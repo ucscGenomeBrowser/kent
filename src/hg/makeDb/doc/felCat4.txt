@@ -2308,6 +2308,18 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s /hive/data/genomes/felCat4/bed/multiz6way/downloads/md5sum.txt .
 
 
+#############################################################################
+# LIFTOVER TO FelCat5 (DONE - 2012-07-23 - Hiram )
+    mkdir /hive/data/genomes/felCat4/bed/blat.felCat5.2012-07-23
+    cd /hive/data/genomes/felCat4/bed/blat.felCat5.2012-07-23
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/felCat4/jkStuff/felCat4.11.ooc felCat4 felCat5
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/felCat4/jkStuff/felCat4.11.ooc \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	 felCat4 felCat5 > do.log 2>&1
+    #	real    58m58.107s
 
 #############################################################################
-

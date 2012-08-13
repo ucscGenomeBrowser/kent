@@ -91,10 +91,10 @@ int i;
 for(sg = sgList; sg != NULL; sg = sg->next)
     {
     struct graphPoint2D *gList = NULL;
-    for(i=0; i< sg->numExps; i++)
-	{
-	struct graphPoint2D *gTemp = NULL;
-	gTemp = createSageGraphPoint(sg, i+1);
+    for (i=0; i< sg->numExps; i++)
+        {
+        struct graphPoint2D *gTemp = NULL;
+        gTemp = createSageGraphPoint(sg, i+1);
 	slAddHead(&gList, gTemp);
 	}
     gptAddGraphPointList(gp, gList, "linesp");
@@ -130,7 +130,8 @@ return ret;
 void chuckHtmlStart(char *title)
 {
 printf("<html><head>");
-//FIXME blueStyle should not be absolute to genome-test and should bae called by: webIncludeResourceFile("blueStyle.css");
+//FIXME blueStyle should not be absolute to genome-test and should bae called by:
+// webIncludeResourceFile("blueStyle.css");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
@@ -194,10 +195,10 @@ sc = sqlConnectRemote("localhost", user, password, db);
 dyStringPrintf(query, "%s", "select * from sage where ");
 for(nm=nmList;nm!=NULL;nm=nm->next)
     {
-    if(count++)
-	{
-	dyStringPrintf(query," or uni=%s ", nm->name );
-	}
+    if (count++)
+        {
+        dyStringPrintf(query," or uni=%s ", nm->name );
+        }
     else
 	{
 	dyStringPrintf(query," uni=%s ", nm->name);

@@ -543,3 +543,27 @@ susScr3.genbank.est.native.load = yes
     make etc-update
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr18:20905375-20909537" where name="susScr3";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/susScr3/pushQ
+    cd /hive/data/genomes/susScr3/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl susScr3 2> stderr.txt | grep -v transMap > susScr3.sql
+    #   real    3m45.401s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/susScr3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/susScr3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/susScr3/bbi/quality.bw
+# WARNING: susScr3 does not have seq
+# WARNING: susScr3 does not have extFile
+# WARNING: susScr3 does not have estOrientInfo
+
+    scp -p susScr3.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/susScr3.sql"
+
+############################################################################

@@ -3,7 +3,6 @@ objType composite
 composite wgEncodeLicrRnaSeq
 expVars lab,dataType,cell,age
 geoSeriesAccession GSE36026
-readType 1x36
 
 metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1
 objType table
@@ -2577,7 +2576,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 sex M
 softwareVersion TopHat
-strain C57BL/6
+strain Unknown
 subId 5958
 tableName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6AlnRep1
 tissueSourceType Individual
@@ -2607,7 +2606,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 sex M
 softwareVersion TopHat
-strain C57BL/6
+strain Unknown
 subId 5958
 tableName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6AlnRep2
 tissueSourceType Individual
@@ -2638,7 +2637,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5958
 tissueSourceType Individual
 view RawData
@@ -2668,7 +2667,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain Unknown
 subId 5958
 tissueSourceType Individual
 view RawData
@@ -2698,7 +2697,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 sex M
 softwareVersion TopHat
-strain C57BL/6
+strain Unknown
 subId 5958
 tableName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6SigRep1
 tissueSourceType Individual
@@ -2729,7 +2728,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 sex M
 softwareVersion TopHat
-strain C57BL/6
+strain Unknown
 subId 5958
 tableName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6SigRep2
 tissueSourceType Individual
@@ -4009,4 +4008,4 @@ tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: 2013064407
+# MAGIC: 2011540500

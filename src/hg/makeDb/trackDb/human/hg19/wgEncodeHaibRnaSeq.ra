@@ -18,7 +18,7 @@ shortLabel HAIB RNA-seq
 longLabel RNA-seq from ENCODE/HAIB
 group expression
 subGroup1 view Views RawSignal=Raw_Signal Alignments=Alignments
-subGroup2 cellType Cell_Line 1GM12878=GM12878<BR>&nbsp;(Tier_1) 1H1hESC=H1-hESC<BR>&nbsp;(Tier_1) 1K562=K562<BR>&nbsp;(Tier_1) 2HELAS3=HeLa-S3<BR>&nbsp;(Tier_2) 2HEPG2=HepG2<BR>&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2&#95;C BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC-1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn 2HUVEC=HUVEC IMR90=IMR90 JURKAT=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
+subGroup2 cellType Cell_Line t2A549=A549&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3BE2C=BE2_C t3ECC1=ECC-1 t3JURKAT=Jurkat t3PANC1=PANC-1 t3PFSK1=PFSK-1 t3T47D=T-47D t3U87=U87
 subGroup3 treatment Treatment  BPA14h=BPA_4hr_100nM DM002P4H=DMSO_4hr_0.02pct EST10NM4H=ESTRADIOL_4hr_10nM GEN4H=GENISTEIN_4hr_100nM DEX100NM=DEX_1hr_100nM DEX5NM=DEX_1hr_5nM DEX1NM=DEX_1hr_1nM DEX500PM=DEX_1hr_500pM DEX100PM=DEX_1hr_100pM ETOH02=ETOH_1hr_0.02pct zNONE=None
 subGroup4 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
 dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
@@ -56,7 +56,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel Jurkat 2
         longLabel Jurkat RNA-seq Alignments Replicate 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=JURKAT treatment=zNONE rep=rep2
+        subGroups view=Alignments cellType=t3JURKAT treatment=zNONE rep=rep2
         type bam
         # subId=3868 dateSubmitted=2011-04-05
         # was wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2 cricket Tue Dec 13 09:33:59 2011
@@ -65,7 +65,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 ETOH 3
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Alignments Rep 3 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=ETOH02 rep=rep3
+        subGroups view=Alignments cellType=t2A549 treatment=ETOH02 rep=rep3
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3 cricket Tue Dec 13 09:23:48 2011
@@ -74,7 +74,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX100pM 1
         longLabel A549 DEX 1 hr 100 pM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX100PM rep=rep1
+        subGroups view=Alignments cellType=t2A549 treatment=DEX100PM rep=rep1
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1 cricket Tue Dec 13 09:23:46 2011
@@ -83,7 +83,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX500pM 1
         longLabel A549 DEX 1 hr 500 pM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX500PM rep=rep1
+        subGroups view=Alignments cellType=t2A549 treatment=DEX500PM rep=rep1
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1 cricket Tue Dec 13 09:23:47 2011
@@ -92,7 +92,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX1nM 1
         longLabel A549 DEX 1 hr 1 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX1NM rep=rep1
+        subGroups view=Alignments cellType=t2A549 treatment=DEX1NM rep=rep1
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1 cricket Tue Dec 13 09:23:46 2011
@@ -101,7 +101,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX5nM 1
         longLabel A549 DEX 1 hr 5 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX5NM rep=rep1
+        subGroups view=Alignments cellType=t2A549 treatment=DEX5NM rep=rep1
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1 cricket Tue Dec 13 09:23:47 2011
@@ -110,7 +110,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 ETOH 4
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Alignments Rep 4 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=ETOH02 rep=rep4
+        subGroups view=Alignments cellType=t2A549 treatment=ETOH02 rep=rep4
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4 cricket Tue Dec 13 09:23:48 2011
@@ -119,7 +119,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX100pM 2
         longLabel A549 DEX 1 hr 100 pM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX100PM rep=rep2
+        subGroups view=Alignments cellType=t2A549 treatment=DEX100PM rep=rep2
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2 cricket Tue Dec 13 09:23:46 2011
@@ -128,7 +128,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX500pM 2
         longLabel A549 DEX 1 hr 500 pM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX500PM rep=rep2
+        subGroups view=Alignments cellType=t2A549 treatment=DEX500PM rep=rep2
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2 cricket Tue Dec 13 09:23:47 2011
@@ -137,7 +137,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX1nM 2
         longLabel A549 DEX 1 hr 1 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX1NM rep=rep2
+        subGroups view=Alignments cellType=t2A549 treatment=DEX1NM rep=rep2
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2 cricket Tue Dec 13 09:23:46 2011
@@ -146,7 +146,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX5nM 2
         longLabel A549 DEX 1 hr 5 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX5NM rep=rep2
+        subGroups view=Alignments cellType=t2A549 treatment=DEX5NM rep=rep2
         type bam
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2 cricket Tue Dec 13 09:23:47 2011
@@ -155,7 +155,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 GEN 1
         longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 treatment=GEN4H rep=rep1
+        subGroups view=Alignments cellType=t3ECC1 treatment=GEN4H rep=rep1
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1 cricket Tue Dec 13 09:23:51 2011
@@ -164,7 +164,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 EST 2
         longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 treatment=EST10NM4H rep=rep2
+        subGroups view=Alignments cellType=t3ECC1 treatment=EST10NM4H rep=rep2
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2 cricket Tue Dec 13 09:23:50 2011
@@ -173,7 +173,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 EST 1
         longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 treatment=EST10NM4H rep=rep1
+        subGroups view=Alignments cellType=t3ECC1 treatment=EST10NM4H rep=rep1
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1 cricket Tue Dec 13 09:23:50 2011
@@ -182,7 +182,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D EST 1
         longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D treatment=EST10NM4H rep=rep1
+        subGroups view=Alignments cellType=t3T47D treatment=EST10NM4H rep=rep1
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1 cricket Tue Dec 13 09:23:55 2011
@@ -191,7 +191,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D GEN 1
         longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D treatment=GEN4H rep=rep1
+        subGroups view=Alignments cellType=t3T47D treatment=GEN4H rep=rep1
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1 cricket Tue Dec 13 09:23:55 2011
@@ -200,7 +200,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D DMSO 2
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D treatment=DM002P4H rep=rep2
+        subGroups view=Alignments cellType=t3T47D treatment=DM002P4H rep=rep2
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep2 wong Wed Jun  8 17:37:23 2011
@@ -210,7 +210,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D EST 2
         longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D treatment=EST10NM4H rep=rep2
+        subGroups view=Alignments cellType=t3T47D treatment=EST10NM4H rep=rep2
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2 cricket Tue Dec 13 09:23:55 2011
@@ -219,7 +219,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D GEN 2
         longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D treatment=GEN4H rep=rep2
+        subGroups view=Alignments cellType=t3T47D treatment=GEN4H rep=rep2
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2 cricket Tue Dec 13 09:23:55 2011
@@ -228,7 +228,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 GEN 2
         longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 treatment=GEN4H rep=rep2
+        subGroups view=Alignments cellType=t3ECC1 treatment=GEN4H rep=rep2
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2 cricket Tue Dec 13 09:23:51 2011
@@ -237,7 +237,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D DMSO 1
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D treatment=DM002P4H rep=rep1
+        subGroups view=Alignments cellType=t3T47D treatment=DM002P4H rep=rep1
         type bam
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep1 wong Wed Jun  8 17:37:23 2011
@@ -247,7 +247,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D BPA 1
         longLabel T-47D BPA 4 hr 100 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D treatment=BPA14h rep=rep1
+        subGroups view=Alignments cellType=t3T47D treatment=BPA14h rep=rep1
         type bam
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1 cricket Tue Dec 13 09:23:53 2011
@@ -256,7 +256,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 BPA 1
         longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 treatment=BPA14h rep=rep1
+        subGroups view=Alignments cellType=t3ECC1 treatment=BPA14h rep=rep1
         type bam
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1 cricket Tue Dec 13 09:23:49 2011
@@ -265,7 +265,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D BPA 2
         longLabel T-47D BPA 4 hr 100 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=T47D treatment=BPA14h rep=rep2
+        subGroups view=Alignments cellType=t3T47D treatment=BPA14h rep=rep2
         type bam
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2 cricket Tue Dec 13 09:23:53 2011
@@ -274,7 +274,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 BPA 2
         longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 treatment=BPA14h rep=rep2
+        subGroups view=Alignments cellType=t3ECC1 treatment=BPA14h rep=rep2
         type bam
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2 cricket Tue Dec 13 09:23:49 2011
@@ -283,7 +283,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 DMSO 2
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 treatment=DM002P4H rep=rep2
+        subGroups view=Alignments cellType=t3ECC1 treatment=DM002P4H rep=rep2
         type bam
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep2 wong Wed Jun  8 17:37:22 2011
@@ -293,7 +293,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 DMSO 1
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=ECC1 treatment=DM002P4H rep=rep1
+        subGroups view=Alignments cellType=t3ECC1 treatment=DM002P4H rep=rep1
         type bam
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep1 wong Wed Jun  8 17:37:22 2011
@@ -303,7 +303,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 ETOH 1
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=ETOH02 rep=rep1
+        subGroups view=Alignments cellType=t2A549 treatment=ETOH02 rep=rep1
         type bam
         # subId=1849 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1 cricket Tue Dec 13 09:23:48 2011
@@ -312,7 +312,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 ETOH 2
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=ETOH02 rep=rep2
+        subGroups view=Alignments cellType=t2A549 treatment=ETOH02 rep=rep2
         type bam
         # subId=1849 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2 cricket Tue Dec 13 09:23:48 2011
@@ -321,7 +321,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX100nM 1
         longLabel A549 DEX 1 hr 100 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX100NM rep=rep1
+        subGroups view=Alignments cellType=t2A549 treatment=DEX100NM rep=rep1
         type bam
         # subId=1849 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1 cricket Tue Dec 13 09:23:45 2011
@@ -330,7 +330,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX100nM 2
         longLabel A549 DEX 1 hr 100 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=A549 treatment=DEX100NM rep=rep2
+        subGroups view=Alignments cellType=t2A549 treatment=DEX100NM rep=rep2
         type bam
         # subId=1849 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2 cricket Tue Dec 13 09:23:45 2011
@@ -339,7 +339,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel BE2_C 1
         longLabel BE2_C RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=BE2C treatment=zNONE rep=rep1
+        subGroups view=Alignments cellType=t3BE2C treatment=zNONE rep=rep1
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1 cricket Tue Dec 13 09:23:49 2011
@@ -348,7 +348,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel BE2_C 2
         longLabel BE2_C RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=BE2C treatment=zNONE rep=rep2
+        subGroups view=Alignments cellType=t3BE2C treatment=zNONE rep=rep2
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2 cricket Tue Dec 13 09:23:49 2011
@@ -357,7 +357,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel SK-N-SH 1
         longLabel SK-N-SH RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=SKNSH treatment=zNONE rep=rep1
+        subGroups view=Alignments cellType=t2SKNSH treatment=zNONE rep=rep1
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep1 wong Fri Jun  3 11:47:46 2011
@@ -367,7 +367,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel SK-N-SH 2
         longLabel SK-N-SH RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=SKNSH treatment=zNONE rep=rep2
+        subGroups view=Alignments cellType=t2SKNSH treatment=zNONE rep=rep2
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep2 wong Fri Jun  3 11:47:46 2011
@@ -377,7 +377,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel PANC-1 1
         longLabel PANC-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=PANC1 treatment=zNONE rep=rep1
+        subGroups view=Alignments cellType=t3PANC1 treatment=zNONE rep=rep1
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1 cricket Tue Dec 13 09:23:52 2011
@@ -386,7 +386,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel PANC-1 2
         longLabel PANC-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=PANC1 treatment=zNONE rep=rep2
+        subGroups view=Alignments cellType=t3PANC1 treatment=zNONE rep=rep2
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2 cricket Tue Dec 13 09:23:52 2011
@@ -395,7 +395,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel PFSK-1 1
         longLabel PFSK-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=PFSK1 treatment=zNONE rep=rep1
+        subGroups view=Alignments cellType=t3PFSK1 treatment=zNONE rep=rep1
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1 cricket Tue Dec 13 09:23:52 2011
@@ -404,7 +404,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel PFSK-1 2
         longLabel PFSK-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=PFSK1 treatment=zNONE rep=rep2
+        subGroups view=Alignments cellType=t3PFSK1 treatment=zNONE rep=rep2
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2 cricket Tue Dec 13 09:23:52 2011
@@ -431,7 +431,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel Jurkat 1
         longLabel Jurkat RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=JURKAT treatment=zNONE rep=rep1
+        subGroups view=Alignments cellType=t3JURKAT treatment=zNONE rep=rep1
         type bam
         origAssembly hg18
         # subId=5454 dateSubmitted=2012-01-24
@@ -440,7 +440,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel U87 2
         longLabel U87 RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep2
+        subGroups view=Alignments cellType=t3U87 treatment=zNONE rep=rep2
         type bam
         origAssembly hg18
         # subId=5606 dateSubmitted=2012-02-10
@@ -449,7 +449,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel U87 1
         longLabel U87 RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep1
+        subGroups view=Alignments cellType=t3U87 treatment=zNONE rep=rep1
         type bam
         origAssembly hg18
         # subId=5606 dateSubmitted=2012-02-10
@@ -470,7 +470,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 ETOH 3
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Raw Signal Rep 3 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=ETOH02 rep=rep3
+        subGroups view=RawSignal cellType=t2A549 treatment=ETOH02 rep=rep3
         type bigWig 0.115095 1155.819946
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep3 cricket Tue Dec 13 09:23:48 2011
@@ -479,7 +479,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX100pM 1
         longLabel A549 DEX 1 hr 100 pM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX100PM rep=rep1
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX100PM rep=rep1
         type bigWig 0.122735 1558.979980
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1 cricket Tue Dec 13 09:23:46 2011
@@ -488,7 +488,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX500pM 1
         longLabel A549 DEX 1 hr 500 pM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX500PM rep=rep1
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX500PM rep=rep1
         type bigWig 0.117905 1144.349976
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1 cricket Tue Dec 13 09:23:47 2011
@@ -497,7 +497,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX1nM 1
         longLabel A549 DEX 1 hr 1 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX1NM rep=rep1
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX1NM rep=rep1
         type bigWig 0.120431 1351.449951
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1 cricket Tue Dec 13 09:23:46 2011
@@ -506,7 +506,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX5nM 1
         longLabel A549 DEX 1 hr 5 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX5NM rep=rep1
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX5NM rep=rep1
         type bigWig 0.149512 1237.839966
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1 cricket Tue Dec 13 09:23:47 2011
@@ -515,7 +515,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 ETOH 4
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Raw Signal Rep 4 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=ETOH02 rep=rep4
+        subGroups view=RawSignal cellType=t2A549 treatment=ETOH02 rep=rep4
         type bigWig 0.120691 1476.140015
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep4 cricket Tue Dec 13 09:23:48 2011
@@ -524,7 +524,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX100pM 2
         longLabel A549 DEX 1 hr 100 pM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX100PM rep=rep2
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX100PM rep=rep2
         type bigWig 0.140351 1194.630005
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep2 cricket Tue Dec 13 09:23:46 2011
@@ -533,7 +533,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX500pM 2
         longLabel A549 DEX 1 hr 500 pM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX500PM rep=rep2
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX500PM rep=rep2
         type bigWig 0.108844 1106.400024
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep2 cricket Tue Dec 13 09:23:47 2011
@@ -542,7 +542,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX1nM 2
         longLabel A549 DEX 1 hr 1 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX1NM rep=rep2
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX1NM rep=rep2
         type bigWig 0.122421 1310.829956
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep2 cricket Tue Dec 13 09:23:47 2011
@@ -551,7 +551,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX5nM 2
         longLabel A549 DEX 1 hr 5 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX5NM rep=rep2
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX5NM rep=rep2
         type bigWig 0.157130 1170.689941
         # subId=2974 dateSubmitted=2011-01-22
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep2 cricket Tue Dec 13 09:23:48 2011
@@ -560,7 +560,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 GEN 1
         longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 treatment=GEN4H rep=rep1
+        subGroups view=RawSignal cellType=t3ECC1 treatment=GEN4H rep=rep1
         type bigWig 0.248248 738.353027
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep1 cricket Tue Dec 13 09:23:51 2011
@@ -569,7 +569,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 EST 2
         longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 treatment=EST10NM4H rep=rep2
+        subGroups view=RawSignal cellType=t3ECC1 treatment=EST10NM4H rep=rep2
         type bigWig 0.208881 751.294006
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2 cricket Tue Dec 13 09:23:51 2011
@@ -578,7 +578,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 EST 1
         longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 treatment=EST10NM4H rep=rep1
+        subGroups view=RawSignal cellType=t3ECC1 treatment=EST10NM4H rep=rep1
         type bigWig 0.267722 963.263977
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1 cricket Tue Dec 13 09:23:51 2011
@@ -587,7 +587,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D EST 1
         longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D treatment=EST10NM4H rep=rep1
+        subGroups view=RawSignal cellType=t3T47D treatment=EST10NM4H rep=rep1
         type bigWig 0.271642 1572.939941
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1 cricket Tue Dec 13 09:23:55 2011
@@ -596,7 +596,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D GEN 1
         longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D treatment=GEN4H rep=rep1
+        subGroups view=RawSignal cellType=t3T47D treatment=GEN4H rep=rep1
         type bigWig 0.256140 872.221008
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep1 cricket Tue Dec 13 09:23:55 2011
@@ -605,7 +605,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D DMSO 2
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D treatment=DM002P4H rep=rep2
+        subGroups view=RawSignal cellType=t3T47D treatment=DM002P4H rep=rep2
         type bigWig 0.098354 737.018005
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep2 wong Wed Jun  8 17:37:23 2011
@@ -615,7 +615,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D EST 2
         longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D treatment=EST10NM4H rep=rep2
+        subGroups view=RawSignal cellType=t3T47D treatment=EST10NM4H rep=rep2
         type bigWig 0.090113 781.908997
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2 cricket Tue Dec 13 09:23:55 2011
@@ -624,7 +624,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D GEN 2
         longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D treatment=GEN4H rep=rep2
+        subGroups view=RawSignal cellType=t3T47D treatment=GEN4H rep=rep2
         type bigWig 0.174213 644.237976
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep2 cricket Tue Dec 13 09:23:55 2011
@@ -633,7 +633,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 GEN 2
         longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 treatment=GEN4H rep=rep2
+        subGroups view=RawSignal cellType=t3ECC1 treatment=GEN4H rep=rep2
         type bigWig 0.204548 865.341980
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep2 cricket Tue Dec 13 09:23:51 2011
@@ -642,7 +642,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D DMSO 1
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D treatment=DM002P4H rep=rep1
+        subGroups view=RawSignal cellType=t3T47D treatment=DM002P4H rep=rep1
         type bigWig 0.138023 880.583984
         # subId=2975 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep1 wong Wed Jun  8 17:37:23 2011
@@ -652,7 +652,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D BPA 1
         longLabel T-47D BPA 4 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D treatment=BPA14h rep=rep1
+        subGroups view=RawSignal cellType=t3T47D treatment=BPA14h rep=rep1
         type bigWig 0.149111 676.367004
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1 cricket Tue Dec 13 09:23:54 2011
@@ -661,7 +661,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 BPA 1
         longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 treatment=BPA14h rep=rep1
+        subGroups view=RawSignal cellType=t3ECC1 treatment=BPA14h rep=rep1
         type bigWig 0.210921 561.841003
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1 cricket Tue Dec 13 09:23:49 2011
@@ -670,7 +670,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D BPA 2
         longLabel T-47D BPA 4 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=T47D treatment=BPA14h rep=rep2
+        subGroups view=RawSignal cellType=t3T47D treatment=BPA14h rep=rep2
         type bigWig 0.129285 618.044983
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2 cricket Tue Dec 13 09:23:54 2011
@@ -679,7 +679,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 BPA 2
         longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 treatment=BPA14h rep=rep2
+        subGroups view=RawSignal cellType=t3ECC1 treatment=BPA14h rep=rep2
         type bigWig 0.206326 724.461975
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2 cricket Tue Dec 13 09:23:49 2011
@@ -688,7 +688,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 DMSO 2
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 treatment=DM002P4H rep=rep2
+        subGroups view=RawSignal cellType=t3ECC1 treatment=DM002P4H rep=rep2
         type bigWig 0.176215 817.461975
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep2 wong Wed Jun  8 17:37:22 2011
@@ -698,7 +698,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 DMSO 1
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=ECC1 treatment=DM002P4H rep=rep1
+        subGroups view=RawSignal cellType=t3ECC1 treatment=DM002P4H rep=rep1
         type bigWig 0.264957 963.716003
         # subId=2976 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep1 wong Wed Jun  8 17:37:22 2011
@@ -708,7 +708,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 ETOH 1
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=ETOH02 rep=rep1
+        subGroups view=RawSignal cellType=t2A549 treatment=ETOH02 rep=rep1
         type bigWig 0.218757 915.445007
         # subId=1849 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1 cricket Tue Dec 13 09:23:48 2011
@@ -717,7 +717,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 ETOH 2
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=ETOH02 rep=rep2
+        subGroups view=RawSignal cellType=t2A549 treatment=ETOH02 rep=rep2
         type bigWig 0.228926 1241.689941
         # subId=1849 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep2 cricket Tue Dec 13 09:23:48 2011
@@ -726,7 +726,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX100nM 1
         longLabel A549 DEX 1 hr 100 nM RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX100NM rep=rep1
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX100NM rep=rep1
         type bigWig 0.217478 1051.670044
         # subId=1849 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1 cricket Tue Dec 13 09:23:45 2011
@@ -735,7 +735,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX100nM 2
         longLabel A549 DEX 1 hr 100 nM RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=A549 treatment=DEX100NM rep=rep2
+        subGroups view=RawSignal cellType=t2A549 treatment=DEX100NM rep=rep2
         type bigWig 0.124371 1297.219971
         # subId=1849 dateSubmitted=2011-01-21
         # was wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep2 cricket Tue Dec 13 09:23:45 2011
@@ -744,7 +744,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel BE2_C 1
         longLabel BE2_C RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=BE2C treatment=zNONE rep=rep1
+        subGroups view=RawSignal cellType=t3BE2C treatment=zNONE rep=rep1
         type bigWig 0.231311 1122.900024
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqBe2cShortpolyaRawRep1 cricket Tue Dec 13 09:23:49 2011
@@ -753,7 +753,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel BE2_C 2
         longLabel BE2_C RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=BE2C treatment=zNONE rep=rep2
+        subGroups view=RawSignal cellType=t3BE2C treatment=zNONE rep=rep2
         type bigWig 0.145512 1134.989990
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2 cricket Tue Dec 13 09:23:49 2011
@@ -762,7 +762,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel SK-N-SH 1
         longLabel SK-N-SH RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=SKNSH treatment=zNONE rep=rep1
+        subGroups view=RawSignal cellType=t2SKNSH treatment=zNONE rep=rep1
         type bigWig 0.139722 938.793030
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep1 wong Fri Jun  3 11:47:46 2011
@@ -772,7 +772,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel SK-N-SH 2
         longLabel SK-N-SH RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=SKNSH treatment=zNONE rep=rep2
+        subGroups view=RawSignal cellType=t2SKNSH treatment=zNONE rep=rep2
         type bigWig 0.149537 705.216003
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep2 wong Fri Jun  3 11:47:46 2011
@@ -782,7 +782,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PANC-1 1
         longLabel PANC-1 RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=PANC1 treatment=zNONE rep=rep1
+        subGroups view=RawSignal cellType=t3PANC1 treatment=zNONE rep=rep1
         type bigWig 0.137402 1973.189941
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep1 cricket Tue Dec 13 09:23:52 2011
@@ -791,7 +791,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PANC-1 2
         longLabel PANC-1 RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=PANC1 treatment=zNONE rep=rep2
+        subGroups view=RawSignal cellType=t3PANC1 treatment=zNONE rep=rep2
         type bigWig 0.146817 2090.860107
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2 cricket Tue Dec 13 09:23:52 2011
@@ -800,7 +800,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PFSK-1 1
         longLabel PFSK-1 RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=PFSK1 treatment=zNONE rep=rep1
+        subGroups view=RawSignal cellType=t3PFSK1 treatment=zNONE rep=rep1
         type bigWig 0.149150 1066.459961
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep1 cricket Tue Dec 13 09:23:52 2011
@@ -809,7 +809,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PFSK-1 2
         longLabel PFSK-1 RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=PFSK1 treatment=zNONE rep=rep2
+        subGroups view=RawSignal cellType=t3PFSK1 treatment=zNONE rep=rep2
         type bigWig 0.178471 1536.329956
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2 cricket Tue Dec 13 09:23:52 2011
@@ -836,7 +836,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel Jurkat 2
         longLabel Jurkat RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=JURKAT treatment=zNONE rep=rep2
+        subGroups view=RawSignal cellType=t3JURKAT treatment=zNONE rep=rep2
         type bigWig 0.579586 391.365997
         # subId=3868 dateSubmitted=2011-04-01
         # was wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2 cricket Tue Dec 13 09:23:51 2011
@@ -845,7 +845,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel Jurkat 1
         longLabel Jurkat RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=JURKAT treatment=zNONE rep=rep1
+        subGroups view=RawSignal cellType=t3JURKAT treatment=zNONE rep=rep1
         type bigWig 0.244927 403.884003
         origAssembly hg18
         # subId=5478 dateSubmitted=2012-01-24
@@ -854,7 +854,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel U87 2
         longLabel U87 RNA-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep2
+        subGroups view=RawSignal cellType=t3U87 treatment=zNONE rep=rep2
         type bigWig 1.000000 70252.000000
         origAssembly hg18
         # subId=5606 dateSubmitted=2012-02-10
@@ -863,7 +863,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel U87 1
         longLabel U87 RNA-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep1
+        subGroups view=RawSignal cellType=t3U87 treatment=zNONE rep=rep1
         type bigWig 1.000000 52464.000000
         origAssembly hg18
         # subId=5606 dateSubmitted=2012-02-10

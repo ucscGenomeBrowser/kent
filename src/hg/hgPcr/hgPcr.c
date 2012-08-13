@@ -636,7 +636,6 @@ int main(int argc, char *argv[])
 {
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

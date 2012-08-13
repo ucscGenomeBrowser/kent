@@ -1058,23 +1058,23 @@ switch (byteCount)
 	if (isSigned)
 	    {
 	    if (isMinus)
+		*(short *)val = -res;
+	    else
+		*(short *)val = res;
+	    }
+	else
+	    *(unsigned short *)val = res;
+	break;
+    case 4:
+	if (isSigned)
+	    {
+	    if (isMinus)
 		*(int *)val = -res;
 	    else
 		*(int *)val = res;
 	    }
 	else
 	    *(unsigned *)val = res;
-	break;
-    case 4:
-	if (isSigned)
-	    {
-	    if (isMinus)
-		*(long long *)val = -res;
-	    else
-		*(long long *)val = res;
-	    }
-	else
-	    *(unsigned long long *)val = res;
 	break;
     case 8:
 	if (isSigned)
@@ -1122,8 +1122,8 @@ for (;;)
     if (s == NULL || s[0] == 0 || count == arraySize)
         break;
     e = strchr(s, ',');
-    if (e != NULL)
-        *e++ = 0;
+    if (e)
+        *e = 0;
     int res = lineFileCheckAllIntsNoAbort(s, cArray, isSigned, byteCount, typeString, noNeg, errMsg, sizeof errMsg);
     if (res > 0)
 	{
@@ -1133,6 +1133,8 @@ for (;;)
     if (cArray) // NULL means validation only.
 	cArray += byteCount;  
     count++;
+    if (e)  // restore input string
+        *e++ = ',';
     s = e;
     }
 return count;

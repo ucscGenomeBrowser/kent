@@ -93,12 +93,12 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	    colArray[i] = colorTrack->itemColor(colorTrack, bed, hvg);
 	else
 	    colArray[i] = colorTrack->ixColor;
-	}
+        }
     }
 }
 
 void wigFillInColorArray(struct track *wigTrack, struct hvGfx *hvg,
-			 Color *colorArray, int colSize, struct track *colorTrack)
+                         Color *colorArray, int colSize, struct track *colorTrack)
 /* Fill in a color array with the colorTrack's color where
    it would normally have an exon. */
 {
@@ -231,8 +231,8 @@ int saveHeight = tg->height;
 wigCart = (struct wigCartOptions *) tg->extraUiData;
 
 /*
- *	A track is just one
- *	item, so there is nothing to do here, either it is the tvFull
+ *      A track is just one
+ *      item, so there is nothing to do here, either it is the tvFull
  *	height as chosen by the user from TrackUi, or it is the dense
  *	mode.
  *  ADDENDUM: wiggle options for squish and pack are being added.
@@ -350,10 +350,9 @@ tg->items = wiList;
 lf = lineFileOpen(ct->wigFile, TRUE);
 while (lineFileChopNextTab(lf, row, ArraySize(row)))
     {
-
     wiggleStaticLoad(row, &wiggle);
-    /*	we have to do hRangeQuery's job here since we are reading a
-     *	file.  We need to be on the correct chromosome, and the data
+    /*  we have to do hRangeQuery's job here since we are reading a
+     *  file.  We need to be on the correct chromosome, and the data
      *	needs to be in the current view.
      */
     if (sameWord(chromName,wiggle.chrom))
@@ -378,8 +377,8 @@ lineFileClose(&lf);
 #endif /* GBROWSE */
 
 void wigLoadItems(struct track *tg)
-/*	wigLoadItems - read the table rows that hRangeQuery returns
- *	With appropriate adjustment to help hRangeQuery limit its
+/*      wigLoadItems - read the table rows that hRangeQuery returns
+ *      With appropriate adjustment to help hRangeQuery limit its
  *	result to specific "Span" based on the basesPerPixel.
  *	From the rows returned, turn each one into a wigItem, add it to
  *	the growing wiList, and return that wiList as the tg->items.
@@ -597,7 +596,7 @@ for (i = 0; i < preDrawSize; ++i)
 		if (fabs(preDraw[i].min)
 				< fabs(preDraw[i].max))
 		    dataValue = preDraw[i].min;
-		else
+                else
 		    dataValue = preDraw[i].max;
 		break;
 	    case wiggleWindowingMean:
@@ -610,7 +609,7 @@ for (i = 0; i < preDrawSize; ++i)
 		if (fabs(preDraw[i].min)
 			> fabs(preDraw[i].max))
 		    dataValue = preDraw[i].min;
-		else
+                else
 		    dataValue = preDraw[i].max;
 		break;
 	    }
@@ -623,10 +622,10 @@ for (i = 0; i < preDrawSize; ++i)
 
 void preDrawSmoothing(struct preDrawElement *preDraw, int preDrawSize,
     enum wiggleSmoothingEnum smoothingWindow)
-/*	apply smoothing function to preDraw array	*/
+/*      apply smoothing function to preDraw array       */
 {
-/*	Are we perhaps doing smoothing ?  smoothingWindow is 1 off due
- *	to enum funny business in inc/hui.h and lib/hui.c 	*/
+/*      Are we perhaps doing smoothing ?  smoothingWindow is 1 off due
+ *      to enum funny business in inc/hui.h and lib/hui.c       */
 if (smoothingWindow > 0)
     {
     int winSize = smoothingWindow + 1; /* enum funny business */
@@ -719,26 +718,26 @@ if (autoScale == wiggleScaleAuto)
     if (*overallRange == 0.0)
 	{
 	if (*overallUpperLimit > 0.0)
-	    {
-	    *graphUpperLimit = *overallUpperLimit;
-	    *graphLowerLimit = 0.0;
-	    } 
-	else if (*overallUpperLimit < 0.0) 
-	    {
-	    *graphUpperLimit = 0.0;
-	    *graphLowerLimit = *overallUpperLimit;
-	    } 
-	else 
-	    {
-	    *graphUpperLimit = 1.0;
-	    *graphLowerLimit = -1.0;
-	    }
-	} 
+            {
+            *graphUpperLimit = *overallUpperLimit;
+            *graphLowerLimit = 0.0;
+            } 
+        else if (*overallUpperLimit < 0.0) 
+            {
+            *graphUpperLimit = 0.0;
+            *graphLowerLimit = *overallUpperLimit;
+            } 
+        else 
+            {
+            *graphUpperLimit = 1.0;
+            *graphLowerLimit = -1.0;
+            }
+        } 
     else 
         {
-	*graphUpperLimit = *overallUpperLimit;
-	*graphLowerLimit = *overallLowerLimit;
-	}
+        *graphUpperLimit = *overallUpperLimit;
+        *graphLowerLimit = *overallLowerLimit;
+        }
     } 
 else 
     {
@@ -756,11 +755,11 @@ static Color * makeColorArray(struct preDrawElement *preDraw, int width,
 {
 char *colorTrack = wigCart->colorTrack;
 int x1;
-Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
+Color *colorArray = NULL;       /*      Array of pixels to be drawn.    */
 
-/*	Set up the color by array. Determine color of each pixel
- *	based initially on the sign of the data point. If a colorTrack
- *	is specified also fill in the color array with that.
+/*      Set up the color by array. Determine color of each pixel
+ *      based initially on the sign of the data point. If a colorTrack
+ *      is specified also fill in the color array with that.
  */
 AllocArray(colorArray, width);
 for(x1 = 0; x1 < width; ++x1)
@@ -780,7 +779,7 @@ for(x1 = 0; x1 < width; ++x1)
     }
 
 /* Fill in colors from alternate track if necessary. */
-if(colorTrack != NULL)
+if (colorTrack != NULL)
     {
     struct track *cTrack = hashMustFindVal(trackHash, colorTrack);
 
@@ -848,12 +847,12 @@ for (x1 = 0; x1 < width; ++x1)
 	 *	h * (graphUpperLimit/graphRange)
 	 *	These may end up to be negative meaning they are above
 	 *	the upper graphing limit, or be very large, meaning they
-	 *	are below the lower graphing limit.  This is OK, the
-	 *	clipping will be taken care of by the vgBox() function.
-	 */
+         *      are below the lower graphing limit.  This is OK, the
+         *      clipping will be taken care of by the vgBox() function.
+         */
 
-	if (vis == tvFull || vis == tvPack)
-	    {
+        if (vis == tvFull || vis == tvPack)
+            {
 #define scaleHeightToPixels(val) (min(BIGNUM,(scaleFactor * (graphUpperLimit - (val)) + yOff)))
 	    if (lineBar == wiggleGraphBar)
 		{
@@ -881,28 +880,28 @@ for (x1 = 0; x1 < width; ++x1)
 		        if (((zeroPos-yOff)+darkHeight) == 0)
 			    darkHeight += 1;	  // top pixel special case
 			hvGfxBox(hvg, x,zeroPos,1, darkHeight, drawColor);
-			hvGfxBox(hvg, x, zeroPos+darkHeight, 1, mediumHeight-darkHeight,
+                        hvGfxBox(hvg, x, zeroPos+darkHeight, 1, mediumHeight-darkHeight,
 				mediumColor);
-			hvGfxBox(hvg, x, zeroPos+mediumHeight,1, lightHeight-mediumHeight,
+                        hvGfxBox(hvg, x, zeroPos+mediumHeight,1, lightHeight-mediumHeight,
 				lightColor);
 			}
 		    else
 		        {
-			/* The calculations here are a little convoluted because
-			 * of the history.  Originally it drew from the baseline
-			 * up to the max first in the lightest color, then from the
-			 * baseline to the mean+std in medium color, and finally
-			 * from baseline to mean in dark color.  This ended up
-			 * drawing the same pixels up to three times which messed
-			 * things up in transparent overlay mode.   The code was
-			 * refactored to accomplish this without having to worry
-			 * about +/- 1 differences.   In particular be aware the
-			 * xyzHeight calculations are done assuming the other end is
-			 * the baseline. */
+                        /* The calculations here are a little convoluted because
+                         * of the history.  Originally it drew from the baseline
+                         * up to the max first in the lightest color, then from the
+                         * baseline to the mean+std in medium color, and finally
+                         * from baseline to mean in dark color.  This ended up
+                         * drawing the same pixels up to three times which messed
+                         * things up in transparent overlay mode.   The code was
+                         * refactored to accomplish this without having to worry
+                         * about +/- 1 differences.   In particular be aware the
+                         * xyzHeight calculations are done assuming the other end is
+                         * the baseline. */
 
-			/* Calculate dark part from smoothed mean. */
-			int boxHeight = max(1,zeroPos - scaledVal);
-			if (scaledVal == (yOff+h))  // bottom pixel special case
+                        /* Calculate dark part from smoothed mean. */
+                        int boxHeight = max(1,zeroPos - scaledVal);
+                        if (scaledVal == (yOff+h))  // bottom pixel special case
 			    scaledVal -= 1;
 		        if (((scaledVal-yOff)+boxHeight) == 0)
 			    boxHeight += 1;	    // top pixel special case
@@ -921,13 +920,13 @@ for (x1 = 0; x1 < width; ++x1)
 			/* Calculate light part from max. */
 			int scaledMax = scaleHeightToPixels(doTransform(p->max, transformFunc));
 			if (scaledMax == (h+yOff))
-			    scaledMax = (h+yOff) - 1;
-			boxHeight = max(1,zeroPos-scaledMax);
-			int lightTop = scaledMax, lightHeight = boxHeight;
+                            scaledMax = (h+yOff) - 1;
+                        boxHeight = max(1,zeroPos-scaledMax);
+                        int lightTop = scaledMax, lightHeight = boxHeight;
 
-			/* Draw, making sure not to overwrite pixels since
-			 * would mess up transparent drawing. */
-			hvGfxBox(hvg,x,darkTop,1, darkHeight, drawColor);
+                        /* Draw, making sure not to overwrite pixels since
+                         * would mess up transparent drawing. */
+                        hvGfxBox(hvg,x,darkTop,1, darkHeight, drawColor);
 			hvGfxBox(hvg, x, mediumTop, 1, mediumHeight-darkHeight, mediumColor);
 			hvGfxBox(hvg,x,lightTop,1,lightHeight-mediumHeight, lightColor);
 			}
@@ -983,8 +982,8 @@ for (x1 = 0; x1 < width; ++x1)
 	    else if (dataValue < graphLowerLimit)
 		hvGfxBox(hvg, x, yOff + h - 1, 1, 2, clipColor);
 #undef scaleHeightToPixels	/* No longer use this symbol */
-	    }	/*	vis == tvFull || vis == tvPack */
-	else if (vis == tvDense || vis == tvSquish)
+            }   /*	vis == tvFull || vis == tvPack */
+        else if (vis == tvDense || vis == tvSquish)
 	    {
 	    double grayValue;
 	    int grayIndex;
@@ -996,7 +995,7 @@ for (x1 = 0; x1 < width; ++x1)
 	    drawColor =
 		tg->colorShades[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
 	    hvGfxBox(hvg, x, yOff, 1, tg->lineHeight, drawColor);
-	    }	/*	vis == tvDense || vis == tvSquish	*/
+            }   /*	vis == tvDense || vis == tvSquish	*/
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 }	/*	graphPreDraw()	*/
@@ -1083,10 +1082,10 @@ if (tg->mapsSelf)
 	}
     else
 #endif /* GBROWSE */
-	itemName = cloneString(tg->track);
+        itemName = cloneString(tg->track);
 
     // Don't bother if we are imageV2 and a dense child.
-    if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+    if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track,
             itemName, NULL);
     freeMem(itemName);
@@ -1125,10 +1124,10 @@ return usingDataSpan;
 }
 
 void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis,
-	struct preDrawContainer *preDrawList, int preDrawZero, 
-	int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
+                    struct hvGfx *hvg, int xOff, int yOff, int width,
+                    MgFont *font, Color color, enum trackVisibility vis,
+                    struct preDrawContainer *preDrawList, int preDrawZero,
+                    int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
 /* Draw once we've figured out predraw... */
 {
 enum wiggleYLineMarkEnum yLineOnOff;
@@ -1333,17 +1332,17 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	The drawing window, in pixels:
  *	xOff = left margin, yOff = top margin, h = height of drawing window
  *	drawing window in chrom coords: seqStart, seqEnd
- *	'basesPerPixel' is known, 'pixelsPerBase' is known
+ *      'basesPerPixel' is known, 'pixelsPerBase' is known
  */
-	/*	let's check end point screen coordinates.  If they are
- 	 *	the same, then this entire data block lands on one pixel,
- 	 *	no need to walk through it, just use the block's specified
- 	 *	max/min.  It is OK if these end up + or - values, we do want to
- 	 *	keep track of pixels before and after the screen for
- 	 *	later smoothing operations.
-	 */
+        /*      let's check end point screen coordinates.  If they are
+         *      the same, then this entire data block lands on one pixel,
+         *      no need to walk through it, just use the block's specified
+         *      max/min.  It is OK if these end up + or - values, we do want to
+         *      keep track of pixels before and after the screen for
+         *      later smoothing operations.
+         */
 double x1d = (double)(wi->start - seqStart) * pixelsPerBase;
-	x1 = round(x1d);
+        x1 = round(x1d);
 double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
 	x2 = round(x2d);
 
@@ -1388,8 +1387,8 @@ double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixels
 		    }
 		}
 	    freeMem(readData);
-	    }
-	else
+            }
+        else
 	    {	/*	only one pixel for this block of data */
 	    int xCoord = preDrawZero + x1;
 	    /*	if the point falls within our array, record it.
@@ -1429,16 +1428,16 @@ struct preDrawContainer *pre = wigLoadPreDraw(tg, seqStart, seqEnd, width);
 if (pre != NULL)
     {
     wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	pre, pre->preDrawZero, pre->preDrawSize, 
-	&tg->graphUpperLimit, &tg->graphLowerLimit);
+                   pre, pre->preDrawZero, pre->preDrawSize,
+                   &tg->graphUpperLimit, &tg->graphLowerLimit);
     }
 }
 
 void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis, char *shortLabel,
-	double graphUpperLimit, double graphLowerLimit, boolean showNumbers)
+                       struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+                       boolean withCenterLabels, MgFont *font, Color color,
+                       enum trackVisibility vis, char *shortLabel,
+                       double graphUpperLimit, double graphLowerLimit, boolean showNumbers)
 /* Draw labels on left for a wiggle-type track. */
 {
 int fontHeight = tl.fontHeight+1;
@@ -1475,13 +1474,13 @@ else if (tg->limitedVis == tvFull)
 	{
 	boolean zeroOK = TRUE;
 	char upper[SMALLBUF];
-	char lower[SMALLBUF];
-	char upperTic = '-';	/* as close as we can get with ASCII */
-			/* the ideal here would be to draw tic marks in
- 			 * exactly the correct location.
-			 */
-	Color drawColor;
-	if (withCenterLabels)
+        char lower[SMALLBUF];
+        char upperTic = '-';    /* as close as we can get with ASCII */
+                        /* the ideal here would be to draw tic marks in
+                         * exactly the correct location.
+                         */
+        Color drawColor;
+        if (withCenterLabels)
 	    {
 	    centerOffset = fontHeight;
 	    upperTic = '_';	/*	this is correct	*/
@@ -1578,7 +1577,7 @@ void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 /*	drawing left labels	*/
 {
 wigLeftAxisLabels(tg, seqStart, seqEnd, hvg, xOff, yOff, width, height, withCenterLabels,
-	font, color, vis, tg->shortLabel, tg->graphUpperLimit, tg->graphLowerLimit, TRUE);
+                  font, color, vis, tg->shortLabel, tg->graphUpperLimit, tg->graphLowerLimit,TRUE);
 }
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[])

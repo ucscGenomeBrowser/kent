@@ -478,3 +478,27 @@ triMan1.perChromTables = no
     #   81010525 bases of 2769099677 (2.926%) in intersection
 
 #########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH594607:13029229-13038048" where name="triMan1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/triMan1/pushQ
+    cd /hive/data/genomes/triMan1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl triMan1 2> stderr.txt | grep -v transMap > triMan1.sql
+    #   real    3m38.582s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/triMan1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/triMan1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/triMan1/bbi/quality.bw
+# WARNING: triMan1 does not have seq
+# WARNING: triMan1 does not have extFile
+# WARNING: triMan1 does not have estOrientInfo
+
+    scp -p triMan1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/triMan1.sql"
+
+############################################################################

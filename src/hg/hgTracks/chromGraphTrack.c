@@ -71,7 +71,7 @@ return ret;
 static void cgDrawEither(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis,
-	char *binFileName)
+        char *binFileName)
 /* Draw chromosome graph - either built in or not. */
 {
 struct chromGraphSettings *cgs = tg->customPt;
@@ -180,21 +180,22 @@ else
 xOff = hvGfxAdjXW(hvg, xOff, width);
 
 char *encodedTrack = cgiEncode(tg->track);
-if(theImgBox && curImgTrack)
+if (theImgBox && curImgTrack)
     {
     char link[512];     // FIXME: winStart/winEnd are not right when using a portal
     safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s", hgcNameAndSettings(),
         chromName, winStart, winEnd, encodedTrack);
-    #ifdef IMAGEv2_SHORT_MAPITEMS
-        if(xOff < insideX && xOff+width > insideX)
-            warn("cgDrawEither(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",encodedTrack,xOff, yOff, xOff+width, yOff+height, link);
-    #endif//def IMAGEv2_SHORT_MAPITEMS
+#ifdef IMAGEv2_SHORT_MAPITEMS
+    if (xOff < insideX && xOff+width > insideX)
+        warn("cgDrawEither(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",
+             encodedTrack,xOff, yOff, xOff+width, yOff+height, link);
+#endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,NULL,xOff,yOff,xOff+width,yOff+height,tg->track);
     }
 else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
-        yOff+height);
+            yOff+height);
     hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\">\n",
             hgcNameAndSettings(), winStart, winEnd, encodedTrack, chromName, winStart, winEnd,
             database, tl.picWidth);
@@ -294,12 +295,12 @@ else
 	char numText[16];
 	hvGfxBox(hvg, xOff + width - tickSize, y, tickSize, 1, color);
 	safef(numText, sizeof(numText), "%g", val);
-	hvGfxTextRight(hvg, xOff, y - tl.fontHeight+2,
+        hvGfxTextRight(hvg, xOff, y - tl.fontHeight+2,
 		width - numPos, tl.fontHeight,
 		color, font, numText);
 	}
     wrapTextAndCenter(hvg, xOff+1, yOff, width*5*tl.nWidth, height,
-    	font, color, tg->shortLabel);
+                      font, color, tg->shortLabel);
     }
 }
 

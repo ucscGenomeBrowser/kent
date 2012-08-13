@@ -12,6 +12,7 @@ wgEncodeFsuRepliChip.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeGencodeV10.ra \
 wgEncodeGencodeV11.ra \
+wgEncodeGencodeV12.ra \
 wgEncodeGisChiaPet.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
@@ -26,7 +27,9 @@ wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromDnase.ra\
 wgEncodeOpenChromFaire.ra \
 wgEncodeOpenChromSynth.ra \
-wgEncodeReg.ra \
+wgEncodeRegDnaseClustered.ra \
+wgEncodeRegTfbsClustered.ra \
+wgEncodeRegTxn.ra \
 wgEncodeRikenCage.ra \
 wgEncodeSunyAlbanyGeneSt.ra \
 wgEncodeSunyAlbanyTiling.ra \

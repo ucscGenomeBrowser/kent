@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db ochPri2
+clade mammal
+genomeCladePriority 35
+scientificName Ochotona princeps
+commonName Pika
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute
+assemblyShortLabel OchPri2.0
+orderKey 1930
+mitoAcc none
+fastaFiles /cluster/data/ochPri2/broad/assembly.bases.gz
+agpFiles /cluster/data/ochPri2/broad/assembly.agp
+qualFiles /cluster/data/ochPri2/broad/ochPri2.qual.qac
+dbDbSpeciesDir pika
+photoCreditURL http://en.wikipedia.org/wiki/File:Ochotona_princeps.jpg
+photoCreditName Justin Johnsen, Wikipedia Commons
+ncbiGenomeId 771
+ncbiAssemblyId 199698
+ncbiAssemblyName ASM16482v1
+ncbiBioProject 19235
+genBankAccessionID GCA_000164825.1
+taxId 9978

@@ -9,27 +9,30 @@
 <h2>Description</h2>
 <p>
 RNA sequencing, or RNA-seq, is a method for mapping and quantifying the
-transcriptome of any organism that has a genomic DNA sequence
-assembly. Compared to microarrays, RNA-seq is especially
+total amount of RNA transcripts in a cell at any given time, otherwise known as
+the transcriptome, for any organism that has a genomic DNA sequence
+assembly. Compared to microarrays that detect and quantify transcripts by
+hybridization against known sequences, RNA-seq directly sequences
+transcripts and is especially
 well-suited for <span style="font-style: italic;">de novo</span>
 discovery of RNA splicing patterns and for determining unequivocally
-the presence or absence of lower abundance class RNAs.<br>
-</p>
-
-<p>RNA-seq is performed by reverse-transcribing an RNA sample into
+the presence or absence of lower abundance class RNAs.
+RNA-seq is performed by reverse-transcribing an RNA sample into
 cDNA followed by high throughput DNA sequencing. Most data is produced
-in one of two formats: single reads, each of which comes from one end
+in the format of either single reads or paired-end reads.
+In the format of single reads each sequence read comes from one end
 of a randomly primed cDNA molecule (and represent one end of one cDNA
-segment), and paired-end reads, which are obtained as pairs
+segment), while paired-end reads are obtained as pairs
 from both ends of a randomly primed cDNA (and represent two opposite
 ends of one cDNA segment). The resulting sequence reads are then
 informatically mapped onto the genome sequence (<span
-style="font-style: italic;">Alignments</span>).  Those that map,
-mapped reads, are counted to determine their frequency of occurence at
-known gene models. Those that don't map to the genome are mapped to
-known RNA splice junctions (<span style="font-style: italic;">Splice
-Sites</span>).
-
+style="font-style: italic;">Alignments</span>). 
+The current mappers (TopHat and STAR) have the ability to map
+reads to annotated and unannotated genomic regions.
+Reads mapped to annotated or novel RNA splice junctions are
+(<span style="font-style: italic;">Splice
+Sites</span>). Earlier versions of this software did not map 
+reads to unannotated genomic regions.
 </p>
 <p>
 Some RNA-seq protocols do not specify the coding strand. As a result,
@@ -51,7 +54,7 @@ These data were generated and analyzed as part of the <a
  href="http://www.genome.gov/10005107">ENCODE</a> project, a
 genome-wide consortium project with the aim of cataloging all
 functional elements in the human genome. This effort includes
-collecting a variety of data across related experimental conditions, to
+collecting a variety of data across related experimental conditions to
 facilitate integrative analysis. Consequently, additional ENCODE tracks may 
 contain data that is relevant to the data in these tracks. 
 <h2>References</h2>

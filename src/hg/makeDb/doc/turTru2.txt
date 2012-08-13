@@ -400,3 +400,145 @@ close (FH);
     #   59031653 bases of 2332402443 (2.531%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-07 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2332402443 / 2897316137 \) \* 1024
+    #	( 2332402443 / 2897316137 ) * 1024 = 824.342249
+
+    # round up to 850
+
+    cd /hive/data/genomes/turTru2
+    time blat turTru2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/turTru2.11.ooc -repMatch=850
+    #   Wrote 27158 overused 11-mers to jkStuff/turTru2.11.ooc
+    #   real    1m20.824s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" turTru2 | sort | uniq -c
+    #   334536 yes
+#    cd /hive/data/genomes/turTru2/jkStuff
+#    gapToLift turTru2 turTru2.nonBridged.lift -bedFile=turTru2.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' turTru2.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-07 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Tursiops truncatus	102	8040	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add turTru2 just after ce2
+# turTru2 (Dolphin)
+turTru2.serverGenome = /hive/data/genomes/turTru2/turTru2.2bit
+turTru2.clusterGenome = /hive/data/genomes/turTru2/turTru2.2bit
+turTru2.ooc = /hive/data/genomes/turTru2/jkStuff/turTru2.11.ooc
+turTru2.lift = no
+turTru2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+turTru2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+turTru2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+turTru2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+turTru2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+turTru2.refseq.mrna.native.load = no
+turTru2.refseq.mrna.xeno.load = yes
+turTru2.genbank.mrna.native.load = no
+turTru2.genbank.mrna.xeno.load = yes
+turTru2.genbank.est.native.load = no
+turTru2.downloadDir = turTru2
+turTru2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding turTru2 Dolphin" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for turTruNames Tursiops truncatus" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S turTru2           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial turTru2 &
+    #   var/build/logs/2012.06.08-10:05:05.turTru2.initalign.log
+    #   real    1400m6.762s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad turTru2 &
+    #	logFile: var/dbload/hgwdev/logs/2012.06.12-13:43:53.dbload.log
+    #   real    4m45.316s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-06-12 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add turTru2 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added turTru2." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+##############################################################################
+# LASTZi cow bosTau7 (DONE 2012-06-19 - Chin)
+    #   original alignment done at bosTau7.txt
+    cd /hive/data/genomes/bosTau7/bed/lastzTurTru2.2012-06-19
+
+    cat fb.bosTau7.chainTurTru2Link.txt
+    #   1696154184 bases of 2804673174 (60.476%) in intersection    
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s lastzTurTru2.2012-06-19 lastz.turTru2
+
+
+    # and the swap
+    mkdir /hive/data/genomes/turTru2/bed/blastz.bosTau7.swap
+    cd /hive/data/genomes/turTru2/bed/blastz.bosTau7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/bosTau7/bed/lastzTurTru2.2012-06-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    532m53.448s
+    cat fb.turTru2.chainBosTau7Link.txt
+    #   1625706583 bases of 2332402443 (69.701%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/turTru2/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH481929:22304-29703" where name="turTru2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/turTru2/pushQ
+    cd /hive/data/genomes/turTru2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl turTru2 2> stderr.txt | grep -v transMap > turTru2.sql
+    #   real    3m41.168s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/turTru2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/turTru2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/turTru2/bbi/quality.bw
+# WARNING: turTru2 does not have seq
+# WARNING: turTru2 does not have extFile
+# WARNING: turTru2 does not have estOrientInfo
+
+    scp -p turTru2.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/turTru2.sql"
+
+############################################################################

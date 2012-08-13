@@ -29,18 +29,21 @@ union aNumber
     };
 
 struct annoFilter
-/* A filter on a column of data: operand and value(s). This info can tell the UI what
- * filtering options to offer and what their current values are; and it tells the
+/* A filter on a row or specific column of data: operand and value(s). This info can tell the
+ * UI what filtering options to offer and what their current values are; and it tells the
  * annoStreamer what filters to apply. */
     {
     struct annoFilter *next;
-    struct asColumn *columnDef;	// Lots of info about the column: name, type, type-hints, ...
-    char *label;		// Option label for UI (if NULL, see column->comment)
+    boolean (*filterFunc)(struct annoFilter *self, char **row, int rowSize);
+				// If non-NULL, pass whole row to this function.
+    char *label;		// Option label for UI
+    int columnIx;		// If filterFunc is NULL, index of column in row
+    enum asTypes type;		// Data type (determines which filter operations are applicable)
     enum annoFilterOp op;	// Action to be performed
     void *values;		// Depending on op: name(s) to match, thresholds to compare, etc.
     boolean isExclude;		// True if we are excluding items that pass, false if including.
     boolean rightJoin;		// A la SQL: if this filter fails, discard primary row.
-    boolean haveMinMax;		// True if we know the allowable range for numeric thresholds
+    boolean hasMinMax;		// True if we know the allowable range for numeric thresholds
 				// so e.g. UI can enforce limits
     union aNumber min;		// Lowest valid threshold value
     union aNumber max;		// Highest valid threshold value
@@ -48,8 +51,7 @@ struct annoFilter
 
 struct annoFilter *annoFiltersFromAsObject(struct asObject *asObj);
 /* Translate a table's autoSql representation into a list of annoFilters that make
- * sense for the table's set of fields.
- * Callers: do not modify any filter's columnDef! */
+ * sense for the table's set of fields. */
 
 boolean annoFilterRowFails(struct annoFilter *filterList, char **row, int rowSize,
 			   boolean *retRightJoin);
@@ -63,9 +65,15 @@ boolean annoFilterWigValueFails(struct annoFilter *filterList, double value,
  * Set retRightJoin to TRUE if a rightJoin filter has failed. */
 
 struct annoFilter *annoFilterCloneList(struct annoFilter *list);
-/* Shallow-copy a list of annoFilters.  Callers: do not modify any filter's columnDef! */
+/* Copy a list of annoFilters. */
 
 void annoFilterFreeList(struct annoFilter **pList);
-/* Shallow-free a list of annoFilters. */
+/* Free a list of annoFilters. */
+
+enum annoFilterOp afOpFromString(char *string);
+/* Translate string (e.g. "afNotEqual") into enum value (e.g. afNotEqual). */
+
+char *stringFromAfOp(enum annoFilterOp op);
+/* Translate op into a string.  Do not free result. */
 
 #endif//ndef ANNOFILTER_H

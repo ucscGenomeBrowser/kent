@@ -184,7 +184,15 @@ CREATE TABLE [dbo].[Builds] (
         [build_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION NOT NULL ,
         [tax_id] [int] NOT NULL ,
         [ncbi_build_number] [int] NOT NULL ,
-        [ncbi_build_version] [int] NOT NULL
+        [ncbi_build_version] [int] NOT NULL,
+        [ensembl_build_number] [int] NOT NULL ,
+        [assembly_acc] [varchar] (16) COLLATE Latin1_General_BIN NOT NULL ,
+        [assembly_version] [int] NOT NULL ,
+        [assembly_name] [varchar] (16) COLLATE Latin1_General_BIN NOT NULL ,
+        [prev_build_uid] [int] NULL ,
+        [date_created] [datetime] NOT NULL ,
+        [date_made_public] [datetime] NULL
+
 ) ON [PRIMARY]
 go
 
@@ -219,7 +227,7 @@ CREATE TABLE [dbo].[ProspectiveGroups] (
 go
 
 CREATE TABLE [dbo].[ProspectiveAnnotCompare] (
-        [prospective_uid] [int] NOT NULL ,
+        [group_version_uid] [int] NOT NULL ,
         [prot_length_diff] [int] NOT NULL ,
         [coverage_pct] [float] NOT NULL ,
         [matched_splice_count] [int] NOT NULL ,
@@ -236,7 +244,8 @@ CREATE TABLE [dbo].[ReportTypes] (
 ) ON [PRIMARY]
 go
 
-CREATE TABLE [dbo].[ReportQueries] (
+CREATE TABLE [dbo].[ReportQueries]
+(
     [query_uid] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
     [report_type_uid] [int] NOT NULL,
     [report_sort_order] [int] NULL,
@@ -248,7 +257,7 @@ go
 
 CREATE TABLE [dbo].[ProspectiveStatusVals] (
 	[prospective_status_val_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION  NOT NULL ,
-	[prospective_status] [varchar] (50) COLLATE Latin1_General_BIN NOT NULL 
+	[prospective_status] [varchar] (50) COLLATE Latin1_General_BIN NOT NULL
 ) ON [PRIMARY]
 go
 

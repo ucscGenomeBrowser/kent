@@ -70,7 +70,7 @@ return FALSE;
 }
 
 int packCountRowsUCSFDemo(struct track *tg, int maxCount,
-			  boolean withLabels, boolean allowOverflow)
+                          boolean withLabels, boolean allowOverflow)
 /* Return packed height. */
 /* Cloned from packCountRowsOverflow() in hgTracks.c. */
 {
@@ -174,14 +174,15 @@ void mapBoxHcTwoItems(struct hvGfx *hvg, int start, int end, int x, int y, int w
 char *encodedItem1 = cgiEncode(item1);
 char *encodedItem2 = cgiEncode(item2);
 x = hvGfxAdjXW(hvg, x, width);
-if(theImgBox && curImgTrack)
+if (theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s&i=%s&i2=%s", // NOTE: winStart,winEnd removed due to portal
         hgcNameAndSettings(), chromName, start, end, track, encodedItem1, encodedItem2);
     #ifdef IMAGEv2_SHORT_MAPITEMS
-        if(x < insideX && x+width > insideX)
-            warn("mapBoxHcTwoItems(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",track,x, y, x+width, y+height, link);
+    if (x < insideX && x+width > insideX)
+        warn("mapBoxHcTwoItems(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",
+             track,x, y, x+width, y+height, link);
     #endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,statusLine,x, y, x+width, y+height, track);
     }
@@ -189,8 +190,8 @@ else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
     hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
-        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName, winStart, winEnd,
-        database, tl.picWidth);
+            hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName,
+            winStart, winEnd, database, tl.picWidth);
     hPrintf("TITLE=\"%s\">\n", statusLine);
     }
 freeMem(encodedItem1);
@@ -227,8 +228,8 @@ for(i = 0; i < ArraySize(tissues); i++)
 return -1;
 }
 
-void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end,
-		    int x, int y, int width, int height)
+void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName,
+                    char *mapItemName, int start, int end, int x, int y, int width, int height)
 {
 if(tg->visibility != tvDense && tg->visibility != tvHide)
     mapBoxHcTwoItems(hvg, start, end, x,y, width, height, tg->track, itemName, itemName, itemName);
@@ -266,7 +267,7 @@ return lfsList;
 }
 
 void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes,
-		       struct expRecord *erList,  int index, char *filter, int filterIndex)
+                       struct expRecord *erList,  int index, char *filter, int filterIndex)
 /* creates two hashes which contain a mapping from
    experiment to type and from type to lists of experiments */
 {
@@ -288,8 +289,8 @@ for(er = erList; er != NULL; er = er->next)
 	val = hashFindVal(seen, name);
 	if (val == NULL)
 	    {
-	    /* if this type is new
-	       save the index for this type */
+            /* if this type is new
+               save the index for this type */
 	    AllocVar(val);
 	    snprintf(buff, sizeof(buff), "%d", unique);
 	    hashAdd(expIndexesToNames, buff, name);
@@ -304,8 +305,8 @@ for(er = erList; er != NULL; er = er->next)
 	    }
 	else
 	    {
-	    /* if this type has been seen before
-	       tack the new index on the end of the list */
+            /* if this type has been seen before
+               tack the new index on the end of the list */
 	    AllocVar(sr);
 	    srList = hashMustFindVal(indexes, val->val);
 	    sr->val = er->id;
@@ -357,8 +358,8 @@ if(sameString(b->name, "NSCLC"))
 return(strcmp(a->name, b->name));
 }
 
-struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database,
-	char *table, int expIndex, char *filter, int filterIndex)
+struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table,
+                                               int expIndex, char *filter, int filterIndex)
 /* Groups bed expScores in multiple scores bed by the expIndex
  * in the expRecord->extras array. Makes use of hashes to remember
  * numerical index of experiments, as hard to do in a list.
@@ -426,42 +427,42 @@ for(i=0;i<numIndexes;i++)
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     /* for each tissue we need to average the scores together */
-    for(i=0; i<numIndexes; i++)
-	{
-	float aveScores = 0;
-	int aveCount =0;
+    for (i=0; i<numIndexes; i++)
+        {
+        float aveScores = 0;
+        int aveCount =0;
 
-	/* get the indexes of experiments that we want to average
-	 in form of a slRef list */
-	snprintf(buff, sizeof(buff), "%d", i);
+        /* get the indexes of experiments that we want to average
+         in form of a slRef list */
+        snprintf(buff, sizeof(buff), "%d", i);
 	srList = hashMustFindVal(indexes, buff);
 	currentIndex = srList->val;
 
 	/* create the linked features */
 	lf = lfFromBed(bed);
 
-	/* average the scores together to get the ave score for this
-	   tissue type */
-	for(sr = srList; sr != NULL; sr = sr->next)
-	    {
-	    currentIndex = sr->val;
-	    if( bed->expScores[currentIndex] != -10000)
-		{
-		aveScores += bed->expScores[currentIndex];
-		aveCount++;
-		}
-	    }
+        /* average the scores together to get the ave score for this
+           tissue type */
+        for (sr = srList; sr != NULL; sr = sr->next)
+            {
+            currentIndex = sr->val;
+            if ( bed->expScores[currentIndex] != -10000)
+                {
+                aveScores += bed->expScores[currentIndex];
+                aveCount++;
+                }
+            }
 
-	/* if there were some good values do the average
-	   otherwise mark as missing */
-	if(aveCount != 0)
-	    lf->score = aveScores/aveCount;
-	else
-	    lf->score = -10000;
+        /* if there were some good values do the average
+           otherwise mark as missing */
+        if (aveCount != 0)
+            lf->score = aveScores/aveCount;
+        else
+            lf->score = -10000;
 
-	/* add this linked feature to the correct
-	   linkedFeaturesSeries */
-	slAddHead(&lfsArray[i]->features, lf);
+        /* add this linked feature to the correct
+           linkedFeaturesSeries */
+        slAddHead(&lfsArray[i]->features, lf);
 	}
     }
 /* Summarize all of our linkedFeatureSeries in one linkedFeatureSeries list */
@@ -612,10 +613,10 @@ else
    implementation should be minimal as we only hit this code when
    there are less than 10 items in window.
 */
-if(tg->limitedVis == tvFull)
+if (tg->limitedVis == tvFull)
     {
     for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
-	{
+        {
 	for(lf = lfs->features; lf != NULL; lf = lfNext)
 	    {
 	    lfNext = lf->next;
@@ -811,22 +812,22 @@ if(tg->limitedVis == tvDense)
 else
     {
     /* for each experiment create a linked features series */
-    for(i = 0; i < bedList->expCount; i++)
-	{
-	char buff[256];
-	AllocVar(lfs);
+    for (i = 0; i < bedList->expCount; i++)
+        {
+        char buff[256];
+        AllocVar(lfs);
 	if(bedList != NULL)
 	    {
 	    snprintf(buff, sizeof(buff), "%d", bedList->expIds[i]);
 	    lfs->name = cloneString(buff);
-	    }
-	else
-	    lfs->name = cloneString(tg->shortLabel);
-      	for(bed = bedList; bed != NULL; bed = bed->next)
-	    {
-	    lf = lfFromBed(bed);
-	    lf->tallStart = bed->chromStart;
-	    lf->tallEnd = bed->chromEnd;
+            }
+        else
+            lfs->name = cloneString(tg->shortLabel);
+        for (bed = bedList; bed != NULL; bed = bed->next)
+            {
+            lf = lfFromBed(bed);
+            lf->tallStart = bed->chromStart;
+            lf->tallEnd = bed->chromEnd;
 	    lf->score = bed->expScores[i];
 	    slAddHead(&lfs->features, lf);
 	    }
@@ -855,7 +856,7 @@ if(!exprBedColorsMade)
 if(val == -10000)
     return shadesOfGray[5];
 
-if(tg->visibility == tvDense)
+if (tg->visibility == tvDense)
     /* True value stored as integer in score field and was multiplied by 100 */
     absVal = absVal/100;
 
@@ -864,7 +865,7 @@ if (tg->visibility == tvFull)
     {
     maxDeviation = 0.7;
     }
- else
+else
     {
     maxDeviation = 0.5;
     }
@@ -878,7 +879,7 @@ if(absVal > maxDeviation)
  * 1 * 15 /2.0 = 7.5 = 7
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
-if(val < 0)
+if (val < 0)
     if (sameString(colorScheme, "gr"))
         return shadesOfRed[colorIndex];
     else
@@ -896,7 +897,7 @@ else
 
 
 Color expressionScoreColor(struct track *tg, float val, struct hvGfx *hvg,
-		 float denseMax, float fullMax)
+                           float denseMax, float fullMax)
 /* Does the score->color conversion for various microarray tracks */
 /* NOTE: item is a linkedFeatures struct */
 {
@@ -942,10 +943,10 @@ if(absVal > maxDeviation)
  * 1 * 15 /2.0 = 7.5 = 7
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
-if(val > 0)
+if (val > 0)
     {
     if (expColor == yellowBlue)
-	return shadesOfYellow[colorIndex];
+        return shadesOfYellow[colorIndex];
     else if (expColor == redBlueOnWhite)
 	return shadesOfRedOnWhite[colorIndex];
     else if (expColor == redBlueOnYellow)
@@ -962,7 +963,7 @@ else
     else if (expColor == redBlueOnYellow)
 	return shadesOfBlueOnYellow[colorIndex];
     else
-	return shadesOfBlue[colorIndex];
+        return shadesOfBlue[colorIndex];
     }
 }
 
@@ -981,7 +982,7 @@ hvGfxMakeColorGradient(hvg, &black, &shade3, 11, shadesOfLowe3);
 
 /*For Lowe Lab arrays with M and A values*/
 Color loweExpressionScoreColor(struct track *tg, float val, struct hvGfx *hvg,
-		 float denseMax, float fullMax)
+                               float denseMax, float fullMax)
 /* Does the score->color conversion for various microarray tracks */
 /* NOTE: item is a linkedFeatures struct */
 {
@@ -1032,12 +1033,14 @@ if(absVal > maxDeviation)
  * 1 * 15 /2.0 = 7.5 = 7
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
-if(val > 0)
-	if(val == addednumber+1){
-		return shadesOfLowe1[9];
-	}
-	else if(val == addednumber+2){
-		return  shadesOfLowe2[9];
+if (val > 0)
+    if (val == addednumber+1)
+        {
+        return shadesOfLowe1[9];
+        }
+    else if (val == addednumber+2)
+        {
+        return  shadesOfLowe2[9];
 	}
 	else if(val == addednumber+3){
 		return shadesOfLowe3[9];
@@ -1055,7 +1058,7 @@ else
 }
 
 Color expressionColor(struct track *tg, void *item, struct hvGfx *hvg,
-		 float denseMax, float fullMax)
+                      float denseMax, float fullMax)
 /* Does the score->color conversion for various microarray tracks */
 {
 struct linkedFeatures *lf = item;
@@ -1064,7 +1067,7 @@ return expressionScoreColor(tg, lf->score, hvg, denseMax, fullMax);
 
 /*For Lowe Lab arrays with M and A values*/
 Color loweExpressionColor(struct track *tg, void *item, struct hvGfx *hvg,
-		 float denseMax, float fullMax)
+                          float denseMax, float fullMax)
 /* Does the score->color conversion for various microarray tracks */
 {
 struct linkedFeatures *lf = item;
@@ -1094,7 +1097,7 @@ else
     val = 0;
 
 /* scale offset down to 0 */
-if(val > offset)
+if (val > offset)
     val = val - offset;
 else
     val = 0;
@@ -1106,7 +1109,7 @@ max = max - offset;
 if(max < 0)
     errAbort("hgTracks::getColorForAffyExpssn() - Max val should be greater than 0 but it is: %g", max);
 
-if(val > max)
+if (val > max)
     val = max;
 colorIndex = (int)(val * maxShade/max);
 return shadesOfSea[colorIndex];
@@ -1217,15 +1220,15 @@ void fixLfs(struct track *tg)
 {
 struct linkedFeatures *lf;
 struct linkedFeaturesSeries *lfs;
-for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
+for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     /* Set the beginning and end of each linkedFeaturesSeries. */
     {
     lfs->start = BIGNUM;
     lfs->end = 0;
-    for(lf = lfs->features; lf != NULL; lf = lf->next)
-	{
-	if(lf->start < lfs->start)
-	    lfs->start = lf->start;
+    for (lf = lfs->features; lf != NULL; lf = lf->next)
+        {
+        if (lf->start < lfs->start)
+            lfs->start = lf->start;
 	if(lf->end > lfs->end)
 	    lfs->end = lf->end;
 	}
@@ -1309,7 +1312,7 @@ struct linkedFeaturesSeries *lfs = item;
 char *full = NULL;
 static char abbrev[32];
 char *tmp = strstr(lfs->name, "_vs_");
-if(tmp != NULL)
+if (tmp != NULL)
     {
     tmp += 4;
     full = tmp = cloneString(tmp);
@@ -1319,7 +1322,7 @@ if(tmp != NULL)
     strncpy(abbrev, full, sizeof(abbrev));
     freez(&full);
     }
-else if(lfs->name != NULL)
+else if (lfs->name != NULL)
     {
     strncpy(abbrev, lfs->name, sizeof(abbrev));
     }
@@ -1344,9 +1347,9 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 }
 
 void expRatioDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font,
-	Color color, enum trackVisibility vis)
+                            struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+                            boolean withCenterLabels, MgFont *font,
+                            Color color, enum trackVisibility vis)
 /* Because I want the labels to appear in pack mode, and make the display */
 /* identical to full mode, there's this custom leftLabels function. */
 {
@@ -1371,7 +1374,7 @@ if ((vis == tvFull) || (vis == tvPack))
     /* Apply filtering here */
     for (item = tg->items; item != NULL; item = item->next)
 	{
-	char *name = tg->itemName(tg, item);
+        char *name = tg->itemName(tg, item);
 	int itemHeight = tg->itemHeight(tg, item);
 	if (sameString(tg->table, "CGHBreastCancerUCSF"))
 	    {
@@ -1424,7 +1427,7 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
     !(sameString(tg->table, "expRatioUCSFDemo") || sameString(tg->table, "cnvLungBroadv2")  || sameString(tg->table, "CGHBreastCancerUCSF")  || sameString(tg->table, "expBreastCancerUCSF")) )
     {
     int xOffRc = hvGfxAdjXW(hvg, xOff, insideWidth);
-    if(theImgBox && curImgTrack)
+    if (theImgBox && curImgTrack)
         {
         char link[512];
 #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
@@ -1433,14 +1436,16 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
 #endif
         safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s&i=zoomInMore", hgcNameAndSettings(), chromName, seqStart, seqEnd, tg->track);
         #ifdef IMAGEv2_SHORT_MAPITEMS
-            if(xOffRc < insideX && xOffRc+insideWidth > insideX)
-                warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->track,xOffRc, y, xOffRc+insideWidth, y+totalHeight, link);
+        if (xOffRc < insideX && xOffRc+insideWidth > insideX)
+            warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d "
+                 "link:[%s]",tg->track,xOffRc, y, xOffRc+insideWidth, y+totalHeight, link);
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,"zoomInMore",xOffRc, y, xOffRc+insideWidth, y+totalHeight, tg->track);
         }
     else
         {
-        hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOffRc, y, xOffRc+insideWidth, y+totalHeight);
+        hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ",
+                xOffRc, y, xOffRc+insideWidth, y+totalHeight);
         hPrintf("HREF=\"%s&c=%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ",
                 hgcNameAndSettings(), chromName, seqStart, seqEnd, tg->track, chromName, winStart, winEnd, database);
         hPrintf("TITLE=\"zoomInMore\">\n");
@@ -1456,7 +1461,7 @@ else
 	int w;
 	if (x1 < 0)
 	    x1 = 0;
-	if (x2 > insideWidth-1)
+        if (x2 > insideWidth-1)
 	    x2 = insideWidth-1;
 	w = x2 - x1 + 1;
 	if (sameString(tg->table, "expRatioUCSFDemo") || sameString(tg->table, "cnvLungBroadv2")  || sameString(tg->table, "expBreastCancerUCSF"))
@@ -1493,14 +1498,14 @@ else
                 }
 	    break;
 	    }
-	else
+        else
 	    mapBoxHcTwoItems(hvg, probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->track, probe->name, probe->name, probe->name);
-	}
+        }
     }
 }
 
 static void expRatioSetupPixelArrays(struct track *tg, int **pPixCountArray,
-				     float ***pPixScoreArray, double scale)
+                                     float ***pPixScoreArray, double scale)
 /* This makes an array that keeps track of how many items there are at */
 /* a given pixel on the track. This is important technique for speeding */
 /* up the track when it's zoomed out far and there's a lot of stuff */
@@ -1532,16 +1537,16 @@ for (i = 0, expLfs = tg->items; (i < nExps) && (expLfs != NULL); i++, expLfs = e
 	int w, j;
 	if (x1 < 0)
 	    x1 = 0;
-	if (x2 > insideWidth-1)
+        if (x2 > insideWidth-1)
 	    x2 = insideWidth-1;
 	w = x2 - x1;
 	if (w == 0)
 	    w = 1;
 	for (j = 0; j < w; j++)
 	    {
-	    if ((pixCountArray[i][x1+j] == 0) ||
+            if ((pixCountArray[i][x1+j] == 0) ||
 		(pixScoreArray[i][x1+j] == MICROARRAY_MISSING_DATA) ||
-		((fabs(lfProbe->score) > fabs(pixScoreArray[i][x1+j])) &&
+                ((fabs(lfProbe->score) > fabs(pixScoreArray[i][x1+j])) &&
 		 (lfProbe->score != MICROARRAY_MISSING_DATA)))
 		pixScoreArray[i][x1+j] = lfProbe->score;
 	    pixCountArray[i][x1+j]++;
@@ -1558,8 +1563,8 @@ freeMem(pixCountArray);
 }
 
 void expRatioDrawItemsWithExons(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis)
+                                struct hvGfx *hvg, int xOff, int yOff, int width,
+                                MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the microarray measurements and show exons.  A cart var should be */
 /* on to access this function instead of directly. */
 {
@@ -1570,16 +1575,16 @@ struct slList *item;
 hvGfxSetClip(hvg, xOff, yOff, width, tg->height);
 for (item = tg->items; item != NULL; item = item->next)
     {
-    if(tg->itemColor != NULL)
-	color = tg->itemColor(tg, item, hvg);
+    if (tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, hvg);
     linkedFeaturesSeriesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
     y += lineHeight;
     }
 }
 
 void expRatioDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis)
+                       struct hvGfx *hvg, int xOff, int yOff, int width,
+                       MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the microarray measurements, and do it a lot faster than */
 /* genericDrawItems would. */
 {

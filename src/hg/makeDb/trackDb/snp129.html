@@ -62,24 +62,64 @@ build 129, available from
     </LI>
     <LI>
       <A name="Func"></A>
-      <B>Function</B>: Predicted functional role 
-	(<I>each variant may have more than one functional role</I>)<BR>
+      <B>Function</B>: dbSNP's predicted functional effect of variant on RefSeq transcripts,
+      both curated (NM_* and NR_*) as in the RefSeq Genes track and predicted (XM_* and XR_*),
+      not shown in UCSC Genome Browser.
+      A variant may have more than one functional role if it overlaps
+      multiple transcripts.
+      For filtering and coloring, function terms are grouped into more
+      general categories:<BR>
       <UL>
-        <LI><B>Locus Region</B> - variation within 2000 bases of gene, but not 
-	    in transcript (<TT>near-gene-3</TT>, <TT>near-gene-5</TT>)
+        <LI><B>Locus Region</B> - variation is 3' to and within 500  bases of a
+            transcript, or is 5' to and within 2000 bases of a transcript
+	    (dbSNP terms: <TT>near-gene-3</TT>, <TT>near-gene-5</TT>;
+	    Sequence Ontology terms:
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
+	    TARGET=_BLANK>downstream_gene_variant</A></TT>,
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001631"
+	    TARGET=_BLANK>upstream_gene_variant</A></TT>)</LI>
         <LI><B>Coding - Synonymous</B> - no change in peptide for allele with 
-	    respect to reference assembly (<TT>coding-synon</TT>)
+	    respect to reference assembly (dbSNP term: <TT>coding-synon</TT>;
+	    Sequence Ontology term:
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001819"
+	    TARGET=_BLANK>synonymous_variant</A></TT>)</LI>
         <LI><B>Coding - Non-Synonymous</B> - change in peptide for allele with 
-	    respect to reference assembly (<TT>nonsense</TT>, <TT>missense</TT>, 
-            <TT>frameshift</TT>)
+	    respect to reference assembly
+	    (dbSNP terms: <TT>nonsense</TT>, <TT>missense</TT>, <TT>frameshift</TT>;
+	    Sequence Ontology terms:
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001587"
+	    TARGET=_BLANK>stop_gained</A></TT>,
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001583"
+	    TARGET=_BLANK>missense_variant</A></TT>,
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001589"
+	    TARGET=_BLANK>frameshift_variant</A></TT>)</LI>
         <LI><B>Untranslated</B> - variation in transcript, but not in coding 
-	    region interval (<TT>untranslated-3</TT>, <TT>untranslated-5</TT>)
+	    region interval
+	    (dbSNP terms: <TT>untranslated-3</TT>, <TT>untranslated-5</TT>;
+	    Sequence Ontology terms:
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001624"
+	    TARGET=_BLANK>3_prime_UTR_variant</A></TT>,
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001623"
+	    TARGET=_BLANK>5_prime_UTR_variant</A></TT>)</LI>
         <LI><B>Intron</B> - variation in intron, but not in first two or last two bases of intron
-        <LI><B>Splice Site</B> - variation in first two or last two bases of 
-	    intron (<TT>splice-3</TT>, <TT>splice-5</TT>)
+	    (dbSNP term: <TT>intron</TT>;
+	    Sequence Ontology term:
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001627"
+	    TARGET=_BLANK>intron_variant</A></TT>)</LI>
+        <LI><B>Splice Site</B> - variation in first two or last two bases of intron
+	    (dbSNP terms: <TT>splice-3</TT>, <TT>splice-5</TT>;
+	    Sequence Ontology terms:
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001574"
+	    TARGET=_BLANK>splice_acceptor_variant</A></TT>,
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001575"
+	    TARGET=_BLANK>splice_donor_variant</A></TT>)</LI>
         <LI><B>Reference (coding)</B> - one of the observed alleles of a SNP
-	    in a coding region matches the reference assembly (<TT>cds-reference</TT>)
-        <LI><B>Unknown</B> - no known functional classification
+	    in a coding region matches the reference assembly
+	    (dbSNP term: <TT>cds-reference</TT>;
+	    Sequence Ontology term:
+	    <TT><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001580"
+	    TARGET=_BLANK>coding_sequence_variant</A></TT>)</LI>
+        <LI><B>Unknown</B> - no known functional classification</LI>
       </UL>
     </LI>
     <LI>
@@ -200,7 +240,11 @@ TARGET=_BLANK>ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
       b129_SNPContigInfo_36_3.bcp.gz.  
   <LI>b129_SNPMapInfo_36_3.bcp.gz provided the alignment weights.
   <LI>Functional classification was obtained from 
-      b129_SNPContigLocusId_36_3.bcp.gz.
+      b129_SNPContigLocusId_36_3.bcp.gz. The internal database representation
+      uses dbSNP's function terms, but for display in SNP details pages,
+      these are translated into
+      <A HREF="http://sequenceontology.org/"
+      TARGET=_BLANK>Sequence Ontology</A> terms.
   <LI>Validation status and heterozygosity were obtained from SNP.bcp.gz.
   <LI>The header lines in the rs_fasta files were used for molecule type,
       class and observed polymorphism.

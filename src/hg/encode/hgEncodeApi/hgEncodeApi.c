@@ -85,10 +85,7 @@ void experimentsResource(struct dyString *output)
 struct sqlConnection *connExp = sqlConnect(ENCODE_EXP_DATABASE);
 if (!sqlTableExists(connExp, ENCODE_EXP_TABLE))
     {
-    /* NOTE:  The experiment table lives only on development and preview servers 
-        -- use preview if not found on localhost */
-    sqlDisconnect(&connExp);
-    connExp = sqlConnectProfile("preview", ENCODE_EXP_DATABASE);
+    errAbort("Experiment table not found on server");
     }
 
 int *ids = NULL;

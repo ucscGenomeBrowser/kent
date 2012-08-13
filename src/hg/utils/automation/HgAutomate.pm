@@ -167,7 +167,7 @@ sub getWarnClusters {
     if ($isInput) {
       return @allClusters;
     } else {
-      return ('memk');
+      return ('encodek');
     }
   }
 }

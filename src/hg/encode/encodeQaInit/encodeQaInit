@@ -451,7 +451,6 @@ You may need to do a 'git pull'.
 
 def main():
     parser = argparse.ArgumentParser(
-    prog='encodeQaInit',
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='Initializes QA directory for claiming a release',
     epilog=
@@ -469,11 +468,11 @@ encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 
 
 
-    if len(sys.argv) == 1:
-        parser.print_help()
-        return
+    #if len(sys.argv) == 1:
+    #    parser.print_help()
+    #    return
 
-    args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args()
 
     releaseOld = 'solo'
     if not args.release.isdigit():
@@ -577,41 +576,45 @@ encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 
     tables = genNotes.newTables
 
-    print "Running qa tests"
-    output.append("Checking for missing table descriptions:")
-    (tableDescOutput, noDescription) = qa.checkTableDescriptions(args.database, tables)
-    output.extend(tableDescOutput)
+    if tables:
 
-    output.append("Checking for missing table indexes:")
-    (tableIndexOut, missingIndex) = qa.checkTableIndex(args.database, tables)
-    output.extend(tableIndexOut)
+        print "Running qa tests"
+        output.append("Checking for missing table descriptions:")
+        (tableDescOutput, noDescription) = qa.checkTableDescriptions(args.database, tables)
+        output.extend(tableDescOutput)
 
-    output.append("Checking table names for errors:")
-    (tableNameOut, badTableNames) = qa.checkTableName(tables)
-    output.extend(tableNameOut)
+        output.append("Checking for missing table indexes:")
+        (tableIndexOut, missingIndex) = qa.checkTableIndex(args.database, tables)
+        output.extend(tableIndexOut)
 
-    trackDbPath = c.currentTrackDb
-    if trackDbPath:
-        output.append("Checking short and long labels in trackDb:")
-        (labelOut, badLabels) = qa.checkLabels(trackDbPath)
-        output.extend(labelOut)
+        output.append("Checking table names for errors:")
+        (tableNameOut, badTableNames) = qa.checkTableName(tables)
+        output.extend(tableNameOut)
+
+        trackDbPath = c.currentTrackDb
+        if trackDbPath:
+            output.append("Checking short and long labels in trackDb:")
+            (labelOut, badLabels) = qa.checkLabels(trackDbPath)
+            output.extend(labelOut)
+        else:
+            print "Could not determine track Db to use, does the composite have the alpha tag in trackDb.wgEncode.ra?"
+
+        output.append("Checking tables for coordinate errors:")
+        (coordsOut, badCoords) = qa.checkTableCoords(args.database, tables)
+        output.extend(coordsOut)
+
+        output.append("Checking tables for positional errors:")
+        (posOut, badPos) = qa.positionalTblCheck(args.database, tables)
+        output.extend(posOut)
+
+        output.append("Counts per chromosome:")
+        output.append("")
+        (countChromOut, tableCounts) = qa.countPerChrom(args.database, tables)
+        output.extend(countChromOut)
+
+        writeScriptOut(qaDir, output)
     else:
-        print "Could not determine track Db to use, does the composite have the alpha tag in trackDb.wgEncode.ra?"
-
-    output.append("Checking tables for coordinate errors:")
-    (coordsOut, badCoords) = qa.checkTableCoords(args.database, tables)
-    output.extend(coordsOut)
-
-    output.append("Checking tables for positional errors:")
-    (posOut, badPos) = qa.positionalTblCheck(args.database, tables)
-    output.extend(posOut)
-
-    output.append("Counts per chromosome:")
-    output.append("")
-    (countChromOut, tableCounts) = qa.countPerChrom(args.database, tables)
-    output.extend(countChromOut)
-
-    writeScriptOut(qaDir, output)
+        print "No new tables, skipping qaTests."
 
     print "Done!"
 

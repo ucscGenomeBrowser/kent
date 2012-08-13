@@ -252,3 +252,86 @@ skipInvalid yes
     #   20779803 bases of 2133134836 (0.974%) in intersection
 
 #########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Erinaceus europaeus	10	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add eriEur1 just after ce2
+# eriEur1 (European Hedgehog)
+eriEur1.serverGenome = /hive/data/genomes/eriEur1/eriEur1.2bit
+eriEur1.clusterGenome = /scratch/data/eriEur1/eriEur1.2bit
+eriEur1.ooc = /scratch/data/eriEur1/eriEur1.11.ooc
+eriEur1.lift = no
+eriEur1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+eriEur1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+eriEur1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+eriEur1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+eriEur1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+eriEur1.refseq.mrna.native.load = no
+eriEur1.refseq.mrna.xeno.load = yes
+eriEur1.genbank.mrna.xeno.load = yes
+eriEur1.genbank.est.native.load = no
+eriEur1.downloadDir = eriEur1
+eriEur1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding eriEur1 European hedgehog" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for eriEurNames" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S eriEur1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial eriEur1 &
+    #   var/build/logs/2012.05.29-09:59:15.eriEur1.initalign.log
+    #   real    8831m21.557s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad eriEur1 &
+    #	logFile: var/dbload/hgwdev/logs/2012.06.07-16:03:53.dbload.log
+    #   real    13m24.324s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-05-11 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add eriEur1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added eriEur1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-20 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_373857:3457-13237" where name="eriEur1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-20 - Hiram)
+    mkdir /hive/data/genomes/eriEur1/pushQ
+    cd /hive/data/genomes/eriEur1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl eriEur1 2> stderr.txt | grep -v transMap > eriEur1.sql
+
+    scp -p eriEur1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < eriEur1.sql
+
+############################################################################

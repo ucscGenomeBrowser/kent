@@ -311,9 +311,11 @@ void printSelfHomologs(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     printf("<b>Homologs within genome</b><BR>\n");
 
     /* Print table */
-    printf("<table style='width:60%%; background-color:#%s;' border=0 cellpadding=1 cellspacing=0>", HG_COL_BORDER);
+    printf("<table style='width:60%%; background-color:#%s;' border=0 cellpadding=1 cellspacing=0>",
+           HG_COL_BORDER);
     printf("<tbody><tr><td>\n");
-    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
+    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 "
+           "cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
     printf("<tbody>\n");
 
     /* Print table column heading */
@@ -1381,9 +1383,9 @@ hFreeConn(&conn);
 for (eg = egList; eg != NULL; eg = eg->next)
     {
     if (eg->genbank[0] == 'Y')
-    printf("<span style='color:#FF0000;'>\n");
+        printf("<span style='color:#FF0000;'>\n");
     else
-    printf("<span style='color:#000000;'>\n");
+        printf("<span style='color:#000000;'>\n");
     printf("<B>Item:</B> %s<BR>\n",eg->name);
     printf("<B>Feature identifier:</B> %s<BR>\n",eg->feat);
     printf("<B>Start codon:</B> %s<BR>\n",eg->startCodon);
@@ -2111,7 +2113,8 @@ void doTigrOperons(struct trackDb *tdb, char *tigrOperonName)
     /* Print table */
     printf("<table style=\"width: 50%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
     printf("<tbody><tr><td>\n");
-    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
+    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 "
+           "cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
     printf("<tbody>\n");
 
     /* Print table column heading */
@@ -2203,7 +2206,8 @@ void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
     /* Print table */
     printf("<table style=\"width: 50%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
     printf("<tbody><tr><td>\n");
-    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
+    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 "
+           "cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
     printf("<tbody>\n");
 
     /* Print table column heading */
@@ -2453,7 +2457,8 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     /* Print table */
     printf("<table style=\"width: 100%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
     printf("<tbody><tr><td>\n");
-    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
+    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 "
+           "cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
     printf("<tbody>\n");
 
     /* Print table column heading */
@@ -2858,7 +2863,8 @@ void printBlastxResult(struct sqlConnection *conn, struct blastTab *blastxHitsLi
     /* Print table */
     printf("<table style=\"width: 100%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
     printf("<tbody><tr><td>\n");
-    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
+    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 "
+           "cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
     printf("<tbody>\n");
 
     /* Print table column heading */
@@ -3164,7 +3170,8 @@ void doPrimers(struct trackDb *tdb, char *primerName)
     /* Print table */
     printf("<table style=\"width: 90%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
     printf("<tbody><tr><td>\n");
-    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
+    printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 "
+           "cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
     printf("<tbody>\n");
 
     /* Print table column heading */
@@ -3728,7 +3735,8 @@ void doCRISPRs(struct trackDb *tdb, char *crisprName)
 			/* Print table */
 			printf("<table style=\"width: 100%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
 			printf("<tbody><tr><td>\n");
-			printf("<table style='width:100%%; text-align:left; background-color:#%s;' border=1 cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
+			printf("<table style='width:100%%; text-align:left; background-color:#%s;' "
+                               "border=1 cellpadding=2 cellspacing=2>\n", HG_COL_INSIDE);
 			printf("<tbody>\n");
 
 			/* Print table column heading */
@@ -3757,10 +3765,20 @@ void doCRISPRs(struct trackDb *tdb, char *crisprName)
 					if (pairCount + 1 < crispr->blockCount)
 					{
 						memset(tempSeq, '\0', sizeof(tempSeq));
-						memcpy(tempSeq, sequence->dna + crispr->chromStarts[pairCount] + crispr->blockSizes[pairCount],
-							crispr->chromStarts[pairCount+1] - crispr->blockSizes[pairCount] - crispr->chromStarts[pairCount]);
-						printf("<td>%d</td><td>%s</td><td>%d</td>\n", crispr->chromStart + 1 + crispr->chromStarts[pairCount] + crispr->blockSizes[pairCount], tempSeq,
-							   crispr->chromStarts[pairCount+1] - crispr->blockSizes[pairCount] - crispr->chromStarts[pairCount]);
+					    memcpy(tempSeq, sequence->dna +
+					           crispr->chromStarts[pairCount] +
+					           crispr->blockSizes[pairCount],
+					           crispr->chromStarts[pairCount+1] -
+					           crispr->blockSizes[pairCount] -
+					           crispr->chromStarts[pairCount]);
+					    printf("<td>%d</td><td>%s</td><td>%d</td>\n",
+					           crispr->chromStart + 1 +
+					           crispr->chromStarts[pairCount] +
+					           crispr->blockSizes[pairCount],
+					           tempSeq,
+						   crispr->chromStarts[pairCount+1] -
+						   crispr->blockSizes[pairCount] -
+						   crispr->chromStarts[pairCount]);
 					}
 					else
 					{
@@ -3783,11 +3801,19 @@ void doCRISPRs(struct trackDb *tdb, char *crisprName)
 					if (pairCount - 1 >= 0)
 					{
 						memset(tempSeq, '\0', sizeof(tempSeq));
-						memcpy(tempSeq, sequence->dna + crispr->chromStarts[pairCount-1] + crispr->blockSizes[pairCount-1],
-							   crispr->chromStarts[pairCount] - crispr->blockSizes[pairCount-1] - crispr->chromStarts[pairCount-1]);
+					    memcpy(tempSeq, sequence->dna +
+					           crispr->chromStarts[pairCount-1] +
+					           crispr->blockSizes[pairCount-1],
+						   crispr->chromStarts[pairCount] -
+						   crispr->blockSizes[pairCount-1] -
+						   crispr->chromStarts[pairCount-1]);
 						reverseComplement(tempSeq, strlen(tempSeq));
-						printf("<td>%d</td><td>%s</td><td>%d</td>\n", crispr->chromStart + crispr->chromStarts[pairCount], tempSeq,
-							   crispr->chromStarts[pairCount] - crispr->blockSizes[pairCount-1] - crispr->chromStarts[pairCount-1]);
+					    printf("<td>%d</td><td>%s</td><td>%d</td>\n",
+					           crispr->chromStart +
+					           crispr->chromStarts[pairCount], tempSeq,
+						   crispr->chromStarts[pairCount] -
+						   crispr->blockSizes[pairCount-1] -
+						   crispr->chromStarts[pairCount-1]);
 					}
 					else
 					{

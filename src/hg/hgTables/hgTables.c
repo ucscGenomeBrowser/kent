@@ -148,7 +148,8 @@ popWarnHandler();
 if(strstr(format, "needLargeMem:") || strstr(format, "carefulAlloc:"))
     format = "Region selected is too large for calculation. Please specify a smaller region or try limiting to fewer data points.";
 vaWarn(format, args);
-noWarnAbort();
+if(isErrAbortInProgress())
+    noWarnAbort();
 }
 
 static void errAbortHandler(char *format, va_list args)
@@ -162,7 +163,8 @@ else
     popWarnHandler();
     vaWarn(format, args);
     }
-noWarnAbort();
+if(isErrAbortInProgress())
+    noWarnAbort();
 }
 
 static void vaHtmlOpen(char *format, va_list args)
@@ -533,8 +535,7 @@ if (isPositional)
 	}
     else
 	{
-	sr = hExtendedRangeQuery(conn, table, region->chrom,
-		region->start, region->end,
+	sr = hExtendedRangeQuery(conn, table, region->chrom, region->start, region->end,
 		extraWhere, TRUE, fields, NULL);
 	}
     }
@@ -1172,7 +1173,7 @@ else if (track != NULL)
                     }
                 }
             }
-            joinerPairFreeList(&jpList);
+        joinerPairFreeList(&jpList);
         }
     }
 /* If we haven't found the answer but this looks like a non-positional table,
@@ -1669,7 +1670,6 @@ if (track != NULL)
 	!cartVarExists(cart, "gvDisclaimer"))
 	{
 	/* display disclaimer and add flag to cart, program exits from here */
-	htmlSetBackground(hBackgroundImage());
 	htmlStart("Table Browser");
 	gvDisclaimer();
 	}

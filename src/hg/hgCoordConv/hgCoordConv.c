@@ -52,7 +52,7 @@ char *defaultPos = "chr22:17045228-17054909"; /* default position */
 char *origDb = NULL;          /* name of genome to use as from genome, optional */
 char *organism = "Human";     /* Only do human for now. */
 struct dyString *webWarning = NULL; /* set this string with warnings for user,
-				       displayed on results page */
+                                       displayed on results page */
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
@@ -211,7 +211,7 @@ void posAbort(char *position)
 {
 char buff[256];
 snprintf(buff, sizeof(buff), "Expecting position in the form chrN:10000-20000 got %s",
-	 (position != NULL ? position : ""));
+         (position != NULL ? position : ""));
 webAbort("Error:", buff );
 }
 
@@ -223,7 +223,7 @@ char *pos = cloneString(origPos);
 char *tmp = NULL;
 char *tmp2 = NULL;
 tmp = strstr(pos, ":");
-if(tmp == NULL)
+if (tmp == NULL)
     posAbort(origPos);
 *tmp='\0';
 tmp++;
@@ -249,11 +249,11 @@ char *ret = NULL;
 struct dyString *dy = newDyString(128);
 
 if (database != NULL)
-    dyStringPrintf(dy, "select description from dbDb where name = '%s' and (genome like '%s' or genome like 'Zoo')",
-		   database, org);
+    dyStringPrintf(dy,"select description from dbDb where name = '%s' and (genome like '%s' "
+                      "or genome like 'Zoo')", database, org);
 else if (freeze != NULL)
-    dyStringPrintf(dy, "select name from dbDb where description = '%s' and (genome like '%s' or genome like 'Zoo')",
-		   freeze, org);
+    dyStringPrintf(dy,"select name from dbDb where description = '%s' and (genome like '%s' "
+                      "or genome like 'Zoo')", freeze, org);
 else
     internalErr();
 sr = sqlGetResult(conn, dy->string);
@@ -298,19 +298,24 @@ if (chromStart > chromEnd)
 /* convert the genomes requested to hgN format */
 if(origGenome != NULL)
     origGenome = ccFreezeDbConversion(NULL, origGenome, organism);
-if(newGenome != NULL)
+if (newGenome != NULL)
     newGenome = ccFreezeDbConversion(NULL, newGenome, organism);
 
 /* make sure that we've got valid arguments */
-if((newGenome == NULL || origGenome == NULL || chrom == NULL || chromStart == -1 || chromEnd == -1) && (calledSelf))
+if ((  newGenome == NULL
+    || origGenome == NULL
+    || chrom == NULL
+    || chromStart == -1
+    || chromEnd == -1)
+&&  calledSelf)
     webAbort("Error:", "Missing some inputs.");
 
 if( origGenome != NULL && sameString(origGenome, newGenome))
     {
     struct dyString *warning = newDyString(1024);
     dyStringPrintf(warning, "Did you really want to convert from %s to %s (the same genome)?",
-		   ccFreezeDbConversion(origGenome, NULL, organism), \
-		   ccFreezeDbConversion(newGenome, NULL, organism));
+                   ccFreezeDbConversion(origGenome, NULL, organism), \
+                   ccFreezeDbConversion(newGenome, NULL, organism));
     appendWarningMsg(warning->string);
     dyStringFree(&warning);
     }
@@ -385,7 +390,7 @@ void doGoodReportZoo(FILE *dummy, struct coordConvRep *ccr)
 /** output the result of a successful conversion */
 {
 cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d",
-	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
+             ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
 
@@ -419,10 +424,10 @@ void doGoodReport(FILE *dummy, struct coordConvRep *ccr)
 /** output the result of a successful conversion */
 {
 cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d",
-	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
+             ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
-if(sameString(ccr->midPsl->strand, "-"))
+if (sameString(ccr->midPsl->strand, "-"))
     {
     printf(" It appears that the orientation of your coordinate range has been inverted.\n");
     }
@@ -472,8 +477,8 @@ cartWebEnd();
 
 /* Version for Zoo species */
 boolean convertCoordinatesZoo(FILE *goodOut, FILE *badOut,
-			void (*goodResult)(FILE *out, struct coordConvRep *report),
-			void (*badResult)(FILE *out, struct coordConvRep *report))
+                        void (*goodResult)(FILE *out, struct coordConvRep *report),
+                        void (*badResult)(FILE *out, struct coordConvRep *report))
 /* tries to convert coordinates and prints report
  depending on function pointers provided. In generial
  goodResult and badResult either generate html or tesxt
@@ -548,7 +553,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	ccr->to->chromStart=psl->qStart;
 
 	/* Actual point of conversion of coordinates */
-	ccr->from->next->chromStart=psl->tStart;
+        ccr->from->next->chromStart=psl->tStart;
 	ccr->good=TRUE;
 
 	success=TRUE;
@@ -560,7 +565,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* Check for inversion (old start is "bigger" than new start)*/
 
     if(iteration > 0)
-	{
+        {
 	if((comp_start> psl->qStart))
 	    {
 	    /* If not currently in an inversion state */
@@ -580,7 +585,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if( ((comp_start - psl->qEnd)>(10 * (psl->tStart - ref_end))) && ((comp_start - psl->qEnd) > 10000))
 		max_apart=TRUE;
 	    }
-	else
+        else
 	    /* No inversion */
 	    {
 	    /* Check if previous state was an inversion (then flip flop)...*/
@@ -657,8 +662,8 @@ return success;
 
 
 boolean convertCoordinates(FILE *goodOut, FILE *badOut,
-			void (*goodResult)(FILE *out, struct coordConvRep *report),
-			void (*badResult)(FILE *out, struct coordConvRep *report))
+                        void (*goodResult)(FILE *out, struct coordConvRep *report),
+                        void (*badResult)(FILE *out, struct coordConvRep *report))
 /* tries to convert coordinates and prints report
  depending on function pointers provided. In generial
  goodResult and badResult either generate html or tesxt
@@ -669,7 +674,7 @@ struct coordConvRep *ccr = NULL;
 boolean success = FALSE;
 serve = hFindBlatServer(newGenome, FALSE);
 ccr = coordConvConvertPos(chrom, chromStart, chromEnd, origGenome, newGenome,
-	       	       serve->host, serve->port, serve->nibDir);
+	               serve->host, serve->port, serve->nibDir);
 if(ccr->good)
     {
     goodResult(goodOut, ccr);
@@ -704,10 +709,10 @@ char *chooseDb(char *db1, char *db2)
 /* match up our possible databases with the date version i.e. Dec 17, 2000 */
 {
 int i;
-if(db1 != NULL)
+if (db1 != NULL)
     {
     if(strstr(db1, "hg") == db1)
-	return ccFreezeDbConversion(db1, NULL, organism);
+        return ccFreezeDbConversion(db1, NULL, organism);
     else
 	return db1;
     }
@@ -757,7 +762,7 @@ printf("</td></tr></table></td>\n");
 printf("  <b><td><table><tr><td>Original Position:  </b>\n");
 
 /* if someone has passed in a position fill it in for them */
-if(position == NULL)
+if (position == NULL)
     cgiMakeTextVar("position",defaultPos, 30);
 else
     cgiMakeTextVar("position",position, 30);
@@ -811,7 +816,7 @@ printf("</td></tr></table></td>\n");
 printf("  <b><td><table><tr><td>Original Position:  </b>\n");
 
 /* if someone has passed in a position fill it in for them */
-if(position == NULL)
+if (position == NULL)
     cgiMakeTextVar("position",defaultPos, 30);
 else
     cgiMakeTextVar("position",position, 30);
@@ -972,9 +977,9 @@ if(hgTest)
 else
     {
 /* do our thing  */
-    if(calledSelf)
+    if (calledSelf)
         {
-	cartEmptyShell(doConvertCoordinates, hUserCookie(), excludeVars, NULL);
+        cartEmptyShell(doConvertCoordinates, hUserCookie(), excludeVars, NULL);
         }
     else
         {

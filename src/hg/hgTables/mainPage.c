@@ -472,48 +472,22 @@ hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
 hPrintf("</TD></TR>\n");
 }
 
-struct outputType otAllFields = { NULL,
-	outPrimaryTable,
-	"all fields from selected table", };
-struct outputType otSelected = { NULL,
-    outSelectedFields,
-    "selected fields from primary and related tables",  };
-struct outputType otSequence = { NULL,
-    outSequence,
-    "sequence", };
-struct outputType otPal = { NULL,
-    outPalOptions,
-    "CDS FASTA alignment from multiple alignment", };
-struct outputType otGff = { NULL,
-    outGff,
-    "GTF - gene transfer format", };
-struct outputType otBed = { NULL,
-    outBed,
-    "BED - browser extensible data", };
-struct outputType otCustomTrack = { NULL,
-    outCustomTrack,
-    "custom track", };
-struct outputType otHyperlinks = { NULL,
-    outHyperlinks,
-    "hyperlinks to Genome Browser", };
-struct outputType otWigData = { NULL,
-     outWigData,
-    "data points", };
-struct outputType otWigBed = { NULL,
-     outWigBed,
-    "bed format", };
-struct outputType otMaf = { NULL,
-     outMaf,
-     "MAF - multiple alignment format", };
-struct outputType otChromGraphData = { NULL,
-     outChromGraphData,
-    "data points", };
-struct outputType otMicroarrayNames = { NULL,
-     outMicroarrayNames,
-    "microarray names", };
-struct outputType otMicroarrayGroupings = { NULL,
-     outMicroarrayGroupings,
-    "microarray groupings", };
+struct outputType otAllFields = { NULL,	outPrimaryTable,"all fields from selected table", };
+struct outputType otSelected =  { NULL, outSelectedFields,
+                                  "selected fields from primary and related tables",  };
+struct outputType otSequence =  { NULL, outSequence,    "sequence", };
+struct outputType otPal =       { NULL, outPalOptions,
+                                  "CDS FASTA alignment from multiple alignment", };
+struct outputType otGff =         { NULL, outGff,         "GTF - gene transfer format", };
+struct outputType otBed =         { NULL, outBed,         "BED - browser extensible data", };
+struct outputType otCustomTrack = { NULL, outCustomTrack, "custom track", };
+struct outputType otHyperlinks =  { NULL, outHyperlinks,  "hyperlinks to Genome Browser", };
+struct outputType otWigData =     { NULL, outWigData,     "data points", };
+struct outputType otWigBed =      { NULL, outWigBed,      "bed format", };
+struct outputType otMaf =         { NULL, outMaf,         "MAF - multiple alignment format", };
+struct outputType otChromGraphData =      { NULL, outChromGraphData,       "data points", };
+struct outputType otMicroarrayNames =     { NULL, outMicroarrayNames,     "microarray names", };
+struct outputType otMicroarrayGroupings = { NULL, outMicroarrayGroupings, "microarray groupings", };
 
 static void showOutputTypeRow(boolean isWig, boolean isBedGr,
     boolean isPositional, boolean isMaf, boolean isChromGraphCt,
@@ -641,7 +615,7 @@ hPrintf("<TABLE BORDER=0>\n");
             }
         }
     hOnClickButton("document.customTrackForm.submit();return false;",
-        hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
+                   hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 
     hPrintf(" ");
     if (hubConnectTableExists())
@@ -681,16 +655,16 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("</TD></TR>\n");
     }
 
-    if (curTrack == NULL)
-        {
-        struct trackDb *tdb = hTrackDbForTrack(database, curTable);
-        struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
-        if (cTdb)
-            curTrack = cTdb;
-        else
-            curTrack = tdb;
-        isMaf = isMafTable(database, curTrack, curTable);
-        }
+if (curTrack == NULL)
+    {
+    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
+    if (cTdb)
+        curTrack = cTdb;
+    else
+        curTrack = tdb;
+    isMaf = isMafTable(database, curTrack, curTable);
+    }
 
 /* Region line */
 {
@@ -850,16 +824,17 @@ if (correlateTrackTableOK(tdb, curTable))
         /* debugging 	dbg	vvvvv	*/
         if (curTrack && curTrack->type)		/*	dbg	*/
             {
-            hPrintf("<BR>&nbsp;(debug:&nbsp;'%s',&nbsp;'%s(%s)')", curTrack->type, tdb2->type, table2);
+            hPrintf("<BR>&nbsp;(debug:&nbsp;'%s',&nbsp;'%s(%s)')",
+                    curTrack->type, tdb2->type, table2);
             }
         /* debugging 	debug	^^^^^	*/
 #endif
 
         }
-        else
-            cgiMakeButton(hgtaDoCorrelatePage, "create");
+    else
+        cgiMakeButton(hgtaDoCorrelatePage, "create");
 
-        hPrintf("</TD></TR>\n");
+    hPrintf("</TD></TR>\n");
     }
 
 /* Print output type line. */
@@ -955,7 +930,7 @@ hPrintf("%s",
   "of the controls in this form, the "
   "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">User's Guide</A> for "
   "general information and sample queries, and the OpenHelix Table Browser "
-  "<A HREF=\"http://www.openhelix.com/downloads/ucsc/ucsc_home.shtml\" "
+  "<A HREF=\"http://www.openhelix.com/cgi/tutorialInfo.cgi?id=28\" "
   "TARGET=_blank>tutorial</A> for a narrated presentation of the software "
   "features and usage. "
   "For more complex queries, you may want to use "

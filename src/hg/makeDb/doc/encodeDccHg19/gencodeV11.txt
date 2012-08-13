@@ -54,3 +54,44 @@
     registerTrackHandlerOnFamily("wgEncodeGencodeV11", gencodeGeneMethods);
 
 ------------------------------------------------------------------------------
+2012-06-05:
+
+An error was discovered where both gene names and transcript names (not ids) a
+version number appended. eg. RP11-513O17.2.1 and RP11-513O17.2-006.  In
+total 19958 gene names and 27058 transcript names have been corrected.
+
+Repeat above build in a new directory
+
+    mkdir -p /hive/groups/encode/dcc/data/gencodeV11b/release
+    cd /hive/groups/encode/dcc/data/gencodeV11b/release
+
+    wget -nv ftp://ftp.sanger.ac.uk/pub/gencode/release_11/gencode.v11.2wayconspseudos.gtf.gz
+    wget -nv ftp://ftp.sanger.ac.uk/pub/gencode/release_11/gencode.v11.annotation.gtf.gz
+    wget -nv ftp://ftp.sanger.ac.uk/pub/gencode/release_11/gencode.v11.long_noncoding_RNAs.gtf.gz
+    wget -nv ftp://ftp.sanger.ac.uk/pub/gencode/release_11/gencode.v11.pc_transcripts.fa.gz
+    wget -nv ftp://ftp.sanger.ac.uk/pub/gencode/release_11/gencode.v11.pc_translations.fa.gz
+    wget -nv ftp://ftp.sanger.ac.uk/pub/gencode/release_11/gencode.v11.polyAs.gtf.gz
+    wget -nv ftp://ftp.sanger.ac.uk/pub/gencode/release_11/gencode.v11.tRNAs.gtf.gz
+    wget -nv ftp://ftp.sanger.ac.uk/pub/gencode/release_11/gencode11_GRCh37.tgz
+
+    # silly sanity check:
+    for f in * ; do zcat $f >/dev/null ; done
+
+    # untar main distribution
+    tar -zxf gencode11_GRCh37.tgz
+
+    # copy over obtain transcription support level analysis, not affect by change
+    cd ..
+    mkdir -p data
+    cp /cluster/home/markd/compbio/ccds/branches/transSupV11.1/modules/gencodeTransSupport/exprs/classDev/runs/2012-02-26/results/gencode.v11.transcriptionSupportLevel.{tab,tsv} data/
+
+    # keep Makefile from previous V11
+    cp ../gencodeV11/Makefile .
+   
+    (time nice make -j 10 mkTables) >&build.out&
+    # took ~45 minutes
+
+    # validate what changed
+    (cd ../gencodeV11; md5sum tables/*)> v11.tables.md5
+
+diff -r ../gencodeV11/tables tables >tbl.diff

@@ -24,12 +24,14 @@ errAbort(
   "   species.lst    list of species names\n"
   "   output         put output here\n"
   "options:\n"
+  "   -useFile           genePredTable argument is a genePred file name\n"
   "   -geneName=foobar   name of gene as it appears in genePred\n"
   "   -geneList=foolst   name of file with list of genes\n"
   "   -geneBeds=foo.bed  name of bed file with genes and positions\n"
   "   -chrom=chr1        name of chromosome from which to grab genes\n"
   "   -exons             output exons\n"
   "   -noTrans           don't translate output into amino acids\n"
+  "   -includeUtr        include the UTRs, use only with -noTrans\n"
   "   -delay=N           delay N seconds between genes (default 0)\n" 
   "   -noDash            don't output lines with all dashes\n"
   );
@@ -43,6 +45,8 @@ static struct optionSpec options[] = {
    {"exons", OPTION_BOOLEAN},
    {"noTrans", OPTION_BOOLEAN},
    {"noDash", OPTION_BOOLEAN},
+   {"useFile", OPTION_BOOLEAN},
+   {"includeUtr", OPTION_BOOLEAN},
    {"delay", OPTION_INT},
    {NULL, 0},
 };
@@ -56,6 +60,8 @@ boolean noTrans = TRUE;
 int delay = 0;
 boolean newTableType;
 boolean noDash = FALSE;
+boolean useFile = FALSE;
+boolean includeUtr = FALSE;
 
 /* load one or more genePreds from the database */
 struct genePred *getPredsForName(char *name, char *geneTable, char *db)
@@ -112,6 +118,8 @@ if (noTrans)
     options |= MAFGENE_NOTRANS;
 if (!noDash)
     options |= MAFGENE_OUTBLANK;
+if (includeUtr)
+    options |= MAFGENE_INCLUDEUTR;
 
 mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList, options, 0);
 }
@@ -216,6 +224,9 @@ if (geneList != NULL)
 	    slCat(&list, pred);
 	}
     }
+else if (useFile)
+    /* Read genePreds from a file passed instead of a table */
+    list = genePredReaderLoadFile(geneTable, NULL);
 else if (geneName != NULL)
     list = getPredsForName(geneName, geneTable, dbName);
 else if (geneBeds != NULL)
@@ -250,15 +261,20 @@ onlyChrom = optionVal("chrom", onlyChrom);
 inExons = optionExists("exons");
 noDash = optionExists("noDash");
 noTrans = optionExists("noTrans");
+includeUtr = optionExists("includeUtr");
+useFile = optionExists("useFile");
 delay = optionInt("delay", delay);
 
 if (((geneName != NULL) && ((geneList != NULL) || geneBeds != NULL)) ||
     ((geneList != NULL) && ((geneName != NULL) || geneBeds != NULL)) ||
     ((geneBeds != NULL) && ((geneList != NULL) || geneName != NULL)))
-    errAbort("must specify only one of geneList, geneName, or geneBeds");
+    errAbort("must specify only one of geneList, geneName, geneBeds");
 
 if ((geneBeds != NULL) && (onlyChrom != NULL))
     errAbort("cannot specify beds and chrom");
+
+if (includeUtr && !noTrans)
+    errAbort("must specify noTrans if includeUtr is selected");
 
 mafGene(argv[1],argv[2],argv[3],argv[4],argv[5]);
 return 0;

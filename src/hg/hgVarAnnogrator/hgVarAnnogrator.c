@@ -64,35 +64,15 @@ int maxOutRows = 10000;  //#*** make sensible, configurable limit
 void addSomeCss()
 /* This should go in a .css file of course. */
 {
-hPrintf("<style>\n.sectionLiteHeader { font-weight: bold; font-size:1.1em; color:#000000; "
-	"text-align:left; vertical-align:bottom; white-space:nowrap; "
-	"text-indent:10px; padding-top:2px; }\n"
-	".prop10 { height:10px; float:right; width:1px; }\n"
-	".prop5 { height:5px; float:right; width:1px; }\n"
-	".clear { clear:both; height: 1px; overflow:hidden; };\n"
+hPrintf("<style>\n"
+	"div.sectionLite { border-width: 1px; border-color: #"HG_COL_BORDER"; border-style: solid;"
+	"  background-color: #"HG_COL_INSIDE"; padding-left: 10px; padding-right: 10px; "
+	"  padding-top: 8px; padding-bottom: 5px; margin-top: 5px; margin-bottom: 5px }\n"
+	".sectionLiteHeader { font-weight: bold; font-size:1.1em; color:#000000;"
+	"  text-align:left; vertical-align:bottom; white-space:nowrap; }\n"
+	"div.sectionLiteHeader.noReorderRemove { padding-bottom:5px; }\n"
+	"div.sourceFilter { padding-top: 5px; padding-bottom: 5px }\n"
 	"</style>\n");
-}
-
-void printSmallVerticalSpace(struct dyString *dy)
-/* Add a small vertical space, like a short <BR>.  This and the CSS properties
- * are from http://www.greywyvern.com/code/min-height-hack . */
-{
-char *hack = "<div class='prop10'></div><div class='clear'></div>\n";
-if (dy)
-    dyStringAppend(dy, hack);
-else
-    printf(hack);
-}
-
-void printSmallerVerticalSpace(struct dyString *dy)
-/* Add an even smaller vertical space, like a short <BR>.  This and the CSS properties
- * are from http://www.greywyvern.com/code/min-height-hack . */
-{
-char *hack = "<div class='prop5'></div><div class='clear'></div>\n";
-if (dy)
-    dyStringAppend(dy, hack);
-else
-    printf(hack);
 }
 
 // #*** -------------------------- libify to jsHelper ? ------------------------
@@ -274,11 +254,13 @@ for (t = fullTrackList;  t != NULL;  t = t->next)
 return FALSE;
 }
 
+//#*** perhaps this fancy onChange stuff should be done in hgVarAnnogrator.js?
+//#*** and do we really need a hidden form?
+
 static struct dyString *onChangeStart()
 /* Start up a javascript onChange command */
 {
 struct dyString *dy = jsOnChangeStart();
-//#*** mainPage.c saves a bunch of variables in addition to clade/org/db/position.
 jsTextCarryOver(dy, hgvaRegionType);
 jsTextCarryOver(dy, hgvaRange);
 return dy;
@@ -316,47 +298,6 @@ dyStringAppend(dy, " document.hiddenForm." hgvaRange ".value='';");
 return jsOnChangeEnd(&dy);
 }
 
-void hgTablesCladeGenomeDb()
-/* Print clade, genome and assembly line like hgTables. */
-{
-hPrintf("<TABLE BORDER=0>\n");
-//#*** --------------- More copied verbatim, from hgTables/mainPage.c: ---------------
-
-if (hGotClade())
-    {
-    hPrintf("<TR><TD><B>clade:</B>\n");
-    printCladeListHtml(hGenome(database), onChangeClade());
-    nbSpaces(3);
-    hPrintf("<B>genome:</B>\n");
-    printGenomeListForCladeHtml(database, onChangeOrg());
-    }
-else
-    {
-    hPrintf("<TR><TD><B>genome:</B>\n");
-    printGenomeListHtml(database, onChangeOrg());
-    }
-nbSpaces(3);
-hPrintf("<B>assembly:</B>\n");
-printAssemblyListHtml(database, onChangeDb());
-hPrintf("<BR>\n");
-printSmallerVerticalSpace(NULL);
-hPrintf("<div style='text-align: center;'>\n");
-hOnClickButton("document.customTrackForm.submit();return false;",
-	       gotCustomTracks() ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
-hPrintf(" ");
-if (hubConnectTableExists())
-    hOnClickButton("document.trackHubForm.submit();return false;", "track hubs");
-hPrintf("</div>\n");
-printSmallerVerticalSpace(NULL);
-hPrintf(
-	"To reset <B>all</B> user cart settings (including custom tracks), \n"
-	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
-	getScriptName());
-hPrintf("</TD></TR>\n");
-//#*** ------------------ end verbatim ---------------
-hPrintf("</TABLE>");
-}
-
 INLINE void printOption(char *val, char *selectedVal, char *label)
 /* For rolling our own select without having to build conditional arrays/lists. */
 {
@@ -384,22 +325,21 @@ printf("</SELECT>");
 
 void topLabelSpansStart(char *label)
 {
-printf("<span style='display: inline-block;'>"
+printf("<span style='display: inline-block; padding-right: 5px;'>"
        "<span style='display: block;'>%s</span>\n"
-       "<span style='display: block;'>\n", label);
+       "<span style='display: block; padding-bottom: 5px;'>\n", label);
 }
 
 void topLabelSpansEnd()
 {
-printf("</span></span></span>");
-nbSpaces(1);
+printf("</span></span>");
 }
 
 char *makePositionInput()
 /* Return HTML for the position input. */
 {
 struct dyString *dy = dyStringCreate("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\""
-				     " onblur=\"hgvaLookupPosition();\">",
+				     " onchange=\"hgvaLookupPosition();\">",
 				     hgvaRange, 26, addCommasToPos(NULL, position));
 return dyStringCannibalize(&dy);
 }
@@ -434,7 +374,7 @@ printf("<span id='"hgvaPositionContainer"'%s>\n",
 puts(makePositionInput());
 printf("</span>\n");
 topLabelSpansEnd();
-puts("<BR><BR>");
+puts("<div style='padding-top: 5px; padding-bottom: 5px'>");
 hOnClickButton("document.customTrackForm.submit();return false;",
 	       gotCustomTracks() ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 hPrintf(" ");
@@ -444,13 +384,14 @@ nbSpaces(3);
 hPrintf("To reset <B>all</B> user cart settings (including custom tracks), \n"
 	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
 	getScriptName());
+puts("</div>");
 }
 
 void printAssemblySection()
-/* Print assembly-selection stuff, pretty much identical to hgTables.
+/* Print assembly-selection stuff.
  * Redrawing the whole page when the assembly changes seems fine to me. */
 {
-//#*** More copied verbatim, from hgTables/mainPage.c:
+//#*** ---------- More copied verbatim, from hgTables/mainPage.c: -----------
 /* Hidden form - for benefit of javascript. */
     {
     static char *saveVars[] = {
@@ -464,12 +405,7 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" ID=\"mainForm\" METHOD=%s>\n",
 
 saveMiniCart();
 
-printf("<span class='sectionLiteHeader'>");
-hPrintf("Select Genome Assembly\n");
-printf("</span>");
-
-printSmallVerticalSpace(NULL);
-printSmallerVerticalSpace(NULL);
+printf("<div class='sectionLiteHeader noReorderRemove'>Select Genome Assembly</div>\n");
 
 /* Print clade, genome and assembly line. */
 hgGatewayCladeGenomeDb();
@@ -477,12 +413,12 @@ hgGatewayCladeGenomeDb();
 hPrintf("</FORM>");
 }
 
-static boolean inSection = TRUE;  // when moved into web.c, will start out false.
+static boolean inOldSection = TRUE;
+static boolean inSectionLite = FALSE;
 
-void webEndHackSection()
+void webEndOldSection()
 {
-printSmallerVerticalSpace(NULL);
-//#*** this statement copied from web.c's static void webEndSection:
+//#*** this statement copied from web.c's static void webEndSection... maybe just expose that in  web.h!
 puts(
     "" "\n"
     "	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
@@ -490,53 +426,241 @@ puts(
     "	</TD></TR></TABLE>" "\n"
     "	" );
 puts("</div>\n");
-inSection = FALSE;
+inOldSection = FALSE;
 }
 
-void webNewHackSection(boolean canReorderRemove, char *divId, boolean show, char* format, ...)
+void webEndSectionLite()
+{
+puts("</div>\n");
+inSectionLite = FALSE;
+}
+
+void webNewSectionLite(boolean canReorderRemove, char *divId, boolean show, char* format, ...)
 /* create a new section on the web page -- probably should do div w/css style, but this is quicker */
 {
-if (inSection)
-    webEndHackSection();
-inSection = TRUE;
-printf("<div id='%s'%s", divId, (canReorderRemove ? " class='hideableSection'" : ""));
+if (inOldSection)
+    webEndOldSection();
+if (inSectionLite)
+    webEndSectionLite();
+inSectionLite = TRUE;
+puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
+printf("<div id='%s' class='sectionLite%s'", divId, (canReorderRemove ? " hideableSection" : ""));
 if (!show)
     printf(" style='display: none;'");
 printf(">\n");
 
-puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
-printSmallVerticalSpace(NULL);
-puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
-    "   <!--outer table is for border purposes-->\n"
-    "   <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
-    "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n"
-    "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>\n"
-    "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n"
-);
 if (isNotEmpty(format))
     {
     if (canReorderRemove)
-	printf("<span class='sectionLiteHeader' style='cursor: default'>\n"
-	       "<span id='sortHandle'>\n"
+	printf("<div class='sectionLiteHeader'>\n"
+	       "<span name='sortHandle' style='float: left;'>\n"
 	       "<span class='ui-icon ui-icon-arrowthick-2-n-s' style='float: left;'></span>\n");
     else
-	printf("<span class='sectionLiteHeader'>\n");
+	puts("<div class='sectionLiteHeader noReorderRemove'>");
     va_list args;
     va_start(args, format);
     vprintf(format, args);
     va_end(args);
     if (canReorderRemove)
 	{
-	printf("</span></span>\n"
+	printf("</span>\n"
 	       "<span style=\"float: right;\">");
 	cgiMakeButtonWithMsg("removeMe", "Remove", "remove this section");
+	puts("</span>\n"
+	     "<div style='clear: both; '></div>");
 	}
-    printf("</span>");
-    printSmallVerticalSpace(NULL);
-    if (!canReorderRemove)
-	// Compensate for the height that the Remove button would add:
-	printSmallerVerticalSpace(NULL);
+    puts("</div>");
     }
+}
+
+struct slName *variantsGroupList()
+/* Return the restricted group list for the Variants section. */
+{
+static struct slName *list = NULL;
+if (list == NULL)
+    {
+    list = slNameNew("phenDis");
+    slAddHead(&list, slNameNew("varRep"));
+    }
+return list;
+}
+
+struct slName *genesGroupList()
+/* Return the restricted group list for the Genes section. */
+{
+static struct slName *list = NULL;
+if (list == NULL)
+    list = slNameNew("genes");
+return list;
+}
+
+struct slName *groupListForSource(char *divId)
+/* If applicable, return the restricted group list for the given section. */
+{
+struct slName *groupList = NULL;
+if (sameString(divId, "variantsContents"))
+    groupList = variantsGroupList();
+else if (sameString(divId, "genesContents"))
+    groupList = genesGroupList();
+return groupList;
+}
+
+//-----------------------------------------------------------------------------
+// Configuration data structures parsed from JSON sent by UI and/or stored in cart
+
+struct sourceConfig
+/* User settings for input data, from a div/section of the UI */
+    {
+    struct sourceConfig *next;
+    char *name;			// Name of section div, e.g. "variants", "genes", "source0"
+    struct slName *groupList;	// If not NULL, restricted list of track groups for dropdown
+    char *selGroup;		// Currently selected track group
+    char *selTrack;		// Currently selected track
+    char *selTable;		// Currently selected table
+    char *selIntersect;		// Currently selected intersection mode
+    struct annoFilter *filterList;	// Active (i.e. configured by user) filters
+    boolean isPrimary;		// True only for first source in list
+    boolean thinksItsPrimary;	// UI state
+    };
+
+struct formatterConfig
+/* User settings for output data, from output div/section of the UI */
+    {
+    struct formatterConfig *next;
+    char *outFormat;		// Name of output format, e.g. "tabSep"
+    };
+
+struct queryConfig
+/* Complete description of query, built from UI elements */
+    {
+    struct sourceConfig *sources;	// Inputs
+    struct formatterConfig *formatters;	// Outputs
+    };
+
+void *parseNumbers(enum asTypes type, char *numStr1, char *numStr2)
+/* Given one or two numbers from UI, parse & store them in an array according to type. */
+{
+void *ret = NULL;
+if (asTypesIsFloating(type))
+    {
+    double *retDouble = needMem(2 * sizeof(double *));
+    retDouble[0] = atof(numStr1);
+    if (numStr2 != NULL)
+	retDouble[1] = atof(numStr2);
+    ret = retDouble;
+    }
+else if (asTypesIsInt(type))
+    {
+    long long *retLl = needMem(2 * sizeof(long long));
+    retLl[0] = atoll(numStr1);
+    if (numStr2 != NULL)
+	retLl[1] = atoll(numStr2);
+    ret = retLl;
+    }
+return ret;
+}
+
+struct annoFilter *parseFilters(struct slRef *filterRefList)
+/* Translate a hash of JSON elements that describe a single data source's filter settings
+ * into a partial annoFilter. */
+{
+struct annoFilter *afList = NULL;
+struct slRef *ref;
+for (ref = filterRefList;  ref != NULL;  ref = ref->next)
+    {
+    struct hash *fHash = hashFromJEl(ref->val, "filter", FALSE);
+    struct annoFilter *newFilter;
+    AllocVar(newFilter);
+    newFilter->label = stringFromJHash(fHash, "name", FALSE);
+    newFilter->columnIx = -1;  // we don't have or use filterFunc or columnIx in UI
+    newFilter->op = afOpFromString(stringFromJHash(fHash, "opSel", FALSE));
+    enum asTypes type = atoi(stringFromJHash(fHash, "asType", FALSE)); //#*** should use enum<-->strings
+    newFilter->type = type;
+    if (newFilter->op == afInRange)
+	{
+	char *numStr1 = stringFromJHash(fHash, "num1", FALSE);
+	char *numStr2 = stringFromJHash(fHash, "num2", FALSE);
+	newFilter->values = parseNumbers(type, numStr1, numStr2);
+	}
+    else if (newFilter->op == afMatch || newFilter->op == afNotMatch)
+	newFilter->values = stringFromJHash(fHash, "matchPattern", FALSE);
+    else if (newFilter->op != afNoFilter)
+	newFilter->values = parseNumbers(type, stringFromJHash(fHash, "num1", FALSE), NULL);
+    slAddHead(&afList, newFilter);
+    }
+slReverse(&afList);
+return afList;
+}
+
+struct sourceConfig *parseSourceConfig(struct hash *srcHash, boolean isPrimary)
+/* Translate a hash of JSON elements that describe a single data source. */
+{
+struct sourceConfig *newSrc;
+AllocVar(newSrc);
+newSrc->name = stringFromJHash(srcHash, "id", FALSE);
+newSrc->groupList = groupListForSource(newSrc->name);
+newSrc->selGroup = stringFromJHash(srcHash, "groupSel", FALSE);
+newSrc->selTrack = stringFromJHash(srcHash, "trackSel", FALSE);
+newSrc->selTable = stringFromJHash(srcHash, "tableSel", FALSE);
+newSrc->selIntersect = stringFromJHash(srcHash, "intersectSel", TRUE);
+newSrc->filterList = parseFilters(listFromJHash(srcHash, "filters", TRUE));
+newSrc->isPrimary = isPrimary;
+if (sameOk(stringFromJHash(srcHash, "isPrimary", TRUE), "1"))
+    newSrc->thinksItsPrimary = TRUE;
+return newSrc;
+}
+
+struct queryConfig *parseQueryConfig(struct hash *qcHash)
+/* Translate a hash of JSON elements into a proper queryConfig. */
+{
+struct queryConfig *queryConfig = NULL;
+AllocVar(queryConfig);
+struct slRef *srcRef, *sources = listFromJHash(qcHash, "sources", FALSE);
+for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
+    {
+    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
+    struct sourceConfig *newSrc = parseSourceConfig(srcHash, (srcRef == sources));
+    slAddHead(&(queryConfig->sources), newSrc);
+    }
+slReverse(&(queryConfig->sources));
+// Only one formatter:
+AllocVar(queryConfig->formatters);
+struct hash *outSpec = hashFromJHash(qcHash, "output", FALSE);
+queryConfig->formatters->outFormat = stringFromJHash(outSpec, "outFormat", FALSE);
+return queryConfig;
+}
+
+struct sourceConfig *emptyVariantsConfig()
+/* Return a sourceConfig for the variants section but otherwise empty. Caller do not modify! */
+{
+static struct sourceConfig emptyVariantsConfig =
+    { NULL, "variantsContents", NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE};
+if (emptyVariantsConfig.groupList == NULL)
+    emptyVariantsConfig.groupList = variantsGroupList();
+return &emptyVariantsConfig;
+}
+
+struct sourceConfig *emptyGenesConfig()
+/* Return a sourceConfig for the genes section but otherwise empty. Caller do not modify! */
+{
+static struct sourceConfig emptyGenesConfig =
+    { NULL, "genesContents", NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE};
+if (emptyGenesConfig.groupList == NULL)
+    emptyGenesConfig.groupList = genesGroupList();
+return &emptyGenesConfig;
+}
+
+struct sourceConfig *emptySourceConfig(unsigned short i)
+/* Return an empty sourceConfig with numeric name from i, for immediate use only.
+ * Caller do not modify! */
+{
+#define EMPTY_SOURCE_NAME_SIZE 32
+static struct sourceConfig emptySourceConfig =
+    { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE};
+if (emptySourceConfig.name == NULL)
+    emptySourceConfig.name = needMem(EMPTY_SOURCE_NAME_SIZE);
+safef(emptySourceConfig.name, EMPTY_SOURCE_NAME_SIZE, "source%dContents", i);
+return &emptySourceConfig;
 }
 
 //#*** --------------------------- verbatim from hgTables.c ---------------------------
@@ -555,8 +679,7 @@ return NULL;
 void makeGroupDropDown(struct dyString *dy, char *selGroup)
 /* Make group drop-down from fullGroupList. */
 {
-char *selectName = "groupSel";
-dyStringPrintf(dy, "<SELECT ID='%s' NAME='%s'>\n", selectName, selectName);
+dyStringAppend(dy, "<SELECT NAME='groupSel'>\n");
 if (selGroup == NULL || sameString(selGroup, "none"));
     dyStringAppend(dy, " <OPTION VALUE='none' SELECTED>\n");
 struct grp *group;
@@ -572,8 +695,7 @@ char *makeSpecificGroupDropDown(struct dyString *dy, struct slName *groups, char
 /* Make group drop-down with only Custom Tracks and listed groups.  If selGroup is NULL
  * but there's only one group to select from, return that group; otherwise return selGroup. */
 {
-char *selectName = "groupSel";
-dyStringPrintf(dy, "<SELECT ID='%s' NAME='%s' %s>\n", selectName, selectName, "");
+dyStringAppend(dy, "<SELECT NAME='groupSel'>\n");
 int gotCT = gotCustomTracks() ? 1 : 0;
 //#*** should probably offer hub tracks here too.
 // Count the number of groups that actually exist in this database:
@@ -617,8 +739,7 @@ char *makeTrackDropDown(struct dyString *dy, char *selGroup, char *selTrack)
 /* Make track drop-down for selGroup using fullTrackList. If selTrack is NULL,
  * return first track in selGroup; otherwise return selTrack. */
 {
-char *selectName = "trackSel";
-dyStringPrintf(dy, "<SELECT ID='%s' NAME='%s' %s>\n", selectName, selectName, "");
+dyStringAppend(dy, "<SELECT NAME='trackSel'>\n");
 boolean allTracks = sameString(selGroup, "All Tracks");
 if (allTracks)
     slSort(&fullTrackList, trackDbCmpShortLabel);
@@ -735,8 +856,7 @@ return NULL;
 char *makeTableDropDown(struct dyString *dy, char *selTrack, char *selTable)
 /* Make table drop-down for non-NULL selTrack. */
 {
-char *selectName = "tableSel";
-dyStringPrintf(dy, "<SELECT ID='%s' NAME='%s' %s>\n", selectName, selectName, "");
+dyStringAppend(dy, "<SELECT NAME='tableSel'>\n");
 struct trackDb *track = findTdb(fullTrackList, selTrack);
 struct slName *t, *tableList = tablesForTrack(track);
 if (isEmpty(selTable) && tableList != NULL)
@@ -755,10 +875,10 @@ dyStringPrintf(dy, "</SELECT>\n");
 return selTable;
 }
 
-void makeEmptySelect(struct dyString *dy, char *idName)
+void makeEmptySelect(struct dyString *dy, char *name)
 /* print out an empty select, to be filled in by javascript */
 {
-dyStringPrintf(dy, "<SELECT name='%s' id='%s'></SELECT>\n", idName, idName);
+dyStringPrintf(dy, "<SELECT NAME='%s'></SELECT>\n", name);
 }
 
 void dyMakeButtonWithMsg(struct dyString *dy, char *name, char *value, char *msg)
@@ -770,59 +890,240 @@ dyStringPrintf(dy, "<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" %s%s%s>",
 	       (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
 }
 
+INLINE void addOption(struct dyString *dy, char *value, char *selected)
+{
+dyStringPrintf(dy, "<OPTION VALUE='%s'%s>", value,
+	       sameOk(selected, value) ? "SELECTED" : "");
+}
+
+void makeIntersectDropDown(struct dyString *dy, struct sourceConfig *src, char *primaryTrack)
+/* Give the user the option of keeping/dropping primary items based on overlap with this track. */
+{
+struct trackDb *tdb = findTdb(fullTrackList, src->selTrack);
+if (isEmpty(primaryTrack))
+    primaryTrack = "primary track";
+dyStringPrintf(dy, "<SELECT NAME='intersectSel'%s>\n",
+	       src->isPrimary ? " style='display: none'" : "");
+addOption(dy, "keepAll", src->selIntersect);
+dyStringPrintf(dy, "Keep all %s items whether or not they overlap %s items</OPTION>\n",
+	       primaryTrack, tdb->shortLabel);
+addOption(dy, "mustOverlap", src->selIntersect);
+dyStringPrintf(dy, "Keep %s items only if they overlap %s items</OPTION>\n",
+	       primaryTrack, tdb->shortLabel);
+addOption(dy, "mustNotOverlap", src->selIntersect);
+dyStringPrintf(dy, "Keep %s items only if they do not overlap %s items</OPTION>\n",
+	       primaryTrack, tdb->shortLabel);
+dyStringPrintf(dy, "</SELECT>\n");
+}
+
+void dyStartJsonHashEl(struct dyString *dy, boolean isFirst, char *name)
+/* Add '"name": ' to dy, prepending "{ " or ", " as necessary. */
+{
+if (isFirst)
+    dyStringAppend(dy, "{ ");
+else
+    dyStringAppend(dy, ", ");
+dyStringAppendC(dy, '"');
+dyStringAppend(dy, name);
+dyStringAppend(dy, "\": ");
+}
+
+void dyAddQuotedString(struct dyString *dy, char *string)
+/* Add double-quotes around string and escape them inside string. */
+{
+dyStringAppendC(dy, '"');
+dyStringAppendEscapeQuotes(dy, string, '"', '\\');
+dyStringAppendC(dy, '"');
+}
+
+void dyAddNumericValue(struct dyString *dy, enum asTypes type, void *values)
+/* Cast the first element of values to the appropriate type and add to dy. */
+{
+if (asTypesIsFloating(type))
+    dyStringPrintf(dy, "%lf", *(double *)values);
+else if (asTypesIsInt(type))
+    dyStringPrintf(dy, "%lld", *(long long *)values);
+else
+    errAbort("dyAddNumericValue: unrecognized type %d for numeric op", type);
+}
+
+void dyAddAnnoFilterValues(struct dyString *dy, struct annoFilter *filter)
+/* Deduce the type and number of values depending on op, and JSONify accordingly. */
+{
+void *values = filter->values;
+enum annoFilterOp op = filter->op;
+if (values == NULL || op == afNoFilter)
+    {
+    dyStringAppend(dy, "null");
+    return;
+    }
+else if (op == afMatch || op == afNotMatch)
+    dyAddQuotedString(dy, (char *)values);
+else if (op == afLT || op == afLTE || op == afEqual || op == afNotEqual ||
+	 op == afGTE || op == afGT || op == afInRange)
+    {
+    if (op == afInRange)
+	dyStringAppend(dy, "[ ");
+    dyAddNumericValue(dy, filter->type, values);
+    if (op == afInRange)
+	{
+	dyStringAppend(dy, ", ");
+	dyAddNumericValue(dy, filter->type, values+1);
+	dyStringAppend(dy, " ]");
+	}
+    }
+else
+    errAbort("dyAddAnnoFilterValues: unrecognized filter->op %d", filter->op);
+}
+
+void dyAddAnnoFilterMinMax(struct dyString *dy, struct annoFilter *filter)
+/* If filter has a min and max, deduce their type and JSONify accordingly. */
+{
+dyStartJsonHashEl(dy, FALSE, "hasMinMax");
+dyStringPrintf(dy, "%d", filter->hasMinMax);
+boolean isDouble = asTypesIsFloating(filter->type);
+dyStartJsonHashEl(dy, FALSE, "min");
+if (isDouble)
+    dyStringPrintf(dy, "%Lf", filter->min.aDouble);
+else
+    dyStringPrintf(dy, "%lld", filter->min.anInt);
+dyStartJsonHashEl(dy, FALSE, "max");
+if (isDouble)
+    dyStringPrintf(dy, "%Lf", filter->max.aDouble);
+else
+    dyStringPrintf(dy, "%lld", filter->max.anInt);
+}
+
+void dyAddAnnoFilter(struct dyString *dy, struct annoFilter *filter)
+/* Encode an annoFilter as a JSON hash (object). */
+{
+dyStartJsonHashEl(dy, TRUE, "label");
+dyAddQuotedString(dy, filter->label);
+dyStartJsonHashEl(dy, FALSE, "type");
+dyStringPrintf(dy, "%d", filter->type);
+dyStartJsonHashEl(dy, FALSE, "op");
+dyStringPrintf(dy, "\"%s\"", stringFromAfOp(filter->op));
+dyStartJsonHashEl(dy, FALSE, "values");
+dyAddAnnoFilterValues(dy, filter);
+dyStartJsonHashEl(dy, FALSE, "isExclude");
+dyStringPrintf(dy, "%d", filter->isExclude);
+dyStartJsonHashEl(dy, FALSE, "rightJoin");
+dyStringPrintf(dy, "%d", filter->rightJoin);
+dyAddAnnoFilterMinMax(dy, filter);
+dyStringAppend(dy, " }");
+}
+
+struct annoFilter *findFilterByLabel(struct annoFilter *filterList, char *label)
+/* Return annoFilter with name, or NULL. */
+{
+struct annoFilter *af;
+for (af = filterList;  af != NULL;  af = af->next)
+    if (sameString(label, af->label))
+	return af;
+return NULL;
+}
+
+struct annoStreamer *streamerFromSource(char *database, char *table, struct trackDb *tdb);
+//#*** Move it up here?  Or move out to a lib!!
+
+void makeFilterSection(struct dyString *dy, struct sourceConfig *src)
+/* Add a filter controls section to dyString: build up two javascript variables for UI,
+ * one for active filters (i.e. those that the user has already configured) and
+ * one for available filters. */
+{
+struct trackDb *tdb = findTdb(fullTrackList, src->selTrack);
+dyStringPrintf(dy, "<div name='filter' class='sourceFilter'>\n");
+dyStringPrintf(dy, "<script>activeFilterList['%s'] = [ ", src->name);
+struct dyString *availDy = dyStringCreate("availableFilterList['%s'] = [ ", src->name);
+boolean gotActive = FALSE, gotAvail = FALSE;
+struct annoStreamer *streamer = streamerFromSource(database, src->selTable, tdb);
+struct annoFilter *af, *afList = streamer->getFilters(streamer);
+for (af = afList;  af != NULL;  af = af->next)
+    {
+    struct annoFilter *cf = findFilterByLabel(src->filterList, af->label);
+    if (cf != NULL)
+	{
+	if (!gotActive)
+	    gotActive = TRUE;
+	else
+	    dyStringAppend(dy, ", ");
+	dyAddAnnoFilter(dy, cf);
+	}
+    else
+	{
+	if (!gotAvail)
+	    gotAvail = TRUE;
+	else
+	    dyStringAppend(availDy, ", ");
+	dyAddAnnoFilter(availDy, af);
+	}
+    }
+dyStringPrintf(dy, " ];\n");
+dyStringAppend(dy, availDy->string);
+dyStringAppend(dy, " ];\n</script>\n</div>\n");
+dyStringFree(&availDy);
+}
+
 // Defined after a bunch of verbatims below:
 void initGroupsTracksTables();
 
-char *buildSourceContents(struct slName *groupList, char *selGroup, char *selTrack, char *selTable,
-			  boolean isPrimary)
+char *buildSourceContents(struct sourceConfig *src, char *primaryTrack)
 /* Return a string with the contents of a <source>Contents div:
  * group, track, table selects and empty filter. */
 {
 initGroupsTracksTables();
 struct dyString *dy = dyStringNew(1024);
-if (isPrimary)
-    dyStringPrintf(dy, "<INPUT TYPE=HIDDEN NAME='%s' VALUE='%s'>\n", "isPrimary", "true");
+dyStringPrintf(dy, "<INPUT TYPE=HIDDEN NAME='%s' VALUE='%s'>\n", "isPrimary",
+	       src->isPrimary ? "1" : "0");
 dyStringPrintf(dy, "<B>group:</B> ");
-if (groupList != NULL)
-    selGroup = makeSpecificGroupDropDown(dy, groupList, selGroup);
+if (src->groupList != NULL)
+    src->selGroup = makeSpecificGroupDropDown(dy, src->groupList, src->selGroup);
 else
-    makeGroupDropDown(dy, selGroup);
-dyStringPrintf(dy, "<B>track:</B> ");
-if (isNotEmpty(selGroup))
-    selTrack = makeTrackDropDown(dy, selGroup, selTrack);
+    makeGroupDropDown(dy, src->selGroup);
+dyStringPrintf(dy, "<B>&nbsp;track:</B> ");
+if (isNotEmpty(src->selGroup))
+    src->selTrack = makeTrackDropDown(dy, src->selGroup, src->selTrack);
 else
     makeEmptySelect(dy, "trackSel");
-dyStringPrintf(dy, "<B>table:</B> ");
-if (isNotEmpty(selTrack))
-    selTable = makeTableDropDown(dy, selTrack, selTable);
+dyStringPrintf(dy, "<B>&nbsp;table:</B> ");
+if (isNotEmpty(src->selTrack))
+    src->selTable = makeTableDropDown(dy, src->selTrack, src->selTable);
 else
     makeEmptySelect(dy, "tableSel");
-if (slNameInList(groupList, "varRep") && !gotCustomTracks())
+if (slNameInList(src->groupList, "varRep") && !gotCustomTracks())
     dyStringPrintf(dy, "<BR>\n<EM>Note: to upload your own variants, click the "
 	   "&quot;"CT_ADD_BUTTON_LABEL"&quot; button above.</EM>\n");
 dyStringPrintf(dy, "<BR>\n");
-printSmallerVerticalSpace(dy);
-dyStringPrintf(dy, "<div id='filter'>\n");
-dyStringPrintf(dy, "\n</div>\n");
-if (isNotEmpty(selTable))
+if (isNotEmpty(src->selTable))
+    {
+    makeIntersectDropDown(dy, src, primaryTrack);
+    makeFilterSection(dy, src);
     dyMakeButtonWithMsg(dy, "addFilter", "Add Filter", "add constraints on data");
+    }
 return dyStringCannibalize(&dy);
 }
 
-void printDataSourceSection(char *title, char *divId, struct slName *groupList,
-			    char *selTrack, char *selTable, boolean show, boolean isPrimary)
+void printDataSourceSection(struct sourceConfig *src, char *primaryTrack, boolean show)
 /* Add section with group/track/table selects, which may be restricted to a particular
  * group and may be hidden. */
 {
-webNewHackSection(TRUE, divId, show, title);
-printf("<div id='%sContents' class='sourceSection'>\n", divId);
-char *selGroup = NULL;
-if (isNotEmpty(selTrack))
+char *title = "Select Data";
+if (sameString(src->name, "variantsContents"))
+    title = "Select Variants";
+else if (sameString(src->name, "genesContents"))
+    title = "Select Genes";
+char *divId = cloneString(src->name);
+char *p = strstr(divId, "Contents");
+if (p != NULL)
+    *p = '\0';
+webNewSectionLite(TRUE, divId, show, title);
+printf("<div id='%s' class='sourceSection'>\n", src->name);
+if (isNotEmpty(src->selTrack))
     {
-    struct trackDb *tdb = findTdb(fullTrackList, selTrack);
-    selGroup = tdb->grp;
+    struct trackDb *tdb = findTdb(fullTrackList, src->selTrack);
+    src->selGroup = tdb->grp;
     }
-char *contents = buildSourceContents(groupList, selGroup, selTrack, selTable, isPrimary);
+char *contents = buildSourceContents(src, primaryTrack);
 puts(contents);
 printf("</div>\n");
 freeMem(contents);
@@ -831,12 +1132,10 @@ freeMem(contents);
 void printAddDataSection()
 /* Print a very lightweight section that just has a "Select More Data" button. */
 {
-webNewHackSection(FALSE , "addData", TRUE, "");
-printSmallerVerticalSpace(NULL);
+webNewSectionLite(FALSE , "addData", TRUE, "");
 cgiMakeButtonWithOnClick("addData", "Select More Data",
 			 "select a new track to integrate with Variants",
 			 "hgvaShowNextHiddenSource();");
-printSmallVerticalSpace(NULL);
 }
 
 void makeOutputFormatDropDown(char *selectName, char *selected)
@@ -847,21 +1146,17 @@ char *values[] = { "tabSep", "other" };
 cgiMakeDropListWithVals(selectName, menu, values, ArraySize(menu), selected);
 }
 
-void printOutputSection(struct hash *querySpec)
+void printOutputSection(struct queryConfig *queryConfig)
 /* Print an output format section that can't be removed like data source sections can. */
 {
-webNewHackSection(FALSE, "outFormat", TRUE, "Select Output Format");
+webNewSectionLite(FALSE, "outFormat", TRUE, "Select Output Format");
 printf("<div id='outFormatContents' class='outputSection'>\n");
 char *selOutput = "";
-if (querySpec != NULL)
-    {
-    struct hash *outSpec = hashFromJHash(querySpec, "output", FALSE);
-    selOutput = stringFromJHash(outSpec, "outFormat", FALSE);
-    }
+if (queryConfig != NULL)
+    selOutput = queryConfig->formatters->outFormat;
 makeOutputFormatDropDown("outFormat", selOutput);
 printf("<BR>\n");
 printf("<div id='outOptions'>\n");
-printSmallerVerticalSpace(NULL);
 cgiMakeButtonWithMsg("outSelectFields", "Select fields",
 		     "select particular fields from inputs");
 printf("</div>\n"); // options
@@ -871,7 +1166,7 @@ printf("</div>\n"); // contents
 void printSubmitSection()
 /* Print an output format section that can't be removed like data source sections can. */
 {
-webNewHackSection(FALSE, "submitSection", TRUE, "Get Results");
+webNewSectionLite(FALSE, "submitSection", TRUE, "Get Results");
 cgiMakeButtonWithOnClick("startQuery", "Go!",
 			 "get the results of your query",
 			 "hgvaExecuteQuery();");
@@ -927,6 +1222,7 @@ return(theCtList);
 
 
 //#*** --------------------- verbatim from hgTables.c (+ globals) -------------------------
+//#*** hgTracks needs a full track list too... can it all be libified?
 struct grp *grpFromHub(struct hubConnectStatus *hub)
 /* Make up a grp structur from hub */
 {
@@ -1108,47 +1404,32 @@ if (! inited)
     }
 }
 
-struct slName *variantsGroupList()
-/* Return the restricted group list for the Variants section. */
+char *primaryTrackName(struct queryConfig *queryConfig)
+/* Return name of queryConfig's primary source track, checking for NULL. */
 {
-static struct slName *list = NULL;
-if (list == NULL)
-    {
-    list = slNameNew("phenDis");
-    slAddHead(&list, slNameNew("varRep"));
-    }
-return list;
+if (queryConfig == NULL || queryConfig->sources == NULL)
+    return NULL;
+initGroupsTracksTables();
+struct trackDb *tdb = findTdb(fullTrackList, queryConfig->sources->selTrack);
+if (tdb == NULL)
+    return NULL;
+return tdb->shortLabel;
 }
 
-void printVariantsSection(char *selTrack, char *selTable, boolean isPrimary)
-/* Print a section that shows tracks only from group varRep (+ phenDis + user if available). */
-{
-printDataSourceSection("Select Variants", "variants", variantsGroupList(), selTrack, selTable,
-		       TRUE, isPrimary);
-}
-
-struct slName *genesGroupList()
-/* Return the restricted group list for the Genes section. */
-{
-static struct slName *list = NULL;
-if (list == NULL)
-    list = slNameNew("genes");
-return list;
-}
-
-void printGenesSection(char *selTrack, char *selTable, boolean isPrimary)
-/* Print a section that shows tracks only from group genes (+ user if available). */
-{
-printDataSourceSection("Select Genes", "genes", genesGroupList(), selTrack, selTable,
-		       TRUE, isPrimary);
-}
-
-void printExtraSource(int i, char *selTrack, char *selTable, boolean show, boolean isPrimary)
+void printExtraSource(unsigned short i, struct sourceConfig *src, char *primaryTrack, boolean show)
 /* Print a source section with unrestricted group list and numeric-suffix id. */
 {
-char id[32];
-safef(id, sizeof(id), "source%d", i);
-printDataSourceSection("Select Data", id, NULL, selTrack, selTable, show, isPrimary);
+if (src == NULL)
+    printDataSourceSection(emptySourceConfig(i), primaryTrack, show);
+else
+    {
+    char *tmpName = src->name;
+    char sourceI[32];
+    safef(sourceI, sizeof(sourceI), "source%dContents", i);
+    src->name = sourceI;
+    printDataSourceSection(src, primaryTrack, show);
+    src->name = tmpName;
+    }
 }
 
 #define MAX_EXTRA_SOURCES 5
@@ -1156,62 +1437,61 @@ printDataSourceSection("Select Data", id, NULL, selTrack, selTable, show, isPrim
 void printDefaultSources()
 /* When cart doesn't yet have a querySpec, show variants & genes; make several hidden sources. */
 {
-printVariantsSection(NULL, NULL, TRUE);
-printGenesSection(NULL, NULL, FALSE);
-int i;
+printDataSourceSection(emptyVariantsConfig(), NULL, TRUE);
+printDataSourceSection(emptyGenesConfig(), NULL, TRUE);
+unsigned short i;
 for (i = 0;  i < MAX_EXTRA_SOURCES;  i++)
-    printExtraSource(i, NULL, NULL, FALSE, FALSE);
+    printExtraSource(i, NULL, NULL, FALSE);
 }
 
-void printSourcesFromQuerySpec(struct hash *querySpec)
-/* Show sources with the same order and settings as querySpec. */
+void printSourcesFromQueryConfig(struct queryConfig *queryConfig)
+/* Show sources with the same order and settings as queryConfig. */
 {
-int i;
-struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
-for (i = 0, srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
+char *primaryTrack = primaryTrackName(queryConfig);
+struct sourceConfig *src;
+unsigned short i;
+for (i = 0, src = queryConfig->sources;  src != NULL;  src = src->next)
     {
-    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
-    char *srcId = stringFromJHash(srcHash, "id", FALSE);
-    char *selTrack = stringFromJHash(srcHash, "trackSel", FALSE);
-    char *selTable = stringFromJHash(srcHash, "tableSel", FALSE);
-    boolean isPrimary = (srcRef == sources);
-    if (sameString(srcId, "variantsContents"))
-	printVariantsSection(selTrack, selTable, isPrimary);
-    else if (sameString(srcId, "genesContents"))
-	printGenesSection(selTrack, selTable, isPrimary);
+    if (sameString(src->name, "variantsContents") || sameString(src->name, "genesContents"))
+	printDataSourceSection(src, primaryTrack, TRUE);
     else
-	printExtraSource(i++, selTrack, selTable, TRUE, isPrimary);
+	printExtraSource(i++, src, primaryTrack, TRUE);
     }
 // If the max number of extra sources hasn't been reached, add hidden extra sources:
 for (;  i < MAX_EXTRA_SOURCES;  i++)
-    printExtraSource(i, NULL, NULL, FALSE, FALSE);
+    printExtraSource(i, NULL, primaryTrack, FALSE);
 }
 
 void doMainPage()
 /* Print out initial HTML of control page. */
 {
 printAssemblySection();
-webEndHackSection();
+webEndOldSection();
 initGroupsTracksTables();
-struct hash *querySpec = NULL;
+struct queryConfig *queryConfig = NULL;
 char *queryStr = cartOptionalString(cart, "querySpec");
 if (queryStr != NULL)
     {
     struct jsonElement *querySpecJson = jsonParse(queryStr);
-    querySpec = hashFromJEl(querySpecJson, "querySpec from cart", FALSE);
+    struct hash *querySpec = hashFromJEl(querySpecJson, "querySpec from cart", FALSE);
+    queryConfig = parseQueryConfig(querySpec);
     }
 printf("<div id='sourceContainerPlus'>\n");
 printf("<div id='sourceContainer'>\n");
-if (querySpec == NULL)
+// Each data source section will add to these variables:
+printf("<script>var activeFilterList = {}; var availableFilterList = {};</script>\n");
+if (queryConfig == NULL)
     printDefaultSources();
 else
-    printSourcesFromQuerySpec(querySpec);
-webEndHackSection();
+    {
+    printSourcesFromQueryConfig(queryConfig);
+    }
+webEndSectionLite();
 printf("</div>\n"); // sourceContainer
 printAddDataSection();
-webEndHackSection();
+webEndSectionLite();
 printf("</div>\n"); // sourceContainerPlus (extend down a bit so sections can be dragged to bottom)
-printOutputSection(querySpec);
+printOutputSection(queryConfig);
 printSubmitSection();
 
 // __detectback trick from http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
@@ -1300,17 +1580,6 @@ cartCheckout(&cart);
 textOutClose(&compressPipeline);
 }
 
-struct slName *groupListForSource(char *divId)
-/* If applicable, return the restricted group list for the given section. */
-{
-struct slName *groupList = NULL;
-if (sameString(divId, "variantsContents"))
-    groupList = variantsGroupList();
-else if (sameString(divId, "genesContents"))
-    groupList = genesGroupList();
-return groupList;
-}
-
 char *escapeStringForJson(char *input)
 /* \-escape newlines and double-quotes in string to be passed via JSON. */
 {
@@ -1324,105 +1593,65 @@ return output;
 // what changed: group, track or table?
 enum gtt { gttGroup, gttTrack, gttTable};
 
-void changeGroupTrackTable(char *divId, struct hash *querySpec, enum gtt groupTrackOrTable)
+void changeGroupTrackTable(char *divId, struct queryConfig *queryConfig,
+			   char *primaryTrack, enum gtt groupTrackOrTable)
 /* Send new contents for the section: same group select, updated track & table selects,
  * reset filter section. */
 {
-boolean isPrimary = FALSE;
 printf("{ \"updates\": [ { \"id\": \"#%s\", \"contents\": \"", divId);
-struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
-char *selGroup = NULL, *selTrack = NULL, *selTable = NULL;
-for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
+struct sourceConfig *src;
+for (src = queryConfig->sources;  src != NULL;  src = src->next)
     {
-    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
-    char *srcId = stringFromJHash(srcHash, "id", FALSE);
-    if (sameString(srcId, divId))
-	{
-	selGroup = stringFromJHash(srcHash, "groupSel", FALSE);
-	selTrack = stringFromJHash(srcHash, "trackSel", FALSE);
-	selTable = stringFromJHash(srcHash, "tableSel", FALSE);
-	if (srcRef == sources)
-	    isPrimary = TRUE;
+    if (sameString(src->name, divId))
 	break;
-	}
     }
-if (selGroup == NULL)
+if (src == NULL)
     errAbort("Can't find source '%s'", divId);
 if (groupTrackOrTable == gttGroup)
-    selTrack = selTable = NULL;
+    src->selTrack = src->selTable = NULL;
 else if (groupTrackOrTable == gttTrack)
-    selTable = NULL;
+    src->selTable = NULL;
 else if (groupTrackOrTable != gttTable)
     errAbort("Unexpected groupTrackOrTable enum val %d", groupTrackOrTable);
-struct slName *groupList = groupListForSource(divId);
-char *newContents = buildSourceContents(groupList, selGroup, selTrack, selTable, isPrimary);
+char *newContents = buildSourceContents(src, primaryTrack);
 printf("%s\" } ]", escapeStringForJson(newContents));
 printf(" }\n");
 }
 
-void showFilter(char *divId, struct hash *querySpec)
+void showFilter(char *divId, struct queryConfig *queryConfig)
 /* Send new contents for div's filter section. */
 {
+//#*** Make filter settings from the appropriate src in queryConfig
 printf("{ \"updates\": [ { \"id\": \"#%s #filter\", \"append\": true, "
        "\"contents\": \"", divId);
 printf("a new filter!<BR>");
 puts("\" } ] }");
 }
 
-void showOutSelectFields(char *divId, struct hash *querySpec)
+void showOutSelectFields(char *divId, struct queryConfig *queryConfig)
 /* Send new contents for divId's field selection section. */
 {
-printf("{ \"updates\": [ { \"id\": \"#%s #outOptions\", \"contents\": \"", divId);
+printf("{ \"updates\": [ { \"id\": \"#%s\", \"contents\": \"", divId);
+//#*** for tabSep, iterate through sources and show fields for each one (expand/collapse each)
 printf("a whole bunch of checkboxes<BR>");
 puts("\" } ] }");
 }
 
-void resetRemovedSource(char *removedSource)
-/* Reset the contents of the newly "removed" (hidden) source, so if we bring it back
- * it will look new. */
-{
-if (isNotEmpty(removedSource))
-    {
-    printf("{ \"updates\": [ { \"id\": \"#%s\", \"contents\": \"", removedSource);
-    struct slName *groupList = groupListForSource(removedSource);
-    char *newContents = buildSourceContents(groupList, NULL, NULL, NULL, FALSE);
-    printf("%s\" } ]", escapeStringForJson(newContents));
-    printf(" }\n");
-    }
-}
-
-void updateSourcesAndOutput(struct hash *querySpec)
+void updateSourcesAndOutput(char *removedSource, struct queryConfig *queryConfig,
+			    char *primaryTrack)
 /* The number and/or order of sources has changed.  If primary source has changed,
  * then filter settings of the former and new primaries need to be adjusted.
  * If the number of sources has changed, we might end up with more or fewer
  * choices of output format.  Send JSON to server with new HTML for changed sections. */
 {
 struct dyString *dy = dyStringNew(512);
-struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
 boolean gotUpdate = FALSE;
-for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
+if (isNotEmpty(removedSource))
     {
-    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
-    char *srcId = stringFromJHash(srcHash, "id", FALSE);
-    boolean isPrimary = (srcRef == sources);
-    boolean srcThinksItsPrimary = isNotEmpty(stringFromJHash(srcHash, "isPrimary", TRUE));
-//#*** this is necessary only if it has filters... and we could simply update the filter div!
-    if (srcThinksItsPrimary ^ isPrimary)
-	{
-	if (!gotUpdate)
-	    printf("{ \"updates\": [ ");
-	else
-	    printf(", ");
-	gotUpdate = TRUE;
-	printf("{ \"id\": \"#%s\", \"contents\": \"", srcId);
-	struct slName *groupList = groupListForSource(srcId);
-	char *selGroup = stringFromJHash(srcHash, "groupSel", FALSE);
-	char *selTrack = stringFromJHash(srcHash, "trackSel", FALSE);
-	char *selTable = stringFromJHash(srcHash, "tableSel", FALSE);
-	char *newContents = buildSourceContents(groupList, selGroup, selTrack, selTable, isPrimary);
-	printf("%s\" }", escapeStringForJson(newContents));
-	dyStringPrintf(dy, "Telling %s that it is%s primary.  ", srcId, isPrimary ? "" : " not");
-	}
+    gotUpdate = TRUE;
+    printf("{ \"updates\": [ { \"id\": \"#%s\", \"contents\": \"", removedSource);
+    char *newContents = buildSourceContents(emptySourceConfig(0), primaryTrack);
+    printf("%s\" }", escapeStringForJson(newContents));
     }
 if (gotUpdate)
     printf(" ], ");
@@ -1525,7 +1754,12 @@ struct dyString *dy = dyStringCreate("table %s\n"
 struct sqlFieldInfo *field = sameString("bin", fieldList->field) ? fieldList->next : fieldList;
 for (;  field != NULL;  field = field->next)
     {
-    char *asType = asTypeNameFromSqlType(field->type);
+    char *sqlType = field->type;
+    // hg19.wgEncodeOpenChromSynthGm12878Pk.pValue has sql type "float unsigned",
+    // and I'd rather pretend it's just a float than work unsigned floats into autoSql.
+    if (sameString(sqlType, "float unsigned"))
+	sqlType = "float";
+    char *asType = asTypeNameFromSqlType(sqlType);
     if (asType == NULL)
 	errAbort("No asTypeInfo for sql type '%s'!", field->type);
     dyStringPrintf(dy, "    %s %s;\t\"\"\n", asType, field->field);
@@ -1556,7 +1790,6 @@ else
 
 struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb)
 /* Figure out the source and type of data and make an annoStreamer. */
-//#*** filters someday...
 {
 struct annoStreamer *streamer = NULL;
 char *dataDb = db, *dbTable = table;
@@ -1656,38 +1889,36 @@ else
 return grator;
 }
 
-struct annoFormatter *formatterFromOutput(char *format)
+struct annoFormatter *formatterFromOutput(struct queryConfig *queryConfig)
 /* Build up formatter given output format and options. */
 {
-struct annoFormatter *formatter = annoFormatTabNew("stdout");
-//#*** options someday...
+struct formatterConfig *fConfig = queryConfig->formatters;
+struct annoFormatter *formatter = NULL;
+if (sameString(fConfig->outFormat, "tabSep"))
+    formatter = annoFormatTabNew("stdout");
+else
+    errAbort("Sorry, no support for output format '%s' yet.", fConfig->outFormat);
 return formatter;
 }
 
-void executeQuery(char *db, struct hash *querySpec)
-/* Build up annoGrator objects from querySpec, create an annoGratorQuery and execute it. */
+void executeQuery(char *db, struct queryConfig *queryConfig)
+/* Build up annoGrator objects from queryConfig, create an annoGratorQuery and execute it. */
 {
 webStartText();
 initGroupsTracksTables();
 struct annoStreamer *primary = NULL;
 struct annoGrator *gratorList = NULL;
-struct slRef *srcRef, *sources = listFromJHash(querySpec, "sources", FALSE);
-for (srcRef = sources;  srcRef != NULL;  srcRef = srcRef->next)
+struct sourceConfig *src;
+for (src = queryConfig->sources;  src != NULL;  src = src->next)
     {
-    struct hash *srcHash = hashFromJEl(srcRef->val, "source object", FALSE);
-    char *table = stringFromJHash(srcHash, "tableSel", FALSE);
-    char *tableNoAll_ = startsWith("all_", table) ? table+strlen("all_") : table;
-    struct trackDb *tdb = tdbForTrack(db, tableNoAll_, &fullTrackList);
-    boolean isPrimary = (srcRef == sources);
-    if (isPrimary)
-	primary = streamerFromSource(db, table, tdb);
+    struct trackDb *tdb = tdbForTrack(db, src->selTrack, &fullTrackList);
+    if (src->isPrimary)
+	primary = streamerFromSource(db, src->selTable, tdb);
     else
-	slAddHead(&gratorList, gratorFromSource(db, table, tdb, primary));
+	slAddHead(&gratorList, gratorFromSource(db, src->selTable, tdb, primary));
     }
 slReverse(&gratorList);
-struct hash *out = hashFromJHash(querySpec, "output", FALSE);
-char *outFormat = stringFromJHash(out, "outFormat", FALSE);
-struct annoFormatter *formatter = formatterFromOutput(outFormat);
+struct annoFormatter *formatter = formatterFromOutput(queryConfig);
 char *nibOrTwoBitDir = hDbDbNibPath(db);
 char twoBitPath[HDB_MAX_PATH_STRING];
 safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
@@ -1739,6 +1970,7 @@ expectJsonType(request, jsonObject, "top-level request");
 struct hash *topHash = request->val.jeHash;
 // Every request must include a querySpec:
 struct hash *querySpec = hashFromJHash(topHash, "querySpec", FALSE);
+struct queryConfig *queryConfig = parseQueryConfig(querySpec);
 restoreMiniCart(topHash);
 
 char *action = stringFromJHash(topHash, "action", FALSE);
@@ -1748,7 +1980,7 @@ else
     puts("Content-Type:text/javascript\n");
 
 if (sameString(action, "reorderSources"))
-    updateSourcesAndOutput(querySpec);
+    updateSourcesAndOutput(NULL, queryConfig, primaryTrackName(queryConfig));
 else if (sameString(action, "lookupPosition"))
     updatePosition(topHash);
 else if (sameString(action, "event"))
@@ -1761,18 +1993,19 @@ else if (sameString(action, "event"))
 	id = name;
     if (isEmpty(id))
 	errAbort("request must contain id and/or name, but has neither.");
+    char *primaryTrack = primaryTrackName(queryConfig);
     if (sameString(id, "removeMe"))
-	resetRemovedSource(parentId);
+	updateSourcesAndOutput(parentId, queryConfig, primaryTrack);
     else if (sameString(id, "groupSel"))
-	changeGroupTrackTable(parentId, querySpec, gttGroup);
+	changeGroupTrackTable(parentId, queryConfig, primaryTrack, gttGroup);
      else if (sameString(id, "trackSel"))
-	 changeGroupTrackTable(parentId, querySpec, gttTrack);
+	 changeGroupTrackTable(parentId, queryConfig, primaryTrack, gttTrack);
     else if (sameString(id, "tableSel"))
-	changeGroupTrackTable(parentId, querySpec, gttTable);
+	changeGroupTrackTable(parentId, queryConfig, primaryTrack, gttTable);
     else if (sameString(id, "addFilter"))
-	showFilter(parentId, querySpec);
+	showFilter(parentId, queryConfig);
     else if (sameString(id, "outSelectFields"))
-	showOutSelectFields(parentId, querySpec);
+	showOutSelectFields(parentId, queryConfig);
     else if (endsWith(parentId, "Contents"))
 	printf("{ \"serverSays\": \"Some new input '%s' I need to handle in %s\" }\n",
 	       id, parentId);
@@ -1780,7 +2013,7 @@ else if (sameString(action, "event"))
 	printf("{ \"serverSays\": \"What is '%s' from %s?\" }\n", id, parentId);
     }
 else if (sameString(action, "execute"))
-    executeQuery(database, querySpec);
+    executeQuery(database, queryConfig);
 else
     printf("{ \"serverSays\": \"Unrecognized action '%s'\" }\n", action);
 }

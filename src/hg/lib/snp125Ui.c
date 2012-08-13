@@ -287,7 +287,7 @@ static char *locusSyn[] =
     {"locus",		"gene-segment", "near-gene-3", "near-gene-5", NULL};
 static char *nonsynonSyn[] =
     {"coding-nonsynon",	"nonsense", "missense", "frameshift", "stop-loss", "cds-indel",
-     "coding-synonymy-unknown", NULL};
+     "coding-synonymy-unknown", "cds-synonymy-unknown", NULL};
 static char *untranslatedSyn[] =
     {"untranslated",	"untranslated-3", "untranslated-5", NULL};
 static char *spliceSyn[] =
@@ -317,6 +317,91 @@ static char *snp125FuncOldIncludeVars[] = {
 
 int snp125FuncArraySize   = ArraySize(snp125FuncLabels);
 
+// Map func terms (from all snpNNN to date) to Sequence Ontology terms and IDs:
+struct snpFuncSO
+    {
+    char *funcTerm;	// term found in snpNNN.func
+    char *soTerm;	// corresponding Sequence Ontology term
+    char *soId;		// corresponding Sequence Ontology accession
+    };
+
+static struct snpFuncSO snpFuncToSO[] = {
+    { "locus", "feature_variant", "SO:0001878" },
+    { "locus-region", "feature_variant", "SO:0001878" },
+    { "coding", "coding_sequence_variant", "SO:0001580" },
+    { "coding-synon", "synonymous_variant", "SO:0001819" },
+    { "coding-nonsynon", "protein_altering_variant", "SO:0001818" },
+    { "untranslated", "UTR_variant", "SO:0001622" },
+    { "mrna-utr", "UTR_variant", "SO:0001622" },
+    { "intron", "intron_variant", "SO:0001627" },
+    { "splice-site", "splice_site_variant", "SO:0001629" },
+    { "cds-reference", "coding_sequence_variant", "SO:0001580" },
+    { "cds-synonymy-unknown", "coding_sequence_variant", "SO:0001580" },
+    { "near-gene-3", "downstream_gene_variant", "SO:0001632" },
+    { "near-gene-5", "upstream_gene_variant", "SO:0001631" },
+    { "ncRNA", "nc_transcript_variant", "SO:0001619" },
+    { "nonsense", "stop_gained", "SO:0001587" },
+    { "missense", "missense_variant", "SO:0001583" },
+    { "stop-loss", "stop_lost", "SO:0001578" },
+    { "frameshift", "frameshift_variant", "SO:0001589" },
+    { "cds-indel", "inframe_indel", "SO:0001820" },
+    { "untranslated-3", "3_prime_UTR_variant", "SO:0001624" },
+    { "untranslated-5", "5_prime_UTR_variant", "SO:0001623" },
+    { "splice-3", "splice_acceptor_variant", "SO:0001574" },
+    { "splice-5", "splice_donor_variant", "SO:0001575" },
+    // And some that dbSNP doesn't use at this point, but we do, to match Ensembl:
+    { "inframe_insertion", "inframe_insertion", "SO:0001821" },
+    { "inframe_deletion", "inframe_deletion", "SO:0001822" },
+    { "stop_retained_variant", "stop_retained_variant", "SO:0001567" },
+    { "splice_region_variant", "splice_region_variant", "SO:0001630" },
+    { NULL, NULL, NULL }
+};
+
+static boolean snpSOFromFunc(char *funcTerm, char **retSoTerm, char **retSoId)
+/* Look up snpNNN.func term (or SO term) in static array snpFuncToSO and set
+ * corresponding Sequence Ontology term and accession; return TRUE if found. */
+{
+if (isEmpty(funcTerm))
+    return FALSE;
+int i;
+for (i = 0;  snpFuncToSO[i].funcTerm != NULL;  i++)
+    {
+    struct snpFuncSO *info = &(snpFuncToSO[i]);
+    if (sameString(funcTerm, info->funcTerm) || sameString(funcTerm, info->soTerm))
+	{
+	if (retSoTerm != NULL)
+	    *retSoTerm = info->soTerm;
+	if (retSoId != NULL)
+	    *retSoId = info->soId;
+	return TRUE;
+	}
+    }
+return FALSE;
+}
+
+#define MISO_BASE_URL "http://sequenceontology.org/browser/current_release/term/"
+
+char *snpMisoLinkFromFunc(char *funcTerm)
+/* If we can map funcTerm to a Sequence Ontology term, return a link to the MISO SO browser;
+ * otherwise just return the same term. funcTerm may be a comma-separated list of terms. */
+{
+char *soId = NULL, *soTerm = NULL;
+struct dyString *dy = dyStringNew(256);
+char *terms[128];
+int termCount = chopCommas(cloneString(funcTerm), terms);
+int i;
+for (i = 0;  i < termCount;  i++)
+    {
+    if (i > 0)
+	dyStringAppend(dy, ", ");
+    boolean gotSO = snpSOFromFunc(terms[i], &soTerm, &soId);
+    if (gotSO)
+	dyStringPrintf(dy, "<A HREF=\""MISO_BASE_URL"%s\" TARGET=_BLANK>%s</A>", soId, soTerm);
+    else
+	dyStringAppend(dy, terms[i]);
+    }
+return dyStringCannibalize(&dy);
+}
 
 /****** LocType related controls *******/
 /* Types: unknown, range, exact, between,
@@ -393,6 +478,8 @@ char *snp132ExceptionLabels[] = {
     "MultipleAlignments",
     "NonIntegerChromCount",
     "AlleleFreqSumNot1",
+    "SingleAlleleFreq",
+    "InconsistentAlleles",
 };
 
 char *snp132ExceptionVarName[] = {
@@ -417,6 +504,8 @@ char *snp132ExceptionVarName[] = {
     "MultipleAlignments",
     "NonIntegerChromCount",
     "AlleleFreqSumNot1",
+    "SingleAlleleFreq",
+    "InconsistentAlleles",
 };
 
 char *snp132ExceptionDefault[] = {
@@ -441,6 +530,8 @@ char *snp132ExceptionDefault[] = {
     "red",	// MultipleAlignments
     "gray",	// NonIntegerChromCount
     "gray",	// AlleleFreqSumNot1
+    "gray",	// SingleAlleleFreq
+    "gray",	// InconsistentAlleles
 };
 
 int snp132ExceptionArraySize = ArraySize(snp132ExceptionLabels);

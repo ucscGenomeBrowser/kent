@@ -78,7 +78,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3481
 tableName wgEncodeRikenCageA549CellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageA549CellPapMinusSignalRep2
 objType table
@@ -104,7 +104,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3482
 tableName wgEncodeRikenCageA549CellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageA549CellPapPlusSignalRep1
 objType table
@@ -130,7 +130,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3481
 tableName wgEncodeRikenCageA549CellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageA549CellPapPlusSignalRep2
 objType table
@@ -156,7 +156,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3482
 tableName wgEncodeRikenCageA549CellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageA549CellPapRawDataRep1
 objType file
@@ -334,7 +334,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6595
 tableName wgEncodeRikenCageA549CytosolPapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageA549CytosolPapMinusRawRep4
 objType table
@@ -360,7 +360,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6626
 tableName wgEncodeRikenCageA549CytosolPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageA549CytosolPapPlusRawRep3
 objType table
@@ -386,7 +386,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6595
 tableName wgEncodeRikenCageA549CytosolPapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageA549CytosolPapPlusRawRep4
 objType table
@@ -412,7 +412,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6626
 tableName wgEncodeRikenCageA549CytosolPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageA549CytosolPapRawDataRep3
 objType file
@@ -565,7 +565,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6608
 tableName wgEncodeRikenCageA549NucleusPapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageA549NucleusPapMinusRawRep4
 objType table
@@ -591,7 +591,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6627
 tableName wgEncodeRikenCageA549NucleusPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageA549NucleusPapPlusRawRep3
 objType table
@@ -617,7 +617,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6608
 tableName wgEncodeRikenCageA549NucleusPapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageA549NucleusPapPlusRawRep4
 objType table
@@ -643,7 +643,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6627
 tableName wgEncodeRikenCageA549NucleusPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageA549NucleusPapRawDataRep3
 objType file
@@ -794,7 +794,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3479
 tableName wgEncodeRikenCageAg04450CellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageAg04450CellPapMinusSignalRep2
 objType table
@@ -820,7 +820,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3480
 tableName wgEncodeRikenCageAg04450CellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageAg04450CellPapPlusSignalRep1
 objType table
@@ -846,7 +846,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3479
 tableName wgEncodeRikenCageAg04450CellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageAg04450CellPapPlusSignalRep2
 objType table
@@ -872,7 +872,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3480
 tableName wgEncodeRikenCageAg04450CellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageAg04450CellPapRawDataRep1
 objType file
@@ -1048,7 +1048,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3483
 tableName wgEncodeRikenCageBjCellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageBjCellPapMinusSignalRep2
 objType table
@@ -1074,7 +1074,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3484
 tableName wgEncodeRikenCageBjCellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageBjCellPapPlusSignalRep1
 objType table
@@ -1100,7 +1100,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3483
 tableName wgEncodeRikenCageBjCellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageBjCellPapPlusSignalRep2
 objType table
@@ -1126,7 +1126,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3484
 tableName wgEncodeRikenCageBjCellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageBjCellPapRawDataRep1
 objType file
@@ -1307,7 +1307,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6625
 tableName wgEncodeRikenCageCd20CellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageCd20CellPapMinusRawRep2
 objType table
@@ -1334,7 +1334,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6647
 tableName wgEncodeRikenCageCd20CellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageCd20CellPapPlusRawRep1
 objType table
@@ -1361,7 +1361,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6625
 tableName wgEncodeRikenCageCd20CellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageCd20CellPapPlusRawRep2
 objType table
@@ -1388,7 +1388,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6647
 tableName wgEncodeRikenCageCd20CellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageCd20CellPapRawDataRep1
 objType file
@@ -1518,7 +1518,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6618
 tableName wgEncodeRikenCageCd34mobilizedCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageCd34mobilizedCellPapPlusRawRep1
 objType table
@@ -1544,7 +1544,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6618
 tableName wgEncodeRikenCageCd34mobilizedCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageCd34mobilizedCellPapRawDataRep1
 objType file
@@ -1670,7 +1670,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3946
 tableName wgEncodeRikenCageGm12878CellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878CellPapMinusSignalRep2
 objType table
@@ -1696,7 +1696,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3951
 tableName wgEncodeRikenCageGm12878CellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878CellPapPlusSignalRep1
 objType table
@@ -1722,7 +1722,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3946
 tableName wgEncodeRikenCageGm12878CellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878CellPapPlusSignalRep2
 objType table
@@ -1748,7 +1748,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3951
 tableName wgEncodeRikenCageGm12878CellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878CellPapRawDataRep1
 objType file
@@ -1767,7 +1767,7 @@ grant Gingeras
 lab RIKEN
 labExpId J72
 localization cell
-md5sum d6c970a05ebafc50f8f109e9e8a515b0
+md5sum 38489b20550f89a117ba9652efd95373
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1792,7 +1792,7 @@ grant Gingeras
 lab RIKEN
 labExpId J73
 localization cell
-md5sum b62e0151d40da03be7d5d2a31238a23c
+md5sum 935bf7c7b2a9d9225739aab7ea69a65d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1900,7 +1900,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1797
 tableName wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters
 objType file
@@ -1926,7 +1926,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1797
 tableName wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolLongnonpolyaRawData
 objType file
@@ -2001,7 +2001,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1797
 tableName wgEncodeRikenCageGm12878CytosolPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolPamPlusSignal
 objType table
@@ -2027,7 +2027,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1797
 tableName wgEncodeRikenCageGm12878CytosolPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolPamRawData
 objType file
@@ -2197,7 +2197,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3950
 tableName wgEncodeRikenCageGm12878CytosolPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolPapMinusSignalRep2
 objType table
@@ -2223,7 +2223,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3947
 tableName wgEncodeRikenCageGm12878CytosolPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolPapPlusSignalRep1
 objType table
@@ -2249,7 +2249,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3950
 tableName wgEncodeRikenCageGm12878CytosolPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolPapPlusSignalRep2
 objType table
@@ -2275,7 +2275,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3947
 tableName wgEncodeRikenCageGm12878CytosolPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolPapRawDataRep1
 objType file
@@ -2294,7 +2294,7 @@ grant Gingeras
 lab RIKEN
 labExpId J84
 localization cytosol
-md5sum a00600b0be2b7f32ca5bfa1d37f9b1c2
+md5sum 71621ab0376d95da763cd0146429528d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2319,7 +2319,7 @@ grant Gingeras
 lab RIKEN
 labExpId J85
 localization cytosol
-md5sum d04a9c6774f547e5aaee9f6dd78334e0
+md5sum 60bb1cd2e8e256eb61c79de047251c61
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2424,7 +2424,7 @@ replicate 0
 rnaExtract total
 subId 2125
 tableName wgEncodeRikenCageGm12878NucleolusTotalMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalMinusSignal
 objType table
@@ -2449,7 +2449,7 @@ project wgEncode
 rnaExtract total
 subId 2125
 tableName wgEncodeRikenCageGm12878NucleolusTotalMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
 objType file
@@ -2474,7 +2474,7 @@ replicate 0
 rnaExtract total
 subId 2125
 tableName wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalPlusSignal
 objType table
@@ -2499,7 +2499,7 @@ project wgEncode
 rnaExtract total
 subId 2125
 tableName wgEncodeRikenCageGm12878NucleolusTotalPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalRawData
 objType file
@@ -2642,7 +2642,7 @@ replicate 1
 rnaExtract longNonPolyA
 subId 2350
 tableName wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1
 objType file
@@ -2666,7 +2666,7 @@ replicate 1
 rnaExtract longNonPolyA
 subId 2350
 tableName wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusLongnonpolyaRawDataRep1
 objType file
@@ -2737,7 +2737,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 2350
 tableName wgEncodeRikenCageGm12878NucleusPamMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusPamPlusSignalRep1
 objType table
@@ -2761,7 +2761,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 2350
 tableName wgEncodeRikenCageGm12878NucleusPamPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusPamRawDataRep1
 objType file
@@ -2932,7 +2932,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3948
 tableName wgEncodeRikenCageGm12878NucleusPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusPapMinusSignalRep2
 objType table
@@ -2958,7 +2958,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3949
 tableName wgEncodeRikenCageGm12878NucleusPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusPapPlusSignalRep1
 objType table
@@ -2984,7 +2984,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3948
 tableName wgEncodeRikenCageGm12878NucleusPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusPapPlusSignalRep2
 objType table
@@ -3010,7 +3010,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3949
 tableName wgEncodeRikenCageGm12878NucleusPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusPapRawDataRep1
 objType file
@@ -3029,7 +3029,7 @@ grant Gingeras
 lab RIKEN
 labExpId J93
 localization nucleus
-md5sum 902ac945214ffc8d988bf25bc4eaef57
+md5sum febdbaf841a04cc6b8a985f99000de90
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3054,7 +3054,7 @@ grant Gingeras
 lab RIKEN
 labExpId J94
 localization nucleus
-md5sum 4978bdc6ef8596eeccf0390fffa5e986
+md5sum d3ea3876b0f4b2a02aab89bec7e9d710
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3162,7 +3162,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1799
 tableName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
 objType file
@@ -3188,7 +3188,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1799
 tableName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescCellLongnonpolyaRawData
 objType file
@@ -3263,7 +3263,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1799
 tableName wgEncodeRikenCageH1hescCellPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPamPlusSignal
 objType table
@@ -3289,7 +3289,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1799
 tableName wgEncodeRikenCageH1hescCellPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPamRawData
 objType file
@@ -3460,7 +3460,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapMinusClustersRep2
 objType file
@@ -3486,7 +3486,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapMinusSignalRep1
 objType table
@@ -3512,7 +3512,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapMinusSignalRep2
 objType table
@@ -3538,7 +3538,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapPlusClustersRep1
 objType file
@@ -3564,7 +3564,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapPlusClustersRep2
 objType file
@@ -3590,7 +3590,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapPlusSignalRep1
 objType table
@@ -3616,7 +3616,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2380
 tableName wgEncodeRikenCageH1hescCellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapPlusSignalRep2
 objType table
@@ -3642,7 +3642,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapRawDataRep1
 objType file
@@ -3793,7 +3793,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2
 objType table
@@ -3819,7 +3819,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2
 objType file
@@ -3845,7 +3845,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescCytosolPapPlusSignalRep2
 objType table
@@ -3871,7 +3871,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescCytosolPapRawDataRep2
 objType file
@@ -3897,6 +3897,31 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2379
 view RawData
+
+metaObject wgEncodeRikenCageH1hescCytosolPapTssHmm
+objType table
+bioRep 006C
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-20
+dateUnrestricted 2013-04-20
+dccAccession wgEncodeEH001139
+expId 1139
+fileName wgEncodeRikenCageH1hescCytosolPapTssHmm.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J86
+localization cytosol
+md5sum 0d96ca71dbc0c868e13ed2b58b3e5679
+project wgEncode
+readType 1x36
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+subId 7562
+tableName wgEncodeRikenCageH1hescCytosolPapTssHmm
+view TssHmm
 
 metaObject wgEncodeRikenCageH1hescNucleusPapAlnRep2
 objType table
@@ -3947,7 +3972,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2
 objType table
@@ -3973,7 +3998,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2
 objType file
@@ -3999,7 +4024,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescNucleusPapPlusSignalRep2
 objType table
@@ -4025,7 +4050,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageH1hescNucleusPapRawDataRep2
 objType file
@@ -4051,6 +4076,31 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2360
 view RawData
+
+metaObject wgEncodeRikenCageH1hescNucleusPapTssHmm
+objType table
+bioRep 006N
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-20
+dateUnrestricted 2013-04-20
+dccAccession wgEncodeEH001140
+expId 1140
+fileName wgEncodeRikenCageH1hescNucleusPapTssHmm.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J95
+localization nucleus
+md5sum 9db72cc11424489b7a5f1dbbdfe3b22c
+project wgEncode
+readType 1x36
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+subId 7561
+tableName wgEncodeRikenCageH1hescNucleusPapTssHmm
+view TssHmm
 
 metaObject wgEncodeRikenCageHaoafCellPapAlnRep1
 objType table
@@ -4131,7 +4181,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6607
 tableName wgEncodeRikenCageHaoafCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHaoafCellPapMinusRawRep2
 objType table
@@ -4158,7 +4208,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6630
 tableName wgEncodeRikenCageHaoafCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHaoafCellPapPlusRawRep1
 objType table
@@ -4185,7 +4235,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6607
 tableName wgEncodeRikenCageHaoafCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHaoafCellPapPlusRawRep2
 objType table
@@ -4212,7 +4262,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6630
 tableName wgEncodeRikenCageHaoafCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHaoafCellPapRawDataRep1
 objType file
@@ -4371,7 +4421,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6600
 tableName wgEncodeRikenCageHaoecCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHaoecCellPapMinusRawRep2
 objType table
@@ -4398,7 +4448,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6614
 tableName wgEncodeRikenCageHaoecCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHaoecCellPapPlusRawRep1
 objType table
@@ -4425,7 +4475,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6600
 tableName wgEncodeRikenCageHaoecCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHaoecCellPapPlusRawRep2
 objType table
@@ -4452,7 +4502,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6614
 tableName wgEncodeRikenCageHaoecCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHaoecCellPapRawDataRep1
 objType file
@@ -4611,7 +4661,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6645
 tableName wgEncodeRikenCageHchCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHchCellPapMinusRawRep2
 objType table
@@ -4638,7 +4688,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6648
 tableName wgEncodeRikenCageHchCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHchCellPapPlusRawRep1
 objType table
@@ -4665,7 +4715,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6645
 tableName wgEncodeRikenCageHchCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHchCellPapPlusRawRep2
 objType table
@@ -4692,7 +4742,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6648
 tableName wgEncodeRikenCageHchCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHchCellPapRawDataRep1
 objType file
@@ -4846,7 +4896,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapMinusClustersRep2
 objType file
@@ -4872,7 +4922,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapMinusSignalRep1
 objType table
@@ -4898,7 +4948,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapMinusSignalRep2
 objType table
@@ -4924,7 +4974,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapPlusClustersRep1
 objType file
@@ -4950,7 +5000,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapPlusClustersRep2
 objType file
@@ -4976,7 +5026,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapPlusSignalRep1
 objType table
@@ -5002,7 +5052,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2363
 tableName wgEncodeRikenCageHelas3CellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapPlusSignalRep2
 objType table
@@ -5028,7 +5078,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapRawDataRep1
 objType file
@@ -5178,7 +5228,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
 objType file
@@ -5203,7 +5253,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData
 objType file
@@ -5275,7 +5325,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPamPlusSignal
 objType table
@@ -5299,7 +5349,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPamRawData
 objType file
@@ -5469,7 +5519,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2
 objType file
@@ -5495,7 +5545,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapMinusSignalRep1
 objType table
@@ -5521,7 +5571,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapMinusSignalRep2
 objType table
@@ -5547,7 +5597,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1
 objType file
@@ -5573,7 +5623,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2
 objType file
@@ -5599,7 +5649,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapPlusSignalRep1
 objType table
@@ -5625,7 +5675,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2364
 tableName wgEncodeRikenCageHelas3CytosolPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapPlusSignalRep2
 objType table
@@ -5651,7 +5701,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapRawDataRep1
 objType file
@@ -5799,7 +5849,7 @@ replicate 0
 rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalMinusSignal
 objType table
@@ -5823,7 +5873,7 @@ project wgEncode
 rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
 objType file
@@ -5848,7 +5898,7 @@ replicate 0
 rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalPlusSignal
 objType table
@@ -5872,7 +5922,7 @@ project wgEncode
 rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalRawData
 objType file
@@ -6019,7 +6069,7 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 6605
 tableName wgEncodeRikenCageHelas3NucleusPamMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPamPlusRawRep1
 objType table
@@ -6045,7 +6095,7 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 6605
 tableName wgEncodeRikenCageHelas3NucleusPamPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPamRawDataRep1
 objType file
@@ -6063,7 +6113,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
-md5sum 166afa3abc92d4e6b2be3119bbb07824
+md5sum e0b744cf7eddfb3fa3dcb74157a27f34
 project wgEncode
 readType 1x36
 replicate 1
@@ -6171,7 +6221,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2
 objType file
@@ -6197,7 +6247,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapMinusSignalRep1
 objType table
@@ -6223,7 +6273,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapMinusSignalRep2
 objType table
@@ -6249,7 +6299,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1
 objType file
@@ -6275,7 +6325,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2
 objType file
@@ -6301,7 +6351,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapPlusSignalRep1
 objType table
@@ -6327,7 +6377,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2386
 tableName wgEncodeRikenCageHelas3NucleusPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapPlusSignalRep2
 objType table
@@ -6353,7 +6403,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapRawDataRep1
 objType file
@@ -6529,7 +6579,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapMinusClustersRep2
 objType file
@@ -6555,7 +6605,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapMinusSignalRep1
 objType table
@@ -6581,7 +6631,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapMinusSignalRep2
 objType table
@@ -6607,7 +6657,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapPlusClustersRep1
 objType file
@@ -6633,7 +6683,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapPlusClustersRep2
 objType file
@@ -6659,7 +6709,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapPlusSignalRep1
 objType table
@@ -6685,7 +6735,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2381
 tableName wgEncodeRikenCageHepg2CellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapPlusSignalRep2
 objType table
@@ -6711,7 +6761,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapRawDataRep1
 objType file
@@ -6864,7 +6914,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1801
 tableName wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters
 objType file
@@ -6890,7 +6940,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1801
 tableName wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaRawData
 objType file
@@ -6965,7 +7015,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1801
 tableName wgEncodeRikenCageHepg2CytosolPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPamPlusSignal
 objType table
@@ -6991,7 +7041,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1801
 tableName wgEncodeRikenCageHepg2CytosolPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPamRawData
 objType file
@@ -7162,7 +7212,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2
 objType file
@@ -7188,7 +7238,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapMinusSignalRep1
 objType table
@@ -7214,7 +7264,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapMinusSignalRep2
 objType table
@@ -7240,7 +7290,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1
 objType file
@@ -7266,7 +7316,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2
 objType file
@@ -7292,7 +7342,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapPlusSignalRep1
 objType table
@@ -7318,7 +7368,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2357
 tableName wgEncodeRikenCageHepg2CytosolPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapPlusSignalRep2
 objType table
@@ -7344,7 +7394,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapRawDataRep1
 objType file
@@ -7493,7 +7543,7 @@ replicate 0
 rnaExtract total
 subId 2124
 tableName wgEncodeRikenCageHepg2NucleolusTotalMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalMinusSignal
 objType table
@@ -7518,7 +7568,7 @@ project wgEncode
 rnaExtract total
 subId 2124
 tableName wgEncodeRikenCageHepg2NucleolusTotalMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalPlusClusters
 objType file
@@ -7543,7 +7593,7 @@ replicate 0
 rnaExtract total
 subId 2124
 tableName wgEncodeRikenCageHepg2NucleolusTotalPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalPlusSignal
 objType table
@@ -7568,7 +7618,7 @@ project wgEncode
 rnaExtract total
 subId 2124
 tableName wgEncodeRikenCageHepg2NucleolusTotalPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalRawData
 objType file
@@ -7716,7 +7766,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1802
 tableName wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters
 objType file
@@ -7742,7 +7792,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1802
 tableName wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusLongnonpolyaRawData
 objType file
@@ -7817,7 +7867,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1802
 tableName wgEncodeRikenCageHepg2NucleusPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPamPlusSignal
 objType table
@@ -7843,7 +7893,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1802
 tableName wgEncodeRikenCageHepg2NucleusPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPamRawData
 objType file
@@ -8014,7 +8064,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2
 objType file
@@ -8040,7 +8090,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapMinusSignalRep1
 objType table
@@ -8066,7 +8116,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapMinusSignalRep2
 objType table
@@ -8092,7 +8142,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1
 objType file
@@ -8118,7 +8168,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2
 objType file
@@ -8144,7 +8194,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapPlusSignalRep1
 objType table
@@ -8170,7 +8220,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2375
 tableName wgEncodeRikenCageHepg2NucleusPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapPlusSignalRep2
 objType table
@@ -8196,7 +8246,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapRawDataRep1
 objType file
@@ -8377,7 +8427,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6641
 tableName wgEncodeRikenCageHfdpcCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHfdpcCellPapMinusRawRep2
 objType table
@@ -8404,7 +8454,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6629
 tableName wgEncodeRikenCageHfdpcCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHfdpcCellPapPlusRawRep1
 objType table
@@ -8431,7 +8481,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6641
 tableName wgEncodeRikenCageHfdpcCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHfdpcCellPapPlusRawRep2
 objType table
@@ -8458,7 +8508,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6629
 tableName wgEncodeRikenCageHfdpcCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHfdpcCellPapRawDataRep1
 objType file
@@ -8590,7 +8640,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6612
 tableName wgEncodeRikenCageHmepcCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHmepcCellPapPlusRawRep1
 objType table
@@ -8617,7 +8667,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6612
 tableName wgEncodeRikenCageHmepcCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHmepcCellPapRawDataRep1
 objType file
@@ -8750,7 +8800,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6644
 tableName wgEncodeRikenCageHmscatCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHmscatCellPapMinusRawRep2
 objType table
@@ -8777,7 +8827,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6602
 tableName wgEncodeRikenCageHmscatCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHmscatCellPapPlusRawRep1
 objType table
@@ -8804,7 +8854,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6644
 tableName wgEncodeRikenCageHmscatCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHmscatCellPapPlusRawRep2
 objType table
@@ -8831,7 +8881,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6602
 tableName wgEncodeRikenCageHmscatCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHmscatCellPapRawDataRep1
 objType file
@@ -8990,7 +9040,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6624
 tableName wgEncodeRikenCageHmscbmCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHmscbmCellPapMinusRawRep2
 objType table
@@ -9017,7 +9067,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6622
 tableName wgEncodeRikenCageHmscbmCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHmscbmCellPapPlusRawRep1
 objType table
@@ -9044,7 +9094,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6624
 tableName wgEncodeRikenCageHmscbmCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHmscbmCellPapPlusRawRep2
 objType table
@@ -9071,7 +9121,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6622
 tableName wgEncodeRikenCageHmscbmCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHmscbmCellPapRawDataRep1
 objType file
@@ -9230,7 +9280,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6633
 tableName wgEncodeRikenCageHmscucCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHmscucCellPapMinusRawRep2
 objType table
@@ -9257,7 +9307,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6639
 tableName wgEncodeRikenCageHmscucCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHmscucCellPapPlusRawRep1
 objType table
@@ -9284,7 +9334,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6633
 tableName wgEncodeRikenCageHmscucCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHmscucCellPapPlusRawRep2
 objType table
@@ -9311,7 +9361,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6639
 tableName wgEncodeRikenCageHmscucCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHmscucCellPapRawDataRep1
 objType file
@@ -9470,7 +9520,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6596
 tableName wgEncodeRikenCageHobCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHobCellPapMinusRawRep2
 objType table
@@ -9497,7 +9547,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6636
 tableName wgEncodeRikenCageHobCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHobCellPapPlusRawRep1
 objType table
@@ -9524,7 +9574,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6596
 tableName wgEncodeRikenCageHobCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHobCellPapPlusRawRep2
 objType table
@@ -9551,7 +9601,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6636
 tableName wgEncodeRikenCageHobCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHobCellPapRawDataRep1
 objType file
@@ -9710,7 +9760,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6623
 tableName wgEncodeRikenCageHpcplCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHpcplCellPapMinusRawRep2
 objType table
@@ -9737,7 +9787,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6628
 tableName wgEncodeRikenCageHpcplCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHpcplCellPapPlusRawRep1
 objType table
@@ -9764,7 +9814,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6623
 tableName wgEncodeRikenCageHpcplCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHpcplCellPapPlusRawRep2
 objType table
@@ -9791,7 +9841,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6628
 tableName wgEncodeRikenCageHpcplCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHpcplCellPapRawDataRep1
 objType file
@@ -9950,7 +10000,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6610
 tableName wgEncodeRikenCageHpiepcCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHpiepcCellPapMinusRawRep2
 objType table
@@ -9977,7 +10027,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6620
 tableName wgEncodeRikenCageHpiepcCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHpiepcCellPapPlusRawRep1
 objType table
@@ -10004,7 +10054,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6610
 tableName wgEncodeRikenCageHpiepcCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHpiepcCellPapPlusRawRep2
 objType table
@@ -10031,7 +10081,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6620
 tableName wgEncodeRikenCageHpiepcCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHpiepcCellPapRawDataRep1
 objType file
@@ -10190,7 +10240,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6609
 tableName wgEncodeRikenCageHsavecCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHsavecCellPapMinusRawRep2
 objType table
@@ -10217,7 +10267,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6640
 tableName wgEncodeRikenCageHsavecCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHsavecCellPapPlusRawRep1
 objType table
@@ -10244,7 +10294,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6609
 tableName wgEncodeRikenCageHsavecCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHsavecCellPapPlusRawRep2
 objType table
@@ -10271,7 +10321,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6640
 tableName wgEncodeRikenCageHsavecCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHsavecCellPapRawDataRep1
 objType file
@@ -10425,7 +10475,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapMinusClustersRep2
 objType file
@@ -10451,7 +10501,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapMinusSignalRep1
 objType table
@@ -10477,7 +10527,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapMinusSignalRep2
 objType table
@@ -10503,7 +10553,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapPlusClustersRep1
 objType file
@@ -10529,7 +10579,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapPlusClustersRep2
 objType file
@@ -10555,7 +10605,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapPlusSignalRep1
 objType table
@@ -10581,7 +10631,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2376
 tableName wgEncodeRikenCageHuvecCellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapPlusSignalRep2
 objType table
@@ -10607,7 +10657,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapRawDataRep1
 objType file
@@ -10759,7 +10809,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1800
 tableName wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters
 objType file
@@ -10785,7 +10835,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1800
 tableName wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolLongnonpolyaRawData
 objType file
@@ -10860,7 +10910,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1800
 tableName wgEncodeRikenCageHuvecCytosolPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPamPlusSignal
 objType table
@@ -10886,7 +10936,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1800
 tableName wgEncodeRikenCageHuvecCytosolPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPamRawData
 objType file
@@ -11057,7 +11107,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4
 objType file
@@ -11083,7 +11133,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapMinusSignalRep3
 objType table
@@ -11109,7 +11159,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapMinusSignalRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapMinusSignalRep4
 objType table
@@ -11135,7 +11185,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapMinusSignalRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3
 objType file
@@ -11161,7 +11211,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4
 objType file
@@ -11187,7 +11237,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapPlusSignalRep3
 objType table
@@ -11213,7 +11263,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2368
 tableName wgEncodeRikenCageHuvecCytosolPapPlusSignalRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapPlusSignalRep4
 objType table
@@ -11239,7 +11289,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapPlusSignalRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapRawDataRep3
 objType file
@@ -11391,7 +11441,7 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 6635
 tableName wgEncodeRikenCageHuvecNucleusPamMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPamPlusRawRep1
 objType table
@@ -11417,7 +11467,7 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 6635
 tableName wgEncodeRikenCageHuvecNucleusPamPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPamRawDataRep1
 objType file
@@ -11435,7 +11485,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
-md5sum 1bb3921c15deb6a74e3a64af07aac934
+md5sum 3f4c88c9224b2e8997b37754b9f4447b
 project wgEncode
 readType 1x36
 replicate 1
@@ -11543,7 +11593,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4
 objType file
@@ -11569,7 +11619,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapMinusSignalRep3
 objType table
@@ -11595,7 +11645,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapMinusSignalRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapMinusSignalRep4
 objType table
@@ -11621,7 +11671,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapMinusSignalRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3
 objType file
@@ -11647,7 +11697,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4
 objType file
@@ -11673,7 +11723,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapPlusSignalRep3
 objType table
@@ -11699,7 +11749,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2377
 tableName wgEncodeRikenCageHuvecNucleusPapPlusSignalRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapPlusSignalRep4
 objType table
@@ -11725,7 +11775,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapPlusSignalRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapRawDataRep3
 objType file
@@ -11906,7 +11956,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6594
 tableName wgEncodeRikenCageHvmfCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHvmfCellPapMinusRawRep2
 objType table
@@ -11933,7 +11983,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6611
 tableName wgEncodeRikenCageHvmfCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHvmfCellPapPlusRawRep1
 objType table
@@ -11960,7 +12010,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6594
 tableName wgEncodeRikenCageHvmfCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHvmfCellPapPlusRawRep2
 objType table
@@ -11987,7 +12037,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6611
 tableName wgEncodeRikenCageHvmfCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHvmfCellPapRawDataRep1
 objType file
@@ -12146,7 +12196,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6601
 tableName wgEncodeRikenCageHwpCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHwpCellPapMinusRawRep2
 objType table
@@ -12173,7 +12223,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6617
 tableName wgEncodeRikenCageHwpCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageHwpCellPapPlusRawRep1
 objType table
@@ -12200,7 +12250,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6601
 tableName wgEncodeRikenCageHwpCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHwpCellPapPlusRawRep2
 objType table
@@ -12227,7 +12277,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6617
 tableName wgEncodeRikenCageHwpCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageHwpCellPapRawDataRep1
 objType file
@@ -12386,7 +12436,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6637
 tableName wgEncodeRikenCageImr90CellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageImr90CellPapMinusRawRep2
 objType table
@@ -12413,7 +12463,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6643
 tableName wgEncodeRikenCageImr90CellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageImr90CellPapPlusRawRep1
 objType table
@@ -12440,7 +12490,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6637
 tableName wgEncodeRikenCageImr90CellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageImr90CellPapPlusRawRep2
 objType table
@@ -12467,7 +12517,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6643
 tableName wgEncodeRikenCageImr90CellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageImr90CellPapRawDataRep1
 objType file
@@ -12626,7 +12676,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6588
 tableName wgEncodeRikenCageImr90CytosolPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageImr90CytosolPapMinusRawRep2
 objType table
@@ -12653,7 +12703,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6642
 tableName wgEncodeRikenCageImr90CytosolPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageImr90CytosolPapPlusRawRep1
 objType table
@@ -12680,7 +12730,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6588
 tableName wgEncodeRikenCageImr90CytosolPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageImr90CytosolPapPlusRawRep2
 objType table
@@ -12707,7 +12757,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6642
 tableName wgEncodeRikenCageImr90CytosolPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageImr90CytosolPapRawDataRep1
 objType file
@@ -12866,7 +12916,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6589
 tableName wgEncodeRikenCageImr90NucleusPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageImr90NucleusPapMinusRawRep2
 objType table
@@ -12893,7 +12943,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6593
 tableName wgEncodeRikenCageImr90NucleusPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageImr90NucleusPapPlusRawRep1
 objType table
@@ -12920,7 +12970,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6589
 tableName wgEncodeRikenCageImr90NucleusPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageImr90NucleusPapPlusRawRep2
 objType table
@@ -12947,7 +12997,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6593
 tableName wgEncodeRikenCageImr90NucleusPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageImr90NucleusPapRawDataRep1
 objType file
@@ -13101,7 +13151,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CellPapMinusClustersRep2
 objType file
@@ -13127,7 +13177,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CellPapMinusSignalRep1
 objType table
@@ -13153,7 +13203,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CellPapMinusSignalRep2
 objType table
@@ -13179,7 +13229,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CellPapPlusClustersRep1
 objType file
@@ -13205,7 +13255,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CellPapPlusClustersRep2
 objType file
@@ -13231,7 +13281,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CellPapPlusSignalRep1
 objType table
@@ -13257,7 +13307,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2359
 tableName wgEncodeRikenCageK562CellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CellPapPlusSignalRep2
 objType table
@@ -13283,7 +13333,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2362
 tableName wgEncodeRikenCageK562CellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CellPapRawDataRep1
 objType file
@@ -13434,7 +13484,7 @@ replicate 0
 rnaExtract total
 subId 1804
 tableName wgEncodeRikenCageK562ChromatinTotalMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562ChromatinTotalMinusSignal
 objType table
@@ -13460,7 +13510,7 @@ project wgEncode
 rnaExtract total
 subId 1804
 tableName wgEncodeRikenCageK562ChromatinTotalMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562ChromatinTotalPlusClusters
 objType file
@@ -13486,7 +13536,7 @@ replicate 0
 rnaExtract total
 subId 1804
 tableName wgEncodeRikenCageK562ChromatinTotalPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562ChromatinTotalPlusSignal
 objType table
@@ -13512,7 +13562,7 @@ project wgEncode
 rnaExtract total
 subId 1804
 tableName wgEncodeRikenCageK562ChromatinTotalPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562ChromatinTotalRawData
 objType file
@@ -13660,7 +13710,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1805
 tableName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
 objType file
@@ -13686,7 +13736,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1805
 tableName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CytosolLongnonpolyaRawData
 objType file
@@ -13787,7 +13837,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1805
 tableName wgEncodeRikenCageK562CytosolPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPamPlusSignal
 objType table
@@ -13813,7 +13863,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1805
 tableName wgEncodeRikenCageK562CytosolPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPamRawData
 objType file
@@ -14035,7 +14085,7 @@ replicate 0
 rnaExtract longPolyA
 subId 1806
 tableName wgEncodeRikenCageK562CytosolPapMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusClustersRep1
 objType file
@@ -14061,7 +14111,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusClustersRep2
 objType file
@@ -14087,7 +14137,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusSignal
 objType file
@@ -14113,7 +14163,7 @@ md5sum 6bfd6923f449ef9a7153601d03a25c96
 project wgEncode
 rnaExtract longPolyA
 subId 1806
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusSignalRep1
 objType table
@@ -14139,7 +14189,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusSignalRep2
 objType table
@@ -14165,7 +14215,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusClusters
 objType file
@@ -14191,7 +14241,7 @@ replicate 0
 rnaExtract longPolyA
 subId 1806
 tableName wgEncodeRikenCageK562CytosolPapPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusClustersRep1
 objType file
@@ -14217,7 +14267,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusClustersRep2
 objType file
@@ -14243,7 +14293,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusSignal
 objType file
@@ -14269,7 +14319,7 @@ md5sum 7581b8936432aa99d1ec01329e202789
 project wgEncode
 rnaExtract longPolyA
 subId 1806
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusSignalRep1
 objType table
@@ -14295,7 +14345,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2371
 tableName wgEncodeRikenCageK562CytosolPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusSignalRep2
 objType table
@@ -14321,7 +14371,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapRawData
 objType file
@@ -14492,7 +14542,7 @@ project wgEncode
 rnaExtract total
 subId 2929
 tableName wgEncodeRikenCageK562NucleolusTotalMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleolusTotalPlusSignal
 objType table
@@ -14516,7 +14566,7 @@ project wgEncode
 rnaExtract total
 subId 2929
 tableName wgEncodeRikenCageK562NucleolusTotalPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleolusTotalRawData
 objType file
@@ -14663,7 +14713,7 @@ replicate 0
 rnaExtract total
 subId 1808
 tableName wgEncodeRikenCageK562NucleoplasmTotalMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalMinusSignal
 objType table
@@ -14689,7 +14739,7 @@ project wgEncode
 rnaExtract total
 subId 1808
 tableName wgEncodeRikenCageK562NucleoplasmTotalMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
 objType file
@@ -14715,7 +14765,7 @@ replicate 0
 rnaExtract total
 subId 1808
 tableName wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalPlusSignal
 objType table
@@ -14741,7 +14791,7 @@ project wgEncode
 rnaExtract total
 subId 1808
 tableName wgEncodeRikenCageK562NucleoplasmTotalPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalRawData
 objType file
@@ -14887,7 +14937,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 2127
 tableName wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters
 objType file
@@ -14912,7 +14962,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 2127
 tableName wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleusLongnonpolyaRawData
 objType file
@@ -15011,7 +15061,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 2127
 tableName wgEncodeRikenCageK562NucleusPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPamPlusSignal
 objType table
@@ -15036,7 +15086,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 2127
 tableName wgEncodeRikenCageK562NucleusPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPamRawData
 objType file
@@ -15232,7 +15282,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapMinusClustersRep2
 objType file
@@ -15258,7 +15308,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapMinusSignalRep1
 objType table
@@ -15284,7 +15334,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapMinusSignalRep2
 objType table
@@ -15310,7 +15360,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapPlusClustersRep1
 objType file
@@ -15336,7 +15386,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapPlusClustersRep2
 objType file
@@ -15362,7 +15412,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapPlusSignalRep1
 objType table
@@ -15388,7 +15438,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2367
 tableName wgEncodeRikenCageK562NucleusPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapPlusSignalRep2
 objType table
@@ -15414,7 +15464,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapRawDataRep1
 objType file
@@ -15566,7 +15616,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1810
 tableName wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters
 objType file
@@ -15592,7 +15642,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1810
 tableName wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562PolysomeLongnonpolyaRawData
 objType file
@@ -15667,7 +15717,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1810
 tableName wgEncodeRikenCageK562PolysomePamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageK562PolysomePamPlusSignal
 objType table
@@ -15693,7 +15743,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1810
 tableName wgEncodeRikenCageK562PolysomePamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageK562PolysomePamRawData
 objType file
@@ -15864,7 +15914,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMcf7CellPapMinusRawRep2
 objType table
@@ -15890,7 +15940,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 4332
 tableName wgEncodeRikenCageMcf7CellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMcf7CellPapMinusSignalRep1
 objType table
@@ -15916,7 +15966,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMcf7CellPapPlusClustersRep1
 objType file
@@ -15942,7 +15992,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMcf7CellPapPlusRawRep2
 objType table
@@ -15968,7 +16018,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 4332
 tableName wgEncodeRikenCageMcf7CellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMcf7CellPapPlusSignalRep1
 objType table
@@ -15994,7 +16044,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2365
 tableName wgEncodeRikenCageMcf7CellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMcf7CellPapRawDataRep1
 objType file
@@ -16013,7 +16063,7 @@ grant Gingeras
 lab RIKEN
 labExpId K07
 localization cell
-md5sum b14be70fa85e86f98c6cdb6d515a7ad4
+md5sum b52bc0da6e052c54a2b087cd427ad729
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -16172,7 +16222,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6616
 tableName wgEncodeRikenCageMcf7CytosolPapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMcf7CytosolPapMinusRawRep4
 objType table
@@ -16198,7 +16248,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6604
 tableName wgEncodeRikenCageMcf7CytosolPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMcf7CytosolPapPlusRawRep3
 objType table
@@ -16224,7 +16274,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6616
 tableName wgEncodeRikenCageMcf7CytosolPapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMcf7CytosolPapPlusRawRep4
 objType table
@@ -16250,7 +16300,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6604
 tableName wgEncodeRikenCageMcf7CytosolPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMcf7CytosolPapRawDataRep3
 objType file
@@ -16403,7 +16453,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6586
 tableName wgEncodeRikenCageMcf7NucleusPapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMcf7NucleusPapMinusRawRep4
 objType table
@@ -16429,7 +16479,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6591
 tableName wgEncodeRikenCageMcf7NucleusPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMcf7NucleusPapPlusRawRep3
 objType table
@@ -16455,7 +16505,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6586
 tableName wgEncodeRikenCageMcf7NucleusPapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMcf7NucleusPapPlusRawRep4
 objType table
@@ -16481,7 +16531,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6591
 tableName wgEncodeRikenCageMcf7NucleusPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMcf7NucleusPapRawDataRep3
 objType file
@@ -16637,7 +16687,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6587
 tableName wgEncodeRikenCageMonocd14CellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMonocd14CellPapMinusRawRep2
 objType table
@@ -16664,7 +16714,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6621
 tableName wgEncodeRikenCageMonocd14CellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageMonocd14CellPapPlusRawRep1
 objType table
@@ -16691,7 +16741,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6587
 tableName wgEncodeRikenCageMonocd14CellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMonocd14CellPapPlusRawRep2
 objType table
@@ -16718,7 +16768,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6621
 tableName wgEncodeRikenCageMonocd14CellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageMonocd14CellPapRawDataRep1
 objType file
@@ -16877,7 +16927,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6631
 tableName wgEncodeRikenCageNhdfCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhdfCellPapMinusRawRep2
 objType table
@@ -16904,7 +16954,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6634
 tableName wgEncodeRikenCageNhdfCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhdfCellPapPlusRawRep1
 objType table
@@ -16931,7 +16981,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6631
 tableName wgEncodeRikenCageNhdfCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhdfCellPapPlusRawRep2
 objType table
@@ -16958,7 +17008,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6634
 tableName wgEncodeRikenCageNhdfCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhdfCellPapRawDataRep1
 objType file
@@ -17112,7 +17162,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapMinusClustersRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCellPapMinusClustersRep2
 objType file
@@ -17138,7 +17188,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapMinusClustersRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCellPapMinusSignalRep1
 objType table
@@ -17164,7 +17214,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapMinusSignalRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCellPapMinusSignalRep2
 objType table
@@ -17190,7 +17240,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCellPapPlusClustersRep1
 objType file
@@ -17216,7 +17266,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapPlusClustersRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCellPapPlusClustersRep2
 objType file
@@ -17242,7 +17292,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapPlusClustersRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCellPapPlusSignalRep1
 objType table
@@ -17268,7 +17318,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapPlusSignalRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCellPapPlusSignalRep2
 objType table
@@ -17294,7 +17344,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCellPapRawDataRep1
 objType file
@@ -17446,7 +17496,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1811
 tableName wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters
 objType file
@@ -17472,7 +17522,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1811
 tableName wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolLongnonpolyaRawData
 objType file
@@ -17547,7 +17597,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1811
 tableName wgEncodeRikenCageNhekCytosolPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPamPlusSignal
 objType table
@@ -17573,7 +17623,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1811
 tableName wgEncodeRikenCageNhekCytosolPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPamRawData
 objType file
@@ -17744,7 +17794,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapMinusClustersRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPapMinusRawRep4
 objType table
@@ -17770,7 +17820,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 4166
 tableName wgEncodeRikenCageNhekCytosolPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPapMinusSignalRep3
 objType table
@@ -17796,7 +17846,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapMinusSignalRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPapPlusClustersRep3
 objType file
@@ -17822,7 +17872,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapPlusClustersRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPapPlusRawRep4
 objType table
@@ -17848,7 +17898,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 4166
 tableName wgEncodeRikenCageNhekCytosolPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPapPlusSignalRep3
 objType table
@@ -17874,7 +17924,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapPlusSignalRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPapRawDataRep3
 objType file
@@ -18026,7 +18076,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1812
 tableName wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters
 objType file
@@ -18052,7 +18102,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 1812
 tableName wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusLongnonpolyaRawData
 objType file
@@ -18127,7 +18177,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1812
 tableName wgEncodeRikenCageNhekNucleusPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPamPlusSignal
 objType table
@@ -18153,7 +18203,7 @@ project wgEncode
 rnaExtract longNonPolyA
 subId 1812
 tableName wgEncodeRikenCageNhekNucleusPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPamRawData
 objType file
@@ -18327,7 +18377,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapMinusClustersRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPapMinusRawRep4
 objType table
@@ -18355,7 +18405,7 @@ seqPlatform Illumina_GA2x
 sex F
 subId 6619
 tableName wgEncodeRikenCageNhekNucleusPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPapMinusSignalRep3
 objType table
@@ -18381,7 +18431,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapMinusSignalRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPapPlusClustersRep3
 objType file
@@ -18407,7 +18457,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapPlusClustersRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPapPlusRawRep4
 objType table
@@ -18435,7 +18485,7 @@ seqPlatform Illumina_GA2x
 sex F
 subId 6619
 tableName wgEncodeRikenCageNhekNucleusPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPapPlusSignalRep3
 objType table
@@ -18461,7 +18511,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapPlusSignalRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPapRawDataRep3
 objType file
@@ -18506,7 +18556,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011
 localization nucleus
-md5sum 684839e3c1f080801890b4150b5ce00c
+md5sum 9ce38385515dc5a85038e041ca585326
 project wgEncode
 readType 1x36
 replicate 4
@@ -18568,54 +18618,30 @@ view TssHmm
 
 metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV3
 objType table
+bioRep 028N,027N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-10
-dateUnrestricted 2012-11-10
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-24
+dateUnrestricted 2013-04-24
 dccAccession wgEncodeEH001154
+donorId 4F1155J
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapTssHmmV3.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
-labExpId K09
+labExpId CTig10011,K09
 localization nucleus
 md5sum acfc0a827edee9ded634a97c9b701128
-project wgEncode
-rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 5611
-submittedDataVersion V3 - Repacing . with -1 for missing data
-tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
-view TssHmm
-
-metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV4
-objType table
-bioRep 028N
-cell NHEK
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-30
-dateUnrestricted 2012-12-30
-dccAccession wgEncodeEH001154
-donorId 4F1155J
-expId 1154
-fileName wgEncodeRikenCageNhekNucleusPapTssHmmV4.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId CTig10011
-localization nucleus
-md5sum d0d4b79df92e17a026fd3da074cb5075
 project wgEncode
 readType 1x36
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 sex F
-subId 6726
-submittedDataVersion V4 - replaces old version 3 that had broken values
-tableName wgEncodeRikenCageNhekNucleusPapTssHmmV4
+subId 7560
+submittedDataVersion V3 - New sample is merged for replicates
+tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageNhemfm2CellPapAlnRep1
@@ -18697,7 +18723,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6603
 tableName wgEncodeRikenCageNhemfm2CellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhemfm2CellPapMinusRawRep2
 objType table
@@ -18724,7 +18750,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6638
 tableName wgEncodeRikenCageNhemfm2CellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhemfm2CellPapPlusRawRep1
 objType table
@@ -18751,7 +18777,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6603
 tableName wgEncodeRikenCageNhemfm2CellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhemfm2CellPapPlusRawRep2
 objType table
@@ -18778,7 +18804,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6638
 tableName wgEncodeRikenCageNhemfm2CellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhemfm2CellPapRawDataRep1
 objType file
@@ -18937,7 +18963,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6646
 tableName wgEncodeRikenCageNhemm2CellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhemm2CellPapMinusRawRep2
 objType table
@@ -18964,7 +18990,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6592
 tableName wgEncodeRikenCageNhemm2CellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageNhemm2CellPapPlusRawRep1
 objType table
@@ -18991,7 +19017,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6646
 tableName wgEncodeRikenCageNhemm2CellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhemm2CellPapPlusRawRep2
 objType table
@@ -19018,7 +19044,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6592
 tableName wgEncodeRikenCageNhemm2CellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageNhemm2CellPapRawDataRep1
 objType file
@@ -19148,7 +19174,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1813
 tableName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
 objType file
@@ -19174,7 +19200,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1813
 tableName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageProstateCellLongnonpolyaRawData
 objType file
@@ -19275,7 +19301,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1813
 tableName wgEncodeRikenCageProstateCellPamMinusSignal
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageProstateCellPamPlusSignal
 objType table
@@ -19301,7 +19327,7 @@ rnaExtract longNonPolyA
 softwareVersion bedtools v2.7.1
 subId 1813
 tableName wgEncodeRikenCageProstateCellPamPlusSignal
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageProstateCellPamRawData
 objType file
@@ -19430,7 +19456,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6606
 tableName wgEncodeRikenCageSkmcCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSkmcCellPapMinusRawRep2
 objType table
@@ -19457,7 +19483,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6599
 tableName wgEncodeRikenCageSkmcCellPapMinusRawRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSkmcCellPapPlusRawRep1
 objType table
@@ -19484,7 +19510,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6606
 tableName wgEncodeRikenCageSkmcCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSkmcCellPapPlusRawRep2
 objType table
@@ -19511,7 +19537,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6599
 tableName wgEncodeRikenCageSkmcCellPapPlusRawRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSkmcCellPapRawDataRep1
 objType file
@@ -19667,7 +19693,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6598
 tableName wgEncodeRikenCageSknshCellPapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSknshCellPapMinusRawRep4
 objType table
@@ -19693,7 +19719,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6632
 tableName wgEncodeRikenCageSknshCellPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSknshCellPapPlusRawRep3
 objType table
@@ -19719,7 +19745,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6598
 tableName wgEncodeRikenCageSknshCellPapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSknshCellPapPlusRawRep4
 objType table
@@ -19745,7 +19771,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6632
 tableName wgEncodeRikenCageSknshCellPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSknshCellPapRawDataRep3
 objType file
@@ -19898,7 +19924,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6615
 tableName wgEncodeRikenCageSknshCytosolPapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSknshCytosolPapMinusRawRep4
 objType table
@@ -19924,7 +19950,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6590
 tableName wgEncodeRikenCageSknshCytosolPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSknshCytosolPapPlusRawRep3
 objType table
@@ -19950,7 +19976,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6615
 tableName wgEncodeRikenCageSknshCytosolPapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSknshCytosolPapPlusRawRep4
 objType table
@@ -19976,7 +20002,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6590
 tableName wgEncodeRikenCageSknshCytosolPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSknshCytosolPapRawDataRep3
 objType file
@@ -20129,7 +20155,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6613
 tableName wgEncodeRikenCageSknshNucleusPapMinusRawRep3
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSknshNucleusPapMinusRawRep4
 objType table
@@ -20155,7 +20181,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6597
 tableName wgEncodeRikenCageSknshNucleusPapMinusRawRep4
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSknshNucleusPapPlusRawRep3
 objType table
@@ -20181,7 +20207,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6613
 tableName wgEncodeRikenCageSknshNucleusPapPlusRawRep3
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSknshNucleusPapPlusRawRep4
 objType table
@@ -20207,7 +20233,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 subId 6597
 tableName wgEncodeRikenCageSknshNucleusPapPlusRawRep4
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSknshNucleusPapRawDataRep3
 objType file
@@ -20358,7 +20384,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 4167
 tableName wgEncodeRikenCageSknshraCellPapMinusRawRep1
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSknshraCellPapMinusSignalRep2
 objType table
@@ -20384,7 +20410,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3339
 tableName wgEncodeRikenCageSknshraCellPapMinusSignalRep2
-view MinusRawSignal
+view MinusSignal
 
 metaObject wgEncodeRikenCageSknshraCellPapPlusRawRep1
 objType table
@@ -20410,7 +20436,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 4167
 tableName wgEncodeRikenCageSknshraCellPapPlusRawRep1
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSknshraCellPapPlusSignalRep2
 objType table
@@ -20436,7 +20462,7 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3339
 tableName wgEncodeRikenCageSknshraCellPapPlusSignalRep2
-view PlusRawSignal
+view PlusSignal
 
 metaObject wgEncodeRikenCageSknshraCellPapRawDataRep1
 objType file
@@ -20538,4 +20564,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -89464798
+# MAGIC: 2000543582

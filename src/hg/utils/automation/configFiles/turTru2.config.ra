@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db turTru2
+clade mammal
+genomeCladePriority 35
+scientificName Tursiops truncatus
+commonName Dolphin
+assemblyDate Oct. 2011
+assemblyLabel Baylor College of Medicine Ttru_1.4
+assemblyShortLabel Baylor Ttru_1.4
+orderKey 2364
+# chrM bioproject: 34125
+mitoAcc NC_012059
+fastaFiles /hive/data/genomes/turTru2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/turTru2/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir dolphin
+photoCreditURL http://en.wikipedia.org/wiki/File:Bottlenose_Dolphin_KSC04pd0178.jpg
+photoCreditName Photo courtesy of Solipsist, Wikipedia Commons
+ncbiGenomeId 769
+ncbiAssemblyId 325108
+ncbiAssemblyName Ttru_1.4
+ncbiBioProject 20367
+genBankAccessionID GCA_000151865.2
+taxId 9739

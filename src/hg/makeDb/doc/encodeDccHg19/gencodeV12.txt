@@ -45,6 +45,9 @@
     (time nice make -j 10) >&all.out&
 
     ## copy and update trackDb files from previous release
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with:
+    select distinct transcriptType from wgEncodeGencodeAttrsV12 order by transcriptType;
     kent/src/hg/makeDb/trackDb
     cp human/hg19/wgEncodeGencodeV10.ra human/hg19/wgEncodeGencodeV12.ra
     cp human/hg19/wgEncodeGencodeV10.html human/hg19/wgEncodeGencodeV12.html

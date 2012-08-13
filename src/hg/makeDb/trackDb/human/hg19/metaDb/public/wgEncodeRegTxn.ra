@@ -1,0 +1,211 @@
+metaObject wgEncodeRegTxn
+objType composite
+composite wgEncodeRegTxn
+
+metaObject wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
+objType table
+cell GM12878
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+sourceObj wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigRep1V2 wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigRep2V2
+subId 3416
+submittedDataVersion V2 - A better mapping technique
+tableName wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled
+objType table
+cell H1-hESC
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+sourceObj wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigRep1V2 wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigRep2V2
+subId 3464
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
+objType table
+cell HeLa-S3
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
+fileName wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum c0ee13a431fac2ff6b4d00aa0c574e3d
+origAssembly hg18
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+subId 3418
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
+objType table
+cell HepG2
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
+fileName wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 1448d05c49419c2e920038aa17ed92ab
+origAssembly hg18
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+subId 3466
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
+objType table
+cell HSMM
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+sourceObj wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigRep1V2 wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigRep2V2
+subId 3468
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled
+objType table
+cell HUVEC
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+sourceObj wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigRep1V2 wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigRep2V2
+subId 3470
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled
+objType table
+cell K562
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+sourceObj wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigRep1V2 wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigRep2V2
+subId 3419
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled
+objType table
+cell NHEK
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+sourceObj wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigRep1V2 wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigRep2V2
+subId 3473
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled
+objType table
+cell NHLF
+composite wgEncodeRegTxn
+dataType RnaSeq
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+sourceObj wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigRep1V2 wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigRep2V2
+subId 3413
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled
+view Signal
+
+# MAGIC: -1833931751

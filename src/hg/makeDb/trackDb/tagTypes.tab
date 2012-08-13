@@ -164,6 +164,8 @@ groupings expRatio
 hapmapPhase bed
 hgGene genePred
 hgsid bed genePred
+highlightBy genePred
+highlightColor genePred
 html *
 htmlFile customTracks
 htmlUrl customTracks
@@ -266,10 +268,13 @@ qValueFilterLimits bed narrowPeak broadPeak
 refSeqAnnoVersion genePred
 release *
 ucscRetroInfo psl
+sGroup_Birds wigMaf
 sGroup_Chimp wigMaf
+sGroup_Glire wigMaf
 sGroup_Glires wigMaf
 sGroup_Human wigMaf
 sGroup_Placental_Mammal wigMaf
+sGroup_Placental wigMaf
 sGroup_Primate wigMaf
 sGroup_Primates wigMaf
 sGroup_Vertebrate wigMaf

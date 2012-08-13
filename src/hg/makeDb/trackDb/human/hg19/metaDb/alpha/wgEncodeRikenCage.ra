@@ -322,6 +322,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002736
 expId 2736
 fileName wgEncodeRikenCageA549CytosolPapMinusRawRep3.bigWig
+geoSampleAccession GSM979632
 grant Gingeras
 lab RIKEN
 labExpId CThi10049
@@ -348,6 +349,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002736
 expId 2736
 fileName wgEncodeRikenCageA549CytosolPapMinusRawRep4.bigWig
+geoSampleAccession GSM979632
 grant Gingeras
 lab RIKEN
 labExpId CThi10059
@@ -374,6 +376,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002736
 expId 2736
 fileName wgEncodeRikenCageA549CytosolPapPlusRawRep3.bigWig
+geoSampleAccession GSM979632
 grant Gingeras
 lab RIKEN
 labExpId CThi10049
@@ -400,6 +403,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002736
 expId 2736
 fileName wgEncodeRikenCageA549CytosolPapPlusRawRep4.bigWig
+geoSampleAccession GSM979632
 grant Gingeras
 lab RIKEN
 labExpId CThi10059
@@ -426,6 +430,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002736
 expId 2736
 fileName wgEncodeRikenCageA549CytosolPapRawDataRep3.fastq.gz
+geoSampleAccession GSM979632
 grant Gingeras
 lab RIKEN
 labExpId CThi10049
@@ -451,6 +456,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002736
 expId 2736
 fileName wgEncodeRikenCageA549CytosolPapRawDataRep4.fastq.gz
+geoSampleAccession GSM979632
 grant Gingeras
 lab RIKEN
 labExpId CThi10059
@@ -476,6 +482,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002736
 expId 2736
 fileName wgEncodeRikenCageA549CytosolPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979632
 grant Gingeras
 lab RIKEN
 labExpId CThi10049,CThi10059
@@ -553,6 +560,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002737
 expId 2737
 fileName wgEncodeRikenCageA549NucleusPapMinusRawRep3.bigWig
+geoSampleAccession GSM979633
 grant Gingeras
 lab RIKEN
 labExpId CThi10106
@@ -579,6 +587,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002737
 expId 2737
 fileName wgEncodeRikenCageA549NucleusPapMinusRawRep4.bigWig
+geoSampleAccession GSM979633
 grant Gingeras
 lab RIKEN
 labExpId CThi10060
@@ -605,6 +614,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002737
 expId 2737
 fileName wgEncodeRikenCageA549NucleusPapPlusRawRep3.bigWig
+geoSampleAccession GSM979633
 grant Gingeras
 lab RIKEN
 labExpId CThi10106
@@ -631,6 +641,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002737
 expId 2737
 fileName wgEncodeRikenCageA549NucleusPapPlusRawRep4.bigWig
+geoSampleAccession GSM979633
 grant Gingeras
 lab RIKEN
 labExpId CThi10060
@@ -657,6 +668,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002737
 expId 2737
 fileName wgEncodeRikenCageA549NucleusPapRawDataRep3.fastq.gz
+geoSampleAccession GSM979633
 grant Gingeras
 lab RIKEN
 labExpId CThi10106
@@ -682,6 +694,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002737
 expId 2737
 fileName wgEncodeRikenCageA549NucleusPapRawDataRep4.fastq.gz
+geoSampleAccession GSM979633
 grant Gingeras
 lab RIKEN
 labExpId CThi10060
@@ -707,6 +720,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002737
 expId 2737
 fileName wgEncodeRikenCageA549NucleusPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979633
 grant Gingeras
 lab RIKEN
 labExpId CThi10106,CThi10060
@@ -1295,6 +1309,7 @@ dccAccession wgEncodeEH002738
 donorId RO01794
 expId 2738
 fileName wgEncodeRikenCageCd20CellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979634
 grant Gingeras
 lab RIKEN
 labExpId CThi10023
@@ -1322,6 +1337,7 @@ dccAccession wgEncodeEH002738
 donorId RO01778
 expId 2738
 fileName wgEncodeRikenCageCd20CellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979634
 grant Gingeras
 lab RIKEN
 labExpId CThi10024
@@ -1349,6 +1365,7 @@ dccAccession wgEncodeEH002738
 donorId RO01794
 expId 2738
 fileName wgEncodeRikenCageCd20CellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979634
 grant Gingeras
 lab RIKEN
 labExpId CThi10023
@@ -1376,6 +1393,7 @@ dccAccession wgEncodeEH002738
 donorId RO01778
 expId 2738
 fileName wgEncodeRikenCageCd20CellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979634
 grant Gingeras
 lab RIKEN
 labExpId CThi10024
@@ -1403,6 +1421,7 @@ dccAccession wgEncodeEH002738
 donorId RO01794
 expId 2738
 fileName wgEncodeRikenCageCd20CellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979634
 grant Gingeras
 lab RIKEN
 labExpId CThi10023
@@ -1429,6 +1448,7 @@ dccAccession wgEncodeEH002738
 donorId RO01778
 expId 2738
 fileName wgEncodeRikenCageCd20CellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979634
 grant Gingeras
 lab RIKEN
 labExpId CThi10024
@@ -1455,6 +1475,7 @@ dccAccession wgEncodeEH002738
 donorId RO01794,RO01778
 expId 2738
 fileName wgEncodeRikenCageCd20CellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979634
 grant Gingeras
 lab RIKEN
 labExpId CThi10023,CThi10024
@@ -1506,6 +1527,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002739
 expId 2739
 fileName wgEncodeRikenCageCd34mobilizedCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979635
 grant Gingeras
 lab RIKEN
 labExpId CThi10058
@@ -1532,6 +1554,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002739
 expId 2739
 fileName wgEncodeRikenCageCd34mobilizedCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979635
 grant Gingeras
 lab RIKEN
 labExpId CThi10058
@@ -1558,6 +1581,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002739
 expId 2739
 fileName wgEncodeRikenCageCd34mobilizedCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979635
 grant Gingeras
 lab RIKEN
 labExpId CThi10058
@@ -1583,6 +1607,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002739
 expId 2739
 fileName wgEncodeRikenCageCd34mobilizedCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979635
 grant Gingeras
 lab RIKEN
 labExpId CThi10058
@@ -1767,7 +1792,7 @@ grant Gingeras
 lab RIKEN
 labExpId J72
 localization cell
-md5sum d6c970a05ebafc50f8f109e9e8a515b0
+md5sum 38489b20550f89a117ba9652efd95373
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1792,7 +1817,7 @@ grant Gingeras
 lab RIKEN
 labExpId J73
 localization cell
-md5sum b62e0151d40da03be7d5d2a31238a23c
+md5sum 935bf7c7b2a9d9225739aab7ea69a65d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2294,7 +2319,7 @@ grant Gingeras
 lab RIKEN
 labExpId J84
 localization cytosol
-md5sum a00600b0be2b7f32ca5bfa1d37f9b1c2
+md5sum 71621ab0376d95da763cd0146429528d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2319,7 +2344,7 @@ grant Gingeras
 lab RIKEN
 labExpId J85
 localization cytosol
-md5sum d04a9c6774f547e5aaee9f6dd78334e0
+md5sum 60bb1cd2e8e256eb61c79de047251c61
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3029,7 +3054,7 @@ grant Gingeras
 lab RIKEN
 labExpId J93
 localization nucleus
-md5sum 902ac945214ffc8d988bf25bc4eaef57
+md5sum febdbaf841a04cc6b8a985f99000de90
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3054,7 +3079,7 @@ grant Gingeras
 lab RIKEN
 labExpId J94
 localization nucleus
-md5sum 4978bdc6ef8596eeccf0390fffa5e986
+md5sum d3ea3876b0f4b2a02aab89bec7e9d710
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3898,6 +3923,31 @@ seqPlatform Illumina_GA2x
 subId 2379
 view RawData
 
+metaObject wgEncodeRikenCageH1hescCytosolPapTssHmm
+objType table
+bioRep 006C
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-20
+dateUnrestricted 2013-04-20
+dccAccession wgEncodeEH001139
+expId 1139
+fileName wgEncodeRikenCageH1hescCytosolPapTssHmm.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J86
+localization cytosol
+md5sum 0d96ca71dbc0c868e13ed2b58b3e5679
+project wgEncode
+readType 1x36
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+subId 7562
+tableName wgEncodeRikenCageH1hescCytosolPapTssHmm
+view TssHmm
+
 metaObject wgEncodeRikenCageH1hescNucleusPapAlnRep2
 objType table
 bioRep 006N
@@ -4052,6 +4102,31 @@ seqPlatform Illumina_GA2x
 subId 2360
 view RawData
 
+metaObject wgEncodeRikenCageH1hescNucleusPapTssHmm
+objType table
+bioRep 006N
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-20
+dateUnrestricted 2013-04-20
+dccAccession wgEncodeEH001140
+expId 1140
+fileName wgEncodeRikenCageH1hescNucleusPapTssHmm.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J95
+localization nucleus
+md5sum 9db72cc11424489b7a5f1dbbdfe3b22c
+project wgEncode
+readType 1x36
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+subId 7561
+tableName wgEncodeRikenCageH1hescNucleusPapTssHmm
+view TssHmm
+
 metaObject wgEncodeRikenCageHaoafCellPapAlnRep1
 objType table
 bioRep 055WC
@@ -4119,6 +4194,7 @@ dccAccession wgEncodeEH002740
 donorId 6111301.9
 expId 2740
 fileName wgEncodeRikenCageHaoafCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979637
 grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT
@@ -4146,6 +4222,7 @@ dccAccession wgEncodeEH002740
 donorId 6090101.11
 expId 2740
 fileName wgEncodeRikenCageHaoafCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979637
 grant Gingeras
 lab RIKEN
 labExpId CThi10103CTT
@@ -4173,6 +4250,7 @@ dccAccession wgEncodeEH002740
 donorId 6111301.9
 expId 2740
 fileName wgEncodeRikenCageHaoafCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979637
 grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT
@@ -4200,6 +4278,7 @@ dccAccession wgEncodeEH002740
 donorId 6090101.11
 expId 2740
 fileName wgEncodeRikenCageHaoafCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979637
 grant Gingeras
 lab RIKEN
 labExpId CThi10103CTT
@@ -4227,6 +4306,7 @@ dccAccession wgEncodeEH002740
 donorId 6111301.9
 expId 2740
 fileName wgEncodeRikenCageHaoafCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979637
 grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT
@@ -4253,6 +4333,7 @@ dccAccession wgEncodeEH002740
 donorId 6090101.11
 expId 2740
 fileName wgEncodeRikenCageHaoafCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979637
 grant Gingeras
 lab RIKEN
 labExpId CThi10103CTT
@@ -4279,6 +4360,7 @@ dccAccession wgEncodeEH002740
 donorId 6111301.9,6090101.11
 expId 2740
 fileName wgEncodeRikenCageHaoafCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979637
 grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT,CThi10103CTT
@@ -4359,6 +4441,7 @@ dccAccession wgEncodeEH002741
 donorId 7071706.1
 expId 2741
 fileName wgEncodeRikenCageHaoecCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979636
 grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT
@@ -4386,6 +4469,7 @@ dccAccession wgEncodeEH002741
 donorId 8061102.1
 expId 2741
 fileName wgEncodeRikenCageHaoecCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979636
 grant Gingeras
 lab RIKEN
 labExpId CThi10105CTT
@@ -4413,6 +4497,7 @@ dccAccession wgEncodeEH002741
 donorId 7071706.1
 expId 2741
 fileName wgEncodeRikenCageHaoecCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979636
 grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT
@@ -4440,6 +4525,7 @@ dccAccession wgEncodeEH002741
 donorId 8061102.1
 expId 2741
 fileName wgEncodeRikenCageHaoecCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979636
 grant Gingeras
 lab RIKEN
 labExpId CThi10105CTT
@@ -4467,6 +4553,7 @@ dccAccession wgEncodeEH002741
 donorId 7071706.1
 expId 2741
 fileName wgEncodeRikenCageHaoecCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979636
 grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT
@@ -4493,6 +4580,7 @@ dccAccession wgEncodeEH002741
 donorId 8061102.1
 expId 2741
 fileName wgEncodeRikenCageHaoecCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979636
 grant Gingeras
 lab RIKEN
 labExpId CThi10105CTT
@@ -4519,6 +4607,7 @@ dccAccession wgEncodeEH002741
 donorId 7071706.1,8061102.1
 expId 2741
 fileName wgEncodeRikenCageHaoecCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979636
 grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT,CThi10105CTT
@@ -4599,6 +4688,7 @@ dccAccession wgEncodeEH002742
 donorId 0011308.2P
 expId 2742
 fileName wgEncodeRikenCageHchCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979639
 grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT
@@ -4626,6 +4716,7 @@ dccAccession wgEncodeEH002742
 donorId 8100808.2
 expId 2742
 fileName wgEncodeRikenCageHchCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979639
 grant Gingeras
 lab RIKEN
 labExpId CThi10104ACA
@@ -4653,6 +4744,7 @@ dccAccession wgEncodeEH002742
 donorId 0011308.2P
 expId 2742
 fileName wgEncodeRikenCageHchCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979639
 grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT
@@ -4680,6 +4772,7 @@ dccAccession wgEncodeEH002742
 donorId 8100808.2
 expId 2742
 fileName wgEncodeRikenCageHchCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979639
 grant Gingeras
 lab RIKEN
 labExpId CThi10104ACA
@@ -4707,6 +4800,7 @@ dccAccession wgEncodeEH002742
 donorId 0011308.2P
 expId 2742
 fileName wgEncodeRikenCageHchCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979639
 grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT
@@ -4733,6 +4827,7 @@ dccAccession wgEncodeEH002742
 donorId 8100808.2
 expId 2742
 fileName wgEncodeRikenCageHchCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979639
 grant Gingeras
 lab RIKEN
 labExpId CThi10104ACA
@@ -4759,6 +4854,7 @@ dccAccession wgEncodeEH002742
 donorId 0011308.2P,8100808.2
 expId 2742
 fileName wgEncodeRikenCageHchCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979639
 grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT,CThi10104ACA
@@ -6007,6 +6103,7 @@ dateUnrestricted 2012-12-31
 dccAccession wgEncodeEH002775
 expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamMinusRawRep1.bigWig
+geoSampleAccession GSM979631
 grant Gingeras
 lab RIKEN
 labExpId CTig10028
@@ -6033,6 +6130,7 @@ dateUnrestricted 2012-12-31
 dccAccession wgEncodeEH002775
 expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamPlusRawRep1.bigWig
+geoSampleAccession GSM979631
 grant Gingeras
 lab RIKEN
 labExpId CTig10028
@@ -6059,11 +6157,12 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002775
 expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamRawDataRep1.fastq.tgz
+geoSampleAccession GSM979631
 grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
-md5sum 166afa3abc92d4e6b2be3119bbb07824
+md5sum e0b744cf7eddfb3fa3dcb74157a27f34
 project wgEncode
 readType 1x36
 replicate 1
@@ -6084,6 +6183,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002775
 expId 2775
 fileName wgEncodeRikenCageHelas3NucleusPamTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979631
 grant Gingeras
 lab RIKEN
 labExpId CTig10028
@@ -8365,6 +8465,7 @@ dccAccession wgEncodeEH002743
 donorId 0102703.3
 expId 2743
 fileName wgEncodeRikenCageHfdpcCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979638
 grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA
@@ -8392,6 +8493,7 @@ dccAccession wgEncodeEH002743
 donorId 0100503.2
 expId 2743
 fileName wgEncodeRikenCageHfdpcCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979638
 grant Gingeras
 lab RIKEN
 labExpId CThi10100GAT
@@ -8419,6 +8521,7 @@ dccAccession wgEncodeEH002743
 donorId 0102703.3
 expId 2743
 fileName wgEncodeRikenCageHfdpcCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979638
 grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA
@@ -8446,6 +8549,7 @@ dccAccession wgEncodeEH002743
 donorId 0100503.2
 expId 2743
 fileName wgEncodeRikenCageHfdpcCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979638
 grant Gingeras
 lab RIKEN
 labExpId CThi10100GAT
@@ -8473,6 +8577,7 @@ dccAccession wgEncodeEH002743
 donorId 0102703.3
 expId 2743
 fileName wgEncodeRikenCageHfdpcCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979638
 grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA
@@ -8499,6 +8604,7 @@ dccAccession wgEncodeEH002743
 donorId 0100503.2
 expId 2743
 fileName wgEncodeRikenCageHfdpcCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979638
 grant Gingeras
 lab RIKEN
 labExpId CThi10100GAT
@@ -8525,6 +8631,7 @@ dccAccession wgEncodeEH002743
 donorId 0102703.3,0100503.2
 expId 2743
 fileName wgEncodeRikenCageHfdpcCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979638
 grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA,CThi10100GAT
@@ -8578,6 +8685,7 @@ dccAccession wgEncodeEH002744
 donorId 6022801.3
 expId 2744
 fileName wgEncodeRikenCageHmepcCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979641
 grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
@@ -8605,6 +8713,7 @@ dccAccession wgEncodeEH002744
 donorId 6022801.3
 expId 2744
 fileName wgEncodeRikenCageHmepcCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979641
 grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
@@ -8632,6 +8741,7 @@ dccAccession wgEncodeEH002744
 donorId 6022801.3
 expId 2744
 fileName wgEncodeRikenCageHmepcCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979641
 grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
@@ -8658,6 +8768,7 @@ dccAccession wgEncodeEH002744
 donorId 6022801.3
 expId 2744
 fileName wgEncodeRikenCageHmepcCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979641
 grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
@@ -8738,6 +8849,7 @@ dccAccession wgEncodeEH002765
 donorId 0102604.12
 expId 2765
 fileName wgEncodeRikenCageHmscatCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979652
 grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA
@@ -8765,6 +8877,7 @@ dccAccession wgEncodeEH002765
 donorId 9061601.12
 expId 2765
 fileName wgEncodeRikenCageHmscatCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979652
 grant Gingeras
 lab RIKEN
 labExpId CThi10104GAT
@@ -8792,6 +8905,7 @@ dccAccession wgEncodeEH002765
 donorId 0102604.12
 expId 2765
 fileName wgEncodeRikenCageHmscatCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979652
 grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA
@@ -8819,6 +8933,7 @@ dccAccession wgEncodeEH002765
 donorId 9061601.12
 expId 2765
 fileName wgEncodeRikenCageHmscatCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979652
 grant Gingeras
 lab RIKEN
 labExpId CThi10104GAT
@@ -8846,6 +8961,7 @@ dccAccession wgEncodeEH002765
 donorId 0102604.12
 expId 2765
 fileName wgEncodeRikenCageHmscatCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979652
 grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA
@@ -8872,6 +8988,7 @@ dccAccession wgEncodeEH002765
 donorId 9061601.12
 expId 2765
 fileName wgEncodeRikenCageHmscatCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979652
 grant Gingeras
 lab RIKEN
 labExpId CThi10104GAT
@@ -8898,6 +9015,7 @@ dccAccession wgEncodeEH002765
 donorId 0102604.12,9061601.12
 expId 2765
 fileName wgEncodeRikenCageHmscatCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979652
 grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA,CThi10104GAT
@@ -8978,6 +9096,7 @@ dccAccession wgEncodeEH002766
 donorId 0051105.11
 expId 2766
 fileName wgEncodeRikenCageHmscbmCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979651
 grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC
@@ -9005,6 +9124,7 @@ dccAccession wgEncodeEH002766
 donorId 0050602.11
 expId 2766
 fileName wgEncodeRikenCageHmscbmCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979651
 grant Gingeras
 lab RIKEN
 labExpId CThi10100ACA
@@ -9032,6 +9152,7 @@ dccAccession wgEncodeEH002766
 donorId 0051105.11
 expId 2766
 fileName wgEncodeRikenCageHmscbmCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979651
 grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC
@@ -9059,6 +9180,7 @@ dccAccession wgEncodeEH002766
 donorId 0050602.11
 expId 2766
 fileName wgEncodeRikenCageHmscbmCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979651
 grant Gingeras
 lab RIKEN
 labExpId CThi10100ACA
@@ -9086,6 +9208,7 @@ dccAccession wgEncodeEH002766
 donorId 0051105.11
 expId 2766
 fileName wgEncodeRikenCageHmscbmCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979651
 grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC
@@ -9112,6 +9235,7 @@ dccAccession wgEncodeEH002766
 donorId 0050602.11
 expId 2766
 fileName wgEncodeRikenCageHmscbmCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979651
 grant Gingeras
 lab RIKEN
 labExpId CThi10100ACA
@@ -9138,6 +9262,7 @@ dccAccession wgEncodeEH002766
 donorId 0051105.11,0050602.11
 expId 2766
 fileName wgEncodeRikenCageHmscbmCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979651
 grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC,CThi10100ACA
@@ -9218,6 +9343,7 @@ dccAccession wgEncodeEH002767
 donorId 0052501.7
 expId 2767
 fileName wgEncodeRikenCageHmscucCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979650
 grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT
@@ -9245,6 +9371,7 @@ dccAccession wgEncodeEH002767
 donorId 0081101.7
 expId 2767
 fileName wgEncodeRikenCageHmscucCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979650
 grant Gingeras
 lab RIKEN
 labExpId CThi10100ATC
@@ -9272,6 +9399,7 @@ dccAccession wgEncodeEH002767
 donorId 0052501.7
 expId 2767
 fileName wgEncodeRikenCageHmscucCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979650
 grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT
@@ -9299,6 +9427,7 @@ dccAccession wgEncodeEH002767
 donorId 0081101.7
 expId 2767
 fileName wgEncodeRikenCageHmscucCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979650
 grant Gingeras
 lab RIKEN
 labExpId CThi10100ATC
@@ -9326,6 +9455,7 @@ dccAccession wgEncodeEH002767
 donorId 0052501.7
 expId 2767
 fileName wgEncodeRikenCageHmscucCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979650
 grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT
@@ -9352,6 +9482,7 @@ dccAccession wgEncodeEH002767
 donorId 0081101.7
 expId 2767
 fileName wgEncodeRikenCageHmscucCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979650
 grant Gingeras
 lab RIKEN
 labExpId CThi10100ATC
@@ -9378,6 +9509,7 @@ dccAccession wgEncodeEH002767
 donorId 0052501.7,0081101.7
 expId 2767
 fileName wgEncodeRikenCageHmscucCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979650
 grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT,CThi10100ATC
@@ -9458,6 +9590,7 @@ dccAccession wgEncodeEH002745
 donorId 0091301
 expId 2745
 fileName wgEncodeRikenCageHobCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979640
 grant Gingeras
 lab RIKEN
 labExpId CThi10036
@@ -9485,6 +9618,7 @@ dccAccession wgEncodeEH002745
 donorId 0090202.1
 expId 2745
 fileName wgEncodeRikenCageHobCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979640
 grant Gingeras
 lab RIKEN
 labExpId CThi10037
@@ -9512,6 +9646,7 @@ dccAccession wgEncodeEH002745
 donorId 0091301
 expId 2745
 fileName wgEncodeRikenCageHobCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979640
 grant Gingeras
 lab RIKEN
 labExpId CThi10036
@@ -9539,6 +9674,7 @@ dccAccession wgEncodeEH002745
 donorId 0090202.1
 expId 2745
 fileName wgEncodeRikenCageHobCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979640
 grant Gingeras
 lab RIKEN
 labExpId CThi10037
@@ -9566,6 +9702,7 @@ dccAccession wgEncodeEH002745
 donorId 0091301
 expId 2745
 fileName wgEncodeRikenCageHobCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979640
 grant Gingeras
 lab RIKEN
 labExpId CThi10036
@@ -9592,6 +9729,7 @@ dccAccession wgEncodeEH002745
 donorId 0090202.1
 expId 2745
 fileName wgEncodeRikenCageHobCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979640
 grant Gingeras
 lab RIKEN
 labExpId CThi10037
@@ -9618,6 +9756,7 @@ dccAccession wgEncodeEH002745
 donorId 0091301,0090202.1
 expId 2745
 fileName wgEncodeRikenCageHobCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979640
 grant Gingeras
 lab RIKEN
 labExpId CThi10036,CThi10037
@@ -9698,6 +9837,7 @@ dccAccession wgEncodeEH002746
 donorId 0101504.13
 expId 2746
 fileName wgEncodeRikenCageHpcplCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979643
 grant Gingeras
 lab RIKEN
 labExpId CThi10057
@@ -9725,6 +9865,7 @@ dccAccession wgEncodeEH002746
 donorId 0032601.13
 expId 2746
 fileName wgEncodeRikenCageHpcplCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979643
 grant Gingeras
 lab RIKEN
 labExpId CThi10105ATC
@@ -9752,6 +9893,7 @@ dccAccession wgEncodeEH002746
 donorId 0101504.13
 expId 2746
 fileName wgEncodeRikenCageHpcplCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979643
 grant Gingeras
 lab RIKEN
 labExpId CThi10057
@@ -9779,6 +9921,7 @@ dccAccession wgEncodeEH002746
 donorId 0032601.13
 expId 2746
 fileName wgEncodeRikenCageHpcplCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979643
 grant Gingeras
 lab RIKEN
 labExpId CThi10105ATC
@@ -9806,6 +9949,7 @@ dccAccession wgEncodeEH002746
 donorId 0101504.13
 expId 2746
 fileName wgEncodeRikenCageHpcplCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979643
 grant Gingeras
 lab RIKEN
 labExpId CThi10057
@@ -9832,6 +9976,7 @@ dccAccession wgEncodeEH002746
 donorId 0032601.13
 expId 2746
 fileName wgEncodeRikenCageHpcplCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979643
 grant Gingeras
 lab RIKEN
 labExpId CThi10105ATC
@@ -9858,6 +10003,7 @@ dccAccession wgEncodeEH002746
 donorId 0101504.13,0032601.13
 expId 2746
 fileName wgEncodeRikenCageHpcplCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979643
 grant Gingeras
 lab RIKEN
 labExpId CThi10057,CThi10105ATC
@@ -9938,6 +10084,7 @@ dccAccession wgEncodeEH002747
 donorId 9041503.2
 expId 2747
 fileName wgEncodeRikenCageHpiepcCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979642
 grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC
@@ -9965,6 +10112,7 @@ dccAccession wgEncodeEH002747
 donorId 9012801.2
 expId 2747
 fileName wgEncodeRikenCageHpiepcCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979642
 grant Gingeras
 lab RIKEN
 labExpId CThi10101GAT
@@ -9992,6 +10140,7 @@ dccAccession wgEncodeEH002747
 donorId 9041503.2
 expId 2747
 fileName wgEncodeRikenCageHpiepcCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979642
 grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC
@@ -10019,6 +10168,7 @@ dccAccession wgEncodeEH002747
 donorId 9012801.2
 expId 2747
 fileName wgEncodeRikenCageHpiepcCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979642
 grant Gingeras
 lab RIKEN
 labExpId CThi10101GAT
@@ -10046,6 +10196,7 @@ dccAccession wgEncodeEH002747
 donorId 9041503.2
 expId 2747
 fileName wgEncodeRikenCageHpiepcCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979642
 grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC
@@ -10072,6 +10223,7 @@ dccAccession wgEncodeEH002747
 donorId 9012801.2
 expId 2747
 fileName wgEncodeRikenCageHpiepcCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979642
 grant Gingeras
 lab RIKEN
 labExpId CThi10101GAT
@@ -10098,6 +10250,7 @@ dccAccession wgEncodeEH002747
 donorId 9041503.2,9012801.2
 expId 2747
 fileName wgEncodeRikenCageHpiepcCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979642
 grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC,CThi10101GAT
@@ -10178,6 +10331,7 @@ dccAccession wgEncodeEH002748
 donorId 0022202.16
 expId 2748
 fileName wgEncodeRikenCageHsavecCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979645
 grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA
@@ -10205,6 +10359,7 @@ dccAccession wgEncodeEH002748
 donorId 9100101.15
 expId 2748
 fileName wgEncodeRikenCageHsavecCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979645
 grant Gingeras
 lab RIKEN
 labExpId CThi10102ATC
@@ -10232,6 +10387,7 @@ dccAccession wgEncodeEH002748
 donorId 0022202.16
 expId 2748
 fileName wgEncodeRikenCageHsavecCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979645
 grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA
@@ -10259,6 +10415,7 @@ dccAccession wgEncodeEH002748
 donorId 9100101.15
 expId 2748
 fileName wgEncodeRikenCageHsavecCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979645
 grant Gingeras
 lab RIKEN
 labExpId CThi10102ATC
@@ -10286,6 +10443,7 @@ dccAccession wgEncodeEH002748
 donorId 0022202.16
 expId 2748
 fileName wgEncodeRikenCageHsavecCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979645
 grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA
@@ -10312,6 +10470,7 @@ dccAccession wgEncodeEH002748
 donorId 9100101.15
 expId 2748
 fileName wgEncodeRikenCageHsavecCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979645
 grant Gingeras
 lab RIKEN
 labExpId CThi10102ATC
@@ -10338,6 +10497,7 @@ dccAccession wgEncodeEH002748
 donorId 0022202.16,9100101.15
 expId 2748
 fileName wgEncodeRikenCageHsavecCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979645
 grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA,CThi10102ATC
@@ -11379,6 +11539,7 @@ dateUnrestricted 2012-12-31
 dccAccession wgEncodeEH002749
 expId 2749
 fileName wgEncodeRikenCageHuvecNucleusPamMinusRawRep1.bigWig
+geoSampleAccession GSM979644
 grant Gingeras
 lab RIKEN
 labExpId CTig10027
@@ -11405,6 +11566,7 @@ dateUnrestricted 2012-12-31
 dccAccession wgEncodeEH002749
 expId 2749
 fileName wgEncodeRikenCageHuvecNucleusPamPlusRawRep1.bigWig
+geoSampleAccession GSM979644
 grant Gingeras
 lab RIKEN
 labExpId CTig10027
@@ -11431,11 +11593,12 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002749
 expId 2749
 fileName wgEncodeRikenCageHuvecNucleusPamRawDataRep1.fastq.tgz
+geoSampleAccession GSM979644
 grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
-md5sum 1bb3921c15deb6a74e3a64af07aac934
+md5sum 3f4c88c9224b2e8997b37754b9f4447b
 project wgEncode
 readType 1x36
 replicate 1
@@ -11456,6 +11619,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002749
 expId 2749
 fileName wgEncodeRikenCageHuvecNucleusPamTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979644
 grant Gingeras
 lab RIKEN
 labExpId CTig10027
@@ -11894,6 +12058,7 @@ dccAccession wgEncodeEH002750
 donorId 6091203.3
 expId 2750
 fileName wgEncodeRikenCageHvmfCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979660
 grant Gingeras
 lab RIKEN
 labExpId CThi10034
@@ -11921,6 +12086,7 @@ dccAccession wgEncodeEH002750
 donorId 6100401.3
 expId 2750
 fileName wgEncodeRikenCageHvmfCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979660
 grant Gingeras
 lab RIKEN
 labExpId CThi10035
@@ -11948,6 +12114,7 @@ dccAccession wgEncodeEH002750
 donorId 6091203.3
 expId 2750
 fileName wgEncodeRikenCageHvmfCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979660
 grant Gingeras
 lab RIKEN
 labExpId CThi10034
@@ -11975,6 +12142,7 @@ dccAccession wgEncodeEH002750
 donorId 6100401.3
 expId 2750
 fileName wgEncodeRikenCageHvmfCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979660
 grant Gingeras
 lab RIKEN
 labExpId CThi10035
@@ -12002,6 +12170,7 @@ dccAccession wgEncodeEH002750
 donorId 6091203.3
 expId 2750
 fileName wgEncodeRikenCageHvmfCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979660
 grant Gingeras
 lab RIKEN
 labExpId CThi10034
@@ -12028,6 +12197,7 @@ dccAccession wgEncodeEH002750
 donorId 6100401.3
 expId 2750
 fileName wgEncodeRikenCageHvmfCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979660
 grant Gingeras
 lab RIKEN
 labExpId CThi10035
@@ -12054,6 +12224,7 @@ dccAccession wgEncodeEH002750
 donorId 6091203.3,6100401.3
 expId 2750
 fileName wgEncodeRikenCageHvmfCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979660
 grant Gingeras
 lab RIKEN
 labExpId CThi10034,CThi10035
@@ -12134,6 +12305,7 @@ dccAccession wgEncodeEH002751
 donorId 8120201.5
 expId 2751
 fileName wgEncodeRikenCageHwpCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979661
 grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA
@@ -12161,6 +12333,7 @@ dccAccession wgEncodeEH002751
 donorId 0092205
 expId 2751
 fileName wgEncodeRikenCageHwpCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979661
 grant Gingeras
 lab RIKEN
 labExpId CThi10101ATC
@@ -12188,6 +12361,7 @@ dccAccession wgEncodeEH002751
 donorId 8120201.5
 expId 2751
 fileName wgEncodeRikenCageHwpCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979661
 grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA
@@ -12215,6 +12389,7 @@ dccAccession wgEncodeEH002751
 donorId 0092205
 expId 2751
 fileName wgEncodeRikenCageHwpCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979661
 grant Gingeras
 lab RIKEN
 labExpId CThi10101ATC
@@ -12242,6 +12417,7 @@ dccAccession wgEncodeEH002751
 donorId 8120201.5
 expId 2751
 fileName wgEncodeRikenCageHwpCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979661
 grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA
@@ -12268,6 +12444,7 @@ dccAccession wgEncodeEH002751
 donorId 0092205
 expId 2751
 fileName wgEncodeRikenCageHwpCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979661
 grant Gingeras
 lab RIKEN
 labExpId CThi10101ATC
@@ -12294,6 +12471,7 @@ dccAccession wgEncodeEH002751
 donorId 8120201.5,0092205
 expId 2751
 fileName wgEncodeRikenCageHwpCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979661
 grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA,CThi10101ATC
@@ -12374,6 +12552,7 @@ dccAccession wgEncodeEH002754
 donorId 58607680
 expId 2754
 fileName wgEncodeRikenCageImr90CellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979656
 grant Gingeras
 lab RIKEN
 labExpId CThi10016
@@ -12401,6 +12580,7 @@ dccAccession wgEncodeEH002754
 donorId 58607680
 expId 2754
 fileName wgEncodeRikenCageImr90CellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979656
 grant Gingeras
 lab RIKEN
 labExpId CThi10018
@@ -12428,6 +12608,7 @@ dccAccession wgEncodeEH002754
 donorId 58607680
 expId 2754
 fileName wgEncodeRikenCageImr90CellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979656
 grant Gingeras
 lab RIKEN
 labExpId CThi10016
@@ -12455,6 +12636,7 @@ dccAccession wgEncodeEH002754
 donorId 58607680
 expId 2754
 fileName wgEncodeRikenCageImr90CellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979656
 grant Gingeras
 lab RIKEN
 labExpId CThi10018
@@ -12482,6 +12664,7 @@ dccAccession wgEncodeEH002754
 donorId 58607680
 expId 2754
 fileName wgEncodeRikenCageImr90CellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979656
 grant Gingeras
 lab RIKEN
 labExpId CThi10016
@@ -12508,6 +12691,7 @@ dccAccession wgEncodeEH002754
 donorId 58607680
 expId 2754
 fileName wgEncodeRikenCageImr90CellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979656
 grant Gingeras
 lab RIKEN
 labExpId CThi10018
@@ -12534,6 +12718,7 @@ dccAccession wgEncodeEH002754
 donorId 58607680
 expId 2754
 fileName wgEncodeRikenCageImr90CellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979656
 grant Gingeras
 lab RIKEN
 labExpId CThi10016,CThi10018
@@ -12614,6 +12799,7 @@ dccAccession wgEncodeEH002752
 donorId 58607680
 expId 2752
 fileName wgEncodeRikenCageImr90CytosolPapMinusRawRep1.bigWig
+geoSampleAccession GSM979658
 grant Gingeras
 lab RIKEN
 labExpId CThi10017
@@ -12641,6 +12827,7 @@ dccAccession wgEncodeEH002752
 donorId 58607680
 expId 2752
 fileName wgEncodeRikenCageImr90CytosolPapMinusRawRep2.bigWig
+geoSampleAccession GSM979658
 grant Gingeras
 lab RIKEN
 labExpId CThi10019
@@ -12668,6 +12855,7 @@ dccAccession wgEncodeEH002752
 donorId 58607680
 expId 2752
 fileName wgEncodeRikenCageImr90CytosolPapPlusRawRep1.bigWig
+geoSampleAccession GSM979658
 grant Gingeras
 lab RIKEN
 labExpId CThi10017
@@ -12695,6 +12883,7 @@ dccAccession wgEncodeEH002752
 donorId 58607680
 expId 2752
 fileName wgEncodeRikenCageImr90CytosolPapPlusRawRep2.bigWig
+geoSampleAccession GSM979658
 grant Gingeras
 lab RIKEN
 labExpId CThi10019
@@ -12722,6 +12911,7 @@ dccAccession wgEncodeEH002752
 donorId 58607680
 expId 2752
 fileName wgEncodeRikenCageImr90CytosolPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979658
 grant Gingeras
 lab RIKEN
 labExpId CThi10017
@@ -12748,6 +12938,7 @@ dccAccession wgEncodeEH002752
 donorId 58607680
 expId 2752
 fileName wgEncodeRikenCageImr90CytosolPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979658
 grant Gingeras
 lab RIKEN
 labExpId CThi10019
@@ -12774,6 +12965,7 @@ dccAccession wgEncodeEH002752
 donorId 58607680
 expId 2752
 fileName wgEncodeRikenCageImr90CytosolPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979658
 grant Gingeras
 lab RIKEN
 labExpId CThi10017,CThi10019
@@ -12854,6 +13046,7 @@ dccAccession wgEncodeEH002753
 donorId 58607680
 expId 2753
 fileName wgEncodeRikenCageImr90NucleusPapMinusRawRep1.bigWig
+geoSampleAccession GSM979659
 grant Gingeras
 lab RIKEN
 labExpId CThi10025
@@ -12881,6 +13074,7 @@ dccAccession wgEncodeEH002753
 donorId 58607680
 expId 2753
 fileName wgEncodeRikenCageImr90NucleusPapMinusRawRep2.bigWig
+geoSampleAccession GSM979659
 grant Gingeras
 lab RIKEN
 labExpId CThi10026
@@ -12908,6 +13102,7 @@ dccAccession wgEncodeEH002753
 donorId 58607680
 expId 2753
 fileName wgEncodeRikenCageImr90NucleusPapPlusRawRep1.bigWig
+geoSampleAccession GSM979659
 grant Gingeras
 lab RIKEN
 labExpId CThi10025
@@ -12935,6 +13130,7 @@ dccAccession wgEncodeEH002753
 donorId 58607680
 expId 2753
 fileName wgEncodeRikenCageImr90NucleusPapPlusRawRep2.bigWig
+geoSampleAccession GSM979659
 grant Gingeras
 lab RIKEN
 labExpId CThi10026
@@ -12962,6 +13158,7 @@ dccAccession wgEncodeEH002753
 donorId 58607680
 expId 2753
 fileName wgEncodeRikenCageImr90NucleusPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979659
 grant Gingeras
 lab RIKEN
 labExpId CThi10025
@@ -12988,6 +13185,7 @@ dccAccession wgEncodeEH002753
 donorId 58607680
 expId 2753
 fileName wgEncodeRikenCageImr90NucleusPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979659
 grant Gingeras
 lab RIKEN
 labExpId CThi10026
@@ -13014,6 +13212,7 @@ dccAccession wgEncodeEH002753
 donorId 58607680
 expId 2753
 fileName wgEncodeRikenCageImr90NucleusPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979659
 grant Gingeras
 lab RIKEN
 labExpId CThi10025,CThi10026
@@ -16013,7 +16212,7 @@ grant Gingeras
 lab RIKEN
 labExpId K07
 localization cell
-md5sum b14be70fa85e86f98c6cdb6d515a7ad4
+md5sum b52bc0da6e052c54a2b087cd427ad729
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -16160,6 +16359,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002755
 expId 2755
 fileName wgEncodeRikenCageMcf7CytosolPapMinusRawRep3.bigWig
+geoSampleAccession GSM979657
 grant Gingeras
 lab RIKEN
 labExpId CThi10051
@@ -16186,6 +16386,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002755
 expId 2755
 fileName wgEncodeRikenCageMcf7CytosolPapMinusRawRep4.bigWig
+geoSampleAccession GSM979657
 grant Gingeras
 lab RIKEN
 labExpId CThi10053
@@ -16212,6 +16413,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002755
 expId 2755
 fileName wgEncodeRikenCageMcf7CytosolPapPlusRawRep3.bigWig
+geoSampleAccession GSM979657
 grant Gingeras
 lab RIKEN
 labExpId CThi10051
@@ -16238,6 +16440,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002755
 expId 2755
 fileName wgEncodeRikenCageMcf7CytosolPapPlusRawRep4.bigWig
+geoSampleAccession GSM979657
 grant Gingeras
 lab RIKEN
 labExpId CThi10053
@@ -16264,6 +16467,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002755
 expId 2755
 fileName wgEncodeRikenCageMcf7CytosolPapRawDataRep3.fastq.gz
+geoSampleAccession GSM979657
 grant Gingeras
 lab RIKEN
 labExpId CThi10051
@@ -16289,6 +16493,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002755
 expId 2755
 fileName wgEncodeRikenCageMcf7CytosolPapRawDataRep4.fastq.gz
+geoSampleAccession GSM979657
 grant Gingeras
 lab RIKEN
 labExpId CThi10053
@@ -16314,6 +16519,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002755
 expId 2755
 fileName wgEncodeRikenCageMcf7CytosolPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979657
 grant Gingeras
 lab RIKEN
 labExpId CThi10051,CThi10053
@@ -16391,6 +16597,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002756
 expId 2756
 fileName wgEncodeRikenCageMcf7NucleusPapMinusRawRep3.bigWig
+geoSampleAccession GSM979654
 grant Gingeras
 lab RIKEN
 labExpId CThi10052
@@ -16417,6 +16624,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002756
 expId 2756
 fileName wgEncodeRikenCageMcf7NucleusPapMinusRawRep4.bigWig
+geoSampleAccession GSM979654
 grant Gingeras
 lab RIKEN
 labExpId CThi10054
@@ -16443,6 +16651,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002756
 expId 2756
 fileName wgEncodeRikenCageMcf7NucleusPapPlusRawRep3.bigWig
+geoSampleAccession GSM979654
 grant Gingeras
 lab RIKEN
 labExpId CThi10052
@@ -16469,6 +16678,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002756
 expId 2756
 fileName wgEncodeRikenCageMcf7NucleusPapPlusRawRep4.bigWig
+geoSampleAccession GSM979654
 grant Gingeras
 lab RIKEN
 labExpId CThi10054
@@ -16495,6 +16705,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002756
 expId 2756
 fileName wgEncodeRikenCageMcf7NucleusPapRawDataRep3.fastq.gz
+geoSampleAccession GSM979654
 grant Gingeras
 lab RIKEN
 labExpId CThi10052
@@ -16520,6 +16731,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002756
 expId 2756
 fileName wgEncodeRikenCageMcf7NucleusPapRawDataRep4.fastq.gz
+geoSampleAccession GSM979654
 grant Gingeras
 lab RIKEN
 labExpId CThi10054
@@ -16545,6 +16757,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002756
 expId 2756
 fileName wgEncodeRikenCageMcf7NucleusPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979654
 grant Gingeras
 lab RIKEN
 labExpId CThi10052,CThi10054
@@ -16625,6 +16838,7 @@ dccAccession wgEncodeEH002757
 donorId RO01746
 expId 2757
 fileName wgEncodeRikenCageMonocd14CellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979655
 grant Gingeras
 lab RIKEN
 labExpId CThi10021
@@ -16652,6 +16866,7 @@ dccAccession wgEncodeEH002757
 donorId RO01746
 expId 2757
 fileName wgEncodeRikenCageMonocd14CellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979655
 grant Gingeras
 lab RIKEN
 labExpId CThi10022
@@ -16679,6 +16894,7 @@ dccAccession wgEncodeEH002757
 donorId RO01746
 expId 2757
 fileName wgEncodeRikenCageMonocd14CellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979655
 grant Gingeras
 lab RIKEN
 labExpId CThi10021
@@ -16706,6 +16922,7 @@ dccAccession wgEncodeEH002757
 donorId RO01746
 expId 2757
 fileName wgEncodeRikenCageMonocd14CellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979655
 grant Gingeras
 lab RIKEN
 labExpId CThi10022
@@ -16733,6 +16950,7 @@ dccAccession wgEncodeEH002757
 donorId RO01746
 expId 2757
 fileName wgEncodeRikenCageMonocd14CellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979655
 grant Gingeras
 lab RIKEN
 labExpId CThi10021
@@ -16759,6 +16977,7 @@ dccAccession wgEncodeEH002757
 donorId RO01746
 expId 2757
 fileName wgEncodeRikenCageMonocd14CellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979655
 grant Gingeras
 lab RIKEN
 labExpId CThi10022
@@ -16785,6 +17004,7 @@ dccAccession wgEncodeEH002757
 donorId RO01746
 expId 2757
 fileName wgEncodeRikenCageMonocd14CellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979655
 grant Gingeras
 lab RIKEN
 labExpId CThi10021,CThi10022
@@ -16865,6 +17085,7 @@ dccAccession wgEncodeEH002758
 donorId 7071701.2
 expId 2758
 fileName wgEncodeRikenCageNhdfCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979662
 grant Gingeras
 lab RIKEN
 labExpId CThi10032
@@ -16892,6 +17113,7 @@ dccAccession wgEncodeEH002758
 donorId 0060801.3
 expId 2758
 fileName wgEncodeRikenCageNhdfCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979662
 grant Gingeras
 lab RIKEN
 labExpId CThi10033
@@ -16919,6 +17141,7 @@ dccAccession wgEncodeEH002758
 donorId 7071701.2
 expId 2758
 fileName wgEncodeRikenCageNhdfCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979662
 grant Gingeras
 lab RIKEN
 labExpId CThi10032
@@ -16946,6 +17169,7 @@ dccAccession wgEncodeEH002758
 donorId 0060801.3
 expId 2758
 fileName wgEncodeRikenCageNhdfCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979662
 grant Gingeras
 lab RIKEN
 labExpId CThi10033
@@ -16973,6 +17197,7 @@ dccAccession wgEncodeEH002758
 donorId 7071701.2
 expId 2758
 fileName wgEncodeRikenCageNhdfCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979662
 grant Gingeras
 lab RIKEN
 labExpId CThi10032
@@ -16999,6 +17224,7 @@ dccAccession wgEncodeEH002758
 donorId 0060801.3
 expId 2758
 fileName wgEncodeRikenCageNhdfCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979662
 grant Gingeras
 lab RIKEN
 labExpId CThi10033
@@ -17025,6 +17251,7 @@ dccAccession wgEncodeEH002758
 donorId 7071701.2,0060801.3
 expId 2758
 fileName wgEncodeRikenCageNhdfCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979662
 grant Gingeras
 lab RIKEN
 labExpId CThi10032,CThi10033
@@ -18506,7 +18733,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011
 localization nucleus
-md5sum 684839e3c1f080801890b4150b5ce00c
+md5sum 9ce38385515dc5a85038e041ca585326
 project wgEncode
 readType 1x36
 replicate 4
@@ -18568,54 +18795,30 @@ view TssHmm
 
 metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV3
 objType table
+bioRep 028N,027N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-10
-dateUnrestricted 2012-11-10
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-24
+dateUnrestricted 2013-04-24
 dccAccession wgEncodeEH001154
+donorId 4F1155J
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapTssHmmV3.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
-labExpId K09
+labExpId CTig10011,K09
 localization nucleus
 md5sum acfc0a827edee9ded634a97c9b701128
-project wgEncode
-rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-subId 5611
-submittedDataVersion V3 - Repacing . with -1 for missing data
-tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
-view TssHmm
-
-metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV4
-objType table
-bioRep 028N
-cell NHEK
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-30
-dateUnrestricted 2012-12-30
-dccAccession wgEncodeEH001154
-donorId 4F1155J
-expId 1154
-fileName wgEncodeRikenCageNhekNucleusPapTssHmmV4.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId CTig10011
-localization nucleus
-md5sum d0d4b79df92e17a026fd3da074cb5075
 project wgEncode
 readType 1x36
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 sex F
-subId 6726
-submittedDataVersion V4 - replaces old version 3 that had broken values
-tableName wgEncodeRikenCageNhekNucleusPapTssHmmV4
+subId 7560
+submittedDataVersion V3 - New sample is merged for replicates
+tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageNhemfm2CellPapAlnRep1
@@ -18685,6 +18888,7 @@ dccAccession wgEncodeEH002759
 donorId 6022001
 expId 2759
 fileName wgEncodeRikenCageNhemfm2CellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979663
 grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT
@@ -18712,6 +18916,7 @@ dccAccession wgEncodeEH002759
 donorId 5071302.2
 expId 2759
 fileName wgEncodeRikenCageNhemfm2CellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979663
 grant Gingeras
 lab RIKEN
 labExpId CThi10055
@@ -18739,6 +18944,7 @@ dccAccession wgEncodeEH002759
 donorId 6022001
 expId 2759
 fileName wgEncodeRikenCageNhemfm2CellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979663
 grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT
@@ -18766,6 +18972,7 @@ dccAccession wgEncodeEH002759
 donorId 5071302.2
 expId 2759
 fileName wgEncodeRikenCageNhemfm2CellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979663
 grant Gingeras
 lab RIKEN
 labExpId CThi10055
@@ -18793,6 +19000,7 @@ dccAccession wgEncodeEH002759
 donorId 6022001
 expId 2759
 fileName wgEncodeRikenCageNhemfm2CellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979663
 grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT
@@ -18819,6 +19027,7 @@ dccAccession wgEncodeEH002759
 donorId 5071302.2
 expId 2759
 fileName wgEncodeRikenCageNhemfm2CellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979663
 grant Gingeras
 lab RIKEN
 labExpId CThi10055
@@ -18845,6 +19054,7 @@ dccAccession wgEncodeEH002759
 donorId 6022001,5071302.2
 expId 2759
 fileName wgEncodeRikenCageNhemfm2CellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979663
 grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT,CThi10055
@@ -18925,6 +19135,7 @@ dccAccession wgEncodeEH002760
 donorId 7012303
 expId 2760
 fileName wgEncodeRikenCageNhemm2CellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979649
 grant Gingeras
 lab RIKEN
 labExpId CThi10056
@@ -18952,6 +19163,7 @@ dccAccession wgEncodeEH002760
 donorId 7011001.2
 expId 2760
 fileName wgEncodeRikenCageNhemm2CellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979649
 grant Gingeras
 lab RIKEN
 labExpId CThi10102GAT
@@ -18979,6 +19191,7 @@ dccAccession wgEncodeEH002760
 donorId 7012303
 expId 2760
 fileName wgEncodeRikenCageNhemm2CellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979649
 grant Gingeras
 lab RIKEN
 labExpId CThi10056
@@ -19006,6 +19219,7 @@ dccAccession wgEncodeEH002760
 donorId 7011001.2
 expId 2760
 fileName wgEncodeRikenCageNhemm2CellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979649
 grant Gingeras
 lab RIKEN
 labExpId CThi10102GAT
@@ -19033,6 +19247,7 @@ dccAccession wgEncodeEH002760
 donorId 7012303
 expId 2760
 fileName wgEncodeRikenCageNhemm2CellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979649
 grant Gingeras
 lab RIKEN
 labExpId CThi10056
@@ -19059,6 +19274,7 @@ dccAccession wgEncodeEH002760
 donorId 7011001.2
 expId 2760
 fileName wgEncodeRikenCageNhemm2CellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979649
 grant Gingeras
 lab RIKEN
 labExpId CThi10102GAT
@@ -19085,6 +19301,7 @@ dccAccession wgEncodeEH002760
 donorId 7012303,7011001.2
 expId 2760
 fileName wgEncodeRikenCageNhemm2CellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979649
 grant Gingeras
 lab RIKEN
 labExpId CThi10056,CThi10102GAT
@@ -19418,6 +19635,7 @@ dccAccession wgEncodeEH002764
 donorId 9011302
 expId 2764
 fileName wgEncodeRikenCageSkmcCellPapMinusRawRep1.bigWig
+geoSampleAccession GSM979653
 grant Gingeras
 lab RIKEN
 labExpId CThi10030
@@ -19445,6 +19663,7 @@ dccAccession wgEncodeEH002764
 donorId 8121902.17
 expId 2764
 fileName wgEncodeRikenCageSkmcCellPapMinusRawRep2.bigWig
+geoSampleAccession GSM979653
 grant Gingeras
 lab RIKEN
 labExpId CThi10031
@@ -19472,6 +19691,7 @@ dccAccession wgEncodeEH002764
 donorId 9011302
 expId 2764
 fileName wgEncodeRikenCageSkmcCellPapPlusRawRep1.bigWig
+geoSampleAccession GSM979653
 grant Gingeras
 lab RIKEN
 labExpId CThi10030
@@ -19499,6 +19719,7 @@ dccAccession wgEncodeEH002764
 donorId 8121902.17
 expId 2764
 fileName wgEncodeRikenCageSkmcCellPapPlusRawRep2.bigWig
+geoSampleAccession GSM979653
 grant Gingeras
 lab RIKEN
 labExpId CThi10031
@@ -19526,6 +19747,7 @@ dccAccession wgEncodeEH002764
 donorId 9011302
 expId 2764
 fileName wgEncodeRikenCageSkmcCellPapRawDataRep1.fastq.gz
+geoSampleAccession GSM979653
 grant Gingeras
 lab RIKEN
 labExpId CThi10030
@@ -19552,6 +19774,7 @@ dccAccession wgEncodeEH002764
 donorId 8121902.17
 expId 2764
 fileName wgEncodeRikenCageSkmcCellPapRawDataRep2.fastq.gz
+geoSampleAccession GSM979653
 grant Gingeras
 lab RIKEN
 labExpId CThi10031
@@ -19578,6 +19801,7 @@ dccAccession wgEncodeEH002764
 donorId 9011302,8121902.17
 expId 2764
 fileName wgEncodeRikenCageSkmcCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979653
 grant Gingeras
 lab RIKEN
 labExpId CThi10030,CThi10031
@@ -19655,6 +19879,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002763
 expId 2763
 fileName wgEncodeRikenCageSknshCellPapMinusRawRep3.bigWig
+geoSampleAccession GSM979646
 grant Gingeras
 lab RIKEN
 labExpId CThi10043
@@ -19681,6 +19906,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002763
 expId 2763
 fileName wgEncodeRikenCageSknshCellPapMinusRawRep4.bigWig
+geoSampleAccession GSM979646
 grant Gingeras
 lab RIKEN
 labExpId CThi10046
@@ -19707,6 +19933,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002763
 expId 2763
 fileName wgEncodeRikenCageSknshCellPapPlusRawRep3.bigWig
+geoSampleAccession GSM979646
 grant Gingeras
 lab RIKEN
 labExpId CThi10043
@@ -19733,6 +19960,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002763
 expId 2763
 fileName wgEncodeRikenCageSknshCellPapPlusRawRep4.bigWig
+geoSampleAccession GSM979646
 grant Gingeras
 lab RIKEN
 labExpId CThi10046
@@ -19759,6 +19987,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002763
 expId 2763
 fileName wgEncodeRikenCageSknshCellPapRawDataRep3.fastq.gz
+geoSampleAccession GSM979646
 grant Gingeras
 lab RIKEN
 labExpId CThi10043
@@ -19784,6 +20013,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002763
 expId 2763
 fileName wgEncodeRikenCageSknshCellPapRawDataRep4.fastq.gz
+geoSampleAccession GSM979646
 grant Gingeras
 lab RIKEN
 labExpId CThi10046
@@ -19809,6 +20039,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002763
 expId 2763
 fileName wgEncodeRikenCageSknshCellPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979646
 grant Gingeras
 lab RIKEN
 labExpId CThi10043,CThi10046
@@ -19886,6 +20117,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002761
 expId 2761
 fileName wgEncodeRikenCageSknshCytosolPapMinusRawRep3.bigWig
+geoSampleAccession GSM979648
 grant Gingeras
 lab RIKEN
 labExpId CThi10044
@@ -19912,6 +20144,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002761
 expId 2761
 fileName wgEncodeRikenCageSknshCytosolPapMinusRawRep4.bigWig
+geoSampleAccession GSM979648
 grant Gingeras
 lab RIKEN
 labExpId CThi10047
@@ -19938,6 +20171,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002761
 expId 2761
 fileName wgEncodeRikenCageSknshCytosolPapPlusRawRep3.bigWig
+geoSampleAccession GSM979648
 grant Gingeras
 lab RIKEN
 labExpId CThi10044
@@ -19964,6 +20198,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002761
 expId 2761
 fileName wgEncodeRikenCageSknshCytosolPapPlusRawRep4.bigWig
+geoSampleAccession GSM979648
 grant Gingeras
 lab RIKEN
 labExpId CThi10047
@@ -19990,6 +20225,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002761
 expId 2761
 fileName wgEncodeRikenCageSknshCytosolPapRawDataRep3.fastq.gz
+geoSampleAccession GSM979648
 grant Gingeras
 lab RIKEN
 labExpId CThi10044
@@ -20015,6 +20251,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002761
 expId 2761
 fileName wgEncodeRikenCageSknshCytosolPapRawDataRep4.fastq.gz
+geoSampleAccession GSM979648
 grant Gingeras
 lab RIKEN
 labExpId CThi10047
@@ -20040,6 +20277,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002761
 expId 2761
 fileName wgEncodeRikenCageSknshCytosolPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979648
 grant Gingeras
 lab RIKEN
 labExpId CThi10044,CThi10047
@@ -20117,6 +20355,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002762
 expId 2762
 fileName wgEncodeRikenCageSknshNucleusPapMinusRawRep3.bigWig
+geoSampleAccession GSM979647
 grant Gingeras
 lab RIKEN
 labExpId CThi10045
@@ -20143,6 +20382,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002762
 expId 2762
 fileName wgEncodeRikenCageSknshNucleusPapMinusRawRep4.bigWig
+geoSampleAccession GSM979647
 grant Gingeras
 lab RIKEN
 labExpId CThi10048
@@ -20169,6 +20409,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002762
 expId 2762
 fileName wgEncodeRikenCageSknshNucleusPapPlusRawRep3.bigWig
+geoSampleAccession GSM979647
 grant Gingeras
 lab RIKEN
 labExpId CThi10045
@@ -20195,6 +20436,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002762
 expId 2762
 fileName wgEncodeRikenCageSknshNucleusPapPlusRawRep4.bigWig
+geoSampleAccession GSM979647
 grant Gingeras
 lab RIKEN
 labExpId CThi10048
@@ -20221,6 +20463,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002762
 expId 2762
 fileName wgEncodeRikenCageSknshNucleusPapRawDataRep3.fastq.gz
+geoSampleAccession GSM979647
 grant Gingeras
 lab RIKEN
 labExpId CThi10045
@@ -20246,6 +20489,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEH002762
 expId 2762
 fileName wgEncodeRikenCageSknshNucleusPapRawDataRep4.fastq.gz
+geoSampleAccession GSM979647
 grant Gingeras
 lab RIKEN
 labExpId CThi10048
@@ -20271,6 +20515,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEH002762
 expId 2762
 fileName wgEncodeRikenCageSknshNucleusPapTssHmm.bedRnaElements.gz
+geoSampleAccession GSM979647
 grant Gingeras
 lab RIKEN
 labExpId CThi10045,CThi10048
@@ -20538,4 +20783,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 359478210
+# MAGIC: -1381138258

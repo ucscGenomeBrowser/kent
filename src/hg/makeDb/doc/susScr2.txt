@@ -869,3 +869,17 @@ chainOne $(path1)
     ln -s blastz.mm10.swap lastz.mm10
 
 ############################################################################
+# LIFTOVER TO susScr3 (DONE - 2012-07-26 - Hiram )
+    mkdir /hive/data/genomes/susScr2/bed/blat.susScr3.2012-07-26
+    cd /hive/data/genomes/susScr2/bed/blat.susScr3.2012-07-26
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/susScr2/jkStuff/susScr2.11.ooc susScr2 susScr3
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/susScr2/jkStuff/susScr2.11.ooc \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	 susScr2 susScr3 > do.log 2>&1
+    #	real    28m35.606s
+
+#############################################################################

@@ -292,3 +292,117 @@ ncbiAssemblyName SpeTri2.0
     #   50135714 bases of 2311060300 (2.169%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2311060300 / 2897316137 \) \* 1024
+    #	( 2311060300 / 2897316137 ) * 1024 = 816.799284
+
+    # round up to 850
+
+    cd /hive/data/genomes/speTri2
+    time blat speTri2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/speTri2.11.ooc -repMatch=850
+    #   Wrote 23341 overused 11-mers to jkStuff/speTri2.11.ooc
+    #   real    0m49.211s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" speTri2 | sort | uniq -c
+    #   141005 yes
+#    cd /hive/data/genomes/speTri2/jkStuff
+#    gapToLift speTri2 speTri2.nonBridged.lift -bedFile=speTri2.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' speTri2.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Ictidomys tridecemlineatus	43	5258	0
+# Spermophilus tridecemlineatus - not in the list, named is as above
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add speTri2
+# speTri2 (13-lined ground squirrel)
+speTri2.serverGenome = /hive/data/genomes/speTri2/speTri2.2bit
+speTri2.clusterGenome = /hive/data/genomes/speTri2/speTri2.2bit
+speTri2.ooc = /hive/data/genomes/speTri2/jkStuff/speTri2.11.ooc
+speTri2.lift = no
+speTri2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+speTri2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+speTri2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+speTri2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+speTri2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+speTri2.refseq.mrna.native.load = no
+speTri2.refseq.mrna.xeno.load = yes
+speTri2.genbank.mrna.xeno.load = yes
+speTri2.genbank.est.native.load = yes
+speTri2.downloadDir = speTri2
+speTri2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding speTri2 13-lined ground squirrel" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for speTriNames" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S speTri2           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial speTri2 &
+    #   var/build/logs/2012.06.08-09:59:03.speTri2.initalign.log
+    #   real    1706m23.669s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad speTri2 &
+    #	logFile:  var/dbload/hgwdev/logs/2012.06.11-11:53:53.dbload.log
+    #   real    36m2.148s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-05-11 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add speTri2 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added speTri2." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH393412:896020-902549" where name="speTri2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/speTri2/pushQ
+    cd /hive/data/genomes/speTri2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl speTri2 2> stderr.txt | grep -v transMap > speTri2.sql
+    #   real    3m56.966s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/speTri2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/speTri2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/speTri2/bbi/quality.bw
+# WARNING: speTri2 does not have seq
+# WARNING: speTri2 does not have extFile
+# WARNING: speTri2 does not have estOrientInfo
+
+    scp -p speTri2.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/speTri2.sql"
+
+############################################################################

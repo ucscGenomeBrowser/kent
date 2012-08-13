@@ -848,5 +848,101 @@ CREATE TABLE ucscToEnsembl (
     md5sum bosTau6ToBosTau4.over.chain.gz >> md5sum.txt
     popd
 
+#############################################################################
+# LIFTOVER TO bosTau4 ( redo DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau4 > doLiftOverToBosTau4.log 2>&1 &
+    # real    1590m52.986s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau4.over.chain.gz >> md5sum.txt
+    popd
+
+#############################################################################
+# LIFTOVER TO bosTau5 (DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau5 > doLiftOverToBosTau5.log 2>&1 &
+    # real    1567m22.050s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau5.over.chain.gz >> md5sum.txt
+    popd
+
+#############################################################################
+# LIFTOVER TO bosTau7 (DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau7 > doLiftOverToBosTau7.log 2>&1 &
+    # real    1594m27.003s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau7.over.chain.gz >> md5sum.txt
+    popd
+
+
+##############################################################################
+# SWAP mm10 LASTZ (DONE - 2012-06-19 - Chin)
+
+    #   original alignment done at mm10.txt
+    cd /hive/data/genomes/mm10/bed/lastzBosTau6.2012-06-19
+    cat fb.mm10.chainBosTau6Link.txt
+    #   700039696 bases of 2652783500 (26.389%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzBosTau6.2012-06-19 lastz.bosTau6
+
+    # swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/mm10/bed/lastzBosTau6.2012-06-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    72m13.925s
+    cat fb.bosTau6.chainMm10Link.txt
+    #   688651806 bases of 2649682029 (25.990%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# SWAP dog canFam3 LASTZ  (DONE - 2012-06-24 - Chin)
+    mkdir /hive/data/genomes/canFam3/bed/lastzBosTau6.2012-06-24
+    cd /hive/data/genomes/canFam3/bed/lastzBosTau6.2012-06-24
+
+    cat fb.canFam3.chainBosTau6Link.txt
+    # 1387159926 bases of 2392715236 (57.974%) in intersection
+    # Create link
+    cd /hive/data/genomes/canFam3/bed
+    ln -s  lastzBosTau6.2012-06-24 lastz.bosTau6
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau6/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/bosTau6/bed/blastz.canFam3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam3/bed/lastzBosTau6.2012-06-24/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real      119m54.003s
+    cat fb.bosTau6.chainCanFam3Link.txt
+    #   1399687351 bases of 2649682029 (52.825%) in intersection
+    cd /hive/data/genomes/bosTau6/bed
+    ln -s blastz.canFam3.swap lastz.canFam3
+
 ############################################################################
 

@@ -313,3 +313,101 @@ skipInvalid yes
     #   669452844 bases of 3179905132 (21.053%) in intersection
 
 #########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - 2012-06-22 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Tarsius syrichta	8	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add tarSyr1
+# tarSyr1 (Tarsier)
+tarSyr1.serverGenome = /hive/data/genomes/tarSyr1/tarSyr1.2bit
+tarSyr1.clusterGenome = /scratch/data/tarSyr1/tarSyr1.2bit
+tarSyr1.ooc = /scratch/data/tarSyr1/tarSyr1.11.ooc
+tarSyr1.lift = no
+tarSyr1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+tarSyr1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+tarSyr1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+tarSyr1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+tarSyr1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+tarSyr1.refseq.mrna.native.load = no
+tarSyr1.refseq.mrna.xeno.load = yes
+tarSyr1.genbank.mrna.xeno.load = yes
+tarSyr1.genbank.est.native.load = yes
+tarSyr1.downloadDir = tarSyr1
+tarSyr1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding tarSyr1 tarsier" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for tarSyrNames" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S tarSyr1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial tarSyr1 &
+    #   var/build/logs/2012.06.08-10:01:20.tarSyr1.initalign.log
+    #   real    4309m23.845s
+    # after finishing the kluster run manually:
+# Completed: 650332 of 650332 jobs
+# CPU time in finished jobs:    2156583s   35943.06m   599.05h   24.96d  0.068 y
+# IO & Wait Time:               3057671s   50961.18m   849.35h   35.39d  0.097 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:             210s       3.50m     0.06h    0.00d
+# Submission to last job:        207812s    3463.53m    57.73h    2.41d
+
+    time nice -n +19 ./bin/gbAlignStep -initial -continue=finish tarSyr1 &
+    #   var/build/logs/2012.06.16-12:07:23.tarSyr1.initalign.log
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad tarSyr1 &
+    #	logFile:  var/dbload/hgwdev/logs/2012.06.22-14:55:19.dbload.log
+    #   real    64m45.767s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add tarSyr1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added tarSyr1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_66368:1-2388" where name="tarSyr1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/tarSyr1/pushQ
+    cd /hive/data/genomes/tarSyr1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl tarSyr1 2> stderr.txt | grep -v transMap > tarSyr1.sql
+    #   real    4m6.158s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/tarSyr1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/tarSyr1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/tarSyr1/bbi/quality.bw
+# WARNING: tarSyr1 does not have seq
+# WARNING: tarSyr1 does not have extFile
+# WARNING: tarSyr1 does not have estOrientInfo
+
+    scp -p tarSyr1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/tarSyr1.sql"
+
+############################################################################

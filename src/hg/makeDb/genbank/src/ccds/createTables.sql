@@ -202,7 +202,15 @@ CREATE TABLE Builds (
         build_uid int PRIMARY KEY NOT NULL ,
         tax_id int NOT NULL ,
         ncbi_build_number int NOT NULL ,
-        ncbi_build_version int NOT NULL
+        ncbi_build_version int NOT NULL,
+        ensembl_build_number int NOT NULL ,
+        assembly_acc varchar (16) NOT NULL ,
+        assembly_version int NOT NULL ,
+        assembly_name varchar (16) NOT NULL ,
+        prev_build_uid int NULL ,
+        date_created datetime NOT NULL ,
+        date_made_public datetime NULL
+
 ) 
 ;
 
@@ -240,7 +248,7 @@ CREATE TABLE ProspectiveGroups (
 
 DROP TABLE IF EXISTS ProspectiveAnnotCompare;
 CREATE TABLE ProspectiveAnnotCompare (
-        prospective_uid int NOT NULL ,
+        group_version_uid int NOT NULL ,
         prot_length_diff int NOT NULL ,
         coverage_pct float NOT NULL ,
         matched_splice_count int NOT NULL ,
@@ -259,7 +267,8 @@ CREATE TABLE ReportTypes (
 ;
 
 DROP TABLE IF EXISTS ReportQueries;
-CREATE TABLE ReportQueries (
+CREATE TABLE ReportQueries
+(
     query_uid int PRIMARY KEY NOT NULL,
     report_type_uid int NOT NULL,
     report_sort_order int NULL,
@@ -272,7 +281,7 @@ CREATE TABLE ReportQueries (
 DROP TABLE IF EXISTS ProspectiveStatusVals;
 CREATE TABLE ProspectiveStatusVals (
 	prospective_status_val_uid int PRIMARY KEY  NOT NULL ,
-	prospective_status varchar (50) NOT NULL 
+	prospective_status varchar (50) NOT NULL
 ) 
 ;
 

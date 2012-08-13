@@ -12,6 +12,7 @@ enum snp125CodingCoordlessFrame
     snp125CodingCoordless1 = 0,
     snp125CodingCoordless2 = 1,
     snp125CodingCoordless3 = 2,
+    snp125CodingCoordlessNA = 3,
     };
 struct snp125CodingCoordless
 /* Annotations of the effects of SNPs on translated protein sequence. */

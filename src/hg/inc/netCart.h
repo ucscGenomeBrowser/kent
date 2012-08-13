@@ -24,11 +24,11 @@
 /* pull-down menu items */
 
 enum netColorEnum netFetchColorOption(struct cart *cart, struct trackDb *tdb,
-	boolean parentLevel);
+                                      boolean parentLevel);
 /******	netColorOption - Chrom colors by default **************************/
 
 enum netLevelEnum netFetchLevelOption(struct cart *cart, struct trackDb *tdb,
-	boolean parentLevel);
+                                      boolean parentLevel);
 /******	netLevelOption - net level 0 (All levels) by default    ***********/
 
 #endif /* NETCART_H */

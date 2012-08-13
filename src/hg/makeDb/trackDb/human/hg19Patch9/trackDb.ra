@@ -1,0 +1,38 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+track ctgPos2
+shortLabel Scaffold
+longLabel Alternate Scaffold name
+group map
+priority 10
+visibility hide
+type ctgPos
+
+track altSequence
+shortLabel Alt Sequence
+longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
+visibility hide
+type bed 9
+itemRgb on
+group map
+priority 25
+url http:/cgi-bin/hgTracks?db=hg19&position=$$
+urlLabel GRCh37 sequence:
+
+track testChainHg19
+shortLabel GRCh37 Chain 
+longLabel GRCh37 Chained Alignments
+group map
+priority 25.1
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain hg19
+otherDb hg19

@@ -405,3 +405,171 @@ close (FH);
     #   26863973 bases of 1086614815 (2.472%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1086614815 / 2897316137 \) \* 1024
+    #	( 1086614815 / 2897316137 ) * 1024 = 384.042858
+
+    # round up to 400
+
+    cd /hive/data/genomes/melUnd1
+    time blat melUnd1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/melUnd1.11.ooc -repMatch=400
+    #   Wrote 14287 overused 11-mers to jkStuff/melUnd1.11.ooc
+    #   real    0m24.153s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" melUnd1 | sort | uniq -c
+    #   51022 yes
+#    cd /hive/data/genomes/melUnd1/jkStuff
+#    gapToLift melUnd1 melUnd1.nonBridged.lift -bedFile=melUnd1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' melUnd1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Melopsittacus undulatus	25	1	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add melUnd1 just after ce2
+# melUnd1 (Budgerigar)
+melUnd1.serverGenome = /hive/data/genomes/melUnd1/melUnd1.2bit
+melUnd1.clusterGenome = /hive/data/genomes/melUnd1/melUnd1.2bit
+melUnd1.ooc = /hive/data/genomes/melUnd1/jkStuff/melUnd1.11.ooc
+melUnd1.lift = no
+melUnd1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+melUnd1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+melUnd1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+melUnd1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+melUnd1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+melUnd1.refseq.mrna.native.load = no
+melUnd1.refseq.mrna.xeno.load = yes
+melUnd1.genbank.mrna.xeno.load = yes
+melUnd1.genbank.est.native.load = no
+melUnd1.downloadDir = melUnd1
+melUnd1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding melUnd1 budgerigar" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for melUndNames" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S melUnd1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial melUnd1 &
+    # after setting genbank.mrna.xeno.load = no
+    #   var/build/logs/2012.06.07-16:08:32.melUnd1.initalign.log
+    #   real    883m56.428s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad melUnd1 &
+    #   real    10m14.118s
+    #   var/dbload/hgwdev/logs/2012.06.10-12:54:07.dbload.log
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-05-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add melUnd1 to:
+        etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added melUnd1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH556451:700038-706370" where name="melUnd1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-23 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/pushQ
+    cd /hive/data/genomes/melUnd1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl melUnd1 2> stderr.txt | grep -v transMap > melUnd1.sql
+    #   real    4m1.757s
+
+    scp -p melUnd1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < melUnd1.sql
+
+############################################################################
+# LASTZ Medium Ground Finch geoFor1 (DONE - 2012-07-28 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S melUnd1
+    mkdir /hive/data/genomes/melUnd1/bed/lastzGeoFor1.2012-07-28
+    cd /hive/data/genomes/melUnd1/bed/lastzGeoFor1.2012-07-28
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    cat << '_EOF_' > DEF
+# Budgerigar vs. Medium Ground Finch
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+
+# TARGET: Budgerigar melUnd1
+SEQ1_DIR=/hive/data/genomes/melUnd1/melUnd1.2bit
+SEQ1_LEN=/hive/data/genomes/melUnd1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Medium Ground Finch GeoFor1
+SEQ2_DIR=/hive/data/genomes/geoFor1/geoFor1.2bit
+SEQ2_LEN=/hive/data/genomes/geoFor1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/melUnd1/bed/lastzGeoFor1.2012-07-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > do.log 2>&1
+    #   real    1628m48.053s
+    cat fb.melUnd1.chainGeoFor1Link.txt
+    #   832321696 bases of 1086614815 (76.598%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/melUnd1/bed
+    ln -s lastzGeoFor1.2012-07-28 lastz.geoFor1
+
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.melUnd1.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.melUnd1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/melUnd1/bed/lastzGeoFor1.2012-07-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > swap.log 2>&1 &
+    #   real    56m32.909s
+
+    cat fb.geoFor1.chainMelUnd1Link.txt
+    #   839798431 bases of 1041286029 (80.650%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/geoFor1/bed
+    ln -s blastz.melUnd1.swap lastz.melUnd1
+
+##############################################################################

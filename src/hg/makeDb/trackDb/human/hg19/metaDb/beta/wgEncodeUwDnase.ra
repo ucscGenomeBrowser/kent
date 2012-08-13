@@ -2704,7 +2704,7 @@ fileName wgEncodeUwDnaseCd20ro01778RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18208
-md5sum ee66a62fc47d851edb38906b8c0a5d8e
+md5sum 46acddb9d5af36a5c2f459e94ce60595
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2726,7 +2726,7 @@ fileName wgEncodeUwDnaseCd20ro01778RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS17541
-md5sum a1b640317b4f6ac1dcc29e3b4b7445fc
+md5sum d6dfcfe9225cf42c013236d28e4c764a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2867,7 +2867,7 @@ fileName wgEncodeUwDnaseCd34mobilizedRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16814
-md5sum 792392d36849af14473f94ca642aa137
+md5sum 1f6ada91d6b851001ffb58364a259ab9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2896,6 +2896,240 @@ project wgEncode
 replicate 1
 subId 4401
 tableName wgEncodeUwDnaseCd34mobilizedRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseCd4naivewb11970640AlnRep1
+objType file
+cell CD4+_Naive_Wb11970640
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003027
+expId 3027
+fileName wgEncodeUwDnaseCd4naivewb11970640AlnRep1.bam,wgEncodeUwDnaseCd4naivewb11970640AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14108
+labVersion Bowtie 0.12.7
+md5sum 820770efc5e981d6d0acbd3fb3ec006b,16cc1ae5d626ad71c0a4e8c613860ea5
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7326
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseCd4naivewb11970640HotspotsRep1
+objType table
+cell CD4+_Naive_Wb11970640
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003027
+expId 3027
+fileName wgEncodeUwDnaseCd4naivewb11970640HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14108
+labVersion Hotspot-v5.2
+md5sum 07d69683c4cdcd1e0e1d12914e77badf
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7326
+tableName wgEncodeUwDnaseCd4naivewb11970640HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseCd4naivewb11970640PkRep1
+objType table
+cell CD4+_Naive_Wb11970640
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003027
+expId 3027
+fileName wgEncodeUwDnaseCd4naivewb11970640PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14108
+labVersion lmax-v1.0
+md5sum fffba9c9b3045a5f70337ae188974b4c
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7326
+tableName wgEncodeUwDnaseCd4naivewb11970640PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseCd4naivewb11970640RawDataRep1
+objType file
+cell CD4+_Naive_Wb11970640
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003027
+expId 3027
+fileName wgEncodeUwDnaseCd4naivewb11970640RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14108
+md5sum c8f5ea01c83782128bad566d1514a9b9
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7326
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseCd4naivewb11970640RawRep1
+objType table
+cell CD4+_Naive_Wb11970640
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003027
+expId 3027
+fileName wgEncodeUwDnaseCd4naivewb11970640RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14108
+labVersion WindowDensity-bin20-win+/-75
+md5sum bb2e797086e6d4cafae029166a232f19
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7326
+tableName wgEncodeUwDnaseCd4naivewb11970640RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseCd4naivewb78495824AlnRep1
+objType file
+cell CD4+_Naive_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003028
+expId 3028
+fileName wgEncodeUwDnaseCd4naivewb78495824AlnRep1.bam,wgEncodeUwDnaseCd4naivewb78495824AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS15241
+labVersion Bowtie 0.12.7
+md5sum 1691395b2722578972900be08ec0c67d,9224e8d4d4dc3e56a506d086d87315a0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7327
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseCd4naivewb78495824HotspotsRep1
+objType table
+cell CD4+_Naive_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003028
+expId 3028
+fileName wgEncodeUwDnaseCd4naivewb78495824HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS15241
+labVersion Hotspot-v5.2
+md5sum 0c9cfb0b6bc08db4a3c707aa7d04f9a7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7327
+tableName wgEncodeUwDnaseCd4naivewb78495824HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseCd4naivewb78495824PkRep1
+objType table
+cell CD4+_Naive_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003028
+expId 3028
+fileName wgEncodeUwDnaseCd4naivewb78495824PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS15241
+labVersion lmax-v1.0
+md5sum bf73b1b4a7220cc5638e2c03bfd669c1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7327
+tableName wgEncodeUwDnaseCd4naivewb78495824PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseCd4naivewb78495824RawDataRep1
+objType file
+cell CD4+_Naive_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003028
+expId 3028
+fileName wgEncodeUwDnaseCd4naivewb78495824RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS15241
+md5sum 2f788ab59ed15e7ae102e585b323f4ba
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7327
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseCd4naivewb78495824RawRep1
+objType table
+cell CD4+_Naive_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-09
+dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003028
+expId 3028
+fileName wgEncodeUwDnaseCd4naivewb78495824RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS15241
+labVersion WindowDensity-bin20-win+/-75
+md5sum e79ba7153fd8dcd691a48aa5c6be5b9d
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7327
+tableName wgEncodeUwDnaseCd4naivewb78495824RawRep1
 treatment None
 view RawSignal
 
@@ -3181,7 +3415,7 @@ fileName wgEncodeUwDnaseGm04503RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18637
-md5sum a107672bb72d7295766ba22754020dc6
+md5sum 37f1e350af6d56c82a69ee37ace1d273
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3203,7 +3437,7 @@ fileName wgEncodeUwDnaseGm04503RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18640
-md5sum 215651e32eec7e735111bb640298a8f3
+md5sum 563c29709c586e208d63a7cfc74c4e85
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3415,7 +3649,7 @@ fileName wgEncodeUwDnaseGm04504RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18973
-md5sum 153149bb3b9bec6fc3e9b077208de430
+md5sum 9468d96e3dacee0edefdfabebad7e2ca
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3437,7 +3671,7 @@ fileName wgEncodeUwDnaseGm04504RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18975
-md5sum 6fb5e22c419cf1fccd18365ea0b5320d
+md5sum 20fa829c88740357bea31326aa7525d9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4702,7 +4936,7 @@ fileName wgEncodeUwDnaseH7esDiffa14dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12147
-md5sum 415f24ba6f564a9a9767c258dcaf7835
+md5sum 69c4ec182c3d5675243f41dc0e706438
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4724,7 +4958,7 @@ fileName wgEncodeUwDnaseH7esDiffa14dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11814
-md5sum fb64c941fb396c142e73c5202fe9aca5
+md5sum 34c770bcbfd9092a4d0440b89c5a20e0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5053,7 +5287,7 @@ fileName wgEncodeUwDnaseH7esDiffa5dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15665
-md5sum ebbd77257b8fd0dff6c97eb7650a72be
+md5sum 54369f079a7c22cc3c421f462b9c42d7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5075,7 +5309,7 @@ fileName wgEncodeUwDnaseH7esDiffa5dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11953
-md5sum affcdb3667303167a82a1afd5a04a7ab
+md5sum 5be27681a5efcfb007f2c6f10bc32a3d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5129,6 +5363,123 @@ replicate 2
 subId 5193
 tableName wgEncodeUwDnaseH7esDiffa5dRawRep2
 treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwDnaseH7esDiffa9dAlnRep1
+objType file
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003019
+expId 3019
+fileName wgEncodeUwDnaseH7esDiffa9dAlnRep1.bam,wgEncodeUwDnaseH7esDiffa9dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS15809
+labVersion Bowtie 0.12.7
+md5sum d999be4dc9182e5a27b252a17cc9e4c2,8aa677677d68ad1ad144d021e1eb52ff
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7328
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwDnaseH7esDiffa9dHotspotsRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003019
+expId 3019
+fileName wgEncodeUwDnaseH7esDiffa9dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS15809
+labVersion Hotspot-v5.2
+md5sum 0408c1115800627063e5ae2d0af590a0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7328
+tableName wgEncodeUwDnaseH7esDiffa9dHotspotsRep1
+treatment diffProtA_9d
+view Hotspots
+
+metaObject wgEncodeUwDnaseH7esDiffa9dPkRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003019
+expId 3019
+fileName wgEncodeUwDnaseH7esDiffa9dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS15809
+labVersion lmax-v1.0
+md5sum 92c3679869de1f537f7febb48ec1955f
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7328
+tableName wgEncodeUwDnaseH7esDiffa9dPkRep1
+treatment diffProtA_9d
+view Peaks
+
+metaObject wgEncodeUwDnaseH7esDiffa9dRawDataRep1
+objType file
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003019
+expId 3019
+fileName wgEncodeUwDnaseH7esDiffa9dRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS15809
+md5sum 25848f28ae659ebf2aff943f07dec763
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7328
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwDnaseH7esDiffa9dRawRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003019
+expId 3019
+fileName wgEncodeUwDnaseH7esDiffa9dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS15809
+labVersion WindowDensity-bin20-win+/-75
+md5sum 179d74608ea136c9281f9d9f25faeff3
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7328
+tableName wgEncodeUwDnaseH7esDiffa9dRawRep1
+treatment diffProtA_9d
 view RawSignal
 
 metaObject wgEncodeUwDnaseH7esHotspotsRep1
@@ -6643,7 +6994,7 @@ fileName wgEncodeUwDnaseHbvpRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14834
-md5sum 08155a5e9f2202e0b9178841ff673580
+md5sum e7f2cd5b6b341bde4b930e5eca5c0bf3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6831,7 +7182,7 @@ fileName wgEncodeUwDnaseHbvsmcRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14860
-md5sum 3e587c7a3e55791f40a781405910a174
+md5sum 8c64c205299f77c7cd2c45c06ff12ab7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6853,7 +7204,7 @@ fileName wgEncodeUwDnaseHbvsmcRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14845
-md5sum 50ea982b1e77597c0e84414a08fc19fd
+md5sum 0df3d590a6d38371ea772da573ee1b77
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11038,7 +11389,7 @@ fileName wgEncodeUwDnaseHmvecdadRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12957
-md5sum 3f421c8115767ead88bef8dfe701960a
+md5sum 2f530b30f91616b7ae6b1180215bc159
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11060,7 +11411,7 @@ fileName wgEncodeUwDnaseHmvecdadRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12952
-md5sum 57940224ee6ee81f728788865860ae91
+md5sum 95bec8313d309a2d9ac714b712de3bc9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13161,7 +13512,7 @@ fileName wgEncodeUwDnaseHpaecRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12916
-md5sum 76315f1d94a05e3f4cd5c40102489fdb
+md5sum 3289c58d183f1df3007b8a0d16572cbc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14925,6 +15276,240 @@ tableName wgEncodeUwDnaseHrpeRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwDnaseHs27aAlnRep1
+objType file
+cell bone_marrow_HS27a
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003029
+expId 3029
+fileName wgEncodeUwDnaseHs27aAlnRep1.bam,wgEncodeUwDnaseHs27aAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS16602
+labVersion Bowtie 0.12.7
+md5sum 078fd5ec4d1d9293e522b84f55fe58c9,e670b329440cb6ca9cdd9b80f706bbcd
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7359
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHs27aHotspotsRep1
+objType table
+cell bone_marrow_HS27a
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003029
+expId 3029
+fileName wgEncodeUwDnaseHs27aHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS16602
+labVersion Hotspot-v5.2
+md5sum 88a446a5d5a35b4b89005b0284b71a7d
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7359
+tableName wgEncodeUwDnaseHs27aHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHs27aPkRep1
+objType table
+cell bone_marrow_HS27a
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003029
+expId 3029
+fileName wgEncodeUwDnaseHs27aPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS16602
+labVersion lmax-v1.0
+md5sum 299801a7c5813cdeb7267d569761aeb1
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7359
+tableName wgEncodeUwDnaseHs27aPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHs27aRawDataRep1
+objType file
+cell bone_marrow_HS27a
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003029
+expId 3029
+fileName wgEncodeUwDnaseHs27aRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS16602
+md5sum f5f99622cc7c7bfc0e93d4982c4b0cd8
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7359
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHs27aRawRep1
+objType table
+cell bone_marrow_HS27a
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003029
+expId 3029
+fileName wgEncodeUwDnaseHs27aRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS16602
+labVersion WindowDensity-bin20-win+/-75
+md5sum e93680a6f489a2cdbaccdeb3f71bd962
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7359
+tableName wgEncodeUwDnaseHs27aRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseHs5AlnRep1
+objType file
+cell bone_marrow_HS5
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003030
+expId 3030
+fileName wgEncodeUwDnaseHs5AlnRep1.bam,wgEncodeUwDnaseHs5AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS16597
+labVersion Bowtie 0.12.7
+md5sum 7d7b2694fb56c433656b982fb1c5e4f0,03031f1f923c2ea1ccc84e77e3e8f10c
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7360
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseHs5HotspotsRep1
+objType table
+cell bone_marrow_HS5
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003030
+expId 3030
+fileName wgEncodeUwDnaseHs5HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS16597
+labVersion Hotspot-v5.2
+md5sum 027fc86e95395186cf039176d64b9401
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7360
+tableName wgEncodeUwDnaseHs5HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseHs5PkRep1
+objType table
+cell bone_marrow_HS5
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003030
+expId 3030
+fileName wgEncodeUwDnaseHs5PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS16597
+labVersion lmax-v1.0
+md5sum 9b6bde6ab0d9d5be3c66575e296c25d2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7360
+tableName wgEncodeUwDnaseHs5PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseHs5RawDataRep1
+objType file
+cell bone_marrow_HS5
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003030
+expId 3030
+fileName wgEncodeUwDnaseHs5RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS16597
+md5sum fb2adccaf0a468d68d8f3bf1e2098f52
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7360
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseHs5RawRep1
+objType table
+cell bone_marrow_HS5
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003030
+expId 3030
+fileName wgEncodeUwDnaseHs5RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS16597
+labVersion WindowDensity-bin20-win+/-75
+md5sum 2c0f5e99d5c732518a98e0c6503f4ed6
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7360
+tableName wgEncodeUwDnaseHs5RawRep1
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwDnaseHsmmAlnRep1
 objType file
 cell HSMM
@@ -15351,7 +15936,7 @@ fileName wgEncodeUwDnaseHsmmtRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15538
-md5sum c48f45984c827de55b51754342950b18
+md5sum d9569298db4a1ae18cd0e9e4951ecfca
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16406,12 +16991,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5AlnRep1.bam,wgEncodeUwDnaseK562Znf2c10c5AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS14279
 labVersion Bowtie 0.12.7
 md5sum c03030d5b2a67b87cc6acb9ba09802ea,1895bc9c11727a89aa6b68c7d0477ecd
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16427,12 +17015,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5AlnRep2.bam,wgEncodeUwDnaseK562Znf2c10c5AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS14274
 labVersion Bowtie 0.12.7
 md5sum 2912ad276e7382bbc1b043dc9e55749d,37a759259ff62d861541d2ab569b8af4
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16448,12 +17039,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS14279
 labVersion Hotspot-v5.2
 md5sum 61f8878d44fc40607eb8ddf482ce831a
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16470,12 +17064,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS14274
 labVersion Hotspot-v5.2
 md5sum 6dfc7a6ddc5825e3b34dc1d4349bd98a
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16492,12 +17089,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS14279
 labVersion lmax-v1.0
 md5sum b59b7c250ed68ae624f23a1be6ad4a9b
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16514,12 +17114,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS14274
 labVersion lmax-v1.0
 md5sum 609921643e209653bfb508952b6ad162
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16536,11 +17139,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14279
 md5sum 20e49e5d2361119b4f9a6f4386033c62
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16556,11 +17162,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14274
 md5sum 07166bcf1913098f338f8d7840e4bc68
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16576,12 +17185,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS14279
 labVersion WindowDensity-bin20-win+/-75
 md5sum c1cb0a7aef9557fb3e69a4a28b3fbdcf
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16598,12 +17210,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003008
+expId 3008
 fileName wgEncodeUwDnaseK562Znf2c10c5RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS14274
 labVersion WindowDensity-bin20-win+/-75
 md5sum 6b0e649c918cd528430128da2a36c46e
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16620,12 +17235,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4AlnRep1.bam,wgEncodeUwDnaseK562Znf4c50c4AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS14216
 labVersion Bowtie 0.12.7
 md5sum 92efa3d1ae04655575fcf7be19f8f1e0,97d9b3b83a65c06f4fc9c260c4935bac
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16641,12 +17259,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4AlnRep2.bam,wgEncodeUwDnaseK562Znf4c50c4AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS14211
 labVersion Bowtie 0.12.7
 md5sum c1c764c2c2725fd268f3cfd466586131,c752b189023d3701c435ccaa30273ccc
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16662,12 +17283,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS14216
 labVersion Hotspot-v5.2
 md5sum e0ca09831b08a910fe760b4dab222b7c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16684,12 +17308,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS14211
 labVersion Hotspot-v5.2
 md5sum 5b09b20fe20a31b8e32827752c42b1b8
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16706,12 +17333,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS14216
 labVersion lmax-v1.0
 md5sum d511d985f1dbe9e6b7c4884a91d0ae61
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16728,12 +17358,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS14211
 labVersion lmax-v1.0
 md5sum 7c488dbb01ed42ae453b7d235912946f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16750,11 +17383,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14216
 md5sum 5b0e1e6202d23a5897e19116de90d9f8
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16770,11 +17406,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14211
 md5sum d8d951bd02b9738e5fed66e540aec8d9
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16790,12 +17429,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS14216
 labVersion WindowDensity-bin20-win+/-75
 md5sum e4c15f05bd8b481ec0d7b0263236fc9b
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16812,12 +17454,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003009
+expId 3009
 fileName wgEncodeUwDnaseK562Znf4c50c4RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS14211
 labVersion WindowDensity-bin20-win+/-75
 md5sum 1448b022cd8fa79d57d0766a995245dd
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16834,12 +17479,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3AlnRep1.bam,wgEncodeUwDnaseK562Znf4g7d3AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS14250
 labVersion Bowtie 0.12.7
 md5sum 1783d8c18676161bcf28038b28f07a71,54cd3ac6701fdf98ebe4cae71cc062f5
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16855,12 +17503,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3AlnRep2.bam,wgEncodeUwDnaseK562Znf4g7d3AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS14245
 labVersion Bowtie 0.12.7
 md5sum b21ea66beb826cc7d294f421e8143f8b,20eb0e22ec032dd8b816020104b7cd5e
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16876,12 +17527,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS14250
 labVersion Hotspot-v5.2
 md5sum dbff1d923a07c809114e324cba77ee83
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16898,12 +17552,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS14245
 labVersion Hotspot-v5.2
 md5sum 8ba60028fa00090f7a31ea7a1f5c4f45
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16920,12 +17577,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS14250
 labVersion lmax-v1.0
 md5sum 2ded195d7e84bdb152a88fc30bf32b4f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16942,12 +17602,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS14245
 labVersion lmax-v1.0
 md5sum 8ac0d5ebcd25ef0a7f67c60a9f5447cf
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16964,11 +17627,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14250
 md5sum f7e2dcd970764791d0703782ad03eb52
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16984,11 +17650,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14245
 md5sum b8648b1401f06f6e3770d61dc970c01c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17004,12 +17673,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS14250
 labVersion WindowDensity-bin20-win+/-75
 md5sum aba8432cd7145fa4dd0f52a5f0942df9
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17026,12 +17698,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003010
+expId 3010
 fileName wgEncodeUwDnaseK562Znf4g7d3RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS14245
 labVersion WindowDensity-bin20-win+/-75
 md5sum d62aa1fbbd23a961be5766b78a78e846
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17048,12 +17723,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6AlnRep1.bam,wgEncodeUwDnaseK562Znfa41c6AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS15363
 labVersion Bowtie 0.12.7
 md5sum 10db03f696d57a01907dc534c1449e33,ec71872aa15b870efc346f25064dcfde
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17069,12 +17747,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6AlnRep2.bam,wgEncodeUwDnaseK562Znfa41c6AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS15358
 labVersion Bowtie 0.12.7
 md5sum cf8ba9a40b0cbbb8f849bc0c1d41e89c,56efd619148ee3cbb743aad4d3490e3c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17090,12 +17771,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS15363
 labVersion Hotspot-v5.2
 md5sum 2ab32fb50306e8e7ba2356ac442d269d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17112,12 +17796,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS15358
 labVersion Hotspot-v5.2
 md5sum 7e1377b4fb2d56cb4b048b96304181e3
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17134,12 +17821,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS15363
 labVersion lmax-v1.0
 md5sum 040d0db680b6cde8975e7eaa313ec874
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17156,12 +17846,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS15358
 labVersion lmax-v1.0
 md5sum c821180a6defc18160b5eea20e94c9af
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17178,11 +17871,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15363
 md5sum 6083205c558a6243f6ace9adb4733794
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17198,11 +17894,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15358
 md5sum 5230b245ccc4b4522b4a483b5433bd4c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17218,12 +17917,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS15363
 labVersion WindowDensity-bin20-win+/-75
 md5sum e2b560d31214deb19ff0579124c68b32
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17240,12 +17942,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003011
+expId 3011
 fileName wgEncodeUwDnaseK562Znfa41c6RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS15358
 labVersion WindowDensity-bin20-win+/-75
 md5sum 4156152daf771a6fab853f51a54746b7
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17262,12 +17967,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8AlnRep1.bam,wgEncodeUwDnaseK562Znfb34a8AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS13282
 labVersion Bowtie 0.12.7
 md5sum f36a82ae8b9d9954fcfeda8072e4ae5c,7e151d6304cc826cb059bcf273d8505c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17283,12 +17991,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8AlnRep2.bam,wgEncodeUwDnaseK562Znfb34a8AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS13287
 labVersion Bowtie 0.12.7
 md5sum 8a1d023ed1a32d5ff3c371eda2ed9568,9ee26f54c9219365153b9e1196083bb6
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17304,12 +18015,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS13282
 labVersion Hotspot-v5.2
 md5sum cad32c5e65aaa27ffd851e4742d9f5a0
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17326,12 +18040,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS13287
 labVersion Hotspot-v5.2
 md5sum 64e64604b8bc83b0bbe64680b9decc20
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17348,12 +18065,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS13282
 labVersion lmax-v1.0
 md5sum d456237148bd726af118405f12abc7f7
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17370,12 +18090,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS13287
 labVersion lmax-v1.0
 md5sum 8a85380d186359efb666d92c22dfea41
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17392,11 +18115,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13282
 md5sum 89f2f74dd010f64009d569caa22eef0c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17412,11 +18138,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13287
 md5sum 814be55133c95e283e00f82d451fe1c4
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17432,12 +18161,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS13282
 labVersion WindowDensity-bin20-win+/-75
 md5sum d621e73f85aa5a49d4eeee7d6bdd05e4
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17454,12 +18186,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003012
+expId 3012
 fileName wgEncodeUwDnaseK562Znfb34a8RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS13287
 labVersion WindowDensity-bin20-win+/-75
 md5sum a1c3f557e6eb176ad8c33d20477b868f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17476,12 +18211,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6AlnRep1.bam,wgEncodeUwDnaseK562Znfe103c6AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS13310
 labVersion Bowtie 0.12.7
 md5sum 70c9d0dd6d8bed27066eb7e0572e21e5,5a8f6f360b411bbae85ef5b4c16b99ee
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17497,12 +18235,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6AlnRep2.bam,wgEncodeUwDnaseK562Znfe103c6AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS15309
 labVersion Bowtie 0.12.7
 md5sum 96af1847c5bf02092f909341c27aa042,7327891d3e3f025cdaa97d94fa1f4fde
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17518,12 +18259,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS13310
 labVersion Hotspot-v5.2
 md5sum 714a61674150c58bd51999e7f74793b1
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17540,12 +18284,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS15309
 labVersion Hotspot-v5.2
 md5sum e74bd8bc35cd528ccab7e4953c531523
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17562,12 +18309,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS13310
 labVersion lmax-v1.0
 md5sum 8d43d44b7e2afce376a922d34de6db1e
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17584,12 +18334,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS15309
 labVersion lmax-v1.0
 md5sum 9dc6108629ca69d58891f6b82fcc55da
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17606,11 +18359,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13310
 md5sum 8a37eab23ef6d2c732746c2fe6ea94c4
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17626,11 +18382,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15309
 md5sum 9129ef2ff9ec26d895bc21cb667894cf
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17646,12 +18405,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS13310
 labVersion WindowDensity-bin20-win+/-75
 md5sum 854b173f13f6a334103bee6cf8f8eb3a
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17668,12 +18430,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003013
+expId 3013
 fileName wgEncodeUwDnaseK562Znfe103c6RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS15309
 labVersion WindowDensity-bin20-win+/-75
 md5sum bbd46e237f901c0ef619181ec0a073a4
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17690,12 +18455,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2AlnRep1.bam,wgEncodeUwDnaseK562Znff41b2AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS13204
 labVersion Bowtie 0.12.7
 md5sum 14cb0f0159684406809492c93adaeeaa,327db94ef5b61c5252145ae93d6ddc60
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17711,12 +18479,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2AlnRep2.bam,wgEncodeUwDnaseK562Znff41b2AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS13209
 labVersion Bowtie 0.12.7
 md5sum bc5d0bedaff5ae98f840b9fd4148b5f9,b193a9f4eac35172d064fdc34a3eb992
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17732,12 +18503,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS13204
 labVersion Hotspot-v5.2
 md5sum cf133d86a1750f12a89e2682ae75131f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17754,12 +18528,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS13209
 labVersion Hotspot-v5.2
 md5sum f824f7b3b1c4c0a5ca2c836e3037f56a
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17776,12 +18553,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS13204
 labVersion lmax-v1.0
 md5sum 7e0bce7b4b5ef66b8d4cb0be91941e0d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17798,12 +18578,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS13209
 labVersion lmax-v1.0
 md5sum 1725c281b0a7eed9dbac0fa9d9d3d031
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17820,11 +18603,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13204
 md5sum 4f56a7d99daeba98333380459a989df9
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17840,11 +18626,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13209
 md5sum de687e95d9a54758ca9ef911c24d54d3
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17860,12 +18649,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS13204
 labVersion WindowDensity-bin20-win+/-75
 md5sum 70b5b84ffe4c1b2f7dd15b4a9cb92cf5
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17882,12 +18674,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003014
+expId 3014
 fileName wgEncodeUwDnaseK562Znff41b2RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS13209
 labVersion WindowDensity-bin20-win+/-75
 md5sum 2cfdcb8a9dc7cbd65cd590113ccb62c7
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17904,12 +18699,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11AlnRep1.bam,wgEncodeUwDnaseK562Znfg54a11AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS13906
 labVersion Bowtie 0.12.7
 md5sum 63381a8375f1833ad5a53dae39e3b878,0c3f4fae1098e1558e7ef50007b6deab
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17925,12 +18723,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11AlnRep2.bam,wgEncodeUwDnaseK562Znfg54a11AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS13277
 labVersion Bowtie 0.12.7
 md5sum e442335186ea81820ea0a87d514ee7ac,ea9247c7ea52b5968546b41cbdd14a5f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17946,12 +18747,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS13906
 labVersion Hotspot-v5.2
 md5sum b9dd124b5c1faf906f3ea57400f4060f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17968,12 +18772,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS13277
 labVersion Hotspot-v5.2
 md5sum 2af7c32ac437296b7484a7f7fc596c4f
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17990,12 +18797,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS13906
 labVersion lmax-v1.0
 md5sum 0be9dedcc6c1438b8e65ae82e34d0891
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18012,12 +18822,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS13277
 labVersion lmax-v1.0
 md5sum b45fe0ae9b71ab17666dc2f9f6d832ad
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18034,11 +18847,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13906
 md5sum b203021d1eb2a36a2fc0dccd2c00677b
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18054,11 +18870,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13277
 md5sum 86bc270b49712a04059a3cdede980c66
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18074,12 +18893,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS13906
 labVersion WindowDensity-bin20-win+/-75
 md5sum e6487dbdc4e0a203bb838a0329182499
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18096,12 +18918,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003015
+expId 3015
 fileName wgEncodeUwDnaseK562Znfg54a11RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS13277
 labVersion WindowDensity-bin20-win+/-75
 md5sum bbf27ef0d3770cc617831a8189a234de
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18118,12 +18943,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5AlnRep1.bam,wgEncodeUwDnaseK562Znfp5AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS16924
 labVersion Bowtie 0.12.7
 md5sum 8371230f4fad766ca20332f5071b166b,f206040458423e69734f0fbe5c4abacc
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18139,12 +18967,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5AlnRep2.bam,wgEncodeUwDnaseK562Znfp5AlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS16934
 labVersion Bowtie 0.12.7
 md5sum baaa082354f079ec6a9aeb1274bd4235,13aea401335acd986232f3810ce2e1dd
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18160,12 +18991,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS16924
 labVersion Hotspot-v5.2
 md5sum 625d5a3b2904d1479d719085376b7272
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18182,12 +19016,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS16934
 labVersion Hotspot-v5.2
 md5sum 9631957526feb5e879c528c86942a7a0
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18204,12 +19041,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5PkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS16924
 labVersion lmax-v1.0
 md5sum acdae2358bac07cb7c9563285877f61d
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18226,12 +19066,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS16934
 labVersion lmax-v1.0
 md5sum 292496238eec751d59e252cd25d9d3ac
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18248,11 +19091,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16924
 md5sum 11519806f14e284ad877c7a5de9a79db
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18268,11 +19114,14 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16934
 md5sum af498874066dc11cc364f5a43d6b455c
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18288,12 +19137,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5RawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS16924
 labVersion WindowDensity-bin20-win+/-75
 md5sum 5a8c05a5ff1c110bec2b61c38a2deb9a
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18310,12 +19162,15 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-23
 dateUnrestricted 2012-12-23
+dccAccession wgEncodeEH003016
+expId 3016
 fileName wgEncodeUwDnaseK562Znfp5RawRep2.bigWig
 grant Stam
 lab UW
 labExpId DS16934
 labVersion WindowDensity-bin20-win+/-75
 md5sum 15c5b477623d59ee4b83ab576e3eb2b1
+objStatus revoked - data is mixed and merged with other experiments
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18332,6 +19187,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2AlnRep1.bam,wgEncodeUwDnaseLhcnm2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -18353,6 +19210,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2AlnRep2.bam,wgEncodeUwDnaseLhcnm2AlnRep2.bam.bai
 grant Stam
 lab UW
@@ -18374,6 +19233,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dAlnRep1.bam,wgEncodeUwDnaseLhcnm2Diff4dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -18395,6 +19256,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dAlnRep2.bam,wgEncodeUwDnaseLhcnm2Diff4dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -18416,6 +19279,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -18438,6 +19303,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -18460,6 +19327,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -18482,6 +19351,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -18504,11 +19375,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20647
-md5sum 68e412120e4d41c0a56e5a0924562843
+md5sum 433986cb718d1654fbaa288637949437
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18524,11 +19397,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20534
-md5sum 5d2d6607b0f5ac4e7fd2a669f7aa4fbc
+md5sum 0c8c8e68b456ef37f458af6d1c320d1b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18544,6 +19419,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dRawRep1.bigWig
 grant Stam
 lab UW
@@ -18566,6 +19443,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003006
+expId 3006
 fileName wgEncodeUwDnaseLhcnm2Diff4dRawRep2.bigWig
 grant Stam
 lab UW
@@ -18588,6 +19467,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -18610,6 +19491,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -18632,6 +19515,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2PkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -18654,6 +19539,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2PkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -18676,11 +19563,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20548
-md5sum 001de0f12fdda12f0816a02698c795bf
+md5sum c213172a93d9bdf3ed97ef6b5213d9b7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18696,11 +19585,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20485
-md5sum 85fe4206dc65d994c5f50924332be37e
+md5sum 9dc59c8d9fab9f97f61e4aa187c9effe
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18716,6 +19607,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2RawRep1.bigWig
 grant Stam
 lab UW
@@ -18738,6 +19631,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH003005
+expId 3005
 fileName wgEncodeUwDnaseLhcnm2RawRep2.bigWig
 grant Stam
 lab UW
@@ -19004,6 +19899,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jAlnRep1.bam,wgEncodeUwDnaseM059jAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -19048,6 +19945,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -19094,6 +19993,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -19140,11 +20041,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20493
-md5sum 3bbef7b368d347f49d0b19a61194cd4a
+md5sum 5701c5cc6b8f62814506a8b6c0015ad2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19166,7 +20069,7 @@ fileName wgEncodeUwDnaseM059jRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20497
-md5sum a1a8a45c1397a3b255f674da8f2c2091
+md5sum 9553cf2a2b3c1eacf03cfcf3092b3661
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19182,6 +20085,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-21
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEH002581
+expId 2581
 fileName wgEncodeUwDnaseM059jRawRep1.bigWig
 grant Stam
 lab UW
@@ -19278,6 +20183,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hAlnRep1.bam,wgEncodeUwDnaseMcf7Est100nm1hAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -19299,6 +20206,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hAlnRep2.bam,wgEncodeUwDnaseMcf7Est100nm1hAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -19320,6 +20229,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -19342,6 +20253,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -19364,6 +20277,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -19386,6 +20301,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -19408,11 +20325,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18271
-md5sum c5da6ebbb310644e0a649f02dce46c6d
+md5sum e48899260ce28feac0b3b740b09babec
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19428,11 +20347,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18025
-md5sum 217d26b7fa37cb13d1552cdbeb519a5c
+md5sum 95e7da7ca3ec8bd749bbabae5d849274
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19448,6 +20369,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hRawRep1.bigWig
 grant Stam
 lab UW
@@ -19470,6 +20393,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003017
+expId 3017
 fileName wgEncodeUwDnaseMcf7Est100nm1hRawRep2.bigWig
 grant Stam
 lab UW
@@ -19492,6 +20417,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hAlnRep1.bam,wgEncodeUwDnaseMcf7Estctrl0hAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -19513,6 +20440,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hAlnRep2.bam,wgEncodeUwDnaseMcf7Estctrl0hAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -19534,6 +20463,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -19556,6 +20487,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -19578,6 +20511,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -19600,6 +20535,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -19622,11 +20559,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18267
-md5sum eaef867c62fc605a43d14b17702e27a4
+md5sum 11c4cc5755b3b49d27e1bd5b13b03de0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19642,11 +20581,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18021
-md5sum 4ef49ad59503a5281f14e0b38c1e4ff1
+md5sum 7e77c491fed9c997131651fa0048f47b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19662,6 +20603,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hRawRep1.bigWig
 grant Stam
 lab UW
@@ -19684,6 +20627,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-28
 dateUnrestricted 2012-12-28
+dccAccession wgEncodeEH003018
+expId 3018
 fileName wgEncodeUwDnaseMcf7Estctrl0hRawRep2.bigWig
 grant Stam
 lab UW
@@ -20313,7 +21258,7 @@ fileName wgEncodeUwDnaseMonocd14ro1746RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18065
-md5sum 78d8e1ba6db9f928cae4befb49f4d56d
+md5sum d506e7759a619b089b88769da2bdb146
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20395,6 +21340,240 @@ project wgEncode
 replicate 2
 subId 4399
 tableName wgEncodeUwDnaseMonocd14ro1746RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseMscAlnRep1
+objType file
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscAlnRep1.bam,wgEncodeUwDnaseMscAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS20514
+labVersion Bowtie 0.12.7
+md5sum 42bf4df9712e34be9a85cbf9345429a3,43b2fb24b09f25b874c5485c13b70853
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7357
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseMscAlnRep2
+objType file
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscAlnRep2.bam,wgEncodeUwDnaseMscAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS20518
+labVersion Bowtie 0.12.7
+md5sum da16ac188eeed0e64b4f53bc19dc36a1,ce6715dfefca31a2e1623e86677db604
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7358
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseMscHotspotsRep1
+objType table
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS20514
+labVersion Hotspot-v5.2
+md5sum 74999548275aed14c747dfdcb76efe55
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7357
+tableName wgEncodeUwDnaseMscHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseMscHotspotsRep2
+objType table
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS20518
+labVersion Hotspot-v5.2
+md5sum c51efb5d08d3b40690a5992c7e5a65ed
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7358
+tableName wgEncodeUwDnaseMscHotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseMscPkRep1
+objType table
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS20514
+labVersion lmax-v1.0
+md5sum e4c8e56c097e91bd652da8777f3f5f74
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7357
+tableName wgEncodeUwDnaseMscPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseMscPkRep2
+objType table
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS20518
+labVersion lmax-v1.0
+md5sum 62b6f449af370d3d76d2b6cdfcd421ad
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7358
+tableName wgEncodeUwDnaseMscPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseMscRawDataRep1
+objType file
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS20514
+md5sum 8300f60aafce1854143d68774a5e9fa2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7357
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseMscRawDataRep2
+objType file
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscRawDataRep2.fastq.tgz
+grant Stam
+lab UW
+labExpId DS20518
+md5sum 43c8d5775d55ffc41976ed048bb43b96
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7358
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseMscRawRep1
+objType table
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS20514
+labVersion WindowDensity-bin20-win+/-75
+md5sum 4b05c4b0cb9fb9aa53ec370d5d9cd690
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7357
+tableName wgEncodeUwDnaseMscRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseMscRawRep2
+objType table
+cell bone_marrow_MSC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-13
+dateUnrestricted 2013-04-12
+dccAccession wgEncodeEH003031
+expId 3031
+fileName wgEncodeUwDnaseMscRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS20518
+labVersion WindowDensity-bin20-win+/-75
+md5sum f4ff2ac443231fe1a897ff457bed607f
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7358
+tableName wgEncodeUwDnaseMscRawRep2
 treatment None
 view RawSignal
 
@@ -21051,7 +22230,7 @@ fileName wgEncodeUwDnaseNhberaRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11969
-md5sum 382eac748d585fb584e90d448b7d7612
+md5sum 077446d5a237b255803330ee13add9b5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -21073,7 +22252,7 @@ fileName wgEncodeUwDnaseNhberaRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11959
-md5sum 3a7dd6b66d113a6d30c973ef28ed786a
+md5sum 9fc49ab574017637f391b100e10ccfa1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22281,7 +23460,7 @@ fileName wgEncodeUwDnaseNt2d1RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14575
-md5sum 2fcd7c232c3a4c807239477dd25d4519
+md5sum cd0590c84edaa75d4c143c8a03e1c262
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22767,7 +23946,7 @@ fileName wgEncodeUwDnasePrecRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12098
-md5sum 7dfd9e7b6a47f498dbfdedc48755c5af
+md5sum abcda94bcc6ea3c29a2ea180dc1c4df2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22789,7 +23968,7 @@ fileName wgEncodeUwDnasePrecRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12088
-md5sum 9a1e63d5678c787f942c8a425054be9c
+md5sum 3c4df769bbdd630cd67a0d95e84c0029
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22853,6 +24032,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951AlnRep1.bam,wgEncodeUwDnaseRpmi7951AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -22874,6 +24055,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951AlnRep2.bam,wgEncodeUwDnaseRpmi7951AlnRep2.bam.bai
 grant Stam
 lab UW
@@ -22895,6 +24078,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951HotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -22917,6 +24102,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -22939,6 +24126,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951PkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -22961,6 +24150,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951PkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -22983,11 +24174,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20909
-md5sum 56f281b86b2f2eeec1939835940fe7dc
+md5sum 4a6917e2b591247dbede6f7cde6c45c3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23003,11 +24196,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20904
-md5sum 29068bdc63d3ded237994cdeb2516df5
+md5sum 4adcd7fbe74676801c8ced4973756237
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23023,6 +24218,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951RawRep1.bigWig
 grant Stam
 lab UW
@@ -23045,6 +24242,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-22
 dateUnrestricted 2012-12-22
+dccAccession wgEncodeEH003007
+expId 3007
 fileName wgEncodeUwDnaseRpmi7951RawRep2.bigWig
 grant Stam
 lab UW
@@ -24462,7 +25661,7 @@ fileName wgEncodeUwDnaseT47dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId DS19794
-md5sum ab9693de2dcf0b52c71b948090dbf56e
+md5sum f286871e48e2e157922f48e898e86564
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24484,7 +25683,7 @@ fileName wgEncodeUwDnaseT47dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
 labExpId DS19790
-md5sum 39d9e98f7b5289f6b5c0af5df5477163
+md5sum 8c111a6c663e20f22f788cb6ef2ff0b4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24540,6 +25739,123 @@ tableName wgEncodeUwDnaseT47dRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwDnaseTh17AlnRep1
+objType file
+cell Th17
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003020
+expId 3020
+fileName wgEncodeUwDnaseTh17AlnRep1.bam,wgEncodeUwDnaseTh17AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS11039
+labVersion Bowtie 0.12.7
+md5sum a7a99a095449b497d266b1adc7321248,95e83ba79cb1563decb394fac5690767
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7336
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTh17HotspotsRep1
+objType table
+cell Th17
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003020
+expId 3020
+fileName wgEncodeUwDnaseTh17HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS11039
+labVersion Hotspot-v5.2
+md5sum 13bf6ad34c2b3206031ca9409964ebbb
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7336
+tableName wgEncodeUwDnaseTh17HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseTh17PkRep1
+objType table
+cell Th17
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003020
+expId 3020
+fileName wgEncodeUwDnaseTh17PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS11039
+labVersion lmax-v1.0
+md5sum dc501b2797603d6be6197efb24000a48
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7336
+tableName wgEncodeUwDnaseTh17PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseTh17RawDataRep1
+objType file
+cell Th17
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003020
+expId 3020
+fileName wgEncodeUwDnaseTh17RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS11039
+md5sum e751ef040d04813bd914e5aa573282af
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7336
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTh17RawRep1
+objType table
+cell Th17
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003020
+expId 3020
+fileName wgEncodeUwDnaseTh17RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS11039
+labVersion WindowDensity-bin20-win+/-75
+md5sum 94f48d7e69bdc786112dd5021c1e0f3f
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7336
+tableName wgEncodeUwDnaseTh17RawRep1
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwDnaseTh1AlnRep1
 objType file
 cell Th1
@@ -24562,6 +25878,29 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1641
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTh1AlnRep2
+objType file
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
+fileName wgEncodeUwDnaseTh1AlnRep2.bam,wgEncodeUwDnaseTh1AlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS18018
+labVersion Bowtie 0.12.7
+md5sum bee8d7ac6b1f864840c602f234ff30c2,f1bb7a5d33dbd7cfd7f8b4b9c4639f17
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7337
 treatment None
 view Alignments
 
@@ -24591,6 +25930,30 @@ tableName wgEncodeUwDnaseTh1HotspotsRep1
 treatment None
 view Hotspots
 
+metaObject wgEncodeUwDnaseTh1HotspotsRep2
+objType table
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
+fileName wgEncodeUwDnaseTh1HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18018
+labVersion Hotspot-v5.2
+md5sum d5614c89bc2aa4ba1a4e812f53d1d559
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7337
+tableName wgEncodeUwDnaseTh1HotspotsRep2
+treatment None
+view Hotspots
+
 metaObject wgEncodeUwDnaseTh1PkRep1
 objType table
 cell Th1
@@ -24617,6 +25980,30 @@ tableName wgEncodeUwDnaseTh1PkRep1
 treatment None
 view Peaks
 
+metaObject wgEncodeUwDnaseTh1PkRep2
+objType table
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
+fileName wgEncodeUwDnaseTh1PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18018
+labVersion lmax-v1.0
+md5sum e08f8067620dfc1f38811aa05493a384
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7337
+tableName wgEncodeUwDnaseTh1PkRep2
+treatment None
+view Peaks
+
 metaObject wgEncodeUwDnaseTh1RawDataRep1
 objType file
 cell Th1
@@ -24637,6 +26024,28 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 49
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTh1RawDataRep2
+objType file
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
+fileName wgEncodeUwDnaseTh1RawDataRep2.fastq.tgz
+grant Stam
+lab UW
+labExpId DS18018
+md5sum 34559d35dd330cf5528a58428682e212
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7337
 treatment None
 view RawData
 
@@ -24666,6 +26075,381 @@ tableName wgEncodeUwDnaseTh1RawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwDnaseTh1RawRep2
+objType table
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000483
+expId 483
+fileName wgEncodeUwDnaseTh1RawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS18018
+labVersion WindowDensity-bin20-win+/-75
+md5sum 18fc76bb7a9b2c44a25a5f944f7d8d3e
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7337
+tableName wgEncodeUwDnaseTh1RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseTh1wb33676984AlnRep1
+objType file
+cell Th1_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003021
+expId 3021
+fileName wgEncodeUwDnaseTh1wb33676984AlnRep1.bam,wgEncodeUwDnaseTh1wb33676984AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS18015
+labVersion Bowtie 0.12.7
+md5sum 443fc1424f7f90e8c7c6e6e061990455,76dfceacc6a0b91b0a7748f46c49ec48
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7331
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTh1wb33676984HotspotsRep1
+objType table
+cell Th1_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003021
+expId 3021
+fileName wgEncodeUwDnaseTh1wb33676984HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18015
+labVersion Hotspot-v5.2
+md5sum 4452e6e9a0f829891d1868b2efbe0b5d
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7331
+tableName wgEncodeUwDnaseTh1wb33676984HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseTh1wb33676984PkRep1
+objType table
+cell Th1_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003021
+expId 3021
+fileName wgEncodeUwDnaseTh1wb33676984PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18015
+labVersion lmax-v1.0
+md5sum 0825833ebb0f69edba2616cbdf8a33e9
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7331
+tableName wgEncodeUwDnaseTh1wb33676984PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseTh1wb33676984RawDataRep1
+objType file
+cell Th1_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003021
+expId 3021
+fileName wgEncodeUwDnaseTh1wb33676984RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS18015
+md5sum 6d6165a3d13cc60f235a8ceb114331d9
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7331
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTh1wb33676984RawRep1
+objType table
+cell Th1_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003021
+expId 3021
+fileName wgEncodeUwDnaseTh1wb33676984RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18015
+labVersion WindowDensity-bin20-win+/-75
+md5sum dfe9c3e9f7b8f5bf4197c35507862d79
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7331
+tableName wgEncodeUwDnaseTh1wb33676984RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseTh1wb54553204AlnRep1
+objType file
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204AlnRep1.bam,wgEncodeUwDnaseTh1wb54553204AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS17593
+labVersion Bowtie 0.12.7
+md5sum ea57034e5bd25b58ddc23661d22c17aa,019ffc1eabc6009c41c22bcb04e350ac
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7332
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTh1wb54553204AlnRep2
+objType file
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204AlnRep2.bam,wgEncodeUwDnaseTh1wb54553204AlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS17592
+labVersion Bowtie 0.12.7
+md5sum 34afebc79b6963e44352d7ba098e164d,ceaa0582c6aa68cbe113e12395ebf8ef
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7333
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTh1wb54553204HotspotsRep1
+objType table
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS17593
+labVersion Hotspot-v5.2
+md5sum b842e90d51e4024cec55a483b735d764
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7332
+tableName wgEncodeUwDnaseTh1wb54553204HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseTh1wb54553204HotspotsRep2
+objType table
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS17592
+labVersion Hotspot-v5.2
+md5sum 86f52670730f526234c2f09182b98e9c
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7333
+tableName wgEncodeUwDnaseTh1wb54553204HotspotsRep2
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseTh1wb54553204PkRep1
+objType table
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS17593
+labVersion lmax-v1.0
+md5sum a23dd1f934f540428718cc461bd6cd5e
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7332
+tableName wgEncodeUwDnaseTh1wb54553204PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseTh1wb54553204PkRep2
+objType table
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS17592
+labVersion lmax-v1.0
+md5sum af27ea8770b73040e90b0b3bb20c9c2c
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7333
+tableName wgEncodeUwDnaseTh1wb54553204PkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseTh1wb54553204RawDataRep1
+objType file
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS17593
+md5sum ada17de5676f7a74eadc7b6d3274dbe8
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7332
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTh1wb54553204RawDataRep2
+objType file
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204RawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS17592
+md5sum 0e7f2c8683e7e77e5ac284c01b30e200
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7333
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTh1wb54553204RawRep1
+objType table
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17593
+labVersion WindowDensity-bin20-win+/-75
+md5sum e76fac978b98d1858582120b4f95cb0c
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7332
+tableName wgEncodeUwDnaseTh1wb54553204RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseTh1wb54553204RawRep2
+objType table
+cell Th1_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003022
+expId 3022
+fileName wgEncodeUwDnaseTh1wb54553204RawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS17592
+labVersion WindowDensity-bin20-win+/-75
+md5sum e15d45a186854fc583d2ead4e27e87f9
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7333
+tableName wgEncodeUwDnaseTh1wb54553204RawRep2
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwDnaseTh2AlnRep1
 objType file
 cell Th2
@@ -24688,6 +26472,29 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 1677
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTh2AlnRep2
+objType file
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
+fileName wgEncodeUwDnaseTh2AlnRep2.bam,wgEncodeUwDnaseTh2AlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS17603
+labVersion Bowtie 0.12.7
+md5sum 08ce8e52c630b7c57c1ed932abcd6ff8,a244b5d316a474edbff0d4dc9107b753
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7338
 treatment None
 view Alignments
 
@@ -24717,6 +26524,30 @@ tableName wgEncodeUwDnaseTh2HotspotsRep1
 treatment None
 view Hotspots
 
+metaObject wgEncodeUwDnaseTh2HotspotsRep2
+objType table
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
+fileName wgEncodeUwDnaseTh2HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS17603
+labVersion Hotspot-v5.2
+md5sum 301d8557c804be20b5329a21394d59a6
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7338
+tableName wgEncodeUwDnaseTh2HotspotsRep2
+treatment None
+view Hotspots
+
 metaObject wgEncodeUwDnaseTh2PkRep1
 objType table
 cell Th2
@@ -24743,6 +26574,30 @@ tableName wgEncodeUwDnaseTh2PkRep1
 treatment None
 view Peaks
 
+metaObject wgEncodeUwDnaseTh2PkRep2
+objType table
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
+fileName wgEncodeUwDnaseTh2PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS17603
+labVersion lmax-v1.0
+md5sum 3d1f0e65fb3273f9708224ecf1b960c9
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7338
+tableName wgEncodeUwDnaseTh2PkRep2
+treatment None
+view Peaks
+
 metaObject wgEncodeUwDnaseTh2RawDataRep1
 objType file
 cell Th2
@@ -24763,6 +26618,28 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 312
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTh2RawDataRep2
+objType file
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
+fileName wgEncodeUwDnaseTh2RawDataRep2.fastq.tgz
+grant Stam
+lab UW
+labExpId DS17603
+md5sum 811cd56300efe2130758c205a9948693
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7338
 treatment None
 view RawData
 
@@ -24789,6 +26666,498 @@ project wgEncode
 replicate 1
 subId 1677
 tableName wgEncodeUwDnaseTh2RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseTh2RawRep2
+objType table
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH000491
+expId 491
+fileName wgEncodeUwDnaseTh2RawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS17603
+labVersion WindowDensity-bin20-win+/-75
+md5sum 51aa36fa87e331b112905f04fdc38bfe
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 7338
+tableName wgEncodeUwDnaseTh2RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseTh2wb33676984AlnRep1
+objType file
+cell Th2_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003023
+expId 3023
+fileName wgEncodeUwDnaseTh2wb33676984AlnRep1.bam,wgEncodeUwDnaseTh2wb33676984AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS18057
+labVersion Bowtie 0.12.7
+md5sum 6c1b3356b660159ae6d5145316353982,896c4c0f547323051d98a094ec4e0a2b
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7330
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTh2wb33676984HotspotsRep1
+objType table
+cell Th2_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003023
+expId 3023
+fileName wgEncodeUwDnaseTh2wb33676984HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18057
+labVersion Hotspot-v5.2
+md5sum 5548fd61478c83ec0368a1e06c3a1505
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7330
+tableName wgEncodeUwDnaseTh2wb33676984HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseTh2wb33676984PkRep1
+objType table
+cell Th2_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003023
+expId 3023
+fileName wgEncodeUwDnaseTh2wb33676984PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18057
+labVersion lmax-v1.0
+md5sum d2a1531605040f22eeb9168cdfe57c6c
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7330
+tableName wgEncodeUwDnaseTh2wb33676984PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseTh2wb33676984RawDataRep1
+objType file
+cell Th2_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003023
+expId 3023
+fileName wgEncodeUwDnaseTh2wb33676984RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18057
+md5sum ad93426a2e417b7e142bfce8dd9ae325
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7330
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTh2wb33676984RawRep1
+objType table
+cell Th2_Wb33676984
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003023
+expId 3023
+fileName wgEncodeUwDnaseTh2wb33676984RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18057
+labVersion WindowDensity-bin20-win+/-75
+md5sum 61f94a6dc6800200a8603992927d6031
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7330
+tableName wgEncodeUwDnaseTh2wb33676984RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseTh2wb54553204AlnRep1
+objType file
+cell Th2_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003024
+expId 3024
+fileName wgEncodeUwDnaseTh2wb54553204AlnRep1.bam,wgEncodeUwDnaseTh2wb54553204AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS17597
+labVersion Bowtie 0.12.7
+md5sum e3facd27070ec6a8f7f0e0de778d3c9c,75681badf129afda15a08782befe651e
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7329
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTh2wb54553204HotspotsRep1
+objType table
+cell Th2_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003024
+expId 3024
+fileName wgEncodeUwDnaseTh2wb54553204HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS17597
+labVersion Hotspot-v5.2
+md5sum 5a528d5e59703a0cf369742721a0e1c5
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7329
+tableName wgEncodeUwDnaseTh2wb54553204HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseTh2wb54553204PkRep1
+objType table
+cell Th2_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003024
+expId 3024
+fileName wgEncodeUwDnaseTh2wb54553204PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS17597
+labVersion lmax-v1.0
+md5sum 5dccba21b2ae7c46400a1ac182d70157
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7329
+tableName wgEncodeUwDnaseTh2wb54553204PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseTh2wb54553204RawDataRep1
+objType file
+cell Th2_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003024
+expId 3024
+fileName wgEncodeUwDnaseTh2wb54553204RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS17597
+md5sum b04256ca7594f44445e807fa3446ba74
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7329
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTh2wb54553204RawRep1
+objType table
+cell Th2_Wb54553204
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003024
+expId 3024
+fileName wgEncodeUwDnaseTh2wb54553204RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17597
+labVersion WindowDensity-bin20-win+/-75
+md5sum 2522f7a75701c91f0070aee49b0a013e
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7329
+tableName wgEncodeUwDnaseTh2wb54553204RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseTregwb78495824AlnRep1
+objType file
+cell Treg_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003025
+expId 3025
+fileName wgEncodeUwDnaseTregwb78495824AlnRep1.bam,wgEncodeUwDnaseTregwb78495824AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14702
+labVersion Bowtie 0.12.7
+md5sum bf647fa931001a692eb8187254ef42fb,cec753446f6553f3de1b79f4d0f40f96
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7334
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTregwb78495824HotspotsRep1
+objType table
+cell Treg_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003025
+expId 3025
+fileName wgEncodeUwDnaseTregwb78495824HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14702
+labVersion Hotspot-v5.2
+md5sum 0f9e9d7ededa4c2f154523675fdbf238
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7334
+tableName wgEncodeUwDnaseTregwb78495824HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseTregwb78495824PkRep1
+objType table
+cell Treg_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003025
+expId 3025
+fileName wgEncodeUwDnaseTregwb78495824PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14702
+labVersion lmax-v1.0
+md5sum 0f05368536aa42f08b193c19f867ac82
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7334
+tableName wgEncodeUwDnaseTregwb78495824PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseTregwb78495824RawDataRep1
+objType file
+cell Treg_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003025
+expId 3025
+fileName wgEncodeUwDnaseTregwb78495824RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS14702
+md5sum 4f26e6e9b5f43835f0c6277a8c079f33
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7334
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTregwb78495824RawRep1
+objType table
+cell Treg_Wb78495824
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003025
+expId 3025
+fileName wgEncodeUwDnaseTregwb78495824RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14702
+labVersion WindowDensity-bin20-win+/-75
+md5sum 3f99d93440e5a61d31498432ace505e0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7334
+tableName wgEncodeUwDnaseTregwb78495824RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseTregwb83319432AlnRep1
+objType file
+cell Treg_Wb83319432
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003026
+expId 3026
+fileName wgEncodeUwDnaseTregwb83319432AlnRep1.bam,wgEncodeUwDnaseTregwb83319432AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS17589
+labVersion Bowtie 0.12.7
+md5sum 2726c667e488736ad42726bd265e4e67,af7dbc667f0bd86234ded8c290fd44aa
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7335
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseTregwb83319432HotspotsRep1
+objType table
+cell Treg_Wb83319432
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003026
+expId 3026
+fileName wgEncodeUwDnaseTregwb83319432HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS17589
+labVersion Hotspot-v5.2
+md5sum 12f7db0baf93c07bd3533f694490f1f7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7335
+tableName wgEncodeUwDnaseTregwb83319432HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseTregwb83319432PkRep1
+objType table
+cell Treg_Wb83319432
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003026
+expId 3026
+fileName wgEncodeUwDnaseTregwb83319432PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS17589
+labVersion lmax-v1.0
+md5sum 7671621929d14c4585c5e0be17529b91
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7335
+tableName wgEncodeUwDnaseTregwb83319432PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseTregwb83319432RawDataRep1
+objType file
+cell Treg_Wb83319432
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003026
+expId 3026
+fileName wgEncodeUwDnaseTregwb83319432RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS17589
+md5sum 6cb0c077138bb492ad61828042816712
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7335
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseTregwb83319432RawRep1
+objType table
+cell Treg_Wb83319432
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-07
+dateUnrestricted 2013-04-06
+dccAccession wgEncodeEH003026
+expId 3026
+fileName wgEncodeUwDnaseTregwb83319432RawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17589
+labVersion WindowDensity-bin20-win+/-75
+md5sum 1644512084dc310ebd9a293a51682cfb
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 7335
+tableName wgEncodeUwDnaseTregwb83319432RawRep1
 treatment None
 view RawSignal
 
@@ -25524,4 +27893,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1474927058
+# MAGIC: 1083392577

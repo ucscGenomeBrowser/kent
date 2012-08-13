@@ -1,0 +1,107 @@
+<h2>Description</h2>
+
+<p>
+This track shows joined fragments of interrupted repeats extracted
+from the output of the <a href="http://www.repeatmasker.org/" target="_blank">
+RepeatMasker</a> program which screens DNA sequences
+for interspersed repeats and low complexity DNA sequences using the
+<a href="http://www.girinst.org/repbase/update/index.html" target="_blank">
+Repbase Update</a> library of repeats from the
+<a href="http://www.girinst.org/" target="_blank">Genetic
+Information Research Institute</a> (GIRI). Repbase Update is described in
+Jurka (2000) in the References section below.
+</p>
+
+<p>
+The detailed annotations from RepeatMasker are in the RepeatMasker track.  This
+track shows fragments of original repeat insertions which have been interrupted
+by insertions of younger repeats or through local rearrangements.  The fragments
+are joined using the ID column of RepeatMasker output.
+</p>
+
+<p>
+Note that this track was created using a version of RepeatMasker from Nov. 2005
+along with Repbase Update 9.11.  In hg18, there is also an Intr Rpts 3.2.7 track
+which was created in 2009 using a newer version of RepeatMasker and Repbase Update.
+All of the hg18 tracks are based upon this original track and not upon the newer
+Intr Rpts 3.2.7 track.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+In pack or full mode, each interrupted repeat is displayed as boxes
+(fragments) joined by horizontal lines, labeled with the repeat name.
+If all fragments are on the same strand, arrows are added to the
+horizontal line to indicate the strand.  In dense or squish mode, labels
+and arrows are omitted and in dense mode, all items are collapsed to
+fit on a single row.
+</p>
+
+<p>
+Items are shaded according to the average identity score of their
+fragments.  Usually, the shade of an item is similar to the shades of
+its fragments unless some fragments are much more diverged than
+others.  The score displayed above is the average identity score,
+clipped to a range of 50% - 100% and then mapped to the range
+0 - 1000 for shading in the browser.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+UCSC has used the most current versions of the RepeatMasker software
+and repeat libraries available to generate these data. Note that these
+versions may be newer than those that are publicly available on the Internet.
+</p>
+
+<p>
+Data are generated using the RepeatMasker <em>-s</em> flag. Additional flags
+may be used for certain organisms.  See the
+<a href="../FAQ/FAQdownloads#download16">FAQ</a> for more information.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Arian Smit, Robert Hubley and GIRI for providing the tools and
+repeat libraries used to generate this track.
+</p>
+
+<h2>References</h2>
+
+<p>
+Smit AFA, Hubley R, Green P.
+<em>RepeatMasker Open-3.0</em>.
+<a href="http://www.repeatmasker.org" target="_blank">
+http://www.repeatmasker.org</a>. 1996-2010.
+</p>
+
+<p>
+Repbase Update is described in:
+</p>
+
+<p>
+Jurka J.
+<a href="http://www.sciencedirect.com/science/article/pii/S016895250002093X" target="_blank">
+Repbase Update: a database and an electronic journal of repetitive elements</a>.
+<em>Trends Genet</em>. 2000 Sep;16(9):418-420.
+</p>
+
+<p>
+For a discussion of repeats in mammalian genomes, see:
+</p>
+
+<p>
+Smit AF.
+<a href="http://www.sciencedirect.com/science/article/pii/S0959437X99000313" target="_blank">
+Interspersed repeats and other mementos of transposable elements in mammalian genomes</a>.
+<em>Curr Opin Genet Dev</em>. 1999 Dec;9(6):657-63.
+</p>
+
+<p>
+Smit AF.
+<a href="http://www.sciencedirect.com/science/article/pii/S0959437X9680030X" target="_blank">
+The origin of interspersed repeats in the human genome</a>.
+<em>Curr Opin Genet Dev</em>. 1996 Dec;6(6):743-8.
+</p>

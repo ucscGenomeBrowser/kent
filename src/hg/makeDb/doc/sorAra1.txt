@@ -245,3 +245,116 @@ geneScaffolds yes
     #   28734625 bases of 1832864697 (1.568%) in intersection
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1832864697 / 2897316137 \) \* 1024
+    #	( 1832864697 / 2897316137 ) * 1024 = 647.790355
+
+    # round up to 700
+
+    cd /hive/data/genomes/sorAra1
+    time blat sorAra1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/sorAra1.11.ooc -repMatch=700
+    #   Wrote 26119 overused 11-mers to jkStuff/sorAra1.11.ooc
+    #   real    0m45.014s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" sorAra1 | sort | uniq -c
+    #   403896 yes
+#    cd /hive/data/genomes/sorAra1/jkStuff
+#    gapToLift sorAra1 sorAra1.nonBridged.lift -bedFile=sorAra1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' sorAra1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Sorex unguiculatus	2	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add sorAra1
+# sorAra1 (common shrew)
+sorAra1.serverGenome = /hive/data/genomes/sorAra1/sorAra1.2bit
+sorAra1.clusterGenome = /hive/data/genomes/sorAra1/sorAra1.2bit
+sorAra1.ooc = /hive/data/genomes/sorAra1/jkStuff/sorAra1.11.ooc
+sorAra1.lift = no
+sorAra1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+sorAra1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+sorAra1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+sorAra1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+sorAra1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+sorAra1.refseq.mrna.native.load = no
+sorAra1.refseq.mrna.xeno.load = yes
+sorAra1.genbank.mrna.xeno.load = yes
+sorAra1.genbank.est.native.load = no
+sorAra1.downloadDir = sorAra1
+sorAra1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding sorAra1 common shrew" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for sorAraNames" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S sorAra1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial sorAra1 &
+    #   var/build/logs/2012.06.08-09:57:32.sorAra1.initalign.log
+    #   real    2505m42.331s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad sorAra1 &
+    #	logFile:  var/dbload/hgwdev/logs/2012.06.12-13:15:38.dbload.log
+    #   real    19m9.715s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-06-12 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add sorAra1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added sorAra1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_163319:8348-15207" where name="sorAra1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/sorAra1/pushQ
+    cd /hive/data/genomes/sorAra1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl sorAra1 2> stderr.txt | grep -v transMap > sorAra1.sql
+    #   real    3m42.169s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/sorAra1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/sorAra1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/sorAra1/bbi/quality.bw
+# WARNING: sorAra1 does not have seq
+# WARNING: sorAra1 does not have extFile
+# WARNING: sorAra1 does not have estOrientInfo
+
+    scp -p sorAra1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/sorAra1.sql"
+
+############################################################################

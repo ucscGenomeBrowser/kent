@@ -1,0 +1,218 @@
+<h2>Description</h2>
+
+<p>
+This track contains chromatin interaction data generated using the 5C (Chromatin Conformation Capture Carbon Copy)
+method by the ENCODE group (Dekker Lab) located at the University of Massachusetts, Worcester, MA.
+This track shows the significant looping interactions between transcriptional start sites (TSS)
+and distal regulatory elements in the context of the 44 ENCODE pilot regions spanning 1% of the human genome.
+</p>
+
+<p>
+Although the DNA is a linear sequence, the chromatin, which is packed and organized inside the nucleus, 
+does not function linearly. This is most clearly illustrated by the fact that genes are
+often regulated by elements that are located hundreds of kilobases away in the linear genome.
+Imaging techniques have shown that regulatory elements can act over large genomic distances 
+by engaging in direct physical interactions with target genes, resulting in the formation of chromatin loops.
+Based on these observations, we have envisaged that the spatial organization of the genome resembles a
+three-dimensional network that is driven by physical associations between genes and regulatory elements,
+both in cis (within the same chromosome) and in trans (between different chromosomes) (Dekker, 2006).
+</p>
+
+<p>
+Apart from imaging technology which is labor intensive and low-throughput, 
+long-range chromatin looping interactions can be detected using the Chromosome Conformation Capture (3C)
+technology (Dekker <em>et al.</em>, 2002). The 3C method employs formaldehyde cross-linking to covalently link
+interacting chromatin segments in intact cells. Cells are subsequently lysed and chromatin is
+digested with a restriction enzyme of choice. The digested fragments are then ligated under 
+dilute conditions to facilitate intramolecular ligation. The result is a genome-wide 
+interaction library of ligation products corresponding to all possible chromatin interactions. 
+Specific ligation products can then be detected by PCR using specific primer pairs. 
+</p>
+
+<p>
+The 5C method was developed to dramatically increase 3C throughput (Dostie <em>et al.</em>, 2006; Dostie and Dekker, 2007).
+The 5C method greatly increases the scale of chromatin interaction detection by replacing the PCR detection step of 3C with
+ligation-mediated amplification (LMA). LMA is advantageous due to a much higher level of multiplexing by using
+thousands of primers in a single reaction to detect millions of chromatin interactions (ligation junctions) in parallel. 
+The LMA step effectively "copies" 3C ligation products into much smaller 5C ligation products that precisely correspond to ligation
+junctions formed during the 3C procedure. The products of the multiplexed LMA reaction constitute the 5C library.
+The composition of the 5C library is determined using high-throughput DNA sequencing.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+In the graphical display, the significant looping interactions in cis (i.e., from the same ENCODE pilot regions) 
+are represented by blocks and connected by a horizontal line. Users can opt to filter the significant looping interactions 
+according to their respective z-score (scaled to 0-1000) by using the built-in genome browser display score threshold.
+</p>
+
+<p>
+Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.
+</p>
+
+<h2>File Conventions</h2>
+
+<P>
+The following types of data are available for download:
+</p>
+<DL>
+<DT><I>Matrix</I></DT>
+<DD>
+Interaction files are in a matrix format indicating interaction strength
+with "reverse primer name  | genome version | reverse HindIII fragment coordinates" in
+the top row and "forward primer name | genome version | forward primer fragment coordinates"
+in the first column.  The number of sequences mapped to each interaction fills the matrix.
+<B>
+In order to understand the Matrix data, you must download the associated primer data file.
+</B>
+</DD>
+<dt><i>Primer</i></dt>
+<dd>
+Primer data files include the sequences of the primers used in the experiments.
+These files are available for download in the <A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUmassDekker5C/supplemental/"
+ TARGET=ucscDownloads>supplemental materials</a>.
+</dd>
+<dt><i>Raw Data</i></dt>
+<dd>
+Sequencing files provided in fastQ format.</dd>
+</dl>
+
+<h2>Methods</h2>
+
+<p>
+The aim of the pilot study was to generate a "connectivity map" between transcription start sites (TSS) and distal 
+regulatory elements within the 44 ENCODE PILOT regions. 
+</p>
+
+<p>
+In the current scheme, 5C primers were designed for all HindIII restriction fragments. 
+Reverse primers were designed on fragments containing the TSS of annotated genes. Forward primers were designed on all other fragments. 
+This design allowed for the interrogation of all TSS with all other restriction fragments, thus 
+generating an interaction map between TSS and regulatory elements. For gene desert ENCODE pilot regions (for example ENr313), 
+an altered scheme of forward and reverse primers was designed. 
+</p>
+
+<p>
+Primers were selected for relative uniqueness using a custom 15-mer frequency table and BLAST. 
+A custom hexamer barcode was added to each primer to ensure the sequence was unique relative to the primer pool being used. 
+Primers were also selected for the appropriate melting temperature and GC-content and a universal tail sequence for amplification. 
+</p>
+
+<p>
+The 44 ENCODE regions were analyzed in two groups using two separate 5C primer pools.
+The first group (ENm) contained the manually-picked ENCODE regions, ENm001-014 and ENr313. 
+The second group (ENr) contained the 30 randomly-picked ENCODE regions. 
+The two 5C primer pools were made by pooling 5C primers for interrogating long-range interactions in the 
+two groups of ENCODE regions. The primer pool for the ENm group contained a total 
+of 3,150 primers (476 reverse 5C primers and 2674 forward 5C primers). This primer pool allowed interrogation 
+of a total of 1,272,824 interactions. Of these, 83,427 interactions were between fragments that were 
+both located in the same ENCODE region. This primer pool for the ENr group contained a total of 
+3,152 primers (505 reverse 5C primers and 2647 forward 5C primers). 
+This primer pool allowed interrogation of a total of 1,336,735 interactions. 
+Of these, 34,859 interactions were between fragments that were both located in the same ENCODE region.
+In total, 981 reverse primers and 5,321 forward primers were designed (corresponding to ~77.1% (6,302/8,174) 
+of all HindIII fragments in the 44 ENCODE regions).
+</p>
+
+<p>
+Currently, data for two biological replicates have been generated for 
+ENCODE Tier I (GM12878 and K562), Tier II (HeLa-S3), and H1 human embryonic stem cells (H1-hESC), 
+spanning 14 ENCODE manual regions along with one random region (ENr313) as well as 
+30 random regions separately using high-throughput paired-end sequencing in the 
+Illumina GA2 platform. The looping interactions, which are detected in both the biological replicates, are considered significant.
+</p>
+
+<h2>Release Notes</h2>
+<p>
+This is Release 2 (July 2012). There is no new data for this release all new data has the version number appended to the name (<i>e.g.</i>, V2). Peak files have been reanalyzed and more complete Raw Data files have been submitted.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+All provided data were produced by the Dekker Lab at UMass Medical School, Worcester, MA. 
+The following personnel contributed to the project (contacts):
+</p>
+<ul>
+
+<li>Wet Lab: <A HREF="mailto:&#97;&#109;&#97;&#114;&#116;&#121;&#97;.
+&#115;&#97;n&#121;&#97;l&#64;&#117;&#109;&#97;&#115;s&#109;&#101;&#100;.
+&#101;&#100;&#117;">Amartya Sanyal</A>
+<!-- above address is amartya.sanyal at umassmed.edu -->
+</li>
+<li>Dry Lab: <A HREF="mailto:&#98;r&#121;a&#110;.
+&#108;a&#106;&#111;&#105;&#101;&#64;&#117;m&#97;&#115;&#115;&#109;ed.
+&#101;&#100;&#117;">Bryan R. Lajoie</A>,
+<!-- above address is bryan.lajoie at umassmed.edu -->
+	<A HREF="mailto:&#103;au&#114;&#97;&#118;.
+&#106;&#97;&#105;&#110;&#64;&#117;&#109;&#97;&#115;s&#109;e&#100;.
+&#101;&#100;&#117;">Gaurav Jain</A>
+<!-- above address is gaurav.jain at umassmed.edu -->
+</li>
+<li>Principal Investigator: <A HREF="mailto:&#106;&#111;&#98;.
+&#100;&#101;k&#107;&#101;&#114;&#64;&#117;&#109;&#97;&#115;&#115;&#109;e&#100;.
+&#101;&#100;&#117;">Job Dekker</A>
+<!-- above address is job.dekker at umassmed.edu -->
+</li>
+</ul>
+<p>
+Additional information and/or vizualization tools can be found on the
+<a href="http://my5c.umassmed.edu/welcome/welcome.php" target="_blank">Dekker Lab website</a>.
+</p>
+
+
+<h2>References</h2>
+
+<p>
+Ba&#249; D, Sanyal A, Lajoie BR, Capriotti E, Byron M, Lawrence JB, Dekker J, Marti-Renom MA.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21131981" target="_blank">
+The three-dimensional folding of the &#945;-globin gene domain reveals formation of chromatin globules</a>.
+<em>Nat Struct Mol Biol</em>. 2011 Jan;18(1):107-14.
+</p>
+
+<p>
+Dekker J.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16369547" target="_blank">
+The three 'C' s of chromosome conformation capture: controls, controls, controls</a>.
+<em>Nat. Methods.</em> 2006;3(1):17-21.
+<p>
+
+<p>
+Dekker J, Rippe K, Dekker M, Kleckner N.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/11847345" target="_blank">
+Capturing chromosome conformation</a>.
+<em>Science.</em> 2002 Feb 15;295(5558):1306-11.
+</p>
+
+<p>
+Dostie J, Dekker J.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17446898" target="_blank">
+Mapping networks of physical interactions between genomic elements using 5C technology</a>.
+<em>Nature Protocols.</em> 2007;2(4):988-1002.
+</p>
+
+<p>
+Dostie J, Richmond TA, Arnaout RA, Selzer RR, Lee WL, Honan TA, Rubio ED, Krumm A, Lamb J, Nusbaum C
+<em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16954542" target="_blank">
+Chromosome Conformation Capture Carbon Copy (5C): a massively parallel solution for mapping
+interactions between genomic elements</a>.
+<em>Genome Res</em>. 2006 Oct;16(10):1299-309.
+</p>
+
+<p>
+Lajoie BR, van Berkum NL, Sanyal A, Dekker J.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19789528" target="_blank">
+My5C: web tools for chromosome conformation capture studies</a>.
+<em>Nat. Methods.</em> 2009;6(1):690-91.
+</p>
+
+<H2>Data Release Policy</H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column, above.  The full data release policy
+for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET="_BLANK">here</A>.</P>

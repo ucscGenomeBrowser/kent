@@ -1246,8 +1246,9 @@ dbSize = sqlLongLong(row[1]);
 diskSize = fileSize(path);
 if (dbSize != diskSize)
     {
-    errAbort("External file %s cannot be opened or has wrong size.  Old size %lld, new size %lld, error %s",
-   	path, dbSize, diskSize, strerror(errno));
+    errAbort("External file %s cannot be opened or has wrong size.  "
+             "Old size %lld, new size %lld, error %s",
+             path, dbSize, diskSize, strerror(errno));
     }
 sqlFreeResult(&sr);
 return path;
@@ -2160,37 +2161,6 @@ char query[256];
 boolean ok;
 safef(query, sizeof(query),
 	"select hgNearOk from dbDb where name = '%s'", database);
-ok = sqlQuickNum(conn, query);
-hDisconnectCentral(&conn);
-return ok;
-}
-
-boolean hgPbOk(char *database)
-/* Return TRUE if ok to put up Proteome Browser (pbTracks)
- * on this database. */
-{
-struct sqlConnection *conn = hConnectCentral();
-char query[256];
-char **row;
-struct sqlResult *sr = NULL;
-boolean ok;
-boolean dbDbHasPbOk;
-
-dbDbHasPbOk = FALSE;
-safef(query, sizeof(query), "describe dbDb");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (sameWord(row[0], "hgPbOk"))
-        {
-        dbDbHasPbOk = TRUE;
-        }
-    }
-sqlFreeResult(&sr);
-if (!dbDbHasPbOk) return(FALSE);
-
-safef(query, sizeof(query),
-        "select hgPbOk from dbDb where name = '%s'", database);
 ok = sqlQuickNum(conn, query);
 hDisconnectCentral(&conn);
 return ok;
@@ -3631,7 +3601,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             if (tdb->subtracks == NULL)
                 tdbMarkAsCompositeChild(tdb);
             else
-               tdbMarkAsCompositeView(tdb);
+                tdbMarkAsCompositeView(tdb);
             }
         }
     trackDbContainerMarkup(tdb, tdb->subtracks);

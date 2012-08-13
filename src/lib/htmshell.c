@@ -131,7 +131,7 @@ if (s == NULL)
 char *scrubbed = needMem(strlen(s));
 char *from=s;
 char *to=scrubbed;
-while(*from!='\0')
+while (*from!='\0')
     {
     if (*from == '<')
         {
@@ -182,7 +182,7 @@ char *htmlEncodeText(char *s,boolean tagsOkay)
    be displayed in an html page or tooltip style title.  */
 {
 int size = strlen(s) + 3; // Add some slop
-if(tagsOkay)
+if (tagsOkay)
     size += countChars(s,'\n') * 4;
 else
     {
@@ -197,15 +197,16 @@ char *cleanQuote = needMem(size);
 safecpy(cleanQuote,size,s);
 
 // NOTE: While some internal HTML should work, a single quote (') will will screw it up!
-if(tagsOkay)
+if (tagsOkay)
     strSwapStrs(cleanQuote, size,"\n","<BR>" ); // new lines also break the html
 else
     {
-    strSwapStrs(cleanQuote, size,"&" ,"&amp;" ); //  '&' is not the start of a control char
-    strSwapStrs(cleanQuote, size,">" ,"&gt;"  ); // '>' is not the close of a tag
-    strSwapStrs(cleanQuote, size,"<" ,"&lt;"  ); // '<' is not the open of a tag
-    if(cgiClientBrowser(NULL,NULL,NULL) == btFF)
-        strSwapStrs(cleanQuote, size,"\n","&#124;"); // FF does not support!  Use "&#124;" for '|' instead
+    strSwapStrs(cleanQuote, size,"&","&amp;" );  // '&' is not the start of a control char
+    strSwapStrs(cleanQuote, size,">","&gt;"  );  // '>' is not the close of a tag
+    strSwapStrs(cleanQuote, size,"<","&lt;"  );  // '<' is not the open of a tag
+    if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
+        strSwapStrs(cleanQuote, size,"\n","&#124;"); // FF does not support!  Use "&#124;" for '|'
+                                                     // instead
     else
         strSwapStrs(cleanQuote, size,"\n","&#x0A;"); // '\n' is supported on some browsers
     }
@@ -239,7 +240,7 @@ void htmlWarnBoxSetup(FILE *f)
 {
 // Only set this up once per page
 static boolean htmlWarnBoxSetUpAlready=FALSE;
-if(htmlWarnBoxSetUpAlready)
+if (htmlWarnBoxSetUpAlready)
     return;
 htmlWarnBoxSetUpAlready=TRUE;
 
@@ -250,14 +251,13 @@ htmlWarnBoxSetUpAlready=TRUE;
 // FF3.0 (but not FF2.0) was resizable with the following, but it took some experimentation.
 // Remember what worked nicely on FF3.0:
 //      "var app=navigator.appName.substr(0,9); "
-//      "if(app == 'Microsoft') {warnBox.style.display='';} else {warnBox.style.display=''; warnBox.style.width='auto';}"
+//      "if(app == 'Microsoft') {warnBox.style.display='';} 
+//       else {warnBox.style.display=''; warnBox.style.width='auto';}"
 fprintf(f, "<script type='text/javascript'>\n");
 fprintf(f, "document.write(\"<center>"
-            "<div id='warnBox' style='display:none; background-color:Beige; "
-              "border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; "
-              "text-align:left;'>"
-            "<CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER>"
-	    "<UL id='warnList'></UL>"
+            "<div id='warnBox' style='display:none;'>"
+            "<CENTER><B id='warnHead'></B></CENTER>"
+            "<UL id='warnList'></UL>"
             "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER>"
             "</div></center>\");\n");
 fprintf(f,"function showWarnBox() {"
@@ -272,7 +272,7 @@ fprintf(f,"function hideWarnBox() {"
             "warnBox.style.display='none';warnBox.innerHTML='';"
             "var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);"
             "if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }"
-          "}\n"); // Note that the OK button goes to prev page when this page is interrupted by the error.
+          "}\n"); // Note OK button goes to prev page when this page is interrupted by the error.
 fprintf(f,"window.onunload = function(){}; // Trick to avoid FF back button issue.\n");
 fprintf(f,"</script>\n");
 }
@@ -285,10 +285,12 @@ va_copy(argscp, args);
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
 vsnprintf(warning,sizeof(warning),format, args);
-char *encodedMessage = htmlEncodeText(warning,TRUE); // NOTE: While some internal HTML should work, a single quote (') will will screw it all up!
+char *encodedMessage = htmlEncodeText(warning,TRUE); // NOTE: While some internal HTML should work,
+                                                     // a single quote (') will will screw it up!
 printf("<script type='text/javascript'>{showWarnBox();"
         "var warnList=document.getElementById('warnList');"
-        "warnList.innerHTML += '<li>%s</li>';}</script><!-- ERROR -->\n",encodedMessage); // NOTE that "--ERROR --" is needed at the end of this print!!
+        "warnList.innerHTML += '<li>%s</li>';}</script><!-- ERROR -->\n",encodedMessage); 
+                                     // NOTE that "--ERROR --" is needed at the end of this print!!
 freeMem(encodedMessage);
 
 /* Log useful CGI info to stderr */
@@ -438,6 +440,30 @@ if(isSecure == TRUE)
 printf("\n");
 }
 
+void printBodyTag(FILE *f)
+{
+// print starting BODY tag, including any appropriate attributes (class, background and bgcolor). 
+fprintf(f, "<BODY");
+struct slName *classes = NULL;
+
+slNameAddHead(&classes, "cgi");
+char *scriptName = cgiScriptName();
+if(isNotEmpty(scriptName))
+    {
+    char buf[FILENAME_LEN];
+    splitPath(scriptName, NULL, buf, NULL);
+    slNameAddHead(&classes, cloneString(buf));
+}
+if (htmlFormClass != NULL )
+    slNameAddHead(&classes, htmlFormClass);
+fprintf(f, " CLASS=\"%s\"", slNameListToString(classes, ' '));
+
+if (htmlBackground != NULL )
+    fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
+if (gotBgColor)
+    fprintf(f, " BGCOLOR=\"#%X\"", htmlBgColor);
+fputs(">\n",f);
+}
 
 void _htmStartWithHead(FILE *f, char *head, char *title, boolean printDocType, int dirDepth)
 /* Write out bits of header that both stand-alone .htmls
@@ -453,9 +479,9 @@ if (printDocType)
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
     else
-        fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">",f);
+        fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+              "\"http://www.w3.org/TR/html4/loose.dtd\">",f);
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
-    //fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n",f);
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     }
 fputs("<HTML>", f);
@@ -464,21 +490,12 @@ fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript
 if (htmlStyle != NULL)
     fputs(htmlStyle, f);
 if (htmlStyleSheet != NULL)
-    fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n"
-        , htmlStyleSheet);  
+    fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n", htmlStyleSheet);
 if (htmlStyleTheme != NULL)
     fputs(htmlStyleTheme, f);
 
 fputs("</HEAD>\n\n",f);
-fputs("<BODY",f);
-if (htmlFormClass != NULL )
-    fprintf(f, " CLASS=\"%s\"", htmlFormClass);
-if (htmlBackground != NULL )
-    fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
-if (gotBgColor)
-    fprintf(f, " BGCOLOR=\"#%X\"", htmlBgColor);
-fputs(">\n",f);
-
+printBodyTag(f);
 htmlWarnBoxSetup(f);
 }
 
@@ -608,10 +625,7 @@ puts("\n");
 
 puts("<HTML>");
 printf("<HEAD>%s<TITLE>%s</TITLE>\n</HEAD>\n\n", head, title);
-if (htmlBackground == NULL)
-    puts("<BODY>\n");
-else
-    printf("<BODY BACKGROUND=\"%s\">\n", htmlBackground);
+printBodyTag(stdout);
 
 htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
 
@@ -631,7 +645,7 @@ size_t len = 0;
 if (path == NULL)
     errAbort("Program error: including null file");
 if (!fileExists(path))
-   errAbort("Missing file %s", path);
+    errAbort("Missing file %s", path);
 readInGulp(path, &str, &len);
 
 if (len <= 0)

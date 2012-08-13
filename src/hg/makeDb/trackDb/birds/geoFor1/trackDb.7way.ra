@@ -1,0 +1,193 @@
+track cons7way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (7 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+subGroup2 clade Clade birds=Birds vert=Vertebrate all=All_species
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 103.29
+
+    track cons7wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons7way
+
+        track multiz7way
+        subTrack cons7wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 7 Vertebrates
+        subGroups view=align clade=all
+        noInherit on
+        irows on
+        summary multiz7waySummary
+        frames multiz7wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault geoFor1
+        speciesGroups Birds Vertebrate
+        sGroup_Birds taeGut1 melUnd1 galGal4 melGal1
+        sGroup_Vertebrate hg19 mm10
+        itemFirstCharCase noChange
+        treeImage phylo/geoFor1_7way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons7wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons7way
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track phyloP7wayBirds
+        subTrack cons7wayViewphyloP off
+        subGroups view=phyloP clade=birds
+        shortLabel Birds Cons
+        longLabel Birds Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.169 0.508
+        maxHeightPixels 100:50:11
+        viewLimits -3.08:0.508
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,10,70
+        altColor 70,10,10
+        priority 1
+
+        track phyloP7wayVertebrate
+        subTrack cons7wayViewphyloP on
+        subGroups view=phyloP clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Basewise Conservation by PhyloP (human, mouse, finch)
+        noInherit on
+        configurable on
+        type wig -1.282 0.673
+        maxHeightPixels 100:50:11
+        viewLimits -0.91:0.673
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,40,120
+        altColor 120,40,40
+        priority 3
+
+        track phyloP7way
+        subTrack cons7wayViewphyloP off
+        subGroups view=phyloP clade=all
+        shortLabel 7 vertebrates Cons
+        longLabel 7 vertebrates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.711 0.934
+        maxHeightPixels 100:50:11
+        viewLimits -3.107:0.934
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons7wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons7way
+
+        track phastCons7wayBirds
+        subTrack cons7wayViewphastcons on
+        subGroups view=phastcons clade=birds
+        shortLabel Birds Cons
+        longLabel Birds Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 10
+
+        track phastCons7wayVertebrate
+        subTrack cons7wayViewphastcons off
+        subGroups view=phastcons clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Conservation by PhastCons (human, mouse, finch)
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 55,115,55
+        altColor 115,55,55
+        priority 12
+
+        track phastCons7way
+        subTrack cons7wayViewphastcons off
+        subGroups view=phastcons clade=all
+        shortLabel 7 vertebrates Cons
+        longLabel 7 vertebrates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons7wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons7way
+
+        track phastConsElements7wayBirds
+        subTrack cons7wayViewelements on
+        subGroups view=elements clade=birds
+        shortLabel Bird El
+        longLabel Birds Conserved Elements
+        noInherit on
+        type bed 5 .
+        color 170,50,100
+        priority 20
+
+        track phastConsElements7wayVertebrate
+        subTrack cons7wayViewelements on
+        subGroups view=elements clade=vert
+        shortLabel Vertebrate El
+        longLabel Vertebrate Conserved Elements (human, mouse, finch)
+        noInherit on
+        type bed 5 .
+        color 130,30,60
+        priority 22
+
+        track phastConsElements7way
+        subTrack cons7wayViewelements on
+        subGroups view=elements clade=all
+        shortLabel 7 vertebrates El
+        longLabel 7 vertebrates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+
