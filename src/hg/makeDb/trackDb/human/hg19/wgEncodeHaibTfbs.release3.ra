@@ -3195,13 +3195,13 @@ html wgEncodeHaibTfbs.release2
         type broadPeak
         # subId=4331 dateSubmitted=2011-06-27
 
-        track wgEncodeHaibTfbsK562CtcfcPcr1xPkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 CTCF PCR1 1
-        longLabel K562 CTCF 5916 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=CTCFSC5916 cellType=t1K562 protocol=PCR1X treatment=NONE rep=rep1
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562CtcfcPcr1xPkRep1
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 CTCF PCR1 1
+        #longLabel K562 CTCF 5916 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=CTCFSC5916 cellType=t1K562 protocol=PCR1X treatment=NONE rep=rep1
+        #type broadPeak
+        #color 46,0,184
         # subId=4319 dateSubmitted=2011-06-29
 
         track wgEncodeHaibTfbsK562CtcfcPcr1xPkRep2
@@ -9692,13 +9692,13 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.133128 1445.709961
         # subId=4331 dateSubmitted=2011-06-27
 
-        track wgEncodeHaibTfbsK562CtcfcPcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 CTCF PCR1 1
-        longLabel K562 CTCF 5916 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=CTCFSC5916 cellType=t1K562 protocol=PCR1X treatment=NONE rep=rep1
-        type bigWig 0.210243 290.135986
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562CtcfcPcr1xRawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 CTCF PCR1 1
+        #longLabel K562 CTCF 5916 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=CTCFSC5916 cellType=t1K562 protocol=PCR1X treatment=NONE rep=rep1
+        #type bigWig 0.210243 290.135986
+        #color 46,0,184
         # subId=4319 dateSubmitted=2011-06-29
 
         track wgEncodeHaibTfbsK562CtcfcPcr1xRawRep2
