@@ -198,7 +198,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfA20BalbcannMImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel A20 Immt Hs 1
-        longLabel A20 BALB/cAnN Immortal Cell Lines DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel A20 Immortal Cell Lines BALB/cAnN DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=A20 sex=M strain=BALBCANN treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -207,7 +207,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfEscj7129s1ME0HotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel ES-CJ7 E0 Hs 1
-        longLabel ES-CJ7 129S1/SVImJ Embryonic Day 0 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel ES-CJ7 Embryonic Day 0 129S1/SVImJ DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=Str129S1 treatment=NONE rep=rep1
         type broadPeak
         color 65,105,225
@@ -216,7 +216,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfNih3t3NihsMImmortalHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel NIH-3T3 Immt Hs 1
-        longLabel NIH-3T3 NIH/Swiss Immortal Cell Lines DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel NIH-3T3 Immortal Cell Lines NIH/Swiss DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS treatment=NONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -225,7 +225,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfRetinaC57bl6MNew1daysHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel Retina 1day Hs 1
-        longLabel Retina C57BL/6 Newborn 1 Day DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel Retina Newborn 1 Day C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=NEW1DAYS cellType=RETINA sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
         color 105,105,105
@@ -234,7 +234,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0Diffb24hHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel ZhBTc4 E0 Hs 1
-        longLabel ZhBTc4 Embryonic Day 0 129/Ola diffProtB 24hr DNase-DGF Hotspots Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 Embryonic Day 0 129/Ola diffProtB 24 hr DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type broadPeak
         color 65,105,225
@@ -311,7 +311,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgf416bB6d2f1jImmortalPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel 416B Pk 1
-        longLabel 416B B6D2F1/J Immortal Cell Lines DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel 416B Immortal Cell Lines B6D2F1/J DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=IMMORTAL cellType=Cel416B sex=M strain=B6D2F1J treatment=NONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -456,7 +456,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0Diffb24hPkRep1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel ZhBTc4 E0 Pk 1
-        longLabel ZhBTc4 Embryonic Day 0 129/Ola diffProtB 24hr DNase-DGF Peaks Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 Embryonic Day 0 129/Ola diffProtB 24 hr DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type narrowPeak
         color 65,105,225
@@ -678,7 +678,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0Diffb24hSigRep1
         parent wgEncodeUwDgfViewSignal off
         shortLabel ZhBTc4 E0 Sg 1
-        longLabel ZhBTc4 Embryonic Day 0 129/Ola diffProtB 24hr DNase-DGF Signal Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 Embryonic Day 0 129/Ola diffProtB 24 hr DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type bigWig 1.000000 130305.000000
         color 65,105,225
@@ -901,7 +901,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfZhbtc4129olaME0Diffb24hRawRep1
         parent wgEncodeUwDgfViewRawSignal off
         shortLabel ZhBTc4 E0 Rw 1
-        longLabel ZhBTc4 Embryonic Day 0 129/Ola diffProtB 24hr DNase-DGF Raw Signal  Rep 1 from ENCODE/UW 
+        longLabel ZhBTc4 Embryonic Day 0 129/Ola diffProtB 24 hr DNase-DGF Raw Signal  Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=E0 cellType=ZHBTC4 sex=M strain=Str129OLA treatment=DIFFB24H rep=rep1
         type bigWig 1.000000 759516.000000
         color 65,105,225
