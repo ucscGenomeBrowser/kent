@@ -20,7 +20,6 @@ priority 0
 type bed 3
 noInherit on
 wgEncode 1
-#maxWindowToDraw 10000000
 html wgEncodeCaltechRnaSeq.release4
 
     track wgEncodeCaltechRnaSeqViewSplices
@@ -38,7 +37,7 @@ html wgEncodeCaltechRnaSeq.release4
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
-    maxWindowToDraw 1000000
+    #maxWindowToDraw 1000000
 
         track wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
@@ -172,7 +171,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HSMM paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel HSMM 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel HSMM 2x75 Sp 1
         subGroups view=Splices cellType=t3HSMM insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -180,7 +179,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HSMM paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel HSMM 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel HSMM 2x75 Sp 2
         subGroups view=Splices cellType=t3HSMM insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -188,7 +187,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HUVEC paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel HUVEC 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel HUVEC 2x75 Sp 2
         subGroups view=Splices cellType=t2HUVEC insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -197,7 +196,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HUVEC paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel HUVEC 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel HUVEC 2x75 Sp 1
         subGroups view=Splices cellType=t2HUVEC insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -206,7 +205,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel GM12878 paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel GM12878 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel GM78 2x75 Sp 2
         subGroups view=Splices cellType=t1GM12878 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -215,7 +214,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HepG2 paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel HepG2 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel HepG 2x75 Sp 2
         subGroups view=Splices cellType=t2HEPG2 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -224,7 +223,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HepG2 paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel HepG2 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel HepG 2x75 Sp 1
         subGroups view=Splices cellType=t2HEPG2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -233,7 +232,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HeLa-S3 paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel HeLa-S3 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel HeLa 2x75 Sp 2
         subGroups view=Splices cellType=t2HELAS3 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -242,7 +241,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel H1-hESC paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel H1ES 2x75 Sp 1
         subGroups view=Splices cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -251,7 +250,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel K562 paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel K562 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel K562 2x75 Sp 1
         subGroups view=Splices cellType=t1K562 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -260,7 +259,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel NHLF paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel NHLF 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel NHLF 2x75 Sp 1
         subGroups view=Splices cellType=t3NHLF insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -268,7 +267,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel H1-hESC paired read (200 bp) RNA-seq Splices Rep 3 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Splices Rep 3 from ENCODE/Caltech
         shortLabel H1ES 2x75 Sp 3
         subGroups view=Splices cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bam
@@ -277,7 +276,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel GM12878 paired read (400 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel GM12878 400 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel GM78 400 Sp 2
         subGroups view=Splices cellType=t1GM12878 insertLength=il400 readType=a1R2x75400 rep=rep2 treatment=aNone
         type bam
@@ -286,7 +285,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HeLa-S3 paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel HeLa-S3 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel HeLa 2x75 Sp 1
         subGroups view=Splices cellType=t2HELAS3 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -295,7 +294,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel NHEK paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel NHEK 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel NHEK 2x75 Sp 2
         subGroups view=Splices cellType=t3NHEK insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -304,7 +303,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel H1-hESC paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel H1ES 2x75 Sp 2
         subGroups view=Splices cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -313,7 +312,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel NHLF paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel NHLF 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel NHLF 2x75 Sp 2
         subGroups view=Splices cellType=t3NHLF insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -321,7 +320,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel H1-hESC paired read (200 bp) RNA-seq Splices Rep 4 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Splices Rep 4 from ENCODE/Caltech
         shortLabel H1ES 2x75 Sp 4
         subGroups view=Splices cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep4 treatment=aNone
         type bam
@@ -330,7 +329,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel MCF-7 paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel MCF7 2x75 Sp 2
         subGroups view=Splices cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -338,7 +337,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel NHEK paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel NHEK 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel NHEK 2x75 Sp 1
         subGroups view=Splices cellType=t3NHEK insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -347,7 +346,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel K562 paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel K562 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel K562 2x75 Sp 2
         subGroups view=Splices cellType=t1K562 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -356,7 +355,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel GM12878 paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel GM12878 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel GM78 2x75 Sp 1
         subGroups view=Splices cellType=t1GM12878 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -365,7 +364,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HCT-116 paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel HCT-116 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel HCT6 2x75 Sp 1
         subGroups view=Splices cellType=t3HCT116 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -373,7 +372,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel MCF-7 paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel MCF7 2x75 Sp 1
         subGroups view=Splices cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -381,7 +380,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel MCF-7 paired read (200 bp) RNA-seq Splices Rep 3 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Splices Rep 3 from ENCODE/Caltech
         shortLabel MCF7 2x75 Sp 3
         subGroups view=Splices cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bam
@@ -389,7 +388,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel HCT-116 paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel HCT-116 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel HCT6 2x75 Sp 2
         subGroups view=Splices cellType=t3HCT116 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -397,7 +396,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel H1-hESC paired read (400 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel H1-hESC 400 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel H1ES 400 Sp 1
         subGroups view=Splices cellType=t1H1HESC insertLength=il400 readType=a1R2x75400 rep=rep1 treatment=aNone
         type bam
@@ -406,7 +405,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel GM12891 paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel GM12891 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel GM91 2x75 Sp 2
         subGroups view=Splices cellType=t3GM12891 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -414,7 +413,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel GM12892 paired read (200 bp) RNA-seq Splices Rep 2 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Splices Rep 2 from ENCODE/Caltech
         shortLabel GM92 2x75 Sp 2
         subGroups view=Splices cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -422,7 +421,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel GM12892 paired read (200 bp) RNA-seq Splices Rep 3 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Splices Rep 3 from ENCODE/Caltech
         shortLabel GM92 2x75 Sp 3
         subGroups view=Splices cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bam
@@ -430,7 +429,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel GM12891 paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel GM12891 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel GM91 2x75 Sp 1
         subGroups view=Splices cellType=t3GM12891 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -438,7 +437,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel GM12892 paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel GM92 2x75 Sp 1
         subGroups view=Splices cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -446,7 +445,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel LHCN-M2 Myoblast paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myoblast 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel LHCN 2x75 Sp 1
         subGroups view=Splices cellType=t2LHCNM2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -454,7 +453,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1
         parent wgEncodeCaltechRnaSeqViewSplices off
-        longLabel LHCN-M2 Myocyte paired read (200 bp) RNA-seq Splices Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myocyte 200 bp paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
         shortLabel LHCND 2x75 Sp 1
         subGroups view=Splices cellType=t2LHCNM2D insertLength=il200 readType=a1R2x75 rep=rep1 treatment=bDIFF7D
         type bam
@@ -477,7 +476,7 @@ html wgEncodeCaltechRnaSeq.release4
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
-    maxWindowToDraw 1000000
+    #maxWindowToDraw 1000000
 
         track wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
@@ -611,7 +610,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HSMM paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel HSMM 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel HSMM 2x75 A 1
         subGroups view=Aligns cellType=t3HSMM insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -620,7 +619,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HSMM paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HSMM 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel HSMM 2x75 A 2
         subGroups view=Aligns cellType=t3HSMM insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -629,7 +628,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HUVEC paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HUVEC 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel HUVEC 2x75 A 2
         subGroups view=Aligns cellType=t2HUVEC insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -639,7 +638,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HUVEC paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel HUVEC 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel HUVEC 2x75 A 1
         subGroups view=Aligns cellType=t2HUVEC insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -649,7 +648,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel GM12878 paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel GM12878 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel GM78 2x75 A 2
         subGroups view=Aligns cellType=t1GM12878 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -659,7 +658,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HepG2 paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HepG2 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel HepG 2x75 A 2
         subGroups view=Aligns cellType=t2HEPG2 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -669,7 +668,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HepG2 paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel HepG2 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel HepG 2x75 A 1
         subGroups view=Aligns cellType=t2HEPG2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -679,7 +678,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HeLa-S3 paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HeLa-S3 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel HeLa 2x75 A 2
         subGroups view=Aligns cellType=t2HELAS3 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -689,7 +688,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel H1-hESC paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel H1ES 2x75 A 1
         subGroups view=Aligns cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -699,7 +698,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel K562 paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel K562 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel K562 2x75 A 1
         subGroups view=Aligns cellType=t1K562 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -709,7 +708,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel NHLF paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel NHLF 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel NHLF 2x75 A 1
         subGroups view=Aligns cellType=t3NHLF insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -718,7 +717,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel H1-hESC paired read (200 bp) RNA-seq Alignments Rep 3 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Alignments Rep 3 from ENCODE/Caltech
         shortLabel H1ES 2x75 A 3
         subGroups view=Aligns cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bam
@@ -728,7 +727,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel GM12878 paired read (400 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel GM12878 400 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel GM78 400 A 2
         subGroups view=Aligns cellType=t1GM12878 insertLength=il400 readType=a1R2x75400 rep=rep2 treatment=aNone
         type bam
@@ -738,7 +737,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HeLa-S3 paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel HeLa-S3 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel HeLa 2x75 A 1
         subGroups view=Aligns cellType=t2HELAS3 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -748,7 +747,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel NHEK paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel NHEK 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel NHEK 2x75 A 2
         subGroups view=Aligns cellType=t3NHEK insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -758,7 +757,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel H1-hESC paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel H1ES 2x75 A 2
         subGroups view=Aligns cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -768,7 +767,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel NHLF paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel NHLF 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel NHLF 2x75 A 2
         subGroups view=Aligns cellType=t3NHLF insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -777,7 +776,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel H1-hESC paired read (200 bp) RNA-seq Alignments Rep 4 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Alignments Rep 4 from ENCODE/Caltech
         shortLabel H1ES 2x75 A 4
         subGroups view=Aligns cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep4 treatment=aNone
         type bam
@@ -787,7 +786,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel MCF-7 paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel MCF7 2x75 A 2
         subGroups view=Aligns cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -796,7 +795,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel NHEK paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel NHEK 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel NHEK 2x75 A 1
         subGroups view=Aligns cellType=t3NHEK insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -806,7 +805,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel K562 paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel K562 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel K562 2x75 A 2
         subGroups view=Aligns cellType=t1K562 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -816,7 +815,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel GM12878 paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel GM12878 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel GM78 2x75 A 1
         subGroups view=Aligns cellType=t1GM12878 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -826,7 +825,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HCT-116 paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel HCT-116 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel HCT6 2x75 A 1
         subGroups view=Aligns cellType=t3HCT116 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -835,7 +834,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel MCF-7 paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel MCF7 2x75 A 1
         subGroups view=Aligns cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -844,7 +843,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel MCF-7 paired read (200 bp) RNA-seq Alignments Rep 3 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Alignments Rep 3 from ENCODE/Caltech
         shortLabel MCF7 2x75 A 3
         subGroups view=Aligns cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bam
@@ -853,7 +852,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel HCT-116 paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HCT-116 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel HCT6 2x75 A 2
         subGroups view=Aligns cellType=t3HCT116 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -862,7 +861,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel H1-hESC paired read (400 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel H1-hESC 400 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel H1ES 400 A 1
         subGroups view=Aligns cellType=t1H1HESC insertLength=il400 readType=a1R2x75400 rep=rep1 treatment=aNone
         type bam
@@ -872,7 +871,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel GM12891 paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel GM12891 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel GM91 2x75 A 2
         subGroups view=Aligns cellType=t3GM12891 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -881,7 +880,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel GM12892 paired read (200 bp) RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Alignments Rep 2 from ENCODE/Caltech
         shortLabel GM92 2x75 A 2
         subGroups view=Aligns cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bam
@@ -890,7 +889,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel GM12892 paired read (200 bp) RNA-seq Alignments Rep 3 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Alignments Rep 3 from ENCODE/Caltech
         shortLabel GM92 2x75 A 3
         subGroups view=Aligns cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bam
@@ -899,7 +898,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel GM12891 paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel GM12891 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel GM91 2x75 A 1
         subGroups view=Aligns cellType=t3GM12891 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -908,7 +907,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel GM12892 paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel GM92 2x75 A 1
         subGroups view=Aligns cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -917,7 +916,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel LHCN-M2 Myoblast paired read (200 bp) RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myoblast 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel LHCN 2x75 A 1
         subGroups view=Aligns cellType=t2LHCNM2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bam
@@ -926,7 +925,7 @@ html wgEncodeCaltechRnaSeq.release4
 
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1
         parent wgEncodeCaltechRnaSeqViewAligns off
-        longLabel LHCN-M2 Myocyte paired read (200 bp) RNA-seq Alignment Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myocyte 200 bp paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
         shortLabel LHCND 2x75 A 1
         subGroups view=Aligns cellType=t2LHCNM2D insertLength=il200 readType=a1R2x75 rep=rep1 treatment=bDIFF7D
         type bam
@@ -1205,7 +1204,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400USigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel GM78 400 Sg 2
-        longLabel GM12878 paired read (400 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel GM12878 400 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t1GM12878 insertLength=il400 readType=a1R2x75400 rep=rep2 treatment=aNone
         type bigWig 0.017500 93589.914062
         color 153,38,0
@@ -1214,7 +1213,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel NHLF 2x75 Sg 2
-        longLabel NHLF paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel NHLF 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t3NHLF insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.025000 149797.000000
         # subId=6245 dateSubmitted=2012-03-23
@@ -1222,7 +1221,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel NHLF 2x75 Sg 1
-        longLabel NHLF paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel NHLF 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t3NHLF insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.025000 107130.000000
         # subId=6246 dateSubmitted=2012-03-23
@@ -1230,7 +1229,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel NHEK 2x75 Sg 2
-        longLabel NHEK paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel NHEK 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t3NHEK insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.025000 204766.500000
         color 179,0,134
@@ -1239,7 +1238,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel NHEK 2x75 Sg 1
-        longLabel NHEK paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel NHEK 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t3NHEK insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.018800 424045.312500
         color 179,0,134
@@ -1248,7 +1247,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep3V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel MCF7 2x75 Sg 3
-        longLabel MCF-7 paired read (200 bp) RNA-seq Signal Rep 3 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Signal Rep 3 from ENCODE/Caltech
         subGroups view=Signal cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bigWig 0.018500 227099.500000
         # subId=6249 dateSubmitted=2012-03-23
@@ -1256,7 +1255,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel MCF7 2x75 Sg 2
-        longLabel MCF-7 paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.024300 310099.000000
         # subId=6250 dateSubmitted=2012-03-23
@@ -1264,7 +1263,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel MCF7 2x75 Sg 1
-        longLabel MCF-7 paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel MCF-7 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t2MCF7 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.005900 213150.828125
         # subId=6251 dateSubmitted=2012-03-23
@@ -1272,7 +1271,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200USigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel LHCN 2x75 Sg 1
-        longLabel LHCN-M2 Myoblast paired read 200 bp RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myoblast 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t2LHCNM2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.016100 286176.343750
         # subId=6253 dateSubmitted=2012-03-26
@@ -1280,7 +1279,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200Diff7dSigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel LHCND 2x75 Sg 1
-        longLabel LHCN-M2 Myocyte 7 d paired read 200 bp RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel LHCN-M2 Myocyte 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t2LHCNM2D insertLength=il200 readType=a1R2x75 rep=rep1 treatment=bDIFF7D
         type bigWig 0.018100 253052.171875
         # subId=6252 dateSubmitted=2012-03-26
@@ -1288,7 +1287,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal
         shortLabel K562 2x75 Sg 2
-        longLabel K562 paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel K562 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t1K562 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.021200 203032.093750
         color 46,0,184
@@ -1297,7 +1296,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal
         shortLabel K562 2x75 Sg 1
-        longLabel K562 paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel K562 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t1K562 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.025000 272104.406250
         color 46,0,184
@@ -1306,7 +1305,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HepG 2x75 Sg 2
-        longLabel HepG2 paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t2HEPG2 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.024300 201608.000000
         color 189,0,157
@@ -1315,7 +1314,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HepG 2x75 Sg 1
-        longLabel HepG2 paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel HepG2 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t2HEPG2 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.024300 222408.000000
         color 189,0,157
@@ -1324,7 +1323,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HeLa 2x75 Sg 2
-        longLabel HeLa-S3 paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel HeLa-S3 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t2HELAS3 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.021200 80230.414062
         color 0,119,158
@@ -1333,7 +1332,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HeLa 2x75 Sg 1
-        longLabel HeLa-S3 paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel HeLa-S3 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t2HELAS3 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.024300 59610.000000
         color 0,119,158
@@ -1342,7 +1341,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HUVEC 2x75 Sg 2
-        longLabel HUVEC paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel HUVEC 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t2HUVEC insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.025000 109492.835938
         color 224,75,0
@@ -1351,7 +1350,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HUVEC 2x75 Sg 1
-        longLabel HUVEC paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel HUVEC 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t2HUVEC insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.025000 140203.156250
         color 224,75,0
@@ -1360,7 +1359,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HSMM 2x75 Sg 1
-        longLabel HSMM paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel HSMM 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t3HSMM insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.025000 229178.156250
         # subId=6263 dateSubmitted=2012-03-23
@@ -1368,7 +1367,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HSMM 2x75 Sg 2
-        longLabel HSMM paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel HSMM 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t3HSMM insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.025000 221794.921875
         # subId=6262 dateSubmitted=2012-03-23
@@ -1376,7 +1375,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HCT6 2x75 Sg 2
-        longLabel HCT-116 paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel HCT-116 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t3HCT116 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.019200 324592.250000
         # subId=6264 dateSubmitted=2012-03-23
@@ -1384,7 +1383,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel HCT6 2x75 Sg 1
-        longLabel HCT-116 paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel HCT-116 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t3HCT116 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.019300 298424.656250
         # subId=6265 dateSubmitted=2012-03-23
@@ -1392,7 +1391,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel H1ES 2x75 Sg 4
-        longLabel H1-hESC paired read (200 bp) RNA-seq Signal Rep 4 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Signal Rep 4 from ENCODE/Caltech
         subGroups view=Signal cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep4 treatment=aNone
         type bigWig 0.023800 73808.031250
         color 0,107,27
@@ -1401,7 +1400,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel H1ES 2x75 Sg 3
-        longLabel H1-hESC paired read (200 bp) RNA-seq Signal Rep 3 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Signal Rep 3 from ENCODE/Caltech
         subGroups view=Signal cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bigWig 0.024300 98884.000000
         color 0,107,27
@@ -1410,7 +1409,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel H1ES 2x75 Sg 2
-        longLabel H1-hESC paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.025000 89564.164062
         color 0,107,27
@@ -1419,7 +1418,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel H1ES 2x75 Sg 1
-        longLabel H1-hESC paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel H1-hESC 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t1H1HESC insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.022200 76510.914062
         color 0,107,27
@@ -1428,7 +1427,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep3V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel GM92 2x75 Sg 3
-        longLabel GM12892 paired read (200 bp) RNA-seq Signal Rep 3 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Signal Rep 3 from ENCODE/Caltech
         subGroups view=Signal cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep3 treatment=aNone
         type bigWig 0.004200 551821.000000
         # subId=6271 dateSubmitted=2012-03-23
@@ -1436,7 +1435,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel GM92 2x75 Sg 2
-        longLabel GM12892 paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.016100 316681.500000
         # subId=6272 dateSubmitted=2012-03-23
@@ -1444,7 +1443,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel GM92 2x75 Sg 1
-        longLabel GM12892 paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel GM12892 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t3GM12892 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.017200 152652.671875
         # subId=6273 dateSubmitted=2012-03-23
@@ -1452,7 +1451,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel GM91 2x75 Sg 2
-        longLabel GM12891 paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel GM12891 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t3GM12891 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.020800 312844.000000
         # subId=6274 dateSubmitted=2012-03-23
@@ -1460,7 +1459,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel GM91 2x75 Sg 1
-        longLabel GM12891 paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel GM12891 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t3GM12891 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.005900 193001.843750
         # subId=6275 dateSubmitted=2012-03-23
@@ -1468,7 +1467,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2V4
         parent wgEncodeCaltechRnaSeqViewSignal
         shortLabel GM78 2x75 Sg 2
-        longLabel GM12878 paired read (200 bp) RNA-seq Signal Rep 2 from ENCODE/Caltech
+        longLabel GM12878 200 bp paired read RNA-seq Signal Rep 2 from ENCODE/Caltech
         subGroups view=Signal cellType=t1GM12878 insertLength=il200 readType=a1R2x75 rep=rep2 treatment=aNone
         type bigWig 0.020000 440994.250000
         color 153,38,0
@@ -1477,7 +1476,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal
         shortLabel GM78 2x75 Sg 1
-        longLabel GM12878 paired read (200 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel GM12878 200 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t1GM12878 insertLength=il200 readType=a1R2x75 rep=rep1 treatment=aNone
         type bigWig 0.025000 168603.000000
         color 153,38,0
@@ -1486,7 +1485,7 @@ html wgEncodeCaltechRnaSeq.release4
         track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1V4
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel H1ES 400 Sg 1
-        longLabel H1-hESC paired read (400 bp) RNA-seq Signal Rep 1 from ENCODE/Caltech
+        longLabel H1-hESC 400 bp paired read RNA-seq Signal Rep 1 from ENCODE/Caltech
         subGroups view=Signal cellType=t1H1HESC insertLength=il400 readType=a1R2x75400 rep=rep1 treatment=aNone
         type bigWig 0.025000 239583.453125
         color 0,107,27

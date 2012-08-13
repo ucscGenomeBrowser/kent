@@ -47,7 +47,7 @@ dimensions dimensionX=cellType dimensionY=factor dimensionA=treatment
 filterComposite dimA=all
 sortOrder cellType=+ treatment=+ factor=+ rep=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment antibody=Antibody<BR>Target labExpId=Lab_ID replicate=Replicate view=View controlId=Control_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=Treatment sex=sex age=age strain=strain control=control
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment sex=sex age=age strain=strain control=control
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=pack Signal=full
 noInherit on

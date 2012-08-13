@@ -157,146 +157,6 @@ subId 5973
 tableName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdSig
 view Signal
 
-metaObject wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep1
-objType file
-age adult-8wks
-antibody Input
-cell B-cell_(CD43-)
-composite wgEncodeLicrTfbs
-control std
-controlId B-cell_(CD43-)/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-05-25
-dateUnrestricted 2013-02-25
-fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep1.bam.bai
-grant Ren
-lab LICR-m
-labVersion 06/08/2011 FISH A Lane 4-10
-md5sum 9ef9f1c2ea99564e1c8166a1ea49af0a,5776b2513ad348cf141581306dcf764c
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-softwareVersion Bowtie
-strain C57BL/6
-subId 6926
-view Alignments
-
-metaObject wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep2
-objType file
-age adult-8wks
-antibody Input
-cell B-cell_(CD43-)
-composite wgEncodeLicrTfbs
-control std
-controlId B-cell_(CD43-)/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-05-25
-dateUnrestricted 2013-02-25
-fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdAlnRep2.bam.bai
-grant Ren
-lab LICR-m
-labVersion 06/08/2011 FISH A Lane 4-11
-md5sum ec9ff82bf2a1d383dfa1e85887892889,688b9c149e3392bfa898bc04dacd245c
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-softwareVersion Bowtie
-strain C57BL/6
-subId 6926
-view Alignments
-
-metaObject wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdRawDataRep1
-objType file
-age adult-8wks
-antibody Input
-cell B-cell_(CD43-)
-composite wgEncodeLicrTfbs
-control std
-controlId B-cell_(CD43-)/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-05-25
-dateUnrestricted 2013-02-25
-fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 06/08/2011 FISH A Lane 4-10
-md5sum 0599df783a0c443c353bf1e190c03fb2
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 6926
-view RawData
-
-metaObject wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdRawDataRep2
-objType file
-age adult-8wks
-antibody Input
-cell B-cell_(CD43-)
-composite wgEncodeLicrTfbs
-control std
-controlId B-cell_(CD43-)/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-05-25
-dateUnrestricted 2013-02-25
-fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdRawDataRep2.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 06/08/2011 FISH A Lane 4-11
-md5sum 10f0bc418664a1f660fc061362700e6d
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 6926
-view RawData
-
-metaObject wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdSig
-objType table
-age adult-8wks
-antibody Input
-cell B-cell_(CD43-)
-composite wgEncodeLicrTfbs
-control std
-controlId B-cell_(CD43-)/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-05-25
-dateUnrestricted 2013-02-25
-fileName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdSig.bigWig
-grant Ren
-lab LICR-m
-labVersion Pooled & normalized
-md5sum f2cbab442178f2a8f9426e4e3655ac3a
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-softwareVersion Custom Scripts
-strain C57BL/6
-subId 6926
-tableName wgEncodeLicrTfbsBcellcd43nInputMAdult8wksC57bl6StdSig
-view Signal
-
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -2000,144 +1860,6 @@ strain C57BL/6
 subId 2497
 tissueSourceType Pooled
 view RawData
-
-metaObject wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep1
-objType file
-age immortalized
-antibody Input
-cell CH12
-composite wgEncodeLicrTfbs
-control std
-controlId CH12/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-07
-dateUnrestricted 2013-03-07
-fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep1.bam.bai
-grant Ren
-lab LICR-m
-labVersion 01/12/2012 FISH A Lane 5-5
-md5sum 53fe19dc13590d374bc7abaaae8dc064,6d7ab5c97c53cba750c71c503ab7cfb7
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion Bowtie
-strain C57BL/6
-subId 6927
-view Alignments
-
-metaObject wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep2
-objType file
-age immortalized
-antibody Input
-cell CH12
-composite wgEncodeLicrTfbs
-control std
-controlId CH12/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-07
-dateUnrestricted 2013-03-07
-fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdAlnRep2.bam.bai
-grant Ren
-lab LICR-m
-labVersion 01/12/2012 FISH A Lane 5-6
-md5sum 3b3aff2cb875bc32ea96eeaa69e72536,a0d1e81f455b1392dc6b209b22e91f33
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion Bowtie
-strain C57BL/6
-subId 6927
-view Alignments
-
-metaObject wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdRawDataRep1
-objType file
-age immortalized
-antibody Input
-cell CH12
-composite wgEncodeLicrTfbs
-control std
-controlId CH12/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-07
-dateUnrestricted 2013-03-07
-fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdRawDataRep1.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 01/12/2012 FISH A Lane 5-5
-md5sum 63d82fd449f79a29589f9cbd39804546
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion HCS
-strain C57BL/6
-subId 6927
-view RawData
-
-metaObject wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdRawDataRep2
-objType file
-age immortalized
-antibody Input
-cell CH12
-composite wgEncodeLicrTfbs
-control std
-controlId CH12/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-07
-dateUnrestricted 2013-03-07
-fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdRawDataRep2.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 01/12/2012 FISH A Lane 5-6
-md5sum 137be8b67e4459a5f3b29413373da7a5
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion HCS
-strain C57BL/6
-subId 6927
-view RawData
-
-metaObject wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdSig
-objType table
-age immortalized
-antibody Input
-cell CH12
-composite wgEncodeLicrTfbs
-control std
-controlId CH12/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-07
-dateUnrestricted 2013-03-07
-fileName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdSig.bigWig
-grant Ren
-lab LICR-m
-labVersion Pooled & normalized
-md5sum 8c4671ec882cdead6236d794876f15ac
-project wgEncode
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion Custom Scripts
-strain C57BL/6
-subId 6927
-tableName wgEncodeLicrTfbsCh12InputFImmortalC57bl6StdSig
-view Signal
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1
 objType file
@@ -5050,11 +4772,13 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5068,7 +4792,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7036
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2
@@ -5108,11 +4832,13 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5126,7 +4852,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7036
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdPk
@@ -5197,11 +4923,13 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5215,7 +4943,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7036
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep2
@@ -5256,11 +4984,13 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5274,7 +5004,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7036
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdSig
@@ -5373,11 +5103,13 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002482
+expId 2482
 fileName wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5391,7 +5123,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7040
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdRawDataRep1
@@ -5462,11 +5194,13 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002482
+expId 2482
 fileName wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5480,7 +5214,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7040
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdSig
@@ -5550,11 +5284,13 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5568,7 +5304,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7041
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2
@@ -5608,11 +5344,13 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -5626,7 +5364,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7041
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdPk
@@ -5697,11 +5435,13 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5715,7 +5455,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7041
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep2
@@ -5756,11 +5496,13 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-07
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -5774,7 +5516,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7041
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdSig
@@ -8545,6 +8287,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 1
 md5sum f231ffb8c9dc1ec2e222bb93041097ed,6264d991b8ebdf0ebd0427773e8a2e14
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -8574,6 +8317,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 2
 md5sum 42edbb82dc96a37ef2571d24767d1958,87321416ccf0aec973cb3444393a47c1
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8604,6 +8348,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 1
 md5sum d78be60ce4073b12151aed92856d34fc
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -8634,6 +8379,7 @@ grant Ren
 lab LICR-m
 labVersion 1/18/11 Lane 2
 md5sum 717f817d91049541fb6d4289e225d5b1
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8664,6 +8410,7 @@ grant Ren
 lab LICR-m
 labVersion Pooled & filtered
 md5sum 0ceca399c1aaf77cb69661bf34df4d69
+objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -8800,11 +8547,13 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-06
+dccAccession wgEncodeEM002591
+expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -8818,7 +8567,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7042
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -9275,11 +9024,13 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM001700
+expId 1700
 fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -9293,7 +9044,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7044
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdPk
@@ -9366,11 +9117,13 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM001700
+expId 1700
 fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -9384,7 +9137,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7044
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -9426,11 +9179,13 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM001700
+expId 1700
 fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -9444,7 +9199,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7044
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdSig
@@ -9608,11 +9363,13 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM001459
+expId 1459
 fileName wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -9626,7 +9383,7 @@ sex M
 softwareVersion Bowtie
 strain C57BL/6
 subId 7048
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdSig
@@ -10889,11 +10646,13 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1V2.bam.bai
 grant Ren
 lab LICR-m
@@ -10907,7 +10666,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7030
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2
@@ -10947,11 +10706,13 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -10965,7 +10726,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7030
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdPk
@@ -11036,11 +10797,13 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11054,7 +10817,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7030
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2
@@ -11095,11 +10858,13 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11113,7 +10878,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7030
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig
@@ -11212,11 +10977,13 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002494
+expId 2494
 fileName wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -11230,7 +10997,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7034
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdRawDataRep1
@@ -11301,11 +11068,13 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002494
+expId 2494
 fileName wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11319,7 +11088,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7034
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdSig
@@ -11389,11 +11158,13 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1V2.bam.bai
 grant Ren
 lab LICR-m
@@ -11407,7 +11178,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7035
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2
@@ -11447,11 +11218,13 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2V2.bam.bai
 grant Ren
 lab LICR-m
@@ -11465,7 +11238,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7035
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view Alignments
 
 metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdPk
@@ -11536,11 +11309,13 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep1V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11554,7 +11329,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7035
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2
@@ -11595,11 +11370,13 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2V2.fastq.gz
 grant Ren
 lab LICR-m
@@ -11613,7 +11390,7 @@ sex U
 softwareVersion Bowtie
 strain C57BL/6
 subId 7035
-submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bams files.  These barcodes were not removed in the previous submission and that also casued erroneous bam files.
+submittedDataVersion V2 - removed the in-house 6-base barcode from the fastq file and reprocessed the bam files.  These barcodes were not removed in the previous submission which resulted in erroneous bam files.
 view RawData
 
 metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
@@ -11646,4 +11423,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1625644955
+# MAGIC: 1036124156

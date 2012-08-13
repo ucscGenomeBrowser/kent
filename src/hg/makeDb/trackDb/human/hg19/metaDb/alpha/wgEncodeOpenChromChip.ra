@@ -1101,6 +1101,147 @@ tableName wgEncodeOpenChromChipGlioblaPol2Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipGm10248CtcfAlnRep1
+objType file
+antibody CTCF
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10248CtcfAlnRep1.bam,wgEncodeOpenChromChipGm10248CtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7690
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm10248CtcfAlnRep2
+objType file
+antibody CTCF
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10248CtcfAlnRep2.bam,wgEncodeOpenChromChipGm10248CtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 7690
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm10248CtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10248CtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7690
+tableName wgEncodeOpenChromChipGm10248CtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipGm10248CtcfPkRep1
+objType table
+antibody CTCF
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10248CtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7690
+tableName wgEncodeOpenChromChipGm10248CtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipGm10248CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10248CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7690
+view RawData
+
+metaObject wgEncodeOpenChromChipGm10248CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10248CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7690
+view RawData
+
+metaObject wgEncodeOpenChromChipGm10248CtcfSigRep1
+objType table
+antibody CTCF
+cell GM10248
+composite wgEncodeOpenChromChip
+controlId GM10248/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm10248CtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_GM10248
+project wgEncode
+replicate 1
+setType exp
+subId 7690
+tableName wgEncodeOpenChromChipGm10248CtcfSigRep1
+view Signal
+
 metaObject wgEncodeOpenChromChipGm10248InputAln
 objType file
 antibody Input
@@ -1159,6 +1300,147 @@ project wgEncode
 setType input
 subId 7517
 tableName wgEncodeOpenChromChipGm10248InputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipGm10266CtcfAlnRep1
+objType file
+antibody CTCF
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-29
+fileName wgEncodeOpenChromChipGm10266CtcfAlnRep1.bam,wgEncodeOpenChromChipGm10266CtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7534
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm10266CtcfAlnRep2
+objType file
+antibody CTCF
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-29
+fileName wgEncodeOpenChromChipGm10266CtcfAlnRep2.bam,wgEncodeOpenChromChipGm10266CtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 7534
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm10266CtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-29
+fileName wgEncodeOpenChromChipGm10266CtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7534
+tableName wgEncodeOpenChromChipGm10266CtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipGm10266CtcfPkRep1
+objType table
+antibody CTCF
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-29
+fileName wgEncodeOpenChromChipGm10266CtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7534
+tableName wgEncodeOpenChromChipGm10266CtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipGm10266CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-29
+fileName wgEncodeOpenChromChipGm10266CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7534
+view RawData
+
+metaObject wgEncodeOpenChromChipGm10266CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-29
+fileName wgEncodeOpenChromChipGm10266CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7534
+view RawData
+
+metaObject wgEncodeOpenChromChipGm10266CtcfSigRep1
+objType table
+antibody CTCF
+cell GM10266
+composite wgEncodeOpenChromChip
+controlId GM10266/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-29
+fileName wgEncodeOpenChromChipGm10266CtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_GM10266
+project wgEncode
+replicate 1
+setType exp
+subId 7534
+tableName wgEncodeOpenChromChipGm10266CtcfSigRep1
 view Signal
 
 metaObject wgEncodeOpenChromChipGm10266InputAln
@@ -2346,6 +2628,147 @@ tableName wgEncodeOpenChromChipGm12892CtcfSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipGm13976CtcfAlnRep1
+objType file
+antibody CTCF
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm13976CtcfAlnRep1.bam,wgEncodeOpenChromChipGm13976CtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7535
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm13976CtcfAlnRep2
+objType file
+antibody CTCF
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm13976CtcfAlnRep2.bam,wgEncodeOpenChromChipGm13976CtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 7535
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm13976CtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm13976CtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7535
+tableName wgEncodeOpenChromChipGm13976CtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipGm13976CtcfPkRep1
+objType table
+antibody CTCF
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm13976CtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7535
+tableName wgEncodeOpenChromChipGm13976CtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipGm13976CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm13976CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7535
+view RawData
+
+metaObject wgEncodeOpenChromChipGm13976CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm13976CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7535
+view RawData
+
+metaObject wgEncodeOpenChromChipGm13976CtcfSigRep1
+objType table
+antibody CTCF
+cell GM13976
+composite wgEncodeOpenChromChip
+controlId GM13976/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-26
+dateUnrestricted 2013-04-26
+fileName wgEncodeOpenChromChipGm13976CtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_GM13976
+project wgEncode
+replicate 1
+setType exp
+subId 7535
+tableName wgEncodeOpenChromChipGm13976CtcfSigRep1
+view Signal
+
 metaObject wgEncodeOpenChromChipGm13976InputAln
 objType file
 antibody Input
@@ -2404,6 +2827,147 @@ project wgEncode
 setType input
 subId 7519
 tableName wgEncodeOpenChromChipGm13976InputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipGm13977CtcfAlnRep1
+objType file
+antibody CTCF
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeOpenChromChipGm13977CtcfAlnRep1.bam,wgEncodeOpenChromChipGm13977CtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7536
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm13977CtcfAlnRep2
+objType file
+antibody CTCF
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeOpenChromChipGm13977CtcfAlnRep2.bam,wgEncodeOpenChromChipGm13977CtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 7536
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm13977CtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeOpenChromChipGm13977CtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7536
+tableName wgEncodeOpenChromChipGm13977CtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipGm13977CtcfPkRep1
+objType table
+antibody CTCF
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeOpenChromChipGm13977CtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7536
+tableName wgEncodeOpenChromChipGm13977CtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipGm13977CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeOpenChromChipGm13977CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7536
+view RawData
+
+metaObject wgEncodeOpenChromChipGm13977CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeOpenChromChipGm13977CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7536
+view RawData
+
+metaObject wgEncodeOpenChromChipGm13977CtcfSigRep1
+objType table
+antibody CTCF
+cell GM13977
+composite wgEncodeOpenChromChip
+controlId GM13977/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-27
+dateUnrestricted 2013-04-27
+fileName wgEncodeOpenChromChipGm13977CtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_GM13977
+project wgEncode
+replicate 1
+setType exp
+subId 7536
+tableName wgEncodeOpenChromChipGm13977CtcfSigRep1
 view Signal
 
 metaObject wgEncodeOpenChromChipGm13977InputAln
@@ -3019,6 +3583,147 @@ setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfSig
 treatment None
+view Signal
+
+metaObject wgEncodeOpenChromChipGm20000CtcfAlnRep1
+objType file
+antibody CTCF
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipGm20000CtcfAlnRep1.bam,wgEncodeOpenChromChipGm20000CtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7537
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm20000CtcfAlnRep2
+objType file
+antibody CTCF
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipGm20000CtcfAlnRep2.bam,wgEncodeOpenChromChipGm20000CtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 7537
+view Alignments
+
+metaObject wgEncodeOpenChromChipGm20000CtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipGm20000CtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7537
+tableName wgEncodeOpenChromChipGm20000CtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipGm20000CtcfPkRep1
+objType table
+antibody CTCF
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipGm20000CtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7537
+tableName wgEncodeOpenChromChipGm20000CtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipGm20000CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipGm20000CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7537
+view RawData
+
+metaObject wgEncodeOpenChromChipGm20000CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipGm20000CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7537
+view RawData
+
+metaObject wgEncodeOpenChromChipGm20000CtcfSigRep1
+objType table
+antibody CTCF
+cell GM20000
+composite wgEncodeOpenChromChip
+controlId GM20000/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipGm20000CtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_20000
+project wgEncode
+replicate 1
+setType exp
+subId 7537
+tableName wgEncodeOpenChromChipGm20000CtcfSigRep1
 view Signal
 
 metaObject wgEncodeOpenChromChipGm20000InputAln
@@ -6490,6 +7195,186 @@ subId 3832
 treatment None
 view Validation
 
+metaObject wgEncodeOpenChromChipKidneyocCtcfAlnRep1
+objType file
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfAlnRep1.bam,wgEncodeOpenChromChipKidneyocCtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 1
+setType exp
+subId 7540
+view Alignments
+
+metaObject wgEncodeOpenChromChipKidneyocCtcfAlnRep2
+objType file
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfAlnRep2.bam,wgEncodeOpenChromChipKidneyocCtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 2
+setType exp
+subId 7540
+view Alignments
+
+metaObject wgEncodeOpenChromChipKidneyocCtcfAlnRep3
+objType file
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfAlnRep3.bam,wgEncodeOpenChromChipKidneyocCtcfAlnRep3.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 3
+setType exp
+subId 7540
+view Alignments
+
+metaObject wgEncodeOpenChromChipKidneyocCtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7540
+tableName wgEncodeOpenChromChipKidneyocCtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipKidneyocCtcfPkRep1
+objType table
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7540
+tableName wgEncodeOpenChromChipKidneyocCtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipKidneyocCtcfRawDataRep1
+objType file
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7540
+view RawData
+
+metaObject wgEncodeOpenChromChipKidneyocCtcfRawDataRep2
+objType file
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7540
+view RawData
+
+metaObject wgEncodeOpenChromChipKidneyocCtcfRawDataRep3
+objType file
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfRawDataRep3.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 3
+setType exp
+subId 7540
+view RawData
+
+metaObject wgEncodeOpenChromChipKidneyocCtcfSigRep1
+objType table
+antibody CTCF
+cell Kidney_OC
+composite wgEncodeOpenChromChip
+controlId Kidney_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipKidneyocCtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_Kidney
+project wgEncode
+replicate 1
+setType exp
+subId 7540
+tableName wgEncodeOpenChromChipKidneyocCtcfSigRep1
+view Signal
+
 metaObject wgEncodeOpenChromChipKidneyocInputAln
 objType file
 antibody Input
@@ -6550,6 +7435,295 @@ subId 7527
 tableName wgEncodeOpenChromChipKidneyocInputSig
 view Signal
 
+metaObject wgEncodeOpenChromChipLncapCtcfAlnRep1
+objType file
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAlnRep1.bam,wgEncodeOpenChromChipLncapCtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7538
+view Alignments
+
+metaObject wgEncodeOpenChromChipLncapCtcfAlnRep2
+objType file
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAlnRep2.bam,wgEncodeOpenChromChipLncapCtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 7538
+view Alignments
+
+metaObject wgEncodeOpenChromChipLncapCtcfAndroAlnRep1
+objType file
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/androgen/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAndroAlnRep1.bam,wgEncodeOpenChromChipLncapCtcfAndroAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7539
+treatment androgen
+view Alignments
+
+metaObject wgEncodeOpenChromChipLncapCtcfAndroAlnRep2
+objType file
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/androgen/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAndroAlnRep2.bam,wgEncodeOpenChromChipLncapCtcfAndroAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 7539
+treatment androgen
+view Alignments
+
+metaObject wgEncodeOpenChromChipLncapCtcfAndroBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/androgen/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAndroBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7539
+tableName wgEncodeOpenChromChipLncapCtcfAndroBaseOverlapSignalRep1
+treatment androgen
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipLncapCtcfAndroPkRep1
+objType table
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/androgen/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAndroPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7539
+tableName wgEncodeOpenChromChipLncapCtcfAndroPkRep1
+treatment androgen
+view Peaks
+
+metaObject wgEncodeOpenChromChipLncapCtcfAndroRawDataRep1
+objType file
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/androgen/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAndroRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7539
+treatment androgen
+view RawData
+
+metaObject wgEncodeOpenChromChipLncapCtcfAndroRawDataRep2
+objType file
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/androgen/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAndroRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7539
+treatment androgen
+view RawData
+
+metaObject wgEncodeOpenChromChipLncapCtcfAndroSigRep1
+objType table
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/androgen/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfAndroSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_LnCAP
+project wgEncode
+replicate 1
+setType exp
+subId 7539
+tableName wgEncodeOpenChromChipLncapCtcfAndroSigRep1
+treatment androgen
+view Signal
+
+metaObject wgEncodeOpenChromChipLncapCtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7538
+tableName wgEncodeOpenChromChipLncapCtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipLncapCtcfPkRep1
+objType table
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7538
+tableName wgEncodeOpenChromChipLncapCtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipLncapCtcfRawDataRep1
+objType file
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7538
+view RawData
+
+metaObject wgEncodeOpenChromChipLncapCtcfRawDataRep2
+objType file
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7538
+view RawData
+
+metaObject wgEncodeOpenChromChipLncapCtcfSigRep1
+objType table
+antibody CTCF
+cell LNCaP
+composite wgEncodeOpenChromChip
+controlId LNCaP/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-30
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLncapCtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_LnCAP
+project wgEncode
+replicate 1
+setType exp
+subId 7538
+tableName wgEncodeOpenChromChipLncapCtcfSigRep1
+view Signal
+
 metaObject wgEncodeOpenChromChipLncapInputAln
 objType file
 antibody Input
@@ -6608,6 +7782,147 @@ project wgEncode
 setType input
 subId 7522
 tableName wgEncodeOpenChromChipLncapInputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipLungocCtcfAlnRep1
+objType file
+antibody CTCF
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLungocCtcfAlnRep1.bam,wgEncodeOpenChromChipLungocCtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 1
+setType exp
+subId 7543
+view Alignments
+
+metaObject wgEncodeOpenChromChipLungocCtcfAlnRep2
+objType file
+antibody CTCF
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLungocCtcfAlnRep2.bam,wgEncodeOpenChromChipLungocCtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 2
+setType exp
+subId 7543
+view Alignments
+
+metaObject wgEncodeOpenChromChipLungocCtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLungocCtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7543
+tableName wgEncodeOpenChromChipLungocCtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipLungocCtcfPkRep1
+objType table
+antibody CTCF
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLungocCtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7543
+tableName wgEncodeOpenChromChipLungocCtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipLungocCtcfRawDataRep1
+objType file
+antibody CTCF
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLungocCtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7543
+view RawData
+
+metaObject wgEncodeOpenChromChipLungocCtcfRawDataRep2
+objType file
+antibody CTCF
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLungocCtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7543
+view RawData
+
+metaObject wgEncodeOpenChromChipLungocCtcfSigRep1
+objType table
+antibody CTCF
+cell Lung_OC
+composite wgEncodeOpenChromChip
+controlId Lung_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipLungocCtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_Lung
+project wgEncode
+replicate 1
+setType exp
+subId 7543
+tableName wgEncodeOpenChromChipLungocCtcfSigRep1
 view Signal
 
 metaObject wgEncodeOpenChromChipLungocInputAln
@@ -9345,6 +10660,147 @@ tableName wgEncodeOpenChromChipNhekCtcfSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipPancreasocCtcfAlnRep1
+objType file
+antibody CTCF
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipPancreasocCtcfAlnRep1.bam,wgEncodeOpenChromChipPancreasocCtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 1
+setType exp
+subId 7545
+view Alignments
+
+metaObject wgEncodeOpenChromChipPancreasocCtcfAlnRep2
+objType file
+antibody CTCF
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipPancreasocCtcfAlnRep2.bam,wgEncodeOpenChromChipPancreasocCtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 2
+setType exp
+subId 7545
+view Alignments
+
+metaObject wgEncodeOpenChromChipPancreasocCtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipPancreasocCtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7545
+tableName wgEncodeOpenChromChipPancreasocCtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipPancreasocCtcfPkRep1
+objType table
+antibody CTCF
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipPancreasocCtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7545
+tableName wgEncodeOpenChromChipPancreasocCtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipPancreasocCtcfRawDataRep1
+objType file
+antibody CTCF
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipPancreasocCtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7545
+view RawData
+
+metaObject wgEncodeOpenChromChipPancreasocCtcfRawDataRep2
+objType file
+antibody CTCF
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipPancreasocCtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7545
+view RawData
+
+metaObject wgEncodeOpenChromChipPancreasocCtcfSigRep1
+objType table
+antibody CTCF
+cell Pancreas_OC
+composite wgEncodeOpenChromChip
+controlId Pancreas_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipPancreasocCtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_Pancreas
+project wgEncode
+replicate 1
+setType exp
+subId 7545
+tableName wgEncodeOpenChromChipPancreasocCtcfSigRep1
+view Signal
+
 metaObject wgEncodeOpenChromChipPancreasocInputAln
 objType file
 antibody Input
@@ -9730,6 +11186,147 @@ tableName wgEncodeOpenChromChipProgfibPol2Sig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromChipSpleenocCtcfAlnRep1
+objType file
+antibody CTCF
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipSpleenocCtcfAlnRep1.bam,wgEncodeOpenChromChipSpleenocCtcfAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 1
+setType exp
+subId 7544
+view Alignments
+
+metaObject wgEncodeOpenChromChipSpleenocCtcfAlnRep2
+objType file
+antibody CTCF
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipSpleenocCtcfAlnRep2.bam,wgEncodeOpenChromChipSpleenocCtcfAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1. first 35bps only
+project wgEncode
+replicate 2
+setType exp
+subId 7544
+view Alignments
+
+metaObject wgEncodeOpenChromChipSpleenocCtcfBaseOverlapSignalRep1
+objType table
+antibody CTCF
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipSpleenocCtcfBaseOverlapSignalRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 7544
+tableName wgEncodeOpenChromChipSpleenocCtcfBaseOverlapSignalRep1
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipSpleenocCtcfPkRep1
+objType table
+antibody CTCF
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipSpleenocCtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 7544
+tableName wgEncodeOpenChromChipSpleenocCtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipSpleenocCtcfRawDataRep1
+objType file
+antibody CTCF
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipSpleenocCtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 7544
+view RawData
+
+metaObject wgEncodeOpenChromChipSpleenocCtcfRawDataRep2
+objType file
+antibody CTCF
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipSpleenocCtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 7544
+view RawData
+
+metaObject wgEncodeOpenChromChipSpleenocCtcfSigRep1
+objType table
+antibody CTCF
+cell Spleen_OC
+composite wgEncodeOpenChromChip
+controlId Spleen_OC/Input
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-04-30
+fileName wgEncodeOpenChromChipSpleenocCtcfSigRep1.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_Spleen
+project wgEncode
+replicate 1
+setType exp
+subId 7544
+tableName wgEncodeOpenChromChipSpleenocCtcfSigRep1
+view Signal
+
 metaObject wgEncodeOpenChromChipSpleenocInputAln
 objType file
 antibody Input
@@ -9790,4 +11387,4 @@ subId 7528
 tableName wgEncodeOpenChromChipSpleenocInputSig
 view Signal
 
-# MAGIC: 1539038764
+# MAGIC: 1771352639
