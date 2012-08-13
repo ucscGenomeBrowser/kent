@@ -3,9 +3,9 @@ hg19 wgEncodeHaibTfbs Release 3 vs Release 2
 2012-08-13
 
 QA Count Summaries for Release 3:
-Tables: 1458
-Files: 3815
-Gbdbs: 786
+Tables: 1456
+Files: 3807
+Gbdbs: 784
 Supplemental: 0
 Other: 3
 
@@ -16,27 +16,25 @@ Gbdbs: 18
 
 Sizes of New:
 Table: 717 MB
-Files: 711397 MB (695 GB)
-Gbdbs: 40703 MB (40 GB)
+Files: 701935 MB (685 GB)
+Gbdbs: 39993 MB (39 GB)
 Supplemental: 0 MB
 Other: 3 MB
-Total: 752820 MB (735 GB)
+Total: 742648 MB (725 GB)
 
 
 TABLES:
-New: 429
+New: 427
 Untouched: 1029
 Revoked/Replaced/Renamed: 34
-New + Untouched: 1458
-Total (New + Untouched + Revoked/Replaced/Renamed): 1492
+New + Untouched: 1456
+Total (New + Untouched + Revoked/Replaced/Renamed): 1490
 
-New Tables (429):
+New Tables (427):
 wgEncodeHaibTfbsA549Cebpbsc150V0422111PkRep1
 wgEncodeHaibTfbsA549Cebpbsc150V0422111PkRep2
 wgEncodeHaibTfbsA549Cebpbsc150V0422111RawRep1
 wgEncodeHaibTfbsA549Cebpbsc150V0422111RawRep2
-wgEncodeHaibTfbsA549ControlV0422111RawRep1
-wgEncodeHaibTfbsA549ControlV0422111RawRep2
 wgEncodeHaibTfbsA549E2f6V0422111PkRep1
 wgEncodeHaibTfbsA549E2f6V0422111PkRep2
 wgEncodeHaibTfbsA549E2f6V0422111RawRep1
@@ -57,6 +55,8 @@ wgEncodeHaibTfbsA549Rad21V0422111PkRep1
 wgEncodeHaibTfbsA549Rad21V0422111PkRep2
 wgEncodeHaibTfbsA549Rad21V0422111RawRep1
 wgEncodeHaibTfbsA549Rad21V0422111RawRep2
+wgEncodeHaibTfbsA549RxlchV0422111RawRep1
+wgEncodeHaibTfbsA549RxlchV0422111RawRep2
 wgEncodeHaibTfbsA549Tead4sc101184V0422111PkRep1
 wgEncodeHaibTfbsA549Tead4sc101184V0422111PkRep2
 wgEncodeHaibTfbsA549Tead4sc101184V0422111RawRep1
@@ -65,8 +65,6 @@ wgEncodeHaibTfbsEcc1Cebpbsc150V0422111PkRep1
 wgEncodeHaibTfbsEcc1Cebpbsc150V0422111PkRep2
 wgEncodeHaibTfbsEcc1Cebpbsc150V0422111RawRep1
 wgEncodeHaibTfbsEcc1Cebpbsc150V0422111RawRep2
-wgEncodeHaibTfbsEcc1ControlV0422111RawRep1
-wgEncodeHaibTfbsEcc1ControlV0422111RawRep2
 wgEncodeHaibTfbsEcc1Creb1sc240V0422111PkRep1
 wgEncodeHaibTfbsEcc1Creb1sc240V0422111PkRep2
 wgEncodeHaibTfbsEcc1Creb1sc240V0422111RawRep1
@@ -103,6 +101,8 @@ wgEncodeHaibTfbsEcc1Rad21V0422111PkRep1
 wgEncodeHaibTfbsEcc1Rad21V0422111PkRep2
 wgEncodeHaibTfbsEcc1Rad21V0422111RawRep1
 wgEncodeHaibTfbsEcc1Rad21V0422111RawRep2
+wgEncodeHaibTfbsEcc1RxlchV0422111RawRep1
+wgEncodeHaibTfbsEcc1RxlchV0422111RawRep2
 wgEncodeHaibTfbsEcc1SrfV0422111PkRep1
 wgEncodeHaibTfbsEcc1SrfV0422111PkRep2
 wgEncodeHaibTfbsEcc1SrfV0422111RawRep1
@@ -135,16 +135,14 @@ wgEncodeHaibTfbsGm12878Cebpbsc150V0422111PkRep1
 wgEncodeHaibTfbsGm12878Cebpbsc150V0422111PkRep2
 wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawRep1
 wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawRep2
-wgEncodeHaibTfbsGm12878ControlV0422111RawRep1
-wgEncodeHaibTfbsGm12878ControlV0422111RawRep2
-wgEncodeHaibTfbsGm12878ControlV0422111RawRep3
-wgEncodeHaibTfbsGm12878ControlV0422111RawRep4
 wgEncodeHaibTfbsGm12878Creb1sc240V0422111PkRep1
 wgEncodeHaibTfbsGm12878Creb1sc240V0422111PkRep2
 wgEncodeHaibTfbsGm12878Creb1sc240V0422111RawRep1
 wgEncodeHaibTfbsGm12878Creb1sc240V0422111RawRep2
-wgEncodeHaibTfbsH1hescControlV0422111RawRep1
-wgEncodeHaibTfbsH1hescControlV0422111RawRep2
+wgEncodeHaibTfbsGm12878RxlchV0422111RawRep1
+wgEncodeHaibTfbsGm12878RxlchV0422111RawRep2
+wgEncodeHaibTfbsGm12878RxlchV0422111RawRep3
+wgEncodeHaibTfbsGm12878RxlchV0422111RawRep4
 wgEncodeHaibTfbsH1hescCreb1sc240V0422111PkRep1
 wgEncodeHaibTfbsH1hescCreb1sc240V0422111PkRep2
 wgEncodeHaibTfbsH1hescCreb1sc240V0422111RawRep1
@@ -157,12 +155,11 @@ wgEncodeHaibTfbsH1hescMaxV0422111PkRep1
 wgEncodeHaibTfbsH1hescMaxV0422111PkRep2
 wgEncodeHaibTfbsH1hescMaxV0422111RawRep1
 wgEncodeHaibTfbsH1hescMaxV0422111RawRep2
+wgEncodeHaibTfbsH1hescRxlchV0422111RawRep2
 wgEncodeHaibTfbsH1hescTead4sc101184V0422111PkRep1
 wgEncodeHaibTfbsH1hescTead4sc101184V0422111PkRep2
 wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawRep1
 wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawRep2
-wgEncodeHaibTfbsH1neuronsControlV0422111RawRep1
-wgEncodeHaibTfbsH1neuronsControlV0422111RawRep2
 wgEncodeHaibTfbsH1neuronsNrsfV0422111PkRep1
 wgEncodeHaibTfbsH1neuronsNrsfV0422111PkRep2
 wgEncodeHaibTfbsH1neuronsNrsfV0422111RawRep1
@@ -171,6 +168,8 @@ wgEncodeHaibTfbsH1neuronsPol24h8V0422111PkRep1
 wgEncodeHaibTfbsH1neuronsPol24h8V0422111PkRep2
 wgEncodeHaibTfbsH1neuronsPol24h8V0422111RawRep1
 wgEncodeHaibTfbsH1neuronsPol24h8V0422111RawRep2
+wgEncodeHaibTfbsH1neuronsRxlchV0422111RawRep1
+wgEncodeHaibTfbsH1neuronsRxlchV0422111RawRep2
 wgEncodeHaibTfbsH1neuronsTaf1V0422111PkRep1
 wgEncodeHaibTfbsH1neuronsTaf1V0422111PkRep2
 wgEncodeHaibTfbsH1neuronsTaf1V0422111RawRep1
@@ -187,8 +186,6 @@ wgEncodeHaibTfbsHct116Cebpbsc150V0422111PkRep1
 wgEncodeHaibTfbsHct116Cebpbsc150V0422111PkRep2
 wgEncodeHaibTfbsHct116Cebpbsc150V0422111RawRep1
 wgEncodeHaibTfbsHct116Cebpbsc150V0422111RawRep2
-wgEncodeHaibTfbsHct116ControlV0422111RawRep1
-wgEncodeHaibTfbsHct116ControlV0422111RawRep2
 wgEncodeHaibTfbsHct116CtcfcV0422111PkRep1
 wgEncodeHaibTfbsHct116CtcfcV0422111PkRep2
 wgEncodeHaibTfbsHct116CtcfcV0422111RawRep1
@@ -221,6 +218,8 @@ wgEncodeHaibTfbsHct116Rad21V0422111PkRep1
 wgEncodeHaibTfbsHct116Rad21V0422111PkRep2
 wgEncodeHaibTfbsHct116Rad21V0422111RawRep1
 wgEncodeHaibTfbsHct116Rad21V0422111RawRep2
+wgEncodeHaibTfbsHct116RxlchV0422111RawRep1
+wgEncodeHaibTfbsHct116RxlchV0422111RawRep2
 wgEncodeHaibTfbsHct116Sin3ak20V0422111PkRep1
 wgEncodeHaibTfbsHct116Sin3ak20V0422111PkRep2
 wgEncodeHaibTfbsHct116Sin3ak20V0422111RawRep1
@@ -241,8 +240,6 @@ wgEncodeHaibTfbsHct116Usf1V0422111PkRep1
 wgEncodeHaibTfbsHct116Usf1V0422111PkRep2
 wgEncodeHaibTfbsHct116Usf1V0422111RawRep1
 wgEncodeHaibTfbsHct116Usf1V0422111RawRep2
-wgEncodeHaibTfbsHepg2ControlV0422111RawRep2
-wgEncodeHaibTfbsHepg2ControlV0422111RawRep3
 wgEncodeHaibTfbsHepg2Creb1sc240V0422111PkRep1
 wgEncodeHaibTfbsHepg2Creb1sc240V0422111PkRep2
 wgEncodeHaibTfbsHepg2Creb1sc240V0422111RawRep1
@@ -255,12 +252,12 @@ wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111PkRep1
 wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111PkRep2
 wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111RawRep1
 wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111RawRep2
+wgEncodeHaibTfbsHepg2RxlchV0422111RawRep2
+wgEncodeHaibTfbsHepg2RxlchV0422111RawRep3
 wgEncodeHaibTfbsHepg2Zeb1V0422111PkRep1
 wgEncodeHaibTfbsHepg2Zeb1V0422111PkRep2
 wgEncodeHaibTfbsHepg2Zeb1V0422111RawRep1
 wgEncodeHaibTfbsHepg2Zeb1V0422111RawRep2
-wgEncodeHaibTfbsHl60ControlV0422111RawRep1
-wgEncodeHaibTfbsHl60ControlV0422111RawRep2
 wgEncodeHaibTfbsHl60GabpV0422111PkRep1
 wgEncodeHaibTfbsHl60GabpV0422111PkRep2
 wgEncodeHaibTfbsHl60GabpV0422111RawRep1
@@ -277,15 +274,16 @@ wgEncodeHaibTfbsHl60Pu1V0422111PkRep1
 wgEncodeHaibTfbsHl60Pu1V0422111PkRep2
 wgEncodeHaibTfbsHl60Pu1V0422111RawRep1
 wgEncodeHaibTfbsHl60Pu1V0422111RawRep2
-wgEncodeHaibTfbsK562ControlV0422111RawRep1
-wgEncodeHaibTfbsK562ControlV0422111RawRep3
-wgEncodeHaibTfbsK562ControlV0422111RawRep4
+wgEncodeHaibTfbsHl60RxlchV0422111RawRep1
+wgEncodeHaibTfbsHl60RxlchV0422111RawRep2
 wgEncodeHaibTfbsK562Creb1sc240V0422111PkRep1
 wgEncodeHaibTfbsK562Creb1sc240V0422111PkRep2
 wgEncodeHaibTfbsK562Creb1sc240V0422111RawRep1
 wgEncodeHaibTfbsK562Creb1sc240V0422111RawRep2
 wgEncodeHaibTfbsK562CtcfcPcr1xPkRep1V2
 wgEncodeHaibTfbsK562CtcfcPcr1xRawRep1V2
+wgEncodeHaibTfbsK562RxlchV0422111RawRep3
+wgEncodeHaibTfbsK562RxlchV0422111RawRep4
 wgEncodeHaibTfbsK562Trim28sc81411V0422111PkRep1
 wgEncodeHaibTfbsK562Trim28sc81411V0422111PkRep2
 wgEncodeHaibTfbsK562Trim28sc81411V0422111RawRep1
@@ -294,10 +292,6 @@ wgEncodeHaibTfbsMcf7Cebpbsc150V0422111PkRep1
 wgEncodeHaibTfbsMcf7Cebpbsc150V0422111PkRep2
 wgEncodeHaibTfbsMcf7Cebpbsc150V0422111RawRep1
 wgEncodeHaibTfbsMcf7Cebpbsc150V0422111RawRep2
-wgEncodeHaibTfbsMcf7ControlV0422111RawRep1
-wgEncodeHaibTfbsMcf7ControlV0422111RawRep2
-wgEncodeHaibTfbsMcf7ControlV0422111RawRep3
-wgEncodeHaibTfbsMcf7ControlV0422111RawRep4
 wgEncodeHaibTfbsMcf7CtcfcV0422111PkRep1
 wgEncodeHaibTfbsMcf7CtcfcV0422111PkRep2
 wgEncodeHaibTfbsMcf7CtcfcV0422111RawRep1
@@ -358,6 +352,10 @@ wgEncodeHaibTfbsMcf7Rad21V0422111PkRep1
 wgEncodeHaibTfbsMcf7Rad21V0422111PkRep2
 wgEncodeHaibTfbsMcf7Rad21V0422111RawRep1
 wgEncodeHaibTfbsMcf7Rad21V0422111RawRep2
+wgEncodeHaibTfbsMcf7RxlchV0422111RawRep1
+wgEncodeHaibTfbsMcf7RxlchV0422111RawRep2
+wgEncodeHaibTfbsMcf7RxlchV0422111RawRep3
+wgEncodeHaibTfbsMcf7RxlchV0422111RawRep4
 wgEncodeHaibTfbsMcf7Sin3ak20V0422111PkRep1
 wgEncodeHaibTfbsMcf7Sin3ak20V0422111PkRep2
 wgEncodeHaibTfbsMcf7Sin3ak20V0422111RawRep1
@@ -378,15 +376,11 @@ wgEncodeHaibTfbsMcf7Tead4sc101184V0422111PkRep1
 wgEncodeHaibTfbsMcf7Tead4sc101184V0422111PkRep2
 wgEncodeHaibTfbsMcf7Tead4sc101184V0422111RawRep1
 wgEncodeHaibTfbsMcf7Tead4sc101184V0422111RawRep2
-wgEncodeHaibTfbsPanc1ControlV0422111RawRep1
 wgEncodeHaibTfbsPanc1NrsfV0422111PkRep1
 wgEncodeHaibTfbsPanc1NrsfV0422111PkRep2
 wgEncodeHaibTfbsPanc1NrsfV0422111RawRep1
 wgEncodeHaibTfbsPanc1NrsfV0422111RawRep2
-wgEncodeHaibTfbsSknshControlV0422111RawRep1
-wgEncodeHaibTfbsSknshControlV0422111RawRep2
-wgEncodeHaibTfbsSknshControlV0422111RawRep3
-wgEncodeHaibTfbsSknshControlV0422111RawRep4
+wgEncodeHaibTfbsPanc1RxlchV0422111RawRep1
 wgEncodeHaibTfbsSknshElf1V0422111PkRep1
 wgEncodeHaibTfbsSknshElf1V0422111PkRep2
 wgEncodeHaibTfbsSknshElf1V0422111RawRep1
@@ -433,6 +427,10 @@ wgEncodeHaibTfbsSknshPbx3V0422111RawRep1
 wgEncodeHaibTfbsSknshPbx3V0422111RawRep2
 wgEncodeHaibTfbsSknshRunx3sc101553V0422111PkRep1
 wgEncodeHaibTfbsSknshRunx3sc101553V0422111RawRep1
+wgEncodeHaibTfbsSknshRxlchV0422111RawRep1
+wgEncodeHaibTfbsSknshRxlchV0422111RawRep2
+wgEncodeHaibTfbsSknshRxlchV0422111RawRep3
+wgEncodeHaibTfbsSknshRxlchV0422111RawRep4
 wgEncodeHaibTfbsSknshRxraV0422111PkRep2
 wgEncodeHaibTfbsSknshRxraV0422111RawRep2
 wgEncodeHaibTfbsSknshTcf12V0422111PkRep1
@@ -455,11 +453,11 @@ wgEncodeHaibTfbsSknshZbtb33V0422111PkRep1
 wgEncodeHaibTfbsSknshZbtb33V0422111PkRep2
 wgEncodeHaibTfbsSknshZbtb33V0422111RawRep1
 wgEncodeHaibTfbsSknshZbtb33V0422111RawRep2
-wgEncodeHaibTfbsT47dControlV0422111RawRep1
 wgEncodeHaibTfbsT47dJundV0422111PkRep1
 wgEncodeHaibTfbsT47dJundV0422111PkRep2
 wgEncodeHaibTfbsT47dJundV0422111RawRep1
 wgEncodeHaibTfbsT47dJundV0422111RawRep2
+wgEncodeHaibTfbsT47dRxlchV0422111RawRep1
 
 Untouched Tables (1029):
 wgEncodeHaibTfbsA549Atf3V0422111Etoh02PkRep1
@@ -1530,13 +1528,13 @@ wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 
 
 DOWNLOAD FILES:
-New: 1118
+New: 1110
 Untouched: 2697
 Revoked/Replaced/Renamed: 97
-New + Untouched: 3815
-Total (New + Untouched + Revoked/Replaced/Renamed): 3912
+New + Untouched: 3807
+Total (New + Untouched + Revoked/Replaced/Renamed): 3904
 
-New Download Files (1118):
+New Download Files (1110):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Cebpbsc150V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Cebpbsc150V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Cebpbsc150V0422111AlnRep2.bam
@@ -1547,14 +1545,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Cebpbsc150V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Cebpbsc150V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Cebpbsc150V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549ControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549ControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549ControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549ControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549ControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549ControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549ControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549ControlV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549E2f6V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549E2f6V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549E2f6V0422111AlnRep2.bam
@@ -1605,6 +1595,14 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Rad21V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Rad21V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Rad21V0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549RxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549RxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549RxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549RxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549RxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549RxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549RxlchV0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549RxlchV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Tead4sc101184V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Tead4sc101184V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Tead4sc101184V0422111AlnRep2.bam
@@ -1625,14 +1623,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Cebpbsc150V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Cebpbsc150V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Cebpbsc150V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1ControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1ControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1ControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1ControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1ControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1ControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1ControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1ControlV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Creb1sc240V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Creb1sc240V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Creb1sc240V0422111AlnRep2.bam
@@ -1723,6 +1713,14 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Rad21V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Rad21V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1Rad21V0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1RxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1RxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1RxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1RxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1RxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1RxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1RxlchV0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1RxlchV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1SrfV0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1SrfV0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsEcc1SrfV0422111AlnRep2.bam
@@ -1803,22 +1801,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111AlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111AlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111AlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111AlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111RawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111RawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111RawRep3.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878ControlV0422111RawRep4.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Creb1sc240V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Creb1sc240V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Creb1sc240V0422111AlnRep2.bam
@@ -1829,14 +1811,22 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Creb1sc240V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Creb1sc240V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878Creb1sc240V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescControlV0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111AlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111AlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111RawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111RawRep3.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsGm12878RxlchV0422111RawRep4.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescCreb1sc240V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescCreb1sc240V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescCreb1sc240V0422111AlnRep2.bam
@@ -1867,6 +1857,10 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescMaxV0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescMaxV0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescMaxV0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescRxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescRxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescRxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescRxlchV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescTead4sc101184V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescTead4sc101184V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescTead4sc101184V0422111AlnRep2.bam
@@ -1877,14 +1871,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsControlV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsNrsfV0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsNrsfV0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsNrsfV0422111AlnRep2.bam
@@ -1905,6 +1891,14 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsPol24h8V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsPol24h8V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsPol24h8V0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsRxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsRxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsRxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsRxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsRxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsRxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsRxlchV0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsRxlchV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsTaf1V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsTaf1V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsH1neuronsTaf1V0422111AlnRep2.bam
@@ -1945,14 +1939,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Cebpbsc150V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Cebpbsc150V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Cebpbsc150V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116ControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116ControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116ControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116ControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116ControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116ControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116ControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116ControlV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116CtcfcV0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116CtcfcV0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116CtcfcV0422111AlnRep2.bam
@@ -2033,6 +2019,14 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Rad21V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Rad21V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Rad21V0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116RxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116RxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116RxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116RxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116RxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116RxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116RxlchV0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116RxlchV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Sin3ak20V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Sin3ak20V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Sin3ak20V0422111AlnRep2.bam
@@ -2083,14 +2077,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Usf1V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Usf1V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHct116Usf1V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2ControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2ControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2ControlV0422111AlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2ControlV0422111AlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2ControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2ControlV0422111RawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2ControlV0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2ControlV0422111RawRep3.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Creb1sc240V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Creb1sc240V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Creb1sc240V0422111AlnRep2.bam
@@ -2121,6 +2107,14 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2RxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2RxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2RxlchV0422111AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2RxlchV0422111AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2RxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2RxlchV0422111RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2RxlchV0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2RxlchV0422111RawRep3.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Zeb1V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Zeb1V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Zeb1V0422111AlnRep2.bam
@@ -2131,14 +2125,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Zeb1V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Zeb1V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHepg2Zeb1V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60ControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60ControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60ControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60ControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60ControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60ControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60ControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60ControlV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60GabpV0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60GabpV0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60GabpV0422111AlnRep2.bam
@@ -2179,18 +2165,14 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60Pu1V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60Pu1V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60Pu1V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111AlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111AlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111AlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111AlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111RawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111RawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111RawRep3.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562ControlV0422111RawRep4.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60RxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60RxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60RxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60RxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60RxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60RxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60RxlchV0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsHl60RxlchV0422111RawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562Creb1sc240V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562Creb1sc240V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562Creb1sc240V0422111AlnRep2.bam
@@ -2205,6 +2187,14 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562CtcfcPcr1xAlnRep1V2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562CtcfcPcr1xPkRep1V2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562CtcfcPcr1xRawRep1V2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562RxlchV0422111AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562RxlchV0422111AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562RxlchV0422111AlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562RxlchV0422111AlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562RxlchV0422111RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562RxlchV0422111RawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562RxlchV0422111RawRep3.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562RxlchV0422111RawRep4.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562Trim28sc81411V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562Trim28sc81411V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsK562Trim28sc81411V0422111AlnRep2.bam
@@ -2225,22 +2215,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Cebpbsc150V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Cebpbsc150V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Cebpbsc150V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111AlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111AlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111AlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111AlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111RawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111RawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111RawRep3.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7ControlV0422111RawRep4.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7CtcfcV0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7CtcfcV0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7CtcfcV0422111AlnRep2.bam
@@ -2391,6 +2365,22 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Rad21V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Rad21V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Rad21V0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111AlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111AlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111RawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111RawRep3.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7RxlchV0422111RawRep4.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Sin3ak20V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Sin3ak20V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Sin3ak20V0422111AlnRep2.bam
@@ -2441,10 +2431,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Tead4sc101184V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Tead4sc101184V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsMcf7Tead4sc101184V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1ControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1ControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1ControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1ControlV0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1NrsfV0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1NrsfV0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1NrsfV0422111AlnRep2.bam
@@ -2455,22 +2441,10 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1NrsfV0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1NrsfV0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1NrsfV0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111AlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111AlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111AlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111AlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111RawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111RawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111RawRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111RawRep3.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshControlV0422111RawRep4.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1RxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1RxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1RxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsPanc1RxlchV0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshElf1V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshElf1V0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshElf1V0422111AlnRep2.bam
@@ -2586,6 +2560,22 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRunx3sc101553V0422111PkRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRunx3sc101553V0422111RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRunx3sc101553V0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111AlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111AlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111RawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111RawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111RawRep3.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxlchV0422111RawRep4.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxraV0422111AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxraV0422111AlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshRxraV0422111PkRep2.broadPeak.gz
@@ -2641,10 +2631,6 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshZbtb33V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshZbtb33V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsSknshZbtb33V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dControlV0422111AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dControlV0422111AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dControlV0422111RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dControlV0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dJundV0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dJundV0422111AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dJundV0422111AlnRep2.bam
@@ -2655,6 +2641,10 @@ New Download Files (1118):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dJundV0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dJundV0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dJundV0422111RawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dRxlchV0422111AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dRxlchV0422111AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dRxlchV0422111RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsT47dRxlchV0422111RawRep1.bigWig
 
 Untouched Download Files (2697):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release3/wgEncodeHaibTfbsA549Atf3V0422111Etoh02AlnRep1.bam
@@ -5456,17 +5446,15 @@ Revoked/Replaced/Renamed Download Files (97):
 
 
 GBDBS:
-New: 230
+New: 228
 Untouched: 556
 Revoked/Replaced/Renamed: 18
-New + Untouched: 786
-Total (New + Untouched + Revoked/Replaced/Renamed): 804
+New + Untouched: 784
+Total (New + Untouched + Revoked/Replaced/Renamed): 802
 
-New Gbdb Files (230):
+New Gbdb Files (228):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Cebpbsc150V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Cebpbsc150V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsA549ControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsA549ControlV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549E2f6V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549E2f6V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Gata3V0422111RawRep1.bigWig
@@ -5477,12 +5465,12 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Pbx3V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Rad21V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Rad21V0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsA549RxlchV0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsA549RxlchV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Tead4sc101184V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Tead4sc101184V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Cebpbsc150V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Cebpbsc150V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1ControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1ControlV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Creb1sc240V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Creb1sc240V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Egr1V0422111RawRep1.bigWig
@@ -5501,6 +5489,8 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1P300V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Rad21V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Rad21V0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1RxlchV0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1RxlchV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1SrfV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1SrfV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Taf1V0422111RawRep1.bigWig
@@ -5517,28 +5507,27 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsEcc1Zbtb7aV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878Cebpbsc150V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878ControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878ControlV0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878ControlV0422111RawRep3.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878ControlV0422111RawRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878Creb1sc240V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878Creb1sc240V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescControlV0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878RxlchV0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878RxlchV0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878RxlchV0422111RawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsGm12878RxlchV0422111RawRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescCreb1sc240V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescCreb1sc240V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescE2f6V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescE2f6V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescMaxV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescMaxV0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescRxlchV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1hescTead4sc101184V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsControlV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsNrsfV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsNrsfV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsPol24h8V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsPol24h8V0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsRxlchV0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsRxlchV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsTaf1V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsH1neuronsTaf1V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Atf3V0422111RawRep1.bigWig
@@ -5547,8 +5536,6 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Cbx3sc101004V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Cebpbsc150V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Cebpbsc150V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsHct116ControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsHct116ControlV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116CtcfcV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116CtcfcV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Egr1V0422111RawRep1.bigWig
@@ -5565,6 +5552,8 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116NrsfV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Rad21V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Rad21V0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsHct116RxlchV0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsHct116RxlchV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Sin3ak20V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Sin3ak20V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Sp1V0422111RawRep1.bigWig
@@ -5575,18 +5564,16 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Tead4sc101184V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Usf1V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHct116Usf1V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2ControlV0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2ControlV0422111RawRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2Creb1sc240V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2Creb1sc240V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2MaxV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2MaxV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2Nr2f2sc271940V0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2RxlchV0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2RxlchV0422111RawRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2Zeb1V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2Zeb1V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsHl60ControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsHl60ControlV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHl60GabpV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHl60GabpV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHl60NrsfV0422111RawRep1.bigWig
@@ -5595,20 +5582,17 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHl60Pol24h8V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHl60Pu1V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHl60Pu1V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsK562ControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsK562ControlV0422111RawRep3.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsK562ControlV0422111RawRep4.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsHl60RxlchV0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsHl60RxlchV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsK562Creb1sc240V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsK562Creb1sc240V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsK562CtcfcPcr1xRawRep1V2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsK562RxlchV0422111RawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsK562RxlchV0422111RawRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsK562Trim28sc81411V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsK562Trim28sc81411V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Cebpbsc150V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Cebpbsc150V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7ControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7ControlV0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7ControlV0422111RawRep3.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7ControlV0422111RawRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7CtcfcV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7CtcfcV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Egr1V0422111RawRep1.bigWig
@@ -5639,6 +5623,10 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Pmlsc71910V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Rad21V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Rad21V0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7RxlchV0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7RxlchV0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7RxlchV0422111RawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7RxlchV0422111RawRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Sin3ak20V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Sin3ak20V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7SrfV0422111RawRep1.bigWig
@@ -5649,13 +5637,9 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Tcf12V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Tead4sc101184V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsMcf7Tead4sc101184V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsPanc1ControlV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsPanc1NrsfV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsPanc1NrsfV0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsSknshControlV0422111RawRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsSknshControlV0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsSknshControlV0422111RawRep3.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsSknshControlV0422111RawRep4.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsPanc1RxlchV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshElf1V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshElf1V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshFosl2V0422111RawRep1.bigWig
@@ -5679,6 +5663,10 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshPbx3V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshPbx3V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshRunx3sc101553V0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsSknshRxlchV0422111RawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsSknshRxlchV0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsSknshRxlchV0422111RawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsSknshRxlchV0422111RawRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshRxraV0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshTcf12V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshTcf12V0422111RawRep2.bigWig
@@ -5690,9 +5678,9 @@ New Gbdb Files (230):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshYy1sc281V0422111RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshZbtb33V0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsSknshZbtb33V0422111RawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeHaibTfbsT47dControlV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsT47dJundV0422111RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsT47dJundV0422111RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeHaibTfbsT47dRxlchV0422111RawRep1.bigWig
 
 Untouched Gbdb Files (556):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Atf3V0422111Etoh02RawRep1.bigWig
