@@ -98,7 +98,7 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel B-cell_CD19+ Hs 1
+        shortLabel B-cell_CD19+ 8w Hs 1
         longLabel B-cell (CD19+) Adult 8 Weeks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
@@ -107,7 +107,7 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel B-cell_CD43- Hs 1
+        shortLabel B-cell_CD43- 8w Hs 1
         longLabel B-cell (CD43-) Adult 8 Weeks C57BL/6 DNase-DGF Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 treatment=NONE rep=rep1
         type broadPeak
@@ -320,7 +320,7 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel B-cell_CD19+ Pk 1
+        shortLabel B-cell_CD19+ 8w Pk 1
         longLabel B-cell (CD19+) Adult 8 Weeks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
@@ -329,7 +329,7 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel B-cell_CD43- Pk 1
+        shortLabel B-cell_CD43- 8w Pk 1
         longLabel B-cell (CD43-) Adult 8 Weeks C57BL/6 DNase-DGF Peaks Rep 1 from ENCODE/UW 
         subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 treatment=NONE rep=rep1
         type narrowPeak
@@ -542,7 +542,7 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
-        shortLabel B-cell_CD19+ Sg 1
+        shortLabel B-cell_CD19+ 8w Sg 1
         longLabel B-cell (CD19+) Adult 8 Weeks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 102599.000000
@@ -551,7 +551,7 @@ html wgEncodeUwDgf
 
         track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDgfViewSignal off
-        shortLabel B-cell_CD43- Sg 1
+        shortLabel B-cell_CD43- 8w Sg 1
         longLabel B-cell (CD43-) Adult 8 Weeks C57BL/6 DNase-DGF Signal Rep 1 from ENCODE/UW 
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 treatment=NONE rep=rep1
         type bigWig 1.000000 62266.000000
