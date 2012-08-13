@@ -27,8 +27,8 @@ include wgEncodeLicrHistone.release2.ra beta,public
 include wgEncodeLicrHistone.release3.ra alpha
 
 # LICR TFBS (wrangler: Fang)
-include wgEncodeLicrTfbs.release2.ra beta,public
-include wgEncodeLicrTfbs.release3.ra alpha
+include wgEncodeLicrTfbs.release2.ra public
+include wgEncodeLicrTfbs.release3.ra alpha,beta
 
 # Stan/Yale RNA-Seq (wrangler: Venkat)
 include wgEncodeSydhRnaSeq.release2.ra

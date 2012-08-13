@@ -297,6 +297,7 @@ class makeNotes(object):
             if intersect:
                 output.append("")
                 output.append("These %s objects exist in both new and revoked %s:" % (len(intersect), title))
+                sys.stderr.write("\n\nWARNING: There are objects that are both new and revoked. Those files should be removed from the new release directory, as they haven't been released yet.\n\n")
                 for i in intersect:
                     output.append("%s" % i)
         if all and not summary:

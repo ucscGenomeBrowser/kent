@@ -262,7 +262,7 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks off
-        shortLabel OFlact 8w CTCF 
+        shortLabel Olfact 8w CTCF 
         longLabel Olfactory Bulb Adult 8 weeks CTCF TFBS ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=A1DULT8WKS factor=CTCF cellType=OLFACT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -289,7 +289,7 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks off
-        shortLabel OFlact 8w Pol2 
+        shortLabel Olfact 8w Pol2 
         longLabel Olfactory Bulb Adult 8 weeks Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DULT8WKS factor=POL2 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -370,8 +370,8 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel MEL Pol2 
-        longLabel MEL immortal cells Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel MEL Immort Pol2 
+        longLabel MEL Immortal cells Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=IMMORTAL factor=POL2 cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -379,8 +379,8 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel MEL CTCF 
-        longLabel MEL immortal cells CTCF TFBS ChIP-seq Peaks from ENCODE/LICR 
+        shortLabel MEL Immort CTCF 
+        longLabel MEL Immortal cells CTCF TFBS ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=CTCF cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -691,7 +691,7 @@ html wgEncodeLicrTfbs.release3
         track wgEncodeLicrTfbsEsb4InputME0C57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel ES-B4 E0 Input 
-        longLabel ES-Bruce4 Adult 8 weeks Input TFBS ChIP-seq Signal from ENCODE/LICR
+        longLabel ES-Bruce4 Embryonic day 0 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=INPUT cellType=ESB4 control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 64.720001
         color 65,105,225
@@ -700,7 +700,7 @@ html wgEncodeLicrTfbs.release3
         track wgEncodeLicrTfbsEsb4P300ME0C57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel ES-B4 E0 p300 
-        longLabel ES-Bruce4 Adult 8 weeks p300 TFBS ChIP-seq Signal from ENCODE/LICR
+        longLabel ES-Bruce4 Embryonic day 0 p300 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=P300 cellType=ESB4 control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 73.150002
         color 65,105,225
@@ -710,7 +710,7 @@ html wgEncodeLicrTfbs.release3
         track wgEncodeLicrTfbsEsb4Pol2ME0C57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel ES-B4 E0 Pol2 
-        longLabel ES-Bruce4 Adult 8 weeks Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+        longLabel ES-Bruce4 Embryonic day 0 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=POL2 cellType=ESB4 control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 73.010002
         color 65,105,225
@@ -729,7 +729,7 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel OFlact 8w CTCF 
+        shortLabel Olfact 8w CTCF 
         longLabel Olfactory Bulb Adult 8 weeks CTCF TFBS ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=A1DULT8WKS factor=CTCF cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.107427 50.025291
@@ -759,7 +759,7 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel OFlact 8w Pol2 
+        shortLabel Olfact 8w Pol2 
         longLabel Olfactory Bulb Adult 8 weeks Pol2 TFBS ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=A1DULT8WKS factor=POL2 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.128951 53.643612
@@ -853,7 +853,7 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsOlfactInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel OFlact 8w Input 
+        shortLabel Olfact 8w Input 
         longLabel Olfactory Bulb Adult 8 weeks Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DULT8WKS factor=INPUT cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.102227 41.708450
@@ -935,8 +935,8 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel MEL Pol2 
-        longLabel MEL immortal cells Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel MEL Immort Pol2 
+        longLabel MEL Immortal cells Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=POL2 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.120000 70.449997
         color 86,180,233
@@ -945,8 +945,8 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel MEL CTCF 
-        longLabel MEL immortal cells CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel MEL Immort CTCF 
+        longLabel MEL Immortal cells CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=CTCF cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.150000 142.000000
         color 86,180,233
@@ -955,8 +955,8 @@ html wgEncodeLicrTfbs.release3
 
         track wgEncodeLicrTfbsMelInputMImmortalC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel MEL Input 
-        longLabel MEL immortal cells Input TFBS ChIP-seq Signal from ENCODE/LICR 
+        shortLabel MEL Immort Input 
+        longLabel MEL Immortal cells Input TFBS ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=IMMORTAL factor=INPUT cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.150000 92.559998
         color 86,180,233

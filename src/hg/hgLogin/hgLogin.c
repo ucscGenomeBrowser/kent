@@ -15,7 +15,6 @@
 #include "web.h"
 #include "ra.h"
 #include "hgColors.h"
-#include <crypt.h>
 #include "net.h"
 #include "wikiLink.h"
 #include "hgLogin.h"
