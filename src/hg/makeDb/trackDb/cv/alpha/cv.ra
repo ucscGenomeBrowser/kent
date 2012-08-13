@@ -17620,6 +17620,18 @@ priority 970
 requiredVars term,tag,type,description
 optionalVars label,deprecated
 
+term targetClass
+tag TARGETCLASS
+type typeOfTerm
+label Antibody target class
+description The genes targeted by antibodies are classified by the biological function of the gene products.
+searchable freeText
+cvDefined yes
+validate cv
+priority 150
+requiredVars term,tag,type
+optionalVars label
+
 term treatment
 tag TREATMENT
 type typeOfTerm
