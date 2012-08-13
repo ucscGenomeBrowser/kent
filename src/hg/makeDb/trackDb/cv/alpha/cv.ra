@@ -17624,7 +17624,7 @@ term targetClass
 tag TARGETCLASS
 type typeOfTerm
 label Antibody target class
-description The genes targetted by antibodies are classified by the biological function of the gene products.
+description The genes targeted by antibodies are classified by the biological function of the gene products.
 searchable freeText
 cvDefined yes
 validate cv
