@@ -2501,9 +2501,9 @@ tableName wgEncodeSydhTfbsGm12878Brca1a300IggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep1
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep1
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -2512,7 +2512,7 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep1.bam,wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep1.bam,wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford
 project wgEncode
@@ -2522,9 +2522,9 @@ subId 7857
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep2
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep2
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -2533,7 +2533,7 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep2.bam,wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep2.bam,wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford
 project wgEncode
@@ -2543,9 +2543,9 @@ subId 7857
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusPk
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusPk
 objType table
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -2554,20 +2554,20 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 7857
-tableName wgEncodeSydhTfbsGm12878CdpbiotechIggmusPk
+tableName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusRawDataRep1
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusRawDataRep1
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -2576,7 +2576,7 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
 project wgEncode
@@ -2586,9 +2586,9 @@ subId 7857
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusRawDataRep2
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusRawDataRep2
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -2597,7 +2597,7 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
 project wgEncode
@@ -2607,9 +2607,9 @@ subId 7857
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusSig
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusSig
 objType table
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -2618,14 +2618,14 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusSig.bigWig
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 7857
-tableName wgEncodeSydhTfbsGm12878CdpbiotechIggmusSig
+tableName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusSig
 treatment None
 view Signal
 
@@ -43677,9 +43677,9 @@ tableName wgEncodeSydhTfbsK562Ccnt2StdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep1
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep1
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -43688,7 +43688,7 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep1.bam,wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep1.bam,wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
 project wgEncode
@@ -43698,9 +43698,9 @@ subId 7859
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep2
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep2
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -43709,7 +43709,7 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep2.bam,wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep2.bam,wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
 project wgEncode
@@ -43719,9 +43719,9 @@ subId 7859
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabPk
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabPk
 objType table
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -43730,20 +43730,20 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 7859
-tableName wgEncodeSydhTfbsK562CdpbiotechIggrabPk
+tableName wgEncodeSydhTfbsK562Cdpsc6327IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabRawDataRep1
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -43752,7 +43752,7 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
 project wgEncode
@@ -43762,9 +43762,9 @@ subId 7859
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabRawDataRep2
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -43773,7 +43773,7 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
 project wgEncode
@@ -43783,9 +43783,9 @@ subId 7859
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabSig
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabSig
 objType table
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -43794,14 +43794,14 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabSig.bigWig
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 7859
-tableName wgEncodeSydhTfbsK562CdpbiotechIggrabSig
+tableName wgEncodeSydhTfbsK562Cdpsc6327IggrabSig
 treatment None
 view Signal
 
@@ -65769,4 +65769,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1927427614
+# MAGIC: 1710853574
