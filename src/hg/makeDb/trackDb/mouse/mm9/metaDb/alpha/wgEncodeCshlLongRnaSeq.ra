@@ -1185,6 +1185,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -1213,6 +1215,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003062
+expId 3062
 fileName wgEncodeCshlLongRnaSeqBladderAdult8wksSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -1748,6 +1752,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -1776,6 +1782,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003058
+expId 3058
 fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -2311,6 +2319,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -2339,6 +2349,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003052
+expId 3052
 fileName wgEncodeCshlLongRnaSeqCnsE11halfSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -2874,6 +2886,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14SpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -2902,6 +2916,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003056
+expId 3056
 fileName wgEncodeCshlLongRnaSeqCnsE14SpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -3437,6 +3453,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18SpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -3465,6 +3483,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003057
+expId 3057
 fileName wgEncodeCshlLongRnaSeqCnsE18SpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -4718,6 +4738,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -4746,6 +4768,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003063
+expId 3063
 fileName wgEncodeCshlLongRnaSeqCortexAdult8wksSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -5999,6 +6023,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -6027,6 +6053,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003064
+expId 3064
 fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -9434,6 +9462,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -9462,6 +9492,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003059
+expId 3059
 fileName wgEncodeCshlLongRnaSeqLimbE14halfSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -10715,6 +10747,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14SpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -10743,6 +10777,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003053
+expId 3053
 fileName wgEncodeCshlLongRnaSeqLiverE14SpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -11278,6 +11314,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -11306,6 +11344,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003054
+expId 3054
 fileName wgEncodeCshlLongRnaSeqLiverE14halfSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -11841,6 +11881,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18SpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -11869,6 +11911,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003060
+expId 3060
 fileName wgEncodeCshlLongRnaSeqLiverE18SpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -14558,6 +14602,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -14586,6 +14632,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003061
+expId 3061
 fileName wgEncodeCshlLongRnaSeqPlacAdult8wksSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -19429,6 +19477,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfSpikeinsRep1.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -19457,6 +19507,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003055
+expId 3055
 fileName wgEncodeCshlLongRnaSeqWbrainE14halfSpikeinsRep2.spikeins.bam.gz
 grant Gingeras
 lab CSHL-m
@@ -19529,4 +19581,4 @@ strain C57BL/6J
 subId 7798
 view TranscriptEnsV65IAcuff
 
-# MAGIC: -53121231
+# MAGIC: -619762675
