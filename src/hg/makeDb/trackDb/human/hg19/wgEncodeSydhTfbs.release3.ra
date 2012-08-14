@@ -3236,14 +3236,6 @@ html wgEncodeSydhTfbs.release3
         color 0,119,158
         # subId=7852 dateSubmitted=2012-08-01
 
-        track wgEncodeSydhTfbsA549Bhlhe40cIggrabPk
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel A549 BHLHE40_(NB100-1800) Pk
-        longLabel A549 BHLHE40 (NB100-1800) IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
-        subGroups view=Peaks factor=BHLHE40NB100 cellType=t2A549 control=IGGRAB treatment=aNONE
-        type narrowPeak
-        # subId=7856 dateSubmitted=2012-08-01
-
         track wgEncodeSydhTfbsGm12878Cdpsc6327IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 CDP_(BioTech) Pk
@@ -7382,14 +7374,6 @@ html wgEncodeSydhTfbs.release3
         type bigWig 1.000000 496.000000
         color 0,119,158
         # subId=7852 dateSubmitted=2012-08-01
-
-        track wgEncodeSydhTfbsA549Bhlhe40cIggrabSig
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel A549 BHLHE40_(NB100-1800) Sig
-        longLabel A549 BHLHE40 (NB100-1800) IgG-rab ChIP-seq Signal from ENCODE/SYDH 
-        subGroups view=Signal factor=BHLHE40NB100 cellType=t2A549 control=IGGRAB treatment=aNONE
-        type bigWig 1.000000 18642.000000
-        # subId=7856 dateSubmitted=2012-08-01
 
         track wgEncodeSydhTfbsGm12878Cdpsc6327IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
