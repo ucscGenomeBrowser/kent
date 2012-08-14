@@ -563,6 +563,7 @@ lab CSHL-m
 labExpId LID20728
 localization cell
 md5sum 3bd94337b7e3b83d9a7ff389d85a6936
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -623,6 +624,7 @@ lab CSHL-m
 labExpId LID20729
 localization cell
 md5sum 7a873c351b14d77dab922cd90499ff8c
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4116,6 +4118,7 @@ lab CSHL-m
 labExpId LID21040
 localization cell
 md5sum 9de19d8687ae5bf8b29110c3d187118d
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4176,6 +4179,7 @@ lab CSHL-m
 labExpId LID21041
 localization cell
 md5sum 7aa6c2bf44c3a5cebb02c429409a2835
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5401,6 +5405,7 @@ lab CSHL-m
 labExpId LID20730
 localization cell
 md5sum 6d27bdbeed54b1caab76f1ff92f11cd6
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5461,6 +5466,7 @@ lab CSHL-m
 labExpId LID20731
 localization cell
 md5sum 658df86aa1f3bb2b3101adbc86b04318
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6686,6 +6692,7 @@ lab CSHL-m
 labExpId LID21179
 localization cell
 md5sum 5908a97d6f329355bf4a166069c333d2
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6746,6 +6753,7 @@ lab CSHL-m
 labExpId LID21180
 localization cell
 md5sum 6d90300b229ffe50b96b3dea136e6d5a
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7404,6 +7412,7 @@ lab CSHL-m
 labExpId LID20870
 localization cell
 md5sum 64bf19563012c86a819eeb3f466729d8
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -7464,6 +7473,7 @@ lab CSHL-m
 labExpId LID20871
 localization cell
 md5sum f1d3ebbc233558b08fbe8663cbcb7617
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8122,6 +8132,7 @@ lab CSHL-m
 labExpId LID20872
 localization cell
 md5sum dc3623e6f83cd73aad310c94102c63d8
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8182,6 +8193,7 @@ lab CSHL-m
 labExpId LID20873
 localization cell
 md5sum dddce6223874d9acfea343de56c165fc
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8840,6 +8852,7 @@ lab CSHL-m
 labExpId LID21183
 localization cell
 md5sum 8a32f7832c7f0979b06bd2adee8864b6
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8900,6 +8913,7 @@ lab CSHL-m
 labExpId LID21184
 localization cell
 md5sum b30e68d2cff76dabedfe1ba179537670
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -10125,6 +10139,7 @@ lab CSHL-m
 labExpId LID21042
 localization cell
 md5sum df56efdb07fb35b0cb6f6afa6157c4ab
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -10185,6 +10200,7 @@ lab CSHL-m
 labExpId LID21043
 localization cell
 md5sum c005d10f542348af43f1c44e8dc1dd4d
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12544,6 +12560,7 @@ lab CSHL-m
 labExpId LID20920
 localization cell
 md5sum 2834d666ade4b086e6b4dbf3e4bc33bd
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -12604,6 +12621,7 @@ lab CSHL-m
 labExpId LID20921
 localization cell
 md5sum 54c55b94d8a0c7142e7097b825f75f26
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13262,6 +13280,7 @@ lab CSHL-m
 labExpId LID20924
 localization cell
 md5sum af6fe719b660703cff82fdc1689c84e0
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -13322,6 +13341,7 @@ lab CSHL-m
 labExpId LID20925
 localization cell
 md5sum 3d3e2642d7cb87291a25feb3a2c1eed3
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13980,6 +14000,7 @@ lab CSHL-m
 labExpId LID20821
 localization cell
 md5sum 508e725bb6677274b73a22f40c196d5f
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -14040,6 +14061,7 @@ lab CSHL-m
 labExpId LID20822
 localization cell
 md5sum 29579bcaca029781a284a09c8d8aaa63
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15265,6 +15287,7 @@ lab CSHL-m
 labExpId LID21181
 localization cell
 md5sum 12b85fe823b385655d283958933966ad
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -15325,6 +15348,7 @@ lab CSHL-m
 labExpId LID21182
 localization cell
 md5sum edbabc32d2a0a92b0ce64e46203fc452
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15983,6 +16007,7 @@ lab CSHL-m
 labExpId LID20819
 localization cell
 md5sum 0dfd47d8aa94034fa93495906c3f1898
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -16043,6 +16068,7 @@ lab CSHL-m
 labExpId LID20820
 localization cell
 md5sum 1aeb3e44aeb8d1fc12c3b4201c9d6113
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17419,6 +17445,7 @@ lab CSHL-m
 labExpId LID20732
 localization cell
 md5sum a918549be179a4a0f5577b8f4feab5b7
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17479,6 +17506,7 @@ lab CSHL-m
 labExpId LID20733
 localization cell
 md5sum ad540df43e583a4e1f0589c427712d24
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18137,6 +18165,7 @@ lab CSHL-m
 labExpId LID20868
 localization cell
 md5sum bb28d5f1b70e6f5066a1f47b6beded94
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -18197,6 +18226,7 @@ lab CSHL-m
 labExpId LID20869
 localization cell
 md5sum 8f165fc51713c2fe381d8e575d68bdc2
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18855,6 +18885,7 @@ lab CSHL-m
 labExpId LID20922
 localization cell
 md5sum a137383bd1d5351c3b6db6c2c4baa830
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 1
@@ -18915,6 +18946,7 @@ lab CSHL-m
 labExpId LID20923
 localization cell
 md5sum 08b52938d2f81986ff48e6925cf159f6
+objStatus replaced
 project wgEncode
 readType 2x76D
 replicate 2
@@ -19581,4 +19613,4 @@ strain C57BL/6J
 subId 7798
 view TranscriptEnsV65IAcuff
 
-# MAGIC: -619762675
+# MAGIC: -239873587
