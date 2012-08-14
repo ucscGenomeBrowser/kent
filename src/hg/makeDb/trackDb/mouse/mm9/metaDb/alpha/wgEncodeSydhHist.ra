@@ -10,7 +10,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
@@ -39,7 +39,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
@@ -68,7 +68,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
@@ -97,7 +97,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
@@ -125,7 +125,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
@@ -153,7 +153,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
@@ -182,7 +182,7 @@ antibody Input
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
@@ -211,7 +211,7 @@ antibody Input
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
@@ -238,7 +238,7 @@ antibody Input
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId CH12/None/Input/IgG-Yale
+controlId wgEncodeEM002001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
@@ -1087,7 +1087,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
@@ -1115,7 +1115,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
@@ -1143,7 +1143,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
@@ -1172,7 +1172,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
@@ -1200,7 +1200,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
@@ -1228,7 +1228,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
@@ -1585,7 +1585,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
@@ -1614,7 +1614,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
@@ -1643,7 +1643,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-07-19
@@ -2486,7 +2486,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
@@ -2514,7 +2514,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
@@ -2542,7 +2542,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
@@ -2571,7 +2571,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
@@ -2600,7 +2600,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
@@ -2629,7 +2629,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/DMSO_2.0pct/Input/IgG-Yale
+controlId wgEncodeEM001963
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
@@ -2659,7 +2659,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
@@ -2688,7 +2688,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-26
@@ -2715,7 +2715,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId wgEncodeEM002003
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-26
@@ -2737,4 +2737,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 1258341449
+# MAGIC: 2009116391
