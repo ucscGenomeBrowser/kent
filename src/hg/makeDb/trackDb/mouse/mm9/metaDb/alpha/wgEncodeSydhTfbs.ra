@@ -179,7 +179,7 @@ antibody CHD1_(NB100-60411)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -204,7 +204,7 @@ antibody CHD1_(NB100-60411)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -229,7 +229,7 @@ antibody CHD1_(NB100-60411)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -254,7 +254,7 @@ antibody CHD1_(NB100-60411)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -279,7 +279,7 @@ antibody CHD1_(NB100-60411)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -304,7 +304,7 @@ antibody CHD1_(NB100-60411)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -1509,7 +1509,7 @@ antibody GCN5
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -1534,7 +1534,7 @@ antibody GCN5
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -1559,7 +1559,7 @@ antibody GCN5
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -1585,7 +1585,7 @@ antibody GCN5
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -1610,7 +1610,7 @@ antibody GCN5
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -1635,7 +1635,7 @@ antibody GCN5
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -1661,7 +1661,7 @@ antibody HCFC1_(NB100-68209)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -1686,7 +1686,7 @@ antibody HCFC1_(NB100-68209)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -1711,7 +1711,7 @@ antibody HCFC1_(NB100-68209)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -1736,7 +1736,7 @@ antibody HCFC1_(NB100-68209)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -1761,7 +1761,7 @@ antibody HCFC1_(NB100-68209)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -1786,7 +1786,7 @@ antibody HCFC1_(NB100-68209)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -2485,7 +2485,7 @@ antibody MAZ_(ab85725)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -2510,7 +2510,7 @@ antibody MAZ_(ab85725)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -2535,7 +2535,7 @@ antibody MAZ_(ab85725)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -2561,7 +2561,7 @@ antibody MAZ_(ab85725)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -2586,7 +2586,7 @@ antibody MAZ_(ab85725)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -2611,7 +2611,7 @@ antibody MAZ_(ab85725)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -2973,7 +2973,7 @@ antibody Nrf2
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -2998,7 +2998,7 @@ antibody Nrf2
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -3023,7 +3023,7 @@ antibody Nrf2
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -3048,7 +3048,7 @@ antibody Nrf2
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -3073,7 +3073,7 @@ antibody Nrf2
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -3098,7 +3098,7 @@ antibody Nrf2
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -4632,7 +4632,7 @@ antibody ZC3H11A_(NB100-74650)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -4657,7 +4657,7 @@ antibody ZC3H11A_(NB100-74650)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -4682,7 +4682,7 @@ antibody ZC3H11A_(NB100-74650)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -4707,7 +4707,7 @@ antibody ZC3H11A_(NB100-74650)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -4732,7 +4732,7 @@ antibody ZC3H11A_(NB100-74650)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -4757,7 +4757,7 @@ antibody ZC3H11A_(NB100-74650)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -4946,7 +4946,7 @@ antibody ZNF384_(HPA004051)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -4971,7 +4971,7 @@ antibody ZNF384_(HPA004051)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -4996,7 +4996,7 @@ antibody ZNF384_(HPA004051)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5021,7 +5021,7 @@ antibody ZNF384_(HPA004051)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5046,7 +5046,7 @@ antibody ZNF384_(HPA004051)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5071,7 +5071,7 @@ antibody ZNF384_(HPA004051)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5096,7 +5096,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5121,7 +5121,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5146,7 +5146,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5171,7 +5171,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5196,7 +5196,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5221,7 +5221,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId CH12/None/Input/IgG-rab
+controlId wgEncodeEM001939
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5246,7 +5246,7 @@ antibody HCFC1_(NB100-68209)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5271,7 +5271,7 @@ antibody HCFC1_(NB100-68209)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5296,7 +5296,7 @@ antibody HCFC1_(NB100-68209)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5321,7 +5321,7 @@ antibody HCFC1_(NB100-68209)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5346,7 +5346,7 @@ antibody HCFC1_(NB100-68209)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5371,7 +5371,7 @@ antibody HCFC1_(NB100-68209)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5642,7 +5642,7 @@ antibody ZC3H11A_(NB100-74650)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5667,7 +5667,7 @@ antibody ZC3H11A_(NB100-74650)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5692,7 +5692,7 @@ antibody ZC3H11A_(NB100-74650)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5717,7 +5717,7 @@ antibody ZC3H11A_(NB100-74650)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5742,7 +5742,7 @@ antibody ZC3H11A_(NB100-74650)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5767,7 +5767,7 @@ antibody ZC3H11A_(NB100-74650)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5792,7 +5792,7 @@ antibody ZNF384_(HPA004051)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5817,7 +5817,7 @@ antibody ZNF384_(HPA004051)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5842,7 +5842,7 @@ antibody ZNF384_(HPA004051)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5867,7 +5867,7 @@ antibody ZNF384_(HPA004051)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5892,7 +5892,7 @@ antibody ZNF384_(HPA004051)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5917,7 +5917,7 @@ antibody ZNF384_(HPA004051)
 cell ES-E14
 composite wgEncodeSydhTfbs
 control std
-controlId ES-E14/None/Input/std
+controlId wgEncodeEM002788
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -5942,7 +5942,7 @@ antibody BHLHE40_(NB100-1800)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
@@ -5967,7 +5967,7 @@ antibody BHLHE40_(NB100-1800)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
@@ -5992,7 +5992,7 @@ antibody BHLHE40_(NB100-1800)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
@@ -6018,7 +6018,7 @@ antibody BHLHE40_(NB100-1800)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
@@ -6043,7 +6043,7 @@ antibody BHLHE40_(NB100-1800)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
@@ -6068,7 +6068,7 @@ antibody BHLHE40_(NB100-1800)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
@@ -6094,7 +6094,7 @@ antibody CHD1_(NB100-60411)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -6119,7 +6119,7 @@ antibody CHD1_(NB100-60411)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -6144,7 +6144,7 @@ antibody CHD1_(NB100-60411)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -6169,7 +6169,7 @@ antibody CHD1_(NB100-60411)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -6194,7 +6194,7 @@ antibody CHD1_(NB100-60411)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -6219,7 +6219,7 @@ antibody CHD1_(NB100-60411)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -6921,7 +6921,7 @@ antibody COREST_(sc-30189)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
@@ -6946,7 +6946,7 @@ antibody COREST_(sc-30189)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
@@ -6971,7 +6971,7 @@ antibody COREST_(sc-30189)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
@@ -6997,7 +6997,7 @@ antibody COREST_(sc-30189)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
@@ -7022,7 +7022,7 @@ antibody COREST_(sc-30189)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
@@ -7047,7 +7047,7 @@ antibody COREST_(sc-30189)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
@@ -8415,7 +8415,7 @@ antibody GCN5
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -8440,7 +8440,7 @@ antibody GCN5
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -8465,7 +8465,7 @@ antibody GCN5
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -8490,7 +8490,7 @@ antibody GCN5
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -8515,7 +8515,7 @@ antibody GCN5
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -8541,7 +8541,7 @@ antibody GCN5
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -8566,7 +8566,7 @@ antibody HCFC1_(NB100-68209)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -8591,7 +8591,7 @@ antibody HCFC1_(NB100-68209)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -8616,7 +8616,7 @@ antibody HCFC1_(NB100-68209)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -8641,7 +8641,7 @@ antibody HCFC1_(NB100-68209)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -8666,7 +8666,7 @@ antibody HCFC1_(NB100-68209)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -8691,7 +8691,7 @@ antibody HCFC1_(NB100-68209)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -10199,7 +10199,7 @@ antibody MAZ_(ab85725)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10224,7 +10224,7 @@ antibody MAZ_(ab85725)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10249,7 +10249,7 @@ antibody MAZ_(ab85725)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10274,7 +10274,7 @@ antibody MAZ_(ab85725)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10299,7 +10299,7 @@ antibody MAZ_(ab85725)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10324,7 +10324,7 @@ antibody MAZ_(ab85725)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10685,7 +10685,7 @@ antibody Nrf2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10710,7 +10710,7 @@ antibody Nrf2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10735,7 +10735,7 @@ antibody Nrf2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10760,7 +10760,7 @@ antibody Nrf2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10785,7 +10785,7 @@ antibody Nrf2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -10810,7 +10810,7 @@ antibody Nrf2
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -12859,7 +12859,7 @@ antibody UBF_(sc-13125)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId MEL/None/Input/IgG-mus
+controlId wgEncodeEM001946
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -12884,7 +12884,7 @@ antibody UBF_(sc-13125)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId MEL/None/Input/IgG-mus
+controlId wgEncodeEM001946
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -12909,7 +12909,7 @@ antibody UBF_(sc-13125)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId MEL/None/Input/IgG-mus
+controlId wgEncodeEM001946
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -12934,7 +12934,7 @@ antibody UBF_(sc-13125)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId MEL/None/Input/IgG-mus
+controlId wgEncodeEM001946
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -12959,7 +12959,7 @@ antibody UBF_(sc-13125)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId MEL/None/Input/IgG-mus
+controlId wgEncodeEM001946
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -12984,7 +12984,7 @@ antibody UBF_(sc-13125)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId MEL/None/Input/IgG-mus
+controlId wgEncodeEM001946
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
@@ -13401,7 +13401,7 @@ antibody ZC3H11A_(NB100-74650)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13426,7 +13426,7 @@ antibody ZC3H11A_(NB100-74650)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13451,7 +13451,7 @@ antibody ZC3H11A_(NB100-74650)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13476,7 +13476,7 @@ antibody ZC3H11A_(NB100-74650)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13501,7 +13501,7 @@ antibody ZC3H11A_(NB100-74650)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13526,7 +13526,7 @@ antibody ZC3H11A_(NB100-74650)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13715,7 +13715,7 @@ antibody ZNF384_(HPA004051)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13740,7 +13740,7 @@ antibody ZNF384_(HPA004051)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13765,7 +13765,7 @@ antibody ZNF384_(HPA004051)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13790,7 +13790,7 @@ antibody ZNF384_(HPA004051)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13815,7 +13815,7 @@ antibody ZNF384_(HPA004051)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13840,7 +13840,7 @@ antibody ZNF384_(HPA004051)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13865,7 +13865,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13890,7 +13890,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13915,7 +13915,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13940,7 +13940,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13965,7 +13965,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -13990,7 +13990,7 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId MEL/None/Input/IgG-rab
+controlId wgEncodeEM001947
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
@@ -14008,4 +14008,4 @@ tableName wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabSig
 treatment None
 view Signal
 
-# MAGIC: 1474699433
+# MAGIC: 773344175
