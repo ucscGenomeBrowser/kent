@@ -27,6 +27,7 @@ html wgEncodeGisRnaPet.release2
     view v1Clusters
     visibility full
     type bed 6
+    noScoreFilter on
     parent wgEncodeGisRnaPet
 
         track wgEncodeGisRnaPetSknshNucleusPapClusters
