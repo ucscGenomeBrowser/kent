@@ -19,6 +19,11 @@ visibility hide
 track xenoRefGene override
 visibility pack
 
+searchTable genscan
+searchType genePred
+termRegex [AGc][ELh][R8][LMX3][012G\.][-0-9\.]+
+searchPriority 50
+
 searchTable gold
 searchMethod prefix
 searchType bed

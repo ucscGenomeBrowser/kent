@@ -16,6 +16,11 @@ visibility pack
 track xenoRefGene override
 visibility pack
 
+searchTable genscan
+searchType genePred
+termRegex [GJc][HL][r18][MXY1-9][-0-9\.]+
+searchPriority 50
+
 searchTable gold
 searchMethod prefix
 searchType bed
