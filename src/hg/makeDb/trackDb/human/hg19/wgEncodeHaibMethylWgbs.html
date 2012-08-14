@@ -31,15 +31,15 @@ WGBS library construction started with sonication of genomic DNA on a Covaris S2
 </p> 
 
 <h3>Data Analysis</h3>
-<p>To analyze the sequence data, <A TARGET=_BLANK HREF="http://www.bioinformatics.babraham.ac.uk/projects/bismark/">Bismark</A> (Krueger and Andrews, 2011) was used to align sequences reads.  Generally, each read went through a conversion of Cs to Ts and was then aligned to fully converted plus and minus strands of the hg19 build of the human genome.  A few custom refinements were made to the Bismark program.  Since these libraries were made in a directional orientation with the first read always being C-poor, we skipped unnecessary alignments to impossible orientations.  We also implemented a more stringent uniqueness filter, only allowing reads that have one acceptable alignment (based on default Bowtie parameters) across both strands.  Once reads were aligned, the percent methylation was calculated for each cytosine using the original sequence reads. The percent methylation and number of reads is reported for each CpG in the wgEncodeHaibMethylWgbsXXXXCpg.bigBed file and for each non CpG cytosine in the wgEncodeHaibMethylWgbsXXXXNoncpg.bigBed file.</p>
+<p>To analyze the sequence data, <A TARGET=_BLANK HREF="http://www.bioinformatics.babraham.ac.uk/projects/bismark/">Bismark</A> (Krueger and Andrews, 2011) was used to align sequences reads.  Generally, each read went through a conversion of Cs to Ts and was then aligned to fully converted plus and minus strands of the hg19 build of the human genome.  A few custom refinements were made to the Bismark program.  Since these libraries were made in a directional orientation with the first read always being C-poor, we skipped unnecessary alignments to impossible orientations.  We also implemented a more stringent uniqueness filter, only allowing reads that have one acceptable alignment (based on default Bowtie (http://bowtie-bio.sourceforge.net/index.shtml) parameters) across both strands.  Once reads were aligned, the percent methylation was calculated for each cytosine using the original sequence reads. The percent methylation and number of reads is reported for each CpG in the wgEncodeHaibMethylWgbsXXXXCpg.bigBed file and for each non CpG cytosine in the wgEncodeHaibMethylWgbsXXXXNoncpg.bigBed file.</p>
 
 <h2>Release Notes</h2>
 <P>
 The Whole Genome Bisulfite Sequencing data, alignment and browser display were produced as a test of the Whole Genome
 Bisulfite Sequencing method for ENCODE. Due to the complexity of aligning bisulfite-converted DNA to the whole
-genome, we are still perfecting the method and will therefore leave the track on the preview browser until more
-tests can be performed to confirm the alignment. These are still very valuable data (alignment and
-fastq files), however, and we are confident enough in the alignment that we would like to make the files available on GEO.
+genome, this method is still being perfected. Therefore, this track will not be released to public but will remain on
+the preview browser until more tests can be performed to confirm the alignment. These are still very valuable data (alignment and
+fastq files), however, and the data will be made available on GEO.
 </P>
 
 
