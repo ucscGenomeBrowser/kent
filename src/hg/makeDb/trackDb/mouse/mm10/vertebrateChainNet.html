@@ -105,31 +105,32 @@ See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Mm10_conservation_lastz_
 TARGET=_blank>lastz parameters</A> and other details (e.g., update time) 
 and chain <A HREF="http://genomewiki.ucsc.edu/index.php/Mm10_Genome_size_statistics"
 TARGET=_blank>minimum score and gap</A> parameters used in these alignments.
-</P><P>
-Additional chain/net tracks added since the completion of the 60-way
-conservation set mentioned in these external document pages include:
-<UL>
-<LI>Medium ground finch, geoFor1, April 2012, BGI, lastz alignment matrix:
-<TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
-<TR ALIGN=right><TD>&nbsp;</TD><TD><B>A</B></TD><TD><B>C</B></TD><TD><B>G</B></TD><TD><B>T</B></TD></TR>
-<TR ALIGN=right><TD><B>A<B></TD><TD>91</TD><TD>-90</TD><TD>-25</TD><TD>-100</TD></TR>
-<TR ALIGN=right><TD><B>C<B></TD><TD>-90</TD><TD>100</TD><TD>-100</TD><TD>-25</TD></TR>
-<TR ALIGN=right><TD><B>G<B></TD><TD>-25</TD><TD>-100</TD><TD>100</TD><TD>-90</TD></TR>
-<TR ALIGN=right><TD><B>T<B></TD><TD>-100</TD><TD>-25</TD><TD>-90</TD><TD>91</TD></TR>
-</TABLE>
-chains scoring below a minimum score of '5000' were discarded,
-and the linear gap matrix used with axtChain:<BR>
-<PRE>-linearGap=loose
+</P>
+
+<P>Additional chain/net tracks added since the completion of the 60-way
+conservation set mentioned in these external document pages include:</p>
+
+<UL style="list-style:none;">
+    <LI><strong>Medium ground finch, geoFor1</strong>, April 2012, BGI, lastz alignment matrix:
+    <TABLE class="stdTbl" style="text-align:right;">
+        <TR><TD>&nbsp;</TD><TD><B>A</B></TD><TD><B>C</B></TD><TD><B>G</B></TD><TD><B>T</B></TD></TR>
+        <TR><TD><B>A<B></TD><TD>91</TD><TD>-90</TD><TD>-25</TD><TD>-100</TD></TR>
+        <TR><TD><B>C<B></TD><TD>-90</TD><TD>100</TD><TD>-100</TD><TD>-25</TD></TR>
+        <TR><TD><B>G<B></TD><TD>-25</TD><TD>-100</TD><TD>100</TD><TD>-90</TD></TR>
+        <TR><TD><B>T<B></TD><TD>-100</TD><TD>-25</TD><TD>-90</TD><TD>91</TD></TR>
+    </TABLE>
+    
+    <p>Chains scoring below a minimum score of '5000' were discarded,
+    and the linear gap matrix used with axtChain:</p>
+    <PRE>-linearGap=loose
 tablesize    11
 smallSize   111
 position  1   2   3   11  111  2111  12111  32111  72111  152111  252111
 qGap    325 360 400  450  600  1100   3600   7600  15600   31600   56600
 tGap    325 360 400  450  600  1100   3600   7600  15600   31600   56600
 bothGap 625 660 700  750  900  1400   4000   8000  16000   32000   57000
-</PRE>
-</LI>
+</PRE></LI>
 </UL>
-</P>
 
 <H3>Net track</H3>
 <P>
