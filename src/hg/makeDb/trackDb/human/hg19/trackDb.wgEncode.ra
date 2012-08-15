@@ -6,6 +6,7 @@ include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra alpha
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV11.ra alpha
+include wgEncodeGencodeV13.ra alpha
 
 # GENCODE genes on public (wrangler: cricket)
 include wgEncodeGencodeV7.ra public
