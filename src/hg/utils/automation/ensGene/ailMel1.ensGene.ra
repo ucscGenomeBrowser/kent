@@ -1,0 +1,12 @@
+# required db variable
+db ailMel1
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+# knownToEnsembl yes
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#	to UCSC simple haplotype coordinates
+# haplotypeLift /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift
+# changing names for the odd bits in Ensembl 57
+# liftUp /hive/data/genomes/hg19/jkStuff/ens.57.lft

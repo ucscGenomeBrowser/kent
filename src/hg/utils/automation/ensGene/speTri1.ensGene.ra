@@ -1,0 +1,4 @@
+# required db variable
+db speTri1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes

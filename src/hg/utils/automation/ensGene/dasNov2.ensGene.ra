@@ -1,0 +1,7 @@
+# required db variable
+db dasNov2
+# need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+geneScaffolds yes
+#	during the loading of the gene pred, skip all invalid genes
+skipInvalid yes
+#	31903: ENSDNOT00000003424 no exonFrame on CDS exon 3

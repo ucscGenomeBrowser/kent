@@ -1,0 +1,11 @@
+# required db variable
+db hg18
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#	to UCSC simple haplotype coordinates
+haplotypeLift /hive/data/genomes/hg18/jkStuff/ensGene.haplotype.lift
+liftUp /hive/data/genomes/hg18/jkStuff/liftContigs.lft

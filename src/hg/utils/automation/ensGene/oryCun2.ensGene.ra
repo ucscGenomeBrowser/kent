@@ -1,0 +1,7 @@
+# required db variable
+db oryCun2
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^MT/chrM/;"
+# ensembl v62 has new naming scheme based on NCBI release:
+liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
