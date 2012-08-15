@@ -1,0 +1,6 @@
+# required db variable
+db nomLeu1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With single quotes to protect
+#	everything in perl
+nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;'

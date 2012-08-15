@@ -1,0 +1,8 @@
+# required db variable
+db ornAna1
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^\(X[0-9]\)/chr\1/; s/^MT/chrM/"
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly, 824 items, 31,254 are OK
+skipInvalid yes
