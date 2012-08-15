@@ -73,14 +73,15 @@ do
 done
 
 The above granted permissions are recommended for browser developers.
-The WEB browser CGI binaries only need SELECT and CREATE TEMPORARY
+The WEB browser CGI binaries need SELECT, INSERT and CREATE TEMPORARY
 TABLES permissions.  For example, you could create a special user for
 the browser genome databases only.  In this example, user: "readonly"
 with password: "access"
 
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, CREATE TEMPORARY TABLES \
+    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, \
+        CREATE TEMPORARY TABLES \
 	on ${DB}.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
 done
