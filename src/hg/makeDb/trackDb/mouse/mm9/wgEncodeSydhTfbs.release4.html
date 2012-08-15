@@ -1,0 +1,147 @@
+<H2>Description</H2>
+
+<P>This track shows probable binding sites of the specified transcription 
+factors (TFs) in the given cell types as determined by chromatin 
+immunoprecipitation followed by high throughput sequencing (ChIP-seq). 
+Each experiment is associated with an input signal, which represents the 
+control condition where immunoprecipitation with non-specific immunoglobulin 
+was performed in the same cell type. For each experiment (cell type vs. 
+antibody) this track shows a graph of enrichment for TF binding (<I>Signal</I>),
+along with sites that have the greatest evidence of transcription factor 
+binding, as identified by the PeakSeq algorithm (<I>Peaks</I>).
+<P>
+The sequence reads, quality scores, and alignment coordinates from
+these experiments are available for download.
+</P>
+
+<H2>Display Conventions and Configuration</H2>
+
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <a href="/goldenPath/help/multiView.html" target="_blank">here</a>.
+This track contains the following views:
+<DL>
+<DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
+(normalized data from pooled replicates). Intensity is represented in 
+grayscale, the darker shading shows higher intensity (a solid vertical line
+in the peak region represents the the point with the highest signal).
+ENCODE Peaks tables contain fields for statistical significance, including FDR
+(<a href="/goldenPath/help/qValue.html" target="_blank">qValue</a>).</DD>
+<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
+processed data.</DD>
+</DL>
+<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+
+<H2>Methods</H2>
+
+<P>
+Cells were grown according to the approved
+<a href="/ENCODE/protocols/cell/mouse" target="_blank">ENCODE cell culture protocols</a>.
+For details on the chromatin immunoprecipitation protocol used, 
+see Euskirchen <EM>et. al.</EM>, (2007), Rozowsky <EM>et. al.</EM> (2009) 
+and Auerbach <EM>et. al.</EM> (2009).
+</P>
+<P>
+DNA recovered from the precipitated chromatin was sequenced on the Illumina (Solexa)
+sequencing platform and mapped to the genome using the Eland alignment program.
+ChIP-seq data was scored based on sequence reads (length ~30 bps) that align uniquely
+to the human genome. From the mapped tags, a signal map of ChIP DNA fragments
+(average fragment length ~ 200 bp) was constructed where the signal height is the number of
+overlapping fragments at each nucleotide position in the genome. Reads were pooled from 
+all submitted replicates to generate the Peak and Signal files. Per-replicate
+aligments and sequences are available for download at
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/wgEncodeSydhTfbs/"
+ TARGET=_BLANK>downloads page</A>.
+</P>
+<P>
+For each 1 Mb segment of each chromosome, a peak height threshold was determined
+by requiring a false discovery rate &lt;= 0.01 when comparing the number of peaks
+above said threshold to the number of peaks obtained from multiple simulations of a
+random null background with the same number of mapped reads (also accounting
+for the fraction of mapable bases for sequence tags in that 1 Mb segment). The
+number of mapped tags in a putative binding region is compared to the normalized
+(normalized by correlating tag counts in genomic 10 kb windows) number of 
+mapped tags in the same region from an input DNA control. Using a binomial test,
+only regions that have a p-value &le; 0.01 are considered to be significantly 
+enriched compared to the input DNA control.
+</P>
+
+<h2>Release Notes</h2>
+
+<P>
+This is Release 3 (June 2012). It contains a total of 54 ChIP-seq experiments on transcriptions factor binding with the addition of 17 new 
+experiments.
+</P>
+<P>
+Previous versions of files are available for download from the
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/wgEncodeSydhTfbs/"
+TARGET=_BLANK>FTP site</A>.
+</P>
+
+<H2>Credits</H2>
+
+<P>These data were generated and analyzed by the labs of
+<A HREF="http://snyderlab.stanford.edu/"
+  class="external text" title="http://snyderlab.stanford.edu/"
+  target="_blank">Michael Snyder</a> at Stanford University and
+<A HREF="http://medicine.yale.edu/genetics/people/sherman_weissman.profile"
+  class="external text" title="http://medicine.yale.edu/genetics/people/sherman_weissman.profile"
+  target="_blank">Sherman Weissman</a> at Yale University.
+</P>
+<P>
+Contact: <A 
+HREF="mailto:&#112;c&#97;&#121;&#116;&#105;n&#103;&#64;&#115;&#116;&#97;n&#102;
+o&#114;&#100;.&#101;d&#117;"
+ title="mailto:&#112;c&#97;&#121;&#116;&#105;n&#103;&#64;&#115;&#116;&#97;n&#102;
+o&#114;&#100;.&#101;d&#117;" rel="nofollow"
+  TARGET=_BLANK>Philip Cayting</A>.
+<!-- above address is (Philip Cayting) pcayting at stanford.edu -->
+</P>
+
+<H2>References</H2>
+
+<p>
+Auerbach RK, Euskirchen G, Rozowsky J, Lamarre-Vincent N, Moqtaderi Z, Lefran&#231;ois P, Struhl K, Gerstein M, Snyder M.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19706456" target="_blank">
+Mapping accessible chromatin regions using Sono-Seq</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2009 Sep 1;106(35):14926-31.
+</p>
+
+<p>
+Euskirchen GM, Rozowsky JS, Wei CL, Lee WH, Zhang ZD, Hartman S, Emanuelsson O, Stolc V, Weissman S, Gerstein MB <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17568005" target="_blank">
+Mapping of transcription factor binding regions in mammalian cells by ChIP: comparison of array- and sequencing-based technologies</a>.
+<em>Genome Res</em>. 2007 Jun;17(6):898-909.
+</p>
+
+<p>
+Martone R, Euskirchen G, Bertone P, Hartman S, Royce TE, Luscombe NM, Rinn JL, Nelson FK, Miller P, Gerstein M <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/14527995" target="_blank">
+Distribution of NF-kappaB-binding sites across human chromosome 22</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Oct 14;100(21):12247-52.
+</p>
+
+<p>
+Robertson G, Hirst M, Bainbridge M, Bilenky M, Zhao Y, Zeng T, Euskirchen G, Bernier B, Varhol R, Delaney A <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17558387" target="_blank">
+Genome-wide profiles of STAT1 DNA association using chromatin immunoprecipitation and massively parallel sequencing</a>.
+<em>Nat Methods</em>. 2007 Aug;4(8):651-7.
+</p>
+
+<p>
+Rozowsky J, Euskirchen G, Auerbach RK, Zhang ZD, Gibson T, Bjornson R, Carriero N, Snyder M, Gerstein MB.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19122651" target="_blank">
+PeakSeq enables systematic scoring of ChIP-seq experiments relative to controls</a>.
+<em>Nat Biotechnol</em>. 2009 Jan;27(1):66-75.
+</p>
+
+<H2>Data Release Policy</H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column on the track configuration page and
+the download page.  The full data release policy for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
