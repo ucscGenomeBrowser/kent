@@ -243,3 +243,18 @@ hgsid on
 # oldToNew kg5ToKg6
 baseColorUseCds given
 baseColorDefault genomicCodons
+
+searchName stsMapAliasMrnaAcc
+searchTable stsMap
+searchType bed
+shortCircuit 1
+semiShortCircuit 1
+xrefTable stsAlias
+xrefQuery select trueName,alias from %s where alias like '%s'
+searchBoth on
+termRegex [a-z0-9][-A-Z0-9_:)(\.]+
+dontCheck [^[:space:]]+
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000
+
