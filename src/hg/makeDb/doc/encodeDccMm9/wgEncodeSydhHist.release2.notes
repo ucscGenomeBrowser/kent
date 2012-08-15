@@ -1,11 +1,11 @@
 mkChangeNotes v2
 mm9 wgEncodeSydhHist Release 2 vs Release 1
-2012-08-07
+2012-08-15
 
 QA Count Summaries for Release 2:
-Tables: 33
-Files: 132
-Gbdbs: 18
+Tables: 36
+Files: 144
+Gbdbs: 21
 Supplemental: 0
 Other: 3
 
@@ -16,27 +16,28 @@ Gbdbs: 0
 
 Sizes of New:
 Table: 15 MB
-Files: 37416 MB (37 GB)
-Gbdbs: 2421 MB (2 GB)
+Files: 45574 MB (45 GB)
+Gbdbs: 3194 MB (3 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 39853 MB (39 GB)
+Total: 48784 MB (48 GB)
 
 
 TABLES:
-New: 24
+New: 27
 Untouched: 9
 Revoked/Replaced/Renamed: 0
-New + Untouched: 33
-Total (New + Untouched + Revoked/Replaced/Renamed): 33
+New + Untouched: 36
+Total (New + Untouched + Revoked/Replaced/Renamed): 36
 
-New Tables (24):
+New Tables (27):
 wgEncodeSydhHistEse14H3k04me1StdPk
 wgEncodeSydhHistEse14H3k04me1StdSig
 wgEncodeSydhHistEse14H3k04me3StdPk
 wgEncodeSydhHistEse14H3k04me3StdSig
 wgEncodeSydhHistEse14H3k09me3StdPk
 wgEncodeSydhHistEse14H3k09me3StdSig
+wgEncodeSydhHistEse14InputStdSig
 wgEncodeSydhHistMelH3k04me1Dm2p5dStdPk
 wgEncodeSydhHistMelH3k04me1Dm2p5dStdSig
 wgEncodeSydhHistMelH3k04me1IggrabPk
@@ -55,6 +56,8 @@ wgEncodeSydhHistMelH3k27me3bDm2p5dStdPk
 wgEncodeSydhHistMelH3k27me3bDm2p5dStdSig
 wgEncodeSydhHistMelH3k36me3bDm2p5dStdPk
 wgEncodeSydhHistMelH3k36me3bDm2p5dStdSig
+wgEncodeSydhHistMelInputDm2p5dStdSig
+wgEncodeSydhHistMelInputIggrabSig
 
 Untouched Tables (9):
 wgEncodeSydhHistCh12H3k4me3IggyalePk
@@ -71,13 +74,13 @@ Revoked/Replaced/Renamed Tables (0):
 
 
 DOWNLOAD FILES:
-New: 96
+New: 108
 Untouched: 36
 Revoked/Replaced/Renamed: 0
-New + Untouched: 132
-Total (New + Untouched + Revoked/Replaced/Renamed): 132
+New + Untouched: 144
+Total (New + Untouched + Revoked/Replaced/Renamed): 144
 
-New Download Files (96):
+New Download Files (108):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14H3k04me1StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14H3k04me1StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14H3k04me1StdAlnRep2.bam
@@ -102,6 +105,10 @@ New Download Files (96):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14H3k09me3StdRawDataRep1.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14H3k09me3StdRawDataRep2.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14H3k09me3StdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14InputStdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14InputStdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14InputStdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistEse14InputStdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelH3k04me1Dm2p5dStdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelH3k04me1Dm2p5dStdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelH3k04me1Dm2p5dStdAlnRep2.bam
@@ -174,6 +181,14 @@ New Download Files (96):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelH3k36me3bDm2p5dStdRawDataRep1.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelH3k36me3bDm2p5dStdRawDataRep2.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelH3k36me3bDm2p5dStdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelInputDm2p5dStdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelInputDm2p5dStdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelInputDm2p5dStdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelInputDm2p5dStdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelInputIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelInputIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelInputIggrabRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistMelInputIggrabSig.bigWig
 
 Untouched Download Files (36):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeSydhHist/release2/wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1.bam
@@ -217,16 +232,17 @@ Revoked/Replaced/Renamed Download Files (0):
 
 
 GBDBS:
-New: 12
+New: 15
 Untouched: 6
 Revoked/Replaced/Renamed: 0
-New + Untouched: 18
-Total (New + Untouched + Revoked/Replaced/Renamed): 18
+New + Untouched: 21
+Total (New + Untouched + Revoked/Replaced/Renamed): 21
 
-New Gbdb Files (12):
+New Gbdb Files (15):
 /gbdb/mm9/bbi/wgEncodeSydhHistEse14H3k04me1StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeSydhHistEse14H3k04me3StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeSydhHistEse14H3k09me3StdSig.bigWig
+/gbdb/mm9/bbi/wgEncodeSydhHistEse14InputStdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeSydhHistMelH3k04me1Dm2p5dStdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeSydhHistMelH3k04me1IggrabSig.bigWig
 /gbdb/mm9/bbi/wgEncodeSydhHistMelH3k04me3Dm2p5dStdSig.bigWig
@@ -236,6 +252,8 @@ New Gbdb Files (12):
 /gbdb/mm9/bbi/wgEncodeSydhHistMelH3k27acIggrabSig.bigWig
 /gbdb/mm9/bbi/wgEncodeSydhHistMelH3k27me3bDm2p5dStdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeSydhHistMelH3k36me3bDm2p5dStdSig.bigWig
+/gbdb/mm9/bbi/wgEncodeSydhHistMelInputDm2p5dStdSig.bigWig
+/gbdb/mm9/bbi/wgEncodeSydhHistMelInputIggrabSig.bigWig
 
 Untouched Gbdb Files (6):
 /gbdb/mm9/bbi/wgEncodeSydhHistCh12H3k4me3IggyaleSig.bigWig
