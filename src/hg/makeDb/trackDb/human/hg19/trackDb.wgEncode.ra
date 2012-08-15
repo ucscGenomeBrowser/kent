@@ -6,6 +6,7 @@ include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra alpha
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV11.ra alpha
+include wgEncodeGencodeV13.ra alpha
 
 # GENCODE trackDb changes in transition to public to support highlighting
 include wgEncodeGencodeV7.release3.ra

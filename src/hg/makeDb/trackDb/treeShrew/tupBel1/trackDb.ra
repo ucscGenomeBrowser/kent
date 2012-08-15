@@ -22,6 +22,11 @@ visibility hide
 track xenoRefGene override
 visibility pack
 
+searchTable genscan
+searchType genePred
+termRegex scaffold_[-0-9_\.]+
+searchPriority 50
+
 searchTable gold
 searchMethod prefix
 searchType bed
