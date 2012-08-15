@@ -42,7 +42,7 @@ type bed 3
 origAssembly mm9
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line CH12=CH12 ESE14=ES-E14 MEL=MEL
-subGroup3 factor Factor BHLHE40c=BHLHE40_(NB100-1800) CHD1NB10060411=CHD1_(NB100-60411) CHD2AB68301=CHD2 cJUN=c-Jun cMYBSC7874=c-Myb cMYC=c-Myc CORESTSC30189=COREST_(sc-30189) CTCFb=CTCF E2F4=E2F4 ETS1=ETS1 GATA1SC265=GATA-1 GCN5=GCN5 HCFC1NB10068209=HCFC1_(NB100-68209) JUND=JunD MAFKAB50322=MafK MAX=Max MAZAB85725=MAZ_(ab85725) MXI1AF4185=Mxi1 NELFE=NELFe NRF2=Nrf2 P300=p300 P300SC584=p300_(SC-584) POL2=Pol2 POL2S2=Pol2(phosphoS2) RAD21=Rad21 SIN3ANB6001263=SIN3A_(NB600-1263) SMC3ab9263=SMC3 TBP=TBP UBFSC13125=UBF&#95;(SC-13125) USF2=USF2 ZC3H11ANB10074650=ZC3H11A_(NB100-74650) ZKSCAN1HPA006672=ZKSCAN1&#95;(HPA006672) ZNF384HPA004051=ZNF384_(HPA004051) ZNFMIZDCP1AB65767=ZNF-MIZD-CP1_(ab65767) zInputIGGMUS=Input_(<i>IgG-mus</i>) zInputIGGRAB=Input_(<i>IgG-rab</i>) zInputIGGRAT=Input_(<i>IgG-rat</i>) zInputstd=Input_(<i>Standard</i>) zInputIGGYALE=Input_(<i>IgG-Yale</i>)
+subGroup3 factor Factor BHLHE40c=BHLHE40_(NB100-1800) CHD1NB10060411=CHD1_(NB100-60411) CHD2AB68301=CHD2 cJUN=c-Jun cMYBSC7874=c-Myb cMYC=c-Myc CORESTSC30189=COREST_(sc-30189) CTCFb=CTCF E2F4=E2F4 ETS1=ETS1 GATA1SC265=GATA-1 GCN5=GCN5 HCFC1NB10068209=HCFC1_(NB100-68209) JUND=JunD MAFKAB50322=MafK MAX=Max MAZAB85725=MAZ_(ab85725) MXI1AF4185=Mxi1 NELFE=NELFe NRF2=Nrf2 P300=p300 P300SC584=p300_(SC-584) POL2=Pol2 POL2S2=Pol2(phosphoS2) RAD21=Rad21 SIN3ANB6001263=SIN3A_(NB600-1263) SMC3ab9263=SMC3 TBP=TBP UBFSC13125=UBF&#95;(SC-13125) USF2=USF2 ZC3H11ANB10074650=ZC3H11A_(NB100-74650) ZKSCAN1HPA006672=ZKSCAN1&#95;(HPA006672) ZNF384HPA004051=ZNF384_(HPA004051) ZNFMIZDCP1AB65767=ZNF-MIZD-CP1_(ab65767) ZZZInputIGGMUS=Input_(<i>IgG-mus</i>) ZZZInputIGGRAB=Input_(<i>IgG-rab</i>) ZZZInputIGGRAT=Input_(<i>IgG-rat</i>) ZZZInputstd=Input_(<i>Standard</i>) ZZZInputIGGYALE=Input_(<i>IgG-Yale</i>)
 subGroup4 control Control IGGMUS=IgG-mus IGGRAB=IgG-rab IGGRAT=IgG-rat IGGYALE=IgG-Yale STD=std
 subGroup5 treatment Treatment zNONE=None DM2P5D=DMSO_2.0pct
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
@@ -769,7 +769,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel CH12 IgG-rab
         longLabel CH12 IgG-rab Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputIGGRAB cellType=CH12 control=IGGRAB treatment=zNONE
+        subGroups view=Signal factor=ZZZInputIGGRAB cellType=CH12 control=IGGRAB treatment=zNONE
         type bigWig 1 66328
         color 86,180,233
         # subId=1125
@@ -796,7 +796,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel CH12 IgG-mus
         longLabel CH12 IgG-mus Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputIGGMUS cellType=CH12 control=IGGMUS treatment=zNONE
+        subGroups view=Signal factor=ZZZInputIGGMUS cellType=CH12 control=IGGMUS treatment=zNONE
         type bigWig 1 71455
         color 86,180,233
         # subId=1154
@@ -859,7 +859,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL IgG-mus
         longLabel MEL IgG-mus Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputIGGMUS cellType=MEL control=IGGMUS treatment=zNONE
+        subGroups view=Signal factor=ZZZInputIGGMUS cellType=MEL control=IGGMUS treatment=zNONE
         type bigWig 1 78618
         color 86,180,233
         # subId=1162
@@ -877,7 +877,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL IgG-rab
         longLabel MEL IgG-rab Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputIGGRAB cellType=MEL control=IGGRAB treatment=zNONE
+        subGroups view=Signal factor=ZZZInputIGGRAB cellType=MEL control=IGGRAB treatment=zNONE
         type bigWig 1 103648
         color 86,180,233
         # subId=1164
@@ -895,7 +895,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL IgG-rat
         longLabel MEL IgG-rat Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGRAT treatment=zNONE
+        subGroups view=Signal factor=ZZZInputIGGRAT cellType=MEL control=IGGRAT treatment=zNONE
         type bigWig 1 90844
         color 86,180,233
         # subId=1167
@@ -998,7 +998,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL IgG-Y D
         longLabel MEL IgG-Yale Input DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYALE treatment=DM2P5D
+        subGroups view=Signal factor=ZZZInputIGGYALE cellType=MEL control=IGGYALE treatment=DM2P5D
         type bigWig 1.000000 78459.000000
         color 86,180,233
         # subId=1862 dateSubmitted=2010-07-09
@@ -1167,7 +1167,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL Input
         longLabel MEL Standard Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputstd cellType=MEL control=STD treatment=zNONE
+        subGroups view=Signal factor=ZZZInputstd cellType=MEL control=STD treatment=zNONE
         type bigWig 1.000000 132487.000000
         color 86,180,233
         # subId=4006 dateSubmitted=2011-04-29
@@ -1176,7 +1176,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL Input D
         longLabel MEL Standard Input DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputstd cellType=MEL control=STD treatment=DM2P5D
+        subGroups view=Signal factor=ZZZInputstd cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 103298.000000
         color 86,180,233
         # subId=4007 dateSubmitted=2011-04-29
@@ -1240,7 +1240,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL Input D
         longLabel MEL DMSO 2% Input IgG-rat TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGRAT treatment=DM2P5D
+        subGroups view=Signal factor=ZZZInputIGGRAT cellType=MEL control=IGGRAT treatment=DM2P5D
         type bigWig 1.000000 87331.000000
         color 86,180,233
         # subId=4931 dateSubmitted=2011-09-29
@@ -1276,7 +1276,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel ES-E14 Input
         longLabel ES-E14 Input TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputstd cellType=ESE14 control=STD treatment=zNONE
+        subGroups view=Signal factor=ZZZInputstd cellType=ESE14 control=STD treatment=zNONE
         type bigWig 1.000000 255463.000000
         color 65,105,225
         # subId=6574 dateSubmitted=2012-03-29
@@ -1285,7 +1285,7 @@ html wgEncodeSydhTfbs.release4
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL Input D
         longLabel MEL Input DMSO 2% ChIP-seq Signal from ENCODE/Stanford/Yale
-        subGroups view=Signal factor=zInputstd cellType=MEL control=STD treatment=DM2P5D
+        subGroups view=Signal factor=ZZZInputstd cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 84376.000000
         color 86,180,233
         # subId=6555 dateSubmitted=2012-03-29
