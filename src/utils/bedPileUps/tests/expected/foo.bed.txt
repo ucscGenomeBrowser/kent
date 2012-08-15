@@ -1,0 +1,2 @@
+Input is not sorted - chromosome chrX start 151071196 < lastStart 151094536 in line 22.
+
