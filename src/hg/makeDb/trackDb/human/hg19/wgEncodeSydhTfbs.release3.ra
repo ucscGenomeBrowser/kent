@@ -7421,3 +7421,11 @@ html wgEncodeSydhTfbs.release3
         type bigWig 1.000000 456.000000
         # subId=7862 dateSubmitted=2012-08-01
 
+        track wgEncodeSydhTfbsSknshInputIggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel SK-N-SH Inpt IgR
+        longLabel SK-N-SH Input IgG-rab ChIP-seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=zInputrab cellType=t2SKNSH control=IGGRAB treatment=aNONE
+        type bigWig 1.000000 16004.000000
+        # subId=7867 dateSubmitted=2012-08-14
+
