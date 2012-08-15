@@ -60,6 +60,7 @@ DIRS = \
 	bedCommonRegions \
 	bedGeneParts \
 	bedGraphToBigWig \
+	bedPileUps \
 	bedRemoveOverlap \
 	bedRestrictToPositions \
 	bedToBigBed \
