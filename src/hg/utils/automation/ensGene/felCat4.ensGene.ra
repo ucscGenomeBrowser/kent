@@ -1,0 +1,3 @@
+# required db variable
+db felCat4
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
