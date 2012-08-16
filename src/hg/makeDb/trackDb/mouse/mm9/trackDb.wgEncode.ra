@@ -6,8 +6,7 @@
 include wgEncodeMapability.ra
 
 # Stan/Yale TFBS (wrangler: Venkat) 
-include wgEncodeSydhTfbs.release3.ra public
-include wgEncodeSydhTfbs.release4.ra alpha,beta
+include wgEncodeSydhTfbs.release4.ra
 
 # Stan/Yale Histone (wrangler: Venkat)
 include wgEncodeSydhHist.ra beta,public
