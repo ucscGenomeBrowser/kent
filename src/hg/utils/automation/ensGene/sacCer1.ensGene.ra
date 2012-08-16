@@ -1,0 +1,5 @@
+# required db variable
+db sacCer1
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^VIII/chr8/; s/^VII/chr7/; s/^VI/chr6/; s/^V/chr5/; s/^XIII/chr13/; s/^XII/chr12/; s/^XIV/chr14/; s/^XI/chr11/; s/^XVI/chr16/; s/^XV/chr15/; s/^X/chr10/; s/^III/chr3/; s/^IV/chr4/; s/^II/chr2/; s/^IX/chr9/; s/^I/chr1/; s/^MT/chrM/; /2-micron/d"

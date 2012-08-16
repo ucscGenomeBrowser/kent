@@ -337,3 +337,16 @@ visibility hide
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
+
+searchName stsMapAliasMrnaAcc
+searchTable stsMapRat
+searchType bed
+semiShortCircuit 1
+shortCircuit 1
+xrefTable stsAlias
+xrefQuery select trueName,alias from %s where alias like '%s'
+searchBoth on
+termRegex [a-z][-a-z0-9_,:\.]+
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000

@@ -48,7 +48,7 @@ if(exact)
     if(hasKnownCanonical)
         safef(query, sizeof(query), "select x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description from knownCanonical k, knownGene kg, kgXref x where k.transcript = x.kgID and k.transcript = kg.name and x.geneSymbol = '%s' order by x.geneSymbol, k.chrom, kg.txEnd - kg.txStart desc", prefix);
     else
-        safef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, description.name from %s r, gbCdnaInfo, description where r.name2 = '%s' and gbCdnaInfo.description = description.id order by r.name2, r.chrom, r.txEnd - r.txStart desc", table, prefix);
+        safef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, description.name from %s r, gbCdnaInfo, description where r.name2 = '%s' and gbCdnaInfo.acc = r.name and gbCdnaInfo.description = description.id order by r.name2, r.chrom, r.txEnd - r.txStart desc", table, prefix);
     }
 else
     {
@@ -59,7 +59,7 @@ else
     if(hasKnownCanonical)
         safef(query, sizeof(query), "select x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description from knownCanonical k, knownGene kg, kgXref x where k.transcript = x.kgID and k.transcript = kg.name and x.geneSymbol LIKE '%s%%' order by x.geneSymbol, k.chrom, kg.txStart", prefix);
     else
-        safef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name2, description.name from %s r, gbCdnaInfo, description where r.name2 LIKE '%s%%' and acc = r.name and gbCdnaInfo.description = description.id order by r.name2, r.chrom, r.txStart", table, prefix);
+        safef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name2, description.name from %s r, gbCdnaInfo, description where r.name2 LIKE '%s%%' and gbCdnaInfo.acc = r.name and gbCdnaInfo.description = description.id order by r.name2, r.chrom, r.txStart", table, prefix);
     }
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
