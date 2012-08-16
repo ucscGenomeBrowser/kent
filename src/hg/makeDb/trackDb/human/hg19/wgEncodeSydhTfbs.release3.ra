@@ -3018,7 +3018,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsH1hescZnf274m01UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel H1-hESC ZNF274 UCD
+        shortLabel H1ES ZNF274 UCD
         longLabel H1-hESC ZNF274 (M01) UCDavis ChIP-seq Peaks from ENCODE/USC 
         subGroups view=Peaks factor=ZNF274M01 cellType=t1H1HESC control=UCD treatment=aNONE
         type narrowPeak
@@ -3027,7 +3027,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878MafkIggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM12878 MafK IgM
+        shortLabel GM78 MafK IgM
         longLabel GM12878 MafK (ab50322) IgG-mus ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=MAFK cellType=t1GM12878 control=IGGMUS treatment=aNONE
         type narrowPeak
@@ -3036,7 +3036,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878Srebp1IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM12878 SREBP1 IgR
+        shortLabel GM78 SREBP1 IgR
         longLabel GM12878 SREBP1 IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=SREBP1 cellType=t1GM12878 control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3045,7 +3045,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878Srebp2IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM12878 SREBP2 IgR
+        shortLabel GM78 SREBP2 IgR
         longLabel GM12878 SREBP2 IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=SREBP2 cellType=t1GM12878 control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3104,7 +3104,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878JundIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM12878 JunD IgR
+        shortLabel GM78 JunD IgR
         longLabel GM12878 JunD IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=JUND cellType=t1GM12878 control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3113,7 +3113,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshCtcfbIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel SK-N-SH CTCF IgR
+        shortLabel SKSH CTCF IgR
         longLabel SK-N-SH CTCF (SC-15914) IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=CTCFb cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3121,7 +3121,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshJundIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel SK-N-SH JunD IgR
+        shortLabel SKSH JunD IgR
         longLabel SK-N-SH JunD IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=JUND cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3129,7 +3129,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshMxi1IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel SK-N-SH Mxi1 IgR
+        shortLabel SKSH Mxi1 IgR
         longLabel SK-N-SH Mxi1 (AF4185) IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=MXI1 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3137,7 +3137,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshNrf1IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel SK-N-SH Nrf1 IgR
+        shortLabel SKSH Nrf1 IgR
         longLabel SK-N-SH Nrf1 IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=NRF1 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3145,7 +3145,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshRfx5IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel SK-N-SH RFX5 IgR
+        shortLabel SKSH RFX5 IgR
         longLabel SK-N-SH RFX5 (200-401-194) IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=RFX5200401194 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3153,7 +3153,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshRad21IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel SK-N-SH Rad21 IgR
+        shortLabel SKSH Rad21 IgR
         longLabel SK-N-SH Rad21 IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=RAD21 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3161,7 +3161,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshSmc3IggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel SK-N-SH SMC3 IgR
+        shortLabel SKSH SMC3 IgR
         longLabel SK-N-SH SMC3 (ab9263) IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=SMC3ab9263 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3169,7 +3169,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshP300bIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel SK-N-SH p300 IgR
+        shortLabel SKSH p300 IgR
         longLabel SK-N-SH p300 (SC-584) IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=P300SC584 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3220,7 +3220,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878ErraIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM12878 ERRA IgR
+        shortLabel GM78 ERRA IgR
         longLabel GM12878 ERRA IgG-rab ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=ERRA cellType=t1GM12878 control=IGGRAB treatment=aNONE
         type narrowPeak
@@ -3238,7 +3238,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878Cdpsc6327IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM12878 CDP IgM
+        shortLabel GM78 CDP IgM
         longLabel GM12878 CDP (BioTech) IgG-mus ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=CDPSC6327 cellType=t1GM12878 control=IGGMUS treatment=aNONE
         type narrowPeak
@@ -3248,7 +3248,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM12878 ZNF384 IgM
+        shortLabel GM78 ZNF384 IgM
         longLabel GM12878 ZNF384 (HPA004051) IgG-mus ChIP-seq Peaks from ENCODE/SYDH 
         subGroups view=Peaks factor=ZNF384HPA004051 cellType=t1GM12878 control=IGGMUS treatment=aNONE
         type narrowPeak
@@ -3452,7 +3452,7 @@ html wgEncodeSydhTfbs.release3
 
         #	    track wgEncodeSydhTfbsH1hescSuz12UcdSig
         #	    subTrack wgEncodeSydhTfbsViewSignal off
-        #	    shortLabel H1-hESC SUZ12  SgUCD
+        #	    shortLabel H1ES SUZ12  SgUCD
         #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SUZ12 in H1-hESC cells)
         #	    subGroups view=Signal factor=SUZ12 cellType=1H1HESC control=UCD treatment=aNONE
         #	    type bigWig 1 14985
@@ -3469,7 +3469,7 @@ html wgEncodeSydhTfbs.release3
 
         #	    track wgEncodeSydhTfbsH1hescInputUcdSig
         #	    subTrack wgEncodeSydhTfbsViewSignal off
-        #	    shortLabel H1-hESC Input  SgUCD
+        #	    shortLabel H1ES Input  SgUCD
         #	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in H1-hESC cells)
         #	    subGroups view=Signal factor=zInputucd cellType=1H1HESC control=UCD treatment=aNONE
         #	    type bigWig 1 5725
@@ -3675,7 +3675,7 @@ html wgEncodeSydhTfbs.release3
 
         #        track wgEncodeSydhTfbsH1hescMaxUcdSig
         #        subTrack wgEncodeSydhTfbsViewSignal off
-        #        shortLabel H1-hESC Max    SgUCD
+        #        shortLabel H1ES Max    SgUCD
         #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Max in H1-hESC cells)
         #        subGroups view=Signal factor=MAX cellType=1H1HESC control=UCD treatment=aNONE
         #        type bigWig 1.000000 4069.000000
@@ -3742,7 +3742,7 @@ html wgEncodeSydhTfbs.release3
         #		#Tier 1 Cell Line, deafult track on #
         #        track wgEncodeSydhTfbsGm12878TbpIggmusSig
         #        subTrack wgEncodeSydhTfbsViewSignal on
-        #        shortLabel GM12878 TBP    SgUCD
+        #        shortLabel GM78 TBP    SgUCD
         #        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in GM12878 cells)
         #        subGroups view=Signal factor=TBP cellType=1GM12878 control=IGGMUS treatment=aNONE
         #        type bigWig 1.000000 54051.000000
@@ -5618,7 +5618,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsK562Setdb1MnasedUcdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel K562 MNas STDB UCUCD
+        shortLabel K562 MNas STDB UC
         longLabel K562 SETDB1 UC Davis MNaseD ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=SETDB1 cellType=t1K562 control=UCD treatment=MNaseD
         type bigWig 0.000000 16409.599609
@@ -7157,7 +7157,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsH1hescZnf274m01UcdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel H1-hESC ZNF274 UCD
+        shortLabel H1ES ZNF274 UCD
         longLabel H1-hESC ZNF274 (M01) UCDavis ChIP-seq Signal from ENCODE/USC 
         subGroups view=Signal factor=ZNF274M01 cellType=t1H1HESC control=UCD treatment=aNONE
         type bigWig 1.000000 10138.000000
@@ -7166,7 +7166,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878MafkIggmusSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM12878 MafK IgM
+        shortLabel GM78 MafK IgM
         longLabel GM12878 MafK (ab50322) IgG-mus ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=MAFK cellType=t1GM12878 control=IGGMUS treatment=aNONE
         type bigWig 1.000000 408.000000
@@ -7175,7 +7175,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878Srebp1IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM12878 SREBP1 IgR
+        shortLabel GM78 SREBP1 IgR
         longLabel GM12878 SREBP1 IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=SREBP1 cellType=t1GM12878 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 568.000000
@@ -7184,7 +7184,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878Srebp2IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM12878 SREBP2 IgR
+        shortLabel GM78 SREBP2 IgR
         longLabel GM12878 SREBP2 IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=SREBP2 cellType=t1GM12878 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 600.000000
@@ -7243,7 +7243,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878JundIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM12878 JunD IgR
+        shortLabel GM78 JunD IgR
         longLabel GM12878 JunD IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=JUND cellType=t1GM12878 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 416.000000
@@ -7252,7 +7252,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshCtcfbIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH CTCF IgR
+        shortLabel SKSH CTCF IgR
         longLabel SK-N-SH CTCF (SC-15914) IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=CTCFb cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 464.000000
@@ -7260,7 +7260,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshJundIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH JunD IgR
+        shortLabel SKSH JunD IgR
         longLabel SK-N-SH JunD IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=JUND cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 496.000000
@@ -7268,7 +7268,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshMxi1IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH Mxi1 IgR
+        shortLabel SKSH Mxi1 IgR
         longLabel SK-N-SH Mxi1 (AF4185) IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=MXI1 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 488.000000
@@ -7276,7 +7276,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshNrf1IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH Nrf1 IgR
+        shortLabel SKSH Nrf1 IgR
         longLabel SK-N-SH Nrf1 IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=NRF1 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 416.000000
@@ -7284,7 +7284,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshRfx5IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH RFX5 IgR
+        shortLabel SKSH RFX5 IgR
         longLabel SK-N-SH RFX5 (200-401-194) IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=RFX5200401194 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 536.000000
@@ -7292,7 +7292,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshRad21IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH Rad21 IgR
+        shortLabel SKSH Rad21 IgR
         longLabel SK-N-SH Rad21 IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=RAD21 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 464.000000
@@ -7300,7 +7300,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshSmc3IggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH SMC3 IgR
+        shortLabel SKSH SMC3 IgR
         longLabel SK-N-SH SMC3 (ab9263) IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=SMC3ab9263 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 456.000000
@@ -7308,7 +7308,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshP300bIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH p300 IgR
+        shortLabel SKSH p300 IgR
         longLabel SK-N-SH p300 (SC-584) IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=P300SC584 cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 540.000000
@@ -7359,7 +7359,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878ErraIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM12878 ERRA IgR
+        shortLabel GM78 ERRA IgR
         longLabel GM12878 ERRA IgG-rab ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=ERRA cellType=t1GM12878 control=IGGRAB treatment=aNONE
         type bigWig 1.000000 528.000000
@@ -7377,7 +7377,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878Cdpsc6327IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM12878 CDP IgM
+        shortLabel GM78 CDP IgM
         longLabel GM12878 CDP (BioTech) IgG-mus ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=CDPSC6327 cellType=t1GM12878 control=IGGMUS treatment=aNONE
         type bigWig 1.000000 12658.000000
@@ -7387,7 +7387,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM12878 ZNF384 IgM
+        shortLabel GM78 ZNF384 IgM
         longLabel GM12878 ZNF384 (HPA004051) IgG-mus ChIP-seq Signal from ENCODE/SYDH 
         subGroups view=Signal factor=ZNF384HPA004051 cellType=t1GM12878 control=IGGMUS treatment=aNONE
         type bigWig 1.000000 16678.000000
@@ -7423,7 +7423,7 @@ html wgEncodeSydhTfbs.release3
 
         track wgEncodeSydhTfbsSknshInputIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel SK-N-SH Inpt IgR
+        shortLabel SKSH Inpt IgR
         longLabel SK-N-SH Input IgG-rab ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputrab cellType=t2SKNSH control=IGGRAB treatment=aNONE
         type bigWig 1.000000 16004.000000
