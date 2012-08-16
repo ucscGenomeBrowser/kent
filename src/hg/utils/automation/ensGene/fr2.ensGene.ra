@@ -1,0 +1,5 @@
+# required db variable
+db fr2
+nameTranslation "s/^MT/chrM/;"
+# lift Ensembl scaffolds to UCSC chrUn coordinates
+liftUp /cluster/data/fr2/jkStuff/liftAll.lft

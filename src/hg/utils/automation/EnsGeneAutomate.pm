@@ -3115,7 +3115,6 @@ my %ensGeneFtpMySqlFileNames_68 = (
 'vicPac1' => 'vicugna_pacos_core_68_1',
 'xenTro3' => 'xenopus_tropicalis_core_68_42',
 );
-/* gtf, pep, mysql */
 
 my @versionList = qw( 68 67 65 64 63 62 61 60 59 58 57 56 55 54 52 51 50 49 48 47 46 35 );
 

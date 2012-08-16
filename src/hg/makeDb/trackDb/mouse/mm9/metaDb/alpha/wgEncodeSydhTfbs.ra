@@ -184,6 +184,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003334
+expId 3334
 fileName wgEncodeSydhTfbsCh12Chd1nb10060411IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Chd1nb10060411IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -209,6 +211,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003334
+expId 3334
 fileName wgEncodeSydhTfbsCh12Chd1nb10060411IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Chd1nb10060411IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -234,6 +238,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003334
+expId 3334
 fileName wgEncodeSydhTfbsCh12Chd1nb10060411IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -259,6 +265,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003334
+expId 3334
 fileName wgEncodeSydhTfbsCh12Chd1nb10060411IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -284,6 +292,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003334
+expId 3334
 fileName wgEncodeSydhTfbsCh12Chd1nb10060411IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -309,6 +319,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003334
+expId 3334
 fileName wgEncodeSydhTfbsCh12Chd1nb10060411IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -1514,6 +1526,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003335
+expId 3335
 fileName wgEncodeSydhTfbsCh12Gcn5IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Gcn5IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -1539,6 +1553,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003335
+expId 3335
 fileName wgEncodeSydhTfbsCh12Gcn5IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Gcn5IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -1564,6 +1580,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003335
+expId 3335
 fileName wgEncodeSydhTfbsCh12Gcn5IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -1590,6 +1608,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003335
+expId 3335
 fileName wgEncodeSydhTfbsCh12Gcn5IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -1615,6 +1635,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003335
+expId 3335
 fileName wgEncodeSydhTfbsCh12Gcn5IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -1640,6 +1662,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003335
+expId 3335
 fileName wgEncodeSydhTfbsCh12Gcn5IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -1666,6 +1690,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003345
+expId 3345
 fileName wgEncodeSydhTfbsCh12Hcfc1nb10068209IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Hcfc1nb10068209IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -1691,6 +1717,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003345
+expId 3345
 fileName wgEncodeSydhTfbsCh12Hcfc1nb10068209IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Hcfc1nb10068209IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -1716,6 +1744,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003345
+expId 3345
 fileName wgEncodeSydhTfbsCh12Hcfc1nb10068209IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -1741,6 +1771,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003345
+expId 3345
 fileName wgEncodeSydhTfbsCh12Hcfc1nb10068209IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -1766,6 +1798,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003345
+expId 3345
 fileName wgEncodeSydhTfbsCh12Hcfc1nb10068209IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -1791,6 +1825,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003345
+expId 3345
 fileName wgEncodeSydhTfbsCh12Hcfc1nb10068209IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -2490,6 +2526,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003336
+expId 3336
 fileName wgEncodeSydhTfbsCh12Mazab85725IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Mazab85725IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -2515,6 +2553,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003336
+expId 3336
 fileName wgEncodeSydhTfbsCh12Mazab85725IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Mazab85725IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -2540,6 +2580,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003336
+expId 3336
 fileName wgEncodeSydhTfbsCh12Mazab85725IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -2566,6 +2608,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003336
+expId 3336
 fileName wgEncodeSydhTfbsCh12Mazab85725IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -2591,6 +2635,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003336
+expId 3336
 fileName wgEncodeSydhTfbsCh12Mazab85725IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -2616,6 +2662,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003336
+expId 3336
 fileName wgEncodeSydhTfbsCh12Mazab85725IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -2978,6 +3026,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003337
+expId 3337
 fileName wgEncodeSydhTfbsCh12Nrf2IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Nrf2IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -3003,6 +3053,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003337
+expId 3337
 fileName wgEncodeSydhTfbsCh12Nrf2IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Nrf2IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -3028,6 +3080,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003337
+expId 3337
 fileName wgEncodeSydhTfbsCh12Nrf2IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -3053,6 +3107,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003337
+expId 3337
 fileName wgEncodeSydhTfbsCh12Nrf2IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -3078,6 +3134,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003337
+expId 3337
 fileName wgEncodeSydhTfbsCh12Nrf2IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -3103,6 +3161,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003337
+expId 3337
 fileName wgEncodeSydhTfbsCh12Nrf2IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -4637,6 +4697,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003346
+expId 3346
 fileName wgEncodeSydhTfbsCh12Zc3h11anb10074650IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Zc3h11anb10074650IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -4662,6 +4724,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003346
+expId 3346
 fileName wgEncodeSydhTfbsCh12Zc3h11anb10074650IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Zc3h11anb10074650IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -4687,6 +4751,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003346
+expId 3346
 fileName wgEncodeSydhTfbsCh12Zc3h11anb10074650IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -4712,6 +4778,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003346
+expId 3346
 fileName wgEncodeSydhTfbsCh12Zc3h11anb10074650IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -4737,6 +4805,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003346
+expId 3346
 fileName wgEncodeSydhTfbsCh12Zc3h11anb10074650IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -4762,6 +4832,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003346
+expId 3346
 fileName wgEncodeSydhTfbsCh12Zc3h11anb10074650IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -4951,6 +5023,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003348
+expId 3348
 fileName wgEncodeSydhTfbsCh12Znf384hpa004051IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Znf384hpa004051IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -4976,6 +5050,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003348
+expId 3348
 fileName wgEncodeSydhTfbsCh12Znf384hpa004051IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Znf384hpa004051IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -5001,6 +5077,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003348
+expId 3348
 fileName wgEncodeSydhTfbsCh12Znf384hpa004051IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -5026,6 +5104,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003348
+expId 3348
 fileName wgEncodeSydhTfbsCh12Znf384hpa004051IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5051,6 +5131,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003348
+expId 3348
 fileName wgEncodeSydhTfbsCh12Znf384hpa004051IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5076,6 +5158,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003348
+expId 3348
 fileName wgEncodeSydhTfbsCh12Znf384hpa004051IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -5101,6 +5185,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003347
+expId 3347
 fileName wgEncodeSydhTfbsCh12Znfmizdcp1ab65767IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Znfmizdcp1ab65767IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -5126,6 +5212,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003347
+expId 3347
 fileName wgEncodeSydhTfbsCh12Znfmizdcp1ab65767IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Znfmizdcp1ab65767IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -5151,6 +5239,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003347
+expId 3347
 fileName wgEncodeSydhTfbsCh12Znfmizdcp1ab65767IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -5176,6 +5266,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003347
+expId 3347
 fileName wgEncodeSydhTfbsCh12Znfmizdcp1ab65767IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5201,6 +5293,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003347
+expId 3347
 fileName wgEncodeSydhTfbsCh12Znfmizdcp1ab65767IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5226,6 +5320,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003347
+expId 3347
 fileName wgEncodeSydhTfbsCh12Znfmizdcp1ab65767IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -5251,6 +5347,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003349
+expId 3349
 fileName wgEncodeSydhTfbsEse14Hcfc1nb10068209StdAlnRep1.bam,wgEncodeSydhTfbsEse14Hcfc1nb10068209StdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -5276,6 +5374,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003349
+expId 3349
 fileName wgEncodeSydhTfbsEse14Hcfc1nb10068209StdAlnRep2.bam,wgEncodeSydhTfbsEse14Hcfc1nb10068209StdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -5301,6 +5401,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003349
+expId 3349
 fileName wgEncodeSydhTfbsEse14Hcfc1nb10068209StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -5326,6 +5428,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003349
+expId 3349
 fileName wgEncodeSydhTfbsEse14Hcfc1nb10068209StdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5351,6 +5455,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003349
+expId 3349
 fileName wgEncodeSydhTfbsEse14Hcfc1nb10068209StdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5376,6 +5482,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003349
+expId 3349
 fileName wgEncodeSydhTfbsEse14Hcfc1nb10068209StdSig.bigWig
 grant Snyder
 lab Stanford
@@ -5647,6 +5755,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003350
+expId 3350
 fileName wgEncodeSydhTfbsEse14Zc3h11anb10074650StdAlnRep1.bam,wgEncodeSydhTfbsEse14Zc3h11anb10074650StdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -5672,6 +5782,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003350
+expId 3350
 fileName wgEncodeSydhTfbsEse14Zc3h11anb10074650StdAlnRep2.bam,wgEncodeSydhTfbsEse14Zc3h11anb10074650StdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -5697,6 +5809,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003350
+expId 3350
 fileName wgEncodeSydhTfbsEse14Zc3h11anb10074650StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -5722,6 +5836,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003350
+expId 3350
 fileName wgEncodeSydhTfbsEse14Zc3h11anb10074650StdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5747,6 +5863,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003350
+expId 3350
 fileName wgEncodeSydhTfbsEse14Zc3h11anb10074650StdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5772,6 +5890,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003350
+expId 3350
 fileName wgEncodeSydhTfbsEse14Zc3h11anb10074650StdSig.bigWig
 grant Snyder
 lab Stanford
@@ -5797,6 +5917,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003351
+expId 3351
 fileName wgEncodeSydhTfbsEse14Znf384hpa004051StdAlnRep1.bam,wgEncodeSydhTfbsEse14Znf384hpa004051StdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -5822,6 +5944,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003351
+expId 3351
 fileName wgEncodeSydhTfbsEse14Znf384hpa004051StdAlnRep2.bam,wgEncodeSydhTfbsEse14Znf384hpa004051StdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -5847,6 +5971,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003351
+expId 3351
 fileName wgEncodeSydhTfbsEse14Znf384hpa004051StdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -5872,6 +5998,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003351
+expId 3351
 fileName wgEncodeSydhTfbsEse14Znf384hpa004051StdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5897,6 +6025,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003351
+expId 3351
 fileName wgEncodeSydhTfbsEse14Znf384hpa004051StdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5922,6 +6052,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003351
+expId 3351
 fileName wgEncodeSydhTfbsEse14Znf384hpa004051StdSig.bigWig
 grant Snyder
 lab Stanford
@@ -5947,6 +6079,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEM003344
+expId 3344
 fileName wgEncodeSydhTfbsMelBhlhe40cIggrabAlnRep1.bam,wgEncodeSydhTfbsMelBhlhe40cIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -5972,6 +6106,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEM003344
+expId 3344
 fileName wgEncodeSydhTfbsMelBhlhe40cIggrabAlnRep2.bam,wgEncodeSydhTfbsMelBhlhe40cIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -5997,6 +6133,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEM003344
+expId 3344
 fileName wgEncodeSydhTfbsMelBhlhe40cIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -6023,6 +6161,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEM003344
+expId 3344
 fileName wgEncodeSydhTfbsMelBhlhe40cIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -6048,6 +6188,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEM003344
+expId 3344
 fileName wgEncodeSydhTfbsMelBhlhe40cIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -6073,6 +6215,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEM003344
+expId 3344
 fileName wgEncodeSydhTfbsMelBhlhe40cIggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -6099,6 +6243,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003338
+expId 3338
 fileName wgEncodeSydhTfbsMelChd1nb10060411IggrabAlnRep1.bam,wgEncodeSydhTfbsMelChd1nb10060411IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -6124,6 +6270,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003338
+expId 3338
 fileName wgEncodeSydhTfbsMelChd1nb10060411IggrabAlnRep2.bam,wgEncodeSydhTfbsMelChd1nb10060411IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -6149,6 +6297,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003338
+expId 3338
 fileName wgEncodeSydhTfbsMelChd1nb10060411IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -6174,6 +6324,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003338
+expId 3338
 fileName wgEncodeSydhTfbsMelChd1nb10060411IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -6199,6 +6351,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003338
+expId 3338
 fileName wgEncodeSydhTfbsMelChd1nb10060411IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -6224,6 +6378,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003338
+expId 3338
 fileName wgEncodeSydhTfbsMelChd1nb10060411IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -6926,6 +7082,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEM003343
+expId 3343
 fileName wgEncodeSydhTfbsMelCorestsc30189IggrabAlnRep1.bam,wgEncodeSydhTfbsMelCorestsc30189IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -6951,6 +7109,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEM003343
+expId 3343
 fileName wgEncodeSydhTfbsMelCorestsc30189IggrabAlnRep2.bam,wgEncodeSydhTfbsMelCorestsc30189IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -6976,6 +7136,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEM003343
+expId 3343
 fileName wgEncodeSydhTfbsMelCorestsc30189IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -7002,6 +7164,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEM003343
+expId 3343
 fileName wgEncodeSydhTfbsMelCorestsc30189IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -7027,6 +7191,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEM003343
+expId 3343
 fileName wgEncodeSydhTfbsMelCorestsc30189IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -7052,6 +7218,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEM003343
+expId 3343
 fileName wgEncodeSydhTfbsMelCorestsc30189IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -8420,6 +8588,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003339
+expId 3339
 fileName wgEncodeSydhTfbsMelGcn5IggrabAlnRep1.bam,wgEncodeSydhTfbsMelGcn5IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -8445,6 +8615,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003339
+expId 3339
 fileName wgEncodeSydhTfbsMelGcn5IggrabAlnRep2.bam,wgEncodeSydhTfbsMelGcn5IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -8470,6 +8642,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003339
+expId 3339
 fileName wgEncodeSydhTfbsMelGcn5IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -8495,6 +8669,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003339
+expId 3339
 fileName wgEncodeSydhTfbsMelGcn5IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -8520,6 +8696,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003339
+expId 3339
 fileName wgEncodeSydhTfbsMelGcn5IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -8546,6 +8724,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003339
+expId 3339
 fileName wgEncodeSydhTfbsMelGcn5IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -8571,6 +8751,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003352
+expId 3352
 fileName wgEncodeSydhTfbsMelHcfc1nb10068209IggrabAlnRep1.bam,wgEncodeSydhTfbsMelHcfc1nb10068209IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -8596,6 +8778,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003352
+expId 3352
 fileName wgEncodeSydhTfbsMelHcfc1nb10068209IggrabAlnRep2.bam,wgEncodeSydhTfbsMelHcfc1nb10068209IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -8621,6 +8805,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003352
+expId 3352
 fileName wgEncodeSydhTfbsMelHcfc1nb10068209IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -8646,6 +8832,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003352
+expId 3352
 fileName wgEncodeSydhTfbsMelHcfc1nb10068209IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -8671,6 +8859,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003352
+expId 3352
 fileName wgEncodeSydhTfbsMelHcfc1nb10068209IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -8696,6 +8886,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003352
+expId 3352
 fileName wgEncodeSydhTfbsMelHcfc1nb10068209IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -10204,6 +10396,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003340
+expId 3340
 fileName wgEncodeSydhTfbsMelMazab85725IggrabAlnRep1.bam,wgEncodeSydhTfbsMelMazab85725IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -10229,6 +10423,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003340
+expId 3340
 fileName wgEncodeSydhTfbsMelMazab85725IggrabAlnRep2.bam,wgEncodeSydhTfbsMelMazab85725IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -10254,6 +10450,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003340
+expId 3340
 fileName wgEncodeSydhTfbsMelMazab85725IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -10279,6 +10477,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003340
+expId 3340
 fileName wgEncodeSydhTfbsMelMazab85725IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -10304,6 +10504,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003340
+expId 3340
 fileName wgEncodeSydhTfbsMelMazab85725IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -10329,6 +10531,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003340
+expId 3340
 fileName wgEncodeSydhTfbsMelMazab85725IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -10690,6 +10894,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003341
+expId 3341
 fileName wgEncodeSydhTfbsMelNrf2IggrabAlnRep1.bam,wgEncodeSydhTfbsMelNrf2IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -10715,6 +10921,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003341
+expId 3341
 fileName wgEncodeSydhTfbsMelNrf2IggrabAlnRep2.bam,wgEncodeSydhTfbsMelNrf2IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -10740,6 +10948,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003341
+expId 3341
 fileName wgEncodeSydhTfbsMelNrf2IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -10765,6 +10975,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003341
+expId 3341
 fileName wgEncodeSydhTfbsMelNrf2IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -10790,6 +11002,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003341
+expId 3341
 fileName wgEncodeSydhTfbsMelNrf2IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -10815,6 +11029,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003341
+expId 3341
 fileName wgEncodeSydhTfbsMelNrf2IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -12864,6 +13080,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003342
+expId 3342
 fileName wgEncodeSydhTfbsMelUbfsc13125IggmusAlnRep1.bam,wgEncodeSydhTfbsMelUbfsc13125IggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -12889,6 +13107,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003342
+expId 3342
 fileName wgEncodeSydhTfbsMelUbfsc13125IggmusAlnRep2.bam,wgEncodeSydhTfbsMelUbfsc13125IggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -12914,6 +13134,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003342
+expId 3342
 fileName wgEncodeSydhTfbsMelUbfsc13125IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -12939,6 +13161,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003342
+expId 3342
 fileName wgEncodeSydhTfbsMelUbfsc13125IggmusRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -12964,6 +13188,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003342
+expId 3342
 fileName wgEncodeSydhTfbsMelUbfsc13125IggmusRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -12989,6 +13215,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-29
 dateUnrestricted 2013-03-28
+dccAccession wgEncodeEM003342
+expId 3342
 fileName wgEncodeSydhTfbsMelUbfsc13125IggmusSig.bigWig
 grant Snyder
 lab Stanford
@@ -13406,6 +13634,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003353
+expId 3353
 fileName wgEncodeSydhTfbsMelZc3h11anb10074650IggrabAlnRep1.bam,wgEncodeSydhTfbsMelZc3h11anb10074650IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -13431,6 +13661,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003353
+expId 3353
 fileName wgEncodeSydhTfbsMelZc3h11anb10074650IggrabAlnRep2.bam,wgEncodeSydhTfbsMelZc3h11anb10074650IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -13456,6 +13688,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003353
+expId 3353
 fileName wgEncodeSydhTfbsMelZc3h11anb10074650IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -13481,6 +13715,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003353
+expId 3353
 fileName wgEncodeSydhTfbsMelZc3h11anb10074650IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -13506,6 +13742,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003353
+expId 3353
 fileName wgEncodeSydhTfbsMelZc3h11anb10074650IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -13531,6 +13769,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003353
+expId 3353
 fileName wgEncodeSydhTfbsMelZc3h11anb10074650IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -13720,6 +13960,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003355
+expId 3355
 fileName wgEncodeSydhTfbsMelZnf384hpa004051IggrabAlnRep1.bam,wgEncodeSydhTfbsMelZnf384hpa004051IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -13745,6 +13987,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003355
+expId 3355
 fileName wgEncodeSydhTfbsMelZnf384hpa004051IggrabAlnRep2.bam,wgEncodeSydhTfbsMelZnf384hpa004051IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -13770,6 +14014,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003355
+expId 3355
 fileName wgEncodeSydhTfbsMelZnf384hpa004051IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -13795,6 +14041,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003355
+expId 3355
 fileName wgEncodeSydhTfbsMelZnf384hpa004051IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -13820,6 +14068,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003355
+expId 3355
 fileName wgEncodeSydhTfbsMelZnf384hpa004051IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -13845,6 +14095,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003355
+expId 3355
 fileName wgEncodeSydhTfbsMelZnf384hpa004051IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -13870,6 +14122,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003354
+expId 3354
 fileName wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabAlnRep1.bam,wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -13895,6 +14149,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003354
+expId 3354
 fileName wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabAlnRep2.bam,wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -13920,6 +14176,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003354
+expId 3354
 fileName wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -13945,6 +14203,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003354
+expId 3354
 fileName wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -13970,6 +14230,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003354
+expId 3354
 fileName wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -13995,6 +14257,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEM003354
+expId 3354
 fileName wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -14008,4 +14272,4 @@ tableName wgEncodeSydhTfbsMelZnfmizdcp1ab65767IggrabSig
 treatment None
 view Signal
 
-# MAGIC: 773344175
+# MAGIC: 1861146167
