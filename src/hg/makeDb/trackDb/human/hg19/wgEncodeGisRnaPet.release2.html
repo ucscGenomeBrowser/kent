@@ -14,12 +14,14 @@ of the 5' start and the 3' end of individual mRNA transcripts, thus
 demarcating the first and last exon, and contain enough coding information
 to map the tags uniquely to the genome, in turn making it possible to
 identify unconventional fusion transcripts. These 5' and 3' paired-end tags
-extracted by restriction enzyme are ligated together to form a ditag for sequencing.
+extracted by restriction enzyme are ligated together to form a ditag for sequencing,
+where the 3' end includes two adenine bases from the polyA tail thereby 
+reducing the relative amount of unique sequence.
 The RNA-PET information provided in this track is composed of two different
 PET length versions based on how the PETs were extracted using different
 restriction enzymes. The cloning-based PET method (18 bp and 16 bp for each of
 the 5' and 3' ends) is an earlier version (Ng <EM>et al</EM>., 2006). While the
-cloning-free PET approach (27 bp and 27 bp for each of the 5' and 3' ends) is a
+cloning-free PET approach (27 bp and 25 bp for each of the 5' and 3' ends) is a
 recently modified version which uses Type III restriction enzyme EcoP15I
 to generate a longer length of PET (Ruan and Ruan, 2012), 
 which results in a significant enhancement
@@ -45,7 +47,9 @@ distinguishing between the different cell types and compartments.
 <DD>The Clusters view shows clusters built from the alignments.
 In the graphical display, the ends are represented by blocks connected by a
 horizontal line. In full and packed display modes, the arrowheads on the
-horizontal line represent the direction of transcription. 
+horizontal line represent the direction of transcription.  Although some of
+the subtracks have score information most of them do not and score filtering
+has been disabled.
 <DT><i>Plus Raw Signal</i>
 <DD>The Plus Raw Signal view graphs the base-by-base density of tags on the forward strand.
 <DT><i>Minus Raw Signal</i>
@@ -69,9 +73,9 @@ Cells were grown according to the approved
 Two different GIS RNA-PET protocols were used to generate the full-length transcriptome
 PETs: one is based on a cloning-free RNA-PET library construction and sequencing strategy (Ruan and Ruan, 2012),
 and the other is a cloning-based library construction (Ng <EM>et al</EM>., 2005)
-and recent Illumina paired end sequencing.
+and recent Illumina paired-end sequencing.
 </P>
-<h3>Cloning-free RNA-PET (54 bp reads, 27 bp and 27 bp tag for each of the 5' and 3' ends)</h3>
+<h3>Cloning-free RNA-PET (52 bp reads, 27 bp and 25 bp tag for each of the 5' and 3' ends)</h3>
 <P>
 <B>Method:</B>
 The cloning-free RNA-PET libraries were generated from polyA mRNA
@@ -89,8 +93,9 @@ for paired-end sequencing using Illumina platforms.
 </P>
 <P>
 <B>Data:</B>
-The sequenced RNA-PETs resulted in paired 2x27 bp reads from 5' and 3'
-ends of a cDNA. Redundant and noisy reads were excluded from downstream
+The sequenced RNA-PETs resulted in reads of 27 bp and 25 bp corresponding
+to the 5' and 3' end of each cDNA, respectively.
+Redundant and noisy reads were excluded from downstream
 analysis. Strand-specific orientation of each PET was determined using
 the barcode built into the sequencing template. The oriented RNA-PET was
 mapped onto the reference genome allowing up to two mismatches. The majority
@@ -179,7 +184,14 @@ or from isolated total RNA (cloning-free PET) for sequencing confirmation.
 <H2>Release Notes</H2>
 <P>
 This is Release 2 (Aug 2012) of this track. It adds data for tier 2
-cell lines (A549, SK-N-SH, IMR90, and MCF-7).  
+cell lines (A549, SK-N-SH, IMR90, and MCF-7). This newer data has no
+scores in the Clusters files. 
+
+Note:  The clone-based data has functioning score fields in
+the Cluster files which could be used for filtering or shading.
+However, the clone-free data either has scores that are not scaled
+well or scores that are set to zero for all items.
+  
 </P>
 
 <H2>Credits</H2>

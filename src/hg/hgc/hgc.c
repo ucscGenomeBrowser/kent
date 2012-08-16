@@ -3874,7 +3874,7 @@ else if (wordCount > 0)
     else if (sameString(type, "encodePeak") || sameString(type, "narrowPeak") ||
 	     sameString(type, "broadPeak") || sameString(type, "gappedPeak"))
 	{
-	doEncodePeak(tdb, NULL);
+	doEncodePeak(tdb, NULL, item);
 	}
     else if (sameString(type, "encodeFiveC"))
 	{
@@ -20046,7 +20046,7 @@ printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
 else if (sameWord(type, "encodePeak"))
-    doEncodePeak(ct->tdb, ct);
+    doEncodePeak(ct->tdb, ct, itemName);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
 else if (sameWord(type, "bigBed"))

@@ -8750,6 +8750,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
 validation Human_-_:missing Mouse_-_:missing
 label c-Myc (sc-764)
 
+term CBP_(sc-369)
+tag CBPSC369
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CBP
+target CBP
+targetDescription CBP is a histone acetyl transferase that promotes transcription.  CBP is recruited by a variety of transcription factors to promoters and enhancers.
+vendorName Santa Cruz Biotech
+vendorId sc369
+orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
+lab Struhl
+targetId GeneCard:CREBBP
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
+validation Human_-_CBP_(sc-369)(Western_blot,ChIP):human_CBP_sc-369_validation_Struhl.pdf
+label CBP (sc-369)
+
 term CBX2
 tag CBX2
 type Antibody
@@ -8765,6 +8780,38 @@ targetId GeneCard:CBX2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX2
 validation Human_-_CBX2_(A302-524A)(ChIP,WesternBlot):human_CBX2_validation_Epstein.pdf
 label CBX2 (A302-524A)
+
+term CBX3_(SC-101004)
+tag CBX3SC101004
+type Antibody
+target CBX3
+targetDescription At the nuclear envelope, the nuclear lamina and heterochromatin are adjacent to the inner nuclear membrane. The protein encoded by this gene binds DNA and is a component of heterochromatin. This protein also can bind lamin B receptor, an integral membrane protein found in the inner nuclear membrane. The dual binding functions of the encoded protein may explain the association of heterochromatin with the inner nuclear membrane. This protein binds histone H3 tails methylated at Lys-9 sites. This protein is also recruited to sites of ultraviolet-induced DNA damage and double-strand breaks. Two transcript variants encoding the same protein but differing in the 5' UTR, have been found for this gene.
+antibodyDescription Mouse monoclonal IgG, raised against recombinant CBX3 of human origin. Antibody Target: CBX3
+vendorName Santa Cruz Biotech
+vendorId sc-101004
+orderUrl http://www.scbt.com/datasheet-101004-hp1gamma-s-19-antibody.html
+lab Myers
+lots G1410
+targetId GeneCard:CBX3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
+validation Human_-_CBX3_(SC-101004)(Western_blot,IP-Mass_spec):human_CBX3_SC-101004_validation_Myers.pdf
+label CBX3 (sc-101004)
+
+term CBX5
+tag CBX5
+type Antibody
+target CBX5
+targetDescription Chromobox homolog 5 (HP1 alpha homolog, Drosophila)
+antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH,IP,and WB. Antibody Target: CBX5
+vendorName Millipore
+vendorId 05-689
+orderUrl http://www.millipore.com/catalogue/item/05-689
+lab Tenenbaum
+targetId GeneCard:CBX5
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
+validation 
+label CBX5 (05-689)
+#lots
 
 term CBX8
 tag CBX8
@@ -8897,6 +8944,37 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPZ
 validation Human_-_CEBPZ(Immunoprecipitation,IP-Mass_spec):human_CEBPZ_validation_Snyder.pdf
 label CEBPZ (SAB2100398)
 
+term CELF1
+tag CELF1
+type Antibody
+target CELF1
+targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
+antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA. Antibody Target: CELF1
+vendorName Millipore
+vendorId 05-621
+orderUrl http://www.millipore.com/
+lab Tenenbaum
+targetId GeneCard:CELF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
+validation Human_-_:missing
+label CELF1 (05-621)
+# lots
+
+term CELF2
+tag CELF2
+type Antibody
+target CELF2
+targetDescription CUGBP, Elav-like family member 2
+antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CELF2 of human origin by WB. Antibody Target: CELF2
+vendorName Millipore
+vendorId 04-047
+orderUrl http://www.millipore.com/catalogue/item/04-047
+lab Tenenbaum
+targetId GeneCard:CELF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
+validation 
+label CELF2 (04-047)
+
 term CHD1_(A301-218A)
 tag CHD1A301218A
 type Antibody
@@ -8976,6 +9054,40 @@ targetId GeneCards:CHD7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD7
 validation CHD7_(A301-223A-1)(ChIP,WesternBlot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
 label CHD7 (A301-223A-1)
+
+term COREST_(ab24166)
+tag CORESTAB24166
+type Antibody
+antibodyDescription Synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST.   Note: This antibody has since been discontinued.  Full product information is attached as part of validation document. Antibody Target: COREST_(ab24166)
+target COREST
+targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
+vendorName Abcam
+vendorId ab24166
+orderUrl http://www.abcam.com/CoREST-antibody-ChIP-Grade-ab24166.html
+lab Snyder
+lots 834865
+targetId RCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
+validation Human_-_COREST_(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
+label COREST (ab24166)
+
+term COREST_(sc-30189)
+tag CORESTSC30189
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin. Antibody Target: COREST (sc30189)
+target COREST
+targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
+vendorName Santa Cruz Biotech
+vendorId sc-30189
+orderUrl http://www.scbt.com/datasheet-30189-corest-h-65-antibody.html
+lab Snyder
+lots C0806
+targetId RCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
+validation Human_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):human_COREST_sc-30189_validation_Snyder.pdf Mouse_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):mouse_COREST_sc-30189_validation_Snyder.pdf
+label COREST (sc30189)
+# lots
+##This does not appear in metaDb
 
 term CREB1_(06-863)
 tag CREB106863
@@ -9217,6 +9329,23 @@ targetId GeneCard:BACH1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
 validation Human_-_:missing
 label BACH1 (eGFP-BACH1)
+
+term EEF1A1
+tag EEF1A1
+type Antibody
+target EEF1A1
+targetDescription Eukaryotic translation elongation factor 1 alpha 1
+antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB. Antibody Target: EEF1A1
+vendorName Millipore
+vendorId 05-235
+orderUrl http://www.millipore.com/catalogue/item/05-235
+lab Tenenbaum
+targetId Gene:1915
+targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
+validation 
+label EEF1A1 (05-235)
+# lots
+##This does not appear in metaDb
 
 term eGFP-CCNE1
 tag CCNE1
@@ -9548,6 +9677,69 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1
 validation Human_-_:missing
 label STAT1 (eGFP-STAT1)
 
+term Egr-1
+tag EGR1
+type Antibody
+target EGR1
+antibodyDescription Rabbit polyclonal, EGR-1 (588). Antibody Target: EGR1
+targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factors belonging to the Egr C2H2-type zinc-finger protein family and containing three C2H2-type zinc fingers. As immediate early proteins, Egr transcription factors are rapidly induced by diverse extracellular stimuli. Egr proteins are subject to tight differential control through diverse mechanisms at several levels of regulation including transcriptional, translational and post-translational (including glyco- sylation, phosphorylation and redox) mechanisms and protein-protein inter- action. Egr-1 binds to the DNA sequence 5'-CGCCCCCGC-3' (EGR-site), there- by activating transcription of target genes whose products are required for mitogenisis and differentiation. Egr-2 binds specific DNA sites located in the promoter region of HoxA4. Egr-2 defects cause congenital hypomyelination neuropathy (also designated Charcot-Marie-tooth disease) and Dejerine- Sottas neuropathology (also designated hereditary motor and sensory neuro- pathy III. Egr-3 is involved in muscle spindle development and is expressed in T cells 20 minutes following activation. EGR-4 binds to the EGR consensus motif GCGTGGGCG, functions as a transcriptional repressor, and displays autoregulatory activities, downregulating its on gene promoter in a dose dependent manner.
+vendorName Santa Cruz Biotech
+vendorId sc-110
+orderUrl http://www.scbt.com/product.php?datasheet=110
+lab Farnham
+targetId GeneCard:EGR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1
+validation Human_-_Egr-1(Immunoblot):human_Egr-1_588_validation_Myers.pdf
+label EGR1 (sc-110)
+
+term EIF4E
+tag EIF4E
+type Antibody
+target EIF4E
+targetDescription Eukaryotic initiation factor 4E
+antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209of human eIF4E. Recommended for detection of EIF4E of H, M, and R origin by WB, IH(P), IC, and IP. Antibody Target: EIF4E
+vendorName Millipore
+vendorId 04-1058
+orderUrl http://www.millipore.com/catalogue/item/04-1058
+lab Tenenbaum
+targetId Gene:45525
+targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
+validation 
+label EIF4E (04-1058)
+# lots
+##This does not appear in metaDb
+
+term EIF4EBP1
+tag EIF4EBP1
+type Antibody
+target EIF4EBP1
+targetDescription Eukaryotic translation initiation factor 4E binding protein 1
+antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of humanE IF4EBP1 . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB. Antibody Target: EIF4EBP1
+vendorName Millipore
+vendorId 04-1010
+orderUrl http://www.millipore.com/catalogue/item/04-1010
+lab Tenenbaum
+targetId Gene:1978
+targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
+validation 
+label EIF4EBP1 (04-1010)
+
+term ELAVL1
+tag ELAVL1
+type Antibody
+target ELAVL1
+targetDescription  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
+antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
+vendorName 1) Santa Cruz Biotech; 2) Millipore
+vendorId SC-5261; 07-1735 is recommended replacement for AB5831
+orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html ; http://www.millipore.com/catalogue/item/07-1735
+lab Tenenbaum
+lots 1) B2508(Nov2008)
+targetId Gene:1994
+targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
+validation Human_-_:missing
+label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
+
 term ELF1_(SC-631)
 tag ELF1
 type Antibody
@@ -9563,7 +9755,23 @@ lots L2707
 targetId GeneCard:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
 validation Human_-_ELF1_(SC-631)(Western_blot,IP-MassSpec):human_ELF1_SC-631_validation_Myers.pdf
-label  ELF1 (sc-631)
+label ELF1 (sc-631)
+
+term ELK1_(1277-1)
+tag ELK112771
+type Antibody
+antibodyDescription Rabbit polyclonal, a synthetic peptide corresponding to residues in C-terminus of human ELK-1 was used as immunogen. The antibody does not cross-react with other ETS family members. Antibody Target: ELK1
+target ELK1
+targetDescription Elk-1 is a transcription factor that is part of the ets oncogene superfamily. Elk-1 forms a ternary complex with the serum response factors, SRE and SRF, mediating gene activity in response to serum and growth factors. Activation by several mitogen- activated protein kinases (Erk1 and Erk2) mediates the immediate early responses of the c-fos promoter to growth factors and other stimuli.
+vendorName Epitomics
+vendorId 1277-1
+orderUrl http://www.epitomics.com/products/product_info/194
+lab Snyder
+lots YG030402C
+targetId ELK1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK1
+validation Human_-_ELK1(1277-1)(Immunoprecipitation,IP-Mass_spec):human_ELK1_1277-1_validation_Snyder.pdf
+label ELK1 (1277-1)
 
 term ELK4
 tag ELK4
@@ -9614,21 +9822,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation 
 label ERalpha b (MAb-009-050)
 ##This does not appear in metaDb
-
-term Egr-1
-tag EGR1
-type Antibody
-target EGR1
-antibodyDescription Rabbit polyclonal, EGR-1 (588). Antibody Target: EGR1
-targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factors belonging to the Egr C2H2-type zinc-finger protein family and containing three C2H2-type zinc fingers. As immediate early proteins, Egr transcription factors are rapidly induced by diverse extracellular stimuli. Egr proteins are subject to tight differential control through diverse mechanisms at several levels of regulation including transcriptional, translational and post-translational (including glyco- sylation, phosphorylation and redox) mechanisms and protein-protein inter- action. Egr-1 binds to the DNA sequence 5'-CGCCCCCGC-3' (EGR-site), there- by activating transcription of target genes whose products are required for mitogenisis and differentiation. Egr-2 binds specific DNA sites located in the promoter region of HoxA4. Egr-2 defects cause congenital hypomyelination neuropathy (also designated Charcot-Marie-tooth disease) and Dejerine- Sottas neuropathology (also designated hereditary motor and sensory neuro- pathy III. Egr-3 is involved in muscle spindle development and is expressed in T cells 20 minutes following activation. EGR-4 binds to the EGR consensus motif GCGTGGGCG, functions as a transcriptional repressor, and displays autoregulatory activities, downregulating its on gene promoter in a dose dependent manner.
-vendorName Santa Cruz Biotech
-vendorId sc-110
-orderUrl http://www.scbt.com/product.php?datasheet=110
-lab Farnham
-targetId GeneCard:EGR1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1
-validation Human_-_Egr-1(Immunoblot):human_Egr-1_588_validation_Myers.pdf
-label EGR1 (sc-110)
 
 term ERRA
 tag ERRA
@@ -9837,6 +10030,23 @@ targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
 validation Human_-_FOXP2(Western_blot,siRNA):human_FOXP2_validation_Myers.pdf
 label FOXP2 (ab16046)
+
+term FXR1
+tag FXR1
+type Antibody
+target FXR1
+targetDescription Fragile X mental retardation, autosomal homolog 1
+antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: FXR1
+vendorName Millipore
+vendorId 05-1529
+orderUrl http://www.millipore.com/catalogue/item/05-1529
+lab Tenenbaum
+targetId Gene:8087
+targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
+validation 
+label FXR1 (05-1529)
+# lots
+##This does not appear in metaDb
 
 term GABP
 tag GABP
@@ -10527,6 +10737,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC6
 validation Human_-_HDAC6_(A301-341A)(Western_blot,ChIP-String):human_Hdac6_A301-341A_validation_Bernstein.pdf
 label HDAC6 (A301-341A)
 
+term Hexim1
+tag HEXIM1
+type Antibody
+target Hexim1
+targetDescription Hexamethylene bis-acetamide inducible 1
+antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: Hexim1
+vendorName Millipore
+vendorId 07-955
+orderUrl http://www.millipore.com/catalogue/item/07-955
+lab Tenenbaum
+targetId Gene:10614
+targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
+validation 
+label Hexim1 (07-955)
+
 term HEY1
 tag HEY1
 type Antibody
@@ -10542,6 +10767,21 @@ targetId GeneCard:HEY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HEY1
 validation Human_-_:missing
 label HEY1 (sc-16424)
+
+term HMGN1_(ab51212)
+tag HMGN1AB51212
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14. Antibody Target: HMGN1
+target HMGN1
+targetDescription HMGN1 is one of four members of the high mobility group nucleosome binding proteins.  HMGN1 is ubiquitously expressed and has been implicated in promoting transcription.
+vendorName Abcam
+vendorId ab5212
+orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
+lab Struhl
+targetId GeneCard:HMGN1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN1
+validation Human_-_HMGN1_(ab51212)(Western_blot,Immunoprecipitation):human_HMGN1_ab51212_validation_Struhl.pdf
+label HMGN1 (ab5212)
 
 term HMGN3
 tag HMGN3
@@ -10611,6 +10851,40 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
 validation Human_-_HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 label HNF4G (sc-6558)
 
+term HNRNPD
+tag HNRNPD
+type Antibody
+target HNRNPD
+targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
+antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP. Antibody Target: HNRNPD
+vendorName Millipore
+vendorId 07-260
+orderUrl http://www.millipore.com/catalogue/item/07-260
+lab Tenenbaum
+targetId Gene:3184
+targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
+validation 
+label HNRNPD (07-260)
+# lots
+##This does not appear in metaDb
+
+term hnRNPM
+tag HNRNPM
+type Antibody
+target hnRNPM
+targetDescription Heterogeneous nuclear ribonucleoprotein M
+antibodyDescription Mouse monoclonal Anti-hnRNP M1-M4, clone 1D8. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB, Antibody Target: hnRNPM
+vendorName Millipore
+vendorId 05-620
+orderUrl http://www.millipore.com/catalogue/item/05-620
+lab Tenenbaum
+targetId Gene:76936
+targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
+validation 
+label hnRNPM (05-620)
+# lots
+##This does not appear in metaDb
+
 term HP1gamma_(ab10480)
 tag HP1GAMMAAB10480
 type Antibody
@@ -10642,6 +10916,37 @@ targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
 validation Human_-_HSF1(Immunoprecipitation,Motif_Enrichment):human_HSF1_validation_Snyder.pdf
 label HSF1 (sc-9144)
+
+term hSpt5_(sc-28678)
+tag HSPT5SC28678
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: hSpt5
+target hSpt5
+targetDescription hSpt5 heterodimerizes with hSpt4 to form the DRB Sensitivity Inducing Factor (DSIF). DSIF play dual roles in elongation. First, in a conjunction with NELF, dephosphorylated state DSIF blocks RNA polymerase II (RNAPII) from shifting from early elongation to productive elongation.  Second, after phosphorylation DSIF continues to associate with elongating RNAPII to facilitate recruitment of factors required for processing of the mRNA.
+vendorName Santa Cruz Biotech
+vendorId sc28678
+orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
+lab Struhl
+targetId GeneCard:SUPT5H
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
+validation Human_-_hSpt5_(sc-28678)(Western_blot,Immunoprecipitation):human_hSpt5_sc-28678_validation_Struhl.pdf
+label hSpt5 (sc28678)
+
+term IGF2BP1
+tag IGF2BP1
+type Antibody
+target IGF2BP1
+targetDescription  Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
+antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin. Antibody Target: IGF2BP1
+vendorName Santa Cruz Biotech
+vendorId SC-21027
+orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
+lab Tenenbaum
+lots I0607(Nov2008)
+targetId Gene:10642
+targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
+validation Human_-_:missing
+label IGF2BP1 (SC-21027)
 
 term IKZF1_(IkN)_(UCLA)
 tag IKZF1IKNUCLA
@@ -10920,6 +11225,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
 validation Human_-_MAX(Immunoprecipitation,Motif_Enrichment):human_Max_validation_Myers.pdf Mouse_-_:missing
 label Max (sc-197)
 
+term MAZ_(ab85725)
+tag MAZAB85725
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, GenBank BAA33064.1. Antibody Target: MAZ
+target MAZ
+targetDescription May function as a transcription factor with dual roles in transcription initiation and termination. Binds to two sites, ME1a1 and ME1a2, within the MYC promoter having greater affinity for the former. Also binds to multiple G/C-rich sites within the promoter of the Sp1 family of transcription factors.
+vendorName Abcam
+vendorId ab85725
+orderUrl http://www.abcam.com/MAZ-antibody-ab85725.html
+lab Snyder
+lots GR41711-2
+targetId MAZ
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAZ
+validation Human_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):human_MAZ_ab85725_validation_Snyder.pdf Mouse_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):mouse_MAZ_ab85725_validation_Snyder.pdf
+label MAZ (ab85725)
+
 term MBD4_(SC-271530)
 tag MBD4SC271530
 type Antibody
@@ -11031,6 +11352,23 @@ targetId GeneCard:MTA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MTA3
 validation Human_-_MTA3_(SC-81325)(Western_blot,IP-MassSpec):human_MTA3_SC-81325_sc-81325_validation_Myers.pdf
 label MTA3 (sc-81325)
+
+term Mxi1_(AF4185)
+tag MXI1
+type Antibody
+target Mxi1
+targetClass TFSS
+targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
+antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1. Antibody Target: Mxi1
+vendorName R&D Systems
+vendorId AF4185
+orderUrl http://www.rndsystems.com/pdf/AF4185.pdf
+lab Snyder
+lots ZIJ01
+targetId GeneCard:MXI1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
+validation Human_-_MXI1(Immunoprecipitation,IP-Mass_spec):human_MXI1_validation_Snyder.pdf Mouse_-_:missing
+label Mxi1 (AF4185)
 
 term MYBL2_(SC-81192)
 tag MYBL2SC81192
@@ -11242,6 +11580,23 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
 validation Human_-_:missing
 label NF-YB
 
+term NONO
+tag NONO
+type Antibody
+target NONO
+targetDescription Non-POU domain containing, octamer-binding
+antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS.Recommended for detection of NONO of H, R origin by IP, WB, IH. Antibody Target: NONO
+vendorName Millipore
+vendorId 05-950
+orderUrl http://www.millipore.com/catalogue/item/05-950
+lab Tenenbaum
+targetId GeneCard:NONO
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
+validation 
+label NONO (05-950)
+# lots
+##This does not appear in metaDb
+
 term Nrf1
 tag NRF1
 type Antibody
@@ -11305,7 +11660,6 @@ targetId GeneCard:NR2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR2F2
 validation Human_-_NR2F2_(sc-271940)(Western_blot,IP-Mass_spec):human_NR2F2_SC-271940_validation_Myers.pdf
 label NR2F2 (sc-271940)
-
 
 term NSD2_(ab75359)
 tag NSD2AB75359
@@ -11387,6 +11741,37 @@ targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing
 label P300 (sc-48343)
+
+term PABP
+tag PABP
+type Antibody
+target PABP
+targetDescription PolyA-binding protein
+antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB. Antibody Target: PABP
+vendorName Millipore
+vendorId 04-1467
+orderUrl http://www.millipore.com/catalogue/item/04-1467
+lab Tenenbaum
+targetId Gene:37070
+targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
+validation 
+label PABP (04-1467)
+
+term PABPC1
+tag PABPC1
+type Antibody
+target PABPC1
+targetDescription  poly(A) binding protein, cytoplasmic 1 (Homo sapiens).
+antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin. Antibody Target: PABPC1
+vendorName Sigma Chemical Co.
+vendorId P6246
+orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
+lab Tenenbaum
+lots 044K4810 (Nov 2008)
+targetId 26986
+targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
+validation Human_-_:missing
+label PABPC1 (P6246)
 
 term PAX5-C20
 tag PAX5
@@ -11694,6 +12079,23 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
 validation Human_-_PU.1(Immunoprecipitation-Western_blot,MassSpec):human_PU.1_validation_Myers.pdf
 label PU1 (sc-22805)
 
+term QKI
+tag QKI
+type Antibody
+target QKI
+targetDescription Quaking homolog, KH domain RNA binding (mouse)
+antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI. Recommended for detection of QKI of H, M, and R origin by IP and WB. Antibody Target: QKI
+vendorName Millipore
+vendorId AB9904
+orderUrl http://www.millipore.com/catalogue/item/ab9904
+lab Tenenbaum
+targetId 9444
+targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
+validation 
+label QKI (AB9904)
+# lots
+##This does not appear in metaDb
+
 term Rad21
 tag RAD21
 type Antibody
@@ -11743,6 +12145,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation Human_-_REST_(17-641)(ChIP,WesternBlot):human_REST_validation_Epstein.pdf
 label REST (17-641)
 
+term ripInput
+tag RIPIN
+type Antibody
+target ripInput
+targetDescription  Total input for comparison for RIP experiments
+antibodyDescription Total input. Antibody Target: ripInput
+vendorId RIP Input
+vendorName Tenenbaum lab
+orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
+lab Tenenbaum
+targetId (input)
+validation Human_-_:missing
+label RIP input
+# lots
+#targetUrl ;
+
 term RNF2
 tag RNF2
 type Antibody
@@ -11790,6 +12208,23 @@ targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
 validation Human_-_:missing
 label RPC155 (1900)
+
+term RPS6KA1
+tag RPS6KA1
+type Antibody
+target RPS6KA1
+targetDescription Ribosomal protein S6 kinase, 90kDa, polypeptide 1
+antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1(C-LAQRRVRKLPSTTL). Recommended for detection of RPS6KA1 of H, M, and R origin by WB, IP, and ELISA. Antibody Target: RPS6KA1
+vendorName Millipore
+vendorId 07-1477
+orderUrl http://www.millipore.com/catalogue/item/07-1477
+lab Tenenbaum
+targetId 6195
+targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
+validation 
+label RPS6KA1 (07-1477)
+# lots
+##This does not appear in metaDb
 
 term RUNX3_(SC-101553)
 tag RUNX3SC101553
@@ -11952,6 +12387,22 @@ targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
 validation Human_-_SIX5(ChIP,MassSpec):human_SIX5_validation_Myers.pdf
 label SIX5 (sc-55706)
+
+term SLBP
+tag SLBP
+type Antibody
+target SLBP
+targetDescription  Stem-loop binding protein (Homo sapiens)
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
+vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
+vendorId 06-1376; 26522; MA156353
+orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
+lab Tenenbaum
+lots 3) 7308-S2
+targetId 7884
+targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
+validation Human_-_:missing
+label SLBP (06-1376; 26522; MA156353)
 
 term SMC3_(ab9263)
 tag SMC3
@@ -12181,6 +12632,22 @@ targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
 validation Human_-_SUZ12_(Western_blot,ChIP):human_SUZ12_validation_Farnham.pdf
 label SUZ12 (SUZ12)
+
+term T7Tag
+tag T7
+type Antibody
+target T7Tag
+targetDescription  Negative Control Ab (T7 Tag Mouse Monoclonal).
+antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal). Antibody Target: T7Tag
+vendorName 1)Millipore; 2)Novagen
+vendorId AB3790; Nov_69522
+orderUrl http://www.millipore.com/
+lab Tenenbaum
+targetId (input)
+validation Human_-_:missing
+label T7Tag (AB3790; Nov_69522)
+#lots
+#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 
 term TAF1
 tag TAF1
@@ -12909,480 +13376,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation Human_-_:missing
 label ZZZ3
 
-
-###  Antibodies
-### These are all for the  experiments.
-### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
-
-term CBP_(sc-369)
-tag CBPSC369
-type Antibody
-antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CBP
-target CBP
-targetDescription CBP is a histone acetyl transferase that promotes transcription.  CBP is recruited by a variety of transcription factors to promoters and enhancers.
-vendorName Santa Cruz Biotech
-vendorId sc369
-orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
-lab Struhl
-targetId GeneCard:CREBBP
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
-validation Human_-_CBP_(sc-369)(Western_blot,ChIP):human_CBP_sc-369_validation_Struhl.pdf
-label CBP (sc-369)
-
-term CBX3_(SC-101004)
-tag CBX3SC101004
-type Antibody
-target CBX3
-targetDescription At the nuclear envelope, the nuclear lamina and heterochromatin are adjacent to the inner nuclear membrane. The protein encoded by this gene binds DNA and is a component of heterochromatin. This protein also can bind lamin B receptor, an integral membrane protein found in the inner nuclear membrane. The dual binding functions of the encoded protein may explain the association of heterochromatin with the inner nuclear membrane. This protein binds histone H3 tails methylated at Lys-9 sites. This protein is also recruited to sites of ultraviolet-induced DNA damage and double-strand breaks. Two transcript variants encoding the same protein but differing in the 5' UTR, have been found for this gene.
-antibodyDescription Mouse monoclonal IgG, raised against recombinant CBX3 of human origin. Antibody Target: CBX3
-vendorName Santa Cruz Biotech
-vendorId sc-101004
-orderUrl http://www.scbt.com/datasheet-101004-hp1gamma-s-19-antibody.html
-lab Myers
-lots G1410
-targetId GeneCard:CBX3
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
-validation Human_-_CBX3_(SC-101004)(Western_blot,IP-Mass_spec):human_CBX3_SC-101004_validation_Myers.pdf
-label CBX3 (sc-101004)
-
-term CBX5
-tag CBX5
-type Antibody
-target CBX5
-targetDescription Chromobox homolog 5 (HP1 alpha homolog, Drosophila)
-antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH,IP,and WB. Antibody Target: CBX5
-vendorName Millipore
-vendorId 05-689
-orderUrl http://www.millipore.com/catalogue/item/05-689
-lab Tenenbaum
-targetId GeneCard:CBX5
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
-validation 
-label CBX5 (05-689)
-#lots
-
-term CELF1
-tag CELF1
-type Antibody
-target CELF1
-targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
-antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA. Antibody Target: CELF1
-vendorName Millipore
-vendorId 05-621
-orderUrl http://www.millipore.com/
-lab Tenenbaum
-targetId GeneCard:CELF1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
-validation Human_-_:missing
-label CELF1 (05-621)
-# lots
-
-term CELF2
-tag CELF2
-type Antibody
-target CELF2
-targetDescription CUGBP, Elav-like family member 2
-antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CELF2 of human origin by WB. Antibody Target: CELF2
-vendorName Millipore
-vendorId 04-047
-orderUrl http://www.millipore.com/catalogue/item/04-047
-lab Tenenbaum
-targetId GeneCard:CELF2
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
-validation 
-label CELF2 (04-047)
-
-term COREST_(ab24166)
-tag CORESTAB24166
-type Antibody
-antibodyDescription Synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST.   Note: This antibody has since been discontinued.  Full product information is attached as part of validation document. Antibody Target: COREST_(ab24166)
-target COREST
-targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
-vendorName Abcam
-vendorId ab24166
-orderUrl http://www.abcam.com/CoREST-antibody-ChIP-Grade-ab24166.html
-lab Snyder
-lots 834865
-targetId RCOR1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST_(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
-label COREST (ab24166)
-
-
-term COREST_(sc-30189)
-tag CORESTSC30189
-type Antibody
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin. Antibody Target: COREST (sc30189)
-target COREST
-targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
-vendorName Santa Cruz Biotech
-vendorId sc-30189
-orderUrl http://www.scbt.com/datasheet-30189-corest-h-65-antibody.html
-lab Snyder
-lots C0806
-targetId RCOR1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):human_COREST_sc-30189_validation_Snyder.pdf Mouse_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):mouse_COREST_sc-30189_validation_Snyder.pdf
-label COREST (sc30189)
-# lots
-##This does not appear in metaDb
-
-term EEF1A1
-tag EEF1A1
-type Antibody
-target EEF1A1
-targetDescription Eukaryotic translation elongation factor 1 alpha 1
-antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB. Antibody Target: EEF1A1
-vendorName Millipore
-vendorId 05-235
-orderUrl http://www.millipore.com/catalogue/item/05-235
-lab Tenenbaum
-targetId Gene:1915
-targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
-validation 
-label EEF1A1 (05-235)
-# lots
-##This does not appear in metaDb
-
-term EIF4E
-tag EIF4E
-type Antibody
-target EIF4E
-targetDescription Eukaryotic initiation factor 4E
-antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209of human eIF4E. Recommended for detection of EIF4E of H, M, and R origin by WB, IH(P), IC, and IP. Antibody Target: EIF4E
-vendorName Millipore
-vendorId 04-1058
-orderUrl http://www.millipore.com/catalogue/item/04-1058
-lab Tenenbaum
-targetId Gene:45525
-targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
-validation 
-label EIF4E (04-1058)
-# lots
-##This does not appear in metaDb
-
-term EIF4EBP1
-tag EIF4EBP1
-type Antibody
-target EIF4EBP1
-targetDescription Eukaryotic translation initiation factor 4E binding protein 1
-antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of humanE IF4EBP1 . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB. Antibody Target: EIF4EBP1
-vendorName Millipore
-vendorId 04-1010
-orderUrl http://www.millipore.com/catalogue/item/04-1010
-lab Tenenbaum
-targetId Gene:1978
-targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
-validation 
-label EIF4EBP1 (04-1010)
-
-term ELAVL1
-tag ELAVL1
-type Antibody
-target ELAVL1
-targetDescription  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
-antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
-vendorName 1) Santa Cruz Biotech; 2) Millipore
-vendorId SC-5261; 07-1735 is recommended replacement for AB5831
-orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html ; http://www.millipore.com/catalogue/item/07-1735
-lab Tenenbaum
-lots 1) B2508(Nov2008)
-targetId Gene:1994
-targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-validation Human_-_:missing
-label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
-
-term ELK1_(1277-1)
-tag ELK112771
-type Antibody
-antibodyDescription Rabbit polyclonal, a synthetic peptide corresponding to residues in C-terminus of human ELK-1 was used as immunogen. The antibody does not cross-react with other ETS family members. Antibody Target: ELK1
-target ELK1
-targetDescription Elk-1 is a transcription factor that is part of the ets oncogene superfamily. Elk-1 forms a ternary complex with the serum response factors, SRE and SRF, mediating gene activity in response to serum and growth factors. Activation by several mitogen- activated protein kinases (Erk1 and Erk2) mediates the immediate early responses of the c-fos promoter to growth factors and other stimuli.
-vendorName Epitomics
-vendorId 1277-1
-orderUrl http://www.epitomics.com/products/product_info/194
-lab Snyder
-lots YG030402C
-targetId ELK1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK1
-validation Human_-_ELK1(1277-1)(Immunoprecipitation,IP-Mass_spec):human_ELK1_1277-1_validation_Snyder.pdf
-label ELK1 (1277-1)
-
-term FXR1
-tag FXR1
-type Antibody
-target FXR1
-targetDescription Fragile X mental retardation, autosomal homolog 1
-antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: FXR1
-vendorName Millipore
-vendorId 05-1529
-orderUrl http://www.millipore.com/catalogue/item/05-1529
-lab Tenenbaum
-targetId Gene:8087
-targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
-validation 
-label FXR1 (05-1529)
-# lots
-##This does not appear in metaDb
-
-term Hexim1
-tag HEXIM1
-type Antibody
-target Hexim1
-targetDescription Hexamethylene bis-acetamide inducible 1
-antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: Hexim1
-vendorName Millipore
-vendorId 07-955
-orderUrl http://www.millipore.com/catalogue/item/07-955
-lab Tenenbaum
-targetId Gene:10614
-targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
-validation 
-label Hexim1 (07-955)
-
-term HMGN1_(ab51212)
-tag HMGN1AB51212
-type Antibody
-antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14. Antibody Target: HMGN1
-target HMGN1
-targetDescription HMGN1 is one of four members of the high mobility group nucleosome binding proteins.  HMGN1 is ubiquitously expressed and has been implicated in promoting transcription.
-vendorName Abcam
-vendorId ab5212
-orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
-lab Struhl
-targetId GeneCard:HMGN1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN1
-validation Human_-_HMGN1_(ab51212)(Western_blot,Immunoprecipitation):human_HMGN1_ab51212_validation_Struhl.pdf
-label HMGN1 (ab5212)
-
-term HNRNPD
-tag HNRNPD
-type Antibody
-target HNRNPD
-targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
-antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP. Antibody Target: HNRNPD
-vendorName Millipore
-vendorId 07-260
-orderUrl http://www.millipore.com/catalogue/item/07-260
-lab Tenenbaum
-targetId Gene:3184
-targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
-validation 
-label HNRNPD (07-260)
-# lots
-##This does not appear in metaDb
-
-term hnRNPM
-tag HNRNPM
-type Antibody
-target hnRNPM
-targetDescription Heterogeneous nuclear ribonucleoprotein M
-antibodyDescription Mouse monoclonal Anti-hnRNP M1-M4, clone 1D8. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB, Antibody Target: hnRNPM
-vendorName Millipore
-vendorId 05-620
-orderUrl http://www.millipore.com/catalogue/item/05-620
-lab Tenenbaum
-targetId Gene:76936
-targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
-validation 
-label hnRNPM (05-620)
-# lots
-##This does not appear in metaDb
-
-term hSpt5_(sc-28678)
-tag HSPT5SC28678
-type Antibody
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: hSpt5
-target hSpt5
-targetDescription hSpt5 heterodimerizes with hSpt4 to form the DRB Sensitivity Inducing Factor (DSIF). DSIF play dual roles in elongation. First, in a conjunction with NELF, dephosphorylated state DSIF blocks RNA polymerase II (RNAPII) from shifting from early elongation to productive elongation.  Second, after phosphorylation DSIF continues to associate with elongating RNAPII to facilitate recruitment of factors required for processing of the mRNA.
-vendorName Santa Cruz Biotech
-vendorId sc28678
-orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
-lab Struhl
-targetId GeneCard:SUPT5H
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
-validation Human_-_hSpt5_(sc-28678)(Western_blot,Immunoprecipitation):human_hSpt5_sc-28678_validation_Struhl.pdf
-label hSpt5 (sc28678)
-
-
-term IGF2BP1
-tag IGF2BP1
-type Antibody
-target IGF2BP1
-targetDescription  Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
-antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin. Antibody Target: IGF2BP1
-vendorName Santa Cruz Biotech
-vendorId SC-21027
-orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
-lab Tenenbaum
-lots I0607(Nov2008)
-targetId Gene:10642
-targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
-validation Human_-_:missing
-label IGF2BP1 (SC-21027)
-
-term MAZ_(ab85725)
-tag MAZAB85725
-type Antibody
-antibodyDescription Rabbit polyclonal, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, GenBank BAA33064.1. Antibody Target: MAZ
-target MAZ
-targetDescription May function as a transcription factor with dual roles in transcription initiation and termination. Binds to two sites, ME1a1 and ME1a2, within the MYC promoter having greater affinity for the former. Also binds to multiple G/C-rich sites within the promoter of the Sp1 family of transcription factors.
-vendorName Abcam
-vendorId ab85725
-orderUrl http://www.abcam.com/MAZ-antibody-ab85725.html
-lab Snyder
-lots GR41711-2
-targetId MAZ
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAZ
-validation Human_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):human_MAZ_ab85725_validation_Snyder.pdf Mouse_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):mouse_MAZ_ab85725_validation_Snyder.pdf
-label MAZ (ab85725)
-
-term Mxi1_(AF4185)
-tag MXI1
-type Antibody
-target Mxi1
-targetClass TFSS
-targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
-antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1. Antibody Target: Mxi1
-vendorName R&D Systems
-vendorId AF4185
-orderUrl http://www.rndsystems.com/pdf/AF4185.pdf
-lab Snyder
-lots ZIJ01
-targetId GeneCard:MXI1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
-validation Human_-_MXI1(Immunoprecipitation,IP-Mass_spec):human_MXI1_validation_Snyder.pdf Mouse_-_:missing
-label Mxi1 (AF4185)
-
-term NONO
-tag NONO
-type Antibody
-target NONO
-targetDescription Non-POU domain containing, octamer-binding
-antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS.Recommended for detection of NONO of H, R origin by IP, WB, IH. Antibody Target: NONO
-vendorName Millipore
-vendorId 05-950
-orderUrl http://www.millipore.com/catalogue/item/05-950
-lab Tenenbaum
-targetId GeneCard:NONO
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
-validation 
-label NONO (05-950)
-# lots
-##This does not appear in metaDb
-
-term PABP
-tag PABP
-type Antibody
-target PABP
-targetDescription PolyA-binding protein
-antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB. Antibody Target: PABP
-vendorName Millipore
-vendorId 04-1467
-orderUrl http://www.millipore.com/catalogue/item/04-1467
-lab Tenenbaum
-targetId Gene:37070
-targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
-validation 
-label PABP (04-1467)
-
-term PABPC1
-tag PABPC1
-type Antibody
-target PABPC1
-targetDescription  poly(A) binding protein, cytoplasmic 1 (Homo sapiens).
-antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin. Antibody Target: PABPC1
-vendorName Sigma Chemical Co.
-vendorId P6246
-orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
-lab Tenenbaum
-lots 044K4810 (Nov 2008)
-targetId 26986
-targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
-validation Human_-_:missing
-label PABPC1 (P6246)
-
-term QKI
-tag QKI
-type Antibody
-target QKI
-targetDescription Quaking homolog, KH domain RNA binding (mouse)
-antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI. Recommended for detection of QKI of H, M, and R origin by IP and WB. Antibody Target: QKI
-vendorName Millipore
-vendorId AB9904
-orderUrl http://www.millipore.com/catalogue/item/ab9904
-lab Tenenbaum
-targetId 9444
-targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
-validation 
-label QKI (AB9904)
-# lots
-##This does not appear in metaDb
-
-term RPS6KA1
-tag RPS6KA1
-type Antibody
-target RPS6KA1
-targetDescription Ribosomal protein S6 kinase, 90kDa, polypeptide 1
-antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1(C-LAQRRVRKLPSTTL). Recommended for detection of RPS6KA1 of H, M, and R origin by WB, IP, and ELISA. Antibody Target: RPS6KA1
-vendorName Millipore
-vendorId 07-1477
-orderUrl http://www.millipore.com/catalogue/item/07-1477
-lab Tenenbaum
-targetId 6195
-targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
-validation 
-label RPS6KA1 (07-1477)
-# lots
-##This does not appear in metaDb
-
-term ripInput
-tag RIPIN
-type Antibody
-target ripInput
-targetDescription  Total input for comparison for RIP experiments
-antibodyDescription Total input. Antibody Target: ripInput
-vendorId RIP Input
-vendorName Tenenbaum lab
-orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
-lab Tenenbaum
-targetId (input)
-validation Human_-_:missing
-label RIP input
-# lots
-#targetUrl ;
-
-term SLBP
-tag SLBP
-type Antibody
-target SLBP
-targetDescription  Stem-loop binding protein (Homo sapiens)
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
-vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
-vendorId 06-1376; 26522; MA156353
-orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
-lab Tenenbaum
-lots 3) 7308-S2
-targetId 7884
-targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
-validation Human_-_:missing
-label SLBP (06-1376; 26522; MA156353)
-
-term T7Tag
-tag T7
-type Antibody
-target T7Tag
-targetDescription  Negative Control Ab (T7 Tag Mouse Monoclonal).
-antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal). Antibody Target: T7Tag
-vendorName 1)Millipore; 2)Novagen
-vendorId AB3790; Nov_69522
-orderUrl http://www.millipore.com/
-lab Tenenbaum
-targetId (input)
-validation Human_-_:missing
-label T7Tag (AB3790; Nov_69522)
-#lots
-#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 
 ### mapAlgorithm : Comparing map algorithms
 # term (human-readable map algorithm name)

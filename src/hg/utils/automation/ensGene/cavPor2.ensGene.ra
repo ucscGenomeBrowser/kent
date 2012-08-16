@@ -1,0 +1,12 @@
+# required db variable
+db cavPor2
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+# skipInvalid yes
+# ignore the three genes that have invalid structures from Ensembl:
+# ENSFCAT00000006929 no exonFrame on CDS exon 15
+# ENSFCAT00000009384 no exonFrame on CDS exon 0
+# ENSFCAT00000010965 no exonFrame on CDS exon 1
+

@@ -1,0 +1,7 @@
+# required db variable
+db oryLat1
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
+# ignore 2,687 genes that haven't lifted properly yet
+skipInvalid yes

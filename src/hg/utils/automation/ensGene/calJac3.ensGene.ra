@@ -1,0 +1,5 @@
+# required db variable
+db calJac3
+# nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/; s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/;"
+# name translation in Ensembl v62
+liftUp /hive/data/genomes/calJac3/jkStuff/ens.62.lft

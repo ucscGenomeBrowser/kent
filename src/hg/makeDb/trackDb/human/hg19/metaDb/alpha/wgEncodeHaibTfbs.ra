@@ -54703,6 +54703,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3075
 md5sum bd9c23f4468b70153f6dc112b6f7623f,5caf3e3760126524d8de20bc7c3a51e3
+objStatus replaced - object is identifying wrong peaks
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -54782,6 +54783,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3075
 md5sum db81c82a38d7487f3027f6ebad80d5e3
+objStatus replaced - object is identifying wrong peaks
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -54918,6 +54920,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3075
 md5sum 1955bb273875c4c0849cd3dba66055b0
+objStatus replaced - object is identifying wrong peaks
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -82333,4 +82336,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -620199539
+# MAGIC: -552155267
