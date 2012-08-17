@@ -2203,6 +2203,242 @@ tableName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksSigRep3
 tissueSourceType Pooled
 view Signal
 
+metaObject wgEncodeUwDnaseCh122a4bFImmortalAlnRep1
+objType file
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalAlnRep1.bam,wgEncodeUwDnaseCh122a4bFImmortalAlnRep1.bam.bai
+grant Stam
+lab UW-m
+labExpId DS22542
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 1
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7869
+tissueSourceType None
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalAlnRep2
+objType file
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalAlnRep2.bam,wgEncodeUwDnaseCh122a4bFImmortalAlnRep2.bam.bai
+grant Stam
+lab UW-m
+labExpId DS22536
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 2
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7868
+tissueSourceType None
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep1
+objType table
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS22542
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 1
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7869
+tableName wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep1
+tissueSourceType None
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep2
+objType table
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS22536
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 2
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7868
+tableName wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep2
+tissueSourceType None
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalPkRep1
+objType table
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS22542
+labVersion lmax-v1.1
+project wgEncode
+replicate 1
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7869
+tableName wgEncodeUwDnaseCh122a4bFImmortalPkRep1
+tissueSourceType None
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalPkRep2
+objType table
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalPkRep2.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS22536
+labVersion lmax-v1.1
+project wgEncode
+replicate 2
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7868
+tableName wgEncodeUwDnaseCh122a4bFImmortalPkRep2
+tissueSourceType None
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalRawDataRep1
+objType file
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalRawDataRep1.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS22542
+labVersion 1
+project wgEncode
+replicate 1
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7869
+tissueSourceType None
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalRawDataRep2
+objType file
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalRawDataRep2.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS22536
+labVersion 1
+project wgEncode
+replicate 2
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7868
+tissueSourceType None
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalSigRep1
+objType table
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalSigRep1.bigWig
+grant Stam
+lab UW-m
+labExpId DS22542
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 1
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7869
+tableName wgEncodeUwDnaseCh122a4bFImmortalSigRep1
+tissueSourceType None
+treatment None
+view Signal
+
+metaObject wgEncodeUwDnaseCh122a4bFImmortalSigRep2
+objType table
+age immortalized
+cell CH12
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-16
+dateUnrestricted 2013-05-16
+fileName wgEncodeUwDnaseCh122a4bFImmortalSigRep2.bigWig
+grant Stam
+lab UW-m
+labExpId DS22536
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 2
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 7868
+tableName wgEncodeUwDnaseCh122a4bFImmortalSigRep2
+tissueSourceType None
+treatment None
+view Signal
+
 metaObject wgEncodeUwDnaseEpcmppCd1ME14halfAlnRep1
 objType file
 age E14.5
@@ -15924,4 +16160,4 @@ tissueSourceType None
 treatment None
 view Signal
 
-# MAGIC: 1815517753
+# MAGIC: -1648558664
