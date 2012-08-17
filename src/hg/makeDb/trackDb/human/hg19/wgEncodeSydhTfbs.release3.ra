@@ -3018,7 +3018,7 @@ html wgEncodeSydhTfbs.release3
         track wgEncodeSydhTfbsH1hescZnf274m01UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1ES ZNF274 UCD
-        longLabel H1-hESC ZNF274 (M01) UCDavis ChIP-seq Peaks from ENCODE/USC 
+        longLabel H1-hESC ZNF274 (M01) UC Davis ChIP-seq Peaks from ENCODE/USC 
         subGroups view=Peaks factor=ZNF274M01 cellType=t1H1HESC control=UCD treatment=aNONE
         type narrowPeak
         color 0,107,27
@@ -7157,7 +7157,7 @@ html wgEncodeSydhTfbs.release3
         track wgEncodeSydhTfbsH1hescZnf274m01UcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1ES ZNF274 UCD
-        longLabel H1-hESC ZNF274 (M01) UCDavis ChIP-seq Signal from ENCODE/USC 
+        longLabel H1-hESC ZNF274 (M01) UC Davis ChIP-seq Signal from ENCODE/USC 
         subGroups view=Signal factor=ZNF274M01 cellType=t1H1HESC control=UCD treatment=aNONE
         type bigWig 1.000000 10138.000000
         color 0,107,27
