@@ -37,7 +37,7 @@ origAssembly mm9
 nextItemButton on
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line CH12=CH12 ESE14=ES-E14 MEL=MEL
-subGroup3 factor Factor H3K04ME1=H3K4me1 H3K04ME3=H3K4me3 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3b=H3K27me3B H3K36ME3b=H3K36me3B zInputSTD=Input_(<i>std</i>) zInputIGGRAB=Input_(<i>IgG-rab</i>) zInputIGGYALE=Input_(<i>IgG-Yale</i>)
+subGroup3 factor Factor H3K04ME1=H3K4me1 H3K04ME3=H3K4me3 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3b=H3K27me3 H3K36ME3b=H3K36me3 zInputSTD=Input_(<i>std</i>) zInputIGGRAB=Input_(<i>IgG-rab</i>) zInputIGGYALE=Input_(<i>IgG-Yale</i>)
 subGroup4 control Control IGGRAB=IgG-rab IGGYale=IgG-Yale STD=std
 subGroup5 treatment Treatment DM2P5D=DMSO_2% zNONE=None
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
@@ -68,8 +68,8 @@ html wgEncodeSydhHist.release2
 
 	track wgEncodeSydhHistMelH3k04me3IggyalePk
 	parent wgEncodeSydhHistViewPeaks
-	shortLabel MEL H3K4m3
-	longLabel MEL H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
+	shortLabel MEL H3K4m3 Y
+	longLabel MEL H3K4me3 IgG-Yale Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
 	subGroups view=Peaks factor=H3K04ME3 cellType=MEL control=IGGYale treatment=zNONE
 	type narrowPeak
 	color 86,180,233
@@ -87,8 +87,8 @@ html wgEncodeSydhHist.release2
 		
 	track wgEncodeSydhHistCh12H3k4me3IggyalePk
 	parent wgEncodeSydhHistViewPeaks
-	shortLabel CH12 H3K4m3
-	longLabel CH12 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
+	shortLabel CH12 H3K4m3 Y
+	longLabel CH12 H3K4me3 IgG-Yale Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
 	subGroups view=Peaks factor=H3K04ME3 cellType=CH12 control=IGGYale treatment=zNONE
 	type narrowPeak
 	color 86,180,233
@@ -96,7 +96,7 @@ html wgEncodeSydhHist.release2
 
 	track wgEncodeSydhHistMelH3k04me1Dm2p5dStdPk
 	parent wgEncodeSydhHistViewPeaks
-	shortLabel MEL H3K4m1 D STD
+	shortLabel MEL H3K4m1 DMSO
 	longLabel MEL H3K4me1 DMSO 2% Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
 	subGroups view=Peaks factor=H3K04ME1 cellType=MEL control=STD treatment=DM2P5D
 	type narrowPeak
@@ -114,7 +114,7 @@ html wgEncodeSydhHist.release2
 
 	track wgEncodeSydhHistMelH3k04me3Dm2p5dStdPk
 	parent wgEncodeSydhHistViewPeaks
-	shortLabel MEL H3K4m3 D STD
+	shortLabel MEL H3K4m3 DMSO
 	longLabel MEL H3K4me3 DMSO 2% Std Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
 	subGroups view=Peaks factor=H3K04ME3 cellType=MEL control=STD treatment=DM2P5D
 	type narrowPeak
@@ -177,8 +177,8 @@ html wgEncodeSydhHist.release2
 
         track wgEncodeSydhHistMelH3k27me3bDm2p5dStdPk
         parent wgEncodeSydhHistViewPeaks off
-        shortLabel MEL H3K27m3B D
-        longLabel MEL H3K27me3B DMSO 2% Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
+        shortLabel MEL H3K27m3 DMSO
+        longLabel MEL H3K27me3 DMSO 2% Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=H3K27ME3b cellType=MEL control=STD treatment=DM2P5D
         type narrowPeak
         color 86,180,233
@@ -186,8 +186,8 @@ html wgEncodeSydhHist.release2
 
         track wgEncodeSydhHistMelH3k36me3bDm2p5dStdPk
         parent wgEncodeSydhHistViewPeaks off
-        shortLabel MEL H3K36m3B D
-        longLabel MEL H3K36me3B DMSO 2% Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
+        shortLabel MEL H3K36m3 DMSO
+        longLabel MEL H3K36me3 DMSO 2% Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=H3K36ME3b cellType=MEL control=STD treatment=DM2P5D
         type narrowPeak
         color 86,180,233
@@ -195,7 +195,7 @@ html wgEncodeSydhHist.release2
 
         track wgEncodeSydhHistMelH3k09me3Dm2p5dStdPk
         parent wgEncodeSydhHistViewPeaks off
-        shortLabel MEL H3K9m3 D
+        shortLabel MEL H3K9m3 DMSO
         longLabel MEL H3K9me3 DMSO 2% Histone Mods by ChIP-seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=H3K09ME3 cellType=MEL control=STD treatment=DM2P5D
         type narrowPeak
@@ -218,7 +218,7 @@ html wgEncodeSydhHist.release2
 	track wgEncodeSydhHistMelH3k4me3IggyaleSig
 	parent wgEncodeSydhHistViewSig
 	shortLabel MEL H3K4m3 Y
-	longLabel MEL H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/SYDH
+	longLabel MEL H3K4me3 IgG-Yale Histone Mods by ChIP-seq Signal from ENCODE/SYDH
 	subGroups view=Signal factor=H3K04ME3 cellType=MEL control=IGGYale treatment=zNONE
 	type bigWig 1 38729
 	color 86,180,233
@@ -236,7 +236,7 @@ html wgEncodeSydhHist.release2
 	track wgEncodeSydhHistCh12H3k4me3IggyaleSig
 	parent wgEncodeSydhHistViewSig
 	shortLabel CH12 H3K4m3 Y
-	longLabel CH12 H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/SYDH
+	longLabel CH12 H3K4me3 IgG-Yale Histone Mods by ChIP-seq Signal from ENCODE/SYDH
 	subGroups view=Signal factor=H3K04ME3 cellType=CH12 control=IGGYale treatment=zNONE
 	type bigWig 1.000000 45491.000000
 	color 86,180,233
@@ -352,8 +352,8 @@ html wgEncodeSydhHist.release2
 
         track wgEncodeSydhHistMelH3k27me3bDm2p5dStdSig
         parent wgEncodeSydhHistViewSig off
-        shortLabel MEL H3K27m3B
-        longLabel MEL H3K27me3B DMSO 2% Histone Mods by ChIP-seq Signal from ENCODE/SYDH
+        shortLabel MEL H3K27m3 DMSO
+        longLabel MEL H3K27me3 DMSO 2% Histone Mods by ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=H3K27ME3b cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 46121.000000
         color 86,180,233
@@ -361,8 +361,8 @@ html wgEncodeSydhHist.release2
 
         track wgEncodeSydhHistMelH3k36me3bDm2p5dStdSig
         parent wgEncodeSydhHistViewSig off
-        shortLabel MEL H3K36m3B
-        longLabel MEL H3K36me3B DMSO 2% Histone Mods by ChIP-seq Signal from ENCODE/SYDH
+        shortLabel MEL H3K36m3 DMSO
+        longLabel MEL H3K36me3 DMSO 2% Histone Mods by ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=H3K36ME3b cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 45856.000000
         color 86,180,233
@@ -370,7 +370,7 @@ html wgEncodeSydhHist.release2
 
         track wgEncodeSydhHistMelH3k09me3Dm2p5dStdSig
         parent wgEncodeSydhHistViewSig off
-        shortLabel MEL H3K9m3
+        shortLabel MEL H3K9m3 DMSO
         longLabel MEL H3K9me3 DMSO 2% Histone Mods by ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=H3K09ME3 cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 131256.000000
@@ -380,7 +380,7 @@ html wgEncodeSydhHist.release2
         track wgEncodeSydhHistEse14InputStdSig
         parent wgEncodeSydhHistViewSig off
         shortLabel ES-E14 Input
-        longLabel ES-E14 Input std Histone Mods by ChIP-seq Signal from ENCODE/SYDH
+        longLabel ES-E14 Input Histone Mods by ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputSTD cellType=ESE14 control=STD treatment=zNONE
         type bigWig 1.000000 255463.000000
         color 65,105,225
@@ -388,8 +388,8 @@ html wgEncodeSydhHist.release2
 
         track wgEncodeSydhHistMelInputDm2p5dStdSig
         parent wgEncodeSydhHistViewSig off
-        shortLabel MEL Input
-        longLabel MEL DMSO 2% Input std Histone Mods by ChIP-seq Signal from ENCODE/SYDH
+        shortLabel MEL Input DMSO
+        longLabel MEL Input DMSO 2% Histone Mods by ChIP-seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=zInputSTD cellType=MEL control=STD treatment=DM2P5D
         type bigWig 1.000000 84376.000000
         color 86,180,233
