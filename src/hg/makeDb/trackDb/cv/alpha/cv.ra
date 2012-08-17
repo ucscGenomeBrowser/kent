@@ -9934,7 +9934,7 @@ lab Wold
 lots G0109
 targetId Genecard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation Human_-_FOSL1_(sc-605): Mouse_-_:missing
+validation Human_-_:missing Mouse_-_:missing
 label FOSL1 (sc-605)
 
 term FOSL2
@@ -14168,31 +14168,31 @@ term diffProtD_3hr
 tag DIFFD3H
 description 3 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 3 hour
+label Estradiol 3 hour diff protocol
 
 term diffProtD_7hr
 tag DIFFD7H
 description 7 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 7 hour
+label Estradiol 7 hour diff protocol
 
 term diffProtD_14hr
 tag DIFFD14H
 description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 14 hour
+label Estradiol 14 hour diff protocol
 
 term diffProtD_24hr
 tag DIFFD24H
 description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 24 hour
+label Estradiol 24 hour diff protocol
 
 term diffProtD_30hr
 tag DIFFD30H
 description 30 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 30 hour
+label Estradiol 30 hour diff protocol
 
 term diffProtE_3d
 tag DIFFE3D
