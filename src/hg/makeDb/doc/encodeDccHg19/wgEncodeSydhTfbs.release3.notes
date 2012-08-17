@@ -1,12 +1,12 @@
 mkChangeNotes v2
 hg19 wgEncodeSydhTfbs Release 3 vs Release 2
-2012-08-15
+2012-08-17
 
 QA Count Summaries for Release 3:
 Tables: 781
 Files: 3393
 Gbdbs: 425
-Supplemental: 0
+Supplemental: 41
 Other: 3
 
 REVOKED:
@@ -18,9 +18,9 @@ Sizes of New:
 Table: 625 MB
 Files: 130347 MB (127 GB)
 Gbdbs: 16203 MB (16 GB)
-Supplemental: 0 MB
+Supplemental: 46349 MB (45 GB)
 Other: 3 MB
-Total: 147178 MB (144 GB)
+Total: 193527 MB (189 GB)
 
 
 TABLES:
@@ -4711,6 +4711,61 @@ Revoked/Replaced/Renamed Gbdb Files (3):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878MaxStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig.bigWig
+
+
+SUPPLEMENTAL FILES:
+New: 41
+Untouched: 0
+Removed: 0
+New + Untouched: 41
+Total: 41
+
+New Supplemental Files (41):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shAID_1_4465171159_E.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shAOF2_1_4465171155_J.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shATF2_4465171136_A.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shBCL11A_4465171136_B.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shBRCA_4465171136_E.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shBRG1_4465171136_C.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shCJUN_4465171135_D.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shCMAF_4465171136_J.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shCON_1_4465171155_I.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shCP2_4465171136_D.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shEGR1_1_4465171159_F.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shFOS_4465171135_G.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shIKAROS_1_4465171159_C.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shIRF9_4465171136_H.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shJUNB_4465171135_E.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shLDB_1_4465171159_A.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shMCM5_1_4465171159_I.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shMCM5_2_4465171159_J.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shMRE-11_1_4465171155_H.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shMYC_4465171135_C.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shNF45_1_4465171155_C.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shNFE2_1_4465171159_K.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shORC_1_4465171155_E.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shPUI_4465171136_I.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shRAD_1_4465171159_L.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shRCOR1_1_4465171155_L.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shREST_1_4465171155_K.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shSMC3_1_4465171159_D.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shTOP213_4465171136_G.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shTRIP_4465171135_F.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_shVEZF1_4465171136_F.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_siATF2_4465171135_H.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_siNF45#4_1_4465171155_D.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_siNF90#1_1_4465171155_B.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_siNF90#4_1_4465171155_A.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_siNTCON_1_4465171155_F.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/K562_siSUBNT2_4465171135_I.csv
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/TAL1_d3_K562.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/USF2_d3_K562.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release3/supplemental/shRNA_metadata.csv
+
+Untouched Supplemental Files (0):
+
+Removed Supplemental Files (0):
 
 
 
