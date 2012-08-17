@@ -22,7 +22,7 @@ is a universal feature of active cis-regulatory sequences.  Maps of DNaseI sensi
 and library prep followed by massively parallel short read sequencing on the Illumina GAIIx and HiSeq platforms. The sequence tags are mapped back to the mouse genome, and a graph of the 
 smoothed kernel density of DNaseI cleavage sites is displayed as the "Signal" track. 
 This provides a quantitative estimate of the frequency of cleavage by DNaseI in the initial digest, which in turn is related to the accessibility of the DNA in the chromatin. 
-Segments of greatest cleavage site density represent DNase hypersensitive sites (DHSs) and are called as peaks by the F-seq program (Boyle <em>et al.</em> 2008). DHSs are candidates for any cis-regulatory module, including promoters, enhancers, insulators, and novel elements. 
+Segments of greatest cleavage site density represent DNase hypersensitive sites (DHSs) and are identified as peaks by the F-seq program (Boyle <em>et al.</em> 2008). DHSs are candidates for any cis-regulatory module, including promoters, enhancers, insulators, and novel elements. 
 The sequence reads, quality scores, and alignment coordinates from these experiments are available for download.
 </p>
 
@@ -58,13 +58,13 @@ DNaseI-digested ends were captured from three different DNase concentrations, an
 <p>
 The read length for sequences from DNase-seq is 20 bases long due to a MmeI cutting step of the approximately 50 kb DNA fragments extracted after DNaseI digestion. 
 Sequences from each experiment were mapped to the mouse genome (mm9 assembly) using the program Bowtie (Langmead <em>et al.</em>, 2009).  
-Reads mapping to more than one location were not removed, but only the best mapping result was used for each read ("--best" option).  
+Reads mapping to more than one location were not removed, rather for each read only the best mapping result was used ("--best" option).
 Sequences from multiple lanes were combined for a single replicate and converted to the sam/bam format using samtools.  
 Using F-seq, the resulting digital signal was converted to a continuous wiggle track that employs a Parzen kernel density estimation to create base pair scores (Boyle <em>et al.</em>, 2008).
 </p>
 
 <p>
-Discrete DNaseI HS sites (peaks) were identified from DNase-seq F-seq density signal. Significant regions were determined by fitting the data to a gamma distribution to calculate p-values.
+Discrete DNaseI HS sites (peaks) were identified from the DNase-seq F-seq density signal. Significant regions were determined by fitting the data to a gamma distribution to calculate p-values.
 </p>
 
 

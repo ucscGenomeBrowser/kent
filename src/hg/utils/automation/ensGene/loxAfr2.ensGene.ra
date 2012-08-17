@@ -1,0 +1,7 @@
+# required db variable
+db loxAfr2
+# need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+geneScaffolds yes
+#	during the loading of the gene pred, skip all invalid genes
+skipInvalid yes
+#	 ENSLAFT00000000586 no exonFrame on CDS exon 4

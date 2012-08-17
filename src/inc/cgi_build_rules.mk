@@ -1,14 +1,22 @@
 #	Common set of build rules for CGI binaries
 
+ifeq (${CGI_BIN_USER},)
+    CGI_BIN_USER=${CGI_BIN}-${USER}
+endif
+
+ifeq (${CGI_BIN_BETA},)
+    CGI_BIN_BETA=${CGI_BIN}-beta
+endif
+
 my:: compile
 	chmod a+rx $A${EXE}
-	mv $A${EXE} ${CGI_BIN}-${USER}/$A
+	mv $A${EXE} ${CGI_BIN_USER}/$A
 
 alpha:: strip
 	mv $A${EXE} ${CGI_BIN}/$A
 
 beta:: strip
-	mv $A${EXE} ${CGI_BIN}-beta/$A
+	mv $A${EXE} ${CGI_BIN_BETA}/$A
 
 # don't actually strip so we can get stack traces
 strip::  compile

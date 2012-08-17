@@ -1,0 +1,6 @@
+# required db variable
+db otoGar1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# after geneScaffold conversions, change Ensembl chrom names to UCSC names
+liftUp /cluster/data/otoGar1/jkStuff/ensGene.lft

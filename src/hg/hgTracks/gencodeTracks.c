@@ -374,7 +374,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 gencodeQueryFree(&gencodeQuery);
-genePredAssignConfiguredName(tg);
 
 if (tg->visibility != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
