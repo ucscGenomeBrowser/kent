@@ -46,7 +46,6 @@ html wgEncodeSydhTfbs.release3
     shortLabel Peaks
     view Peaks
     visibility pack
-    viewUi on
     subTrack wgEncodeSydhTfbs
     signalFilter 0
     signalFilterLimits 0:18241
