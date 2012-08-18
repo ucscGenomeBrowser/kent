@@ -63,7 +63,7 @@ wgEncode 1
 
         track wgEncodeHaibMethylWgbsGm12878NonCpGSites
         parent wgEncodeHaibMethylWgbsViewNonCpg_Sites
-        shortLabel GM12878 NonCpG
+        shortLabel GM12878 Non-CpG
         longLabel GM12878 Methyl WGBS Non-CpG Cytosine Sites from ENCODE/HudsonAlpha
         subGroups view=NonCpG_Sites cellType=t1GM12878 
         type bigBed 9 +
@@ -72,7 +72,7 @@ wgEncode 1
 
         track wgEncodeHaibMethylWgbsH1hescNonCpGSites
         parent wgEncodeHaibMethylWgbsViewNonCpg_Sites 
-        shortLabel H1-hESC NonCpG
+        shortLabel H1-hESC Non-CpG
         longLabel H1-hESC Methyl WGBS Non-CpG Cytosine Sites from ENCODE/HudsonAlpha
         subGroups view=NonCpG_Sites cellType=t1H1HESC 
         type bigBed 9 +
