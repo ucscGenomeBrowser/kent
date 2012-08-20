@@ -48,6 +48,7 @@ char *gff3FeatThreePrimeUTR = "three_prime_UTR";
 char *gff3FeatFivePrimeUTR = "five_prime_UTR";
 char *gff3FeatStartCodon = "start_codon";
 char *gff3FeatStopCodon = "stop_codon";
+char *gff3FeatTranscript = "transcript";
 
 static bool gff3FileStopDueToErrors(struct gff3File *g3f)
 /* determine if we should stop due to the number of errors */
