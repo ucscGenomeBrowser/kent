@@ -1,17 +1,17 @@
 mkChangeNotes v2
 mm9 wgEncodeCshlLongRnaSeq Release 3 vs Release 2
-2012-08-14
+2012-08-20
 
 QA Count Summaries for Release 3:
 Tables: 274
-Files: 762
+Files: 730
 Gbdbs: 308
 Supplemental: 10
 Other: 1
 
 REVOKED:
 Tables: 0
-Files: 0
+Files: 32
 Gbdbs: 0
 
 Sizes of New:
@@ -313,9 +313,9 @@ Revoked/Replaced/Renamed Tables (0):
 
 DOWNLOAD FILES:
 New: 388
-Untouched: 374
-Revoked/Replaced/Renamed: 0
-New + Untouched: 762
+Untouched: 342
+Revoked/Replaced/Renamed: 32
+New + Untouched: 730
 Total (New + Untouched + Revoked/Replaced/Renamed): 762
 
 New Download Files (388):
@@ -708,7 +708,7 @@ New Download Files (388):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqWbrainE14halfTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqWbrainE14halfTranscriptEnsV65IAcuff.gtf.gz
 
-Untouched Download Files (374):
+Untouched Download Files (342):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2.bam
@@ -727,8 +727,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1.bam
@@ -749,8 +747,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep1.bam
@@ -771,8 +767,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep1.bam
@@ -793,8 +787,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1.bam
@@ -815,8 +807,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep1.bam
@@ -837,8 +827,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep1.bam
@@ -859,8 +847,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1.bam
@@ -881,8 +867,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep1.bam
@@ -903,8 +887,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep1.bam
@@ -925,8 +907,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep1.bam
@@ -947,8 +927,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep1.bam
@@ -969,8 +947,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep1.bam
@@ -991,8 +967,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSplAdult8wksExonsDeNovo.gtf.gz
@@ -1035,8 +1009,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1.bam
@@ -1057,8 +1029,6 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep1.bam
@@ -1079,12 +1049,42 @@ Untouched Download Files (374):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksPlusRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksTranscriptEnsV65IAcuff.gtf.gz
 
-Revoked/Replaced/Renamed Download Files (0):
+Revoked/Replaced/Renamed Download Files (32):
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 
 
 GBDBS:
@@ -1411,16 +1411,14 @@ Revoked/Replaced/Renamed Gbdb Files (0):
 
 SUPPLEMENTAL FILES:
 New: 0
-Untouched: 0
-Removed: 10
-New + Untouched: 0
+Untouched: 10
+Removed: 0
+New + Untouched: 10
 Total: 10
 
 New Supplemental Files (0):
 
-Untouched Supplemental Files (0):
-
-Removed Supplemental Files (10):
+Untouched Supplemental Files (10):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/supplemental/Contigs_Info.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/supplemental/ExonsDeNovo_Info.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/supplemental/ExonsEnsV65IAcuff_Info.txt
@@ -1431,6 +1429,8 @@ Removed Supplemental Files (10):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/supplemental/TranscriptEnsV65IAcuff_Info.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/supplemental/wgEncodeCshlLongSpikeins.fasta
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/supplemental/wgEncodeCshlLongSpikeinsConcentrations.tsv
+
+Removed Supplemental Files (0):
 
 
 
@@ -1445,19 +1445,9 @@ New Other Files (1):
 Revoked Other Files (0):
 
 
-Files that dropped between releases (12):
+Files that dropped between releases (2):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/files.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/Contigs_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/ExonsDeNovo_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/ExonsEnsV65IAcuff_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/GeneDeNovo_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/GeneEnsV65IAcuff_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/Junctions_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/TranscriptDeNovo_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/TranscriptEnsV65IAcuff_Info.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/wgEncodeCshlLongSpikeins.fasta
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/supplemental/wgEncodeCshlLongSpikeinsConcentrations.tsv
 
 
 
