@@ -169,7 +169,7 @@ void bigWigCustomClick(struct trackDb *tdb);
 /* Display details for BigWig custom tracks. */
 
 void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb,
-		     char *item, int start, int bedSize);
+		     char *item, int start, int end, int bedSize);
 
 void doPubsDetails(struct trackDb *tdb, char *item);
 /* Handle text2Genome track clicks in pubs.c */
