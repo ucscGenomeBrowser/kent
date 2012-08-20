@@ -1,0 +1,7 @@
+# required db variable
+db bosTau4
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9UX][0-9n]*\)/chr\1/; s/^MT/chrM/"
+# cause SQL tables to be fetched to see if chrUn can be fixed up
+# geneScaffolds yes

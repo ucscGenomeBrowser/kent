@@ -244,6 +244,62 @@ freeMem(fieldArray);
 freeMem(columnArray);
 }
 
+static unsigned slCountAtMost(const void *list, unsigned max)
+// return the length of the list, but only count up to max
+{
+struct slList *pt = (struct slList *)list;
+int len = 0;
+
+while (pt != NULL)
+    {
+    len += 1;
+    pt = pt->next;
+    if (len == max)
+	break;
+    }
+return len;
+}
+
+static struct bigBedInterval *getTenElements(struct bbiFile *bbi, 
+    struct bbiChromInfo *chromList, struct lm *lm)
+// get up to ten sample rows from the first chrom listed in the bigBed.
+// will return less than ten if there are less than ten on the first chrom.
+{
+struct bigBedInterval *ivList = NULL;
+// start out requesting only 10k bp so we don't hang if the bigBed is huge
+int currentLen = 10000;
+// look about 2/3 of the way through the chrom to avoid the telomeres
+// and the centromere
+int startAddr = 2 * chromList->size / 3;
+int endAddr;
+
+while ((slCountAtMost(ivList,10)) < 10)
+    {
+    endAddr = startAddr + currentLen;
+
+    // if we're pointing beyond the end of the chromosome
+    if (endAddr > chromList->size)
+	{
+	// move the start address back
+	startAddr -= (endAddr - chromList->size);
+	endAddr = chromList->size;
+	}
+
+    // if we're pointing to before the start of the chrom
+    if (startAddr < 0)
+	startAddr = 0;
+
+    // ask for ten items
+    ivList = bigBedIntervalQuery(bbi, chromList->name, startAddr, endAddr, 10, lm);
+    currentLen *= 2;
+
+    if ((startAddr == 0) && (endAddr == chromList->size))
+	break;
+    }
+
+return  ivList;
+}
+
 void showSchemaBigBed(char *table)
 /* Show schema on bigBed. */
 {
@@ -253,8 +309,7 @@ char *fileName = bigBedFileName(table, conn);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *ivList = bigBedIntervalQuery(bbi, chromList->name, 0,
-					 	    chromList->size, 10, lm);
+struct bigBedInterval *ivList = getTenElements(bbi, chromList, lm);
 
 /* Get description of columns, making it up from BED records if need be. */
 struct asObject *as = bigBedAsOrDefault(bbi);

@@ -59,3 +59,12 @@ informant Pig N-SCAN uses human (hg19) as the informant, updated with PASA clust
 
 track ensGene override
 longLabel Ensembl Genes (lifted to susScr2 from Ensembl version Sscrofa9)
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [A-Z57][-A-Z0-9_]+

@@ -1,0 +1,5 @@
+# required db variable
+db cavPor3
+# do we need to translate geneScaffold coordinates
+# geneScaffolds yes
+nameTranslation "s/^MT/chrM/;"

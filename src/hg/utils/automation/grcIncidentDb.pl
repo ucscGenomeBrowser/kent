@@ -6,6 +6,20 @@ use warnings;
 # set debug to 1 to see more output to stderr
 my $debug = 0;
 
+# given database, table, tab file, load file into db.table
+sub loadTmpTable($$$) {
+    my ($db, $table, $tabFile) = @_;
+    my $sqlFile = $tabFile;
+    $sqlFile =~ s/.tab$/.sql/;
+    `/cluster/bin/x86_64/hgsql -e "drop table if exists $table;" $db`;
+    die "ERROR: failed drop table $db.$table" if ($?);
+    `/cluster/bin/x86_64/hgsql $db < $sqlFile`;
+    die "ERROR: failed create table $db.$table from $sqlFile" if ($?);
+    `/cluster/bin/x86_64/hgsql -e "load data local infile '$tabFile' into table $table;" $db`;
+    die "ERROR: failed load data table $db.$table from $tabFile" if ($?);
+}
+
+
 # read two columns from file, tab separated, first column is an integer
 # array index, second column is a string to save in that array[index]
 sub readTagValue($$) {
@@ -35,6 +49,8 @@ if ($argc < 2) {
 
 my $sequenceName = shift;
 $sequenceName =~ s/^-//;
+
+my $tmpDb = "tmpIncident${sequenceName}";
 
 while (my $dir = shift) {
     my @issueId;  # index is autoSql assigned id, value is NCBI key2
@@ -105,19 +121,20 @@ while (my $dir = shift) {
     # human has multiple locations in each issue and has
     #	an issueToLocation table
     $file = "$dir/issue.tab";
-    open (FH, "<$file") or die "can not read $file";
     printf STDERR "# reading $file\n" if ($debug);
-my $sampleDebug = 0;
+    loadTmpTable($tmpDb, "issue", $file);
+    open (FH, "/cluster/bin/x86_64/hgsql -N $tmpDb -e 'select id,type,key2,assignedChr,accession1,accession2,reportType,summary,status,statusText,description,experimentType,externalInfoType,upd,resolution,resolutionText,affectVersion,fixVersion,location from issue;'|")
+        or die "can not select from $tmpDb.issue";
     while (my $line = <FH>) {
 	chomp $line;
 	my @a = split('\t', $line);
-	if (scalar(@a) != 19) {
-	    die "do not find 19 columns in issue.tab in $sequenceName";
-	}
+        my $fieldCount = scalar(@a);
+        die "do not find 19 issue.tab, instead: $fieldCount in $sequenceName $file" if ( $fieldCount != 19 );
 	my ($id, $type, $key2, $assignedChr, $accession1, $accession2,
 	    $reportType, $summary, $status, $statusText, $description,
 	    $experimentType, $externalInfoType, $upd, $resolution, 
-	    $resolutionText, $affectVersion, $fixVersion, $location) = split('\t', $line);
+	    $resolutionText, $affectVersion, $fixVersion,
+            $location) = split('\t', $line);
 	die "ERROR: id $id already seen in $file" if (exists($issueId[$id]));
 	die "ERROR: key $key2 already exists" if (exists($issues{$key2}));
 	my %issue;
@@ -130,6 +147,7 @@ my $sampleDebug = 0;
 	$issue{'resolution'} = $resolution;
 	$issue{'resolutionText'} = $resolutionText;
 	$issue{'issueId'} = $id;
+die "location == 'na' in $file" if ($location eq "na");
 	$issue{'location'} = $location;
 	$issueId[$id] = $key2;
 	$issues{$key2} = \%issue;
@@ -202,7 +220,6 @@ my $sampleDebug = 0;
 	} else {
 	    $position[$positionIndex++] = \%position;
 	}
-++$sampleDebug;
     }
     close (FH);
     printf STDERR "read %d items from position.tab file\n", $positionIndex-1

@@ -8,8 +8,8 @@ shortLabel Duke DNaseI HS
 longLabel Open Chromatin by DNaseI HS from ENCODE/OpenChrom(Duke University)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01794=B_cells_CD20+_RO01794&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14=Monocytes_CD14+&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3A8988T=8988T t3AOSMC=AoSMC t3CEREBELLUMOC=Cerebellum_OC t3CEREBRUMFRONTALOC=Cerebrum_frontal_OC t3CHORION=Chorion t3CLL=CLL t3COLO829=Colo829 t3ECC1=ECC-1 t3FIBROBL=Fibrobl t3FIBROBLGM03348=Fibrobl_GM03348 t3FIBROPAG08395=FibroP_AG08395 t3FIBROPAG08396=FibroP_AG08396 t3FIBROPAG20443=FibroP_AG20443 t3FRONTALCORTEXOC=Frontal_cortex_OC t3GCBCELL=GC_B_cell t3GLIOBLA=Gliobla t3GM10248=GM10248 t3GM10266=GM10266 t3GM12891=GM12891 t3GM12892=GM12892 t3GM13976=GM13976 t3GM18507=GM18507 t3GM19238=GM19238 t3GM19239=GM19239 t3GM19240=GM19240 t3GM20000=GM20000 t3H7HESC=H7-hESC t3H9ES=H9ES t3HEARTOC=Heart_OC t3HEK293T=HEK293T t3HEPATOCYTES=Hepatocytes t3HMEC=HMEC t3HPDE6E6E7=HPDE6-E6E7 t3HSMM=HSMM t3HSMMEMB=HSMM_emb t3HSMMFSHD=HSMM_FSHD t3HSMMTUBE=HSMMtube t3HTR8SVN=HTR8svn t3HUH7=Huh-7 t3HUH75=Huh-7.5 t3IPSCWRU1=iPS_CWRU1 t3IPSNIHI7=iPS_NIHi7 t3IPSNIHI11=iPS_NIHi11 t3ISHIKAWA=Ishikawa t3LNCAP=LNCaP t3MEDULLO=Medullo t3MEDULLOD341=Medullo_D341 t3MEL2183=Mel_2183 t3MELANO=Melano t3MYOMETR=Myometr t3NAIVEBCELL=Naive_B_cell t3NHEK=NHEK t3OLFNEUROSPHERE=Olf_neurosphere t3OSTEOBLASTS=Osteoblasts t3PANISLETD=PanIsletD t3PANISLETS=PanIslets t3PHTE=pHTE t3PROGFIB=ProgFib t3RWPE1=RWPE1 t3STELLATE=Stellate t3T47D=T-47D t3TCELLSCD4TH0ADULT=T_cells_CD4+_Th0_adult t3TCELLSCD4TH1ADULT=T_cells_CD4+_Th1_adult t3UROTHELIA=Urothelia
-subGroup3 treatment Treatment AANONE=None CTCFSHRNA=CTCF_shRNA_knockdown RANDSHRNA=Randomized_shRNA_control DM002P1H=DMSO_0.02% EST10NM1H=Estradiol_10_nM_1_h EST10NM30M=Estradiol_10_nM_30_m ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid HYPOXLACCON=Hypoxia_LacAcid_ctrl IFNa4h=IFN-&alpha;_4_hrs LENTICON=lenti-control LENTIMYOD=lenti-MyoD METHYLT=Methyltrienolone&nbsp;(androgen) NABUT=NaBut SERUMFREE=Serum_Free_Media TAM10030=4-hydroxytamoxifen_100_nM_30_m UT189=UT189_<em>E._coli</em> G1PHASE=G1_phase G2MPHASE=G2-M_phase
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01794=B_cells_CD20+_RO01794&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14=Monocytes_CD14+&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3A8988T=8988T t3AOSMC=AoSMC t3CEREBELLUMOC=Cerebellum_OC t3CEREBRUMFRONTALOC=Cerebrum_frontal_OC t3CHORION=Chorion t3CLL=CLL t3COLO829=Colo829 t3ECC1=ECC-1 t3FIBROBL=Fibrobl t3FIBROBLGM03348=Fibrobl_GM03348 t3FIBROPAG08395=FibroP_AG08395 t3FIBROPAG08396=FibroP_AG08396 t3FIBROPAG20443=FibroP_AG20443 t3FRONTALCORTEXOC=Frontal_cortex_OC t3GCBCELL=GC_B_cell t3GLIOBLA=Gliobla t3GM10248=GM10248 t3GM10266=GM10266 t3GM12891=GM12891 t3GM12892=GM12892 t3GM13976=GM13976 t3GM13977=GM13977 t3GM18507=GM18507 t3GM19238=GM19238 t3GM19239=GM19239 t3GM19240=GM19240 t3GM20000=GM20000 t3H7HESC=H7-hESC t3H9ES=H9ES t3HEARTOC=Heart_OC t3HEK293T=HEK293T t3HEPATOCYTES=Hepatocytes t3HMEC=HMEC t3HPDE6E6E7=HPDE6-E6E7 t3HSMM=HSMM t3HSMMEMB=HSMM_emb t3HSMMFSHD=HSMM_FSHD t3HSMMTUBE=HSMMtube t3HTR8SVN=HTR8svn t3HUH7=Huh-7 t3HUH75=Huh-7.5 t3IPSCWRU1=iPS_CWRU1 t3IPSNIHI7=iPS_NIHi7 t3IPSNIHI11=iPS_NIHi11 t3ISHIKAWA=Ishikawa t3LNCAP=LNCaP t3MEDULLO=Medullo t3MEDULLOD341=Medullo_D341 t3MEL2183=Mel_2183 t3MELANO=Melano t3MYOMETR=Myometr t3NAIVEBCELL=Naive_B_cell t3NHEK=NHEK t3OLFACTORYNEUROSPHERE=Olfactory_neurosphere t3OSTEOBLASTS=Osteoblasts t3PANISLETD=PanIsletD t3PANISLETS=PanIslets t3PHTE=pHTE t3PROGFIB=ProgFib t3PSOASMUSCLEOC=Psoas_muscle_OC t3RWPE1=RWPE1 t3STELLATE=Stellate t3T47D=T-47D t3TCELLSCD4TH0ADULT=T_cells_CD4+_Th0_adult t3TCELLSCD4TH1ADULT=T_cells_CD4+_Th1_adult t3UROTHELIA=Urothelia
+subGroup3 treatment Treatment AANONE=None CTCFSHRNA=CTCF_shRNA_knockdown RANDSHRNA=Randomized_shRNA_control DM002P1H=DMSO_0.02% EST10NM1H=Estradiol_10_nM_1_h EST10NM30M=Estradiol_10_nM_30_m ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid HYPOXLACCON=Hypoxia_LacAcid_ctrl IFNa4h=IFN-&alpha;_4_hrs LENTICON=lenti-control LENTIMYOD=lenti-MyoD METHYLT=Methyltrienolone&nbsp;(androgen) NABUT=NaBut SAHA1U72HR=SAHA_1uM_72h SAHACTRL=SAHA_Control SERUMFREE=Serum_Free_Media TAM10030=4-hydroxytamoxifen_100_nM_30_m UT189=UT189_<em>E._coli</em> G1PHASE=G1_phase G2MPHASE=G2-M_phase
 sortOrder cellType=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dimensions dimensionY=cellType dimensionX=treatment
@@ -708,7 +708,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Olf_neurosphere Pk
         longLabel Olf neurosphere DNase-seq Peaks from ENCODE/Duke #autogenerated
-        subGroups view=Peaks cellType=t3OLFNEUROSPHERE treatment=AANONE
+        subGroups view=Peaks cellType=t3OLFACTORYNEUROSPHERE treatment=AANONE
         type narrowPeak
         # subId=7309 dateSubmitted=2012-07-02
 
@@ -815,6 +815,40 @@ dataVersion through the ENCODE Mar 2012 Freeze
         subGroups view=Peaks cellType=t3GM10248 treatment=AANONE
         type narrowPeak
         # subId=7511 dateSubmitted=2012-07-19
+
+        track wgEncodeOpenChromDnaseGm13977Pk
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel GM13977 Pk
+        longLabel GM13977 DNase-seq Peaks from ENCODE/Duke #autogenerated
+        subGroups view=Peaks cellType=t3GM13977 treatment=AANONE
+        type narrowPeak
+        # subId=7514 dateSubmitted=2012-07-30
+
+        track wgEncodeOpenChromDnaseK562SahactrlPk
+        parent wgEncodeOpenChromDnaseViewPeaks
+        shortLabel K562 Pk
+        longLabel K562 SAHA ctrl DNase-seq Peaks from ENCODE/Duke #autogenerated
+        subGroups view=Peaks cellType=t1K562 treatment=SAHACTRL
+        type narrowPeak
+        color 46,0,184
+        # subId=7515 dateSubmitted=2012-07-30
+
+        track wgEncodeOpenChromDnaseK562Saha1u72hrPk
+        parent wgEncodeOpenChromDnaseViewPeaks
+        shortLabel K562 Pk
+        longLabel K562 SAHA 1uM 72hr DNase-seq Peaks from ENCODE/Duke #autogenerated
+        subGroups view=Peaks cellType=t1K562 treatment=SAHA1U72HR
+        type narrowPeak
+        color 46,0,184
+        # subId=7516 dateSubmitted=2012-07-31
+
+        track wgEncodeOpenChromDnasePsoasmuscleocPk
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel Psoas_muscle_OC Pk
+        longLabel Psoas muscle OC DNase-seq Peaks from ENCODE/Duke #autogenerated
+        subGroups view=Peaks cellType=t3PSOASMUSCLEOC treatment=AANONE
+        type narrowPeak
+        # subId=7557 dateSubmitted=2012-07-31
 
     track wgEncodeOpenChromDnaseViewSignal
     view SIG
@@ -1501,7 +1535,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Olf_neurosphere Sig
         longLabel Olf neurosphere DNase-seq Signal from ENCODE/Duke #autogenerated
-        subGroups view=SIG cellType=t3OLFNEUROSPHERE treatment=AANONE
+        subGroups view=SIG cellType=t3OLFACTORYNEUROSPHERE treatment=AANONE
         type bigWig 0.000000 2.391100
         # subId=7309 dateSubmitted=2012-07-02
 
@@ -1608,6 +1642,40 @@ dataVersion through the ENCODE Mar 2012 Freeze
         subGroups view=SIG cellType=t3GM10248 treatment=AANONE
         type bigWig 0.000000 1.117400
         # subId=7511 dateSubmitted=2012-07-19
+
+        track wgEncodeOpenChromDnaseGm13977Sig
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel GM13977 Sig
+        longLabel GM13977 DNase-seq Signal from ENCODE/Duke #autogenerated
+        subGroups view=SIG cellType=t3GM13977 treatment=AANONE
+        type bigWig 0.000000 1.382800
+        # subId=7514 dateSubmitted=2012-07-30
+
+        track wgEncodeOpenChromDnaseK562SahactrlSig
+        parent wgEncodeOpenChromDnaseViewSignal
+        shortLabel K562 Sig
+        longLabel K562 SAHA ctrl DNase-seq Signal from ENCODE/Duke #autogenerated
+        subGroups view=SIG cellType=t1K562 treatment=SAHACTRL
+        type bigWig 0.000000 2.081900
+        color 46,0,184
+        # subId=7515 dateSubmitted=2012-07-30
+
+        track wgEncodeOpenChromDnaseK562Saha1u72hrSig
+        parent wgEncodeOpenChromDnaseViewSignal
+        shortLabel K562 Sig
+        longLabel K562 SAHA 1uM 72hr DNase-seq Signal from ENCODE/Duke #autogenerated
+        subGroups view=SIG cellType=t1K562 treatment=SAHA1U72HR
+        type bigWig 0.000000 1.588700
+        color 46,0,184
+        # subId=7516 dateSubmitted=2012-07-31
+
+        track wgEncodeOpenChromDnasePsoasmuscleocSig
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel Psoas_muscle_OC Sig
+        longLabel Psoas muscle OC DNase-seq Signal from ENCODE/Duke #autogenerated
+        subGroups view=SIG cellType=t3PSOASMUSCLEOC treatment=AANONE
+        type bigWig 0.000000 1.953700
+        # subId=7557 dateSubmitted=2012-07-31
 
     track wgEncodeOpenChromDnaseViewSigBo
     view SIGBO
@@ -2295,7 +2363,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Olf_neurosphere
         longLabel Olf neurosphere DNase-seq Base overlap signal from ENCODE/Duke #autogenerated
-        subGroups view=SIGBO cellType=t3OLFNEUROSPHERE treatment=AANONE
+        subGroups view=SIGBO cellType=t3OLFACTORYNEUROSPHERE treatment=AANONE
         type bigWig 0.000000 495.000000
         # subId=7309 dateSubmitted=2012-07-02
 
@@ -2402,4 +2470,38 @@ dataVersion through the ENCODE Mar 2012 Freeze
         subGroups view=SIGBO cellType=t3GM10248 treatment=AANONE
         type bigWig 0.000000 220.000000
         # subId=7511 dateSubmitted=2012-07-19
+
+        track wgEncodeOpenChromDnaseGm13977BaseOverlapSignal
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel GM13977
+        longLabel GM13977 DNase-seq Base overlap signal from ENCODE/Duke #autogenerated
+        subGroups view=SIGBO cellType=t3GM13977 treatment=AANONE
+        type bigWig 0.000000 242.000000
+        # subId=7514 dateSubmitted=2012-07-30
+
+        track wgEncodeOpenChromDnaseK562SahactrlBaseOverlapSignal
+        parent wgEncodeOpenChromDnaseViewSigBo
+        shortLabel K562
+        longLabel K562 SAHA ctrl DNase-seq Base overlap signal from ENCODE/Duke #autogenerated
+        subGroups view=SIGBO cellType=t1K562 treatment=SAHACTRL
+        type bigWig 0.000000 341.000000
+        color 46,0,184
+        # subId=7515 dateSubmitted=2012-07-30
+
+        track wgEncodeOpenChromDnaseK562Saha1u72hrBaseOverlapSignal
+        parent wgEncodeOpenChromDnaseViewSigBo
+        shortLabel K562
+        longLabel K562 SAHA 1uM 72hr DNase-seq Base overlap signal from ENCODE/Duke #autogenerated
+        subGroups view=SIGBO cellType=t1K562 treatment=SAHA1U72HR
+        type bigWig 0.000000 330.000000
+        color 46,0,184
+        # subId=7516 dateSubmitted=2012-07-31
+
+        track wgEncodeOpenChromDnasePsoasmuscleocBaseOverlapSignal
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel Psoas_muscle_OC
+        longLabel Psoas muscle OC DNase-seq Base overlap signal from ENCODE/Duke #autogenerated
+        subGroups view=SIGBO cellType=t3PSOASMUSCLEOC treatment=AANONE
+        type bigWig 0.000000 231.000000
+        # subId=7557 dateSubmitted=2012-07-31
 

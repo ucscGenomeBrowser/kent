@@ -2071,44 +2071,10 @@ return list;
 
 char *hPdbFromGdb(char *genomeDb)
 /* Find proteome database name given genome database name */
+/* With the retirement of the proteome browser, we always use the most
+ * recent version of the database which is called "proteome" */
 {
-struct sqlConnection *conn = hConnectCentral();
-struct sqlResult *sr;
-char **row;
-char *ret = NULL;
-struct dyString *dy = newDyString(128);
-
-if (sqlTableExists(conn, "gdbPdb"))
-    {
-    if (genomeDb != NULL)
-	dyStringPrintf(dy, "select proteomeDb from gdbPdb where genomeDb = '%s';", genomeDb);
-    else
-	internalErr();
-    sr = sqlGetResult(conn, dy->string);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	ret = cloneString(row[0]);
-	}
-    else
-	{
-	// if a corresponding protein DB is not found, get the default one from the gdbPdb table
-        sqlFreeResult(&sr);
-    	sr = sqlGetResult(conn,  "select proteomeDb from gdbPdb where genomeDb = 'default';");
-    	if ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    ret = cloneString(row[0]);
-	    }
-	else
-	    {
-	    errAbort("No protein database defined for %s.", genomeDb);
-	    }
-	}
-
-    sqlFreeResult(&sr);
-    }
-hDisconnectCentral(&conn);
-freeDyString(&dy);
-return(ret);
+return "proteome";
 }
 
 static char *hFreezeDbConversion(char *database, char *freeze)
@@ -5007,6 +4973,11 @@ struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, str
 {
 if(isEmpty(table))
     return parent;
+
+// hub tracks aren't in the trackDb hash, just use the parent tdb
+if (isHubTrack(table))
+    return parent;
+
 struct trackDb *tdb = NULL;
 if (isCustomTrack(table))
     {

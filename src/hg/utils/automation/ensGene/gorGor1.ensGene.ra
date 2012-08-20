@@ -1,0 +1,10 @@
+# required db variable
+db gorGor1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# after geneScaffold conversions, change Ensembl chrom names to UCSC
+# names
+liftUp /hive/data/genomes/gorGor1/jkStuff/ensemblLiftToUcsc.lift
+# ignore the single gene that has an invalid structure from Ensembl:
+skipInvalid yes
+# 8939: ENSGGOT00000010340 no exonFrame on CDS exon 3

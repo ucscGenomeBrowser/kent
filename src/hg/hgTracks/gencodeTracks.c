@@ -15,6 +15,7 @@ struct gencodeQuery
     struct dyString *fields;                // select fields
     struct dyString *from;                  // from clause
     struct dyString *where;                 // where clause
+    boolean isGenePredX;                    // does this have the extended fields?
     int nextFieldCol;                       // next available column in result row
     int supportLevelCol;                    // support level column if joined for highlighting, or -1 
     int transcriptTypeCol;                  // transcript type column if joined for highlighting, or -1 
@@ -307,18 +308,32 @@ if (gencodeQuery->joinSupportLevel)
     }
 }
 
+static boolean tableIsGenePredX(struct track *tg)
+/* determine if a table has genePred extended fields.  two-way consensus
+ * pseudo doesn't have them. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct slName *fields = sqlFieldNames(conn, tg->table);
+hFreeConn(&conn);
+boolean isGenePredX = slNameInList(fields, "score");
+slFreeList(&fields);
+return isGenePredX;
+}
+
 static struct gencodeQuery *gencodeQueryConstruct(struct track *tg)
 /* construct the query for a GENCODE genePred track, which includes filters. */
 {
-static char *genePredFields = "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds, g.score, g.name2, g.cdsStartStat, g.cdsEndStat, g.exonFrames";
-struct gencodeQuery *gencodeQuery = gencodeQueryNew();
+static char *genePredXFields = "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds, g.score, g.name2, g.cdsStartStat, g.cdsEndStat, g.exonFrames";
+static char *genePredFields = "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds";
 
-dyStringAppend(gencodeQuery->fields, genePredFields);
+struct gencodeQuery *gencodeQuery = gencodeQueryNew();
+gencodeQuery->isGenePredX = tableIsGenePredX(tg);
+gencodeQuery->nextFieldCol = (gencodeQuery->isGenePredX ? GENEPREDX_NUM_COLS : GENEPRED_NUM_COLS);
+dyStringAppend(gencodeQuery->fields, (gencodeQuery->isGenePredX ? genePredXFields : genePredFields));
 
 // bin range overlap part
 hAddBinToQuery(winStart, winEnd, gencodeQuery->where);
 dyStringPrintf(gencodeQuery->where, "(g.chrom = \"%s\") and (g.txStart < %u) and (g.txEnd > %u)", chromName, winEnd, winStart);
-gencodeQuery->nextFieldCol = GENEPREDX_NUM_COLS;
 
 gencodeFilterBySetQuery(tg, gencodeQuery);
 gencodeHighlightBySetQuery(tg, gencodeQuery);
@@ -339,7 +354,7 @@ return sr;
 static struct linkedFeatures *loadGencodeGenePred(struct track *tg, struct gencodeQuery *gencodeQuery, char **row, unsigned highlightColor)
 /* load one genePred record into a linkedFeatures object */
 {
-struct genePred *gp = genePredExtLoad(row, GENEPREDX_NUM_COLS);
+struct genePred *gp = genePredExtLoad(row, (gencodeQuery->isGenePredX ? GENEPREDX_NUM_COLS:  GENEPRED_NUM_COLS));
 struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, gp, TRUE);
 highlightByGetColor(row, gencodeQuery, highlightColor, lf);
 return lf;
@@ -359,7 +374,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 gencodeQueryFree(&gencodeQuery);
-genePredAssignConfiguredName(tg);
 
 if (tg->visibility != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
