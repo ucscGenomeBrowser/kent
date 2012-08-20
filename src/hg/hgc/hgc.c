@@ -3757,6 +3757,7 @@ void genericClickHandlerPlus(
 char *dupe, *type, *words[16], *headerItem;
 int wordCount;
 int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
 struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 char *imagePath = trackDbSetting(tdb, ITEM_IMAGE_PATH);
 char *container = trackDbSetting(tdb, "container");
@@ -3812,7 +3813,7 @@ else if (wordCount > 0)
 	if (wordCount > 1)
 	    num = atoi(words[1]);
 	if (num < 3) num = 3;
-        genericBigBedClick(conn, tdb, item, start, num);
+        genericBigBedClick(conn, tdb, item, start, end, num);
 	}
     else if (sameString(type, "sample"))
 	{

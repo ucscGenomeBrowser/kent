@@ -5702,29 +5702,66 @@ rm -f $c.gp $c.maf $c.ss
 #TREE: (((((((((((((((mm10:0.0855383,rn5:0.0922719):0.202381,dipOrd1:0.210819):0.0258471,(hetGla2:0.0917322,cavPor3:0.136876):0.0994271):0.00910944,speTri2:0.145483):0.0274969,(oryCun2:0.109639,ochPri2:0.200966):0.102067):0.0141654,(((((((((hg19:0.00674057,panTro4:0.00692231):0.00309904,gorGor3:0.00918625):0.00954082,ponAbe2:0.0191843):0.00356049,nomLeu2:0.0218207):0.0116848,(rheMac3:0.00814945,papHam1:0.0079848):0.0289473):0.0208338,(calJac3:0.0342405,saiBol1:0.0333221):0.0359171):0.0594469,tarSyr1:0.137467):0.011091,(micMur1:0.0918138,otoGar3:0.127231):0.0351527):0.0153171,tupBel1:0.18879):0.0042463):0.0214646,((susScr3:0.121641,(vicPac1:0.109818,(turTru2:0.0635753,(oviAri1:0.0392493,bosTau7:0.0315816):0.0939861):0.0203711):0.00368417):0.0444758,((((felCat5:0.0897448,(canFam3:0.0888602,ailMel1:0.0767935):0.021837):0.05011,equCab2:0.109367):0.00605998,(myoLuc2:0.137144,pteVam1:0.114013):0.0339604):0.00395001,(eriEur1:0.226934,sorAra1:0.270619):0.0628319):0.00292667):0.0291403):0.0231397,((((loxAfr3:0.078841,proCap1:0.160295):0.00825096,echTel1:0.266786):0.0031636,triMan1:0.0685675):0.0736043,(dasNov3:0.112086,choHof1:0.0974658):0.0535724):0.00739115):0.245967,(monDom5:0.139913,(sarHar1:0.132596,macEug2:0.111778):0.0294309):0.21273):0.0770867,ornAna1:0.50425):0.135096,(((((melGal1:0.067697,galGal4:0.05253):0.13729,taeGut1:0.202681):0.00899388,melUnd1:0.127774):0.216078,anoCar2:0.575186):0.0128221,chrPic1:0.201659):0.137011):0.113527,xenTro3:0.943162):0.0646458,latCha1:0.596956):0.463611,((((((tetNig2:0.223213,fr3:0.198755):0.263107,oreNil2:0.33649):0.0139699,gasAcu1:0.314841):0.0573697,oryLat2:0.430105):0.185668,gadMor1:0.562778):0.169352,danRer7:0.753326):0.117017):0.501088,petMar1:0.501088);
 
     #   four different subset lists:
-    #  mm10 is on each list since it is the reference and is needed for
-    #   everything to work.
-    paste glire.list primate.list placental.list vertebrate.list
+    paste glire.list euarchontoglires.list placental.list all.list
 # mm10    mm10    mm10    mm10
-# rn5     hg19    equCab2 macEug2
-# dipOrd1 gorGor3 vicPac1 sarHar1
-# hetGla2 panTro4 turTru2 monDom5
-# cavPor3 nomLeu2 susScr3 ornAna1
-# speTri2 ponAbe2 bosTau7 galGal4
-# oryCun2 tarSyr1 oviAri1 taeGut1
-# ochPri2 rheMac3 pteVam1 melGal1
-# tupBel1 papHam1 myoLuc2 melUnd1
-#         otoGar3 felCat5 anoCar2
-#         calJac3 canFam3 chrPic1
-#         micMur1 ailMel1 xenTro3
-#         saiBol1 eriEur1 latCha1
-#                 sorAra1 gadMor1
-#                 choHof1 gasAcu1
-#                 dasNov3 fr3
-#                 proCap1 oreNil2
-#                 echTel1 tetNig2
-#                 triMan1 danRer7
-#                 loxAfr3 oryLat2
+# rn5     rn5     rn5     rn5
+# dipOrd1 dipOrd1 dipOrd1 dipOrd1
+# hetGla2 hetGla2 hetGla2 hetGla2
+# cavPor3 cavPor3 cavPor3 cavPor3
+# speTri2 speTri2 speTri2 speTri2
+# oryCun2 oryCun2 oryCun2 oryCun2
+# ochPri2 ochPri2 ochPri2 ochPri2
+#         tupBel1 tupBel1 tupBel1
+#         hg19    hg19    hg19
+#         gorGor3 gorGor3 gorGor3
+#         panTro4 panTro4 panTro4
+#         nomLeu2 nomLeu2 nomLeu2
+#         ponAbe2 ponAbe2 ponAbe2
+#         tarSyr1 tarSyr1 tarSyr1
+#         rheMac3 rheMac3 rheMac3
+#         papHam1 papHam1 papHam1
+#         otoGar3 otoGar3 otoGar3
+#         calJac3 calJac3 calJac3
+#         micMur1 micMur1 micMur1
+#         saiBol1 saiBol1 saiBol1
+#                 equCab2 equCab2
+#                 vicPac1 vicPac1
+#                 turTru2 turTru2
+#                 susScr3 susScr3
+#                 bosTau7 bosTau7
+#                 oviAri1 oviAri1
+#                 pteVam1 pteVam1
+#                 myoLuc2 myoLuc2
+#                 felCat5 felCat5
+#                 canFam3 canFam3
+#                 ailMel1 ailMel1
+#                 eriEur1 eriEur1
+#                 sorAra1 sorAra1
+#                 choHof1 choHof1
+#                 dasNov3 dasNov3
+#                 proCap1 proCap1
+#                 echTel1 echTel1
+#                 triMan1 triMan1
+#                 loxAfr3 loxAfr3
+#                         macEug2
+#                         sarHar1
+#                         monDom5
+#                         ornAna1
+#                         galGal4
+#                         taeGut1
+#                         melGal1
+#                         melUnd1
+#                         anoCar2
+#                         chrPic1
+#                         xenTro3
+#                         latCha1
+#                         gadMor1
+#                         gasAcu1
+#                         fr3
+#                         oreNil2
+#                         tetNig2
+#                         danRer7
+#                         oryLat2
 #                         petMar1
 
     # on organisms that do not have all species in all files, the file names
@@ -5787,16 +5824,11 @@ for (my $i = 0; $i < scalar(@mfaFileList); ++$i) {
     # << happy emacs
     chmod +x filterMfa.pl
 
-    # 1. glire, 2. glire+primate, 3. glire+primate+placental,
-    # 4. glire+primate+placental,vertebrate == all - done
-    mkdir glire glirePrimateMfa glirePrimatePlacentalMfa
-
-    mkdir primateMfa placentalMfa vertebrateMfa
+    mkdir glireMfa euarchontogliresMfa placentalMfa vertebrateMfa
 
     # extract each set from the full mfa files, run msa_view on
     #   each subset and construct .nh tree for that subset
-    for N in glire glirePrimate glirePrimatePlacental
-    for N in primate placental vertebrate
+    for N in glire euarchontoglires placental vertebrate
 do
     ./filterMfa.pl ${N}.list
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
@@ -5808,8 +5840,7 @@ do
 done
 
     # use phyloFit to create tree model (output is phyloFit.mod)
-    for N in glire glirePrimate glirePrimatePlacental
-    for N in glire primate placental vertebrate
+    for N in glire euarchontoglires placental vertebrate
 do
     time nice -n +19 \
 	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
@@ -5818,8 +5849,10 @@ do
     mv phyloFit.mod ${N}.mod
     grep TREE ${N}.mod | sed 's/TREE\:\ //' > ${N}.Nway.nh
 done
-    #   real    0m24.600s
-    #   real    0m27.249s
+    #   real    0m15.747s
+    #   real    4m5.526s
+XXX - running - Mon Aug 20 11:13:01 PDT 2012
+
     #   real    4m37.709s
     #   real    30m32.453s
 
