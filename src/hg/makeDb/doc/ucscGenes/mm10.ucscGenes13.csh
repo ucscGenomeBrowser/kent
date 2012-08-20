@@ -79,10 +79,8 @@ set wormFa = $genomes/$wormDb/bed/blastp/ensPep.faa
 set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 
 # Other files needed
-  # For bioCyc pathways - best to update these following build instructions in
-  # mm9.txt
-set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
-set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
+set bioCycPathways = /hive/data/outside/bioCyc/120801/1.7/data/pathways.col
+set bioCycGenes = /hive/data/outside/bioCyc/120801/1.7/data/genes.col
 set rfam = /hive/data/outside/Rfam/111130
 
 
