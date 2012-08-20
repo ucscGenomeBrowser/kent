@@ -9,9 +9,13 @@ GIT = git
 GITUP = ${GIT} pull
 FIND=gitFiles
 
+ifeq (${DOCUMENTROOT_USER},)
+    DOCUMENTROOT_USER=${DOCUMENTROOT}-${USER}
+endif
+
 user:
-	if test -d ${DOCUMENTROOT}-${USER}; then \
-	    ${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER} extra=doSymLink; \
+	if test -d ${DOCUMENTROOT_USER}; then \
+	    ${MAKE} doInstall destDir=${DOCUMENTROOT_USER} extra=doSymLink; \
 	fi
 
 alpha:

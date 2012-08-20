@@ -4281,7 +4281,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol Stam:HS27a_Stam_protocol.pdf
+protocol missing
 
 term bone_marrow_HS5
 tag HS5
@@ -4299,7 +4299,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol Stam:HS5_Stam_protocol.pdf
+protocol missing 
 
 term bone_marrow_MSC
 tag MSC
@@ -4317,7 +4317,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol Stam:MSC_Stam_protocol.pdf
+protocol missing
 
 term HSaVEC
 tag HSAVEC
@@ -6983,7 +6983,7 @@ tissue blood
 category primaryCell
 age ageUnknown
 strain Unknown
-description liver fraction CD117+,CD71-,TER119- #PROVISIONAL
+description liver fraction CD117+,CD71-,TER119-
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117+,CD71-,TER119-
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -7001,7 +7001,7 @@ tissue blood
 category primaryCell
 age ageUnknown
 strain Unknown
-description liver fraction CD117+,CD71+,TER119- #PROVISIONAL
+description liver fraction CD117+,CD71+,TER119-
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117+,CD71+,TER119-
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -7019,7 +7019,7 @@ tissue blood
 category primaryCell
 age ageUnknown
 strain Unknown
-description liver fraction CD117-,CD71+,TER119+ #PROVISIONAL
+description liver fraction CD117-,CD71+,TER119+
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117-,CD71+,TER119+
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -7037,7 +7037,7 @@ tissue blood
 category primaryCell
 age ageUnknown
 strain Unknown
-description liver fraction CD117-,CD71-,TER119+ #PROVISIONAL
+description liver fraction CD117-,CD71-,TER119+
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117-,CD71-,TER119+
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -7055,7 +7055,7 @@ tissue blood
 category primaryCell
 age ageUnknown
 strain Unknown
-description liver fraction CD117+,CD71+,TER119+ #PROVISIONAL
+description liver fraction CD117+,CD71+,TER119+
 vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 vendorId CD117+,CD71+,TER119+
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -7140,7 +7140,7 @@ organism mouse
 category primaryCells
 description ES-cells were originally isolated from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
-strain 129
+strain 129S1/SV1mj
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 vendorName Stam lab
@@ -7205,7 +7205,7 @@ type Cell Line
 organism mouse
 tissue nerve
 category primaryCells
-description neurons derived from mouse embryonic stem cells by treatment of retinoic acid #PROVISIONAL
+description neurons derived from mouse embryonic stem cells by treatment of retinoic acid
 age E3.5
 strain 129S4/SvJae
 vendorName LICR lab
@@ -7352,7 +7352,7 @@ tissue frontal lobe
 category Tissue
 age ageUnknown
 strain Unknown
-description Frontal Lobe #PROVISIONAL
+description Frontal Lobe
 vendorName CSHL lab
 vendorId Frontal Lobe
 orderUrl  http://gingeraslab.cshl.edu/
@@ -7371,7 +7371,7 @@ tissue spleen
 category primaryCells
 age ageUnknown
 strain Unknown
-description Friend virus infected murine CD34+,CD133+,Kit+,Sca1+ Leukemia stem cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+description Friend virus infected murine CD34+,CD133+,Kit+,Sca1+ Leukemia stem cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s).
 vendorName Paulson Lab
 vendorId FVLstem
 orderUrl http://vbs.psu.edu/research/labs/paulson
@@ -7390,7 +7390,7 @@ tissue spleen
 category primaryCells
 age ageUnknown
 strain Unknown
-description Friend virus infected murine CD34-,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s). #PROVISIONAL
+description Friend virus infected murine CD34-,CD133-,Kit+,Sca1+ progenitor cells. Strains which can be used to generate the cells must carry the Fv2 sensitive allele (Fv2s).
 vendorName Paulson Lab
 vendorId FVprogenitor
 orderUrl http://vbs.psu.edu/research/labs/paulson
@@ -9026,7 +9026,7 @@ label CHD2 (ab68301)
 term CHD4_Mi2
 tag CHD4MI2
 type Antibody
-target CHD4_Mi2
+target CHD4
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription CHD4/Mi2beta is a helicase component of the nucleosome remodeling and deacetylase (NuRD) complex that functions to remodel chromatin and repress transcription. Outside of the NuRD complex, CHD4/Mi2beta can function as an activator of transcription in association with p300 histone acetyltransferase.
 vendorName Bethyl
@@ -9037,7 +9037,7 @@ lots A301-081A-1
 targetId GeneCard:CHD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD4
 validation Human_-_CHD4_(A301-081A)(ChIP,WesternBlot):human_CHD4_validation_Epstein.pdf
-label CHD4 (A301-081A)
+label CHD4_Mi2 (A301-081A)
 
 term CHD7_(A301-223A-1)
 tag CHD7A301223A1
@@ -9052,8 +9052,8 @@ lab Bernstein
 lots A301-223A-1
 targetId GeneCards:CHD7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD7
-validation CHD7_(A301-223A-1)(ChIP,WesternBlot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
-label CHD7 (A301-223A-1)
+validation CHD7_(A301-223A)(ChIP,WesternBlot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
+label CHD7 (A301-223A)
 
 term COREST_(ab24166)
 tag CORESTAB24166
@@ -9846,14 +9846,14 @@ antibodyDescription mouse monoclonal IgG2b, specific for an epitope mapping betw
 target ESET
 targetDescription ERG-associated protein with SET domain (ESET), also designated Histone H3-K9 methyltransferase 4 or SET domain bifurcated 1, is a nuclear protein belonging to the histone-lysine methyltransferase family.  ESET is a histone methyltransferase, methylating Lys-9 of histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity.
 vendorName Santa Cruz Biotechnology
-vendorId 166621
+vendorId sc-166621
 orderUrl http://www.scbt.com/datasheet-166621-eset-a-1-antibody.html
 lab Bernstein
 lots H2009
 targetId GeneCards:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation ESET_(166621)(ChIP,WesternBlot):human_ESET_166621_validation_Bernstein.pdf
-label ESET (166621)
+label ESET (sc-166621)
 
 term ETS1
 tag ETS1
@@ -9934,7 +9934,7 @@ lab Wold
 lots G0109
 targetId Genecard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation Human_-_FOSL1_(sc-605): Mouse_-_:missing
+validation Human_-_:missing Mouse_-_:missing
 label FOSL1 (sc-605)
 
 term FOSL2
@@ -11144,7 +11144,7 @@ label LEF1 (sc-8592)
 term LSD1
 tag LSD1
 type Antibody
-target LSD1
+target KDM1A
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 vendorName Bethyl
@@ -11448,7 +11448,7 @@ lab Epstein
 lots A301-145A-1
 targetId GeneCard:NCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
-validation Human_-_NCoR_(A301-145A)(ChIP,WesternBlot):human_NCoR_validation_Epstein.pdf
+validation Human_-_:missing
 label NCoR (A301-145A)
 
 term NELFe
@@ -11696,7 +11696,7 @@ label P300 (sc-585)
 term P300_KAT3B
 tag P300KAT3B
 type Antibody
-target P300_KAT3B
+target EP300
 targetClass HISase
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
@@ -11707,8 +11707,8 @@ lab Epstein
 lots A300-358A-1
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
-validation Human_-_P300_KAT3B_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
-label P300_KAT3B (A300-358A)
+validation Human_-_P300_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
+label EP300_KAT3B (A300-358A)
 
 term p300_(SC-584)
 tag P300b
@@ -11840,7 +11840,7 @@ label PBX3 (sc-891)
 term PCAF
 tag PCAF
 type Antibody
-target PCAF_KAT2B
+target KAT2B
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
 vendorName Bethyl
@@ -14168,31 +14168,31 @@ term diffProtD_3hr
 tag DIFFD3H
 description 3 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 3 hour
+label Estradiol 3 hour diff protocol
 
 term diffProtD_7hr
 tag DIFFD7H
 description 7 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 7 hour
+label Estradiol 7 hour diff protocol
 
 term diffProtD_14hr
 tag DIFFD14H
 description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 14 hour
+label Estradiol 14 hour diff protocol
 
 term diffProtD_24hr
 tag DIFFD24H
 description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 24 hour
+label Estradiol 24 hour diff protocol
 
 term diffProtD_30hr
 tag DIFFD30H
 description 30 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison)
 type treatment
-label Estradiol 30 hour
+label Estradiol 30 hour diff protocol
 
 term diffProtE_3d
 tag DIFFE3D
@@ -15305,7 +15305,6 @@ type dataType
 label CAGE
 description CAGE 5' RNA Tags
 dataGroup RNA Profiling
-#Provisional, shouldn't the description be Cap analysis gene (CAGE) is a technique used to sequence the 5' end of a sample's population of messenger RNA
 
 term ChipSeq
 tag CHIPSEQ
@@ -15565,7 +15564,7 @@ description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x C
 term BALB/cJ
 tag BALBCJ
 type strain
-description A common inbred strain of laboratory mouse. #PROVISIONAL
+description A common inbred strain of laboratory mouse.
 
 term BALB/cAnN
 tag BALBCANN
@@ -15624,7 +15623,7 @@ label 129
 term 129.DLCR/DLCR
 tag 129DLCR
 type strain
-description 129 strain mouse with homozygous deletion of the beta-globin LCR region, see Bender et. al. (2000). Beta-globin gene switching and DNase I sensitivity of the endogenous beta-globin locus in mice do not require the locus control region. #PROVISIONAL
+description 129 strain mouse with homozygous deletion of the beta-globin LCR region, see Bender et. al. (2000). Beta-globin gene switching and DNase I sensitivity of the endogenous beta-globin locus in mice do not require the locus control region.
 label 129.&#916;LCR/&#916;LCR
 
 term 129/Ola
@@ -15646,7 +15645,7 @@ description The mice have white (or light)-bellied agouti.
 term 129S4/SvJae
 tag 129S4
 type strain
-description The mice have white (or light)-bellied agouti and have been used to develop multiple embryonic stem cell lines #PROVISIONAL 
+description The mice have white (or light)-bellied agouti and have been used to develop multiple embryonic stem cell lines
 
 term Spretus.BL6-Xist
 tag SPBL6
@@ -15682,7 +15681,7 @@ term E3.5
 tag E3HALF
 type age
 stage Embryonic
-description Embryonic day 3.5 #PROVISIONAL
+description Embryonic day 3.5
 label Embryonic day 3.5
 
 term E11.5
@@ -15766,7 +15765,7 @@ term adult-10-12wks
 tag ADULT810WKS
 type age
 stage Adult
-description Adult between 8-10 weeks #PROVISIONAL
+description Adult between 8-10 weeks
 label Adult 8-10 weeks
 
 term adult-24wks
@@ -16845,7 +16844,7 @@ cvDefined yes
 validate cv or control
 priority 190
 requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab
-optionalVars label,validation,targetUrl,lots,deprecated,tagetClass
+optionalVars label,validation,targetUrl,lots,deprecated,targetClass
 
 term attic
 tag ATTIC

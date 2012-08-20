@@ -8,8 +8,7 @@ cmdShouldFail = echo "Error: command should have failed" >&2; false
 all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
-	noIdTest errCases1Test bogusQuotesTest noExonsTest
-
+	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -49,6 +48,11 @@ bogusQuotesTest: mkout
 
 noExonsTest: mkout
 	${gff3ToGenePred} input/noExons.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+# from PlasmoDB: ncRNAs have gene->transcript->exon
+geneTranscriptTest: mkout
+	${gff3ToGenePred} input/geneTranscript.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
 
