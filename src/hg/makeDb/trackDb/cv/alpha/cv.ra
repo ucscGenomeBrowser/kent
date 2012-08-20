@@ -7140,7 +7140,7 @@ organism mouse
 category primaryCells
 description ES-cells were originally isolated from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
-strain 129
+strain 129S1/SV1mj
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
 vendorName Stam lab
