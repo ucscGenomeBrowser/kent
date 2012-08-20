@@ -55,9 +55,9 @@ subGroup4 sex Sex F=F M=M U=U
 subGroup5 age Age ADULT1WKS=adult-1wks ADULT8WKS=adult-8wks E0=E0 E11HALF=E11.5 E14HALF=E14.5 E18HALF=E18.5 IMMORTAL=immortalized NEW1DAYS=newborn-1days
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 rep9=9 rep10=10 rep11=11 rep12=12 rep13=13 rep14=14
 subGroup7 treatment Treatment DIFFB24H=diffProtB_24hr DIFFB6H=diffProtB_6hr DIFFC24H=diffProtC_24hr DIFFC48H=diffProtC_48hr zNONE=None
-dimensions dimensionX=cellType dimensionY=age dimensionA=treatment dimesionB=rep
-dimensionBchecked rep1
-filterComposite dimensionA=all dimensionB=multi
+dimensions dimensionX=cellType dimensionY=age dimensionA=strain dimensionB=treatment dimesionC=rep
+dimensionCchecked rep1
+filterComposite dimensionA=all dimensionB=all dimensionC=multi
 sortOrder cellType=+ strain=+ age=+ treatment=+ sex=+ rep=+ view=+
 fileSortOrder cell=Cell_Line strain=Strain age=Age treatment=Treatment sex=Sex replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex treatment=Treatment
