@@ -7,7 +7,7 @@ Tables: 274
 Files: 730
 Gbdbs: 308
 Supplemental: 10
-Other: 1
+Other: 3
 
 REVOKED:
 Tables: 0
@@ -1435,19 +1435,16 @@ Removed Supplemental Files (0):
 
 
 OTHER FILES:
-New: 1
+New: 3
 Revoked/Replace: 0
-Total: 1
+Total: 3
 
-New Other Files (1):
+New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/md5sum.txt
 
 Revoked Other Files (0):
-
-
-Files that dropped between releases (2):
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/README.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release2/files.txt
 
 
 
