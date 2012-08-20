@@ -11691,7 +11691,7 @@ lab Myers
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
-label EP300&#47;P300 (sc-585)
+label EP300/P300 (sc-585)
 
 term P300_KAT3B
 tag P300KAT3B
@@ -11708,7 +11708,7 @@ lots A300-358A-1
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_P300_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
-label EP300&#47;P300&#47;KAT3B (A300-358A)
+label EP300/P300/KAT3B (A300-358A)
 
 term p300_(SC-584)
 tag P300b
@@ -11724,7 +11724,7 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
-label EP300&#47;P300 (sc-584)
+label EP300/P300 (sc-584)
 
 term p300_(SC-48343)
 tag P300c
@@ -11740,7 +11740,7 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing
-label EP300&#47;P300 (sc-48343)
+label EP300/P300 (sc-48343)
 
 term PABP
 tag PABP
