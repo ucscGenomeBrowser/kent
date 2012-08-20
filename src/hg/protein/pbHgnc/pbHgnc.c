@@ -10,13 +10,13 @@ errAbort(
   "pbHgnc - process HGNC data\n"
   "usage:\n"
   "   pbHgnc yymmdd\n"
-  "      yymmdd is the release date of SWISS-PROT data\n"
+  "      yymmdd is the date on the proteins database\n"
   "example: pbHgnc 051015\n");
 }
 
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn2, *conn3;
+struct sqlConnection *conn2;
   
 char query2[256];
 struct sqlResult *sr2;
@@ -25,30 +25,28 @@ char **row2;
 char *proteinDataDate;
  
 FILE   *o2;
-char *entrez;
 
-char *chp;
-char *hgncId, *name, *symbol, *refSeqIds, *uniProt;
-int j;
-char *locusType;
-
-char *refseq;
-boolean gotRefseq;
 
 if (argc != 2) usage();
 proteinDataDate = argv[1];
    
 o2 = fopen("j.dat", "w");
-conn2= hAllocConn(hDefaultDb());
-conn3= hAllocConn(hDefaultDb());
+char proteinsDb[1024];
+safef(proteinsDb, sizeof proteinsDb, "proteins%s", proteinDataDate);
+conn2= hAllocConn(proteinsDb);
 
-sprintf(query2,
-	"select hgncId, symbol, name, refSeqMapped, refSeqIds, uniProt, entrezMapped, locusType from proteins%s.hgnc where status not like '%cWithdrawn%c'", 
-	proteinDataDate, '%', '%');
+safef(query2, sizeof query2,
+	"select hgncId, symbol, name, refSeqMapped, refSeqIds, uniProtMapped, entrezMapped, locusType from hgnc where status not like '%%Withdrawn%%'");
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
+    char *entrez;
+    char *hgncId, *name, *symbol, *refSeqIds, *uniProt;
+    int j;
+    char *locusType;
+    char *refseq;
+
     j=0;
     hgncId 	= row2[j];j++;
     symbol 	= row2[j];j++;
@@ -59,14 +57,11 @@ while (row2 != NULL)
     entrez   	= row2[j];j++;
     locusType  	= row2[j];j++;
     
-    chp = strstr(hgncId, "HGNC:");
-    hgncId = chp+5;
-
-    gotRefseq = FALSE;
+    boolean gotRefseq = FALSE;
 
     /* process refSeqMapped first */
 
-    if (!sameWord(refseq, ""))
+    if (refseq != NULL && !sameWord(refseq, ""))
     	{
     	fprintf(o2, "%s\t%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, entrez, name);
 	gotRefseq = TRUE;
@@ -74,7 +69,7 @@ while (row2 != NULL)
 
     /* process refSeqIds next */
 
-    chp = strstr(refSeqIds, ",");
+    char *chp = strstr(refSeqIds, ",");
     if (chp != NULL) 
     	{
     	*chp = '\0';
@@ -92,7 +87,7 @@ while (row2 != NULL)
 	}
     else
     	{
-	if (!sameWord(refseq,""))
+	if (refseq != NULL && !sameWord(refseq,""))
 	    {
 	    fprintf(o2, "%s\t%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, entrez, name);
 	    }
@@ -106,6 +101,7 @@ while (row2 != NULL)
 		}
 	    }
 	}
+    fflush(o2);
     row2 = sqlNextRow(sr2);
     }
 sqlFreeResult(&sr2);

@@ -13,15 +13,43 @@
 
 // The stack of dyString buffers is only accessible locally
 static struct dyString *dyOutStack = NULL;
-// It is desirable to return a unique token but NOT give access to the dyString it is based on
-#define dyOutPointerToToken(pointer) (int)((size_t)(pointer) & 0xffffffff)
 #define dyOutAssertToken(token) assert(dyOutPointerToToken(dyOutStack) == token)
 
 // This module defaults to STDOUT but an alternative can be registered
 static FILE *dyOutStream = NULL;
-#define dyOutStreamInitialize() {if (dyOutStream == NULL) dyOutStream = stdout;}
 #define dyOutStreamAssertUnregistered() assert(dyOutStream == stdout || dyOutStream == NULL)
 #define dyOutStreamAssertRegistered(out) assert(dyOutStream == out)
+
+
+INLINE void dyOutStreamInitialize(void)
+// Must initialize the static dyOutStream before use.
+{
+if (dyOutStream == NULL) 
+    dyOutStream = stdout;
+}
+
+
+INLINE int dyOutPointerToToken(struct dyString *pointer)
+// It is desirable to return a unique token but NOT give access to the dyString it is based on
+{
+return (int)((size_t)(pointer) & 0xffffffff);
+}
+
+
+static struct dyString *dyOutPointerFromToken(int token)
+// Return the stack member corresponding to the token.
+// This ix can be used to walk up the stack from a given point
+{
+struct dyString *ds = dyOutStack;
+int ix = 0;
+
+for (; ds != NULL; ds = ds->next, ++ix)
+    {
+    if (dyOutPointerToToken(ds) == token)
+        return ds;
+    }
+return NULL;
+}
 
 
 int dyOutOpen(int initialBufSize)
@@ -50,7 +78,7 @@ if (dyOutStack != NULL)
     }
 else
     {
-    dyOutStreamInitialize()
+    dyOutStreamInitialize();
     vfprintf(dyOutStream,format, args);
     }
 va_end(args);
@@ -162,22 +190,6 @@ dyOutAssertToken(token);
 int len = dyStringLen(dyOutStack);
 dyStringClear(dyOutStack);
 return len;
-}
-
-
-static struct dyString *dyOutPointerFromToken(int token)
-// Return the stack member corresponding to the token.
-// This ix can be used to walk up the stack from a given point
-{
-struct dyString *ds = dyOutStack;
-int ix = 0;
-
-for (; ds != NULL; ds = ds->next, ++ix)
-    {
-    if (dyOutPointerToToken(ds) == token)
-        return ds;
-    }
-return NULL;
 }
 
 
