@@ -472,7 +472,7 @@ struct trackDb *compositeTdb;  /* tdb of composite parent */
 };
 
 static void validateTag(char *database,struct trackDb *tdb,char *type,char *tag,
-                        boolean firstIsDigitWarning,boolean silent)
+                        boolean firstIsDigitWarning)
 // Determines if tag is conforming to rules:
 // 1) must exist
 // 2) cannot be all numeric.
@@ -490,9 +490,8 @@ if (!isalpha(*c))
         errAbort("Track %s.%s has all numeric '%s' tag '%s'",database,tdb->track,type,tag);
     if (!firstIsDigitWarning)
         return;
-    if (!silent)
-        warn("Track %s.%s has non-conforming '%s' tag '%s' (begins with digit)",
-             database,tdb->track,type,tag);
+    warn("Track %s.%s has non-conforming '%s' tag '%s' (begins with digit)",
+         database,tdb->track,type,tag);
     }
 for (c++;*c != '\0';c++)
     {
@@ -531,15 +530,19 @@ for (td = tdbList; td != NULL; td = tdNext)
             sgSetting = cloneString(sgSetting);
             char *sgWord = sgSetting;
             char *sgName = nextWord(&sgWord);
-            if (!strict)
-                validateTag(database,td,subGroupName,sgName,TRUE,strict);
+            // TODO: validateTags should be called in strict too.  However, not until the
+            //  beta/public trackDbs are fixed.  This is scheduled by end of Sept 2012
+            if (!strict) //  This is a temporary evil so that make beta works.
+                validateTag(database,td,subGroupName,sgName,TRUE);
             nextWord(&sgWord);  /* skip word not used */
             struct hash *subGroupHash = newHash(3);
             struct slPair *slPair, *slPairList = slPairListFromString(sgWord,TRUE); // respect ""
             for (slPair = slPairList; slPair; slPair = slPair->next)
                 {
-                if (!strict)
-                    validateTag(database,td,sgName,slPair->name,TRUE,strict);
+                // TODO: validateTags should be called in strict too.  However, not until the
+                //  beta/public trackDbs are fixed.  This is scheduled by end of Sept 2012
+                if (!strict) //  This is a temporary evil so that make beta works.
+                    validateTag(database,td,sgName,slPair->name,TRUE);
                 hashAdd(subGroupHash, slPair->name, slPair->val);
                 }
             if (sgd->nameHash == NULL)

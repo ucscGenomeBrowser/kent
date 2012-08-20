@@ -1,7 +1,7 @@
 metaObject wgEncodeUwDnase
 objType composite
 composite wgEncodeUwDnase
-expVars lab,dataType,cell,age,treatment
+expVars lab,dataType,cell,age,treatment,strain
 geoSeriesAccession GSE37074
 
 metaObject wgEncodeUwDnase3134RiiiMImmortalAlnRep1
@@ -6293,8 +6293,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfAlnRep2.bam,wgEncodeUwDnaseLiver129dlcrME14halfAlnRep2.bam.bai
 grant Stam
 lab UW-m
@@ -6319,8 +6319,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW-m
@@ -6346,8 +6346,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfPkRep2.narrowPeak.gz
 grant Stam
 lab UW-m
@@ -6373,8 +6373,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
@@ -6399,8 +6399,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfSigRep2.bigWig
 grant Stam
 lab UW-m
@@ -8371,8 +8371,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfAlnRep1.bam,wgEncodeUwDnaseLiverS129ME14halfAlnRep1.bam.bai
 grant Stam
 lab UW-m
@@ -8397,8 +8397,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
@@ -8424,8 +8424,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
@@ -8451,8 +8451,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
@@ -8477,8 +8477,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfSigRep1.bigWig
 grant Stam
 lab UW-m
@@ -15990,12 +15990,41 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum da7ce24569974b7d1652b910c82825a2,61730db93f90383bd229730260b2025a
+objStatus replaced - Replaced with better version
 project wgEncode
 replicate 1
 sex M
 strain 129/Ola
 subId 3896
 tissueSourceType None
+view Alignments
+
+metaObject wgEncodeUwDnaseZhbtc4129olaME0AlnRep1V2
+objType file
+age E0
+cell ZhBTc4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-18
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+dccAccession wgEncodeEM001735
+expId 1735
+fileName wgEncodeUwDnaseZhbtc4129olaME0AlnRep1V2.bam,wgEncodeUwDnaseZhbtc4129olaME0AlnRep1V2.bam.bai
+grant Stam
+lab UW-m
+labExpId DS17616
+labVersion Bowtie 0.12.5
+md5sum 5df79dc3a8e9124607c837ad77063bd9,0fbb32f6dc0f73a4762266098e706643
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 7510
+submittedDataVersion V2 - replaces earlier version
+tissueSourceType None
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0AlnRep2
@@ -16570,6 +16599,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 2b01e3180afe02756c5cf5957611f1ec
+objStatus replaced - Replaced with better version
 project wgEncode
 replicate 1
 sex M
@@ -16577,6 +16607,35 @@ strain 129/Ola
 subId 3896
 tableName wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep1
 tissueSourceType None
+view Hotspots
+
+metaObject wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep1V2
+objType table
+age E0
+cell ZhBTc4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-18
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+dccAccession wgEncodeEM001735
+expId 1735
+fileName wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep1V2.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS17616
+labVersion Hotspot-v5.2
+md5sum c689ce1f4ba72cef670f6113c04e57ba
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 7510
+submittedDataVersion V2 - replaces earlier version
+tableName wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep1V2
+tissueSourceType None
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep2
@@ -16620,6 +16679,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.1
 md5sum 395de79891cc3022026734e35516b467
+objStatus replaced - Replaced with better version
 project wgEncode
 replicate 1
 sex M
@@ -16627,6 +16687,35 @@ strain 129/Ola
 subId 3896
 tableName wgEncodeUwDnaseZhbtc4129olaME0PkRep1
 tissueSourceType None
+view Peaks
+
+metaObject wgEncodeUwDnaseZhbtc4129olaME0PkRep1V2
+objType table
+age E0
+cell ZhBTc4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-18
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+dccAccession wgEncodeEM001735
+expId 1735
+fileName wgEncodeUwDnaseZhbtc4129olaME0PkRep1V2.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS17616
+labVersion lmax-v1.1
+md5sum 2c01faf26e2a9e935b9237a06c55ee53
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 7510
+submittedDataVersion V2 - replaces earlier version
+tableName wgEncodeUwDnaseZhbtc4129olaME0PkRep1V2
+tissueSourceType None
+treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0PkRep2
@@ -16670,12 +16759,41 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum d3a42d283240fe6dad06993ee8a137a2
+objStatus replaced - Replaced with better version
 project wgEncode
 replicate 1
 sex M
 strain 129/Ola
 subId 3896
 tissueSourceType None
+view RawData
+
+metaObject wgEncodeUwDnaseZhbtc4129olaME0RawDataRep1V2
+objType file
+age E0
+cell ZhBTc4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-18
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+dccAccession wgEncodeEM001735
+expId 1735
+fileName wgEncodeUwDnaseZhbtc4129olaME0RawDataRep1V2.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS17616
+labVersion 1
+md5sum 8127d4ebb1c532de3a19ad220b991e59
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 7510
+submittedDataVersion V2 - replaces earlier version
+tissueSourceType None
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0RawDataRep2
@@ -16718,6 +16836,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum cba99f9fe54599c4ba360e02d1254cd9
+objStatus replaced - Replaced with better version
 project wgEncode
 replicate 1
 sex M
@@ -16725,6 +16844,35 @@ strain 129/Ola
 subId 3896
 tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep1
 tissueSourceType None
+view Signal
+
+metaObject wgEncodeUwDnaseZhbtc4129olaME0SigRep1V2
+objType table
+age E0
+cell ZhBTc4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateResubmitted 2012-07-18
+dateSubmitted 2011-05-06
+dateUnrestricted 2012-02-06
+dccAccession wgEncodeEM001735
+expId 1735
+fileName wgEncodeUwDnaseZhbtc4129olaME0SigRep1V2.bigWig
+grant Stam
+lab UW-m
+labExpId DS17616
+labVersion WindowDensity-bin20-win+/-75
+md5sum 24c18269a31e03db6ec74d7aea6eea36
+project wgEncode
+replicate 1
+sex M
+strain 129/Ola
+subId 7510
+submittedDataVersion V2 - replaces earlier version
+tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep1V2
+tissueSourceType None
+treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0SigRep2
@@ -16752,142 +16900,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwDnaseZhbtc4129olaUE0AlnRep1V2
-objType file
-age E0
-cell ZhBTc4
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-18
-dateUnrestricted 2013-04-18
-dccAccession wgEncodeEM001735
-expId 1735
-fileName wgEncodeUwDnaseZhbtc4129olaUE0AlnRep1V2.bam,wgEncodeUwDnaseZhbtc4129olaUE0AlnRep1V2.bam.bai
-grant Stam
-lab UW-m
-labExpId DS17616
-labVersion Bowtie 0.12.5
-md5sum 5df79dc3a8e9124607c837ad77063bd9,0fbb32f6dc0f73a4762266098e706643
-project wgEncode
-replicate 1
-sex U
-strain 129/Ola
-subId 7510
-submittedDataVersion V2 - replaces earlier version
-tissueSourceType None
-treatment None
-view Alignments
-
-metaObject wgEncodeUwDnaseZhbtc4129olaUE0HotspotsRep1V2
-objType table
-age E0
-cell ZhBTc4
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-18
-dateUnrestricted 2013-04-18
-dccAccession wgEncodeEM001735
-expId 1735
-fileName wgEncodeUwDnaseZhbtc4129olaUE0HotspotsRep1V2.broadPeak.gz
-grant Stam
-lab UW-m
-labExpId DS17616
-labVersion Hotspot-v5.2
-md5sum c689ce1f4ba72cef670f6113c04e57ba
-project wgEncode
-replicate 1
-sex U
-strain 129/Ola
-subId 7510
-submittedDataVersion V2 - replaces earlier version
-tableName wgEncodeUwDnaseZhbtc4129olaUE0HotspotsRep1V2
-tissueSourceType None
-treatment None
-view Hotspots
-
-metaObject wgEncodeUwDnaseZhbtc4129olaUE0PkRep1V2
-objType table
-age E0
-cell ZhBTc4
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-18
-dateUnrestricted 2013-04-18
-dccAccession wgEncodeEM001735
-expId 1735
-fileName wgEncodeUwDnaseZhbtc4129olaUE0PkRep1V2.narrowPeak.gz
-grant Stam
-lab UW-m
-labExpId DS17616
-labVersion lmax-v1.1
-md5sum 2c01faf26e2a9e935b9237a06c55ee53
-project wgEncode
-replicate 1
-sex U
-strain 129/Ola
-subId 7510
-submittedDataVersion V2 - replaces earlier version
-tableName wgEncodeUwDnaseZhbtc4129olaUE0PkRep1V2
-tissueSourceType None
-treatment None
-view Peaks
-
-metaObject wgEncodeUwDnaseZhbtc4129olaUE0RawDataRep1V2
-objType file
-age E0
-cell ZhBTc4
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-18
-dateUnrestricted 2013-04-18
-dccAccession wgEncodeEM001735
-expId 1735
-fileName wgEncodeUwDnaseZhbtc4129olaUE0RawDataRep1V2.fastq.tgz
-grant Stam
-lab UW-m
-labExpId DS17616
-labVersion 1
-md5sum 8127d4ebb1c532de3a19ad220b991e59
-project wgEncode
-replicate 1
-sex U
-strain 129/Ola
-subId 7510
-submittedDataVersion V2 - replaces earlier version
-tissueSourceType None
-treatment None
-view RawData
-
-metaObject wgEncodeUwDnaseZhbtc4129olaUE0SigRep1V2
-objType table
-age E0
-cell ZhBTc4
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-18
-dateUnrestricted 2013-04-18
-dccAccession wgEncodeEM001735
-expId 1735
-fileName wgEncodeUwDnaseZhbtc4129olaUE0SigRep1V2.bigWig
-grant Stam
-lab UW-m
-labExpId DS17616
-labVersion WindowDensity-bin20-win+/-75
-md5sum 24c18269a31e03db6ec74d7aea6eea36
-project wgEncode
-replicate 1
-sex U
-strain 129/Ola
-subId 7510
-submittedDataVersion V2 - replaces earlier version
-tableName wgEncodeUwDnaseZhbtc4129olaUE0SigRep1V2
-tissueSourceType None
-treatment None
-view Signal
-
-# MAGIC: -1998128496
+# MAGIC: -302992623
