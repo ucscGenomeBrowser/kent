@@ -17,7 +17,7 @@ include wgEncodeGencodeV12.release3.ra
 include wgEncodeUncBsuProt.release2.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
-include wgEncodeUncBsuProtGenc.release1.ra alpha
+include wgEncodeUncBsuProtGenc.release1.ra alpha,beta
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.release3.ra
