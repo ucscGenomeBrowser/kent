@@ -1,7 +1,7 @@
 metaObject wgEncodeUwDnase
 objType composite
 composite wgEncodeUwDnase
-expVars lab,dataType,cell,age,treatment
+expVars lab,dataType,cell,age,treatment,strain
 geoSeriesAccession GSE37074
 
 metaObject wgEncodeUwDnase3134RiiiMImmortalAlnRep1
@@ -6293,8 +6293,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfAlnRep2.bam,wgEncodeUwDnaseLiver129dlcrME14halfAlnRep2.bam.bai
 grant Stam
 lab UW-m
@@ -6319,8 +6319,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW-m
@@ -6346,8 +6346,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfPkRep2.narrowPeak.gz
 grant Stam
 lab UW-m
@@ -6373,8 +6373,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
@@ -6399,8 +6399,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003418
+expId 3418
 fileName wgEncodeUwDnaseLiver129dlcrME14halfSigRep2.bigWig
 grant Stam
 lab UW-m
@@ -8371,8 +8371,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfAlnRep1.bam,wgEncodeUwDnaseLiverS129ME14halfAlnRep1.bam.bai
 grant Stam
 lab UW-m
@@ -8397,8 +8397,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
@@ -8424,8 +8424,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
@@ -8451,8 +8451,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
@@ -8477,8 +8477,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-25
 dateUnrestricted 2013-04-25
-dccAccession wgEncodeEM003401
-expId 3401
+dccAccession wgEncodeEM003419
+expId 3419
 fileName wgEncodeUwDnaseLiverS129ME14halfSigRep1.bigWig
 grant Stam
 lab UW-m
@@ -16890,4 +16890,4 @@ tissueSourceType None
 treatment None
 view Signal
 
-# MAGIC: -1998128496
+# MAGIC: -779995197
