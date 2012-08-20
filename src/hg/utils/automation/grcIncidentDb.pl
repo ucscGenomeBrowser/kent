@@ -11,11 +11,11 @@ sub loadTmpTable($$$) {
     my ($db, $table, $tabFile) = @_;
     my $sqlFile = $tabFile;
     $sqlFile =~ s/.tab$/.sql/;
-    `hgsql -e "drop table if exists $table;" $db`;
+    `/cluster/bin/x86_64/hgsql -e "drop table if exists $table;" $db`;
     die "ERROR: failed drop table $db.$table" if ($?);
-    `hgsql $db < $sqlFile`;
+    `/cluster/bin/x86_64/hgsql $db < $sqlFile`;
     die "ERROR: failed create table $db.$table from $sqlFile" if ($?);
-    `hgsql -e "load data local infile '$tabFile' into table $table;" $db`;
+    `/cluster/bin/x86_64/hgsql -e "load data local infile '$tabFile' into table $table;" $db`;
     die "ERROR: failed load data table $db.$table from $tabFile" if ($?);
 }
 
@@ -123,7 +123,7 @@ while (my $dir = shift) {
     $file = "$dir/issue.tab";
     printf STDERR "# reading $file\n" if ($debug);
     loadTmpTable($tmpDb, "issue", $file);
-    open (FH, "hgsql -N $tmpDb -e 'select id,type,key2,assignedChr,accession1,accession2,reportType,summary,status,statusText,description,experimentType,externalInfoType,upd,resolution,resolutionText,affectVersion,fixVersion,location from issue;'|")
+    open (FH, "/cluster/bin/x86_64/hgsql -N $tmpDb -e 'select id,type,key2,assignedChr,accession1,accession2,reportType,summary,status,statusText,description,experimentType,externalInfoType,upd,resolution,resolutionText,affectVersion,fixVersion,location from issue;'|")
         or die "can not select from $tmpDb.issue";
     while (my $line = <FH>) {
 	chomp $line;

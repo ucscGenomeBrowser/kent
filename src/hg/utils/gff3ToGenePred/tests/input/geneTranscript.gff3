@@ -1,0 +1,14 @@
+##gff-version	3
+# from PlasmoDB, non-coding RNAs that have transcript under gene
+# http://plasmodb.org/common/downloads/release-9.0/Pfalciparum3D7/gff/data/PlasmoDB-9.0_Pfalciparum3D7.gff
+#
+Pf3D7_01_v3	ApiDB	gene	429041	429749	.	+	.	ID=PF3D7_0111100;Name=PF3D7_0111100;description=unspecified+product;size=709;web_id=PF3D7_0111100;locus_tag=PF3D7_0111100;size=709;Alias=PF3D7_0111100,PF01TR006:ncRNA
+Pf3D7_01_v3	ApiDB	transcript	429041	429749	.	+	.	ID=rna_PF3D7_0111100-1;Name=PF3D7_0111100-1;description=PF3D7_0111100-1;size=709;Parent=PF3D7_0111100;Dbxref=ApiDB_PlasmoDB:PF3D7_0111100,taxon:36329
+Pf3D7_01_v3	ApiDB	exon	429041	429749	.	+	.	ID=exon_PF3D7_0111100-1;Name=exon;description=exon;size=709;Parent=rna_PF3D7_0111100-1
+Pf3D7_01_v3	ApiDB	gene	334866	336314	.	+	.	ID=PF3D7_0108200;Name=PF3D7_0108200;description=unspecified+product;size=1449;web_id=PF3D7_0108200;locus_tag=PF3D7_0108200;size=1449;Alias=PF3D7_0108200,PF01TR004:ncRNA
+Pf3D7_01_v3	ApiDB	transcript	334866	336314	.	+	.	ID=rna_PF3D7_0108200-1;Name=PF3D7_0108200-1;description=PF3D7_0108200-1;size=1449;Parent=PF3D7_0108200;Dbxref=ApiDB_PlasmoDB:PF3D7_0108200,taxon:36329
+Pf3D7_01_v3	ApiDB	exon	334866	336314	.	+	.	ID=exon_PF3D7_0108200-1;Name=exon;description=exon;size=1449;Parent=rna_PF3D7_0108200-1
+
+# faked case with transcript at the top level
+Pf3D7_02_v3	ApiDB	transcript	407900	408438	.	+	.	ID=rna_PF3D7_0209900-1;Name=PF3D7_0209900-1;description=PF3D7_0209900-1;size=539;Dbxref=ApiDB_PlasmoDB:PF3D7_0209900,taxon:36329
+Pf3D7_02_v3	ApiDB	exon	407900	408438	.	+	.	ID=exon_PF3D7_0209900-1;Name=exon;description=exon;size=539;Parent=rna_PF3D7_0209900-1
