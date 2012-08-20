@@ -215,6 +215,7 @@ extern char *gff3FeatThreePrimeUTR;
 extern char *gff3FeatFivePrimeUTR;
 extern char *gff3FeatStartCodon;
 extern char *gff3FeatStopCodon;
+extern char *gff3FeatTranscript;
 
 struct gff3File *gff3FileOpen(char *fileName, int maxErr, FILE *errFh);
 /* Parse a GFF3 file into a gff3File object.  If maxErr not zero, then
