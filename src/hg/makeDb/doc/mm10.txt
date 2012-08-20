@@ -32,8 +32,8 @@
 #	Finishing project:
 #	http://www.ncbi.nlm.nih.gov/bioproject/20689
 
-#	Assembly ID: 165668
-#	http://www.ncbi.nlm.nih.gov/genome/assembly/165668/
+#	Assembly ID: 327618
+#	http://www.ncbi.nlm.nih.gov/genome/assembly/327618/
 
 #	Celera Assembly
 # http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAHY00
@@ -288,7 +288,7 @@ fastaFiles /hive/data/genomes/mm10/ucsc/*.fa.gz
 agpFiles /hive/data/genomes/mm10/ucsc/*.agp.gz
 dbDbSpeciesDir mouse
 taxId   10090
-ncbiAssemblyId   165668
+ncbiAssemblyId   327618
 ncbiAssemblyName   GRCm38
 '_EOF_'
     # << happy emacs
