@@ -340,7 +340,7 @@ dateUnrestricted 2013-03-19
 fileName wgEncodeOpenChromFaireColonocAlnRep1.bam,wgEncodeOpenChromFaireColonocAlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7103
@@ -357,7 +357,7 @@ dateUnrestricted 2013-03-19
 fileName wgEncodeOpenChromFaireColonocAlnRep2.bam,wgEncodeOpenChromFaireColonocAlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7103
@@ -446,6 +446,91 @@ subId 7103
 tableName wgEncodeOpenChromFaireColonocSig
 view Signal
 
+metaObject wgEncodeOpenChromFaireEndometriumocAlnRep1
+objType file
+cell Endometrium_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-12
+dateUnrestricted 2013-04-12
+fileName wgEncodeOpenChromFaireEndometriumocAlnRep1.bam,wgEncodeOpenChromFaireEndometriumocAlnRep1.bam.bai
+grant Crawford
+lab UNC
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7348
+view Alignments
+
+metaObject wgEncodeOpenChromFaireEndometriumocAlnRep2
+objType file
+cell Endometrium_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-12
+dateUnrestricted 2013-04-12
+fileName wgEncodeOpenChromFaireEndometriumocAlnRep2.bam,wgEncodeOpenChromFaireEndometriumocAlnRep2.bam.bai
+grant Crawford
+lab UNC
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7348
+view Alignments
+
+metaObject wgEncodeOpenChromFaireEndometriumocBaseOverlapSignal
+objType table
+cell Endometrium_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-12
+dateUnrestricted 2013-04-12
+fileName wgEncodeOpenChromFaireEndometriumocBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7348
+tableName wgEncodeOpenChromFaireEndometriumocBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireEndometriumocPk
+objType table
+cell Endometrium_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-12
+dateUnrestricted 2013-04-12
+fileName wgEncodeOpenChromFaireEndometriumocPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 7348
+tableName wgEncodeOpenChromFaireEndometriumocPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireEndometriumocSig
+objType table
+cell Endometrium_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-12
+dateUnrestricted 2013-04-12
+fileName wgEncodeOpenChromFaireEndometriumocSig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 7348
+tableName wgEncodeOpenChromFaireEndometriumocSig
+view Signal
+
 metaObject wgEncodeOpenChromFaireFrontalcortexocAlnRep1
 objType file
 cell Frontal_cortex_OC
@@ -457,7 +542,7 @@ dateUnrestricted 2013-04-04
 fileName wgEncodeOpenChromFaireFrontalcortexocAlnRep1.bam,wgEncodeOpenChromFaireFrontalcortexocAlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7319
@@ -474,7 +559,7 @@ dateUnrestricted 2013-04-04
 fileName wgEncodeOpenChromFaireFrontalcortexocAlnRep2.bam,wgEncodeOpenChromFaireFrontalcortexocAlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7319
@@ -3526,6 +3611,123 @@ project wgEncode
 subId 3831
 view Validation
 
+metaObject wgEncodeOpenChromFaireKidneyocAlnRep1
+objType file
+cell Kidney_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireKidneyocAlnRep1.bam,wgEncodeOpenChromFaireKidneyocAlnRep1.bam.bai
+grant Crawford
+lab UNC
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7324
+view Alignments
+
+metaObject wgEncodeOpenChromFaireKidneyocAlnRep2
+objType file
+cell Kidney_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireKidneyocAlnRep2.bam,wgEncodeOpenChromFaireKidneyocAlnRep2.bam.bai
+grant Crawford
+lab UNC
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7324
+view Alignments
+
+metaObject wgEncodeOpenChromFaireKidneyocBaseOverlapSignal
+objType table
+cell Kidney_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireKidneyocBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7324
+tableName wgEncodeOpenChromFaireKidneyocBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireKidneyocPk
+objType table
+cell Kidney_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireKidneyocPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 7324
+tableName wgEncodeOpenChromFaireKidneyocPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireKidneyocRawDataRep1
+objType file
+cell Kidney_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireKidneyocRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 7324
+view RawData
+
+metaObject wgEncodeOpenChromFaireKidneyocRawDataRep2
+objType file
+cell Kidney_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireKidneyocRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 7324
+view RawData
+
+metaObject wgEncodeOpenChromFaireKidneyocSig
+objType table
+cell Kidney_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireKidneyocSig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7324
+tableName wgEncodeOpenChromFaireKidneyocSig
+view Signal
+
 metaObject wgEncodeOpenChromFaireMcf7Est10nm30mAlnRep1
 objType file
 cell MCF-7
@@ -3537,7 +3739,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromFaireMcf7Est10nm30mAlnRep1.bam,wgEncodeOpenChromFaireMcf7Est10nm30mAlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7135
@@ -3555,7 +3757,7 @@ dateUnrestricted 2013-03-26
 fileName wgEncodeOpenChromFaireMcf7Est10nm30mAlnRep2.bam,wgEncodeOpenChromFaireMcf7Est10nm30mAlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7135
@@ -3827,7 +4029,7 @@ dateUnrestricted 2013-03-19
 fileName wgEncodeOpenChromFaireMcf7VehAlnRep1.bam,wgEncodeOpenChromFaireMcf7VehAlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7105
@@ -3845,7 +4047,7 @@ dateUnrestricted 2013-03-19
 fileName wgEncodeOpenChromFaireMcf7VehAlnRep2.bam,wgEncodeOpenChromFaireMcf7VehAlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7105
@@ -4110,7 +4312,7 @@ dateUnrestricted 2013-01-20
 fileName wgEncodeOpenChromFaireMrta2041AlnRep1.bam,wgEncodeOpenChromFaireMrta2041AlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 6792
@@ -4127,7 +4329,7 @@ dateUnrestricted 2013-01-20
 fileName wgEncodeOpenChromFaireMrta2041AlnRep2.bam,wgEncodeOpenChromFaireMrta2041AlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 6792
@@ -4227,7 +4429,7 @@ dateUnrestricted 2013-01-20
 fileName wgEncodeOpenChromFaireMrtg4016AlnRep1.bam,wgEncodeOpenChromFaireMrtg4016AlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 6793
@@ -4244,7 +4446,7 @@ dateUnrestricted 2013-01-20
 fileName wgEncodeOpenChromFaireMrtg4016AlnRep2.bam,wgEncodeOpenChromFaireMrtg4016AlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 6793
@@ -4344,7 +4546,7 @@ dateUnrestricted 2013-01-20
 fileName wgEncodeOpenChromFaireMrtttc549AlnRep1.bam,wgEncodeOpenChromFaireMrtttc549AlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 6794
@@ -4361,7 +4563,7 @@ dateUnrestricted 2013-01-20
 fileName wgEncodeOpenChromFaireMrtttc549AlnRep2.bam,wgEncodeOpenChromFaireMrtttc549AlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 6794
@@ -4975,7 +5177,7 @@ dateUnrestricted 2013-03-19
 fileName wgEncodeOpenChromFairePancreasocAlnRep1.bam,wgEncodeOpenChromFairePancreasocAlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7104
@@ -4992,7 +5194,7 @@ dateUnrestricted 2013-03-19
 fileName wgEncodeOpenChromFairePancreasocAlnRep2.bam,wgEncodeOpenChromFairePancreasocAlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7104
@@ -5212,7 +5414,7 @@ dateUnrestricted 2013-03-19
 fileName wgEncodeOpenChromFaireRcc7860AlnRep1.bam,wgEncodeOpenChromFaireRcc7860AlnRep1.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 7102
@@ -5229,7 +5431,7 @@ dateUnrestricted 2013-03-19
 fileName wgEncodeOpenChromFaireRcc7860AlnRep2.bam,wgEncodeOpenChromFaireRcc7860AlnRep2.bam.bai
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 7102
@@ -5316,6 +5518,123 @@ labVersion fseq v 1.84, iff_generic_male
 project wgEncode
 subId 7102
 tableName wgEncodeOpenChromFaireRcc7860Sig
+view Signal
+
+metaObject wgEncodeOpenChromFaireSmallintestineocAlnRep1
+objType file
+cell Small_intestine_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireSmallintestineocAlnRep1.bam,wgEncodeOpenChromFaireSmallintestineocAlnRep1.bam.bai
+grant Crawford
+lab UNC
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 7322
+view Alignments
+
+metaObject wgEncodeOpenChromFaireSmallintestineocAlnRep2
+objType file
+cell Small_intestine_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireSmallintestineocAlnRep2.bam,wgEncodeOpenChromFaireSmallintestineocAlnRep2.bam.bai
+grant Crawford
+lab UNC
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 7322
+view Alignments
+
+metaObject wgEncodeOpenChromFaireSmallintestineocBaseOverlapSignal
+objType table
+cell Small_intestine_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireSmallintestineocBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 7322
+tableName wgEncodeOpenChromFaireSmallintestineocBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireSmallintestineocPk
+objType table
+cell Small_intestine_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireSmallintestineocPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 7322
+tableName wgEncodeOpenChromFaireSmallintestineocPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireSmallintestineocRawDataRep1
+objType file
+cell Small_intestine_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireSmallintestineocRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 7322
+view RawData
+
+metaObject wgEncodeOpenChromFaireSmallintestineocRawDataRep2
+objType file
+cell Small_intestine_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireSmallintestineocRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 7322
+view RawData
+
+metaObject wgEncodeOpenChromFaireSmallintestineocSig
+objType table
+cell Small_intestine_OC
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-06
+dateUnrestricted 2013-04-06
+fileName wgEncodeOpenChromFaireSmallintestineocSig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 7322
+tableName wgEncodeOpenChromFaireSmallintestineocSig
 view Signal
 
 metaObject wgEncodeOpenChromFaireUrotsaAlnRep1
@@ -5643,4 +5962,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -427420028
+# MAGIC: -768884226
