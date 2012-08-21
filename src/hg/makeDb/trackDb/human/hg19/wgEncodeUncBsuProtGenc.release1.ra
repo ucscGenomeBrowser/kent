@@ -7,7 +7,7 @@ shortLabel UNC/BSU ProtGenc
 longLabel Proteogenomics Hg19 and GENCODE Mapping from ENCODE/Univ. North Carolina/Boise State Univ.
 group expression
 subGroup1 view Views pepMapGcFt=Peptide_Mapping_with_Hg19_and_GENCODE_(Filtered) mPepMapGcFt=Modified_Peptide_Mapping_with_Hg19_and_GENCODE_(Filtered)
-subGroup2 cellType Cell_Line H1HESC=H1-hESC&nbsp;(Tier_1) H1NEURONS=H1-neurons&nbsp;(Tier_2) t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) 
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1HESC=H1-hESC&nbsp;(Tier_1)  K562=K562&nbsp;(Tier_1)  H1NEURONS=H1-neurons&nbsp;(Tier_2) 
 subGroup3 localization Localization CYTOSOL=Cytosol CELL=Whole_Cell membraneFraction=Membrane mito=Mitochondria nucleus=Nucleus
 subGroup4 protocol Protocol FASP=FASP INGEL=In-gel MUDPIT=MudPIT
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=protocol
@@ -35,8 +35,8 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
         shortLabel GM12878 Ce
-        longLabel GM12878 In-gel ProtG GENCODE11 & Hg19 Mapping from ENCODE/UNC/BSU
-        subGroups view=pepMapGcFt cellType=t1GM12878 localization=CELL protocol=INGEL
+        longLabel GM12878 In-gel ProtG GENCODE11 Hg19 Mapping from ENCODE/UNC/BSU
+        subGroups view=pepMapGcFt cellType=GM12878 localization=CELL protocol=INGEL
         type bigBed 12
         color 153,38,0
         # subId=6541 dateSubmitted=2012-03-28
@@ -44,8 +44,8 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
         shortLabel GM12878 Cyt
-        longLabel GM12878 Cytosol InGel ProtG GENCODE11 & Hg19 Mapping from ENCODE/UNC/BSU 
-        subGroups view=pepMapGcFt cellType=t1GM12878 localization=CYTOSOL protocol=INGEL
+        longLabel GM12878 Cytosol InGel ProtG GENCODE11 Hg19 Mapping from ENCODE/UNC/BSU 
+        subGroups view=pepMapGcFt cellType=GM12878 localization=CYTOSOL protocol=INGEL
         type bigBed 12
         color 153,38,0
         # subId=6527 dateSubmitted=2012-03-28
@@ -53,8 +53,8 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencK562CellIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
         shortLabel K562 Ce
-        longLabel K562 In-gel ProtG GENCODE11 & Hg19 Mapping from ENCODE/UNC/BSU 
-        subGroups view=pepMapGcFt cellType=t1K562 localization=CELL protocol=INGEL
+        longLabel K562 In-gel ProtG GENCODE11 Hg19 Mapping from ENCODE/UNC/BSU 
+        subGroups view=pepMapGcFt cellType=K562 localization=CELL protocol=INGEL
         type bigBed 12
         color 46,0,184
         # subId=6544 dateSubmitted=2012-03-28
@@ -62,7 +62,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencH1hescCellFasppepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt 
         shortLabel H1-hESC Ce F
-        longLabel H1-hESC FASP ProtG GENCODE11 & Hg19 Mapping from ENCODE/UNC/BSU 
+        longLabel H1-hESC FASP ProtG GENCODE11 Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=H1HESC localization=CELL protocol=FASP
         type bigBed 12
         color 0,107,27
@@ -71,7 +71,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencH1neuronsCellMudpitpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt 
         shortLabel H1-neurons Ce
-        longLabel H1-neurons MudPIT ProtG GENCODE10 & Hg19 Mapping from ENCODE/UNC/BSU 
+        longLabel H1-neurons MudPIT ProtG GENCODE10 Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=H1NEURONS localization=CELL protocol=MUDPIT
         type bigBed 12
         # subId=7513 dateSubmitted=2012-07-19
@@ -79,7 +79,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencH1hescCellMudpitpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt 
         shortLabel H1-hESC Ce M
-        longLabel H1-hESC MudPIT ProtG GENCODE10 & Hg19 Mapping from ENCODE/UNC/BSU 
+        longLabel H1-hESC MudPIT ProtG GENCODE10 Hg19 Mapping from ENCODE/UNC/BSU 
         subGroups view=pepMapGcFt cellType=H1HESC localization=CELL protocol=MUDPIT
         type bigBed 12
         color 0,107,27
@@ -97,8 +97,8 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel GM12878 Ce PTM
-        longLabel GM12878 In-gel ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
-        subGroups view=mPepMapGcFt cellType=t1GM12878 localization=CELL protocol=INGEL
+        longLabel GM12878 In-gel ProtG GENCODE11 Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        subGroups view=mPepMapGcFt cellType=GM12878 localization=CELL protocol=INGEL
         type bigBed 12
         color 153,38,0
         # subId=6541 dateSubmitted=2012-03-28
@@ -106,8 +106,8 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel GM12878 Cyt PTM
-        longLabel GM12878 Cytosol InGel ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
-        subGroups view=mPepMapGcFt cellType=t1GM12878 localization=CYTOSOL protocol=INGEL
+        longLabel GM12878 Cytosol InGel ProtG GENCODE11 Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        subGroups view=mPepMapGcFt cellType=GM12878 localization=CYTOSOL protocol=INGEL
         type bigBed 12
         color 153,38,0
         # subId=6527 dateSubmitted=2012-03-28
@@ -115,8 +115,8 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencK562CellIngelmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel K562 Ce PTM
-        longLabel K562 In-gel ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
-        subGroups view=mPepMapGcFt cellType=t1K562 localization=CELL protocol=INGEL
+        longLabel K562 In-gel ProtG GENCODE11 Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        subGroups view=mPepMapGcFt cellType=K562 localization=CELL protocol=INGEL
         type bigBed 12
         color 46,0,184
         # subId=6544 dateSubmitted=2012-03-28
@@ -124,7 +124,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel H1-hESC Ce PTM
-        longLabel H1-hESC FASP ProtG GENCODE11 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        longLabel H1-hESC FASP ProtG GENCODE11 Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=H1HESC localization=CELL protocol=FASP
         type bigBed 12
         color 0,107,27
@@ -133,7 +133,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencH1neuronsCellMudpitmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel H1-neurons Ce PTM
-        longLabel H1-neurons MudPIT ProtG GENCODE10 & Hg19 PTM Mapping from ENCODE/UNC/BSU
+        longLabel H1-neurons MudPIT ProtG GENCODE10 Hg19 PTM Mapping from ENCODE/UNC/BSU
         subGroups view=mPepMapGcFt cellType=H1NEURONS localization=CELL protocol=MUDPIT
         type bigBed 12
         # subId=7513 dateSubmitted=2012-07-19
@@ -141,7 +141,7 @@ html wgEncodeUncBsuProtGenc.release1
         track wgEncodeUncBsuProtGencH1hescCellMudpitmPepMapGcFt
         parent wgEncodeUncBsuProtGencViewmPepMapGcFt
         shortLabel H1-hESC Ce M PTM
-        longLabel H1-hESC MudPIT ProtG GENCODE10 & Hg19 PTM Mapping from ENCODE/UNC/BSU 
+        longLabel H1-hESC MudPIT ProtG GENCODE10 Hg19 PTM Mapping from ENCODE/UNC/BSU 
         subGroups view=mPepMapGcFt cellType=H1HESC localization=CELL protocol=MUDPIT
         type bigBed 12
         color 0,107,27
