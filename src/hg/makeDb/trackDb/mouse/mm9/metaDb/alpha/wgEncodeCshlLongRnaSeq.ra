@@ -17105,7 +17105,7 @@ dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEM002517
 expId 2517
-fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep1.spikeins
+fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038
@@ -17136,7 +17136,7 @@ dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEM002517
 expId 2517
-fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins
+fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21039
