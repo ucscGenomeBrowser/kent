@@ -16,11 +16,11 @@ Gbdbs: 68
 
 Sizes of New:
 Table: 3350 MB (3 GB)
-Files: 1971443 MB (1.88 TB)
+Files: 1971384 MB (1.88 TB)
 Gbdbs: 887575 MB (867 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 2862369 MB (2.73 TB)
+Total: 2862310 MB (2.73 TB)
 
 
 TABLES:
@@ -312,16 +312,13 @@ wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep2
 
 
 DOWNLOAD FILES:
-New: 454
+New: 453
 Untouched: 207
 Revoked/Replaced/Renamed: 102
-New + Untouched: 661
+New + Untouched: 660
 Total (New + Untouched + Revoked/Replaced/Renamed): 762
 
-These 1 objects exist in both new and revoked download files:
-wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
-
-New Download Files (454):
+New Download Files (453):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1V2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1V2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2V2.bam
@@ -723,7 +720,6 @@ New Download Files (454):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd1Rep2.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd2Rep1.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd2Rep2.fastq.tgz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1V2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1V2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep2V2.bam
