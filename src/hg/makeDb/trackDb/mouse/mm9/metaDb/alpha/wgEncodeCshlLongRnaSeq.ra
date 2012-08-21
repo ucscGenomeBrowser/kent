@@ -17111,6 +17111,7 @@ lab CSHL-m
 labExpId LID21038
 localization cell
 md5sum 176961cf70ed3fedea68c1626b8f4815
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17141,6 +17142,7 @@ lab CSHL-m
 labExpId LID21039
 localization cell
 md5sum 7631ba95140a51fee57cae1fef5b0ce6
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -19975,4 +19977,4 @@ strain C57BL/6J
 subId 7798
 view TranscriptEnsV65IAcuff
 
-# MAGIC: 2087718409
+# MAGIC: -1988112331
