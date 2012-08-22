@@ -8,8 +8,8 @@ shortLabel Duke DNaseI HS
 longLabel Open Chromatin by DNaseI HS from ENCODE/OpenChrom(Duke University)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01794=B_cells_CD20+_RO01794&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14=Monocytes_CD14+&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3A8988T=8988T t3AOSMC=AoSMC t3CEREBELLUMOC=Cerebellum_OC t3CEREBRUMFRONTALOC=Cerebrum_frontal_OC t3CHORION=Chorion t3CLL=CLL t3COLO829=Colo829 t3ECC1=ECC-1 t3FIBROBL=Fibrobl t3FIBROBLGM03348=Fibrobl_GM03348 t3FIBROPAG08395=FibroP_AG08395 t3FIBROPAG08396=FibroP_AG08396 t3FIBROPAG20443=FibroP_AG20443 t3FRONTALCORTEXOC=Frontal_cortex_OC t3GCBCELL=GC_B_cell t3GLIOBLA=Gliobla t3GM10248=GM10248 t3GM10266=GM10266 t3GM12891=GM12891 t3GM12892=GM12892 t3GM13976=GM13976 t3GM13977=GM13977 t3GM18507=GM18507 t3GM19238=GM19238 t3GM19239=GM19239 t3GM19240=GM19240 t3GM20000=GM20000 t3H7HESC=H7-hESC t3H9ES=H9ES t3HEARTOC=Heart_OC t3HEK293T=HEK293T t3HEPATOCYTES=Hepatocytes t3HMEC=HMEC t3HPDE6E6E7=HPDE6-E6E7 t3HSMM=HSMM t3HSMMEMB=HSMM_emb t3HSMMFSHD=HSMM_FSHD t3HSMMTUBE=HSMMtube t3HTR8SVN=HTR8svn t3HUH7=Huh-7 t3HUH75=Huh-7.5 t3IPSCWRU1=iPS_CWRU1 t3IPSNIHI07=iPS_NIHi7 t3IPSNIHI11=iPS_NIHi11 t3ISHIKAWA=Ishikawa t3LNCAP=LNCaP t3MEDULLO=Medullo t3MEDULLOD341=Medullo_D341 t3MEL2183=Mel_2183 t3MELANO=Melano t3MYOMETR=Myometr t3NAIVEBCELL=Naive_B_cell t3NHEK=NHEK t3OLFACTORYNEUROSPHERE=Olfactory_neurosphere t3OSTEOBLASTS=Osteoblasts t3PANISLETD=PanIsletD t3PANISLETS=PanIslets t3PHTE=pHTE t3PROGFIB=ProgFib t3PSOASMUSCLEOC=Psoas_muscle_OC t3RWPE1=RWPE1 t3STELLATE=Stellate t3T47D=T-47D t3TCELLSCD4TH0ADULT=Adult_CD4+_Th0 t3TCELLSCD4TH1ADULT=Adult_CD4+_Th1 t3UROTHELIA=Urothelia
-subGroup3 treatment Treatment AANONE=None CTCFSHRNA=CTCF_shRNA_knockdown RANDSHRNA=Randomized_shRNA_Control DM002P1H=DMSO_0.02% EST10NM1H=Estradiol_10_nM_1_h EST10NM30M=Estradiol_10_nM_30_m ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid HYPOXLACCON=Hypoxia_LacAcid_Control IFNa4h=IFN-&alpha;_4_hrs LENTICON=Lenti-Control LENTIMYOD=Lenti-MyoD METHYLT=Methyltrienolone&nbsp;(androgen) NABUT=NaBut SAHA1U72HR=SAHA_1_&#181;M_72_h SAHACTRL=SAHA_Control SERUMFREE=Serum_Free_Media 4TAM10030=4-OHTAM_100_nM_30_m UT189=UT189 G1PHASE=G1_phase G2MPHASE=G2-M_phase
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20RO01794=B_cells_CD20+_RO01794&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2IMR90=IMR90&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t2MONOCYTESCD14=Monocytes_CD14+&nbsp;(Tier_2) t2SKNSH=SK-N-SH&nbsp;(Tier_2) t3A8988T=8988T t3ADULTCD4TH0=Adult_CD4+_Th0 t3ADULTCD4TH1=Adult_CD4+_Th1 t3AOSMC=AoSMC t3CEREBELLUMOC=Cerebellum_OC t3CEREBRUMFRONTALOC=Cerebrum_frontal_OC t3CHORION=Chorion t3CLL=CLL t3COLO829=Colo829 t3ECC1=ECC-1 t3FIBROBL=Fibrobl t3FIBROBLGM03348=Fibrobl_GM03348 t3FIBROPAG08395=FibroP_AG08395 t3FIBROPAG08396=FibroP_AG08396 t3FIBROPAG20443=FibroP_AG20443 t3FRONTALCORTEXOC=Frontal_cortex_OC t3GCBCELL=GC_B_cell t3GLIOBLA=Gliobla t3GM10248=GM10248 t3GM10266=GM10266 t3GM12891=GM12891 t3GM12892=GM12892 t3GM13976=GM13976 t3GM13977=GM13977 t3GM18507=GM18507 t3GM19238=GM19238 t3GM19239=GM19239 t3GM19240=GM19240 t3GM20000=GM20000 t3H7HESC=H7-hESC t3H9ES=H9ES t3HEARTOC=Heart_OC t3HEK293T=HEK293T t3HEPATOCYTES=Hepatocytes t3HMEC=HMEC t3HPDE6E6E7=HPDE6-E6E7 t3HSMM=HSMM t3HSMMEMB=HSMM_emb t3HSMMFSHD=HSMM_FSHD t3HSMMTUBE=HSMMtube t3HTR8SVN=HTR8svn t3HUH7=Huh-7 t3HUH75=Huh-7.5 t3IPSCWRU1=iPS_CWRU1 t3IPSNIHI07=iPS_NIHi7 t3IPSNIHI11=iPS_NIHi11 t3ISHIKAWA=Ishikawa t3LNCAP=LNCaP t3MEDULLO=Medullo t3MEDULLOD341=Medullo_D341 t3MEL2183=Mel_2183 t3MELANO=Melano t3MYOMETR=Myometr t3NAIVEBCELL=Naive_B_cell t3NHEK=NHEK t3OLFACTORYNEUROSPHERE=Olfactory_neurosphere t3OSTEOBLASTS=Osteoblasts t3PANISLETD=PanIsletD t3PANISLETS=PanIslets t3PHTE=pHTE t3PROGFIB=ProgFib t3PSOASMUSCLEOC=Psoas_muscle_OC t3RWPE1=RWPE1 t3STELLATE=Stellate t3T47D=T-47D t3UROTHELIA=Urothelia
+subGroup3 treatment Treatment CTCFSHRNA=CTCF_shRNA_knockdown RANDSHRNA=Randomized_shRNA_Control DM002P1H=DMSO_0.02% EST10NM1H=Estradiol_10_nM_1_h EST10NM30M=Estradiol_10_nM_30_m ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid HYPOXLACCON=Hypoxia_LacAcid_Control IFNa4h=IFN-&alpha;_4_hrs LENTICON=Lenti-Control LENTIMYOD=Lenti-MyoD METHYLT=Methyltrienolone&nbsp;(androgen) NABUT=NaBut SAHA1U72HR=SAHA_1_&#181;M_72_h SAHACTRL=SAHA_Control SERUMFREE=Serum_Free_Media A4TAM10030=4-OHTAM_100_nM_30_m UT189=UT189 G1PHASE=G1_phase G2MPHASE=G2-M_phase zNONE=None
 sortOrder cellType=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dimensions dimensionY=cellType dimensionX=treatment
@@ -38,7 +38,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Chorion Pk
         longLabel Chorion DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3CHORION treatment=AANONE
+        subGroups view=Peaks cellType=t3CHORION treatment=zNONE
         type narrowPeak
         # subId=1412 dateSubmitted=2010-06-14
 
@@ -46,7 +46,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Medullo Pk
         longLabel Medullo DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3MEDULLO treatment=AANONE
+        subGroups view=Peaks cellType=t3MEDULLO treatment=zNONE
         type narrowPeak
         # subId=1479 dateSubmitted=2010-06-15
 
@@ -54,7 +54,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM12891 Pk
         longLabel GM12891 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM12891 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM12891 treatment=zNONE
         type narrowPeak
         # subId=1487 dateSubmitted=2010-06-16
 
@@ -62,7 +62,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM12892 Pk
         longLabel GM12892 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM12892 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM12892 treatment=zNONE
         type narrowPeak
         # subId=1488 dateSubmitted=2010-06-16
 
@@ -70,7 +70,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19238 Pk
         longLabel GM19238 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM19238 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM19238 treatment=zNONE
         type narrowPeak
         # subId=1489 dateSubmitted=2010-06-16
 
@@ -78,7 +78,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel GM12878 Pk
         longLabel GM12878 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t1GM12878 treatment=AANONE
+        subGroups view=Peaks cellType=t1GM12878 treatment=zNONE
         type narrowPeak
         color 153,38,0
         # subId=1494 dateSubmitted=2010-06-16
@@ -87,7 +87,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel H1-hESC Pk
         longLabel H1-hESC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t1H1HESC treatment=AANONE
+        subGroups view=Peaks cellType=t1H1HESC treatment=zNONE
         type narrowPeak
         color 0,107,27
         # subId=1495 dateSubmitted=2010-06-16
@@ -96,7 +96,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa-S3 Pk
         longLabel HeLa-S3 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2HELAS3 treatment=AANONE
+        subGroups view=Peaks cellType=t2HELAS3 treatment=zNONE
         type narrowPeak
         color 0,119,158
         # subId=1498 dateSubmitted=2010-06-16
@@ -105,7 +105,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19239 Pk
         longLabel GM19239 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM19239 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM19239 treatment=zNONE
         type narrowPeak
         # subId=1506 dateSubmitted=2010-06-16
 
@@ -113,7 +113,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM18507 Pk
         longLabel GM18507 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM18507 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM18507 treatment=zNONE
         type narrowPeak
         # subId=1507 dateSubmitted=2010-06-16
 
@@ -121,7 +121,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19240 Pk
         longLabel GM19240 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM19240 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM19240 treatment=zNONE
         type narrowPeak
         # subId=1509 dateSubmitted=2010-06-16
 
@@ -129,7 +129,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel H9ES Pk
         longLabel H9ES DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3H9ES treatment=AANONE
+        subGroups view=Peaks cellType=t3H9ES treatment=zNONE
         type narrowPeak
         # subId=1519 dateSubmitted=2010-06-16
 
@@ -137,7 +137,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HepG2 Pk
         longLabel HepG2 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2HEPG2 treatment=AANONE
+        subGroups view=Peaks cellType=t2HEPG2 treatment=zNONE
         type narrowPeak
         color 189,0,157
         # subId=1528 dateSubmitted=2010-06-16
@@ -146,7 +146,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HUVEC Pk
         longLabel HUVEC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2HUVEC treatment=AANONE
+        subGroups view=Peaks cellType=t2HUVEC treatment=zNONE
         type narrowPeak
         color 224,75,0
         # subId=1532 dateSubmitted=2010-06-17
@@ -155,7 +155,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel NHEK Pk
         longLabel NHEK DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3NHEK treatment=AANONE
+        subGroups view=Peaks cellType=t3NHEK treatment=zNONE
         type narrowPeak
         color 179,0,134
         # subId=1533 dateSubmitted=2010-06-17
@@ -164,7 +164,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewPeaks
         #shortLabel K562 Pk
         #longLabel K562 DNaseI HS Peaks from ENCODE/Duke
-        #subGroups view=Peaks cellType=1K562 treatment=AANONE
+        #subGroups view=Peaks cellType=1K562 treatment=zNONE
         #type narrowPeak
         #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
@@ -172,7 +172,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa-S3 Pk
-        longLabel HeLa-S3 IFN-a 4hrs DNaseI HS Peaks from ENCODE/Duke
+        longLabel HeLa-S3 IFN-a 4 hr DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t2HELAS3 treatment=IFNa4h
         type narrowPeak
         color 0,119,158
@@ -182,7 +182,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel MCF-7 Pk
         longLabel MCF-7 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2MCF7 treatment=AANONE
+        subGroups view=Peaks cellType=t2MCF7 treatment=zNONE
         type narrowPeak
         # subId=1545 dateSubmitted=2010-06-17
 
@@ -190,7 +190,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel ProgFib Pk
         longLabel ProgFib DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3PROGFIB treatment=AANONE
+        subGroups view=Peaks cellType=t3PROGFIB treatment=zNONE
         type narrowPeak
         # subId=1650 dateSubmitted=2010-06-19
 
@@ -198,7 +198,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewPeaks off
         #shortLabel FibroP Pk
         #longLabel FibroP DNaseI HS Peaks from ENCODE/Duke
-        #subGroups view=Peaks cellType=FIBROP treatment=AANONE
+        #subGroups view=Peaks cellType=FIBROP treatment=zNONE
         #type narrowPeak
         # subId=1651 dateSubmitted=2010-06-19
 
@@ -206,7 +206,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Fibrobl Pk
         longLabel Fibrobl DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3FIBROBL treatment=AANONE
+        subGroups view=Peaks cellType=t3FIBROBL treatment=zNONE
         type narrowPeak
         # subId=1653 dateSubmitted=2010-06-19
 
@@ -214,7 +214,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMM Pk
         longLabel HSMM DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HSMM treatment=AANONE
+        subGroups view=Peaks cellType=t3HSMM treatment=zNONE
         type narrowPeak
         # subId=1654 dateSubmitted=2010-06-19
 
@@ -222,7 +222,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Myometr Pk
         longLabel Myometr DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3MYOMETR treatment=AANONE
+        subGroups view=Peaks cellType=t3MYOMETR treatment=zNONE
         type narrowPeak
         # subId=1655 dateSubmitted=2010-06-19
 
@@ -230,7 +230,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel PanIslets Pk
         longLabel PanIslets DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3PANISLETS treatment=AANONE
+        subGroups view=Peaks cellType=t3PANISLETS treatment=zNONE
         type narrowPeak
         # subId=1656 dateSubmitted=2010-06-19
 
@@ -246,7 +246,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMMtube Pk
         longLabel HSMMtube DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HSMMTUBE treatment=AANONE
+        subGroups view=Peaks cellType=t3HSMMTUBE treatment=zNONE
         type narrowPeak
         # subId=1679 dateSubmitted=2010-06-20
 
@@ -254,7 +254,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Melano Pk
         longLabel Melano DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3MELANO treatment=AANONE
+        subGroups view=Peaks cellType=t3MELANO treatment=zNONE
         type narrowPeak
         # subId=2096 dateSubmitted=2010-08-11
 
@@ -262,7 +262,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel pHTE Pk
         longLabel pHTE DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3PHTE treatment=AANONE
+        subGroups view=Peaks cellType=t3PHTE treatment=zNONE
         type narrowPeak
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -270,7 +270,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Osteoblasts Pk
         longLabel Osteoblasts DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3OSTEOBLASTS treatment=AANONE
+        subGroups view=Peaks cellType=t3OSTEOBLASTS treatment=zNONE
         type narrowPeak
         # subId=2506 dateSubmitted=2010-10-16
 
@@ -287,7 +287,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel LNCaP Pk
         longLabel LNCaP DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3LNCAP treatment=AANONE
+        subGroups view=Peaks cellType=t3LNCAP treatment=zNONE
         type narrowPeak
         color 0,119,158
         # subId=2482 dateSubmitted=2010-10-15
@@ -296,7 +296,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel A549 Pk
         longLabel A549 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2A549 treatment=AANONE
+        subGroups view=Peaks cellType=t2A549 treatment=zNONE
         type narrowPeak
         # subId=2493 dateSubmitted=2010-10-15
 
@@ -304,7 +304,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HTR8svn Pk
         longLabel HTR8svn DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HTR8SVN treatment=AANONE
+        subGroups view=Peaks cellType=t3HTR8SVN treatment=zNONE
         type narrowPeak
         # subId=2793 dateSubmitted=2010-11-02
 
@@ -312,7 +312,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel 8988T Pk
         longLabel 8988T DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3A8988T treatment=AANONE
+        subGroups view=Peaks cellType=t3A8988T treatment=zNONE
         type narrowPeak
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -320,7 +320,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel PanIsletD Pk
         longLabel PanIsletD DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3PANISLETD treatment=AANONE
+        subGroups view=Peaks cellType=t3PANISLETD treatment=zNONE
         type narrowPeak
         # subId=2785 dateSubmitted=2010-10-29
 
@@ -328,7 +328,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HMEC Pk
         longLabel HMEC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HMEC treatment=AANONE
+        subGroups view=Peaks cellType=t3HMEC treatment=zNONE
         type narrowPeak
         # subId=2764 dateSubmitted=2010-10-27
 
@@ -336,7 +336,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Gliobla Pk
         longLabel Gliobla DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GLIOBLA treatment=AANONE
+        subGroups view=Peaks cellType=t3GLIOBLA treatment=zNONE
         type narrowPeak
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -344,7 +344,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel CLL Pk
         longLabel CLL DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3CLL treatment=AANONE
+        subGroups view=Peaks cellType=t3CLL treatment=zNONE
         type narrowPeak
         # subId=2787 dateSubmitted=2010-11-01
 
@@ -352,7 +352,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Hepatocytes Pk
         longLabel Hepatocytes DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HEPATOCYTES treatment=AANONE
+        subGroups view=Peaks cellType=t3HEPATOCYTES treatment=zNONE
         type narrowPeak
         # subId=3063 dateSubmitted=2010-12-06
 
@@ -360,7 +360,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HPDE6-E6E7 Pk
         longLabel HPDE6-E6E7 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HPDE6E6E7 treatment=AANONE
+        subGroups view=Peaks cellType=t3HPDE6E6E7 treatment=zNONE
         type narrowPeak
         # subId=3064 dateSubmitted=2010-12-06
 
@@ -368,7 +368,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewPeaks off
         #shortLabel iPS Pk
         #longLabel iPS DNaseI HS Peaks from ENCODE/Duke
-        #subGroups view=Peaks cellType=IPS treatment=AANONE
+        #subGroups view=Peaks cellType=IPS treatment=zNONE
         #type narrowPeak
         # subId=3065 dateSubmitted=2010-12-06
 
@@ -376,7 +376,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Huh-7 Pk
         longLabel Huh-7 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HUH7 treatment=AANONE
+        subGroups view=Peaks cellType=t3HUH7 treatment=zNONE
         type narrowPeak
         # subId=3075 dateSubmitted=2010-12-07
 
@@ -384,7 +384,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Huh-7.5 Pk
         longLabel Huh-7.5 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HUH75 treatment=AANONE
+        subGroups view=Peaks cellType=t3HUH75 treatment=zNONE
         type narrowPeak
         # subId=3076 dateSubmitted=2010-12-07
 
@@ -392,7 +392,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Stellate Pk
         longLabel Stellate DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3STELLATE treatment=AANONE
+        subGroups view=Peaks cellType=t3STELLATE treatment=zNONE
         type narrowPeak
         # subId=3077 dateSubmitted=2010-12-06
 
@@ -400,7 +400,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel T-47D Pk
         longLabel T-47D DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3T47D treatment=AANONE
+        subGroups view=Peaks cellType=t3T47D treatment=zNONE
         type narrowPeak
         # subId=3078 dateSubmitted=2010-12-06
 
@@ -408,7 +408,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewPeaks off
         #shortLabel Urothelia Pk
         #longLabel Urothelia DNaseI HS Peaks from ENCODE/Duke
-        #subGroups view=Peaks cellType=UROtsa treatment=AANONE
+        #subGroups view=Peaks cellType=UROtsa treatment=zNONE
         #type narrowPeak
         # subId=3217 dateSubmitted=2011-01-11
 
@@ -432,7 +432,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Colo829 Pk
         longLabel Colo829 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3COLO829 treatment=AANONE
+        subGroups view=Peaks cellType=t3COLO829 treatment=zNONE
         type narrowPeak
         # subId=4907 dateSubmitted=2011-09-28
 
@@ -448,7 +448,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Ishikawa Pk
         longLabel Ishikawa 4-OHTAM 100 nM 30 m DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3ISHIKAWA treatment=4TAM10030
+        subGroups view=Peaks cellType=t3ISHIKAWA treatment=A4TAM10030
         type narrowPeak
         # subId=4911 dateSubmitted=2011-09-28
 
@@ -456,7 +456,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMM emb Pk
         longLabel HSMM emb DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HSMMEMB treatment=AANONE
+        subGroups view=Peaks cellType=t3HSMMEMB treatment=zNONE
         type narrowPeak
         # subId=4912 dateSubmitted=2011-09-28
 
@@ -464,7 +464,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel RWPE1 Pk
         longLabel RWPE1 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3RWPE1 treatment=AANONE
+        subGroups view=Peaks cellType=t3RWPE1 treatment=zNONE
         type narrowPeak
         # subId=4908 dateSubmitted=2011-10-03
 
@@ -472,7 +472,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel H7-hESC Pk
         longLabel H7-hESC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3H7HESC treatment=AANONE
+        subGroups view=Peaks cellType=t3H7HESC treatment=zNONE
         type narrowPeak
         # subId=5386 dateSubmitted=2011-12-29
 
@@ -480,7 +480,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Adlt CD4Th0 Pk
         longLabel Adult CD4+ Th0 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3TCELLSCD4TH0ADULT treatment=AANONE
+        subGroups view=Peaks cellType=t3ADULTCD4TH0 treatment=zNONE
         type narrowPeak
         # subId=4924 dateSubmitted=2012-02-03
 
@@ -504,7 +504,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HEK293T Pk
         longLabel HEK293T DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HEK293T treatment=AANONE
+        subGroups view=Peaks cellType=t3HEK293T treatment=zNONE
         type narrowPeak
         # subId=5385 dateSubmitted=2012-02-03
 
@@ -529,7 +529,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Adlt CD4Th1 Pk
         longLabel Adult CD4+ Th1 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3TCELLSCD4TH1ADULT treatment=AANONE
+        subGroups view=Peaks cellType=t3ADULTCD4TH1 treatment=zNONE
         type narrowPeak
         # subId=5389 dateSubmitted=2012-02-03
 
@@ -537,7 +537,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMM FSHD Pk
         longLabel HSMM FSHD DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HSMMFSHD treatment=AANONE
+        subGroups view=Peaks cellType=t3HSMMFSHD treatment=zNONE
         type narrowPeak
         # subId=5479 dateSubmitted=2012-01-31
 
@@ -545,7 +545,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Mel 2183 Pk
         longLabel Mel 2183 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3MEL2183 treatment=AANONE
+        subGroups view=Peaks cellType=t3MEL2183 treatment=zNONE
         type narrowPeak
         # subId=5480 dateSubmitted=2012-01-31
 
@@ -553,7 +553,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel NIHi7 Pk
         longLabel iPS NIHi7 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3IPSNIHI07 treatment=AANONE
+        subGroups view=Peaks cellType=t3IPSNIHI07 treatment=zNONE
         type narrowPeak
         # subId=5481 dateSubmitted=2012-02-01
 
@@ -561,7 +561,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel CWRU1 Pk
         longLabel iPS CWRU1 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3IPSCWRU1 treatment=AANONE
+        subGroups view=Peaks cellType=t3IPSCWRU1 treatment=zNONE
         type narrowPeak
         # subId=5503 dateSubmitted=2012-02-02
 
@@ -569,7 +569,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel NIHi11 Pk
         longLabel iPS NIHi11 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3IPSNIHI11 treatment=AANONE
+        subGroups view=Peaks cellType=t3IPSNIHI11 treatment=zNONE
         type narrowPeak
         # subId=5504 dateSubmitted=2012-02-02
 
@@ -577,7 +577,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel FibP AG20443 Pk
         longLabel FibroP AG20443 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3FIBROPAG20443 treatment=AANONE
+        subGroups view=Peaks cellType=t3FIBROPAG20443 treatment=zNONE
         type narrowPeak
         # subId=5560 dateSubmitted=2012-02-07
 
@@ -585,7 +585,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel FibP AG08395 Pk
         longLabel FibroP AG08395 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3FIBROPAG08395 treatment=AANONE
+        subGroups view=Peaks cellType=t3FIBROPAG08395 treatment=zNONE
         type narrowPeak
         # subId=5561 dateSubmitted=2012-02-07
 
@@ -593,7 +593,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel FibP AG08396 Pk
         longLabel FibroP AG08396 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3FIBROPAG08396 treatment=AANONE
+        subGroups view=Peaks cellType=t3FIBROPAG08396 treatment=zNONE
         type narrowPeak
         # subId=5562 dateSubmitted=2012-02-07
 
@@ -601,7 +601,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel K562 Pk
         longLabel K562 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t1K562 treatment=AANONE
+        subGroups view=Peaks cellType=t1K562 treatment=zNONE
         type narrowPeak
         color 46,0,184
         # subId=5901 dateSubmitted=2012-02-28
@@ -610,7 +610,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Medul D341 DNs Pk
         longLabel Medullo D341 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3MEDULLOD341 treatment=AANONE
+        subGroups view=Peaks cellType=t3MEDULLOD341 treatment=zNONE
         type narrowPeak
         # subId=5991 dateSubmitted=2012-03-13
 
@@ -618,7 +618,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Urothelia Dnse Pk
         longLabel Urothelia DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3UROTHELIA treatment=AANONE
+        subGroups view=Peaks cellType=t3UROTHELIA treatment=zNONE
         type narrowPeak
         # subId=5990 dateSubmitted=2012-03-13
 
@@ -634,7 +634,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Monocytes-CD14+ Pk
         longLabel Monocytes CD14+ DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2MONOCYTESCD14 treatment=AANONE
+        subGroups view=Peaks cellType=t2MONOCYTESCD14 treatment=zNONE
         type narrowPeak
         # subId=6860 dateSubmitted=2012-04-25
 
@@ -642,7 +642,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel CD20+_RO01794 Pk
         longLabel B-cells CD20+ RO01794 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2BCELLSCD20RO01794 treatment=AANONE
+        subGroups view=Peaks cellType=t2BCELLSCD20RO01794 treatment=zNONE
         type narrowPeak
         # subId=6861 dateSubmitted=2012-04-25
 
@@ -657,7 +657,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseMcf7RandshrnaPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel MCF-7 Pk
-        longLabel MCF-7 Randomized shRNA control DNaseI HS Peaks from ENCODE/Duke
+        longLabel MCF-7 Randomized shRNA Control DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t2MCF7 treatment=RANDSHRNA
         type narrowPeak
         # subId=6920 dateSubmitted=2012-05-02
@@ -674,7 +674,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseMcf7HypoxlacconPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel MCF-7 Pk
-        longLabel MCF-7 Hypoxia LacAcid ctrl DNaseI HS Peaks from ENCODE/Duke
+        longLabel MCF-7 Hypoxia LacAcid Control DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t2MCF7 treatment=HYPOXLACCON
         type narrowPeak
         # subId=7134 dateSubmitted=2012-06-26
@@ -683,7 +683,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Frontal_cortex_OC Pk
         longLabel Frontal cortex OC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3FRONTALCORTEXOC treatment=AANONE
+        subGroups view=Peaks cellType=t3FRONTALCORTEXOC treatment=zNONE
         type narrowPeak
         # subId=7137 dateSubmitted=2012-06-27
 
@@ -700,7 +700,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GC_B_cell Pk
         longLabel GC B cell DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GCBCELL treatment=AANONE
+        subGroups view=Peaks cellType=t3GCBCELL treatment=zNONE
         type narrowPeak
         # subId=7308 dateSubmitted=2012-07-02
 
@@ -708,14 +708,14 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Olf_neurosphere Pk
         longLabel Olf neurosphere DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3OLFACTORYNEUROSPHERE treatment=AANONE
+        subGroups view=Peaks cellType=t3OLFACTORYNEUROSPHERE treatment=zNONE
         type narrowPeak
         # subId=7309 dateSubmitted=2012-07-02
 
         track wgEncodeOpenChromDnaseFibroblgm03348LenticonPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Fibrobl_GM03348 Pk
-        longLabel Fibrobl GM03348 lenti-control DNaseI HS Peaks from ENCODE/Duke
+        longLabel Fibrobl GM03348 Lenti-Control DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t3FIBROBLGM03348 treatment=LENTICON
         type narrowPeak
         # subId=7310 dateSubmitted=2012-07-03
@@ -723,7 +723,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseFibroblgm03348LentimyodPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Fibrobl_GM03348 Pk
-        longLabel Fibrobl GM03348 lenti-MyoD DNaseI HS Peaks from ENCODE/Duke
+        longLabel Fibrobl GM03348 Lenti-MyoD DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t3FIBROBLGM03348 treatment=LENTIMYOD
         type narrowPeak
         # subId=7311 dateSubmitted=2012-07-02
@@ -732,7 +732,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Fibrobl_GM03348 Pk
         longLabel Fibrobl GM03348 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3FIBROBLGM03348 treatment=AANONE
+        subGroups view=Peaks cellType=t3FIBROBLGM03348 treatment=zNONE
         type narrowPeak
         # subId=7312 dateSubmitted=2012-07-03
 
@@ -740,7 +740,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Naive_B_cell Pk
         longLabel Naive B cell DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3NAIVEBCELL treatment=AANONE
+        subGroups view=Peaks cellType=t3NAIVEBCELL treatment=zNONE
         type narrowPeak
         # subId=7313 dateSubmitted=2012-07-03
 
@@ -748,7 +748,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Heart_OC Pk
         longLabel Heart OC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3HEARTOC treatment=AANONE
+        subGroups view=Peaks cellType=t3HEARTOC treatment=zNONE
         type narrowPeak
         # subId=7321 dateSubmitted=2012-07-05
 
@@ -756,7 +756,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Cerebrum_frontal_OC Pk
         longLabel Cerebrum frontal OC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3CEREBRUMFRONTALOC treatment=AANONE
+        subGroups view=Peaks cellType=t3CEREBRUMFRONTALOC treatment=zNONE
         type narrowPeak
         # subId=7339 dateSubmitted=2012-07-08
 
@@ -764,7 +764,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Cerebellum_OC Pk
         longLabel Cerebellum OC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3CEREBELLUMOC treatment=AANONE
+        subGroups view=Peaks cellType=t3CEREBELLUMOC treatment=zNONE
         type narrowPeak
         # subId=7340 dateSubmitted=2012-07-09
 
@@ -772,7 +772,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel IMR90 Pk
         longLabel IMR90 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2IMR90 treatment=AANONE
+        subGroups view=Peaks cellType=t2IMR90 treatment=zNONE
         type narrowPeak
         # subId=7397 dateSubmitted=2012-07-14
 
@@ -780,7 +780,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel SK-N-SH Pk
         longLabel SK-N-SH DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t2SKNSH treatment=AANONE
+        subGroups view=Peaks cellType=t2SKNSH treatment=zNONE
         type narrowPeak
         # subId=7398 dateSubmitted=2012-07-14
 
@@ -788,7 +788,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM20000 Pk
         longLabel GM20000 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM20000 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM20000 treatment=zNONE
         type narrowPeak
         # subId=7399 dateSubmitted=2012-07-16
 
@@ -796,7 +796,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM10266 Pk
         longLabel GM10266 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM10266 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM10266 treatment=zNONE
         type narrowPeak
         # subId=7400 dateSubmitted=2012-07-16
 
@@ -804,7 +804,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM13976 Pk
         longLabel GM13976 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM13976 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM13976 treatment=zNONE
         type narrowPeak
         # subId=7500 dateSubmitted=2012-07-17
 
@@ -812,7 +812,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM10248 Pk
         longLabel GM10248 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM10248 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM10248 treatment=zNONE
         type narrowPeak
         # subId=7511 dateSubmitted=2012-07-19
 
@@ -820,14 +820,14 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM13977 Pk
         longLabel GM13977 DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3GM13977 treatment=AANONE
+        subGroups view=Peaks cellType=t3GM13977 treatment=zNONE
         type narrowPeak
         # subId=7514 dateSubmitted=2012-07-30
 
         track wgEncodeOpenChromDnaseK562SahactrlPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel K562 Pk
-        longLabel K562 SAHA ctrl DNaseI HS Peaks from ENCODE/Duke
+        longLabel K562 SAHA Control DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t1K562 treatment=SAHACTRL
         type narrowPeak
         color 46,0,184
@@ -836,7 +836,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseK562Saha1u72hrPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel K562 Pk
-        longLabel K562 SAHA 1uM 72hr DNaseI HS Peaks from ENCODE/Duke
+        longLabel K562 SAHA 1 uM 72 hr DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t1K562 treatment=SAHA1U72HR
         type narrowPeak
         color 46,0,184
@@ -846,7 +846,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Psoas_muscle_OC Pk
         longLabel Psoas muscle OC DNaseI HS Peaks from ENCODE/Duke
-        subGroups view=Peaks cellType=t3PSOASMUSCLEOC treatment=AANONE
+        subGroups view=Peaks cellType=t3PSOASMUSCLEOC treatment=zNONE
         type narrowPeak
         # subId=7557 dateSubmitted=2012-07-31
 
@@ -865,7 +865,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Chorion DS
         longLabel Chorion DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3CHORION treatment=AANONE
+        subGroups view=SIG cellType=t3CHORION treatment=zNONE
         type bigWig 0.000000 1.413200
         # subId=1412 dateSubmitted=2010-06-14
 
@@ -873,7 +873,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Medullo DS
         longLabel Medullo DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3MEDULLO treatment=AANONE
+        subGroups view=SIG cellType=t3MEDULLO treatment=zNONE
         type bigWig 0.000000 1.186600
         # subId=1479 dateSubmitted=2010-06-15
 
@@ -881,7 +881,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM12891 DS
         longLabel GM12891 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM12891 treatment=AANONE
+        subGroups view=SIG cellType=t3GM12891 treatment=zNONE
         type bigWig 0.000000 1.893100
         # subId=1487 dateSubmitted=2010-06-16
 
@@ -889,7 +889,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM12892 DS
         longLabel GM12892 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM12892 treatment=AANONE
+        subGroups view=SIG cellType=t3GM12892 treatment=zNONE
         type bigWig 0.000000 1.880000
         # subId=1488 dateSubmitted=2010-06-16
 
@@ -897,7 +897,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19238 DS
         longLabel GM19238 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM19238 treatment=AANONE
+        subGroups view=SIG cellType=t3GM19238 treatment=zNONE
         type bigWig 0.000000 2.042500
         # subId=1489 dateSubmitted=2010-06-16
 
@@ -905,7 +905,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel GM12878 DS
         longLabel GM12878 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t1GM12878 treatment=AANONE
+        subGroups view=SIG cellType=t1GM12878 treatment=zNONE
         type bigWig 0.000000 1.097700
         color 153,38,0
         # subId=1494 dateSubmitted=2010-06-16
@@ -914,7 +914,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel H1-hESC DS
         longLabel H1-hESC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t1H1HESC treatment=AANONE
+        subGroups view=SIG cellType=t1H1HESC treatment=zNONE
         type bigWig 0.000000 2.243700
         color 0,107,27
         # subId=1495 dateSubmitted=2010-06-16
@@ -923,7 +923,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa-S3 DS
         longLabel HeLa-S3 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2HELAS3 treatment=AANONE
+        subGroups view=SIG cellType=t2HELAS3 treatment=zNONE
         type bigWig 0.000000 2.024200
         color 0,119,158
         # subId=1498 dateSubmitted=2010-06-16
@@ -932,7 +932,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19239 DS
         longLabel GM19239 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM19239 treatment=AANONE
+        subGroups view=SIG cellType=t3GM19239 treatment=zNONE
         type bigWig 0.000000 1.811800
         # subId=1506 dateSubmitted=2010-06-16
 
@@ -940,7 +940,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM18507 DS
         longLabel GM18507 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM18507 treatment=AANONE
+        subGroups view=SIG cellType=t3GM18507 treatment=zNONE
         type bigWig 0.000000 1.676800
         # subId=1507 dateSubmitted=2010-06-16
 
@@ -948,7 +948,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19240 DS
         longLabel GM19240 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM19240 treatment=AANONE
+        subGroups view=SIG cellType=t3GM19240 treatment=zNONE
         type bigWig 0.000000 1.867200
         # subId=1509 dateSubmitted=2010-06-16
 
@@ -956,7 +956,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel H9ES DS
         longLabel H9ES DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3H9ES treatment=AANONE
+        subGroups view=SIG cellType=t3H9ES treatment=zNONE
         type bigWig 0.000000 1.603000
         # subId=1519 dateSubmitted=2010-06-16
 
@@ -964,7 +964,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HepG2 DS
         longLabel HepG2 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2HEPG2 treatment=AANONE
+        subGroups view=SIG cellType=t2HEPG2 treatment=zNONE
         type bigWig 0.000000 2.203900
         color 189,0,157
         # subId=1528 dateSubmitted=2010-06-16
@@ -973,7 +973,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HUVEC DS
         longLabel HUVEC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2HUVEC treatment=AANONE
+        subGroups view=SIG cellType=t2HUVEC treatment=zNONE
         type bigWig 0.000000 2.605700
         color 224,75,0
         # subId=1532 dateSubmitted=2010-06-17
@@ -982,7 +982,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel NHEK DS
         longLabel NHEK DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3NHEK treatment=AANONE
+        subGroups view=SIG cellType=t3NHEK treatment=zNONE
         type bigWig 0.000000 1.748600
         color 179,0,134
         # subId=1533 dateSubmitted=2010-06-17
@@ -991,7 +991,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSignal
         #shortLabel K562 DS
         #longLabel K562 DNaseI HS Density Signal from ENCODE/Duke
-        #subGroups view=SIG cellType=1K562 treatment=AANONE
+        #subGroups view=SIG cellType=1K562 treatment=zNONE
         #type bigWig 0.000000 3.111200
         #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
@@ -999,7 +999,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa-S3 DS
-        longLabel HeLa-S3 IFN-a 4hrs DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HeLa-S3 IFN-a 4 hr DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t2HELAS3 treatment=IFNa4h
         type bigWig 0.000000 0.761900
         color 0,119,158
@@ -1009,7 +1009,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel MCF-7 DS
         longLabel MCF-7 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2MCF7 treatment=AANONE
+        subGroups view=SIG cellType=t2MCF7 treatment=zNONE
         type bigWig 0.000000 0.624200
         # subId=1545 dateSubmitted=2010-06-17
 
@@ -1017,7 +1017,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel ProgFib DS
         longLabel ProgFib DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3PROGFIB treatment=AANONE
+        subGroups view=SIG cellType=t3PROGFIB treatment=zNONE
         type bigWig 0.000000 1.924100
         # subId=1650 dateSubmitted=2010-06-19
 
@@ -1025,7 +1025,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSignal off
         #shortLabel FibroP DS
         #longLabel FibroP DNaseI HS Density Signal from ENCODE/Duke
-        #subGroups view=SIG cellType=FIBROP treatment=AANONE
+        #subGroups view=SIG cellType=FIBROP treatment=zNONE
         #type bigWig 0.000000 1.562600
         # subId=1651 dateSubmitted=2010-06-19
 
@@ -1033,7 +1033,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Fibrobl DS
         longLabel Fibrobl DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3FIBROBL treatment=AANONE
+        subGroups view=SIG cellType=t3FIBROBL treatment=zNONE
         type bigWig 0.000000 1.250700
         # subId=1653 dateSubmitted=2010-06-19
 
@@ -1041,7 +1041,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMM DS
         longLabel HSMM DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HSMM treatment=AANONE
+        subGroups view=SIG cellType=t3HSMM treatment=zNONE
         type bigWig 0.000000 2.424300
         # subId=1654 dateSubmitted=2010-06-19
 
@@ -1049,7 +1049,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Myometr DS
         longLabel Myometr DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3MYOMETR treatment=AANONE
+        subGroups view=SIG cellType=t3MYOMETR treatment=zNONE
         type bigWig 0.000000 1.229800
         # subId=1655 dateSubmitted=2010-06-19
 
@@ -1057,7 +1057,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PanIslets DS
         longLabel PanIslets DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3PANISLETS treatment=AANONE
+        subGroups view=SIG cellType=t3PANISLETS treatment=zNONE
         type bigWig 0.000000 1.691300
         # subId=1656 dateSubmitted=2010-06-19
 
@@ -1073,7 +1073,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMMtube DS
         longLabel HSMMtube DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HSMMTUBE treatment=AANONE
+        subGroups view=SIG cellType=t3HSMMTUBE treatment=zNONE
         type bigWig 0.000000 1.594200
         # subId=1679 dateSubmitted=2010-06-20
 
@@ -1081,7 +1081,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Melano DS
         longLabel Melano DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3MELANO treatment=AANONE
+        subGroups view=SIG cellType=t3MELANO treatment=zNONE
         type bigWig 0.000000 1.470500
         # subId=2096 dateSubmitted=2010-08-11
 
@@ -1089,7 +1089,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel pHTE DS
         longLabel pHTE DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3PHTE treatment=AANONE
+        subGroups view=SIG cellType=t3PHTE treatment=zNONE
         type bigWig 0.000000 2.165800
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -1097,7 +1097,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Osteoblasts DS
         longLabel Osteoblasts DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3OSTEOBLASTS treatment=AANONE
+        subGroups view=SIG cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.000000 3.150400
         # subId=2506 dateSubmitted=2010-10-16
 
@@ -1114,7 +1114,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel LNCaP DS
         longLabel LNCaP DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3LNCAP treatment=AANONE
+        subGroups view=SIG cellType=t3LNCAP treatment=zNONE
         type bigWig 0.000000 2.732500
         color 0,119,158
         # subId=2482 dateSubmitted=2010-10-15
@@ -1123,7 +1123,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel A549 DS
         longLabel A549 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2A549 treatment=AANONE
+        subGroups view=SIG cellType=t2A549 treatment=zNONE
         type bigWig 0.000000 0.892200
         # subId=2493 dateSubmitted=2010-10-15
 
@@ -1131,7 +1131,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HTR8svn DS
         longLabel HTR8svn DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HTR8SVN treatment=AANONE
+        subGroups view=SIG cellType=t3HTR8SVN treatment=zNONE
         type bigWig 0.000000 0.930700
         # subId=2793 dateSubmitted=2010-11-02
 
@@ -1139,7 +1139,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel 8988T DS
         longLabel 8988T DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3A8988T treatment=AANONE
+        subGroups view=SIG cellType=t3A8988T treatment=zNONE
         type bigWig 0.000000 1.842900
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -1147,7 +1147,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PanIsletD DS
         longLabel PanIsletD DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3PANISLETD treatment=AANONE
+        subGroups view=SIG cellType=t3PANISLETD treatment=zNONE
         type bigWig 0.000000 1.462100
         # subId=2785 dateSubmitted=2010-10-29
 
@@ -1155,7 +1155,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HMEC DS
         longLabel HMEC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HMEC treatment=AANONE
+        subGroups view=SIG cellType=t3HMEC treatment=zNONE
         type bigWig 0.000000 2.710200
         # subId=2764 dateSubmitted=2010-10-27
 
@@ -1163,7 +1163,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Gliobla DS
         longLabel Gliobla DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GLIOBLA treatment=AANONE
+        subGroups view=SIG cellType=t3GLIOBLA treatment=zNONE
         type bigWig 0.000000 1.195300
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -1171,7 +1171,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel CLL DS
         longLabel CLL DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3CLL treatment=AANONE
+        subGroups view=SIG cellType=t3CLL treatment=zNONE
         type bigWig 0.000000 0.697500
         # subId=2787 dateSubmitted=2010-11-01
 
@@ -1179,7 +1179,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Hepatocytes DS
         longLabel Hepatocytes DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HEPATOCYTES treatment=AANONE
+        subGroups view=SIG cellType=t3HEPATOCYTES treatment=zNONE
         type bigWig 0.000000 1.185800
         # subId=3063 dateSubmitted=2010-12-06
 
@@ -1187,7 +1187,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HPDE6-E6E7 DS
         longLabel HPDE6-E6E7 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HPDE6E6E7 treatment=AANONE
+        subGroups view=SIG cellType=t3HPDE6E6E7 treatment=zNONE
         type bigWig 0.000000 0.568300
         # subId=3064 dateSubmitted=2010-12-06
 
@@ -1195,7 +1195,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSignal off
         #shortLabel iPS DS
         #longLabel iPS DNaseI HS Density Signal from ENCODE/Duke
-        #subGroups view=SIG cellType=IPS treatment=AANONE
+        #subGroups view=SIG cellType=IPS treatment=zNONE
         #type bigWig 0.000000 2.048100
         # subId=3065 dateSubmitted=2010-12-06
 
@@ -1203,7 +1203,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Huh-7 DS
         longLabel Huh-7 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HUH7 treatment=AANONE
+        subGroups view=SIG cellType=t3HUH7 treatment=zNONE
         type bigWig 0.000000 2.031400
         # subId=3075 dateSubmitted=2010-12-07
 
@@ -1211,7 +1211,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Huh-7.5 DS
         longLabel Huh-7.5 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HUH75 treatment=AANONE
+        subGroups view=SIG cellType=t3HUH75 treatment=zNONE
         type bigWig 0.000000 2.919900
         # subId=3076 dateSubmitted=2010-12-07
 
@@ -1219,7 +1219,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Stellate DS
         longLabel Stellate DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3STELLATE treatment=AANONE
+        subGroups view=SIG cellType=t3STELLATE treatment=zNONE
         type bigWig 0.000000 1.116200
         # subId=3077 dateSubmitted=2010-12-06
 
@@ -1227,7 +1227,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel T-47D DS
         longLabel T-47D DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3T47D treatment=AANONE
+        subGroups view=SIG cellType=t3T47D treatment=zNONE
         type bigWig 0.000000 1.376400
         # subId=3078 dateSubmitted=2010-12-06
 
@@ -1235,7 +1235,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSignal off
         #shortLabel Urothelia DS
         #longLabel Urothelia DNaseI HS Density Signal from ENCODE/Duke
-        #subGroups view=SIG cellType=UROtsa treatment=AANONE
+        #subGroups view=SIG cellType=UROtsa treatment=zNONE
         #type bigWig 0.000000 0.851700
         # subId=3217 dateSubmitted=2011-01-11
 
@@ -1259,14 +1259,14 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Colo829 DS
         longLabel Colo829 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3COLO829 treatment=AANONE
+        subGroups view=SIG cellType=t3COLO829 treatment=zNONE
         type bigWig 0.000000 0.945300
         # subId=4907 dateSubmitted=2011-09-28
 
         track wgEncodeOpenChromDnaseIshikawaEst10nm30mSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Ishikawa DS
-        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Density Sig from ENCODE/Duke
+        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t3ISHIKAWA treatment=EST10NM30M
         type bigWig 0.000000 0.971500
         # subId=4909 dateSubmitted=2011-09-28
@@ -1275,7 +1275,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Ishikawa DS
         longLabel Ishikawa 4-OHTAM 100 nM 30 m DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3ISHIKAWA treatment=4TAM10030
+        subGroups view=SIG cellType=t3ISHIKAWA treatment=A4TAM10030
         type bigWig 0.000000 1.095400
         # subId=4911 dateSubmitted=2011-09-28
 
@@ -1283,7 +1283,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMM emb DS
         longLabel HSMM emb DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HSMMEMB treatment=AANONE
+        subGroups view=SIG cellType=t3HSMMEMB treatment=zNONE
         type bigWig 0.000000 1.117100
         # subId=4912 dateSubmitted=2011-09-28
 
@@ -1291,7 +1291,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel RWPE1 DS
         longLabel RWPE1 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3RWPE1 treatment=AANONE
+        subGroups view=SIG cellType=t3RWPE1 treatment=zNONE
         type bigWig 0.000000 1.112900
         # subId=4908 dateSubmitted=2011-10-03
 
@@ -1299,7 +1299,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel H7-hESC DS
         longLabel H7-hESC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3H7HESC treatment=AANONE
+        subGroups view=SIG cellType=t3H7HESC treatment=zNONE
         type bigWig 0.000000 1.355700
         # subId=5386 dateSubmitted=2011-12-29
 
@@ -1307,7 +1307,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Adlt CD4Th0 DS
         longLabel Adult CD4+ Th0 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3TCELLSCD4TH0ADULT treatment=AANONE
+        subGroups view=SIG cellType=t3ADULTCD4TH0 treatment=zNONE
         type bigWig 0.000000 2.507900
         # subId=4924 dateSubmitted=2012-02-03
 
@@ -1331,7 +1331,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HEK293T DS
         longLabel HEK293T DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HEK293T treatment=AANONE
+        subGroups view=SIG cellType=t3HEK293T treatment=zNONE
         type bigWig 0.000000 0.702200
         # subId=5385 dateSubmitted=2012-02-03
 
@@ -1356,7 +1356,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Adlt CD4Th1 DS
         longLabel Adult CD4+ Th1 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3TCELLSCD4TH1ADULT treatment=AANONE
+        subGroups view=SIG cellType=t3ADULTCD4TH1 treatment=zNONE
         type bigWig 0.000000 2.975700
         # subId=5389 dateSubmitted=2012-02-03
 
@@ -1364,7 +1364,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMM FSHD DS
         longLabel HSMM FSHD DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HSMMFSHD treatment=AANONE
+        subGroups view=SIG cellType=t3HSMMFSHD treatment=zNONE
         type bigWig 0.000000 1.203700
         # subId=5479 dateSubmitted=2012-01-31
 
@@ -1372,7 +1372,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Mel 2183 DS
         longLabel Mel 2183 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3MEL2183 treatment=AANONE
+        subGroups view=SIG cellType=t3MEL2183 treatment=zNONE
         type bigWig 0.000000 1.165000
         # subId=5480 dateSubmitted=2012-01-31
 
@@ -1380,7 +1380,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel NIHi7 DS
         longLabel iPS NIHi7 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3IPSNIHI07 treatment=AANONE
+        subGroups view=SIG cellType=t3IPSNIHI07 treatment=zNONE
         type bigWig 0.000000 0.476200
         # subId=5481 dateSubmitted=2012-02-01
 
@@ -1388,7 +1388,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel CWRU1 DS
         longLabel iPS CWRU1 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3IPSCWRU1 treatment=AANONE
+        subGroups view=SIG cellType=t3IPSCWRU1 treatment=zNONE
         type bigWig 0.000000 1.032700
         # subId=5503 dateSubmitted=2012-02-02
 
@@ -1396,7 +1396,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel NIHi11 DS
         longLabel iPS NIHi11 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3IPSNIHI11 treatment=AANONE
+        subGroups view=SIG cellType=t3IPSNIHI11 treatment=zNONE
         type bigWig 0.000000 0.824900
         # subId=5504 dateSubmitted=2012-02-02
 
@@ -1404,7 +1404,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel FibP AG20443 DS
         longLabel FibroP AG20443 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3FIBROPAG20443 treatment=AANONE
+        subGroups view=SIG cellType=t3FIBROPAG20443 treatment=zNONE
         type bigWig 0.000000 0.798500
         # subId=5560 dateSubmitted=2012-02-07
 
@@ -1412,7 +1412,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel FibP AG08395 DS
         longLabel FibroP AG08395 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3FIBROPAG08395 treatment=AANONE
+        subGroups view=SIG cellType=t3FIBROPAG08395 treatment=zNONE
         type bigWig 0.000000 0.638200
         # subId=5561 dateSubmitted=2012-02-07
 
@@ -1420,7 +1420,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel FibP AG08396 DS
         longLabel FibroP AG08396 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3FIBROPAG08396 treatment=AANONE
+        subGroups view=SIG cellType=t3FIBROPAG08396 treatment=zNONE
         type bigWig 0.000000 1.203900
         # subId=5562 dateSubmitted=2012-02-07
 
@@ -1428,7 +1428,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel K562 DS
         longLabel K562 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t1K562 treatment=AANONE
+        subGroups view=SIG cellType=t1K562 treatment=zNONE
         type bigWig 0.000000 1.153500
         color 46,0,184
         # subId=5901 dateSubmitted=2012-02-28
@@ -1437,7 +1437,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Medul D341 DNs DS
         longLabel Medullo D341 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3MEDULLOD341 treatment=AANONE
+        subGroups view=SIG cellType=t3MEDULLOD341 treatment=zNONE
         type bigWig 0.000000 1.422500
         # subId=5991 dateSubmitted=2012-03-13
 
@@ -1445,7 +1445,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Urothelia Dnse DS
         longLabel Urothelia DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3UROTHELIA treatment=AANONE
+        subGroups view=SIG cellType=t3UROTHELIA treatment=zNONE
         type bigWig 0.000000 0.874300
         # subId=5990 dateSubmitted=2012-03-13
 
@@ -1461,7 +1461,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Monocytes-CD14+ Sig
         longLabel Monocytes CD14+ DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2MONOCYTESCD14 treatment=AANONE
+        subGroups view=SIG cellType=t2MONOCYTESCD14 treatment=zNONE
         type bigWig 0.000000 2.037700
         # subId=6860 dateSubmitted=2012-04-25
 
@@ -1469,7 +1469,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel CD20+_RO01794 Sig
         longLabel B-cells CD20+ RO01794 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2BCELLSCD20RO01794 treatment=AANONE
+        subGroups view=SIG cellType=t2BCELLSCD20RO01794 treatment=zNONE
         type bigWig 0.000000 1.765400
         # subId=6861 dateSubmitted=2012-04-25
 
@@ -1484,7 +1484,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseMcf7RandshrnaSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel MCF-7 Sig
-        longLabel MCF-7 Randomized shRNA control DNaseI HS Density Signal from ENCODE/Duke
+        longLabel MCF-7 Randomized shRNA Control DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t2MCF7 treatment=RANDSHRNA
         type bigWig 0.000000 1.001000
         # subId=6920 dateSubmitted=2012-05-02
@@ -1501,7 +1501,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseMcf7HypoxlacconSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel MCF-7 Sig
-        longLabel MCF-7 Hypoxia LacAcid ctrl DNaseI HS Density Signal from ENCODE/Duke
+        longLabel MCF-7 Hypoxia LacAcid Control DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t2MCF7 treatment=HYPOXLACCON
         type bigWig 0.000000 0.726900
         # subId=7134 dateSubmitted=2012-06-26
@@ -1510,7 +1510,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Frontal_cortex_OC Sig
         longLabel Frontal cortex OC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3FRONTALCORTEXOC treatment=AANONE
+        subGroups view=SIG cellType=t3FRONTALCORTEXOC treatment=zNONE
         type bigWig 0.000000 2.190400
         # subId=7137 dateSubmitted=2012-06-27
 
@@ -1527,7 +1527,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GC_B_cell Sig
         longLabel GC B cell DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GCBCELL treatment=AANONE
+        subGroups view=SIG cellType=t3GCBCELL treatment=zNONE
         type bigWig 0.000000 1.097000
         # subId=7308 dateSubmitted=2012-07-02
 
@@ -1535,14 +1535,14 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Olf_neurosphere Sig
         longLabel Olf neurosphere DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3OLFACTORYNEUROSPHERE treatment=AANONE
+        subGroups view=SIG cellType=t3OLFACTORYNEUROSPHERE treatment=zNONE
         type bigWig 0.000000 2.391100
         # subId=7309 dateSubmitted=2012-07-02
 
         track wgEncodeOpenChromDnaseFibroblgm03348LenticonSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Fibrobl_GM03348 Sig
-        longLabel Fibrobl GM03348 lenti-control DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Fibrobl GM03348 Lenti-Control DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t3FIBROBLGM03348 treatment=LENTICON
         type bigWig 0.000000 0.940400
         # subId=7310 dateSubmitted=2012-07-03
@@ -1550,7 +1550,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseFibroblgm03348LentimyodSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Fibrobl_GM03348 Sig
-        longLabel Fibrobl GM03348 lenti-MyoD DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Fibrobl GM03348 Lenti-MyoD DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t3FIBROBLGM03348 treatment=LENTIMYOD
         type bigWig 0.000000 1.114000
         # subId=7311 dateSubmitted=2012-07-02
@@ -1559,7 +1559,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Fibrobl_GM03348 Sig
         longLabel Fibrobl GM03348 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3FIBROBLGM03348 treatment=AANONE
+        subGroups view=SIG cellType=t3FIBROBLGM03348 treatment=zNONE
         type bigWig 0.000000 1.073700
         # subId=7312 dateSubmitted=2012-07-03
 
@@ -1567,7 +1567,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Naive_B_cell Sig
         longLabel Naive B cell DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3NAIVEBCELL treatment=AANONE
+        subGroups view=SIG cellType=t3NAIVEBCELL treatment=zNONE
         type bigWig 0.000000 1.104600
         # subId=7313 dateSubmitted=2012-07-03
 
@@ -1575,7 +1575,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Heart_OC Sig
         longLabel Heart OC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3HEARTOC treatment=AANONE
+        subGroups view=SIG cellType=t3HEARTOC treatment=zNONE
         type bigWig 0.000000 2.241000
         # subId=7321 dateSubmitted=2012-07-05
 
@@ -1583,7 +1583,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Cerebrum_frontal_OC Sig
         longLabel Cerebrum frontal OC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3CEREBRUMFRONTALOC treatment=AANONE
+        subGroups view=SIG cellType=t3CEREBRUMFRONTALOC treatment=zNONE
         type bigWig 0.000000 1.972200
         # subId=7339 dateSubmitted=2012-07-08
 
@@ -1591,7 +1591,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Cerebellum_OC Sig
         longLabel Cerebellum OC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3CEREBELLUMOC treatment=AANONE
+        subGroups view=SIG cellType=t3CEREBELLUMOC treatment=zNONE
         type bigWig 0.000000 1.795000
         # subId=7340 dateSubmitted=2012-07-09
 
@@ -1599,7 +1599,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel IMR90 Sig
         longLabel IMR90 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2IMR90 treatment=AANONE
+        subGroups view=SIG cellType=t2IMR90 treatment=zNONE
         type bigWig 0.000000 1.676300
         # subId=7397 dateSubmitted=2012-07-14
 
@@ -1607,7 +1607,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel SK-N-SH Sig
         longLabel SK-N-SH DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t2SKNSH treatment=AANONE
+        subGroups view=SIG cellType=t2SKNSH treatment=zNONE
         type bigWig 0.000000 2.501600
         # subId=7398 dateSubmitted=2012-07-14
 
@@ -1615,7 +1615,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM20000 Sig
         longLabel GM20000 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM20000 treatment=AANONE
+        subGroups view=SIG cellType=t3GM20000 treatment=zNONE
         type bigWig 0.000000 1.525900
         # subId=7399 dateSubmitted=2012-07-16
 
@@ -1623,7 +1623,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM10266 Sig
         longLabel GM10266 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM10266 treatment=AANONE
+        subGroups view=SIG cellType=t3GM10266 treatment=zNONE
         type bigWig 0.000000 1.645000
         # subId=7400 dateSubmitted=2012-07-16
 
@@ -1631,7 +1631,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM13976 Sig
         longLabel GM13976 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM13976 treatment=AANONE
+        subGroups view=SIG cellType=t3GM13976 treatment=zNONE
         type bigWig 0.000000 1.308400
         # subId=7500 dateSubmitted=2012-07-17
 
@@ -1639,7 +1639,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM10248 Sig
         longLabel GM10248 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM10248 treatment=AANONE
+        subGroups view=SIG cellType=t3GM10248 treatment=zNONE
         type bigWig 0.000000 1.117400
         # subId=7511 dateSubmitted=2012-07-19
 
@@ -1647,14 +1647,14 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM13977 Sig
         longLabel GM13977 DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3GM13977 treatment=AANONE
+        subGroups view=SIG cellType=t3GM13977 treatment=zNONE
         type bigWig 0.000000 1.382800
         # subId=7514 dateSubmitted=2012-07-30
 
         track wgEncodeOpenChromDnaseK562SahactrlSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel K562 Sig
-        longLabel K562 SAHA ctrl DNaseI HS Density Signal from ENCODE/Duke
+        longLabel K562 SAHA Control DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t1K562 treatment=SAHACTRL
         type bigWig 0.000000 2.081900
         color 46,0,184
@@ -1663,7 +1663,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseK562Saha1u72hrSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel K562 Sig
-        longLabel K562 SAHA 1uM 72hr DNaseI HS Density Signal from ENCODE/Duke
+        longLabel K562 SAHA 1 uM 72 hr DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t1K562 treatment=SAHA1U72HR
         type bigWig 0.000000 1.588700
         color 46,0,184
@@ -1673,7 +1673,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Psoas_muscle_OC Sig
         longLabel Psoas muscle OC DNaseI HS Density Signal from ENCODE/Duke
-        subGroups view=SIG cellType=t3PSOASMUSCLEOC treatment=AANONE
+        subGroups view=SIG cellType=t3PSOASMUSCLEOC treatment=zNONE
         type bigWig 0.000000 1.953700
         # subId=7557 dateSubmitted=2012-07-31
 
@@ -1692,7 +1692,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Chorion OS
         longLabel Chorion DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3CHORION treatment=AANONE
+        subGroups view=SIGBO cellType=t3CHORION treatment=zNONE
         type bigWig 0.000000 286.000000
         # subId=1412 dateSubmitted=2010-06-14
 
@@ -1700,7 +1700,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Medullo OS
         longLabel Medullo DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3MEDULLO treatment=AANONE
+        subGroups view=SIGBO cellType=t3MEDULLO treatment=zNONE
         type bigWig 0.000000 242.000000
         # subId=1479 dateSubmitted=2010-06-15
 
@@ -1708,7 +1708,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM12891 OS
         longLabel GM12891 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM12891 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM12891 treatment=zNONE
         type bigWig 0.000000 209.000000
         # subId=1487 dateSubmitted=2010-06-16
 
@@ -1716,7 +1716,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM12892 OS
         longLabel GM12892 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM12892 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM12892 treatment=zNONE
         type bigWig 0.000000 220.000000
         # subId=1488 dateSubmitted=2010-06-16
 
@@ -1724,7 +1724,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19238 OS
         longLabel GM19238 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM19238 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM19238 treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=1489 dateSubmitted=2010-06-16
 
@@ -1732,7 +1732,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel GM12878 OS
         longLabel GM12878 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t1GM12878 treatment=AANONE
+        subGroups view=SIGBO cellType=t1GM12878 treatment=zNONE
         type bigWig 0.000000 627.000000
         color 153,38,0
         # subId=1494 dateSubmitted=2010-06-16
@@ -1741,7 +1741,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel H1-hESC OS
         longLabel H1-hESC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t1H1HESC treatment=AANONE
+        subGroups view=SIGBO cellType=t1H1HESC treatment=zNONE
         type bigWig 0.000000 264.000000
         color 0,107,27
         # subId=1495 dateSubmitted=2010-06-16
@@ -1750,7 +1750,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa-S3 OS
         longLabel HeLa-S3 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2HELAS3 treatment=AANONE
+        subGroups view=SIGBO cellType=t2HELAS3 treatment=zNONE
         type bigWig 0.000000 265.000000
         color 0,119,158
         # subId=1498 dateSubmitted=2010-06-16
@@ -1759,7 +1759,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19239 OS
         longLabel GM19239 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM19239 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM19239 treatment=zNONE
         type bigWig 0.000000 209.000000
         # subId=6244 dateSubmitted=2012-03-23
 
@@ -1767,7 +1767,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM18507 OS
         longLabel GM18507 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM18507 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM18507 treatment=zNONE
         type bigWig 0.000000 253.000000
         # subId=1507 dateSubmitted=2010-06-16
 
@@ -1775,7 +1775,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19240 OS
         longLabel GM19240 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM19240 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM19240 treatment=zNONE
         type bigWig 0.000000 253.000000
         # subId=1509 dateSubmitted=2010-06-16
 
@@ -1783,7 +1783,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel H9ES OS
         longLabel H9ES DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3H9ES treatment=AANONE
+        subGroups view=SIGBO cellType=t3H9ES treatment=zNONE
         type bigWig 0.000000 269.000000
         # subId=1519 dateSubmitted=2010-06-16
 
@@ -1791,7 +1791,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HepG2 OS
         longLabel HepG2 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2HEPG2 treatment=AANONE
+        subGroups view=SIGBO cellType=t2HEPG2 treatment=zNONE
         type bigWig 0.000000 274.000000
         color 189,0,157
         # subId=1528 dateSubmitted=2010-06-16
@@ -1800,7 +1800,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HUVEC OS
         longLabel HUVEC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2HUVEC treatment=AANONE
+        subGroups view=SIGBO cellType=t2HUVEC treatment=zNONE
         type bigWig 0.000000 198.000000
         color 224,75,0
         # subId=1532 dateSubmitted=2010-06-17
@@ -1809,7 +1809,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel NHEK OS
         longLabel NHEK DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3NHEK treatment=AANONE
+        subGroups view=SIGBO cellType=t3NHEK treatment=zNONE
         type bigWig 0.000000 194.000000
         color 179,0,134
         # subId=1533 dateSubmitted=2010-06-17
@@ -1818,7 +1818,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSigBo
         #shortLabel K562 OS
         #longLabel K562 DNaseI HS Overlap Signal from ENCODE/Duke
-        #subGroups view=SIGBO cellType=1K562 treatment=AANONE
+        #subGroups view=SIGBO cellType=1K562 treatment=zNONE
         #type bigWig 0.000000 256.000000
         #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
@@ -1826,7 +1826,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa-S3 OS
-        longLabel HeLa-S3 IFN-a 4hrs DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HeLa-S3 IFN-a 4 hr DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t2HELAS3 treatment=IFNa4h
         type bigWig 0.000000 224.000000
         color 0,119,158
@@ -1836,7 +1836,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel MCF-7 OS
         longLabel MCF-7 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2MCF7 treatment=AANONE
+        subGroups view=SIGBO cellType=t2MCF7 treatment=zNONE
         type bigWig 0.000000 198.000000
         # subId=1545 dateSubmitted=2010-06-17
 
@@ -1844,7 +1844,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel ProgFib OS
         longLabel ProgFib DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3PROGFIB treatment=AANONE
+        subGroups view=SIGBO cellType=t3PROGFIB treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=1650 dateSubmitted=2010-06-19
 
@@ -1852,7 +1852,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSigBo off
         #shortLabel FibroP OS
         #longLabel FibroP DNaseI HS Overlap Signal from ENCODE/Duke
-        #subGroups view=SIGBO cellType=FIBROP treatment=AANONE
+        #subGroups view=SIGBO cellType=FIBROP treatment=zNONE
         #type bigWig 0.000000 430.000000
         # subId=1651 dateSubmitted=2010-06-19
 
@@ -1860,7 +1860,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Fibrobl OS
         longLabel Fibrobl DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3FIBROBL treatment=AANONE
+        subGroups view=SIGBO cellType=t3FIBROBL treatment=zNONE
         type bigWig 0.000000 318.000000
         # subId=1653 dateSubmitted=2010-06-19
 
@@ -1868,7 +1868,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMM OS
         longLabel HSMM DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HSMM treatment=AANONE
+        subGroups view=SIGBO cellType=t3HSMM treatment=zNONE
         type bigWig 0.000000 341.000000
         # subId=1654 dateSubmitted=2010-06-19
 
@@ -1877,7 +1877,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSigBo off
         #shortLabel Myometr OS
         #longLabel Myometr DNaseI HS Overlap Signal from ENCODE/Duke
-        #subGroups view=SIGBO cellType=MYOMETR treatment=AANONE
+        #subGroups view=SIGBO cellType=MYOMETR treatment=zNONE
         #type bigWig 0.000000 209.000000
         # subId=1655 dateSubmitted=2010-06-19
 
@@ -1885,7 +1885,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel PanIslets OS
         longLabel PanIslets DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3PANISLETS treatment=AANONE
+        subGroups view=SIGBO cellType=t3PANISLETS treatment=zNONE
         type bigWig 0.000000 357.000000
         # subId=1656 dateSubmitted=2010-06-19
 
@@ -1901,7 +1901,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMMtube OS
         longLabel HSMMtube DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HSMMTUBE treatment=AANONE
+        subGroups view=SIGBO cellType=t3HSMMTUBE treatment=zNONE
         type bigWig 0.000000 328.000000
         # subId=1679 dateSubmitted=2010-06-20
 
@@ -1909,7 +1909,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Melano OS
         longLabel Melano DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3MELANO treatment=AANONE
+        subGroups view=SIGBO cellType=t3MELANO treatment=zNONE
         type bigWig 0.000000 412.000000
         # subId=2096 dateSubmitted=2010-08-11
 
@@ -1917,7 +1917,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel pHTE OS
         longLabel pHTE DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3PHTE treatment=AANONE
+        subGroups view=SIGBO cellType=t3PHTE treatment=zNONE
         type bigWig 0.000000 317.000000
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -1925,7 +1925,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Osteoblasts OS
         longLabel Osteoblasts DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3OSTEOBLASTS treatment=AANONE
+        subGroups view=SIGBO cellType=t3OSTEOBLASTS treatment=zNONE
         type bigWig 0.000000 604.000000
         # subId=2506 dateSubmitted=2010-10-16
 
@@ -1942,7 +1942,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel LNCaP OS
         longLabel LNCaP DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3LNCAP treatment=AANONE
+        subGroups view=SIGBO cellType=t3LNCAP treatment=zNONE
         type bigWig 0.000000 517.000000
         color 0,119,158
         # subId=2482 dateSubmitted=2010-10-15
@@ -1951,7 +1951,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel A549 OS
         longLabel A549 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2A549 treatment=AANONE
+        subGroups view=SIGBO cellType=t2A549 treatment=zNONE
         type bigWig 0.000000 204.000000
         # subId=2493 dateSubmitted=2010-10-15
 
@@ -1959,7 +1959,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HTR8svn OS
         longLabel HTR8svn DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HTR8SVN treatment=AANONE
+        subGroups view=SIGBO cellType=t3HTR8SVN treatment=zNONE
         type bigWig 0.000000 187.000000
         # subId=2793 dateSubmitted=2010-11-02
 
@@ -1967,7 +1967,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel 8988T OS
         longLabel 8988T DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3A8988T treatment=AANONE
+        subGroups view=SIGBO cellType=t3A8988T treatment=zNONE
         type bigWig 0.000000 286.000000
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -1975,7 +1975,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel PanIsletD OS
         longLabel PanIsletD DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3PANISLETD treatment=AANONE
+        subGroups view=SIGBO cellType=t3PANISLETD treatment=zNONE
         type bigWig 0.000000 415.000000
         # subId=2785 dateSubmitted=2010-10-29
 
@@ -1983,7 +1983,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HMEC OS
         longLabel HMEC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HMEC treatment=AANONE
+        subGroups view=SIGBO cellType=t3HMEC treatment=zNONE
         type bigWig 0.000000 495.000000
         # subId=2764 dateSubmitted=2010-10-27
 
@@ -1991,7 +1991,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Gliobla OS
         longLabel Gliobla DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GLIOBLA treatment=AANONE
+        subGroups view=SIGBO cellType=t3GLIOBLA treatment=zNONE
         type bigWig 0.000000 228.000000
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -1999,7 +1999,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel CLL OS
         longLabel CLL DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3CLL treatment=AANONE
+        subGroups view=SIGBO cellType=t3CLL treatment=zNONE
         type bigWig 0.000000 302.000000
         # subId=2787 dateSubmitted=2010-11-01
 
@@ -2007,7 +2007,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Hepatocytes OS
         longLabel Hepatocytes DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HEPATOCYTES treatment=AANONE
+        subGroups view=SIGBO cellType=t3HEPATOCYTES treatment=zNONE
         type bigWig 0.000000 242.000000
         # subId=3063 dateSubmitted=2010-12-06
 
@@ -2015,7 +2015,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HPDE6-E6E7 OS
         longLabel HPDE6-E6E7 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HPDE6E6E7 treatment=AANONE
+        subGroups view=SIGBO cellType=t3HPDE6E6E7 treatment=zNONE
         type bigWig 0.000000 185.000000
         # subId=3064 dateSubmitted=2010-12-06
 
@@ -2023,7 +2023,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSigBo off
         #shortLabel iPS OS
         #longLabel iPS DNaseI HS Overlap Signal from ENCODE/Duke
-        #subGroups view=SIGBO cellType=IPS treatment=AANONE
+        #subGroups view=SIGBO cellType=IPS treatment=zNONE
         #type bigWig 0.000000 440.000000
         # subId=3065 dateSubmitted=2010-12-06
 
@@ -2031,7 +2031,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Huh-7 OS
         longLabel Huh-7 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HUH7 treatment=AANONE
+        subGroups view=SIGBO cellType=t3HUH7 treatment=zNONE
         type bigWig 0.000000 209.000000
         # subId=3075 dateSubmitted=2010-12-07
 
@@ -2039,7 +2039,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Huh-7.5 OS
         longLabel Huh-7.5 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HUH75 treatment=AANONE
+        subGroups view=SIGBO cellType=t3HUH75 treatment=zNONE
         type bigWig 0.000000 286.000000
         # subId=3076 dateSubmitted=2010-12-07
 
@@ -2047,7 +2047,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Stellate OS
         longLabel Stellate DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3STELLATE treatment=AANONE
+        subGroups view=SIGBO cellType=t3STELLATE treatment=zNONE
         type bigWig 0.000000 209.000000
         # subId=3077 dateSubmitted=2010-12-06
 
@@ -2055,7 +2055,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel T-47D OS
         longLabel T-47D DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3T47D treatment=AANONE
+        subGroups view=SIGBO cellType=t3T47D treatment=zNONE
         type bigWig 0.000000 251.000000
         # subId=3078 dateSubmitted=2010-12-06
 
@@ -2063,7 +2063,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         #parent wgEncodeOpenChromDnaseViewSigBo off
         #shortLabel Urothelia OS
         #longLabel Urothelia DNaseI HS Overlap Signal from ENCODE/Duke
-        #subGroups view=SIGBO cellType=UROtsa treatment=AANONE
+        #subGroups view=SIGBO cellType=UROtsa treatment=zNONE
         #type bigWig 0.000000 196.000000
         # subId=3217 dateSubmitted=2011-01-11
 
@@ -2087,7 +2087,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Colo829 OS
         longLabel Colo829 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3COLO829 treatment=AANONE
+        subGroups view=SIGBO cellType=t3COLO829 treatment=zNONE
         type bigWig 0.000000 198.000000
         # subId=4907 dateSubmitted=2011-09-28
 
@@ -2103,7 +2103,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Ishikawa OS
         longLabel Ishikawa 4-OHTAM 100 nM 30 m DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3ISHIKAWA treatment=4TAM10030
+        subGroups view=SIGBO cellType=t3ISHIKAWA treatment=A4TAM10030
         type bigWig 0.000000 209.000000
         # subId=4911 dateSubmitted=2011-09-28
 
@@ -2111,7 +2111,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMM emb OS
         longLabel HSMM emb DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HSMMEMB treatment=AANONE
+        subGroups view=SIGBO cellType=t3HSMMEMB treatment=zNONE
         type bigWig 0.000000 198.000000
         # subId=4912 dateSubmitted=2011-09-28
 
@@ -2119,7 +2119,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel RWPE1 OS
         longLabel RWPE1 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3RWPE1 treatment=AANONE
+        subGroups view=SIGBO cellType=t3RWPE1 treatment=zNONE
         type bigWig 0.000000 198.000000
         # subId=4908 dateSubmitted=2011-10-03
 
@@ -2127,7 +2127,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel H7-hESC OS
         longLabel H7-hESC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3H7HESC treatment=AANONE
+        subGroups view=SIGBO cellType=t3H7HESC treatment=zNONE
         type bigWig 0.000000 363.000000
         # subId=5386 dateSubmitted=2011-12-29
 
@@ -2135,7 +2135,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Adlt CD4Th0 OS
         longLabel Adult CD4+ Th0 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3TCELLSCD4TH0ADULT treatment=AANONE
+        subGroups view=SIGBO cellType=t3ADULTCD4TH0 treatment=zNONE
         type bigWig 0.000000 330.000000
         # subId=4924 dateSubmitted=2012-02-03
 
@@ -2159,7 +2159,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HEK293T OS
         longLabel HEK293T DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HEK293T treatment=AANONE
+        subGroups view=SIGBO cellType=t3HEK293T treatment=zNONE
         type bigWig 0.000000 198.000000
         # subId=5385 dateSubmitted=2012-02-03
 
@@ -2184,7 +2184,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Adlt CD4Th1 OS
         longLabel Adult CD4+ Th1 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3TCELLSCD4TH1ADULT treatment=AANONE
+        subGroups view=SIGBO cellType=t3ADULTCD4TH1 treatment=zNONE
         type bigWig 0.000000 385.000000
         # subId=5389 dateSubmitted=2012-02-03
 
@@ -2192,7 +2192,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMM FSHD OS
         longLabel HSMM FSHD DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HSMMFSHD treatment=AANONE
+        subGroups view=SIGBO cellType=t3HSMMFSHD treatment=zNONE
         type bigWig 0.000000 308.000000
         # subId=5479 dateSubmitted=2012-01-31
 
@@ -2200,7 +2200,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Mel 2183 OS
         longLabel Mel 2183 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3MEL2183 treatment=AANONE
+        subGroups view=SIGBO cellType=t3MEL2183 treatment=zNONE
         type bigWig 0.000000 197.000000
         # subId=5480 dateSubmitted=2012-01-31
 
@@ -2208,7 +2208,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel NIHi7 OS
         longLabel iPS NIHi7 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3IPSNIHI07 treatment=AANONE
+        subGroups view=SIGBO cellType=t3IPSNIHI07 treatment=zNONE
         type bigWig 0.000000 319.000000
         # subId=5481 dateSubmitted=2012-02-01
 
@@ -2216,7 +2216,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel CWRU1 OS
         longLabel iPS CWRU1 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3IPSCWRU1 treatment=AANONE
+        subGroups view=SIGBO cellType=t3IPSCWRU1 treatment=zNONE
         type bigWig 0.000000 264.000000
         # subId=5503 dateSubmitted=2012-02-02
 
@@ -2224,7 +2224,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel NIHi11 OS
         longLabel iPS NIHi11 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3IPSNIHI11 treatment=AANONE
+        subGroups view=SIGBO cellType=t3IPSNIHI11 treatment=zNONE
         type bigWig 0.000000 385.000000
         # subId=5504 dateSubmitted=2012-02-02
 
@@ -2232,7 +2232,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel FibP AG20443 OS
         longLabel FibroP AG20443 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3FIBROPAG20443 treatment=AANONE
+        subGroups view=SIGBO cellType=t3FIBROPAG20443 treatment=zNONE
         type bigWig 0.000000 341.000000
         # subId=5560 dateSubmitted=2012-02-07
 
@@ -2240,7 +2240,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel FibP AG08395 OS
         longLabel FibroP AG08395 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3FIBROPAG08395 treatment=AANONE
+        subGroups view=SIGBO cellType=t3FIBROPAG08395 treatment=zNONE
         type bigWig 0.000000 391.000000
         # subId=5561 dateSubmitted=2012-02-07
 
@@ -2248,15 +2248,15 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel FibP AG08396 OS
         longLabel FibroP AG08396 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3FIBROPAG08396 treatment=AANONE
+        subGroups view=SIGBO cellType=t3FIBROPAG08396 treatment=zNONE
         type bigWig 0.000000 352.000000
         # subId=5562 dateSubmitted=2012-02-07
 
         track wgEncodeOpenChromDnaseK562BaseOverlapSignalV2
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel K562 OS
-        longLabel K562 DNaseI Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t1K562 treatment=AANONE
+        longLabel K562 DNaseI HS Overlap Signal from ENCODE/Duke
+        subGroups view=SIGBO cellType=t1K562 treatment=zNONE
         type bigWig 0.000000 352.000000
         color 46,0,184
         # subId=5901 dateSubmitted=2012-02-28
@@ -2265,7 +2265,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Medul D341 DNs OS
         longLabel Medullo D341 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3MEDULLOD341 treatment=AANONE
+        subGroups view=SIGBO cellType=t3MEDULLOD341 treatment=zNONE
         type bigWig 0.000000 220.000000
         # subId=5991 dateSubmitted=2012-03-13
 
@@ -2273,7 +2273,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Urothelia DNse OS
         longLabel Urothelia DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3UROTHELIA treatment=AANONE
+        subGroups view=SIGBO cellType=t3UROTHELIA treatment=zNONE
         type bigWig 0.000000 209.000000
         # subId=5990 dateSubmitted=2012-03-13
 
@@ -2289,7 +2289,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Monocytes-CD14+
         longLabel Monocytes CD14+ DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2MONOCYTESCD14 treatment=AANONE
+        subGroups view=SIGBO cellType=t2MONOCYTESCD14 treatment=zNONE
         type bigWig 0.000000 253.000000
         # subId=6860 dateSubmitted=2012-04-25
 
@@ -2297,7 +2297,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel CD20+_RO01794
         longLabel B-cells CD20+ RO01794 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2BCELLSCD20RO01794 treatment=AANONE
+        subGroups view=SIGBO cellType=t2BCELLSCD20RO01794 treatment=zNONE
         type bigWig 0.000000 308.000000
         # subId=6861 dateSubmitted=2012-04-25
 
@@ -2312,7 +2312,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseMcf7RandshrnaBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel MCF-7
-        longLabel MCF-7 Randomized shRNA control DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel MCF-7 Randomized shRNA Control DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t2MCF7 treatment=RANDSHRNA
         type bigWig 0.000000 352.000000
         # subId=6920 dateSubmitted=2012-05-02
@@ -2329,7 +2329,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseMcf7HypoxlacconBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel MCF-7
-        longLabel MCF-7 Hypoxia LacAcid ctrl DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel MCF-7 Hypoxia LacAcid Control DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t2MCF7 treatment=HYPOXLACCON
         type bigWig 0.000000 220.000000
         # subId=7134 dateSubmitted=2012-06-26
@@ -2338,7 +2338,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Frontal_cortex_OC
         longLabel Frontal cortex OC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3FRONTALCORTEXOC treatment=AANONE
+        subGroups view=SIGBO cellType=t3FRONTALCORTEXOC treatment=zNONE
         type bigWig 0.000000 253.000000
         # subId=7137 dateSubmitted=2012-06-27
 
@@ -2355,7 +2355,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GC_B_cell
         longLabel GC B cell DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GCBCELL treatment=AANONE
+        subGroups view=SIGBO cellType=t3GCBCELL treatment=zNONE
         type bigWig 0.000000 242.000000
         # subId=7308 dateSubmitted=2012-07-02
 
@@ -2363,14 +2363,14 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Olf_neurosphere
         longLabel Olf neurosphere DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3OLFACTORYNEUROSPHERE treatment=AANONE
+        subGroups view=SIGBO cellType=t3OLFACTORYNEUROSPHERE treatment=zNONE
         type bigWig 0.000000 495.000000
         # subId=7309 dateSubmitted=2012-07-02
 
         track wgEncodeOpenChromDnaseFibroblgm03348LenticonBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Fibrobl_GM03348
-        longLabel Fibrobl GM03348 lenti-control DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Fibrobl GM03348 Lenti-Control DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t3FIBROBLGM03348 treatment=LENTICON
         type bigWig 0.000000 242.000000
         # subId=7310 dateSubmitted=2012-07-03
@@ -2378,7 +2378,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseFibroblgm03348LentimyodBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Fibrobl_GM03348
-        longLabel Fibrobl GM03348 lenti-MyoD DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Fibrobl GM03348 Lenti-MyoD DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t3FIBROBLGM03348 treatment=LENTIMYOD
         type bigWig 0.000000 242.000000
         # subId=7311 dateSubmitted=2012-07-02
@@ -2387,7 +2387,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Fibrobl_GM03348
         longLabel Fibrobl GM03348 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3FIBROBLGM03348 treatment=AANONE
+        subGroups view=SIGBO cellType=t3FIBROBLGM03348 treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=7312 dateSubmitted=2012-07-03
 
@@ -2395,7 +2395,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Naive_B_cell
         longLabel Naive B cell DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3NAIVEBCELL treatment=AANONE
+        subGroups view=SIGBO cellType=t3NAIVEBCELL treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=7313 dateSubmitted=2012-07-03
 
@@ -2403,7 +2403,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Heart_OC
         longLabel Heart OC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3HEARTOC treatment=AANONE
+        subGroups view=SIGBO cellType=t3HEARTOC treatment=zNONE
         type bigWig 0.000000 275.000000
         # subId=7321 dateSubmitted=2012-07-05
 
@@ -2411,7 +2411,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Cerebrum_frontal_OC
         longLabel Cerebrum frontal OC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3CEREBRUMFRONTALOC treatment=AANONE
+        subGroups view=SIGBO cellType=t3CEREBRUMFRONTALOC treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=7339 dateSubmitted=2012-07-08
 
@@ -2419,7 +2419,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Cerebellum_OC
         longLabel Cerebellum OC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3CEREBELLUMOC treatment=AANONE
+        subGroups view=SIGBO cellType=t3CEREBELLUMOC treatment=zNONE
         type bigWig 0.000000 220.000000
         # subId=7340 dateSubmitted=2012-07-09
 
@@ -2427,7 +2427,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel IMR90
         longLabel IMR90 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2IMR90 treatment=AANONE
+        subGroups view=SIGBO cellType=t2IMR90 treatment=zNONE
         type bigWig 0.000000 220.000000
         # subId=7397 dateSubmitted=2012-07-14
 
@@ -2435,7 +2435,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel SK-N-SH
         longLabel SK-N-SH DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t2SKNSH treatment=AANONE
+        subGroups view=SIGBO cellType=t2SKNSH treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=7398 dateSubmitted=2012-07-14
 
@@ -2443,7 +2443,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM20000
         longLabel GM20000 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM20000 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM20000 treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=7399 dateSubmitted=2012-07-16
 
@@ -2451,7 +2451,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM10266
         longLabel GM10266 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM10266 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM10266 treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=7400 dateSubmitted=2012-07-16
 
@@ -2459,7 +2459,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM13976
         longLabel GM13976 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM13976 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM13976 treatment=zNONE
         type bigWig 0.000000 209.000000
         # subId=7500 dateSubmitted=2012-07-17
 
@@ -2467,7 +2467,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM10248
         longLabel GM10248 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM10248 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM10248 treatment=zNONE
         type bigWig 0.000000 220.000000
         # subId=7511 dateSubmitted=2012-07-19
 
@@ -2475,14 +2475,14 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM13977
         longLabel GM13977 DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3GM13977 treatment=AANONE
+        subGroups view=SIGBO cellType=t3GM13977 treatment=zNONE
         type bigWig 0.000000 242.000000
         # subId=7514 dateSubmitted=2012-07-30
 
         track wgEncodeOpenChromDnaseK562SahactrlBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel K562
-        longLabel K562 SAHA ctrl DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel K562 SAHA Control DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t1K562 treatment=SAHACTRL
         type bigWig 0.000000 341.000000
         color 46,0,184
@@ -2491,7 +2491,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseK562Saha1u72hrBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel K562
-        longLabel K562 SAHA 1uM 72hr DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel K562 SAHA 1 uM 72 hr DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t1K562 treatment=SAHA1U72HR
         type bigWig 0.000000 330.000000
         color 46,0,184
@@ -2501,7 +2501,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Psoas_muscle_OC
         longLabel Psoas muscle OC DNaseI HS Overlap Signal from ENCODE/Duke
-        subGroups view=SIGBO cellType=t3PSOASMUSCLEOC treatment=AANONE
+        subGroups view=SIGBO cellType=t3PSOASMUSCLEOC treatment=zNONE
         type bigWig 0.000000 231.000000
         # subId=7557 dateSubmitted=2012-07-31
 
