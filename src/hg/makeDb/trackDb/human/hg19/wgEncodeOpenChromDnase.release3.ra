@@ -552,7 +552,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIpsnihi7Pk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel NIHi7 Pk
-        longLabel iPS NIHi 7 DNaseI HS Peaks from ENCODE/Duke
+        longLabel iPS NIHi7 DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t3IPSNIHI07 treatment=zNONE
         type narrowPeak
         # subId=5481 dateSubmitted=2012-02-01
@@ -1379,7 +1379,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIpsnihi7Sig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel NIHi7 DS
-        longLabel iPS NIHi 7 DNaseI HS Density Signal from ENCODE/Duke
+        longLabel iPS NIHi7 DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t3IPSNIHI07 treatment=zNONE
         type bigWig 0.000000 0.476200
         # subId=5481 dateSubmitted=2012-02-01
@@ -2207,7 +2207,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIpsnihi7BaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel NIHi7 OS
-        longLabel iPS NIHi 7 DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel iPS NIHi7 DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t3IPSNIHI07 treatment=zNONE
         type bigWig 0.000000 319.000000
         # subId=5481 dateSubmitted=2012-02-01
