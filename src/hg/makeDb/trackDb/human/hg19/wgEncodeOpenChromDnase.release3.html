@@ -1,6 +1,6 @@
 <H2>Description</H2>
 <P>These tracks display DNaseI hypersensitivity (HS) evidence as part of the
-four <B><em>Open Chromatin</em></B> track sets.
+four <a href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeDNAseSuper&hgTracksConfigPage=configure">Open Chromatin</a> track sets.
 DNaseI is an enzyme that has long been used to map general
 chromatin accessibility and DNaseI "hypersensitivity" is a feature of active
 <i>cis</i>-regulatory sequences. The use of this method has led to the discovery of
@@ -33,9 +33,9 @@ high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen.
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>.
 <LI>Data for the ChIP experiments can be found in
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">UTA TFBS</A>.
-<LI>A syntheseis of all the open chromatin assays for select cell lines can
+<LI>A synthesis of all the open chromatin assays for select cell lines can
 be previewed in
-<A HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chrom Synth</a>.
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chrom Synth</a>.
 </UL>
 
 <H2> Display Conventions and Configuration </H2>
@@ -108,7 +108,7 @@ one replicate were detected in the top 100,000 peaks of a second replicate. For
 some cell types, additional verification was performed using similar material
 hybridized to NimbleGen Human ENCODE tiling arrays (1% of the genome) along with
 the input DNA as reference (DNase-chip). A more detailed protocol is available
-<A HREF="/ENCODE/protocols/general/Duke_DNase_protocol.pdf">here</A>.
+<A HREF="/ENCODE/protocols/general/Duke_DNase_protocol.pdf" target="_blank">here</A>.
 </P>
 <P>The read length for sequences from DNase-seq was 20 bases long due to a MmeI
 cutting step of the approximately 50 kb DNA fragments extracted after DNaseI
@@ -121,7 +121,7 @@ of sequences converted into the required bfq format.</DIV>
 </P>
 <P>Sequences from multiple lanes
 were combined for a single replicate using the bwa samse command and converted
-to the sam/bam format using samtools.
+to the sam/bam format using SAMtools.
 </P>
 <P>Only those sequences that aligned to 4 or fewer locations were retained. Other sequences
 were also filtered based on their alignment to problematic regions
@@ -131,15 +131,15 @@ were also filtered based on their alignment to problematic regions
 The mappings of these short reads to the genome are available for
 <A HREF="/cgi-bin/hgFileUi?g=wgEncodeOpenChromDnase">download</A>.</P>
 <P> Using F-seq, the resulting digital signal was converted to a continuous wiggle track that employs a Parzen kernel density estimation to create base pair scores
-(Boyle <em>et al.</em>, 2008b).  Input data has been generated for several
-cell lines. These are used directly to create a control/background model used
+(Boyle <em>et al.</em>, 2008b).  Input data was generated for several
+cell lines. These were used directly to create a control/background model used
 for F-Seq when generating signal annotations for these cell lines.
-These models are meant to correct for sequencing biases, alignment artifacts,
+These models were meant to correct for sequencing biases, alignment artifacts,
 and copy number changes in these cell lines. Input data was not generated
 directly for other cell lines. Instead, a general background model was derived
-from the available Input data sets. This should provide corrections for
-sequencing biases and alignment artifacts, but does not correct for cell type-specific copy number changes.
-<DIV style='position:relative; left:25px;'><DL><DT>The exact command used for this step is:</DT>
+from the available Input data sets. This provided corrections for
+sequencing biases and alignment artifacts, but did not correct for cell type-specific copy number changes.
+<DIV style='position:relative; left:25px;'><DL><DT>The exact command used for this step was:</DT>
 <DD><CODE>&gt; fseq -l 600 -v -f 0 -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</CODE></DD></DL>
 where the bff files are the background files based on alignability, the
 iff files are the background files based on the Input experiments,
@@ -152,7 +152,7 @@ threshold were considered significant.
 </P>
 <P>Data from the high-resolution 1% ENCODE tiled microarrays supplied by
 NimbleGen were normalized using the Tukey biweight normalization and peaks
-were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple levels
+were called using ChIPOTle (Buck <em>et al.</em>, 2005) at multiple levels
 of significance. Regions matched on size to these peaks that were devoid of
 any significant signal were also created as a null model.  These data were used
 for additional verification of Tier 1 and Tier 2 cell lines by ROC analysis.
@@ -165,17 +165,8 @@ directory, labeled 'Validation' in the View column.
 
 <h2>Release Notes</h2>
 <P>
-This is Release 2 (March 2012) of the track. A number of new experiments have been added, 
-some experiments have been removed, and others have been updated based on the results of new experiments. 
-The previous FibroP and iPS cell line experiments consisted of samples from donated cell lines from three separate individuals. 
-Replicate data for each individual have been created, thus both of these experiments were split into three distinct cell lines 
-(FibroP_AG08395, FibroP_AG08396, FibroP_AG20443, and iPS_CWRU1, iPS_NIHi7, iPS_NIHi11). 
-The K562 cell line now consists of data from three completely new experiments starting with new growths of the cell line and is of 
-significantly higher quality than the previous data. Similarly, the two Urothelia tracks (with and without UT189 treatment) 
-include new data from a new replicate. For both, the original replicate 1 was retained, but the replicate 2 was replaced with the new replicate. 
-The previous replicate 2 was not of high enough quality to distinguish between the treated and untreated cell lines, 
-which appear to be extremely similar at the chromatin level. Lastly, the LHSR data was removed as we could not verify 
-the purity of the cell growths. We have decided not to pursue this cell line further.
+This is Release 3 (August 2012) of the track. It includes 27 new experiments including 18 new cell lines. 
+
 </P>
 <P>
 <UL>
@@ -226,8 +217,7 @@ Insitute</A>: Paul Flicek, Damian Keefe, and
 <A HREF="http://www.ebi.ac.uk/~birney/" TARGET=_blank>Ewan Birney</a>
 </P><P>
 <LI><A HREF="http://www.oncology.cam.ac.uk/" TARGET=_blank>University of
-Cambridge, Department of Oncology and CR-UK Cambridge Research Institute (CRI)
-</A>: Stefan Graf
+Cambridge, Department of Oncology and CR-UK Cambridge Research Institute (CRI)</A>: Stefan Graf
 </UL>
 </P><P>
 We thank NHGRI for ENCODE funding support.
