@@ -9726,6 +9726,58 @@ subId 7188
 tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep4
 view PlusSignal
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3V2
+objType file
+bioRep 091NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-05-01
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID47963
+labProtocolId 091NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7816
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4V2
+objType file
+bioRep 092NL
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-31
+dateUnrestricted 2013-05-01
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4V2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID47964
+labProtocolId 092NLt
+localization nucleolus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 4
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist13
+subId 7815
+submittedDataVersion V2 - New version of processing used.
+view Protocol
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep3
 objType file
 attic auxSup
@@ -60841,4 +60893,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 1984231968
+# MAGIC: -295125784
