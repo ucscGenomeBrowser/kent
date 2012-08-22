@@ -35,20 +35,20 @@ shortLabel CSHL Long RNA-seq
 longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group regulation
 subGroup1 view Views Contigs=Contigs PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Junctions=Splice_Junctions Alignments=Alignments
-subGroup2 cellType Cell_Line ADRENAL=Adrenal BLADDER=Bladder CBELLUM=Cerebellum CNS=CNS COLON=Colon CORTEX=Cortex DUOD=Duodenum FLOBE=FrontalLobe GFAT=Genital_Fat_Pad HEART=Heart KIDNEY=Kidney LGINT=Large_Intestine LIMB=Limb LIVER=Liver LUNG=Lung MAMG=Mammary_Gland OVARY=Ovary PLAC=Placenta SMINT=Small_Intestine SPLEEN=Spleen STOM=Stomach SUFAT=Subcutaneous_Fat_Pad TESTIS=Testis THYMUS=Thymus WBRAIN=Whole_Brain
+subGroup2 cellType Cell_Line ADRENAL=Adrenal BLADDER=Bladder CBELLUM=Cerebellum CNS=CNS COLON=Colon CORTEX=Cortex DUOD=Duodenum FLOBE=Frontal_Lobe GFAT=Genital_Fat_Pad HEART=Heart KIDNEY=Kidney LGINT=Large_Intestine LIMB=Limb LIVER=Liver LUNG=Lung MAMG=Mammary_Gland OVARY=Ovary PLAC=Placenta SMINT=Small_Intestine SPLEEN=Spleen STOM=Stomach SUFAT=Subcutaneous_Fat_Pad TESTIS=Testis THYMUS=Thymus WBRAIN=Whole_Brain
 subGroup3 age Age ADULT8WKS=Adult_8_wks E11HALF=Embryonic_11.5_days E14=Embryonic_14_days E14HALF=Embryonic_14.5_days E18=Embryonic_18_days
-subGroup4 rep Rep rep1=1 rep2=2 Pooled=Pooled
+subGroup4 rep Rep rep1=1 rep2=2 repP=Pooled
 dimensions dimensionY=rep dimensionX=cellType dimensionA=age
 #filterComposite
 sortOrder cellType=+ age=+ rep=+ view=+
-fileSortOrder cell=Cell_Line rnaExtract=RNA<BR>Extract replicate=Replicate view=View bioRep=Cross_Lab<BR>BioReplicate labProtocolId=Protocol labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line replicate=Replicate view=View bioRep=Cross_Lab<BR>BioReplicate labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell rnaExtract=rnaExtract age=age
 dragAndDrop subTracks
 priority 0
 type bed 3
 wgEncode 1
 noInherit on
-html wgEncodeCshlLongRnaSeq.release2
+html wgEncodeCshlLongRnaSeq.release3
 
 	track wgEncodeCshlLongRnaSeqViewPlusRawSignal
 	shortLabel Plus Raw Signal
@@ -65,7 +65,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSpleenAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel Spleen + 2
-        longLabel Spleen A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Spleen A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=SPLEEN rep=rep2
         type bigWig 1.000000 5738738.000000
         color 86,180,233
@@ -74,7 +74,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqHeartAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel Heart + 2
-        longLabel Heart A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Heart A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=HEART rep=rep2
         type bigWig 1.000000 2947116.000000
         color 153,38,0
@@ -83,7 +83,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqHeartAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal 
         shortLabel Heart + 1
-        longLabel Heart A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Heart A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=HEART rep=rep1
         type bigWig 1.000000 3000713.000000
         color 153,38,0
@@ -92,7 +92,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLungAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Lung + 1
-        longLabel Lung A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Lung A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LUNG rep=rep1
         type bigWig 1.000000 662082.000000
         # subId=5428 dateSubmitted=2012-01-05
@@ -100,7 +100,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLungAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Lung + 2
-        longLabel Lung A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Lung A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LUNG rep=rep2
         type bigWig 1.000000 852123.000000
         # subId=5429 dateSubmitted=2012-01-05
@@ -108,7 +108,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Liver A8 + 1
-        longLabel Liver A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Liver A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LIVER rep=rep1
         type bigWig 1.000000 1395240.000000
         color 230,159,0
@@ -117,7 +117,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqColonAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Colon + 2
-        longLabel Colon A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Colon A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=COLON rep=rep2
         type bigWig 1.000000 725162.000000
         color 230,159,0
@@ -126,7 +126,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Liver A8 + 2
-        longLabel Liver A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Liver A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LIVER rep=rep2
         type bigWig 1.000000 2117547.000000
         color 230,159,0
@@ -135,7 +135,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqThymusAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Thymus + 1
-        longLabel Thymus A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Thymus A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=THYMUS rep=rep1
         type bigWig 1.000000 1559615.000000
         color 86,180,233
@@ -144,7 +144,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqKidneyAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel Kidney + 1
-        longLabel Kidney A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Kidney A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=KIDNEY rep=rep1
         type bigWig 1.000000 964197.000000
         color 204,121,167
@@ -153,7 +153,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqColonAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Colon + 1
-        longLabel Colon A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Colon A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=COLON rep=rep1
         type bigWig 1.000000 935051.000000
         color 230,159,0
@@ -162,7 +162,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqThymusAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Thymus + 2
-        longLabel Thymus A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Thymus A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=THYMUS rep=rep2
         type bigWig 1.000000 1366028.000000
         color 86,180,233
@@ -171,7 +171,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSpleenAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel Spleen + 1
-        longLabel Spleen A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Spleen A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=SPLEEN rep=rep1
         type bigWig 1.000000 3071679.000000
         color 86,180,233
@@ -180,7 +180,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqTestisAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal 
         shortLabel Testis + 1
-        longLabel Testis A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Testis A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=TESTIS rep=rep1
         type bigWig 1.000000 353102.000000
         color 0,158,115
@@ -189,7 +189,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqTestisAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal 
         shortLabel Testis + 2
-        longLabel Testis A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Testis A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=TESTIS rep=rep2
         type bigWig 1.000000 554501.000000
         color 0,158,115
@@ -198,7 +198,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel GenFatPad + 1
-        longLabel Genital Fat Pad A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Genital Fat Pad A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=GFAT rep=rep1
         type bigWig 1.000000 753772.000000
         color 189,0,157
@@ -207,7 +207,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel Ovary + 2
-        longLabel Ovary A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Ovary A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=OVARY rep=rep2
         type bigWig 1.000000 1240022.000000
         color 0,158,115
@@ -216,7 +216,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel MaGland + 1
-        longLabel Mammary Gland A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Mammary Gland A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=MAMG rep=rep1
         type bigWig 1.000000 1249790.000000
         color 0,158,115
@@ -225,7 +225,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Adrenal + 2
-        longLabel Adrenal A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Adrenal A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=ADRENAL rep=rep2
         type bigWig 1.000000 665516.000000
         color 189,0,157
@@ -234,7 +234,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel SmInt + 2
-        longLabel Small Intestine A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Small Intestine A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=SMINT rep=rep2
         type bigWig 1.000000 1357587.000000
         color 230,159,0
@@ -243,7 +243,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel SubcFatPad + 1
-        longLabel Subcutaneous Fat Pad A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Subcutaneous Fat Pad A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=SUFAT rep=rep1
         type bigWig 1.000000 596899.000000
         color 189,0,157
@@ -252,7 +252,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel GenFatPad + 2
-        longLabel Genital Fat Pad A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Genital Fat Pad A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=GFAT rep=rep2
         type bigWig 1.000000 504194.000000
         color 189,0,157
@@ -261,7 +261,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Stomach + 2
-        longLabel Stomach A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Stomach A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=STOM rep=rep2
         type bigWig 1.000000 4021214.000000
         color 230,159,0
@@ -270,7 +270,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel LgInt + 2
-        longLabel Large Intestine A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Large Intestine A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LGINT rep=rep2
         type bigWig 1.000000 1055697.000000
         color 230,159,0
@@ -279,7 +279,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Duodenum + 1
-        longLabel Duodenum A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Duodenum A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=DUOD rep=rep1
         type bigWig 1.000000 1962905.000000
         color 230,159,0
@@ -288,7 +288,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel SubcFatPad + 2
-        longLabel Subcutaneous Fat Pad A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Subcutaneous Fat Pad A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=SUFAT rep=rep2
         type bigWig 1.000000 801696.000000
         color 189,0,157
@@ -297,7 +297,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Adrenal + 1
-        longLabel Adrenal A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Adrenal A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=ADRENAL rep=rep1
         type bigWig 1.000000 554318.000000
         color 189,0,157
@@ -306,7 +306,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel LgInt + 1
-        longLabel Large Intestine A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Large Intestine A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=LGINT rep=rep1
         type bigWig 1.000000 708868.000000
         color 230,159,0
@@ -315,7 +315,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel Ovary + 1
-        longLabel Ovary A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Ovary A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=OVARY rep=rep1
         type bigWig 1.000000 243375.000000
         color 0,158,115
@@ -324,7 +324,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel MaGland + 2
-        longLabel Mammary Gland A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Mammary Gland A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=MAMG rep=rep2
         type bigWig 1.000000 712426.000000
         color 0,158,115
@@ -333,7 +333,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Stomach + 1
-        longLabel Stomach A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Stomach A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=STOM rep=rep1
         type bigWig 1.000000 2267153.000000
         color 230,159,0
@@ -342,7 +342,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Duodenum + 2
-        longLabel Duodenum A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Duodenum A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=DUOD rep=rep2
         type bigWig 1.000000 2658856.000000
         color 230,159,0
@@ -351,7 +351,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel SmInt + 1
-        longLabel Small Intestine A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Small Intestine A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=SMINT rep=rep1
         type bigWig 1.000000 3416337.000000
         color 230,159,0
@@ -360,7 +360,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqKidneyAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal
         shortLabel Kidney + 2
-        longLabel Kidney A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Kidney A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=KIDNEY rep=rep2
         type bigWig 1.000000 1934001.000000
         color 204,121,167
@@ -369,7 +369,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE14PlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Liver E14 + 1
-        longLabel Liver E14 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Liver E14 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14 cellType=LIVER rep=rep1
         type bigWig 1.000000 15383945.000000
         color 230,159,0
@@ -378,7 +378,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE11halfPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel CNS E11.5 + 2
-        longLabel CNS E11.5 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel CNS E11.5 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E11HALF cellType=CNS rep=rep2
         type bigWig 1.000000 646546.000000
         color 105,105,105
@@ -387,7 +387,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqWbrainE14halfPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel WholeBrain + 1
-        longLabel Whole Brain E14.5 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Whole Brain E14.5 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14HALF cellType=WBRAIN rep=rep1
         type bigWig 1.000000 257245.000000
         color 105,105,105
@@ -396,7 +396,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLimbE14halfPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Limb + 1
-        longLabel Limb E14.5 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Limb E14.5 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14HALF cellType=LIMB rep=rep1
         type bigWig 1.000000 717738.000000
         color 102,50,200
@@ -405,7 +405,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE14halfPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Liver E14.5 + 1
-        longLabel Liver E14.5 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Liver E14.5 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14HALF cellType=LIVER rep=rep1
         type bigWig 1.000000 15356158.000000
         color 230,159,0
@@ -414,7 +414,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqPlacAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Placenta + 1
-        longLabel Placenta A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Placenta A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=PLAC rep=rep1
         type bigWig 1.000000 1833846.000000
         color 153,38,0
@@ -423,7 +423,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE14halfPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Liver E14.5 + 2
-        longLabel Liver E14.5 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Liver E14.5 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14HALF cellType=LIVER rep=rep2
         type bigWig 1.000000 25603984.000000
         color 230,159,0
@@ -432,7 +432,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCbellumAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Cerebellum + 2
-        longLabel Cerebellum A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Cerebellum A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=CBELLUM rep=rep2
         type bigWig 1.000000 878213.000000
         color 105,105,105
@@ -441,7 +441,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE14PlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Liver E14 + 2
-        longLabel Liver E14 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Liver E14 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14 cellType=LIVER rep=rep2
         type bigWig 1.000000 18756232.000000
         color 230,159,0
@@ -450,7 +450,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE18PlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Liver E18 + 2
-        longLabel Liver E18 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Liver E18 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E18 cellType=LIVER rep=rep2
         type bigWig 1.000000 7504586.000000
         color 230,159,0
@@ -459,7 +459,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCortexAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Cortex + 1
-        longLabel Cortex A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Cortex A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=CORTEX rep=rep1
         type bigWig 1.000000 1131486.000000
         color 105,105,105
@@ -468,7 +468,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLimbE14halfPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Limb + 2
-        longLabel Limb E14.5 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Limb E14.5 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14HALF cellType=LIMB rep=rep2
         type bigWig 1.000000 697216.000000
         color 102,50,200
@@ -477,7 +477,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE14PlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel CNS E14 + 2
-        longLabel CNS E14 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel CNS E14 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14 cellType=CNS rep=rep2
         type bigWig 1.000000 935604.000000
         color 105,105,105
@@ -486,7 +486,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE18PlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel CNS E18 + 1
-        longLabel CNS E18 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel CNS E18 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E18 cellType=CNS rep=rep1
         type bigWig 1.000000 311688.000000
         color 105,105,105
@@ -495,7 +495,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE14PlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel CNS E14 + 1
-        longLabel CNS E14 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel CNS E14 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14 cellType=CNS rep=rep1
         type bigWig 1.000000 527651.000000
         color 105,105,105
@@ -504,7 +504,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqBladderAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Bladder + 2
-        longLabel Bladder A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Bladder A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=BLADDER rep=rep2
         type bigWig 1.000000 784114.000000
         color 204,121,167
@@ -513,7 +513,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqBladderAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Bladder + 1
-        longLabel Bladder A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Bladder A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=BLADDER rep=rep1
         type bigWig 1.000000 908532.000000
         color 204,121,167
@@ -522,7 +522,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCbellumAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Cerebellum + 1
-        longLabel Cerebellum A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Cerebellum A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=CBELLUM rep=rep1
         type bigWig 1.000000 864867.000000
         color 105,105,105
@@ -531,7 +531,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqFlobeAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel FrontalLobe + 2
-        longLabel Frontal Lobe A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Frontal Lobe A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=FLOBE rep=rep2
         type bigWig 1.000000 1178288.000000
         color 105,105,105
@@ -540,7 +540,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqWbrainE14halfPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel WholeBrain + 2
-        longLabel Whole Brain E14.5 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Whole Brain E14.5 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E14HALF cellType=WBRAIN rep=rep2
         type bigWig 1.000000 957920.000000
         color 105,105,105
@@ -549,7 +549,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE11halfPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel CNS E11.5 + 1
-        longLabel CNS E11.5 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel CNS E11.5 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E11HALF cellType=CNS rep=rep1
         type bigWig 1.000000 1047677.000000
         color 105,105,105
@@ -558,7 +558,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqPlacAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Placenta + 2
-        longLabel Placenta A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Placenta A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=PLAC rep=rep2
         type bigWig 1.000000 5031153.000000
         color 153,38,0
@@ -567,7 +567,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE18PlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Liver E18 + 1
-        longLabel Liver E18 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Liver E18 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E18 cellType=LIVER rep=rep1
         type bigWig 1.000000 8811002.000000
         color 230,159,0
@@ -576,7 +576,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE18PlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel CNS E18 + 2
-        longLabel CNS E18 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel CNS E18 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=E18 cellType=CNS rep=rep2
         type bigWig 1.000000 438350.000000
         color 105,105,105
@@ -585,7 +585,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqFlobeAdult8wksPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel FrontalLobe + 1
-        longLabel Frontal Lobe A8 Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel Frontal Lobe A8 Long RNA-seq Plus Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=FLOBE rep=rep1
         type bigWig 1.000000 1301024.000000
         color 105,105,105
@@ -594,7 +594,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCortexAdult8wksPlusRawRep2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSignal off
         shortLabel Cortex + 2
-        longLabel Cortex A8 Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel Cortex A8 Long RNA-seq Plus Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=CORTEX rep=rep2
         type bigWig 1.000000 2017463.000000
         color 105,105,105
@@ -616,7 +616,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSpleenAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Spleen - 2
-        longLabel Spleen A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Spleen A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=SPLEEN rep=rep2
         type bigWig 1.000000 2205882.000000
         color 86,180,233
@@ -625,7 +625,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqHeartAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Heart - 2
-        longLabel Heart A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Heart A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=HEART rep=rep2
         type bigWig 1.000000 2232933.000000
         color 153,38,0
@@ -634,7 +634,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqHeartAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Heart - 1
-        longLabel Heart A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Heart A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=HEART rep=rep1
         type bigWig 1.000000 2343090.000000
         color 153,38,0
@@ -643,7 +643,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLungAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Lung - 1
-        longLabel Lung A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Lung A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LUNG rep=rep1
         type bigWig 1.000000 1083071.000000
         # subId=5428 dateSubmitted=2012-01-05
@@ -651,7 +651,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLungAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Lung - 2
-        longLabel Lung A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Lung A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LUNG rep=rep2
         type bigWig 1.000000 1199651.000000
         # subId=5429 dateSubmitted=2012-01-05
@@ -659,7 +659,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Liver A8 - 1
-        longLabel Liver A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Liver A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LIVER rep=rep1
         type bigWig 1.000000 547737.000000
         color 230,159,0
@@ -668,7 +668,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqColonAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Colon - 2
-        longLabel Colon A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Colon A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=COLON rep=rep2
         type bigWig 1.000000 432217.000000
         color 230,159,0
@@ -677,7 +677,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Liver A8 - 2
-        longLabel Liver A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Liver A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LIVER rep=rep2
         type bigWig 1.000000 513460.000000
         color 230,159,0
@@ -686,7 +686,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqThymusAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Thymus - 1
-        longLabel Thymus A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Thymus A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=THYMUS rep=rep1
         type bigWig 1.000000 669286.000000
         color 86,180,233
@@ -695,7 +695,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqKidneyAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Kidney - 1
-        longLabel Kidney A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Kidney A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=KIDNEY rep=rep1
         type bigWig 1.000000 742879.000000
         color 204,121,167
@@ -704,7 +704,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqColonAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Colon - 1
-        longLabel Colon A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Colon A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=COLON rep=rep1
         type bigWig 1.000000 295940.000000
         color 230,159,0
@@ -713,7 +713,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqThymusAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Thymus - 2
-        longLabel Thymus A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Thymus A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=THYMUS rep=rep2
         type bigWig 1.000000 634555.000000
         color 86,180,233
@@ -722,7 +722,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSpleenAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Spleen - 1
-        longLabel Spleen A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Spleen A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=SPLEEN rep=rep1
         type bigWig 1.000000 1080439.000000
         color 86,180,233
@@ -731,7 +731,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqTestisAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Testis - 1
-        longLabel Testis A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Testis A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=TESTIS rep=rep1
         type bigWig 1.000000 326358.000000
         color 0,158,115
@@ -740,7 +740,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqTestisAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Testis - 2
-        longLabel Testis A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Testis A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=TESTIS rep=rep2
         type bigWig 1.000000 340729.000000
         color 0,158,115
@@ -749,7 +749,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel GenFatPad - 1
-        longLabel Genital Fat Pad A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Genital Fat Pad A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=GFAT rep=rep1
         type bigWig 1.000000 390244.000000
         color 189,0,157
@@ -758,7 +758,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Ovary - 2
-        longLabel Ovary A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Ovary A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=OVARY rep=rep2
         type bigWig 1.000000 1299260.000000
         color 0,158,115
@@ -767,7 +767,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel MaGland - 1
-        longLabel Mammary Gland A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Mammary Gland A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=MAMG rep=rep1
         type bigWig 1.000000 844027.000000
         color 0,158,115
@@ -776,7 +776,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Adrenal - 2
-        longLabel Adrenal A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Adrenal A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=ADRENAL rep=rep2
         type bigWig 1.000000 547818.000000
         color 189,0,157
@@ -785,7 +785,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel SmInt - 2
-        longLabel Small Intestine A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Small Intestine A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=SMINT rep=rep2
         type bigWig 1.000000 492337.000000
         color 230,159,0
@@ -794,7 +794,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel SubcFatPad - 1
-        longLabel Subcutaneous Fat Pad A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Subcutaneous Fat Pad A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=SUFAT rep=rep1
         type bigWig 1.000000 280620.000000
         color 189,0,157
@@ -803,7 +803,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel GenFatPad - 2
-        longLabel Genital Fat Pad A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Genital Fat Pad A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=GFAT rep=rep2
         type bigWig 1.000000 278328.000000
         color 189,0,157
@@ -812,7 +812,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Stomach - 2
-        longLabel Stomach A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Stomach A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=STOM rep=rep2
         type bigWig 1.000000 5462174.000000
         color 230,159,0
@@ -821,7 +821,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel LgInt - 2
-        longLabel Large Intestine A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Large Intestine A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LGINT rep=rep2
         type bigWig 1.000000 327311.000000
         color 230,159,0
@@ -830,7 +830,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Duodenum - 1
-        longLabel Duodenum A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Duodenum A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=DUOD rep=rep1
         type bigWig 1.000000 663503.000000
         color 230,159,0
@@ -839,7 +839,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel SubcFatPad - 2
-        longLabel Subcutaneous Fat Pad A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Subcutaneous Fat Pad A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=SUFAT rep=rep2
         type bigWig 1.000000 581537.000000
         color 189,0,157
@@ -848,7 +848,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Adrenal - 1
-        longLabel Adrenal A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Adrenal A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=ADRENAL rep=rep1
         type bigWig 1.000000 461984.000000
         color 189,0,157
@@ -857,7 +857,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel LgInt - 1
-        longLabel Large Intestine A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Large Intestine A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=LGINT rep=rep1
         type bigWig 1.000000 318236.000000
         color 230,159,0
@@ -866,7 +866,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Ovary - 1
-        longLabel Ovary A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Ovary A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=OVARY rep=rep1
         type bigWig 1.000000 111584.000000
         color 0,158,115
@@ -875,7 +875,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel MaGland - 2
-        longLabel Mammary Gland A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Mammary Gland A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=MAMG rep=rep2
         type bigWig 1.000000 267141.000000
         color 0,158,115
@@ -884,7 +884,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Stomach - 1
-        longLabel Stomach A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Stomach A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=STOM rep=rep1
         type bigWig 1.000000 3101357.000000
         color 230,159,0
@@ -893,7 +893,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Duodenum - 2
-        longLabel Duodenum A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Duodenum A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=DUOD rep=rep2
         type bigWig 1.000000 1258908.000000
         color 230,159,0
@@ -902,7 +902,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel SmInt - 1
-        longLabel Small Intestine A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Small Intestine A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=SMINT rep=rep1
         type bigWig 1.000000 1662167.000000
         color 230,159,0
@@ -911,7 +911,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqKidneyAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal
         shortLabel Kidney - 2
-        longLabel Kidney A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Kidney A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=KIDNEY rep=rep2
         type bigWig 1.000000 1498409.000000
         color 204,121,167
@@ -920,7 +920,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE14MinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Liver E14 - 1
-        longLabel Liver E14 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Liver E14 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14 cellType=LIVER rep=rep1
         type bigWig 1.000000 14241027.000000
         color 230,159,0
@@ -929,7 +929,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE11halfMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel CNS E11.5 - 2
-        longLabel CNS E11.5 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel CNS E11.5 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E11HALF cellType=CNS rep=rep2
         type bigWig 1.000000 330563.000000
         color 105,105,105
@@ -938,7 +938,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqWbrainE14halfMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel WholeBrain - 1
-        longLabel Whole Brain E14.5 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Whole Brain E14.5 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14HALF cellType=WBRAIN rep=rep1
         type bigWig 1.000000 484041.000000
         color 105,105,105
@@ -947,7 +947,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLimbE14halfMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Limb - 1
-        longLabel Limb E14.5 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Limb E14.5 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14HALF cellType=LIMB rep=rep1
         type bigWig 1.000000 317417.000000
         color 102,50,200
@@ -956,7 +956,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE14halfMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Liver E14.5 - 1
-        longLabel Liver E14.5 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Liver E14.5 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14HALF cellType=LIVER rep=rep1
         type bigWig 1.000000 14246225.000000
         color 230,159,0
@@ -965,7 +965,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqPlacAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Placenta - 1
-        longLabel Placenta A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Placenta A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=PLAC rep=rep1
         type bigWig 1.000000 907082.000000
         color 153,38,0
@@ -974,7 +974,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE14halfMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Liver E14.5 - 2
-        longLabel Liver E14.5 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Liver E14.5 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14HALF cellType=LIVER rep=rep2
         type bigWig 1.000000 12442109.000000
         color 230,159,0
@@ -983,7 +983,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCbellumAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Cerebellum - 2
-        longLabel Cerebellum A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Cerebellum A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=CBELLUM rep=rep2
         type bigWig 1.000000 586025.000000
         color 105,105,105
@@ -992,7 +992,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE14MinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Liver E14 - 2
-        longLabel Liver E14 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Liver E14 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14 cellType=LIVER rep=rep2
         type bigWig 1.000000 19676648.000000
         color 230,159,0
@@ -1001,7 +1001,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE18MinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Liver E18 - 2
-        longLabel Liver E18 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Liver E18 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E18 cellType=LIVER rep=rep2
         type bigWig 1.000000 6178518.000000
         color 230,159,0
@@ -1010,7 +1010,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCortexAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Cortex - 1
-        longLabel Cortex A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Cortex A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=CORTEX rep=rep1
         type bigWig 1.000000 1004512.000000
         color 105,105,105
@@ -1019,7 +1019,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLimbE14halfMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Limb - 2
-        longLabel Limb E14.5 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Limb E14.5 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14HALF cellType=LIMB rep=rep2
         type bigWig 1.000000 280410.000000
         color 102,50,200
@@ -1028,7 +1028,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE14MinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel CNS E14 - 2
-        longLabel CNS E14 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel CNS E14 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14 cellType=CNS rep=rep2
         type bigWig 1.000000 564636.000000
         color 105,105,105
@@ -1037,7 +1037,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE18MinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel CNS E18 - 1
-        longLabel CNS E18 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel CNS E18 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E18 cellType=CNS rep=rep1
         type bigWig 1.000000 474002.000000
         color 105,105,105
@@ -1046,7 +1046,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE14MinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel CNS E14 - 1
-        longLabel CNS E14 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel CNS E14 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14 cellType=CNS rep=rep1
         type bigWig 1.000000 339669.000000
         color 105,105,105
@@ -1055,7 +1055,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqBladderAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Bladder - 2
-        longLabel Bladder A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Bladder A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=BLADDER rep=rep2
         type bigWig 1.000000 398901.000000
         color 204,121,167
@@ -1064,7 +1064,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqBladderAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Bladder - 1
-        longLabel Bladder A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Bladder A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=BLADDER rep=rep1
         type bigWig 1.000000 626959.000000
         color 204,121,167
@@ -1073,7 +1073,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCbellumAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Cerebellum - 1
-        longLabel Cerebellum A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Cerebellum A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=CBELLUM rep=rep1
         type bigWig 1.000000 578586.000000
         color 105,105,105
@@ -1082,7 +1082,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqFlobeAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel FrontalLobe - 2
-        longLabel Frontal Lobe A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Frontal Lobe A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=FLOBE rep=rep2
         type bigWig 1.000000 998833.000000
         color 105,105,105
@@ -1091,7 +1091,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqWbrainE14halfMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel WholeBrain - 2
-        longLabel Whole Brain E14.5 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Whole Brain E14.5 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E14HALF cellType=WBRAIN rep=rep2
         type bigWig 1.000000 444396.000000
         color 105,105,105
@@ -1100,7 +1100,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE11halfMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel CNS E11.5 - 1
-        longLabel CNS E11.5 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel CNS E11.5 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E11HALF cellType=CNS rep=rep1
         type bigWig 1.000000 1135308.000000
         color 105,105,105
@@ -1109,7 +1109,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqPlacAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Placenta - 2
-        longLabel Placenta A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Placenta A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=PLAC rep=rep2
         type bigWig 1.000000 930592.000000
         color 153,38,0
@@ -1118,7 +1118,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqLiverE18MinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Liver E18 - 1
-        longLabel Liver E18 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Liver E18 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E18 cellType=LIVER rep=rep1
         type bigWig 1.000000 8260340.000000
         color 230,159,0
@@ -1127,7 +1127,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCnsE18MinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel CNS E18  - 2
-        longLabel CNS E18 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel CNS E18 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=E18 cellType=CNS rep=rep2
         type bigWig 1.000000 700305.000000
         color 105,105,105
@@ -1136,7 +1136,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqFlobeAdult8wksMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel FrontalLobe - 1
-        longLabel Frontal Lobe A8 Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel Frontal Lobe A8 Long RNA-seq Minus Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=FLOBE rep=rep1
         type bigWig 1.000000 1155431.000000
         color 105,105,105
@@ -1145,7 +1145,7 @@ html wgEncodeCshlLongRnaSeq.release2
         track wgEncodeCshlLongRnaSeqCortexAdult8wksMinusRawRep2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSignal off
         shortLabel Cortex - 2
-        longLabel Cortex A8 Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel Cortex A8 Long RNA-seq Minus Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=CORTEX rep=rep2
         type bigWig 1.000000 1082007.000000
         color 105,105,105
@@ -1717,7 +1717,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs
         shortLabel Heart C
         longLabel Heart A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=HEART rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=HEART rep=repP
         type bed 6 +
         color 153,38,0
         # subId=5570 dateSubmitted=2012-02-09
@@ -1726,7 +1726,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Colon C
         longLabel Colon A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=COLON rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=COLON rep=repP
         type bed 6 +
         color 230,159,0
         # subId=5566 dateSubmitted=2012-02-08
@@ -1735,7 +1735,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs
         shortLabel Kidney C
         longLabel Kidney A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=KIDNEY rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=KIDNEY rep=repP
         type bed 6 +
         color 204,121,167
         # subId=5571 dateSubmitted=2012-02-09
@@ -1744,7 +1744,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Lung C
         longLabel Lung A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=LUNG rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=LUNG rep=repP
         type bed 6 +
         # subId=5572 dateSubmitted=2012-02-09
 
@@ -1752,7 +1752,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Duodenum C
         longLabel Duodenum A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=DUOD rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=DUOD rep=repP
         type bed 6 +
         color 230,159,0
         # subId=5573 dateSubmitted=2012-02-09
@@ -1761,7 +1761,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel SmInt C
         longLabel Small Intestine A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=SMINT rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=SMINT rep=repP
         type bed 6 +
         color 230,159,0
         # subId=5574 dateSubmitted=2012-02-09
@@ -1770,7 +1770,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs
         shortLabel Spleen C
         longLabel Spleen A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=SPLEEN rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=SPLEEN rep=repP
         type bed 6 +
         color 86,180,233
         # subId=5575 dateSubmitted=2012-02-09
@@ -1779,7 +1779,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel MaGland C
         longLabel Mammary Gland A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=MAMG rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=MAMG rep=repP
         type bed 6 +
         color 0,158,115
         # subId=5576 dateSubmitted=2012-02-09
@@ -1788,7 +1788,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs
         shortLabel GenFatPad C
         longLabel Genital Fat Pad A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=GFAT rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=GFAT rep=repP
         type bed 6 +
         color 189,0,157
         # subId=5577 dateSubmitted=2012-02-09
@@ -1797,7 +1797,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel SubcFatPad C
         longLabel Subcutaneous Fat Pad A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=SUFAT rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=SUFAT rep=repP
         type bed 6 +
         color 189,0,157
         # subId=5578 dateSubmitted=2012-02-09
@@ -1806,7 +1806,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs
         shortLabel Testis C
         longLabel Testis A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=TESTIS rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=TESTIS rep=repP
         type bed 6 +
         color 0,158,115
         # subId=5579 dateSubmitted=2012-02-09
@@ -1815,7 +1815,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Liver A8 C
         longLabel Liver A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=LIVER rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=5580 dateSubmitted=2012-02-09
@@ -1824,7 +1824,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Stomach C
         longLabel Stomach A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=STOM rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=STOM rep=repP
         type bed 6 +
         color 230,159,0
         # subId=5581 dateSubmitted=2012-02-09
@@ -1833,7 +1833,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Thymus C
         longLabel Thymus A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=THYMUS rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=THYMUS rep=repP
         type bed 6 +
         color 86,180,233
         # subId=5582 dateSubmitted=2012-02-09
@@ -1842,7 +1842,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Adrenal C
         longLabel Adrenal A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=ADRENAL rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=ADRENAL rep=repP
         type bed 6 +
         color 189,0,157
         # subId=5583 dateSubmitted=2012-02-09
@@ -1851,7 +1851,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs
         shortLabel Ovary C
         longLabel Ovary A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=OVARY rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=OVARY rep=repP
         type bed 6 +
         color 0,158,115
         # subId=5584 dateSubmitted=2012-02-09
@@ -1860,7 +1860,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel LgInt C
         longLabel Large Intestine A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=LGINT rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=LGINT rep=repP
         type bed 6 +
         color 230,159,0
         # subId=5585 dateSubmitted=2012-02-09
@@ -1869,7 +1869,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Liver E14.5 C
         longLabel Liver E14.5 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=E14HALF cellType=LIVER rep=Pooled
+        subGroups view=Contigs age=E14HALF cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7344 dateSubmitted=2012-07-11
@@ -1878,7 +1878,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel CNS E14 C
         longLabel CNS E14 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=E14 cellType=CNS rep=Pooled
+        subGroups view=Contigs age=E14 cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7361 dateSubmitted=2012-07-13
@@ -1887,7 +1887,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel CNS E18 C
         longLabel CNS E18 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=E18 cellType=CNS rep=Pooled
+        subGroups view=Contigs age=E18 cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7364 dateSubmitted=2012-07-13
@@ -1896,7 +1896,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel WholeBrain C
         longLabel Whole Brain E14.5 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=E14HALF cellType=WBRAIN rep=Pooled
+        subGroups view=Contigs age=E14HALF cellType=WBRAIN rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7368 dateSubmitted=2012-07-13
@@ -1905,7 +1905,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel CNS E11.5 C
         longLabel CNS E11.5 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=E11HALF cellType=CNS rep=Pooled
+        subGroups view=Contigs age=E11HALF cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7369 dateSubmitted=2012-07-13
@@ -1914,7 +1914,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Placenta C
         longLabel Placenta A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=PLAC rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=PLAC rep=repP
         type bed 6 +
         color 153,38,0
         # subId=7370 dateSubmitted=2012-07-13
@@ -1923,7 +1923,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Cortex C
         longLabel Cortex A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=CORTEX rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=CORTEX rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7377 dateSubmitted=2012-07-14
@@ -1932,7 +1932,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Bladder C
         longLabel Bladder A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=BLADDER rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=BLADDER rep=repP
         type bed 6 +
         color 204,121,167
         # subId=7378 dateSubmitted=2012-07-14
@@ -1941,7 +1941,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Liver E14 C
         longLabel Liver E14 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=E14 cellType=LIVER rep=Pooled
+        subGroups view=Contigs age=E14 cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7383 dateSubmitted=2012-07-14
@@ -1950,7 +1950,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel FrontalLobe  C
         longLabel Frontal Lobe A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=FLOBE rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=FLOBE rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7384 dateSubmitted=2012-07-14
@@ -1959,7 +1959,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Limb C
         longLabel Limb E14.5 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=E14HALF cellType=LIMB rep=Pooled
+        subGroups view=Contigs age=E14HALF cellType=LIMB rep=repP
         type bed 6 +
         color 102,50,200
         # subId=7387 dateSubmitted=2012-07-14
@@ -1968,7 +1968,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Liver E18 C
         longLabel Liver E18 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=E18 cellType=LIVER rep=Pooled
+        subGroups view=Contigs age=E18 cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7392 dateSubmitted=2012-07-14
@@ -1977,7 +1977,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel Cerebellum C
         longLabel Cerebellum A8 Long RNA-seq Contigs from ENCODE/CSHL
-        subGroups view=Contigs age=ADULT8WKS cellType=CBELLUM rep=Pooled
+        subGroups view=Contigs age=ADULT8WKS cellType=CBELLUM rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7394 dateSubmitted=2012-07-14
@@ -1987,14 +1987,14 @@ maxWindowToDraw 1000000
     view Junctions
     visibility hide
     subTrack wgEncodeCshlLongRnaSeq
-    scoreFilter 200
-    scoreFilterLimits 0:100
+    scoreFilter 0
+    scoreFilterLimits 0:1000
 
         track wgEncodeCshlLongRnaSeqColonAdult8wksJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Colon J
         longLabel Colon A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=COLON rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=COLON rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6215 dateSubmitted=2012-03-23
@@ -2003,7 +2003,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Kidney J
         longLabel Kidney A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=KIDNEY rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=KIDNEY rep=repP
         type bed 6 +
         color 204,121,167
         # subId=6216 dateSubmitted=2012-03-23
@@ -2012,7 +2012,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Heart J
         longLabel Heart A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=HEART rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=HEART rep=repP
         type bed 6 +
         color 153,38,0
         # subId=6217 dateSubmitted=2012-03-23
@@ -2021,7 +2021,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Lung J
         longLabel Lung A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=LUNG rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=LUNG rep=repP
         type bed 6 +
         # subId=6218 dateSubmitted=2012-03-23
 
@@ -2029,7 +2029,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SmInt J
         longLabel Small Intestine A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=SMINT rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=SMINT rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6219 dateSubmitted=2012-03-23
@@ -2038,7 +2038,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Duodenum J
         longLabel Duodenum A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=DUOD rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=DUOD rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6220 dateSubmitted=2012-03-23
@@ -2047,7 +2047,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel MaGland J
         longLabel Mammary Gland A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=MAMG rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=MAMG rep=repP
         type bed 6 +
         color 0,158,115
         # subId=6221 dateSubmitted=2012-03-23
@@ -2056,7 +2056,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Spleen J
         longLabel Spleen A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=SPLEEN rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=SPLEEN rep=repP
         type bed 6 +
         color 86,180,233
         # subId=6222 dateSubmitted=2012-03-23
@@ -2065,7 +2065,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel GenFatPad J
         longLabel Genital Fat Pad A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=GFAT rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=GFAT rep=repP
         type bed 6 +
         color 189,0,157
         # subId=6223 dateSubmitted=2012-03-23
@@ -2074,7 +2074,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SubcFatPad J
         longLabel Subcutaneous Fat Pad A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=SUFAT rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=SUFAT rep=repP
         type bed 6 +
         color 189,0,157
         # subId=6224 dateSubmitted=2012-03-23
@@ -2083,7 +2083,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Testis J
         longLabel Testis A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=TESTIS rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=TESTIS rep=repP
         type bed 6 +
         color 0,158,115
         # subId=6225 dateSubmitted=2012-03-23
@@ -2092,7 +2092,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Liver A8 J
         longLabel Liver A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=LIVER rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6226 dateSubmitted=2012-03-23
@@ -2101,7 +2101,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Stomach J
         longLabel Stomach A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=STOM rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=STOM rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6227 dateSubmitted=2012-03-23
@@ -2110,7 +2110,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Thymus J
         longLabel Thymus A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=THYMUS rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=THYMUS rep=repP
         type bed 6 +
         color 86,180,233
         # subId=6228 dateSubmitted=2012-03-23
@@ -2119,7 +2119,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Adrenal J
         longLabel Adrenal A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=ADRENAL rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=ADRENAL rep=repP
         type bed 6 +
         color 189,0,157
         # subId=6229 dateSubmitted=2012-03-23
@@ -2128,7 +2128,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Ovary J
         longLabel Ovary A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=OVARY rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=OVARY rep=repP
         type bed 6 +
         color 0,158,115
         # subId=6230 dateSubmitted=2012-03-23
@@ -2137,7 +2137,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel LgInt J
         longLabel Large Intestine A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=LGINT rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=LGINT rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6231 dateSubmitted=2012-03-23
@@ -2146,7 +2146,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Liver E14.5 J
         longLabel Liver E14.5 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14HALF cellType=LIVER rep=Pooled
+        subGroups view=Junctions age=E14HALF cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7344 dateSubmitted=2012-07-11
@@ -2155,7 +2155,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel CNS E14 J
         longLabel CNS E14 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14 cellType=CNS rep=Pooled
+        subGroups view=Junctions age=E14 cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7361 dateSubmitted=2012-07-13
@@ -2164,7 +2164,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel CNS E18 J
         longLabel CNS E18 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E18 cellType=CNS rep=Pooled
+        subGroups view=Junctions age=E18 cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7364 dateSubmitted=2012-07-13
@@ -2173,7 +2173,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel WholeBrain J
         longLabel Whole Brain E14.5 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14HALF cellType=WBRAIN rep=Pooled
+        subGroups view=Junctions age=E14HALF cellType=WBRAIN rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7368 dateSubmitted=2012-07-13
@@ -2182,7 +2182,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel CNS E11.5 J
         longLabel CNS E11.5 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E11HALF cellType=CNS rep=Pooled
+        subGroups view=Junctions age=E11HALF cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7369 dateSubmitted=2012-07-13
@@ -2191,7 +2191,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Placenta J
         longLabel Placenta A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=PLAC rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=PLAC rep=repP
         type bed 6 +
         color 153,38,0
         # subId=7370 dateSubmitted=2012-07-13
@@ -2200,7 +2200,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Cortex J
         longLabel Cortex A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=CORTEX rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=CORTEX rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7377 dateSubmitted=2012-07-14
@@ -2209,7 +2209,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Bladder J
         longLabel Bladder A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=BLADDER rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=BLADDER rep=repP
         type bed 6 +
         color 204,121,167
         # subId=7378 dateSubmitted=2012-07-14
@@ -2218,7 +2218,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Liver E14 J
         longLabel Liver E14 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14 cellType=LIVER rep=Pooled
+        subGroups view=Junctions age=E14 cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7383 dateSubmitted=2012-07-14
@@ -2227,7 +2227,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel FrontalLobe J
         longLabel Frontal Lobe A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=FLOBE rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=FLOBE rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7384 dateSubmitted=2012-07-14
@@ -2236,7 +2236,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Limb J
         longLabel Limb E14.5 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14HALF cellType=LIMB rep=Pooled
+        subGroups view=Junctions age=E14HALF cellType=LIMB rep=repP
         type bed 6 +
         color 102,50,200
         # subId=7387 dateSubmitted=2012-07-14
@@ -2245,7 +2245,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Liver E18 J
         longLabel Liver E18 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E18 cellType=LIVER rep=Pooled
+        subGroups view=Junctions age=E18 cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7392 dateSubmitted=2012-07-14
@@ -2254,7 +2254,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Cerebellum J
         longLabel Cerebellum A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=CBELLUM rep=Pooled
+        subGroups view=Junctions age=ADULT8WKS cellType=CBELLUM rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7394 dateSubmitted=2012-07-14
