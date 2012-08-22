@@ -1,8 +1,8 @@
-# PSU DnaseI HS Track wrangler:vsmalladi
+# PSU DNaseI HS Track wrangler:vsmalladi
 
 track wgEncodePsuDnase
 compositeTrack on
-shortLabel PSU DnaseI HS
+shortLabel PSU DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/PSU
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal

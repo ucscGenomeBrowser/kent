@@ -11075,8 +11075,8 @@ lab Bernstein
 lots A300-861A-1
 targetId GeneCards:KDM4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM4A
-validation JMJD2A_(A300-861A-1)(ChIP,WesternBlot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
-label JMJD2A (A300-861A-1)
+validation JMJD2A_(A300-861A)(ChIP,WesternBlot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
+label JMJD2A (A300-861A)
 
 term JunD
 tag JUND
