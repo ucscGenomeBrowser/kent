@@ -22,6 +22,7 @@ lab CSHL-m
 labExpId LID20728
 localization cell
 md5sum 91a501fe63306d15749a0003849f919c,a117f019f0b35f8d8bab60cae8de2f2e
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -51,6 +52,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20728
 localization cell
+md5sum 71e18d8da2b164f0cb71123b3161508a,aca31b16cd476655e91f6c034d970c69
 project wgEncode
 readType 2x76D
 replicate 1
@@ -82,6 +84,7 @@ lab CSHL-m
 labExpId LID20729
 localization cell
 md5sum 0c653c2ce4ce05df6653bb460c3a2336,d0054667d050ad3f9ca1d22651d107b0
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -111,6 +114,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20729
 localization cell
+md5sum 98b5e08df0ea73fd07244c764d8159ff,20ade5d22552cf0108de72cb83d7e631
 project wgEncode
 readType 2x76D
 replicate 2
@@ -563,7 +567,7 @@ lab CSHL-m
 labExpId LID20728
 localization cell
 md5sum 3bd94337b7e3b83d9a7ff389d85a6936
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -625,7 +629,7 @@ lab CSHL-m
 labExpId LID20729
 localization cell
 md5sum 7a873c351b14d77dab922cd90499ff8c
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -743,6 +747,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030
 localization cell
+md5sum 1e56577882c46a2a88fc2636a12ca288,2d398925ad7cfa3073615a0dbd637ce2
 project wgEncode
 readType 2x101D
 replicate 1
@@ -772,6 +777,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47031
 localization cell
+md5sum c82de56373defda5f1ac12cb0a1a7c75,7e90e970c291668b83cd72eff45f7aba
 project wgEncode
 readType 2x101D
 replicate 2
@@ -801,6 +807,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030,LID47031
 localization cell
+md5sum 84f72dcd1a3a61a39c66df1285bff466
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -829,6 +836,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030,LID47031
 localization cell
+md5sum 6a46cd18b5c98a7211ecb6cfca97f1dd
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -857,6 +865,7 @@ lab CSHL-m
 labExpId LID47030,LID47031
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 8e17d7ca4494bd2ea6ba9bf1ce293906
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -884,6 +893,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030
 localization cell
+md5sum 3acaa1bf4440adf3a7289815363ea39e
 project wgEncode
 readType 2x101D
 replicate 1
@@ -912,6 +922,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47031
 localization cell
+md5sum 86470d676073ec5a9f83b428f9271562
 project wgEncode
 readType 2x101D
 replicate 2
@@ -940,6 +951,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030
 localization cell
+md5sum 3c88deabd6306be1be02bcdd13eea3db
 project wgEncode
 readType 2x101D
 replicate 1
@@ -968,6 +980,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47031
 localization cell
+md5sum 3995c4129bffb0c357e267443f882ebf
 project wgEncode
 readType 2x101D
 replicate 2
@@ -996,6 +1009,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030,LID47031
 localization cell
+md5sum f1d54a7176432b44800570bb1c75803a
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1024,6 +1038,7 @@ lab CSHL-m
 labExpId LID47030,LID47031
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum c9896eca0ea8bb404a7e65aaa6529c1b
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1051,6 +1066,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030,LID47031
 localization cell
+md5sum 821ed5573e688ff8dd89f2ac0962910c
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1079,6 +1095,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030
 localization cell
+md5sum 1d1e4565248c1f042772dcfa94880014
 project wgEncode
 readType 2x101D
 replicate 1
@@ -1108,6 +1125,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47031
 localization cell
+md5sum 9694d96bebb0ef3502f581b36eba0182
 project wgEncode
 readType 2x101D
 replicate 2
@@ -1137,6 +1155,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030
 localization cell
+md5sum 680b33c3c092c37fea2b731dc2466e1b
 project wgEncode
 readType 2x101D
 replicate 1
@@ -1166,6 +1185,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47031
 localization cell
+md5sum a9b70a01af4f1ed323dbb42ba153be72
 project wgEncode
 readType 2x101D
 replicate 2
@@ -1257,6 +1277,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47030,LID47031
 localization cell
+md5sum b45bde38e95ade07971d34cf20968b28
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1285,6 +1306,7 @@ lab CSHL-m
 labExpId LID47030,LID47031
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 2e16bb15732b062764c022f04c37b421
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1312,6 +1334,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036
 localization cell
+md5sum 5c76aa2f519a1ee38b23f8fb35c20e15,ab0523339e46bb4a28c0fe5f17487c86
 project wgEncode
 readType 2x101D
 replicate 1
@@ -1341,6 +1364,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47037
 localization cell
+md5sum 17096dccb2bab597886b366b12ff62e9,124fdcabd08ab1c702a18261a68b572a
 project wgEncode
 readType 2x101D
 replicate 2
@@ -1370,6 +1394,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036,LID47037
 localization cell
+md5sum 5a991b1487a5f3b7af587c0019f6e45a
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1398,6 +1423,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036,LID47037
 localization cell
+md5sum 242618af44af7e5c5bbff028b1bdcf4d
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1426,6 +1452,7 @@ lab CSHL-m
 labExpId LID47036,LID47037
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 7cdaa171306f9218ba9de2d4cc1cbd94
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1453,6 +1480,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036
 localization cell
+md5sum 1914be2648b13bb95232eb88e1e2c943
 project wgEncode
 readType 2x101D
 replicate 1
@@ -1481,6 +1509,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47037
 localization cell
+md5sum 54cf5077cb0c14e3f042c7929cb6091b
 project wgEncode
 readType 2x101D
 replicate 2
@@ -1509,6 +1538,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036
 localization cell
+md5sum a27041e20c8d1715edcf1cbb3871babf
 project wgEncode
 readType 2x101D
 replicate 1
@@ -1537,6 +1567,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47037
 localization cell
+md5sum 02b47fcc3d242a19ce9b9361d939c6a1
 project wgEncode
 readType 2x101D
 replicate 2
@@ -1565,6 +1596,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036,LID47037
 localization cell
+md5sum 92bc4a7740ab461cb2fc1ce9ff83f059
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1593,6 +1625,7 @@ lab CSHL-m
 labExpId LID47036,LID47037
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum e277c68698d1db8b376aee7e54fbbeef
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1620,6 +1653,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036,LID47037
 localization cell
+md5sum 867927ef9581119b03842be40a4e62a7
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1648,6 +1682,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036
 localization cell
+md5sum 3d5bef5231d2d52c89bbae40736d56e2
 project wgEncode
 readType 2x101D
 replicate 1
@@ -1677,6 +1712,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47037
 localization cell
+md5sum 8378f7571691ba1b61633d2006e1c615
 project wgEncode
 readType 2x101D
 replicate 2
@@ -1706,6 +1742,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036
 localization cell
+md5sum 6bbd84ed0668ef40690938f9b8825de0
 project wgEncode
 readType 2x101D
 replicate 1
@@ -1735,6 +1772,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47037
 localization cell
+md5sum d114a810a72bf1260ea8fe5cf511561a
 project wgEncode
 readType 2x101D
 replicate 2
@@ -1826,6 +1864,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47036,LID47037
 localization cell
+md5sum a6cf1721b48f6fbe201bb20e03ead65d
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1854,6 +1893,7 @@ lab CSHL-m
 labExpId LID47036,LID47037
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 6f19d0915b448adb2df3dabcee52fa00
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1881,6 +1921,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946
 localization cell
+md5sum ec10815def5836c380635a5443dc5d4e,800a7b4012a99a9d5188692afca5929e
 project wgEncode
 readType 2x101D
 replicate 1
@@ -1910,6 +1951,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46947
 localization cell
+md5sum 10c9cc1bc92820852a653da98038c9fa,90af0abc18f453db27218a7475747ba1
 project wgEncode
 readType 2x101D
 replicate 2
@@ -1939,6 +1981,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946,LID46947
 localization cell
+md5sum 0f4cc0aaebb54c372d4d12e1c7fb6a8f
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1967,6 +2010,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946,LID46947
 localization cell
+md5sum b3fa49ff82ccdfe3a2fda5af1819a92f
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -1995,6 +2039,7 @@ lab CSHL-m
 labExpId LID46946,LID46947
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum c6519a391fcc27e7682f73681c7a6298
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2022,6 +2067,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946
 localization cell
+md5sum 726a712228b59952670821b3f11520f8
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2050,6 +2096,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46947
 localization cell
+md5sum 64a6e108ac892f579d22fde3cea23472
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2078,6 +2125,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946
 localization cell
+md5sum a1b132f97d3f5e239193c89bebd5b665
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2106,6 +2154,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46947
 localization cell
+md5sum 1650cd9ace630eec3566faee7470d462
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2134,6 +2183,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946,LID46947
 localization cell
+md5sum 513ec89f2e612c2fbbd027b17d6e6cb7
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2162,6 +2212,7 @@ lab CSHL-m
 labExpId LID46946,LID46947
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 59fca19199858b77cc603b96ad6cab5b
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2189,6 +2240,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946,LID46947
 localization cell
+md5sum 913b24d24458131cbdfc99144adcda7d
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2217,6 +2269,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946
 localization cell
+md5sum dee1c848169fc0fd7921b94cab056630
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2246,6 +2299,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46947
 localization cell
+md5sum 7e66cef818c38ab9204c627973445e5a
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2275,6 +2329,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946
 localization cell
+md5sum 240998a1768a7ccd40aa7355612fc9f3
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2304,6 +2359,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46947
 localization cell
+md5sum 7f74425c13b039b868020ec4436e3ebd
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2395,6 +2451,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46946,LID46947
 localization cell
+md5sum be536e0534ab15f65a2bd961933be955
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2423,6 +2480,7 @@ lab CSHL-m
 labExpId LID46946,LID46947
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 6bb2ae1baa3a19b4f69c81e407a556b3
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2450,6 +2508,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46948
 localization cell
+md5sum 0bed0472f8f1ae17bf43b5ce67d4b56b,f53d0cbb25ff198148727aeac4aa7989
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2479,6 +2538,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46949
 localization cell
+md5sum e992f573bc1a692f81a6689759f5c62c,3a0c489daca0e3284e9357fac6bef2cc
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2508,6 +2568,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46948,LID46949
 localization cell
+md5sum 369351fbffcc5c89ab8d6c51d74e0409
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2536,6 +2597,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46949,LID46948
 localization cell
+md5sum 08bec91272fa438090687cbe543f44e5
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2564,6 +2626,7 @@ lab CSHL-m
 labExpId LID46949,LID46948
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum e1fcbbb55210ba1a14cbd228f29f6161
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2591,6 +2654,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46948
 localization cell
+md5sum 28120752c72a6d08b63cdf2ffab3735f
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2619,6 +2683,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46949
 localization cell
+md5sum 4ac636a59203827e6a419e52f87508c5
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2647,6 +2712,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46948
 localization cell
+md5sum d35c242352261daaff2a075ebc7eb198
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2675,6 +2741,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46949
 localization cell
+md5sum 563065b7f5c54c806e276d115dea435e
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2703,6 +2770,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46949,LID46948
 localization cell
+md5sum 44568be9b25a79328a29e2c66bf6b440
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2731,6 +2799,7 @@ lab CSHL-m
 labExpId LID46949,LID46948
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 01f13a5ec57775b1b283da21595c423e
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2758,6 +2827,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46948,LID46949
 localization cell
+md5sum 1dbe3f4b672c7db1cd556f0ad20669a7
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2786,6 +2856,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46948
 localization cell
+md5sum 26d2a12f610ba9654798534703abfc78
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2815,6 +2886,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46949
 localization cell
+md5sum 4134d210f2c2bf14f110dfb78023107b
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2844,6 +2916,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46948
 localization cell
+md5sum 5fab715309d46b27ce82dc07e3159c97
 project wgEncode
 readType 2x101D
 replicate 1
@@ -2873,6 +2946,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46949
 localization cell
+md5sum 3c3f67ea98ee90c7afc2c275a7313306
 project wgEncode
 readType 2x101D
 replicate 2
@@ -2964,6 +3038,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46949,LID46948
 localization cell
+md5sum 9bb26facdddb66d054041a171142e74c
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -2992,6 +3067,7 @@ lab CSHL-m
 labExpId LID46949,LID46948
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 24b8ec9e0a9e65aee6dd6a66d1a30a60
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3019,6 +3095,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950
 localization cell
+md5sum 9aa4c97affc681fd59ad984aea8f024e,d4142934932e8ff5323cf1da3d44cf84
 project wgEncode
 readType 2x101D
 replicate 1
@@ -3048,6 +3125,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46951
 localization cell
+md5sum 0b45719c0e7e854f79cc7e4f082d5643,eb1cee6622d5587650dcf5e4bcf76f1d
 project wgEncode
 readType 2x101D
 replicate 2
@@ -3077,6 +3155,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950,LID46951
 localization cell
+md5sum b1cc90c4be86208b7f1fc91e9c723bbe
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3105,6 +3184,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950,LID46951
 localization cell
+md5sum 052366cb6b56ec6122597dfa46515312
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3133,6 +3213,7 @@ lab CSHL-m
 labExpId LID46950,LID46951
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum b3b2d98c02a3431b2445c4e5215611b2
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3160,6 +3241,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950
 localization cell
+md5sum 6cbbd0287199c1cc92e5011ddbdf5263
 project wgEncode
 readType 2x101D
 replicate 1
@@ -3188,6 +3270,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46951
 localization cell
+md5sum bff06141e372023d986f9f8619a6de3c
 project wgEncode
 readType 2x101D
 replicate 2
@@ -3216,6 +3299,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950
 localization cell
+md5sum 22fb050745749be3940c84359c2d9576
 project wgEncode
 readType 2x101D
 replicate 1
@@ -3244,6 +3328,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46951
 localization cell
+md5sum 3ffa71817b338baaf18afcf273d39b4d
 project wgEncode
 readType 2x101D
 replicate 2
@@ -3272,6 +3357,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950,LID46951
 localization cell
+md5sum 5224e72647e31d99904eec9d88f4ba27
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3300,6 +3386,7 @@ lab CSHL-m
 labExpId LID46950,LID46951
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 60cd9535d57baecb58ec3fe7573c13d8
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3327,6 +3414,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950,LID46951
 localization cell
+md5sum 12e46a338d9af310aa204868e7f174b6
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3355,6 +3443,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950
 localization cell
+md5sum 00a2b28637d4f9ee702b25c5f7345375
 project wgEncode
 readType 2x101D
 replicate 1
@@ -3384,6 +3473,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46951
 localization cell
+md5sum b331e178cc64348e81d3d09e88e4bf95
 project wgEncode
 readType 2x101D
 replicate 2
@@ -3413,6 +3503,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950
 localization cell
+md5sum 697b39af04afc5d99f79f807a317c6fc
 project wgEncode
 readType 2x101D
 replicate 1
@@ -3442,6 +3533,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46951
 localization cell
+md5sum 94da2b1f3ad0c6356d2841e8c9a2b10e
 project wgEncode
 readType 2x101D
 replicate 2
@@ -3533,6 +3625,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46950,LID46951
 localization cell
+md5sum bfedef0c3d21e4a4fbecb5fbe4bf2e85
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3561,6 +3654,7 @@ lab CSHL-m
 labExpId LID46950,LID46951
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 0ebf29244b42daf03d6be8977a8eb511
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -3589,6 +3683,7 @@ lab CSHL-m
 labExpId LID21040
 localization cell
 md5sum ea04394881d5c6697c4b72ee5c8ed65d,61ce59651939c681e5c0fe46f9b4ac12
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -3618,6 +3713,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21040
 localization cell
+md5sum ac6d22eac0e317b75ed62d967553c621,c52f09e98a97b964e7db0cc32cbf61dd
 project wgEncode
 readType 2x76D
 replicate 1
@@ -3649,6 +3745,7 @@ lab CSHL-m
 labExpId LID21041
 localization cell
 md5sum 822c5eb4a2d40b776a99a87c1e772b44,a564bbf1521163b47a267c220999c524
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -3678,6 +3775,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21041
 localization cell
+md5sum 2a309ed7a8dbeedf10a82894d58657ee,0d7b0d44db0ba3a5c952664484b014d7
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4130,7 +4228,7 @@ lab CSHL-m
 labExpId LID21040
 localization cell
 md5sum 9de19d8687ae5bf8b29110c3d187118d
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4192,7 +4290,7 @@ lab CSHL-m
 labExpId LID21041
 localization cell
 md5sum 7aa6c2bf44c3a5cebb02c429409a2835
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4310,6 +4408,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032
 localization cell
+md5sum b922885e05cbc12dc2435a2622949b52,647fe56dd18769b6880b398b686d619b
 project wgEncode
 readType 2x101D
 replicate 1
@@ -4339,6 +4438,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47033
 localization cell
+md5sum 352998d9040e64fcf3a533cdebe672d1,21d255d14337d1e70e990b1ba3a51f89
 project wgEncode
 readType 2x101D
 replicate 2
@@ -4368,6 +4468,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032,LID47033
 localization cell
+md5sum 97dcae6b1b5d833ee72c58bcf6e16b31
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -4396,6 +4497,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032,LID47033
 localization cell
+md5sum 2695c3ca839eba286ca3fe84ba37e7cd
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -4424,6 +4526,7 @@ lab CSHL-m
 labExpId LID47032,LID47033
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum ac01b544221990f4914b641a5faf9ef8
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -4451,6 +4554,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032
 localization cell
+md5sum 46f690cd605fea08ec6430ab0221155c
 project wgEncode
 readType 2x101D
 replicate 1
@@ -4479,6 +4583,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47033
 localization cell
+md5sum aae511a97e3cb028525c1d1977f7fac6
 project wgEncode
 readType 2x101D
 replicate 2
@@ -4507,6 +4612,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032
 localization cell
+md5sum c42a2012b27f11309c3409b96e10d129
 project wgEncode
 readType 2x101D
 replicate 1
@@ -4535,6 +4641,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47033
 localization cell
+md5sum ba1e56927097dcbb30181ba996ba0a1e
 project wgEncode
 readType 2x101D
 replicate 2
@@ -4563,6 +4670,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032,LID47033
 localization cell
+md5sum d429167dc88e528aa23ff74b06c5a68d
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -4591,6 +4699,7 @@ lab CSHL-m
 labExpId LID47032,LID47033
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum ea57a0df24636615bb09eed4b09897eb
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -4618,6 +4727,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032,LID47033
 localization cell
+md5sum 6e0f41ce5b818348f63527fee2c9a90a
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -4646,6 +4756,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032
 localization cell
+md5sum 85f5379f86b0541328258154f8b99c59
 project wgEncode
 readType 2x101D
 replicate 1
@@ -4675,6 +4786,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47033
 localization cell
+md5sum 2174d957fe0f6d6e80cf32960604afc5
 project wgEncode
 readType 2x101D
 replicate 2
@@ -4704,6 +4816,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032
 localization cell
+md5sum f23511a94189769c5d1abe7954073eb0
 project wgEncode
 readType 2x101D
 replicate 1
@@ -4733,6 +4846,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47033
 localization cell
+md5sum c6196075f9f1ee252052c34c798ee46e
 project wgEncode
 readType 2x101D
 replicate 2
@@ -4824,6 +4938,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47032,LID47033
 localization cell
+md5sum 2ed4a41570ec815f7b993c40529b09b1
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -4852,6 +4967,7 @@ lab CSHL-m
 labExpId LID47032,LID47033
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 46bf6c3975e61a793975d72c8eafad2d
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -4880,6 +4996,7 @@ lab CSHL-m
 labExpId LID20730
 localization cell
 md5sum 8a45f86e49c1639b6f7bbdeb457bcb5a,476a478dc2d11df3d51ec0186481a87c
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4909,6 +5026,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20730
 localization cell
+md5sum 65d650988e871776098cc5059b215cc8,9ce9cc98e4499b5c3885d0a8f92d7fa6
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4940,6 +5058,7 @@ lab CSHL-m
 labExpId LID20731
 localization cell
 md5sum 782a44f19577aeebfdc0a8608bb73787,dc4fa9c62628754021cf4a00e196fb6a
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4969,6 +5088,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20731
 localization cell
+md5sum 2aa0d6e1403ddad084d5e8efff88f22d,be316bd4e0415a47bf506ecad1982154
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5421,7 +5541,7 @@ lab CSHL-m
 labExpId LID20730
 localization cell
 md5sum 6d27bdbeed54b1caab76f1ff92f11cd6
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5483,7 +5603,7 @@ lab CSHL-m
 labExpId LID20731
 localization cell
 md5sum 658df86aa1f3bb2b3101adbc86b04318
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5601,6 +5721,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47081
 localization cell
+md5sum 8d978ff1b86d45b1480703e7a541f8da,abad794ce548de5438a13f4de1ec38e9
 project wgEncode
 readType 2x101D
 replicate 1
@@ -5630,6 +5751,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47082
 localization cell
+md5sum 136904a664ab73e47d333ab23be4e255,24cf45d1792e85f6c8efebf92ad1176a
 project wgEncode
 readType 2x101D
 replicate 2
@@ -5659,6 +5781,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47081,LID47082
 localization cell
+md5sum 07fe86db92bb3a24dc2a159a48df733c
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -5687,6 +5810,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47082,LID47081
 localization cell
+md5sum 71ccd09cd4d5a06609c08b27d8e465a2
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -5715,6 +5839,7 @@ lab CSHL-m
 labExpId LID47082,LID47081
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 11931d21569a038bd8f0355a9d5119a5
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -5742,6 +5867,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47081
 localization cell
+md5sum 20e60f95a5f1fad38556fbd9da5dafe8
 project wgEncode
 readType 2x101D
 replicate 1
@@ -5770,6 +5896,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47082
 localization cell
+md5sum 4c2cfecca923c5aee35d6eae419eab95
 project wgEncode
 readType 2x101D
 replicate 2
@@ -5798,6 +5925,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47081
 localization cell
+md5sum 9d67f578cc4cd46c2784f35e00d780ff
 project wgEncode
 readType 2x101D
 replicate 1
@@ -5826,6 +5954,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47082
 localization cell
+md5sum 2b27fb081e4b9152576f498c6f2946af
 project wgEncode
 readType 2x101D
 replicate 2
@@ -5854,6 +5983,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47082,LID47081
 localization cell
+md5sum 6dacc424b67f28d43a4a1d3c403cf9dd
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -5882,6 +6012,7 @@ lab CSHL-m
 labExpId LID47082,LID47081
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum d76ab2a4da68ba6c498b5e69eec9a220
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -5909,6 +6040,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47081,LID47082
 localization cell
+md5sum 7f4063d395d5e42f9237cad21b5b389b
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -5937,6 +6069,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47081
 localization cell
+md5sum 01fe0a11235eff91a67506fccee0b761
 project wgEncode
 readType 2x101D
 replicate 1
@@ -5966,6 +6099,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47082
 localization cell
+md5sum bc4aa0bca59116d1e0b0c73efa5555eb
 project wgEncode
 readType 2x101D
 replicate 2
@@ -5995,6 +6129,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47081
 localization cell
+md5sum 3d824109e600913c8125b3c32abf664c
 project wgEncode
 readType 2x101D
 replicate 1
@@ -6024,6 +6159,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47082
 localization cell
+md5sum cbcce29f57178937b330dfe2413ff8c6
 project wgEncode
 readType 2x101D
 replicate 2
@@ -6115,6 +6251,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47082,LID47081
 localization cell
+md5sum d6676e3ffbe38f8ba0eaa0ca2ed40ec7
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -6143,6 +6280,7 @@ lab CSHL-m
 labExpId LID47082,LID47081
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum c388470cdc2b9e79fc57f15e5106d7e0
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -6171,6 +6309,7 @@ lab CSHL-m
 labExpId LID21179
 localization cell
 md5sum e8e3e5bf3fa08005e2fcd43ba97d4291,7ee61c80acb9d2a325c1898ca5c9a707
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6200,6 +6339,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21179
 localization cell
+md5sum 1c5d42054b25685a884ec34bd988c773,c1b05a11d05159d75c6101f2b2368390
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6231,6 +6371,7 @@ lab CSHL-m
 labExpId LID21180
 localization cell
 md5sum aef46bb54edbb117ac262b15ba7c4b66,fa97c0b9449afa5e25621cbeeff0e04a
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6260,6 +6401,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21180
 localization cell
+md5sum 9741b96f1fc94fb373a393caf105789b,fd724eca2a932817f1b9775b44cd8eb6
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6712,7 +6854,7 @@ lab CSHL-m
 labExpId LID21179
 localization cell
 md5sum 5908a97d6f329355bf4a166069c333d2
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6774,7 +6916,7 @@ lab CSHL-m
 labExpId LID21180
 localization cell
 md5sum 6d90300b229ffe50b96b3dea136e6d5a
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6893,6 +7035,7 @@ lab CSHL-m
 labExpId LID20870
 localization cell
 md5sum 6ef130a6a641ef4e78697937b01b4a4d,73e4171577948b1fc59842b90d3b3e2b
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6922,6 +7065,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20870
 localization cell
+md5sum fbf73a02c04e8945e6e5e2a157347e2f,0c95e76721434894adc078355c28af74
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6953,6 +7097,7 @@ lab CSHL-m
 labExpId LID20871
 localization cell
 md5sum 40f4b96be5afde3964b96680733bb760,f915488359eb2e3bc9d92263a3516166
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6982,6 +7127,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20871
 localization cell
+md5sum 676e205dcd796f0dd719934c3505b114,3181b24b054c4eff4230985b0392b515
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7191,7 +7337,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20871
 localization cell
-md5sum 2d306eeedf9e29bac05a2c729b809fdf
+md5sum 348d6f85de112c739ff649866b372153
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7434,7 +7580,7 @@ lab CSHL-m
 labExpId LID20870
 localization cell
 md5sum 64bf19563012c86a819eeb3f466729d8
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -7496,7 +7642,7 @@ lab CSHL-m
 labExpId LID20871
 localization cell
 md5sum f1d3ebbc233558b08fbe8663cbcb7617
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7615,6 +7761,7 @@ lab CSHL-m
 labExpId LID20872
 localization cell
 md5sum 7b6fb73c0ee2914369a06b58736ef56d,8c1f95bf92ff30a0a2f253e3fafa033c
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -7644,6 +7791,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20872
 localization cell
+md5sum e3e141f50c6d15ebcd22218a7d8bb2f1,7875a185bf39f700ab0b8c6ee2c065fc
 project wgEncode
 readType 2x76D
 replicate 1
@@ -7675,6 +7823,7 @@ lab CSHL-m
 labExpId LID20873
 localization cell
 md5sum 1600e8d81f96aa58373287d2f4857b24,8f04664ba7d1ee24073944d2250ebdbc
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7704,6 +7853,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20873
 localization cell
+md5sum c5bfa1248e1b5fec7c0038aaea1e97a6,c257fc2f1434e9413b04d391fca8600c
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8156,7 +8306,7 @@ lab CSHL-m
 labExpId LID20872
 localization cell
 md5sum dc3623e6f83cd73aad310c94102c63d8
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8218,7 +8368,7 @@ lab CSHL-m
 labExpId LID20873
 localization cell
 md5sum dddce6223874d9acfea343de56c165fc
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8337,6 +8487,7 @@ lab CSHL-m
 labExpId LID21183
 localization cell
 md5sum 77473346742f6558ff7fd20fbe4645f7,6a02a4e4c8cfda817e2895e1fcaaf3b0
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8366,6 +8517,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21183
 localization cell
+md5sum 30805742209beb58a0a50db5c3aaf77f,60e0e68cc5b6b814a964de725c4c4dff
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8397,6 +8549,7 @@ lab CSHL-m
 labExpId LID21184
 localization cell
 md5sum 1d60beeaa912e58fabd40e1e0a5a74b2,4cbe0c6dbc2c66e870b5e4835072fc3a
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8426,6 +8579,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21184
 localization cell
+md5sum 5e74154e358700b85889b88cad1dcd32,53b556f242133deb16339ccbb091aa9a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8878,7 +9032,7 @@ lab CSHL-m
 labExpId LID21183
 localization cell
 md5sum 8a32f7832c7f0979b06bd2adee8864b6
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8940,7 +9094,7 @@ lab CSHL-m
 labExpId LID21184
 localization cell
 md5sum b30e68d2cff76dabedfe1ba179537670
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -9058,6 +9212,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985
 localization cell
+md5sum a2880eb12fd37d458eea5ee758d9bd30,2dbd47480c67ca5be0bdd7d870eba659
 project wgEncode
 readType 2x101D
 replicate 1
@@ -9087,6 +9242,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46986
 localization cell
+md5sum 53e19cef514a5fb90ae941a17d2cc719,563baf30e3de82a249683dd37cd598d2
 project wgEncode
 readType 2x101D
 replicate 2
@@ -9116,6 +9272,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985,LID46986
 localization cell
+md5sum 4e210c3c61e061982c06fe1ca30dfd4c
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -9144,6 +9301,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985,LID46986
 localization cell
+md5sum be3b5e9a791b7ca40465f7167596973e
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -9172,6 +9330,7 @@ lab CSHL-m
 labExpId LID46985,LID46986
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 9768315277f3b7ec92c568f3993fb135
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -9199,6 +9358,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985
 localization cell
+md5sum a9bee3a621217576bf40cee6540c2bb4
 project wgEncode
 readType 2x101D
 replicate 1
@@ -9227,6 +9387,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46986
 localization cell
+md5sum bf745b0a1ed857b246ecb2b929b5dc0c
 project wgEncode
 readType 2x101D
 replicate 2
@@ -9255,6 +9416,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985
 localization cell
+md5sum 28067e0c8fc1905858a5770cd9e54c8e
 project wgEncode
 readType 2x101D
 replicate 1
@@ -9283,6 +9445,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46986
 localization cell
+md5sum 06e20e9914ffcc60519acb110c142668
 project wgEncode
 readType 2x101D
 replicate 2
@@ -9311,6 +9474,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985,LID46986
 localization cell
+md5sum 24b3fcb556e2988d37cd7a60c473ab7d
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -9339,6 +9503,7 @@ lab CSHL-m
 labExpId LID46985,LID46986
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 8e4937b929e540c55933fbbfd22e0c72
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -9366,6 +9531,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985,LID46986
 localization cell
+md5sum 744349ef7d3f0a39e5d22a27fb0517d4
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -9394,6 +9560,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985
 localization cell
+md5sum 1fe6bfa73214a0e5cf5f7733884a10c1
 project wgEncode
 readType 2x101D
 replicate 1
@@ -9423,6 +9590,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46986
 localization cell
+md5sum b70a6e63c9983c071fda4a2e243ebdd7
 project wgEncode
 readType 2x101D
 replicate 2
@@ -9452,6 +9620,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985
 localization cell
+md5sum 039c4d802f4c0382016c37d3ba2627ec
 project wgEncode
 readType 2x101D
 replicate 1
@@ -9481,6 +9650,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46986
 localization cell
+md5sum d4694ce83e8b772b5fef086893ba2a03
 project wgEncode
 readType 2x101D
 replicate 2
@@ -9572,6 +9742,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46985,LID46986
 localization cell
+md5sum 3a8e7fa300cc17a4e04d779b2895c0f0
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -9600,6 +9771,7 @@ lab CSHL-m
 labExpId LID46985,LID46986
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 7fcc49eddc4f6205dc8a382be09f3750
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -9628,6 +9800,7 @@ lab CSHL-m
 labExpId LID21042
 localization cell
 md5sum 859095835df92e8f5235d253416986e5,51c0aabd0ee0dac023408902a3b08b68
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -9657,6 +9830,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21042
 localization cell
+md5sum 5fdd53d6a9391823cf1c2f31a5d66ca2,f0e1a1227aeb57471b55bf0987299796
 project wgEncode
 readType 2x76D
 replicate 1
@@ -9688,6 +9862,7 @@ lab CSHL-m
 labExpId LID21043
 localization cell
 md5sum dfe860afe7c36797cdaf8371d69f2966,68f60973c0c57449a307940dbb8547ad
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -9717,6 +9892,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21043
 localization cell
+md5sum 5a6fa139d8aa116c0b3c2528821bef85,05a7e101579ccade6820dd2dbc87c33d
 project wgEncode
 readType 2x76D
 replicate 2
@@ -10169,7 +10345,7 @@ lab CSHL-m
 labExpId LID21042
 localization cell
 md5sum df56efdb07fb35b0cb6f6afa6157c4ab
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -10231,7 +10407,7 @@ lab CSHL-m
 labExpId LID21043
 localization cell
 md5sum c005d10f542348af43f1c44e8dc1dd4d
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -10349,6 +10525,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47144
 localization cell
+md5sum 17e985f0f62f1027566f802d1124a987,6ea390c9769e64e3ca249b64c911fe82
 project wgEncode
 readType 2x101D
 replicate 1
@@ -10378,6 +10555,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47145
 localization cell
+md5sum a3cadb7dee855f014ca6f4b8981b72c3,ae9ccc87e63be92c4187ebb00b81d0ef
 project wgEncode
 readType 2x101D
 replicate 2
@@ -10407,6 +10585,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47144,LID47145
 localization cell
+md5sum 64b2e0730d062752446d2b15ef12bbf4
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -10435,6 +10614,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47145,LID47144
 localization cell
+md5sum 62fe859497aad6c881ef3ff00e6808f1
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -10463,6 +10643,7 @@ lab CSHL-m
 labExpId LID47145,LID47144
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum b69ad03c734d4ea23441d7e70764841c
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -10490,6 +10671,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47144
 localization cell
+md5sum f74d86349b5ecdcbcad08f0952bd0ef4
 project wgEncode
 readType 2x101D
 replicate 1
@@ -10518,6 +10700,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47145
 localization cell
+md5sum 1623536610493855c047e3bcb69ec4b3
 project wgEncode
 readType 2x101D
 replicate 2
@@ -10546,6 +10729,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47144
 localization cell
+md5sum 35a40a38e8782909cb1df8266542e3ab
 project wgEncode
 readType 2x101D
 replicate 1
@@ -10574,6 +10758,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47145
 localization cell
+md5sum 761753ed2d5dd2da0c2d1d7933eedab8
 project wgEncode
 readType 2x101D
 replicate 2
@@ -10602,6 +10787,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47145,LID47144
 localization cell
+md5sum feee858e3f5466f6540906f7ac936c1a
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -10630,6 +10816,7 @@ lab CSHL-m
 labExpId LID47145,LID47144
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum fa1cf5aec8ff9fd53c58c4ccab16be85
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -10657,6 +10844,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47144,LID47145
 localization cell
+md5sum ca57625fa380da681dcea8e0f0743c81
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -10685,6 +10873,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47144
 localization cell
+md5sum c8b93c60c814e90912efce146e909ae3
 project wgEncode
 readType 2x101D
 replicate 1
@@ -10714,6 +10903,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47145
 localization cell
+md5sum 7fbc52890656a674b4b88c2fb9b6e243
 project wgEncode
 readType 2x101D
 replicate 2
@@ -10743,6 +10933,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47144
 localization cell
+md5sum 41d31f5617ab64bcdc89531884748446
 project wgEncode
 readType 2x101D
 replicate 1
@@ -10772,6 +10963,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47145
 localization cell
+md5sum 83c372754f38d7ef8dce5f0d81cfa822
 project wgEncode
 readType 2x101D
 replicate 2
@@ -10863,6 +11055,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47145,LID47144
 localization cell
+md5sum 187341e291dc38cea9154daf77675b0a
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -10891,6 +11084,7 @@ lab CSHL-m
 labExpId LID47145,LID47144
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum dbec24f8a0744c7f8e1c5c5e2f8e5503
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -10918,6 +11112,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146
 localization cell
+md5sum c2a131ed1fd552c6ce3e539473df274e,24488af32b07bfa0e70fcb85d60439be
 project wgEncode
 readType 2x101D
 replicate 1
@@ -10947,6 +11142,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47147
 localization cell
+md5sum 62b7cdd80db0759e8ecd685bb4414ed9,972640b0002c40ca2a2ca0e281db484e
 project wgEncode
 readType 2x101D
 replicate 2
@@ -10976,6 +11172,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146,LID47147
 localization cell
+md5sum e63032bc23116aaa26bb58a115de8817
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11004,6 +11201,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146,LID47147
 localization cell
+md5sum b4bf37191c11a1b66d379313ed926ace
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11032,6 +11230,7 @@ lab CSHL-m
 labExpId LID47146,LID47147
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 48a720d3b0430fb156e9283655c405ea
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11059,6 +11258,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146
 localization cell
+md5sum 80f7a42197b9fe8fae5542ff5bcdc4ef
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11087,6 +11287,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47147
 localization cell
+md5sum eae544791a025c2df592543f86f2553f
 project wgEncode
 readType 2x101D
 replicate 2
@@ -11115,6 +11316,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146
 localization cell
+md5sum a43f4614b2068eaed0cf94e742ebabe7
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11143,6 +11345,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47147
 localization cell
+md5sum cd25763737cae2ee36510e7149aed097
 project wgEncode
 readType 2x101D
 replicate 2
@@ -11171,6 +11374,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146,LID47147
 localization cell
+md5sum da96b265940b9739e7d36f7e1dc1b09b
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11199,6 +11403,7 @@ lab CSHL-m
 labExpId LID47146,LID47147
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 8bd3bf0ef2a4dec6f40dfc854b5f8a78
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11226,6 +11431,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146,LID47147
 localization cell
+md5sum 57087d452ce994056b4015ea9fad388d
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11254,6 +11460,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146
 localization cell
+md5sum c22484ab53a136c7b124fd4e7e2004bf
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11283,6 +11490,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47147
 localization cell
+md5sum adcffae7ed8be3a31ca616e042312436
 project wgEncode
 readType 2x101D
 replicate 2
@@ -11312,6 +11520,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146
 localization cell
+md5sum 1de3e3566ea87553e9da5115c9ca9eea
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11341,6 +11550,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47147
 localization cell
+md5sum 96f7ee17cdefe684ef11402fd4dd2bb2
 project wgEncode
 readType 2x101D
 replicate 2
@@ -11432,6 +11642,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47146,LID47147
 localization cell
+md5sum d6d48ee95f4649618e309dbd2fd0fd79
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11460,6 +11671,7 @@ lab CSHL-m
 labExpId LID47146,LID47147
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum be3f7b48a297ce9f35eefeedcea5903e
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11487,6 +11699,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47148
 localization cell
+md5sum 7d3d674ca696aa50f9fc41815af15665,ddc82e1de8622670a957e144f7958fbc
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11516,6 +11729,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47149
 localization cell
+md5sum 034f491f68817e59d3f21f89d93eb13e,a29a803d19fe0bb095bdfe968cd8cc8f
 project wgEncode
 readType 2x101D
 replicate 2
@@ -11545,6 +11759,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47148,LID47149
 localization cell
+md5sum fc92f89953ae255f8adf871800d08ab2
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11573,6 +11788,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47149,LID47148
 localization cell
+md5sum 3262fc16db2e7d67ee882292986607d3
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11601,6 +11817,7 @@ lab CSHL-m
 labExpId LID47149,LID47148
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 84851c078bfc9df747dfb665c14d32fd
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11628,6 +11845,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47148
 localization cell
+md5sum 85d9a62c0a15844dee053f345c0697ef
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11656,6 +11874,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47149
 localization cell
+md5sum cc520400b8858eff18ac3844f3355986
 project wgEncode
 readType 2x101D
 replicate 2
@@ -11684,6 +11903,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47148
 localization cell
+md5sum 2ef47e3060fd33228d4ce10e2ea888e3
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11712,6 +11932,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47149
 localization cell
+md5sum 8fced00146c91085b6ffbe8d87de6661
 project wgEncode
 readType 2x101D
 replicate 2
@@ -11740,6 +11961,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47149,LID47148
 localization cell
+md5sum b252274f9e60a936b47322d2c8bae96c
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11768,6 +11990,7 @@ lab CSHL-m
 labExpId LID47149,LID47148
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 6b91378a4c3b810774f3c9ab6c678452
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11795,6 +12018,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47148,LID47149
 localization cell
+md5sum 54a534146b39a0ca0831db239582faa8
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -11823,6 +12047,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47148
 localization cell
+md5sum c5bb312adfeaac4c60a9f7ffc7bf4536
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11852,6 +12077,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47149
 localization cell
+md5sum 21c2f3653b1094fe7b8043e340358796
 project wgEncode
 readType 2x101D
 replicate 2
@@ -11881,6 +12107,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47148
 localization cell
+md5sum 8375281c206a60cc3b90eb7bf1779785
 project wgEncode
 readType 2x101D
 replicate 1
@@ -11910,6 +12137,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47149
 localization cell
+md5sum 004f05247d200853f647a776a5aff3a9
 project wgEncode
 readType 2x101D
 replicate 2
@@ -12001,6 +12229,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID47149,LID47148
 localization cell
+md5sum 74a64754f668903659d8e05643ec0ab2
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -12029,6 +12258,7 @@ lab CSHL-m
 labExpId LID47149,LID47148
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 83c1a975751771ec8080497d22177930
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -12057,6 +12287,7 @@ lab CSHL-m
 labExpId LID20920
 localization cell
 md5sum c489553aa70ba33be3db5c28ccec3fde,0eadb72fee2968bf0596e7f377503dc5
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -12086,6 +12317,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20920
 localization cell
+md5sum 7a6f7a1219ac3d34b7abf33bc05d993c,bc8e3e1c5d6c1891719acd9a2923d33c
 project wgEncode
 readType 2x76D
 replicate 1
@@ -12117,6 +12349,7 @@ lab CSHL-m
 labExpId LID20921
 localization cell
 md5sum 4dadd1d3f4118d98b9260e5c4bd301ff,1dbc2703775407426d27d50d0c9ffacb
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12146,6 +12379,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20921
 localization cell
+md5sum f023649a8704d067f12dd9ef21cb733c,b436e61d83e1f30118a108a14c76da70
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12355,7 +12589,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20921
 localization cell
-md5sum 7d18cfd784b89751d24523ef3f3e7364
+md5sum 89ea4fa47dc7479d37c47d6688171bd7
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12598,7 +12832,7 @@ lab CSHL-m
 labExpId LID20920
 localization cell
 md5sum 2834d666ade4b086e6b4dbf3e4bc33bd
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -12660,7 +12894,7 @@ lab CSHL-m
 labExpId LID20921
 localization cell
 md5sum 54c55b94d8a0c7142e7097b825f75f26
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12779,6 +13013,7 @@ lab CSHL-m
 labExpId LID20924
 localization cell
 md5sum 8b6c164f2cd78b694d6f2e4d93a7b8dc,6fd6b5ec6fdb9ef78152370663b52cce
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -12808,6 +13043,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20924
 localization cell
+md5sum da93b8dba68d989dd991a5d0c3047481,45a095c59036c9e523fd65c30ffe49ef
 project wgEncode
 readType 2x76D
 replicate 1
@@ -12839,6 +13075,7 @@ lab CSHL-m
 labExpId LID20925
 localization cell
 md5sum 1b960a005325019554f2a2b52eb0fbe5,4887ca148fecf47a84c1a857f46ebfa4
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12868,6 +13105,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20925
 localization cell
+md5sum 7ade5dd321734a75bcf684a1496c6382,4ce01fa5356d444e7ad529c48205829e
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13320,7 +13558,7 @@ lab CSHL-m
 labExpId LID20924
 localization cell
 md5sum af6fe719b660703cff82fdc1689c84e0
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -13382,7 +13620,7 @@ lab CSHL-m
 labExpId LID20925
 localization cell
 md5sum 3d3e2642d7cb87291a25feb3a2c1eed3
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13501,6 +13739,7 @@ lab CSHL-m
 labExpId LID20821
 localization cell
 md5sum d7b7246d45bdadd464f147786cda7a6d,5e927afc8c10b701bfb6a050f996358b
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -13530,6 +13769,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20821
 localization cell
+md5sum 014514a7b0922b3958c22362168c0ebc,2cd65ca4622d56a8c57b58b69f96592d
 project wgEncode
 readType 2x76D
 replicate 1
@@ -13561,6 +13801,7 @@ lab CSHL-m
 labExpId LID20822
 localization cell
 md5sum f66bdd3ea7a171c19a4da6ca4997cdd0,44d1e0f356351d19020b4481e97ee66a
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13590,6 +13831,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20822
 localization cell
+md5sum 6f7bef4013dc6fff58e9eb385626d04c,3aba550a7b1642acfb4b952d3f43e7a9
 project wgEncode
 readType 2x76D
 replicate 2
@@ -14042,7 +14284,7 @@ lab CSHL-m
 labExpId LID20821
 localization cell
 md5sum 508e725bb6677274b73a22f40c196d5f
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -14104,7 +14346,7 @@ lab CSHL-m
 labExpId LID20822
 localization cell
 md5sum 29579bcaca029781a284a09c8d8aaa63
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -14222,6 +14464,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46983
 localization cell
+md5sum d643b27b044340d8cb18c301bdeda80e,94985d392151b69ac250c3602f2a4fca
 project wgEncode
 readType 2x101D
 replicate 1
@@ -14251,6 +14494,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46984
 localization cell
+md5sum 4c50c3347bd3cc6c6c0932b1d0a6e8c7,ea4867c1146345a5f1917bc1d0748c41
 project wgEncode
 readType 2x101D
 replicate 2
@@ -14280,6 +14524,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46983,LID46984
 localization cell
+md5sum 0e58771bb1a14c5e29168e9807e0aa22
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -14308,6 +14553,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46984,LID46983
 localization cell
+md5sum 04afe780b14494c14009cbd7bfbf3b6f
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -14336,6 +14582,7 @@ lab CSHL-m
 labExpId LID46984,LID46983
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 07eca70f8dcf4f7e21d7878199bfe73a
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -14363,6 +14610,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46983
 localization cell
+md5sum 86d2863ee8f48452d4176f0706fcacb2
 project wgEncode
 readType 2x101D
 replicate 1
@@ -14391,6 +14639,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46984
 localization cell
+md5sum e961fa35b633bed371949ed8074b8f2b
 project wgEncode
 readType 2x101D
 replicate 2
@@ -14419,6 +14668,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46983
 localization cell
+md5sum 0fbc2c7550c198ff0bd1dbb825819753
 project wgEncode
 readType 2x101D
 replicate 1
@@ -14447,6 +14697,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46984
 localization cell
+md5sum 9fdf649e2599cd9c2e71d4edbd3ca7cd
 project wgEncode
 readType 2x101D
 replicate 2
@@ -14475,6 +14726,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46984,LID46983
 localization cell
+md5sum 07255045e0d172edbbd8d0e8375a9337
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -14503,6 +14755,7 @@ lab CSHL-m
 labExpId LID46984,LID46983
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 68620e08e08bb280429fa3b5748ca974
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -14530,6 +14783,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46983,LID46984
 localization cell
+md5sum bfffdd18df744d6204a3447fdb4a1e25
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -14558,6 +14812,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46983
 localization cell
+md5sum 4d19bbae6a057acc75b846cf900e93e8
 project wgEncode
 readType 2x101D
 replicate 1
@@ -14587,6 +14842,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46984
 localization cell
+md5sum 6434c862b9d55f65f657f50a8d1a2c30
 project wgEncode
 readType 2x101D
 replicate 2
@@ -14616,6 +14872,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46983
 localization cell
+md5sum a700f9186c08eab1799248eec8882925
 project wgEncode
 readType 2x101D
 replicate 1
@@ -14645,6 +14902,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46984
 localization cell
+md5sum f7cb4053650762610fd5da777e0b5e69
 project wgEncode
 readType 2x101D
 replicate 2
@@ -14701,7 +14959,7 @@ dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003061
 expId 3061
-fileName /hive/groups/encode/dcc/analysis/ftp/pipeline/mm9/wgEncodeCshlLongRnaSeq/tmp/wgEncodeCshlLongRnaSeqPlacAdult8wksSpikeinsRep2/wgEncodeCshlLongRnaSeqPlacAdult8wksSpikeinsRep2.spikeins
+fileName wgEncodeCshlLongRnaSeqPlacAdult8wksSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46984
@@ -14736,6 +14994,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46984,LID46983
 localization cell
+md5sum 4494015c9fae4d80222b48982092d2b5
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -14764,6 +15023,7 @@ lab CSHL-m
 labExpId LID46984,LID46983
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum c290938ebe5dfda3b8a0865704018608
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -14792,6 +15052,7 @@ lab CSHL-m
 labExpId LID21181
 localization cell
 md5sum 2c3812d622a1753231d766a6f105747b,edc05633943351f74000281d4c393dc5
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -14821,6 +15082,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21181
 localization cell
+md5sum 6aa3ac26e74b7b96176788b7dc625019,38b726c927cd80a9db6c6f5fb8629a42
 project wgEncode
 readType 2x76D
 replicate 1
@@ -14852,6 +15114,7 @@ lab CSHL-m
 labExpId LID21182
 localization cell
 md5sum a8ef72d1f331879fac40b94e11234929,4a0beb1c46e2cef4551d4acdd5e568aa
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -14881,6 +15144,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21182
 localization cell
+md5sum ee30ac61ae0e4c012455c970aab0968c,7b2050ef9ab8141da76a1b237480c3fc
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15060,7 +15324,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21181
 localization cell
-md5sum db81d46dceb87b2a02f298fad37062e5
+md5sum 99010a1a627743fd3ada2fda976a0294
 project wgEncode
 readType 2x76D
 replicate 1
@@ -15333,7 +15597,7 @@ lab CSHL-m
 labExpId LID21181
 localization cell
 md5sum 12b85fe823b385655d283958933966ad
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -15395,7 +15659,7 @@ lab CSHL-m
 labExpId LID21182
 localization cell
 md5sum edbabc32d2a0a92b0ce64e46203fc452
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15514,6 +15778,7 @@ lab CSHL-m
 labExpId LID20819
 localization cell
 md5sum 656d4e6a42a0954f8d52857e1e9a88ac,82abc16de38af56d7b5a2e8f1d77b0fa
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -15543,6 +15808,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20819
 localization cell
+md5sum 84deb2cd9e1d9560f86dddd19c27145d,5eb487e5229677f302a0fb172ef633a7
 project wgEncode
 readType 2x76D
 replicate 1
@@ -15574,6 +15840,7 @@ lab CSHL-m
 labExpId LID20820
 localization cell
 md5sum d80edf4731debd277cc5b93f6d33e431,ae2a731907d2b522b5acc8094bf030a2
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15603,6 +15870,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20820
 localization cell
+md5sum 2a4fb32f5a1284a0b9af34168486d6b9,39c213dcc816b55c5df32dcec30c959f
 project wgEncode
 readType 2x76D
 replicate 2
@@ -16055,7 +16323,7 @@ lab CSHL-m
 labExpId LID20819
 localization cell
 md5sum 0dfd47d8aa94034fa93495906c3f1898
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -16117,7 +16385,7 @@ lab CSHL-m
 labExpId LID20820
 localization cell
 md5sum 1aeb3e44aeb8d1fc12c3b4201c9d6113
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -16235,6 +16503,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21038
 localization cell
+md5sum 0d154d9e52d230113b5779a87ff07d4f,109ee54b690e5c8b33df33039272f1b4
 project wgEncode
 readType 2x76D
 replicate 1
@@ -16265,6 +16534,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID21039
 localization cell
+md5sum 03457ae36551ea6c4235671737eef95f,fcd469e08671a9b64d2e250ee109ef67
 project wgEncode
 readType 2x76D
 replicate 2
@@ -16416,6 +16686,7 @@ lab CSHL-m
 labExpId LID21038
 localization cell
 md5sum b6248afbd4db1b55d42fef2f3597395f,daf61f204d4503aabbdcb463447f57d8
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -16446,6 +16717,7 @@ lab CSHL-m
 labExpId LID21039
 localization cell
 md5sum 9ec82409109fac1d6bbd0ba8b58b5e6b,24f1a331171b9495122e727565ed6e21
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -16833,12 +17105,13 @@ dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEM002517
 expId 2517
-fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep1.spikeins
+fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21038
 localization cell
 md5sum 176961cf70ed3fedea68c1626b8f4815
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -16863,12 +17136,13 @@ dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEM002517
 expId 2517
-fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins
+fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL-m
 labExpId LID21039
 localization cell
 md5sum 7631ba95140a51fee57cae1fef5b0ce6
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -16956,6 +17230,7 @@ lab CSHL-m
 labExpId LID20732
 localization cell
 md5sum 9300d52a8d7342cb173bc2bd42832ac3,ee8b9eb126a2f35b11c5a6ed08516889
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -16985,6 +17260,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20732
 localization cell
+md5sum a5048747ee3608bb9091a672eaa64783,6376e701670cf5e35d6b95b59d22bc3b
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17016,6 +17292,7 @@ lab CSHL-m
 labExpId LID20733
 localization cell
 md5sum 309a02696e48b15db78519360a652835,5dac9c847e80f3726c34d1ff8427bf83
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17045,6 +17322,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20733
 localization cell
+md5sum 27af8306dede10acc647ada1cacaa09b,de82b75478f385228ffadf2e991cffa0
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17497,7 +17775,7 @@ lab CSHL-m
 labExpId LID20732
 localization cell
 md5sum a918549be179a4a0f5577b8f4feab5b7
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17559,7 +17837,7 @@ lab CSHL-m
 labExpId LID20733
 localization cell
 md5sum ad540df43e583a4e1f0589c427712d24
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17678,6 +17956,7 @@ lab CSHL-m
 labExpId LID20868
 localization cell
 md5sum 318e444eed18988aed0210ec57199d20,02898d3bb9c00dd3a072fc59c8a06be5
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17707,6 +17986,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20868
 localization cell
+md5sum 99b1e95320edf866ee3d9cd7635d01b4,da9e0df1d1a1ab79f66a32479b848613
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17738,6 +18018,7 @@ lab CSHL-m
 labExpId LID20869
 localization cell
 md5sum 2b321cc6dd8f0090d4c86bba063ba5c5,97e3b5805238cbb7500600ad5ae1e460
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17767,6 +18048,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20869
 localization cell
+md5sum d20cfa2862224713f2770262946d0eaf,cbb1d5c1fc4a99fc7bb61ca48d5268db
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18219,7 +18501,7 @@ lab CSHL-m
 labExpId LID20868
 localization cell
 md5sum bb28d5f1b70e6f5066a1f47b6beded94
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -18244,7 +18526,7 @@ dateSubmitted 2012-07-29
 dateUnrestricted 2013-04-29
 dccAccession wgEncodeEM002519
 expId 2519
-fileName /hive/groups/encode/dcc/analysis/ftp/pipeline/mm9/wgEncodeCshlLongRnaSeq/tmp/wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep1V2/wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep1V2.spikeins
+fileName wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep1V2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID20868
@@ -18281,7 +18563,7 @@ lab CSHL-m
 labExpId LID20869
 localization cell
 md5sum 8f165fc51713c2fe381d8e575d68bdc2
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18400,6 +18682,7 @@ lab CSHL-m
 labExpId LID20922
 localization cell
 md5sum 72945c2573b4b23b2e85a77f6e0d513b,05c950fbaa61332101654815e452a80b
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -18429,6 +18712,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20922
 localization cell
+md5sum 0b65f0b9dc3c4bca808001a8f5283cde,0950d624b85a00f6330e6e249962ce58
 project wgEncode
 readType 2x76D
 replicate 1
@@ -18460,6 +18744,7 @@ lab CSHL-m
 labExpId LID20923
 localization cell
 md5sum b039d28a58d2c88ed8ce3dbf4855d4cd,dc6eff5d68bcf4ef110d0046f437f80c
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18489,6 +18774,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID20923
 localization cell
+md5sum eb4d3e85007fac7d2376eb01d46c8c58,ced8419825e2bacfafc4893bb461cc40
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18941,7 +19227,7 @@ lab CSHL-m
 labExpId LID20922
 localization cell
 md5sum a137383bd1d5351c3b6db6c2c4baa830
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -19003,7 +19289,7 @@ lab CSHL-m
 labExpId LID20923
 localization cell
 md5sum 08b52938d2f81986ff48e6925cf159f6
-objStatus replaced
+objStatus replaced - read 2 reverse complimented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -19121,6 +19407,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987
 localization cell
+md5sum 0a5b9c11a856751fe654e40313193798,2be83657d56d287e17e6137526558252
 project wgEncode
 readType 2x101D
 replicate 1
@@ -19150,6 +19437,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46988
 localization cell
+md5sum 2b3a97bb9632c73ae85a7ce0a32d8522,79c3c2c2143276093f2cd4befcf63531
 project wgEncode
 readType 2x101D
 replicate 2
@@ -19179,6 +19467,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987,LID46988
 localization cell
+md5sum 8e555219628528f817bf4e296d9cd3d2
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -19207,6 +19496,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987,LID46988
 localization cell
+md5sum 3722a2ec14a758eda54ea829e9031ebb
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -19235,6 +19525,7 @@ lab CSHL-m
 labExpId LID46988,LID46987
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum e919c230479a83f6de4470fb70b8f48e
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -19262,6 +19553,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987
 localization cell
+md5sum a66fd8ae01f790b524188fe8e98ea65d
 project wgEncode
 readType 2x101D
 replicate 1
@@ -19290,6 +19582,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46988
 localization cell
+md5sum 3d24d3d022aa8cffe60a11f3a1d0e24c
 project wgEncode
 readType 2x101D
 replicate 2
@@ -19318,6 +19611,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987
 localization cell
+md5sum e2245378ddaf5712af454705a59ebe49
 project wgEncode
 readType 2x101D
 replicate 1
@@ -19346,6 +19640,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46988
 localization cell
+md5sum 0c216bfabff62bdc40b7a3c36c6ff7c1
 project wgEncode
 readType 2x101D
 replicate 2
@@ -19374,6 +19669,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987,LID46988
 localization cell
+md5sum c90fe2a0bdc02225920d39f6d10cdc9e
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -19402,6 +19698,7 @@ lab CSHL-m
 labExpId LID46988,LID46987
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum de2d798ce107fd5cda7383f817c0ebc7
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -19429,6 +19726,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987,LID46988
 localization cell
+md5sum 677626e67c66fc5c29dd34f1bb6b59da
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -19457,6 +19755,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987
 localization cell
+md5sum 256b55a79b7d3e8cfcd4b7e38090da60
 project wgEncode
 readType 2x101D
 replicate 1
@@ -19486,6 +19785,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46988
 localization cell
+md5sum 112ee5b719b2e35661798b0ba7a406ad
 project wgEncode
 readType 2x101D
 replicate 2
@@ -19515,6 +19815,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987
 localization cell
+md5sum 6abc69ad571cf965dd2c8c0821136e62
 project wgEncode
 readType 2x101D
 replicate 1
@@ -19544,6 +19845,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46988
 localization cell
+md5sum 648c27e62f3e2db0ce323d9d21a80b2e
 project wgEncode
 readType 2x101D
 replicate 2
@@ -19635,6 +19937,7 @@ grant Gingeras
 lab CSHL-m
 labExpId LID46987,LID46988
 localization cell
+md5sum 085e719ea83dfa57d177f75aa489237f
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -19663,6 +19966,7 @@ lab CSHL-m
 labExpId LID46988,LID46987
 labVersion Ensembl_objects_only,no_Cufflinks
 localization cell
+md5sum 617bd3a52bf84ddc33c0459face04906
 project wgEncode
 readType 2x101D
 rnaExtract longPolyA
@@ -19673,4 +19977,4 @@ strain C57BL/6J
 subId 7798
 view TranscriptEnsV65IAcuff
 
-# MAGIC: -239873587
+# MAGIC: -1988112331
