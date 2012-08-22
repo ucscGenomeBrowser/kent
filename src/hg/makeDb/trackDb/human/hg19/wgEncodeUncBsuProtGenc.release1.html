@@ -60,22 +60,24 @@ FDR threshold have a score of 0 (worst).  The <span style="font-style: italic;">
 Score</span> is used by the Genome Browser to render shade to displayed
 rectangular items.
 </li>
-  <li>The <span style="font-style: italic;">rawScore </span> is the original 
-peptide mapping score given by Peppy, which reflects the strength of the peptide 
-mapping; as an estimated <span style="font-style: italic;">p</span>-value, 
-indicating the confidence of the peptide mapping.</li>
-  <li>The <span style="font-style: italic;">spectrumId </span> is the original 
+  <li>The <span style="font-style: italic;">rawScore (Raw score for a peptide/spectrum match)
+</span> is the original peptide mapping score given by Peppy, which reflects 
+the strength of the peptide mapping; as an estimated <span style="font-style: italic;">
+p</span>-value, indicating the confidence of the peptide mapping.</li>
+  <li>The <span style="font-style: italic;">spectrumId (An identifier of the spectrum 
+associated with the peptide mapping) </span> is the original 
 identifier of the spectrum that mapped to the peptide sequence, and it can be 
 used to track the original spectrum.<br></li>
-  <li>The <span style="font-style: italic;">peptideRank </span>indicates the 
+  <li>The <span style="font-style: italic;">peptideRank (Rank of the peptide/spectrum match, 
+for spectrum matching to different peptides)</span>indicates the 
 rank of each peptide/spectrum mapping.  A spectrum can be chimeric, containing 
 more than one peptide, and the spectrum can be mapped to two or more distinct 
 peptides.  Here, we are only reporting the top-scoring match.  If more than one 
 peptide 'tied' for the top score, then all peptides were included and all 
 matches have a <span style="font-style: italic;">peptideRank of 1</span>.<br></li>
 
-  <li>The <span style="font-style: italic;">peptideRepeatCount</span> indicates 
-the number of places in the genome where the peptide is encoded, reflecting the 
+  <li>The <span style="font-style: italic;">peptideRepeatCount (Indicates the number of places
+ in the genome where the peptide is encoded for a peptide/spectrum match).</span>  It reflects the 
 prevalence or uniqueness of the peptide mapping in the genome.  Those peptides 
 mapped to only a few genomic locations will have a low peptideRepeatCount, whereas 
 those peptides mapped to highly duplicated regions will have a high <span style=
