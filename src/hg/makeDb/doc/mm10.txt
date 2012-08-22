@@ -5839,6 +5839,10 @@ do
         ../tree-commas.nh > tree-commas.${N}.nh
 done
 
+    ### XXX ### MOST INTERESTING, this phyloFit operation was repeated
+    ### to verify that the full 60 species vertebrate operation produced the
+    ### same result as the original "all" subset.  This phyloFit appears to
+    ### produce a different result each time ?
     # use phyloFit to create tree model (output is phyloFit.mod)
     for N in glire euarchontoglires placental vertebrate
 do
