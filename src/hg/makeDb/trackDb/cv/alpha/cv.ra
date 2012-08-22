@@ -13148,7 +13148,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation Human_-_:missing
+validation Human_-_:human_YY1_sc-1703_validation_Farnham.pdf
 label YY1 (sc-1703)
 
 term YY1_(SC-281)
