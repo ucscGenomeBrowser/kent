@@ -7,7 +7,7 @@ shortLabel UNC FAIRE
 longLabel Open Chromatin by FAIRE from ENCODE/OpenChrom(UNC Chapel Hill)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t3COLONOC=Colon_OC t3FRONTALCORTEXOC=Frontal_cortex_OC t3GLIOBLA=Gliobla t3GM12891=GM12891 t3GM12892=GM12892 t3GM18507=GM18507 t3GM19239=GM19239 t3HTR8SVN=HTR8svn t3MEDULLO=Medullo t3MRTA204=MRT_A204 t3MRTG401=MRT_G401 t3MRTTTC549=MRT_TTC549 t3NHA=NH-A t3NHBE=NHBE t3NHEK=NHEK t3PANCREASOC=Pancreas_OC t3PANISLETS=PanIslets t3RCC7860=RCC_7860 t3UROTHELIA=Urothelia
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t3COLONOC=Colon_OC t3ENDOMETRIUMOC=Endometrium_OC t3FRONTALCORTEXOC=Frontal_cortex_OC t3GLIOBLA=Gliobla t3GM12891=GM12891 t3GM12892=GM12892 t3GM18507=GM18507 t3GM19239=GM19239 t3HTR8SVN=HTR8svn t3KIDNEYOC=Kidney_OC t3MEDULLO=Medullo t3MRTA204=MRT_A204 t3MRTG401=MRT_G401 t3MRTTTC549=MRT_TTC549 t3NHA=NH-A t3NHBE=NHBE t3NHEK=NHEK t3PANCREASOC=Pancreas_OC t3PANISLETS=PanIslets t3RCC7860=RCC_7860 t3SMALLINTESTINEOC=Small_intestine_OC t3UROTHELIA=Urothelia 
 subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN&alpha;_4hrs IFNg4h=IFN&gamma;_4hrs NaBut=Sodium_Butyrate OHUrea=Hydroxyurea SERUMFREE=Serum_Free UT189=UT189_E.coli VEH=Vehicle EST10NM30M=Estradiol_10nM_30m
 sortOrder cellType=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -316,6 +316,30 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type narrowPeak
         # subId=7319 dateSubmitted=2012-07-04
 
+        track wgEncodeOpenChromFaireSmallintestineocPk
+        parent wgEncodeOpenChromFaireViewPeaks off
+        shortLabel Small_intestine_OC Pk
+        longLabel Small intestine OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        subGroups view=Peaks cellType=t3SMALLINTESTINEOC treatment=AANONE
+        type narrowPeak
+        # subId=7322 dateSubmitted=2012-07-06
+
+        track wgEncodeOpenChromFaireKidneyocPk
+        parent wgEncodeOpenChromFaireViewPeaks off
+        shortLabel Kidney_OC Pk
+        longLabel Kidney OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        subGroups view=Peaks cellType=t3KIDNEYOC treatment=AANONE
+        type narrowPeak
+        # subId=7324 dateSubmitted=2012-07-06
+
+        track wgEncodeOpenChromFaireEndometriumocPk
+        parent wgEncodeOpenChromFaireViewPeaks off
+        shortLabel Endometrium_OC Pk
+        longLabel Endometrium OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        subGroups view=Peaks cellType=t3ENDOMETRIUMOC treatment=AANONE
+        type narrowPeak
+        # subId=7348 dateSubmitted=2012-07-12
+
     track wgEncodeOpenChromFaireViewSignal
     shortLabel FAIRE F-Seq Density Signal
     view SIG
@@ -611,6 +635,30 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type bigWig 0.000000 0.592400
         # subId=7319 dateSubmitted=2012-07-04
 
+        track wgEncodeOpenChromFaireSmallintestineocSig
+        parent wgEncodeOpenChromFaireViewSignal off
+        shortLabel Small_intestine_OC Sig
+        longLabel Small intestine OC FAIRE Signal from ENCODE/OpenChrom(UNC)
+        subGroups view=SIG cellType=t3SMALLINTESTINEOC treatment=AANONE
+        type bigWig 0.000000 0.854500
+        # subId=7322 dateSubmitted=2012-07-06
+
+        track wgEncodeOpenChromFaireKidneyocSig
+        parent wgEncodeOpenChromFaireViewSignal off
+        shortLabel Kidney_OC Sig
+        longLabel Kidney OC FAIRE Signal from ENCODE/OpenChrom(UNC)
+        subGroups view=SIG cellType=t3KIDNEYOC treatment=AANONE
+        type bigWig 0.000000 1.018100
+        # subId=7324 dateSubmitted=2012-07-06
+
+        track wgEncodeOpenChromFaireEndometriumocSig
+        parent wgEncodeOpenChromFaireViewSignal off
+        shortLabel Endometrium_OC Sig
+        longLabel Endometrium OC FAIRE Signal from ENCODE/OpenChrom(UNC)
+        subGroups view=SIG cellType=t3ENDOMETRIUMOC treatment=AANONE
+        type bigWig 0.000000 0.350500
+        # subId=7348 dateSubmitted=2012-07-12
+
     track wgEncodeOpenChromFaireViewSigBo
     shortLabel Base Overlap Signal
     view SIGBO
@@ -905,4 +953,28 @@ dataVersion through the ENCODE Jan 2011 Freeze
         subGroups view=SIGBO cellType=t3FRONTALCORTEXOC treatment=AANONE
         type bigWig 0.000000 2783.000000
         # subId=7319 dateSubmitted=2012-07-04
+
+        track wgEncodeOpenChromFaireSmallintestineocBaseOverlapSignal
+        parent wgEncodeOpenChromFaireViewSigBo off
+        shortLabel Small_intestine_OC
+        longLabel Small intestine OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        subGroups view=SIGBO cellType=t3SMALLINTESTINEOC treatment=AANONE
+        type bigWig 0.000000 2457.000000
+        # subId=7322 dateSubmitted=2012-07-06
+
+        track wgEncodeOpenChromFaireKidneyocBaseOverlapSignal
+        parent wgEncodeOpenChromFaireViewSigBo off
+        shortLabel Kidney_OC
+        longLabel Kidney OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        subGroups view=SIGBO cellType=t3KIDNEYOC treatment=AANONE
+        type bigWig 0.000000 2031.000000
+        # subId=7324 dateSubmitted=2012-07-06
+
+        track wgEncodeOpenChromFaireEndometriumocBaseOverlapSignal
+        parent wgEncodeOpenChromFaireViewSigBo off
+        shortLabel Endometrium_OC
+        longLabel Endometrium OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        subGroups view=SIGBO cellType=t3ENDOMETRIUMOC treatment=AANONE
+        type bigWig 0.000000 2355.000000
+        # subId=7348 dateSubmitted=2012-07-12
 
