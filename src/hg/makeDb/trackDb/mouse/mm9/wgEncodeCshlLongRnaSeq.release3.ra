@@ -34,7 +34,7 @@ compositeTrack on
 shortLabel CSHL Long RNA-seq
 longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group regulation
-subGroup1 view Views Contigs=Contigs PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Junctions=Splice_Junctions Alignments=Alignments
+subGroup1 view Views Contigs=Contigs PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal SJunctions=Splice_Junctions Alignments=Alignments
 subGroup2 cellType Cell_Line ADRENAL=Adrenal BLADDER=Bladder CBELLUM=Cerebellum CNS=CNS COLON=Colon CORTEX=Cortex DUOD=Duodenum FLOBE=Frontal_Lobe GFAT=Genital_Fat_Pad HEART=Heart KIDNEY=Kidney LGINT=Large_Intestine LIMB=Limb LIVER=Liver LUNG=Lung MAMG=Mammary_Gland OVARY=Ovary PLAC=Placenta SMINT=Small_Intestine SPLEEN=Spleen STOM=Stomach SUFAT=Subcutaneous_Fat_Pad TESTIS=Testis THYMUS=Thymus WBRAIN=Whole_Brain
 subGroup3 age Age ADULT8WKS=Adult_8_wks E11HALF=Embryonic_11.5_days E14=Embryonic_14_days E14HALF=Embryonic_14.5_days E18=Embryonic_18_days
 subGroup4 rep Rep rep1=1 rep2=2 repP=Pooled
@@ -1994,7 +1994,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Colon J
         longLabel Colon A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=COLON rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=COLON rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6215 dateSubmitted=2012-03-23
@@ -2003,7 +2003,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Kidney J
         longLabel Kidney A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=KIDNEY rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=KIDNEY rep=repP
         type bed 6 +
         color 204,121,167
         # subId=6216 dateSubmitted=2012-03-23
@@ -2012,7 +2012,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Heart J
         longLabel Heart A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=HEART rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=HEART rep=repP
         type bed 6 +
         color 153,38,0
         # subId=6217 dateSubmitted=2012-03-23
@@ -2021,7 +2021,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Lung J
         longLabel Lung A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=LUNG rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=LUNG rep=repP
         type bed 6 +
         # subId=6218 dateSubmitted=2012-03-23
 
@@ -2029,7 +2029,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SmInt J
         longLabel Small Intestine A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=SMINT rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=SMINT rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6219 dateSubmitted=2012-03-23
@@ -2038,7 +2038,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Duodenum J
         longLabel Duodenum A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=DUOD rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=DUOD rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6220 dateSubmitted=2012-03-23
@@ -2047,7 +2047,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel MaGland J
         longLabel Mammary Gland A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=MAMG rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=MAMG rep=repP
         type bed 6 +
         color 0,158,115
         # subId=6221 dateSubmitted=2012-03-23
@@ -2056,7 +2056,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Spleen J
         longLabel Spleen A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=SPLEEN rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=SPLEEN rep=repP
         type bed 6 +
         color 86,180,233
         # subId=6222 dateSubmitted=2012-03-23
@@ -2065,7 +2065,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel GenFatPad J
         longLabel Genital Fat Pad A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=GFAT rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=GFAT rep=repP
         type bed 6 +
         color 189,0,157
         # subId=6223 dateSubmitted=2012-03-23
@@ -2074,7 +2074,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SubcFatPad J
         longLabel Subcutaneous Fat Pad A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=SUFAT rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=SUFAT rep=repP
         type bed 6 +
         color 189,0,157
         # subId=6224 dateSubmitted=2012-03-23
@@ -2083,7 +2083,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Testis J
         longLabel Testis A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=TESTIS rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=TESTIS rep=repP
         type bed 6 +
         color 0,158,115
         # subId=6225 dateSubmitted=2012-03-23
@@ -2092,7 +2092,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Liver A8 J
         longLabel Liver A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=LIVER rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6226 dateSubmitted=2012-03-23
@@ -2101,7 +2101,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Stomach J
         longLabel Stomach A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=STOM rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=STOM rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6227 dateSubmitted=2012-03-23
@@ -2110,7 +2110,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Thymus J
         longLabel Thymus A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=THYMUS rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=THYMUS rep=repP
         type bed 6 +
         color 86,180,233
         # subId=6228 dateSubmitted=2012-03-23
@@ -2119,7 +2119,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Adrenal J
         longLabel Adrenal A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=ADRENAL rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=ADRENAL rep=repP
         type bed 6 +
         color 189,0,157
         # subId=6229 dateSubmitted=2012-03-23
@@ -2128,7 +2128,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Ovary J
         longLabel Ovary A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=OVARY rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=OVARY rep=repP
         type bed 6 +
         color 0,158,115
         # subId=6230 dateSubmitted=2012-03-23
@@ -2137,7 +2137,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel LgInt J
         longLabel Large Intestine A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=LGINT rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=LGINT rep=repP
         type bed 6 +
         color 230,159,0
         # subId=6231 dateSubmitted=2012-03-23
@@ -2146,7 +2146,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Liver E14.5 J
         longLabel Liver E14.5 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14HALF cellType=LIVER rep=repP
+        subGroups view=SJunctions age=E14HALF cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7344 dateSubmitted=2012-07-11
@@ -2155,7 +2155,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel CNS E14 J
         longLabel CNS E14 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14 cellType=CNS rep=repP
+        subGroups view=SJunctions age=E14 cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7361 dateSubmitted=2012-07-13
@@ -2164,7 +2164,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel CNS E18 J
         longLabel CNS E18 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E18 cellType=CNS rep=repP
+        subGroups view=SJunctions age=E18 cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7364 dateSubmitted=2012-07-13
@@ -2173,7 +2173,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel WholeBrain J
         longLabel Whole Brain E14.5 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14HALF cellType=WBRAIN rep=repP
+        subGroups view=SJunctions age=E14HALF cellType=WBRAIN rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7368 dateSubmitted=2012-07-13
@@ -2182,7 +2182,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel CNS E11.5 J
         longLabel CNS E11.5 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E11HALF cellType=CNS rep=repP
+        subGroups view=SJunctions age=E11HALF cellType=CNS rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7369 dateSubmitted=2012-07-13
@@ -2191,7 +2191,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Placenta J
         longLabel Placenta A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=PLAC rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=PLAC rep=repP
         type bed 6 +
         color 153,38,0
         # subId=7370 dateSubmitted=2012-07-13
@@ -2200,7 +2200,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Cortex J
         longLabel Cortex A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=CORTEX rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=CORTEX rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7377 dateSubmitted=2012-07-14
@@ -2209,7 +2209,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Bladder J
         longLabel Bladder A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=BLADDER rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=BLADDER rep=repP
         type bed 6 +
         color 204,121,167
         # subId=7378 dateSubmitted=2012-07-14
@@ -2218,7 +2218,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Liver E14 J
         longLabel Liver E14 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14 cellType=LIVER rep=repP
+        subGroups view=SJunctions age=E14 cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7383 dateSubmitted=2012-07-14
@@ -2227,7 +2227,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel FrontalLobe J
         longLabel Frontal Lobe A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=FLOBE rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=FLOBE rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7384 dateSubmitted=2012-07-14
@@ -2236,7 +2236,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Limb J
         longLabel Limb E14.5 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E14HALF cellType=LIMB rep=repP
+        subGroups view=SJunctions age=E14HALF cellType=LIMB rep=repP
         type bed 6 +
         color 102,50,200
         # subId=7387 dateSubmitted=2012-07-14
@@ -2245,7 +2245,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Liver E18 J
         longLabel Liver E18 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=E18 cellType=LIVER rep=repP
+        subGroups view=SJunctions age=E18 cellType=LIVER rep=repP
         type bed 6 +
         color 230,159,0
         # subId=7392 dateSubmitted=2012-07-14
@@ -2254,7 +2254,7 @@ maxWindowToDraw 1000000
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Cerebellum J
         longLabel Cerebellum A8 Long RNA-seq Junctions from ENCODE/CSHL
-        subGroups view=Junctions age=ADULT8WKS cellType=CBELLUM rep=repP
+        subGroups view=SJunctions age=ADULT8WKS cellType=CBELLUM rep=repP
         type bed 6 +
         color 105,105,105
         # subId=7394 dateSubmitted=2012-07-14
