@@ -4281,7 +4281,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing
+protocol Stam:HS27a_SOP-1.V.pdf
 
 term bone_marrow_HS5
 tag HS5
@@ -4299,7 +4299,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing 
+protocol Stam:HS5_SOP-1.V1-2.pdf
 
 term bone_marrow_MSC
 tag MSC
@@ -4317,7 +4317,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing
+protocol Stam:MSC_marrow-fibroblastoid_SOP_v2.pdf
 
 term HSaVEC
 tag HSAVEC
@@ -9843,7 +9843,7 @@ term ESET_(166621)
 tag ESET166621
 type Antibody
 antibodyDescription mouse monoclonal IgG2b, specific for an epitope mapping between amino acids 1195-1228 near the C-terminus of human ESET
-target SETDB1
+target ESET 
 targetDescription ERG-associated protein with SET domain (ESET), also designated Histone H3-K9 methyltransferase 4 or SET domain bifurcated 1, is a nuclear protein belonging to the histone-lysine methyltransferase family.  ESET is a histone methyltransferase, methylating Lys-9 of histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity.
 vendorName Santa Cruz Biotechnology
 vendorId sc-166621
@@ -10154,7 +10154,7 @@ lab Hardison
 lots J2108
 targetId GeneCard: GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation Human_-_GATA2_(SC-9008)(Western_blot):human_GATA2_SC-9008_validation_Hardison.pdf Mouse_-_:missing
+validation Human_-_:missing Mouse_-_GATA2_(SC-9008)(Western_blot):mouse_GATA2_SC-9008_validation_Hardison.pdf
 label GATA2 (sc-9008)
 
 term  GATA3_(SC-268)
@@ -11093,6 +11093,7 @@ targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation Human_-_:missing Mouse_-_:missing
 label JunD (sc-74)
+# validation Human_-_JunD(sc-74)(ChIP_MS,MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 
 term KAP1
 tag KAP1
@@ -11144,7 +11145,7 @@ label LEF1 (sc-8592)
 term LSD1
 tag LSD1
 type Antibody
-target KDM1A
+target LSD1
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 vendorName Bethyl
@@ -11155,7 +11156,7 @@ lots A300-215A-1
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
 validation Human_-_KDM1A&#47;LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
-label KDM1A&#47;LSD1 (A300-215A)
+label LSD1&#47;KDM1A (A300-215A)
 
 term MafF_(M8194)
 tag MAFF
@@ -11680,7 +11681,7 @@ label NSD2 (ab75359)
 term p300
 tag P300
 type Antibody
-target EP300
+target P300
 targetDescription EP300(c-20)
 targetClass HISase
 antibodyDescription Rabbit Polyclonal. Antibody Target: P300
@@ -11691,12 +11692,12 @@ lab Myers
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
-label EP300/P300 (sc-585)
+label P300&#47;EP300 (sc-585)
 
 term P300_KAT3B
 tag P300KAT3B
 type Antibody
-target EP300
+target P300
 targetClass HISase
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
@@ -11708,12 +11709,12 @@ lots A300-358A-1
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_P300_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
-label EP300/P300/KAT3B (A300-358A)
+label P300&#47;EP300&#47;KAT3B (A300-358A)
 
 term p300_(SC-584)
 tag P300b
 type Antibody
-target EP300
+target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
 targetClass HISase
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin. Antibody Target: P300
@@ -11724,12 +11725,12 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
-label EP300/P300 (sc-584)
+label P300&#47;EP300 (sc-584)
 
 term p300_(SC-48343)
 tag P300c
 type Antibody
-target EP300
+target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein.
 targetClass HISase
 antibodyDescription mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: P300
@@ -11740,7 +11741,7 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing
-label EP300/P300 (sc-48343)
+label P300&#47;EP300 (sc-48343)
 
 term PABP
 tag PABP
@@ -11840,7 +11841,7 @@ label PBX3 (sc-891)
 term PCAF
 tag PCAF
 type Antibody
-target KAT2B
+target PCAF
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
 vendorName Bethyl
@@ -11851,7 +11852,7 @@ lots A301-666A-1
 targetId GeneCard:KAT2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
 validation Human_-_KAT2B&#47;PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
-label KAT2B&#47;PCAF (A301-666A)
+label PCAF&#47;KAT2B (A301-666A)
 
 term PGC1A
 tag PGC1A
@@ -12968,7 +12969,7 @@ orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname
 lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
-validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
+validation Human_-_TR4_(Western_blot,ChIP):human_TR4_validation_Farnham.pdf
 label TR4
 
 term TRIM28_(SC-81411)
