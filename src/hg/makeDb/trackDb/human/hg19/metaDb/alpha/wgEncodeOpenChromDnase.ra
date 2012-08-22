@@ -760,6 +760,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003465
+expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794AlnRep1.bam,wgEncodeOpenChromDnaseCd20ro01794AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -778,6 +780,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003465
+expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794AlnRep2.bam,wgEncodeOpenChromDnaseCd20ro01794AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -796,6 +800,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003465
+expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -814,6 +820,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003465
+expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -832,6 +840,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003465
+expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -849,6 +859,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003465
+expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -866,6 +878,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003465
+expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794Sig.bigWig
 grant Crawford
 lab Duke
@@ -884,6 +898,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-09
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003481
+expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocAlnRep1.bam,wgEncodeOpenChromDnaseCerebellumocAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -902,6 +918,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-09
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003481
+expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocAlnRep2.bam,wgEncodeOpenChromDnaseCerebellumocAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -920,6 +938,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-09
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003481
+expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -938,6 +958,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-09
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003481
+expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -956,6 +978,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-09
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003481
+expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -973,6 +997,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-09
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003481
+expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -990,6 +1016,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-09
 dateUnrestricted 2013-04-09
+dccAccession wgEncodeEH003481
+expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocSig.bigWig
 grant Crawford
 lab Duke
@@ -1008,6 +1036,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-08
 dateUnrestricted 2013-04-07
+dccAccession wgEncodeEH003480
+expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep1.bam,wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -1026,6 +1056,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-08
 dateUnrestricted 2013-04-07
+dccAccession wgEncodeEH003480
+expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep2.bam,wgEncodeOpenChromDnaseCerebrumfrontalocAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -1044,6 +1076,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-08
 dateUnrestricted 2013-04-07
+dccAccession wgEncodeEH003480
+expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -1062,6 +1096,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-08
 dateUnrestricted 2013-04-07
+dccAccession wgEncodeEH003480
+expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -1080,6 +1116,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-08
 dateUnrestricted 2013-04-07
+dccAccession wgEncodeEH003480
+expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -1097,6 +1135,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-08
 dateUnrestricted 2013-04-07
+dccAccession wgEncodeEH003480
+expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -1114,6 +1154,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-08
 dateUnrestricted 2013-04-07
+dccAccession wgEncodeEH003480
+expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocSig.bigWig
 grant Crawford
 lab Duke
@@ -2029,6 +2071,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003476
+expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348AlnRep1.bam,wgEncodeOpenChromDnaseFibroblgm03348AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -2047,6 +2091,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003476
+expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348AlnRep2.bam,wgEncodeOpenChromDnaseFibroblgm03348AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -2065,6 +2111,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003476
+expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -2083,6 +2131,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003477
+expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep1.bam,wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -2102,6 +2152,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003477
+expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep2.bam,wgEncodeOpenChromDnaseFibroblgm03348LenticonAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -2121,6 +2173,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003477
+expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -2140,6 +2194,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003477
+expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -2159,6 +2215,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003477
+expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -2177,6 +2235,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003477
+expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -2195,6 +2255,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003477
+expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonSig.bigWig
 grant Crawford
 lab Duke
@@ -2214,6 +2276,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003473
+expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep1.bam,wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -2233,6 +2297,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003473
+expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep2.bam,wgEncodeOpenChromDnaseFibroblgm03348LentimyodAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -2252,6 +2318,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003473
+expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -2271,6 +2339,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003473
+expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -2290,6 +2360,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003473
+expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -2308,6 +2380,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003473
+expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -2326,6 +2400,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003473
+expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodSig.bigWig
 grant Crawford
 lab Duke
@@ -2345,6 +2421,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003476
+expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -2363,6 +2441,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003476
+expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -2380,6 +2460,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003476
+expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -2397,6 +2479,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003476
+expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348Sig.bigWig
 grant Crawford
 lab Duke
@@ -3129,6 +3213,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003471
+expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocAlnRep1.bam,wgEncodeOpenChromDnaseFrontalcortexocAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -3147,6 +3233,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003471
+expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocAlnRep2.bam,wgEncodeOpenChromDnaseFrontalcortexocAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -3165,6 +3253,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003471
+expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -3183,6 +3273,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003471
+expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -3201,6 +3293,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003471
+expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -3218,6 +3312,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003471
+expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -3235,6 +3331,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003471
+expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocSig.bigWig
 grant Crawford
 lab Duke
@@ -3253,6 +3351,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003474
+expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellAlnRep1.bam,wgEncodeOpenChromDnaseGcbcellAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -3271,6 +3371,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003474
+expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellAlnRep2.bam,wgEncodeOpenChromDnaseGcbcellAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -3289,6 +3391,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003474
+expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -3307,6 +3411,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003474
+expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -3325,6 +3431,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003474
+expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -3342,6 +3450,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003474
+expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -3359,6 +3469,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003474
+expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellSig.bigWig
 grant Crawford
 lab Duke
@@ -3543,6 +3655,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003487
+expId 3487
 fileName wgEncodeOpenChromDnaseGm10248AlnRep1.bam,wgEncodeOpenChromDnaseGm10248AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -3561,6 +3675,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003487
+expId 3487
 fileName wgEncodeOpenChromDnaseGm10248AlnRep2.bam,wgEncodeOpenChromDnaseGm10248AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -3579,6 +3695,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003487
+expId 3487
 fileName wgEncodeOpenChromDnaseGm10248BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -3597,6 +3715,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003487
+expId 3487
 fileName wgEncodeOpenChromDnaseGm10248Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -3615,6 +3735,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003487
+expId 3487
 fileName wgEncodeOpenChromDnaseGm10248RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -3632,6 +3754,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003487
+expId 3487
 fileName wgEncodeOpenChromDnaseGm10248RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -3649,6 +3773,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH003487
+expId 3487
 fileName wgEncodeOpenChromDnaseGm10248Sig.bigWig
 grant Crawford
 lab Duke
@@ -3667,6 +3793,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003484
+expId 3484
 fileName wgEncodeOpenChromDnaseGm10266AlnRep1.bam,wgEncodeOpenChromDnaseGm10266AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -3685,6 +3813,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003484
+expId 3484
 fileName wgEncodeOpenChromDnaseGm10266AlnRep2.bam,wgEncodeOpenChromDnaseGm10266AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -3703,6 +3833,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003484
+expId 3484
 fileName wgEncodeOpenChromDnaseGm10266BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -3721,6 +3853,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003484
+expId 3484
 fileName wgEncodeOpenChromDnaseGm10266Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -3739,6 +3873,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003484
+expId 3484
 fileName wgEncodeOpenChromDnaseGm10266RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -3756,6 +3892,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003484
+expId 3484
 fileName wgEncodeOpenChromDnaseGm10266RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -3773,6 +3911,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003484
+expId 3484
 fileName wgEncodeOpenChromDnaseGm10266Sig.bigWig
 grant Crawford
 lab Duke
@@ -4476,6 +4616,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-17
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH003486
+expId 3486
 fileName wgEncodeOpenChromDnaseGm13976AlnRep1.bam,wgEncodeOpenChromDnaseGm13976AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -4494,6 +4636,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-17
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH003486
+expId 3486
 fileName wgEncodeOpenChromDnaseGm13976AlnRep2.bam,wgEncodeOpenChromDnaseGm13976AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -4512,6 +4656,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-17
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH003486
+expId 3486
 fileName wgEncodeOpenChromDnaseGm13976BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -4530,6 +4676,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-17
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH003486
+expId 3486
 fileName wgEncodeOpenChromDnaseGm13976Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -4548,6 +4696,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-17
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH003486
+expId 3486
 fileName wgEncodeOpenChromDnaseGm13976RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -4565,6 +4715,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-17
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH003486
+expId 3486
 fileName wgEncodeOpenChromDnaseGm13976RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -4582,6 +4734,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-17
 dateUnrestricted 2013-04-16
+dccAccession wgEncodeEH003486
+expId 3486
 fileName wgEncodeOpenChromDnaseGm13976Sig.bigWig
 grant Crawford
 lab Duke
@@ -4600,10 +4754,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003488
+expId 3488
 fileName wgEncodeOpenChromDnaseGm13977AlnRep1.bam,wgEncodeOpenChromDnaseGm13977AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 9d86c4a404f054628496fe2a9af862fd,34258909143cff577694ac73846e7a34
 project wgEncode
 replicate 1
 subId 7514
@@ -4617,10 +4774,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003488
+expId 3488
 fileName wgEncodeOpenChromDnaseGm13977AlnRep2.bam,wgEncodeOpenChromDnaseGm13977AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum c9f3281abd29420617df710cc34f530c,f6a712cba67f41743b3af1971787e20e
 project wgEncode
 replicate 2
 subId 7514
@@ -4634,10 +4794,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003488
+expId 3488
 fileName wgEncodeOpenChromDnaseGm13977BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 991b87bc54897827e7433865db41d03b
 project wgEncode
 subId 7514
 tableName wgEncodeOpenChromDnaseGm13977BaseOverlapSignal
@@ -4651,10 +4814,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003488
+expId 3488
 fileName wgEncodeOpenChromDnaseGm13977Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum b1a3d5910567ebdf1ba22abbada604d4
 project wgEncode
 subId 7514
 tableName wgEncodeOpenChromDnaseGm13977Pk
@@ -4668,9 +4834,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003488
+expId 3488
 fileName wgEncodeOpenChromDnaseGm13977RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum c82611cf11241172148ff4b849f8f321
 project wgEncode
 replicate 1
 subId 7514
@@ -4684,9 +4853,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003488
+expId 3488
 fileName wgEncodeOpenChromDnaseGm13977RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 15bb366e3ce5a6295f918dbb494db9b7
 project wgEncode
 replicate 2
 subId 7514
@@ -4700,10 +4872,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003488
+expId 3488
 fileName wgEncodeOpenChromDnaseGm13977Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+md5sum 964c154c361b8b6d4a9d784fb3882eb9
 project wgEncode
 subId 7514
 tableName wgEncodeOpenChromDnaseGm13977Sig
@@ -5498,6 +5673,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003485
+expId 3485
 fileName wgEncodeOpenChromDnaseGm20000AlnRep1.bam,wgEncodeOpenChromDnaseGm20000AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -5516,6 +5693,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003485
+expId 3485
 fileName wgEncodeOpenChromDnaseGm20000AlnRep2.bam,wgEncodeOpenChromDnaseGm20000AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -5534,6 +5713,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003485
+expId 3485
 fileName wgEncodeOpenChromDnaseGm20000BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -5552,6 +5733,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003485
+expId 3485
 fileName wgEncodeOpenChromDnaseGm20000Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -5570,6 +5753,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003485
+expId 3485
 fileName wgEncodeOpenChromDnaseGm20000RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -5587,6 +5772,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003485
+expId 3485
 fileName wgEncodeOpenChromDnaseGm20000RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -5604,6 +5791,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-16
 dateUnrestricted 2013-04-15
+dccAccession wgEncodeEH003485
+expId 3485
 fileName wgEncodeOpenChromDnaseGm20000Sig.bigWig
 grant Crawford
 lab Duke
@@ -6150,6 +6339,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-05
 dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003479
+expId 3479
 fileName wgEncodeOpenChromDnaseHeartocAlnRep1.bam,wgEncodeOpenChromDnaseHeartocAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -6168,6 +6359,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-05
 dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003479
+expId 3479
 fileName wgEncodeOpenChromDnaseHeartocAlnRep2.bam,wgEncodeOpenChromDnaseHeartocAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -6186,6 +6379,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-05
 dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003479
+expId 3479
 fileName wgEncodeOpenChromDnaseHeartocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -6204,6 +6399,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-05
 dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003479
+expId 3479
 fileName wgEncodeOpenChromDnaseHeartocPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -6222,6 +6419,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-05
 dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003479
+expId 3479
 fileName wgEncodeOpenChromDnaseHeartocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -6239,6 +6438,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-05
 dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003479
+expId 3479
 fileName wgEncodeOpenChromDnaseHeartocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -6256,6 +6457,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-05
 dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003479
+expId 3479
 fileName wgEncodeOpenChromDnaseHeartocSig.bigWig
 grant Crawford
 lab Duke
@@ -8776,6 +8979,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003482
+expId 3482
 fileName wgEncodeOpenChromDnaseImr90AlnRep1.bam,wgEncodeOpenChromDnaseImr90AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -8794,6 +8999,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003482
+expId 3482
 fileName wgEncodeOpenChromDnaseImr90AlnRep2.bam,wgEncodeOpenChromDnaseImr90AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -8812,6 +9019,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003482
+expId 3482
 fileName wgEncodeOpenChromDnaseImr90BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -8830,6 +9039,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003482
+expId 3482
 fileName wgEncodeOpenChromDnaseImr90Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -8848,6 +9059,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003482
+expId 3482
 fileName wgEncodeOpenChromDnaseImr90RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -8865,6 +9078,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003482
+expId 3482
 fileName wgEncodeOpenChromDnaseImr90RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -8882,6 +9097,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003482
+expId 3482
 fileName wgEncodeOpenChromDnaseImr90Sig.bigWig
 grant Crawford
 lab Duke
@@ -10023,6 +10240,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep1.bam,wgEncodeOpenChromDnaseK562G1phaseAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -10042,6 +10261,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep2.bam,wgEncodeOpenChromDnaseK562G1phaseAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -10061,6 +10282,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseAlnRep3.bam,wgEncodeOpenChromDnaseK562G1phaseAlnRep3.bam.bai
 grant Crawford
 lab Duke
@@ -10080,6 +10303,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -10099,6 +10324,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phasePk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -10118,6 +10345,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -10136,6 +10365,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -10154,6 +10385,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
@@ -10172,6 +10405,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003469
+expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseSig.bigWig
 grant Crawford
 lab Duke
@@ -10191,6 +10426,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep1.bam,wgEncodeOpenChromDnaseK562G2mphaseAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -10210,6 +10447,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep2.bam,wgEncodeOpenChromDnaseK562G2mphaseAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -10229,6 +10468,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseAlnRep3.bam,wgEncodeOpenChromDnaseK562G2mphaseAlnRep3.bam.bai
 grant Crawford
 lab Duke
@@ -10248,6 +10489,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -10267,6 +10510,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphasePk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -10286,6 +10531,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -10304,6 +10551,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -10322,6 +10571,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
@@ -10340,6 +10591,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-27
 dateUnrestricted 2013-03-27
+dccAccession wgEncodeEH003472
+expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseSig.bigWig
 grant Crawford
 lab Duke
@@ -10665,10 +10918,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrAlnRep1.bam,wgEncodeOpenChromDnaseK562Saha1u72hrAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 14b2beecd1b0090012c045ec8dc84618,cbd916e10906cbf9bc682a6420e72b69
 project wgEncode
 replicate 1
 subId 7516
@@ -10683,10 +10939,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrAlnRep2.bam,wgEncodeOpenChromDnaseK562Saha1u72hrAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 4e46567dce2da9251a739ec8127ff956,fe01285509be2510ec52309dbe9f1cc5
 project wgEncode
 replicate 2
 subId 7516
@@ -10701,10 +10960,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrAlnRep3.bam,wgEncodeOpenChromDnaseK562Saha1u72hrAlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 39cb164c99f79cdfda54f914597be7c4,06327033b57211a3866026f394b286f0
 project wgEncode
 replicate 3
 subId 7516
@@ -10719,10 +10981,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 0394f8279252106d7a0e27c021849cd0
 project wgEncode
 subId 7516
 tableName wgEncodeOpenChromDnaseK562Saha1u72hrBaseOverlapSignal
@@ -10737,10 +11002,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 9940212e3156352f57a76d874e63f268
 project wgEncode
 subId 7516
 tableName wgEncodeOpenChromDnaseK562Saha1u72hrPk
@@ -10755,9 +11023,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum ed9732791ed9996ec5d455600c8389e9
 project wgEncode
 replicate 1
 subId 7516
@@ -10772,9 +11043,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum a9e99f2fa0d902d31e18b889b2989bc1
 project wgEncode
 replicate 2
 subId 7516
@@ -10789,9 +11063,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+md5sum 7d4c5af9e3d3298c83425ed22e147ea5
 project wgEncode
 replicate 3
 subId 7516
@@ -10806,10 +11083,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003490
+expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
+md5sum b143e54ec8a5060cb2a39330710fc121
 project wgEncode
 subId 7516
 tableName wgEncodeOpenChromDnaseK562Saha1u72hrSig
@@ -10824,10 +11104,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlAlnRep1.bam,wgEncodeOpenChromDnaseK562SahactrlAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 2555eb5f7469104869c18445154c26dd,6b0baea031bd87b621dc421d77206e4c
 project wgEncode
 replicate 1
 subId 7515
@@ -10842,10 +11125,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlAlnRep2.bam,wgEncodeOpenChromDnaseK562SahactrlAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum e9b25f633d4d9345ecbfed118d36346c,a884acfd5aa4bc9460c3d3dea7b24f2d
 project wgEncode
 replicate 2
 subId 7515
@@ -10860,10 +11146,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlAlnRep3.bam,wgEncodeOpenChromDnaseK562SahactrlAlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 3b8561240045a05a70e5a5a30832eb51,32db16af298968fb109d1852543aee8a
 project wgEncode
 replicate 3
 subId 7515
@@ -10878,10 +11167,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 95ad73f8c56dd8d65cf9f03dcc87ee05
 project wgEncode
 subId 7515
 tableName wgEncodeOpenChromDnaseK562SahactrlBaseOverlapSignal
@@ -10896,10 +11188,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum b2127a59f5a0a232bb914e865b635134
 project wgEncode
 subId 7515
 tableName wgEncodeOpenChromDnaseK562SahactrlPk
@@ -10914,9 +11209,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 638a438998cd023b70c24f785aa3ffa2
 project wgEncode
 replicate 1
 subId 7515
@@ -10931,9 +11229,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum fa208c5ca019db1b5f7718041767e23a
 project wgEncode
 replicate 2
 subId 7515
@@ -10948,9 +11249,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
+md5sum b8b7ca1f84e01ee1f6ae5c3932ec700c
 project wgEncode
 replicate 3
 subId 7515
@@ -10965,10 +11269,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-30
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003489
+expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
+md5sum c1f9ce64d6cf6f6a0847487e464c98b5
 project wgEncode
 subId 7515
 tableName wgEncodeOpenChromDnaseK562SahactrlSig
@@ -11551,6 +11858,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep1.bam,wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -11570,6 +11879,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep2.bam,wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -11589,6 +11900,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep3.bam,wgEncodeOpenChromDnaseMcf7CtcfshrnaAlnRep3.bam.bai
 grant Crawford
 lab Duke
@@ -11608,6 +11921,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -11627,6 +11942,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -11646,6 +11963,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -11664,6 +11983,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -11682,6 +12003,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
@@ -11700,6 +12023,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003467
+expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaSig.bigWig
 grant Crawford
 lab Duke
@@ -11871,6 +12196,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003470
+expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep1.bam,wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -11890,6 +12217,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003470
+expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep2.bam,wgEncodeOpenChromDnaseMcf7HypoxlacconAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -11909,6 +12238,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003470
+expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -11928,6 +12259,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003470
+expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -11947,6 +12280,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003470
+expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -11965,6 +12300,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003470
+expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -11983,6 +12320,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
+dccAccession wgEncodeEH003470
+expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconSig.bigWig
 grant Crawford
 lab Duke
@@ -12027,6 +12366,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep1.bam,wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -12046,6 +12387,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep2.bam,wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -12065,6 +12408,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep3.bam,wgEncodeOpenChromDnaseMcf7RandshrnaAlnRep3.bam.bai
 grant Crawford
 lab Duke
@@ -12084,6 +12429,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -12103,6 +12450,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -12122,6 +12471,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -12140,6 +12491,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -12158,6 +12511,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
@@ -12176,6 +12531,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-05-02
 dateUnrestricted 2013-02-02
+dccAccession wgEncodeEH003468
+expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaSig.bigWig
 grant Crawford
 lab Duke
@@ -12877,6 +13234,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003466
+expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14AlnRep1.bam,wgEncodeOpenChromDnaseMonocd14AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -12895,6 +13254,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003466
+expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14AlnRep2.bam,wgEncodeOpenChromDnaseMonocd14AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -12913,6 +13274,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003466
+expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -12931,6 +13294,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003466
+expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -12949,6 +13314,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003466
+expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -12966,6 +13333,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003466
+expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -12983,6 +13352,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-25
 dateUnrestricted 2013-01-25
+dccAccession wgEncodeEH003466
+expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14Sig.bigWig
 grant Crawford
 lab Duke
@@ -13127,6 +13498,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003478
+expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellAlnRep1.bam,wgEncodeOpenChromDnaseNaivebcellAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -13145,6 +13518,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003478
+expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellAlnRep2.bam,wgEncodeOpenChromDnaseNaivebcellAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -13163,6 +13538,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003478
+expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -13181,6 +13558,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003478
+expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -13199,6 +13578,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003478
+expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -13216,6 +13597,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003478
+expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -13233,6 +13616,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-03
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003478
+expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellSig.bigWig
 grant Crawford
 lab Duke
@@ -13444,6 +13829,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep1.bam,wgEncodeOpenChromDnaseOlfneurosphereAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -13462,6 +13849,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep2.bam,wgEncodeOpenChromDnaseOlfneurosphereAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -13480,6 +13869,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereAlnRep3.bam,wgEncodeOpenChromDnaseOlfneurosphereAlnRep3.bam.bai
 grant Crawford
 lab Duke
@@ -13498,6 +13889,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -13516,6 +13909,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurospherePk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -13534,6 +13929,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -13551,6 +13948,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -13568,6 +13967,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
@@ -13585,6 +13986,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-02
 dateUnrestricted 2013-04-02
+dccAccession wgEncodeEH003475
+expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereSig.bigWig
 grant Crawford
 lab Duke
@@ -14377,10 +14780,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003491
+expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocAlnRep1.bam,wgEncodeOpenChromDnasePsoasmuscleocAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 70906a3c9cb62d5371c6aa4678032215,10e5fb77ad9ca9f5c0864cf894cba880
 project wgEncode
 replicate 1
 subId 7557
@@ -14394,10 +14800,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003491
+expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocAlnRep2.bam,wgEncodeOpenChromDnasePsoasmuscleocAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum b5573b31ea96417087d0e808bbc54b93,27418707ff6281d4d7ca597c95ea42d9
 project wgEncode
 replicate 2
 subId 7557
@@ -14411,10 +14820,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003491
+expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 1e3b3ef3447e420e90ebdff3678bf70c
 project wgEncode
 subId 7557
 tableName wgEncodeOpenChromDnasePsoasmuscleocBaseOverlapSignal
@@ -14428,10 +14840,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003491
+expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 3aa80bd4308c272847b56f8e694fcac3
 project wgEncode
 subId 7557
 tableName wgEncodeOpenChromDnasePsoasmuscleocPk
@@ -14445,9 +14860,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003491
+expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 2000086c4e92799276164177b719c98a
 project wgEncode
 replicate 1
 subId 7557
@@ -14461,9 +14879,12 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003491
+expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum d818465eea3a2162da6ed217fa9cd802
 project wgEncode
 replicate 2
 subId 7557
@@ -14477,10 +14898,13 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-04-30
+dccAccession wgEncodeEH003491
+expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum 5c7f9c6885c065eb9d3277ee726f730d
 project wgEncode
 subId 7557
 tableName wgEncodeOpenChromDnasePsoasmuscleocSig
@@ -14639,6 +15063,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003483
+expId 3483
 fileName wgEncodeOpenChromDnaseSknshAlnRep1.bam,wgEncodeOpenChromDnaseSknshAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -14657,6 +15083,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003483
+expId 3483
 fileName wgEncodeOpenChromDnaseSknshAlnRep2.bam,wgEncodeOpenChromDnaseSknshAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -14675,6 +15103,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003483
+expId 3483
 fileName wgEncodeOpenChromDnaseSknshBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -14693,6 +15123,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003483
+expId 3483
 fileName wgEncodeOpenChromDnaseSknshPk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -14711,6 +15143,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003483
+expId 3483
 fileName wgEncodeOpenChromDnaseSknshRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -14728,6 +15162,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003483
+expId 3483
 fileName wgEncodeOpenChromDnaseSknshRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -14745,6 +15181,8 @@ dataType DnaseSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-14
 dateUnrestricted 2013-04-14
+dccAccession wgEncodeEH003483
+expId 3483
 fileName wgEncodeOpenChromDnaseSknshSig.bigWig
 grant Crawford
 lab Duke
@@ -15882,4 +16320,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 524810237
+# MAGIC: 156790226
