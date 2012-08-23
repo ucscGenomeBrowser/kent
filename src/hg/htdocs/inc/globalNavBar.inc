@@ -35,9 +35,9 @@
 </li>
 <li class="menuparent"><span>Downloads</span>
 	<ul style="display: none; visibility: hidden;">
-	<li class="first"><a href="http://hgdownload.cse.ucsc.edu/downloads.html">Genome Data</a></li>
-	<li><a href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
-	<li><a href="http://hgdownload.cse.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
+	<li class="first"><a href="http://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
 	</ul>
@@ -72,7 +72,6 @@
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
 <li><a href="../training.html">Training</a></li>
 <li><a href="../contacts.html">Mailing Lists</a></li>
-<li><a href="../mirror.html">Browser Mirrors</a></li>
 <li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
 </ul>
 </li>

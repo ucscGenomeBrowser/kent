@@ -154,134 +154,6 @@ tableName wgEncodeSydhTfbsA549Bhlhe40IggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsA549Bhlhe40cIggrabAlnRep1
-objType file
-antibody BHLHE40_(NB100-1800)
-cell A549
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId A549/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-08-01
-dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsA549Bhlhe40cIggrabAlnRep1.bam,wgEncodeSydhTfbsA549Bhlhe40cIggrabAlnRep1.bam.bai
-grant Snyder
-lab Stanford
-project wgEncode
-replicate 1
-setType exp
-subId 7856
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsA549Bhlhe40cIggrabAlnRep2
-objType file
-antibody BHLHE40_(NB100-1800)
-cell A549
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId A549/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-08-01
-dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsA549Bhlhe40cIggrabAlnRep2.bam,wgEncodeSydhTfbsA549Bhlhe40cIggrabAlnRep2.bam.bai
-grant Snyder
-lab Stanford
-project wgEncode
-replicate 2
-setType exp
-subId 7856
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsA549Bhlhe40cIggrabPk
-objType table
-antibody BHLHE40_(NB100-1800)
-cell A549
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId A549/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-08-01
-dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsA549Bhlhe40cIggrabPk.narrowPeak.gz
-grant Snyder
-lab Stanford
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 7856
-tableName wgEncodeSydhTfbsA549Bhlhe40cIggrabPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhTfbsA549Bhlhe40cIggrabRawDataRep1
-objType file
-antibody BHLHE40_(NB100-1800)
-cell A549
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId A549/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-08-01
-dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsA549Bhlhe40cIggrabRawDataRep1.fastq.tgz
-grant Snyder
-lab Stanford
-project wgEncode
-replicate 1
-setType exp
-subId 7856
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsA549Bhlhe40cIggrabRawDataRep2
-objType file
-antibody BHLHE40_(NB100-1800)
-cell A549
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId A549/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-08-01
-dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsA549Bhlhe40cIggrabRawDataRep2.fastq.tgz
-grant Snyder
-lab Stanford
-project wgEncode
-replicate 2
-setType exp
-subId 7856
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsA549Bhlhe40cIggrabSig
-objType table
-antibody BHLHE40_(NB100-1800)
-cell A549
-composite wgEncodeSydhTfbs
-control IgG-rab
-controlId A549/None/Input/IgG-rab
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-08-01
-dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsA549Bhlhe40cIggrabSig.bigWig
-grant Snyder
-lab Stanford
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 7856
-tableName wgEncodeSydhTfbsA549Bhlhe40cIggrabSig
-treatment None
-view Signal
-
 metaObject wgEncodeSydhTfbsA549CebpbIggrabAlnRep1
 objType file
 antibody CEBPB
@@ -438,14 +310,17 @@ antibody c-Myc
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003385
+expId 3385
 fileName wgEncodeSydhTfbsA549CmycIggrabAlnRep1.bam,wgEncodeSydhTfbsA549CmycIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 581ce2b98c9ff128287dcf5273ef3733,8f036aa24277fcab874240e209343a87
 project wgEncode
 replicate 1
 setType exp
@@ -459,14 +334,17 @@ antibody c-Myc
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003385
+expId 3385
 fileName wgEncodeSydhTfbsA549CmycIggrabAlnRep2.bam,wgEncodeSydhTfbsA549CmycIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 82316d956cfe83a4584573538800db30,a04c774009f4b23e4b4be3535b3f9905
 project wgEncode
 replicate 2
 setType exp
@@ -480,14 +358,17 @@ antibody c-Myc
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003385
+expId 3385
 fileName wgEncodeSydhTfbsA549CmycIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+md5sum adfd0e32d5582e6d308e088bba680b08
 project wgEncode
 setType exp
 subId 7843
@@ -501,14 +382,17 @@ antibody c-Myc
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003385
+expId 3385
 fileName wgEncodeSydhTfbsA549CmycIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum cdd8deb9a350dab6e64f24e15cf5617c
 project wgEncode
 replicate 1
 setType exp
@@ -522,14 +406,17 @@ antibody c-Myc
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003385
+expId 3385
 fileName wgEncodeSydhTfbsA549CmycIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 9ea890d90d4a8cc6153ee281cab5d602
 project wgEncode
 replicate 2
 setType exp
@@ -543,14 +430,17 @@ antibody c-Myc
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003385
+expId 3385
 fileName wgEncodeSydhTfbsA549CmycIggrabSig.bigWig
 grant Snyder
 lab Stanford
+md5sum dd49e94d886076d1b5bb80b932edb4a5
 project wgEncode
 setType exp
 subId 7843
@@ -564,14 +454,17 @@ antibody CTCF_(SC-15914)
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003384
+expId 3384
 fileName wgEncodeSydhTfbsA549CtcfbIggrabAlnRep1.bam,wgEncodeSydhTfbsA549CtcfbIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 2dcb86ddd8019efcdbd6b7e88cc76dcf,761828d94b06447146b8a63a7ae122ec
 project wgEncode
 replicate 1
 setType exp
@@ -585,14 +478,17 @@ antibody CTCF_(SC-15914)
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003384
+expId 3384
 fileName wgEncodeSydhTfbsA549CtcfbIggrabAlnRep2.bam,wgEncodeSydhTfbsA549CtcfbIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 940248bbc40bfd37a970e768c821dba1,9351c0d26f588a7fd7919972a600a766
 project wgEncode
 replicate 2
 setType exp
@@ -606,14 +502,17 @@ antibody CTCF_(SC-15914)
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003384
+expId 3384
 fileName wgEncodeSydhTfbsA549CtcfbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+md5sum 7264cd2dd1a9f716bb4536e89a539c21
 project wgEncode
 setType exp
 subId 7842
@@ -627,14 +526,17 @@ antibody CTCF_(SC-15914)
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003384
+expId 3384
 fileName wgEncodeSydhTfbsA549CtcfbIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 8ac0c00061ec13f8bfa27e40714a4c48
 project wgEncode
 replicate 1
 setType exp
@@ -648,14 +550,17 @@ antibody CTCF_(SC-15914)
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003384
+expId 3384
 fileName wgEncodeSydhTfbsA549CtcfbIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum d09c70ae818a9c9a489930a90e635196
 project wgEncode
 replicate 2
 setType exp
@@ -669,14 +574,17 @@ antibody CTCF_(SC-15914)
 cell A549
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId A549/None/Input/IgG-rab
+controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003384
+expId 3384
 fileName wgEncodeSydhTfbsA549CtcfbIggrabSig.bigWig
 grant Snyder
 lab Stanford
+md5sum 6135077ab72216c596cd3f18e5724e1d
 project wgEncode
 setType exp
 subId 7842
@@ -2501,20 +2409,23 @@ tableName wgEncodeSydhTfbsGm12878Brca1a300IggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep1
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep1
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep1.bam,wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep1.bam.bai
+dccAccession wgEncodeEH003386
+expId 3386
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep1.bam,wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 6e28dd49f7beb2a7ce39392c4f0374cc,16f3a87509c73102fb997c624cf8cc8f
 project wgEncode
 replicate 1
 setType exp
@@ -2522,20 +2433,23 @@ subId 7857
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep2
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep2
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep2.bam,wgEncodeSydhTfbsGm12878CdpbiotechIggmusAlnRep2.bam.bai
+dccAccession wgEncodeEH003386
+expId 3386
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep2.bam,wgEncodeSydhTfbsGm12878Cdpsc6327IggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 4a4867a44c7c81e3af16373f784c9aec,e0e5239a306712e6fc42bca6cc8faa0b
 project wgEncode
 replicate 2
 setType exp
@@ -2543,42 +2457,48 @@ subId 7857
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusPk
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusPk
 objType table
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusPk.narrowPeak.gz
+dccAccession wgEncodeEH003386
+expId 3386
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 52ed65dd7ad9cf290819dc2431d7966a
 project wgEncode
 setType exp
 subId 7857
-tableName wgEncodeSydhTfbsGm12878CdpbiotechIggmusPk
+tableName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusRawDataRep1
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusRawDataRep1
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusRawDataRep1.fastq.tgz
+dccAccession wgEncodeEH003386
+expId 3386
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 39a69b453cf7bc540cf674ce40131242
 project wgEncode
 replicate 1
 setType exp
@@ -2586,20 +2506,23 @@ subId 7857
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusRawDataRep2
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusRawDataRep2
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusRawDataRep2.fastq.tgz
+dccAccession wgEncodeEH003386
+expId 3386
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum accbe7e3edb4d20306d5cc2855625559
 project wgEncode
 replicate 2
 setType exp
@@ -2607,25 +2530,28 @@ subId 7857
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878CdpbiotechIggmusSig
+metaObject wgEncodeSydhTfbsGm12878Cdpsc6327IggmusSig
 objType table
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsGm12878CdpbiotechIggmusSig.bigWig
+dccAccession wgEncodeEH003386
+expId 3386
+fileName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 463fc33bea2dcbdd2c0ca6826fc9e33d
 project wgEncode
 setType exp
 subId 7857
-tableName wgEncodeSydhTfbsGm12878CdpbiotechIggmusSig
+tableName wgEncodeSydhTfbsGm12878Cdpsc6327IggmusSig
 treatment None
 view Signal
 
@@ -3914,14 +3840,17 @@ antibody ERRA
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003387
+expId 3387
 fileName wgEncodeSydhTfbsGm12878ErraIggrabAlnRep1.bam,wgEncodeSydhTfbsGm12878ErraIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 35349527985f25dace4839f66616d291,bff192818e7d3a3789645d44a0c34182
 project wgEncode
 replicate 1
 setType exp
@@ -3935,14 +3864,17 @@ antibody ERRA
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003387
+expId 3387
 fileName wgEncodeSydhTfbsGm12878ErraIggrabAlnRep2.bam,wgEncodeSydhTfbsGm12878ErraIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 76b83d67741fbfbc7f5123cf14f0d063,831fb4d19b66e671b910e000d91b9e65
 project wgEncode
 replicate 2
 setType exp
@@ -3956,14 +3888,17 @@ antibody ERRA
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003387
+expId 3387
 fileName wgEncodeSydhTfbsGm12878ErraIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+md5sum 846ae6723c2d5f31c74ce7cdb260b991
 project wgEncode
 setType exp
 subId 7850
@@ -3977,14 +3912,17 @@ antibody ERRA
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003387
+expId 3387
 fileName wgEncodeSydhTfbsGm12878ErraIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 256d23a785d8ea721084e560ec8942bd
 project wgEncode
 replicate 1
 setType exp
@@ -3998,14 +3936,17 @@ antibody ERRA
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003387
+expId 3387
 fileName wgEncodeSydhTfbsGm12878ErraIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 32f8e05bab28f6adfe5fe57a508a4ec7
 project wgEncode
 replicate 2
 setType exp
@@ -4019,14 +3960,17 @@ antibody ERRA
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003387
+expId 3387
 fileName wgEncodeSydhTfbsGm12878ErraIggrabSig.bigWig
 grant Snyder
 lab Stanford
+md5sum f24daba4abdd9cbb7c633a21791de4cf
 project wgEncode
 setType exp
 subId 7850
@@ -4924,11 +4868,13 @@ antibody JunD
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003370
+expId 3370
 fileName wgEncodeSydhTfbsGm12878JundIggrabAlnRep1.bam,wgEncodeSydhTfbsGm12878JundIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -4946,11 +4892,13 @@ antibody JunD
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003370
+expId 3370
 fileName wgEncodeSydhTfbsGm12878JundIggrabAlnRep2.bam,wgEncodeSydhTfbsGm12878JundIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -4968,11 +4916,13 @@ antibody JunD
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003370
+expId 3370
 fileName wgEncodeSydhTfbsGm12878JundIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -4990,11 +4940,13 @@ antibody JunD
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003370
+expId 3370
 fileName wgEncodeSydhTfbsGm12878JundIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5012,11 +4964,13 @@ antibody JunD
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003370
+expId 3370
 fileName wgEncodeSydhTfbsGm12878JundIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5034,11 +4988,13 @@ antibody JunD
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003370
+expId 3370
 fileName wgEncodeSydhTfbsGm12878JundIggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -5214,11 +5170,13 @@ antibody MafK_(ab50322)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003361
+expId 3361
 fileName wgEncodeSydhTfbsGm12878MafkIggmusAlnRep1.bam,wgEncodeSydhTfbsGm12878MafkIggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -5236,11 +5194,13 @@ antibody MafK_(ab50322)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003361
+expId 3361
 fileName wgEncodeSydhTfbsGm12878MafkIggmusAlnRep2.bam,wgEncodeSydhTfbsGm12878MafkIggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -5258,11 +5218,13 @@ antibody MafK_(ab50322)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003361
+expId 3361
 fileName wgEncodeSydhTfbsGm12878MafkIggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -5280,11 +5242,13 @@ antibody MafK_(ab50322)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003361
+expId 3361
 fileName wgEncodeSydhTfbsGm12878MafkIggmusRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5302,11 +5266,13 @@ antibody MafK_(ab50322)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003361
+expId 3361
 fileName wgEncodeSydhTfbsGm12878MafkIggmusRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -5324,11 +5290,13 @@ antibody MafK_(ab50322)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003361
+expId 3361
 fileName wgEncodeSydhTfbsGm12878MafkIggmusSig.bigWig
 grant Snyder
 lab Stanford
@@ -9008,11 +8976,13 @@ antibody SREBP1
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003362
+expId 3362
 fileName wgEncodeSydhTfbsGm12878Srebp1IggrabAlnRep1.bam,wgEncodeSydhTfbsGm12878Srebp1IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -9030,11 +9000,13 @@ antibody SREBP1
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003362
+expId 3362
 fileName wgEncodeSydhTfbsGm12878Srebp1IggrabAlnRep2.bam,wgEncodeSydhTfbsGm12878Srebp1IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -9052,11 +9024,13 @@ antibody SREBP1
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003362
+expId 3362
 fileName wgEncodeSydhTfbsGm12878Srebp1IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -9074,11 +9048,13 @@ antibody SREBP1
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003362
+expId 3362
 fileName wgEncodeSydhTfbsGm12878Srebp1IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -9096,11 +9072,13 @@ antibody SREBP1
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003362
+expId 3362
 fileName wgEncodeSydhTfbsGm12878Srebp1IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -9118,11 +9096,13 @@ antibody SREBP1
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003362
+expId 3362
 fileName wgEncodeSydhTfbsGm12878Srebp1IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -9140,11 +9120,13 @@ antibody SREBP2
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003363
+expId 3363
 fileName wgEncodeSydhTfbsGm12878Srebp2IggrabAlnRep1.bam,wgEncodeSydhTfbsGm12878Srebp2IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -9162,11 +9144,13 @@ antibody SREBP2
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003363
+expId 3363
 fileName wgEncodeSydhTfbsGm12878Srebp2IggrabAlnRep2.bam,wgEncodeSydhTfbsGm12878Srebp2IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -9184,11 +9168,13 @@ antibody SREBP2
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003363
+expId 3363
 fileName wgEncodeSydhTfbsGm12878Srebp2IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -9206,11 +9192,13 @@ antibody SREBP2
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003363
+expId 3363
 fileName wgEncodeSydhTfbsGm12878Srebp2IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -9228,11 +9216,13 @@ antibody SREBP2
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003363
+expId 3363
 fileName wgEncodeSydhTfbsGm12878Srebp2IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -9250,11 +9240,13 @@ antibody SREBP2
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003363
+expId 3363
 fileName wgEncodeSydhTfbsGm12878Srebp2IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -9614,6 +9606,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-25
 dateUnrestricted 2013-03-25
+dccAccession wgEncodeEH002853
+expId 2853
 fileName wgEncodeSydhTfbsGm12878Tblr1ab24550IggmusAlnRep1V2.bam,wgEncodeSydhTfbsGm12878Tblr1ab24550IggmusAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford
@@ -10736,6 +10730,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-25
 dateUnrestricted 2013-03-25
+dccAccession wgEncodeEH003358
+expId 3358
 fileName wgEncodeSydhTfbsGm12878Znf274StdAlnRep1V2.bam,wgEncodeSydhTfbsGm12878Znf274StdAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford
@@ -10786,6 +10782,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-25
 dateUnrestricted 2013-03-25
+dccAccession wgEncodeEH003358
+expId 3358
 fileName wgEncodeSydhTfbsGm12878Znf274StdAlnRep2V2.bam,wgEncodeSydhTfbsGm12878Znf274StdAlnRep2V2.bam.bai
 grant Snyder
 lab Stanford
@@ -10912,14 +10910,17 @@ antibody ZNF384_(HPA004051)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003388
+expId 3388
 fileName wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusAlnRep1.bam,wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 49d8909604390e7a7f9ff96586c4b01a,977b352b1c389c001ec36090aa775cf0
 project wgEncode
 replicate 1
 setType exp
@@ -10933,14 +10934,17 @@ antibody ZNF384_(HPA004051)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003388
+expId 3388
 fileName wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusAlnRep2.bam,wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 93cb657f94588370c69cdc4fdf5477a0,954564b16ff126d599bf9092017bd732
 project wgEncode
 replicate 2
 setType exp
@@ -10954,15 +10958,18 @@ antibody ZNF384_(HPA004051)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003388
+expId 3388
 fileName wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 49ca7bb79844efd93e8df6ae931feb72
 project wgEncode
 setType exp
 subId 7858
@@ -10976,14 +10983,17 @@ antibody ZNF384_(HPA004051)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003388
+expId 3388
 fileName wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 74188bb3bc5d158d38b91fabac811a07
 project wgEncode
 replicate 1
 setType exp
@@ -10997,14 +11007,17 @@ antibody ZNF384_(HPA004051)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003388
+expId 3388
 fileName wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 3fc6ee83a8fe00864624b45e5fe75075
 project wgEncode
 replicate 2
 setType exp
@@ -11018,15 +11031,18 @@ antibody ZNF384_(HPA004051)
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId GM12878/None/Input/IgG-mus
+controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003388
+expId 3388
 fileName wgEncodeSydhTfbsGm12878Znf384hpa004051IggmusSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 2b555fd69db81e8b21940eee373ca3de
 project wgEncode
 setType exp
 subId 7858
@@ -19198,6 +19214,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-25
 dateUnrestricted 2013-03-25
+dccAccession wgEncodeEH003359
+expId 3359
 fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep1V2.bam,wgEncodeSydhTfbsH1hescMaxUcdAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford
@@ -19247,6 +19265,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-25
 dateUnrestricted 2013-03-25
+dccAccession wgEncodeEH003359
+expId 3359
 fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep2V2.bam,wgEncodeSydhTfbsH1hescMaxUcdAlnRep2V2.bam.bai
 grant Snyder
 lab Stanford
@@ -20759,11 +20779,13 @@ antibody ZNF274_(M01)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId H1-hESC/None/Input/UCDavis
+controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEH003357
+expId 3357
 fileName wgEncodeSydhTfbsH1hescZnf274m01UcdAlnRep1.bam,wgEncodeSydhTfbsH1hescZnf274m01UcdAlnRep1.bam.bai
 grant Snyder
 lab USC
@@ -20781,11 +20803,13 @@ antibody ZNF274_(M01)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId H1-hESC/None/Input/UCDavis
+controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEH003357
+expId 3357
 fileName wgEncodeSydhTfbsH1hescZnf274m01UcdAlnRep2.bam,wgEncodeSydhTfbsH1hescZnf274m01UcdAlnRep2.bam.bai
 grant Snyder
 lab USC
@@ -20803,11 +20827,13 @@ antibody ZNF274_(M01)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId H1-hESC/None/Input/UCDavis
+controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEH003357
+expId 3357
 fileName wgEncodeSydhTfbsH1hescZnf274m01UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
@@ -20826,11 +20852,13 @@ antibody ZNF274_(M01)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId H1-hESC/None/Input/UCDavis
+controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEH003357
+expId 3357
 fileName wgEncodeSydhTfbsH1hescZnf274m01UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -20848,11 +20876,13 @@ antibody ZNF274_(M01)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId H1-hESC/None/Input/UCDavis
+controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEH003357
+expId 3357
 fileName wgEncodeSydhTfbsH1hescZnf274m01UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
@@ -20870,11 +20900,13 @@ antibody ZNF274_(M01)
 cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId H1-hESC/None/Input/UCDavis
+controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-06
 dateUnrestricted 2013-03-05
+dccAccession wgEncodeEH003357
+expId 3357
 fileName wgEncodeSydhTfbsH1hescZnf274m01UcdSig.bigWig
 grant Snyder
 lab USC
@@ -26176,14 +26208,17 @@ antibody HCFC1_(NB100-68209)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLa-S3/None/Input/IgG-rab
+controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003389
+expId 3389
 fileName wgEncodeSydhTfbsHelas3Hcfc1nb10068209IggrabAlnRep1.bam,wgEncodeSydhTfbsHelas3Hcfc1nb10068209IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 0ab0c654afb08ba8df5ea1de78679691,31047aaaff5ea9878ee753818359707f
 project wgEncode
 replicate 1
 setType exp
@@ -26197,14 +26232,17 @@ antibody HCFC1_(NB100-68209)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLa-S3/None/Input/IgG-rab
+controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003389
+expId 3389
 fileName wgEncodeSydhTfbsHelas3Hcfc1nb10068209IggrabAlnRep2.bam,wgEncodeSydhTfbsHelas3Hcfc1nb10068209IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum b1ab07ab95e5632fdaa4d4fcc6cceacc,a071eda166c96574ffa4bef2535e585d
 project wgEncode
 replicate 2
 setType exp
@@ -26218,14 +26256,17 @@ antibody HCFC1_(NB100-68209)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLa-S3/None/Input/IgG-rab
+controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003389
+expId 3389
 fileName wgEncodeSydhTfbsHelas3Hcfc1nb10068209IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+md5sum 6d32d6c7aa07fa1a57d545406590feb5
 project wgEncode
 setType exp
 subId 7852
@@ -26239,14 +26280,17 @@ antibody HCFC1_(NB100-68209)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLa-S3/None/Input/IgG-rab
+controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003389
+expId 3389
 fileName wgEncodeSydhTfbsHelas3Hcfc1nb10068209IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 37118a5fb6971acac675923965ebfe4e
 project wgEncode
 replicate 1
 setType exp
@@ -26260,14 +26304,17 @@ antibody HCFC1_(NB100-68209)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLa-S3/None/Input/IgG-rab
+controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003389
+expId 3389
 fileName wgEncodeSydhTfbsHelas3Hcfc1nb10068209IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum e222c8138fb84cd3f687f6bbc14fc776
 project wgEncode
 replicate 2
 setType exp
@@ -26281,14 +26328,17 @@ antibody HCFC1_(NB100-68209)
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLa-S3/None/Input/IgG-rab
+controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003389
+expId 3389
 fileName wgEncodeSydhTfbsHelas3Hcfc1nb10068209IggrabSig.bigWig
 grant Snyder
 lab Stanford
+md5sum 9dad14df8fe163772a35d9d084bb7712
 project wgEncode
 setType exp
 subId 7852
@@ -36113,7 +36163,7 @@ antibody Mxi1_(AF4185)
 cell HepG2
 composite wgEncodeSydhTfbs
 control std
-controlId HepG2/None/Input/std
+controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
@@ -36139,7 +36189,7 @@ antibody Mxi1_(AF4185)
 cell HepG2
 composite wgEncodeSydhTfbs
 control std
-controlId HepG2/None/Input/std
+controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
@@ -36165,7 +36215,7 @@ antibody Mxi1_(AF4185)
 cell HepG2
 composite wgEncodeSydhTfbs
 control std
-controlId HepG2/None/Input/std
+controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
@@ -36191,7 +36241,7 @@ antibody Mxi1_(AF4185)
 cell HepG2
 composite wgEncodeSydhTfbs
 control std
-controlId HepG2/None/Input/std
+controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
@@ -36219,7 +36269,7 @@ antibody Mxi1_(AF4185)
 cell HepG2
 composite wgEncodeSydhTfbs
 control std
-controlId HepG2/None/Input/std
+controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
@@ -36246,7 +36296,7 @@ antibody Mxi1_(AF4185)
 cell HepG2
 composite wgEncodeSydhTfbs
 control std
-controlId HepG2/None/Input/std
+controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
@@ -36273,7 +36323,7 @@ antibody Mxi1_(AF4185)
 cell HepG2
 composite wgEncodeSydhTfbs
 control std
-controlId HepG2/None/Input/std
+controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
@@ -36300,7 +36350,7 @@ antibody Mxi1_(AF4185)
 cell HepG2
 composite wgEncodeSydhTfbs
 control std
-controlId HepG2/None/Input/std
+controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
@@ -39729,6 +39779,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-25
 dateUnrestricted 2013-03-25
+dccAccession wgEncodeEH003360
+expId 3360
 fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep1V2.bam,wgEncodeSydhTfbsHuvecGata2UcdAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford
@@ -39778,6 +39830,8 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-25
 dateUnrestricted 2013-03-25
+dccAccession wgEncodeEH003360
+expId 3360
 fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep2V2.bam,wgEncodeSydhTfbsHuvecGata2UcdAlnRep2V2.bam.bai
 grant Snyder
 lab Stanford
@@ -40635,14 +40689,17 @@ antibody CHD1_(NB100-60411)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003390
+expId 3390
 fileName wgEncodeSydhTfbsImr90Chd1nb10060411IggrabAlnRep1.bam,wgEncodeSydhTfbsImr90Chd1nb10060411IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 408334bd1597703e66271f3f97252b57,59d85081b24df0791f060bd37f11118c
 project wgEncode
 replicate 1
 setType exp
@@ -40656,14 +40713,17 @@ antibody CHD1_(NB100-60411)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003390
+expId 3390
 fileName wgEncodeSydhTfbsImr90Chd1nb10060411IggrabAlnRep2.bam,wgEncodeSydhTfbsImr90Chd1nb10060411IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum b5c3f171f38b55ea8efafc4bbc8a1643,d5c667e6d2e8db375a6b16ef60e507a3
 project wgEncode
 replicate 2
 setType exp
@@ -40677,14 +40737,17 @@ antibody CHD1_(NB100-60411)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003390
+expId 3390
 fileName wgEncodeSydhTfbsImr90Chd1nb10060411IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
+md5sum ce2b5d33002312a7285df4f2a5999cd0
 project wgEncode
 setType exp
 subId 7862
@@ -40698,14 +40761,17 @@ antibody CHD1_(NB100-60411)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003390
+expId 3390
 fileName wgEncodeSydhTfbsImr90Chd1nb10060411IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 605dcb5ae42309b0cb559d5cea63551a
 project wgEncode
 replicate 1
 setType exp
@@ -40719,14 +40785,17 @@ antibody CHD1_(NB100-60411)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003390
+expId 3390
 fileName wgEncodeSydhTfbsImr90Chd1nb10060411IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum eac0de448d286e3565d039479a2938e5
 project wgEncode
 replicate 2
 setType exp
@@ -40740,14 +40809,17 @@ antibody CHD1_(NB100-60411)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003390
+expId 3390
 fileName wgEncodeSydhTfbsImr90Chd1nb10060411IggrabSig.bigWig
 grant Snyder
 lab Stanford
+md5sum c7eafeb50d05af46a54c38acb37e1196
 project wgEncode
 setType exp
 subId 7862
@@ -40761,11 +40833,13 @@ antibody COREST_(sc-30189)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003364
+expId 3364
 fileName wgEncodeSydhTfbsImr90Corestsc30189IggrabAlnRep1.bam,wgEncodeSydhTfbsImr90Corestsc30189IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -40783,11 +40857,13 @@ antibody COREST_(sc-30189)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003364
+expId 3364
 fileName wgEncodeSydhTfbsImr90Corestsc30189IggrabAlnRep2.bam,wgEncodeSydhTfbsImr90Corestsc30189IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -40805,11 +40881,13 @@ antibody COREST_(sc-30189)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003364
+expId 3364
 fileName wgEncodeSydhTfbsImr90Corestsc30189IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -40827,11 +40905,13 @@ antibody COREST_(sc-30189)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003364
+expId 3364
 fileName wgEncodeSydhTfbsImr90Corestsc30189IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -40849,11 +40929,13 @@ antibody COREST_(sc-30189)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003364
+expId 3364
 fileName wgEncodeSydhTfbsImr90Corestsc30189IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -40871,11 +40953,13 @@ antibody COREST_(sc-30189)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003364
+expId 3364
 fileName wgEncodeSydhTfbsImr90Corestsc30189IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -41268,11 +41352,13 @@ antibody MAZ_(ab85725)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003365
+expId 3365
 fileName wgEncodeSydhTfbsImr90Mazab85725IggrabAlnRep1.bam,wgEncodeSydhTfbsImr90Mazab85725IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -41290,11 +41376,13 @@ antibody MAZ_(ab85725)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003365
+expId 3365
 fileName wgEncodeSydhTfbsImr90Mazab85725IggrabAlnRep2.bam,wgEncodeSydhTfbsImr90Mazab85725IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -41312,11 +41400,13 @@ antibody MAZ_(ab85725)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003365
+expId 3365
 fileName wgEncodeSydhTfbsImr90Mazab85725IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -41334,11 +41424,13 @@ antibody MAZ_(ab85725)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003365
+expId 3365
 fileName wgEncodeSydhTfbsImr90Mazab85725IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -41356,11 +41448,13 @@ antibody MAZ_(ab85725)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003365
+expId 3365
 fileName wgEncodeSydhTfbsImr90Mazab85725IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -41378,11 +41472,13 @@ antibody MAZ_(ab85725)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003365
+expId 3365
 fileName wgEncodeSydhTfbsImr90Mazab85725IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -41400,11 +41496,13 @@ antibody Mxi1_(AF4185)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003366
+expId 3366
 fileName wgEncodeSydhTfbsImr90Mxi1IggrabAlnRep1.bam,wgEncodeSydhTfbsImr90Mxi1IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -41422,11 +41520,13 @@ antibody Mxi1_(AF4185)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003366
+expId 3366
 fileName wgEncodeSydhTfbsImr90Mxi1IggrabAlnRep2.bam,wgEncodeSydhTfbsImr90Mxi1IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -41444,11 +41544,13 @@ antibody Mxi1_(AF4185)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003366
+expId 3366
 fileName wgEncodeSydhTfbsImr90Mxi1IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -41466,11 +41568,13 @@ antibody Mxi1_(AF4185)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003366
+expId 3366
 fileName wgEncodeSydhTfbsImr90Mxi1IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -41488,11 +41592,13 @@ antibody Mxi1_(AF4185)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003366
+expId 3366
 fileName wgEncodeSydhTfbsImr90Mxi1IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -41510,11 +41616,13 @@ antibody Mxi1_(AF4185)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003366
+expId 3366
 fileName wgEncodeSydhTfbsImr90Mxi1IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -41832,11 +41940,13 @@ antibody RFX5_(200-401-194)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003367
+expId 3367
 fileName wgEncodeSydhTfbsImr90Rfx5IggrabAlnRep1.bam,wgEncodeSydhTfbsImr90Rfx5IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -41854,11 +41964,13 @@ antibody RFX5_(200-401-194)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003367
+expId 3367
 fileName wgEncodeSydhTfbsImr90Rfx5IggrabAlnRep2.bam,wgEncodeSydhTfbsImr90Rfx5IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -41876,11 +41988,13 @@ antibody RFX5_(200-401-194)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003367
+expId 3367
 fileName wgEncodeSydhTfbsImr90Rfx5IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -41898,11 +42012,13 @@ antibody RFX5_(200-401-194)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003367
+expId 3367
 fileName wgEncodeSydhTfbsImr90Rfx5IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -41920,11 +42036,13 @@ antibody RFX5_(200-401-194)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003367
+expId 3367
 fileName wgEncodeSydhTfbsImr90Rfx5IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -41942,11 +42060,13 @@ antibody RFX5_(200-401-194)
 cell IMR90
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId IMR90/None/Input/IgG-rab
+controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003367
+expId 3367
 fileName wgEncodeSydhTfbsImr90Rfx5IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -43677,20 +43797,23 @@ tableName wgEncodeSydhTfbsK562Ccnt2StdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep1
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep1
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep1.bam,wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep1.bam.bai
+dccAccession wgEncodeEH003391
+expId 3391
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep1.bam,wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 4fb387d99b4bf0e0c39bdc3100c4dfa4,536ed0bfcb5816fe12873555230b12b8
 project wgEncode
 replicate 1
 setType exp
@@ -43698,20 +43821,23 @@ subId 7859
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep2
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep2
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep2.bam,wgEncodeSydhTfbsK562CdpbiotechIggrabAlnRep2.bam.bai
+dccAccession wgEncodeEH003391
+expId 3391
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep2.bam,wgEncodeSydhTfbsK562Cdpsc6327IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 2eb88087cb9294a18236b2e0e395b7d9,b45f2ac4d5ca5f14c9272c3b69aa04df
 project wgEncode
 replicate 2
 setType exp
@@ -43719,42 +43845,48 @@ subId 7859
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabPk
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabPk
 objType table
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabPk.narrowPeak.gz
+dccAccession wgEncodeEH003391
+expId 3391
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum d20fccbb76459a4b2a02a3814b92bdd7
 project wgEncode
 setType exp
 subId 7859
-tableName wgEncodeSydhTfbsK562CdpbiotechIggrabPk
+tableName wgEncodeSydhTfbsK562Cdpsc6327IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabRawDataRep1
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabRawDataRep1
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabRawDataRep1.fastq.tgz
+dccAccession wgEncodeEH003391
+expId 3391
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 9d8d39decb95bd2e9db4dde5cfa9765d
 project wgEncode
 replicate 1
 setType exp
@@ -43762,20 +43894,23 @@ subId 7859
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabRawDataRep2
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabRawDataRep2
 objType file
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabRawDataRep2.fastq.tgz
+dccAccession wgEncodeEH003391
+expId 3391
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 77ac82f6d2185d0225c3c94c01eacbcf
 project wgEncode
 replicate 2
 setType exp
@@ -43783,25 +43918,28 @@ subId 7859
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562CdpbiotechIggrabSig
+metaObject wgEncodeSydhTfbsK562Cdpsc6327IggrabSig
 objType table
-antibody CDP_(BioTech)
+antibody CDP_(sc-6327)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
-fileName wgEncodeSydhTfbsK562CdpbiotechIggrabSig.bigWig
+dccAccession wgEncodeEH003391
+expId 3391
+fileName wgEncodeSydhTfbsK562Cdpsc6327IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum d30c1b865cf71635045fb6185207924a
 project wgEncode
 setType exp
 subId 7859
-tableName wgEncodeSydhTfbsK562CdpbiotechIggrabSig
+tableName wgEncodeSydhTfbsK562Cdpsc6327IggrabSig
 treatment None
 view Signal
 
@@ -44802,11 +44940,13 @@ antibody c-Jun
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003369
+expId 3369
 fileName wgEncodeSydhTfbsK562CjunIggrabAlnRep1.bam,wgEncodeSydhTfbsK562CjunIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -44824,11 +44964,13 @@ antibody c-Jun
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003369
+expId 3369
 fileName wgEncodeSydhTfbsK562CjunIggrabAlnRep2.bam,wgEncodeSydhTfbsK562CjunIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -44846,11 +44988,13 @@ antibody c-Jun
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003369
+expId 3369
 fileName wgEncodeSydhTfbsK562CjunIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -44868,11 +45012,13 @@ antibody c-Jun
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003369
+expId 3369
 fileName wgEncodeSydhTfbsK562CjunIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -44890,11 +45036,13 @@ antibody c-Jun
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003369
+expId 3369
 fileName wgEncodeSydhTfbsK562CjunIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -44912,11 +45060,13 @@ antibody c-Jun
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003369
+expId 3369
 fileName wgEncodeSydhTfbsK562CjunIggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -46645,11 +46795,13 @@ antibody ELK1_(1277-1)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-12-01
+dccAccession wgEncodeEH003356
+expId 3356
 fileName wgEncodeSydhTfbsK562Elk112771IggrabAlnRep1.bam,wgEncodeSydhTfbsK562Elk112771IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -46667,11 +46819,13 @@ antibody ELK1_(1277-1)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-12-01
+dccAccession wgEncodeEH003356
+expId 3356
 fileName wgEncodeSydhTfbsK562Elk112771IggrabAlnRep2.bam,wgEncodeSydhTfbsK562Elk112771IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -46689,11 +46843,13 @@ antibody ELK1_(1277-1)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-12-01
+dccAccession wgEncodeEH003356
+expId 3356
 fileName wgEncodeSydhTfbsK562Elk112771IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -46712,11 +46868,13 @@ antibody ELK1_(1277-1)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-12-01
+dccAccession wgEncodeEH003356
+expId 3356
 fileName wgEncodeSydhTfbsK562Elk112771IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -46734,11 +46892,13 @@ antibody ELK1_(1277-1)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-12-01
+dccAccession wgEncodeEH003356
+expId 3356
 fileName wgEncodeSydhTfbsK562Elk112771IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -46756,11 +46916,13 @@ antibody ELK1_(1277-1)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-12-01
+dccAccession wgEncodeEH003356
+expId 3356
 fileName wgEncodeSydhTfbsK562Elk112771IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -46941,11 +47103,13 @@ antibody GATA1_(SC-266)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId K562/None/Input/IgG-mus
+controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003368
+expId 3368
 fileName wgEncodeSydhTfbsK562Gata1bIggmusAlnRep1.bam,wgEncodeSydhTfbsK562Gata1bIggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -46963,11 +47127,13 @@ antibody GATA1_(SC-266)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId K562/None/Input/IgG-mus
+controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003368
+expId 3368
 fileName wgEncodeSydhTfbsK562Gata1bIggmusAlnRep2.bam,wgEncodeSydhTfbsK562Gata1bIggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -46985,11 +47151,13 @@ antibody GATA1_(SC-266)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId K562/None/Input/IgG-mus
+controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003368
+expId 3368
 fileName wgEncodeSydhTfbsK562Gata1bIggmusPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -47007,11 +47175,13 @@ antibody GATA1_(SC-266)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId K562/None/Input/IgG-mus
+controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003368
+expId 3368
 fileName wgEncodeSydhTfbsK562Gata1bIggmusRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -47029,11 +47199,13 @@ antibody GATA1_(SC-266)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId K562/None/Input/IgG-mus
+controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003368
+expId 3368
 fileName wgEncodeSydhTfbsK562Gata1bIggmusRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -47051,11 +47223,13 @@ antibody GATA1_(SC-266)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
-controlId K562/None/Input/IgG-mus
+controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-30
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003368
+expId 3368
 fileName wgEncodeSydhTfbsK562Gata1bIggmusSig.bigWig
 grant Snyder
 lab Stanford
@@ -47555,14 +47729,17 @@ antibody HCFC1_(NB100-68209)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003392
+expId 3392
 fileName wgEncodeSydhTfbsK562Hcfc1nb10068209IggrabAlnRep1.bam,wgEncodeSydhTfbsK562Hcfc1nb10068209IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 2a8e8caa17e4deec1f91f97e93257449,8b31314a8bed4fd67f3d824fdfcccbef
 project wgEncode
 replicate 1
 setType exp
@@ -47576,14 +47753,17 @@ antibody HCFC1_(NB100-68209)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003392
+expId 3392
 fileName wgEncodeSydhTfbsK562Hcfc1nb10068209IggrabAlnRep2.bam,wgEncodeSydhTfbsK562Hcfc1nb10068209IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 9da7bce746b7a3855fc31010f84ede6c,f8ba87142a88590c6833996f4004a0c6
 project wgEncode
 replicate 2
 setType exp
@@ -47597,15 +47777,18 @@ antibody HCFC1_(NB100-68209)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003392
+expId 3392
 fileName wgEncodeSydhTfbsK562Hcfc1nb10068209IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 0b23a5f7826f7719d4c7b71a54db8c89
 project wgEncode
 setType exp
 subId 7860
@@ -47619,14 +47802,17 @@ antibody HCFC1_(NB100-68209)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003392
+expId 3392
 fileName wgEncodeSydhTfbsK562Hcfc1nb10068209IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum bb2034a573f5cc70af816c628c462075
 project wgEncode
 replicate 1
 setType exp
@@ -47640,14 +47826,17 @@ antibody HCFC1_(NB100-68209)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003392
+expId 3392
 fileName wgEncodeSydhTfbsK562Hcfc1nb10068209IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum b90d1a55a1d8a4b7ec409b2e8a20984d
 project wgEncode
 replicate 2
 setType exp
@@ -47661,15 +47850,18 @@ antibody HCFC1_(NB100-68209)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-08-01
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003392
+expId 3392
 fileName wgEncodeSydhTfbsK562Hcfc1nb10068209IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 283a65221cdf2deb62b9992dc51c8db9
 project wgEncode
 setType exp
 subId 7860
@@ -57257,14 +57449,17 @@ antibody ZC3H11A_(NB100-74650)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003380
+expId 3380
 fileName wgEncodeSydhTfbsK562Zc3h11anb10074650IggrabAlnRep1.bam,wgEncodeSydhTfbsK562Zc3h11anb10074650IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum bc547c3e2a0fe94e699277bb15348e64,54feb1a877ae19ca626df61392240687
 project wgEncode
 replicate 1
 setType exp
@@ -57278,14 +57473,17 @@ antibody ZC3H11A_(NB100-74650)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003380
+expId 3380
 fileName wgEncodeSydhTfbsK562Zc3h11anb10074650IggrabAlnRep2.bam,wgEncodeSydhTfbsK562Zc3h11anb10074650IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum bbf5fd4bcfa6ef7a65079da7248d301e,fde24ac28deaf423d2d907b2ff38e917
 project wgEncode
 replicate 2
 setType exp
@@ -57299,15 +57497,18 @@ antibody ZC3H11A_(NB100-74650)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003380
+expId 3380
 fileName wgEncodeSydhTfbsK562Zc3h11anb10074650IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum f3c6590064e9f00e2d27030c95559992
 project wgEncode
 setType exp
 subId 5527
@@ -57321,14 +57522,17 @@ antibody ZC3H11A_(NB100-74650)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003380
+expId 3380
 fileName wgEncodeSydhTfbsK562Zc3h11anb10074650IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 992dc1201f59304489bb09c5c623b87f
 project wgEncode
 replicate 1
 setType exp
@@ -57342,14 +57546,17 @@ antibody ZC3H11A_(NB100-74650)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003380
+expId 3380
 fileName wgEncodeSydhTfbsK562Zc3h11anb10074650IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 5019d455f817a95e2eb7ff4c517e74d7
 project wgEncode
 replicate 2
 setType exp
@@ -57363,15 +57570,18 @@ antibody ZC3H11A_(NB100-74650)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003380
+expId 3380
 fileName wgEncodeSydhTfbsK562Zc3h11anb10074650IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum cefcaa7b3dc68affc2d7743caf13312e
 project wgEncode
 setType exp
 subId 5527
@@ -58027,14 +58237,17 @@ antibody ZNF384_(HPA004051)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003382
+expId 3382
 fileName wgEncodeSydhTfbsK562Znf384hpa004051IggrabAlnRep1.bam,wgEncodeSydhTfbsK562Znf384hpa004051IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 306d3ebb6655a86514deeffc095f9b9c,5de676d680aaf6d6a01f18b8fcdbc5bc
 project wgEncode
 replicate 1
 setType exp
@@ -58048,14 +58261,17 @@ antibody ZNF384_(HPA004051)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003382
+expId 3382
 fileName wgEncodeSydhTfbsK562Znf384hpa004051IggrabAlnRep2.bam,wgEncodeSydhTfbsK562Znf384hpa004051IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum fe10223f1733ebe2cdabfd18cccf5f80,3f6648a7a02a2148d254336fd9fe5369
 project wgEncode
 replicate 2
 setType exp
@@ -58069,15 +58285,18 @@ antibody ZNF384_(HPA004051)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003382
+expId 3382
 fileName wgEncodeSydhTfbsK562Znf384hpa004051IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 306c904ab969183a2dbaf7482691ec1d
 project wgEncode
 setType exp
 subId 5536
@@ -58091,14 +58310,17 @@ antibody ZNF384_(HPA004051)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003382
+expId 3382
 fileName wgEncodeSydhTfbsK562Znf384hpa004051IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 26a7f8f3a90b8b42c8fdf2e912089e11
 project wgEncode
 replicate 1
 setType exp
@@ -58112,14 +58334,17 @@ antibody ZNF384_(HPA004051)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003382
+expId 3382
 fileName wgEncodeSydhTfbsK562Znf384hpa004051IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum f1fea3cc6fe36d00dc0fb0a0df331212
 project wgEncode
 replicate 2
 setType exp
@@ -58133,15 +58358,18 @@ antibody ZNF384_(HPA004051)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003382
+expId 3382
 fileName wgEncodeSydhTfbsK562Znf384hpa004051IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 69e0a03b7a79540b5e248d6d168c511c
 project wgEncode
 setType exp
 subId 5536
@@ -58155,14 +58383,17 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003381
+expId 3381
 fileName wgEncodeSydhTfbsK562Znfmizdcp1ab65767IggrabAlnRep1.bam,wgEncodeSydhTfbsK562Znfmizdcp1ab65767IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 696104d699e3d71285d78ea9d56f9ea1,d0d59ae159e3060f28b7ac370c6c1a0e
 project wgEncode
 replicate 1
 setType exp
@@ -58176,14 +58407,17 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003381
+expId 3381
 fileName wgEncodeSydhTfbsK562Znfmizdcp1ab65767IggrabAlnRep2.bam,wgEncodeSydhTfbsK562Znfmizdcp1ab65767IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum e67c1dcdbe9fac4bd83354690815d91f,3133a187a74a219dcf780a45f394d1ff
 project wgEncode
 replicate 2
 setType exp
@@ -58197,15 +58431,18 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003381
+expId 3381
 fileName wgEncodeSydhTfbsK562Znfmizdcp1ab65767IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 19d2b7ddc8ef34d60def3494ebc4311e
 project wgEncode
 setType exp
 subId 5528
@@ -58219,14 +58456,17 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003381
+expId 3381
 fileName wgEncodeSydhTfbsK562Znfmizdcp1ab65767IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 8b890bdb26b55a0fd61710d437f07ddf
 project wgEncode
 replicate 1
 setType exp
@@ -58240,14 +58480,17 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003381
+expId 3381
 fileName wgEncodeSydhTfbsK562Znfmizdcp1ab65767IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 690e7a841babbbc898abd75bf5219ae8
 project wgEncode
 replicate 2
 setType exp
@@ -58261,15 +58504,18 @@ antibody ZNF-MIZD-CP1_(ab65767)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003381
+expId 3381
 fileName wgEncodeSydhTfbsK562Znfmizdcp1ab65767IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 9aac08b39071db7f6008194b0ff9c085
 project wgEncode
 setType exp
 subId 5528
@@ -63764,14 +64010,17 @@ antibody Pol2
 cell Raji
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId Raji/None/Input/UCDavis
+controlId wgEncodeEH001760
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEH003379
+expId 3379
 fileName wgEncodeSydhTfbsRajiPol2UcdAlnRep1V2.bam,wgEncodeSydhTfbsRajiPol2UcdAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford
+md5sum cab88391c16a4024855ebffa160a5f21,d5a7e75f3df3027129e4b5e3f57fbc08
 project wgEncode
 replicate 1
 setType exp
@@ -63811,14 +64060,17 @@ antibody Pol2
 cell Raji
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId Raji/None/Input/UCDavis
+controlId wgEncodeEH001760
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-13
 dateUnrestricted 2013-04-13
+dccAccession wgEncodeEH003379
+expId 3379
 fileName wgEncodeSydhTfbsRajiPol2UcdAlnRep2V2.bam,wgEncodeSydhTfbsRajiPol2UcdAlnRep2V2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 632f9877332e67bc2f3adaa6151085b2,e379b33e28ddfec97d41b2782e4cfd54
 project wgEncode
 replicate 2
 setType exp
@@ -64329,11 +64581,13 @@ antibody CTCF_(SC-15914)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003371
+expId 3371
 fileName wgEncodeSydhTfbsSknshCtcfbIggrabAlnRep1.bam,wgEncodeSydhTfbsSknshCtcfbIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -64351,11 +64605,13 @@ antibody CTCF_(SC-15914)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003371
+expId 3371
 fileName wgEncodeSydhTfbsSknshCtcfbIggrabAlnRep2.bam,wgEncodeSydhTfbsSknshCtcfbIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -64373,11 +64629,13 @@ antibody CTCF_(SC-15914)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003371
+expId 3371
 fileName wgEncodeSydhTfbsSknshCtcfbIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -64395,11 +64653,13 @@ antibody CTCF_(SC-15914)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003371
+expId 3371
 fileName wgEncodeSydhTfbsSknshCtcfbIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64417,11 +64677,13 @@ antibody CTCF_(SC-15914)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003371
+expId 3371
 fileName wgEncodeSydhTfbsSknshCtcfbIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64439,11 +64701,13 @@ antibody CTCF_(SC-15914)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003371
+expId 3371
 fileName wgEncodeSydhTfbsSknshCtcfbIggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -64455,17 +64719,92 @@ tableName wgEncodeSydhTfbsSknshCtcfbIggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsSknshInputIggrabAlnRep1
+objType file
+antibody Input
+cell SK-N-SH
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH003393
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-14
+dateUnrestricted 2013-05-14
+dccAccession wgEncodeEH003393
+expId 3393
+fileName wgEncodeSydhTfbsSknshInputIggrabAlnRep1.bam,wgEncodeSydhTfbsSknshInputIggrabAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+md5sum 7c6d409569dde59f1257442203dd0851,d83a1afdcae2d08effa1a564f2395d6a
+project wgEncode
+replicate 1
+setType input
+subId 7867
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsSknshInputIggrabRawDataRep1
+objType file
+antibody Input
+cell SK-N-SH
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH003393
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-14
+dateUnrestricted 2013-05-14
+dccAccession wgEncodeEH003393
+expId 3393
+fileName wgEncodeSydhTfbsSknshInputIggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+md5sum 75327392d98e07685ab0d222c83f71ef
+project wgEncode
+replicate 1
+setType input
+subId 7867
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsSknshInputIggrabSig
+objType table
+antibody Input
+cell SK-N-SH
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId wgEncodeEH003393
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-14
+dateUnrestricted 2013-05-14
+dccAccession wgEncodeEH003393
+expId 3393
+fileName wgEncodeSydhTfbsSknshInputIggrabSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+md5sum 2ed60f741c65f4dd51d3cf83d16fcfdb
+project wgEncode
+setType input
+subId 7867
+tableName wgEncodeSydhTfbsSknshInputIggrabSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsSknshJundIggrabAlnRep1
 objType file
 antibody JunD
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003372
+expId 3372
 fileName wgEncodeSydhTfbsSknshJundIggrabAlnRep1.bam,wgEncodeSydhTfbsSknshJundIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -64483,11 +64822,13 @@ antibody JunD
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003372
+expId 3372
 fileName wgEncodeSydhTfbsSknshJundIggrabAlnRep2.bam,wgEncodeSydhTfbsSknshJundIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -64505,11 +64846,13 @@ antibody JunD
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003372
+expId 3372
 fileName wgEncodeSydhTfbsSknshJundIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -64527,11 +64870,13 @@ antibody JunD
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003372
+expId 3372
 fileName wgEncodeSydhTfbsSknshJundIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64549,11 +64894,13 @@ antibody JunD
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003372
+expId 3372
 fileName wgEncodeSydhTfbsSknshJundIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64571,11 +64918,13 @@ antibody JunD
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003372
+expId 3372
 fileName wgEncodeSydhTfbsSknshJundIggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -64593,11 +64942,13 @@ antibody Mxi1_(AF4185)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003373
+expId 3373
 fileName wgEncodeSydhTfbsSknshMxi1IggrabAlnRep1.bam,wgEncodeSydhTfbsSknshMxi1IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -64615,11 +64966,13 @@ antibody Mxi1_(AF4185)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003373
+expId 3373
 fileName wgEncodeSydhTfbsSknshMxi1IggrabAlnRep2.bam,wgEncodeSydhTfbsSknshMxi1IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -64637,11 +64990,13 @@ antibody Mxi1_(AF4185)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003373
+expId 3373
 fileName wgEncodeSydhTfbsSknshMxi1IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -64659,11 +65014,13 @@ antibody Mxi1_(AF4185)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003373
+expId 3373
 fileName wgEncodeSydhTfbsSknshMxi1IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64681,11 +65038,13 @@ antibody Mxi1_(AF4185)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003373
+expId 3373
 fileName wgEncodeSydhTfbsSknshMxi1IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64703,11 +65062,13 @@ antibody Mxi1_(AF4185)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003373
+expId 3373
 fileName wgEncodeSydhTfbsSknshMxi1IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -64725,11 +65086,13 @@ antibody Nrf1
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003374
+expId 3374
 fileName wgEncodeSydhTfbsSknshNrf1IggrabAlnRep1.bam,wgEncodeSydhTfbsSknshNrf1IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -64747,11 +65110,13 @@ antibody Nrf1
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003374
+expId 3374
 fileName wgEncodeSydhTfbsSknshNrf1IggrabAlnRep2.bam,wgEncodeSydhTfbsSknshNrf1IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -64769,11 +65134,13 @@ antibody Nrf1
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003374
+expId 3374
 fileName wgEncodeSydhTfbsSknshNrf1IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -64791,11 +65158,13 @@ antibody Nrf1
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003374
+expId 3374
 fileName wgEncodeSydhTfbsSknshNrf1IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64813,11 +65182,13 @@ antibody Nrf1
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003374
+expId 3374
 fileName wgEncodeSydhTfbsSknshNrf1IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64835,11 +65206,13 @@ antibody Nrf1
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003374
+expId 3374
 fileName wgEncodeSydhTfbsSknshNrf1IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -64857,11 +65230,13 @@ antibody p300_(SC-584)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003378
+expId 3378
 fileName wgEncodeSydhTfbsSknshP300bIggrabAlnRep1.bam,wgEncodeSydhTfbsSknshP300bIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -64879,11 +65254,13 @@ antibody p300_(SC-584)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003378
+expId 3378
 fileName wgEncodeSydhTfbsSknshP300bIggrabAlnRep2.bam,wgEncodeSydhTfbsSknshP300bIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -64901,11 +65278,13 @@ antibody p300_(SC-584)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003378
+expId 3378
 fileName wgEncodeSydhTfbsSknshP300bIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -64923,11 +65302,13 @@ antibody p300_(SC-584)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003378
+expId 3378
 fileName wgEncodeSydhTfbsSknshP300bIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64945,11 +65326,13 @@ antibody p300_(SC-584)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003378
+expId 3378
 fileName wgEncodeSydhTfbsSknshP300bIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -64967,11 +65350,13 @@ antibody p300_(SC-584)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003378
+expId 3378
 fileName wgEncodeSydhTfbsSknshP300bIggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -64989,11 +65374,13 @@ antibody Rad21
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003376
+expId 3376
 fileName wgEncodeSydhTfbsSknshRad21IggrabAlnRep1.bam,wgEncodeSydhTfbsSknshRad21IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -65011,11 +65398,13 @@ antibody Rad21
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003376
+expId 3376
 fileName wgEncodeSydhTfbsSknshRad21IggrabAlnRep2.bam,wgEncodeSydhTfbsSknshRad21IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -65033,11 +65422,13 @@ antibody Rad21
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003376
+expId 3376
 fileName wgEncodeSydhTfbsSknshRad21IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -65055,11 +65446,13 @@ antibody Rad21
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003376
+expId 3376
 fileName wgEncodeSydhTfbsSknshRad21IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -65077,11 +65470,13 @@ antibody Rad21
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003376
+expId 3376
 fileName wgEncodeSydhTfbsSknshRad21IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -65099,11 +65494,13 @@ antibody Rad21
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003376
+expId 3376
 fileName wgEncodeSydhTfbsSknshRad21IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -65121,11 +65518,13 @@ antibody RFX5_(200-401-194)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003375
+expId 3375
 fileName wgEncodeSydhTfbsSknshRfx5IggrabAlnRep1.bam,wgEncodeSydhTfbsSknshRfx5IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -65143,11 +65542,13 @@ antibody RFX5_(200-401-194)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003375
+expId 3375
 fileName wgEncodeSydhTfbsSknshRfx5IggrabAlnRep2.bam,wgEncodeSydhTfbsSknshRfx5IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -65165,11 +65566,13 @@ antibody RFX5_(200-401-194)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003375
+expId 3375
 fileName wgEncodeSydhTfbsSknshRfx5IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -65187,11 +65590,13 @@ antibody RFX5_(200-401-194)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003375
+expId 3375
 fileName wgEncodeSydhTfbsSknshRfx5IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -65209,11 +65614,13 @@ antibody RFX5_(200-401-194)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003375
+expId 3375
 fileName wgEncodeSydhTfbsSknshRfx5IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -65231,11 +65638,13 @@ antibody RFX5_(200-401-194)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003375
+expId 3375
 fileName wgEncodeSydhTfbsSknshRfx5IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -65253,11 +65662,13 @@ antibody SMC3_(ab9263)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003377
+expId 3377
 fileName wgEncodeSydhTfbsSknshSmc3IggrabAlnRep1.bam,wgEncodeSydhTfbsSknshSmc3IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
@@ -65275,11 +65686,13 @@ antibody SMC3_(ab9263)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003377
+expId 3377
 fileName wgEncodeSydhTfbsSknshSmc3IggrabAlnRep2.bam,wgEncodeSydhTfbsSknshSmc3IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
@@ -65297,11 +65710,13 @@ antibody SMC3_(ab9263)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003377
+expId 3377
 fileName wgEncodeSydhTfbsSknshSmc3IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
@@ -65319,11 +65734,13 @@ antibody SMC3_(ab9263)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003377
+expId 3377
 fileName wgEncodeSydhTfbsSknshSmc3IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
@@ -65341,11 +65758,13 @@ antibody SMC3_(ab9263)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003377
+expId 3377
 fileName wgEncodeSydhTfbsSknshSmc3IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
@@ -65363,11 +65782,13 @@ antibody SMC3_(ab9263)
 cell SK-N-SH
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId SK-N-SH/None/Input/IgG-rab
+controlId wgEncodeEH003393
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-01
 dateUnrestricted 2013-03-30
+dccAccession wgEncodeEH003377
+expId 3377
 fileName wgEncodeSydhTfbsSknshSmc3IggrabSig.bigWig
 grant Snyder
 lab Stanford
@@ -65769,4 +66190,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1630680098
+# MAGIC: -2099200710

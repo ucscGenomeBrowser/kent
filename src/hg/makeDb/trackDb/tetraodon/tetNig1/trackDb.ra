@@ -59,3 +59,12 @@ shortCircuit 1
 termRegex [AEGH][OSVY][TX3][0-9a-z-]+
 dontCheck [AEGH][OSVY][TX3][0-9a-z-]+\.[0-9]+
 searchPriority 50
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [AEGHRSTUY57][-A-Z0-9_]*

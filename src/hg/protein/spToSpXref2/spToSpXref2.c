@@ -14,9 +14,9 @@ void usage()
 errAbort(
   "spToSpXref2- Create tab delimited data files for the spXref2 table in uniProt (spxxxxxx) database.\n"
   "usage:\n"
-  "   spToSpXref2 yymmdd\n"
+  "   spToSpXref2 swissProt-yymmdd proteome-yymmdd\n"
   "      yymmdd is the release date of SWISS-PROT data\n"
-  "Example: spToSpXref2 080707\n");
+  "Example: spToSpXref2 080707 120323\n");
 }
 
 int main(int argc, char *argv[])
@@ -26,7 +26,8 @@ char query[256], query2[256];
 struct sqlResult *sr, *sr2;
 char **row, **row2;
 FILE *o1;
-char *proteinDataDate;
+char *proteomeDataDate;
+char *uniprotDataDate;
 char *bioDatabase, *bioentryID;
 char *displayID;
 char *accession;
@@ -40,9 +41,10 @@ int id;
 char *val;
 
 optionHash(&argc, argv);
-if (argc != 2) usage();
+if (argc != 3) usage();
 
-proteinDataDate = argv[1];
+uniprotDataDate = argv[1];
+proteomeDataDate = argv[2];
 
 o1 = mustOpen("temp_spXref2.dat", "w");
 
@@ -52,7 +54,7 @@ conn2 = hAllocConn(hDefaultDb());
 icnt =0;
 
 /* first read in extDb table */
-safef(query, sizeof(query), "select * from sp%s.extDb", proteinDataDate);
+safef(query, sizeof(query), "select * from sp%s.extDb", uniprotDataDate);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)
@@ -76,7 +78,7 @@ iii=0;
 /* Reuse the first 5 fields from the spXref3 table */
 safef(query2, sizeof(query2), 
       "select accession, displayID, division, bioentryID, biodatabaseID from proteins%s.spXref3;",
-      proteinDataDate);
+      proteomeDataDate);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 iii=0;
@@ -90,7 +92,7 @@ while (row2 != NULL)
   
     safef(query, sizeof(query),
 	  "select extAcc1, extDb.id from sp%s.extDb, sp%s.extDbRef where extDbRef.acc='%s' %s",
-	  proteinDataDate, proteinDataDate, accession, "and extDb.id = extDbRef.extDb;"); 
+	  uniprotDataDate, uniprotDataDate, accession, "and extDb.id = extDbRef.extDb;"); 
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     while (row != NULL)

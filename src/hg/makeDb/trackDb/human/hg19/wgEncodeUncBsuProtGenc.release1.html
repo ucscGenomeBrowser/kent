@@ -31,7 +31,7 @@ previously.
 
 <h2>Display Conventions and Configuration</h2>
 
-<p>The display for this track shows peptide mappings as contiguous,
+<p>This track shows peptide mappings as contiguous,
 rectangular items rendered in grayscale according to their
 score, with darker items representing higher-confidence peptide mappings.  
 The name of each item is the amino acid sequence of the peptide and a period (.) 
@@ -45,41 +45,41 @@ fields specific to these Proteogenomic tracks: <br>
 
   <li>The <span style="font-style: italic;">Item</span> shows the peptide sequence 
 for regular pepitde mapping and peptide sequence appended with the integer portion
-of the PTM mass for PTM peptide mapping. These appear in the left or right space as 
-short label besides the main Genome Browser display window depending on the 
+of the PTM mass for PTM peptide mapping. These appear in the left or right space as   
+short labels besides the main Genome Browser display window depending on the 
 configuration.</li>
   <li>The <span style="font-style: italic;">Score</span> is derived from the <span 
 style="font-style: italic;">rawScore </span>(see below) given by the proteomics 
 peptide mapping software Peppy.  It is computed 
-as [<span style="font-style: italic;">rawScore</span> - <span style="font-style: 
+as [(<span style="font-style: italic;">rawScore</span> - <span style="font-style: 
 italic;">rawScore</span> at 10% FDR cutoff) / (<span style="font-style: italic;">
 rawScore</span> at near 0% FDR cutoff - <span style="font-style: italic;">rawScore
 </span> at 10% FDR cutoff)] * 1000, and is then converted to an integer.  Raw scores 
 above the 0% FDR threshold have a score of 1000 (best), while those below the 10% 
 FDR threshold have a score of 0 (worst).  The <span style="font-style: italic;">
-Score</span> is used by the Genome Browser to render shade to the displaying solid 
-rectangular.
+Score</span> is used by the Genome Browser to render shade to displayed
+rectangular items.
 </li>
-  <li>The <span style="font-style: italic;">rawScore </span> is the original 
-peptide mapping score given by Peppy, which reflects the strength of the peptide 
-mapping; as an estimated <span style="font-style: italic;">p</span>-value, 
-indicating the confidence of the peptide mapping.</li>
-  <li>The <span style="font-style: italic;">spectrumId </span> is the original 
-identifier of the spectrum that mapped to the peptide sequence, and it can be 
+  <li>The <span style="font-style: italic;">rawScore (Raw score for a peptide/spectrum match)
+</span> is given by Peppy.  It reflects 
+the strength of the peptide mapping; as an estimated <span style="font-style: italic;">
+p</span>-value, indicating the confidence of the peptide mapping.</li>
+  <li>The <span style="font-style: italic;">spectrumId (An identifier of the spectrum 
+associated with the peptide mapping) </span> can be 
 used to track the original spectrum.<br></li>
-  <li>The <span style="font-style: italic;">peptideRank </span>indicates the 
-rank of each peptide/spectrum mapping.  A spectrum can be chimeric, containing 
+  <li>The <span style="font-style: italic;">peptideRank (Rank of the peptide/spectrum match, 
+for spectrum matching to different peptides):</span>  A spectrum can be chimeric, containing 
 more than one peptide, and the spectrum can be mapped to two or more distinct 
 peptides.  Here, we are only reporting the top-scoring match.  If more than one 
 peptide 'tied' for the top score, then all peptides were included and all 
 matches have a <span style="font-style: italic;">peptideRank of 1</span>.<br></li>
 
-  <li>The <span style="font-style: italic;">peptideRepeatCount</span> indicates 
-the number of places in the genome where the peptide is encoded, reflecting the 
+  <li>The <span style="font-style: italic;">peptideRepeatCount (Indicates the number of places
+ in the genome where the peptide is encoded for a peptide/spectrum match):</span>  It reflects the 
 prevalence or uniqueness of the peptide mapping in the genome.  Those peptides 
 mapped to only a few genomic locations will have a low peptideRepeatCount, whereas 
 those peptides mapped to highly duplicated regions will have a high <span style=
-"font-style: italic;">peptideRepeatCount</span>.  <b>Peptides with <span style=
+"font-style: italic;">peptideRepeatCount</span>.  <b>Peptides with a <span style=
 "font-style: italic;">peptideRepeatCount</span> greater than 10 times in the genome 
 were deleted from the track</b> (this field is for regular peptides only).</li>
   <li>The <span style="font-style: italic;"> modificationMass</span> reflects the 
@@ -94,23 +94,23 @@ field is for PTM peptides only).
 <p>ENCODE cell lines K562, GM12878, H1-hESC and H1-neurons were used for this 
 large scale proteomic analysis. Cell lines were cultured according to standard
 <A HREF="/ENCODE/protocols/cell" target="_blank">ENCODE cell culture protocols</A>
-and tryptic peptides were prepared using In-gel digestion (Shevchenko, <EM>et al.
-</EM> 2007), FASP (Wiseniewski <EM>et al.</EM>, 2009, Manza <EM>et al.</EM>, 2005) 
-or MudPIT (Washburn <EM>et al.</EM>, 2001) protocols as indicated for each sample .  
+and tryptic peptides were prepared using In-gel digestion (Shevchenko <EM>et al.,
+</EM> 2007), FASP (Wiseniewski <EM>et al.</EM>, 2009; Manza <EM>et al.,</EM> 2005) 
+or MudPIT (Washburn <EM>et al.</EM>, 2001) protocols as indicated for each sample.  
 Tandem mass spectrometry (RPLC-MS/MS) analysis was then performed on an Eksigent 
-Ultra-LTQ Orbitrap system or a Q Exactive system (Thermo Scientific) as indicated*. 
-The number of Arginine or Lysine sites missed by the trypsin enzyme is indicated by 
+Ultra-LTQ Orbitrap system or a Q Exactive system (Thermo Scientific) as indicated.* 
+The number of arginine or lysine sites missed by the trypsin enzyme is indicated by 
 the metadata parameter <i>miscleavages</i>.
 
-<p>We performed proteogenomic mapping (Jaffe, et al., 2004) on an <i>in silico</i> 
+<p>We performed proteogenomic mapping (Jaffe<EM> et al.,</EM> 2004) on an <i>in silico</i> 
 translation and proteolytic digestion of the whole human genome (UCSC Hg19), and 
-the GENCODE translation of protein-codeing transcripts database with up to 
+the GENCODE translation of protein-coding transcripts database with up to 
 one missed cleavage using <A HREF="http://www.geneffects.com/peppy" target="_blank">
-Peppy software</A>. (The GENCODE version for H1-hESC (FASP protocol), K562, and 
-GM12878 is V11 and it is V10 for H1-hESC (MudPIT protocol), H1-neurons datasets.  
+Peppy software</A>. The GENCODE version for H1-hESC (FASP protocol), K562, and 
+GM12878 is V11 and it is V10 for H1-hESC (MudPIT protocol) and H1-neurons datasets.  
 GENCODE V11 was initially used for database search and it was later found that 
 GENCODE V10 is the preferred version and was subsequently used to replace GENCODE 
-V11 for the analyses of the later datasets).  Peppy's imbedded algorithm matches 
+V11 for the analyses of the later datasets.  Peppy's embedded algorithm matches 
 the MS/MS spectra to peptides and outputs a matching score, and the peptides are 
 then mapped back to their corresponding genomic sequences.  The peptide/spectrum 
 matches (PSMs) found from Hg19 genome and GENCODE searches were compared and the PSMs 
@@ -123,18 +123,18 @@ searches resulted in a greater coverage.
 <p>
 For both the Hg19 genome and GENCODE database searches, a blind search for 
 post-translational modifications (PTMs) was performed using Peppy software.  
-In a blind PTM search, when Peppy matches an MS/MS spectrum to a peptide, if the 
+In a blind PTM search, when Peppy matches a MS/MS spectrum to a peptide, if the 
 matching score is increased after the addition of the molecular weight (MW) of a 
 potential PTM, the peptide is determined as having a PTM.  In the output of both the
 Hg19 genome and GENCODE searches, some spectra were output as matched with peptides 
 of PTMs and others were output as matched with regular peptides, <EM>i.e.</EM>, peptides 
-without PTMs.  Once the best-ranking PSMs were identifie from either search, the
+without PTMs.  Once the best-ranking PSMs were identified from either search, the
 regular peptides and peptides with PTMs were displayed in separate tracks. 
 </p>
 
 <p>
 For each data set, a reverse database search was also performed using all spectra
-to calculate the false discovery rate (FDR)  (Elias, <EM>et al.</EM> 2007).  Only
+to calculate the false discovery rate (FDR)  (Elias <EM>et al.,</EM> 2007).  Only
 those matches with a FDR rate below 5% were included in this track.  The
 unfiltered results of those peptides matches with an FDR rate below 10% are available 
 for download.

@@ -10048,21 +10048,17 @@ tg->items = lfFromGenePredInRange(tg, tg->table, chromName, winStart, winEnd);
 filterItems(tg, genePredClassFilter, "include");
 }
 
-void loadGenePredWithConfiguredName(struct track *tg)
-/* Convert gene pred info in window to linked feature. Include name
- * in "extra" field (gene name, accession, or both, depending on UI) */
+void genePredAssignConfiguredName(struct track *tg)
+/* Set name on genePred in "extra" field to gene name, accession, or both,
+ * depending, on UI on all items in track */
 {
-char *geneLabel;
-boolean useGeneName, useAcc;
+char *geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label","gene");
+boolean useGeneName =  sameString(geneLabel, "gene")
+    || sameString(geneLabel, "name")
+    || sameString(geneLabel, "both");
+boolean useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
+
 struct linkedFeatures *lf;
-
-geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label","gene");
-useGeneName =  sameString(geneLabel, "gene")
-            || sameString(geneLabel, "name")
-            || sameString(geneLabel, "both");
-useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
-
-loadGenePredWithName2(tg);
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(SMALLDYBUF);
@@ -10076,6 +10072,14 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         dyStringAppend(name, lf->name);
     lf->extra = dyStringCannibalize(&name);
     }
+}
+
+void loadGenePredWithConfiguredName(struct track *tg)
+/* Convert gene pred info in window to linked feature. Include name
+ * in "extra" field (gene name, accession, or both, depending on UI) */
+{
+loadGenePredWithName2(tg);
+genePredAssignConfiguredName(tg);
 }
 
 Color genePredItemAttrColor(struct track *tg, void *item, struct hvGfx *hvg)

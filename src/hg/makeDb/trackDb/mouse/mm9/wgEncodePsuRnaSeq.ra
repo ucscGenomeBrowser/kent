@@ -1,10 +1,10 @@
 track wgEncodePsuRnaSeq
 compositeTrack on
-shortLabel PSU RnaSeq
-longLabel ENCODE PSU Hardison RnaSeq
+shortLabel PSU RNA-seq
+longLabel RNA-seq from ENCODE/PSU
 group regulation
 subGroup1 view Views Signal=Signal MinusRawSignal=Minus_Raw_Signal PlusRawSignal=Plus_Raw_Signal Alignments=Alignments
-subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast G1E=G1E G1EER4=G1E-ER4 G1EER4T=G1E-ER4&nbsp;(Time_Course) FVP=FV-progenitor FVLS=FVL-stem MEGAKARYO=Megakaryocyte MEL=MEL MEP=MEP
+subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast FVP=FV-progenitor FVLS=FVL-stem G1E=G1E G1EER4=G1E-ER4 G1EER4T=G1E-ER4&nbsp;(Time_Course) MEGAKARYO=Megakaryocyte MEL=MEL MEP=MEP
 subGroup3 sex Sex F=F M=M U=U B=B
 subGroup4 age Age E0=E0 E14HALF=E14.5 IMMORTAL=immortalized ADULT810WKS=adult-10-12wks ADULT5WKS=adult-5wks
 subGroup5 strain Strain s129=129 s2A4B=B10.H-2aH-4bp/Wts BALBCJ=BALB/cJ CD1=CD-1 C57BL6J=C57BL/6J UKN=Unknown
@@ -388,7 +388,7 @@ noInherit on
 
         track wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep1
         parent wgEncodePsuRnaSeqViewMinusRawSignal off
-        shortLabel G1E-ER4 Ohr M 1
+        shortLabel G1E-ER4 0hr M 1
         longLabel G1E-ER4 Estradiol 0 hr 2x99D TC RNA-seq Minus Raw Signal Rep 1 from ENCODE/PSU
         subGroups view=MinusRawSignal age=E0 cellType=G1EER4T readType=R2X99D sex=M strain=s129 treatment=aNONE rep=rep1
         type bigWig -1764097.000000 -1.000000

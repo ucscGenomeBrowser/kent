@@ -6,22 +6,18 @@ include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra alpha
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV11.ra alpha
-
-# GENCODE genes on public (wrangler: cricket)
-include wgEncodeGencodeV7.ra beta,public
-include wgEncodeGencodeV10.ra beta,public
-include wgEncodeGencodeV12.ra beta,public
+include wgEncodeGencodeV13.ra alpha
 
 # GENCODE trackDb changes in transition to public to support highlighting
-include wgEncodeGencodeV7.release3.ra alpha
-include wgEncodeGencodeV10.release3.ra alpha
-include wgEncodeGencodeV12.release3.ra alpha
+include wgEncodeGencodeV7.release3.ra
+include wgEncodeGencodeV10.release3.ra
+include wgEncodeGencodeV12.release3.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.release2.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
-include wgEncodeUncBsuProtGenc.release1.ra alpha
+include wgEncodeUncBsuProtGenc.release1.ra alpha,beta
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.release3.ra
@@ -41,8 +37,7 @@ include wgEncodeFsuRepliChip.release2.ra
 include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
-include wgEncodeGisRnaPet.ra public
-include wgEncodeGisRnaPet.release2.ra alpha,beta
+include wgEncodeGisRnaPet.release2.ra
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
@@ -89,8 +84,8 @@ include wgEncodeOpenChromFaire.ra beta,public
 include wgEncodeOpenChromSynth.release2.ra
 
 #Duke DNaseI HS (wrangler: Matt)
-include wgEncodeOpenChromDnase.release2.ra beta,public
-include wgEncodeOpenChromDnase.release3.ra alpha
+include wgEncodeOpenChromDnase.release2.ra public
+include wgEncodeOpenChromDnase.release3.ra alpha,beta
 
 #Uw Dnase-Seq (wrangler: Venkat)
 include wgEncodeUwDnase.release6.ra
@@ -115,8 +110,7 @@ include wgEncodeCshlShortRnaSeq.release3.ra
 include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
-include wgEncodeCaltechRnaSeq.release3.ra public
-include wgEncodeCaltechRnaSeq.release4.ra alpha,beta
+include wgEncodeCaltechRnaSeq.release4.ra
 
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.release2.ra beta,public
@@ -170,16 +164,15 @@ include wgEncodeSydhHistone.release3.ra
 include wgEncodeUwTfbs.release4.ra
 
 #UTA TFBS (wrangler: Matt)
-include wgEncodeOpenChromChip.release2.ra alpha
-include wgEncodeOpenChromChip.ra beta,public
+include wgEncodeOpenChromChip.release2.ra alpha,beta
+include wgEncodeOpenChromChip.ra public
 
 # HAIB TFBS (wrangler: Venkat)
 #include wgEncodeHaibTfbs.patch.ra beta
 include wgEncodeHaibTfbs.release3.ra alpha
 include wgEncodeHaibTfbs.release2.ra beta,public
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.release2.ra beta,public
-include wgEncodeSydhTfbs.release3.ra alpha
+include wgEncodeSydhTfbs.release3.ra
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra public

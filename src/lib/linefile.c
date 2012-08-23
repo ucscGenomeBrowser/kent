@@ -1058,23 +1058,23 @@ switch (byteCount)
 	if (isSigned)
 	    {
 	    if (isMinus)
+		*(short *)val = -res;
+	    else
+		*(short *)val = res;
+	    }
+	else
+	    *(unsigned short *)val = res;
+	break;
+    case 4:
+	if (isSigned)
+	    {
+	    if (isMinus)
 		*(int *)val = -res;
 	    else
 		*(int *)val = res;
 	    }
 	else
 	    *(unsigned *)val = res;
-	break;
-    case 4:
-	if (isSigned)
-	    {
-	    if (isMinus)
-		*(long long *)val = -res;
-	    else
-		*(long long *)val = res;
-	    }
-	else
-	    *(unsigned long long *)val = res;
 	break;
     case 8:
 	if (isSigned)

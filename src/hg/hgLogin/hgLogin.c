@@ -15,7 +15,6 @@
 #include "web.h"
 #include "ra.h"
 #include "hgColors.h"
-#include <crypt.h>
 #include "net.h"
 #include "wikiLink.h"
 #include "hgLogin.h"
@@ -38,6 +37,7 @@ char brwName[64];
 char brwAddr[256];
 char signature[256];
 char returnAddr[256];
+char mailFormat[32];
 /* ---- Global helper functions ---- */
 char *browserName()
 /* Return the browser name like 'UCSC Genome Browser' */
@@ -73,6 +73,29 @@ if isEmpty(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR))
     return cloneString("NULL_mailReturnAddr");
 else
     return cloneString(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR));
+}
+
+char *mailOptionFormat()
+/* Return the mail option format to be used by mail command */
+{
+if isEmpty(cfgOption(CFG_MAIL_OPTIONFORMAT))
+    return cloneString("SENDMAIL");
+else
+    return cloneString(cfgOption(CFG_MAIL_OPTIONFORMAT));
+}
+
+int mailItOut(char *toAddr, char *subject, char *msg, char *fromAddr)
+/* send mail to toAddr address */
+{
+char cmd[4096];
+if (sameString(mailFormat, "POSTFIX"))
+    safef(cmd,sizeof(cmd), "echo '%s' | /bin/mail -s \"%s\" -r %s %s",
+        msg, subject, fromAddr, toAddr);
+else 
+    safef(cmd,sizeof(cmd), "echo '%s' | /bin/mail -s \"%s\" %s -- -f%s",
+        msg, subject, toAddr, fromAddr);
+int result = system(cmd);
+return result;
 }
 
 /* ---- password functions depend on optionally installed openssl lib ---- */
@@ -350,11 +373,9 @@ void sendActMailOut(char *email, char *subject, char *msg)
 /* send mail to email address */
 {
 char *hgLoginHost = wikiLinkHost();
-char cmd[4096];
-safef(cmd,sizeof(cmd),
-    "echo '%s' | mail -s \"%s\" %s  -- -f %s", 
-    msg, subject, email, returnAddr);
-int result = system(cmd);
+int result;
+result = mailItOut(email, subject, msg, returnAddr);
+
 if (result == -1)
     {
     hPrintf(
@@ -403,11 +424,8 @@ void sendMailOut(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
-char cmd[4096];
-safef(cmd,sizeof(cmd),
-    "echo '%s' | mail -s \"%s\" %s -- -f %s",
-    msg, subject, email, returnAddr);
-int result = system(cmd);
+int result;
+result = mailItOut(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf( 
@@ -453,7 +471,7 @@ char query[256];
 
 /* find all the user names assocaited with this email address */
 char userList[256]="";
-safef(query,sizeof(query),"select * from gbMembers where email='%s'", email);
+safef(query,sizeof(query),"SELECT * FROM gbMembers WHERE email='%s'", email);
 sr = sqlGetResult(conn, query);
 int numUser = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -548,7 +566,7 @@ void sendNewPassword(struct sqlConnection *conn, char *username, char *password)
 struct sqlResult *sr;
 char query[256];
 /* find email address associated with this username */
-safef(query,sizeof(query),"select email from gbMembers where userName='%s'", username);
+safef(query,sizeof(query),"SELECT email FROM gbMembers WHERE userName='%s'", username);
 char *email = sqlQuickString(conn, query);
 if (!email || sameString(email,""))
     {
@@ -568,7 +586,7 @@ char query[256];
 char *password = generateRandomPassword();
 char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
-safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),newPassword='%s', newPasswordExpire=DATE_ADD(NOW(), INTERVAL 7 DAY), passwordChangeRequired='Y' where userName='%s'",
+safef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(),newPassword='%s', newPasswordExpire=DATE_ADD(NOW(), INTERVAL 7 DAY), passwordChangeRequired='Y' WHERE userName='%s'",
     sqlEscapeString(encPwd), sqlEscapeString(username));
 sqlUpdate(conn, query);
 sendNewPassword(conn, username, password);
@@ -579,7 +597,7 @@ void clearNewPasswordFields(struct sqlConnection *conn, char *username)
 /* clear the newPassword fields */
 {
 char query[256];
-safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),newPassword='', newPasswordExpire='', passwordChangeRequired='N' where userName='%s'",
+safef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(),newPassword='', newPasswordExpire='', passwordChangeRequired='N' WHERE userName='%s'",
 sqlEscapeString(username));
 sqlUpdate(conn, query);
 cartRemove(cart, "hgLogin_changeRequired");
@@ -614,7 +632,7 @@ void setupNewAccount(struct sqlConnection *conn, char *email, char *username)
 char query[256];
 char *token = generateRandomPassword();
 char *tokenMD5 = generateTokenMD5(token);
-safef(query,sizeof(query), "update gbMembers set lastUse=NOW(),emailToken='%s', emailTokenExpires=DATE_ADD(NOW(), INTERVAL 7 DAY), accountActivated='N' where userName='%s'",
+safef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(),emailToken='%s', emailTokenExpires=DATE_ADD(NOW(), INTERVAL 7 DAY), accountActivated='N' WHERE userName='%s'",
     sqlEscapeString(tokenMD5),
     sqlEscapeString(username)
     );
@@ -676,11 +694,11 @@ char query[256];
 char *token = cgiUsualString("token", "");
 char *username = cgiUsualString("user","");
 safef(query,sizeof(query),
-    "select emailToken from gbMembers where userName='%s'", username);
+    "SELECT emailToken FROM gbMembers WHERE userName='%s'", username);
 char *emailToken = sqlQuickString(conn, query);
 if (sameString(emailToken, token))
     {
-    safef(query,sizeof(query), "update gbMembers set lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' where userName='%s'",
+    safef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' WHERE userName='%s'",
     username);
     sqlUpdate(conn, query);
     freez(&errMsg);
@@ -795,12 +813,12 @@ if (newPassword1 && newPassword2 && !sameString(newPassword1, newPassword2))
 char *password;
 if (changeRequired && sameString(changeRequired, "YES"))
     {
-    safef(query,sizeof(query), "select newPassword from gbMembers where userName='%s'", user);
+    safef(query,sizeof(query), "SELECT newPassword FROM gbMembers WHERE userName='%s'", user);
     password = sqlQuickString(conn, query);
     } 
 else 
     {
-    safef(query,sizeof(query), "select password from gbMembers where userName='%s'", user);
+    safef(query,sizeof(query), "SELECT password FROM gbMembers WHERE userName='%s'", user);
     password = sqlQuickString(conn, query);
     }
 if (!password)
@@ -819,7 +837,7 @@ if (!checkPwd(currentPassword, password))
     }
 char encPwd[45] = "";
 encryptNewPwd(newPassword1, encPwd, sizeof(encPwd));
-safef(query,sizeof(query), "update gbMembers set password='%s' where userName='%s'", sqlEscapeString(encPwd), sqlEscapeString(user));
+safef(query,sizeof(query), "UPDATE gbMembers SET password='%s' WHERE userName='%s'", sqlEscapeString(encPwd), sqlEscapeString(user));
 sqlUpdate(conn, query);
 clearNewPasswordFields(conn, user);
 
@@ -907,7 +925,7 @@ if (strlen(user) > 32)
     return;
     }
 
-safef(query,sizeof(query), "select password from gbMembers where userName='%s'", user);
+safef(query,sizeof(query), "SELECT password FROM gbMembers WHERE userName='%s'", user);
 
 char *password = sqlQuickString(conn, query);
 if (password)
@@ -981,7 +999,7 @@ if (password && password2 && !sameString(password, password2))
 /* pass all the checks, OK to create the account now */
 char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
-safef(query,sizeof(query), "insert into gbMembers set "
+safef(query,sizeof(query), "INSERT INTO gbMembers SET "
     "userName='%s',password='%s',email='%s', "
     "lastUse=NOW(),accountActivated='N'",
     sqlEscapeString(user),sqlEscapeString(encPwd),sqlEscapeString(email));
@@ -1029,7 +1047,7 @@ if (sameString(helpWith,"username"))
     else 
         {
         safef(query,sizeof(query),
-            "select password from gbMembers where email='%s'", email);
+            "SELECT password FROM gbMembers WHERE email='%s'", email);
         char *password = sqlQuickString(conn, query);
         cartSetString(cart, "hgLogin_sendMailTo", email);
         cartSetString(cart, "hgLogin_sendMailContain", "username(s)");
@@ -1056,7 +1074,7 @@ if (sameString(helpWith,"password"))
     else 
         { 
         safef(query,sizeof(query), 
-            "select password from gbMembers where userName='%s'", username);
+            "SELECT password FROM gbMembers WHERE userName='%s'", username);
         char *password = sqlQuickString(conn, query);
         if (!password)
             {
@@ -1077,9 +1095,9 @@ boolean usingNewPassword(struct sqlConnection *conn, char *userName, char *passw
 /* The user is using  requested new password */
 {
 char query[256];
-safef(query,sizeof(query), "select passwordChangeRequired from gbMembers where userName='%s'", userName);
+safef(query,sizeof(query), "SELECT passwordChangeRequired FROM gbMembers WHERE userName='%s'", userName);
 char *change = sqlQuickString(conn, query);
-safef(query,sizeof(query), "select newPassword from gbMembers where userName='%s'", userName);
+safef(query,sizeof(query), "SELECT newPassword FROM gbMembers WHERE userName='%s'", userName);
 char *newPassword = sqlQuickString(conn, query);
 if (change && sameString(change, "Y") && checkPwd(password, newPassword))
     return TRUE;
@@ -1154,7 +1172,7 @@ if (sameString(password,""))
     return;
     }
 
-safef(query,sizeof(query),"select * from gbMembers where userName='%s'", userName);
+safef(query,sizeof(query),"SELECT * FROM gbMembers WHERE userName='%s'", userName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
@@ -1227,6 +1245,8 @@ safecpy(brwName,sizeof(brwName), browserName());
 safecpy(brwAddr,sizeof(brwAddr), browserAddr());
 safecpy(signature,sizeof(signature), mailSignature());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
+safecpy(mailFormat,sizeof(mailFormat), mailOptionFormat());
+
 
 if (cartVarExists(cart, "hgLogin.do.changePasswordPage"))
     changePasswordPage(conn);
