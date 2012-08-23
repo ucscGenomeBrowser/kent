@@ -1,0 +1,71 @@
+# for emacs: -*- mode: sh; -*-
+
+#       DATE:   31-May-2012
+#       ORGANISM:       Alligator mississippiensis
+#       TAXID:  8496
+#       ASSEMBLY LONG NAME:     allMis0.2
+#       ASSEMBLY SHORT NAME:    allMis0.2
+#       ASSEMBLY SUBMITTER:     International Crocodilian Genomes Working Group
+#       ASSEMBLY TYPE:  Haploid
+#       NUMBER OF ASSEMBLY-UNITS:       1
+#       ASSEMBLY ACCESSION:     GCA_000281125.1
+
+#       FTP-RELEASE DATE: 07-Aug-2012
+
+#       http://www.ncbi.nlm.nih.gov/genome/13409
+#       http://www.ncbi.nlm.nih.gov/assembly/406428/
+#       http://www.ncbi.nlm.nih.gov/bioproject/159843
+
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AKHW01
+#       Genome Coverage : 68x
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=8496
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Alligator_mississippiensis/allMis0.2/
+
+##########################################################################
+# Download sequence (DONE - 2012-08-08 - Hiram)
+    mkdir /hive/data/genomes/allMis1
+    cd /hive/data/genomes/allMis1
+    mkdir genbank
+    cd genbank
+rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Alligator_mississippiensis/allMis0.2/ ./
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+# 2174243242 bases (45539765 N's 2128703477 real 2128703477 upper 0 lower)
+#       in 14644 sequences in 1 files
+# Total size: mean 148473.3 sd 283025.3 min 816 (gi|397224103|gb|AKHW01085896.1|)
+#       max 4958242 (gi|397457027|gb|JH738473.1|) median 25764
+# %0.00 masked total, %0.00 masked real
+
+    # strip the names down to something reasonable, they can all be:
+    # >JH7[0-9]
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+        | sed -e "s/^>.*JH7/>JH7/; s/^>.*AKHW01/>AKHW01/; s/.1. Alligator.*//" \
+        | gzip -c > ucsc.fa.gz
+    zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+        | sed -e "s/^\(JH7[0-9]*\).1/\1/; s/^\(AKHW01[0-9]*\).1/\1/;" \
+        | gzip -c > ucsc.agp.gz
+    time checkAgpAndFa  ucsc.agp.gz ucsc.fa.gz 2>&1 | tail -2
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+    #   real    0m59.548s
+
+XXX photo to be done, might use:
+XXX     https://green.soe.ucsc.edu/sites/default/files/ed-gator.JPG
+
+    mkdir /hive/data/genomes/allMis1/photograph
+    cd /hive/data/genomes/allMis1/photograph
+    wget -O female_galapagos_medium_ground_finch.jpg \
+http://upload.wikimedia.org/wikipedia/commons/7/7b/Female_Gal%C3%A1pagos_medium_ground_finch.jpg
+    convert -geometry "350x350" female_galapagos_medium_ground_finch.jpg \
+        Geospiza_fortis.jpg
+    # check this .jpg file into the source tree kent/src/hg/htdocs/images/
+    git commit -m "from Wikimedia Commons - Charlesjsharp" Geospiza_fortis.jpg
+    # and copy to /usr/local/apache/htdocs/images
+    cp -p Geospiza_fortis.jpg /usr/local/apache/htdocs/images
+
+##########################################################################
