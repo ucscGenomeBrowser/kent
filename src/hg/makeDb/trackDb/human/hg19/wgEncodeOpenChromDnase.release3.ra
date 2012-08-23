@@ -22,7 +22,7 @@ priority 2
 type bed 3
 wgEncode 1
 html wgEncodeOpenChromDnase.release3
-dataVersion through the ENCODE July 2012 Freeze
+dataVersion Through the ENCODE July 2012 Freeze
 
     track wgEncodeOpenChromDnaseViewPeaks
     view Peaks
@@ -276,7 +276,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseLncapAndroPk
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel LNCP Methyl Pk
+        shortLabel LNCaP Methyl Pk
         longLabel LNCaP Methyltrienolone DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t3LNCAP treatment=METHYLT
         type narrowPeak
@@ -285,7 +285,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseLncapPk
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel LNCP Pk
+        shortLabel LNCaP Pk
         longLabel LNCaP DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t3LNCAP treatment=zNONE
         type narrowPeak
@@ -632,7 +632,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseMonocd14Pk
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel Monocytes Pk
+        shortLabel CD14 Pk
         longLabel Monocytes CD14+ DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t2MONOCYTESCD14 treatment=zNONE
         type narrowPeak
@@ -640,7 +640,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseCd20ro01794Pk
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel B cells Pk
+        shortLabel CD20 Pk
         longLabel B-cells CD20+ RO01794 DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t2BCELLSCD20RO01794 treatment=zNONE
         type narrowPeak
@@ -738,7 +738,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseNaivebcellPk
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel Naive B-cell Pk
+        shortLabel Naive B cell Pk
         longLabel Naive B cell DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t3NAIVEBCELL treatment=zNONE
         type narrowPeak
@@ -836,7 +836,7 @@ dataVersion through the ENCODE July 2012 Freeze
         track wgEncodeOpenChromDnaseK562Saha1u72hrPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel K562 SAHA 72h Pk
-        longLabel K562 SAHA 1 uM 72 hr DNaseI HS Peaks from ENCODE/Duke
+        longLabel K562 SAHA 1 uM 72 h DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=t1K562 treatment=SAHA1U72HR
         type narrowPeak
         color 46,0,184
@@ -1103,7 +1103,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseLncapAndroSig
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel LNCP Methyl DS
+        shortLabel LNCaP Methyl DS
         longLabel LNCaP Methyltrienolone DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t3LNCAP treatment=METHYLT
         type bigWig 0.000000 1.231700
@@ -1112,7 +1112,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseLncapSig
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel LNCP DS
+        shortLabel LNCaP DS
         longLabel LNCaP DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t3LNCAP treatment=zNONE
         type bigWig 0.000000 2.732500
@@ -1459,7 +1459,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseMonocd14Sig
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel Monocytes DS
+        shortLabel CD14 DS
         longLabel Monocytes CD14+ DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t2MONOCYTESCD14 treatment=zNONE
         type bigWig 0.000000 2.037700
@@ -1467,7 +1467,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseCd20ro01794Sig
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel B cells DS
+        shortLabel CD20 DS
         longLabel B-cells CD20+ RO01794 DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t2BCELLSCD20RO01794 treatment=zNONE
         type bigWig 0.000000 1.765400
@@ -1565,7 +1565,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseNaivebcellSig
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel Naive B-cell DS
+        shortLabel Naive B cell DS
         longLabel Naive B cell DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t3NAIVEBCELL treatment=zNONE
         type bigWig 0.000000 1.104600
@@ -1663,7 +1663,7 @@ dataVersion through the ENCODE July 2012 Freeze
         track wgEncodeOpenChromDnaseK562Saha1u72hrSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel K562 SAHA 72h DS
-        longLabel K562 SAHA 1 uM 72 hr DNaseI HS Density Signal from ENCODE/Duke
+        longLabel K562 SAHA 1 uM 72 h DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=t1K562 treatment=SAHA1U72HR
         type bigWig 0.000000 1.588700
         color 46,0,184
@@ -1931,7 +1931,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel LNCP Methyl OS
+        shortLabel LNCaP Methyl OS
         longLabel LNCaP Methyltrienolone DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t3LNCAP treatment=METHYLT
         type bigWig 0.000000 220.000000
@@ -1940,7 +1940,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseLncapBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel LNCP OS
+        shortLabel LNCaP OS
         longLabel LNCaP DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t3LNCAP treatment=zNONE
         type bigWig 0.000000 517.000000
@@ -2287,7 +2287,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseMonocd14BaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Monocytes OS
+        shortLabel CD14 OS
         longLabel Monocytes CD14+ DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t2MONOCYTESCD14 treatment=zNONE
         type bigWig 0.000000 253.000000
@@ -2295,7 +2295,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseCd20ro01794BaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel B cells OS
+        shortLabel CD20 OS
         longLabel B-cells CD20+ RO01794 DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t2BCELLSCD20RO01794 treatment=zNONE
         type bigWig 0.000000 308.000000
@@ -2393,7 +2393,7 @@ dataVersion through the ENCODE July 2012 Freeze
 
         track wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Naive B-cell OS
+        shortLabel Naive B cell OS
         longLabel Naive B cell DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t3NAIVEBCELL treatment=zNONE
         type bigWig 0.000000 231.000000
@@ -2491,7 +2491,7 @@ dataVersion through the ENCODE July 2012 Freeze
         track wgEncodeOpenChromDnaseK562Saha1u72hrBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel K562 SAHA 72h OS
-        longLabel K562 SAHA 1 uM 72 hr DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel K562 SAHA 1 uM 72 h DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=t1K562 treatment=SAHA1U72HR
         type bigWig 0.000000 330.000000
         color 46,0,184
