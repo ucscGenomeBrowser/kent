@@ -21,8 +21,8 @@ useScore 0
 priority 2
 type bed 3
 wgEncode 1
-html wgEncodeOpenChromDnase.release2
-dataVersion through the ENCODE Mar 2012 Freeze
+html wgEncodeOpenChromDnase.release3
+dataVersion through the ENCODE July 2012 Freeze
 
     track wgEncodeOpenChromDnaseViewPeaks
     view Peaks
