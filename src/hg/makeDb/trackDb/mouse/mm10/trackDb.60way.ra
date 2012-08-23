@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (60 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-subGroup2 clade Clade glire=Glire euarchontoglire=Euarchontoglire placental=Placental vert=Vertebrate all=All_species
+subGroup2 clade Clade glire=Glire euarchontoglire=Euarchontoglire placental=Placental all=All_species
 dragAndDrop subTracks
 dimensions dimensionX=clade
 visibility full
@@ -102,23 +102,6 @@ priority 103.29
         altColor 120,40,40
         priority 3
 
-        track phyloP60wayVertebrate
-        subTrack cons60wayViewphyloP on
-        subGroups view=phyloP clade=vert
-        shortLabel Vertebrate Cons
-        longLabel Vertebrate Basewise Conservation by PhyloP
-        noInherit on
-        configurable on
-        type wig -20 7.532
-        maxHeightPixels 100:50:11
-        viewLimits -4.5:4.88
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 40,40,120
-        altColor 120,40,40
-        priority 3
-
         track phyloP60wayAll
         subTrack cons60wayViewphyloP off
         subGroups view=phyloP clade=all
@@ -191,22 +174,6 @@ priority 103.29
         altColor 115,55,55
         priority 12
 
-        track phastCons60wayVertebrate
-        subTrack cons60wayViewphastcons on
-        subGroups view=phastcons clade=vert
-        shortLabel Vertebrate Cons
-        longLabel Vertebrate Conservation by PhastCons
-        noInherit on
-        configurable on
-        type wig 0 1
-        maxHeightPixels 100:40:11
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 55,115,55
-        altColor 115,55,55
-        priority 12
-
         track phastCons60way
         subTrack cons60wayViewphastcons off
         subGroups view=phastcons clade=all
@@ -255,16 +222,6 @@ priority 103.29
         subGroups view=elements clade=placental
         shortLabel Placental El
         longLabel Placental Conserved Elements
-        noInherit on
-        type bed 5 .
-        color 130,30,60
-        priority 22
-
-        track phastConsElements60wayVertebrate
-        subTrack cons60wayViewelements on
-        subGroups view=elements clade=vert
-        shortLabel Vertebrate El
-        longLabel Vertebrate Conserved Elements
         noInherit on
         type bed 5 .
         color 130,30,60
