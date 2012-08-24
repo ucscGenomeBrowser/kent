@@ -131,9 +131,9 @@ if (cmp && pat)
 	case 1: if (ll) *ll = sqlDouble(words[0]);
 		break;
 	default:
-	    warn("can not understand numbers input for dataValue filter");
-	    errAbort(
-	    "dataValue filter must be one or two numbers (two for 'in range')");
+	    warn("dataValue filter must be one or two numbers (two for 'in range').  "
+		 "Please click the filter edit button and either set the comparison to 'ignored' "
+		 "or set the dataValue threshold.");
 	}
     if (sameWord(cmp,"in range") && (wordCount != 2))
 	errAbort("'in range' dataValue filter must have two numbers input\n");
