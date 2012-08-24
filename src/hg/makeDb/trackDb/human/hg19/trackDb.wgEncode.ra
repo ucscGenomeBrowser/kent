@@ -93,6 +93,9 @@ include wgEncodeUwDnase.release6.ra
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.release4.ra
 
+#AWG DnaseI HS (wrangler: Kate)
+include wgEncodeAwgDnase.ra
+
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
 

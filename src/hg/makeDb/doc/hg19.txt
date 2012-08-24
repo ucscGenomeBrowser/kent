@@ -19384,13 +19384,14 @@ TMPDIR=/scratch/tmp
 #########################################################################
 # ENCODE Regulation track V2: Track #7526 (In progress 2012-06-20 kate)
 # This version will have:
-#       * Two additional cell lines for Histones (Hela, HepG2)
-#               - Note Hela & HepG2 already added to Tx track (July2012 release)
-#       * Possibly a 10th cell type (HMEC) for Tx and Histone
 #       * Replace Tx with CSHL stranded data, pooled (JK advising, also AWG use)
 #              http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformRNASignal.txt 
-#              These are from DCC wgEncodeCshlLongRnaSeq downloads (Long polyA+),
+#              These are from DCC wgEncodeCshlLongRnaSeq downloads (Long polyA+, whole cell),
 #               AWG did not pool reps or plus/minus for their hub (but we will)
+#       * Possibly a 10th cell type (HMEC) for Tx and Histone
+#               Note: single replicate for HMEC Tx (others have 2)
+#       * Two additional cell lines for Histones (Hela, HepG2)
+#               - Note Hela & HepG2 already added to Tx track (July2012 release)
 #       * Histones from uniform processing: H3K4me1, H3K4me3, H3K27ac
 #             (http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/) 
 #                       wgEncodeBroadHistone{cell}{histone}StdAln_?Reps.norm5.rawsignal.bw
@@ -19402,6 +19403,7 @@ TMPDIR=/scratch/tmp
 #                       with treatments, which are in filename but not subGroups
 #               - NOTE: AWG includes Duke data processed like UW.  Where both 
 #                       labs had data, they are merged. View is .01FDR peaks (narrow, bigbed 6+)
+#          Previous track:  74 cell types (2 reps), all UW.  This version:  125 cell types, pooled replicates, merged UW+Duke
 #  Also considering adding new data types from AWG hub:
 #               - Short RNA's
 #               - AWG uniform RNA contigs
@@ -19441,10 +19443,25 @@ cat > poolTx.csh << 'EOF'
     end
 'EOF'
     csh poolTx.csh >&! poolTx.out &
-#  ~8 minutes per cell type
-# NOTE:  25 chroms in Hepg2, H1hesc, Huvec, Nhlf (male or unknown sex)
 
-    # Now have to normalize.  This takes two passes.  The first just creates
+    #  ~8 minutes per cell type
+    # NOTE:  25 chroms in Hepg2, H1hesc, Huvec, Nhlf (male or unknown sex)
+
+    # Add in HMEC, which has single replicates
+
+cat > poolHmec.csh << 'EOF'
+    foreach cell (Hmec)
+      echo "processing ${cell}"
+      bigWigMerge -adjust=-1 \
+          /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapMinusRawSigRep1.bigWig \
+          /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapPlusRawSigRep1.bigWig \
+          stdout \
+          | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCshlLongRnaSeq${cell}CellPapRawSigPooled.bedGraph
+    end
+'EOF'
+    csh poolHmec.csh >&! poolHmec.out &
+
+    # Normalize.  This takes two passes.  The first creates
     # a tab-separated file with normalization values. A batch file is made
     # by running awk on the tab file, and this batch file executes the
     # second half, transforming the bedGraphs to normalized values. The
@@ -19465,6 +19482,7 @@ cat > makeNorm.csh << 'EOF'
 
     mkdir ../normalized
     csh ../norm.csh  >&! ../norm.out &
+    cd ../normalized
 
     # make bigWigs
 cat > big.csh << 'EOF'
@@ -19507,8 +19525,8 @@ chr1    10180   10330   .       0       .       26.000000       -1      -1      
     csh unbig.csh >&! unbig.out
     # udc couldn't read 4 bytes from wgEncodeUWDukeDnaseHepG2.fdr01peaks.hg19.bb, did read 0
     #  This dataset was truncated
-    ls -1 *.bed > peak.lst
-    grep -v Hepg2 peak.lst > peak.fixed.lst
+    #  Repeated wget and bigBedToBed for HepG2 (8/23)
+    ls -1 *AwgDnase*.bed > peak.lst
 
     # Datasets with treated cells (hints from long label)
     grep '(' uniformDnase.txt | grep longLabel > treated.txt
@@ -19517,20 +19535,41 @@ chr1    10180   10330   .       0       .       26.000000       -1      -1      
     # Tamoxifen -> Tam10030 (Duke) or 40HAM20nM72hr (UW), Estradiol -> Est10nm30m, Ifna4h, Andro, Hypox
     # TODO: Edit to rename
 
-    # Cluster table:  wgEncodeRegDnaseClusteredV2 (bed5, with name=#datasets represented in cluster)
+    # Make cluster table:  wgEncodeRegDnaseClusteredV2 (bed5, with name=#datasets represented in cluster)
 
-    regClusterMakeTableOfTables awgDnase01 peak.fixed.lst peak.table -verbose=3 >&! regTable.out &
+    regClusterMakeTableOfTables awgDnase01 peak.lst peak.table -verbose=3 >&! regTable.out &
     regCluster peak.table /dev/null peak.bed
-    # 2229038 singly-linked clusters, 2338570 clusters in 24 chromosomes
+    #Read 125 sources from peak.table
+    # 2233542 singly-linked clusters, 2343745 clusters in 24 chromosomes
 
-    # filter out low scoring, single peaks in cluster
+    # filter out low scoring, single peaks in cluster and load in database
     awk '$4 > 1 && $5 >= 100' peak.bed > wgEncodeRegDnaseClusteredV2.bed
     wc -l wgEncodeRegDnaseClusteredV2.bed
-    # 1277312 wgEncodeRegDnaseClusteredV2.bed
 
     hgLoadBed hg19 wgEncodeRegDnaseClusteredV2 wgEncodeRegDnaseClusteredV2.bed
+    # Read 1281988 elements of size 5 from wgEncodeRegDnaseClusteredV2.bed
 
-    #  NOTE: V1 had ~1M clusters.  Perhaps should be bigBed now.
+    # load individual peak files as a track (needed by hgc)
+    # TODO: generate labels out of metadata
+
+cat > loadDnase.csh << 'EOF'
+    set b = wgEncodeAwgDnase
+    set t = ${b}Peak
+    foreach f (${b}*)
+        set table = $f:r
+        hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $table $f
+        set cell = `echo $f | perl -wpe 's/(wgEncodeAwgDnase[A-Z][a-z]+)(.*)Peak.bed/$2/'`
+        echo "    track $f" >> $t.ra
+        echo "    type narrowPeak" >> $t.ra
+        echo "    parent $t" >> $t.ra
+        echo "    shortLabel $cell DNase" >> $t.ra
+        echo "    longLabel $cell Uniform DNaseI HS Peaks from ENCODE/Analysis" >> $t.ra
+        echo "    subGroups cellType=$cell treatment=None" >> $t.ra
+        echo "" >> $t.ra
+    end
+'EOF'
+
+    #  NOTE: V1 had ~1M clusters.
     # Other data tables: Need to load the peak files as they are used by hgc
     #   These should probably also be subtracks.
     # It would be nice if hgc sorted datasets by signal or cellType

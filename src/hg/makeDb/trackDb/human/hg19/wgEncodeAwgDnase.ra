@@ -1,0 +1,894 @@
+track wgEncodeAwgDnasePeak
+compositeTrack on
+# TODO:  supertrack for analysis  ?
+# superTrack wgEncodeDNAseSuper dense
+shortLabel Uniform DNaseI HS
+longLabel Uniform DNaseI Hypersensitivity Peaks from ENCODE/Analysis
+group regulation
+#subGroup1 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2&#95;C BJ=BJ CACO2=Caco-2 CD14MONO=CD14+_Monocytes CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD34MOBILIZED=CD34+_Mobilized CMK=CMK GM04503=GM04503 GM04504=GM04504 GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7ES=H7-hESC HAAH=HA-h HAASP=HA-sp HAC=HAc HAE=HAEpiC HBMEC=HBMEC HBVP=HBVP HBVSMC=HBVSCM HCF=HCF HCFaa=HCFaa HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECDAD=HMVEC-dAd HMVECDBLAD=HMVEC-dBl-Ad HMVECDBLNEO=HMVEC-dBl-Neo HMVECDLYAD=HMVEC-dLy-Ad HMVECDLYNEO=HMVEC-dLy-Neo HMVECDNEO=HMVEC-dNeo HMVECLBL=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCE=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRGEC=HRGEC HRPE=HRPEpiC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp;(G1_phase) LNCaP=LNCaP M059J=M059J MCF7=MCF-7 NB4=NB4 NHAA=NH-A NHBERA=NHBE&#95;RA NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2D1=NT2-D1 PANC1=PANC-1 PREC=PReC RPTEC=RPTEC SAEC=SAEC SKNMC=SK-N-MC SKNSHRA=SK-N-SH&#95;RA SKZMC=SKMC TA47D=T-47D Th1=Th1 Th2=Th2 WERIRb1=WERI-Rb-1 WI38=WI-38 WI38O=WI-38_4-hydroxytamoxifen
+#subGroup2 treatment Treatment None=None DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA14D=diffProtA_14d OHTAM=4-OHTAM_20nM_72hr
+#dimensions dimensionX=cellType dimensionX=rep
+#sortOrder cellType=+
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+#html wgEncodeAwgDnase
+priority 4
+type bed 3 +
+wgEncode 1
+# TODO: filter limits
+     
+    track wgEncodeAwgDnaseDuke8988tPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel 8988t DNase
+    longLabel 8988t Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=8988t treatment=None
+
+    track wgEncodeAwgDnaseDukeAosmcPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Aosmc DNase
+    longLabel Aosmc Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Aosmc treatment=None
+
+    track wgEncodeAwgDnaseDukeChorionPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Chorion DNase
+    longLabel Chorion Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Chorion treatment=None
+
+    track wgEncodeAwgDnaseDukeCllPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Cll DNase
+    longLabel Cll Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Cll treatment=None
+
+    track wgEncodeAwgDnaseDukeFibroblPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Fibrobl DNase
+    longLabel Fibrobl Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Fibrobl treatment=None
+
+    track wgEncodeAwgDnaseDukeFibropPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Fibrop DNase
+    longLabel Fibrop Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Fibrop treatment=None
+
+    track wgEncodeAwgDnaseDukeGlioblaPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gliobla DNase
+    longLabel Gliobla Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gliobla treatment=None
+
+    track wgEncodeAwgDnaseDukeGm12891Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm12891 DNase
+    longLabel Gm12891 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm12891 treatment=None
+
+    track wgEncodeAwgDnaseDukeGm12892Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm12892 DNase
+    longLabel Gm12892 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm12892 treatment=None
+
+    track wgEncodeAwgDnaseDukeGm18507Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm18507 DNase
+    longLabel Gm18507 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm18507 treatment=None
+
+    track wgEncodeAwgDnaseDukeGm19238Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm19238 DNase
+    longLabel Gm19238 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm19238 treatment=None
+
+    track wgEncodeAwgDnaseDukeGm19239Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm19239 DNase
+    longLabel Gm19239 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm19239 treatment=None
+
+    track wgEncodeAwgDnaseDukeGm19240Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm19240 DNase
+    longLabel Gm19240 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm19240 treatment=None
+
+    track wgEncodeAwgDnaseDukeH9esPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel H9es DNase
+    longLabel H9es Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=H9es treatment=None
+
+    track wgEncodeAwgDnaseDukeHelas3ifna4hPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Helas3ifna4h DNase
+    longLabel Helas3ifna4h Uniform DNaseI HS Peaks from ENCODE/Analysis
+    ##subGroups cellType=Helas3ifna4h treatment=None
+
+    track wgEncodeAwgDnaseDukeHepatocytesPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hepatocytes DNase
+    longLabel Hepatocytes Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hepatocytes treatment=None
+
+    track wgEncodeAwgDnaseDukeHpde6e6e7Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hpde6e6e7 DNase
+    longLabel Hpde6e6e7 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hpde6e6e7 treatment=None
+
+    track wgEncodeAwgDnaseDukeHsmmembPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hsmmemb DNase
+    longLabel Hsmmemb Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hsmmemb treatment=None
+
+    track wgEncodeAwgDnaseDukeHtr8svnPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Htr8svn DNase
+    longLabel Htr8svn Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Htr8svn treatment=None
+
+    track wgEncodeAwgDnaseDukeHuh7.5Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Huh7.5 DNase
+    longLabel Huh7.5 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Huh7.5 treatment=None
+
+    track wgEncodeAwgDnaseDukeHuh7Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Huh7 DNase
+    longLabel Huh7 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Huh7 treatment=None
+
+    track wgEncodeAwgDnaseDukeIpsPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Ips DNase
+    longLabel Ips Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Ips treatment=None
+
+    track wgEncodeAwgDnaseDukeIshikawaestradiolPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Ishikawaestradiol DNase
+    longLabel Ishikawaestradiol Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Ishikawaestradiol treatment=None
+
+    track wgEncodeAwgDnaseDukeIshikawatamoxifenPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Ishikawatamoxifen DNase
+    longLabel Ishikawatamoxifen Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Ishikawatamoxifen treatment=None
+
+    track wgEncodeAwgDnaseDukeLncapandrogenPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Lncapandrogen DNase
+    longLabel Lncapandrogen Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Lncapandrogen treatment=None
+
+    track wgEncodeAwgDnaseDukeMcf7hypoxiaPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Mcf7hypoxia DNase
+    longLabel Mcf7hypoxia Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Mcf7hypoxia treatment=None
+
+    track wgEncodeAwgDnaseDukeMedulloPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Medullo DNase
+    longLabel Medullo Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Medullo treatment=None
+
+    track wgEncodeAwgDnaseDukeMelanoPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Melano DNase
+    longLabel Melano Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Melano treatment=None
+
+    track wgEncodeAwgDnaseDukeMyometrPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Myometr DNase
+    longLabel Myometr Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Myometr treatment=None
+
+    track wgEncodeAwgDnaseDukeOsteoblPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Osteobl DNase
+    longLabel Osteobl Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Osteobl treatment=None
+
+    track wgEncodeAwgDnaseDukePanisletdPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Panisletd DNase
+    longLabel Panisletd Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Panisletd treatment=None
+
+    track wgEncodeAwgDnaseDukePanisletsPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Panislets DNase
+    longLabel Panislets Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Panislets treatment=None
+
+    track wgEncodeAwgDnaseDukePhtePeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Phte DNase
+    longLabel Phte Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Phte treatment=None
+
+    track wgEncodeAwgDnaseDukeProgfibPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Progfib DNase
+    longLabel Progfib Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Progfib treatment=None
+
+    track wgEncodeAwgDnaseDukeRwpe1Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Rwpe1 DNase
+    longLabel Rwpe1 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Rwpe1 treatment=None
+
+    track wgEncodeAwgDnaseDukeStellatePeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Stellate DNase
+    longLabel Stellate Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Stellate treatment=None
+
+    track wgEncodeAwgDnaseDukeT47dPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel T47d DNase
+    longLabel T47d Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=T47d treatment=None
+
+    track wgEncodeAwgDnaseDukeTh0Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Th0 DNase
+    longLabel Th0 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Th0 treatment=None
+
+    track wgEncodeAwgDnaseDukeUrotheliaPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Urothelia DNase
+    longLabel Urothelia Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Urothelia treatment=None
+
+    track wgEncodeAwgDnaseDukeUrotheliaut189Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Urotheliaut189 DNase
+    longLabel Urotheliaut189 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Urotheliaut189 treatment=None
+
+    track wgEncodeAwgDnaseUwAg04449Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Ag04449 DNase
+    longLabel Ag04449 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Ag04449 treatment=None
+
+    track wgEncodeAwgDnaseUwAg04450Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Ag04450 DNase
+    longLabel Ag04450 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Ag04450 treatment=None
+
+    track wgEncodeAwgDnaseUwAg09309Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Ag09309 DNase
+    longLabel Ag09309 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Ag09309 treatment=None
+
+    track wgEncodeAwgDnaseUwAg09319Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Ag09319 DNase
+    longLabel Ag09319 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Ag09319 treatment=None
+
+    track wgEncodeAwgDnaseUwAg10803Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Ag10803 DNase
+    longLabel Ag10803 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Ag10803 treatment=None
+
+    track wgEncodeAwgDnaseUwAoafPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Aoaf DNase
+    longLabel Aoaf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Aoaf treatment=None
+
+    track wgEncodeAwgDnaseUwBe2cPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Be2c DNase
+    longLabel Be2c Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Be2c treatment=None
+
+    track wgEncodeAwgDnaseUwBjPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Bj DNase
+    longLabel Bj Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Bj treatment=None
+
+    track wgEncodeAwgDnaseUwCaco2Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Caco2 DNase
+    longLabel Caco2 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Caco2 treatment=None
+
+    track wgEncodeAwgDnaseUwCd20Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Cd20 DNase
+    longLabel Cd20 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Cd20 treatment=None
+
+    track wgEncodeAwgDnaseUwCd34mobilizedPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Cd34mobilized DNase
+    longLabel Cd34mobilized Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Cd34mobilized treatment=None
+
+    track wgEncodeAwgDnaseUwCmkPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Cmk DNase
+    longLabel Cmk Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Cmk treatment=None
+
+    track wgEncodeAwgDnaseUwGm06990Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm06990 DNase
+    longLabel Gm06990 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm06990 treatment=None
+
+    track wgEncodeAwgDnaseUwGm12864Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm12864 DNase
+    longLabel Gm12864 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm12864 treatment=None
+
+    track wgEncodeAwgDnaseUwGm12865Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm12865 DNase
+    longLabel Gm12865 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm12865 treatment=None
+
+    track wgEncodeAwgDnaseUwH7hescPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel H7hesc DNase
+    longLabel H7hesc Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=H7hesc treatment=None
+
+    track wgEncodeAwgDnaseUwHacPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hac DNase
+    longLabel Hac Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hac treatment=None
+
+    track wgEncodeAwgDnaseUwHaepicPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Haepic DNase
+    longLabel Haepic Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Haepic treatment=None
+
+    track wgEncodeAwgDnaseUwHahPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hah DNase
+    longLabel Hah Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hah treatment=None
+
+    track wgEncodeAwgDnaseUwHaspPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hasp DNase
+    longLabel Hasp Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hasp treatment=None
+
+    track wgEncodeAwgDnaseUwHbmecPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hbmec DNase
+    longLabel Hbmec Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hbmec treatment=None
+
+    track wgEncodeAwgDnaseUwHcfPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hcf DNase
+    longLabel Hcf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hcf treatment=None
+
+    track wgEncodeAwgDnaseUwHcfaaPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hcfaa DNase
+    longLabel Hcfaa Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hcfaa treatment=None
+
+    track wgEncodeAwgDnaseUwHcmPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hcm DNase
+    longLabel Hcm Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hcm treatment=None
+
+    track wgEncodeAwgDnaseUwHconfPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hconf DNase
+    longLabel Hconf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hconf treatment=None
+
+    track wgEncodeAwgDnaseUwHcpepicPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hcpepic DNase
+    longLabel Hcpepic Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hcpepic treatment=None
+
+    track wgEncodeAwgDnaseUwHct116Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hct116 DNase
+    longLabel Hct116 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hct116 treatment=None
+
+    track wgEncodeAwgDnaseUwHeepicPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Heepic DNase
+    longLabel Heepic Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Heepic treatment=None
+
+    track wgEncodeAwgDnaseUwHffPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hff DNase
+    longLabel Hff Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hff treatment=None
+
+    track wgEncodeAwgDnaseUwHffmycPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hffmyc DNase
+    longLabel Hffmyc Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hffmyc treatment=None
+
+    track wgEncodeAwgDnaseUwHgfPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hgf DNase
+    longLabel Hgf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hgf treatment=None
+
+    track wgEncodeAwgDnaseUwHipepicPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hipepic DNase
+    longLabel Hipepic Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hipepic treatment=None
+
+    track wgEncodeAwgDnaseUwHl60Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hl60 DNase
+    longLabel Hl60 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hl60 treatment=None
+
+    track wgEncodeAwgDnaseUwHmfPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmf DNase
+    longLabel Hmf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmf treatment=None
+
+    track wgEncodeAwgDnaseUwHmvecdadPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmvecdad DNase
+    longLabel Hmvecdad Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmvecdad treatment=None
+
+    track wgEncodeAwgDnaseUwHmvecdbladPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmvecdblad DNase
+    longLabel Hmvecdblad Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmvecdblad treatment=None
+
+    track wgEncodeAwgDnaseUwHmvecdblneoPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmvecdblneo DNase
+    longLabel Hmvecdblneo Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmvecdblneo treatment=None
+
+    track wgEncodeAwgDnaseUwHmvecdlyadPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmvecdlyad DNase
+    longLabel Hmvecdlyad Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmvecdlyad treatment=None
+
+    track wgEncodeAwgDnaseUwHmvecdlyneoPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmvecdlyneo DNase
+    longLabel Hmvecdlyneo Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmvecdlyneo treatment=None
+
+    track wgEncodeAwgDnaseUwHmvecdneoPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmvecdneo DNase
+    longLabel Hmvecdneo Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmvecdneo treatment=None
+
+    track wgEncodeAwgDnaseUwHmveclblPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmveclbl DNase
+    longLabel Hmveclbl Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmveclbl treatment=None
+
+    track wgEncodeAwgDnaseUwHmvecllyPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmveclly DNase
+    longLabel Hmveclly Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmveclly treatment=None
+
+    track wgEncodeAwgDnaseUwHnpcepicPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hnpcepic DNase
+    longLabel Hnpcepic Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hnpcepic treatment=None
+
+    track wgEncodeAwgDnaseUwHpaecPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hpaec DNase
+    longLabel Hpaec Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hpaec treatment=None
+
+    track wgEncodeAwgDnaseUwHpafPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hpaf DNase
+    longLabel Hpaf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hpaf treatment=None
+
+    track wgEncodeAwgDnaseUwHpdlfPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hpdlf DNase
+    longLabel Hpdlf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hpdlf treatment=None
+
+    track wgEncodeAwgDnaseUwHpfPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hpf DNase
+    longLabel Hpf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hpf treatment=None
+
+    track wgEncodeAwgDnaseUwHrcepicPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hrcepic DNase
+    longLabel Hrcepic Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hrcepic treatment=None
+
+    track wgEncodeAwgDnaseUwHrePeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hre DNase
+    longLabel Hre Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hre treatment=None
+
+    track wgEncodeAwgDnaseUwHrgecPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hrgec DNase
+    longLabel Hrgec Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hrgec treatment=None
+
+    track wgEncodeAwgDnaseUwHrpepicPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hrpepic DNase
+    longLabel Hrpepic Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hrpepic treatment=None
+
+    track wgEncodeAwgDnaseUwHvmfPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hvmf DNase
+    longLabel Hvmf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hvmf treatment=None
+
+    track wgEncodeAwgDnaseUwJurkatPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Jurkat DNase
+    longLabel Jurkat Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Jurkat treatment=None
+
+    track wgEncodeAwgDnaseUwMonocytescd14ro01746Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Monocytescd14ro01746 DNase
+    longLabel Monocytescd14ro01746 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Monocytescd14ro01746 treatment=None
+
+    track wgEncodeAwgDnaseUwNb4Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Nb4 DNase
+    longLabel Nb4 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Nb4 treatment=None
+
+    track wgEncodeAwgDnaseUwNhaPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Nha DNase
+    longLabel Nha Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Nha treatment=None
+
+    track wgEncodeAwgDnaseUwNhdfadPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Nhdfad DNase
+    longLabel Nhdfad Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Nhdfad treatment=None
+
+    track wgEncodeAwgDnaseUwNhdfneoPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Nhdfneo DNase
+    longLabel Nhdfneo Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Nhdfneo treatment=None
+
+    track wgEncodeAwgDnaseUwNhlfPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Nhlf DNase
+    longLabel Nhlf Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Nhlf treatment=None
+
+    track wgEncodeAwgDnaseUwNt2d1Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Nt2d1 DNase
+    longLabel Nt2d1 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Nt2d1 treatment=None
+
+    track wgEncodeAwgDnaseUwPanc1Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Panc1 DNase
+    longLabel Panc1 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Panc1 treatment=None
+
+    track wgEncodeAwgDnaseUwPrecPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Prec DNase
+    longLabel Prec Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Prec treatment=None
+
+    track wgEncodeAwgDnaseUwRptecPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Rptec DNase
+    longLabel Rptec Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Rptec treatment=None
+
+    track wgEncodeAwgDnaseUwSaecPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Saec DNase
+    longLabel Saec Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Saec treatment=None
+
+    track wgEncodeAwgDnaseUwSkmcPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Skmc DNase
+    longLabel Skmc Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Skmc treatment=None
+
+    track wgEncodeAwgDnaseUwSknmcPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Sknmc DNase
+    longLabel Sknmc Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Sknmc treatment=None
+
+    track wgEncodeAwgDnaseUwSknshraPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Sknshra DNase
+    longLabel Sknshra Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Sknshra treatment=None
+
+    track wgEncodeAwgDnaseUwTh2Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Th2 DNase
+    longLabel Th2 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Th2 treatment=None
+
+    track wgEncodeAwgDnaseUwWerirb1Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Werirb1 DNase
+    longLabel Werirb1 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Werirb1 treatment=None
+
+    track wgEncodeAwgDnaseUwWi38Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Wi38 DNase
+    longLabel Wi38 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Wi38 treatment=None
+
+    track wgEncodeAwgDnaseUwWi38tamoxifentamoxifenPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Wi38tamoxifentamoxifen DNase
+    longLabel Wi38tamoxifentamoxifen Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Wi38tamoxifentamoxifen treatment=None
+
+    track wgEncodeAwgDnaseUwdukeA549Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel A549 DNase
+    longLabel A549 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=A549 treatment=None
+
+    track wgEncodeAwgDnaseUwdukeGm12878Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Gm12878 DNase
+    longLabel Gm12878 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Gm12878 treatment=None
+
+    track wgEncodeAwgDnaseUwdukeH1hescPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel H1hesc DNase
+    longLabel H1hesc Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=H1hesc treatment=None
+
+    track wgEncodeAwgDnaseUwdukeHelas3Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Helas3 DNase
+    longLabel Helas3 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Helas3 treatment=None
+
+    track wgEncodeAwgDnaseUwdukeHepg2Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hepg2 DNase
+    longLabel Hepg2 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hepg2 treatment=None
+
+    track wgEncodeAwgDnaseUwdukeHmecPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hmec DNase
+    longLabel Hmec Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hmec treatment=None
+
+    track wgEncodeAwgDnaseUwdukeHsmmPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hsmm DNase
+    longLabel Hsmm Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hsmm treatment=None
+
+    track wgEncodeAwgDnaseUwdukeHsmmtubePeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Hsmmtube DNase
+    longLabel Hsmmtube Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Hsmmtube treatment=None
+
+    track wgEncodeAwgDnaseUwdukeHuvecPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Huvec DNase
+    longLabel Huvec Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Huvec treatment=None
+
+    track wgEncodeAwgDnaseUwdukeK562Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel K562 DNase
+    longLabel K562 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=K562 treatment=None
+
+    track wgEncodeAwgDnaseUwdukeLncapPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Lncap DNase
+    longLabel Lncap Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Lncap treatment=None
+
+    track wgEncodeAwgDnaseUwdukeMcf7Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Mcf7 DNase
+    longLabel Mcf7 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Mcf7 treatment=None
+
+    track wgEncodeAwgDnaseUwdukeNhekPeak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Nhek DNase
+    longLabel Nhek Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Nhek treatment=None
+
+    track wgEncodeAwgDnaseUwdukeTh1Peak.bed
+    type broadPeak
+    parent wgEncodeAwgDnasePeak
+    shortLabel Th1 DNase
+    longLabel Th1 Uniform DNaseI HS Peaks from ENCODE/Analysis
+    #subGroups cellType=Th1 treatment=None
+
