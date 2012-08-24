@@ -310,6 +310,18 @@ udcMustReadOne(udc, sum->sumSquares);
 }
 #endif /* UNUSED */
 
+static void bbiSummaryHandleSwapped(struct bbiFile *bbi, struct bbiSummaryOnDisk *in)
+/* Swap integer fields in summary as needed. */
+{
+if (bbi->isSwapped)
+    {
+    in->chromId = byteSwap32(in->chromId);
+    in->start = byteSwap32(in->start);
+    in->end = byteSwap32(in->end);
+    in->validCount = byteSwap32(in->validCount);
+    }
+}
+
 static struct bbiSummary *bbiSummaryFromOnDisk(struct bbiSummaryOnDisk *in)
 /* Create a bbiSummary unlinked to anything from input in onDisk format. */
 {
@@ -326,7 +338,7 @@ out->sumSquares = in->sumSquares;
 return out;
 }
 
-static struct bbiSummary *bbiSummariesInRegion(struct bbiZoomLevel *zoom, struct bbiFile *bbi, 
+struct bbiSummary *bbiSummariesInRegion(struct bbiZoomLevel *zoom, struct bbiFile *bbi, 
 	int chromId, bits32 start, bits32 end)
 /* Return list of all summaries in region at given zoom level of bbiFile. */
 {
@@ -386,6 +398,7 @@ for (block = blockList; block != NULL; )
 	    {
 	    dSum = (void *)blockPt;
 	    blockPt += sizeof(*dSum);
+	    bbiSummaryHandleSwapped(bbi, dSum);
 	    if (dSum->chromId == chromId)
 		{
 		int s = max(dSum->start, start);
