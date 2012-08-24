@@ -1,11 +1,11 @@
 mkChangeNotes v2
 hg19 wgEncodeOpenChromDnase Release 3 vs Release 2
-2012-08-22
+2012-08-24
 
 QA Count Summaries for Release 3:
-Tables: 284
-Files: 935
-Gbdbs: 189
+Tables: 285
+Files: 936
+Gbdbs: 190
 Supplemental: 5
 Other: 3
 
@@ -16,21 +16,21 @@ Gbdbs: 8
 
 Sizes of New:
 Table: 777 MB
-Files: 743272 MB (726 GB)
-Gbdbs: 126970 MB (124 GB)
+Files: 744354 MB (727 GB)
+Gbdbs: 128052 MB (125 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 871020 MB (851 GB)
+Total: 873184 MB (853 GB)
 
 
 TABLES:
-New: 81
+New: 82
 Untouched: 203
 Revoked/Replaced/Renamed: 11
-New + Untouched: 284
-Total (New + Untouched + Revoked/Replaced/Renamed): 295
+New + Untouched: 285
+Total (New + Untouched + Revoked/Replaced/Renamed): 296
 
-New Tables (81):
+New Tables (82):
 wgEncodeOpenChromDnaseCd20ro01794BaseOverlapSignal
 wgEncodeOpenChromDnaseCd20ro01794Pk
 wgEncodeOpenChromDnaseCd20ro01794Sig
@@ -100,6 +100,7 @@ wgEncodeOpenChromDnaseMcf7RandshrnaSig
 wgEncodeOpenChromDnaseMonocd14BaseOverlapSignal
 wgEncodeOpenChromDnaseMonocd14Pk
 wgEncodeOpenChromDnaseMonocd14Sig
+wgEncodeOpenChromDnaseMyometrBaseOverlapSignalV2
 wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal
 wgEncodeOpenChromDnaseNaivebcellPk
 wgEncodeOpenChromDnaseNaivebcellSig
@@ -333,13 +334,13 @@ wgEncodeOpenChromDnaseUrotsaUt189Sig
 
 
 DOWNLOAD FILES:
-New: 264
+New: 265
 Untouched: 671
 Revoked/Replaced/Renamed: 29
-New + Untouched: 935
-Total (New + Untouched + Revoked/Replaced/Renamed): 964
+New + Untouched: 936
+Total (New + Untouched + Revoked/Replaced/Renamed): 965
 
-New Download Files (264):
+New Download Files (265):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseCd20ro01794AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseCd20ro01794AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseCd20ro01794AlnRep2.bam
@@ -565,6 +566,7 @@ New Download Files (264):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseMonocd14RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseMonocd14RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseMonocd14Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseMyometrBaseOverlapSignalV2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseNaivebcellAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseNaivebcellAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release3/wgEncodeOpenChromDnaseNaivebcellAlnRep2.bam
@@ -1311,13 +1313,13 @@ Revoked/Replaced/Renamed Download Files (29):
 
 
 GBDBS:
-New: 54
+New: 55
 Untouched: 135
 Revoked/Replaced/Renamed: 8
-New + Untouched: 189
-Total (New + Untouched + Revoked/Replaced/Renamed): 197
+New + Untouched: 190
+Total (New + Untouched + Revoked/Replaced/Renamed): 198
 
-New Gbdb Files (54):
+New Gbdb Files (55):
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseCd20ro01794BaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseCd20ro01794Sig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseCerebellumocBaseOverlapSignal.bigWig
@@ -1364,6 +1366,7 @@ New Gbdb Files (54):
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseMcf7RandshrnaSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseMonocd14BaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseMonocd14Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseMyometrBaseOverlapSignalV2.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseNaivebcellSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseOlfneurosphereBaseOverlapSignal.bigWig

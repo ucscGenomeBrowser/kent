@@ -889,7 +889,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMonocd14ro1746InputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Mono-CD14+ Inp DS
-        longLabel Monocytes-CD14+ Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Monocytes-CD14+ Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=zCTRL cellType=t2MONOCYTESCD14RO01746
         type bigWig 0.000000 3.876800
         # subId=3271 dateSubmitted=2011-01-17
@@ -899,7 +899,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         #track wgEncodeOpenChromChipMonocd14InputSig
         #parent wgEncodeOpenChromChipViewSignal off
         #shortLabel Mono-CD14+ Inp DS
-        #longLabel Monocytes-CD14+ Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        #longLabel Monocytes-CD14+ Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         #subGroups treatment=AANONE view=SIG factor=zCTRL cellType=MonoCD14
         #type bigWig 0.000000 3.876800
         # subId=3271 dateSubmitted=2011-01-17
@@ -907,7 +907,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipA549InputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel A549 Input DS
-        longLabel A549 Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel A549 Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=zCTRL cellType=t2A549
         type bigWig 0.000000 3.520600
         # subId=4906 dateSubmitted=2011-09-27
@@ -915,7 +915,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipA549Pol2Sig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel A549 Pol2 DS
-        longLabel A549 Pol2 TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel A549 Pol2 TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=POL2 cellType=t2A549
         type bigWig 0.000000 1.908100
         # subId=4934 dateSubmitted=2011-09-29
@@ -923,7 +923,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipA549CtcfSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel A549 CTCF DS
-        longLabel A549 CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel A549 CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=CTCF cellType=t2A549
         type bigWig 0.000000 8.870100
         # subId=4935 dateSubmitted=2011-09-29
@@ -931,7 +931,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSerumstimSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 CTCF stm DS
-        longLabel MCF-7 serum stim CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t2MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 10.246700
         # subId=5613 dateSubmitted=2012-02-11
@@ -939,7 +939,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7Pol2SerumstimSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 Pol2 stm DS
-        longLabel MCF-7 serum stim Pol2 TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim Pol2 TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=POL2 cellType=t2MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 5.031400
         # subId=5614 dateSubmitted=2012-02-11
@@ -947,7 +947,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycSerumstimSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 cMyc stm DS
-        longLabel MCF-7 serum stim cMyc TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim cMyc TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CMYC cellType=t2MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 4.694000
         # subId=5615 dateSubmitted=2012-02-11
@@ -955,7 +955,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSerumstvdSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 CTCF stv DS
-        longLabel MCF-7 serum starved CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t2MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 8.219700
         # subId=5616 dateSubmitted=2012-02-13
@@ -963,7 +963,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7Pol2SerumstvdSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 Pol2 stv DS
-        longLabel MCF-7 serum starved Pol2 TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved Pol2 TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=POL2 cellType=t2MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 4.383900
         # subId=5617 dateSubmitted=2012-02-13
@@ -971,7 +971,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycSerumstvdSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 cMyc stv DS
-        longLabel MCF-7 serum starved cMyc TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved cMyc TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CMYC cellType=t2MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 1.093700
         # subId=6196 dateSubmitted=2012-03-23
@@ -979,7 +979,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMedulloInputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Medullo Input DS
-        longLabel Medullo Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Medullo Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3MEDULLO treatment=AANONE
         type bigWig 0.000000 6.733300
         # subId=7323 dateSubmitted=2012-07-06
@@ -987,7 +987,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMedulloCtcfSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Medullo CTCF DS
-        longLabel Medullo CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Medullo CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3MEDULLO treatment=AANONE
         type bigWig 0.000000 5.218800
         # subId=7325 dateSubmitted=2012-07-06
@@ -995,7 +995,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm10248InputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM10248 Input DS
-        longLabel GM10248 Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM10248 Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3GM10248 treatment=AANONE
         type bigWig 0.000000 5.442500
         # subId=7517 dateSubmitted=2012-07-25
@@ -1003,7 +1003,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm10266InputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM10266 Input DS
-        longLabel GM10266 Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM10266 Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3GM10266 treatment=AANONE
         type bigWig 0.000000 3.460200
         # subId=7518 dateSubmitted=2012-07-26
@@ -1011,7 +1011,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm13976InputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM13976 Input DS
-        longLabel GM13976 Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM13976 Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3GM13976 treatment=AANONE
         type bigWig 0.000000 6.426200
         # subId=7519 dateSubmitted=2012-07-25
@@ -1019,7 +1019,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm13977InputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM13977 Input DS
-        longLabel GM13977 Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM13977 Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3GM13977 treatment=AANONE
         type bigWig 0.000000 2.513700
         # subId=7520 dateSubmitted=2012-07-25
@@ -1027,7 +1027,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm20000InputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM20000 Input DS
-        longLabel GM20000 Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM20000 Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3GM20000 treatment=AANONE
         type bigWig 0.000000 4.061500
         # subId=7521 dateSubmitted=2012-07-26
@@ -1035,7 +1035,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipLncapInputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel LNCaP Input DS
-        longLabel LNCaP Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel LNCaP Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3LNCAP treatment=AANONE
         type bigWig 0.000000 5.800100
         color 0,119,158
@@ -1044,7 +1044,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipPancreasocInputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Pancreas Input DS
-        longLabel Pancreas OC Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Pancreas OC Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3PANCREASOC treatment=AANONE
         type bigWig 0.000000 3.097700
         # subId=7523 dateSubmitted=2012-07-26
@@ -1052,7 +1052,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipColonocInputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Colon Input DS
-        longLabel Colon OC Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Colon OC Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3COLONOC treatment=AANONE
         type bigWig 0.000000 4.467900
         # subId=7524 dateSubmitted=2012-07-26
@@ -1060,7 +1060,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHeartocInputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Heart Input DS
-        longLabel Heart OC Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Heart OC Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3HEARTOC treatment=AANONE
         type bigWig 0.000000 5.827500
         # subId=7525 dateSubmitted=2012-07-26
@@ -1068,7 +1068,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipLungocInputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Lung Input DS
-        longLabel Lung OC Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Lung OC Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3LUNGOC treatment=AANONE
         type bigWig 0.000000 7.026700
         # subId=7526 dateSubmitted=2012-07-26
@@ -1076,7 +1076,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipKidneyocInputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Kidney Input DS
-        longLabel Kidney OC Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Kidney OC Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3KIDNEYOC treatment=AANONE
         type bigWig 0.000000 8.637000
         # subId=7527 dateSubmitted=2012-07-26
@@ -1084,7 +1084,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipSpleenocInputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Spleen Input DS
-        longLabel Spleen OC Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Spleen OC Input TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=zCTRL cellType=t3SPLEENOC treatment=AANONE
         type bigWig 0.000000 4.871900
         # subId=7528 dateSubmitted=2012-07-26
@@ -1092,7 +1092,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm10266CtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM10266 CTCF DS
-        longLabel GM10266 CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM10266 CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3GM10266  treatment=AANONE
         type bigWig 0.000000 5.693500
         # subId=7534 dateSubmitted=2012-07-30
@@ -1100,7 +1100,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm13976CtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM13976 CTCF DS
-        longLabel GM13976 CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM13976 CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3GM13976  treatment=AANONE
         type bigWig 0.000000 6.173500
         # subId=7535 dateSubmitted=2012-07-26
@@ -1108,7 +1108,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm13977CtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM13977 CTCF DS
-        longLabel GM13977 CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM13977 CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3GM13977  treatment=AANONE
         type bigWig 0.000000 12.803400
         # subId=7536 dateSubmitted=2012-07-27
@@ -1116,7 +1116,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm20000CtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM20000 CTCF DS
-        longLabel GM20000 CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM20000 CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3GM20000  treatment=AANONE
         type bigWig 0.000000 3.008500
         # subId=7537 dateSubmitted=2012-07-30
@@ -1124,7 +1124,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipLncapCtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel LNCaP CTCF DS
-        longLabel LNCaP CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel LNCaP CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3LNCAP  treatment=AANONE
         type bigWig 0.000000 8.868000
         color 0,119,158
@@ -1133,7 +1133,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipLncapCtcfAndroSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel LNCaP CTCF DS
-        longLabel LNCaP androgen CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel LNCaP androgen CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3LNCAP treatment=ANDRO
         type bigWig 0.000000 5.611100
         color 0,119,158
@@ -1142,7 +1142,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipKidneyocCtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Kidney CTCF DS
-        longLabel Kidney OC CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Kidney OC CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3KIDNEYOC  treatment=AANONE
         type bigWig 0.000000 9.869400
         # subId=7540 dateSubmitted=2012-07-31
@@ -1150,7 +1150,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipLungocCtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Lung CTCF DS
-        longLabel Lung OC CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Lung OC CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3LUNGOC  treatment=AANONE
         type bigWig 0.000000 10.782000
         # subId=7543 dateSubmitted=2012-07-31
@@ -1158,7 +1158,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipSpleenocCtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Spleen CTCF DS
-        longLabel Spleen OC CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Spleen OC CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3SPLEENOC  treatment=AANONE
         type bigWig 0.000000 6.415600
         # subId=7544 dateSubmitted=2012-07-31
@@ -1166,7 +1166,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipPancreasocCtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel Pancreas CTCF DS
-        longLabel Pancreas OC CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel Pancreas OC CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3PANCREASOC  treatment=AANONE
         type bigWig 0.000000 9.584400
         # subId=7545 dateSubmitted=2012-07-31
@@ -1174,7 +1174,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm10248CtcfSigRep1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel GM10248 CTCF DS
-        longLabel GM10248 CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel GM10248 CTCF TFBS ChIP-seq Density Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=t3GM10248  treatment=AANONE
         type bigWig 0.000000 5.796300
         # subId=7690 dateSubmitted=2012-07-26

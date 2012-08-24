@@ -2505,3 +2505,11 @@ dataVersion Through the ENCODE July 2012 Freeze
         type bigWig 0.000000 231.000000
         # subId=7557 dateSubmitted=2012-07-31
 
+        track wgEncodeOpenChromDnaseMyometrBaseOverlapSignalV2
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel Myometr OS
+        longLabel Myometr DNaseI HS Overlap Signal from ENCODE/Duke
+        subGroups view=SIGBO cellType=t3MYOMETR treatment=zNONE
+        type bigWig 0.000000 209.000000
+        # subId=7873 dateSubmitted=2012-08-24
+
