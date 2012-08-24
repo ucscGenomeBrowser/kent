@@ -358,4 +358,8 @@ boolean bbiFileCheckSigs(char *fileName, bits32 sig, char *typeName);
 time_t bbiUpdateTime(struct bbiFile *bbi);
 /* return bbi->udc->updateTime */
 
+struct bbiSummary *bbiSummariesInRegion(struct bbiZoomLevel *zoom, struct bbiFile *bbi,
+        int chromId, bits32 start, bits32 end);
+/* Return list of all summaries in region at given zoom level of bbiFile. */
+
 #endif /* BBIFILE_H */
