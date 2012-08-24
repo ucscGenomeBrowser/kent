@@ -2373,6 +2373,7 @@ html wgEncodeLicrHistone.release3
         subGroups view=Signal age=IMMORTAL factor=H3K04ME2 cellType=CH12 control=STD sex=F strain=C57BL6
         type bigWig 0.130000 33.910000
         color 86,180,233
+        viewLimits 0.2:3
         # subId=7116 dateSubmitted=2012-06-21
 
         track wgEncodeLicrHistoneCh12H3k04me1FImmortalC57bl6StdSig

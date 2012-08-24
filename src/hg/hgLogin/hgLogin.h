@@ -11,6 +11,7 @@
 #define CFG_LOGIN_MAIL_SIGNATURE "login.mailSignature"
 #define CFG_LOGIN_MAIL_RETURN_ADDR "login.mailReturnAddr"
 #define CFG_CENTRAL_DOMAIN "central.domain"
+#define CFG_MAILX_VERSION "mailx.version"
 
 #endif /* hgLogin_H */
 

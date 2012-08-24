@@ -37,6 +37,7 @@ char brwName[64];
 char brwAddr[256];
 char signature[256];
 char returnAddr[256];
+char mailxVer[32];
 /* ---- Global helper functions ---- */
 char *browserName()
 /* Return the browser name like 'UCSC Genome Browser' */
@@ -72,6 +73,29 @@ if isEmpty(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR))
     return cloneString("NULL_mailReturnAddr");
 else
     return cloneString(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR));
+}
+
+char *mailxVersion()
+/* Return the mail option format to be used by mail command */
+{
+if isEmpty(cfgOption(CFG_MAILX_VERSION))
+    return cloneString("SENDMAIL");
+else
+    return cloneString(cfgOption(CFG_MAILX_VERSION));
+}
+
+int mailItOut(char *toAddr, char *subject, char *msg, char *fromAddr)
+/* send mail to toAddr address */
+{
+char cmd[4096];
+if (sameString(mailxVer, "V12"))
+    safef(cmd,sizeof(cmd), "echo '%s' | /bin/mail -s \"%s\" -r %s %s",
+        msg, subject, fromAddr, toAddr);
+else /* default to old V8 version */
+    safef(cmd,sizeof(cmd), "echo '%s' | /bin/mail -s \"%s\" %s -- -f%s",
+        msg, subject, toAddr, fromAddr);
+int result = system(cmd);
+return result;
 }
 
 /* ---- password functions depend on optionally installed openssl lib ---- */
@@ -349,11 +373,9 @@ void sendActMailOut(char *email, char *subject, char *msg)
 /* send mail to email address */
 {
 char *hgLoginHost = wikiLinkHost();
-char cmd[4096];
-safef(cmd,sizeof(cmd),
-    "echo '%s' | mail -s \"%s\" %s  -- -f %s", 
-    msg, subject, email, returnAddr);
-int result = system(cmd);
+int result;
+result = mailItOut(email, subject, msg, returnAddr);
+
 if (result == -1)
     {
     hPrintf(
@@ -402,11 +424,8 @@ void sendMailOut(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
-char cmd[4096];
-safef(cmd,sizeof(cmd),
-    "echo '%s' | mail -s \"%s\" %s -- -f %s",
-    msg, subject, email, returnAddr);
-int result = system(cmd);
+int result;
+result = mailItOut(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf( 
@@ -1226,6 +1245,8 @@ safecpy(brwName,sizeof(brwName), browserName());
 safecpy(brwAddr,sizeof(brwAddr), browserAddr());
 safecpy(signature,sizeof(signature), mailSignature());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
+safecpy(mailxVer,sizeof(mailxVer), mailxVersion());
+
 
 if (cartVarExists(cart, "hgLogin.do.changePasswordPage"))
     changePasswordPage(conn);
