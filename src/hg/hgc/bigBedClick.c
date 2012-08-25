@@ -28,6 +28,12 @@ if (bedSize == 0)
     showUrl = TRUE;
     }
 
+
+char *scoreFilter = cartOrTdbString(cart, tdb, "scoreFilter", NULL);
+int minScore = 0;
+if (scoreFilter)
+    minScore = atoi(scoreFilter);
+
 /* Find particular item in list - matching start, and item if possible. */
 boolean found = FALSE;
 boolean firstTime = TRUE;
@@ -64,6 +70,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = bedLoadN(fields, bedSize);
+    if (bedSize >= 6 && scoreFilter && bed->score < minScore)
+	continue;
     if (showUrl && (bedSize >= 4))
         printCustomUrl(tdb, item, TRUE);
     bedPrintPos(bed, bedSize, tdb);

@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db geoFor1
+clade vertebrate
+genomeCladePriority 60
+scientificName Geospiza fortis
+commonName Medium Ground Finch
+assemblyDate Apr. 2012
+assemblyLabel Beijing Genomics Institute
+assemblyShortLabel GeoFor_1.0
+orderKey 4373
+mitoAcc none
+fastaFiles /hive/data/genomes/geoFor1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/geoFor1/genbank/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir birds
+photoCreditURL http://commons.wikimedia.org/wiki/User:Charlesjsharp
+photoCreditName Photo courtesy of Charles J Sharp, Wikimedia Commons
+ncbiGenomeId 13302
+ncbiAssemblyId 402638
+ncbiAssemblyName GeoFor_1.0
+ncbiBioProject 156703
+genBankAccessionID GCA_000277835.1
+taxId 48883

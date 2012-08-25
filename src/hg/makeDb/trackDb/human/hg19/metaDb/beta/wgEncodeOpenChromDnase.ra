@@ -13440,6 +13440,32 @@ tableName wgEncodeOpenChromDnaseMyometrBaseOverlapSignal
 treatment None
 view Base_Overlap_Signal
 
+metaObject wgEncodeOpenChromDnaseMyometrBaseOverlapSignalV2
+objType table
+cell Myometr
+composite wgEncodeOpenChromDnase
+controlId generic_female
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2012-08-24
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+dccAccession wgEncodeEH000603
+expId 603
+fileName wgEncodeOpenChromDnaseMyometrBaseOverlapSignalV2.bigWig
+geoSampleAccession GSM816630
+grant Crawford
+lab Duke
+labVersion private-noSequence baseAlignCounts.pl v 1
+md5sum 9ef860623cbde0e7e5343d378005a0e8
+origAssembly hg18
+project wgEncode
+subId 7873
+submittedDataVersion V2 - replacing old bigWig with version 4
+tableName wgEncodeOpenChromDnaseMyometrBaseOverlapSignalV2
+treatment None
+view Base_Overlap_Signal
+
 metaObject wgEncodeOpenChromDnaseMyometrPk
 objType table
 cell Myometr
@@ -16320,4 +16346,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 156790226
+# MAGIC: -1313451360
