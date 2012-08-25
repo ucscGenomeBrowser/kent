@@ -475,7 +475,7 @@ return validCount;
 }
 
 static int bbiChromId(struct bbiFile *bbi, char *chrom)
-/* Return chromosome size */
+/* Return chromosome Id */
 {
 struct bbiChromIdSize idSize;
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
