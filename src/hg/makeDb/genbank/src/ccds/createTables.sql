@@ -67,7 +67,8 @@ CREATE TABLE GroupVersions (
 	location_count int NOT NULL ,
 	ccds_status_val_uid int NOT NULL ,
 	ccds_version int NULL ,
-	was_public tinyint(1) NOT NULL 
+	was_public tinyint(1) NOT NULL ,
+        build_uid int NOT NULL 
 ) 
 ;
 
