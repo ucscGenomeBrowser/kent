@@ -30,6 +30,7 @@ ALTER TABLE Accessions_GroupVersions ADD INDEX (accession_uid), ADD INDEX (ccds_
 ALTER TABLE CcdsUids ADD INDEX (group_uid);
 ALTER TABLE ChromosomeAccessions ADD INDEX (organization_uid);
 ALTER TABLE GroupVersions ADD INDEX (ccds_status_val_uid), ADD INDEX (group_uid);
+ALTER TABLE GroupVersions ADD INDEX (build_uid);
 ALTER TABLE GroupVersions_ChromosomeAccessions ADD INDEX (chromosome_accession_uid), ADD INDEX (group_version_uid);
 ALTER TABLE InterpretationSubtypes ADD INDEX (interpretation_type_uid);
 ALTER TABLE Interpretations ADD INDEX (acc_rejection_uid), ADD INDEX (accession_uid), ADD INDEX (ccds_uid), ADD INDEX (group_version_uid), ADD INDEX (group_uid), ADD INDEX (interpretation_subtype_uid), ADD INDEX (interpretation_type_uid), ADD INDEX (parent_interpretation_uid), ADD INDEX (interpreter_uid), ADD INDEX (program_uid);

@@ -22,7 +22,7 @@ lab CSHL-m
 labExpId LID20728
 localization cell
 md5sum 91a501fe63306d15749a0003849f919c,a117f019f0b35f8d8bab60cae8de2f2e
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -62,7 +62,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7769
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1V2
 view Alignments
 
@@ -84,7 +84,7 @@ lab CSHL-m
 labExpId LID20729
 localization cell
 md5sum 0c653c2ce4ce05df6653bb460c3a2336,d0054667d050ad3f9ca1d22651d107b0
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -124,7 +124,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7762
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2V2
 view Alignments
 
@@ -567,7 +567,7 @@ lab CSHL-m
 labExpId LID20728
 localization cell
 md5sum 3bd94337b7e3b83d9a7ff389d85a6936
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -607,7 +607,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7769
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep2
@@ -629,7 +629,7 @@ lab CSHL-m
 labExpId LID20729
 localization cell
 md5sum 7a873c351b14d77dab922cd90499ff8c
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -669,7 +669,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7762
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksTranscriptDeNovo
@@ -1215,7 +1215,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47030
-labProtocolId 30A
 localization cell
 md5sum 23f7581fab3fbafa39eb84d722ae85f3
 project wgEncode
@@ -1246,7 +1245,6 @@ fileName wgEncodeCshlLongRnaSeqBladderAdult8wksSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47031
-labProtocolId 30B
 localization cell
 md5sum 02313a3627b189726b31f2d020aed421
 project wgEncode
@@ -1802,7 +1800,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47036
-labProtocolId 20A
 localization cell
 md5sum 902e3a212b527c89c056610162c60cce
 project wgEncode
@@ -1833,7 +1830,6 @@ fileName wgEncodeCshlLongRnaSeqCbellumAdult8wksSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47037
-labProtocolId 20B
 localization cell
 md5sum 00471539ce43169fb7fec701efc4b75d
 project wgEncode
@@ -2389,7 +2385,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46946
-labProtocolId 21A
 localization cell
 md5sum 881674e77de4eb104f1d907999b752ef
 project wgEncode
@@ -2420,7 +2415,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE11halfSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46947
-labProtocolId 21B
 localization cell
 md5sum 18835457419fb37bb80072007d57bf04
 project wgEncode
@@ -2976,7 +2970,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14SpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46948
-labProtocolId 23A
 localization cell
 md5sum 24adfc0330c9829f653c4283b6a62b29
 project wgEncode
@@ -3007,7 +3000,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE14SpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46949
-labProtocolId 23B
 localization cell
 md5sum 6c9301fe40f6bf7a5c852f59d751a1b8
 project wgEncode
@@ -3563,7 +3555,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18SpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46950
-labProtocolId 24A
 localization cell
 md5sum e80744544fd5e230e089939705923089
 project wgEncode
@@ -3594,7 +3585,6 @@ fileName wgEncodeCshlLongRnaSeqCnsE18SpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46951
-labProtocolId 24B
 localization cell
 md5sum 30b22a3bbbdd276f1290456513f902aa
 project wgEncode
@@ -3683,7 +3673,7 @@ lab CSHL-m
 labExpId LID21040
 localization cell
 md5sum ea04394881d5c6697c4b72ee5c8ed65d,61ce59651939c681e5c0fe46f9b4ac12
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -3723,7 +3713,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7764
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1V2
 view Alignments
 
@@ -3745,7 +3735,7 @@ lab CSHL-m
 labExpId LID21041
 localization cell
 md5sum 822c5eb4a2d40b776a99a87c1e772b44,a564bbf1521163b47a267c220999c524
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -3785,7 +3775,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7752
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep2V2
 view Alignments
 
@@ -4228,7 +4218,7 @@ lab CSHL-m
 labExpId LID21040
 localization cell
 md5sum 9de19d8687ae5bf8b29110c3d187118d
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4268,7 +4258,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7764
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep2
@@ -4290,7 +4280,7 @@ lab CSHL-m
 labExpId LID21041
 localization cell
 md5sum 7aa6c2bf44c3a5cebb02c429409a2835
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4330,7 +4320,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7752
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksTranscriptDeNovo
@@ -4876,7 +4866,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47032
-labProtocolId 6A
 localization cell
 md5sum 0297b695932a0ef5e976a1b7869d5a69
 project wgEncode
@@ -4907,7 +4896,6 @@ fileName wgEncodeCshlLongRnaSeqCortexAdult8wksSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47033
-labProtocolId 6B
 localization cell
 md5sum f6f87853661d3ea1498ec172a7001735
 project wgEncode
@@ -4996,7 +4984,7 @@ lab CSHL-m
 labExpId LID20730
 localization cell
 md5sum 8a45f86e49c1639b6f7bbdeb457bcb5a,476a478dc2d11df3d51ec0186481a87c
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5036,7 +5024,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7768
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep1V2
 view Alignments
 
@@ -5058,7 +5046,7 @@ lab CSHL-m
 labExpId LID20731
 localization cell
 md5sum 782a44f19577aeebfdc0a8608bb73787,dc4fa9c62628754021cf4a00e196fb6a
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5098,7 +5086,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7757
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep2V2
 view Alignments
 
@@ -5541,7 +5529,7 @@ lab CSHL-m
 labExpId LID20730
 localization cell
 md5sum 6d27bdbeed54b1caab76f1ff92f11cd6
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5581,7 +5569,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7768
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep2
@@ -5603,7 +5591,7 @@ lab CSHL-m
 labExpId LID20731
 localization cell
 md5sum 658df86aa1f3bb2b3101adbc86b04318
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5643,7 +5631,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7757
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksTranscriptDeNovo
@@ -6189,7 +6177,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47081
-labProtocolId 7A
 localization cell
 md5sum d31fccd5c15fa17ce20b99e3d56a63bd
 project wgEncode
@@ -6220,7 +6207,6 @@ fileName wgEncodeCshlLongRnaSeqFlobeAdult8wksSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47082
-labProtocolId 7B
 localization cell
 md5sum a9a47e563980301994e3c6a1f588dc6e
 project wgEncode
@@ -6309,7 +6295,7 @@ lab CSHL-m
 labExpId LID21179
 localization cell
 md5sum e8e3e5bf3fa08005e2fcd43ba97d4291,7ee61c80acb9d2a325c1898ca5c9a707
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6349,7 +6335,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7742
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep1V2
 view Alignments
 
@@ -6371,7 +6357,7 @@ lab CSHL-m
 labExpId LID21180
 localization cell
 md5sum aef46bb54edbb117ac262b15ba7c4b66,fa97c0b9449afa5e25621cbeeff0e04a
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6411,7 +6397,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7765
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep2V2
 view Alignments
 
@@ -6854,7 +6840,7 @@ lab CSHL-m
 labExpId LID21179
 localization cell
 md5sum 5908a97d6f329355bf4a166069c333d2
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6894,7 +6880,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7742
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep2
@@ -6916,7 +6902,7 @@ lab CSHL-m
 labExpId LID21180
 localization cell
 md5sum 6d90300b229ffe50b96b3dea136e6d5a
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6956,7 +6942,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7765
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksTranscriptDeNovo
@@ -7035,7 +7021,7 @@ lab CSHL-m
 labExpId LID20870
 localization cell
 md5sum 6ef130a6a641ef4e78697937b01b4a4d,73e4171577948b1fc59842b90d3b3e2b
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -7075,7 +7061,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7760
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1V2
 view Alignments
 
@@ -7097,7 +7083,7 @@ lab CSHL-m
 labExpId LID20871
 localization cell
 md5sum 40f4b96be5afde3964b96680733bb760,f915488359eb2e3bc9d92263a3516166
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7137,7 +7123,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7761
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep2V2
 view Alignments
 
@@ -7580,7 +7566,7 @@ lab CSHL-m
 labExpId LID20870
 localization cell
 md5sum 64bf19563012c86a819eeb3f466729d8
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -7620,7 +7606,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7760
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep2
@@ -7642,7 +7628,7 @@ lab CSHL-m
 labExpId LID20871
 localization cell
 md5sum f1d3ebbc233558b08fbe8663cbcb7617
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7682,7 +7668,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7761
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksTranscriptDeNovo
@@ -7761,7 +7747,7 @@ lab CSHL-m
 labExpId LID20872
 localization cell
 md5sum 7b6fb73c0ee2914369a06b58736ef56d,8c1f95bf92ff30a0a2f253e3fafa033c
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -7801,7 +7787,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7756
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep1V2
 view Alignments
 
@@ -7823,7 +7809,7 @@ lab CSHL-m
 labExpId LID20873
 localization cell
 md5sum 1600e8d81f96aa58373287d2f4857b24,8f04664ba7d1ee24073944d2250ebdbc
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7863,7 +7849,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7774
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep2V2
 view Alignments
 
@@ -8306,7 +8292,7 @@ lab CSHL-m
 labExpId LID20872
 localization cell
 md5sum dc3623e6f83cd73aad310c94102c63d8
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8346,7 +8332,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7756
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep2
@@ -8368,7 +8354,7 @@ lab CSHL-m
 labExpId LID20873
 localization cell
 md5sum dddce6223874d9acfea343de56c165fc
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8408,7 +8394,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7774
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqKidneyAdult8wksTranscriptDeNovo
@@ -8487,7 +8473,7 @@ lab CSHL-m
 labExpId LID21183
 localization cell
 md5sum 77473346742f6558ff7fd20fbe4645f7,6a02a4e4c8cfda817e2895e1fcaaf3b0
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8527,7 +8513,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7755
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep1V2
 view Alignments
 
@@ -8549,7 +8535,7 @@ lab CSHL-m
 labExpId LID21184
 localization cell
 md5sum 1d60beeaa912e58fabd40e1e0a5a74b2,4cbe0c6dbc2c66e870b5e4835072fc3a
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8589,7 +8575,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7766
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep2V2
 view Alignments
 
@@ -9032,7 +9018,7 @@ lab CSHL-m
 labExpId LID21183
 localization cell
 md5sum 8a32f7832c7f0979b06bd2adee8864b6
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -9072,7 +9058,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7755
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep2
@@ -9094,7 +9080,7 @@ lab CSHL-m
 labExpId LID21184
 localization cell
 md5sum b30e68d2cff76dabedfe1ba179537670
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -9134,7 +9120,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7766
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksTranscriptDeNovo
@@ -9680,7 +9666,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46985
-labProtocolId 29A
 localization cell
 md5sum 6ba32b7cd63cc53d8c1beae30edb403d
 project wgEncode
@@ -9711,7 +9696,6 @@ fileName wgEncodeCshlLongRnaSeqLimbE14halfSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46986
-labProtocolId 29B
 localization cell
 md5sum c4a294abb6281f50344044df7de114da
 project wgEncode
@@ -9800,7 +9784,7 @@ lab CSHL-m
 labExpId LID21042
 localization cell
 md5sum 859095835df92e8f5235d253416986e5,51c0aabd0ee0dac023408902a3b08b68
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -9840,7 +9824,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7751
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1V2
 view Alignments
 
@@ -9862,7 +9846,7 @@ lab CSHL-m
 labExpId LID21043
 localization cell
 md5sum dfe860afe7c36797cdaf8371d69f2966,68f60973c0c57449a307940dbb8547ad
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -9902,7 +9886,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7770
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep2V2
 view Alignments
 
@@ -10345,7 +10329,7 @@ lab CSHL-m
 labExpId LID21042
 localization cell
 md5sum df56efdb07fb35b0cb6f6afa6157c4ab
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -10385,7 +10369,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7751
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep2
@@ -10407,7 +10391,7 @@ lab CSHL-m
 labExpId LID21043
 localization cell
 md5sum c005d10f542348af43f1c44e8dc1dd4d
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -10447,7 +10431,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7770
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksTranscriptDeNovo
@@ -10993,7 +10977,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14SpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47144
-labProtocolId 26A
 localization cell
 md5sum 502348ae2a26485ab3ab6b601356c498
 project wgEncode
@@ -11024,7 +11007,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14SpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47145
-labProtocolId 26B
 localization cell
 md5sum fa22f214e962d2215094d55901410e91
 project wgEncode
@@ -11580,7 +11562,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47146
-labProtocolId 28A
 localization cell
 md5sum a6b33f8ff1689e56a59f3b7111ba760f
 project wgEncode
@@ -11611,7 +11592,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE14halfSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47147
-labProtocolId 28B
 localization cell
 md5sum 3480748bbc622a6c6b9dee31ccd1b6ae
 project wgEncode
@@ -12167,7 +12147,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18SpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47148
-labProtocolId 27A
 localization cell
 md5sum 5cae8256d9884f2e69f9df7da6f4a6b5
 project wgEncode
@@ -12198,7 +12177,6 @@ fileName wgEncodeCshlLongRnaSeqLiverE18SpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID47149
-labProtocolId 27B
 localization cell
 md5sum 928705d95f216a5358d9d2d95ddd832e
 project wgEncode
@@ -12287,7 +12265,7 @@ lab CSHL-m
 labExpId LID20920
 localization cell
 md5sum c489553aa70ba33be3db5c28ccec3fde,0eadb72fee2968bf0596e7f377503dc5
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -12327,7 +12305,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7767
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep1V2
 view Alignments
 
@@ -12349,7 +12327,7 @@ lab CSHL-m
 labExpId LID20921
 localization cell
 md5sum 4dadd1d3f4118d98b9260e5c4bd301ff,1dbc2703775407426d27d50d0c9ffacb
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12389,7 +12367,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7750
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep2V2
 view Alignments
 
@@ -12832,7 +12810,7 @@ lab CSHL-m
 labExpId LID20920
 localization cell
 md5sum 2834d666ade4b086e6b4dbf3e4bc33bd
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -12872,7 +12850,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7767
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep2
@@ -12894,7 +12872,7 @@ lab CSHL-m
 labExpId LID20921
 localization cell
 md5sum 54c55b94d8a0c7142e7097b825f75f26
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12934,7 +12912,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7750
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqLungAdult8wksTranscriptDeNovo
@@ -13013,7 +12991,7 @@ lab CSHL-m
 labExpId LID20924
 localization cell
 md5sum 8b6c164f2cd78b694d6f2e4d93a7b8dc,6fd6b5ec6fdb9ef78152370663b52cce
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -13053,7 +13031,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7744
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep1V2
 view Alignments
 
@@ -13075,7 +13053,7 @@ lab CSHL-m
 labExpId LID20925
 localization cell
 md5sum 1b960a005325019554f2a2b52eb0fbe5,4887ca148fecf47a84c1a857f46ebfa4
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13115,7 +13093,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7772
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep2V2
 view Alignments
 
@@ -13558,7 +13536,7 @@ lab CSHL-m
 labExpId LID20924
 localization cell
 md5sum af6fe719b660703cff82fdc1689c84e0
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -13598,7 +13576,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7744
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep2
@@ -13620,7 +13598,7 @@ lab CSHL-m
 labExpId LID20925
 localization cell
 md5sum 3d3e2642d7cb87291a25feb3a2c1eed3
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13660,7 +13638,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7772
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksTranscriptDeNovo
@@ -13739,7 +13717,7 @@ lab CSHL-m
 labExpId LID20821
 localization cell
 md5sum d7b7246d45bdadd464f147786cda7a6d,5e927afc8c10b701bfb6a050f996358b
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -13779,7 +13757,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7771
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep1V2
 view Alignments
 
@@ -13801,7 +13779,7 @@ lab CSHL-m
 labExpId LID20822
 localization cell
 md5sum f66bdd3ea7a171c19a4da6ca4997cdd0,44d1e0f356351d19020b4481e97ee66a
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13841,7 +13819,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7743
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep2V2
 view Alignments
 
@@ -14284,7 +14262,7 @@ lab CSHL-m
 labExpId LID20821
 localization cell
 md5sum 508e725bb6677274b73a22f40c196d5f
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -14324,7 +14302,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7771
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep2
@@ -14346,7 +14324,7 @@ lab CSHL-m
 labExpId LID20822
 localization cell
 md5sum 29579bcaca029781a284a09c8d8aaa63
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -14386,7 +14364,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7743
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksTranscriptDeNovo
@@ -14932,7 +14910,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46983
-labProtocolId 10A
 localization cell
 md5sum c5ef9c245fb0e46dc4504c11b8e531e9
 project wgEncode
@@ -14963,7 +14940,6 @@ fileName wgEncodeCshlLongRnaSeqPlacAdult8wksSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46984
-labProtocolId 10B
 localization cell
 md5sum 59a42389bf55931ca643a9973d9320f8
 project wgEncode
@@ -15052,7 +15028,7 @@ lab CSHL-m
 labExpId LID21181
 localization cell
 md5sum 2c3812d622a1753231d766a6f105747b,edc05633943351f74000281d4c393dc5
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -15092,7 +15068,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7763
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep1V2
 view Alignments
 
@@ -15114,7 +15090,7 @@ lab CSHL-m
 labExpId LID21182
 localization cell
 md5sum a8ef72d1f331879fac40b94e11234929,4a0beb1c46e2cef4551d4acdd5e568aa
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15154,7 +15130,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7753
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep2V2
 view Alignments
 
@@ -15597,7 +15573,7 @@ lab CSHL-m
 labExpId LID21181
 localization cell
 md5sum 12b85fe823b385655d283958933966ad
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -15637,7 +15613,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7763
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep2
@@ -15659,7 +15635,7 @@ lab CSHL-m
 labExpId LID21182
 localization cell
 md5sum edbabc32d2a0a92b0ce64e46203fc452
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15699,7 +15675,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7753
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksTranscriptDeNovo
@@ -15778,7 +15754,7 @@ lab CSHL-m
 labExpId LID20819
 localization cell
 md5sum 656d4e6a42a0954f8d52857e1e9a88ac,82abc16de38af56d7b5a2e8f1d77b0fa
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -15818,7 +15794,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7759
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep1V2
 view Alignments
 
@@ -15840,7 +15816,7 @@ lab CSHL-m
 labExpId LID20820
 localization cell
 md5sum d80edf4731debd277cc5b93f6d33e431,ae2a731907d2b522b5acc8094bf030a2
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -15880,7 +15856,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7745
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep2V2
 view Alignments
 
@@ -16323,7 +16299,7 @@ lab CSHL-m
 labExpId LID20819
 localization cell
 md5sum 0dfd47d8aa94034fa93495906c3f1898
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -16363,7 +16339,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7759
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep2
@@ -16385,7 +16361,7 @@ lab CSHL-m
 labExpId LID20820
 localization cell
 md5sum 1aeb3e44aeb8d1fc12c3b4201c9d6113
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -16425,7 +16401,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7745
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksTranscriptDeNovo
@@ -16513,7 +16489,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7758
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqSplAdult8wksAlnRep1V2
 view Alignments
 
@@ -16544,7 +16520,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7741
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqSplAdult8wksAlnRep2V2
 view Alignments
 
@@ -16634,7 +16610,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7758
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSplAdult8wksSpikeinsRep2V2
@@ -16665,7 +16641,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7741
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep1
@@ -16686,7 +16662,7 @@ lab CSHL-m
 labExpId LID21038
 localization cell
 md5sum b6248afbd4db1b55d42fef2f3597395f,daf61f204d4503aabbdcb463447f57d8
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -16717,7 +16693,7 @@ lab CSHL-m
 labExpId LID21039
 localization cell
 md5sum 9ec82409109fac1d6bbd0ba8b58b5e6b,24f1a331171b9495122e727565ed6e21
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17111,7 +17087,7 @@ lab CSHL-m
 labExpId LID21038
 localization cell
 md5sum 176961cf70ed3fedea68c1626b8f4815
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17142,7 +17118,7 @@ lab CSHL-m
 labExpId LID21039
 localization cell
 md5sum 7631ba95140a51fee57cae1fef5b0ce6
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17230,7 +17206,7 @@ lab CSHL-m
 labExpId LID20732
 localization cell
 md5sum 9300d52a8d7342cb173bc2bd42832ac3,ee8b9eb126a2f35b11c5a6ed08516889
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17270,7 +17246,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7773
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1V2
 view Alignments
 
@@ -17292,7 +17268,7 @@ lab CSHL-m
 labExpId LID20733
 localization cell
 md5sum 309a02696e48b15db78519360a652835,5dac9c847e80f3726c34d1ff8427bf83
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17332,7 +17308,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7748
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep2V2
 view Alignments
 
@@ -17775,7 +17751,7 @@ lab CSHL-m
 labExpId LID20732
 localization cell
 md5sum a918549be179a4a0f5577b8f4feab5b7
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17815,7 +17791,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7773
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep2
@@ -17837,7 +17813,7 @@ lab CSHL-m
 labExpId LID20733
 localization cell
 md5sum ad540df43e583a4e1f0589c427712d24
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17877,7 +17853,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7748
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqStomAdult8wksTranscriptDeNovo
@@ -17956,7 +17932,7 @@ lab CSHL-m
 labExpId LID20868
 localization cell
 md5sum 318e444eed18988aed0210ec57199d20,02898d3bb9c00dd3a072fc59c8a06be5
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17996,7 +17972,7 @@ sex M
 spikeInPool Nist14
 strain C57BL/6J
 subId 7749
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1V2
 view Alignments
 
@@ -18018,7 +17994,7 @@ lab CSHL-m
 labExpId LID20869
 localization cell
 md5sum 2b321cc6dd8f0090d4c86bba063ba5c5,97e3b5805238cbb7500600ad5ae1e460
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18058,7 +18034,7 @@ sex M
 spikeInPool Nist14
 strain C57BL/6J
 subId 7747
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep2V2
 view Alignments
 
@@ -18501,7 +18477,7 @@ lab CSHL-m
 labExpId LID20868
 localization cell
 md5sum bb28d5f1b70e6f5066a1f47b6beded94
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -18541,7 +18517,7 @@ sex M
 spikeInPool Nist14
 strain C57BL/6J
 subId 7749
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep2
@@ -18563,7 +18539,7 @@ lab CSHL-m
 labExpId LID20869
 localization cell
 md5sum 8f165fc51713c2fe381d8e575d68bdc2
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18603,7 +18579,7 @@ sex M
 spikeInPool Nist14
 strain C57BL/6J
 subId 7747
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksTranscriptDeNovo
@@ -18682,7 +18658,7 @@ lab CSHL-m
 labExpId LID20922
 localization cell
 md5sum 72945c2573b4b23b2e85a77f6e0d513b,05c950fbaa61332101654815e452a80b
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -18722,7 +18698,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7754
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep1V2
 view Alignments
 
@@ -18744,7 +18720,7 @@ lab CSHL-m
 labExpId LID20923
 localization cell
 md5sum b039d28a58d2c88ed8ce3dbf4855d4cd,dc6eff5d68bcf4ef110d0046f437f80c
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18784,7 +18760,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7746
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 tableName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep2V2
 view Alignments
 
@@ -19227,7 +19203,7 @@ lab CSHL-m
 labExpId LID20922
 localization cell
 md5sum a137383bd1d5351c3b6db6c2c4baa830
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 1
@@ -19267,7 +19243,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7754
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep2
@@ -19289,7 +19265,7 @@ lab CSHL-m
 labExpId LID20923
 localization cell
 md5sum 08b52938d2f81986ff48e6925cf159f6
-objStatus replaced - read 2 reverse complimented
+objStatus replaced - read 2 reverse complemented
 project wgEncode
 readType 2x76D
 replicate 2
@@ -19329,7 +19305,7 @@ sex U
 spikeInPool Nist14
 strain C57BL/6J
 subId 7746
-submittedDataVersion V2 - Read 2 of each read pair had been mistakenly reverse-complemented in preivous version. Now corrected.
+submittedDataVersion V2 - Previous version had read 2 reverse complemented
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqThymusAdult8wksTranscriptDeNovo
@@ -19875,7 +19851,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46987
-labProtocolId 25A
 localization cell
 md5sum 1f3a7602ce98104a68fc83b4edda39dc
 project wgEncode
@@ -19906,7 +19881,6 @@ fileName wgEncodeCshlLongRnaSeqWbrainE14halfSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL-m
 labExpId LID46988
-labProtocolId 25B
 localization cell
 md5sum de4feeab5f3cbbd0435bbc10781e3ee6
 project wgEncode
@@ -19977,4 +19951,4 @@ strain C57BL/6J
 subId 7798
 view TranscriptEnsV65IAcuff
 
-# MAGIC: -1988112331
+# MAGIC: -391270575

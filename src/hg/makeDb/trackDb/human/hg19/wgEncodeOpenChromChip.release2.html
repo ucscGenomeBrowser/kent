@@ -1,7 +1,7 @@
 <H2>Description</H2>
 
 <P>These tracks display chromatin immunoprecipitation (ChIP-seq) evidence as
-part of the four <B><em>Open Chromatin</em></B> track sets.
+part of the four <B><em>Open Chromatin</em></B> track sets (see below).
 ChIP-seq is a method to identify the specific location of proteins that are
 directly or indirectly bound to genomic DNA. By identifying the binding location
 of sequence-specific transcription factors, general transcription
@@ -10,7 +10,7 @@ annotation of the open chromatin regions identified by DNaseI HS mapping and
 FAIRE.
 </P>
 <P>Together with
-DNaseI HS and FAIRE experiments, these tracks display the locations of active
+DNaseI HS and FAIRE experiments, these tracks display the locations of  active
 regulatory elements identified as open chromatin in
 <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
 from the Duke, UNC-Chapel Hill, UT-Austin, and EBI ENCODE group.
@@ -43,9 +43,9 @@ poor sequence alignability.
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>.
 <LI>Data for the FAIRE experiments can be found in
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>.
-<LI>A syntheseis of all the open chromatin assays for select cell lines can
-be previewed in
-<A HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth"
+<LI>A synthesis of all the open chromatin assays for select cell lines can
+be found in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth"
 target=_blank>Open Chrom Synth</a>.
 </UL>
 
@@ -106,7 +106,7 @@ sequence and alignment files for each replicate are available for
 <A HREF="/ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 </P>
 <P>To perform <em>ChIP</em>, proteins were cross-linked to DNA <em>in vivo</em>
-using 1&#37; formaldehyde solution (Bhinge <em>et al.</em>, 2007, ENCODE
+using 1&#37; formaldehyde solution (Bhinge <em>et al.</em>, 2007; ENCODE
 Project Consortium, 2007). Cross-linked chromatin was sheared by sonication
 and immunoprecipitated using a specific antibody against the protein of
 interest. After reversal of the cross-links, the immunoprecipitated DNA was
@@ -115,7 +115,7 @@ was accomplished by sequencing of the ends of the immunoprecipitated DNA
 (ChIP-seq) using the Illumina (Solexa) sequencing system. ChIP data for
 Tier 1 and Tier 2 cell lines were verified by comparing multiple independent
 growths (replicates) and determining the reproducibility of the data. For
-some cell types, additional verification was performed using the same the
+some cell types, additional verification was performed using the same
 immunoprecipitated DNA by labeling and hybridizing to NimbleGen Human
 ENCODE tiling arrays (1&#37; of the genome) along with the input DNA as reference
 (ChIP-chip). A more detailed protocol is available
@@ -123,15 +123,15 @@ ENCODE tiling arrays (1&#37; of the genome) along with the input DNA as referenc
 </P>
 <P>DNA fragments isolated by ChIP are 100-200 bp in length, with the average
 length being 134 bp.  Sequences from each experiment were aligned to the
-genome using BWA (Li <em>et al.</em>, 2010) for the GRCh37 (hg19) assembly.
+genome using Burrows-Wheeler Aligner (Li <em>et al.</em>, 2010) for the GRCh37 (hg19) assembly.
 <DIV style='position:relative; left:25px;'><DL><DT>The command used for these alignments was:</DT>
 <DD><code>&gt; bwa aln -t 8 genome.fa s_1.sequence.txt.bfq &gt; s_1.sequence.txt.sai</code></DD>
 <DT>Where genome.fa is the whole genome sequence and s_1.sequence.txt.bfq is one lane
-of sequences convert into the required bfq format.</DT></DL></DIV>
+of sequences converted into the required bfq format.</DT></DL></DIV>
 </P>
 <P>Sequences from multiple lanes
 are combined for a single replicate using the bwa samse command, and converted
-in the sam/bam format using samtools.
+in the sam/bam format using SAMtools.
 </P>
 <P>Only those that aligned to 4 or fewer locations were retained. Other sequences
 were also filtered based on their alignment to problematic regions
@@ -150,7 +150,7 @@ for F-Seq when generating signal annotations for these cell lines.
 These models are meant to correct for sequencing biases, alignment artifacts,
 and copy number changes in these cell lines. Input data is not being generated
 directly for other cell lines. Instead, a general background model was derived
-from the available Input data sets. This should provide corrections for
+from the available input data sets. This should provide corrections for
 sequencing biases and alignment artifacts, but will not correct for cell
 type specific copy number changes.
 <DIV style='position:relative; left:25px;'>
@@ -162,7 +162,7 @@ type specific copy number changes.
 <DT>PolII:</DT>
 <DD><code>&gt; fseq -l 800 -v -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</code></DD>
 <DT>Where the (bff files) are the background files based on alignability, the
-(iff files) are the background files based on the Input experiments,
+(iff files) are the background files based on the input experiments,
 and alignments.bed are a bed file of filtered sequence alignments.</DT></DL></DIV>
 </P>
 <P>Discrete ChIP sites (peaks) were identified from ChIP-seq F-seq
@@ -176,16 +176,15 @@ were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple levels
 of significance. Regions matched on size to these peaks that were devoid of
 any significant signal were also created as a null model.  These data were used
 for additional verification of Tier 1 and Tier 2 cell lines by ROC analysis.
-Files containing this data can be found in the 
-<a href="/cgi-bin/hgFileUi?db=hg19&g=wgEncodeOpenChromChip" >Downloads</a> 
-directory labeled Validation view.
+Files labeled Validation view containing this data are available for
+<a href="/cgi-bin/hgFileUi?db=hg19&g=wgEncodeOpenChromChip" >download</a>.
+
 </P>
 
 <h2>Release Notes</h2>
 
 <P>
-Release 2 (Dec 2011) of this track consists of all of release 1 as well as one new
-experiment and cell line validation files.
+Release 2 (August 2011) of this track adds 34 new experiments including 17 new cell lines.
 </p>
 <P>
 <li><B>Enhancer and Insulator Functional assays:</B>  A subset of DNase and FAIRE
@@ -201,21 +200,23 @@ experiments can be found
 <P>
 These data and annotations were created by a collaboration of multiple
 institutions (contact:
-<A HREF="mailto:&#116;&#115;&#102;ur&#101;&#121;&#64;&#100;&#117;&#107;&#101;.e&#100;u">
-Terry Furey</A>):
-<!-- above address is tsfurey at duke.edu -->
+<A HREF="mailto:&#116;&#115;&#102;u&#114;&#101;&#121;&#64;&#101;m&#97;&#105;&#108;.
+&#117;&#110;&#99;.
+&#101;&#100;u">
+Terry Furey</A>)
+<!-- above address is tsfurey at email.unc.edu -->
 </P><P>
 <UL>
 <LI>Duke University's <A HREF="http://www.genome.duke.edu/index.php"
 TARGET=_blank>Institute for Genome Sciences & Policy (IGSP)</A>: Alan Boyle,
-Lingyun Song, <A HREF="http://www.genome.duke.edu/people/faculty/furey/"
-TARGET=_blank>Terry Furey</A>, and
+Lingyun Song, and
 <A HREF="http://www.genome.duke.edu/people/faculty/crawford/"
 TARGET=_blank>Greg Crawford</a>
 </P><P>
 <LI>University of North Carolina at Chapel Hill: Paul Giresi and
-<A HREF="http://www.bio.unc.edu/faculty/lieb/labpages/default.shtml"
-TARGET=_blank>Jason Lieb</a>
+<A HREF="http://bio.unc.edu/people/faculty/lieb/"
+TARGET=_blank>Jason Lieb</a> and <A HREF="http://genetics.unc.edu/faculty/terry-furey"
+TARGET=_blank>Terry Furey</A>
 </P><P>
 <LI>University of Texas at Austin: Zheng Liu, Ryan McDaniell, Bum-Kyu Lee, and
 <A HREF="http://microarray.icmb.utexas.edu/research.html"
