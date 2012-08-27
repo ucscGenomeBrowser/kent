@@ -6826,6 +6826,62 @@ tableName wgEncodeLicrHistoneEsb4InputME0C57bl6StdSig
 tissueSourceType Individual
 view Signal
 
+metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep1
+objType file
+age E14
+antibody H3K4me1
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-23
+dateUnrestricted 2013-03-22
+dccAccession wgEncodeEM003171
+expId 3171
+fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 12/16/2012 FISH A Lane 7-5
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 7122
+view Alignments
+
+metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep2
+objType file
+age E14
+antibody H3K4me1
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-23
+dateUnrestricted 2013-03-22
+dccAccession wgEncodeEM003171
+expId 3171
+fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 03/16/2012 ChIP B Lane 7-8, 04/10/2012 ChIP A Lane 2-8
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 7122
+view Alignments
+
 metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdPk
 objType table
 age E14
@@ -6853,6 +6909,62 @@ strain C57BL/6
 subId 7122
 tableName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdPk
 view Peaks
+
+metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdRawDataRep1
+objType file
+age E14
+antibody H3K4me1
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-23
+dateUnrestricted 2013-03-22
+dccAccession wgEncodeEM003171
+expId 3171
+fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/16/2011 FISH A Lane 7-5
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7122
+view RawData
+
+metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdRawDataRep2
+objType file
+age E14
+antibody H3K4me1
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-23
+dateUnrestricted 2013-03-22
+dccAccession wgEncodeEM003171
+expId 3171
+fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/16/2012 ChIP B Lane 7-8, 04/10/2012 ChIP A Lane 2-8
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7122
+view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdSig
 objType table
@@ -6882,24 +6994,24 @@ subId 7122
 tableName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdSig
 view Signal
 
-metaObject wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdAlnRep1
+metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep1
 objType file
 age E14
-antibody H3K4me1
+antibody H3K4me3
 cell ES-E14
 composite wgEncodeLicrHistone
 control std
 controlId ES-E14/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-23
-dateUnrestricted 2013-03-22
-dccAccession wgEncodeEM003171
-expId 3171
-fileName wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdAlnRep1.bam.bai
+dateSubmitted 2012-06-24
+dateUnrestricted 2013-03-23
+dccAccession wgEncodeEM003172
+expId 3172
+fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
-labVersion 12/16/2012 FISH A Lane 7-5
+labVersion 12/08/2012 FISH A Lane 1-3
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6907,27 +7019,27 @@ setType exp
 sex M
 softwareVersion Bowtie
 strain C57BL/6
-subId 7122
+subId 7123
 view Alignments
 
-metaObject wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdAlnRep2
+metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep2
 objType file
 age E14
-antibody H3K4me1
+antibody H3K4me3
 cell ES-E14
 composite wgEncodeLicrHistone
 control std
 controlId ES-E14/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-23
-dateUnrestricted 2013-03-22
-dccAccession wgEncodeEM003171
-expId 3171
-fileName wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdAlnRep2.bam.bai
+dateSubmitted 2012-06-24
+dateUnrestricted 2013-03-23
+dccAccession wgEncodeEM003172
+expId 3172
+fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
-labVersion 03/16/2012 ChIP B Lane 7-8, 04/10/2012 ChIP A Lane 2-8
+labVersion 04/10/2012 FISH A Lane 7-1
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6935,64 +7047,8 @@ setType exp
 sex M
 softwareVersion Bowtie
 strain C57BL/6
-subId 7122
+subId 7123
 view Alignments
-
-metaObject wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdRawDataRep1
-objType file
-age E14
-antibody H3K4me1
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-23
-dateUnrestricted 2013-03-22
-dccAccession wgEncodeEM003171
-expId 3171
-fileName wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdRawDataRep1.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 12/16/2011 FISH A Lane 7-5
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7122
-view RawData
-
-metaObject wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdRawDataRep2
-objType file
-age E14
-antibody H3K4me1
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-23
-dateUnrestricted 2013-03-22
-dccAccession wgEncodeEM003171
-expId 3171
-fileName wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdRawDataRep2.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 03/16/2012 ChIP B Lane 7-8, 04/10/2012 ChIP A Lane 2-8
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7122
-view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdPk
 objType table
@@ -7022,6 +7078,62 @@ subId 7123
 tableName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdPk
 view Peaks
 
+metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdRawDataRep1
+objType file
+age E14
+antibody H3K4me3
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-24
+dateUnrestricted 2013-03-23
+dccAccession wgEncodeEM003172
+expId 3172
+fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/08/2011 FISH A Lane 1-3
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7123
+view RawData
+
+metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdRawDataRep2
+objType file
+age E14
+antibody H3K4me3
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-24
+dateUnrestricted 2013-03-23
+dccAccession wgEncodeEM003172
+expId 3172
+fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 04/03/2012 FISH A Lane 7-1
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7123
+view RawData
+
 metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdSig
 objType table
 age E14
@@ -7050,24 +7162,24 @@ subId 7123
 tableName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdSig
 view Signal
 
-metaObject wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdAlnRep1
+metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep1
 objType file
 age E14
-antibody H3K4me3
+antibody H3K9ac
 cell ES-E14
 composite wgEncodeLicrHistone
 control std
 controlId ES-E14/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-24
-dateUnrestricted 2013-03-23
-dccAccession wgEncodeEM003172
-expId 3172
-fileName wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdAlnRep1.bam.bai
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-24
+dccAccession wgEncodeEM003173
+expId 3173
+fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
-labVersion 12/08/2012 FISH A Lane 1-3
+labVersion 12/16/2011 FISH A Lane 7-7, 02/16/2012 ChIP A lane 3-7
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7075,27 +7187,27 @@ setType exp
 sex M
 softwareVersion Bowtie
 strain C57BL/6
-subId 7123
+subId 7124
 view Alignments
 
-metaObject wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdAlnRep2
+metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep2
 objType file
 age E14
-antibody H3K4me3
+antibody H3K9ac
 cell ES-E14
 composite wgEncodeLicrHistone
 control std
 controlId ES-E14/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-24
-dateUnrestricted 2013-03-23
-dccAccession wgEncodeEM003172
-expId 3172
-fileName wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdAlnRep2.bam.bai
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-24
+dccAccession wgEncodeEM003173
+expId 3173
+fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
-labVersion 04/10/2012 FISH A Lane 7-1
+labVersion 06/01/2012 ChIP A Lane 1-9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7103,64 +7215,8 @@ setType exp
 sex M
 softwareVersion Bowtie
 strain C57BL/6
-subId 7123
+subId 7124
 view Alignments
-
-metaObject wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdRawDataRep1
-objType file
-age E14
-antibody H3K4me3
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-24
-dateUnrestricted 2013-03-23
-dccAccession wgEncodeEM003172
-expId 3172
-fileName wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdRawDataRep1.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 12/08/2011 FISH A Lane 1-3
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7123
-view RawData
-
-metaObject wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdRawDataRep2
-objType file
-age E14
-antibody H3K4me3
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-24
-dateUnrestricted 2013-03-23
-dccAccession wgEncodeEM003172
-expId 3172
-fileName wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdRawDataRep2.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 04/03/2012 FISH A Lane 7-1
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7123
-view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdPk
 objType table
@@ -7190,6 +7246,62 @@ subId 7124
 tableName wgEncodeLicrHistoneEse14H3k09acME0129olaStdPk
 view Peaks
 
+metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdRawDataRep1
+objType file
+age E14
+antibody H3K9ac
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-24
+dccAccession wgEncodeEM003173
+expId 3173
+fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/16/2011 FISH A Lane 7-7, 02/16/2012 ChIP A lane 3-7
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7124
+view RawData
+
+metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdRawDataRep2
+objType file
+age E14
+antibody H3K9ac
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-25
+dateUnrestricted 2013-03-24
+dccAccession wgEncodeEM003173
+expId 3173
+fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 06/01/2012 ChIP A Lane 1-9
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7124
+view RawData
+
 metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdSig
 objType table
 age E14
@@ -7218,24 +7330,24 @@ subId 7124
 tableName wgEncodeLicrHistoneEse14H3k09acME0129olaStdSig
 view Signal
 
-metaObject wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdAlnRep1
+metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep1
 objType file
 age E14
-antibody H3K9ac
+antibody H3K27ac
 cell ES-E14
 composite wgEncodeLicrHistone
 control std
 controlId ES-E14/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-25
-dateUnrestricted 2013-03-24
-dccAccession wgEncodeEM003173
-expId 3173
-fileName wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdAlnRep1.bam.bai
+dateSubmitted 2012-06-26
+dateUnrestricted 2013-03-26
+dccAccession wgEncodeEM003174
+expId 3174
+fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
-labVersion 12/16/2011 FISH A Lane 7-7, 02/16/2012 ChIP A lane 3-7
+labVersion 01/04/2012 FISH A Lane 1-2, 02/16/2012 ChIP A Lane 3-2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7243,27 +7355,27 @@ setType exp
 sex M
 softwareVersion Bowtie
 strain C57BL/6
-subId 7124
+subId 7125
 view Alignments
 
-metaObject wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdAlnRep2
+metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep2
 objType file
 age E14
-antibody H3K9ac
+antibody H3K27ac
 cell ES-E14
 composite wgEncodeLicrHistone
 control std
 controlId ES-E14/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-25
-dateUnrestricted 2013-03-24
-dccAccession wgEncodeEM003173
-expId 3173
-fileName wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdAlnRep2.bam.bai
+dateSubmitted 2012-06-26
+dateUnrestricted 2013-03-26
+dccAccession wgEncodeEM003174
+expId 3174
+fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
-labVersion 06/01/2012 ChIP A Lane 1-9
+labVersion 03/16/2012 ChIP B Lane 7-9, 04/10/2012 ChIP A Lane 2-9, 05/11/212 ChIP A Lane 5-9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7271,64 +7383,8 @@ setType exp
 sex M
 softwareVersion Bowtie
 strain C57BL/6
-subId 7124
+subId 7125
 view Alignments
-
-metaObject wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdRawDataRep1
-objType file
-age E14
-antibody H3K9ac
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-25
-dateUnrestricted 2013-03-24
-dccAccession wgEncodeEM003173
-expId 3173
-fileName wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdRawDataRep1.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 12/16/2011 FISH A Lane 7-7, 02/16/2012 ChIP A lane 3-7
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7124
-view RawData
-
-metaObject wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdRawDataRep2
-objType file
-age E14
-antibody H3K9ac
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-25
-dateUnrestricted 2013-03-24
-dccAccession wgEncodeEM003173
-expId 3173
-fileName wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdRawDataRep2.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 06/01/2012 ChIP A Lane 1-9
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7124
-view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdPk
 objType table
@@ -7358,6 +7414,62 @@ subId 7125
 tableName wgEncodeLicrHistoneEse14H3k27acME0129olaStdPk
 view Peaks
 
+metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdRawDataRep1
+objType file
+age E14
+antibody H3K27ac
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-26
+dateUnrestricted 2013-03-26
+dccAccession wgEncodeEM003174
+expId 3174
+fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 01/04/2012 FISH A Lane 1-2, 02/16/2012 ChIP A Lane 3-2
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7125
+view RawData
+
+metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdRawDataRep2
+objType file
+age E14
+antibody H3K27ac
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-26
+dateUnrestricted 2013-03-26
+dccAccession wgEncodeEM003174
+expId 3174
+fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/16/2012 ChIP B Lane 7-9, 04/10/2012 ChIP A Lane 2-9, 05/11/212 ChIP A Lane 5-9
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7125
+view RawData
+
 metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdSig
 objType table
 age E14
@@ -7386,10 +7498,10 @@ subId 7125
 tableName wgEncodeLicrHistoneEse14H3k27acME0129olaStdSig
 view Signal
 
-metaObject wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdAlnRep1
+metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep1
 objType file
 age E14
-antibody H3K27ac
+antibody H3K36me3
 cell ES-E14
 composite wgEncodeLicrHistone
 control std
@@ -7398,12 +7510,12 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
-dccAccession wgEncodeEM003174
-expId 3174
-fileName wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdAlnRep1.bam.bai
+dccAccession wgEncodeEM003175
+expId 3175
+fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
-labVersion 01/04/2012 FISH A Lane 1-2, 02/16/2012 ChIP A Lane 3-2
+labVersion 01/04/2012 FISH A Lane 1-5, 02/16/2012 ChIP A Lane 3-5
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7411,13 +7523,13 @@ setType exp
 sex M
 softwareVersion Bowtie
 strain C57BL/6
-subId 7125
+subId 7126
 view Alignments
 
-metaObject wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdAlnRep2
+metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep2
 objType file
 age E14
-antibody H3K27ac
+antibody H3K36me3
 cell ES-E14
 composite wgEncodeLicrHistone
 control std
@@ -7426,12 +7538,12 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
 dateUnrestricted 2013-03-26
-dccAccession wgEncodeEM003174
-expId 3174
-fileName wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdAlnRep2.bam.bai
+dccAccession wgEncodeEM003175
+expId 3175
+fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
-labVersion 03/16/2012 ChIP B Lane 7-9, 04/10/2012 ChIP A Lane 2-9, 05/11/212 ChIP A Lane 5-9
+labVersion 03/16/2012 ChIP B Lane 7-10, 04/10/2012 ChIP A Lane 2-10
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7439,64 +7551,8 @@ setType exp
 sex M
 softwareVersion Bowtie
 strain C57BL/6
-subId 7125
+subId 7126
 view Alignments
-
-metaObject wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdRawDataRep1
-objType file
-age E14
-antibody H3K27ac
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-26
-dateUnrestricted 2013-03-26
-dccAccession wgEncodeEM003174
-expId 3174
-fileName wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdRawDataRep1.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 01/04/2012 FISH A Lane 1-2, 02/16/2012 ChIP A Lane 3-2
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7125
-view RawData
-
-metaObject wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdRawDataRep2
-objType file
-age E14
-antibody H3K27ac
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-26
-dateUnrestricted 2013-03-26
-dccAccession wgEncodeEM003174
-expId 3174
-fileName wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdRawDataRep2.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 03/16/2012 ChIP B Lane 7-9, 04/10/2012 ChIP A Lane 2-9, 05/11/212 ChIP A Lane 5-9
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7125
-view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdPk
 objType table
@@ -7526,6 +7582,62 @@ subId 7126
 tableName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdPk
 view Peaks
 
+metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdRawDataRep1
+objType file
+age E14
+antibody H3K36me3
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-26
+dateUnrestricted 2013-03-26
+dccAccession wgEncodeEM003175
+expId 3175
+fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 01/04/2012 FISH A Lane 1-5, 02/16/2012 ChIP A Lane 3-5
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7126
+view RawData
+
+metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdRawDataRep2
+objType file
+age E14
+antibody H3K36me3
+cell ES-E14
+composite wgEncodeLicrHistone
+control std
+controlId ES-E14/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-06-26
+dateUnrestricted 2013-03-26
+dccAccession wgEncodeEM003175
+expId 3175
+fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 03/16/2012 ChIP B Lane 7-10, 04/10/2012 ChIP A Lane 2-10
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 7126
+view RawData
+
 metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdSig
 objType table
 age E14
@@ -7553,118 +7665,6 @@ strain C57BL/6
 subId 7126
 tableName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdSig
 view Signal
-
-metaObject wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdAlnRep1
-objType file
-age E14
-antibody H3K36me3
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-26
-dateUnrestricted 2013-03-26
-dccAccession wgEncodeEM003175
-expId 3175
-fileName wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdAlnRep1.bam,wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdAlnRep1.bam.bai
-grant Ren
-lab LICR-m
-labVersion 01/04/2012 FISH A Lane 1-5, 02/16/2012 ChIP A Lane 3-5
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion Bowtie
-strain C57BL/6
-subId 7126
-view Alignments
-
-metaObject wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdAlnRep2
-objType file
-age E14
-antibody H3K36me3
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-26
-dateUnrestricted 2013-03-26
-dccAccession wgEncodeEM003175
-expId 3175
-fileName wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdAlnRep2.bam,wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdAlnRep2.bam.bai
-grant Ren
-lab LICR-m
-labVersion 03/16/2012 ChIP B Lane 7-10, 04/10/2012 ChIP A Lane 2-10
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion Bowtie
-strain C57BL/6
-subId 7126
-view Alignments
-
-metaObject wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdRawDataRep1
-objType file
-age E14
-antibody H3K36me3
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-26
-dateUnrestricted 2013-03-26
-dccAccession wgEncodeEM003175
-expId 3175
-fileName wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdRawDataRep1.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 01/04/2012 FISH A Lane 1-5, 02/16/2012 ChIP A Lane 3-5
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7126
-view RawData
-
-metaObject wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdRawDataRep2
-objType file
-age E14
-antibody H3K36me3
-cell ES-E14
-composite wgEncodeLicrHistone
-control std
-controlId ES-E14/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-06-26
-dateUnrestricted 2013-03-26
-dccAccession wgEncodeEM003175
-expId 3175
-fileName wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdRawDataRep2.fastq.gz
-grant Ren
-lab LICR-m
-labVersion 03/16/2012 ChIP B Lane 7-10, 04/10/2012 ChIP A Lane 2-10
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-softwareVersion HCS
-strain C57BL/6
-subId 7126
-view RawData
 
 metaObject wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdAlnRep1
 objType file
@@ -23474,4 +23474,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 958957978
+# MAGIC: 638092922
