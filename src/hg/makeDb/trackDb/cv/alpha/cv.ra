@@ -9314,22 +9314,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation Human_-_EBF1_(SC-137065)(Immunoprecipitation-Western_blotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 label EBF1 (sc-137065)
 
-term eGFP-BACH1
-tag BACH1
-type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1. Antibody Target: eGFP-BACH1
-target eGFP-BACH1
-targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
-vendorId eGFP-BACH1
-orderUrl http://www.igsb.org/labs/kevin-white/
-lab White
-lots 1
-targetId GeneCard:BACH1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
-validation Human_-_:missing
-label BACH1 (eGFP-BACH1)
-
 term EEF1A1
 tag EEF1A1
 type Antibody
@@ -9346,6 +9330,22 @@ validation
 label EEF1A1 (05-235)
 # lots
 ##This does not appear in metaDb
+
+term eGFP-BACH1
+tag BACH1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1. Antibody Target: eGFP-BACH1
+target eGFP-BACH1
+targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-BACH1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCard:BACH1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
+validation Human_-_:missing
+label BACH1 (eGFP-BACH1)
 
 term eGFP-CCNE1
 tag CCNE1
@@ -10797,7 +10797,7 @@ lots 1
 lab Struhl
 targetId GeneCard:HMGN3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN3
-validation Human_-_:missing
+validation Human_-_HMGN3_(NB100-61076)(Western_blot,Immunoprecipitation):human_HMGN3_validation_Struhl.pdf
 label HMGN3 (NB100-61076)
 # wrong orderUrl: mixing vendorName and vendorIds
 
@@ -11091,9 +11091,8 @@ orderUrl http://www.scbt.com/product.php?datasheet=74
 lab Snyder
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_JunD(sc-74)(ChIP_MS,MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 label JunD (sc-74)
-# validation Human_-_JunD(sc-74)(ChIP_MS,MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 
 term KAP1
 tag KAP1
@@ -11562,7 +11561,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
-validation Human_-_:missing
+validation Human_-_NF-YA(Western_Blot,Immunoprecipitation):human_NF-YA_validation_Struhl.pdf
 label NF-YA
 
 term NF-YB
@@ -11578,7 +11577,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
-validation Human_-_:missing
+validation Human_-_NF-YB(Western_Blot,Immunoprecipitation):human_NF-YB_validation_Struhl.pdf
 label NF-YB
 
 term NONO
