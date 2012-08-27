@@ -10797,7 +10797,7 @@ lots 1
 lab Struhl
 targetId GeneCard:HMGN3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN3
-validation Human_-_:missing
+validation Human_-_HMGN3_(NB100-61076)(Western_blot,Immunoprecipitation):human_HMGN3_validation_Struhl.pdf
 label HMGN3 (NB100-61076)
 # wrong orderUrl: mixing vendorName and vendorIds
 
@@ -11091,9 +11091,8 @@ orderUrl http://www.scbt.com/product.php?datasheet=74
 lab Snyder
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_JunD(sc-74)(ChIP_MS,MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 label JunD (sc-74)
-# validation Human_-_JunD(sc-74)(ChIP_MS,MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 
 term KAP1
 tag KAP1
@@ -11562,7 +11561,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
-validation Human_-_:missing
+validation Human_-_NF-YA(Western_Blot,Immunoprecipitation):human_NF-YA_validation_Struhl.pdf
 label NF-YA
 
 term NF-YB
@@ -11578,7 +11577,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
-validation Human_-_:missing
+validation Human_-_NF-YB(Western_Blot,Immunoprecipitation):human_NF-YB_validation_Struhl.pdf
 label NF-YB
 
 term NONO
