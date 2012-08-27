@@ -161,8 +161,7 @@ include wgEncodeSydhHistone.release3.ra
 include wgEncodeUwTfbs.release4.ra
 
 #UTA TFBS (wrangler: Matt)
-include wgEncodeOpenChromChip.release2.ra alpha,beta
-include wgEncodeOpenChromChip.ra public
+include wgEncodeOpenChromChip.release2.ra
 
 # HAIB TFBS (wrangler: Venkat)
 #include wgEncodeHaibTfbs.patch.ra beta
