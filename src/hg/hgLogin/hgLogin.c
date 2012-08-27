@@ -79,11 +79,13 @@ int mailItOut(char *toAddr, char *subject, char *msg, char *fromAddr)
 {
 char cmd[4096];
 char fullMail[4096];
-safef(fullMail,sizeof(fullMail),"Form: %s\nTo: %s\nSubject: %s\n\n%s",
+safef(fullMail,sizeof(fullMail),
+    "From: %s\n"
+    "To: %s\n"
+    "Subject: %s\n"
+    "\n%s",
     fromAddr, toAddr, subject, msg);
 safef(cmd,sizeof(cmd), "echo '%s' | /usr/sbin/sendmail -t -oi",fullMail);      
-//safef(cmd,sizeof(cmd), "echo '%s' | /bin/mail -s \"%s\" %s -- -f%s",
-        msg, subject, toAddr, fromAddr);
 int result = system(cmd);
 return result;
 }
