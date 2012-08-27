@@ -10757,6 +10757,7 @@ tag HEY1
 type Antibody
 target HEY1
 targetClass TFSS
+deprecated data withdrawn
 antibodyDescription HRT1 (C-20) Goat polyclonal IgG, 200 ?g/ml. Epitope mapping near the C-terminus of HRT1 of human origin. Antibody Target: HEY1
 targetDescription This gene encodes a nuclear protein belonging to the hairy and enhancer of split-related (HESR) family of basic helix-loop-helix (bHLH)-type transcriptional repressors. Expression of this gene is induced by the Notch and c-Jun signal transduction pathways. Two similar and redundant genes in mouse are required for embryonic cardiovascular development, and are also implicated in neurogenesis and somitogenesis. Alternative splicing results in multiple transcript variants.
 vendorName Santa Cruz Biotech
@@ -15064,7 +15065,6 @@ tag PLUSSIG
 type view
 label Plus signal
 description Graphs the base-by-base density of tags on the plus strand
-
 
 term Primer
 tag PRIMER
