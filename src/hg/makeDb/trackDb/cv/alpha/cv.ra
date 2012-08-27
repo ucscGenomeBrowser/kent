@@ -9314,22 +9314,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation Human_-_EBF1_(SC-137065)(Immunoprecipitation-Western_blotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 label EBF1 (sc-137065)
 
-term eGFP-BACH1
-tag BACH1
-type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1. Antibody Target: eGFP-BACH1
-target eGFP-BACH1
-targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
-vendorId eGFP-BACH1
-orderUrl http://www.igsb.org/labs/kevin-white/
-lab White
-lots 1
-targetId GeneCard:BACH1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
-validation Human_-_:missing
-label BACH1 (eGFP-BACH1)
-
 term EEF1A1
 tag EEF1A1
 type Antibody
@@ -9346,6 +9330,22 @@ validation
 label EEF1A1 (05-235)
 # lots
 ##This does not appear in metaDb
+
+term eGFP-BACH1
+tag BACH1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1. Antibody Target: eGFP-BACH1
+target eGFP-BACH1
+targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-BACH1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCard:BACH1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
+validation Human_-_:missing
+label BACH1 (eGFP-BACH1)
 
 term eGFP-CCNE1
 tag CCNE1
