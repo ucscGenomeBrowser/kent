@@ -8570,7 +8570,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BDP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BDP1
-validation Human_-_:missing
+validation Human_-_BDP1(2663):human_BDP1_2663_validation_Struhl.pdf
 label BDP1 (2663)
 
 term BHLHE40
@@ -8635,7 +8635,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF1
-validation Human_-_:missing
+validation Human_-_BRF1(128):human_Brf1_128_validation_Struhl.pdf
 label BRF1 (128)
 
 term BRF2
@@ -8651,7 +8651,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BRF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2
-validation Human_-_:missing
+validation Human_-_BRF2(4295):human_Brf2_4295_validation_Struhl.pdf
 label BRF2 (4295)
 
 term Brg1
@@ -12207,7 +12207,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
-validation Human_-_:missing
+validation Human_-_RPC155(1900):human_Rpc155_1900_validation_Struhl.pdf
 label RPC155 (1900)
 
 term RPS6KA1
@@ -12353,7 +12353,7 @@ orderUrl http://www.abcam.com/SIRT6-antibody-ab48192.html
 lab Struhl
 targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
-validation Human_-_:missing
+validation Human_-_SIRT6(ab48192):human_SirT6_ab48192_validation_Struhl.pdf
 label SIRT6 (ab48192)
 
 term SIRT6_(ab62739)
@@ -12920,7 +12920,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
-validation Human_-_:missing
+validation Human_-_TFIIIC-110(4286):human_TFIIIC-110_4286_validation_Struhl.pdf
 label TFIIIC-110 (4286)
 
 term THAP1_(SC-98174)
