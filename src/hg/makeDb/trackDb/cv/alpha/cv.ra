@@ -9344,7 +9344,7 @@ lab White
 lots 1
 targetId GeneCard:BACH1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label BACH1 (eGFP-BACH1)
 
 term eGFP-CCNE1
@@ -9360,7 +9360,7 @@ lab White
 lots 1
 targetId GeneCard:CCNE1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNE1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label CCNE1 (eGFP-CCNE1)
 
 term eGFP-CDKN1B
@@ -9376,7 +9376,7 @@ lab White
 lots 1
 targetId GeneCard:CDKN1B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN1B
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label CDKN1B (eGFP-CDKN1B)
 
 term eGFP-E2F1
@@ -9393,7 +9393,7 @@ lab White
 lots 1
 targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label E2F1 (eGFP-E2F1)
 
 term eGFP-EKLF1
@@ -9409,7 +9409,7 @@ lab White
 lots 1
 targetId GeneCard:EKLF1
 targetUrl missing
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label EKLF1 (eGFP-EKLF1)
 
 term eGFP-ELF1
@@ -9425,7 +9425,7 @@ lab White
 lots 1
 targetId GeneCard:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ELF1 (eGFP-ELF1)
 
 term eGFP-ESR
@@ -9442,7 +9442,7 @@ lab White
 lots 1
 targetId GeneCard:ESR
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ESR (eGFP-ESR)
 
 term eGFP-FOS
@@ -9459,7 +9459,7 @@ lab White
 lots N/A
 targetId GeneCard:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation Human_-_eGFP-FOS:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label FOS (eGFP-FOS)
 
 term eGFP-GATA2
@@ -9476,7 +9476,7 @@ lab White
 lots N/A
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation Human_-_eGFP-GATA2:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label GATA2 (eGFP-GATA2)
 
 term eGFP-HDAC8
@@ -9493,7 +9493,7 @@ lab White
 lots N/A
 targetId GeneCard:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation Human_-_eGFP-HDAC8:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label HDAC8 (eGFP-HDAC8)
 
 term eGFP-HMGB1
@@ -9509,7 +9509,7 @@ lab White
 lots 1
 targetId GeneCard:HMGB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGB1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label HMGB1 (eGFP-HMGB1)
 
 term eGFP-ILF2
@@ -9525,7 +9525,7 @@ lab White
 lots 1
 targetId GeneCard:ILF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF2
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ILF2 (eGFP-ILF2)
 
 term eGFP-JunB
@@ -9542,7 +9542,7 @@ lab White
 lots N/A
 targetId GeneCard:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
-validation Human_-_eGFP-JunB:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label JunB (eGFP-JunB)
 
 term eGFP-JunD
@@ -9559,7 +9559,7 @@ lab White
 lots N/A
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation Human_-_eGFP-JunD:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label JunD (eGFP-JunD)
 
 term eGFP-MLL5
@@ -9575,7 +9575,7 @@ lab White
 lots 1
 targetId GeneCard:MLL5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MLL5
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label MLL5 (eGFP-MLL5)
 
 term eGFP-NCOR1
@@ -9591,7 +9591,7 @@ lab White
 lots 1
 targetId GeneCard:NCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NCOR1 (eGFP-NCOR1)
 
 term eGFP-NF90
@@ -9607,7 +9607,7 @@ lab White
 lots 1
 targetId GeneCard:ILF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF3
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NF90 (eGFP-NF90)
 #NF90 is associated with ILF3 ~Jeff
 
@@ -9625,7 +9625,7 @@ lab White
 lots N/A
 targetId GeneCard:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
-validation Human_-_eGFP-NR4A1:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NR4A1 (eGFP-NR4A1)
 
 term eGFP-SMARCA1
@@ -9641,7 +9641,7 @@ lab White
 lots 1
 targetId GeneCard:SMARCA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label SMARCA1 (eGFP-SMARCA1)
 
 term eGFP-SMARCA2
@@ -9657,7 +9657,7 @@ lab White
 lots 1
 targetId GeneCard:SMARCA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA2
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label SMARCA2 (eGFP-SMARCA2)
 
 term eGFP-STAT1
@@ -9674,7 +9674,7 @@ lab White
 lots 1
 targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label STAT1 (eGFP-STAT1)
 
 term Egr-1
