@@ -6284,6 +6284,32 @@ tissueSourceType Pooled
 treatment None
 view Signal
 
+metaObject wgEncodeUwDnaseLiver129dlcrME14halfAlnRep1
+objType file
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-20
+dateUnrestricted 2013-05-20
+dccAccession wgEncodeEM003418
+expId 3418
+fileName wgEncodeUwDnaseLiver129dlcrME14halfAlnRep1.bam,wgEncodeUwDnaseLiver129dlcrME14halfAlnRep1.bam.bai
+grant Stam
+lab UW-m
+labExpId DS19241
+labVersion Bowtie 0.12.5
+md5sum a86a6b45629631024d2bc134c4fd9500,1e261bcef33babe87df6aeaf20dae53f
+project wgEncode
+replicate 1
+sex M
+strain 129.DLCR/DLCR
+subId 7871
+tissueSourceType Pooled
+treatment None
+view Alignments
+
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfAlnRep2
 objType file
 age E14.5
@@ -6309,6 +6335,33 @@ subId 7618
 tissueSourceType Pooled
 treatment None
 view Alignments
+
+metaObject wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep1
+objType table
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-20
+dateUnrestricted 2013-05-20
+dccAccession wgEncodeEM003418
+expId 3418
+fileName wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS19241
+labVersion Hotspot-v5.2
+md5sum b3bcafe3c4f5f825e0162a9dbf657ed5
+project wgEncode
+replicate 1
+sex M
+strain 129.DLCR/DLCR
+subId 7871
+tableName wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep1
+tissueSourceType Pooled
+treatment None
+view Hotspots
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep2
 objType table
@@ -6337,6 +6390,33 @@ tissueSourceType Pooled
 treatment None
 view Hotspots
 
+metaObject wgEncodeUwDnaseLiver129dlcrME14halfPkRep1
+objType table
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-20
+dateUnrestricted 2013-05-20
+dccAccession wgEncodeEM003418
+expId 3418
+fileName wgEncodeUwDnaseLiver129dlcrME14halfPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS19241
+labVersion lmax-v1.1
+md5sum 49247ef89dee77d18346a23e85f905bc
+project wgEncode
+replicate 1
+sex M
+strain 129.DLCR/DLCR
+subId 7871
+tableName wgEncodeUwDnaseLiver129dlcrME14halfPkRep1
+tissueSourceType Pooled
+treatment None
+view Peaks
+
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfPkRep2
 objType table
 age E14.5
@@ -6364,6 +6444,32 @@ tissueSourceType Pooled
 treatment None
 view Peaks
 
+metaObject wgEncodeUwDnaseLiver129dlcrME14halfRawDataRep1
+objType file
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-20
+dateUnrestricted 2013-05-20
+dccAccession wgEncodeEM003418
+expId 3418
+fileName wgEncodeUwDnaseLiver129dlcrME14halfRawDataRep1.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS19241
+labVersion 1
+md5sum f9fd7d9cae2b82193fe88a8bc0513444
+project wgEncode
+replicate 1
+sex M
+strain 129.DLCR/DLCR
+subId 7871
+tissueSourceType Pooled
+treatment None
+view RawData
+
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfRawDataRep2
 objType file
 age E14.5
@@ -6389,6 +6495,33 @@ subId 7618
 tissueSourceType Pooled
 treatment None
 view RawData
+
+metaObject wgEncodeUwDnaseLiver129dlcrME14halfSigRep1
+objType table
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-20
+dateUnrestricted 2013-05-20
+dccAccession wgEncodeEM003418
+expId 3418
+fileName wgEncodeUwDnaseLiver129dlcrME14halfSigRep1.bigWig
+grant Stam
+lab UW-m
+labExpId DS19241
+labVersion WindowDensity-bin20-win+/-75
+md5sum ed227da96c403c5affa6ff4da31cf21c
+project wgEncode
+replicate 1
+sex M
+strain 129.DLCR/DLCR
+subId 7871
+tableName wgEncodeUwDnaseLiver129dlcrME14halfSigRep1
+tissueSourceType Pooled
+treatment None
+view Signal
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfSigRep2
 objType table
@@ -16900,4 +17033,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -302992623
+# MAGIC: -362543442

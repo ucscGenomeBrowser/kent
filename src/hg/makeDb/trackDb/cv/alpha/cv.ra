@@ -4281,7 +4281,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing
+protocol Stam:HS27a_SOP-1.V.pdf
 
 term bone_marrow_HS5
 tag HS5
@@ -4299,7 +4299,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing 
+protocol Stam:HS5_SOP-1.V1-2.pdf
 
 term bone_marrow_MSC
 tag MSC
@@ -4317,7 +4317,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing
+protocol Stam:MSC_marrow-fibroblastoid_SOP_v2.pdf
 
 term HSaVEC
 tag HSAVEC
@@ -8570,7 +8570,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BDP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BDP1
-validation Human_-_:missing
+validation Human_-_BDP1(2663):human_BDP1_2663_validation_Struhl.pdf
 label BDP1 (2663)
 
 term BHLHE40
@@ -8635,7 +8635,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF1
-validation Human_-_:missing
+validation Human_-_BRF1(128):human_BRF1_128_validation_Struhl.pdf
 label BRF1 (128)
 
 term BRF2
@@ -8651,7 +8651,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BRF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2
-validation Human_-_:missing
+validation Human_-_BRF2(4295):human_BRF2_4295_validation_Struhl.pdf
 label BRF2 (4295)
 
 term Brg1
@@ -9314,22 +9314,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation Human_-_EBF1_(SC-137065)(Immunoprecipitation-Western_blotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 label EBF1 (sc-137065)
 
-term eGFP-BACH1
-tag BACH1
-type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1. Antibody Target: eGFP-BACH1
-target eGFP-BACH1
-targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
-vendorId eGFP-BACH1
-orderUrl http://www.igsb.org/labs/kevin-white/
-lab White
-lots 1
-targetId GeneCard:BACH1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
-validation Human_-_:missing
-label BACH1 (eGFP-BACH1)
-
 term EEF1A1
 tag EEF1A1
 type Antibody
@@ -9347,6 +9331,22 @@ label EEF1A1 (05-235)
 # lots
 ##This does not appear in metaDb
 
+term eGFP-BACH1
+tag BACH1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1. Antibody Target: eGFP-BACH1
+target eGFP-BACH1
+targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-BACH1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCard:BACH1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
+label BACH1 (eGFP-BACH1)
+
 term eGFP-CCNE1
 tag CCNE1
 type Antibody
@@ -9360,7 +9360,7 @@ lab White
 lots 1
 targetId GeneCard:CCNE1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNE1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label CCNE1 (eGFP-CCNE1)
 
 term eGFP-CDKN1B
@@ -9376,7 +9376,7 @@ lab White
 lots 1
 targetId GeneCard:CDKN1B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN1B
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label CDKN1B (eGFP-CDKN1B)
 
 term eGFP-E2F1
@@ -9393,7 +9393,7 @@ lab White
 lots 1
 targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label E2F1 (eGFP-E2F1)
 
 term eGFP-EKLF1
@@ -9409,7 +9409,7 @@ lab White
 lots 1
 targetId GeneCard:EKLF1
 targetUrl missing
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label EKLF1 (eGFP-EKLF1)
 
 term eGFP-ELF1
@@ -9425,7 +9425,7 @@ lab White
 lots 1
 targetId GeneCard:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ELF1 (eGFP-ELF1)
 
 term eGFP-ESR
@@ -9442,7 +9442,7 @@ lab White
 lots 1
 targetId GeneCard:ESR
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ESR (eGFP-ESR)
 
 term eGFP-FOS
@@ -9459,7 +9459,7 @@ lab White
 lots N/A
 targetId GeneCard:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation Human_-_eGFP-FOS:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label FOS (eGFP-FOS)
 
 term eGFP-GATA2
@@ -9476,7 +9476,7 @@ lab White
 lots N/A
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation Human_-_eGFP-GATA2:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label GATA2 (eGFP-GATA2)
 
 term eGFP-HDAC8
@@ -9493,7 +9493,7 @@ lab White
 lots N/A
 targetId GeneCard:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation Human_-_eGFP-HDAC8:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label HDAC8 (eGFP-HDAC8)
 
 term eGFP-HMGB1
@@ -9509,7 +9509,7 @@ lab White
 lots 1
 targetId GeneCard:HMGB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGB1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label HMGB1 (eGFP-HMGB1)
 
 term eGFP-ILF2
@@ -9525,7 +9525,7 @@ lab White
 lots 1
 targetId GeneCard:ILF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF2
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ILF2 (eGFP-ILF2)
 
 term eGFP-JunB
@@ -9542,7 +9542,7 @@ lab White
 lots N/A
 targetId GeneCard:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
-validation Human_-_eGFP-JunB:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label JunB (eGFP-JunB)
 
 term eGFP-JunD
@@ -9559,7 +9559,7 @@ lab White
 lots N/A
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation Human_-_eGFP-JunD:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label JunD (eGFP-JunD)
 
 term eGFP-MLL5
@@ -9575,7 +9575,7 @@ lab White
 lots 1
 targetId GeneCard:MLL5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MLL5
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label MLL5 (eGFP-MLL5)
 
 term eGFP-NCOR1
@@ -9591,7 +9591,7 @@ lab White
 lots 1
 targetId GeneCard:NCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NCOR1 (eGFP-NCOR1)
 
 term eGFP-NF90
@@ -9607,7 +9607,7 @@ lab White
 lots 1
 targetId GeneCard:ILF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF3
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NF90 (eGFP-NF90)
 #NF90 is associated with ILF3 ~Jeff
 
@@ -9625,7 +9625,7 @@ lab White
 lots N/A
 targetId GeneCard:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
-validation Human_-_eGFP-NR4A1:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NR4A1 (eGFP-NR4A1)
 
 term eGFP-SMARCA1
@@ -9641,7 +9641,7 @@ lab White
 lots 1
 targetId GeneCard:SMARCA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label SMARCA1 (eGFP-SMARCA1)
 
 term eGFP-SMARCA2
@@ -9657,7 +9657,7 @@ lab White
 lots 1
 targetId GeneCard:SMARCA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA2
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label SMARCA2 (eGFP-SMARCA2)
 
 term eGFP-STAT1
@@ -9674,7 +9674,7 @@ lab White
 lots 1
 targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label STAT1 (eGFP-STAT1)
 
 term Egr-1
@@ -9843,7 +9843,7 @@ term ESET_(166621)
 tag ESET166621
 type Antibody
 antibodyDescription mouse monoclonal IgG2b, specific for an epitope mapping between amino acids 1195-1228 near the C-terminus of human ESET
-target SETDB1
+target ESET 
 targetDescription ERG-associated protein with SET domain (ESET), also designated Histone H3-K9 methyltransferase 4 or SET domain bifurcated 1, is a nuclear protein belonging to the histone-lysine methyltransferase family.  ESET is a histone methyltransferase, methylating Lys-9 of histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity.
 vendorName Santa Cruz Biotechnology
 vendorId sc-166621
@@ -10154,7 +10154,7 @@ lab Hardison
 lots J2108
 targetId GeneCard: GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation Human_-_GATA2_(SC-9008)(Western_blot):human_GATA2_SC-9008_validation_Hardison.pdf Mouse_-_:missing
+validation Human_-_:missing Mouse_-_GATA2_(SC-9008)(Western_blot):mouse_GATA2_SC-9008_validation_Hardison.pdf
 label GATA2 (sc-9008)
 
 term  GATA3_(SC-268)
@@ -10757,6 +10757,7 @@ tag HEY1
 type Antibody
 target HEY1
 targetClass TFSS
+deprecated data withdrawn
 antibodyDescription HRT1 (C-20) Goat polyclonal IgG, 200 ?g/ml. Epitope mapping near the C-terminus of HRT1 of human origin. Antibody Target: HEY1
 targetDescription This gene encodes a nuclear protein belonging to the hairy and enhancer of split-related (HESR) family of basic helix-loop-helix (bHLH)-type transcriptional repressors. Expression of this gene is induced by the Notch and c-Jun signal transduction pathways. Two similar and redundant genes in mouse are required for embryonic cardiovascular development, and are also implicated in neurogenesis and somitogenesis. Alternative splicing results in multiple transcript variants.
 vendorName Santa Cruz Biotech
@@ -10797,7 +10798,7 @@ lots 1
 lab Struhl
 targetId GeneCard:HMGN3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN3
-validation Human_-_:missing
+validation Human_-_HMGN3_(NB100-61076)(Western_blot,Immunoprecipitation):human_HMGN3_validation_Struhl.pdf
 label HMGN3 (NB100-61076)
 # wrong orderUrl: mixing vendorName and vendorIds
 
@@ -11075,8 +11076,8 @@ lab Bernstein
 lots A300-861A-1
 targetId GeneCards:KDM4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM4A
-validation JMJD2A_(A300-861A-1)(ChIP,WesternBlot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
-label JMJD2A (A300-861A-1)
+validation JMJD2A_(A300-861A)(ChIP,WesternBlot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
+label JMJD2A (A300-861A)
 
 term JunD
 tag JUND
@@ -11091,7 +11092,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=74
 lab Snyder
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_JunD(sc-74)(ChIP_MS,MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 label JunD (sc-74)
 
 term KAP1
@@ -11144,7 +11145,7 @@ label LEF1 (sc-8592)
 term LSD1
 tag LSD1
 type Antibody
-target KDM1A
+target LSD1
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 vendorName Bethyl
@@ -11155,7 +11156,7 @@ lots A300-215A-1
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
 validation Human_-_KDM1A&#47;LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
-label KDM1A&#47;LSD1 (A300-215A)
+label LSD1&#47;KDM1A (A300-215A)
 
 term MafF_(M8194)
 tag MAFF
@@ -11561,7 +11562,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
-validation Human_-_:missing
+validation Human_-_NF-YA(Western_Blot,Immunoprecipitation):human_NF-YA_validation_Struhl.pdf
 label NF-YA
 
 term NF-YB
@@ -11577,7 +11578,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
-validation Human_-_:missing
+validation Human_-_NF-YB(Western_Blot,Immunoprecipitation):human_NF-YB_validation_Struhl.pdf
 label NF-YB
 
 term NONO
@@ -11680,7 +11681,7 @@ label NSD2 (ab75359)
 term p300
 tag P300
 type Antibody
-target EP300
+target P300
 targetDescription EP300(c-20)
 targetClass HISase
 antibodyDescription Rabbit Polyclonal. Antibody Target: P300
@@ -11691,12 +11692,12 @@ lab Myers
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
-label EP300/P300 (sc-585)
+label P300&#47;EP300 (sc-585)
 
 term P300_KAT3B
 tag P300KAT3B
 type Antibody
-target EP300
+target P300
 targetClass HISase
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
@@ -11708,12 +11709,12 @@ lots A300-358A-1
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_P300_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
-label EP300/P300/KAT3B (A300-358A)
+label P300&#47;EP300&#47;KAT3B (A300-358A)
 
 term p300_(SC-584)
 tag P300b
 type Antibody
-target EP300
+target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
 targetClass HISase
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin. Antibody Target: P300
@@ -11724,12 +11725,12 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
-label EP300/P300 (sc-584)
+label P300&#47;EP300 (sc-584)
 
 term p300_(SC-48343)
 tag P300c
 type Antibody
-target EP300
+target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein.
 targetClass HISase
 antibodyDescription mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: P300
@@ -11740,7 +11741,7 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing
-label EP300/P300 (sc-48343)
+label P300&#47;EP300 (sc-48343)
 
 term PABP
 tag PABP
@@ -11840,7 +11841,7 @@ label PBX3 (sc-891)
 term PCAF
 tag PCAF
 type Antibody
-target KAT2B
+target PCAF
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
 targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
 vendorName Bethyl
@@ -11851,7 +11852,7 @@ lots A301-666A-1
 targetId GeneCard:KAT2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
 validation Human_-_KAT2B&#47;PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
-label KAT2B&#47;PCAF (A301-666A)
+label PCAF&#47;KAT2B (A301-666A)
 
 term PGC1A
 tag PGC1A
@@ -12206,7 +12207,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
-validation Human_-_:missing
+validation Human_-_RPC155(1900):human_RPC155_1900_validation_Struhl.pdf
 label RPC155 (1900)
 
 term RPS6KA1
@@ -12352,7 +12353,7 @@ orderUrl http://www.abcam.com/SIRT6-antibody-ab48192.html
 lab Struhl
 targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
-validation Human_-_:missing
+validation Human_-_SIRT6(ab48192):human_SIRT6_ab48192_validation_Struhl.pdf
 label SIRT6 (ab48192)
 
 term SIRT6_(ab62739)
@@ -12919,7 +12920,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
-validation Human_-_:missing
+validation Human_-_TFIIIC-110(4286):human_TFIIIC-110_4286_validation_Struhl.pdf
 label TFIIIC-110 (4286)
 
 term THAP1_(SC-98174)
@@ -12968,7 +12969,7 @@ orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname
 lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
-validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
+validation Human_-_TR4_(Western_blot,ChIP):human_TR4_validation_Farnham.pdf
 label TR4
 
 term TRIM28_(SC-81411)
@@ -13147,7 +13148,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1703
 lab Farnham
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation Human_-_:missing
+validation Human_-_:human_YY1_sc-1703_validation_Farnham.pdf
 label YY1 (sc-1703)
 
 term YY1_(SC-281)
@@ -15064,7 +15065,6 @@ tag PLUSSIG
 type view
 label Plus signal
 description Graphs the base-by-base density of tags on the plus strand
-
 
 term Primer
 tag PRIMER

@@ -74,6 +74,22 @@ else
     return cloneString(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR));
 }
 
+int mailItOut(char *toAddr, char *subject, char *msg, char *fromAddr)
+/* send mail to toAddr address */
+{
+char cmd[4096];
+char fullMail[4096];
+safef(fullMail,sizeof(fullMail),
+    "From: %s\n"
+    "To: %s\n"
+    "Subject: %s\n"
+    "\n%s",
+    fromAddr, toAddr, subject, msg);
+safef(cmd,sizeof(cmd), "echo '%s' | /usr/sbin/sendmail -t -oi",fullMail);      
+int result = system(cmd);
+return result;
+}
+
 /* ---- password functions depend on optionally installed openssl lib ---- */
 #ifdef USE_SSL
 #include <openssl/md5.h>
@@ -349,11 +365,9 @@ void sendActMailOut(char *email, char *subject, char *msg)
 /* send mail to email address */
 {
 char *hgLoginHost = wikiLinkHost();
-char cmd[4096];
-safef(cmd,sizeof(cmd),
-    "echo '%s' | mail -s \"%s\" %s  -- -f %s", 
-    msg, subject, email, returnAddr);
-int result = system(cmd);
+int result;
+result = mailItOut(email, subject, msg, returnAddr);
+
 if (result == -1)
     {
     hPrintf(
@@ -402,11 +416,8 @@ void sendMailOut(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
-char cmd[4096];
-safef(cmd,sizeof(cmd),
-    "echo '%s' | mail -s \"%s\" %s -- -f %s",
-    msg, subject, email, returnAddr);
-int result = system(cmd);
+int result;
+result = mailItOut(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf( 

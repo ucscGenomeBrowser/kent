@@ -259,6 +259,16 @@ ALTER TABLE [dbo].[GroupVersions] ADD
 	)
 GO
 
+ALTER TABLE [dbo].[GroupVersions] ADD
+        CONSTRAINT [FK_GroupVersions_Builds] FOREIGN KEY
+        (
+                [build_uid]
+        ) REFERENCES [dbo].[Builds] (
+                [build_uid]
+        )
+
+GO
+
 ALTER TABLE [dbo].[GroupVersions_ChromosomeAccessions] ADD 
 	CONSTRAINT [FK_GroupVersions_chromosomeAccessions_ChromosomeAccessions] FOREIGN KEY 
 	(
