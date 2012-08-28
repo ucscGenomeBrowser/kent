@@ -19,7 +19,7 @@ errAbort(
   "alphaChain - create a linear projection of alpha satellite arrays using the probablistic model\n"
   "of HuRef satellite graphs\n"
   "usage:\n"
-  "   alphaChain alphaMonFile.fa significant_output.txt\n"
+  "   alphaChain alphaMonFile.fa monomerOrder.txt significant_output.txt\n"
   "options:\n"
   "   -size=N - Set max chain size, default %d\n"
   "   -fullOnly - Only output chains of size above\n"
@@ -42,6 +42,28 @@ static struct optionSpec options[] = {
    {"seed", OPTION_INT},
    {NULL, 0},
 };
+
+/* Some structures to keep track of words (which correspond to alpha satellight monomers)
+ * seen in input. */
+
+struct wordInfo
+/* Basic information on a word including how many times it is seen in input and output
+ * streams.  Unlike the wordTree, this is flat, and does not include predecessors. */
+    {
+    struct wordInfo *next;	/* Next in list of all words. */
+    char *word;			/* The word itself.  Not allocated here. */
+    int useCount;		/* Number of times used. */
+    int outTarget;		/* Number of times want to output word. */
+    int outCount;		/* Number of times have output word so far. */
+    };
+
+struct wordStore
+/* Stores info on all words */
+    {
+    struct wordInfo *list;   /* List of words, fairly arbitrary order. */
+    struct hash *hash;	     /* Hash of wordInfo, keyed by word. */
+    struct wordTree *markovChains;   /* Tree of words that follow other words. */
+    };
 
 /* The wordTree structure below is the central data structure for this program.  It is
  * used to build up a tree that contains all observed N-word-long sequences observed in
@@ -91,19 +113,19 @@ struct wordTree
     struct wordTree *next;	/* Next sibling */
     struct wordTree *children;	/* Children in list. */
     struct wordTree *parent;    /* Parent of this node or NULL for root. */
-    char *word;			/* The word itself including comma, period etc. */
-    int useCount;		/* Number of times word used in input. */
-    int outTarget;              /* Number of times want to output word. */
-    int outCount;		/* Number of times output. */
+    struct wordInfo *info;	/* The info on the word itself. */
+    int useCount;		/* Number of times word used in input with given predecessors. */
+    int outTarget;              /* Number of times want to output word with given predecessors. */
+    int outCount;		/* Number of times actually output with given predecessors. */
     double normVal;             /* value to place the normalization value */    
     };
 
-struct wordTree *wordTreeNew(char *word)
+struct wordTree *wordTreeNew(struct wordInfo *info)
 /* Create and return new wordTree element. */
 {
 struct wordTree *wt;
 AllocVar(wt);
-wt->word = cloneString(word);
+wt->info = info;
 return wt;
 }
 
@@ -112,27 +134,27 @@ int wordTreeCmpWord(const void *va, const void *vb)
 {
 const struct wordTree *a = *((struct wordTree **)va);
 const struct wordTree *b = *((struct wordTree **)vb);
-return cmpStringsWithEmbeddedNumbers(a->word, b->word);
+return cmpStringsWithEmbeddedNumbers(a->info->word, b->info->word);
 }
 
-struct wordTree *wordTreeFindInList(struct wordTree *list, char *word)
+struct wordTree *wordTreeFindInList(struct wordTree *list, struct wordInfo *info)
 /* Return wordTree element in list that has given word, or NULL if none. */
 {
 struct wordTree *wt;
 for (wt = list; wt != NULL; wt = wt->next)
-    if (sameString(wt->word, word))
+    if (wt->info == info)
         break;
 return wt;
 }
 
-struct wordTree *wordTreeAddFollowing(struct wordTree *wt, char *word)
+struct wordTree *wordTreeAddFollowing(struct wordTree *wt, struct wordInfo *info)
 /* Make word follow wt in tree.  If word already exists among followers
  * return it and bump use count.  Otherwise create new one. */
 {
-struct wordTree *child = wordTreeFindInList(wt->children, word);
+struct wordTree *child = wordTreeFindInList(wt->children, info);
 if (child == NULL)
     {
-    child = wordTreeNew(word);
+    child = wordTreeNew(info);
     child->parent = wt;
     slAddHead(&wt->children, child);
     }
@@ -167,9 +189,9 @@ struct dlNode *node;
 wt->useCount += 1;
 for (node = chain->head; !dlEnd(node); node = node->next)
     {
-    char *word = node->val;
-    verbose(2, "  adding %s\n", word);
-    wt = wordTreeAddFollowing(wt, word);
+    struct wordInfo *info = node->val;
+    verbose(2, "  adding %s\n", info->word);
+    wt = wordTreeAddFollowing(wt, info);
     }
 }
 
@@ -194,8 +216,9 @@ char *wordTreeString(struct wordTree *wt)
 struct slName *list = NULL, *el;
 for (;wt != NULL; wt = wt->parent)
     {
-    if (!isEmpty(wt->word))   // Avoid blank great grandparent
-	slNameAddHead(&list, wt->word);
+    char *word = wt->info->word;
+    if (!isEmpty(word))   // Avoid blank great grandparent
+	slNameAddHead(&list, word);
     }
 
 struct dyString *dy = dyStringNew(0);
@@ -221,8 +244,8 @@ for (node = head; !dlEnd(node); node = node->next)
     {
     if (node != head)
        dyStringAppendC(dy, ' ');
-    char *word = node->val;
-    dyStringAppend(dy, word);
+    struct wordInfo *info = node->val;
+    dyStringAppend(dy, info->word);
     }
 dyStringAppendC(dy, '}');
 return dyStringCannibalize(&dy);
@@ -235,7 +258,7 @@ static char *words[64];
 int i;
 assert(level < ArraySize(words));
 
-words[level] = wt->word;
+words[level] = wt->info->word;
 if (!fullOnly || level == maxChainSize)
     {
     fprintf(f, "%d\t%d\t%d\t%d\t%f\t", 
@@ -267,7 +290,7 @@ struct wordTree *picked = NULL;
         {
 	if (wt != list)
 	    verbose(2, " ");
-	verbose(2, "%s:%d", wt->word, wt->outTarget);
+	verbose(2, "%s:%d", wt->info->word, wt->outTarget);
 	}
     verbose(2, ") total %d\n", wordTreeSumOutTargets(list));
     }
@@ -286,11 +309,11 @@ if (total > 0)
 	{
 	int size = wt->outTarget;
 	int binEnd = binStart + size;
-	verbose(2, "      %s size %d, binEnd %d\n", wt->word, size, binEnd);
+	verbose(2, "      %s size %d, binEnd %d\n", wt->info->word, size, binEnd);
 	if (threshold < binEnd)
 	    {
 	    picked = wt;
-	    verbose(2, "      picked %s\n", wt->word);
+	    verbose(2, "      picked %s\n", wt->info->word);
 	    break;
 	    }
 	binStart = binEnd;
@@ -357,9 +380,9 @@ verbose(2, " predictNextFromAllPredecessors(%s, %s)\n", wordTreeString(wt), dlLi
 struct dlNode *node;
 for (node = list; !dlEnd(node); node = node->next)
     {
-    char *word = node->val;
-    wt = wordTreeFindInList(wt->children, word);
-    verbose(2, "   wordTreeFindInList(%s) = %p %s\n", word, wt, wordTreeString(wt));
+    struct wordInfo *info = node->val;
+    wt = wordTreeFindInList(wt->children, info);
+    verbose(2, "   wordTreeFindInList(%s) = %p %s\n", info->word, wt, wordTreeString(wt));
     if (wt == NULL || wt->children == NULL)
         break;
     }
@@ -385,7 +408,7 @@ for (node = recent->head; !dlEnd(node); node = node->next)
     }
 struct wordTree *topLevel = pickRandom(wt->children);
 verbose(2, "in predictNext(%s, %s) ", wordTreeString(wt), dlListFragWords(recent->head));
-verbose(2, "last resort pick of %s\n", topLevel->word);
+verbose(2, "last resort pick of %s\n", topLevel->info->word);
 return topLevel;
 }
 
@@ -409,10 +432,11 @@ while (wt != NULL)
     }
 }
 
-static void wordTreeGenerateFaux(struct wordTree *wt, int maxSize, struct wordTree *firstWord, 
+static void wordTreeGenerateFaux(struct wordStore *store, int maxSize, struct wordTree *firstWord, 
 	int maxOutputWords, char *fileName)
 /* Go spew out a bunch of words according to probabilities in tree. */
 {
+struct wordTree *wt = store->markovChains;
 FILE *f = mustOpen(fileName, "w");
 struct dlList *ll = dlListNew();
 int listSize = 0;
@@ -449,10 +473,10 @@ for (;;)
 
 
     /* Add word from whatever level we fetched back to our chain of up to maxChainSize. */
-    node->val = picked->word;
+    node->val = picked->info;
     dlAddTail(ll, node);
 
-    fprintf(f, "%s\n", picked->word);
+    fprintf(f, "%s\n", picked->info->word);
 
     decrementOutputCounts(picked);
     }
@@ -470,16 +494,40 @@ for (child = wt->children; child != NULL; child = child->next)
     wordTreeSort(child);
 }
 
-struct wordTree *wordTreeForChainsInFile(char *fileName, int chainSize)
-/* Return a wordTree of all chains-of-words of length chainSize seen in file. 
- * Allocate the structure in local memory pool lm. */ 
+struct wordStore *wordStoreNew()
+/* Allocate and initialize a new word store. */
+{
+struct wordStore *store;
+AllocVar(store);
+store->hash = hashNew(0);
+return store;
+}
+
+struct wordInfo *wordStoreAdd(struct wordStore *store, char *word)
+/* Add word to store,  incrementing it's useCount if it's already there, otherwise
+ * making up a new record for it. */
+{
+struct wordInfo *info = hashFindVal(store->hash, word);
+if (info == NULL)
+    {
+    AllocVar(info);
+    hashAddSaveName(store->hash, word, info, &info->word);
+    }
+info->useCount += 1;
+return info;
+}
+
+struct wordStore *wordStoreForChainsInFile(char *fileName, int chainSize)
+/* Return a wordStore containing all words, and also all chains-of-words of length 
+ * chainSize seen in file.  */
 {
 /* Stuff for processing file a line at a time. */
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
 
 /* We'll build up the tree starting with an empty root node. */
-struct wordTree *wt = wordTreeNew("");	
+struct wordStore *store = wordStoreNew();
+struct wordTree *wt = store->markovChains = wordTreeNew(wordStoreAdd(store, ""));	
 
 /* Loop through each line of file, treating it as a separate read. There's 
  * special cases at the beginning and end of line, and for short lines.  In the
@@ -499,6 +547,7 @@ while (lineFileNext(lf, &line, NULL))
 
     while ((word = nextWord(&line)) != NULL)
 	{
+	struct wordInfo *info = wordStoreAdd(store, word);
 	 /* For the first few words in the file after ID, we'll just build up the chain,
 	 * only adding it to the tree when we finally do get to the desired
 	 * chain size.  Once past the initial section of the file we'll be
@@ -506,7 +555,7 @@ while (lineFileNext(lf, &line, NULL))
 	 * last link in the chain with each new word we see. */
 	if (curSize < chainSize)
 	    {
-	    dlAddValTail(chain, cloneString(word));
+	    dlAddValTail(chain, info);
 	    ++curSize;
 	    if (curSize == chainSize)
 		addChainToTree(wt, chain);
@@ -516,8 +565,7 @@ while (lineFileNext(lf, &line, NULL))
 	    /* Reuse doubly-linked-list node, but give it a new value, as we move
 	     * it from head to tail of list. */
 	    node = dlPopHead(chain);
-	    freeMem(node->val);
-	    node->val = cloneString(word);
+	    node->val = info;
 	    dlAddTail(chain, node);
 	    addChainToTree(wt, chain);
 	    }
@@ -531,7 +579,6 @@ while (lineFileNext(lf, &line, NULL))
 	{
 	if (!dlEmpty(chain))
 	    addChainToTree(wt, chain);
-	freeMem(node->val);
 	freeMem(node);
 	}
     dlListFree(&chain);
@@ -539,7 +586,7 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 
 wordTreeSort(wt);  // Make output of chain file prettier
-return wt;
+return store;
 }
 
 void wordTreeWrite(struct wordTree *wt, char *fileName)
@@ -551,10 +598,11 @@ wordTreeDump(0, wt, f);
 carefulClose(&f);
 }
 
-void alphaChain(char *inFile, char *outFile)
+void alphaChain(char *readsFile, char *monomerOrderFile, char *outFile)
 /* alphaChain - Create Markov chain of words and optionally output chain in two formats. */
 {
-struct wordTree *wt = wordTreeForChainsInFile(inFile, maxChainSize);
+struct wordStore *store = wordStoreForChainsInFile(readsFile, maxChainSize);
+struct wordTree *wt = store->markovChains;
 wordTreeNormalize(wt, outSize, 1.0);
 
 if (optionExists("chain"))
@@ -563,7 +611,7 @@ if (optionExists("chain"))
     wordTreeWrite(wt, fileName);
     }
 
-wordTreeGenerateFaux(wt, maxChainSize, pickRandom(wt->children), outSize, outFile);
+wordTreeGenerateFaux(store, maxChainSize, pickRandom(wt->children), outSize, outFile);
 
 if (optionExists("afterChain"))
     {
@@ -576,13 +624,13 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 maxChainSize = optionInt("size", maxChainSize);
 outSize = optionInt("outSize", outSize);
 fullOnly = optionExists("fullOnly");
 int seed = optionInt("seed", (int)time(0));
 srand(seed);
-alphaChain(argv[1], argv[2]);
+alphaChain(argv[1], argv[2], argv[3]);
 return 0;
 }
