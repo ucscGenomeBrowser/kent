@@ -3425,6 +3425,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me1FImmortalC57bl6StdAlnRep1.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-5
+md5sum 8745b1eeddc331a71fdaba89c79739a6,9fdd661e8417989a47495dde6838c252
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3453,6 +3454,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me1FImmortalC57bl6StdAlnRep2.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-9
+md5sum 3356cdd3baa9c794a46e353a771e00b9,3b54d67a668b60e3ac8d35f6291ad52b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3481,6 +3483,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me1FImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum fc6e225288b7ef1d7db5977e6932866c
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3509,6 +3512,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me1FImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-5
+md5sum 6ff53a9837318475c43fb4379b485dbf
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3537,6 +3541,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me1FImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-9
+md5sum 7a921e149a16e67a9db461b7c573f3c3
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3565,6 +3570,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me1FImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum caf1344194bd89cea1110032f127c300
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3593,6 +3599,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me2FImmortalC57bl6StdAlnRep1.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 02/15/2012 FISH A Lane 1-1, 03/01/2012 ChIP B Lane 4-1
+md5sum 01a5f9d83266cd5e8729bc78e52e1b2c,e63682ad0a2bd88dfd9415cb1efc1032
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3621,6 +3628,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me2FImmortalC57bl6StdAlnRep2.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 02/15/2012 FISH A Lane 1-6, 03/01/2012 ChIP B Lane 4-6
+md5sum c7c1ebdfb63b79edc043447269720a9d,b6464a99d6d0bea43235c34c1905a9ef
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3649,6 +3657,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me2FImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 8146a5be9678eb5399212d1f82d525e8
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3677,6 +3686,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me2FImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/15/2012 FISH A Lane 1-1, 03/01/2012 ChIP B Lane 4-1
+md5sum 65f1976db2ee92e8a163641e4736a7b4
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3705,6 +3715,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me2FImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/15/2012 FISH A Lane 1-6, 03/01/2012 ChIP B Lane 4-6
+md5sum 90773536cb598f6c9cc63c9db2beab98
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3733,6 +3744,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me2FImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 3f03bade321fe158572930ae20ad2b29
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3761,6 +3773,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me3FImmortalC57bl6StdAlnRep1.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-6
+md5sum 133be958f03c5104814e1961b63a7ddf,72b57aeabb63f3f39639eeffcbf74b65
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3789,6 +3802,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me3FImmortalC57bl6StdAlnRep2.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-10
+md5sum f21065083e1b12bd125f8458215ab38a,07e5f4988ce528800575dca91602ac59
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3817,6 +3831,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me3FImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum b43488d560cf44bb465075a1b24ffe93
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3845,6 +3860,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me3FImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-6
+md5sum 97fea21a8a0e1084e3eafaeb30b93840
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3873,6 +3889,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me3FImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-10
+md5sum c13d7e6880cfef2f53f9e098954e86ce
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3901,6 +3918,7 @@ fileName wgEncodeLicrHistoneCh12H3k04me3FImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum d29167637c10612957f15a6ecabe06af
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3929,6 +3947,7 @@ fileName wgEncodeLicrHistoneCh12H3k09acFImmortalC57bl6StdAlnRep1.bam,wgEncodeLic
 grant Ren
 lab LICR-m
 labVersion 02/15/2012 FISH A Lane 1-4
+md5sum c3ac0915f7270c52a782b87e78d22ac9,71e8a29f06003ee032990c80bc3be50a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3957,6 +3976,7 @@ fileName wgEncodeLicrHistoneCh12H3k09acFImmortalC57bl6StdAlnRep2.bam,wgEncodeLic
 grant Ren
 lab LICR-m
 labVersion 03/16/2012 ChIP B Lane 7-11, 05/11/2012 ChIP A Lane 5-11
+md5sum ca09a34175d846061ac47b7c58ab14d0,6c6d2af437e460a3c3f5579c476b32a6
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3985,6 +4005,7 @@ fileName wgEncodeLicrHistoneCh12H3k09acFImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum dee66a409f0ed39229ca02b0f6049df9
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4013,6 +4034,7 @@ fileName wgEncodeLicrHistoneCh12H3k09acFImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/15/2012 FISH A Lane 1-4
+md5sum eebd0ac2ea5ebc183391f0fcbc637bc4
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4041,6 +4063,7 @@ fileName wgEncodeLicrHistoneCh12H3k09acFImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 03/16/2012 ChIP B Lane 7-11, 05/11/2012 ChIP A Lane 5-11
+md5sum 19bd3442adb509b5b1f247f4812926bb
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4069,6 +4092,7 @@ fileName wgEncodeLicrHistoneCh12H3k09acFImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum c87f763d33cb22d19717ecab7d5d4d07
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4097,6 +4121,7 @@ fileName wgEncodeLicrHistoneCh12H3k27acFImmortalC57bl6StdAlnRep1.bam,wgEncodeLic
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-7
+md5sum f7f902c4550d883cb2d7bc0d2bb2f58e,29bb705dec1d972103d5a9e1af5a4082
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4125,6 +4150,7 @@ fileName wgEncodeLicrHistoneCh12H3k27acFImmortalC57bl6StdAlnRep2.bam,wgEncodeLic
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-11
+md5sum fb8b6bb2a21b679d16adfde390e521a8,3e1fe6528783930937a39d763012060c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4153,6 +4179,7 @@ fileName wgEncodeLicrHistoneCh12H3k27acFImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 6b0a600251f15c6630124fe21786a336
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4181,6 +4208,7 @@ fileName wgEncodeLicrHistoneCh12H3k27acFImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-7
+md5sum 12e2f10e70f7395e56dbaf38b0268a86
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4209,6 +4237,7 @@ fileName wgEncodeLicrHistoneCh12H3k27acFImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/06/2012 FISH A Lane 4-11
+md5sum 7c9ce398dec1c60bb063b6f193ab5381
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4237,6 +4266,7 @@ fileName wgEncodeLicrHistoneCh12H3k27acFImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum a4a892652857190b4ba95b553e317acd
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4439,6 +4469,7 @@ fileName wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdAlnRep1.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 02/15/2012 FISH A Lane 1-3, 03/01/2012 ChIP B Lane 4-3
+md5sum 825fa968541a76292d83ba3fa8c09fd4,b4f2c66a750a939e049b5bc0946adbef
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4467,6 +4498,7 @@ fileName wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdAlnRep2.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 02/16/2012 ChIP A Lane 6-8, 03/01/2012 ChIP B Lane 4-8
+md5sum 76c9dbf5875198a893a4f5b3c7f5f22b,6996d25a90b60829d523cc812b214218
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4495,6 +4527,7 @@ fileName wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 753935ed3e379a2ea1dfcb66d55866ea
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4523,6 +4556,7 @@ fileName wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/15/2012 FISH A Lane 1-3, 03/01/2012 ChIP B Lane 4-3
+md5sum 06a8a882ec5ce504afec0298edab5403
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4551,6 +4585,7 @@ fileName wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 02/16/2012 ChIP A Lane 6-8, 03/01/2012 ChIP B Lane 4-8
+md5sum 46ece475baa6e96f23200cc86b00dafc
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4579,6 +4614,7 @@ fileName wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 23b35529022c44f8f5fbe5457e28a4d5
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5453,6 +5489,7 @@ fileName wgEncodeLicrHistoneEsb4H3k09acME0C57bl6StdAlnRep1.bam,wgEncodeLicrHisto
 grant Ren
 lab LICR-m
 labVersion 04/10/2012 ChIP A Lane 1-9
+md5sum 8cf52dcd1e4b8d6feff12a296e14410b,890da1daad0cf5a494bedf4700f89e54
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5481,6 +5518,7 @@ fileName wgEncodeLicrHistoneEsb4H3k09acME0C57bl6StdAlnRep2.bam,wgEncodeLicrHisto
 grant Ren
 lab LICR-m
 labVersion 04/10/2012 ChIP A Lane 1-10
+md5sum 610abca74c9dbc1d5c749b7b36ad17e6,1eed18a8f1f9c4668452eb8eb1990352
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5509,6 +5547,7 @@ fileName wgEncodeLicrHistoneEsb4H3k09acME0C57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum c2e7f5df28c0ae886f75660b9223d89f
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5537,6 +5576,7 @@ fileName wgEncodeLicrHistoneEsb4H3k09acME0C57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 04/10/2012 ChIP A Lane 1-9
+md5sum c861d0d72460e9ccc29044c5f5639c68
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5565,6 +5605,7 @@ fileName wgEncodeLicrHistoneEsb4H3k09acME0C57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 04/10/2012 ChIP A Lane 1-10
+md5sum 38536d6cdf93f050e3c6af4d79a4f227
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5593,6 +5634,7 @@ fileName wgEncodeLicrHistoneEsb4H3k09acME0C57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 5193a0266aa10b998e27364472a61fc7
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6844,6 +6886,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep1.bam,wgEncodeLicrHis
 grant Ren
 lab LICR-m
 labVersion 12/16/2012 FISH A Lane 7-5
+md5sum 3ceb727fdc1434cb75740b04148de288,1ede1fc4f7d2a86c85030c1502c584f9
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6872,6 +6915,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep2.bam,wgEncodeLicrHis
 grant Ren
 lab LICR-m
 labVersion 03/16/2012 ChIP B Lane 7-8, 04/10/2012 ChIP A Lane 2-8
+md5sum b76c93b1f8a33681a4f6194a981f8143,a04ecd1ac6dc981c82a67c100c95363a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6900,6 +6944,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 2da849633e688c28d3d72a67e07ad96b
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6928,6 +6973,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 12/16/2011 FISH A Lane 7-5
+md5sum 921f3b2e55677b5d1a137105fc617307
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6956,6 +7002,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 03/16/2012 ChIP B Lane 7-8, 04/10/2012 ChIP A Lane 2-8
+md5sum 6fc0c6c3f6d35790c66c9f6dffa14a86
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6984,6 +7031,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 6057e529921e35700a984e6927cf0fda
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7012,6 +7060,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep1.bam,wgEncodeLicrHis
 grant Ren
 lab LICR-m
 labVersion 12/08/2012 FISH A Lane 1-3
+md5sum 416bb3f048544879a59beb0d88657cac,61ffce3ec71cd342b769cbaadb4c5ec1
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7040,6 +7089,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep2.bam,wgEncodeLicrHis
 grant Ren
 lab LICR-m
 labVersion 04/10/2012 FISH A Lane 7-1
+md5sum 9f0ae2a4068b09ec2ae2cd77c8498988,56be544f0e9e305f20912cb936d494e1
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7068,6 +7118,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum c253af43387b1ab34776908168a2308e
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7096,6 +7147,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 12/08/2011 FISH A Lane 1-3
+md5sum 6ca3b3780a45701e7f87e04a64dc8382
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7124,6 +7176,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 04/03/2012 FISH A Lane 7-1
+md5sum 3fe6c1fa61a25b6c34971b855650f60b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7152,6 +7205,7 @@ fileName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 33aa36428599463daa0c2d8e9e336e18
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7180,6 +7234,7 @@ fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep1.bam,wgEncodeLicrHist
 grant Ren
 lab LICR-m
 labVersion 12/16/2011 FISH A Lane 7-7, 02/16/2012 ChIP A lane 3-7
+md5sum 722b5b86d713da7b8669326cb2a9d673,221fedc3437445fa0750e2ee06151bf0
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7208,6 +7263,7 @@ fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep2.bam,wgEncodeLicrHist
 grant Ren
 lab LICR-m
 labVersion 06/01/2012 ChIP A Lane 1-9
+md5sum 22d7b2fc2f5b608b2ba13d5f86f847b4,f4e2eadedb97852a0f92e8d63c1b97b2
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7236,6 +7292,7 @@ fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum d3cb9cf4f92a3d366b755707a255a22d
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7264,6 +7321,7 @@ fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 12/16/2011 FISH A Lane 7-7, 02/16/2012 ChIP A lane 3-7
+md5sum ffb1562b631ab1861ef5223d78063a6b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7292,6 +7350,7 @@ fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 06/01/2012 ChIP A Lane 1-9
+md5sum 91a461030172313573097f70b019ec4a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7320,6 +7379,7 @@ fileName wgEncodeLicrHistoneEse14H3k09acME0129olaStdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum cbe14eb212134cc122d8b680499558b5
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7348,6 +7408,7 @@ fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep1.bam,wgEncodeLicrHist
 grant Ren
 lab LICR-m
 labVersion 01/04/2012 FISH A Lane 1-2, 02/16/2012 ChIP A Lane 3-2
+md5sum b5836739b5998332f82c65ce1054898a,97946a3b2ff569db6fcbb9510e4e04b4
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7376,6 +7437,7 @@ fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep2.bam,wgEncodeLicrHist
 grant Ren
 lab LICR-m
 labVersion 03/16/2012 ChIP B Lane 7-9, 04/10/2012 ChIP A Lane 2-9, 05/11/212 ChIP A Lane 5-9
+md5sum d5920eadfa050048750d954520a1a6c4,688f54af766e441be3831629091b7cb9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7404,6 +7466,7 @@ fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 37497f3fc2a15db831dc3e1e6e7c1472
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7432,6 +7495,7 @@ fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 01/04/2012 FISH A Lane 1-2, 02/16/2012 ChIP A Lane 3-2
+md5sum 2ac5b1a688a0870fcee9b2275e74fb87
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7460,6 +7524,7 @@ fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 03/16/2012 ChIP B Lane 7-9, 04/10/2012 ChIP A Lane 2-9, 05/11/212 ChIP A Lane 5-9
+md5sum bbb4fa34d9c6c8162264ef84bd7072b6
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7488,6 +7553,7 @@ fileName wgEncodeLicrHistoneEse14H3k27acME0129olaStdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 5068c6d4977d36367ef30fc05e323a42
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7516,6 +7582,7 @@ fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep1.bam,wgEncodeLicrHis
 grant Ren
 lab LICR-m
 labVersion 01/04/2012 FISH A Lane 1-5, 02/16/2012 ChIP A Lane 3-5
+md5sum 384164fc31a6bbf87053a0d2e41c108e,efaeaa1f3389f2a68ba6d79c8f110194
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7544,6 +7611,7 @@ fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep2.bam,wgEncodeLicrHis
 grant Ren
 lab LICR-m
 labVersion 03/16/2012 ChIP B Lane 7-10, 04/10/2012 ChIP A Lane 2-10
+md5sum 009293aa9d70c219a7baa612bd68b758,6fdd42f4277932350bd4496551871a73
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7572,6 +7640,7 @@ fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 3dea9781c7e55346107b7c190903ab0b
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7600,6 +7669,7 @@ fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 01/04/2012 FISH A Lane 1-5, 02/16/2012 ChIP A Lane 3-5
+md5sum 0225e689544d6c75aa23cc47dd741507
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7628,6 +7698,7 @@ fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 03/16/2012 ChIP B Lane 7-10, 04/10/2012 ChIP A Lane 2-10
+md5sum 49c262c053b630fb8cb1ab684a452ac9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7656,6 +7727,7 @@ fileName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 9e345cfc972b73e135577a96020a7890
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -23474,4 +23546,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 638092922
+# MAGIC: 1353634333
