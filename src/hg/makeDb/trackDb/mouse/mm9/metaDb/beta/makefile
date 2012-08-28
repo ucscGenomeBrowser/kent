@@ -16,6 +16,7 @@ wgEncodePsuTfbs.ra \
 wgEncodeSydhHist.ra \
 wgEncodeSydhRnaSeq.ra \
 wgEncodeSydhTfbs.ra \
+wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwRnaSeq.ra \
 
