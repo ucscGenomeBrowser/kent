@@ -12,12 +12,14 @@ subGroup4 sex Sex M=M
 subGroup5 age Age ADULT1WKS=adult-1wks ADULT8WKS=adult-8wks E0=E0 E11HALF=E11.5 E14HALF=E14.5 E18HALF=E18.5 IMMORTAL=immortalized NEW1DAYS=newborn-1days
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6 rep7=7 rep8=8 rep9=9 rep10=10 rep11=11 rep12=12
 subGroup7 treatment Treatment NONE=None DIFFB24H=24_hour_diff_protocol_B
-dimensions dimensionX=cellType dimensionY=age dimensionA=rep dimensionB=treatment
+dimensions dimensionX=cellType dimensionY=age dimensionD=age dimensionA=rep dimensionC=strain dimensionB=treatment 
 dimensionAchecked rep1
 dimensionBchecked NONE
-filterComposite dimensionA=multi dimensionB=multi
-sortOrder cellType=+ treatment=+ strain=+ age=+ rep=+ view=+
-fileSortOrder cell=Cell_Line treatment=Treatment strain=Strain age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+dimensionCchecked All
+dimensionDchecked All
+filterComposite dimensionA=multi dimensionB=multi dimensionC=multi dimensionD=multi
+sortOrder cellType=+ treatment=+ strain=+ age=+ rep=+ view=+ 
+fileSortOrder cell=Cell_Line treatment=Treatment strain=Strain age=Age replicate=Replicate view=View geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex treatment=treatment
 dragAndDrop subTracks
 noInherit on
@@ -30,7 +32,7 @@ html wgEncodeUwDgf
 	track wgEncodeUwDgfViewHotspots
 	shortLabel Hotspots
 	view Hotspots
-	visibility pack
+	visibility hide
 	parent wgEncodeUwDgf
 	pValueFilter 0.0
 	pValueFilterLimits 1:324
@@ -252,7 +254,7 @@ html wgEncodeUwDgf
 	track wgEncodeUwDgfViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility pack
+	visibility hide
 	parent wgEncodeUwDgf
 	pValueFilter 0.0
 	pValueFilterLimits 1:324
@@ -696,7 +698,7 @@ html wgEncodeUwDgf
 	track wgEncodeUwDgfViewRawSignal
 	shortLabel RawSignal
 	view RawSignal
-	visibility pack
+	visibility hide
 	parent wgEncodeUwDgf
 	viewLimits 1:250
 	minLimit 1
@@ -810,7 +812,7 @@ html wgEncodeUwDgf
         track wgEncodeUwDgfMelUknImmortalRawRep1
         parent wgEncodeUwDgfViewRawSignal 
         shortLabel MEL Immt Rw 
-        longLabel MEL Immortal Cell Line Nase-DGF Raw Signal Rep 1 from ENCODE/UW 
+        longLabel MEL Immortal Cell Line DNase-DGF Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=RawSignal age=IMMORTAL cellType=MEL sex=M strain=UKN treatment=NONE rep=rep1
         type bigWig 1.000000 974470.000000
         color 86,180,233
