@@ -6828,7 +6828,7 @@ view Signal
 
 metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep1
 objType file
-age E14
+age E0
 antibody H3K4me1
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -6850,13 +6850,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7122
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdAlnRep2
 objType file
-age E14
+age E0
 antibody H3K4me1
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -6878,13 +6878,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7122
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdPk
 objType table
-age E14
+age E0
 antibody H3K4me1
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -6905,14 +6905,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion MACS
-strain C57BL/6
+strain 129/Ola
 subId 7122
 tableName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdPk
 view Peaks
 
 metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdRawDataRep1
 objType file
-age E14
+age E0
 antibody H3K4me1
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -6934,13 +6934,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7122
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdRawDataRep2
 objType file
-age E14
+age E0
 antibody H3K4me1
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -6962,13 +6962,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7122
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdSig
 objType table
-age E14
+age E0
 antibody H3K4me1
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -6989,14 +6989,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain 129/Ola
 subId 7122
 tableName wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep1
 objType file
-age E14
+age E0
 antibody H3K4me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7018,13 +7018,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7123
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdAlnRep2
 objType file
-age E14
+age E0
 antibody H3K4me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7046,13 +7046,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7123
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdPk
 objType table
-age E14
+age E0
 antibody H3K4me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7073,14 +7073,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion MACS
-strain C57BL/6
+strain 129/Ola
 subId 7123
 tableName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdPk
 view Peaks
 
 metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdRawDataRep1
 objType file
-age E14
+age E0
 antibody H3K4me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7102,13 +7102,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7123
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdRawDataRep2
 objType file
-age E14
+age E0
 antibody H3K4me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7130,13 +7130,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7123
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdSig
 objType table
-age E14
+age E0
 antibody H3K4me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7157,14 +7157,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain 129/Ola
 subId 7123
 tableName wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep1
 objType file
-age E14
+age E0
 antibody H3K9ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7186,13 +7186,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7124
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdAlnRep2
 objType file
-age E14
+age E0
 antibody H3K9ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7214,13 +7214,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7124
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdPk
 objType table
-age E14
+age E0
 antibody H3K9ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7241,14 +7241,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion MACS
-strain C57BL/6
+strain 129/Ola
 subId 7124
 tableName wgEncodeLicrHistoneEse14H3k09acME0129olaStdPk
 view Peaks
 
 metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdRawDataRep1
 objType file
-age E14
+age E0
 antibody H3K9ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7270,13 +7270,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7124
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdRawDataRep2
 objType file
-age E14
+age E0
 antibody H3K9ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7298,13 +7298,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7124
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k09acME0129olaStdSig
 objType table
-age E14
+age E0
 antibody H3K9ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7325,14 +7325,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain 129/Ola
 subId 7124
 tableName wgEncodeLicrHistoneEse14H3k09acME0129olaStdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep1
 objType file
-age E14
+age E0
 antibody H3K27ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7354,13 +7354,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7125
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdAlnRep2
 objType file
-age E14
+age E0
 antibody H3K27ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7382,13 +7382,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7125
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdPk
 objType table
-age E14
+age E0
 antibody H3K27ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7409,14 +7409,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion MACS
-strain C57BL/6
+strain 129/Ola
 subId 7125
 tableName wgEncodeLicrHistoneEse14H3k27acME0129olaStdPk
 view Peaks
 
 metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdRawDataRep1
 objType file
-age E14
+age E0
 antibody H3K27ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7438,13 +7438,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7125
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdRawDataRep2
 objType file
-age E14
+age E0
 antibody H3K27ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7466,13 +7466,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7125
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k27acME0129olaStdSig
 objType table
-age E14
+age E0
 antibody H3K27ac
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7493,14 +7493,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain 129/Ola
 subId 7125
 tableName wgEncodeLicrHistoneEse14H3k27acME0129olaStdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep1
 objType file
-age E14
+age E0
 antibody H3K36me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7522,13 +7522,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7126
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdAlnRep2
 objType file
-age E14
+age E0
 antibody H3K36me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7550,13 +7550,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Bowtie
-strain C57BL/6
+strain 129/Ola
 subId 7126
 view Alignments
 
 metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdPk
 objType table
-age E14
+age E0
 antibody H3K36me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7577,14 +7577,14 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion MACS
-strain C57BL/6
+strain 129/Ola
 subId 7126
 tableName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdPk
 view Peaks
 
 metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdRawDataRep1
 objType file
-age E14
+age E0
 antibody H3K36me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7606,13 +7606,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7126
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdRawDataRep2
 objType file
-age E14
+age E0
 antibody H3K36me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7634,13 +7634,13 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion HCS
-strain C57BL/6
+strain 129/Ola
 subId 7126
 view RawData
 
 metaObject wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdSig
 objType table
-age E14
+age E0
 antibody H3K36me3
 cell ES-E14
 composite wgEncodeLicrHistone
@@ -7661,7 +7661,7 @@ seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 softwareVersion Custom Scripts
-strain C57BL/6
+strain 129/Ola
 subId 7126
 tableName wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdSig
 view Signal
