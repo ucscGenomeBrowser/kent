@@ -336,7 +336,7 @@ safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars)
 appendLink(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", FALSE);
 appendLink(&links, "../cgi-bin/cartReset", "Reset all user settings", "cartResetMenuLink", FALSE);
 
-struct dyString *viewMenu = dyStringCreate("<li class='menuparent'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
+struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
 len = slCount(links);
 for(i = 0, link = links; link != NULL; i++, link = link->next)
     {
