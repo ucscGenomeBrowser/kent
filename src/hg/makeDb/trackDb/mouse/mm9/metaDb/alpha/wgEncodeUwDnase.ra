@@ -639,7 +639,7 @@ fileName wgEncodeUwDnaseA20BalbcannMAdult8wksRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum bc66f460f0a67c2a05eb3a9294acc43c
+md5sum a801b57b23653840b742510fe3b8bfb8
 project wgEncode
 replicate 1
 sex M
@@ -663,7 +663,7 @@ fileName wgEncodeUwDnaseA20BalbcannMAdult8wksRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum 415108a3ffb3bc236b3e8167c059705a
+md5sum 5c5cdc4accc2920face74166aae935e2
 project wgEncode
 replicate 2
 sex M
@@ -1665,7 +1665,7 @@ grant Stam
 lab UW-m
 labExpId DS19087
 labVersion 1
-md5sum ed9e956980823b2bb7d7887b7f4d99b0
+md5sum c6c24c61ebada94b3abb751fbe773c1b
 project wgEncode
 replicate 3
 sex M
@@ -2399,7 +2399,7 @@ grant Stam
 lab UW-m
 labExpId DS22542
 labVersion 1
-md5sum b8f0f2771b379fb2628636b296de4efa
+md5sum 3b57677443aaebc58a47a89e6f3fc34c
 project wgEncode
 replicate 1
 sex F
@@ -3433,7 +3433,7 @@ grant Stam
 lab UW-m
 labExpId DS21450
 labVersion 1
-md5sum 713940821bcb742293e34cdfb9002a5f
+md5sum 9b0c33bc96d6bafdd1827f77459bbbf3
 project wgEncode
 replicate 1
 sex M
@@ -3459,7 +3459,7 @@ grant Stam
 lab UW-m
 labExpId DS18505
 labVersion 1
-md5sum 6547398744e986d5c9bc32b74512445b
+md5sum 855d3012c3c1e395c45b0e3520351698
 project wgEncode
 replicate 2
 sex M
@@ -3965,7 +3965,7 @@ grant Stam
 lab UW-m
 labExpId DS17063
 labVersion 1
-md5sum a94826c1fccd2148664bc179842dfcc4
+md5sum 414170be237d294eb3f9e94eaf8273ba
 project wgEncode
 replicate 1
 sex M
@@ -3991,7 +3991,7 @@ grant Stam
 lab UW-m
 labExpId DS18365
 labVersion 1
-md5sum cd978c09731e6c4e42f5565c41bab3bf
+md5sum c3c603b9d5c8cc45ade4e34cc4ca7dbe
 project wgEncode
 replicate 2
 sex M
@@ -4946,7 +4946,7 @@ fileName wgEncodeUwDnaseGfatC57bl6MAdult8wksRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum 4a7ceddfa2db34ff78e63d42cf60b714
+md5sum 0fde420ad24f5a00ea4870fffcb35fed
 project wgEncode
 replicate 1
 sex M
@@ -5220,7 +5220,7 @@ grant Stam
 lab UW-m
 labExpId DS18138
 labVersion 1
-md5sum 141198cf8f6d439e0d33fa54cad6fc2d
+md5sum c2f2fec2065a1be173be2d6d2dfac1dd
 project wgEncode
 replicate 2
 sex M
@@ -5467,7 +5467,7 @@ fileName wgEncodeUwDnaseHlbudCd1ME11halfRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum 19fdfb0c4d1308823ec35057d33e5a30
+md5sum eb2d8e2bc3a14aa6197920d7d867d683
 project wgEncode
 replicate 2
 sex M
@@ -6196,7 +6196,7 @@ grant Stam
 lab UW-m
 labExpId DS19140
 labVersion 1
-md5sum 867f1f31c3cccc65cdf8206554c9747f
+md5sum 53b9b6d15175505c9ebbfffa8203607d
 project wgEncode
 replicate 1
 sex M
@@ -6460,7 +6460,7 @@ grant Stam
 lab UW-m
 labExpId DS19241
 labVersion 1
-md5sum f9fd7d9cae2b82193fe88a8bc0513444
+md5sum 296b3e3c8adee76518d5a2c7451ec638
 project wgEncode
 replicate 1
 sex M
@@ -6486,7 +6486,7 @@ grant Stam
 lab UW-m
 labExpId DS19531
 labVersion 1
-md5sum ed5a350d4b86e1e0b5a970199725a770
+md5sum 042f512aba3795dc76fb06809c01d2a9
 project wgEncode
 replicate 2
 sex M
@@ -7706,7 +7706,7 @@ grant Stam
 lab UW-m
 labExpId DS16853
 labVersion 1
-md5sum 57863773e4614242d54d7037cb4403ec
+md5sum 365cfc7bb13a24fa829cea4836beeb2c
 project wgEncode
 replicate 11
 sex M
@@ -7785,7 +7785,7 @@ grant Stam
 lab UW-m
 labExpId DS19375
 labVersion 1
-md5sum 55f0cacf1ca9af52691f2adefdccd838
+md5sum 38d4e2b6c13d7132671c5a6a47123234
 project wgEncode
 replicate 14
 sex M
@@ -8458,7 +8458,7 @@ grant Stam
 lab UW-m
 labExpId DS20666
 labVersion 1
-md5sum 1789a9b402c5cd69666fc7faa0df1c1a
+md5sum f4a7ee6a20bfa78605890979393301a7
 project wgEncode
 replicate 1
 sex M
@@ -9524,7 +9524,7 @@ fileName wgEncodeUwDnaseMesodermCd1ME11halfRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum 75ad165ad0d744d51b98fdfe11d5249c
+md5sum d9e6e13ffa2ffff8089b6db692fa70be
 project wgEncode
 replicate 1
 sex M
@@ -9548,7 +9548,7 @@ fileName wgEncodeUwDnaseMesodermCd1ME11halfRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum 959e2160b44750a84843cdde2e3845f5
+md5sum 548d14fdaee8d3095ae488c5142c7f6b
 project wgEncode
 replicate 2
 sex M
@@ -10315,7 +10315,7 @@ grant Stam
 lab UW-m
 labExpId DS15400
 labVersion 1
-md5sum e065b85dabc33770d6ea02df24aba716
+md5sum f504ea25aeeb8536b402eaf0b88384d8
 project wgEncode
 replicate 1
 sex M
@@ -10824,7 +10824,7 @@ fileName wgEncodeUwDnasePatskiSpbl6MImmortalRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum 290cf834059473a796f612a3d7ef9bdd
+md5sum ac545b8dddaeb7b7323f56a599f5b692
 project wgEncode
 replicate 1
 sex M
@@ -10848,7 +10848,7 @@ fileName wgEncodeUwDnasePatskiSpbl6MImmortalRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum ab677c5a09a0754afaa337f7839fccbb
+md5sum d7c0b20bd89dd670fc005f008cc31cac
 project wgEncode
 replicate 2
 sex M
@@ -11483,7 +11483,7 @@ grant Stam
 lab UW-m
 labExpId DS18130
 labVersion 1
-md5sum 4de9b74cce6631b77654d0e9aaa0e0fc
+md5sum 9b7e17b6890ce7b86a65ca679d47d6b3
 project wgEncode
 replicate 1
 sex M
@@ -11509,7 +11509,7 @@ grant Stam
 lab UW-m
 labExpId DS18892
 labVersion 1
-md5sum b326e1a3e9fc1f591a23d21879af280c
+md5sum cd5f24cc5cd6152082a09545d89adf23
 project wgEncode
 replicate 2
 sex M
@@ -11749,7 +11749,7 @@ grant Stam
 lab UW-m
 labExpId DS18870
 labVersion 1
-md5sum 3edb69c98b6669d8d5ad489b9071196f
+md5sum d811cb5030aa6e60280e8e8f2ecfc306
 project wgEncode
 replicate 1
 sex M
@@ -11775,7 +11775,7 @@ grant Stam
 lab UW-m
 labExpId DS18884
 labVersion 1
-md5sum e57488c2937cd71f1ce7adbbd4bc0636
+md5sum be77c3503d82c0541f7498059c2ca64d
 project wgEncode
 replicate 2
 sex M
@@ -12014,7 +12014,7 @@ grant Stam
 lab UW-m
 labExpId DS17070
 labVersion 1
-md5sum dd8600eff26ddb343c5c967de4a6fc25
+md5sum d161c6b15b5d66e635d3ac0d199dbc57
 project wgEncode
 replicate 1
 sex M
@@ -12307,7 +12307,7 @@ grant Stam
 lab UW-m
 labExpId DS18890
 labVersion 1
-md5sum 6d79bd351ae46bb1ae3469f71914c500
+md5sum c5910fdc16eb058ef61482415ca43cb8
 project wgEncode
 replicate 2
 sex M
@@ -12699,7 +12699,7 @@ fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
-md5sum 77e7df9fe7cea7106551ab7682f8380b
+md5sum 9e74ee6aece21ba3dbd18aa0f0fd89c5
 project wgEncode
 replicate 1
 sex M
@@ -12750,7 +12750,7 @@ grant Stam
 lab UW-m
 labExpId DS17080
 labVersion 1
-md5sum d90f65eda23da53b1b7e6e58de54b2a1
+md5sum 72262304471939183ca67de785f47e5b
 project wgEncode
 replicate 3
 sex M
@@ -13189,7 +13189,7 @@ grant Stam
 lab UW-m
 labExpId DS16358
 labVersion 1
-md5sum fc6bf799af1ee9fc171e09efcca5b0b3
+md5sum e2e285949957cd6789adc7a7a20c61b3
 project wgEncode
 replicate 3
 sex M
@@ -16360,7 +16360,7 @@ grant Stam
 lab UW-m
 labExpId DS17562
 labVersion 1
-md5sum 101fe778c5e6c2d75feb6fd36a9a7b60
+md5sum 0c13bb64e4bf6e1903c8bceae42f9351
 project wgEncode
 replicate 1
 sex M
@@ -16652,7 +16652,7 @@ grant Stam
 lab UW-m
 labExpId DS15860
 labVersion 1
-md5sum e2eee1ee407e780aed765c0f33093dc1
+md5sum 89acf702c89306b71f892904f51317e2
 project wgEncode
 replicate 2
 sex M
