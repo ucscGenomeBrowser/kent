@@ -622,79 +622,6 @@ tableName wgEncodeHaibTfbsA549Cebpbsc150V0422111RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsA549ControlV0416101Etoh02AlnRep1
-objType file
-antibody RevXlinkChromatin
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL3978
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-18
-dateUnrestricted 2012-04-18
-dccAccession wgEncodeEH002283
-expId 2283
-fileName wgEncodeHaibTfbsA549ControlV0416101Etoh02AlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL3978
-project wgEncode
-protocol v041610.1
-replicate 1
-setType input
-subId 4321
-treatment EtOH_0.02pct
-view Alignments
-
-metaObject wgEncodeHaibTfbsA549ControlV0416101Etoh02RawDataRep1
-objType file
-antibody RevXlinkChromatin
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL3978
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-18
-dateUnrestricted 2012-04-18
-dccAccession wgEncodeEH002283
-expId 2283
-fileName wgEncodeHaibTfbsA549ControlV0416101Etoh02RawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL3978
-project wgEncode
-protocol v041610.1
-replicate 1
-setType input
-subId 4321
-treatment EtOH_0.02pct
-view RawData
-
-metaObject wgEncodeHaibTfbsA549ControlV0416101Etoh02RawRep1
-objType table
-antibody RevXlinkChromatin
-cell A549
-composite wgEncodeHaibTfbs
-controlId SL3978
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-18
-dateUnrestricted 2012-04-18
-dccAccession wgEncodeEH002283
-expId 2283
-fileName wgEncodeHaibTfbsA549ControlV0416101Etoh02RawRep1.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL3978
-project wgEncode
-protocol v041610.1
-replicate 1
-setType input
-subId 4321
-tableName wgEncodeHaibTfbsA549ControlV0416101Etoh02RawRep1
-treatment EtOH_0.02pct
-view RawSignal
-
 metaObject wgEncodeHaibTfbsA549Creb1sc240Pcr1xEtoh02AlnRep1
 objType file
 antibody CREB1_(SC-240)
@@ -2741,6 +2668,7 @@ fileName wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3077
+md5sum af010e6f7052bd26d4f45ff600d224b1
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -2767,6 +2695,7 @@ fileName wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3253
+md5sum 4f86511b322394cab735ba78f71b3a2e
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -4580,6 +4509,7 @@ fileName wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3900
+md5sum 5e9f089b801b13628a98b8623c9da52b
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -4606,6 +4536,7 @@ fileName wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4698
+md5sum 7a127c0eee155510e08f0121f884804d
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -6513,6 +6444,82 @@ tableName wgEncodeHaibTfbsA549RxlchPcr2xEtoh02RawRep1
 treatment EtOH_0.02pct
 view RawSignal
 
+metaObject wgEncodeHaibTfbsA549RxlchV0416101Etoh02AlnRep1
+objType file
+antibody RevXlinkChromatin
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL3978
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-18
+dateUnrestricted 2012-04-18
+dccAccession wgEncodeEH002283
+expId 2283
+fileName wgEncodeHaibTfbsA549RxlchV0416101Etoh02AlnRep1.bam,wgEncodeHaibTfbsA549RxlchV0416101Etoh02AlnRep1.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL3978
+md5sum 8abaaab4b377fc5cb6b09aedf059aa86,136f58918af6dc16e7fb86bbaa9397ad
+project wgEncode
+protocol v041610.1
+replicate 1
+setType input
+subId 4321
+treatment EtOH_0.02pct
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549RxlchV0416101Etoh02RawDataRep1
+objType file
+antibody RevXlinkChromatin
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL3978
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-18
+dateUnrestricted 2012-04-18
+dccAccession wgEncodeEH002283
+expId 2283
+fileName wgEncodeHaibTfbsA549RxlchV0416101Etoh02RawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3978
+md5sum 25dc912c2d054558552bd9d443cc144f
+project wgEncode
+protocol v041610.1
+replicate 1
+setType input
+subId 4321
+treatment EtOH_0.02pct
+view RawData
+
+metaObject wgEncodeHaibTfbsA549RxlchV0416101Etoh02RawRep1
+objType table
+antibody RevXlinkChromatin
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL3978
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-18
+dateUnrestricted 2012-04-18
+dccAccession wgEncodeEH002283
+expId 2283
+fileName wgEncodeHaibTfbsA549RxlchV0416101Etoh02RawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL3978
+md5sum 42f63198914ad4a49923e20998e0805f
+project wgEncode
+protocol v041610.1
+replicate 1
+setType input
+subId 4321
+tableName wgEncodeHaibTfbsA549RxlchV0416101Etoh02RawRep1
+treatment EtOH_0.02pct
+view RawSignal
+
 metaObject wgEncodeHaibTfbsA549RxlchV0422111AlnRep1
 objType file
 antibody RevXlinkChromatin
@@ -6579,6 +6586,7 @@ fileName wgEncodeHaibTfbsA549RxlchV0422111AlnRep3.bam,wgEncodeHaibTfbsA549RxlchV
 grant Myers
 lab HudsonAlpha
 labExpId SL12790
+md5sum 702926f71e42998a060ceb65817ff35e,12b1dae4782224c362c5727359ba7991
 project wgEncode
 protocol v042211.1
 replicate 3
@@ -6586,6 +6594,82 @@ setType input
 subId 7872
 treatment None
 view Alignments
+
+metaObject wgEncodeHaibTfbsA549RxlchV0422111Dex100nmAlnRep1
+objType file
+antibody RevXlinkChromatin
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL6020
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-18
+dateUnrestricted 2012-04-18
+dccAccession wgEncodeEH002284
+expId 2284
+fileName wgEncodeHaibTfbsA549RxlchV0422111Dex100nmAlnRep1.bam,wgEncodeHaibTfbsA549RxlchV0422111Dex100nmAlnRep1.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL6020
+md5sum bf0fffe25959fad365d0e4019240eabe,28be7b938722381f1c9c0f7f5866b980
+project wgEncode
+protocol v042211.1
+replicate 1
+setType input
+subId 4321
+treatment DEX_100nM
+view Alignments
+
+metaObject wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawDataRep1
+objType file
+antibody RevXlinkChromatin
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL6020
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-18
+dateUnrestricted 2012-04-18
+dccAccession wgEncodeEH002284
+expId 2284
+fileName wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL6020
+md5sum f7184d01edf1a42fd9d21a263d6cdd63
+project wgEncode
+protocol v042211.1
+replicate 1
+setType input
+subId 4321
+treatment DEX_100nM
+view RawData
+
+metaObject wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
+objType table
+antibody RevXlinkChromatin
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL6020
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-18
+dateUnrestricted 2012-04-18
+dccAccession wgEncodeEH002284
+expId 2284
+fileName wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL6020
+md5sum abdf214f10a025eeda892bd39af4c9f3
+project wgEncode
+protocol v042211.1
+replicate 1
+setType input
+subId 4321
+tableName wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
+treatment DEX_100nM
+view RawSignal
 
 metaObject wgEncodeHaibTfbsA549RxlchV0422111Etoh02AlnRep1V2
 objType file
@@ -6731,6 +6815,7 @@ fileName wgEncodeHaibTfbsA549RxlchV0422111RawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL12790
+md5sum fffcbe56348e7e114aec97565a4165b5
 project wgEncode
 protocol v042211.1
 replicate 3
@@ -6807,6 +6892,7 @@ fileName wgEncodeHaibTfbsA549RxlchV0422111RawRep3.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL12790
+md5sum ec5809055ab5fd321dd7939d8c53c0d8
 project wgEncode
 protocol v042211.1
 replicate 3
@@ -54627,6 +54713,7 @@ fileName wgEncodeHaibTfbsK562Cebpdsc636V0422111AlnRep1.bam,wgEncodeHaibTfbsK562C
 grant Myers
 lab HudsonAlpha
 labExpId SL11280
+md5sum cb1eb088784862f91c75d568bd42ee56,6d6a21b36acbfed0177c3d643ed8f310
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -54651,6 +54738,7 @@ fileName wgEncodeHaibTfbsK562Cebpdsc636V0422111AlnRep2.bam,wgEncodeHaibTfbsK562C
 grant Myers
 lab HudsonAlpha
 labExpId SL13317
+md5sum ba5299db027492c4b8b3b517efbc64dd,10f4a440d965ea4d6b302dbb212f2582
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -54675,6 +54763,7 @@ fileName wgEncodeHaibTfbsK562Cebpdsc636V0422111PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL11280
+md5sum c4707f310696a1014c5b9705f7cc40de
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -54701,6 +54790,7 @@ fileName wgEncodeHaibTfbsK562Cebpdsc636V0422111PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL13317
+md5sum ae28579b811fdc61d012680bb51fe006
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -54727,6 +54817,7 @@ fileName wgEncodeHaibTfbsK562Cebpdsc636V0422111RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL11280
+md5sum 34bbb92b93fca2a31d37ffcd5f40d937
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -54751,6 +54842,7 @@ fileName wgEncodeHaibTfbsK562Cebpdsc636V0422111RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL13317
+md5sum 4182ee5423ad75eeddde9932235989c7
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -54775,6 +54867,7 @@ fileName wgEncodeHaibTfbsK562Cebpdsc636V0422111RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL11280
+md5sum 8f83ae492aee02f0360ee811f2e98201
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -54800,6 +54893,7 @@ fileName wgEncodeHaibTfbsK562Cebpdsc636V0422111RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL13317
+md5sum e495c1608ecf2d6bd217ff9de1a626c7
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -82738,4 +82832,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -823142135
+# MAGIC: 1839780976
