@@ -5309,13 +5309,14 @@ html wgEncodeHaibTfbs.release2
         type broadPeak
         # subId=7684 dateSubmitted=2012-07-30
 
-        track wgEncodeHaibTfbsSknshRunx3sc101553V0422111PkRep1
+        track wgEncodeHaibTfbsSknshRxraV0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKSH RUNX3 V11 1
-        longLabel SK-N-SH RUNX3 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=RUNX3SC101553 cellType=t2SKNSH protocol=V0422111 treatment=NONE rep=rep1
+        shortLabel SKSH RXRA V11 1
+        longLabel SK-N-SH RXRA v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=RXRA cellType=t2SKNSH protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
         # subId=7684 dateSubmitted=2012-07-30
+        # was wgEncodeHaibTfbsSknshRunx3sc101553V0422111PkRep1 wong Wed Aug 29 11:45:17 2012
 
         track wgEncodeHaibTfbsSknshMef2aV0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -12033,13 +12034,14 @@ html wgEncodeHaibTfbs.release2
         type bigWig 1.000000 2864.000000
         # subId=7684 dateSubmitted=2012-07-30
 
-        track wgEncodeHaibTfbsSknshRunx3sc101553V0422111RawRep1
+        track wgEncodeHaibTfbsSknshRxraV0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKSH RUNX3 V11 1
-        longLabel SK-N-SH RUNX3 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=RUNX3SC101553 cellType=t2SKNSH protocol=V0422111 treatment=NONE rep=rep1
+        shortLabel SKSH RXRA V11 1
+        longLabel SK-N-SH RXRA v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal factor=RXRA cellType=t2SKNSH protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 1.000000 2902.000000
         # subId=7684 dateSubmitted=2012-07-30
+        # was wgEncodeHaibTfbsSknshRunx3sc101553V0422111RawRep1 wong Wed Aug 29 11:45:18 2012
 
         track wgEncodeHaibTfbsSknshMef2aV0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
