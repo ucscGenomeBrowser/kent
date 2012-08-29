@@ -65,7 +65,6 @@ if (optionExists("zooms"))
 	printf("\t%d\t%d\n", zoom->reductionLevel, (int)(zoom->indexOffset - zoom->dataOffset));
 	for (chrom=chromList; chrom != NULL; chrom = chrom->next)
 	    {
-	    extern struct bbiSummary *bbiSummariesInRegion(struct bbiZoomLevel *zoom, struct bbiFile *bbi, int chromId, bits32 start, bits32 end);
 	    struct bbiSummary *sum, *sumList = bbiSummariesInRegion(zoom, bbi,   chrom->id,0, chrom->size);
 	     for (sum = sumList; sum != NULL; sum = sum->next)
 	             {

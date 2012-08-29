@@ -36,11 +36,12 @@ subGroup4 sex Sex M=M F=F U=U
 subGroup5 age Age A1DLT8W=Adult_8_weeks A2DULT24WKS=Adult_24_weeks E0=Embryonic_day_0 E14=Embryonic_day_14 E14HALF=Embryonic_day_14.5 IMMORTAL=Immortal_cells
 subGroup6 strain Strain C57BL6=C57BL/6 A129Ola=129/Ola
 subGroup7 control Control STD=std
-dimensions dimensionX=cellType dimensionY=factor dimensionA=age 
+dimensions dimensionX=cellType dimensionY=factor dimensionA=age  dimensionB=strain
 dimensionAchecked 1ADLT8W,IMMORTAL
-filterComposite dimensionA=multi
-sortOrder cellType=+ factor=+ view=+ age=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession geoSeriesAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+dimensionBchecked All
+filterComposite dimensionA=multi dimensionB=multi
+sortOrder cellType=+ factor=+ view=+ age=+ strain=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age strain=Strain replicate=Replicate view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control:wq
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=dense Signal=full
@@ -945,7 +946,7 @@ html wgEncodeLicrHistone.release3
         color 65,105,225
         # subId=7136 dateSubmitted=2012-06-27
 
-        track wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdPk
+        track wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K36m3 
         longLabel ES-E14 E0 H3K36me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
@@ -953,8 +954,9 @@ html wgEncodeLicrHistone.release3
         type broadPeak
         color 65,105,225
         # subId=7126 dateSubmitted=2012-06-26
+        # was wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdPk fang Mon Aug 27 11:47:41 2012
 
-        track wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdPk
+        track wgEncodeLicrHistoneEse14H3k27acME0129olaStdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K27a 
         longLabel ES-E14 E0 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
@@ -962,8 +964,9 @@ html wgEncodeLicrHistone.release3
         type broadPeak
         color 65,105,225
         # subId=7125 dateSubmitted=2012-06-26
+        # was wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdPk fang Mon Aug 27 11:46:22 2012
 
-        track wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdPk
+        track wgEncodeLicrHistoneEse14H3k09acME0129olaStdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K9a 
         longLabel ES-E14 E0 H3K9ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
@@ -971,8 +974,9 @@ html wgEncodeLicrHistone.release3
         type broadPeak
         color 65,105,225
         # subId=7124 dateSubmitted=2012-06-25
+        # was wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdPk fang Mon Aug 27 11:45:01 2012
 
-        track wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdPk
+        track wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K4m3 
         longLabel ES-E14 E0 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
@@ -980,8 +984,9 @@ html wgEncodeLicrHistone.release3
         type broadPeak
         color 65,105,225
         # subId=7123 dateSubmitted=2012-06-24
+        # was wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdPk fang Mon Aug 27 11:43:42 2012
 
-        track wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdPk
+        track wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ES-E14 0 H3K4m1 
         longLabel ES-E14 E0 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
@@ -989,6 +994,7 @@ html wgEncodeLicrHistone.release3
         type broadPeak
         color 65,105,225
         # subId=7122 dateSubmitted=2012-06-23
+        # was wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdPk fang Mon Aug 27 11:40:34 2012
 
         track wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
@@ -2276,7 +2282,7 @@ html wgEncodeLicrHistone.release3
         viewLimits 0.2:5
         # subId=7136 dateSubmitted=2012-06-27
 
-        track wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdSig
+        track wgEncodeLicrHistoneEse14H3k36me3ME0129olaStdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K36m3 
         longLabel ES-E14 E0 H3K36me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
@@ -2285,8 +2291,9 @@ html wgEncodeLicrHistone.release3
         color 65,105,225
         viewLimits 0.2:2
         # subId=7126 dateSubmitted=2012-06-26
+        # was wgEncodeLicrHistoneEse14H3k36me3ME14C57bl6StdSig fang Mon Aug 27 11:48:18 2012
 
-        track wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdSig
+        track wgEncodeLicrHistoneEse14H3k27acME0129olaStdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K27a 
         longLabel ES-E14 E0 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR
@@ -2295,8 +2302,9 @@ html wgEncodeLicrHistone.release3
         color 65,105,225
         viewLimits 0.2:5
         # subId=7125 dateSubmitted=2012-06-26
+        # was wgEncodeLicrHistoneEse14H3k27acME14C57bl6StdSig fang Mon Aug 27 11:47:00 2012
 
-        track wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdSig
+        track wgEncodeLicrHistoneEse14H3k09acME0129olaStdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K9a
         longLabel ES-E14 E0 H3K9ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
@@ -2305,8 +2313,9 @@ html wgEncodeLicrHistone.release3
         color 65,105,225
         viewLimits 0.2:5
         # subId=7124 dateSubmitted=2012-06-25
+        # was wgEncodeLicrHistoneEse14H3k09acME14C57bl6StdSig fang Mon Aug 27 11:45:43 2012
 
-        track wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdSig
+        track wgEncodeLicrHistoneEse14H3k04me3ME0129olaStdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K4m3
         longLabel ES-E14 E0 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
@@ -2315,8 +2324,9 @@ html wgEncodeLicrHistone.release3
         color 65,105,225
         viewLimits 0.2:10
         # subId=7123 dateSubmitted=2012-06-24
+        # was wgEncodeLicrHistoneEse14H3k04me3ME14C57bl6StdSig fang Mon Aug 27 11:44:18 2012
 
-        track wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdSig
+        track wgEncodeLicrHistoneEse14H3k04me1ME0129olaStdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel ES-E14 0 H3K4m1 
         longLabel ES-E14 E0 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
@@ -2325,6 +2335,7 @@ html wgEncodeLicrHistone.release3
         color 65,105,225
         viewLimits 0.2:3
         # subId=7122 dateSubmitted=2012-06-23
+        # was wgEncodeLicrHistoneEse14H3k04me1ME14C57bl6StdSig fang Mon Aug 27 11:42:48 2012
 
         track wgEncodeLicrHistoneCh12H3k79me2FImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
