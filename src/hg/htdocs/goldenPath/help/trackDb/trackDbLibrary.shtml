@@ -4008,9 +4008,40 @@ for each cell associated with the particular TF binding location.</P>
 </DIV>
 
 <DIV class="subGroups_example"><span class="types superGroups"></span>
-<div class="format"><B>Example of a Composite track with Subgroups:</B></div>
+<div class="format"><B>Examples of Composite tracks with Subgroups:</B></div>
     <pre>
     track myComposite
+    composite on
+    subGroup1 cellLine Cell_Line \
+            A1GM12=GM12878 \
+            CD14=CD14&amp;#43; &hellip;
+    subGroup2 ab Antibody \
+            H3K04ME3=H3K4me3 \
+            H3K36ME3=H3K36me3 &hellip;
+    dimensions dimX=ab dimY=cellLine
+    sortOrder cell=+ ab=+
+      ...
+
+        track myFirstSubtrack
+        parent myComposite on
+        subGroups cellLine=CD14 ab=H3K04ME3
+          ...    </pre>
+    <P>A composite with
+    one subtrack and two subgroups is shown.  Notice that the
+    dimensions setting declares X and Y dimensions so those will be in
+    a 2D matrix on the composite's configuration page.  Notice that the
+    title of the cellLine subgroup contains a blank space filled in
+    with '<code>_</code>'.  The second cell line includes an HTML code
+    in the title for '<code>+</code>', making the user see "CD14+"
+    as the cell line. The two subgroups participate in the default
+    sort order, but they each have non-standard sort orders.  For
+    cells, GM12878 sorts first by starting its tag with "A".  The 
+    antibodies have numbers in their titles, but the tags expand
+    the number with "0" to pad the spacing.  This ensures
+    H3K4me3 sorts before H3K36me3.</P>
+
+    <pre>
+    track my3DComposite
     composite on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
@@ -4034,29 +4065,20 @@ for each cell associated with the particular TF binding location.</P>
       ...
 
         track myFirstSubtrack
-        parent myComposite on
+        parent my3DComposite on
         subGroups cellLine=CD14 ab=H3K04ME3 treat=ZNONE
           ...    </pre>
-    <P>The composite with
-    one subtrack and three subgroups is shown.  Notice that the
+    <P>In this second example composite,
+    one subtrack and three subgroups is shown.  As in the previous example, the
     dimensions setting declares X and Y dimensions so those will be in
-    a 2D matrix on the composite's configuration page.  Also
-    notice that a third dimension is declared as the "A"
+    a 2D matrix of "Antibody" and "Cell Line" options.  Also
+    notice that a third "Treatment" subgroup is declared as the "A"
     dimension and the user will be able to select subtracks for this
-    dimension by a drop down multi-select filter box.  Notice that the
-    title of the cellLine subgroup contains a blank space filled in
-    with '<code>_</code>'.  The second cell line includes an HTML code
-    in the title for '<code>+</code>', making the user see "CD14+"
-    as the cell line. All three subgroups participate in the default
-    sort order, but they each have non-standard sort orders.  For
-    cells, GM12878 sorts first by starting its tag with "A".
-        The antibodies have numbers in their titles, but the tags expand
-    the number with "0" to pad the spacing.  This ensures
-    H3K4me3 sorts before H3K36me3.  Finally the treatment "None"
-    sorts after "TNF-alpha" by beginning the tag with a
-    "Z".  That said, the default sort order on the
-    treatment group is reverse, so that "None" will be
-    seen first.  Also note that for this "A" dimension,
+    dimension by a drop down multi-select filter box.  All three subgroups 
+    participate in the default sort order, and now the treatment subgroup is 
+    sorted in reverse order by default.  Also the "None" treatment
+    sorts before all others (in reverse order) by beginning the tag with
+    a "Z".  Also note that for this "A" dimension,
     the "None" treatment will be selected by default.  By
     declaring the proper settings, using subGroups to organize a
     composite can be quite powerful.</P>
@@ -4086,6 +4108,78 @@ for each cell associated with the particular TF binding location.</P>
     the trackDb settings, if done correctly, can tie all these
     elements together in a nice cohesive package.</P>
 </DIV>
+
+<DIV class="subGroups_hub_example"><span class="types superGroups"></span>
+<div class="format"><B>Examples of Composite tracks with Subgroups:</B></div>
+    <pre>
+    track myComposite
+    composite on
+    subGroup1 cellLine Cell_Line \
+            A1GM12=GM12878 \
+            CD14=CD14&amp;#43; &hellip;
+    subGroup2 ab Antibody \
+            H3K04ME3=H3K4me3 \
+            H3K36ME3=H3K36me3 &hellip;
+    dimensions dimX=ab dimY=cellLine
+    sortOrder cell=+ ab=+
+      ...
+
+        track myFirstSubtrack
+        parent myComposite on
+        subGroups cellLine=CD14 ab=H3K04ME3
+          ...    </pre>
+    <P>A composite with
+    one subtrack and two subgroups is shown.  Notice that the
+    dimensions setting declares X and Y dimensions so those will be in
+    a 2D matrix on the composite's configuration page.  Notice that the
+    title of the cellLine subgroup contains a blank space filled in
+    with '<code>_</code>'.  The second cell line includes an HTML code
+    in the title for '<code>+</code>', making the user see "CD14+"
+    as the cell line. The two subgroups participate in the default
+    sort order, but they each have non-standard sort orders.  For
+    cells, GM12878 sorts first by starting its tag with "A".  The 
+    antibodies have numbers in their titles, but the tags expand
+    the number with "0" to pad the spacing.  This ensures
+    H3K4me3 sorts before H3K36me3.</P>
+
+    <pre>
+    track my3DComposite
+    composite on
+    subGroup1 cellLine Cell_Line \
+            A1GM12=GM12878 \
+            CD14=CD14&amp;#43; &hellip;
+    subGroup2 ab Antibody \
+            H3K04ME3=H3K4me3 \
+            H3K36ME3=H3K36me3 &hellip;
+    subGroup3 treat Treatment \
+            TNFA=TNF-alpha \
+            ZNONE=None &hellip;
+    dimensions dimX=ab dimY=cellLine dimA=treat
+    filterComposite dimA
+    dimensionAchecked ZNONE
+    sortOrder cell=+ ab=+ treat=-
+      ...
+
+        track myFirstSubtrack
+        parent my3DComposite on
+        subGroups cellLine=CD14 ab=H3K04ME3 treat=ZNONE
+          ...    </pre>
+    <P>In this second example composite,
+    one subtrack and three subgroups is shown.  As in the previous example, the
+    dimensions setting declares X and Y dimensions so those will be in
+    a 2D matrix of "Antibody" and "Cell Line" options.  Also
+    notice that a third "Treatment" subgroup is declared as the "A"
+    dimension and the user will be able to select subtracks for this
+    dimension by a drop down multi-select filter box.  All three subgroups 
+    participate in the default sort order, and now the treatment subgroup is 
+    sorted in reverse order by default.  Also the "None" treatment
+    sorts before all others (in reverse order) by beginning the tag with
+    a "Z".  Also note that for this "A" dimension,
+    the "None" treatment will be selected by default.  By
+    declaring the proper settings, using subGroups to organize a
+    composite can be quite powerful.</P>
+</DIV>
+
 
 
 <!-- - - - - - - - VIEW settings - - - - - - - -->
