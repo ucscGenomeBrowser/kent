@@ -6612,6 +6612,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL6020
 md5sum bf0fffe25959fad365d0e4019240eabe,28be7b938722381f1c9c0f7f5866b980
+objStatus revoked - nothing uses this control
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -6637,6 +6638,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL6020
 md5sum f7184d01edf1a42fd9d21a263d6cdd63
+objStatus revoked - nothing uses this control
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -6662,6 +6664,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL6020
 md5sum abdf214f10a025eeda892bd39af4c9f3
+objStatus revoked - nothing uses this control
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -11871,7 +11874,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL13758
 md5sum 0bb00c65ff83a4c868a0ddc60853eb8b,37f5a69e06d8bc8b5df117404954a791
-objStatus incorrect antibody used
+objStatus revoked - incorrect antibody used
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -11897,7 +11900,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL14722
 md5sum 597d7ac653c084cd7880bdb11664ccd3,aed2947d4e0a7bcb672276c0da69cb66
-objStatus incorrect antibody used
+objStatus revoked - incorrect antibody used
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -11923,7 +11926,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL13758
 md5sum bb82a1bc1596f7225814a093da7c666c
-objStatus incorrect antibody used
+objStatus revoked - incorrect antibody used
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -11951,7 +11954,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL14722
 md5sum 62c35f2b56f5a6327b2ddaf7e746fd05
-objStatus incorrect antibody used
+objStatus revoked - incorrect antibody used
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -11979,7 +11982,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL13758
 md5sum 49183dd5a483695020bba9beaf453f5d
-objStatus incorrect antibody used
+objStatus revoked - incorrect antibody used
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -12005,7 +12008,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL14722
 md5sum 4b45d0ba2aaf5ca7e2fe40a5eea1cce2
-objStatus incorrect antibody used
+objStatus revoked - incorrect antibody used
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -12031,7 +12034,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL13758
 md5sum 839864c40f262efd09ada14a287d3ef2
-objStatus incorrect antibody used
+objStatus revoked - incorrect antibody used
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -12058,7 +12061,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL14722
 md5sum 59876b8a6dffca0a230636d6a1e55823
-objStatus incorrect antibody used
+objStatus revoked - incorrect antibody used
 project wgEncode
 protocol v042211.1
 replicate 2
@@ -82832,4 +82835,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 1839780976
+# MAGIC: -732977079
