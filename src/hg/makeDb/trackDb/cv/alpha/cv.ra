@@ -2569,7 +2569,8 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002807
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002807
 lab Stam
-protocol Stam:H0287_Stam_protocol.pdf
+protocol missing
+#protocol Stam:H0287_Stam_protocol.pdf
 
 term H7-hESC
 tag H7ES
