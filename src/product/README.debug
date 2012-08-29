@@ -103,5 +103,23 @@ common form of problem is a memory violation while using some
 of the specialized structures, hash lists, etc.  Your stack backtrace
 will usually highlight these situations.
 
-====================================================================
-This file last updated: $Date: 2005/03/28 19:49:59 $
+In order to determine the URL being used by the browser CGIs to pass
+to in the debugger, you need to force the browser to use GET http
+requests rather than POST.  Try adding &formMethod=GET to an URL.
+Not all forms pay attention to that input, but when they do it
+generally looks like this:
+
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
+    getScriptName(), cartUsualString(cart, "formMethod", "POST"));
+
+If you add &formMethod=GET and a subsequently fetched form is still
+posting, you might need to alter the "<FORM..." statement to use the
+cartUsualString.
+
+The hg18 hgTracks config page generates a GET URL that is too long for
+FireFox, so after debugging hgTables, you will probably want to add
+&formMethod=POST to an URL (or clear cart, load session etc).
+
+One thing that does not work with GET is "upload file" inputs.
+
+
