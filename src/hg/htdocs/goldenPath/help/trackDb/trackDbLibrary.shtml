@@ -677,6 +677,20 @@
     http://genome.ucsc.edu/FAQ/FAQformat.html</A>.</P>
 </DIV>
 
+<DIV class="bigBed_intro">
+<H3>bigBed: Item or region tracks</H3>
+    <P>Some of the most
+    common track types are those that highlight regions or items of
+    varying size in a genome assembly.  There are many variations to the
+    "items" track, most of which are specified with a bigBed format.  
+    These two formats are really a cluster of many
+    formats all starting with three common fields (chromosome start end)
+    and having optionally many more fields.  For complete bigBed
+    format definitions please see:
+    <A HREF="../bigBed.html">
+    http://genome.ucsc.edu/goldenPath/help/bigBed.html</A>.</P>
+</DIV>
+
 <DIV class="bed"><span class="types bed bigBed"></span>
 <div class="format">
     <code>type bed &lt;3-12&gt; [+/.]</code><BR>
@@ -684,6 +698,17 @@
     <P>Both bed and bigBed
     declare the number of standard bed fields in the data.  There may
     be additional fields following these standard ones.  If so, the
+    type should end with a '<code>+</code>' (plus).  Even if there are not
+    additional non-standard fields, the additional parameter '<code>.</code>' (dot)
+    is needed, if this track is meant to be configurable.</P>
+    <P><em>Examples can be found below.</em></P>
+</DIV>
+
+<DIV class="bigBed"><span class="types bigBed"></span>
+<div class="format">
+    <code>type bigBed &lt;3-12&gt; [+/.]</code></div>
+    <P>Type bigBed declares the number of standard "bed" fields in the data.  
+    There may be additional fields following these standard ones.  If so, the
     type should end with a '<code>+</code>' (plus).  Even if there are not
     additional non-standard fields, the additional parameter '<code>.</code>' (dot)
     is needed, if this track is meant to be configurable.</P>
@@ -841,6 +866,32 @@
     is floating-point, will be filtered by range.  The expected data
     range is 0-15 and by default only items with pValues within 3-15
     will be displayed.</P>
+</DIV>
+
+<DIV class="scoreFilter"><span class="types bigBed"></span>
+<div class="format">
+    <code>scoreFilter &lt;low&gt;[:&lt;high&gt;]</code><BR>
+    <code>scoreFilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
+    </div>
+    <P>Type <code>bigBed</code> tracks can be filtered on the standard bed field
+    <code>score</code>.  This numerical filter is requested by the 
+    <code>scoreFilter</code> setting, which should include the default value.  
+    </P>
+    <P>By default the range
+    of values for a score filter is from 0 to 1000.  However, you
+    can explicitly set the upper and lower limit of the filter by
+    setting <code>scoreFilterLimits</code>.
+    </P>
+    <P>The score filter will exclude items that fall below the setting. That is, a
+    scoreFilter of 800 will exclude all items with a score below 800.</P>
+    <P><B>Example:</B></P>
+    <pre>
+    scoreFilter 300
+    scoreFilterLimits 200:1000</pre>
+    <P>The standard bed
+    field of <code>score</code>, which is an integer will be used to filter items
+    in the track.  By default, items with scores below 300 will be
+    excluded.  The filter cannot be set to less than 200 or more than 1000..</P>
 </DIV>
 
 <DIV class="filterBy"><span class="types bed genePred psl"></span>
@@ -1369,6 +1420,45 @@
     standard 6.</P>
 </DIV>
 
+<DIV class="bigBed_example"><span class="types bigBed"></span>
+<div class="format"><B>Examples of item base types:</B></div>
+    <pre>
+    type bigBed 6 +
+    colorByStrand 255,0,0 0,0,255
+      ...    </pre>
+    <P>The type setting for
+    a bed and a bigBed are nearly identical.  Here, both type settings
+    would define a track with the first 6 standard bed fields defined
+    (up to <code>strand</code>) and with additional fields defined
+    after those 6.  Notice that plus strand items are colored red,
+    while minus strand items are blue.</P><BR>
+
+    <pre>
+    type bigBed 8 .
+    scoreFilter 700
+    scoreFilterLimits 100:1000
+    thickDrawItem on
+    spectrum on
+    scoreMin 700
+    scoreMax 900
+    color 0,0,255
+    minGrayLevel   4
+      ...    </pre>
+    <P>A bigBed track with
+    the first 8 standard bed fields (through <code>thickEnd</code>),
+    and no additional fields.  The '<code>.</code>' is required to tell
+    the Browser that the user may configure this track.  The score
+    filter is explicitly declared to default to 700, and an allowable
+    range for the score suggests there are no values below 100 worth
+    looking at.  This example also sets the items to blue and presents
+    a spectrum or gradation of darkness based upon the score range.
+    Items with score 700 or less are the lightest, and items with
+    score 900 or more are the darkest blue.  Finally the lightest
+    shade set to be not too light with the poorly named <code>minGrayLevel</code>
+    setting.  No doubt 4 was chosen after experimentation to see how
+    it actually looks in the Browser.</P><BR>
+</DIV>
+
 
 <!-- - - - - - - - WIG/BIGWIG settings - - - - - - - -->
 <DIV class="wig_intro">
@@ -1385,6 +1475,18 @@
     http://genome.ucsc.edu/FAQ/FAQformat.html</A>.</P>
 </DIV>
 
+<DIV class="bigWig_intro">
+<H3>bigWig/bamWig:  signal graphing tracks </H3>
+    <P>Another set of common track types are those that graph a density signal along
+    the genome. The graph can be a continuously varying density plot or
+    one that displays a density signal in only certain regions.  For data hubs
+    the most common signal track type is <code>bigWig</code>.
+    For detailed specifications of the <code>bigWig</code> remote data
+    file format and how to prepare them for display in the Genome Browser please
+    see: <A HREF="../bigWig.html">
+    http://genome.ucsc.edu/goldenPath/help/bigWig.html</A>.</P>
+</DIV>
+
 <DIV class="wig"><span class="types wig bigWig bamWig"></span>
 <div class="format">
     <code>type wig &lt;low#&gt; &lt;high#&gt;</code><BR>
@@ -1392,6 +1494,16 @@
     <code>type bamWig &lt;#&gt; &lt;#&gt;</code></div>
     <P>MySQL tables of type
     <code>wig</code> and remote data files of type <code>bigWig</code>
+    or <code>bamWig</code> must declare the expected signal range for
+    the data.</P>
+    <P><em>Examples can be found below.</em></P>
+</DIV>
+
+<DIV class="bigWig"><span class="types bigWig bamWig"></span>
+<div class="format">
+    <code>type bigWig &lt;#&gt; &lt;#&gt;</code><BR>
+    <code>type bamWig &lt;#&gt; &lt;#&gt;</code></div>
+    <P>The remote data files of type <code>bigWig</code>
     or <code>bamWig</code> must declare the expected signal range for
     the data.</P>
     <P><em>Examples can be found below.</em></P>
@@ -1672,6 +1784,30 @@
     define a signal in varying granularities of windows with or
     without gaps.
     </P>
+</DIV>
+
+<DIV class="bigWig_example"><span class="types bigWig"></span>
+<div class="format"><B>Example of signal graphing tracks:</B></div>
+    <pre>
+    type bigWig -0.25 37.6
+    windowingFunction mean+whiskers
+    viewLimits 5:20
+    viewLimitsMax 0:37.6
+    maxHeightPixels 100:32:8
+    yLineOnOff on
+    yLineMark 15
+    gridDefault on
+    color 128,0,128
+      ...  </pre>
+    <P>This bigwig format
+    signal is held in a data file (which may be remote).  The more
+    informative mean+whiskers windowing function is used by default in
+    this track and the signal will be 32 pixels high in the Browser
+    image display.  Notice that even though the signal value may be
+    less than zero, that portion of the signal is not available to be
+    displayed.  There will be a line at y=0 and another at y=15, which
+    may be a threshold value for this signal.  Finally notice the
+    track will be colored purple.</P><BR>
 </DIV>
 
 
