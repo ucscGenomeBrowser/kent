@@ -57,12 +57,28 @@ struct wordInfo
     int outCount;		/* Number of times have output word so far. */
     };
 
+struct wordInfoRef
+/* A reference to a word. */
+    {
+    struct wordInfoRef *next;	/* Next in list */
+    struct wordInfo *val;	/* The word referred to. */
+    };
+
+struct wordType
+/* A collection of words of the same type - or monomers of same type. */
+    {
+    struct wordType *next;   /* Next wordType */
+    struct wordInfoRef *list;	    /* List of all words of that type */
+    };
+
 struct wordStore
 /* Stores info on all words */
     {
-    struct wordInfo *list;   /* List of words, fairly arbitrary order. */
-    struct hash *hash;	     /* Hash of wordInfo, keyed by word. */
+    struct wordInfo *infoList;   /* List of words, fairly arbitrary order. */
+    struct hash *infoHash;	     /* Hash of wordInfo, keyed by word. */
     struct wordTree *markovChains;   /* Tree of words that follow other words. */
+    struct wordType *typeList;	/* List of all types. */
+    struct hash *typeHash;	/* Hash with wordType values, keyed by all words. */
     };
 
 /* The wordTree structure below is the central data structure for this program.  It is
@@ -499,7 +515,7 @@ struct wordStore *wordStoreNew()
 {
 struct wordStore *store;
 AllocVar(store);
-store->hash = hashNew(0);
+store->infoHash = hashNew(0);
 return store;
 }
 
@@ -507,11 +523,12 @@ struct wordInfo *wordStoreAdd(struct wordStore *store, char *word)
 /* Add word to store,  incrementing it's useCount if it's already there, otherwise
  * making up a new record for it. */
 {
-struct wordInfo *info = hashFindVal(store->hash, word);
+struct wordInfo *info = hashFindVal(store->infoHash, word);
 if (info == NULL)
     {
     AllocVar(info);
-    hashAddSaveName(store->hash, word, info, &info->word);
+    hashAddSaveName(store->infoHash, word, info, &info->word);
+    slAddHead(&store->infoList, info);
     }
 info->useCount += 1;
 return info;
@@ -598,11 +615,47 @@ wordTreeDump(0, wt, f);
 carefulClose(&f);
 }
 
+void wordStoreLoadMonomerOrder(struct wordStore *store, char *readsFile, char *fileName)
+/* Read in a file with one line for each monomer type, containing a word for each
+ * monomer variant.  Requires all variants already be in store.  The readsFile is passed
+ * just for nicer error reporting. */
+{
+/* Stuff for processing file a line at a time. */
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
+
+/* Set up variables we'll put results in in store. */
+store->typeHash = hashNew(0);
+store->typeList = NULL;
+
+while (lineFileNextReal(lf, &line))
+    {
+    struct wordType *type;
+    AllocVar(type);
+    slAddHead(&store->typeList, type);
+    while ((word = nextWord(&line)) != NULL)
+        {
+	struct wordInfo *info = hashFindVal(store->infoHash, word);
+	if (info == NULL)
+	    errAbort("%s is in %s but not %s", word, lf->fileName, readsFile);
+	struct wordInfoRef *ref;
+	AllocVar(ref);
+	ref->val = info;
+	slAddHead(&type->list, ref);
+	hashAddUnique(store->typeHash, word, type);
+	}
+    }
+lineFileClose(&lf);
+verbose(2, "Added %d types containing %d words from %s\n", 
+    slCount(store->typeList), store->typeHash->elCount, fileName);
+}
+
 void alphaChain(char *readsFile, char *monomerOrderFile, char *outFile)
 /* alphaChain - Create Markov chain of words and optionally output chain in two formats. */
 {
 struct wordStore *store = wordStoreForChainsInFile(readsFile, maxChainSize);
 struct wordTree *wt = store->markovChains;
+wordStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
 wordTreeNormalize(wt, outSize, 1.0);
 
 if (optionExists("chain"))
