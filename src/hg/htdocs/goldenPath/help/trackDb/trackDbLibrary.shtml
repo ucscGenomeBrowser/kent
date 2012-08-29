@@ -4041,7 +4041,7 @@ for each cell associated with the particular TF binding location.</P>
     H3K4me3 sorts before H3K36me3.</P>
 
     <pre>
-    track my3DComposite
+    track myCompositeIs3D
     composite on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
@@ -4064,8 +4064,8 @@ for each cell associated with the particular TF binding location.</P>
                 fileSize=Size
       ...
 
-        track myFirstSubtrack
-        parent my3DComposite on
+        track myFirstSubtrackIn3D
+        parent myCompositeIs3D on
         subGroups cellLine=CD14 ab=H3K04ME3 treat=ZNONE
           ...    </pre>
     <P>In this second example composite,
@@ -4143,7 +4143,7 @@ for each cell associated with the particular TF binding location.</P>
     H3K4me3 sorts before H3K36me3.</P>
 
     <pre>
-    track my3DComposite
+    track myCompositeIs3D
     composite on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
@@ -4160,8 +4160,8 @@ for each cell associated with the particular TF binding location.</P>
     sortOrder cell=+ ab=+ treat=-
       ...
 
-        track myFirstSubtrack
-        parent my3DComposite on
+        track myFirstSubtrackIn3D
+        parent myCompositeIs3D on
         subGroups cellLine=CD14 ab=H3K04ME3 treat=ZNONE
           ...    </pre>
     <P>In this second example composite,
@@ -4293,7 +4293,7 @@ for each cell associated with the particular TF binding location.</P>
 <DIV class="view_example"><span class="types view"></span>
 <div class="format"><B>Example of a Composite track with Views:</B></div>
     <pre>
-    track myComposite
+    track myMultiViewComposite
     composite on
     visibility dense
     subGroup1 view Views PK=Peaks SIG=Signals
@@ -4309,7 +4309,7 @@ for each cell associated with the particular TF binding location.</P>
       ...
 
         track myViewPeaks
-        parent myComposite
+        parent myMultiViewComposite
         shortLabel Peaks
         view PK
         visibility pack
@@ -4319,7 +4319,7 @@ for each cell associated with the particular TF binding location.</P>
         viewUi on
           ...
 
-            track myFirstSubtrack
+            track myFirstPeakSubtrack
             parent myViewPeaks on
             subGroups cell=CD14 ab=H3K04ME3 view=PK
               ...    </pre>
