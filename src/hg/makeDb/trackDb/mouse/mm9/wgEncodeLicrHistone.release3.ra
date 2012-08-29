@@ -37,7 +37,7 @@ subGroup5 age Age A1DLT8W=Adult_8_weeks A2DULT24WKS=Adult_24_weeks E0=Embryonic_
 subGroup6 strain Strain C57BL6=C57BL/6 A129Ola=129/Ola
 subGroup7 control Control STD=std
 dimensions dimensionX=cellType dimensionY=factor dimensionA=age  dimensionB=strain
-dimensionAchecked 1ADLT8W,IMMORTAL
+dimensionAchecked A1DLT8W,IMMORTAL
 dimensionBchecked All
 filterComposite dimensionA=multi dimensionB=multi
 sortOrder cellType=+ factor=+ view=+ age=+ strain=+
