@@ -2695,7 +2695,7 @@ md5sum 5360cfa8c73bcad971510caf0c3568a0,e2b95021ec83a23e30115c815c1dcfec
 project wgEncode
 protocol v041610.2
 replicate 1
-setType input
+setType exp
 subId 4882
 treatment EtOH_0.02pct
 view Alignments
@@ -2720,10 +2720,62 @@ md5sum 6f9e02f5540ff609a0452e9fb1211f36,f4cc6b2594c41b7f3d9daedf852bd490
 project wgEncode
 protocol v041610.2
 replicate 2
-setType input
+setType exp
 subId 4882
 treatment EtOH_0.02pct
 view Alignments
+
+metaObject wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep1
+objType table
+antibody FOXA2_(SC-6554)
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL3978
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-29
+dateUnrestricted 2013-05-29
+dccAccession wgEncodeEH002326
+expId 2326
+fileName wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3077
+project wgEncode
+protocol v041610.2
+replicate 1
+setType exp
+softwareVersion MACS
+subId 7874
+tableName wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep1
+treatment EtOH_0.02pct
+view Peaks
+
+metaObject wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep2
+objType table
+antibody FOXA2_(SC-6554)
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL3978
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-29
+dateUnrestricted 2013-05-29
+dccAccession wgEncodeEH002326
+expId 2326
+fileName wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3253
+project wgEncode
+protocol v041610.2
+replicate 2
+setType exp
+softwareVersion MACS
+subId 7874
+tableName wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep2
+treatment EtOH_0.02pct
+view Peaks
 
 metaObject wgEncodeHaibTfbsA549Foxa2V0416102Etoh02RawDataRep1
 objType file
@@ -2745,7 +2797,7 @@ md5sum 217b1c10eb63c1a875084d57d4292b44
 project wgEncode
 protocol v041610.2
 replicate 1
-setType input
+setType exp
 subId 4882
 treatment EtOH_0.02pct
 view RawData
@@ -2770,7 +2822,7 @@ md5sum 9b7b22d943c13cf074d6bfea11fddcf8
 project wgEncode
 protocol v041610.2
 replicate 2
-setType input
+setType exp
 subId 4882
 treatment EtOH_0.02pct
 view RawData
@@ -2795,7 +2847,7 @@ md5sum 72c1c7f6b6c41f8b3cd6a1dff6ab9f2f
 project wgEncode
 protocol v041610.2
 replicate 1
-setType input
+setType exp
 subId 4882
 tableName wgEncodeHaibTfbsA549Foxa2V0416102Etoh02RawRep1
 treatment EtOH_0.02pct
@@ -2821,7 +2873,7 @@ md5sum 89014c7ae988fbacbd56e3955fa72c45
 project wgEncode
 protocol v041610.2
 replicate 2
-setType input
+setType exp
 subId 4882
 tableName wgEncodeHaibTfbsA549Foxa2V0416102Etoh02RawRep2
 treatment EtOH_0.02pct
@@ -4482,7 +4534,7 @@ md5sum 64c8e4cae68a8392a2b3ef21b104ce79,4354dbe84e05370eddfce29d802e2551
 project wgEncode
 protocol v041610.2
 replicate 1
-setType input
+setType exp
 subId 4882
 treatment EtOH_0.02pct
 view Alignments
@@ -4507,10 +4559,62 @@ md5sum 7e20947c9f615df7e4258a5e55f62bf6,9cda62f978bc16a3bbaf1f6689fe6346
 project wgEncode
 protocol v041610.2
 replicate 2
-setType input
+setType exp
 subId 4882
 treatment EtOH_0.02pct
 view Alignments
+
+metaObject wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep1
+objType table
+antibody JunD
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL3978
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-29
+dateUnrestricted 2013-05-29
+dccAccession wgEncodeEH002327
+expId 2327
+fileName wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3900
+project wgEncode
+protocol v041610.2
+replicate 1
+setType exp
+softwareVersion MACS
+subId 7874
+tableName wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep1
+treatment EtOH_0.02pct
+view Peaks
+
+metaObject wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep2
+objType table
+antibody JunD
+cell A549
+composite wgEncodeHaibTfbs
+controlId SL3978
+dataType ChipSeq
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-08-29
+dateUnrestricted 2013-05-29
+dccAccession wgEncodeEH002327
+expId 2327
+fileName wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL4698
+project wgEncode
+protocol v041610.2
+replicate 2
+setType exp
+softwareVersion MACS
+subId 7874
+tableName wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep2
+treatment EtOH_0.02pct
+view Peaks
 
 metaObject wgEncodeHaibTfbsA549JundV0416102Etoh02RawDataRep1
 objType file
@@ -4532,7 +4636,7 @@ md5sum ed3261c5637d337faa6dfa42d5f7a34e
 project wgEncode
 protocol v041610.2
 replicate 1
-setType input
+setType exp
 subId 4882
 treatment EtOH_0.02pct
 view RawData
@@ -4557,7 +4661,7 @@ md5sum f774484230933453c063f2b1667dda13
 project wgEncode
 protocol v041610.2
 replicate 2
-setType input
+setType exp
 subId 4882
 treatment EtOH_0.02pct
 view RawData
@@ -4582,7 +4686,7 @@ md5sum 8433ddbb571bbcc0a8bb29e8691479cd
 project wgEncode
 protocol v041610.2
 replicate 1
-setType input
+setType exp
 subId 4882
 tableName wgEncodeHaibTfbsA549JundV0416102Etoh02RawRep1
 treatment EtOH_0.02pct
@@ -4608,7 +4712,7 @@ md5sum 25e1c5aae7c33b1e0b513e9ebb60adf4
 project wgEncode
 protocol v041610.2
 replicate 2
-setType input
+setType exp
 subId 4882
 tableName wgEncodeHaibTfbsA549JundV0416102Etoh02RawRep2
 treatment EtOH_0.02pct
@@ -82634,4 +82738,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 1739348852
+# MAGIC: -823142135

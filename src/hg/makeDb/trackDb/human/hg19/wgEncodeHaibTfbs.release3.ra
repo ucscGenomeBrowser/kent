@@ -5968,6 +5968,38 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=7872 dateSubmitted=2012-08-20
 
+        track wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 FOXA2 ETOH 1
+        longLabel A549 FOXA2 (SC-6554) EtOH 0.02% v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=FOXA2SC6554 cellType=t2A549 protocol=V0416102 treatment=ETOH02 rep=rep1
+        type broadPeak
+        # subId=7874 dateSubmitted=2012-08-29
+
+        track wgEncodeHaibTfbsA549Foxa2V0416102Etoh02PkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 FOXA2 ETOH 2
+        longLabel A549 FOXA2 (SC-6554) EtOH 0.02pct v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=FOXA2SC6554 cellType=t2A549 protocol=V0416102 treatment=ETOH02 rep=rep2
+        type broadPeak
+        # subId=7874 dateSubmitted=2012-08-29
+
+        track wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 JunD ETOH 1
+        longLabel A549 JunD EtOH 0.02pct v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=JUND cellType=t2A549 protocol=V0416102 treatment=ETOH02 rep=rep1
+        type broadPeak
+        # subId=7874 dateSubmitted=2012-08-29
+
+        track wgEncodeHaibTfbsA549JundV0416102Etoh02PkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 JunD ETOH 2
+        longLabel A549 JunD EtOH 0.02pct v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=JUND cellType=t2A549 protocol=V0416102 treatment=ETOH02 rep=rep2
+        type broadPeak
+        # subId=7874 dateSubmitted=2012-08-29
+
     #Raw Signal Track HAIB TFBS#
     #Short Labels for Raw Signal =Ra #
     track wgEncodeHaibTfbsViewRawSignal
