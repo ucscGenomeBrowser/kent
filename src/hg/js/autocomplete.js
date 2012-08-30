@@ -27,14 +27,8 @@ var suggestBox = {
                            },
                            success: catchErrorOrDispatch,
                            error: function (request, status, errorThrown) {
-                               if (typeof console != "undefined") {
-                                   console.dir(request);
-                                   console.log(status);
-                               }
-                               var msg = "ajax call failed";
-                               if(status != "error")
-                                   msg = msg + "; error: " + status;
-                               warn(msg + "; statusText: " + request.statusText + "; responseText: " + request.responseText);
+                               // tolerate errors (i.e. don't report them) to avoid spamming people on flaky network connections
+                               // with tons of error messages (#8816).
                            },
                            key: key,
                            cont: callback
