@@ -5227,7 +5227,7 @@ treatment DEX_100nM
 view RawData
 
 metaObject wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
-objType table
+objType file
 antibody RevXlinkChromatin
 cell A549
 composite wgEncodeHaibTfbs
@@ -5248,7 +5248,6 @@ protocol v042211.1
 replicate 1
 setType input
 subId 4321
-tableName wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
 treatment DEX_100nM
 view RawSignal
 
