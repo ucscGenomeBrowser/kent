@@ -461,7 +461,7 @@ html wgEncodeLicrHistone.release3
         # subId=5666 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
+        parent wgEncodeLicrHistoneViewPeaks
         shortLabel Heart 14.5 H3K4m1
         longLabel Heart E14.5 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=HEART control=STD sex=U strain=C57BL6
@@ -470,7 +470,7 @@ html wgEncodeLicrHistone.release3
         # subId=5663 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
+        parent wgEncodeLicrHistoneViewPeaks 
         shortLabel Heart 14.5 H3K4m3
         longLabel Heart E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=HEART control=STD sex=U strain=C57BL6
@@ -479,7 +479,7 @@ html wgEncodeLicrHistone.release3
         # subId=5664 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
+        parent wgEncodeLicrHistoneViewPeaks
         shortLabel Heart 14.5 H3K27a
         longLabel Heart E14.5 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K27AC cellType=HEART control=STD sex=U strain=C57BL6
@@ -542,7 +542,7 @@ html wgEncodeLicrHistone.release3
         # subId=5629 dateSubmitted=2012-02-13
 
         track wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
+        parent wgEncodeLicrHistoneViewPeaks
         shortLabel Liver 14.5 H3K27a
         longLabel Liver E14.5 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K27AC cellType=LIVER control=STD sex=U strain=C57BL6
@@ -551,7 +551,7 @@ html wgEncodeLicrHistone.release3
         # subId=5670 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
+        parent wgEncodeLicrHistoneViewPeaks
         shortLabel Liver 14.5 H3K4m1
         longLabel Liver E14.5 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=LIVER control=STD sex=U strain=C57BL6
@@ -560,7 +560,7 @@ html wgEncodeLicrHistone.release3
         # subId=5671 dateSubmitted=2012-02-15
 
         track wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
+        parent wgEncodeLicrHistoneViewPeaks
         shortLabel Liver 14.5 H3K4m3
         longLabel Liver E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=LIVER control=STD sex=U strain=C57BL6
@@ -1663,7 +1663,7 @@ html wgEncodeLicrHistone.release3
         # subId=5376 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
+        parent wgEncodeLicrHistoneViewSignal
         shortLabel Heart 14.5 H3K4m1
         longLabel Heart E14.5 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=HEART control=STD sex=U strain=C57BL6
@@ -1673,7 +1673,7 @@ html wgEncodeLicrHistone.release3
         # subId=5415 dateSubmitted=2012-01-04
 
         track wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
+        parent wgEncodeLicrHistoneViewSignal 
         shortLabel Heart 14.5 H3K4m3
         longLabel Heart E14.5 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=HEART control=STD sex=U strain=C57BL6
@@ -1683,7 +1683,7 @@ html wgEncodeLicrHistone.release3
         # subId=5414 dateSubmitted=2012-01-04
 
         track wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
+        parent wgEncodeLicrHistoneViewSignal
         shortLabel Heart 14.5 H3K27a
         longLabel Heart E14.5 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=HEART control=STD sex=U strain=C57BL6
@@ -1783,7 +1783,7 @@ html wgEncodeLicrHistone.release3
         # subId=5627 dateSubmitted=2012-02-13
 
         track wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
+        parent wgEncodeLicrHistoneViewSignal
         shortLabel Liver 14.5 H3K27a
         longLabel Liver E14.5 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=LIVER control=STD sex=U strain=C57BL6
@@ -1793,7 +1793,7 @@ html wgEncodeLicrHistone.release3
         # subId=5670 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
+        parent wgEncodeLicrHistoneViewSignal
         shortLabel Liver 14.5 H3K4m1
         longLabel Liver E14.5 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=LIVER control=STD sex=U strain=C57BL6
@@ -1803,7 +1803,7 @@ html wgEncodeLicrHistone.release3
         # subId=5671 dateSubmitted=2012-02-15
 
         track wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
+        parent wgEncodeLicrHistoneViewSignal
         shortLabel Liver 14.5 H3K4m3
         longLabel Liver E14.5 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=LIVER control=STD sex=U strain=C57BL6
