@@ -10,7 +10,6 @@ cd zips
 if ( -e kent ) then
     echo "cleaning out old zips/kent. [${0}: `date`]"
     rm -fr kent
-    rm -f README.txt
 endif
 
 set zip = "jksrc.v"$BRANCHNN".zip"
