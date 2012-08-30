@@ -336,7 +336,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel OlfactB 8w H3K4m3
+        shortLabel OlfBulb 8w H3K4m3
         longLabel OlfactBulb 8w H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K04ME3 cellType=OLFACT control=STD sex=M strain=C57BL6
         type broadPeak
@@ -345,7 +345,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel OlfactB 8w H3K4m1
+        shortLabel OlfBulb 8w H3K4m1
         longLabel OlfactBulb 8w H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K04ME1 cellType=OLFACT control=STD sex=M strain=C57BL6
         type broadPeak
@@ -354,7 +354,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel OlfactB 8w H3K27a
+        shortLabel OlfBulb 8w H3K27a
         longLabel OlfactBulb 8w H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27AC cellType=OLFACT control=STD sex=M strain=C57BL6
         type broadPeak
@@ -1372,7 +1372,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel OlfactB 8w H3K4m1
+        shortLabel OlfBulb 8w H3K4m1
         longLabel OlfactBulb 8w H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=H3K04ME1 cellType=OLFACT control=STD sex=M strain=C57BL6
         type bigWig 0.133084 34.513157
@@ -1402,7 +1402,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel OlfactB 8w H3K27a
+        shortLabel OlfBulb 8w H3K27a
         longLabel OlfactBulb 8w H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=H3K27AC cellType=OLFACT control=STD sex=M strain=C57BL6
         type bigWig 0.117609 27.520395
@@ -1422,7 +1422,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneOlfactInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel OlfactB 8w Input
+        shortLabel OlfBulb 8w Input
         longLabel OlfactBulb 8w Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=INPUT cellType=OLFACT control=STD sex=M strain=C57BL6
         type bigWig 0.102227 41.708450
@@ -1704,7 +1704,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel OlfactB 8w H3K4m3
+        shortLabel OlfBulb 8w H3K4m3
         longLabel OlfactBulb 8w H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=H3K04ME3 cellType=OLFACT control=STD sex=M strain=C57BL6
         type bigWig 0.121283 73.194351
