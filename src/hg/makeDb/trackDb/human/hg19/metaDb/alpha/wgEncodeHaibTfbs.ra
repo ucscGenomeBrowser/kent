@@ -6602,7 +6602,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL6020
 dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002284
@@ -6612,7 +6612,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL6020
 md5sum bf0fffe25959fad365d0e4019240eabe,28be7b938722381f1c9c0f7f5866b980
-objStatus revoked - nothing uses this control
+objStatus revoked - unused control
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -6628,7 +6628,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL6020
 dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002284
@@ -6638,7 +6638,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL6020
 md5sum f7184d01edf1a42fd9d21a263d6cdd63
-objStatus revoked - nothing uses this control
+objStatus revoked - unused control
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -6654,7 +6654,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL6020
 dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
+dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002284
@@ -6664,7 +6664,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL6020
 md5sum abdf214f10a025eeda892bd39af4c9f3
-objStatus revoked - nothing uses this control
+objStatus revoked - unused control
 project wgEncode
 protocol v042211.1
 replicate 1
@@ -82835,4 +82835,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -732977079
+# MAGIC: -859709038
