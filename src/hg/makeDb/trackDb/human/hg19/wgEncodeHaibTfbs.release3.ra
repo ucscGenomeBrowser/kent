@@ -6010,7 +6010,7 @@ html wgEncodeHaibTfbs.release2
     subTrack wgEncodeHaibTfbs
     minLimit 0
     maxLimit 47957.00
-    viewLimits 1:5
+    viewLimits 0:5
     autoScale off
     maxHeightPixels 100:32:16
     windowingFunction mean+whiskers
