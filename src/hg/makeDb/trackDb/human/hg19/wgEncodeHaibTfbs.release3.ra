@@ -6008,7 +6008,7 @@ html wgEncodeHaibTfbs.release2
     visibility full
     view RawSignal
     subTrack wgEncodeHaibTfbs
-    minLimit 1
+    minLimit 0
     maxLimit 47957.00
     viewLimits 1:5
     autoScale off
