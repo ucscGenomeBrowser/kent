@@ -1,6 +1,6 @@
 mkChangeNotes v2
 hg19 wgEncodeHaibTfbs Release 3 vs Release 2
-2012-08-29
+2012-08-30
 
 QA Count Summaries for Release 3:
 Tables: 1457
@@ -10,9 +10,9 @@ Supplemental: 0
 Other: 3
 
 REVOKED:
-Tables: 36
+Tables: 37
 Files: 105
-Gbdbs: 19
+Gbdbs: 20
 
 Sizes of New:
 Table: 722 MB
@@ -26,9 +26,9 @@ Total: 741177 MB (724 GB)
 TABLES:
 New: 431
 Untouched: 1026
-Revoked/Replaced/Renamed: 36
+Revoked/Replaced/Renamed: 37
 New + Untouched: 1457
-Total (New + Untouched + Revoked/Replaced/Renamed): 1493
+Total (New + Untouched + Revoked/Replaced/Renamed): 1494
 
 New Tables (431):
 wgEncodeHaibTfbsA549Cebpbsc150V0422111PkRep1
@@ -1491,7 +1491,8 @@ wgEncodeHaibTfbsU87RxlchPcr2xRawRep2V2
 wgEncodeHaibTfbsU87RxlchV0416101RawRep1V2
 wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 
-Revoked/Replaced/Renamed Tables (36):
+Revoked/Replaced/Renamed Tables (37):
+wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
 wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1
 wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2
 wgEncodeHaibTfbsHepg2Hey1V0416101PkRep1
@@ -5455,9 +5456,9 @@ Revoked/Replaced/Renamed Download Files (105):
 GBDBS:
 New: 228
 Untouched: 554
-Revoked/Replaced/Renamed: 19
+Revoked/Replaced/Renamed: 20
 New + Untouched: 782
-Total (New + Untouched + Revoked/Replaced/Renamed): 801
+Total (New + Untouched + Revoked/Replaced/Renamed): 802
 
 New Gbdb Files (228):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsA549Cebpbsc150V0422111RawRep1.bigWig
@@ -6245,7 +6246,8 @@ Untouched Gbdb Files (554):
 /gbdb/hg19/bbi/wgEncodeHaibTfbsU87RxlchV0416101RawRep1V2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2.bigWig
 
-Revoked/Replaced/Renamed Gbdb Files (19):
+Revoked/Replaced/Renamed Gbdb Files (20):
+/gbdb/hg19/bbi/wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2Hey1V0416101RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsHepg2Hey1V0416101RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep1.bigWig

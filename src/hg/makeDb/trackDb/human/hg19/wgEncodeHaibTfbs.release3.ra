@@ -6008,9 +6008,9 @@ html wgEncodeHaibTfbs.release2
     visibility full
     view RawSignal
     subTrack wgEncodeHaibTfbs
-    minLimit 1
+    minLimit 0
     maxLimit 47957.00
-    viewLimits 1:5
+    viewLimits 0:5
     autoScale off
     maxHeightPixels 100:32:16
     windowingFunction mean+whiskers
@@ -10399,12 +10399,12 @@ html wgEncodeHaibTfbs.release2
         # subId=4321 dateSubmitted=2011-07-18
         # was wgEncodeHaibTfbsHepg2ControlV0422111RawRep1 wong Thu Jan 26 11:44:36 2012
 
-        track wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 RvXL DEX 1
-        longLabel A549 Control DEX 100nM v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=t2A549 protocol=V0422111 treatment=DEX100NM rep=rep1
-        type bigWig 0.082165 233.000000
+        #track wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel A549 RvXL DEX 1
+        #longLabel A549 Control DEX 100nM v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=zRXLCH cellType=t2A549 protocol=V0422111 treatment=DEX100NM rep=rep1
+        #type bigWig 0.082165 233.000000
         # subId=4321 dateSubmitted=2011-07-18
         # was wgEncodeHaibTfbsA549ControlV0422111Dex100nmRawRep1 wong Thu Jan 26 11:44:34 2012
 

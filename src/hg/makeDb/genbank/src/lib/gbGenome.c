@@ -87,6 +87,7 @@ static char *gasAcuNames[] = {"Gasterosteus aculeatus", NULL};
 static char *oryLatNames[] = {"Oryzias latipes", NULL};
 static char *chiLanNames[] = {"Chinchilla lanigera", NULL};
 static char *equCabNames[] = {"Equus caballus", NULL};
+static char *cerSimNames[] = {"Ceratotherium simum", "Ceratotherium simum simum", "Ceratotherium simum cottoni", NULL};
 static char *oviAriNames[] = {"Ovis aries", NULL};
 static char *susScrNames[] = {"Sus scrofa", "Sus scrofa coreanus", "Sus scrofa domesticus",
                               "Sus scrofa domestica", "Sus scrofa ussuricus", NULL};
@@ -168,6 +169,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"oryCun", oryCunNames},
     {"cavPor", cavPorNames},
     {"equCab", equCabNames},
+    {"cerSim", cerSimNames},
     {"oviAri", oviAriNames},
     {"susScr", susScrNames},
     {"droYak", droYakNames},
