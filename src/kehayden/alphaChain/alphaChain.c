@@ -408,7 +408,7 @@ if (wt != NULL && wt->children != NULL)
 return result;
 }
 
-struct wordTree *predictNext(struct wordTree *wt, struct dlList *recent)
+struct wordTree *predictNext(struct wordTree *wt, struct dlNode *recent)
 /* Predict next word given tree and recently used word list.  Will use all words in
  * recent list if can,  but if there is not data in tree, will back off, and use
  * progressively less previous words until ultimately it just picks a random
@@ -416,14 +416,14 @@ struct wordTree *predictNext(struct wordTree *wt, struct dlList *recent)
 {
 struct dlNode *node;
 
-for (node = recent->head; !dlEnd(node); node = node->next)
+for (node = recent; !dlEnd(node); node = node->next)
     {
     struct wordTree *result = predictNextFromAllPredecessors(wt, node);
     if (result != NULL)
         return result;
     }
 struct wordTree *topLevel = pickRandom(wt->children);
-verbose(2, "in predictNext(%s, %s) ", wordTreeString(wt), dlListFragWords(recent->head));
+verbose(2, "in predictNext(%s, %s) ", wordTreeString(wt), dlListFragWords(recent));
 verbose(2, "last resort pick of %s\n", topLevel->info->word);
 return topLevel;
 }
@@ -448,15 +448,15 @@ while (wt != NULL)
     }
 }
 
-static void wordTreeGenerateFaux(struct wordStore *store, int maxSize, struct wordTree *firstWord, 
-	int maxOutputWords, char *fileName)
-/* Go spew out a bunch of words according to probabilities in tree. */
+static struct dlList *wordTreeGenerateList(struct wordStore *store, int maxSize, 
+    struct wordTree *firstWord, int maxOutputWords)
+/* Make a list of words based on probabilities in tree. */
 {
 struct wordTree *wt = store->markovChains;
-FILE *f = mustOpen(fileName, "w");
 struct dlList *ll = dlListNew();
-int listSize = 0;
+int chainSize = 0;
 int outputWords = 0;
+struct dlNode *chainStartNode = NULL;
 
 for (;;)
     {
@@ -466,40 +466,55 @@ for (;;)
     struct wordTree *picked;
 
     /* Get next predicted word. */
-    if (listSize == 0)
+    AllocVar(node);
+    if (chainSize == 0)
         {
-	AllocVar(node);
-	++listSize;
+	chainStartNode = node;
+	++chainSize;
 	picked = firstWord;
 	}
-    else if (listSize >= maxSize)
+    else if (chainSize >= maxSize)
 	{
-	node = dlPopHead(ll);
-	picked = predictNext(wt, ll);
+	chainStartNode = chainStartNode->next;
+	picked = predictNext(wt, chainStartNode);
 	}
     else
 	{
-	picked = predictNext(wt, ll);
-	AllocVar(node);
-	++listSize;
+	picked = predictNext(wt, chainStartNode);
+	++chainSize;
 	}
 
     if (picked == NULL)
          break;
 
 
-    /* Add word from whatever level we fetched back to our chain of up to maxChainSize. */
+    /* Add word from whatever level we fetched back to our output chain. */
     node->val = picked->info;
     dlAddTail(ll, node);
 
-    fprintf(f, "%s\n", picked->info->word);
-
     decrementOutputCounts(picked);
     }
-dlListFree(&ll);
-carefulClose(&f);
 verbose(2, "totUseZeroCount = %d\n", totUseZeroCount);
+return ll;
 }
+
+static void wordTreeGenerateFile(struct wordStore *store, int maxSize, struct wordTree *firstWord, 
+	int maxOutputWords, char *fileName)
+/* Create file containing words base on tree probabilities.  The wordTreeGenerateList does
+ * most of work. */
+{
+struct dlList *ll = wordTreeGenerateList(store, maxSize, firstWord, maxOutputWords);
+FILE *f = mustOpen(fileName, "w");
+struct dlNode *node;
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    struct wordInfo *info = node->val;
+    fprintf(f, "%s\n", info->word);
+    }
+carefulClose(&f);
+dlListFree(&ll);
+}
+
 
 static void wordTreeSort(struct wordTree *wt)
 /* Sort all children lists in tree. */
@@ -664,7 +679,7 @@ if (optionExists("chain"))
     wordTreeWrite(wt, fileName);
     }
 
-wordTreeGenerateFaux(store, maxChainSize, pickRandom(wt->children), outSize, outFile);
+wordTreeGenerateFile(store, maxChainSize, pickRandom(wt->children), outSize, outFile);
 
 if (optionExists("afterChain"))
     {
