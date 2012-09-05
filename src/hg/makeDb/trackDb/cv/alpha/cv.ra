@@ -2569,8 +2569,7 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002807
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002807
 lab Stam
-protocol missing
-#protocol Stam:H0287_Stam_protocol.pdf
+protocol Stam:H0287_Stam_protocol.pdf
 
 term H7-hESC
 tag H7ES
@@ -9738,7 +9737,7 @@ lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId Gene:1994
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-validation Human_-_:missing
+validation Human_-_ELAVL1_(AB5831)(Western_blot,Immunoprecipitation):human_ELAVL1_AB5831_validation_Tenenbaum.pdf
 label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
 
 term ELF1_(SC-631)
@@ -11466,7 +11465,7 @@ vendorId sc-32912
 lab Struhl
 targetId GeneCard:RDBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_NELFe_(SC-32912)(Western_blot,ChIP-Seq):human_NELFe_sc-32912_validation_Struhl.pdf Mouse_-_:missing
 label NELFe (sc-32912)
 
 term NFIC_(SC-81335)
@@ -12904,7 +12903,7 @@ targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 lots J1905
 lab Struhl
-validation Human_-_:missing
+validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-Seq):human_TFIIB_sc-225X_validation_Struhl.pdf
 label TFIIB (sc-225)
 ##This does not appear in metaDb
 
