@@ -159,7 +159,10 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir, noDo
                     # target filename (generated above).  If the document is a PDF,
                     # download it and save it in the filename generated above.
                     if re.search(".pdf$", url):
-                        validationData = accessWiki(wikiBaseUrl + url, username, password)
+                        if re.search("http\:\/\/encodewiki.ucsc.edu", url):
+                            validationData = accessWiki(url, username, password) 
+                        else:
+                            validationData = accessWiki(wikiBaseUrl + url, username, password)
                         if len(validationData) > 0:
                             downloadFilename = targetDocumentName + str(ii)
                             newValidationFile = open(downloadFilename, "wb")
