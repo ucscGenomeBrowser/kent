@@ -10312,11 +10312,11 @@ targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and
 orderUrl http://www.abcam.com/index.html?datasheet=8895
 vendorName Abcam
 vendorId ab8895
-lab Bernstein
-lots 383111
+lab Bernstein, Ren
+lots 383111, 720417
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Mouse_-_:missing
+validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Human_-_H3K4me1(ab8895)(Dot_blot,Western_blot):human_H3K4me1_ab8895_validation_Ren.pdf
 label H3K4me1 (ab8895)
 
 term H3K4me1_(pAb-037-050)
@@ -10354,17 +10354,17 @@ label H3K4me2 (ab7766)
 term H3K4me2_(ab32356)
 tag AB32356
 type Antibody
-antibodyDescription Rabbit polyclonal. Antibody Target: H3K4me2
+antibodyDescription Rabbit monoclonal [Y47] to Histone H3 (di methyl K4) - ChIP Grade. Antibody Target: H3K4me2
 target H3K4me2
-targetDescription Histone H3 (di methyl K4). Marks promoters and enhancers.
+targetDescription Histone H3 dimethylated on Lysine 4. Marks promoters and enhancers.
 vendorName Abcam
 vendorId ab32356
 orderUrl http://www.abcam.com/Histone-H3-di-methyl-K4-antibody-Y47-ChIP-Grade-ab32356.html
-lab Wold
-lots 870402
+lab Wold, Ren
+lots 870402, 577702
 targetId Genecard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation  Mouse_-_:missing
+validation  Human_-_H3K4me2_(ab32356)(Dot_blot,Western_blot):human_H3K4me2_ab32356_validation_Ren.pdf
 label H3K4me2 (ab32356)
 
 term H3K4me3
@@ -10385,6 +10385,21 @@ label H3K4me3 (07-473)
 #vendorName Abcam
 #vendorId ab8580
 #orderUrl http://www.abcam.com/index.html?datasheet=8580
+
+term H3K4me3_(04-745)
+tag H3K4ME304745
+type Antibody
+antibodyDescription Anti-trimethyl-Histone H3 (Lys4) Antibody, clone MC315
+target H3K4me3
+targetDescription Detect only histone H3 containing trimethyl-lysine 4
+vendorName Millipore
+vendorId 04-745
+orderUrl http://www.millipore.com/catalogue/item/04-745
+lab Ren
+lots NG1643014
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation Human_-_H3K4me3_(04-745)(Dot_blot,Western_blot):human_H3K4me3_04-745_validation_Ren.pdf
 
 term H3K4me3B
 tag H3K04ME3b
@@ -10419,21 +10434,20 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_:missing
 label H3K9ac (ab4441)
 
-term H3K9acB
-tag H3K09ACb
+term H3K9Ac_(39137)
+tag H3K9AC39137
 type Antibody
-target H3K9ac
-antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
-targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
-orderUrl http://www.millipore.com/catalogue/item/07-352
-vendorName Millipore
-vendorId 07-352
-lab Farnham
+antibodyDescription Rabbit polyclonal  to Histone H3 K9 acetylation
+target H3K9Ac
+targetDescription Detect only  Histone H3 K9 acetylation
+vendorName Active Motif
+vendorId 39137
+orderUrl http://www.activemotif.com/catalog/details/39137/histone-h3-acetyl-lys9-antibody-pab
+lab Ren
+lots 1008001
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_:missing
-label H3K9ac (07-352)
-#lots
+validation Human_-_:H3K9Ac_(39137)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf
 
 term H3K9Ac_(9649)
 tag H3K09ACc
@@ -10450,6 +10464,22 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K9Ac_(9649)(Western_blot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
 label H3K9Ac (9649)
+
+term H3K9acB
+tag H3K09ACb
+type Antibody
+target H3K9ac
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
+targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
+orderUrl http://www.millipore.com/catalogue/item/07-352
+vendorName Millipore
+vendorId 07-352
+lots unknown
+lab Farnham
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation Human_-_H3K9Ac_(07-352)(Western_blot,ChIP):human_H3K9Ac_07-352_validation_Farnham.pdf
+label H3K9ac (07-352)
 
 term H3K9me1
 tag H3K09ME1
@@ -10475,11 +10505,12 @@ antibodyDescription rabbit polyclonal, ChIP grade. Antibody Target: H3K9me3
 targetDescription Histone H3 (tri methyl K9). Is associated with repressive heterochromatic state (silenced chromatin). NOTE CONTRAST to H3K9me1 which is associated with active and accessible regions.
 vendorName Abcam
 vendorId ab8898
+lots 19208002
 orderUrl http://www.abcam.com/index.html?datasheet=8898
-lab Farnham
+lab Farnham, Ren
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Mouse_-_:missing
+validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Human_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf Mouse_-_:missing
 label H3K9me3 (ab8898)
 
 term H3K9me3_(9754)
@@ -10514,6 +10545,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K27ac(Dot_blot):human_H3K27ac_validation_Bernstein.pdf
 label H3K27ac (ab4729)
 
+term H3K27Ac_(39133)
+tag H3K27AC39133
+type Antibody
+antibodyDescription Rabbit polyclonal  to Histone H3 K27 acetylation
+target H3K27Ac
+targetDescription Specific for detecting Histone H3 K27 acetylation only
+vendorName Active Motif
+vendorId 39133
+orderUrl http://www.activemotif.com/catalog/details/39133/histone-h3-acetyl-lys27-antibody-pab
+lab Ren
+lots 19208002
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K27Ac_(39133)(Dot_blot,Western_blot):human_H3K27Ac_39133_validation_Ren.pdf
+
 term H3K27me3
 tag H3K27ME3
 type Antibody
@@ -10529,6 +10575,21 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf Mouse_-_:missing
 label H3K27me3 (07-449)
+
+term H3K27me3_(39155)
+tag H3K27ME339155
+type Antibody
+antibodyDescription Rabbit polyclonal to Histone H3 K27 trimethylation
+target H3K27me3
+targetDescription This antibody only detects Histone H3 trimethylated on Lysine 27
+vendorName Active Motif
+vendorId 39155
+orderUrl http://www.activemotif.com/catalog/details/39155
+lab Ren
+lots 30508004
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation Human_-_H3K27me3_(39155)(Dot_blot,Western_blot):human_H3K27me3_39155_validation_Ren.pdf
 
 term H3K27me3B
 tag H3K27ME3b
@@ -10552,15 +10613,15 @@ tag H3K36ME3
 type Antibody
 target H3K36me3
 antibodyDescription rabbit polyclonal. Antibody Target: H3K36me3
-targetDescription Histone H3 (tri-methyl K36). Marks regions of RNAPII elongation, including coding and non-coding transcripts.
+targetDescription Specific for histone H3 tri methylated at lysine 36, weakly reacts with H3K36me2. Marks regions of RNAPII elongation, including coding and non-coding transcripts.
 orderUrl http://www.abcam.com/index.html?datasheet=9050
 vendorName Abcam
 vendorId ab9050
-lab Bernstein
-lots 136353
+lab Bernstein, Ren
+lots 136353, 707946
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Mouse_-_:missing
+validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Human_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):human_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_:missing
 label H3K36me3 (ab9050)
 
 term H3K36me3B
@@ -10588,11 +10649,11 @@ targetDescription H3K79me2 is a mark of the transcriptional transition region - 
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
-lab Bernstein
+lab Bernstein, Ren
 lots 177/0100800
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
+validation Human_-_H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf Human_-_H3K79me2_(39143)(Dot_blot,Western_blot):human_H3K79me2_39143_validation_Ren.pdf
 label H3K79me2 (39143)
 
 term H3K79me2_(ab3594)
@@ -13145,10 +13206,11 @@ targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel cla
 vendorName Santa Cruz Biotech
 vendorId sc-1703
 orderUrl http://www.scbt.com/product.php?datasheet=1703
-lab Farnham
+lots B1710
+lab Farnham, Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation Human_-_:human_YY1_sc-1703_validation_Farnham.pdf
+validation Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703_validation_Farnham.pdf Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703-V2_validation_Myers.pdf
 label YY1 (sc-1703)
 
 term YY1_(SC-281)
