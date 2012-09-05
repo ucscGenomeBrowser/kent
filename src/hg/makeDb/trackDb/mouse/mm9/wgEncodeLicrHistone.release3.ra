@@ -66,7 +66,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BM H3K4m1
+        shortLabel BoneMarrow H3K4m1
         longLabel Bone Marrow 8w H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K04ME1 cellType=B1MARROW control=STD sex=M strain=C57BL6
         type broadPeak
@@ -75,7 +75,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BM H3K4m3
+        shortLabel BoneMarrow H3K4m3
         longLabel Bone Marrow 8w H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K04ME3 cellType=B1MARROW control=STD sex=M strain=C57BL6
         type broadPeak
@@ -532,7 +532,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BM H3K27a
+        shortLabel BoneMarrow H3K27a
         longLabel Bone Marrow 8w H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=A1DLT8W factor=H3K27AC cellType=B1MARROW control=STD sex=M strain=C57BL6
         type broadPeak
@@ -1063,7 +1063,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BM H3K4m1
+        shortLabel BoneMarrow H3K4m1
         longLabel Bone Marrow 8w H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=H3K04ME1 cellType=B1MARROW control=STD sex=M strain=C57BL6
         type bigWig 0.120000 20.459999
@@ -1073,7 +1073,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BM H3K4m3
+        shortLabel BoneMarrow H3K4m3
         longLabel Bone Marrow 8w H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=H3K04ME3 cellType=B1MARROW control=STD sex=M strain=C57BL6
         type bigWig 0.120000 50.509998
@@ -1201,7 +1201,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBmarrowInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BM Input
+        shortLabel BoneMarrow Input
         longLabel Bone Marrow 8w Input Histone Mods by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=INPUT cellType=B1MARROW control=STD sex=M strain=C57BL6
         type bigWig 0.150000 34.869999
@@ -1572,7 +1572,7 @@ html wgEncodeLicrHistone.release3
 
         track wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BM H3K27a
+        shortLabel BoneMarrow H3K27a
         longLabel Bone Marrow 8w H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=A1DLT8W factor=H3K27AC cellType=B1MARROW control=STD sex=M strain=C57BL6
         type bigWig 0.110000 49.990002
