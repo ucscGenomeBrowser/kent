@@ -11466,7 +11466,7 @@ vendorId sc-32912
 lab Struhl
 targetId GeneCard:RDBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_NELFe_(SC-32912)(Western_blot,ChIP-Seq):human_NELFe_sc-32912_validation_Struhl.pdf Mouse_-_:missing
 label NELFe (sc-32912)
 
 term NFIC_(SC-81335)
@@ -12904,7 +12904,7 @@ targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 lots J1905
 lab Struhl
-validation Human_-_:missing
+validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-Seq):human_TFIIB_sc-225X_validation_Struhl.pdf
 label TFIIB (sc-225)
 ##This does not appear in metaDb
 
