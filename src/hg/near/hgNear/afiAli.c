@@ -54,6 +54,7 @@ char *bId = cartString(cart, searchVarName);
 bioSeq *a = getSeq(conn, aId, nameCol, "pepTable");
 bioSeq *b = getSeq(conn, bId, nameCol, "pepTable");
 struct axtScoreScheme *ss = axtScoreSchemeProteinDefault();
+makeTitle("Affine Alignment", NULL);
 
 if (a != NULL && b != NULL)
     {
