@@ -1,0 +1,240 @@
+<h2> Description </h2>
+
+<p>This track displays binding sites of the specified transcription factors in the given cell types as identified by chromatin immunoprecipitation followed by high-throughput sequencing 
+(ChIP-seq &mdash; see Johnson DS, <em>et al.</em>, 2007 and Fields S, 2007).
+</p>
+
+<p>
+ChIP-seq was used to assay chromatin fragments bound by specific or general transcription factors as described below.
+DNA enriched by chromatin immunoprecipitation was sequenced and short sequence reads of 25-36 nt were mapped to the human reference genome. 
+Enriched regions (peaks) of high sequence read density relative to input chromatin control sequence reads were identified with a peak calling algorithm.
+</p>
+
+<p>
+The sequence reads with quality scores 
+(<a href="http://maq.sourceforge.net/fastq.shtml" target="_blank">fastq files</a>) 
+and alignment coordinates 
+(<a href="/FAQ/FAQformat.html#format5.1" TARGET="_BLANK">BAM files</a>) 
+from these experiments are available for 
+<A HREF="/cgi-bin/hgFileUi?g=wgEncodeHaibTfbs">download</A>.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+<!--tag1-->
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  
+For each view, there are multiple subtracks that display individually on the browser. 
+Instructions for configuring multi-view tracks are 
+<A HREF="/goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+The subtracks in this track are grouped by transcription factor targeted antibody and by cell type. 
+For each experiment 
+(cell type vs. antibody), 
+the following views are included:
+
+<DL>
+<DT><I>Peaks</I></DT>
+<DD>
+Sites with the greatest evidence of transcription factor binding, 
+calculated using the 
+<A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html" TARGET=_BLANK>MACS</A>
+peak caller (Zhang Y, <em>et al.</em>, 2008), 
+as enriched regions of high read density in the ChIP experiment relative to total input chromatin control reads.
+</DD>
+<DT><I>Raw Signal</I></DT>
+<DD> 
+A continuous signal which indicates density of aligned reads.  
+The sequence reads were extended to the size-selected length (225 bp), 
+and the read density computed as reads per million.
+</DD>
+</DL>
+
+</p>
+<!--\tag1-->
+
+<p>
+Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.
+</p>
+
+<h2> Methods </h2>
+
+<p>
+Cells were grown according to the approved
+<A HREF="/ENCODE/cellTypes.html" TARGET=_BLANK>ENCODE cell culture protocols</A>.
+Cross-linked chromatin was immunoprecipitated with an antibody, 
+the protein-DNA crosslinks were reversed and the DNA fragments were recovered and sequenced. 
+Please see protocol notes below and check 
+<A HREF="http://hudsonalpha.org/myers-lab/protocols" TARGET=_BLANK>here</A> 
+for the most current version of the protocol. 
+Biological replicates from each experiment were completed.
+</p>
+
+<p>
+Libraries were sequenced with an Illumina Genome Analyzer I or IIx according to the manufacturer's recommendations. 
+Sequence data produced by the Illumina data pipeline software were quality filtered and then mapped to NCBI Build37 (hg19) using the integrated Eland software; 
+32 nt of the sequence reads were used for alignment; 
+up to two mismatches were tolerated; reads that mapped to multiple sites in the genome were discarded.
+</p>
+
+<p>
+To identify likely transcription factor occupancy sites, 
+peak calling was applied to the aligned sequence data sets using Model-based Analysis of ChIP-seq 
+<A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html" TARGET=_BLANK>MACS</A>
+(Zhang Y,<em> et al.</em>, 2008). 
+The MACS method models the shift size of ChIP-seq tags empirically, 
+and uses the shift to improve the spatial resolution of predicted binding sites.  
+The MACS method also uses a dynamic Poisson distribution to capture local biases in the genome,
+allowing for  more robust predictions 
+(Zhang Y,<em> et al.</em>, 2008).
+</p>
+
+<h4> Protocol Notes </h4>
+
+<p> 
+Several changes and improvements were made to the original ChIP-seq protocol
+(Jonshon <em>et al.</em>,2008). 
+The major differences between protocols are the number of cells and magnetic beads used for IP, 
+the method of sonication used to fragment DNA, 
+the method used for fragment size selection,
+and the number of cycles of PCR used to amplify the sequencing library. 
+The protocol field for each file denotes the version of the protocol used as being PCR1x, 
+PCR2x or a version number, e.g. v041610.1.
+</p>
+
+<p>
+The sequencing libraries labeled as PCR2x were made with two rounds of amplification 
+(25 and 15 cycles) 
+and those labeled as PCR1x were made with one 15-cycle round of amplification. 
+Experiments that were completed prior to January 2010 were originally aligned to NCBI Build36 (hg18). 
+They have been re-aligned to NCBI Build37 (hg19) with the 
+<A HREF="http://bowtie-bio.sourceforge.net/index.shtml" TARGET=_BLANK>Bowtie</A> 
+software (Langmead, <em> et al.</em>, 2009) 
+for this data release.
+The libraries labeled with a protocol version number were competed after January 2010 
+and were only aligned to NCBI Build37 (hg19). 
+</p>
+
+<p>
+Please refer to the 
+<A HREF="http://hudsonalpha.org/myers-lab/protocols" TARGET=_BLANK>Myers Lab website</A> 
+for details on each protocol version and the most current protocol in use.
+</p>
+
+<h2>Verification</h2>
+
+<p>
+The 
+<A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html" TARGET=_BLANK>MACS</A> 
+peak caller was used to call significant peaks on the individual replicates of a ChIP-seq experiment. 
+Next, the irreproducible discovery rate (IDR) method 
+developed by Li <em> et al.</em> (2011), 
+was used to quantify the consistency between pairs of ranked peaks lists from replicates.  
+The IDR methods uses a model that assumes that the ranked lists of peaks in a pair of replicates consist of two groups: 
+a reproducible group and an irreproducible group. 
+In general, the signals in the reproducible group are more consistent 
+(i.e. with a larger rank correlation coefficient) 
+and are ranked higher than the irreproducible group. 
+The proportion of peaks that belong to the irreproducible component 
+and the correlation of the reproducible component are estimated adaptively from the data. 
+The model also provides an IDR score for each peak, 
+which reflects the posterior probability of the peak belonging to the irreproducible group. 
+The aligned reads were pooled from all replicates 
+and the MACS peak caller was used to call significant peaks on the pooled data. 
+Only datasets containing at least 100 peaks passing the IDR threshold are considered valid and submitted for release. 
+</p>
+
+<p>
+As part of the validation of ChIP-seq antibodies 
+and to study the downstream targets of several transcription factors, 
+inducible short hairpin RNA (shRNA) cell lines to knock down the expression of these factors were generated. 
+K562 cells (non-adherent, human erythromyeloblastoid leukemia cell line; ENCODE Tier 1) 
+were transduced with lentiviral vectors carrying an inducible shRNA to a specific transcription factor as described in this 
+<a href="http://hudsonalpha.org/sites/default/files/pdf/shRNA%20K562%20protocol.pdf" TARGET="_BLANK">protocol</a>. 
+Expression of shRNA was induced with doxycycline in the growth media. 
+Only cell lines that exhibited at least 70% reduction in expression of the targeted transcription factor 
+(determined by qPCR) were used. 
+The cell lines were designated K562-shX, 
+where X is the transcription factor targeted by shRNA and K562 denotes the parent cell line. 
+For example, K562-shATF3 cells are K562 cells selected for stable integration of shRNA targeting the transcription factor ATF3 gene. 
+Gene expression in doxycycline induced and uninduced cells were measured and profiled using RNA-seq.  
+The RNA-seq data were submitted to GEO 
+(<a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE33816" TARGET="_BLANK">Accession:GSE33816</a>).
+</p>
+
+<h2>Release Notes</h2>
+
+<p>
+<ul>
+<li>This is Release 2 (Feb 2012). It contains 68 new experiments including 1 new cell line and 20 new antibodies.</li>
+<li>The entire HepG2/HEY1 (Accession: wgEncodeEH001502) and K562/HEY1 (Accession: wgEncodeEH001481) datasets have been revoked due to problems with the quality of the antibody.</li>
+<li>All experiments with the U87 cell line were remapped. Previously, the sex of the cell was unknown and was mapped to the male genome. It was discovered that the cell line is female. </li> 
+<li>Other files from the previous release also contained errors. They have been corrected with a version number appended to the name e.g. V2. </li>
+<li>shRNA validation data have been included in this release. The Verification section above provides a more in-depth explanation of the method. </li>
+</ul>
+</p>
+
+<h2>Credits</h2>
+
+<p>
+These data were provided by the 
+<a href='http://myers.hudsonalpha.org/' TARGET=_blank>Myers Lab</a> 
+at the 
+<a href='http://www.hudsonalpha.org/'TARGET=_blank>HudsonAlpha Institute for Biotechnology</a>.
+</p>
+
+<p>
+Contact:
+<A HREF="mailto:&#102;p&#97;&#117;&#108;&#105;&#64;&#104;&#117;&#100;&#115;&#111;&#110;&#97;&#108;&#112;&#104;a.&#111;r&#103;">Flo Pauli</A>.
+<!-- above address is fpauli at hudsonalpha.org (encodeEmail.pl) -->
+</P>
+
+<h2>References</h2>
+
+<p>
+Fields S.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17556576" target="_blank">
+Molecular biology. Site-seeing by sequencing</a>.
+<em>Science</em>. 2007 Jun 8;316(5830):1441-2.
+</p>
+
+<p>
+Johnson DS, Mortazavi A, Myers RM, Wold B.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17540862" target="_blank">
+Genome-wide mapping of in vivo protein-DNA interactions</a>.
+<em>Science</em>. 2007 Jun 8;316(5830):1497-502.
+</p>
+
+<p>
+Langmead B, Trapnell C, Pop M, Salzberg SL.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174" target="_blank">
+Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</a>.
+<em>Genome Biol</em>. 2009;10(3):R25.
+</p>
+
+<p>
+Li Q, Brown JB, Huang H, Bickel PJ.
+<a href="http://projecteuclid.org/euclid.aoas/1318514284" target="_blank">
+Measuring Reproducibility of High-throughput experiments</a>.
+<em>Ann. Appl. Stat.</em> Volume 5, Number 3 (2011), 1752-1779.
+</p>
+
+<p>
+Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nusbaum C, Myers RM, Brown M, Li W <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18798982" target="_blank">
+Model-based analysis of ChIP-Seq (MACS)</a>.
+<em>Genome Biol</em>. 2008;9(9):R137.
+</p>
+
+<H2>Data Release Policy</H2>
+
+<P>
+Data users may freely use ENCODE data, 
+but may not, 
+without prior consent, 
+submit publications that use an unpublished ENCODE dataset until nine months following the release of the dataset. 
+This date is listed in the 
+<EM>Restricted Until</EM> 
+column on the track configuration page and the download page. 
+The full data release policy for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
