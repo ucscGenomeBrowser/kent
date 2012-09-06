@@ -6,7 +6,7 @@ shortLabel UW DNaseI DGF
 longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line Cel3134=3134 Cel416B=416B CelA20=A20 CelBCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum ESCJ7=ES-CJ7 FAT=FatPad FIBROBLAST=Fibroblast FLBUD=ForelimbBud GFAT=GenitalFatPad HEART=Heart HLBUD=HindlimbBud KIDNEY=Kidney LIVER=Liver LUNG=Lung MEL=MEL NIH3T3=NIH-3T3 RETINA=Retina THELPA=THelper-Activated THYMUS=Thymus TNAIVE=T-Naive TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
+subGroup2 cellType Cell_Line Cel3134=3134 Cel416B=416B CelA20=A20 CelBCELLCD19P=B-cell_(CD19+) CelBCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum ESCJ7=ES-CJ7 FAT=FatPad FIBROBLAST=Fibroblast FLBUD=ForelimbBud GFAT=GenitalFatPad HEART=Heart HLBUD=HindlimbBud KIDNEY=Kidney LIVER=Liver LUNG=Lung MEL=MEL NIH3T3=NIH-3T3 RETINA=Retina THELPA=THelper-Activated THYMUS=Thymus TNAIVE=T-Naive TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
 subGroup3 strain Strain A129=129 A129OLA=129/Ola A129S1=129S1/SVImJ BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss RIII=RIII SPBL6=Spretus.BL6-Xist  UKN=Unknown
 subGroup4 age Age ADULT8WKS=Adult_8_Weeks E0=Embryonic_Day_0 E11HALF=E11.5 E14HALF=Embryonic_Day_14.5 E18HALF=E18.5 IMMORTAL=Immortalized NEW1DAYS=Newborn_1_Day
 subGroup5 rep Replicate rep1=1 rep2=2 
@@ -107,7 +107,7 @@ html wgEncodeUwDgf
                 parent wgEncodeUwDgfViewHotspots off
                 shortLabel Bcell CD43- 8w H
                 longLabel B-cell (CD43-) 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-                subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
+                subGroups view=Hotspots age=ADULT8WKS cellType=CelBCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
                 type broadPeak
                 color 86,180,233
                 # subId=5242 dateSubmitted=2011-12-17
@@ -329,7 +329,7 @@ html wgEncodeUwDgf
                 parent wgEncodeUwDgfViewPeaks off
                 shortLabel Bcell CD43- 8w P 
                 longLabel B-cell (CD43-) 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-                subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
+                subGroups view=Peaks age=ADULT8WKS cellType=CelBCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
                 type narrowPeak
                 color 86,180,233
                 # subId=5242 dateSubmitted=2011-12-17
@@ -551,7 +551,7 @@ html wgEncodeUwDgf
             parent wgEncodeUwDgfViewSignal off
             shortLabel Bcell CD43- 8w S 
             longLabel B-cell (CD43-) 8w C57BL/6 DNaseI DGF Signal Rep 1 from ENCODE/UW 
-            subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
+            subGroups view=Signal age=ADULT8WKS cellType=CelBCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
             type bigWig 1.000000 62266.000000
             color 86,180,233
             # subId=5242 dateSubmitted=2011-12-17
@@ -773,7 +773,7 @@ html wgEncodeUwDgf
                 parent wgEncodeUwDgfViewRawSignal off
                 shortLabel Bcell CD43- 8w R 
                 longLabel B-cell (CD43-) 8w C57BL/6 DNaseI DGF Raw Signal Rep 1 from ENCODE/UW 
-                subGroups view=RawSignal age=ADULT8WKS cellType=BCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
+                subGroups view=RawSignal age=ADULT8WKS cellType=CelBCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
                 type bigWig 1.000000 395435.000000
                 color 86,180,233
                 # subId=5242 dateSubmitted=2011-12-17
