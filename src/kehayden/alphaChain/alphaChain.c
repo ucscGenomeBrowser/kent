@@ -388,6 +388,32 @@ if (picked == NULL)
 return picked;
 }
 
+struct wordInfo *pickRandomFromType(struct wordType *type)
+/* Pick a random word, weighted by outTarget, from all available of given type */
+{
+/* Figure out total on list */
+int total = 0;
+struct wordInfoRef *ref;
+for (ref = type->list; ref != NULL; ref = ref->next)
+    total += ref->val->outTarget;
+
+/* Loop through list returning selection corresponding to random threshold. */
+int threshold = rand() % total; 
+int binStart = 0;
+for (ref = type->list; ref != NULL; ref = ref->next)
+    {
+    struct wordInfo *info = ref->val;
+    int size = info->outTarget;
+    int binEnd = binStart + size;
+    if (threshold < binEnd)
+	return info;
+    binStart = binEnd;
+    }
+
+verbose(2, "Fell off end in pickRandomFromType\n");
+return type->list->val;	    // Fall back position (necessary?) just first in list
+}
+
 struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNode *list)
 /* Predict next word given tree and recently used word list.  If tree doesn't
  * have statistics for what comes next given the words in list, then it returns
@@ -409,7 +435,7 @@ if (wt != NULL && wt->children != NULL)
 return result;
 }
 
-struct wordTree *predictNextFromRecent(struct wordTree *wt, struct dlNode *recent)
+struct wordTree *predictFromWordTree(struct wordTree *wt, struct dlNode *recent)
 /* Predict next word given tree and recently used word list.  Will use all words in
  * recent list if can,  but if there is not data in tree, will back off, and use
  * progressively less previous words until ultimately it just picks a random
@@ -423,10 +449,7 @@ for (node = recent; !dlEnd(node); node = node->next)
     if (result != NULL)
         return result;
     }
-struct wordTree *topLevel = pickRandom(wt->children);
-verbose(2, "in predictNext(%s, %s) ", wordTreeString(wt), dlListFragWords(recent));
-verbose(2, "last resort pick of %s\n", topLevel->info->word);
-return topLevel;
+return NULL;
 }
 
 struct dlNode *nodesFromTail(struct dlList *list, int count)
@@ -444,14 +467,79 @@ for (i=0, node = list->tail; i<count; ++i)
 return node;
 }
 
+struct wordType *advanceTypeWithWrap(struct wordType *typeList, struct wordType *startType,
+    int amountToAdvance)
+/* Skip forward amountToAdvance in typeList from startType.  If get to end of list start
+ * again at the beginning */
+{
+int i;
+struct wordType *type = startType;
+for (i=0; i<amountToAdvance; ++i)
+    {
+    type = type->next;
+    if (type == NULL)
+	type = typeList;
+    }
+return type;
+}
+
+struct wordTree *predictFromPreviousTypes(struct wordStore *store, struct dlList *past)
+/* Predict next based on general pattern of monomer order. */
+{
+int maxToLookBack = 3;
+    { /* Debugging block */
+    struct dlNode *node = nodesFromTail(past, maxToLookBack);
+    verbose(3, "predictFromPreviousTypes(");
+    for (; !dlEnd(node); node = node->next)
+        {
+	struct wordInfo *info = node->val;
+	verbose(3, "%s, ", info->word);
+	}
+    verbose(3, ")\n");
+    }
+int pastDepth;
+struct dlNode *node;
+for (pastDepth = 1, node = past->tail; pastDepth <= maxToLookBack; ++pastDepth)
+    {
+    if (dlStart(node))
+	{
+	verbose(2, "predictFromPreviousTypes with empty past\n");
+	return NULL;
+	}
+    struct wordInfo *info = node->val;
+    struct wordType *prevType = hashFindVal(store->typeHash, info->word);
+    if (prevType != NULL)
+        {
+	struct wordType *curType = advanceTypeWithWrap(store->typeList, prevType, pastDepth);
+	struct wordInfo *curInfo = pickRandomFromType(curType);
+	struct wordTree *curTree = wordTreeFindInList(store->markovChains->children, curInfo);
+	verbose(3, "predictFromPreviousType pastDepth %d, curInfo %s, curTree %p %s\n", 
+	    pastDepth, curInfo->word, curTree, curTree->info->word);
+	return curTree;
+	}
+    node = node->prev;
+    }
+verbose(2, "predictFromPreviousTypes past all unknown types\n");
+return NULL;
+}
+
+
 struct wordTree *predictNext(struct wordStore *store, struct dlList *past)
 /* Given input data store and what is known from the past, predict the next word. */
 {
 struct dlNode *recent = nodesFromTail(past, store->maxChainSize);
-return predictNextFromRecent(store->markovChains, recent);
+struct wordTree *pick =  predictFromWordTree(store->markovChains, recent);
+if (pick == NULL)
+    pick = predictFromPreviousTypes(store, past);
+if (pick == NULL)
+    {
+    pick = pickRandom(store->markovChains->children);
+    verbose(2, "in predictNext() last resort pick of %s\n", pick->info->word);
+    }
+return pick;
 }
 
-void decrementOutputCounts(struct wordTree *wt)
+void decrementOutputCountsInTree(struct wordTree *wt)
 /* Decrement output count of self and parents. */
 {
 while (wt != NULL)
@@ -511,10 +599,13 @@ for (;;)
 
 
     /* Add word from whatever level we fetched back to our output chain. */
-    node->val = picked->info;
+    struct wordInfo *info = picked->info;
+    node->val = info;
     dlAddTail(ll, node);
 
-    decrementOutputCounts(picked);
+    decrementOutputCountsInTree(picked);
+    info->outTarget -= 1;
+    info->outCount += 1;
     }
 verbose(2, "totUseZeroCount = %d\n", totUseZeroCount);
 return ll;
@@ -683,9 +774,27 @@ while (lineFileNextReal(lf, &line))
 	hashAddUnique(store->typeHash, word, type);
 	}
     }
+slReverse(&store->typeList);
 lineFileClose(&lf);
 verbose(2, "Added %d types containing %d words from %s\n", 
     slCount(store->typeList), store->typeHash->elCount, fileName);
+}
+
+void wordInfoListNormalise(struct wordInfo *list, int totalCount, int outputSize)
+/* Set outTarget field in all of list to be normalized to outputSize */
+{
+struct wordInfo *info;
+double scale = outputSize/totalCount;
+for (info = list; info != NULL; info = info->next)
+    info->outTarget = round(scale * info->useCount);
+}
+
+void wordStoreNormalize(struct wordStore *store, int outputSize)
+/* Set up output counts on each word to make sure it gets it's share of output size */
+{
+struct wordTree *wt = store->markovChains;
+wordTreeNormalize(wt, outputSize, 1.0);
+wordInfoListNormalise(store->infoList, wt->useCount, outputSize);
 }
 
 void alphaChain(char *readsFile, char *monomerOrderFile, char *outFile)
@@ -694,7 +803,7 @@ void alphaChain(char *readsFile, char *monomerOrderFile, char *outFile)
 struct wordStore *store = wordStoreForChainsInFile(readsFile, maxChainSize);
 struct wordTree *wt = store->markovChains;
 wordStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
-wordTreeNormalize(wt, outSize, 1.0);
+wordStoreNormalize(store, outSize);
 
 if (optionExists("chain"))
     {
