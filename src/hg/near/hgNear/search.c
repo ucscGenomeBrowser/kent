@@ -209,7 +209,7 @@ else if (totalCount == 1 || allSame(csrList))
     displayData(conn, colList, &srOne->gp);
 else
     {
-    hPrintf("<H1>Simple Search Results</H1>\n");
+    makeTitle("Simple Search Results", NULL);
     for (csr = csrList; csr != NULL; csr = csr->next)
         {
 	hPrintf("<H2>%s</H2>\n", csr->label);
