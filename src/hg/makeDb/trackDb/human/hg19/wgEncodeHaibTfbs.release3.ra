@@ -1113,7 +1113,7 @@ html wgEncodeHaibTfbs.release3
 
         track wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR DX.1mM 1
+        shortLabel A549 GR DX100nM 1
         longLabel A549 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=t2A549 protocol=PCR2X treatment=DEX100NM rep=rep1
         type broadPeak
@@ -1122,7 +1122,7 @@ html wgEncodeHaibTfbs.release3
 
         track wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR DX.1mM 2
+        shortLabel A549 GR DX100nM 2
         longLabel A549 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=t2A549 protocol=PCR2X treatment=DEX100NM rep=rep2
         type broadPeak
@@ -1131,7 +1131,7 @@ html wgEncodeHaibTfbs.release3
 
         track wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel T47 ERa GEN PC2 2
+        shortLabel T47 ERa Gen PC2 2
         longLabel T-47D ERa a Genistein PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ERAA cellType=t3T47D protocol=PCR2X treatment=GEN1H rep=rep2
         type broadPeak
@@ -1139,7 +1139,7 @@ html wgEncodeHaibTfbs.release3
 
         track wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel T47 ERa GEN PC2 1
+        shortLabel T47 ERa Gen PC2 1
         longLabel T-47D ERa a Genistein PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ERAA cellType=t3T47D protocol=PCR2X treatment=GEN1H rep=rep1
         type broadPeak
@@ -6126,7 +6126,7 @@ html wgEncodeHaibTfbs.release3
 
         track wgEncodeHaibTfbsT47dEralphaaV0416102Gen1hRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel T47 ERa GEN 102 1
+        shortLabel T47 ERa Gen 102 1
         longLabel T-47D ERa a Genistein v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ERAA cellType=t3T47D protocol=V0416102 treatment=GEN1H rep=rep1
         type bigWig 0.106978 163.623993
@@ -6134,7 +6134,7 @@ html wgEncodeHaibTfbs.release3
 
         track wgEncodeHaibTfbsT47dEralphaaV0416102Gen1hRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel T47 ERa GEN 102 2
+        shortLabel T47 ERa Gen 102 2
         longLabel T-47D ERa a Genistein v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ERAA cellType=t3T47D protocol=V0416102 treatment=GEN1H rep=rep2
         type bigWig 0.201361 266.501007
@@ -7014,7 +7014,7 @@ html wgEncodeHaibTfbs.release3
 
         track wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR DX.1mM 1
+        shortLabel A549 GR DX100nM 1
         longLabel A549 GR DEX 100nM PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=t2A549 protocol=PCR2X treatment=DEX100NM rep=rep1
         type bigWig 0.178638 530.018005
@@ -7198,7 +7198,7 @@ html wgEncodeHaibTfbs.release3
 
         track wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR DX.1mM 2
+        shortLabel A549 GR DX100nM 2
         longLabel A549 GR DEX 100nM PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=t2A549 protocol=PCR2X treatment=DEX100NM rep=rep2
         type bigWig 0.159649 105.927002
