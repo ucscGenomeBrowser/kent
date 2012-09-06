@@ -35,7 +35,7 @@ html wgEncodeUwDgf
 	scoreFilter 100
 	scoreFilterLimits 100:1000
 	minGrayLevel 2
-	#maxWindowToDraw 10000000
+	maxWindowToDraw 50000000
 
                 track wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep1
                 parent wgEncodeUwDgfViewHotspots off 
@@ -231,7 +231,7 @@ html wgEncodeUwDgf
 
                 track wgEncodeUwDgfZhbtc4129olaME0Diffb24hHotspotsRep1
                 parent wgEncodeUwDgfViewHotspots off
-                shortLabel ZhBTc4 E0 H
+                shortLabel ZhBTc4 diff E0 H
                 longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
                 subGroups view=Hotspots age=E0 cellType=ZHBTC4 strain=A129OLA treatment=DIFFB24H rep=rep1
                 type broadPeak
@@ -453,7 +453,7 @@ html wgEncodeUwDgf
 
                 track wgEncodeUwDgfZhbtc4129olaME0Diffb24hPkRep1
                 parent wgEncodeUwDgfViewPeaks off
-                shortLabel ZhBTc4 E0 P 
+                shortLabel ZhBTc4 diff E0 P 
                 longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Peaks Rep 1 from ENCODE/UW 
                 subGroups view=Peaks age=E0 cellType=ZHBTC4 strain=A129OLA treatment=DIFFB24H rep=rep1
                 type narrowPeak
@@ -675,7 +675,7 @@ html wgEncodeUwDgf
 
             track wgEncodeUwDgfZhbtc4129olaME0Diffb24hSigRep1
             parent wgEncodeUwDgfViewSignal off
-            shortLabel ZhBTc4 E0 S 
+            shortLabel ZhBTc4 diff E0 S 
             longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Signal Rep 1 from ENCODE/UW 
             subGroups view=Signal age=E0 cellType=ZHBTC4 strain=A129OLA treatment=DIFFB24H rep=rep1
             type bigWig 1.000000 130305.000000
@@ -898,7 +898,7 @@ html wgEncodeUwDgf
 
                 track wgEncodeUwDgfZhbtc4129olaME0Diffb24hRawRep1
                 parent wgEncodeUwDgfViewRawSignal off
-                shortLabel ZhBTc4 E0 R 
+                shortLabel ZhBTc4 diff E0 R 
                 longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Raw Signal Rep 1 ENCODE/UW 
                 subGroups view=RawSignal age=E0 cellType=ZHBTC4 strain=A129OLA treatment=DIFFB24H rep=rep1
                 type bigWig 1.000000 759516.000000
