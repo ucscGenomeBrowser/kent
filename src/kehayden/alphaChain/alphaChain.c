@@ -77,6 +77,7 @@ struct wordStore
     struct wordInfo *infoList;   /* List of words, fairly arbitrary order. */
     struct hash *infoHash;	     /* Hash of wordInfo, keyed by word. */
     struct wordTree *markovChains;   /* Tree of words that follow other words. */
+    int maxChainSize;		/* Maximum depth of tree. */
     struct wordType *typeList;	/* List of all types. */
     struct hash *typeHash;	/* Hash with wordType values, keyed by all words. */
     };
@@ -267,7 +268,7 @@ dyStringAppendC(dy, '}');
 return dyStringCannibalize(&dy);
 }
 
-void wordTreeDump(int level, struct wordTree *wt, FILE *f)
+void wordTreeDump(int level, struct wordTree *wt, int maxChainSize, FILE *f)
 /* Write out wordTree to file. */
 {
 static char *words[64];
@@ -289,7 +290,7 @@ if (!fullOnly || level == maxChainSize)
     }
 struct wordTree *child;
 for (child = wt->children; child != NULL; child = child->next)
-    wordTreeDump(level+1, child, f);
+    wordTreeDump(level+1, child, maxChainSize, f);
 }
 
 struct wordTree *pickRandomOnOutTarget(struct wordTree *list)
@@ -408,7 +409,7 @@ if (wt != NULL && wt->children != NULL)
 return result;
 }
 
-struct wordTree *predictNext(struct wordTree *wt, struct dlNode *recent)
+struct wordTree *predictNextFromRecent(struct wordTree *wt, struct dlNode *recent)
 /* Predict next word given tree and recently used word list.  Will use all words in
  * recent list if can,  but if there is not data in tree, will back off, and use
  * progressively less previous words until ultimately it just picks a random
@@ -426,6 +427,28 @@ struct wordTree *topLevel = pickRandom(wt->children);
 verbose(2, "in predictNext(%s, %s) ", wordTreeString(wt), dlListFragWords(recent));
 verbose(2, "last resort pick of %s\n", topLevel->info->word);
 return topLevel;
+}
+
+struct dlNode *nodesFromTail(struct dlList *list, int count)
+/* Return count nodes from tail of list.  If list is shorter than count, it returns the
+ * whole list. */
+{
+int i;
+struct dlNode *node;
+for (i=0, node = list->tail; i<count; ++i)
+    {
+    if (dlStart(node))
+        return list->head;
+    node = node->prev;
+    }
+return node;
+}
+
+struct wordTree *predictNext(struct wordStore *store, struct dlList *past)
+/* Given input data store and what is known from the past, predict the next word. */
+{
+struct dlNode *recent = nodesFromTail(past, store->maxChainSize);
+return predictNextFromRecent(store->markovChains, recent);
 }
 
 void decrementOutputCounts(struct wordTree *wt)
@@ -452,7 +475,6 @@ static struct dlList *wordTreeGenerateList(struct wordStore *store, int maxSize,
     struct wordTree *firstWord, int maxOutputWords)
 /* Make a list of words based on probabilities in tree. */
 {
-struct wordTree *wt = store->markovChains;
 struct dlList *ll = dlListNew();
 int chainSize = 0;
 int outputWords = 0;
@@ -476,11 +498,11 @@ for (;;)
     else if (chainSize >= maxSize)
 	{
 	chainStartNode = chainStartNode->next;
-	picked = predictNext(wt, chainStartNode);
+	picked = predictNext(store, ll);
 	}
     else
 	{
-	picked = predictNext(wt, chainStartNode);
+	picked = predictNext(store, ll);
 	++chainSize;
 	}
 
@@ -525,12 +547,13 @@ for (child = wt->children; child != NULL; child = child->next)
     wordTreeSort(child);
 }
 
-struct wordStore *wordStoreNew()
+struct wordStore *wordStoreNew(int maxChainSize)
 /* Allocate and initialize a new word store. */
 {
 struct wordStore *store;
 AllocVar(store);
 store->infoHash = hashNew(0);
+store->maxChainSize = maxChainSize;
 return store;
 }
 
@@ -558,7 +581,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
 
 /* We'll build up the tree starting with an empty root node. */
-struct wordStore *store = wordStoreNew();
+struct wordStore *store = wordStoreNew(chainSize);
 struct wordTree *wt = store->markovChains = wordTreeNew(wordStoreAdd(store, ""));	
 
 /* Loop through each line of file, treating it as a separate read. There's 
@@ -621,12 +644,12 @@ wordTreeSort(wt);  // Make output of chain file prettier
 return store;
 }
 
-void wordTreeWrite(struct wordTree *wt, char *fileName)
+void wordTreeWrite(struct wordTree *wt, int maxChainSize, char *fileName)
 /* Write out tree to file */
 {
 FILE *f = mustOpen(fileName, "w");
 fprintf(f, "#level\tuseCount\toutTarget\toutCount\tnormVal\tmonomers\n");
-wordTreeDump(0, wt, f);
+wordTreeDump(0, wt, maxChainSize, f);
 carefulClose(&f);
 }
 
@@ -676,15 +699,15 @@ wordTreeNormalize(wt, outSize, 1.0);
 if (optionExists("chain"))
     {
     char *fileName = optionVal("chain", NULL);
-    wordTreeWrite(wt, fileName);
+    wordTreeWrite(wt, store->maxChainSize, fileName);
     }
 
-wordTreeGenerateFile(store, maxChainSize, pickRandom(wt->children), outSize, outFile);
+wordTreeGenerateFile(store, store->maxChainSize, pickRandom(wt->children), outSize, outFile);
 
 if (optionExists("afterChain"))
     {
     char *fileName = optionVal("afterChain", NULL);
-    wordTreeWrite(wt, fileName);
+    wordTreeWrite(wt, store->maxChainSize, fileName);
     }
 }
 
