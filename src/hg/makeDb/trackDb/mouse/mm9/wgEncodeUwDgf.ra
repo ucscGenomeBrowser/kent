@@ -6,8 +6,8 @@ shortLabel UW DNaseI DGF
 longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line Cel3134=3134 Cel416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum ESCJ7=ES-CJ7 FAT=FatPad FIBROBLAST=Fibroblast FLBUD=ForelimbBud GFAT=GenitalFatPad HEART=Heart HLBUD=HindlimbBud KIDNEY=Kidney LIVER=Liver LUNG=Lung MEL=MEL NIH3T3=NIH-3T3 RETINA=Retina THELPA=THelper-Activated THYMUS=Thymus TNAIVE=T-Naive TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
-subGroup3 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss RIII=RIII Str129=129 Str129OLA=129/Ola Str129S1=129S1/SVImJ SPBL6=Spretus.BL6-Xist  UKN=Unknown
+subGroup2 cellType Cell_Line Cel3134=3134 Cel416B=416B CelA20=A20 CelBCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum ESCJ7=ES-CJ7 FAT=FatPad FIBROBLAST=Fibroblast FLBUD=ForelimbBud GFAT=GenitalFatPad HEART=Heart HLBUD=HindlimbBud KIDNEY=Kidney LIVER=Liver LUNG=Lung MEL=MEL NIH3T3=NIH-3T3 RETINA=Retina THELPA=THelper-Activated THYMUS=Thymus TNAIVE=T-Naive TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
+subGroup3 strain Strain A129=129 A129OLA=129/Ola A129S1=129S1/SVImJ BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss RIII=RIII SPBL6=Spretus.BL6-Xist  UKN=Unknown
 subGroup4 age Age ADULT8WKS=Adult_8_Weeks E0=Embryonic_Day_0 E11HALF=E11.5 E14HALF=Embryonic_Day_14.5 E18HALF=E18.5 IMMORTAL=Immortalized NEW1DAYS=Newborn_1_Day
 subGroup5 rep Replicate rep1=1 rep2=2 
 subGroup6 treatment Treatment NONE=None DIFFB24H=24_hour_diff_protocol_B
@@ -35,217 +35,217 @@ html wgEncodeUwDgf
 	scoreFilter 100
 	scoreFilterLimits 100:1000
 	minGrayLevel 2
-	maxWindowToDraw 10000000
+	#maxWindowToDraw 10000000
 
-        track wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off 
-        shortLabel T-Naive 8w H 1
-        longLabel T-Naive 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=TNAIVE strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=5248 dateSubmitted=2011-12-18
+                track wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off 
+                shortLabel T-Naive 8w H 1
+                longLabel T-Naive 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=TNAIVE strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=5248 dateSubmitted=2011-12-18
 
-        track wgEncodeUwDgfWbrainC57bl6ME14halfHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots  
-        shortLabel Brain E14.5 H
-        longLabel Brain E14.5 C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=E14HALF cellType=WBRAIN strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 105,105,105
-        # subId=5252 dateSubmitted=2011-12-18
-        # was wgEncodeUwDgfWholebrainC57bl6ME14halfHotspotsRep1 vsmalladi Tue Jan 10 15:20:50 2012
+                track wgEncodeUwDgfWbrainC57bl6ME14halfHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots  
+                shortLabel Brain E14.5 H
+                longLabel Brain E14.5 C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=E14HALF cellType=WBRAIN strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 105,105,105
+                # subId=5252 dateSubmitted=2011-12-18
+                # was wgEncodeUwDgfWholebrainC57bl6ME14halfHotspotsRep1 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwDgf3134RiiiMImmortalHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off 
-        shortLabel 3134 Immt H
-        longLabel 3134 Immortal RIII DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=IMMORTAL cellType=Cel3134 strain=RIII treatment=NONE rep=rep1
-        type broadPeak
-        color 0,158,115
-        # subId=5235 dateSubmitted=2011-12-17
+                track wgEncodeUwDgf3134RiiiMImmortalHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off 
+                shortLabel 3134 Immt H
+                longLabel 3134 Immortal RIII DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=IMMORTAL cellType=Cel3134 strain=RIII treatment=NONE rep=rep1
+                type broadPeak
+                color 0,158,115
+                # subId=5235 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfWbrainC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots
-        shortLabel Brain 8w H
-        longLabel Brain 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=WBRAIN strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 105,105,105
-        # subId=5236 dateSubmitted=2011-12-17
-        # was wgEncodeUwDgfWholebrainC57bl6MAdult8wksHotspotsRep1 vsmalladi Tue Jan 10 15:20:49 2012
+                track wgEncodeUwDgfWbrainC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots
+                shortLabel Brain 8w H
+                longLabel Brain 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=WBRAIN strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 105,105,105
+                # subId=5236 dateSubmitted=2011-12-17
+                # was wgEncodeUwDgfWholebrainC57bl6MAdult8wksHotspotsRep1 vsmalladi Tue Jan 10 15:20:49 2012
 
-        track wgEncodeUwDgfLiverC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots 
-        shortLabel Liver 8w H
-        longLabel Liver 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=LIVER strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 230,159,0
-        # subId=5237 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfLiverC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots 
+                shortLabel Liver 8w H
+                longLabel Liver 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=LIVER strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 230,159,0
+                # subId=5237 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgf416bB6d2f1jImmortalHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel 416B Immt H
-        longLabel 416B Immortal B6D2F1/J DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=IMMORTAL cellType=Cel416B strain=B6D2F1J treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=5238 dateSubmitted=2011-12-17
-        # was wgEncodeUwDgf416bC57bl6MAdult8wksHotspotsRep1 vsmalladi Wed Mar 28 10:27:18 2012
+                track wgEncodeUwDgf416bB6d2f1jImmortalHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel 416B Immt H
+                longLabel 416B Immortal B6D2F1/J DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=IMMORTAL cellType=Cel416B strain=B6D2F1J treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=5238 dateSubmitted=2011-12-17
+                # was wgEncodeUwDgf416bC57bl6MAdult8wksHotspotsRep1 vsmalladi Wed Mar 28 10:27:18 2012
 
-        track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel Bcell CD19+ 8w H
-        longLabel B-cell (CD19+) 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD19P strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=5241 dateSubmitted=2012-01-18
+                track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel Bcell CD19+ 8w H
+                longLabel B-cell (CD19+) 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=CelBCELLCD19P strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=5241 dateSubmitted=2012-01-18
 
-        track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel Bcell CD43- 8w H
-        longLabel B-cell (CD43-) 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=5242 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel Bcell CD43- 8w H
+                longLabel B-cell (CD43-) 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=5242 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfHeartC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots 
-        shortLabel Heart 8w H
-        longLabel Heart 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=HEART strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 153,38,0
-        # subId=5243 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfHeartC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots 
+                shortLabel Heart 8w H
+                longLabel Heart 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=HEART strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 153,38,0
+                # subId=5243 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfKidneyC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel Kidney 8w H
-        longLabel Kidney 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=KIDNEY strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 204,121,167
-        # subId=5245 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfKidneyC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel Kidney 8w H
+                longLabel Kidney 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=KIDNEY strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 204,121,167
+                # subId=5245 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfLungC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel Lung 8w H
-        longLabel Lung 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=LUNG strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        # subId=5246 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfLungC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel Lung 8w H
+                longLabel Lung 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=LUNG strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                # subId=5246 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfMelUknImmortalHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots 
-        shortLabel MEL Immt H
-        longLabel MEL Immortal DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=IMMORTAL cellType=MEL strain=UKN treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=5247 dateSubmitted=2011-12-17
-        # was wgEncodeUwDgfMelC57bl6MAdult8wksHotspotsRep1 vsmalladi Wed Mar 28 10:27:18 2012
+                track wgEncodeUwDgfMelUknImmortalHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots 
+                shortLabel MEL Immt H
+                longLabel MEL Immortal DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=IMMORTAL cellType=MEL strain=UKN treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=5247 dateSubmitted=2011-12-17
+                # was wgEncodeUwDgfMelC57bl6MAdult8wksHotspotsRep1 vsmalladi Wed Mar 28 10:27:18 2012
 
-        track wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep2
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel T-Naive 8w H 2
-        longLabel T-Naive 8w C57BL/6 DNaseI DGF Hotspots Rep 2 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=TNAIVE strain=C57BL6 treatment=NONE rep=rep2
-        type broadPeak
-        color 86,180,233
-        # subId=5249 dateSubmitted=2011-12-18
+                track wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep2
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel T-Naive 8w H 2
+                longLabel T-Naive 8w C57BL/6 DNaseI DGF Hotspots Rep 2 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=TNAIVE strain=C57BL6 treatment=NONE rep=rep2
+                type broadPeak
+                color 86,180,233
+                # subId=5249 dateSubmitted=2011-12-18
 
-        track wgEncodeUwDgfThymusC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel Thymus 8w H
-        longLabel Thymus 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=THYMUS strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=5250 dateSubmitted=2011-12-18
+                track wgEncodeUwDgfThymusC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel Thymus 8w H
+                longLabel Thymus 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=THYMUS strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=5250 dateSubmitted=2011-12-18
 
-        track wgEncodeUwDgfTregC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel TReg 8w H
-        longLabel TReg 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=TREG strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=5251 dateSubmitted=2011-12-18
+                track wgEncodeUwDgfTregC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel TReg 8w H
+                longLabel TReg 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=TREG strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=5251 dateSubmitted=2011-12-18
 
-        track wgEncodeUwDgfThelpaC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel THelp-Act 8w H
-        longLabel THelper-Activated 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=THELPA strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=6910 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfThelpaC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel THelp-Act 8w H
+                longLabel THelper-Activated 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=THELPA strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=6910 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfTregaC57bl6MAdult8wksHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel TReg-Act 8w H
-        longLabel TReg-Activated 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=ADULT8WKS cellType=TREGA strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=6911 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfTregaC57bl6MAdult8wksHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel TReg-Act 8w H
+                longLabel TReg-Activated 8w C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=ADULT8WKS cellType=TREGA strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=6911 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfA20BalbcannMImmortalHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel A20 Immt H
-        longLabel A20 Immortal BALB/cAnN DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=IMMORTAL cellType=A20 strain=BALBCANN treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=6912 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfA20BalbcannMImmortalHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel A20 Immt H
+                longLabel A20 Immortal BALB/cAnN DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=IMMORTAL cellType=CelA20 strain=BALBCANN treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=6912 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfEscj7129s1ME0HotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel ES-CJ7 E0 H
-        longLabel ES-CJ7 E0 129S1/SVImJ DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=E0 cellType=ESCJ7 strain=Str129S1 treatment=NONE rep=rep1
-        type broadPeak
-        color 65,105,225
-        # subId=6913 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfEscj7129s1ME0HotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel ES-CJ7 E0 H
+                longLabel ES-CJ7 E0 129S1/SVImJ DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=E0 cellType=ESCJ7 strain=A129S1 treatment=NONE rep=rep1
+                type broadPeak
+                color 65,105,225
+                # subId=6913 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfNih3t3NihsMImmortalHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel NIH-3T3 Immt H
-        longLabel NIH-3T3 Immortal NIH/Swiss DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=IMMORTAL cellType=NIH3T3 strain=NIHS treatment=NONE rep=rep1
-        type broadPeak
-        color 86,180,233
-        # subId=6914 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfNih3t3NihsMImmortalHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel NIH-3T3 Immt H
+                longLabel NIH-3T3 Immortal NIH/Swiss DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=IMMORTAL cellType=NIH3T3 strain=NIHS treatment=NONE rep=rep1
+                type broadPeak
+                color 86,180,233
+                # subId=6914 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfRetinaC57bl6MNew1daysHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel Retina 1day H
-        longLabel Retina Newborn 1 Day C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=NEW1DAYS cellType=RETINA strain=C57BL6 treatment=NONE rep=rep1
-        type broadPeak
-        color 105,105,105
-        # subId=6915 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfRetinaC57bl6MNew1daysHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel Retina 1day H
+                longLabel Retina Newborn 1 Day C57BL/6 DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=NEW1DAYS cellType=RETINA strain=C57BL6 treatment=NONE rep=rep1
+                type broadPeak
+                color 105,105,105
+                # subId=6915 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfZhbtc4129olaME0Diffb24hHotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel ZhBTc4 E0 H
-        longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=E0 cellType=ZHBTC4 strain=Str129OLA treatment=DIFFB24H rep=rep1
-        type broadPeak
-        color 65,105,225
-        # subId=6916 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfZhbtc4129olaME0Diffb24hHotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel ZhBTc4 E0 H
+                longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=E0 cellType=ZHBTC4 strain=A129OLA treatment=DIFFB24H rep=rep1
+                type broadPeak
+                color 65,105,225
+                # subId=6916 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfZhbtc4129olaME0HotspotsRep1
-        parent wgEncodeUwDgfViewHotspots off
-        shortLabel ZhBTc4 E0 H
-        longLabel ZhBTc4 E0 129/Ola DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hotspots age=E0 cellType=ZHBTC4 strain=Str129OLA treatment=NONE rep=rep1
-        type broadPeak
-        color 65,105,225
-        # subId=6917 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfZhbtc4129olaME0HotspotsRep1
+                parent wgEncodeUwDgfViewHotspots off
+                shortLabel ZhBTc4 E0 H
+                longLabel ZhBTc4 E0 129/Ola DNaseI DGF Hotspots Rep 1 from ENCODE/UW 
+                subGroups view=Hotspots age=E0 cellType=ZHBTC4 strain=A129OLA treatment=NONE rep=rep1
+                type broadPeak
+                color 65,105,225
+                # subId=6917 dateSubmitted=2012-05-01
 
 	track wgEncodeUwDgfViewPeaks
 	shortLabel Peaks
@@ -256,218 +256,218 @@ html wgEncodeUwDgf
 	pValueFilterLimits 1:324
 	scoreFilter 100
 	scoreFilterLimits 100:1000
-	maxWindowToDraw 10000000
+	#maxWindowToDraw 10000000
 	minGrayLevel 3
 
-        track wgEncodeUwDgfTnaiveC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel T-Naive 8w P 1
-        longLabel T-Naive 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=TNAIVE strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=5248 dateSubmitted=2011-12-18
+                track wgEncodeUwDgfTnaiveC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel T-Naive 8w P 1
+                longLabel T-Naive 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=TNAIVE strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=5248 dateSubmitted=2011-12-18
 
-        track wgEncodeUwDgfWbrainC57bl6ME14halfPkRep1
-        parent wgEncodeUwDgfViewPeaks 
-        shortLabel Brain E14.5 P
-        longLabel Brain E14.5 C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=E14HALF cellType=WBRAIN strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 105,105,105
-        # subId=5252 dateSubmitted=2011-12-18
-        # was wgEncodeUwDgfWholebrainC57bl6ME14halfPkRep1 vsmalladi Tue Jan 10 15:20:50 2012
+                track wgEncodeUwDgfWbrainC57bl6ME14halfPkRep1
+                parent wgEncodeUwDgfViewPeaks 
+                shortLabel Brain E14.5 P
+                longLabel Brain E14.5 C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=E14HALF cellType=WBRAIN strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 105,105,105
+                # subId=5252 dateSubmitted=2011-12-18
+                # was wgEncodeUwDgfWholebrainC57bl6ME14halfPkRep1 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwDgf3134RiiiMImmortalPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel 3134 Immt P
-        longLabel 3134 Immortal RIII DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=IMMORTAL cellType=Cel3134 strain=RIII treatment=NONE rep=rep1
-        type narrowPeak
-        color 0,158,115
-        # subId=5235 dateSubmitted=2011-12-17
+                track wgEncodeUwDgf3134RiiiMImmortalPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel 3134 Immt P
+                longLabel 3134 Immortal RIII DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=IMMORTAL cellType=Cel3134 strain=RIII treatment=NONE rep=rep1
+                type narrowPeak
+                color 0,158,115
+                # subId=5235 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfWbrainC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks 
-        shortLabel Brain 8w P
-        longLabel Brain 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=WBRAIN strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 105,105,105
-        # subId=5236 dateSubmitted=2011-12-17
-        # was wgEncodeUwDgfWholebrainC57bl6MAdult8wksPkRep1 vsmalladi Tue Jan 10 15:20:49 2012
+                track wgEncodeUwDgfWbrainC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks 
+                shortLabel Brain 8w P
+                longLabel Brain 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=WBRAIN strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 105,105,105
+                # subId=5236 dateSubmitted=2011-12-17
+                # was wgEncodeUwDgfWholebrainC57bl6MAdult8wksPkRep1 vsmalladi Tue Jan 10 15:20:49 2012
 
-        track wgEncodeUwDgfLiverC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks
-        shortLabel Liver 8w P
-        longLabel Liver 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=LIVER strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 230,159,0
-        # subId=5237 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfLiverC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks
+                shortLabel Liver 8w P
+                longLabel Liver 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=LIVER strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 230,159,0
+                # subId=5237 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgf416bB6d2f1jImmortalPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel 416B Immt P
-        longLabel 416B Immortal B6D2F1/J DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=IMMORTAL cellType=Cel416B strain=B6D2F1J treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=5238 dateSubmitted=2011-12-17
-        # was wgEncodeUwDgf416bC57bl6MAdult8wksPkRep1 vsmalladi Wed Mar 28 10:27:18 2012
+                track wgEncodeUwDgf416bB6d2f1jImmortalPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel 416B Immt P
+                longLabel 416B Immortal B6D2F1/J DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=IMMORTAL cellType=Cel416B strain=B6D2F1J treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=5238 dateSubmitted=2011-12-17
+                # was wgEncodeUwDgf416bC57bl6MAdult8wksPkRep1 vsmalladi Wed Mar 28 10:27:18 2012
 
-        track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel Bcell CD19+ 8w P
-        longLabel B-cell (CD19+) 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD19P strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=5241 dateSubmitted=2012-01-18
+                track wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel Bcell CD19+ 8w P
+                longLabel B-cell (CD19+) 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=CelBCELLCD19P strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=5241 dateSubmitted=2012-01-18
 
-        track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel Bcell CD43- 8w P 
-        longLabel B-cell (CD43-) 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=5242 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel Bcell CD43- 8w P 
+                longLabel B-cell (CD43-) 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD43N strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=5242 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfHeartC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks 
-        shortLabel Heart 8w P 
-        longLabel Heart 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=HEART strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 153,38,0
-        # subId=5243 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfHeartC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks 
+                shortLabel Heart 8w P 
+                longLabel Heart 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=HEART strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 153,38,0
+                # subId=5243 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfKidneyC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel Kidney 8w P 
-        longLabel Kidney 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=KIDNEY strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 204,121,167
-        # subId=5245 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfKidneyC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel Kidney 8w P 
+                longLabel Kidney 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=KIDNEY strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 204,121,167
+                # subId=5245 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfLungC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel Lung 8w P 
-        longLabel Lung 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=LUNG strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        # subId=5246 dateSubmitted=2011-12-17
+                track wgEncodeUwDgfLungC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel Lung 8w P 
+                longLabel Lung 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=LUNG strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                # subId=5246 dateSubmitted=2011-12-17
 
-        track wgEncodeUwDgfMelUknImmortalPkRep1
-        parent wgEncodeUwDgfViewPeaks 
-        shortLabel MEL Immt P 
-        longLabel MEL Immortal DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=IMMORTAL cellType=MEL strain=UKN treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=5247 dateSubmitted=2011-12-17
-        # was wgEncodeUwDgfMelC57bl6MAdult8wksPkRep1 vsmalladi Wed Mar 28 10:27:19 2012
+                track wgEncodeUwDgfMelUknImmortalPkRep1
+                parent wgEncodeUwDgfViewPeaks 
+                shortLabel MEL Immt P 
+                longLabel MEL Immortal DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=IMMORTAL cellType=MEL strain=UKN treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=5247 dateSubmitted=2011-12-17
+                # was wgEncodeUwDgfMelC57bl6MAdult8wksPkRep1 vsmalladi Wed Mar 28 10:27:19 2012
 
-        track wgEncodeUwDgfTnaiveC57bl6MAdult8wksPkRep2
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel T-Naive 8w P 2
-        longLabel T-Naive 8w C57BL/6 DNaseI DGF Peaks Rep 2 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=TNAIVE strain=C57BL6 treatment=NONE rep=rep2
-        type narrowPeak
-        color 86,180,233
-        # subId=5249 dateSubmitted=2011-12-18
+                track wgEncodeUwDgfTnaiveC57bl6MAdult8wksPkRep2
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel T-Naive 8w P 2
+                longLabel T-Naive 8w C57BL/6 DNaseI DGF Peaks Rep 2 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=TNAIVE strain=C57BL6 treatment=NONE rep=rep2
+                type narrowPeak
+                color 86,180,233
+                # subId=5249 dateSubmitted=2011-12-18
 
-        track wgEncodeUwDgfThymusC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel Thymus 8w P 
-        longLabel Thymus 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=THYMUS strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=5250 dateSubmitted=2011-12-18
+                track wgEncodeUwDgfThymusC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel Thymus 8w P 
+                longLabel Thymus 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=THYMUS strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=5250 dateSubmitted=2011-12-18
 
-        track wgEncodeUwDgfTregC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel TReg 8w P 
-        longLabel TReg 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=TREG strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=5251 dateSubmitted=2011-12-18
+                track wgEncodeUwDgfTregC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel TReg 8w P 
+                longLabel TReg 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=TREG strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=5251 dateSubmitted=2011-12-18
 
-        track wgEncodeUwDgfThelpaC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel THelp-Act 8w P 
-        longLabel THelper-Activated 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=THELPA strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=6910 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfThelpaC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel THelp-Act 8w P 
+                longLabel THelper-Activated 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=THELPA strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=6910 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfTregaC57bl6MAdult8wksPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel TReg-Act 8w P 
-        longLabel TReg-Activated 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=ADULT8WKS cellType=TREGA strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=6911 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfTregaC57bl6MAdult8wksPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel TReg-Act 8w P 
+                longLabel TReg-Activated 8w C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=ADULT8WKS cellType=TREGA strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=6911 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfA20BalbcannMImmortalPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel A20 Immt P 
-        longLabel A20 Immortal BALB/cAnN DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=IMMORTAL cellType=A20 strain=BALBCANN treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=6912 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfA20BalbcannMImmortalPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel A20 Immt P 
+                longLabel A20 Immortal BALB/cAnN DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=IMMORTAL cellType=CelA20 strain=BALBCANN treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=6912 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfEscj7129s1ME0PkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel ES-CJ7 E0 P 
-        longLabel ES-CJ7 E0 129S1/SVImJ DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=E0 cellType=ESCJ7 strain=Str129S1 treatment=NONE rep=rep1
-        type narrowPeak
-        color 65,105,225
-        # subId=6913 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfEscj7129s1ME0PkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel ES-CJ7 E0 P 
+                longLabel ES-CJ7 E0 129S1/SVImJ DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=E0 cellType=ESCJ7 strain=A129S1 treatment=NONE rep=rep1
+                type narrowPeak
+                color 65,105,225
+                # subId=6913 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfNih3t3NihsMImmortalPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel NIH-3T3 Immt P 
-        longLabel NIH-3T3 Immortal NIH/Swiss DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=IMMORTAL cellType=NIH3T3 strain=NIHS treatment=NONE rep=rep1
-        type narrowPeak
-        color 86,180,233
-        # subId=6914 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfNih3t3NihsMImmortalPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel NIH-3T3 Immt P 
+                longLabel NIH-3T3 Immortal NIH/Swiss DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=IMMORTAL cellType=NIH3T3 strain=NIHS treatment=NONE rep=rep1
+                type narrowPeak
+                color 86,180,233
+                # subId=6914 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfRetinaC57bl6MNew1daysPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel Retina 1day P 
-        longLabel Retina Newborn 1 Day C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=NEW1DAYS cellType=RETINA strain=C57BL6 treatment=NONE rep=rep1
-        type narrowPeak
-        color 105,105,105
-        # subId=6915 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfRetinaC57bl6MNew1daysPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel Retina 1day P 
+                longLabel Retina Newborn 1 Day C57BL/6 DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=NEW1DAYS cellType=RETINA strain=C57BL6 treatment=NONE rep=rep1
+                type narrowPeak
+                color 105,105,105
+                # subId=6915 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfZhbtc4129olaME0Diffb24hPkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel ZhBTc4 E0 P 
-        longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=E0 cellType=ZHBTC4 strain=Str129OLA treatment=DIFFB24H rep=rep1
-        type narrowPeak
-        color 65,105,225
-        # subId=6916 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfZhbtc4129olaME0Diffb24hPkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel ZhBTc4 E0 P 
+                longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=E0 cellType=ZHBTC4 strain=A129OLA treatment=DIFFB24H rep=rep1
+                type narrowPeak
+                color 65,105,225
+                # subId=6916 dateSubmitted=2012-05-01
 
-        track wgEncodeUwDgfZhbtc4129olaME0PkRep1
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel ZhBTc4 E0 P 
-        longLabel ZhBTc4 E0 129/Ola DNaseI DGF Peaks Rep 1 from ENCODE/UW 
-        subGroups view=Peaks age=E0 cellType=ZHBTC4 strain=Str129OLA treatment=NONE rep=rep1
-        type narrowPeak
-        color 65,105,225
-        # subId=6917 dateSubmitted=2012-05-01
+                track wgEncodeUwDgfZhbtc4129olaME0PkRep1
+                parent wgEncodeUwDgfViewPeaks off
+                shortLabel ZhBTc4 E0 P 
+                longLabel ZhBTc4 E0 129/Ola DNaseI DGF Peaks Rep 1 from ENCODE/UW 
+                subGroups view=Peaks age=E0 cellType=ZHBTC4 strain=A129OLA treatment=NONE rep=rep1
+                type narrowPeak
+                color 65,105,225
+                # subId=6917 dateSubmitted=2012-05-01
 
 	track wgEncodeUwDgfViewSignal
 	shortLabel Signal
@@ -542,7 +542,7 @@ html wgEncodeUwDgf
             parent wgEncodeUwDgfViewSignal off
             shortLabel Bcell CD19+ 8w S 
             longLabel B-cell (CD19+) 8w C57BL/6 DNaseI DGF Signal Rep 1 from ENCODE/UW 
-            subGroups view=Signal age=ADULT8WKS cellType=BCELLCD19P strain=C57BL6 treatment=NONE rep=rep1
+            subGroups view=Signal age=ADULT8WKS cellType=CelBCELLCD19P strain=C57BL6 treatment=NONE rep=rep1
             type bigWig 1.000000 102599.000000
             color 86,180,233
             # subId=5241 dateSubmitted=2012-01-18
@@ -641,7 +641,7 @@ html wgEncodeUwDgf
             parent wgEncodeUwDgfViewSignal off
             shortLabel A20 Immt S 
             longLabel A20 Immortal BALB/cAnN DNaseI DGF Signal Rep 1 from ENCODE/UW 
-            subGroups view=Signal age=IMMORTAL cellType=A20 strain=BALBCANN treatment=NONE rep=rep1
+            subGroups view=Signal age=IMMORTAL cellType=CelA20 strain=BALBCANN treatment=NONE rep=rep1
             type bigWig 1.000000 143918.000000
             color 86,180,233
             # subId=6912 dateSubmitted=2012-05-01
@@ -650,7 +650,7 @@ html wgEncodeUwDgf
             parent wgEncodeUwDgfViewSignal off
             shortLabel ES-CJ7 E0 S 
             longLabel ES-CJ7 E0 129S1/SVImJ DNaseI DGF Signal Rep 1 from ENCODE/UW 
-            subGroups view=Signal age=E0 cellType=ESCJ7 strain=Str129S1 treatment=NONE rep=rep1
+            subGroups view=Signal age=E0 cellType=ESCJ7 strain=A129S1 treatment=NONE rep=rep1
             type bigWig 1.000000 79700.000000
             color 65,105,225
             # subId=6913 dateSubmitted=2012-05-01
@@ -677,7 +677,7 @@ html wgEncodeUwDgf
             parent wgEncodeUwDgfViewSignal off
             shortLabel ZhBTc4 E0 S 
             longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Signal Rep 1 from ENCODE/UW 
-            subGroups view=Signal age=E0 cellType=ZHBTC4 strain=Str129OLA treatment=DIFFB24H rep=rep1
+            subGroups view=Signal age=E0 cellType=ZHBTC4 strain=A129OLA treatment=DIFFB24H rep=rep1
             type bigWig 1.000000 130305.000000
             color 65,105,225
             # subId=6916 dateSubmitted=2012-05-01
@@ -686,7 +686,7 @@ html wgEncodeUwDgf
             parent wgEncodeUwDgfViewSignal off
             shortLabel ZhBTc4 E0 S 
             longLabel ZhBTc4 E0 129/Ola DNaseI DGF Signal Rep 1 from ENCODE/UW 
-            subGroups view=Signal age=E0 cellType=ZHBTC4 strain=Str129OLA treatment=NONE rep=rep1
+            subGroups view=Signal age=E0 cellType=ZHBTC4 strain=A129OLA treatment=NONE rep=rep1
             type bigWig 1.000000 90713.000000
             color 65,105,225
             # subId=6917 dateSubmitted=2012-05-01
@@ -764,7 +764,7 @@ html wgEncodeUwDgf
                 parent wgEncodeUwDgfViewRawSignal off
                 shortLabel Bcell CD19+ 8w R 
                 longLabel B-cell (CD19+) 8w C57BL/6 DNaseI DGF Raw Signal Rep 1 from ENCODE/UW 
-                subGroups view=RawSignal age=ADULT8WKS cellType=BCELLCD19P strain=C57BL6 treatment=NONE rep=rep1
+                subGroups view=RawSignal age=ADULT8WKS cellType=CelBCELLCD19P strain=C57BL6 treatment=NONE rep=rep1
                 type bigWig 1.000000 785440.000000
                 color 86,180,233
                 # subId=5241 dateSubmitted=2012-01-18
@@ -864,7 +864,7 @@ html wgEncodeUwDgf
                 parent wgEncodeUwDgfViewRawSignal off
                 shortLabel A20 Immt R 
                 longLabel A20 Immortal BALB/cAnN DNaseI DGF Raw Signal Rep 1 from ENCODE/UW 
-                subGroups view=RawSignal age=IMMORTAL cellType=A20 strain=BALBCANN treatment=NONE rep=rep1
+                subGroups view=RawSignal age=IMMORTAL cellType=CelA20 strain=BALBCANN treatment=NONE rep=rep1
                 type bigWig 1.000000 801343.000000
                 color 86,180,233
                 # subId=6912 dateSubmitted=2012-05-01
@@ -873,7 +873,7 @@ html wgEncodeUwDgf
                 parent wgEncodeUwDgfViewRawSignal off
                 shortLabel ES-CJ7 E0 R 
                 longLabel ES-CJ7 E0 129S1/SVImJ DNaseI DGF Raw Signal Rep 1 from ENCODE/UW 
-                subGroups view=RawSignal age=E0 cellType=ESCJ7 strain=Str129S1 treatment=NONE rep=rep1
+                subGroups view=RawSignal age=E0 cellType=ESCJ7 strain=A129S1 treatment=NONE rep=rep1
                 type bigWig 1.000000 425541.000000
                 color 65,105,225
                 # subId=6913 dateSubmitted=2012-05-01
@@ -900,7 +900,7 @@ html wgEncodeUwDgf
                 parent wgEncodeUwDgfViewRawSignal off
                 shortLabel ZhBTc4 E0 R 
                 longLabel ZhBTc4 E0 129/Ola differentiated 24 hr DNaseI DGF Raw Signal Rep 1 ENCODE/UW 
-                subGroups view=RawSignal age=E0 cellType=ZHBTC4 strain=Str129OLA treatment=DIFFB24H rep=rep1
+                subGroups view=RawSignal age=E0 cellType=ZHBTC4 strain=A129OLA treatment=DIFFB24H rep=rep1
                 type bigWig 1.000000 759516.000000
                 color 65,105,225
                 # subId=6916 dateSubmitted=2012-05-01
@@ -909,7 +909,7 @@ html wgEncodeUwDgf
                 parent wgEncodeUwDgfViewRawSignal off
                 shortLabel ZhBTc4 E0 R 
                 longLabel ZhBTc4 E0 129/Ola DNaseI DGF Raw Signal Rep 1 from ENCODE/UW 
-                subGroups view=RawSignal age=E0 cellType=ZHBTC4 strain=Str129OLA treatment=NONE rep=rep1
+                subGroups view=RawSignal age=E0 cellType=ZHBTC4 strain=A129OLA treatment=NONE rep=rep1
                 type bigWig 1.000000 563374.000000
                 color 65,105,225
                 # subId=6917 dateSubmitted=2012-05-01
