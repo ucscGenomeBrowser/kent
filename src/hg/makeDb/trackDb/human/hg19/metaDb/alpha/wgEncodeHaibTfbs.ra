@@ -60004,6 +60004,7 @@ controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-02-07
+dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001599
 expId 1599
 fileName wgEncodeHaibTfbsK562RxlchV0416101AlnRep1.bam,wgEncodeHaibTfbsK562RxlchV0416101AlnRep1.bam.bai
@@ -82835,4 +82836,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -859709038
+# MAGIC: 826114788
