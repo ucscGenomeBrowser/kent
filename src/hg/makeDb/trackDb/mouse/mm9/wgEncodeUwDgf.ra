@@ -35,7 +35,7 @@ html wgEncodeUwDgf
 	scoreFilter 100
 	scoreFilterLimits 100:1000
 	minGrayLevel 2
-	maxWindowToDraw 50000000
+	#maxWindowToDraw 50000000
 
                 track wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep1
                 parent wgEncodeUwDgfViewHotspots off 
