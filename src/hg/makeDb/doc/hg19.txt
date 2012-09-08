@@ -19382,3 +19382,52 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
+# DENISOVA HIGH-COVERAGE VARIANTS (DONE 9/6/12 angie)
+    mkdir /hive/data/genomes/hg19/bed/denisova
+    cd /hive/data/genomes/hg19/bed/denisova
+    # Get tabix-compressed+indexed VCF files for Denisova and 11 modern humans:
+    wget ftp://ucsc_paper_data:PHZuezz7@cdna.eva.mpg.de/hg19_1000g/\*
+    # Make /gbdb links and bbi tables, prefix dhcVcf for Denisova High-Coverage VCF:
+    foreach f (`pwd`/*.vcf.gz{,.tbi})
+      ln -s $f /gbdb/hg19/bbi/
+    end
+    foreach f (*.vcf.gz)
+      set track = dhcVcf$f:r:r
+      echo $track
+      hgBbiDbLink hg19 $track /gbdb/hg19/bbi/$f
+    end
+#dhcVcfDNK02
+#dhcVcfDenisovaPinky
+#dhcVcfHGDP00456
+#dhcVcfHGDP00521
+#dhcVcfHGDP00542
+#dhcVcfHGDP00665
+#dhcVcfHGDP00778
+#dhcVcfHGDP00927
+#dhcVcfHGDP00998
+#dhcVcfHGDP01029
+#dhcVcfHGDP01284
+#dhcVcfHGDP01307
+    # Add Denisova track group section:
+    hgsql hg19 -e "insert into grp values('denisova', 'Denisova Assembly and Analysis', 6.6, 1)"
+
+
+#########################################################################
+# DENISOVA HIGH-COVERAGE ANALYSIS (TODO 9/6/12 angie)
+    mkdir /hive/data/genomes/hg19/bed/denisova
+    cd /hive/data/genomes/hg19/bed/denisova
+    wget --no-check-certificate https://bioinf.eva.mpg.de/download/HighCoverageDenisovaGenome/Denisova_catalog.zip
+    unzip Denisova_catalog.zip
+
+    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Denisova-derived_Human-ancestral/
+
+    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/GAD_Denisova-state/
+
+    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/GWAS_Denisova-state/
+
+    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Human-derived_Denisova-ancestral/
+
+    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Human-derived_Denisova-state/
+
+
+#########################################################################
