@@ -42,7 +42,7 @@ at the end of a name signifies a stop codon.
 <ul>
   <li>The <span style="font-style: italic;">Item</span> names the peptide sequence and
 is appended with a number for proteins with post-translational modifications (PTM)
-representing the integer portion of the PTM mass. The peptide sequence appears as a short label besides
+representing the integer portion of the PTM mass. The peptide sequence appears as a short label beside
 the main Genome Browser display window depending on the view configuration.</li>
   <li>The <span style="font-style: italic;">Score</span> is used to render shade to
 displayed rectangular items and is derived from the <span 
@@ -53,18 +53,22 @@ peptide mapping software Peppy.  It is computed as [(<span style="font-style: it
 <span style="font-style: italic;">rawScore</span> at 10% FDR cutoff)] * 1000,
 and is then converted to an integer.  Raw scores above the 0% FDR threshold have
 a score of 1000 (best), while those below the 10% FDR threshold have a score of 0 (worst).</li>
-  <li>The <span style="font-style: italic;">rawScore</span> is the raw score for
-a peptide/spectrum match given by Peppy and is expressed as the negative log 10
-of the <EM>p-value</EM>, which reflects the confidence of the mapping between the peptides
-and the spectrums.</li>
+  <li>The <span style="font-style: italic;">rawScore</span> is given by Peppy 
+and is expressed as the negative log 10 of the <EM>p-value</EM>, which reflects
+the confidence of the mapping between the peptides and the spectrums.
+On the item details pages, <EM>rawScore</EM> is labeled: Raw score for a peptide/spectrum match.</li>
   <li>The <span style="font-style: italic;">spectrumId</span> is an identifier of the
-spectrum associated with the peptide mapping and can be used to track the original spectrum.</li>
+spectrum associated with the peptide mapping and can be used to track the original spectrum.
+On the item details pages, <EM>spectrumId</EM> is labeled: An identifier of the spectrum
+associated with the peptide mapping.</li>
   <li>The <span style="font-style: italic;">peptideRank</span> is a rank of the
 peptide/spectrum match used for a spectrum matching to different peptides. A spectrum
-can be chimeric, containing more than one peptide, and the spectrum can be mapped
+can be chimeric (containing more than one peptide) and the spectrum can be mapped
 to two or more distinct peptides. Here, only the top-scoring match is reported. If more
 than one peptide "tied" for the top score, then all peptides were included and all 
-matches have a <span style="font-style: italic;">peptideRank</span> of 1.</li>
+matches have a <span style="font-style: italic;">peptideRank</span> of 1. On the
+item details pages, <EM>peptideRank</EM> is labeled: Rank of the peptide/spectrum match,
+for spectrum matching to different peptides.</li>
   <li>The <span style="font-style: italic;">peptideRepeatCount</span> indicates the
 number of places in the genome where the peptide is encoded for a peptide/spectrum
 match. It reflects the prevalence or uniqueness of the peptide mapping in the genome.
@@ -73,11 +77,13 @@ Those peptides mapped to only a few genomic locations will have a low
 to highly duplicated regions will have a high <span style="font-style:
 italic;">peptideRepeatCount</span>. <b>Peptides with
 a <EM>peptideRepeatCount</EM> greater than 10 times in the genome were
-deleted from the track</b> (this field is for regular peptides only).</li>
+deleted from the track</b> (this field is for regular peptides only). On the 
+item details pages, <EM>peptideRepeatCount</EM> is labeled: Indicates the number
+of places in the genome where the peptide is encoded for a peptide/spectrum match.</li>
   <li>The <span style="font-style: italic;"> modificationMass</span> reflects the 
 additional molecular weight for each modified peptide matched to a spectrum (this
-field is for PTM peptides only).
-  </li>
+field is for PTM peptides only). On the item details pages, <EM>modificationMass</EM> is labeled:
+Reflects the additional molecular weight for each modified peptide matched to a spectrum.</li>
 </ul>
 
 
@@ -136,12 +142,14 @@ for download.
 Ultra LTQ Orbitrap system (Thermo Scientific) whereas H1-hESC (MudPIT protocol), 
 H1-neurons sample were analyzed on the Q Exactive system (Thermo Scientific).</font>
 
+<h2>Release Notes</h2>
+This is Release 1 of this track (Sept 2012).  Unlike other ENCODE data, this data is not archived at GEO but at <a href="https://proteomecommons.org/" target="_blank">Proteome Commons</a>.  The first 32 digits of the Tranche Hash for each data set is stored as the labExpId.
 
 <h2>Credits</h2>
 <p>Proteogenomic mapping: Dr. John Wrobel, Dr. Jainab Khatun, Mr. Brian Risk, 
-and Mr. David Thomas (<A HREF=http://giddingslab.org/>Giddings Lab</A>). </p>
+and Mr. David Thomas (<a href="http://giddingslab.org/" target="_blank">Giddings Lab</a>). </p>
 <p>Proteomic analysis: Dr. Yanbao Yu, Dr. Harsha Gunawardena, Dr. Ling Xie and 
-Ms. Li Wang (<A HREF=http://www.med.unc.edu/biochem/chenlab/chen-research-lab>Chen Lab</A>).
+Ms. Li Wang (<a href="http://www.med.unc.edu/biochem/chenlab/chen-research-lab" target="_blank">Chen Lab</a>).
 </p>
 Main Contact:
 <a href="mailto:johnwrobel@boisestate.edu">John Wrobel</a>
@@ -207,9 +215,7 @@ consent, submit publications that use an unpublished ENCODE dataset
 until
 nine months following the release of the dataset. This date is listed
 in
-the <em>Restricted Until</em> column on the track configuration page
-and
-the download page. The full data release policy for ENCODE is available
+the <em>Restricted Until</em> column above. The full data release policy for ENCODE is available
 <a href="../ENCODE/terms.html" target="_BLANK">here</a>.</p>
 </body>
 </html>

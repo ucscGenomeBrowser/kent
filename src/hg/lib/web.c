@@ -493,7 +493,8 @@ char *defaultLabel = NULL;
 int numClades = 0;
 
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
-struct sqlResult *sr = sqlGetResult(conn, "select name, label from clade order by priority");
+// get only the clades that have actual active genomes
+struct sqlResult *sr = sqlGetResult(conn, "SELECT DISTINCT(c.name), c.label FROM clade c, genomeClade g, dbDb d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     clades[numClades] = cloneString(row[0]);
@@ -504,6 +505,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (numClades >= ArraySize(clades))
         internalErr();
     }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
 
 cgiMakeDropListFull(cladeCgiName, labels, clades, numClades,
                     defaultLabel, onChangeText);

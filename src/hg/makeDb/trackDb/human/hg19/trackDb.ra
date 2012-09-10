@@ -3,6 +3,7 @@
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
+include trackDb.denisova.ra
 
 #large composites
 include uMassBrainHistone.ra

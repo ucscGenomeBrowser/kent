@@ -22,8 +22,7 @@ include wgEncodePsuTfbs.release2.ra
 include wgEncodePsuHistone.release2.ra
 
 # LICR Histone (wrangler: Fang)
-include wgEncodeLicrHistone.release2.ra public
-include wgEncodeLicrHistone.release3.ra alpha,beta
+include wgEncodeLicrHistone.release3.ra
 
 # LICR TFBS (wrangler: Fang)
 include wgEncodeLicrTfbs.release3.ra
@@ -45,11 +44,10 @@ include wgEncodeCaltechTfbs.release2.ra alpha
 include wgEncodeCaltechHist.ra 
 
 # UW DNaseI DGF (wrangler: Venkat)
-include wgEncodeUwDgf.ra alpha,beta
+include wgEncodeUwDgf.ra
 
 # CSHL Long RNA-Seq (wrangler: Venkat)
-include wgEncodeCshlLongRnaSeq.release2.ra public
-include wgEncodeCshlLongRnaSeq.release3.ra alpha,beta
+include wgEncodeCshlLongRnaSeq.release3.ra
 
 # Caltech RNA-Seq (wrangler: Ruihua)
 #include wgEncodeCaltechRnaSeq.ra alpha

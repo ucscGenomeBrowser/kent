@@ -742,11 +742,13 @@
 </DIV>
 
 <DIV class="colorByStrand"><span class="types bed bigBed"></span>
-<div class="format"><code>colorByStrand &lt;red.green.blue&gt; &lt;red.green.blue&gt;</code></div>
+<div class="format"><code>colorByStrand &lt;red,green,blue&gt; &lt;red,green,blue&gt;</code></div>
     <P>To color items
     differently by the strand they align to, use the colorByStrand
     setting.  The first color will be used for plus strand alignments
-    and the second for the minus strand.</P>
+    and the second for the minus strand.  This setting is incompatible with <code>spectrum</code>
+    and all items on the same strand will have the same color, regardless of the item's
+    <code>score</score>.</P>
     <P><B>Example:</B></P>
     <pre>   colorByStrand 255,0,0 0,0,255</pre>
     <P>Plus strand alignements are red and minus
@@ -789,10 +791,10 @@
 </DIV>
 
 <DIV class="denseCoverage"><span class="types bigBed"></span>
-<div class="format"><code>denseCoverage &lt;maxVal &gt;</code></div>
+<div class="format"><code>denseCoverage &lt;maxVal&gt;</code></div>
     <P><I>bigBed specific</I></P>
     <P>Type bigBed tracks
-    nn dense mode do a density plot based on maximum coverage seen at
+    in dense mode do a density plot based on maximum coverage seen at
     each pixel.  The maxVal corresponds to the count at which the plot
     gets as dark as it can get.  If maxVal is 0 then this will be
     calculated from the data itself.</P>
