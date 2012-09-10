@@ -12,8 +12,8 @@ subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol membraneFrac
 subGroup4 protocol Protocol FASP=FASP INGEL=In-gel
 dimensions dimensionX=cellType dimensionY=localization
 sortOrder cellType=+ localization=+ 
-fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType=cell localization=localization protocol=protocol
+fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View labExpId=Lab_Exp_ID dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 priority 0
 type bed 3
