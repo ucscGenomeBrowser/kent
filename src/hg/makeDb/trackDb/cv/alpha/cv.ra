@@ -11218,7 +11218,7 @@ lab Epstein
 lots A300-215A-1
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
-validation Human_-_KDM1A&#47;LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
+validation Human_-_LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
 label LSD1&#47;KDM1A (A300-215A)
 
 term MafF_(M8194)
@@ -11914,7 +11914,7 @@ lab Epstein
 lots A301-666A-1
 targetId GeneCard:KAT2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
-validation Human_-_KAT2B&#47;PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
+validation Human_-_PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
 label PCAF&#47;KAT2B (A301-666A)
 
 term PGC1A
