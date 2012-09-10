@@ -2,7 +2,7 @@
 db taeGut1
 # optional nameTranslation, the sed command that will transform
 #	Ensemble names to UCSC names.  With quotes just to make sure.
-nameTranslation "s/^\([0-9LXYZ][0-9ABG]*\)/chr\1/; s/^Un/chrUn/"
+nameTranslation "s/^\([0-9LXYZ][0-9ABG]*\)/chr\1/; s/^Un/chrUn/; s/^MT/chrM/"
 # need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
 # geneScaffolds yes
 #	during the loading of the gene pred, skip all invalid genes
