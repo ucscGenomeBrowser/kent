@@ -4424,7 +4424,7 @@ dateUnrestricted 2013-01-20
 fileName wgEncodeOpenChromFaireMrta2041RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
-md5sum 21d628cfa83461b76911121ea3e841cb
+md5sum 184dae652b440f615f643603f914c8ab
 project wgEncode
 replicate 1
 subId 6792
@@ -4775,7 +4775,7 @@ geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
-md5sum 5a8e95edd7993bb2f34a99dd7df46df5
+md5sum c028ecb2031d1a5a6af121642261481f
 origAssembly hg19
 project wgEncode
 subId 2481
@@ -4798,7 +4798,7 @@ geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
-md5sum 4f8ed48117a0a6e308fa16f37d309807
+md5sum 24e98d614c2735db3123fdf503582572
 origAssembly hg19
 project wgEncode
 subId 2481
@@ -4865,7 +4865,7 @@ geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
-md5sum 9986af0f897a7edb7d4c3edbfb0d9988
+md5sum 5d914943053520f00c877154e96bbd98
 origAssembly hg19
 project wgEncode
 subId 2481
@@ -6044,4 +6044,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1618028990
+# MAGIC: -272668421
