@@ -13,7 +13,7 @@ subGroup4 protocol Protocol FASP=FASP INGEL=In-gel MUDPIT=MudPIT
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=protocol
 dimensionZchecked FASP,INGEL,MUDPIT
 sortOrder cellType=+ localization=+ protocol=+
-fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View dccAccession=UCSC_Accession fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View labExpId=Lab_Exp_ID dccAccession=UCSC_Accession fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization protocol=protocol
 dragAndDrop subTracks
 priority 0
@@ -21,7 +21,6 @@ type bed 3
 noInherit on
 wgEncode 1
 visibility hide
-html wgEncodeUncBsuProtGenc.release1
 
     track wgEncodeUncBsuProtGencViewpepMapGcFt
     shortLabel pepMapping Gc
