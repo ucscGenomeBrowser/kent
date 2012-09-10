@@ -9147,12 +9147,28 @@ targetDescription CTCF zinc finger transcription factor. A sequence specific DNA
 orderUrl http://www.millipore.com/catalogue/item/07-729
 vendorName Millipore
 vendorId 07-729
-lab Hardison
+lab Myers, Hardison
 lots 1350637, DAM1472197
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
-validation Human_-_:missing Mouse_-_CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
+validation Human_-_CTCF_(07-729)(Western_blot,Motif_enrichment):human_CTCF_validation_Myers.pdf Mouse_-_CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 label CTCF (07-729)
+
+term CTCF_(2899)
+tag CTCF2899
+type Antibody
+antibodyDescription Rabbit polyclonal, detects endogenous levels of total CTCF protein and doesn't cross-react with BORIS. Antibody Target: CTCF
+target CTCF
+targetDescription CTCF is a ubiquitously expressed 11 zinc-finger protein that plays a central role in multiple complex processes, including transcription, imprinting, long-range chromatin interactions, subnuclear localization. CTCF has also been connected with multiple malignancies.
+vendorName Cell Signaling
+vendorId 2899
+orderUrl http://www.cellsignal.com/products/2899.html
+lab Stam
+lots Lot1
+targetId GeneCard:CTCF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
+validation CTCF_(2899)(Western_blot):human_CTCF_2899_validation_Stam.pdf
+label CTCF (2899)
 
 term CTCF_(SC-15914)
 tag CTCFb
@@ -9904,7 +9920,7 @@ lab Hardison
 lots E1211
 targetId GeneCard:FLI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
-validation FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
+validation Human_-_FLI1_(sc-356)(Western_blot):human_FLI1_sc-356_validation_Hardison.pdf Mouse_-_FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
 label FLI1 (sc-356)
 
 term  FOSL1_(SC-183)
@@ -10314,12 +10330,13 @@ targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and
 orderUrl http://www.abcam.com/index.html?datasheet=8895
 vendorName Abcam
 vendorId ab8895
-lab Bernstein, Ren
+lab Bernstein, Ren, Hardison
 lots 383111, 720417
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Human_-_H3K4me1(ab8895)(Dot_blot,Western_blot):human_H3K4me1_ab8895_validation_Ren.pdf
+validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Human_-_H3K4me1(ab8895)(Dot_blot,Western_blot):human_H3K4me1_ab8895_validation_Ren.pdf Mouse_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Hardison.pdf
 label H3K4me1 (ab8895)
+#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K4me1_(pAb-037-050)
 tag H3K04ME1b
@@ -10375,18 +10392,16 @@ type Antibody
 target H3K4me3
 antibodyDescription rabbit polyclonal. Antibody Target: H3K4me3
 targetDescription Histone H3 (tri methyl K4). Marks promoters that are active or poised to be activated.
-vendorName Millipore
-vendorId 07-473
-orderUrl http://www.millipore.com/catalogue/item/07-473
-lab Bernstein
+vendorName 1)Abcam; 2)Millipore
+vendorId ab8580; 07-473
+orderUrl http://www.abcam.com/index.html?datasheet=8580; http://www.millipore.com/catalogue/item/07-473
+lab Bernstein, Hardison
 lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf Mouse_-_:missing
+validation Human_-_H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf Mouse_-_H3K4me3_(ab8580)(Dot_blot):human_H3K4me3_Abcam_validation_Hardison.pdf Mouse_-_H3K4me3_(07-473)(Dot_blot):human_H3K4me3_Millipore_validation_Hardison.pdf
 label H3K4me3 (07-473)
-#vendorName Abcam
-#vendorId ab8580
-#orderUrl http://www.abcam.com/index.html?datasheet=8580
+#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K4me3_(04-745)
 tag H3K4ME304745
@@ -10509,11 +10524,12 @@ vendorName Abcam
 vendorId ab8898
 lots 19208002
 orderUrl http://www.abcam.com/index.html?datasheet=8898
-lab Farnham, Ren
+lab Farnham, Ren, Hardison
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Human_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf Mouse_-_:missing
+validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Human_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf Mouse_-_H3K9me3_(ab8898)(Dot_blot):human_H3K9me3_validation_Hardison.pdf
 label H3K9me3 (ab8898)
+#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K9me3_(9754)
 tag H3K09ME3b
@@ -10571,12 +10587,13 @@ targetDescription Histone H3 (tri-methyl K27). Marks promoters that are silenced
 orderUrl http://www.millipore.com/catalogue/item/07-449
 vendorName Millipore
 vendorId 07-449
-lab Bernstein
+lab Bernstein, Hardison
 lots DAM1387952
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf Mouse_-_:missing
+validation Human_-_H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf Mouse_-_H3K27me3_(07-449)(Dot_blot):human_H3K27me3_validation_Hardison.pdf
 label H3K27me3 (07-449)
+#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K27me3_(39155)
 tag H3K27ME339155
@@ -10619,12 +10636,13 @@ targetDescription Specific for histone H3 tri methylated at lysine 36, weakly re
 orderUrl http://www.abcam.com/index.html?datasheet=9050
 vendorName Abcam
 vendorId ab9050
-lab Bernstein, Ren
+lab Bernstein, Ren, Hardison
 lots 136353, 707946
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Human_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):human_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_:missing
+validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Human_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):human_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot):human_H3K36me3_validation_Hardison.pdf
 label H3K36me3 (ab9050)
+#Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
 
 term H3K36me3B
 tag H3K36ME3b
@@ -11218,7 +11236,7 @@ lab Epstein
 lots A300-215A-1
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
-validation Human_-_KDM1A&#47;LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
+validation Human_-_LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
 label LSD1&#47;KDM1A (A300-215A)
 
 term MafF_(M8194)
@@ -11398,7 +11416,7 @@ lab Myers
 lots K2009
 targetId GeneCard:MEF2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
-validation Human_-_:missing
+validation Human_-_MEF2C_(sc-13268)(Western_blot,Motif_enrichment):human_MEF2C_SC-13268_validation_Myers.pdf
 label MEF2C (sc-13268)
 
 term MTA3_(SC-81325)
@@ -11706,7 +11724,7 @@ lab Myers, Wold
 lots 20070905JV
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_NRSF_(Western_blot,Motif_enrichment):human_NRSF_validation_Myers.pdf Mouse_-_:missing
 label NRSF
 
 term NR2F2_(SC-271940)
@@ -11914,7 +11932,7 @@ lab Epstein
 lots A301-666A-1
 targetId GeneCard:KAT2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
-validation Human_-_KAT2B&#47;PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
+validation Human_-_PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
 label PCAF&#47;KAT2B (A301-666A)
 
 term PGC1A

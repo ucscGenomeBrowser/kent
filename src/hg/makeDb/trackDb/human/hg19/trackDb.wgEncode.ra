@@ -17,7 +17,7 @@ include wgEncodeGencodeV12.release3.ra
 include wgEncodeUncBsuProt.release2.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
-include wgEncodeUncBsuProtGenc.release1.ra alpha,beta
+include wgEncodeUncBsuProtGenc.ra alpha,beta
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.release3.ra
@@ -164,8 +164,7 @@ include wgEncodeOpenChromChip.release2.ra
 
 # HAIB TFBS (wrangler: Venkat)
 #include wgEncodeHaibTfbs.patch.ra beta
-include wgEncodeHaibTfbs.release3.ra alpha,beta
-include wgEncodeHaibTfbs.release2.ra public
+include wgEncodeHaibTfbs.release3.ra
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.release3.ra
 
