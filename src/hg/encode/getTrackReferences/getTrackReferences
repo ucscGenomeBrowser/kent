@@ -141,7 +141,7 @@ def main():
         epilog='example: getTrackReferences PMC3039671 21347206'
         )
     parser.add_argument('ids', metavar='IDs', type=str, nargs='+', help='The list of PubMed and PubMedCentral Ids')
-    parser.add_argument('-o', '--original', action="store_true", default=0, help="Use original article link instead of PubMed link. Currently an experimental feature.")
+    parser.add_argument('-o', '--original', action="store_true", default=0, help="Use original article link instead of PubMed link, if possible.")
     parser.add_argument('-p', '--plain', action="store_true", default=0, help="Output the references in plain-text instead of html.")
     #if len(sys.argv) <= 1:
     #    parser.print_help()
