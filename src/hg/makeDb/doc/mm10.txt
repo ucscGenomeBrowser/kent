@@ -8630,3 +8630,68 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################
+# construct assembly fragments table (DONE - 2012-09-11 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/assemblyFrags
+    cd /hive/data/genomes/mm10/bed/assemblyFrags
+    zgrep -h -v "^#" "${F}"
+
+    zgrep -h -v "^#" ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/*.comp.agp.gz \
+    | awk '$5 != "N"' \
+        | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1,$2-1,$3,$6,$9}' \
+    | sed -e 's/CM000994.2/chr1/; s/CM000995.2/chr2/; s/CM000996.2/chr3/; s/CM000997.2/chr4/; s/CM000998.2/chr5/; s/CM000999.2/chr6/; s/CM001000.2/chr7/; s/CM001001.2/chr8/; s/CM001002.2/chr9/; s/CM001003.2/chr10/; s/CM001004.2/chr11/; s/CM001005.2/chr12/; s/CM001006.2/chr13/; s/CM001007.2/chr14/; s/CM001008.2/chr15/; s/CM001009.2/chr16/; s/CM001010.2/chr17/; s/CM001011.2/chr18/; s/CM001012.2/chr19/; s/CM001013.2/chrX/; s/CM001014.2/chrY/;' > chr.asmFrag.bed
+
+    zgrep -h -v "^#" ../../genbank/Primary_Assembly/unlocalized_scaffolds/AGP/*.agp.gz \
+        | awk '$5 != "N"' \
+        | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1,$2-1,$3,$6,$9}' \
+    | sed -e "s#GL456233.1#chrX_GL456233_random#; s#GL456216.1#chr4_GL456216_random#; s#JH584299.1#chr5_JH584299_random#; s#JH584301.1#chrY_JH584301_random#; s#JH584300.1#chrY_JH584300_random#; s#JH584303.1#chrY_JH584303_random#; s#JH584302.1#chrY_JH584302_random#; s#JH584298.1#chr5_JH584298_random#; s#JH584297.1#chr5_JH584297_random#; s#JH584296.1#chr5_JH584296_random#; s#JH584295.1#chr4_JH584295_random#; s#JH584294.1#chr4_JH584294_random#; s#JH584293.1#chr4_JH584293_random#; s#JH584292.1#chr4_JH584292_random#; s#GL456354.1#chr5_GL456354_random#; s#GL456350.1#chr4_GL456350_random#; s#GL456221.1#chr1_GL456221_random#; s#GL456219.1#chr7_GL456219_random#; s#GL456213.1#chr1_GL456213_random#; s#GL456212.1#chr1_GL456212_random#; s#GL456211.1#chr1_GL456211_random#; s#GL456210.1#chr1_GL456210_random#;" > chrUL.asmFrag.bed
+
+    zgrep -h -v "^#" ../../genbank/Primary_Assembly/unplaced_scaffolds/AGP/*.agp.gz \
+        | awk '$5 != "N"' | sed -e 's/\.1\t/\t/' \
+        | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1,$2-1,$3,$6,$9}' \
+        > chrUn.asmFrag.bed
+
+    cat chr.asmFrag.bed chrUL.asmFrag.bed chrUn.asmFrag.bed > mm10.asmFrag.bed
+    # add the chrM identity
+    echo -e "chrM\t0\t1629\tAY172335.1\t0\t+" >> mm10.asmFrag.bed
+    hgLoadBed mm10 assemblyFrags mm10.asmFrag.bed
+    featureBits mm10 assemblyFrags
+    #   2652027564 bases of 2652783500 (99.972%) in intersection
+
+#########################################################################
+# construct ucscToEnsembl table (DONE - 2012-09-11 - Hiram)
+    mkdir /hive/data/genomes/mm10/ensembl
+    cd /hive/data/genomes/mm10/ensembl
+    wget --timestamping \
+'ftp://ftp.ensembl.org/pub/release-68/fasta/mus_musculus/dna/Mus_musculus.GRCm38.68.dna.toplevel.fa.gz'
+
+    wget --timestamping \
+'ftp://ftp.ensembl.org/pub/release-68/fasta/mus_musculus/dna/Mus_musculus.GRCm38.68.dna.nonchromosomal.fa.gz'
+
+    faCount *.fa.gz > faCount.txt
+    egrep -v "total|seq" faCount.txt  | awk '{print $1,$2}' \
+        | sort -u | sort -k2nr | sed -e "s/ /\t/" > ensembl.chrom.sizes
+
+    mkdir /hive/data/genomes/mm10/bed/ucscToEnsembl
+    cd /hive/data/genomes/mm10/bed/ucscToEnsembl
+    awk '{printf "%d\t%s\n", $2,$1}' ../../chrom.sizes | sort > sizes.chrom.ucsc
+    awk '{printf "%d\t%s\n", $2,$1}' ../../ensembl/ensembl.chrom.sizes \
+        | sort > sizes.chrom.ensembl
+    join sizes.chrom.ucsc sizes.chrom.ensembl \
+        | awk '{printf "%s\t%s\n", $2,$3}' > ucscToEnsembl.tab
+
+    cut -f1 ucscToEnsembl.tab | awk '{print length($1)}' | sort -rn | head -1
+    #   20
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(20))
+);
+'_EOF_'
+
+    hgLoadSqlTab mm10 ucscToEnsembl ucscToEnsembl.sql ucscToEnsembl.tab
+
+#########################################################################
