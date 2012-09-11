@@ -9827,7 +9827,7 @@ subId 7188
 tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep4
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3V2
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3
 objType file
 bioRep 091NL
 cell GM12878
@@ -9836,7 +9836,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
-fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47963
@@ -9850,10 +9850,9 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7816
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4V2
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4
 objType file
 bioRep 092NL
 cell GM12878
@@ -9862,7 +9861,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
-fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47964
@@ -9876,7 +9875,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7815
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep3
@@ -42126,7 +42124,7 @@ subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3V2
+metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3
 objType file
 bioRep 025CH
 cell K562
@@ -42136,7 +42134,7 @@ dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
 expId 180
-fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3.pdf.gz
 geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
@@ -42151,7 +42149,6 @@ rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7667
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep4
@@ -61527,4 +61524,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -361976337
+# MAGIC: -1746755170
