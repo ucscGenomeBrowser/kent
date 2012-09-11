@@ -3762,6 +3762,7 @@ tablesIgnored hgFixed
 
 tablesIgnored $gbd
     NIAGene
+    assemblyFrags
     affyDrosDev%
     ancientRepeat
     axtInfo
