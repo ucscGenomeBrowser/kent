@@ -169,7 +169,7 @@ void bigWigCustomClick(struct trackDb *tdb);
 /* Display details for BigWig custom tracks. */
 
 void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb,
-		     char *item, int start, int bedSize);
+		     char *item, int start, int end, int bedSize);
 
 void doPubsDetails(struct trackDb *tdb, char *item);
 /* Handle text2Genome track clicks in pubs.c */
@@ -378,7 +378,7 @@ void customMafClick(struct sqlConnection *conn,
 	struct sqlConnection *conn2, struct trackDb *tdb);
 /* handle clicks on a custom maf */
 
-void doEncodePeak(struct trackDb *tdb, struct customTrack *ct);
+void doEncodePeak(struct trackDb *tdb, struct customTrack *cti, char *item);
 /*  details for encodePeak type tracks.  */
 
 void doEncodeFiveC(struct sqlConnection *conn, struct trackDb *tdb);

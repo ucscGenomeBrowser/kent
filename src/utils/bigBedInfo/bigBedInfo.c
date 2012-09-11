@@ -55,14 +55,26 @@ if (bbi->levelList != NULL)
     long long indexEnd = bbi->levelList->dataOffset;
     printLabelAndLongNumber("primaryIndexSize", indexEnd - bbi->unzoomedIndexOffset);
     }
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
 printf("zoomLevels: %d\n", bbi->zoomLevels);
 if (optionExists("zooms"))
     {
     struct bbiZoomLevel *zoom;
     for (zoom = bbi->levelList; zoom != NULL; zoom = zoom->next)
+	{
 	printf("\t%d\t%d\n", zoom->reductionLevel, (int)(zoom->indexOffset - zoom->dataOffset));
+	for (chrom=chromList; chrom != NULL; chrom = chrom->next)
+	    {
+	    struct bbiSummary *sum, *sumList = bbiSummariesInRegion(zoom, bbi,   chrom->id,0, chrom->size);
+	     for (sum = sumList; sum != NULL; sum = sum->next)
+	             {
+		     printf("\t\t%s:%d-%d\n",chrom->name, sum->start, sum->end);
+		     }
+				       
+	    }
+
+	}
     }
-struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
 printf("chromCount: %d\n", slCount(chromList));
 if (optionExists("chroms"))
     for (chrom=chromList; chrom != NULL; chrom = chrom->next)

@@ -9,12 +9,12 @@
 
 <ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1">
 
-<li class="first even"><a href="/index.html" ><span id="home-link">Home</span></a></li> 
+<li class="first even" id="home"><a href="/index.html" ><span id="home-link">Home</span></a></li> 
 
-<li><a href="/cgi-bin/hgGateway">Genomes</a></li>
-<li><a href="/cgi-bin/hgTracks">Genome Browser</a></li>
+<li id="genomes"><a href="/cgi-bin/hgGateway">Genomes</a></li>
+<li id="genomeBrowser"><a href="/cgi-bin/hgTracks">Genome Browser</a></li>
 
-<li class="menuparent"><span>Tools</span>
+<li class="menuparent" id="tools"><span>Tools</span>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../cgi-bin/hgBlat?command=start">Blat</a></li>
 	<li><a href="../cgi-bin/hgTables">Table Browser</a></li>
@@ -26,30 +26,30 @@
 	<li class="last"><a href="../util.html">Other Utilities</a></li>
 	</ul>
 </li>
-<li class="menuparent"><span>Mirrors</span>
+<li class="menuparent" id="mirrors"><span>Mirrors</span>
 	<ul style="display: none; visibility: hidden;">
 	<!-- OPTIONAL_GEO_MIRROR_ITEMS -->
 	<li><a href="../mirror.html">Third Party Mirrors</a></li>
 	<li class="last"><a href="../admin/mirror.html">Mirroring Instructions</a></li>
 	</ul>
 </li>
-<li class="menuparent"><span>Downloads</span>
+<li class="menuparent" id="downloads"><span>Downloads</span>
 	<ul style="display: none; visibility: hidden;">
-	<li class="first"><a href="http://hgdownload.cse.ucsc.edu/downloads.html">Genome Data</a></li>
-	<li><a href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
-	<li><a href="http://hgdownload.cse.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
+	<li class="first"><a href="http://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
 	</ul>
 </li>
-<li class="menuparent"><span>My Data</span>
+<li class="menuparent" id="myData"><span>My Data</span>
 	<ul style="display: none; visibility: hidden;">
 	<li><a href="../cgi-bin/hgSession?hgS_doMainPage=1">Sessions</a></li>
 	<li><a href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
 	<li class="last"><a href="../cgi-bin/hgCustom">Custom Tracks</a></li>
 	</ul>
 </li>
-<li class="menuparent"><span>About Us</span>
+<li class="menuparent" id="aboutUs"><span>About Us</span>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
 	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
@@ -66,13 +66,12 @@
 
 <!-- OPTIONAL_VIEW_MENU -->
 
-<li class="menuparent last"><span>Help</span><ul style="display: none; visibility: hidden;">
+<li class="menuparent last" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->
 <li><a href="../FAQ/">FAQs</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
 <li><a href="../training.html">Training</a></li>
 <li><a href="../contacts.html">Mailing Lists</a></li>
-<li><a href="../mirror.html">Browser Mirrors</a></li>
 <li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
 </ul>
 </li>

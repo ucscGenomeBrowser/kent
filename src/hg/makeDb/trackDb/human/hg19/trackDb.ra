@@ -3,6 +3,7 @@
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
+include trackDb.denisova.ra
 
 #large composites
 include uMassBrainHistone.ra
@@ -808,14 +809,8 @@ html hg19mammalChainNet
         type chain felCat4
         otherDb felCat4
 
-        track chainCanFam2
-    #replaces record chainCanFam2 in parent dir missing/extra priority
-        subTrack placentalChainNetViewchain off
-        subGroups view=chain species=pDog clade=bLaura
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain canFam2
-        otherDb canFam2
+include chainCanFam2.ra beta,public
+include chainCanFam3.ra alpha
 
         track chainDasNov2
         subTrack placentalChainNetViewchain off
@@ -1029,14 +1024,8 @@ html hg19mammalChainNet
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
-        track netCanFam2
-    #replaces record netCanFam2 in parent dir missing/extra priority
-        subTrack placentalChainNetViewnet on 
-        subGroups view=net species=pDog clade=bLaura
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign canFam2 chainCanFam2
-        otherDb canFam2
+include netCanFam2.ra beta,public
+include netCanFam3.ra alpha
 
         track netDasNov2
         subTrack placentalChainNetViewnet on 
@@ -2300,7 +2289,7 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
-#include altSeqComposite5.ra
+include altSeqComposite5.ra
 
 include altSeqComposite9.ra
 

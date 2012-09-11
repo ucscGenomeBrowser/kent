@@ -96,8 +96,10 @@ void doAdvFilterKeyUpload(struct sqlConnection *conn, struct column *colList,
 /* Handle upload keyword list button press in advanced filter form. */
 {
 char *varName = NULL;
+char buf[1024];
 cartRemovePrefix(cart, keyWordUploadPrefix);
-hPrintf("<H2>Upload List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
+safef(buf, sizeof(buf), "Upload List : %s - %s", col->shortLabel, col->longLabel);
+makeTitle(buf, NULL);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n");
 cartSaveSession(cart);
 hPrintf("Enter the name of a file from your computer that contains a list");
@@ -127,8 +129,10 @@ void doAdvFilterKeyPaste(struct sqlConnection *conn, struct column *colList,
 /* Handle upload keyword list button press in advanced filter form. */
 {
 char *varName = NULL;
+char buf[1024];
 cartRemovePrefix(cart, keyWordPastePrefix);
-hPrintf("<H2>Paste List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
+safef(buf, sizeof(buf), "Paste List : %s - %s", col->shortLabel, col->longLabel);
+makeTitle(buf, NULL);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 hPrintf("Paste in a list of items to match. ");
@@ -324,6 +328,7 @@ void doAdvFilterListCol(struct sqlConnection *conn, struct column *colList,
 {
 struct genePos *gp, *list = NULL, *newList = NULL, *gpNext = NULL;
 struct column *col = findNamedColumn(colName);
+makeTitle("Current Filters", NULL);
 
 if (col == NULL)
     {

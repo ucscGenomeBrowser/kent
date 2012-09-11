@@ -137,12 +137,14 @@ void userSettingsSaveForm(struct userSettings *us)
 /* Put up controls that let user name and save the current
  * set. */
 {
+char buf[1024];
 struct hashEl *list = cartFindPrefix(us->cart, us->savePrefix);
+safef(buf, sizeof(buf), "Save %s", us->formTitle);
+makeTitle(buf, NULL);
 
 /* Start form/save session/print title. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"usForm\" METHOD=GET>\n");
 cartSaveSession(us->cart);
-hPrintf("<H2>Save %s</H2>\n", us->formTitle);
 
 /* Put up controls that are always there. */
 hPrintf("Please name this setup:\n");
@@ -181,12 +183,14 @@ void userSettingsLoadForm(struct userSettings *us)
 /* Put up controls that let user name and save the current
  * set. */
 {
+char buf[1024];
 struct hashEl *list = cartFindPrefix(us->cart, us->savePrefix);
+safef(buf, sizeof(buf), "Load %s", us->formTitle);
+makeTitle(buf, NULL);
 
 /* Start form/save session/print title. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"usForm\" METHOD=GET>\n");
 cartSaveSession(us->cart);
-hPrintf("<H2>Load %s</H2>\n", us->formTitle);
 
 hPrintf("<TABLE><TR><TD>\n");
 hPrintf("<SELECT NAME=\"%s\" SIZE=%d>",

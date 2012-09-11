@@ -32,8 +32,8 @@
 #	Finishing project:
 #	http://www.ncbi.nlm.nih.gov/bioproject/20689
 
-#	Assembly ID: 165668
-#	http://www.ncbi.nlm.nih.gov/genome/assembly/165668/
+#	Assembly ID: 327618
+#	http://www.ncbi.nlm.nih.gov/genome/assembly/327618/
 
 #	Celera Assembly
 # http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAHY00
@@ -288,7 +288,7 @@ fastaFiles /hive/data/genomes/mm10/ucsc/*.fa.gz
 agpFiles /hive/data/genomes/mm10/ucsc/*.agp.gz
 dbDbSpeciesDir mouse
 taxId   10090
-ncbiAssemblyId   165668
+ncbiAssemblyId   327618
 ncbiAssemblyName   GRCm38
 '_EOF_'
     # << happy emacs
@@ -5702,29 +5702,66 @@ rm -f $c.gp $c.maf $c.ss
 #TREE: (((((((((((((((mm10:0.0855383,rn5:0.0922719):0.202381,dipOrd1:0.210819):0.0258471,(hetGla2:0.0917322,cavPor3:0.136876):0.0994271):0.00910944,speTri2:0.145483):0.0274969,(oryCun2:0.109639,ochPri2:0.200966):0.102067):0.0141654,(((((((((hg19:0.00674057,panTro4:0.00692231):0.00309904,gorGor3:0.00918625):0.00954082,ponAbe2:0.0191843):0.00356049,nomLeu2:0.0218207):0.0116848,(rheMac3:0.00814945,papHam1:0.0079848):0.0289473):0.0208338,(calJac3:0.0342405,saiBol1:0.0333221):0.0359171):0.0594469,tarSyr1:0.137467):0.011091,(micMur1:0.0918138,otoGar3:0.127231):0.0351527):0.0153171,tupBel1:0.18879):0.0042463):0.0214646,((susScr3:0.121641,(vicPac1:0.109818,(turTru2:0.0635753,(oviAri1:0.0392493,bosTau7:0.0315816):0.0939861):0.0203711):0.00368417):0.0444758,((((felCat5:0.0897448,(canFam3:0.0888602,ailMel1:0.0767935):0.021837):0.05011,equCab2:0.109367):0.00605998,(myoLuc2:0.137144,pteVam1:0.114013):0.0339604):0.00395001,(eriEur1:0.226934,sorAra1:0.270619):0.0628319):0.00292667):0.0291403):0.0231397,((((loxAfr3:0.078841,proCap1:0.160295):0.00825096,echTel1:0.266786):0.0031636,triMan1:0.0685675):0.0736043,(dasNov3:0.112086,choHof1:0.0974658):0.0535724):0.00739115):0.245967,(monDom5:0.139913,(sarHar1:0.132596,macEug2:0.111778):0.0294309):0.21273):0.0770867,ornAna1:0.50425):0.135096,(((((melGal1:0.067697,galGal4:0.05253):0.13729,taeGut1:0.202681):0.00899388,melUnd1:0.127774):0.216078,anoCar2:0.575186):0.0128221,chrPic1:0.201659):0.137011):0.113527,xenTro3:0.943162):0.0646458,latCha1:0.596956):0.463611,((((((tetNig2:0.223213,fr3:0.198755):0.263107,oreNil2:0.33649):0.0139699,gasAcu1:0.314841):0.0573697,oryLat2:0.430105):0.185668,gadMor1:0.562778):0.169352,danRer7:0.753326):0.117017):0.501088,petMar1:0.501088);
 
     #   four different subset lists:
-    #  mm10 is on each list since it is the reference and is needed for
-    #   everything to work.
-    paste glire.list primate.list placental.list vertebrate.list
+    paste glire.list euarchontoglires.list placental.list all.list
 # mm10    mm10    mm10    mm10
-# rn5     hg19    equCab2 macEug2
-# dipOrd1 gorGor3 vicPac1 sarHar1
-# hetGla2 panTro4 turTru2 monDom5
-# cavPor3 nomLeu2 susScr3 ornAna1
-# speTri2 ponAbe2 bosTau7 galGal4
-# oryCun2 tarSyr1 oviAri1 taeGut1
-# ochPri2 rheMac3 pteVam1 melGal1
-# tupBel1 papHam1 myoLuc2 melUnd1
-#         otoGar3 felCat5 anoCar2
-#         calJac3 canFam3 chrPic1
-#         micMur1 ailMel1 xenTro3
-#         saiBol1 eriEur1 latCha1
-#                 sorAra1 gadMor1
-#                 choHof1 gasAcu1
-#                 dasNov3 fr3
-#                 proCap1 oreNil2
-#                 echTel1 tetNig2
-#                 triMan1 danRer7
-#                 loxAfr3 oryLat2
+# rn5     rn5     rn5     rn5
+# dipOrd1 dipOrd1 dipOrd1 dipOrd1
+# hetGla2 hetGla2 hetGla2 hetGla2
+# cavPor3 cavPor3 cavPor3 cavPor3
+# speTri2 speTri2 speTri2 speTri2
+# oryCun2 oryCun2 oryCun2 oryCun2
+# ochPri2 ochPri2 ochPri2 ochPri2
+#         tupBel1 tupBel1 tupBel1
+#         hg19    hg19    hg19
+#         gorGor3 gorGor3 gorGor3
+#         panTro4 panTro4 panTro4
+#         nomLeu2 nomLeu2 nomLeu2
+#         ponAbe2 ponAbe2 ponAbe2
+#         tarSyr1 tarSyr1 tarSyr1
+#         rheMac3 rheMac3 rheMac3
+#         papHam1 papHam1 papHam1
+#         otoGar3 otoGar3 otoGar3
+#         calJac3 calJac3 calJac3
+#         micMur1 micMur1 micMur1
+#         saiBol1 saiBol1 saiBol1
+#                 equCab2 equCab2
+#                 vicPac1 vicPac1
+#                 turTru2 turTru2
+#                 susScr3 susScr3
+#                 bosTau7 bosTau7
+#                 oviAri1 oviAri1
+#                 pteVam1 pteVam1
+#                 myoLuc2 myoLuc2
+#                 felCat5 felCat5
+#                 canFam3 canFam3
+#                 ailMel1 ailMel1
+#                 eriEur1 eriEur1
+#                 sorAra1 sorAra1
+#                 choHof1 choHof1
+#                 dasNov3 dasNov3
+#                 proCap1 proCap1
+#                 echTel1 echTel1
+#                 triMan1 triMan1
+#                 loxAfr3 loxAfr3
+#                         macEug2
+#                         sarHar1
+#                         monDom5
+#                         ornAna1
+#                         galGal4
+#                         taeGut1
+#                         melGal1
+#                         melUnd1
+#                         anoCar2
+#                         chrPic1
+#                         xenTro3
+#                         latCha1
+#                         gadMor1
+#                         gasAcu1
+#                         fr3
+#                         oreNil2
+#                         tetNig2
+#                         danRer7
+#                         oryLat2
 #                         petMar1
 
     # on organisms that do not have all species in all files, the file names
@@ -5787,16 +5824,11 @@ for (my $i = 0; $i < scalar(@mfaFileList); ++$i) {
     # << happy emacs
     chmod +x filterMfa.pl
 
-    # 1. glire, 2. glire+primate, 3. glire+primate+placental,
-    # 4. glire+primate+placental,vertebrate == all - done
-    mkdir glire glirePrimateMfa glirePrimatePlacentalMfa
-
-    mkdir primateMfa placentalMfa vertebrateMfa
+    mkdir glireMfa euarchontogliresMfa placentalMfa vertebrateMfa
 
     # extract each set from the full mfa files, run msa_view on
     #   each subset and construct .nh tree for that subset
-    for N in glire glirePrimate glirePrimatePlacental
-    for N in primate placental vertebrate
+    for N in glire euarchontoglires placental vertebrate
 do
     ./filterMfa.pl ${N}.list
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
@@ -5807,9 +5839,12 @@ do
         ../tree-commas.nh > tree-commas.${N}.nh
 done
 
+    ### XXX ### MOST INTERESTING, this phyloFit operation was repeated
+    ### to verify that the full 60 species vertebrate operation produced the
+    ### same result as the original "all" subset.  This phyloFit appears to
+    ### produce a different result each time ?
     # use phyloFit to create tree model (output is phyloFit.mod)
-    for N in glire glirePrimate glirePrimatePlacental
-    for N in glire primate placental vertebrate
+    for N in glire euarchontoglires placental vertebrate
 do
     time nice -n +19 \
 	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
@@ -5818,13 +5853,13 @@ do
     mv phyloFit.mod ${N}.mod
     grep TREE ${N}.mod | sed 's/TREE\:\ //' > ${N}.Nway.nh
 done
-    #   real    0m24.600s
-    #   real    0m27.249s
-    #   real    4m37.709s
-    #   real    30m32.453s
+    #   real    0m15.747s
+    #   real    4m5.526s
+    #   real    20m45.982s
+    #   real    141m21.248s
 
 #######################################################################
-# phastCons 60-way (WORKING - 2012-06-12 - Hiram)
+# phastCons 60-way (DONE - 2012-06-12, 2012-08-21 - Hiram)
     #	was unable to split the full chrom MAF files, now working on the
     #	maf files as they were split up during multiz
 
@@ -5964,7 +5999,7 @@ rm -fr $tmp
     ls -1S ../ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
 
     # Create parasol batch and run it
-    # run for all species
+    ############################ run for all species
     cd /hive/data/genomes/mm10/bed/multiz60way/cons
     mkdir all
     cd all
@@ -6006,6 +6041,14 @@ done > tmpMostConserved.bed
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     #   refGene:cds 1.281%, phastConsElements60way 6.517%,
     #   both 0.913%, cover 71.29%, enrich 10.94x
+    time featureBits mm10 -enrichment ensGene:cds phastConsElements60way
+    #   ensGene:cds 1.357%, phastConsElements60way 6.517%, both 0.942%, cover
+    #   69.39%, enrich 10.65x
+    #   real    0m54.109s
+    time featureBits mm10 -enrichment knownGene:cds phastConsElements60way
+    #   knownGene:cds 1.325%, phastConsElements60way 6.517%, both 0.930%,
+    #   cover 70.18%, enrich 10.77x
+    #   real    0m50.472s
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/mm10/bed/multiz60way/cons/all
@@ -6119,17 +6162,20 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # glire-only: get the glire only tree from the 4d directory
     cp -p ../../4d/glire.mod ./glire.mod
     # and all the others become the non-informative list for phastCons to ignore
-    cat ../../4d/tree-commas.primate.nh ../../4d/tree-commas.placental.nh ../../4d/tree-commas.vertebrate.nh | sed -e 's/)//g; s/(//g; s/;/,/g' | xargs echo | sed -e "s/ //g" > glire.non-inf
-
+    sort ../../4d/glire.list > glire.list
+    sort ../../4d/vertebrate.list > vertebrate.list
+    comm -13 glire.list vertebrate.list | xargs echo \
+        | sed -e "s/ /,/g" > glire.non-inf
+    
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     para -ram=8g create jobList
     para try ... check ... push ... etc.
 # Completed: 314 of 314 jobs
-# CPU time in finished jobs:      12750s     212.50m     3.54h    0.15d  0.000 y
-# IO & Wait Time:                119853s    1997.55m    33.29h    1.39d  0.004 y
-# Average job time:                 422s       7.04m     0.12h    0.00d
-# Longest finished job:             770s      12.83m     0.21h    0.01d
-# Submission to last job:           826s      13.77m     0.23h    0.01d
+# CPU time in finished jobs:      12411s     206.85m     3.45h    0.14d  0.000 y
+# IO & Wait Time:                117850s    1964.16m    32.74h    1.36d  0.004 y
+# Average job time:                 415s       6.91m     0.12h    0.00d
+# Longest finished job:             658s      10.97m     0.18h    0.01d
+# Submission to last job:           796s      13.27m     0.22h    0.01d
 
     cd /hive/data/genomes/mm10/bed/multiz60way/cons/glire
     # create Most Conserved track
@@ -6146,7 +6192,7 @@ done > tmpMostConserved.bed
     #   real    0m19.122s
 
     featureBits mm10 mostConserved.bed
-    #   118618880 bases of 2652783500 (4.471%) in intersection
+    #   117058023 bases of 2652783500 (4.413%) in intersection
     #   real    0m21.506s
 
     # load into database
@@ -6154,23 +6200,23 @@ done > tmpMostConserved.bed
     cd /hive/data/genomes/mm10/bed/multiz60way/cons/glire
     time nice -n +19 hgLoadBed mm10 phastConsElements60wayGlire \
 	mostConserved.bed
-    #	Loaded 1456153 elements of size 6
-    #	real    0m14.655s
+    #	Loaded 1336504 elements of size 6
+    #	real    0m13.672s
     # verify coverage
     time featureBits mm10 phastConsElements60wayGlire
-    #   118618880 bases of 2652783500 (4.471%) in intersection
-    #   real    0m8.621s
+    #   117058023 bases of 2652783500 (4.413%) in intersection
+    #   real    0m15.041s
 
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits mm10 -enrichment refGene:cds phastConsElements60wayGlire
-    #	refGene:cds 1.186%, phastConsElements60wayGlire 4.031%,
-    #	both 0.730%, cover 61.54%, enrich 15.27x
+    #   refGene:cds 1.282%, phastConsElements60wayGlire 4.413%,
+    #   both 0.944%, cover 73.60%, enrich 16.68x
 
     featureBits mm10 -enrichment knownGene:cds phastConsElements60wayGlire
-    #	knownGene:cds 1.252%, phastConsElements60wayGlire 4.031%,
-    #	both 0.743%, cover 59.31%, enrich 14.71x
+    #   knownGene:cds 1.325%, phastConsElements60wayGlire 4.413%,
+    #   both 0.957%, cover 72.22%, enrich 16.37x
 
-    #	Create the downloads .pp files, from which the phastCons wiggle data
+#	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
     # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
@@ -6185,35 +6231,38 @@ do
 done
 
     # Create merged posterier probability file and wiggle track data files
-    zcat downloads/chr*.wigFix.gz \
-	 | wigEncode stdin phastCons60wayGlire.wig phastCons60wayGlire.wib
-    # Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    11m54.090s
+    time (zcat downloads/chr*.wigFix.gz \
+	 | wigEncode stdin phastCons60wayGlire.wig phastCons60wayGlire.wib) &
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    10m26.712s
 
     #	encode to bigWig
     #	(warning wigToBigWig process grows to about 36 Gb)
     #	in bash, to avoid the 32 Gb memory limit:
-sizeG=188743680
-export sizeG
+export sizeG=188743680
 ulimit -d $sizeG
 ulimit -v $sizeG
 
-    zcat downloads/*.wigFix.gz \
-        | wigToBigWig stdin ../../../../chrom.sizes phastCons60wayGlire.bw
-    #   real    27m6.715s
+    time (zcat downloads/*.wigFix.gz \
+        | wigToBigWig -verbose=2 stdin ../../../../chrom.sizes \
+        phastCons60wayGlire.bw > bigWig.log 2>&1) &
+    #   real    52m17.108s
+    grep VmPeak bigWig.log
+    # pid=5552: VmPeak:     20926360 kB
+
     bigWigInfo phastCons60wayGlire.bw
 version: 4
 isCompressed: yes
 isSwapped: 0
-primaryDataSize: 3,591,400,685
+primaryDataSize: 3,631,413,425
 primaryIndexSize: 100,774,056
 zoomLevels: 10
 chromCount: 59
 basesCovered: 1,929,686,275
-mean: 0.141238
+mean: 0.142675
 min: 0.000000
 max: 1.000000
-std: 0.253225
+std: 0.252347
 
     #	if desired to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phastCons60wayGlire.bw /gbdb/mm10/bbi
@@ -6234,9 +6283,9 @@ std: 0.253225
 
     wigTableStats.sh mm10 phastCons60wayGlire
 # db.table      min max mean count sumData
-mm10.phastCons60wayGlire     0 1 0.141238 1929686275 2.72545e+08
+mm10.phastCons60wayGlire     0 1 0.142675 1929686275 2.75318e+08
 #	stdDev viewLimits
-#       0.253225 viewLimits=0:1
+#       0.252347 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
@@ -6268,7 +6317,171 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
     ########################################################################
-    ### Create a phastCons data set for primate
+    ### Create a phastCons data set for Euarchontoglires
+
+    # setup euarchontoglires-only run
+    ssh swarm
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/cons/euarchontoglires
+    cd /hive/data/genomes/mm10/bed/multiz60way/cons/euarchontoglires
+    # euarchontoglires-only: get the euarchontoglires only tree from the 4d directory
+    cp -p ../../4d/euarchontoglires.mod ./euarchontoglires.mod
+    # and all the others become the non-informative list for phastCons to ignore
+    sort ../../4d/euarchontoglires.list > euarchontoglires.list
+    sort ../../4d/vertebrate.list > vertebrate.list
+    comm -13 euarchontoglires.list vertebrate.list | xargs echo \
+        | sed -e "s/ /,/g" > euarchontoglires.non-inf
+    
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+# Completed: 314 of 314 jobs
+# CPU time in finished jobs:      17421s     290.36m     4.84h    0.20d  0.001 y
+# IO & Wait Time:                 37430s     623.83m    10.40h    0.43d  0.001 y
+# Average job time:                 175s       2.91m     0.05h    0.00d
+# Longest finished job:             343s       5.72m     0.10h    0.00d
+# Submission to last job:          2403s      40.05m     0.67h    0.03d
+
+    cd /hive/data/genomes/mm10/bed/multiz60way/cons/euarchontoglires
+    # create Most Conserved track
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/${C} 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    #   real    0m32.945s
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+    #   real    0m19.122s
+
+    featureBits mm10 mostConserved.bed
+    #   127113541 bases of 2652783500 (4.792%) in intersection
+    #   real    0m21.506s
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/mm10/bed/multiz60way/cons/euarchontoglires
+    time nice -n +19 hgLoadBed mm10 phastConsElements60wayEuarchontoGlires \
+	mostConserved.bed
+    #	Loaded 2327130 elements of size 6
+    #	real    0m24.591s
+    # verify coverage
+    time featureBits mm10 phastConsElements60wayEuarchontoGlires
+    #   127113541 bases of 2652783500 (4.792%) in intersection
+    #   real    0m18.857s
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits mm10 -enrichment refGene:cds phastConsElements60wayEuarchontoGlires
+    #   refGene:cds 1.282%, phastConsElements60wayEuarchontoGlires 4.792%,
+    #   both 0.929%, cover 72.46%, enrich 15.12x
+
+    featureBits mm10 -enrichment knownGene:cds phastConsElements60wayEuarchontoGlires
+    #   knownGene:cds 1.325%, phastConsElements60wayEuarchontoGlires 4.792%,
+    #   both 0.943%, cover 71.16%, enrich 14.85x
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # sort by chromName, chromStart so that items are in numerical order
+    #  for wigEncode
+    cd /hive/data/genomes/mm10/bed/multiz60way/cons/euarchontoglires
+    mkdir downloads
+    for D in `ls -d pp/chr* | sed -e 's#pp/##'`
+do
+    echo "working: $D"
+    find ./pp/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/${D}.phastCons60way.euarchontoglires.wigFix.gz
+done
+
+    # Create merged posterier probability file and wiggle track data files
+    time (zcat downloads/chr*.wigFix.gz \
+	 | wigEncode stdin phastCons60wayEuarchontoGlires.wig phastCons60wayEuarchontoGlires.wib \
+        > wigEncode.log 2>&1) &
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    9m49.080s
+
+    #	encode to bigWig
+    #	(warning wigToBigWig process grows to about 36 Gb)
+    #	in bash, to avoid the 32 Gb memory limit:
+export sizeG=188743680
+ulimit -d $sizeG
+ulimit -v $sizeG
+
+    time (zcat downloads/*.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes phastCons60wayEuarchontoGlires.bw \
+        > bigWig.log 2>&1 ) &
+    #   real    26m0.111s
+    bigWigInfo phastCons60wayEuarchontoGlires.bw
+version: 4
+isCompressed: yes
+isSwapped: 0
+primaryDataSize: 3,411,704,465
+primaryIndexSize: 100,774,056
+zoomLevels: 10
+chromCount: 59
+basesCovered: 1,929,686,275
+mean: 0.133253
+min: 0.000000
+max: 1.000000
+std: 0.256320
+
+    #	if desired to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phastCons60wayEuarchontoGlires.bw /gbdb/mm10/bbi
+    hgsql mm10 -e 'drop table if exists phastCons60wayEuarchontoGlires; \
+            create table phastCons60wayEuarchontoGlires \
+		(fileName varchar(255) not null); \
+            insert into phastCons60wayEuarchontoGlires values
+	("/gbdb/mm10/bbi/phastCons60wayEuarchontoGlires.bw");'
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /hive/data/genomes/mm10/bed/multiz60way/cons/euarchontoglires
+    ln -s `pwd`/phastCons60wayEuarchontoGlires.wib \
+	/gbdb/mm10/multiz60way/phastCons60wayEuarchontoGlires.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm10/multiz60way mm10 \
+	phastCons60wayEuarchontoGlires phastCons60wayEuarchontoGlires.wig
+    #   real    0m50.676s
+
+    time wigTableStats.sh mm10 phastCons60wayEuarchontoGlires
+# db.table      min max mean count sumData
+mm10.phastCons60wayEuarchontoGlires  0 1 0.133253 1929686275 2.57137e+08
+#	stdDev viewLimits
+#       0.25632 viewLimits=0:1
+    #   real    0m21.964s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=mm10 phastCons60wayEuarchontoGlires  > histogram.data 2>&1
+    #	real    3m31.112s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse Mm10 Histogram phastCons60wayEuarchontoGlires track"
+set xlabel " phastCons60wayEuarchontoGlires score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ########################################################################
+    ### Create a phastCons data set for primate ***### This was constructed
+    ### and examined, but not used in the release
 
     # setup primate-only run
     ssh swarm
@@ -6412,7 +6625,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Hg19 Histogram phastCons60wayPrimate track"
+set title " Mouse Mm10 Histogram phastCons60wayPrimate track"
 set xlabel " phastCons60wayPrimate score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -6437,20 +6650,21 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     # placental-only: get the placental only tree from the 4d directory
     cp -p ../../4d/placental.mod ./placental.mod
-    # the remainders become the non-informative list for phastCons to ignore
-    cat ../../4d/glire.list ../../4d/primate.list ../../4d/vertebrate.list \
-        | grep -v mm10 | sort | xargs echo | sed -e "s/ /,/g" \
-        > placental.non-inf
+    # and all the others become the non-informative list for phastCons to ignore
+    sort ../../4d/placental.list > placental.list
+    sort ../../4d/vertebrate.list > vertebrate.list
+    comm -13 placental.list vertebrate.list | xargs echo \
+        | sed -e "s/ /,/g" > placental.non-inf
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
-    para -ram=8g create jobList
+    para create jobList
     para try ... check ... push ... etc.
 # Completed: 314 of 314 jobs
-# CPU time in finished jobs:      17098s     284.96m     4.75h    0.20d  0.001 y
-# IO & Wait Time:                 64906s    1081.77m    18.03h    0.75d  0.002 y
-# Average job time:                 261s       4.35m     0.07h    0.00d
-# Longest finished job:             664s      11.07m     0.18h    0.01d
-# Submission to last job:          1156s      19.27m     0.32h    0.01d
+# CPU time in finished jobs:      27853s     464.21m     7.74h    0.32d  0.001 y
+# IO & Wait Time:                128981s    2149.69m    35.83h    1.49d  0.004 y
+# Average job time:                 499s       8.32m     0.14h    0.01d
+# Longest finished job:             785s      13.08m     0.22h    0.01d
+# Submission to last job:          5970s      99.50m     1.66h    0.07d
 
     cd /hive/data/genomes/mm10/bed/multiz60way/cons/placental
     # create Most Conserved track
@@ -6464,32 +6678,40 @@ do
 done > tmpMostConserved.bed
     #   real    0m44.506s
     /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+    #   real    0m44.170s
 
     featureBits mm10 mostConserved.bed
-    #   144021335 bases of 2652783500 (5.429%) in intersection
-    #   real    1m44.848s
+    #   144041584 bases of 2652783500 (5.430%) in intersection
+    #   real    0m54.927s
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/mm10/bed/multiz60way/cons/placental
     time nice -n +19 hgLoadBed mm10 phastConsElements60wayPlacental \
 	mostConserved.bed
-    #	Loaded 5255920 elements of size 6
-    #	real    0m56.508s
+    #	Loaded 5257437 elements of size 6
+    #	real    0m56.788s
 
-    # verify coverage
-    featureBits mm10 phastConsElements60wayPlacental
-    #   135764629 bases of 2652783500 (5.118%) in intersection
-    #   real    0m30.421s
+    # verify coverage, should be the same as the file measured above
+    time featureBits mm10 phastConsElements60wayPlacental
+    #   144041584 bases of 2652783500 (5.430%) in intersection
+    #   real    0m39.537s
 
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-    featureBits mm10 -enrichment refGene:cds phastConsElements60wayPlacental
-    #   refGene:cds 1.281%, phastConsElements60wayPlacental 5.118%,
-    #   both 0.922%, cover 71.99%, enrich 14.07x
+    time featureBits mm10 -enrichment refGene:cds phastConsElements60wayPlacental
+    #   refGene:cds 1.282%, phastConsElements60wayPlacental 5.430%,
+    #   both 0.920%, cover 71.73%, enrich 13.21x
+    #   real    0m39.833s
 
-    featureBits mm10 -enrichment knownGene:cds phastConsElements60wayPlacental
-    #   knownGene:cds 1.325%, phastConsElements60wayPlacental 5.118%,
-    #   both 0.936%, cover 70.67%, enrich 13.81x
+    time featureBits mm10 -enrichment knownGene:cds phastConsElements60wayPlacental
+    #   knownGene:cds 1.325%, phastConsElements60wayPlacental 5.430%,
+    #   both 0.934%, cover 70.47%, enrich 12.98x
+    #   real    0m44.567s
+
+    time featureBits mm10 -enrichment ensGene:cds phastConsElements60wayPlacental
+    #   ensGene:cds 1.357%, phastConsElements60wayPlacental 5.430%,
+    #   both 0.941%, cover 69.32%, enrich 12.77x
+    #   real    0m43.093s
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
@@ -6506,10 +6728,11 @@ do
 done
 
     # Create merged posterier probability file and wiggle track data files
-    zcat downloads/chr*.wigFix.gz \
-	 | wigEncode stdin phastCons60wayPlacental.wig phastCons60wayPlacental.wib
+    time (zcat downloads/chr*.wigFix.gz \
+	 | wigEncode stdin phastCons60wayPlacental.wig \
+        phastCons60wayPlacental.wib > wigEncode.log 2>&1) &
     # Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    8m49.769s
+    #   real    9m48.237s
 
     #	encode to bigWig
     #	(warning wigToBigWig process grows to about 36 Gb)
@@ -6518,22 +6741,23 @@ export sizeG=188743680
 ulimit -d $sizeG
 ulimit -v $sizeG
 
-    zcat downloads/*.wigFix.gz \
-        | wigToBigWig stdin ../../../../chrom.sizes phastCons60wayPlacental.bw
-    #   real    20m54.693s
+    time (zcat downloads/*.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes \
+        phastCons60wayPlacental.bw > bigWig.log 2>&1) &
+    #   real    25m18.556s
     bigWigInfo phastCons60wayPlacental.bw
 version: 4
 isCompressed: yes
 isSwapped: 0
-primaryDataSize: 2,266,979,643
+primaryDataSize: 3,271,676,156
 primaryIndexSize: 100,774,056
 zoomLevels: 10
 chromCount: 59
 basesCovered: 1,929,686,275
-mean: 0.099122
+mean: 0.135703
 min: 0.000000
 max: 1.000000
-std: 0.251288
+std: 0.266432
 
     #	if desired to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phastCons60wayPlacental.bw /gbdb/mm10/bbi
@@ -6550,19 +6774,21 @@ std: 0.251288
 	/gbdb/mm10/multiz60way/phastCons60wayPlacental.wib
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm10/multiz60way mm10 \
 	phastCons60wayPlacental phastCons60wayPlacental.wig
-    #   real    0m49.526s
+    #   real    0m41.999s
 
-    wigTableStats.sh mm10 phastCons60wayPlacental
+    time wigTableStats.sh mm10 phastCons60wayPlacental
 # db.table      min max mean count sumData
-# mm10.phastCons60wayPlacental 0 1 0.0991215 1929686275 1.91273e+08
+# mm10.phastCons60wayPlacental 0 1 0.135703 1929686275 2.61864e+08
 #	stdDev viewLimits
-#       0.251288 viewLimits=0:1
+#       0.266432 # viewLimits=0:1
+    #   real    0m21.723s
+
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=mm10 phastCons60wayPlacental  > histogram.data 2>&1
-    #   real    3m9.102s
+    #   real    2m39.659s
 
     #	create plot of histogram:
 
@@ -6572,7 +6798,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Hg19 Histogram phastCons60wayPlacental track"
+set title " Mouse Mm10 Histogram phastCons60wayPlacental track"
 set xlabel " phastCons60wayPlacental score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -6597,20 +6823,19 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     # vertebrate-only: get the vertebrate only tree from the 4d directory
     cp -p ../../4d/vertebrate.mod ./vertebrate.mod
-    # the remainders become the non-informative list for phastCons to ignore
-    cat ../../4d/glire.list ../../4d/primate.list ../../4d/placental.list \
-        | grep -v mm10 | sort | xargs echo | sed -e "s/ /,/g" \
-        > vertebrate.non-inf
+    # they are all in this one, no need for non-informative list
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
-    para -ram=8g create jobList
+    para create jobList
     para try ... check ... push ... etc.
-# Completed: 314 of 314 jobs
-# CPU time in finished jobs:      13443s     224.05m     3.73h    0.16d  0.000 y
-# IO & Wait Time:                133747s    2229.11m    37.15h    1.55d  0.004 y
-# Average job time:                 469s       7.81m     0.13h    0.01d
-# Longest finished job:             724s      12.07m     0.20h    0.01d
-# Submission to last job:           875s      14.58m     0.24h    0.01d
+# Completed: 313 of 314 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      36058s     600.97m    10.02h    0.42d  0.001 y
+# IO & Wait Time:                125496s    2091.59m    34.86h    1.45d  0.004 y
+# Average job time:                 516s       8.60m     0.14h    0.01d
+# Longest finished job:             912s      15.20m     0.25h    0.01d
+# Submission to last job:          2681s      44.68m     0.74h    0.03d
+    # the one failed job was completed manually on hgwdev
 
     cd /hive/data/genomes/mm10/bed/multiz60way/cons/vertebrate
     # create Most Conserved track
@@ -6625,33 +6850,36 @@ done > tmpMostConserved.bed
     #   real    0m44.506s
     /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
 
-    featureBits mm10 mostConserved.bed
-    #   131913202 bases of 2652783500 (4.973%) in intersection
+    time featureBits mm10 mostConserved.bed
+    #   172842314 bases of 2652783500 (6.516%) in intersection
+    #   real    1m23.298s
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/mm10/bed/multiz60way/cons/vertebrate
     time nice -n +19 hgLoadBed mm10 phastConsElements60wayVertebrate \
 	mostConserved.bed
-    #   Read 1654057 elements of size 5 from mostConserved.bed
-    #   real    0m14.752s
+    #   Read 6747163 elements of size 5 from mostConserved.bed
+    #   real    1m15.122s
 
     # verify coverage
     featureBits mm10 phastConsElements60wayVertebrate
-    #   131913202 bases of 2652783500 (4.973%) in intersection
+    #   172842314 bases of 2652783500 (6.516%) in intersection
 
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits mm10 -enrichment refGene:cds phastConsElements60wayVertebrate
-    #   refGene:cds 1.281%, phastConsElements60wayVertebrate 4.973%,
-    #   both 0.898%, cover 70.12%, enrich 14.10x
+    #   refGene:cds 1.282%, phastConsElements60wayVertebrate 6.516%,
+    #   both 0.914%, cover 71.26%, enrich 10.94x
 
-    featureBits mm10 -enrichment ensGene:cds phastConsElements60wayVertebrate
-    #   ensGene:cds 1.357%, phastConsElements60wayVertebrate 4.973%,
-    #   both 0.925%, cover 68.17%, enrich 13.71x
+    time featureBits mm10 -enrichment ensGene:cds phastConsElements60wayVertebrate
+    #   ensGene:cds 1.357%, phastConsElements60wayVertebrate 6.516%,
+    #   both 0.942%, cover 69.39%, enrich 10.65x
+    #   real    0m51.139s
 
-    featureBits mm10 -enrichment knownGene:cds phastConsElements60wayVertebrate
-    #   knownGene:cds 1.325%, phastConsElements60wayVertebrate 4.973%,
-    #   both 0.914%, cover 69.01%, enrich 13.88x
+    time featureBits mm10 -enrichment knownGene:cds phastConsElements60wayVertebrate
+    #   knownGene:cds 1.325%, phastConsElements60wayVertebrate 6.516%,
+    #   both 0.930%, cover 70.18%, enrich 10.77x
+    #   real    0m51.545s
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
@@ -6668,10 +6896,11 @@ do
 done
 
     # Create merged posterier probability file and wiggle track data files
-    zcat downloads/chr*.wigFix.gz \
-	 | wigEncode stdin phastCons60wayVertebrate.wig phastCons60wayVertebrate.wib
+    time (zcat downloads/chr*.wigFix.gz \
+	 | wigEncode stdin phastCons60wayVertebrate.wig \
+        phastCons60wayVertebrate.wib > wigEncode.log 2>&1 ) &
     # Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    6m47.064s
+    #   real    9m48.554s
 
     #	encode to bigWig
     #	(warning wigToBigWig process grows to about 36 Gb)
@@ -6680,23 +6909,24 @@ export sizeG=188743680
 ulimit -d $sizeG
 ulimit -v $sizeG
 
-    zcat downloads/*.wigFix.gz \
-        | wigToBigWig stdin ../../../../chrom.sizes phastCons60wayVertebrate.bw
-    #   real    15m43.842s
+    time (zcat downloads/*.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes \
+        phastCons60wayVertebrate.bw > bigWig.log 2>&1) &
+    #   real    25m8.630s
 
     bigWigInfo phastCons60wayVertebrate.bw
 version: 4
 isCompressed: yes
 isSwapped: 0
-primaryDataSize: 1,056,668,386
+primaryDataSize: 3,333,348,984
 primaryIndexSize: 100,774,056
 zoomLevels: 10
 chromCount: 59
 basesCovered: 1,929,686,275
-mean: 0.081029
+mean: 0.149646
 min: 0.000000
 max: 1.000000
-std: 0.242315
+std: 0.282502
 
     #	if desired to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phastCons60wayVertebrate.bw /gbdb/mm10/bbi
@@ -6715,17 +6945,18 @@ std: 0.242315
 	phastCons60wayVertebrate phastCons60wayVertebrate.wig
     #   real    0m45.432s
 
-    wigTableStats.sh mm10 phastCons60wayVertebrate
+    time wigTableStats.sh mm10 phastCons60wayVertebrate
 # db.table      min max mean count sumData
-# mm10.phastCons60wayVertebrate 0 1 0.0810293 1929686275 1.56361e+08
+# mm10.phastCons60wayVertebrate 0 1 0.149646 1929686275 2.8877e+08
 #	stdDev viewLimits
-#       0.242315 viewLimits=0:1
+#       0.282502 viewLimits=0:1
+    #   real    0m22.224s
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=mm10 phastCons60wayVertebrate  > histogram.data 2>&1
-    #   real    3m8.096s
+    #   real    2m52.041s
 
     #	create plot of histogram:
 
@@ -6735,7 +6966,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Hg19 Histogram phastCons60wayVertebrate track"
+set title " Mouse Mm10 Histogram phastCons60wayVertebrate track"
 set xlabel " phastCons60wayVertebrate score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -6751,7 +6982,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
-# phyloP conservation for 60-way (WORKING - 2012-06-15 - Hiram)
+# phyloP conservation for 60-way (DONE - 2012-06-15 - 2012-08-21 - Hiram)
 #
 # Vertebrate, Glire, Primate, Placental
 #
@@ -6828,24 +7059,31 @@ rm -f $2.running
 	../../cons/all/all.mod 0.525 > all.mod
     grep BACKGROUND ../../cons/glire/glire.mod \
 	| awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.530
+    #	0.531
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
-	../../cons/glire/glire.mod 0.530 > glire.mod
+	../../cons/glire/glire.mod 0.531 > glire.mod
     grep BACKGROUND ../../cons/primate/primate.mod \
 	| awk '{printf "%0.3f\n", $3 + $4}'
     #	0.509
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
 	../../cons/primate/primate.mod 0.509 > primate.mod
+    grep BACKGROUND ../../cons/euarchontoglires/euarchontoglires.mod \
+	| awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.518
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/euarchontoglires/euarchontoglires.mod 0.518 \
+        > euarchontoglires.mod
+
     grep BACKGROUND ../../cons/placental/placental.mod \
 	| awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.532
+    #	0.525
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
-	../../cons/placental/placental.mod 0.532 > placental.mod
+	../../cons/placental/placental.mod 0.525 > placental.mod
     grep BACKGROUND ../../cons/vertebrate/vertebrate.mod \
 	| awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.524
+    #	0.525
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
-	../../cons/vertebrate/vertebrate.mod 0.524 > vertebrate.mod
+	../../cons/vertebrate/vertebrate.mod 0.525 > vertebrate.mod
 
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fex
@@ -6912,7 +7150,7 @@ rm -fr $tmp
     ../run.phyloP/doPhyloP.csh chrM/chrM.1-16296 wigFix/chrM/chrM.1-16296.wigFix
 
     ssh hgwdev
-    cd /cluster/data/hg18/bed/multiz60way/consPhyloP/run.phyloP/all
+    cd /cluster/data/mm10/bed/multiz60way/consPhyloP/run.phyloP/all
     mkdir downloads
     for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
 do
@@ -7012,13 +7250,14 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     para try ... check ... push ... etc ...
     para time
 # Completed: 2709 of 2709 jobs
-# CPU time in finished jobs:     264147s    4402.45m    73.37h    3.06d  0.008 y
-# IO & Wait Time:                 50193s     836.55m    13.94h    0.58d  0.002 y
-# Average job time:                 116s       1.93m     0.03h    0.00d
-# Longest finished job:             239s       3.98m     0.07h    0.00d
-# Submission to last job:          3296s      54.93m     0.92h    0.04d
+# CPU time in finished jobs:     206723s    3445.39m    57.42h    2.39d  0.007 y
+# IO & Wait Time:                256366s    4272.76m    71.21h    2.97d  0.008 y
+# Average job time:                 171s       2.85m     0.05h    0.00d
+# Longest finished job:             487s       8.12m     0.14h    0.01d
+# Submission to last job:          1926s      32.10m     0.54h    0.02d
 
-    cd /cluster/data/hg18/bed/multiz60way/consPhyloP/run.phyloP/glire
+    cd /hive/data/genomes/mm10/bed/multiz60way/consPhyloP/glire
+    mkdir downloads
     for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
 do
     echo "working: $D"
@@ -7030,28 +7269,28 @@ done
     time (zcat downloads/chr*.wigFix.gz  \
 	| wigEncode stdin phyloP60wayGlire.wig phyloP60wayGlire.wib \
 	> wigEncode.log 2>&1) &
-    #   Converted stdin, upper limit 1.27, lower limit -4.73
-    #   real    12m32.853s
+    #   Converted stdin, upper limit 1.17, lower limit -4.35
+    #   real     20m31.753s
 
 export sizeG=188743680
 ulimit -d $sizeG
 ulimit -v $sizeG
     time (zcat downloads/chr*.wigFix.gz \
 	| wigToBigWig stdin ../../../../chrom.sizes phyloP60wayGlire.bw) &
-    #   real    28m50.613s
+    #   real    37m9.063s
     bigWigInfo phyloP60wayGlire.bw
 version: 4
 isCompressed: yes
 isSwapped: 0
-primaryDataSize: 3,242,728,454
+primaryDataSize: 3,158,091,915
 primaryIndexSize: 100,775,272
 zoomLevels: 10
 chromCount: 59
 basesCovered: 1,929,686,275
-mean: 0.072641
-min: -4.728000
-max: 1.271000
-std: 0.615306
+mean: 0.073187
+min: -4.346000
+max: 1.165000
+std: 0.602992
 
     #	if you wanted to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phyloP60wayGlire.bw /gbdb/mm10/bbi
@@ -7065,20 +7304,20 @@ std: 0.615306
     ln -s `pwd`/phyloP60wayGlire.wib /gbdb/mm10/multiz60way
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm10/multiz60way mm10 \
 	phyloP60wayGlire phyloP60wayGlire.wig
-    #   real    1m9.143s
+    #   real    0m58.536s
 
     wigTableStats.sh mm10 phyloP60wayGlire
 # db.table      min max mean count
-# mm10.phyloP60wayGlire        -4.728 1.271 0.0726411 1929686275 1.40175e+08
+# mm10.phyloP60wayGlire -4.346 1.165 0.0731873 1929686275 1.41229e+08
 #	stdDev viewLimits
-#       0.615306 viewLimits=-3.00389:1.271
-    #	that range is: 3.00389+1.271 = 4.27489 -> hBinSize=0.0427489 
+#       0.602992 viewLimits=-2.94177:1.165
+    #	that range is: 4.346+1.165 = 5.511 -> hBinSize=0.005511 
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.0427489 -hBinCount=1000 -hMinVal=-3.00389 -verbose=2 \
+	-hBinSize=0.005511 -hBinCount=1000 -hMinVal=-4.346 -verbose=2 \
 	    -db=mm10 phyloP60wayGlire > histogram.data 2>&1
-    #   real    5m53.679s
+    #   real    8m23.088s
 
     #	create plot of histogram:
     cat << '_EOF_' | gnuplot > histo.png
@@ -7087,7 +7326,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human Hg19 Histogram phyloP60wayGlire track"
+set title " Human Mm10 Histogram phyloP60wayGlire track"
 set xlabel " phyloP60wayGlire score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -7103,7 +7342,114 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+    ###################   Running the euarchontoglires  #######################
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/consPhyloP/euarchontoglires
+    cd /hive/data/genomes/mm10/bed/multiz60way/consPhyloP/euarchontoglires
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 2709 of 2709 jobs
+# CPU time in finished jobs:     542547s    9042.45m   150.71h    6.28d  0.017 y
+# IO & Wait Time:                 75914s    1265.23m    21.09h    0.88d  0.002 y
+# Average job time:                 228s       3.80m     0.06h    0.00d
+# Longest finished job:             430s       7.17m     0.12h    0.00d
+# Submission to last job:          4149s      69.15m     1.15h    0.05d
+
+    cd /hive/data/genomes/mm10/bed/multiz60way/consPhyloP/euarchontoglires
+    mkdir downloads
+    for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
+do
+    echo "working: $D"
+    find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/${D}.phastCons60way.euarchontoglires.wigFix.gz
+done
+
+    time (zcat downloads/chr*.wigFix.gz  \
+	| wigEncode stdin phyloP60wayEuarchontoGlires.wig phyloP60wayEuarchontoGlires.wib \
+	> wigEncode.log 2>&1) &
+    #   Converted stdin, upper limit 1.75, lower limit -12.70
+    #   real    10m52.064s
+
+export sizeG=188743680
+ulimit -d $sizeG
+ulimit -v $sizeG
+    time (zcat downloads/chr*.wigFix.gz \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP60wayEuarchontoGlires.bw) &
+    #   real    26m47.912s
+    bigWigInfo phyloP60wayEuarchontoGlires.bw
+version: 4
+isCompressed: yes
+isSwapped: 0
+primaryDataSize: 3,970,501,521
+primaryIndexSize: 100,775,272
+zoomLevels: 10
+chromCount: 59
+basesCovered: 1,929,686,275
+mean: 0.078739
+min: -12.704000
+max: 1.753000
+std: 0.689759
+
+    #	if you wanted to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phyloP60wayEuarchontoGlires.bw /gbdb/mm10/bbi
+    hgsql mm10 -e 'drop table if exists phyloP60wayEuarchontoGlires; \
+            create table phyloP60wayEuarchontoGlires \
+		(fileName varchar(255) not null); \
+            insert into phyloP60wayEuarchontoGlires values
+	("/gbdb/mm10/bbi/phyloP60wayEuarchontoGlires.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP60wayEuarchontoGlires.wib /gbdb/mm10/multiz60way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm10/multiz60way mm10 \
+	phyloP60wayEuarchontoGlires phyloP60wayEuarchontoGlires.wig
+    #   real    0m51.777s
+
+    time wigTableStats.sh mm10 phyloP60wayEuarchontoGlires
+# db.table      min max mean count
+# mm10.phyloP60wayEuarchontoGlires -12.704 1.753 0.0787387 1929686275
+#	sumData stdDev viewLimits
+#       1.51941e+08 0.689759 viewLimits=-3.37006:1.753
+    #   real    0m26.197s
+
+    #	that range is: 12.704+1.753 = 14.457 -> hBinSize=0.014457 
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.014457 -hBinCount=1000 -hMinVal=-12.704 -verbose=2 \
+	    -db=mm10 phyloP60wayEuarchontoGlires > histogram.data 2>&1
+    #   real    3m22.205s
+
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse Mm10 Histogram phyloP60wayEuarchontoGlires track"
+set xlabel " phyloP60wayEuarchontoGlires score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.15]
+set xrange [-2:1.2]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
     ######################   Running the primate  #######################
+    ### ***### This was constructed
+    ### and examined, but not used in the release
     mkdir /hive/data/genomes/mm10/bed/multiz60way/consPhyloP/primate
     cd /hive/data/genomes/mm10/bed/multiz60way/consPhyloP/primate
     rm -fr wigFix
@@ -7192,7 +7538,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human Hg19 Histogram phyloP60wayPrimate track"
+set title " Human Mm10 Histogram phyloP60wayPrimate track"
 set xlabel " phyloP60wayPrimate score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -7215,17 +7561,17 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     mkdir wigFix
 
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
-    para -ram=8g create jobList
+    para create jobList
     para try ... check ... push ... etc ...
     para time
 # Completed: 2709 of 2709 jobs
-# CPU time in finished jobs:     526868s    8781.13m   146.35h    6.10d  0.017 y
-# IO & Wait Time:                 59527s     992.12m    16.54h    0.69d  0.002 y
-# Average job time:                 216s       3.61m     0.06h    0.00d
-# Longest finished job:             411s       6.85m     0.11h    0.00d
-# Submission to last job:          7271s     121.18m     2.02h    0.08d
+# CPU time in finished jobs:    1188036s   19800.60m   330.01h   13.75d  0.038 y
+# IO & Wait Time:                209859s    3497.65m    58.29h    2.43d  0.007 y
+# Average job time:                 516s       8.60m     0.14h    0.01d
+# Longest finished job:            1672s      27.87m     0.46h    0.02d
+# Submission to last job:          6336s     105.60m     1.76h    0.07d
 
-    cd /cluster/data/mm10/bed/multiz60way/consPhyloP/placental
+    cd /hive/data/genomes/mm10/bed/multiz60way/consPhyloP/placental
     mkdir downloads
     for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
 do
@@ -7238,27 +7584,27 @@ done
 	| wigEncode stdin phyloP60wayPlacental.wig phyloP60wayPlacental.wib \
 	> wigEncode.log 2>&1) &
     #	Converted stdin, upper limit 3.30, lower limit -20.00
-    #   real    9m44.270s
+    #   real    11m54.289s
 
 export sizeG=188743680
 ulimit -d $sizeG
 ulimit -v $sizeG
     time (zcat downloads/chr*.wigFix.gz \
-	| wigToBigWig stdin ../../../../chrom.sizes phyloP60wayPlacental.bw) &
-    #   real    21m32.760s
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP60wayPlacental.bw \           > bigWig.log 2>&1) &
+    #   real    28m4.576s
     bigWigInfo phyloP60wayPlacental.bw
 version: 4
 isCompressed: yes
 isSwapped: 0
-primaryDataSize: 3,073,994,079
+primaryDataSize: 4,423,832,009
 primaryIndexSize: 100,775,272
 zoomLevels: 10
 chromCount: 59
 basesCovered: 1,929,686,275
-mean: 0.096865
-min: -9.313000
-max: 2.099000
-std: 0.603459
+mean: 0.109489
+min: -20.000000
+max: 3.296000
+std: 0.810657
 
     #	loading bigWig table if that is what you wanted to do:
     ln -s `pwd`/phyloP60wayPlacental.bw /gbdb/mm10/bbi
@@ -7272,19 +7618,20 @@ std: 0.603459
     ln -s `pwd`/phyloP60wayPlacental.wib /gbdb/mm10/multiz60way
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm10/multiz60way mm10 \
 	phyloP60wayPlacental phyloP60wayPlacental.wig
-    #   real    0m54.702s
+    #   real    0m50.284s
 
     wigTableStats.sh mm10 phyloP60wayPlacental
-# db.table      min max mean count sumData stdDev viewLimits
-# mm10.phyloP60wayPlacental -9.313 2.099 0.0968651 1929686275 1.86919e+08
-#	stdDev viewLimits
-#       0.603459 viewLimits=-2.92043:2.099
-    #	that range is: 9.313+2.099 = 11.412 for hBinSize=0.11412
+# db.table      min max mean count sumData
+# mm10.phyloP60wayPlacental -20 3.296 0.109489 1929686275 2.11279e+08
+#       stdDev viewLimits
+#       0.810657 viewLimits=-3.9438:3.296
+
+    #	that range is: 20+3.296 = 23.296 for hBinSize=0.023296
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.11412 -hBinCount=1000 -hMinVal=-9.313 -verbose=2 \
+	-hBinSize=0.023296 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=mm10 phyloP60wayPlacental > histogram.data 2>&1
-    #   real    4m7.029s
+    #   real    3m24.650s
     # to see yrange:
     grep -v "^#" histogram.data | ave -col=5 stdin
 
@@ -7296,13 +7643,13 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human Hg19 Histogram phyloP60wayPlacental track"
+set title " Mouse Mm10 Histogram phyloP60wayPlacental track"
 set xlabel " phyloP60wayPlacental score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.473]
+set yrange [0:0.084]
 set xrange [-2.5:2.5]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
@@ -7323,13 +7670,13 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     para try ... check ... push ... etc ...
     para time
 # Completed: 2709 of 2709 jobs
-# CPU time in finished jobs:     407922s    6798.71m   113.31h    4.72d  0.013 y
-# IO & Wait Time:                 55046s     917.43m    15.29h    0.64d  0.002 y
-# Average job time:                 171s       2.85m     0.05h    0.00d
-# Longest finished job:             327s       5.45m     0.09h    0.00d
-# Submission to last job:          6586s     109.77m     1.83h    0.08d
+# CPU time in finished jobs:    1825414s   30423.56m   507.06h   21.13d  0.058 y
+# IO & Wait Time:                211040s    3517.34m    58.62h    2.44d  0.007 y
+# Average job time:                 752s      12.53m     0.21h    0.01d
+# Longest finished job:            1530s      25.50m     0.42h    0.02d
+# Submission to last job:          6045s     100.75m     1.68h    0.07d
 
-    cd /cluster/data/mm10/bed/multiz60way/consPhyloP/vertebrate
+    cd /hive/data/genomes/mm10/bed/multiz60way/consPhyloP/vertebrate
     mkdir downloads
     for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
 do
@@ -7342,28 +7689,29 @@ done
     time (zcat downloads/chr*.wigFix.gz \
 	| wigEncode stdin phyloP60wayVertebrate.wig phyloP60wayVertebrate.wib \
 	> wigEncode.log 2>&1) &
-    #	Converted stdin, upper limit 4.91, lower limit -5.57
-    #   real    6m46.089s
+    #	Converted stdin, upper limit 7.53, lower limit -20.00
+    #   real    12m2.774s
 
 export sizeG=188743680
 ulimit -d $sizeG
 ulimit -v $sizeG
     time (zcat downloads/chr*.wigFix.gz \
-	| wigToBigWig stdin ../../../../chrom.sizes phyloP60wayVertebrate.bw) &
-    #   real    15m28.263s
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP60wayVertebrate.bw \
+        > bigWig.log 2>&1) &
+    #   real    27m6.791s
     bigWigInfo phyloP60wayVertebrate.bw
 version: 4
 isCompressed: yes
 isSwapped: 0
-primaryDataSize: 909,660,204
+primaryDataSize: 4,529,467,614
 primaryIndexSize: 100,775,272
 zoomLevels: 10
 chromCount: 59
 basesCovered: 1,929,686,275
-mean: 0.088549
-min: -5.566000
-max: 4.914000
-std: 0.477322
+mean: 0.169653
+min: -20.000000
+max: 7.532000
+std: 0.942808
 
     #	loading bigWig table:
     ln -s `pwd`/phyloP60wayVertebrate.bw /gbdb/mm10/bbi
@@ -7377,20 +7725,22 @@ std: 0.477322
     ln -s `pwd`/phyloP60wayVertebrate.wib /gbdb/mm10/multiz60way
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm10/multiz60way mm10 \
 	phyloP60wayVertebrate phyloP60wayVertebrate.wig
-    #   real    0m58.228s
+    #   real    0m56.535s
 
-    wigTableStats.sh mm10 phyloP60wayVertebrate
+    time wigTableStats.sh mm10 phyloP60wayVertebrate
 # db.table      min max mean count sumData stdDev viewLimits
-# mm10.phyloP60wayVertebrate -5.566 4.914 0.0885486 1929686275 1.70871e+08
+# mm10.phyloP60wayVertebrate -20 7.532 0.169653 1929686275 3.27377e+08
 #	stdDev viewLimits
-#       0.477322 viewLimits=-2.29806:2.47516
-    #	that range is: 5.566+4.914 = 10.480 for hBinSize=0.10480
+#       0.942808 viewLimits=-4.54439:4.88369
+    #   real    0m25.320s
+
+    #	that range is: 20+7.532 = 27.532 for hBinSize=0.027532
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.10480 -hBinCount=1000 -hMinVal=-5.566 -verbose=2 \
+	-hBinSize=0.027532 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=mm10 phyloP60wayVertebrate > histogram.data 2>&1
-    #   real    4m31.919s
+    #   real    3m26.565s
     # to see yrange:
     grep -v "^#" histogram.data | ave -col=5 stdin
 
@@ -7402,13 +7752,13 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human Hg19 Histogram phyloP60wayVertebrate track"
+set title " Mouse Mm10 Histogram phyloP60wayVertebrate track"
 set xlabel " phyloP60wayVertebrate score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.771]
+set yrange [0:0.0913]
 set xrange [-2.5:2.5]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
@@ -7419,19 +7769,21 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
-# construct download files for 60-way (WORKING - 2012-06-27 - Hiram)
+# construct download files for 60-way (DONE - 2012-06-27 - 2012-08-21 - Hiram)
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way/maf
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way/alignments
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/glire
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/primate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/euarchontoglire
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/placental
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/vertebrate
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/mm10.60way.phastCons
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/glire
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/primate
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/euarchontoglire
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/placental
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/vertebrate
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way.phyloP60way
@@ -7460,13 +7812,19 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way
 
     #####################################################################
     cd /hive/data/genomes/mm10/bed/multiz60way/downloads/phastCons60way
-    mkdir glire primate placental vertebrate mm10.60way.phastCons
+    mkdir glire euarchontoglire primate placental vertebrate mm10.60way.phastCons
     cd glire
     ln -s ../../../cons/glire/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
     ln -s `pwd`/*.gz `pwd`/md5sum.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/glire
     #   real    5m50.001s
+    cd ../euarchontoglire
+    ln -s ../../../cons/euarchontoglires/downloads/chr*.gz .
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m14.103s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phastCons60way/euarchontoglire
     cd ../primate
     ln -s ../../../cons/primate/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
@@ -7493,15 +7851,18 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way
     #   real    6m11.158s
     cd ..
     ln -s ../../cons/all/all.mod mm10.60way.phastCons.mod
-    ln -s ../../cons/glire/glire.mod glire.mod
-    ln -s ../../cons/primate/primate.mod primate.mod
-    ln -s ../../cons/placental/placental.mod placental.mod
-    ln -s ../../cons/vertebrate/vertebrate.mod .
+    ln -s ../../cons/glire/glire.mod mm10.60way.phastCons.glire.mod
+    ln -s ../../cons/primate/primate.mod mm10.60way.phastCons.primate.mod
+    ln -s ../../cons/euarchontoglires/euarchontoglires.mod mm10.60way.phastCons.euarchontoglire.mod
+    ln -s ../../cons/placental/placental.mod mm10.60way.phastCons.placental.mod
+    ln -s ../../cons/vertebrate/vertebrate.mod mm10.60way.phastCons.vertebrate.mod
     ln -s ../../cons/all/phastCons60way.bw mm10.60way.phastCons.bw
     ln -s ../../cons/glire/phastCons60wayGlire.bw \
         mm10.60way.phastCons60wayGlire.bw
     ln -s ../../cons/placental/phastCons60wayPlacental.bw \
         mm10.60way.phastCons60wayPlacental.bw
+    ln -s ../../cons/euarchontoglires/phastCons60wayEuarchontoGlires.bw \
+        mm10.60way.phastCons60wayEuarchontoGlire.bw
     ln -s ../../cons/primate/phastCons60wayPrimate.bw \
         mm10.60way.phastCons60wayPrimate.bw
     ln -s ../../cons/vertebrate/phastCons60wayVertebrate.bw \
@@ -7515,13 +7876,19 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way
 
     #####################################################################
     cd /hive/data/genomes/mm10/bed/multiz60way/downloads/phyloP60way
-    mkdir glire primate placental vertebrate mm10.60way.phyloP60way
+    mkdir glire euarchontoglire primate placental vertebrate mm10.60way.phyloP60way
     cd glire
     ln -s ../../../consPhyloP/glire/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
     ln -s `pwd`/*.gz `pwd`/md5sum.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/glire
     #   real    6m5.733s
+    cd ../euarchontoglire
+    ln -s ../../../consPhyloP/euarchontoglires/downloads/chr*.gz .
+    time md5sum *.gz > md5sum.txt &
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/euarchontoglire
+    #   real    5m40.272s
     cd ../primate
     ln -s ../../../consPhyloP/primate/downloads/chr*.gz .
     time md5sum *.gz > md5sum.txt &
@@ -7548,9 +7915,10 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way
 
     cd ..
     ln -s ../../consPhyloP/run.phyloP/all.mod mm10.60way.phyloP60way.mod
-    ln -s ../../consPhyloP/run.phyloP/glire.mod ./mm10.60way.glire.mod
-    ln -s ../../consPhyloP/run.phyloP/placental.mod ./mm10.60way.placental.mod
-    ln -s ../../consPhyloP/run.phyloP/primate.mod ./mm10.60way.primate.mod
+    ln -s ../../consPhyloP/run.phyloP/glire.mod ./mm10.phyloP.glire.mod
+    ln -s ../../consPhyloP/run.phyloP/placental.mod ./mm10.phyloP.placental.mod
+    ln -s ../../consPhyloP/run.phyloP/euarchontoglires.mod ./mm10.phyloP.euarchontoglire.mod
+    ln -s ../../consPhyloP/run.phyloP/primate.mod ./mm10.phyloP.primate.mod
     ln -s ../../consPhyloP/run.phyloP/vertebrate.mod ./mm10.60way.vertebrate.mod
 
     ln -s ../../consPhyloP/all/phyloP60way.bw mm10.60way.phyloP60way.bw
@@ -7560,6 +7928,8 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way
         mm10.60way.phyloP60wayVertebrate.bw
     ln -s ../../consPhyloP/placental/phyloP60wayPlacental.bw \
         mm10.60way.phyloP60wayPlacental.bw
+    ln -s ../../consPhyloP/euarchontoglires/phyloP60wayEuarchontoGlires.bw \
+        mm10.60way.phyloP60wayEuarchontoglire.bw
     ln -s ../../consPhyloP/primate/phyloP60wayPrimate.bw \
         mm10.60way.phyloP60wayPrimate.bw
 
@@ -7598,7 +7968,7 @@ done
         /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/multiz60way
 
 #############################################################################
-# hgPal downloads (WORKING - Hiram - 2012-07-05)
+# hgPal downloads (DONE - 2012-07-05 - 2012-07-09 - Hiram)
 #   FASTA from 60-way for refGene
 
     ssh hgwdev
@@ -8258,5 +8628,70 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# construct assembly fragments table (DONE - 2012-09-11 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/assemblyFrags
+    cd /hive/data/genomes/mm10/bed/assemblyFrags
+    zgrep -h -v "^#" "${F}"
+
+    zgrep -h -v "^#" ../../genbank/Primary_Assembly/assembled_chromosomes/AGP/*.comp.agp.gz \
+    | awk '$5 != "N"' \
+        | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1,$2-1,$3,$6,$9}' \
+    | sed -e 's/CM000994.2/chr1/; s/CM000995.2/chr2/; s/CM000996.2/chr3/; s/CM000997.2/chr4/; s/CM000998.2/chr5/; s/CM000999.2/chr6/; s/CM001000.2/chr7/; s/CM001001.2/chr8/; s/CM001002.2/chr9/; s/CM001003.2/chr10/; s/CM001004.2/chr11/; s/CM001005.2/chr12/; s/CM001006.2/chr13/; s/CM001007.2/chr14/; s/CM001008.2/chr15/; s/CM001009.2/chr16/; s/CM001010.2/chr17/; s/CM001011.2/chr18/; s/CM001012.2/chr19/; s/CM001013.2/chrX/; s/CM001014.2/chrY/;' > chr.asmFrag.bed
+
+    zgrep -h -v "^#" ../../genbank/Primary_Assembly/unlocalized_scaffolds/AGP/*.agp.gz \
+        | awk '$5 != "N"' \
+        | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1,$2-1,$3,$6,$9}' \
+    | sed -e "s#GL456233.1#chrX_GL456233_random#; s#GL456216.1#chr4_GL456216_random#; s#JH584299.1#chr5_JH584299_random#; s#JH584301.1#chrY_JH584301_random#; s#JH584300.1#chrY_JH584300_random#; s#JH584303.1#chrY_JH584303_random#; s#JH584302.1#chrY_JH584302_random#; s#JH584298.1#chr5_JH584298_random#; s#JH584297.1#chr5_JH584297_random#; s#JH584296.1#chr5_JH584296_random#; s#JH584295.1#chr4_JH584295_random#; s#JH584294.1#chr4_JH584294_random#; s#JH584293.1#chr4_JH584293_random#; s#JH584292.1#chr4_JH584292_random#; s#GL456354.1#chr5_GL456354_random#; s#GL456350.1#chr4_GL456350_random#; s#GL456221.1#chr1_GL456221_random#; s#GL456219.1#chr7_GL456219_random#; s#GL456213.1#chr1_GL456213_random#; s#GL456212.1#chr1_GL456212_random#; s#GL456211.1#chr1_GL456211_random#; s#GL456210.1#chr1_GL456210_random#;" > chrUL.asmFrag.bed
+
+    zgrep -h -v "^#" ../../genbank/Primary_Assembly/unplaced_scaffolds/AGP/*.agp.gz \
+        | awk '$5 != "N"' | sed -e 's/\.1\t/\t/' \
+        | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1,$2-1,$3,$6,$9}' \
+        > chrUn.asmFrag.bed
+
+    cat chr.asmFrag.bed chrUL.asmFrag.bed chrUn.asmFrag.bed > mm10.asmFrag.bed
+    # add the chrM identity
+    echo -e "chrM\t0\t1629\tAY172335.1\t0\t+" >> mm10.asmFrag.bed
+    hgLoadBed mm10 assemblyFrags mm10.asmFrag.bed
+    featureBits mm10 assemblyFrags
+    #   2652027564 bases of 2652783500 (99.972%) in intersection
+
+#########################################################################
+# construct ucscToEnsembl table (DONE - 2012-09-11 - Hiram)
+    mkdir /hive/data/genomes/mm10/ensembl
+    cd /hive/data/genomes/mm10/ensembl
+    wget --timestamping \
+'ftp://ftp.ensembl.org/pub/release-68/fasta/mus_musculus/dna/Mus_musculus.GRCm38.68.dna.toplevel.fa.gz'
+
+    wget --timestamping \
+'ftp://ftp.ensembl.org/pub/release-68/fasta/mus_musculus/dna/Mus_musculus.GRCm38.68.dna.nonchromosomal.fa.gz'
+
+    faCount *.fa.gz > faCount.txt
+    egrep -v "total|seq" faCount.txt  | awk '{print $1,$2}' \
+        | sort -u | sort -k2nr | sed -e "s/ /\t/" > ensembl.chrom.sizes
+
+    mkdir /hive/data/genomes/mm10/bed/ucscToEnsembl
+    cd /hive/data/genomes/mm10/bed/ucscToEnsembl
+    awk '{printf "%d\t%s\n", $2,$1}' ../../chrom.sizes | sort > sizes.chrom.ucsc
+    awk '{printf "%d\t%s\n", $2,$1}' ../../ensembl/ensembl.chrom.sizes \
+        | sort > sizes.chrom.ensembl
+    join sizes.chrom.ucsc sizes.chrom.ensembl \
+        | awk '{printf "%s\t%s\n", $2,$3}' > ucscToEnsembl.tab
+
+    cut -f1 ucscToEnsembl.tab | awk '{print length($1)}' | sort -rn | head -1
+    #   20
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(20))
+);
+'_EOF_'
+
+    hgLoadSqlTab mm10 ucscToEnsembl ucscToEnsembl.sql ucscToEnsembl.tab
 
 #########################################################################

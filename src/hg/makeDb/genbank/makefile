@@ -20,7 +20,7 @@ etc-update-server:
 	${MAKE} install-etc PREFIX=/hive/data/outside/genbank
 etc-update: etc-update-server # alternative name
 
-install-rr: ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad ${GB_BINARCH}/mrnaToGene ${GB_BINARCH}/hgLoadGenePred all
+install-rr: all ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad ${GB_BINARCH}/mrnaToGene ${GB_BINARCH}/hgLoadGenePred 
 	${MAKE} install PREFIX=/genbank
 
 etc-update-rr:

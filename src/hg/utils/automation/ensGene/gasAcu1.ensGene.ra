@@ -1,0 +1,5 @@
+# required db variable
+db gasAcu1
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^group\([IUVX]\)/chr\1/; s/^MT/chrM/;"

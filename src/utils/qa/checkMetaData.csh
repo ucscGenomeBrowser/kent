@@ -191,21 +191,13 @@ hgsql $host2 -Ne 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" \
 set genome=`hgsql -N -e 'SELECT genome FROM dbDb WHERE name = "'$db'"' \
   hgcentraltest`
 
-# pull out last word of the find, if in the format "G. species" 
-#    and use LIKE to query genomeClade.
-set secondWord=`echo $genome | gawk -F" " '{print $2}'`
-if ( $secondWord != "" ) then
-  set genome=$secondWord
-endif
-
 set metatable="genomeClade"
 
 # get lookup for clade check
-# filter out "/" when it appears in genome name - to avoid e.g, Dog/Human
-hgsql $host1 -Ne 'SELECT * FROM genomeClade WHERE genome LIKE "%'$genome'"' \
-  $centdb1 | grep -v "/" | sort > $metatable.$db.$out1 
-hgsql $host2 -Ne 'SELECT * FROM genomeClade WHERE genome LIKE  "%'$genome'"' \
-  $centdb2 | grep -v "/" | sort > $metatable.$db.$out2
+hgsql $host1 -Ne "SELECT * FROM genomeClade WHERE genome='$genome'" \
+  $centdb1 | sort > $metatable.$db.$out1 
+hgsql $host2 -Ne "SELECT * FROM genomeClade WHERE genome='$genome'" \
+  $centdb2 | sort > $metatable.$db.$out2
  
 set metatable=""
 

@@ -1,0 +1,4 @@
+# required db variable
+db macEug1
+# need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+geneScaffolds yes

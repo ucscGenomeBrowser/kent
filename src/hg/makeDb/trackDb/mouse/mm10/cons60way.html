@@ -5,7 +5,7 @@ species and measurements of evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
 PHAST package</A>, for
-all species (vertebrate) and three subsets (glire, primate and placental mammal).
+all species (vertebrate) and three subsets (glire, euarchontoglire and placental mammal).
 The multiple alignments were generated using multiz and
 other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/"
 TARGET=_blank>Penn State Bioinformatics</A>
@@ -42,13 +42,13 @@ and 1.
 <P>
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data, and both were run with the same parameters for each
-species set (vertebrate, placental,  primate, and glire).
+species set (glire, euarchontoglire and placental).
 Thus, in regions in which only glires appear in the alignment, all three
 sets of scores will be the same, but in regions in which additional species
-are available, the primate, placental and/or vertebrate scores may differ from
+are available, the glire, euarchontoglire, and/or placental scores may differ from
 the glire scores.  The alternative
 plots help to identify sequences that are under different evolutionary
-pressures in, say, glires and non-glires, or primates and non-primates.
+pressures in, say, glires and non-glires, or placentals and non-placentals.
 </P>
 
 <P>
@@ -69,9 +69,9 @@ zoomed out and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). 
 <TR ALIGN=left><TD>Rabbit</TD><TD>Oryctolagus cuniculus</TD><TD>Apr. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=oryCun2"    TARGET=_blank>Broad/oryCun2</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Rat</TD><TD>Rattus norvegicus</TD><TD>Mar. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=rn5"    TARGET=_blank>RGSC 5.0/rn5</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Squirrel</TD><TD>Spermophilus tridecemlineatus</TD><TD>Nov. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/speTri2"    TARGET=_blank>Broad/speTri2</A>*</TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Tree shrew</TD><TD>Tupaia belangeri</TD><TD>Dec. 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/tupBel1"    TARGET=_blank>Broad/tupBel1</A>*</TD><TD>Reciprocal best net</TD></TR>
-<TR><TH COLSPAN=5>primate subset</TH></TR>
+<TR><TH COLSPAN=5>euarchontoglire subset, the glire set above plus:</TH></TR>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
+<TR ALIGN=left><TD>Tree shrew</TD><TD>Tupaia belangeri</TD><TD>Dec. 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/tupBel1"    TARGET=_blank>Broad/tupBel1</A>*</TD><TD>Reciprocal best net</TD></TR>
 <TR ALIGN=left><TD>Baboon</TD><TD>Papio hamadryas</TD><TD>Nov. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/papHam1"    TARGET=_blank>Baylor 1.0/papHam1</A>*</TD><TD>Reciprocal best net</TD></TR>
 <TR ALIGN=left><TD>Bushbaby</TD><TD>Otolemur garnettii</TD><TD>Mar. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/otoGar3"    TARGET=_blank>Broad/otoGar3</A>*</TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Chimp</TD><TD>Pan troglodytes</TD><TD>Feb. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/panTro4"    TARGET=_blank>WUGSC Pan_troglodytes-2.1.4/panTro4</A>*</TD><TD>Syntenic net</TD></TR>
@@ -84,7 +84,7 @@ zoomed out and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). 
 <TR ALIGN=left><TD>Orangutan</TD><TD>Pongo pygmaeus abelii</TD><TD>Jul. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=ponAbe2"    TARGET=_blank>WUGSC 2.0.2/ponAbe2</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Squirrel monkey</TD><TD>Saimiri boliviensis</TD><TD>Oct. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/saiBol1"    TARGET=_blank>Broad/saiBol1</A>*</TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Tarsier</TD><TD>Tarsius syrichta</TD><TD>Aug. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/tarSyr1"    TARGET=_blank>Broad/tarSyr1</A>*</TD><TD>Reciprocal best net</TD></TR>
-<TR><TH COLSPAN=5>placental subset</TH></TR>
+<TR><TH COLSPAN=5>placental subset, the glire and euarchontoglire sets above, plus:</TH></TR>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
 <TR ALIGN=left><TD>Alpaca</TD><TD>Vicugna pacos</TD><TD>Jul. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/vicPac1"    TARGET=_blank>Broad/vicPac1</A>*</TD><TD>Reciprocal best net</TD></TR>
 <TR ALIGN=left><TD>Armadillo</TD><TD>Dasypus novemcinctus</TD><TD>Dec. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/dasNov3"    TARGET=_blank>Baylor/dasNov3</A>*</TD><TD>Reciprocal best net</TD></TR>
@@ -105,7 +105,7 @@ zoomed out and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). 
 <TR ALIGN=left><TD>Shrew</TD><TD>Sorex araneus</TD><TD>Jun. 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/sorAra1"    TARGET=_blank>Broad/sorAra1</A>*</TD><TD>Reciprocal best net</TD></TR>
 <TR ALIGN=left><TD>Sloth</TD><TD>Choloepus hoffmanni</TD><TD>Jul. 2008</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/choHof1"    TARGET=_blank>Broad/choHof1</A>*</TD><TD>Reciprocal best net</TD></TR>
 <TR ALIGN=left><TD>Tenrec</TD><TD>Echinops telfairi</TD><TD>Jul. 2005</TD><TD><A HREF="../cgi-bin/hgGateway?db=echTel1"    TARGET=_blank>Broad/echTel1</A></TD><TD>Reciprocal best net</TD></TR>
-<TR><TH COLSPAN=5>vertebrate subset</TH></TR>
+<TR><TH COLSPAN=5>full 60 species, the three subsets above plus:</TH></TR>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
 <TR ALIGN=left><TD>Atlantic cod</TD><TD>Gadus morhua</TD><TD>May. 2010</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/gadMor1"    TARGET=_blank>Genofisk GadMor_May2010/gadMor1</A>*</TD><TD>Net</TD></TR>
 <TR ALIGN=left><TD>Budgerigar</TD><TD>Melopsittacus undulatus</TD><TD>Sep. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/melUnd1"    TARGET=_blank>WUGSC v6.3/melUnd1</A>*</TD><TD>Net</TD></TR>
@@ -144,9 +144,8 @@ Downloads for data in this track are available:
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-The track configuration options allow the user to display either
-the vertebrate or placental mammal conservation scores, or both
-simultaneously.
+The track configuration options allow the user to display any of the
+subset conservation scores, or all simultaneously.
 In full and pack display modes, conservation scores are displayed as a
 <EM>wiggle track</EM> (histogram) in which the height reflects the
 size of the score.
@@ -327,8 +326,8 @@ generated using the <em>phyloFit</em> program from the PHAST package
 set, filtered to select single-coverage long transcripts.  The
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.glire.mod"
 TARGET=_blank >glire</A>,
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.primate.mod"
-TARGET=_blank >primate</A>,
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.euarchontoglire.mod"
+TARGET=_blank >euarchontoglire</A>,
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.placental.mod"
 TARGET=_blank >placental</A> and
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phastCons60way/mm10.60way.phastCons.vertebrate.mod"
@@ -344,8 +343,8 @@ The resulting tree models:
 TARGET=_blank>all species</A>,
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.glire.mod"
 TARGET=_blank >glire</A>,
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.primate.mod"
-TARGET=_blank >primate</A>,
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.euarchontoglire.mod"
+TARGET=_blank >euarchontoglire</A>,
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.placental.mod"
 TARGET=_blank >placental</A> and
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/phyloP60way/mm10.phyloP.vertebrate.mod"

@@ -9,22 +9,32 @@ use lib "/cluster/bin/scripts";
 use Encode;
 use HgDb;
 
-unless (scalar(@ARGV) == 2) {
-	
+sub usage {
 	print STDERR<<END;
 usage: encodeQaSqlRelease <release.sql> <sponsor>
 example: encodeQaSqlRelease release.sql wong
 
 END
-
 exit(1);
 }
+
 my $host = `hostname`;
 chomp $host;
 unless ($host eq "hgwbeta") {
 	die "must be run on hgwbeta\n";
 }
+unless (scalar(@ARGV) == 2) {
+	usage()
+}
+
+
 my $in = $ARGV[0];
+unless (-e $in) {
+	print STDERR "file $in does not exist\n";
+	usage()
+
+}
+
 my $sponsor = $ARGV[1];
 my $db = HgDb->new(DB => 'qapushq') or die "die: Can't connect to DB: qapushq\n";
 my $sth = $db->execute("show tables") or die "die: Can't show tables\n";

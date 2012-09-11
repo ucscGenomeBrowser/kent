@@ -505,20 +505,36 @@ sub isTarZipped
 # true if file ends in [.tar.gz] or [.tgz]
 {
     my ($filePath) = @_;
-    return $filePath =~ m/\.(tar\.|t)gz$/;
+    my $fileinfo = `file -iz $filePath`;
+    if ($fileinfo =~ m/tar.*zip/) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 sub isTar
 # true if file ends in [.tar]
 {
     my ($filePath) = @_;
-    return $filePath =~ m/\.tar$/;
+    my $fileinfo = `file -i $filePath`;
+    if ($fileinfo =~ m/tar/) {
+        return 1;
+    } else {
+        return 0;
+    }
+
 }
 
 sub isZipped
 {
     my ($filePath) = @_;
-    return $filePath =~ m/\.gz$/;
+    my $fileinfo = `file -i $filePath`;
+    if ($fileinfo =~ m/zip/) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 sub isControlInput

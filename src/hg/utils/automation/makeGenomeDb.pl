@@ -515,6 +515,12 @@ _EOF_
   # verify no dots allowed in chrom names
   $bossScript->add(<<_EOF_
 
+twoBitDup $db.unmasked.2bit > jkStuff/twoBitDup.txt
+if (`wc -l < jkStuff/twoBitDup.txt` > 0) then
+  echo "ERROR: duplicate sequence found in $db.unmasked.2bit"
+  exit 1
+endif
+
 twoBitInfo $db.unmasked.2bit stdout | sort -k2nr > chrom.sizes
 
 # if no dots in chrom names, should have only one kind of field size:

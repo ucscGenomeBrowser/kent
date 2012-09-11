@@ -2683,6 +2683,7 @@ wait
     export db=geoFor1
     time (find ./exonAA -type f | xargs zcat | gzip -c > $gp.$mz.exonAA.fa.gz)
     time (find ./exonNuc -type f | xargs zcat | gzip -c > $gp.$mz.exonNuc.fa.gz)
+    #   real    6m30.702s
 
     # check how many genes are used:
     zcat xenoRefGene.multiz7way.exonAA.fa.gz | grep geoFor1 \

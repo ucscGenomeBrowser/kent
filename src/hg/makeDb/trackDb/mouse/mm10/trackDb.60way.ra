@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (60 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-subGroup2 clade Clade glire=Glire primate=Primate placental=Placental vert=Vertebrate all=All_species
+subGroup2 clade Clade glire=Glire euarchontoglire=Euarchontoglire placental=Placental all=All_species
 dragAndDrop subTracks
 dimensions dimensionX=clade
 visibility full
@@ -32,11 +32,11 @@ priority 103.29
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault mm10
-        speciesGroups Glire Primate Placental Vertebrate
-        sGroup_Glire rn5 dipOrd1 hetGla2 cavPor3 speTri2 oryCun2 ochPri2 tupBel1
-        sGroup_Primate otoGar3 micMur1 tarSyr1 calJac3 saiBol1 papHam1 rheMac3 nomLeu2 ponAbe2 gorGor3 panTro4 hg19
-        sGroup_Placental pteVam1 myoLuc2 ailMel1 canFam3 felCat5 eriEur1 sorAra1 equCab2 bosTau7 oviAri1 turTru2 vicPac1 susScr3 choHof1 dasNov3 echTel1 triMan1 proCap1 loxAfr3
-        sGroup_Vertebrate macEug2 sarHar1 monDom5 ornAna1 melUnd1 taeGut1 galGal4 melGal1 anoCar2 chrPic1 xenTro3 latCha1 gadMor1 danRer7 gasAcu1 fr3 tetNig2 oreNil2 oryLat2 petMar1
+        speciesGroups Glire Euarchontoglire Placental Vertebrate
+        sGroup_Glire rn5 dipOrd1 hetGla2 cavPor3 speTri2 oryCun2 ochPri2
+        sGroup_Euarchontoglire tupBel1 hg19 panTro4 gorGor3 ponAbe2 nomLeu2 rheMac3 papHam1 calJac3 saiBol1 tarSyr1 micMur1 otoGar3
+        sGroup_Placental susScr3 vicPac1 turTru2 oviAri1 bosTau7 felCat5 canFam3 ailMel1 equCab2 myoLuc2 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 triMan1 dasNov3 choHof1
+        sGroup_Vertebrate monDom5 sarHar1 macEug2 ornAna1 melGal1 galGal4 taeGut1 melUnd1 anoCar2 chrPic1 xenTro3 latCha1 tetNig2 fr3 oreNil2 gasAcu1 oryLat2 gadMor1 danRer7 petMar1
         speciesDefaultOff panTro4 gorGor3 ponAbe2 papHam1 rheMac3 nomLeu2 calJac3 saiBol1 tarSyr1 otoGar3 equCab2 micMur1 dipOrd1 hetGla2 cavPor3 speTri2 ochPri2 eriEur1 felCat5 pteVam1 myoLuc2 ailMel1 turTru2 bosTau7 oviAri1 vicPac1 susScr3 choHof1 echTel1 triMan1 dasNov3 macEug2 sarHar1 melUnd1 taeGut1 melGal1 anoCar2 chrPic1 xenTro3 latCha1 gadMor1 proCap1 tetNig2 oreNil2 fr3 gasAcu1 oryLat2 petMar1
         itemFirstCharCase noChange
         treeImage phylo/mm10_60way.png
@@ -58,9 +58,9 @@ priority 103.29
         longLabel Glire Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.728 1.271
+        type wig -4.346 1.165
         maxHeightPixels 100:50:11
-        viewLimits -3:1.271
+        viewLimits -3:1.17
         autoScale off
         spanList 1
         windowingFunction mean
@@ -68,16 +68,16 @@ priority 103.29
         altColor 70,10,10
         priority 1
 
-        track phyloP60wayPrimate
+        track phyloP60wayEuarchontoGlires
         subTrack cons60wayViewphyloP off
-        subGroups view=phyloP clade=primate
-        shortLabel Primate Cons
-        longLabel Primate Basewise Conservation by PhyloP
+        subGroups view=phyloP clade=euarchontoglire
+        shortLabel Euarch Cons
+        longLabel Euarchontoglire Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -10.633 0.93
+        type wig -12.704 1.753
         maxHeightPixels 100:50:11
-        viewLimits -2.6:0.93
+        viewLimits -3.37:1.753
         autoScale off
         spanList 1
         windowingFunction mean
@@ -92,26 +92,9 @@ priority 103.29
         longLabel Placental Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -9.313 2.099
+        type wig -20 3.296
         maxHeightPixels 100:50:11
-        viewLimits -3:2.099
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 40,40,120
-        altColor 120,40,40
-        priority 3
-
-        track phyloP60wayVertebrate
-        subTrack cons60wayViewphyloP on
-        subGroups view=phyloP clade=vert
-        shortLabel Vertebrate Cons
-        longLabel Vertebrate Basewise Conservation by PhyloP
-        noInherit on
-        configurable on
-        type wig -5.566 4.914
-        maxHeightPixels 100:50:11
-        viewLimits -2.3:2.48
+        viewLimits -3.94:3.296
         autoScale off
         spanList 1
         windowingFunction mean
@@ -128,7 +111,7 @@ priority 103.29
         configurable on
         type wig -20 7.532
         maxHeightPixels 100:50:11
-        viewLimits -4.5:4.5
+        viewLimits -4.5:4.88
         autoScale off
         spanList 1
         windowingFunction mean
@@ -159,11 +142,11 @@ priority 103.29
         altColor 70,10,10
         priority 10
 
-        track phastCons60wayPrimate
+        track phastCons60wayEuarchontoGlires
         subTrack cons60wayViewphastcons off
-        subGroups view=phastcons clade=primate
-        shortLabel Primate Cons
-        longLabel Primate Conservation by PhastCons
+        subGroups view=phastcons clade=euarchontoglire
+        shortLabel Euarch Cons
+        longLabel Euarchontoglire Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -180,22 +163,6 @@ priority 103.29
         subGroups view=phastcons clade=placental
         shortLabel Placental Cons
         longLabel Placental Conservation by PhastCons
-        noInherit on
-        configurable on
-        type wig 0 1
-        maxHeightPixels 100:40:11
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 55,115,55
-        altColor 115,55,55
-        priority 12
-
-        track phastCons60wayVertebrate
-        subTrack cons60wayViewphastcons on
-        subGroups view=phastcons clade=vert
-        shortLabel Vertebrate Cons
-        longLabel Vertebrate Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -240,11 +207,11 @@ priority 103.29
         color 170,50,100
         priority 20
 
-        track phastConsElements60wayPrimate
+        track phastConsElements60wayEuarchontoGlires
         subTrack cons60wayViewelements off
-        subGroups view=elements clade=primate
-        shortLabel Primate El
-        longLabel Primate Conserved Elements
+        subGroups view=elements clade=euarchontoglire
+        shortLabel Euarch El
+        longLabel Euarchontoglire Conserved Elements
         noInherit on
         type bed 5 .
         color 150,40,80
@@ -255,16 +222,6 @@ priority 103.29
         subGroups view=elements clade=placental
         shortLabel Placental El
         longLabel Placental Conserved Elements
-        noInherit on
-        type bed 5 .
-        color 130,30,60
-        priority 22
-
-        track phastConsElements60wayVertebrate
-        subTrack cons60wayViewelements on
-        subGroups view=elements clade=vert
-        shortLabel Vertebrate El
-        longLabel Vertebrate Conserved Elements
         noInherit on
         type bed 5 .
         color 130,30,60

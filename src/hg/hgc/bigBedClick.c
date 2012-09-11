@@ -10,7 +10,7 @@
 #include "hui.h"
 
 static void bigBedClick(char *fileName, struct trackDb *tdb,
-                     char *item, int start, int bedSize)
+                     char *item, int start, int end, int bedSize)
 /* Handle click in generic bigBed track. */
 {
 boolean showUrl = FALSE;
@@ -19,7 +19,7 @@ char *chrom = cartString(cart, "c");
 /* Open BigWig file and get interval list. */
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, winStart, winEnd, 0, lm);
+struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
 /* Get bedSize if it's not already defined. */
 if (bedSize == 0)
@@ -28,33 +28,32 @@ if (bedSize == 0)
     showUrl = TRUE;
     }
 
+
+char *scoreFilter = cartOrTdbString(cart, tdb, "scoreFilter", NULL);
+int minScore = 0;
+if (scoreFilter)
+    minScore = atoi(scoreFilter);
+
 /* Find particular item in list - matching start, and item if possible. */
-struct bigBedInterval *bbMatch = NULL, *bb;
+boolean found = FALSE;
+boolean firstTime = TRUE;
+struct bigBedInterval *bb;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    if (bb->start == start)
-        {
-	if (bedSize > 3)
-	    {
-	    char *name = cloneFirstWordInLine(bb->rest);
-	    boolean match = sameString(name, item);
-	    freez(&name);
-	    if (match)
-	        {
-		bbMatch = bb;
-		break;
-		}
-	    }
-	else
-	    {
-	    bbMatch = bb;
-	    break;
-	    }
+    if (!(bb->start == start && bb->end == end))
+	continue;
+    if (bedSize > 3)
+	{
+	char *name = cloneFirstWordInLine(bb->rest);
+	boolean match = sameString(name, item);
+	freez(&name);
+	if (!match)
+	    continue;
 	}
-    }
 
-if (bbMatch != NULL)
-    {
+    found = TRUE;
+    if (firstTime)
+	printf("<BR>\n");
     int seq1Seq2Fields = 0;
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     boolean seq1Seq2 = sameOk(trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE), "seq1Seq2");
@@ -62,8 +61,8 @@ if (bbMatch != NULL)
 	seq1Seq2Fields = 2;
     char *fields[bedSize+seq1Seq2Fields];
     char startBuf[16], endBuf[16];
-    char *rest = cloneString(bbMatch->rest);
-    int bbFieldCount = bigBedIntervalToRow(bbMatch, chrom, startBuf, endBuf, fields,
+    char *rest = cloneString(bb->rest);
+    int bbFieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
                                            bedSize+seq1Seq2Fields);
     if (bbFieldCount != bedSize+seq1Seq2Fields)
         {
@@ -71,6 +70,8 @@ if (bbMatch != NULL)
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = bedLoadN(fields, bedSize);
+    if (bedSize >= 6 && scoreFilter && bed->score < minScore)
+	continue;
     if (showUrl && (bedSize >= 4))
         printCustomUrl(tdb, item, TRUE);
     bedPrintPos(bed, bedSize, tdb);
@@ -104,8 +105,10 @@ if (bbMatch != NULL)
 	time_t timep = bbiUpdateTime(bbi);
 	printBbiUpdateTime(&timep);
 	}
+
     }
-else
+
+if (!found)
     {
     printf("No item %s starting at %d\n", emptyForNull(item), start);
     }
@@ -115,11 +118,11 @@ bbiFileClose(&bbi);
 }
 
 void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb,
-                     char *item, int start, int bedSize)
+                     char *item, int start, int end, int bedSize)
 /* Handle click in generic bigBed track. */
 {
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-bigBedClick(fileName, tdb, item, start, bedSize);
+bigBedClick(fileName, tdb, item, start, end, bedSize);
 }
 
 void bigBedCustomClick(struct trackDb *tdb)
@@ -128,5 +131,6 @@ void bigBedCustomClick(struct trackDb *tdb)
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
 char *item = cartOptionalString(cart, "i");
 int start = cartInt(cart, "o");
-bigBedClick(fileName, tdb, item, start, 0);
+int end = cartInt(cart, "t");
+bigBedClick(fileName, tdb, item, start, end, 0);
 }

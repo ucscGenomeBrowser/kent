@@ -160,6 +160,8 @@ void makeTitle(char *title, char *helpName)
 /* Print main menu and the title bar. */
 {
 char buf[1024];
+if(!helpName)
+    helpName = "hgNearHelp.html";
 safef(buf, sizeof(buf), "../goldenPath/help/%s", helpName);
 setContextSpecificHelp(buf, NULL);
 cartWebStart(cart, database, "%s", title);
@@ -1603,6 +1605,7 @@ void doGetText(struct sqlConnection *conn, struct column *colList,
 struct genePos *gene;
 struct column *col;
 boolean first = TRUE;
+makeTitle("Gene Sorter Text Output", NULL);
 
 if (geneList == NULL)
     {
@@ -1743,7 +1746,6 @@ else
     if (gp) geneList = getOrderedList(ord, colList, conn, displayCount);
     doMainDisplay(conn, ord, ordList, colList, geneList);
     }
-cartWebEnd();
 }
 
 static struct genePos *curGenePos()
@@ -1792,10 +1794,12 @@ void doColInfo(struct sqlConnection *conn, struct column *colList,
 /* Put up info page on column. */
 {
 struct column *col = findNamedColumn(colName);
+char buf[1024];
 char *htmlFileName;
 if (col == NULL)
     errAbort("Can't find column '%s'", colName);
-hPrintf("<H2>Column %s - %s</H2>\n", col->shortLabel, col->longLabel);
+safef(buf, sizeof(buf), "Column %s - %s", col->shortLabel, col->longLabel);
+makeTitle(buf, NULL);
 htmlFileName = colHtmlFileName(col);
 if (fileExists(htmlFileName))
     {
@@ -1980,6 +1984,7 @@ else
     doExamples(conn, colList);
 hFreeConn(&conn);
 cartRemovePrefix(cart, "near.do.");
+cartWebEnd();
 }
 
 void usage()

@@ -1,12 +1,12 @@
 mkChangeNotes v2
 hg19 wgEncodeOpenChromChip Release 2 vs Release 1
-2012-04-09
+2012-08-22
 
 QA Count Summaries for Release 2:
-Tables: 140
-Files: 441
-Gbdbs: 97
-Supplemental: 0
+Tables: 189
+Files: 604
+Gbdbs: 134
+Supplemental: 5
 Other: 3
 
 REVOKED:
@@ -15,22 +15,22 @@ Files: 4
 Gbdbs: 1
 
 Sizes of New:
-Table: 227 MB
-Files: 83775 MB (82 GB)
-Gbdbs: 40378 MB (39 GB)
+Table: 279 MB
+Files: 253587 MB (248 GB)
+Gbdbs: 151035 MB (147 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 124381 MB (121 GB)
+Total: 404902 MB (395 GB)
 
 
 TABLES:
-New: 26
+New: 75
 Untouched: 114
 Revoked/Replaced/Renamed: 1
-New + Untouched: 140
-Total (New + Untouched + Revoked/Replaced/Renamed): 141
+New + Untouched: 189
+Total (New + Untouched + Revoked/Replaced/Renamed): 190
 
-New Tables (26):
+New Tables (75):
 wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
 wgEncodeOpenChromChipA549CtcfPkRep1
 wgEncodeOpenChromChipA549CtcfSig
@@ -38,6 +38,43 @@ wgEncodeOpenChromChipA549InputSig
 wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
 wgEncodeOpenChromChipA549Pol2PkRep1
 wgEncodeOpenChromChipA549Pol2Sig
+wgEncodeOpenChromChipColonocInputSig
+wgEncodeOpenChromChipGm10248CtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipGm10248CtcfPkRep1
+wgEncodeOpenChromChipGm10248CtcfSigRep1
+wgEncodeOpenChromChipGm10248InputSig
+wgEncodeOpenChromChipGm10266CtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipGm10266CtcfPkRep1
+wgEncodeOpenChromChipGm10266CtcfSigRep1
+wgEncodeOpenChromChipGm10266InputSig
+wgEncodeOpenChromChipGm13976CtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipGm13976CtcfPkRep1
+wgEncodeOpenChromChipGm13976CtcfSigRep1
+wgEncodeOpenChromChipGm13976InputSig
+wgEncodeOpenChromChipGm13977CtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipGm13977CtcfPkRep1
+wgEncodeOpenChromChipGm13977CtcfSigRep1
+wgEncodeOpenChromChipGm13977InputSig
+wgEncodeOpenChromChipGm20000CtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipGm20000CtcfPkRep1
+wgEncodeOpenChromChipGm20000CtcfSigRep1
+wgEncodeOpenChromChipGm20000InputSig
+wgEncodeOpenChromChipHeartocInputSig
+wgEncodeOpenChromChipKidneyocCtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipKidneyocCtcfPkRep1
+wgEncodeOpenChromChipKidneyocCtcfSigRep1
+wgEncodeOpenChromChipKidneyocInputSig
+wgEncodeOpenChromChipLncapCtcfAndroBaseOverlapSignalRep1
+wgEncodeOpenChromChipLncapCtcfAndroPkRep1
+wgEncodeOpenChromChipLncapCtcfAndroSigRep1
+wgEncodeOpenChromChipLncapCtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipLncapCtcfPkRep1
+wgEncodeOpenChromChipLncapCtcfSigRep1
+wgEncodeOpenChromChipLncapInputSig
+wgEncodeOpenChromChipLungocCtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipLungocCtcfPkRep1
+wgEncodeOpenChromChipLungocCtcfSigRep1
+wgEncodeOpenChromChipLungocInputSig
 wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal
 wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1
 wgEncodeOpenChromChipMcf7CmycSerumstimSig
@@ -56,7 +93,19 @@ wgEncodeOpenChromChipMcf7Pol2SerumstimSig
 wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal
 wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1
 wgEncodeOpenChromChipMcf7Pol2SerumstvdSig
+wgEncodeOpenChromChipMedulloCtcfBaseOverlapSignal
+wgEncodeOpenChromChipMedulloCtcfPkRep1
+wgEncodeOpenChromChipMedulloCtcfSig
+wgEncodeOpenChromChipMedulloInputSig
 wgEncodeOpenChromChipMonocd14ro1746InputSig
+wgEncodeOpenChromChipPancreasocCtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipPancreasocCtcfPkRep1
+wgEncodeOpenChromChipPancreasocCtcfSigRep1
+wgEncodeOpenChromChipPancreasocInputSig
+wgEncodeOpenChromChipSpleenocCtcfBaseOverlapSignalRep1
+wgEncodeOpenChromChipSpleenocCtcfPkRep1
+wgEncodeOpenChromChipSpleenocCtcfSigRep1
+wgEncodeOpenChromChipSpleenocInputSig
 
 Untouched Tables (114):
 wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
@@ -179,13 +228,13 @@ wgEncodeOpenChromChipMonocd14InputSig
 
 
 DOWNLOAD FILES:
-New: 93
+New: 256
 Untouched: 348
 Revoked/Replaced/Renamed: 4
-New + Untouched: 441
-Total (New + Untouched + Revoked/Replaced/Renamed): 445
+New + Untouched: 604
+Total (New + Untouched + Revoked/Replaced/Renamed): 608
 
-New Download Files (93):
+New Download Files (256):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549CtcfAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549CtcfAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549CtcfAlnRep2.bam
@@ -208,9 +257,82 @@ New Download Files (93):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549Pol2RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549Pol2RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipA549Pol2Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipColonocInputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipColonocInputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipColonocInputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipColonocInputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248CtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248InputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248InputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248InputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10248InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266CtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266InputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266InputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266InputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm10266InputSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm12878CmycValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm12878CtcfValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm12878Pol2Validation.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976CtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976InputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976InputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976InputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13976InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977CtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977InputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977InputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977InputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm13977InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000CtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000InputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000InputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000InputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipGm20000InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipHeartocInputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipHeartocInputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipHeartocInputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipHeartocInputSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipHelas3CmycValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipHelas3CtcfValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipHelas3Pol2Validation.tgz
@@ -221,6 +343,57 @@ New Download Files (93):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipK562CmycValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipK562CtcfValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipK562Pol2Validation.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocCtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocInputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocInputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocInputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipKidneyocInputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfAndroSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapCtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapInputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapInputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapInputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLncapInputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocCtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocInputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocInputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocInputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipLungocInputSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam
@@ -275,10 +448,49 @@ New Download Files (93):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMcf7Pol2SerumstvdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloCtcfSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloInputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloInputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloInputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMedulloInputSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMonocd14ro1746InputAln.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMonocd14ro1746InputAln.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMonocd14ro1746InputRawData.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipMonocd14ro1746InputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocCtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocInputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocInputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocInputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipPancreasocInputSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfBaseOverlapSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocCtcfSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocInputAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocInputAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocInputRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipSpleenocInputSig.bigWig
 
 Untouched Download Files (348):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/release2/wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
@@ -638,18 +850,46 @@ Revoked/Replaced/Renamed Download Files (4):
 
 
 GBDBS:
-New: 18
+New: 55
 Untouched: 79
 Revoked/Replaced/Renamed: 1
-New + Untouched: 97
-Total (New + Untouched + Revoked/Replaced/Renamed): 98
+New + Untouched: 134
+Total (New + Untouched + Revoked/Replaced/Renamed): 135
 
-New Gbdb Files (18):
+New Gbdb Files (55):
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549CtcfBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549CtcfSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549InputSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549Pol2BaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipA549Pol2Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipColonocInputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm10248CtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm10248CtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm10248InputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm10266CtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm10266CtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm10266InputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm13976CtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm13976CtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm13976InputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm13977CtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm13977CtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm13977InputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm20000CtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm20000CtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipGm20000InputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipHeartocInputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipKidneyocCtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipKidneyocCtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipKidneyocInputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipLncapCtcfAndroBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipLncapCtcfAndroSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipLncapCtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipLncapCtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipLncapInputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipLungocCtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipLungocCtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipLungocInputSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CmycSerumstimSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal.bigWig
@@ -662,7 +902,16 @@ New Gbdb Files (18):
 /gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7Pol2SerumstimSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipMcf7Pol2SerumstvdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMedulloCtcfBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMedulloCtcfSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipMedulloInputSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromChipMonocd14ro1746InputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipPancreasocCtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipPancreasocCtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipPancreasocInputSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipSpleenocCtcfBaseOverlapSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipSpleenocCtcfSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromChipSpleenocInputSig.bigWig
 
 Untouched Gbdb Files (79):
 /gbdb/hg19/bbi/wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
@@ -805,6 +1054,8 @@ wgEncodeOpenChromChipHuvecCtcfValidation
 wgEncodeOpenChromChipK562CmycValidation
 wgEncodeOpenChromChipK562CtcfValidation
 wgEncodeOpenChromChipK562Pol2Validation
+
+
 
 
 No Errors

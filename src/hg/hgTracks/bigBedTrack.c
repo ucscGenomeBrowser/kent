@@ -54,19 +54,13 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
-    if (!(track->limitedVisSet && track->limitedVis == tvDense))
+    int maxItems = maximumTrackItems(track);
+    result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems + 1, lm);
+    if (slCount(result) > maxItems)
 	{
-	int maxItems = maximumTrackItems(track) + 1;
-	result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);
-	if (slCount(result) >= maxItems)
-	    {
-	    track->limitedVis = tvDense;
-	    track->limitedVisSet = TRUE;
-	    result = NULL;
-	    }
-	}
-    if (actualVisibility(track) == tvDense)
-	{
+	track->limitedVis = tvDense;
+	track->limitedVisSet = TRUE;
+	result = NULL;
 	AllocArray(track->summary, insideWidth);
 	if (bigBedSummaryArrayExtended(bbi, chrom, start, end, insideWidth, track->summary))
 	    {

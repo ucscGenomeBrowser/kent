@@ -612,6 +612,7 @@ fileName wgEncodeUwDnaseA20BalbcannMAdult8wksRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
+md5sum a801b57b23653840b742510fe3b8bfb8
 project wgEncode
 replicate 1
 sex M
@@ -635,6 +636,7 @@ fileName wgEncodeUwDnaseA20BalbcannMAdult8wksRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
+md5sum 5c5cdc4accc2920face74166aae935e2
 project wgEncode
 replicate 2
 sex M
@@ -4998,6 +5000,7 @@ fileName wgEncodeUwDnasePatskiSpbl6MImmortalRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
+md5sum ac545b8dddaeb7b7323f56a599f5b692
 project wgEncode
 replicate 1
 sex M
@@ -5021,6 +5024,7 @@ fileName wgEncodeUwDnasePatskiSpbl6MImmortalRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
+md5sum d7c0b20bd89dd670fc005f008cc31cac
 project wgEncode
 replicate 2
 sex M
@@ -5234,6 +5238,7 @@ fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
+md5sum 9e74ee6aece21ba3dbd18aa0f0fd89c5
 project wgEncode
 replicate 1
 sex M

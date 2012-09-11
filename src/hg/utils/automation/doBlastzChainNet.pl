@@ -1108,7 +1108,7 @@ sub getBlastzParams {
   my $o = $defVars{'BLASTZ_O'} || 400;
   my $e = $defVars{'BLASTZ_E'} || 30;
   my $k = $defVars{'BLASTZ_K'} || 3000;
-  my $l = $defVars{'BLASTZ_L'} || 2200;
+  my $l = $defVars{'BLASTZ_L'} || 3000;
   my $h = $defVars{'BLASTZ_H'} || 2000;
   my $blastzOther = '';
   foreach my $var (sort keys %defVars) {

@@ -29,6 +29,10 @@ errAbort(
   "       - exon and CDS\n"
   "       - CDS, five_prime_UTR, three_prime_UTR\n"
   "       - only exon for non-coding\n"
+  "   - top-level gene records with transcript records\n"
+  "   - top-level transcript records\n"
+  "   - transcript records that contain:\n"
+  "       - exon\n"
   "The first step is to parse GFF3 file, up to 50 errors are reported before\n"
   "aborting.  If the GFF3 files is successfully parse, it is converted to gene,\n"
   "annotation.  Up to 50 conversion errors are reported before aborting.\n"
@@ -171,6 +175,16 @@ else
 return gp;
 }
 
+static void outputGenePredAndFree(FILE *gpFh, struct genePred *gp)
+/* validate and output a genePred and free it */
+{
+// output before checking so it can be examined
+genePredTabOut(gp, gpFh);
+if (genePredCheck("GFF3 convert to genePred", stderr, -1, gp) != 0)
+    cnvError("invalid genePred created for: %s", gp->name);
+genePredFree(&gp);
+}
+
 static bool adjacentBlockDiffTypes(struct gff3AnnRef *prevBlk, struct gff3AnnRef *blk)
 /* are two block adjacent and of a different type? prevBlk can be NULL */
 {
@@ -264,6 +278,28 @@ slFreeList(&cdsUtrBlks);
 return gp;  // NULL if error above
 }
 
+static struct genePred *transcriptToGenePred(struct gff3Ann *gene, struct gff3Ann *transcript)
+/* construct a genePred from an transcript record, return NULL if there is an error */
+{
+// allow for only having UTR/CDS children
+struct gff3AnnRef *exons = getChildFeatures(transcript, gff3FeatExon);
+struct genePred *gp = makeGenePred((gene != NULL) ? gene : transcript, transcript, exons, NULL);
+if (gp != NULL)
+    addExons(gp, exons);
+slFreeList(&exons);
+return gp;  // NULL if error above
+}
+
+static void processTranscript(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *transcript, struct hash *processed)
+/* process a transcript node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
+{
+recProcessed(processed, transcript);
+
+struct genePred *gp = transcriptToGenePred(gene, transcript);
+if (gp != NULL)
+    outputGenePredAndFree(gpFh, gp);
+}
+
 static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
 /* process a mRNA node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
 {
@@ -271,13 +307,7 @@ recProcessed(processed, mrna);
 
 struct genePred *gp = mrnaToGenePred(gene, mrna);
 if (gp != NULL)
-    {
-    // output before checking so it can be examined
-    genePredTabOut(gp, gpFh);
-    if (genePredCheck("GFF3 convert to genePred", stderr, -1, gp) != 0)
-        cnvError("invalid genePred created for: %s", gp->name);
-    genePredFree(&gp);
-    }
+    outputGenePredAndFree(gpFh, gp);
 }
 
 static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
@@ -289,11 +319,11 @@ struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
     if (sameString(child->ann->type, gff3FeatMRna) && !isProcessed(processed, child->ann))
-        {
         processMRna(gpFh, gene, child->ann, processed);
-        if (convertErrCnt >= maxConvertErrors)
-            break;
-        }
+    else if (sameString(child->ann->type, gff3FeatTranscript) && !isProcessed(processed, child->ann))
+        processTranscript(gpFh, gene, child->ann, processed);
+    if (convertErrCnt >= maxConvertErrors)
+        break;
     }
 }
 
@@ -306,6 +336,8 @@ if (sameString(node->type, gff3FeatGene))
     processGene(gpFh, node, processed);
 else if (sameString(node->type, gff3FeatMRna))
     processMRna(gpFh, NULL, node, processed);
+else if (sameString(node->type, gff3FeatTranscript))
+    processTranscript(gpFh, NULL, node, processed);
 }
 
 static void gff3ToGenePred(char *inGff3File, char *outGpFile)

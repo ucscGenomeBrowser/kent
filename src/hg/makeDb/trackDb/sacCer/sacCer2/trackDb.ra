@@ -52,3 +52,12 @@ visibility hide
 
 track sgdOther override
 noScoreFilter .
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [A-Z12][-A-Z0-9_)(]+

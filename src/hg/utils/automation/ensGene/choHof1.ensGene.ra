@@ -1,0 +1,5 @@
+# required db variable
+db choHof1
+# need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+geneScaffolds yes
+#	during the loading of the gene pred, skip all invalid genes
