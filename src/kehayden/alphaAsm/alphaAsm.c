@@ -57,7 +57,7 @@ struct monomer
  * streams.  Unlike the wordTree, this is flat, and does not include predecessors. */
     {
     struct monomer *next;	/* Next in list of all words. */
-    char *word;			/* The word itself.  Not allocated here. */
+    char *word;			/* The word used to represent monomer.  Not allocated here. */
     int useCount;		/* Number of times used. */
     int outTarget;		/* Number of times want to output word. */
     int outCount;		/* Number of times have output word so far. */
@@ -81,7 +81,7 @@ struct alphaRead
 /* A read that's been parsed into alpha variants. */
     {
     struct alphaRead *next;	/* Next in list */
-    char *name;			/* Id of read */
+    char *name;			/* Id of read, not allocated here. */
     struct monomerRef *list;	/* List of alpha subunits */
     };
 
@@ -721,6 +721,109 @@ store->readList = readList;
 lineFileClose(&lf);
 }
 
+struct alphaOrphan
+/* Information about an orphan - something without great joining information. */
+    {
+    struct alphaOrphan *next;
+    struct monomer *monomer;
+    struct monomerType *type;
+    };
+
+struct alphaOrphan *findOrphanStarts(struct alphaRead *readList)
+/* Return list of monomers that are found only at start of reads. */
+{
+struct alphaOrphan *orphanList = NULL;
+
+/* Build up hash of things seen later in reads. */
+struct alphaRead *read;
+struct hash *later = hashNew(0);    /* Hash of monomers found later. */
+for (read = readList; read != NULL; read = read->next)
+    {
+    struct monomerRef *ref;
+    for (ref = read->list->next; ref != NULL; ref = ref->next)
+        {
+	hashAdd(later, ref->val->word, NULL);
+	}
+    }
+
+/* Pass through again collecting orphans. */
+struct hash *orphanHash = hashNew(0);
+for (read = readList; read != NULL; read = read->next)
+    {
+    struct monomer *monomer = read->list->val;
+    if (!hashLookup(later, monomer->word))
+        {
+	struct alphaOrphan *orphan = hashFindVal(orphanHash, monomer->word);
+	if (orphan == NULL)
+	    {
+	    AllocVar(orphan);
+	    orphan->monomer = monomer;
+	    slAddHead(&orphanList, orphan);
+	    hashAdd(orphanHash, monomer->word, orphan);
+	    uglyf("Adding orphan start %s\n", monomer->word);
+	    }
+	else uglyf("Repeating orphan start %s\n", monomer->word);
+	}
+    }
+hashFree(&later);
+hashFree(&orphanHash);
+slReverse(&orphanList);
+return orphanList;
+}
+
+struct alphaOrphan *findOrphanEnds(struct alphaRead *readList)
+/* Return list of monomers that are found only at end of reads. */
+{
+struct alphaOrphan *orphanList = NULL;
+
+/* Build up hash of things seen sooner in reads. */
+struct alphaRead *read;
+struct hash *sooner = hashNew(0);    /* Hash of monomers found sooner. */
+for (read = readList; read != NULL; read = read->next)
+    {
+    struct monomerRef *ref;
+    /* Loop over all but last. */
+    for (ref = read->list; ref->next != NULL; ref = ref->next)
+        {
+	hashAdd(sooner, ref->val->word, NULL);
+	}
+    }
+
+/* Pass through again collecting orphans. */
+struct hash *orphanHash = hashNew(0);
+for (read = readList; read != NULL; read = read->next)
+    {
+    struct monomerRef *lastRef = slLastEl(read->list);
+    struct monomer *monomer = lastRef->val;
+    if (!hashLookup(sooner, monomer->word))
+        {
+	struct alphaOrphan *orphan = hashFindVal(orphanHash, monomer->word);
+	if (orphan == NULL)
+	    {
+	    AllocVar(orphan);
+	    orphan->monomer = monomer;
+	    slAddHead(&orphanList, orphan);
+	    hashAdd(orphanHash, monomer->word, orphan);
+	    uglyf("Adding orphan end %s\n", monomer->word);
+	    }
+	else uglyf("Repeating orphan end %s\n", monomer->word);
+	}
+    }
+hashFree(&sooner);
+slReverse(&orphanList);
+hashFree(&orphanHash);
+return orphanList;
+}
+
+void matchUpOrphans(struct alphaStore *store)
+/* Make up fake reads that integrate orphans (monomers only found at beginning or end
+ * of a read) better. */
+{
+struct alphaOrphan *orphanStarts = findOrphanStarts(store->readList);
+struct alphaOrphan *orphanEnds = findOrphanEnds(store->readList);
+uglyf("orphanStarts has %d items, orphanEnds %d\n", slCount(orphanStarts), slCount(orphanEnds));
+}
+
 void makeMarkovChains(struct alphaStore *store)
 /* Return a alphaStore containing all words, and also all chains-of-words of length 
  * chainSize seen in file.  */
@@ -851,9 +954,9 @@ void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
 struct alphaStore *store = alphaStoreNew(maxChainSize);
 alphaReadListFromFile(readsFile, store);
 makeMarkovChains(store);
-// struct alphaStore *store = alphaStoreForChainsInFile(readsFile, maxChainSize);
 struct wordTree *wt = store->markovChains;
 alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
+matchUpOrphans(store);
 alphaStoreNormalize(store, outSize);
 
 if (optionExists("chain"))
