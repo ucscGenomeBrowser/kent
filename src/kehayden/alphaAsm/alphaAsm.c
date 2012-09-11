@@ -61,6 +61,8 @@ struct monomer
     int useCount;		/* Number of times used. */
     int outTarget;		/* Number of times want to output word. */
     int outCount;		/* Number of times have output word so far. */
+    struct monomerType *type;	/* The type of the monomer. */
+    struct slRef *readList;	/* List of references to reads this is in. */
     };
 
 struct monomerRef
@@ -74,6 +76,7 @@ struct monomerType
 /* A collection of words of the same type - or monomers of same type. */
     {
     struct monomerType *next;   /* Next monomerType */
+    char *name;			/* Short name of type */
     struct monomerRef *list;	    /* List of all words of that type */
     };
 
@@ -96,6 +99,8 @@ struct alphaStore
     int maxChainSize;		/* Maximum depth of tree. */
     struct monomerType *typeList;	/* List of all types. */
     struct hash *typeHash;	/* Hash with monomerType values, keyed by all words. */
+    int typeCount;		/* Count of types. */
+    struct monomerType **typeArray;  /* Array as opposed to list of types */
     };
 
 /* The wordTree structure below is the central data structure for this program.  It is
@@ -681,6 +686,21 @@ monomer->useCount += 1;
 return monomer;
 }
 
+void connectReadsToMonomers(struct alphaStore *store)
+/* Add each read monomer appears in to monomer's readList. */
+{
+struct alphaRead *read;
+for (read = store->readList; read != NULL; read = read->next)
+    {
+    struct monomerRef *ref;
+    for (ref = read->list; ref != NULL; ref = ref->next)
+        {
+	struct monomer *monomer = ref->val;
+	refAdd(&monomer->readList, read);
+	}
+    }
+}
+
 void alphaReadListFromFile(char *fileName, struct alphaStore *store)
 /* Read in file and turn it into a list of alphaReads. */
 {
@@ -719,6 +739,7 @@ while (lineFileNextReal(lf, &line))
 slReverse(&readList);
 store->readList = readList;
 lineFileClose(&lf);
+connectReadsToMonomers(store);
 }
 
 struct alphaOrphan
@@ -729,7 +750,7 @@ struct alphaOrphan
     struct monomerType *type;
     };
 
-struct alphaOrphan *findOrphanStarts(struct alphaRead *readList)
+struct alphaOrphan *findOrphanStarts(struct alphaRead *readList, struct alphaStore *store)
 /* Return list of monomers that are found only at start of reads. */
 {
 struct alphaOrphan *orphanList = NULL;
@@ -751,18 +772,30 @@ struct hash *orphanHash = hashNew(0);
 for (read = readList; read != NULL; read = read->next)
     {
     struct monomer *monomer = read->list->val;
-    if (!hashLookup(later, monomer->word))
+    char *word = monomer->word;
+    if (!hashLookup(later, word))
         {
-	struct alphaOrphan *orphan = hashFindVal(orphanHash, monomer->word);
+	struct alphaOrphan *orphan = hashFindVal(orphanHash, word);
 	if (orphan == NULL)
 	    {
 	    AllocVar(orphan);
 	    orphan->monomer = monomer;
 	    slAddHead(&orphanList, orphan);
-	    hashAdd(orphanHash, monomer->word, orphan);
-	    uglyf("Adding orphan start %s\n", monomer->word);
+	    hashAdd(orphanHash, word, orphan);
+	    uglyf("Adding orphan start %s\n", word);
 	    }
-	else uglyf("Repeating orphan start %s\n", monomer->word);
+
+	/* Try and find orphan type by consulting either itself or previous items in read. */
+	if (orphan->type == NULL)
+	    {
+	    struct monomerType *type = monomer->type;
+	    if (type == NULL) 
+	        {
+		uglyf("Can't find type for %s\n", word);
+		}
+	    else uglyf("%s is type %s\n", word, type->name);
+	    orphan->type = type;
+	    }
 	}
     }
 hashFree(&later);
@@ -771,7 +804,7 @@ slReverse(&orphanList);
 return orphanList;
 }
 
-struct alphaOrphan *findOrphanEnds(struct alphaRead *readList)
+struct alphaOrphan *findOrphanEnds(struct alphaRead *readList, struct alphaStore *store)
 /* Return list of monomers that are found only at end of reads. */
 {
 struct alphaOrphan *orphanList = NULL;
@@ -819,8 +852,8 @@ void matchUpOrphans(struct alphaStore *store)
 /* Make up fake reads that integrate orphans (monomers only found at beginning or end
  * of a read) better. */
 {
-struct alphaOrphan *orphanStarts = findOrphanStarts(store->readList);
-struct alphaOrphan *orphanEnds = findOrphanEnds(store->readList);
+struct alphaOrphan *orphanStarts = findOrphanStarts(store->readList, store);
+struct alphaOrphan *orphanEnds = findOrphanEnds(store->readList, store);
 uglyf("orphanStarts has %d items, orphanEnds %d\n", slCount(orphanStarts), slCount(orphanEnds));
 }
 
@@ -897,21 +930,27 @@ carefulClose(&f);
 }
 
 void alphaStoreLoadMonomerOrder(struct alphaStore *store, char *readsFile, char *fileName)
-/* Read in a file with one line for each monomer type, containing a word for each
- * monomer variant.  Requires all variants already be in store.  The readsFile is passed
+/* Read in a file with one line for each monomer type, where first word is type name,
+ * and rest of words are all the actually variants of that type.
+ * Requires all variants already be in store.  The readsFile is passed
  * just for nicer error reporting. */
 {
 /* Stuff for processing file a line at a time. */
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
+struct hash *uniq = hashNew(0);
 
 /* Set up variables we'll put results in in store. */
 store->typeList = NULL;
 
 while (lineFileNextReal(lf, &line))
     {
+    char *name = nextWord(&line);
+    if (hashLookup(uniq, name) != NULL)
+        errAbort("Type name '%s' repeated line %d of %s\n", name, lf->lineIx, lf->fileName);
     struct monomerType *type;
     AllocVar(type);
+    type->name = cloneString(name);
     slAddHead(&store->typeList, type);
     while ((word = nextWord(&line)) != NULL)
         {
@@ -927,8 +966,17 @@ while (lineFileNextReal(lf, &line))
     }
 slReverse(&store->typeList);
 lineFileClose(&lf);
+hashFree(&uniq);
 verbose(2, "Added %d types containing %d words from %s\n", 
     slCount(store->typeList), store->typeHash->elCount, fileName);
+
+/* Create type array */
+store->typeCount = slCount(store->typeList);
+struct monomerType **types = AllocArray(store->typeArray, store->typeCount);
+struct monomerType *type;
+int i;
+for (i=0, type = store->typeList; i<store->typeCount; ++i, type = type->next)
+    types[i] = type;
 }
 
 void monomerListNormalise(struct monomer *list, int totalCount, int outputSize)
@@ -948,6 +996,128 @@ wordTreeNormalize(wt, outputSize, 1.0);
 monomerListNormalise(store->monomerList, wt->useCount, outputSize);
 }
 
+struct monomerType *fillInTypeFromReads(struct monomer *monomer, struct alphaStore *store)
+/* Look through read list trying to find best supported type for this monomer. */
+{
+/* The algorithm here could be better.  It picks the closest nearby monomer that is typed
+ * to fill in from.  When have information from both before and after uses arbitrarily 
+ * before preferentially.  When have information that is equally close from multiple reads,
+ * just uses info from first read.  Fortunately the data, at least on Y, shows a lot of
+ * consistency, so probably not actually worth a more sophisticated algorithm that could
+ * take the most popular choice if data were inconsistent. */
+verbose(2, "fillInTypeFromReads on %s from %d reads\n", monomer->word, slCount(monomer->readList));
+struct monomerType *bestType = NULL;
+int bestPos = 0;
+boolean bestIsAfter = FALSE;
+struct slRef *readRef;
+for (readRef = monomer->readList; readRef != NULL; readRef = readRef->next)
+    {
+    struct alphaRead *read = readRef->val;
+    struct monomerRef *ref;
+	{
+	verbose(2, "  read %s (%d els):", read->name, slCount(read->list));
+	for (ref = read->list; ref != NULL; ref = ref->next)
+	    {
+	    struct monomer *m = ref->val;
+	    verbose(2, " %s", m->word);
+	    }
+	verbose(2, "\n");
+	}
+    struct monomerType *beforeType = NULL;
+    int beforePos = 0;
+
+    /* Look before. */
+    for (ref = read->list; ref != NULL; ref = ref->next)
+        {
+	struct monomer *m = ref->val;
+	if (m == monomer)
+	     break;
+	if (m->type != NULL)
+	    {
+	    beforeType = m->type;
+	    beforePos = 0;
+	    }
+	++beforePos;
+	}
+
+    /* Look after. */
+    struct monomerType *afterType = NULL;
+    int afterPos = 0;
+    assert(ref != NULL && ref->val == monomer);   
+    for (ref = ref->next; ref != NULL; ref = ref->next)
+        {
+	struct monomer *m = ref->val;
+	++afterPos;
+	if (m->type != NULL)
+	    {
+	    afterType = m->type;
+	    break;
+	    }
+	}
+
+    if (beforeType != NULL)
+        {
+	if (bestType == NULL || beforePos < bestPos)
+	    {
+	    bestType = beforeType;
+	    bestPos = beforePos;
+	    bestIsAfter = FALSE;
+	    }
+	}
+
+    if (afterType != NULL)
+        {
+	if (bestType == NULL || afterPos < bestPos)
+	    {
+	    bestType = afterType;
+	    bestPos = afterPos;
+	    bestIsAfter = TRUE;
+	    }
+	}
+    }
+
+struct monomerType *chosenType = NULL;
+if (bestType != NULL)
+    {
+    int bestIx = ptArrayIx(bestType, store->typeArray, store->typeCount);
+    if (bestIsAfter)
+        {
+	bestIx -= bestPos;
+	if (bestIx < 0)
+	    bestIx += store->typeCount;
+	}
+    else
+        {
+	bestIx += bestPos;
+	if (bestIx > store->typeCount)
+	     bestIx -= store->typeCount;
+	}
+    chosenType = store->typeArray[bestIx];
+    }
+
+return chosenType;
+}
+
+void fillInTypes(struct alphaStore *store)
+/* We have types for most but not all monomers. Try and fill out types for most of
+ * the rest by looking for position in reads they are in that do contain known types */
+{
+/* Do first pass on ones defined - just have to look them up in hash. */
+struct monomer *monomer;
+for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
+    monomer->type = hashFindVal(store->typeHash, monomer->word);
+
+/* Do second pass on ones that are not yet defined */
+for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
+    {
+    if (monomer->type == NULL)
+	{
+	struct monomerType *type = monomer->type = fillInTypeFromReads(monomer, store);
+	verbose(2, "Got %p %s\n", type, (type != NULL ? type->name : "n/a"));
+	}
+    }
+}
+
 void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
 /* alphaAsm - Create Markov chain of words and optionally output chain in two formats. */
 {
@@ -956,6 +1126,7 @@ alphaReadListFromFile(readsFile, store);
 makeMarkovChains(store);
 struct wordTree *wt = store->markovChains;
 alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
+fillInTypes(store);
 matchUpOrphans(store);
 alphaStoreNormalize(store, outSize);
 
