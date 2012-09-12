@@ -54,7 +54,7 @@
 #define MAXPIXELS 14000
 #endif
 
-#define BIGBEDMAXIMUMITEMS 500
+#define BIGBEDMAXIMUMITEMS 3000
 
 struct track
 /* Structure that displays of tracks. The central data structure
