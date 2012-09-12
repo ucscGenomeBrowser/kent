@@ -1207,11 +1207,11 @@ void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
 {
 struct alphaStore *store = alphaStoreNew(maxChainSize);
 alphaReadListFromFile(readsFile, store);
-makeMarkovChains(store);
-struct wordTree *wt = store->markovChains;
 alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
 fillInTypes(store);
 integrateOrphans(store);
+makeMarkovChains(store);
+struct wordTree *wt = store->markovChains;
 alphaStoreNormalize(store, outSize);
 
 if (optionExists("chain"))
