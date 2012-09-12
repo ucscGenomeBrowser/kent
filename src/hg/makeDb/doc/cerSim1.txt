@@ -84,8 +84,8 @@ http://upload.wikimedia.org/wikipedia/commons/3/3c/Ceratotherium_simum_Kruger_Pa
     # obtain a template for this from the source tree:
     # kent/src/hg/utils/automation/configFiles/
     # and check it back into the source tree when completed here:
-    cd /hive/data/genomes/geoFor1
-    cat << '_EOF_' > geoFor1.config.ra
+    cd /hive/data/genomes/cerSim1
+    cat << '_EOF_' > cerSim1.config.ra
 # Config parameters for makeGenomeDb.pl:
 db cerSim1
 clade mammal
@@ -129,21 +129,20 @@ taxId 73337
     #	browser should function now
 
 ##########################################################################
-# running repeat masker (DONE - 2012-07-26 - Hiram)
+# running repeat masker (DONE - 2012-08-28 - Hiram)
     mkdir /hive/data/genomes/cerSim1/bed/repeatMasker
     cd /hive/data/genomes/cerSim1/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek cerSim1 > do.log 2>&1 &
-    #   real     50m40.986s
-XXX - finished ! - checking with Robert Hubley about this
+    #   real    444m31.442s
 
     cat faSize.rmsk.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 981275330 upper
-    #           60010699 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %5.63 masked total, %5.76 masked real
+    #   2464367180 bases (97509168 N's 2366858012 real 1448944781
+    #   upper 917913231 lower) in 3087 sequences in 1 files
+    #   Total size: mean 798304.9 sd 4912716.1 min 1000 (AKZM01057813)
+    #   max 79733107 (JH767723) median 2106
+    #   %37.25 masked total, %38.78 masked real
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
@@ -151,7 +150,7 @@ XXX - finished ! - checking with Robert Hubley about this
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
     featureBits -countGaps cerSim1 rmsk
-    #   60063362 bases of 1065292181 (5.638%) in intersection
+    #   918443203 bases of 2464367180 (37.269%) in intersection
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -164,81 +163,85 @@ XXX - finished ! - checking with Robert Hubley about this
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	cerSim1 > do.log 2>&1 &
-    #   real    9m46.133s
+    #   real    11m58.961s
 
     cat fb.simpleRepeat
-    #   22565360 bases of 2129659933 (1.060%) in intersection
+    #   23369813 bases of 2366858012 (0.987%) in intersection
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2012-07-26 - Hiram)
+#	(DONE - 2012-08-28 - Hiram)
     mkdir /hive/data/genomes/cerSim1/bed/gap
     cd /hive/data/genomes/cerSim1/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../cerSim1.unmasked.2bit > findMotif.txt 2>&1
-    #   real    0m29.584s
+    #   real    1m7.343s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits cerSim1 -not gap -bed=notGap.bed
-    #   2129659933 bases of 2129659933 (100.000%) in intersection
-    #   real    0m16.373s
+    #   2366858012 bases of 2366858012 (100.000%) in intersection
+    #   real    0m12.510s
+
 
     # can see now if allGaps.bed actually is all the gaps:
     hgsql -N -e "select size from gap;" cerSim1 | ave stdin | grep total
-# total 44599955.000000
+# total 97509168.000000
     ave -col=5 allGaps.bed | grep total
-# total 45539765.000000
-    # not the same count, not all gaps are marked
+# total 97509168.000000
+    # same count, all gaps are marked
 
-    time featureBits cerSim1 allGaps.bed notGap.bed -bed=new.gaps.bed
-    #   939810 bases of 2129659933 (0.044%) in intersection
-    #   real    44m59.537s
-XXX - ready to continue this
-
-    # check if any non-bridged gaps here:
+    # check if any non-bridged gaps here (looking for 'no'):
     hgsql -N -e "select bridge from gap;" cerSim1 | sort | uniq -c
-    #  68589 yes
+    #  54737 yes
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2012-07-26 - Hiram)
+## WINDOWMASKER (DONE - 2012-08-28 - Hiram)
     mkdir /hive/data/genomes/cerSim1/bed/windowMasker
     cd /hive/data/genomes/cerSim1/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev cerSim1 > do.log 2>&1 &
-XXX - running - Tue Aug 28 07:57:24 PDT 2012
-    #   real    56m40.276s
+    #   real    188m18.153s
 
     # Masking statistics
      cat faSize.cerSim1.wmsk.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 840644896 upper
-    #           200641133 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %18.83 masked total, %19.27 masked real
+    #   2464367180 bases (97509168 N's 2366858012 real 1667189438 upper
+    #   699668574 lower) in 3087 sequences in 1 files
+    #   Total size: mean 798304.9 sd 4912716.1 min 1000 (AKZM01057813)
+    #   max 79733107 (JH767723) median 2106
+    #   %28.39 masked total, %29.56 masked real
 
     cat faSize.cerSim1.wmsk.sdust.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833616540 upper
-    #           207669489 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.49 masked total, %19.94 masked real
+    #   2464367180 bases (97509168 N's 2366858012 real 1654019560 upper
+    #   712838452 lower) in 3087 sequences in 1 files
+    #   Total size: mean 798304.9 sd 4912716.1 min 1000 (AKZM01057813)
+    #   max 79733107 (JH767723) median 2106
+    #   %28.93 masked total, %30.12 masked real
 
     cat faSize.cerSim1.cleanWMSdust.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833616540 upper
-    #           207669489 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.49 masked total, %19.94 masked real
+    #   2464367180 bases (97509168 N's 2366858012 real 1654019560 upper
+    #   712838452 lower) in 3087 sequences in 1 files
+    #   Total size: mean 798304.9 sd 4912716.1 min 1000 (AKZM01057813)
+    #   max 79733107 (JH767723) median 2106
+    #   %28.93 masked total, %30.12 masked real
 
     cat fb.cerSim1.windowmaskerSdust.clean.txt
-    #   207669489 bases of 1065292181 (19.494%) in intersection
+    #   712838452 bases of 2464367180 (28.926%) in intersection
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps cerSim1 rmsk windowmaskerSdust
-    #   32967187 bases of 1065292181 (3.095%) in intersection
+    #   382474428 bases of 2464367180 (15.520%) in intersection
 
 ##########################################################################
-# add simpleRepeats to WindowMasker result (DONE - 2012-07-26 - Hiram)
-    # add to rmsk after it is done:
+# add simpleRepeats to either WindowMasker or RepeatMasker to make masked 2bit
+#       usually use the one that has the more masking
+#       (DONE - 2012-08-31 - Hiram)
+    cd /hive/data/genomes/cerSim1
+    # add to rmsk after RM run is done:
+    twoBitMask cerSim1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed cerSim1.2bit
+    twoBitToFa cerSim1.2bit stdout | faSize stdin > faSize.cerSim1.2bit.txt
+    #	you can safely ignore the warning about fields >= 13
+
+    # or after WM run is done:
     cd /hive/data/genomes/cerSim1
     twoBitMask -add bed/windowMasker/cerSim1.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed cerSim1.2bit
@@ -246,64 +249,69 @@ XXX - running - Tue Aug 28 07:57:24 PDT 2012
 
     twoBitToFa cerSim1.2bit stdout | faSize stdin > faSize.cerSim1.2bit.txt
     cat faSize.cerSim1.2bit.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833083628 upper
-    #           208202401 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.54 masked total, %19.99 masked real
+    #   2464367180 bases (97509168 N's 2366858012 real 1448462731
+    #   upper 918395281 lower) in 3087 sequences in 1 files
+    #   Total size: mean 798304.9 sd 4912716.1 min 1000 (AKZM01057813)
+    #   max 79733107 (JH767723) median 2106
+    #   %37.27 masked total, %38.80 masked real
 
     rm /gbdb/cerSim1/cerSim1.2bit
     ln -s `pwd`/cerSim1.2bit /gbdb/cerSim1/cerSim1.2bit
 
 ##########################################################################
-# cpgIslands - (DONE - 2012-07-26 - Hiram)
+# cpgIslands - (DONE - 2012-08-31 - Hiram)
     mkdir /hive/data/genomes/cerSim1/bed/cpgIslands
     cd /hive/data/genomes/cerSim1/bed/cpgIslands
     time doCpgIslands.pl cerSim1 > do.log 2>&1
-    #   real    17m6.876s
+    #   real    6m13s
 
     cat fb.cerSim1.cpgIslandExt.txt
-    #   5087816 bases of 1041286029 (0.489%) in intersection
+    #   22364010 bases of 2366858012 (0.945%) in intersection
 
 #########################################################################
-# genscan - (DONE - 2012-07-26 - Hiram)
+# genscan - (DONE - 2012-09-05 - Hiram)
     mkdir /hive/data/genomes/cerSim1/bed/genscan
     cd /hive/data/genomes/cerSim1/bed/genscan
     time doGenscan.pl cerSim1 > do.log 2>&1
-    #   real    31m32.788s
-# Completed: 27239 of 27239 jobs
-# CPU time in finished jobs:         28s       0.47m     0.01h    0.00d  0.000 y
-# IO & Wait Time:                 96830s    1613.83m    26.90h    1.12d  0.003 y
-# Average job time:                   4s       0.06m     0.00h    0.00d
-# Longest finished job:              16s       0.27m     0.00h    0.00d
-# Submission to last job:           154s       2.57m     0.04h    0.00d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # one broken job:
+# ./runGsBig.csh JH767732 000 gtf/000/JH767732.gtf pep/000/JH767732.pep subopt/000/JH767732.bed
+    # reset the window size to 200000 and run:
+    time ./lastOne.csh JH767732 000 gtf/000/JH767732.gtf pep/000/JH767732.pep subopt/000/JH767732.bed
+# Completed: 3086 of 3087 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      49072s     817.87m    13.63h    0.57d  0.002 y
+# IO & Wait Time:                 13542s     225.70m     3.76h    0.16d  0.000 y
+# Average job time:                  20s       0.34m     0.01h    0.00d
+# Longest finished job:            1738s      28.97m     0.48h    0.02d
+# Submission to last job:          2708s      45.13m     0.75h    0.03d
+    #   real    12m35.518s
+    time doGenscan.pl -continue=makeBed cerSim1 > makeBed.log 2>&1
+    #   real    3m19.120s
 
     cat fb.cerSim1.genscan.txt
-    #   18118133 bases of 1041286029 (1.740%) in intersection
+    #   55376418 bases of 2366858012 (2.340%) in intersection
     cat fb.cerSim1.genscanSubopt.txt
-    #   22582067 bases of 1041286029 (2.169%) in intersection
+    #   54875625 bases of 2366858012 (2.319%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-07-26 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-08-31 - Hiram)
     # Use -repMatch=400, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 1041286029 / 2897316137 \) \* 1024
-    #   ( 1041286029 / 2897316137 ) * 1024 = 368.022281
+    calc \( 2366858012 / 2897316137 \) \* 1024
+    #   ( 2366858012 / 2897316137 ) * 1024 = 836.519900
 
-    # round up to 400 (melUnd1 was also 400)
+    # round up to 850 (equCab2 was 825)
 
     cd /hive/data/genomes/cerSim1
     time blat cerSim1.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/cerSim1.11.ooc -repMatch=400
-    #   Wrote 14450 overused 11-mers to jkStuff/cerSim1.11.ooc
-    #   real    0m32.689s
-    #   melUnd1 was: Wrote 14287 overused 11-mers to jkStuff/melUnd1.11.ooc
+      -makeOoc=jkStuff/cerSim1.11.ooc -repMatch=850
+    #   Wrote 22623 overused 11-mers to jkStuff/cerSim1.11.ooc
+    #   real    1m46.942s
 
     # there are no non-bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" cerSim1 | sort | uniq -c
-    #   68589 yes
+    #   54737 yes
 #    cd /hive/data/genomes/cerSim1/jkStuff
 #    gapToLift cerSim1 cerSim1.nonBridged.lift -bedFile=cerSim1.nonBridged.bed
     # largest non-bridged contig:
@@ -311,28 +319,28 @@ XXX - running - Tue Aug 28 07:57:24 PDT 2012
     #   123773608 chrX  95534   123869142       chrX.01
 
 #########################################################################
-# AUTO UPDATE GENBANK (DONE - 2012-07-26 - Hiram)
+# AUTO UPDATE GENBANK (DONE - 2012-08-31 - Hiram)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Geospiza fortis	1	0	0
+# Ceratotherium simum     12      0       0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
     ssh hgwdev  
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # edit etc/genbank.conf to add cerSim1 just after ce2
-# cerSim1 (Medium Ground Finch - Darwin finch)
+    # edit etc/genbank.conf to add cerSim1 just after equCab1
+# cerSim1 (Ceratotherium simum - White Rhino)
 cerSim1.serverGenome = /hive/data/genomes/cerSim1/cerSim1.2bit
 cerSim1.clusterGenome = /hive/data/genomes/cerSim1/cerSim1.2bit
 cerSim1.ooc = /hive/data/genomes/cerSim1/jkStuff/cerSim1.11.ooc
 cerSim1.lift = no
-cerSim1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-cerSim1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-cerSim1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-cerSim1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-cerSim1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+cerSim1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+cerSim1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+cerSim1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+cerSim1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+cerSim1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 cerSim1.refseq.mrna.native.load = no
 cerSim1.refseq.mrna.xeno.load = yes
 cerSim1.genbank.mrna.xeno.load = no
@@ -341,13 +349,13 @@ cerSim1.downloadDir = cerSim1
 cerSim1.perChromTables = no
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding cerSim1 medium ground finch" etc/genbank.conf
+    git commit -m "adding cerSim1 white rhino redmine 8752" etc/genbank.conf
     git push
     make etc-update
 
     git pull
     # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "adding definition for geoForNames" src/lib/gbGenome.c
+    git commit -m "adding definition for cerSimNames white rhino redmine 8752" src/lib/gbGenome.c
     git push
     make install-server
 
@@ -355,17 +363,18 @@ cerSim1.perChromTables = no
     screen -S cerSim1           # long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial cerSim1 &
-    #   var/build/logs/2012.07.26-22:50:11.cerSim1.initalign.log
-    #   real    175m22.294s
+    #   var/build/logs/2012.08.31-14:22:23.cerSim1.initalign.log
+    #   real    162m56.210s
+
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad cerSim1 &
-    #   real    9m57.487s
-    #   var/dbload/hgwdev/logs/2012.07.27-14:05:35.dbload.log
+    #   real    28m9.256s
+    #   var/dbload/hgwdev/logs/2012.09.05-15:21:50.dbload.log
 
     # check the end of that dbload.log to see if it was successful
-    #   hgwdev 2012.07.27-14:15:33 dbload: finish
+    #   hgwdev 2012.09.05-15:49:59 dbload: finish
 
     # enable daily alignment and update of hgwdev (DONE - 2012-05-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
@@ -376,6 +385,7 @@ cerSim1.perChromTables = no
     git push
     make etc-update
 
+XXX - ready to continue - Wed Sep  5 16:12:53 PDT 2012
 #########################################################################
 # set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
     hgsql -e \
