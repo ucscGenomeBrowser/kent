@@ -6451,7 +6451,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL3978
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002283
@@ -6476,7 +6476,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL3978
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002283
@@ -6501,7 +6501,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL3978
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002283
@@ -6602,7 +6602,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL6020
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002284
@@ -6628,7 +6628,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL6020
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002284
@@ -6654,7 +6654,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL6020
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-18
 dateUnrestricted 2012-04-18
 dccAccession wgEncodeEH002284
@@ -31353,7 +31353,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH001579
@@ -31379,7 +31379,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH001579
@@ -31405,7 +31405,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH001579
@@ -31433,7 +31433,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH001579
@@ -56496,7 +56496,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001580
@@ -56522,7 +56522,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001580
@@ -56548,7 +56548,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001580
@@ -56576,7 +56576,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001580
@@ -58868,7 +58868,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001581
@@ -58894,7 +58894,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001581
@@ -58920,7 +58920,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001581
@@ -58948,7 +58948,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001581
@@ -59520,7 +59520,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH001585
@@ -59546,7 +59546,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH001585
@@ -59572,7 +59572,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH001585
@@ -59600,7 +59600,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH001585
@@ -61178,7 +61178,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH001578
@@ -61204,7 +61204,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH001578
@@ -61230,7 +61230,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH001578
@@ -61258,7 +61258,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH001578
@@ -62028,7 +62028,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001582
@@ -62054,7 +62054,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001582
@@ -62080,7 +62080,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001582
@@ -62108,7 +62108,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001582
@@ -63082,7 +63082,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001583
@@ -63108,7 +63108,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001583
@@ -63134,7 +63134,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001583
@@ -63162,7 +63162,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001583
@@ -63296,7 +63296,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001584
@@ -63323,7 +63323,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001584
@@ -63350,7 +63350,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001584
@@ -63379,7 +63379,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion ENCODE Jan 2011. Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH001584
@@ -82836,4 +82836,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 826114788
+# MAGIC: 483848688

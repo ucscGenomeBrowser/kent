@@ -252,22 +252,22 @@ hPrintf("%s", description);
 freez(&description);
 
 /* print genome position and size */
-char asciiNumber[1024];
-hPrintf("<B>Transcription Chromosome:</B> %s\n", curGeneChrom);
-hPrintf("&nbsp;&nbsp;<B>Strand:</B> %s\n", curGenePred->strand);
-sprintLongWithCommas(asciiNumber, (long long)curGeneEnd - curGeneStart);
-hPrintf("&nbsp;&nbsp;<B>Size:</B> %s\n", asciiNumber);
-sprintLongWithCommas(asciiNumber, (long long) curGeneStart);
-hPrintf("&nbsp;&nbsp;<B>Start:</B> %s\n", asciiNumber);
-sprintLongWithCommas(asciiNumber, (long long)curGeneEnd);
-hPrintf("&nbsp;&nbsp;<B>End:</B> %s\n", asciiNumber);
-
-/* print exon count(s) */
+char buffer[1024];
+char *commaPos;
+   
 exonCnt = curGenePred->exonCount;
-hPrintf("&nbsp;&nbsp;<B>Exon Count:</B> %d\n", exonCnt);
+safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEnd);
+commaPos = addCommasToPos(database, buffer);
 
-cdsStart= curGenePred->cdsStart;
-cdsEnd  = curGenePred->cdsEnd;
+hPrintf("<B>Transcript (Including UTRs):</B><br>\n");
+hPrintf("<B>Position:</B>&nbsp%s&nbsp",commaPos);
+sprintLongWithCommas(buffer, (long long)curGeneEnd - curGeneStart);
+hPrintf("<B>Size:</B>&nbsp%s&nbsp", buffer);
+hPrintf("<B>Total Exon Count:</B>&nbsp%d&nbsp", exonCnt);
+hPrintf("<B>Strand:</B>&nbsp%s<br>\n",curGenePred->strand);
+
+cdsStart = curGenePred->cdsStart;
+cdsEnd = curGenePred->cdsEnd;
 
 /* count CDS exons */
 if (cdsStart < cdsEnd)
@@ -278,16 +278,13 @@ if (cdsStart < cdsEnd)
 	     (cdsEnd >= curGenePred->exonStarts[i]) )
 	     cdsExonCnt++;
 	}
-    /* print CDS exon count only if it is different than exonCnt */
-    hPrintf("<BR>");
-    hPrintf("<B>Coding&nbsp;&nbsp;");
-    sprintLongWithCommas(asciiNumber, (long long)cdsEnd - cdsStart);
-    hPrintf("Size:</B> %s\n", asciiNumber);
-    sprintLongWithCommas(asciiNumber, (long long) cdsStart);
-    hPrintf("<B>Start:</B> %s\n", asciiNumber);
-    sprintLongWithCommas(asciiNumber, (long long)cdsEnd );
-    hPrintf("&nbsp;&nbsp;<B>End:</B> %s\n", asciiNumber);
-    hPrintf("<B>Exon Count:</B> %d\n", cdsExonCnt);
+    hPrintf("<B>Coding Region:</B><br>\n");
+    safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, cdsStart+1, cdsEnd);
+    commaPos = addCommasToPos(database, buffer);
+    hPrintf("<B>Position:</B>&nbsp%s&nbsp",commaPos);
+    sprintLongWithCommas(buffer, (long long)cdsEnd - cdsStart);
+    hPrintf("<B>Size:</B>&nbsp%s&nbsp", buffer);
+    hPrintf("<B>Coding Exon Count:</B>&nbsp%d&nbsp\n", cdsExonCnt);
     }
 fflush(stdout);
 }

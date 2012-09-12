@@ -18837,7 +18837,8 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
-# DBSNP B137 / SNP137 (DONE 7/11/12)
+# DBSNP B137 / SNP137 (DONE 9/10/12)
+# Originally done 7/11/12; updated w/corrections from dbSNP 9/10/12 -- see below, #8360 note 36
 # Redmine #8360
     mkdir -p /hive/data/outside/dbSNP/137/human
     cd /hive/data/outside/dbSNP/137/human
@@ -18891,9 +18892,50 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue load \
       >>& do.log & tail -f do.log
 
+    # 9/10/12: update w/corrections from dbSNP:
+    cd /hive/data/outside/dbSNP/137/human/data
+    mv b137_SNPContigLoc.bcp.gz b137_SNPContigLoc.orig.bcp.gz
+    mv b137_SNPContigLocusId.bcp.gz b137_SNPContigLocusId.orig.bcp.gz
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/post_b137_fix_preview/b137_SNPContigLoc.bcp.gz
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/post_b137_fix_preview/b137_SNPContigLocusId.bcp.gz
+    hgsql hg19snp137 -e 'drop table b137_SNPContigLoc; drop table b137_SNPContigLocusId;'
+    hgsql hg19snp137 < schema/SNPContigLocs.sql
+    # Relevant subset of loadDbSnp.csh:
+    cd /hive/data/outside/dbSNP/137/human
+    setenv TMPDIR /data/tmp
+    set tmpDir = `mktemp -d $TMPDIR/doDbSnp.pl.translate.XXXXXX`
+    chmod 775 $tmpDir
+    pushd $tmpDir
+    echo $tmpDir > /hive/data/outside/dbSNP/137/human/workingDir
+    set t = b137_SNPContigLocusId
+    zcat /hive/data/outside/dbSNP/137/human/data/$t.bcp.gz | egrep -vw '(HuRef|CRA_TCAGchr7v2)'  | egrep -vw 'NW_003(3159[0-9][0-9]|5710[3-6][0-9])'\
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+    | hgLoadSqlTab -oldTable hg19snp137 $t placeholder stdin
+    hgsql hg19snp137 -e 'alter table b137_SNPContigLocusId add index (ctg_id);'
+    zcat /hive/data/outside/dbSNP/137/human/data/b137_ContigInfo.bcp.gz | egrep -vw '(HuRef|CRA_TCAGchr7v2)' \
+    | cut -f 1 | sort -n > b137_ContigInfo.ctg_id.txt
+    zcat /hive/data/outside/dbSNP/137/human/data/b137_SNPContigLoc.bcp.gz \
+    | grep -Fwf b137_ContigInfo.ctg_id.txt \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+      > tmp.tab
+    hgLoadSqlTab -oldTable hg19snp137 b137_SNPContigLoc placeholder tmp.tab
+    hgsql hg19snp137 -e 'alter table b137_SNPContigLoc add index (ctg_id);'
+    hgsql hg19snp137 -e 'create table ContigLocFix select cl.* from b137_SNPContigLoc as cl, b137_ContigInfo as ci where cl.ctg_id = ci.ctg_id;'
+    hgsql hg19snp137 -e 'alter table ContigLocFix add index (ctg_id);'
+    hgsql hg19snp137 -e 'drop table b137_SNPContigLoc; \
+                         rename table ContigLocFix to b137_SNPContigLoc;'
+    hgsql hg19snp137 -e 'alter table b137_SNPContigLoc add index (snp_id);'
+    popd
+    # Run the first parts of addToDbSnp (if(0)'d out the rest):
+    ./addToDbSnp.csh >>& do.log & tail -f do.log
+    # Redo from bigJoin onward...
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin \
+      >>& do.log & tail -f do.log
+
 
 #############################################################################
-# FILTER SNP137 (DONE 7/11/12 angie)
+# FILTER SNP137 (DONE 9/11/12 angie)
+# Originally done 7/11/12; updated 9/11/12 -- see SNP137 above
     # Redmine #8360
     # Make several tracks that are filtered subsets of snp137:
     # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp137Mult
@@ -18938,10 +18980,10 @@ EOF
        close($mult);  close($common); close($flagged);  close($misc); \
        print "snp137Mult:    $multCount\nsnp137Common:  $comCount\nsnp137Flagged: $flagCount\n" . \
              "leftover:      $miscCount\n";'
-#snp137Mult:    3541999
-#snp137Common:  13895608
-#snp137Flagged: 39458
-#leftover:      38720374
+#snp137Mult:    3540399
+#snp137Common:  13893708
+#snp137Flagged: 42211
+#leftover:      38680449
 
     # Load tables
     foreach subset (Mult Common Flagged)
@@ -18952,6 +18994,8 @@ EOF
 
 #############################################################################
 # SNP137 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 7/12/12 angie)
+# Chose not to redo this 9/11/12 (see SNP137 above) because this is only for SNVs
+# and only indel locations were changed.
     mkdir /hive/data/genomes/hg19/bed/snp137Ortho
     cd /hive/data/genomes/hg19/bed/snp137Ortho
     # Filter snp137 to to keep only uniquely mapped biallelic SNVs (class=single, length=1);
@@ -19093,9 +19137,11 @@ EOF
 
 
 ############################################################################
-# DBSNP CODING ANNOTATIONS (137) (DONE 7/30/12 angie)
-    # Originally done 7/11/12 but code 43 (stop-loss) was omitted, and filtering out
-    # NULL frame caused us to lose 45 (cds-indel) too.
+# DBSNP CODING ANNOTATIONS (137) (DONE 9/11/12 angie)
+# Originally done 7/11/12 but code 43 (stop-loss) was omitted, and filtering out
+# NULL frame caused us to lose 45 (cds-indel) too.
+# Updated 7/30/12 with corrections for that issue.
+# Updated 9/11/12 with extensive corrections from dbSNP (see SNP137 above, #8360 note 36)
     cd /hive/data/outside/dbSNP/137/human
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # For anything except an insertion (0 bases between flanks),
@@ -19124,18 +19170,18 @@ EOF
     | uniq \
       > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
-#4912900 ncbiCodingAnnotations.txt
+#4869082 ncbiCodingAnnotations.txt
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
-# 692334 3   (coding-synon)
-#2915183 8   (cds-reference -- ignored)
-#  36027 41  (nonsense)
-#1210823 42  (missense)
-#   1201 43  (stop-loss)
-#  41918 44  (frameshift)
-#  15414 45  (cds-indel)
-    # Lots of new 8's (reference) -- now including non-coding (frame = NULL),
+# 716393 3   (coding-synon)
+#2782782 8   (cds-reference -- ignored)
+# 41064 41  (nonsense)
+#1282302 42  (missense)
+#   1308 43  (stop-loss)
+#  42024 44  (frameshift)
+#   3209 45  (cds-indel)
+    # Lots more 8's (reference) than b135 -- now including non-coding (frame = NULL),
     # which we'll exclude here because this is supposed to be just coding stuff...
     # probably need to update how we show dbSNP's func annos anyway.
     # Gather up multiple annotation lines into one line per {snp, gene, frame}:
@@ -19177,11 +19223,13 @@ EOF
     hgLoadBed hg19 snp137CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp137CodingDbSnp.bed
-#Read 1959839 elements of size 11 from snp137CodingDbSnp.bed
+#Read 1956591 elements of size 11 from snp137CodingDbSnp.bed
 
 
 ############################################################################
 # SNPMASKED SEQUENCE FOR SNP137 (DONE 7/12/12 angie)
+# Chose not to redo this 9/11/12 (see SNP137 above) because this is only for SNVs
+# and only indel locations were changed.
     mkdir /hive/data/genomes/hg19/snp137Mask
     cd /hive/data/genomes/hg19/snp137Mask
     # Identify rsIds with various problems -- we will exclude those.
@@ -19410,6 +19458,16 @@ TMPDIR=/scratch/tmp
 #dhcVcfHGDP01307
     # Add Denisova track group section:
     hgsql hg19 -e "insert into grp values('denisova', 'Denisova Assembly and Analysis', 6.6, 1)"
+
+
+#########################################################################
+# DENISOVA HIGH-COVERAGE SEQUENCE READS (DONE 9/10/12)
+    cd /hive/data/genomes/hg19/bed/denisova
+    wget http://cdna.eva.mpg.de/denisova/alignments/T_hg19_1000g.bam
+    wget http://cdna.eva.mpg.de/denisova/alignments/T_hg19_1000g.bam.bai
+    # Tweak sequence names?  e.g. SN:GL000193.1 -> chr4_gl000193_random ?
+    ln -s `pwd`/T_hg19_1000g.bam{,.bai} /gbdb/hg19/bbi/
+    hgBbiDbLink hg19 dhcBamDenisova /gbdb/hg19/bbi/T_hg19_1000g.bam
 
 
 #########################################################################

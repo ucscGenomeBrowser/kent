@@ -11,7 +11,7 @@ exec </dev/null
 # location of the genbank root and files on the remote build server
 gbBuildServer=hgwdev.cse.ucsc.edu
 rsyncPort="ssh"
-rsyncOpts="-rav"
+rsyncOpts="-ra"
 
 gbBuildRoot=/hive/data/outside/genbank
 gbRoot=/data/genbank
