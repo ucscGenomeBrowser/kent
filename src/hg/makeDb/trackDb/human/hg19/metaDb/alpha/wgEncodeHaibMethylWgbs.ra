@@ -3,6 +3,7 @@ objType composite
 composite wgEncodeHaibMethylWgbs
 dataType MethylWgbs
 expVars lab,cell,dataType
+geoSeriesAccession GSE40832
 
 metaObject wgEncodeHaibMethylWgbsGm12878CpGSites
 objType table
@@ -14,6 +15,7 @@ dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-28
 expId 3420
 fileName wgEncodeHaibMethylWgbsGm12878CpGSites.bigBed
+geoSampleAccession GSM1002650
 grant Myers
 lab HudsonAlpha
 labExpId SL8614_SL8615
@@ -33,6 +35,7 @@ dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-28
 expId 3420
 fileName wgEncodeHaibMethylWgbsGm12878NonCpGSites.bigBed
+geoSampleAccession GSM1002650
 grant Myers
 lab HudsonAlpha
 labExpId SL8614_SL8615
@@ -52,6 +55,7 @@ dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-28
 expId 3421
 fileName wgEncodeHaibMethylWgbsH1hescCpGSites.bigBed
+geoSampleAccession GSM1002649
 grant Myers
 lab HudsonAlpha
 labExpId SL8616_SL8617
@@ -71,6 +75,7 @@ dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-28
 expId 3421
 fileName wgEncodeHaibMethylWgbsH1hescNonCpGSites.bigBed
+geoSampleAccession GSM1002649
 grant Myers
 lab HudsonAlpha
 labExpId SL8616_SL8617
@@ -80,4 +85,4 @@ subId 5890
 tableName wgEncodeHaibMethylWgbsH1hescNonCpGSites
 view NonCpG_Sites
 
-# MAGIC: -1609397898
+# MAGIC: -707079418
