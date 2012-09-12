@@ -638,7 +638,8 @@ sub loadDbSnp {
     foreach t ($ContigInfo $ContigLocusId $MapInfo)
       zcat $dataDir/\$t.bcp.gz $grepOutLabels $grepOutContigs\\
       | perl -wpe '$cleanDbSnpSql' \\
-      | hgLoadSqlTab -oldTable $tmpDb \$t placeholder stdin
+        > tmp.tab
+      hgLoadSqlTab -oldTable $tmpDb \$t placeholder tmp.tab
     end
     hgsql $tmpDb -e \\
       'alter table $ContigInfo add index (ctg_id); \\
