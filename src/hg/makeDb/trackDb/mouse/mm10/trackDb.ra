@@ -13,6 +13,17 @@ html gold
 track gap override
 html gap
 
+track assemblyFrags
+shortLabel Contigs
+longLabel Contig fragments used in the assembly
+group map
+priority 9
+visibility hide
+colorByStrand 150,100,30 100,50,0
+type bed 6
+urlLabel NCBI Nucleotide:
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+
 track ensGene override
 origAssembly mm9
 pennantIcon 9.jpg ../goldenPath/help/mm9ToMm10LiftOver.html "lifted from mm9"
