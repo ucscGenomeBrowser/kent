@@ -20,7 +20,7 @@ void usage()
 {
 errAbort(
   "alphaAsm - create a linear projection of alpha satellite arrays using the probablistic model\n"
-  "of HuRef satellite graphs\n"
+  "of HuRef satellite graphs based on Sanger style reads.\n"
   "usage:\n"
   "   alphaAsm alphaMonFile.txt monomerOrder.txt output.txt\n"
   "Where alphaMonFile is a list of reads with alpha chains monomers parsed out, one read per\n"
@@ -34,10 +34,12 @@ errAbort(
   "   -fullOnly - Only output chains of size above\n"
   "   -chain=fileName - Write out word chain to file\n"
   "   -afterChain=fileName - Write out word chain after faux generation to file for debugging\n"
-  "   -outSize=N - Output this many words.\n"
+  "   -outSize=N - Output this many words. Default %d\n"
+  "   -pseudoCount=N - Add this number to observed quantities - helps compensate for what's not\n"
+  "                observed.  Default %d\n"
   "   -seed=N - Initialize random number with this seed for consistent results, otherwise\n"
   "             it will generate different results each time it's run.\n"
-  , maxChainSize
+  , maxChainSize, outSize, pseudoCount
   );
 }
 
@@ -70,7 +72,7 @@ struct monomer
     };
 
 struct monomerRef
-/* A reference to a word. */
+/* A reference to a monomer. */
     {
     struct monomerRef *next;	/* Next in list */
     struct monomer *val;	/* The word referred to. */
@@ -93,7 +95,7 @@ struct alphaRead
     };
 
 struct alphaStore
-/* Stores info on all words */
+/* Stores info on all monomers */
     {
     struct monomer *monomerList;   /* List of words, fairly arbitrary order. */
     struct hash *monomerHash;       /* Hash of monomer, keyed by word. */
@@ -177,6 +179,15 @@ int wordTreeCmpWord(const void *va, const void *vb)
 const struct wordTree *a = *((struct wordTree **)va);
 const struct wordTree *b = *((struct wordTree **)vb);
 return cmpStringsWithEmbeddedNumbers(a->monomer->word, b->monomer->word);
+}
+
+static void wordTreeSort(struct wordTree *wt)
+/* Sort all children lists in tree. */
+{
+slSort(&wt->children, wordTreeCmpWord);
+struct wordTree *child;
+for (child = wt->children; child != NULL; child = child->next)
+    wordTreeSort(child);
 }
 
 struct wordTree *wordTreeFindInList(struct wordTree *list, struct monomer *monomer)
@@ -267,8 +278,6 @@ void wordTreeNormalize(struct wordTree *wt, double outTarget, double normVal)
 {
 if (pseudoCount > 0)
     wordTreeAddPseudoCount(wt, pseudoCount);
-#ifdef SOON
-#endif /* SOON */
 wt->normVal = normVal;
 wt->outTarget = outTarget;
 int childrenTotalUses = wordTreeSumUseCounts(wt->children);
@@ -441,8 +450,8 @@ if (total > 0)
 	}
     }
 
-warn("Fell off end in pickRandomFromType on %s", type->name);
-return type->list->val;	    // Fall back position (necessary?) just first in list
+errAbort("Fell off end in pickRandomFromType on %s", type->name);
+return NULL;
 }
 
 struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNode *list)
@@ -469,8 +478,7 @@ return result;
 struct wordTree *predictFromWordTree(struct wordTree *wt, struct dlNode *recent)
 /* Predict next word given tree and recently used word list.  Will use all words in
  * recent list if can,  but if there is not data in tree, will back off, and use
- * progressively less previous words until ultimately it just picks a random
- * word. */
+ * progressively less previous words. */
 {
 struct dlNode *node;
 verbose(2, " predictNextFromWordTree(%s)\n", wordTreeString(wt));
@@ -597,7 +605,7 @@ while (wt != NULL)
         outTarget = kidSum;
     wt->outTarget = outTarget;
 
-    /* Always bump outCount for debugging. */
+    /* Always bump outCount to help us debug (only real use of outCount). */
     wt->outCount += 1;
     wt = wt->parent;
     }
@@ -672,15 +680,6 @@ carefulClose(&f);
 dlListFree(&ll);
 }
 
-
-static void wordTreeSort(struct wordTree *wt)
-/* Sort all children lists in tree. */
-{
-slSort(&wt->children, wordTreeCmpWord);
-struct wordTree *child;
-for (child = wt->children; child != NULL; child = child->next)
-    wordTreeSort(child);
-}
 
 struct alphaStore *alphaStoreNew(int maxChainSize)
 /* Allocate and initialize a new word store. */
