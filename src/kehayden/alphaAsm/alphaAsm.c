@@ -1,4 +1,6 @@
-/* alphaAsm - Predicts faux centromere sequences using a probablistic model. */
+/* alphaAsm - assemble alpha repeat regions such as centromeres from reads that have
+ * been parsed into various repeat monomer variants.  Cycles of these variants tend to
+ * form higher order repeats. */
 
 #include "common.h"
 #include "linefile.h"
@@ -314,7 +316,7 @@ for (child = wt->children; child != NULL; child = child->next)
     wordTreeDump(level+1, child, maxChainSize, f);
 }
 
-struct wordTree *pickRandomOnOutTarget(struct wordTree *list)
+struct wordTree *pickRandom(struct wordTree *list)
 /* Pick word from list randomly, but so that words with higher outTargets
  * are picked more often. */
 {
@@ -322,7 +324,7 @@ struct wordTree *picked = NULL;
 
 /* Debug output. */
     {
-    verbose(2, "   pickRandomOnOutTarget(");
+    verbose(2, "   pickRandom(");
     struct wordTree *wt;
     for (wt = list; wt != NULL; wt = wt->next)
         {
@@ -360,54 +362,7 @@ if (total > 0)
 return picked;
 }
 
-struct wordTree *pickRandomOnUseCounts(struct wordTree *list)
-/* Pick word from list randomly, but so that words with higher useCounts
- * are picked more often.  Much like above routine, but a little simple
- * since we know useCounts are non-zero. */
-{
-struct wordTree *picked = NULL;
-
-/* Figure out total number and a random number between 0 and that total. */
-int total = wordTreeSumUseCounts(list);
-assert(total > 0);
-int threshold = rand() % total; 
-
-/* Loop through list returning selection corresponding to random threshold. */
-int binStart = 0;
-struct wordTree *wt;
-for (wt = list; wt != NULL; wt = wt->next)
-    {
-    int size = wt->useCount;
-    int binEnd = binStart + size;
-    if (threshold < binEnd)
-	{
-	picked = wt;
-	break;
-	}
-    binStart = binEnd;
-    }
-assert(picked != NULL);
-return picked;
-}
-
 int totUseZeroCount = 0;
-
-struct wordTree *pickRandom(struct wordTree *list)
-/* Pick word from list randomly, but so that words more
- * commonly seen are picked more often. */
-{
-struct wordTree *picked = pickRandomOnOutTarget(list);
-
-/* If did not find anything, that's ok. It can happen on legitimate input due to unevenness
- * of read coverage.  In this case we pick a random number based on original counts
- * rather than normalized/counted down counts. */
-if (picked == NULL)
-    {
-    picked = pickRandomOnUseCounts(list);
-    ++totUseZeroCount;
-    }
-return picked;
-}
 
 struct monomer *pickRandomFromType(struct monomerType *type)
 /* Pick a random word, weighted by outTarget, from all available of given type */
@@ -419,19 +374,43 @@ for (ref = type->list; ref != NULL; ref = ref->next)
     total += ref->val->outTarget;
 
 /* Loop through list returning selection corresponding to random threshold. */
-int threshold = rand() % total; 
-int binStart = 0;
-for (ref = type->list; ref != NULL; ref = ref->next)
+if (total > 0)
     {
-    struct monomer *monomer = ref->val;
-    int size = monomer->outTarget;
-    int binEnd = binStart + size;
-    if (threshold < binEnd)
-	return monomer;
-    binStart = binEnd;
+    int threshold = rand() % total; 
+    int binStart = 0;
+    for (ref = type->list; ref != NULL; ref = ref->next)
+	{
+	struct monomer *monomer = ref->val;
+	int size = monomer->outTarget;
+	int binEnd = binStart + size;
+	if (threshold < binEnd)
+	    return monomer;
+	binStart = binEnd;
+	}
     }
 
-verbose(2, "Fell off end in pickRandomFromType\n");
+verbose(2, "Backup plan for %s in pickRandomFromType\n", type->name);
+
+/* Try again based on use counts. */
+total = 0;
+for (ref = type->list; ref != NULL; ref = ref->next)
+    total += ref->val->useCount;
+if (total > 0)
+    {
+    int threshold = rand() % total; 
+    int binStart = 0;
+    for (ref = type->list; ref != NULL; ref = ref->next)
+	{
+	struct monomer *monomer = ref->val;
+	int size = monomer->useCount;
+	int binEnd = binStart + size;
+	if (threshold < binEnd)
+	    return monomer;
+	binStart = binEnd;
+	}
+    }
+
+warn("Fell off end in pickRandomFromType on %s", type->name);
 return type->list->val;	    // Fall back position (necessary?) just first in list
 }
 
@@ -440,7 +419,7 @@ struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNo
  * have statistics for what comes next given the words in list, then it returns
  * NULL. */
 {
-verbose(2, " predictNextFromAllPredecessors(%s, %s)\n", wordTreeString(wt), dlListFragWords(list));
+verbose(2, "  predictNextFromAllPredecessors(%s, %s)\n", wordTreeString(wt), dlListFragWords(list));
 struct dlNode *node;
 for (node = list; !dlEnd(node); node = node->next)
     {
@@ -463,6 +442,7 @@ struct wordTree *predictFromWordTree(struct wordTree *wt, struct dlNode *recent)
  * word. */
 {
 struct dlNode *node;
+verbose(2, " predictNextFromWordTree(%s)\n", wordTreeString(wt));
 
 for (node = recent; !dlEnd(node); node = node->next)
     {
@@ -1094,11 +1074,11 @@ struct monomerType *fillInTypeFromReads(struct monomer *monomer, struct alphaSto
 /* Look through read list trying to find best supported type for this monomer. */
 {
 /* The algorithm here could be better.  It picks the closest nearby monomer that is typed
- * to fill in from.  When have information from both before and after uses arbitrarily 
- * before preferentially.  When have information that is equally close from multiple reads,
- * just uses info from first read.  Fortunately the data, at least on Y, shows a lot of
- * consistency, so probably not actually worth a more sophisticated algorithm that could
- * take the most popular choice if data were inconsistent. */
+ * to fill in from.  When have information from both before and after the program arbitrarily 
+ * uses before preferentially.  When have information that is equally close from multiple reads,
+ * it just uses info from first read.  Fortunately the data, at least on Y, shows a lot of
+ * consistency, so it's probably not actually worth a more sophisticated algorithm that would
+ * instead take the most popular choice rather than the first one. */
 verbose(2, "fillInTypeFromReads on %s from %d reads\n", monomer->word, slCount(monomer->readList));
 struct monomerType *bestType = NULL;
 int bestPos = 0;
@@ -1170,6 +1150,8 @@ for (readRef = monomer->readList; readRef != NULL; readRef = readRef->next)
 	}
     }
 
+/* Now have found a type that is at a known position relative to ourselves.  From this
+ * infer our own type. */
 struct monomerType *chosenType = NULL;
 if (bestType != NULL)
     {
@@ -1178,7 +1160,6 @@ if (bestType != NULL)
     else
 	chosenType = typeAfter(store, bestType, bestPos);
     }
-
 return chosenType;
 }
 
@@ -1203,7 +1184,9 @@ for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
 }
 
 void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
-/* alphaAsm - Create Markov chain of words and optionally output chain in two formats. */
+/* alphaAsm - assemble alpha repeat regions such as centromeres from reads that have
+ * been parsed into various repeat monomer variants.  Cycles of these variants tend to
+ * form higher order repeats. */
 {
 struct alphaStore *store = alphaStoreNew(maxChainSize);
 alphaReadListFromFile(readsFile, store);
