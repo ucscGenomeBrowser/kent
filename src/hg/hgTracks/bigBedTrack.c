@@ -54,7 +54,7 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
-    int maxItems = maximumTrackItems(track);
+    int maxItems = min(BIGBEDMAXIMUMITEMS, maximumTrackItems(track)); // do not allow it to exceed BIGBEDMAXIMUMITEMS for bigBed
     result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems + 1, lm);
     if (slCount(result) > maxItems)
 	{
