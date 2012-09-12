@@ -10673,7 +10673,7 @@ lab Bernstein, Ren
 lots 177/0100800
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf Human_-_H3K79me2_(39143)(Dot_blot,Western_blot):human_H3K79me2_39143_validation_Ren.pdf
+validation Human_-_H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf Mouse_-_H3K79me2_(39143)(Dot_blot,Western_blot):human_H3K79me2_39143_validation_Ren.pdf
 label H3K79me2 (39143)
 
 term H3K79me2_(ab3594)
