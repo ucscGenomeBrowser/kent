@@ -10,6 +10,7 @@
 #include "dlist.h"
 
 /* Global vars - all of which can be set by command line options. */
+int pseudoCount = 1;
 int maxChainSize = 3;
 int outSize = 10000;
 boolean fullOnly = FALSE;
@@ -48,6 +49,7 @@ static struct optionSpec options[] = {
    {"fullOnly", OPTION_BOOLEAN},
    {"outSize", OPTION_INT},
    {"seed", OPTION_INT},
+   {"pseudoCount", OPTION_INT},
    {NULL, 0},
 };
 
@@ -235,9 +237,38 @@ for (node = chain->head; !dlEnd(node); node = node->next)
     }
 }
 
+int wordTreeAddPseudoCount(struct wordTree *wt, int pseudo)
+/* Add pseudo to all leaves of tree and propagate counts up to parents. */
+{
+if (wt->children == NULL)
+    {
+    wt->useCount += pseudo;
+    return wt->useCount;
+    }
+else
+    {
+    struct wordTree *child;
+    int oldChildTotal = 0;
+    for (child = wt->children; child != NULL; child = child->next)
+	oldChildTotal += child->useCount;
+    int oldDiff = wt->useCount - oldChildTotal;
+    if (oldDiff < 0) oldDiff = 0;  // Necessary in rare cases, not sure why.
+
+    int total = 0;
+    for (child = wt->children; child != NULL; child = child->next)
+	total += wordTreeAddPseudoCount(child, pseudo);
+    wt->useCount = total + oldDiff + pseudo;
+    return total;
+    }
+}
+
 void wordTreeNormalize(struct wordTree *wt, double outTarget, double normVal)
 /* Recursively set wt->normVal  and wt->outTarget so each branch gets its share */
 {
+if (pseudoCount > 0)
+    wordTreeAddPseudoCount(wt, pseudoCount);
+#ifdef SOON
+#endif /* SOON */
 wt->normVal = normVal;
 wt->outTarget = outTarget;
 int childrenTotalUses = wordTreeSumUseCounts(wt->children);
@@ -547,7 +578,7 @@ if (pick == NULL)
 if (pick == NULL)
     {
     pick = pickRandom(store->markovChains->children);
-    verbose(2, "in predictNext() last resort pick of %s\n", pick->monomer->word);
+    warn("in predictNext() last resort pick of %s", pick->monomer->word);
     }
 return pick;
 }
@@ -1221,6 +1252,7 @@ if (argc != 4)
 maxChainSize = optionInt("size", maxChainSize);
 outSize = optionInt("outSize", outSize);
 fullOnly = optionExists("fullOnly");
+pseudoCount = optionInt("pseudoCount", pseudoCount);
 int seed = optionInt("seed", (int)time(0));
 srand(seed);
 alphaAsm(argv[1], argv[2], argv[3]);
