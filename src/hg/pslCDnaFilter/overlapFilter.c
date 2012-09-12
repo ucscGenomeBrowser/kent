@@ -16,8 +16,27 @@ return sameString(aln1->psl->tName, aln2->psl->tName)
     && sameString(aln1->psl->strand, aln2->psl->strand);
 }
 
+static boolean identicalAligns(struct cDnaAlign *aln1,
+                               struct cDnaAlign *aln2)
+/* test if two alignments are identical */
+{
+if (!(sameString(aln1->psl->tName, aln2->psl->tName)
+      && sameString(aln1->psl->strand, aln2->psl->strand)
+      && (aln1->psl->blockCount == aln2->psl->blockCount)))
+    return FALSE;
+int iBlk;
+for (iBlk = 0; iBlk < aln1->psl->blockCount; iBlk++)
+    {
+    if (!((aln1->psl->blockSizes[iBlk] == aln2->psl->blockSizes[iBlk])
+          && (aln1->psl->qStarts[iBlk] == aln2->psl->qStarts[iBlk])
+          && (aln1->psl->tStarts[iBlk] == aln2->psl->tStarts[iBlk])))
+        return FALSE;
+    }
+return TRUE;
+}
+
 struct alignSimilarities
-/* count of bases aligned in the same or different ways */
+/* Count of bases aligned and overlapping in the same or different ways */
 {
     unsigned same;      /* bases aligned by both to the same locations */
     unsigned diff;      /* bases aligned by both to different locations */
@@ -93,7 +112,7 @@ return consumed;
 }
 
 static void blockSimCheck(struct alignSimilarities *alnSim,
-                          struct psl *psl1, int iBlk1,          
+                          struct psl *psl1, int iBlk1,
                           struct psl *psl2)
 /* collect similarity counts for a single block of one psl against the
  * other psl. */
@@ -112,6 +131,17 @@ assert(qStart1 == qEnd1);
 assert(tStart1 == (psl1->tStarts[iBlk1]+psl1->blockSizes[iBlk1]));
 }
 
+static struct alignSimilarities alignSimCheck(struct cDnaAlign *aln1, struct cDnaAlign *aln2)
+/* collect similarity counts for all blocks of one psl against the other
+ * psl. */
+{
+struct alignSimilarities alnSim = {0, 0};
+int iBlk1;
+for (iBlk1 = 0; iBlk1 < aln1->psl->blockCount; iBlk1++)
+    blockSimCheck(&alnSim, aln1->psl, iBlk1, aln2->psl);
+return alnSim;
+}
+
 static void weirdOverlapCheck(struct cDnaQuery *cdna,
                               struct cDnaAlign *aln1,
                               struct cDnaAlign *aln2)
@@ -121,15 +151,10 @@ static void weirdOverlapCheck(struct cDnaQuery *cdna,
  * alignment to the same region.  Flags these cases. */
 {
 assert(overlapTest(aln1, aln2));
-static float dissimFrac = 0.98;
-struct alignSimilarities alnSim;
-int iBlk1;
-ZeroVar(&alnSim);
+static float dissimFrac = 0.98;  // markd: not sure why this was chosen
+struct alignSimilarities alnSim = alignSimCheck(aln1, aln2);
 
-for (iBlk1 = 0; iBlk1 < aln1->psl->blockCount; iBlk1++)
-    blockSimCheck(&alnSim, aln1->psl, iBlk1, aln2->psl);
-
-/* Check for overlap and don't share bases and check for a low level of
+/* it's weird if it overlap and don't share bases or as low level of
  * similarity */
 if (((alnSim.same + alnSim.diff) == 0) || (alignSimilaritiesFrac(alnSim) < dissimFrac))
     {
@@ -154,10 +179,14 @@ static void flagWeird(struct cDnaQuery *cdna,
                       struct cDnaAlign *aln)
 /* Flag alignments that have weird overlap with other alignmentst */
 {
+// identical should not be check, however if we have a mix of weird, they all
+// get flagged as weird and the identical ones will not be dropped in the case
+// of keeping weird overlaps and bestOverlap filtering.  This is so rare we
+// don't care.
 struct cDnaAlign *aln2;
 for (aln2 = aln->next; (aln2 != NULL) && (!aln->drop); aln2 = aln2->next)
     {
-    if (overlapTest(aln, aln2))
+    if (overlapTest(aln, aln2) && !identicalAligns(aln, aln2))
         weirdOverlapCheck(cdna, aln, aln2);
     }
 }
