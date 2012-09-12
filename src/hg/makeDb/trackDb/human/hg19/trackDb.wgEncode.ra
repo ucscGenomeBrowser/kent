@@ -74,8 +74,8 @@ include wgEncodeDukeAffyExon.release3.ra
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
-include wgEncodeOpenChromFaire.release2.ra alpha
-include wgEncodeOpenChromFaire.ra beta,public
+include wgEncodeOpenChromFaire.release2.ra alpha,beta
+include wgEncodeOpenChromFaire.ra public
 
 #Open Chrom Synth (wrangler: Matt)
 include wgEncodeOpenChromSynth.release2.ra
