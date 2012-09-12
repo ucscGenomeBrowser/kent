@@ -488,25 +488,37 @@ for (i=0, node = list->tail; i<count; ++i)
 return node;
 }
 
-struct monomerType *advanceTypeWithWrap(struct monomerType *typeList, struct monomerType *startType,
-    int amountToAdvance)
-/* Skip forward amountToAdvance in typeList from startType.  If get to end of list start
+struct monomerType *typeAfter(struct alphaStore *store, struct monomerType *oldType,
+    int amount)
+/* Skip forward amount in typeList from oldType.  If get to end of list start
  * again at the beginning */
 {
 int i;
-struct monomerType *type = startType;
-for (i=0; i<amountToAdvance; ++i)
+struct monomerType *type = oldType;
+for (i=0; i<amount; ++i)
     {
     type = type->next;
     if (type == NULL)
-	type = typeList;
+	type = store->typeList;
     }
 return type;
+}
+
+struct monomerType *typeBefore(struct alphaStore *store, struct monomerType *oldType, int amount)
+/* Pick type that comes amount before given type. */
+{
+int typeIx = ptArrayIx(oldType, store->typeArray, store->typeCount);
+typeIx -= amount;
+while (typeIx < 0)
+    typeIx += store->typeCount;
+return store->typeArray[typeIx];
 }
 
 struct wordTree *predictFromPreviousTypes(struct alphaStore *store, struct dlList *past)
 /* Predict next based on general pattern of monomer order. */
 {
+/* This routine is now a bit more complex than necessary but it still works.  It
+ * these days only needs to look back 1 because of the read-based type fill-in. */
 int maxToLookBack = 3;
     { /* Debugging block */
     struct dlNode *node = nodesFromTail(past, maxToLookBack);
@@ -531,7 +543,7 @@ for (pastDepth = 1, node = past->tail; pastDepth <= maxToLookBack; ++pastDepth)
     struct monomerType *prevType = hashFindVal(store->typeHash, monomer->word);
     if (prevType != NULL)
         {
-	struct monomerType *curType = advanceTypeWithWrap(store->typeList, prevType, pastDepth);
+	struct monomerType *curType = typeAfter(store, prevType, pastDepth);
 	struct monomer *curInfo = pickRandomFromType(curType);
 	struct wordTree *curTree = wordTreeFindInList(store->markovChains->children, curInfo);
 	verbose(3, "predictFromPreviousType pastDepth %d, curInfo %s, curTree %p %s\n", 
@@ -683,6 +695,7 @@ if (monomer == NULL)
     slAddHead(&store->monomerList, monomer);
     }
 monomer->useCount += 1;
+monomer->outTarget = monomer->useCount;	    /* Set default value, may be renormalized. */
 return monomer;
 }
 
@@ -745,9 +758,9 @@ connectReadsToMonomers(store);
 struct alphaOrphan
 /* Information about an orphan - something without great joining information. */
     {
-    struct alphaOrphan *next;
-    struct monomer *monomer;
-    struct monomerType *type;
+    struct alphaOrphan *next;	/* Next in list */
+    struct monomer *monomer;	/* Pointer to orphan */
+    boolean paired;		/* True if has been paired with somebody. */
     };
 
 struct alphaOrphan *findOrphanStarts(struct alphaRead *readList, struct alphaStore *store)
@@ -782,19 +795,7 @@ for (read = readList; read != NULL; read = read->next)
 	    orphan->monomer = monomer;
 	    slAddHead(&orphanList, orphan);
 	    hashAdd(orphanHash, word, orphan);
-	    uglyf("Adding orphan start %s\n", word);
-	    }
-
-	/* Try and find orphan type by consulting either itself or previous items in read. */
-	if (orphan->type == NULL)
-	    {
-	    struct monomerType *type = monomer->type;
-	    if (type == NULL) 
-	        {
-		uglyf("Can't find type for %s\n", word);
-		}
-	    else uglyf("%s is type %s\n", word, type->name);
-	    orphan->type = type;
+	    verbose(2, "Adding orphan start %s\n", word);
 	    }
 	}
     }
@@ -837,9 +838,8 @@ for (read = readList; read != NULL; read = read->next)
 	    orphan->monomer = monomer;
 	    slAddHead(&orphanList, orphan);
 	    hashAdd(orphanHash, monomer->word, orphan);
-	    uglyf("Adding orphan end %s\n", monomer->word);
+	    verbose(2, "Adding orphan end %s\n", monomer->word);
 	    }
-	else uglyf("Repeating orphan end %s\n", monomer->word);
 	}
     }
 hashFree(&sooner);
@@ -848,13 +848,107 @@ hashFree(&orphanHash);
 return orphanList;
 }
 
-void matchUpOrphans(struct alphaStore *store)
+struct alphaRead *addReadOfTwo(struct alphaStore *store, struct monomer *a, struct monomer *b)
+/* Make up a fake read that goes from a to b and add it to store. */
+{
+/* Create fake name and start fake read with it. */
+static int fakeId = 0;
+char name[32];
+safef(name, sizeof(name), "fake%d", ++fakeId);
+
+/* Allocate fake read. */
+struct alphaRead *read;
+AllocVar(read);
+
+/* Add a and b to the read. */
+struct monomerRef *aRef, *bRef;
+AllocVar(aRef);
+aRef->val = a;
+AllocVar(bRef);
+bRef->val = b;
+aRef->next = bRef;
+read->list = aRef;
+
+/* Add read to the store. */
+slAddHead(&store->readList, read);
+hashAddSaveName(store->readHash, name, read, &read->name);
+
+/* Add read to the monomers. */
+refAdd(&a->readList, read);
+refAdd(&a->readList, read);
+
+a->useCount += 1;
+b->useCount += 1;
+return read;
+}
+
+void integrateOrphans(struct alphaStore *store)
 /* Make up fake reads that integrate orphans (monomers only found at beginning or end
  * of a read) better. */
 {
 struct alphaOrphan *orphanStarts = findOrphanStarts(store->readList, store);
 struct alphaOrphan *orphanEnds = findOrphanEnds(store->readList, store);
-uglyf("orphanStarts has %d items, orphanEnds %d\n", slCount(orphanStarts), slCount(orphanEnds));
+verbose(2, "orphanStarts has %d items, orphanEnds %d\n", 
+    slCount(orphanStarts), slCount(orphanEnds));
+
+/* First look for the excellent situation where you can pair up orphans with each 
+ * other.  For Y at least this happens half the time. */
+struct alphaOrphan *start, *end;
+for (start = orphanStarts; start != NULL; start = start->next)
+    {
+    struct monomerType *startType = start->monomer->type;
+    if (startType == NULL)
+        continue;
+    for (end = orphanEnds; end != NULL && !start->paired; end = end->next)
+        {
+	struct monomerType *endType = end->monomer->type;
+	if (endType == NULL)
+	    continue;
+	if (!end->paired)
+	    {
+	    struct monomerType *nextType = typeAfter(store, endType, 1);
+	    if (nextType == startType)
+	        {
+		end->paired = TRUE;
+		start->paired = TRUE;
+		addReadOfTwo(store, end->monomer, start->monomer);
+		verbose(2, "Pairing %s with %s\n", end->monomer->word, start->monomer->word);
+		}
+	    }
+	}
+    }
+
+/* Ok, now have to just manufacture other side of orphan starts out of thin air. */
+for (start = orphanStarts; start != NULL; start = start->next)
+    {
+    if (start->paired)
+        continue;
+    struct monomer *startMono = start->monomer;
+    struct monomerType *startType = startMono->type;
+    if (startType == NULL)
+        continue;
+
+    struct monomerType *newType = typeBefore(store, startType, 1);
+    struct monomer *newMono = pickRandomFromType(newType);
+    addReadOfTwo(store, newMono, startMono);
+    verbose(2, "Pairing new %s with start %s\n", newMono->word, startMono->word);
+    }
+
+/* Ok, now have to just manufacture other side of orphan ends out of thin air. */
+for (end = orphanEnds; end != NULL; end = end->next)
+    {
+    if (end->paired)
+        continue;
+    struct monomer *endMono = end->monomer;
+    struct monomerType *endType = endMono->type;
+    if (endType == NULL)
+        continue;
+
+    struct monomerType *newType = typeAfter(store, endType, 1);
+    struct monomer *newMono = pickRandomFromType(newType);
+    addReadOfTwo(store, endMono, newMono);
+    verbose(2, "Pairing end %s with new %s\n", endMono->word, newMono->word);
+    }
 }
 
 void makeMarkovChains(struct alphaStore *store)
@@ -1079,20 +1173,10 @@ for (readRef = monomer->readList; readRef != NULL; readRef = readRef->next)
 struct monomerType *chosenType = NULL;
 if (bestType != NULL)
     {
-    int bestIx = ptArrayIx(bestType, store->typeArray, store->typeCount);
     if (bestIsAfter)
-        {
-	bestIx -= bestPos;
-	if (bestIx < 0)
-	    bestIx += store->typeCount;
-	}
+	chosenType = typeBefore(store, bestType, bestPos);
     else
-        {
-	bestIx += bestPos;
-	if (bestIx > store->typeCount)
-	     bestIx -= store->typeCount;
-	}
-    chosenType = store->typeArray[bestIx];
+	chosenType = typeAfter(store, bestType, bestPos);
     }
 
 return chosenType;
@@ -1127,7 +1211,7 @@ makeMarkovChains(store);
 struct wordTree *wt = store->markovChains;
 alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
 fillInTypes(store);
-matchUpOrphans(store);
+integrateOrphans(store);
 alphaStoreNormalize(store, outSize);
 
 if (optionExists("chain"))
