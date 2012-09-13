@@ -5297,7 +5297,7 @@ term NH-A
 tag NHA
 type Cell Line
 organism human
-tissue nervous
+tissue brain
 lineage ectoderm
 karyotype normal
 description astrocytes (also called Astrocy)
