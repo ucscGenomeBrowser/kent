@@ -84,3 +84,23 @@ priority 11
     longLabel Dai Individual (HGDP01307) Variant Calls
     priority 11
 
+track dhcBamDenisova
+shortLabel Denisova Seq
+longLabel Denisova High-Coverage Sequence Reads
+group denisova
+priority 4
+visibility hide
+type bam
+pairEndsByName on
+showNames off
+noColorTag .
+bamColorMode gray
+bamGrayMode aliQual
+aliQualRange 0:60
+baseColorDefault diffBases
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 100
+maxWindowToDraw 1000000

@@ -16,7 +16,7 @@
 
 <H2>Description</H2>
 <P>
-The Denisova Variants track shows variant calls made using
+The Denisova Sequence track shows
 high-coverage sequence reads from an archaic Denisovan individual
 mapped to the $organism genome reference assembly.
 The Denisova DNA was extracted from a phalanx bone excavated from
@@ -35,38 +35,6 @@ Sequence reads were aligned to $organism sequence $date
 TARGET=_BLANK>1000 Genomes Project</A>) using the
 <A HREF="http://bio-bwa.sourceforge.net/"
 TARGET=_blank>Burrows-Wheeler Aligner.</A>
-Genotype calls for single nucleotide variants and small insertions and
-deletions were made using the Unified Genotyper from the
-<A HREF="http://www.broadinstitute.org/gatk/"
-TARGET=_BLANK>Genome Analysis Toolkit (GATK)</A>, with an additional iteration
-using a modified reference genome in order to reduce reference bias (Meyer, 2012,
-supplemental online material Note 6).
-</P>
-<P>
-Variant Call Format (VCF) files were enhanced by adding information from
-<A HREF="ftp://ftp.ensembl.org/pub/release-64/emf/ensembl-compara/"
-TARGET=_BLANK>
-Ensembl Compara EPO alignments</A> of 6 primates and of 35 Eutherian mammals,
-phastCons conservation scores generated using EPO alignments,
-1000 Genomes Project
-<A HREF="ftp://ftp.ncbi.nlm.nih.gov/1000genomes/ftp/release/20101123/interim_phase1_release/"
-TARGET=_BLANK>integrated variant call files</A>,
-University of Washington
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19424416"
-TARGET=_BLANK>background selection scores</A>,
-ENCODE/Duke Uniqueness of 20mers (see the Mapability track),
-segmental duplications from the Eichler lab (see the Segmental Dups track),
-and
-<A HREF="http://samtools.sourceforge.net/mpileup.shtml"
-TARGET=_BLANK>samtools mpileup</A> summaries of mapped reads.
-</P>
-<P>
-<A HREF="http://cdna.eva.mpg.de/denisova/VCF/hg19_1000g/"
-TARGET=_BLANK>Comprehensive VCF files</A> that include information for homozygous-reference
-bases and uncovered bases are available.  This track uses VCF files that were filtered
-to retain only those locations that clearly differ from the $organism reference genome.
-Reference genome bases without variant calls may indicate either matching Denisova sequence
-or insufficient data.
 </P>
 
 <H2>Credits</H2>
@@ -74,7 +42,9 @@ or insufficient data.
 Thanks to the
 <A HREF="http://www.eva.mpg.de/"
 TARGET=_BLANK>Max Planck Institute for Evolutionary Anthropology</A>
-for providing the variant-only VCF files used for this track.
+for providing the
+<A HREF="http://cdna.eva.mpg.de/denisova/alignments/"
+TARGET=_BLANK>BAM files</A> used for this track.
 </P>
 
 <H2>References</H2>

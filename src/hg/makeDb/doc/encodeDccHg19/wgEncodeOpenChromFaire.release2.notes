@@ -1,6 +1,6 @@
 mkChangeNotes v2
 hg19 wgEncodeOpenChromFaire Release 2 vs Release 1
-2012-08-27
+2012-09-10
 
 QA Count Summaries for Release 2:
 Tables: 111
@@ -15,12 +15,12 @@ Files: 9
 Gbdbs: 2
 
 Sizes of New:
-Table: 481 MB
-Files: 213163 MB (208 GB)
-Gbdbs: 61145 MB (60 GB)
+Table: 482 MB
+Files: 212491 MB (208 GB)
+Gbdbs: 60472 MB (59 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 274790 MB (268 GB)
+Total: 273446 MB (267 GB)
 
 
 TABLES:

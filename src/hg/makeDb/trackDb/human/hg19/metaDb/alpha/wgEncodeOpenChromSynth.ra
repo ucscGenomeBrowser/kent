@@ -2,6 +2,7 @@ metaObject wgEncodeOpenChromSynth
 objType composite
 composite wgEncodeOpenChromSynth
 expVars lab,dataType,cell,treatment,composite
+geoSeriesAccession GSE40833
 treatment None
 
 metaObject wgEncodeOpenChromSynthGlioblaPk
@@ -15,6 +16,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002257
 expId 2257
 fileName wgEncodeOpenChromSynthGlioblaPk.bed.gz
+geoSampleAccession GSM1002662
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -36,6 +38,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001323
 expId 1323
 fileName wgEncodeOpenChromSynthGm12878Pk.bed.gz
+geoSampleAccession GSM1002651
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -57,6 +60,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002253
 expId 2253
 fileName wgEncodeOpenChromSynthGm12891Pk.bed.gz
+geoSampleAccession GSM1002666
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -78,6 +82,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002254
 expId 2254
 fileName wgEncodeOpenChromSynthGm12892Pk.bed.gz
+geoSampleAccession GSM1002665
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -99,6 +104,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002255
 expId 2255
 fileName wgEncodeOpenChromSynthGm18507Pk.bed.gz
+geoSampleAccession GSM1002664
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -120,6 +126,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002256
 expId 2256
 fileName wgEncodeOpenChromSynthGm19239Pk.bed.gz
+geoSampleAccession GSM1002663
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -141,6 +148,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001324
 expId 1324
 fileName wgEncodeOpenChromSynthH1hescPk.bed.gz
+geoSampleAccession GSM1002655
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -162,6 +170,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002259
 expId 2259
 fileName wgEncodeOpenChromSynthHelas3Ifna4hPk.bed.gz
+geoSampleAccession GSM1002660
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -183,6 +192,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001326
 expId 1326
 fileName wgEncodeOpenChromSynthHelas3Pk.bed.gz
+geoSampleAccession GSM1002653
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -204,6 +214,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001327
 expId 1327
 fileName wgEncodeOpenChromSynthHepg2Pk.bed.gz
+geoSampleAccession GSM1002654
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -225,6 +236,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002258
 expId 2258
 fileName wgEncodeOpenChromSynthHtr8Pk.bed.gz
+geoSampleAccession GSM1002661
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -246,6 +258,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001325
 expId 1325
 fileName wgEncodeOpenChromSynthHuvecPk.bed.gz
+geoSampleAccession GSM1002656
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -267,6 +280,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001328
 expId 1328
 fileName wgEncodeOpenChromSynthK562Pk.bed.gz
+geoSampleAccession GSM1002657
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -288,6 +302,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002260
 expId 2260
 fileName wgEncodeOpenChromSynthMedulloPk.bed.gz
+geoSampleAccession GSM1002667
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -309,6 +324,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001329
 expId 1329
 fileName wgEncodeOpenChromSynthNhekPk.bed.gz
+geoSampleAccession GSM1002658
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -330,6 +346,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002261
 expId 2261
 fileName wgEncodeOpenChromSynthPanisletsPk.bed.gz
+geoSampleAccession GSM1002652
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -351,6 +368,7 @@ dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002262
 expId 2262
 fileName wgEncodeOpenChromSynthUrothelUt189Pk.bed.gz
+geoSampleAccession GSM1002659
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -361,4 +379,4 @@ tableName wgEncodeOpenChromSynthUrothelUt189Pk
 treatment UT189
 view Peaks
 
-# MAGIC: -170829841
+# MAGIC: -1985238247

@@ -2542,7 +2542,7 @@ identifier ensemblTranscriptIdFelCat external=Ensembl dependency
 identifier ensemblLinkId external=Ensembl dependency
 "Ensembl Links from hgTracks"
     hg18,hg19,anoCar2,bosTau6,calJac3,oryCun2,panTro4,xenTro3.chromInfo.chrom
-    hg18,hg19,anoCar2,bosTau6,calJac3,oryCun2,panTro4,xenTro3.ucscToEnsembl.ucsc
+    hg18,hg19,anoCar2,bosTau6,calJac3,oryCun2,panTro4,xenTro3.mm10.ucscToEnsembl.ucsc
 
 identifier ucscToEnsembl external=Ensembl dependency
 "UCSC to Ensembl chrom name translation"
@@ -3762,6 +3762,7 @@ tablesIgnored hgFixed
 
 tablesIgnored $gbd
     NIAGene
+    assemblyFrags
     affyDrosDev%
     ancientRepeat
     axtInfo
