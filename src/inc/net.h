@@ -10,6 +10,23 @@
 #include "linefile.h"
 #include "dystring.h"
 
+void setConnFailuresEnabled(boolean val);
+/* Turn on or off the connFailures feature */
+
+boolean checkConnFailure(char *hostName, int port, char **pErrStr);
+/* check if this hostName:port has already had failure
+ *  which can save time and avoid more timeouts */
+
+void addConnFailure(char *hostName, int port, char *format, ...)
+/* add a failure to connFailures[]
+ *  which can save time and avoid more timeouts */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
+/* add a failure to connFailures[]
+ *  which can save time and avoid more timeouts */
 int netConnect(char *hostName, int port);
 /* Start connection with a server having resolved port. Return < 0 if error. */
 
