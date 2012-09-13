@@ -1678,12 +1678,13 @@ html wgEncodeCshlLongRnaSeq.release3
         # subId=5995 dateSubmitted=2012-03-14
         # was wgEncodeCshlLongRnaSeqHpiepcCellTotalPlusRawRep1 wong Wed May 16 10:55:54 2012
 
-        track wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
-        parent wgEncodeCshlLongRnaSeqViewPlusSig off
-        shortLabel hMNPB cel tot + 1
-        longLabel hMNC-PB whole cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-        subGroups view=PlusSignal cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
-        type bigWig 1.000000 764308.000000
+        # Replaced
+        #track wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
+        #parent wgEncodeCshlLongRnaSeqViewPlusSig off
+        #shortLabel hMNPB cel tot + 1
+        #longLabel hMNC-PB whole cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        #subGroups view=PlusSignal cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
+        #type bigWig 1.000000 764308.000000
         # subId=6858 dateSubmitted=2012-04-25
         # was wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRawRep1 wong Wed May 16 10:55:48 2012
 
@@ -1700,7 +1701,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHaoafCellTotalPlusSignalRep1
         parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel HAoAF cel tot + 1
-        longLabel HAoAF cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel HAoAF whole cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HAOAF localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 6475461.000000
         # subId=7191 dateSubmitted=2012-06-29
@@ -1717,7 +1718,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusSignalRep1V2
         parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel hMNPB cel tot + 1
-        longLabel hMNC-PB cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel hMNC-PB whole cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 6668862.000000
         # subId=7189 dateSubmitted=2012-06-29
@@ -3384,12 +3385,13 @@ html wgEncodeCshlLongRnaSeq.release3
         # subId=5995 dateSubmitted=2012-03-14
         # was wgEncodeCshlLongRnaSeqHpiepcCellTotalMinusRawRep1 wong Wed May 16 10:55:53 2012
 
-        track wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
-        parent wgEncodeCshlLongRnaSeqViewMinusSig off
-        shortLabel hMNPB cel tot - 1
-        longLabel hMNC-PB whole cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-        subGroups view=MinusSignal cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
-        type bigWig 1.000000 783818.000000
+        #Replaced
+        #track wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
+        #parent wgEncodeCshlLongRnaSeqViewMinusSig off
+        #shortLabel hMNPB cel tot - 1
+        #longLabel hMNC-PB whole cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        #subGroups view=MinusSignal cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
+        #type bigWig 1.000000 783818.000000
         # subId=6858 dateSubmitted=2012-04-25
         # was wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRawRep1 wong Wed May 16 10:55:48 2012
 
@@ -3406,7 +3408,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHaoafCellTotalMinusSignalRep1
         parent wgEncodeCshlLongRnaSeqViewMinusSig off
         shortLabel HAoAF cel tot - 1
-        longLabel HAoAF cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel HAoAF whole cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HAOAF localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 7172853.000000
         # subId=7191 dateSubmitted=2012-06-29
@@ -3423,7 +3425,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusSignalRep1V2
         parent wgEncodeCshlLongRnaSeqViewMinusSig off
         shortLabel hMNPB cel tot - 1
-        longLabel hMNC-PB cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel hMNC-PB whole cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bigWig 1.000000 4900756.000000
         # subId=7189 dateSubmitted=2012-06-29
@@ -5030,12 +5032,13 @@ html wgEncodeCshlLongRnaSeq.release3
         type bam
         # subId=5995 dateSubmitted=2012-03-14
 
-        track wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1
-        parent wgEncodeCshlLongRnaSeqViewAlignments off
-        shortLabel hMNPB cel tot A 1
-        longLabel hMNC-PB whole cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        subGroups view=Alignments cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
-        type bam
+        #Replaced
+        #track wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1
+        #parent wgEncodeCshlLongRnaSeqViewAlignments off
+        #shortLabel hMNPB cel tot A 1
+        #longLabel hMNC-PB whole cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        #subGroups view=Alignments cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
+        #type bam
         # subId=6785 dateSubmitted=2012-03-30
 
         #REVOKED
@@ -5067,7 +5070,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2
         parent wgEncodeCshlLongRnaSeqViewAlignments off
         shortLabel hMNPB cel tot A 1
-        longLabel hMNC-PB cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        longLabel hMNC-PB whole cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bam
         # subId=7189 dateSubmitted=2012-06-29
@@ -5878,12 +5881,13 @@ html wgEncodeCshlLongRnaSeq.release3
         type bed 6 +
         # subId=5996 dateSubmitted=2012-03-14
 
-        track wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel hMNPB cel tot C
-        longLabel hMNC-PB whole cell total RNA-seq Contigs Pooled from ENCODE/CSHL
-        subGroups view=Contigs cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=Pooled rank=none
-        type bed 6 +
+        # REPLACED 
+        #track wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs
+        #parent wgEncodeCshlLongRnaSeqViewContigs off
+        #shortLabel hMNPB cel tot C
+        #longLabel hMNC-PB whole cell total RNA-seq Contigs Pooled from ENCODE/CSHL
+        #subGroups view=Contigs cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=Pooled rank=none
+        #type bed 6 +
         # subId=6781 dateSubmitted=2012-03-30
 
         #REVOKED
@@ -5906,7 +5910,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHmncpbCellTotalContigsV2
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel hMNPB cel tot C
-        longLabel hMNC-PB cell total RNA-seq Contigs Pooled from ENCODE/CSHL
+        longLabel hMNC-PB whole cell total RNA-seq Contigs Pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=t3HMNCPB localization=CELL rnaExtract=TOTAL rep=Pooled rank=none
         type bed 6 +
         # subId=7320 dateSubmitted=2012-07-04
