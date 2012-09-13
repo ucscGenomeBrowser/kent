@@ -59,9 +59,6 @@ include wgEncodeUmassDekker5C.release2.ra
 
 # UW 5C (wrangler: Venkat and Kate)
 include wgEncodeUw5C.ra 
-#include wgEncodeUw5C.patch.ra public
-#include wgEncodeUw5C.patch2.ra alpha,beta
-#include wgEncodeUw5C.release2.ra alpha
 
 
 # Encode Affy Exon --------------------------------------------
