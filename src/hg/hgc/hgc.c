@@ -905,9 +905,6 @@ if (tableName != NULL)
     struct sqlConnection *conn = hAllocConn(database);
     struct itemDetailsHtml *html, *htmls;
     if (columnExists(conn, tableName, "chrom"))
-        htmls = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
-                       "select name, html from %s where name = '%s'", tableName, itemName);
-    else 
         {
         char *chrom = cgiString("c");
         int start   = cgiInt("o");
@@ -920,6 +917,9 @@ if (tableName != NULL)
                        start = '%d' and \
                        end = '%d'", tableName, itemName, chrom, start, end);
         }
+    else 
+        htmls = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
+                       "select name, html from %s where name = '%s'", tableName, itemName);
 
     for (html = htmls; html != NULL; html = html->next)
         printf("<br>\n%s\n", html->html);
