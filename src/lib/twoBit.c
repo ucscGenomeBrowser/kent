@@ -932,11 +932,6 @@ else
     *e++ = '\0';
     s = e;
     }
-if (!endsWith(spec->fileName, ".2bit"))
-    {
-    twoBitSpecFree(&spec);
-    return NULL; /* not a 2bit file */
-    }
 
 if (s != NULL)
     {
