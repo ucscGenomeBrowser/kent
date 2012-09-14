@@ -12,6 +12,7 @@
 
 
 int bedPlus = 0;
+int ends = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
@@ -37,6 +38,7 @@ static struct optionSpec optionSpecs[] = {
     {"positions", OPTION_BOOLEAN},
     {"pslT", OPTION_BOOLEAN},
     {"sample", OPTION_BOOLEAN},
+    {"ends", OPTION_INT},
     {"tab", OPTION_BOOLEAN},
     {"tabSep", OPTION_BOOLEAN},
     {NULL, 0}
@@ -73,6 +75,8 @@ errAbort(
   "   -hasBin - File has bin value (used only with -bedPlus)\n"
   "   -tab - Separate by tabs rather than space (used only with -bedPlus)\n"
   "   -pslT - File is in psl format, map target side only\n"
+  "   -ends=N - Lift the first and last N bases of each record and combine the\n"
+  "             result. This is useful for lifting large regions like BAC end pairs.\n" 
   "   -minBlocks=0.N Minimum ratio of alignment blocks or exons that must map\n"
   "                  (default %3.2f)\n"
   "   -fudgeThick    (bed 12 or 12+ only) If thickStart/thickEnd is not mapped,\n"
@@ -120,6 +124,11 @@ else if (optionExists("sample"))
 else if (optionExists("pslT"))
     liftOverPsl(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
+else if (optionExists("ends"))
+    liftOverBedPlusEnds(oldFile, chainHash, minMatch, minBlocks, 
+                minSizeT, minSizeQ, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+		chainTable, bedPlus, hasBin, tabSep, ends, &errCt);
 else if (optionExists("bedPlus"))
     liftOverBedPlus(oldFile, chainHash, minMatch, minBlocks, 
                 minSizeT, minSizeQ, 
@@ -167,6 +176,7 @@ minSizeQ = optionInt("minSizeQ", minSizeQ);
 minChainT = optionInt("minChainT", minChainT);
 minChainQ = optionInt("minChainQ", minChainQ);
 bedPlus = optionInt("bedPlus", bedPlus);
+ends = optionInt("ends", ends);
 hasBin = optionExists("hasBin");
 tabSep = optionExists("tab") || optionExists("tabSep");
 if ((hasBin || tabSep) && !bedPlus)
