@@ -104,7 +104,7 @@ set cpuFarm = swarm
 set kent = ~/kent
 
 # Create initial dir
-set scriptDir = `pwd`
+#set scriptDir = `pwd`
 mkdir -p $dir
 cd $dir
 
@@ -736,7 +736,7 @@ set lift = "/gbdb/$oldDb/liftOver/${oldDb}To${Db}.over.chain.gz"
 genePredToFakePsl $oldDb knownGene $oldDb.kg.psl $oldDb.kg.cds
 
 # only keep those id's that uniquely map to mm10
-zcat $lift | pslMap -chainMapFile -swapMap $oldDb.kg.psl stdin stdout | pslCDnaFilter -uniqueMapped stdin stdout |  sort -k 14,14 -k 16,16n | /cluster/home/braney/bin/x86_64/pslToBed -cds=$oldDb.kg.cds stdin $oldDb.$db.kg.bed 
+zcat $lift | pslMap -chainMapFile -swapMap $oldDb.kg.psl stdin stdout | pslCDnaFilter -uniqueMapped stdin stdout |  sort -k 14,14 -k 16,16n | pslToBed -cds=$oldDb.kg.cds stdin $oldDb.$db.kg.bed 
 
 #     drop nonUnique:     112     285
 
@@ -746,19 +746,19 @@ txGeneAccession $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId \
 	weeded.bed txToAcc.tab oldToNew.tab
 
 tawk '{print $4}' oldToNew.tab | sort | uniq -c
-# 3681 compatible
-# 48739 exact
-# 2887 lost
-# 6701 new
+#   5108 compatible
+#  48739 exact
+#   1460 lost
+#   5274 new
 
 echo "select * from knownGene" | hgsql mm9 | sort > mm9.knownGene.gp
 grep lost oldToNew.tab | awk '{print $2}' | sort > lost.txt
 join lost.txt mm9.knownGene.gp > mm9.lost.gp
 
-awk '{if ($7 == $6) print}' mm9.lost.gp | wc       
-# non-coding 1927
-awk '{if ($7 != $6) print}' mm9.lost.gp | wc       
-# coding 960
+awk '{if ($7 == $6) print}' mm9.lost.gp | wc -l
+# non-coding 762
+awk '{if ($7 != $6) print}' mm9.lost.gp | wc -l
+# coding 698
 
 # Assign permanent accessions to each transcript, and make up a number
 # of our files with this accession in place of the temporary IDs we've been
@@ -822,11 +822,11 @@ ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para time > run.time"
 
 cat run.time
 # Completed: 97 of 97 jobs
-# CPU time in finished jobs:       1837s      30.62m     0.51h    0.02d  0.000 y
-# IO & Wait Time:                   948s      15.80m     0.26h    0.01d  0.000 y
-# Average job time:                  29s       0.48m     0.01h    0.00d
-# Longest finished job:              96s       1.60m     0.03h    0.00d
-# Submission to last job:           100s       1.67m     0.03h    0.00d
+# CPU time in finished jobs:       1167s      19.45m     0.32h    0.01d  0.000 y
+# IO & Wait Time:                   405s       6.75m     0.11h    0.00d  0.000 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest finished job:              60s       1.00m     0.02h    0.00d
+# Submission to last job:            62s       1.03m     0.02h    0.00d
 
 pslCat raw/*.psl > ../../ucscVsUniprot.psl
 rm -r raw
@@ -912,7 +912,9 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > ref
 hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
 # Make up kgXref table.  Takes about 3 minutes.
-txGeneXref $db $tempDb $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
+time txGeneXref $db $tempDb $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
+# 5.078u 4.871s 1:45.41 9.4%      0+0k 0+0io 0pf+0w
+
 hgLoadSqlTab $tempDb kgXref $kent/src/hg/lib/kgXref.sql ucscGenes.xref
 
 # Update knownToRefSeq to make it consistent with ucscGenes.xref.  Prior to
@@ -999,11 +1001,12 @@ endif
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
 hgsql $tempDb -e "delete k from knownToVisiGene k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
+
+vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 # probe has 26611 rows
 # gene has 20413 rows
 # imageProbe has 125765 rows
 
-vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 cd /usr/local/apache/cgi-bin/visiGeneData
 ixIxx visiGene.text visiGene.ix visiGene.ixx
 cd $dir
@@ -1045,6 +1048,7 @@ scratchDir $scratchDir/brHgNearBlastp
 _EOF_
 
 
+rm -rf  $scratchDir/brHgNearBlastp
 doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra |& tee do.log 
 # *** All done!
 # *** -noLoad was specified -- you can run this script manually to load mm10 tables:
@@ -1093,6 +1097,7 @@ synBlastp.csh $tempDb $xdb
 # old number of unique target values 22667
 # new number of unique query values: 39713
 # new number of unique target values 22032
+
 hgsql -e "select  count(*) from hgBlastTab\G" $oldDb | tail -n +2
 # count(*): 47124
 hgsql -e "select  count(*) from hgBlastTab\G" $db | tail -n +2
@@ -1214,9 +1219,6 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     hgLoadRnaFold $tempDb foldUtr5 fold
     cd ../utr3
     hgLoadRnaFold -warnEmpty $tempDb foldUtr3 fold
-# There are a five warnings on empty files.  Seems to be a problem in
-# RNAfold, so not easy for us to fix. Consequence is not too bad, just a
-# few 3' UTRs will be missing annotation.
 
 # Clean up
     rm -r split fold err batch.bak
@@ -1259,12 +1261,11 @@ ssh $cpuFarm "cd $dir/pfam; para make jobList"
 ssh $cpuFarm "cd $dir/pfam; para time > run.time"
 cat run.time
 
-# Completed: 9671 of 9671 jobs
-# CPU time in finished jobs:    2523742s   42062.37m   701.04h   29.21d  0.080 y
-# IO & Wait Time:               2605504s   43425.06m   723.75h   30.16d  0.083 y
-# Average job time:                 530s       8.84m     0.15h    0.01d
-# Longest finished job:            2264s      37.73m     0.63h    0.03d
-# Submission to last job:          5530s      92.17m     1.54h    0.06d
+# CPU time in finished jobs:    2538170s   42302.84m   705.05h   29.38d  0.080 y
+# IO & Wait Time:                415746s    6929.10m   115.48h    4.81d  0.013 y
+# Average job time:                 305s       5.09m     0.08h    0.00d
+# Longest finished job:            1737s      28.95m     0.48h    0.02d
+# Submission to last job:         17004s     283.40m     4.72h    0.20d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
@@ -1316,12 +1317,13 @@ gensub2 prot.list single template jobList
 ssh $cpuFarm "cd $dir/scop; para make jobList"
 ssh $cpuFarm "cd $dir/scop; para time > run.time"
 cat run.time
+
 # Completed: 9671 of 9671 jobs
-# CPU time in finished jobs:    2708684s   45144.73m   752.41h   31.35d  0.086 y
-# IO & Wait Time:               2849560s   47492.67m   791.54h   32.98d  0.090 y
-# Average job time:                 575s       9.58m     0.16h    0.01d
-# Longest finished job:            2676s      44.60m     0.74h    0.03d
-# Submission to last job:          6435s     107.25m     1.79h    0.07d
+# CPU time in finished jobs:    2718190s   45303.16m   755.05h   31.46d  0.086 y
+# IO & Wait Time:                594796s    9913.27m   165.22h    6.88d  0.019 y
+# Average job time:                 343s       5.71m     0.10h    0.00d
+# Longest finished job:            2411s      40.18m     0.67h    0.03d
+# Submission to last job:         13659s     227.65m     3.79h    0.16d
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -1494,7 +1496,7 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
 
 # 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
-# /gbdb/$db/targetDb/kgTargetSeq.2bit .          
+# /gbdb/$db/targetDb/kgTargetSeq${curVer}.2bit
 
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
