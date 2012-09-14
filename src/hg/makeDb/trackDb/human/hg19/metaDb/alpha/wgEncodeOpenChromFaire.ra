@@ -1480,7 +1480,6 @@ labVersion 1% ENCODE array platform validation tests
 md5sum 21ed657d2b71a4cad34befa7cddb7aa0
 project wgEncode
 subId 4154
-treatment None
 view Validation
 
 metaObject wgEncodeOpenChromFaireGm18507AlnRep1
@@ -1600,7 +1599,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm18507RawDataRep2
@@ -1624,7 +1622,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm18507Sig
@@ -1670,7 +1667,6 @@ labVersion 1% ENCODE array platform validation tests
 md5sum 68ab08c8b0794dae7330a56daca59d03
 project wgEncode
 subId 4154
-treatment None
 view Validation
 
 metaObject wgEncodeOpenChromFaireGm19239AlnRep1
@@ -1790,7 +1786,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm19239RawDataRep2
@@ -1814,7 +1809,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm19239Sig
@@ -1860,7 +1854,6 @@ labVersion 1% ENCODE array platform validation tests
 md5sum 217a61b0a8a6e75fd04b8429d7016193
 project wgEncode
 subId 4154
-treatment None
 view Validation
 
 metaObject wgEncodeOpenChromFaireH1hescAlnRep1
@@ -1980,7 +1973,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireH1hescRawDataRep2
@@ -2004,7 +1996,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireH1hescSig
@@ -2562,7 +2553,6 @@ labVersion 1% ENCODE array platform validation tests
 md5sum 7137541f13c341285cc27a791ca062e3
 project wgEncode
 subId 4154
-treatment None
 view Validation
 
 metaObject wgEncodeOpenChromFaireHepg2AlnRep1
@@ -2797,7 +2787,6 @@ labVersion 1% ENCODE array platform validation tests
 md5sum 303ee673001f431fe82f010e33cc439c
 project wgEncode
 subId 4154
-treatment None
 view Validation
 
 metaObject wgEncodeOpenChromFaireHtr8AlnRep1
@@ -3076,7 +3065,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireHuvecRawDataRep2
@@ -3100,7 +3088,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireHuvecSig
@@ -3146,7 +3133,6 @@ labVersion 1% ENCODE array platform validation tests
 md5sum 8bc1a79741b1b34c398b0849acd599b2
 project wgEncode
 subId 4154
-treatment None
 view Validation
 
 metaObject wgEncodeOpenChromFaireK562AlnRep1
@@ -5108,7 +5094,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireNhbeRawDataRep2
@@ -5133,7 +5118,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireNhbeSig
@@ -5276,7 +5260,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireNhekRawDataRep2
@@ -5300,7 +5283,6 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireNhekSig
@@ -5346,7 +5328,6 @@ labVersion 1% ENCODE array platform validation tests
 md5sum d588326d7ba13fdbd811a5f5b9fb364d
 project wgEncode
 subId 4154
-treatment None
 view Validation
 
 metaObject wgEncodeOpenChromFairePancreasocAlnRep1
@@ -5580,7 +5561,6 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 3153
-treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFairePanisletsSig
@@ -6208,4 +6188,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1238126744
+# MAGIC: -1438736924
