@@ -10,6 +10,8 @@
 #include "linefile.h"
 #include "dystring.h"
 
+#define DEFAULTCONNECTTIMEOUTMSEC 10000  /* default connect timeout for tcp in milliseconds */
+
 void setConnFailuresEnabled(boolean val);
 /* Turn on or off the connFailures feature */
 
