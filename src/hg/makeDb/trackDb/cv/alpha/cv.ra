@@ -1582,6 +1582,7 @@ termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 lab Crawford
 protocol Crawford:ColonOC_Crawford_protocol.pdf
+label Colon OC
 
 term Cord_CD4_naive
 tag CORDCD4NAIVE
@@ -1713,6 +1714,7 @@ termId BTO:0001422
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001422
 lab Crawford
 protocol Crawford:EndometriumOC_Crawford_protocol.pdf
+label Endometrium OC
 
 term Fibrobl
 tag FIBROBL
@@ -1810,6 +1812,7 @@ termId BTO:0000484
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000484
 lab Crawford
 protocol Crawford:FrontalcortexOC_Crawford_protocol.pdf
+label Frontal cortex OC
 
 term Gliobla
 tag GLIOBLA
@@ -4862,6 +4865,7 @@ termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
 lab Crawford
 protocol Crawford:KidneyOC_Crawford_protocol.pdf
+label Kidney OC
 
 term LHSR
 tag LHSR
@@ -5204,6 +5208,7 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTG401.6_Crawford_protocol.pdf
+label MRT G401
 
 term MRT_A204
 tag MRTA204
@@ -5223,6 +5228,7 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTA204.1_Crawford_protocol.pdf
+label MRT A204
 
 term MRT_TTC549
 tag MRTTTC549
@@ -5241,6 +5247,7 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
+label MRT TTC549
 
 term Myometr
 tag MYOMETR
@@ -5687,6 +5694,7 @@ termId BTO:0000988
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000988
 lab Crawford
 protocol Crawford:PancreasOC_Crawford_protocol.pdf
+label Pancreas OC
 
 term PanIsletD
 tag PANISD
@@ -5940,6 +5948,7 @@ termId BTO:0000037
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000037&termName=renal%20adenocarcinoma%20cell
 lab Crawford
 protocol Crawford:RCC7860_Crawford_protocol.pdf
+label RCC 7860
 
 term RPMI-7951
 tag RPMI7951
@@ -6174,6 +6183,7 @@ termId BTO:0000651
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000651
 lab Crawford
 protocol Crawford:SmallintestineOC_Crawford_protocol.pdf
+label Small intestine OC
 
 term Spleen_OC
 tag SPLEENOC

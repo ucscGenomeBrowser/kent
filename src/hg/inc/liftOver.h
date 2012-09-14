@@ -55,6 +55,14 @@ int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,
 /* Lift bed with N+ (where n=bedPlus param) format.
  * Return the number of records successfully converted */
 
+int liftOverBedPlusEnds(char *fileName, struct hash *chainHash, double minMatch,  
+                    double minBlocks, int minSizeT, int minSizeQ, int minChainT,
+                    int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
+                    bool multiple, char *chainTable, int bedPlus, bool hasBin, 
+			bool tabSep, int ends, int *errCt);
+/* Lift bed N+ file.
+ * Return the number of records successfully converted */
+
 int liftOverPositions(char *fileName, struct hash *chainHash, 
                       double minMatch,  double minBlocks, 
                       int minSizeT, int minSizeQ,
