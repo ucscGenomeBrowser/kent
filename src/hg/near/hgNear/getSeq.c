@@ -230,7 +230,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 boolean hasBin = hOffsetPastBin(database, NULL, table);
-makeTitle("Genomice Sequence", NULL);
+makeTitle("Genomic Sequence", NULL);
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
