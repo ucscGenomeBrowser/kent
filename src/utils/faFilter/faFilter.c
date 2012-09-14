@@ -137,10 +137,11 @@ void faFilter(char *inFile, char *outFile)
 /* faFilter - Filter out fa records that don't match expression. */
 {
 struct slName *patternsList = NULL;
-if (optNamePatList != NULL)
-    readInPatterns(optNamePatList);
+if (optNamePatList != NULL) 
+    patternsList = readInPatterns(optNamePatList);
 if (namePat != NULL)
     slSafeAddHead(&patternsList, slNameNew(namePat));
+
 struct lineFile *inLf = lineFileOpen(inFile, TRUE);
 FILE *outFh = mustOpen(outFile, "w");
 DNA *seq;
