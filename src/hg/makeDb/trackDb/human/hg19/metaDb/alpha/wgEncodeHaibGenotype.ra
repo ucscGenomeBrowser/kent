@@ -1789,6 +1789,7 @@ dccAccession wgEncodeEH001289
 dccRep 1
 expId 1289
 fileName wgEncodeHaibGenotypeNhaDukeRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999328
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1814,6 +1815,7 @@ dccAccession wgEncodeEH001272
 dccRep 1
 expId 1272
 fileName wgEncodeHaibGenotypeNhaRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999311
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1839,6 +1841,7 @@ dccAccession wgEncodeEH001272
 dccRep 2
 expId 1272
 fileName wgEncodeHaibGenotypeNhaRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999311
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2346,4 +2349,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -984494169
+# MAGIC: -677806229

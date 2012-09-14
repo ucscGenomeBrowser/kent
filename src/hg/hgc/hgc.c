@@ -9270,6 +9270,14 @@ if (row != NULL)
     examined_samples    = row[ii];ii++;
     mut_freq            = row[ii];ii++;
 
+    // chromosome name adjustment
+    if (sameString(chromosome, "23"))
+	chromosome = "X";    
+    if (sameString(chromosome, "24"))
+	chromosome = "Y";    
+    if (sameString(chromosome, "25"))
+	chromosome = "M";    
+
     chp = strstr(itemName, "COSM")+strlen("COSM");
     printf("<B>COSMIC ID:</B> %s", chp);
 
