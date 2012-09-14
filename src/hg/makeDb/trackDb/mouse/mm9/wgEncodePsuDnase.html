@@ -1,0 +1,133 @@
+<H2>Description</H2>
+<P><DT><B><I>Rationale for the Mouse ENCODE project</I></B></DT>
+Knowledge of the function of genomic DNA sequences comes from three basic approaches. 
+Genetics uses changes in behavior or structure of a cell or organism in response to changes in DNA sequence to infer function of the altered sequence. 
+Biochemical approaches monitor states of histone modification, binding of specific transcription factors, accessibility to DNases and other epigenetic features along genomic DNA. 
+In general, these features are associated with gene activity, but the precise relationships remain to be established. 
+The third approach is evolutionary, using comparisons among homologous DNA sequences to find segments that are evolving more slowly or more rapidly than expected given the local rate of neutral change. 
+Such changes are inferred to be under negative or positive selection, respectively, and interpreted as DNA sequences needed for a preserved (negative selection) or adaptive (positive selection) function.
+</p>
+<p>
+The ENCODE project aims to discover all the DNA sequences associated with various epigenetic features, with the reasonable expectation that these will also be functional 
+(best tested by genetic methods). However, it is not clear how to relate these results with those from evolutionary analyses. 
+The mouse ENCODE project aims to make this connection explicitly and with a moderate breadth. 
+Assays identical to those being used in the ENCODE project are performed in cell types in mouse that are similar or homologous to those studied in the human project. 
+The comparison will be used to discover which epigenetic features are conserved between mouse and human, and examine the extent to which these overlap with the DNA sequences under negative selection. 
+The contribution of functional DNA preserved in mammals versus function in only one species will be discovered. The results will have a significant impact on the understanding of the evolution of gene regulation.
+</p>
+
+<P><DT><B><I>Maps of DNaseI Sensitivity</I></B></DT>
+DNaseI has long been used to map general chromatin accessibility, and DNaseI hypersensitivity 
+is a universal feature of active cis-regulatory sequences.  Maps of DNaseI sensitivity measured genome-wide are generated through DNaseI digestion, addition of linkers at the sites of cleavage, 
+and library prep followed by massively parallel short read sequencing on the Illumina GAIIx and HiSeq platforms. The sequence tags are mapped back to the mouse genome, and a graph of the 
+smoothed kernel density of DNaseI cleavage sites is displayed as the "Signal" track. 
+This provides a quantitative estimate of the frequency of cleavage by DNaseI in the initial digest, which in turn is related to the accessibility of the DNA in the chromatin. 
+Segments of greatest cleavage site density represent DNase hypersensitive sites (DHSs) and are identified as peaks by the F-seq program (Boyle <em>et al.</em> 2008). DHSs are candidates for any cis-regulatory module, including promoters, enhancers, insulators, and novel elements. 
+The sequence reads, quality scores, and alignment coordinates from these experiments are available for download.
+</p>
+
+<H2>Display Conventions and Configuration</H2>
+<p>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>). For each view, there are multiple subtracks that display
+individually on the browser. Instructions for configuring multi-view tracks
+are <a href="/goldenPath/help/multiView.html" target="_blank">here</a>.
+This track contains the following views:
+<DL>
+<DT><I>Peaks</I></DT>
+<DD> DNaseI hypersensitive sites (DHSs) identified as signal peaks.
+Peaks were called based on signals created using F-Seq, a software program developed at Duke (Boyle <em>et al.</em>, 2008). 
+Significant regions were determined by fitting the data to a gamma distribution to calculate p-values. The solid vertical line in the peak represents the point with the highest signal.</DD>
+<DT><I>Signal</I></DT>
+<DD>Density graph (wiggle) of signal enrichment calculated using F-Seq for each replicate. 
+F-Seq employs Parzen kernel density estimation to create base pair scores (Boyle <em>et al.</em>, 2008). 
+This method does not look at fixed-length windows, but rather weights contributions of nearby sequences in proportion to their distance from that base. </DD>
+</DL>
+<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+
+
+<H2>Methods</H2>
+Cells were grown and harvested according to the approved <a href="/ENCODE/protocols/cell/mouse" target="_blank">ENCODE cell culture protocols</a>
+for G1E and G1E-ER4. 
+<p>
+DNaseI hypersensitive sites were isolated using methods called DNase-seq or DNase-chip (Song and Crawford, 2010). 
+Briefly, cells were lysed with NP40, and intact nuclei were digested with optimal levels of DNaseI enzyme. 
+DNaseI-digested ends were captured from three different DNase concentrations, and material was sequenced using Illumina sequencing.
+</p>
+
+<p>
+The read length for sequences from DNase-seq is 20 bases long due to a MmeI cutting step of the approximately 50 kb DNA fragments extracted after DNaseI digestion. 
+Sequences from each experiment were mapped to the mouse genome (mm9 assembly) using the program
+<a href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a> (Langmead <em>et al.</em>, 2009).  
+Reads mapping to more than one location were not removed. For such reads, only the best mapping result was used ("--best" option).
+Sequences from multiple lanes were combined for a single replicate and converted to the sam/bam format using
+<a href="http://samtools.sourceforge.net/" target="_blank">SAMtools</a>.  
+Using F-seq, the resulting digital signal was converted to a continuous wiggle track that employs a Parzen kernel density estimation to create base pair scores (Boyle <em>et al.</em>, 2008).
+</p>
+
+<p>
+Discrete DNaseI HS sites (peaks) were identified from the DNase-seq F-seq density signal. Significant regions were determined by fitting the data to a gamma distribution to calculate p-values.
+</p>
+
+
+<H2>Credits</H2>
+<p>
+Cell growth and DNaseI digestion were done by Christine Dorman in the Hardison lab, and DNase-seq libraries were constructed in the laboratory of Greg Crawford (Duke).  
+Sequencing was done by the laboratory of Greg Crawford (Duke). Data processing and analysis was done by Chris Morrissey (PSU) and Yoichiro Shibata (Duke) with advice from Terry Furey (University of North Carolina). 
+Some analyses used tools provided in the Galaxy platform (Anton Nekrutenko, PSU, and James Taylor, Emory) enabled by the Penn State Cyberstar computer (supported by the National Science Foundation). 
+Generation of these data was supported by National Institutes of Health grants R01DK065806 and RC2HG005573.
+<p>
+
+<p>
+Contact:
+<A HREF="mailto:&#114;&#99;h&#56;&#64;&#112;&#115;&#117;.
+&#101;&#100;u"
+title="mailto:&#114;&#99;h&#56;&#64;&#112;&#115;&#117;.
+&#101;&#100;u" rel="nofollow"
+TARGET=_BLANK>Ross Hardison</A>
+<!-- above address is Ross Hardison at psu.edu -->
+</p>
+
+<H2>References</H2>
+<p>
+Boyle AP, Guinney J, Crawford GE, Furey TS.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18784119" target="_blank">
+F-Seq: a feature density estimator for high-throughput sequence tags</a>.
+<em>Bioinformatics</em>. 2008 Nov 1;24(21):2537-8.
+</p>
+
+<p>
+Langmead B, Trapnell C, Pop M, Salzberg SL.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174" target="_blank">
+Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</a>.
+<em>Genome Biol</em>. 2009;10(3):R25.
+</p>
+
+<p>
+Song L, Crawford GE.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20150147" target="_blank">
+DNase-seq: a high-resolution technique for mapping active gene regulatory elements across the genome
+from mammalian cells</a>.
+<em>Cold Spring Harb Protoc</em>. 2010 Feb;2010(2):pdb.prot5384.
+</p>
+
+
+<h2>Publications</h2>
+<p>
+Wu W, Cheng Y, Keller CA, Ernst J, Kumar SA, Mishra T, Morrissey C, Dorman CM, Chen KB, Drautz D <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21795386" target="_blank">
+Dynamics of the epigenetic landscape during erythroid differentiation after GATA1 restoration</a>.
+<em>Genome Res</em>. 2011 Oct;21(10):1659-71.
+</p>
+
+
+
+<H2> Data Release Policy </H2>
+
+<p>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column, above.  The full data release policy
+for ENCODE is available
+<A TARGET=_BLANK HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</p>
+

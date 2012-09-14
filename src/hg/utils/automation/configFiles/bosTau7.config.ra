@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db bosTau7
+clade mammal
+genomeCladePriority 31
+scientificName Bos taurus
+commonName Cow
+assemblyDate OCt. 2011
+assemblyLabel Baylor Btau_4.6.1
+assemblyShortLabel Btau_4.6.1
+orderKey 236
+mitoAcc AY526085
+fastaFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir cow
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 82
+ncbiAssemblyId 313728
+ncbiAssemblyName Baylor Btau_4.6.1
+ncbiBioProject 12555
+genBankAccessionID GCA_000003205.4
+taxId 9913

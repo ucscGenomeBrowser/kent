@@ -180,3 +180,171 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/ochPri2/bed/ensGene.51
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/ochPri2/bed/cpgIslands
+    cd /hive/data/genomes/ochPri2/bed/cpgIslands
+    time doCpgIslands.pl ochPri2 > do.log 2>&1
+    #   fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    2m10.760s
+    # continuing:
+    time doCpgIslands.pl -continue=cleanup ochPri2 > cleanup.log 2>&1
+    #   real    41m18.291s
+
+    cat fb.ochPri2.cpgIslandExt.txt
+    #   22070916 bases of 1923624051 (1.147%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/ochPri2/bed/genscan
+    cd /hive/data/genomes/ochPri2/bed/genscan
+    time doGenscan.pl ochPri2 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    329m1.050s
+    # continuing:
+    time doGenscan.pl -continue=load ochPri2 > load.log 2>&1
+    #   real    12m8.926s
+    # failed out of inodes on hive:
+    time doGenscan.pl -continue=cleanup ochPri2 > cleanup.log 2>&1
+    #   real    35m52.560s
+
+    cat fb.ochPri2.genscan.txt
+    #   76450061 bases of 1923624051 (3.974%) in intersection
+    cat fb.ochPri2.genscanSubopt.txt
+    #   102217862 bases of 1923624051 (5.314%) in intersection
+
+#########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S ochPri2
+    mkdir /hive/data/genomes/ochPri2/bed/windowMasker
+    cd /hive/data/genomes/ochPri2/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev ochPri2 > do.log 2>&1
+    #   real    904m39.415s
+    # fixing a broken command in the doLoad step:
+    time ./lastLoad.csh
+    #   real    7m10.582s
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -continue=cleanup -workhorse=hgwdev -buildDir=`pwd` \
+        -dbHost=hgwdev ochPri2 > cleanup.log 2>&1
+    #   real    1m45.497s
+
+    cat fb.ochPri2.windowmaskerSdust.beforeClean.txt
+    #   2224659037 bases of 3445784354 (64.562%) in intersection
+    sed -e 's/^/    #\t/' fb.ochPri2.windowmaskerSdust.clean.txt
+    #   702498734 bases of 3445784354 (20.387%) in intersection
+    sed -e 's/^/    #\t/' fb.ochPri2.rmsk.windowmaskerSdust.txt
+    #   79974550 bases of 3445784354 (2.321%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1923624051 / 2897316137 \) \* 1024
+    #	( 1923624051 / 2897316137 ) * 1024 = 679.867483
+
+    # round up to 700
+
+    cd /hive/data/genomes/ochPri2
+    time blat ochPri2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/ochPri2.11.ooc -repMatch=700
+    #   Wrote 19533 overused 11-mers to jkStuff/ochPri2.11.ooc
+    #   real    0m51.997s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" ochPri2 | sort | uniq -c
+    #   530221 yes
+#    cd /hive/data/genomes/ochPri2/jkStuff
+#    gapToLift ochPri2 ochPri2.nonBridged.lift -bedFile=ochPri2.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' ochPri2.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Ochotona princeps       1       0       0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add ochPri2 just after ce2
+# ochPri2 (Pika)
+ochPri2.serverGenome = /hive/data/genomes/ochPri2/ochPri2.2bit
+ochPri2.clusterGenome = /hive/data/genomes/ochPri2/ochPri2.2bit
+ochPri2.ooc = /hive/data/genomes/ochPri2/jkStuff/ochPri2.11.ooc
+ochPri2.lift = no
+ochPri2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+ochPri2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+ochPri2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+ochPri2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+ochPri2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+ochPri2.refseq.mrna.native.load = no
+ochPri2.refseq.mrna.xeno.load = yes
+ochPri2.genbank.mrna.xeno.load = yes
+ochPri2.genbank.est.native.load = no
+ochPri2.downloadDir = ochPri2
+ochPri2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding ochPri2 pika" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for micMurNames" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S ochPri2           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial ochPri2 &
+    #   var/build/logs/2012.06.08-09:50:30.ochPri2.initalign.log
+    #   real    2405m45.707s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ochPri2 &
+    #	logFile:  var/dbload/hgwdev/logs/2012.06.11-13:42:34.dbload.log
+    #   real    10m29.923s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-06-11 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add ochPri2 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added ochPri2." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_6491:75719-81052" where name="ochPri2";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/ochPri2/pushQ
+    cd /hive/data/genomes/ochPri2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl ochPri2 2> stderr.txt | grep -v transMap > ochPri2.sql
+    #   real    3m37.306s
+
+    scp -p ochPri2.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/ochPri2.sql"
+
+############################################################################

@@ -1,5 +1,5 @@
 table bedRrbs
-"BED9 + 2  number of reads + percent methylation"
+"BED9+2  Number of reads + percent methylation"
     (
     string chrom;      "Reference chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"

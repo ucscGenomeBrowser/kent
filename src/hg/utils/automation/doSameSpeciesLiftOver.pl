@@ -527,8 +527,24 @@ _EOF_
 sub getSeqAndSizes {
   # Test assumptions about 2bit and chrom.sizes files.
   $tSeq = "/scratch/data/$tDb/$tDb.2bit";
+  if (! -e $tSeq) {
+    # allow it to exist here too:
+    my $fs = "$HgAutomate::clusterData";
+&HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
+      if (-e "$fs/$tDb/$tDb.2bit") {
+        $tSeq = "$fs/$tDb/$tDb.2bit";
+      }
+  }
   $tSizes = "$HgAutomate::clusterData/$tDb/chrom.sizes";
   $qSeq = "/scratch/data/$qDb/$qDb.2bit";
+  if (! -e $qSeq) {
+    # allow it to exist here too:
+    my $fs = "$HgAutomate::clusterData";
+&HgAutomate::verbose(1, "checking $fs/$qDb/$qDb.2bit\n");
+      if (-e "$fs/$qDb/$qDb.2bit") {
+        $qSeq = "$fs/$qDb/$qDb.2bit";
+      }
+  }
   $qSizes = "$HgAutomate::clusterData/$qDb/chrom.sizes";
   my $problem = 0;
   foreach my $file ($tSeq, $tSizes, $qSeq, $qSizes) {

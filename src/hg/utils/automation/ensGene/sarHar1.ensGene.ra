@@ -1,0 +1,8 @@
+# required db variable
+db sarHar1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With single quotes to protect
+#	everything in perl
+nameTranslation '/^MT/d'
+liftUp /hive/data/genomes/sarHar1/jkStuff/ensToUcsc.lift
+

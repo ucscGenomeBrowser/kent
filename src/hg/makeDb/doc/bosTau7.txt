@@ -3,6 +3,7 @@
 #	http://www.ncbi.nlm.nih.gov/genome/82
 #	http://www.ncbi.nlm.nih.gov/bioproject/12555
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAFC01
+#   http://www.ncbi.nlm.nih.gov/genome/assembly/313728/
 
 # file template copied from bosTau6.txt
 # Assembly Info:
@@ -120,6 +121,42 @@ zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
    # 0 lower) in 11660 sequences in 1 files
 
+    # N50
+    cd /hive/data/genomes/bosTau7/
+    n50.pl chrom.sizes
+    #   reading: chrom.sizes
+    #   contig count: 11692, total size: 2981119579, one half size: 1490559789
+    # cumulative    N50 count   contig  contig size
+    # 1444820354  12  chrX    88654062
+    # 1490559789 one half size
+    # 1529939826  13  chr12   85119472
+
+    cat << '_EOF_' > bosTau7.config.ra
+# Config parameters for makeGenomeDb.pl:
+db bosTau7
+clade mammal
+genomeCladePriority 31
+scientificName Bos taurus
+commonName Cow
+assemblyDate OCt. 2011
+assemblyLabel Baylor Btau_4.6.1
+assemblyShortLabel Baylor Btau_4.6.1
+orderKey 236
+mitoAcc AY526085
+fastaFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir cow
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 82
+ncbiAssemblyId 313728
+ncbiAssemblyName Baylor Btau_4.6.1
+ncbiBioProject 12555
+genBankAccessionID GCA_000003205.4
+taxId 9913
+'_EOF_'
+
 #########################################################################
 # Initial  database build (DONE - 2012-01-03 - Chin)
     cd /hive/data/genomes/bosTau7
@@ -131,7 +168,7 @@ genomeCladePriority 31
 scientificName Bos taurus
 commonName Cow
 assemblyDate OCt. 2011
-assemblyLabel Btau_4.6.1 (NCBI project 12555, accession GCA_000003205.4)
+assemblyLabel Baylor Btau_4.6.1 
 assemblyShortLabel Btau_4.6.1
 orderKey 236
 mitoAcc AY526085
@@ -139,6 +176,13 @@ fastaFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.fa.gz
 agpFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.agp.gz
 # qualFiles none
 dbDbSpeciesDir cow
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 82
+ncbiAssemblyId 313728
+ncbiAssemblyName Baylor Btau_4.6.1
+ncbiBioProject 12555
+genBankAccessionID GCA_000003205.4
 taxId 9913
 '_EOF_'
     # << happy emacs
@@ -150,7 +194,7 @@ taxId 9913
     ln -s `pwd`/bosTau7.unmasked.2bit /gbdb/bosTau7/bosTau7.2bit
 
     #  Per instructions in makeGenomeDb.log:
-XXXX TODO - replace *** use actual url for project etc.. in all html files
+# - replace *** use actual url for project etc.. in all html files
 #Search for '***' notes in each file in and make corrections (sometimes the
 #files used for a previous assembly might make a better template):
 #  description.html /cluster/data/bosTau7/html/{trackDb.ra,gap.html,gold.html}
@@ -165,7 +209,9 @@ XXXX TODO - replace *** use actual url for project etc.. in all html files
 # - Run make update DBS=bosTau7 and make alpha when done.
 # - (optional) Clean up /cluster/data/bosTau7/TemporaryTrackDbCheckout
 
-
+    # re-generated description html using update makeGenomeDb.pl and config.ra
+    cd /hive/data/genomes/bosTau7
+    makeGenomeDb.pl -forceDescription -continue=trackDb bosTau7.config.ra
 
 #########################################################################
 # RepeatMasker (DONE 2012-01-04 - Chin)
@@ -660,7 +706,6 @@ TMPDIR=/scratch/tmp
         -chainMinScore=5000 -verbose=2 -chainLinearGap=loose > do.log 2>&1 &
     #   real    1780m16.857s
 
-XXXX # TBD for all chain/net:
  *** All done !  Elapsed time: 1780m17s
  *** Make sure that goldenPath/bosTau7/vsOrnAna1/README.txt is accurate.
  *** Add {chain,net}OrnAna1 tracks to trackDb.ra if necessary.
@@ -687,7 +732,6 @@ XXXX # TBD for all chain/net:
     cat fb.ornAna1.chainBosTau7Link.txt
     # 190094136 bases of 1842236818 (10.319%) in intersection
 
-XXXX # TBD for all chain/net:
  *** All done !  Elapsed time: 58m6s
  *** Make sure that goldenPath/ornAna1/vsBosTau7/README.txt is accurate.
  *** Add {chain,net}BosTau7 tracks to trackDb.ra if necessary.
@@ -945,9 +989,50 @@ done
     featureBits bosTau3 genscan
     #   59251085 bases of 2731807384 (2.169%) in intersection
 
+#############################################################################
+# LIFTOVER TO bosTau4 (DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau7
+    ln -s jkStuff/bosTau7.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau7 bosTau4 > doLiftOverToBosTau4.log 2>&1 &
+    # real    1567m22.050s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau7/liftOver/
+    md5sum bosTau7ToBosTau4.over.chain.gz >> md5sum.txt
+    popd
+
+#############################################################################
+# LIFTOVER TO bosTau5 (DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau7
+    ln -s jkStuff/bosTau7.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau7 bosTau5 > doLiftOverToBosTau5.log 2>&1 &
+    # real    1570m4.968s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau7/liftOver/
+    md5sum bosTau7ToBosTau5.over.chain.gz >> md5sum.txt
+    popd
+
+#############################################################################
+# LIFTOVER TO bosTau6 (DONE - 2012-05-11 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/bosTau7
+    ln -s jkStuff/bosTau7.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau7 bosTau6 > doLiftOverToBosTau6.log 2>&1 &
+    # real    1570m6.579s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau7/liftOver/
+    md5sum bosTau7ToBosTau6.over.chain.gz >> md5sum.txt
+    popd
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (working 2011-06-14 - Chin)
+# all.joiner update, downloads and in pushQ - (DONE 2012-05-16 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=bosTau7 -all all.joiner
@@ -979,19 +1064,188 @@ done
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
 
-#############################################################################
-# LIFTOVER TO bosTau4 (working - 2011-10-20 - Chin)
+#########################################################################
+#  SWAP mm10 LASTZ (DONE - 2012-06-19 - Chin)
+    #   original alignment done at mm10.txt
+    cd /hive/data/genomes/mm10/bed/lastzBosTau7.2012-03-21
+    cat fb.mm10.chainBosTau7Link.txt
+    # 696498363 bases of 2652783500 (26.255%) in intersection
 
-    sh hgwdev
-    cd /hive/data/genomes/bosTau7
-    ln -s jkStuff/bosTau7.11.ooc 11.ooc
-    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
-        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-         bosTau7 bosTau4 > doLiftOverToBosTau4.log 2>&1 &
-    # real    110m26.710s
-    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau7/liftOver/
-    md5sum bosTau7ToBosTau4.over.chain.gz >> md5sum.txt
-    popd
+    # Create link
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzBosTau7.2012-03-21 lastz.bosTau7
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.mm10.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/mm10/bed/lastzBosTau7.2012-03-21/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    77m58.759s
+    cat fb.bosTau7.chainMm10Link.txt
+    #   711923052 bases of 2804673174 (25.383%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################
+# LASTZ alpaca vicPac1 (DONE - 2012-06-19 - Chin)
+    # establish a screen to control this job with a name to indicate
+    # what it is
+    screen -S bosTau7VicPac1
+    mkdir /hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19
+    cd /hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #   number of jobs, 50,000 to something under 100,000
+    cat << '_EOF_' > DEF
+# alpaca vs cow
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# TARGET: cow BosTau7
+SEQ1_DIR=/scratch/data/bosTau7/bosTau7.2bit
+SEQ1_LEN=/scratch/data/bosTau7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: alpaca VicPac1
+SEQ2_DIR=/scratch/data/vicPac1/vicPac1.2bit
+SEQ2_LEN=/scratch/data/vicPac1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=4000
+
+BASE=/hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    `pwd`/DEF \
+    -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    3089m45.519s
+    cat fb.bosTau7.chainVicPac1Link.txt
+    #   1259182233 bases of 2804673174 (44.896%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s lastzVicPac1.2012-06-19 lastz.vicPac1
+
+    # better to have reciprocal best for this one since it is low
+    # coverage:
+    cd /hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19
+    time doRecipBest.pl bosTau7 vicPac1 -buildDir=`pwd` -workhorse=hgwdev \
+    > best.log 2>&1 &
+    #   real    110m1.192s
+
+    # swap
+    mkdir /hive/data/genomes/vicPac1/bed/blastz.bosTau7.swap
+    cd /hive/data/genomes/vicPac1/bed/blastz.bosTau7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    717m22.295s
+    cat fb.vicPac1.chainBosTau7Link.txt
+    #  1309266730 bases of 1922910435 (68.088%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/vicPac1/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
+#########################################################################
+#  SWAP canFam3 LASTZ (DONE - 2012-06-23 - Chin)
+    #   original alignment done at canFam3.txt
+    cd /hive/data/genomes/canFam3/bed/lastzBosTau7.2012-06-23
+
+    cat fb.canFam3.chainBosTau7Link.txt
+    # 1381966556 bases of 2392715236 (57.757%) in intersection
+    # Create link
+    cd /hive/data/genomes/canFam3/bed
+    ln -s  lastzBosTau7.2012-06-23 lastz.bosTau7
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.canFam3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam3/bed/lastzBosTau7.2012-06-23/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real      121m44.022s
+    cat fb.bosTau7.chainCanFam3Link.txt
+    # 1456104306 bases of 2804673174 (51.917%) in intersection
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.canFam3.swap lastz.canFam3
+
+##############################################################################
+# LASTZ dolphin turTru2 (DONE 2012-06-19 - Chin)
+    # establish a screen to control this job with a name to indicate
+    # what it is
+    screen -S bosTau7TurTru2
+    mkdir /hive/data/genomes/bosTau7/bed/lastzTurTru2.2012-06-19
+    cd /hive/data/genomes/bosTau7/bed/lastzTurTru2.2012-06-19
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #   number of jobs, 50,000 to something under 100,000
+    cat << '_EOF_' > DEF
+# dolphin vs cow
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# TARGET: Cow BosTau7
+SEQ1_DIR=/scratch/data/bosTau7/bosTau7.2bit
+SEQ1_LEN=/scratch/data/bosTau7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: dolphin TurTru2
+SEQ2_DIR=/hive/data/genomes/turTru2/turTru2.2bit
+SEQ2_LEN=/hive/data/genomes/turTru2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=5000
+
+BASE=/hive/data/genomes/bosTau7/bed/lastzTurTru2.2012-06-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    `pwd`/DEF \
+    -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    7776m13.787s
+    cat fb.bosTau7.chainTurTru2Link.txt
+    #   1696154184 bases of 2804673174 (60.476%) in intersection    
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s lastzTurTru2.2012-06-19 lastz.turTru2
+
+    # better to have reciprocal best for this one since it is low
+    # coverage:
+    cd /hive/data/genomes/bosTau7/bed/lastzTurTru2.2012-06-19
+    time doRecipBest.pl bosTau7 turTru2 -buildDir=`pwd` -workhorse=hgwdev \
+    > best.log 2>&1 &
+    #   65m6.795s
+
+    # then swap
+    mkdir /hive/data/genomes/turTru2/bed/blastz.bosTau7.swap
+    cd /hive/data/genomes/turTru2/bed/blastz.bosTau7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/bosTau7/bed/lastzTurTru2.2012-06-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    532m53.448s
+    cat fb.turTru2.chainBosTau7Link.txt
+    #   1625706583 bases of 2332402443 (69.701%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/turTru2/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
 
 ############################################################################
 

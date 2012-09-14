@@ -33,23 +33,27 @@ $(function () {
         antibodyGroups = encodeProject.getAntibodyGroups(antibodies);
 
         // set up structures for cell types and their tiers
-        cellTiers = encodeProject.getCellTiers(cellTypes);
+        cellTiers = encodeProject.getCellTiers(cellTypes, encodeMatrix_organism);
 
         // gather experiments into matrix
         matrix = makeExperimentMatrix(experiments, antibodyTargetExps);
 
        // fill in table using matrix
-        encodeMatrix.tableOut($matrixTable, matrix, cellTiers, 
-                        antibodyGroups, antibodyTargetExps, tableHeaderOut, rowAddCells);
+        encodeMatrix.tableOut($matrixTable, matrix, cellTiers, antibodyGroups, antibodyTargetExps, 
+                encodeProject.pruneAntibodyGroupsToExps, tableHeaderOut, rowAddCells);
     }
 
     function makeExperimentMatrix(experiments, antibodyTargetExps) {
         // Populate antibodyTarget vs. cellType array with counts of experiments
 
-        var antibody, target, cellType;
+        var antibody, target, cellType, exp;
         var matrix = {};
 
-        $.each(experiments, function (i, exp) {
+        $.each(experiments, function (i, experiment) {
+
+            // adjust experiment as needed for display purposes
+            exp = encodeProject.adjustExperiment(experiment);
+
             // exclude ref genome annotations
             if (exp.cellType === 'None') {
                 return true;
@@ -58,6 +62,7 @@ $(function () {
             if (exp.dataType !== 'ChipSeq') {
                 return true;
             }
+
             // count experiments per target so we can prune those having none
             // (the matrix[cellType] indicates this for cell types 
             // so don't need hash for those
@@ -86,7 +91,7 @@ $(function () {
     return matrix;
     }
 
-    function tableHeaderOut($table, antibodyGroups, antibodyTargetExps) {
+    function tableHeaderOut($table, antibodyGroups) {
         // Generate table header and add to document
 
         var $tableHeaders, $thead, $th;
@@ -108,10 +113,6 @@ $(function () {
             $thead.before('<colgroup></colgroup>');
 
             $.each(group.targets, function (i, target) {
-                // prune out targets with no experiments 
-                if (antibodyTargetExps[target] === undefined) {
-                    return true;
-                }
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
                 $th = $('<th class="elementType">' + '<div class="verticalText">'+
                     '<a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&target=' + 
@@ -137,7 +138,7 @@ $(function () {
         }
     }
 
-    function rowAddCells($row, antibodyGroups, antibodyTargetExps, matrix, cellType) {
+    function rowAddCells($row, antibodyGroups, matrix, cellType) {
         // populate a row in the matrix with cells for antibody target groups and the targets
         // null cellType indicates this is a row for a cell group (tier)
 
@@ -150,10 +151,6 @@ $(function () {
             $row.append($td);
 
             $.each(group.targets, function (i, target) {
-                // prune out targets with no experiments
-                if (antibodyTargetExps[target] === undefined) {
-                    return true;
-                }
                 $td = $('<td></td>');
                 $td.addClass('matrixCell');
                 $row.append($td);
@@ -173,30 +170,26 @@ $(function () {
                     'target' : target,
                     'cellType' : cellType
                 });
-                $td.mouseover(function() {
-                    $(this).attr('title', 'Click to select: ' +
-                                ($(this).data().target) + ' ' + ' in ' + 
-                                $(this).data().cellType +' cells');
-                });
+
+                $td.attr('title', 'Click to select: ' +  target +
+                        ' in ' + cellType +' cells');
+
+                // add highlight when moused over
+                encodeMatrix.hoverExperiment($td);
+
                 $td.click(function() {
                     var url, antibodyTarget;
+                    var antibodies = []; 
 
-                    // NOTE: generating full search URL should be generalized & encapsulated
-                    url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
-                    url +=
-                       ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + 'ChipSeq' +
-                       '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
-                       '&hgt_mdbVar3=antibody');
+                    // get list of antibodies for this protein target
                     antibodyTarget = encodeProject.getAntibodyTarget($(this).data().target);
-                    // TODO: html encode ?
                     $.each(antibodyTarget.antibodies, function (i, antibody) {
-                        url += ('&hgt_mdbVal3=' + antibody);
+                        antibodies.push(antibody);
                     });
-                    url += '&hgt_mdbVar4=view&hgt_mdbVal4=Any';
-
-                    // remove extra rows
-                    url += '&hgt_mdbVar5=[]';
-                    url += '&hgt_mdbVar6=[]';
+                    url = encodeMatrix.getSearchUrl(
+                            {'mdbVar': 'dataType', 'mdbVal': 'ChipSeq'},
+                            {'mdbVar': 'cell', 'mdbVal': $(this).data().cellType},
+                            {'mdbVar': 'antibody', 'mdbVal': antibodies});
                     window.open(url, "searchWindow");
                 });
             });

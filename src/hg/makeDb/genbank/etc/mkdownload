@@ -9,11 +9,11 @@
 
 # errors terminate with message
 set -e
-trap "echo Error: `hostname` mkdownload failed >&2; exit 1" ERR
+trap "echo Error: $(hostname) mkdownload failed >&2; exit 1" ERR
 exec </dev/null
 
 # output root
-downloadRootDir=/cluster/data/genbank/data/ftp
+downloadRootDir=/hive/data/outside/genbank/data/ftp
 
 #verb='-verbose=1'
 verb=''
@@ -25,7 +25,7 @@ while [[ $1 == -* ]] ; do
     shift
     case "$opt" in
         -getDownloadSeqs=*) 
-            downloadSeqsDays=`echo "$opt" |sed -e 's/-getDownloadSeqs=//'` ;;
+            downloadSeqsDays=$(echo "$opt" |sed -e 's/-getDownloadSeqs=//') ;;
         -*) echo "Error: invalid option $opt" >&2
             exit 1 ;;
     esac
@@ -37,7 +37,7 @@ if [ $# != 0 ] ; then
 fi
 
 # initialize
-gbRoot=/cluster/data/genbank
+gbRoot=/hive/data/outside/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
@@ -46,7 +46,7 @@ cd $gbRoot
 gbCheckLock $gbRoot/var/mkdownload/run/mkdownload.lock
 
 # make downloads for everything on the hgwbeta or rr
-databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
+databases=$(gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs)
 
 # -maxHours limits the length of of processing so lock file gets released and 
 # prevent bogus stale lock message and too many completed messages

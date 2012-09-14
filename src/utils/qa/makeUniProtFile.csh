@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/bin/tcsh -e
 source `which qaConfig.csh`
 
 ########################################
@@ -96,17 +96,19 @@ endif
 sort -k1,1 -u $db.rawDataForUniProt.plus > $db.uniProtToUcscGenes.txt
 
 # make the new directory and copy the file there
-mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/$db/UCSCGenes
-cp $db.uniProtToUcscGenes.txt /usr/local/apache/htdocs-hgdownload/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt
+set copyDir = /usr/local/apache/htdocs-hgdownload/goldenPath/$db/UCSCGenes
+mkdir -p $copyDir
+mv $db.uniProtToUcscGenes.txt $copyDir/uniProtToUcscGenes.txt
 
 # how big is the file
-set num=`wc -l $db.uniProtToUcscGenes.txt | awk '{print $1}'`
+set num=`wc -l $copyDir/uniProtToUcscGenes.txt | awk '{print $1}'`
+
 
 # explain the output to the user
 echo "\nSUCCESS!\n"
 echo "Here's a sample of the ${num}-line file you just created"
 echo " (expect: UniProtId ucscGeneId orgName)"
-head $db.uniProtToUcscGenes.txt
+head $copyDir/uniProtToUcscGenes.txt
 echo " \nAsk for a push of your new file to hgdownload:\n"
 echo " /usr/local/apache/htdocs-hgdownload/goldenPath/$db/UCSCGenes/uniProtToUcscGenes.txt"
 # clean up old files (except the real one)

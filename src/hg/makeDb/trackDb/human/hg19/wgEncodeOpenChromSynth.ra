@@ -23,18 +23,6 @@ boxedCfg on
 pValueFilter 0.0
 pValueFilterLimits 0:16
 noScoreFilter .
-extraFields pValue=[f]Fisher's_Combined_P-Value_(<code>-log<sub>10</sub></code>) \
-            dnaseSignal=[f]DNaseI_HS_Signal \
-            dnasePvalue=[f]DNaseI_HS_P-Value_(<code>-log<sub>10</sub></code>) \
-            faireSignal=[f]FAIRE_Signal \
-            fairePvalue=[f]FAIRE_P-Value_(<code>-log<sub>10</sub></code>) \
-            polIISignal=[f]Pol-II_Signal \
-            polIIPvalue=[f]Pol-II_P-Value_(<code>-log<sub>10</sub></code>) \
-            ctcfSignal=[f]CTCF_Signal \
-            ctcfPvalue=[f]CTCF_P-Value_(<code>-log<sub>10</sub></code>) \
-            cmycSignal=[f]c-Myc_Signal \
-            cmycPvalue=[f]c-Myc_P-Value_(<code>-log<sub>10</sub></code>) \
-            ocCode=[i]Open_Chromatin_(OC)_Code
 filterBy color:Validation_Level=\
             0|Validated_(OC_1){#000000},\
             255|Open_Chromatin_(OC_2-3){#0000FF},\

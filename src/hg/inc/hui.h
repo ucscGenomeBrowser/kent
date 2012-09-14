@@ -9,9 +9,6 @@
 #include "wiggle.h"
 #include "asParse.h"
 
-// This temporary define shouuld be removed after rollout of hgTrackUi subtrack cfg changes
-#define SUBTRACK_CFG
-
 struct lineFile;
 
 void setUdcCacheDir();
@@ -59,9 +56,6 @@ char *hFileContentsOrWarning(char *file);
 char *hCgiRoot();
 /* get the path to the CGI directory.
  * Returns NULL when not running as a CGI (unless specified by browser.cgiRoot) */
-
-char *hBackgroundImage();
-/* get the path to the configured background image to use, or the default */
 
 /* Definitions for ruler pseudo-track.  It's not yet a full-fledged
  * track, so it can't appear in trackDb. */
@@ -192,13 +186,14 @@ char *hStringFromTv(enum trackVisibility vis);
 #define TV_DROPDOWN_STYLE "width: 70px"
 
 void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
-	boolean canPack, char *class, char *visOnly, char *extra);
+                                     boolean canPack, char *class, char *visOnly, char *extra);
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
 #define hTvDropDownClassVisOnly(varName,vis,canPack,class,visOnly) \
         hTvDropDownClassVisOnlyAndExtra(varName,vis,canPack,class,visOnly,NULL)
 
-void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack, char *class,char *javascript);
+void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack,
+                                    char *class,char *javascript);
 /* Make track visibility drop down for varName with style class and javascript */
 #define hTvDropDownClass(varName,vis,canPack,class) \
         hTvDropDownClassWithJavascript((varName),(vis),(canPack),(class),"")
@@ -210,7 +205,8 @@ void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boo
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
 void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, char *extra);
-#define hideShowDropDown(varName,show,class) hideShowDropDownWithClassAndExtra(varName,show,class,NULL)
+#define hideShowDropDown(varName,show,class) \
+        hideShowDropDownWithClassAndExtra(varName,show,class,NULL)
 /* Make hide/show dropdown for varName */
 
 /****** Some stuff for stsMap related controls *******/
@@ -845,8 +841,8 @@ struct mrnaFilter
 struct mrnaUiData
 /* Data for mrna-specific user interface. */
    {
-   char *filterTypeSuffix; /* cgi variable suffix that holds type of filter. */
-   char *logicTypeSuffix;  /* cgi variable suffix that indicates logic. */
+    char *filterTypeSuffix; /* cgi variable suffix that holds type of filter. */
+    char *logicTypeSuffix;  /* cgi variable suffix that indicates logic. */
    struct mrnaFilter *filterList;	/* List of filters that can be applied. */
    };
 
@@ -871,10 +867,12 @@ void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *
 	boolean leafOnly);
 /* Recursively add trackList to trackHash */
 
-struct hash *trackHashMakeWithComposites(char *db,char *chrom,struct trackDb **tdbList,bool withComposites);
+struct hash *trackHashMakeWithComposites(char *db,char *chrom,struct trackDb **tdbList,
+                                         bool withComposites);
 // Make hash of trackDb items for this chromosome, including composites, not just the subtracks.
 // May pass in prepopulated trackDb list, or may receive the trackDb list as an inout.
-#define makeTrackHashWithComposites(db,chrom,withComposites) trackHashMakeWithComposites(db,chrom,NULL,withComposites)
+#define makeTrackHashWithComposites(db,chrom,withComposites) \
+        trackHashMakeWithComposites(db,chrom,NULL,withComposites)
 #define makeTrackHash(db,chrom) trackHashMakeWithComposites(db,chrom,NULL,FALSE)
 
 char *genePredDropDown(struct cart *cart, struct hash *trackHash,
@@ -929,7 +927,7 @@ boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
 /* If metadata from metaTbl exists, create a link that will allow toggling it's display */
 
 boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
-                                int visibleChild,char *extra);
+                                    int visibleChild,char *extra);
 /* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:
@@ -938,7 +936,8 @@ boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
  *   -1 don't know (this function should determine)
  * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
-#define superTrackDropDown(cart,tdb,visibleChild) superTrackDropDownWithExtra(cart,tdb,visibleChild,NULL)
+#define superTrackDropDown(cart,tdb,visibleChild) \
+        superTrackDropDownWithExtra(cart,tdb,visibleChild,NULL)
 
 boolean dimensionsExist(struct trackDb *parentTdb);
 /* Does this parent track contain dimensions? */
@@ -971,16 +970,22 @@ int tvCompare(enum trackVisibility a, enum trackVisibility b);
 enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
 /* Return the less visible of a and b. */
 
-enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,boolean *subtrackOverride);
-// returns visibility NOT limited by ancestry.  Fills optional boolean if subtrack specific vis is found
-// If not NULL cart will be examined without ClosestToHome.  Folders/supertracks resolve to hide/full
+enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,
+                                        boolean *subtrackOverride);
+// returns visibility NOT limited by ancestry.
+// Fills optional boolean if subtrack specific vis is found
+// If not NULL cart will be examined without ClosestToHome.
+// Folders/supertracks resolve to hide/full
 
-enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb *tdb, boolean checkBoxToo, boolean foldersToo);
-// returns visibility limited by ancestry.  This includes subtrack vis override and parents limit maximum.
+enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb *tdb,
+                                              boolean checkBoxToo, boolean foldersToo);
+// returns visibility limited by ancestry.
+// This includes subtrack vis override and parents limit maximum.
 // cart may be null, in which case, only trackDb settings (default state) are examined
 // checkBoxToo means ensure subtrack checkbox state is visible
 // foldersToo means limit by folders (aka superTracks) as well.
-#define tdbVisLimitedByAncestry(cart,tdb,noFolders) tdbVisLimitedByAncestors(cart, tdb, TRUE, !(noFolders))
+#define tdbVisLimitedByAncestry(cart,tdb,noFolders) \
+        tdbVisLimitedByAncestors(cart, tdb, TRUE, !(noFolders))
 
 char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 /* Returns a string with the composite view control name if one exists */
@@ -1010,7 +1015,8 @@ void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none);
 void radioButton(char *var, char *val, char *ourVal);
 /* Print one radio button */
 
-void oneMrnaFilterUi(struct controlGrid *cg, struct trackDb *tdb, char *text, char *var, char *suffix, struct cart *cart);
+void oneMrnaFilterUi(struct controlGrid *cg, struct trackDb *tdb, char *text, char *var,
+                     char *suffix, struct cart *cart);
 /* Print out user interface for one type of mrna filter. */
 
 void bedFiltCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed);
@@ -1042,47 +1048,51 @@ void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, i
  * the default is too light to see or darker than necessary. */
 
 struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
-       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and);
-/* creates the where clause condition to support numeric int filter range.
-   Filters are expected to follow
-        {fiterName}: trackDb min or min:max - default value(s);
-        {filterName}Min or {filterName}: min (user supplied) cart variable;
-        {filterName}Max: max (user supplied) cart variable;
-        {filterName}Limits: trackDb allowed range "0:1000" Optional
-           uses:{filterName}Min: old trackDb value if {filterName}Limits not found
-                {filterName}Max: old trackDb value if {filterName}Limits not found
-                defaultLimits: function param if no tdb limits settings found)
-   The 'and' param and dyString in/out allows stringing multiple where clauses together */
+                                  struct dyString *extraWhere,char *filter,
+                                  char *defaultVal, char*field, boolean *and);
+// creates the where clause condition to support numeric int filter range.
+// Filters are expected to follow
+//      {fiterName}: trackDb min or min:max - default value(s);
+//      {filterName}Min or {filterName}: min (user supplied) cart variable;
+//      {filterName}Max: max (user supplied) cart variable;
+//      {filterName}Limits: trackDb allowed range "0:1000" Optional
+//         uses:{filterName}Min: old trackDb value if {filterName}Limits not found
+//              {filterName}Max: old trackDb value if {filterName}Limits not found
+//              defaultLimits: function param if no tdb limits settings found)
+// The 'and' param and dyString in/out allows stringing multiple where clauses together
 
 struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
-       struct dyString *extraWhere,char *filter,char *defaultLimits, char*field, boolean *and);
-/* creates the where clause condition to support numeric double filters.
-   Filters are expected to follow
-        {fiterName}: trackDb min or min:max - default value(s);
-        {filterName}Min or {filterName}: min (user supplied) cart variable;
-        {filterName}Max: max (user supplied) cart variable;
-        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
-            uses:  defaultLimits: function param if no tdb limits settings found)
-   The 'and' param allows stringing multiple where clauses together */
+                                     struct dyString *extraWhere,char *filter,
+                                     char *defaultLimits, char*field, boolean *and);
+// creates the where clause condition to support numeric double filters.
+// Filters are expected to follow
+//      {fiterName}: trackDb min or min:max - default value(s);
+//      {filterName}Min or {filterName}: min (user supplied) cart variable;
+//      {filterName}Max: max (user supplied) cart variable;
+//      {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+//          uses:  defaultLimits: function param if no tdb limits settings found)
+// The 'and' param allows stringing multiple where clauses together
 
-struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, struct dyString *extraWhere,boolean *and);
-/* creates the where clause condition to gather together all random double filters
-   Filters are expected to follow
-        {fiterName}: trackDb min or min:max - default value(s);
-        {filterName}Min or {filterName}: min (user supplied) cart variable;
-        {filterName}Max: max (user supplied) cart variable;
-        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
-            uses:  defaultLimits: function param if no tdb limits settings found)
-   The 'and' param and dyString in/out allows stringing multiple where clauses together */
+struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb,
+                                      struct dyString *extraWhere,boolean *and);
+// creates the where clause condition to gather together all random double filters
+// Filters are expected to follow
+//      {fiterName}: trackDb min or min:max - default value(s);
+//      {filterName}Min or {filterName}: min (user supplied) cart variable;
+//      {filterName}Max: max (user supplied) cart variable;
+//      {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+//          uses:  defaultLimits: function param if no tdb limits settings found)
+// The 'and' param and dyString in/out allows stringing multiple where clauses together
 
 boolean encodePeakHasCfgUi(struct trackDb *tdb);
 // Confirms that this track has encode Peak cfgUI
 
-void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
-/* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
+void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title,
+                     boolean boxed);
+// Put up UI for filtering wgEnocde peaks based on score, Pval and Qval
 
 void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
-/* Put up genePred-specific controls */
+// Put up genePred-specific controls
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
@@ -1091,15 +1101,15 @@ void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 /* BAM: short-read-oriented alignment file format. */
 
 boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
-/* Updates the tdb->priority from cart then sorts the list anew.
-   Returns TRUE if priorities obtained from cart */
+// Updates the tdb->priority from cart then sorts the list anew.
+// Returns TRUE if priorities obtained from cart
 
 boolean tdbRefSortPrioritiesFromCart(struct cart *cart, struct slRef **tdbRefList);
 /* Updates the tdb->priority from cart then sorts the list anew.
    Returns TRUE if priorities obtained from cart */
 
 enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
-/* returns the default track visibility of particular view within a composite track */
+// returns the default track visibility of particular view within a composite track
 
 boolean isNameAtParentLevel(struct trackDb *tdb,char *name);
 // cfgUi controls are passed a prefix name that may be at the composite, view or subtrack level
@@ -1108,8 +1118,10 @@ boolean isNameAtParentLevel(struct trackDb *tdb,char *name);
 boolean hSameTrackDbType(char *type1, char *type2);
 /* Compare type strings: require same string unless both are wig tracks. */
 
-typedef struct _sortOrder {
-// Sort order is used for sorting trackDb entries (hgTrackDb) and setting up javascript sorting (hui.c)
+typedef struct _sortOrder
+// Sort order is used for sorting trackDb entries (hgTrackDb)
+// and setting up javascript sorting (hui.c)
+    {
     int count;
     char*sortOrder;      // from cart (eg: CEL=+ FAC=- view=-)
     char*htmlId;         // {tableName}.sortOrder
@@ -1118,29 +1130,32 @@ typedef struct _sortOrder {
     boolean* forward;    // Always order in trackDb.ra but value of cart! (eg: -,+,-)
     int*  order;  // 1 based
     char *setting;
-} sortOrder_t;
+    } sortOrder_t;
 
 sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb);
-/* Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
-   Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action), as is sortOrder->order,
-   But columns are in original tdb order (unchanging)!  However, if cart is null, all is from trackDb.ra */
+// Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
+// Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action),
+// as is sortOrder->order, but columns are in original tdb order (unchanging)!
+// However, if cart is null, all is from trackDb.ra */
 
 void sortOrderFree(sortOrder_t **sortOrder);
-/* frees any previously obtained sortOrder settings */
+// frees any previously obtained sortOrder settings
 
-typedef struct _sortColumn {
+typedef struct _sortColumn
 // link list of columns to sort contained in sortableItem
+    {
     struct _sortColumn *next;
     char *value;                // value to sort on
     boolean fwd;                // direction
-} sortColumn;
+    } sortColumn;
 
-typedef struct _sortableTdbItem {
+typedef struct _sortableTdbItem
 // link list of tdb items to sort
+    {
     struct _sortableTdbItem *next;
     struct trackDb *tdb;        // a contained item is actually a tdb entry
     sortColumn *columns;        // a link list of values to sort on
-} sortableTdbItem;
+    } sortableTdbItem;
 
 sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sortOrder);
 // creates a sortable tdb item struct, given a child tdb and its parents sort table
@@ -1152,45 +1167,58 @@ void sortableTdbItemsFree(sortableTdbItem **items);
 // Frees all memory associated with a list of sortable tdb items
 
 #define FILTER_BY "filterBy"
-typedef struct _filterBy {
-// A single filterBy set (from trackDb.ra filterBy column:Title=value,value [column:Title=value|label,value|label,value|label])
+#define HIGHLIGHT_BY "highlightBy"
+typedef struct _filterBy
+// A single filterBy set (from trackDb.ra filterBy column:Title=value,value
+//                             [column:Title=value|label,value|label,value|label])
+    {
     struct _filterBy *next;   // SL list
     char*column;              // field that will be filtered on
     char*title;               // Title that User sees
     char*htmlName;            // Name used in HTML/CGI
     boolean useIndex;         // The returned values should be indexes
     boolean valueAndLabel;    // If values list is value|label, then label is shown to the user
-    boolean styleFollows;     // style settings can follow like value|label[background-color:#660000]
-                              // legacy like value|label{#AA0000} is a just the style='color... that follows
+    boolean styleFollows;     // style settings can follow like:
+                              //    value|label{background-color:#660000}
     struct slName *slValues;  // Values that can be filtered on (All is always implied)
     struct slName *slChoices; // Values that have been chosen
-} filterBy_t;
+    } filterBy_t;
 
 filterBy_t *filterBySetGet(struct trackDb *tdb, struct cart *cart, char *name);
-/* Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found */
+// Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found
+
+filterBy_t *highlightBySetGet(struct trackDb *tdb, struct cart *cart, char *name);
+/* Gets one or more "highlightBy" settings (ClosestToHome).  returns NULL if not found */
 
 void filterBySetFree(filterBy_t **filterBySet);
-/* Free a set of filterBy structs */
+// Free a set of filterBy structs
 
 char *filterBySetClause(filterBy_t *filterBySet);
-/* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
+// returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs
+
+INLINE boolean filterByAllChosen(filterBy_t *filterBy)
+/* Is "All" chosen in the filter list? */
+{
+return ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All")));
+}
 
 void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
                       filterBy_t *filterBySet, boolean onOneLine);
-/* Does the UI for a list of filterBy structure */
+// Does the UI for a list of filterBy structure
 
 char *filterByClause(filterBy_t *filterBy);
-/* returns the SQL where clause for a single filterBy struct */
+// returns the SQL where clause for a single filterBy struct: "column in (...)"
 
 struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
-       struct dyString *extraWhere,char *column, boolean *and);
-/* creates the where clause condition to support a filterBy setting.
-   Format: filterBy column:Title=value,value [column:Title=value|label,value|label,value|label])
-   filterBy filters are multiselect's so could have multiple values selected.
-   thus returns the "column1 in (...) and column2 in (...)" clause.
-   if 'column' is provided, and there are multiple filterBy columns, only the named column's clause is returned.
-   The 'and' param and dyString in/out allows stringing multiple where clauses together
-*/
+                                     struct dyString *extraWhere,char *column, boolean *and);
+// creates the where clause condition to support a filterBy setting.
+// Format: filterBy column:Title=value,value [column:Title=value|label,value|label,value|label])
+// filterBy filters are multiselect's so could have multiple values selected.
+// thus returns the "column1 in (...) and column2 in (...)" clause.
+// if 'column' is provided, and there are multiple filterBy columns,
+// only the named column's clause is returned.
+// The 'and' param and dyString in/out allows stringing multiple where clauses together
+
 boolean makeDownloadsLink(char *database, struct trackDb *tdb);
 // Make a downloads link (if appropriate and then returns TRUE)
 
@@ -1198,10 +1226,10 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 // Make a table schema link (if appropriate and then returns TRUE)
 
 void makeTopLink(struct trackDb *tdb);
-/* Link to top of UI page */
+// Link to top of UI page
 
 void extraUiLinks(char *db,struct trackDb *tdb);
-/* Show downloads, schema and metadata links where appropriate */
+// Show downloads, schema and metadata links where appropriate
 
 boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 /*	check if normScore column is specified in trackDb as available */
@@ -1210,29 +1238,34 @@ void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char
 /* Print out table of abbreviations. */
 
 // Four State checkboxes can be checked/unchecked by enable/disabled
-// NOTE: fourState is not a bitmap because it is manipulated in javascript and int seemed easier at the time
+// NOTE: fourState is not a bitmap because it is manipulated in javascript
+//       and int seemed easier at the time
 #define FOUR_STATE_UNCHECKED         0
 #define FOUR_STATE_CHECKED           1
 #define FOUR_STATE_CHECKED_DISABLED  -1
-#define fourStateChecked(fourState) ((fourState) == FOUR_STATE_CHECKED || (fourState) == FOUR_STATE_CHECKED_DISABLED)
+#define fourStateChecked(fourState) \
+        ((fourState) == FOUR_STATE_CHECKED || (fourState) == FOUR_STATE_CHECKED_DISABLED)
 #define fourStateEnabled(fourState) ((fourState) >= FOUR_STATE_UNCHECKED)
 #define fourStateVisible(fourState) ((fourState) == FOUR_STATE_CHECKED)
 
 int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
-/* Returns the four state checked state of the subtrack */
+// Returns the four state checked state of the subtrack
 
-void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled);
-/* Sets the fourState Checked in the cart and updates cached state */
+void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,
+                                 boolean checked, boolean enabled);
+// Sets the fourState Checked in the cart and updates cached state
 
 boolean hPrintPennantIcon(struct trackDb *tdb);
-// Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
+// Returns TRUE and prints out the "pennantIcon" when found.
+// Example: ENCODE tracks in hgTracks config list.
 
 boolean printPennantIconNote(struct trackDb *tdb);
 // Returns TRUE and prints out the "pennantIcon" and note when found.
 //This is used by hgTrackUi and hgc before printing out trackDb "html"
 
-void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed);
-// Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
+void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,
+                  char *prefix, char *title, boolean boxed);
+// Methods for putting up type specific cfgs used by composites/subtracks
 
 boolean cfgBeginBoxAndTitle(struct trackDb *tdb, boolean boxed, char *title);
 /* Handle start of box and title for individual track type settings */
@@ -1249,14 +1282,16 @@ void printBbiUpdateTime(time_t *timep);
 
 //#define EXTRA_FIELDS_SUPPORT
 #ifdef EXTRA_FIELDS_SUPPORT
-enum fieldType {
+enum fieldType
+    {
     ftString  =0,
     ftInteger =1,
     ftFloat   =2,
-};
+    };
 
-struct extraField {
+struct extraField
 // extraFileds are defined in trackDb and provide labls and can be used in filtering
+    {
     struct extraField *next;
     char *name;                 // name of field
     char *label;                // Label (which could include HTML)

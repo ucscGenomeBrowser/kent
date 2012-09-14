@@ -9,14 +9,12 @@
 #   - Spaces and not tabs
 # It could be used to test 
 #   - validateFiles -type=bed5 
-
 chr1	808464	808692	peak1	78
 chr1	929191	929415	peak2	59
 chr1	936069	936461	peak3	156
 chr1	966907	967091	peak4	46
 chr1	976506	976637	peak5	39
 chr1	1001036	1001260	peak6	121
-chr1	1014777	1014777	peak7	307
 chr1	1015465	1015913	peak8	0
 chr1	1047366	1047635	peak9	1000
 chr1	1051491	1051822	.	30

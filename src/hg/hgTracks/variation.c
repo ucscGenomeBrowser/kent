@@ -49,7 +49,7 @@ for (el = tg->items; el != NULL; el = next)
     {
     next = el->next;
     if (filter(tg, el))
- 	slAddHead(&newList, el);
+        slAddHead(&newList, el);
     }
 slReverse(&newList);
 tg->items = newList;
@@ -63,8 +63,8 @@ int    snpMapSource = 0;
 
 for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
     if (containsStringNoCase(el->source,snpMapSourceDataName[snpMapSource]))
- 	if (sameString(snpMapSourceCart[snpMapSource], "exclude"))
- 	    return FALSE;
+        if (sameString(snpMapSourceCart[snpMapSource], "exclude"))
+            return FALSE;
 return TRUE;
 }
 
@@ -76,8 +76,8 @@ int    snpMapType = 0;
 
 for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     if (containsStringNoCase(el->type,snpMapTypeDataName[snpMapType]))
- 	if (sameString(snpMapTypeCart[snpMapType], "exclude"))
- 	    return FALSE;
+        if (sameString(snpMapTypeCart[snpMapType], "exclude"))
+            return FALSE;
 return TRUE;
 }
 
@@ -169,8 +169,8 @@ int    snpSource = 0;
 
 for (snpSource=0; snpSource<snpSourceCartSize; snpSource++)
     if (containsStringNoCase(el->source,snpSourceDataName[snpSource]))
- 	if (sameString(snpSourceCart[snpSource], "exclude") )
- 	    return FALSE;
+        if (sameString(snpSourceCart[snpSource], "exclude") )
+            return FALSE;
 return TRUE;
 }
 
@@ -182,8 +182,8 @@ int    snpMolType = 0;
 
 for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
     if (containsStringNoCase(el->molType,snpMolTypeDataName[snpMolType]))
- 	if ( sameString(snpMolTypeCart[snpMolType], "exclude") )
- 	    return FALSE;
+        if ( sameString(snpMolTypeCart[snpMolType], "exclude") )
+            return FALSE;
 return TRUE;
 }
 
@@ -205,8 +205,8 @@ int    snpClass = 0;
 
 for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
     if (containsStringNoCase(el->class,snpClassDataName[snpClass]))
- 	if ( sameString(snpClassCart[snpClass], "exclude") )
- 	    return FALSE;
+        if ( sameString(snpClassCart[snpClass], "exclude") )
+            return FALSE;
 return TRUE;
 }
 
@@ -228,8 +228,8 @@ int    snpValid = 0;
 
 for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
     if (containsStringNoCase(el->valid,snpValidDataName[snpValid]))
- 	if ( sameString(snpValidCart[snpValid], "exclude") )
- 	    return FALSE;
+        if ( sameString(snpValidCart[snpValid], "exclude") )
+            return FALSE;
 return TRUE;
 }
 
@@ -269,8 +269,8 @@ int    snpFunc = 0;
 
 for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
     if (containsStringNoCase(el->func,snpFuncDataName[snpFunc]))
- 	if ( sameString(snpFuncCart[snpFunc], "exclude") )
- 	    return FALSE;
+        if ( sameString(snpFuncCart[snpFunc], "exclude") )
+            return FALSE;
 return TRUE;
 }
 
@@ -289,7 +289,7 @@ for (i = 0;  i < wordCount;  i++)
     {
     char *simpleFunc = (char *)hashMustFindVal(snp125FuncCartNameHash,
 					       words[i]);
-    if (slNameInList(snp125FuncFilter, simpleFunc))
+    if (slNameInList(snp125FuncFilter, simpleFunc) || slNameInList(snp125FuncFilter, words[i]))
 	return TRUE;
     }
 return FALSE;
@@ -303,8 +303,8 @@ int    snpLocType = 0;
 
 for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
     if (containsStringNoCase(el->locType,snpLocTypeDataName[snpLocType]))
- 	if ( sameString(snpLocTypeCart[snpLocType], "exclude") )
- 	    return FALSE;
+        if ( sameString(snpLocTypeCart[snpLocType], "exclude") )
+            return FALSE;
 return TRUE;
 }
 
@@ -646,7 +646,7 @@ for (i=0; i < varCount; i++)
 return cartColors;
 }
 
-static void snp125SetupFiltersAndColorsFromCart(struct trackDb *tdb)
+static void snp125SetupFiltersAndColorsFromCart(struct trackDb *tdb, int version)
 /* Load the controls set by hgTrackUi into global vars. */
 {
 char *track = tdb->track;
@@ -715,6 +715,13 @@ for (i=0; i < snp125FuncArraySize; i++)
     hashAdd(snp125FuncCartNameHash, snp125FuncDataName[i],
 	    snp125FuncDataName[i]);
     }
+if (version >= 137)
+    {
+    hashAddInt(snp125FuncCartColorHash, "ncRNA",
+	       stringArrayIx("blue", snp125ColorLabel, snp125ColorArraySize));
+    hashAdd(snp125FuncCartNameHash, "ncRNA", "ncRNA");
+    }
+// Map finer-grained func codes in table to simplified filtering/coloring choices.
 int j, k;
 for (j = 0;  snp125FuncDataSynonyms[j] != NULL;  j++)
     {
@@ -920,7 +927,7 @@ else if (version >= 125)
 else
     errAbort("How was loadSnp125 called on version < 125? (%d)", version);
 
-snp125SetupFiltersAndColorsFromCart(tg->tdb);
+snp125SetupFiltersAndColorsFromCart(tg->tdb, version);
 filterSnp125Items(tg, version);
 snp125ColorItems(tg, version);
 
@@ -1086,23 +1093,23 @@ switch (stringArrayIx(snpColorSource, snpColorSourceStrings, snpColorSourceStrin
 switch (thisSnpColor)
     {
     case snpColorRed:
- 	return MG_RED;
- 	break;
+        return MG_RED;
+        break;
     case snpColorGreen:
- 	return MG_GREEN;
- 	break;
+        return MG_GREEN;
+        break;
     case snpColorBlue:
- 	return MG_BLUE;
- 	break;
+        return MG_BLUE;
+        break;
     case snpColorBlack:
     default:
- 	return MG_BLACK;
- 	break;
+        return MG_BLACK;
+        break;
     }
 }
 
 void snpMapDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
-	double scale, MgFont *font, Color color, enum trackVisibility vis)
+        double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snpMap item at position. */
 {
 struct snpMap *sm = item;
@@ -1121,7 +1128,7 @@ if (tg->drawName && vis != tvSquish)
 }
 
 void snpDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
-	double scale, MgFont *font, Color color, enum trackVisibility vis)
+        double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snp item at position. */
 {
 struct snp *s = item;
@@ -1137,11 +1144,11 @@ hvGfxBox(hvg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
     mapBoxHc(hvg, s->chromStart, s->chromEnd, x1, y, w, heightPer,
-	     tg->track, tg->mapItemName(tg, s), NULL);
+             tg->track, tg->mapItemName(tg, s), NULL);
 }
 
 void snp125DrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
-	double scale, MgFont *font, Color color, enum trackVisibility vis)
+        double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snp125 item at position. */
 {
 struct snp125 *s = item;
@@ -1191,7 +1198,7 @@ if (vis == tvPack || vis == tvSquish)
         int x2 = round((e - winStart)*scale) + xOff;
         int textX = x1;
         char *name = tg->itemName(tg, item);
-	Color itemColor = tg->itemColor(tg, item, hvg);
+        Color itemColor = tg->itemColor(tg, item, hvg);
         Color itemNameColor = tg->itemNameColor(tg, item, hvg);
 
         y = yOff + lineHeight * sn->row;
@@ -1206,18 +1213,18 @@ if (vis == tvPack || vis == tvSquish)
         #else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (textX < insideX)        /* Snap label to the left. */
         #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-		{
+                {
 		textX = leftLabelX;
                 assert(hvgSide != NULL);
-		hvGfxUnclip(hvgSide);
-		hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
-		hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
+                hvGfxUnclip(hvgSide);
+                hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+                hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
-		hvGfxUnclip(hvgSide);
-		hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
+                hvGfxUnclip(hvgSide);
+                hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
 		}
             else
-		hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
+                hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
 			    itemNameColor, font, name);
             }
         if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ))
@@ -1300,29 +1307,29 @@ if (vis == tvPack || vis == tvSquish)
 	    boolean snapLeft = FALSE;
 	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
-	    snapLeft = (textX < insideX);
+            snapLeft = (textX < insideX);
         #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox == NULL && snapLeft)
         #else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (snapLeft)
         #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-		{
+                {
 		textX = leftLabelX;
                 assert(hvgSide != NULL);
-		hvGfxUnclip(hvgSide);
-		hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+                hvGfxUnclip(hvgSide);
+                hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
 		if (drawNameInverted)
 		    {
 		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-		    hvGfxBox(hvgSide, boxStart, y, nameWidth+1, heightPer - 1, color);
-		    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
+                    hvGfxBox(hvgSide, boxStart, y, nameWidth+1, heightPer - 1, color);
+                    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 		                MG_WHITE, font, name);
 		    }
 		else
-		    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
+                    hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
-		hvGfxUnclip(hvgSide);
-		hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
+                hvGfxUnclip(hvgSide);
+                hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
 		}
             else
 	        {
@@ -1332,7 +1339,7 @@ if (vis == tvPack || vis == tvSquish)
 		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, MG_WHITE, font, name);
 		    }
 		else
-		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
+                    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
 			    itemNameColor, font, name);
 		}
             }
@@ -1413,7 +1420,7 @@ return (tg->heightPer-4);
 
 static void haplotypeLinkedFeaturesDrawAt(struct track *tg, void *item,
                struct hvGfx *hvg, int xOff, int y, double scale,
-	       MgFont *font, Color color, enum trackVisibility vis)
+               MgFont *font, Color color, enum trackVisibility vis)
 /* draws and individual haplotype and a given location */
 {
 struct linkedFeatures *lf = item;
@@ -1502,7 +1509,7 @@ else
 }
 
 void bedLoadLdItemByQuery(struct track *tg, char *table,
-			char *query, ItemLoader loader)
+                        char *query, ItemLoader loader)
 /* LD specific tg->item loader, as we need to load items beyond
    the current window to load the chromEnd positions for LD values. */
 {
@@ -1546,15 +1553,15 @@ tg->canPack = FALSE;
 }
 
 void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt,
-		  int xr, int yr, int xb, int yb,
-		  char *name, char *shortLabel, char *trackName)
+                  int xr, int yr, int xb, int yb,
+                  char *name, char *shortLabel, char *trackName)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
-if(theImgBox && curImgTrack)
+if (theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s?%s=%u&g=%s&i=%s", hgTrackUiName(),
-    cartSessionVarName(), cartSessionId(cart), trackName, name);
+          cartSessionVarName(), cartSessionId(cart), trackName, name);
     char title[128];
     safef(title,sizeof(title),"%s controls", shortLabel);
     // Add map item to currnent map (TODO: pass in map)
@@ -1567,18 +1574,19 @@ if(theImgBox && curImgTrack)
     // FIXME:    hvGfxAdjX(hvg, xb), yb));
     // FIXME: What am I going to do about poly cords???
     // FIXME: What am I going to do about poly cords???
-    warn("Track named %s has called for a POLY map titled '%s controls', but imageV2 doesn't yet support this. No map item made.",trackName,shortLabel);
+    warn("Track named %s has called for a POLY map titled '%s controls', but imageV2 doesn't "
+         "yet support this. No map item made.",trackName,shortLabel);
     }
 else
     {
     hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ",
-        hvGfxAdjX(hvg, xl), yl,
+            hvGfxAdjX(hvg, xl), yl,
             hvGfxAdjX(hvg, xt), yt,
             hvGfxAdjX(hvg, xr), yr,
             hvGfxAdjX(hvg, xb), yb);
     /* move this to hgTracks when finished */
     hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
-        cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
+            cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
     mapStatusMessage("%s controls", shortLabel);
     hPrintf(">\n");
     }
@@ -1589,26 +1597,27 @@ void mapTrackBackground(struct track *tg, struct hvGfx *hvg, int xOff, int yOff)
 {
 xOff = hvGfxAdjXW(hvg, xOff, insideWidth);
 char *track = tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track;
-if(theImgBox && curImgTrack)
+if (theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s?%s=%u&g=%s&i=%s",hgTrackUiName(),
-    cartSessionVarName(), cartSessionId(cart), track, track);
+          cartSessionVarName(), cartSessionId(cart), track, track);
     char title[128];
     safef(title,sizeof(title),"%s controls", tg->track);
     // Add map item to currnent map (TODO: pass in map)
     #ifdef IMAGEv2_SHORT_MAPITEMS
-        if(xOff < insideX && xOff+insideWidth > insideX)
-            warn("mapTrackBackground(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",tg->track,xOff, yOff, xOff+insideWidth, yOff+tg->height, link);
+    if (xOff < insideX && xOff+insideWidth > insideX)
+        warn("mapTrackBackground(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",
+             tg->track,xOff, yOff, xOff+insideWidth, yOff+tg->height, link);
     #endif//def IMAGEv2_SHORT_MAPITEMS
     imgTrackAddMapItem(curImgTrack,link,title,xOff, yOff, xOff+insideWidth, yOff+tg->height, tg->track);
     }
 else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ",
-        xOff, yOff, xOff+insideWidth, yOff+tg->height);
+            xOff, yOff, xOff+insideWidth, yOff+tg->height);
     hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
-        cartSessionVarName(), cartSessionId(cart), chromName, track, track);
+            cartSessionVarName(), cartSessionId(cart), chromName, track, track);
     mapStatusMessage("%s controls", tg->track);
     hPrintf(">\n");
     }
@@ -1647,8 +1656,8 @@ colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
 }
 
 void drawDiamond(struct hvGfx *hvg,
-	 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb,
-	 Color fillColor, Color outlineColor)
+         int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb,
+         Color fillColor, Color outlineColor)
 /* Draw diamond shape. */
 {
 struct gfxPoly *poly = gfxPolyNew();
@@ -1663,8 +1672,8 @@ gfxPolyFree(&poly);
 }
 
 void ldDrawDiamond(struct hvGfx *hvg, struct track *tg, int width,
-		   int xOff, int yOff, int a, int b, int c, int d,
-		   Color shade, Color outlineColor, double scale,
+                   int xOff, int yOff, int a, int b, int c, int d,
+                   Color shade, Color outlineColor, double scale,
 		   boolean drawMap, char *name, enum trackVisibility vis,
 		   boolean trim, boolean ldInv)
 /* Draw and map a single pairwise LD box */
@@ -1694,11 +1703,11 @@ if (yt>yMax && trim)
     yt=yMax;
 drawDiamond(hvg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
 return; /* mapDiamondUI is working well, but there is a bug with
-	   AREA=POLY on the Mac browsers, so this will be
-	   postponed for now by not using this code */
-	/* also, since it only goes to hgTrackUi, it is redundant with mapTrackBackground.
-	 * so keep this disabled until there is something more specific like an hgc
-	 * handler for diamonds. */
+           AREA=POLY on the Mac browsers, so this will be
+           postponed for now by not using this code */
+        /* also, since it only goes to hgTrackUi, it is redundant with mapTrackBackground.
+         * so keep this disabled until there is something more specific like an hgc
+         * handler for diamonds. */
 if (drawMap && xt-xl>5 && xb-xl>5)
     mapDiamondUi(hvg, xl, yl, xt, yt, xr, yr, xb, yb, name, tg->track,
 		 tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track);
@@ -1826,7 +1835,7 @@ else
 }
 
 void ldDrawDenseValue(struct hvGfx *hvg, struct track *tg, int xOff, int y1,
-		      double scale, Color outlineColor, struct ldStats *d)
+                      double scale, Color outlineColor, struct ldStats *d)
 /* Draw single dense LD value */
 {
 if (d->chromStart < winStart)
@@ -1850,7 +1859,7 @@ if (outlineColor!=0)
 }
 
 void ldDrawDenseValueHash(struct hvGfx *hvg, struct track *tg, int xOff, int yOff,
-			  double scale, Color outlineColor, struct hash *ldHash)
+                          double scale, Color outlineColor, struct hash *ldHash)
 /* Draw dynamically computed dense LD values */
 {
 struct hashEl *hashEl, *stats=hashElListHash(ldHash);
@@ -1860,8 +1869,8 @@ hashElFreeList(&stats);
 }
 
 void ldDrawDense(struct hvGfx *hvg, struct track *tg, int xOff, int yOff,
-		 double scale, Color outlineColor,
-		 boolean isLod, boolean isRsquared)
+                 double scale, Color outlineColor,
+                 boolean isLod, boolean isRsquared)
 /* Draw precomputed dense LD values from ld2 table. */
 {
 static struct ldStats lds;
@@ -1895,9 +1904,9 @@ for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
 }
 
 void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font,
-	Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+        boolean withCenterLabels, MgFont *font,
+        Color color, enum trackVisibility vis)
 /* Draw left labels. */
 {
 char  label[17];

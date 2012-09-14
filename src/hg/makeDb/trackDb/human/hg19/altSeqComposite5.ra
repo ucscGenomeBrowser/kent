@@ -1,6 +1,6 @@
-track altSeqComposite
+track altSeqComposite5
 compositeTrack on
-shortLabel GRC Patch Release
+shortLabel GRC Patch 5
 longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
 subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
@@ -10,7 +10,7 @@ type bed 6
 noInherit on
 group map
 priority 25
-chromosomes  chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
+chromosomes  chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
 otherDb hg19Patch5
 chainMinScore 2000
 chainLinearGap medium
@@ -19,40 +19,40 @@ matrixHeader A, C, G, T
 html altSeqComposite
 dataVersion GRCh37 Patch 5 update, June 2011
 
-    track altSeqCompositeViewlocation
-    shortLabel Patch/Haplotype
+    track altSeqCompositeViewlocation5
+    shortLabel Patch 5/Haplotype
     view location
     visibility pack
-    parent altSeqComposite
+    parent altSeqComposite5
     noScoreFilter .
 
-	track altSeqHaplotypes
-        parent altSeqCompositeViewlocation
+	track altSeqHaplotypesP5
+        parent altSeqCompositeViewlocation5
         subGroups view=location
 	color 32,32,190
-	shortLabel Haplotypes
-	longLabel Haplotypes to GRCh37 Reference Sequence
+	shortLabel HaplotypesP5
+	longLabel Haplotypes to GRCh37.p5 Reference Sequence
 	html altSeqComposite
 	priority 1
 	urlLabel Fetch alternate sequence (GRCh37.p5):
 	url /cgi-bin/hgc?db=hg19Patch5&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
-	track altSeqPatches
-        parent altSeqCompositeViewlocation
+	track altSeqPatchesP5
+        parent altSeqCompositeViewlocation5
         subGroups view=location
 	color 190,32,32
-	shortLabel Patches
-	longLabel Patches to GRCh37 Reference Sequence
+	shortLabel Patches 5
+	longLabel Patches to GRCh37.p5 Reference Sequence
 	html altSeqComposite
 	priority 2
 	urlLabel Fetch alternate sequence (GRCh37.p5):
 	url /cgi-bin/hgc?db=hg19Patch5&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
-    track altSeqCompositeViewpsl
-    shortLabel Alignment
+    track altSeqCompositeViewpsl5
+    shortLabel Alignment 5
     view psl
     visibility hide
-    parent altSeqComposite
+    parent altSeqComposite5
     type psl
     indelDoubleInsert on
     indelQueryInsert on
@@ -64,41 +64,41 @@ dataVersion GRCh37 Patch 5 update, June 2011
     pslSequence no
     baseColorUseSequence extFile seqHg19Patch5 extHg19Patch5
 
-	track altSeqLiftOverPsl
-        parent altSeqCompositeViewpsl
+	track altSeqLiftOverPslP5
+        parent altSeqCompositeViewpsl5
         subGroups view=psl
-	shortLabel Alignment
-	longLabel GRCh37 Alternate Sequence Lift Over Alignments
+	shortLabel Alignment 5
+	longLabel GRCh37.p5 Alternate Sequence Lift Over Alignments
 	html altSeqComposite
 	priority 3
 
-    track altSeqCompositeViewchain
-    shortLabel Chain
+    track altSeqCompositeViewchain5
+    shortLabel Chain P5
     view chain
     visibility hide
-    parent altSeqComposite
+    parent altSeqComposite5
     spectrum on
 
         track chainHg19Patch5
-        parent altSeqCompositeViewchain
+        parent altSeqCompositeViewchain5
         subGroups view=chain
-        shortLabel Chain
-        longLabel GRCh37 Alternate Sequence Chained Alignments
+        shortLabel Chain P5
+        longLabel GRCh37.p5 Alternate Sequence Chained Alignments
         type chain hg19Patch5
         html chainNet
 	priority 4
 
-    track altSeqCompositeViewnet
-    shortLabel Net
+    track altSeqCompositeViewnet5
+    shortLabel Net P5
     view net
     visibility hide
-    parent altSeqComposite
+    parent altSeqComposite5
 
         track netHg19Patch5
-        parent altSeqCompositeViewnet
+        parent altSeqCompositeViewnet5
         subGroups view=net
-        shortLabel Net
-        longLabel GRCh37 Alternate Sequence Alignment Net
+        shortLabel Net P5
+        longLabel GRCh37.p5 Alternate Sequence Alignment Net
         type netAlign hg19Patch5 chainHg19Patch5
         html chainNet
 	priority 5

@@ -48,7 +48,7 @@ if (fieldCount >= 4)
     if (hti->nameField[0] != 0)
 	dyStringPrintf(fields, ",%s", hti->nameField);
     else /* Put in . as placeholder. */
-	dyStringPrintf(fields, ",'.'");
+        dyStringPrintf(fields, ",'.'");
     }
 if (fieldCount >= 5)
     {
@@ -62,14 +62,14 @@ if (fieldCount >= 6)
     if (hti->strandField[0] != 0)
 	dyStringPrintf(fields, ",%s", hti->strandField);
     else
-	dyStringPrintf(fields, ",'.'");
+        dyStringPrintf(fields, ",'.'");
     }
 if (fieldCount >= 8)
     {
     if (hti->cdsStartField[0] != 0)
 	dyStringPrintf(fields, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
     else
-	dyStringPrintf(fields, ",%s,%s", hti->startField, hti->endField);
+        dyStringPrintf(fields, ",%s,%s", hti->startField, hti->endField);
     }
 if (fieldCount >= 12)
     {
@@ -87,13 +87,13 @@ if (htiIsPsl(hti))
 }
 
 struct bed *bedFromRow(
-	char *chrom, 		  /* Chromosome bed is on. */
-	char **row,  		  /* Row with other data for bed. */
-	int fieldCount,		  /* Number of fields in final bed. */
-	boolean isPsl, 		  /* True if in PSL format. */
-	boolean isGenePred,	  /* True if in GenePred format. */
-	boolean isBedWithBlocks,  /* True if BED with block list. */
-	boolean *pslKnowIfProtein,/* Have we figured out if psl is protein? */
+        char *chrom,              /* Chromosome bed is on. */
+        char **row,               /* Row with other data for bed. */
+        int fieldCount,           /* Number of fields in final bed. */
+        boolean isPsl,            /* True if in PSL format. */
+        boolean isGenePred,       /* True if in GenePred format. */
+        boolean isBedWithBlocks,  /* True if BED with block list. */
+        boolean *pslKnowIfProtein,/* Have we figured out if psl is protein? */
 	boolean *pslIsProtein,    /* True if we know psl is protien. */
 	struct lm *lm)		  /* Local memory pool */
 /* Create bed from a database row when we already understand
@@ -156,20 +156,18 @@ else if (isPsl)
 	/* Figure out if is protein using a rather elaborate but
 	 * working test I think Angie or Brian must have figured out. */
 	if (tStrand == '-')
-	    {
-	    int tSize = sqlUnsigned(row[10]);
-	    *pslIsProtein =
-		   (bed->chromStart ==
-		    tSize - (3*bed->blockSizes[bed->blockCount - 1]  +
-		    bed->chromStarts[bed->blockCount - 1]));
-	    }
-	else
-	    {
-	    *pslIsProtein = (bed->chromEnd ==
-		    3*bed->blockSizes[bed->blockCount - 1]  +
-		    bed->chromStarts[bed->blockCount - 1]);
-	    }
-	*pslKnowIfProtein = TRUE;
+            {
+            int tSize = sqlUnsigned(row[10]);
+            *pslIsProtein = (bed->chromStart == tSize -
+                                                ( 3*bed->blockSizes[bed->blockCount - 1]
+                                                + bed->chromStarts[bed->blockCount - 1]));
+            }
+        else
+            {
+            *pslIsProtein = (bed->chromEnd == 3*bed->blockSizes[bed->blockCount - 1]
+                                              + bed->chromStarts[bed->blockCount - 1]);
+            }
+        *pslKnowIfProtein = TRUE;
 	}
     if (*pslIsProtein)
 	{
@@ -184,7 +182,7 @@ else if (isPsl)
 	int tSize = sqlUnsigned(row[10]);
 	for (i=0; i<blockCount; ++i)
 	    {
-	    bed->chromStarts[i] = tSize -
+            bed->chromStarts[i] = tSize -
 		    (bed->chromStarts[i] + bed->blockSizes[i]);
 	    }
 	reverseInts(bed->chromStarts, bed->blockCount);
@@ -201,12 +199,12 @@ return bed;
 }
 
 struct bed *getRegionAsBed(
-	char *db, char *table, 	/* Database and table. */
-	struct region *region,  /* Region to get data for. */
-	char *filter, 		/* Filter to add to SQL where clause if any. */
-	struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
-	struct lm *lm,		/* Where to allocate memory. */
-	int *retFieldCount)	/* Number of fields. */
+        char *db, char *table,  /* Database and table. */
+        struct region *region,  /* Region to get data for. */
+        char *filter,           /* Filter to add to SQL where clause if any. */
+        struct hash *idHash,    /* Restrict to id's in this hash if non-NULL. */
+        struct lm *lm,          /* Where to allocate memory. */
+        int *retFieldCount)     /* Number of fields. */
 /* Return a bed list of all items in the given range in table.
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 {
@@ -254,7 +252,7 @@ else
     isPsl = htiIsPsl(hti);
     isGenePred = sameString("exonEnds", hti->endsSizesField);
     isBedWithBlocks = (
-    	(sameString("chromStarts", hti->startsField) ||
+        (sameString("chromStarts", hti->startsField) ||
 	 sameString("blockStarts", hti->startsField))
 	     && sameString("blockSizes", hti->endsSizesField));
 
@@ -302,8 +300,8 @@ else if (isCustomTrack(table))
 else if (sameWord(table, WIKI_TRACK_TABLE))
     bedList = wikiTrackGetFilteredBeds(table, region, lm, retFieldCount);
 else
-    bedList = dbGetFilteredBedsOnRegions(conn, database, database,
-    	table, table, region, lm, retFieldCount);
+    bedList = dbGetFilteredBedsOnRegions(conn, database, database, table, table, region, lm,
+                                         retFieldCount);
 region->next = oldNext;
 return bedList;
 }
@@ -328,7 +326,7 @@ char *ctVisWigMenu[] =
 int ctVisWigMenuSize = 3;
 
 void doBedOrCtOptions(char *table, struct sqlConnection *conn,
-	boolean doCt)
+                      boolean doCt)
 /* Put up form to get options on BED or custom track output. */
 /* (Taken from hgText.c/doBedCtOptions) */
 {
@@ -353,16 +351,16 @@ if (!doGreat())
     if (doCt)
         {
         hPrintf("%s\n", "</TD><TD>"
-    	 "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
-    	 "Custom track</A> header: </B>");
+                "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
+                "Custom track</A> header: </B>");
         }
     else
         {
         cgiMakeCheckBox(hgtaPrintCustomTrackHeaders,
-    	    cartCgiUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE));
+                        cartCgiUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE));
         hPrintf("%s\n", "</TD><TD> <B> Include "
-    	 "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
-    	 "custom track</A> header: </B>");
+                        "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
+                        "custom track</A> header: </B>");
         }
     hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>name=");
     safef(buf, sizeof(buf), "tb_%s", hti->rootName);
@@ -370,9 +368,7 @@ if (!doGreat())
     cgiMakeTextVar(hgtaCtName, setting, 16);
     hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>description=");
     safef(buf, sizeof(buf), "table browser query on %s%s%s",
-    	 table,
-    	 (table2 ? ", " : ""),
-    	 (table2 ? table2 : ""));
+          table, (table2 ? ", " : ""), (table2 ? table2 : ""));
     setting = cgiUsualString(hgtaCtDesc, buf);
     cgiMakeTextVar(hgtaCtDesc, setting, 50);
     hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>visibility=");
@@ -409,9 +405,9 @@ else
     if ((anyIntersection() && intersectionIsBpWise()) ||
 	(anySubtrackMerge(database, table) && subtrackMergeIsBpWise()))
 	{
-	/* The original table may have blocks/CDS, described in hti, but
-	 * that info will be lost after base pair-wise operations.  So make
-	 * a temporary copy of hti with its flags tweaked: */
+        /* The original table may have blocks/CDS, described in hti, but
+         * that info will be lost after base pair-wise operations.  So make
+         * a temporary copy of hti with its flags tweaked: */
 	struct hTableInfo simplifiedHti;
 	memcpy(&simplifiedHti, hti, sizeof(simplifiedHti));
 	simplifiedHti.hasBlocks = FALSE;
@@ -528,7 +524,7 @@ return ctNew;
 }
 
 boolean doGetBedOrCt(struct sqlConnection *conn, boolean doCt,
-		     boolean doCtFile, boolean redirectToGb)
+                     boolean doCtFile, boolean redirectToGb)
 /* Actually output bed or custom track. Return TRUE unless no results. */
 {
 char *db = sqlGetDatabase(conn);
@@ -576,7 +572,7 @@ for (region = regionList; region != NULL; region = region->next)
             {
             dv = wiggleDataVector(curTrack, curTable, conn, region);
             if (dv != NULL)
-            slAddHead(&dataVectorList, dv);
+                slAddHead(&dataVectorList, dv);
             }
         else
             {
@@ -625,16 +621,16 @@ for (region = regionList; region != NULL; region = region->next)
         bedList = cookedBedList(conn, curTable, region, lm, &fields);
         }
 
-    /*	this is a one-time only initial creation of the custom track
-     *	structure to receive the results.  gotResults turns it off after
-     *	the first time.
+    /*  this is a one-time only initial creation of the custom track
+     *  structure to receive the results.  gotResults turns it off after
+     *  the first time.
      */
     if (doCtHdr && !gotResults &&
 	((bedList != NULL) || (wigDataList != NULL) ||
-	 (dataVectorList != NULL)))
+         (dataVectorList != NULL)))
         {
         ctNew = beginCustomTrack(table, fields,
-                    doCt, (isWig || isBedGr || isBgWg), doDataPoints);
+                                 doCt, (isWig || isBedGr || isBgWg), doDataPoints);
         }
 
     if (doDataPoints && (wigDataList || dataVectorList))
@@ -679,7 +675,7 @@ for (region = regionList; region != NULL; region = region->next)
                 {
                 ctNew->fieldCount = fields;
                 safef(ctNew->tdb->type, strlen(ctNew->tdb->type)+1,
-                    "bed %d", fields);
+                      "bed %d", fields);
                 }
             for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
                 {
@@ -687,7 +683,7 @@ for (region = regionList; region != NULL; region = region->next)
                     {
                     char *ptr = strchr(fbPtr->name, ' ');
                     if (ptr != NULL)
-                    *ptr = 0;
+                        *ptr = 0;
                     }
                 if (doCt)
                     {
@@ -712,8 +708,8 @@ for (region = regionList; region != NULL; region = region->next)
             featureBitsFreeList(&fbList);
             }
         }
-        bedList = NULL;
-        lmCleanup(&lm);
+    bedList = NULL;
+    lmCleanup(&lm);
     }
 if (!gotResults)
     {
@@ -730,8 +726,7 @@ else if (doCt)
         if (needSubtrackMerge || isBedGr || isBgWg)
             {
             slReverse(&dataVectorList);
-            wigDataSize = dataVectorWriteWigAscii(dataVectorList, ctNew->wigAscii,
-                        0, NULL);
+            wigDataSize = dataVectorWriteWigAscii(dataVectorList, ctNew->wigAscii, 0, NULL);
             // TODO: see if can make prettier wig output here that
             // doesn't necessarily have one value per base
             }
@@ -762,13 +757,13 @@ else if (doCt)
         char headerText[512];
         int redirDelay = 3;
         safef(browserUrl, sizeof(browserUrl),
-            "%s?%s&db=%s", hgTracksName(), cartSidUrlString(cart), database);
+              "%s?%s&db=%s", hgTracksName(), cartSidUrlString(cart), database);
         safef(headerText, sizeof(headerText),
-            "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
-            redirDelay, browserUrl);
+              "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
+              redirDelay, browserUrl);
         webStartHeader(cart, database, headerText,
-                "Table Browser: %s %s: %s", hOrganism(database),
-                freezeName, "get custom track");
+                       "Table Browser: %s %s: %s", hOrganism(database),
+                       freezeName, "get custom track");
         if (doDataPoints)
             {
             hPrintf("There are %d data points in custom track. ", wigDataSize);
@@ -776,12 +771,12 @@ else if (doCt)
         else
             {
             hPrintf("There are %d items in custom track. ",
-                slCount(ctNew->bedList));
+                    slCount(ctNew->bedList));
             }
         hPrintf("You will be automatically redirected to the genome browser in\n"
-            "%d seconds, or you can \n"
-            "<A HREF=\"%s\">click here to continue</A>.\n",
-            redirDelay, browserUrl);
+                "%d seconds, or you can \n"
+                "<A HREF=\"%s\">click here to continue</A>.\n",
+                redirDelay, browserUrl);
         }
     }
 else if (doDataPoints)

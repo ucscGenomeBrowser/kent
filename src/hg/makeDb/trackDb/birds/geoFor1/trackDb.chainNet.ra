@@ -1,0 +1,54 @@
+track chainNetTaeGut1 override
+visibility dense
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 200.3
+
+    track chainNetTaeGut1Viewnet override
+    visibility hide
+
+track chainNetGalGal4 override
+visibility dense
+chainLinearGap loose
+chainMinScore 1000
+priority 210.3
+
+    track chainNetGalGal4Viewnet override
+    visibility hide
+
+track chainNetMelGal1 override
+visibility dense
+chainMinScore 1000
+priority 215.3
+
+    track chainNetMelGal1Viewnet override
+    visibility hide
+
+track chainNetMelUnd1 override
+visibility dense
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 463.3
+
+    track chainNetMelUnd1Viewnet override
+    visibility hide
+
+track chainNetMm10 override
+visibility dense
+chainMinScore 5000
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainLinearGap loose
+priority 470.3
+
+    track chainNetMm10Viewnet override
+    visibility hide
+
+track chainNetHg19 override
+visibility dense
+chainMinScore 5000
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainLinearGap loose
+priority 580.3
+
+    track chainNetHg19Viewnet override
+    visibility hide

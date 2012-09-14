@@ -10,12 +10,11 @@ cd zips
 if ( -e kent ) then
     echo "cleaning out old zips/kent. [${0}: `date`]"
     rm -fr kent
-    rm README.txt
 endif
 
 set zip = "jksrc.v"$BRANCHNN".zip"
 echo "unzipping $zip. [${0}: `date`]"
-unzip $zip >& /dev/null
+unzip -o $zip >& unzip.log
 set err = $status
 if ( $err ) then
     echo "error unzipping $zip: $err [${0}: `date`]" 

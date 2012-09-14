@@ -54,6 +54,8 @@
 #define MAXPIXELS 14000
 #endif
 
+#define BIGBEDMAXIMUMITEMS 3000
+
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
@@ -133,8 +135,8 @@ struct track
     /* Get color for the item's label (optional). */
 
     void (*mapItem)(struct track *tg, struct hvGfx *hvg, void *item,
-    	char *itemName, char *mapItemName, int start, int end,
-	int x, int y, int width, int height);
+                    char *itemName, char *mapItemName, int start, int end,
+                    int x, int y, int width, int height);
     /* Write out image mapping for a given item */
 
     boolean hasUi;	/* True if has an extended UI page. */
@@ -198,16 +200,17 @@ struct track
     /* fill in left label drawing area */
     Color labelColor;   /* Fixed color for the track label (optional) */
     void (*drawLeftLabels)(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font,
-	Color color, enum trackVisibility vis);
+                           struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+                           boolean withCenterLabels, MgFont *font,
+                           Color color, enum trackVisibility vis);
 
     struct track *subtracks;   /* list of subsidiary tracks that are
                                 loaded and drawn by this track.  This
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
     struct track *parent;	/* Parent track if any */
-    struct track *prevTrack;    /* if not NULL, points to track immediately above in the image.  Needed by ConditionalCenterLabel logic */
+    struct track *prevTrack;    // if not NULL, points to track immediately above in the image.
+                                //    Needed by ConditionalCenterLabel logic
 
     void (*nextPrevExon)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
     /* Function will draw the button on a track item and assign a map */
@@ -291,6 +294,13 @@ enum {lfWithBarbs = 3}; /* Turn on barbs to show direction based on
 enum {lfSubChain = 4};
 enum {lfNoIntronLines = 5}; /* Draw no lines between exon blocks */
 
+enum highlightMode
+    {
+    highlightNone=0,
+    highlightBackground=1,
+    highlightOutline=2
+    };
+
 struct linkedFeatures
 /* A linked set of features - drawn as a bunch of boxes (often exons)
  * connected by horizontal lines (often introns).  About 75% of
@@ -310,6 +320,8 @@ struct linkedFeatures
     void *original;			/* The structure that was converted
 					   into this (when needed later).  */
     struct itemAttr *itemAttr;          /* itemAttr object for this lf, or NULL */
+    unsigned highlightColor;            /* highlight color,0 if no highlight */
+    enum highlightMode highlightMode;   /* highlight mode,0 if no highlight */
     };
 
 struct linkedFeaturesSeries
@@ -346,18 +358,9 @@ struct gsidSeq
     char *subjId;
     };
 
-/* list of links to display in a menu */
-struct hotLink
-    {
-    struct hotLink *next;
-    char *name;
-    char *url;
-    char *id;
-    };
-
 extern char *excludeVars[];
 extern struct trackLayout tl;
-extern struct jsonHashElement *jsonForClient;
+extern struct jsonElement *jsonForClient;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern struct hash *oldVars;       /* List of vars from previous cart. */
@@ -384,7 +387,7 @@ extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
 extern boolean withGuidelines;		/* Display guidelines? */
 extern boolean withNextExonArrows;	/* Display next exon navigation buttons near center labels? */
-extern struct hvGfx *hvgSide;    // An extra pointer to a side label image that can be built if needed
+extern struct hvGfx *hvgSide;  // An extra pointer to side label image that can be built if needed
 
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */
@@ -618,15 +621,15 @@ void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
  */
 
 void genericDrawItems(struct track *tg,
-	int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis);
+                      int seqStart, int seqEnd,
+                      struct hvGfx *hvg, int xOff, int yOff, int width,
+                      MgFont *font, Color color, enum trackVisibility vis);
 /* Draw generic item list.  Features must be fixed height
  * and tg->drawItemAt has to be filled in. */
 
 void bedDrawSimpleAt(struct track *tg, void *item,
-	struct hvGfx *hvg, int xOff, int y,
-	double scale, MgFont *font, Color color, enum trackVisibility vis);
+                     struct hvGfx *hvg, int xOff, int y,
+                     double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
 void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
@@ -636,8 +639,7 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 
 typedef struct slList *(*ItemLoader)(char **row);
 
-void bedLoadItemByQuery(struct track *tg, char *table,
-			char *query, ItemLoader loader);
+void bedLoadItemByQuery(struct track *tg, char *table, char *query, ItemLoader loader);
 /* Generic tg->item loader. If query is NULL use generic
  hRangeQuery(). */
 
@@ -652,10 +654,14 @@ void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int 
 
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row),
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
-				   char *scoreColumn, char *moreWhere, boolean (*itemFilter)(struct slList *item));
+				   char *scoreColumn, char *moreWhere,
+                                   boolean (*itemFilter)(struct slList *item));
 /* Make a linkedFeatures loader by providing three functions: (1) a regular */
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
+
+struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct genePred *gp, boolean extra);
+/* construct a linkedFeatures object from a genePred */
 
 struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb *tdb,
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
@@ -767,8 +773,8 @@ void spreadBasesString(struct hvGfx *hvg, int x, int y, int width, int height,
 /* Draw evenly spaced base letters in string. */
 
 void spreadAlignString(struct hvGfx *hvg, int x, int y, int width, int height,
-                        Color color, MgFont *font, char *s,
-                        char *match, int count, bool dots, bool isCodon);
+                       Color color, MgFont *font, char *s,
+                       char *match, int count, bool dots, bool isCodon);
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
  * with the main color, mismatched letters will have alt color.
@@ -1069,7 +1075,8 @@ void makeRedGreenShades(struct hvGfx *hvg);
 
 void linkedFeaturesSeriesMethods(struct track *tg);
 
-void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end,
+void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName,
+                    char *mapItemName, int start, int end,
 		    int x, int y, int width, int height);
 
 void drawScaledBoxSample(struct hvGfx *hvg,
@@ -1091,8 +1098,8 @@ Color getChromBreakBlueColor();
 Color getChromBreakGreenColor();
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
-				 struct hvGfx *hvg, int xOff, int y, double scale,
-				 MgFont *font, Color color, enum trackVisibility vis);
+                          struct hvGfx *hvg, int xOff, int y, double scale,
+                          MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
 Color lighterColor(struct hvGfx *hvg, Color color);
@@ -1173,13 +1180,15 @@ boolean isWithCenterLabels(struct track *track);
  * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
 
-#define isCenterLabelConditional(track) ((limitVisibility(track) == tvDense) && tdbIsCompositeChild((track)->tdb))
+#define isCenterLabelConditional(track) \
+                        ((limitVisibility(track) == tvDense) && tdbIsCompositeChild((track)->tdb))
 // dense subtracks have conditional centerLabels
 
 boolean isCenterLabelConditionallySeen(struct track *track);
 // returns FALSE if track and prevTrack have same parent, and are both dense subtracks
 
-#define isCenterLabelIncluded(track) (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
+#define isCenterLabelIncluded(track) \
+                (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
 // Center labels may be conditionally included
 
 void affyTxnPhase2Methods(struct track *track);
@@ -1187,6 +1196,14 @@ void affyTxnPhase2Methods(struct track *track);
 
 void loadGenePred(struct track *tg);
 /* Convert gene pred in window to linked feature. */
+
+void genePredAssignConfiguredName(struct track *tg);
+/* Set name on genePred in "extra" field to gene name, accession, or both,
+ * depending, on UI on all items in track */
+
+void loadGenePredWithConfiguredName(struct track *tg);
+/* Convert gene pred info in window to linked feature. Include name
+ * in "extra" field (gene name, accession, or both, depending on UI) */
 
 boolean highlightItem(struct track *tg, void *item);
 /* Should this item be highlighted? */
@@ -1283,6 +1300,12 @@ boolean superTrackHasVisibleMembers(struct trackDb *tdb);
 enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 
+INLINE enum trackVisibility actualVisibility(struct track *track)
+// return actual visibility for this track (limited to limitedVis if appropriate)
+{
+return track->limitedVisSet ? track->limitedVis : track->visibility;
+}
+
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
 // Returns "score >= ..." extra where clause if one is needed
 
@@ -1338,6 +1361,9 @@ int gCmpPriority(const void *va, const void *vb);
 
 int tgCmpPriority(const void *va, const void *vb);
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
+
+void printMenuBar();
+/* Put up the menu bar. */
 
 #define measureTime uglyTime
 

@@ -14,12 +14,12 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 
     track avgView
     view avg
-    shortLabel Sex Average
+    shortLabel Sex Avg
     parent decodeRmap
     visibility full
 
 	track decodeSexAveraged
-	shortLabel Sex Average
+	shortLabel Sex Avg
 	longLabel deCODE recombination map, sex-average
 	parent avgView
 	subGroups view=avg
@@ -29,7 +29,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 	priority 1
 
 	track decodeSexAveragedCarrier
-	shortLabel Sex Average Carrier
+	shortLabel Sex Avg Carry
 	longLabel deCODE recombination map, sex-average carrier
 	parent avgView off
 	subGroups view=avg
@@ -39,7 +39,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 	priority 2
 
 	track decodeSexAveragedNonCarrier
-	shortLabel Sex Average Non-carrier
+	shortLabel Sex Avg Non-carry
 	longLabel deCODE recombination map, sex-average non-carrier
 	parent avgView off
 	subGroups view=avg
@@ -65,7 +65,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 	priority 4
 
 	track decodeFemaleCarrier
-	shortLabel Female Carrier
+	shortLabel Female Carry
 	longLabel deCODE recombination map, female carrier
 	parent femaleView
 	subGroups view=female
@@ -75,7 +75,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 	priority 5
 
 	track decodeFemaleNonCarrier
-	shortLabel Female Non-carrier
+	shortLabel Female Non-carry
 	longLabel deCODE recombination map, female non-carrier
 	parent femaleView
 	subGroups view=female
@@ -101,7 +101,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 	priority 7
 
 	track decodeMaleCarrier
-	shortLabel Male Carrier
+	shortLabel Male Carry
 	longLabel deCODE recombination map, male carrier
 	parent maleView
 	subGroups view=male
@@ -111,7 +111,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 	priority 8
 
 	track decodeMaleNonCarrier
-	shortLabel Male Non-carrier
+	shortLabel Male Non-carry
 	longLabel deCODE recombination map, male non-carrier
 	parent maleView
 	subGroups view=male

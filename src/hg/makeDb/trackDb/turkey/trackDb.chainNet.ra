@@ -10,6 +10,11 @@ chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
+track chainNetGeoFor1 override
+priority 215.3
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
 track chainNetMonDom5 override
 priority 250.3
 chainMinScore 5000
@@ -19,6 +24,12 @@ track chainNetRn4 override
 priority 460.3
 chainMinScore 5000
 chainLinearGap loose
+
+track chainNetMm10 override
+priority 470.3
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetMm9 override
 priority 470.3

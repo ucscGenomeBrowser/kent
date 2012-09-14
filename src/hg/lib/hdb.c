@@ -1246,8 +1246,9 @@ dbSize = sqlLongLong(row[1]);
 diskSize = fileSize(path);
 if (dbSize != diskSize)
     {
-    errAbort("External file %s cannot be opened or has wrong size.  Old size %lld, new size %lld, error %s",
-   	path, dbSize, diskSize, strerror(errno));
+    errAbort("External file %s cannot be opened or has wrong size.  "
+             "Old size %lld, new size %lld, error %s",
+             path, dbSize, diskSize, strerror(errno));
     }
 sqlFreeResult(&sr);
 return path;
@@ -2070,44 +2071,10 @@ return list;
 
 char *hPdbFromGdb(char *genomeDb)
 /* Find proteome database name given genome database name */
+/* With the retirement of the proteome browser, we always use the most
+ * recent version of the database which is called "proteome" */
 {
-struct sqlConnection *conn = hConnectCentral();
-struct sqlResult *sr;
-char **row;
-char *ret = NULL;
-struct dyString *dy = newDyString(128);
-
-if (sqlTableExists(conn, "gdbPdb"))
-    {
-    if (genomeDb != NULL)
-	dyStringPrintf(dy, "select proteomeDb from gdbPdb where genomeDb = '%s';", genomeDb);
-    else
-	internalErr();
-    sr = sqlGetResult(conn, dy->string);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	ret = cloneString(row[0]);
-	}
-    else
-	{
-	// if a corresponding protein DB is not found, get the default one from the gdbPdb table
-        sqlFreeResult(&sr);
-    	sr = sqlGetResult(conn,  "select proteomeDb from gdbPdb where genomeDb = 'default';");
-    	if ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    ret = cloneString(row[0]);
-	    }
-	else
-	    {
-	    errAbort("No protein database defined for %s.", genomeDb);
-	    }
-	}
-
-    sqlFreeResult(&sr);
-    }
-hDisconnectCentral(&conn);
-freeDyString(&dy);
-return(ret);
+return "proteome";
 }
 
 static char *hFreezeDbConversion(char *database, char *freeze)
@@ -2160,37 +2127,6 @@ char query[256];
 boolean ok;
 safef(query, sizeof(query),
 	"select hgNearOk from dbDb where name = '%s'", database);
-ok = sqlQuickNum(conn, query);
-hDisconnectCentral(&conn);
-return ok;
-}
-
-boolean hgPbOk(char *database)
-/* Return TRUE if ok to put up Proteome Browser (pbTracks)
- * on this database. */
-{
-struct sqlConnection *conn = hConnectCentral();
-char query[256];
-char **row;
-struct sqlResult *sr = NULL;
-boolean ok;
-boolean dbDbHasPbOk;
-
-dbDbHasPbOk = FALSE;
-safef(query, sizeof(query), "describe dbDb");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (sameWord(row[0], "hgPbOk"))
-        {
-        dbDbHasPbOk = TRUE;
-        }
-    }
-sqlFreeResult(&sr);
-if (!dbDbHasPbOk) return(FALSE);
-
-safef(query, sizeof(query),
-        "select hgPbOk from dbDb where name = '%s'", database);
 ok = sqlQuickNum(conn, query);
 hDisconnectCentral(&conn);
 return ok;
@@ -3631,7 +3567,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             if (tdb->subtracks == NULL)
                 tdbMarkAsCompositeChild(tdb);
             else
-               tdbMarkAsCompositeView(tdb);
+                tdbMarkAsCompositeView(tdb);
             }
         }
     trackDbContainerMarkup(tdb, tdb->subtracks);
@@ -4742,6 +4678,42 @@ else
 return buffer;
 }
 
+INLINE boolean isAllDigits(char *str)
+/* Return TRUE if every character in str is a digit. */
+{
+char *p = str;
+while (*p != '\0')
+    if (!isdigit(*p++))
+	return FALSE;
+return TRUE;
+}
+
+boolean parsePosition(char *position, char **retChrom, uint *retStart, uint *retEnd)
+/* If position is word:number-number (possibly with commas & whitespace),
+ * set retChrom, retStart (subtracting 1) and retEnd, and return TRUE.
+ * Otherwise return FALSE and leave rets unchanged. */
+{
+char *chrom = cloneString(position);
+stripChar(chrom, ',');
+eraseWhiteSpace(chrom);
+char *startStr = strchr(chrom, ':');
+if (startStr == NULL)
+    return FALSE;
+*startStr++ = '\0';
+char *endStr = strchr(startStr, '-');
+if (endStr == NULL)
+    return FALSE;
+*endStr++ = '\0';
+if (!isAllDigits(startStr))
+    return FALSE;
+if (!isAllDigits(endStr))
+    return FALSE;
+*retChrom = chrom;
+*retStart = sqlUnsigned(startStr) - 1;
+*retEnd = sqlUnsigned(endStr);
+return TRUE;
+}
+
 static struct grp* loadGrps(char *db, char *confName, char *defaultTbl)
 /* load all of the grp rows from a table.  The table name is first looked up
  * in hg.conf with confName. If not there, use defaultTbl.  If the table
@@ -5001,6 +4973,11 @@ struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, str
 {
 if(isEmpty(table))
     return parent;
+
+// hub tracks aren't in the trackDb hash, just use the parent tdb
+if (isHubTrack(table))
+    return parent;
+
 struct trackDb *tdb = NULL;
 if (isCustomTrack(table))
     {
@@ -5055,17 +5032,54 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
 return trackIsType(database, table, parent, "bigBed", ctLookupName);
 }
 
-char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table)
-/* Return file name from bigDataUrl or little table. */
+static char *bbiNameFromTableChrom(struct sqlConnection *conn, char *table, char *seqName)
+/* Return file name from table.  If table has a seqName column, then grab the
+ * row associated with chrom (which can be e.g. '1' not 'chr1' if that is the
+ * case in the big remote file). */
 {
-char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+boolean checkSeqName = (sqlFieldIndex(conn, table, "seqName") >= 0);
+if (checkSeqName && seqName == NULL)
+    errAbort("bamFileNameFromTable: table %s has seqName column, but NULL seqName passed in",
+	     table);
+char query[512];
+if (checkSeqName)
+    safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+	  table, seqName);
+else
+    safef(query, sizeof(query), "select fileName from %s", table);
+char *fileName = sqlQuickString(conn, query);
+if (fileName == NULL && checkSeqName)
+    {
+    if (startsWith("chr", seqName))
+	safef(query, sizeof(query), "select fileName from %s where seqName = '%s'",
+	      table, seqName+strlen("chr"));
+    else
+	safef(query, sizeof(query), "select fileName from %s where seqName = 'chr%s'",
+	      table, seqName);
+    fileName = sqlQuickString(conn, query);
+    }
 if (fileName == NULL)
     {
-    char query[256];
-    safef(query, sizeof(query), "select fileName from %s", table);
-    fileName = sqlQuickString(conn, query);
-    if (fileName == NULL)
+    if (checkSeqName)
+	errAbort("Missing fileName for seqName '%s' in %s table", seqName, table);
+    else
 	errAbort("Missing fileName in %s table", table);
     }
 return fileName;
+}
+
+char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *conn, char *table,
+				     char *seqName)
+/* Return file name from bigDataUrl or little table (which might have a seqName column). */
+{
+char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+if (fileName == NULL)
+    fileName = bbiNameFromTableChrom(conn, table, seqName);
+return fileName;
+}
+
+char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table)
+/* Return file name from bigDataUrl or little table. */
+{
+return bbiNameFromSettingOrTableChrom(tdb, conn, table, NULL);
 }

@@ -30,6 +30,13 @@ else if (chrom != NULL)
     errAbort("annoStreamVcf: setRegion not yet implemented for non-tabix VCF.");
 }
 
+static char *asvGetHeader(struct annoStreamer *vSelf)
+/* Return VCF header (e.g. for use by formatter) */
+{
+struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
+return cloneString(self->vcff->headerString);
+}
+
 static char **nextRowUnfiltered(struct annoStreamVcf *self)
 /* Get the next VCF record and put the row text into autoSql words.
  * Return pointer to self->asWords if we get a row, otherwise NULL. */
@@ -122,6 +129,7 @@ struct asObject *asObj = vcfAsObj();
 annoStreamerInit(streamer, asObj);
 streamer->rowType = arVcf;
 streamer->setRegion = asvSetRegion;
+streamer->getHeader = asvGetHeader;
 streamer->nextRow = asvNextRow;
 streamer->close = asvClose;
 self->vcff = vcff;

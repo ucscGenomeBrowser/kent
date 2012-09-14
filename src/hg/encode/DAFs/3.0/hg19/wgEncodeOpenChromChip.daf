@@ -29,7 +29,7 @@ variables        cell, antibody
 assembly         hg19
 dafVersion       2.0
 
-validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,nMatch,isSort,matchFirst=32;
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,nMatch,matchFirst=32;
 
  # Track/view definition
  view             Peaks
@@ -40,22 +40,22 @@ validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,nMatch,isSor
  view             Signal
  type             bigWig
  hasReplicates    no
- required         yes
+ required         no
 
  view             Base_Overlap_Signal
  type             bigWig
  hasReplicates    no
- required         yes
+ required         no
 
  view             Alignments
  type             bam
- hasReplicates    yes
- required	  yes
+ hasReplicates    no
+ required	  no
  downloadOnly	  yes
 
  view             RawData
  type             fastq
- hasReplicates    yes
+ hasReplicates    no
  required         no
 
 

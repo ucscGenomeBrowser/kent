@@ -141,11 +141,38 @@ freeMem(s);
 freeMem(r);
 }
 
+static void earlyAbortHandler(char *format, va_list args)
+{
+// provide more explicit message when we run out of memory (#5147).
+popWarnHandler();
+if(strstr(format, "needLargeMem:") || strstr(format, "carefulAlloc:"))
+    format = "Region selected is too large for calculation. Please specify a smaller region or try limiting to fewer data points.";
+vaWarn(format, args);
+if(isErrAbortInProgress())
+    noWarnAbort();
+}
+
+static void errAbortHandler(char *format, va_list args)
+{
+// provide more explicit message when we run out of memory (#5147).
+if(strstr(format, "needLargeMem:") || strstr(format, "carefulAlloc:"))
+    htmlVaWarn("Region selected is too large for calculation. Please specify a smaller region or try limiting to fewer data points.", args);
+else
+    {
+    // call previous handler
+    popWarnHandler();
+    vaWarn(format, args);
+    }
+if(isErrAbortInProgress())
+    noWarnAbort();
+}
+
 static void vaHtmlOpen(char *format, va_list args)
 /* Start up a page that will be in html format. */
 {
 puts("Content-Type:text/html\n");
 cartVaWebStart(cart, database, format, args);
+pushWarnHandler(errAbortHandler);
 }
 
 void htmlOpen(char *format, ...)
@@ -154,6 +181,7 @@ void htmlOpen(char *format, ...)
 va_list args;
 va_start(args, format);
 vaHtmlOpen(format, args);
+va_end(args);
 }
 
 void htmlClose()
@@ -507,8 +535,7 @@ if (isPositional)
 	}
     else
 	{
-	sr = hExtendedRangeQuery(conn, table, region->chrom,
-		region->start, region->end,
+	sr = hExtendedRangeQuery(conn, table, region->chrom, region->start, region->end,
 		extraWhere, TRUE, fields, NULL);
 	}
     }
@@ -1146,7 +1173,7 @@ else if (track != NULL)
                     }
                 }
             }
-            joinerPairFreeList(&jpList);
+        joinerPairFreeList(&jpList);
         }
     }
 /* If we haven't found the answer but this looks like a non-positional table,
@@ -1643,7 +1670,6 @@ if (track != NULL)
 	!cartVarExists(cart, "gvDisclaimer"))
 	{
 	/* display disclaimer and add flag to cart, program exits from here */
-	htmlSetBackground(hBackgroundImage());
 	htmlStart("Table Browser");
 	gvDisclaimer();
 	}
@@ -1732,6 +1758,7 @@ void dispatch()
 {
 struct hashEl *varList;
 struct sqlConnection *conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
+pushWarnHandler(earlyAbortHandler);
 /* only allows view table schema function for CGB or GSID servers for the time being */
 if (hIsCgbServer() || hIsGsidServer())
     {

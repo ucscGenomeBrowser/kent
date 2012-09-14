@@ -587,7 +587,7 @@ int maxToReturn = 500;
 
 if (slCount(tsrList) > maxToReturn)
     {
-    warn("Search terms are not very specific, only showing first %d matching known genes.",
+    warn("Search terms are not very specific, only showing first %d matching UCSC Genes.",
     	maxToReturn);
     tsr = slElementFromIx(tsrList, maxToReturn-1);
     tsr->next = NULL;
@@ -2382,7 +2382,7 @@ hFreeConn(&conn);
 return(found);
 }
 
-void hgPositionsHtml(char *db, struct hgPositions *hgp, FILE *f,
+static void hgPositionsHtml(char *db, struct hgPositions *hgp, FILE *f,
 		     boolean useWeb, char *hgAppName, struct cart *cart)
 /* Write out hgp table as HTML to file. */
 {
@@ -2393,6 +2393,7 @@ char range[HGPOSRANGESIZE];
 char *ui = getUiUrl(cart);
 char *extraCgi = hgp->extraCgi;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
+boolean containerDivPrinted = FALSE;
 
 if (useWeb)
     webStart(cart, db, "Select Position");
@@ -2407,6 +2408,11 @@ for (table = hgp->tableList; table != NULL; table = table->next)
             errAbort("no track for table \"%s\" found via a findSpec", table->name); // wish we had searchName
 	char *vis = hCarefulTrackOpenVis(db, trackName);
 	boolean excludeTable = FALSE;
+        if(!containerDivPrinted)
+            {
+            fprintf(f, "<div id='hgFindResults'>\n");
+            containerDivPrinted = TRUE;
+            }
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
 	else
@@ -2452,6 +2458,9 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	    fprintf(f, "</PRE>\n");
 	}
     }
+
+if(containerDivPrinted)
+    fprintf(f, "</div>\n");
 
 if (useWeb)
     webEnd();
@@ -3155,19 +3164,13 @@ void hgPositionsHelpHtml(char *organism, char *database)
 char *htmlPath = hHtmlPath(database);
 char *htmlString = NULL;
 size_t htmlStrLength = 0;
-char *freeze = hFreezeFromDb(database);
 
 if (strstrNoCase(organism, "zoo")) 
     webNewSection("About the NISC Comparative Sequencing Program Browser");
-else if (stringIn(database, freeze))
-    webNewSection("About the %s %s assembly"
-		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
-		  organism, freeze,
-		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 else
-    webNewSection("About the %s %s (%s) assembly"
+    webNewSection("%s Genome Browser &ndash; %s assembly"
 		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
-		  organism, freeze, database,
+		  organism, database,
 		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 if (htmlPath != NULL && fileExists(htmlPath))

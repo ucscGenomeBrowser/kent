@@ -1,4 +1,4 @@
-#Text to Genome project article data table
+#publications track article metadata table
 CREATE TABLE pubsArticle (
     articleId bigint not null,	# internal article ID, created during download
     extId varchar(255) not null,	# publisher ID e.g. PMCxxxx or doi or sciencedirect ID

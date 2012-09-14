@@ -1790,3 +1790,27 @@ TMPDIR=/scratch/tmp
 # (see hg19.txt for multi-species build notes)
 
 ############################################################################
+# LIFTOVER TO rheMac3 (DONE - 2012-07-24 - Hiram )
+    # need a .ooc file for this
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    # the 2646668809 is the 'real' size from faSize on the genome
+    calc \(  2646668809 / 2897316137 \) \* 1024
+    #   ( 2646668809 / 2897316137 ) * 1024 = 935.413580
+    # round down to 900 as was in rheMac3:
+    cd /hive/data/genomes/rheMac2
+    blat rheMac2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/rheMac2.11.ooc -repMatch=900
+    #   Wrote 31602 overused 11-mers to jkStuff/rheMac2.11.ooc
+    mkdir /hive/data/genomes/rheMac2/bed/blat.rheMac3.2012-07-24
+    cd /hive/data/genomes/rheMac2/bed/blat.rheMac3.2012-07-24
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/rheMac2/jkStuff/rheMac2.11.ooc rheMac2 rheMac3
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/rheMac2/jkStuff/rheMac2.11.ooc \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	 rheMac2 rheMac3 > do.log 2>&1
+    #	real    24m28.376s
+
+#############################################################################

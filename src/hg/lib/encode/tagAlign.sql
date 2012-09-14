@@ -9,9 +9,10 @@ CREATE TABLE tagAlign (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     sequence varchar(255) not null,	# Sequence of this read
-    score int not null,	# Indicates mismatches, quality, or other measurement (0-1000)
-    strand char(1) not null,	# Orientation of this read (+ or -)
-              #Indices
+    score int unsigned not null,	# Indicates mismatches, quality, or other measurement (0-1000)
+    strand char(1) not null,	        # Orientation of this read (+ or -)
+              
+#Indices
     INDEX chromStart (chrom(8), chromStart)
 )
 AVG_ROW_LENGTH = 100

@@ -317,6 +317,22 @@ while ((hel = hashNext(&cookie)) != NULL)
 return names;
 }
 
+struct slName *cfgNamesWithPrefix(char* prefix)
+/* get list of names in config file that start with prefix. slFreeList when finished */
+{
+if(cfgOptionsHash == NULL)
+    initConfig();
+struct slName *names = NULL;
+struct hashCookie cookie = hashFirst(cfgOptionsHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL) 
+    {
+    if (startsWith(prefix, hel->name)) 
+        slSafeAddHead(&names, slNameNew(hel->name));
+    }
+return names;
+}
+
 unsigned long cfgModTime()
 /* Return modification time of config file */
 {

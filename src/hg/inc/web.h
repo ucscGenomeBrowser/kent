@@ -47,6 +47,9 @@ void webEndSectionTables();
 void webVaWarn(char *format, va_list args);
 /* Warning handler that closes off web page. */
 
+boolean webGotWarnings();
+/* Return TRUE if webVaWarn has been called. */
+
 void webAbort(char* title, char* format, ...);
 /* an abort function that outputs a error page */
 
@@ -264,8 +267,8 @@ char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml);
 // NOTE: png, jpg and gif should also be supported but are untested.
 
 char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml);
-// If this is the first call, will
-//   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
+// If this is the first call, will Return full path of timestamped link to the
+ // requested resource file (js, or css).  Free after use.
 // else returns NULL.  Useful to ensure multiple references to the same resource file are not made
 // NOTE: png, jpg and gif should also be supported but are untested.
 
@@ -275,5 +278,14 @@ boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName);
 // Passing in NULL as the file pointer results in hPrintf call
 // The reference will be to a link with timestamp.
 #define webIncludeResourceFile(fileName)  webIncludeResourcePrintToFile(NULL,fileName)
+
+void lazarusLives(unsigned long newExpireSeconds);
+/* Long running process requests more time */
+
+void setContextSpecificHelp(char *link, char *label);
+// Override default behavior for the context specific help link
+
+char *menuBar(struct cart *cart);
+// return HTML for the menu bar (read from a configuration file).
 
 #endif /* WEB_H */

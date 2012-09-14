@@ -8,9 +8,12 @@ wgEncodeCaltechRnaSeq.ra \
 wgEncodeCshlLongRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
 wgEncodeDukeAffyExon.ra \
+wgEncodeFsuRepliChip.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeGencodeV10.ra \
 wgEncodeGencodeV11.ra \
+wgEncodeGencodeV12.ra \
+wgEncodeGisChiaPet.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeGisRnaSeq.ra \
@@ -24,7 +27,9 @@ wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromDnase.ra\
 wgEncodeOpenChromFaire.ra \
 wgEncodeOpenChromSynth.ra \
-wgEncodeReg.ra \
+wgEncodeRegDnaseClustered.ra \
+wgEncodeRegTfbsClustered.ra \
+wgEncodeRegTxn.ra \
 wgEncodeRikenCage.ra \
 wgEncodeSunyAlbanyGeneSt.ra \
 wgEncodeSunyAlbanyTiling.ra \
@@ -37,6 +42,7 @@ wgEncodeSydhTfbs.ra \
 wgEncodeUchicagoTfbs.ra \
 wgEncodeUmassDekker5C.ra \
 wgEncodeUncBsuProt.ra \
+wgEncodeUncBsuProtGenc.ra \
 wgEncodeUw5C.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwDgf.ra \

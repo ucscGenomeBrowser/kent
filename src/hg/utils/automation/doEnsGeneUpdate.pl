@@ -698,7 +698,6 @@ if (!defined $opt_ensVersion) {
 }
 
 $ensVersion = $opt_ensVersion;
-$previousEnsVersion = $ensVersion - 1;
 
 if (! $opt_vegaGene) {
   if ($versionListString !~ m/$ensVersion/) {
@@ -714,6 +713,12 @@ $bedDir = "$topDir/$HgAutomate::trackBuild";
 # Force debug and verbose until this is looking pretty solid:
 # $opt_debug = 1;
 # $opt_verbose = 3 if ($opt_verbose < 3);
+
+# Establish previous version
+$previousEnsVersion = `hgsql -Ne 'select max(version) from trackVersion where name="ensGene" AND db="$db";' hgFixed`;
+chomp $previousEnsVersion;
+if ( $previousEnsVersion eq 'NULL') { $previousEnsVersion=0;}
+
 
 # Establish what directory we will work in, tack on the ensembl version ID.
 if ($opt_vegaGene) {

@@ -83,6 +83,7 @@ loadDbTracks() {
     fi
     if [ -n "$release" ] ; then
         topts="$topts -release=$release"
+        fopts="$fopts -release=$release"
         qopts="$qopts -release=$release"
     fi
     if [ -n "$strict" ] ; then

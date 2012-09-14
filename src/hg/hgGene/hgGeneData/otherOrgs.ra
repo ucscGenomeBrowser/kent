@@ -10,7 +10,7 @@ geneTable knownGene
 genomeUrl ../cgi-bin/hgTracks?org=Human&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Human&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=Human&hgg_gene=%s&hgg_chrom=none
-otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+otherUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 otherIdSql select kgXref.mRNA from kgXref where kgID='%s'
 otherName GenBank
 priority 10

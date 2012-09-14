@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-test: testMinSize testMaxSize testNameWild testMult testUniq
+test: testMinSize testMaxSize testNameWild testMult testUniq testUniqIc
 
 testMinSize: mkdir
 	faFilter -minSize=10 input/basic.fa output/$@.fa
@@ -21,6 +21,11 @@ testMult: mkdir
 testUniq: mkdir
 	cat input/basic.fa input/basic.fa >output/basicDups.fa
 	faFilter -uniq output/basicDups.fa output/$@.fa
+	diff -u expected/$@.fa output/$@.fa
+
+testUniqIc: mkdir
+	cat input/uniqIc.fa input/uniqIc.fa >output/uniqIcDups.fa
+	faFilter -uniq -i output/uniqIcDups.fa output/$@.fa
 	diff -u expected/$@.fa output/$@.fa
 
 clean::

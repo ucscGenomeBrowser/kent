@@ -8,6 +8,10 @@ track chainNetGorGor3 override
 priority 230.3
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 
+track chainNetPanTro4 override
+priority 240.3
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+
 track chainNetPanTro3 override
 priority 240.3
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
@@ -52,8 +56,16 @@ priority 260.3
 track chainNetCalJac1 override
 priority 260.3
 
+track chainNetRn5 override
+priority 360.3
+shortLabel $o_db Chain/Net
+
 track chainNetRn4 override
 priority 360.3
+
+track chainNetMm10 override
+priority 370.3
+shortLabel $o_db Chain/Net
 
 track chainNetMm9 override
 priority 370.3

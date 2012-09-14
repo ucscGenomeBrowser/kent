@@ -1,0 +1,25 @@
+# Config parameters for makeGenomeDb.pl:
+db sorAra1
+clade mammal
+genomeCladePriority 20.1
+scientificName Sorex araneus
+commonName Shrew
+assemblyDate Jun. 2006
+assemblyLabel Broad Institute Draft_v2
+assemblyShortLabel Draft_v2
+orderKey 2580
+# search Entrez nucleotide for 'sorex araneus mitochondrion complete genome, use GI #'
+# not found (only sorex unguiculatus)
+mitoAcc none
+fastaFiles /cluster/data/sorAra1/downloads/assembly.bases.gz
+agpFiles /cluster/data/sorAra1/downloads/assembly.agp
+qualFiles /cluster/data/sorAra1/downloads/sorAra1.quals.qac
+dbDbSpeciesDir shrew
+photoCreditURL http://en.wikipedia.org/wiki/File:Common_Shrew.jpg
+photoCreditName Sjonge, Wikipedia Commons
+ncbiGenomeId 226
+ncbiAssemblyId 228978
+ncbiAssemblyName ASM18127v1
+ncbiBioProject 13689
+genBankAccessionID GCA_000181275.1
+taxId 42254

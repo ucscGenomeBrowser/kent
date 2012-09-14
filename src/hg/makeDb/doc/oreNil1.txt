@@ -266,3 +266,26 @@ XXX - running - Wed Nov 30 09:27:18 PST 2011
 	hgcentraltest
 
 ############################################################################
+# cpgIslands - (DONE - 2011-04-20 - Hiram)
+    mkdir /hive/data/genomes/oreNil1/bed/cpgIslands
+    cd /hive/data/genomes/oreNil1/bed/cpgIslands
+    time doCpgIslands.pl oreNil1 > do.log 2>&1
+    #   Elapsed time: 11m10s
+
+    time featureBits oreNil1 cpgIslandExt > fb.oreNil1.cpgIslandExt.txt 2>&1
+    #   6076152 bases of 816084674 (0.745%) in intersection
+    #   real    0m2.342s
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/oreNil1/bed/genscan
+    cd /hive/data/genomes/oreNil1/bed/genscan
+    time doGenscan.pl oreNil1 > do.log 2>&1
+    #   real    15m43.924s
+
+    cat fb.oreNil1.genscan.txt
+    #   38174535 bases of 816084674 (4.678%) in intersection
+    cat fb.oreNil1.genscanSubopt.txt
+    #   30455436 bases of 816084674 (3.732%) in intersection
+
+#########################################################################

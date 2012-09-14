@@ -15,15 +15,15 @@
 
 # errors terminate with message
 set -e
-trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
+trap "echo Error: genbank-align failed on $(hostname) >&2; exit 1" ERR
 exec </dev/null
 
 # initialize
-gbRoot=/cluster/data/genbank
+gbRoot=/hive/data/outside/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
-databases=`gbGetDatabases etc/align.dbs`
-maxParallel=16
+databases=$(gbGetDatabases etc/align.dbs)
+maxParallel=8
 
 buildTime=var/build/build.time
 
@@ -49,7 +49,7 @@ done
 
 # setup workdir unless specified on command line
 if [ "x$workdir" = "x" ] ; then
-    date=`date +"%Y.%m.%d"`
+    date=$(date +"%Y.%m.%d")
     workdir="work/daily/align.$date"
 fi
 

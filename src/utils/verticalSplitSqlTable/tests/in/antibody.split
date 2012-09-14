@@ -1,0 +1,7 @@
+table1 cvDb_antibody
+fields1 id=id term=term tag=tag deprecated=deprecated description=antibodyDescription target=target  vendorName=vendorName vendorId=vendorId orderUrl=orderUrl lab=lab validation=validation label=label lots=lots
+description1 Information on an antibody including where to get it and what it targets
+table2 cvDb_abTarget
+fields2 term=target deprecated=deprecated description=targetDescription externalId=targetId url=targetUrl
+description2 Describes where an antibody is thought to bind
+sharedKey target

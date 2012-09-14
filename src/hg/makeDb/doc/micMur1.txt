@@ -159,4 +159,161 @@ cut -f 2 chrom.sizes | ave stdin
 # add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute micMur1 (NCBI project 19967, ABDC00000000)" where name="micMur1";' hgcentraltest
+
 ###########################################################################
+# cpgIslands - (DONE - 2011-04-24 - Hiram)
+    mkdir /hive/data/genomes/micMur1/bed/cpgIslands
+    cd /hive/data/genomes/micMur1/bed/cpgIslands
+    time doCpgIslands.pl micMur1 > do.log 2>&1
+    #   real    314m39.323s
+
+    cat fb.micMur1.cpgIslandExt.txt
+    #   33763514 bases of 1852394361 (1.823%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/micMur1/bed/genscan
+    cd /hive/data/genomes/micMur1/bed/genscan
+    time doGenscan.pl micMur1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    256m38.291s
+    # continuing:
+    time doGenscan.pl -continue=load micMur1 > load.log 2>&1
+    #   real    9m19.938s
+    # failed out of inodes on hive:
+    time doGenscan.pl -continue=cleanup micMur1 > cleanup.log 2>&1
+    #   real    25m41.674s
+
+    cat fb.micMur1.genscan.txt
+    #   50561491 bases of 1852394361 (2.730%) in intersection
+    cat fb.micMur1.genscanSubopt.txt
+    #   55072205 bases of 1852394361 (2.973%) in intersection
+
+#########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S micMur1
+    mkdir /hive/data/genomes/micMur1/bed/windowMasker
+    cd /hive/data/genomes/micMur1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev micMur1 > do.log 2>&1
+    #   Elapsed time: 769m16s
+
+    sed -e 's/^/    #\t/' fb.micMur1.windowmaskerSdust.beforeClean.txt
+    #   1606982741 bases of 2902270736 (55.370%) in intersection
+    sed -e 's/^/    #\t/' fb.micMur1.windowmaskerSdust.clean.txt
+    #   557106366 bases of 2902270736 (19.196%) in intersection
+    sed -e 's/^/    #\t/' fb.micMur1.rmsk.windowmaskerSdust.txt
+    #   333189865 bases of 2902270736 (11.480%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-03 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1852394361 / 2897316137 \) \* 1024
+    #	( 1852394361 / 2897316137 ) * 1024 = 654.692735
+
+    # round up to 700
+
+    cd /hive/data/genomes/micMur1
+    time blat micMur1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/micMur1.11.ooc -repMatch=700
+    #   Wrote 19902 overused 11-mers to jkStuff/micMur1.11.ooc
+    #   real    0m47.067s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" micMur1 | sort | uniq -c
+    #   484693 yes
+#    cd /hive/data/genomes/micMur1/jkStuff
+#    gapToLift micMur1 micMur1.nonBridged.lift -bedFile=micMur1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' micMur1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Melopsittacus undulatus	25	1	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add micMur1 just after ce2
+# micMur1 (Mouse lemur)
+micMur1.serverGenome = /hive/data/genomes/micMur1/micMur1.2bit
+micMur1.clusterGenome = /hive/data/genomes/micMur1/micMur1.2bit
+micMur1.ooc = /hive/data/genomes/micMur1/jkStuff/micMur1.11.ooc
+micMur1.lift = no
+micMur1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+micMur1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+micMur1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+micMur1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+micMur1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+micMur1.refseq.mrna.native.load = no
+micMur1.refseq.mrna.xeno.load = yes
+micMur1.genbank.mrna.xeno.load = yes
+micMur1.genbank.est.native.load = no
+micMur1.downloadDir = micMur1
+micMur1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding micMur1 mouse lemur" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for micMurNames" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S micMur1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial micMur1 &
+    #   var/build/logs/2012.06.07-16:10:31.micMur1.initalign.log
+    #   real    2142m37.090s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad micMur1 &
+    #	logFile:  var/dbload/hgwdev/logs/2012.06.11-11:02:03.dbload.log
+    #   real    40m11.656s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-05-11 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add micMur1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added micMur1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_31:985166-987669" where name="micMur1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/micMur1/pushQ
+    cd /hive/data/genomes/micMur1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl micMur1 2> stderr.txt | grep -v transMap > micMur1.sql
+    #   real    3m52.913s
+
+    scp -p micMur1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/micMur1.sql"
+
+############################################################################

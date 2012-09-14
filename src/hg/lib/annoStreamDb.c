@@ -14,13 +14,14 @@ struct annoStreamDb
     struct sqlResult *sr;		// SQL query result from which we grab rows
     boolean hasBin;			// 1 if SQL table's first column is bin
     boolean omitBin;			// 1 if table hasBin and autoSql doesn't have bin
-    int numCols;			// Number of columns in autoSql
     char *chromField;			// Name of chrom-ish column in table
     char *startField;			// Name of chromStart-ish column in table
     char *endField;			// Name of chromEnd-ish column in table
     int chromIx;			// Index of chrom-ish col in autoSql or bin-less table
     int startIx;			// Index of chromStart-ish col in autoSql or bin-less table
     int endIx;				// Index of chromEnd-ish col in autoSql or bin-less table
+    boolean hasEndFieldIndex;		// TRUE if index on end field (can mess up sorting)
+    boolean notSorted;			// TRUE if table is not sorted (e.g. genbank-updated)
     };
 
 static void asdSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
@@ -50,8 +51,11 @@ if (!streamer->positionIsGenome)
 	dyStringPrintf(query, "%s < %u and %s > %u", self->startField, streamer->regionEnd,
 		       self->endField, streamer->regionStart);
 	}
+    if (self->hasEndFieldIndex || self->notSorted)
+	dyStringPrintf(query, " order by %s", self->startField);
     }
-verbose(2, "mysql query: '%s'\n", query->string);
+else if (self->notSorted)
+    dyStringPrintf(query, " order by %s,%s", self->chromField, self->startField);
 struct sqlResult *sr = sqlGetResult(self->conn, query->string);
 dyStringFree(&query);
 self->sr = sr;
@@ -83,7 +87,7 @@ if (row == NULL)
     return NULL;
 // Skip past any left-join failures until we get a right-join failure, a passing row, or EOF.
 boolean rightFail = FALSE;
-while (annoFilterRowFails(vSelf->filters, row, self->numCols, &rightFail))
+while (annoFilterRowFails(vSelf->filters, row, vSelf->numCols, &rightFail))
     {
     if (rightFail)
 	break;
@@ -94,7 +98,7 @@ while (annoFilterRowFails(vSelf->filters, row, self->numCols, &rightFail))
 char *chrom = row[self->chromIx];
 uint chromStart = sqlUnsigned(row[self->startIx]);
 uint chromEnd = sqlUnsigned(row[self->endIx]);
-return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row, self->numCols);
+return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row, vSelf->numCols);
 }
 
 static void asdClose(struct annoStreamer **pVSelf)
@@ -158,6 +162,26 @@ if (asHasFields(self, "genoName", "genoStart", "genoEnd"))
 return FALSE;
 }
 
+boolean sqlTableHasIndexOn(struct sqlConnection *conn, char *table, char *field)
+/* Return TRUE if table has an index that includes field. */
+{
+boolean foundIndex = FALSE;
+char query[512];
+safef(query, sizeof(query), "show index from %s", table);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[4], field))
+	{
+	foundIndex = TRUE;
+	break;
+	}
+    }
+sqlFreeResult(&sr);
+return foundIndex;
+}
+
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct asObject *asObj)
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
 {
@@ -179,9 +203,12 @@ if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
     self->hasBin = 1;
 if (self->hasBin && !sameString(asFirstColumnName, "bin"))
     self->omitBin = 1;
-self->numCols = slCount(streamer->asObj->columnList);
 if (!asdInitBed3Fields(self))
     errAbort("annoStreamDbNew: can't figure out which fields of %s to use as "
 	     "{chrom, chromStart, chromEnd}.", table);
+// When a table has an index on endField, sometimes the query optimizer uses it
+// and that ruins the sorting.  Fortunately most tables don't anymore.
+self->hasEndFieldIndex = sqlTableHasIndexOn(self->conn, self->table, self->endField);
+self->notSorted = TRUE; // True for more tables than I counted on, e.g. snp135 (bc it's packed??)
 return (struct annoStreamer *)self;
 }

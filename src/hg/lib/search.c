@@ -29,7 +29,8 @@ return fileExists(trixFile);
 struct slPair *fileFormatSearchWhiteList()
 // Gets the whitelist of approved file formats that is allowed for search
 {
-char *crudeTypes[] = {
+char *crudeTypes[] =
+    {
     "bam",  //    "bam.bai" is now alway selected with bam,
     "tagAlign",
     "bed.gz",
@@ -39,8 +40,9 @@ char *crudeTypes[] = {
     "fastq",
     "bigWig",
     "wig"    // TODO: Add "other" category. TODO: make into multi-select
-};
-char *nicerTypes[] = {
+    };
+char *nicerTypes[] =
+    {
     "Alignment binary (bam) - binary SAM",  //    "Alignment binary index (bai) - binary SAM index",
     "Alignment tags (tagAlign)",
     "bed - browser extensible data",
@@ -50,12 +52,12 @@ char *nicerTypes[] = {
     "Raw Sequence (fastq) - High throughput sequence format",
     "Signal (bigWig) - self index, often remote wiggle format",
     "Signal (wig) - wiggle format"
-};
+    };
 
 struct slPair *fileTypes = NULL;
 int ix = 0, count = sizeof(crudeTypes)/sizeof(char *);
-for(ix=0;ix<count;ix++)
-    slPairAdd(&fileTypes, crudeTypes[ix],cloneString(nicerTypes[ix])); // Name gets cloned while adding
+for (ix=0;ix<count;ix++)
+    slPairAdd(&fileTypes, crudeTypes[ix],cloneString(nicerTypes[ix]));
 return fileTypes;
 }
 
@@ -65,7 +67,8 @@ char *fileFormatSelectHtml(char *name, char *selected, char *extraHtml)
 struct slPair *fileTypes = fileFormatSearchWhiteList();
 if (slCount(fileTypes) > 0)
     {
-    char *dropDownHtml = cgiMakeSingleSelectDropList(name,fileTypes,selected,ANYLABEL,NULL,extraHtml);
+    char *dropDownHtml = cgiMakeSingleSelectDropList(name,fileTypes,selected,
+                                                     ANYLABEL,NULL,extraHtml);
     slPairFreeList(&fileTypes);
     return dropDownHtml;
     }
@@ -83,12 +86,12 @@ if (mdbVars == NULL)
     return 0;
 
 // Get the current number of rows in the table of mdb selects
-for(;;)
+for (;;)
     {
     char buf[256];
     safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
     char *str = cartOptionalString(cart, buf);
-    if(isEmpty(str))
+    if (isEmpty(str))
         break;
     else
         numMetadataSelects++;
@@ -97,21 +100,21 @@ for(;;)
 // Requesting to add or delete any?
 int delSearchSelect = cartUsualInt(cart, TRACK_SEARCH_DEL_ROW, 0);   // 1-based row to delete
 int addSearchSelect = cartUsualInt(cart, TRACK_SEARCH_ADD_ROW, 0);   // 1-based row to insert after
-if(delSearchSelect)
+if (delSearchSelect)
     numMetadataSelects--;
-if(addSearchSelect)
+if (addSearchSelect)
     numMetadataSelects++;
 
-if(numMetadataSelects)
+if (numMetadataSelects)
     {
     int ix;
     char buf[256];
-    for(ix = 0; ix < numMetadataSelects; ix++)
+    for (ix = 0; ix < numMetadataSelects; ix++)
         {
         int offset;   // used to handle additions/deletions
-        if(addSearchSelect > 0 && ix >= addSearchSelect)
+        if (addSearchSelect > 0 && ix >= addSearchSelect)
             offset = 0; // do nothing to offset (i.e. copy data from previous row)
-        else if(delSearchSelect > 0 && ix + 1 >= delSearchSelect)
+        else if (delSearchSelect > 0 && ix + 1 >= delSearchSelect)
             offset = 2;
         else
             offset = 1;
@@ -120,7 +123,7 @@ if(numMetadataSelects)
         char *val = NULL;
 
         // We need to make sure var is valid in this assembly; if it isn't, reset it to "cell".
-        if(slPairFindVal(mdbVars,var) == NULL)
+        if (slPairFindVal(mdbVars,var) == NULL)
             var = "cell";
         else
             {
@@ -150,7 +153,7 @@ if(numMetadataSelects)
             }
         slPairAdd(&mdbSelectPairs,var,val); // val already cloned
         }
-    if(delSearchSelect > 0)
+    if (delSearchSelect > 0)
         {
         safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
         cartRemove(cart, buf);
@@ -169,32 +172,42 @@ slReverse(&mdbSelectPairs);
 return mdbSelectPairs;
 }
 
-char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects,struct slPair *mdbVars,int cols,boolean fileSearch)
-// genereates the html for the table rows containing mdb var and val selects.  Assume tableSearch unless fileSearch
+char *mdbSelectsHtmlRows(struct sqlConnection *conn,struct slPair *mdbSelects,
+                         struct slPair *mdbVars,int cols,boolean fileSearch)
+// genereates the html for the table rows containing mdb var and val selects.
+// Assume tableSearch unless fileSearch
 {
 struct dyString *output = dyStringNew(1024);
 
-dyStringPrintf(output,"<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>\n", cols,COLOR_DARKGREY);
+dyStringPrintf(output,"<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; "
+                      "max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em>"
+                      "</td></tr>\n", cols,COLOR_DARKGREY);
 
 struct slPair *mdbSelect = mdbSelects;
 int row = 0;
-for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
+for (;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     {
     char buf[256];
     char *dropDownHtml = NULL;
 
 #ifdef BUTTONS_BY_CSS
-    #define BUTTON_PM  "<span class='pmButton' id='%sButton%d' title='%s' onclick='findTracks.mdbSelectPlusMinus(this,%d)'>%c</span>"
-    #define ADD_PM_BUTTON(type,num,value) dyStringPrintf(output,BUTTON_PM, (type), (num), ((value) == '+' ? "add another row after":"delete"), (num), (value))
+    #define BUTTON_PM  "<span class='pmButton' id='%sButton%d' title='%s' " \
+                       "onclick='findTracks.mdbSelectPlusMinus(this,%d)'>%c</span>"
+    #define ADD_PM_BUTTON(type,num,value) dyStringPrintf(output,BUTTON_PM, (type), (num), " \
+                       "((value) == '+' ? "add another row after":"delete"), (num), (value))
 #else///ifndef BUTTONS_BY_CSS
-    #define PLUS_MINUS_BUTTON "<input type='button' id='%sButton%d' value='%c' style='font-size:.7em;' title='%s' onclick='findTracks.mdbSelectPlusMinus(this,%d)'>"
-    #define ADD_PM_BUTTON(type,num,value) dyStringPrintf(output,PLUS_MINUS_BUTTON, (type), (num), (value), ((value) == '+' ? "add another row after":"delete"), (num))
+    #define PLUS_MINUS_BUTTON "<input type='button' id='%sButton%d' value='%c' " \
+                              "style='font-size:.7em;' title='%s' " \
+                              "onclick='findTracks.mdbSelectPlusMinus(this,%d)'>"
+    #define ADD_PM_BUTTON(type,num,value) \
+            dyStringPrintf(output,PLUS_MINUS_BUTTON, (type), (num), (value), \
+                           ((value) == '+' ? "add another row after":"delete"), (num))
 #endif///def BUTTONS_BY_CSS
 
     dyStringAppend(output,"<tr valign='top' class='mdbSelect'><td nowrap>\n");
     row++;
 
-    if(slCount(mdbSelects) > 2 || row > 2)
+    if (slCount(mdbSelects) > 2 || row > 2)
         ADD_PM_BUTTON("minus", row, '-');
     else
         dyStringAppend(output,"&nbsp;");
@@ -204,7 +217,8 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, row);
 
     // Left side select of vars
-    dropDownHtml = cgiMakeSingleSelectDropList(buf, mdbVars,mdbSelect->name, NULL,"mdbVar","style='font-size:.9em;' onchange='findTracks.mdbVarChanged(this);'");
+    dropDownHtml = cgiMakeSingleSelectDropList(buf, mdbVars,mdbSelect->name, NULL,"mdbVar",
+                             "style='font-size:.9em;' onchange='findTracks.mdbVarChanged(this);'");
     if (dropDownHtml)
         {
         dyStringAppend(output,dropDownHtml);
@@ -216,13 +230,19 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     enum cvSearchable searchBy = cvSearchMethod(mdbSelect->name);
     if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
         {
-        dyStringPrintf(output,"</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is%s</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
-                row,(searchBy == cvSearchByMultiSelect?" among":""),buf);
-        struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION, FALSE, !fileSearch, fileSearch); // not tags, either a file or table search
+        dyStringPrintf(output,"</td>\n<td align='right' id='isLike%i' style='width:10px; "
+                              "white-space:nowrap;'>is%s</td>\n<td nowrap id='%s' "
+                              "style='max-width:600px;'>\n",
+                              row,(searchBy == cvSearchByMultiSelect?" among":""),buf);
+        struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION,
+                                                 FALSE, !fileSearch, fileSearch);
+                                                        // not tags, either a file or table search
         if (slCount(pairs) > 0)
             {
             char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
-                    buf, pairs,mdbSelect->val, ANYLABEL,"mdbVal","style='min-width:200px; font-size:.9em;' onchange='findTracks.mdbValChanged(this);'");
+                                                buf, pairs,mdbSelect->val, ANYLABEL,"mdbVal",
+                                                "style='min-width:200px; font-size:.9em;' "
+                                                "onchange='findTracks.mdbValChanged(this);'");
             if (dropDownHtml)
                 {
                 dyStringAppend(output,dropDownHtml);
@@ -233,17 +253,24 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
         }
     else if (searchBy == cvSearchByFreeText)
         {
-        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>contains</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
-                       row,buf);
-        dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal freeText' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracks.mdbVarChanged(true);'>\n",
-                buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
+        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; "
+                              "white-space:nowrap;'>contains</td>\n<td nowrap id='%s' "
+                              "style='max-width:600px;'>\n",row,buf);
+        dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal freeText' "
+                              "style='max-width:310px; width:310px; font-size:.9em;' "
+                              "onchange='findTracks.mdbVarChanged(true);'>\n",
+                              buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
         }
     else if (searchBy == cvSearchByWildList)
         {
-        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is among</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
-                       row,buf);
-        dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal wildList' title='enter comma separated list of values' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracks.mdbVarChanged(true);'>\n",
-                buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
+        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; "
+                              "white-space:nowrap;'>is among</td>\n<td nowrap id='%s' "
+                              "style='max-width:600px;'>\n",row,buf);
+        dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal wildList' "
+                              "title='enter comma separated list of values' "
+                              "style='max-width:310px; width:310px; font-size:.9em;' "
+                              "onchange='findTracks.mdbVarChanged(true);'>\n",
+                              buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
         }
     //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
     //    {
@@ -253,7 +280,8 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     dyStringPrintf(output,"</tr>\n");
     }
 
-    dyStringPrintf(output,"<tr><td colspan='%d' align='right' style='height:10px; max-height:10px;'>&nbsp;</td></tr>", cols);
+    dyStringPrintf(output,"<tr><td colspan='%d' align='right' style='height:10px; "
+                          "max-height:10px;'>&nbsp;</td></tr>", cols);
 
 return dyStringCannibalize(&output);
 }
@@ -273,7 +301,6 @@ if (!strchr(token,'*') && !strchr(token,'?'))
 char wordWild[1024];
 safef(wordWild,sizeof wordWild,"*%s*",token);
 return wildMatch(wordWild, string);
-
 }
 
 boolean searchNameMatches(struct trackDb *tdb, struct slName *wordList)
@@ -284,7 +311,7 @@ if (tdb->shortLabel == NULL || tdb->longLabel == NULL)
     return (wordList != NULL);
 
 struct slName *word = wordList;
-for(; word != NULL; word = word->next)
+for (; word != NULL; word = word->next)
     {
     if (!searchMatchToken(tdb->shortLabel,word->name)
     &&  !searchMatchToken(tdb->longLabel, word->name))
@@ -297,16 +324,17 @@ boolean searchDescriptionMatches(struct trackDb *tdb, struct slName *wordList)
 // returns TRUE if all words in preparsed list matches html description page.
 // A "word" can be "multiple words" (parsed from quoteed string).
 // Because description contains html, quoted string match has limits.
-// DANGER: this will alter html of tdb struct (replacing \n with ' ', so the html should not be displayed after.
+// DANGER: this will alter html of tdb struct (replacing \n with ' ',
+// so the html should not be displayed after.
 {
 if (tdb->html == NULL)
     return (wordList != NULL);
 
-if (strchr(tdb->html,'\n'))
-    strSwapChar(tdb->html,'\n',' ');   // DANGER: don't own memory.  However, this CGI will use html for no other purpose
+if (strchr(tdb->html,'\n'))           // DANGER: don't own memory.
+    strSwapChar(tdb->html,'\n',' ');  //  However, this CGI will use html for no other purpose
 
 struct slName *word = wordList;
-for(; word != NULL; word = word->next)
+for (; word != NULL; word = word->next)
     {
     if (!searchMatchToken(tdb->html,word->name))
         return FALSE;

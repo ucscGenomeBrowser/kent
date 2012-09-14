@@ -2038,7 +2038,7 @@ searchPriority 12
 padding 250
 
 
-searchName dbRIPAlu
+searchName dbRIPAlu.b
 searchTable dbRIPAlu
 searchMethod exact
 searchType bed
@@ -2046,7 +2046,7 @@ termRegex RIP_Alu_chr[0-9XY]+_[0-9]+_[0-9]+
 searchPriority 18
 padding 400
 
-searchName dbRIPL1
+searchName dbRIPL1.b
 searchTable dbRIPL1
 searchMethod exact
 searchType bed
@@ -2054,7 +2054,7 @@ termRegex RIP_L1_chr[0-9XY]+_[0-9]+_[0-9]+
 searchPriority 18
 padding 400
 
-searchName dbRIPSVA
+searchName dbRIPSVA.b
 searchTable dbRIPSVA
 searchMethod exact
 searchType bed

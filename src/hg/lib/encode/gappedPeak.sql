@@ -6,20 +6,21 @@
 #This format is used to provide called regions of signal enrichment based on pooled, normalized (interpreted) data where the regions may be spliced or incorporate gaps in the genomic sequence. It is a BED12+3 format.
 CREATE TABLE gappedPeak (
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
-    chromStart int unsigned not null,	# pseudogene alignment start position
-    chromEnd int unsigned not null,	# pseudogene alignment end position
-    name varchar(255) not null,	# Name of pseudogene
-    score int unsigned not null,	# score of pseudogene with gene
-    strand char(2) not null,	# + or -
+    chromStart int unsigned not null,	# Pseudogene alignment start position
+    chromEnd int unsigned not null,	# Pseudogene alignment end position
+    name varchar(255) not null,	        # Name of Pseudogene
+    score int unsigned not null,	# Score of pseudogene with gene (0-1000)
+    strand char(1) not null,	        # + or - or . for unknown
     thickStart int unsigned not null,	# Start of where display should be thick (start codon)
     thickEnd int unsigned not null,	# End of where display should be thick (stop codon)
     reserved int unsigned not null,	# Always zero for now
-    blockCount int not null,	# Number of blocks
+    blockCount int not null,	        # Number of blocks
     blockSizes longblob not null,	# Comma separated list of block sizes
     chromStarts longblob not null,	# Start positions relative to chromStart
-    signalValue float not null,	# Measurement of average enrichment for the region
+    signalValue float not null,	        # Measurement of average enrichment for the region
     pValue float not null default -1,	# Within dataset statistical significance of signal value (-log10)
     qValue float not null default -1,	# Cross-dataset statistical significance of signal value (-log10)
-              #Indices
+              
+#Indices
     INDEX chromStart (chrom(8), chromStart)
 );

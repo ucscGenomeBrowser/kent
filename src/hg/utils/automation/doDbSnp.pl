@@ -33,7 +33,7 @@ my $ftpSnpDb = 'ftp://ftp.ncbi.nih.gov/snp/database/organism_data/$orgDir';
 my $ftpOrgSchema = 'ftp://ftp.ncbi.nlm.nih.gov/snp/database/organism_schema/$orgDir';
 my $ftpSharedSchema = 'ftp://ftp.ncbi.nlm.nih.gov/snp/database/shared_schema';
 my $dbSnpRoot = '/hive/data/outside/dbSNP';
-# Some ContigInfo columns -- if there are any changes, garbage results
+# Some ContigInfo columns (1-based) -- if there are any changes, garbage results
 # should trigger errors.
 my $ctgIdCol = 1;
 my $contigAccCol = 3;
@@ -223,9 +223,11 @@ sub requireVar {
   # Ensure that var is in %config and return its value.
   # Remove it from %config so we can check for unrecognized contents.
   my ($var, $config) = @_;
-  my $val = $config->{$var}
-    || die "Error: $CONFIG is missing required variable \"$var\".\n" .
-      "For a detailed list of required variables, run \"$base -help\".\n";
+  my $val = $config->{$var};
+  if (! defined $val) {
+    die "Error: $CONFIG is missing required variable \"$var\".\n" .
+        "For a detailed list of required variables, run \"$base -help\".\n";
+  }
   delete $config->{$var};
   return $val;
 } # requireVar
@@ -636,7 +638,8 @@ sub loadDbSnp {
     foreach t ($ContigInfo $ContigLocusId $MapInfo)
       zcat $dataDir/\$t.bcp.gz $grepOutLabels $grepOutContigs\\
       | perl -wpe '$cleanDbSnpSql' \\
-      | hgLoadSqlTab -oldTable $tmpDb \$t placeholder stdin
+        > tmp.tab
+      hgLoadSqlTab -oldTable $tmpDb \$t placeholder tmp.tab
     end
     hgsql $tmpDb -e \\
       'alter table $ContigInfo add index (ctg_id); \\
@@ -1154,10 +1157,17 @@ my $config = &parseConfig($CONFIG);
 $buildDir = $opt_buildDir ? $opt_buildDir : "$dbSnpRoot/$build";
 ($commonName = $orgDir) =~ s/_\d+$//;
 $assemblyLabelFile = "$buildDir/$commonName/assemblyLabels.txt";
-$ContigInfo = "b${build}_ContigInfo_$buildAssembly";
-$ContigLoc = "b${build}_SNPContigLoc_$buildAssembly";
-$ContigLocusId = "b${build}_SNPContigLocusId_$buildAssembly";
-$MapInfo = "b${build}_SNPMapInfo_$buildAssembly";
+if ($buildAssembly ne "") {
+  $ContigInfo = "b${build}_ContigInfo_$buildAssembly";
+  $ContigLoc = "b${build}_SNPContigLoc_$buildAssembly";
+  $ContigLocusId = "b${build}_SNPContigLocusId_$buildAssembly";
+  $MapInfo = "b${build}_SNPMapInfo_$buildAssembly";
+} else {
+  $ContigInfo = "b${build}_ContigInfo";
+  $ContigLoc = "b${build}_SNPContigLoc";
+  $ContigLocusId = "b${build}_SNPContigLocusId";
+  $MapInfo = "b${build}_SNPMapInfo";
+}
 $endNotes = "";
 $needSNPAlleleFreq_TGP = ($commonName eq "human");
 $snpBase = "snp$build" if (! $snpBase);

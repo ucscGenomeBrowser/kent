@@ -1,0 +1,195 @@
+<H2>Description</H2>
+
+<P><DT><B><I>Rationale for the Mouse ENCODE project</I></B></DT>
+Knowledge of the function of genomic DNA sequences comes from three 
+basic approaches. Genetics uses changes in behavior or structure of a cell or organism
+in response to changes in DNA sequence to infer function of the altered sequence. 
+Biochemical approaches monitor states of histone modification, binding of specific 
+transcription factors, accessibility to DNases and other epigenetic features along 
+genomic DNA. In general, these are associated with gene activity, but the precise 
+relationships remain to be established. The third approach is evolutionary, using 
+comparisons among homologous DNA sequences to find segments that are evolving 
+more slowly or more rapidly than expected given the local rate of neutral change. These 
+are inferred to be under negative or positive selection, respectively, and interpreted 
+as DNA sequences needed for a preserved (negative selection) or adaptive 
+(positive selection) function. </P>
+
+<P>The ENCODE project aims to discover all the DNA sequences associated with 
+various epigenetic features, with the reasonable expectation that these will also be 
+functional &#40;best tested by genetic methods&#41;. However, it is not clear how to relate these 
+results with those from evolutionary analyses. The mouse ENCODE project aims to 
+make this connection explicitly and with a moderate breadth. Assays identical to those 
+being used in the ENCODE project are performed in cell types in mouse that are similar 
+or homologous to those studied in the human project. Thus we will be able to discover which epigenetic 
+features are conserved between mouse and human, and we can examine the extent to which 
+these overlap with the DNA sequences under negative selection. 
+The contribution of DNA with a function preserved in mammals versus that with a function 
+in only one species will be discovered. 
+</P>
+
+<p><DT><B><I>Transcriptome Maps</I></B></DT>
+One of the epigenetic features most closely related to genomic activity is the 
+production of stable RNA, including transcripts from both protein-coding genes and noncoding transcripts. 
+These genomic compilations of transcripts, or transcriptomes, are primary determinants 
+of the way cells function, respond and differentiate, both by the production of proteins 
+translated from coding transcripts and the regulatory activity of untranslated non-coding transcripts.
+Non-coding RNA's regulate gene expression through diverse mechanisms ranging from reducing 
+chromatin accessibility &#40;affecting large regions or whole chromosomes&#41; to precise fine-tuning 
+of transcription from specific genes, <em>e.g.</em> via RNAi. 
+</p>
+
+<p>
+Even though a large proportion of mammalian genomes is transcribed, many of the transcribed segments have yet 
+to be assigned any function. The ENCODE project aims to create a comprehensive, quantitative annotation 
+of the human transcriptome in several cell and tissue types as well as to understand regulation of 
+transcriptomes by establishing the relationship between regulatory factors and their targets. 
+Mapping the mouse transcriptome in similar tissues will allow us to discern conservation of 
+transcriptome profiles between mouse and human and to discover species-specific transcription patterns, 
+and to infer conserved versus species-specific regulatory mechanisms. 
+The results will have a significant impact on our understanding of the evolution of gene regulation.
+</p>
+
+<H2>Display Conventions and Configuration</H2>
+
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <a href="/goldenPath/help/multiView.html" target="_blank">here</a>.
+This track contains the following views:
+<DL>
+<DT><I>Raw Signals</I><DD>The Plus Raw Signal and Minus Raw Signal views show the density of mapped reads 
+on the plus and minus strands (wiggle format), respectively.<DD>
+<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based
+on processed data.</DD>
+<DT><I>Alignments</I></DT><DD>Mappings of short reads to the genome. <DD>
+</DL>
+<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+
+<H2>Methods</H2>
+
+<P>
+Cells were grown according to the approved
+<a href="/ENCODE/protocols/cell/mouse" target="_blank">ENCODE cell culture protocols</a>.
+<p>
+Total RNA was extracted from 5-10 million cells using TRIzol reagent. 
+This was followed by mRNA selection, fragmentation and cDNA synthesis, which were performed as described previously &#40;Mortazavi <em> et al.</em>, 2009&#41;. 
+Double-stranded cDNA samples were processed for library construction for Illumina sequencing, using the Illumina ChIP-seq
+Sample Preparation Kit.
+</p>
+<p>
+Strand-specific libraries were generated in a similar manner, 
+except for a couple of modifications described previously &#40;Parkhomchuk<em> et al.</em>, 2009&#41;. 
+Briefly, instead of dTTP, dUTP was used during second-strand cDNA synthesis to label the second-strand cDNA.
+During library preparation, the dUTP-labeled cDNA was treated with Uracil N Glycosylase, prior to the PCR amplification step. 
+This was done to remove uracil from the second-strand, following which the DNA was subjected to high heat to facilitate abasic scission of the second strand.
+</p>
+
+<p>
+Cluster generation, linearization, blocking and sequencing primer reagents were provided in the Illumina Cluster Amplification kits. 
+All samples are considered as biological replicates.
+</p>
+
+<P>
+Sequencing was done on the Illumina Genome Analyzer IIx and on the Illumina HiSeq 2000. FastQ files for the resulting sequence reads (single read and paired-end, directional and non-directional)
+were moved to a data library in Galaxy, and tools implemented in Galaxy were used for further processing via workflows (&#40;Giardine <em>et al.</em>, 2005&#41;, &#40;Blankenberg <em> et al.</em>, 2010 &#41;, &#40;Goecks <em>et al.</em>, 2010&#41;).
+Data processing was also performed on the CyberSTAR high-performance computing system at Penn State. 
+The reads were mapped to the mouse genome (mm9 assembly) using the program TopHat (&#40;Langmead <em>et al.</em>, 2009&#41; and &#40;Trapnell <em>et al.</em>, 2009&#41;). 
+Signal tracks were created using BEDtools (Quinlan <em>et al.</em>, 2010) and SAMtools (Li, Handasaker <em>et al.</em>, 2009).
+</P>
+<H2>Credits</H2>
+<p>
+Cell growth and RNA isolation were done in the laboratories of Ross Hardison, Robert Paulson, David Bodine and Mitchell J. Weiss (PSU, NHGRI and Children's Hospital of Philadelphia). 
+Isolation of mRNA, cDNA synthesis and Illumina library construction were done primarily by Tejaswini Mishra, 
+and sequencing on the Illumina was done largely by Cheryl Keller, both in the laboratory of Ross Hardison.
+Mapping and transcript assembly were done by Belinda Giardine and Tejaswini Mishra on Galaxy and the CyberSTAR, Penn State high-performance computing system. 
+Data processing and analysis were overseen by James Taylor (Emory University) and Ross Hardison (PSU). 
+Generation of these data was supported by National Institutes of Health grants R01DK065806 and RC2HG005573. This work was supported in part through instrumentation funded by the National Science Foundation through grant OCI-0821527.  
+</p>
+
+<p>
+Contact:
+<A HREF="mailto:&#114;&#99;h&#56;&#64;&#112;&#115;&#117;.
+&#101;&#100;u"
+title="mailto:&#114;&#99;h&#56;&#64;&#112;&#115;&#117;.
+&#101;&#100;u" rel="nofollow"
+ TARGET=_BLANK>Ross Hardison</A>
+<!-- above address is Ross Hardison at psu.edu -->
+</p>
+
+<H2>References</H2>
+
+<p>
+Blankenberg D, Von Kuster G, Coraor N, Ananda G, Lazarus R, Mangan M, Nekrutenko A, Taylor J.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20069535" target="_blank">
+Galaxy: a web-based genome analysis tool for experimentalists</a>.
+<em>Curr Protoc Mol Biol</em>. 2010 Jan;Chapter 19:Unit 19.10.1-21.
+</p>
+
+<p>
+Giardine B, Riemer C, Hardison RC, Burhans R, Elnitski L, Shah P, Zhang Y, Blankenberg D, Albert I, Taylor J <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16169926" target="_blank">
+Galaxy: a platform for interactive large-scale genome analysis</a>.
+<em>Genome Res</em>. 2005 Oct;15(10):1451-5.
+</p>
+
+<p>
+Goecks J, Nekrutenko A, Taylor J, Galaxy Team.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20738864" target="_blank">
+Galaxy: a comprehensive approach for supporting accessible, reproducible, and transparent
+computational research in the life sciences</a>.
+<em>Genome Biol</em>. 2010;11(8):R86.
+</p>
+
+<p>
+Langmead B, Trapnell C, Pop M, Salzberg SL.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174" target="_blank">
+Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</a>.
+<em>Genome Biol</em>. 2009;10(3):R25.
+</p>
+
+<p>
+Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R, 1000 Genome
+Project Data Processing Subgroup.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19505943" target="_blank">
+The Sequence Alignment/Map format and SAMtools</a>.
+<em>Bioinformatics</em>. 2009 Aug 15;25(16):2078-9.
+</p>
+
+<p>
+Mortazavi A, Williams BA, McCue K, Schaeffer L, Wold B.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18516045" target="_blank">
+Mapping and quantifying mammalian transcriptomes by RNA-Seq</a>.
+<em>Nat Methods</em>. 2008 Jul;5(7):621-8.
+</p>
+
+<p>
+Parkhomchuk D, Borodina T, Amstislavskiy V, Banaru M, Hallen L, Krobitsch S, Lehrach H, Soldatov A.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19620212" target="_blank">
+Transcriptome analysis by strand-specific sequencing of complementary DNA</a>.
+<em>Nucleic Acids Res</em>. 2009 Oct;37(18):e123.
+</p>
+
+<p>
+Quinlan AR, Hall IM.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20110278" target="_blank">
+BEDTools: a flexible suite of utilities for comparing genomic features</a>.
+<em>Bioinformatics</em>. 2010 Mar 15;26(6):841-2.
+</p>
+
+<p>
+Trapnell C, Pachter L, Salzberg SL.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19289445" target="_blank">
+TopHat: discovering splice junctions with RNA-Seq</a>.
+<em>Bioinformatics</em>. 2009 May 1;25(9):1105-11.
+</p>
+
+
+<H2>Data Release Policy</H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column on the track configuration page and
+the download page.  The full data release policy for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>

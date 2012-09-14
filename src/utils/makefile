@@ -60,6 +60,7 @@ DIRS = \
 	bedCommonRegions \
 	bedGeneParts \
 	bedGraphToBigWig \
+	bedPileUps \
 	bedRemoveOverlap \
 	bedRestrictToPositions \
 	bedToBigBed \
@@ -157,6 +158,7 @@ DIRS = \
 	undupFa \
 	upper \
 	venn \
+	verticalSplitSqlTable \
 	weedLines \
 	wigCorrelate \
 	wigToBigWig \

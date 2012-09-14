@@ -15,6 +15,7 @@ dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002062
 expId 2062
 fileName wgEncodeHaibMethylRrbsA549Dm002p7dHaibRawDataRep1.fastq.gz
+geoSampleAccession GSM980580
 grant Myers
 lab HudsonAlpha
 labExpId SL3655
@@ -37,6 +38,7 @@ dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002062
 expId 2062
 fileName wgEncodeHaibMethylRrbsA549Dm002p7dHaibRawDataRep2.fastq.gz
+geoSampleAccession GSM980580
 grant Myers
 lab HudsonAlpha
 labExpId SL3656
@@ -59,6 +61,7 @@ dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002062
 expId 2062
 fileName wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep1.bed.gz
+geoSampleAccession GSM980580
 grant Myers
 lab HudsonAlpha
 labExpId SL3655
@@ -82,6 +85,7 @@ dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002062
 expId 2062
 fileName wgEncodeHaibMethylRrbsA549Dm002p7dHaibSitesRep2.bed.gz
+geoSampleAccession GSM980580
 grant Myers
 lab HudsonAlpha
 labExpId SL3656
@@ -155,7 +159,6 @@ lab HudsonAlpha
 labExpId SL890
 md5sum a3b6c7f9c071db558888d2bbb9d3c180
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -180,7 +183,6 @@ lab HudsonAlpha
 labExpId SL1625
 md5sum 2e6f9439a687dbf78bbeb47c5363a39f
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -201,9 +203,9 @@ expId 1330
 fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a3b6c7f9c071db558888d2bbb9d3c180
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -224,9 +226,9 @@ expId 1330
 fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 2e6f9439a687dbf78bbeb47c5363a39f
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -295,7 +297,6 @@ lab HudsonAlpha
 labExpId SL893
 md5sum 682c29c6760091ebc66e21912b1de98d
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -320,7 +321,6 @@ lab HudsonAlpha
 labExpId SL1417
 md5sum c6d8b1789b2a732b33628c5bb2443555
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -341,9 +341,9 @@ expId 1331
 fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 682c29c6760091ebc66e21912b1de98d
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -364,9 +364,9 @@ expId 1331
 fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum c6d8b1789b2a732b33628c5bb2443555
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -435,7 +435,6 @@ lab HudsonAlpha
 labExpId SL888
 md5sum 40a37f5d6dddb5c16d23e25618010a70
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -460,7 +459,6 @@ lab HudsonAlpha
 labExpId SL1437
 md5sum 3570dc163efd57db372b325e33871ef5
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -481,9 +479,9 @@ expId 1332
 fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 40a37f5d6dddb5c16d23e25618010a70
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -504,9 +502,9 @@ expId 1332
 fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 3570dc163efd57db372b325e33871ef5
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -575,7 +573,6 @@ lab HudsonAlpha
 labExpId SL894
 md5sum 1a3037a6501f7206b4a836d83db3ae7e
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -600,7 +597,6 @@ lab HudsonAlpha
 labExpId SL1418
 md5sum 937ab4de74bbae12493f1c0a7b78ef1e
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -621,9 +617,9 @@ expId 1333
 fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 1a3037a6501f7206b4a836d83db3ae7e
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -644,9 +640,9 @@ expId 1333
 fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 937ab4de74bbae12493f1c0a7b78ef1e
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -715,7 +711,6 @@ lab HudsonAlpha
 labExpId SL891
 md5sum 89ee88174cad7a90c3a6b5f669456d72
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -740,7 +735,6 @@ lab HudsonAlpha
 labExpId SL1438
 md5sum cd1a71b4ca83a8e0a6b7172c4b0575ca
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -761,9 +755,9 @@ expId 1334
 fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 89ee88174cad7a90c3a6b5f669456d72
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -784,9 +778,9 @@ expId 1334
 fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum cd1a71b4ca83a8e0a6b7172c4b0575ca
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -2036,7 +2030,6 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep1
 objType file
-attic auxExp
 cell BC_Skeletal_Muscle_H12817N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -2061,7 +2054,6 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsBcskeletalmuscleh12817nBiochainSitesRep2
 objType file
-attic auxExp
 cell BC_Skeletal_Muscle_H12817N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -2647,6 +2639,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001416
 expId 1416
 fileName wgEncodeHaibMethylRrbsCaco2UwRawDataRep1.fastq.gz
+geoSampleAccession GSM980582
 grant Myers
 lab HudsonAlpha
 labExpId SL862
@@ -2669,6 +2662,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001416
 expId 1416
 fileName wgEncodeHaibMethylRrbsCaco2UwRawDataRep2.fastq.gz
+geoSampleAccession GSM980582
 grant Myers
 lab HudsonAlpha
 labExpId SL4744
@@ -2691,6 +2685,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001416
 expId 1416
 fileName wgEncodeHaibMethylRrbsCaco2UwSitesRep1.bed.gz
+geoSampleAccession GSM980582
 grant Myers
 lab HudsonAlpha
 labExpId SL862
@@ -2714,6 +2709,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001416
 expId 1416
 fileName wgEncodeHaibMethylRrbsCaco2UwSitesRep2.bed.gz
+geoSampleAccession GSM980582
 grant Myers
 lab HudsonAlpha
 labExpId SL4744
@@ -2787,7 +2783,6 @@ lab HudsonAlpha
 labExpId SL870
 md5sum c4f0b8c1644a5aaa41e2852c46e3f7b8
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -2812,7 +2807,6 @@ lab HudsonAlpha
 labExpId SL1341
 md5sum 62e44fcfcc1204a7b0100f1a2850ef43
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -2833,9 +2827,9 @@ expId 1335
 fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum c4f0b8c1644a5aaa41e2852c46e3f7b8
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -2856,9 +2850,9 @@ expId 1335
 fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 62e44fcfcc1204a7b0100f1a2850ef43
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -3019,7 +3013,6 @@ lab HudsonAlpha
 labExpId SL765
 md5sum 949833b40e965d0f38f68e59ef86b1b8
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -3044,7 +3037,6 @@ lab HudsonAlpha
 labExpId SL1818
 md5sum 5ab94fa9543f95e7bdfcdcc6e5c42003
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -3065,9 +3057,9 @@ expId 1336
 fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 949833b40e965d0f38f68e59ef86b1b8
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -3088,9 +3080,9 @@ expId 1336
 fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 5ab94fa9543f95e7bdfcdcc6e5c42003
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -3109,6 +3101,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001417
 expId 1417
 fileName wgEncodeHaibMethylRrbsGm06990UwRawDataRep1.fastq.gz
+geoSampleAccession GSM980583
 grant Myers
 lab HudsonAlpha
 labExpId SL901
@@ -3131,6 +3124,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001417
 expId 1417
 fileName wgEncodeHaibMethylRrbsGm06990UwRawDataRep2.fastq.gz
+geoSampleAccession GSM980583
 grant Myers
 lab HudsonAlpha
 labExpId SL4745
@@ -3153,6 +3147,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001417
 expId 1417
 fileName wgEncodeHaibMethylRrbsGm06990UwSitesRep1.bed.gz
+geoSampleAccession GSM980583
 grant Myers
 lab HudsonAlpha
 labExpId SL901
@@ -3176,6 +3171,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001417
 expId 1417
 fileName wgEncodeHaibMethylRrbsGm06990UwSitesRep2.bed.gz
+geoSampleAccession GSM980583
 grant Myers
 lab HudsonAlpha
 labExpId SL4745
@@ -3249,7 +3245,6 @@ lab HudsonAlpha
 labExpId SL727
 md5sum bc46ff06bff8fa2aae6d5928c3697777
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1174
@@ -3274,7 +3269,6 @@ lab HudsonAlpha
 labExpId SL728
 md5sum 26daedfec06496e66b17fa60427d8181
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1174
@@ -3295,9 +3289,9 @@ expId 1355
 fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum bc46ff06bff8fa2aae6d5928c3697777
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1174
@@ -3318,9 +3312,9 @@ expId 1355
 fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 26daedfec06496e66b17fa60427d8181
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1174
@@ -3389,7 +3383,6 @@ lab HudsonAlpha
 labExpId SL1615
 md5sum f1b5f253a2887e931526901a963e97c4
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -3414,7 +3407,6 @@ lab HudsonAlpha
 labExpId SL1614
 md5sum 0bf32bee206f364b391c064df8aa70bd
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -3435,9 +3427,9 @@ expId 1376
 fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum f1b5f253a2887e931526901a963e97c4
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -3458,9 +3450,9 @@ expId 1376
 fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 0bf32bee206f364b391c064df8aa70bd
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -3529,7 +3521,6 @@ lab HudsonAlpha
 labExpId SL1232
 md5sum d2c9a7b8e72f70ffad295e6689a326c9
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -3554,7 +3545,6 @@ lab HudsonAlpha
 labExpId SL1233
 md5sum 8cebd10e43236ad611a6eb9a1c2f061b
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -3575,9 +3565,9 @@ expId 1360
 fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum d2c9a7b8e72f70ffad295e6689a326c9
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -3598,9 +3588,9 @@ expId 1360
 fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 8cebd10e43236ad611a6eb9a1c2f061b
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -3669,7 +3659,6 @@ lab HudsonAlpha
 labExpId SL761
 md5sum e3c66a2f19e7852fcb09200e6e956f52
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -3694,7 +3683,6 @@ lab HudsonAlpha
 labExpId SL760
 md5sum 84685e05f12a7975b6300a2c91d82606
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -3715,9 +3703,9 @@ expId 1361
 fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum e3c66a2f19e7852fcb09200e6e956f52
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -3738,9 +3726,9 @@ expId 1361
 fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 84685e05f12a7975b6300a2c91d82606
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -3809,7 +3797,6 @@ lab HudsonAlpha
 labExpId SL1804
 md5sum 7474435873a59ec935dd5abd177e52cf
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -3834,7 +3821,6 @@ lab HudsonAlpha
 labExpId SL793
 md5sum 459e8dc8e3f4d175496f2b753bd072a4
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -3855,9 +3841,9 @@ expId 1337
 fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 7474435873a59ec935dd5abd177e52cf
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -3878,9 +3864,9 @@ expId 1337
 fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 459e8dc8e3f4d175496f2b753bd072a4
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -3949,7 +3935,6 @@ lab HudsonAlpha
 labExpId SL943
 md5sum 771a932b356db8cbcb8cc2accea4e826
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -3974,7 +3959,6 @@ lab HudsonAlpha
 labExpId SL1803
 md5sum 693df8f8cb1f8a260d19a89e4fe7423d
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -3995,9 +3979,9 @@ expId 1338
 fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 771a932b356db8cbcb8cc2accea4e826
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -4018,9 +4002,9 @@ expId 1338
 fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 693df8f8cb1f8a260d19a89e4fe7423d
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -4089,7 +4073,6 @@ lab HudsonAlpha
 labExpId SL716
 md5sum 1a92d6a69864f481a4fa28ec01879574
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -4114,7 +4097,6 @@ lab HudsonAlpha
 labExpId SL713
 md5sum cbd3635d6a67f8e2f42f10209e92afd5
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -4135,9 +4117,9 @@ expId 1362
 fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 1a92d6a69864f481a4fa28ec01879574
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -4158,9 +4140,9 @@ expId 1362
 fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum cbd3635d6a67f8e2f42f10209e92afd5
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -4229,7 +4211,6 @@ lab HudsonAlpha
 labExpId SL889
 md5sum 3cb491e3e92319ae644c654c072ed214
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -4254,7 +4235,6 @@ lab HudsonAlpha
 labExpId SL1618
 md5sum bf3469a1195928e6667b4690e8936d17
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -4275,9 +4255,9 @@ expId 1339
 fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 3cb491e3e92319ae644c654c072ed214
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -4298,9 +4278,9 @@ expId 1339
 fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum bf3469a1195928e6667b4690e8936d17
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -4369,7 +4349,6 @@ lab HudsonAlpha
 labExpId SL898
 md5sum a57b636685063746115a06e570fed7ce
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -4394,7 +4373,6 @@ lab HudsonAlpha
 labExpId SL1441
 md5sum e3f9baf990eb2360414edf210e15eede
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -4415,9 +4393,9 @@ expId 1340
 fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a57b636685063746115a06e570fed7ce
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -4438,9 +4416,9 @@ expId 1340
 fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum e3f9baf990eb2360414edf210e15eede
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -4509,7 +4487,6 @@ lab HudsonAlpha
 labExpId SL873
 md5sum 9de7a872ade99709e3497a560440e827
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -4534,7 +4511,6 @@ lab HudsonAlpha
 labExpId SL1626
 md5sum d90c51a3ca95b733b338f539d0ff5019
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -4555,9 +4531,9 @@ expId 1341
 fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 9de7a872ade99709e3497a560440e827
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -4578,9 +4554,9 @@ expId 1341
 fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum d90c51a3ca95b733b338f539d0ff5019
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -4649,7 +4625,6 @@ lab HudsonAlpha
 labExpId SL892
 md5sum 32026606d24794d19de638487759ca9b
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -4674,7 +4649,6 @@ lab HudsonAlpha
 labExpId SL1439
 md5sum b8104c04c45ab567d57d9515ad03cac4
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -4695,9 +4669,9 @@ expId 1365
 fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 32026606d24794d19de638487759ca9b
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -4718,9 +4692,9 @@ expId 1365
 fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum b8104c04c45ab567d57d9515ad03cac4
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -4789,7 +4763,6 @@ lab HudsonAlpha
 labExpId SL757
 md5sum c368ce628590962021fa9b04b8681248
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -4814,7 +4787,6 @@ lab HudsonAlpha
 labExpId SL1902
 md5sum a08913af52cca626aa4ffa344a7bf711
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -4835,9 +4807,9 @@ expId 1356
 fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum c368ce628590962021fa9b04b8681248
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -4858,9 +4830,9 @@ expId 1356
 fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a08913af52cca626aa4ffa344a7bf711
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -4929,7 +4901,6 @@ lab HudsonAlpha
 labExpId SL896
 md5sum 7d075516a66a64211c8722db39631f82
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -4954,7 +4925,6 @@ lab HudsonAlpha
 labExpId SL1620
 md5sum 24f34afe0e676672adce99d65089d813
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -4975,9 +4945,9 @@ expId 1342
 fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 7d075516a66a64211c8722db39631f82
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -4998,9 +4968,9 @@ expId 1342
 fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 24f34afe0e676672adce99d65089d813
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -5069,7 +5039,6 @@ lab HudsonAlpha
 labExpId SL759
 md5sum c3a80da7526c593f48c3420f40e00826
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -5094,7 +5063,6 @@ lab HudsonAlpha
 labExpId SL1901
 md5sum 03e2ff05e30d69d3505e3f9a5df60a06
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -5150,7 +5118,6 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep1
 objType file
-attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5166,7 +5133,6 @@ lab HudsonAlpha
 labExpId SL860
 md5sum 71707e5ac77e426da7042d1ed0734f86
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -5176,7 +5142,6 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsHek293UwSitesRep2
 objType file
-attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -5192,7 +5157,6 @@ lab HudsonAlpha
 labExpId SL1422
 md5sum 39ab31312cdcab170b1587341fada0fc
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -5213,9 +5177,9 @@ expId 1343
 fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 71707e5ac77e426da7042d1ed0734f86
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -5235,9 +5199,9 @@ expId 1343
 fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 39ab31312cdcab170b1587341fada0fc
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -5257,9 +5221,9 @@ expId 1343
 fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum c3a80da7526c593f48c3420f40e00826
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -5280,9 +5244,9 @@ expId 1343
 fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 03e2ff05e30d69d3505e3f9a5df60a06
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -5351,7 +5315,6 @@ lab HudsonAlpha
 labExpId SL657
 md5sum 3af5c7292aaedd66d5cccbc8f217f345
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -5376,7 +5339,6 @@ lab HudsonAlpha
 labExpId SL712
 md5sum 0f551a76f44440364bff432826492925
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -5397,9 +5359,9 @@ expId 1363
 fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 3af5c7292aaedd66d5cccbc8f217f345
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -5420,9 +5382,9 @@ expId 1363
 fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 0f551a76f44440364bff432826492925
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -5583,7 +5545,6 @@ lab HudsonAlpha
 labExpId SL1815
 md5sum 531ab01acf92013793b202af91736bd9
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -5608,7 +5569,6 @@ lab HudsonAlpha
 labExpId SL1816
 md5sum 9e0d58684e5717908ed89bf0e7fc247d
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -5679,7 +5639,6 @@ lab HudsonAlpha
 labExpId SL715
 md5sum 48d21ea7208048ecaeb021e55f29db09
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -5703,7 +5662,6 @@ lab HudsonAlpha
 labExpId SL714
 md5sum 28a5dc3785fd9445cb4c0e4d8977e8b5
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -5723,9 +5681,9 @@ expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 48d21ea7208048ecaeb021e55f29db09
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -5745,9 +5703,9 @@ expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 28a5dc3785fd9445cb4c0e4d8977e8b5
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -5767,9 +5725,9 @@ expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 531ab01acf92013793b202af91736bd9
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -5790,9 +5748,9 @@ expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 9e0d58684e5717908ed89bf0e7fc247d
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -5861,7 +5819,6 @@ lab HudsonAlpha
 labExpId SL875
 md5sum 51c9b1162977997012ad94aa9ae49a37
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -5886,7 +5843,6 @@ lab HudsonAlpha
 labExpId SL1619
 md5sum a82df73e852ed63d8c1e19e5545b474e
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -5907,9 +5863,9 @@ expId 1344
 fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 51c9b1162977997012ad94aa9ae49a37
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -5930,9 +5886,9 @@ expId 1344
 fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a82df73e852ed63d8c1e19e5545b474e
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -5951,6 +5907,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001418
 expId 1418
 fileName wgEncodeHaibMethylRrbsHl60UwRawDataRep1.fastq.gz
+geoSampleAccession GSM980576
 grant Myers
 lab HudsonAlpha
 labExpId SL902
@@ -5973,6 +5930,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001418
 expId 1418
 fileName wgEncodeHaibMethylRrbsHl60UwRawDataRep2.fastq.gz
+geoSampleAccession GSM980576
 grant Myers
 lab HudsonAlpha
 labExpId SL4742
@@ -5995,6 +5953,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001418
 expId 1418
 fileName wgEncodeHaibMethylRrbsHl60UwSitesRep1.bed.gz
+geoSampleAccession GSM980576
 grant Myers
 lab HudsonAlpha
 labExpId SL902
@@ -6018,6 +5977,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001418
 expId 1418
 fileName wgEncodeHaibMethylRrbsHl60UwSitesRep2.bed.gz
+geoSampleAccession GSM980576
 grant Myers
 lab HudsonAlpha
 labExpId SL4742
@@ -6091,7 +6051,6 @@ lab HudsonAlpha
 labExpId SL867
 md5sum 6d32ebca89d7e6da8a4f1fc0f14056db
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -6116,7 +6075,6 @@ lab HudsonAlpha
 labExpId SL1421
 md5sum f991e4942804dabd5e7efe55df696820
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -6137,9 +6095,9 @@ expId 1345
 fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 6d32ebca89d7e6da8a4f1fc0f14056db
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -6160,9 +6118,9 @@ expId 1345
 fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum f991e4942804dabd5e7efe55df696820
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -6231,7 +6189,6 @@ lab HudsonAlpha
 labExpId SL877
 md5sum 9fc0ed586eeab5723863fd4b1bd96e79
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -6256,7 +6213,6 @@ lab HudsonAlpha
 labExpId SL1440
 md5sum af32e02f087453528cea733e551c7025
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -6277,9 +6233,9 @@ expId 1346
 fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 9fc0ed586eeab5723863fd4b1bd96e79
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -6300,9 +6256,9 @@ expId 1346
 fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum af32e02f087453528cea733e551c7025
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -6371,7 +6327,6 @@ lab HudsonAlpha
 labExpId SL897
 md5sum 9dbfee2f9a946ef66197a6742c90b562
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -6396,7 +6351,6 @@ lab HudsonAlpha
 labExpId SL1347
 md5sum 6094c059aa55a24f3b26ae45602f1af6
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -6417,9 +6371,9 @@ expId 1366
 fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 9dbfee2f9a946ef66197a6742c90b562
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -6440,9 +6394,9 @@ expId 1366
 fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 6094c059aa55a24f3b26ae45602f1af6
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -6511,7 +6465,6 @@ lab HudsonAlpha
 labExpId SL866
 md5sum 3b3390be722112ee2235f8d8950ada82
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -6536,7 +6489,6 @@ lab HudsonAlpha
 labExpId SL1344
 md5sum baeb8ccf7e3fd55d6de322a625c44c8d
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -6557,9 +6509,9 @@ expId 1347
 fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 3b3390be722112ee2235f8d8950ada82
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -6580,9 +6532,9 @@ expId 1347
 fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum baeb8ccf7e3fd55d6de322a625c44c8d
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -6651,7 +6603,6 @@ lab HudsonAlpha
 labExpId SL865
 md5sum 0a031d0f5ad0357549accbf72e50ec1b
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -6676,7 +6627,6 @@ lab HudsonAlpha
 labExpId SL1343
 md5sum 299beca42e16b2d15a05dc04b8ef7bcb
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -6697,9 +6647,9 @@ expId 1357
 fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 0a031d0f5ad0357549accbf72e50ec1b
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -6720,9 +6670,9 @@ expId 1357
 fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 299beca42e16b2d15a05dc04b8ef7bcb
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -6791,7 +6741,6 @@ lab HudsonAlpha
 labExpId SL874
 md5sum 445188711951d5f6ab37d1f41d8b7dfe
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -6816,7 +6765,6 @@ lab HudsonAlpha
 labExpId SL1443
 md5sum 616d246d338f40bb6c34c7422aa0116f
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -6837,9 +6785,9 @@ expId 1358
 fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 445188711951d5f6ab37d1f41d8b7dfe
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -6860,9 +6808,9 @@ expId 1358
 fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 616d246d338f40bb6c34c7422aa0116f
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -6954,7 +6902,6 @@ lab HudsonAlpha
 labExpId SL939
 md5sum 2443942f39321fb6434b708d8f1e98fc
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -6979,7 +6926,6 @@ lab HudsonAlpha
 labExpId SL940
 md5sum d27cf647eb9e7ff6428b535ac85a52aa
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -7024,9 +6970,9 @@ expId 1371
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 2443942f39321fb6434b708d8f1e98fc
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -7047,9 +6993,9 @@ expId 1371
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum d27cf647eb9e7ff6428b535ac85a52aa
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -7070,9 +7016,9 @@ expId 1371
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 3ed351fb4333adf2901816ed7f2e6558
 objStatus revoked - Confusion over contents of file
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 3
 subId 2471
@@ -7091,6 +7037,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
 expId 2060
 fileName wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep1.fastq.gz
+geoSampleAccession GSM980578
 grant Myers
 lab HudsonAlpha
 labExpId SL1919
@@ -7113,6 +7060,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
 expId 2060
 fileName wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep2.fastq.gz
+geoSampleAccession GSM980578
 grant Myers
 lab HudsonAlpha
 labExpId SL1936
@@ -7135,6 +7083,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
 expId 2060
 fileName wgEncodeHaibMethylRrbsHsmmfshdDukeRawDataRep3.fastq.gz
+geoSampleAccession GSM980578
 grant Myers
 lab HudsonAlpha
 labExpId SL1917
@@ -7157,6 +7106,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
 expId 2060
 fileName wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep1.bed.gz
+geoSampleAccession GSM980578
 grant Myers
 lab HudsonAlpha
 labExpId SL1919
@@ -7180,6 +7130,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
 expId 2060
 fileName wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep2.bed.gz
+geoSampleAccession GSM980578
 grant Myers
 lab HudsonAlpha
 labExpId SL1936
@@ -7203,6 +7154,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
 expId 2060
 fileName wgEncodeHaibMethylRrbsHsmmfshdDukeSitesRep3.bed.gz
+geoSampleAccession GSM980578
 grant Myers
 lab HudsonAlpha
 labExpId SL1917
@@ -7299,7 +7251,6 @@ lab HudsonAlpha
 labExpId SL1916
 md5sum 6ef4e5cfccbb79e1a1c217f36c445e6f
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -7324,7 +7275,6 @@ lab HudsonAlpha
 labExpId SL1935
 md5sum 8983305add0cb0d5c0402d0ce42341be
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -7334,7 +7284,6 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
 objType table
-attic auxExp
 cell HSMMtube
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7370,9 +7319,9 @@ expId 1348
 fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 6ef4e5cfccbb79e1a1c217f36c445e6f
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -7393,9 +7342,9 @@ expId 1348
 fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 8983305add0cb0d5c0402d0ce42341be
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -7414,6 +7363,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
 expId 2061
 fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep1.fastq.gz
+geoSampleAccession GSM980579
 grant Myers
 lab HudsonAlpha
 labExpId SL1920
@@ -7436,6 +7386,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
 expId 2061
 fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep2.fastq.gz
+geoSampleAccession GSM980579
 grant Myers
 lab HudsonAlpha
 labExpId SL1921
@@ -7458,6 +7409,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
 expId 2061
 fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeRawDataRep3.fastq.gz
+geoSampleAccession GSM980579
 grant Myers
 lab HudsonAlpha
 labExpId SL1918
@@ -7480,6 +7432,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
 expId 2061
 fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep1.bed.gz
+geoSampleAccession GSM980579
 grant Myers
 lab HudsonAlpha
 labExpId SL1920
@@ -7503,6 +7456,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
 expId 2061
 fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep2.bed.gz
+geoSampleAccession GSM980579
 grant Myers
 lab HudsonAlpha
 labExpId SL1921
@@ -7526,6 +7480,7 @@ dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
 expId 2061
 fileName wgEncodeHaibMethylRrbsHsmmtubefshdDukeSitesRep3.bed.gz
+geoSampleAccession GSM980579
 grant Myers
 lab HudsonAlpha
 labExpId SL1918
@@ -7608,7 +7563,6 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
 objType table
-attic auxExp
 cell HTR8svn
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -7692,7 +7646,6 @@ lab HudsonAlpha
 labExpId SL900
 md5sum 5bbddbeaf38e60ba6ab62d5522cd1b8c
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -7717,7 +7670,6 @@ lab HudsonAlpha
 labExpId SL1375
 md5sum c93b08a8f5279edc9733dc1b228561f3
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -7738,9 +7690,9 @@ expId 1377
 fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 5bbddbeaf38e60ba6ab62d5522cd1b8c
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -7761,9 +7713,9 @@ expId 1377
 fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum c93b08a8f5279edc9733dc1b228561f3
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -7832,7 +7784,6 @@ lab HudsonAlpha
 labExpId SL899
 md5sum 45b80265a057cdff3f621863445f9d3b
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -7857,7 +7808,6 @@ lab HudsonAlpha
 labExpId SL1345
 md5sum 73288d3cb917488a0ec698571a322709
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -7878,9 +7828,9 @@ expId 1359
 fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 45b80265a057cdff3f621863445f9d3b
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -7901,9 +7851,9 @@ expId 1359
 fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 73288d3cb917488a0ec698571a322709
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -7972,7 +7922,6 @@ lab HudsonAlpha
 labExpId SL725
 md5sum 41961b5eceb0f77200cfae0cfffcb7d5
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -7997,7 +7946,6 @@ lab HudsonAlpha
 labExpId SL726
 md5sum 4155ce4c0538ab22bad721255e3f95f5
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -8018,9 +7966,9 @@ expId 1364
 fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 41961b5eceb0f77200cfae0cfffcb7d5
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -8041,9 +7989,9 @@ expId 1364
 fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 4155ce4c0538ab22bad721255e3f95f5
 objStatus replaced
 obtainedBy HudsonAlpha
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -8112,7 +8060,6 @@ lab HudsonAlpha
 labExpId SL1903
 md5sum 3ff7a0b55c73572baa10542c3c1aadeb
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -8137,7 +8084,6 @@ lab HudsonAlpha
 labExpId SL1805
 md5sum b64ece6863e6f2ce85e3c55d7d0175b5
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -8158,9 +8104,9 @@ expId 1367
 fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 3ff7a0b55c73572baa10542c3c1aadeb
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -8181,9 +8127,9 @@ expId 1367
 fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum b64ece6863e6f2ce85e3c55d7d0175b5
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -8239,7 +8185,6 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsLncapDukeSitesRep1
 objType file
-attic auxExp
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -8264,7 +8209,6 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsLncapDukeSitesRep2
 objType file
-attic auxExp
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -8463,7 +8407,6 @@ lab HudsonAlpha
 labExpId SL729
 md5sum 17fd4816ec1d76cc87f45b4ec516dc7b
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -8488,7 +8431,6 @@ lab HudsonAlpha
 labExpId SL730
 md5sum 1b5139c1656a16f5e28caf0aa32888f2
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -8604,7 +8546,6 @@ lab HudsonAlpha
 labExpId SL732
 md5sum f8fabacc6312de8aba785d27193b5982
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -8629,7 +8570,6 @@ lab HudsonAlpha
 labExpId SL733
 md5sum a1270662fc86674c75cac1b9fd953e5b
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -8674,9 +8614,9 @@ expId 1379
 fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum f8fabacc6312de8aba785d27193b5982
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -8697,9 +8637,9 @@ expId 1379
 fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum a1270662fc86674c75cac1b9fd953e5b
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -8720,9 +8660,9 @@ expId 1378
 fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 17fd4816ec1d76cc87f45b4ec516dc7b
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -8743,14 +8683,108 @@ expId 1378
 fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 1b5139c1656a16f5e28caf0aa32888f2
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2
 treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeRawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003032
+expId 3032
+fileName wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeRawDataRep1.fastq.gz
+geoSampleAccession GSM980574
+grant Myers
+lab HudsonAlpha
+labExpId SL14361
+md5sum 6455869648709f32f35bd728ca39d206
+obtainedBy Duke
+project wgEncode
+replicate 1
+subId 7076
+treatment CTCF_shRNA_knockdown
+view RawData
+
+metaObject wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeRawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003032
+expId 3032
+fileName wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeRawDataRep2.fastq.gz
+geoSampleAccession GSM980574
+grant Myers
+lab HudsonAlpha
+labExpId SL14362
+md5sum 76b2c5e2f17991c93d55f0b02849ea8b
+obtainedBy Duke
+project wgEncode
+replicate 2
+subId 7076
+treatment CTCF_shRNA_knockdown
+view RawData
+
+metaObject wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeSitesRep1
+objType table
+cell MCF-7
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-11
+dateUnrestricted 2013-04-11
+dccAccession wgEncodeEH003032
+expId 3032
+fileName wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeSitesRep1.bedRrbs.gz
+geoSampleAccession GSM980574
+grant Myers
+lab HudsonAlpha
+labExpId SL14361
+md5sum 4d6c7181ebe819283d2a46fe11d70429
+obtainedBy Duke
+project wgEncode
+replicate 1
+subId 7347
+tableName wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeSitesRep1
+treatment CTCF_shRNA_knockdown
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeSitesRep2
+objType table
+cell MCF-7
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-11
+dateUnrestricted 2013-04-11
+dccAccession wgEncodeEH003032
+expId 3032
+fileName wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeSitesRep2.bedRrbs.gz
+geoSampleAccession GSM980574
+grant Myers
+lab HudsonAlpha
+labExpId SL14362
+md5sum d4a670ed9f470559d2c15a5531ae384d
+obtainedBy Duke
+project wgEncode
+replicate 2
+subId 7347
+tableName wgEncodeHaibMethylRrbsMcf7CtcfshrnaDukeSitesRep2
+treatment CTCF_shRNA_knockdown
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7DukeRawDataRep1
@@ -8814,7 +8848,6 @@ lab HudsonAlpha
 labExpId SL1812
 md5sum 04701f3c4e672f8e8b16f02df356afbc
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -8839,7 +8872,6 @@ lab HudsonAlpha
 labExpId SL1813
 md5sum 4f35187ad44ee39d7ea5fd44b1f0c80c
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -8860,9 +8892,9 @@ expId 1350
 fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 04701f3c4e672f8e8b16f02df356afbc
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -8883,14 +8915,108 @@ expId 1350
 fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 4f35187ad44ee39d7ea5fd44b1f0c80c
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2
 treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf7RandshrnaDukeRawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003033
+expId 3033
+fileName wgEncodeHaibMethylRrbsMcf7RandshrnaDukeRawDataRep1.fastq.gz
+geoSampleAccession GSM980575
+grant Myers
+lab HudsonAlpha
+labExpId SL14363
+md5sum 5abd25b724117f59e2794ae44dee9bb0
+obtainedBy Duke
+project wgEncode
+replicate 1
+subId 7076
+treatment Randomized_shRNA_control
+view RawData
+
+metaObject wgEncodeHaibMethylRrbsMcf7RandshrnaDukeRawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-05
+dateUnrestricted 2013-04-05
+dccAccession wgEncodeEH003033
+expId 3033
+fileName wgEncodeHaibMethylRrbsMcf7RandshrnaDukeRawDataRep2.fastq.gz
+geoSampleAccession GSM980575
+grant Myers
+lab HudsonAlpha
+labExpId SL14364
+md5sum 0b20bd4b12ef95c8f4af168d4310b876
+obtainedBy Duke
+project wgEncode
+replicate 2
+subId 7076
+treatment Randomized_shRNA_control
+view RawData
+
+metaObject wgEncodeHaibMethylRrbsMcf7RandshrnaDukeSitesRep1
+objType table
+cell MCF-7
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-11
+dateUnrestricted 2013-04-11
+dccAccession wgEncodeEH003033
+expId 3033
+fileName wgEncodeHaibMethylRrbsMcf7RandshrnaDukeSitesRep1.bedRrbs.gz
+geoSampleAccession GSM980575
+grant Myers
+lab HudsonAlpha
+labExpId SL14363
+md5sum 177ec96f1d718f8c838a7f39c459f33d
+obtainedBy Duke
+project wgEncode
+replicate 1
+subId 7347
+tableName wgEncodeHaibMethylRrbsMcf7RandshrnaDukeSitesRep1
+treatment Randomized_shRNA_control
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf7RandshrnaDukeSitesRep2
+objType table
+cell MCF-7
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jul 2012 Freeze
+dateSubmitted 2012-07-11
+dateUnrestricted 2013-04-11
+dccAccession wgEncodeEH003033
+expId 3033
+fileName wgEncodeHaibMethylRrbsMcf7RandshrnaDukeSitesRep2.bedRrbs.gz
+geoSampleAccession GSM980575
+grant Myers
+lab HudsonAlpha
+labExpId SL14364
+md5sum 81b6b5da639f6f738c9e48a2b26daa05
+obtainedBy Duke
+project wgEncode
+replicate 2
+subId 7347
+tableName wgEncodeHaibMethylRrbsMcf7RandshrnaDukeSitesRep2
+treatment Randomized_shRNA_control
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordRawDataRep1
@@ -8957,7 +9083,6 @@ lab HudsonAlpha
 labExpId SL756
 md5sum e1c12b1d8ebcc8efb7f2aef66c18524d
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -8982,7 +9107,6 @@ lab HudsonAlpha
 labExpId SL1900
 md5sum 0b057a9f49b81510362a268cc45d6f55
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -9053,7 +9177,6 @@ lab HudsonAlpha
 labExpId SL905
 md5sum 77ef9e00f0a70a833c34997bffafd75d
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -9078,7 +9201,6 @@ lab HudsonAlpha
 labExpId SL1627
 md5sum b3de0ee4cfb20690c7811c676af03620
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -9098,9 +9220,9 @@ expId 1350
 fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 77ef9e00f0a70a833c34997bffafd75d
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -9120,9 +9242,9 @@ expId 1350
 fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum b3de0ee4cfb20690c7811c676af03620
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -9131,6 +9253,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
 objType file
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -9142,9 +9265,9 @@ expId 1350
 fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum e1c12b1d8ebcc8efb7f2aef66c18524d
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -9153,6 +9276,7 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
 objType file
+attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -9164,9 +9288,9 @@ expId 1350
 fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 0b057a9f49b81510362a268cc45d6f55
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -9257,7 +9381,6 @@ lab HudsonAlpha
 labExpId SL1820
 md5sum b15a42d582334bf0d4b0beeaec76d6f6
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -9282,7 +9405,6 @@ lab HudsonAlpha
 labExpId SL1809
 md5sum ec9a4289a4588048b264d4d64cac978f
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -9308,7 +9430,6 @@ lab HudsonAlpha
 labExpId SL1810
 md5sum 980956830a827c5273ebb043ed9b9c12
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 3
 subId 2471
@@ -9469,7 +9590,6 @@ lab HudsonAlpha
 labExpId SL872
 md5sum 3c72e0189993fea4b609bdbb9e06fbda
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -9494,7 +9614,6 @@ lab HudsonAlpha
 labExpId SL1442
 md5sum ce15884c9fe6495fd467ef7c0c22044d
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -9515,9 +9634,9 @@ expId 1351
 fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 3c72e0189993fea4b609bdbb9e06fbda
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -9538,9 +9657,9 @@ expId 1351
 fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum ce15884c9fe6495fd467ef7c0c22044d
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -9701,7 +9820,6 @@ lab HudsonAlpha
 labExpId SL887
 md5sum d59f910ae9a5ffc18227007865eefe0e
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -9726,7 +9844,6 @@ lab HudsonAlpha
 labExpId SL1621
 md5sum 63b2a0dbb0ae58b1a0c76d5808b020c7
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -9747,9 +9864,9 @@ expId 1380
 fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum d59f910ae9a5ffc18227007865eefe0e
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -9770,9 +9887,9 @@ expId 1380
 fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 63b2a0dbb0ae58b1a0c76d5808b020c7
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -9841,7 +9958,6 @@ lab HudsonAlpha
 labExpId SL871
 md5sum 9e30c2b9e676656e940965f1113bfc4e
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -9866,7 +9982,6 @@ lab HudsonAlpha
 labExpId SL1420
 md5sum e35fb2c9fcc62646d83199d159d3778e
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -9887,9 +10002,9 @@ expId 1352
 fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 9e30c2b9e676656e940965f1113bfc4e
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -9910,9 +10025,9 @@ expId 1352
 fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum e35fb2c9fcc62646d83199d159d3778e
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -9981,7 +10096,6 @@ lab HudsonAlpha
 labExpId SL895
 md5sum 02bf9a164b289c330faf2b8c5947151d
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -10006,7 +10120,6 @@ lab HudsonAlpha
 labExpId SL1376
 md5sum 36fcb6ca2206e05d2bf4c890e9960d05
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -10027,9 +10140,9 @@ expId 1368
 fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 02bf9a164b289c330faf2b8c5947151d
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -10050,9 +10163,9 @@ expId 1368
 fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 36fcb6ca2206e05d2bf4c890e9960d05
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -10121,7 +10234,6 @@ lab HudsonAlpha
 labExpId SL758
 md5sum 52a4b716e2e00f25de48725c31fd24b9
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -10146,7 +10258,6 @@ lab HudsonAlpha
 labExpId SL1899
 md5sum fe97f33d96b0e21bceadf8c5fa9e12e7
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -10218,7 +10329,6 @@ lab HudsonAlpha
 labExpId SL906
 md5sum 638cf3d1184a1122e9c8461ff6fa08ce
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -10262,9 +10372,9 @@ expId 1353
 fileName wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 638cf3d1184a1122e9c8461ff6fa08ce
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -10284,9 +10394,9 @@ expId 1353
 fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 52a4b716e2e00f25de48725c31fd24b9
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -10307,9 +10417,9 @@ expId 1353
 fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum fe97f33d96b0e21bceadf8c5fa9e12e7
 objStatus replaced
 obtainedBy Stanford
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -10378,7 +10488,6 @@ lab HudsonAlpha
 labExpId SL767
 md5sum e0c0d6368d61b07105e05e73d22eff74
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -10403,7 +10512,6 @@ lab HudsonAlpha
 labExpId SL1806
 md5sum 9a4a0a26036e94317ad63abeee18ab4e
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -10424,9 +10532,9 @@ expId 1381
 fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 9a4a0a26036e94317ad63abeee18ab4e
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -10447,9 +10555,9 @@ expId 1381
 fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum e0c0d6368d61b07105e05e73d22eff74
 objStatus replaced
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -10468,6 +10576,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001419
 expId 1419
 fileName wgEncodeHaibMethylRrbsOvcar3UwRawDataRep1.fastq.gz
+geoSampleAccession GSM980577
 grant Myers
 lab HudsonAlpha
 labExpId SL904
@@ -10490,6 +10599,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001419
 expId 1419
 fileName wgEncodeHaibMethylRrbsOvcar3UwRawDataRep2.fastq.gz
+geoSampleAccession GSM980577
 grant Myers
 lab HudsonAlpha
 labExpId SL4746
@@ -10512,6 +10622,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001419
 expId 1419
 fileName wgEncodeHaibMethylRrbsOvcar3UwSitesRep1.bed.gz
+geoSampleAccession GSM980577
 grant Myers
 lab HudsonAlpha
 labExpId SL904
@@ -10535,6 +10646,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001419
 expId 1419
 fileName wgEncodeHaibMethylRrbsOvcar3UwSitesRep2.bed.gz
+geoSampleAccession GSM980577
 grant Myers
 lab HudsonAlpha
 labExpId SL4746
@@ -10687,7 +10799,6 @@ view RawData
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwSitesRep1
 objType file
-attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -10711,7 +10822,6 @@ view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanc1UwSitesRep2
 objType file
-attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
@@ -10863,7 +10973,6 @@ lab HudsonAlpha
 labExpId SL1937
 md5sum 160d446c06c26cb06f9fd6d24d88fe36
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -10888,7 +10997,6 @@ lab HudsonAlpha
 labExpId SL1941
 md5sum 903e8407b4fa016f5a3c10ec5fe80c72
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -10914,7 +11022,6 @@ lab HudsonAlpha
 labExpId SL1938
 md5sum a9e5451bf347a45d27fc8be2e247fb87
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 3
 subId 2471
@@ -10940,7 +11047,6 @@ lab HudsonAlpha
 labExpId SL1939
 md5sum 8800a4b274c6e3d3829c842711408eef
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 4
 subId 2471
@@ -10966,7 +11072,6 @@ lab HudsonAlpha
 labExpId SL1940
 md5sum 79691aee064084aacc12c9318954b445
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 5
 subId 2471
@@ -11219,7 +11324,6 @@ lab HudsonAlpha
 labExpId SL938
 md5sum 978e159a84bd5499448dc8b8a5f9b6e7
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -11244,7 +11348,6 @@ lab HudsonAlpha
 labExpId SL1802
 md5sum 46de71e060deb580846d8f8dae369571
 obtainedBy Duke
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -11269,7 +11372,6 @@ lab HudsonAlpha
 labExpId SL876
 md5sum 1a80335ce4e4ea7d10a2b1d8b24d600f
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -11294,7 +11396,6 @@ lab HudsonAlpha
 labExpId SL1346
 md5sum 2eabb3710938a4748466a0b9f3be3239
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -11407,7 +11508,6 @@ lab HudsonAlpha
 labExpId SL864
 md5sum 6564b404156a3e35400dee6e56f4ffd1
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -11432,7 +11532,6 @@ lab HudsonAlpha
 labExpId SL1342
 md5sum af97f52467153b0cff1dfea1c7461baf
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -11453,9 +11552,9 @@ expId 1369
 fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 6564b404156a3e35400dee6e56f4ffd1
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -11476,9 +11575,9 @@ expId 1369
 fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum af97f52467153b0cff1dfea1c7461baf
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -11547,7 +11646,6 @@ lab HudsonAlpha
 labExpId SL886
 md5sum 931698cdef23f7f6521dc29308556110
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -11572,7 +11670,6 @@ lab HudsonAlpha
 labExpId SL1419
 md5sum b7e879f0d8b98e4a8c0806dc96c802e1
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -11593,9 +11690,9 @@ expId 1354
 fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 931698cdef23f7f6521dc29308556110
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -11616,9 +11713,9 @@ expId 1354
 fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum b7e879f0d8b98e4a8c0806dc96c802e1
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -11871,7 +11968,6 @@ lab HudsonAlpha
 labExpId SL863
 md5sum 1f7cb546e11aef908e90084d8bd8aa51
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -11896,7 +11992,6 @@ lab HudsonAlpha
 labExpId SL1628
 md5sum 57dcc625654c5e8c32a68836f94ee712
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -11917,9 +12012,9 @@ expId 1370
 fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 1f7cb546e11aef908e90084d8bd8aa51
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -11940,9 +12035,9 @@ expId 1370
 fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+md5sum 57dcc625654c5e8c32a68836f94ee712
 objStatus replaced
 obtainedBy UW
-origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -12241,6 +12336,7 @@ dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002063
 expId 2063
 fileName wgEncodeHaibMethylRrbsUch1DukeRawDataRep1.fastq.gz
+geoSampleAccession GSM980581
 grant Myers
 lab HudsonAlpha
 labExpId SL1814
@@ -12263,6 +12359,7 @@ dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002063
 expId 2063
 fileName wgEncodeHaibMethylRrbsUch1DukeRawDataRep2.fastq.gz
+geoSampleAccession GSM980581
 grant Myers
 lab HudsonAlpha
 labExpId SL1821
@@ -12285,6 +12382,7 @@ dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002063
 expId 2063
 fileName wgEncodeHaibMethylRrbsUch1DukeSitesRep1.bed.gz
+geoSampleAccession GSM980581
 grant Myers
 lab HudsonAlpha
 labExpId SL1814
@@ -12308,6 +12406,7 @@ dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002063
 expId 2063
 fileName wgEncodeHaibMethylRrbsUch1DukeSitesRep2.bed.gz
+geoSampleAccession GSM980581
 grant Myers
 lab HudsonAlpha
 labExpId SL1821
@@ -12320,4 +12419,4 @@ tableName wgEncodeHaibMethylRrbsUch1DukeSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -877971100
+# MAGIC: -1660700033

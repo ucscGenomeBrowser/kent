@@ -46,6 +46,7 @@ options:
 print STDERR <<_EOF_
     -splitGoldGap         split the gold/gap tables (default is not split)
     -noGoldGapSplit       default behavior, this option no longer required
+    -forceDescription     construct a new description.html when -continue=trackDb
 _EOF_
   ;
   print STDERR "
@@ -88,6 +89,17 @@ assemblyShortLabel XXXXXX
   - The abbreviated form of the sequencing center's label or version identifier
     for this release (e.g. 'WUGSC 1.2.3').
 
+photoCreditURL http://some.path/to/photo/credit.html
+  - used to construct a courtesy URL reference to the source for the
+    photograph on the gateway page
+
+photoCreditName string for photo credit
+  - used to label the photoCreditURL under the picture on the gateway page
+
+ncbiGenomeId nnnnn
+  - A numeric NCBI identifier for the genome information reference at
+    http://www.ncbi.nlm.nih.gov/genome/nnnnn
+
 ncbiAssemblyId nnnnn
   - A numeric NCBI identifier for the assembly. To determine this, do an
     NCBI Assembly query at http://www.ncbi.nlm.nih.gov/genome/assembly/,
@@ -98,6 +110,14 @@ ncbiAssemblyName xxxxxrr
   - The assembly name used in the ftp path such as \"catChrV17e\" in  
     ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Felis_catus/catChrV17e/
     It is identical to the name returned from the NCBI Assembly query mention above. 
+
+ncbiBioProject nnnnn
+  - The NCBI bioproject number to construct the URL:
+    http://www.ncbi.nlm.nih.gov/bioproject/nnnnn
+
+genBankAccessionID GCA_nnn
+  - The NCBI assembly accession identification from the ASSEMBLY_INFO file
+    in the downloads from the FTP site ftp.ncbi.nlm.nih.gov/genbank/genomes
 
 orderKey NN
   - A priority number (for the central database's dbDb.orderKey column)
@@ -195,10 +215,11 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_splitGoldGap
     $opt_noGoldGapSplit
+    $opt_forceDescription
     /;
 
 # Required config parameters:
-my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $ncbiAssemblyName, $ncbiAssemblyId,
+my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $ncbiAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $genBankAccessionID,
     $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
 # Conditionally required config parameters:
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
@@ -206,7 +227,7 @@ my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
 # Optional config parameters:
 my ($commonName, $agpFiles, $qualFiles, $mitoSize, $subsetLittleIds);
 # Other globals:
-my ($gotMito, $gotAgp, $gotQual, $topDir, $chromBased);
+my ($gotMito, $gotAgp, $gotQual, $topDir, $chromBased, $forceDescription);
 my ($bedDir, $scriptDir, $endNotes);
 
 sub checkOptions {
@@ -215,6 +236,7 @@ sub checkOptions {
 		      @HgAutomate::commonOptionSpec,
 		      "splitGoldGap",
 		      "noGoldGapSplit",
+		      "forceDescription",
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -222,6 +244,8 @@ sub checkOptions {
   my $err = $stepper->processOptions();
   usage(1) if ($err);
   $dbHost = $opt_dbHost if (defined $opt_dbHost);
+  $forceDescription = 0;
+  $forceDescription = 1 if (defined $opt_forceDescription)
 } # checkOptions
 
 sub requireVar {
@@ -274,8 +298,13 @@ sub parseConfig {
   $fastaFiles = &requireVar('fastaFiles', \%config);
   $dbDbSpeciesDir = &requireVar('dbDbSpeciesDir', \%config);
   $taxId = &requireVar('taxId', \%config);
+  $photoCreditURL = &requireVar('photoCreditURL', \%config);
+  $photoCreditName = &requireVar('photoCreditName', \%config);
+  $ncbiGenomeId = &requireVar('ncbiGenomeId', \%config);
   $ncbiAssemblyName = &requireVar('ncbiAssemblyName', \%config);
   $ncbiAssemblyId = &requireVar('ncbiAssemblyId', \%config);
+  $ncbiBioProject = &requireVar('ncbiBioProject', \%config);
+  $genBankAccessionID = &requireVar('genBankAccessionID', \%config);
   # Conditionally required variables -- optional here, but they might be
   # required later on in some cases.
   $fakeAgpMinContigGap = &optionalVar('fakeAgpMinContigGap', \%config);
@@ -485,6 +514,12 @@ _EOF_
   # Having made the unmasked .2bit, make chrom.sizes and chromInfo.tab:
   # verify no dots allowed in chrom names
   $bossScript->add(<<_EOF_
+
+twoBitDup $db.unmasked.2bit > jkStuff/twoBitDup.txt
+if (`wc -l < jkStuff/twoBitDup.txt` > 0) then
+  echo "ERROR: duplicate sequence found in $db.unmasked.2bit"
+  exit 1
+endif
 
 twoBitInfo $db.unmasked.2bit stdout | sort -k2nr > chrom.sizes
 
@@ -928,144 +963,124 @@ sub makeDescription {
   my $anchorRoot = lc($genome);
   $anchorRoot =~ s/\. /_/;
   $anchorRoot =~ s/ /_/;
+  my $imgExtn = "jpg";
+  my $img = "/usr/local/apache/htdocs/images/$sciUnderscore.$imgExtn";
+  if ( ! -s $img ) {
+      $imgExtn = "png";
+      $img = "/usr/local/apache/htdocs/images/$sciUnderscore.$imgExtn";
+      if ( ! -s $img ) {
+        $imgExtn = "gif";
+        $img = "/usr/local/apache/htdocs/images/$sciUnderscore.$imgExtn";
+          if ( ! -s $img ) {
+            warn "missing htdocs/images/$sciUnderscore.{jpg|png|gif}\n\n";
+            exit 1;
+          }
+      }
+  }
+  my $widthHeight = `identify $img | awk '{print \$3}'`;
+  chomp $widthHeight;
+  my ($width, $height) = split('x', $widthHeight);
+  my $borderWidth = $width + 15;
+
   my $fh = &HgAutomate::mustOpen(">$topDir/html/description.html");
   print $fh <<_EOF_
 <!-- Display image in righthand corner -->
-<TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=$borderWidth>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
-    TARGET=_blank>
-    <IMG SRC="/images/$sciUnderscore.jpg" WIDTH=*** HEIGHT=*** ALT="$genome"></A>
+    <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET=_blank>
+    <IMG SRC="/images/$sciUnderscore.$imgExtn" WIDTH=$width HEIGHT=$height ALT="$genome"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>$scientificName</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+      (<A HREF="$photoCreditURL"
+      TARGET=_blank>$photoCreditName</A>)
     </FONT>
   </TD></TR>
 </TABLE>
 
 <P>
-The $assemblyDate <em>$scientificName</em> draft assembly 
-($assemblyLabel) was produced by the *** sequencing center.
-For more information about this assembly, see
-<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId/" TARGET="_blank">
-$ncbiAssemblyName</A> in the NCBI Assembly database.
+<B>UCSC Genome Browser assembly ID:</B> $db<BR>
+<B>Sequencing/Assembly provider ID:</B> $assemblyLabel<BR>
+<B>Assembly date:</B> $assemblyDate<BR>
+<B>GenBank accession ID:</B> $genBankAccessionID<BR>
+<B>NCBI Genome information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET="_blank">
+NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
+<B>NCBI Assembly information:</B>
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId" TARGET="_blank">
+NCBI genome/assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
 
-<H3>Sample position queries</H3>
-<P>
-A genome position can be specified by the accession number of a
-sequenced genomic region, an mRNA or EST, a chromosomal coordinate
-range, or keywords from the GenBank description of an mRNA. The
-following list shows examples of valid position queries for the
-$genome genome.  See the
-<A HREF="../goldenPath/help/hgTracksHelp.html"
-    TARGET=_blank>User's Guide</A> for more information.
-<P>
-<TABLE border=0 CELLPADDING=0 CELLSPACING=0>
-    <TR><TH ALIGN=LEFT>Request:</TH>
-        <TH WIDTH=14>&nbsp;</TH>
-       	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrZ</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
-    </TR>
-    <TR><TD VALIGN=Top>chr3:1-1000000</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
-    </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
-       	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>BX950328</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number BX950328</TD>
-    </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-      	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>pseudogene mRNA</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
-    </TR>
-    <TR><TD VALIGN=Top>homeobox caudal</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
-    </TR>
-    <TR><TD VALIGN=Top>zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD>
-    </TR>
-    <TR><TD VALIGN=Top>kruppel zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
-    </TR>
-    <TR><TD VALIGN=Top>zhang</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
-    </TR>
-    <TR><TD VALIGN=Top>Taguchi,T.</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Taguchi T</em>, internally it
-	uses the format <em>Taguchi,T.</em>.</TD>
-    </TR>
-</TABLE>
-
-<HR>
-<H3>Assembly details</H3>
-<P>
-The genome has been sequenced to ***X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
-which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
-(In contrast to mammals, the female chicken is heterogametic (ZW) and the 
-male is homogametic (ZZ).) 
-The remaining unanchored contigs that could be localized to a chromosome 
-have been concatenated into the virtual 
-chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
-Unanchored contigs that could not be localized to a chromosome 
-have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
-The chicken 
-mitochondrial sequence is also available as the virtual chromosome 
-&quot;chrM&quot;. 
+<B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A>
 </P>
-
-
+<HR>
 <P>
-Bulk downloads of the sequence and annotation data are available via 
-the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/">FTP
-server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#$anchorRoot">Downloads</A> page. 
-
-  *** Developer -- remove this if no conditions for use:
-These data have
-<A HREF="../goldenPath/credits.html#${anchorRoot}_use">specific 
-conditions for use</A>. 
-
-The $genome browser annotation tracks were generated by UCSC and 
-collaborators worldwide. See the 
-<A HREF="/goldenPath/credits.html#${anchorRoot}_credits">Credits</A> 
-page for a detailed list of the organizations and individuals who contributed 
-to the success of this release. 
+<B>Search the assembly:</B>
+<UL>
+<LI>
+<B>By position or search term: </B> Use the &quot;position or search term&quot;
+box to find areas of the genome associated with many different attributes, such
+as a specific chromosomal coordinate range; mRNA, EST, or STS marker names; or
+keywords from the GenBank description of an mRNA.
+<A HREF="../goldenPath/help/query.html">More information</A>, including sample
+queries.
+<LI>
+<B>By gene name: </B> Type a gene name into the &quot;search term&quot; box,
+choose your gene from the drop-down list, then press &quot;submit&quot; to go 
+directly to the assembly location associated with that gene.
+<A HREF="../goldenPath/help/geneSearchBox.html">More information</A>.
+<LI>
+<B>By track type: </B> Click the &quot;track search&quot; button
+to find Genome Browser tracks that match specific selection criteria.
+<A HREF="../goldenPath/help/trackSearch.html">More information</A>.
+</UL>
+</P>
+<HR>
+<P>
+<B>Download sequence and annotation data:</B>
+<UL>
+<LI><A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/">Using FTP</A>
+(recommended)
+<LI><A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#$anchorRoot">Using HTML</A>
+<LI><A HREF="../goldenPath/credits.html#${anchorRoot}_credits">Data use conditions and
+restrictions</A>
+<LI><A HREF="../goldenPath/credits.html#${anchorRoot}_credits">Acknowledgments</A>
+</UL>
 </P>
 _EOF_
   ;
   close($fh);
 } # makeDescription
+
+# from Perl Cookbook Recipe 2.17, print out large numbers with comma
+# delimiters:
+sub commify($) {
+    my $text = reverse $_[0];
+    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+    return scalar reverse $text
+}
+
+# definition of contig types in the AGP file
+my %goldTypes = (
+'A' => 'active finishing',
+'D' => 'draft sequence',
+'F' => 'finished sequence',
+'O' => 'other sequence',
+'W' => 'whole genome shotgun'
+);
+# definition of gap types in the AGP file
+my %gapTypes = (
+'clone' => 'gaps between clones in scaffolds',
+'heterochromatin' => 'heterochromatin gaps',
+'short_arm' => 'short arm gaps',
+'telomere' => 'telomere gaps',
+'centromere' => 'gaps for centromeres are included when they can be reasonably localized',
+'scaffold' => 'gaps between scaffolds in chromosome assemblies',
+'contig' => 'gaps between contigs in scaffolds',
+'other' => 'gaps added at UCSC to annotate strings of <em>N</em>s that were not marked in the AGP file',
+'fragment' => 'gaps between whole genome shotgun contigs'
+);
+
 
 sub makeLocalTrackDbRa {
   # Make an assembly-level trackDb.ra, gap.html and gold.html.
@@ -1091,15 +1106,24 @@ _EOF_
   if ($gotAgp) {
     print $fh <<_EOF_
 <H2>Description</H2>
-This track depicts gaps in the draft assembly ($assemblyDate, $assemblyLabel)
-of the $em\$organism$noEm genome.
-
-  *** Developer: remove this statement if no future assemblies are expected:
-
-Many of these gaps &mdash; with the
-exception of intractable heterochromatic gaps &mdash; may be closed during the
-finishing process.
-
+<P>
+This track shows the gaps in the $assemblyDate $em\$organism$noEm genome assembly.
+</P>
+<P>
+Genome assembly procedures are covered in the NCBI
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+TARGET=_blank>assembly documentation.</A><BR>
+NCBI also provides
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
+TARGET="_blank">specific information about this assembly.</A>
+</P>
+<P>
+The definition of the gaps in this assembly is from the
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
+TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/agp/AGP_Specification.shtml"
+TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
+</P>
 <P>
 Gaps are represented as black boxes in this track.
 If the relative order and orientation of the contigs on either side
@@ -1109,53 +1133,33 @@ through the black box representing the gap.
 </P>
 <P>This assembly contains the following principal types of gaps:
 <UL>
-
-  *** Developer: make sure this part is accurate.  Here is a WUSTL template:
-
-<LI><B>Fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
-supercontig.  (In this context, a contig is a set of overlapping sequence reads.  
-A supercontig is a set of contigs ordered and oriented during the 
-Whole Genome Shotgun process using paired-end reads.)
-These are represented by varying numbers of <em>N</em>s  in the assembly.  
-Fragment gap sizes are usually taken from read pair data.  
-<LI><B>Clone</B> - gaps between supercontigs linked by the fingerprint map.  
-In general, these are represented by 10,000 <em>N</em>s  in the assembly.
-<LI><B>Contig</B> - gaps between supercontigs not linked by the fingerprint 
-map, but instead by marker data.  (In this context, the &quot;Contig&quot; gap 
-type refers to a map contig, not a sequence contig.)  
-In general, these are represented by 10,000 <em>N</em>s  in the assembly for all 
-chromosomes except chrUn (concatenation of unplaced supercontigs), where 
-gaps of 1,000 <em>N</em>s  are used.  Gaps of other sizes were used when mRNA or 
-other data suggested possible but not confirmed links between supercontigs.
-<LI><B>Centromere</B> - gaps for centromeres were included when they could be 
-reasonably localized.  These are represented by 1,500,000 <em>N</em>s  in the 
-assembly for the macrochromosomes 1-10 and Z, and by 500,000 <em>N</em>s  for 
-all others (microchromosomes).  
-
-  *** Developer: here is a Broad template:
-
-<LI><B>Fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
-supercontig. These are represented by varying numbers of <em>N</em>s in the 
-assembly. In this context, a contig is a set of overlapping sequence reads and  
-a supercontig is a set of contigs ordered and oriented during the 
-Whole Genome Shotgun process using paired-end reads. Fragment gap sizes 
-are usually taken from read pair data.  
-</LI>
-<LI><B>Clone</B> - gaps between supercontigs linked by the physical map.  
-In general, these are represented by 1,000 <em>N</em>s  in the assembly.  
-
-*** Developer: look for this kind of gap placement:
-
-Clone gaps of 3,000,000 have been placed at the end of chrX and at the 
-beginning of all other chromosomes.  
-</LI>
-
-
-</UL></P>
-
-
 _EOF_
     ;
+    open (GL, "hgsql -N -e 'select type from gap;' $db | sort | uniq -c | sort -n|") or die "can not select type from $db.gap table";
+    while (my $line = <GL>) {
+        chomp $line;
+        $line =~ s/^\s+//;
+        my ($count, $type) = split('\s+', $line);
+        my $minSize = `hgsql -N -e 'select min(size) from gap where type="$type";' $db`;
+        chomp $minSize;
+        my $maxSize = `hgsql -N -e 'select max(size) from gap where type="$type";' $db`;
+        chomp $maxSize;
+        my $sizeMessage = "";
+        if ($minSize == $maxSize) {
+            $sizeMessage = sprintf ("all of size %s bases", commify($minSize));
+        } else {
+            $sizeMessage = sprintf ("size range: %s - %s bases",
+                commify($minSize), commify($maxSize));
+        }
+        if (exists ($gapTypes{$type}) ) {
+            printf $fh "<LI><B>%s</B> - %s (count: %s; %s)</LI>\n", $type,
+                $gapTypes{$type}, commify($count), $sizeMessage;
+        } else {
+            die "makeLocalTrackDbRa: missing AGP gap type definition: $type";
+        }
+    }
+    close (GL);
+    print $fh "</UL></P>\n";
   } else {
     print $fh <<_EOF_
 <H2>Description</H2>
@@ -1205,15 +1209,23 @@ _EOF_
     print $fh <<_EOF_
 <H2>Description</H2>
 <P>
-This track shows the draft assembly ($assemblyDate, $assemblyLabel)
-of the $em\$organism$noEm genome.
-
-  *** Developer: check if this is accurate:
-
-Whole-genome shotgun reads were assembled into contigs.  When possible, 
-contigs were grouped into scaffolds (also known as &quot;supercontigs&quot;).
-The order, orientation and gap sizes between contigs within a scaffold are
-based on paired-end read evidence. </P>
+This track shows the sequences used in the $assemblyDate $em\$organism$noEm genome assembly.
+</P>
+<P>
+Genome assembly procedures are covered in the NCBI
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+TARGET=_blank>assembly documentation.</A><BR>
+NCBI also provides
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
+TARGET="_blank">specific information about this assembly.</A>
+</P>
+<P>
+The definition of this assembly is from the
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
+TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/agp/AGP_Specification.shtml"
+TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
+</P>
 <P>
 In dense mode, this track depicts the contigs that make up the 
 currently viewed scaffold. 
@@ -1224,10 +1236,35 @@ blocks.  The relative order and orientation of the contigs
 within a scaffold is always known; therefore, a line is drawn in the graphical
 display to bridge the blocks.</P>
 <P>
-All components within this track are of fragment type &quot;W&quot;: 
-Whole Genome Shotgun contig. </P>
+Component types found in this track (with counts of that type in parenthesis):
+<UL>
 _EOF_
     ;
+    open (GL, "hgsql -N -e 'select type from gold;' $db | sort | uniq -c | sort -rn|") or die "can not select type from $db.gold table";
+    while (my $line = <GL>) {
+        chomp $line;
+        $line =~ s/^\s+//;
+        my ($count, $type) = split('\s+', $line);
+        my $singleMessage = "";
+        if ((1 == $count) && (("F" eq $type) || ("O" eq $type))) {
+            my $chr = `hgsql -N -e 'select chrom from gold where type=\"$type\";' $db`;
+            my $frag = `hgsql -N -e 'select frag from gold where type=\"$type\";' $db`;
+            chomp $chr;
+            chomp $frag;
+            $singleMessage = sprintf("(%s/%s)", $chr, $frag);
+        }
+        if (exists ($goldTypes{$type}) ) {
+            if (length($singleMessage)) {
+                printf $fh "<LI>%s - one %s %s</LI>\n", $type, $goldTypes{$type}, $singleMessage;
+            } else {
+                printf $fh "<LI>%s - %s (%s)</LI>\n", $type, $goldTypes{$type}, commify($count);
+            }
+        } else {
+            die "makeLocalTrackDbRa: missing AGP contig type definition: $type";
+        }
+    }
+    close (GL);
+    printf $fh "</UL></P>\n";
   } else {
     print $fh <<_EOF_
 <H2>Description</H2>
@@ -1258,7 +1295,7 @@ within a scaffold is always known; therefore, a line is drawn in the graphical
 display to bridge the blocks.</P>
 <P>
 All components within this track are of fragment type &quot;W&quot;: 
-Whole Genome Shotgun contig. </P>
+whole genome shotgun contig. </P>
 _EOF_
     ;
   }
@@ -1307,6 +1344,9 @@ mkdir -p $dbDbSpeciesDir/$db
 # Move local description files into place:
 mv $localFiles $dbDbSpeciesDir/$db/
 
+if (1 == $forceDescription) then
+  rm -f $dbDbSpeciesDir/$db/description.html
+endif
 # Copy the template description.html for $db into place, and link to it
 # from $HgAutomate::gbdb/$db/html/ .
 if (! -e $dbDbSpeciesDir/$db/description.html) then

@@ -234,7 +234,7 @@
 		// Find the position where the menu should appear, given an x,y of the click event
 		getPosition: function(clickX,clickY,cmenu,e) {
 			var x = clickX+cmenu.offsetX;
-			var y = clickY+cmenu.offsetY
+		        var y = clickY+cmenu.offsetY;
 			var h = $(cmenu.menu).height();
 			var w = $(cmenu.menu).width();
 			var dir = cmenu.direction;
@@ -246,7 +246,10 @@
 				var maxRight = x+w-$w.scrollLeft();
 				if (maxRight > ww) { x -= (maxRight-ww); }
 			}
-			if (dir=="up") { y -= h; }
+			if (dir=="up") {
+                            // use scrollTop to make sure menu doesn't disappear off the top (#7687).
+                            y = Math.max(y - h, $w.scrollTop());
+                        }
 			return {'x':x,'y':y};
 		},
 		

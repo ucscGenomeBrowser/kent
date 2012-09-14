@@ -66,6 +66,9 @@ void htmlStart(char *title);
 void htmStart(FILE *f, char *title);
 /* Write the start of a stand alone .html file. */
 
+void printBodyTag(FILE *f);
+// print starting BODY tag, including any appropriate attributes (class, background and bgcolor). 
+
 void htmStartWithHead(FILE *f, char *head, char *title);
 /* Write the start of a stand alone .html file, plus head info */
 
@@ -87,6 +90,18 @@ void htmlSetStyle(char *style);
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink
  * which will remove underlines from links.
+ * Needs to be called before htmlStart or htmShell. */
+
+void htmlSetStyleSheet(char *styleSheet);
+/* Set document wide style sheet by adding css name to HEAD part.
+ * Needs to be called before htmlStart or htmShell. */
+
+void htmlSetFormClass(char *formClass);
+/* Set class in the BODY part. */
+
+
+void htmlSetStyleTheme(char *style);
+/* Set theme style, these styles can overwrite document wide styles.
  * Needs to be called before htmlStart or htmShell. */
 
 void htmlSetBackground(char *imageFile);

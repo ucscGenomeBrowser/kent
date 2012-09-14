@@ -785,6 +785,9 @@ boolean endsWith(char *string, char *end);
 char lastChar(char *s);
 /* Return last character in string. */
 
+void trimLastChar(char *s);
+/* Erase last character in string. */
+
 char *lastNonwhitespaceChar(char *s);
 // Return pointer to last character in string that is not whitespace.
 
@@ -876,6 +879,10 @@ int countLeadingNondigits(const char *s);
 
 int countSame(char *a, char *b);
 /* Count number of characters that from start in a,b that are same. */
+
+int countSeparatedItems(char *string, char separator);
+/* Count number of items in string you would parse out with given
+ * separator,  assuming final separator is optional. */
 
 int chopString(char *in, char *sep, char *outArray[], int outSize);
 /* int chopString(in, sep, outArray, outSize); */
@@ -1377,10 +1384,15 @@ __attribute__((format(printf, 1, 2)))
 ;
 
 // SETTING_ON set of macros are frequently used comparisons of string values for boolean questions.
-// Notice the subtle difference between NOT_ON and IS_OFF.  NOT_ON could be NULL but IS_OFF must be explicitly set
-#define SETTING_IS_ON(setting)    (setting && (sameWord(setting,"on") || sameWord(setting,"true") || sameWord(setting,"yes") || sameWord(setting,"enabled") || atoi(setting) != 0))
+// Notice the subtle difference between NOT_ON and IS_OFF.
+//        NOT_ON could be NULL but IS_OFF must be explicitly set
+#define SETTING_IS_ON(setting) (  setting && (sameWord(setting,"on") || sameWord(setting,"true") \
+                               || sameWord(setting,"yes") || sameWord(setting,"enabled") \
+                               || atoi(setting) != 0) )
 #define SETTING_NOT_ON(setting)   (!SETTING_IS_ON(setting))
-#define SETTING_IS_OFF(setting)   (setting && (sameWord(setting,"off") || sameWord(setting,"false") || sameWord(setting,"no") || sameWord(setting,"disabled") || sameWord(setting,"0")))
+#define SETTING_IS_OFF(setting) (  setting && (sameWord(setting,"off") \
+                                || sameWord(setting,"false") || sameWord(setting,"no") \
+                                || sameWord(setting,"disabled") || sameWord(setting,"0")) )
 
 // Standard bit mask macros
 #define BITS_ADD(    flags,bits) ((flags) = ((flags) |  (bits)))

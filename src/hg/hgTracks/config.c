@@ -17,6 +17,40 @@
 #include "hubConnect.h"
 #include "fileUi.h"
 
+static void themeDropDown(struct cart* cart)
+/* Create drop down for UI themes. 
+ * specfied in hg.conf like this
+ * browser.theme.modern=background.png,HGStyle
+ * */
+{
+struct slName* themes = cfgNamesWithPrefix("browser.theme.");
+//struct slName* themes = cfgNames();
+if (themes==NULL)
+    return;
+
+hPrintf("<TR><TD>website style:");
+hPrintf("<TD style=\"text-align: right\">");
+
+// create labels for drop down box by removing prefix from hg.conf keys
+char *labels[50];
+struct slName* el;
+int i = 0;
+el = themes;
+for (el = themes; el != NULL && i<50; el = el->next)
+    {
+    char* name = el->name;
+    name = chopPrefix(name); // chop off first two words
+    name = chopPrefix(name);
+    labels[i] = name;
+    i++;
+    }
+
+char* currentTheme = cartOptionalString(cart, "theme"); 
+hDropList("theme", labels, i, currentTheme);
+slFreeList(themes);
+hPrintf("</TD>");
+}
+
 static void textSizeDropDown()
 /* Create drop down for font size. */
 {
@@ -43,7 +77,7 @@ changeTrackVis(groupList, groupTarget, changeVis);
 if (changeVis != -2)
     {
     if (groupTarget == NULL ||
-    	(groupList != NULL && sameString(groupTarget, groupList->name)))
+        (groupList != NULL && sameString(groupTarget, groupList->name)))
 	{
 	if (changeVis == -1)
 	    rulerMode = tvFull;
@@ -69,36 +103,42 @@ for (group = groupList; group != NULL; group = group->next)
     boolean isOpen = !isCollapsedGroup(group);
     collapseGroupGoodies(isOpen, FALSE, &indicatorImg,
                             &indicator, &otherState);
-    hPrintf("<TABLE BORDER='1' CELLSPACING='0' style='background-color:#%s; width:54em;'>\n",HG_COL_INSIDE);
+    hPrintf("<TABLE BORDER='1' CELLSPACING='0' style='background-color:#%s; width:54em;'>\n",
+            HG_COL_INSIDE);
     hPrintf("<TR NOWRAP class='blueToggleBar'>");
     hPrintf("<TH NOWRAP align='left' colspan=3>");
     hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
-        collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
+            collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
 //#define BUTTONS_BY_CSS_NOT_HERE
 #ifdef BUTTONS_BY_CSS_NOT_HERE
-    hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
-        group->name, group->name, isOpen?"Collapse":"Expand", indicator);
+    hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" "
+            "id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
+            group->name, group->name, isOpen?"Collapse":"Expand", indicator);
 #else///ifndef BUTTONS_BY_CSS_NOT_HERE
-    hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this,'%s');\" id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
-        group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+    hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this,'%s');\" "
+            "id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
+            group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
 #endif///ndef BUTTONS_BY_CSS_NOT_HERE
     hPrintf("<B>&nbsp;%s</B> ", group->label);
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("</td><td style='text-align:right;'>\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Hide all tracks in this groups'>",
+            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+            "title='Hide all tracks in this groups'>",
 	    configHideAll, "hide all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Show all tracks in this groups'>",
+            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+            "title='Show all tracks in this groups'>",
 	    configShowAll, "show all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Show default tracks in this group'>",
+            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+            "title='Show default tracks in this group'>",
 	    configDefaultAll, "default", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
@@ -117,7 +157,7 @@ for (group = groupList; group != NULL; group = group->next)
                 differentString(group->name, "user"))
 	{
         showedRuler = TRUE;
-	hPrintf("<TR %sid='%s-0'>",(isOpen ? "" : "style='display: none'"), group->name);
+        hPrintf("<TR %sid='%s-0'>",(isOpen ? "" : "style='display: none'"), group->name);
 	hPrintf("<TD>");
         hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
                 cartSessionVarName(), cartSessionId(cart),
@@ -180,12 +220,12 @@ for (group = groupList; group != NULL; group = group->next)
     /* Loop through this group and display */
     int rowCount=1;
     for (tr = group->trackList; tr != NULL; tr = tr->next)
-	{
-	struct track *track = tr->track;
+        {
+        struct track *track = tr->track;
         struct trackDb *tdb = track->tdb;
 
-	hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none'"),group->name, rowCount++);
-	hPrintf("<TD NOWRAP>");
+        hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none'"),group->name, rowCount++);
+        hPrintf("<TD NOWRAP>");
         if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -194,10 +234,10 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintPennantIcon(tdb);
 
         if (track->hasUi)
-	    hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%u&g=%s&hgTracksConfigPage=configure'>",
-                tdb->parent ? "Part of super track: " : "Configure ",
-                tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
-                hgTrackUiName(),cartSessionVarName(), cartSessionId(cart), track->track);
+            hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%u&g=%s&hgTracksConfigPage=configure'>",
+                    tdb->parent ? "Part of super track: " : "Configure ",
+                    tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
+                    hgTrackUiName(),cartSessionVarName(), cartSessionId(cart), track->track);
         hPrintf(" %s", tdb->shortLabel);
         if (tdbIsSuper(tdb))
             hPrintf("...");
@@ -211,11 +251,10 @@ for (group = groupList; group != NULL; group = group->next)
 
 	/* If track is not on this chrom print an informational
 	   message for the user. */
-        if (tdbIsDownloadsOnly(tdb))
-            hPrintf("<A TITLE='Downloadable files...' HREF='%s?%s=%u&g=%s'>Downloads</A>", // No vis display for downloadsOnly
-                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), tdb->track);
-        else
-        if (hTrackOnChrom(track->tdb, chromName))
+        if (tdbIsDownloadsOnly(tdb))    // No vis display for downloadsOnly
+            hPrintf("<A TITLE='Downloadable files...' HREF='%s?%s=%u&g=%s'>Downloads</A>",
+                    hgFileUiName(),cartSessionVarName(), cartSessionId(cart), tdb->track);
+        else if (hTrackOnChrom(track->tdb, chromName))
 	    {
             if (tdbIsSuper(track->tdb))
                 {
@@ -226,16 +265,16 @@ for (group = groupList; group != NULL; group = group->next)
                 {
                 /* check for option of limiting visibility to one mode */
                 hTvDropDownClassVisOnly(track->track, track->visibility,
-                            rTdbTreeCanPack(track->tdb), (track->visibility == tvHide) ?
-                            "hiddenText" : "normalText",
-                            trackDbSetting(track->tdb, "onlyVisibility"));
+                                        rTdbTreeCanPack(track->tdb),
+                                        (track->visibility == tvHide) ? "hiddenText" : "normalText",
+                                        trackDbSetting(track->tdb, "onlyVisibility"));
                 }
 	    }
-	else
+        else
 	    hPrintf("[No data-%s]", chromName);
 	hPrintf("</TD>");
 	hPrintf("<TD NOWRAP>");
-	hPrintf("%s", tdb->longLabel);
+        hPrintf("%s", tdb->longLabel);
 	hPrintf("</TD>");
 	hPrintf("</TR>\n");
 	}
@@ -252,7 +291,7 @@ struct track *track = NULL;
 struct group *group = NULL;
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *tdb = tdbList;
-for(;tdb != NULL; tdb = tdb->next)
+for (;tdb != NULL; tdb = tdb->next)
     {
     if (!tdbIsDownloadsOnly(tdb)
     || tdbIsFolderContent(tdb)
@@ -274,7 +313,7 @@ for(;tdb != NULL; tdb = tdb->next)
     // Make the track
     track = trackFromTrackDb(tdb);
     track->group = group;
-    track->groupName = cloneString(group->name);  // Don't even bother looking in cart.  That junk should be thrown out, now that we have dragReorder
+    track->groupName = cloneString(group->name);
     slAddHead(pTrackList,track);
     count++;
     }
@@ -322,7 +361,8 @@ trackList = getTrackList(&groupList, vis);
 
 if (trackHash == NULL)
     trackHash = makeGlobalTrackHash(trackList);
-parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+// Subtrack settings must be removed when composite/view settings are updated
+parentChildCartCleanup(trackList,cart,oldVars);
 
 addDownloadOnlyTracks(database,&groupList,&trackList);
 
@@ -366,9 +406,10 @@ hPrintf("<TD>characters<TD></TR>");
 hPrintf("<TR><TD>text size:");
 hPrintf("<TD style=\"text-align: right\">");
 textSizeDropDown();
-hPrintf("<TD>");
+hPrintf("</TD>");
 if (trackLayoutInclFontExtras())
     {
+    hPrintf("<TD>");
     char *defaultStyle = cartUsualString(cart, "fontType", "medium");
     cartMakeRadioButton(cart, "fontType", "medium", defaultStyle);
     hPrintf("&nbsp;medium&nbsp;");
@@ -377,8 +418,12 @@ if (trackLayoutInclFontExtras())
     cartMakeRadioButton(cart, "fontType", "bold", defaultStyle);
     hPrintf("&nbsp;bold&nbsp;");
     hPrintf("&nbsp;");
+    hPrintf("</TD>");
     }
-hPrintf("<TR><BR>");
+hPrintf("</TR>");
+
+themeDropDown(cart);
+
 hTableStart();
 if (ideoTrack != NULL)
     {
@@ -437,7 +482,7 @@ else
 	  organization, browserName, organism, freeze, database);
 webNewSection(buf);
 hPrintf("Tracks: ");
-if(isSearchTracksSupported(database,cart))
+if (isSearchTracksSupported(database,cart))
     {
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     hPrintf(" ");
@@ -448,10 +493,13 @@ cgiMakeButtonWithMsg(configShowAll, "show all","Show all tracks in this genome a
 hPrintf(" ");
 cgiMakeButtonWithMsg(configDefaultAll, "default","Display only default tracks");
 hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
-hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return vis.expandAllGroups(false)");
+hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups",
+                   "return vis.expandAllGroups(false)");
 hPrintf(" ");
-hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return vis.expandAllGroups(true)");
-hPrintf("<div style='margin-top:.2em; margin-bottom:.9em;'>Control track and group visibility more selectively below.</div>");
+hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups",
+                   "return vis.expandAllGroups(true)");
+hPrintf("<div style='margin-top:.2em; margin-bottom:.9em;'>Control track and group visibility "
+        "more selectively below.</div>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);
@@ -459,7 +507,6 @@ freez(&groupTarget);
 webEndSectionTables();
 hPrintf("</FORM>");
 }
-
 
 void configPage()
 /* Put up configuration page. */

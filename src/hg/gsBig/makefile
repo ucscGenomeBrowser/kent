@@ -11,5 +11,8 @@ gsBig: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/gsBig $O $(MYLIBS) $L
 #${STRIP} ${BINDIR}/gsBig${EXE}
 
+compile:: $O $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o gsBig $O $(MYLIBS) $L
+    
 clean::
-	rm -f ${O}
+	rm -f ${O} gsBig

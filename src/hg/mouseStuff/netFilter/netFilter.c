@@ -25,6 +25,7 @@ errAbort(
   "   -maxScore=N - restrict to those scoring less than N\n"
   "   -minGap=N  - restrict to those with gap size (tSize) >= minSize\n"
   "   -minAli=N - restrict to those with at least given bases aligning\n"
+  "   -maxAli=N - restrict to those with at most given bases aligning\n"
   "   -minSizeT=N - restrict to those at least this big on target\n"
   "   -minSizeQ=N - restrict to those at least this big on query\n"
   "   -qStartMin=N - restrict to those with qStart at least N\n"
@@ -68,6 +69,7 @@ struct optionSpec options[] = {
    {"maxScore", OPTION_FLOAT},
    {"minGap", OPTION_INT},
    {"minAli", OPTION_INT},
+   {"maxAli", OPTION_INT},
    {"minSizeT", OPTION_INT},
    {"minSizeQ", OPTION_INT},
    {"qStartMin", OPTION_INT},
@@ -158,6 +160,7 @@ double minSynAli = 10000;     /* Minimum alignment size. */
 double maxFar = 200000;  /* Maximum distance to allow synteny. */
 int minGap = 0;		      /* Minimum gap size. */
 int minAli = 0;			/* Minimum ali size. */
+int maxAli = 0;			/* Maximum ali size. */
 int minSizeT = 0;		/* Minimum target size. */
 int minSizeQ = 0;		/* Minimum query size. */
 boolean fillOnly = FALSE;	/* Only pass fills? */
@@ -236,6 +239,8 @@ if (fill->chainId)
     if (fill->score < minScore || fill->score > maxScore)
 	return FALSE;
     if (fill->ali < minAli)
+        return FALSE;
+    if ((fill->ali > maxAli) && (maxAli != 0))
         return FALSE;
     if (noRandom)
         {
@@ -371,6 +376,7 @@ doChimpSyn = optionExists("chimpSyn");
 doNonSyn = optionExists("nonsyn");
 minGap = optionInt("minGap", minGap);
 minAli = optionInt("minAli", minAli);
+maxAli = optionInt("maxAli", maxAli);
 minSizeT = optionInt("minSizeT", minSizeT);
 minSizeQ = optionInt("minSizeQ", minSizeQ);
 fillOnly = optionExists("fill");

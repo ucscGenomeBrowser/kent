@@ -19,7 +19,6 @@
 #include "hPrint.h"
 #include "suggest.h"
 #include "search.h"
-#include "internet.h"
 #include "geoMirror.h"
 
 struct cart *cart = NULL;
@@ -62,37 +61,31 @@ jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("autocomplete.js", NULL);
 jsIncludeFile("hgGateway.js", NULL);
 jsIncludeFile("utils.js", NULL);
+jsIncludeFile("jquery.watermarkinput.js", NULL);
 
-puts(
-"<CENTER style='font-size:small;'>"
-"The UCSC Genome Browser was created by the \n"
-"<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
-"<BR>"
-"Software Copyright (c) The Regents of the University of California.\n"
-"All rights reserved.\n"
-"</CENTER>\n"
-);
+puts("<CENTER style='font-size:small;'>"
+     "The UCSC Genome Browser was created by the \n"
+     "<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
+     "<BR>"
+     "Software Copyright (c) The Regents of the University of California.\n"
+     "All rights reserved.\n"
+     "</CENTER>\n");
 
-puts(
-"<FORM ACTION='../cgi-bin/hgTracks' NAME='mainForm' METHOD='GET' style='display:inline;'>\n"
-"<CENTER>"
-"<table style='background-color:#FFFEF3; border: 1px solid #CCCC99;'>\n"
-"<tr><td>\n");
+puts("<FORM ACTION='../cgi-bin/hgTracks' NAME='mainForm' METHOD='GET' style='display:inline;'>\n"
+     "<CENTER>"
+     "<table style='background-color:#FFFEF3; border: 1px solid #CCCC99;'>\n"
+     "<tr><td>\n");
 cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTracks");
 
 puts("<table><tr>");
 if (gotClade)
     puts("<td align=center valign=baseline>clade</td>");
-puts(
-"<td align=center valign=baseline>genome</td>\n"
-"<td align=center valign=baseline>assembly</td>\n"
-"<td align=center valign=baseline>position or search term</td>\n");
-if(supportsSuggest)
-    puts("<td align=center valign=baseline><a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a></td>\n");
-puts(
-"<td align=center valign=baseline> &nbsp; </td>\n"
-"</tr>\n<tr>"
-);
+puts("<td align=center valign=baseline>genome</td>\n"
+     "<td align=center valign=baseline>assembly</td>\n"
+     "<td align=center valign=baseline>position</td>\n"
+     "<td align=center valign=baseline>search term</td>\n"
+     "<td align=center valign=baseline> &nbsp; </td>\n"
+     "</tr>\n<tr>");
 
 if (gotClade)
     {
@@ -113,17 +106,13 @@ printAssemblyListHtml(db, onChangeDB);
 puts("</td>\n");
 
 puts("<td align=center>\n");
-cgiMakeTextVar("position", addCommasToPos(db, position), 30);
-printf("</td>\n");
-
+hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(db, position));
+hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", addCommasToPos(db, position));
+puts("</td><td align=center>\n");
+hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='45'>\n");
 if(supportsSuggest)
-    {
-    puts("<td align=center>\n");
-    hPrintf("<input name='hgt.suggest' type='text' size='5' id='suggest' />\n"
-            "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db)
-            );
-    printf("</td>\n");
-    }
+    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db));
+printf("</td>\n");
 
 cartSetString(cart, "position", position);
 cartSetString(cart, "db", db);
@@ -135,38 +124,34 @@ freez(&defaultPosition);
 position = NULL;
 
 puts("<td align=center>");
-if(supportsSuggest)
-    hButtonWithOnClick("Submit", "submit", NULL, "submitButtonOnClick()");
-else
-    cgiMakeButton("Submit", "submit");
+hButton("Submit", "submit");
 /* This is a clear submit button that browsers will use by default when enter is pressed in position box. FIXME: This should be done with js onchange event! */
 printf("<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>");
 cartSaveSession(cart);  /* Put up hgsid= as hidden variable. */
-puts(
-"</td>\n"
-"</tr></table>\n"
-"</td></tr>\n");
+puts("</td>\n"
+     "</tr></table>\n"
+     "</td></tr>\n");
 
-puts(
-"<tr><td><CENTER><BR>\n"
-"<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.");
+puts("<tr><td><CENTER><BR>\n"
+     "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> "
+     "the browser user interface settings to their defaults.");
 
 #define SURVEY 1
 #ifdef SURVEY
 if (survey && differentWord(survey, "off"))
-    printf("&nbsp;&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></span>", survey, surveyLabel ? surveyLabel : "Take survey");
+    printf("&nbsp;&nbsp;&nbsp;<span style='background-color:yellow;'>"
+           "<A HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></span>", 
+           survey, surveyLabel ? surveyLabel : "Take survey");
 #endif
 
-puts(
-"<BR>\n"
-"</CENTER>\n"
-"</td></tr><tr><td><CENTER>\n"
-);
+puts("<BR>\n"
+     "</CENTER>\n"
+     "</td></tr><tr><td><CENTER>\n");
 
 puts("<TABLE BORDER=\"0\">");
 puts("<TR>");
 
-if(isSearchTracksSupported(db,cart))
+if (isSearchTracksSupported(db,cart))
     {
     puts("<TD VALIGN=\"TOP\">");
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
@@ -182,8 +167,8 @@ if (!hIsGsidServer() && !hIsCgbServer())
     {
     boolean hasCustomTracks = customTracksExist(cart, NULL);
     printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
-        hgCustomName(),hasCustomTracks ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL,
-        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
+           hgCustomName(),hasCustomTracks ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL,
+           hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
     }
 puts("</TD>");
 
@@ -191,21 +176,14 @@ if (hubConnectTableExists())
     {
     puts("<TD VALIGN=\"TOP\">");
     printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
-        "../cgi-bin/hgHubConnect", "track hubs", "Import tracks");
+           "../cgi-bin/hgHubConnect", "track hubs", "Import tracks");
     puts("</TD>");
     }
 
 // configure button
 puts("<TD VALIGN=\"TOP\">");
-cgiMakeButtonWithMsg("hgTracksConfigPage", "configure tracks and display","Configure track selections and browser display");
-puts("</TD>");
-
-// clear possition button
-puts("<TD VALIGN=\"TOP\">");
-if(supportsSuggest)
-    cgiMakeOnClickButton("document.mainForm.position.value=''; document.getElementById('suggest').value='';", "clear position");
-else
-    cgiMakeOnClickButton("document.mainForm.position.value=''", "clear position");
+cgiMakeButtonWithMsg("hgTracksConfigPage", "configure tracks and display",
+                     "Configure track selections and browser display");
 puts("</TD>");
 
 puts("</TR></TABLE>");
@@ -242,8 +220,8 @@ puts("<P>WARNING: This is our development and test site.  It usually works, but 
 if (hIsGsidServer())
     {
     webNewSection("%s", "Sequence View\n");
-    printf("%s",
-	   "Sequence View is a customized version of the UCSC Genome Browser, which is specifically tailored to provide functions needed for the GSID HIV Data Browser.\n");
+    printf("%s","Sequence View is a customized version of the UCSC Genome Browser, which is "
+           "specifically tailored to provide functions needed for the GSID HIV Data Browser.\n");
     }
 
 hgPositionsHelpHtml(organism, db);
@@ -317,35 +295,14 @@ if (thisNodeStr)
         {
         int thisNode = sqlUnsigned(thisNodeStr);
         struct sqlConnection *centralConn = hConnectCentral();
-        char query[1024];
         char *ipStr = cgiRemoteAddr();
-        bits32 ip = 0;
-        internetDottedQuadToIp(ipStr, &ip);
-
-        // we assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient.
-        safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart order by ipStart desc limit 1", ip);
-        char **row;
-        struct sqlResult *sr = sqlGetResult(centralConn, query);
-        int defaultNode = 1;
-        if ((row = sqlNextRow(sr)) != NULL)
-            {
-            uint ipStart = sqlUnsigned(row[0]);
-            uint ipEnd = sqlUnsigned(row[1]);
-            if (ipStart <= ip && ipEnd >= ip)
-                {
-                defaultNode = sqlSigned(row[2]);
-                }
-            }
-        sqlFreeResult(&sr);
-
-        fprintf(stderr, "GALT thisNodeStr=%s thisNode=%d ipStr=%s ip=%u defaultNode (for user) %d\n", 
-		thisNodeStr, thisNode,
-		ipStr, ip, defaultNode); fflush(stderr); // DEBUG REMOVE
+        int node = defaultNode(centralConn, ipStr);
 
         // get location of redirect node
-        if (thisNode != defaultNode)
+        if (thisNode != node)
             {
-            safef(query, sizeof query, "select domain from gbNode where node = %d", defaultNode);
+            char query[1056];
+            safef(query, sizeof query, "select domain from gbNode where node = %d", node);
             char *newDomain = sqlQuickString(centralConn, query);
             fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
             char *oldDomain = cgiServerName();

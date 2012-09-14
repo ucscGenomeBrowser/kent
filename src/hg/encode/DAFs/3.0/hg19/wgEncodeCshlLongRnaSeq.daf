@@ -78,12 +78,12 @@ downloadOnly     no
 
 
 # Individual Replicates
-view             PlusRawSignal
+view             PlusSignal
 type             bigWig
 hasReplicates    yes
 required         no
 
-view             MinusRawSignal
+view             MinusSignal
 type             bigWig
 hasReplicates    yes
 required         no

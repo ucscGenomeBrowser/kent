@@ -2,43 +2,39 @@
 
 #Encode Composite tracks (main wrangler:Venkat)
 
+# mapability liftover
+include wgEncodeMapability.ra
+
 # Stan/Yale TFBS (wrangler: Venkat) 
-include wgEncodeSydhTfbs.ra beta,public
-include wgEncodeSydhTfbs.release3.ra alpha
+include wgEncodeSydhTfbs.release4.ra
 
 # Stan/Yale Histone (wrangler: Venkat)
-include wgEncodeSydhHist.ra beta,public
-include wgEncodeSydhHist.release2.ra alpha
+include wgEncodeSydhHist.release2.ra
 
 # UW DNaseI HS (wrangler: Venkat)
 include wgEncodeUwDnase.ra beta,public
 include wgEncodeUwDnase.release2.ra alpha 
 
 # PSU TFBS (wrangler: Venkat)
-include wgEncodePsuTfbs.ra beta,public
-include wgEncodePsuTfbs.patch.ra alpha
-#include wgEncodePsuTfbs.release2.ra alpha
+include wgEncodePsuTfbs.release2.ra
 
 # PSU Histone (wrangler: Venkat)
-include wgEncodePsuHistone.ra alpha,beta
+include wgEncodePsuHistone.release2.ra
 
 # LICR Histone (wrangler: Fang)
-include wgEncodeLicrHistone.release2.ra beta,public
-include wgEncodeLicrHistone.release3.ra alpha
+include wgEncodeLicrHistone.release3.ra
 
 # LICR TFBS (wrangler: Fang)
-include wgEncodeLicrTfbs.ra public
-include wgEncodeLicrTfbs.release2.ra alpha,beta
+include wgEncodeLicrTfbs.release3.ra
 
 # Stan/Yale RNA-Seq (wrangler: Venkat)
-include wgEncodeSydhRnaSeq.ra alpha
+include wgEncodeSydhRnaSeq.release2.ra
 
 # Licr RNA-Seq (wrangler: Fang)
-include wgEncodeLicrRnaSeq.ra public
-include wgEncodeLicrRnaSeq.release2.ra alpha,beta
+include wgEncodeLicrRnaSeq.release2.ra
 
 # Uw RNA-Seq (wrangler: Venkat)
-include wgEncodeUwRnaSeq.ra alpha
+include wgEncodeUwRnaSeq.ra
 
 # Caltech TFBS (wrangler: Venkat)
 include wgEncodeCaltechTfbs.ra beta,public
@@ -48,17 +44,20 @@ include wgEncodeCaltechTfbs.release2.ra alpha
 include wgEncodeCaltechHist.ra 
 
 # UW DNaseI DGF (wrangler: Venkat)
-include wgEncodeUwDgf.ra alpha
+include wgEncodeUwDgf.ra
 
 # CSHL Long RNA-Seq (wrangler: Venkat)
-include wgEncodeCshlLongRnaSeq.ra
+include wgEncodeCshlLongRnaSeq.release3.ra
 
 # Caltech RNA-Seq (wrangler: Ruihua)
 #include wgEncodeCaltechRnaSeq.ra alpha
-include wgEncodeCaltechRnaSeq.release1.ra alpha
+include wgEncodeCaltechRnaSeq.release1.ra
 
-# FSU Repli-Seq (wrangler: Venkat)
-include wgEncodeFsuRepliSeq.ra
+# FSU Repli-chip (wrangler: Venkat)
+include wgEncodeFsuRepliChip.ra
 
 # PSU RNA-Seq (wrangler: Venkat)
 include wgEncodePsuRnaSeq.ra
+
+# PSU DNase (wrangler: Venkat)
+include wgEncodePsuDnase.ra

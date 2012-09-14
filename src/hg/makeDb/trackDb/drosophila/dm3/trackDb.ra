@@ -1,3 +1,6 @@
+track blastHg18KG override
+visibility hide
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Low-res)
 longLabel Chromosome Bands (Low-resolution for Chromosome Ideogram)

@@ -30,7 +30,7 @@ if (cgiVarExists("submit"))
         {
 	varName = skipLeadingSpaces(varName);
 	eraseTrailingSpaces(varName);
-	if (sameString(newValue, CART_DUMP_REMOVE_VAR) || sameString(newValue, CART_VAR_EMPTY))
+        if (sameString(newValue, CART_DUMP_REMOVE_VAR) || sameString(newValue, CART_VAR_EMPTY))
 	    cartRemove(cart, varName);
 	else
 	    cartSetString(cart, varName, newValue);
@@ -41,16 +41,16 @@ if (cgiVarExists("submit"))
 if (cgiVarExists("noDisplay"))
     {
     char *trackName = cgiOptionalString("g");
-    if(trackName != NULL && hashNumEntries(oldVars) > 0)
+    if (trackName != NULL && hashNumEntries(oldVars) > 0)
         {
         char *db = cartString(cart, "db");
         struct trackDb *tdb = hTrackDbForTrack(db, trackName);
-        if(tdb != NULL && tdbIsComposite(tdb))
-	    {
-	    struct lm *lm = lmInit(0);
+        if (tdb != NULL && tdbIsComposite(tdb))
+            {
+            struct lm *lm = lmInit(0);
             cartTdbTreeCleanupOverrides(tdb,cart,oldVars,lm);
 	    lmCleanup(&lm);
-	    }
+            }
         }
 
     return;
@@ -64,13 +64,13 @@ if (asTable)
     cartSaveSession(cart);
     printf("<em>Variables can be altered by changing the values and then leaving the field (onchange event will use ajax).\n");
     printf("Enter </em><B><code style='color:%s'>%s</code></B><em> or </em><B><code style='color:%s'>%s</code></B><em> to remove a variable.</em>",
-        COLOR_DARKBLUE,CART_DUMP_REMOVE_VAR,COLOR_DARKBLUE,CART_VAR_EMPTY);
+           COLOR_DARKBLUE,CART_DUMP_REMOVE_VAR,COLOR_DARKBLUE,CART_VAR_EMPTY);
     printf("<BR><em>Add a variable named:</em> ");
     cgiMakeTextVar(vName, "", 12);
     printf(" <em>value:</em> ");
     cgiMakeTextVar(vVal, "", 24);
     printf("&nbsp;");
-    cgiMakeButton("submit", "refresh");// Says refresh but works as a submit.
+    cgiMakeButton("submit", "refresh"); // Says refresh but works as a submit.
     printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
            "<a HREF='../cgi-bin/cartReset?destination=cartDump'><INPUT TYPE='button' VALUE='Reset the cart' style='color:%s;'></a>\n",
            COLOR_RED);
@@ -98,7 +98,7 @@ if (!asTable)
     printf(" ");
     cgiMakeButton("submit", "submit");
     printf("<BR>Put </em><B><code style='color:%s'>%s</code></B><em> in for the new value to clear a variable.</em>",
-        COLOR_DARKBLUE,CART_DUMP_REMOVE_VAR);
+           COLOR_DARKBLUE,CART_DUMP_REMOVE_VAR);
     printf("</FORM>\n");
     }
 printf("<P><em>Cookies passed to</em> %s:<BR>\n%s\n</P>\n",

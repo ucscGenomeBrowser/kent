@@ -956,6 +956,57 @@ struct joinerDtf *filterTables = NULL;
 boolean doJoin = joinRequired(primaryDb, primaryTable,
 			      fieldList, &dtfList, &filterTables);
 
+boolean hasIdentifiers = (identifierFileName() != NULL);
+
+char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
+boolean hasRegions = sameString(regionType, hgtaRegionTypeRange)
+		 ||  sameString(regionType, hgtaRegionTypeEncode)
+		 || (sameString(regionType, hgtaRegionTypeUserRegions) && (userRegionsFileName() != NULL));
+
+if (hasIdentifiers || hasRegions)
+    {
+    boolean hasTable = FALSE;
+    char *dtfDb, *dtfTable;
+    char split[1024];
+    /* Choosing the All Tables group and then choosing a db like hgFixed or go 
+     * causes it to inserts a $db. in front of the table name while leaving the primaryDb as the assembly. 
+     * In effect, the table field is sometimes overloaded to carry this extra database for all tables support. */
+    char *sep = strchr(primaryTable, '.');
+    if (sep)
+	{
+	safecpy(split, sizeof split, primaryTable);
+	sep = strchr(split, '.');
+	*sep++ = 0;
+	dtfDb = split;
+	dtfTable = sep;
+	}
+    else
+	{
+	dtfDb = primaryDb;
+	dtfTable = primaryTable;
+	}
+    /* see if we already have the primary table in output fields or filter */
+    struct joinerDtf *temp;
+    for (temp = dtfList; temp; temp = temp->next)
+	if (sameString(temp->database, dtfDb) && sameString(temp->table, dtfTable))
+	    hasTable = TRUE;
+    for (temp = filterTables; temp; temp = temp->next)
+	if (sameString(temp->database, dtfDb) && sameString(temp->table, dtfTable))
+	    hasTable = TRUE;
+    /* if primary table is not in output or filter, 
+     *  add it to the filterTables list to trigger joining and identifier and/or region filtering */
+    if (!hasTable)
+	{	    
+	struct joinerDtf *dtf;
+	AllocVar(dtf);
+	dtf->database = cloneString(dtfDb);
+	dtf->table = cloneString(dtfTable);
+	slAddTail(&filterTables, dtf);
+	doJoin = TRUE;
+	}
+    }
+
+
 if (! doJoin)
     {
     struct sqlConnection *conn = hAllocConn(dtfList->database);

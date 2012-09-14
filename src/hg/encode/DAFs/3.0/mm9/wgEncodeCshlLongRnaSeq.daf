@@ -1,4 +1,4 @@
-# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.9 $
+# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.13 $
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -36,7 +36,9 @@ compositeSuffix   CshlLongRnaSeq
 group             expression
 variables         cell,age
 assembly          mm9
-validationSettings validateFiles.bam:mismatches=7,nMatch,allowOther
+dataVersion	  2
+dataVersionComment Read 2 had been reverse complimented
+validationSettings validateFiles.bam:mismatches=10,nMatch,allowOther
 
 # Track/view definition
 view             PlusRawSignal
@@ -79,12 +81,43 @@ hasReplicates    no
 required         no
 downloadOnly     yes
 
+view             GeneDeNovo
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes
+
+view             ExonsDeNovo
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes
+
+
 view             Contigs
 type             bedRnaElements
-sql				 bedRnaElements
+sql		 bedRnaElements
 hasReplicates    no
 required         no
 downloadOnly     no
+
+view             ExonsEnsV65
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes
+
+view             GeneEnsV65
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes
+
+view             TranscriptEnsV65
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes
 
 view             ExonsEnsV65IAcuff
 type             gtf
@@ -108,5 +141,10 @@ view             Junctions
 type             bedRnaElements
 sql              bedRnaElements
 hasReplicates    no
+required         no
+
+view             Protocol
+type             document
+hasReplicates    yes
 required         no
 downloadOnly     yes

@@ -462,7 +462,7 @@ html wgEncodeLicrRnaSeq.release2
 	pairEndsByName on
 	showNames 
 	noColorTag .
-	bamColorMode 
+	bamColorMode off
 	bamGrayMode aliQual
 	baseColorDefault diffBases
 	baseColorUseSequence lfExtra

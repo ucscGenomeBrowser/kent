@@ -78,7 +78,7 @@ _EOF_
     screen # use a screen to manage this job
     mkdir /hive/data/genomes/choHof1/bed/simpleRepeat
     cd /hive/data/genomes/choHof1/bed/simpleRepeat
-    # 
+    #
     time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
 	-buildDir=/hive/data/genomes/choHof1/bed/simpleRepeat choHof1 \
 	> do.log 2>&1 &
@@ -119,3 +119,143 @@ _EOF_
 	/hive/data/staging/data/choHof1
     #	request to cluster admin to push this to the kluster nodes
     #	/scratch/data/
+
+###########################################################################
+# cpgIsland - (DONE - 2012-04-23 - Hiram)
+    mkdir /hive/data/genomes/choHof1/bed/cpgIslands
+    cd /hive/data/genomes/choHof1/bed/cpgIslands
+    time doCpgIslands.pl choHof1 > do.log 2>&1
+    # fixing broken command in script:
+    time ./doLoadCpg.csh
+    #   real    4m0.503s
+    # continuing:
+    time doCpgIslands.pl -continue=cleanup choHof1 > cleanup.log 2>&1
+    #   real    135m42.244s
+
+    cat fb.choHof1.cpgIslandExt.txt
+    #   9771165 bases of 2060419685 (0.474%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2011-04-25 - Hiram)
+    mkdir /hive/data/genomes/choHof1/bed/genscan
+    cd /hive/data/genomes/choHof1/bed/genscan
+    time doGenscan.pl choHof1 > do.log 2>&1
+    #   real    1004m5.449s
+
+    cat fb.choHof1.genscan.txt
+    #   41313862 bases of 2060419685 (2.005%) in intersection
+    cat fb.choHof1.genscanSubopt.txt
+    #   37047077 bases of 2060419685 (1.798%) in intersection
+
+#########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    mkdir /hive/data/genomes/choHof1/bed/windowMasker
+    cd /hive/data/genomes/choHof1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev choHof1 > do.log 2>&1
+    #   real    219m35.396s
+    # fixing some broken commands:
+    #   time ./doLoadClean.csh > loadClean.log 2>&1
+    #   real    1460m21.553s
+
+    # fixing some broken commands:
+    time ./lastClean.sh
+    #   real    13m14.689s
+
+    cat fb.choHof1.windowmaskerSdust.beforeClean.txt
+    #   1188087555 bases of 2458927620 (48.317%) in intersection
+    cat fb.choHof1.windowmaskerSdust.clean.txt
+    #   789579620 bases of 2458927620 (32.111%) in intersection
+
+    cat fb.choHof1.rmsk.windowmaskerSdust.txt
+    #   377356167 bases of 2458927620 (15.346%) in intersection
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-03 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Choloepus hoffmanni	7	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add choHof1 just after ce2
+# choHof1 (sloth)
+choHof1.serverGenome = /hive/data/genomes/choHof1/choHof1.2bit
+choHof1.clusterGenome = /scratch/data/choHof1/choHof1.2bit
+choHof1.ooc = /scratch/data/choHof1//choHof1.11.ooc
+choHof1.lift = no
+choHof1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+choHof1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+choHof1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+choHof1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+choHof1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+choHof1.refseq.mrna.native.load = no
+choHof1.refseq.mrna.xeno.load = yes
+choHof1.genbank.mrna.xeno.load = yes
+choHof1.genbank.est.native.load = no
+choHof1.downloadDir = choHof1
+choHof1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding choHof1 and removing blanks at end of line" \
+        etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for choHofNames Choloepus hoffmanni" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S choHof1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial choHof1 &
+    # after setting genbank.mrna.xeno.load = no
+    #   var/build/logs/2012.05.31-10:16:29.choHof1.initalign.log
+    #   real    1472m49.406s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad choHof1 &
+    #	logFile: var/dbload/hgwdev/logs/2012.06.10-16:52:16.dbload.log
+    #   real    10m9.448s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-06-11 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add choHof1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added choHof1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to CHM/CHML/OPN3 gene displays:
+#	(DONE - 2012-07-20 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_5701:20408-28976" where name="choHof1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-20 - Hiram)
+    mkdir /hive/data/genomes/choHof1/pushQ
+    cd /hive/data/genomes/choHof1/pushQ
+    # Mark says don't let the transMap track get there
+    makePushQSql.pl choHof1 2> stderr.txt | grep -v transMap > choHof1.sql
+
+    scp -p choHof1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < choHof1.sql
+
+############################################################################

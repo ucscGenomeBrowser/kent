@@ -1,0 +1,178 @@
+<H2>Description</H2>
+
+<P>This track shows probable binding sites of the specified transcription
+factors (TFs) in the given cell types as determined by chromatin
+immunoprecipitation followed by high throughput sequencing (ChIP-seq).
+Included for each cell type is the input signal, which represents the control
+condition where no antibody targeting was performed.
+For each experiment (cell type vs. antibody) this track shows
+a graph of enrichment for TF binding (<I>Signal</I>), along with
+sites that have the greatest evidence of transcription factor binding (<I>Peaks</I>).
+<P>
+The sequence reads, quality scores, and alignment coordinates from
+these experiments are available for download.
+</P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <A HREF="/goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+ENCODE tracks typically contain one or more of the following views:
+<DL>
+<DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
+(normalized data from pooled replicates). ENCODE Peaks tables contain
+fields for statistical significance,
+including the minimum false discovery rate (FDR) threshold at which the test may be called significant
+(<A HREF="/goldenPath/help/qValue.html" TARGET=_BLANK>qValue</A>).</DD>
+<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
+processed data.</DD>
+</DL>
+<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+
+<H2>Methods</H2>
+<P>
+Cells were grown according to the approved
+<A HREF="/ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
+Further preparations were similar to those previously published
+(Euskirchen <EM>et al.</EM>, 2007) with the exceptions that the cells
+were unstimulated and sodium orthovanadate was omitted from the buffers.
+For details on the chromatin immunoprecipitation protocol used, see
+(Euskirchen <EM>et al.</EM>, 2007) and (Rozowsky <EM>et al.</EM>, 2009).
+</P>
+<P>
+DNA recovered from the precipitated chromatin was sequenced on the Illumina (Solexa)
+sequencing platform and mapped to the genome using the Eland alignment program.
+ChIP-seq data was scored based on sequence reads (length ~30 bp) that align uniquely
+to the human genome. From the mapped tags a signal map of ChIP DNA fragments
+(average fragment length ~ 200 bp) was constructed where the signal height is the number of
+overlapping fragments at each nucleotide position in the genome.
+</P>
+<P>
+For each 1 Mb segment of each chromosome a peak height threshold was
+determined by requiring a false discovery rate less than or equal to 0.05 when comparing the
+number of peaks above threshold as compared the number obtained from multiple
+simulations of a random null background with the same number of mapped
+reads (also accounting for the fraction of mapable bases
+for sequence tags in that 1 Mb segment). The number of mapped tags in a putative
+binding region is compared to the normalized (normalized by correlating tag
+counts
+in genomic 10 kb windows) number of mapped tags in the same region from an input DNA control.
+Using a binomial test, only regions that have a p-value less than or equal to 0.05 are considered to be
+significantly enriched compared to the input DNA control.
+</P>
+
+<h2>Release Notes</h2>
+<p>
+This is Release 3 (August 2012). This release adds in 37 new experiments including 1 new cell line and 7 new antibodies.
+</p>
+
+<H2>Credits</H2>
+<P>These data were generated and analyzed by the labs of
+<A HREF="http://snyderlab.stanford.edu/"
+  class="external text" title="http://snyderlab.stanford.edu/"
+  target="_blank">Michael Snyder</a> at Stanford University;
+<A HREF="http://bioinfo.mbb.yale.edu/"
+  class="external text"
+  title="http://bioinfo.mbb.yale.edu/"
+  target="_blank">Mark Gerstein</a> and
+<A HREF="http://medicine.yale.edu/genetics/index.aspx"
+  class="external text" title="http://medicine.yale.edu/genetics/index.aspx"
+  target="_blank">Sherman Weissman</a> at Yale University;
+<A HREF="http://pibbs.usc.edu/faculty/profile/?fid=205"
+  class="external text" title="http://pibbs.usc.edu/faculty/profile/?fid=205"
+  target="_blank">Peggy Farnham</a> at University of Southern California; and
+<A HREF="http://struhl.med.harvard.edu/"
+  class="external text" title="http://struhl.med.harvard.edu/"
+  target="_blank">Kevin Struhl</a> at Harvard.</P>
+<P>
+Contact:
+<A HREF="mailto:&#112;c&#97;&#121;&#116;&#105;n&#103;&#64;&#115;&#116;&#97;n&#102;o&#114;&#100;.&#101;d&#117;"
+ title="mailto:&#112;c&#97;&#121;&#116;&#105;n&#103;&#64;&#115;&#116;&#97;n&#102;o&#114;&#100;.&#101;d&#117;" rel="nofollow"
+  TARGET=_BLANK>Philip Cayting</A>.
+ <!-- above address is (Philip Cayting) pcayting at stanford.edu -->
+</P>
+
+<H2>References</H2>
+
+<p>
+Cao AR, Rabinovich R, Xu M, Xu X, Jin VX, Farnham PJ.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21310950" target="_blank">
+Genome-wide analysis of transcription factor E2F1 mutant proteins reveals that N- and C-terminal protein interaction domains do not participate in targeting E2F1 to the human genome</a>.
+<em>J Biol Chem</em>. 2011 Apr 8;286(14):11985-96.
+</p>
+
+<p>
+Euskirchen G, Royce TE, Bertone P, Martone R, Rinn JL, Nelson FK, Sayward F, Luscombe NM, Miller P, Gerstein M <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/15082775" target="_blank">
+CREB binds to multiple loci on human chromosome 22</a>.
+<em>Mol Cell Biol</em>. 2004 May;24(9):3804-14.
+</p>
+
+<p>
+Euskirchen GM, Rozowsky JS, Wei CL, Lee WH, Zhang ZD, Hartman S, Emanuelsson O, Stolc V, Weissman S, Gerstein MB <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17568005" target="_blank">
+Mapping of transcription factor binding regions in mammalian cells by ChIP: comparison of array- and sequencing-based technologies</a>.
+<em>Genome Res</em>. 2007 Jun;17(6):898-909.
+</p>
+
+<p>
+Iyengar S, Ivanov AV, Jin VX, Rauscher FJ 3rd, Farnham PJ.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21343339" target="_blank">
+Functional analysis of KAP1 genomic recruitment</a>.
+<em>Mol Cell Biol</em>. 2011 May;31(9):1833-47.
+</p>
+
+<p>
+Martone R, Euskirchen G, Bertone P, Hartman S, Royce TE, Luscombe NM, Rinn JL, Nelson FK, Miller P, Gerstein M <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/14527995" target="_blank">
+Distribution of NF-kappaB-binding sites across human chromosome 22</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Oct 14;100(21):12247-52.
+</p>
+
+<p>
+Robertson G, Hirst M, Bainbridge M, Bilenky M, Zhao Y, Zeng T, Euskirchen G, Bernier B, Varhol R, Delaney A <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17558387" target="_blank">
+Genome-wide profiles of STAT1 DNA association using chromatin immunoprecipitation and massively parallel sequencing</a>.
+<em>Nat Methods</em>. 2007 Aug;4(8):651-7.
+</p>
+
+<p>
+Rozowsky J, Euskirchen G, Auerbach RK, Zhang ZD, Gibson T, Bjornson R, Carriero N, Snyder M, Gerstein MB.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19122651" target="_blank">
+PeakSeq enables systematic scoring of ChIP-seq experiments relative to controls</a>.
+<em>Nat Biotechnol</em>. 2009 Jan;27(1):66-75.
+</p>
+
+<h2>Publications</h2>
+
+<p>
+Kang YA, Sanalkumar R, O'Geen H, Linnemann AK, Chang CJ, Bouhassira EE, Farnham PJ, Keles S, Bresnick EH.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22025678" target="_blank">
+Autophagy driven by a master regulator of hematopoiesis</a>.
+<em>Mol Cell Biol</em>. 2012 Jan;32(1):226-39.
+</p>
+
+<p>
+Krebs AR, Karmodiya K, Lindahl-Allen M, Struhl K, Tora L.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22055187" target="_blank">
+SAGA and ATAC histone acetyl transferase complexes regulate distinct sets of genes and ATAC defines a class of p300-independent enhancers</a>.
+<em>Mol Cell</em>. 2011 Nov 4;44(3):410-23.
+</p>
+
+<p>
+Linnemann AK, O'Geen H, Keles S, Farnham PJ, Bresnick EH.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21808000" target="_blank">
+Genetic framework for GATA factor function in vascular biology</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2011 Aug 16;108(33):13641-6.
+</p>
+
+<H2>Data Release Policy</H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column on the track configuration page and
+the download page.  The full data release policy for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>

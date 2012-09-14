@@ -1,0 +1,106 @@
+# Tracks from the high-coverage sequencing of Denisova: http://www.ncbi.nlm.nih.gov/pubmed/22936568
+
+# Denisova High-Coverage variants
+track dhcVcfDenisovaPinky
+shortLabel Denisova Variants
+longLabel Variant Calls from High-Coverage Genome Sequence of an Archaic Denisovan Individual
+type vcfTabix
+visibility hide
+group denisova
+priority 10
+
+track dhcVcfModern
+compositeTrack on
+shortLabel Mod Hum Variants
+longLabel Variant Calls from 11 Modern Human Genome Sequences
+type vcfTabix
+visibility hide
+group denisova
+priority 11
+
+    track dhcVcfDNK02
+    parent dhcVcfModern
+    shortLabel Dinka Variants
+    longLabel Dinka Individual Variant Calls
+    priority 1
+
+    track dhcVcfHGDP00456
+    parent dhcVcfModern
+    shortLabel Mbuti Variants
+    longLabel Mbuti Individual (HGDP00456) Variant Calls
+    priority 2
+
+    track dhcVcfHGDP00521
+    parent dhcVcfModern
+    shortLabel French Variants
+    longLabel French Individual (HGDP00521) Variant Calls
+    priority 3
+
+    track dhcVcfHGDP00542
+    parent dhcVcfModern
+    shortLabel Papuan Variants
+    longLabel Papuan Individual (HGDP00542) Variant Calls
+    priority 4
+
+    track dhcVcfHGDP00665
+    parent dhcVcfModern
+    shortLabel Sardin. Variants
+    longLabel Sardinian Individual (HGDP00665) Variant Calls
+    priority 5
+
+    track dhcVcfHGDP00778
+    parent dhcVcfModern
+    shortLabel Han Variants
+    longLabel Han Individual (HGDP00778) Variant Calls
+    priority 6
+
+    track dhcVcfHGDP00927
+    parent dhcVcfModern
+    shortLabel Yoruba Variants
+    longLabel Yoruba Individual (HGDP00927) Variant Calls
+    priority 7
+
+    track dhcVcfHGDP00998
+    parent dhcVcfModern
+    shortLabel Karit. Variants
+    longLabel Karitiana Individual (HGDP00998) Variant Calls
+    priority 8
+
+    track dhcVcfHGDP01029
+    parent dhcVcfModern
+    shortLabel San Variants
+    longLabel San Individual (HGDP01029) Variant Calls
+    priority 9
+
+    track dhcVcfHGDP01284
+    parent dhcVcfModern
+    shortLabel Mandenka Variants
+    longLabel Mandenka Individual (HGDP01284) Variant Calls
+    priority 10
+
+    track dhcVcfHGDP01307
+    parent dhcVcfModern
+    shortLabel Dai Variants
+    longLabel Dai Individual (HGDP01307) Variant Calls
+    priority 11
+
+track dhcBamDenisova
+shortLabel Denisova Seq
+longLabel Denisova High-Coverage Sequence Reads
+group denisova
+priority 4
+visibility hide
+type bam
+pairEndsByName on
+showNames off
+noColorTag .
+bamColorMode gray
+bamGrayMode aliQual
+aliQualRange 0:60
+baseColorDefault diffBases
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 100
+maxWindowToDraw 1000000

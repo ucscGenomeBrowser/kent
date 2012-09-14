@@ -763,13 +763,15 @@ for(; list ; list = giNext)
 }
  
 static struct exonInfo *buildGIList(char *database, struct genePred *pred, 
-    char *mafTable)
+    char *mafTable, unsigned options)
 {
 struct exonInfo *giList = NULL;
 unsigned *exonStart = pred->exonStarts;
 unsigned *lastStart = &exonStart[pred->exonCount];
 unsigned *exonEnd = pred->exonEnds;
 int *frames = pred->exonFrames;
+
+boolean includeUtr = options & MAFGENE_INCLUDEUTR;
 
 if (frames == NULL)
     {
@@ -782,34 +784,40 @@ assert(frames != NULL);
 int start = 0;
 
 
-/* first skip 5' UTR */
-for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
+/* first skip 5' UTR if the includeUtr option is not set */
+if (!includeUtr) 
     {
-    int size = *exonEnd - *exonStart;
+    for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
+       {
+       int size = *exonEnd - *exonStart;
 
-    if (*exonStart + size > pred->cdsStart)
-	break;
+       if (*exonStart + size > pred->cdsStart)
+       	   break;
+       }
     }
 
 for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
     {
     struct exonInfo *gi;
     int thisStart = *exonStart;
-
-    if (thisStart > pred->cdsEnd)
-	break;
-
-    if (thisStart < pred->cdsStart)
-	thisStart = pred->cdsStart;
-
     int thisEnd = *exonEnd;
+    
+    if (!includeUtr) 
+        {
+        if (thisStart > pred->cdsEnd)
+	    break;
 
-    if (thisEnd > pred->cdsEnd)
-	thisEnd = pred->cdsEnd;
+        if (thisStart < pred->cdsStart)
+	    thisStart = pred->cdsStart;
 
+
+        if (thisEnd > pred->cdsEnd)
+	    thisEnd = pred->cdsEnd;
+        
+	}
     int thisSize = thisEnd - thisStart;
-    verbose(3, "in %d %d cds %d %d\n",*exonStart,*exonEnd, thisStart, thisEnd);
-
+    if (!includeUtr)
+        verbose(3, "in %d %d cds %d %d\n",*exonStart,*exonEnd, thisStart, thisEnd);
     AllocVar(gi);
     gi->frame = *frames;
     gi->name = pred->name;
@@ -823,9 +831,12 @@ for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
     gi->strand = pred->strand[0];
     start += gi->exonSize;
     slAddHead(&giList, gi);
-
-    if (thisEnd == pred->cdsEnd)
-	break;
+ 
+    if (!includeUtr) 
+        {
+        if (thisEnd == pred->cdsEnd)
+	    break;
+        }
     }
 slReverse(&giList);
 
@@ -844,7 +855,7 @@ if (pred->cdsStart == pred->cdsEnd)
 if (numCols < -1)
     errAbort("Number of columns must be zero or greater.");
 
-struct exonInfo *giList = buildGIList(dbName, pred, mafTable);
+struct exonInfo *giList = buildGIList(dbName, pred, mafTable, options);
 
 if (giList == NULL)
     return;

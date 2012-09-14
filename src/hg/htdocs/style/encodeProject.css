@@ -5,10 +5,13 @@
 /* over-riding alignment so we don't have to nest in a table */
 .topBlueBar {
     text-align: left;
+    background-color: #004D99;
+    position: relative;
 }
 
 body {
     font-family: arial,Geneva,Helvetica,sans-serif;
+    background-color: #fff;
 }
 
 .encodeHeader {

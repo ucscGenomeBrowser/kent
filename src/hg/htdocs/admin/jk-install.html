@@ -30,125 +30,21 @@
 		    <TR><TH HEIGHT=10></TH></TR>
 		    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
-<!--start of INSTALLING---------------------------------------------->
+<p>
+This page is no longer maintained. For the lastest build instructions,
+please see
+<a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/README.building.source"
+target="_blank">src/product/README.building.source</a>.
 
-<P>
-NOTE: These instructions are intended for Unix/Linux systems only.
-Building the source on other systems is beyond the scope of
-these instructions.
-<P>
+<p>
 SEE ALSO: README files in the source tree describing the build process:
-<UL>
-<LI> src/README
-<LI> src/product/README.*
-<LI> src/hg/makeDb/trackDB/README
-<LI> src/hg/makeDb/doc/&lt;db&gt;.txt  (plain text files)
-</UL>
-<P>
-<OL>
-<LI>
-Check that the environment variable MACHTYPE exists on your system.
-It should be present on Unix systems. On Linux systems, MACHTYPE will probably 
-be <em>i686</em>, and for a Sun it will probably be <em>sparc</em>. If 
-necessary, set this environment variable in your shell environment:<BR>
-<TT>MACHTYPE=i686</TT><BR>
-It should be a simple non-hyphenated word such as: 
-<TT>i386 i686 sparc alpha x86_64 ppc, etc...</TT>
-</P>
-<P>
-<LI>
-Create a subdirectory named <em>/bin/$MACHTYPE</em> in your home directory. 
-During the build, binaries will be moved to this subdirectory. <BR> 
-<TT>
-	$ mkdir ~/bin/$MACHTYPE
-</TT>
-<P>
-<LI>
-Set the MYSQLINC and MYSQLLIBS environment variables:
-<OL type=a>
-<P>
-<LI>
-MYSQLINC should be set to point to the mySQL include files. For example:<BR>
-<TT>MYSQLINC=/usr/include/mysql</TT><BR>
--or-<BR>
-<TT>MYSQLINC=/usr/local/mysql/include</TT>
-<P>
-<LI>
-MYSQLLIBS should point to the location of
-the <em>libmysqlclient.a</em> library and any other libraries needed on
-your platform to link network applications.<BR>
-<TT>MYSQLLIBS='/usr/lib/mysql/libmysqlclient.a -lz'</TT>
-<P>
-For example, Solaris often needs:<BR>
-<TT>MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz -lsocket -lnsl'</TT> 
-<LI>
-If available, the commands<BR>
-<TT>mysql_config --libs</TT><BR>
-<TT>mysql_config --include</TT><BR>
-will display the appropriate arguments to use in these environment variables.
-</OL>
-<P>
-<LI>
-Create a directory named <em>jksrc</em> and go to it.
-<P>
-<LI>
-Unzip <em>jksrc.zip</em>. This creates the source hierarchy <em>./kent</em> (the source 
-tree is also available via <A HREF="git.html">Git</A>).
-<P>
-<LI>
-Go to the <em>kent/src</em> directory and type: <TT>make libs</TT>. This builds 
-the libraries from the source directories:
-	<UL>
-	<LI> jkweb.a from <em>kent/src/lib</em>
-	<LI> jkOwnLib.a from <em>kent/src/jkOwnLib</em>
-	<LI> jkhgap.a from <em>kent/src/hg/lib</em>
-	<LI> jkhpap.a from <em>kent/src/hg/protein/lib</em>
-	</UL>
-Placing those lib.a files into <em>src/lib/$MACHTYPE</em>
-</P>
-<P>
-<LI>
-Go to the <em>kent/src/hg</em> directory and type: <TT>make compile</TT>.
-</P>
-<P>
-Then, type: 
-<TT>make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path</TT>.  
-</P>
-<P>
-The resulting binaries are moved to <em>/destination/prefix/cgi-bin/path</em>, 
-with additional data and custom track loader binaries also being installed
-in this cgi-bin hierarchy.
-</P>
-<P>Pre-compiled Red-Hat (2.6.12-1.1381_FC3smp) AMD Opteron x86_64 64-bit
-binaries can be fetched with the rsync command:<BR><BR>
-<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGI_BIN/ </TT><BR><BR>
-There are a number of data files that are also used in this directory.
-This rsync will fetch them all.  If you need i386 (x86) 32-bit binaries, please
-use the following rsync in addition to and after the above rsync,
-to replace the 64 bit binaries:<BR><BR>
-<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ $CGI_BIN/ </TT>
-<P>
-<LI>
-Many other programs are available in the source tree. For any particular 
-program, go to its source directory and type: <TT>make</TT>.  The resulting 
-binary will be moved to your subdirectory <em>~/bin/$MACHTYPE</em> as a 
-convenience.  You can move these files elsewhere as desired. 
-<P>
-There are hundreds of utilities used for processing genome assemblies
-and preparing data for creating tracks in the browser.  The file 
-<em>./kent/src/README</em> is a general guideline to the major processing
-categories in the source tree file.
-</P>
-<P>
-To see examples of how the various programs are used and
-how tracks are created, examine any of the <em>&lt;db&gt;.txt</em> files in
-<em>./kent/src/hg/makeDb/doc/&lt;db&gt;.txt</em> (these are ordinary text
-files, not Microsoft word doc files).
-</P>
-</OL>
-<P>
-
-<!--end of INSTALLING---------------------------------------------->
+<ul>
+<li> <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/README" target="_blank">src/README</a></li>
+<li> <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product" target="_blank">src/product/README.*</a></li>
+<li> <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/hg/makeDb/trackDb/README" target="_blank">src/hg/makeDb/trackDB/README</a></li>
+<li> <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/hg/makeDb/doc" target="_blank">src/hg/makeDb/doc/&lt;db&gt;.txt</a> (plain text files)</li>
+</ul>
+</p>
 
 <HR WIDTH="100%">
 <em>Should you have any comments or questions, please contact

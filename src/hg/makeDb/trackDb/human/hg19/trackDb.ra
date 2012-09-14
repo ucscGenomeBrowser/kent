@@ -3,6 +3,7 @@
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
+include trackDb.denisova.ra
 
 #large composites
 include uMassBrainHistone.ra
@@ -58,14 +59,8 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track gwasCatalog override
-snpTable snp132
-snpVersion 132
-release beta,public
-
-track gwasCatalog override
 snpTable snp135
 snpVersion 135
-release alpha
 
 track ucscRetroAli1
 release alpha
@@ -814,14 +809,8 @@ html hg19mammalChainNet
         type chain felCat4
         otherDb felCat4
 
-        track chainCanFam2
-    #replaces record chainCanFam2 in parent dir missing/extra priority
-        subTrack placentalChainNetViewchain off
-        subGroups view=chain species=pDog clade=bLaura
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain canFam2
-        otherDb canFam2
+include chainCanFam2.ra beta,public
+include chainCanFam3.ra alpha
 
         track chainDasNov2
         subTrack placentalChainNetViewchain off
@@ -847,13 +836,13 @@ html hg19mammalChainNet
         type chain myoLuc1
         otherDb myoLuc1
 
-        track chainBosTau6
+        track chainBosTau7
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=lCow clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain bosTau6
-        otherDb bosTau6
+        type chain bosTau7
+        otherDb bosTau7
 
         track chainCavPor3
         subTrack placentalChainNetViewchain off
@@ -905,13 +894,13 @@ html hg19mammalChainNet
         type chain echTel1
         otherDb echTel1
 
-        track chainMm9
+        track chainMm10
         subTrack placentalChainNetViewchain on 
         subGroups view=chain species=bMouse clade=aEuarch
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain mm9
-        otherDb mm9
+        type chain mm10
+        otherDb mm10
 
         track chainRn4
         subTrack placentalChainNetViewchain off
@@ -1035,14 +1024,8 @@ html hg19mammalChainNet
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
-        track netCanFam2
-    #replaces record netCanFam2 in parent dir missing/extra priority
-        subTrack placentalChainNetViewnet on 
-        subGroups view=net species=pDog clade=bLaura
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign canFam2 chainCanFam2
-        otherDb canFam2
+include netCanFam2.ra beta,public
+include netCanFam3.ra alpha
 
         track netDasNov2
         subTrack placentalChainNetViewnet on 
@@ -1068,13 +1051,13 @@ html hg19mammalChainNet
         type netAlign myoLuc1 chainMyoLuc1
         otherDb myoLuc1
 
-        track netBosTau6
+        track netBosTau7
         subTrack placentalChainNetViewnet on 
         subGroups view=net species=lCow clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign bosTau6 chainBosTau6
-        otherDb bosTau6
+        type netAlign bosTau7 chainBosTau7
+        otherDb bosTau7
 
         track netCavPor3
         subTrack placentalChainNetViewnet off
@@ -1126,13 +1109,13 @@ html hg19mammalChainNet
         type netAlign echTel1 chainEchTel1
         otherDb echTel1
 
-        track netMm9
+        track netMm10
         subTrack placentalChainNetViewnet on
         subGroups view=net species=bMouse clade=aEuarch
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign mm9 chainMm9
-        otherDb mm9
+        type netAlign mm10 chainMm10
+        otherDb mm10
 
         track netRn4
         subTrack placentalChainNetViewnet on 
@@ -1180,7 +1163,7 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken fZebra_Finch=Zebra_Finch gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
+subGroup2 species Species aWallaby=Wallaby bOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbZebra_Finch=Zebra_Finch gLizard=Lizard hX_Tro=X._tropicalis iTetraodon=Tetraodon jFugu=Fugu kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nLamprey=Lamprey
 subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
@@ -1242,9 +1225,17 @@ html hg19vertChainNet
         type chain galGal3
         otherDb galGal3
 
+        track chainGeoFor1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=faMedium_Ground_Finch clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain geoFor1
+        otherDb geoFor1
+
         track chainTaeGut1
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=fZebra_Finch clade=bDino
+        subGroups view=chain species=fbZebra_Finch clade=bDino
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain taeGut1
@@ -1360,9 +1351,17 @@ html hg19vertChainNet
         type netAlign galGal3 chainGalGal3
         otherDb galGal3
 
+        track netGeoFor1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=faMedium_Ground_Finch clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign geoFor1 chainGeoFor1
+        otherDb geoFor1
+
         track netTaeGut1
         subTrack vertebrateChainNetViewnet off
-        subGroups view=net species=fZebra_Finch clade=bDino
+        subGroups view=net species=fbZebra_Finch clade=bDino
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign taeGut1 chainTaeGut1
@@ -1636,6 +1635,96 @@ priority 103.29
         color 170,100,50
         type bed 5 .
         priority 23
+
+track snp137Common
+shortLabel Common SNPs(137)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Found in >= 1% of Samples
+group varRep
+priority 99.0901
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp137Seq
+snpExceptionDesc snp137ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+snpSeqFile /gbdb/hg19/snp/snp137.fa
+chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp137CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp137CodingDbSnp dbSNP
+
+track snp137Flagged
+shortLabel Flagged SNPs(137)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Flagged by dbSNP as Clinically Assoc
+group varRep
+priority 99.0902
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp137Seq
+snpExceptionDesc snp137ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+snpSeqFile /gbdb/hg19/snp/snp137.fa
+chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp137CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp137CodingDbSnp dbSNP
+
+track snp137Mult
+shortLabel Mult. SNPs(137)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 137) That Map to Multiple Genomic Loci
+group varRep
+priority 99.0903
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp137Seq
+snpExceptionDesc snp137ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+snpSeqFile /gbdb/hg19/snp/snp137.fa
+chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp137CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp137CodingDbSnp dbSNP
+
+track snp137
+shortLabel All SNPs(137)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 137)
+group varRep
+priority 99.0904
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+snpSeqFile /gbdb/hg19/snp/snp137.fa
+chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp137CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp137CodingDbSnp dbSNP
 
 track snp135Common override
 snpSeqFile /gbdb/hg19/snp/snp135.fa
@@ -1947,6 +2036,14 @@ track pgSaqqaqHc override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
+track tgpPhase1
+shortLabel 1000Genomes Ph 1
+longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, InDels, SVs
+type vcfTabix
+group varRep
+priority 99.1
+visibility hide
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 searchTable nscanGene
 searchType genePred
@@ -1983,7 +2080,7 @@ longLabel Vega Annotations
 group genes
 priority 37.1
 visibility hide
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chr6_apd_hap1,chr6_cox_hap2,chr6_dbb_hap3,chr6_mann_hap4,chr6_mcf_hap5,chr6_qbl_hap6,chr6_ssto_hap7
 type genePred vegaPep
 urlLabel Vega Transcript:
 url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
@@ -2053,8 +2150,8 @@ compositeTrack on
 group expression
 shortLabel Affy Exon Array
 longLabel Affymetrix $Organism Exon Array Probes and Probesets
-subGroup1 view Views 1-Probeset=Probeset 2-Probe=Probe
-subGroup2 level Level 1-Core=Core 2-Extended=Extended 3-Full=Full 4-Free=Free 5-Ambiguous=Ambiguous 
+subGroup1 view Views v1Probeset=Probeset v2Probe=Probe
+subGroup2 level Level L1Core=Core L2Extended=Extended L3Full=Full L4Free=Free L5Ambiguous=Ambiguous 
 sortOrder level=+ view=+ 
 dimensions dimensionX=level dimensionY=view
 dragAndDrop subTracks
@@ -2065,12 +2162,12 @@ type bed 12
 
     track affyExonProbeset
     parent affyExonArray
-    view 1-Probeset
+    view v1Probeset
     visibility dense
 
         track affyExonProbesetCore
         parent affyExonProbeset
-        subGroups view=1-Probeset level=1-Core
+        subGroups view=v1Probeset level=L1Core
         shortLabel Core PS
         longLabel Affymetrix $Organism Exon Array Core Probesets 
         # royalblue
@@ -2078,7 +2175,7 @@ type bed 12
 
         track affyExonProbesetExtended
         parent affyExonProbeset
-        subGroups view=1-Probeset level=2-Extended
+        subGroups view=v1Probeset level=L2Extended
         shortLabel Extended PS
         longLabel Affymetrix $Organism Exon Array Extended Probesets
         # chocolate 4
@@ -2086,7 +2183,7 @@ type bed 12
 
         track affyExonProbesetFull
         parent affyExonProbeset off
-        subGroups view=1-Probeset level=3-Full
+        subGroups view=v1Probeset level=L3Full
         shortLabel Full PS
         longLabel Affymetrix $Organism Exon Array Full Probesets
         # deeppink
@@ -2094,7 +2191,7 @@ type bed 12
 
         track affyExonProbesetFree 
         parent affyExonProbeset off
-        subGroups view=1-Probeset level=4-Free
+        subGroups view=v1Probeset level=L4Free
         shortLabel Free PS
         longLabel Affymetrix $Organism Exon Array Free Probesets
         # darkgreen
@@ -2102,7 +2199,7 @@ type bed 12
 
         track affyExonProbesetAmbiguous 
         parent affyExonProbeset off
-        subGroups view=1-Probeset level=5-Ambiguous
+        subGroups view=v1Probeset level=L5Ambiguous
         shortLabel Ambiguous PS
         longLabel Affymetrix $Organism Exon Array Ambiguous Probesets
         # orchid 
@@ -2110,12 +2207,12 @@ type bed 12
 
     track affyExonProbe
     parent affyExonArray
-    view 2-Probe
+    view v2Probe
     visibility dense
 
         track affyExonProbeCore 
         parent affyExonProbe off
-        subGroups view=2-Probe level=1-Core
+        subGroups view=v2Probe level=L1Core
         shortLabel Core Probes
         longLabel Affymetrix $Organism Exon Array Core Probes
         # royalblue
@@ -2124,7 +2221,7 @@ type bed 12
 
         track affyExonProbeExtended 
         parent affyExonProbe off
-        subGroups view=2-Probe level=2-Extended
+        subGroups view=v2Probe level=L2Extended
         shortLabel Extended Probes
         longLabel Affymetrix $Organism Exon Array Extended Probes
         # chocolate 4
@@ -2133,7 +2230,7 @@ type bed 12
 
         track affyExonProbeFull 
         parent affyExonProbe off
-        subGroups view=2-Probe level=3-Full
+        subGroups view=v2Probe level=L3Full
         shortLabel Full Probes
         longLabel Affymetrix $Organism Exon Array Full Probes
         # deep pink
@@ -2142,7 +2239,7 @@ type bed 12
 
         track affyExonProbeFree 
         parent affyExonProbe off
-        subGroups view=2-Probe level=4-Free
+        subGroups view=v2Probe level=L4Free
         shortLabel Free Probes
         longLabel Affymetrix $Organism Exon Array Free Probes
         # darkgreen
@@ -2151,7 +2248,7 @@ type bed 12
 
         track affyExonProbeAmbiguous 
         parent affyExonProbe off
-        subGroups view=2-Probe level=5-Ambiguous
+        subGroups view=v2Probe level=L5Ambiguous
         shortLabel Ambiguous Probes
         longLabel Affymetrix $Organism Exon Array Ambiguous Probes
         # orchid
@@ -2193,6 +2290,8 @@ track wgRna override
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
 include altSeqComposite5.ra
+
+include altSeqComposite9.ra
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
@@ -2832,6 +2931,24 @@ type bigWig -15 7
 autoScale on
 maxHeightPixels 128:64:20
 
+track multizBasal
+#subTrack consDinoViewalign on
+shortLabel Basal Align
+longLabel Basal Alignments of 7 
+#subGroups view=align clade=vert
+noInherit on
+irows on
+summary multizBasalSummary
+frames multiz46wayFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault hg19
+#speciesOrder ornAna1 galGal3 taeGut1 anoCar2 pytMol0 chrPic0 pelSin0 cheMyd0 allMis0
+speciesOrder mm9 bosTau4 monDom5 anoCar1 galGal3 xenTro2 danRer6 fr2 gasAcu1 oryLat2 calMil0
+priority 100
+
 track multizDino
 #subTrack consDinoViewalign on
 shortLabel Dino Align
@@ -2946,3 +3063,34 @@ urlLabel SIB link:
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg19&species=H.+sapiens&tromer=$$
 
+searchTable snp137Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9885
+padding 250
+
+searchTable snp137Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9886
+padding 250
+
+searchTable snp137Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9887
+padding 250
+
+searchTable snp137
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9888
+padding 250

@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db pteVam1
+clade mammal
+genomeCladePriority 35
+scientificName Pteropus vampyrus
+commonName Megabat
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute
+assemblyShortLabel PteVam1.0
+orderKey 2520
+mitoAcc none
+fastaFiles /cluster/data/pteVam1/broad/assembly.bases.gz
+agpFiles /cluster/data/pteVam1/broad/assembly.agp
+qualFiles /cluster/data/pteVam1/broad/pteVam1.qual.qac
+dbDbSpeciesDir megabat
+photoCreditURL http://en.wikipedia.org/wiki/File:Pteropus_vampyrus1.jpg
+photoCreditName Raul654, Wikipedia Commons
+ncbiGenomeId 757
+ncbiAssemblyId 175198
+ncbiAssemblyName ASM15184v1
+ncbiBioProject 20325
+genBankAccessionID GCA_000151845.1
+taxId 132908

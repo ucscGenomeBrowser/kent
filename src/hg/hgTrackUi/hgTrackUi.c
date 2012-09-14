@@ -42,6 +42,7 @@
 #include "bbiFile.h"
 #include "ensFace.h"
 #include "microarray.h"
+#include "trackVersion.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
@@ -229,6 +230,56 @@ cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedAttribut
 printf("</TD></TR>\n");
 }
 
+static char *commaSepFromSqlSetTypeDecl(struct sqlFieldInfo *fi, char *table)
+/* Destructively prepare fi->type for chopCommas: strip initial "set(" and final ")",
+ * informatively errAborting if not found, and strip the single-quote characters
+ * that mysql puts around each field. */
+{
+if (!startsWith("set(", fi->type))
+    errAbort("Expected %s.%s's type to begin with 'set(' but got '%s'",
+	     table, fi->field, fi->type);
+char *vals = fi->type + strlen("set(");
+char *rightParen = strrchr(vals, ')');
+if (rightParen == NULL || rightParen[1] != '\0')
+    errAbort("Expected %s.%s's type to end with ')' but got '%s'",
+	     table, fi->field, fi->type);
+else
+    *rightParen = '\0';
+stripChar(vals, '\'');
+return vals;
+}
+
+static void snp137PrintFunctionFilterControls(struct trackDb *tdb)
+/* As of snp137, show func filter choices based on sql field set
+ * values and Sequence Ontology (SO) terms so we won't have to
+ * hardcode menus as new functional categories are added. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlFieldInfo *fi, *fiList = sqlFieldInfoGet(conn, tdb->table);
+hFreeConn(&conn);
+for (fi = fiList;  fi != NULL;  fi = fi->next)
+    {
+    if (sameString(fi->field, "func"))
+	{
+	char *vals = commaSepFromSqlSetTypeDecl(fi, tdb->table);
+	char *values[128]; // 22 values as of snp137
+	int valCount = chopCommas(vals, values);
+	char *labels[valCount];
+	int i;
+	for (i = 0;  i < valCount;  i++)
+	    {
+	    if (sameString(values[i], "unknown"))
+		labels[i] = "Unknown";
+	    else
+		labels[i] = snpMisoLinkFromFunc(values[i]);
+	    }
+	snp125PrintFilterControls(tdb->track, "Function", "func", labels, values, valCount);
+	return;;
+	}
+    }
+errAbort("Didn't find definition of func field in %s", tdb->table);
+}
+
 static void snp125PrintFilterControlSection(struct trackDb *tdb, int version)
 /* Print a collapsible section of filtering controls on SNP properties, first numeric
  * and then enum/set. */
@@ -300,15 +351,23 @@ snp125PrintFilterControls(tdb->track, "Class", "class", snp125ClassLabels,
 			  snp125ClassDataName, snp125ClassArraySize);
 snp125PrintFilterControls(tdb->track, "Validation", "valid", snp125ValidLabels,
 			  snp125ValidDataName, snp125ValidArraySize);
-int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
-snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
-			  snp125FuncDataName, funcArraySize);
+if (version < 137)
+    {
+    int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+    snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
+			      snp125FuncDataName, funcArraySize);
+    }
+else
+    snp137PrintFunctionFilterControls(tdb);
 snp125PrintFilterControls(tdb->track, "Molecule Type", "molType", snp125MolTypeLabels,
 			  snp125MolTypeDataName, snp125MolTypeArraySize);
 if (version >= 132)
     {
+    int excArraySize = snp132ExceptionArraySize;
+    if (version < 135)
+	excArraySize -= 2;
     snp125PrintFilterControls(tdb->track, "Unusual Conditions (UCSC)", "exceptions",
-		      snp132ExceptionLabels, snp132ExceptionVarName, snp132ExceptionArraySize);
+		      snp132ExceptionLabels, snp132ExceptionVarName, excArraySize);
     snp125PrintFilterControls(tdb->track, "Miscellaneous Attributes (dbSNP)", "bitfields",
 		      snp132BitfieldLabels, snp132BitfieldDataName, snp132BitfieldArraySize);
     }
@@ -452,43 +511,50 @@ if (version > 127 && colorSourceCart == snp125ColorSourceLocType)
     colorSourceCart = SNP125_DEFAULT_COLOR_SOURCE;
 switch (colorSourceCart)
     {
-    int funcArraySize;
+    int funcArraySize, excArraySize;
     case snp125ColorSourceLocType:
-	snp125PrintColorSpec(tdb->track, "locType", snp125LocTypeOldColorVars, TRUE,
-			     snp125LocTypeLabels, snp125LocTypeDefault, snp125LocTypeArraySize);
-	break;
+                snp125PrintColorSpec(tdb->track, "locType", snp125LocTypeOldColorVars, TRUE,
+                                     snp125LocTypeLabels, snp125LocTypeDefault,
+                                     snp125LocTypeArraySize);
+                break;
     case snp125ColorSourceClass:
-    snp125PrintColorSpec(tdb->track, "class", snp125ClassOldColorVars, TRUE,
-			 snp125ClassLabels, snp125ClassDefault, snp125ClassArraySize);
-	break;
+                snp125PrintColorSpec(tdb->track, "class", snp125ClassOldColorVars, TRUE,
+                                     snp125ClassLabels, snp125ClassDefault, snp125ClassArraySize);
+                break;
     case snp125ColorSourceValid:
-    snp125PrintColorSpec(tdb->track, "valid", snp125ValidOldColorVars, TRUE,
-			 snp125ValidLabels, snp125ValidDefault, snp125ValidArraySize);
-	break;
+                snp125PrintColorSpec(tdb->track, "valid", snp125ValidOldColorVars, TRUE,
+                                     snp125ValidLabels, snp125ValidDefault, snp125ValidArraySize);
+                break;
     case snp125ColorSourceFunc:
-	funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
-    snp125PrintColorSpec(tdb->track, "func", snp125FuncOldColorVars, TRUE,
-			 snp125FuncLabels, snp125FuncDefault, funcArraySize);
-	break;
+                funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+                snp125PrintColorSpec(tdb->track, "func", snp125FuncOldColorVars, TRUE,
+                                     snp125FuncLabels, snp125FuncDefault, funcArraySize);
+                break;
     case snp125ColorSourceMolType:
-    snp125PrintColorSpec(tdb->track, "molType", snp125MolTypeOldColorVars, TRUE,
-			 snp125MolTypeLabels, snp125MolTypeDefault, snp125MolTypeArraySize);
-	break;
+                snp125PrintColorSpec(tdb->track, "molType", snp125MolTypeOldColorVars, TRUE,
+                                     snp125MolTypeLabels, snp125MolTypeDefault,
+                                     snp125MolTypeArraySize);
+                break;
     case snp125ColorSourceExceptions:
-    snp125PrintColorSpec(tdb->track, "exceptions", snp132ExceptionVarName, FALSE,
-			 snp132ExceptionLabels, snp132ExceptionDefault, snp132ExceptionArraySize);
-	break;
+		excArraySize = snp132ExceptionArraySize;
+		if (version < 135)
+		    excArraySize -= 2;
+                snp125PrintColorSpec(tdb->track, "exceptions", snp132ExceptionVarName, FALSE,
+                                     snp132ExceptionLabels, snp132ExceptionDefault,
+                                     excArraySize);
+                break;
     case snp125ColorSourceBitfields:
-    snp125PrintColorSpec(tdb->track, "bitfields", snp132BitfieldVarName, FALSE,
-			 snp132BitfieldLabels, snp132BitfieldDefault, snp132BitfieldArraySize);
-	break;
+                snp125PrintColorSpec(tdb->track, "bitfields", snp132BitfieldVarName, FALSE,
+                                     snp132BitfieldLabels, snp132BitfieldDefault,
+                                     snp132BitfieldArraySize);
+                break;
     case snp125ColorSourceAlleleFreq:
-	printf("<P>Items are be colored by allele frequency on a red-blue spectrum, "
-	       "with red representing rare alleles and blue representing common alleles. "
-	       "Items with no allele frequency data are colored black.</P>");
-	break;
+                printf("<P>Items are be colored by allele frequency on a red-blue spectrum, "
+                       "with red representing rare alleles and blue representing common alleles. "
+                       "Items with no allele frequency data are colored black.</P>");
+                break;
     default:
-	errAbort("Unrecognized value of enum snp125ColorSource (%d)", colorSourceCart);
+                errAbort("Unrecognized value of enum snp125ColorSource (%d)", colorSourceCart);
     }
 jsEndCollapsibleSection();
 }
@@ -633,7 +699,7 @@ if (tdbIsComposite(tdb))
     {
     printf("<BR>&nbsp;&nbsp;&nbsp;");
     struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
-    slSort(tdbRefList, trackDbRefCmp);
+    slSort(&tdbRefList, trackDbRefCmp);
     struct slRef *tdbRef;
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	{
@@ -641,7 +707,8 @@ if (tdbIsComposite(tdb))
 	if (hTableExists(database, subTdb->table))
 	    {
 	    safef(var, sizeof(var), "%s_inv", subTdb->track);
-	    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault));
+	    cgiMakeCheckBoxJS(var, cartUsualBoolean(cart, var, ldInvDefault),
+			      "class='subtrackInCompositeUi'");
 	    printf("&nbsp;Invert display for %s<BR>&nbsp;&nbsp;\n",
 		   subTdb->longLabel);
 	    }
@@ -1611,7 +1678,7 @@ if (sameString(tdb->track, "refGene"))
 
 /* Put up label line  - boxes for gene, accession or maybe OMIM. */
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "gene", "gene", TRUE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 if (omimAvail != 0)
     {
@@ -2013,8 +2080,10 @@ tnfgVis = hTvFromString(visString);
 printf("<b>Transfrags Display Mode: </b>");
 hTvDropDown("hgt.affyPhase2.tnfg", tnfgVis, TRUE);
 
-wigCfgUi(cart,tdb,tdb->track,"<span style='text-decoration:underline;'>Graph Plotting options:</span>",FALSE);
-printf("<p><b><span style='text-decoration:underline;'>View/Hide individual cell lines:</span></b>");
+wigCfgUi(cart,tdb,tdb->track,
+         "<span style='text-decoration:underline;'>Graph Plotting options:</span>",FALSE);
+printf("<p><b><span style='text-decoration:underline;'>"
+       "View/Hide individual cell lines:</span></b>");
 }
 
 void humMusUi(struct trackDb *tdb, int optionNum )
@@ -2258,7 +2327,8 @@ else
     }
 
 static char *orthoMenu[] =
-    { "no filter",
+    {
+      "no filter",
       "available",
       "matches major human allele",
       "matches minor human allele",
@@ -2385,7 +2455,8 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
     #define BUTTON_PLUS_SUPER()  printf(BUTTON_SUPER,"true", '+')
     #define BUTTON_MINUS_SUPER() printf(BUTTON_SUPER,"false",'-')
 #else///ifndef BUTTONS_BY_CSS
-    #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" id='btn_%s' src='../images/%s'>"
+    #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" " \
+                             "id='btn_%s' src='../images/%s'>"
     #define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
     #define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
 #endif///ndef BUTTONS_BY_CSS
@@ -2409,23 +2480,25 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("<TR><TD NOWRAP>");
     if (!tdbIsDownloadsOnly(tdb))
         {
-        enum trackVisibility tv = hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
+        enum trackVisibility tv =
+                hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
         // Don't use cheapCgi code... no name and no boolshad... just js
-        printf("<INPUT TYPE=CHECKBOX id='%s' onchange='superT.childChecked(this);'%s>",tdb->track,(tv != tvHide?" CHECKED":""));
+        printf("<INPUT TYPE=CHECKBOX id='%s' onchange='superT.childChecked(this);'%s>",
+               tdb->track,(tv != tvHide?" CHECKED":""));
         hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
                                         (tv == tvHide ? "hiddenText":"normalText"),
                                         trackDbSetting(tdb, "onlyVisibility"),
                                         "onchange='superT.selChanged(this);'");
         printf("</TD>\n<TD>");
-        printf("<A HREF='%s?%s=%u&c=%s&g=%s' onclick='return superT.submitAndLink(this);'>%s</A>&nbsp;",
-                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
-                cartSessionVarName(), cartSessionId(cart),
-                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
+        printf("<A HREF='%s?%s=%u&c=%s&g=%s' onclick='return superT.submitAndLink(this);'>"
+               "%s</A>&nbsp;", (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
+               cartSessionVarName(), cartSessionId(cart),
+               chromosome, cgiEncode(tdb->track), tdb->shortLabel);
         }
     else
         {
         printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
-                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
+               hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
         printf("</TD>\n<TD>");
         printf("%s&nbsp;",tdb->shortLabel);
         }
@@ -2436,20 +2509,19 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         printf("%s&nbsp;",tdb->shortLabel);
     else
         printf("<A HREF='%s?%s=%u&c=%s&g=%s'>%s</A>&nbsp;",
-                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
-                cartSessionVarName(), cartSessionId(cart),
-                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
+               (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
+               cartSessionVarName(), cartSessionId(cart),
+               chromosome, cgiEncode(tdb->track), tdb->shortLabel);
     printf("</TD><TD>");
     if (tdbIsDownloadsOnly(tdb))
         {
         printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
-                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
+               hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
         }
     else
         {
         enum trackVisibility tv =
-                        hTvFromString(cartUsualString(cart, tdb->track,
-                                                hStringFromTv(tdb->visibility)));
+                hTvFromString(cartUsualString(cart, tdb->track, hStringFromTv(tdb->visibility)));
         hTvDropDownClassVisOnly(tdb->track, tv, tdb->canPack,
                                 tv == tvHide ?  "hiddenText" : "normalText",
                                 trackDbSetting(tdb, "onlyVisibility"));
@@ -2516,8 +2588,8 @@ else if (sameString(track, "snp"))
 else if (snpVersion(track) >= 125)
     snp125Ui(tdb);
 else if (sameString(track, "rertyHumanDiversityLd")
-     ||	 startsWith("hapmapLd", track)
-     ||	 sameString(tdb->type, "ld2"))
+     ||  startsWith("hapmapLd", track)
+     ||  sameString(tdb->type, "ld2"))
     ldUi(tdb);
 else if (sameString(track, "cbr_waba"))
     cbrWabaUi(tdb);
@@ -2651,7 +2723,7 @@ else if (tdb->type != NULL)
         chromGraphUi(tdb);
     else if (startsWith("sample", tdb->type))
         genericWiggleUi(tdb,7);
-    else if (startsWithWord("array",tdb->type)) /* not quite the same as an "expRatio" type (custom tracks) */
+    else if (startsWithWord("array",tdb->type)) // not quite the same as "expRatio" (custom tracks)
         expRatioCtUi(tdb);
     else if (startsWithWord("factorSource",tdb->type))
         factorSourceUi(database,tdb);
@@ -2659,7 +2731,8 @@ else if (tdb->type != NULL)
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
     {
-    // Composites *might* have had their top level controls just printed, but almost certainly have additional controls
+    // Composites *might* have had their top level controls just printed,
+    // but almost certainly have additional controls
     if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
         hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 
@@ -2695,8 +2768,8 @@ if (!ajax)
     webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
-    jsonHashAddString(NULL, "track", tdb->track);
-    jsonHashAddString(NULL, "db", database);
+    jsonObjectAdd(NULL, "track", newJsonString(tdb->track));
+    jsonObjectAdd(NULL, "db", newJsonString(database));
     }
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];
@@ -2718,11 +2791,13 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     else
         {
         struct trackDb *tdbParent = tdb->parent;
-        for (;tdbParent && (tdbParent->html == NULL || tdbParent->html[0] == 0); tdbParent = tdbParent->parent )
+        for (;tdbParent && (tdbParent->html == NULL || tdbParent->html[0] == 0);
+              tdbParent = tdbParent->parent )
             ; // Get the first parent that has html
         if (tdbParent != NULL && tdbParent->html != NULL && tdbParent->html[0])
             {
-            printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",COLOR_DARKGREEN,tdbParent->shortLabel);
+            printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",
+                   COLOR_DARKGREEN,tdbParent->shortLabel);
             puts(tdbParent->html);
             }
         else
@@ -2731,7 +2806,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
-if(tdbIsContainer(tdb))
+if (tdbIsContainer(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
     // NOTE: if you want track vis to not be reset, move to after vis dropdown
@@ -2761,13 +2836,14 @@ if (sameWord(tdb->track,"ensGene"))
     else
         safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
 
-    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
     {
     if (trackDbSetting(tdb, "wgEncode"))
-        printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
-    printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+        printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
+               "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
+    printf("<B style='font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
     }
 /* Print link for parent track */
@@ -2776,9 +2852,11 @@ if (!ajax)
     if (tdb->parent)
         {
         char *encodedMapName = cgiEncode(tdb->parent->track);
-        printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
-                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                    chromosome, encodedMapName, tdb->parent->shortLabel);
+        printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
+               "(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'>"
+               "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
+               hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+               chromosome, encodedMapName, tdb->parent->shortLabel);
         freeMem(encodedMapName);
         }
     else
@@ -2788,15 +2866,20 @@ if (!ajax)
             {
             if (sameString(grp->name,tdb->grp))
                 {
-                printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
-                        hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,tdb->grp,tdb->grp,grp->label,grp->label,endsWith(grp->label," Tracks")?"":" tracks");
+                printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
+                       "(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure"
+                       "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
+                       "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
+                       hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,
+                       tdb->grp,tdb->grp,grp->label,grp->label,
+                       endsWith(grp->label," Tracks")?"":" tracks");
                 break;
                 }
             }
         grpFreeList(&grps);
         }
     }
-    puts("<BR><BR>");
+puts("<BR><BR>");
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
@@ -2808,54 +2891,56 @@ else if (sameString(tdb->track, WIKI_TRACK_TABLE))
 if (!tdbIsDownloadsOnly(tdb))
     {
     /* Display visibility menu */
-        if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
-            printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
-        else
-            printf("<B>Display&nbsp;mode:&nbsp;</B>");
-        if (tdbIsSuper(tdb))
+    if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
+        printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
+    else
+        printf("<B>Display&nbsp;mode:&nbsp;</B>");
+    if (tdbIsSuper(tdb))
+        {
+        superTrackDropDown(cart, tdb, 1);
+        }
+    else
+        {
+        /* normal visibility control dropdown */
+        enum trackVisibility vis = tdb->visibility;
+        boolean canPack = rTdbTreeCanPack(tdb);
+        if (ajax)
             {
-            superTrackDropDown(cart, tdb, 1);
+            // ajax popups should show currently inherited visability
+            vis = tdbVisLimitedByAncestry(cart, tdb, TRUE);
+            // composite children may inherit squish/pack vis so allow it.
+            if (canPack == FALSE && tdbIsCompositeChild(tdb))
+                canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
             }
-        else
-            {
-            /* normal visibility control dropdown */
-            enum trackVisibility vis = tdb->visibility;
-            boolean canPack = rTdbTreeCanPack(tdb);
-            if (ajax)
-                {
-                vis = tdbVisLimitedByAncestry(cart, tdb, TRUE);  // ajax popups should show currently inherited visability
-                // composite children may inherit squish/pack vis so allow it.
-                if (canPack == FALSE && tdbIsCompositeChild(tdb))
-                    canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
-                }
-            else
-                vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
+        else                               // But hgTrackUi page should show local vis
+            vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis)));
 
-            if (tdbIsSuperTrackChild(tdb))
-                {
-                hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
-                    "normalText superChild visDD", trackDbSetting(tdb, "onlyVisibility"),
-                    "onchange='visTriggersHiddenSelect(this);'");
-                }
-            else
-                hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
-                    "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),NULL);
+        if (tdbIsSuperTrackChild(tdb))
+            {
+            hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,"normalText superChild visDD",
+                                            trackDbSetting(tdb, "onlyVisibility"),
+                                            "onchange='visTriggersHiddenSelect(this);'");
             }
+        else
+            hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,"normalText visDD",
+                                            trackDbSetting(tdb, "onlyVisibility"),NULL);
+        }
+
     if (!ajax)
         {
         printf("&nbsp;");
         cgiMakeButton("Submit", "Submit");
-    #ifdef SUBTRACK_CFG
-        // Offer cancel button always?     // composites and multiTracks (not standAlones or supers)
+        // Offer cancel button always?    // composites and multiTracks (not standAlones or supers)
         if (tdbIsContainer(tdb))
             {
             printf("&nbsp;");
             cgiMakeOnClickButton("window.history.back();","Cancel");
             }
-    #endif///def SUBTRACK_CFG
 
-        if(tdbIsComposite(tdb))
-            printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
+        if (tdbIsComposite(tdb))
+            printf("\n&nbsp;&nbsp;<a href='#' "
+                   "onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); "
+                   "return false;'>Reset to defaults</a>\n",setting);
         }
 
     if (ct)
@@ -2867,9 +2952,11 @@ if (!tdbIsDownloadsOnly(tdb))
         if (differentString(tdb->type, "chromGraph"))
             {
             char buf[256];
-            if(ajax)
-                // reference to a separate form doesn't work in modal dialog, so change window.location directly.
-                safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;", hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
+            if (ajax)
+                // reference to a separate form doesn't work in modal dialog,
+                // so change window.location directly.
+                safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;",
+                      hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
             else
                 safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
             cgiMakeOnClickButton(buf, "Update custom track");
@@ -2880,7 +2967,8 @@ if (!tdbIsDownloadsOnly(tdb))
 if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
-    if (trackDbSetting(tdb, "dimensions") || (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))
+    if (trackDbSetting(tdb, "dimensions")
+    ||  (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))
         {
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))
@@ -2888,8 +2976,9 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
             if (!hIsPreviewHost())
                 {
                 // TODO: get from hui.c
-                printf("<A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s' TITLE='Early access to unreviewed new data on the Preview Browser...'>Preview</A>",
-                    "genome-preview.ucsc.edu", database, tdb->track);
+                printf("<A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s' "
+                       "TITLE='Early access to unreviewed new data on the Preview Browser...'>"
+                       "Preview</A>", "genome-preview.ucsc.edu", database, tdb->track);
                 }
             printf("&nbsp;&nbsp;");
             makeDownloadsLink(database, tdb);
@@ -2898,16 +2987,18 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         enum browserType browser = cgiBrowser();
         if (browser == btIE || browser == btFF)
             downArrow = "&darr;";
-        printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtracks section of page'>Subtracks%s</A>",downArrow);
-        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",downArrow);
+        printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtracks section of "
+               "page'>Subtracks%s</A>",downArrow);
+        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+               "Description%s</A>",downArrow);
         printf("&nbsp;</span>");
         }
     }
 if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
     puts("<BR>");
 
-if (tdbIsDownloadsOnly(tdb))
-    filesDownloadUi(database,cart,tdb);  // Composites without tracks but with files to download are tdb->type: downloadsOnly
+if (tdbIsDownloadsOnly(tdb))             // Composites without tracks but with files to download
+    filesDownloadUi(database,cart,tdb);  // are tdb->type: downloadsOnly
 else
     specificUi(tdb, tdbList, ct, ajax);
 puts("</FORM>");
@@ -2928,17 +3019,19 @@ if (ct)
 	printBbiUpdateTime(&timep);
 	}
     else
-	printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
+        printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
     }
 
 if (!ct)
     {
     /* Print data version trackDB setting, if any */
-    char *version = trackDbSetting(tdb, "dataVersion");
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    char *version = trackVersion == NULL ? trackDbSetting(tdb, "dataVersion")
+                                         : trackVersion->version;
     if (version)
         {
         cgiDown(0.7);
-        printf("<B>Data version:</B> %s\n", version);
+        printf("<B>Data version:</B> %s <BR>\n", version);
         }
 
    /* Print lift information from trackDb, if any */
@@ -2969,10 +3062,10 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     makeTopLink(tdb);
     printf("&nbsp</td></tr></table>");
     }
-}	/*	void trackUi(struct trackDb *tdb)	*/
+}       /*      void trackUi(struct trackDb *tdb)       */
 
 struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel,
-	char *longLabel, int defaultVis, boolean canPack)
+                                      char *longLabel, int defaultVis, boolean canPack)
 /* Create trackDb for a track without a corresponding table. */
 {
 struct trackDb *tdb;
@@ -3077,7 +3170,7 @@ if (super)
         }
     }
 char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
-                tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
+               tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
@@ -3100,7 +3193,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
 setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;

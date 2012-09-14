@@ -1,0 +1,2 @@
+# Instead use src/hg/lib/fullBed.as
+# If I include a copy here, there is a .as script that nags about duplication.

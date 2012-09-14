@@ -688,7 +688,7 @@ strLower(exp->organism);
 
 struct slPair *varPairs = NULL;
 struct mdbVar *edv = vars;
-for(;edv != NULL; edv = edv->next)
+for (;edv != NULL; edv = edv->next)
     {
     if (sameWord(edv->var,MDB_VAR_LAB))
         {
@@ -726,7 +726,8 @@ if (exp->cellType == NULL)  // Okay if no cell
 if (varPairs != NULL)
     {
     slPairSortCase(&varPairs);
-    exp->expVars = slPairListToString(varPairs,FALSE); // don't bother adding quotes since EDVs should not have spaces
+    exp->expVars = slPairListToString(varPairs,FALSE); // don't bother adding quotes since EDVs
+                                                       // should not have spaces
     slPairFreeList(&varPairs);
     }
 return exp;
@@ -824,6 +825,13 @@ else
     errAbort("Invalid organism %s", exp->organism);
 safef(accession, sizeof(accession), "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, exp->ix);
 return cloneString(accession);
+}
+
+int encodeExpIdOffset() {
+/* Length of prefix preceding experiment ID in the accession. 
+   Prefix is defined string + 1 for org character
+*/
+    return strlen(ENCODE_EXP_ACC_PREFIX) + 1;
 }
 
 void encodeExpAdd(struct sqlConnection *conn, char *tableName, struct encodeExp *exp)
@@ -1094,7 +1102,8 @@ struct encodeExp *encodeExpGetByMdbVarsFromTable(char *db, struct mdbVar *vars, 
 /* Return experiments by looking up mdb var list from the named experiment table */
 {
 struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
-struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
+                         // don't expect quoted EDVs which should always be simple tokens.
+struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); 
 
 struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
 // No longer needed
@@ -1114,7 +1123,8 @@ struct encodeExp *encodeExpGetOrCreateByMdbVarsFromTable(char *db, struct mdbVar
 // Return experiment looked up or created from the mdb var list from the named experiment table.
 {
 struct encodeExp *exp = encodeExpFromMdbVars(db,vars);
-struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); // don't expect quoted EDVs which should always be simple tokens.
+                         // don't expect quoted EDVs which should always be simple tokens.
+struct slPair *edvVars = slPairListFromString(exp->expVars,FALSE); 
 
 struct encodeExp *expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
 if (expFound == NULL)
@@ -1122,7 +1132,8 @@ if (expFound == NULL)
     struct sqlConnection *conn = sqlConnect(ENCODE_EXP_DATABASE);
     encodeExpAdd(conn, table, exp);
     sqlDisconnect(&conn);
-    expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,edvVars,table);
+    expFound = encodeExpGetFromTable(exp->organism,exp->lab,exp->dataType,exp->cellType,
+                                     edvVars,table);
     }
 encodeExpFree(&exp);
 slPairFreeValsAndList(&edvVars);

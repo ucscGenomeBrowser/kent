@@ -6,7 +6,7 @@ server.  This runs on the build server and pushes to the specified download
 server"
 
 set -beEu -o pipefail
-trap "echo Error: `hostname` download copy failed >&2; exit 1" ERR
+trap "echo Error: $(hostname) download copy failed >&2; exit 1" ERR
 exec </dev/null
 
 if [ $# != 1 ] ; then
@@ -16,7 +16,7 @@ fi
 downloadServer="$1"
 
 # initialize
-gbRoot=/cluster/data/genbank
+gbRoot=/hive/data/outside/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 

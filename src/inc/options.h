@@ -4,6 +4,9 @@
  * granted for all use - public, private or commercial. */
 
 #ifndef OPTIONS_H
+#define OPTIONS_H
+
+#include "common.h"
 
 /* Types for options */
 #define OPTION_BOOLEAN    0x01

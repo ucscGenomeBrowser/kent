@@ -69,12 +69,14 @@ level as the block they enclose:
 Each block of code is indented by 4 from the previous block.
 As per Unix standard practice, tab stops are set to 8, not 4
 as is the common practice in Windows, so some care must be
-taken when using tabs for indenting.  Since tabs are especially
-problematic for Python code, and we are starting to use
-Python a fair bit as well, tabs are best avoided altogether.
-The proper settings for the vi editor to interpret tabs correctly
-in existing code, and avoid tabs in new code are:
-     set ts=8 set sw=4 set expandtab
+taken when using tabs for indenting.  
+
+Tabs continue to be a problem for the programmer even in 2012.
+Currently our makefiles require tabs, while our python code forbids
+them. The C code can go either way so long as tabs are treated
+as advancing to the next multiple-of-eight column. Please consult local
+users of your favorite editor for help configuring it with these
+indentation and tab standards.
 
 Lines should be no more than 100 characters wide.  Lines that are 
 longer than this are broken and indented at least 8 spaces

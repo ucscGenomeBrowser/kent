@@ -1,38 +1,29 @@
-# generated with encodeMkChangeNotes 0.9
-This is a release1 of the "ENCODE wgEncodeUncBsuProt"
-The composite track is wgEncodeUncBsuProt
-# WARNINGS #################################################
-1 - table wgEncodeUncBsuProtGm12878NucleusRaw does not exist, from filetype peptideMapping
-2 - table wgEncodeUncBsuProtK562MitoRaw does not exist, from filetype peptideMapping
-3 - table wgEncodeUncBsuProtK562NucleusRaw does not exist, from filetype peptideMapping
-4 - table wgEncodeUncBsuProtK562CytosolRaw does not exist, from filetype peptideMapping
-5 - table wgEncodeUncBsuProtGm12878MitoRaw does not exist, from filetype peptideMapping
-6 - table wgEncodeUncBsuProtGm12878MembranefractionRaw does not exist, from filetype peptideMapping
-7 - table wgEncodeUncBsuProtK562MembranefractionRaw does not exist, from filetype peptideMapping
-############################################################
+mkChangeNotes v2
+hg19 wgEncodeUncBsuProt Release 1
+2012-07-13
 
-Categories of tables and files('):
-A) Untouched - are on public browser and should remain
-B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
-   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
-   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
-C) New - are only currently on test but will need to be pushed to the RR.
-D) Additional items of note
+QA Count Summaries for Release 1:
+Tables: 7
+Files: 14
+Gbdbs: 0
+Supplemental: 0
+Other: 3
 
-Summary total counts for release1 (new+untouched):
-    Tables: 7
-    Files: 17
-    Gbdbs: 0
+REVOKED:
+Tables: 0
+Files: 0
+Gbdbs: 0
 
-A) Untouched Tables (0):
+Sizes of New:
+Table: 11 MB
+Files: 7 MB
+Gbdbs: 0 MB
+Supplemental: 0 MB
+Other: 1 MB
+Total: 19 MB
 
-A') Untouched Files (0 downloadables, 0 gbdbs):
 
-B) Deprecated tables (0):
-
-B') Deprecated files (0 downloadables, 0 gbdbs):
-
-C) New tables (7):
+New Tables (7):
 wgEncodeUncBsuProtGm12878MembranefractionSig
 wgEncodeUncBsuProtGm12878MitoSig
 wgEncodeUncBsuProtGm12878NucleusSig
@@ -41,12 +32,8 @@ wgEncodeUncBsuProtK562MembranefractionSig
 wgEncodeUncBsuProtK562MitoSig
 wgEncodeUncBsuProtK562NucleusSig
 
-C') New files (14 downloadables, 0 gbdbs):
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/
-    NOT on RR but must be placed in:
-      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/
 
+New Download Files (14):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878MembranefractionRaw.peptideMapping.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878MembranefractionSig.peptideMapping.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878MitoRaw.peptideMapping.gz
@@ -63,12 +50,10 @@ C') New files (14 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtK562NucleusSig.peptideMapping.gz
 
 
-D) Additional items:
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/
-    should be placed on the RR in (overwritting any existing copy):
-      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/
-
+New Other Files (3):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/md5sum.txt
+
+
+No Errors

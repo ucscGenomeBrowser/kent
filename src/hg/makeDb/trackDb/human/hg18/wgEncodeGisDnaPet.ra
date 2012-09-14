@@ -4,8 +4,8 @@ shortLabel GIS DNA PET
 longLabel ENCODE Genome Institute of Singapore DNA Paired-End Ditags
 group varRep
 subGroup1 view Views Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3 fragSize Frag_Size 0-1k=1k 1-5k=5k 2-10k=10k 3-f20k=20k
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1)
+subGroup3 fragSize Frag_Size m0-1k=0-1k m1-5k=1-5k m2-10k=2-10k m3-20k=3-20k
 dimensions dimensionX=cellType dimensionY=fragSize
 #fileSortOrder cell=Cell_Line view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ fragSize=+ view=+
@@ -19,14 +19,14 @@ wgEncode 1
     shortLabel Alignments
     view Alignments
     visibility dense
-        subTrack wgEncodeGisDnaPet
+    subTrack wgEncodeGisDnaPet
 
         track wgEncodeGisDnaPetAlignmentsK5621k
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel K562 1k
         color 46,0,184
         longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
-        subGroups view=Alignments cellType=K562 fragSize=0-1k
+        subGroups view=Alignments cellType=t1K562 fragSize=m0-1k
         #type pairedTagAlign
         type bigBed 6
         baseColorDefault diffBases
@@ -34,14 +34,14 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-    #    configurable on
+        #    configurable on
 
         track wgEncodeGisDnaPetAlignmentsK56210k
         subTrack wgEncodeGisDnaPetViewAlignments on
         shortLabel K562 10k
         color 46,0,184
         longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
-        subGroups view=Alignments cellType=K562 fragSize=2-10k
+        subGroups view=Alignments cellType=t1K562 fragSize=m2-10k
         #type pairedTagAlign
         type bigBed 6
         baseColorDefault diffBases
@@ -49,27 +49,27 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-    #    configurable on
+        #    configurable on
 
-	track wgEncodeGisDnaPetAlignmentsK56220k
+        track wgEncodeGisDnaPetAlignmentsK56220k
         subTrack wgEncodeGisDnaPetViewAlignments off
-	shortLabel K562 20k
+        shortLabel K562 20k
         color 46,0,184
-	longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
-	subGroups view=Alignments cellType=K562 fragSize=3-f20k
-	type bigBed 6
+        longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
+        subGroups view=Alignments cellType=t1K562 fragSize=m3-20k
+        type bigBed 6
         baseColorDefault diffBases
         baseColorUseSequence seq1Seq2
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
-	showDiffBasesMaxZoom 10000.0
+        showDiffBasesMaxZoom 10000.0
 
         track wgEncodeGisDnaPetAlignmentsGm128781k
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 1k
         color 153,38,0
         longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
-        subGroups view=Alignments cellType=GM12878 fragSize=0-1k
+        subGroups view=Alignments cellType=t1GM12878 fragSize=m0-1k
         #type pairedTagAlign
         type bigBed 6
         baseColorDefault diffBases
@@ -77,14 +77,14 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-    #    configurable on
+        #    configurable on
 
         track wgEncodeGisDnaPetAlignmentsGm128785k
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 5k
         color 153,38,0
         longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
-        subGroups view=Alignments cellType=GM12878 fragSize=1-5k
+        subGroups view=Alignments cellType=t1GM12878 fragSize=m1-5k
         #type pairedTagAlign
         type bigBed 6
         baseColorDefault diffBases
@@ -92,19 +92,18 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-    #    configurable on
+        #    configurable on
 
         track wgEncodeGisDnaPetAlignmentsGm1287810k
         subTrack wgEncodeGisDnaPetViewAlignments on
         color 153,38,0
         shortLabel GM12878 10k
         longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
-        subGroups view=Alignments cellType=GM12878 fragSize=2-10k
+        subGroups view=Alignments cellType=t1GM12878 fragSize=m2-10k
         type bigBed 6
         baseColorDefault diffBases
         baseColorUseSequence seq1Seq2
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-
 

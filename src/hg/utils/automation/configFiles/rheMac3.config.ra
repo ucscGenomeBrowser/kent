@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db rheMac3
+clade mammal
+genomeCladePriority 15
+scientificName Macaca mulatta
+commonName Rhesus
+assemblyDate Oct. 2010
+assemblyLabel Beijing Genomics Institute, Shenzhen (GCA_000230795.1)
+assemblyShortLabel BGI CR_1.0
+orderKey 359
+# chrM bioproject 12395
+mitoAcc NC_005943
+fastaFiles /hive/data/genomes/rheMac3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/rheMac3/ucsc/*.agp.gz
+dbDbSpeciesDir rhesus
+photoCreditURL http://www1.wfubmc.edu/pathresearch/faculty/kaplan.htm
+photoCreditName J.R. Kaplan
+ncbiGenomeId 215
+ncbiAssemblyId 310688
+ncbiAssemblyName CR_1.0
+ncbiBioProject 51409
+genBankAccessionID GCA_000230795.1
+taxId 9544

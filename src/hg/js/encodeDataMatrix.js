@@ -40,28 +40,30 @@ $(function () {
         dataGroups = encodeProject.getDataGroups(dataTypes);
 
         // set up structures for cell types and their tiers
-        cellTiers = encodeProject.getCellTiers(cellTypes);
+        cellTiers = encodeProject.getCellTiers(cellTypes, encodeMatrix_organism);
 
         // gather experiments into matrix
         // NOTE: dataTypeExps is populated here
         matrix = makeExperimentMatrix(experiments, dataTypeExps);
 
         // fill in table using matrix
-        encodeMatrix.tableOut($matrixTable, matrix, cellTiers, 
-                    dataGroups, dataTypeExps, tableHeaderOut, rowAddCells);
+        encodeMatrix.tableOut($matrixTable, matrix, cellTiers, dataGroups, dataTypeExps, 
+                        encodeProject.pruneDataGroupsToExps, tableHeaderOut, rowAddCells);
     }
 
     function makeExperimentMatrix(experiments, dataTypeExps) {
         // Populate dataType vs. cellType array with counts of experiments
 
-        var dataType, cellType;
+        var dataType, cellType, exp;
         var matrix = {};
 
-        $.each(experiments, function (i, exp) {
+        $.each(experiments, function (i, experiment) {
             // exclude ref genome annotations
-            if (exp.cellType === 'None') {
+            if (experiment.cellType === 'None') {
                 return true;
             }
+            // adjust experiment as needed for display purposes
+            exp = encodeProject.adjustExperiment(experiment);
 
             // count experiments per dataType so we can prune those having none
             // (the matrix[cellType] indicates this for cell types 
@@ -84,7 +86,7 @@ $(function () {
     return matrix;
     }
 
-    function tableHeaderOut($table, dataGroups, dataTypeExps) {
+    function tableHeaderOut($table, dataGroups) {
         // Generate table header and add to document
         // NOTE: relies on hard-coded classes and ids
 
@@ -106,23 +108,28 @@ $(function () {
             $thead.before('<colgroup></colgroup>');
             $.each(group.dataTypes, function (i, label) {
                 dataType = encodeProject.getDataTypeByLabel(label);
-
-                // prune out datatypes with no experiments
-                if (dataTypeExps[dataType.term] !== undefined) {
-                    $th = $('<th class="elementType"><div class="verticalText">' + 
-                                dataType.label + '</div></th>');
-                    if (!encodeProject.isIE8()) {
-                        // Suppress mouseOver under IE8 as QA noted flashing effect
-                        $th.attr('title', dataType.description);
-                    }
-                    $tableHeaders.append($th);
-
-                    // add colgroup element to support cross-hair hover effect
-                    $thead.before('<colgroup class="experimentCol"></colgroup>');
-                    maxLen = Math.max(maxLen, dataType.label.length);
+                $th = $('<th class="elementType"><div class="verticalText">' + 
+                            dataType.label + 
+                            // add button to launch ChIP-seq (but suppress on IE)
+                            (dataType.term === 'ChipSeq' && !$.browser.msie ? 
+                            '&nbsp;&nbsp; <span title="Click to view ChIP-seq experiment matrix by antibody target" id="chipButton">view matrix</span>': '') + 
+                            '</div></th>');
+                if (!encodeProject.isIE8()) {
+                    // Suppress mouseOver under IE8 as QA noted flashing effect
+                    $th.attr('title', dataType.description);
                 }
+                $tableHeaders.append($th);
+                // add colgroup element to support cross-hair hover effect
+                $thead.before('<colgroup class="experimentCol"></colgroup>');
+                maxLen = Math.max(maxLen, dataType.label.length);
             });
         });
+
+        // add click handler to navigate to Chip-seq matrix
+        $('#chipButton').click(function() {
+            window.open(encodeMatrix.pageFor('chipMatrix', encodeMatrix_organism), 'matrixWindow');
+        });
+
         // adjust size of headers based on longest label length
         // empirically len/2 em's is right
         $('#columnHeaders th').css('height', (String((maxLen/2 + 2)).concat('em')));
@@ -134,7 +141,7 @@ $(function () {
         }
     }
 
-    function rowAddCells($row, dataGroups, dataTypeExps, matrix, cellType) {
+    function rowAddCells($row, dataGroups, matrix, cellType) {
         // populate a row in the matrix with cells for data groups and data types
         // null cellType indicates this is a row for a cell group (tier)
 
@@ -145,13 +152,12 @@ $(function () {
             $td = $('<td></td>');
             $td.addClass('matrixCell');
             $row.append($td);
-
+            if (!group.dataTypes.length) {
+                // no data types in this organism for this group
+                return true;
+            }
             $.each(group.dataTypes, function (i, dataTypeLabel) {
                 dataType = encodeProject.getDataTypeByLabel(dataTypeLabel).term;
-                // prune out datatypes with no experiments
-                if (dataTypeExps[dataType] === undefined) {
-                    return true;
-                }
                 $td = $('<td></td>');
                 $td.addClass('matrixCell');
                 $row.append($td);
@@ -162,7 +168,7 @@ $(function () {
                     $td.addClass('todoExperiment');
                     return true;
                 }
-                // this cell represents experiments that
+                // this cell represents experiments
                 // fill in count, mouseover and selection by click
                 $td.addClass('experiment');
                 $td.text(matrix[cellType][dataType]);
@@ -170,25 +176,18 @@ $(function () {
                     'dataType' : dataType,
                     'cellType' : cellType
                 });
+                $td.attr('title', 'Click to select: ' + 
+                        encodeProject.getDataType(dataType).label +
+                        ' in ' + cellType +' cells');
 
-                $td.mouseover(function() {
-                    $(this).attr('title', 'Click to select: ' + 
-                        encodeProject.getDataType($(this).data().dataType).label +
-                        ' ' + ' in ' + $(this).data().cellType +' cells');
-                });
+                // add highlight when moused over
+                encodeMatrix.hoverExperiment($td);
+
                 $td.click(function() {
-                    // NOTE: generating full search URL should be generalized & encapsulated
-                    var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
-                    // TODO: encapsulate var names
-                    url +=
-                       ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + $(this).data().dataType +
-                       '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
-                       '&hgt_mdbVar3=view&hgt_mdbVal3=Any'
-                       );
+                    var url = encodeMatrix.getSearchUrl(
+                                {'mdbVar': 'dataType', 'mdbVal': $(this).data().dataType},
+                                {'mdbVar': 'cell', 'mdbVal': $(this).data().cellType});
                     // specifying window name limits open window glut
-                    url += '&hgt_mdbVar4=[]';
-                    url += '&hgt_mdbVar5=[]';
-                    url += '&hgt_mdbVar6=[]';
                     window.open(url, "searchWindow");
                 });
             });
@@ -197,7 +196,7 @@ $(function () {
 
     // initialize application
     encodeMatrix.start($matrixTable);
-
+    
     // load data from server and do callback
     encodeProject.loadAllFromServer(requests, handleServerData);
 });

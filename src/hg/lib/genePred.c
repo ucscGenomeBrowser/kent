@@ -52,7 +52,8 @@ static char *exonFramesFieldSql =
 
 struct genePred *genePredLoad(char **row)
 /* Load a genePred from row fetched with select * from genePred
- * from database.  Dispose of this with genePredFree(). */
+ * from database.  Dispose of this with genePredFree(). 
+ * NOTE: cannabalizes the row argument */
 {
 struct genePred *ret;
 int sizeOne;

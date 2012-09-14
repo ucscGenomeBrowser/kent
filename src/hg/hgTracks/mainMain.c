@@ -18,6 +18,7 @@
 #include "hgFind.h"
 #include "hgTracks.h"
 #include "versionInfo.h"
+#include "net.h"
 #include "search.h"
 #include "imageV2.h"
 
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 measureTime(NULL);
+setConnFailuresEnabled(TRUE);
 browserName = hBrowserName();
 organization = "UCSC";
 
@@ -39,9 +41,8 @@ organization = (hIsGisaidServer() ? "GISAID" : organization);
  * somehow can't be moved effectively into doMiddle. */
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
-char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link wrapped in html
-if (link)
+char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link
+if (link)                                                                  // wrapped in html
     htmlSetStyle(link);
 
 oldVars = hashNew(10);

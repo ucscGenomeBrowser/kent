@@ -1,0 +1,319 @@
+track wgEncodeFsuRepliChip
+compositeTrack on
+shortLabel FSU Repli-chip
+longLabel Replication Timing by Repli-chip from ENCODE/FSU
+group regulation
+subGroup1 view Views WaveSignal=WaveSignal
+subGroup2 cellType Cell_Line CH12=CH12 EPISC5=EpiSC-5 EPISC7=EpiSC-7 ES46C=ES-46C ESD3=ES-D3 ESEM5S=ES-EM5Sox17huCD25 ESTT2=ES-TT2 J185A=J185a L1210=L1210 MEF=MEF MEL=MEL
+subGroup3 sex Sex M=M F=F U=U
+subGroup4 treatment Treatment NONE=None DIFFE3D=diffProtE_3_d DIFFF9D=diffProtF_9_d DIFFE6D=diffProtE_6_d DIFFE9D=diffProtE_9_d DIFFF6D=diffProtF_6_d DIFFG3D=diffProtG_3_d DIFFHSOXP=diffProtH_Sox17+ DIFFHSOXM=diffProtH_Sox17-
+subGroup5 rep Rep rep1=1 rep2=2
+dimensions dimensionX=cellType dimensionY=rep dimensionZ=treatment
+filterComposite dimZ=all
+sortOrder cellType=+ sex=+ treatment=+ rep=+ view=+
+fileSortOrder cell=Cell_Line sex=Sex treatment=Treatment replicate=Rep view=View platform=Platform labExpId=Lab_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell sex=sex treatment=treatment
+dragAndDrop subTracks
+visibilityViewDefaults WaveSignal=hide
+priority 0
+type bigWig
+windowingFunction mean+whiskers
+viewLimits -2:2
+wgEncode 1
+
+        track wgEncodeFsuRepliChipCh12FWaveSignalRep1
+        parent wgEncodeFsuRepliChip
+        shortLabel CH12 Ws 1
+        longLabel CH12 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=CH12 sex=F treatment=NONE rep=rep1
+        type bigWig -1.467918 1.317050
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31
+
+        track wgEncodeFsuRepliChipMelMWaveSignalRep1
+        parent wgEncodeFsuRepliChip
+        shortLabel MEL Ws 1
+        longLabel MEL Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=MEL sex=M treatment=NONE rep=rep1
+        type bigWig -1.771599 1.324733
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31
+
+        track wgEncodeFsuRepliChipL1210FWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel L1210 Ws 1
+        longLabel L1210 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=L1210 sex=F treatment=NONE rep=rep1
+        type bigWig -17.782591 5.268431
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31
+
+        track wgEncodeFsuRepliChipEsd3MWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 Ws 1
+        longLabel ES-D3 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=NONE rep=rep1
+        type bigWig -6.216455 1.621844
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEstt2MWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-TT2 Ws 1
+        longLabel ES-TT2 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESTT2 sex=M treatment=NONE rep=rep1
+        type bigWig -10.300041 2.263489
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEs46cMWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-46C Ws 1
+        longLabel ES-46C Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ES46C sex=M treatment=NONE rep=rep1
+        type bigWig -2.118093 5.296189
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 EBM3 Ws 1
+        longLabel ES-D3 EBM 3 d Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=DIFFE3D rep=rep1
+        type bigWig -9.098131 1.871574
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 EBM6 Ws 1
+        longLabel ES-D3 EBM 6 d Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=DIFFE6D rep=rep1
+        type bigWig -10.554374 1.634434
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 NP Ws 1
+        longLabel ES-D3 NP 9 d Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=DIFFE9D rep=rep1
+        type bigWig -7.040370 1.677722
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-TT2 NP Ws 1
+        longLabel ES-TT2 NP 9 d Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESTT2 sex=M treatment=DIFFF9D rep=rep1
+        type bigWig -5.522534 2.160326
+        color 65,105,225
+        # subId=7197 dateSubmitted=2012-06-28
+
+        track wgEncodeFsuRepliChipEs46cMDifff6dWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-46C NP Ws 1
+        longLabel ES-46C NP 6 d Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ES46C sex=M treatment=DIFFF6D rep=rep1
+        type bigWig -9.600121 2.012937
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEpisc5MWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel EpiSC-5 Ws 1
+        longLabel EpiSC-5 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=EPISC5 sex=M treatment=NONE rep=rep1
+        type bigWig -2.590480 2.178855
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEpisc7FWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel EpiSC-7 Ws 1
+        longLabel EpiSC-7 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=EPISC7 sex=F treatment=NONE rep=rep1
+        type bigWig -7.988754 2.288202
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipMefMWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel MEF Ws 1
+        longLabel MEF Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=MEF sex=M treatment=NONE rep=rep1
+        type bigWig -5.096592 2.062456
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipCh12FWaveSignalRep2
+        parent wgEncodeFsuRepliChip
+        shortLabel CH12 Ws 2
+        longLabel CH12 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=CH12 sex=F treatment=NONE rep=rep2
+        type bigWig -1.740197 1.319845
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31
+
+        track wgEncodeFsuRepliChipEsd3MWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 Ws 2
+        longLabel ES-D3 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=NONE rep=rep2
+        type bigWig -2.013756 1.882734
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEstt2MWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-TT2 Ws 2
+        longLabel ES-TT2 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESTT2 sex=M treatment=NONE rep=rep2
+        type bigWig -4.597528 2.123765
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 EBM3 Ws 2
+        longLabel ES-D3 EBM 3 d Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=DIFFE3D rep=rep2
+        type bigWig -13.418283 2.518819
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 EBM6 Ws 2
+        longLabel ES-D3 EBM 6 d Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=DIFFE6D rep=rep2
+        type bigWig -9.815218 2.047791
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 NP Ws 2
+        longLabel ES-D3 NP 9 d Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=DIFFE9D rep=rep2
+        type bigWig -8.892423 1.362410
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-TT2 NP Ws 2
+        longLabel ES-TT2 NP 9 d Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESTT2 sex=M treatment=DIFFF9D rep=rep2
+        type bigWig -13.130930 2.447524
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEpisc5MWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel EpiSC-5 Ws 2
+        longLabel EpiSC-5 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=EPISC5 sex=M treatment=NONE rep=rep2
+        type bigWig -5.700624 3.277806
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEpisc7FWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel EpiSC-7 Ws 2
+        longLabel EpiSC-7 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=EPISC7 sex=F treatment=NONE rep=rep2
+        type bigWig -9.584117 1.922653
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 EPL Ws 1
+        longLabel ES-D3 EPL 3 d Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=DIFFG3D rep=rep1
+        type bigWig -4.491621 2.001237
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel Mesoderm Ws 1
+        longLabel  Mesoderm Gsc/Sox17- Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESEM5S sex=U treatment=DIFFHSOXM rep=rep1
+        type bigWig -6.037550 2.512868
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel Endoderm Ws 1
+        longLabel Endoderm Gsc/Sox17+ Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESEM5S sex=U treatment=DIFFHSOXP rep=rep1
+        type bigWig -2.805707 2.500815
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipJ185aUWaveSignalRep1
+        parent wgEncodeFsuRepliChip off
+        shortLabel J185a Ws 1
+        longLabel J185a Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=J185A sex=U treatment=NONE rep=rep1
+        type bigWig -2.900778 4.882994
+        color 139,69,19
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsd3MDiffg3dWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel ES-D3 EPL Ws 2
+        longLabel ES-D3 EPL 3 d Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESD3 sex=M treatment=DIFFG3D rep=rep2
+        type bigWig -7.767494 2.185306
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsem5sUDiffhsoxmWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel Mesoderm Ws 2
+        longLabel Mesoderm Gsc/Sox17- Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU 
+        subGroups view=WaveSignal cellType=ESEM5S sex=U treatment=DIFFHSOXM rep=rep2
+        type bigWig -7.279305 2.019603
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipEsem5sUDiffhsoxpWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel Endoderm Ws 2
+        longLabel Endoderm Gsc/Sox17+ Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=ESEM5S sex=U treatment=DIFFHSOXP rep=rep2
+        type bigWig -11.218806 1.801808
+        color 65,105,225
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipJ185aUWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel J185a Ws 2
+        longLabel J185a Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=J185A sex=U treatment=NONE rep=rep2
+        type bigWig -6.760349 2.574383
+        color 139,69,19
+        # subId=7068 dateSubmitted=2012-06-18
+
+        track wgEncodeFsuRepliChipL1210FWaveSignalRep2
+        parent wgEncodeFsuRepliChip off
+        shortLabel L1210 Ws 2
+        longLabel L1210 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=L1210 sex=F treatment=NONE rep=rep2
+        type bigWig -18.702608 6.627410
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31
+
+        track wgEncodeFsuRepliChipMelMWaveSignalRep2
+        parent wgEncodeFsuRepliChip
+        shortLabel MEL Ws 2
+        longLabel MEL Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+        subGroups view=WaveSignal cellType=MEL sex=M treatment=NONE rep=rep2
+        type bigWig -2.123494 1.485932
+        color 86,180,233
+        # subId=6809 dateSubmitted=2012-03-31

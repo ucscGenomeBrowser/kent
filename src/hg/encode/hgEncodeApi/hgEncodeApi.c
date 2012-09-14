@@ -85,10 +85,7 @@ void experimentsResource(struct dyString *output)
 struct sqlConnection *connExp = sqlConnect(ENCODE_EXP_DATABASE);
 if (!sqlTableExists(connExp, ENCODE_EXP_TABLE))
     {
-    /* NOTE:  The experiment table lives only on development and preview servers 
-        -- use preview if not found on localhost */
-    sqlDisconnect(&connExp);
-    connExp = sqlConnectProfile("preview", ENCODE_EXP_DATABASE);
+    errAbort("Experiment table not found on server");
     }
 
 int *ids = NULL;
@@ -104,15 +101,16 @@ if (database)
     int id, maxId;
     if (!hDbExists(database))
         errAbort("Invalid database '%s'", database);
+    int idOffset = encodeExpIdOffset();
     maxId = encodeExpIdMax(connExp);
     conn = hAllocConn(database);
     safef(query, sizeof(query), "select distinct(%s) from %s where %s='%s'",
-                    MDB_VAL, MDB_DEFAULT_NAME, MDB_VAR, MDB_VAR_ENCODE_EXP_ID);
+                    MDB_VAL, MDB_DEFAULT_NAME, MDB_VAR, MDB_VAR_DCC_ACCESSION);
     sr = sqlGetResult(conn, query);
     AllocArray(ids, maxId + 1); // ids start with 1
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        id = sqlUnsigned(row[0]);
+        id = sqlUnsigned(row[0] + idOffset);
         if (id <= maxId) 
             ids[id] = 1;
         }

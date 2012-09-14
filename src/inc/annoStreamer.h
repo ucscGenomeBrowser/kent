@@ -30,6 +30,9 @@ struct annoStreamer
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
     /* Set genomic region for query (should be called only by annoGratorQuerySetRegion) */
 
+    char *(*getHeader)(struct annoStreamer *self);
+    /* Get the file header as a string (possibly NULL, possibly multi-line). */
+
     struct annoFilter *(*getFilters)(struct annoStreamer *self);
     void (*setFilters)(struct annoStreamer *self, struct annoFilter *newFilters);
     /* Get and set filters */
@@ -51,6 +54,8 @@ struct annoStreamer
     struct annoGratorQuery *query;	// The query object that owns this streamer.
     enum annoRowType rowType;
     int numCols;
+    struct annoFilter *filters;
+    struct annoColumn *columns;
 
     // Private members -- callers are on the honor system to access these using only methods above.
     boolean positionIsGenome;
@@ -58,8 +63,6 @@ struct annoStreamer
     uint regionStart;
     uint regionEnd;
     struct asObject *asObj;
-    struct annoFilter *filters;
-    struct annoColumn *columns;
     };
 
 // ---------------------- annoStreamer default methods -----------------------

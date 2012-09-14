@@ -206,3 +206,73 @@ hFreeConn(&conn);
 return ret;
 }
 
+struct hash *chromNameAndSizeHashFromList(struct chromInfo *ci)
+/* Return a hash table of chrom key=name, val=size */
+{
+unsigned *size;
+struct hash *h = newHash(0);
+for ( ; ci ; ci = ci->next )
+    {
+    AllocVar(size);
+    *size = ci->size;
+    hashAdd(h, ci->chrom, size);
+    }
+return h;
+}
+
+struct hash *chromHashFromDatabase(char *db) 
+/* read chrom info from database and return hash of name and size */
+{
+struct hash *chromSizeHash = NULL;
+struct chromInfo *list = NULL;
+list = createChromInfoList(NULL, db);
+if (!list)
+    errAbort("could not load chromInfo from DB %s\n", db);
+chromSizeHash = chromNameAndSizeHashFromList(list);
+chromInfoFree(&list);
+return chromSizeHash;
+}
+
+struct chromInfo *chromInfoAddOneFromFile(char **row)
+/* Load a chromInfo from row fetched from file.
+ * Dispose of this with chromInfoFree(). */
+{
+struct chromInfo *ret;
+
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->size = sqlUnsigned(row[1]);
+ret->fileName = NULL;  // note only name and size supported
+return ret;
+}
+
+struct chromInfo *chromInfoListFromFile(char *fileName) 
+/* read chrom info from file and return list of name and size */
+{
+struct chromInfo *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = chromInfoAddOneFromFile(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+
+struct hash *chromHashFromFile(char *fileName) 
+/* read chrom info from file and return hash of name and size */
+{
+struct hash *chromSizeHash = NULL;
+struct chromInfo *list = NULL;
+list = chromInfoListFromFile(fileName);
+if (!list)
+    errAbort("could not load chromInfo file %s\n", fileName);
+chromSizeHash = chromNameAndSizeHashFromList(list);
+chromInfoFree(&list);
+return chromSizeHash;
+}

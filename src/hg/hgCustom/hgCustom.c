@@ -14,10 +14,11 @@
 #include "customFactory.h"
 #include "portable.h"
 #include "errCatch.h"
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
+#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def USE_BAM && KNETFILE_HOOKS
+#include "net.h"
+#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 #include "jsHelper.h"
 #include <signal.h>
 
@@ -170,6 +171,7 @@ else
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("hgCustom.js", NULL);
 jsIncludeFile("utils.js", NULL);
+jsIncludeFile("ajax.js", NULL);
 
 /* main form */
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" "
@@ -185,10 +187,11 @@ if (!isUpdateForm)
     char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
     char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 
-if (hIsGsidServer())
-    {
-    printf("<span style='color:red;'>The Custom Track function and its documentation is currently under development ...</span><BR><BR>\n");
-    }
+    if (hIsGsidServer())
+        {
+        printf("<span style='color:red;'>The Custom Track function and its documentation is "
+                "currently under development ...</span><BR><BR>\n");
+        }
 
     puts("<TABLE BORDER=0>\n");
     if (gotClade)
@@ -226,7 +229,8 @@ puts("<P>");
 
 /* row for error message */
 if (err)
-    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>Error</span>&nbsp;%s</B><P>", err);
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>"
+           "Error</span>&nbsp;%s</B><P>", err);
 
 cgiSimpleTableStart();
 
@@ -356,7 +360,9 @@ cgiTableRowEnd();
 
 /* extra space */
 cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
 cgiDown(0.7);
+cgiTableFieldEnd();
 cgiTableRowEnd();
 
 /* next row - label for description text entry */
@@ -395,7 +401,6 @@ else
     cgiTableFieldEnd();
     cgiTableRowEnd();
     cgiTableEnd();
-    cgiTableFieldEnd();
     }
 cgiTableFieldEnd();
 
@@ -1119,10 +1124,8 @@ if (sameString(initialDb, "0"))
                 dbWithCts = cloneString(dbDb->name);
             }
         }
-    if (dbWithCts)
-        /* set the database for the selected organism to an assembly that
-         * has custom tracks */
-        {
+    if (dbWithCts)  // set the database for the selected organism to an assembly that
+        {           // has custom tracks
         database = dbWithCts;
         cartSetString(cart, "db", database);
         }
@@ -1332,6 +1335,7 @@ int main(int argc, char *argv[])
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+setConnFailuresEnabled(TRUE);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

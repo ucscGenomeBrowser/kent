@@ -13,7 +13,7 @@ Many of the datasets produced by the Hannon lab (Generation 0 datasets) in Relea
 This track is a multi-view composite track that contains multiple data types
 (<em>views</em>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
-tracks are <a href="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</a>.
+tracks are <a href="/goldenPath/help/multiView.html" TARGET=_BLANK>here</a>.
 To show only selected subtracks, uncheck the boxes next to the tracks that
 you wish to hide.  Color differences among the views provide a visual cue for
 distinguishing between the different cell types and compartments.</p>
@@ -25,9 +25,6 @@ distinguishing between the different cell types and compartments.</p>
 <dd>The Contigs are BED format files representing blocks of overlapping mapped reads from pooled biological replicates. The corresponding number of mapped reads, the RPKM value, and the non-parametric IDR (npIDR) are reported for each contig.</dd>
 <dt><i>Raw Signal</i></dt>
 <dd>The Raw Signal view shows the density of mapped reads on the plus and minus strands (wiggle format).</dd>
-<dt><i>Alignments</i></dt>
-<dd>The Alignments view shows individual reads mapped to the genome and indicates where bases may mismatch. Every mapped read is displayed. The alignments file follows the standard SAM format. See the <a target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf#page=4">SAM Format Specification</a> for more information on the SAM/BAM file format.
-</dd>
 </dl>
 
 <P>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</P>
@@ -36,6 +33,9 @@ distinguishing between the different cell types and compartments.</p>
 The following files can be found on the <a target="_BLANK" href="../cgi-bin/hgFileUi?db=hg19&g=wgEncodeCshlShortRnaSeq">Downloads Page</a>.
 
 <dl>
+<dt><i>Alignments</i></dt>
+<dd>The Alignments contain individual reads mapped to the genome and indicates where bases may mismatch. Every mapped read is displayed. The alignments file follows the standard SAM format. See the <a target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf#page=4">SAM Format Specification</a> for more information on the SAM/BAM file format.
+</dd>
 <dt><i>GENCODE V7</i></dt>
 <dd>For each GENCODE V7 exon, the raw read count on the plus or minus strand, reads per million mapped reads (RPM) and the non-parametric IDR (npIDR) are reported in GFF format.</dd>
 <dt><i>Transfrags</i></dt>
@@ -47,7 +47,7 @@ The following files can be found on the <a target="_BLANK" href="../cgi-bin/hgFi
 
 <h2>Methods</h2>
 <h3>Experimental Procedures</h3>
-<p>Cells were grown according to the approved ENCODE <A href="../../ENCODE/protocols/cell" target="_BLANK">cell culture protocols</a>. Short RNAs between 20-200 nt were isolated from total RNA using a Qiagen RNeasy kit (Qiagen #74204) according to manufacturer protocol. Purified small RNAs were treated with Ribominus (Invitrogen # A10837-08) according to manufacturer protocols to remove ribosomal RNA. The 5' structures were removed by treatment with Tobacco Alkaline Pyrophosphatase to allow for ligation of a 5' linker. RNA fragments were poly-adenylated using poly-A polymerase (or poly-cytidylated, in the case of Generation 0 data) and a 5' linker was ligated using T4 RNA ligase. An anchored oligo-dT was used to prime the reverse transcriptase reaction. cDNA was amplified using universal PCR primers introduced during the reverse transcriptase reaction. Resulting libraries were gel purified and used in cluster generation on an Illumina GAIIx<!-- or HiSeq-->. The libraries were sequenced as a single read from the 5' end of the inserts for a total of 36 <!--or 101--> cycles.
+<p>Cells were grown according to the approved ENCODE <A href="/ENCODE/protocols/cell" target="_BLANK">cell culture protocols</a>. Short RNAs between 20-200 nt were isolated from total RNA using a Qiagen RNeasy kit (Qiagen #74204) according to manufacturer protocol. Purified small RNAs were treated with Ribominus (Invitrogen # A10837-08) according to manufacturer protocols to remove ribosomal RNA. The 5' structures were removed by treatment with Tobacco Alkaline Pyrophosphatase to allow for ligation of a 5' linker. RNA fragments were poly-adenylated using poly-A polymerase (or poly-cytidylated, in the case of Generation 0 data) and a 5' linker was ligated using T4 RNA ligase. An anchored oligo-dT was used to prime the reverse transcriptase reaction. cDNA was amplified using universal PCR primers introduced during the reverse transcriptase reaction. Resulting libraries were gel purified and used in cluster generation on an Illumina GAIIx<!-- or HiSeq-->. The libraries were sequenced as a single read from the 5' end of the inserts for a total of 36 <!--or 101--> cycles.
 </p>
 <p>
 Complete protocols are available in the <a target="_BLANK" href="../cgi-bin/hgFileUi?db=hg19&g=wgEncodeCshlShortRnaSeq">Downloads Page</a>.
@@ -71,6 +71,9 @@ Reads were trimmed to discard any bases following a quality score less than or e
 </p>
 
 <h2>Release Notes </h2>
+<p>
+Update to Release 2 (July 2012): Alignments are no longer being displayed. They are now available as downloads only.
+</p>
 <p>
 This is Release 2 (February 2012) of CSHL Small RNA-seq with new data from the Gingeras lab. It includes ten new cell lines (A549, AG04450, BJ, H1-hESC, HeLa-S3, HepG2, HUVEC, MCF-7, NHEK, and SK-N-SH_RA), a new displayed view (Contigs), and two new download files (GENCODE Predicted Exons and a Protocol Document).
 </p>
@@ -117,14 +120,15 @@ Hannon lab members: Katalin Fejes-Toth, Vihra Sotirova, Gordon  Assaf, Jon Preal
 <h2>References</h2>
 
 <p>
-Fejes-Toth K, Sotirova V, Sachidanandam R, Assaf G, Hannon GJ, Kapranov P, Foissac S, Willingham AT, Duttagupta R, Dumais E, Gingeras TR. <a target="_BLANK" href="http://www.ncbi.nlm.nih.gov/pubmed/19169241"><u>Post-transcriptional processing generates a diversity of 5'-modified long and short RNAs</u></a>. <em>Nature</em>. 2009;457(7232):1028-32.
+Affymetrix ENCODE Transcriptome Project, Cold Spring Harbor Laboratory ENCODE Transcriptome Project.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19169241" target="_blank">
+Post-transcriptional processing generates a diversity of 5'-modified long and short RNAs</a>.
+<em>Nature</em>. 2009 Feb 19;457(7232):1028-32.
 </p>
-
 
 <p>
 Langmead B, Trapnell C, Pop M, Salzberg SL.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174"
- rel="nofollow" target="_blank">
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174" target="_blank">
 Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</a>.
 <em>Genome Biol</em>. 2009;10(3):R25.
 </p>

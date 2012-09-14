@@ -74,7 +74,7 @@ return list;
 }
 
 void describeFields(char *db, char *table,
-	struct asObject *asObj, struct sqlConnection *conn)
+                    struct asObject *asObj, struct sqlConnection *conn)
 /* Print out an HTML table showing table fields and types, and optionally
  * offering histograms for the text/enum fields. */
 {
@@ -194,12 +194,12 @@ if (!hIsGsidServer())
     puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
      "1-based.  See explanation \n"
      "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
-     "here</A>.</I>");
+         "here</A>.</I>");
     }
 else
     {
     puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
-     "1-based.\n</I>");
+         "1-based.\n</I>");
     }
 }
 
@@ -215,7 +215,7 @@ int itemRgbCol = -1;
 boolean showItemRgb = FALSE;
 
 showItemRgb=bedItemRgb(findTdbForTable(database, curTrack, table, ctLookupName));
-// should we expect itemRgb	instead of "reserved"
+// should we expect itemRgb     instead of "reserved"
 
 /* Make table with header row containing name of fields. */
 safef(query, sizeof(query), "describe %s", table);
@@ -343,7 +343,8 @@ if (tdb != NULL && isNotEmpty(tdb->html))
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         puts(tdb->html);
     else
-    printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",tdb->html);
+        printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",
+               tdb->html);
     }
 }
 
@@ -415,14 +416,12 @@ if (jpList != NULL)
 	    }
 	else if (aViaIndex)
 	    {
-	    hPrintf("(which is an array index into %s.%s)",
-	    	jp->a->table, jp->a->field);
+            hPrintf("(which is an array index into %s.%s)", jp->a->table, jp->a->field);
 	    }
 	else if (bViaIndex)
 	    {
-	    hPrintf("(%s.%s is an array index into %s.%s)",
-		jp->a->table, jp->a->field,
-	    	jp->b->table, jp->b->field);
+            hPrintf("(%s.%s is an array index into %s.%s)", jp->a->table, jp->a->field,
+	        jp->b->table, jp->b->field);
 	    }
 	else
 	    {
@@ -540,7 +539,8 @@ else
     }
 }
 
-static void showSchemaWithAsObj(char *db, char *trackId, struct customTrack *ct, struct asObject *asObj)
+static void showSchemaWithAsObj(char *db, char *trackId, struct customTrack *ct,
+                                struct asObject *asObj)
 /* Show schema on custom track using autoSqlString defined for this track type. */
 {
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -714,16 +714,14 @@ if (sqlTableExists(conn, "tableDescriptions"))
         char query[256];
 
         safef(query, sizeof(query),
-            "select autoSqlDef from tableDescriptions where tableName='%s'",
-            table);
+              "select autoSqlDef from tableDescriptions where tableName='%s'", table);
         char *asText = asText = sqlQuickString(conn, query);
 
         // If no result try split table. (not likely)
         if (asText == NULL)
             {
             safef(query, sizeof(query),
-                "select autoSqlDef from tableDescriptions where tableName='chrN_%s'",
-                table);
+                  "select autoSqlDef from tableDescriptions where tableName='chrN_%s'", table);
             asText = sqlQuickString(conn, query);
             }
         if (asText != NULL && asText[0] != 0)

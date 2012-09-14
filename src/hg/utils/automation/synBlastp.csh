@@ -42,6 +42,11 @@ endif
 
 set db = "$1"
 set otherDb = "$2"
+set otherGeneTable = "knownGene"
+
+if ( "$3" != "" ) then
+ set otherGeneTable = $3
+endif
 
 # check for required lift file in /gbdb/$db
 set otherDbUp1st = `echo "$otherDb" | gawk '{print toupper(substr($1,1,1)) substr($1,2,length($1)-1)}'`
@@ -53,7 +58,7 @@ if ( ! -e $lift ) then
 endif
 
 
-#check for required tables $db.xxBlastTab and db.knownGene and otherDb.knownGene
+#check for required tables $db.xxBlastTab and db.knownGene and otherDb.$otherGeneTable
 
 set otherOrg = `echo "$otherDb" | sed 's/[0123456789]*//g'`
 
@@ -75,11 +80,11 @@ if ($result != "knownGene") then
  exit 1
 endif
 
-# otherDb.knownGene exists?
-set sql = "show tables like 'knownGene'"
+# otherDb.$otherGeneTable exists?
+set sql = "show tables like '$otherGeneTable'"
 set result = `hgsql $otherDb -BN -e "$sql"`
-if ($result != "knownGene") then
- echo "error: table $otherDb.knownGene not found."
+if ($result != "$otherGeneTable") then
+ echo "error: table $otherDb.$otherGeneTable not found."
  exit 1
 endif
 
@@ -87,6 +92,7 @@ endif
 #debug
 echo "db=$db"
 echo "otherDb=$otherDb"
+echo "otherGeneTable=$otherGeneTable"
 #echo "lift=$lift"
 #echo "otherDbUp1st=$otherDbUp1st"
 #echo "otherOrg=$otherOrg"
@@ -120,7 +126,7 @@ echo "hgLoadPsl:"
 hgLoadPsl $otherDb $db.$otherDb.kg.psl -table=temp${db}KgPslMapped
 
 echo "hgMapToGene:"
-hgMapToGene -all $otherDb -type=psl -verbose=0 temp${db}KgPslMapped knownGene temp${otherDb}kgTo${db}kg
+hgMapToGene -all $otherDb -type=psl -verbose=0 temp${db}KgPslMapped $otherGeneTable temp${otherDb}kgTo${db}kg
 
 echo "$db.${xxBlastTab}:"
 

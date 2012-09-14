@@ -335,7 +335,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type narrowPeak
         # subId=3272 dateSubmitted=2011-01-17
 
-
     track wgEncodeOpenChromChipViewSignal
     shortLabel ChIP F-Seq Density Signal
     view SIG
@@ -731,7 +730,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         subGroups treatment=AANONE view=SIG factor=zCTRL cellType=MonoCD14
         type bigWig 0.000000 3.876800
         # subId=3271 dateSubmitted=2011-01-17
-
 
     track wgEncodeOpenChromChipViewSigBo
     shortLabel Base Overlap Signal

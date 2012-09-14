@@ -352,30 +352,6 @@ xrefTable vegaToCloneId
 xrefQuery select transcriptId,cloneId from %s where cloneId like '%s%%'
 searchPriority 10
 
-searchTable affyZebrafish
-searchMethod exact
-searchType psl
-shortCircuit 1
-termRegex Zebrafish:.+
-searchPriority 15
-termPrefix Zebrafish:
-                                                                                
-searchName affyZebrafishAbbrev
-searchTable affyZebrafish
-searchMethod exact
-searchType psl
-shortCircuit 1
-termRegex [Dr][[:alnum:]_\.]+.*_at
-searchPriority 15
-
-searchName affyZebrafishHg16Ortholog
-searchTable affyZebrafish
-searchMethod prefix
-searchType psl
-xrefTable affyToHg16Orthologs
-xrefQuery select name,geneSymbol from %s where geneSymbol like '%s%%'
-searchPriority 20
-
 searchTable ucscRetroMrnaInfo1
 searchType bed
 searchMethod prefix

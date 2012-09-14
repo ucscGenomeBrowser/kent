@@ -5,6 +5,10 @@ Test cases:
     o misc
     o noDropCntBug
     o overlap
+      - overlapping PSL, some in weird ways
+      - pseudoautosomal; make sure both are kept
+      - different parts of the same alignment overlap
+      - exact duplicates
     o pseudoRetro
     o repMatch
     o haplotype - hg18

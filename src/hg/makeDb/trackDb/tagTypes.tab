@@ -96,7 +96,6 @@ expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
 extTable *
-extraFields bed
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -165,6 +164,8 @@ groupings expRatio
 hapmapPhase bed
 hgGene genePred
 hgsid bed genePred
+highlightBy genePred
+highlightColor genePred
 html *
 htmlFile customTracks
 htmlUrl customTracks
@@ -191,6 +192,7 @@ itemClassTbl bed genePred
 itemClassNameColumn genePred
 itemClassClassColumn genePred
 itemCount customTracks
+itemDetailsHtmlTable genePred psl bed
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed
@@ -266,10 +268,14 @@ qValueFilterLimits bed narrowPeak broadPeak
 refSeqAnnoVersion genePred
 release *
 ucscRetroInfo psl
+sGroup_Birds wigMaf
 sGroup_Chimp wigMaf
+sGroup_Glire wigMaf
 sGroup_Glires wigMaf
+sGroup_Euarchontoglire wigMaf
 sGroup_Human wigMaf
 sGroup_Placental_Mammal wigMaf
+sGroup_Placental wigMaf
 sGroup_Primate wigMaf
 sGroup_Primates wigMaf
 sGroup_Vertebrate wigMaf

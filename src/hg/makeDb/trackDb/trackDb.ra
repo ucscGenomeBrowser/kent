@@ -452,7 +452,6 @@ visibility hide
 color 0,0,0
 type bed 4
 compositeTrack on
-release alpha
 nextExonText Next Match
 prevExonText Prev Match
 pubsArticleTable hgFixed.pubsArticle
@@ -463,23 +462,21 @@ noInherit on
 
     track pubsBlat
     shortLabel Sequences
-    longLabel Sequences in Articles: PubmedCentral (OA subset) and Elsevier
+    longLabel Sequences in Articles: PubmedCentral and Elsevier
     parent pubs on
     type bed 12 .
     visibility pack
     priority 2
-    release alpha
     configurable off
     configureByPopup off
 
     track pubsBlatPsl
-    shortLabel Individual Seq. Matches
+    shortLabel Indiv. Seq. Matches
     longLabel Individual sequence matches of one selected article from sequences track
     parent pubs off
     type psl
     visibility hide
     priority 1
-    release alpha
     configurable off
     configureByPopup off
     color 0,115,70
@@ -490,8 +487,7 @@ noInherit on
     parent pubs on
     visibility hide
     priority 3
-    type bed 4
-    release alpha
+    type bed 5
 
     track pubsMarkerSnp
     shortLabel SNPs
@@ -499,8 +495,7 @@ noInherit on
     parent pubs on
     visibility hide
     priority 3
-    type bed 4
-    release alpha
+    type bed 5
 
     track pubsMarkerGene
     shortLabel Genes
@@ -508,8 +503,7 @@ noInherit on
     parent pubs on
     priority 3
     visibility hide
-    type bed 4
-    release alpha
+    type bed 5
 
 track transMap
 superTrack on
@@ -1546,7 +1540,6 @@ shortLabel Common SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Found in >= 1% of Samples
 group varRep
 priority 99.0921
-visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp132Seq
@@ -3047,10 +3040,6 @@ xrefTable dm1.blastFBRef00
 xrefQuery select acc,geneId from %s where geneId like '%s%%'
 searchPriority 25
 
-searchTable ECgene
-searchType genePred
-searchPriority 50
-
 searchTable phastConsTopPaper
 searchType bed
 searchPriority 50
@@ -3092,31 +3081,9 @@ searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
 
-track ncbiIncidentDb
-shortLabel NCBI Incident
-longLabel NCBI Incident database
-group map
-priority 27
-visibility hide
-type bigBed 4 +
-url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
-urlLabel NCBI Incident:
-nonBedFieldsLabel Summary information from incident database:
-
 track grcIncidentDb
 shortLabel GRC Incident
 longLabel GRC Incident database
-group map
-priority 27
-visibility hide
-type bigBed 4 +
-url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
-urlLabel GRC Incident:
-nonBedFieldsLabel Summary information from incident database:
-
-track nextNcbiIncidentDb
-shortLabel TBD NCBIIncident
-longLabel In Progress GRC Incident database
 group map
 priority 27
 visibility hide

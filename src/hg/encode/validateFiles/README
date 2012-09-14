@@ -1,0 +1,18 @@
+
+BED TESTS:
+
+Since hgLoadBed and other loaders modify their input before creating the output,
+the sql table loaded can differ from the input, and therefore a sql tab dump
+will not match the input to hgLoadBed.  In particular, the bin field and the
+itemRgb fields are different.  Bin gets added (unless over-ridden with hgLoadBed option) and 
+itemRgb gets interpreted and converted into a 32-bit integer (unless over-ridden with hgLoadBed option).
+
+To get some test data from already loaded tables, I used the following approach:
+
+hgsql hg19 -BN -e 'select chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,replace(substr(inet_ntoa(reserved),3),".",","),blockCount,blockSizes,chromStarts from wgEncodeGisChiaPetHct116Pol2InteractionsRep1 limit 10' > input/bed12ok.txt
+
+Note that although it's a minor pain to have to list all the fields, it allows skipping the bin field,
+Also, it allows the conversion of the reserved 32-bit integer back into itemRgb with this expression:
+ replace(substr(inet_ntoa(reserved),3),".",",")
+
+

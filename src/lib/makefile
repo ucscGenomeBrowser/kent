@@ -2,7 +2,7 @@ include ../inc/common.mk
 
 
 O = aliType.o annoColumn.o annoFilter.o annoFormatter.o annoFormatTab.o \
-    annoGrator.o annoGratorQuery.o annoRow.o annoStreamer.o annoStreamVcf.o \
+    annoGrator.o annoGratorQuery.o annoOption.o annoRow.o annoStreamer.o annoStreamVcf.o \
     apacheLog.o asParse.o axt.o axtAffine.o bamFile.o base64.o \
     basicBed.o bbiRead.o bbiWrite.o bigBed.o binRange.o bits.o \
     blastOut.o blastParse.o boxClump.o boxLump.o bPlusTree.o \
@@ -10,7 +10,7 @@ O = aliType.o annoColumn.o annoFilter.o annoFormatter.o annoFormatTab.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o chainToPsl.o \
     cheapcgi.o cirTree.o codebias.o colHash.o common.o correlate.o crTree.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o dnaMotif.o dnaseq.o \
-    dnautil.o dtdParse.o dystring.o \
+    dnautil.o dtdParse.o dyOut.o dystring.o \
     emblParse.o errCatch.o errabort.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
     font/mgCourier10.o font/mgCourier12.o font/mgCourier14.o font/mgCourier18.o \
@@ -25,8 +25,8 @@ O = aliType.o annoColumn.o annoFilter.o annoFormatter.o annoFormatTab.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
     hacTree.o hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
-    https.o intExp.o intValTree.o internet.o itsa.o \
-    jointalign.o jpegSize.o keys.o knetUdc.o kxTok.o linefile.o localmem.o log.o \
+    https.o intExp.o intValTree.o internet.o itsa.o iupac.o \
+    jointalign.o jpegSize.o keys.o knetUdc.o kxTok.o linefile.o lineFileOnBigBed.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o memalloc.o memgfx.o metaWig.o mgCircle.o \
     mgPolygon.o mime.o net.o nib.o nibTwo.o nt4.o numObscure.o \
     obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o peakCluster.o \

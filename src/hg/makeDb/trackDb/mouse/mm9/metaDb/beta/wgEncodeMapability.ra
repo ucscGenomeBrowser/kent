@@ -1,0 +1,106 @@
+metaObject wgEncodeCrgMapabilityAlign100mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002937
+expId 2937
+fileName wgEncodeCrgMapabilityAlign100mer.bigWig
+grant Gingeras
+lab CRG-Guigo-m
+labVersion uniqueness no more than 2 mismatches
+md5sum 0fc0a6ff28f4e2ee780bf6702ed7aea7
+project wgEncode
+size 100mer
+subId 7051
+tableName wgEncodeCrgMapabilityAlign100mer
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign36mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002938
+expId 2938
+fileName wgEncodeCrgMapabilityAlign36mer.bigWig
+grant Gingeras
+lab CRG-Guigo-m
+labVersion uniqueness no more than 2 mismatches
+md5sum cea40c2bca1572ebfab8edc8936ea9ab
+project wgEncode
+size 36mer
+subId 7051
+tableName wgEncodeCrgMapabilityAlign36mer
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign40mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002939
+expId 2939
+fileName wgEncodeCrgMapabilityAlign40mer.bigWig
+grant Gingeras
+lab CRG-Guigo-m
+labVersion uniqueness no more than 2 mismatches
+md5sum 13cc3bf69325fb580586e79e75d82654
+project wgEncode
+size 40mer
+subId 7051
+tableName wgEncodeCrgMapabilityAlign40mer
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign50mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002940
+expId 2940
+fileName wgEncodeCrgMapabilityAlign50mer.bigWig
+grant Gingeras
+lab CRG-Guigo-m
+labVersion uniqueness no more than 2 mismatches
+md5sum def4bb1db43b8d93f16cf91f6987ecad
+project wgEncode
+size 50mer
+subId 7051
+tableName wgEncodeCrgMapabilityAlign50mer
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign75mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-02-09
+dateUnrestricted 2010-11-09
+dccAccession wgEncodeEM002941
+expId 2941
+fileName wgEncodeCrgMapabilityAlign75mer.bigWig
+grant Gingeras
+lab CRG-Guigo-m
+labVersion uniqueness no more than 2 mismatches
+md5sum 39b8af3492edd29d935f0b8d5b1dbdda
+project wgEncode
+size 75mer
+subId 7051
+tableName wgEncodeCrgMapabilityAlign75mer
+view Alignability
+
+metaObject wgEncodeMapability
+objType composite
+composite wgEncodeMapability
+expVars lab,dataType,view,size
+
+# MAGIC: 114026558

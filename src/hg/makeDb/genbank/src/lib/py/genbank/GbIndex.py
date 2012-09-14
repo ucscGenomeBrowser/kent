@@ -276,7 +276,7 @@ class GbIndex(dict):
 
 if __name__ == "__main__":
     # quick test
-    os.chdir("/cluster/data/genbank")
+    os.chdir("/hive/data/outside/genbank")
     gbi = GbIndex()
     rel = gbi[GenBank].getLatestRel()
     rel.loadAlignedParts("hg17")

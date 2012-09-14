@@ -1,4 +1,4 @@
-#!/usr/bin/env /cluster/data/genbank/bin/gbPython
+#!/usr/bin/env /hive/data/outside/genbank/bin/gbPython
 #
 # $Id: gbAlignSetup,v 1.24 2009/04/19 01:36:13 markd Exp $
 #
@@ -113,13 +113,14 @@ class CDnaUnaligned(object):
     to query against genome.  Does all specified orgCats at once, to avoid
     multiple passes throught the cDNA fasta files files"""
 
-    def __init__(self, db, rel, cdnaType, orgCats, querySplitSize, workDir):
+    def __init__(self, db, rel, cdnaType, orgCats, querySplitSizeBytes, workDir, partitionsFh):
         self.db = db
         self.rel = rel
         self.cdnaType = cdnaType
         self.orgCats = orgCats
-        self.querySplitSize = querySplitSize
+        self.querySplitSizeBytes = querySplitSizeBytes
         self.workDir = os.path.normpath(workDir)
+        self.partitionsFh = partitionsFh
         self.numAlign = 0L
         self.unaligned = [] # list of GbProcessedPart objs
         self.queries = {} # list of CDnaQuery objs, by orgCat
@@ -152,22 +153,23 @@ class CDnaUnaligned(object):
                 if self.__needsAligned(procPart):
                     self.unaligned.append(procPart)
 
+    def __parseAlignGetRow(self, procPart, row):
+        "parse on row of output from gbAlignGet"
+        if row[0] == "alignFa":
+            # alignFa: path orgCat numSeqs numBases
+            cdnas = CDnaQuery(procPart, self.cdnaType, row[2], int(row[3]), long(row[4]), row[1])
+            self.queries[cdnas.orgCat].append(cdnas)
+        elif row[0] == "partitions":
+            self.partitionsFh.write("\t".join(row[1:]) + "\n")
+        elif row[0] == "alignCnt":
+            self.numAlign += long(row[1])
+        else:
+            raise Exception("unexpected output from gbAlignGet: " + "\t".join(row))
+
     def __parseAlignGet(self, procPart, lines):
         "parse output from gbAlignGet"
-        cnt = None
         for line in lines:
-            row = line.split(" ")
-            if row[0] == "alignFa:":
-                # alignFa: path orgCat numSeqs numBases
-                cdnas = CDnaQuery(procPart, self.cdnaType, row[2], int(row[3]), long(row[4]), row[1])
-                self.queries[row[2]].append(cdnas)
-            elif row[0] == "alignCnt:":
-                cnt = long(row[1])
-            else:
-                raise Exception("unexpected output from gbAlignGet: " + line)
-        if cnt == None:
-            raise Exception("gbAlignGet did not output \"alignCnt:\"")
-        self.numAlign += cnt
+            self.__parseAlignGetRow(procPart, line.split("\t"))
 
     def __saveGmonOut(self, procPart):
         saveName = gmonOutDir + "/gbAlignGet/" + self.db + "/" + self.rel + "/" + procPart.update + "." + procPart.cdnaType
@@ -205,8 +207,8 @@ class CDnaUnaligned(object):
                    "-workdir=" + self.workDir,
                    "-orgCats=" + ",".join(self.orgCats),
                    "-polyASizes"];
-        if self.querySplitSize > 0:
-            cmdBase.append("-fasize=" + str(self.querySplitSize))
+        if self.querySplitSizeBytes > 0:
+            cmdBase.append("-fasize=" + str(self.querySplitSizeBytes))
         if cmdOpts.verbose:
             cmdBase.append("-verbose=" + str(cmdOpts.verbose))
         if cmdOpts.noMigrate:
@@ -292,9 +294,7 @@ class Jobs(list):
         self.jobGenDb = jobGenDb
         self.winSize = jobGenDb.genome.windows.winSize
         self.overlap = jobGenDb.genome.windows.overlap
-        # threshold for just sticking a window in it's own job
-        self.singleWinJobSize = self.winSize - self.overlap
-        self.maxWinsPerJob = jobGenDb.maxWinsPerJob
+        self.maxJobTargetSize = jobGenDb.maxJobTargetSize
         self.cdnaQuery = cdnaQuery
         self.pending = []
 
@@ -311,37 +311,36 @@ class Jobs(list):
                 return i
         return None
 
+    def __newJob(self, win):
+        """add a new job for the window"""
+        # add to pending unless it's already full
+        job = Job(self.cdnaQuery)
+        job.addTargetWin(win)
+        if job.targetBases >= self.maxJobTargetSize:
+            self.append(job)
+        else:
+            self.pending.append(job)
+
+    def __moveFromPending(self, i, job):
+        """move a full job from the pending list to being ready"""
+        # shuffle last pending job it's position in array
+        iLast = len(self.pending)-1
+        self.pending[i] = self.pending[iLast]
+        del(self.pending[iLast])
+        self.append(job)
+
     def __addWindow(self, win):
         """add a window to the object.  Performance sensitive due to
         pseudo-chromosomes with unplaced sequence"""
-        if win.size >= self.singleWinJobSize:
-            # win is only one in job
-            job = Job(self.cdnaQuery)
-            job.addTargetWin(win)
-            self.append(job)
+        i = self.__findJobWithRoom(win)
+        if i == None:
+            self.__newJob(win)
         else:
-            i = self.__findJobWithRoom(win)
-            if i == None:
-                # new job, add to pending unless only one per job allowed
-                job = Job(self.cdnaQuery)
-                job.addTargetWin(win)
-                if self.maxWinsPerJob > 1:
-                    self.pending.append(job)
-                else:
-                    self.append(job)
-            else:
-                # pack into existing job
-                job = self.pending[i]
-                job.addTargetWin(win)
-                if ((len(job) > self.maxWinsPerJob)
-                    or (job.targetBases >= self.singleWinJobSize)):
-                    # now full, remove from pending, and shuffle last
-                    # pending job it's postion in array (assumes this is
-                    # faster).
-                    iLast = len(self.pending)-1
-                    self.pending[i] = self.pending[iLast]
-                    del(self.pending[iLast])
-                    self.append(job)
+            # pack into existing job
+            job = self.pending[i]
+            job.addTargetWin(win)
+            if job.targetBases >= self.maxJobTargetSize:
+                self.__moveFromPending(i, job)
 
     def write(self, preFilterOpts):
         "write jobs"
@@ -369,13 +368,14 @@ class Jobs(list):
 
 class JobGenDb(object):
     "object to generate alignment jobs for a database"
-    def __init__(self, jobGen, db):
+    def __init__(self, jobGen, db, partitionsFh):
         self.jobGen = jobGen
         self.conf = jobGen.conf
         self.db = db
-        self.querySplitSize = 1024*1024*self.conf.getDbInt(db, "align.querySplitSize")
+        self.partitionsFh = partitionsFh
+        self.querySplitSizeBytes = 1024*1024*self.conf.getDbInt(db, "align.querySplitSize")
         self.ooc = self.conf.getDbStrNo(db, "ooc")
-        self.maxWinsPerJob = self.conf.getDbInt(db, "align.maxWinsPerJob")
+        self.maxJobTargetSize = self.conf.getDbInt(db, "align.maxJobTargetSize")
         self.genome = None
         self.numAlign = 0L
 
@@ -414,8 +414,8 @@ class JobGenDb(object):
         
     def __addJobSet(self, rel, cdnaType, orgCats):
         cdnaQueries = CDnaUnaligned(self.db, rel, cdnaType, orgCats,
-                                    self.querySplitSize,
-                                    self.jobGen.workDir)
+                                    self.querySplitSizeBytes,
+                                    self.jobGen.workDir, self.partitionsFh)
         if cdnaQueries.buildQueries() > 0:
             for orgCat in orgCats:
                 self.__addOrgCatJobs(rel, cdnaType, orgCat, cdnaQueries.queries[orgCat])
@@ -450,6 +450,8 @@ class JobGen(object):
         self.jobsFileTmp = self.jobsFile + ".tmp"
         self.expectFile = workDir + "/align.expected"
         self.expectFileTmp = self.expectFile + ".tmp"
+        self.partitionsFile = workDir + "/partitions.lst"
+        self.partitionsFileTmp = self.partitionsFile + ".tmp"
         self.numAlign = 0L
 
         fileOps.ensureDir(workDir)
@@ -460,10 +462,11 @@ class JobGen(object):
 
         self.jobFh = open(self.jobsFileTmp, "w")
         self.expectFh = open(self.expectFileTmp, "w")
+        self.partitionsFh = open(self.partitionsFileTmp, "w")
 
     def addJobs(self, db):
         "add jobs for unaligned sequences in a database"
-        j = JobGenDb(self, db)
+        j = JobGenDb(self, db, self.partitionsFh)
         j.addJobs()
         self.numAlign += j.numAlign
 
@@ -476,10 +479,12 @@ class JobGen(object):
             # leave flag indicating nothing to align
             open(self.workDir + "/align.none", "w").close()
             os.remove(self.expectFileTmp)
+            os.remove(self.partitionsFileTmp)
             os.remove(self.jobsFileTmp)
         else:
             os.rename(self.expectFileTmp, self.expectFile)
-            os.rename(self.jobsFileTmp, self.jobsFile) # must be last
+            os.rename(self.partitionsFileTmp, self.partitionsFile)
+            os.rename(self.jobsFileTmp, self.jobsFile) # must be last, flag file check in __init__
 
 def convertOptToSet(optName, optValue, valid):
     """convert one of the restriction options to a set, validating it's values

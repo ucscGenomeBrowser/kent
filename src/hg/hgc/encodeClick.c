@@ -48,7 +48,7 @@ for (sub = tdb->subtracks; sub != NULL; sub = sub->next)
 }
 #endif//def UNUSED
 
-void doEncodePeak(struct trackDb *tdb, struct customTrack *ct)
+void doEncodePeak(struct trackDb *tdb, struct customTrack *ct, char *item)
 /*  details for encodePeak type tracks. */
 {
 struct sqlConnection *conn;
@@ -61,6 +61,7 @@ char *chrom = cartString(cart,"c");
 int start = cgiInt("o");
 int end = cgiInt("t");
 int rowOffset;
+boolean firstTime = TRUE;
 /* connect to DB */
 if (ct)
     {
@@ -73,7 +74,7 @@ conn = hAllocConn(db);
 peakType = encodePeakInferTypeFromTable(db, table, tdb->type);
 if (peakType == 0)
     errAbort("unrecognized peak type from table %s", tdb->table);
-genericHeader(tdb, NULL);
+genericHeader(tdb, NULL);  // genericClickHandlerPlus gets there first anyway and overrides this which is now moot.
 sr = hOrderedRangeQuery(conn, table, chrom, start, end,
 			NULL, &rowOffset);
 while((row = sqlNextRow(sr)) != NULL)
@@ -81,10 +82,18 @@ while((row = sqlNextRow(sr)) != NULL)
     char **rowPastOffset = row + rowOffset;
     if ((sqlUnsigned(rowPastOffset[1]) != start) ||  (sqlUnsigned(rowPastOffset[2]) != end))
 	continue;
+    if (!sameString(rowPastOffset[3], item))
+	continue;
 
     float signal = -1;
     float pValue = -1;
     float qValue = -1;
+
+    if (firstTime)
+	firstTime = FALSE;
+    else // print separator
+	printf("<BR>\n");
+
     /* Name */
     if (rowPastOffset[3][0] != '.')
 	printf("<B>Name:</B> %s<BR>\n", rowPastOffset[3]);
@@ -205,8 +214,9 @@ int found = 0;
 genericHeader(tdb, NULL);
 
 /* Just get the current item. */
-safef(query, sizeof(query), "select * from %s where name='%s' and chrom='%s' and chromStart=%d and chromEnd=%d", 
-    tdb->track, item, chrom, start, end);
+safef(query, sizeof(query), 
+      "select * from %s where name='%s' and chrom='%s' and chromStart=%d and chromEnd=%d", 
+      tdb->track, item, chrom, start, end);
 sr = sqlGetResult(conn, query);
 
 if (sqlFieldColumn(sr, "bin") == 0)
@@ -249,7 +259,8 @@ if (pos.peptideRepeatCount > 1)
     {
     struct hash *hash = hashNew(8);
     struct peptideMapping anotherPos;
-    safef(query, sizeof(query), "select * from %s where name='%s' and not (chrom='%s' and chromStart=%d and chromEnd=%d)", 
+    safef(query, sizeof(query), 
+          "select * from %s where name='%s' and not (chrom='%s' and chromStart=%d and chromEnd=%d)", 
 	  tdb->track, item, chrom, start, end);
     printf("<BR>\n");
     webPrintLinkTableStart();

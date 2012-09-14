@@ -94,5 +94,8 @@ void trackVersionOutput(struct trackVersion *el, FILE *f, char sep, char lastSep
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct trackVersion *getTrackVersion(char *database, char *track);
+// Get most recent trackVersion for given track in given database
+
 #endif /* TRACKVERSION_H */
 

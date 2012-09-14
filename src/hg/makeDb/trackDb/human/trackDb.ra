@@ -903,101 +903,6 @@ visibility hide
 type bed 3 +
 otherDb panTro1
 
-track snp131Clinical
-shortLabel Clin SNPs (131)
-longLabel Clinically Associated Simple Nucleotide Polymorphisms (dbSNP build 131)
-group varRep
-priority 100.092
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
-chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp131CodingDbSnp,
-codingAnnoLabel_snp131CodingDbSnp dbSNP
-snpExceptions snp131Exceptions
-snpExceptionDesc snp131ExceptionDesc
-snpSeq snp131Seq
-
-track snp131NonClinical
-shortLabel SNPs (131)
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) Not Clinically Associated
-group varRep
-priority 100.093
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
-chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp131CodingDbSnp,
-codingAnnoLabel_snp131CodingDbSnp dbSNP
-snpExceptions snp131Exceptions
-snpExceptionDesc snp131ExceptionDesc
-snpSeq snp131Seq
-
-track snp131Composite
-compositeTrack on
-shortLabel SNPs (131) Comp
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) -- Composite version
-group varRep
-priority 99.093
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
-chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
-chimpDb panTro2
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp131CodingDbSnp,
-codingAnnoLabel_snp131CodingDbSnp dbSNP
-snpExceptions snp131Exceptions
-snpExceptionDesc snp131ExceptionDesc
-snpSeq snp131Seq
-subGroup1 view Views common=Common_SNPs misc=Misc_SNPs nonu=Non-Unique_SNPs
-dimensions dimX=view
-#configurable on
-
-    track snp131Common
-    parent snp131Composite
-    shortLabel Common SNPs (131)
-    longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) from HapMap and/or 1000Genomes
-    subGroups view=common
-    visibility pack
-    priority 1
-
-    track snp131Misc
-    parent snp131Composite
-    shortLabel Misc SNPs (131)
-    longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) not from HapMap and/or 1000Genomes
-    subGroups view=misc
-    visibility dense
-    priority 2
-
-    track snp131NonUnique
-    parent snp131Composite
-    shortLabel Non-Unique SNPs
-    longLabel Non-uniquely Mapped Simple Nucleotide Polymorphisms (dbSNP build 131)
-    subGroups view=nonu
-    visibility hide
-    priority 3
-
-
 track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
@@ -1265,6 +1170,21 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v10
+
+track dgvBeta
+shortLabel DGV Beta
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del) -- Beta Site
+group varRep
+priority 144.8
+visibility hide
+color 0,100,0
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+urlLabel DGV Browser and Report:
+url http://dgvbeta.tcag.ca/dgv/app/variant?id=$$&ref=$D
+dataVersion beta
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -3039,20 +2959,6 @@ color 200, 0, 0
 type bed 4
 hgsid on
 url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
-release beta,public
-
-track cosmic
-shortLabel COSMIC
-longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
-group phenDis
-priority 29.80
-visibility hide
-color 200, 0, 0
-type bed 4
-hgsid on
-url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
-dataVersion v57
-release alpha
 
 searchName cosmicId
 searchTable cosmic
@@ -3938,7 +3844,7 @@ urlLabel ISCA details:
     track iscaPathGainCum
     parent iscaComposite
     shortLabel ISCA Path Gain
-    longLabel ISCA CNVs: Pathogenic Gain Cumulative
+    longLabel ISCA CNVs: Pathogenic Gain Total
     type bedGraph 4
     maxHeightPixels 128:57:16
     viewLimits 0:100
@@ -3950,7 +3856,7 @@ urlLabel ISCA details:
     track iscaPathLossCum
     parent iscaComposite
     shortLabel ISCA Path Loss
-    longLabel ISCA CNVs: Pathogenic Loss Cumulative
+    longLabel ISCA CNVs: Pathogenic Loss Total
     type bedGraph 4
     maxHeightPixels 128:57:16
     viewLimits 0:100
@@ -3969,6 +3875,15 @@ urlLabel ISCA details:
     visibility hide
     priority 3
 
+    track iscaCuratedBenign
+    parent iscaComposite
+    shortLabel ISCA Curated Ben
+    longLabel ISCA CNVs: Curated Benign
+    type gvf
+    noScoreFilter .
+    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
+    priority 4
+
     track iscaPathogenic
     parent iscaComposite
     shortLabel ISCA Pathogenic
@@ -3977,7 +3892,7 @@ urlLabel ISCA details:
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
     visibility pack
-    priority 4
+    priority 5
 
     track iscaLikelyPathogenic
     parent iscaComposite
@@ -3986,39 +3901,30 @@ urlLabel ISCA details:
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 5
+    priority 6
 
     track iscaUncertain
-    parent iscaComposite off
+    parent iscaComposite
     shortLabel ISCA Uncertain
     longLabel ISCA CNVs: Uncertain
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 6
+    priority 7
 
     track iscaLikelyBenign
-    parent iscaComposite off
+    parent iscaComposite
     shortLabel ISCA Uncert Ben
     longLabel ISCA CNVs: Uncertain: Likely Benign
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 7
-
-    track iscaBenign
-    parent iscaComposite off
-    shortLabel ISCA Benign
-    longLabel ISCA CNVs: Benign
-    type gvf
-    noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
     priority 8
 
-    track iscaCuratedBenign
-    parent iscaComposite off
-    shortLabel ISCA Curated Ben
-    longLabel ISCA CNVs: Curated Benign
+    track iscaBenign
+    parent iscaComposite
+    shortLabel ISCA Benign
+    longLabel ISCA CNVs: Benign
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html

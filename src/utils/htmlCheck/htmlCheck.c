@@ -219,6 +219,7 @@ popAbortHandler();
 return retVal;
 }
 
+
 void checkRecursiveLinks(struct hash *uniqHash, struct htmlPage *page, 
 	int depth, boolean justLocal)
 /* Check links recursively up to depth. */
@@ -244,7 +245,7 @@ for (link = linkList; link != NULL; link = link->next)
 		if (!hashLookup(uniqHash, url))
 		    {
 		    struct hash *headerHash = newHash(8);
-		    int status = netUrlHead(url, headerHash);
+		    int status = netUrlHeadExt(url, "GET", headerHash);
 		    hashAdd(uniqHash, url, NULL);
 		    if (status != 200 && status != 302 && status != 301)
 			warn("%d from %s", status, url);

@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db dipOrd1
+clade mammal
+genomeCladePriority 35
+scientificName  Dipodomys ordii
+commonName Kangaroo rat
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute
+assemblyShortLabel Dipord1.0
+orderKey 1580
+mitoAcc none
+fastaFiles /cluster/data/dipOrd1/broad/assembly.bases.gz
+agpFiles /cluster/data/dipOrd1/broad/assembly.agp
+qualFiles /cluster/data/dipOrd1/broad/dipOrd1.qual.qac
+dbDbSpeciesDir kangarooRat
+photoCreditURL http://en.wikipedia.org/wiki/File:Kangaroo-rat.jpg
+photoCreditName Rex, Wikipedia Commons
+ncbiGenomeId 772
+ncbiAssemblyId 175238
+ncbiAssemblyName Dipord1.0
+ncbiBioProject 20385
+genBankAccessionID GCA_000151885.1
+taxId 10020

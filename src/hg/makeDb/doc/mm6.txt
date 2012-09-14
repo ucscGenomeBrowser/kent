@@ -10432,3 +10432,37 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 ssh hgwdev
 knownToVisiGene mm6
 
+##########################################################################
+# construct liftOver to mm10 (DONE - 2012-05-01 - Hiram) 
+    screen -S mm6	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/mm6/bed/blat.mm10.2012-05-01
+    cd /hive/data/genomes/mm6/bed/blat.mm10.2012-05-01
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/mm6/ooc/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev mm6 mm10
+    # if that is OK, then run it:
+    #   This is interesting, the above debug correctly used
+    #   /hive/data/genomes/mm6/mm6.2bit but this attempted run said
+    #   that /scratch/data/mm6/mm6.2bit was missing.  So, ran the
+    #   scripts created above manually to get the blat done:
+# Completed: 6027 of 6027 jobs
+# CPU time in finished jobs:     961983s   16033.05m   267.22h   11.13d  0.031 y
+# IO & Wait Time:                258451s    4307.51m    71.79h    2.99d  0.008 y
+# Average job time:                 202s       3.37m     0.06h    0.00d
+# Longest finished job:             771s      12.85m     0.21h    0.01d
+# Submission to last job:          2617s      43.62m     0.73h    0.03d
+
+    # then:
+    time doSameSpeciesLiftOver.pl -continue=chain -buildDir=`pwd` \
+        -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/mm6/ooc/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev mm6 mm10 > chain.log 2>&1
+    #   real    63m12.463s
+
+    # verify this file exists:
+    og -L /gbdb/mm6/liftOver/mm6ToMm10.over.chain.gz
+# -rw-rw-r-- 1 3567460 May  1 12:06 /gbdb/mm6/liftOver/mm6ToMm10.over.chain.gz
+
+    # and try out the conversion on genome-test from mm6 to mm10 
+############################################################################

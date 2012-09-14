@@ -18,6 +18,7 @@
 #include "genePred.h"
 #include "hgColors.h"
 #include "hgGene.h"
+#include "obscure.h"
 
 
 /* ---- Global variables. ---- */
@@ -251,14 +252,22 @@ hPrintf("%s", description);
 freez(&description);
 
 /* print genome position and size */
-hPrintf("<B>Strand:</B> %s\n", curGenePred->strand);
-hPrintf("&nbsp;&nbsp;<B>Genomic Size:</B> %d\n", curGeneEnd - curGeneStart);
-
-/* print exon count(s) */
+char buffer[1024];
+char *commaPos;
+   
 exonCnt = curGenePred->exonCount;
-cdsStart= curGenePred->cdsStart;
-cdsEnd  = curGenePred->cdsEnd;
-hPrintf("&nbsp;&nbsp;<B>Exon Count:</B> %d\n", exonCnt);
+safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEnd);
+commaPos = addCommasToPos(database, buffer);
+
+hPrintf("<B>Transcript (Including UTRs):</B><br>\n");
+hPrintf("<B>Position:</B>&nbsp%s&nbsp",commaPos);
+sprintLongWithCommas(buffer, (long long)curGeneEnd - curGeneStart);
+hPrintf("<B>Size:</B>&nbsp%s&nbsp", buffer);
+hPrintf("<B>Total Exon Count:</B>&nbsp%d&nbsp", exonCnt);
+hPrintf("<B>Strand:</B>&nbsp%s<br>\n",curGenePred->strand);
+
+cdsStart = curGenePred->cdsStart;
+cdsEnd = curGenePred->cdsEnd;
 
 /* count CDS exons */
 if (cdsStart < cdsEnd)
@@ -269,10 +278,14 @@ if (cdsStart < cdsEnd)
 	     (cdsEnd >= curGenePred->exonStarts[i]) )
 	     cdsExonCnt++;
 	}
+    hPrintf("<B>Coding Region:</B><br>\n");
+    safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, cdsStart+1, cdsEnd);
+    commaPos = addCommasToPos(database, buffer);
+    hPrintf("<B>Position:</B>&nbsp%s&nbsp",commaPos);
+    sprintLongWithCommas(buffer, (long long)cdsEnd - cdsStart);
+    hPrintf("<B>Size:</B>&nbsp%s&nbsp", buffer);
+    hPrintf("<B>Coding Exon Count:</B>&nbsp%d&nbsp\n", cdsExonCnt);
     }
-/* print CDS exon count only if it is different than exonCnt */
-hPrintf("&nbsp;&nbsp;");
-hPrintf("<B>Coding Exon Count:</B> %d\n", cdsExonCnt);
 fflush(stdout);
 }
 

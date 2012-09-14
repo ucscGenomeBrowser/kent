@@ -136,14 +136,14 @@ echo "Build branch sandbox on beta [${0}: `date`]"
 ./buildBeta.csh
 if ( $status ) then
      echo "build on beta failed for v$BRANCHNN [${0}: `date`]"
-    # echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER galt browser-qa
-    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "v$BRANCHNN Build failed on beta" $USER
+    # echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER ${BUILDMEISTER} galt browser-qa
+    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "v$BRANCHNN Build failed on beta" $USER ${BUILDMEISTER}
     echo "Waiting for any other processes to finish"
     wait
     exit 1
 endif
 echo "build on beta done for v$BRANCHNN [${0}: `date`]"
-echo "v$BRANCHNN built successfully on beta (day 16)." | mail -s "v$BRANCHNN Build complete on beta (day 16)." $USER galt kent browser-qa
+echo "v$BRANCHNN built successfully on beta (day 16)." | mail -s "v$BRANCHNN Build complete on beta (day 16)." $USER ${BUILDMEISTER} galt kent browser-qa
 
 echo
 echo "Waiting for the background beta:git-reports to finish [${0}: `date`]"
@@ -153,13 +153,13 @@ echo "Wait complete, checking results. [${0}: `date`]"
 if ( -e GitReports.ok ) then
     echo "Git Reports finished ok. [${0}: `date`]"
     echo "buildGitReports.csh done on hgwdev, sending email... [${0}: `date`]"
-    echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." $USER donnak kuhn ann pauline kate luvina
+    echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." $USER ${BUILDMEISTER} donnak kuhn ann pauline kate luvina
 
 	# email all who have checked in that code summaries are due
     @ LASTNN=$BRANCHNN - 1
     #foreach victim (braney larrym angie hiram tdreszer kate chinhli)
     set victims=( `git log v${LASTNN}_base..v${BRANCHNN}_base --name-status | grep Author | sort | uniq | awk '{ end=index($0,"@"); beg=index($0,"<"); addr=substr( $0,beg+1,end-beg-1); print addr; }'` )
-    echo "Expected victims:\n${victims}" | mail -s "Code summaries for v$BRANCHNN are expected from...." $USER ann
+    echo "Expected victims:\n${victims}" | mail -s "Code summaries for v$BRANCHNN are expected from...." $USER ${BUILDMEISTER} ann
     foreach victim ( $victims )
 		git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base --pretty=oneline > /dev/null
 		if ($? == 0) then

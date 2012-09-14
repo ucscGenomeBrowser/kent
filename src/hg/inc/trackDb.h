@@ -59,18 +59,22 @@ struct trackDb
     struct hash *settingsHash;  /* Hash for settings. Not saved in database.
                                  * Don't use directly, rely on trackDbSetting to access. */
     /* additional info, determined from settings */
-    char treeNodeType;          /* bit map containing defining supertrack, composite and children of same (may be parent & child) */
-    struct trackDb *parent;     /* parent of composite or superTracks */
-    struct trackDb *subtracks;  /* children of composite not supertracks */ // NOTE: can only be on one sl at a time!
-    struct slRef *children;     /* children of folders (superTracks) only.  Needed as slRef since these children are on the main trackList and can't be in 2 sl's at once */
-    char *parentName;           /* set if this is a supertrack member */
-    boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
+    char treeNodeType;          // bit map containing defining supertrack, composite and children
+                                //     of same (may be parent & child)
+    struct trackDb *parent;     // parent of composite or superTracks
+    struct trackDb *subtracks;  // children of composite not supers. NOTE: only in one sl at a time!
+    struct slRef *children;     // children of folders (superTracks) only.
+                                // Needed as slRef since these children are on the main trackList
+                                // and can't be in 2 sl's at once
+    char *parentName;           // set if this is a supertrack member 
+    boolean isShow;             // for supertracks: true if supertrack with pseudo-vis 'show'
     struct hash *overrides;     /* If not NULL, this is an override
                                  * entry.  It contains the names, but not the
                                  * values of the fields and settings that were
                                  * specified in the entry. */
-    struct tdbExtras *tdbExtras;/* This struct allows storing extra values which may be used multiple times within a single cgi
-                                   And example is the metadata looked looked up once in the metaTbl and used again and again. */
+    struct tdbExtras *tdbExtras;// This struct allows storing extra values which may be used
+                                // multiple times within a single cgi. An example is the metadata
+                                // looked up once in the metaDb and used again and again.
     };
 
 #define FOLDER_MASK                      0x10
@@ -93,15 +97,18 @@ struct trackDb
 #define COMPOSITE_CHILD_NODE(nodeType)   ((nodeType) & COMPOSITE_CHILD_MASK)
 #define COMPOSITE_VIEW_NODE(nodeType)    ((nodeType) & COMPOSITE_VIEW_MASK)
 #define MULTI_TRACK_CHILD_NODE(nodeType) ((nodeType) & MULTI_TRACK_CHILD_MASK)
-#define CONTAINER_CHILD_NODE(nodeType)   ((nodeType) & (MULTI_TRACK_CHILD_MASK | COMPOSITE_CHILD_MASK))
+#define CONTAINER_CHILD_NODE(nodeType)   ((nodeType) & \
+                                                   (MULTI_TRACK_CHILD_MASK | COMPOSITE_CHILD_MASK))
 #define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK) == 0 )
 #define SOLO_NODE(nodeType)             (((nodeType) & TREETYPE_MASK) <= FOLDER_CHILD_MASK)
-//#define tdbIsParent(tdb)              ((tdb)->subtracks)
-//#define tdbIsChild(tdb)               ((tdb)->parent   )
-//#define tdbIsTreeLeaf(tdb)            ( CHILD_NODE((tdb)->treeNodeType) && !tdbIsParent(tdb))
-//#define tdbIsTreeRoot(tdb)            (PARENT_NODE((tdb)->treeNodeType) && !tdbIsChild(tdb) )
-//#define tdbIsTreeBranch(tdb)          (!INDEPENDENT_NODE((tdb)->treeNodeType) &&  tdbIsParent(tdb) &&  tdbIsChild(tdb))
-//#define tdbIsNotInTree(tdb)           ( INDEPENDENT_NODE((tdb)->treeNodeType) && !tdbIsParent(tdb) && !tdbIsChild(tdb))
+//#define tdbIsParent(tdb)     ((tdb)->subtracks)
+//#define tdbIsChild(tdb)      ((tdb)->parent   )
+//#define tdbIsTreeLeaf(tdb)   ( CHILD_NODE((tdb)->treeNodeType) && !tdbIsParent(tdb))
+//#define tdbIsTreeRoot(tdb)   (PARENT_NODE((tdb)->treeNodeType) && !tdbIsChild(tdb) )
+//#define tdbIsTreeBranch(tdb) (  !INDEPENDENT_NODE((tdb)->treeNodeType)
+//                             &&  tdbIsParent(tdb) &&  tdbIsChild(tdb))
+//#define tdbIsNotInTree(tdb)  (   INDEPENDENT_NODE((tdb)->treeNodeType)
+//                             && !tdbIsParent(tdb) && !tdbIsChild(tdb))
 
 // --- Folders are superTracks.  Currently only one level deep
 INLINE void tdbMarkAsFolder(struct trackDb *tdb)
@@ -121,7 +128,8 @@ tdb->treeNodeType |= FOLDER_CHILD_MASK;
 INLINE boolean tdbIsFolder(struct trackDb *tdb)
 // Is this trackDb struct marked as a folder ?
 {
-return tdb && FOLDER_NODE(tdb->treeNodeType);  // && tdb->children  NOTE: The children list is not always filled in, but should be
+return tdb && FOLDER_NODE(tdb->treeNodeType);  // && tdb->children
+//  NOTE: The children list is not always filled in, but should be
 }
 #define tdbIsSuper(tdb) tdbIsFolder(tdb)
 #define tdbIsSuperTrack(tdb) tdbIsFolder(tdb)
@@ -138,7 +146,7 @@ INLINE struct trackDb *tdbGetImmediateFolder(struct trackDb *tdb)
 {
 struct trackDb *parent = tdb->parent;
 for ( ; parent != NULL && !tdbIsFolder(parent); parent = parent->parent)
-     ;
+    ;
 return parent;
 }
 #define tdbGetSuperTrack(tdb) tdbGetImmediateFolder(tdb)
@@ -188,12 +196,13 @@ INLINE struct trackDb *tdbGetComposite(struct trackDb *tdb)
 {
 struct trackDb *parent = tdb->parent;
 for ( ; parent != NULL && !tdbIsComposite(parent); parent = parent->parent)
-     ;
+    ;
 return parent;
 }
 
 
-// --- MultiTracks are container tracks with one level of subtracks combined into a unified hgTracks image track
+// --- MultiTracks are container tracks with one level of subtracks
+ //                combined into a unified hgTracks image track
 INLINE void tdbMarkAsMultiTrack( struct trackDb *tdb)
 // Marks a trackDb struct as a multiTrack (like multiWig)
 {
@@ -225,12 +234,12 @@ INLINE struct trackDb *tdbGetMultiTrack(struct trackDb *tdb)
 {
 struct trackDb *parent = tdb->parent;
 for ( ; parent != NULL && !tdbIsMultiTrack(parent); parent = parent->parent)
-     ;
+    ;
 return parent;
 }
 
 
-// --- CONTAINERS are composites or multiTracks, which behave in similar ways through some code paths
+// --- CONTAINERS are composites or multiTracks, which behave in similar ways thru some code paths
 INLINE boolean tdbIsContainer( struct trackDb *tdb)
 // Is this trackDb struct marked as a composite or multiTrack with children ?
 {
@@ -249,7 +258,7 @@ INLINE struct trackDb *tdbGetContainer(struct trackDb *tdb)
 {
 struct trackDb *parent = tdb->parent;
 for ( ; parent != NULL && !tdbIsContainer(parent); parent = parent->parent)
-     ;
+    ;
 return parent;
 }
 
@@ -401,7 +410,7 @@ void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database);
 
 // Not all track types have separate configuration
 typedef enum _eCfgType
-{
+    {
     cfgNone     =0,
     cfgBedScore =1,
     cfgWig      =2,
@@ -415,7 +424,7 @@ typedef enum _eCfgType
     cfgPsl      =10,
     cfgVcf      =11,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
-} eCfgType;
+    } eCfgType;
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
 /* determine what kind of track specific configuration is needed,

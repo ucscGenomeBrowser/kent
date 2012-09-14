@@ -1,0 +1,9 @@
+# required db variable
+db dasNov1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that has invalid structures from Ensembl:
+# 31903: ENSDNOT00000003424 no exonFrame on CDS exon 3

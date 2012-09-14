@@ -16,16 +16,46 @@ endif
 cd ${BUILDHOME}/build-hgdownload/admin
 git pull origin master
 
-hgsqldump --all -d -c -h genome-centdb hgcentral \
-sessionDb userDb hubStatus | sed -e "s/genome-centdb/localhost/" > \
-/tmp/hgcentraltemp.sql
+### Creates these tables only
+set CREATE_ONLY="sessionDb userDb hubStatus gbMembers namedSessionDb" 
+set CREATE_OR_LIST=`echo "${CREATE_ONLY}" | sed -e "s/ /|/g"`
+set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
+     | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
+     | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
+hgsqldump --skip-add-drop-table --skip-lock-tables --no-data ${IGNORE_TABLES} \
+          -h genome-centdb --no-create-db --databases hgcentral  | grep -v "^USE " \
+         | sed -e "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/" \
+    > /tmp/hgcentraltemp.sql 
 
-# --skip-extended-insert 
-#   to make it dump rows as separate insert statements
-hgsqldump --all --skip-extended-insert -c -h genome-centdb hgcentral \
-defaultDb blatServers dbDb dbDbArch gdbPdb liftOverChain clade genomeClade targetDb hubPublic | \
-sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentraltemp.sql
+### Creates and fills (replacing entirely) these tables
+set REPLACE_ENTIRELY="blatServers dbDb dbDbArch gdbPdb liftOverChain" 
+set CREATE_OR_LIST=`echo "${REPLACE_ENTIRELY}" | sed -e "s/ /|/g"`
+set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
+     | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
+     | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
+# --skip-extended-insert ... to make it dump rows as separate insert statements
+# --skip-add-drop-table ... to avoid dropping existing tables
+# Note that INSERT is turned into REPLACE making our table contents dominant, 
+#      but users additional rows are preserved
+hgsqldump ${IGNORE_TABLES} --skip-extended-insert -c -h genome-centdb \
+        --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
+        "s/genome-centdb/localhost/" \
+    >> /tmp/hgcentraltemp.sql
 
+### Creates and fills (replacing uniquely keyed rows only) these tables
+set CREATE_AND_FILL="defaultDb clade genomeClade targetDb hubPublic" 
+set CREATE_OR_LIST=`echo "${CREATE_AND_FILL}" | sed -e "s/ /|/g"`
+set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
+     | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
+     | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
+# --skip-extended-insert ... to make it dump rows as separate insert statements
+# --skip-add-drop-table ... to avoid dropping existing tables
+# Note that INSERT is turned into REPLACE making our table contents dominant, 
+#      but users additional rows are preserved
+hgsqldump ${IGNORE_TABLES} --skip-add-drop-table --skip-extended-insert -c -h genome-centdb \
+        --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
+        "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/; s/INSERT/REPLACE/" \
+    >> /tmp/hgcentraltemp.sql
 
 # get rid of some mysql5 trash in the output we don't want.
 # also need to break data values at rows so the diff and cvs 
@@ -63,10 +93,14 @@ endif
 # push to hgdownload
 ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p hgcentral.sql qateam@hgdownload:/mirrordata/apache/htdocs/admin/
+ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
+scp -p hgcentral.sql qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/
 
 echo
 echo "A new hgcentral.sql file should now be present at:"
 echo "  http://hgdownload.cse.ucsc.edu/admin/"
+echo "   and"
+echo "  http://hgdownload-sd.cse.ucsc.edu/admin/"
 echo
 echo "If it is not, you can request a push of the file:"
 echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"

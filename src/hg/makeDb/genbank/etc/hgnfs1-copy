@@ -5,22 +5,22 @@
 # since the last time files were downloaded.  Remote file access is by rsync.
 
 set -e  # errors terminate
-trap "echo Error: `hostname` copy failed >&2; exit 1" ERR
+trap "echo Error: $(hostname) copy failed >&2; exit 1" ERR
 exec </dev/null
 
 # initialize
 gbRoot=/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
-databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
+databases=$(gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs)
 
 # local location of /gbdb
 gbdb=/export/gbdb
 
 # location of the genbank root and files on the remote build server
-gbBuildServer=genbank-10
+gbBuildServer=hgwdev
 rsyncPort="rsh"
-gbBuildRoot=/cluster/data/genbank
+gbBuildRoot=/hive/data/outside/genbank
 
 # Checking for an existing lock file, Silently exits if lock file exists
 # and is less than one day old,  error if older.

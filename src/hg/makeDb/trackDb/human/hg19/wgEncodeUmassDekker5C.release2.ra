@@ -1,0 +1,94 @@
+
+track wgEncodeUmassDekker5C
+superTrack wgEncodeChromSuper dense
+shortLabel UMass 5C
+longLabel Chromatin Interactions by 5C from ENCODE/Dekker Univ. Mass.
+group regulation
+compositeTrack on
+subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2)
+subGroup2 region Region NONE=None
+dimensions dimensionX=cellType
+sortOrder cellType=+
+fileSortOrder cell=Cell_Line region=Region replicate=Replicate view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession  fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell region=region
+dragAndDrop subTracks
+boxedCfg on
+canPack On
+priority 0
+type bed 12 +
+scoreFilter 0
+noInherit on
+wgEncode 1
+html wgEncodeUmassDekker5C.release2
+
+#        track wgEncodeUmassDekker5CGm12878Pk
+#        parent wgEncodeUmassDekker5C
+#        shortLabel GM12878 Pk
+#        longLabel GM12878 5C Peaks from ENCODE/UMass-Dekker
+#        subGroups cellType=1GM12878 region=NONE
+#        type bed 12
+#        color 153,38,0
+#        # subId=5451 dateSubmitted=2012-02-07
+
+        track wgEncodeUmassDekker5CGm12878PkV2
+        parent wgEncodeUmassDekker5C
+        shortLabel GM12878 Pk
+        longLabel GM12878 5C Peaks from ENCODE/UMass-Dekker
+        subGroups cellType=t1GM12878 region=NONE
+        type bed 12
+        color 153,38,0
+        # subId=7026 dateSubmitted=2012-06-05
+
+#        track wgEncodeUmassDekker5CH1hescPk
+#        parent wgEncodeUmassDekker5C
+#        shortLabel H1-hESC Pk
+#        longLabel H1-hESC 5C Peaks from ENCODE/UMass-Dekker
+#        subGroups cellType=1H1HESC region=NONE
+#        type bed 12
+#        color 0,107,27
+#        # subId=5451 dateSubmitted=2012-02-07
+
+        track wgEncodeUmassDekker5CH1hescPkV2
+        parent wgEncodeUmassDekker5C
+        shortLabel H1-hESC Pk
+        longLabel H1-hESC 5C Peaks from ENCODE/UMass-Dekker
+        subGroups cellType=t1H1HESC region=NONE
+        type bed 12
+        color 0,107,27
+        # subId=7026 dateSubmitted=2012-06-05
+
+#        track wgEncodeUmassDekker5CHelas3Pk
+#        parent wgEncodeUmassDekker5C
+#        shortLabel HeLa-S3 Pk
+#        longLabel HeLa-S3 5C Peaks from ENCODE/UMass-Dekker
+#        subGroups cellType=2HELAS3 region=NONE
+#        type bed 12
+#        color 0,119,158
+#        # subId=5451 dateSubmitted=2012-02-07
+
+        track wgEncodeUmassDekker5CHelas3PkV2
+        parent wgEncodeUmassDekker5C
+        shortLabel HeLa-S3 Pk
+        longLabel HeLa-S3 5C Peaks from ENCODE/UMass-Dekker
+        subGroups cellType=t2HELAS3 region=NONE
+        type bed 12
+        color 0,119,158
+        # subId=7026 dateSubmitted=2012-06-05
+
+#        track wgEncodeUmassDekker5CK562Pk
+#        parent wgEncodeUmassDekker5C
+#        shortLabel K562 Pk
+#        longLabel K562 5C Peaks from ENCODE/UMass-Dekker
+#        subGroups cellType=1K562 region=NONE
+#        type bed 12
+#        color 46,0,184
+#        # subId=5451 dateSubmitted=2012-02-07
+
+        track wgEncodeUmassDekker5CK562PkV2
+        parent wgEncodeUmassDekker5C
+        shortLabel K562 Pk
+        longLabel K562 5C Peaks from ENCODE/UMass-Dekker
+        subGroups cellType=t1K562 region=NONE
+        type bed 12
+        color 46,0,184
+        # subId=7026 dateSubmitted=2012-06-05

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #	$Id: fetchFullGbdb.sh,v 1.2 2010/03/19 16:19:34 hiram Exp $
 #

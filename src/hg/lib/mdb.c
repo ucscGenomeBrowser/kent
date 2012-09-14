@@ -55,7 +55,7 @@ void mdbSaveToDb(struct sqlConnection *conn, struct mdb *el, char *tableName, in
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s set obj='%s', var='%s', val='%s'",
-	tableName,  el->obj,  el->var,  el->val);
+               tableName,  el->obj,  el->var,  el->val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -76,7 +76,7 @@ var = sqlEscapeString(el->var);
 val = sqlEscapeString(el->val);
 
 dyStringPrintf(update, "insert into %s set obj='%s', var='%s', val='%s'",
-	tableName,  obj,  var,  val);
+               tableName,  obj,  var,  val);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&obj);
@@ -237,8 +237,8 @@ fputc('}',f);
 static void mdbLeafObjFree(struct mdbLeafObj **leafObjPtr)
 // Frees a single mdbVar struct
 {
-    freeMem((*leafObjPtr)->obj);
-    freez(leafObjPtr);
+freeMem((*leafObjPtr)->obj);
+freez(leafObjPtr);
 }
 
 static void mdbLimbValFree(struct mdbLimbVal **limbValPtr)
@@ -246,15 +246,15 @@ static void mdbLimbValFree(struct mdbLimbVal **limbValPtr)
 {
 struct mdbLimbVal *limbVal = *limbValPtr;
 
-    // Free hash first (shared memory)
-    hashFree(&(limbVal->objHash));
+// Free hash first (shared memory)
+hashFree(&(limbVal->objHash));
 
-    struct mdbLeafObj *leafObj = NULL;
-    while((leafObj = slPopHead(&(limbVal->objs))) != NULL)
-        mdbLeafObjFree(&leafObj);
+struct mdbLeafObj *leafObj = NULL;
+while ((leafObj = slPopHead(&(limbVal->objs))) != NULL)
+    mdbLeafObjFree(&leafObj);
 
-    freeMem(limbVal->val);
-    freez(limbValPtr);
+freeMem(limbVal->val);
+freez(limbValPtr);
 }
 
 static struct mdbVar *mdbVarNew(char *var, void *val)
@@ -282,12 +282,12 @@ struct mdbObj *mdbObj  = NULL;
 struct mdbObj *mdbObjs = NULL;
 struct mdbVar *mdbVar;
 struct mdb *thisRow;
-while((thisRow = slPopHead(mdbPtr)) != NULL)
+while ((thisRow = slPopHead(mdbPtr)) != NULL)
     {
     if (mdbObj == NULL || differentString(thisRow->obj,mdbObj->obj) )
         {
         // Finish last object before starting next!
-        if(mdbObj!= NULL)
+        if (mdbObj!= NULL)
             slReverse(&(mdbObjs->vars));
         // Start new object
         AllocVar(mdbObj);
@@ -312,9 +312,9 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
     }
 
 // Finish very last object
-if(mdbObjs && mdbObjs->vars)
+if (mdbObjs && mdbObjs->vars)
     slReverse(&(mdbObjs->vars));
-if(mdbObjs)
+if (mdbObjs)
     slReverse(&mdbObjs);
 
 return mdbObjs;
@@ -328,15 +328,15 @@ struct mdbByVar *rootVar  = NULL;
 struct mdbLimbVal *limbVal  = NULL;
 struct mdbLeafObj *leafObj;
 struct mdb *thisRow;
-while((thisRow = slPopHead(mdbPtr)) != NULL)
+while ((thisRow = slPopHead(mdbPtr)) != NULL)
     {
     // Start at root
     if (rootVar == NULL || differentString(thisRow->var,rootVar->var) )
         {
         // Finish last var before starting next!
-        if(rootVars && rootVars->vals && rootVars->vals->objs)
+        if (rootVars && rootVars->vals && rootVars->vals->objs)
             slReverse(&(rootVars->vals->objs));
-        if(rootVars && rootVars->vals)
+        if (rootVars && rootVars->vals)
             slReverse(&(rootVars->vals));
         // Start new var
         AllocVar(rootVar);
@@ -355,14 +355,14 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
     if (limbVal == NULL || differentString(thisRow->val,limbVal->val) )
         {
         // Finish last val before starting next!
-        if(limbVal != NULL && limbVal->objs != NULL)
+        if (limbVal != NULL && limbVal->objs != NULL)
             slReverse(&(limbVal->objs));
         // Start new val
         AllocVar(limbVal);
         limbVal->val     = thisRow->val;
         if ( buildHashes )
-            {
-            hashAddUnique(rootVar->valHash, limbVal->val, limbVal); // Pointer to struct to get to objHash
+            {                                          // Pointer to struct to get to objHash
+            hashAddUnique(rootVar->valHash, limbVal->val, limbVal);
             limbVal->objHash = hashNew(10);
             }
         slAddHead(&(rootVar->vals),limbVal);
@@ -374,18 +374,18 @@ while((thisRow = slPopHead(mdbPtr)) != NULL)
     AllocVar(leafObj);
     leafObj->obj     = thisRow->obj;
     if ( buildHashes )
-        hashAddUnique(limbVal->objHash, leafObj->obj, leafObj); // Pointer to struct to resolve type!
+        hashAddUnique(limbVal->objHash, leafObj->obj, leafObj);// Pointer to struct to resolve type
     slAddHead(&(limbVal->objs),leafObj);
 
     freeMem(thisRow);
     }
 
 // Finish very last object
-if(rootVars && rootVars->vals && rootVars->vals->objs)
+if (rootVars && rootVars->vals && rootVars->vals->objs)
     slReverse(&(rootVars->vals->objs));
-if(rootVars && rootVars->vals)
+if (rootVars && rootVars->vals)
     slReverse(&(rootVars->vals));
-if(rootVars && rootVars->vals)
+if (rootVars && rootVars->vals)
     slReverse(&rootVars);
 
 return rootVars;
@@ -397,17 +397,17 @@ static int mdbObjCRC(struct mdbObj *mdbObjs)
 {
 int crc = 0;
 struct mdbObj *mdbObj = NULL;
-for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+for (mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     {
-    if(mdbObj->obj != NULL)
+    if (mdbObj->obj != NULL)
         crc += hashCrc(mdbObj->obj);
 
     struct mdbVar *mdbVar = NULL;
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
-        if(mdbVar->var != NULL)
+        if (mdbVar->var != NULL)
             crc += hashCrc(mdbVar->var);
-        if(mdbVar->val != NULL)
+        if (mdbVar->val != NULL)
             crc += hashCrc(mdbVar->val);
         }
     }
@@ -442,132 +442,135 @@ struct mdbObj *mdbObj = oldObj;
 struct mdbVar *mdbVar;
 char *cloneVars = cloneString(varPairs);
 
-    // initial chop and determine if this looks like metadata
-    int count = chopByWhiteRespectDoubleQuotes(cloneVars,NULL,0);
-    char **words = needMem(sizeof(char *) * count);
-    count = chopByWhiteRespectDoubleQuotes(cloneVars,words,count);
-    if(count < 1 || words[0] == NULL)
+// initial chop and determine if this looks like metadata
+int count = chopByWhiteRespectDoubleQuotes(cloneVars,NULL,0);
+char **words = needMem(sizeof(char *) * count);
+count = chopByWhiteRespectDoubleQuotes(cloneVars,words,count);
+if (count < 1 || words[0] == NULL)
+    {
+    errAbort("This is not formatted var=val pairs:\n\t%s\n",varPairs);
+    }
+
+verbose(3, "mdbObjAddVarPairs() word count:%d\n\t%s\n",count,varPairs);
+
+if (mdbObj == NULL)
+    AllocVar(mdbObj);
+if (mdbObj->varHash == NULL)
+    mdbObj->varHash = hashNew(8);
+
+int ix;
+for (ix = 0;ix<count;ix++)
+    {
+    if (*words[ix] == '#')
+        break;
+
+    AllocVar(mdbVar);
+    if (strchr(words[ix], '=') == NULL) // treat this the same as "var="
         {
-        errAbort("This is not formatted var=val pairs:\n\t%s\n",varPairs);
+        mdbVar->var = cloneString(words[ix]);
+        mdbVar->val = NULL;
         }
-
-    verbose(3, "mdbObjAddVarPairs() word count:%d\n\t%s\n",count,varPairs);
-
-    if(mdbObj == NULL)
-        AllocVar(mdbObj);
-    if(mdbObj->varHash == NULL)
-        mdbObj->varHash = hashNew(8);
-
-    int ix;
-    for(ix = 0;ix<count;ix++)
+    else
         {
-        if(*words[ix] == '#')
-            break;
-
-        AllocVar(mdbVar);
-        if(strchr(words[ix], '=') == NULL) // treat this the same as "var="
-            {
-            mdbVar->var = cloneString(words[ix]);
-            mdbVar->val = NULL;
-            }
-        else
-            {
-            mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
-            mdbVar->val = cloneString(words[ix]);
-            }
-        verbose(3, "mdbObjAddVarPairs() var=val: %s=%s\n",mdbVar->var,mdbVar->val);
-        struct mdbVar *oldVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, mdbVar->var);
-        if(oldVar)
-            {
-            verbose(1, "The same variable appears twice: %s=%s and %s=%s.  Ignoring second value.\n\t%s\n",
-                oldVar->var,oldVar->val,mdbVar->var,mdbVar->val,varPairs);
-            mdbVarFree(&mdbVar);
-            }
-        else
-            {
-            hashAdd(mdbObj->varHash, mdbVar->var, mdbVar); // pointer to struct to resolve type
-            slAddHead(&(mdbObj->vars),mdbVar);
-            }
+        mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
+        mdbVar->val = cloneString(words[ix]);
         }
-    freeMem(words);
-    freeMem(cloneVars);
+    verbose(3, "mdbObjAddVarPairs() var=val: %s=%s\n",mdbVar->var,mdbVar->val);
+    struct mdbVar *oldVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, mdbVar->var);
+    if (oldVar)
+        {
+        verbose(1,"The same variable appears twice: %s=%s and %s=%s.  "
+                  "Ignoring second value.\n\t%s\n",
+                  oldVar->var,oldVar->val,mdbVar->var,mdbVar->val,varPairs);
+        mdbVarFree(&mdbVar);
+        }
+    else
+        {
+        hashAdd(mdbObj->varHash, mdbVar->var, mdbVar); // pointer to struct to resolve type
+        slAddHead(&(mdbObj->vars),mdbVar);
+        }
+    }
+freeMem(words);
+freeMem(cloneVars);
 
-    // Special for old style ENCODE metadata
+// Special for old style ENCODE metadata
 #define ENCODE_ALN  "Alignments"
 #define ENCODE_RSIG "RawSignal"
-    if(mdbObj->obj == NULL)
+if (mdbObj->obj == NULL)
+    {
+    char * tableName = NULL;
+    char * fileName = NULL;
+    for (mdbVar  = mdbObj->vars;
+         mdbVar != NULL && (tableName == NULL || fileName == NULL);
+         mdbVar  = mdbVar->next)
         {
-        char * tableName = NULL;
-        char * fileName = NULL;
-        for(mdbVar  = mdbObj->vars;
-            mdbVar != NULL && (tableName == NULL || fileName == NULL);
-            mdbVar  = mdbVar->next)
-            {
-            if(sameString(mdbVar->var,MDB_VAR_TABLENAME))
-                tableName = mdbVar->val;
-            else if(sameString(mdbVar->var,MDB_VAR_FILENAME))
-                fileName = mdbVar->val;
-            }
+        if (sameString(mdbVar->var,MDB_VAR_TABLENAME))
+            tableName = mdbVar->val;
+        else if (sameString(mdbVar->var,MDB_VAR_FILENAME))
+            fileName = mdbVar->val;
+        }
 
-        mdbVar = NULL; // assertably so, but this is conditioanally created below
-        if(tableName != NULL)
+    mdbVar = NULL; // assertably so, but this is conditioanally created below
+    if (tableName != NULL)
+        {
+        verbose(3, "%s:%s\n",MDB_VAR_TABLENAME,tableName);
+        if (fileName == NULL || startsWithWordByDelimiter(tableName,'.',fileName))
             {
-            verbose(3, "%s:%s\n",MDB_VAR_TABLENAME,tableName);
-            if(fileName == NULL || startsWithWordByDelimiter(tableName,'.',fileName))
+            mdbObj->obj     = cloneString(tableName);
+            AllocVar(mdbVar);
+            mdbVar->var = cloneString(MDB_OBJ_TYPE);
+            mdbVar->val = cloneString(MDB_OBJ_TYPE_TABLE);
+            }
+        else if (stringIn(ENCODE_ALN,fileName)    // Messier case where the file has "Alignment"
+             &&  stringIn(ENCODE_RSIG,tableName)) // but the table has "RawSignal"
+            {
+            char *tmpFilName = cloneString(fileName);
+            strSwapStrs(tmpFilName, strlen(tmpFilName),ENCODE_ALN, ENCODE_RSIG);
+            if (startsWithWordByDelimiter(tableName,'.',tmpFilName))
                 {
                 mdbObj->obj     = cloneString(tableName);
                 AllocVar(mdbVar);
                 mdbVar->var = cloneString(MDB_OBJ_TYPE);
                 mdbVar->val = cloneString(MDB_OBJ_TYPE_TABLE);
                 }
-            else if(stringIn(ENCODE_ALN,fileName) && stringIn(ENCODE_RSIG,tableName))// Messier case where the file has "Alignment" but the table has "RawSignal"
-                {
-                char *tmpFilName = cloneString(fileName);
-                strSwapStrs(tmpFilName, strlen(tmpFilName),ENCODE_ALN, ENCODE_RSIG);
-                if(startsWithWordByDelimiter(tableName,'.',tmpFilName))
-                    {
-                    mdbObj->obj     = cloneString(tableName);
-                    AllocVar(mdbVar);
-                    mdbVar->var = cloneString(MDB_OBJ_TYPE);
-                    mdbVar->val = cloneString(MDB_OBJ_TYPE_TABLE);
-                    }
-                freeMem(tmpFilName);
-                }
-            }
-        else if(fileName != NULL)
-            {
-            verbose(3, "%s:%s\n",MDB_VAR_FILENAME,fileName);
-            // NOTE: that the file object is the root of the name, so both file.fastq.gz and file.fastq are same obj!
-            mdbObj->obj     = cloneFirstWordByDelimiter(fileName,'.');
-            AllocVar(mdbVar);
-            mdbVar->var = cloneString(MDB_OBJ_TYPE);
-            mdbVar->val = cloneString(MDB_OBJ_TYPE_FILE);
-            }
-
-        if(mdbVar != NULL) // Just determined an objType
-            {
-            verbose(3, "mdbObjAddVarPairs() var=val: %s=%s\n",mdbVar->var,mdbVar->val);
-            struct mdbVar *oldVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, mdbVar->var);
-            if(oldVar)
-                mdbVarFree(&mdbVar);
-            else
-                {
-                hashAdd(mdbObj->varHash, mdbVar->var, mdbVar); // pointer to struct to resolve type
-                slAddHead(&(mdbObj->vars),mdbVar);
-                }
+            freeMem(tmpFilName);
             }
         }
+    else if (fileName != NULL)
+        {
+        verbose(3, "%s:%s\n",MDB_VAR_FILENAME,fileName);
+        // NOTE: that the file object is the root of the name,
+        //       so both file.fastq.gz and file.fastq are same obj!
+        mdbObj->obj     = cloneFirstWordByDelimiter(fileName,'.');
+        AllocVar(mdbVar);
+        mdbVar->var = cloneString(MDB_OBJ_TYPE);
+        mdbVar->val = cloneString(MDB_OBJ_TYPE_FILE);
+        }
 
-if(mdbObj->obj == NULL) // NOTE: Should this be a hard error!
+    if (mdbVar != NULL) // Just determined an objType
+        {
+        verbose(3, "mdbObjAddVarPairs() var=val: %s=%s\n",mdbVar->var,mdbVar->val);
+        struct mdbVar *oldVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, mdbVar->var);
+        if (oldVar)
+            mdbVarFree(&mdbVar);
+        else
+            {
+            hashAdd(mdbObj->varHash, mdbVar->var, mdbVar); // pointer to struct to resolve type
+            slAddHead(&(mdbObj->vars),mdbVar);
+            }
+        }
+    }
+
+if (mdbObj->obj == NULL) // NOTE: Should this be a hard error!
     errAbort("No obj found. This is not properly formatted metadata:\n\t%s\n",varPairs);
 
-    //slReverse(&(mdbObj->vars)); Could have added vars so sort instead
-    slSort(&(mdbObj->vars),&mdbVarCmp); // Should be in determined order
-    mdbVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, MDB_OBJ_TYPE);
-    if(mdbVar == NULL)
-        mdbVar = mdbObj->vars;
-    verbose(3, "mdbObjAddVarPairs() obj=%s %s=%s\n",
-    mdbObj->obj, mdbVar->var,mdbVar->val);
+//slReverse(&(mdbObj->vars)); Could have added vars so sort instead
+slSort(&(mdbObj->vars),&mdbVarCmp);     // Should be in determined order
+mdbVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, MDB_OBJ_TYPE);
+if (mdbVar == NULL)
+    mdbVar = mdbObj->vars;
+verbose(3, "mdbObjAddVarPairs() obj=%s %s=%s\n",
+        mdbObj->obj, mdbVar->var,mdbVar->val);
 return mdbObj;
 }
 
@@ -576,30 +579,31 @@ struct mdbObj *metadataLineParse(char *line)
 {
 char *fromTheTop = line;
 char*nibbledWord = cloneNextWordByDelimiter(&line,' ');
-if(nibbledWord == NULL || differentWord(nibbledWord,MDB_METADATA_KEY))
+if (nibbledWord == NULL || differentWord(nibbledWord,MDB_METADATA_KEY))
     errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
 freeMem(nibbledWord);
 
 struct mdbObj *mdbObj = NULL;
 char*varPairs = line;
 nibbledWord = cloneNextWordByDelimiter(&line,' ');;
-if(nibbledWord == NULL)
+if (nibbledWord == NULL)
     errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
-if(strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should be obj
+if (strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should be obj
     {
     AllocVar(mdbObj);
     mdbObj->obj = nibbledWord;
     verbose(3, "metadataLineParse() %s=%s\n",MDB_OBJ,mdbObj->obj);
     varPairs = line;
-    while(strlen(line) > 0)
+    while (strlen(line) > 0)
         {
         nibbledWord = cloneNextWordByDelimiter(&line,' ');;
-        if(nibbledWord == NULL)
+        if (nibbledWord == NULL)
             errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
-        if(*nibbledWord == '#' || strchr(nibbledWord, '=') != NULL) // IS commnet OR start of var=val pairs
+        if (*nibbledWord == '#'               // IS comment
+        ||  strchr(nibbledWord, '=') != NULL) // OR start of var=val pairs
             break;
 
-        if(sameWord(nibbledWord,"delete"))
+        if (sameWord(nibbledWord,"delete"))
             mdbObj->deleteThis = TRUE;
         else
             errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
@@ -607,9 +611,9 @@ if(strchr(nibbledWord, '=') == NULL) // If this is not a var=val then it should 
         freeMem(nibbledWord);
         }
     }
-if(varPairs != NULL && strlen(varPairs) > 0 && *varPairs != '#')
-        mdbObj = mdbObjAddVarPairs(mdbObj,varPairs);
-else if(mdbObj->deleteThis == FALSE)
+if (varPairs != NULL && strlen(varPairs) > 0 && *varPairs != '#')
+    mdbObj = mdbObjAddVarPairs(mdbObj,varPairs);
+else if (mdbObj->deleteThis == FALSE)
     errAbort("This is not a formatted metadata line:\n\t%s\n",fromTheTop);
 return mdbObj;
 }
@@ -623,66 +627,70 @@ struct mdbByVar   *rootVar = NULL;
 struct mdbLimbVal *limbVal = NULL;
 char *cloneLine = cloneString(line);
 
-    // initial chop and determine if this looks like metadata
-    int count = chopByWhiteRespectDoubleQuotes(cloneLine,NULL,0);
-    char **words = needMem(sizeof(char *) * count);
-    count = chopByWhiteRespectDoubleQuotes(cloneLine,words,count);
+// initial chop and determine if this looks like metadata
+int count = chopByWhiteRespectDoubleQuotes(cloneLine,NULL,0);
+char **words = needMem(sizeof(char *) * count);
+count = chopByWhiteRespectDoubleQuotes(cloneLine,words,count);
 
-    verbose(3, "mdbByVarsLineParse() word count:%d\n\t%s\n",count,line);
+verbose(3, "mdbByVarsLineParse() word count:%d\n\t%s\n",count,line);
 
-    // All words are expected to be var=val pairs!
-    for (thisWord=0; thisWord<count; thisWord++)
+// All words are expected to be var=val pairs!
+for (thisWord=0; thisWord<count; thisWord++)
+    {
+    if (strchr(words[thisWord], '=') == NULL)
+        errAbort("Expected '%s=%s' but found '%s'.  This is not properly formatted metadata:\n"
+                 "\t%s\n",MDB_VAR,MDB_VAL,words[thisWord],line);
+
+    // Set up var struct from 1st half of pair
+    // NOTE: Do not try to combine repeated vars because "fob=a fob=b" is 'AND'
+    //                                             while "fob=a,b"     is 'OR'.
+    //       Does this make sense?  Yes: select * ... where fob like 'Fr%' and fob != 'Frunk'
+    AllocVar(rootVar);
+    rootVar->var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
+    rootVar->notEqual = (rootVar->var[strlen(rootVar->var)-1] == '!'); // requested not equal
+    if (rootVar->notEqual)
+        rootVar->var[strlen(rootVar->var)-1] = 0;
+
+    // Fill in the val(s) from second half of pair
+    char *val = NULL;
+    if (words[thisWord][0] != '\0'
+    &&  words[thisWord][0] != '?') // "var=?" or "var=" will query by var name only
+        val = cloneString(words[thisWord]);
+    if (val != NULL)
         {
-        if (strchr(words[thisWord], '=') == NULL)
-            errAbort("Expected '%s=%s' but found '%s'.  This is not properly formatted metadata:\n\t%s\n",MDB_VAR,MDB_VAL,words[thisWord],line);
-
-        // Set up var struct from 1st half of pair
-        // NOTE: Do not try to combine repeated vars because "fob=a fob=b" is 'AND' while "fob=a,b" is 'OR'.
-        //       Does this make sense?  Yes: select * ... where fob like 'Fr%' and fob != 'Frunk'
-        AllocVar(rootVar);
-        rootVar->var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
-        rootVar->notEqual = (rootVar->var[strlen(rootVar->var)-1] == '!'); // requested not equal
-        if (rootVar->notEqual)
-            rootVar->var[strlen(rootVar->var)-1] = 0;
-
-        // Fill in the val(s) from second half of pair
-        char *val = NULL;
-        if (words[thisWord][0] != '\0' && words[thisWord][0] != '?') // "var=?" or "var=" will query by var name only
-            val = cloneString(words[thisWord]);
-        if (val != NULL)
+        // Strip any single or double quotes first.
+        char *end = val + strlen(val) - 1;
+        if ((*val == '"'  && *end == '"')
+        ||  (*val == '\'' && *end == '\''))
             {
-            // Strip any single or double quotes first.
-            char *end = val + strlen(val) - 1;
-            if ((*val == '"'  && *end == '"')
-            ||  (*val == '\'' && *end == '\''))
-                {
-                *end = '\0';
-                val++;
-                }
-            // handle comma separated list of vals (if not framed with widcards)
-            if (strchr(val,',') != NULL && (*val != '%' || *(val + strlen(val) - 1) != '%'))
-                {
-                char * aVal = NULL;
-                while((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
-                    {
-                    AllocVar(limbVal);
-                    limbVal->val = aVal;
-                    slAddTail(&rootVar->vals,limbVal);
-                    }
-                }
-            else
+            *end = '\0';
+            val++;
+            }
+        // handle comma separated list of vals (if not framed with widcards)
+        if (strchr(val,',') != NULL && (*val != '%' || *(val + strlen(val) - 1) != '%'))
+            {
+            char * aVal = NULL;
+            while ((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
                 {
                 AllocVar(limbVal);
-                limbVal->val = val;
-                rootVar->vals = limbVal;
+                limbVal->val = aVal;
+                slAddTail(&rootVar->vals,limbVal);
                 }
             }
-        slAddHead(&mdbByVars,rootVar);
+        else
+            {
+            AllocVar(limbVal);
+            limbVal->val = val;
+            rootVar->vals = limbVal;
+            }
         }
-    freeMem(words);
-    slReverse(&mdbByVars);
-    verbose(3, "mdbByVarsLineParse() parsed:%d first: %s%s='%s'.\n",
-        slCount(mdbByVars),mdbByVars->var,(mdbByVars->notEqual?"!":""),(mdbByVars->vals?mdbByVars->vals->val:""));
+    slAddHead(&mdbByVars,rootVar);
+    }
+freeMem(words);
+slReverse(&mdbByVars);
+verbose(3, "mdbByVarsLineParse() parsed:%d first: %s%s='%s'.\n",
+            slCount(mdbByVars),mdbByVars->var,(mdbByVars->notEqual?"!":""),
+            (mdbByVars->vals?mdbByVars->vals->val:""));
 return mdbByVars;
 }
 
@@ -692,20 +700,20 @@ struct mdbByVar*mdbByVarCreate(char *var, char *val)
 {
 struct mdbByVar *mdbByVar = NULL;
 
-    if(var == NULL)
-        errAbort("Need variable to create mdbByVar query object.\n");
+if (var == NULL)
+    errAbort("Need variable to create mdbByVar query object.\n");
 
-    AllocVar(mdbByVar);
-    mdbByVar->var = cloneString(var);
+AllocVar(mdbByVar);
+mdbByVar->var = cloneString(var);
 
-    if(val != NULL)
-        {
-        struct mdbLimbVal * limbVal;
-        AllocVar(limbVal);
+if (val != NULL)
+    {
+    struct mdbLimbVal * limbVal;
+    AllocVar(limbVal);
 
-        limbVal->val    = cloneString(val);
-        mdbByVar->vals = limbVal; // Only one
-        }
+    limbVal->val    = cloneString(val);
+    mdbByVar->vals = limbVal;     // Only one
+    }
 
 return mdbByVar;
 }
@@ -715,12 +723,12 @@ boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var,char *val,boolean no
 {
 // Does var already exist in mdbByVars?
 struct mdbByVar *mdbByVar = mdbByVars;
-for(;mdbByVar!=NULL;mdbByVar=mdbByVar->next)
+for (;mdbByVar!=NULL;mdbByVar=mdbByVar->next)
     {
     if (sameString(mdbByVar->var,var) && mdbByVar->notEqual == notEqual)
         {
         struct mdbLimbVal * limbVal = mdbByVar->vals;
-        for(;limbVal!=NULL;limbVal=limbVal->next)
+        for (;limbVal!=NULL;limbVal=limbVal->next)
             {
             if (sameString(limbVal->val,val))
                 return FALSE; // Nothing to do as this var is already there.
@@ -747,22 +755,22 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *val)
 {
 struct mdbObj *mdbObj = NULL;
 
-    if(obj == NULL)
-        errAbort("Need obj to create mdbObj object.\n");
+if (obj == NULL)
+    errAbort("Need obj to create mdbObj object.\n");
 
-    AllocVar(mdbObj);
-    mdbObj->obj     = cloneString(obj);
+AllocVar(mdbObj);
+mdbObj->obj     = cloneString(obj);
 
-    if(var != NULL)
-        {
-        struct mdbVar * mdbVar;
-        AllocVar(mdbVar);
+if (var != NULL)
+    {
+    struct mdbVar * mdbVar;
+    AllocVar(mdbVar);
 
-        mdbVar->var     = cloneString(var);
-        if(val != NULL)
-            mdbVar->val     = cloneString(val);
-        mdbObj->vars = mdbVar; // Only one
-        }
+    mdbVar->var     = cloneString(var);
+    if (val != NULL)
+        mdbVar->val     = cloneString(val);
+    mdbObj->vars = mdbVar;     // Only one
+    }
 return mdbObj;
 }
 
@@ -787,7 +795,7 @@ else
     hashAddUnique(mdbObj->varHash, mdbVars->var, mdbObj->vars); // pointer to struct to resolve type
 
     struct mdbVar *var = mdbVars->next;
-    for(;var != NULL;var = var->next);
+    for (;var != NULL;var = var->next)
         mdbObjSetVar(mdbObj, var->var,var->val);
     }
 return mdbObj;
@@ -800,7 +808,7 @@ struct mdbObj *mdbObjs = NULL;
 struct hashEl* objEl = NULL;
 
 struct hashCookie objCookie = hashFirst(objsHash);
-while((objEl = hashNext(&objCookie)) != NULL)
+while ((objEl = hashNext(&objCookie)) != NULL)
     {
     struct mdbObj *mdbObj;
     AllocVar(mdbObj);
@@ -809,9 +817,9 @@ while((objEl = hashNext(&objCookie)) != NULL)
     struct hash *hashedVars = objEl->val;
     struct hashCookie varCookie = hashFirst(hashedVars);
     struct hashEl* varEl = NULL;
-    while((varEl = hashNext(&varCookie)) != NULL)
+    while ((varEl = hashNext(&varCookie)) != NULL)
         {
-        if(sameString(varEl->name,MDB_METAOBJ_RAKEY))
+        if (sameString(varEl->name,MDB_METAOBJ_RAKEY))
             continue;
 
         struct mdbVar * mdbVar;
@@ -821,11 +829,11 @@ while((objEl = hashNext(&objCookie)) != NULL)
         hashAdd(mdbObj->varHash, mdbVar->var, mdbVar); // pointer to struct to resolve type
         slAddHead(&(mdbObj->vars),mdbVar);
         }
-        slSort(&(mdbObj->vars),&mdbVarCmp); // Should be in determined order
-        slAddHead(&mdbObjs,mdbObj);
+    slSort(&(mdbObj->vars),&mdbVarCmp);     // Should be in determined order
+    slAddHead(&mdbObjs,mdbObj);
     }
-    slSort(&mdbObjs,&mdbObjCmp); // Should be in determined order
-    return mdbObjs;
+slSort(&mdbObjs,&mdbObjCmp);     // Should be in determined order
+return mdbObjs;
 }
 
 // ------ Loading from files ------
@@ -839,27 +847,27 @@ char *line;
 while (lineFileNext(lf, &line,NULL))
     {
     char *start = skipLeadingSpaces(line);
-    if(start == NULL || *start == '#')
+    if (start == NULL || *start == '#')
         continue;
-    if(startsWithWord(MDB_METAOBJ_RAKEY,line))
+    if (startsWithWord(MDB_METAOBJ_RAKEY,line))
         {
         // This is the RA style file!!
         lineFileClose(&lf);
         return mdbObjsLoadFromRAFile(fileName,validated);
         }
     struct mdbObj *mdbObj = metadataLineParse(line);
-    if(mdbObj == NULL)
+    if (mdbObj == NULL)
         {
         mdbObjsFree(&mdbObjs);
         return NULL;
         }
     slAddHead(&mdbObjs,mdbObj);
     }
-    lineFileClose(&lf);
-    slReverse(&mdbObjs);  // Go ahead and keep this in file order
-    if(validated)
-        *validated = FALSE;
-    return mdbObjs;
+lineFileClose(&lf);
+slReverse(&mdbObjs);      // Go ahead and keep this in file order
+if (validated)
+    *validated = FALSE;
+return mdbObjs;
 }
 
 #define MDB_MAGIC_PREFIX "# MAGIC: "
@@ -867,7 +875,7 @@ struct mdbObj *mdbObjsLoadFromRAFile(char *fileName,boolean *validated)
 // Load all mdbObjs from a file containing RA formatted 'metaObjects'
 {
 struct hash *mdHash = raReadAll(fileName, MDB_METAOBJ_RAKEY);
-if(mdHash == NULL)
+if (mdHash == NULL)
     {
     verbose(1,"Missing, empty or badly formated RA file:%s\n",fileName);
     return NULL;
@@ -876,16 +884,17 @@ struct mdbObj *mdbObjs = mdbObjsLoadFromHashes(mdHash);
 hashFree(&mdHash);
 
 // Try to validate file
-if(validated)
+if (validated)
     {
     *validated = FALSE;
     struct lineFile *lf = lineFileOpen(fileName, TRUE);
     char *line = lineFileSkipToLineStartingWith(lf,MDB_MAGIC_PREFIX,1000000);
-    if(line != NULL)
+    if (line != NULL)
         {
         int fileMagic = atoi(line+strlen(MDB_MAGIC_PREFIX));
         int objsMagic = mdbObjCRC(mdbObjs);
-        verbose(3,"Objects magic: %d  Files magic: %d (%s)\n",objsMagic,fileMagic,line+strlen(MDB_MAGIC_PREFIX));
+        verbose(3,"Objects magic: %d  Files magic: %d (%s)\n",
+                  objsMagic,fileMagic,line+strlen(MDB_MAGIC_PREFIX));
         *validated = (fileMagic == objsMagic);
         }
     else
@@ -900,23 +909,23 @@ void mdbReCreate(struct sqlConnection *conn,char *tblName,boolean testOnly)
 // Creates ore Recreates the named mdb.
 {
 char *sqlCreate =
-"# Contains metadata for a table, file or other objects.\n"
-"CREATE TABLE %s (\n"
-"    obj varchar(255) not null,      # Object name or ID.\n"
-"    var varchar(255) not null,      # Metadata variable name.\n"
-"    val varchar(2048) not null,     # Metadata value.\n"
-"  #Indices\n"
-"    PRIMARY KEY(obj,var),\n"
-"    INDEX varKey (var,val(32),obj)\n"
-")";
+    "# Contains metadata for a table, file or other objects.\n"
+    "CREATE TABLE %s (\n"
+    "    obj varchar(255) not null,      # Object name or ID.\n"
+    "    var varchar(255) not null,      # Metadata variable name.\n"
+    "    val varchar(2048) not null,     # Metadata value.\n"
+    "  #Indices\n"
+    "    PRIMARY KEY(obj,var),\n"
+    "    INDEX varKey (var,val(32),obj)\n"
+    ")";
 
-if(sqlTableExists(conn,tblName))
+if (sqlTableExists(conn,tblName))
     verbose(2, "Table '%s' already exists.  It will be recreated.\n",tblName);
 
 struct dyString *dy = newDyString(512);
 dyStringPrintf(dy, sqlCreate, tblName);
 verbose(2, "Requesting table creation:\n%s;\n", dyStringContents(dy));
-if(!testOnly)
+if (!testOnly)
     sqlRemakeTable(conn, tblName, dyStringContents(dy));
 
 dyStringFree(&dy);
@@ -929,12 +938,12 @@ static char*mdbTableNamePreferSandbox()
 // returns the mdb table name or NULL if conn supplied but the table doesn't exist
 {
 char *table = cfgOption(HG_CONF_SANDBOX_MDB);
-if(table != NULL)
+if (table != NULL)
     return cloneString(table);
 
 // Look for trackDb name to model
 char *name = cfgOption(HG_CONF_SANDBOX_TDB);
-if(name == NULL)
+if (name == NULL)
     return cloneString(MDB_DEFAULT_NAME);
 
 // Only take the last table of a list of tables!
@@ -1006,7 +1015,8 @@ return table;
 }
 
 // -------------- Updating the DB --------------
-int mdbObjsSetToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean replace,boolean testOnly)
+int mdbObjsSetToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,
+                   boolean replace,boolean testOnly)
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 {
 char query[8192];
@@ -1014,9 +1024,9 @@ struct mdbObj *mdbObj;
 struct mdbVar *mdbVar;
 int count = 0;
 
-if(tableName == NULL)
-    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
-else if(!sqlTableExists(conn,tableName))
+if (tableName == NULL)
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if exists, else MDB_DEFAULT_NAME
+else if (!sqlTableExists(conn,tableName))
     errAbort("mdbObjsSetToDb attempting to update non-existent table named '%s'.\n",tableName);
 
 // Table specific lock (over-cautious, since most work is done on sandbox tables)
@@ -1024,40 +1034,40 @@ char lock[64];
 safef(lock,sizeof lock,"lock_%s",tableName);
 sqlGetLock(conn, lock);
 
-for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
+for (mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
     {
     // Handle delete requests first
-    if(mdbObj->deleteThis)
+    if (mdbObj->deleteThis)
         {
-        if(mdbObj->vars == NULL) // deletes all
+        if (mdbObj->vars == NULL) // deletes all
             {
             safef(query, sizeof(query),"%s where obj = '%s'",tableName,mdbObj->obj);
             int delCnt = sqlRowCount(conn,query);
 
-            if(delCnt>0)
+            if (delCnt>0)
                 {
                 safef(query, sizeof(query),
-                    "delete from %s where obj = '%s'",tableName,mdbObj->obj);
+                      "delete from %s where obj = '%s'",tableName,mdbObj->obj);
                 verbose(2, "Requesting delete of %d rows:\n\t%s;\n",delCnt, query);
-                if(!testOnly)
+                if (!testOnly)
                     sqlUpdate(conn, query);
                 count += delCnt;
                 }
             }
         else  // deletes selected vars
             {
-            for(mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
+            for (mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
                 {
                 safef(query, sizeof(query),
-                    "select obj from %s where obj = '%s' and var = '%s'",
-                    tableName,mdbObj->obj,mdbVar->var);
-                if(sqlExists(conn,query))
+                      "select obj from %s where obj = '%s' and var = '%s'",
+                      tableName,mdbObj->obj,mdbVar->var);
+                if (sqlExists(conn,query))
                     {
                     safef(query, sizeof(query),
-                        "delete from %s where obj = '%s' and var = '%s'",
-                        tableName,mdbObj->obj,mdbVar->var);
+                          "delete from %s where obj = '%s' and var = '%s'",
+                          tableName,mdbObj->obj,mdbVar->var);
                     verbose(2, "Requesting delete of 1 row:\n\t%s;\n",query);
-                    if(!testOnly)
+                    if (!testOnly)
                         sqlUpdate(conn, query);
                     count++;
                     }
@@ -1070,19 +1080,19 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         safef(query, sizeof(query),"%s where obj = '%s'",tableName,mdbObj->obj);
         int delCnt = sqlRowCount(conn,query);
 
-        if(delCnt>0)
+        if (delCnt>0)
             {
             safef(query, sizeof(query),
-                "delete from %s where obj = '%s'",tableName,mdbObj->obj);
+                  "delete from %s where obj = '%s'",tableName,mdbObj->obj);
             verbose(2, "Requesting replacement of %d rows:\n\t%s;\n",delCnt, query);
-            if(!testOnly)
+            if (!testOnly)
                 sqlUpdate(conn, query);
             count += delCnt;
             }
         }
 
     // Now it is time for update or add!
-    for(mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
+    for (mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
         {
         stripEnclosingDoubleQuotes(mdbVar->val); // Ensures values are stripped of enclosing quotes
 
@@ -1090,17 +1100,15 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
         if (!replace)
             {
             struct mdbObj *objExists = mdbObjQueryByObj(conn,tableName,mdbObj->obj,mdbVar->var);
-            if(objExists)
+            if (objExists)
                 {
-                if(differentString(mdbVar->val,objExists->vars->val))
+                if (differentString(mdbVar->val,objExists->vars->val))
                     {
                     safef(query, sizeof(query),
-                        "update %s set val = '%s' where obj = '%s' and var = '%s'",
-                            tableName,
-                            sqlEscapeString(mdbVar->val),
-                            mdbObj->obj,mdbVar->var);
+                          "update %s set val = '%s' where obj = '%s' and var = '%s'",
+                          tableName, sqlEscapeString(mdbVar->val), mdbObj->obj, mdbVar->var);
                     verbose(2, "Requesting update of 1 row:\n\t%s;\n",query);
-                    if(!testOnly)
+                    if (!testOnly)
                         sqlUpdate(conn, query);
                     count++;
                     }
@@ -1110,11 +1118,10 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
             }
         // Finally ready to insert new vars
         safef(query, sizeof(query),
-            "insert into %s set obj='%s', var='%s', val='%s'",
-                tableName,mdbObj->obj,mdbVar->var,
-                sqlEscapeString(mdbVar->val)); // FIXME Strip quotes
+              "insert into %s set obj='%s', var='%s', val='%s'",
+              tableName,mdbObj->obj,mdbVar->var,sqlEscapeString(mdbVar->val));
         verbose(2, "Requesting insert of one row:\n\t%s;\n",query);
-        if(!testOnly)
+        if (!testOnly)
             sqlUpdate(conn, query);
         count++;
         }
@@ -1123,14 +1130,15 @@ sqlReleaseLock(conn, lock);
 return count;
 }
 
-int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean testOnly)
+int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,
+                    boolean testOnly)
 // Adds mdb Objs with minimal error checking
 {
 int count = 0;
 verboseTime(2, "Start of mdbObjsLoadToDb %s", tableName);
 
 if (tableName == NULL)
-    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
+    tableName = mdbTableName(conn,TRUE); // defaults to sandbox, if exists, else MDB_DEFAULT_NAME
 else if (!sqlTableExists(conn,tableName))
     errAbort("mdbObjsLoadToDb attempting to load non-existent table named '%s'.\n",tableName);
 
@@ -1148,7 +1156,8 @@ safef(query, sizeof(query),"alter table %s disable keys",tableName);
 sqlUpdate(conn, query);
 
 // Quick? load
-sqlLoadTabFile(conn, MDB_TEMPORARY_TAB_FILE, tableName, SQL_TAB_FILE_WARN_ON_ERROR|SQL_TAB_FILE_WARN_ON_WARN);
+sqlLoadTabFile(conn, MDB_TEMPORARY_TAB_FILE, tableName,
+               SQL_TAB_FILE_WARN_ON_ERROR|SQL_TAB_FILE_WARN_ON_WARN);
 verboseTime(2, "past sqlLoadTabFile()");
 
 // Enabling the keys again
@@ -1158,75 +1167,76 @@ verboseTime(2, "Past alter table");
 
 //unlink(MDB_TEMPORARY_TAB_FILE);
 
-verbose(0,"%04ldms - Done loading mdb with 'LOAD DATA INFILE' mysql command.\n",(clock1000() - lastTime));
+verbose(0,"%04ldms - Done loading mdb with 'LOAD DATA INFILE' mysql command.\n",
+          (clock1000() - lastTime));
 
 return count;
 }
 
 // ------------------ Querys -------------------
 struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj *mdbObj)
-// Query the metadata table by obj and optional vars and vals in metaObj struct.  If mdbObj is NULL query all.
-// Returns new mdbObj struct fully populated and sorted in obj,var order.
+// Query the metadata table by obj and optional vars and vals in metaObj struct.
+// If mdbObj is NULL query all.  Returns new mdbObj struct fully populated & sorted in obj,var order
 {
 //  select obj,var,val where (var= [and val=]) or ([var= and] val=) order by obj,var
-    boolean buildHash = TRUE;
+boolean buildHash = TRUE;
 
-    if(table == NULL)
-        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
-    else if(!sqlTableExists(conn,table))
-        return NULL;
+if (table == NULL)
+    table = mdbTableName(conn,TRUE); // defaults to sandbox, if exists, else MDB_DEFAULT_NAME
+else if (!sqlTableExists(conn,table))
+    return NULL;
 
-    struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "select obj,var,val from %s", table);
-    if(mdbObj != NULL && mdbObj->obj != NULL)
+struct dyString *dy = newDyString(4096);
+dyStringPrintf(dy, "select obj,var,val from %s", table);
+if (mdbObj != NULL && mdbObj->obj != NULL)
+    {
+    dyStringPrintf(dy, " where obj %s '%s'",
+                   (strchr(mdbObj->obj,'%') ? "like" : "="),mdbObj->obj);
+
+    struct mdbVar *mdbVar;
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
-        dyStringPrintf(dy, " where obj %s '%s'",
-            (strchr(mdbObj->obj,'%')?"like":"="),mdbObj->obj);
-
-        struct mdbVar *mdbVar;
-        for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+        if (mdbVar==mdbObj->vars)
+            dyStringPrintf(dy, " and (");
+        else
+            dyStringPrintf(dy, " or ");
+        if (mdbVar->var != NULL)
             {
-            if(mdbVar==mdbObj->vars)
-                dyStringPrintf(dy, " and (");
-            else
-                dyStringPrintf(dy, " or ");
-            if(mdbVar->var != NULL)
-                {
-                if(mdbVar->val != NULL)
-                    dyStringPrintf(dy, "(");
-                dyStringPrintf(dy, "var %s '%s'",
-                    (strchr(mdbVar->var,'%')?"like":"="),mdbVar->var);
-                }
-            if(mdbVar->val != NULL)
-                {
-                if(mdbVar->var != NULL)
-                    dyStringPrintf(dy, " and ");
-                dyStringPrintf(dy, "val %s '%s'",
-                    (strchr(mdbVar->val,'%')?"like":"="), sqlEscapeString(mdbVar->val));
-                if(mdbVar->var != NULL)
-                    dyStringPrintf(dy, ")");
-                }
-            if(mdbVar->var == NULL && mdbVar->val)
-                errAbort("mdbObjQuery has empty mdbVar struct.\n");
-            buildHash = FALSE;  // too few variables
+            if (mdbVar->val != NULL)
+                dyStringPrintf(dy, "(");
+            dyStringPrintf(dy, "var %s '%s'",
+                           (strchr(mdbVar->var,'%') ? "like" : "="),mdbVar->var);
             }
-        if(mdbObj->vars != NULL)
-            dyStringPrintf(dy, ")");
+        if (mdbVar->val != NULL)
+            {
+            if (mdbVar->var != NULL)
+                dyStringPrintf(dy, " and ");
+            dyStringPrintf(dy, "val %s '%s'",
+                           (strchr(mdbVar->val,'%') ? "like" : "="), sqlEscapeString(mdbVar->val));
+            if (mdbVar->var != NULL)
+                dyStringPrintf(dy, ")");
+            }
+        if (mdbVar->var == NULL && mdbVar->val)
+            errAbort("mdbObjQuery has empty mdbVar struct.\n");
+        buildHash = FALSE;  // too few variables
         }
-    dyStringPrintf(dy, " order by binary obj, var");    // binary forces case-sensitive sort
-    verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+    if (mdbObj->vars != NULL)
+        dyStringPrintf(dy, ")");
+    }
+dyStringPrintf(dy, " order by binary obj, var");    // binary forces case-sensitive sort
+verbose(3, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
-    struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
-    struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,buildHash);
-    verbose(3, "Returned %d object(s) with %d var(s).\n",
+struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
+struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,buildHash);
+verbose(3, "Returned %d object(s) with %d var(s).\n",
         mdbObjCount(mdbObjs,TRUE),mdbObjCount(mdbObjs,FALSE));
-    return mdbObjs;
+return mdbObjs;
 }
 
 struct mdbObj *mdbObjQueryByObj(struct sqlConnection *conn,char *table,char *obj,char *var)
 // Query a single metadata object and optional var from a table (default mdb).
 {
-if(obj == NULL)
+if (obj == NULL)
     return mdbObjQuery(conn,table,NULL);
 
 struct mdbObj *queryObj  = mdbObjCreate(obj,var,NULL);
@@ -1236,85 +1246,88 @@ return resultObj;
 }
 
 struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct mdbByVar *mdbByVars)
-// Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ANY conditions.
+// Query the metadata table by one or more var=val pairs to find the distinct set of objs
+// that satisfy ANY conditions.
 // Returns new mdbByVar struct fully populated and sorted in var,val,obj order.
 {
-//  select obj,var,val where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by var,val,obj
+//  select obj,var,val where (var= [and val in (val1,val2)])
+//                        or (var= [and val in (val1,val2)]) order by var,val,obj
 
-    if(table == NULL)
-            table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
-    else if(!sqlTableExists(conn,table))
-        return NULL;
+if (table == NULL)
+    table = mdbTableName(conn,TRUE);     // defaults to sandbox, if exists, else MDB_DEFAULT_NAME
+else if (!sqlTableExists(conn,table))
+    return NULL;
 
-    struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "select obj,var,val from %s", table);
+struct dyString *dy = newDyString(4096);
+dyStringPrintf(dy, "select obj,var,val from %s", table);
 
-    struct mdbByVar *rootVar;
-    for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
+struct mdbByVar *rootVar;
+for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
+    {
+    if (rootVar==mdbByVars)
+        dyStringPrintf(dy, " where (var ");
+    else
+        dyStringPrintf(dy, " OR (var ");
+
+    if (rootVar->notEqual && rootVar->vals == NULL)
+        dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
+                                        // one of: "NOT LIKE". "!=" or "NOT EXISTS"
+
+    if (rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0)
         {
-        if(rootVar==mdbByVars)
-            dyStringPrintf(dy, " where (var ");
-        else
-            dyStringPrintf(dy, " OR (var ");
+        dyStringPrintf(dy, "%s '%s'",
+                       (strchr(rootVar->var,'%') ? "like" : "="), rootVar->var);
+        }
+    else
+        dyStringPrintf(dy, "EXISTS");
 
-        if(rootVar->notEqual && rootVar->vals == NULL)
-            dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");  // one of: "NOT LIKE". "!=" or "NOT EXISTS"
+    struct mdbLimbVal *limbVal;
+    boolean multiVals = FALSE;
+    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+        {
+        if (limbVal->val == NULL || strlen(limbVal->val) < 1)
+            continue;
 
-        if(rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0)
+        if (!multiVals)
             {
-            dyStringPrintf(dy, "%s '%s'",
-                (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
-            }
-        else
-            dyStringPrintf(dy, "EXISTS");
-
-        struct mdbLimbVal *limbVal;
-        boolean multiVals = FALSE;
-        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
-            {
-            if(limbVal->val == NULL || strlen(limbVal->val) < 1)
-                continue;
-
-            if(!multiVals)
+            dyStringPrintf(dy, " and val ");
+            if (rootVar->notEqual)
+                dyStringPrintf(dy, "%s",strchr(limbVal->val,'%')?"NOT ":"!");
+            if (limbVal->next == NULL) // only one val
                 {
-                dyStringPrintf(dy, " and val ");
-                if(rootVar->notEqual)
-                    dyStringPrintf(dy, "%s",strchr(limbVal->val,'%')?"NOT ":"!");
-                if(limbVal->next == NULL) // only one val
-                    {
-                    dyStringPrintf(dy, "%s '%s'",
-                        (strchr(limbVal->val,'%')?"like":"="), sqlEscapeString(limbVal->val));
-                    break;
-                    }
-                else
-                    dyStringPrintf(dy, "in (");
-                multiVals=TRUE;
+                dyStringPrintf(dy, "%s '%s'",
+                    (strchr(limbVal->val,'%')?"like":"="), sqlEscapeString(limbVal->val));
+                break;
                 }
             else
-                dyStringPrintf(dy, ",");
-            dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
+                dyStringPrintf(dy, "in (");
+            multiVals=TRUE;
             }
-        if(multiVals)
-            dyStringPrintf(dy, ")");
-        dyStringPrintf(dy, ")");
+        else
+            dyStringPrintf(dy, ",");
+        dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
         }
-    dyStringPrintf(dy, " order by var, val, obj");
-    verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+    if (multiVals)
+        dyStringPrintf(dy, ")");
+    dyStringPrintf(dy, ")");
+    }
+dyStringPrintf(dy, " order by var, val, obj");
+verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
-    struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
-    verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
-    struct mdbByVar *mdbByVarsFromMem = mdbByVarsLoadFromMemory(&mdb,TRUE);
-    verbose(3, "Returned %d vars(s) with %d val(s) with %d object(s).\n",
-        mdbByVarCount(mdbByVarsFromMem,TRUE ,FALSE),
+struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
+verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
+struct mdbByVar *mdbByVarsFromMem = mdbByVarsLoadFromMemory(&mdb,TRUE);
+verbose(3, "Returned %d vars(s) with %d val(s) with %d object(s).\n",
+        mdbByVarCount(mdbByVarsFromMem,TRUE,FALSE),
         mdbByVarCount(mdbByVarsFromMem,FALSE,TRUE ),
         mdbByVarCount(mdbByVarsFromMem,FALSE,FALSE));
-    return mdbByVarsFromMem;
+return mdbByVarsFromMem;
 }
 
 struct mdbByVar *mdbByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val)
-// Query a single metadata variable and optional val from a table (default mdb) for searching val->obj.
+// Query a single metadata variable & optional val from a table (default mdb) for searching val->obj
 {
-if(varName == NULL)
+if (varName == NULL)
     return mdbByVarsQuery(conn,table,NULL);
 
 struct mdbByVar *queryVar  = mdbByVarCreate(varName,val);
@@ -1324,121 +1337,155 @@ return resultVar;
 }
 
 struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct mdbByVar *mdbByVars)
-// Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ALL conditions.
+// Query the metadata table by one or more var=val pairs
+// to find the distinct set of objs that satisfy ALL conditions.
 // Returns new mdbObj struct fully populated and sorted in obj,var order.
 {
 // MOST POPULAR WAY TO QUERY MDB.  Building example queries like:
 // "cell=GM12878" or "cell!=GM12878"
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val = 'GM12878') ORDER BY T1.obj, T1.var;
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val != 'GM12878') ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
+//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val = 'GM12878')
+//           ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
+//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val != 'GM12878')
+//       ORDER BY T1.obj, T1.var;
 // "cell=GM%" or "cell!=GM%"
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%') ORDER BY T1.obj, T1.var;
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT LIKE 'GM%') ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
+//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%')
+//       ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
+//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT LIKE 'GM%')
+//       ORDER BY T1.obj, T1.var;
 // "cell=" or "cell!="
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell') ORDER BY T1.obj, T1.var;
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE NOT EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell') ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
+//                      WHERE T2.obj = T1.obj AND T2.var = 'cell')
+//       ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE NOT EXISTS (SELECT T2.obj FROM metaDb T2
+//                          WHERE T2.obj = T1.obj AND T2.var = 'cell')
+//       ORDER BY T1.obj, T1.var;
 // "cell=GM12878,K562" or "cell!=GM12878,K562"
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val IN ('GM12878','K562')) ORDER BY T1.obj, T1.var;
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT IN ('K562','GM12878')) ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
+//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val IN ('GM12878','K562'))
+//       ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
+//                      WHERE T2.obj = T1.obj AND T2.var = 'cell'
+//                        AND T2.val NOT IN ('K562','GM12878'))
+//       ORDER BY T1.obj, T1.var;
 // "cell=GM% cell!=GM12878"  (very powerful)
-//   SELECT T1.obj,T1.var,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%')
-//                                                           AND EXISTS (SELECT T3.obj FROM metaDb T3 WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878') ORDER BY T1.obj, T1.var;
+//      SELECT T1.obj,T1.var,T1.val FROM metaDb T1
+//       WHERE EXISTS (SELECT T2.obj FROM metaDb T2
+//                      WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%')
+//         AND EXISTS (SELECT T3.obj FROM metaDb T3
+//                      WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878')
+//       ORDER BY T1.obj, T1.var;
 
-    if(table == NULL)
-        table = mdbTableName(conn,TRUE); // defaults to sandbox, if it exists, else MDB_DEFAULT_NAME;
-    else if(!sqlTableExists(conn,table))
-        return NULL;
+if (table == NULL)
+    table = mdbTableName(conn,TRUE); // defaults to sandbox, if exists, else MDB_DEFAULT_NAME
+else if (!sqlTableExists(conn,table))
+    return NULL;
 
-    struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.val FROM %s T1", table);
+struct dyString *dy = newDyString(4096);
+dyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.val FROM %s T1", table);
 
-    struct mdbByVar *rootVar;
-    boolean gotVar = FALSE;
-    int tix;
-    for(rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
+struct mdbByVar *rootVar;
+boolean gotVar = FALSE;
+int tix;
+for (rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
+    {
+    boolean hasVal = (rootVar->vals != NULL);
+    //boolean hasVal = (  rootVar->vals != NULL
+    //                 && rootVar->vals->val != NULL
+    //                 && strlen(rootVar->vals->val) > 0);
+    if (!gotVar)
         {
-        boolean hasVal = (rootVar->vals != NULL);
-        //boolean hasVal = (rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0);
-        if(!gotVar)
-            {
-            dyStringPrintf(dy, " WHERE ");
-            gotVar=TRUE;
-            }
-        else
-            dyStringPrintf(dy, " AND ");
-
-        if(!hasVal && rootVar->notEqual)
-            dyStringPrintf(dy, "NOT EXISTS ");
-        else
-            dyStringPrintf(dy, "EXISTS ");
-
-        dyStringPrintf(dy, "(SELECT T%d.obj FROM %s T%d WHERE T%d.obj = T1.obj AND T%d.var ",tix,table,tix,tix,tix);
-
-        if(hasVal && rootVar->notEqual && rootVar->vals == NULL)
-            dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
-
-        dyStringPrintf(dy, "%s '%s'",
-            (strchr(rootVar->var,'%')?"LIKE":"="), rootVar->var);
-
-        struct mdbLimbVal *limbVal;
-        boolean multiVals = (rootVar->vals != NULL && rootVar->vals->next != NULL);
-        boolean wilds = FALSE;
-        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
-            {
-            if (strchr(limbVal->val,'%') != NULL)
-                wilds = TRUE;
-            }
-        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
-            {
-            if(limbVal->val == NULL || strlen(limbVal->val) < 1)
-                continue;
-
-            if(limbVal==rootVar->vals) // First val
-                {
-                if (wilds && multiVals)
-                    dyStringPrintf(dy, " AND (T%d.val ",tix);
-                else
-                    dyStringPrintf(dy, " AND T%d.val ",tix);
-                }
-            else                      // successive vals
-                {
-                if (wilds && multiVals)
-                    dyStringPrintf(dy, " or T%d.val ",tix);
-                else
-                    dyStringPrintf(dy, ",");
-                }
-
-            if (limbVal==rootVar->vals   // First val
-            ||  (wilds && multiVals))      // and successive if wildcards
-                {
-                if(rootVar->notEqual)
-                    dyStringPrintf(dy, "%s",(strchr(limbVal->val,'%') || limbVal->next)?"NOT ":"!");
-                if (strchr(limbVal->val,'%') != NULL)
-                    dyStringPrintf(dy, "LIKE ");
-                else if (!multiVals || wilds)
-                    dyStringPrintf(dy, "= ");
-                else
-                    dyStringPrintf(dy, "IN (");
-                }
-            dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
-            }
-        if(multiVals)
-            dyStringPrintf(dy, ")");
-        dyStringPrintf(dy, ")");
+        dyStringPrintf(dy, " WHERE ");
+        gotVar=TRUE;
         }
-    dyStringPrintf(dy, " ORDER BY binary T1.obj, T1.var");  // binary forces case sensitive sort
-    verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+    else
+        dyStringPrintf(dy, " AND ");
 
-    struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
-    verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
-    struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,TRUE);
-    verbose(3, "Returned %d object(s) with %d var(s).\n",
+    if (!hasVal && rootVar->notEqual)
+        dyStringPrintf(dy, "NOT EXISTS ");
+    else
+        dyStringPrintf(dy, "EXISTS ");
+
+    dyStringPrintf(dy, "(SELECT T%d.obj FROM %s T%d WHERE T%d.obj = T1.obj AND T%d.var ",
+                   tix,table,tix,tix,tix);
+
+    if (hasVal && rootVar->notEqual && rootVar->vals == NULL)
+        dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
+
+    dyStringPrintf(dy, "%s '%s'",
+                   (strchr(rootVar->var,'%') ? "LIKE" : "="), rootVar->var);
+
+    struct mdbLimbVal *limbVal;
+    boolean multiVals = (rootVar->vals != NULL && rootVar->vals->next != NULL);
+    boolean wilds = FALSE;
+    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+        {
+        if (strchr(limbVal->val,'%') != NULL)
+            wilds = TRUE;
+        }
+    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+        {
+        if (limbVal->val == NULL || strlen(limbVal->val) < 1)
+            continue;
+
+        if (limbVal==rootVar->vals) // First val
+            {
+            if (wilds && multiVals)
+                dyStringPrintf(dy, " AND (T%d.val ",tix);
+            else
+                dyStringPrintf(dy, " AND T%d.val ",tix);
+            }
+        else                      // successive vals
+            {
+            if (wilds && multiVals)
+                dyStringPrintf(dy, " or T%d.val ",tix);
+            else
+                dyStringPrintf(dy, ",");
+            }
+
+        if (limbVal==rootVar->vals   // First val
+        ||  (wilds && multiVals))      // and successive if wildcards
+            {
+            if (rootVar->notEqual)
+                dyStringPrintf(dy, "%s",(strchr(limbVal->val,'%') || limbVal->next)?"NOT ":"!");
+            if (strchr(limbVal->val,'%') != NULL)
+                dyStringPrintf(dy, "LIKE ");
+            else if (!multiVals || wilds)
+                dyStringPrintf(dy, "= ");
+            else
+                dyStringPrintf(dy, "IN (");
+            }
+        dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
+        }
+    if (multiVals)
+        dyStringPrintf(dy, ")");
+    dyStringPrintf(dy, ")");
+    }
+dyStringPrintf(dy, " ORDER BY binary T1.obj, T1.var");  // binary forces case sensitive sort
+verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
+
+struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
+verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
+struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,TRUE);
+verbose(3, "Returned %d object(s) with %d var(s).\n",
         mdbObjCount(mdbObjs,TRUE),mdbObjCount(mdbObjs,FALSE));
-    return mdbObjs;
+return mdbObjs;
 }
 
 struct mdbObj *mdbObjsQueryByVarValString(struct sqlConnection *conn,char *tableName,char *varVals)
-// returns mdbObjs matching varVals in form of: [var1=val1 var2=val2a,val2b var3=v%3 var4="val 4" var5!=val5 var6=]
+// returns mdbObjs matching varVals in form of:
+//                   [var1=val1 var2=val2a,val2b var3=v%3 var4="val 4" var5!=val5 var6=]
 //   var2=val2a,val2b: matches asny of comma separated list
 //   var3=v%3        : matches '%' and '?' wild cards.
 //   var4="val 4"    : matches simple double quoted strings.
@@ -1451,19 +1498,21 @@ if (mdbByVars == NULL)
 return mdbObjsQueryByVars(conn,tableName,mdbByVars);
 }
 
-struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName,struct slPair *varValPairs)
+struct mdbObj *mdbObjsQueryByVarPairs(struct sqlConnection *conn,char *tableName,
+                                      struct slPair *varValPairs)
 // returns mdbObjs matching varValPairs provided.
 //   The != logic of mdbObjsQueryByVarValString() is not possible, but other cases are supported:
 //   as val may be NULL, a comma delimited list, double quoted string, containing wilds: % and ?
 {
-// Note: there is a bit of inefficiency creating a string then tearing it down, but it streamlines code
+// Note: there is inefficiency in creating a string then tearing it down, but it streamlines code
 char *varValString = slPairListToString(varValPairs,TRUE); // quotes added when spaces found
 struct mdbObj *mdbObjs = mdbObjsQueryByVarValString(conn,tableName,varValString);
 freeMem(varValString);
 return mdbObjs;
 }
 
-struct mdbObj *mdbObjQueryCompositeObj(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj)
+struct mdbObj *mdbObjQueryCompositeObj(struct sqlConnection *conn,char *tableName,
+                                       struct mdbObj *mdbObj)
 // returns NULL or the composite mdbObj associated with the object passed in.
 {
 char *objType = mdbObjFindValue(mdbObj,MDB_OBJ_TYPE);
@@ -1481,15 +1530,15 @@ return mdbObjQuery(conn,tableName,mdbObjCreate(compName,NULL,NULL));
 // ----------- Printing and Counting -----------
 static void mdbVarValPrint(struct mdbVar *mdbVar,boolean raStyle, FILE *outF)
 {
-if(mdbVar != NULL && mdbVar->var != NULL)
+if (mdbVar != NULL && mdbVar->var != NULL)
     {
-    if(raStyle)
+    if (raStyle)
         fprintf(outF, "\n%s ",mdbVar->var);
     else
         fprintf(outF, " %s=",mdbVar->var);
-    if(mdbVar->val != NULL)
+    if (mdbVar->val != NULL)
         {
-        if(!raStyle && strchr(mdbVar->val, ' ') != NULL) // Has blanks
+        if (!raStyle && strchr(mdbVar->val, ' ') != NULL) // Has blanks
             fprintf(outF, "\"%s\"",mdbVar->val);
         else
             fprintf(outF, "%s",mdbVar->val);
@@ -1509,31 +1558,31 @@ void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF )
 //       ethy fred
 // TODO: Expand for mutilple var types; strip quotes from vals on ra style
 struct mdbObj *mdbObj = NULL;
-for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+for (mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     {
-    if(mdbObj->obj == NULL)
+    if (mdbObj->obj == NULL)
         continue;
 
-    fprintf(outF, "%s %s",(raStyle?MDB_METAOBJ_RAKEY:MDB_METADATA_KEY),mdbObj->obj);
-    if(mdbObj->deleteThis)
-        fprintf(outF, " delete");
 
+    fprintf(outF, "%s %s",(raStyle?MDB_METAOBJ_RAKEY:MDB_METADATA_KEY),mdbObj->obj);
+    if (mdbObj->deleteThis)
+        fprintf(outF, " delete");
     struct mdbVar *mdbVar = NULL;
 
     // If hash available, force objType to front
-    if(mdbObj->varHash != NULL)
+    if (mdbObj->varHash != NULL)
         {
         mdbVar = hashFindVal(mdbObj->varHash,MDB_OBJ_TYPE);
         mdbVarValPrint(mdbVar,raStyle, outF);
         }
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
-        if(mdbObj->varHash == NULL || !sameOk(MDB_OBJ_TYPE,mdbVar->var))
+        if (mdbObj->varHash == NULL || !sameOk(MDB_OBJ_TYPE,mdbVar->var))
             mdbVarValPrint(mdbVar,raStyle, outF);
         }
     fprintf(outF, "%s",(raStyle?"\n\n":"\n"));
     }
-if(raStyle) // NOTE: currently only supporting validation of RA files
+if (raStyle) // NOTE: currently only supporting validation of RA files
     fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
 }
 
@@ -1551,7 +1600,7 @@ if (mdbObj!=NULL)
         mdbVar = hashFindVal(mdbObj->varHash,MDB_OBJ_TYPE);
         dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
         }
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
             {
@@ -1598,7 +1647,8 @@ mdbObjPrintToStream(mdbObjs, raStyle, f);
 fclose(f);
 }
 
-void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *separator, boolean header)
+void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *separator,
+                                boolean header)
 // prints mdbObjs as a table, but only the vars listed in comma delimited order.
 // Examples of separator: " " "\t\t" or "<TD>", in which case this is an HTML table.
 // mdbObjs list will be reordered. Sort fails when vars are missing in objs.
@@ -1608,7 +1658,7 @@ if (separator == NULL)
 boolean html = FALSE;
 if (startsWith("<T",separator) || startsWith("<t",separator))
     {
-    if(!endsWith(separator,">"))
+    if (!endsWith(separator,">"))
         errAbort("mdbObjPrintOrdered() separator is invalid HTML '%s'.\n",separator);
     html = TRUE;
     }
@@ -1651,9 +1701,12 @@ for (;mdbObj != NULL; mdbObj = mdbObj->next)
         char *val = mdbObjFindValue(mdbObj, var->name);
         if (val == NULL)
             {
-            /*if (sameWord(var->name,"obj") || sameWord(var->name,"objName") || sameWord(var->name,"metaObject"))
+            /*if (sameWord(var->name,"obj")
+              ||  sameWord(var->name,"objName")
+              ||  sameWord(var->name,"metaObject"))
                 val = mdbObj->obj;
-            else*/ if (html)
+            else*/
+            if (html)
                 val = "&nbsp;";
             else
                 val = " ";
@@ -1681,13 +1734,13 @@ FILE *tabFile = mustOpen(file, "w");
 int count = 0;
 
 struct mdbObj *mdbObj = NULL;
-for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+for (mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     {
-    if(mdbObj->obj == NULL)
+    if (mdbObj->obj == NULL)
         continue;
 
     struct mdbVar *mdbVar = NULL;
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (mdbVar->var == NULL || mdbVar->val == NULL)
             continue;
@@ -1714,40 +1767,40 @@ void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle)
 //   metaObject Fred
 //   metaObject Lucy
 struct mdbByVar *rootVar = NULL;
-for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
+for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
     {
-    if(rootVar->var == NULL)
+    if (rootVar->var == NULL)
         continue;
 
     struct mdbLimbVal *limbVal = NULL;
-    for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+    for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
-        if(limbVal->val == NULL)
+        if (limbVal->val == NULL)
             continue;
 
-        if(raStyle)
+        if (raStyle)
             printf("%s %s ",MDB_METAVAR_RAKEY,rootVar->var);
         else
             printf("%s %s=",MDB_METAVAR_RAKEY,rootVar->var);
 
-        if(!raStyle && strchr(limbVal->val, ' ') != NULL) // Has blanks
+        if (!raStyle && strchr(limbVal->val, ' ') != NULL) // Has blanks
             printf("\"%s\"",limbVal->val);
         else
             printf("%s",limbVal->val);
 
         struct mdbLeafObj *leafObj = NULL;
-        for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
+        for (leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
             {
-            if(leafObj->obj == NULL)
+            if (leafObj->obj == NULL)
                 continue;
 
-            if(raStyle)
+            if (raStyle)
                 printf("\n%s %s",MDB_METAOBJ_RAKEY,leafObj->obj);
             else
                 printf(" %s",leafObj->obj);
             }
         printf("\n");
-        if(raStyle)
+        if (raStyle)
             printf("\n");
         }
     }
@@ -1759,18 +1812,18 @@ int mdbObjCount(struct mdbObj *mdbObjs,boolean objs)
 {
 int count = 0;
 struct mdbObj *mdbObj = NULL;
-for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+for (mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     {
-    if(mdbObj->obj == NULL)
+    if (mdbObj->obj == NULL)
         continue;
-    if(objs)
+    if (objs)
         count++;
     else
         {
         struct mdbVar *mdbVar = NULL;
-        for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+        for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
             {
-            if(mdbVar->var != NULL && mdbVar->val != NULL)
+            if (mdbVar->var != NULL && mdbVar->val != NULL)
                 count++;
             }
         }
@@ -1784,27 +1837,27 @@ int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals)
 {
 int count = 0;
 struct mdbByVar *rootVar = NULL;
-for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
+for (rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
     {
-    if(rootVar->var == NULL)
+    if (rootVar->var == NULL)
         continue;
-    if(vars)
+    if (vars)
         count++;
     else
         {
         struct mdbLimbVal *limbVal = NULL;
-        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+        for (limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
             {
-            if(limbVal->val == NULL)
+            if (limbVal->val == NULL)
                 continue;
-            if(vals)
+            if (vals)
                 count++;
             else
                 {
                 struct mdbLeafObj *leafObj = NULL;
-                for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
+                for (leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
                     {
-                    if(leafObj->obj != NULL)
+                    if (leafObj->obj != NULL)
                         count++;
                     }
                 }
@@ -1823,17 +1876,17 @@ if (mdbObj == NULL)
     return NULL;
 
 struct mdbVar *mdbVar = NULL;
-if(mdbObj->varHash != NULL)
+if (mdbObj->varHash != NULL)
     mdbVar = hashFindVal(mdbObj->varHash,var); // case sensitive (unfortunately)
 else
     {
-    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+    for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
-        if(sameWord(var,mdbVar->var)) // case insensitive
+        if (sameWord(var,mdbVar->var)) // case insensitive
             break;
         }
     }
-if(mdbVar == NULL)
+if (mdbVar == NULL)
     return NULL;
 
 return mdbVar;
@@ -1883,21 +1936,21 @@ boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val)
 if (mdbObj == NULL)
     return FALSE;
 
-if(var != NULL)
+if (var != NULL)
     {
     char *foundVal = mdbObjFindValue(mdbObj,var);
-    if(foundVal == NULL)
+    if (foundVal == NULL)
         return FALSE;
-    if(val == NULL)
+    if (val == NULL)
         return TRUE;
     return sameOk(foundVal,val);
     }
 struct mdbVar *mdbVar = NULL;
-for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if(differentStringNullOk(var,mdbVar->var) != 0)
+    if (differentStringNullOk(var,mdbVar->var) != 0)
         continue;
-    if(differentStringNullOk(val,mdbVar->val) != 0)
+    if (differentStringNullOk(val,mdbVar->val) != 0)
         continue;
     return TRUE;
     }
@@ -1909,9 +1962,9 @@ boolean mdbObjsContainAltleastOneMatchingVar(struct mdbObj *mdbObjs, char *var, 
 // Returns TRUE if any object in set contains var
 {
 struct mdbObj *mdbObj = mdbObjs;
-for(;mdbObj!=NULL; mdbObj=mdbObj->next)
+for (;mdbObj!=NULL; mdbObj=mdbObj->next)
     {
-    if(mdbObjContains(mdbObj, var, val))
+    if (mdbObjContains(mdbObj, var, val))
         return TRUE;
     }
 return FALSE;
@@ -1931,15 +1984,16 @@ mdbObj=mdbObj->next;                             // No need to include first obj
 if (mdbObj != NULL)
     {
     int count = 1;
-    // NOTE: This should not loop through all, as the list could be huge.  Just compare the first 10 for now
+    // NOTE: This should not loop through all, as the list could be huge.
+    //       Just compare the first 10 for now
     struct dyString *dyPruneVars = dyStringNew(512);
-    for(;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
+    for (;mdbObj != NULL && count < MDB_COMMON_VARS_OBJ_SEARCH_LIMIT;mdbObj=mdbObj->next, count++)
         {
-        struct mdbVar *mdbVar = commonVars->vars;            // Will walk through the first obj's vars
-        for(; mdbVar != NULL; mdbVar = mdbVar->next )
+        struct mdbVar *mdbVar = commonVars->vars;     // Will walk through the first obj's vars
+        for (; mdbVar != NULL; mdbVar = mdbVar->next )
             {
             if (mdbObjsContainAtleastOne(mdbObj, mdbVar->var) == FALSE)
-                dyStringPrintf(dyPruneVars,"%s ",mdbVar->var);  // var not found so add to prune list
+                dyStringPrintf(dyPruneVars,"%s ",mdbVar->var); // var not found so add to prune list
             }
         if (dyStringLen(dyPruneVars) > 0)
             {
@@ -1959,27 +2013,27 @@ if (mdbByVar != NULL)
     {
     struct mdbLimbVal *limbVal = NULL;
     struct mdbLeafObj *leafObj = NULL;
-    if(mdbByVar->valHash != NULL && val != NULL)
+    if (mdbByVar->valHash != NULL && val != NULL)
         {
         limbVal = hashFindVal(mdbByVar->valHash,val);
-        if(limbVal == NULL || limbVal->val == NULL)
+        if (limbVal == NULL || limbVal->val == NULL)
             return FALSE;
-        if(limbVal->objHash != NULL && obj != NULL)
+        if (limbVal->objHash != NULL && obj != NULL)
             {
             leafObj = hashFindVal(limbVal->objHash,obj);
-            if(leafObj == NULL)
+            if (leafObj == NULL)
                 return FALSE;
             return sameOk(leafObj->obj,obj);
             }
         }
-    for(limbVal=mdbByVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+    for (limbVal=mdbByVar->vals;limbVal!=NULL;limbVal=limbVal->next)
         {
-        if(differentStringNullOk(val,limbVal->val) != 0)
+        if (differentStringNullOk(val,limbVal->val) != 0)
             continue;
 
-        for(leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
+        for (leafObj=limbVal->objs;leafObj!=NULL;leafObj=leafObj->next)
             {
-            if(differentStringNullOk(obj,leafObj->obj) != 0)
+            if (differentStringNullOk(obj,leafObj->obj) != 0)
                 continue;
             return TRUE;
             }
@@ -2003,7 +2057,7 @@ if (strchr(cloneLine, ' ') == NULL) // Tolerate alternate delimiters
         strSwapChar(cloneLine,'\t',' ');
     }
 int count = chopByWhite(cloneLine,NULL,0);
-if(count)
+if (count)
     {
     words = needMem(sizeof(char *) * count);
     count = chopByWhite(cloneLine,words,count);
@@ -2012,37 +2066,37 @@ else
     errAbort("mdbObjReorderVars cannot parse vars argument.\n");
 
 struct mdbObj *mdbObj = NULL;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     int ix;
     struct mdbVar *orderedVars = NULL;
     struct mdbVar **varsToReorder = needMem(sizeof(struct mdbVar *) * count);
 
     struct mdbVar *mdbVar = NULL;
-    while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
+    while ((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
         {
         ix = stringArrayIx(mdbVar->var,words,count); // Is case insensitive
-        if(ix < 0)
+        if (ix < 0)
             slAddHead(&orderedVars,mdbVar);
         else
             varsToReorder[ix] = mdbVar;
         }
 
-    if(back) // add to front of backward list
+    if (back) // add to front of backward list
         {
-        for( ix=0; ix<count; ix++ )
-            {
-            if(varsToReorder[ix] != NULL) // NOTE: For NULL, could add "None" but that would be too much "inside ball"
+        for ( ix=0; ix<count; ix++ )
+            {                              // NOTE: For NULL, could add "None"
+            if (varsToReorder[ix] != NULL) //       but that would be too much "inside ball"
                 slAddHead(&orderedVars,varsToReorder[ix]);
             }
         }
     slReverse(&orderedVars);
 
-    if(!back)  // Add to front of forward list
+    if (!back)  // Add to front of forward list
         {
-        for( ix=count-1; ix>=0; ix-- )
+        for ( ix=count-1; ix>=0; ix-- )
             {
-            if(varsToReorder[ix] != NULL)
+            if (varsToReorder[ix] != NULL)
                 slAddHead(&orderedVars,varsToReorder[ix]);
             }
         }
@@ -2050,7 +2104,7 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     mdbObj->vars = orderedVars;
     freeMem(varsToReorder);
     }
-    freeMem(words);
+freeMem(words);
 }
 
 void mdbObjReorderByCv(struct mdbObj *mdbObjs, boolean includeHidden)
@@ -2066,7 +2120,7 @@ for (el = elList; el != NULL; el = el->next)
     if (includeHidden || !cvTermIsHidden(el->name)) // Skip the hidden ones
         {
         char *priority = hashFindVal(varHash, CV_TOT_PRIORITY);
-        if (priority != NULL) // If there is no priority it will randomly fall to the back of the list
+        if (priority != NULL) // If no priority it will randomly fall to the back of the list
             slPairAdd(&cvVars,el->name,(char *)sqlUnsignedLong(priority));
         }
     }
@@ -2081,7 +2135,7 @@ if (cvVars)
     slPairFreeList(&cvVars);
     if (orderedVars != NULL)
         {
-        mdbObjReorderVars(mdbObjs, orderedVars,FALSE); // Finally we can reorder the vars in the mdbObjs
+        mdbObjReorderVars(mdbObjs, orderedVars,FALSE); // Finally we can reorder the vars
         freeMem(orderedVars);
         }
     }
@@ -2094,33 +2148,33 @@ const struct mdbObj *a = *((struct mdbObj **)va);
 const struct mdbObj *b = *((struct mdbObj **)vb);
 struct mdbVar* aVar = a->vars;
 struct mdbVar* bVar = b->vars;
-for(;aVar != NULL && bVar != NULL;aVar=aVar->next,bVar=bVar->next)
+for (;aVar != NULL && bVar != NULL;aVar=aVar->next,bVar=bVar->next)
     {
     int ret = differentWord(aVar->var, bVar->var); // case insensitive
-    if(ret != 0)
+    if (ret != 0)
         {
         // Look for it by walking vars
         struct mdbVar* tryVar = bVar->next;
-        for(;tryVar;tryVar=tryVar->next)
+        for (;tryVar;tryVar=tryVar->next)
             {
             if (sameWord(aVar->var, tryVar->var))
-                return -1; // Current aVar found in B so B has extra var and A has NULL: A sorts first
+                return -1; // Current aVar found in B so B has extra var & A has NULL: A sorts first
             }
         tryVar = aVar->next;
-        for(;tryVar;tryVar=tryVar->next)
+        for (;tryVar;tryVar=tryVar->next)
             {
             if (sameWord(tryVar->var, bVar->var))
-                return 1; // Current bVar found in A so A has extra var and B has NULL: B sorts first
+                return 1; // Current bVar found in A so A has extra var & B has NULL: B sorts first
             }
-        return ret;   // Current aVar and bVar are not shared so prioritize them alphabetically (What else can I do?)
-        }
+        return ret;   // Current aVar and bVar are not shared so prioritize them alphabetically
+        }                                                               // (What else can I do?)
     ret = differentString(aVar->val, bVar->val); // case sensitive on val
-    if(ret != 0)
+    if (ret != 0)
         return ret;
     }
-if(bVar != NULL)
+if (bVar != NULL)
     return -1;   // B has extra var and A has NULL: A sorts first
-if(aVar != NULL)
+if (aVar != NULL)
     return 1;    // A has extra var and B has NULL: B sorts first
 return 0;
 }
@@ -2128,17 +2182,20 @@ return 0;
 
 
 void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars)
-// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
-// Optionally give list of vars "cell antibody treatment" to sort on (bringing to front of vars lists).
-{  // NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,... and missing treatment messes up sort)
-if(vars != NULL)
+// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes objs' vars are in identical order
+// Optionally give list of vars "cell antibody treatment" to sort on (bringing to front of lists).
+// NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,...
+//       and missing treatment messes up sort)
+{
+if (vars != NULL)
     mdbObjReorderVars(*mdbObjs,vars,FALSE);
 
 slSort(mdbObjs, mdbObjVarCmp);
 }
 
 void mdbObjsSortOnVarPairs(struct mdbObj **mdbObjs,struct slPair *varValPairs)
-// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
+// Sorts on var,val pairs vars lists: fwd case-sensitive.
+//       Assumes all objs' vars are in identical order.
 // This method will use mdbObjsSortOnVars()
 {
 if (varValPairs == NULL)
@@ -2148,7 +2205,7 @@ struct slPair *onePair = varValPairs;
 struct dyString *dyTerms = dyStringNew(256);
 dyStringAppend(dyTerms,onePair->name);
 onePair = onePair->next;
-for(; onePair != NULL; onePair = onePair->next)
+for (; onePair != NULL; onePair = onePair->next)
     dyStringPrintf(dyTerms,",%s",onePair->name);
 mdbObjsSortOnVars(mdbObjs,dyStringContents(dyTerms));
 dyStringFree(&dyTerms);
@@ -2157,17 +2214,19 @@ dyStringFree(&dyTerms);
 void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden)
 // Puts obj->vars in order based upon cv.ra typeOfTerms priority,
 //  then case-sensitively sorts all objs in list based upon that var order.
-{  // NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,... and missing treatment messes up sort)
+// NOTE: assumes all var pairs match (e.g. every obj has cell,treatment,antibody,...
+//       and missing treatment messes up sort)
+{
 mdbObjReorderByCv(*mdbObjs, includeHidden);
-slSort(mdbObjs, mdbObjVarCmp);  // While sort will not be perfect (given missing values) it does a good job none the less.
-}
+slSort(mdbObjs, mdbObjVarCmp);  // While sort will not be perfect (given missing values)
+}                               // it does a good job none the less.
 
 boolean mdbObjRemoveOneVar(struct mdbObj *mdbObj, char *var, char *val)
 // returns TRUE if var (and optional val) are found and surgically removed from one mdbObj
 {
 struct mdbVar *lastVar = NULL;
 struct mdbVar *mdbVar = mdbObj->vars;
-for(;mdbVar != NULL;lastVar=mdbVar,mdbVar=mdbVar->next)
+for (;mdbVar != NULL;lastVar=mdbVar,mdbVar=mdbVar->next)
     {
     if (sameWord(mdbVar->var,var))
         {
@@ -2192,7 +2251,7 @@ void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
 {
 int count = 0;
 char **words = NULL;
-if(vars != NULL)
+if (vars != NULL)
     {
     count = chopByWhite(vars,NULL,0);
     if (count > 1)
@@ -2202,11 +2261,11 @@ if(vars != NULL)
         }
     }
 struct mdbObj *mdbObj = NULL;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     if (count == 0)
         {
-        if(mdbObj->varHash != NULL)
+        if (mdbObj->varHash != NULL)
             hashFree(&mdbObj->varHash);
         mdbVarsFree(&mdbObj->vars);
         }
@@ -2216,26 +2275,26 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         {
         struct mdbVar *keepTheseVars = NULL;
         struct mdbVar *mdbVar = NULL;
-        while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
+        while ((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
             {
             int ix = stringArrayIx(mdbVar->var,words,count);
-            if(ix < 0)
+            if (ix < 0)
                 slAddHead(&keepTheseVars,mdbVar);
             else
                 {
-                if(count != 0 && mdbObj->varHash != NULL)
+                if (count != 0 && mdbObj->varHash != NULL)
                     hashRemove(mdbObj->varHash, mdbVar->var);
 
                 mdbVarFree(&mdbVar);
                 }
             }
 
-        if(keepTheseVars != NULL)
+        if (keepTheseVars != NULL)
             slReverse(&keepTheseVars);
         mdbObj->vars = keepTheseVars;
         }
     }
-if(words != NULL)
+if (words != NULL)
     freeMem(words);
 }
 
@@ -2265,7 +2324,7 @@ boolean mdbObjsHasCommonVar(struct mdbObj *mdbList, char *var, boolean missingOk
 {
 char *val = NULL;
 struct mdbObj *mdb = NULL;
-for(mdb = mdbList; mdb; mdb=mdb->next)
+for (mdb = mdbList; mdb; mdb=mdb->next)
     {
     char *thisVal = mdbObjFindValue(mdb,var);
     if (thisVal == NULL)
@@ -2277,7 +2336,7 @@ for(mdb = mdbList; mdb; mdb=mdb->next)
         }
     if (val == NULL)
         val = thisVal;
-    else if(differentWord(val,thisVal))
+    else if (differentWord(val,thisVal))
         return FALSE;
     }
 return TRUE;
@@ -2291,7 +2350,7 @@ if (mdbObjsHasCommonVar(mdbList,var,TRUE))  // If var isn't found in some, that 
     {
     char *val = NULL;
     struct mdbObj *mdb = mdbList;
-    for( ; mdb; mdb=mdb->next)
+    for (; mdb; mdb=mdb->next)
         {
         if (val == NULL)
             {
@@ -2347,7 +2406,7 @@ void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis)
 // Replaces objs' vars with var=val pairs provided, preparing for DB update.
 {
 struct mdbObj *mdbObj = NULL;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     mdbObj->deleteThis = deleteThis;
 
@@ -2362,15 +2421,18 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
 }
 
 struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,boolean returnMatches)
-// Filters mdb objects to only those that include/exclude vars.  Optionally checks (case insensitive) val too.
+// Filters mdb objects to only those that include/exclude vars.
+// Optionally checks (case insensitive) val too.
 // Returns matched or unmatched items objects as requested, maintaining sort order
 {
 struct mdbObj *mdbObjsReturned = NULL;
 struct mdbObj *mdbObjs = *pMdbObjs;
 *pMdbObjs = NULL;
 boolean wildValMatch = (val != NULL && strchr(val,'*') != NULL);
-struct mdbObj **pMatchTail   = returnMatches ? &mdbObjsReturned : pMdbObjs;  // Slightly faster than slAddHead/slReverse
-struct mdbObj **pNoMatchTail = returnMatches ? pMdbObjs : &mdbObjsReturned;  // Also known as too clever by half
+             // pMatchTail: Slightly faster than slAddHead/slReverse
+struct mdbObj **pMatchTail   = returnMatches ? &mdbObjsReturned : pMdbObjs;
+             // pNoMatchTail: Also known as too clever by half
+struct mdbObj **pNoMatchTail = returnMatches ? pMdbObjs : &mdbObjsReturned;
 while (mdbObjs!=NULL)
     {
     boolean match = FALSE;
@@ -2399,10 +2461,13 @@ while (mdbObjs!=NULL)
 return mdbObjsReturned;
 }
 
-struct mdbObj *mdbObjsFilterByVars(struct mdbObj **pMdbObjs,char *vars,boolean noneEqualsNotFound,boolean returnMatches)
-// Filters mdb objects to only those that include/exclude var=val pairs (e.g. "var1=val1 var2 var3!=val3 var4=None").
+struct mdbObj *mdbObjsFilterByVars(struct mdbObj **pMdbObjs,char *vars,
+                                   boolean noneEqualsNotFound,boolean returnMatches)
+// Filters mdb objects to only those that include/exclude var=val pairs
+//   (e.g. "var1=val1 var2 var3!=val3 var4=None").
 // Supports != ("var!=" means var not found). Optionally supports var=None equal to var is not found
-// Returns matched or unmatched items objects as requested.  Multiple passes means sort order is destroyed.
+// Returns matched or unmatched items objects as requested.
+// Multiple passes means sort order is destroyed.
 {
 struct mdbObj *mdbObjsMatch = *pMdbObjs;
 struct mdbObj *mdbObjsNoMatch = NULL;
@@ -2410,10 +2475,10 @@ char *varsLine = cloneString(vars);
 int ix=0,count = chopByWhite(varsLine,NULL,0);
 char **var = needMem(count * sizeof(char *));
 chopByWhite(varsLine,var,count);
-for(ix=0;ix<count;ix++)
+for (ix=0;ix<count;ix++)
     {
     boolean notEqual = FALSE;
-    char *val = strchr(var[ix],'='); // list may be vars alone! (var1=val1 var2 var3!=val3 var4=None)
+    char *val = strchr(var[ix],'=');// list may be vars alone (var1=val1 var2 var3!=val3 ...)
     if (val != NULL)
         {
         notEqual = (*(val - 1) == '!');
@@ -2424,24 +2489,26 @@ for(ix=0;ix<count;ix++)
         if (*val == '\0')
             val = NULL;
         }
-    struct mdbObj *objNotMatching = mdbObjsFilter(&mdbObjsMatch,var[ix],val,notEqual); // exclude non-matching
+    struct mdbObj *objNotMatching = mdbObjsFilter(&mdbObjsMatch,var[ix],val,notEqual);
+    // 1st match on var=None, now match on var!= (var not defined)
     if (noneEqualsNotFound && val != NULL && sameWord(val,MDB_VAL_ENCODE_EDV_NONE))
-        mdbObjsMatch = slCat(mdbObjsMatch,mdbObjsFilter(&objNotMatching,var[ix],NULL,notEqual)); // 1st match on var=None, now match on var!= (var not defined)
-    mdbObjsNoMatch = slCat(mdbObjsNoMatch,objNotMatching);  // Multiple passes "cat" non-matching and destroys sort order
-    }
+        mdbObjsMatch = slCat(mdbObjsMatch,mdbObjsFilter(&objNotMatching,var[ix],NULL,notEqual));
+    mdbObjsNoMatch = slCat(mdbObjsNoMatch,objNotMatching);  // Multiple passes "cat" non-matching
+    }                                                       // and destroys sort order
 freeMem(var);
 freeMem(varsLine);
 if (returnMatches)
     {
     *pMdbObjs = mdbObjsNoMatch;
-    return  mdbObjsMatch;
+    return mdbObjsMatch;
     }
 *pMdbObjs = mdbObjsMatch;
-return  mdbObjsNoMatch;
+return mdbObjsNoMatch;
 }
 
 struct mdbObj *mdbObjsFilterTablesOrFiles(struct mdbObj **pMdbObjs,boolean tables, boolean files)
-// Filters mdb objects to only those that have associated tables or files. Returns removed non-table/file objects
+// Filters mdb objects to only those that have associated tables or files.
+// Returns removed non-table/file objects
 // Note: Since table/file objects overlap, there are 3 possibilites: tables, files, table && files
 {
 assert(tables || files); // Cant exclude both
@@ -2453,10 +2520,12 @@ if (tables)
 
 if (files)
     {
-    struct mdbObj *mdbObjsNoFileName = mdbObjsDropped = mdbObjsFilter(&mdbObjs,MDB_VAR_FILENAME,NULL,FALSE);
+    struct mdbObj *mdbObjsNoFileName = mdbObjsDropped = mdbObjsFilter(&mdbObjs,MDB_VAR_FILENAME,
+                                                                      NULL,FALSE);
     if (mdbObjsNoFileName)
         {
-        struct mdbObj *mdbObjsNoFileIndex = mdbObjsFilter(&mdbObjsNoFileName,MDB_VAR_FILEINDEX,NULL,FALSE);
+        struct mdbObj *mdbObjsNoFileIndex = mdbObjsFilter(&mdbObjsNoFileName,MDB_VAR_FILEINDEX,
+                                                          NULL,FALSE);
         if (mdbObjsNoFileIndex)
             {
             mdbObjs        = slCat(mdbObjs,mdbObjsNoFileName);
@@ -2507,22 +2576,22 @@ void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *val,boolea
 // Turns one or more mdbObjs into the stucture needed to add/update or delete.
 {
 struct mdbObj *mdbObj = NULL;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     mdbObj->deleteThis = deleteThis;
 
-    if(mdbObj->varHash != NULL)
+    if (mdbObj->varHash != NULL)
         hashFree(&mdbObj->varHash);
 
     mdbVarsFree(&(mdbObj->vars));
 
-    if(var != NULL)
+    if (var != NULL)
         {
         struct mdbVar *mdbVar;
         AllocVar(mdbVar);
 
         mdbVar->var     = cloneString(var);
-        if(val != NULL)
+        if (val != NULL)
             mdbVar->val     = cloneString(val);
         mdbObj->vars = mdbVar; // Only one
         }
@@ -2532,30 +2601,30 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
 struct mdbObj *mdbObjClone(const struct mdbObj *mdbObj)
 // Clones a single mdbObj, including hash and maintining order
 {
-if(mdbObj == NULL)
+if (mdbObj == NULL)
     return NULL;
 
 struct mdbObj *newObj;
 AllocVar(newObj);
 
-if(mdbObj->obj != NULL)
+if (mdbObj->obj != NULL)
     newObj->obj    = cloneString(mdbObj->obj);
 newObj->deleteThis = mdbObj->deleteThis;
-if(mdbObj->vars != NULL)
+if (mdbObj->vars != NULL)
     {
-    if(mdbObj->varHash != NULL)
+    if (mdbObj->varHash != NULL)
         newObj->varHash = hashNew(8);
 
     struct mdbVar *mdbVar = NULL;
-    for(mdbVar = mdbObj->vars; mdbVar != NULL; mdbVar = mdbVar->next )
+    for (mdbVar = mdbObj->vars; mdbVar != NULL; mdbVar = mdbVar->next )
         {
         struct mdbVar *newVar = NULL;
         AllocVar(newVar);
-        if(mdbVar->var != NULL)
+        if (mdbVar->var != NULL)
             newVar->var = cloneString(mdbVar->var);
-        if(mdbVar->val != NULL)
+        if (mdbVar->val != NULL)
             newVar->val = cloneString(mdbVar->val);
-        if(newVar->var != NULL && newVar->val != NULL)
+        if (newVar->var != NULL && newVar->val != NULL)
             hashAdd(newObj->varHash, newVar->var, newVar); // pointer to struct to resolve type
         slAddHead(&(newObj->vars),newVar);
         }
@@ -2569,7 +2638,7 @@ struct slName *mdbObjToSlName(struct mdbObj *mdbObjs)
 {
 struct slName *mdbNames = NULL;
 struct mdbObj *mdbObj = mdbObjs;
-for( ;mdbObj!=NULL; mdbObj=mdbObj->next)
+for (;mdbObj!=NULL; mdbObj=mdbObj->next)
     {
     slAddHead(&mdbNames,slNameNew(mdbObj->obj)); //allocates memory
     }
@@ -2588,7 +2657,7 @@ return sameWord(objType,MDB_OBJ_TYPE_COMPOSITE);
 }
 
 boolean mdbObjIsCompositeMember(struct mdbObj *mdbObj)
-// returns TRUE if this is a valid member of a composite.  DOES not confirm that composite obj exists
+// returns TRUE if this is a valid member of a composite. DOES not confirm that composite obj exists
 {
 char *objType = mdbObjFindValue(mdbObj,MDB_OBJ_TYPE);
 assert(objType != NULL);
@@ -2605,10 +2674,10 @@ int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
 struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
 struct mdbObj *mdbObj = NULL;
 int invalids = 0;
-for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+for ( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
     struct mdbVar *mdbVar = NULL;
-    for(mdbVar = mdbObj->vars;mdbVar != NULL;mdbVar=mdbVar->next)
+    for (mdbVar = mdbObj->vars;mdbVar != NULL;mdbVar=mdbVar->next)
         {
         struct hash *termHash = hashFindVal(termTypeHash,mdbVar->var);
         if (termHash == NULL) // No cv definition for term so no validation can be done
@@ -2658,28 +2727,30 @@ freeMem(edvs);
 return compositeEdvs;
 }
 
-static struct mdbVar *mdbObjEncodeEdvsAsMdbVars(struct mdbObj *mdbObj,struct slName *compositeEdvs,boolean includeNone)
+static struct mdbVar *mdbObjEncodeEdvsAsMdbVars(struct mdbObj *mdbObj,struct slName *compositeEdvs,
+                                                boolean includeNone)
 // returns the EDVs and values for the composite member object
 // If includeNone, then defined variables not found in obj will be included as {var}="None".
 {
 struct mdbVar *edvVars = NULL;
 struct slName *var = compositeEdvs;
-for(;var!=NULL;var=var->next)
+for (;var!=NULL;var=var->next)
     {
     char *val = mdbObjFindValue(mdbObj,var->name);
     if (val)
         mdbVarAdd(&edvVars, var->name,val);
     else if (includeNone)
         {
-        if (differentWord(var->name,ENCODE_EXP_FIELD_ORGANISM)) // Does not go into EDV's sent to encodeExp table
-            mdbVarAdd(&edvVars, var->name,MDB_VAL_ENCODE_EDV_NONE);
+        if (differentWord(var->name,ENCODE_EXP_FIELD_ORGANISM))     // Does not go into EDV's
+            mdbVarAdd(&edvVars, var->name,MDB_VAL_ENCODE_EDV_NONE); // sent to encodeExp table
         }
     }
 slReverse(&edvVars);
 return edvVars;
 }
 
-struct slName *mdbObjFindCompositeNamedEncodeEdvs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj)
+struct slName *mdbObjFindCompositeNamedEncodeEdvs(struct sqlConnection *conn,char *tableName,
+                                                  struct mdbObj *mdbObj)
 // returns NULL or the Experiment Defining Variable names for this composite
 {
 if (!mdbObjIsCompositeMember(mdbObj))
@@ -2693,7 +2764,8 @@ mdbObjFree(&compObj);
 return edvs;
 }
 
-struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObj,boolean includeNone)
+struct mdbVar *mdbObjFindEncodeEdvPairs(struct sqlConnection *conn,char *tableName,
+                                        struct mdbObj *mdbObj,boolean includeNone)
 // returns NULL or the Experiment Defining Variables and values for this composite member object
 // If includeNone, then defined variables not found in obj will be included as {var}="None".
 {
@@ -2709,16 +2781,20 @@ if (compositeEdvs == NULL)
 return mdbObjEncodeEdvsAsMdbVars(mdbObj,compositeEdvs,includeNone);
 }
 
-struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,char *expTable,
-                       struct mdbObj **pMdbObjs,int warn,boolean createExpIfNecessary,boolean updateAccession)
-// Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,
+                                          char *expTable, struct mdbObj **pMdbObjs,int warn,
+                                          boolean createExpIfNecessary,boolean updateAccession)
+// Organizes objects into experiments and validates experiment IDs.
+//      Will add/update the ids in the structures.
 // If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
 //    warn=2, then print line for each obj with expId or warning.
 // createExpIfNecessary means add expId to encodeExp table. updateAccession too if necessary.
-// Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
+// Returns a new set of mdbObjs that is what can (and should)
+//         be used to update the mdb via mdbObjsSetToDb().
 {
 // Here is what "experimentify" does from "mdbPrint -encodeExp" and "mdbUpdate -encodeExp":
-//    - Uses normal selection methods to get a set of objects (e.g. one composite worth) or all objs. (in mdbPrint and mdbUpdate)
+//    - Uses normal selection methods to get a set of objects (e.g. one composite worth)
+//      or all objs. (in mdbPrint and mdbUpdate)
 //    - This API:
 //    - Breaks up and walks through set of objects composite by composite
 //    - Looks up EDVs (Experiment Defining Variables) for composite.
@@ -2727,8 +2803,8 @@ struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,ch
 //    - Uses encodeExp API to determine what expId should be.
 //    - Creates new mdbObjs list of updates needed to put expId and dccAccession into the mdb.
 //    - From "mdbPrint", this API warns of mismatches or missing expIds
-//    - From "mdbUpdate" (not -test) then that utility will update the mdb from this API's return structs.  If -test, will reveal what would be updated.
-//    - FIXME: Need to extend this to update dccAccession separately from expId.
+//    - From "mdbUpdate" (not -test) then that utility will update the mdb from this API's
+//      return structs.  If -test, will reveal what would be updated.
 
 if (pMdbObjs == NULL || *pMdbObjs == NULL)
     return 0;
@@ -2744,19 +2820,20 @@ mdbObjsSortOnVars(&mdbObjs, MDB_VAR_COMPOSITE);
 
 struct dyString *dyVars = dyStringNew(256);
 
-while(mdbObjs != NULL)
+while (mdbObjs != NULL)
     {
     // Work on a composite at a time
     boolean compositelessObj = FALSE;
     char *compName = NULL;
-    while(mdbObjs != NULL && compName == NULL)
+    while (mdbObjs != NULL && compName == NULL)
         {
         compName = mdbObjFindValue(mdbObjs,MDB_VAR_COMPOSITE);
         if (compName == NULL)
             {
             if (mdbObjFindValue(mdbObjs,MDB_VAR_ENCODE_EDVS) == NULL)
                 {
-                verbose(1, "Object '%s' has no %s or %s defined.\n",mdbObjs->obj,MDB_VAR_COMPOSITE,MDB_VAR_ENCODE_EDVS);
+                verbose(1, "Object '%s' has no %s or %s defined.\n",
+                        mdbObjs->obj,MDB_VAR_COMPOSITE,MDB_VAR_ENCODE_EDVS);
                 mdbProcessedObs = slCat(mdbProcessedObs,slPopHead(&mdbObjs));
                 continue;
                 }
@@ -2770,17 +2847,17 @@ while(mdbObjs != NULL)
     else
         mdbCompositeObjs = slPopHead(&mdbObjs); // Rare cases there is no composite set.
     assert(mdbCompositeObjs != NULL);
-    // --- At this point we have nibbled off a composite worth of objects from the full set of objects
+    // --- At this point we have nibbled off a composite worth of objs from the full set of objects
 
     // Find the composite obj if it exists
     struct mdbObj *compObj = NULL;
     if (compName != NULL)
         {
         compObj =mdbObjsFilter(&mdbCompositeObjs, MDB_OBJ_TYPE, MDB_OBJ_TYPE_COMPOSITE,TRUE);
-        if (compObj == NULL) // May be NULL if mdbObjs passed in was produced by too narrow of selection criteria
-            {
-            compObj = mdbObjQueryCompositeObj(conn,tableName,mdbCompositeObjs);  // First obj on list will do
-            if(compObj == NULL)  // This should be assertable
+        if (compObj == NULL) // May be NULL if mdbObjs passed in was produced by
+            {                // too narrow of selection criteria
+            compObj = mdbObjQueryCompositeObj(conn,tableName,mdbCompositeObjs);  // 1st obj will do
+            if (compObj == NULL)  // This should be assertable
                 {
                 verbose(1, "Composite '%s' has not been defined.\n",compName);
                 mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
@@ -2789,7 +2866,8 @@ while(mdbObjs != NULL)
                 }
             }
         else
-            slAddHead(&mdbProcessedObs,compObj); // We can still use the pointer, but will not "process" it.  NOTE: leak the queried one
+            slAddHead(&mdbProcessedObs,compObj);
+            // We can still use the pointer, but will not "process" it.  NOTE: leak the queried one
         }
     else
         {
@@ -2797,14 +2875,16 @@ while(mdbObjs != NULL)
         compName = mdbCompositeObjs->obj;
         compositelessObj = TRUE;
         }
-    verbose(2, "mdbObjsEncodeExperimentify() working on %s %s%s.\n",compName,MDB_VAR_COMPOSITE,(compositelessObj?"less set":""));
+    verbose(2, "mdbObjsEncodeExperimentify() working on %s %s%s.\n",
+            compName,MDB_VAR_COMPOSITE,(compositelessObj?"less set":""));
 
     // Obtain experiment defining variables for the composite (or compositeless obj)
     struct slName *compositeEdvs = mdbObjGetNamedEncodeEdvs(compObj);
     if (compositeEdvs == NULL)
         {
-        verbose(1, "There are no experiment defining variables established for this %s%s.  Add them to obj %s => var:%s.\n",
-                MDB_VAR_COMPOSITE,(compositelessObj?"less set":""), compName,MDB_VAR_ENCODE_EDVS);
+        verbose(1, "There are no experiment defining variables established for this %s%s.  "
+                   "Add them to obj %s => var:%s.\n", MDB_VAR_COMPOSITE,
+                   (compositelessObj?"less set":""), compName,MDB_VAR_ENCODE_EDVS);
         mdbProcessedObs = slCat(mdbProcessedObs,mdbCompositeObjs);
         mdbCompositeObjs = NULL;
         continue;
@@ -2813,11 +2893,12 @@ while(mdbObjs != NULL)
     dyStringAppend(dyVars,slNameListToString(compositeEdvs, ' '));
 
     if (warn > 0)
-        printf("Composite%s '%s' with %d objects has %d EDVs(%s): [%s].\n",(compositelessObj?"less set":""),compName,
-               slCount(mdbCompositeObjs),slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars)); // Set the stage
+        printf("Composite%s '%s' with %d objects has %d EDVs(%s): [%s].\n",
+               (compositelessObj?"less set":""),compName,slCount(mdbCompositeObjs),
+               slCount(compositeEdvs),MDB_VAR_ENCODE_EDVS,dyStringContents(dyVars));// Set the stage
 
     // Organize composite objs by EDVs
-    dyStringPrintf(dyVars, " %s %s ",MDB_VAR_VIEW,MDB_VAR_REPLICATE); // Allows for nicer sorted list
+    dyStringPrintf(dyVars, " %s %s ",MDB_VAR_VIEW,MDB_VAR_REPLICATE);// Allows for nicer sorted list
     char *edvSortOrder = cloneString(dyStringContents(dyVars));
 
     // Walk through objs for an exp as defined by EDVs
@@ -2827,25 +2908,28 @@ while(mdbObjs != NULL)
     int expObjsCount=0; // Total of all experimental object accoss the composite
     int expMax=0;       // Largest experiment (in number of objects)
     int expMin=999;     // Smallest experiment (in number of objects)
-    while(mdbCompositeObjs != NULL)
+    while (mdbCompositeObjs != NULL)
         {
         // Must sort each cycle, because sort order is lost during mdbObjs FilterByVars();
         mdbObjsSortOnVars(&mdbCompositeObjs, edvSortOrder);
 
         // Get the EDVs for the first obj
-        struct mdbVar *edvVarVals = mdbObjEncodeEdvsAsMdbVars(mdbCompositeObjs,compositeEdvs,TRUE); // use first obj on list and include Nones
+        struct mdbVar *edvVarVals = mdbObjEncodeEdvsAsMdbVars(mdbCompositeObjs,compositeEdvs,TRUE);
+        // use first obj on list and include Nones
         if (edvVarVals == NULL)
             {
-            verbose(1, "There are no experiment defining variables for this object '%s'.\n",mdbCompositeObjs->obj);
+            verbose(1, "There are no experiment defining variables for this object '%s'.\n",
+                    mdbCompositeObjs->obj);
             slAddHead(&mdbProcessedObs,slPopHead(&mdbCompositeObjs)); // We're done with this one
             continue;
             }
 
-        // Construct the var=val string for filtering a single exp (set of objs) from composite worth of objs
+        // Construct the var=val string for filtering a single exp (set of objs)
+        //           from composite worth of objs
         dyStringClear(dyVars);
         struct mdbVar *edvVar = edvVarVals;
         int valsFound = 0;
-        for(;edvVar!=NULL;edvVar=edvVar->next)
+        for (;edvVar!=NULL;edvVar=edvVar->next)
             {
             dyStringPrintf(dyVars,"%s=%s ",edvVar->var,edvVar->val);
             if (differentString(edvVar->val,MDB_VAL_ENCODE_EDV_NONE))
@@ -2855,7 +2939,8 @@ while(mdbObjs != NULL)
 
         if (valsFound == 0)
             {
-            verbose(1, "There are no experiment defining variables for this object '%s'.\n",mdbCompositeObjs->obj);
+            verbose(1, "There are no experiment defining variables for this object '%s'.\n",
+                    mdbCompositeObjs->obj);
             slAddHead(&mdbProcessedObs,slPopHead(&mdbCompositeObjs)); // We're done with this one
             mdbVarsFree(&edvVarVals);
             continue;
@@ -2863,9 +2948,10 @@ while(mdbObjs != NULL)
 
         // Work on one experiment at a time
         verbose(2, "mdbObjsEncodeExperimentify() working on EDVs: %s.\n",dyStringContents(dyVars));
-        struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&mdbCompositeObjs,dyStringContents(dyVars),TRUE,TRUE); // None={notFound}
+        struct mdbObj *mdbExpObjs = mdbObjsFilterByVars(&mdbCompositeObjs,dyStringContents(dyVars),
+                                                        TRUE,TRUE); // None={notFound}
 
-        // --- At this point we have nibbled off an experiment worth of objects from the composite set of objects
+        // --- At this point we have nibbled off an experiment worth of objects from the composite
 
         int objsInExp = slCount(mdbExpObjs);
         assert(objsInExp > 0);
@@ -2894,10 +2980,13 @@ while(mdbObjs != NULL)
             {
             safef(experimentId,sizeof(experimentId),"{missing}");
             if (warn > 0)
-                printf("Experiment %s EDV: [%s] is not defined in %s.%s table.\n",experimentId,dyStringContents(dyVars), ENCODE_EXP_DATABASE, expTable);
-                //printf("Experiment %s EDV: [%s] is not defined in %s table. Remaining:%d and %d\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE,slCount(mdbCompositeObjs),slCount(mdbObjs));
-            if (warn < 2) // From mdbUpdate (warn=1), just interested in testing waters.  From mdbPrint (warn=2) list all objs in exp.
-                {
+                printf("Experiment %s EDV: [%s] is not defined in %s.%s table.\n",
+                       experimentId,dyStringContents(dyVars), ENCODE_EXP_DATABASE, expTable);
+                //printf("Experiment %s EDV: [%s] is not defined in %s table. Remaining:%d "
+                //       "and %d\n",experimentId,dyStringContents(dyVars),EXPERIMENTS_TABLE,
+                //       slCount(mdbCompositeObjs),slCount(mdbObjs));
+            if (warn < 2) // From mdbUpdate (warn=1), just interested in testing waters.
+                {         // From mdbPrint  (warn=2) list all objs in exp.
                 expMissing += slCount(mdbExpObjs);
                 mdbProcessedObs = slCat(mdbProcessedObs,mdbExpObjs);
                 mdbExpObjs = NULL;
@@ -2909,7 +2998,8 @@ while(mdbObjs != NULL)
             {
             safef(experimentId,sizeof(experimentId),"%d",expId);
             if (warn > 0)
-                printf("Experiment %s has %d objects based upon %d EDVs: [%s].\n",experimentId,slCount(mdbExpObjs),valsFound,dyStringContents(dyVars)); // Set the stage
+                printf("Experiment %s has %d objects based upon %d EDVs: [%s].\n",
+                       experimentId,slCount(mdbExpObjs),valsFound,dyStringContents(dyVars));
             }
 
         // Now we can walk through each obj in experiment and determine if it has the correct expId
@@ -2919,37 +3009,45 @@ while(mdbObjs != NULL)
             expMax = objsInExp;
         if (expMin > objsInExp)
             expMin = objsInExp;
-        while(mdbExpObjs != NULL)
+        while (mdbExpObjs != NULL)
             {
             struct mdbObj *obj = slPopHead(&mdbExpObjs);
 
-            { // NOTE: This list could expand but we expect only tables and files to be objs in an experiment
-                char *objType = mdbObjFindValue(obj,MDB_OBJ_TYPE);
-                assert(objType != NULL && (sameString(objType,MDB_OBJ_TYPE_TABLE) || sameString(objType,MDB_OBJ_TYPE_FILE)));
-                }
+            { // NOTE: This list could expand but we expect only
+              //       tables and files to be objs in an experiment
+            char *objType = mdbObjFindValue(obj,MDB_OBJ_TYPE);
+            assert(  objType != NULL
+                  && (  sameString(objType,MDB_OBJ_TYPE_TABLE)
+                     || sameString(objType,MDB_OBJ_TYPE_FILE)));
+            }
 
             boolean updateObj = FALSE;
             char *val = mdbObjFindValue(obj,MDB_VAR_ENCODE_EXP_ID);
             if (val != NULL)
                 {
-                foundId = TRUE; // warn==1 will give only 1 exp wide error if no individual errors.  NOTE: would be nice if those with expId sorted to beginning, but can't have everything.
+                foundId = TRUE; // warn==1 will give only 1 exp wide error if no individual errors.
+                // NOTE: would be nice if those with expId sorted to beginning,
+                //       but can't have everything.
                 int thisId = atoi(val);
                 if (expId == ENCODE_EXP_IX_UNDEFINED || thisId != expId)
                     {
                     updateObj = TRUE;  // Always an error!
                     expMissing++;
 
-                    printf("    ERROR  %s %-60s has bad %s=%s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
+                    printf("    ERROR  %s %-60s has bad %s=%s.\n",
+                           experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,val);
                     }
                 else
                     {
                     char *acc = mdbObjFindValue(obj,MDB_VAR_DCC_ACCESSION);
-                    if (updateAccession && !createExpIfNecessary && exp->accession == NULL) // -test so one wasn't created
-                        {
+                    if (updateAccession && !createExpIfNecessary && exp->accession == NULL)
+                        {                 // -test so one wasn't created
                         exp->accession = needMem(16);
-                        safef(exp->accession, 16, "TEMP%06d", exp->ix); // Temporary since this is not an update but we want -test to work.
+                        safef(exp->accession, 16, "TEMP%06d", exp->ix);
+                                     // TEMP since this is not an update but we want -test to work.
                         }
-                    if (exp->accession != NULL && (acc == NULL || differentString(acc,exp->accession)))
+                    if (exp->accession != NULL
+                    &&  (acc == NULL || differentString(acc,exp->accession)))
                         {
                         if (updateAccession)
                             updateObj = TRUE;
@@ -2957,16 +3055,20 @@ while(mdbObjs != NULL)
                         accMissing++;
 
                         if (acc != NULL) // Always an error
-                            printf("    ERROR  %s %-60s %s set, has wrong %s: %s.\n",experimentId,obj->obj,
-                                    MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION,acc);
-                        else if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                            printf("           %s %-60s %s set, needs %s.\n",experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,MDB_VAR_DCC_ACCESSION);
+                            printf("    ERROR  %s %-60s %s set, has wrong %s: %s.\n",
+                                   experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,
+                                   MDB_VAR_DCC_ACCESSION,acc);
+                        else if (warn > 1) // NOTE: Could give more info as per wrangler's desires
+                            printf("           %s %-60s %s set, needs %s.\n",
+                                   experimentId,obj->obj,MDB_VAR_ENCODE_EXP_ID,
+                                   MDB_VAR_DCC_ACCESSION);
                         }
                     else
                         {
                         errors--;       // One less error
-                        if (warn > 1)           // NOTE: Could give more info for each obj as per wrangler's desires
-                            printf("           %s %-60s %s\n",experimentId,obj->obj,(exp->accession != NULL ? exp->accession : ""));
+                        if (warn > 1)   // NOTE: Could give more info as per wrangler's desires
+                            printf("           %s %-60s %s\n", experimentId,obj->obj,
+                                   (exp->accession != NULL ? exp->accession : ""));
                         }
                     }
                 }
@@ -2981,7 +3083,8 @@ while(mdbObjs != NULL)
                 if ((foundId && warn > 0) || warn > 1)
                     {
                     if (updateObj)
-                        printf("           %s %-60s needs updating to mdb.\n",experimentId,obj->obj);
+                        printf("           %s %-60s needs updating to mdb.\n",
+                               experimentId,obj->obj);
                     else
                         printf("           %s %s\n",experimentId,obj->obj); // missing
                     }
@@ -3002,17 +3105,20 @@ while(mdbObjs != NULL)
         encodeExpFree(&exp);
 
         if (!foundId && errors > 0 && warn > 0)
-            printf("           %s all %d objects are missing an %s.\n",experimentId,objsInExp,MDB_VAR_ENCODE_EXP_ID);
+            printf("           %s all %d objects are missing an %s.\n",
+                   experimentId,objsInExp,MDB_VAR_ENCODE_EXP_ID);
         }
     // Done with one composite
 
     if (expCount > 0)
         {
         printf("Composite%s '%s' has %d recognizable experiment%s with %d objects needing %s",
-               (compositelessObj?"less set":""),compName,expCount,(expCount != 1?"s":""),expMissing,MDB_VAR_ENCODE_EXP_ID);
+               (compositelessObj?"less set":""),compName,expCount,(expCount != 1?"s":""),
+               expMissing,MDB_VAR_ENCODE_EXP_ID);
         if (accMissing > 0)
             printf(" and %d objects needing %s",accMissing,MDB_VAR_DCC_ACCESSION);
-        printf(" updated.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",expMin,expMax,((double)expObjsCount/expCount));
+        printf(" updated.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",
+               expMin,expMax,((double)expObjsCount/expCount));
         }
 
     if (edvSortOrder != NULL)
@@ -3053,11 +3159,11 @@ void mdbObjsFree(struct mdbObj **mdbObjsPtr)
 // Frees one or more metadata objects and any contained mdbVars.  Will free any hashes as well.
 {
 
-if(mdbObjsPtr != NULL && *mdbObjsPtr != NULL)
+if (mdbObjsPtr != NULL && *mdbObjsPtr != NULL)
     {
     // free all roots
     struct mdbObj *mdbObj = NULL;
-    while((mdbObj = slPopHead(mdbObjsPtr)) != NULL)
+    while ((mdbObj = slPopHead(mdbObjsPtr)) != NULL)
         {
         // Free hash first (shared memory)
         hashFree(&(mdbObj->varHash));
@@ -3077,7 +3183,7 @@ void mdbVarsFree(struct mdbVar **mdbVarsPtr)
 // Frees one or more metadata vars and any val as well
 {
 struct mdbVar *mdbVar = NULL;
-while((mdbVar = slPopHead(mdbVarsPtr)) != NULL)
+while ((mdbVar = slPopHead(mdbVarsPtr)) != NULL)
     {
     freeMem(mdbVar->val);
     freeMem(mdbVar->var);
@@ -3088,22 +3194,22 @@ while((mdbVar = slPopHead(mdbVarsPtr)) != NULL)
 void mdbByVarsFree(struct mdbByVar **mdbByVarsPtr)
 // Frees one or more metadata vars and any contained vals and objs.  Will free any hashes as well.
 {
-if(mdbByVarsPtr != NULL && *mdbByVarsPtr != NULL)
+if (mdbByVarsPtr != NULL && *mdbByVarsPtr != NULL)
     {
     // free all roots
     struct mdbByVar *rootVar = NULL;
-    while((rootVar = slPopHead(mdbByVarsPtr)) != NULL)
+    while ((rootVar = slPopHead(mdbByVarsPtr)) != NULL)
         {
         // Free hash first (shared memory)
         hashFree(&(rootVar->valHash));
 
         // free all limbs
         struct mdbLimbVal *limbVal = NULL;
-        while((limbVal = slPopHead(&(rootVar->vals))) != NULL)
+        while ((limbVal = slPopHead(&(rootVar->vals))) != NULL)
             mdbLimbValFree(&limbVal);
 
         // The rest of root
-        if(rootVar->var)
+        if (rootVar->var)
             freeMem(rootVar->var);
         freeMem(rootVar);
         }
@@ -3121,7 +3227,7 @@ static struct mdbObj *metadataForTableFromTdb(struct trackDb *tdb)
 // Returns the metadata for a table from a tdb setting.
 {
 char *setting = trackDbSetting(tdb, MDB_METADATA_KEY);
-if(setting == NULL)
+if (setting == NULL)
     return NULL;
 struct mdbObj *mdbObj;
 AllocVar(mdbObj);
@@ -3132,8 +3238,8 @@ mdbObj->vars->val = cloneString(MDB_OBJ_TYPE_TABLE);
 mdbObj->varHash = hashNew(8);
 hashAdd(mdbObj->varHash, mdbObj->vars->var, mdbObj->vars);
 mdbObj = mdbObjAddVarPairs(mdbObj,setting);
-mdbObjRemoveVars(mdbObj,MDB_VAR_TABLENAME); // NOTE: Special hint that the tdb metadata is used since no mdb metadata is found
-return mdbObj;
+mdbObjRemoveVars(mdbObj,MDB_VAR_TABLENAME); // NOTE: Special hint that the tdb metadata
+return mdbObj;                              //       is used since no mdb metadata is found
 }
 
 const struct mdbObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
@@ -3142,14 +3248,14 @@ const struct mdbObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
 struct mdbObj *mdbObj = NULL;
 
 // See of the mdbObj was already built
-if(tdb != NULL)
+if (tdb != NULL)
     {
     mdbObj = tdbExtrasMdb(tdb);
-    if(mdbObj == METADATA_NOT_FOUND) // NOT in mtatbl, not in tdb metadata setting!
+    if (mdbObj == METADATA_NOT_FOUND) // NOT in mtatbl, not in tdb metadata setting!
         return NULL;
-    else if(mdbObj == MDB_NOT_FOUND) // looked mdb already and not found!
+    else if (mdbObj == MDB_NOT_FOUND) // looked mdb already and not found!
         return metadataForTableFromTdb(tdb);
-    else if(mdbObj != NULL)
+    else if (mdbObj != NULL)
         {
         return mdbObj;  // No reason to query the table again!
         }
@@ -3159,19 +3265,19 @@ struct sqlConnection *conn = hAllocConn(db);
 char *mdb = mdbTableName(conn,TRUE);  // Look for sandbox name first
 if(tdb != NULL && tdb->table != NULL)
     table = tdb->table;
-if(mdb != NULL)
+if (mdb != NULL)
     mdbObj = mdbObjQueryByObj(conn,mdb,table,NULL);
 hFreeConn(&conn);
 
 // save the mdbObj for next time
-if(tdb)
+if (tdb)
     {
-    if(mdbObj != NULL)
+    if (mdbObj != NULL)
         tdbExtrasMdbSet(tdb,mdbObj);
     else
         {
         tdbExtrasMdbSet(tdb,MDB_NOT_FOUND);
-        return metadataForTableFromTdb(tdb);  // FIXME: metadata setting in TDB is soon to be obsolete
+        return metadataForTableFromTdb(tdb); // FIXME: metadata setting in TDB soon to be obsolete
         }
     }
 
@@ -3182,7 +3288,7 @@ const char *metadataFindValue(struct trackDb *tdb, char *var)
 // Finds the val associated with the var or retruns NULL
 {
 struct mdbObj *mdbObj = tdbExtrasMdb(tdb);
-if(mdbObj == MDB_NOT_FOUND) // Note, only we if already looked for mdb (which requires db)
+if (mdbObj == MDB_NOT_FOUND) // Note, only we if already looked for mdb (which requires db)
     mdbObj = metadataForTableFromTdb(tdb);
 if (mdbObj == NULL || mdbObj == METADATA_NOT_FOUND)
     return NULL;
@@ -3192,7 +3298,8 @@ return mdbObjFindValue(mdbObj,var);
 
 
 struct mdbObj *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit)
-// Search the metaDb table for objs by var and val.  Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
+// Search the metaDb table for objs by var and val.
+// Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
 {
 if (var == NULL && val == NULL)
@@ -3205,17 +3312,19 @@ struct dyString *dyQuery = dyStringNew(512);
 dyStringPrintf(dyQuery,"select l1.obj, l1.var, l1.val from %s l1",tableName);
 
 if (var != NULL || val != NULL)
-    dyStringPrintf(dyQuery," where exists (select l2.obj from %s l2 where l2.obj = l1.obj and ",tableName);
-if(var != NULL)
+    dyStringPrintf(dyQuery," where exists (select l2.obj from %s l2 where l2.obj = l1.obj and ",
+                   tableName);
+if (var != NULL)
     dyStringPrintf(dyQuery,"l2.var = '%s'", var);
-if(var != NULL && val != NULL)
+if (var != NULL && val != NULL)
     dyStringAppend(dyQuery," and ");
-if(val != NULL)
+if (val != NULL)
     {
     dyStringAppend(dyQuery,"l2.val ");
-    if(sameString(op, "in"))
-        dyStringPrintf(dyQuery,"in (%s)", val); // Note, must be a formatted string already: 'a','b','c' or  1,2,3
-    else if(sameString(op, "contains") || sameString(op, "like"))
+    if (sameString(op, "in"))
+        dyStringPrintf(dyQuery,"in (%s)", val);
+                              // Note, must be a formatted string already: 'a','b','c' or  1,2,3
+    else if (sameString(op, "contains") || sameString(op, "like"))
         dyStringPrintf(dyQuery,"like '%%%s%%'", val);
     else if (limit > 0 && strlen(val) != limit)
         dyStringPrintf(dyQuery,"like '%.*s%%'", limit, val);
@@ -3232,31 +3341,35 @@ struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,TRUE);
 return mdbObjs;
 }
 
-struct mdbObj *mdbObjRepeatedSearch(struct sqlConnection *conn,struct slPair *varValPairs,boolean tables,boolean files)
+struct mdbObj *mdbObjRepeatedSearch(struct sqlConnection *conn,struct slPair *varValPairs,
+                                    boolean tables,boolean files)
 // Search the metaDb table for objs by var,val pairs.  Uses mdbCvSearchMethod() if available.
 // This method will use mdbObjsQueryByVars()
 {
 struct slPair *onePair;
 struct dyString *dyTerms = dyStringNew(256);
 // Build list of terms as "var1=val1 var2=val2a,val2b,val2c var3=%val3%"
-for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
+for (onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     {
-    if (isEmpty(((char *)(onePair->val)))) // NOTE: All the parens are needed to get the macro to do the right thing
-        continue;
+    if (isEmpty(((char *)(onePair->val)))) // NOTE: All the parens are needed to get the macro
+        continue;                          //       to do the right thing
     enum cvSearchable searchBy = cvSearchMethod(onePair->name);
-    if (searchBy == cvSearchByMultiSelect  // multiSelect val will be filled with a comma delimited list
-    || searchBy == cvSearchBySingleSelect
-    || searchBy == cvSearchByWildList)
+    if (searchBy == cvSearchByMultiSelect  // multiSelect val will be filled with
+    ||  searchBy == cvSearchBySingleSelect //                                comma delimited list
+    ||  searchBy == cvSearchByWildList)
         {
         if (strchr((char *)onePair->val,' '))
             dyStringPrintf(dyTerms,"%s=\"%s\" ",onePair->name,(char *)onePair->val);
         else
             dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
         }
-    else if (searchBy == cvSearchByFreeText)                                      // If select is by free text then like
+    else if (searchBy == cvSearchByFreeText)    // If select is by free text then like
         dyStringPrintf(dyTerms,"%s=\"%%%s%%\" ",onePair->name,(char *)onePair->val);
-    else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))  // special case.  Not directly searchable by UI but indirectly and will show up here.
+    else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))
+        {
+        // special case.  Not directly searchable by UI but indirectly and will show up here.
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
+        }
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
         {
         // TO BE IMPLEMENTED
@@ -3274,8 +3387,10 @@ dyStringFree(&dyTerms);
 return mdbObjs;
 }
 
-struct slName *mdbObjNameSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files)
-// Search the metaDb table for objs by var and val.  Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
+struct slName *mdbObjNameSearch(struct sqlConnection *conn, char *var, char *val, char *op,
+                                int limit, boolean tables, boolean files)
+// Search the metaDb table for objs by var and val.
+// Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
 {  // Note: This proves faster than getting mdbObjs then converting to slNames
 struct mdbObj *mdbObjs = mdbObjSearch(conn,var,val,op,limit);
@@ -3292,36 +3407,51 @@ mdbObjsFree(&mdbObjs);
 return mdbNames;
 }
 
-static void mdbSearchableQueryRestictForTablesOrFiles(struct dyString *dyQuery,char *tableName, char letter,boolean hasTableName, boolean hasFileName)
+static void mdbSearchableQueryRestictForTablesOrFiles(struct dyString *dyQuery,char *tableName,
+                                            char letter,boolean hasTableName, boolean hasFileName)
 // Append table and file restrictions onto an mdb query.
-// letter (e.g. 'A') should be used in original query to alias table name: "select A.val from metaDb A where A.val = 'fred'".
+// letter (e.g. 'A') should be used in original query to alias table name:
+//                           "select A.val from metaDb A where A.val = 'fred'".
 {
-// A note about tables and files: objType=table may have fileNames associated, but objType=file will not have tableNames
+// A note about tables and files: objType=table may have fileNames associated,
+//   but objType=file will not have tableNames
 // While objType=table should have a var=tableName, this is redundant because the obj=tableName
 // So the lopsided 'exists' queries below are meant to be the most flexible/efficent
 
 assert(isalpha(letter) && isalpha(letter + 2)); // will need one or two sub-queries.
 char nextLtr = letter + 1;
 
-// We are only searching for objects that are of objType table or file. objType=composite are not search targets!
-if (hasTableName && !hasFileName) // objType=table may have fileNames associated, but objType=file will not have tableNames
-    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var='objType' and %c.val = '%s')",
-                    nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE);
+// We are only searching for objects that are of objType table or file.
+//    objType=composite are not search targets!
+if (hasTableName && !hasFileName)
+    {
+    // objType=table may have fileNames associated, but objType=file will not have tableNames
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
+                           "%c.var='objType' and %c.val = '%s')",nextLtr,tableName,nextLtr,nextLtr,
+                           letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE);
+    }
 else // tables OR files (but not objType=composite)
-    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var='objType' and %c.val in ('%s','%s'))",
-                    nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE,MDB_OBJ_TYPE_FILE);
-
+    {
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
+                           "%c.var='objType' and %c.val in ('%s','%s'))",nextLtr,tableName,nextLtr,
+                           nextLtr,letter,nextLtr,nextLtr,MDB_OBJ_TYPE_TABLE,MDB_OBJ_TYPE_FILE);
+    }
 nextLtr++;
 
-if (!hasTableName && hasFileName) // last of 3 possibilites objType either table or file but must have fileName var
-    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and %c.var in ('%s','%s'))",
-                   nextLtr,tableName,nextLtr,nextLtr,letter,nextLtr,MDB_VAR_FILENAME,MDB_VAR_FILEINDEX);
+// last of 3 possibilites objType either table or file but must have fileName var
+if (!hasTableName && hasFileName)
+    dyStringPrintf(dyQuery," and exists (select %c.obj from %s %c where %c.obj = %c.obj and "
+                           "%c.var in ('%s','%s'))",nextLtr,tableName,nextLtr,nextLtr,letter,
+                           nextLtr,MDB_VAR_FILENAME,MDB_VAR_FILEINDEX);
 }
 
-struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean hasTableName, boolean hasFileName)
-// Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit,
+                            boolean hasTableName, boolean hasFileName)
+// Search the metaDb table for vals by var.
+//    Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
-// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+// Searchable vars are only for table or file objects.
+//    Further restrict to vars associated with tableName, fileName or both.
 {  // TODO: Change this to use normal mdb struct routines?
 struct slName *retVal;
 
@@ -3348,11 +3478,15 @@ slNameSortCase(&retVal);
 return retVal;
 }
 
-struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags, boolean hasTableName, boolean hasFileName)
-// Search the metaDb table for vals by var and returns val (as pair->name) and controlled vocabulary (cv) label
-// (if it exists) (as pair->val).  Can impose (non-zero) limit on returned string size of name.
-// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
-// Return is case insensitive sorted on label (cv label or else val). If requested, return cv tag instead of mdb val.
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tags,
+                                 boolean hasTableName, boolean hasFileName)
+// Search the metaDb table for vals by var and returns val (as pair->name)
+// and controlled vocabulary (cv) label (if it exists) (as pair->val).
+// Can impose (non-zero) limit on returned string size of name.
+// Searchable vars are only for table or file objects.
+// Further restrict to vars associated with tableName, fileName or both.
+// Return is case insensitive sorted on label (cv label or else val).
+// If requested, return cv tag instead of mdb val.
 {  // TODO: Change this to use normal mdb struct routines?
 if (!hasTableName && !hasFileName)
     errAbort("mdbValLabelSearch requests vals associated with neither table nor files.\n");
@@ -3413,9 +3547,11 @@ if (slCount(pairs) > 0)
 return pairs;
 }
 
-struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableName, boolean hasFileName)
+struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableName,
+                                 boolean hasFileName)
 // returns a white list of mdb vars that actually exist in the current DB.
-// Searchable vars are only for table or file objects.  Further restrict to vars associated with tableName, fileName or both.
+// Searchable vars are only for table or file objects.
+// Further restrict to vars associated with tableName, fileName or both.
 {
 if (!hasTableName && !hasFileName)
     errAbort("mdbVarsSearchable requests vals associated with neither table nor files.\n");
@@ -3426,17 +3562,18 @@ char letter = 'A';
 struct slPair *cvApproved = cvWhiteList(TRUE,FALSE);
 struct slPair *relevant = NULL;
 struct dyString *dyQuery = dyStringNew(256);
-while(cvApproved != NULL)
+while (cvApproved != NULL)
     {
     struct slPair *oneVar = slPopHead(&cvApproved);
     dyStringClear(dyQuery);
-    dyStringPrintf(dyQuery, "select count(DISTINCT %c.val) from %s %c where %c.var = '%s'",letter,tableName,letter,letter,oneVar->name);
+    dyStringPrintf(dyQuery, "select count(DISTINCT %c.val) from %s %c where %c.var = '%s'",
+                   letter,tableName,letter,letter,oneVar->name);
 
     mdbSearchableQueryRestictForTablesOrFiles(dyQuery,tableName,letter, hasTableName, hasFileName);
     int count = sqlQuickNum(conn,dyStringContents(dyQuery));
     //warn("%d %s",count,dyStringContents(dyQuery));
 
-    if(count > 1)  // If there is only one value then searching on that variable is useless!
+    if (count > 1) // If there is only one value then searching on that variable is useless!
         slAddHead(&relevant, oneVar);
     else
         slPairFree(&oneVar);

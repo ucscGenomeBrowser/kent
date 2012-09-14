@@ -108,7 +108,7 @@ tg->itemNameColor = encodeRnaColor;
 }
 
 static struct linkedFeatures *lfFromEncodePeak(struct slList *item, struct trackDb *tdb,
-					int scoreMin, int scoreMax)
+                                        int scoreMin, int scoreMax)
 /* Translate an {encode,narrow,broad,gapped}Peak item into a linkedFeatures. */
 {
 struct encodePeak *peak = (struct encodePeak *)item;
@@ -203,7 +203,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);
 
     if (lf)
-	   slAddHead(&lfList, lf);
+        slAddHead(&lfList, lf);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -226,8 +226,8 @@ encodePeakLoadItemsBoth(tg, ct);
 }
 
 static void encodePeakDrawAt(struct track *tg, void *item,
-	struct hvGfx *hvg, int xOff, int y, double scale,
-	MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int y, double scale,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the peak from the linkedFeature.  Currently this doesn't draw any */
 /* sorta shading based on the signalValue/pValue. */
 {
@@ -252,20 +252,20 @@ if (lf->components)
     drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+(heightPer/2), 1, rangeColor);
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
-	drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y+shortOff,
-		      shortHeight, rangeColor);
+        drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y+shortOff,
+                      shortHeight, rangeColor);
 	if (drawArrows)
 	    {
 	    int x1 = round((double)(sf->start-winStart)*scale) + xOff;
 	    int x2 = round((double)(sf->end-winStart)*scale) + xOff;
 	    int w = x2-x1;
-	    if (w < 1)
-		w = 1;
+            if (w < 1)
+                w = 1;
 
-	    clippedBarbs(hvg, x1, y + heightPer/2, w, 
-		    tl.barbHeight, tl.barbSpacing, lf->orientation,
-		    MG_WHITE, FALSE);
-	    }
+            clippedBarbs(hvg, x1, y + heightPer/2, w, 
+                    tl.barbHeight, tl.barbSpacing, lf->orientation,
+                    MG_WHITE, FALSE);
+            }
 	}
     }
 else

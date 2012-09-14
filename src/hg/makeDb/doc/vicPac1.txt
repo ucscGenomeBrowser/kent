@@ -249,10 +249,203 @@ skipInvalid yes
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    159m21.952s
-    cat fb.vicPac1.chainMm10Link.txt 
+    cat fb.vicPac1.chainMm10Link.txt
     #	610885692 bases of 1922910435 (31.769%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/vicPac1/bed
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/vicPac1/bed/cpgIslands
+    cd /hive/data/genomes/vicPac1/bed/cpgIslands
+    time doCpgIslands.pl vicPac1 > do.log 2>&1
+    #   real    897m19.342s
+    # fixing broken command in the script:
+    time ./doLoadCpg.csh
+    #   real    2m37.853s
+    time doCpgIslands.pl -continue=cleanup vicPac1 > cleanup.log 2>&1
+    #   real    119m41.201s
+
+    cat fb.vicPac1.cpgIslandExt.txt
+    #   9241028 bases of 1922910435 (0.481%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/vicPac1/bed/genscan
+    cd /hive/data/genomes/vicPac1/bed/genscan
+    time doGenscan.pl vicPac1 > do.log 2>&1
+    # recovering from power failure, kluster run had just finished
+    # and it had just started on makeBed:
+    time ./doMakeBed.csh
+    #   real    445m44.260s
+    # continuing:
+    time doGenscan.pl -continue=load vicPac1 > load.log 2>&1
+    #   real    40m21.604s
+    cat fb.vicPac1.genscan.txt
+    #   46607076 bases of 1922910435 (2.424%) in intersection
+    cat fb.vicPac1.genscanSubopt.txt
+    #   54656455 bases of 1922910435 (2.842%) in intersection
+
+#########################################################################
+# windowMasker - (DONE - 2012-05-02 - Hiram)
+    screen -S vicPac1
+    mkdir /hive/data/genomes/vicPac1/bed/windowMasker
+    cd /hive/data/genomes/vicPac1/bed/windowMasker
+    # trying out new version of the script that does all the usual steps
+    #   that used to be performed manually after it was done
+    time /cluster/home/hiram/kent/src/hg/utils/automation/doWindowMasker.pl \
+        -workhorse=hgwdev -buildDir=`pwd` -dbHost=hgwdev vicPac1 > do.log 2>&1
+    #   real    1042m31.380s
+    # fixing a broken command in the doLoad step:
+    time ./lastLoad.csh
+    #   real    9m4.895s
+
+    sed -e 's/^/    #\t/' fb.vicPac1.windowmaskerSdust.beforeClean.txt
+    #   1672360288 bases of 2962253608 (56.456%) in intersection
+    sed -e 's/^/    #\t/' fb.vicPac1.windowmaskerSdust.clean.txt
+    #   633017115 bases of 2962253608 (21.369%) in intersection
+    sed -e 's/^/    #\t/' fb.vicPac1.rmsk.windowmaskerSdust.txt
+    #   266161799 bases of 2962253608 (8.985%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-07 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1922910435 / 2897316137 \) \* 1024
+    #	( 1922910435 / 2897316137 ) * 1024 = 679.615269
+
+    # round up to 700
+
+    cd /hive/data/genomes/vicPac1
+    time blat vicPac1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/vicPac1.11.ooc -repMatch=700
+    #   Wrote 25830 overused 11-mers to jkStuff/vicPac1.11.ooc
+    #   Done making jkStuff/vicPac1.11.ooc
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" vicPac1 | sort | uniq -c
+    #   422879 yes
+#    cd /hive/data/genomes/vicPac1/jkStuff
+#    gapToLift vicPac1 vicPac1.nonBridged.lift -bedFile=vicPac1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' vicPac1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-07 - 2012-06-22 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Vicugna pacos	164	7286	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add vicPac1
+
+# vicPac1 (alpaca)
+vicPac1.serverGenome = /hive/data/genomes/vicPac1/vicPac1.2bit
+vicPac1.clusterGenome = /hive/data/genomes/vicPac1/vicPac1.2bit
+vicPac1.ooc = /hive/data/genomes/vicPac1/jkStuff/vicPac1.11.ooc
+vicPac1.lift = no
+vicPac1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+vicPac1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+vicPac1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+vicPac1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+vicPac1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+vicPac1.refseq.mrna.native.load = no
+vicPac1.refseq.mrna.xeno.load = yes
+vicPac1.genbank.mrna.native.load = no
+vicPac1.genbank.mrna.xeno.load = no
+vicPac1.genbank.est.native.load = yes
+vicPac1.downloadDir = vicPac1
+vicPac1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding vicPac1 alpaca" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for vicPacNames" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S vicPac1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial vicPac1 &
+    #   var/build/logs/2012.06.16-19:10:31.vicPac1.initalign.log
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad vicPac1 &
+    #   var/dbload/hgwdev/logs/2012.06.22-12:27:12.dbload.log
+    #   real    39m1.879s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add vicPac1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added vicPac1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#####################################################################
+#  SWAP bosTau7 LASTZ (DONE - 2012-06-19 - Chin)
+    #   original alignment done at bosTau7.txt
+    cd /hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19
+    cat fb.bosTau7.chainVicPac1Link.txt
+    #   1259182233 bases of 2804673174 (44.896%) in intersection
+
+    # Create link
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s lastzVicPac1.2012-06-19 lastz.vicPac1
+
+    #   and the swap
+    mkdir /hive/data/genomes/vicPac1/bed/blastz.bosTau7.swap
+    cd /hive/data/genomes/vicPac1/bed/blastz.bosTau7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    /hive/data/genomes/bosTau7/bed/lastzVicPac1.2012-06-19/DEF \
+    -swap -syntenicNet \
+    -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+    -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    717m22.295s
+    cat fb.vicPac1.chainBosTau7Link.txt
+    #  1309266730 bases of 1922910435 (68.088%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/vicPac1/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-26 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="scaffold_5479:34441-51753" where name="vicPac1";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/vicPac1/pushQ
+    cd /hive/data/genomes/vicPac1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl vicPac1 2> stderr.txt | grep -v transMap > vicPac1.sql
+    #   real    3m49.201s
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/vicPac1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/vicPac1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/vicPac1/bbi/quality.bw
+# WARNING: vicPac1 does not have seq
+# WARNING: vicPac1 does not have extFile
+# WARNING: vicPac1 does not have estOrientInfo
+
+    scp -p vicPac1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/vicPac1.sql"
+
+############################################################################

@@ -1,0 +1,20 @@
+table antibody
+"The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest."
+    (
+    uint id;    "Unique unsigned integer identifier for this item"
+    string term;        "A relatively short label, no more than a few words"
+    string tag; "A short human and machine readable symbol with just alphanumeric characters."
+    string deprecated;  "If non-empty, the reason why this entry is obsolete."
+    string target;      "Molecular target of antibody."
+    lstring antibodyDescription;        "Short description of antibody itself."
+    lstring targetDescription;  "Short description of antibody target."
+    string vendorName;  "Name of vendor selling reagent."
+    string vendorId;    "Catalog number of other way of identifying reagent."
+    string orderUrl;    "Web page to order regent."
+    string lab; "Scientific lab producing data."
+    string targetId;    "Identifier for target, prefixed with source of ID, usually GeneCards"
+    string targetUrl;   "Web page associated with antibody target."
+    string validation;  "How antibody was validated to be specific for target."
+    string label;       "A relatively short label, no more than a few words"
+    string lots;        "The specific lots of reagent used."
+    )

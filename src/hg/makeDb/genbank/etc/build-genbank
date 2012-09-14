@@ -9,11 +9,11 @@
 
 # errors terminate with message
 set -e
-trap "echo Error: build-genbank failed on `hostname` >&2; exit 1" ERR
+trap "echo Error: build-genbank failed on $(hostname) >&2; exit 1" ERR
 exec </dev/null
 
 # initialize
-gbRoot=/cluster/data/genbank
+gbRoot=/hive/data/outside/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
@@ -24,4 +24,4 @@ nice gbProcessStep -mkOrganismList
 
 nice etc/align-genbank
 
-echo "`hostname` genbank build completed"
+echo "$(hostname) genbank build completed"

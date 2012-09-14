@@ -69,3 +69,8 @@ struct chromInfo *createChromInfoList(char *name, char *database);
  * If name is NULL or "all" then load all chroms.
  * Similar to featureBits.c - could be moved to library */
 
+struct hash *chromHashFromDatabase(char *db);
+/* read chrom info from database and return hash of name and size */
+
+struct hash *chromHashFromFile(char *fileName);
+/* read chrom info from file and return hash of name and size */

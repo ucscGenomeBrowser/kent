@@ -1,0 +1,104 @@
+track wgEncodeFsuRepliChip
+compositeTrack on
+shortLabel FSU Repli-chip
+longLabel Replication Timing by Repli-chip from ENCODE/FSU
+group regulation
+subGroup1 view Views WaveSignal=Wavelet-smoothed_Signal
+subGroup2 cellType Cell_Line 1H1HESC=H1-hESC&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2IMR90=IMR90&nbsp;(Tier_2) BG02ES=BG02ES  GM06990=GM06990 H7ES=H7-hESC H9ES=H9ES
+subGroup3 rep Rep rep1=1 rep2=2
+dimensions dimensionX=cellType dimensionY=rep
+sortOrder cellType=+ rep=+ view=+
+fileSortOrder cell=Cell_Line replicate=Rep view=View platform=Platform labExpId=Lab_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell
+dragAndDrop subTracks
+visibilityViewDefaults WaveSignal=hide
+priority 0
+maxHeightPixels 100:32:16
+type bigWig
+windowingFunction mean+whiskers
+viewLimits -2:2
+wgEncode 1
+
+    track wgEncodeFsuRepliChipBg02esWaveSignalRep1
+    parent wgEncodeFsuRepliChip off
+    shortLabel BG02ES Ws 1
+    longLabel BG02ES Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=BG02ES rep=rep1
+    type bigWig -1.779521 1.617028
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipH1hescWaveSignalRep1
+    parent wgEncodeFsuRepliChip
+    shortLabel H1-hESC Ws 1
+    longLabel H1-hESC Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=1H1HESC rep=rep1
+    type bigWig -1.765402 1.942196
+    color 0,107,27
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipH7esWaveSignalRep1
+    parent wgEncodeFsuRepliChip off
+    shortLabel H7-hESC Ws 1
+    longLabel H7-hESC Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=H7ES rep=rep1
+    type bigWig -1.907256 1.951967
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipH9esWaveSignalRep1
+    parent wgEncodeFsuRepliChip off
+    shortLabel H9ES Ws 1
+    longLabel H9ES Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=H9ES rep=rep1
+    type bigWig -2.235592 1.987216
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipGm06990WaveSignalRep1
+    parent wgEncodeFsuRepliChip off
+    shortLabel GM06990 Ws 1
+    longLabel GM06990 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=GM06990 rep=rep1
+    type bigWig -4.089016 1.564421
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipImr90WaveSignalRep1
+    parent wgEncodeFsuRepliChip
+    shortLabel IMR90 Ws 1
+    longLabel IMR90 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=2IMR90 rep=rep1
+    type bigWig -1.871862 1.569896
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipHelas3WaveSignalRep1
+    parent wgEncodeFsuRepliChip
+    shortLabel HeLa-S3 Ws 1
+    longLabel HeLa-S3 Repli-chip Wavelet-smoothed Signal Rep 1 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=2HELAS3 rep=rep1
+    type bigWig -6.303239 1.678583
+    color 0,119,158
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipBg02esWaveSignalRep2
+    parent wgEncodeFsuRepliChip off
+    shortLabel BG02ES Ws 2
+    longLabel BG02ES Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=BG02ES rep=rep2
+    type bigWig -2.019916 2.087141
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipH1hescWaveSignalRep2
+    parent wgEncodeFsuRepliChip
+    shortLabel H1-hESC Ws 2
+    longLabel H1-hESC Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=1H1HESC rep=rep2
+    type bigWig -2.136414 2.603866
+    color 0,107,27
+    # subId=5976 dateSubmitted=2012-03-02
+
+    track wgEncodeFsuRepliChipGm06990WaveSignalRep2
+    parent wgEncodeFsuRepliChip off
+    shortLabel GM06990 Ws 2
+    longLabel GM06990 Repli-chip Wavelet-smoothed Signal Rep 2 from ENCODE/FSU
+    subGroups view=WaveSignal cellType=GM06990 rep=rep2
+    type bigWig -4.305486 1.583986
+    # subId=5976 dateSubmitted=2012-03-02
+
