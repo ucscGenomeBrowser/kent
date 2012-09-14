@@ -3,7 +3,6 @@ objType composite
 composite wgEncodeGisRnaPet
 expVars lab,dataType,cell,localization,rnaExtract
 geoSeriesAccession GSE33600
-readType 2x36
 
 metaObject wgEncodeGisRnaPetA549CellPapAlnRep3
 objType table

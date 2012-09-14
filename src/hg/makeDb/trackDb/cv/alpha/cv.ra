@@ -1226,6 +1226,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Stam:BE2-C_Stam_protocol.pdf Myers:BE2-C_Myers_protocol.pdf
+label BE(2)-C
 
 term BG02ES
 tag BG02ES
@@ -1581,6 +1582,7 @@ termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 lab Crawford
 protocol Crawford:ColonOC_Crawford_protocol.pdf
+label Colon OC
 
 term Cord_CD4_naive
 tag CORDCD4NAIVE
@@ -1712,6 +1714,7 @@ termId BTO:0001422
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001422
 lab Crawford
 protocol Crawford:EndometriumOC_Crawford_protocol.pdf
+label Endometrium OC
 
 term Fibrobl
 tag FIBROBL
@@ -1809,6 +1812,7 @@ termId BTO:0000484
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000484
 lab Crawford
 protocol Crawford:FrontalcortexOC_Crawford_protocol.pdf
+label Frontal cortex OC
 
 term Gliobla
 tag GLIOBLA
@@ -4861,6 +4865,7 @@ termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
 lab Crawford
 protocol Crawford:KidneyOC_Crawford_protocol.pdf
+label Kidney OC
 
 term LHSR
 tag LHSR
@@ -5203,6 +5208,7 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTG401.6_Crawford_protocol.pdf
+label MRT G401
 
 term MRT_A204
 tag MRTA204
@@ -5222,6 +5228,7 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTA204.1_Crawford_protocol.pdf
+label MRT A204
 
 term MRT_TTC549
 tag MRTTTC549
@@ -5240,6 +5247,7 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
 protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
+label MRT TTC549
 
 term Myometr
 tag MYOMETR
@@ -5686,6 +5694,7 @@ termId BTO:0000988
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000988
 lab Crawford
 protocol Crawford:PancreasOC_Crawford_protocol.pdf
+label Pancreas OC
 
 term PanIsletD
 tag PANISD
@@ -5939,6 +5948,7 @@ termId BTO:0000037
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000037&termName=renal%20adenocarcinoma%20cell
 lab Crawford
 protocol Crawford:RCC7860_Crawford_protocol.pdf
+label RCC 7860
 
 term RPMI-7951
 tag RPMI7951
@@ -6173,6 +6183,7 @@ termId BTO:0000651
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000651
 lab Crawford
 protocol Crawford:SmallintestineOC_Crawford_protocol.pdf
+label Small intestine OC
 
 term Spleen_OC
 tag SPLEENOC
@@ -9818,25 +9829,25 @@ orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
 lots C2510, G1509
 lab Ruan
 targetId GeneCard:ESR1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,MassSpect):human_ERalpha_a_validation_Myers.pdf
 label ERalpha a (sc-543)
 
-term ERalpha_b
-tag ERAB
-type Antibody
-target ERalpha_b
-targetClass TFSS
-antibodyDescription Monoclonal antibody raised in mouse against the NH2 terminus of the human ER (estrogen receptor alpha), using a KLH-conjugated synthetic peptide (Q19-K32). Antibody Target: ERalpha_b
-targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
-vendorName Diagenode
-vendorId MAb-009-050
-orderUrl http://www.diagenode.com/en/catalog/antibodies-3/nuclear-receptor-30/product/er-alpha-monoclonal-antibody-185
-lab Ruan
-targetId GeneCard:ESR1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
-validation 
-label ERalpha b (MAb-009-050)
+#term ERalpha_b
+#tag ERAB
+#type Antibody
+#target ERalpha_b
+#targetClass TFSS
+#antibodyDescription Monoclonal antibody raised in mouse against the NH2 terminus of the human ER (estrogen receptor alpha), using a KLH-conjugated synthetic peptide (Q19-K32). Antibody Target: ERalpha_b
+#targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
+#vendorName Diagenode
+#vendorId MAb-009-050
+#orderUrl http://www.diagenode.com/en/catalog/antibodies-3/nuclear-receptor-30/product/er-alpha-monoclonal-antibody-185
+#lab Ruan
+#targetId GeneCard:ESR1
+#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
+#validation 
+#label ERalpha b (MAb-009-050)
 ##This does not appear in metaDb
 
 term ERRA
@@ -10047,21 +10058,20 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
 validation Human_-_FOXP2(Western_blot,siRNA):human_FOXP2_validation_Myers.pdf
 label FOXP2 (ab16046)
 
-term FXR1
-tag FXR1
-type Antibody
-target FXR1
-targetDescription Fragile X mental retardation, autosomal homolog 1
-antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: FXR1
-vendorName Millipore
-vendorId 05-1529
-orderUrl http://www.millipore.com/catalogue/item/05-1529
-lab Tenenbaum
-targetId Gene:8087
-targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
-validation 
-label FXR1 (05-1529)
-# lots
+#term FXR1
+#tag FXR1
+#type Antibody
+#target FXR1
+#targetDescription Fragile X mental retardation, autosomal homolog 1
+#antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: FXR1
+#vendorName Millipore
+#vendorId 05-1529
+#orderUrl http://www.millipore.com/catalogue/item/05-1529
+#lab Tenenbaum
+#targetId Gene:8087
+#targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
+#validation 
+#label FXR1 (05-1529)
 ##This does not appear in metaDb
 
 term GABP
@@ -10105,7 +10115,7 @@ vendorName Santa Cruz Biotech
 vendorId  sc-265
 orderUrl http://www.scbt.com/datasheet-265-gata-1-n6-antibody.html
 targetId GeneCard:Gata1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Hardison
 validation Mouse_-_GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 label GATA1 (sc-265)
@@ -10120,11 +10130,10 @@ vendorName Santa Cruz Biotech
 vendorId sc-266
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
 lab Snyder
-targetId GeneCard:Gata1
+targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 validation Mouse_-_GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf
 label  GATA1 (sc-266)
-#lots
 
 term GATA-2
 tag GATA2
@@ -10217,10 +10226,9 @@ vendorId Missing
 orderUrl http://www.igbmc.fr/Tora
 lab Struhl
 targetId GeneCard:KAT2A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A&search=gcn5
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A
 validation Human_-_:missing
 label GCN5
-#lots
 
 term GR
 tag GR
@@ -10816,20 +10824,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC6
 validation Human_-_HDAC6_(A301-341A)(Western_blot,ChIP-String):human_Hdac6_A301-341A_validation_Bernstein.pdf
 label HDAC6 (A301-341A)
 
-term Hexim1
-tag HEXIM1
-type Antibody
-target Hexim1
-targetDescription Hexamethylene bis-acetamide inducible 1
-antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: Hexim1
-vendorName Millipore
-vendorId 07-955
-orderUrl http://www.millipore.com/catalogue/item/07-955
-lab Tenenbaum
-targetId Gene:10614
-targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
-validation 
-label Hexim1 (07-955)
+#term Hexim1
+#tag HEXIM1
+#type Antibody
+#target Hexim1
+#targetDescription Hexamethylene bis-acetamide inducible 1
+#antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: Hexim1
+#vendorName Millipore
+#vendorId 07-955
+#orderUrl http://www.millipore.com/catalogue/item/07-955
+#lab Tenenbaum
+#targetId Gene:10614
+#targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
+#validation 
+#label Hexim1 (07-955)
+# not used
 
 term HEY1
 tag HEY1
@@ -10931,37 +10940,37 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
 validation Human_-_HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 label HNF4G (sc-6558)
 
-term HNRNPD
-tag HNRNPD
-type Antibody
-target HNRNPD
-targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
-antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP. Antibody Target: HNRNPD
-vendorName Millipore
-vendorId 07-260
-orderUrl http://www.millipore.com/catalogue/item/07-260
-lab Tenenbaum
-targetId Gene:3184
-targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
-validation 
-label HNRNPD (07-260)
-# lots
-##This does not appear in metaDb
+#term HNRNPD
+#tag HNRNPD
+#type Antibody
+#target HNRNPD
+#targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
+#antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP. Antibody Target: HNRNPD
+#vendorName Millipore
+#vendorId 07-260
+#orderUrl http://www.millipore.com/catalogue/item/07-260
+#lab Tenenbaum
+#targetId Gene:3184
+#targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
+#validation 
+#label HNRNPD (07-260)
+## lots
+###This does not appear in metaDb
 
-term hnRNPM
-tag HNRNPM
-type Antibody
-target hnRNPM
-targetDescription Heterogeneous nuclear ribonucleoprotein M
-antibodyDescription Mouse monoclonal Anti-hnRNP M1-M4, clone 1D8. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB, Antibody Target: hnRNPM
-vendorName Millipore
-vendorId 05-620
-orderUrl http://www.millipore.com/catalogue/item/05-620
-lab Tenenbaum
-targetId Gene:76936
-targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
-validation 
-label hnRNPM (05-620)
+#term hnRNPM
+#tag HNRNPM
+#type Antibody
+#target hnRNPM
+#targetDescription Heterogeneous nuclear ribonucleoprotein M
+#antibodyDescription Mouse monoclonal Anti-hnRNP M1-M4, clone 1D8. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB, Antibody Target: hnRNPM
+#vendorName Millipore
+#vendorId 05-620
+#orderUrl http://www.millipore.com/catalogue/item/05-620
+#lab Tenenbaum
+#targetId Gene:76936
+#targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
+#validation 
+#label hnRNPM (05-620)
 # lots
 ##This does not appear in metaDb
 
@@ -11104,7 +11113,7 @@ vendorId sc-6059
 orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
 lab Myers
 lots  IO1O6
-targetId IRF4
+targetId GeneCard:IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
 validation Human_-_IRF4_(SC-6059)(Immunoprecipitation-Western_blot,MassSpec):human_IRF4_SC-6059_validation_Myers.pdf
 label  IRF4 (sc-6059)
@@ -11316,7 +11325,7 @@ vendorId ab85725
 orderUrl http://www.abcam.com/MAZ-antibody-ab85725.html
 lab Snyder
 lots GR41711-2
-targetId MAZ
+targetId GeneCard:MAZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAZ
 validation Human_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):human_MAZ_ab85725_validation_Snyder.pdf Mouse_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):mouse_MAZ_ab85725_validation_Snyder.pdf
 label MAZ (ab85725)
@@ -11363,7 +11372,7 @@ vendorId sc-48776
 orderUrl http://www.scbt.com/datasheet-48776-crsp70-h-228-antibody.html
 lab Struhl
 targetId GeneCard:Med26
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26
 validation Human_-_Med26_(sc-48776)(Western_blot,Immunoprecipitation):human_Med26_sc-48776_validation_Struhl.pdf
 label Med26 (sc-48776)
 
@@ -12398,7 +12407,7 @@ vendorId NB600-1263
 orderUrl http://www.novusbio.com/mSin3A-Antibody_NB600-1263.html
 lab Snyder
 lots LB140235
-targetId SIN3A
+targetId GeneCard:/SIRSIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
 validation Human_-_SIN3A_(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_SIN3A_(NB600-1263)(Immunoprecipitation):mouse_SIN3A_NB600-1263_validation_Snyder.pdf
 label SIN3A (NB600-1263)
@@ -12700,10 +12709,10 @@ label SUZ12 (05-1317)
 term SUZ12
 tag SUZ12
 type Antibody
-target SUZ12
-targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
 targetClass HISase
 antibodyDescription rabbit polyclonal. Antibody Target: SUZ12
+target SUZ12
+targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
 vendorName Antibody made by Farnham lab
 vendorId SUZ12
 orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205
