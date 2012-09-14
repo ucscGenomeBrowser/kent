@@ -10,7 +10,7 @@ body.cgi {
 }
 
 body.hgTracks {
-	background: url("../../images/internal_bg1.jpg") repeat-x scroll left bottom #F9F9F7;
+	background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
 }
 
 a:link {color: #121E9A;}
