@@ -1,3 +1,10 @@
-
-
 include trackDb.chainNet.ra
+
+track genscan override
+visibility pack
+
+track gc5Base override
+visibility dense
+
+track xenoRefGene override
+visibility dense

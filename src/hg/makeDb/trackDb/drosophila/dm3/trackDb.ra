@@ -74,6 +74,17 @@ color 0,100,180
 type bed
 otherDb dm2
 
+track redfly
+shortLabel REDfly
+longLabel REDfly Database Transcriptional Regulatory Elements
+group genes
+priority 46.5
+visibility hide
+type bedDetail 11
+itemRgb on
+url http://redfly.ccr.buffalo.edu//search.php?redfly_id=$$
+urlLabel REDfly link
+
 track evofold
 shortLabel EvoFold
 longLabel EvoFold predictions of RNA secondary structure (id_strand_score)
