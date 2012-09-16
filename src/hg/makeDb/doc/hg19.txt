@@ -19388,6 +19388,7 @@ TMPDIR=/scratch/tmp
 #              http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformRNASignal.txt 
 #              These are from DCC wgEncodeCshlLongRnaSeq downloads (Long polyA+, whole cell),
 #               AWG did not pool reps or plus/minus for their hub (but we will)
+#               AWG has filtered for bad regions so no longer necessary
 #       * Possibly a 10th cell type (HMEC) for Tx and Histone
 #               Note: single replicate for HMEC Tx (others have 2)
 #       * Two additional cell lines for Histones (Hela, HepG2)
@@ -19423,6 +19424,35 @@ TMPDIR=/scratch/tmp
     #(was /hive/users/kent/regulate/companion/mapping/bad.bed)
 
     ######
+    # Small RNA's
+    # For signal, pool strands and replicates
+    ######
+    cd /hive/data/genomes/hg19/bed/
+    mkdir -p wgEncodeRegV2/shortRna/pooled
+    cd wgEncodeRegV2/shortRna/pooled
+
+cat > list.csh << 'EOF'
+    foreach cell (Gm12878 H1hesc Helas3 Hepg2 Hmec Hsmm Huvec K562 Nhek Nhlf)
+      echo "processing ${cell}"
+      ls /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeq${cell}CellShorttotal*.bigWig
+'EOF'
+    csh list.csh >&! list.out &
+    # There are 6 of overalpping with histones and long RNAs.  4 other tier2's.
+
+cat > pool.csh << 'EOF'
+    foreach cell (Gm12878 H1hesc Helas3 Hepg2 K562 Nhek A549 Cd20 Imr90 Mcf7)
+      echo "processing ${cell}"
+      bigWigMerge -adjust=-1 \
+          /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeq${cell}CellShorttotalTapMinusRawRep1.bigWig \
+          /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeq${cell}CellShorttotalTapMinusRawRep2.bigWig \
+          /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeq${cell}CellShorttotalTapPlusRawRep1.bigWig \
+          /gbdb/hg19/bbi/wgEncodeCshlShortRnaSeq${cell}CellShorttotalTapPlusRawRep2.bigWig \
+            wgEncodeRegTxnCshlShortRnaSeq${cell}CellTotalRawSigPooled.bedGraph
+    end
+'EOF'
+    csh pool.csh >&! pool.out &
+
+    ######
     # Handle the RNA seq, starting by pooling it and filtering out multiple
     # mapping and blacklisted regions.
     ######
@@ -19438,8 +19468,7 @@ cat > poolTx.csh << 'EOF'
           /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapMinusRawSigRep2.bigWig \
           /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapPlusRawSigRep1.bigWig \
           /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapPlusRawSigRep2.bigWig \
-          stdout \
-          | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCshlLongRnaSeq${cell}CellPapRawSigPooled.bedGraph
+            wgEncodeRegTxnCshlLongRnaSeq${cell}CellPapRawSigPooled.bedGraph
     end
 'EOF'
     csh poolTx.csh >&! poolTx.out &
@@ -19455,8 +19484,7 @@ cat > poolHmec.csh << 'EOF'
       bigWigMerge -adjust=-1 \
           /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapMinusRawSigRep1.bigWig \
           /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeq${cell}CellPapPlusRawSigRep1.bigWig \
-          stdout \
-          | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCshlLongRnaSeq${cell}CellPapRawSigPooled.bedGraph
+              wgEncodeRegTxnCshlLongRnaSeq${cell}CellPapRawSigPooled.bedGraph
     end
 'EOF'
     csh poolHmec.csh >&! poolHmec.out &
@@ -19482,6 +19510,7 @@ cat > makeNorm.csh << 'EOF'
 
     mkdir ../normalized
     csh ../norm.csh  >&! ../norm.out &
+#### STOPPED HERE
     cd ../normalized
 
     # make bigWigs
@@ -19502,9 +19531,25 @@ cat > big.csh << 'EOF'
     end
 
     ######
+    # Possible new track:  FAIRE Peaks Union across 25 cells, from AWG
+    ######
+    cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
+    mkdir -p faire/peaks
+    cd faire/peaks
+    wget http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformFaire.txt
+    sed -n 's/bigDataUrl /wget /p' uniformFaire.txt | grep Union > wget.csh
+    csh wget.csh >&! wget.out &
+    mv *Union*.bb encodeAwgFairePeaks25CellUnion.bb
+    bigBedToBed encodeAwgFairePeaks25CellUnion.bb encodeAwgFairePeaks25CellUnion.bed 
+    # head -1 *.bed
+     chr1    10033   10376
+    # bed 3
+    hgLoadBed hg19 encodeAwgFairePeaks25CellUnion encodeAwgFairePeaks25CellUnion.bed 
+    # Read 2369615 elements of size 3 from encodeAwgFairePeaks25CellUnion.bed
+
+    ######
     # Create the DNAse peak clusters subtrack.
     ######
-
     cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
     mkdir -p dnase/peaks
     cd dnase/peaks
@@ -19559,11 +19604,11 @@ cat > loadDnase.csh << 'EOF'
         set table = $f:r
         hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $table $f
         set cell = `echo $f | perl -wpe 's/(wgEncodeAwgDnase[A-Z][a-z]+)(.*)Peak.bed/$2/'`
-        echo "    track $f" >> $t.ra
+        echo "    track $table" >> $t.ra
         echo "    type narrowPeak" >> $t.ra
         echo "    parent $t" >> $t.ra
         echo "    shortLabel $cell DNase" >> $t.ra
-        echo "    longLabel $cell Uniform DNaseI HS Peaks from ENCODE/Analysis" >> $t.ra
+        echo "    longLabel $cell DNaseI HS Uniform Peaks from ENCODE/Analysis" >> $t.ra
         echo "    subGroups cellType=$cell treatment=None" >> $t.ra
         echo "" >> $t.ra
     end
@@ -19581,6 +19626,7 @@ cat > loadDnase.csh << 'EOF'
     # DISPLAY: Consider item name change to % assays represented instead of count.
     #  Also, could color item name label to highlight ubiquitous vs. cell-type-specific
     #  (top quartile -> color indicating high expression (red/orange) ?, bottom green/blue ?)
+
 
     ######
     # Uniform histone signal for overlay wiggles
