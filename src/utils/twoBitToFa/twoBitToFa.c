@@ -27,7 +27,7 @@ errAbort(
   "   -noMask - convert sequence to all upper case\n"
   "   -bpt=index.bpt - use bpt index instead of built in one\n"
   "   -bed=input.bed - grab sequences specified by input.bed. Will exclude introns\n"
-  "   -bedPos        - use with -bed to put chrom:start-end as the fasta ID\n"
+  "   -bedPos        - with -bed, to use chrom:start-end as the fasta ID in output.fa\n"
   "\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"
