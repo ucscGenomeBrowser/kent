@@ -138,6 +138,8 @@ for (bed = bedList; bed != NULL; bed = bed->next)
         }
     else
         seqName = seq->name;
+    if (noMask)
+        toUpperN(seq->dna, seq->size);
     faWriteNext(outFile, seqName, seq->dna, seq->size);
     dnaSeqFree(&seq);
     }
