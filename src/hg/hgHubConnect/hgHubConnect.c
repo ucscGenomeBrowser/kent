@@ -39,7 +39,7 @@ char *organism = NULL;
 
 static void ourCellStart()
 {
-puts("<TD>");
+fputs("<TD>", stdout);  // do not add a newline
 }
 
 static void ourCellEnd()
@@ -51,7 +51,7 @@ static void ourPrintCell(char *str)
 {
 ourCellStart();
 if (str != NULL)
-    puts(str);
+    fputs(str, stdout); // do not add a newline -- was causing trailing blanks get copied in cut and paste 
 ourCellEnd();
 }
 
@@ -98,7 +98,7 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> \n"
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
 	    "type=\"text\" size=\"65\"> \n"
 	"<input name=\"hubAddButton\""
-	    "onClick=\"if(validateUrl($('#hubUrl').val())) { document.addHubForm.elements['hubUrl'].value=hubText.value;"
+	    "onClick=\"hubText.value=$.trim(hubText.value);if(validateUrl($('#hubUrl').val())) { document.addHubForm.elements['hubUrl'].value=hubText.value;"
 		"document.addHubForm.submit();return true;} else { return false;}\" "
 		"class=\"hubField\" type=\"button\" value=\"Add Hub\">\n"
 	"</th> \n"
@@ -296,6 +296,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     ourPrintCell(removeLastComma(dbList));
     ourPrintCell(url);
+
     hashStore(publicHash, url);
     }
 sqlFreeResult(&sr);
