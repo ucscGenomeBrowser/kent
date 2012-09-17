@@ -1335,7 +1335,7 @@ int main(int argc, char *argv[])
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-setConnFailuresEnabled(TRUE);
+setConnFailuresEnabled(FALSE); // try TRUE in next release v274
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

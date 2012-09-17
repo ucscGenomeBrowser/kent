@@ -886,6 +886,16 @@ for (i=0; i<subCount; ++i)
 return s;
 }
 
+bool columnExists(struct sqlConnection *conn, char *tableName, char *column)
+/* checks if column exists in table */
+{
+    char query[1024];
+    safef(query, 1024, "SHOW COLUMNS FROM `%s` LIKE '%s'", tableName, column);
+    char buf[1024];
+    char *ret = sqlQuickQuery(conn, query, buf, 1024);
+    return (ret!=NULL);
+}
+
 void printItemDetailsHtml(struct trackDb *tdb, char *itemName)
 /* if track has an itemDetailsHtml, retrieve and print the HTML */
 {
@@ -893,9 +903,24 @@ char *tableName = trackDbSetting(tdb, "itemDetailsHtmlTable");
 if (tableName != NULL)
     {
     struct sqlConnection *conn = hAllocConn(database);
-    struct itemDetailsHtml *html, *htmls
-        = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
+    struct itemDetailsHtml *html, *htmls;
+    if (columnExists(conn, tableName, "chrom"))
+        {
+        char *chrom = cgiString("c");
+        int start   = cgiInt("o");
+        int end     = cgiInt("t");
+
+        htmls = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
+                       "select name, html from %s where \
+                       name = '%s' and \
+                       chrom = '%s' and \
+                       start = '%d' and \
+                       end = '%d'", tableName, itemName, chrom, start, end);
+        }
+    else 
+        htmls = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
                        "select name, html from %s where name = '%s'", tableName, itemName);
+
     for (html = htmls; html != NULL; html = html->next)
         printf("<br>\n%s\n", html->html);
     itemDetailsHtmlFreeList(&htmls);
