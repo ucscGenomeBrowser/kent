@@ -285,7 +285,7 @@ return sd;
 int netConnect(char *hostName, int port)
 /* Start connection with a server. */
 {
-return netConnectWithTimeout(hostName, port, 10000); // 10 seconds connect timeout
+return netConnectWithTimeout(hostName, port, DEFAULTCONNECTTIMEOUTMSEC); // 10 seconds connect timeout
 }
 
 int netMustConnect(char *hostName, int port)
