@@ -247,7 +247,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrta2041Pk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel A204.1 FAIRE Pk
+        shortLabel MRT A204.1 F Pk
         longLabel MRT A204.1 FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=ZPeaks cellType=t3MRTA204 treatment=AANONE
         type narrowPeak
@@ -255,7 +255,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrtg4016Pk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel G401.6 FAIRE Pk
+        shortLabel MRT G401.6 F Pk
         longLabel MRT G401.6 FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=ZPeaks cellType=t3MRTG401 treatment=AANONE
         type narrowPeak
@@ -263,7 +263,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrtttc549Pk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel TTC549 FAIRE Pk
+        shortLabel MRT TTC549 F Pk
         longLabel MRT TTC549 FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=ZPeaks cellType=t3MRTTTC549 treatment=AANONE
         type narrowPeak
@@ -566,7 +566,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrta2041Sig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel A204.1 FAIRE DS
+        shortLabel MRT A204.1 F DS
         longLabel MRT A204.1 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3MRTA204 treatment=AANONE
         type bigWig 0.000000 0.650900
@@ -574,7 +574,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrtg4016Sig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel G401.6 FAIRE DS
+        shortLabel MRT G401.6 F DS
         longLabel MRT G401.6 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3MRTG401 treatment=AANONE
         type bigWig 0.000000 0.801300
@@ -582,7 +582,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrtttc549Sig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel TTC549 FAIRE DS
+        shortLabel MRT TTC549 F DS
         longLabel MRT TTC549 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3MRTTTC549 treatment=AANONE
         type bigWig 0.000000 0.664800
@@ -885,7 +885,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrta2041BaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel A204.1 FAIRE OS
+        shortLabel MRT A204.1 F OS
         longLabel MRT A204.1 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3MRTA204 treatment=AANONE
         type bigWig 0.000000 1571.000000
@@ -893,7 +893,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrtg4016BaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel G401.6 FAIRE OS
+        shortLabel MRT G401.6 F OS
         longLabel MRT G401.6 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3MRTG401 treatment=AANONE
         type bigWig 0.000000 1909.000000
@@ -901,7 +901,7 @@ dataVersion ENCODE Jul 2012 Freeze
 
         track wgEncodeOpenChromFaireMrtttc549BaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel TTC549 FAIRE OS
+        shortLabel MRT TTC549 F OS
         longLabel MRT TTC549 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3MRTTTC549 treatment=AANONE
         type bigWig 0.000000 1553.000000
