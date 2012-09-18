@@ -106,8 +106,8 @@ include wgEncodeGisRnaSeq.ra
 include wgEncodeCaltechRnaSeq.release4.ra
 
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.release2.ra beta,public
-include wgEncodeCshlLongRnaSeq.release3.ra alpha
+include wgEncodeCshlLongRnaSeq.release2.ra public
+include wgEncodeCshlLongRnaSeq.release3.ra alpha,beta
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale

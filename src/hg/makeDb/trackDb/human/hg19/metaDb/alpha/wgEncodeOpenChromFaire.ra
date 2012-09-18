@@ -333,6 +333,7 @@ metaObject wgEncodeOpenChromFaireColonocAlnRep1
 objType file
 cell Colon_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -353,6 +354,7 @@ metaObject wgEncodeOpenChromFaireColonocAlnRep2
 objType file
 cell Colon_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -373,6 +375,7 @@ metaObject wgEncodeOpenChromFaireColonocBaseOverlapSignal
 objType table
 cell Colon_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -393,6 +396,7 @@ metaObject wgEncodeOpenChromFaireColonocPk
 objType table
 cell Colon_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -413,6 +417,7 @@ metaObject wgEncodeOpenChromFaireColonocRawDataRep1
 objType file
 cell Colon_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -432,6 +437,7 @@ metaObject wgEncodeOpenChromFaireColonocRawDataRep2
 objType file
 cell Colon_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -451,6 +457,7 @@ metaObject wgEncodeOpenChromFaireColonocSig
 objType table
 cell Colon_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -471,6 +478,7 @@ metaObject wgEncodeOpenChromFaireEndometriumocAlnRep1
 objType file
 cell Endometrium_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
@@ -491,6 +499,7 @@ metaObject wgEncodeOpenChromFaireEndometriumocAlnRep2
 objType file
 cell Endometrium_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
@@ -511,6 +520,7 @@ metaObject wgEncodeOpenChromFaireEndometriumocBaseOverlapSignal
 objType table
 cell Endometrium_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
@@ -531,6 +541,7 @@ metaObject wgEncodeOpenChromFaireEndometriumocPk
 objType table
 cell Endometrium_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
@@ -551,6 +562,7 @@ metaObject wgEncodeOpenChromFaireEndometriumocSig
 objType table
 cell Endometrium_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-12
@@ -571,6 +583,7 @@ metaObject wgEncodeOpenChromFaireFrontalcortexocAlnRep1
 objType file
 cell Frontal_cortex_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
@@ -591,6 +604,7 @@ metaObject wgEncodeOpenChromFaireFrontalcortexocAlnRep2
 objType file
 cell Frontal_cortex_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
@@ -611,6 +625,7 @@ metaObject wgEncodeOpenChromFaireFrontalcortexocBaseOverlapSignal
 objType table
 cell Frontal_cortex_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
@@ -631,6 +646,7 @@ metaObject wgEncodeOpenChromFaireFrontalcortexocPk
 objType table
 cell Frontal_cortex_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
@@ -651,6 +667,7 @@ metaObject wgEncodeOpenChromFaireFrontalcortexocRawDataRep1
 objType file
 cell Frontal_cortex_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
@@ -670,6 +687,7 @@ metaObject wgEncodeOpenChromFaireFrontalcortexocRawDataRep2
 objType file
 cell Frontal_cortex_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
@@ -689,6 +707,7 @@ metaObject wgEncodeOpenChromFaireFrontalcortexocSig
 objType table
 cell Frontal_cortex_OC
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-04
@@ -3658,6 +3677,7 @@ metaObject wgEncodeOpenChromFaireKidneyocAlnRep1
 objType file
 cell Kidney_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -3678,6 +3698,7 @@ metaObject wgEncodeOpenChromFaireKidneyocAlnRep2
 objType file
 cell Kidney_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -3698,6 +3719,7 @@ metaObject wgEncodeOpenChromFaireKidneyocBaseOverlapSignal
 objType table
 cell Kidney_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -3718,6 +3740,7 @@ metaObject wgEncodeOpenChromFaireKidneyocPk
 objType table
 cell Kidney_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -3738,6 +3761,7 @@ metaObject wgEncodeOpenChromFaireKidneyocRawDataRep1
 objType file
 cell Kidney_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -3757,6 +3781,7 @@ metaObject wgEncodeOpenChromFaireKidneyocRawDataRep2
 objType file
 cell Kidney_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -3776,6 +3801,7 @@ metaObject wgEncodeOpenChromFaireKidneyocSig
 objType table
 cell Kidney_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -3796,6 +3822,7 @@ metaObject wgEncodeOpenChromFaireMcf7Est10nm30mAlnRep1
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
@@ -3817,6 +3844,7 @@ metaObject wgEncodeOpenChromFaireMcf7Est10nm30mAlnRep2
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
@@ -3838,6 +3866,7 @@ metaObject wgEncodeOpenChromFaireMcf7Est10nm30mBaseOverlapSignal
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
@@ -3859,6 +3888,7 @@ metaObject wgEncodeOpenChromFaireMcf7Est10nm30mPk
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
@@ -3880,6 +3910,7 @@ metaObject wgEncodeOpenChromFaireMcf7Est10nm30mRawDataRep1
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
@@ -3900,6 +3931,7 @@ metaObject wgEncodeOpenChromFaireMcf7Est10nm30mRawDataRep2
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
@@ -3920,6 +3952,7 @@ metaObject wgEncodeOpenChromFaireMcf7Est10nm30mSig
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-26
@@ -4107,6 +4140,7 @@ metaObject wgEncodeOpenChromFaireMcf7VehAlnRep1
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -4128,6 +4162,7 @@ metaObject wgEncodeOpenChromFaireMcf7VehAlnRep2
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -4149,6 +4184,7 @@ metaObject wgEncodeOpenChromFaireMcf7VehBaseOverlapSignal
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -4170,6 +4206,7 @@ metaObject wgEncodeOpenChromFaireMcf7VehPk
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -4191,6 +4228,7 @@ metaObject wgEncodeOpenChromFaireMcf7VehRawDataRep1
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -4211,6 +4249,7 @@ metaObject wgEncodeOpenChromFaireMcf7VehRawDataRep2
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -4231,6 +4270,7 @@ metaObject wgEncodeOpenChromFaireMcf7VehSig
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -4411,6 +4451,7 @@ metaObject wgEncodeOpenChromFaireMrta2041AlnRep1
 objType file
 cell MRT_A204
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4431,6 +4472,7 @@ metaObject wgEncodeOpenChromFaireMrta2041AlnRep2
 objType file
 cell MRT_A204
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4451,6 +4493,7 @@ metaObject wgEncodeOpenChromFaireMrta2041BaseOverlapSignal
 objType table
 cell MRT_A204
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4471,6 +4514,7 @@ metaObject wgEncodeOpenChromFaireMrta2041Pk
 objType table
 cell MRT_A204
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4491,6 +4535,7 @@ metaObject wgEncodeOpenChromFaireMrta2041RawDataRep1
 objType file
 cell MRT_A204
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4510,6 +4555,7 @@ metaObject wgEncodeOpenChromFaireMrta2041RawDataRep2
 objType file
 cell MRT_A204
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4529,6 +4575,7 @@ metaObject wgEncodeOpenChromFaireMrta2041Sig
 objType table
 cell MRT_A204
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4549,6 +4596,7 @@ metaObject wgEncodeOpenChromFaireMrtg4016AlnRep1
 objType file
 cell MRT_G401
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4569,6 +4617,7 @@ metaObject wgEncodeOpenChromFaireMrtg4016AlnRep2
 objType file
 cell MRT_G401
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4589,6 +4638,7 @@ metaObject wgEncodeOpenChromFaireMrtg4016BaseOverlapSignal
 objType table
 cell MRT_G401
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4609,6 +4659,7 @@ metaObject wgEncodeOpenChromFaireMrtg4016Pk
 objType table
 cell MRT_G401
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4629,6 +4680,7 @@ metaObject wgEncodeOpenChromFaireMrtg4016RawDataRep1
 objType file
 cell MRT_G401
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4648,6 +4700,7 @@ metaObject wgEncodeOpenChromFaireMrtg4016RawDataRep2
 objType file
 cell MRT_G401
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4667,6 +4720,7 @@ metaObject wgEncodeOpenChromFaireMrtg4016Sig
 objType table
 cell MRT_G401
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4687,6 +4741,7 @@ metaObject wgEncodeOpenChromFaireMrtttc549AlnRep1
 objType file
 cell MRT_TTC549
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4707,6 +4762,7 @@ metaObject wgEncodeOpenChromFaireMrtttc549AlnRep2
 objType file
 cell MRT_TTC549
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4727,6 +4783,7 @@ metaObject wgEncodeOpenChromFaireMrtttc549BaseOverlapSignal
 objType table
 cell MRT_TTC549
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4747,6 +4804,7 @@ metaObject wgEncodeOpenChromFaireMrtttc549Pk
 objType table
 cell MRT_TTC549
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4767,6 +4825,7 @@ metaObject wgEncodeOpenChromFaireMrtttc549RawDataRep1
 objType file
 cell MRT_TTC549
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4786,6 +4845,7 @@ metaObject wgEncodeOpenChromFaireMrtttc549RawDataRep2
 objType file
 cell MRT_TTC549
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4805,6 +4865,7 @@ metaObject wgEncodeOpenChromFaireMrtttc549Sig
 objType table
 cell MRT_TTC549
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-04-20
@@ -4984,6 +5045,7 @@ metaObject wgEncodeOpenChromFaireNhbeAlnRep1
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
@@ -5007,6 +5069,7 @@ metaObject wgEncodeOpenChromFaireNhbeAlnRep2
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
@@ -5030,6 +5093,7 @@ metaObject wgEncodeOpenChromFaireNhbeBaseOverlapSignal
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
@@ -5053,6 +5117,7 @@ metaObject wgEncodeOpenChromFaireNhbePk
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
@@ -5124,6 +5189,7 @@ metaObject wgEncodeOpenChromFaireNhbeSig
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
@@ -5334,6 +5400,7 @@ metaObject wgEncodeOpenChromFairePancreasocAlnRep1
 objType file
 cell Pancreas_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5354,6 +5421,7 @@ metaObject wgEncodeOpenChromFairePancreasocAlnRep2
 objType file
 cell Pancreas_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5374,6 +5442,7 @@ metaObject wgEncodeOpenChromFairePancreasocBaseOverlapSignal
 objType table
 cell Pancreas_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5394,6 +5463,7 @@ metaObject wgEncodeOpenChromFairePancreasocPk
 objType table
 cell Pancreas_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5414,6 +5484,7 @@ metaObject wgEncodeOpenChromFairePancreasocRawDataRep1
 objType file
 cell Pancreas_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5433,6 +5504,7 @@ metaObject wgEncodeOpenChromFairePancreasocRawDataRep2
 objType file
 cell Pancreas_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5452,6 +5524,7 @@ metaObject wgEncodeOpenChromFairePancreasocSig
 objType table
 cell Pancreas_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5591,6 +5664,7 @@ metaObject wgEncodeOpenChromFaireRcc7860AlnRep1
 objType file
 cell RCC_7860
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5611,6 +5685,7 @@ metaObject wgEncodeOpenChromFaireRcc7860AlnRep2
 objType file
 cell RCC_7860
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5631,6 +5706,7 @@ metaObject wgEncodeOpenChromFaireRcc7860BaseOverlapSignal
 objType table
 cell RCC_7860
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5651,6 +5727,7 @@ metaObject wgEncodeOpenChromFaireRcc7860Pk
 objType table
 cell RCC_7860
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5671,6 +5748,7 @@ metaObject wgEncodeOpenChromFaireRcc7860RawDataRep1
 objType file
 cell RCC_7860
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5690,6 +5768,7 @@ metaObject wgEncodeOpenChromFaireRcc7860RawDataRep2
 objType file
 cell RCC_7860
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5709,6 +5788,7 @@ metaObject wgEncodeOpenChromFaireRcc7860Sig
 objType table
 cell RCC_7860
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-06-19
@@ -5729,6 +5809,7 @@ metaObject wgEncodeOpenChromFaireSmallintestineocAlnRep1
 objType file
 cell Small_intestine_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -5749,6 +5830,7 @@ metaObject wgEncodeOpenChromFaireSmallintestineocAlnRep2
 objType file
 cell Small_intestine_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -5769,6 +5851,7 @@ metaObject wgEncodeOpenChromFaireSmallintestineocBaseOverlapSignal
 objType table
 cell Small_intestine_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -5789,6 +5872,7 @@ metaObject wgEncodeOpenChromFaireSmallintestineocPk
 objType table
 cell Small_intestine_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -5809,6 +5893,7 @@ metaObject wgEncodeOpenChromFaireSmallintestineocRawDataRep1
 objType file
 cell Small_intestine_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -5828,6 +5913,7 @@ metaObject wgEncodeOpenChromFaireSmallintestineocRawDataRep2
 objType file
 cell Small_intestine_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -5847,6 +5933,7 @@ metaObject wgEncodeOpenChromFaireSmallintestineocSig
 objType table
 cell Small_intestine_OC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-06
@@ -6188,4 +6275,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1438736924
+# MAGIC: 1338423329
