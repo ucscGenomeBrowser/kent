@@ -9687,6 +9687,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1
 validation Human_-_Egr-1(Immunoblot):human_Egr-1_588_validation_Myers.pdf
 label EGR1 (sc-110)
 
+term ELAVL1
 tag ELAVL1
 type Antibody
 target ELAVL1
