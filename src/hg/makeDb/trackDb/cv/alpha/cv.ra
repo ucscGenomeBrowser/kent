@@ -6089,7 +6089,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Stam:Stam_15_protocols.pdf
-# In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
+label SK-N-SH (Retinoic Acid)
 
 #Venkat - old term using SkMC with capital K
 term SKMC
