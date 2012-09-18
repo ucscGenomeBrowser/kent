@@ -1122,4 +1122,3 @@ if (!opened)
     opened = TRUE;
     }
 }
-

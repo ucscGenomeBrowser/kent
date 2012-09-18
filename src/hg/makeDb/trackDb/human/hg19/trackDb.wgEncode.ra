@@ -17,7 +17,7 @@ include wgEncodeGencodeV12.release3.ra
 include wgEncodeUncBsuProt.release2.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
-include wgEncodeUncBsuProtGenc.ra alpha,beta
+include wgEncodeUncBsuProtGenc.ra
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.release3.ra
@@ -59,9 +59,6 @@ include wgEncodeUmassDekker5C.release2.ra
 
 # UW 5C (wrangler: Venkat and Kate)
 include wgEncodeUw5C.ra 
-#include wgEncodeUw5C.patch.ra public
-#include wgEncodeUw5C.patch2.ra alpha,beta
-#include wgEncodeUw5C.release2.ra alpha
 
 
 # Encode Affy Exon --------------------------------------------
@@ -74,8 +71,8 @@ include wgEncodeDukeAffyExon.release3.ra
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
-include wgEncodeOpenChromFaire.release2.ra alpha
-include wgEncodeOpenChromFaire.ra beta,public
+include wgEncodeOpenChromFaire.release2.ra alpha,beta
+include wgEncodeOpenChromFaire.ra public
 
 #Open Chrom Synth (wrangler: Matt)
 include wgEncodeOpenChromSynth.release2.ra
@@ -109,8 +106,8 @@ include wgEncodeGisRnaSeq.ra
 include wgEncodeCaltechRnaSeq.release4.ra
 
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.release2.ra beta,public
-include wgEncodeCshlLongRnaSeq.release3.ra alpha
+include wgEncodeCshlLongRnaSeq.release2.ra public
+include wgEncodeCshlLongRnaSeq.release3.ra alpha,beta
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale

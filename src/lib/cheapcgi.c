@@ -1941,7 +1941,7 @@ int argc = *pArgc;
 int i;
 int argcLeft = argc;
 char *name;
-static char queryString[16384];
+static char queryString[65536];
 char *q = queryString;
 boolean needAnd = TRUE;
 boolean gotAny = FALSE;

@@ -17,6 +17,7 @@
 #if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
+#include "net.h"
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 #include "jsHelper.h"
 #include <signal.h>
@@ -1334,6 +1335,7 @@ int main(int argc, char *argv[])
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+setConnFailuresEnabled(FALSE); // try TRUE in next release v274
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

@@ -54,6 +54,8 @@
 #define MAXPIXELS 14000
 #endif
 
+#define BIGBEDMAXIMUMITEMS 3000
+
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
