@@ -1431,3 +1431,14 @@ exit $status # BRACKET
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr
 # is released, take down the old isPcr gfServer  
 #
+
+#did the following on 2012-09-18 (braney)
+cd $dir/pfam
+genePredToFakePsl hg19 knownGene knownGene.psl cdsOut.tab
+sort cdsOut.tab | sed 's/\.\./   /' > sortCdsOut.tab
+sort /hive/data/genomes/hg19/bed/ucsc.13/pfam/ucscPfam.tab> sortPfam.tab
+awk '{print $10, $11}' knownGene.psl > gene.sizes
+join sortCdsOut.tab sortPfam.tab |  awk '{print $1, $2 + 3 * $4, $2 + 3 * $5, $6}' | bedToPsl gene.sizes stdin domainToGene.psl
+pslMap domainToGene.psl knownGene.psl stdout | sort | uniq | pslToBed stdin domainToGenome.bed 
+hgLoadBed hg19 ucscGenePfam domainToGenome.bed
+

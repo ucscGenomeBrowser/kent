@@ -165,6 +165,10 @@ else if (clSeqList != NULL)
     tbs = twoBitSpecNewFile(inName, clSeqList);
 else
     tbs = twoBitSpecNew(inName);
+
+if (tbs == NULL)
+    errAbort("%s is not a twoBit file", inName);
+
 if (tbs->seqs != NULL && clBpt != NULL)
     tbf = twoBitOpenExternalBptIndex(tbs->fileName, clBpt);
 else
