@@ -14899,38 +14899,39 @@ description Regions of optimal enriched signal in experiment performed by PeakSe
 term pepMapFt
 tag PEPMAPFT
 type view
-label Peptide Mapping Filtered
-description filtered peptide mapping results based on the mapping scores or false discovery rate on genome database for mass-spectrometry-based proteomics experiments
+label Peptide Mapping (filtered)
+description Peptide mapping results based on the hg19 genome for mass-spectrometry-based proteomics experiments filtered by false discovery rate (FDR) better than 5%.
 
 term pepMapUnFt
 tag PEPMAPUNFT
 type view
-label Peptide Mapping unFiltered
-description unfiltered peptide mapping results based on the mapping scores or false discovery rate on genome database for mass-spectrometry-based proteomics experiments
+label Peptide Mapping (unfiltered)
+description Peptide mapping results based on the hg19 genome for mass-spectrometry-based proteomics experiments unfiltered by false discovery rate (FDR).
 
 term pepMapGcFt
 tag PEPMAPGCFT
 type view
-label Peptide Genome and Gencode Mapping Filtered
-description filtered peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
+label Peptide Genome and GENCODE Mapping (filtered)
+description Peptide mapping results based on the hg19 genome and GENCODE annotation for mass-spectrometry-based proteomics experiments filtered by false discovery rate (FDR) better than 5%.
 
 term pepMapGcUnFt
 tag PEPMAPGCUNFT
 type view
-label Peptide Genome and Gencode Mapping unFiltered
-description unfiltered peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
+label Peptide Genome and GENCODE Mapping (unfiltered)
+description Peptide mapping results based on the hg19 genome and GENCODE annotation for mass-spectrometry-based proteomics experiments unfiltered by false discovery rate (FDR).
 
 term mPepMapGcFt
 tag MPEPMAPGCFT
 type view
-label Modified Peptide Genome and Gencode Mapping Filtered
-description filtered modified peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
+label Modified Peptide Genome and GENCODE Mapping (filtered)
+description Modified peptide mapping results based on the hg19 genome and GENCODE annotation for mass-spectrometry-based proteomics experiments filtered by false discovery rate (FDR) better than 5%.
+
 
 term mPepMapGcUnFt
 tag MPEPMAPGCUNFT
 type view
-label Modified Peptide Genome and Gencode Mapping unFiltered
-description unfiltered modified peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
+label Modified Peptide Genome and GENCODE Mapping (unFiltered)
+description Modified peptide mapping results based on the hg19 genome and GENCODE annotation for mass-spectrometry-based proteomics experiments unfiltered by false discovery rate (FDR).
 
 term PrimerPeaks
 tag PRIMEPKS
