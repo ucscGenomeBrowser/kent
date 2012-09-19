@@ -8632,7 +8632,7 @@ orderUrl http://www.bethyl.com/product/A300-000A/BRCA1_Antibody/
 lab Snyder
 targetId GeneCard:BRCA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA1
-validation Human_-_:missing
+validation Human_-_BRCA1_(A300-000A)(Western_blot,IP-Mass_Spec):human_BRCA1_validation_Snyder.pdf
 label BRCA1 (A300-000A)
 
 term BRF1
@@ -8712,7 +8712,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=7202
 lab Snyder
 targetId GeneCard:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation Human_-_:missing
+validation Human_-_c-Fos_(sc-7202)(Immunoprecipiation,Motif_Enrichment):human_c-Fos_validation_Snyder.pdf
 label c-Fos (sc-7202)
 
 term c-Jun
@@ -9161,7 +9161,7 @@ lab Myers, Hardison
 lots 1350637, DAM1472197
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
-validation Human_-_CTCF_(07-729)(Western_blot,Motif_enrichment):human_CTCF_validation_Myers.pdf Mouse_-_CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
+validation Human_-_CTCF_(07-729)(Western_blot,Motif_enrichment):human_CTCF_validation_Myers.pdf Human_-_CTCF_(07-729)(Western_blot):human_CTCT_07-729_validation_Snyder.pdf Mouse_-_CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 label CTCF (07-729)
 
 term CTCF_(2899)
@@ -10052,7 +10052,7 @@ orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
 lab Snyder
 targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
-validation Mouse_-_GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf Mouse_-_GATA1_(sc-266)(Immunoprecipitation,Motif_Enrichment):mouse_GATA1_validation_Snyder.pdf
+validation Human_-_GATA1_(sc-266)(Immunoprecipitation,Motif_Enrichment):human_GATA_validation_Snyder.pdf Mouse_-_GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf Mouse_-_GATA1_(sc-266)(Immunoprecipitation,Motif_Enrichment):mouse_GATA1_validation_Snyder.pdf
 label  GATA1 (sc-266)
 
 term GATA-2
@@ -10182,7 +10182,7 @@ vendorId sc-1002
 lab Snyder
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
-validation Human_-_:missing
+validation Human_-_GRp20_(sc-1002)(Western_blot,IP-Mass_Spec):human_GRP20_validation_Snyder.pdf
 label GRp20 (sc-1002)
 
 term GTF2B
@@ -11959,7 +11959,7 @@ orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-phospho-S2-an
 lab Snyder
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Human_-_:missing Mouse_-_PolIIS2_(ab5095)(Immunoprecipitation,IP-Mass_Spec):mouse_PolIIS2_validation_Snyder.pdf
+validation Human_-_POL2S2_(ab5095)(Immunoprecipitation,IP-Mass_Spec):human_PolIIS2_validation_Snyder.pdf Mouse_-_PolIIS2_(ab5095)(Immunoprecipitation,IP-Mass_Spec):mouse_PolIIS2_validation_Snyder.pdf
 label POL2S2 (ab5095)
 
 term Pol3
@@ -12428,7 +12428,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=8984
 lab Snyder
 targetId GeneCard:SREBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF1
-validation Human_-_:missing
+validation Human_-_SREBP1_(sc-8984)(Western_blot,IP-Mass_Spec):human_SREBP1_validation_Snyder.pdf
 label SREBP1 (sc-8984)
 
 term SREBP2
@@ -12444,7 +12444,7 @@ orderUrl http://www.caymanchem.com/app/template/Product.vm/catalog/10007663
 lab Snyder
 targetId GeneCard:SREBF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF2
-validation Human_-_:missing
+validation Human_-_SREBP2_(10007663)(Western_blot,IP-Mass_SPec):human_SREBP2_validation_Snyder.pdf
 label SREBP2 (10007663)
 
 term SRF
@@ -13018,7 +13018,7 @@ orderUrl http://www.abcam.com/WHIP-antibody-ab4731.html
 lab Snyder
 targetId GeneCard:WRNIP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WRNIP1
-validation Human_-_:missing
+validation Human_-_WHIP_(ab4731)(Western_blot,IP-Mass_Spec):human_WHIP_validation_Snyder.pdf
 label WHIP (ab4731)
 
 term XRCC4
@@ -13164,7 +13164,7 @@ orderUrl http://www.ptglab.com/Products/ZNF143-Antibody-16618-1-AP.htm
 lab Snyder
 targetId GeneCard:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
-validation Human_-_:missing
+validation Human_-_Znf143_(16618-1-AP)(Immunoprecipitation,IP-Mass_spec):human_ZNF143_validation_Snyder.pdf
 label Znf143 (16618-1-AP)
 
 term ZNF-MIZD-CP1_(ab65767)
