@@ -328,7 +328,6 @@ labVersion iIDR
 localization cell
 md5sum 1b33cf1ab99acdaf7d6a6e8302b79238
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -409,8 +408,8 @@ labExpId LID9005,LID9006
 labProtocolId 021WC-,022WC-
 labVersion iIDR
 localization cell
+md5sum f4c09a5bdfc6d5eae3520e0871fca849
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -576,8 +575,8 @@ labExpId LID9005,LID9006
 labProtocolId 021WC-,022WC-
 labVersion iIDR
 localization cell
+md5sum e929527ba0c4b55f807a6fd677dbd663
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -718,7 +717,6 @@ labVersion iIDR
 localization cell
 md5sum b9aaf8118fcbd654cf530a7b4f73bbd5
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -907,8 +905,8 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+md5sum 9920dd2eed55143bd1b759af41b5ed1f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -1240,8 +1238,8 @@ labExpId LID8963,LID8964
 labProtocolId 021WC+,022WC+
 labVersion iIDR
 localization cell
+md5sum c5fb115df99508018acded13ca5c886f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -1380,7 +1378,6 @@ labVersion iIDR
 localization cytosol
 md5sum 49fb5900044d8ac227cc7e08c01fbd32
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1542,8 +1539,8 @@ labExpId LID45897,LID45898
 labProtocolId 087C+,088C+
 labVersion iIDR
 localization cytosol
+md5sum 03dfe883a19d279116eb925d5c1a1a6a
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1737,7 +1734,6 @@ labExpId LID45897
 localization cytosol
 md5sum 7e69f0218733811c05a229a3b7810807
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract longPolyA
@@ -1765,7 +1761,6 @@ labExpId LID45898
 localization cytosol
 md5sum 6964f461dd1643d06b70496953ca3572
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract longPolyA
@@ -1785,7 +1780,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
-fileName wgEncodeCshlLongRnaSeqA549CytosolPapSpikeinsRep3.bam
+fileName wgEncodeCshlLongRnaSeqA549CytosolPapSpikeinsRep3.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45897
@@ -1811,7 +1806,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002624
 expId 2624
-fileName wgEncodeCshlLongRnaSeqA549CytosolPapSpikeinsRep4.bam
+fileName wgEncodeCshlLongRnaSeqA549CytosolPapSpikeinsRep4.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45898
@@ -1845,8 +1840,8 @@ labExpId LID45897,LID45898
 labProtocolId 087C+,088C+
 labVersion iIDR
 localization cytosol
+md5sum 92293d37f13b6c4f416146045e645941
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -1984,7 +1979,6 @@ labVersion iIDR
 localization nucleus
 md5sum c561fce7d7b32225c99747d95810383a
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2146,8 +2140,8 @@ labExpId LID45900,LID45899
 labProtocolId 088N+,087N+
 labVersion iIDR
 localization nucleus
+md5sum d305b800cb402d786763c445a00d0c62
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2341,7 +2335,6 @@ labExpId LID45899
 localization nucleus
 md5sum 1e96894421e634223df6f1ab9b2ce0fa
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract longPolyA
@@ -2369,7 +2362,6 @@ labExpId LID45900
 localization nucleus
 md5sum b21d1bbbfdcfc1d0a5b535f9a10901a1
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract longPolyA
@@ -2389,7 +2381,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
-fileName wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep3.bam
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep3.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45899
@@ -2415,7 +2407,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002625
 expId 2625
-fileName wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep4.bam
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep4.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45900
@@ -2449,8 +2441,8 @@ labExpId LID45900,LID45899
 labProtocolId 088N+,087N+
 labVersion iIDR
 localization nucleus
+md5sum 0d34c03ead29234081628230ee7d2c1b
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -2503,7 +2495,7 @@ grant Gingeras
 lab CSHL
 labExpId LID9001
 localization cell
-md5sum bf874b47b46a49e9408b66dd0f8784d5,bb7600b72dc20a55cd278a136408fd98
+md5sum bf874b47b46a49e9408b66dd0f8784d5,0694486e4a024908c72e8fc2c173b328
 project wgEncode
 readType 2x76D
 replicate 1
@@ -2810,7 +2802,6 @@ labVersion iIDR
 localization cell
 md5sum ef20a24e3ddd77f66a32ee0be595da22
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -2891,8 +2882,8 @@ labExpId LID9001,LID9002
 labProtocolId 017WC-,018WC-
 labVersion iIDR
 localization cell
+md5sum 6d235490ffb5e82a80a6332356b9411e
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -3058,8 +3049,8 @@ labExpId LID9001,LID9002
 labProtocolId 017WC-,018WC-
 labVersion iIDR
 localization cell
+md5sum 0c9adf8c564f18667427c1f8be31d855
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -3113,7 +3104,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8965
 localization cell
-md5sum b04b44097cc0d85871b2b85d16c0e726,d69121706c27b069745c375cc3f34b7c
+md5sum b04b44097cc0d85871b2b85d16c0e726,6e7e60e44a5ba6b749018df2048ceeea
 project wgEncode
 readType 2x76D
 replicate 1
@@ -3141,7 +3132,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8966
 localization cell
-md5sum 0769d29627ad2d59745d7a3f7934097b,7608df98e0e4082c3ab5bb4f313220e9
+md5sum 0769d29627ad2d59745d7a3f7934097b,856fd7103cfc96569749d6ed0a9e6d84
 project wgEncode
 readType 2x76D
 replicate 2
@@ -3200,7 +3191,6 @@ labVersion iIDR
 localization cell
 md5sum 81e91f0512b63ee1d5753d8e63780547
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -3389,8 +3379,8 @@ labExpId LID8965,LID8966
 labProtocolId 017WC+,018WC+
 labVersion iIDR
 localization cell
+md5sum 0556511edae949eb2bbe365ebbade29f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -3722,8 +3712,8 @@ labExpId LID8965,LID8966
 labProtocolId 017WC+,018WC+
 labVersion iIDR
 localization cell
+md5sum d822bf24729fc5034e6b6f7150b315d7
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -4084,7 +4074,6 @@ labVersion iIDR
 localization cell
 md5sum 0c6661593a66cff9e41f0893a13278c2
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -4165,8 +4154,8 @@ labExpId LID9007,LID9008
 labProtocolId 037WC-,038WC-
 labVersion iIDR
 localization cell
+md5sum 2657ad4d638513eb3fcff050f19d8a55
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -4332,8 +4321,8 @@ labExpId LID9007,LID9008
 labProtocolId 037WC-,038WC-
 labVersion iIDR
 localization cell
+md5sum c5b21098169fa0d8bd4848a5b040f5bc
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -4387,7 +4376,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8969
 localization cell
-md5sum aca7563b75059b34dbde330163a7f93c,ce4ae0d071723520b6f50a637bc1e14d
+md5sum aca7563b75059b34dbde330163a7f93c,aae48a5d20ca761d91cbd75e913c7e60
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4415,7 +4404,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8970
 localization cell
-md5sum 0465277e9bc56886f737aa4141bfcf01,e4a4f5c5a54cc596533cf87b194a65ea
+md5sum 0465277e9bc56886f737aa4141bfcf01,bb7414e2a4e820b2d88ed7bf9edc484b
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4474,7 +4463,6 @@ labVersion iIDR
 localization cell
 md5sum 8a8f111288e5810857211b403b3a31aa
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -4663,8 +4651,8 @@ labExpId LID8969,LID8970
 labProtocolId 037WC+,038WC+
 labVersion iIDR
 localization cell
+md5sum faf5517e8e148e8121fafe19998fc444
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -4996,8 +4984,8 @@ labExpId LID8969,LID8970
 labProtocolId 037WC+,038WC+
 labVersion iIDR
 localization cell
+md5sum 23597284c8d0ce000580d9171a60faea
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -5140,7 +5128,6 @@ labVersion iIDR
 localization cell
 md5sum 4a42b4c7c0e1d934579829b837093d00
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -5308,8 +5295,8 @@ labExpId LID44660,LID44659
 labProtocolId 042WC-,041WC-
 labVersion iIDR
 localization cell
+md5sum 3552416c90d24076f7a351af28c0559c
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -5502,7 +5489,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002666
 donorId RO01794
 expId 2666
-fileName wgEncodeCshlLongRnaSeqCd20CellPamSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqCd20CellPamSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID44659
@@ -5529,7 +5516,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002666
 donorId RO01778
 expId 2666
-fileName wgEncodeCshlLongRnaSeqCd20CellPamSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqCd20CellPamSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID44660
@@ -5564,8 +5551,8 @@ labExpId LID44660,LID44659
 labProtocolId 042WC-,041WC-
 labVersion iIDR
 localization cell
+md5sum 392d6e495ab0afbf24450c9bfc52ba8a
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -5708,7 +5695,6 @@ labVersion iIDR
 localization cell
 md5sum 3e55a399204e6662cb3c4905b60d0048
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -5876,8 +5862,8 @@ labExpId LID44499,LID44498
 labProtocolId 042WC+,041WC+
 labVersion iIDR
 localization cell
+md5sum a5f107d466a4ab73809acd77ce34d238
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -6058,7 +6044,7 @@ subId 5772
 tableName wgEncodeCshlLongRnaSeqCd20CellPapPlusRep2
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep1
 objType file
 bioRep 041WC
 cell CD20+
@@ -6067,27 +6053,27 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
-fileName wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM981256
 grant Gingeras
 lab CSHL
 labExpId LID44498
 labProtocolId 041WC+
 localization cell
+md5sum 4a98e26df739df4cb5b67f0bfdc7a043
 project wgEncode
-protocol None
 readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7673
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep2V2
+metaObject wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep2
 objType file
 bioRep 042WC
 cell CD20+
@@ -6096,24 +6082,24 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
-fileName wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep2V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM981256
 grant Gingeras
 lab CSHL
 labExpId LID44499
 labProtocolId 042WC+
 localization cell
+md5sum 950f482fd842ebf8aee6814fa7806796
 project wgEncode
-protocol None
 readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7680
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqCd20CellPapSpikeinsRep1
@@ -6128,7 +6114,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
-fileName wgEncodeCshlLongRnaSeqCd20CellPapSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqCd20CellPapSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID44498
@@ -6155,7 +6141,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
-fileName wgEncodeCshlLongRnaSeqCd20CellPapSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqCd20CellPapSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID44499
@@ -6190,8 +6176,8 @@ labExpId LID44499,LID44498
 labProtocolId 042WC+,041WC+
 labVersion iIDR
 localization cell
+md5sum d7736bdbd31e84fa7d731365b45c0d88
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -6303,7 +6289,6 @@ labVersion iIDR
 localization cell
 md5sum 126155f3083472037d83338221abab63
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -6411,8 +6396,8 @@ labExpId LID45901
 labProtocolId 043WCt
 labVersion iIDR
 localization cell
+md5sum d50b0b1690bd1b5200d0286d808eed33
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -6531,7 +6516,7 @@ subId 5780
 tableName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRep1
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalProtocolRep1
 objType file
 bioRep 043WC
 cell CD34+_Mobilized
@@ -6540,23 +6525,23 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002670
 expId 2670
-fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalProtocolRep1.pdf.gz
 geoSampleAccession GSM981257
 grant Gingeras
 lab CSHL
 labExpId LID45901
 labProtocolId 043WCt
 localization cell
+md5sum 94376ad0e56ecd1d87854696491e6297
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7665
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalSpikeinsRep1
@@ -6570,7 +6555,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002670
 expId 2670
-fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45901
@@ -6604,8 +6589,8 @@ labExpId LID45901
 labProtocolId 043WCt
 labVersion iIDR
 localization cell
+md5sum bb8161e4293c663233dc38575547d1ec
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -6686,7 +6671,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8662
 localization cell
-md5sum 7fe8124e8906f9593a59c6e1e6b21250,ea332e13a261aa43b4c508584039887c
+md5sum 7fe8124e8906f9593a59c6e1e6b21250,bd41a0476f825f0f88daf6edc41f479d
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6965,7 +6950,6 @@ labVersion iIDR
 localization cell
 md5sum f4f2eae882b34a6fdc863e69dde02972
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -7046,8 +7030,8 @@ labExpId LID8661,LID8662
 labProtocolId 003WC-,004WC-
 labVersion iIDR
 localization cell
+md5sum 0bc37a9a54259401f63a046a85f661cc
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -7267,8 +7251,8 @@ labExpId LID8661,LID8662
 labProtocolId 003WC-,004WC-
 labVersion iIDR
 localization cell
+md5sum 4abf445878c8290b90a2ab18192675c1
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -7322,7 +7306,7 @@ grant Gingeras
 lab CSHL
 labExpId LID16629
 localization cell
-md5sum ef50cfac8b54beae2e40b510516dbfbe,233186a92a6d2b8d3c7f88064d80dda5
+md5sum ef50cfac8b54beae2e40b510516dbfbe,daa9acb76bbb00b29f5a406fb8bd80c6
 project wgEncode
 readType 2x76D
 replicate 1
@@ -7350,7 +7334,7 @@ grant Gingeras
 lab CSHL
 labExpId LID16630
 localization cell
-md5sum d5c629b8f777487a31f8b47d0851675e,632ef915f47d94b2ed37320b648213b9
+md5sum d5c629b8f777487a31f8b47d0851675e,4899891103e3066dee2bb3f182cd7dd3
 project wgEncode
 readType 2x76D
 replicate 2
@@ -7409,7 +7393,6 @@ labVersion iIDR
 localization cell
 md5sum 369fd86d3522a77625f1397380935dea
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -7598,8 +7581,8 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+md5sum 13817442a2335487682e07da2dfdf33d
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -7931,8 +7914,8 @@ labExpId LID16629,LID16630
 labProtocolId 003WC+,004WC+
 labVersion iIDR
 localization cell
+md5sum 9069eb6cdc02a41a610e0152b8458498
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -7987,7 +7970,7 @@ grant Gingeras
 lab CSHL
 labExpId crg-7
 localization cell
-md5sum dcd233c01bc856e5cc496b7d49771d67,9f8a94015f2f5609cde523b62e6fc4f3
+md5sum dcd233c01bc856e5cc496b7d49771d67,364ba68eb832dec9378ab620aa386c9d
 project wgEncode
 replicate 1
 rnaExtract total
@@ -8013,7 +7996,7 @@ grant Gingeras
 lab CSHL
 labExpId crg-12
 localization cell
-md5sum 2e931b7df0bb6175b28bb20d6979fe36,36b45efefc6ed8123603e0289f2a7752
+md5sum 2e931b7df0bb6175b28bb20d6979fe36,03e95a1c6d93214801996337494afb49
 project wgEncode
 replicate 2
 rnaExtract total
@@ -8503,7 +8486,6 @@ labVersion iIDR
 localization cytosol
 md5sum 294be67b1ab4c474bdc4b285381ef76f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -8584,8 +8566,8 @@ labExpId LID18547,LID18548
 labProtocolId 003C-,004C-
 labVersion iIDR
 localization cytosol
+md5sum b23ffe4424db730a7206a9aeaef09dca
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -8805,8 +8787,8 @@ labExpId LID18547,LID18548
 labProtocolId 003C-,004C-
 labVersion iIDR
 localization cytosol
+md5sum 1f476a3081e75b9dce7b68a39358b3bf
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -8860,7 +8842,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8467
 localization cytosol
-md5sum d6af952f8274ec254961f0396ac8c60d,d72a8c0d5dbc7a90d0a9d6b05c095729
+md5sum d6af952f8274ec254961f0396ac8c60d,9e350d10b4bbb2ade1f9810f984b2142
 project wgEncode
 readType 2x76D
 replicate 1
@@ -8888,7 +8870,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8468
 localization cytosol
-md5sum 6b002f30c7301a45f850db4c171dc5c2,3ab4d4d8778e12ebdebfd08cd0657035
+md5sum 6b002f30c7301a45f850db4c171dc5c2,84a09bd85bbf8f76ac7e2dcca608d3ea
 project wgEncode
 readType 2x76D
 replicate 2
@@ -8947,7 +8929,6 @@ labVersion iIDR
 localization cytosol
 md5sum e1e27a5447754251049d811838cbfb8f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -9136,8 +9117,8 @@ labExpId LID8467,LID8468
 labProtocolId 003C+,004C+
 labVersion iIDR
 localization cytosol
+md5sum aea173027ba9549476f0d68d7b699050
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -9469,8 +9450,8 @@ labExpId LID8467,LID8468
 labProtocolId 003C+,004C+
 labVersion iIDR
 localization cytosol
+md5sum ae6075ea0f0741467c1b698504d77962
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -9524,8 +9505,8 @@ lab CSHL
 labExpId LID47963
 labProtocolId 091NLt
 localization nucleolus
+md5sum 7f65b29761b2ff70b68e2dc64f5ab397,88650ace2130a350869eb6e266f8821c
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract total
@@ -9552,8 +9533,8 @@ lab CSHL
 labExpId LID47964
 labProtocolId 092NLt
 localization nucleolus
+md5sum bf93db27957f49c9f3b56526b82b7cf4,b526d5e31be34e68ebf2a5071aab3dfc
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract total
@@ -9582,8 +9563,8 @@ labExpId LID47963,LID47964
 labProtocolId 091NLt,092NLt
 labVersion iIDR
 localization nucleolus
+md5sum c60dcc7cac52aef8f8482e04216a6ef9
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -9610,8 +9591,8 @@ lab CSHL
 labExpId LID47963
 labProtocolId 091NLt
 localization nucleolus
+md5sum 4449a8131c25557a8b635f6d3d267011
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract total
@@ -9638,8 +9619,8 @@ lab CSHL
 labExpId LID47964
 labProtocolId 092NLt
 localization nucleolus
+md5sum a450a51faa2dc8e6fb566554bd5be639
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract total
@@ -9666,8 +9647,8 @@ lab CSHL
 labExpId LID47963
 labProtocolId 091NLt
 localization nucleolus
+md5sum d7b811e42386fc8b39117335f073ad11
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract total
@@ -9694,8 +9675,8 @@ lab CSHL
 labExpId LID47964
 labProtocolId 092NLt
 localization nucleolus
+md5sum b207c0c3809671f4287b4a80fec732ac
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract total
@@ -9723,8 +9704,8 @@ labExpId LID47963,LID47964
 labProtocolId 091NLt,092NLt
 labVersion iIDR
 localization nucleolus
+md5sum c36f7037494b13ab5254e0b2a7fa951d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -9751,8 +9732,8 @@ lab CSHL
 labExpId LID47963
 labProtocolId 091NLt
 localization nucleolus
+md5sum fa06154a5e203a38d380178c2ffbeb21
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract total
@@ -9780,8 +9761,8 @@ lab CSHL
 labExpId LID47964
 labProtocolId 092NLt
 localization nucleolus
+md5sum 4b19532f6d465d5414284137911459f6
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract total
@@ -9809,8 +9790,8 @@ lab CSHL
 labExpId LID47963
 labProtocolId 091NLt
 localization nucleolus
+md5sum 09a8c27daf1397450aed01e243205c9e
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract total
@@ -9838,8 +9819,8 @@ lab CSHL
 labExpId LID47964
 labProtocolId 092NLt
 localization nucleolus
+md5sum a1bb7e17049640d96a2cbbfac24a5801
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract total
@@ -9849,7 +9830,7 @@ subId 7188
 tableName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalPlusSignalRep4
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3V2
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3
 objType file
 bioRep 091NL
 cell GM12878
@@ -9858,24 +9839,25 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
-fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3V2.pdf.gz
+dccAccession wgEncodeEH003034
+expId 3034
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47963
 labProtocolId 091NLt
 localization nucleolus
+md5sum 02bcebe8a0ce9b2a4e778510f09b0d56
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7816
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4V2
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4
 objType file
 bioRep 092NL
 cell GM12878
@@ -9884,21 +9866,22 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
-fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4V2.pdf.gz
+dccAccession wgEncodeEH003034
+expId 3034
+fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID47964
 labProtocolId 092NLt
 localization nucleolus
+md5sum eba3d27817a2efec3c26ad474c29ba1d
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7815
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleolusTotalSpikeinsRep3
@@ -9921,7 +9904,6 @@ labProtocolId 091NLt
 localization nucleolus
 md5sum 4b0ae5c6267637a75467dd2b41679519
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract total
@@ -9950,7 +9932,6 @@ labProtocolId 092NLt
 localization nucleolus
 md5sum b796224c569c1da56f329bbedb1c143b
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract total
@@ -10283,7 +10264,6 @@ labVersion iIDR
 localization nucleus
 md5sum b24670957a13835476d272eb69643cbe
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -10364,8 +10344,8 @@ labExpId LID9197,LID9198
 labProtocolId 003N-,004N-
 labVersion iIDR
 localization nucleus
+md5sum 34f00aac7bc9a743e91034f31ac06048
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -10585,8 +10565,8 @@ labExpId LID9197,LID9198
 labProtocolId 003N-,004N-
 labVersion iIDR
 localization nucleus
+md5sum 25d94a1ebb57280fafe1e0ccb9adb9db
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -10640,7 +10620,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8532
 localization nucleus
-md5sum 94d505d54ee07a68e2a0afb193a8b565,9fc190fe174941a9f2ff5e8b1c6308e4
+md5sum 94d505d54ee07a68e2a0afb193a8b565,7487261f6ee3200dd9aa12b768e82545
 project wgEncode
 readType 2x76D
 replicate 1
@@ -10668,7 +10648,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8533
 localization nucleus
-md5sum 8e859e16bf00ff71cf55ffc322ac6126,90c5b2aee2bd5e1cd8f2a8c14601c1b4
+md5sum 8e859e16bf00ff71cf55ffc322ac6126,9715cd9a9d52c65920c02b07fbda3c7a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -10727,7 +10707,6 @@ labVersion iIDR
 localization nucleus
 md5sum 1fc3d65d77e05240e3482d8572d4ff32
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -10916,8 +10895,8 @@ labExpId LID8532,LID8533
 labProtocolId 003N+,004N+
 labVersion iIDR
 localization nucleus
+md5sum dad311c5e25bd468fc8e3eab75256bf6
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -11249,8 +11228,8 @@ labExpId LID8532,LID8533
 labProtocolId 003N+,004N+
 labVersion iIDR
 localization nucleus
+md5sum c332b925e874673d309450c5aac603c3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -11304,7 +11283,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8663
 localization cell
-md5sum 6587e586e376b989854a3040fa929b95,13faa58e9d5b94e47cb334b00d49fab1
+md5sum 6587e586e376b989854a3040fa929b95,9665e433d9bf71c259ba331df36d71b9
 project wgEncode
 readType 2x76D
 replicate 1
@@ -11332,7 +11311,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8664
 localization cell
-md5sum 36059f397cf60b1e8ea84869370fc020,bc424d28efe2722bc5886b5fd4fcf820
+md5sum 36059f397cf60b1e8ea84869370fc020,97b5487eecfb086676efc7ecb1b73a46
 project wgEncode
 readType 2x76D
 replicate 2
@@ -11611,7 +11590,6 @@ labVersion iIDR
 localization cell
 md5sum 5ba124d1bba5b8367433f7ffd4e94df6
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -11692,8 +11670,8 @@ labExpId LID8663,LID8664
 labProtocolId 005WC-,006WC-
 labVersion iIDR
 localization cell
+md5sum c09d9cb7b20fa91dc52ea17d98627cd3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -11913,8 +11891,8 @@ labExpId LID8663,LID8664
 labProtocolId 005WC-,006WC-
 labVersion iIDR
 localization cell
+md5sum 9b4a1a27855cb304f8c72348187fb783
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -11968,7 +11946,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8461
 localization cell
-md5sum 9dabe8fa9819a00a4ba8bb634b4e7e61,1b4489108471c3a6b5e1d46db8db2636
+md5sum 9dabe8fa9819a00a4ba8bb634b4e7e61,8e43fd77132b680b46d6dcb8e6000a92
 project wgEncode
 readType 2x76D
 replicate 1
@@ -11996,7 +11974,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8462
 localization cell
-md5sum 458f9da89a28a39425dca1d224faa227,57ee2a20d7dd62a8f45b6e9fdc0189ce
+md5sum 458f9da89a28a39425dca1d224faa227,ad9c441e1185b46c833c5f305e9f94ea
 project wgEncode
 readType 2x76D
 replicate 2
@@ -12055,7 +12033,6 @@ labVersion iIDR
 localization cell
 md5sum ee8a134ad51c9f9b2ce7251b78fafbd6
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -12244,8 +12221,8 @@ labExpId LID8461,LID8462
 labProtocolId 005WC+,006WC+
 labVersion iIDR
 localization cell
+md5sum bde3297dbe2c5d5b2dc10f50f17811ab
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -12577,8 +12554,8 @@ labExpId LID8461,LID8462
 labProtocolId 005WC+,006WC+
 labVersion iIDR
 localization cell
+md5sum e5e747195a6352cd522cf8d76ed35584
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -12830,7 +12807,6 @@ labVersion iIDR
 localization cytosol
 md5sum 07ab029e2d7af15e91291d16d820a42f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -12911,8 +12887,8 @@ labExpId LID18549
 labProtocolId 006C-
 labVersion iIDR
 localization cytosol
+md5sum f34328996d105f39ea5b07b85492a5f1
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -13077,8 +13053,8 @@ labExpId LID18549
 labProtocolId 006C-
 labVersion iIDR
 localization cytosol
+md5sum 7aa7db124977c3d5dc5cd4dc714e91f3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -13132,7 +13108,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8536
 localization cytosol
-md5sum 350490d4a0accd1d6746fb0ef32559f7,1397412eac1768e005a8786c7c4e941a
+md5sum 350490d4a0accd1d6746fb0ef32559f7,9e087d6bb68d71cc35ad9a027f58ae3b
 project wgEncode
 readType 2x76D
 replicate 2
@@ -13220,7 +13196,6 @@ labVersion iIDR
 localization cytosol
 md5sum fb9a7ef5ef48a4b47b1984704a824e6d
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -13355,8 +13330,8 @@ labExpId LID8536
 labProtocolId 006C+
 labVersion iIDR
 localization cytosol
+md5sum 940dd0021ee554eb679b6f342d20024a
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -13577,8 +13552,8 @@ labExpId LID8536
 labProtocolId 006C+
 labVersion iIDR
 localization cytosol
+md5sum 404b53e8f5e381928f95be2a21cb09af
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -13830,7 +13805,6 @@ labVersion iIDR
 localization nucleus
 md5sum f3d3e5332869351903b695461963d1fc
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -13911,8 +13885,8 @@ labExpId LID9199
 labProtocolId 006N-
 labVersion iIDR
 localization nucleus
+md5sum 7e667881ead92e2485b5bf4379b10477
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -14077,8 +14051,8 @@ labExpId LID9199
 labProtocolId 006N-
 labVersion iIDR
 localization nucleus
+md5sum 509d49df5c7fe202b5458f75d67d82eb
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -14132,7 +14106,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8558
 localization nucleus
-md5sum 0aee237b1e06812fca29dee76a513af6,f80f671f6b4a8e0e73ebe70f54c86dd4
+md5sum 0aee237b1e06812fca29dee76a513af6,6a12fedb69dcde7448196df95ad85b65
 project wgEncode
 readType 2x76D
 replicate 2
@@ -14220,7 +14194,6 @@ labVersion iIDR
 localization nucleus
 md5sum 9919fe8c144b4089acc81a568cb4d765
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -14355,8 +14328,8 @@ labExpId LID8558
 labProtocolId 006N+
 labVersion iIDR
 localization nucleus
+md5sum fcf72a0df06aaad67793184aa6856b00
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -14577,8 +14550,8 @@ labExpId LID8558
 labProtocolId 006N+
 labVersion iIDR
 localization nucleus
+md5sum b9cdbf457f4a392bad2171b46a6fce53
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -14769,7 +14742,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002679
 donorId 6090101.11
 expId 2679
-fileName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHaoaf609010111CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47021
@@ -14802,8 +14775,8 @@ lab CSHL
 labExpId LID47020
 labProtocolId 055WCt
 localization cell
+md5sum 1995bd76774f0f0edee755824b8c43fe,db8089847d54b33a57663b2edbbfcdf1
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -14833,8 +14806,8 @@ labExpId LID47021,LID47020
 labProtocolId 056WCt,055WCt
 labVersion iIDR
 localization cell
+md5sum 34d9699c6e975fefb0ed9aed90c8f6ac
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -14864,7 +14837,6 @@ labVersion iIDR
 localization cell
 md5sum 2694a571a367f0ee201662729bef8771
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -14919,8 +14891,8 @@ lab CSHL
 labExpId LID47020
 labProtocolId 055WCt
 localization cell
+md5sum 4545a4ff57f7f2fb0f890d8a3fd6a228
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -14948,8 +14920,8 @@ lab CSHL
 labExpId LID47020
 labProtocolId 055WCt
 localization cell
+md5sum 96439e78fb98dca3ca993cddde0de84d
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -14978,8 +14950,8 @@ labExpId LID47021
 labProtocolId 056WCt
 labVersion iIDR
 localization cell
+md5sum a0a4c59dcea249f3f8b72f0121cbdc23
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -15035,8 +15007,8 @@ labExpId LID47021,LID47020
 labProtocolId 056WCt,055WCt
 labVersion iIDR
 localization cell
+md5sum c80e69edc0c4c6b7e1cd704bdca7bb68
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -15064,8 +15036,8 @@ lab CSHL
 labExpId LID47020
 labProtocolId 055WCt
 localization cell
+md5sum bcb10e1f55639687f6e44222641a2744
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -15094,8 +15066,8 @@ lab CSHL
 labExpId LID47020
 labProtocolId 055WCt
 localization cell
+md5sum 7609eff7681ef2c5136d7f153b384e2c
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -15125,7 +15097,6 @@ labExpId LID47021
 localization cell
 md5sum e8bda9a226ac7fd929c555822881c5ea
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -15155,7 +15126,6 @@ labProtocolId 055WCt
 localization cell
 md5sum 306d35582cb87aab0e95c7d5cc8120d9
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -15184,8 +15154,8 @@ labExpId LID47021
 labProtocolId 056WCt
 labVersion iIDR
 localization cell
+md5sum 642d004d26edbe002ade3b67c3c55f38
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -15376,7 +15346,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002680
 donorId 7071706.1
 expId 2680
-fileName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHaoec70717061CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47022
@@ -15469,7 +15439,6 @@ labVersion iIDR
 localization cell
 md5sum fd14aceb9950d2f7493e82d6ec96e313
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -15581,8 +15550,8 @@ labExpId LID47023,LID47022
 labProtocolId 058WCt,057WCt
 labVersion iIDR
 localization cell
+md5sum 1f5341da140c52a07408623e07cc27bc
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -15725,7 +15694,6 @@ labExpId LID47022
 localization cell
 md5sum a689023a15023db28a7fe3711339e926
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -15754,7 +15722,6 @@ labExpId LID47023
 localization cell
 md5sum 9bb124b2f404aa42aa4aafbca8dcf74f
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -15775,7 +15742,7 @@ dateUnrestricted 2012-12-14
 dccAccession wgEncodeEH002680
 donorId 8061102.1
 expId 2680
-fileName wgEncodeCshlLongRnaSeqHaoecCellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHaoecCellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47023
@@ -15810,8 +15777,8 @@ labExpId LID47023,LID47022
 labProtocolId 058WCt,057WCt
 labVersion iIDR
 localization cell
+md5sum 80c5fffa8547a1e37e3073364e333a8b
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -16002,7 +15969,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002674
 donorId 0011308.2P
 expId 2674
-fileName wgEncodeCshlLongRnaSeqHch00113082pCellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHch00113082pCellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47024
@@ -16171,7 +16138,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002674
 donorId 8100808.2
 expId 2674
-fileName wgEncodeCshlLongRnaSeqHch81008082CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHch81008082CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47025
@@ -16236,7 +16203,6 @@ labVersion iIDR
 localization cell
 md5sum b5b192ed34853d3f3d0eb1d1fa28b3f6
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -16292,8 +16258,8 @@ labExpId LID47025,LID47024
 labProtocolId 060WCt,059WCt
 labVersion iIDR
 localization cell
+md5sum 09852650f833cbad943611ab1a0da055
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -16378,7 +16344,6 @@ labExpId LID47024
 localization cell
 md5sum 889ecb82aadcfd9395eba7186510aef8
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -16407,7 +16372,6 @@ labExpId LID47025
 localization cell
 md5sum d0a7bb9ade3909ecbdd4b9208a5c1e41
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -16436,8 +16400,8 @@ labExpId LID47025,LID47024
 labProtocolId 060WCt,059WCt
 labVersion iIDR
 localization cell
+md5sum 5a50b404011d464625e7d6e8e2bfc891
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -16798,7 +16762,6 @@ labVersion iIDR
 localization cell
 md5sum d5d2df96fdb30fcdb3d22f01aa28d7fa
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -16879,8 +16842,8 @@ labExpId LID8790,LID8791
 labProtocolId 011WC-,012WC-
 labVersion iIDR
 localization cell
+md5sum 87542dfd847852a306561ff4674565fa
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -17100,8 +17063,8 @@ labExpId LID8790,LID8791
 labProtocolId 011WC-,012WC-
 labVersion iIDR
 localization cell
+md5sum d5e6510da6ddd143037b8eef02f9a5ef
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -17155,7 +17118,7 @@ grant Gingeras
 lab CSHL
 labExpId LID16633
 localization cell
-md5sum a20005281551a16e20382ca7316cc009,760a900511b82a61add528f216545b23
+md5sum a20005281551a16e20382ca7316cc009,bb8048fef0b1666ae3e4f874bb73c825
 project wgEncode
 readType 2x76D
 replicate 1
@@ -17183,7 +17146,7 @@ grant Gingeras
 lab CSHL
 labExpId LID16634
 localization cell
-md5sum 1a2705518ff2cbe67e73d747d3128093,269a772461164540db8d46b01d5c951d
+md5sum 1a2705518ff2cbe67e73d747d3128093,257ede3fdaab9f7c44695eac9e71dd8c
 project wgEncode
 readType 2x76D
 replicate 2
@@ -17242,7 +17205,6 @@ labVersion iIDR
 localization cell
 md5sum 539a452f6072c58b71d465aa0c6dbce0
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -17431,8 +17393,8 @@ labExpId LID16633,LID16634
 labProtocolId 011WC+,012WC+
 labVersion iIDR
 localization cell
+md5sum c6e4603e50e9396ab777f3e10cb661b6
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -17764,8 +17726,8 @@ labExpId LID16633,LID16634
 labProtocolId 011WC+,012WC+
 labVersion iIDR
 localization cell
+md5sum 64bc17371e0e27f287778cb249772169
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -18233,7 +18195,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8469
 localization cytosol
-md5sum fc751da26061a6af4e702add69c06063,ed00b00ef724245b68925d3dee64b650
+md5sum fc751da26061a6af4e702add69c06063,f35d3b2587393165866444a8b398dc66
 project wgEncode
 readType 2x76D
 replicate 1
@@ -18261,7 +18223,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8470
 localization cytosol
-md5sum 812d9cfe01e95848de5addb95ced8693,790cd58c37d00ed7db070ec68a95d33c
+md5sum 812d9cfe01e95848de5addb95ced8693,a9f905c5e1544a80c4d4e30ba4872f7f
 project wgEncode
 readType 2x76D
 replicate 2
@@ -18320,7 +18282,6 @@ labVersion iIDR
 localization cytosol
 md5sum 3b080972f3608d75cc06a5b187bfec84
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -18509,8 +18470,8 @@ labExpId LID8469,LID8470
 labProtocolId 011C+,012C+
 labVersion iIDR
 localization cytosol
+md5sum 73622a7c5ce26c200200de1666ae0bd8
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -18842,8 +18803,8 @@ labExpId LID8469,LID8470
 labProtocolId 011C+,012C+
 labVersion iIDR
 localization cytosol
+md5sum 736f1477d866458d23037d6d2af6f34c
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -19204,7 +19165,6 @@ labVersion iIDR
 localization nucleus
 md5sum 9ea8cf865e0a4af1c0b978339df13e6f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -19285,8 +19245,8 @@ labExpId LID9200,LID9201
 labProtocolId 011N-,012N-
 labVersion iIDR
 localization nucleus
+md5sum dd6455bf36b0fa60fc5297a1241ef0b8
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -19506,8 +19466,8 @@ labExpId LID9200,LID9201
 labProtocolId 011N-,012N-
 labVersion iIDR
 localization nucleus
+md5sum 64eef1c5feac51ca193c46927ab74a55
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -19561,7 +19521,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8559
 localization nucleus
-md5sum 813c186380c3244c4c2ce350cffe3477,ed26396192dff4d0ccc98d946c9d3bde
+md5sum 813c186380c3244c4c2ce350cffe3477,e64d58d731e3744b6af32f586fce0f51
 project wgEncode
 readType 2x76D
 replicate 1
@@ -19589,7 +19549,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8560
 localization nucleus
-md5sum 0458e65b9a61688a2c0765d8804bf376,3704d64e820f7e0d762e35017e8d0332
+md5sum 0458e65b9a61688a2c0765d8804bf376,2b82707be85a094881b1137677970d71
 project wgEncode
 readType 2x76D
 replicate 2
@@ -19648,7 +19608,6 @@ labVersion iIDR
 localization nucleus
 md5sum 46f4d8b2cd5cf47e975b31d3b37c33ae
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -19837,8 +19796,8 @@ labExpId LID8559,LID8560
 labProtocolId 011N+,012N+
 labVersion iIDR
 localization nucleus
+md5sum 3551fb08c135486d5c6e7de069b50e04
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -20170,8 +20129,8 @@ labExpId LID8559,LID8560
 labProtocolId 011N+,012N+
 labVersion iIDR
 localization nucleus
+md5sum 7c976b0b5fef6e9fbef25f912f6831e6
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -20225,7 +20184,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8792
 localization cell
-md5sum e36535aa0cc2fda1c3e7f4964030549c,d8bd5c48db1ab323a9c1351219b54b19
+md5sum e36535aa0cc2fda1c3e7f4964030549c,a30db38a49b3775d94924fe115ba841f
 project wgEncode
 readType 2x76D
 replicate 1
@@ -20532,7 +20491,6 @@ labVersion iIDR
 localization cell
 md5sum f0067f208c194486ab9cbc6991f4f693
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -20613,8 +20571,8 @@ labExpId LID8792,LID8793
 labProtocolId 013WC-,014WC-
 labVersion iIDR
 localization cell
+md5sum b109268067f2cd72feff679d371441f3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -20834,8 +20792,8 @@ labExpId LID8792,LID8793
 labProtocolId 013WC-,014WC-
 labVersion iIDR
 localization cell
+md5sum 12e3fd6336c4763fce20bb9b036ab3a7
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -20889,7 +20847,7 @@ grant Gingeras
 lab CSHL
 labExpId LID16635
 localization cell
-md5sum 02767a22e4364632f70602c093b00c19,bc2c3d7cfc67f7cbc1579ad3c5d43a02
+md5sum 02767a22e4364632f70602c093b00c19,6e35170cd88fd5d68d6528a4da16d2f3
 project wgEncode
 readType 2x76D
 replicate 1
@@ -20917,7 +20875,7 @@ grant Gingeras
 lab CSHL
 labExpId LID16636
 localization cell
-md5sum e7531cb62fdf924279ff59fe98c6b7ca,e32d70f193d1541d3873c9e24003e22b
+md5sum e7531cb62fdf924279ff59fe98c6b7ca,aba8b3593d3bdef25b9c92a56b933646
 project wgEncode
 readType 2x76D
 replicate 2
@@ -20976,7 +20934,6 @@ labVersion iIDR
 localization cell
 md5sum cc5a1dfbf0a816cc8b77beeb44e76e71
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -21165,8 +21122,8 @@ labExpId LID16635,LID16636
 labProtocolId 013WC+,014WC+
 labVersion iIDR
 localization cell
+md5sum 8450240c3ab87410f8b1fd2649a8a29f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -21498,8 +21455,8 @@ labExpId LID16635,LID16636
 labProtocolId 013WC+,014WC+
 labVersion iIDR
 localization cell
+md5sum 3c7062e4e4ca8cc5c1221c31c1997420
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -21860,7 +21817,6 @@ labVersion iIDR
 localization cytosol
 md5sum 9df56e9eb9774ac90d78c77d0a6036b4
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -21941,8 +21897,8 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+md5sum 1204a1b867f67d3fe6a3947985bd9538
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -22162,8 +22118,8 @@ labExpId LID18552,LID18553
 labProtocolId 013C-,014C-
 labVersion iIDR
 localization cytosol
+md5sum 0311ef10ae950eb4dac093fbdcbd9b29
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -22217,7 +22173,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8471
 localization cytosol
-md5sum 75cab8575bcbd0bfdeda8ab7b7ac8488,2275ceaa4ef9cd977f647e7b0e4fa465
+md5sum 75cab8575bcbd0bfdeda8ab7b7ac8488,8ccfbdd1a3e06679993a4ec43cfbd724
 project wgEncode
 readType 2x76D
 replicate 1
@@ -22245,7 +22201,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8472
 localization cytosol
-md5sum 2dbfb045cfb2d0a181c791beb5f7ea38,03841236805b298c8d83d6203bfec92f
+md5sum 2dbfb045cfb2d0a181c791beb5f7ea38,403e9c51257deeb064513192599a988e
 project wgEncode
 readType 2x76D
 replicate 2
@@ -22304,7 +22260,6 @@ labVersion iIDR
 localization cytosol
 md5sum 3ce4ccbb7aca7091c18f3a3732798ea9
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -22493,8 +22448,8 @@ labExpId LID8471,LID8472
 labProtocolId 013C+,014C+
 labVersion iIDR
 localization cytosol
+md5sum 3c11669b4d8f0472701aae40793f4a5a
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -22826,8 +22781,8 @@ labExpId LID8471,LID8472
 labProtocolId 013C+,014C+
 labVersion iIDR
 localization cytosol
+md5sum 0a0c255c92a315d9d0452f654ac20d6a
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -23188,7 +23143,6 @@ labVersion iIDR
 localization nucleus
 md5sum 2dae1dac2584a96cdcd7fbf2ae0e5c53
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -23269,8 +23223,8 @@ labExpId LID9202,LID9203
 labProtocolId 013N-,014N-
 labVersion iIDR
 localization nucleus
+md5sum 975224823eec41a2ea01115b2679ef30
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -23490,8 +23444,8 @@ labExpId LID9202,LID9203
 labProtocolId 013N-,014N-
 labVersion iIDR
 localization nucleus
+md5sum b91971d9f3db58339beebea60d177d80
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -23545,7 +23499,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8534
 localization nucleus
-md5sum 8f2301473a5ab2167df14f49001bf426,d9154572c5e1fb95f584dc6cc1739ff4
+md5sum 8f2301473a5ab2167df14f49001bf426,77a4651bac4f805b014e7f8fa7d3aff5
 project wgEncode
 readType 2x76D
 replicate 1
@@ -23573,7 +23527,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8535
 localization nucleus
-md5sum d536759e33b5fcc0aa401eef92ddffa0,dd158d9b5d4504e64189bceea5e61d7f
+md5sum d536759e33b5fcc0aa401eef92ddffa0,c99c1e50f9b11f8a96726cf3c8e63019
 project wgEncode
 readType 2x76D
 replicate 2
@@ -23632,7 +23586,6 @@ labVersion iIDR
 localization nucleus
 md5sum 8a0eee9c48fd4cb8e75ea5b2bc7e6d6b
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -23821,8 +23774,8 @@ labExpId LID8534,LID8535
 labProtocolId 013N+,014N+
 labVersion iIDR
 localization nucleus
+md5sum bcdc8d66514785998b663d602e78da7d
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -24154,8 +24107,8 @@ labExpId LID8534,LID8535
 labProtocolId 013N+,014N+
 labVersion iIDR
 localization nucleus
+md5sum ca7dd7e3616e0ef8a69fa0234a3d9c26
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -24346,7 +24299,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002671
 donorId 0100503.2
 expId 2671
-fileName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHfdpc01005032CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47095
@@ -24515,7 +24468,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002671
 donorId 0102703.3
 expId 2671
-fileName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHfdpc01027033CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47094
@@ -24580,7 +24533,6 @@ labVersion iIDR
 localization cell
 md5sum 74801d1e34f1f1162831cf3c37ff2733
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -24635,8 +24587,8 @@ lab CSHL
 labExpId LID47094,LID47095
 labVersion iIDR
 localization cell
+md5sum 36b1f9952ee08c632a18ea2ae863983b
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -24721,7 +24673,6 @@ labExpId LID47094
 localization cell
 md5sum 0c944e6e445e5f9a5333196ac37632ef
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -24750,7 +24701,6 @@ labExpId LID47095
 localization cell
 md5sum 12f320e3ddeb4907fc55ebdbfb633107
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -24778,8 +24728,8 @@ lab CSHL
 labExpId LID47094,LID47095
 labVersion iIDR
 localization cell
+md5sum fd9aea94ef03641dc011557aa867de83
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -24833,7 +24783,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8831
 localization cell
-md5sum a525be222112674b21ada5ef31bc9882,762259e187b81f057fb1e077c2c684f8
+md5sum a525be222112674b21ada5ef31bc9882,8a751defea218c2fb9d9c57ab7874044
 project wgEncode
 readType 2x76D
 replicate 1
@@ -25031,7 +24981,6 @@ labVersion iIDR
 localization cell
 md5sum 983f2f1f1373b396b63d1241d6754ab2
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -25112,8 +25061,8 @@ labExpId LID8831
 labProtocolId 036WC-
 labVersion iIDR
 localization cell
+md5sum 8daf2fe3dd0b14cb0cce3a0d3fc0a2b2
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -25278,8 +25227,8 @@ labExpId LID8831
 labProtocolId 036WC-
 labVersion iIDR
 localization cell
+md5sum 2b4fc43ed33bd77b564e261dd93a7e60
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -25333,7 +25282,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8695
 localization cell
-md5sum 8d555da2088148d30086f729624ebdd2,daced4836ea0c925003bc87aac9bb12f
+md5sum 8d555da2088148d30086f729624ebdd2,dfef12696ff0ef95cc6ebf1de6242e29
 project wgEncode
 readType 2x76D
 replicate 1
@@ -25421,7 +25370,6 @@ labVersion iIDR
 localization cell
 md5sum 3b19fc58fc97cbc30393e74cb8a3f0d3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -25556,8 +25504,8 @@ labExpId LID8695
 labProtocolId 036WC+
 labVersion iIDR
 localization cell
+md5sum a62338a0f331556835e6cf664d55f2b5
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -25778,8 +25726,8 @@ labExpId LID8695
 labProtocolId 036WC+
 labVersion iIDR
 localization cell
+md5sum 5e47119ae98669e80e71a468a8e6e3f9
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -25894,7 +25842,6 @@ labVersion iIDR
 localization cell
 md5sum 2a16db8db4fcba6bc56d54abfaac5cea
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -26005,8 +25952,8 @@ lab CSHL
 labExpId LID47096
 labVersion iIDR
 localization cell
+md5sum f1338de661f024fba95db6b33b1a3e78
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -26149,7 +26096,6 @@ labExpId LID47096
 localization cell
 md5sum 5645a295ec59c58e0862d5cbc3b00f00
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26170,7 +26116,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002683
 donorId 6022801.3
 expId 2683
-fileName wgEncodeCshlLongRnaSeqHmepcCellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHmepcCellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47096
@@ -26204,8 +26150,8 @@ lab CSHL
 labExpId LID47096
 labVersion iIDR
 localization cell
+md5sum 0a02cbc8cc4ec1d9da6e14b364e6df9b
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -26405,7 +26351,6 @@ localization cell
 md5sum 25900ef8f5bd43d545a76d03e15a6ac8
 objStatus revoked - DNA present in sample
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -26435,7 +26380,6 @@ localization cell
 md5sum a39147e1499318a8a76f2323126fa4b4
 objStatus revoked - DNA present in sample
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -26465,7 +26409,6 @@ localization cell
 md5sum e18387851efe91612a8bb548f8621c47
 objStatus revoked - DNA present in sample
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -26521,6 +26464,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 1784c796180b9a3fc1b1cf4dbcec0388,a12270ed33ea211c530c444e57046be0
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26548,8 +26492,8 @@ grant Gingeras
 lab CSHL
 labExpId LID47807
 localization cell
+md5sum 92bd5939344efe6e40534844ff375945,eda5e2fe1e0189462f29df51cfd1ab1e
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26580,6 +26524,7 @@ labExpId LID47807
 labVersion iIDR
 localization cell
 md5sum e7221b519eeaf26f13d4389436cc8a3d
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -26608,8 +26553,8 @@ lab CSHL
 labExpId LID47807
 labVersion iIDR
 localization cell
+md5sum 7a17817439ccacd799c51308f636891c
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -26638,6 +26583,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum f38a3f3378f6ddfb273153d85849adce
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26665,8 +26611,8 @@ grant Gingeras
 lab CSHL
 labExpId LID47807
 localization cell
+md5sum 89fe1c8711794b1e7d562cd820f91719
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26695,6 +26641,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 819d7aa5210a0324235a030977811bea
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26722,8 +26669,8 @@ grant Gingeras
 lab CSHL
 labExpId LID47807
 localization cell
+md5sum 8b5d32ff78052e035f7cac0e603baccf
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26753,6 +26700,7 @@ labExpId LID47807
 labVersion iIDR
 localization cell
 md5sum ae5d1306e93e0c33b42e8186c8233ac8
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -26781,8 +26729,8 @@ lab CSHL
 labExpId LID47807
 labVersion iIDR
 localization cell
+md5sum 7fee8aa6668f03047347c19fc07d8b7f
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -26811,8 +26759,8 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum ad10b7de738eafbd410bbfb10bf228a9
+objStatus replaced - too shallow
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26840,8 +26788,8 @@ grant Gingeras
 lab CSHL
 labExpId LID47807
 localization cell
+md5sum 71fff235f6e830176420f922546acf92
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26871,8 +26819,8 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 2b574e2a42ad48edb382bd0f16b31ab8
+objStatus replaced - too shallow
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26900,8 +26848,8 @@ grant Gingeras
 lab CSHL
 labExpId LID47807
 localization cell
+md5sum 92ee6be7d6233123985fb490c3370d65
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26932,7 +26880,6 @@ labExpId LID47807
 localization cell
 md5sum cf2be06e53f4b8e1304a11f575c810de
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -26960,6 +26907,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 2065e110febf58347a0636af4325470e
+objStatus replaced -too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26989,7 +26937,6 @@ labExpId LID47807
 localization cell
 md5sum 62e66cb05ed420052df8d0e530faec6d
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -27153,7 +27100,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002669
 donorId 0102604.12
 expId 2669
-fileName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHmscat010260412CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47097
@@ -27322,7 +27269,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002669
 donorId 9061601.12
 expId 2669
-fileName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHmscat906160112CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47098
@@ -27387,7 +27334,6 @@ labVersion iIDR
 localization cell
 md5sum c65ef5d981e989c33c0c5a79f7927206
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -27442,8 +27388,8 @@ lab CSHL
 labExpId LID47097,LID47098
 labVersion iIDR
 localization cell
+md5sum 5a05f1e0e49fcf06bebe06a5c6402bb0
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -27528,7 +27474,6 @@ labExpId LID47097
 localization cell
 md5sum 3de6d2be31d84f522b91767008fc6d00
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -27557,7 +27502,6 @@ labExpId LID47098
 localization cell
 md5sum 1cd35b82bf53fd0d524613321ea4cc85
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -27585,8 +27529,8 @@ lab CSHL
 labExpId LID47097,LID47098
 labVersion iIDR
 localization cell
+md5sum 36cf3ca5c1b1fc1675e503c5db8cdb1d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -27777,7 +27721,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002673
 donorId 0050602.11
 expId 2673
-fileName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHmscbm005060211CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47100
@@ -27946,7 +27890,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002673
 donorId 0051105.11
 expId 2673
-fileName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHmscbm005110511CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47099
@@ -28011,7 +27955,6 @@ labVersion iIDR
 localization cell
 md5sum cc76b09197488866a366eb214855efe5
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -28066,8 +28009,8 @@ lab CSHL
 labExpId LID47099,LID47100
 labVersion iIDR
 localization cell
+md5sum 9bd82d89458691ee407571607e55f8ed
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -28152,7 +28095,6 @@ labExpId LID47099
 localization cell
 md5sum 9cd161ac1a3cd9999a2028fc0474d914
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -28181,7 +28123,6 @@ labExpId LID47100
 localization cell
 md5sum ec782c2cae001170a2569349b3d86f8e
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -28209,8 +28150,8 @@ lab CSHL
 labExpId LID47099,LID47100
 labVersion iIDR
 localization cell
+md5sum 52792a0fe20741af2e8851f6a2db09f6
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -28401,7 +28342,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002684
 donorId 0052501.7
 expId 2684
-fileName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHmscuc00525017CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47299
@@ -28570,7 +28511,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002684
 donorId 0081101.7
 expId 2684
-fileName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHmscuc00811017CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47300
@@ -28689,6 +28630,7 @@ lab CSHL
 labExpId LID47299,LID47300
 labVersion iIDR
 localization cell
+md5sum da4ce934c0e776b66cb92382b237ee29
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -28754,7 +28696,7 @@ subId 6075
 tableName wgEncodeCshlLongRnaSeqHmscucCellTotalJunctions
 view Junctions
 
-metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep1
 objType file
 bioRep 069WC
 cell hMSC-UC
@@ -28763,14 +28705,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002684
 donorId 0052501.7
 expId 2684
-fileName wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep1.pdf.gz
 geoSampleAccession GSM984607
 grant Gingeras
 lab CSHL
 labExpId LID47299
 localization cell
+md5sum 7cd2f2076eb7b562822e74ca3fff0efc
 project wgEncode
 readType 2x101D
 replicate 1
@@ -28778,10 +28722,9 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7678
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep2V2
+metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep2
 objType file
 bioRep 070WC
 cell hMSC-UC
@@ -28790,14 +28733,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002684
 donorId 0081101.7
 expId 2684
-fileName wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep2V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep2.pdf.gz
 geoSampleAccession GSM984607
 grant Gingeras
 lab CSHL
 labExpId LID47300
 localization cell
+md5sum 31176f8c56376ceecc42a7d5ba3496d6
 project wgEncode
 readType 2x101D
 replicate 2
@@ -28805,7 +28750,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7682
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHmscucCellTotalTranscriptDeNovo
@@ -28827,6 +28771,7 @@ lab CSHL
 labExpId LID47299,LID47300
 labVersion iIDR
 localization cell
+md5sum 872df8b29d2d9e5b898fad24d96dbf80
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -29018,7 +28963,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002675
 donorId 0090202.1
 expId 2675
-fileName wgEncodeCshlLongRnaSeqHob00902021CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHob00902021CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47252
@@ -29187,7 +29132,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002675
 donorId 0091301
 expId 2675
-fileName wgEncodeCshlLongRnaSeqHob0091301CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHob0091301CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47251
@@ -29252,7 +29197,6 @@ labVersion iIDR
 localization cell
 md5sum 5c2dee1f89fbc476634f5b0dd57e309f
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -29307,8 +29251,8 @@ lab CSHL
 labExpId LID47251,LID47252
 labVersion iIDR
 localization cell
+md5sum 7a824348ee02901a99215f655a8fe5ed
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -29393,7 +29337,6 @@ labExpId LID47251
 localization cell
 md5sum edc758b5cb107d059d41e425beaad6b6
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -29422,7 +29365,6 @@ labExpId LID47252
 localization cell
 md5sum ba275078d7f7e6c4c55a09473a02f282
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -29450,8 +29392,8 @@ lab CSHL
 labExpId LID47251,LID47252
 labVersion iIDR
 localization cell
+md5sum c8ab9d46ed78c48dba07929d3927dcdd
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -29594,7 +29536,6 @@ labVersion iIDR
 localization cell
 md5sum 838bc4c5e6d039510842af4978ad3fca
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -29761,8 +29702,8 @@ lab CSHL
 labExpId LID47104,LID47301
 labVersion iIDR
 localization cell
+md5sum 7966f92c6033e98fc42d5ab1d8811ab3
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -29943,7 +29884,7 @@ subId 5759
 tableName wgEncodeCshlLongRnaSeqHpcplCellTotalPlusRep2
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep1
 objType file
 bioRep 071WC
 cell HPC-PL
@@ -29952,14 +29893,16 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002667
 donorId 0101504.13
 expId 2667
-fileName wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep1.pdf.gz
 geoSampleAccession GSM981255
 grant Gingeras
 lab CSHL
 labExpId LID47301
 localization cell
+md5sum 70c955c69fe2fef4248437f1e086237d
 project wgEncode
 readType 2x101D
 replicate 1
@@ -29967,7 +29910,6 @@ rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 7674
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep2
@@ -29990,41 +29932,12 @@ labExpId LID47104
 localization cell
 md5sum dbc3d6f44e488cbe8ad9a4705bd3b603
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist13
 subId 6863
-view Protocol
-
-metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep2V2
-objType file
-bioRep 072WC
-cell HPC-PL
-composite wgEncodeCshlLongRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jul 2012 Freeze
-dateSubmitted 2012-07-26
-dateUnrestricted 2013-04-26
-donorId 0032601.13
-expId 2667
-fileName wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep2V2.pdf.gz
-geoSampleAccession GSM981255
-grant Gingeras
-lab CSHL
-labExpId LID47104
-localization cell
-project wgEncode
-protocol None
-readType 2x101D
-replicate 2
-rnaExtract total
-seqPlatform Illumina_HiSeq_2000
-spikeInPool Nist13
-subId 7661
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqHpcplCellTotalSpikeinsRep1
@@ -30039,7 +29952,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002667
 donorId 0101504.13
 expId 2667
-fileName wgEncodeCshlLongRnaSeqHpcplCellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47301
@@ -30066,7 +29979,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002667
 donorId 0032601.13
 expId 2667
-fileName wgEncodeCshlLongRnaSeqHpcplCellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHpcplCellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47104
@@ -30100,8 +30013,8 @@ lab CSHL
 labExpId LID47104,LID47301
 labVersion iIDR
 localization cell
+md5sum 997c360db0bd8c28c771b32119b01737
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -30244,7 +30157,6 @@ labVersion iIDR
 localization cell
 md5sum 479ebfe1fe28fb2badc9c7cef0429dc0
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -30411,8 +30323,8 @@ lab CSHL
 labExpId LID47105,LID47253
 labVersion iIDR
 localization cell
+md5sum e0dbfe0cf8b01a88496875c94de62599
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -30613,7 +30525,6 @@ labExpId LID47105
 localization cell
 md5sum 8fc7155b250e4f7e8e7de8743af63ccf
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -30642,7 +30553,6 @@ labExpId LID47253
 localization cell
 md5sum 6fe51d2c4d408756ffb4419b4b06b2ed
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -30663,7 +30573,7 @@ dateUnrestricted 2012-12-14
 dccAccession wgEncodeEH002685
 donorId 9041503.2
 expId 2685
-fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47105
@@ -30690,7 +30600,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002685
 donorId 9012801.2
 expId 2685
-fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHpiepcCellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47253
@@ -30724,8 +30634,8 @@ lab CSHL
 labExpId LID47105,LID47253
 labVersion iIDR
 localization cell
+md5sum 8718abef44f0234aacb74644fd431e8c
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -30868,7 +30778,6 @@ labVersion iIDR
 localization cell
 md5sum bffdb6f31b43cd3c07e1dffa08df30ff
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -31035,8 +30944,8 @@ lab CSHL
 labExpId LID47261,LID47260
 labVersion iIDR
 localization cell
+md5sum 1ca52bebb3c6efbfa840813354efc3f3
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -31237,7 +31146,6 @@ labExpId LID47260
 localization cell
 md5sum 866058fc6346258a88e62b07d65f7fbd
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -31266,7 +31174,6 @@ labExpId LID47261
 localization cell
 md5sum 6bfba9f76dd3f2217872bf06642d9754
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -31287,7 +31194,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002676
 donorId 0022202.16
 expId 2676
-fileName wgEncodeCshlLongRnaSeqHsavecCellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHsavecCellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47260
@@ -31314,7 +31221,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002676
 donorId 9100101.15
 expId 2676
-fileName wgEncodeCshlLongRnaSeqHsavecCellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHsavecCellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47261
@@ -31348,8 +31255,8 @@ lab CSHL
 labExpId LID47261,LID47260
 labVersion iIDR
 localization cell
+md5sum 3caf55a9673520ada96f412699c226fe
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -31403,7 +31310,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8826
 localization cell
-md5sum f122a2f44c4afc1282e8c13692e73c04,900ef946d6f4be1b8ab8fb7b32eeb08f
+md5sum f122a2f44c4afc1282e8c13692e73c04,72d4a45e642cb912fffee8ae67b66464
 project wgEncode
 readType 2x76D
 replicate 1
@@ -31431,7 +31338,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8827
 localization cell
-md5sum e80b66c54edd1e499228678fa38a8fd3,da2e0b931b545d4c875a6a6320825f9f
+md5sum e80b66c54edd1e499228678fa38a8fd3,340205cd8cf59bd01ae34836857eb666
 project wgEncode
 readType 2x76D
 replicate 2
@@ -31710,7 +31617,6 @@ labVersion iIDR
 localization cell
 md5sum b4287e0f607c074f4a84854486591dda
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -31791,8 +31697,8 @@ labExpId LID8826,LID8827
 labProtocolId 023WC-,024WC-
 labVersion iIDR
 localization cell
+md5sum 6efeed7c1d2a6979d14678531ddd2325
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -32012,8 +31918,8 @@ labExpId LID8826,LID8827
 labProtocolId 023WC-,024WC-
 labVersion iIDR
 localization cell
+md5sum 56710b3661516950c12070460c751e53
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -32067,7 +31973,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8710
 localization cell
-md5sum 8d64b01d54312d99b29675fca5d8ec84,5bb76f232d73e6e75485e3f8a8f4fdc3
+md5sum 8d64b01d54312d99b29675fca5d8ec84,55e6aa86b7d1017acf1cf6e9aa965346
 project wgEncode
 readType 2x76D
 replicate 1
@@ -32154,7 +32060,6 @@ labVersion iIDR
 localization cell
 md5sum ab9ed9926359345ff7cf1799568ad439
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -32343,8 +32248,8 @@ labExpId LID8710,LID8711
 labProtocolId 023WC+,024WC+
 labVersion iIDR
 localization cell
+md5sum cc54c2cbba4b607b873849d857226f09
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -32676,8 +32581,8 @@ labExpId LID8710,LID8711
 labProtocolId 023WC+,024WC+
 labVersion iIDR
 localization cell
+md5sum 84ac3f86d8fd876cd0c0ee5a63ec1e42
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -33039,7 +32944,6 @@ labVersion iIDR
 localization cell
 md5sum 0f850d5d50b33265058752fc3b92d017
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -33121,8 +33025,8 @@ labExpId LID8788,LID8789
 labProtocolId 009WC-,010WC-
 labVersion iIDR
 localization cell
+md5sum 56fc1c5a032f7f395fd3c319078d05cc
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -33343,8 +33247,8 @@ labExpId LID8788,LID8789
 labProtocolId 009WC-,010WC-
 labVersion iIDR
 localization cell
+md5sum c865c2a438d15fe3e05cc361d2bd55d3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -33398,7 +33302,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8463
 localization cell
-md5sum fbcd4ec3baa483a3517b6c60adeaf5b7,81605439ed87f32639c780486c98e23e
+md5sum fbcd4ec3baa483a3517b6c60adeaf5b7,41bdab8d8dc2d535fcb17b63ea6252a6
 project wgEncode
 readType 2x76D
 replicate 1
@@ -33426,7 +33330,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8464
 localization cell
-md5sum f7d81fc8b284e78252739950d0fc82de,31ae5af8c316436c71bb85387239c757
+md5sum f7d81fc8b284e78252739950d0fc82de,55f6c3400c4c25a4bfe4b6deb489eefb
 project wgEncode
 readType 2x76D
 replicate 2
@@ -33486,7 +33390,6 @@ labVersion iIDR
 localization cell
 md5sum d7428fa4e57ca6e882e33909685fac3d
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -33676,8 +33579,8 @@ labExpId LID8463,LID8464
 labProtocolId 009WC+,010WC+
 labVersion iIDR
 localization cell
+md5sum 309e6350ff5cdf3d15c03fa041337bca
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -34010,8 +33913,8 @@ labExpId LID8463,LID8464
 labProtocolId 009WC+,010WC+
 labVersion iIDR
 localization cell
+md5sum 3e67512720a188be1d3facc916744d7b
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -34264,7 +34167,6 @@ labVersion iIDR
 localization cytosol
 md5sum 06da9b0d0c89c67b5c3d9e11f3667cc3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -34346,8 +34248,8 @@ labExpId LID18556
 labProtocolId 029C-
 labVersion iIDR
 localization cytosol
+md5sum 63826151c75217673db485e7a410c9bc
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -34513,8 +34415,8 @@ labExpId LID18556
 labProtocolId 029C-
 labVersion iIDR
 localization cytosol
+md5sum b5f4ed4140ddf4c51f0d477192301125
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -34568,7 +34470,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8688
 localization cytosol
-md5sum 1d4d5e028c4e7d8bcacc4427b21f0769,035d70a676cedd9ecd024edfa97c94e1
+md5sum 1d4d5e028c4e7d8bcacc4427b21f0769,aa9303053f865231c2ffc678259eade2
 project wgEncode
 readType 2x76D
 replicate 3
@@ -34596,7 +34498,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8689
 localization cytosol
-md5sum 86a9a991dc1cccbf1b24b217e3851325,7208bfb519fb95500653bc58626b20dd
+md5sum 86a9a991dc1cccbf1b24b217e3851325,3d9dc61a6f4a2484ee7a92675af03ca3
 project wgEncode
 readType 2x76D
 replicate 4
@@ -34656,7 +34558,6 @@ labVersion iIDR
 localization cytosol
 md5sum 1fd91fdef366f85e38f3f43ce71bda03
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -34846,8 +34747,8 @@ labExpId LID8688,LID8689
 labProtocolId 029C+,030C+
 labVersion iIDR
 localization cytosol
+md5sum fe27dc858ae1cdce72aefc047e44d336
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -35180,8 +35081,8 @@ labExpId LID8688,LID8689
 labProtocolId 029C+,030C+
 labVersion iIDR
 localization cytosol
+md5sum 166b3e0f8a99156233e39940f4b1fde8
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -35543,7 +35444,6 @@ labVersion iIDR
 localization nucleus
 md5sum 73b34e72efdcb3b01ef6856d1bf6454f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -35625,8 +35525,8 @@ labExpId LID9206,LID9207
 labProtocolId 029N-,030N-
 labVersion iIDR
 localization nucleus
+md5sum af728fc6b420603bf6d1600ea29ab860
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -35847,8 +35747,8 @@ labExpId LID9206,LID9207
 labProtocolId 029N-,030N-
 labVersion iIDR
 localization nucleus
+md5sum 78716470021e272c43f6bdb0cc043c5c
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -35902,7 +35802,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8690
 localization nucleus
-md5sum 488cfcb5a9aea8c1d2128327db09fa0a,79d209fd342b0639a5256be9d91a224e
+md5sum 488cfcb5a9aea8c1d2128327db09fa0a,0fea8329e45b0affe7aa345281083d56
 project wgEncode
 readType 2x76D
 replicate 3
@@ -35930,7 +35830,7 @@ grant Gingeras
 lab CSHL
 labExpId LID8691
 localization nucleus
-md5sum 63cdb6362d78c36b60401d803af249d8,279467979b2471511d5eb88e0cbdd47a
+md5sum 63cdb6362d78c36b60401d803af249d8,e59b1f7ad594be1aae9e32740763cae9
 project wgEncode
 readType 2x76D
 replicate 4
@@ -35990,7 +35890,6 @@ labVersion iIDR
 localization nucleus
 md5sum bb143ed171896f4d9482682311ddd869
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -36180,8 +36079,8 @@ labExpId LID8690,LID8691
 labProtocolId 029N+,030N+
 labVersion iIDR
 localization nucleus
+md5sum bd7f35c262b86ae7723ef8c09e98ce85
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -36514,8 +36413,8 @@ labExpId LID8690,LID8691
 labProtocolId 029N+,030N+
 labVersion iIDR
 localization nucleus
+md5sum ab4a67f0f16a9689aec56e35d55a96f2
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -36706,7 +36605,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002681
 donorId 6091203.3
 expId 2681
-fileName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHvmf60912033CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47249
@@ -36875,7 +36774,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002681
 donorId 6100401.3
 expId 2681
-fileName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHvmf61004013CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47250
@@ -36911,7 +36810,6 @@ labVersion iIDR
 localization cell
 md5sum e6d126bf198473ab5655b8f6305e75ea
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -36941,7 +36839,6 @@ labVersion iIDR
 localization cell
 md5sum 2c34da5467204c2a820ae298e2c83dca
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -36996,8 +36893,8 @@ lab CSHL
 labExpId LID47249,LID47250
 labVersion iIDR
 localization cell
+md5sum e26415474ea78606061aa83e4af4d812
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -37082,7 +36979,6 @@ labExpId LID47249
 localization cell
 md5sum 4605be57d0e022ce3392af5c4bc5d959
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -37111,7 +37007,6 @@ labExpId LID47250
 localization cell
 md5sum 1c5bd7bffd386531b70275488471ef46
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -37139,8 +37034,8 @@ lab CSHL
 labExpId LID47249,LID47250
 labVersion iIDR
 localization cell
+md5sum 8b84f4de17fea730660a37ef955ded08
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -37331,7 +37226,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002682
 donorId 0092205
 expId 2682
-fileName wgEncodeCshlLongRnaSeqHwp0092205CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqHwp0092205CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47255
@@ -37500,7 +37395,7 @@ dateUnrestricted 2012-11-25
 dccAccession wgEncodeEH002682
 donorId 8120201.5
 expId 2682
-fileName wgEncodeCshlLongRnaSeqHwp81202015CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqHwp81202015CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47254
@@ -37565,7 +37460,6 @@ labVersion iIDR
 localization cell
 md5sum f9673950b1263833550ff4ab6b5e7efc
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -37620,8 +37514,8 @@ lab CSHL
 labExpId LID47255,LID47254
 labVersion iIDR
 localization cell
+md5sum bc1b770b205475c65833b4305b78054d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -37706,7 +37600,6 @@ labExpId LID47254
 localization cell
 md5sum 9cf446761ea46d05966d908f3a47cddd
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -37735,7 +37628,6 @@ labExpId LID47255
 localization cell
 md5sum 77b6663fa8ec0998ff0288968e1de9fb
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -37763,8 +37655,8 @@ lab CSHL
 labExpId LID47255,LID47254
 labVersion iIDR
 localization cell
+md5sum d3833f1870785fecb525f6f5593e10d9
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -37905,7 +37797,6 @@ labVersion iIDR
 localization cell
 md5sum 7221bbad86eab126c41a20d29cca6a2d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -38069,8 +37960,8 @@ labExpId LID45017,LID45016
 labProtocolId 046WC+,045WC+
 labVersion iIDR
 localization cell
+md5sum bd314e4677983ecdb1ab785da2023811
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -38247,7 +38138,7 @@ subId 5771
 tableName wgEncodeCshlLongRnaSeqImr90CellPapPlusRep2
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep1
 objType file
 bioRep 045WC
 cell IMR90
@@ -38256,27 +38147,27 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
-fileName wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM981249
 grant Gingeras
 lab CSHL
 labExpId LID45016
 labProtocolId 045WC+
 localization cell
+md5sum 4d6007689937335d781410e3a15ce42b
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7666
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep2V2
+metaObject wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep2
 objType file
 bioRep 046WC
 cell IMR90
@@ -38285,24 +38176,24 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
-fileName wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep2V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM981249
 grant Gingeras
 lab CSHL
 labExpId LID45017
 labProtocolId 046WC+
 localization cell
+md5sum 1218df668d3dcbcdfd5e26b41e825168
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7679
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep1
@@ -38316,7 +38207,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
-fileName wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45016
@@ -38342,7 +38233,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002629
 expId 2629
-fileName wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqImr90CellPapSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45017
@@ -38377,8 +38268,8 @@ labExpId LID45017,LID45016
 labProtocolId 046WC+,045WC+
 labVersion iIDR
 localization cell
+md5sum 65de47738dacd4c352729511b278a316
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -38519,7 +38410,6 @@ labVersion iIDR
 localization cell
 md5sum 3278ff6e4ab786fa726d1e77039931bf
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -38683,8 +38573,8 @@ labExpId LID45238,LID45239
 labProtocolId 045WCt,046WCt
 labVersion iIDR
 localization cell
+md5sum af0e3f708da0e50a92808f9515b9b75f
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -38861,7 +38751,7 @@ subId 5783
 tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRep2
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep1
 objType file
 bioRep 045WC
 cell IMR90
@@ -38870,27 +38760,27 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002623
 donorId 58607680
 expId 2623
-fileName wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep1.pdf.gz
 geoSampleAccession GSM981243
 grant Gingeras
 lab CSHL
 labExpId LID45238
 labProtocolId 045WCt
 localization cell
+md5sum 47a47c59336bc42634a84382b95937a3
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7675
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep2V2
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep2
 objType file
 bioRep 046WC
 cell IMR90
@@ -38899,24 +38789,24 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002623
 donorId 58607680
 expId 2623
-fileName wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep2V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep2.pdf.gz
 geoSampleAccession GSM981243
 grant Gingeras
 lab CSHL
 labExpId LID45239
 labProtocolId 046WCt
 localization cell
+md5sum b653966efd80b68a4d49fb8aa5a3e1c1
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7669
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep1
@@ -38930,7 +38820,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002623
 expId 2623
-fileName wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45238
@@ -38956,7 +38846,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002623
 expId 2623
-fileName wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45239
@@ -38991,8 +38881,8 @@ labExpId LID45238,LID45239
 labProtocolId 045WCt,046WCt
 labVersion iIDR
 localization cell
+md5sum f23de19bda9edd1020b8a2a31a371ef4
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -39133,7 +39023,6 @@ labVersion iIDR
 localization cytosol
 md5sum 6b50704b05f9b91473c8160d299a20b9
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -39297,8 +39186,8 @@ labExpId LID45612,LID45611
 labProtocolId 046N+,045N+
 labVersion iIDR
 localization cytosol
+md5sum 373fca0175696e9e9c6dec55095693c3
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -39475,7 +39364,7 @@ subId 5762
 tableName wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRep2
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep1
 objType file
 bioRep 045C
 cell IMR90
@@ -39484,27 +39373,27 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
-fileName wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep1.pdf.gz
 geoSampleAccession GSM981244
 grant Gingeras
 lab CSHL
 labExpId LID45611
 labProtocolId 045N+
 localization cytosol
+md5sum 8709a657b42a40b73b7f90ef091102e1
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7664
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep2V2
+metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep2
 objType file
 bioRep 046C
 cell IMR90
@@ -39513,24 +39402,24 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
-fileName wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep2V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep2.pdf.gz
 geoSampleAccession GSM981244
 grant Gingeras
 lab CSHL
 labExpId LID45612
 labProtocolId 046N+
 localization cytosol
+md5sum 5344f293544ec7d12a50edbee2fce3e2
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7668
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep1
@@ -39544,7 +39433,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
-fileName wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45611
@@ -39570,7 +39459,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002626
 expId 2626
-fileName wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqImr90CytosolPapSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45612
@@ -39605,8 +39494,8 @@ labExpId LID45612,LID45611
 labProtocolId 046N+,045N+
 labVersion iIDR
 localization cytosol
+md5sum ee5efe02b4d5032f810233d76e9db5cc
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -39747,7 +39636,6 @@ labVersion iIDR
 localization nucleus
 md5sum 25e4544336e38057df51b2e15914cba2
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -39911,8 +39799,8 @@ labExpId LID45613,LID45635
 labProtocolId 045C+,046C+
 labVersion iIDR
 localization nucleus
+md5sum ecbffa0e373889a059f22c5ab8f7014c
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -40089,7 +39977,7 @@ subId 5778
 tableName wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRep2
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep1
 objType file
 bioRep 045N
 cell IMR90
@@ -40098,27 +39986,27 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
-fileName wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep1.pdf.gz
 geoSampleAccession GSM981248
 grant Gingeras
 lab CSHL
 labExpId LID45613
 labProtocolId 045C+
 localization nucleus
+md5sum 9d7949898014bdd68fde8fa84710f40e
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7662
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep2V2
+metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep2
 objType file
 bioRep 046N
 cell IMR90
@@ -40127,24 +40015,24 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
-fileName wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep2V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep2.pdf.gz
 geoSampleAccession GSM981248
 grant Gingeras
 lab CSHL
 labExpId LID45635
 labProtocolId 046C+
 localization nucleus
+md5sum c65e4a075dd89b8c47fa0a9338f4ed11
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 7663
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep1
@@ -40158,7 +40046,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
-fileName wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45613
@@ -40184,7 +40072,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002628
 expId 2628
-fileName wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqImr90NucleusPapSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID45635
@@ -40219,8 +40107,8 @@ labExpId LID45613,LID45635
 labProtocolId 045C+,046C+
 labVersion iIDR
 localization nucleus
+md5sum 89e3f276fd3170e58ca5e8b6f734fb7c
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -40581,7 +40469,6 @@ labVersion iIDR
 localization cell
 md5sum 519f79300fecee2d2ef17f9e65ef8828
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -40662,8 +40549,8 @@ labExpId LID8659,LID8660
 labProtocolId 001WC-,002WC-
 labVersion iIDR
 localization cell
+md5sum 4fa599871a4f8a214ad8c1764d07c9f4
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -40883,8 +40770,8 @@ labExpId LID8659,LID8660
 labProtocolId 001WC-,002WC-
 labVersion iIDR
 localization cell
+md5sum 34449b5fc96b8f80e48676484bec8e84
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -41025,7 +40912,6 @@ labVersion iIDR
 localization cell
 md5sum 70ea3345eb938ae9bca7c07ef4e26933
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -41214,8 +41100,8 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+md5sum 190aea8b2981b9e50691ae63670865fb
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -41547,8 +41433,8 @@ labExpId LID16627,LID16628
 labProtocolId 001WC+,002WC+
 labVersion iIDR
 localization cell
+md5sum c5fddcae2176bd5a7d5301e6bc9412d3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -41899,7 +41785,6 @@ labVersion iIDR
 localization chromatin
 md5sum 915f2cc414757dfc5849385d992735a3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -42088,8 +41973,8 @@ labExpId LID9185,LID9186
 labProtocolId 025CHt,026CHt
 labVersion iIDR
 localization chromatin
+md5sum b3814bb05ebeb83cb4eb84b49eba4714
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -42265,7 +42150,7 @@ subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3V2
+metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3
 objType file
 bioRep 025CH
 cell K562
@@ -42274,26 +42159,26 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000180
 expId 180
-fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3.pdf.gz
 geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185
 labProtocolId 025CHt
 localization chromatin
+md5sum 6f7d11d8edd26eea42794e8350dbb26f
 project wgEncode
-protocol None
 readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7667
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep4V2
+metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep4
 objType file
 bioRep 026CH
 cell K562
@@ -42302,23 +42187,23 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000180
 expId 180
-fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep4V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep4.pdf.gz
 geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9186
 labProtocolId 026CHt
 localization chromatin
+md5sum a000e967d8592babd6dd4bb87a4f7ea9
 project wgEncode
-protocol None
 readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7677
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalSpikeinsRep3
@@ -42423,8 +42308,8 @@ labExpId LID9185,LID9186
 labProtocolId 025CHt,026CHt
 labVersion iIDR
 localization chromatin
+md5sum d5cb183f327972bcbb45cace95aa4de5
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -42785,7 +42670,6 @@ labVersion iIDR
 localization cytosol
 md5sum 3691a18511d55615175ffa294e375690
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -42866,8 +42750,8 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+md5sum 7f1abc6caac196d4af7224943bb3968b
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -43087,8 +42971,8 @@ labExpId LID18545,LID18546
 labProtocolId 001C-,002C-
 labVersion iIDR
 localization cytosol
+md5sum 873eacbc8a1c821d647052d3f330d27c
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -43227,7 +43111,6 @@ labVersion iIDR
 localization cytosol
 md5sum 9fce4c6abe2bb670929952b7ddbcbde2
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -43416,8 +43299,8 @@ labExpId LID8465,LID8466
 labProtocolId 001C+,002C+
 labVersion iIDR
 localization cytosol
+md5sum e6f899f19873837e6a4509bfa63fc45f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -43747,8 +43630,8 @@ labExpId LID8465,LID8466
 labProtocolId 001C+,002C+
 labVersion iIDR
 localization cytosol
+md5sum 6f54c982899bd8f9c462c2ad2846652a
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -43889,7 +43772,6 @@ labVersion iIDR
 localization nucleolus
 md5sum ce93d0a648d643269763f92cf5c09adb
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -44078,8 +43960,8 @@ labExpId LID9187,LID9188
 labProtocolId 025NLt,026NLt
 labVersion iIDR
 localization nucleolus
+md5sum 6217009f67a0ca975903a7b15c4f1768
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -44255,7 +44137,7 @@ subId 2709
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep3V2
+metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep3
 objType file
 bioRep 025NL
 cell K562
@@ -44264,26 +44146,26 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000181
 expId 181
-fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep3V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep3.pdf.gz
 geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187
 labProtocolId 025NLt
 localization nucleolus
+md5sum a654770004dc293e7e888dcdc41a8fb4
 project wgEncode
-protocol None
 readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7670
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep4V2
+metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep4
 objType file
 bioRep 026NL
 cell K562
@@ -44292,23 +44174,23 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000181
 expId 181
-fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep4V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep4.pdf.gz
 geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9188
 labProtocolId 026NLt
 localization nucleolus
+md5sum bd406075c9d5821a880f23928560221a
 project wgEncode
-protocol None
 readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7671
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalSpikeinsRep3
@@ -44413,8 +44295,8 @@ labExpId LID9187,LID9188
 labProtocolId 025NLt,026NLt
 labVersion iIDR
 localization nucleolus
+md5sum 9b995a504e7959d5f6515a406dfd60da
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -44555,7 +44437,6 @@ labVersion iIDR
 localization nucleoplasm
 md5sum 4d8f1c1268a31af54b7087deaf04fadd
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -44744,8 +44625,8 @@ labExpId LID9189,LID9190
 labProtocolId 025NPt,026NPt
 labVersion iIDR
 localization nucleoplasm
+md5sum 60daa7f6cf2f5faf8cb22f53a87bea90
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -44921,7 +44802,7 @@ subId 2712
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep3V2
+metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep3
 objType file
 bioRep 025NP
 cell K562
@@ -44930,26 +44811,26 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000182
 expId 182
-fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep3V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep3.pdf.gz
 geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189
 labProtocolId 025NPt
 localization nucleoplasm
+md5sum aaf482c1c3cccf77190dd1b51aafb00a
 project wgEncode
-protocol None
 readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7676
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep4V2
+metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep4
 objType file
 bioRep 026NP
 cell K562
@@ -44958,23 +44839,23 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000182
 expId 182
-fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep4V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep4.pdf.gz
 geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9190
 labProtocolId 026NPt
 localization nucleoplasm
+md5sum 6aba51fd2fdb882e18106324619cdae3
 project wgEncode
-protocol None
 readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7683
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalSpikeinsRep3
@@ -45079,8 +44960,8 @@ labExpId LID9189,LID9190
 labProtocolId 025NPt,026NPt
 labVersion iIDR
 localization nucleoplasm
+md5sum 2223d6122fc262407e81a9e8566e04b9
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract total
 seqPlatform Illumina_GA2x
@@ -45441,7 +45322,6 @@ labVersion iIDR
 localization nucleus
 md5sum 764639b21f3c3e5a08336684c102b565
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -45522,8 +45402,8 @@ labExpId LID9195,LID9196
 labProtocolId 001N-,002N-
 labVersion iIDR
 localization nucleus
+md5sum 17a2920851c9b15e7396ca9b1aee7925
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -45743,8 +45623,8 @@ labExpId LID9195,LID9196
 labProtocolId 001N-,002N-
 labVersion iIDR
 localization nucleus
+md5sum 149166534483f9afc30b479c5dd0cb74
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -45885,7 +45765,6 @@ labVersion iIDR
 localization nucleus
 md5sum 8d7f5b07002c3d217ddef353bb8736ca
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -46074,8 +45953,8 @@ labExpId LID8556,LID8557
 labProtocolId 001N+,002N+
 labVersion iIDR
 localization nucleus
+md5sum bf2297d98a35ed90713753c2537d1a73
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -46407,8 +46286,8 @@ labExpId LID8556,LID8557
 labProtocolId 001N+,002N+
 labVersion iIDR
 localization nucleus
+md5sum a52ff5f5577f41c953d5478e23380e78
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -46769,7 +46648,6 @@ labVersion iIDR
 localization cell
 md5sum 804175c3be1979893716ec49a8aba93d
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -46850,8 +46728,8 @@ labExpId LID8824,LID8825
 labProtocolId 015WC-,016WC-
 labVersion iIDR
 localization cell
+md5sum 5956fc9e898c1dd4fab0e5553c9cd1a4
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -47071,8 +46949,8 @@ labExpId LID8824,LID8825
 labProtocolId 015WC-,016WC-
 labVersion iIDR
 localization cell
+md5sum d48599eeaf39b250701618467f33e42e
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -47213,7 +47091,6 @@ labVersion iIDR
 localization cell
 md5sum 55c5a342079624346af201425b3ccdf9
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -47402,8 +47279,8 @@ labExpId LID8686,LID8687
 labProtocolId 015WC+1,016WC+1
 labVersion iIDR
 localization cell
+md5sum 92eaa0906d7c1cd96be445b45324ee05
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -47735,8 +47612,8 @@ labExpId LID8686,LID8687
 labProtocolId 015WC+1,016WC+1
 labVersion iIDR
 localization cell
+md5sum ce80749c4bcdab456a7feade6a19d25e
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -47873,8 +47750,8 @@ lab CSHL
 labExpId LID46857,LID46858
 labVersion iIDR
 localization cytosol
+md5sum c8e783ee69cdbaa56fc52b87b0f26ac3
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -48036,8 +47913,8 @@ labExpId LID46857,LID46858
 labProtocolId 089C+,090C+
 labVersion iIDR
 localization cytosol
+md5sum 7f2554036bab86b66867067462dba63a
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -48231,7 +48108,6 @@ labExpId LID46857
 localization cytosol
 md5sum 511eb84fa263d1cf684e2c76c87cfc00
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract longPolyA
@@ -48259,7 +48135,6 @@ labExpId LID46858
 localization cytosol
 md5sum fea255c5e4e0c188c5f5e8ea72905600
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract longPolyA
@@ -48279,7 +48154,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
-fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapSpikeinsRep3.bam
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapSpikeinsRep3.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46857
@@ -48305,7 +48180,7 @@ dateSubmitted 2012-02-25
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002633
 expId 2633
-fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapSpikeinsRep4.bam
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapSpikeinsRep4.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46858
@@ -48339,8 +48214,8 @@ labExpId LID46857,LID46858
 labProtocolId 089C+,090C+
 labVersion iIDR
 localization cytosol
+md5sum adf9b020bb6e4ba5d8c514acb78d883e
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -48478,7 +48353,6 @@ labVersion iIDR
 localization nucleus
 md5sum 91bdc831af8df014873798543aca2521
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -48640,8 +48514,8 @@ labExpId LID46860,LID46859
 labProtocolId 090N+,089N+
 labVersion iIDR
 localization nucleus
+md5sum e894b47c48154a48d4f1ef8ee29fdb91
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -48835,7 +48709,6 @@ labExpId LID46859
 localization nucleus
 md5sum 545c67a58f3916afd0fd3698a50859c6
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract longPolyA
@@ -48863,7 +48736,6 @@ labExpId LID46860
 localization nucleus
 md5sum c0d0819e3833ab4e5f7df7620d5f63af
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract longPolyA
@@ -48883,7 +48755,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
-fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapSpikeinsRep3.bam
+fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapSpikeinsRep3.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46859
@@ -48909,7 +48781,7 @@ dateSubmitted 2012-02-16
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002627
 expId 2627
-fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapSpikeinsRep4.bam
+fileName wgEncodeCshlLongRnaSeqMcf7NucleusPapSpikeinsRep4.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46860
@@ -48943,8 +48815,8 @@ labExpId LID46860,LID46859
 labProtocolId 090N+,089N+
 labVersion iIDR
 localization nucleus
+md5sum 924fc5bbfb63fcb689090c1f6681b401
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -49086,7 +48958,6 @@ labVersion iIDR
 localization cell
 md5sum c3cef2629c7fe17ea9e8ad0a98fe9c31
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -49254,8 +49125,8 @@ labExpId LID44658,LID44657
 labProtocolId 040WC-,039WC-
 labVersion iIDR
 localization cell
+md5sum f801dda52f5261018b953690ff098397
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -49448,7 +49319,7 @@ dateUnrestricted 2012-11-17
 dccAccession wgEncodeEH002668
 donorId RO01746
 expId 2668
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPamSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPamSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID44657
@@ -49475,7 +49346,7 @@ dateUnrestricted 2012-11-16
 dccAccession wgEncodeEH002668
 donorId RO01746
 expId 2668
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPamSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPamSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID44658
@@ -49510,8 +49381,8 @@ labExpId LID44658,LID44657
 labProtocolId 040WC-,039WC-
 labVersion iIDR
 localization cell
+md5sum 8b1a481d54751151f152da99bcc17eee
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -49654,7 +49525,6 @@ labVersion iIDR
 localization cell
 md5sum 3e47f7ad62d70b4980053f0c830b7fca
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -49822,8 +49692,8 @@ labExpId LID44497,LID44594
 labProtocolId 040WC+,039WC+
 labVersion iIDR
 localization cell
+md5sum e98d363f81217dce64dd667f57ec6eda
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -50004,7 +49874,7 @@ subId 5773
 tableName wgEncodeCshlLongRnaSeqMonocd14CellPapPlusRep2
 view PlusSignal
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep1V2
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep1
 objType file
 bioRep 039WC
 cell Monocytes-CD14+
@@ -50013,27 +49883,27 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep1V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep1.pdf.gz
 geoSampleAccession GSM984609
 grant Gingeras
 lab CSHL
 labExpId LID44594
 labProtocolId 039WC+
 localization cell
+md5sum fb0991955e60b3402ec43b22e0d711d1
 project wgEncode
-protocol None
 readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7672
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
-metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep2V2
+metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep2
 objType file
 bioRep 040WC
 cell Monocytes-CD14+
@@ -50042,24 +49912,24 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep2V2.pdf.gz
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep2.pdf.gz
 geoSampleAccession GSM984609
 grant Gingeras
 lab CSHL
 labExpId LID44497
 labProtocolId 040WC+
 localization cell
+md5sum 176279753fa90338b442b98ccac20a97
 project wgEncode
-protocol None
 readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 7681
-submittedDataVersion V2 - New version of processing used.
 view Protocol
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14CellPapSpikeinsRep1
@@ -50074,7 +49944,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPapSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID44594
@@ -50101,7 +49971,7 @@ dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPapSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPapSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID44497
@@ -50136,8 +50006,8 @@ labExpId LID44497,LID44594
 labProtocolId 040WC+,039WC+
 labVersion iIDR
 localization cell
+md5sum a399c1e2bcdde781d5f9375fd50f6965
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -50328,7 +50198,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002677
 donorId 0060801.3
 expId 2677
-fileName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqNhdf00608013CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47248
@@ -50497,7 +50367,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002677
 donorId 7071701.2
 expId 2677
-fileName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqNhdf70717012CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47247
@@ -50562,7 +50432,6 @@ labVersion iIDR
 localization cell
 md5sum c5da3566684b2730d1d0c7bc9df6fb33
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -50617,8 +50486,8 @@ lab CSHL
 labExpId LID47248,LID47247
 labVersion iIDR
 localization cell
+md5sum 3c2192de5f42ff4651247f897f508c0d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -50703,7 +50572,6 @@ labExpId LID47247
 localization cell
 md5sum 5d3567b0fcd08a7a82affe4b9be1d4c9
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -50732,7 +50600,6 @@ labExpId LID47248
 localization cell
 md5sum 1855427c19db51fb21ad0ce6eade2964
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -50760,8 +50627,8 @@ lab CSHL
 labExpId LID47248,LID47247
 labVersion iIDR
 localization cell
+md5sum fba7267288907905970cbc26c46ea026
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -51295,7 +51162,6 @@ labVersion iIDR
 localization cell
 md5sum 6e2d66639f038a7f7d62b65cbb15db4d
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -51325,7 +51191,6 @@ labVersion iIDR
 localization cell
 md5sum 4a979571c691449b68005bd4b4232d1b
 project wgEncode
-protocol None
 readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
@@ -51427,6 +51292,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovoRep5V2.gff.gz
 geoSampleAccession GSM765398
@@ -51436,8 +51302,8 @@ labExpId LID8830
 labProtocolId 035WC-
 labVersion iIDR
 localization cell
+md5sum 8d8a8374678454b788fa78811dfa2ec3
 project wgEncode
-protocol None
 readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
@@ -51457,6 +51323,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000164
 donorId 4F1155J
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovoV2.gff.gz
@@ -51467,8 +51334,8 @@ labExpId LID8665,LID8666
 labProtocolId 007WC-,008WC-
 labVersion iIDR
 localization cell
+md5sum 1c3ba3e4c0372bd1378af83e57ce12a3
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -51763,6 +51630,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoRep5V2.gtf.gz
 geoSampleAccession GSM765398
@@ -51772,8 +51640,8 @@ labExpId LID8830
 labProtocolId 035WC-
 labVersion iIDR
 localization cell
+md5sum cf1b38c11fdc022485132f4781497dc3
 project wgEncode
-protocol None
 readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
@@ -51793,6 +51661,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000164
 donorId 4F1155J
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoV2.gtf.gz
@@ -51803,8 +51672,8 @@ labExpId LID8665,LID8666
 labProtocolId 007WC-,008WC-
 labVersion iIDR
 localization cell
+md5sum fdd1ef59bbe2a409a03505cdd7467fc6
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -52035,7 +51904,6 @@ labVersion iIDR
 localization cell
 md5sum c2ee26c3ca15614dd269f52ab0962ad8
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -52065,7 +51933,6 @@ labVersion iIDR
 localization cell
 md5sum 4c86c4a940a82cc846fa370ef9f90847
 project wgEncode
-protocol None
 readType 2x76D
 replicate 5
 rnaExtract longPolyA
@@ -52331,6 +52198,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovoRep5V2.gff.gz
 geoSampleAccession GSM765401
@@ -52340,8 +52208,8 @@ labExpId LID8694
 labProtocolId 035WC+
 labVersion iIDR
 localization cell
+md5sum fa0a44ffe15e35372ae20b7fd7d4b2f2
 project wgEncode
-protocol None
 readType 2x76D
 replicate 5
 rnaExtract longPolyA
@@ -52361,6 +52229,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000167
 donorId 4F1155J
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovoV2.gff.gz
@@ -52371,8 +52240,8 @@ labExpId LID16631,LID16632
 labProtocolId 007WC+,008WC+
 labVersion iIDR
 localization cell
+md5sum 201cd95ba2d58f707953b1b0b0886036
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -52837,6 +52706,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoRep5V2.gtf.gz
 geoSampleAccession GSM765401
@@ -52846,8 +52716,8 @@ labExpId LID8694
 labProtocolId 035WC+
 labVersion iIDR
 localization cell
+md5sum 29ea3910c845e208648629499c8a5b58
 project wgEncode
-protocol None
 readType 2x76D
 replicate 5
 rnaExtract longPolyA
@@ -52867,6 +52737,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000167
 donorId 4F1155J
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoV2.gtf.gz
@@ -52877,8 +52748,8 @@ labExpId LID16631,LID16632
 labProtocolId 007WC+,008WC+
 labVersion iIDR
 localization cell
+md5sum 15b398008f1bc93e25a0818ab750f0c7
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -53161,7 +53032,6 @@ labVersion iIDR
 localization cytosol
 md5sum 26f64a56d062d8cc4dc280b250d1a5fc
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -53244,8 +53114,8 @@ labExpId LID18554
 labProtocolId 027C-
 labVersion iIDR
 localization cytosol
+md5sum a235efa3623860a186066fd136733dee
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -53385,8 +53255,8 @@ labExpId LID18554
 labProtocolId 027C-
 labVersion iIDR
 localization cytosol
+md5sum a4f54df43e4d54ccb4d2f5e4e8d0809f
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -53529,7 +53399,6 @@ labVersion iIDR
 localization cytosol
 md5sum 003673f6a9c9ec4643b918290f03bd73
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -53720,8 +53589,8 @@ labExpId LID8795,LID8796
 labProtocolId 027C+,028C+
 labVersion iIDR
 localization cytosol
+md5sum 6a4f9cd1f18154e027fab1ec284394f6
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -54055,8 +53924,8 @@ labExpId LID8795,LID8796
 labProtocolId 027C+,028C+
 labVersion iIDR
 localization cytosol
+md5sum a2ce5efe4a0a3e54d62eb25b0ba21907
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -54419,7 +54288,6 @@ labVersion iIDR
 localization nucleus
 md5sum 53a86b7402d5317962d137abce5def29
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -54502,8 +54370,8 @@ labExpId LID9204,LID9205
 labProtocolId 027N-,028N-
 labVersion iIDR
 localization nucleus
+md5sum 6076d5ef2b137654fc01705cb4968512
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -54725,8 +54593,8 @@ labExpId LID9204,LID9205
 labProtocolId 027N-,028N-
 labVersion iIDR
 localization nucleus
+md5sum 901c20627f445e40afeec1a4f30f16a9
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -54870,7 +54738,6 @@ labVersion iIDR
 localization nucleus
 md5sum 0746d91e50c74f40b17244ce0b941d56
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -55061,8 +54928,8 @@ labExpId LID8797,LID8798
 labProtocolId 027N+,028N+
 labVersion iIDR
 localization nucleus
+md5sum df46f1698213cbb9e755379125621d34
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -55396,8 +55263,8 @@ labExpId LID8797,LID8798
 labProtocolId 027N+,028N+
 labVersion iIDR
 localization nucleus
+md5sum c78d7f4892ace7111e0d9831a78664fd
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -55589,7 +55456,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002686
 donorId 5071302.2
 expId 2686
-fileName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqNhemfm250713022CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47257
@@ -55758,7 +55625,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002686
 donorId 6022001
 expId 2686
-fileName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqNhemfm26022001CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47256
@@ -55823,7 +55690,6 @@ labVersion iIDR
 localization cell
 md5sum 291e07073fd8ca654f0ccb2cab1a9602
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -55878,8 +55744,8 @@ lab CSHL
 labExpId LID47256,LID47257
 labVersion iIDR
 localization cell
+md5sum 988762065c0a6b95cee7f9127bca798f
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -55964,7 +55830,6 @@ labExpId LID47256
 localization cell
 md5sum 9cdddf098b5ff6673619d26e29f18cc6
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -55993,7 +55858,6 @@ labExpId LID47257
 localization cell
 md5sum 477b792b3a6d4bab0b8477312f0a936a
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -56021,8 +55885,8 @@ lab CSHL
 labExpId LID47256,LID47257
 labVersion iIDR
 localization cell
+md5sum f2e2e93d1107884220a2d91e02105028
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -56213,7 +56077,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002687
 donorId 7011001.2
 expId 2687
-fileName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqNhemm270110012CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47259
@@ -56382,7 +56246,7 @@ dateUnrestricted 2012-11-27
 dccAccession wgEncodeEH002687
 donorId 7012303
 expId 2687
-fileName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqNhemm27012303CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47258
@@ -56447,7 +56311,6 @@ labVersion iIDR
 localization cell
 md5sum a02ed17ac00e0f01c4e7b4eeb5e8c469
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -56502,8 +56365,8 @@ lab CSHL
 labExpId LID47258,LID47259
 labVersion iIDR
 localization cell
+md5sum 1a8f73c87233d889cab778bf4095d499
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -56588,7 +56451,6 @@ labExpId LID47258
 localization cell
 md5sum 6522d31822ae8984fa64b7261f588771
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -56617,7 +56479,6 @@ labExpId LID47259
 localization cell
 md5sum a63b380c60193c26f8b682078d4d0e84
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -56645,8 +56506,8 @@ lab CSHL
 labExpId LID47258,LID47259
 labVersion iIDR
 localization cell
+md5sum 0deee3a32f7cc8d72b532e7ee7701e4d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -57007,7 +56868,6 @@ labVersion iIDR
 localization cell
 md5sum c094f3b2268c146cf27441a0fecd025d
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -57088,8 +56948,8 @@ labExpId LID8828,LID8829
 labProtocolId 033WC-,034WC-
 labVersion iIDR
 localization cell
+md5sum 2d7806f6a5330fe8989cda9da54fe8af
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -57309,8 +57169,8 @@ labExpId LID8828,LID8829
 labProtocolId 033WC-,034WC-
 labVersion iIDR
 localization cell
+md5sum a9d946735dc350b6afa1c86d98b5d544
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -57451,7 +57311,6 @@ labVersion iIDR
 localization cell
 md5sum 078e185047b38032c82efa75fd50cfe1
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -57640,8 +57499,8 @@ labExpId LID8692,LID8701
 labProtocolId 033WC+,034WC+
 labVersion iIDR
 localization cell
+md5sum cf9a7cbb3f850f060419a509e95fa17b
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -57973,8 +57832,8 @@ labExpId LID8692,LID8701
 labProtocolId 033WC+,034WC+
 labVersion iIDR
 localization cell
+md5sum 2eccb8ccd4619f8efdc6c7b077343d03
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -58165,7 +58024,7 @@ dateUnrestricted 2012-11-26
 dccAccession wgEncodeEH002678
 donorId 8121902.17
 expId 2678
-fileName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalSpikeinsRep2.bam
+fileName wgEncodeCshlLongRnaSeqSkmc812190217CellTotalSpikeinsRep2.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47246
@@ -58334,7 +58193,7 @@ dateUnrestricted 2012-11-24
 dccAccession wgEncodeEH002678
 donorId 9011302
 expId 2678
-fileName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalSpikeinsRep1.bam
+fileName wgEncodeCshlLongRnaSeqSkmc9011302CellTotalSpikeinsRep1.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID47245
@@ -58399,7 +58258,6 @@ labVersion iIDR
 localization cell
 md5sum f8e664340b359b3857d7289c216aa87d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -58454,8 +58312,8 @@ lab CSHL
 labExpId LID47245,LID47246
 labVersion iIDR
 localization cell
+md5sum 08c4935c1c5d649ddfbd4db439bb057b
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -58540,7 +58398,6 @@ labExpId LID47245
 localization cell
 md5sum b5c0174162ff1b525b2b87db55b0857c
 project wgEncode
-protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
@@ -58569,7 +58426,6 @@ labExpId LID47246
 localization cell
 md5sum 178f9446ee008206a28d8849f1783064
 project wgEncode
-protocol None
 readType 2x101D
 replicate 2
 rnaExtract total
@@ -58597,8 +58453,8 @@ lab CSHL
 labExpId LID47245,LID47246
 labVersion iIDR
 localization cell
+md5sum e3cc1d7ba6371662e2a62bf234d6d392
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
@@ -58737,7 +58593,6 @@ labVersion iIDR
 localization cell
 md5sum e5a09e06eab4c8587b98c5a793639c53
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -58899,8 +58754,8 @@ labExpId LID46599,LID46598
 labProtocolId 086WC+,085WC+
 labVersion iIDR
 localization cell
+md5sum 21e2e935eb8cd927aad9ae392cbd107a
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -59094,7 +58949,6 @@ labExpId LID46598
 localization cell
 md5sum 7e88e5f753d09cf2369623869bc995dc
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract longPolyA
@@ -59122,7 +58976,6 @@ labExpId LID46599
 localization cell
 md5sum 70b8fc4d0ab8560e1dfacff408669b82
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract longPolyA
@@ -59142,7 +58995,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
-fileName wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep3.bam
+fileName wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep3.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46598
@@ -59168,7 +59021,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002632
 expId 2632
-fileName wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep4.bam
+fileName wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep4.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46599
@@ -59202,8 +59055,8 @@ labExpId LID46599,LID46598
 labProtocolId 086WC+,085WC+
 labVersion iIDR
 localization cell
+md5sum fe572fb35bd18a1f22ad9be62a2eb70d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -59341,7 +59194,6 @@ labVersion iIDR
 localization cytosol
 md5sum 631a1d0a5d531747fd01fac2faded756
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -59503,8 +59355,8 @@ labExpId LID46594,LID46595
 labProtocolId 085C+,086C+
 labVersion iIDR
 localization cytosol
+md5sum 31d4af25e3e9d66f6b2419a7ca0ae43d
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -59698,7 +59550,6 @@ labExpId LID46594
 localization cytosol
 md5sum 9e038dc7eb6cea4dabb563f7b51dbd5b
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract longPolyA
@@ -59726,7 +59577,6 @@ labExpId LID46595
 localization cytosol
 md5sum 37bd8dc137c7df6ccad0a9e1b096d6d3
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract longPolyA
@@ -59746,7 +59596,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
-fileName wgEncodeCshlLongRnaSeqSknshCytosolPapSpikeinsRep3.bam
+fileName wgEncodeCshlLongRnaSeqSknshCytosolPapSpikeinsRep3.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46594
@@ -59772,7 +59622,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002630
 expId 2630
-fileName wgEncodeCshlLongRnaSeqSknshCytosolPapSpikeinsRep4.bam
+fileName wgEncodeCshlLongRnaSeqSknshCytosolPapSpikeinsRep4.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46595
@@ -59806,8 +59656,8 @@ labExpId LID46594,LID46595
 labProtocolId 085C+,086C+
 labVersion iIDR
 localization cytosol
+md5sum 8b5d04f04ede3d842b5ddbaaf7f62007
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -59945,7 +59795,6 @@ labVersion iIDR
 localization nucleus
 md5sum b9af929f530de841963ffc73f942a21e
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -60107,8 +59956,8 @@ labExpId LID46597,LID46596
 labProtocolId 086N+,085N+
 labVersion iIDR
 localization nucleus
+md5sum 8a1db8ff5ba73f1583aa246cf6458c22
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -60302,7 +60151,6 @@ labExpId LID46596
 localization nucleus
 md5sum 2589e549931ba67a24ed436c1d21ecbf
 project wgEncode
-protocol None
 readType 2x101D
 replicate 3
 rnaExtract longPolyA
@@ -60330,7 +60178,6 @@ labExpId LID46597
 localization nucleus
 md5sum ad5d94a5f9b4a3a05d2a448d520e4e8d
 project wgEncode
-protocol None
 readType 2x101D
 replicate 4
 rnaExtract longPolyA
@@ -60350,7 +60197,7 @@ dateSubmitted 2012-02-18
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
-fileName wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep3.bam
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep3.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46596
@@ -60376,7 +60223,7 @@ dateSubmitted 2012-02-17
 dateUnrestricted 2012-05-14
 dccAccession wgEncodeEH002631
 expId 2631
-fileName wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep4.bam
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep4.spikeins
 grant Gingeras
 lab CSHL
 labExpId LID46597
@@ -60410,8 +60257,8 @@ labExpId LID46597,LID46596
 labProtocolId 086N+,085N+
 labVersion iIDR
 localization nucleus
+md5sum df54dacb56d9b7a5f69209b72c93d694
 project wgEncode
-protocol None
 readType 2x101D
 rnaExtract longPolyA
 seqPlatform Illumina_HiSeq_2000
@@ -60771,7 +60618,6 @@ labVersion iIDR
 localization cell
 md5sum 7604f09dabc4b7fe490fe5167dc5a3fa
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -60852,8 +60698,8 @@ labExpId LID9003,LID9011
 labProtocolId 019WC-,020WC-
 labVersion iIDR
 localization cell
+md5sum e1b341d0546c59433031f1c6220960cc
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -61019,8 +60865,8 @@ labExpId LID9003,LID9011
 labProtocolId 019WC-,020WC-
 labVersion iIDR
 localization cell
+md5sum 236350429b6b3fabece6492738807f15
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
@@ -61161,7 +61007,6 @@ labVersion iIDR
 localization cell
 md5sum db5b043f8f425ebf8f22d62735e22617
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -61350,8 +61195,8 @@ labExpId LID8967,LID8968
 labProtocolId 019WC+,020WC+
 labVersion iIDR
 localization cell
+md5sum b1119a031041ba214bdc10214d031e72
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -61683,8 +61528,8 @@ labExpId LID8967,LID8968
 labProtocolId 019WC+,020WC+
 labVersion iIDR
 localization cell
+md5sum bcf4f9757bba4d4cbb9a19e72d38f75a
 project wgEncode
-protocol None
 readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
@@ -61721,4 +61566,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1949144637
+# MAGIC: -1044133327
