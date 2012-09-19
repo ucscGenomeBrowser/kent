@@ -6089,7 +6089,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Stam:Stam_15_protocols.pdf
-# In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
+label SK-N-SH (Retinoic Acid)
 
 #Venkat - old term using SkMC with capital K
 term SKMC
@@ -9342,22 +9342,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation Human_-_EBF1_(SC-137065)(Immunoprecipitation-Western_blotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 label EBF1 (sc-137065)
 
-#term EEF1A1
-#tag EEF1A1
-#type Antibody
-#target EEF1A1
-#targetDescription Eukaryotic translation elongation factor 1 alpha 1
-#antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB. Antibody Target: EEF1A1
-#vendorName Millipore
-#vendorId 05-235
-#orderUrl http://www.millipore.com/catalogue/item/05-235
-#lab Tenenbaum
-#targetId Gene:1915
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
-#validation 
-#label EEF1A1 (05-235)
-##This does not appear in metaDb
-
 term eGFP-BACH1
 tag BACH1
 type Antibody
@@ -9422,23 +9406,6 @@ targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label E2F1 (eGFP-E2F1)
-
-# I CANNOT FIND THIS TERM ANYWHERE - cricket
-#term eGFP-EKLF1
-#tag EKLF1
-#type Antibody
-#antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor EKLF1. Antibody Target: eGFP-EKLF1
-#target eGFP-EKLF1
-#targetDescription This gene encodes a hematopoietic-specific transcription factor that induces high-level expression of adult beta-globin and other erythroid genes. The zinc-finger protein binds to the DNA sequence CCACACCCT found in the beta hemoglobin promoter. Heterozygous loss-of-function mutations in this gene result in the dominant In(Lu) blood phenotype. (provided by RefSeq)
-#vendorName Kevin White Lab, University of Chicago
-#vendorId eGFP-EKLF1
-#orderUrl http://www.igsb.org/labs/kevin-white/
-#lab White
-#lots 1
-#targetId GeneCard:EKLF1
-#targetUrl missing
-#validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
-#label EKLF1 (eGFP-EKLF1)
 
 term eGFP-ELF1
 tag ELF1
@@ -9719,37 +9686,6 @@ targetId GeneCard:EGR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1
 validation Human_-_Egr-1(Immunoblot):human_Egr-1_588_validation_Myers.pdf
 label EGR1 (sc-110)
-
-#term EIF4E
-#tag EIF4E
-#type Antibody
-#target EIF4E
-#targetDescription Eukaryotic initiation factor 4E
-#antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209of human eIF4E. Recommended for detection of EIF4E of H, M, and R origin by WB, IH(P), IC, and IP. Antibody Target: EIF4E
-#vendorName Millipore
-#vendorId 04-1058
-#orderUrl http://www.millipore.com/catalogue/item/04-1058
-#lab Tenenbaum
-#targetId Gene:45525
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
-#validation 
-#label EIF4E (04-1058)
-##This does not appear in metaDb
-
-#term EIF4EBP1
-#tag EIF4EBP1
-#type Antibody
-#target EIF4EBP1
-#targetDescription Eukaryotic translation initiation factor 4E binding protein 1
-#antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of humanE IF4EBP1 . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB. Antibody Target: EIF4EBP1
-#vendorName Millipore
-#vendorId 04-1010
-#orderUrl http://www.millipore.com/catalogue/item/04-1010
-#lab Tenenbaum
-#targetId Gene:1978
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
-#validation 
-#label EIF4EBP1 (04-1010)
 
 term ELAVL1
 tag ELAVL1
@@ -10057,22 +9993,6 @@ targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
 validation Human_-_FOXP2(Western_blot,siRNA):human_FOXP2_validation_Myers.pdf
 label FOXP2 (ab16046)
-
-#term FXR1
-#tag FXR1
-#type Antibody
-#target FXR1
-#targetDescription Fragile X mental retardation, autosomal homolog 1
-#antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: FXR1
-#vendorName Millipore
-#vendorId 05-1529
-#orderUrl http://www.millipore.com/catalogue/item/05-1529
-#lab Tenenbaum
-#targetId Gene:8087
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
-#validation 
-#label FXR1 (05-1529)
-##This does not appear in metaDb
 
 term GABP
 tag GABP
@@ -10827,22 +10747,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC6
 validation Human_-_HDAC6_(A301-341A)(Western_blot,ChIP-String):human_Hdac6_A301-341A_validation_Bernstein.pdf
 label HDAC6 (A301-341A)
 
-#term Hexim1
-#tag HEXIM1
-#type Antibody
-#target Hexim1
-#targetDescription Hexamethylene bis-acetamide inducible 1
-#antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP. Antibody Target: Hexim1
-#vendorName Millipore
-#vendorId 07-955
-#orderUrl http://www.millipore.com/catalogue/item/07-955
-#lab Tenenbaum
-#targetId Gene:10614
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
-#validation 
-#label Hexim1 (07-955)
-# not used
-
 term HEY1
 tag HEY1
 type Antibody
@@ -10942,40 +10846,6 @@ targetId GeneCard:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
 validation Human_-_HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 label HNF4G (sc-6558)
-
-#term HNRNPD
-#tag HNRNPD
-#type Antibody
-#target HNRNPD
-#targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
-#antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP. Antibody Target: HNRNPD
-#vendorName Millipore
-#vendorId 07-260
-#orderUrl http://www.millipore.com/catalogue/item/07-260
-#lab Tenenbaum
-#targetId Gene:3184
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
-#validation 
-#label HNRNPD (07-260)
-## lots
-###This does not appear in metaDb
-
-#term hnRNPM
-#tag HNRNPM
-#type Antibody
-#target hnRNPM
-#targetDescription Heterogeneous nuclear ribonucleoprotein M
-#antibodyDescription Mouse monoclonal Anti-hnRNP M1-M4, clone 1D8. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB, Antibody Target: hnRNPM
-#vendorName Millipore
-#vendorId 05-620
-#orderUrl http://www.millipore.com/catalogue/item/05-620
-#lab Tenenbaum
-#targetId Gene:76936
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
-#validation 
-#label hnRNPM (05-620)
-# lots
-##This does not appear in metaDb
 
 term HP1gamma_(ab10480)
 tag HP1GAMMAAB10480
@@ -12172,23 +12042,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
 validation Human_-_PU.1(Immunoprecipitation-Western_blot,MassSpec):human_PU.1_validation_Myers.pdf
 label PU1 (sc-22805)
 
-#term QKI
-#tag QKI
-#type Antibody
-#target QKI
-#targetDescription Quaking homolog, KH domain RNA binding (mouse)
-#antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI. Recommended for detection of QKI of H, M, and R origin by IP and WB. Antibody Target: QKI
-#vendorName Millipore
-#vendorId AB9904
-#orderUrl http://www.millipore.com/catalogue/item/ab9904
-#lab Tenenbaum
-#targetId 9444
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
-#validation 
-#label QKI (AB9904)
-# lots
-##This does not appear in metaDb
-
 term Rad21
 tag RAD21
 type Antibody
@@ -12300,22 +12153,6 @@ targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
 validation Human_-_RPC155(1900):human_RPC155_1900_validation_Struhl.pdf
 label RPC155 (1900)
-
-#term RPS6KA1
-#tag RPS6KA1
-#type Antibody
-#target RPS6KA1
-#targetDescription Ribosomal protein S6 kinase, 90kDa, polypeptide 1
-#antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1(C-LAQRRVRKLPSTTL). Recommended for detection of RPS6KA1 of H, M, and R origin by WB, IP, and ELISA. Antibody Target: RPS6KA1
-#vendorName Millipore
-#vendorId 07-1477
-#orderUrl http://www.millipore.com/catalogue/item/07-1477
-#lab Tenenbaum
-#targetId 6195
-#targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
-#validation 
-#label RPS6KA1 (07-1477)
-##This does not appear in metaDb
 
 term RUNX3_(SC-101553)
 tag RUNX3SC101553
@@ -12790,18 +12627,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
 validation Human_-_TAL1(Immunoprecipitation,IP-Mass_spec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 label TAL1 (sc-12984)
-
-#term TAF-II
-#type Antibody
-#target TAF-II
-#antibodyDescription Mouse monoclonal (p250)
-#targetDescription General transcription factor; TBP-associated factor p250kDa; other names: TAF250
-#vendorName Santa Cruz Biotech
-#vendorId sc-735
-#orderUrl http://www.scbt.com/product.php?datasheet=735
-#lab Myers / Wold
-#lots K0905 F2706
-#validation missing
 
 term TBLR1_(ab24550)
 tag TBLR1AB24550
@@ -15074,38 +14899,39 @@ description Regions of optimal enriched signal in experiment performed by PeakSe
 term pepMapFt
 tag PEPMAPFT
 type view
-label Peptide Mapping Filtered
-description filtered peptide mapping results based on the mapping scores or false discovery rate on genome database for mass-spectrometry-based proteomics experiments
+label Peptide Mapping (filtered)
+description Peptide mapping results based on the hg19 genome for mass-spectrometry-based proteomics experiments filtered by false discovery rate (FDR) better than 5%.
 
 term pepMapUnFt
 tag PEPMAPUNFT
 type view
-label Peptide Mapping unFiltered
-description unfiltered peptide mapping results based on the mapping scores or false discovery rate on genome database for mass-spectrometry-based proteomics experiments
+label Peptide Mapping (unfiltered)
+description Peptide mapping results based on the hg19 genome for mass-spectrometry-based proteomics experiments unfiltered by false discovery rate (FDR).
 
 term pepMapGcFt
 tag PEPMAPGCFT
 type view
-label Peptide Genome and Gencode Mapping Filtered
-description filtered peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
+label Peptide Genome and GENCODE Mapping (filtered)
+description Peptide mapping results based on the hg19 genome and GENCODE annotation for mass-spectrometry-based proteomics experiments filtered by false discovery rate (FDR) better than 5%.
 
 term pepMapGcUnFt
 tag PEPMAPGCUNFT
 type view
-label Peptide Genome and Gencode Mapping unFiltered
-description unfiltered peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
+label Peptide Genome and GENCODE Mapping (unfiltered)
+description Peptide mapping results based on the hg19 genome and GENCODE annotation for mass-spectrometry-based proteomics experiments unfiltered by false discovery rate (FDR).
 
 term mPepMapGcFt
 tag MPEPMAPGCFT
 type view
-label Modified Peptide Genome and Gencode Mapping Filtered
-description filtered modified peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
+label Modified Peptide Genome and GENCODE Mapping (filtered)
+description Modified peptide mapping results based on the hg19 genome and GENCODE annotation for mass-spectrometry-based proteomics experiments filtered by false discovery rate (FDR) better than 5%.
+
 
 term mPepMapGcUnFt
 tag MPEPMAPGCUNFT
 type view
-label Modified Peptide Genome and Gencode Mapping unFiltered
-description unfiltered modified peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments
+label Modified Peptide Genome and GENCODE Mapping (unFiltered)
+description Modified peptide mapping results based on the hg19 genome and GENCODE annotation for mass-spectrometry-based proteomics experiments unfiltered by false discovery rate (FDR).
 
 term PrimerPeaks
 tag PRIMEPKS
