@@ -8588,7 +8588,7 @@ orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 lab Myers
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf
+validation Human_-_BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf Mouse_-_
 label BHLHE40 (sc-101023)
 
 term BHLHE40_(NB100-1800)
