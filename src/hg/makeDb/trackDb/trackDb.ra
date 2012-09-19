@@ -3111,3 +3111,12 @@ query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
 searchDescription tRNAscan-SE tRNA Name
 searchPriority 63
 
+track ucscGenePfam
+release alpha
+shortLabel Pfam in UCSC Gene
+longLabel Pfam domains in UCSC Genes
+group genes
+type bed 12
+priority 37.14
+color 20,0,250
+url http://pfam.sanger.ac.uk/family/$$
