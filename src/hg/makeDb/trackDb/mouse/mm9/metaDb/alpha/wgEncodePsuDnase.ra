@@ -2,6 +2,7 @@ metaObject wgEncodePsuDnase
 objType composite
 composite wgEncodePsuDnase
 expVars lab,dataType,cell,treatment
+geoSeriesAccession GSE40848
 
 metaObject wgEncodePsuDnaseG1eS129ME0AlnRep1
 objType file
@@ -63,6 +64,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003046
 expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0PkRep1.narrowPeak.gz
+geoSampleAccession GSM1003239
 grant Stam
 lab PSU-m
 md5sum 408611784518aa50c302942320886f8f
@@ -88,6 +90,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003046
 expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0PkRep2.narrowPeak.gz
+geoSampleAccession GSM1003239
 grant Stam
 lab PSU-m
 md5sum 1bfc194b36bc26935d2612ca17cd8718
@@ -113,6 +116,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003046
 expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0RawDataRep1.fastq.gz
+geoSampleAccession GSM1003239
 grant Stam
 lab PSU-m
 md5sum 5aa2d7da69f0be9d63c6d146836594eb
@@ -137,6 +141,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003046
 expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0RawDataRep2.fastq.gz
+geoSampleAccession GSM1003239
 grant Stam
 lab PSU-m
 md5sum 02b3bc03906ee245a34b01d37b6c830d
@@ -161,6 +166,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003046
 expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0SigRep1.bigWig
+geoSampleAccession GSM1003239
 grant Stam
 lab PSU-m
 md5sum 5b314134207ca489ea2ca8e7801ef953
@@ -186,6 +192,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003046
 expId 3046
 fileName wgEncodePsuDnaseG1eS129ME0SigRep2.bigWig
+geoSampleAccession GSM1003239
 grant Stam
 lab PSU-m
 md5sum 7362e046c4db4a154d02fb601c622428
@@ -259,6 +266,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003047
 expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hPkRep1.narrowPeak.gz
+geoSampleAccession GSM1003238
 grant Stam
 lab PSU-m
 md5sum c342780101f355cb4df1e793629969e5
@@ -284,6 +292,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003047
 expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hPkRep2.narrowPeak.gz
+geoSampleAccession GSM1003238
 grant Stam
 lab PSU-m
 md5sum aeb011b918b5ffa6c4a011fd2b571c15
@@ -309,6 +318,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003047
 expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hRawDataRep1.fastq.gz
+geoSampleAccession GSM1003238
 grant Stam
 lab PSU-m
 md5sum 9219507d126c7428da1d37987c11aaf0
@@ -333,6 +343,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003047
 expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hRawDataRep2.fastq.gz
+geoSampleAccession GSM1003238
 grant Stam
 lab PSU-m
 md5sum 52a5dd6f1ee4116f678814b0206a18a8
@@ -357,6 +368,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003047
 expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hSigRep1.bigWig
+geoSampleAccession GSM1003238
 grant Stam
 lab PSU-m
 md5sum e585590f32278148c3aaafb191a36290
@@ -382,6 +394,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003047
 expId 3047
 fileName wgEncodePsuDnaseG1eer4S129ME0Diffd24hSigRep2.bigWig
+geoSampleAccession GSM1003238
 grant Stam
 lab PSU-m
 md5sum d6a0907ee4989fc0c96f751da2aa859d
@@ -395,4 +408,4 @@ tableName wgEncodePsuDnaseG1eer4S129ME0Diffd24hSigRep2
 treatment diffProtD_24hr
 view Signal
 
-# MAGIC: 248630175
+# MAGIC: 2122173462

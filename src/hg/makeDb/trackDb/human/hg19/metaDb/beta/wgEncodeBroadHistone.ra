@@ -71,6 +71,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003075
 expId 3075
 fileName wgEncodeBroadHistoneA549ControlDex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003540
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -97,6 +98,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003075
 expId 3075
 fileName wgEncodeBroadHistoneA549ControlDex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003540
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -123,6 +125,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003075
 expId 3075
 fileName wgEncodeBroadHistoneA549ControlDex100nmSig.bigWig
+geoSampleAccession GSM1003540
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -201,6 +204,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003076
 expId 3076
 fileName wgEncodeBroadHistoneA549ControlEtoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003541
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -227,6 +231,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003076
 expId 3076
 fileName wgEncodeBroadHistoneA549ControlEtoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003541
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -253,6 +258,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003076
 expId 3076
 fileName wgEncodeBroadHistoneA549ControlEtoh02Sig.bigWig
+geoSampleAccession GSM1003541
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -331,6 +337,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003114
 expId 3114
 fileName wgEncodeBroadHistoneA549CtcfDex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003582
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -358,6 +365,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003114
 expId 3114
 fileName wgEncodeBroadHistoneA549CtcfDex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003582
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -384,6 +392,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003114
 expId 3114
 fileName wgEncodeBroadHistoneA549CtcfDex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003582
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -410,6 +419,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003114
 expId 3114
 fileName wgEncodeBroadHistoneA549CtcfDex100nmSig.bigWig
+geoSampleAccession GSM1003582
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -488,6 +498,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003115
 expId 3115
 fileName wgEncodeBroadHistoneA549CtcfEtoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003581
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -515,6 +526,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003115
 expId 3115
 fileName wgEncodeBroadHistoneA549CtcfEtoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003581
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -541,6 +553,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003115
 expId 3115
 fileName wgEncodeBroadHistoneA549CtcfEtoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003581
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -567,6 +580,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003115
 expId 3115
 fileName wgEncodeBroadHistoneA549CtcfEtoh02Sig.bigWig
+geoSampleAccession GSM1003581
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -645,6 +659,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003116
 expId 3116
 fileName wgEncodeBroadHistoneA549H2azDex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003580
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -672,6 +687,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003116
 expId 3116
 fileName wgEncodeBroadHistoneA549H2azDex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003580
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -698,6 +714,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003116
 expId 3116
 fileName wgEncodeBroadHistoneA549H2azDex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003580
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -724,6 +741,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003116
 expId 3116
 fileName wgEncodeBroadHistoneA549H2azDex100nmSig.bigWig
+geoSampleAccession GSM1003580
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -802,6 +820,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003117
 expId 3117
 fileName wgEncodeBroadHistoneA549H2azEtoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003546
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -829,6 +848,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003117
 expId 3117
 fileName wgEncodeBroadHistoneA549H2azEtoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003546
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -855,6 +875,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003117
 expId 3117
 fileName wgEncodeBroadHistoneA549H2azEtoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003546
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -881,6 +902,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003117
 expId 3117
 fileName wgEncodeBroadHistoneA549H2azEtoh02Sig.bigWig
+geoSampleAccession GSM1003546
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -959,6 +981,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003143
 expId 3143
 fileName wgEncodeBroadHistoneA549H3k04me1Dex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003495
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -986,6 +1009,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003143
 expId 3143
 fileName wgEncodeBroadHistoneA549H3k04me1Dex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003495
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1012,6 +1036,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003143
 expId 3143
 fileName wgEncodeBroadHistoneA549H3k04me1Dex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003495
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1038,6 +1063,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003143
 expId 3143
 fileName wgEncodeBroadHistoneA549H3k04me1Dex100nmSig.bigWig
+geoSampleAccession GSM1003495
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1116,6 +1142,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003122
 expId 3122
 fileName wgEncodeBroadHistoneA549H3k04me1Etoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003453
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1143,6 +1170,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003122
 expId 3122
 fileName wgEncodeBroadHistoneA549H3k04me1Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003453
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1169,6 +1197,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003122
 expId 3122
 fileName wgEncodeBroadHistoneA549H3k04me1Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003453
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1195,6 +1224,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003122
 expId 3122
 fileName wgEncodeBroadHistoneA549H3k04me1Etoh02Sig.bigWig
+geoSampleAccession GSM1003453
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1273,6 +1303,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003098
 expId 3098
 fileName wgEncodeBroadHistoneA549H3k04me2Dex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003511
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1300,6 +1331,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003098
 expId 3098
 fileName wgEncodeBroadHistoneA549H3k04me2Dex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003511
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1326,6 +1358,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003098
 expId 3098
 fileName wgEncodeBroadHistoneA549H3k04me2Dex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003511
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1352,6 +1385,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003098
 expId 3098
 fileName wgEncodeBroadHistoneA549H3k04me2Dex100nmSig.bigWig
+geoSampleAccession GSM1003511
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1430,6 +1464,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003144
 expId 3144
 fileName wgEncodeBroadHistoneA549H3k04me2Etoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003496
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1457,6 +1492,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003144
 expId 3144
 fileName wgEncodeBroadHistoneA549H3k04me2Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003496
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1483,6 +1519,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003144
 expId 3144
 fileName wgEncodeBroadHistoneA549H3k04me2Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003496
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1509,6 +1546,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003144
 expId 3144
 fileName wgEncodeBroadHistoneA549H3k04me2Etoh02Sig.bigWig
+geoSampleAccession GSM1003496
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1587,6 +1625,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003077
 expId 3077
 fileName wgEncodeBroadHistoneA549H3k04me3Dex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003542
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1614,6 +1653,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003077
 expId 3077
 fileName wgEncodeBroadHistoneA549H3k04me3Dex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003542
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1640,6 +1680,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003077
 expId 3077
 fileName wgEncodeBroadHistoneA549H3k04me3Dex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003542
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1666,6 +1707,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003077
 expId 3077
 fileName wgEncodeBroadHistoneA549H3k04me3Dex100nmSig.bigWig
+geoSampleAccession GSM1003542
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1742,6 +1784,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003065
 expId 3065
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003561
 grant Bernstein
 lab Broad
 md5sum 8186fc86203e0253e9acfbd5702bdbb3
@@ -1768,6 +1811,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003065
 expId 3065
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003561
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -1794,6 +1838,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003065
 expId 3065
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003561
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -1820,6 +1865,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003065
 expId 3065
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02Sig.bigWig
+geoSampleAccession GSM1003561
 grant Bernstein
 lab Broad
 md5sum 3c0bcdac28dd83f17f5a30c257244400
@@ -1897,6 +1943,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003079
 expId 3079
 fileName wgEncodeBroadHistoneA549H3k09acEtoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003544
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1924,6 +1971,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003079
 expId 3079
 fileName wgEncodeBroadHistoneA549H3k09acEtoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003544
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1950,6 +1998,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003079
 expId 3079
 fileName wgEncodeBroadHistoneA549H3k09acEtoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003544
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -1976,6 +2025,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003079
 expId 3079
 fileName wgEncodeBroadHistoneA549H3k09acEtoh02Sig.bigWig
+geoSampleAccession GSM1003544
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2054,6 +2104,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003123
 expId 3123
 fileName wgEncodeBroadHistoneA549H3k09me3Etoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003454
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2081,6 +2132,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003123
 expId 3123
 fileName wgEncodeBroadHistoneA549H3k09me3Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003454
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2107,6 +2159,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003123
 expId 3123
 fileName wgEncodeBroadHistoneA549H3k09me3Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003454
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2133,6 +2186,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003123
 expId 3123
 fileName wgEncodeBroadHistoneA549H3k09me3Etoh02Sig.bigWig
+geoSampleAccession GSM1003454
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2211,6 +2265,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003141
 expId 3141
 fileName wgEncodeBroadHistoneA549H3k27acDex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003493
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2238,6 +2293,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003141
 expId 3141
 fileName wgEncodeBroadHistoneA549H3k27acDex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003493
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2264,6 +2320,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003141
 expId 3141
 fileName wgEncodeBroadHistoneA549H3k27acDex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003493
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2290,6 +2347,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003141
 expId 3141
 fileName wgEncodeBroadHistoneA549H3k27acDex100nmSig.bigWig
+geoSampleAccession GSM1003493
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2368,6 +2426,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003118
 expId 3118
 fileName wgEncodeBroadHistoneA549H3k27acEtoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003578
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2395,6 +2454,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003118
 expId 3118
 fileName wgEncodeBroadHistoneA549H3k27acEtoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003578
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2421,6 +2481,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003118
 expId 3118
 fileName wgEncodeBroadHistoneA549H3k27acEtoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003578
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2447,6 +2508,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003118
 expId 3118
 fileName wgEncodeBroadHistoneA549H3k27acEtoh02Sig.bigWig
+geoSampleAccession GSM1003578
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2525,6 +2587,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003119
 expId 3119
 fileName wgEncodeBroadHistoneA549H3k27me3Dex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003577
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2552,6 +2615,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003119
 expId 3119
 fileName wgEncodeBroadHistoneA549H3k27me3Dex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003577
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2578,6 +2642,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003119
 expId 3119
 fileName wgEncodeBroadHistoneA549H3k27me3Dex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003577
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2604,6 +2669,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003119
 expId 3119
 fileName wgEncodeBroadHistoneA549H3k27me3Dex100nmSig.bigWig
+geoSampleAccession GSM1003577
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2682,6 +2748,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003120
 expId 3120
 fileName wgEncodeBroadHistoneA549H3k27me3Etoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003455
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2709,6 +2776,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003120
 expId 3120
 fileName wgEncodeBroadHistoneA549H3k27me3Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003455
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2735,6 +2803,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003120
 expId 3120
 fileName wgEncodeBroadHistoneA549H3k27me3Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003455
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2761,6 +2830,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003120
 expId 3120
 fileName wgEncodeBroadHistoneA549H3k27me3Etoh02Sig.bigWig
+geoSampleAccession GSM1003455
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2839,6 +2909,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003142
 expId 3142
 fileName wgEncodeBroadHistoneA549H3k36me3Dex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003494
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2866,6 +2937,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003142
 expId 3142
 fileName wgEncodeBroadHistoneA549H3k36me3Dex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003494
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2892,6 +2964,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003142
 expId 3142
 fileName wgEncodeBroadHistoneA549H3k36me3Dex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003494
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2918,6 +2991,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003142
 expId 3142
 fileName wgEncodeBroadHistoneA549H3k36me3Dex100nmSig.bigWig
+geoSampleAccession GSM1003494
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -2996,6 +3070,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003121
 expId 3121
 fileName wgEncodeBroadHistoneA549H3k36me3Etoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003456
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3023,6 +3098,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003121
 expId 3121
 fileName wgEncodeBroadHistoneA549H3k36me3Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003456
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3049,6 +3125,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003121
 expId 3121
 fileName wgEncodeBroadHistoneA549H3k36me3Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003456
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3075,6 +3152,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003121
 expId 3121
 fileName wgEncodeBroadHistoneA549H3k36me3Etoh02Sig.bigWig
+geoSampleAccession GSM1003456
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3153,6 +3231,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003078
 expId 3078
 fileName wgEncodeBroadHistoneA549H3k79me2Dex100nmPk.broadPeak.gz
+geoSampleAccession GSM1003543
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3180,6 +3259,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003078
 expId 3078
 fileName wgEncodeBroadHistoneA549H3k79me2Dex100nmRawDataRep1.fastq.gz
+geoSampleAccession GSM1003543
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3206,6 +3286,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003078
 expId 3078
 fileName wgEncodeBroadHistoneA549H3k79me2Dex100nmRawDataRep2.fastq.gz
+geoSampleAccession GSM1003543
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3232,6 +3313,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003078
 expId 3078
 fileName wgEncodeBroadHistoneA549H3k79me2Dex100nmSig.bigWig
+geoSampleAccession GSM1003543
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3310,6 +3392,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003099
 expId 3099
 fileName wgEncodeBroadHistoneA549H3k79me2Etoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003512
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3337,6 +3420,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003099
 expId 3099
 fileName wgEncodeBroadHistoneA549H3k79me2Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003512
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3363,6 +3447,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003099
 expId 3099
 fileName wgEncodeBroadHistoneA549H3k79me2Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003512
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3389,6 +3474,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003099
 expId 3099
 fileName wgEncodeBroadHistoneA549H3k79me2Etoh02Sig.bigWig
+geoSampleAccession GSM1003512
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3467,6 +3553,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003124
 expId 3124
 fileName wgEncodeBroadHistoneA549H4k20me1Etoh02Pk.broadPeak.gz
+geoSampleAccession GSM1003458
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3494,6 +3581,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003124
 expId 3124
 fileName wgEncodeBroadHistoneA549H4k20me1Etoh02RawDataRep1.fastq.gz
+geoSampleAccession GSM1003458
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3520,6 +3608,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003124
 expId 3124
 fileName wgEncodeBroadHistoneA549H4k20me1Etoh02RawDataRep2.fastq.gz
+geoSampleAccession GSM1003458
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3546,6 +3635,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003124
 expId 3124
 fileName wgEncodeBroadHistoneA549H4k20me1Etoh02Sig.bigWig
+geoSampleAccession GSM1003458
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3624,6 +3714,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003132
 expId 3132
 fileName wgEncodeBroadHistoneCd20ControlRawDataRep1.fastq.gz
+geoSampleAccession GSM1003477
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3650,6 +3741,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003132
 expId 3132
 fileName wgEncodeBroadHistoneCd20ControlRawDataRep2.fastq.gz
+geoSampleAccession GSM1003477
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3676,6 +3768,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003132
 expId 3132
 fileName wgEncodeBroadHistoneCd20ControlSig.bigWig
+geoSampleAccession GSM1003477
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3780,6 +3873,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003131
 expId 3131
 fileName wgEncodeBroadHistoneCd20CtcfPk.broadPeak.gz
+geoSampleAccession GSM1003474
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3807,6 +3901,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003131
 expId 3131
 fileName wgEncodeBroadHistoneCd20CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM1003474
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3833,6 +3928,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003131
 expId 3131
 fileName wgEncodeBroadHistoneCd20CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM1003474
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3859,6 +3955,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003131
 expId 3131
 fileName wgEncodeBroadHistoneCd20CtcfRawDataRep3.fastq.gz
+geoSampleAccession GSM1003474
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3885,6 +3982,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003131
 expId 3131
 fileName wgEncodeBroadHistoneCd20CtcfSig.bigWig
+geoSampleAccession GSM1003474
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3963,6 +4061,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003133
 expId 3133
 fileName wgEncodeBroadHistoneCd20H2azPk.broadPeak.gz
+geoSampleAccession GSM1003476
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -3990,6 +4089,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003133
 expId 3133
 fileName wgEncodeBroadHistoneCd20H2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003476
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4016,6 +4116,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003133
 expId 3133
 fileName wgEncodeBroadHistoneCd20H2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003476
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4042,6 +4143,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003133
 expId 3133
 fileName wgEncodeBroadHistoneCd20H2azSig.bigWig
+geoSampleAccession GSM1003476
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4120,6 +4222,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003134
 expId 3134
 fileName wgEncodeBroadHistoneCd20H3k04me2Pk.broadPeak.gz
+geoSampleAccession GSM1003471
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4147,6 +4250,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003134
 expId 3134
 fileName wgEncodeBroadHistoneCd20H3k04me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003471
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4173,6 +4277,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003134
 expId 3134
 fileName wgEncodeBroadHistoneCd20H3k04me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003471
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4199,6 +4304,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003134
 expId 3134
 fileName wgEncodeBroadHistoneCd20H3k04me2Sig.bigWig
+geoSampleAccession GSM1003471
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4277,6 +4383,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003135
 expId 3135
 fileName wgEncodeBroadHistoneCd20ro01794Ezh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003470
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4304,6 +4411,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003135
 expId 3135
 fileName wgEncodeBroadHistoneCd20ro01794Ezh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003470
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4330,6 +4438,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003135
 expId 3135
 fileName wgEncodeBroadHistoneCd20ro01794Ezh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003470
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4356,6 +4465,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003135
 expId 3135
 fileName wgEncodeBroadHistoneCd20ro01794Ezh239875Sig.bigWig
+geoSampleAccession GSM1003470
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4434,6 +4544,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003125
 expId 3125
 fileName wgEncodeBroadHistoneCd20ro01794H3k27acPk.broadPeak.gz
+geoSampleAccession GSM1003459
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4461,6 +4572,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003125
 expId 3125
 fileName wgEncodeBroadHistoneCd20ro01794H3k27acRawDataRep1.fastq.gz
+geoSampleAccession GSM1003459
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4487,6 +4599,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003125
 expId 3125
 fileName wgEncodeBroadHistoneCd20ro01794H3k27acRawDataRep2.fastq.gz
+geoSampleAccession GSM1003459
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4513,6 +4626,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003125
 expId 3125
 fileName wgEncodeBroadHistoneCd20ro01794H3k27acSig.bigWig
+geoSampleAccession GSM1003459
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4591,6 +4705,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003145
 expId 3145
 fileName wgEncodeBroadHistoneCd20ro01794H4k20me1Pk.broadPeak.gz
+geoSampleAccession GSM1003497
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4618,6 +4733,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003145
 expId 3145
 fileName wgEncodeBroadHistoneCd20ro01794H4k20me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003497
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4644,6 +4760,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003145
 expId 3145
 fileName wgEncodeBroadHistoneCd20ro01794H4k20me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003497
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4670,6 +4787,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEH003145
 expId 3145
 fileName wgEncodeBroadHistoneCd20ro01794H4k20me1Sig.bigWig
+geoSampleAccession GSM1003497
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -4746,6 +4864,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002434
 expId 2434
 fileName wgEncodeBroadHistoneDnd41ControlStdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003558
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -4772,6 +4891,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002434
 expId 2434
 fileName wgEncodeBroadHistoneDnd41ControlStdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003558
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -4798,6 +4918,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002434
 expId 2434
 fileName wgEncodeBroadHistoneDnd41ControlStdSig.bigWig
+geoSampleAccession GSM1003558
 grant Bernstein
 lab Broad
 md5sum d9fcb7da153344d686d714099f15b48c
@@ -4873,6 +4994,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
 expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfPk.broadPeak.gz
+geoSampleAccession GSM1003464
 grant Bernstein
 lab Broad
 md5sum 41655369e1b291bcd022dd764042ce35
@@ -4899,6 +5021,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
 expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM1003464
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -4925,6 +5048,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
 expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM1003464
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -4951,6 +5075,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
 expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfSig.bigWig
+geoSampleAccession GSM1003464
 grant Bernstein
 lab Broad
 md5sum 0e3d94adc9d6ad258ebeb8d3c1609b93
@@ -5054,6 +5179,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003080
 expId 3080
 fileName wgEncodeBroadHistoneDnd41Ezh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003522
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -5081,6 +5207,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003080
 expId 3080
 fileName wgEncodeBroadHistoneDnd41Ezh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003522
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -5107,6 +5234,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003080
 expId 3080
 fileName wgEncodeBroadHistoneDnd41Ezh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003522
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -5133,6 +5261,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003080
 expId 3080
 fileName wgEncodeBroadHistoneDnd41Ezh239875RawDataRep3.fastq.gz
+geoSampleAccession GSM1003522
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -5159,6 +5288,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003080
 expId 3080
 fileName wgEncodeBroadHistoneDnd41Ezh239875Sig.bigWig
+geoSampleAccession GSM1003522
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -5235,6 +5365,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
 expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azPk.broadPeak.gz
+geoSampleAccession GSM1003465
 grant Bernstein
 lab Broad
 md5sum cd132e8d874f6e6552d6189ba78f5d61
@@ -5261,6 +5392,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
 expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003465
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -5287,6 +5419,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
 expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003465
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -5313,6 +5446,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
 expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azSig.bigWig
+geoSampleAccession GSM1003465
 grant Bernstein
 lab Broad
 md5sum bc6d2acc70b120caff8acffdc434e100
@@ -5388,6 +5522,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
 expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1Pk.broadPeak.gz
+geoSampleAccession GSM1003460
 grant Bernstein
 lab Broad
 md5sum f86bafe6401625088a9f197697406203
@@ -5414,6 +5549,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
 expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003460
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -5440,6 +5576,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
 expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003460
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -5466,6 +5603,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
 expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1Sig.bigWig
+geoSampleAccession GSM1003460
 grant Bernstein
 lab Broad
 md5sum d4bb13f12c5a44a62979ff19fe6086cf
@@ -5541,6 +5679,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
 expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2Pk.broadPeak.gz
+geoSampleAccession GSM1003461
 grant Bernstein
 lab Broad
 md5sum 8dcc22026782b7b714d432cc0c45c13d
@@ -5567,6 +5706,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
 expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003461
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -5593,6 +5733,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
 expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003461
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -5619,6 +5760,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
 expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2Sig.bigWig
+geoSampleAccession GSM1003461
 grant Bernstein
 lab Broad
 md5sum 96551f815ab255c5e4420ebe08d3f3f3
@@ -5694,6 +5836,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
 expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3Pk.broadPeak.gz
+geoSampleAccession GSM1003468
 grant Bernstein
 lab Broad
 md5sum 14502f90766b7b14a7f92126e2693bea
@@ -5720,6 +5863,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
 expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003468
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -5746,6 +5890,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
 expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003468
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -5772,6 +5917,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
 expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3Sig.bigWig
+geoSampleAccession GSM1003468
 grant Bernstein
 lab Broad
 md5sum ad7334004e41cae658466217a475ec80
@@ -5847,6 +5993,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
 expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acPk.broadPeak.gz
+geoSampleAccession GSM1003552
 grant Bernstein
 lab Broad
 md5sum 75fbfd873bd1bcf07c690e24f21a7170
@@ -5873,6 +6020,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
 expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acRawDataRep1.fastq.gz
+geoSampleAccession GSM1003552
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -5899,6 +6047,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
 expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acRawDataRep2.fastq.gz
+geoSampleAccession GSM1003552
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -5925,6 +6074,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
 expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acSig.bigWig
+geoSampleAccession GSM1003552
 grant Bernstein
 lab Broad
 md5sum 198557d52a00ecafaf6fb2212978f878
@@ -6000,6 +6150,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
 expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003551
 grant Bernstein
 lab Broad
 md5sum 565eaa7a9bfcf8405d374515f01f12af
@@ -6026,6 +6177,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
 expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003551
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -6052,6 +6204,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
 expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003551
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -6078,6 +6231,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
 expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3Sig.bigWig
+geoSampleAccession GSM1003551
 grant Bernstein
 lab Broad
 md5sum 4d98ea5c16fb97f71b35969526b31851
@@ -6153,6 +6307,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
 expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acPk.broadPeak.gz
+geoSampleAccession GSM1003462
 grant Bernstein
 lab Broad
 md5sum c62ef8e115e28df0f7dcff950ce712af
@@ -6179,6 +6334,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
 expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acRawDataRep1.fastq.gz
+geoSampleAccession GSM1003462
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -6205,6 +6361,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
 expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acRawDataRep2.fastq.gz
+geoSampleAccession GSM1003462
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -6231,6 +6388,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
 expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acSig.bigWig
+geoSampleAccession GSM1003462
 grant Bernstein
 lab Broad
 md5sum db04d9fa64a46c5edb2e915be724c3cc
@@ -6308,6 +6466,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003081
 expId 3081
 fileName wgEncodeBroadHistoneDnd41H3k27me3Pk.broadPeak.gz
+geoSampleAccession GSM1003521
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -6335,6 +6494,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003081
 expId 3081
 fileName wgEncodeBroadHistoneDnd41H3k27me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003521
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -6361,6 +6521,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003081
 expId 3081
 fileName wgEncodeBroadHistoneDnd41H3k27me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003521
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -6387,6 +6548,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003081
 expId 3081
 fileName wgEncodeBroadHistoneDnd41H3k27me3Sig.bigWig
+geoSampleAccession GSM1003521
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -6463,6 +6625,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
 expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3Pk.broadPeak.gz
+geoSampleAccession GSM1003463
 grant Bernstein
 lab Broad
 md5sum 413eb18d270afbde186893bbb5044f3e
@@ -6489,6 +6652,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
 expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003463
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -6515,6 +6679,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
 expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003463
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -6541,6 +6706,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
 expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3Sig.bigWig
+geoSampleAccession GSM1003463
 grant Bernstein
 lab Broad
 md5sum 83fe55514d216fcbd5755d5bfa9e0708
@@ -6616,6 +6782,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
 expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003469
 grant Bernstein
 lab Broad
 md5sum f5802f2395f69976271f7fa344f1126e
@@ -6642,6 +6809,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
 expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003469
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -6668,6 +6836,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
 expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003469
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -6694,6 +6863,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
 expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2Sig.bigWig
+geoSampleAccession GSM1003469
 grant Bernstein
 lab Broad
 md5sum e3dbd4459a4cd4f4158c2482a418ff8d
@@ -6769,6 +6939,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
 expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1Pk.broadPeak.gz
+geoSampleAccession GSM1003481
 grant Bernstein
 lab Broad
 md5sum 67c2fbaa102d584a09475cd2a2313ebc
@@ -6795,6 +6966,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
 expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003481
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -6821,6 +6993,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
 expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003481
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -6847,6 +7020,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
 expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1Sig.bigWig
+geoSampleAccession GSM1003481
 grant Bernstein
 lab Broad
 md5sum 0e3db72e67f3d19b50a6626bc47b47f8
@@ -7223,6 +7397,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
 expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003498
 grant Bernstein
 lab Broad
 md5sum a596c652fc59eccb2f7f125cd2f8b4dc
@@ -7249,6 +7424,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
 expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003498
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -7275,6 +7451,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
 expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003498
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -7301,6 +7478,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
 expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875Sig.bigWig
+geoSampleAccession GSM1003498
 grant Bernstein
 lab Broad
 md5sum 9b43df9e621c987a58b53cf2e2e48102
@@ -9543,6 +9721,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
 expId 2095
 fileName wgEncodeBroadHistoneH1hescChd1a301218aStdPk.broadPeak.gz
+geoSampleAccession GSM1003444
 grant Bernstein
 lab Broad
 md5sum 6c8c9cc65b75f59252164d4b39e232c5
@@ -9569,6 +9748,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
 expId 2095
 fileName wgEncodeBroadHistoneH1hescChd1a301218aStdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003444
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -9595,6 +9775,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
 expId 2095
 fileName wgEncodeBroadHistoneH1hescChd1a301218aStdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003444
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -9621,6 +9802,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
 expId 2095
 fileName wgEncodeBroadHistoneH1hescChd1a301218aStdSig.bigWig
+geoSampleAccession GSM1003444
 grant Bernstein
 lab Broad
 md5sum dfa778e423311c6c3a00638bd0bf3cf8
@@ -9672,6 +9854,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003136
 expId 3136
 fileName wgEncodeBroadHistoneH1hescChd7a301223a1Pk.broadPeak.gz
+geoSampleAccession GSM1003473
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -9699,6 +9882,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003136
 expId 3136
 fileName wgEncodeBroadHistoneH1hescChd7a301223a1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003473
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -9725,6 +9909,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003136
 expId 3136
 fileName wgEncodeBroadHistoneH1hescChd7a301223a1Sig.bigWig
+geoSampleAccession GSM1003473
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -10105,6 +10290,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003082
 expId 3082
 fileName wgEncodeBroadHistoneH1hescEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003524
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -10132,6 +10318,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003082
 expId 3082
 fileName wgEncodeBroadHistoneH1hescEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003524
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -10158,6 +10345,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003082
 expId 3082
 fileName wgEncodeBroadHistoneH1hescEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003524
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -10184,6 +10372,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003082
 expId 3082
 fileName wgEncodeBroadHistoneH1hescEzh239875Sig.bigWig
+geoSampleAccession GSM1003524
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -10260,6 +10449,7 @@ dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
 expId 2082
 fileName wgEncodeBroadHistoneH1hescH2azStdPk.broadPeak.gz
+geoSampleAccession GSM1003579
 grant Bernstein
 lab Broad
 md5sum d5c2ba1bf69ac2c8a6e485dbe4cec178
@@ -10286,6 +10476,7 @@ dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
 expId 2082
 fileName wgEncodeBroadHistoneH1hescH2azStdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003579
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -10312,6 +10503,7 @@ dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
 expId 2082
 fileName wgEncodeBroadHistoneH1hescH2azStdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003579
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -10338,6 +10530,7 @@ dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
 expId 2082
 fileName wgEncodeBroadHistoneH1hescH2azStdSig.bigWig
+geoSampleAccession GSM1003579
 grant Bernstein
 lab Broad
 md5sum 06fa53887585b3780b2a2d031e3c5e2f
@@ -10413,6 +10606,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
 expId 2084
 fileName wgEncodeBroadHistoneH1hescH3k09me3StdPk.broadPeak.gz
+geoSampleAccession GSM1003585
 grant Bernstein
 lab Broad
 md5sum c6fea42d0a92ec055af4cb53c89b5ad3
@@ -10439,6 +10633,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
 expId 2084
 fileName wgEncodeBroadHistoneH1hescH3k09me3StdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003585
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -10465,6 +10660,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
 expId 2084
 fileName wgEncodeBroadHistoneH1hescH3k09me3StdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003585
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -10491,6 +10687,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
 expId 2084
 fileName wgEncodeBroadHistoneH1hescH3k09me3StdSig.bigWig
+geoSampleAccession GSM1003585
 grant Bernstein
 lab Broad
 md5sum b3c13cd56ff63c8843ad11dbccc1a225
@@ -11556,6 +11753,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
 expId 2083
 fileName wgEncodeBroadHistoneH1hescH3k79me2StdPk.broadPeak.gz
+geoSampleAccession GSM1003547
 grant Bernstein
 lab Broad
 md5sum be827edd0d687b154613658dc012523e
@@ -11582,6 +11780,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
 expId 2083
 fileName wgEncodeBroadHistoneH1hescH3k79me2StdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003547
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -11608,6 +11807,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
 expId 2083
 fileName wgEncodeBroadHistoneH1hescH3k79me2StdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003547
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -11634,6 +11834,7 @@ dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
 expId 2083
 fileName wgEncodeBroadHistoneH1hescH3k79me2StdSig.bigWig
+geoSampleAccession GSM1003547
 grant Bernstein
 lab Broad
 md5sum 43a8b8ecd3162f3b0d793745f5baa85f
@@ -12015,6 +12216,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003137
 expId 3137
 fileName wgEncodeBroadHistoneH1hescHdac2a300705aPk.broadPeak.gz
+geoSampleAccession GSM1003472
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12042,6 +12244,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003137
 expId 3137
 fileName wgEncodeBroadHistoneH1hescHdac2a300705aRawDataRep1.fastq.gz
+geoSampleAccession GSM1003472
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12068,6 +12271,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003137
 expId 3137
 fileName wgEncodeBroadHistoneH1hescHdac2a300705aSig.bigWig
+geoSampleAccession GSM1003472
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12120,6 +12324,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEH003100
 expId 3100
 fileName wgEncodeBroadHistoneH1hescHdac6a301341aPk.broadPeak.gz
+geoSampleAccession GSM1003571
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12147,6 +12352,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEH003100
 expId 3100
 fileName wgEncodeBroadHistoneH1hescHdac6a301341aRawDataRep1.fastq.gz
+geoSampleAccession GSM1003571
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12173,6 +12379,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEH003100
 expId 3100
 fileName wgEncodeBroadHistoneH1hescHdac6a301341aSig.bigWig
+geoSampleAccession GSM1003571
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12249,6 +12456,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
 expId 2096
 fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdPk.broadPeak.gz
+geoSampleAccession GSM1003446
 grant Bernstein
 lab Broad
 md5sum ea93b0f236edca150c2721e04a7a5f48
@@ -12275,6 +12483,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
 expId 2096
 fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003446
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -12301,6 +12510,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
 expId 2096
 fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003446
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -12327,6 +12537,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
 expId 2096
 fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdSig.bigWig
+geoSampleAccession GSM1003446
 grant Bernstein
 lab Broad
 md5sum c144307e0544370c68881b1821cd2dcb
@@ -12378,6 +12589,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003138
 expId 3138
 fileName wgEncodeBroadHistoneH1hescJmjd2aa300861a1Pk.broadPeak.gz
+geoSampleAccession GSM1003479
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12405,6 +12617,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003138
 expId 3138
 fileName wgEncodeBroadHistoneH1hescJmjd2aa300861a1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003479
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12431,6 +12644,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003138
 expId 3138
 fileName wgEncodeBroadHistoneH1hescJmjd2aa300861a1Sig.bigWig
+geoSampleAccession GSM1003479
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12483,6 +12697,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003126
 expId 3126
 fileName wgEncodeBroadHistoneH1hescP300kat3bPk.broadPeak.gz
+geoSampleAccession GSM1003513
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12510,6 +12725,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003126
 expId 3126
 fileName wgEncodeBroadHistoneH1hescP300kat3bRawDataRep1.fastq.gz
+geoSampleAccession GSM1003513
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12536,6 +12752,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003126
 expId 3126
 fileName wgEncodeBroadHistoneH1hescP300kat3bSig.bigWig
+geoSampleAccession GSM1003513
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12588,6 +12805,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003094
 expId 3094
 fileName wgEncodeBroadHistoneH1hescPhf8a301772aPk.broadPeak.gz
+geoSampleAccession GSM1003509
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12615,6 +12833,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003094
 expId 3094
 fileName wgEncodeBroadHistoneH1hescPhf8a301772aRawDataRep1.fastq.gz
+geoSampleAccession GSM1003509
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12641,6 +12860,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003094
 expId 3094
 fileName wgEncodeBroadHistoneH1hescPhf8a301772aSig.bigWig
+geoSampleAccession GSM1003509
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12693,6 +12913,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003127
 expId 3127
 fileName wgEncodeBroadHistoneH1hescPlu1Pk.broadPeak.gz
+geoSampleAccession GSM1003457
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12720,6 +12941,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003127
 expId 3127
 fileName wgEncodeBroadHistoneH1hescPlu1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003457
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12746,6 +12968,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003127
 expId 3127
 fileName wgEncodeBroadHistoneH1hescPlu1Sig.bigWig
+geoSampleAccession GSM1003457
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12822,6 +13045,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
 expId 2087
 fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdPk.broadPeak.gz
+geoSampleAccession GSM1003584
 grant Bernstein
 lab Broad
 md5sum 656882b08c30b2f0df66405657ebac59
@@ -12848,6 +13072,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
 expId 2087
 fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003584
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -12874,6 +13099,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
 expId 2087
 fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003584
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -12900,6 +13126,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
 expId 2087
 fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdSig.bigWig
+geoSampleAccession GSM1003584
 grant Bernstein
 lab Broad
 md5sum 25462196727673f1715061dfd652d118
@@ -12951,6 +13178,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003101
 expId 3101
 fileName wgEncodeBroadHistoneH1hescSap3039731Pk.broadPeak.gz
+geoSampleAccession GSM1003572
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -12978,6 +13206,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003101
 expId 3101
 fileName wgEncodeBroadHistoneH1hescSap3039731RawDataRep1.fastq.gz
+geoSampleAccession GSM1003572
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -13004,6 +13233,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003101
 expId 3101
 fileName wgEncodeBroadHistoneH1hescSap3039731Sig.bigWig
+geoSampleAccession GSM1003572
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -13056,6 +13286,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003128
 expId 3128
 fileName wgEncodeBroadHistoneH1hescSirt6Pk.broadPeak.gz
+geoSampleAccession GSM1003451
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -13083,6 +13314,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003128
 expId 3128
 fileName wgEncodeBroadHistoneH1hescSirt6RawDataRep1.fastq.gz
+geoSampleAccession GSM1003451
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -13109,6 +13341,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003128
 expId 3128
 fileName wgEncodeBroadHistoneH1hescSirt6Sig.bigWig
+geoSampleAccession GSM1003451
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -13161,6 +13394,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003102
 expId 3102
 fileName wgEncodeBroadHistoneH1hescSuz12051317Pk.broadPeak.gz
+geoSampleAccession GSM1003573
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -13188,6 +13422,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003102
 expId 3102
 fileName wgEncodeBroadHistoneH1hescSuz12051317RawDataRep1.fastq.gz
+geoSampleAccession GSM1003573
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -13214,6 +13449,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003102
 expId 3102
 fileName wgEncodeBroadHistoneH1hescSuz12051317Sig.bigWig
+geoSampleAccession GSM1003573
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -13594,6 +13830,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003086
 expId 3086
 fileName wgEncodeBroadHistoneHelas3Ezh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003520
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -13621,6 +13858,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003086
 expId 3086
 fileName wgEncodeBroadHistoneHelas3Ezh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003520
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -13647,6 +13885,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003086
 expId 3086
 fileName wgEncodeBroadHistoneHelas3Ezh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003520
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -13673,6 +13912,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003086
 expId 3086
 fileName wgEncodeBroadHistoneHelas3Ezh239875Sig.bigWig
+geoSampleAccession GSM1003520
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -13749,6 +13989,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
 expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azPk.broadPeak.gz
+geoSampleAccession GSM1003483
 grant Bernstein
 lab Broad
 md5sum 55e54112f11713fb620fbaf5f2be5f54
@@ -13775,6 +14016,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
 expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003483
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -13801,6 +14043,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
 expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003483
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -13827,6 +14070,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
 expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azSig.bigWig
+geoSampleAccession GSM1003483
 grant Bernstein
 lab Broad
 md5sum 42db9cde2e7ff9440bef36e665247019
@@ -14061,6 +14305,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
 expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003480
 grant Bernstein
 lab Broad
 md5sum dc2f363fddcf185815ffb24ca8c638ae
@@ -14087,6 +14332,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
 expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003480
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -14113,6 +14359,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
 expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003480
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -14139,6 +14386,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
 expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3Sig.bigWig
+geoSampleAccession GSM1003480
 grant Bernstein
 lab Broad
 md5sum b85d7c61e426149a5fd7fa3820f78ce8
@@ -15995,6 +16243,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
 expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003487
 grant Bernstein
 lab Broad
 md5sum 54d856ea8855e9507b93b54590ef7974
@@ -16021,6 +16270,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
 expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003487
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -16047,6 +16297,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
 expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003487
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -16073,6 +16324,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
 expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875Sig.bigWig
+geoSampleAccession GSM1003487
 grant Bernstein
 lab Broad
 md5sum 5c8b16b164d95979f35c361724916c91
@@ -16474,6 +16726,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003087
 expId 3087
 fileName wgEncodeBroadHistoneHepg2H3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003519
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -16501,6 +16754,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003087
 expId 3087
 fileName wgEncodeBroadHistoneHepg2H3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003519
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -16527,6 +16781,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003087
 expId 3087
 fileName wgEncodeBroadHistoneHepg2H3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003519
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -16553,6 +16808,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003087
 expId 3087
 fileName wgEncodeBroadHistoneHepg2H3k09me3Sig.bigWig
+geoSampleAccession GSM1003519
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -18250,6 +18506,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
 expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003501
 grant Bernstein
 lab Broad
 md5sum 51afdec5872f49f7fa4c568c409e324b
@@ -18276,6 +18533,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
 expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003501
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -18302,6 +18560,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
 expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003501
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -18328,6 +18587,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
 expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875Sig.bigWig
+geoSampleAccession GSM1003501
 grant Bernstein
 lab Broad
 md5sum 25ac7ecb02b113ed52fde78afcbf9ceb
@@ -18403,6 +18663,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
 expId 2413
 fileName wgEncodeBroadHistoneHmecH2azPk.broadPeak.gz
+geoSampleAccession GSM1003500
 grant Bernstein
 lab Broad
 md5sum 224359d812f4e63124dc6eae6cafdc0b
@@ -18429,6 +18690,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
 expId 2413
 fileName wgEncodeBroadHistoneHmecH2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003500
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -18455,6 +18717,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
 expId 2413
 fileName wgEncodeBroadHistoneHmecH2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003500
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -18481,6 +18744,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
 expId 2413
 fileName wgEncodeBroadHistoneHmecH2azSig.bigWig
+geoSampleAccession GSM1003500
 grant Bernstein
 lab Broad
 md5sum 95b095f8701ab7934c82c34bfe1fbc5a
@@ -18556,6 +18820,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
 expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003485
 grant Bernstein
 lab Broad
 md5sum 5cfaa56e072d7f8be5d109f0e4d21233
@@ -18582,6 +18847,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
 expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003485
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -18608,6 +18874,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
 expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003485
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -18634,6 +18901,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
 expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3Sig.bigWig
+geoSampleAccession GSM1003485
 grant Bernstein
 lab Broad
 md5sum abf2dabbedeef0dc165aad035417b456
@@ -19699,6 +19967,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
 expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003557
 grant Bernstein
 lab Broad
 md5sum 0a46ef5ecf2c944cf22ede4a31bd4980
@@ -19725,6 +19994,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
 expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003557
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -19751,6 +20021,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
 expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003557
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -19777,6 +20048,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
 expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2Sig.bigWig
+geoSampleAccession GSM1003557
 grant Bernstein
 lab Broad
 md5sum 5678797aec4911b54c554abd6d9368c9
@@ -20482,6 +20754,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
 expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003484
 grant Bernstein
 lab Broad
 md5sum 5f090a5c3ab1cd5029486dab2e864cfe
@@ -20508,6 +20781,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
 expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003484
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -20534,6 +20808,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
 expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003484
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -20560,6 +20835,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
 expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875Sig.bigWig
+geoSampleAccession GSM1003484
 grant Bernstein
 lab Broad
 md5sum 70015cead9870a1b43941c5d12b1f8b3
@@ -22748,6 +23024,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003083
 expId 3083
 fileName wgEncodeBroadHistoneHsmmtEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003523
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -22775,6 +23052,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003083
 expId 3083
 fileName wgEncodeBroadHistoneHsmmtEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003523
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -22801,6 +23079,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003083
 expId 3083
 fileName wgEncodeBroadHistoneHsmmtEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003523
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -22827,6 +23106,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003083
 expId 3083
 fileName wgEncodeBroadHistoneHsmmtEzh239875Sig.bigWig
+geoSampleAccession GSM1003523
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -23068,6 +23348,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
 expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003482
 grant Bernstein
 lab Broad
 md5sum b2aa46ded81ac4bf087d3da478479e94
@@ -23094,6 +23375,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
 expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003482
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -23120,6 +23402,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
 expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003482
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -23146,6 +23429,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
 expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3Sig.bigWig
+geoSampleAccession GSM1003482
 grant Bernstein
 lab Broad
 md5sum e5468c7d30b2e3a945a659bef24a4ccb
@@ -23388,6 +23672,7 @@ dateUnrestricted 2012-12-16
 dccAccession wgEncodeEH003092
 expId 3092
 fileName wgEncodeBroadHistoneHsmmtH3k27me3Pk.broadPeak.gz
+geoSampleAccession GSM1003503
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2e
@@ -23415,6 +23700,7 @@ dateUnrestricted 2012-12-16
 dccAccession wgEncodeEH003092
 expId 3092
 fileName wgEncodeBroadHistoneHsmmtH3k27me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003503
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2e
@@ -23441,6 +23727,7 @@ dateUnrestricted 2012-12-16
 dccAccession wgEncodeEH003092
 expId 3092
 fileName wgEncodeBroadHistoneHsmmtH3k27me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003503
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -23467,6 +23754,7 @@ dateUnrestricted 2012-12-16
 dccAccession wgEncodeEH003092
 expId 3092
 fileName wgEncodeBroadHistoneHsmmtH3k27me3Sig.bigWig
+geoSampleAccession GSM1003503
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2e
@@ -25112,6 +25400,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003084
 expId 3084
 fileName wgEncodeBroadHistoneHuvecEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003518
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -25139,6 +25428,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003084
 expId 3084
 fileName wgEncodeBroadHistoneHuvecEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003518
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -25165,6 +25455,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003084
 expId 3084
 fileName wgEncodeBroadHistoneHuvecEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003518
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -25191,6 +25482,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003084
 expId 3084
 fileName wgEncodeBroadHistoneHuvecEzh239875Sig.bigWig
+geoSampleAccession GSM1003518
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -25267,6 +25559,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
 expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azPk.broadPeak.gz
+geoSampleAccession GSM1003556
 grant Bernstein
 lab Broad
 md5sum 9932b674e4a7d43dea409a8ffcdea5d5
@@ -25293,6 +25586,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
 expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003556
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -25319,6 +25613,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
 expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003556
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -25345,6 +25640,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
 expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azSig.bigWig
+geoSampleAccession GSM1003556
 grant Bernstein
 lab Broad
 md5sum 582e9ae4b5142549a9945c33c056f2c0
@@ -25422,6 +25718,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003085
 expId 3085
 fileName wgEncodeBroadHistoneHuvecH3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003517
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -25449,6 +25746,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003085
 expId 3085
 fileName wgEncodeBroadHistoneHuvecH3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003517
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -25475,6 +25773,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003085
 expId 3085
 fileName wgEncodeBroadHistoneHuvecH3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003517
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -25501,6 +25800,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003085
 expId 3085
 fileName wgEncodeBroadHistoneHuvecH3k09me3Sig.bigWig
+geoSampleAccession GSM1003517
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -26786,6 +27086,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
 expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003555
 grant Bernstein
 lab Broad
 md5sum 9203abeb7d0e553ec9e898e14ee471ca
@@ -26812,6 +27113,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
 expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003555
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -26838,6 +27140,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
 expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003555
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -26864,6 +27167,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
 expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2Sig.bigWig
+geoSampleAccession GSM1003555
 grant Bernstein
 lab Broad
 md5sum 09387a7434601a8469abeb7c6e123cce
@@ -27795,6 +28099,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003103
 expId 3103
 fileName wgEncodeBroadHistoneK562Cbpsc369Pk.broadPeak.gz
+geoSampleAccession GSM1003574
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -27822,6 +28127,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003103
 expId 3103
 fileName wgEncodeBroadHistoneK562Cbpsc369RawDataRep1.fastq.gz
+geoSampleAccession GSM1003574
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -27848,6 +28154,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003103
 expId 3103
 fileName wgEncodeBroadHistoneK562Cbpsc369Sig.bigWig
+geoSampleAccession GSM1003574
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -27900,6 +28207,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003104
 expId 3104
 fileName wgEncodeBroadHistoneK562Cbx2Pk.broadPeak.gz
+geoSampleAccession GSM1003567
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -27927,6 +28235,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003104
 expId 3104
 fileName wgEncodeBroadHistoneK562Cbx2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003567
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -27953,6 +28262,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003104
 expId 3104
 fileName wgEncodeBroadHistoneK562Cbx2Sig.bigWig
+geoSampleAccession GSM1003567
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -28005,6 +28315,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003105
 expId 3105
 fileName wgEncodeBroadHistoneK562Cbx3sc101004Pk.broadPeak.gz
+geoSampleAccession GSM1003568
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -28032,6 +28343,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003105
 expId 3105
 fileName wgEncodeBroadHistoneK562Cbx3sc101004RawDataRep1.fastq.gz
+geoSampleAccession GSM1003568
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -28058,6 +28370,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003105
 expId 3105
 fileName wgEncodeBroadHistoneK562Cbx3sc101004Sig.bigWig
+geoSampleAccession GSM1003568
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -28110,6 +28423,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003106
 expId 3106
 fileName wgEncodeBroadHistoneK562Cbx8Pk.broadPeak.gz
+geoSampleAccession GSM1003569
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -28137,6 +28451,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003106
 expId 3106
 fileName wgEncodeBroadHistoneK562Cbx8RawDataRep1.fastq.gz
+geoSampleAccession GSM1003569
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -28163,6 +28478,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003106
 expId 3106
 fileName wgEncodeBroadHistoneK562Cbx8Sig.bigWig
+geoSampleAccession GSM1003569
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -28239,6 +28555,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
 expId 2088
 fileName wgEncodeBroadHistoneK562Chd1a301218aStdPk.broadPeak.gz
+geoSampleAccession GSM1003575
 grant Bernstein
 lab Broad
 md5sum 913aef020715611097d3fb4fe0d2df2c
@@ -28265,6 +28582,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
 expId 2088
 fileName wgEncodeBroadHistoneK562Chd1a301218aStdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003575
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -28291,6 +28609,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
 expId 2088
 fileName wgEncodeBroadHistoneK562Chd1a301218aStdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003575
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -28317,6 +28636,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
 expId 2088
 fileName wgEncodeBroadHistoneK562Chd1a301218aStdSig.bigWig
+geoSampleAccession GSM1003575
 grant Bernstein
 lab Broad
 md5sum 4d9d8ded8162c90aaff44e02cc5426cf
@@ -28368,6 +28688,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003095
 expId 3095
 fileName wgEncodeBroadHistoneK562Chd4mi2Pk.broadPeak.gz
+geoSampleAccession GSM1003510
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -28395,6 +28716,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003095
 expId 3095
 fileName wgEncodeBroadHistoneK562Chd4mi2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003510
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -28421,6 +28743,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003095
 expId 3095
 fileName wgEncodeBroadHistoneK562Chd4mi2Sig.bigWig
+geoSampleAccession GSM1003510
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -28473,6 +28796,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003139
 expId 3139
 fileName wgEncodeBroadHistoneK562Chd7a301223a1Pk.broadPeak.gz
+geoSampleAccession GSM1003478
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -28500,6 +28824,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003139
 expId 3139
 fileName wgEncodeBroadHistoneK562Chd7a301223a1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003478
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -28526,6 +28851,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003139
 expId 3139
 fileName wgEncodeBroadHistoneK562Chd7a301223a1Sig.bigWig
+geoSampleAccession GSM1003478
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -28848,6 +29174,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
 expId 2089
 fileName wgEncodeBroadHistoneK562Ezh239875StdPk.broadPeak.gz
+geoSampleAccession GSM1003576
 grant Bernstein
 lab Broad
 md5sum a289d82fada7e12137bc7657e207a543
@@ -28874,6 +29201,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
 expId 2089
 fileName wgEncodeBroadHistoneK562Ezh239875StdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003576
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -28900,6 +29228,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
 expId 2089
 fileName wgEncodeBroadHistoneK562Ezh239875StdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003576
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -28926,6 +29255,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
 expId 2089
 fileName wgEncodeBroadHistoneK562Ezh239875StdSig.bigWig
+geoSampleAccession GSM1003576
 grant Bernstein
 lab Broad
 md5sum 9bdf50d759e639de5fa9bdcef9b8599a
@@ -30903,6 +31233,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
 expId 2090
 fileName wgEncodeBroadHistoneK562Hdac1sc6298StdPk.broadPeak.gz
+geoSampleAccession GSM1003448
 grant Bernstein
 lab Broad
 md5sum d0026a52d6bea2c296b0363ea5872197
@@ -30929,6 +31260,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
 expId 2090
 fileName wgEncodeBroadHistoneK562Hdac1sc6298StdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003448
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -30955,6 +31287,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
 expId 2090
 fileName wgEncodeBroadHistoneK562Hdac1sc6298StdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003448
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -30981,6 +31314,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
 expId 2090
 fileName wgEncodeBroadHistoneK562Hdac1sc6298StdSig.bigWig
+geoSampleAccession GSM1003448
 grant Bernstein
 lab Broad
 md5sum 76b52d53a629bcbce73cb2907d05d881
@@ -31056,6 +31390,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
 expId 2091
 fileName wgEncodeBroadHistoneK562Hdac2a300705aStdPk.broadPeak.gz
+geoSampleAccession GSM1003447
 grant Bernstein
 lab Broad
 md5sum 7cbe6c1860923d4839608fca47c08fe3
@@ -31082,6 +31417,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
 expId 2091
 fileName wgEncodeBroadHistoneK562Hdac2a300705aStdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003447
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -31108,6 +31444,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
 expId 2091
 fileName wgEncodeBroadHistoneK562Hdac2a300705aStdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003447
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -31134,6 +31471,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
 expId 2091
 fileName wgEncodeBroadHistoneK562Hdac2a300705aStdSig.bigWig
+geoSampleAccession GSM1003447
 grant Bernstein
 lab Broad
 md5sum 188b815ae7636ba567908fa251c84b5a
@@ -31209,6 +31547,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH003093
 expId 3093
 fileName wgEncodeBroadHistoneK562Hdac6a301341aPk.broadPeak.gz
+geoSampleAccession GSM1003504
 grant Bernstein
 lab Broad
 md5sum 983c9a47c9565d33539929dc62d94739
@@ -31235,6 +31574,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH003093
 expId 3093
 fileName wgEncodeBroadHistoneK562Hdac6a301341aRawDataRep1.fastq.gz
+geoSampleAccession GSM1003504
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -31261,6 +31601,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH003093
 expId 3093
 fileName wgEncodeBroadHistoneK562Hdac6a301341aRawDataRep2.fastq.gz
+geoSampleAccession GSM1003504
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -31287,6 +31628,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEH003093
 expId 3093
 fileName wgEncodeBroadHistoneK562Hdac6a301341aSig.bigWig
+geoSampleAccession GSM1003504
 grant Bernstein
 lab Broad
 md5sum f708d0aa96e82568fcd2257dcb8f806b
@@ -31338,6 +31680,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003107
 expId 3107
 fileName wgEncodeBroadHistoneK562Lsd1Pk.broadPeak.gz
+geoSampleAccession GSM1003570
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31365,6 +31708,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003107
 expId 3107
 fileName wgEncodeBroadHistoneK562Lsd1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003570
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31391,6 +31735,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003107
 expId 3107
 fileName wgEncodeBroadHistoneK562Lsd1Sig.bigWig
+geoSampleAccession GSM1003570
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31443,6 +31788,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003108
 expId 3108
 fileName wgEncodeBroadHistoneK562NcorPk.broadPeak.gz
+geoSampleAccession GSM1003565
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31470,6 +31816,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003108
 expId 3108
 fileName wgEncodeBroadHistoneK562NcorRawDataRep1.fastq.gz
+geoSampleAccession GSM1003565
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31496,6 +31843,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003108
 expId 3108
 fileName wgEncodeBroadHistoneK562NcorSig.bigWig
+geoSampleAccession GSM1003565
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31548,6 +31896,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003140
 expId 3140
 fileName wgEncodeBroadHistoneK562Nsd2ab75359Pk.broadPeak.gz
+geoSampleAccession GSM1003492
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -31575,6 +31924,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003140
 expId 3140
 fileName wgEncodeBroadHistoneK562Nsd2ab75359RawDataRep1.fastq.gz
+geoSampleAccession GSM1003492
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -31601,6 +31951,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003140
 expId 3140
 fileName wgEncodeBroadHistoneK562Nsd2ab75359Sig.bigWig
+geoSampleAccession GSM1003492
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -31677,6 +32028,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002086
 expId 2086
 fileName wgEncodeBroadHistoneK562P300StdPk.broadPeak.gz
+geoSampleAccession GSM1003583
 grant Bernstein
 lab Broad
 md5sum a5435044c396204582db6ab525faaac8
@@ -31703,6 +32055,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002086
 expId 2086
 fileName wgEncodeBroadHistoneK562P300StdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003583
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -31729,6 +32082,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002086
 expId 2086
 fileName wgEncodeBroadHistoneK562P300StdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003583
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -31755,6 +32109,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002086
 expId 2086
 fileName wgEncodeBroadHistoneK562P300StdSig.bigWig
+geoSampleAccession GSM1003583
 grant Bernstein
 lab Broad
 md5sum 12858762d292cd5356e29592bc61f910
@@ -31806,6 +32161,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003109
 expId 3109
 fileName wgEncodeBroadHistoneK562PcafPk.broadPeak.gz
+geoSampleAccession GSM1003566
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31833,6 +32189,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003109
 expId 3109
 fileName wgEncodeBroadHistoneK562PcafRawDataRep1.fastq.gz
+geoSampleAccession GSM1003566
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31859,6 +32216,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003109
 expId 3109
 fileName wgEncodeBroadHistoneK562PcafSig.bigWig
+geoSampleAccession GSM1003566
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -31935,6 +32293,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
 expId 2092
 fileName wgEncodeBroadHistoneK562Phf8a301772aStdPk.broadPeak.gz
+geoSampleAccession GSM1003450
 grant Bernstein
 lab Broad
 md5sum ac17c190d3ee41737ebe9351f8e5f310
@@ -31961,6 +32320,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
 expId 2092
 fileName wgEncodeBroadHistoneK562Phf8a301772aStdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003450
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -31987,6 +32347,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
 expId 2092
 fileName wgEncodeBroadHistoneK562Phf8a301772aStdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003450
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -32013,6 +32374,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
 expId 2092
 fileName wgEncodeBroadHistoneK562Phf8a301772aStdSig.bigWig
+geoSampleAccession GSM1003450
 grant Bernstein
 lab Broad
 md5sum 5a482b444a2028ebff3762b88403a03e
@@ -32088,6 +32450,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002085
 expId 2085
 fileName wgEncodeBroadHistoneK562Plu1StdPk.broadPeak.gz
+geoSampleAccession GSM1003586
 grant Bernstein
 lab Broad
 md5sum ec05d7c145c8a558b3937ff97bcc581d
@@ -32114,6 +32477,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002085
 expId 2085
 fileName wgEncodeBroadHistoneK562Plu1StdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003586
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -32140,6 +32504,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002085
 expId 2085
 fileName wgEncodeBroadHistoneK562Plu1StdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003586
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -32166,6 +32531,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002085
 expId 2085
 fileName wgEncodeBroadHistoneK562Plu1StdSig.bigWig
+geoSampleAccession GSM1003586
 grant Bernstein
 lab Broad
 md5sum fe50d90e4411e030e1416d8dbb00ac30
@@ -32405,6 +32771,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
 expId 2093
 fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdPk.broadPeak.gz
+geoSampleAccession GSM1003449
 grant Bernstein
 lab Broad
 md5sum 1e3db8d5a535a0debce601f47bc0b070
@@ -32431,6 +32798,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
 expId 2093
 fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003449
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -32457,6 +32825,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
 expId 2093
 fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003449
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -32483,6 +32852,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
 expId 2093
 fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdSig.bigWig
+geoSampleAccession GSM1003449
 grant Bernstein
 lab Broad
 md5sum 7a1619623207a408655a3af4c91cb275
@@ -32534,6 +32904,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003096
 expId 3096
 fileName wgEncodeBroadHistoneK562RestPk.broadPeak.gz
+geoSampleAccession GSM1003507
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -32561,6 +32932,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003096
 expId 3096
 fileName wgEncodeBroadHistoneK562RestRawDataRep1.fastq.gz
+geoSampleAccession GSM1003507
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -32587,6 +32959,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003096
 expId 3096
 fileName wgEncodeBroadHistoneK562RestSig.bigWig
+geoSampleAccession GSM1003507
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -32639,6 +33012,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003110
 expId 3110
 fileName wgEncodeBroadHistoneK562Rnf2Pk.broadPeak.gz
+geoSampleAccession GSM1003563
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -32666,6 +33040,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003110
 expId 3110
 fileName wgEncodeBroadHistoneK562Rnf2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003563
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -32692,6 +33067,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003110
 expId 3110
 fileName wgEncodeBroadHistoneK562Rnf2Sig.bigWig
+geoSampleAccession GSM1003563
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -32768,6 +33144,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
 expId 2094
 fileName wgEncodeBroadHistoneK562Sap3039731StdPk.broadPeak.gz
+geoSampleAccession GSM1003445
 grant Bernstein
 lab Broad
 md5sum 3a946e3353e1e785735deeff1cf1636f
@@ -32794,6 +33171,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
 expId 2094
 fileName wgEncodeBroadHistoneK562Sap3039731StdRawDataRep1.fastq.gz
+geoSampleAccession GSM1003445
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -32820,6 +33198,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
 expId 2094
 fileName wgEncodeBroadHistoneK562Sap3039731StdRawDataRep2.fastq.gz
+geoSampleAccession GSM1003445
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -32846,6 +33225,7 @@ dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
 expId 2094
 fileName wgEncodeBroadHistoneK562Sap3039731StdSig.bigWig
+geoSampleAccession GSM1003445
 grant Bernstein
 lab Broad
 md5sum 23110f463ef0664eadc9d2ad9ad4753d
@@ -32897,6 +33277,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003129
 expId 3129
 fileName wgEncodeBroadHistoneK562Setdb1Pk.broadPeak.gz
+geoSampleAccession GSM1003452
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -32924,6 +33305,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003129
 expId 3129
 fileName wgEncodeBroadHistoneK562Setdb1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003452
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -32950,6 +33332,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003129
 expId 3129
 fileName wgEncodeBroadHistoneK562Setdb1Sig.bigWig
+geoSampleAccession GSM1003452
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -33002,6 +33385,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003111
 expId 3111
 fileName wgEncodeBroadHistoneK562Sirt6Pk.broadPeak.gz
+geoSampleAccession GSM1003560
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -33029,6 +33413,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003111
 expId 3111
 fileName wgEncodeBroadHistoneK562Sirt6RawDataRep1.fastq.gz
+geoSampleAccession GSM1003560
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -33055,6 +33440,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003111
 expId 3111
 fileName wgEncodeBroadHistoneK562Sirt6Sig.bigWig
+geoSampleAccession GSM1003560
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -33107,6 +33493,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003112
 expId 3112
 fileName wgEncodeBroadHistoneK562Suz12051317Pk.broadPeak.gz
+geoSampleAccession GSM1003545
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -33134,6 +33521,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003112
 expId 3112
 fileName wgEncodeBroadHistoneK562Suz12051317RawDataRep1.fastq.gz
+geoSampleAccession GSM1003545
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -33160,6 +33548,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003112
 expId 3112
 fileName wgEncodeBroadHistoneK562Suz12051317Sig.bigWig
+geoSampleAccession GSM1003545
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -33238,6 +33627,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003130
 expId 3130
 fileName wgEncodeBroadHistoneMonocd14ro1746ControlRawDataRep1.fastq.gz
+geoSampleAccession GSM1003475
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33264,6 +33654,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003130
 expId 3130
 fileName wgEncodeBroadHistoneMonocd14ro1746ControlRawDataRep2.fastq.gz
+geoSampleAccession GSM1003475
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33290,6 +33681,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEH003130
 expId 3130
 fileName wgEncodeBroadHistoneMonocd14ro1746ControlSig.bigWig
+geoSampleAccession GSM1003475
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33368,6 +33760,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003097
 expId 3097
 fileName wgEncodeBroadHistoneMonocd14ro1746CtcfPk.broadPeak.gz
+geoSampleAccession GSM1003508
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33395,6 +33788,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003097
 expId 3097
 fileName wgEncodeBroadHistoneMonocd14ro1746CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM1003508
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33421,6 +33815,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003097
 expId 3097
 fileName wgEncodeBroadHistoneMonocd14ro1746CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM1003508
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33447,6 +33842,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003097
 expId 3097
 fileName wgEncodeBroadHistoneMonocd14ro1746CtcfSig.bigWig
+geoSampleAccession GSM1003508
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33523,6 +33919,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003066
 expId 3066
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azPk.broadPeak.gz
+geoSampleAccession GSM1003548
 grant Bernstein
 lab Broad
 md5sum 1f6fb26ef899183d76f18ff7e252fa67
@@ -33549,6 +33946,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003066
 expId 3066
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003548
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -33575,6 +33973,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003066
 expId 3066
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003548
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -33601,6 +34000,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003066
 expId 3066
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azSig.bigWig
+geoSampleAccession GSM1003548
 grant Bernstein
 lab Broad
 md5sum 09ddc0809b8ca9ab03f9dd865e082f99
@@ -33676,6 +34076,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003070
 expId 3070
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1Pk.broadPeak.gz
+geoSampleAccession GSM1003535
 grant Bernstein
 lab Broad
 md5sum 1daa14d2b02754690edc291cad0036e4
@@ -33702,6 +34103,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003070
 expId 3070
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003535
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -33728,6 +34130,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003070
 expId 3070
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003535
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -33754,6 +34157,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003070
 expId 3070
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1Sig.bigWig
+geoSampleAccession GSM1003535
 grant Bernstein
 lab Broad
 md5sum b3968e26168686d167f80447d2cd5235
@@ -33831,6 +34235,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003088
 expId 3088
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me2Pk.broadPeak.gz
+geoSampleAccession GSM1003516
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33858,6 +34263,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003088
 expId 3088
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003516
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33884,6 +34290,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003088
 expId 3088
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003516
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33910,6 +34317,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003088
 expId 3088
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me2Sig.bigWig
+geoSampleAccession GSM1003516
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -33986,6 +34394,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003071
 expId 3071
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3Pk.broadPeak.gz
+geoSampleAccession GSM1003536
 grant Bernstein
 lab Broad
 md5sum 54796ed17c8e9861092068c40372609a
@@ -34012,6 +34421,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003071
 expId 3071
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003536
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34038,6 +34448,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003071
 expId 3071
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003536
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34064,6 +34475,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003071
 expId 3071
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3Sig.bigWig
+geoSampleAccession GSM1003536
 grant Bernstein
 lab Broad
 md5sum b7127be4370c7e34869465958cb84194
@@ -34141,6 +34553,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003089
 expId 3089
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09acPk.broadPeak.gz
+geoSampleAccession GSM1003515
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -34168,6 +34581,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003089
 expId 3089
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09acRawDataRep1.fastq.gz
+geoSampleAccession GSM1003515
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -34194,6 +34608,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003089
 expId 3089
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09acRawDataRep2.fastq.gz
+geoSampleAccession GSM1003515
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -34220,6 +34635,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003089
 expId 3089
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09acSig.bigWig
+geoSampleAccession GSM1003515
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -34296,6 +34712,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003073
 expId 3073
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003538
 grant Bernstein
 lab Broad
 md5sum ec4b9b09ef88e292bdc8081624bc7842
@@ -34322,6 +34739,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003073
 expId 3073
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003538
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34348,6 +34766,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003073
 expId 3073
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003538
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34374,6 +34793,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003073
 expId 3073
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3Sig.bigWig
+geoSampleAccession GSM1003538
 grant Bernstein
 lab Broad
 md5sum 3f9da997b4c0f1e953f94a5cca4378d5
@@ -34449,6 +34869,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003067
 expId 3067
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acPk.broadPeak.gz
+geoSampleAccession GSM1003559
 grant Bernstein
 lab Broad
 md5sum 484c83fb42363d0d48e8c52298efb4f6
@@ -34475,6 +34896,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003067
 expId 3067
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acRawDataRep1.fastq.gz
+geoSampleAccession GSM1003559
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34501,6 +34923,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003067
 expId 3067
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acRawDataRep2.fastq.gz
+geoSampleAccession GSM1003559
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34527,6 +34950,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003067
 expId 3067
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acSig.bigWig
+geoSampleAccession GSM1003559
 grant Bernstein
 lab Broad
 md5sum 211ccd207c41c6454741d6d19be84246
@@ -34602,6 +35026,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003068
 expId 3068
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3Pk.broadPeak.gz
+geoSampleAccession GSM1003564
 grant Bernstein
 lab Broad
 md5sum e884b0fdb4da504783e3da233c7b6d0b
@@ -34628,6 +35053,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003068
 expId 3068
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003564
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34654,6 +35080,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003068
 expId 3068
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003564
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34680,6 +35107,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003068
 expId 3068
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3Sig.bigWig
+geoSampleAccession GSM1003564
 grant Bernstein
 lab Broad
 md5sum 9de6355da7b95a1129e9e7094d9c1d17
@@ -34755,6 +35183,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003069
 expId 3069
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3Pk.broadPeak.gz
+geoSampleAccession GSM1003562
 grant Bernstein
 lab Broad
 md5sum 1711c0eb352eae76bebaf6fe386f927e
@@ -34781,6 +35210,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003069
 expId 3069
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003562
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34807,6 +35237,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003069
 expId 3069
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003562
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34833,6 +35264,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003069
 expId 3069
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3Sig.bigWig
+geoSampleAccession GSM1003562
 grant Bernstein
 lab Broad
 md5sum 83bb53725669f687dc7a1805489263be
@@ -34908,6 +35340,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003072
 expId 3072
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003537
 grant Bernstein
 lab Broad
 md5sum d44e856a5c60ee464aa6fada736b6489
@@ -34934,6 +35367,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003072
 expId 3072
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003537
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34960,6 +35394,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003072
 expId 3072
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003537
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -34986,6 +35421,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003072
 expId 3072
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2Sig.bigWig
+geoSampleAccession GSM1003537
 grant Bernstein
 lab Broad
 md5sum dcc9b673e333888160e22c96e90437c1
@@ -35061,6 +35497,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003074
 expId 3074
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1Pk.broadPeak.gz
+geoSampleAccession GSM1003539
 grant Bernstein
 lab Broad
 md5sum 5298b27c394b2f6568aa3b49b243e5fe
@@ -35087,6 +35524,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003074
 expId 3074
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003539
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -35113,6 +35551,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003074
 expId 3074
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003539
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -35139,6 +35578,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH003074
 expId 3074
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1Sig.bigWig
+geoSampleAccession GSM1003539
 grant Bernstein
 lab Broad
 md5sum 99644667e97ebcb0ddc793079c0b5985
@@ -35516,6 +35956,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
 expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003532
 grant Bernstein
 lab Broad
 md5sum 4938e3e8b692f4e8a345505cc3ba653b
@@ -35542,6 +35983,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
 expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003532
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -35568,6 +36010,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
 expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003532
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -35594,6 +36037,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
 expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875Sig.bigWig
+geoSampleAccession GSM1003532
 grant Bernstein
 lab Broad
 md5sum 24fefd38d2f01e186020e3f9ef2133c6
@@ -35669,6 +36113,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
 expId 2397
 fileName wgEncodeBroadHistoneNhaH2azPk.broadPeak.gz
+geoSampleAccession GSM1003499
 grant Bernstein
 lab Broad
 md5sum 612eebc7efa9b8fff86d47cb39f3f1ff
@@ -35695,6 +36140,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
 expId 2397
 fileName wgEncodeBroadHistoneNhaH2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003499
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -35721,6 +36167,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
 expId 2397
 fileName wgEncodeBroadHistoneNhaH2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003499
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -35747,6 +36194,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
 expId 2397
 fileName wgEncodeBroadHistoneNhaH2azSig.bigWig
+geoSampleAccession GSM1003499
 grant Bernstein
 lab Broad
 md5sum 32bed4749ea4c191cf97bd3fa603adca
@@ -35822,6 +36270,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
 expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2Pk.broadPeak.gz
+geoSampleAccession GSM1003533
 grant Bernstein
 lab Broad
 md5sum 7cec6ba7afd05d09d51e25aca1a06cb6
@@ -35848,6 +36297,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
 expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003533
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -35874,6 +36324,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
 expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003533
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -35900,6 +36351,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
 expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2Sig.bigWig
+geoSampleAccession GSM1003533
 grant Bernstein
 lab Broad
 md5sum 0c5e080365b9c811d77e894c7b606d44
@@ -35975,6 +36427,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
 expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acPk.broadPeak.gz
+geoSampleAccession GSM1003534
 grant Bernstein
 lab Broad
 md5sum 3033a6697c01f69a75d15cc642298dab
@@ -36001,6 +36454,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
 expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acRawDataRep1.fastq.gz
+geoSampleAccession GSM1003534
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -36027,6 +36481,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
 expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acRawDataRep2.fastq.gz
+geoSampleAccession GSM1003534
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -36053,6 +36508,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
 expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acSig.bigWig
+geoSampleAccession GSM1003534
 grant Bernstein
 lab Broad
 md5sum 1b5326916cc1c049e94ba75b216e68f6
@@ -36128,6 +36584,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
 expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003491
 grant Bernstein
 lab Broad
 md5sum ae784ff36d12fdd93ddbf1fe58409256
@@ -36154,6 +36611,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
 expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003491
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -36180,6 +36638,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
 expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003491
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -36206,6 +36665,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
 expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3Sig.bigWig
+geoSampleAccession GSM1003491
 grant Bernstein
 lab Broad
 md5sum a869e0fb214c91db45b171c12da2521f
@@ -37108,6 +37568,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
 expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003490
 grant Bernstein
 lab Broad
 md5sum b5e7e4e7da324c6ee98a9c524fc5c94d
@@ -37134,6 +37595,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
 expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003490
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -37160,6 +37622,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
 expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003490
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -37186,6 +37649,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
 expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2Sig.bigWig
+geoSampleAccession GSM1003490
 grant Bernstein
 lab Broad
 md5sum 9ec694d729ce34638721cc4690028801
@@ -37261,6 +37725,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
 expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1Pk.broadPeak.gz
+geoSampleAccession GSM1003525
 grant Bernstein
 lab Broad
 md5sum 9183119d983dc3327a61d329feac96c0
@@ -37287,6 +37752,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
 expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003525
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
@@ -37313,6 +37779,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
 expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003525
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -37339,6 +37806,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
 expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1Sig.bigWig
+geoSampleAccession GSM1003525
 grant Bernstein
 lab Broad
 md5sum 069f15f77aac6785942a751a785fa74d
@@ -37705,6 +38173,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
 expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003550
 grant Bernstein
 lab Broad
 md5sum 5b76012442d59c310fa9529296b3ed5f
@@ -37731,6 +38200,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
 expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003550
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -37757,6 +38227,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
 expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003550
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -37783,6 +38254,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
 expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875Sig.bigWig
+geoSampleAccession GSM1003550
 grant Bernstein
 lab Broad
 md5sum 0e1f9e1ede6a32264f99a82f69cf803b
@@ -37860,6 +38332,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003090
 expId 3090
 fileName wgEncodeBroadHistoneNhdfadH2azPk.broadPeak.gz
+geoSampleAccession GSM1003505
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -37887,6 +38360,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003090
 expId 3090
 fileName wgEncodeBroadHistoneNhdfadH2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003505
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -37913,6 +38387,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003090
 expId 3090
 fileName wgEncodeBroadHistoneNhdfadH2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003505
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -37939,6 +38414,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003090
 expId 3090
 fileName wgEncodeBroadHistoneNhdfadH2azSig.bigWig
+geoSampleAccession GSM1003505
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2x
@@ -38015,6 +38491,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
 expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1Pk.broadPeak.gz
+geoSampleAccession GSM1003526
 grant Bernstein
 lab Broad
 md5sum 3931dc1bb41c39e5574a43f4a06ab476
@@ -38041,6 +38518,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
 expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003526
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -38067,6 +38545,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
 expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003526
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -38093,6 +38572,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
 expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1Sig.bigWig
+geoSampleAccession GSM1003526
 grant Bernstein
 lab Broad
 md5sum 439a0abfdbc8def46790387cfef91554
@@ -38168,6 +38648,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
 expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003553
 grant Bernstein
 lab Broad
 md5sum 241182722b8322ae12b4fbb2021bb1b5
@@ -38194,6 +38675,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
 expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003553
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -38220,6 +38702,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
 expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003553
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -38246,6 +38729,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
 expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3Sig.bigWig
+geoSampleAccession GSM1003553
 grant Bernstein
 lab Broad
 md5sum 898dd33fb0fba3a1e1dece4b771cdbdb
@@ -39116,6 +39600,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
 expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003554
 grant Bernstein
 lab Broad
 md5sum 0811a01d5b93fb3675353712c5b5b4c7
@@ -39142,6 +39627,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
 expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003554
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -39168,6 +39654,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
 expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003554
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -39194,6 +39681,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
 expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2Sig.bigWig
+geoSampleAccession GSM1003554
 grant Bernstein
 lab Broad
 md5sum 6d10eea20b5b75deb070a5352e374de5
@@ -39453,6 +39941,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
 expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1Pk.broadPeak.gz
+geoSampleAccession GSM1003486
 grant Bernstein
 lab Broad
 md5sum 263e7fe1fb727e8bd8325459b3860b07
@@ -39479,6 +39968,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
 expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003486
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
@@ -39505,6 +39995,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
 expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003486
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -39531,6 +40022,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
 expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1RawDataRep3.fastq.gz
+geoSampleAccession GSM1003486
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -39557,6 +40049,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
 expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1Sig.bigWig
+geoSampleAccession GSM1003486
 grant Bernstein
 lab Broad
 md5sum 5d138f2c961eed7d729f9153010ea221
@@ -39991,6 +40484,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
 expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003489
 grant Bernstein
 lab Broad
 md5sum bc23b4f8dd425074b30504371977ddf0
@@ -40018,6 +40512,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
 expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003489
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -40045,6 +40540,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
 expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003489
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -40072,6 +40568,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
 expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875Sig.bigWig
+geoSampleAccession GSM1003489
 grant Bernstein
 lab Broad
 md5sum 0bcf023f6e700a07f5033b72dd33b86b
@@ -40150,6 +40647,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
 expId 2419
 fileName wgEncodeBroadHistoneNhekH2azPk.broadPeak.gz
+geoSampleAccession GSM1003488
 grant Bernstein
 lab Broad
 md5sum c363ffaed259b2b9689c5abb5e601131
@@ -40177,6 +40675,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
 expId 2419
 fileName wgEncodeBroadHistoneNhekH2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003488
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -40204,6 +40703,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
 expId 2419
 fileName wgEncodeBroadHistoneNhekH2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003488
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -40231,6 +40731,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
 expId 2419
 fileName wgEncodeBroadHistoneNhekH2azSig.bigWig
+geoSampleAccession GSM1003488
 grant Bernstein
 lab Broad
 md5sum 5c41f7ba7319bf91aceb4e540e7f4b46
@@ -40309,6 +40810,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
 expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003528
 grant Bernstein
 lab Broad
 md5sum b6a27b24b706500a1808cd1e698732a5
@@ -40336,6 +40838,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
 expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003528
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -40363,6 +40866,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
 expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003528
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -40390,6 +40894,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
 expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3Sig.bigWig
+geoSampleAccession GSM1003528
 grant Bernstein
 lab Broad
 md5sum d3e297cf0a632e83d1bdefb4b7b23987
@@ -41788,6 +42293,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
 expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003527
 grant Bernstein
 lab Broad
 md5sum 2b0d9c0edd95b1751c3eb64efc4304f7
@@ -41815,6 +42321,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
 expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003527
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -41842,6 +42349,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
 expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003527
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -41869,6 +42377,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
 expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2Sig.bigWig
+geoSampleAccession GSM1003527
 grant Bernstein
 lab Broad
 md5sum 1bd49e67651cd1e0a3c13d11b12665ce
@@ -43072,6 +43581,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
 expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875Pk.broadPeak.gz
+geoSampleAccession GSM1003529
 grant Bernstein
 lab Broad
 md5sum 7ee7c797c2b4b074bd9bb830382f523b
@@ -43098,6 +43608,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
 expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875RawDataRep1.fastq.gz
+geoSampleAccession GSM1003529
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -43124,6 +43635,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
 expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875RawDataRep2.fastq.gz
+geoSampleAccession GSM1003529
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -43150,6 +43662,7 @@ dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
 expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875Sig.bigWig
+geoSampleAccession GSM1003529
 grant Bernstein
 lab Broad
 md5sum 540b5283b37f6fa13d74ac98fb1263f8
@@ -43225,6 +43738,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
 expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azPk.broadPeak.gz
+geoSampleAccession GSM1003530
 grant Bernstein
 lab Broad
 md5sum bd0e38bb8d91f8599f156620aed68125
@@ -43251,6 +43765,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
 expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azRawDataRep1.fastq.gz
+geoSampleAccession GSM1003530
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -43277,6 +43792,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
 expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azRawDataRep2.fastq.gz
+geoSampleAccession GSM1003530
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -43303,6 +43819,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
 expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azSig.bigWig
+geoSampleAccession GSM1003530
 grant Bernstein
 lab Broad
 md5sum 7e8dfcd41012e82bf985bebded0c084f
@@ -43378,6 +43895,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
 expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3Pk.broadPeak.gz
+geoSampleAccession GSM1003531
 grant Bernstein
 lab Broad
 md5sum 35bb511bb6f3ca7c515ecb1f14456834
@@ -43404,6 +43922,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
 expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003531
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -43430,6 +43949,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
 expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003531
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -43456,6 +43976,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
 expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3Sig.bigWig
+geoSampleAccession GSM1003531
 grant Bernstein
 lab Broad
 md5sum 2c4edb731c174aafcd22252e82479a86
@@ -44521,6 +45042,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
 expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003549
 grant Bernstein
 lab Broad
 md5sum f852b30e8e25b77d72f9a2ac5a7e97d3
@@ -44547,6 +45069,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
 expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003549
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -44573,6 +45096,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
 expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003549
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -44599,6 +45123,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
 expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2Sig.bigWig
+geoSampleAccession GSM1003549
 grant Bernstein
 lab Broad
 md5sum 7f231c4245b4956f2f727b23ab2bd604
@@ -45032,6 +45557,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003091
 expId 3091
 fileName wgEncodeBroadHistoneOsteoH3k04me3Pk.broadPeak.gz
+geoSampleAccession GSM1003506
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2e
@@ -45059,6 +45585,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003091
 expId 3091
 fileName wgEncodeBroadHistoneOsteoH3k04me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003506
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2e
@@ -45085,6 +45612,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003091
 expId 3091
 fileName wgEncodeBroadHistoneOsteoH3k04me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003506
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -45111,6 +45639,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003091
 expId 3091
 fileName wgEncodeBroadHistoneOsteoH3k04me3RawDataRep3.fastq.gz
+geoSampleAccession GSM1003506
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -45137,6 +45666,7 @@ dateUnrestricted 2012-12-15
 dccAccession wgEncodeEH003091
 expId 3091
 fileName wgEncodeBroadHistoneOsteoH3k04me3Sig.bigWig
+geoSampleAccession GSM1003506
 grant Bernstein
 lab Broad
 labVersion Illumina_GA2e
@@ -45213,6 +45743,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
 expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3Pk.broadPeak.gz
+geoSampleAccession GSM1003466
 grant Bernstein
 lab Broad
 md5sum 3ef4cfa68065c5969171dff5f1e918e2
@@ -45239,6 +45770,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
 expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3RawDataRep1.fastq.gz
+geoSampleAccession GSM1003466
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
@@ -45265,6 +45797,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
 expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3RawDataRep2.fastq.gz
+geoSampleAccession GSM1003466
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -45291,6 +45824,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
 expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3Sig.bigWig
+geoSampleAccession GSM1003466
 grant Bernstein
 lab Broad
 md5sum 2e471319ec8fce6bf8fa7dcf8a90e9aa
@@ -45366,6 +45900,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
 expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2Pk.broadPeak.gz
+geoSampleAccession GSM1003502
 grant Bernstein
 lab Broad
 md5sum 8891eac2ce2120ac38b8bd81c2f91c32
@@ -45392,6 +45927,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
 expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2RawDataRep1.fastq.gz
+geoSampleAccession GSM1003502
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -45418,6 +45954,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
 expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2RawDataRep2.fastq.gz
+geoSampleAccession GSM1003502
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -45444,6 +45981,7 @@ dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
 expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2Sig.bigWig
+geoSampleAccession GSM1003502
 grant Bernstein
 lab Broad
 md5sum c6abea84fe13ac17a1839b13fa0fd6fc
@@ -45519,6 +46057,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
 expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1Pk.broadPeak.gz
+geoSampleAccession GSM1003467
 grant Bernstein
 lab Broad
 md5sum 3fd37614d9f051ee1b349998defe044b
@@ -45545,6 +46084,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
 expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1RawDataRep1.fastq.gz
+geoSampleAccession GSM1003467
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
@@ -45571,6 +46111,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
 expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1RawDataRep2.fastq.gz
+geoSampleAccession GSM1003467
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -45597,6 +46138,7 @@ dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
 expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1Sig.bigWig
+geoSampleAccession GSM1003467
 grant Bernstein
 lab Broad
 md5sum 401e5fb66eac717797557ec4c7669b93
@@ -45674,6 +46216,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003113
 expId 3113
 fileName wgEncodeBroadHistoneOsteoP300kat3bPk.broadPeak.gz
+geoSampleAccession GSM1003514
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -45701,6 +46244,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003113
 expId 3113
 fileName wgEncodeBroadHistoneOsteoP300kat3bRawDataRep1.fastq.gz
+geoSampleAccession GSM1003514
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -45727,6 +46271,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003113
 expId 3113
 fileName wgEncodeBroadHistoneOsteoP300kat3bRawDataRep2.fastq.gz
+geoSampleAccession GSM1003514
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -45753,6 +46298,7 @@ dateUnrestricted 2013-04-23
 dccAccession wgEncodeEH003113
 expId 3113
 fileName wgEncodeBroadHistoneOsteoP300kat3bSig.bigWig
+geoSampleAccession GSM1003514
 grant Bernstein
 lab Broad
 labVersion Illumina_HiSeq_2000
@@ -47010,4 +47556,4 @@ tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 treatment None
 view Signal
 
-# MAGIC: 98592127
+# MAGIC: 1960200406

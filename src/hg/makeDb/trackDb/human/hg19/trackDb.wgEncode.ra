@@ -71,8 +71,7 @@ include wgEncodeDukeAffyExon.release3.ra
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
-include wgEncodeOpenChromFaire.release2.ra alpha,beta
-include wgEncodeOpenChromFaire.ra public
+include wgEncodeOpenChromFaire.release2.ra
 
 #Open Chrom Synth (wrangler: Matt)
 include wgEncodeOpenChromSynth.release2.ra
@@ -106,8 +105,8 @@ include wgEncodeGisRnaSeq.ra
 include wgEncodeCaltechRnaSeq.release4.ra
 
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.release2.ra beta,public
-include wgEncodeCshlLongRnaSeq.release3.ra alpha
+include wgEncodeCshlLongRnaSeq.release2.ra public
+include wgEncodeCshlLongRnaSeq.release3.ra alpha,beta
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale

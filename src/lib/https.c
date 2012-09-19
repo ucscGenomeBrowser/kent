@@ -11,6 +11,7 @@
 
 #include "common.h"
 #include "errabort.h"
+#include "net.h"
 
 
 static pthread_mutex_t *mutexes = NULL;
@@ -176,8 +177,8 @@ while (1)
 	FD_SET(fd, &readfds);
 	FD_SET(fd, &writefds);
 	}
-    tv.tv_sec = 10;  // timeout
-    tv.tv_usec = 0;
+    tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
+    tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
 
     err = select(fd + 1, &readfds, &writefds, NULL, &tv);
     if (err < 0) 
@@ -237,8 +238,8 @@ while (1)
     if (srd == 0)
 	FD_SET(params->sv[1], &readfds);
 
-    tv.tv_sec = 10;   // timeout
-    tv.tv_usec = 0;
+    tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
+    tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
 
     err = select(max(fd,params->sv[1]) + 1, &readfds, &writefds, NULL, &tv);
 
@@ -251,6 +252,8 @@ while (1)
     else if (err == 0) 
 	{
 	/* Timed out - just quit */
+	addConnFailure(params->hostName, params->port,
+	     "https timeout expired");
 	xerr("https timeout expired");
 	goto cleanup;
 	}
@@ -344,6 +347,13 @@ return NULL;
 int netConnectHttps(char *hostName, int port)
 /* Return socket for https connection with server or -1 if error. */
 {
+char *errorString = NULL;
+if (checkConnFailure(hostName, port, &errorString))
+    {
+    warn(errorString);
+    return -1;
+    }
+
 
 fflush(stdin);
 fflush(stdout);

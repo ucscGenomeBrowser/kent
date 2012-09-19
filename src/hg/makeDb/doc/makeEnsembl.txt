@@ -565,6 +565,25 @@ liftUp /hive/data/genomes/hg19/jkStuff/ens.68.lft
  *** Steps were performed in /hive/data/genomes/hg19/bed/ensGene.68
 
  hgsql hgFixed -ne "update trackVersion set dateReference='current' where name='ensGene' AND db='hg19' AND version='68';"
+
+    # lift chrM_rCRS data to UCSC chrM: (DONE - 2012-09-17 - Chin)
+    cd /hive/data/genomes/hg19/bed/ensGene.68
+    # where chrM.over.chain is from hg19Patch9 processing, namely:
+    cat << '_EOF_' > chrM.over.chain
+chain 1550477 chrM_rCRS 16569 + 0 16569 chrM 16571 + 0 16571 526
+310     0       2
+2796    1       0
+13075   0       1
+387
+'_EOF_'
+    # << happy emacs
+    zcat process/hg19.allGenes.gp.gz | grep -w chrM \
+        | sed -e "s/chrM/chrM_rCRS/g" > chrM_rCRS.gp
+    liftOver -genePred chrM_rCRS.gp chrM.over.chain chrM.gp noMap.chrM
+    sed -e "s/^/585\t/" chrM.gp > chrM.tab
+    hgsql -e 'delete from ensGene where chrom="chrM";' hg19
+    hgsql -e 'LOAD DATA LOCAL INFILE "chrM.tab" INTO TABLE ensGene;' hg19
+
 ############################################################################
 #  latCha1 - Coelacanth - Ensembl Genes version 68  (DONE - 2012-08-29 -
 #  chinhli)

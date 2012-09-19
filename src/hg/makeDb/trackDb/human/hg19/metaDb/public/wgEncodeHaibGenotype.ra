@@ -2,6 +2,7 @@ metaObject wgEncodeHaibGenotype
 objType composite
 composite wgEncodeHaibGenotype
 expVars lab,dataType,cell,treatment
+geoSeriesAccession GSE40698
 
 metaObject wgEncodeHaibGenotypeA549RegionsRep1
 objType table
@@ -15,6 +16,7 @@ dccAccession wgEncodeEH001282
 dccRep 1
 expId 1282
 fileName wgEncodeHaibGenotypeA549RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999327
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -40,6 +42,7 @@ dccAccession wgEncodeEH001283
 dccRep 1
 expId 1283
 fileName wgEncodeHaibGenotypeAg04449RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999326
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -65,6 +68,7 @@ dccAccession wgEncodeEH001284
 dccRep 1
 expId 1284
 fileName wgEncodeHaibGenotypeAg04450RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999321
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -90,6 +94,7 @@ dccAccession wgEncodeEH001285
 dccRep 1
 expId 1285
 fileName wgEncodeHaibGenotypeAg09309RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999320
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -115,6 +120,7 @@ dccAccession wgEncodeEH001286
 dccRep 1
 expId 1286
 fileName wgEncodeHaibGenotypeAg09319RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999323
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -140,6 +146,7 @@ dccAccession wgEncodeEH001287
 dccRep 1
 expId 1287
 fileName wgEncodeHaibGenotypeAg10803RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999322
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -165,6 +172,7 @@ dccAccession wgEncodeEH001288
 dccRep 1
 expId 1288
 fileName wgEncodeHaibGenotypeAosmcRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999329
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -216,6 +224,7 @@ dccAccession wgEncodeEH001290
 dccRep 1
 expId 1290
 fileName wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999295
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -241,6 +250,7 @@ dccAccession wgEncodeEH001291
 dccRep 1
 expId 1291
 fileName wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999296
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -266,6 +276,7 @@ dccAccession wgEncodeEH001292
 dccRep 1
 expId 1292
 fileName wgEncodeHaibGenotypeBjRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999293
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -291,6 +302,7 @@ dccAccession wgEncodeEH001294
 dccRep 1
 expId 1294
 fileName wgEncodeHaibGenotypeCaco2RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999299
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -316,6 +328,7 @@ dccAccession wgEncodeEH001295
 dccRep 1
 expId 1295
 fileName wgEncodeHaibGenotypeChorionRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999300
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -341,6 +354,7 @@ dccAccession wgEncodeEH001293
 dccRep 1
 expId 1293
 fileName wgEncodeHaibGenotypeCmkRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999294
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -366,6 +380,7 @@ dccAccession wgEncodeEH001296
 dccRep 1
 expId 1296
 fileName wgEncodeHaibGenotypeGm06990RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999297
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -419,6 +434,7 @@ dccAccession wgEncodeEH000273
 dccRep 1
 expId 273
 fileName wgEncodeHaibGenotypeGm12878RegionsRep1V2.bedLogR.gz
+geoSampleAccession GSM999285
 grant Myers
 lab HudsonAlpha
 labExpId Illumina 1MDuo
@@ -446,6 +462,7 @@ dccAccession wgEncodeEH000273
 dccRep 2
 expId 273
 fileName wgEncodeHaibGenotypeGm12878RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999285
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -471,6 +488,7 @@ dccAccession wgEncodeEH001297
 dccRep 1
 expId 1297
 fileName wgEncodeHaibGenotypeGm12891RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999298
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -496,6 +514,7 @@ dccAccession wgEncodeEH001298
 dccRep 1
 expId 1298
 fileName wgEncodeHaibGenotypeGm12892RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999290
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -521,6 +540,7 @@ dccAccession wgEncodeEH001299
 dccRep 1
 expId 1299
 fileName wgEncodeHaibGenotypeGm19239RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999291
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -546,6 +566,7 @@ dccAccession wgEncodeEH001300
 dccRep 1
 expId 1300
 fileName wgEncodeHaibGenotypeH1hescRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999275
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -571,6 +592,7 @@ dccAccession wgEncodeEH001301
 dccRep 1
 expId 1301
 fileName wgEncodeHaibGenotypeHaeRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999276
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -596,6 +618,7 @@ dccAccession wgEncodeEH001301
 dccRep 2
 expId 1301
 fileName wgEncodeHaibGenotypeHaeRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999276
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -621,6 +644,7 @@ dccAccession wgEncodeEH001302
 dccRep 1
 expId 1302
 fileName wgEncodeHaibGenotypeHcfRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999277
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -646,6 +670,7 @@ dccAccession wgEncodeEH001302
 dccRep 2
 expId 1302
 fileName wgEncodeHaibGenotypeHcfRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999277
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -671,6 +696,7 @@ dccAccession wgEncodeEH001303
 dccRep 1
 expId 1303
 fileName wgEncodeHaibGenotypeHcmRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999278
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -696,6 +722,7 @@ dccAccession wgEncodeEH001303
 dccRep 2
 expId 1303
 fileName wgEncodeHaibGenotypeHcmRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999278
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -721,6 +748,7 @@ dccAccession wgEncodeEH001304
 dccRep 1
 expId 1304
 fileName wgEncodeHaibGenotypeHcpeRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999271
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -746,6 +774,7 @@ dccAccession wgEncodeEH001304
 dccRep 2
 expId 1304
 fileName wgEncodeHaibGenotypeHcpeRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999271
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -771,6 +800,7 @@ dccAccession wgEncodeEH001305
 dccRep 1
 expId 1305
 fileName wgEncodeHaibGenotypeHeeRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999272
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -796,6 +826,7 @@ dccAccession wgEncodeEH001306
 dccRep 1
 expId 1306
 fileName wgEncodeHaibGenotypeHek293RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999273
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -821,6 +852,7 @@ dccAccession wgEncodeEH001316
 dccRep 1
 expId 1316
 fileName wgEncodeHaibGenotypeHelas3RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999302
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -846,6 +878,7 @@ dccAccession wgEncodeEH000274
 dccRep 1
 expId 274
 fileName wgEncodeHaibGenotypeHepg2RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999286
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -871,6 +904,7 @@ dccAccession wgEncodeEH001307
 dccRep 1
 expId 1307
 fileName wgEncodeHaibGenotypeHipeRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999274
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -896,6 +930,7 @@ dccAccession wgEncodeEH001307
 dccRep 2
 expId 1307
 fileName wgEncodeHaibGenotypeHipeRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999274
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -921,6 +956,7 @@ dccAccession wgEncodeEH001308
 dccRep 1
 expId 1308
 fileName wgEncodeHaibGenotypeHl60RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999281
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -946,6 +982,7 @@ dccAccession wgEncodeEH001309
 dccRep 1
 expId 1309
 fileName wgEncodeHaibGenotypeHmecRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999282
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -971,6 +1008,7 @@ dccAccession wgEncodeEH001310
 dccRep 1
 expId 1310
 fileName wgEncodeHaibGenotypeHnpceRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999308
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -996,6 +1034,7 @@ dccAccession wgEncodeEH001311
 dccRep 1
 expId 1311
 fileName wgEncodeHaibGenotypeHpaeRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999307
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1021,6 +1060,7 @@ dccAccession wgEncodeEH001311
 dccRep 2
 expId 1311
 fileName wgEncodeHaibGenotypeHpaeRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999307
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1046,6 +1086,7 @@ dccAccession wgEncodeEH001262
 dccRep 1
 expId 1262
 fileName wgEncodeHaibGenotypeHrceRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999280
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1071,6 +1112,7 @@ dccAccession wgEncodeEH001262
 dccRep 2
 expId 1262
 fileName wgEncodeHaibGenotypeHrceRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999280
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1096,6 +1138,7 @@ dccAccession wgEncodeEH001263
 dccRep 1
 expId 1263
 fileName wgEncodeHaibGenotypeHreRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999279
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1121,6 +1164,7 @@ dccAccession wgEncodeEH001263
 dccRep 2
 expId 1263
 fileName wgEncodeHaibGenotypeHreRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999279
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1146,6 +1190,7 @@ dccAccession wgEncodeEH001264
 dccRep 1
 expId 1264
 fileName wgEncodeHaibGenotypeHrpeRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999284
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1171,6 +1216,7 @@ dccAccession wgEncodeEH001264
 dccRep 2
 expId 1264
 fileName wgEncodeHaibGenotypeHrpeRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999284
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1196,6 +1242,7 @@ dccAccession wgEncodeEH001312
 dccRep 1
 expId 1312
 fileName wgEncodeHaibGenotypeHsmmRegionsRep3.bedLogR.gz
+geoSampleAccession GSM999306
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1221,6 +1268,7 @@ dccAccession wgEncodeEH001313
 dccRep 1
 expId 1313
 fileName wgEncodeHaibGenotypeHsmmtRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999305
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1246,6 +1294,7 @@ dccAccession wgEncodeEH001314
 dccRep 1
 expId 1314
 fileName wgEncodeHaibGenotypeHtr8RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999304
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1271,6 +1320,7 @@ dccAccession wgEncodeEH001315
 dccRep 1
 expId 1315
 fileName wgEncodeHaibGenotypeHuvecRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999303
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1296,6 +1346,7 @@ dccAccession wgEncodeEH001265
 dccRep 1
 expId 1265
 fileName wgEncodeHaibGenotypeImr90RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999283
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1321,6 +1372,7 @@ dccAccession wgEncodeEH001265
 dccRep 2
 expId 1265
 fileName wgEncodeHaibGenotypeImr90RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999283
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1346,6 +1398,7 @@ dccAccession wgEncodeEH001266
 dccRep 1
 expId 1266
 fileName wgEncodeHaibGenotypeJurkatRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999316
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1371,6 +1424,7 @@ dccAccession wgEncodeEH001266
 dccRep 2
 expId 1266
 fileName wgEncodeHaibGenotypeJurkatRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999316
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1396,6 +1450,7 @@ dccAccession wgEncodeEH000275
 dccRep 1
 expId 275
 fileName wgEncodeHaibGenotypeK562RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999287
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1421,6 +1476,7 @@ dccAccession wgEncodeEH001267
 dccRep 1
 expId 1267
 fileName wgEncodeHaibGenotypeLncapRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999310
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1446,6 +1502,7 @@ dccAccession wgEncodeEH001269
 dccRep 1
 expId 1269
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999331
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1471,6 +1528,7 @@ dccAccession wgEncodeEH001269
 dccRep 2
 expId 1269
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999331
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1496,6 +1554,7 @@ dccAccession wgEncodeEH001269
 dccRep 3
 expId 1269
 fileName wgEncodeHaibGenotypeMcf10aesRegionsRep3.bedLogR.gz
+geoSampleAccession GSM999331
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1521,6 +1580,7 @@ dccAccession wgEncodeEH001270
 dccRep 1
 expId 1270
 fileName wgEncodeHaibGenotypeMcf10aesTamRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999309
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1546,6 +1606,7 @@ dccAccession wgEncodeEH001268
 dccRep 1
 expId 1268
 fileName wgEncodeHaibGenotypeMcf7RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999333
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1571,6 +1632,7 @@ dccAccession wgEncodeEH001268
 dccRep 2
 expId 1268
 fileName wgEncodeHaibGenotypeMcf7RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999333
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1596,6 +1658,7 @@ dccAccession wgEncodeEH001317
 dccRep 1
 expId 1317
 fileName wgEncodeHaibGenotypeMelanoRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999301
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1621,6 +1684,7 @@ dccAccession wgEncodeEH001317
 dccRep 2
 expId 1317
 fileName wgEncodeHaibGenotypeMelanoRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999301
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1646,6 +1710,7 @@ dccAccession wgEncodeEH001318
 dccRep 1
 expId 1318
 fileName wgEncodeHaibGenotypeMyometrRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999319
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1671,6 +1736,7 @@ dccAccession wgEncodeEH001271
 dccRep 1
 expId 1271
 fileName wgEncodeHaibGenotypeNb4RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999292
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1696,6 +1762,7 @@ dccAccession wgEncodeEH001271
 dccRep 2
 expId 1271
 fileName wgEncodeHaibGenotypeNb4RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999292
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1722,6 +1789,7 @@ dccAccession wgEncodeEH001289
 dccRep 1
 expId 1289
 fileName wgEncodeHaibGenotypeNhaDukeRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999328
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1747,6 +1815,7 @@ dccAccession wgEncodeEH001272
 dccRep 1
 expId 1272
 fileName wgEncodeHaibGenotypeNhaRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999311
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1772,6 +1841,7 @@ dccAccession wgEncodeEH001272
 dccRep 2
 expId 1272
 fileName wgEncodeHaibGenotypeNhaRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999311
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1797,6 +1867,7 @@ dccAccession wgEncodeEH001273
 dccRep 1
 expId 1273
 fileName wgEncodeHaibGenotypeNhbeRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999312
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1822,6 +1893,7 @@ dccAccession wgEncodeEH001273
 dccRep 2
 expId 1273
 fileName wgEncodeHaibGenotypeNhbeRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999312
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1847,6 +1919,7 @@ dccAccession wgEncodeEH001274
 dccRep 1
 expId 1274
 fileName wgEncodeHaibGenotypeNhdfneoRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999313
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1872,6 +1945,7 @@ dccAccession wgEncodeEH001275
 dccRep 1
 expId 1275
 fileName wgEncodeHaibGenotypeNt2d1RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999314
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1897,6 +1971,7 @@ dccAccession wgEncodeEH001322
 dccRep 1
 expId 1322
 fileName wgEncodeHaibGenotypeOvcar3RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999289
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1922,6 +1997,7 @@ dccAccession wgEncodeEH001276
 dccRep 1
 expId 1276
 fileName wgEncodeHaibGenotypePanc1RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999315
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1947,6 +2023,7 @@ dccAccession wgEncodeEH001276
 dccRep 2
 expId 1276
 fileName wgEncodeHaibGenotypePanc1RegionsRep2.bedLogR.gz
+geoSampleAccession GSM999315
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1972,6 +2049,7 @@ dccAccession wgEncodeEH001319
 dccRep 1
 expId 1319
 fileName wgEncodeHaibGenotypePfsk1RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999317
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -1997,6 +2075,7 @@ dccAccession wgEncodeEH001277
 dccRep 1
 expId 1277
 fileName wgEncodeHaibGenotypePrecRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999318
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2022,6 +2101,7 @@ dccAccession wgEncodeEH001278
 dccRep 1
 expId 1278
 fileName wgEncodeHaibGenotypeRptecRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999288
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2047,6 +2127,7 @@ dccAccession wgEncodeEH001278
 dccRep 2
 expId 1278
 fileName wgEncodeHaibGenotypeRptecRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999288
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2072,6 +2153,7 @@ dccAccession wgEncodeEH001279
 dccRep 1
 expId 1279
 fileName wgEncodeHaibGenotypeSaecRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999334
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2097,6 +2179,7 @@ dccAccession wgEncodeEH001279
 dccRep 2
 expId 1279
 fileName wgEncodeHaibGenotypeSaecRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999334
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2122,6 +2205,7 @@ dccAccession wgEncodeEH001281
 dccRep 1
 expId 1281
 fileName wgEncodeHaibGenotypeSkmcRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999324
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2147,6 +2231,7 @@ dccAccession wgEncodeEH001281
 dccRep 2
 expId 1281
 fileName wgEncodeHaibGenotypeSkmcRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999324
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2172,6 +2257,7 @@ dccAccession wgEncodeEH001280
 dccRep 1
 expId 1280
 fileName wgEncodeHaibGenotypeSknshraRegionsRep1.bedLogR.gz
+geoSampleAccession GSM999325
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2197,6 +2283,7 @@ dccAccession wgEncodeEH001280
 dccRep 2
 expId 1280
 fileName wgEncodeHaibGenotypeSknshraRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999325
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2222,6 +2309,7 @@ dccAccession wgEncodeEH001320
 dccRep 1
 expId 1320
 fileName wgEncodeHaibGenotypeT47dRegionsRep2.bedLogR.gz
+geoSampleAccession GSM999330
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2247,6 +2335,7 @@ dccAccession wgEncodeEH001321
 dccRep 1
 expId 1321
 fileName wgEncodeHaibGenotypeU87RegionsRep1.bedLogR.gz
+geoSampleAccession GSM999332
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
@@ -2260,4 +2349,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -1500758117
+# MAGIC: -677806229

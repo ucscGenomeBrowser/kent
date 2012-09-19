@@ -702,6 +702,7 @@ dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002353
 expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepSignalRep1.bigWig
+geoSampleAccession GSM923584
 grant Hardison
 lab PSU-m
 md5sum 410fcae895710fa0e6ebe1e2912fa499
@@ -2874,6 +2875,7 @@ dateUnrestricted 2012-06-26
 dccAccession wgEncodeEM002354
 expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepSignalRep2.bigWig
+geoSampleAccession GSM923589
 grant Hardison
 lab PSU-m
 md5sum 7678396218ca6d5703d4a1e5d2de22e9
@@ -3265,6 +3267,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003197
 expId 3197
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hPkRep1.broadPeak.gz
+geoSampleAccession GSM995444
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3295,6 +3298,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003197
 expId 3197
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hRawDataRep1.fastq.gz
+geoSampleAccession GSM995444
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3324,6 +3328,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003197
 expId 3197
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd14hSigRep1.bigWig
+geoSampleAccession GSM995444
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3383,6 +3388,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003198
 expId 3198
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hPkRep1.broadPeak.gz
+geoSampleAccession GSM995449
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3413,6 +3419,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003198
 expId 3198
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hRawDataRep1.fastq.gz
+geoSampleAccession GSM995449
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3442,6 +3449,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003198
 expId 3198
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd24hSigRep1.bigWig
+geoSampleAccession GSM995449
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3501,6 +3509,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003199
 expId 3199
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hPkRep1.broadPeak.gz
+geoSampleAccession GSM995448
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3531,6 +3540,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003199
 expId 3199
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hRawDataRep1.fastq.gz
+geoSampleAccession GSM995448
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3560,6 +3570,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003199
 expId 3199
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd30hSigRep1.bigWig
+geoSampleAccession GSM995448
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3619,6 +3630,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003200
 expId 3200
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hPkRep1.broadPeak.gz
+geoSampleAccession GSM995443
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3649,6 +3661,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003200
 expId 3200
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hRawDataRep1.fastq.gz
+geoSampleAccession GSM995443
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3678,6 +3691,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003200
 expId 3200
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd3hSigRep1.bigWig
+geoSampleAccession GSM995443
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3737,6 +3751,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003201
 expId 3201
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hPkRep1.broadPeak.gz
+geoSampleAccession GSM995442
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3767,6 +3782,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003201
 expId 3201
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hRawDataRep1.fastq.gz
+geoSampleAccession GSM995442
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3796,6 +3812,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003201
 expId 3201
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputDiffd7hSigRep1.bigWig
+geoSampleAccession GSM995442
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3826,6 +3843,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003196
 expId 3196
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputPkRep1.broadPeak.gz
+geoSampleAccession GSM995445
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3856,6 +3874,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003196
 expId 3196
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM995445
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3885,6 +3904,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003196
 expId 3196
 fileName wgEncodePsuTfbsG1eer4Gata1aME0S129InputSigRep1.bigWig
+geoSampleAccession GSM995445
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -3973,6 +3993,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003203
 expId 3203
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hRawDataRep1.fastq.gz
+geoSampleAccession GSM995440
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4002,6 +4023,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003203
 expId 3203
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd14hSigRep1.bigWig
+geoSampleAccession GSM995440
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4061,6 +4083,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003204
 expId 3204
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hRawDataRep1.fastq.gz
+geoSampleAccession GSM995439
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4090,6 +4113,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003204
 expId 3204
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd24hSigRep1.bigWig
+geoSampleAccession GSM995439
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4149,6 +4173,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003205
 expId 3205
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hRawDataRep1.fastq.gz
+geoSampleAccession GSM995438
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4178,6 +4203,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003205
 expId 3205
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd30hSigRep1.bigWig
+geoSampleAccession GSM995438
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4237,6 +4263,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003206
 expId 3206
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hRawDataRep1.fastq.gz
+geoSampleAccession GSM995437
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4266,6 +4293,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003206
 expId 3206
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd3hSigRep1.bigWig
+geoSampleAccession GSM995437
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4325,6 +4353,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003207
 expId 3207
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hRawDataRep1.fastq.gz
+geoSampleAccession GSM995436
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4354,6 +4383,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003207
 expId 3207
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputDiffd7hSigRep1.bigWig
+geoSampleAccession GSM995436
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4384,6 +4414,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003202
 expId 3202
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputRawDataRep1.fastq.gz
+geoSampleAccession GSM995441
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -4413,6 +4444,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEM003202
 expId 3202
 fileName wgEncodePsuTfbsG1eer4InputME0S129InputSigRep1.bigWig
+geoSampleAccession GSM995441
 grant Hardison
 lab PSU-m
 labExpId Timecourse
@@ -6249,6 +6281,7 @@ dateUnrestricted 2013-04-18
 dccAccession wgEncodeEM003195
 expId 3195
 fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM995446
 grant Hardison
 lab PSU-m
 md5sum 135ec190933fa12645d2b60c0804ca56
@@ -6276,6 +6309,7 @@ dateUnrestricted 2013-04-18
 dccAccession wgEncodeEM003195
 expId 3195
 fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRawDataRep1.fastq.gz
+geoSampleAccession GSM995446
 grant Hardison
 lab PSU-m
 md5sum b5dee4a8a9ab7d8f26c8239cf03658c9
@@ -6303,6 +6337,7 @@ dateUnrestricted 2013-04-18
 dccAccession wgEncodeEM003195
 expId 3195
 fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRawDataRep2.fastq.gz
+geoSampleAccession GSM995446
 grant Hardison
 lab PSU-m
 md5sum be60f748feb5eb302a40c7d9df58e816
@@ -6330,6 +6365,7 @@ dateUnrestricted 2013-04-18
 dccAccession wgEncodeEM003195
 expId 3195
 fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM995446
 grant Hardison
 lab PSU-m
 md5sum acf06d26611ec4dcc9fd67452f85e68e
@@ -6357,6 +6393,7 @@ dateUnrestricted 2013-04-18
 dccAccession wgEncodeEM003195
 expId 3195
 fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM995446
 grant Hardison
 lab PSU-m
 md5sum 1f73be1c0fd3c4b597d195e1dadee6a2
@@ -6384,6 +6421,7 @@ dateUnrestricted 2013-04-18
 dccAccession wgEncodeEM003195
 expId 3195
 fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM995446
 grant Hardison
 lab PSU-m
 md5sum 43fb04bf2202b5535b86ac04b79cff87
@@ -6411,6 +6449,7 @@ dateUnrestricted 2013-04-18
 dccAccession wgEncodeEM003195
 expId 3195
 fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM995446
 grant Hardison
 lab PSU-m
 md5sum ceb5678102a899710c25628b09c95be0
@@ -6438,6 +6477,7 @@ dateUnrestricted 2013-04-18
 dccAccession wgEncodeEM003195
 expId 3195
 fileName wgEncodePsuTfbsMegakaryoFli1sc356BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM995446
 grant Hardison
 lab PSU-m
 md5sum e87dd4c4a19c1d83566d101b924f7561
@@ -6659,6 +6699,7 @@ dateUnrestricted 2013-04-17
 dccAccession wgEncodeEM002351
 expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep3.fastq.gz
+geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum 3a75f406f665c722d94b844fe066015d
@@ -7218,6 +7259,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputPk.broadPeak.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 3794744ceb668ba1cb24bbddbeb5f818
@@ -7245,6 +7287,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep1.fastq.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 9101d7b287d08b91fe7a2914cc9246da
@@ -7272,6 +7315,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep2.fastq.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 90922c1d48a6749802f792f35a42a2b3
@@ -7299,6 +7343,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep3.fastq.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum f3cf3f69dab547acfe0b4632f1b207d6
@@ -7326,6 +7371,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep4.fastq.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 66c20c812b50f1bdca3489b48df92c50
@@ -7353,6 +7399,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 8c2a71b0c3084177cb5bcc25eecc6ee1
@@ -7380,6 +7427,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 5f9741f3d40d0664d8940cd29aae327f
@@ -7407,6 +7455,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep3.broadPeak.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum e41644f7b384f22f21e67cf2c09d055b
@@ -7434,6 +7483,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep4.broadPeak.gz
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 76918c95111ba9a7c4b1dad35727844e
@@ -7461,6 +7511,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep1.bigWig
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 934178034a803071c2c3134e12d38e7c
@@ -7488,6 +7539,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep2.bigWig
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 0185ebf148aef9a8137c1d2a2c04561c
@@ -7515,6 +7567,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep3.bigWig
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 83d5a198c4b830d225f8ab24530df4c3
@@ -7542,6 +7595,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep4.bigWig
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 5c874ad97f06bd67fa5ae4fd8c3ffcf4
@@ -7569,6 +7623,7 @@ dateUnrestricted 2012-12-29
 dccAccession wgEncodeEM003194
 expId 3194
 fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputSig.bigWig
+geoSampleAccession GSM995447
 grant Hardison
 lab PSU-m
 md5sum 5bf91408e36dd4b4547eb2ed19e1889a
@@ -8626,4 +8681,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1788308103
+# MAGIC: -1179032330

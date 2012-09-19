@@ -1,33 +1,33 @@
 mkChangeNotes v2
 hg19 wgEncodeCshlLongRnaSeq Release 3 vs Release 2
-2012-09-11
+2012-09-17
 
 QA Count Summaries for Release 3:
-Tables: 745
-Files: 2382
-Gbdbs: 732
+Tables: 740
+Files: 2373
+Gbdbs: 728
 Supplemental: 9
 Other: 3
 
 REVOKED:
-Tables: 16
-Files: 21
-Gbdbs: 4
+Tables: 21
+Files: 30
+Gbdbs: 8
 
 Sizes of New:
-Table: 13399 MB (13 GB)
-Files: 401463 MB (392 GB)
+Table: 13347 MB (13 GB)
+Files: 401373 MB (392 GB)
 Gbdbs: 114368 MB (112 GB)
 Supplemental: 0 MB
 Other: 2 MB
-Total: 529232 MB (517 GB)
+Total: 529090 MB (517 GB)
 
 
 TABLES:
 New: 18
-Untouched: 727
-Revoked/Replaced/Renamed: 16
-New + Untouched: 745
+Untouched: 722
+Revoked/Replaced/Renamed: 21
+New + Untouched: 740
 Total (New + Untouched + Revoked/Replaced/Renamed): 761
 
 New Tables (18):
@@ -50,7 +50,7 @@ wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctionsV2
 wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusSignalRep1V2
 wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusSignalRep1V2
 
-Untouched Tables (727):
+Untouched Tables (722):
 wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
 wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2
 wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep1
@@ -355,11 +355,6 @@ wgEncodeCshlLongRnaSeqHmepcCellTotalContigs
 wgEncodeCshlLongRnaSeqHmepcCellTotalJunctions
 wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRep1
 wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRep1
-wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1
-wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs
-wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions
-wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
-wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
 wgEncodeCshlLongRnaSeqHmscat010260412CellTotalAlnRep1
 wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRep1
 wgEncodeCshlLongRnaSeqHmscat010260412CellTotalPlusRep1
@@ -779,7 +774,7 @@ wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2
 wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1
 wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 
-Revoked/Replaced/Renamed Tables (16):
+Revoked/Replaced/Renamed Tables (21):
 wgEncodeCshlLongRnaSeqH1hescCytosolPamContigs
 wgEncodeCshlLongRnaSeqH1hescCytosolPapContigs
 wgEncodeCshlLongRnaSeqH1hescNucleusPamContigs
@@ -792,6 +787,11 @@ wgEncodeCshlLongRnaSeqHmnccbCellTotalContigs
 wgEncodeCshlLongRnaSeqHmnccbCellTotalJunctions
 wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRep2
 wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRep2
+wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1
+wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs
+wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions
+wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1
+wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1
 wgEncodeCshlLongRnaSeqHuvecCytosolPamContigs
 wgEncodeCshlLongRnaSeqNhekCellPamContigs
 wgEncodeCshlLongRnaSeqNhekCellPapContigs
@@ -799,16 +799,16 @@ wgEncodeCshlLongRnaSeqNhekCytosolPamContigs
 
 
 DOWNLOAD FILES:
-New: 546
-Untouched: 1837
-Revoked/Replaced/Renamed: 21
-New + Untouched: 2383
+New: 545
+Untouched: 1829
+Revoked/Replaced/Renamed: 30
+New + Untouched: 2374
 Total (New + Untouched + Revoked/Replaced/Renamed): 2403
 
 These 1 objects exist in both new and revoked download files:
-wgEncodeCshlLongRnaSeqHmnccbCellTotalSpikeinsRep2.spikeins
+wgEncodeCshlLongRnaSeqHmncpbCellTotalSpikeinsRep1.spikeins
 
-New Download Files (546):
+New Download Files (545):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqA549CellPamExonsDeNovo.gff.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqA549CellPamGeneDeNovoV2.gff.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqA549CellPamSpikeinsRep1.spikeins
@@ -1046,7 +1046,6 @@ New Download Files (546):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmepcCellTotalGeneDeNovo.gff.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmepcCellTotalSpikeinsRep1.spikeins
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmepcCellTotalTranscriptDeNovo.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmnccbCellTotalSpikeinsRep2.spikeins
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1V2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalContigsV2.bedRnaElements.gz
@@ -1356,7 +1355,7 @@ New Download Files (546):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSknshraCellPapSpikeinsRep2.spikeins
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptDeNovoV2.gtf.gz
 
-Untouched Download Files (1837):
+Untouched Download Files (1829):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2.bam
@@ -2136,14 +2135,6 @@ Untouched Download Files (1837):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmepcCellTotalProtocolRep1.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmepcCellTotalTranscriptGencV10.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs.bedRnaElements.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions.bedRnaElements.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalProtocolRep1.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmscat010260412CellTotalAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmscat010260412CellTotalAlnRep1.bam.bai
@@ -3195,7 +3186,7 @@ Untouched Download Files (1837):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7.gtf.gz
 
-Revoked/Replaced/Renamed Download Files (21):
+Revoked/Replaced/Renamed Download Files (30):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqH1hescCytosolPamContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqH1hescCytosolPapContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqH1hescNucleusPamContigs.bedRnaElements.gz
@@ -3213,6 +3204,15 @@ Revoked/Replaced/Renamed Download Files (21):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmnccbCellTotalProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmnccbCellTotalSpikeinsRep2.spikeins
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalFastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalJunctions.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHmncpbCellTotalSpikeinsRep1.spikeins
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqHuvecCytosolPamContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqNhekCellPamContigs.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release3/wgEncodeCshlLongRnaSeqNhekCellPapContigs.bedRnaElements.gz
@@ -3221,9 +3221,9 @@ Revoked/Replaced/Renamed Download Files (21):
 
 GBDBS:
 New: 16
-Untouched: 716
-Revoked/Replaced/Renamed: 4
-New + Untouched: 732
+Untouched: 712
+Revoked/Replaced/Renamed: 8
+New + Untouched: 728
 Total (New + Untouched + Revoked/Replaced/Renamed): 736
 
 New Gbdb Files (16):
@@ -3244,7 +3244,7 @@ New Gbdb Files (16):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusSignalRep1V2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusSignalRep1V2.bigWig
 
-Untouched Gbdb Files (716):
+Untouched Gbdb Files (712):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2.bam
@@ -3541,10 +3541,6 @@ Untouched Gbdb Files (716):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmepcCellTotalAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmepcCellTotalMinusRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmepcCellTotalPlusRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam.bai
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmscat010260412CellTotalAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmscat010260412CellTotalAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmscat010260412CellTotalMinusRep1.bigWig
@@ -3962,11 +3958,15 @@ Untouched Gbdb Files (716):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2.bigWig
 
-Revoked/Replaced/Renamed Gbdb Files (4):
+Revoked/Replaced/Renamed Gbdb Files (8):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmnccbCellTotalAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmnccbCellTotalAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmnccbCellTotalMinusRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmnccbCellTotalPlusRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalMinusRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHmncpbCellTotalPlusRep1.bigWig
 
 
 SUPPLEMENTAL FILES:

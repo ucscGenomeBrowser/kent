@@ -7,25 +7,26 @@ shortLabel UNC FAIRE
 longLabel Open Chromatin by FAIRE from ENCODE/OpenChrom(UNC Chapel Hill)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t3COLONOC=Colon_OC t3ENDOMETRIUMOC=Endometrium_OC t3FRONTALCORTEXOC=Frontal_cortex_OC t3GLIOBLA=Gliobla t3GM12891=GM12891 t3GM12892=GM12892 t3GM18507=GM18507 t3GM19239=GM19239 t3HTR8SVN=HTR8svn t3KIDNEYOC=Kidney_OC t3MEDULLO=Medullo t3MRTA204=MRT_A204 t3MRTG401=MRT_G401 t3MRTTTC549=MRT_TTC549 t3NHA=NH-A t3NHBE=NHBE t3NHEK=NHEK t3PANCREASOC=Pancreas_OC t3PANISLETS=PanIslets t3RCC7860=RCC_7860 t3SMALLINTESTINEOC=Small_intestine_OC t3UROTHELIA=Urothelia 
-subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN&alpha;_4hrs IFNg4h=IFN&gamma;_4hrs NaBut=Sodium_Butyrate OHUrea=Hydroxyurea SERUMFREE=Serum_Free UT189=UT189_E.coli VEH=Vehicle EST10NM30M=Estradiol_10nM_30m
+subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MCF7=MCF-7&nbsp;(Tier_2) t3COLONOC=Colon t3ENDOMETRIUMOC=Endometrium t3FRONTALCORTEXOC=Frontal_cortex t3GLIOBLA=Gliobla t3GM12891=GM12891 t3GM12892=GM12892 t3GM18507=GM18507 t3GM19239=GM19239 t3HTR8SVN=HTR8svn t3KIDNEYOC=Kidney t3MEDULLO=Medullo t3MRTA204=MRT_A204 t3MRTG401=MRT_G401 t3MRTTTC549=MRT_TTC549 t3NHA=NH-A t3NHBE=NHBE t3NHEK=NHEK t3PANCREASOC=Pancreas t3PANISLETS=PanIslets t3RCC7860=RCC_7860 t3SMALLINTESTINEOC=Small_intestine t3UROTHELIA=Urothelia
+subGroup3 treatment Treatment AANONE=None EST10NM30M=Estradiol_10nM_30m HYDROUREA=Hydroxyurea HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN&alpha;_4hrs IFNg4h=IFN&gamma;_4hrs NaBut=Sodium_Butyrate SERUMFREE=Serum_Free UT189=UT189_E.coli VEH=Vehicle EST10NM30M=Estradiol_10nM_30m
 sortOrder cellType=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment view=View controlId=Control replicate=Replicate dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dimensions dimensionY=cellType dimensionX=treatment
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 noInherit on
 configurable on
 useScore 0
+html wgEncodeOpenChromFaire.release2
 priority 3
 type bed 3
 wgEncode 1
-dataVersion through the ENCODE Jan 2011 Freeze
+dataVersion ENCODE Jul 2012 Freeze
 
     track wgEncodeOpenChromFaireViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility dense
+    visibility pack
     subTrack wgEncodeOpenChromFaire
     pValueFilter 0.0
     pValueFilterLimits 0:16
@@ -182,7 +183,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel K562 urea FAIR Pk
         longLabel K562 Hydroxyurea FAIRE Peaks from ENCODE/OpenChrom(UNC)
-        subGroups view=Peaks cellType=t1K562 treatment=OHUrea
+        subGroups view=Peaks cellType=t1K562 treatment=HYDROUREA
         type narrowPeak
         color 46,0,184
         # subId=2772 dateSubmitted=2010-10-27
@@ -246,7 +247,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrta2041Pk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel MRT_A204.1 Pk
+        shortLabel MRT A204.1 F Pk
         longLabel MRT A204.1 FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3MRTA204 treatment=AANONE
         type narrowPeak
@@ -254,7 +255,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrtg4016Pk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel MRT_G401.6 Pk
+        shortLabel MRT G401.6 F Pk
         longLabel MRT G401.6 FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3MRTG401 treatment=AANONE
         type narrowPeak
@@ -262,7 +263,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrtttc549Pk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel MRT_TTC549 Pk
+        shortLabel MRT TTC549 F Pk
         longLabel MRT TTC549 FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3MRTTTC549 treatment=AANONE
         type narrowPeak
@@ -270,7 +271,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireRcc7860Pk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel RCC_7860 Pk
+        shortLabel RCC7860 FAIR Pk
         longLabel RCC 7860 FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3RCC7860 treatment=AANONE
         type narrowPeak
@@ -278,31 +279,31 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireColonocPk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Colon_OC Pk
-        longLabel Colon OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        shortLabel Colon FAIRE Pk
+        longLabel Colon FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3COLONOC treatment=AANONE
         type narrowPeak
         # subId=7103 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFairePancreasocPk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Pancreas_OC Pk
-        longLabel Pancreas OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        shortLabel Pancreas FAIRE Pk
+        longLabel Pancreas FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3PANCREASOC treatment=AANONE
         type narrowPeak
         # subId=7104 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFaireMcf7VehPk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel MCF-7 Pk
-        longLabel MCF-7 vehicle FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        shortLabel MCF-7 Veh FAIR Pk
+        longLabel MCF-7 Vehicle FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t2MCF7 treatment=VEH
         type narrowPeak
         # subId=7105 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFaireMcf7Est10nm30mPk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel MCF-7 Pk
+        shortLabel MCF-7 Est FAIR Pk
         longLabel MCF-7 Estradiol 10nM 30m FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t2MCF7 treatment=EST10NM30M
         type narrowPeak
@@ -310,32 +311,32 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireFrontalcortexocPk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Frontal_cortex_OC Pk
-        longLabel Frontal cortex OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        shortLabel Frntl crtx FAI Pk
+        longLabel Frontal cortex FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3FRONTALCORTEXOC treatment=AANONE
         type narrowPeak
         # subId=7319 dateSubmitted=2012-07-04
 
         track wgEncodeOpenChromFaireSmallintestineocPk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Small_intestine_OC Pk
-        longLabel Small intestine OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        shortLabel Smll int FAIRE Pk
+        longLabel Small intestine FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3SMALLINTESTINEOC treatment=AANONE
         type narrowPeak
         # subId=7322 dateSubmitted=2012-07-06
 
         track wgEncodeOpenChromFaireKidneyocPk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Kidney_OC Pk
-        longLabel Kidney OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        shortLabel Kidney FAIRE Pk
+        longLabel Kidney FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3KIDNEYOC treatment=AANONE
         type narrowPeak
         # subId=7324 dateSubmitted=2012-07-06
 
         track wgEncodeOpenChromFaireEndometriumocPk
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Endometrium_OC Pk
-        longLabel Endometrium OC FAIRE Peaks from ENCODE/OpenChrom(UNC)
+        shortLabel Endometr FAIRE Pk
+        longLabel Endometrium FAIRE Peaks from ENCODE/OpenChrom(UNC)
         subGroups view=Peaks cellType=t3ENDOMETRIUMOC treatment=AANONE
         type narrowPeak
         # subId=7348 dateSubmitted=2012-07-12
@@ -501,7 +502,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel K562 urea FAIR DS
         longLabel K562 Hydroxyurea FAIRE Density Signal from ENCODE/OpenChrom(UNC)
-        subGroups view=SIG cellType=t1K562 treatment=OHUrea
+        subGroups view=SIG cellType=t1K562 treatment=HYDROUREA
         type bigWig 0.000000 0.142500
         color 46,0,184
         # subId=2772 dateSubmitted=2010-10-27
@@ -549,8 +550,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireA549Sig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel A549 FAIRE DS OS
-        longLabel A549 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel A549 FAIRE DS
+        longLabel A549 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t2A549 treatment=AANONE
         type bigWig 0.000000 0.403700
         # subId=3496 dateSubmitted=2011-01-22
@@ -565,7 +566,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrta2041Sig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel MRT_A204.1 DS
+        shortLabel MRT A204.1 F DS
         longLabel MRT A204.1 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3MRTA204 treatment=AANONE
         type bigWig 0.000000 0.650900
@@ -573,7 +574,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrtg4016Sig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel MRT_G401.6 DS
+        shortLabel MRT G401.6 F DS
         longLabel MRT G401.6 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3MRTG401 treatment=AANONE
         type bigWig 0.000000 0.801300
@@ -581,7 +582,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrtttc549Sig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel MRT_TTC549 DS
+        shortLabel MRT TTC549 F DS
         longLabel MRT TTC549 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3MRTTTC549 treatment=AANONE
         type bigWig 0.000000 0.664800
@@ -589,7 +590,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireRcc7860Sig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel RCC_7860 DS
+        shortLabel RCC7860 FAIR DS
         longLabel RCC 7860 FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3RCC7860 treatment=AANONE
         type bigWig 0.000000 2.507100
@@ -597,31 +598,31 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireColonocSig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Colon_OC DS
-        longLabel Colon OC FAIRE Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Colon FAIRE DS
+        longLabel Colon FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3COLONOC treatment=AANONE
         type bigWig 0.000000 0.669900
         # subId=7103 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFairePancreasocSig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Pancreas_OC DS
-        longLabel Pancreas OC FAIRE Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Pancreas FAIRE DS
+        longLabel Pancreas FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3PANCREASOC treatment=AANONE
         type bigWig 0.000000 1.547700
         # subId=7104 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFaireMcf7VehSig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel MCF-7 DS
-        longLabel MCF-7 vehicle FAIRE Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel MCF-7 Veh FAIR DS
+        longLabel MCF-7 Vehicle FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t2MCF7 treatment=VEH
         type bigWig 0.000000 0.757500
         # subId=7105 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFaireMcf7Est10nm30mSig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel MCF-7 DS
+        shortLabel MCF-7 Est FAIR DS
         longLabel MCF-7 Estradiol 10nM 30m FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t2MCF7 treatment=EST10NM30M
         type bigWig 0.000000 0.958900
@@ -629,32 +630,32 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireFrontalcortexocSig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Frontal_cortex_OC DS
-        longLabel Frontal cortex OC FAIRE Density Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Frntl crtx FAI DS
+        longLabel Frontal cortex FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3FRONTALCORTEXOC treatment=AANONE
         type bigWig 0.000000 0.592400
         # subId=7319 dateSubmitted=2012-07-04
 
         track wgEncodeOpenChromFaireSmallintestineocSig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Small_intestine_OC DS
-        longLabel Small intestine OC FAIRE Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Smll int FAIRE DS
+        longLabel Small intestine FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3SMALLINTESTINEOC treatment=AANONE
         type bigWig 0.000000 0.854500
         # subId=7322 dateSubmitted=2012-07-06
 
         track wgEncodeOpenChromFaireKidneyocSig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Kidney_OC DS
-        longLabel Kidney OC FAIRE Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Kidney FAIRE DS
+        longLabel Kidney FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3KIDNEYOC treatment=AANONE
         type bigWig 0.000000 1.018100
         # subId=7324 dateSubmitted=2012-07-06
 
         track wgEncodeOpenChromFaireEndometriumocSig
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Endometrium_OC DS
-        longLabel Endometrium OC FAIRE Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Endometr FAIRE DS
+        longLabel Endometrium FAIRE Density Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIG cellType=t3ENDOMETRIUMOC treatment=AANONE
         type bigWig 0.000000 0.350500
         # subId=7348 dateSubmitted=2012-07-12
@@ -820,7 +821,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel K562 urea FAIR OS
         longLabel K562 Hydroxyurea FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
-        subGroups view=SIGBO cellType=t1K562 treatment=OHUrea
+        subGroups view=SIGBO cellType=t1K562 treatment=HYDROUREA
         type bigWig 0.000000 1562.000000
         color 46,0,184
         # subId=2772 dateSubmitted=2010-10-27
@@ -884,7 +885,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrta2041BaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel MRT_A204.1 OS
+        shortLabel MRT A204.1 F OS
         longLabel MRT A204.1 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3MRTA204 treatment=AANONE
         type bigWig 0.000000 1571.000000
@@ -892,7 +893,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrtg4016BaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel MRT_G401.6 OS
+        shortLabel MRT G401.6 F OS
         longLabel MRT G401.6 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3MRTG401 treatment=AANONE
         type bigWig 0.000000 1909.000000
@@ -900,7 +901,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireMrtttc549BaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel MRT_TTC549 OS
+        shortLabel MRT TTC549 F OS
         longLabel MRT TTC549 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3MRTTTC549 treatment=AANONE
         type bigWig 0.000000 1553.000000
@@ -908,7 +909,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireRcc7860BaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel RCC_7860 OS
+        shortLabel RCC7860 FAIR OS
         longLabel RCC 7860 FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3RCC7860 treatment=AANONE
         type bigWig 0.000000 2955.000000
@@ -916,31 +917,31 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireColonocBaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Colon_OC OS
-        longLabel Colon OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Colon FAIRE OS
+        longLabel Colon FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3COLONOC treatment=AANONE
         type bigWig 0.000000 2410.000000
         # subId=7103 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFairePancreasocBaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Pancreas_OC OS
-        longLabel Pancreas OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Pancreas FAIRE OS
+        longLabel Pancreas FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3PANCREASOC treatment=AANONE
         type bigWig 0.000000 2501.000000
         # subId=7104 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFaireMcf7VehBaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel MCF-7 OS
-        longLabel MCF-7 vehicle FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel MCF-7 Veh FAIR OS
+        longLabel MCF-7 Vehicle FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t2MCF7 treatment=VEH
         type bigWig 0.000000 1481.000000
         # subId=7105 dateSubmitted=2012-06-19
 
         track wgEncodeOpenChromFaireMcf7Est10nm30mBaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel MCF-7 OS
+        shortLabel MCF-7 Est FAIR OS
         longLabel MCF-7 Estradiol 10nM 30m FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t2MCF7 treatment=EST10NM30M
         type bigWig 0.000000 2594.000000
@@ -948,32 +949,32 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromFaireFrontalcortexocBaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Frontal_cortex_OC OS
-        longLabel Frontal cortex OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Frntl crtx FAI OS
+        longLabel Frontal cortex FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3FRONTALCORTEXOC treatment=AANONE
         type bigWig 0.000000 2783.000000
         # subId=7319 dateSubmitted=2012-07-04
 
         track wgEncodeOpenChromFaireSmallintestineocBaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Small_intestine_OC OS
-        longLabel Small intestine OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Smll int FAIRE OS
+        longLabel Small intestine FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3SMALLINTESTINEOC treatment=AANONE
         type bigWig 0.000000 2457.000000
         # subId=7322 dateSubmitted=2012-07-06
 
         track wgEncodeOpenChromFaireKidneyocBaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Kidney_OC OS
-        longLabel Kidney OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Kidney FAIRE OS
+        longLabel Kidney FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3KIDNEYOC treatment=AANONE
         type bigWig 0.000000 2031.000000
         # subId=7324 dateSubmitted=2012-07-06
 
         track wgEncodeOpenChromFaireEndometriumocBaseOverlapSignal
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Endometrium_OC OS
-        longLabel Endometrium OC FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
+        shortLabel Endometr FAIRE OS
+        longLabel Endometrium FAIRE Overlap Signal from ENCODE/OpenChrom(UNC)
         subGroups view=SIGBO cellType=t3ENDOMETRIUMOC treatment=AANONE
         type bigWig 0.000000 2355.000000
         # subId=7348 dateSubmitted=2012-07-12

@@ -2,6 +2,7 @@ metaObject wgEncodeGisChiaPet
 objType composite
 composite wgEncodeGisChiaPet
 expVars lab,dataType,cell,antibody
+geoSeriesAccession GSE39495
 
 metaObject wgEncodeGisChiaPetHct116Pol2AlnRep1
 objType file
@@ -36,6 +37,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001427
 expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2FastqRd1Rep1.fastq.gz
+geoSampleAccession GSM970210
 grant Ruan
 lab GIS-Ruan
 labExpId CHH524M
@@ -57,6 +59,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001427
 expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2FastqRd2Rep1.fastq.gz
+geoSampleAccession GSM970210
 grant Ruan
 lab GIS-Ruan
 labExpId CHH524M
@@ -79,6 +82,7 @@ dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001427
 expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2InteractionsRep1.bed.gz
+geoSampleAccession GSM970210
 grant Ruan
 lab GIS-Ruan
 labExpId CHH524M
@@ -101,6 +105,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001427
 expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2SigRep1.bigWig
+geoSampleAccession GSM970210
 grant Ruan
 lab GIS-Ruan
 labExpId CHH524M
@@ -144,6 +149,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001426
 expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2FastqRd1Rep1.fastq.gz
+geoSampleAccession GSM970211
 grant Ruan
 lab GIS-Ruan
 labExpId IHH025M_hg19
@@ -165,6 +171,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001426
 expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2FastqRd2Rep1.fastq.gz
+geoSampleAccession GSM970211
 grant Ruan
 lab GIS-Ruan
 labExpId IHH025M_hg19
@@ -187,6 +194,7 @@ dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001426
 expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2InteractionsRep1.bed.gz
+geoSampleAccession GSM970211
 grant Ruan
 lab GIS-Ruan
 labExpId IHH025M_hg19
@@ -209,6 +217,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001426
 expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2SigRep1.bigWig
+geoSampleAccession GSM970211
 grant Ruan
 lab GIS-Ruan
 labExpId IHH025M_hg19
@@ -254,6 +263,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
 fileName wgEncodeGisChiaPetK562CtcfFastqRd1.fastq.gz
+geoSampleAccession GSM970216
 grant Ruan
 lab GIS-Ruan
 labExpId CTCF_K562M_L7
@@ -276,6 +286,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
 fileName wgEncodeGisChiaPetK562CtcfFastqRd2.fastq.gz
+geoSampleAccession GSM970216
 grant Ruan
 lab GIS-Ruan
 labExpId CTCF_K562M_L7
@@ -298,6 +309,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
 fileName wgEncodeGisChiaPetK562CtcfInteractionsRep1.bed.gz
+geoSampleAccession GSM970216
 grant Ruan
 lab GIS-Ruan
 labExpId CTCF_K562M_L7
@@ -321,6 +333,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002075
 expId 2075
 fileName wgEncodeGisChiaPetK562CtcfSigRep1.bigWig
+geoSampleAccession GSM970216
 grant Ruan
 lab GIS-Ruan
 labExpId CTCF_K562M_L7
@@ -388,6 +401,7 @@ dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
 expId 1428
 fileName wgEncodeGisChiaPetK562Pol2FastqRd1Rep1.fastq.gz
+geoSampleAccession GSM970213
 grant Ruan
 lab GIS-Ruan
 labExpId CHK019M_L2_lane13
@@ -410,6 +424,7 @@ dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
 expId 1428
 fileName wgEncodeGisChiaPetK562Pol2FastqRd1Rep2.fastq.gz
+geoSampleAccession GSM970213
 grant Ruan
 lab GIS-Ruan
 labExpId CHK019M_L2_lane24
@@ -432,6 +447,7 @@ dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
 expId 1428
 fileName wgEncodeGisChiaPetK562Pol2FastqRd2Rep1.fastq.gz
+geoSampleAccession GSM970213
 grant Ruan
 lab GIS-Ruan
 labExpId CHK019M_L2_lane13
@@ -454,6 +470,7 @@ dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
 expId 1428
 fileName wgEncodeGisChiaPetK562Pol2FastqRd2Rep2.fastq.gz
+geoSampleAccession GSM970213
 grant Ruan
 lab GIS-Ruan
 labExpId CHK019M_L2_lane24
@@ -476,6 +493,7 @@ dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001428
 expId 1428
 fileName wgEncodeGisChiaPetK562Pol2InteractionsRep1.bed.gz
+geoSampleAccession GSM970213
 grant Ruan
 lab GIS-Ruan
 labExpId CHK019M_L2_lane13
@@ -499,6 +517,7 @@ dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001428
 expId 1428
 fileName wgEncodeGisChiaPetK562Pol2InteractionsRep2.bed.gz
+geoSampleAccession GSM970213
 grant Ruan
 lab GIS-Ruan
 labExpId CHK019M_L2_lane24
@@ -522,6 +541,7 @@ dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
 expId 1428
 fileName wgEncodeGisChiaPetK562Pol2SigRep1.bigWig
+geoSampleAccession GSM970213
 grant Ruan
 lab GIS-Ruan
 labExpId CHK019M_L2_lane13
@@ -545,6 +565,7 @@ dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
 expId 1428
 fileName wgEncodeGisChiaPetK562Pol2SigRep2.bigWig
+geoSampleAccession GSM970213
 grant Ruan
 lab GIS-Ruan
 labExpId CHK019M_L2_lane24
@@ -612,6 +633,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM970215
 grant Ruan
 lab GIS-Ruan
 labExpId CHM076M
@@ -634,6 +656,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM970215
 grant Ruan
 lab GIS-Ruan
 labExpId CHM077M
@@ -656,6 +679,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM970215
 grant Ruan
 lab GIS-Ruan
 labExpId CHM076M
@@ -678,6 +702,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM970215
 grant Ruan
 lab GIS-Ruan
 labExpId CHM077M
@@ -700,6 +725,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfInteractionsRep1.bed.gz
+geoSampleAccession GSM970215
 grant Ruan
 lab GIS-Ruan
 labExpId CHM076M
@@ -723,6 +749,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfInteractionsRep2.bed.gz
+geoSampleAccession GSM970215
 grant Ruan
 lab GIS-Ruan
 labExpId CHM077M
@@ -746,6 +773,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfSigRep1.bigWig
+geoSampleAccession GSM970215
 grant Ruan
 lab GIS-Ruan
 labExpId CHM076M
@@ -769,6 +797,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH002076
 expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfSigRep2.bigWig
+geoSampleAccession GSM970215
 grant Ruan
 lab GIS-Ruan
 labExpId CHM077M
@@ -854,6 +883,7 @@ dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHM001T_hg19
@@ -875,6 +905,7 @@ dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHH015T_hg19
@@ -896,6 +927,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHM096M
@@ -917,6 +949,7 @@ dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHM001T_hg19
@@ -938,6 +971,7 @@ dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHH015T_hg19
@@ -959,6 +993,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHM096M
@@ -980,6 +1015,7 @@ dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep1.bed.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHM001T_hg19
@@ -1002,6 +1038,7 @@ dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep2.bed.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHH015T_hg19
@@ -1024,6 +1061,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep3.bed.gz
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHM096M
@@ -1046,6 +1084,7 @@ dateUnrestricted 2012-04-20
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep1.bigWig
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHM001T_hg19
@@ -1068,6 +1107,7 @@ dateUnrestricted 2012-04-21
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep2.bigWig
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHH015T_hg19
@@ -1090,6 +1130,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001429
 expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep3.bigWig
+geoSampleAccession GSM970212
 grant Ruan
 lab GIS-Ruan
 labExpId IHM096M
@@ -1197,6 +1238,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep1.fastq.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM040M_hg19
@@ -1218,6 +1260,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep2.fastq.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM053T_hg19
@@ -1240,6 +1283,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep3.fastq.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM160M_L4
@@ -1261,6 +1305,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep4.fastq.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM163M_L4
@@ -1282,6 +1327,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep1.fastq.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM040M_hg19
@@ -1303,6 +1349,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep2.fastq.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM053T_hg19
@@ -1325,6 +1372,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep3.fastq.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM160M_L4
@@ -1346,6 +1394,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep4.fastq.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM163M_L4
@@ -1368,6 +1417,7 @@ dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1.bed.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM040M_hg19
@@ -1391,6 +1441,7 @@ dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2.bed.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM053T_hg19
@@ -1414,6 +1465,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep3.bed.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM160M_L4
@@ -1437,6 +1489,7 @@ dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep4.bed.gz
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM163M_L4
@@ -1459,6 +1512,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep1.bigWig
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM040M_hg19
@@ -1481,6 +1535,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep2.bigWig
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM053T_hg19
@@ -1504,6 +1559,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep3.bigWig
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM160M_L4
@@ -1526,6 +1582,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001430
 expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep4.bigWig
+geoSampleAccession GSM970209
 grant Ruan
 lab GIS-Ruan
 labExpId CHM163M_L4
@@ -1569,6 +1626,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001431
 expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2FastqRd1Rep1.fastq.gz
+geoSampleAccession GSM970214
 grant Ruan
 lab GIS-Ruan
 labExpId IHN009M_hg19
@@ -1590,6 +1648,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001431
 expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2FastqRd2Rep1.fastq.gz
+geoSampleAccession GSM970214
 grant Ruan
 lab GIS-Ruan
 labExpId IHN009M_hg19
@@ -1612,6 +1671,7 @@ dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH001431
 expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2InteractionsRep1.bed.gz
+geoSampleAccession GSM970214
 grant Ruan
 lab GIS-Ruan
 labExpId IHN009M_hg19
@@ -1634,6 +1694,7 @@ dateUnrestricted 2012-04-23
 dccAccession wgEncodeEH001431
 expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2SigRep1.bigWig
+geoSampleAccession GSM970214
 grant Ruan
 lab GIS-Ruan
 labExpId IHN009M_hg19
@@ -1644,4 +1705,4 @@ subId 4873
 tableName wgEncodeGisChiaPetNb4Pol2SigRep1
 view Signal
 
-# MAGIC: 645688883
+# MAGIC: -1393847531

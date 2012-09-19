@@ -26464,6 +26464,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 1784c796180b9a3fc1b1cf4dbcec0388,a12270ed33ea211c530c444e57046be0
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26523,6 +26524,7 @@ labExpId LID47807
 labVersion iIDR
 localization cell
 md5sum e7221b519eeaf26f13d4389436cc8a3d
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -26581,6 +26583,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum f38a3f3378f6ddfb273153d85849adce
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26638,6 +26641,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 819d7aa5210a0324235a030977811bea
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26696,6 +26700,7 @@ labExpId LID47807
 labVersion iIDR
 localization cell
 md5sum ae5d1306e93e0c33b42e8186c8233ac8
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -26754,6 +26759,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum ad10b7de738eafbd410bbfb10bf228a9
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26813,6 +26819,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 2b574e2a42ad48edb382bd0f16b31ab8
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26900,6 +26907,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 2065e110febf58347a0636af4325470e
+objStatus replaced -too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -61558,4 +61566,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 857781697
+# MAGIC: -1044133327
