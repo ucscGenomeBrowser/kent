@@ -475,7 +475,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseFatC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel Fat Pad A8w H 1
-        longLabel FatPad Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        longLabel Fat Pad Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 189,0,157
@@ -484,7 +484,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseFatC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel Fat Pad A8w H 2
-        longLabel FatPad Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        longLabel Fat Pad Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 189,0,157
@@ -1638,7 +1638,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseFatC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel Fat Pad A8w P 1
-        longLabel FatPad Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel Fat Pad Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 189,0,157
@@ -1647,7 +1647,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseFatC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel Fat Pad A8w P 2
-        longLabel FatPad Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel Fat Pad Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 189,0,157
@@ -2844,7 +2844,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseFatC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Fat Pad A8w S 1
-        longLabel FatPad Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        longLabel Fat Pad Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 52562.000000
         color 189,0,157
@@ -2854,7 +2854,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseFatC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Fat Pad A8w S 2
-        longLabel FatPad Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        longLabel Fat Pad Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 53274.000000
         color 189,0,157
