@@ -1,6 +1,7 @@
 # get raw data file from DECIPHER
 
-cp $1  decipherRaw.txt -p
+#cp $1  decipherRaw.txt -p
+cat $1|grep -v '#' >  decipherRaw.txt 
 
 hgsql hg19 -e 'delete from decipherRaw'
 

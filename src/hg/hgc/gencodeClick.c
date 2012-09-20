@@ -229,6 +229,11 @@ if (haveTsl)
     }
 printf("<tr><th>HUGO gene<td colspan=2>%s</tr>\n", transAttrs->geneName);
 printf("<tr><th>CCDS<td>%s<td></tr>\n", transAttrs->ccdsId);
+printf("<tr><th>GeneCards<td colspan=2>");
+if (!isEmpty(transAttrs->geneName))
+    printf("<a href = \"http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s\" TARGET=_blank>%s</A>\n",
+	   transAttrs->geneName, transAttrs->geneName);
+printf("</tr>\n");
 // FIXME: add sequence here??
 printf("</tbody></table>\n");
 }

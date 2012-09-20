@@ -744,6 +744,7 @@ _EOF_
 hgsql '' -e 'create database $db'
 df -h /var/lib/mysql
 hgsql $db < \${HOME}/kent/src/hg/lib/grp.sql
+cut -f1 $HgAutomate::trackBuild/chromInfo/chromInfo.tab | awk '{if (length(\$0)>32) exit(1);}'  || echo Attention annotator: Your chromosome names are longer than 32 character. This will crash this script and lead to error messages by featureBits and everything that uses hdb.c
 cut -f1 $HgAutomate::trackBuild/chromInfo/chromInfo.tab | awk '{print length(\$0)}' | sort -nr > $HgAutomate::trackBuild/chromInfo/t.chrSize
 set chrSize = `head -1 $HgAutomate::trackBuild/chromInfo/t.chrSize`
 sed -e "s/chrom(16)/chrom(\$chrSize)/" \${HOME}/kent/src/hg/lib/chromInfo.sql > $HgAutomate::trackBuild/chromInfo/chromInfo.sql

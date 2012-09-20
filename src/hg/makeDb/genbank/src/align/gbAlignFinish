@@ -149,7 +149,7 @@ sub combinePslSet($$$$$$) {
 
     # sort by query for pslCDnaFilter
     my $cmd = "find $queryDir -name '*.psl' | xargs cat "
-        . "| sort -T $tmpDir -k 10,10 -k 12n,12n ";
+        . "| sort -T $tmpDir -k 10,10 -k 12n,12n | uniq ";
     if (defined($outRawPsl)) {
         $cmd .= "| tee -a $outRawPsl "
     }

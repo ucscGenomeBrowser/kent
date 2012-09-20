@@ -6053,6 +6053,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002665
 donorId RO01794
 expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep1.pdf.gz
@@ -6081,6 +6082,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002665
 donorId RO01778
 expId 2665
 fileName wgEncodeCshlLongRnaSeqCd20CellPapProtocolRep2.pdf.gz
@@ -6523,6 +6525,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002670
 expId 2670
 fileName wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalProtocolRep1.pdf.gz
 geoSampleAccession GSM981257
@@ -9836,6 +9839,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep3.pdf.gz
 grant Gingeras
 lab CSHL
@@ -9861,6 +9866,8 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-31
 dateUnrestricted 2013-05-01
+dccAccession wgEncodeEH003034
+expId 3034
 fileName wgEncodeCshlLongRnaSeqGm12878NucleolusTotalProtocolRep4.pdf.gz
 grant Gingeras
 lab CSHL
@@ -26457,6 +26464,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 1784c796180b9a3fc1b1cf4dbcec0388,a12270ed33ea211c530c444e57046be0
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26516,6 +26524,7 @@ labExpId LID47807
 labVersion iIDR
 localization cell
 md5sum e7221b519eeaf26f13d4389436cc8a3d
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -26574,6 +26583,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum f38a3f3378f6ddfb273153d85849adce
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26631,6 +26641,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 819d7aa5210a0324235a030977811bea
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26689,6 +26700,7 @@ labExpId LID47807
 labVersion iIDR
 localization cell
 md5sum ae5d1306e93e0c33b42e8186c8233ac8
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 rnaExtract total
@@ -26747,6 +26759,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum ad10b7de738eafbd410bbfb10bf228a9
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26806,6 +26819,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 2b574e2a42ad48edb382bd0f16b31ab8
+objStatus replaced - too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -26893,6 +26907,7 @@ lab CSHL
 labExpId LID47807
 localization cell
 md5sum 2065e110febf58347a0636af4325470e
+objStatus replaced -too shallow
 project wgEncode
 readType 2x101D
 replicate 1
@@ -28690,6 +28705,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002684
 donorId 0052501.7
 expId 2684
 fileName wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep1.pdf.gz
@@ -28717,6 +28733,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002684
 donorId 0081101.7
 expId 2684
 fileName wgEncodeCshlLongRnaSeqHmscucCellTotalProtocolRep2.pdf.gz
@@ -29876,6 +29893,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002667
 donorId 0101504.13
 expId 2667
 fileName wgEncodeCshlLongRnaSeqHpcplCellTotalProtocolRep1.pdf.gz
@@ -38129,6 +38147,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep1.pdf.gz
@@ -38157,6 +38176,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002629
 donorId 58607680
 expId 2629
 fileName wgEncodeCshlLongRnaSeqImr90CellPapProtocolRep2.pdf.gz
@@ -38740,6 +38760,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002623
 donorId 58607680
 expId 2623
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep1.pdf.gz
@@ -38768,6 +38789,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002623
 donorId 58607680
 expId 2623
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalProtocolRep2.pdf.gz
@@ -39351,6 +39373,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep1.pdf.gz
@@ -39379,6 +39402,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002626
 donorId 58607680
 expId 2626
 fileName wgEncodeCshlLongRnaSeqImr90CytosolPapProtocolRep2.pdf.gz
@@ -39962,6 +39986,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep1.pdf.gz
@@ -39990,6 +40015,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002628
 donorId 58607680
 expId 2628
 fileName wgEncodeCshlLongRnaSeqImr90NucleusPapProtocolRep2.pdf.gz
@@ -42133,6 +42159,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep3.pdf.gz
 geoSampleAccession GSM765392
@@ -42160,6 +42187,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000180
 expId 180
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalProtocolRep4.pdf.gz
 geoSampleAccession GSM765392
@@ -44118,6 +44146,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep3.pdf.gz
 geoSampleAccession GSM765393
@@ -44145,6 +44174,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000181
 expId 181
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalProtocolRep4.pdf.gz
 geoSampleAccession GSM765393
@@ -44781,6 +44811,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep3.pdf.gz
 geoSampleAccession GSM765390
@@ -44808,6 +44839,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH000182
 expId 182
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalProtocolRep4.pdf.gz
 geoSampleAccession GSM765390
@@ -49851,6 +49883,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep1.pdf.gz
@@ -49879,6 +49912,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-26
 dateUnrestricted 2013-04-26
+dccAccession wgEncodeEH002672
 donorId RO01746
 expId 2672
 fileName wgEncodeCshlLongRnaSeqMonocd14CellPapProtocolRep2.pdf.gz
@@ -51258,6 +51292,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovoRep5V2.gff.gz
 geoSampleAccession GSM765398
@@ -51288,6 +51323,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000164
 donorId 4F1155J
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamGeneDeNovoV2.gff.gz
@@ -51594,6 +51630,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000164
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoRep5V2.gtf.gz
 geoSampleAccession GSM765398
@@ -51624,6 +51661,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000164
 donorId 4F1155J
 expId 164
 fileName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptDeNovoV2.gtf.gz
@@ -52160,6 +52198,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovoRep5V2.gff.gz
 geoSampleAccession GSM765401
@@ -52190,6 +52229,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000167
 donorId 4F1155J
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapGeneDeNovoV2.gff.gz
@@ -52666,6 +52706,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000167
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoRep5V2.gtf.gz
 geoSampleAccession GSM765401
@@ -52696,6 +52737,7 @@ dataType RnaSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-19
 dateUnrestricted 2013-04-19
+dccAccession wgEncodeEH000167
 donorId 4F1155J
 expId 167
 fileName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptDeNovoV2.gtf.gz
@@ -61524,4 +61566,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1746755170
+# MAGIC: -1044133327

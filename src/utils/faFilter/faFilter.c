@@ -27,6 +27,7 @@ errAbort("faFilter - Filter fa records, selecting ones that match the specified 
          "    -maxSize=N - Only pass sequences this size or smaller.\n"
 	 "    -maxN=N Only pass sequences with fewer than this number of N's\n"
          "    -uniq - Removes duplicate sequence ids, keeping the first.\n"
+         "    -i    - make -uniq ignore case so sequence IDs ABC and abc count as dupes.\n"
          "\n"
          "All specified conditions must pass to pass a sequence.  If no conditions are\n"
          "specified, all records will be passed.\n"
@@ -41,6 +42,7 @@ static struct optionSpec options[] = {
     {"maxSize", OPTION_INT},
     {"maxN", OPTION_INT},
     {"uniq", OPTION_BOOLEAN},
+    {"i", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -51,6 +53,7 @@ boolean vOption = FALSE;
 int minSize = -1;
 int maxSize = -1;
 int maxN = -1;
+int uniqIc = 0;
 struct hash *uniqHash = NULL;
 
 char *parseSeqName(char *seqHeader)
@@ -119,6 +122,8 @@ if ((patternsList != NULL) && !matchesAPattern(name, patternsList))
     return FALSE;
 if (uniqHash != NULL) 
     {
+    if (uniqIc) 
+        toUpperN(name, strlen(name));
     if (hashLookup(uniqHash, name) != NULL)
         return FALSE;  // already seen
     hashAdd(uniqHash, name, NULL);
@@ -132,10 +137,11 @@ void faFilter(char *inFile, char *outFile)
 /* faFilter - Filter out fa records that don't match expression. */
 {
 struct slName *patternsList = NULL;
-if (optNamePatList != NULL)
-    readInPatterns(optNamePatList);
+if (optNamePatList != NULL) 
+    patternsList = readInPatterns(optNamePatList);
 if (namePat != NULL)
     slSafeAddHead(&patternsList, slNameNew(namePat));
+
 struct lineFile *inLf = lineFileOpen(inFile, TRUE);
 FILE *outFh = mustOpen(outFile, "w");
 DNA *seq;
@@ -163,6 +169,8 @@ vOption = optionExists("v");
 minSize = optionInt("minSize", minSize);
 maxSize = optionInt("maxSize", maxSize);
 maxN = optionInt("maxN", maxN);
+uniqIc = optionExists("i");
+
 if (optionExists("uniq"))
     uniqHash = hashNew(24);
 faFilter(argv[1],argv[2]);

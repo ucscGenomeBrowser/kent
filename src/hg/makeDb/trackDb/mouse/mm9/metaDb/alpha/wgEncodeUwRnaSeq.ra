@@ -2,6 +2,7 @@ metaObject wgEncodeUwRnaSeq
 objType composite
 composite wgEncodeUwRnaSeq
 expVars lab,dataType,cell,age,strain
+geoSeriesAccession GSE39524
 
 metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep1
 objType table
@@ -72,6 +73,7 @@ dateUnrestricted 2012-03-24
 dccAccession wgEncodeEM002947
 expId 2947
 fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jMinusRawRep1.bigWig
+geoSampleAccession GSM970855
 grant Stam
 lab UW-m
 labVersion coverage
@@ -101,6 +103,7 @@ dateUnrestricted 2012-03-24
 dccAccession wgEncodeEM002947
 expId 2947
 fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jMinusRawRep2.bigWig
+geoSampleAccession GSM970855
 grant Stam
 lab UW-m
 labVersion coverage
@@ -130,6 +133,7 @@ dateUnrestricted 2012-03-24
 dccAccession wgEncodeEM002947
 expId 2947
 fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep1.bigWig
+geoSampleAccession GSM970855
 grant Stam
 lab UW-m
 labVersion coverage
@@ -159,6 +163,7 @@ dateUnrestricted 2012-03-24
 dccAccession wgEncodeEM002947
 expId 2947
 fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep2.bigWig
+geoSampleAccession GSM970855
 grant Stam
 lab UW-m
 labVersion coverage
@@ -187,6 +192,7 @@ dateUnrestricted 2012-03-24
 dccAccession wgEncodeEM002947
 expId 2947
 fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jRawDataRep1.fastq.tgz
+geoSampleAccession GSM970855
 grant Stam
 lab UW-m
 labVersion 1
@@ -214,6 +220,7 @@ dateUnrestricted 2012-03-24
 dccAccession wgEncodeEM002947
 expId 2947
 fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jRawDataRep2.fastq.tgz
+geoSampleAccession GSM970855
 grant Stam
 lab UW-m
 labVersion 1
@@ -242,6 +249,7 @@ dateUnrestricted 2012-03-24
 dccAccession wgEncodeEM002947
 expId 2947
 fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jSigRep1.bigWig
+geoSampleAccession GSM970855
 grant Stam
 lab UW-m
 labVersion coverage
@@ -271,6 +279,7 @@ dateUnrestricted 2012-03-24
 dccAccession wgEncodeEM002947
 expId 2947
 fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jSigRep2.bigWig
+geoSampleAccession GSM970855
 grant Stam
 lab UW-m
 labVersion coverage
@@ -356,6 +365,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002948
 expId 2948
 fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannMinusRawRep1.bigWig
+geoSampleAccession GSM970854
 grant Stam
 lab UW-m
 labVersion coverage
@@ -385,6 +395,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002948
 expId 2948
 fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannMinusRawRep2.bigWig
+geoSampleAccession GSM970854
 grant Stam
 lab UW-m
 labVersion coverage
@@ -414,6 +425,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002948
 expId 2948
 fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannPlusRawRep1.bigWig
+geoSampleAccession GSM970854
 grant Stam
 lab UW-m
 labVersion coverage
@@ -443,6 +455,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002948
 expId 2948
 fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannPlusRawRep2.bigWig
+geoSampleAccession GSM970854
 grant Stam
 lab UW-m
 labVersion coverage
@@ -471,6 +484,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002948
 expId 2948
 fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannRawDataRep1.fastq.gz
+geoSampleAccession GSM970854
 grant Stam
 lab UW-m
 labVersion 1
@@ -498,6 +512,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002948
 expId 2948
 fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannRawDataRep2.fastq.tgz
+geoSampleAccession GSM970854
 grant Stam
 lab UW-m
 labVersion 1
@@ -526,6 +541,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002948
 expId 2948
 fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannSigRep1.bigWig
+geoSampleAccession GSM970854
 grant Stam
 lab UW-m
 labVersion coverage
@@ -555,6 +571,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002948
 expId 2948
 fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannSigRep2.bigWig
+geoSampleAccession GSM970854
 grant Stam
 lab UW-m
 labVersion coverage
@@ -612,6 +629,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002951
 expId 2951
 fileName wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970867
 grant Stam
 lab UW-m
 labVersion coverage
@@ -641,6 +659,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002951
 expId 2951
 fileName wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970867
 grant Stam
 lab UW-m
 labVersion coverage
@@ -669,6 +688,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002951
 expId 2951
 fileName wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970867
 grant Stam
 lab UW-m
 labVersion 1
@@ -697,6 +717,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002951
 expId 2951
 fileName wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970867
 grant Stam
 lab UW-m
 labVersion coverage
@@ -782,6 +803,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002952
 expId 2952
 fileName wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970868
 grant Stam
 lab UW-m
 labVersion coverage
@@ -811,6 +833,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002952
 expId 2952
 fileName wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970868
 grant Stam
 lab UW-m
 labVersion coverage
@@ -840,6 +863,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002952
 expId 2952
 fileName wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970868
 grant Stam
 lab UW-m
 labVersion coverage
@@ -869,6 +893,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002952
 expId 2952
 fileName wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970868
 grant Stam
 lab UW-m
 labVersion coverage
@@ -897,6 +922,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002952
 expId 2952
 fileName wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970868
 grant Stam
 lab UW-m
 labVersion 1
@@ -924,6 +950,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002952
 expId 2952
 fileName wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970868
 grant Stam
 lab UW-m
 labVersion 1
@@ -952,6 +979,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002952
 expId 2952
 fileName wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970868
 grant Stam
 lab UW-m
 labVersion coverage
@@ -981,6 +1009,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002952
 expId 2952
 fileName wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970868
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1066,6 +1095,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001986
 expId 1986
 fileName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970856
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1095,6 +1125,7 @@ dateUnrestricted 2012-11-12
 dccAccession wgEncodeEM001986
 expId 1986
 fileName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970856
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1124,6 +1155,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001986
 expId 1986
 fileName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970856
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1153,6 +1185,7 @@ dateUnrestricted 2012-11-12
 dccAccession wgEncodeEM001986
 expId 1986
 fileName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970856
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1181,6 +1214,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001986
 expId 1986
 fileName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970856
 grant Stam
 lab UW-m
 labVersion 1
@@ -1208,6 +1242,7 @@ dateUnrestricted 2012-11-12
 dccAccession wgEncodeEM001986
 expId 1986
 fileName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970856
 grant Stam
 lab UW-m
 labVersion 1
@@ -1236,6 +1271,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001986
 expId 1986
 fileName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970856
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1265,6 +1301,7 @@ dateUnrestricted 2012-11-12
 dccAccession wgEncodeEM001986
 expId 1986
 fileName wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970856
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1350,6 +1387,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001987
 expId 1987
 fileName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970857
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1379,6 +1417,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001987
 expId 1987
 fileName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970857
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1408,6 +1447,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001987
 expId 1987
 fileName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970857
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1437,6 +1477,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001987
 expId 1987
 fileName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970857
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1465,6 +1506,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001987
 expId 1987
 fileName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970857
 grant Stam
 lab UW-m
 labVersion 1
@@ -1492,6 +1534,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001987
 expId 1987
 fileName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.gz
+geoSampleAccession GSM970857
 grant Stam
 lab UW-m
 labVersion 1
@@ -1520,6 +1563,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001987
 expId 1987
 fileName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970857
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1549,6 +1593,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001987
 expId 1987
 fileName wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970857
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1606,6 +1651,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001988
 expId 1988
 fileName wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970858
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1635,6 +1681,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001988
 expId 1988
 fileName wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970858
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1663,6 +1710,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001988
 expId 1988
 fileName wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970858
 grant Stam
 lab UW-m
 labVersion 1
@@ -1691,6 +1739,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001988
 expId 1988
 fileName wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970858
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1776,6 +1825,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002953
 expId 2953
 fileName wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970869
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1805,6 +1855,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002953
 expId 2953
 fileName wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970869
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1834,6 +1885,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002953
 expId 2953
 fileName wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970869
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1863,6 +1915,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002953
 expId 2953
 fileName wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970869
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1891,6 +1944,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002953
 expId 2953
 fileName wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970869
 grant Stam
 lab UW-m
 labVersion 1
@@ -1918,6 +1972,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002953
 expId 2953
 fileName wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970869
 grant Stam
 lab UW-m
 labVersion 1
@@ -1946,6 +2001,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002953
 expId 2953
 fileName wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970869
 grant Stam
 lab UW-m
 labVersion coverage
@@ -1975,6 +2031,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002953
 expId 2953
 fileName wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970869
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2060,6 +2117,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002954
 expId 2954
 fileName wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970862
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2089,6 +2147,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002954
 expId 2954
 fileName wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970862
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2118,6 +2177,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002954
 expId 2954
 fileName wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970862
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2147,6 +2207,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002954
 expId 2954
 fileName wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970862
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2175,6 +2236,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002954
 expId 2954
 fileName wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970862
 grant Stam
 lab UW-m
 labVersion 1
@@ -2202,6 +2264,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002954
 expId 2954
 fileName wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970862
 grant Stam
 lab UW-m
 labVersion 1
@@ -2230,6 +2293,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002954
 expId 2954
 fileName wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970862
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2259,6 +2323,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002954
 expId 2954
 fileName wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970862
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2316,6 +2381,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001989
 expId 1989
 fileName wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1MinusRawRep1.bigWig
+geoSampleAccession GSM970859
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2345,6 +2411,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001989
 expId 1989
 fileName wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1PlusRawRep1.bigWig
+geoSampleAccession GSM970859
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2373,6 +2440,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001989
 expId 1989
 fileName wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1RawDataRep1.fastq.gz
+geoSampleAccession GSM970859
 grant Stam
 lab UW-m
 labVersion 1
@@ -2401,6 +2469,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001989
 expId 1989
 fileName wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1SigRep1.bigWig
+geoSampleAccession GSM970859
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2458,6 +2527,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001990
 expId 1990
 fileName wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970871
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2487,6 +2557,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001990
 expId 1990
 fileName wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970871
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2515,6 +2586,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001990
 expId 1990
 fileName wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970871
 grant Stam
 lab UW-m
 labVersion 1
@@ -2543,6 +2615,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001990
 expId 1990
 fileName wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970871
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2628,6 +2701,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002955
 expId 2955
 fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970863
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2657,6 +2731,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002955
 expId 2955
 fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970863
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2686,6 +2761,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002955
 expId 2955
 fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970863
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2715,6 +2791,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002955
 expId 2955
 fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970863
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2743,6 +2820,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002955
 expId 2955
 fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970863
 grant Stam
 lab UW-m
 labVersion 1
@@ -2770,6 +2848,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002955
 expId 2955
 fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970863
 grant Stam
 lab UW-m
 labVersion 1
@@ -2798,6 +2877,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002955
 expId 2955
 fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970863
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2827,6 +2907,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002955
 expId 2955
 fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970863
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2970,6 +3051,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2999,6 +3081,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3029,6 +3112,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep3.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3059,6 +3143,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep4.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3088,6 +3173,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3117,6 +3203,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3147,6 +3234,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep3.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3177,6 +3265,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep4.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3205,6 +3294,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion 1
@@ -3232,6 +3322,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.gz
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion 1
@@ -3260,6 +3351,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6RawDataRep3.fastq.gz
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion 1
@@ -3288,6 +3380,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6RawDataRep4.fastq.tgz
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion 1
@@ -3316,6 +3409,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3345,6 +3439,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3375,6 +3470,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep3.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3405,6 +3501,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001992
 expId 1992
 fileName wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep4.bigWig
+geoSampleAccession GSM970873
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3462,6 +3559,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001991
 expId 1991
 fileName wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970870
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3491,6 +3589,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001991
 expId 1991
 fileName wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970870
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3519,6 +3618,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001991
 expId 1991
 fileName wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970870
 grant Stam
 lab UW-m
 labVersion 1
@@ -3547,6 +3647,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001991
 expId 1991
 fileName wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6SigRep1.bigWig
+geoSampleAccession GSM970870
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3604,6 +3705,7 @@ dateUnrestricted 2012-11-12
 dccAccession wgEncodeEM002961
 expId 2961
 fileName wgEncodeUwRnaSeqLiverCellPolyaME14halfS129MinusRawRep1.bigWig
+geoSampleAccession GSM970851
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3633,6 +3735,7 @@ dateUnrestricted 2012-11-12
 dccAccession wgEncodeEM002961
 expId 2961
 fileName wgEncodeUwRnaSeqLiverCellPolyaME14halfS129PlusRawRep1.bigWig
+geoSampleAccession GSM970851
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3661,6 +3764,7 @@ dateUnrestricted 2012-11-12
 dccAccession wgEncodeEM002961
 expId 2961
 fileName wgEncodeUwRnaSeqLiverCellPolyaME14halfS129RawDataRep1.fastq.tgz
+geoSampleAccession GSM970851
 grant Stam
 lab UW-m
 labVersion 1
@@ -3689,6 +3793,7 @@ dateUnrestricted 2012-11-12
 dccAccession wgEncodeEM002961
 expId 2961
 fileName wgEncodeUwRnaSeqLiverCellPolyaME14halfS129SigRep1.bigWig
+geoSampleAccession GSM970851
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3746,6 +3851,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002956
 expId 2956
 fileName wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970864
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3775,6 +3881,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002956
 expId 2956
 fileName wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970864
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3803,6 +3910,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002956
 expId 2956
 fileName wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970864
 grant Stam
 lab UW-m
 labVersion 1
@@ -3831,6 +3939,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002956
 expId 2956
 fileName wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970864
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3916,6 +4025,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001993
 expId 1993
 fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep1.bigWig
+geoSampleAccession GSM970872
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3945,6 +4055,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001993
 expId 1993
 fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep2.bigWig
+geoSampleAccession GSM970872
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3974,6 +4085,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001993
 expId 1993
 fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep1.bigWig
+geoSampleAccession GSM970872
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4003,6 +4115,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001993
 expId 1993
 fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep2.bigWig
+geoSampleAccession GSM970872
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4031,6 +4144,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001993
 expId 1993
 fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknRawDataRep1.fastq.tgz
+geoSampleAccession GSM970872
 grant Stam
 lab UW-m
 labVersion 1
@@ -4058,6 +4172,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001993
 expId 1993
 fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknRawDataRep2.fastq.tgz
+geoSampleAccession GSM970872
 grant Stam
 lab UW-m
 labVersion 1
@@ -4086,6 +4201,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001993
 expId 1993
 fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep1.bigWig
+geoSampleAccession GSM970872
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4115,6 +4231,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001993
 expId 1993
 fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep2.bigWig
+geoSampleAccession GSM970872
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4200,6 +4317,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002949
 expId 2949
 fileName wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsMinusRawRep1.bigWig
+geoSampleAccession GSM970853
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4229,6 +4347,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002949
 expId 2949
 fileName wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsMinusRawRep2.bigWig
+geoSampleAccession GSM970853
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4258,6 +4377,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002949
 expId 2949
 fileName wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsPlusRawRep1.bigWig
+geoSampleAccession GSM970853
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4287,6 +4407,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002949
 expId 2949
 fileName wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsPlusRawRep2.bigWig
+geoSampleAccession GSM970853
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4315,6 +4436,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002949
 expId 2949
 fileName wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsRawDataRep1.fastq.gz
+geoSampleAccession GSM970853
 grant Stam
 lab UW-m
 labVersion 1
@@ -4342,6 +4464,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002949
 expId 2949
 fileName wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsRawDataRep2.fastq.gz
+geoSampleAccession GSM970853
 grant Stam
 lab UW-m
 labVersion 1
@@ -4370,6 +4493,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002949
 expId 2949
 fileName wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsSigRep1.bigWig
+geoSampleAccession GSM970853
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4399,6 +4523,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM002949
 expId 2949
 fileName wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsSigRep2.bigWig
+geoSampleAccession GSM970853
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4484,6 +4609,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM002950
 expId 2950
 fileName wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6MinusRawRep1.bigWig
+geoSampleAccession GSM970866
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4513,6 +4639,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002950
 expId 2950
 fileName wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6MinusRawRep2.bigWig
+geoSampleAccession GSM970866
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4542,6 +4669,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM002950
 expId 2950
 fileName wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6PlusRawRep1.bigWig
+geoSampleAccession GSM970866
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4571,6 +4699,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002950
 expId 2950
 fileName wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6PlusRawRep2.bigWig
+geoSampleAccession GSM970866
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4599,6 +4728,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM002950
 expId 2950
 fileName wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6RawDataRep1.fastq.gz
+geoSampleAccession GSM970866
 grant Stam
 lab UW-m
 labVersion 1
@@ -4626,6 +4756,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002950
 expId 2950
 fileName wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970866
 grant Stam
 lab UW-m
 labVersion 1
@@ -4654,6 +4785,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM002950
 expId 2950
 fileName wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6SigRep1.bigWig
+geoSampleAccession GSM970866
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4683,6 +4815,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002950
 expId 2950
 fileName wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6SigRep2.bigWig
+geoSampleAccession GSM970866
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4768,6 +4901,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002957
 expId 2957
 fileName wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970865
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4797,6 +4931,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002957
 expId 2957
 fileName wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970865
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4826,6 +4961,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002957
 expId 2957
 fileName wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970865
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4855,6 +4991,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002957
 expId 2957
 fileName wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970865
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4883,6 +5020,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002957
 expId 2957
 fileName wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970865
 grant Stam
 lab UW-m
 labVersion 1
@@ -4910,6 +5048,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002957
 expId 2957
 fileName wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970865
 grant Stam
 lab UW-m
 labVersion 1
@@ -4938,6 +5077,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002957
 expId 2957
 fileName wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970865
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4967,6 +5107,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002957
 expId 2957
 fileName wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970865
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5024,6 +5165,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002958
 expId 2958
 fileName wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970860
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5053,6 +5195,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002958
 expId 2958
 fileName wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970860
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5081,6 +5224,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002958
 expId 2958
 fileName wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970860
 grant Stam
 lab UW-m
 labVersion 1
@@ -5109,6 +5253,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002958
 expId 2958
 fileName wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970860
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5194,6 +5339,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002960
 expId 2960
 fileName wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970852
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5223,6 +5369,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002960
 expId 2960
 fileName wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970852
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5252,6 +5399,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002960
 expId 2960
 fileName wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970852
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5281,6 +5429,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002960
 expId 2960
 fileName wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970852
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5309,6 +5458,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002960
 expId 2960
 fileName wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970852
 grant Stam
 lab UW-m
 labVersion 1
@@ -5336,6 +5486,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002960
 expId 2960
 fileName wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970852
 grant Stam
 lab UW-m
 labVersion 1
@@ -5364,6 +5515,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002960
 expId 2960
 fileName wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970852
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5393,6 +5545,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002960
 expId 2960
 fileName wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+geoSampleAccession GSM970852
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5450,6 +5603,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002959
 expId 2959
 fileName wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970861
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5479,6 +5633,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002959
 expId 2959
 fileName wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970861
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5507,6 +5662,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002959
 expId 2959
 fileName wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970861
 grant Stam
 lab UW-m
 labVersion 1
@@ -5535,6 +5691,7 @@ dateUnrestricted 2012-09-22
 dccAccession wgEncodeEM002959
 expId 2959
 fileName wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+geoSampleAccession GSM970861
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5620,6 +5777,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001995
 expId 1995
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970874
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5649,6 +5807,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001995
 expId 1995
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970874
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5678,6 +5837,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001995
 expId 1995
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970874
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5707,6 +5867,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001995
 expId 1995
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970874
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5735,6 +5896,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001995
 expId 1995
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970874
 grant Stam
 lab UW-m
 labVersion 1
@@ -5762,6 +5924,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001995
 expId 1995
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970874
 grant Stam
 lab UW-m
 labVersion 1
@@ -5790,6 +5953,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001995
 expId 1995
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep1.bigWig
+geoSampleAccession GSM970874
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5819,6 +5983,7 @@ dateUnrestricted 2012-03-28
 dccAccession wgEncodeEM001995
 expId 1995
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep2.bigWig
+geoSampleAccession GSM970874
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5904,6 +6069,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM001997
 expId 1997
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawRep1.bigWig
+geoSampleAccession GSM970875
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5933,6 +6099,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM001997
 expId 1997
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawRep2.bigWig
+geoSampleAccession GSM970875
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5962,6 +6129,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM001997
 expId 1997
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawRep1.bigWig
+geoSampleAccession GSM970875
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5991,6 +6159,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM001997
 expId 1997
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawRep2.bigWig
+geoSampleAccession GSM970875
 grant Stam
 lab UW-m
 labVersion coverage
@@ -6019,6 +6188,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM001997
 expId 1997
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6RawDataRep1.fastq.tgz
+geoSampleAccession GSM970875
 grant Stam
 lab UW-m
 labVersion 1
@@ -6046,6 +6216,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM001997
 expId 1997
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6RawDataRep2.fastq.tgz
+geoSampleAccession GSM970875
 grant Stam
 lab UW-m
 labVersion 1
@@ -6074,6 +6245,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM001997
 expId 1997
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep1.bigWig
+geoSampleAccession GSM970875
 grant Stam
 lab UW-m
 labVersion coverage
@@ -6103,6 +6275,7 @@ dateUnrestricted 2012-03-29
 dccAccession wgEncodeEM001997
 expId 1997
 fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2.bigWig
+geoSampleAccession GSM970875
 grant Stam
 lab UW-m
 labVersion coverage
@@ -6119,4 +6292,4 @@ tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -1700565456
+# MAGIC: -880456522
