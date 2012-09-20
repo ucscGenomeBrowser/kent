@@ -2291,7 +2291,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6UknME0PkRep1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ES-WW6 E0 P 1
-        longLabel ES-WW6 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel ES-WW6 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESWW6 sex=M strain=UKN treatment=zNONE rep=rep1
         type narrowPeak
         color 65,105,225
@@ -3055,7 +3055,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Heart A8w S 2
-        longLabel Heart Adult 8-weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        longLabel Heart Adult 8-weeks DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 65466.000000
         color 153,38,0
@@ -3277,7 +3277,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEse14129olaME0SigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ES-E14 E0 S 2
-        longLabel ES-E14 DNaseI HS Signal Rep 1 from ENCODE/UW
+        longLabel ES-E14 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep2
         type bigWig 1.000000 124940.000000
         color 65,105,225
