@@ -66,12 +66,12 @@ if [ "${WC}" -gt 1 ]; then
 "ftp://ftp.sanger.ac.uk/pub/\n"`comm -13 prev.release.list release.list`"/" \
     | mail -s "DECIPHER update watch" ${EMAIL}
 
-FN=`cat release.diff |grep decipher-|sed -e 's/decipher-/\tdecipher-/'|cut -f 2`
+FN=`cat release.diff |grep decipher-|sed -e 's/decipher-/\tdecipher-/'|cut -f 2|tail -1`
 
 today=`date +%F`
 mkdir -p $today
 cd $today
-
+cp -p ../*.diff .
 echo "${FN}" >j.fn.gpg
 cat j.fn.gpg |sed -e 's/.gpg//' >j.fn.txt
 
