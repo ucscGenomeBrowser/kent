@@ -49,7 +49,7 @@ shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line A3134=3134 A416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum CH12=CH12 EPCMPP=EPC_(CD117-,CD71+,TER119+) EPCPMM=EPC_(CD117+,CD71-,TER119-) EPCPPM=EPC_(CD117+,CD71+,TER119-) EPCPPP=EPC_(CD117+,CD71+,TER119+) ESCJ7=ES-CJ7 ESE14=ES-E14 ESWW6=ES-WW6 ESWW6KO=ES-WW6_F1KO FAT=Fat_Pad FIBROBLAST=Fibroblast FLBUD=Fore_Limb_Bud GFAT=Genital_Fat_Pad HEADLEMBRYO=Headless_Embryo HEART=Heart HLBUD=Hind_Limb_Bud KIDNEY=Kidney LGINT=Large_Intestine LIVER=Liver LUNG=Lung MEL=MEL MESODERM=Mesoderm MGER=mG/ER NIH3T3=NIH-3T3 PATSKI=Patski RETINA=Retina SKMUSCLE=Skeletal_Muscle SPLEEN=Spleen T1NAIVE=T-Naive THELPA=THelper-Activated THYMUS=Thymus TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
+subGroup2 cellType Cell_Line A13134=3134 A1416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum CH12=CH12 EPCMPP=EPC_(CD117-,CD71+,TER119+) EPCPMM=EPC_(CD117+,CD71-,TER119-) EPCPPM=EPC_(CD117+,CD71+,TER119-) EPCPPP=EPC_(CD117+,CD71+,TER119+) ESCJ7=ES-CJ7 ESE14=ES-E14 ESWW6=ES-WW6 ESWW6KO=ES-WW6_F1KO FAT=Fat_Pad FIBROBLAST=Fibroblast FLBUD=Fore_Limb_Bud GFAT=Genital_Fat_Pad HEADLEMBRYO=Headless_Embryo HEART=Heart HLBUD=Hind_Limb_Bud KIDNEY=Kidney LGINT=Large_Intestine LIVER=Liver LUNG=Lung MEL=MEL MESODERM=Mesoderm MGER=mG/ER NIH3T3=NIH-3T3 PATSKI=Patski RETINA=Retina SKMUSCLE=Skeletal_Muscle SPLEEN=Spleen T1NAIVE=T-Naive THELPA=THelper-Activated THYMUS=Thymus TREG=TReg TREGA=TReg-Activated WBRAIN=Whole_Brain ZHBTC4=ZhBTc4
 subGroup3 strain Strain b2A4B=B10.H-2aH-4bp/Wts BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss RIII=RIII a129=129 a129DLCR=129.DLCR/DLCR a129OLA=129/Ola a129S1=129S1/SVImJ SPBL6=Spretus.BL6-Xist  UKN=Unknown
 subGroup4 sex Sex F=F M=M U=U
 subGroup5 age Age ADULT1WKS=Adult_1_Week ADULT8WKS=Adult_8_Weeks E0=Embryonic_Day_0 E11HALF=Embryonic_Day_11.5 E14HALF=Embryonic_Day_14.5 E18HALF=Embryonic_Day_18.5 IMMORTAL=Immortalized NEW1DAYS=Newborn_1_day
@@ -92,7 +92,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel 416B immrtl H 2
         longLabel 416B DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hotspots age=IMMORTAL cellType=A416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
+        subGroups view=Hotspots age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
         type broadPeak
         color 86,180,233
         # subId=1997 dateSubmitted=2010-07-22
@@ -101,7 +101,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel 416B immrtl H 1
         longLabel 416B DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hotspots age=IMMORTAL cellType=A416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
+        subGroups view=Hotspots age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
         type broadPeak
         color 86,180,233
         # subId=2000 dateSubmitted=2010-07-23
@@ -377,7 +377,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots
         shortLabel 3134 immrtl H 1
         longLabel 3134 DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hotspots age=IMMORTAL cellType=A3134 sex=M strain=RIII rep=rep1 treatment=zNONE
+        subGroups view=Hotspots age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep1 treatment=zNONE
         type broadPeak
         color 0,158,115
         # subId=2016 dateSubmitted=2010-07-24
@@ -521,7 +521,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel 3134 immrtl H 2
         longLabel 3134 DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hotspots age=IMMORTAL cellType=A3134 sex=M strain=RIII rep=rep2 treatment=zNONE
+        subGroups view=Hotspots age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep2 treatment=zNONE
         type broadPeak
         color 0,158,115
         # subId=3895 dateSubmitted=2011-05-10
@@ -1255,7 +1255,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel 416B immrtl P 2
         longLabel 416B DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks age=IMMORTAL cellType=A416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
+        subGroups view=Peaks age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
         type narrowPeak
         color 86,180,233
         # subId=1997 dateSubmitted=2010-07-22
@@ -1264,7 +1264,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel 416B immrtl P 1
         longLabel 416B DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks age=IMMORTAL cellType=A416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
+        subGroups view=Peaks age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
         type narrowPeak
         color 86,180,233
         # subId=2000 dateSubmitted=2010-07-23
@@ -1540,7 +1540,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks
         shortLabel 3134 immrtl P 1
         longLabel 3134 DNaseI HS Peaks Rep 1 from ENCODE/UW
-        subGroups view=Peaks age=IMMORTAL cellType=A3134 sex=M strain=RIII rep=rep1 treatment=zNONE
+        subGroups view=Peaks age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep1 treatment=zNONE
         type narrowPeak
         color 0,158,115
         # subId=2016 dateSubmitted=2010-07-24
@@ -1684,7 +1684,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel 3134 immrtl P 2
         longLabel 3134 DNaseI HS Peaks Rep 2 from ENCODE/UW
-        subGroups view=Peaks age=IMMORTAL cellType=A3134 sex=M strain=RIII rep=rep2 treatment=zNONE
+        subGroups view=Peaks age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep2 treatment=zNONE
         type narrowPeak
         color 0,158,115
         # subId=3895 dateSubmitted=2011-05-10
@@ -2420,7 +2420,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 416B immrtl S 2
         longLabel 416B DNaseI HS Signal Rep 2 from ENCODE/UW
-        subGroups view=Signal age=IMMORTAL cellType=A416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
+        subGroups view=Signal age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
         type bigWig 1.000000 74554.000000
         color 86,180,233
         # subId=1997 dateSubmitted=2010-07-22
@@ -2430,7 +2430,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 416B immrtl S 1
         longLabel 416B DNaseI HS Signal Rep 1 from ENCODE/UW
-        subGroups view=Signal age=IMMORTAL cellType=A416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
+        subGroups view=Signal age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
         type bigWig 1.000000 109673.000000
         color 86,180,233
         # subId=2000 dateSubmitted=2010-07-23
@@ -2735,7 +2735,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal
         shortLabel 3134 immrtl S 1
         longLabel 3134 DNaseI HS Signal Rep 1 from ENCODE/UW
-        subGroups view=Signal age=IMMORTAL cellType=A3134 sex=M strain=RIII rep=rep1 treatment=zNONE
+        subGroups view=Signal age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep1 treatment=zNONE
         type bigWig 1.000000 53562.000000
         color 0,158,115
         # subId=2016 dateSubmitted=2010-07-24
@@ -2895,7 +2895,7 @@ html wgEncodeUwDnase.release2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 3134 immrtl S 2
         longLabel 3134 DNaseI HS Signal Rep 2 from ENCODE/UW
-        subGroups view=Signal age=IMMORTAL cellType=A3134 sex=M strain=RIII rep=rep2 treatment=zNONE
+        subGroups view=Signal age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep2 treatment=zNONE
         type bigWig 1.000000 42784.000000
         color 0,158,115
         # subId=3895 dateSubmitted=2011-05-10
