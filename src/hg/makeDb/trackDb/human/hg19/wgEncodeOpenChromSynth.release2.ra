@@ -10,7 +10,7 @@ subGroup1 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nb
 subGroup2 treatment Treatment aNone=None IFNA4H=IFNa4h UT189=UT189
 dimensions dimensionX=cellType dimensionY=treatment
 sortOrder cellType=+ treatment=+
-fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 priority 1
