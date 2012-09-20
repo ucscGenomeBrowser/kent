@@ -88,7 +88,7 @@ track dhcBamDenisova
 shortLabel Denisova Seq
 longLabel Denisova High-Coverage Sequence Reads
 group denisova
-priority 4
+priority 14
 visibility hide
 type bam
 pairEndsByName on
@@ -104,3 +104,396 @@ indelQueryInsert on
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 100
 maxWindowToDraw 1000000
+
+
+track dhcHumDerDenAnc
+compositeTrack on
+shortLabel Human Derived
+longLabel Human Derived, Denisova Ancestral
+group denisova
+subGroup1 view Variant_Type A_SNC=Single_Nucleotide_Changes_(SNCs) B_InDel=Insertions/Deletions_(InDels)
+subGroup2 subset Subset All=All CcdsUtr3=CCDS_3'_UTR CcdsUtr5=CCDS_5'_UTR CcdsFrameshiftCoding=CCDS_Frameshift CcdsInFrameNonsyn=CCDS_In-frame_Non-synonymous CcdsNonsyn=CCDS_Non-synonymous CcdsSplice=CCDS_Splice_Site CcdsZLast_Syn=CCDS_Synonymous Utr3=3'_UTR Utr5=5'_UTR FrameshiftCoding=Frameshift InFrameNonsyn=In-frame_Non-synonymous Nonsyn=Non-synonymous Splice=Splice_Site ZLast_Syn=Synonymous D_Reg=Regulatory_Region D_RegMotif=Regulatory_Motif D_RegMotifHighInfo=Regulatory_Motif_(High_Info)
+subGroup3 freq Frequency Fixed=Fixed_in_Modern_Humans HighFreq=>90%_in_Modern_Humans
+dimensions dimensionX=subset dimensionY=freq
+sortOrder subset=+ freq=+ view=+
+dragAndDrop subTracks
+priority 15
+visibility hide
+type bigBed 4 +
+
+    track dhcHumDerDenAncSNC
+    shortLabel Human Derived SNC
+    view SNC
+    subTrack dhcHumDerDenAnc
+    visibility pack
+
+        track dhcHumDerDenAncSNCAllFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=All freq=Fixed
+        shortLabel SNC Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: All SNCs
+        color 0,0,0
+
+        track dhcHumDerDenAncSNCAllHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=All freq=HighFreq
+        shortLabel SNC HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: All SNCs
+        color 0,0,0
+
+        track dhcHumDerDenAncSNCUtr3Fixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=Utr3 freq=Fixed
+        shortLabel SNC Utr3 Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, 3' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncSNCUtr3HighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=Utr3 freq=HighFreq
+        shortLabel SNC Utr3 HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, 3' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncSNCUtr5Fixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=Utr5 freq=Fixed
+        shortLabel SNC Utr5 Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, 5' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncSNCUtr5HighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=Utr5 freq=HighFreq
+        shortLabel SNC Utr5 HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, 5' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncSNCCcdsUtr3Fixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsUtr3 freq=Fixed
+        shortLabel SNC CC Utr3 Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, CCDS 3' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncSNCCcdsUtr3HighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsUtr3 freq=HighFreq
+        shortLabel SNC CC Utr3 HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, CCDS 3' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncSNCCcdsUtr5Fixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsUtr5 freq=Fixed
+        shortLabel SNC CC Utr5 Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, CCDS 5' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncSNCCcdsUtr5HighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsUtr5 freq=HighFreq
+        shortLabel SNC CC Utr5 HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, CCDS 5' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncSNCCcdsNonsynFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsNonsyn freq=Fixed
+        shortLabel SNC CC Nonsyn Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, CCDS Non-synonymous
+        color 200,0,0
+
+        track dhcHumDerDenAncSNCCcdsNonsynHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsNonsyn freq=HighFreq
+        shortLabel SNC CC Nonsyn HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, CCDS Non-synonymous
+        color 200,0,0
+
+        track dhcHumDerDenAncSNCCcdsSpliceFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsSplice freq=Fixed
+        shortLabel SNC CC Splice Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, CCDS Splice
+        color 200,0,0
+
+        track dhcHumDerDenAncSNCCcdsSpliceHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsSplice freq=HighFreq
+        shortLabel SNC CC Splice HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, CCDS Splice
+        color 200,0,0
+
+        track dhcHumDerDenAncSNCCcdsSynFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsZLast_Syn freq=Fixed
+        shortLabel SNC CC Syn Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, CCDS Syn
+        color 0,200,0
+
+        track dhcHumDerDenAncSNCCcdsSynHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=CcdsZLast_Syn freq=HighFreq
+        shortLabel SNC CC Syn HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, CCDS Syn
+        color 0,200,0
+
+        track dhcHumDerDenAncSNCNonsynFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=Nonsyn freq=Fixed
+        shortLabel SNC Nonsyn Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, Non-synonymous
+        color 200,0,0
+
+        track dhcHumDerDenAncSNCNonsynHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=Nonsyn freq=HighFreq
+        shortLabel SNC Nonsyn HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, Non-synonymous
+        color 200,0,0
+
+        track dhcHumDerDenAncSNCSpliceFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=Splice freq=Fixed
+        shortLabel SNC Splice Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, Splice
+        color 200,0,0
+
+        track dhcHumDerDenAncSNCSpliceHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=Splice freq=HighFreq
+        shortLabel SNC Splice HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, Splice
+        color 200,0,0
+
+        track dhcHumDerDenAncSNCSynFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=ZLast_Syn freq=Fixed
+        shortLabel SNC Syn Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs, Syn
+        color 0,200,0
+
+        track dhcHumDerDenAncSNCSynHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=ZLast_Syn freq=HighFreq
+        shortLabel SNC Syn HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs, Syn
+        color 0,200,0
+
+        track dhcHumDerDenAncSNCRegMotifFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=D_RegMotif freq=Fixed
+        shortLabel SNC RegMotif Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs in Regulatory Motif
+        color 230,130,0
+
+        track dhcHumDerDenAncSNCRegMotifHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=D_RegMotif freq=HighFreq
+        shortLabel SNC RegMotif HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs in Regulatory Motif
+        color 230,130,0
+
+        track dhcHumDerDenAncSNCRegMotifHighInfoFixed
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=D_RegMotifHighInfo freq=Fixed
+        shortLabel SNC RgMoHiInf Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: SNCs in Reg. Motif at High Inf Pos in TFBP
+        color 230,130,0
+
+        track dhcHumDerDenAncSNCRegMotifHighInfoHighFreq
+        parent dhcHumDerDenAncSNC
+        subGroups view=A_SNC subset=D_RegMotifHighInfo freq=HighFreq
+        shortLabel SNC RgMoHiInf HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: SNCs in Reg. Motif at High Inf Pos in TFBP
+        color 230,130,0
+
+    track dhcHumDerDenAncInDel
+    shortLabel Human Derived InDel
+    view InDel
+    subTrack dhcHumDerDenAnc
+    visibility pack
+
+        track dhcHumDerDenAncInDelAllFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=All freq=Fixed
+        shortLabel InD Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: All InDels
+        color 0,0,0
+
+        track dhcHumDerDenAncInDelAllHighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=All freq=HighFreq
+        shortLabel InD HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: All InDels
+        color 0,0,0
+
+        track dhcHumDerDenAncInDelUtr3Fixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=Utr3 freq=Fixed
+        shortLabel InD Utr3 Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, 3' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncInDelUtr3HighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=Utr3 freq=HighFreq
+        shortLabel InD Utr3 HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels, 3' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncInDelUtr5Fixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=Utr5 freq=Fixed
+        shortLabel InD Utr5 Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, 5' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncInDelUtr5HighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=Utr5 freq=HighFreq
+        shortLabel InD Utr5 HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels, 5' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncInDelCcdsUtr3Fixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsUtr3 freq=Fixed
+        shortLabel InD CC Utr3 Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, CCDS 3' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncInDelCcdsUtr3HighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsUtr3 freq=HighFreq
+        shortLabel InD CC Utr3 HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels, CCDS 3' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncInDelCcdsUtr5Fixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsUtr5 freq=Fixed
+        shortLabel InD CC Utr5 Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, CCDS 5' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncInDelCcdsUtr5HighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsUtr5 freq=HighFreq
+        shortLabel InD CC Utr5 HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels, CCDS 5' UTR
+        color 0,0,200
+
+        track dhcHumDerDenAncInDelCcdsFrameshiftCodingFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsFrameshiftCoding freq=Fixed
+        shortLabel InD CC FrShft Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, CCDS Frameshift Coding
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelCcdsFrameshiftCodingHighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsFrameshiftCoding freq=HighFreq
+        shortLabel InD CC FrShft HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels, CCDS Frameshift Coding
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelCcdsInFrameNonsynFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsInFrameNonsyn freq=Fixed
+        shortLabel InD CC InFrNS Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, CCDS In-frame Non-synonymous
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelCcdsSpliceFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsSplice freq=Fixed
+        shortLabel InD CC Splice Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, CCDS Splice
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelCcdsSpliceHighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=CcdsSplice freq=HighFreq
+        shortLabel InD CC Splice HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels, CCDS Splice
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelFrameshiftCodingFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=FrameshiftCoding freq=Fixed
+        shortLabel InD FrShft Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, Frameshift Coding
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelFrameshiftCodingHighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=FrameshiftCoding freq=HighFreq
+        shortLabel InD FrShft HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels, Frameshift Coding
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelInFrameNonsynFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=InFrameNonsyn freq=Fixed
+        shortLabel InD InFrNS Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, In-frame Non-synonymous
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelSpliceFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=Splice freq=Fixed
+        shortLabel InD Splice Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels, Splice
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelSpliceHighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=Splice freq=HighFreq
+        shortLabel InD Splice HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels, Splice
+        color 200,0,0
+
+        track dhcHumDerDenAncInDelRegFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=D_Reg freq=Fixed
+        shortLabel InD RegRegion Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels in Regulatory Region
+        color 230,130,0
+
+        track dhcHumDerDenAncInDelRegHighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=D_Reg freq=HighFreq
+        shortLabel InD RegRegion HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels in Regulatory Region
+        color 230,130,0
+
+        track dhcHumDerDenAncInDelRegMotifFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=D_RegMotif freq=Fixed
+        shortLabel InD RegMotif Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels in Regulatory Motif
+        color 230,130,0
+
+        track dhcHumDerDenAncInDelRegMotifHighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=D_RegMotif freq=HighFreq
+        shortLabel InD RegMotif HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels in Regulatory Motif
+        color 230,130,0
+
+        track dhcHumDerDenAncInDelRegMotifHighInfoFixed
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=D_RegMotifHighInfo freq=Fixed
+        shortLabel InD RgMoHiInf Fxd
+        longLabel Human Derived (Fixed), Denisova Ancestral: InDels in Reg. Motif at High Inf Pos in TFBP
+        color 230,130,0
+
+        track dhcHumDerDenAncInDelRegMotifHighInfoHighFreq
+        parent dhcHumDerDenAncInDel
+        subGroups view=B_InDel subset=D_RegMotifHighInfo freq=HighFreq
+        shortLabel InD RgMoHiInf HiF
+        longLabel Human Derived (HighFreq), Denisova Ancestral: InDels in Reg. Motif at High Inf Pos in TFBP
+        color 230,130,0
+
