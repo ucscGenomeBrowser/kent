@@ -874,7 +874,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseLiverC57bl6ME14halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel Livr E14.5 H 1
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        longLabel Liver C57BL/6 Embryonic Day 14.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=LIVER sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type broadPeak
         color 230,159,0
@@ -1101,7 +1101,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0HotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ES-WW6 F1KO H 1
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep1
         type broadPeak
         color 65,105,225
@@ -1110,7 +1110,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0HotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ES-WW6 F1KO H 2
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep2
         type broadPeak
         color 65,105,225
@@ -2037,7 +2037,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseLiverC57bl6ME14halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel Livr E14.5 P 1
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel Liver C57BL/6 Embryonic Day 14.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=LIVER sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type narrowPeak
         color 230,159,0
@@ -2264,7 +2264,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0PkRep1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ES-WW6 F1KO P 1
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep1
         type narrowPeak
         color 65,105,225
@@ -2273,7 +2273,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0PkRep2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ES-WW6 F1KO P 2
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep2
         type narrowPeak
         color 65,105,225
@@ -3259,7 +3259,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseLiverC57bl6ME14halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel Livr E14.5 S 1
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Signal Rep 1 from ENCODE/UW
+        longLabel Liver C57BL/6 Embryonic Day 14.5 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=LIVER sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type bigWig 1.000000 148306.000000
         color 230,159,0
@@ -3486,7 +3486,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0SigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ES-WW6 F1KO S 1
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Signal Rep 1 from ENCODE/UW
+        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep1
         type bigWig 1.000000 51340.000000
         color 65,105,225
@@ -3495,7 +3495,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0SigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ES-WW6 F1KO S 2
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Signal Rep 2 from ENCODE/UW
+        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep2
         type bigWig 1.000000 58605.000000
         color 65,105,225
