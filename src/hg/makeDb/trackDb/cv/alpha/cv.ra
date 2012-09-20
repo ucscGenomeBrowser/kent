@@ -8300,9 +8300,9 @@ protocol Stam:ZhBTc4_Stam_protocol.pdf
 term AP-2alpha
 tag AP2ALPHA
 type Antibody
-target AP-2alpha
+target TFAP2A
 targetClass TFSS
-antibodyDescription Rabbit polyclonal - AP-2alpha (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2alpha of human origin. Antibody Target: AP-2alpha
+antibodyDescription Rabbit polyclonal - AP-2alpha (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2alpha of human origin. Antibody Target: TFAP2A
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5' -GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.  AP-2alpha is the only AP-2 protein required for early morphogenesis of the lens vesicle (by similarity).
 vendorName Santa Cruz Biotech
 vendorId sc-8975
@@ -8316,9 +8316,9 @@ label AP-2alpha (sc-8975)
 term AP-2gamma
 tag AP2GAMMA
 type Antibody
-target AP-2gamma
+target TFAP2C   
 targetClass TFSS
-antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping with in an internal region of AP-2Y of human origin. Antibody Target: AP-2gamma
+antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping with in an internal region of AP-2Y of human origin. Antibody Target: TFAP2C
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5'-GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.
 vendorName Santa Cruz Biotech
 vendorId sc-8977
@@ -8444,7 +8444,7 @@ term Bach1_(sc-14700)
 tag BACH1SC14700
 type Antibody
 antibodyDescription BACH1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of BACH1 of human origin. Antibody Target: Bach1
-target Bach1
+target BACH1
 targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members. These BTB/POZ domains facilitate protein-protein interactions and formation of homo- and/or hetero-oligomers. When this encoded protein forms a heterodimer with MafK, it functions as a repressor of Maf recognition element (MARE) and transcription is repressed. Multiple alternatively spliced transcript variants have been identified for this gene. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-14700
@@ -8454,7 +8454,7 @@ lots E1503
 targetId GeneCard:BACH1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
 validation Human_-_Bach1_(sc-14700)(Immunoblots,IP-Mass_spec):human_Bach1_sc-14700_validation_Snyder.pdf
-label Bach1 (sc-14700)
+label BACH1 (sc-14700)
 
 
 term BAF155
@@ -8702,9 +8702,9 @@ label BTF3 (sc-166093)
 term c-Fos
 tag CFOS
 type Antibody
-target c-Fos
+target FOS
 targetClass TFSS
-antibodyDescription Rabbit polyclonal to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin. Antibody Target: c-Fos
+antibodyDescription Rabbit polyclonal to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin. Antibody Target: FOS
 targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
 vendorName Santa Cruz Biotech
 vendorId sc-7202
@@ -8718,9 +8718,9 @@ label c-Fos (sc-7202)
 term c-Jun
 tag CJUN
 type Antibody
-target c-Jun
+target JUN
 targetClass TFSS
-antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin. Antibody Target: c-Jun
+antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin. Antibody Target: JUN
 targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
 vendorName Santa Cruz Biotech
 vendorId sc-1694
@@ -8734,8 +8734,8 @@ label c-Jun (sc-1694)
 term c-Myb_(SC-7874)
 tag CMYB
 type Antibody
-target c-Myb
-antibodyDescription Rabbit polyclonal IgG, Epitope corresponding to amino acids 500-640 mapping at the C-terminus of c-Myb of human origin. Antibody Target: c-Myb
+target MYB
+antibodyDescription Rabbit polyclonal IgG, Epitope corresponding to amino acids 500-640 mapping at the C-terminus of c-Myb of human origin. Antibody Target: MYB
 targetDescription Transcriptional activator; DNA-binding protein that specifically recognize the sequence 5'-YAAC[GT]G-3'. Plays an important role in the control of proliferation and differentiation of hematopoietic progenitor cells.
 vendorName Santa Cruz Biotech
 vendorId sc-7874
@@ -8749,9 +8749,9 @@ label c-Myb (sc-7874)
 term c-Myc
 tag CMYC
 type Antibody
-target c-Myc
+target MYC
 targetClass TFSS
-antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin. Antibody Target: c-Myc
+antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin. Antibody Target: MYC
 targetDescription transcription factor; c-Myc-encoded proteins function in cell proliferation,differentiation and neoplastic disease
 vendorName Santa Cruz Biotech
 vendorId sc-764
@@ -9233,8 +9233,8 @@ label CTCFL (sc-98982)
 term CtBP1
 tag CTBP1
 type Antibody
-target CtBP1
-antibodyDescription mouse monoclonal. Antibody Target: CtBP1
+target CTBP1
+antibodyDescription mouse monoclonal. Antibody Target: CTBP1
 targetDescription C-terminal binding protein 1
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303
 vendorName BD Biosciences
@@ -9249,8 +9249,8 @@ label CtBP1 (612042)
 term CtBP2
 tag CTBP2
 type Antibody
-target CtBP2
-antibodyDescription mouse monoclonal. Antibody Target: CtBP2
+target CTBP2
+antibodyDescription mouse monoclonal. Antibody Target: CTBP2
 targetDescription C-terminal binding protein 2
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326
 vendorName BD Biosciences
@@ -9755,9 +9755,9 @@ label ELK4 (sc-13030)
 term ERalpha_a
 tag ERAA
 type Antibody
-target ERalpha_a
+target ESR1
 targetClass TFSS
-antibodyDescription Rabbit affinity purified polyclonal antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor  of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ERalpha_a
+antibodyDescription Rabbit affinity purified polyclonal antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor  of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ESR1 
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-543
@@ -9789,9 +9789,9 @@ label ERalpha a (sc-543)
 term ERRA
 tag ERRA
 type Antibody
-target ERRA
+target ESRRA
 targetClass TFSS
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. Antibody Target: ERRA
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. Antibody Target: ESRRA
 targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
@@ -11222,9 +11222,9 @@ label MBD4 (sc-271530)
 term Med1_(sc-8998)
 tag MED1SC8998
 type Antibody
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 502-756 of TRAP220 of mouse origin. Antibody Target: Med1
-target Med1
-targetDescription Med1 is a core subunit of the large coactivator known as mediator.  Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 502-756 of TRAP220 of mouse origin. Antibody Target: MED1
+target MED1
+targetDescription MED1 is a core subunit of the large coactivator known as mediator.  Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
 vendorName Santa Cruz Biotech
 vendorId sc-8998
 orderUrl http://www.scbt.com/datasheet-8998-trap220-m-255-antibody.html
@@ -11232,22 +11232,22 @@ lab Struhl
 targetId GeneCard:MED1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED1
 validation Human_-_Med1_(sc-8998)(Western_blot,Immunoprecipitation):human_Med1_sc-8998_validation_Struhl.pdf
-label Med1 (sc-8998)
+label MED1 (sc-8998)
 
 term Med26_(sc-48776)
 tag MED26SC48776
 type Antibody
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 373-600 mapping at the C-terminus of CRSP70 of human origin. Antibody Target: Med26
-target Med26
-targetDescription Med26 is a subunit of the large coactivator known as mediator. Med26 is subunit found to be mutually exclusive from the CDK8 module of mediator. Med26 has been associated with activating effects on transcription in context specific manner. Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 373-600 mapping at the C-terminus of CRSP70 of human origin. Antibody Target: MED26
+target MED26
+targetDescription MED26 is a subunit of the large coactivator known as mediator. MED26 is subunit found to be mutually exclusive from the CDK8 module of mediator. MED26 has been associated with activating effects on transcription in context specific manner. Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
 vendorName Santa Cruz Biotech
 vendorId sc-48776
 orderUrl http://www.scbt.com/datasheet-48776-crsp70-h-228-antibody.html
 lab Struhl
-targetId GeneCard:Med26
+targetId GeneCard:MED26
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26
 validation Human_-_Med26_(sc-48776)(Western_blot,Immunoprecipitation):human_Med26_sc-48776_validation_Struhl.pdf
-label Med26 (sc-48776)
+label MED26 (sc-48776)
 
 term MEF2_(sc-17785)
 tag MEF2SC17785
@@ -11318,10 +11318,10 @@ label MTA3 (sc-81325)
 term Mxi1_(AF4185)
 tag MXI1
 type Antibody
-target Mxi1
+target MXI1
 targetClass TFSS
 targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
-antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1. Antibody Target: Mxi1
+antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1. Antibody Target: MXI1
 vendorName R&D Systems
 vendorId AF4185
 orderUrl http://www.rndsystems.com/pdf/AF4185.pdf
@@ -11330,7 +11330,7 @@ lots ZIJ01
 targetId GeneCard:MXI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
 validation Human_-_MXI1(Immunoprecipitation,IP-Mass_spec):human_MXI1_validation_Snyder.pdf Mouse_-_MXI1(Immunoprecipitation,IP-Mass_spec):mouse_Mxi1_validation_Snyder.pdf
-label Mxi1 (AF4185)
+label MXI1 (AF4185)
 
 term MYBL2_(SC-81192)
 tag MYBL2SC81192
@@ -11351,8 +11351,8 @@ label MYBL2 (sc-81192)
 term MyoD_(sc-32758)
 tag SC32758
 type Antibody
-antibodyDescription mouse monoclonal antibody raised against recombinant MyoD of mouse origin with an epitope mapping to amino acids 180-189. Antibody Target: MyoD
-target MyoD
+antibodyDescription mouse monoclonal antibody raised against recombinant MYOD of mouse origin with an epitope mapping to amino acids 180-189. Antibody Target: MYOD
+target MYOD
 targetDescription This gene encodes a nuclear protein that belongs to the basic helix-loop-helix family of transcription factors and the myogenic factors subfamily. It regulates muscle cell differentiation by inducing cell cycle arrest, a prerequisite for myogenic initiation. The protein is also involved in muscle regeneration. It activates its own transcription which may stabilize commitment to myogenesis. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-32758
@@ -11362,19 +11362,18 @@ lots missing
 targetId GeneCard:MYOD1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYOD1
 validation  Mouse_-_:missing
-label MyoD (sc-32758)
+label MYOD (sc-32758)
 
 term Myogenin_(sc-12732)
 tag SC12732
 type Antibody
-antibodyDescription mouse monoclonal antibody; epitope mapping within amino acids 138-158 of myogenin of rat origin. Antibody Target: Myogenin
-target Myogenin
+antibodyDescription mouse monoclonal antibody; epitope mapping within amino acids 138-158 of myogenin of rat origin. Antibody Target: MYOG
+target MYOG
 targetDescription Myogenin is a muscle-specific transcription factor that can induce myogenesis in a variety of cell types in tissue culture. It is a member of a large family of proteins related by sequence homology, the helix-loop-helix (HLH) proteins. It is essential for the development of functional skeletal muscle. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-12732
 orderUrl http://www.scbt.com/datasheet-12732-myogenin-f5d-antibody.html
 lab Wold
-lots missing
 targetId GeneCard:MYOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYOG
 validation  Mouse_-_:missing
@@ -11400,8 +11399,8 @@ label NANOG (sc-33759)
 term NCoR
 tag NCOR
 type Antibody
-target NCoR
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target NCOR
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: NCOR
 targetDescription The nuclear receptor corepressor protein (NCoR) mediates gene repression by interacting with nuclear receptors.  NCoR mediates repression by associating with SIN3A/B and the histone deacetylases, HDAC1 and HDAC2, and promoting the formation of repressive chromatin structures.
 vendorName Bethyl
 vendorId A301-145A
@@ -11448,9 +11447,9 @@ label NFIC (sc-81335)
 term NF-E2
 tag NFE2
 type Antibody
-target NF-E2
+target NFE2
 targetClass TFSS
-antibodyDescription Rabbit polyclonal, epitope mapping at the C-terminus of NF-E2 of mouse origin and recommended for detection of protein of rat, mouse and human origin. Antibody Target: NF-E2
+antibodyDescription Rabbit polyclonal, epitope mapping at the C-terminus of NFE2 of mouse origin and recommended for detection of protein of rat, mouse and human origin. Antibody Target: NFE2
 targetDescription Nuclear factor, erythroid-derived 2
 vendorName Santa Cruz Biotech
 vendorId sc-291
@@ -11465,10 +11464,10 @@ label NF-E2 (sc-291)
 term NF-E2_(SC-22827)
 tag NFE2b
 type Antibody
-target NF-E2
+target NFE2
 targetClass TFSS
-antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NF-E2 of human origin. Antibody Target: NF-E2
-targetDescription Transcription factor NF-E2 45 kDa subunit is a component of the NF-E2 complex and essential for regulating erythroid and megakaryocytic maturation and differentiation. Binds to the hypersensitive site 2 (HS2) of the beta-globin control region (LCR). This subunit (NFE2)recognizes the TCAT/C sequence of the AP-1-like core palindrome present in a number of erythroid and megakaryocytic gene promoters. Requires MAFK or other small MAF proteins for binding to the NF-E2 motif. May play a role in all aspects of hemoglobin production from globin and heme synthesis to procurement of iron. NFE2 has been shown to interact with CREB binding protein.
+antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NFE2 of human origin. Antibody Target: NFE2
+targetDescription Transcription factor NFE2 45 kDa subunit is a component of the NFE2 complex and essential for regulating erythroid and megakaryocytic maturation and differentiation. Binds to the hypersensitive site 2 (HS2) of the beta-globin control region (LCR). This subunit (NFE2)recognizes the TCAT/C sequence of the AP-1-like core palindrome present in a number of erythroid and megakaryocytic gene promoters. Requires MAFK or other small MAF proteins for binding to the NFE2 motif. May play a role in all aspects of hemoglobin production from globin and heme synthesis to procurement of iron. NFE2 has been shown to interact with CREB binding protein.
 vendorName Santa Cruz Biotech
 vendorId sc-22827
 orderUrl http://www.scbt.com/product.php?datasheet=22827
@@ -11513,10 +11512,10 @@ label NFKB (sc-372)
 term NF-YA
 tag NFYA
 type Antibody
-target NF-YA
-targetDescription NF-YA is the alpha subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
+target NFYA
+targetDescription NFYA is the alpha subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 targetClass TFSS
-antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NF-YA. Antibody Target: NF-YA
+antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NFYA. Antibody Target: NFYA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId missing
 orderUrl http://www.unimi.it/didattica/scienzemfn/
@@ -11529,10 +11528,10 @@ label NF-YA
 term NF-YB
 tag NFYB
 type Antibody
-target NF-YB
-targetDescription NF-YB is the beta subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
+target NFYB
+targetDescription NFYB is the beta subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 targetClass TFSS
-antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NF-YB. Antibody Target: NF-YB
+antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NFYB. Antibody Target: NFYB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId missing
 orderUrl http://www.unimi.it/didattica/scienzemfn/
@@ -13154,9 +13153,9 @@ label ZKSCAN1 (HPA006672)
 term Znf143_(16618-1-AP)
 tag ZNF143
 type Antibody
-target Znf143
+target ZNF143
 targetClass TFSS
-antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein. Antibody Target: Znf143
+antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein. Antibody Target: ZNF143
 targetDescription Transcriptional activator. Activates the gene for selenocysteine tRNA (tRNAsec). Binds to the SPH motif of small nuclear RNA (snRNA) gene promoters. Participates to efficient U6 RNA polymerase III transcription via its interaction with CHD8
 vendorName Proteintech
 vendorId 16618-1-AP
@@ -13165,7 +13164,7 @@ lab Snyder
 targetId GeneCard:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
 validation Human_-_Znf143_(16618-1-AP)(Immunoprecipitation,IP-Mass_spec):human_ZNF143_validation_Snyder.pdf
-label Znf143 (16618-1-AP)
+label ZNF143 (16618-1-AP)
 
 term ZNF-MIZD-CP1_(ab65767)
 tag ZNFMIZDCP1AB65767
