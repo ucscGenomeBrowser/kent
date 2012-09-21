@@ -2044,7 +2044,7 @@ lab GIS
 labExpId RHH014
 labVersion clone-free
 localization cell
-md5sum d41d8cd98f00b204e9800998ecf8427e
+md5sum 3e1e497e9edea480337743072e0b5a08
 project wgEncode
 readType 2x36
 replicate 1
@@ -7842,4 +7842,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: -812907001
+# MAGIC: -218514769
