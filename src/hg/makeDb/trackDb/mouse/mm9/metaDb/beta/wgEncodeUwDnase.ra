@@ -2246,7 +2246,6 @@ sex F
 strain B10.H-2aH-4bp/Wts
 subId 7869
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalAlnRep2
@@ -2272,7 +2271,6 @@ sex F
 strain B10.H-2aH-4bp/Wts
 subId 7868
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep1
@@ -2299,7 +2297,6 @@ strain B10.H-2aH-4bp/Wts
 subId 7869
 tableName wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep2
@@ -2326,7 +2323,6 @@ strain B10.H-2aH-4bp/Wts
 subId 7868
 tableName wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep2
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalPkRep1
@@ -2353,7 +2349,6 @@ strain B10.H-2aH-4bp/Wts
 subId 7869
 tableName wgEncodeUwDnaseCh122a4bFImmortalPkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalPkRep2
@@ -2380,7 +2375,6 @@ strain B10.H-2aH-4bp/Wts
 subId 7868
 tableName wgEncodeUwDnaseCh122a4bFImmortalPkRep2
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalRawDataRep1
@@ -2406,7 +2400,6 @@ sex F
 strain B10.H-2aH-4bp/Wts
 subId 7869
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalRawDataRep2
@@ -2432,7 +2425,6 @@ sex F
 strain B10.H-2aH-4bp/Wts
 subId 7868
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalSigRep1
@@ -2459,7 +2451,6 @@ strain B10.H-2aH-4bp/Wts
 subId 7869
 tableName wgEncodeUwDnaseCh122a4bFImmortalSigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseCh122a4bFImmortalSigRep2
@@ -2486,7 +2477,6 @@ strain B10.H-2aH-4bp/Wts
 subId 7868
 tableName wgEncodeUwDnaseCh122a4bFImmortalSigRep2
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEpcmppCd1ME14halfAlnRep1
@@ -2512,7 +2502,6 @@ sex M
 strain CD-1
 subId 7615
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEpcmppCd1ME14halfHotspotsRep1
@@ -2539,7 +2528,6 @@ strain CD-1
 subId 7615
 tableName wgEncodeUwDnaseEpcmppCd1ME14halfHotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEpcmppCd1ME14halfPkRep1
@@ -2566,7 +2554,6 @@ strain CD-1
 subId 7615
 tableName wgEncodeUwDnaseEpcmppCd1ME14halfPkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEpcmppCd1ME14halfRawDataRep1
@@ -2592,7 +2579,6 @@ sex M
 strain CD-1
 subId 7615
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEpcmppCd1ME14halfSigRep1
@@ -2619,7 +2605,6 @@ strain CD-1
 subId 7615
 tableName wgEncodeUwDnaseEpcmppCd1ME14halfSigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEpcpmmCd1ME14halfAlnRep1
@@ -2645,7 +2630,6 @@ sex M
 strain CD-1
 subId 7613
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEpcpmmCd1ME14halfHotspotsRep1
@@ -2672,7 +2656,6 @@ strain CD-1
 subId 7613
 tableName wgEncodeUwDnaseEpcpmmCd1ME14halfHotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEpcpmmCd1ME14halfPkRep1
@@ -2699,7 +2682,6 @@ strain CD-1
 subId 7613
 tableName wgEncodeUwDnaseEpcpmmCd1ME14halfPkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEpcpmmCd1ME14halfRawDataRep1
@@ -2725,7 +2707,6 @@ sex M
 strain CD-1
 subId 7613
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEpcpmmCd1ME14halfSigRep1
@@ -2752,7 +2733,6 @@ strain CD-1
 subId 7613
 tableName wgEncodeUwDnaseEpcpmmCd1ME14halfSigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEpcppmCd1ME14halfAlnRep1
@@ -2778,7 +2758,6 @@ sex M
 strain CD-1
 subId 7614
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEpcppmCd1ME14halfHotspotsRep1
@@ -2805,7 +2784,6 @@ strain CD-1
 subId 7614
 tableName wgEncodeUwDnaseEpcppmCd1ME14halfHotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEpcppmCd1ME14halfPkRep1
@@ -2832,7 +2810,6 @@ strain CD-1
 subId 7614
 tableName wgEncodeUwDnaseEpcppmCd1ME14halfPkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEpcppmCd1ME14halfRawDataRep1
@@ -2858,7 +2835,6 @@ sex M
 strain CD-1
 subId 7614
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEpcppmCd1ME14halfSigRep1
@@ -2885,7 +2861,6 @@ strain CD-1
 subId 7614
 tableName wgEncodeUwDnaseEpcppmCd1ME14halfSigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEpcpppCd1ME14halfAlnRep1
@@ -2911,7 +2886,6 @@ sex M
 strain CD-1
 subId 7616
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEpcpppCd1ME14halfHotspotsRep1
@@ -2938,7 +2912,6 @@ strain CD-1
 subId 7616
 tableName wgEncodeUwDnaseEpcpppCd1ME14halfHotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEpcpppCd1ME14halfPkRep1
@@ -2965,7 +2938,6 @@ strain CD-1
 subId 7616
 tableName wgEncodeUwDnaseEpcpppCd1ME14halfPkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEpcpppCd1ME14halfRawDataRep1
@@ -2991,7 +2963,6 @@ sex M
 strain CD-1
 subId 7616
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEpcpppCd1ME14halfSigRep1
@@ -3018,7 +2989,6 @@ strain CD-1
 subId 7616
 tableName wgEncodeUwDnaseEpcpppCd1ME14halfSigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEscj7S129ME0AlnRep1
@@ -3280,7 +3250,6 @@ sex M
 strain 129/Ola
 subId 6918
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEse14129olaME0AlnRep2
@@ -3306,7 +3275,6 @@ sex M
 strain 129/Ola
 subId 5894
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEse14129olaME0HotspotsRep1
@@ -3333,7 +3301,6 @@ strain 129/Ola
 subId 6918
 tableName wgEncodeUwDnaseEse14129olaME0HotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEse14129olaME0HotspotsRep2
@@ -3360,7 +3327,6 @@ strain 129/Ola
 subId 5894
 tableName wgEncodeUwDnaseEse14129olaME0HotspotsRep2
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEse14129olaME0PkRep1
@@ -3387,7 +3353,6 @@ strain 129/Ola
 subId 6918
 tableName wgEncodeUwDnaseEse14129olaME0PkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEse14129olaME0PkRep2
@@ -3414,7 +3379,6 @@ strain 129/Ola
 subId 5894
 tableName wgEncodeUwDnaseEse14129olaME0PkRep2
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEse14129olaME0RawDataRep1
@@ -3440,7 +3404,6 @@ sex M
 strain 129/Ola
 subId 6918
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEse14129olaME0RawDataRep2
@@ -3466,7 +3429,6 @@ sex M
 strain 129/Ola
 subId 5894
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEse14129olaME0SigRep1
@@ -3493,7 +3455,6 @@ strain 129/Ola
 subId 6918
 tableName wgEncodeUwDnaseEse14129olaME0SigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEse14129olaME0SigRep2
@@ -3520,7 +3481,6 @@ strain 129/Ola
 subId 5894
 tableName wgEncodeUwDnaseEse14129olaME0SigRep2
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEsww6UknME0AlnRep1
@@ -3546,7 +3506,6 @@ sex M
 strain Unknown
 subId 7506
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEsww6UknME0AlnRep2
@@ -3572,7 +3531,6 @@ sex M
 strain Unknown
 subId 7507
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEsww6UknME0HotspotsRep1
@@ -3599,7 +3557,6 @@ strain Unknown
 subId 7506
 tableName wgEncodeUwDnaseEsww6UknME0HotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEsww6UknME0HotspotsRep2
@@ -3626,7 +3583,6 @@ strain Unknown
 subId 7507
 tableName wgEncodeUwDnaseEsww6UknME0HotspotsRep2
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEsww6UknME0PkRep1
@@ -3653,7 +3609,6 @@ strain Unknown
 subId 7506
 tableName wgEncodeUwDnaseEsww6UknME0PkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEsww6UknME0PkRep2
@@ -3680,7 +3635,6 @@ strain Unknown
 subId 7507
 tableName wgEncodeUwDnaseEsww6UknME0PkRep2
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEsww6UknME0RawDataRep1
@@ -3706,7 +3660,6 @@ sex M
 strain Unknown
 subId 7506
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEsww6UknME0RawDataRep2
@@ -3732,7 +3685,6 @@ sex M
 strain Unknown
 subId 7507
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEsww6UknME0SigRep1
@@ -3759,7 +3711,6 @@ strain Unknown
 subId 7506
 tableName wgEncodeUwDnaseEsww6UknME0SigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEsww6UknME0SigRep2
@@ -3786,7 +3737,6 @@ strain Unknown
 subId 7507
 tableName wgEncodeUwDnaseEsww6UknME0SigRep2
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEsww6koUknME0AlnRep1
@@ -3812,7 +3762,6 @@ sex M
 strain Unknown
 subId 7508
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEsww6koUknME0AlnRep2
@@ -3838,7 +3787,6 @@ sex M
 strain Unknown
 subId 7509
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseEsww6koUknME0HotspotsRep1
@@ -3865,7 +3813,6 @@ strain Unknown
 subId 7508
 tableName wgEncodeUwDnaseEsww6koUknME0HotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEsww6koUknME0HotspotsRep2
@@ -3892,7 +3839,6 @@ strain Unknown
 subId 7509
 tableName wgEncodeUwDnaseEsww6koUknME0HotspotsRep2
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseEsww6koUknME0PkRep1
@@ -3919,7 +3865,6 @@ strain Unknown
 subId 7508
 tableName wgEncodeUwDnaseEsww6koUknME0PkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEsww6koUknME0PkRep2
@@ -3946,7 +3891,6 @@ strain Unknown
 subId 7509
 tableName wgEncodeUwDnaseEsww6koUknME0PkRep2
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseEsww6koUknME0RawDataRep1
@@ -3972,7 +3916,6 @@ sex M
 strain Unknown
 subId 7508
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEsww6koUknME0RawDataRep2
@@ -3998,7 +3941,6 @@ sex M
 strain Unknown
 subId 7509
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseEsww6koUknME0SigRep1
@@ -4025,7 +3967,6 @@ strain Unknown
 subId 7508
 tableName wgEncodeUwDnaseEsww6koUknME0SigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseEsww6koUknME0SigRep2
@@ -4052,7 +3993,6 @@ strain Unknown
 subId 7509
 tableName wgEncodeUwDnaseEsww6koUknME0SigRep2
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseFatC57bl6MAdult8wksAlnRep1
@@ -6071,7 +6011,6 @@ sex M
 strain C57BL/6
 subId 5604
 tissueSourceType Pooled
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep1
@@ -6124,7 +6063,6 @@ strain C57BL/6
 subId 5604
 tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep2
 tissueSourceType Pooled
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep1
@@ -6177,7 +6115,6 @@ strain C57BL/6
 subId 5604
 tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep2
 tissueSourceType Pooled
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksRawDataRep1
@@ -6228,7 +6165,6 @@ sex M
 strain C57BL/6
 subId 5604
 tissueSourceType Pooled
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep1
@@ -6281,7 +6217,6 @@ strain C57BL/6
 subId 5604
 tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep2
 tissueSourceType Pooled
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfAlnRep1
@@ -6307,7 +6242,6 @@ sex M
 strain 129.DLCR/DLCR
 subId 7871
 tissueSourceType Pooled
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfAlnRep2
@@ -6333,7 +6267,6 @@ sex M
 strain 129.DLCR/DLCR
 subId 7618
 tissueSourceType Pooled
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep1
@@ -6360,7 +6293,6 @@ strain 129.DLCR/DLCR
 subId 7871
 tableName wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep1
 tissueSourceType Pooled
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep2
@@ -6387,7 +6319,6 @@ strain 129.DLCR/DLCR
 subId 7618
 tableName wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep2
 tissueSourceType Pooled
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfPkRep1
@@ -6414,7 +6345,6 @@ strain 129.DLCR/DLCR
 subId 7871
 tableName wgEncodeUwDnaseLiver129dlcrME14halfPkRep1
 tissueSourceType Pooled
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfPkRep2
@@ -6441,7 +6371,6 @@ strain 129.DLCR/DLCR
 subId 7618
 tableName wgEncodeUwDnaseLiver129dlcrME14halfPkRep2
 tissueSourceType Pooled
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfRawDataRep1
@@ -6467,7 +6396,6 @@ sex M
 strain 129.DLCR/DLCR
 subId 7871
 tissueSourceType Pooled
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfRawDataRep2
@@ -6493,7 +6421,6 @@ sex M
 strain 129.DLCR/DLCR
 subId 7618
 tissueSourceType Pooled
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfSigRep1
@@ -6520,7 +6447,6 @@ strain 129.DLCR/DLCR
 subId 7871
 tableName wgEncodeUwDnaseLiver129dlcrME14halfSigRep1
 tissueSourceType Pooled
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLiver129dlcrME14halfSigRep2
@@ -6547,7 +6473,6 @@ strain 129.DLCR/DLCR
 subId 7618
 tableName wgEncodeUwDnaseLiver129dlcrME14halfSigRep2
 tissueSourceType Pooled
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep1
@@ -6675,7 +6600,6 @@ sex M
 strain C57BL/6
 subId 5600
 tissueSourceType Individual
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep14
@@ -6702,7 +6626,6 @@ sex M
 strain C57BL/6
 subId 5601
 tissueSourceType Pooled
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2
@@ -7034,7 +6957,6 @@ strain C57BL/6
 subId 5600
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep13
 tissueSourceType Individual
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep14
@@ -7062,7 +6984,6 @@ strain C57BL/6
 subId 5601
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep14
 tissueSourceType Pooled
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep2
@@ -7402,7 +7323,6 @@ strain C57BL/6
 subId 5600
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep13
 tissueSourceType Individual
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep14
@@ -7430,7 +7350,6 @@ strain C57BL/6
 subId 5601
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep14
 tissueSourceType Pooled
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep2
@@ -7765,7 +7684,6 @@ sex M
 strain C57BL/6
 subId 5600
 tissueSourceType Individual
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep14
@@ -7792,7 +7710,6 @@ sex M
 strain C57BL/6
 subId 5601
 tissueSourceType Pooled
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep2
@@ -8124,7 +8041,6 @@ strain C57BL/6
 subId 5600
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep13
 tissueSourceType Individual
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep14
@@ -8152,7 +8068,6 @@ strain C57BL/6
 subId 5601
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep14
 tissueSourceType Pooled
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep2
@@ -8385,7 +8300,6 @@ sex M
 strain C57BL/6
 subId 5603
 tissueSourceType Pooled
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseLiverC57bl6ME14halfHotspotsRep1
@@ -8412,7 +8326,6 @@ strain C57BL/6
 subId 5603
 tableName wgEncodeUwDnaseLiverC57bl6ME14halfHotspotsRep1
 tissueSourceType Pooled
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLiverC57bl6ME14halfPkRep1
@@ -8439,7 +8352,6 @@ strain C57BL/6
 subId 5603
 tableName wgEncodeUwDnaseLiverC57bl6ME14halfPkRep1
 tissueSourceType Pooled
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseLiverC57bl6ME14halfRawDataRep1
@@ -8465,7 +8377,6 @@ sex M
 strain C57BL/6
 subId 5603
 tissueSourceType Pooled
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseLiverC57bl6ME14halfSigRep1
@@ -8492,7 +8403,6 @@ strain C57BL/6
 subId 5603
 tableName wgEncodeUwDnaseLiverC57bl6ME14halfSigRep1
 tissueSourceType Pooled
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLiverS129ME14halfAlnRep1
@@ -8518,7 +8428,6 @@ sex M
 strain 129
 subId 7617
 tissueSourceType Pooled
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseLiverS129ME14halfHotspotsRep1
@@ -8545,7 +8454,6 @@ strain 129
 subId 7617
 tableName wgEncodeUwDnaseLiverS129ME14halfHotspotsRep1
 tissueSourceType Pooled
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLiverS129ME14halfPkRep1
@@ -8572,7 +8480,6 @@ strain 129
 subId 7617
 tableName wgEncodeUwDnaseLiverS129ME14halfPkRep1
 tissueSourceType Pooled
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseLiverS129ME14halfRawDataRep1
@@ -8598,7 +8505,6 @@ sex M
 strain 129
 subId 7617
 tissueSourceType Pooled
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseLiverS129ME14halfSigRep1
@@ -8625,7 +8531,6 @@ strain 129
 subId 7617
 tableName wgEncodeUwDnaseLiverS129ME14halfSigRep1
 tissueSourceType Pooled
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1
@@ -9630,7 +9535,6 @@ sex M
 strain C57BL/6
 subId 5590
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseMgerUknImmortalAlnRep2
@@ -9656,7 +9560,6 @@ sex M
 strain C57BL/6
 subId 5591
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hAlnRep1
@@ -10215,7 +10118,6 @@ strain C57BL/6
 subId 5590
 tableName wgEncodeUwDnaseMgerUknImmortalHotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseMgerUknImmortalHotspotsRep2
@@ -10242,7 +10144,6 @@ strain C57BL/6
 subId 5591
 tableName wgEncodeUwDnaseMgerUknImmortalHotspotsRep2
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseMgerUknImmortalPkRep1
@@ -10269,7 +10170,6 @@ strain C57BL/6
 subId 5590
 tableName wgEncodeUwDnaseMgerUknImmortalPkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseMgerUknImmortalPkRep2
@@ -10296,7 +10196,6 @@ strain C57BL/6
 subId 5591
 tableName wgEncodeUwDnaseMgerUknImmortalPkRep2
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseMgerUknImmortalRawDataRep1
@@ -10322,7 +10221,6 @@ sex M
 strain C57BL/6
 subId 5590
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseMgerUknImmortalRawDataRep2
@@ -10348,7 +10246,6 @@ sex M
 strain C57BL/6
 subId 5591
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseMgerUknImmortalSigRep1
@@ -10375,7 +10272,6 @@ strain C57BL/6
 subId 5590
 tableName wgEncodeUwDnaseMgerUknImmortalSigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseMgerUknImmortalSigRep2
@@ -10402,7 +10298,6 @@ strain C57BL/6
 subId 5591
 tableName wgEncodeUwDnaseMgerUknImmortalSigRep2
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep1
@@ -11063,7 +10958,6 @@ sex M
 strain C57BL/6
 subId 5589
 tissueSourceType Pooled
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksHotspotsRep1
@@ -11090,7 +10984,6 @@ strain C57BL/6
 subId 5589
 tableName wgEncodeUwDnaseRetinaC57bl6MAdult8wksHotspotsRep1
 tissueSourceType Pooled
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksPkRep1
@@ -11117,7 +11010,6 @@ strain C57BL/6
 subId 5589
 tableName wgEncodeUwDnaseRetinaC57bl6MAdult8wksPkRep1
 tissueSourceType Pooled
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksRawDataRep1
@@ -11143,7 +11035,6 @@ sex M
 strain C57BL/6
 subId 5589
 tissueSourceType Pooled
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksSigRep1
@@ -11170,7 +11061,6 @@ strain C57BL/6
 subId 5589
 tableName wgEncodeUwDnaseRetinaC57bl6MAdult8wksSigRep1
 tissueSourceType Pooled
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseRetinaC57bl6MNew1daysAlnRep1
@@ -11861,7 +11751,6 @@ sex M
 strain C57BL/6
 subId 5895
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksAlnRep2
@@ -11887,7 +11776,6 @@ sex M
 strain C57BL/6
 subId 5896
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksHotspotsRep1
@@ -11914,7 +11802,6 @@ strain C57BL/6
 subId 5895
 tableName wgEncodeUwDnaseThelpaC57bl6MAdult8wksHotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksHotspotsRep2
@@ -11941,7 +11828,6 @@ strain C57BL/6
 subId 5896
 tableName wgEncodeUwDnaseThelpaC57bl6MAdult8wksHotspotsRep2
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksPkRep1
@@ -11968,7 +11854,6 @@ strain C57BL/6
 subId 5895
 tableName wgEncodeUwDnaseThelpaC57bl6MAdult8wksPkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksPkRep2
@@ -11995,7 +11880,6 @@ strain C57BL/6
 subId 5896
 tableName wgEncodeUwDnaseThelpaC57bl6MAdult8wksPkRep2
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksRawDataRep1
@@ -12021,7 +11905,6 @@ sex M
 strain C57BL/6
 subId 5895
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksRawDataRep2
@@ -12047,7 +11930,6 @@ sex M
 strain C57BL/6
 subId 5896
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksSigRep1
@@ -12074,7 +11956,6 @@ strain C57BL/6
 subId 5895
 tableName wgEncodeUwDnaseThelpaC57bl6MAdult8wksSigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseThelpaC57bl6MAdult8wksSigRep2
@@ -12101,7 +11982,6 @@ strain C57BL/6
 subId 5896
 tableName wgEncodeUwDnaseThelpaC57bl6MAdult8wksSigRep2
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep1
@@ -13299,7 +13179,6 @@ sex M
 strain C57BL/6
 subId 5898
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksAlnRep2
@@ -13325,7 +13204,6 @@ sex M
 strain C57BL/6
 subId 5897
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksHotspotsRep1
@@ -13352,7 +13230,6 @@ strain C57BL/6
 subId 5898
 tableName wgEncodeUwDnaseTregaC57bl6MAdult8wksHotspotsRep1
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksHotspotsRep2
@@ -13379,7 +13256,6 @@ strain C57BL/6
 subId 5897
 tableName wgEncodeUwDnaseTregaC57bl6MAdult8wksHotspotsRep2
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksPkRep1
@@ -13406,7 +13282,6 @@ strain C57BL/6
 subId 5898
 tableName wgEncodeUwDnaseTregaC57bl6MAdult8wksPkRep1
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksPkRep2
@@ -13433,7 +13308,6 @@ strain C57BL/6
 subId 5897
 tableName wgEncodeUwDnaseTregaC57bl6MAdult8wksPkRep2
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksRawDataRep1
@@ -13459,7 +13333,6 @@ sex M
 strain C57BL/6
 subId 5898
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksRawDataRep2
@@ -13485,7 +13358,6 @@ sex M
 strain C57BL/6
 subId 5897
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksSigRep1
@@ -13512,7 +13384,6 @@ strain C57BL/6
 subId 5898
 tableName wgEncodeUwDnaseTregaC57bl6MAdult8wksSigRep1
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseTregaC57bl6MAdult8wksSigRep2
@@ -13539,7 +13410,6 @@ strain C57BL/6
 subId 5897
 tableName wgEncodeUwDnaseTregaC57bl6MAdult8wksSigRep2
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep1
@@ -14722,7 +14592,6 @@ sex M
 strain C57BL/6
 subId 5602
 tissueSourceType Pooled
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep1
@@ -14775,7 +14644,6 @@ strain C57BL/6
 subId 5602
 tableName wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep2
 tissueSourceType Pooled
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep1
@@ -14828,7 +14696,6 @@ strain C57BL/6
 subId 5602
 tableName wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep2
 tissueSourceType Pooled
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfRawDataRep1
@@ -14879,7 +14746,6 @@ sex M
 strain C57BL/6
 subId 5602
 tissueSourceType Pooled
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep1
@@ -14932,7 +14798,6 @@ strain C57BL/6
 subId 5602
 tableName wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep2
 tissueSourceType Pooled
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep1
@@ -16157,7 +16022,6 @@ strain 129/Ola
 subId 7510
 submittedDataVersion V2 - replaces earlier version
 tissueSourceType None
-treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0AlnRep2
@@ -16768,7 +16632,6 @@ subId 7510
 submittedDataVersion V2 - replaces earlier version
 tableName wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep1V2
 tissueSourceType None
-treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep2
@@ -16848,7 +16711,6 @@ subId 7510
 submittedDataVersion V2 - replaces earlier version
 tableName wgEncodeUwDnaseZhbtc4129olaME0PkRep1V2
 tissueSourceType None
-treatment None
 view Peaks
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0PkRep2
@@ -16926,7 +16788,6 @@ strain 129/Ola
 subId 7510
 submittedDataVersion V2 - replaces earlier version
 tissueSourceType None
-treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0RawDataRep2
@@ -17005,7 +16866,6 @@ subId 7510
 submittedDataVersion V2 - replaces earlier version
 tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep1V2
 tissueSourceType None
-treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0SigRep2
@@ -17033,4 +16893,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 61172914
+# MAGIC: -1343098346

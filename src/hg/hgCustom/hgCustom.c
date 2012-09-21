@@ -17,8 +17,8 @@
 #if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#include "net.h"
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
+#include "net.h"
 #include "jsHelper.h"
 #include <signal.h>
 

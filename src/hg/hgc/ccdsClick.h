@@ -2,16 +2,11 @@
 #ifndef CCDSCLICK_H
 #define CCDSCLICK_H
 
-struct ccdsInfo *getCcdsUrlForSrcDb(struct sqlConnection *conn, char *acc);
-/* Get a ccdsInfo object for a RefSeq, ensembl, or vega gene, if it
- * exists, otherwise return NULL */
-
-void printCcdsUrlForSrcDb(struct sqlConnection *conn, struct ccdsInfo *ccdsInfo);
-/* Print out CCDS URL for a refseq, ensembl, or vega gene, if it
- * exists.  */
+void printCcdsExtUrl(char *ccdsId);
+/* Print out URL to link to CCDS database at NCBI */
 
 void printCcdsForSrcDb(struct sqlConnection *conn, char *acc);
-/* Print out CCDS link for a refseq, ensembl, or vega gene, if it
+/* Print out CCDS hc link for a refseq, ensembl, or vega gene, if it
  * exists.  */
 
 struct ccdsGeneMap *getCcdsGenesForMappedGene(struct sqlConnection *conn, char *acc,
@@ -20,7 +15,7 @@ struct ccdsGeneMap *getCcdsGenesForMappedGene(struct sqlConnection *conn, char *
  * mapping table, or NULL */
 
 void printCcdsUrl(struct sqlConnection *conn, char *ccdsId);
-/* Print out CCDS url for a gene  */
+/* Print out CCDS hgc URL for a gene  */
 
 void doCcdsGene(struct trackDb *tdb, char *ccdsId);
 /* Process click on a CCDS gene. */

@@ -11,7 +11,7 @@ subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nb
 subGroup3 factor Factor CTCF=CTCF CMYC=c-Myc POL2=Pol2 zCTRL=Input_Control
 subGroup4 treatment Treatment AANONE=None ANDRO=Androgen ESTRO=Estradiol SERUMSTAVD=serum_starved_media SERUMSTIM=serum_stimulated_media VEH=vehicle
 sortOrder cellType=+ factor=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line treatment=Treatment antibody=Antibody<BR>Target replicate=Replicate controlId=Control_ID view=View dccAccession=UCSC_Accession GeoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment antibody=Antibody<BR>Target replicate=Replicate controlId=Control_ID view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dimensions dimA=treatment dimensionY=cellType dimensionX=factor
 dimensionAchecked AANONE
 filterComposite dimA=multi
