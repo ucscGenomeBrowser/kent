@@ -8647,7 +8647,7 @@ TMPDIR=/scratch/tmp
 
     zgrep -h -v "^#" ../../genbank/Primary_Assembly/unplaced_scaffolds/AGP/*.agp.gz \
         | awk '$5 != "N"' | sed -e 's/\.1\t/\t/' \
-        | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1,$2-1,$3,$6,$9}' \
+        | awk '{printf "chrUn_%s\t%d\t%d\t%s\t0\t%s\n", $1,$2-1,$3,$6,$9}' \
         > chrUn.asmFrag.bed
 
     cat chr.asmFrag.bed chrUL.asmFrag.bed chrUn.asmFrag.bed > mm10.asmFrag.bed
@@ -8655,7 +8655,9 @@ TMPDIR=/scratch/tmp
     echo -e "chrM\t0\t1629\tAY172335.1\t0\t+" >> mm10.asmFrag.bed
     hgLoadBed mm10 assemblyFrags mm10.asmFrag.bed
     featureBits mm10 assemblyFrags
-    #   2652027564 bases of 2652783500 (99.972%) in intersection
+    #   2652769048 bases of 2652783500 (99.999%) in intersection
+    # should be silent when all chr names are correct:
+    checkTableCoords mm10 assemblyFrags
 
 #########################################################################
 # construct ucscToEnsembl table (DONE - 2012-09-11 - Hiram)
@@ -8693,5 +8695,30 @@ CREATE TABLE ucscToEnsembl (
 '_EOF_'
 
     hgLoadSqlTab mm10 ucscToEnsembl ucscToEnsembl.sql ucscToEnsembl.tab
+
+#########################################################################
+# GRC Incident database (DONE - 2012-09-21 - Hiram)
+    # updated the automatic scripts to include the build of this track
+    #   on Mm10
+    # this procedure is run as a cron job in Hiram's account:
+
+    #	43 09 * * * /hive/data/outside/grc/incidentDb/runUpdate.sh makeItSo
+
+    # using the two scrips there: runUpdate.sh and update.sh
+    # which are checked into the source tree as files:
+    #	src/hg/utils/automation/grcIncidentUpdate.sh
+    #	src/hg/utils/automation/grcRunIncidentUpdate.sh
+
+    # they fetch the XML files from NCBI, convert them to SQL text
+    # files, construct a bigBed file, and pushes it to genomewiki if
+    # it is an update from previous
+
+    # the table in the dataBase is: grcIncidentDb
+    # which is the URL to the bb file, a single row:
+    #   http://genomewiki.ucsc.edu/images/a/a4/Mm10.grcIncidentDb.bb
+
+    # construct the table after running the script once manually:
+    hgBbiDbLink mm10 grcIncidentDb \
+        "http://genomewiki.ucsc.edu/images/a/a4/Mm10.grcIncidentDb.bb"
 
 #########################################################################

@@ -27,7 +27,8 @@ cd ${TOP}/human
 ${update} human hg19 Hg19 GRCh37 > human.log.${DS} 2>&1
 mkdir -p ${TOP}/mouse
 cd ${TOP}/mouse
-${update} mouse mm9 Mm9 MGSCv37 > mouse.log.${DS} 2>&1
+${update} mouse mm9 Mm9 MGSCv37 > mouse.mm9.log.${DS} 2>&1
+${update} mouse mm10 Mm10 GRCm38 > mouse.mm10.log.${DS} 2>&1
 mkdir -p ${TOP}/zebrafish
 cd ${TOP}/zebrafish
 ${update} zebrafish danRer7 DanRer7 Zv9 > zebrafish.log.${DS} 2>&1
@@ -37,8 +38,8 @@ if [ $? -ne 0 ]; then
     ${ECHO} "incidentDb/runUpdate.sh failing verifyTransfer.sh" 1>&2
     exit 255
 fi
-WC=`tail --quiet --lines=1 ${TOP}/human/human.log.${DS} ${TOP}/mouse/mouse.log.${DS} ${TOP}/zebrafish/zebrafish.log.${DS} | grep SUCCESS | wc -l`
-if [ "${WC}" -ne 3 ]; then
+WC=`tail --quiet --lines=1 ${TOP}/human/human.log.${DS} ${TOP}/mouse/mouse.mm9.log.${DS} ${TOP}/mouse/mouse.mm10.log.${DS} ${TOP}/zebrafish/zebrafish.log.${DS} | grep SUCCESS | wc -l`
+if [ "${WC}" -ne 4 ]; then
     ${ECHO} "incidentDb/runUpdate.sh failing" 1>&2
     ${ECHO} "WC: ${WC}" 1>&2
     exit 255
