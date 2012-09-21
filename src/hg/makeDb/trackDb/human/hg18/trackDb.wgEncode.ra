@@ -9,8 +9,7 @@ include wgEncodeAffyRnaChip.patch.ra alpha
 include wgEncodeBuOrchid.ra
 
 # BROAD Histone (wrangler: Vankat, assisted by Tim)
-include wgEncodeBroadChipSeq.new.ra alpha
-include wgEncodeBroadChipSeq.ra beta,public
+include wgEncodeBroadChipSeq.ra
 
 # BROAD Chromatin modelling by HMM HMM (wrangler: Tim)
 include wgEncodeBroadHmm.ra
