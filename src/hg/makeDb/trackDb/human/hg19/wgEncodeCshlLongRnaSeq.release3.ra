@@ -328,7 +328,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1
         parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel SKRA cel pA+ + 1
-        longLabel SK-N-SH_RA whole cell polyA+ RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA+ RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3SKNSHRA localization=CELL rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 849498.000000
         # subId=2341 dateSubmitted=2010-09-29
@@ -414,7 +414,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
         parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel SKRA cel pA+ + 2
-        longLabel SK-N-SH_RA whole cell polyA+ RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA+ RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3SKNSHRA localization=CELL rnaExtract=PAP rep=rep2 rank=rank2
         type bigWig 1.000000 3970030.000000
         # subId=2418 dateSubmitted=2010-09-29
@@ -765,7 +765,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep2
         parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel SKRA cel pA- + 2
-        longLabel SK-N-SH_RA whole cell polyA- RNA-seq Plus signal Rep 2 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA- RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3SKNSHRA localization=CELL rnaExtract=PAM rep=rep2 rank=rank2
         type bigWig 1.000000 6761712.000000
         # subId=3151 dateSubmitted=2010-12-24
@@ -773,7 +773,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep1
         parent wgEncodeCshlLongRnaSeqViewPlusSig off
         shortLabel SKRA cel pA- + 1
-        longLabel SK-N-SH_RA whole cell polyA- RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA- RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusSignal cellType=t3SKNSHRA localization=CELL rnaExtract=PAM rep=rep1 rank=rank1
         type bigWig 1.000000 8791351.000000
         # subId=3149 dateSubmitted=2010-12-24
@@ -2035,7 +2035,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep1
         parent wgEncodeCshlLongRnaSeqViewMinusSig off
         shortLabel SKRA cel pA+ - 1
-        longLabel SK-N-SH_RA whole cell polyA+ RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA+ RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3SKNSHRA localization=CELL rnaExtract=PAP rep=rep1 rank=rank1
         type bigWig 1.000000 1472243.000000
         # subId=2341 dateSubmitted=2010-09-29
@@ -2121,7 +2121,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2
         parent wgEncodeCshlLongRnaSeqViewMinusSig off
         shortLabel SKRA cel pA+ - 2
-        longLabel SK-N-SH_RA whole cell polyA+ RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA+ RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3SKNSHRA localization=CELL rnaExtract=PAP rep=rep2 rank=rank2
         type bigWig 1.000000 734082.000000
         # subId=2418 dateSubmitted=2010-09-29
@@ -2472,7 +2472,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep2
         parent wgEncodeCshlLongRnaSeqViewMinusSig off
         shortLabel SKRA cel pA- - 2
-        longLabel SK-N-SH_RA whole cell polyA- RNA-seq Minus signal Rep 2 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA- RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3SKNSHRA localization=CELL rnaExtract=PAM rep=rep2 rank=rank2
         type bigWig 1.000000 1625856.000000
         # subId=3151 dateSubmitted=2010-12-24
@@ -2480,7 +2480,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep1
         parent wgEncodeCshlLongRnaSeqViewMinusSig off
         shortLabel SKRA cel pA- - 1
-        longLabel SK-N-SH_RA whole cell polyA- RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA- RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusSignal cellType=t3SKNSHRA localization=CELL rnaExtract=PAM rep=rep1 rank=rank1
         type bigWig 1.000000 1177854.000000
         # subId=3149 dateSubmitted=2010-12-24
@@ -3747,7 +3747,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1
         parent wgEncodeCshlLongRnaSeqViewAlignments off
         shortLabel SKRA cel pA+ A 1
-        longLabel SK-N-SH_RA whole cell polyA+ RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA+ RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3SKNSHRA localization=CELL rnaExtract=PAP rep=rep1 rank=rank1
         type bam
         # subId=2341 dateSubmitted=2010-09-29
@@ -3833,7 +3833,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep2
         parent wgEncodeCshlLongRnaSeqViewAlignments off
         shortLabel SKRA cel pA+ A 2
-        longLabel SK-N-SH_RA whole cell polyA+ RNA-seq Alignments Rep 2 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA+ RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3SKNSHRA localization=CELL rnaExtract=PAP rep=rep2 rank=rank2
         type bam
         # subId=2418 dateSubmitted=2010-09-29
@@ -4184,7 +4184,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2
         parent wgEncodeCshlLongRnaSeqViewAlignments off
         shortLabel SKRA cel pA- A 2
-        longLabel SK-N-SH_RA whole cell polyA- RNA-seq Alignments Rep 2 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA- RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3SKNSHRA localization=CELL rnaExtract=PAM rep=rep2 rank=rank2
         type bam
         # subId=3151 dateSubmitted=2010-12-24
@@ -4192,7 +4192,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1
         parent wgEncodeCshlLongRnaSeqViewAlignments off
         shortLabel SKRA cel pA- A 1
-        longLabel SK-N-SH_RA whole cell polyA- RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA- RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3SKNSHRA localization=CELL rnaExtract=PAM rep=rep1 rank=rank1
         type bam
         # subId=3149 dateSubmitted=2010-12-24
@@ -5053,7 +5053,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHaoafCellTotalAlnRep1
         parent wgEncodeCshlLongRnaSeqViewAlignments off
         shortLabel HAoAF cel tot A 1
-        longLabel HAoAF cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        longLabel HAoAF whole cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=t3HAOAF localization=CELL rnaExtract=TOTAL rep=rep1 rank=rank1
         type bam
         # subId=7191 dateSubmitted=2012-06-29
@@ -5513,7 +5513,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPamContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel SKRA cel pA- C
-        longLabel SK-N-SH_RA whole cell polyA- RNA-seq Contigs Pooled from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA- RNA-seq Contigs Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled rank=none cellType=t3SKNSHRA localization=CELL rnaExtract=PAM
         type bed 6 +
         # subId=3662 dateSubmitted=2011-02-18
@@ -5521,7 +5521,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPapContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel SKRA cel pA+ C
-        longLabel SK-N-SH_RA whole cell polyA+ RNA-seq Contigs Pooled from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA+ RNA-seq Contigs Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled rank=none cellType=t3SKNSHRA localization=CELL rnaExtract=PAP
         type bed 6 +
         # subId=3663 dateSubmitted=2011-02-18
@@ -5927,7 +5927,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHaoafCellTotalContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel HAoAF cel tot C
-        longLabel HAoAF cell total RNA-seq Contigs Pooled from ENCODE/CSHL
+        longLabel HAoAF whole cell total RNA-seq Contigs Pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=t3HAOAF localization=CELL rnaExtract=TOTAL rep=Pooled rank=none
         type bed 6 +
         # subId=7193 dateSubmitted=2012-06-29
@@ -6459,7 +6459,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPamJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SKRA cel pA- J
-        longLabel SK-N-SH_RA whole cell polyA- RNA-seq Junctions Pooled from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA- RNA-seq Junctions Pooled from ENCODE/CSHL
         subGroups view=Junctions cellType=t3SKNSHRA localization=CELL rnaExtract=PAM rep=Pooled rank=none
         type bed 6 +
         # subId=3662 dateSubmitted=2011-02-18
@@ -6467,7 +6467,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqSknshraCellPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SKRA cel pA+ J
-        longLabel SK-N-SH_RA whole cell polyA+ RNA-seq Junctions Pooled from ENCODE/CSHL
+        longLabel SK-N-SH RA whole cell polyA+ RNA-seq Junctions Pooled from ENCODE/CSHL
         subGroups view=Junctions cellType=t3SKNSHRA localization=CELL rnaExtract=PAP rep=Pooled rank=none
         type bed 6 +
         # subId=3663 dateSubmitted=2011-02-18
@@ -6776,7 +6776,7 @@ html wgEncodeCshlLongRnaSeq.release3
         track wgEncodeCshlLongRnaSeqHaoafCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HAoAF cel tot J
-        longLabel HAoAF cell total RNA-seq Junctions Pooled from ENCODE/CSHL
+        longLabel HAoAF whole cell total RNA-seq Junctions Pooled from ENCODE/CSHL
         subGroups view=Junctions cellType=t3HAOAF localization=CELL rnaExtract=TOTAL rep=Pooled rank=none
         type bed 6 +
         # subId=7195 dateSubmitted=2012-06-29
