@@ -1246,6 +1246,8 @@ Below needs be add to the shiny new HTML doc when it is ready.
    o itemDetailsHtmlTable - The name of a table, indexed by item name, that
      contains an optional HTML fragment to display on the details page for
      this item.  This is currently supported on generic genePred, BED, and PSL
-     tables with no track-specific handler.  The expected columns are
-     "name" and "html".
+     tables with no track-specific handler.  The minimum columns are
+     "name" and "html", if "name" is unique. Optional columns are (chrom, start, end), 
+     if the names are not unique. If the "chrom" column exists, the lookup will use
+     (chrom, start, end) and name to find the correct html entry.
 
