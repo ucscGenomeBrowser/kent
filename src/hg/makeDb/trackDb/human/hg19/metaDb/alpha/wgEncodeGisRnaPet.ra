@@ -926,7 +926,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum 4449565e58dcbce0ab7f04a61bf63f8e,11c1a897f3c3215ac69ee77fdb030cac
-objStatus replaced
+objStatus replaced by a Rep1V2
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -949,6 +949,7 @@ dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam,wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam.bai
 grant Gingeras
@@ -1017,7 +1018,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum 927644527b04fea14e544236c778a3fd
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1040,6 +1041,7 @@ dateResubmitted 2010-03-08
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed.gz
 geoSampleAccession GSM830535
@@ -1108,7 +1110,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum c57288b61e645beb3689f6ee35ec8ab8
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1130,6 +1132,7 @@ dateResubmitted 2009-11-17
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
@@ -1195,7 +1198,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum e2ad5fc07a8f727aeb6a3fccd64658a8
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1217,6 +1220,7 @@ dateResubmitted 2009-11-17
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
@@ -1313,7 +1317,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum f89ce7a4a60a27d2b406f8ab40b6e798
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1336,6 +1340,7 @@ dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
@@ -1404,7 +1409,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum 8abeabbf4976dd5318d80d62f15b87ae
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1427,6 +1432,7 @@ dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1.bigWig
 geoSampleAccession GSM830535
@@ -2038,7 +2044,7 @@ lab GIS
 labExpId RHH014
 labVersion clone-free
 localization cell
-md5sum 3e1e497e9edea480337743072e0b5a08
+md5sum d41d8cd98f00b204e9800998ecf8427e
 project wgEncode
 readType 2x36
 replicate 1
@@ -7836,4 +7842,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: 1573362324
+# MAGIC: -812907001
