@@ -41,7 +41,7 @@ subGroup8 strain Strain BALBCANN=BALB/cAnN B6D2F1J=B6D2F1/J C57BL6=C57BL/6 CD1=C
 dimensions dimensionX=cellType dimensionY=age dimensionA=rep dimensionB=strain 
 filterComposite dimA=multi dimB=multi
 sortOrder cellType=+ view=+ rep=+ age=+ strain=+ sex=+
-fileSortOrder cell=Cell_Line strain=Strain view=View replicate=Replicate age=Age dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line strain=Strain view=View replicate=Replicate age=Age dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract sex=sex age=age strain=strain
 dragAndDrop subTracks
 priority 0
