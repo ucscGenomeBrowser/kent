@@ -168,7 +168,7 @@ fd_set mySet;
 char *errorString = NULL;
 if (checkConnFailure(hostName, port, &errorString))
     {
-    warn(errorString);
+    warn("%s", errorString);
     return -1;
     }
 
