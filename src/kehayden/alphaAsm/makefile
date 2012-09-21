@@ -16,3 +16,7 @@ compile:: ${O}
 
 clean::
 	rm -f ${A}${EXE} ${O}
+
+test:
+	alphaAsm yReads.txt yTypeOrder.txt test.out chain=test.before afterChain=test.after outSize=10000 seed=0 verbose=1
+
