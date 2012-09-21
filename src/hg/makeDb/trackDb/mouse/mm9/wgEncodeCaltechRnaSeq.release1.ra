@@ -14,7 +14,7 @@ subGroup8 treatment Treatment E2P60H=EqS_2.0%_60_h NONE=None
 subGroup9 rep Replicate rep1=1
 dimensions dimensionX=cellType dimensionY=treatment
 sortOrder cellType=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain sex=sex mapAlgorithm=mapAlgorithm insertLength=insertLength treatment=treatment
 dragAndDrop subTracks
 priority 0
