@@ -10,9 +10,9 @@ export ECHO="/bin/echo -e"
 if [ $# -ne 4 ]; then
     ${ECHO} "usage: update.sh <name> <db> <Db> <Id>" 1>&2
     ${ECHO} "where <name> is one of: human mouse zebrafish" 1>&2
-    ${ECHO} "<db> is one of: hg19 mm9 danRer7" 1>&2
-    ${ECHO} "<Db> is one of: Hg19 Mm9 DanRer7" 1>&2
-    ${ECHO} "<Id> is one of: GRCH37 MGSCv37 Zv9" 1>&2
+    ${ECHO} "<db> is one of: hg19 mm9 mm10 danRer7" 1>&2
+    ${ECHO} "<Db> is one of: Hg19 Mm9 Mm10 DanRer7" 1>&2
+    ${ECHO} "<Id> is one of: GRCH37 MGSCv37 GRCm38 Zv9" 1>&2
     exit 255
 fi
 
@@ -77,23 +77,29 @@ case "${db}" in
 # illegal coordinates have crept into the data:
 # sed -e "s/132060741/131737871/; s/132085098/131738871/" ${db}.bed5 > t$$.bed5
 /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/grcIncidentDb.as \
-	${db}.bed5 /hive/data/genomes/${db}/chrom.sizes grcIncidentDb.bb
+	${db}.bed5 /hive/data/genomes/${db}/chrom.sizes $db.grcIncidentDb.bb
 #	rm -f t$$.bed5
 	;;
     *)
 /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/grcIncidentDb.as \
-	${db}.bed5 /hive/data/genomes/${db}/chrom.sizes grcIncidentDb.bb
+	${db}.bed5 /hive/data/genomes/${db}/chrom.sizes $db.grcIncidentDb.bb
 	;;
 esac
 
-newSum=`md5sum -b grcIncidentDb.bb | awk '{print $1}'`
-oldSum=`md5sum -b ../../${Db}.grcIncidentDb.bb | awk '{print $1}'`
+export newSum=0
+export oldSum=0
+newSum=`md5sum -b $db.grcIncidentDb.bb | awk '{print $1}'`
+if [ -s ../../${Db}.grcIncidentDb.bb ]; then
+    oldSum=`md5sum -b ../../${Db}.grcIncidentDb.bb | awk '{print $1}'`
+fi
 ${ECHO} $newSum
 ${ECHO} $oldSum
 if [ "$newSum" != "$oldSum" ]; then
     rm -f ../../${Db}.grcIncidentDb.bb.prev
-    mv ../../${Db}.grcIncidentDb.bb ../../${Db}.grcIncidentDb.bb.prev
-    ln -s ${name}/${DS}/grcIncidentDb.bb ../../${Db}.grcIncidentDb.bb
+    if [ -s ../../${Db}.grcIncidentDb.bb ]; then
+        mv ../../${Db}.grcIncidentDb.bb ../../${Db}.grcIncidentDb.bb.prev
+    fi
+    ln -s ${name}/${DS}/$db.grcIncidentDb.bb ../../${Db}.grcIncidentDb.bb
     cd "${TOP}"
     /cluster/bin/scripts/gwUploadFile ${Db}.grcIncidentDb.bb ${Db}.grcIncidentDb.bb
     url=`/cluster/bin/x86_64/hgsql -N -e "select * from grcIncidentDb;" $db`

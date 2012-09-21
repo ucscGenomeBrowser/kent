@@ -19489,3 +19489,9 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
+# recip best for mm10 (DONE - 2012-09-14 - Hiram)
+    # see also: redmine issue 9089
+    cd /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
+    time doRecipBest.pl -buildDir=`pwd` hg19 mm10 > rbest.log 2>&1
+    #   real    157m16.369s
+#########################################################################

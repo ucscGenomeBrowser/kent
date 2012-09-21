@@ -11,7 +11,7 @@ subGroup3 localization Localization m0cell=Cell m10polysome=Polysome m20cytosol=
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+ total=Total
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 dimensionZchecked longPolyA,total
-#fileSortOrder cell=Cell_Line view=View replicate=Lab<BR>Replicate fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+fileSortOrder cell=Cell_Line view=View replicate=Lab<BR>Replicate fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
