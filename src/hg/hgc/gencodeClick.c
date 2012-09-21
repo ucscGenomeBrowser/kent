@@ -256,8 +256,9 @@ if (!isEmpty(transAttrs->ccdsId))
     {
     printf("<a href=\"");
     printCcdsExtUrl(transAttrs->ccdsId);
-    printf("\" target=_blank>%s</a><td></tr>\n", transAttrs->ccdsId);
+    printf("\" target=_blank>%s</a>", transAttrs->ccdsId);
     }
+printf("<td></tr>\n");
 
 printf("<tr><th>GeneCards<td colspan=2>");
 prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
