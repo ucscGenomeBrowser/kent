@@ -297,7 +297,7 @@ struct slName *list = NULL, *el;
 for (;wt != NULL; wt = wt->parent)
     {
     char *word = wt->monomer->word;
-    if (!isEmpty(word))   // Avoid blank great grandparent
+    if (!isEmpty(word))   // Avoid blank great grandparent at root of tree.
 	slNameAddHead(&list, word);
     }
 
@@ -356,7 +356,7 @@ for (child = wt->children; child != NULL; child = child->next)
     wordTreeDump(level+1, child, maxChainSize, f);
 }
 
-struct wordTree *pickRandom(struct wordTree *list)
+struct wordTree *pickWeightedRandomFromList(struct wordTree *list)
 /* Pick word from list randomly, but so that words with higher outTargets
  * are picked more often. */
 {
@@ -364,7 +364,7 @@ struct wordTree *picked = NULL;
 
 /* Debug output. */
     {
-    verbose(2, "   pickRandom(");
+    verbose(2, "   pickWeightedRandomFromList(");
     struct wordTree *wt;
     for (wt = list; wt != NULL; wt = wt->next)
         {
@@ -471,7 +471,7 @@ for (node = list; !dlEnd(node); node = node->next)
     }
 struct wordTree *result = NULL;
 if (wt != NULL && wt->children != NULL)
-    result = pickRandom(wt->children);
+    result = pickWeightedRandomFromList(wt->children);
 return result;
 }
 
@@ -585,7 +585,7 @@ if (pick == NULL)
     pick = predictFromPreviousTypes(store, past);
 if (pick == NULL)
     {
-    pick = pickRandom(store->markovChains->children);
+    pick = pickWeightedRandomFromList(store->markovChains->children);
     warn("in predictNext() last resort pick of %s", pick->monomer->word);
     }
 return pick;
@@ -1233,7 +1233,8 @@ if (optionExists("chain"))
     wordTreeWrite(wt, store->maxChainSize, fileName);
     }
 
-wordTreeGenerateFile(store, store->maxChainSize, pickRandom(wt->children), outSize, outFile);
+wordTreeGenerateFile(store, store->maxChainSize, 
+    pickWeightedRandomFromList(wt->children), outSize, outFile);
 
 if (optionExists("afterChain"))
     {
