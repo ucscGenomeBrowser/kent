@@ -22,10 +22,12 @@ The following tests are run:
   checkTblCoords
   genePredCheck
   pslCheck
-  featureBits
-  (a version of) countPerChrom
 
-  creates 3 files:  outFile.summary, outFile.log, outFile.chrom
+The following statistics are recorded: 
+  featureBits
+  item count per chromosome stats
+
+  creates 2 files:  outFile.summary, outFile.log
         """)
     parser.add_argument('db', help='the database to check')
     parser.add_argument('-f', dest='tableFile', nargs=1, type=argparse.FileType('r'),
@@ -60,21 +62,13 @@ def runTests(db, tableList, reporter, sumTable):
         reporter.writeLine(db + "." + table +":\n")
         table = factory.tableQaFactory(db, table, reporter, sumTable)
         table.validate()
+        reporter.writeBlankLine()
         table.statistics()
-    reporter.writeLine(delimiterLine)
     reporter.writeLine("Tests complete:")
     reporter.writeTimestamp()
 
 def writeSummaryFile(sumTable, sumFile):
     sumFile.write(sumTable.tabSeparated())
-
-def runChromCounts(db, tableList, chromFile):
-    chromFile.write(time.asctime() + "\n")
-    chromFile.write("Database: " + db + "\n\n")
-    tableSet = set(tableList)
-    output, tablecounts = tableCheck.countPerChrom(db, tableSet)
-    for line in output:
-        chromFile.write(line + "\n")
 
 args = parseCommandLine()
 tableList = args.table
@@ -83,15 +77,12 @@ outFile = args.outFile
 checkTablesExist(db, tableList)
 
 logFile = open(outFile + ".log", "w")
-chromFile = open(outFile + ".chroms", "w")
 sumFile = open(outFile + ".summary", "w")
 reporter = reporter.Reporter(logFile)
 sumTable = summary.SumTable()
 
 runTests(db, tableList, reporter, sumTable)
-runChromCounts(db, tableList, chromFile)
 writeSummaryFile(sumTable, sumFile)
 
 logFile.close()
 sumFile.close()
-chromFile.close()
