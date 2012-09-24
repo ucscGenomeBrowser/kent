@@ -10082,7 +10082,7 @@ term GATA2_(SC-267)
 tag GATA2b
 type Antibody
 target GATA2
-targetClass: TFSS
+targetClass TFSS
 targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
 antibodyDescription Mouse monoclonal IgG. Antibody Target: GATA2
 vendorName Santa Cruz Biotechnology
@@ -10100,7 +10100,7 @@ tag GATA2SC9008
 type Antibody
 antibodyDescription Rabbit polyclonal antibody raised against amino acids 120-235 of GATA-2 of human origin. Antibody Target: GATA2
 target GATA2
-targetClass: TFSS
+targetClass TFSS
 targetDescription The GATA family of transcription factors share a conserved zinc finger DNA-binding domain and are capable of binding the WGATAR consensus sequence. GATA1 is erythroid-specific and is essential for normal erythropeisis. By comparison, GATA2 is expressed at high levels in hematopoeitic progenitors, including early erythroid cells, but is strong repressed during erythroblast differentiaion.
 vendorName Santa Cruz Biotechnology
 vendorId sc-9008
@@ -12246,7 +12246,6 @@ type Antibody
 targetClass HISase
 antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A. Antibody Target: SIN3A (NB600-1263)
 target SIN3A
-targetClass HISase
 targetDescription Mammalian Sin 3 (mSin 3) is closely related to the yeast SIN3 repressor protein involved in the transcriptional repression of many genes. Containing 4 paired amphipathic helix domains (PAH domains), mSin 3A and mSin 3B have been shown to directly interact with several other transcriptional repressor proteins including HDAC 1, HDAC 2, RbAp 46, the methyl CpG binding protein MeCP 2, the Mad/Max heterodimer, and the corepressors silencing mediator of retinoic acid &amp; thyroid hormone receptor (SMRT) and nuclear receptor corepressor (N-CoR).
 vendorName Novus Biologicals
 vendorId NB600-1263
