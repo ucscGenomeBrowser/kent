@@ -300,7 +300,7 @@ while ((slCountAtMost(ivList,10)) < 10)
 return  ivList;
 }
 
-void showSchemaBigBed(char *table)
+void showSchemaBigBed(char *table, struct trackDb *tdb)
 /* Show schema on bigBed. */
 {
 /* Figure out bigBed file name and open it.  Get contents for first chromosome as an example. */
@@ -385,7 +385,7 @@ for (iv=ivList; iv != NULL; iv = iv->next)
     hPrintf("</TR>\n");
     }
 hTableEnd();
-
+printTrackHtml(tdb);
 /* Clean up and go home. */
 lmCleanup(&lm);
 bbiFileClose(&bbi);
