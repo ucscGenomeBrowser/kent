@@ -19203,6 +19203,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM001457
 expId 1457
 fileName wgEncodeLicrHistoneSplH3k04me1MAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM769031
 grant Ren
 lab LICR-m
 labVersion 09/19/10 Lane 8C
@@ -19233,6 +19234,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM001457
 expId 1457
 fileName wgEncodeLicrHistoneSplH3k04me1MAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM769031
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 3F
@@ -19263,6 +19265,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM001458
 expId 1458
 fileName wgEncodeLicrHistoneSplH3k04me3MAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM769036
 grant Ren
 lab LICR-m
 labVersion 09/19/10 Lane 8D
@@ -19293,6 +19296,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM001458
 expId 1458
 fileName wgEncodeLicrHistoneSplH3k04me3MAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM769036
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 4G
@@ -20358,6 +20362,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM001459
 expId 1459
 fileName wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM769037
 grant Ren
 lab LICR-m
 labVersion 08/10/10 Lane 2B
@@ -23944,4 +23949,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1867626755
+# MAGIC: -1356494498
