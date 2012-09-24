@@ -38,6 +38,41 @@ The name of each item is the amino acid sequence of the peptide where a period (
 at the end of a name signifies a stop codon.  
 <br>
 </p>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are
+<A HREF="/goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.</P>
+
+<p>To show only selected subtracks, uncheck the boxes next to the tracks that
+you wish to hide.</p>
+
+<p>Color differences among the views are arbitrary. They provide a
+visual cue for
+distinguishing between the different cell types and compartments.</p>
+
+<dl>
+<dt><i>Peptide Genome and GENCODE Mapping(Filtered)</i>
+</dt><dd> Peptide mapping results based on hg19 and GENCODE annotation for mass-spectrometry-based proteomics experiments filtered for a false discovery rate (FDR) better than 5%. Specific column descriptions can be found below.
+</dd><dt><i>Modified Peptide Genome and GENCODE Mapping(Filtered)</i>
+</dt><dd>Modified peptide mapping results based on hg19 and GENCODE annotation for mass-spectrometry-based proteomics experiments filtered for a false discovery rate (FDR) better than 5%.
+</dd>
+</dl>
+<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+
+<P>
+<!--echo var="BROWSER_HOST" -->
+Unfiltered views <A TARGET=_BLANK HREF="../cgi-bin/hgEncodeVocab?tag=MPEPMAPGCUNFT,PEPMAPGCUNFT">views</A> are available on the Downloads page.
+</P>
+
+
+
+
+
+
+
+
 <p>Fields specific to Proteogenomic tracks include:<br></p>
 <ul>
   <li>The <span style="font-style: italic;">Item</span> names the peptide sequence and

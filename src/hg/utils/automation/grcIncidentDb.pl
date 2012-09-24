@@ -43,6 +43,7 @@ if ($argc < 2) {
     printf STDERR "-GRCh37 == hg19\n";
     printf STDERR "-NCBI36 == hg18\n";
     printf STDERR "-MGSCv37 == mm9\n";
+    printf STDERR "-GRCm38 == mm10\n";
     printf STDERR "-Zv9 == danRer7\n";
     exit 255;
 }

@@ -28,8 +28,7 @@ visibility hide
     visibility full
     parent wgEncodeUncBsuProtGenc
     useScore 1
-    scoreFilter 200
-    scoreFilterLimits 200:1000
+    scoreFilterLimits 0:1000
 
         track wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcFt
         parent wgEncodeUncBsuProtGencViewpepMapGcFt
@@ -88,8 +87,7 @@ visibility hide
     shortLabel modPepMapping Gc
     view mPepMapGcFt
     useScore 1
-    scoreFilter 200
-    scoreFilterLimits 200:1000
+    scoreFilterLimits 0:1000
     visibility full
     parent wgEncodeUncBsuProtGenc
 

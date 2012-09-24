@@ -1334,7 +1334,7 @@ orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
-label B_cells_CD20+
+label B-cells CD20+
 
 term CD20+_RO01778
 tag CD20RO01778
@@ -1355,7 +1355,7 @@ orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
-label B_cells_CD20+_RO01778
+label B-cells CD20+ (RO01778)
 
 term CD20+_RO01794
 tag CD20RO01794
@@ -1393,6 +1393,7 @@ orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000725
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000725
 protocol Stam:CD34+Mobilized_Stam_protocol.pdf
+label CD34+ Mobilized
 
 term CD4+_Naive_Wb11970640
 tag CD4NAIVEWB11970640
@@ -5144,7 +5145,7 @@ termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
-label Monocytes_CD14+
+label Monocytes CD14+
 #formerly tier 3
 #there is another Monocytes-CD14+ cell line
 #that is used in UW DNase and Open Chrom Chip
@@ -5479,6 +5480,7 @@ termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
 protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+label NHEM M2
 
 term NHEM_M2_7011001.2
 tag NHEMM270110012
@@ -5498,6 +5500,7 @@ termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
 protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf
+label NHEM M2 (7011001.2)
 
 term NHEM_M2_7012303
 tag NHEMM27012303
@@ -5517,6 +5520,7 @@ termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
 protocol Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+label NHEM M2 (7012303)
 
 term NHEM.f_M2
 tag NHEMFM2
@@ -5535,6 +5539,7 @@ termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
 protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
+label NHEM.f M2
 
 term NHEM.f_M2_5071302.2
 tag NHEMFM250713022
@@ -5554,6 +5559,7 @@ termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
 protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf
+label NHEM.f M2 (5071302.2)
 
 term NHEM.f_M2_6022001
 tag NHEMFM26022001
@@ -5573,6 +5579,7 @@ termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
 protocol Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
+label NHEM.f M2 (6022001)
 
 term NHLF
 tag NHLF
