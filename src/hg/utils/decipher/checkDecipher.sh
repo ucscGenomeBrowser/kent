@@ -1,25 +1,19 @@
-#!/bin/sh
+#!/bin/sh -ex
 
 #	Do not modify this script, modify the source tree copy:
 #	src/utils/decipher/checkDecipher.sh
 #	This script is used via a cron job and kept in $HOME/bin/scripts/
 
-# set EMAIL here for notification list
-EMAIL="fanhsu@soe.ucsc.edu"
-# set DEBUG_EMAIL here for notification of potential errors in the process
-DEBUG_EMAIL="fanhsu@soe.ucsc.edu"
-
 #	cron jobs need to ensure this is true
 umask 002
 
-WORKDIR="/hive/groups/gsid/medical/fan/decipher/auto"
+WORKDIR="/hive/data/outside/otto/decipher"
 export WORKDIR
 
 #	this is where we are going to work
 if [ ! -d "${WORKDIR}" ]; then
     echo "ERROR in DECIPHER release watch, Can not find the directory:
-    ${WORKDIR}" \
-	| mail -s "ERROR: DECIPHER watch" ${DEBUG_EMAIL}
+    ${WORKDIR}" 
     exit 255
 fi
 
@@ -45,55 +39,55 @@ rm -f release.list
 ftp -n -v -i ftp.sanger.ac.uk  < ftp.decipher.rsp > ls.check
 
 #	fetch the release directory names from the ls.check result file
-grep "decipher-" ls.check | sort > release.list
+grep "decipher-hg19" ls.check | sort > release.list
 chmod o+w release.list
 
 #	verify we are getting a proper list
 WC=`cat release.list | wc -l`
 if [ "${WC}" -lt 1 ]; then
     echo "potential error in DECIPHER release watch,
-check release.list in ${WORKDIR}" \
-	| mail -s "ERROR: DECIPHER watch" ${DEBUG_EMAIL}
+check release.list in ${WORKDIR}" 
     exit 255
 fi
 
 #	see if anything is changing, if so, email notify, download, and build
 
-diff prev.release.list release.list  >release.diff
+diff prev.release.list release.list  >release.diff || true
 WC=`cat release.diff | wc -l`
 if [ "${WC}" -gt 1 ]; then
     echo -e "New DECIPHER update noted at:\n" \
-"ftp://ftp.sanger.ac.uk/pub/\n"`comm -13 prev.release.list release.list`"/" \
-    | mail -s "DECIPHER update watch" ${EMAIL}
+"ftp://ftp.sanger.ac.uk/pub/\n"`comm -13 prev.release.list release.list`"/" 
 
-FN=`cat release.diff |grep decipher-|sed -e 's/decipher-/\tdecipher-/'|cut -f 2`
 
-today=`date +%F`
-mkdir -p $today
-cd $today
+    FN=`cat release.diff |grep decipher-|sed -e 's/decipher-/\tdecipher-/'|cut -f 2 | tail -1`
 
-echo "${FN}" >j.fn.gpg
-cat j.fn.gpg |sed -e 's/.gpg//' >j.fn.txt
 
-# prepare ftp download response file
-rm -f ftp.decipher.rsp
-echo "user ftp-decipher-dda ${ftppass}
-cd pub
-get "${FN}"
-bye" > ftp.decipher.rsp
+    today=`date +%F`
+    mkdir -p $today
+    cd $today
+    cp -p ../*.diff .
+    echo "${FN}" >j.fn.gpg
+    cat j.fn.gpg |sed -e 's/.gpg//' >j.fn.txt
 
-# download the new data file
-ftp -n -v -i ftp.sanger.ac.uk  < ftp.decipher.rsp > ftp.log
+    # prepare ftp download response file
+    rm -f ftp.decipher.rsp
+    echo "user ftp-decipher-dda ${ftppass}
+    cd pub
+    get "${FN}"
+    bye" > ftp.decipher.rsp
 
-#rm -f `cat j.fn.txt`
+    # download the new data file
+    ftp -n -v -i ftp.sanger.ac.uk  < ftp.decipher.rsp > ftp.log
 
-# unpack the gpg encrypted file
-gpg --passphrase "${gpgpass}"  "${FN}"
+    #rm -f `cat j.fn.txt`
 
-# build the new DECIPHER track tables
-../buildDecipher `cat j.fn.txt`
+    # unpack the gpg encrypted file
+    gpg --passphrase "${gpgpass}"  "${FN}"
 
-rm j.fn.txt
-rm j.fn.gpg
+    # build the new DECIPHER track tables
+    ../buildDecipher `cat j.fn.txt`
+
+    rm j.fn.txt
+    rm j.fn.gpg
 fi
 

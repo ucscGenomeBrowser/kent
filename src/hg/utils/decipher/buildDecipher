@@ -1,19 +1,21 @@
 # get raw data file from DECIPHER
 
-cp $1  decipherRaw.txt -p
+#cp $1  decipherRaw.txt -p
+cat $1|grep -v '#' >  decipherRaw.txt 
 
 hgsql hg19 -e 'delete from decipherRaw'
 
 hgsql hg19 -e \
-'load data local infile "decipherRaw.txt" into table decipherRaw ignore 1 lines'
+'load data local infile "decipherRaw.txt" into table decipherRaw'
 
 hgsql hg19 -N -e 'select "chr", chr, start-1, end, id from decipherRaw ' |\
 sed -e 's/chr\t/chr/' |sort -u>j.tmp
 
+cp j.tmp decipher.bed
 # fix some out of range of entries
-cat j.tmp|sed -e 's/243000000/242951149/' |\
-sed -e 's/115090019/114142980/' >decipher.bed
-rm j.tmp
+#cat j.tmp|sed -e 's/243000000/242951149/' |\
+#sed -e 's/115090019/114142980/' >decipher.bed
+#rm j.tmp
 
 # Load decipher table
 hgLoadBed hg19 decipher decipher.bed

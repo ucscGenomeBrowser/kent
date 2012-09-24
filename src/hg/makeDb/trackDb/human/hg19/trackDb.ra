@@ -3094,12 +3094,3 @@ semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9888
 padding 250
-
-track ucscGenePfam
-release alpha
-shortLabel Pfam in UCSC Gene
-longLabel Pfam domains in UCSC Genes
-group genes
-type bed 12
-priority 37.14
-color 20,0,250

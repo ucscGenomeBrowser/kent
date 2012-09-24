@@ -71,6 +71,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapClusters.bedCluster.gz
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA009,RHA010
@@ -97,6 +98,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA009
@@ -123,6 +125,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA010
@@ -149,6 +152,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA009
@@ -175,6 +179,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA010
@@ -201,6 +206,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA009
@@ -228,6 +234,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA010
@@ -255,6 +262,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA009
@@ -282,6 +290,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002929
 expId 2929
 fileName wgEncodeGisRnaPetA549CellPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006902
 grant Gingeras
 lab GIS
 labExpId RHA010
@@ -364,6 +373,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapClusters.bedCluster.gz
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA011,RHA012
@@ -390,6 +400,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA011
@@ -416,6 +427,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA012
@@ -442,6 +454,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA011
@@ -468,6 +481,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA012
@@ -494,6 +508,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA011
@@ -521,6 +536,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA012
@@ -548,6 +564,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA011
@@ -575,6 +592,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002927
 expId 2927
 fileName wgEncodeGisRnaPetA549CytosolPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006909
 grant Gingeras
 lab GIS
 labExpId RHA012
@@ -657,6 +675,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapClusters.bedCluster.gz
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA013,RHA014
@@ -683,6 +702,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA013
@@ -709,6 +729,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA014
@@ -735,6 +756,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA013
@@ -761,6 +783,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA014
@@ -787,6 +810,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA013
@@ -814,6 +838,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA014
@@ -841,6 +866,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA013
@@ -868,6 +894,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002928
 expId 2928
 fileName wgEncodeGisRnaPetA549NucleusPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006903
 grant Gingeras
 lab GIS
 labExpId RHA014
@@ -902,7 +929,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum 4449565e58dcbce0ab7f04a61bf63f8e,11c1a897f3c3215ac69ee77fdb030cac
-objStatus replaced
+objStatus replaced by a Rep1V2
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -925,6 +952,7 @@ dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam,wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam.bai
 grant Gingeras
@@ -986,14 +1014,13 @@ dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersFree.bed.gz
-geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum 927644527b04fea14e544236c778a3fd
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1016,9 +1043,9 @@ dateResubmitted 2010-03-08
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed.gz
-geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId DHG001
@@ -1048,6 +1075,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1V2.bed.gz
+geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId IHG024
@@ -1084,7 +1112,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum c57288b61e645beb3689f6ee35ec8ab8
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1106,6 +1134,7 @@ dateResubmitted 2009-11-17
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
@@ -1136,6 +1165,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1V2.fastq.gz
+geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId IHG024
@@ -1171,7 +1201,7 @@ labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum e2ad5fc07a8f727aeb6a3fccd64658a8
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1193,6 +1223,7 @@ dateResubmitted 2009-11-17
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
@@ -1223,6 +1254,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1V2.fastq.gz
+geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId IHG024
@@ -1252,6 +1284,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawRep1V2.bigWig
+geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId IHG024
@@ -1282,14 +1315,13 @@ dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree.bigWig
-geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum f89ce7a4a60a27d2b406f8ab40b6e798
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1312,6 +1344,7 @@ dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
@@ -1343,6 +1376,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawRep1V2.bigWig
+geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId IHG024
@@ -1373,14 +1407,13 @@ dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree.bigWig
-geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId IHG024
 labVersion clone-free
 localization cytosol
 md5sum 8abeabbf4976dd5318d80d62f15b87ae
-objStatus replaced
+objStatus replaced by a Rep1V2 object
 origAssembly hg18
 project wgEncode
 readType 2x36
@@ -1403,9 +1436,9 @@ dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
+dccInternalNotes This is not going to GEO
 expId 248
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1.bigWig
-geoSampleAccession GSM830535
 grant Gingeras
 lab GIS
 labExpId DHG001
@@ -2359,7 +2392,6 @@ dateUnrestricted 2010-09-04
 dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapClustersRep1.bed.gz
-geoSampleAccession GSM830528
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -2390,6 +2422,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapClustersRep1V2.bed.gz
+geoSampleAccession GSM1006914
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -2449,6 +2482,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapFastqRd1Rep1V2.fastq.gz
+geoSampleAccession GSM1006914
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -2507,6 +2541,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapFastqRd2Rep1V2.fastq.gz
+geoSampleAccession GSM1006914
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -2536,7 +2571,6 @@ dateUnrestricted 2010-09-04
 dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapMinusRawRep1.bigWig
-geoSampleAccession GSM830528
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -2567,6 +2601,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapMinusRawRep1V2.bigWig
+geoSampleAccession GSM1006914
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -2597,7 +2632,6 @@ dateUnrestricted 2010-09-04
 dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapPlusRawRep1.bigWig
-geoSampleAccession GSM830528
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -2628,6 +2662,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000267
 expId 267
 fileName wgEncodeGisRnaPetHelas3NucleusPapPlusRawRep1V2.bigWig
+geoSampleAccession GSM1006914
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -3072,7 +3107,6 @@ dateUnrestricted 2010-09-04
 dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapClustersRep1.bed.gz
-geoSampleAccession GSM830529
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -3103,6 +3137,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapClustersRep1V2.bed.gz
+geoSampleAccession GSM1006915
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -3162,6 +3197,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd1Rep1V2.fastq.gz
+geoSampleAccession GSM1006915
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -3220,6 +3256,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd2Rep1V2.fastq.gz
+geoSampleAccession GSM1006915
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -3249,7 +3286,6 @@ dateUnrestricted 2010-09-04
 dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapMinusRawRep1.bigWig
-geoSampleAccession GSM830529
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -3280,6 +3316,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapMinusRawRep1V2.bigWig
+geoSampleAccession GSM1006915
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -3310,7 +3347,6 @@ dateUnrestricted 2010-09-04
 dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapPlusRawRep1.bigWig
-geoSampleAccession GSM830529
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -3341,6 +3377,7 @@ dateUnrestricted 2012-08-09
 dccAccession wgEncodeEH000266
 expId 266
 fileName wgEncodeGisRnaPetHuvecCytosolPapPlusRawRep1V2.bigWig
+geoSampleAccession GSM1006915
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -3605,6 +3642,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapClusters.bedCluster.gz
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI001,RHI002
@@ -3632,6 +3670,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI001
@@ -3659,6 +3698,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI002
@@ -3686,6 +3726,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI001
@@ -3713,6 +3754,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI002
@@ -3740,6 +3782,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapMinusRawRep1.bigWig
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI001
@@ -3768,6 +3811,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapMinusRawRep2.bigWig
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI002
@@ -3796,6 +3840,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapPlusRawRep1.bigWig
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI001
@@ -3824,6 +3869,7 @@ dccAccession wgEncodeEH002924
 donorId 58607680
 expId 2924
 fileName wgEncodeGisRnaPetImr90CellPapPlusRawRep2.bigWig
+geoSampleAccession GSM1006908
 grant Gingeras
 lab GIS
 labExpId RHI002
@@ -3909,6 +3955,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapClusters.bedCluster.gz
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI003,RHI004
@@ -3936,6 +3983,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI003
@@ -3963,6 +4011,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI004
@@ -3990,6 +4039,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI003
@@ -4017,6 +4067,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI004
@@ -4044,6 +4095,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapMinusRawRep1.bigWig
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI003
@@ -4072,6 +4124,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapMinusRawRep2.bigWig
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI004
@@ -4100,6 +4153,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapPlusRawRep1.bigWig
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI003
@@ -4128,6 +4182,7 @@ dccAccession wgEncodeEH002930
 donorId 58607680
 expId 2930
 fileName wgEncodeGisRnaPetImr90CytosolPapPlusRawRep2.bigWig
+geoSampleAccession GSM1006911
 grant Gingeras
 lab GIS
 labExpId RHI004
@@ -4213,6 +4268,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapClusters.bedCluster.gz
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI005,RHI006
@@ -4240,6 +4296,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI005
@@ -4267,6 +4324,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI006
@@ -4294,6 +4352,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI005
@@ -4321,6 +4380,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI006
@@ -4348,6 +4408,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapMinusRawRep1.bigWig
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI005
@@ -4376,6 +4437,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapMinusRawRep2.bigWig
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI006
@@ -4404,6 +4466,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapPlusRawRep1.bigWig
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI005
@@ -4432,6 +4495,7 @@ dccAccession wgEncodeEH002931
 donorId 58607680
 expId 2931
 fileName wgEncodeGisRnaPetImr90NucleusPapPlusRawRep2.bigWig
+geoSampleAccession GSM1006913
 grant Gingeras
 lab GIS
 labExpId RHI006
@@ -5518,6 +5582,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapClusters.bedCluster.gz
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM046,RHM047
@@ -5544,6 +5609,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM046
@@ -5570,6 +5636,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM047
@@ -5596,6 +5663,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM046
@@ -5622,6 +5690,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM047
@@ -5648,6 +5717,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM046
@@ -5675,6 +5745,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM047
@@ -5702,6 +5773,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM046
@@ -5729,6 +5801,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002934
 expId 2934
 fileName wgEncodeGisRnaPetMcf7CellPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006905
 grant Gingeras
 lab GIS
 labExpId RHM047
@@ -5811,6 +5884,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapClusters.bedCluster.gz
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM044,RHM045
@@ -5837,6 +5911,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM044
@@ -5863,6 +5938,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM045
@@ -5889,6 +5965,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM044
@@ -5915,6 +5992,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM045
@@ -5941,6 +6019,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM044
@@ -5968,6 +6047,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM045
@@ -5995,6 +6075,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM044
@@ -6022,6 +6103,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002932
 expId 2932
 fileName wgEncodeGisRnaPetMcf7CytosolPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006904
 grant Gingeras
 lab GIS
 labExpId RHM045
@@ -6104,6 +6186,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapClusters.bedCluster.gz
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM054,RHM055
@@ -6130,6 +6213,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM054
@@ -6156,6 +6240,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM055
@@ -6182,6 +6267,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM054
@@ -6208,6 +6294,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM055
@@ -6234,6 +6321,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM054
@@ -6261,6 +6349,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM055
@@ -6288,6 +6377,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM054
@@ -6315,6 +6405,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002933
 expId 2933
 fileName wgEncodeGisRnaPetMcf7NucleusPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006912
 grant Gingeras
 lab GIS
 labExpId RHM055
@@ -6928,6 +7019,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapClusters.bedCluster.gz
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS015,RHS016
@@ -6954,6 +7046,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS015
@@ -6980,6 +7073,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS016
@@ -7006,6 +7100,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS015
@@ -7032,6 +7127,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS016
@@ -7058,6 +7154,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS015
@@ -7085,6 +7182,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS016
@@ -7112,6 +7210,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS015
@@ -7139,6 +7238,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002926
 expId 2926
 fileName wgEncodeGisRnaPetSknshCellPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006910
 grant Gingeras
 lab GIS
 labExpId RHS016
@@ -7221,6 +7321,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapClusters.bedCluster.gz
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS017,RHS018
@@ -7247,6 +7348,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS017
@@ -7273,6 +7375,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS018
@@ -7299,6 +7402,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS017
@@ -7325,6 +7429,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS018
@@ -7351,6 +7456,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS017
@@ -7378,6 +7484,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS018
@@ -7405,6 +7512,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS017
@@ -7432,6 +7540,7 @@ dateUnrestricted 2012-12-23
 dccAccession wgEncodeEH002925
 expId 2925
 fileName wgEncodeGisRnaPetSknshCytosolPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006907
 grant Gingeras
 lab GIS
 labExpId RHS018
@@ -7514,6 +7623,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapClusters.bedCluster.gz
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS019,RHS020
@@ -7540,6 +7650,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapFastqRd1Rep3.fastq.gz
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS019
@@ -7566,6 +7677,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapFastqRd1Rep4.fastq.gz
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS020
@@ -7592,6 +7704,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapFastqRd2Rep3.fastq.gz
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS019
@@ -7618,6 +7731,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapFastqRd2Rep4.fastq.gz
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS020
@@ -7644,6 +7758,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapMinusRawRep3.bigWig
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS019
@@ -7671,6 +7786,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapMinusRawRep4.bigWig
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS020
@@ -7698,6 +7814,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep3.bigWig
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS019
@@ -7725,6 +7842,7 @@ dateUnrestricted 2012-12-27
 dccAccession wgEncodeEH002935
 expId 2935
 fileName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4.bigWig
+geoSampleAccession GSM1006906
 grant Gingeras
 lab GIS
 labExpId RHS020
@@ -7740,4 +7858,4 @@ subId 6411
 tableName wgEncodeGisRnaPetSknshNucleusPapPlusRawRep4
 view PlusRawSignal
 
-# MAGIC: -1489007972
+# MAGIC: 1839002641

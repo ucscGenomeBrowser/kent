@@ -1,3 +1,6 @@
+
+     o (in 35x1) added repMatch default values for tileSizes 16 to 18 in genoFind.c
+
 35:
      o (in 34x1) Making total query output reporting a 64 bit number to avoid 
        overflow when people using more than 4 gig of query sequence.

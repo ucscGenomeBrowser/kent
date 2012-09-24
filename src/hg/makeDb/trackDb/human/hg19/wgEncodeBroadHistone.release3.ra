@@ -66,7 +66,7 @@ subGroup3 factor Antibody CBPSC369=CBP_(SC-369) CBX2=CBX2 CBX3SC101004=CBX3_(SC-
 subGroup4 treatment Treatment DEX100NM=DEX_100_nM ETOH02=EtOH_0.02% zNONE=None
 dimensions dimensionY=cellType dimensionX=factor
 sortOrder cellType=+ factor=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View replicate=Rep dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View replicate=Rep dccAccession=UCSC_Accession geoSampleAcession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0

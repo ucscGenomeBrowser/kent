@@ -14,7 +14,7 @@ subGroup6 treatment Treatment aNONE=None DIFFD24H=Estradiol_24hr
 subGroup7 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
 sortOrder cellType=+ treatment=+ rep=+ view=+
-fileSortOrder cell=Cell_Line treatment=Treatment replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment replicate=Replicate view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain sex=sex age=age treatment=treatment
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=dense Signal=full
