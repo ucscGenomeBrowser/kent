@@ -13,6 +13,7 @@ class TableQa(object):
     def __init__(self, db, table, tableType, reporter, sumTable):
         self.db = db
         self.table = table
+        self.tableType = tableType
         self.reporter = reporter
         self.sumTable = sumTable
         self.sumRow = summary.SumRow(db, table, tableType)
