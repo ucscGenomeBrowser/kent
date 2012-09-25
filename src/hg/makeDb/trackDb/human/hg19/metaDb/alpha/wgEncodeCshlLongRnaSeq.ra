@@ -7983,6 +7983,7 @@ md5sum dcd233c01bc856e5cc496b7d49771d67,364ba68eb832dec9378ab620aa386c9d
 project wgEncode
 replicate 1
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
 view Alignments
@@ -8009,6 +8010,7 @@ md5sum 2e931b7df0bb6175b28bb20d6979fe36,03e95a1c6d93214801996337494afb49
 project wgEncode
 replicate 2
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2
 view Alignments
@@ -8035,6 +8037,7 @@ md5sum 462b83b5e97c42e67687c9eeb3f90fae
 project wgEncode
 replicate 1
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 752
 view RawData
 
@@ -8060,6 +8063,7 @@ md5sum 5afae9e6c83681896b94f62665754df1
 project wgEncode
 replicate 2
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 752
 view RawData
 
@@ -8086,6 +8090,7 @@ md5sum cadc625e69182fb0af58e4e6a48b2687
 project wgEncode
 replicate 1
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
 view MinusSignal
@@ -8113,6 +8118,7 @@ md5sum 6cacaa26ba8546a42ded06e443bca381
 project wgEncode
 replicate 2
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2
 view MinusSignal
@@ -8140,6 +8146,7 @@ md5sum 9ca68b5ab1aab4a0768f949edc2c34d2
 project wgEncode
 replicate 1
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
 view PlusSignal
@@ -8167,6 +8174,7 @@ md5sum bb977f7faab0e17a5288a2a63d0aac18
 project wgEncode
 replicate 2
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2
 view PlusSignal
@@ -41542,6 +41550,7 @@ md5sum 6240c7fb95a9a460acb47f9d50aab122,8c3a1323da706273fc342ff9eb71a971
 project wgEncode
 replicate 1
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
 view Alignments
@@ -41568,6 +41577,7 @@ md5sum e9b5a54cab5b51c11e1996d984fc565c,296b9020125f71f4d0acac97238decc9
 project wgEncode
 replicate 2
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2
 view Alignments
@@ -41594,6 +41604,7 @@ md5sum 95b6b0776dcaaa3898af091018c28146
 project wgEncode
 replicate 1
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 752
 view RawData
 
@@ -41619,6 +41630,7 @@ md5sum bfed41799fffb55a938c35bfa39e4c60
 project wgEncode
 replicate 2
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 752
 view RawData
 
@@ -41645,6 +41657,7 @@ md5sum 0bbb121f4ff9cfd78cc667d844def78b
 project wgEncode
 replicate 1
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1
 view MinusSignal
@@ -41672,6 +41685,7 @@ md5sum 0a2a36f2d51c9acf19c044bf836a24c6
 project wgEncode
 replicate 2
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2
 view MinusSignal
@@ -41699,6 +41713,7 @@ md5sum a500212157a56feeeb34006c2958aa8a
 project wgEncode
 replicate 1
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1
 view PlusSignal
@@ -41726,6 +41741,7 @@ md5sum 917dcac982a5b25da460327ad6b8180b
 project wgEncode
 replicate 2
 rnaExtract total
+seqPlatform Illumina_GA2
 subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
 view PlusSignal
@@ -61639,4 +61655,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 2123587196
+# MAGIC: -935199412
