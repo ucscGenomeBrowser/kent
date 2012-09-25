@@ -486,7 +486,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000184
 dccInternalNotes Submitted by email
 expId 184
-fileName wgEncodeCshlLongRnaSeqA549CellPamProtocolRep1.spikeins
+fileName wgEncodeCshlLongRnaSeqA549CellPamProtocolRep1.pdf
 grant Gingeras
 lab CSHL
 labExpId LID9005
@@ -512,7 +512,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000184
 dccInternalNotes Submitted by email
 expId 184
-fileName wgEncodeCshlLongRnaSeqA549CellPamProtocolRep2.spikeins
+fileName wgEncodeCshlLongRnaSeqA549CellPamProtocolRep2.pdf
 grant Gingeras
 lab CSHL
 labExpId LID9006
@@ -4288,7 +4288,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000185
 dccInternalNotes Submitted by email
 expId 185
-fileName wgEncodeCshlLongRnaSeqBjCellPamProtocolRep1.spikeins
+fileName wgEncodeCshlLongRnaSeqBjCellPamProtocolRep1.pdf
 grant Gingeras
 lab CSHL
 labExpId LID9007
@@ -4314,7 +4314,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000185
 dccInternalNotes Submitted by email
 expId 185
-fileName wgEncodeCshlLongRnaSeqBjCellPamProtocolRep2.spikeins
+fileName wgEncodeCshlLongRnaSeqBjCellPamProtocolRep2.pdf
 grant Gingeras
 lab CSHL
 labExpId LID9008
@@ -5598,7 +5598,7 @@ dccAccession wgEncodeEH002666
 dccInternalNotes Submitted by email
 donorId RO01794
 expId 2666
-fileName wgEncodeCshlLongRnaSeqCd20CellPamProtocolRep1.spikeins
+fileName wgEncodeCshlLongRnaSeqCd20CellPamProtocolRep1.pdf
 grant Gingeras
 lab CSHL
 labExpId LID44659
@@ -5624,7 +5624,7 @@ dccAccession wgEncodeEH002666
 dccInternalNotes Submitted by email
 donorId RO01778
 expId 2666
-fileName wgEncodeCshlLongRnaSeqCd20CellPamProtocolRep2.spikeins
+fileName wgEncodeCshlLongRnaSeqCd20CellPamProtocolRep2.pdf
 grant Gingeras
 lab CSHL
 labExpId LID44660
@@ -49547,7 +49547,7 @@ dccAccession wgEncodeEH002668
 dccInternalNotes Submitted by email
 donorId RO01746
 expId 2668
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPamProtocolRep1.spikeins
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPamProtocolRep1.pdf
 grant Gingeras
 lab CSHL
 labExpId LID44657
@@ -49573,7 +49573,7 @@ dccAccession wgEncodeEH002668
 dccInternalNotes Submitted by email
 donorId RO01746
 expId 2668
-fileName wgEncodeCshlLongRnaSeqMonocd14CellPamProtocolRep2.spikeins
+fileName wgEncodeCshlLongRnaSeqMonocd14CellPamProtocolRep2.pdf
 grant Gingeras
 lab CSHL
 labExpId LID44658
@@ -61073,7 +61073,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000197
 dccInternalNotes Submitted by email
 expId 197
-fileName wgEncodeCshlLongRnaSeqSknshraCellPamProtocolRep1.spikeins
+fileName wgEncodeCshlLongRnaSeqSknshraCellPamProtocolRep1.pdf
 grant Gingeras
 lab CSHL
 labExpId LID9003
@@ -61099,7 +61099,7 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000197
 dccInternalNotes Submitted by email
 expId 197
-fileName wgEncodeCshlLongRnaSeqSknshraCellPamProtocolRep2.spikeins
+fileName wgEncodeCshlLongRnaSeqSknshraCellPamProtocolRep2.pdf
 grant Gingeras
 lab CSHL
 labExpId LID9011
@@ -61915,4 +61915,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1233310096
+# MAGIC: -16119162
