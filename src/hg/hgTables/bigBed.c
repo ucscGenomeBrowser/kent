@@ -319,7 +319,7 @@ hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s<br>", table);
 hPrintf("<B>Big Bed File:</B> %s", fileName);
 if (bbi->version >= 2)
     {
-    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Item Count:</B> ");
+    hPrintf("<BR><B>Item Count:</B> ");
     printLongWithCommas(stdout, bigBedItemCount(bbi));
     }
 hPrintf("<BR>\n");
