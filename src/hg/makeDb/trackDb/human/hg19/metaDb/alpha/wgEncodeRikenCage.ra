@@ -18833,7 +18833,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011,K09
 localization nucleus
-md5sum acfc0a827edee9ded634a97c9b701128
+md5sum 753e2ccd54a46e58196020fac9d71f9b
 project wgEncode
 readType 1x36
 rnaExtract longPolyA
@@ -20806,4 +20806,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 970083176
+# MAGIC: -1505429137
