@@ -615,9 +615,8 @@ static void showSchemaHub(char *db, char *table)
 /* Show schema on a hub track. */
 {
 struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
+hubConnectAddDescription(db, tdb);
 char *type = cloneFirstWord(tdb->type);
-hPrintf("Binary file of type %s stored at %s<BR>\n",
-	type, trackDbSetting(tdb, "bigDataUrl"));
 if (sameString(type, "bigBed"))
     showSchemaBigBed(table, tdb);
 else if (sameString(type, "bam"))
@@ -625,7 +624,11 @@ else if (sameString(type, "bam"))
 else if (sameString(type, "vcfTabix"))
     showSchemaVcf(table, tdb);
 else
+    {
+    hPrintf("Binary file of type %s stored at %s<BR>\n",
+	    type, trackDbSetting(tdb, "bigDataUrl"));
     printTrackHtml(tdb);
+    }
 }
 
 static void showSchemaWiki(struct trackDb *tdb, char *table)
@@ -639,7 +642,9 @@ printTrackHtml(tdb);
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-if (isBigBed(database, table, curTrack, ctLookupName))
+if (isHubTrack(table))
+    showSchemaHub(db, table);
+else if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table, tdb);
 else if (isBamTable(table))
     showSchemaBam(table, tdb);
@@ -647,8 +652,6 @@ else if (isVcfTable(table))
     showSchemaVcf(table, tdb);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
-else if (isHubTrack(table))
-    showSchemaHub(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
 else

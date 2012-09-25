@@ -298,6 +298,44 @@ for(tdb = tdbList; tdb; tdb = next)
 return p;
 }
 
+static void addOneDescription(char *trackDbFile, struct trackDb *tdb)
+/* Fetch tdb->track's html description and store in tdb->html. */
+{
+char *simpleName = hubConnectSkipHubPrefix(tdb->track);
+char *url = trackHubRelativeUrl(trackDbFile, simpleName);
+char buffer[10*1024];
+safef(buffer, sizeof buffer, "%s.html", url);
+tdb->html = netReadTextFileIfExists(buffer);
+freez(&url);
+}
+
+static void addDescription(char *trackDbFile, struct trackDb *tdb)
+/* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
+ * and store in tdb->html. */
+{
+addOneDescription(trackDbFile, tdb);
+if (isEmpty(tdb->html))
+    {
+    struct trackDb *parent;
+    for (parent = tdb->parent;  isEmpty(tdb->html) && parent != NULL;  parent = parent->parent)
+	{
+	addOneDescription(trackDbFile, parent);
+	if (isNotEmpty(parent->html))
+	    tdb->html = cloneString(parent->html);
+	}
+    }
+}
+
+void hubConnectAddDescription(char *database, struct trackDb *tdb)
+/* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
+ * and store in tdb->html. */
+{
+unsigned hubId = hubIdFromTrackName(tdb->track);
+struct trackHub *hub = trackHubFromId(hubId);
+struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+addDescription(hubGenome->trackDbFile, tdb);
+}
+
 struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database, 
     char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
@@ -326,15 +364,7 @@ if (tdb == NULL)
 /* Note: this does NOT add the HTML for supertrack kids */
 struct trackDb *parent;
 for (parent = tdb; parent != NULL; parent = parent->parent)
-    {
-    char *simpleName = hubConnectSkipHubPrefix(tdb->track);
-    char *url = trackHubRelativeUrl(hubGenome->trackDbFile, simpleName);
-    char buffer[10*1024];
-    safef(buffer, sizeof buffer, "%s.html", url);
-
-    parent->html = netReadTextFileIfExists(buffer);
-    freez(&url);
-    }
+    addDescription(hubGenome->trackDbFile, parent);
 trackHubClose(&hub);
 
 return tdb;
