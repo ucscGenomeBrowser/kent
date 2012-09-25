@@ -505,7 +505,7 @@ if (sqlTableExists(conn, SEQ_TBL))
             changeCnt++;
         }
     if (changeCnt > 0)
-        errAbort("%d accession types have changed, add incorrect ones to data/ignore.idx",
+        errAbort("%d accession types have changed, add incorrect ones to etc/ignore.idx",
                  changeCnt);
     }
 }
