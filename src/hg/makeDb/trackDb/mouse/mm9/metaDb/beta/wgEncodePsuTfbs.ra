@@ -6615,6 +6615,7 @@ dateUnrestricted 2013-04-17
 dccAccession wgEncodeEM002351
 expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPkV2.broadPeak.gz
+geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum 927f35850aa29214979ad808c93b5239
@@ -6783,6 +6784,7 @@ dateUnrestricted 2013-04-17
 dccAccession wgEncodeEM002351
 expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep3.broadPeak.gz
+geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum 89d33336c5739f474e80d1e20d8ba2dd
@@ -6866,6 +6868,7 @@ dateUnrestricted 2013-04-17
 dccAccession wgEncodeEM002351
 expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep3.bigWig
+geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum e7c0cc440ced9256e57133d3591dc5cd
@@ -6922,6 +6925,7 @@ dateUnrestricted 2013-04-17
 dccAccession wgEncodeEM002351
 expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSigV2.bigWig
+geoSampleAccession GSM923586
 grant Hardison
 lab PSU-m
 md5sum 3ea8cb21860c568f58aae39336d13163
@@ -8681,4 +8685,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -1179032330
+# MAGIC: -770123542
