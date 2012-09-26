@@ -165,7 +165,7 @@ boolean chromosomeColorsMade = FALSE;
 int z;
 int maxCount;
 int bestColor;
-int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
