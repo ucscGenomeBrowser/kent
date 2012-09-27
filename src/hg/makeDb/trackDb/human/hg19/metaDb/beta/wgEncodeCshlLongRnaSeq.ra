@@ -491,6 +491,7 @@ grant Gingeras
 lab CSHL
 labExpId LID9005
 localization cell
+md5sum 9c31282e64375b22af330b882984454f
 project wgEncode
 readType 2x76D
 replicate 1
@@ -517,6 +518,7 @@ grant Gingeras
 lab CSHL
 labExpId LID9006
 localization cell
+md5sum 2101ea6b5718a86acb86905e3765f897
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4293,6 +4295,7 @@ grant Gingeras
 lab CSHL
 labExpId LID9007
 localization cell
+md5sum 58963fc04189bf2f1302a7a90dce4bc6
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4319,6 +4322,7 @@ grant Gingeras
 lab CSHL
 labExpId LID9008
 localization cell
+md5sum e38af8abcf549bdbed47da5d813b14e7
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5603,6 +5607,7 @@ grant Gingeras
 lab CSHL
 labExpId LID44659
 localization cell
+md5sum 41e157dbc38488404d837a916e54298a
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5629,6 +5634,7 @@ grant Gingeras
 lab CSHL
 labExpId LID44660
 localization cell
+md5sum 777c0b55c3b5fe894bfe955189482ae4
 project wgEncode
 readType 2x76D
 replicate 2
@@ -49552,6 +49558,7 @@ grant Gingeras
 lab CSHL
 labExpId LID44657
 localization cell
+md5sum 0e39010f90e4aca78a762b4eccdb4ae1
 project wgEncode
 readType 2x76D
 replicate 1
@@ -49578,6 +49585,7 @@ grant Gingeras
 lab CSHL
 labExpId LID44658
 localization cell
+md5sum 4319d8b33c711dc469a22d72f39ab2bd
 project wgEncode
 readType 2x76D
 replicate 2
@@ -61078,6 +61086,7 @@ grant Gingeras
 lab CSHL
 labExpId LID9003
 localization cell
+md5sum f88ffbcc91f64a0f1114f1fae23114e8
 project wgEncode
 readType 2x76D
 replicate 1
@@ -61104,6 +61113,7 @@ grant Gingeras
 lab CSHL
 labExpId LID9011
 localization cell
+md5sum 89d93b6869b6255cdc4115e58774604c
 project wgEncode
 readType 2x76D
 replicate 2
@@ -61915,4 +61925,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -16119162
+# MAGIC: 828706897

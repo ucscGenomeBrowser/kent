@@ -4832,7 +4832,7 @@ proteinID= sqlGetField(database, "knownGene", "proteinID", cond_str);
 if (proteinID != NULL && protDbName != NULL)
     {
     sprintf(cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
-    ans= sqlGetField(protDbName, "spXref2", "displayID", cond_str);
+    ans= sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     if (ans != NULL)
         {
         col = tg->ixColor;
