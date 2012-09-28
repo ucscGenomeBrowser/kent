@@ -411,6 +411,25 @@ cartRemove(cart, "hgLogin_sendMailTo");
 cartRemove(cart, "hgLogin_sendMailContain");
 }
 
+void  displayMailSuccessPwd()
+/* display mail success confirmation box */
+{
+char *username = cgiUsualString("user","");
+hPrintf(
+    "<div id=\"confirmationBoxPwd\" class=\"centeredContainer formBox\">"
+    "<h2>%s</h2>", brwName);
+hPrintf(
+    "<p id=\"confirmationMsgPwd\" class=\"confirmationTxt\">An email containing password reset information has been sent to registered email address of <B>%s</B>.<BR><BR>"
+    " If you do not receive an email, please contact genome-www@soe.ucsc.edu for help.</p>", username);
+hPrintf(
+    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>");
+cartRemove(cart, "hgLogin_helpWith");
+cartRemove(cart, "hgLogin_email");
+cartRemove(cart, "hgLogin_userName");
+cartRemove(cart, "hgLogin_sendMailTo");
+cartRemove(cart, "hgLogin_sendMailContain");
+}
+
 void sendMailOut(char *email, char *subject, char *msg)
 /* send mail to email address */
 {
@@ -478,6 +497,35 @@ sqlFreeResult(&sr);
 mailUsername(email, userList);
 }
 
+void sendPwdMailOut(char *email, char *subject, char *msg, char *username)
+/* send password reset mail to user at registered email address */
+{
+char *hgLoginHost = wikiLinkHost();
+char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
+int result;
+result = mailItOut(email, subject, msg, returnAddr);
+if (result == -1)
+    {
+    hPrintf(
+        "<h2>%s</h2>", brwName);
+    hPrintf(
+        "<p align=\"left\">"
+        "</p>"
+        "<h3>Error emailing %s to: %s</h3>"
+        "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>",
+        obj, email );
+    }
+else
+    {
+    hPrintf("<script  language=\"JavaScript\">\n"
+        "<!-- \n"
+        "window.location =\"http://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
+        "//-->"
+        "\n"
+        "</script>", hgLoginHost, username);
+    }
+}
+
 void sendNewPwdMail(char *username, char *email, char *password)
 /* send user new password */
 {
@@ -489,7 +537,7 @@ safef(subject, sizeof(subject),"New temporary password for %s", brwName);
 safef(msg, sizeof(msg),
     "  Someone (probably you, from IP address %s) requested a new password for %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
     remoteAddr, brwName, brwAddr, username, password, signature, returnAddr);
-sendMailOut(email, subject, msg);
+sendPwdMailOut(email, subject, msg, username);
 }
 
 void displayAccHelpPage(struct sqlConnection *conn)
@@ -1252,6 +1300,8 @@ else if (cartVarExists(cart, "hgLogin.do.displayActMailSuccess"))
     displayActMailSuccess();
 else if (cartVarExists(cart, "hgLogin.do.displayMailSuccess"))
     displayMailSuccess();
+else if (cartVarExists(cart, "hgLogin.do.displayMailSuccessPwd"))
+    displayMailSuccessPwd();
 else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))
     displayLoginPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLogin"))
