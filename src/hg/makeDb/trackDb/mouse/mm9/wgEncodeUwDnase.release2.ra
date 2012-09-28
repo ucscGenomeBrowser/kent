@@ -81,8 +81,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots
-        shortLabel Cerbllm A8w H 1
-        longLabel Cerebellum Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Cerebellum H 1
+        longLabel Cerebellum DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=CBELLUM sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 105,105,105
@@ -90,7 +90,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel 416B immrtl H 2
+        shortLabel 416B H 2
         longLabel 416B DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
         type broadPeak
@@ -99,7 +99,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel 416B immrtl H 1
+        shortLabel 416B H 1
         longLabel 416B DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
         type broadPeak
@@ -108,8 +108,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Bcell A8w H 2
-        longLabel B-cell (CD19+) Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Bcell (CD19+) H 2
+        longLabel B-cell (CD19+) DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -117,8 +117,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEscj7S129ME0HotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ES-CJ7 E0 H 2
-        longLabel ES-CJ7 Embryonic Day 0 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel ES-CJ7 H 2
+        longLabel ES-CJ7 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep2 treatment=zNONE
         type broadPeak
         color 65,105,225
@@ -126,8 +126,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEscj7S129ME0HotspotsRep1
         parent wgEncodeUwDnaseViewHotspots
-        shortLabel ES-CJ7 E0 H 1
-        longLabel ES-CJ7 Embryonic Day 0 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel ES-CJ7 H 1
+        longLabel ES-CJ7 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep1 treatment=zNONE
         type broadPeak
         color 65,105,225
@@ -135,24 +135,24 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Fibro A8w H 2
-        longLabel Fibroblast Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Fibroblast H 2
+        longLabel Fibroblast DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=FIBROBLAST sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         # subId=2005 dateSubmitted=2010-07-23
 
         track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Fibro A8w H 1
-        longLabel Fibroblast Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Fibroblast H 1
+        longLabel Fibroblast DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=FIBROBLAST sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         # subId=2006 dateSubmitted=2010-07-23
 
         track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Livr A8w H 1
-        longLabel Liver Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Livr C A8w H 1
+        longLabel Liver C57BL/6 Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 230,159,0
@@ -190,8 +190,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Livr A8w H 2
-        longLabel Liver Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Livr C A8w H 2
+        longLabel Liver C57BL/6 Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 230,159,0
@@ -199,8 +199,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseKidneyC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Kdny A8w H 1
-        longLabel Kidney Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Kidney H 1
+        longLabel Kidney DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 204,121,167
@@ -218,15 +218,15 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Lung A8w H 2
-        longLabel Lung Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Lung H 2
+        longLabel Lung DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         # subId=2015 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots
-        shortLabel MEL immrtl H 1
+        shortLabel MEL H 1
         longLabel MEL DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=MEL sex=M strain=UKN rep=rep1 treatment=zNONE
         type broadPeak
@@ -245,7 +245,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel MEL immrtl H 2
+        shortLabel MEL H 2
         longLabel MEL DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=MEL sex=M strain=UKN rep=rep2 treatment=zNONE
         type broadPeak
@@ -254,8 +254,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel TNaiv A8w H 2
-        longLabel T-Naive Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel T-Naive H 2
+        longLabel T-Naive DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=T1NAIVE sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -357,8 +357,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Cerbrm A8w H 2
-        longLabel Cerebrum Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Cerebrum H 2
+        longLabel Cerebrum DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=CEREBRUM sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 105,105,105
@@ -366,8 +366,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots
-        shortLabel Cerbrm A8w H 1
-        longLabel Cerebrum Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Cerebrum H 1
+        longLabel Cerebrum DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=CEREBRUM sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 105,105,105
@@ -375,7 +375,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase3134RiiiMImmortalHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots
-        shortLabel 3134 immrtl H 1
+        shortLabel 3134 H 1
         longLabel 3134 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep1 treatment=zNONE
         type broadPeak
@@ -384,8 +384,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel TNaiv A8w H 1
-        longLabel T-Naive Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel T-Naive H 1
+        longLabel T-Naive DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=T1NAIVE sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -393,16 +393,16 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Lung A8w H 1
-        longLabel Lung Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Lung H 1
+        longLabel Lung DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         # subId=3906 dateSubmitted=2011-04-19
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots
-        shortLabel Bcell A8w H 1
-        longLabel B-cell (CD19+) Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Bcell (CD19+) H 1
+        longLabel B-cell (CD19+) DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -410,8 +410,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Heart A8w H 1
-        longLabel Heart Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Heart H 1
+        longLabel Heart DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 153,38,0
@@ -419,8 +419,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseKidneyC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Kdny A8w H 2
-        longLabel Kidney Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Kidney H 2
+        longLabel Kidney DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 204,121,167
@@ -428,8 +428,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCbellumC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Cerbllm A8w H 2
-        longLabel Cerebellum Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Cerebellum H 2
+        longLabel Cerebellum DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=CBELLUM sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 105,105,105
@@ -437,7 +437,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseA20BalbcannMAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel A20 immrtl H 1
+        shortLabel A20 H 1
         longLabel A20 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=A20 sex=M strain=BALBCANN rep=rep1 treatment=zNONE
         type broadPeak
@@ -446,7 +446,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseA20BalbcannMAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel A20 immrtl H 2
+        shortLabel A20 H 2
         longLabel A20 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=A20 sex=M strain=BALBCANN rep=rep2 treatment=zNONE
         type broadPeak
@@ -455,7 +455,7 @@ html wgEncodeUwDnase.release2
 
         #track wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep1
         #parent wgEncodeUwDnaseViewHotspots off
-        #shortLabel ZhBTc4 Hspt 1
+        #shortLabel ZhBTc44 Hspt 1
         #longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         #subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep1 treatment=zNONE
         #type broadPeak
@@ -465,8 +465,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ZhBTc E0 H 2
-        longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 H 2
+        longLabel ZhBTc4 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep2 treatment=zNONE
         type broadPeak
         color 65,105,225
@@ -474,8 +474,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFatC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Fat Pad A8w H 1
-        longLabel Fat Pad Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Fat Pad H 1
+        longLabel Fat Pad DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 189,0,157
@@ -483,8 +483,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFatC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Fat Pad A8w H 2
-        longLabel Fat Pad Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Fat Pad H 2
+        longLabel Fat Pad DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 189,0,157
@@ -492,8 +492,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel TReg A8w H 1
-        longLabel TReg Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel TReg H 1
+        longLabel TReg DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -501,8 +501,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Bcell A8w H 1
-        longLabel B-cell (CD43-) Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Bcell (CD43-) H 1
+        longLabel B-cell (CD43-) DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -510,8 +510,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Bcell A8w H 2
-        longLabel B-cell (CD43-) Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Bcell (CD43-) H 2
+        longLabel B-cell (CD43-) DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -519,7 +519,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase3134RiiiMImmortalHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel 3134 immrtl H 2
+        shortLabel 3134 H 2
         longLabel 3134 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep2 treatment=zNONE
         type broadPeak
@@ -528,7 +528,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnasePatskiSpbl6MImmortalHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Pats immrtl H 2
+        shortLabel Patski H 2
         longLabel Patski DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=PATSKI sex=M strain=SPBL6 rep=rep2 treatment=zNONE
         color 204,121,167
@@ -537,7 +537,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnasePatskiSpbl6MImmortalHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Pats immrtl H 1
+        shortLabel Patski H 1
         longLabel Patski DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=PATSKI sex=M strain=SPBL6 rep=rep1 treatment=zNONE
         color 204,121,167
@@ -546,8 +546,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel TReg A8w H 2
-        longLabel TReg Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel TReg H 2
+        longLabel TReg DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -555,8 +555,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseGfatC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel GenFatPad A8w H 1
-        longLabel Genital Fat Pad Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Gen Fat Pad H 1
+        longLabel Genital Fat Pad DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=GFAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 189,0,157
@@ -564,8 +564,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseGfatC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel GenFatPad A8w H 2
-        longLabel Genital Fat Pad Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Gen Fat Pad H 2
+        longLabel Genital Fat Pad DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=GFAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 189,0,157
@@ -573,8 +573,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFlbudCd1ME11halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel FLimbBud H 1
-        longLabel Fore Limb Bud Embryonic Day 11.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Fore Limb Bud H 1
+        longLabel Fore Limb Bud DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E11HALF cellType=FLBUD sex=M strain=CD1 rep=rep1 treatment=zNONE
         type broadPeak
         color 102,50,200
@@ -582,8 +582,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFlbudCd1ME11halfHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel FLimbBud H 2
-        longLabel Fore Limb Bud Embryonic Day 11.5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Fore Limb Bud H 2
+        longLabel Fore Limb Bud DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E11HALF cellType=FLBUD sex=M strain=CD1 rep=rep2 treatment=zNONE
         type broadPeak
         color 102,50,200
@@ -591,8 +591,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlbudCd1ME11halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel HLimbBud H 1
-        longLabel Hind Limb Bud Embryonic Day 11.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Hind Limb Bud H 1
+        longLabel Hind Limb Bud DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E11HALF cellType=HLBUD sex=M strain=CD1 rep=rep1 treatment=zNONE
         type broadPeak
         color 102,50,200
@@ -600,8 +600,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlbudCd1ME11halfHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel HLimbBud H 2
-        longLabel Hind Limb Bud Embryonic Day 11.5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Hind Limb Bud H 2
+        longLabel Hind Limb Bud DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E11HALF cellType=HLBUD sex=M strain=CD1 rep=rep2 treatment=zNONE
         type broadPeak
         color 102,50,200
@@ -609,8 +609,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlembryoCd1ME11halfHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel NoHeadEmb H 2
-        longLabel Headless Embryo Embryonic Day 11.5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Headless Emb H 2
+        longLabel Headless Embryo DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E11HALF cellType=HEADLEMBRYO sex=M strain=CD1 rep=rep2 treatment=zNONE
         type broadPeak
         color 65,105,225
@@ -618,8 +618,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMesodermCd1ME11halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Mesdrm E11.5 H 1
-        longLabel Mesoderm Embryonic Day 11.5  DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Mesoderm H 1
+        longLabel Mesoderm DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E11HALF cellType=MESODERM sex=M strain=CD1 rep=rep1 treatment=zNONE
         type broadPeak
         color 65,105,225
@@ -627,8 +627,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMesodermCd1ME11halfHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Mesdrm E11.5 H 2
-        longLabel Mesoderm Embryonic Day 11.5  DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Mesoderm H 2
+        longLabel Mesoderm DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E11HALF cellType=MESODERM sex=M strain=CD1 rep=rep2 treatment=zNONE
         type broadPeak
         color 65,105,225
@@ -636,7 +636,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel NIH3T3 immrtl H 2
+        shortLabel NIH-3T3 H 2
         longLabel NIH-3T3 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS rep=rep2 treatment=zNONE
         type broadPeak
@@ -645,8 +645,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlembryoCd1ME11halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel NoHeadEmb H 1
-        longLabel Headless Embryo Embryonic Day 11.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Headless Emb H 1
+        longLabel Headless Embryo DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E11HALF cellType=HEADLEMBRYO sex=M strain=CD1 rep=rep1 treatment=zNONE
         type broadPeak
         color 65,105,225
@@ -674,8 +674,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Heart A8w H 2
-        longLabel Heart Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Heart H 2
+        longLabel Heart DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 153,38,0
@@ -683,8 +683,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel LrgInt A8w H 1
-        longLabel Large Intestine Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Lg Intestine H 1
+        longLabel Large Intestine DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=LGINT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 230,159,0
@@ -713,7 +713,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel NIH3T3 immrtl H 1
+        shortLabel NIH-3T3 H 1
         longLabel NIH-3T3 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS rep=rep1 treatment=zNONE
         type broadPeak
@@ -723,7 +723,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MAdult1wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Ret A1w H 1
+        shortLabel Retina A1w H 1
         longLabel Retina Adult 1 week DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT1WKS cellType=RETINA sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
@@ -732,8 +732,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel SkMus A8w H 1
-        longLabel Skeletal Muscle Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Sk Muscle H 1
+        longLabel Skeletal Muscle DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=SKMUSCLE sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 139,69,19
@@ -741,8 +741,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel SkMus A8w H 2
-        longLabel Skeletal Muscle Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Sk Muscle H 2
+        longLabel Skeletal Muscle DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=SKMUSCLE sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 139,69,19
@@ -750,8 +750,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSpleenC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Spln A8w H 1
-        longLabel Spleen Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Spleen H 1
+        longLabel Spleen DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=SPLEEN sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -759,8 +759,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSpleenC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Spln A8w H 2
-        longLabel Spleen Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Spleen H 2
+        longLabel Spleen DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=SPLEEN sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -768,8 +768,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThymusC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Thyms A8w H 1
-        longLabel Thymus Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Thymus H 1
+        longLabel Thymus DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -777,8 +777,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThymusC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Thyms A8w H 2
-        longLabel Thymus Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Thymus H 2
+        longLabel Thymus DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type broadPeak
         color 86,180,233
@@ -826,7 +826,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MNew1daysHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Ret newb1d H 1
+        shortLabel Retina N1d H 1
         longLabel Retina Newborn 1 Day DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=NEW1DAYS cellType=RETINA sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type broadPeak
@@ -835,7 +835,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Ret A8w H 1
+        shortLabel Retina A8w H 1
         longLabel Retina Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=RETINA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type broadPeak
@@ -873,7 +873,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverC57bl6ME14halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Livr E14.5 H 1
+        shortLabel Livr C E14.5 H 1
         longLabel Liver C57BL/6 Embryonic Day 14.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=LIVER sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type broadPeak
@@ -882,8 +882,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel LrgInt A8w H 2
-        longLabel Large Intestine Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Lg Intestine H 2
+        longLabel Large Intestine DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=LGINT sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type broadPeak
         color 230,159,0
@@ -891,8 +891,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEse14129olaME0HotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ES-E14 E0 H 2
-        longLabel ES-E14 Embryonic Day 0 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel ES-E14 H 2
+        longLabel ES-E14 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep2
         type broadPeak
         color 65,105,225
@@ -901,7 +901,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel mG/ER immrtl H 1
+        shortLabel mG/ER H 1
         longLabel mG/ER DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=zNONE rep=rep1
         type broadPeak
@@ -910,8 +910,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel mG/ER immrtl H 2
-        longLabel mG/ER immortalized DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel mG/ER H 2
+        longLabel mG/ER DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=zNONE rep=rep2
         type broadPeak
         color 86,180,233
@@ -919,8 +919,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc24hHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel mG/ER dPC 24h H 1
-        longLabel mG/ER immortalized diffProtC 24 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel mG/ER dPC 24 H 1
+        longLabel mG/ER diffProtC 24 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC24H rep=rep1
         type broadPeak
         color 86,180,233
@@ -928,8 +928,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc24hHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel mG/ER dPC 24h H 2
-        longLabel mG/ER immortalized diffProtC 24 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel mG/ER dPC 24 H 2
+        longLabel mG/ER diffProtC 24 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC24H rep=rep2
         type broadPeak
         color 86,180,233
@@ -937,8 +937,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc48hHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel mG/ER dPC 48h H 1
-        longLabel mG/ER immortalized diffProtC 48 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel mG/ER dPC 48 H 1
+        longLabel mG/ER diffProtC 48 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC48H rep=rep1
         type broadPeak
         color 86,180,233
@@ -946,8 +946,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc48hHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel mG/ER dPC 48h H 2
-        longLabel mG/ER immortalized diffProtC 48 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel mG/ER dPC 48 H 2
+        longLabel mG/ER diffProtC 48 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC48H rep=rep2
         type broadPeak
         color 86,180,233
@@ -955,8 +955,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb6hHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ZhBTc dPB 6h H 1
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 6 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 6 H 1
+        longLabel ZhBTc4 diffProtB 6 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep1
         type broadPeak
         color 65,105,225
@@ -964,8 +964,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb6hHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ZhBTc dPB 6h H 2
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 6 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 6 H 2
+        longLabel ZhBTc4 diffProtB 6 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep2
         type broadPeak
         color 65,105,225
@@ -973,8 +973,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb24hHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ZhBTc dPB 24h H 1
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 24 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 24 H 1
+        longLabel ZhBTc4 diffProtB 24 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep1
         type broadPeak
         color 65,105,225
@@ -982,8 +982,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb24hHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ZhBTc dPB 24h H 2
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 24 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 24 H 2
+        longLabel ZhBTc4 diffProtB 24 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep2
         type broadPeak
         color 65,105,225
@@ -991,8 +991,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThelpaC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel THelpAct A8w H 1
-        longLabel THelper-Activated Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel THelper-Act H 1
+        longLabel THelper-Activated DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -1000,8 +1000,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThelpaC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel THelpAct A8w H 2
-        longLabel THelper-Activated Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel THelper-Act H 2
+        longLabel THelper-Activated DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type broadPeak
         color 86,180,233
@@ -1009,8 +1009,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregaC57bl6MAdult8wksHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel TRegAct A8w H 2
-        longLabel TReg-Activated Adult 8 Weeks DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel TReg-Act H 2
+        longLabel TReg-Activated DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type broadPeak
         color 86,180,233
@@ -1018,8 +1018,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregaC57bl6MAdult8wksHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel TRegAct A8w H 1
-        longLabel TReg-Activated Adult 8 Weeks DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel TReg-Act H 1
+        longLabel TReg-Activated DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type broadPeak
         color 86,180,233
@@ -1027,8 +1027,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEse14129olaME0HotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ES-E14 E0 H 1
-        longLabel ES-E14 Embryonic Day 0 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel ES-E14 H 1
+        longLabel ES-E14 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type broadPeak
         color 65,105,225
@@ -1036,8 +1036,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcpppCd1ME14halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel EPCPPP E14.5 H 1
-        longLabel EPC (CD117+,CD71+,TER119+) E14.5 CD-1 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel EPC +++ H 1
+        longLabel EPC (CD117+,CD71+,TER119+) DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=EPCPPP sex=M strain=CD1 treatment=zNONE rep=rep1
         type broadPeak
         color 153,38,0
@@ -1045,8 +1045,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Livr E14.5 H 2
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel Livr 1D E14.5 H 2
+        longLabel Liver 129.DLCR/DLCR Embryonic Day 14.5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=LIVER sex=M strain=a129DLCR treatment=zNONE rep=rep2
         type broadPeak
         color 230,159,0
@@ -1054,8 +1054,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcmppCd1ME14halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel EPCMPP E14.5 H 1
-        longLabel EPC (CD117-,CD71+,TER119+) E14.5 CD-1 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel EPC -++ H 1
+        longLabel EPC (CD117-,CD71+,TER119+) DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=EPCMPP sex=M strain=CD1 treatment=zNONE rep=rep1
         type broadPeak
         color 153,38,0
@@ -1063,8 +1063,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverS129ME14halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Livr E14.5 H 1
-        longLabel Liver Embryonic Day 14.5 129 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Livr 1 E14.5 H 1
+        longLabel Liver 129 Embryonic Day 14.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=LIVER sex=M strain=a129 treatment=zNONE rep=rep1
         type broadPeak
         color 230,159,0
@@ -1072,8 +1072,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcppmCd1ME14halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel EPCPPM E14.5 H 1
-        longLabel EPC (CD117+,CD71+,TER119-) E14.5 CD-1 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel EPC ++- H 1
+        longLabel EPC (CD117+,CD71+,TER119-) DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=EPCPPM sex=M strain=CD1 treatment=zNONE rep=rep1
         type broadPeak
         color 153,38,0
@@ -1081,8 +1081,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcpmmCd1ME14halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel EPCPMM E14.5 H 1
-        longLabel EPC (CD117+,CD71-,TER119-) E14.5 CD-1 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel EPC +-- H 1
+        longLabel EPC (CD117+,CD71-,TER119-) DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=EPCPMM sex=M strain=CD1 treatment=zNONE rep=rep1
         type broadPeak
         color 153,38,0
@@ -1090,8 +1090,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0HotspotsRep1V2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ZhBTc E0 H 1
-        longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 H 1
+        longLabel ZhBTc4 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type broadPeak
         color 65,105,225
@@ -1101,7 +1101,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0HotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ES-WW6 F1KO H 1
-        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        longLabel ES-WW6 F1KO DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep1
         type broadPeak
         color 65,105,225
@@ -1110,7 +1110,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0HotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel ES-WW6 F1KO H 2
-        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        longLabel ES-WW6 F1KO DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep2
         type broadPeak
         color 65,105,225
@@ -1118,8 +1118,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEsww6UknME0HotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ES-WW6 E0 H 2
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        shortLabel ES-WW6 H 2
+        longLabel ES-WW6 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESWW6 sex=M strain=UKN treatment=zNONE rep=rep2
         type broadPeak
         color 65,105,225
@@ -1127,8 +1127,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEsww6UknME0HotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel ES-WW6 E0 H 1
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel ES-WW6 H 1
+        longLabel ES-WW6 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E0 cellType=ESWW6 sex=M strain=UKN treatment=zNONE rep=rep1
         type broadPeak
         color 65,105,225
@@ -1136,7 +1136,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel CH12 immrtl H 1
+        shortLabel CH12 H 1
         longLabel CH12 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=CH12 sex=F strain=b2A4B treatment=zNONE rep=rep1
         type broadPeak
@@ -1145,7 +1145,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCh122a4bFImmortalHotspotsRep2
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel CH12 immrtl H 2
+        shortLabel CH12 H 2
         longLabel CH12 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hotspots age=IMMORTAL cellType=CH12 sex=F strain=b2A4B treatment=zNONE rep=rep2
         type broadPeak
@@ -1154,8 +1154,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiver129dlcrME14halfHotspotsRep1
         parent wgEncodeUwDnaseViewHotspots off
-        shortLabel Livr E14.5 H 1
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        shortLabel Livr 1D E14.5 H 1
+        longLabel Liver 129.DLCR/DLCR Embryonic Day 14.5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hotspots age=E14HALF cellType=LIVER sex=M strain=a129DLCR treatment=zNONE rep=rep1
         type broadPeak
         color 230,159,0
@@ -1244,8 +1244,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks
-        shortLabel Cerbllm A8w P 1
-        longLabel Cerebellum Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Cerebellum P 1
+        longLabel Cerebellum DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=CBELLUM sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 105,105,105
@@ -1253,7 +1253,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase416bC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel 416B immrtl P 2
+        shortLabel 416B P 2
         longLabel 416B DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
         type narrowPeak
@@ -1262,7 +1262,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase416bC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel 416B immrtl P 1
+        shortLabel 416B P 1
         longLabel 416B DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
         type narrowPeak
@@ -1271,8 +1271,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Bcell A8w P 2
-        longLabel B-cell (CD19+) Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Bcell (CD19+) P 2
+        longLabel B-cell (CD19+) DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1280,8 +1280,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEscj7S129ME0PkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ES-CJ7 E0 P 2
-        longLabel ES-CJ7 Embryonic Day 0 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel ES-CJ7 P 2
+        longLabel ES-CJ7 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep2 treatment=zNONE
         type narrowPeak
         color 65,105,225
@@ -1289,8 +1289,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEscj7S129ME0PkRep1
         parent wgEncodeUwDnaseViewPeaks
-        shortLabel ES-CJ7 E0 P 1
-        longLabel ES-CJ7 Embryonic Day 0 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel ES-CJ7 P 1
+        longLabel ES-CJ7 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep1 treatment=zNONE
         type narrowPeak
         color 65,105,225
@@ -1298,24 +1298,24 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Fibro A8w P 2
-        longLabel Fibroblast Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Fibroblast P 2
+        longLabel Fibroblast DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=FIBROBLAST sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         # subId=2005 dateSubmitted=2010-07-23
 
         track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Fibro A8w P 1
-        longLabel Fibroblast Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Fibroblast P 1
+        longLabel Fibroblast DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=FIBROBLAST sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         # subId=2006 dateSubmitted=2010-07-23
 
         track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Livr A8w P 1
-        longLabel Liver Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Livr C A8w P 1
+        longLabel Liver C57BL/6 Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 230,159,0
@@ -1353,8 +1353,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Livr A8w P 2
-        longLabel Liver Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Livr C A8w P 2
+        longLabel Liver C57BL/6 Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 230,159,0
@@ -1362,8 +1362,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseKidneyC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Kdny A8w P 1
-        longLabel Kidney Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Kidney P 1
+        longLabel Kidney DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 204,121,167
@@ -1381,15 +1381,15 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Lung A8w P 2
-        longLabel Lung Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Lung P 2
+        longLabel Lung DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         # subId=2015 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks
-        shortLabel MEL immrtl P 1
+        shortLabel MEL P 1
         longLabel MEL DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=MEL sex=M strain=UKN rep=rep1 treatment=zNONE
         type narrowPeak
@@ -1408,7 +1408,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel MEL immrtl P 2
+        shortLabel MEL P 2
         longLabel MEL DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=MEL sex=M strain=UKN rep=rep2 treatment=zNONE
         type narrowPeak
@@ -1417,8 +1417,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel TNaiv A8w P 2
-        longLabel T-Naive Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel T-Naive P 2
+        longLabel T-Naive DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=T1NAIVE sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1520,8 +1520,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Cerbrm A8w P 2
-        longLabel Cerebrum Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Cerebrum P 2
+        longLabel Cerebrum DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=CEREBRUM sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 105,105,105
@@ -1529,8 +1529,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks
-        shortLabel Cerbrm A8w P 1
-        longLabel Cerebrum Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Cerebrum P 1
+        longLabel Cerebrum DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=CEREBRUM sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 105,105,105
@@ -1538,7 +1538,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase3134RiiiMImmortalPkRep1
         parent wgEncodeUwDnaseViewPeaks
-        shortLabel 3134 immrtl P 1
+        shortLabel 3134 P 1
         longLabel 3134 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep1 treatment=zNONE
         type narrowPeak
@@ -1547,8 +1547,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel TNaiv A8w P 1
-        longLabel T-Naive Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel T-Naive P 1
+        longLabel T-Naive DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=T1NAIVE sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1556,16 +1556,16 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Lung A8w P 1
-        longLabel Lung Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Lung P 1
+        longLabel Lung DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         # subId=3906 dateSubmitted=2011-04-19
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks
-        shortLabel Bcell A8w P 1
-        longLabel B-cell (CD19+) Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Bcell (CD19+) P 1
+        longLabel B-cell (CD19+) DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1573,8 +1573,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Heart A8w P 1
-        longLabel Heart Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Heart P 1
+        longLabel Heart DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 153,38,0
@@ -1582,8 +1582,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseKidneyC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Kdny A8w P 2
-        longLabel Kidney Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Kidney P 2
+        longLabel Kidney DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 204,121,167
@@ -1591,8 +1591,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCbellumC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Cerbllm A8w P 2
-        longLabel Cerebellum Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Cerebellum P 2
+        longLabel Cerebellum DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=CBELLUM sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 105,105,105
@@ -1600,7 +1600,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseA20BalbcannMAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel A20 immrtl P 1
+        shortLabel A20 P 1
         longLabel A20 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=A20 sex=M strain=BALBCANN rep=rep1 treatment=zNONE
         type narrowPeak
@@ -1609,7 +1609,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseA20BalbcannMAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel A20 immrtl P 2
+        shortLabel A20 P 2
         longLabel A20 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=A20 sex=M strain=BALBCANN rep=rep2 treatment=zNONE
         type narrowPeak
@@ -1618,7 +1618,7 @@ html wgEncodeUwDnase.release2
 
         #track wgEncodeUwDnaseZhbtc4129olaME0PkRep1
         #parent wgEncodeUwDnaseViewPeaks off
-        #shortLabel ZhBTc4 Pk 1
+        #shortLabel ZhBTc44 Pk 1
         #longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Peaks Rep 1 from ENCODE/UW
         #subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep1 treatment=zNONE
         #type narrowPeak
@@ -1628,8 +1628,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0PkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ZhBTc E0 P 2
-        longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 P 2
+        longLabel ZhBTc4 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep2 treatment=zNONE
         type narrowPeak
         color 65,105,225
@@ -1637,8 +1637,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFatC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Fat Pad A8w P 1
-        longLabel Fat Pad Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Fat Pad P 1
+        longLabel Fat Pad DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 189,0,157
@@ -1646,8 +1646,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFatC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Fat Pad A8w P 2
-        longLabel Fat Pad Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Fat Pad P 2
+        longLabel Fat Pad DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 189,0,157
@@ -1655,8 +1655,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel TReg A8w P 1
-        longLabel TReg Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel TReg P 1
+        longLabel TReg DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1664,8 +1664,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Bcell A8w P 1
-        longLabel B-cell (CD43-) Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Bcell (CD43-) P 1
+        longLabel B-cell (CD43-) DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1673,8 +1673,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Bcell A8w P 2
-        longLabel B-cell (CD43-) Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Bcell (CD43-) P 2
+        longLabel B-cell (CD43-) DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1682,7 +1682,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase3134RiiiMImmortalPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel 3134 immrtl P 2
+        shortLabel 3134 P 2
         longLabel 3134 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep2 treatment=zNONE
         type narrowPeak
@@ -1691,7 +1691,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnasePatskiSpbl6MImmortalPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Pats immrtl P 2
+        shortLabel Patski P 2
         longLabel Patski DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=PATSKI sex=M strain=SPBL6 rep=rep2 treatment=zNONE
         color 204,121,167
@@ -1700,7 +1700,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnasePatskiSpbl6MImmortalPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Pats immrtl P 1
+        shortLabel Patski P 1
         longLabel Patski DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=PATSKI sex=M strain=SPBL6 rep=rep1 treatment=zNONE
         color 204,121,167
@@ -1709,8 +1709,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel TReg A8w P 2
-        longLabel TReg Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel TReg P 2
+        longLabel TReg DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1718,8 +1718,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseGfatC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel GenFatPad A8w P 1
-        longLabel Genital Fat Pad Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Gen Fat Pad P 1
+        longLabel Genital Fat Pad DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=GFAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 189,0,157
@@ -1727,8 +1727,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseGfatC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel GenFatPad A8w P 2
-        longLabel Genital Fat Pad Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Gen Fat Pad P 2
+        longLabel Genital Fat Pad DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=GFAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 189,0,157
@@ -1736,8 +1736,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFlbudCd1ME11halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel FLimbBud P 1
-        longLabel Fore Limb Bud Embryonic Day 11.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Fore Limb Bud P 1
+        longLabel Fore Limb Bud DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E11HALF cellType=FLBUD sex=M strain=CD1 rep=rep1 treatment=zNONE
         type narrowPeak
         color 102,50,200
@@ -1745,8 +1745,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFlbudCd1ME11halfPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel FLimbBud P 2
-        longLabel Fore Limb Bud Embryonic Day 11.5 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Fore Limb Bud P 2
+        longLabel Fore Limb Bud DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E11HALF cellType=FLBUD sex=M strain=CD1 rep=rep2 treatment=zNONE
         type narrowPeak
         color 102,50,200
@@ -1754,8 +1754,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlbudCd1ME11halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel HLimbBud P 1
-        longLabel Hind Limb Bud Embryonic Day 11.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Hind Limb Bud P 1
+        longLabel Hind Limb Bud DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E11HALF cellType=HLBUD sex=M strain=CD1 rep=rep1 treatment=zNONE
         type narrowPeak
         color 102,50,200
@@ -1763,8 +1763,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlbudCd1ME11halfPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel HLimbBud P 2
-        longLabel Hind Limb Bud Embryonic Day 11.5 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Hind Limb Bud P 2
+        longLabel Hind Limb Bud DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E11HALF cellType=HLBUD sex=M strain=CD1 rep=rep2 treatment=zNONE
         type narrowPeak
         color 102,50,200
@@ -1772,8 +1772,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlembryoCd1ME11halfPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel NoHeadEmb P 2
-        longLabel Headless Embryo Embryonic Day 11.5 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Headless Emb P 2
+        longLabel Headless Embryo DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E11HALF cellType=HEADLEMBRYO sex=M strain=CD1 rep=rep2 treatment=zNONE
         type narrowPeak
         color 65,105,225
@@ -1781,8 +1781,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMesodermCd1ME11halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Mesdrm E11.5 P 1
-        longLabel Mesoderm Embryonic Day 11.5  DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Mesoderm P 1
+        longLabel Mesoderm DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E11HALF cellType=MESODERM sex=M strain=CD1 rep=rep1 treatment=zNONE
         type narrowPeak
         color 65,105,225
@@ -1790,8 +1790,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMesodermCd1ME11halfPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Mesdrm E11.5 P 2
-        longLabel Mesoderm Embryonic Day 11.5  DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Mesoderm P 2
+        longLabel Mesoderm DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E11HALF cellType=MESODERM sex=M strain=CD1 rep=rep2 treatment=zNONE
         type narrowPeak
         color 65,105,225
@@ -1799,7 +1799,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseNih3t3NihsMImmortalPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel NIH3T3 immrtl P 2
+        shortLabel NIH-3T3 P 2
         longLabel NIH-3T3 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS rep=rep2 treatment=zNONE
         type narrowPeak
@@ -1808,8 +1808,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlembryoCd1ME11halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel NoHeadEmb P 1
-        longLabel Headless Embryo Embryonic Day 11.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Headless Emb P 1
+        longLabel Headless Embryo DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E11HALF cellType=HEADLEMBRYO sex=M strain=CD1 rep=rep1 treatment=zNONE
         type narrowPeak
         color 65,105,225
@@ -1837,8 +1837,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Heart A8w P 2
-        longLabel Heart Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Heart P 2
+        longLabel Heart DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 153,38,0
@@ -1846,8 +1846,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel LrgInt A8w P 1
-        longLabel Large Intestine Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Lg Intestine P 1
+        longLabel Large Intestine DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=LGINT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 230,159,0
@@ -1876,7 +1876,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseNih3t3NihsMImmortalPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel NIH3T3 immrtl P 1
+        shortLabel NIH-3T3 P 1
         longLabel NIH-3T3 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS rep=rep1 treatment=zNONE
         type narrowPeak
@@ -1886,7 +1886,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MAdult1wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Ret A1w P 1
+        shortLabel Retina A1w P 1
         longLabel Retina Adult 1 week DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT1WKS cellType=RETINA sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
@@ -1895,8 +1895,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel SkMus A8w P 1
-        longLabel Skeletal Muscle Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Sk Muscle P 1
+        longLabel Skeletal Muscle DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=SKMUSCLE sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 139,69,19
@@ -1904,8 +1904,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel SkMus A8w P 2
-        longLabel Skeletal Muscle Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Sk Muscle P 2
+        longLabel Skeletal Muscle DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=SKMUSCLE sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 139,69,19
@@ -1913,8 +1913,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSpleenC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Spln A8w P 1
-        longLabel Spleen Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Spleen P 1
+        longLabel Spleen DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=SPLEEN sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1922,8 +1922,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSpleenC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Spln A8w P 2
-        longLabel Spleen Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Spleen P 2
+        longLabel Spleen DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=SPLEEN sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1931,8 +1931,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThymusC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Thyms A8w P 1
-        longLabel Thymus Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Thymus P 1
+        longLabel Thymus DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1940,8 +1940,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThymusC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Thyms A8w P 2
-        longLabel Thymus Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Thymus P 2
+        longLabel Thymus DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type narrowPeak
         color 86,180,233
@@ -1989,7 +1989,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MNew1daysPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Ret newb1d P 1
+        shortLabel Retina N1d P 1
         longLabel Retina Newborn 1 Day DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=NEW1DAYS cellType=RETINA sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type narrowPeak
@@ -1998,7 +1998,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Ret A8w P 1
+        shortLabel Retina A8w P 1
         longLabel Retina Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=RETINA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type narrowPeak
@@ -2036,7 +2036,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverC57bl6ME14halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Livr E14.5 P 1
+        shortLabel Livr C E14.5 P 1
         longLabel Liver C57BL/6 Embryonic Day 14.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=LIVER sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type narrowPeak
@@ -2045,8 +2045,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel LrgInt A8w P 2
-        longLabel Large Intestine Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Lg Intestine P 2
+        longLabel Large Intestine DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=LGINT sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type narrowPeak
         color 230,159,0
@@ -2054,8 +2054,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEse14129olaME0PkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ES-E14 E0 P 2
-        longLabel ES-E14 Embryonic Day 0 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel ES-E14 P 2
+        longLabel ES-E14 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep2
         type narrowPeak
         color 65,105,225
@@ -2064,7 +2064,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel mG/ER immrtl P 1
+        shortLabel mG/ER P 1
         longLabel mG/ER DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=zNONE rep=rep1
         type narrowPeak
@@ -2073,7 +2073,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel mG/ER immrtl P 2
+        shortLabel mG/ER P 2
         longLabel mG/ER DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=zNONE rep=rep2
         type narrowPeak
@@ -2082,8 +2082,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc24hPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel mG/ER dPC 24h P 1
-        longLabel mG/ER immortalized diffProtC 24 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel mG/ER dPC 24 P 1
+        longLabel mG/ER diffProtC 24 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC24H rep=rep1
         type narrowPeak
         color 86,180,233
@@ -2091,8 +2091,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc24hPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel mG/ER dPC 24h P 2
-        longLabel mG/ER immortalized diffProtC 24 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel mG/ER dPC 24 P 2
+        longLabel mG/ER diffProtC 24 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC24H rep=rep2
         type narrowPeak
         color 86,180,233
@@ -2100,8 +2100,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc48hPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel mG/ER dPC 48h P 1
-        longLabel mG/ER immortalized diffProtC 48 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel mG/ER dPC 48 P 1
+        longLabel mG/ER diffProtC 48 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC48H rep=rep1
         type narrowPeak
         color 86,180,233
@@ -2109,8 +2109,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc48hPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel mG/ER dPC 48h P 2
-        longLabel mG/ER immortalized diffProtC 48 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel mG/ER dPC 48 P 2
+        longLabel mG/ER diffProtC 48 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC48H rep=rep2
         type narrowPeak
         color 86,180,233
@@ -2118,8 +2118,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb6hPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ZhBTc dPB 6h P 1
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 6 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 6 P 1
+        longLabel ZhBTc4 diffProtB 6 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep1
         type narrowPeak
         color 65,105,225
@@ -2127,8 +2127,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb6hPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ZhBTc dPB 6h P 2
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 6 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 6 P 2
+        longLabel ZhBTc4 diffProtB 6 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep2
         type narrowPeak
         color 65,105,225
@@ -2136,8 +2136,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb24hPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ZhBTc dPB 24h P 1
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 24 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 24 P 1
+        longLabel ZhBTc4 diffProtB 24 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep1
         type narrowPeak
         color 65,105,225
@@ -2145,8 +2145,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb24hPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ZhBTc dPB 24h P 2
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 24 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 24 P 2
+        longLabel ZhBTc4 diffProtB 24 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep2
         type narrowPeak
         color 65,105,225
@@ -2154,8 +2154,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThelpaC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel THelpAct A8w P 1
-        longLabel THelper-Activated Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel THelper-Act P 1
+        longLabel THelper-Activated DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -2163,8 +2163,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThelpaC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel THelpAct A8w P 2
-        longLabel THelper-Activated Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel THelper-Act P 2
+        longLabel THelper-Activated DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type narrowPeak
         color 86,180,233
@@ -2172,8 +2172,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregaC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel TRegAct A8w P 2
-        longLabel TReg-Activated Adult 8 Weeks DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel TReg-Act P 2
+        longLabel TReg-Activated DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type narrowPeak
         color 86,180,233
@@ -2181,8 +2181,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregaC57bl6MAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel TRegAct A8w P 1
-        longLabel TReg-Activated Adult 8 Weeks DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel TReg-Act P 1
+        longLabel TReg-Activated DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type narrowPeak
         color 86,180,233
@@ -2190,8 +2190,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEse14129olaME0PkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ES-E14 E0 P 1
-        longLabel ES-E14 Embryonic Day 0 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel ES-E14 P 1
+        longLabel ES-E14 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type narrowPeak
         color 65,105,225
@@ -2199,8 +2199,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcpppCd1ME14halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel EPCPPP E14.5 P 1
-        longLabel EPC (CD117+,CD71+,TER119+) E14.5 CD-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel EPC +++ P 1
+        longLabel EPC (CD117+,CD71+,TER119+) DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=EPCPPP sex=M strain=CD1 treatment=zNONE rep=rep1
         type narrowPeak
         color 153,38,0
@@ -2208,8 +2208,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiver129dlcrME14halfPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Livr E14.5 P 2
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel Livr 1D E14.5 P 2
+        longLabel Liver 129.DLCR/DLCR Embryonic Day 14.5 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=LIVER sex=M strain=a129DLCR treatment=zNONE rep=rep2
         type narrowPeak
         color 230,159,0
@@ -2217,8 +2217,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcmppCd1ME14halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel EPCMPP E14.5 P 1
-        longLabel EPC (CD117-,CD71+,TER119+) E14.5 CD-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel EPC -++ P 1
+        longLabel EPC (CD117-,CD71+,TER119+) DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=EPCMPP sex=M strain=CD1 treatment=zNONE rep=rep1
         type narrowPeak
         color 153,38,0
@@ -2226,8 +2226,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverS129ME14halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Livr E14.5 P 1
-        longLabel Liver Embryonic Day 14.5 129 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Livr 1 E14.5 P 1
+        longLabel Liver 129 Embryonic Day 14.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=LIVER sex=M strain=a129 treatment=zNONE rep=rep1
         type narrowPeak
         color 230,159,0
@@ -2235,8 +2235,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcppmCd1ME14halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel EPCPPM E14.5 P 1
-        longLabel EPC (CD117+,CD71+,TER119-) E14.5 CD-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel EPC ++- P 1
+        longLabel EPC (CD117+,CD71+,TER119-) DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=EPCPPM sex=M strain=CD1 treatment=zNONE rep=rep1
         type narrowPeak
         color 153,38,0
@@ -2244,8 +2244,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcpmmCd1ME14halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel EPCPMM E14.5 P 1
-        longLabel EPC (CD117+,CD71-,TER119-) E14.5 CD-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel EPC +-- P 1
+        longLabel EPC (CD117+,CD71-,TER119-) DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=EPCPMM sex=M strain=CD1 treatment=zNONE rep=rep1
         type narrowPeak
         color 153,38,0
@@ -2253,8 +2253,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0PkRep1V2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ZhBTc E0 P 1
-        longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 P 1
+        longLabel ZhBTc4 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type narrowPeak
         color 65,105,225
@@ -2264,7 +2264,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0PkRep1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ES-WW6 F1KO P 1
-        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel ES-WW6 F1KO DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep1
         type narrowPeak
         color 65,105,225
@@ -2273,7 +2273,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0PkRep2
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel ES-WW6 F1KO P 2
-        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel ES-WW6 F1KO DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep2
         type narrowPeak
         color 65,105,225
@@ -2281,8 +2281,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEsww6UknME0PkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ES-WW6 E0 P 2
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        shortLabel ES-WW6 P 2
+        longLabel ES-WW6 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESWW6 sex=M strain=UKN treatment=zNONE rep=rep2
         type narrowPeak
         color 65,105,225
@@ -2290,8 +2290,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEsww6UknME0PkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel ES-WW6 E0 P 1
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel ES-WW6 P 1
+        longLabel ES-WW6 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E0 cellType=ESWW6 sex=M strain=UKN treatment=zNONE rep=rep1
         type narrowPeak
         color 65,105,225
@@ -2299,7 +2299,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCh122a4bFImmortalPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel CH12 immrtl P 1
+        shortLabel CH12 P 1
         longLabel CH12 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=CH12 sex=F strain=b2A4B treatment=zNONE rep=rep1
         type narrowPeak
@@ -2308,7 +2308,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCh122a4bFImmortalPkRep2
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel CH12 immrtl P 2
+        shortLabel CH12 P 2
         longLabel CH12 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks age=IMMORTAL cellType=CH12 sex=F strain=b2A4B treatment=zNONE rep=rep2
         type narrowPeak
@@ -2317,8 +2317,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiver129dlcrME14halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
-        shortLabel Livr E14.5 P 1
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        shortLabel Livr 1D E14.5 P 1
+        longLabel Liver 129.DLCR/DLCR Embryonic Day 14.5 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks age=E14HALF cellType=LIVER sex=M strain=a129DLCR treatment=zNONE rep=rep1
         type narrowPeak
         color 230,159,0
@@ -2408,8 +2408,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal
-        shortLabel Cerbllm A8w S 1
-        longLabel Cerebellum Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Cerebellum S 1
+        longLabel Cerebellum DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=CBELLUM sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 21846.000000
         color 105,105,105
@@ -2418,7 +2418,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase416bC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel 416B immrtl S 2
+        shortLabel 416B S 2
         longLabel 416B DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep2 treatment=zNONE
         type bigWig 1.000000 74554.000000
@@ -2428,7 +2428,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase416bC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel 416B immrtl S 1
+        shortLabel 416B S 1
         longLabel 416B DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=A1416B sex=M strain=B6D2F1J rep=rep1 treatment=zNONE
         type bigWig 1.000000 109673.000000
@@ -2438,8 +2438,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Bcell A8w S 2
-        longLabel B-cell (CD19+) Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Bcell (CD19+) S 2
+        longLabel B-cell (CD19+) DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 159668.000000
         color 86,180,233
@@ -2448,8 +2448,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEscj7S129ME0SigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ES-CJ7 E0 S 2
-        longLabel ES-CJ7 Embryonic Day 0 DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel ES-CJ7 S 2
+        longLabel ES-CJ7 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep2 treatment=zNONE
         type bigWig 1.000000 85510.000000
         color 65,105,225
@@ -2458,8 +2458,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEscj7S129ME0SigRep1
         parent wgEncodeUwDnaseViewRawSignal
-        shortLabel ES-CJ7 E0 S 1
-        longLabel ES-CJ7 Embryonic Day 0 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel ES-CJ7 S 1
+        longLabel ES-CJ7 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESCJ7 sex=M strain=a129S1 rep=rep1 treatment=zNONE
         type bigWig 1.000000 74881.000000
         color 65,105,225
@@ -2468,8 +2468,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Fibro A8w S 2
-        longLabel Fibroblast Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Fibroblast S 2
+        longLabel Fibroblast DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=FIBROBLAST sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 91985.000000
         # subId=2005 dateSubmitted=2010-07-23
@@ -2477,8 +2477,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFibroblastC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Fibro A8w S 1
-        longLabel Fibroblast Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Fibroblast S 1
+        longLabel Fibroblast DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=FIBROBLAST sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 76418.000000
         # subId=2006 dateSubmitted=2010-07-23
@@ -2486,8 +2486,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Livr A8w S 1
-        longLabel Liver Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Livr C A8w S 1
+        longLabel Liver C57BL/6 Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 49169.000000
         color 230,159,0
@@ -2529,8 +2529,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Livr A8w S 2
-        longLabel Liver Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Livr C A8w S 2
+        longLabel Liver C57BL/6 Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 29008.000000
         color 230,159,0
@@ -2539,8 +2539,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseKidneyC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Kdny A8w S 1
-        longLabel Kidney Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Kidney S 1
+        longLabel Kidney DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 74651.000000
         color 204,121,167
@@ -2560,8 +2560,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLungC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Lung A8w S 2
-        longLabel Lung Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Lung S 2
+        longLabel Lung DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 34840.000000
         # subId=2015 dateSubmitted=2010-07-24
@@ -2569,7 +2569,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal
-        shortLabel MEL immrtl S 1
+        shortLabel MEL S 1
         longLabel MEL DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=MEL sex=M strain=UKN rep=rep1 treatment=zNONE
         type bigWig 1.000000 123367.000000
@@ -2590,7 +2590,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel MEL immrtl S 2
+        shortLabel MEL S 2
         longLabel MEL DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=MEL sex=M strain=UKN rep=rep2 treatment=zNONE
         type bigWig 1.000000 228690.000000
@@ -2600,8 +2600,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel TNaiv A8w S 2
-        longLabel T-Naive Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel T-Naive S 2
+        longLabel T-Naive DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=T1NAIVE sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 86604.000000
         color 86,180,233
@@ -2713,8 +2713,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Cerbrm A8w S 2
-        longLabel Cerebrum Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Cerebrum S 2
+        longLabel Cerebrum DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=CEREBRUM sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 19185.000000
         color 105,105,105
@@ -2723,8 +2723,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal
-        shortLabel Cerbrm A8w S 1
-        longLabel Cerebrum Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Cerebrum S 1
+        longLabel Cerebrum DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=CEREBRUM sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 40784.000000
         color 105,105,105
@@ -2733,7 +2733,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase3134RiiiMImmortalSigRep1
         parent wgEncodeUwDnaseViewRawSignal
-        shortLabel 3134 immrtl S 1
+        shortLabel 3134 S 1
         longLabel 3134 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep1 treatment=zNONE
         type bigWig 1.000000 53562.000000
@@ -2743,8 +2743,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel TNaiv A8w S 1
-        longLabel T-Naive Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel T-Naive S 1
+        longLabel T-Naive DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=T1NAIVE sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 87148.000000
         color 86,180,233
@@ -2753,8 +2753,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLungC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Lung A8w S 1
-        longLabel Lung Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Lung S 1
+        longLabel Lung DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=LUNG sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 33112.000000
         # subId=3906 dateSubmitted=2011-04-19
@@ -2762,8 +2762,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal
-        shortLabel Bcell A8w S 1
-        longLabel B-cell (CD19+) Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Bcell (CD19+) S 1
+        longLabel B-cell (CD19+) DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD19P sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 84233.000000
         color 86,180,233
@@ -2772,8 +2772,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Heart A8w S 1
-        longLabel Heart Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Heart S 1
+        longLabel Heart DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 35686.000000
         color 153,38,0
@@ -2782,8 +2782,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseKidneyC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Kdny A8w S 2
-        longLabel Kidney Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Kidney S 2
+        longLabel Kidney DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=KIDNEY sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 39287.000000
         color 204,121,167
@@ -2792,8 +2792,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCbellumC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Cerbllm A8w S 2
-        longLabel Cerebellum Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Cerebellum S 2
+        longLabel Cerebellum DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=CBELLUM sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 19240.000000
         color 105,105,105
@@ -2802,7 +2802,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel A20 immrtl S 1
+        shortLabel A20 S 1
         longLabel A20 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=A20 sex=M strain=BALBCANN rep=rep1 treatment=zNONE
         type bigWig 1.000000 93407.000000
@@ -2812,7 +2812,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel A20 immrtl S 2
+        shortLabel A20 S 2
         longLabel A20 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=A20 sex=M strain=BALBCANN rep=rep2  treatment=zNONE
         type bigWig 1.000000 162688.000000
@@ -2822,7 +2822,7 @@ html wgEncodeUwDnase.release2
 
         #track wgEncodeUwDnaseZhbtc4129olaME0SigRep1
         #parent wgEncodeUwDnaseViewRawSignal off
-        #shortLabel ZhBTc4 Sg 1
+        #shortLabel ZhBTc44 Sg 1
         #longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Signal Rep 1 from ENCODE/UW
         #subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep1 treatment=zNONE
         #type bigWig 1.000000 87655.000000
@@ -2833,8 +2833,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0SigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ZhBTc E0 S 2
-        longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 S 2
+        longLabel ZhBTc4 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA rep=rep2 treatment=zNONE
         type bigWig 1.000000 94703.000000
         color 65,105,225
@@ -2843,8 +2843,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFatC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Fat Pad A8w S 1
-        longLabel Fat Pad Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Fat Pad S 1
+        longLabel Fat Pad DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 52562.000000
         color 189,0,157
@@ -2853,8 +2853,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFatC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Fat Pad A8w S 2
-        longLabel Fat Pad Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Fat Pad S 2
+        longLabel Fat Pad DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=FAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 53274.000000
         color 189,0,157
@@ -2863,8 +2863,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel TReg A8w S 1
-        longLabel TReg Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel TReg S 1
+        longLabel TReg DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 36553.000000
         color 86,180,233
@@ -2873,8 +2873,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Bcell A8w S 1
-        longLabel B-cell (CD43-) Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Bcell (CD43-) S 1
+        longLabel B-cell (CD43-) DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 45976.000000
         color 86,180,233
@@ -2883,8 +2883,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Bcell A8w S 2
-        longLabel B-cell (CD43-) Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Bcell (CD43-) S 2
+        longLabel B-cell (CD43-) DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 76500.000000
         color 86,180,233
@@ -2893,7 +2893,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnase3134RiiiMImmortalSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel 3134 immrtl S 2
+        shortLabel 3134 S 2
         longLabel 3134 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=A13134 sex=M strain=RIII rep=rep2 treatment=zNONE
         type bigWig 1.000000 42784.000000
@@ -2903,7 +2903,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnasePatskiSpbl6MImmortalSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Pats immrtl S 2
+        shortLabel Patski S 2
         longLabel Patski DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=PATSKI sex=M strain=SPBL6 rep=rep2 treatment=zNONE
         color 204,121,167
@@ -2913,7 +2913,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnasePatskiSpbl6MImmortalSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Pats immrtl S 1
+        shortLabel Patski S 1
         longLabel Patski DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=PATSKI sex=M strain=SPBL6 rep=rep1 treatment=zNONE
         color 204,121,167
@@ -2923,8 +2923,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel TReg A8w S 2
-        longLabel TReg Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel TReg S 2
+        longLabel TReg DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 79792.000000
         color 86,180,233
@@ -2932,8 +2932,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseGfatC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel GenFatPad A8w S 1
-        longLabel Genital Fat Pad Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Gen Fat Pad S 1
+        longLabel Genital Fat Pad DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=GFAT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 47469.000000
         color 189,0,157
@@ -2941,8 +2941,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseGfatC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel GenFatPad A8w S 2
-        longLabel Genital Fat Pad Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Gen Fat Pad S 2
+        longLabel Genital Fat Pad DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=GFAT sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 186127.000000
         color 189,0,157
@@ -2950,8 +2950,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFlbudCd1ME11halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel FLimbBud S 1
-        longLabel Fore Limb Bud Embryonic Day 11.5 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Fore Limb Bud S 1
+        longLabel Fore Limb Bud DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E11HALF cellType=FLBUD sex=M strain=CD1 rep=rep1 treatment=zNONE
         type bigWig 1.000000 58871.000000
         color 102,50,200
@@ -2959,8 +2959,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseFlbudCd1ME11halfSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel FLimbBud S 2
-        longLabel Fore Limb Bud Embryonic Day 11.5 DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Fore Limb Bud S 2
+        longLabel Fore Limb Bud DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E11HALF cellType=FLBUD sex=M strain=CD1 rep=rep2 treatment=zNONE
         type bigWig 1.000000 396503.000000
         color 102,50,200
@@ -2968,8 +2968,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlbudCd1ME11halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel HLimbBud S 1
-        longLabel Hind Limb Bud Embryonic Day 11.5 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Hind Limb Bud S 1
+        longLabel Hind Limb Bud DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E11HALF cellType=HLBUD sex=M strain=CD1 rep=rep1 treatment=zNONE
         type bigWig 1.000000 62621.000000
         color 102,50,200
@@ -2977,8 +2977,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlbudCd1ME11halfSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel HLimbBud S 2
-        longLabel Hind Limb Bud Embryonic Day 11.5 DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Hind Limb Bud S 2
+        longLabel Hind Limb Bud DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E11HALF cellType=HLBUD sex=M strain=CD1 rep=rep2 treatment=zNONE
         type bigWig 1.000000 144814.000000
         color 102,50,200
@@ -2986,8 +2986,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlembryoCd1ME11halfSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel NoHeadEmb S 2
-        longLabel Headless Embryo Embryonic Day 11.5 DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Headless Emb S 2
+        longLabel Headless Embryo DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E11HALF cellType=HEADLEMBRYO sex=M strain=CD1 rep=rep2 treatment=zNONE
         type bigWig 1.000000 58832.000000
         color 65,105,225
@@ -2995,8 +2995,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMesodermCd1ME11halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Mesdrm E11.5 S 1
-        longLabel Mesoderm Embryonic Day 11.5  DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Mesoderm S 1
+        longLabel Mesoderm DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E11HALF cellType=MESODERM sex=M strain=CD1 rep=rep1 treatment=zNONE
         type bigWig 1.000000 267460.000000
         color 65,105,225
@@ -3004,8 +3004,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMesodermCd1ME11halfSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Mesdrm E11.5 S 2
-        longLabel Mesoderm Embryonic Day 11.5  DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Mesoderm S 2
+        longLabel Mesoderm DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E11HALF cellType=MESODERM sex=M strain=CD1 rep=rep2 treatment=zNONE
         type bigWig 1.000000 80928.000000
         color 65,105,225
@@ -3013,7 +3013,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseNih3t3NihsMImmortalSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel NIH3T3 immrtl S 2
+        shortLabel NIH-3T3 S 2
         longLabel NIH-3T3 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS rep=rep2 treatment=zNONE
         type bigWig 1.000000 34373.000000
@@ -3022,8 +3022,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHlembryoCd1ME11halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel NoHeadEmb S 1
-        longLabel Headless Embryo Embryonic Day 11.5 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Headless Emb S 1
+        longLabel Headless Embryo DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E11HALF cellType=HEADLEMBRYO sex=M strain=CD1 rep=rep1 treatment=zNONE
         type bigWig 1.000000 77111.000000
         color 65,105,225
@@ -3054,8 +3054,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Heart A8w S 2
-        longLabel Heart Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Heart S 2
+        longLabel Heart DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=HEART sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 65466.000000
         color 153,38,0
@@ -3064,8 +3064,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel LrgInt A8w S 1
-        longLabel Large Intestine Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Lg Intestine S 1
+        longLabel Large Intestine DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=LGINT sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 48916.000000
         color 230,159,0
@@ -3097,7 +3097,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseNih3t3NihsMImmortalSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel NIH3T3 immrtl S 1
+        shortLabel NIH-3T3 S 1
         longLabel NIH-3T3 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=NIH3T3 sex=M strain=NIHS rep=rep1 treatment=zNONE
         type bigWig 1.000000 55535.000000
@@ -3107,7 +3107,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MAdult1wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Ret A1w S 1
+        shortLabel Retina A1w S 1
         longLabel Retina Adult 1 week DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT1WKS cellType=RETINA sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 47303.000000
@@ -3116,8 +3116,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel SkMus A8w S 1
-        longLabel Skeletal Muscle Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Sk Muscle S 1
+        longLabel Skeletal Muscle DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=SKMUSCLE sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 75085.000000
         color 139,69,19
@@ -3125,8 +3125,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel SkMus A8w S 2
-        longLabel Skeletal Muscle Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Sk Muscle S 2
+        longLabel Skeletal Muscle DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=SKMUSCLE sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 17517.000000
         color 139,69,19
@@ -3134,8 +3134,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSpleenC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Spln A8w S 1
-        longLabel Spleen Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Spleen S 1
+        longLabel Spleen DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=SPLEEN sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 64454.000000
         color 86,180,233
@@ -3143,8 +3143,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseSpleenC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Spln A8w S 2
-        longLabel Spleen Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Spleen S 2
+        longLabel Spleen DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=SPLEEN sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 124046.000000
         color 86,180,233
@@ -3152,8 +3152,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThymusC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Thyms A8w S 1
-        longLabel Thymus Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Thymus S 1
+        longLabel Thymus DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 52662.000000
         color 86,180,233
@@ -3161,8 +3161,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThymusC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Thyms A8w S 2
-        longLabel Thymus Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Thymus S 2
+        longLabel Thymus DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=THYMUS sex=M strain=C57BL6 rep=rep2 treatment=zNONE
         type bigWig 1.000000 71238.000000
         color 86,180,233
@@ -3211,7 +3211,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MNew1daysSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Ret newb1d S 1
+        shortLabel Retina N1d S 1
         longLabel Retina Newborn 1 Day DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=NEW1DAYS cellType=RETINA sex=M strain=C57BL6 rep=rep1 treatment=zNONE
         type bigWig 1.000000 78231.000000
@@ -3220,7 +3220,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseRetinaC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Ret A8w S 1
+        shortLabel Retina A8w S 1
         longLabel Retina Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=RETINA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type bigWig 1.000000 58938.000000
@@ -3258,7 +3258,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverC57bl6ME14halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Livr E14.5 S 1
+        shortLabel Livr C E14.5 S 1
         longLabel Liver C57BL/6 Embryonic Day 14.5 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=LIVER sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type bigWig 1.000000 148306.000000
@@ -3267,8 +3267,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel LrgInt A8w S 2
-        longLabel Large Intestine Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Lg Intestine S 2
+        longLabel Large Intestine DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=LGINT sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type bigWig 1.000000 53963.000000
         color 230,159,0
@@ -3276,8 +3276,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEse14129olaME0SigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ES-E14 E0 S 2
-        longLabel ES-E14 Embryonic Day 0 DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel ES-E14 S 2
+        longLabel ES-E14 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep2
         type bigWig 1.000000 124940.000000
         color 65,105,225
@@ -3286,8 +3286,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel mG/ER immrtl S 1
-        longLabel mG/ER immortalized DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel mG/ER S 1
+        longLabel mG/ER DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=zNONE rep=rep1
         type bigWig 1.000000 51430.000000
         color 86,180,233
@@ -3295,8 +3295,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel mG/ER immrtl S 2
-        longLabel mG/ER immortalized DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel mG/ER S 2
+        longLabel mG/ER DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=zNONE rep=rep2
         type bigWig 1.000000 83865.000000
         color 86,180,233
@@ -3304,8 +3304,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc24hSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel mG/ER dPC 24h S 1
-        longLabel mG/ER immortalized diffProtC 24 hr DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel mG/ER dPC 24 S 1
+        longLabel mG/ER diffProtC 24 hr DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC24H rep=rep1
         type bigWig 1.000000 67184.000000
         color 86,180,233
@@ -3313,8 +3313,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc24hSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel mG/ER dPC 24h S 2
-        longLabel mG/ER immortalized diffProtC 24 hr DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel mG/ER dPC 24 S 2
+        longLabel mG/ER diffProtC 24 hr DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC24H rep=rep2
         type bigWig 1.000000 62131.000000
         color 86,180,233
@@ -3322,8 +3322,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc48hSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel mG/ER dPC 48h S 1
-        longLabel mG/ER immortalized diffProtC 48 hr DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel mG/ER dPC 48 S 1
+        longLabel mG/ER diffProtC 48 hr DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC48H rep=rep1
         type bigWig 1.000000 29826.000000
         color 86,180,233
@@ -3331,8 +3331,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseMgerUknImmortalDiffc48hSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel mG/ER dPC 48h S 2
-        longLabel mG/ER immortalized diffProtC 48 hr DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel mG/ER dPC 48 S 2
+        longLabel mG/ER diffProtC 48 hr DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=MGER sex=M strain=UKN treatment=DIFFC48H rep=rep2
         type bigWig 1.000000 53370.000000
         color 86,180,233
@@ -3340,8 +3340,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb6hSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ZhBTc dPB 6h S 1
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 6 hr DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 6 S 1
+        longLabel ZhBTc4 diffProtB 6 hr DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep1
         type bigWig 1.000000 72892.000000
         color 65,105,225
@@ -3349,8 +3349,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb6hSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ZhBTc dPB 6h S 2
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 6 hr DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 6 S 2
+        longLabel ZhBTc4 diffProtB 6 hr DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB6H rep=rep2
         type bigWig 1.000000 97170.000000
         color 65,105,225
@@ -3358,8 +3358,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb24hSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ZhBTc dPB 24h S 1
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 24 hr DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 24 S 1
+        longLabel ZhBTc4 diffProtB 24 hr DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep1
         type bigWig 1.000000 81535.000000
         color 65,105,225
@@ -3367,8 +3367,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0Diffb24hSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ZhBTc dPB 24h S 2
-        longLabel ZhBTc4 Embryonic Day 0 diffProtB 24 hr DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel ZhBTc4 dPB 24 S 2
+        longLabel ZhBTc4 diffProtB 24 hr DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=DIFFB24H rep=rep2
         type bigWig 1.000000 66813.000000
         color 65,105,225
@@ -3376,8 +3376,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThelpaC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel THelpAct A8w S 1
-        longLabel THelper-Activated Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel THelper-Act S 1
+        longLabel THelper-Activated DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type bigWig 1.000000 55725.000000
         color 86,180,233
@@ -3385,8 +3385,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseThelpaC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel THelpAct A8w S 2
-        longLabel THelper-Activated Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel THelper-Act S 2
+        longLabel THelper-Activated DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=THELPA sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type bigWig 1.000000 56562.000000
         color 86,180,233
@@ -3394,8 +3394,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregaC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel TRegAct A8w S 2
-        longLabel TReg-Activated Adult 8 Weeks DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel TReg-Act S 2
+        longLabel TReg-Activated DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=zNONE rep=rep2
         type bigWig 1.000000 95707.000000
         color 86,180,233
@@ -3403,8 +3403,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseTregaC57bl6MAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel TRegAct A8w S 1
-        longLabel TReg-Activated Adult 8 Weeks DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel TReg-Act S 1
+        longLabel TReg-Activated DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=ADULT8WKS cellType=TREGA sex=M strain=C57BL6 treatment=zNONE rep=rep1
         type bigWig 1.000000 95502.000000
         color 86,180,233
@@ -3412,8 +3412,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEse14129olaME0SigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ES-E14 E0 S 1
-        longLabel ES-E14 Embryonic Day 0 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel ES-E14 S 1
+        longLabel ES-E14 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESE14 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type bigWig 1.000000 192503.000000
         color 65,105,225
@@ -3421,8 +3421,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcpppCd1ME14halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel EPCPPP E14.5 S 1
-        longLabel EPC (CD117+,CD71+,TER119+) E14.5 CD-1 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel EPC +++ S 1
+        longLabel EPC (CD117+,CD71+,TER119+) DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=EPCPPP sex=M strain=CD1 treatment=zNONE rep=rep1
         type bigWig 1.000000 137727.000000
         color 153,38,0
@@ -3430,8 +3430,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiver129dlcrME14halfSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Livr E14.5 S 2
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel Livr 1D E14.5 S 2
+        longLabel Liver 129.DLCR/DLCR Embryonic Day 14.5 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=LIVER sex=M strain=a129DLCR treatment=zNONE rep=rep2
         type bigWig 1.000000 126964.000000
         color 230,159,0
@@ -3439,8 +3439,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcmppCd1ME14halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel EPCMPP E14.5 S 1
-        longLabel EPC (CD117-,CD71+,TER119+) E14.5 CD-1 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel EPC -++ S 1
+        longLabel EPC (CD117-,CD71+,TER119+) DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=EPCMPP sex=M strain=CD1 treatment=zNONE rep=rep1
         type bigWig 1.000000 99568.000000
         color 153,38,0
@@ -3448,8 +3448,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiverS129ME14halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Livr E14.5 S 1
-        longLabel Liver Embryonic Day 14.5 129 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Livr 1 E14.5 S 1
+        longLabel Liver 129 Embryonic Day 14.5 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=LIVER sex=M strain=a129 treatment=zNONE rep=rep1
         type bigWig 1.000000 98657.000000
         color 230,159,0
@@ -3457,8 +3457,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcppmCd1ME14halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel EPCPPM E14.5 S 1
-        longLabel EPC (CD117+,CD71+,TER119-) E14.5 CD-1 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel EPC ++- S 1
+        longLabel EPC (CD117+,CD71+,TER119-) DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=EPCPPM sex=M strain=CD1 treatment=zNONE rep=rep1
         type bigWig 1.000000 55878.000000
         color 153,38,0
@@ -3466,8 +3466,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEpcpmmCd1ME14halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel EPCPMM E14.5 S 1
-        longLabel EPC (CD117+,CD71-,TER119-) E14.5 CD-1 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel EPC +-- S 1
+        longLabel EPC (CD117+,CD71-,TER119-) DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=EPCPMM sex=M strain=CD1 treatment=zNONE rep=rep1
         type bigWig 1.000000 56275.000000
         color 153,38,0
@@ -3475,8 +3475,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseZhbtc4129olaME0SigRep1V2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ZhBTc E0 S 1
-        longLabel ZhBTc4 Embryonic Day 0 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel ZhBTc4 S 1
+        longLabel ZhBTc4 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ZHBTC4 sex=M strain=a129OLA treatment=zNONE rep=rep1
         type bigWig 1.000000 61861.000000
         color 65,105,225
@@ -3486,7 +3486,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0SigRep1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ES-WW6 F1KO S 1
-        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Signal Rep 1 from ENCODE/UW
+        longLabel ES-WW6 F1KO DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep1
         type bigWig 1.000000 51340.000000
         color 65,105,225
@@ -3495,7 +3495,7 @@ html wgEncodeUwDnase.release2
         track wgEncodeUwDnaseEsww6koUknME0SigRep2
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel ES-WW6 F1KO S 2
-        longLabel ES-WW6 F1KO Embryonic Day 0 DNaseI HS Signal Rep 2 from ENCODE/UW
+        longLabel ES-WW6 F1KO DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESWW6KO sex=M strain=UKN treatment=zNONE rep=rep2
         type bigWig 1.000000 58605.000000
         color 65,105,225
@@ -3503,8 +3503,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEsww6UknME0SigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ES-WW6 E0 S 2
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Signal Rep 2 from ENCODE/UW
+        shortLabel ES-WW6 S 2
+        longLabel ES-WW6 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESWW6 sex=M strain=UKN treatment=zNONE rep=rep2
         type bigWig 1.000000 90027.000000
         color 65,105,225
@@ -3512,8 +3512,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseEsww6UknME0SigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel ES-WW6 E0 S 1
-        longLabel ES-WW6 Embryonic Day 0 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel ES-WW6 S 1
+        longLabel ES-WW6 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E0 cellType=ESWW6 sex=M strain=UKN treatment=zNONE rep=rep1
         type bigWig 1.000000 82908.000000
         color 65,105,225
@@ -3521,7 +3521,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCh122a4bFImmortalSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel CH12 immrtl S 1
+        shortLabel CH12 S 1
         longLabel CH12 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=CH12 sex=F strain=b2A4B treatment=zNONE rep=rep1
         type bigWig 1.000000 162118.000000
@@ -3530,7 +3530,7 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseCh122a4bFImmortalSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel CH12 immrtl S 2
+        shortLabel CH12 S 2
         longLabel CH12 DNaseI HS Signal Rep 2 from ENCODE/UW
         subGroups view=Signal age=IMMORTAL cellType=CH12 sex=F strain=b2A4B treatment=zNONE rep=rep2
         type bigWig 1.000000 44111.000000
@@ -3539,8 +3539,8 @@ html wgEncodeUwDnase.release2
 
         track wgEncodeUwDnaseLiver129dlcrME14halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
-        shortLabel Livr E14.5 S 1
-        longLabel Liver Embryonic Day 14.5 DNaseI HS Signal Rep 1 from ENCODE/UW
+        shortLabel Livr 1D E14.5 S 1
+        longLabel Liver 129.DLCR/DLCR Embryonic Day 14.5 DNaseI HS Signal Rep 1 from ENCODE/UW
         subGroups view=Signal age=E14HALF cellType=LIVER sex=M strain=a129DLCR treatment=zNONE rep=rep1
         type bigWig 1.000000 113387.000000
         color 230,159,0

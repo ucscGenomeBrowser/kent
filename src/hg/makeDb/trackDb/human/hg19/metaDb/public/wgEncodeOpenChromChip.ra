@@ -8504,6 +8504,7 @@ fileName wgEncodeOpenChromChipMcf7CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
 md5sum 097383141b906f7b978be98935db8b66
+objStatus revoked
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8529,6 +8530,7 @@ fileName wgEncodeOpenChromChipMcf7CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
 md5sum 01d1d092342b37f0a68c0ac267881042
+objStatus revoked
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11917,4 +11919,4 @@ subId 7528
 tableName wgEncodeOpenChromChipSpleenocInputSig
 view Signal
 
-# MAGIC: -423971007
+# MAGIC: -403872515

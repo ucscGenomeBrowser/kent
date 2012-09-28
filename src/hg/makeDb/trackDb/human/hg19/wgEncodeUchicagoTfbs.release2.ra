@@ -2,12 +2,12 @@
 # Notes:
 #       - Track Long Label: Transcription Factor Binding Sites by Epitope-Tag ChIP-seq from ENCODE/University of Chicago
 #       - Track Short Label: UChicago TFBS
-#       - View Long Labels: [cell] [factor] GFP-tag TFBSChIP-seq [view] from ENCODE/UChicago
+#       - View Long Labels: [cell] [factor] GFP-tag ChIP-seq [view] from ENCODE/UChicago
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
 #       - Short Labels:
 #               Template: [cell] [factor]/GFP [view]
-#					- Views: For consistency sake view will be two letters Pk
-#                       - Peaks = Pk Sg
+#			- Views: For consistency sake view will be two letters
+#                       - Peaks = Pk
 #                       - Signal = Sg
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier.
 #       - Default Tracks on:
@@ -34,7 +34,7 @@ subGroup4 control Control CONTROLBACH1=Control_eGFP-BACH1 CONTROLCCNE1=Control_e
 subGroup5 rep Replicate rep1=1 rep2=2 repInput=Input repPOOLED=Pooled
 dimensions dimensionX=rep dimensionY=factor
 sortOrder cellType=+ factor=+ rep=+ view=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control replicate=Rep view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control replicate=Rep view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
@@ -46,7 +46,7 @@ html wgEncodeUchicagoTfbs.release2
     track wgEncodeUchicagoTfbsPeaks
     shortLabel Peaks
     view Peaks
-    visibility pack 
+    visibility pack
     subTrack wgEncodeUchicagoTfbs
     signalFilter 0
     signalFilterLimits 0:18241

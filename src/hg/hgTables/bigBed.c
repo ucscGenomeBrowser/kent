@@ -300,7 +300,7 @@ while ((slCountAtMost(ivList,10)) < 10)
 return  ivList;
 }
 
-void showSchemaBigBed(char *table)
+void showSchemaBigBed(char *table, struct trackDb *tdb)
 /* Show schema on bigBed. */
 {
 /* Figure out bigBed file name and open it.  Get contents for first chromosome as an example. */
@@ -319,7 +319,7 @@ hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s<br>", table);
 hPrintf("<B>Big Bed File:</B> %s", fileName);
 if (bbi->version >= 2)
     {
-    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Item Count:</B> ");
+    hPrintf("<BR><B>Item Count:</B> ");
     printLongWithCommas(stdout, bigBedItemCount(bbi));
     }
 hPrintf("<BR>\n");
@@ -385,7 +385,7 @@ for (iv=ivList; iv != NULL; iv = iv->next)
     hPrintf("</TR>\n");
     }
 hTableEnd();
-
+printTrackHtml(tdb);
 /* Clean up and go home. */
 lmCleanup(&lm);
 bbiFileClose(&bbi);

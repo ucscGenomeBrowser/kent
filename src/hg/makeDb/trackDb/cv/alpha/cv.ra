@@ -170,7 +170,7 @@ tag HUVEC
 type Cell Line
 organism human
 description umbilical vein endothelial cells
-tissue blood vessel 
+tissue blood vessel
 vendorName Lonza
 vendorId CC-2517
 orderUrl http://www.lonza.com/
@@ -200,7 +200,7 @@ color 0,107,27
 sex M
 tier 1
 protocol ENCODE:missing
-#Protocol with H1-ES_protocol.pdf exists on the RR, but is a generic ChIP-Seq protocol and isn't a growth protocol. 
+#Protocol with H1-ES_protocol.pdf exists on the RR, but is a generic ChIP-Seq protocol and isn't a growth protocol.
 
 term H1-neurons
 tag H1NEURONS
@@ -208,7 +208,7 @@ type Cell Line
 organism human
 description neurons derived from H1 embryonic stem cells, newly promoted to tier 2: not in 2011 analysis
 tissue neurons
-vendorName CDI 
+vendorName CDI
 vendorId TBD
 orderUrl TBD
 lineage ectoderm
@@ -217,7 +217,7 @@ termId BTO:0000938
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000938
 sex M
 tier 2
-protocol Cellular_Dynamics_International_Batch_1:H1_Neurons_Round1.pdf Cellular_Dynamics_International_Batch_2:H1_Neurons_Round2.pdf  
+protocol Cellular_Dynamics_International_Batch_1:H1_Neurons_Round1.pdf Cellular_Dynamics_International_Batch_2:H1_Neurons_Round2.pdf
 
 term LHCN-M2
 tag LHCNM2
@@ -524,7 +524,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 label Bladder_BC_01-11002
 
-term BC_Brain_H11058N 
+term BC_Brain_H11058N
 tag BCBRAIN
 type Cell Line
 tier 3
@@ -584,22 +584,22 @@ tag COLONBC
 type Cell Line
 tier 3
 organism human
-description colon, parent cell type to donors BC_01-11002 and BC_H12817N 
+description colon, parent cell type to donors BC_01-11002 and BC_H12817N
 tissue colon
 lineage endoderm
 karyotype normal
 sex B
 vendorName BioChain ; BioChain ; BioChain ; BioChain
-vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074; CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053 
+vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074; CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053
 orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 protocol Myers:Myers_BioChain_protocol.pdf
 label Colon_BC
-# The new terms Colon_BC, Esophagus_BC, Kidney_BC, 
-# Lung_BC, Skeletal_Muscle_BC, Stomach_BC are out 
-# of alphabetical order. This may make them easier 
-# to review, but they should be moved to their 
+# The new terms Colon_BC, Esophagus_BC, Kidney_BC,
+# Lung_BC, Skeletal_Muscle_BC, Stomach_BC are out
+# of alphabetical order. This may make them easier
+# to review, but they should be moved to their
 # correct location after April 2012. ~Jeff
 
 term BC_Colon_01-11002
@@ -645,7 +645,7 @@ tag ESOPHAGUSBC
 type Cell Line
 tier 3
 organism human
-description esophagus, parental cell type to donors 01-11002 and H12817N 
+description esophagus, parental cell type to donors 01-11002 and H12817N
 tissue esophagus
 lineage endoderm
 karyotype normal
@@ -720,7 +720,7 @@ tag KIDNEYBC
 type Cell Line
 tier 3
 organism human
-description kidney, parental cell type to donors 01-11002 and H12817N 
+description kidney, parental cell type to donors 01-11002 and H12817N
 tissue kidney
 lineage mesoderm
 karyotype normal
@@ -831,7 +831,7 @@ tag LUNGBC
 type Cell Line
 tier 3
 organism human
-description lung, parental cell type to donors 01-11002 and H12817N 
+description lung, parental cell type to donors 01-11002 and H12817N
 tissue lung
 lineage endoderm
 karyotype normal
@@ -996,7 +996,7 @@ tag SKELBC
 type Cell Line
 tier 3
 organism human
-description skeletal muscle, parental cell type to donors 01-11002 and H12817N 
+description skeletal muscle, parental cell type to donors 01-11002 and H12817N
 tissue skeletal muscle
 lineage mesoderm
 karyotype normal
@@ -1124,7 +1124,7 @@ tag STOMACHBC
 type Cell Line
 tier 3
 organism human
-description stomach, parental cell type to donors 01-11002 and H12817N 
+description stomach, parental cell type to donors 01-11002 and H12817N
 tissue stomach
 lineage endoderm
 karyotype normal
@@ -1440,7 +1440,7 @@ description Germinal center B cells (CD77+) isolated from de-identified tonsille
 karyotype normal
 sex U
 tissue tonsil
-vendorName Dr. Yanwen Jiang 
+vendorName Dr. Yanwen Jiang
 vendorId GC_B_cell
 orderUrl http://melnicklaboratory.med.cornell.edu/people/yanwenjiang.php
 termId BTO:0003671
@@ -1905,7 +1905,7 @@ tag GM08714
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line, Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo. 
+description lymphoblastoid cell line, Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo.
 lineage mesoderm
 sex F
 tissue blood
@@ -1924,9 +1924,9 @@ tag GM10248
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12) 
+description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12)
 lineage mesoderm
-karyotype normal 
+karyotype normal
 sex M
 tissue blood
 vendorName Coriell
@@ -1942,12 +1942,12 @@ tag GM10266
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12) 
+description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12)
 lineage mesoderm
-karyotype affected 
+karyotype affected
 sex M
 tissue blood
-vendorName Coriell 
+vendorName Coriell
 vendorId GM10266
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10266&PgId=166
 termId BTO:0002062
@@ -2347,7 +2347,7 @@ tag GM13976
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line, clinically normal; monozygotic twin sister with Cornelia De Lange syndrome is GM13977 
+description lymphoblastoid cell line, clinically normal; monozygotic twin sister with Cornelia De Lange syndrome is GM13977
 lineage mesoderm
 karyotype normal
 sex F
@@ -2365,9 +2365,9 @@ tag GM13977
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line, Clinically affected; microcephaly; low frontal hairline; synophris; "penciled" arched eyebrows; short nose; crescent shaped mouth; hirsutism; micromelia; short thumbs; mental retardation; clinically normal monozygotic twin sister is GM13976 
+description lymphoblastoid cell line, Clinically affected; microcephaly; low frontal hairline; synophris; "penciled" arched eyebrows; short nose; crescent shaped mouth; hirsutism; micromelia; short thumbs; mental retardation; clinically normal monozygotic twin sister is GM13976
 lineage mesoderm
-karyotype affected 
+karyotype affected
 sex F
 tissue blood
 vendorName Coriell
@@ -2545,12 +2545,12 @@ tag GM20000
 type Cell Line
 tier 3
 organism human
-description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation 
+description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation
 lineage mesoderm
-karyotype affected 
+karyotype affected
 sex M
 tissue blood
-vendorName Coriell 
+vendorName Coriell
 vendorId GM20000
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM20000&PgId=166
 termId BTO:0002062
@@ -2803,7 +2803,7 @@ description Aortic Adventitial Fibroblasts from tunica adventitia
 lineage mesoderm
 karyotype normal
 sex M
-tissue blood vessel 
+tissue blood vessel
 childOf HAoAF
 vendorName PromoCell
 vendorId C-14037
@@ -2841,7 +2841,7 @@ description Aortic Endothelial Cells (thoracic) from two individuals, HAoEC_7071
 lineage mesoderm
 karyotype normal
 sex B
-tissue blood vessel 
+tissue blood vessel
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -4351,7 +4351,7 @@ description Saphenous Vein Endothelial Cells from thigh
 lineage mesoderm
 karyotype normal
 sex M
-tissue blood vessel 
+tissue blood vessel
 childOf HSaVEC
 vendorName PromoCell
 vendorId C-14025
@@ -4418,7 +4418,7 @@ tag HSMMFSHD
 type Cell Line
 tier 3
 organism human
-description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients, muscle needle biopsies 
+description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients, muscle needle biopsies
 termId BTO:0000222
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000222
 vendorName Duke/UNC/UT/EBI ENCODE group
@@ -4469,12 +4469,12 @@ tag HSMMTUBEFSHD
 type Cell Line
 tier 3
 organism human
-description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient, muscle needle biopsies 
+description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient, muscle needle biopsies
 childOf HSMM_FSHD
 termId BTO:0001760
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
 vendorName Duke/UNC/UT/EBI ENCODE group
-vendorId HSMMtube_FSHD 
+vendorId HSMMtube_FSHD
 orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
 sex U
 tissue muscle
@@ -4959,7 +4959,7 @@ term Lymphoblastoid_cell_line
 tag LYMPHOBLAST
 type Cell Line
 organism human
-description parental cell type to lymphoblastoid cell lines 
+description parental cell type to lymphoblastoid cell lines
 tissue blood
 #tissue haematopoietic
 vendorName Coriell
@@ -5196,12 +5196,12 @@ tag MRTG401
 type Cell Line
 tier 3
 organism human
-description Malignant renal rhabdoid tumor line 
+description Malignant renal rhabdoid tumor line
 karyotype cancer
 lineage missing
 sex M
 tissue kidney
-vendorName ATCC 
+vendorName ATCC
 vendorId CRL-1441
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1441&Template=cellBiology
 lots 6
@@ -5216,13 +5216,13 @@ tag MRTA204
 type Cell Line
 tier 3
 organism human
-description Malignant rhabdoid tumor (MRT) line, rhabdomyosarcoma 
+description Malignant rhabdoid tumor (MRT) line, rhabdomyosarcoma
 karyotype cancer
 lineage missing
 sex F
 tissue muscle
 vendorName ATCC
-vendorId HTB-82 
+vendorId HTB-82
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-82&Template=cellBiology
 lots 1
 termId BTO:0002062
@@ -5236,18 +5236,18 @@ tag MRTTTC549
 type Cell Line
 tier 3
 organism human
-description Malignant Hepatic Rhabdoid tumor line 
+description Malignant Hepatic Rhabdoid tumor line
 karyotype cancer
 lineage missing
 sex M
 tissue liver
 vendorName ATCC
-vendorId TTC549 
+vendorId TTC549
 orderUrl missing
 termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001802
 lab Crawford
-protocol Crawford:MRTTTC549_Crawford_protocol.pdf 
+protocol Crawford:MRTTTC549_Crawford_protocol.pdf
 label MRT TTC549
 
 term Myometr
@@ -5274,7 +5274,7 @@ description Naive B cells (IgD+) isolated from de-identified tonsillectomy
 karyotype normal
 sex U
 tissue tonsil
-vendorName Dr. Yanwen Jiang 
+vendorName Dr. Yanwen Jiang
 vendorId Naive_B_cell
 orderUrl http://melnicklaboratory.med.cornell.edu/people/yanwenjiang.php
 termId BTO:0000776
@@ -6226,7 +6226,7 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
-term T_cells_CD4+ 
+term T_cells_CD4+
 tag TCELLSCD4
 type Cell Line
 organism human
@@ -6375,7 +6375,7 @@ tier 3
 organism human
 description Th2 cells in vivo isolation, donor is Asian, female 26 year old, primary pheresis of single normal subject
 lineage mesoderm
-karyotype normal 
+karyotype normal
 sex F
 tissue blood
 vendorName John Stamatoyannopoulos
@@ -6838,7 +6838,7 @@ tissue mammary
 category cellLine
 age immortalized
 strain RIII
-description mammary tumor fibroblast 
+description mammary tumor fibroblast
 vendorName ATCC
 vendorId CRL-1616
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1616&Template=cellBiology
@@ -6949,7 +6949,7 @@ tissue central nervous system
 category Tissue
 age ageUnknown
 strain Unknown
-description Central Nervous System 
+description Central Nervous System
 vendorName CSHL lab
 vendorId CNS
 orderUrl http://gingeraslab.cshl.edu/
@@ -6995,7 +6995,7 @@ color 230,159,0
 sex U
 protocol Gingeras:Duodenum_Gingeras_protocol.pdf
 
-term EPC_(CD117+,CD71-,TER119-)
+term EPC_(CD117+_CD71-_TER119-)
 tag EPCPMM
 type Cell Line
 organism mouse
@@ -7013,7 +7013,7 @@ color 153,38,0
 sex U
 protocol UW:EPC_Stam_protocol.pdf
 
-term EPC_(CD117+,CD71+,TER119-)
+term EPC_(CD117+_CD71+_TER119-)
 tag EPCPPM
 type Cell Line
 organism mouse
@@ -7031,7 +7031,7 @@ color 153,38,0
 sex U
 protocol UW:EPC_Stam_protocol.pdf
 
-term EPC_(CD117-,CD71+,TER119+)
+term EPC_(CD117-_CD71+_TER119+)
 tag EPCMPP
 type Cell Line
 organism mouse
@@ -7049,7 +7049,7 @@ color 153,38,0
 sex U
 protocol UW:EPC_Stam_protocol.pdf
 
-term EPC_(CD117-,CD71-,TER119+)
+term EPC_(CD117-_CD71-_TER119+)
 tag EPCMMP
 type Cell Line
 organism mouse
@@ -7067,7 +7067,7 @@ color 153,38,0
 sex U
 protocol UW:EPC_Stam_protocol.pdf
 
-term EPC_(CD117+,CD71+,TER119+)
+term EPC_(CD117+_CD71+_TER119+)
 tag EPCPPP
 type Cell Line
 organism mouse
@@ -7204,17 +7204,17 @@ color 65,105,225
 sex M
 protocol Stam:ES-E14_Stam_protocol.pdf
 
-term ES-EM5Sox17huCD25 
+term ES-EM5Sox17huCD25
 tag ESEM5S
 type Cell Line
 organism mouse
 category primaryCells
-description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5 
+description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5
 age E0
 strain 129/Ola
 vendorName Gilbert lab
 vendorId ES-GscgfpSox17huCD25
-orderUrl http://gilbertlab.bio.fsu.edu/ 
+orderUrl http://gilbertlab.bio.fsu.edu/
 color 65,105,225
 sex U
 protocol missing
@@ -7236,7 +7236,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=15148
 color 105,105,105
 sex M
 label ES-neurons
-protocol Ren:ES-neurons_Ren_protocol.pdf 
+protocol Ren:ES-neurons_Ren_protocol.pdf
 
 term ES-TT2
 tag ESTT2
@@ -7539,10 +7539,10 @@ organism mouse
 category cellLine
 age immortalized
 strain Unknown
-description Fetal myoblast Desmin+ 
+description Fetal myoblast Desmin+
 vendorName Gilbert lab
 vendorId J185a
-orderUrl http://gilbertlab.bio.fsu.edu/ 
+orderUrl http://gilbertlab.bio.fsu.edu/
 termId 174
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=174
 color 139,69,19
@@ -7799,7 +7799,7 @@ age ageUnknown
 strain Unknown
 category cellLine
 description Myocyte
-termId GO:0036194 
+termId GO:0036194
 termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0036194
 vendorName Hardison lab
 orderUrl http://bmb.psu.edu/directory/rch8
@@ -8028,7 +8028,7 @@ vendorId Spinal Cord
 orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 4521
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4521
-color 105,105,105 
+color 105,105,105
 sex U
 protocol Ren:Tissue_Ren_protocol.pdf
 
@@ -8213,7 +8213,7 @@ vendorId Thigh Muscle
 orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 11033
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=11033
-color 139,69,19 
+color 139,69,19
 sex U
 protocol Ren:Tissue_Ren_protocol.pdf
 
@@ -8323,7 +8323,7 @@ label AP-2alpha (sc-8975)
 term AP-2gamma
 tag AP2GAMMA
 type Antibody
-target TFAP2C   
+target TFAP2C
 targetClass TFSS
 antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping with in an internal region of AP-2Y of human origin. Antibody Target: TFAP2C
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes.  AP-2 factors bind to the consensus sequence 5'-GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development.  They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.
@@ -8829,7 +8829,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-689
 lab Tenenbaum
 targetId GeneCard:CBX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
-validation 
+validation
 label CBX5 (05-689)
 #lots
 
@@ -8992,7 +8992,7 @@ orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
 targetId GeneCard:CELF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
-validation 
+validation
 label CELF2 (04-047)
 
 term CHD1_(A301-218A)
@@ -9047,7 +9047,7 @@ term CHD4_Mi2
 tag CHD4MI2
 type Antibody
 target CHD4
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 targetDescription CHD4/Mi2beta is a helicase component of the nucleosome remodeling and deacetylase (NuRD) complex that functions to remodel chromatin and repress transcription. Outside of the NuRD complex, CHD4/Mi2beta can function as an activator of transcription in association with p300 histone acetyltransferase.
 vendorName Bethyl Laboratories
 vendorId A301-081A
@@ -9249,7 +9249,7 @@ vendorId 612042
 lab Farnham
 targetId GeneCard:CTBP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1
-validation 
+validation
 label CtBP1 (612042)
 ##This does not appear in metaDb
 
@@ -9764,7 +9764,7 @@ tag ERAA
 type Antibody
 target ESR1
 targetClass TFSS
-antibodyDescription Rabbit affinity purified polyclonal antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor  of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ESR1 
+antibodyDescription Rabbit affinity purified polyclonal antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor  of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ESR1
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
 vendorName Santa Cruz Biotechnology
 vendorId sc-543
@@ -9789,7 +9789,7 @@ label ERalpha a (sc-543)
 #lab Ruan
 #targetId GeneCard:ESR1
 #targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
-#validation 
+#validation
 #label ERalpha b (MAb-009-050)
 ##This does not appear in metaDb
 
@@ -9813,7 +9813,7 @@ term ESET_(166621)
 tag ESET166621
 type Antibody
 antibodyDescription mouse monoclonal IgG2b, specific for an epitope mapping between amino acids 1195-1228 near the C-terminus of human ESET
-target ESET 
+target ESET
 targetDescription ERG-associated protein with SET domain (ESET), also designated Histone H3-K9 methyltransferase 4 or SET domain bifurcated 1, is a nuclear protein belonging to the histone-lysine methyltransferase family.  ESET is a histone methyltransferase, methylating Lys-9 of histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity.
 vendorName Santa Cruz Biotechnology
 vendorId sc-166621
@@ -10082,7 +10082,7 @@ term GATA2_(SC-267)
 tag GATA2b
 type Antibody
 target GATA2
-targetClass: TFSS
+targetClass TFSS
 targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
 antibodyDescription Mouse monoclonal IgG. Antibody Target: GATA2
 vendorName Santa Cruz Biotechnology
@@ -10100,7 +10100,7 @@ tag GATA2SC9008
 type Antibody
 antibodyDescription Rabbit polyclonal antibody raised against amino acids 120-235 of GATA-2 of human origin. Antibody Target: GATA2
 target GATA2
-targetClass: TFSS
+targetClass TFSS
 targetDescription The GATA family of transcription factors share a conserved zinc finger DNA-binding domain and are capable of binding the WGATAR consensus sequence. GATA1 is erythroid-specific and is essential for normal erythropeisis. By comparison, GATA2 is expressed at high levels in hematopoeitic progenitors, including early erythroid cells, but is strong repressed during erythroblast differentiaion.
 vendorName Santa Cruz Biotechnology
 vendorId sc-9008
@@ -10686,7 +10686,7 @@ vendorId NB100-68209
 orderUrl http://www.novusbio.com/HCFC1-Antibody_NB100-68209.html
 lab Snyder
 lots A1
-targetId GeneCard:HCFC1 
+targetId GeneCard:HCFC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HCFC1
 validation HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):human_HCFC1_NB100-68209_validation_Snyder.pdf Mouse_-_HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):mouse_HCFC1_validation_Snyder.pdf
 
@@ -11114,7 +11114,7 @@ term LSD1
 tag LSD1
 type Antibody
 target LSD1
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 vendorName Bethyl Laboratories
 vendorId A300-215A
@@ -11269,7 +11269,7 @@ lab Wold
 lots missing
 targetId GeneCard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
-validation 
+validation
 label MEF2 (sc-17785)
 
 term MEF2A
@@ -11560,7 +11560,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-950
 lab Tenenbaum
 targetId GeneCard:NONO
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
-validation 
+validation
 label NONO (05-950)
 # lots
 ##This does not appear in metaDb
@@ -11593,7 +11593,7 @@ vendorId sc-22810
 lab Snyder
 targetId GeneCard:GABPA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
-validation 
+validation
 label Nrf2 (sc-22810)
 
 term NRSF
@@ -11666,7 +11666,7 @@ tag P300KAT3B
 type Antibody
 target P300
 targetClass HISase
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
 vendorName Bethyl Laboratories
 vendorId A300-358A
@@ -11809,7 +11809,7 @@ term PCAF
 tag PCAF
 type Antibody
 target PCAF
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
 vendorName Bethyl Laboratories
 vendorId A301-666A
@@ -11877,7 +11877,7 @@ target PLU1
 targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
 vendorName YangShi lab
 vendorId PLU1
-orderUrl http://cellbio.med.harvard.edu/faculty/shi/ 
+orderUrl http://cellbio.med.harvard.edu/faculty/shi/
 lab Bernstein
 lots missing
 targetId GeneCard:KDM5B
@@ -12086,7 +12086,7 @@ tag REST
 type Antibody
 target REST
 targetClass TFSS
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid  
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues.  A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes. Target is GST fusion amino acids 801-1097 of human REST.
 vendorName Millipore
 vendorId 17-641
@@ -12246,7 +12246,6 @@ type Antibody
 targetClass HISase
 antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A. Antibody Target: SIN3A (NB600-1263)
 target SIN3A
-targetClass HISase
 targetDescription Mammalian Sin 3 (mSin 3) is closely related to the yeast SIN3 repressor protein involved in the transcriptional repression of many genes. Containing 4 paired amphipathic helix domains (PAH domains), mSin 3A and mSin 3B have been shown to directly interact with several other transcriptional repressor proteins including HDAC 1, HDAC 2, RbAp 46, the methyl CpG binding protein MeCP 2, the Mad/Max heterodimer, and the corepressors silencing mediator of retinoic acid &amp; thyroid hormone receptor (SMRT) and nuclear receptor corepressor (N-CoR).
 vendorName Novus Biologicals
 vendorId NB600-1263
@@ -12743,7 +12742,7 @@ orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
-validation 
+validation
 label TCF4 (2569S)
 # TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
 # TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
@@ -13379,7 +13378,7 @@ description Single 25 nt reads
 term 1x30
 tag R1x30
 type readType
-description Single 30 nt read 
+description Single 30 nt read
 
 term 1x32
 tag R1X32
@@ -13905,7 +13904,7 @@ label UCDavis Input Control
 term Harvard_Control
 tag HVD
 type control
-description input library was prepared at Harvard. 
+description input library was prepared at Harvard.
 label Harvard Input Control
 
 ### Treatments
@@ -14130,17 +14129,17 @@ type treatment
 
 term diffProtG_3d
 tag DIFFG3D
-description 3 day differentiation of ES-D3 cells with conditioned medium MEDII to form attached monolayer cells, early primitive ectoderm-like cells (EPL) (Gilbert) 
+description 3 day differentiation of ES-D3 cells with conditioned medium MEDII to form attached monolayer cells, early primitive ectoderm-like cells (EPL) (Gilbert)
 type treatment
 
 term diffProtH_Sox17+
 tag DIFFHSOXP
-description Differentionat of ES-GscgfpSox17huCD25 towards endoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescnece activated cell sorting (FACS). (Gilbert) 
+description Differentionat of ES-GscgfpSox17huCD25 towards endoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescnece activated cell sorting (FACS). (Gilbert)
 type treatment
 
 term diffProtH_Sox17-
 tag DIFFHSOXM
-description Differentionat of ES-GscgfpSox17huCD25 towards mesoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17- by fluorescnece activated cell sorting (FACS). (Gilbert) 
+description Differentionat of ES-GscgfpSox17huCD25 towards mesoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17- by fluorescnece activated cell sorting (FACS). (Gilbert)
 type treatment
 
 term DMSO_0.02pct
@@ -14220,7 +14219,7 @@ type treatment
 
 term Estradiol_100nM_1hr
 tag EST100NM1H
-description 1 h with 100 nM Estradiol, hormone treatment (Stam) 
+description 1 h with 100 nM Estradiol, hormone treatment (Stam)
 type treatment
 
 term Estradiol_ctrl_0hr
@@ -14513,7 +14512,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
-label FASP 
+label FASP
 
 term In-gel
 tag INGEL
@@ -14874,7 +14873,7 @@ description Interaction files in matrix format. The number of sequences mapped t
 term MinusRawSignal
 tag MINUSRAWSIG
 type view
-label Minus Raw signal 
+label Minus Raw signal
 description Graphs the base-by-base density of tags on the minus strand
 
 term MinusSignal
@@ -15364,7 +15363,7 @@ term RepliChip
 tag REPLICHIP
 type dataType
 label Repli-chip
-description Assessment of DNA Replication Timing 
+description Assessment of DNA Replication Timing
 dataGroup Other
 
 term RepliSeq
@@ -15468,7 +15467,7 @@ label B6D2F1/J
 term B6CBAF1/J
 tag B6CBAF1J
 type strain
-description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. 
+description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J.
 
 term BALB/cJ
 tag BALBCJ
