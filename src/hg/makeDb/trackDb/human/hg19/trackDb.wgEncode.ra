@@ -105,8 +105,7 @@ include wgEncodeGisRnaSeq.ra
 include wgEncodeCaltechRnaSeq.release4.ra
 
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.release2.ra public
-include wgEncodeCshlLongRnaSeq.release3.ra alpha,beta
+include wgEncodeCshlLongRnaSeq.release3.ra
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
@@ -165,8 +164,8 @@ include wgEncodeHaibTfbs.release3.ra
 include wgEncodeSydhTfbs.release3.ra
 
 # U Chicago TFBS (wrangler: Venkat)
-include wgEncodeUchicagoTfbs.ra public
-include wgEncodeUchicagoTfbs.release2.ra alpha,beta
+include wgEncodeUchicagoTfbs.ra
+# include wgEncodeUchicagoTfbs.release2.ra alpha,beta
 
 # U Mass Weng TFBS Valid
 include wgEncodeUmassWengTfbsValid.ra alpha

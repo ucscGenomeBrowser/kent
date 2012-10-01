@@ -1,0 +1,217 @@
+<h2>Description</h2>
+
+<p>
+This track shows alternate sequence indicated by the
+<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/mouse/index.shtml"
+target="_blank">GRC</a> (Genome Reference Consortium) to the GRCm38 (mm10)
+reference sequence in an effort to provide the best possible reference
+assembly for the mouse genome. The GRC does this by both generating multiple
+representations, alternate loci, for regions that are too complex
+to be represented by a single path and by releasing regional fixes to short
+sections of DNA known as patches. This allows users who are interested in a
+specific locus to get an improved representation without affecting users who
+need chromosome coordinate stability.
+</p>
+
+<a href="http://hgdownload.cse.ucsc.edu/gbdb/mm10/$o_db/" target="_blank">Download</a>
+the GRC Patch Release track data sets from the Genome Browser downloads server.
+
+<h3><font color="#FF0000">Patches</font></h3>
+
+<p>
+Items in the <em>Patch</em> track indicate areas of the sequence that have
+been corrected by the GRC and will be updated to new sequence in the next full
+mouse assembly release. To view the new, corrected sequence, click on the
+&quot;Fetch alternate sequence&quot; link that appears on the sequence
+details pages. Data points in this track are always displayed in
+<font color="#FF0000"><b>red</b></font>.
+</p>
+
+<h3>Alignment</h3>
+
+<p>
+The <em>Alignment</em> track is the PSL representation of the <em>Chain</em>
+track.  This PSL representation allows the side-by-side alignment to be
+viewed.  It was created from the Chain track data using
+the <em>chainToPsl</em> kent source utility. This track follows the display
+conventions for
+<a href="/goldenPath/help/hgTracksHelp.html#PSLDisplay" target="_blank">
+PSL alignment tracks</a>. Alignments are displayed in <b>black</b> and,
+depending on the track configuration settings, may be interspersed with
+vertical <font color="#F88017"><b>orange</b></font> lines.
+</p>
+
+<h3>Chain Track</h3>
+
+<p>
+The chain track shows the alignment of mouse genome alternate sequence to the
+mouse $date genome sequence using a gap scoring system that allows
+longer gaps than traditional affine gap scoring systems. It can also
+tolerate gaps in both mouse and the alternate sequence simultaneously.
+</p>
+
+<p>
+The chain track displays boxes joined together by either single or
+double lines. The boxes represent aligning regions.
+Single lines indicate gaps that are largely due to a deletion in the
+mouse assembly or an insertion in the alternate sequence.
+Double lines represent more complex gaps that involve substantial
+sequence in both sequences.
+</p>
+
+<p>
+In the "pack" and "full" display
+modes, the individual feature names indicate the chromosome, strand, and
+location (in thousands) of the match for each matching alignment.
+By default, the chains to chromosome-based assemblies are colored
+based on which chromosome they map to in the aligning organism. To turn
+off the coloring, check the &quot;off&quot; button next to: Color
+track based on chromosome (click "Chains" text in controls to view options).
+</p>
+
+<p>
+To display only the chains of one chromosome in the aligning
+sequence, enter the name of that chromosome (e.g., chr4) in box next to:
+Filter by chromosome (click "Chains" text in controls to view options).
+</p>
+
+<p>
+Data points in this track are displayed according to the chromosome color key
+that appears just below the Browser display (e.g., data points on
+chromosome 14 appear in <font color="#0000CC"><b>this color</b></font>).
+</p>
+
+<h3>Net Track</h3>
+
+<p>
+The net track shows the best mouse/alternate chain for every part of the alternate
+sequence. It is useful for finding orthologous regions and for studying genome
+rearrangement. The mouse sequence used in this annotation is from the $date assembly.
+</p>
+
+<p>
+In full display mode, the top-level (level 1) chains are the largest, highest-scoring
+chains that span this region. In many cases, gaps exist in the top-level chain. When
+possible, these are filled in by other chains that are displayed at level 2. The gaps in
+level 2 chains may be filled by level 3 chains and so forth.
+</p>
+
+<p>
+In the graphical display, the boxes represent ungapped alignments; the lines represent
+gaps. Click on a box to view detailed information about the chain as a whole; click on a
+line to display information about the gap.  The detailed information is useful in determining
+the cause of the gap or, for lower level chains, the genomic rearrangement.
+</p>
+
+<p>
+Individual items in the display are categorized as one of four types (other than gap):
+</p>
+
+<p><ul>
+<li><b>Top</b> - The best, longest match. Displayed on level 1.</li>
+<li><b>Syn</b> - Line-ups on the same chromosome as the gap in the level above it.</li>
+<li><b>Inv</b> - A line-up on the same chromosome as the gap above it, but in the opposite orientation.</li>
+<li><b>NonSyn</b> - A match to a chromosome different from the gap in the level above.</li>
+</ul></p>
+
+<p>
+Data points in this track are displayed according to the chromosome color key
+that appears just below the Browser display (e.g., data points on
+chromosome 14 appear in <font color="#0000CC"><b>this color</b></font>).
+</p>
+
+<h2>Methods</h2>
+
+<h3>Patch Tracks</h3>
+
+<p>
+The locations of the Patches were established by NCBI and specified in the files at:<br>
+<a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38.p1/PATCHES/alt_scaffolds/"
+target="_blank">ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38.p1/PATCHES/alt_scaffolds/</a>alt_scaffold_placement.txt
+</p>
+
+<h3>Chain Track</h3>
+
+<p>
+The lastz alignments between the mouse sequence and the alternate sequence were restricted to
+only the region of the mouse sequence that is replaced by the updated patch
+sequence. The resulting alignments were converted
+into axt format using the lavToAxt program. The axt alignments were fed into axtChain, which
+organizes all alignments between the single mouse region of the alignment and a single region from
+the alternate sequence into a group and creates a kd-tree out of the gapless subsections (blocks)
+of the alignments. A dynamic program was then run over the kd-trees to find the maximally scoring
+chains of these blocks.
+
+$matrix
+</p>
+
+<p>
+Chains scoring below a minimum score of '$chainMinScore' were discarded; the remaining chains are
+displayed in this track.  The linear gap matrix used with axtChain:<br>
+$chainLinearGap
+</p>
+
+<h3>Net Track</h3>
+
+<p>
+Chains were derived from lastz alignments, using the methods described in the chain track description
+above, and sorted with the highest-scoring chains in the genome ranked first. The program chainNet was
+then used to place the chains one at a time, trimming them as necessary to fit into sections not already
+covered by a higher-scoring chain. During this process, a natural hierarchy emerged in which a chain that
+filled a gap in a higher-scoring chain was placed underneath that chain. The program netSyntenic was used
+to fill in information about the relationship between higher- and lower-level chains, such as whether a
+lower-level chain was syntenic or inverted relative to the higher-level chain. The program netClass was then
+used to fill in how much of the gaps and chains contained <em>N</em>s (sequencing gaps) in one or both species
+and how much was filled with transposons inserted before and after the two sequences diverged.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Lastz (previously known as blastz) was developed at
+<a href="http://www.bx.psu.edu/miller_lab/" target="_blank">Pennsylvania State University</a> by
+Minmei Hou, Scott Schwartz, Zheng Zhang, and Webb Miller with advice from Ross Hardison.
+</p>
+
+<p>
+Lineage-specific repeats were identified by Arian Smit and his
+<a href="http://www.repeatmasker.org" target="_blank">RepeatMasker</a> program.
+</p>
+
+<p>
+The axtChain program was developed at the University of California Santa Cruz
+by Jim Kent with advice from Webb Miller and David Haussler.
+</p>
+
+<p>
+The browser display and database storage of the chains and nets were created
+by Robert Baertsch and Jim Kent.
+</p>
+
+<p>
+The chainNet, netSyntenic, and netClass programs were developed at the
+University of California Santa Cruz by Jim Kent.
+</p>
+
+<h2>References</h2>
+
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">
+Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+</p>
+
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="http://www.pnas.org/content/100/20/11484.abstract" target="_blank">
+Evolution's cauldron: Duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC, Haussler D, Miller W.
+<a href="http://genome.cshlp.org/content/13/1/103.abstract" target="_blank">
+Human-Mouse Alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+</p>

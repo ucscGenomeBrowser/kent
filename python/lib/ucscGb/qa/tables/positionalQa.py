@@ -176,7 +176,7 @@ class PositionalQa(TableQa):
             zeros.sort(key=lambda size: int(size[1]), reverse=True)
             self.reporter.writeLine("the " + str(zerosToShow) + " biggest:")
             for i in range(zerosToShow):
-                self.reporter.writeLine(str(zeros[i]))
+                self.reporter.writeLine('[%s, %s, %s, %g]' % tuple(zeros[i]))
 
     def __writeUnderLimitInfo(self, countsUnderLimit, maxToShow):
         """Writes info for chroms with lowest counts."""
@@ -187,11 +187,11 @@ class PositionalQa(TableQa):
             self.reporter.writeLine("\nthe " + str(lowToShow) + " with lowest counts per size: ")
             countsUnderLimit.sort(key=lambda countPer: float(countPer[3]))
             for i in range(lowToShow):
-                self.reporter.writeLine(str(countsUnderLimit[i]))
+                self.reporter.writeLine('[%s, %s, %s, %g]' % tuple(countsUnderLimit[i]))
             self.reporter.writeLine("\nthe " + str(lowToShow) + " biggest chroms with low counts:")
             countsUnderLimit.sort(key=lambda size: int(size[1]), reverse=True)
             for i in range(lowToShow):
-                self.reporter.writeLine(str(countsUnderLimit[i]))
+                self.reporter.writeLine('[%s, %s, %s, %g]' % tuple(countsUnderLimit[i]))
 
     def __writeOverLimitInfo(self, countsOverLimit, maxToShow):
         """Writes info for chroms with highest counts."""
@@ -202,27 +202,27 @@ class PositionalQa(TableQa):
             self.reporter.writeLine("\nthe " + str(highToShow) + " with highest counts per size:")
             countsOverLimit.sort(key=lambda countPer: float(countPer[3]), reverse=True)
             for i in range(highToShow):
-                self.reporter.writeLine(str(countsOverLimit[i]))
+                self.reporter.writeLine('[%s, %s, %s, %g]' % tuple(countsOverLimit[i]))
             self.reporter.writeLine("\nthe " + str(highToShow) + " biggest chroms with high counts:")
             countsOverLimit.sort(key=lambda size: int(size[1]), reverse=True)
             for i in range(highToShow):
-                self.reporter.writeLine(str(countsOverLimit[i]))
+                self.reporter.writeLine('[%s, %s, %s, %g]' % tuple(countsOverLimit[i]))
  
     def __countPerChrom(self):
         """Finds largest chromosomes with a count of zero, and finds chroms that have item count
         per megabase >3 standard deviations above or <1 SD below the mean. Finds largest of these
         chroms. Records output in reporter."""
-        self.reporter.beginStep(self.db, self.table, "countPerChrom stats:\n")
+        self.reporter.beginStep(self.db, self.table, "\ncountPerChrom stats:\n")
         self.reporter.writeStepInfo()
         counts = self.__getChromCountsFromDatabase()
         mean, SD = self.__getMeanAndSD(counts)
         upperLimit = mean + 3*SD
         lowerLimit = mean - SD
         self.reporter.writeLine("total chroms: " + str(len(counts)))
-        self.reporter.writeLine("mean count/megabase = " + str(mean))
-        self.reporter.writeLine("standard deviation = " + str(SD))
-        self.reporter.writeLine("upper limit (mean + 3*SD) = " + str(upperLimit))
-        self.reporter.writeLine("lower limit (mean - SD) = " + str(lowerLimit)) 
+        self.reporter.writeLine("mean count/megabase = " + '%g' % mean)
+        self.reporter.writeLine("standard deviation = " + '%g' % SD)
+        self.reporter.writeLine("upper limit (mean + 3*SD) = " + '%g' % upperLimit)
+        self.reporter.writeLine("lower limit (mean - SD) = " + '%g' % lowerLimit) 
         self.reporter.writeLine("lists below show: " +\
                                 str(['chrom', 'chrom size', 'count', 'count/megabase']))
         countsOverLimit = []
@@ -240,13 +240,18 @@ class PositionalQa(TableQa):
         self.reporter.endStep()
 
     def __featureBits(self):
-        """Adds featureBits output (both regular and overlap w/ gap) to sumRow."""
+        """Adds featureBits output (both regular and overlap w/ gap) to sumRow.
+        Also records commands and results in reporter"""
         fbCommand = ["featureBits", "-countGaps", self.db, self.table]
         fbOut, fbErr = qaUtils.runCommand(fbCommand)
         # normal featureBits output actually goes to stderr
+        self.reporter.writeLine(' '.join(fbCommand))
+        self.reporter.writeLine(str(fbErr))
         self.sumRow.setFeatureBits(fbErr.rstrip("in intersection\n"))
         fbGapCommand = ["featureBits", "-countGaps", self.db, self.table, "gap"]
         fbGapOut, fbGapErr = qaUtils.runCommand(fbGapCommand)
+        self.reporter.writeLine(' '.join(fbGapCommand))
+        self.reporter.writeLine(str(fbGapErr))
         self.sumRow.setFeatureBitsGaps(fbGapErr.rstrip("in intersection\n"))
 
     def validate(self):

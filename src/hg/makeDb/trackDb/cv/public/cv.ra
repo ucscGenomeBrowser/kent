@@ -33,7 +33,6 @@
 # tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
 #       Should correspond to a "type tier" stanza. required)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)/
-# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human. optional)
 
 term GM12878
@@ -184,137 +183,6 @@ sex U
 tier 2
 protocol ENCODE:HUVEC_protocol.pdf
 
-term NHEK
-tag NHEK
-type Cell Line
-organism human
-category Tissue
-description epidermal keratinocytes
-tissue skin
-vendorName Lonza
-vendorId CC-2501
-orderUrl http://www.lonza.com
-lineage ectoderm
-karyotype normal
-termId BTO:0000375
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
-color 179,0,134
-sex U
-tier 3
-protocol ENCODE:Keratinocyte_protocol.pdf
-
-term NHEM_M2
-tag NHEMM2
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 from cheek / temple
-lineage missing
-karyotype normal
-sex B
-tissue skin
-vendorName PromoCell
-vendorId NHEM
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf Gingeras:NHEMM27012303_Gingeras_protocol.pdf
-
-term NHEM_M2_7011001.2
-tag NHEMM270110012
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (adult) from cheek
-lineage missing
-karyotype normal
-sex M
-tissue skin
-childOf NHEM_M2
-vendorName PromoCell
-vendorId C-14043
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf
-
-term NHEM_M2_7012303
-tag NHEMM27012303
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (adult) from temple
-lineage missing
-karyotype normal
-sex F
-tissue skin
-childOf NHEM_M2
-vendorName PromoCell
-vendorId C-14043
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEMM27012303_Gingeras_protocol.pdf
-
-term NHEM.f_M2
-tag NHEMFM2
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
-lineage missing
-karyotype normal
-sex M
-tissue skin
-vendorName PromoCell
-vendorId NHEM
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
-
-term NHEM.f_M2_5071302.2
-tag NHEMFM250713022
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (foreskin)
-lineage missing
-karyotype normal
-sex M
-tissue skin
-childOf NHEM.f_M2
-vendorName PromoCell
-vendorId C-14042
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf
-
-term NHEM.f_M2_6022001
-tag NHEMFM26022001
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (foreskin)
-lineage missing
-karyotype normal
-sex M
-tissue skin
-childOf NHEM.f_M2
-vendorName PromoCell
-vendorId C-14042
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
-
 term H1-hESC
 tag H1HESC
 type Cell Line
@@ -333,7 +201,6 @@ sex M
 tier 1
 protocol ENCODE:missing
 #Protocol with H1-ES_protocol.pdf exists on the RR, but is a generic ChIP-Seq protocol and isn't a growth protocol.
-#vendorId
 
 term H1-neurons
 tag H1NEURONS
@@ -566,8 +433,6 @@ orderUrl http://www.lonza.com/
 sex F
 tier 3
 protocol Stam:AoAF_Stam_protocol.pdf
-#termId
-#termUrl
 
 term AoSMC
 tag AOSMC
@@ -713,7 +578,6 @@ label Breast_BC_02-03015
 #termId BTO:0001421
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
 #protocol Myers:Myers_BioChain_protocol.pdf
-
 
 term Colon_BC
 tag COLONBC
@@ -1528,26 +1392,6 @@ orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000725
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000725
 protocol Stam:CD34+Mobilized_Stam_protocol.pdf
-#
-#term CD34+_Mobilized_RO01525
-#tag CD34MobRO01525
-#type Cell Line
-#tier 3
-#organism human
-#description Mobilized CD34+ cells from 23 year old donor RO01525
-#lineage blood stem
-#karyotype normal
-#sex M
-#tissue blood
-#childOf CD34+_Mobilized
-#vendorName missing
-#vendorId missing
-#orderUrl missing
-#termId missing
-#termUrl missing
-#lab Stam
-#protocol Stam:CD34+MobilizedRO01525_Stam_protocol.pdf
-#This cell line is not approved yet. Mar 22, 2012 ~Jeff
 
 term CD4+_Naive_Wb11970640
 tag CD4NAIVEWB11970640
@@ -1800,7 +1644,6 @@ tier 3
 lab Crawford
 protocol Crawford_Stam:HumanTh1_Th2_Th17_NaiveCD4_SOP_v1b_1.pdf
 label T_cells_CD4+_Th1_cord_blood
-
 
 term Decidua
 tag DECIDUA
@@ -2410,12 +2253,12 @@ organism human
 description B-lymphocyte, lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue blood
 #tissue haematopoietic
-childOf Lymphoblastoid_cell_line
 karyotype normal
 vendorName Hunt Willard at Duke University
 vendorId GM12878-XiMat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
 lineage mesoderm
+childOf Lymphoblastoid_cell_line
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
@@ -2429,7 +2272,6 @@ protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 #organism human
 #description lymphoblastoid, cloned for paternal X inactivation, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 #tissue haematopoietic
-#tissue blood
 #vendorName Hunt Willard at Duke University
 #vendorId GM12878-XiPat
 #orderUrl http://www.genome.duke.edu/people/faculty/willard/
@@ -3637,7 +3479,6 @@ tag HMF
 type Cell Line
 organism human
 description mammary fibroblasts
-# mammary stromal cell line
 tissue mammary
 vendorName ScienCell
 vendorId 7630
@@ -3896,7 +3737,6 @@ termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
 protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf Gingeras:hMSCUC0052501.7_Gingeras_protocol.pdf
-
 
 term hMSC-UC_0081101.7
 tag HMSCUC00811017
@@ -4211,7 +4051,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 lab Gingeras
 protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
 
-
 term HPC-PL_0032601.13
 tag HPCPL003260113
 type Cell Line
@@ -4442,7 +4281,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing
+protocol Stam:HS27a_SOP-1.V.pdf
 
 term bone_marrow_HS5
 tag HS5
@@ -4460,7 +4299,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing
+protocol Stam:HS5_SOP-1.V1-2.pdf
 
 term bone_marrow_MSC
 tag MSC
@@ -4478,7 +4317,7 @@ termId BTO:0000141
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000141
 lab Stam
 label Bone Marrow HS27a
-protocol missing
+protocol Stam:MSC_marrow-fibroblastoid_SOP_v2.pdf
 
 term HSaVEC
 tag HSAVEC
@@ -4868,7 +4707,6 @@ termId BTO:0001229
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001229&termName=IMR-90%20cell
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
 sex F
-#formerly tier 3
 tier 2
 protocol Stam:IMR90_Stam_protocol.pdf
 #formerly tier 3
@@ -5596,6 +5434,137 @@ termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
 lab Gingeras
 protocol Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
+
+term NHEK
+tag NHEK
+type Cell Line
+organism human
+category Tissue
+description epidermal keratinocytes
+tissue skin
+vendorName Lonza
+vendorId CC-2501
+orderUrl http://www.lonza.com
+lineage ectoderm
+karyotype normal
+termId BTO:0000375
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
+color 179,0,134
+sex U
+tier 3
+protocol ENCODE:Keratinocyte_protocol.pdf
+
+term NHEM_M2
+tag NHEMM2
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 from cheek / temple
+lineage missing
+karyotype normal
+sex B
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+
+term NHEM_M2_7011001.2
+tag NHEMM270110012
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from cheek
+lineage missing
+karyotype normal
+sex M
+tissue skin
+childOf NHEM_M2
+vendorName PromoCell
+vendorId C-14043
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf
+
+term NHEM_M2_7012303
+tag NHEMM27012303
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from temple
+lineage missing
+karyotype normal
+sex F
+tissue skin
+childOf NHEM_M2
+vendorName PromoCell
+vendorId C-14043
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+
+term NHEM.f_M2
+tag NHEMFM2
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
+lineage missing
+karyotype normal
+sex M
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
+
+term NHEM.f_M2_5071302.2
+tag NHEMFM250713022
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (foreskin)
+lineage missing
+karyotype normal
+sex M
+tissue skin
+childOf NHEM.f_M2
+vendorName PromoCell
+vendorId C-14042
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf
+
+term NHEM.f_M2_6022001
+tag NHEMFM26022001
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (foreskin)
+lineage missing
+karyotype normal
+sex M
+tissue skin
+childOf NHEM.f_M2
+vendorName PromoCell
+vendorId C-14042
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
 
 term NHLF
 tag NHLF
@@ -6763,6 +6732,7 @@ termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 86,180,233
 sex M
+label B-cell (CD19+)
 protocol Stam:bCellCd19_Stam_protocol.pdf
 
 term B-cell_(CD43-)
@@ -6782,6 +6752,7 @@ termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 86,180,233
 sex M
+label B-cell (CD43-)
 protocol Stam:bCellCd43_Stam_protocol.pdf
 
 term Bladder
@@ -6934,26 +6905,6 @@ color 86,180,233
 sex F
 protocol Weissman:CH12_Weissman_protocol.pdf
 
-term ES-CJ7
-tag ESCJ7
-type Cell Line
-organism mouse
-category primaryCells
-description ES-cells were originally isolated from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
-age E0
-strain 129
-termId 29
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
-vendorName Stam lab
-vendorId ES-CJ7
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-color 65,105,225
-sex U
-protocol Stam:ES-CJ7_Stam_protocol.pdf
-#tissue
-#termId
-#termUrl
-
 term Colon
 tag COLON
 type Cell Line
@@ -7026,7 +6977,7 @@ color 230,159,0
 sex U
 protocol Gingeras:Duodenum_Gingeras_protocol.pdf
 
-term EPC_(CD117+,CD71-,TER119-)
+term EPC_(CD117+_CD71-_TER119-)
 tag EPCPMM
 type Cell Line
 organism mouse
@@ -7044,7 +6995,7 @@ color 153,38,0
 sex U
 protocol UW:EPC_Stam_protocol.pdf
 
-term EPC_(CD117+,CD71+,TER119-)
+term EPC_(CD117+_CD71+_TER119-)
 tag EPCPPM
 type Cell Line
 organism mouse
@@ -7062,7 +7013,7 @@ color 153,38,0
 sex U
 protocol UW:EPC_Stam_protocol.pdf
 
-term EPC_(CD117-,CD71+,TER119+)
+term EPC_(CD117-_CD71+_TER119+)
 tag EPCMPP
 type Cell Line
 organism mouse
@@ -7080,7 +7031,7 @@ color 153,38,0
 sex U
 protocol UW:EPC_Stam_protocol.pdf
 
-term EPC_(CD117-,CD71-,TER119+)
+term EPC_(CD117-_CD71-_TER119+)
 tag EPCMMP
 type Cell Line
 organism mouse
@@ -7098,7 +7049,7 @@ color 153,38,0
 sex U
 protocol UW:EPC_Stam_protocol.pdf
 
-term EPC_(CD117+,CD71+,TER119+)
+term EPC_(CD117+_CD71+_TER119+)
 tag EPCPPP
 type Cell Line
 organism mouse
@@ -7183,8 +7134,23 @@ orderUrl http://cancer.ucsd.edu/research-training/shared-resources/transgenic-co
 color 65,105,225
 sex M
 protocol Ren:ES-Bruce4_Ren_protocol.pdf
-#termId
-#termUrl
+
+term ES-CJ7
+tag ESCJ7
+type Cell Line
+organism mouse
+category primaryCells
+description ES-cells were originally isolated from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
+age E0
+strain 129S1/SV1mj
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+vendorName Stam lab
+vendorId ES-CJ7
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+color 65,105,225
+sex U
+protocol Stam:ES-CJ7_Stam_protocol.pdf
 
 term ES-D3
 tag ESD3
@@ -7581,8 +7547,6 @@ orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl
 color 204,121,167
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf Gingeras:Tissue_Gingeras_protocol.pdf
-#termId
-#termUrl
 
 term L1210
 tag L1210
@@ -7769,7 +7733,6 @@ orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 color 86,180,233
 sex M
 protocol Weissman:MEL_Weissman_protocol.pdf Stam:MEL_Stam_protocol.pdf
-#Needs protocol, VendorName and Term Id
 
 term Mesoderm
 tag MESODERM
@@ -7865,7 +7828,6 @@ color 86,180,233
 sex M
 protocol Stam:NIH-3T3_Stam_protocol.pdf
 
-# shortened term
 term OlfactBulb
 tag OLFACT
 type Cell Line
@@ -8272,9 +8234,6 @@ orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 color 65,105,225
 sex M
 protocol Stam:ZhBTc4_Stam_protocol.pdf
-#tissue
-#termId
-#termUrl
 
 # Gene types
 # CRICKET is commenting this out in Feb 2012.  We can find no use of it anywhere in the source tree and it is confusing the cvValidator.
@@ -8613,7 +8572,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BDP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BDP1
-validation Human_-_:missing
+validation Human_-_BDP1(2663):human_BDP1_2663_validation_Struhl.pdf
 label BDP1 (2663)
 
 term BHLHE40
@@ -8678,7 +8637,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF1
-validation Human_-_:missing
+validation Human_-_BRF1(128):human_BRF1_128_validation_Struhl.pdf
 label BRF1 (128)
 
 term BRF2
@@ -8694,7 +8653,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:BRF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2
-validation Human_-_:missing
+validation Human_-_BRF2(4295):human_BRF2_4295_validation_Struhl.pdf
 label BRF2 (4295)
 
 term Brg1
@@ -8852,7 +8811,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-689
 lab Tenenbaum
 targetId GeneCard:CBX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
-validation 
+validation
 label CBX5 (05-689)
 #lots
 
@@ -9015,7 +8974,7 @@ orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
 targetId GeneCard:CELF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
-validation 
+validation
 label CELF2 (04-047)
 
 term CHD1_(A301-218A)
@@ -9050,7 +9009,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
 validation Human_-_CHD1_(NB100-60411)(Immunoprecipitation,IP-Mass_spec):human_CHD1_NB100-60411_validation_Snyder.pdf
 label CHD1 (NB100-60411)
 
-
 term CHD2_(AB68301)
 tag CHD2
 type Antibody
@@ -9081,7 +9039,7 @@ lots A301-081A-1
 targetId GeneCard:CHD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD4
 validation Human_-_CHD4_(A301-081A)(ChIP,WesternBlot):human_CHD4_validation_Epstein.pdf
-label CHD4_Mi2 (A301-081A)
+label CHD4&#47;Mi2 (A301-081A)
 
 term CHD7_(A301-223A-1)
 tag CHD7A301223A1
@@ -9113,7 +9071,7 @@ lots 834865
 targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
 validation Human_-_COREST_(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
-label COREST (ab24166)
+label RCOR1&#47;COREST (ab24166)
 
 term COREST_(sc-30189)
 tag CORESTSC30189
@@ -9129,7 +9087,7 @@ lots C0806
 targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
 validation Human_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):human_COREST_sc-30189_validation_Snyder.pdf Mouse_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):mouse_COREST_sc-30189_validation_Snyder.pdf
-label COREST (sc30189)
+label RCOR1&#47;COREST (sc30189)
 # lots
 ##This does not appear in metaDb
 
@@ -9258,11 +9216,10 @@ vendorId 612042
 lab Farnham
 targetId GeneCard:CTBP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1
-validation 
+validation
 label CtBP1 (612042)
 ##This does not appear in metaDb
 
-##This does not appear in metaDb
 term CtBP2
 tag CTBP2
 type Antibody
@@ -9359,6 +9316,23 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation Human_-_EBF1_(SC-137065)(Immunoprecipitation-Western_blotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 label EBF1 (sc-137065)
 
+term EEF1A1
+tag EEF1A1
+type Antibody
+target EEF1A1
+targetDescription Eukaryotic translation elongation factor 1 alpha 1
+antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB. Antibody Target: EEF1A1
+vendorName Millipore
+vendorId 05-235
+orderUrl http://www.millipore.com/catalogue/item/05-235
+lab Tenenbaum
+targetId Gene:1915
+targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
+validation
+label EEF1A1 (05-235)
+# lots
+##This does not appear in metaDb
+
 term eGFP-BACH1
 tag BACH1
 type Antibody
@@ -9372,25 +9346,8 @@ lab White
 lots 1
 targetId GeneCard:BACH1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label BACH1 (eGFP-BACH1)
-
-term EEF1A1
-tag EEF1A1
-type Antibody
-target EEF1A1
-targetDescription Eukaryotic translation elongation factor 1 alpha 1
-antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB. Antibody Target: EEF1A1
-vendorName Millipore
-vendorId 05-235
-orderUrl http://www.millipore.com/catalogue/item/05-235
-lab Tenenbaum
-targetId Gene:1915
-targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
-validation 
-label EEF1A1 (05-235)
-# lots
-##This does not appear in metaDb
 
 term eGFP-CCNE1
 tag CCNE1
@@ -9405,7 +9362,7 @@ lab White
 lots 1
 targetId GeneCard:CCNE1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNE1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label CCNE1 (eGFP-CCNE1)
 
 term eGFP-CDKN1B
@@ -9421,7 +9378,7 @@ lab White
 lots 1
 targetId GeneCard:CDKN1B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN1B
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label CDKN1B (eGFP-CDKN1B)
 
 term eGFP-E2F1
@@ -9438,7 +9395,7 @@ lab White
 lots 1
 targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label E2F1 (eGFP-E2F1)
 
 term eGFP-EKLF1
@@ -9454,7 +9411,7 @@ lab White
 lots 1
 targetId GeneCard:EKLF1
 targetUrl missing
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label EKLF1 (eGFP-EKLF1)
 
 term eGFP-ELF1
@@ -9470,7 +9427,7 @@ lab White
 lots 1
 targetId GeneCard:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ELF1 (eGFP-ELF1)
 
 term eGFP-ESR
@@ -9487,7 +9444,7 @@ lab White
 lots 1
 targetId GeneCard:ESR
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ESR (eGFP-ESR)
 
 term eGFP-FOS
@@ -9504,7 +9461,7 @@ lab White
 lots N/A
 targetId GeneCard:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation Human_-_eGFP-FOS:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label FOS (eGFP-FOS)
 
 term eGFP-GATA2
@@ -9521,7 +9478,7 @@ lab White
 lots N/A
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation Human_-_eGFP-GATA2:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label GATA2 (eGFP-GATA2)
 
 term eGFP-HDAC8
@@ -9538,7 +9495,7 @@ lab White
 lots N/A
 targetId GeneCard:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
-validation Human_-_eGFP-HDAC8:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label HDAC8 (eGFP-HDAC8)
 
 term eGFP-HMGB1
@@ -9554,7 +9511,7 @@ lab White
 lots 1
 targetId GeneCard:HMGB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGB1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label HMGB1 (eGFP-HMGB1)
 
 term eGFP-ILF2
@@ -9570,7 +9527,7 @@ lab White
 lots 1
 targetId GeneCard:ILF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF2
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label ILF2 (eGFP-ILF2)
 
 term eGFP-JunB
@@ -9587,7 +9544,7 @@ lab White
 lots N/A
 targetId GeneCard:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
-validation Human_-_eGFP-JunB:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label JunB (eGFP-JunB)
 
 term eGFP-JunD
@@ -9604,7 +9561,7 @@ lab White
 lots N/A
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation Human_-_eGFP-JunD:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label JunD (eGFP-JunD)
 
 term eGFP-MLL5
@@ -9620,7 +9577,7 @@ lab White
 lots 1
 targetId GeneCard:MLL5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MLL5
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label MLL5 (eGFP-MLL5)
 
 term eGFP-NCOR1
@@ -9636,7 +9593,7 @@ lab White
 lots 1
 targetId GeneCard:NCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NCOR1 (eGFP-NCOR1)
 
 term eGFP-NF90
@@ -9652,7 +9609,7 @@ lab White
 lots 1
 targetId GeneCard:ILF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF3
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NF90 (eGFP-NF90)
 #NF90 is associated with ILF3 ~Jeff
 
@@ -9670,7 +9627,7 @@ lab White
 lots N/A
 targetId GeneCard:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
-validation Human_-_eGFP-NR4A1:human_validation_White.pdf
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label NR4A1 (eGFP-NR4A1)
 
 term eGFP-SMARCA1
@@ -9686,7 +9643,7 @@ lab White
 lots 1
 targetId GeneCard:SMARCA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label SMARCA1 (eGFP-SMARCA1)
 
 term eGFP-SMARCA2
@@ -9702,7 +9659,7 @@ lab White
 lots 1
 targetId GeneCard:SMARCA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA2
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label SMARCA2 (eGFP-SMARCA2)
 
 term eGFP-STAT1
@@ -9719,7 +9676,7 @@ lab White
 lots 1
 targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1
-validation Human_-_:missing
+validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 label STAT1 (eGFP-STAT1)
 
 term Egr-1
@@ -9749,7 +9706,7 @@ orderUrl http://www.millipore.com/catalogue/item/04-1058
 lab Tenenbaum
 targetId Gene:45525
 targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
-validation 
+validation
 label EIF4E (04-1058)
 # lots
 ##This does not appear in metaDb
@@ -9764,10 +9721,9 @@ vendorName Millipore
 vendorId 04-1010
 orderUrl http://www.millipore.com/catalogue/item/04-1010
 lab Tenenbaum
-# lots
 targetId Gene:1978
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
-validation 
+validation
 label EIF4EBP1 (04-1010)
 
 term ELAVL1
@@ -9783,7 +9739,7 @@ lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId Gene:1994
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-validation Human_-_:missing
+validation Human_-_ELAVL1_(AB5831)(Western_blot,Immunoprecipitation):human_ELAVL1_AB5831_validation_Tenenbaum.pdf
 label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
 
 term ELF1_(SC-631)
@@ -9865,7 +9821,7 @@ orderUrl http://www.diagenode.com/en/catalog/antibodies-3/nuclear-receptor-30/pr
 lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
-validation 
+validation
 label ERalpha b (MAb-009-050)
 ##This does not appear in metaDb
 
@@ -9899,7 +9855,7 @@ lots H2009
 targetId GeneCards:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation ESET_(166621)(ChIP,WesternBlot):human_ESET_166621_validation_Bernstein.pdf
-label ESET (sc-166621)
+label ESET&#47;SETDB1 (sc-166621)
 
 term ETS1
 tag ETS1
@@ -10089,7 +10045,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-1529
 lab Tenenbaum
 targetId Gene:8087
 targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
-validation 
+validation
 label FXR1 (05-1529)
 # lots
 ##This does not appear in metaDb
@@ -10200,7 +10156,7 @@ lab Hardison
 lots J2108
 targetId GeneCard: GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation Human_-_GATA2_(SC-9008)(Western_blot):human_GATA2_SC-9008_validation_Hardison.pdf Mouse_-_:missing
+validation Human_-_:missing Mouse_-_GATA2_(SC-9008)(Western_blot):mouse_GATA2_SC-9008_validation_Hardison.pdf
 label GATA2 (sc-9008)
 
 term  GATA3_(SC-268)
@@ -10358,11 +10314,11 @@ targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and
 orderUrl http://www.abcam.com/index.html?datasheet=8895
 vendorName Abcam
 vendorId ab8895
-lab Bernstein
-lots 383111
+lab Bernstein, Ren
+lots 383111, 720417
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Mouse_-_:missing
+validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Human_-_H3K4me1(ab8895)(Dot_blot,Western_blot):human_H3K4me1_ab8895_validation_Ren.pdf
 label H3K4me1 (ab8895)
 
 term H3K4me1_(pAb-037-050)
@@ -10400,17 +10356,17 @@ label H3K4me2 (ab7766)
 term H3K4me2_(ab32356)
 tag AB32356
 type Antibody
-antibodyDescription Rabbit polyclonal. Antibody Target: H3K4me2
+antibodyDescription Rabbit monoclonal [Y47] to Histone H3 (di methyl K4) - ChIP Grade. Antibody Target: H3K4me2
 target H3K4me2
-targetDescription Histone H3 (di methyl K4). Marks promoters and enhancers.
+targetDescription Histone H3 dimethylated on Lysine 4. Marks promoters and enhancers.
 vendorName Abcam
 vendorId ab32356
 orderUrl http://www.abcam.com/Histone-H3-di-methyl-K4-antibody-Y47-ChIP-Grade-ab32356.html
-lab Wold
-lots 870402
+lab Wold, Ren
+lots 870402, 577702
 targetId Genecard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation  Mouse_-_:missing
+validation  Human_-_H3K4me2_(ab32356)(Dot_blot,Western_blot):human_H3K4me2_ab32356_validation_Ren.pdf
 label H3K4me2 (ab32356)
 
 term H3K4me3
@@ -10431,6 +10387,21 @@ label H3K4me3 (07-473)
 #vendorName Abcam
 #vendorId ab8580
 #orderUrl http://www.abcam.com/index.html?datasheet=8580
+
+term H3K4me3_(04-745)
+tag H3K4ME304745
+type Antibody
+antibodyDescription Anti-trimethyl-Histone H3 (Lys4) Antibody, clone MC315
+target H3K4me3
+targetDescription Detect only histone H3 containing trimethyl-lysine 4
+vendorName Millipore
+vendorId 04-745
+orderUrl http://www.millipore.com/catalogue/item/04-745
+lab Ren
+lots NG1643014
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation Human_-_H3K4me3_(04-745)(Dot_blot,Western_blot):human_H3K4me3_04-745_validation_Ren.pdf
 
 term H3K4me3B
 tag H3K04ME3b
@@ -10465,21 +10436,20 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_:missing
 label H3K9ac (ab4441)
 
-term H3K9acB
-tag H3K09ACb
+term H3K9Ac_(39137)
+tag H3K9AC39137
 type Antibody
-target H3K9ac
-antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
-targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
-orderUrl http://www.millipore.com/catalogue/item/07-352
-vendorName Millipore
-vendorId 07-352
-lab Farnham
+antibodyDescription Rabbit polyclonal  to Histone H3 K9 acetylation
+target H3K9Ac
+targetDescription Detect only  Histone H3 K9 acetylation
+vendorName Active Motif
+vendorId 39137
+orderUrl http://www.activemotif.com/catalog/details/39137/histone-h3-acetyl-lys9-antibody-pab
+lab Ren
+lots 1008001
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_:missing
-label H3K9ac (07-352)
-#lots
+validation Human_-_:H3K9Ac_(39137)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf
 
 term H3K9Ac_(9649)
 tag H3K09ACc
@@ -10496,6 +10466,22 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K9Ac_(9649)(Western_blot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
 label H3K9Ac (9649)
+
+term H3K9acB
+tag H3K09ACb
+type Antibody
+target H3K9ac
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
+targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
+orderUrl http://www.millipore.com/catalogue/item/07-352
+vendorName Millipore
+vendorId 07-352
+lots unknown
+lab Farnham
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation Human_-_H3K9Ac_(07-352)(Western_blot,ChIP):human_H3K9Ac_07-352_validation_Farnham.pdf
+label H3K9ac (07-352)
 
 term H3K9me1
 tag H3K09ME1
@@ -10521,11 +10507,12 @@ antibodyDescription rabbit polyclonal, ChIP grade. Antibody Target: H3K9me3
 targetDescription Histone H3 (tri methyl K9). Is associated with repressive heterochromatic state (silenced chromatin). NOTE CONTRAST to H3K9me1 which is associated with active and accessible regions.
 vendorName Abcam
 vendorId ab8898
+lots 19208002
 orderUrl http://www.abcam.com/index.html?datasheet=8898
-lab Farnham
+lab Farnham, Ren
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Mouse_-_:missing
+validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Human_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf Mouse_-_:missing
 label H3K9me3 (ab8898)
 
 term H3K9me3_(9754)
@@ -10560,6 +10547,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K27ac(Dot_blot):human_H3K27ac_validation_Bernstein.pdf
 label H3K27ac (ab4729)
 
+term H3K27Ac_(39133)
+tag H3K27AC39133
+type Antibody
+antibodyDescription Rabbit polyclonal  to Histone H3 K27 acetylation
+target H3K27Ac
+targetDescription Specific for detecting Histone H3 K27 acetylation only
+vendorName Active Motif
+vendorId 39133
+orderUrl http://www.activemotif.com/catalog/details/39133/histone-h3-acetyl-lys27-antibody-pab
+lab Ren
+lots 19208002
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K27Ac_(39133)(Dot_blot,Western_blot):human_H3K27Ac_39133_validation_Ren.pdf
+
 term H3K27me3
 tag H3K27ME3
 type Antibody
@@ -10575,6 +10577,21 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf Mouse_-_:missing
 label H3K27me3 (07-449)
+
+term H3K27me3_(39155)
+tag H3K27ME339155
+type Antibody
+antibodyDescription Rabbit polyclonal to Histone H3 K27 trimethylation
+target H3K27me3
+targetDescription This antibody only detects Histone H3 trimethylated on Lysine 27
+vendorName Active Motif
+vendorId 39155
+orderUrl http://www.activemotif.com/catalog/details/39155
+lab Ren
+lots 30508004
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation Human_-_H3K27me3_(39155)(Dot_blot,Western_blot):human_H3K27me3_39155_validation_Ren.pdf
 
 term H3K27me3B
 tag H3K27ME3b
@@ -10598,15 +10615,15 @@ tag H3K36ME3
 type Antibody
 target H3K36me3
 antibodyDescription rabbit polyclonal. Antibody Target: H3K36me3
-targetDescription Histone H3 (tri-methyl K36). Marks regions of RNAPII elongation, including coding and non-coding transcripts.
+targetDescription Specific for histone H3 tri methylated at lysine 36, weakly reacts with H3K36me2. Marks regions of RNAPII elongation, including coding and non-coding transcripts.
 orderUrl http://www.abcam.com/index.html?datasheet=9050
 vendorName Abcam
 vendorId ab9050
-lab Bernstein
-lots 136353
+lab Bernstein, Ren
+lots 136353, 707946
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Mouse_-_:missing
+validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Human_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):human_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_:missing
 label H3K36me3 (ab9050)
 
 term H3K36me3B
@@ -10634,11 +10651,11 @@ targetDescription H3K79me2 is a mark of the transcriptional transition region - 
 orderUrl http://www.activemotif.com/catalog/details/39143/histone-h3-dimethyl-lys79-antibody-pab.html
 vendorName Active Motif
 vendorId 39143
-lab Bernstein
+lab Bernstein, Ren
 lots 177/0100800
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
+validation Human_-_H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf Human_-_H3K79me2_(39143)(Dot_blot,Western_blot):human_H3K79me2_39143_validation_Ren.pdf
 label H3K79me2 (39143)
 
 term H3K79me2_(ab3594)
@@ -10793,10 +10810,9 @@ vendorName Millipore
 vendorId 07-955
 orderUrl http://www.millipore.com/catalogue/item/07-955
 lab Tenenbaum
-# lots
 targetId Gene:10614
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
-validation 
+validation
 label Hexim1 (07-955)
 
 term HEY1
@@ -10804,6 +10820,7 @@ tag HEY1
 type Antibody
 target HEY1
 targetClass TFSS
+deprecated data withdrawn
 antibodyDescription HRT1 (C-20) Goat polyclonal IgG, 200 ?g/ml. Epitope mapping near the C-terminus of HRT1 of human origin. Antibody Target: HEY1
 targetDescription This gene encodes a nuclear protein belonging to the hairy and enhancer of split-related (HESR) family of basic helix-loop-helix (bHLH)-type transcriptional repressors. Expression of this gene is induced by the Notch and c-Jun signal transduction pathways. Two similar and redundant genes in mouse are required for embryonic cardiovascular development, and are also implicated in neurogenesis and somitogenesis. Alternative splicing results in multiple transcript variants.
 vendorName Santa Cruz Biotech
@@ -10837,7 +10854,6 @@ target HMGN3
 targetClass TFNS
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry. Antibody Target: HMGN3
 targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 to 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
-# wrong orderUrl: mixing vendorName and vendorIds
 orderUrl http://www.novusbio.com/HMGN3-Antibody_NB100-61076.html
 vendorName Novus Biologicals
 vendorId NB100-61076
@@ -10845,7 +10861,7 @@ lots 1
 lab Struhl
 targetId GeneCard:HMGN3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN3
-validation Human_-_:missing
+validation Human_-_HMGN3_(NB100-61076)(Western_blot,Immunoprecipitation):human_HMGN3_validation_Struhl.pdf
 label HMGN3 (NB100-61076)
 # wrong orderUrl: mixing vendorName and vendorIds
 
@@ -10911,7 +10927,7 @@ orderUrl http://www.millipore.com/catalogue/item/07-260
 lab Tenenbaum
 targetId Gene:3184
 targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
-validation 
+validation
 label HNRNPD (07-260)
 # lots
 ##This does not appear in metaDb
@@ -10928,7 +10944,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-620
 lab Tenenbaum
 targetId Gene:76936
 targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
-validation 
+validation
 label hnRNPM (05-620)
 # lots
 ##This does not appear in metaDb
@@ -11139,7 +11155,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=74
 lab Snyder
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_JunD(sc-74)(ChIP_MS,MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 label JunD (sc-74)
 
 term KAP1
@@ -11192,7 +11208,7 @@ label LEF1 (sc-8592)
 term LSD1
 tag LSD1
 type Antibody
-target KDM1A
+target LSD1
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 vendorName Bethyl
@@ -11203,7 +11219,7 @@ lots A300-215A-1
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
 validation Human_-_LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
-label LSD1_KDM1A (A300-215A)
+label LSD1&#47;KDM1A (A300-215A)
 
 term MafF_(M8194)
 tag MAFF
@@ -11348,7 +11364,7 @@ lab Wold
 lots missing
 targetId Genecard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
-validation 
+validation
 label MEF2 (sc-17785)
 
 term MEF2A
@@ -11512,7 +11528,7 @@ vendorId sc-32912
 lab Struhl
 targetId GeneCard:RDBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_NELFe_(SC-32912)(Western_blot,ChIP-Seq):human_NELFe_sc-32912_validation_Struhl.pdf Mouse_-_:missing
 label NELFe (sc-32912)
 
 term NFIC_(SC-81335)
@@ -11609,7 +11625,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
-validation Human_-_:missing
+validation Human_-_NF-YA(Western_Blot,Immunoprecipitation):human_NF-YA_validation_Struhl.pdf
 label NF-YA
 
 term NF-YB
@@ -11625,7 +11641,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
-validation Human_-_:missing
+validation Human_-_NF-YB(Western_Blot,Immunoprecipitation):human_NF-YB_validation_Struhl.pdf
 label NF-YB
 
 term NONO
@@ -11640,7 +11656,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-950
 lab Tenenbaum
 targetId GeneCard:NONO
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
-validation 
+validation
 label NONO (05-950)
 # lots
 ##This does not appear in metaDb
@@ -11673,7 +11689,7 @@ vendorId sc-22810
 lab Snyder
 targetId GeneCard:GABPA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
-validation 
+validation
 label Nrf2 (sc-22810)
 
 term NRSF
@@ -11739,12 +11755,12 @@ lab Myers
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
-label P300 (sc-585)
+label P300&#47;EP300 (sc-585)
 
 term P300_KAT3B
 tag P300KAT3B
 type Antibody
-target EP300
+target P300
 targetClass HISase
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
@@ -11756,7 +11772,7 @@ lots A300-358A-1
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_P300_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
-label EP300_KAT3B (A300-358A)
+label P300&#47;EP300&#47;KAT3B (A300-358A)
 
 term p300_(SC-584)
 tag P300b
@@ -11772,7 +11788,7 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing Mouse_-_:missing
-label P300 (sc-584)
+label P300&#47;EP300 (sc-584)
 
 term p300_(SC-48343)
 tag P300c
@@ -11788,7 +11804,7 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation Human_-_:missing
-label P300 (sc-48343)
+label P300&#47;EP300 (sc-48343)
 
 term PABP
 tag PABP
@@ -11800,10 +11816,9 @@ vendorName Millipore
 vendorId 04-1467
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 lab Tenenbaum
-# lots
 targetId Gene:37070
 targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
-validation 
+validation
 label PABP (04-1467)
 
 term PABPC1
@@ -11889,7 +11904,7 @@ label PBX3 (sc-891)
 term PCAF
 tag PCAF
 type Antibody
-target KAT2B
+target PCAF
 antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
 vendorName Bethyl
@@ -11900,7 +11915,7 @@ lots A301-666A-1
 targetId GeneCard:KAT2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
 validation Human_-_PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
-label PCAF_KAT2B (A301-666A)
+label PCAF&#47;KAT2B (A301-666A)
 
 term PGC1A
 tag PGC1A
@@ -12140,7 +12155,7 @@ orderUrl http://www.millipore.com/catalogue/item/ab9904
 lab Tenenbaum
 targetId 9444
 targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
-validation 
+validation
 label QKI (AB9904)
 # lots
 ##This does not appear in metaDb
@@ -12255,7 +12270,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
-validation Human_-_:missing
+validation Human_-_RPC155(1900):human_RPC155_1900_validation_Struhl.pdf
 label RPC155 (1900)
 
 term RPS6KA1
@@ -12270,7 +12285,7 @@ orderUrl http://www.millipore.com/catalogue/item/07-1477
 lab Tenenbaum
 targetId 6195
 targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
-validation 
+validation
 label RPS6KA1 (07-1477)
 # lots
 ##This does not appear in metaDb
@@ -12401,7 +12416,7 @@ orderUrl http://www.abcam.com/SIRT6-antibody-ab48192.html
 lab Struhl
 targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
-validation Human_-_:missing
+validation Human_-_SIRT6(ab48192):human_SIRT6_ab48192_validation_Struhl.pdf
 label SIRT6 (ab48192)
 
 term SIRT6_(ab62739)
@@ -12869,14 +12884,11 @@ orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2&search=TCF7L2
-validation 
+validation
 label TCF4 (2569S)
 # TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
 # TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
 
-# TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
-# TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
-# This is a stub for the real TCF-4 which may be used later in ENCODE. ~Jeff
 #term TCF-4
 #tag TCF4
 #type Antibody
@@ -12954,7 +12966,7 @@ targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 lots J1905
 lab Struhl
-validation Human_-_:missing
+validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-Seq):human_TFIIB_sc-225X_validation_Struhl.pdf
 label TFIIB (sc-225)
 ##This does not appear in metaDb
 
@@ -12971,7 +12983,7 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
-validation Human_-_:missing
+validation Human_-_TFIIIC-110(4286):human_TFIIIC-110_4286_validation_Struhl.pdf
 label TFIIIC-110 (4286)
 
 term THAP1_(SC-98174)
@@ -13020,7 +13032,7 @@ orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname
 lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
-validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
+validation Human_-_TR4_(Western_blot,ChIP):human_TR4_validation_Farnham.pdf
 label TR4
 
 term TRIM28_(SC-81411)
@@ -13196,10 +13208,11 @@ targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel cla
 vendorName Santa Cruz Biotech
 vendorId sc-1703
 orderUrl http://www.scbt.com/product.php?datasheet=1703
-lab Farnham
+lots B1710
+lab Farnham, Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation Human_-_:missing
+validation Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703_validation_Farnham.pdf Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703-V2_validation_Myers.pdf
 label YY1 (sc-1703)
 
 term YY1_(SC-281)
@@ -13428,19 +13441,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation Human_-_:missing
 label ZZZ3
 
-###  Antibodies
-### These are all for the  experiments.
-### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
-##This does not appear in metaDb
 
-
-# lots
-##This does not appear in metaDb
-
-##This does not appear in metaDb
-##This does not appear in metaDb
-
-##This does not appear in metaDb
 ### mapAlgorithm : Comparing map algorithms
 # term (human-readable map algorithm name)
 # tag (machine-readable map algorithm name, no special characters)
@@ -14591,9 +14592,9 @@ type treatment
 
 term vehicle
 tag VEH
-label Vehicle
 description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
 type treatment
+label Vehicle
 
 term ZNF_knockout_2C10_C5
 tag ZNF2C10C5
@@ -15128,7 +15129,6 @@ tag PLUSSIG
 type view
 label Plus signal
 description Graphs the base-by-base density of tags on the plus strand
-
 
 term Primer
 tag PRIMER
@@ -15952,7 +15952,6 @@ tag RENAMED
 type objStatus
 description This file has been RENAMED by the submitting laboratory. Please see updated file for newest metadata.
 
-## Organisms
 # Type Organism
 
 term human
@@ -16458,16 +16457,6 @@ labPiFull Kevin Struhl
 grantPi Snyder
 organism human
 
-#This is being depricated to be replaced by USC
-#term UCD
-#tag UCD
-#type lab
-#label Farnham - University of California at Davis
-#description Farnham - University of California at Davis
-#labPi Farnham
-#labPiFull Peggy Farnham
-#grantPi Snyder
-#organism human
 term USC
 tag USC
 type lab
@@ -16847,13 +16836,10 @@ projectName FSU
 #  	  100s: expId:100 cellType:110 strain:120 sex:130 age:140 localization:150 rnaExtract:160 readType:165 insertLength:166 phase:170 treatment:180 Antibody:190 attic:190
 #	Undefine:
 #  	  200s: protocol:200 restrictionEnzyme:220 control:230 replicate:240 dccRep:241 submittedDataVersion:250
-#  	  200s: protocol:200 restrictionEnzyme:220 control:230 replicate:240 dccRep:241 submittedDataVersion:250
 #	DCC descriptive:
 #  	  300s: origAssembly:305 dataVersion:310 dccAccession:312 dateSubmitted:315 dateResubmitted:320 dateUnrestricted:325 subId:335 geoSeriesAccession:340 geoSampleAccession:345 setType:350 controlId:355
 #	Lab descriptive:
 #  	  400s: labExpId:410 bioRep:415 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
-#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
-#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
 #	Miscellaneous junk which will be put into the 500 pot which will sort near the end:
 #  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 promoter:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
 #	At End:
@@ -17018,7 +17004,6 @@ cvDefined no
 validate none
 priority 355
 #label Control ID - Specific dataset used as the control
-#This is diffiuclt to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
 #This is difficult to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
 requiredVars term,tag,type,description
 optionalVars label,deprecated
@@ -17776,15 +17761,5 @@ validate cv
 priority 035
 requiredVars term,tag,type,description,label
 optionalVars label,deprecated
-
-
-
-
-
-
-
-
-
-
 
 

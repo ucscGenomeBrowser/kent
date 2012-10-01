@@ -29,10 +29,10 @@ if (!ajax)
 //if(tdbIsContainer(tdb) && !ajax)
 //    cartTdbTreeReshapeIfNeeded(cart,tdb);
 
-printf("<B style='font-family:serif; font-size:200%%;'>%s</B>\n", tdb->longLabel);
+printf("<B style='font-size:200%%;'>%s</B>\n", tdb->longLabel);
 
 // If Composite, link to the hgTrackUi.  But if downloadsOnly then link to any superTrack.
-#define LINK_TO_PARENT "%s<B style='font-family:serif;'>(<A HREF='%s?%s=%u&c=%s&g=%s' " \
+#define LINK_TO_PARENT "%s<b>(<A HREF='%s?%s=%u&c=%s&g=%s' " \
                        "title='Link to %s track settings'><IMG height=12 " \
                        "src='../images/ab_up.gif'>%s</A>)</B>\n"
 if (tdbIsComposite(tdb))

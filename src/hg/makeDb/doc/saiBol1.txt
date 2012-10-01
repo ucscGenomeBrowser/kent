@@ -7,6 +7,8 @@
 #	80X coverage WGS
 
 #	http://www.ncbi.nlm.nih.gov/bioproject/67945
+#       http://www.ncbi.nlm.nih.gov/genome/6907
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/420378
 
 #############################################################################
 # Fetch sequence from genbank (DONE - 2012-01-06 - Hiram)

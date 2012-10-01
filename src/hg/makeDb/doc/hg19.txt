@@ -19430,7 +19430,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
-# DENISOVA HIGH-COVERAGE VARIANTS (DONE 9/6/12 angie)
+# DENISOVA HIGH-COVERAGE VARIANTS #8886 (DONE 9/6/12 angie)
     mkdir /hive/data/genomes/hg19/bed/denisova
     cd /hive/data/genomes/hg19/bed/denisova
     # Get tabix-compressed+indexed VCF files for Denisova and 11 modern humans:
@@ -19461,7 +19461,7 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-# DENISOVA HIGH-COVERAGE SEQUENCE READS (DONE 9/10/12)
+# DENISOVA HIGH-COVERAGE SEQUENCE READS #8886 (DONE 9/10/12)
     cd /hive/data/genomes/hg19/bed/denisova
     wget http://cdna.eva.mpg.de/denisova/alignments/T_hg19_1000g.bam
     wget http://cdna.eva.mpg.de/denisova/alignments/T_hg19_1000g.bam.bai
@@ -19471,21 +19471,200 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-# DENISOVA HIGH-COVERAGE ANALYSIS (TODO 9/6/12 angie)
+# DENISOVA HIGH-COVERAGE ANALYSIS #8886 (DONE 9/28/12 angie)
     mkdir /hive/data/genomes/hg19/bed/denisova
     cd /hive/data/genomes/hg19/bed/denisova
+    # Fetched original .zip file on 9/6/12:
     wget --no-check-certificate https://bioinf.eva.mpg.de/download/HighCoverageDenisovaGenome/Denisova_catalog.zip
     unzip Denisova_catalog.zip
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Denisova-derived_Human-ancestral/
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/GAD_Denisova-state/
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/GWAS_Denisova-state/
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Human-derived_Denisova-ancestral/
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Human-derived_Denisova-state/
 
-    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Denisova-derived_Human-ancestral/
+    # 9/17/12 update: no zip, dir name change, and wget -r apparently doesn't work with
+    # https --no-check-cert, so just fetch updates alongside original files:
+    mv Denisova_zip Denisova_zip_orig
+    cp -p Denisiva_zip_orig DenHC_catalog
+    cd DenHC_catalog/Human-derived_Denisova-state
+    wget --no-check-certificate https://bioinf.eva.mpg.de/download/HighCoverageDenisovaGenome/DenHC_catalog/Human-derived_Denisova-state/Genome_CAT.tsv.gz
+    # Good, no incomplete lines now.  But what we really want to make a track for is
+    # Human-derived_Denisova-ancestral...
+    cd /hive/data/genomes/hg19/bed/denisova/DenHC_catalog/Human-derived_Denisova-ancestral
+    # There are two subdirs, InDels and SNCs, and each subdir has a whole bunch of files
+    # which we can make into BED4+ subtracks of a composite with views.
+    cat > trackify.pl <<'_EOF_'
+#!/usr/bin/env perl
+use warnings;
+use strict;
+my $isSNC = ($ARGV[0] =~ /SNC/);
+while (<>) {
+  next if (/^#/);
+  chomp;
+  my @w = split("\t");
+  my $chromEnd = $w[2];
+  $w[2]--; # chromStart -> 0-based
+  # Delete extra column (Grantham score) that appears only in nonsynon files:
+  splice(@w, 31, 1) if (scalar(@w) > 32);
+  # Measure allele lengths to determine whether this is an indel, and whether it's
+  # necessary to trim an identical first base from each allele:
+  my $humanFirstBase = substr($w[15], 0, 1);
+  my $humanLen = length($w[15]);
+  my $diffLengths = 0;
+  my $sameFirstBase = 1;
+  foreach my $i (16..19) {
+    next if ($w[$i] eq "N/A");
+    my $firstBase = substr($w[$i], 0, 1);
+    my $len = length($w[$i]);
+    $diffLengths = 1 if ($len != $humanLen);
+    $sameFirstBase = 0 if ($firstBase ne $humanFirstBase);
+  }
+  if ($sameFirstBase) {
+    foreach my $i (15..19) {
+      next if ($w[$i] eq "N/A");
+      $w[$i] =~ s/^$humanFirstBase// || die;
+      $w[$i] =~ s/^$/-/; # Some alleles have trailing "-", some don't; use "-" for deletion
+    }
+    $w[2]++; # adjust chromStart
+    $humanLen--;
+  }
+  if ($diffLengths) {
+    $chromEnd = $w[2] + $humanLen;
+  }
+  if ($isSNC) {
+    # "-" is used as N/A in SNCs/* -- tweak to N/A for consistency w/InDels files
+    foreach my $i (16..19) {
+      $w[$i] = "N/A" if ($w[$i] eq "-");
+    }
+  }
+  # Add spaces to Extra for readability:
+  $w[14] =~ s/;/; /g;
+  print join("\t", "chr$w[1]", $w[2], $chromEnd, "$w[15]/$w[16]", # BED 4
+             $w[5], $w[4], $w[14],                           # Feature, Gene, Extra
+             $w[7], $w[8], $w[9], $w[10], $w[11], $w[12],    # Consequence, coding effect
+             $w[15], $w[16], $w[17], $w[18], $w[19],         # Human, Den, etc. alleles
+             $w[20], $w[21], $w[22], $w[23], $w[31]) . "\n"; # D zyg, dbSNP, 1000g freq, flag,strnd
+}
+'_EOF_'
+    # << emacs
+    chmod a+x trackify.pl
 
-    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/GAD_Denisova-state/
+    cat > tsvToBedAndTrackDb.pl << '_EOF_'
+#!/usr/bin/env perl
+# Parse a .tsv file path into descriptive components to use for track name and trackDb subGroups;
+# Call trackify.pl and if the resulting bed file is non-empty, print out subtrack .ra entry.
+use warnings;
+use strict;
+my $tsvPath = $ARGV[0];
+chomp $tsvPath;
+$tsvPath =~ m/^(InDels|SNCs)\/Genome_VEP(|(_genic(_ccds)?_(3utr|5utr|nonsyn_grantham|frameshift_coding|inframe_nonsyn|splice|syn))|(_regul(_motif)?(_highinfo)?))_formatted_(fixed|highfreq)/ || die;
+my ($vType, $ccds, $gType, $reg, $regMo, $regHi, $fType) = ($1, $4 || "", $5 || "", $6 || "",
+                                                            $7 || "", $8 || "", $9 || ""); 
+# Reformat file name components: _ to inital uppercase, etc.
+$vType =~ s/s$//;
+$ccds =~ s/_(\w)/\u$1/g;
+$gType =~ s/_(\w)/\u$1/g;  $gType =~ s/^(\w)/\u$1/;
+$gType =~ s/Grantham//;  $gType =~ s/^(\d)utr/Utr$1/; $gType =~ s/nframe/nFrame/;
+$fType =~ s/^(\w)/\u$1/;
+$fType =~ s/ighfreq/ighFreq/;
+my $fShort = ($fType eq "Fixed") ? "Fxd" : "HiF";
+my $vShort = ($vType eq "InDel") ? "InD" : $vType;
+my $shortLabel = "$vShort ";
+my $longLabel = "Human Derived ($fType), Denisova Ancestral: ";
+my $color = "0,0,0";
+my $subset;
+if ($gType) {
+  $subset = "$ccds$gType";
+  if ($gType eq "Nonsyn" || $gType eq "Splice" || $gType eq "FrameshiftCoding" ||
+      $gType eq "InFrameNonsyn") {
+    $color = "200,0,0";
+  } elsif ($gType =~ /^Utr/) {
+    $color = "0,0,200";
+  } elsif ($gType eq "Syn") {
+    $color = "0,200,0";
+  }
+  my ($gShort, $gLong) = ($gType, $gType);
+  $gShort =~ s/FrameshiftCoding/FrShft/; $gShort =~ s/InFrameNonsyn/InFrNS/;
+  $gLong =~ s/([a-z])([A-Z])/$1 $2/g;  $gLong =~ s/Utr(\d)/$1\' UTR/;
+  $gLong =~ s/In Frame/In-frame/;  $gLong =~ s/Nonsyn/Non-synonymous/;
+  if ($ccds) {
+    $gShort = "CC $gShort";
+    $gLong = "CCDS $gLong";
+  }
+  $shortLabel .= "$gShort $fShort";
+  $longLabel .= "${vType}s, $gLong";
+} elsif ($reg) {
+  $color = "230,130,0";
+  my ($rShort, $rLong);
+  if ($regHi) {
+    $subset = "RegMotifHighInfo";
+    ($rShort, $rLong) = ("RgMoHiInf", "Reg. Motif at High Inf Pos in TFBP");
+  } elsif ($regMo) {
+    $subset = "RegMotif";
+    ($rShort, $rLong) = ("RegMotif", "Regulatory Motif");
+  } else {
+    $subset = "Reg";
+    ($rShort, $rLong) = ("RegRegion", "Regulatory Region");
+  }
+  $shortLabel .= "$rShort $fShort";
+  $longLabel .= "${vType}s in $rLong";
+} else {
+  $subset = "All";
+  $shortLabel .= "$fShort";
+  $longLabel .= "All ${vType}s";
+}
+my $track = "dhcHumDerDenAnc$vType$subset$fType";
+my $cmd = "./trackify.pl $tsvPath > $track.bed";
 
-    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/GWAS_Denisova-state/
+#***system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
 
-    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Human-derived_Denisova-ancestral/
+my $view = ($vType eq "SNC") ? "A_SNC" : "B_InDel";
+my $subsetTweaked = $subset;  $subsetTweaked =~ s/Syn/ZLast_Syn/;  $subsetTweaked =~ s/^Re/D_Re/;
+if (-s "$track.bed") {
+  print "        track $track\n";
+  print "        parent dhcHumDerDenAnc$vType\n";
+  print "        subGroups view=$view subset=$subsetTweaked freq=$fType\n";
+  print "        shortLabel $shortLabel\n";
+  print "        longLabel $longLabel\n";
+  print "        color $color\n\n";
+}
+'_EOF_'
+    # << emacs
+    chmod a+x tsvToBedAndTrackDb.pl
+    foreach f (*/Genome_VEP_*.tsv)
+        ./tsvToBedAndTrackDb.pl $f
+        if ($status != 0) break
+    end
+    # Check input and output file counts:
+    ls -1 */G*.tsv | wc -l
+#54
+    ls -1 *.bed | wc -l
+#54
+    # bedToBigBed:
+    foreach f (dhcHumDerDenAnc*.bed)
+      if (-s $f) then
+        echo $f
+        bedToBigBed -verbose=0 -tab -type=bed4+19 -as=$HOME/kent/src/hg/lib/dhcHumDerDenAnc.as \
+          $f /hive/data/genomes/hg19/chrom.sizes $f:r.bb
+        if ($status != 0) break
+      else
+        echo "Skipping $f (zero size)"
+      endif
+    end
+#Skipping dhcHumDerDenAncInDelCcdsInFrameNonsynHighFreq.bed (zero size)
+#Skipping dhcHumDerDenAncInDelInFrameNonsynHighFreq.bed (zero size)
+    # Check bigBed file count:
+    ls -1 *.bb | wc -l
+#52
+    # We skipped two empty bed files, so that's OK.
 
-    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Human-derived_Denisova-state/
+    # Install in /gbdb and load up.
+    mkdir /gbdb/hg19/dhcHumDerDenAnc
+    ln -s `pwd`/dhcHumDerDenAnc*.bb /gbdb/hg19/dhcHumDerDenAnc/
+    foreach f (dhcHumDerDenAnc*.bb)
+      hgBbiDbLink hg19 $f:r /gbdb/hg19/dhcHumDerDenAnc/$f
+    end
 
 
 #########################################################################
@@ -19494,4 +19673,63 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
     time doRecipBest.pl -buildDir=`pwd` hg19 mm10 > rbest.log 2>&1
     #   real    157m16.369s
+
 #########################################################################
+# NCBI patch 10 (DONE - 2012-09-26 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch10
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch10
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p10/ ./
+    # the scripts from patch9 were modified slightly to update and fix some
+    #	of the new names in this patch10
+    cp ../patch9/gatherNames.pl .
+    ./gatherNames.pl . > ucscNames.patch10.txt
+    # examine the names for sanity:
+    awk '{print $NF}' ucscNames.patch10.txt | sort
+    # and they should not be longer than 31 characters:
+    awk '{print $NF}' ucscNames.patch10.txt | sort | awk '{print length($0)}' \
+        | sort -n | tail
+    cp -p ../patch9/mkTables.pl .
+    ./mkTables.pl  patches.chrom.sizes ucscNames.patch10.txt PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz
+    # output to stdout is the contents of alt.scaf.agp.gz
+    # constructs files: ctgPos.txt chromInfo.txt gold.txt and gap.txt
+    cp -p ../patch9/mkCtgPos2.pl .
+    ./mkCtgPos2.pl ucscNames.patch10.txt patches.chrom.sizes > ctgPos2.txt
+    cp -p ../patch9/mkHapLocate.pl .
+    ./mkHapLocate.pl ctgPos.txt \
+	PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
+	> haplotypeLocations.bed
+    cp -p haplotypeLocations.bed altSequence.bed
+    ln -s ../patch2/before.patch2.hapLoc.bed hg19.hapLoc.bed
+    awk '{printf "%s\t%d\t%d\t%s\t500\t+\t%d\t%d\t32,32,190\n", $2,$3,$4,$5,$3,$4}' \
+hg19.hapLoc.bed >> altSequence.bed
+
+    # a new script for patch10
+    cp -p ../patch9/mkFasta.pl .
+    ./mkFasta.pl ucscNames.patch10.txt > hg19.patch10.fa
+    # the build of hg19Patch10 can be seen in hg19Patch10.txt
+
+    egrep -v "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    > altSeqPatchesP10.tab
+    egrep "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    | grep -v "^chrM_rCRS" > altSeqHaplotypesP10.tab
+    # verify only one lost
+    wc -l altSeqPatchesP10.tab altSeqHaplotypesP10.tab
+    #   112 altSeqPatchesP10.tab
+    #   80 altSeqHaplotypesP10.tab
+    #   192 total
+
+    wc -l altSequence.bed
+    #	193 altSequence.bed
+    hgLoadBed hg19 altSeqHaplotypesP10 altSeqHaplotypesP10.tab
+    #	Read 80 elements of size 6 from altSeqHaplotypesP10.tab
+    hgLoadBed hg19 altSeqPatchesP10 altSeqPatchesP10.tab
+    #	Read 112 elements of size 6 from altSeqPatchesP10.tab
+
+    #    these tables are part of human/hg19/altSeqComposite10.ra
+    #  Check the chrom coverage for the altSeqComposite10.ra listing:
+    cut -f1 altSequence.bed | sort -u | xargs echo
+# chr1 chr10 chr11 chr12 chr13 chr15 chr16 chr17 chr18 chr19 chr2 chr20 chr21 chr22 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chrM chrM_rCRS chrX
+
+##############################################################################

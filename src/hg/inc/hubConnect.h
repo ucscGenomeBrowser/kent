@@ -82,6 +82,10 @@ int hubIdFromCartName(char *trackName);
 unsigned hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
 
+void hubConnectAddDescription(char *database, struct trackDb *tdb);
+/* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
+ * and store in tdb->html. */
+
 struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database, 
     char *trackName, struct trackDb **pTdbList, struct hash *trackHash);
 /* Go find hub for trackName (which will begin with hub_), and load the tracks

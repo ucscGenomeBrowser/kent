@@ -10,6 +10,12 @@ html gap
 track ensGene override
 visibility pack
 
+track genscan override
+visibility pack
+
+track gc5BaseBw override
+visibility full
+
 track chainNetMm10 override
 visibility pack
 
@@ -17,7 +23,7 @@ track intronEst override
 visibility hide
 
 track xenoRefGene override
-visibility pack
+visibility dense
 
 searchTable gold
 searchMethod prefix

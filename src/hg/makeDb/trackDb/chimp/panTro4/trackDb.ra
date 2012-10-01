@@ -6,6 +6,15 @@ html gold
 track gap override
 html gap
 
+track chainNetMm10 override
+visibility pack
+
+track chainNetRheMac3 override
+visibility pack
+
+track genscan override
+visibility pack
+
 searchTable gold
 searchMethod prefix
 searchType bed
