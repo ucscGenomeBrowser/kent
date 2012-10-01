@@ -16,11 +16,14 @@ visibility pack
 track chainNetMm10 override
 visibility pack
 
+track genscan override
+visibility pack
+
 track mrna override
 visibility hide
 
 track xenoRefGene override
-visibility pack
+visibility squish
 
 searchTable gold
 searchMethod prefix
