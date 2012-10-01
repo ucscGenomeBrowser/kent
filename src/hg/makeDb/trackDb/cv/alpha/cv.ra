@@ -10400,7 +10400,7 @@ lab Ren
 lots 1008001
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_:H3K9Ac_(39137)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf
+validation Human_-_H3K9Ac_(39137)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf
 
 term H3K9Ac_(9649)
 tag H3K09ACc
