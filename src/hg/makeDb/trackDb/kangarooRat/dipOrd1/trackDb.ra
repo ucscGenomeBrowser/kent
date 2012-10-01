@@ -13,6 +13,9 @@ visibility full
 track ensGene override
 visibility pack
 
+track genscan override
+visibility pack
+
 track mrna override
 visibility hide
 

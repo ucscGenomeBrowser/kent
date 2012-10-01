@@ -1,8 +1,8 @@
 track altSeqComposite1
 compositeTrack on
 shortLabel GRC Patch Release
-longLabel GRCm38 alternate sequences, haplotypes and reference sequence patches
-subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
+longLabel GRCm38 alternate sequences and reference sequence patches
+subGroup1 view Views location=Patch psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
 # sortOrder view=+
 visibility hide
@@ -20,22 +20,11 @@ html altSeqComposite
 dataVersion GRCm38 Patch 1 update, August 2012
 
     track altSeqCompositeViewlocation1
-    shortLabel Patch/Haplotype
+    shortLabel Patch
     view location
     visibility pack
     parent altSeqComposite1
     noScoreFilter .
-
-	track altSeqHaplotypesP1
-        parent altSeqCompositeViewlocation1
-        subGroups view=location
-	color 32,32,190
-	shortLabel Haplotypes
-	longLabel Haplotypes to GRCm38 Reference Sequence
-	html altSeqComposite
-	priority 1
-	urlLabel Fetch alternate sequence (GRCm38.p1):
-	url /cgi-bin/hgc?db=hg19Patch9&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
 	track altSeqPatchesP1
         parent altSeqCompositeViewlocation1

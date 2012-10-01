@@ -6,28 +6,15 @@ This track shows alternate sequence indicated by the
 target="_blank">GRC</a> (Genome Reference Consortium) to the GRCm38 (mm10)
 reference sequence in an effort to provide the best possible reference
 assembly for the mouse genome. The GRC does this by both generating multiple
-representations (haplotypes/alternate loci) for regions that are too complex
+representations, alternate loci, for regions that are too complex
 to be represented by a single path and by releasing regional fixes to short
 sections of DNA known as patches. This allows users who are interested in a
 specific locus to get an improved representation without affecting users who
-need chromosome coordinate stability.  <em>Note: at this time, September
-2012, there are no haplotype regions defined.</em>
+need chromosome coordinate stability.
 </p>
 
 <a href="http://hgdownload.cse.ucsc.edu/gbdb/mm10/$o_db/" target="_blank">Download</a>
 the GRC Patch Release track data sets from the Genome Browser downloads server.
-
-<h3><font color="#0000FF">Haplotypes</font></h3>
-
-<p>
-Items in the <em>Haplotype</em> track show sequence variation present in the
-population for certain sections of the genome. Items in this track were either
-designated as alternate loci or novel patches by the GRC. To view the alternate
-sequence, click on the &quot;Fetch alternate sequence&quot; link that appears on the sequence
-details pages. Data points in this track are always displayed in
-<font color="#0000FF"><b>blue</b></font>.  <em>Note: at this time, September
-2012, there are no haplotype regions defined.</em>
-</p>
 
 <h3><font color="#FF0000">Patches</font></h3>
 
@@ -135,10 +122,10 @@ chromosome 14 appear in <font color="#0000CC"><b>this color</b></font>).
 
 <h2>Methods</h2>
 
-<h3>Haplotype/Patch Tracks</h3>
+<h3>Patch Tracks</h3>
 
 <p>
-The locations of the Patches and Haplotypes were established by NCBI and specified in the files at:<br>
+The locations of the Patches were established by NCBI and specified in the files at:<br>
 <a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38.p1/PATCHES/alt_scaffolds/"
 target="_blank">ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38.p1/PATCHES/alt_scaffolds/</a>alt_scaffold_placement.txt
 </p>
@@ -147,8 +134,8 @@ target="_blank">ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_ma
 
 <p>
 The lastz alignments between the mouse sequence and the alternate sequence were restricted to
-only the region that the haplotype overlaps the mouse sequence or the region of the mouse
-sequence that is replaced by the updated patch sequence. The resulting alignments were converted
+only the region of the mouse sequence that is replaced by the updated patch
+sequence. The resulting alignments were converted
 into axt format using the lavToAxt program. The axt alignments were fed into axtChain, which
 organizes all alignments between the single mouse region of the alignment and a single region from
 the alternate sequence into a group and creates a kd-tree out of the gapless subsections (blocks)

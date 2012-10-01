@@ -8,7 +8,10 @@ visibility hide
 html gap
 
 track chainNetMm10 override
-visibility hide
+visibility pack
+
+track genscan override
+visibility pack
 
 track intronEst override
 visibility hide
