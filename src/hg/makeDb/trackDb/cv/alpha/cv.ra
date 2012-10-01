@@ -10151,9 +10151,9 @@ target GCN5
 targetClass HISase
 antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: GCN5
 targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
-vendorName Laszlo Tora
-vendorId Missing
-orderUrl http://www.igbmc.fr/Tora
+vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
+vendorId GCN5
+orderUrl http://www.igbmc.fr
 lab Struhl
 targetId GeneCard:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A
@@ -12410,9 +12410,9 @@ target SPT20
 targetClass HISase
 antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids). Antibody Target: SPT20
 targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
-vendorName Laszlo Tora
-vendorId missing
-orderUrl http://www.igbmc.fr/Tora
+vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
+vendorId SPT20
+orderUrl http://www.igbmc.fr
 lab Struhl
 targetId GeneCard:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A
@@ -13275,8 +13275,8 @@ target ZZZ3
 targetClass TFSS
 antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW). Antibody Target: ZZZ3
 targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
-orderUrl http://www.igbmc.fr/Tora
-vendorName Lazlo Tora, Institut de G?n?tique et de Biologie Mol?culaire et Cellulaire
+orderUrl http://www.igbmc.fr
+vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
 vendorId ZZZ3
 lab Struhl
 targetId GeneCard:ZZZ3
