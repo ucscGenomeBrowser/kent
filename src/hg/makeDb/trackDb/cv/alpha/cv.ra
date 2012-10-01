@@ -8976,9 +8976,8 @@ orderUrl http://www.millipore.com/
 lab Tenenbaum
 targetId GeneCard:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
-validation Human_-_:missing
+validation Human_-_CELF1_(05-621)(Western_blot,Immunoprecipitation):human_CELF1_05-621_validation_Tenenbaum.pdf
 label CELF1 (05-621)
-# lots
 
 term CELF2
 tag CELF2
@@ -9707,8 +9706,9 @@ lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId GeneCard:ELAVL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELAVL1
-validation Human_-_ELAVL1_(AB5831)(Western_blot,Immunoprecipitation):human_ELAVL1_AB5831_validation_Tenenbaum.pdf
+validation Human_-_ELAVL1_(AB5831)(Western_blot,Immunoprecipitation):human_ELAVL1_AB5831_validation_Tenenbaum.pdf Human_-_ELAVL1_(07-1735)(Western_blot,Immunoprecipitation):human_ELAVL1_07-1735_validation_Tenenbaum.pdf Human_-_ELAVL1_(SC-5261)(Western_blot,Immunoprecipitation):human_ELAVL1_SC-5261_validation_Tenenbaum.pdf
 label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
+#This is a PROBLEM with multiple antibodies going to one term
 
 term ELF1_(SC-631)
 tag ELF1
@@ -10914,8 +10914,10 @@ lab Tenenbaum
 lots I0607(Nov2008)
 targetId GeneCard:IGF2BP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IGF2BP1
-validation Human_-_:missing
+validation Human_-_IGF2BP1_(07-104)(Western_blot,Immunoprecipitation):human_IGF2BP1_07-104_validation_Tenenbaum.pdf
 label IGF2BP1 (SC-21027)
+# This is a PROBLEM because the validation doc is not the same antibody as is listed in the object
+
 
 term IKZF1_(IkN)_(UCLA)
 tag IKZF1IKNUCLA
@@ -11722,8 +11724,9 @@ orderUrl http://www.millipore.com/catalogue/item/04-1467
 lab Tenenbaum
 targetId GeneCard:PABPC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PABPC10
-validation Human_-_:missing
+validation Human_-_PABPC1_(04-1467)(Western_blot,Immunoprecipitation):human_PABPC1_04-1467_validation_Tenenbaum.pdf
 label PABP (04-1467)
+# Note 05-847 equals 04-1467 in millipore database
 
 term PABPC1
 tag PABPC1
