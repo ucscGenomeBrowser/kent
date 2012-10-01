@@ -13056,7 +13056,7 @@ lots B1710
 lab Farnham, Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703_validation_Farnham.pdf Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703-V2_validation_Myers.pdf
+validation Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703_validation_Farnham.pdf Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703_validation_Myers.pdf
 label YY1 (sc-1703)
 
 term YY1_(SC-281)
