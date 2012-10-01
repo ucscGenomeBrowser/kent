@@ -13,8 +13,14 @@ visibility pack
 track ensGene override
 visibility pack
 
-track xenoRefGene override
+track gc5Base override
+visibility full
+
+track genscan override
 visibility pack
+
+track xenoRefGene override
+visibility squish
 
 searchTable gold
 searchMethod prefix
