@@ -2097,9 +2097,51 @@ return freeBatch(userName, batchName);
 
 void freeBatchAcknowledge(char *line, struct paraMessage *pm)
 /* Free batch resources.  Line format is <user> <dir>
-* Returns 0 if success or some err # if a problem.  Sends result back to client. */
+ * Returns 0 if success or some err # if a problem.  Sends result back to client. */
 {
 int result = freeBatchFromMessage(line);
+pmClear(pm);
+pmPrintf(pm, "%d",result);
+pmSend(pm, rudpOut);
+}
+
+
+int flushResultsByRequest(char *userName, char *batchName)
+/* Flush results file. Return 0 if nothing running and queue empty. */
+{
+struct user *user = findUser(userName);
+if (user == NULL) return -3;
+struct hashEl *hel = hashLookup(stringHash, batchName);
+if (hel == NULL) return -2;
+char *name = hel->name;
+struct batch *batch = findBatchInList(user->curBatches, name);
+if (batch == NULL)
+    batch = findBatchInList(user->oldBatches, name);
+if (batch == NULL) return -2;
+flushResults(batch->name);
+logDebug("paraHub: User %s flushed results batch %s", userName, batchName);
+/* return 0 if nothing running and queue empty */
+if (batch->runningCount > 0) return -1;
+if (!dlEnd(batch->jobQueue->head)) return -1;
+return 0;
+}
+
+int flushResultsFromMessage(char *line)
+/* Parse out flushResults message and flush the results file. */
+{
+char *userName, *batchName;
+if ((userName = nextWord(&line)) == NULL)
+    return -2;
+if ((batchName = nextWord(&line)) == NULL)
+    return -2;
+return flushResultsByRequest(userName, batchName);
+}
+
+void flushResultsAcknowledge(char *line, struct paraMessage *pm)
+/* Flush results file.  Line format is <user> <dir>
+ * Returns 0 if success or some err # if a problem.  Sends result back to client. */
+{
+int result = flushResultsFromMessage(line);
 pmClear(pm);
 pmPrintf(pm, "%d",result);
 pmSend(pm, rudpOut);
@@ -3285,6 +3327,8 @@ for (;;)
          resetCountsAcknowledge(line, pm);
     else if (sameWord(command, "freeBatch"))
          freeBatchAcknowledge(line, pm);
+    else if (sameWord(command, "flushResults"))
+         flushResultsAcknowledge(line, pm);
     else if (sameWord(command, "showSickNodes"))
 	 showSickNodesAcknowledge(line, pm);
     else if (sameWord(command, "clearSickNodes"))
