@@ -34,12 +34,17 @@ if ( $#argv == 2 ) then
   set date=", description"
 endif
 
-if ( "$HOST" != "hgwdev" ) then
- echo "\n ERROR: you must run this script on dev!\n"
- exit 1
+set host=`uname -n`
+if ( "$host" == hgwdev ) then
+  set centralDb=hgcentraltest
+else if ( "$host" == hgwbeta ) then
+  set centralDb=hgcentralbeta
+else
+  echo "\n  error.  Unknown host '$host'.  Can only be run from hgwdev or hgwbeta."
+  exit 1
 endif
 
 hgsql -t -e "SELECT name, organism $date FROM dbDb WHERE NAME LIKE '$db%' \
-  ORDER BY name" hgcentraltest  | tail -n+3
+  ORDER BY name" $centralDb  | tail -n+3
 
 exit 0
