@@ -9,11 +9,17 @@ track gap override
 visibility hide
 html gap
 
+track gc5BaseBw override
+visibility full
+
+track genscan override
+visibility pack
+
 track rmsk override
 visibility hide
 
 track xenoRefGene override
-visibility pack
+visibility dense
 
 searchTable gold
 searchMethod prefix

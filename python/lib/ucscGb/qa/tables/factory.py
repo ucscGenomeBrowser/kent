@@ -30,7 +30,7 @@ otherPositionalTypes = frozenset(["axt", "bed", "chain", "clonePos", "ctgPos", "
                                   "chromGraph", "factorSource", "bedDetail", "pgSnp", "altGraphX",
                                   "ld2", "bed5FloatScore", "bedRnaElements", "broadPeak", "gvf",
                                   "narrowPeak", "peptideMapping"])
-pointerTypes = frozenset(["bigWig", "bigBed", "bam"])
+pointerTypes = frozenset(["bigWig", "bigBed", "bam", "vcfTabix"])
 
 def tableQaFactory(db, table, reporter, sumTable):
     """Returns tableQa object according to trackDb track type.""" 

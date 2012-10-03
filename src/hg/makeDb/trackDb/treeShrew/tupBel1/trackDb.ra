@@ -13,6 +13,12 @@ visibility pack
 track chainNetMm10 override
 visibility pack
 
+track gc5Base override
+visibility full
+
+track genscan override
+visibility pack
+
 track intronEst override
 visibility hide
 
@@ -20,7 +26,7 @@ track mrna override
 visibility hide
 
 track xenoRefGene override
-visibility pack
+visibility dense
 
 searchTable genscan
 searchType genePred

@@ -501,7 +501,7 @@ for (c++;*c != '\0';c++)
     }
 }
 
-static struct hash *buildCompositeHash(char *database,struct trackDb *tdbList,boolean strict)
+static struct hash *buildCompositeHash(char *database,struct trackDb *tdbList)
 /* Create a hash of all composite tracks.  This is keyed by their name with
  * subGroupData values. */
 {
@@ -530,19 +530,13 @@ for (td = tdbList; td != NULL; td = tdNext)
             sgSetting = cloneString(sgSetting);
             char *sgWord = sgSetting;
             char *sgName = nextWord(&sgWord);
-            // TODO: validateTags should be called in strict too.  However, not until the
-            //  beta/public trackDbs are fixed.  This is scheduled by end of Sept 2012
-            if (!strict) //  This is a temporary evil so that make beta works.
-                validateTag(database,td,subGroupName,sgName,TRUE);
+            validateTag(database,td,subGroupName,sgName,TRUE);
             nextWord(&sgWord);  /* skip word not used */
             struct hash *subGroupHash = newHash(3);
             struct slPair *slPair, *slPairList = slPairListFromString(sgWord,TRUE); // respect ""
             for (slPair = slPairList; slPair; slPair = slPair->next)
                 {
-                // TODO: validateTags should be called in strict too.  However, not until the
-                //  beta/public trackDbs are fixed.  This is scheduled by end of Sept 2012
-                if (!strict) //  This is a temporary evil so that make beta works.
-                    validateTag(database,td,sgName,slPair->name,TRUE);
+                validateTag(database,td,sgName,slPair->name,TRUE);
                 hashAdd(subGroupHash, slPair->name, slPair->val);
                 }
             if (sgd->nameHash == NULL)
@@ -641,7 +635,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 static void checkSubGroups(char *database,struct trackDb *tdbList, boolean strict)
 /* Check integrity of subGroup clauses */
 {
-struct hash *compositeHash = buildCompositeHash(database,tdbList,strict);
+struct hash *compositeHash = buildCompositeHash(database,tdbList);
 
 verifySubTracks(tdbList, compositeHash);
 }
@@ -749,7 +743,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     {
     struct trackDb *tdb = ref->val;
     struct trackDb *parent = tdb->parent;
-    if (parent != NULL && parent->subtracks == NULL) /* Our supertrack clue. */
+    if (parent != NULL && tdbIsSuperTrack(parent))
 	{
 	/* The supertrack may appear as a 'floating' parent for multiple tracks.
 	 * Only put it on the list once. */
