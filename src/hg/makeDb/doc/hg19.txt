@@ -19471,7 +19471,7 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-# DENISOVA HIGH-COVERAGE ANALYSIS #8886 (DONE 9/28/12 angie)
+# DENISOVA HIGH-COVERAGE ANALYSIS #8886 (DONE 10/2/12 angie)
     mkdir /hive/data/genomes/hg19/bed/denisova
     cd /hive/data/genomes/hg19/bed/denisova
     # Fetched original .zip file on 9/6/12:
@@ -19538,9 +19538,11 @@ while (<>) {
       $w[$i] = "N/A" if ($w[$i] eq "-");
     }
   }
+  my $name = "$w[15]/$w[16]";
+  $name .= ":$w[21]" if (length($w[21]) > 1);
   # Add spaces to Extra for readability:
   $w[14] =~ s/;/; /g;
-  print join("\t", "chr$w[1]", $w[2], $chromEnd, "$w[15]/$w[16]", # BED 4
+  print join("\t", "chr$w[1]", $w[2], $chromEnd, $name,      # BED 4
              $w[5], $w[4], $w[14],                           # Feature, Gene, Extra
              $w[7], $w[8], $w[9], $w[10], $w[11], $w[12],    # Consequence, coding effect
              $w[15], $w[16], $w[17], $w[18], $w[19],         # Human, Den, etc. alleles
@@ -19569,11 +19571,10 @@ $gType =~ s/Grantham//;  $gType =~ s/^(\d)utr/Utr$1/; $gType =~ s/nframe/nFrame/
 $fType =~ s/^(\w)/\u$1/;
 $fType =~ s/ighfreq/ighFreq/;
 my $fShort = ($fType eq "Fixed") ? "Fxd" : "HiF";
-my $vShort = ($vType eq "InDel") ? "InD" : $vType;
-my $shortLabel = "$vShort ";
+my $shortLabel = "";
 my $longLabel = "Human Derived ($fType), Denisova Ancestral: ";
 my $color = "0,0,0";
-my $subset;
+my ($subset, $view);
 if ($gType) {
   $subset = "$ccds$gType";
   if ($gType eq "Nonsyn" || $gType eq "Splice" || $gType eq "FrameshiftCoding" ||
@@ -19593,7 +19594,8 @@ if ($gType) {
     $gLong = "CCDS $gLong";
   }
   $shortLabel .= "$gShort $fShort";
-  $longLabel .= "${vType}s, $gLong";
+  $longLabel .= "$gLong";
+  $view = $ccds ? $ccds : "Ens";
 } elsif ($reg) {
   $color = "230,130,0";
   my ($rShort, $rLong);
@@ -19608,39 +19610,93 @@ if ($gType) {
     ($rShort, $rLong) = ("RegRegion", "Regulatory Region");
   }
   $shortLabel .= "$rShort $fShort";
-  $longLabel .= "${vType}s in $rLong";
+  $longLabel .= "$rLong";
+  $view = "Reg";
 } else {
   $subset = "All";
   $shortLabel .= "$fShort";
-  $longLabel .= "All ${vType}s";
+  $longLabel .= "All ";
+  $view = "All";
 }
 my $track = "dhcHumDerDenAnc$vType$subset$fType";
 my $cmd = "./trackify.pl $tsvPath > $track.bed";
-
-#***system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
-
-my $view = ($vType eq "SNC") ? "A_SNC" : "B_InDel";
-my $subsetTweaked = $subset;  $subsetTweaked =~ s/Syn/ZLast_Syn/;  $subsetTweaked =~ s/^Re/D_Re/;
+system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
 if (-s "$track.bed") {
-  print "        track $track\n";
-  print "        parent dhcHumDerDenAnc$vType\n";
-  print "        subGroups view=$view subset=$subsetTweaked freq=$fType\n";
-  print "        shortLabel $shortLabel\n";
-  print "        longLabel $longLabel\n";
-  print "        color $color\n\n";
+  my $subsetTweaked = $subset;  $subsetTweaked =~ s/Syn/ZLast_Syn/;
+  $subsetTweaked =~ s/^RegMotifH/DA_RegMotifH/;  $subsetTweaked =~ s/^RegM/DB_RegM/;
+  $subsetTweaked =~ s/^Reg/DC_Reg/;
+  my $isOff = "";
+  $isOff = " off" if ($subset =~ /Syn/ || $subset eq "Reg");
+  # We will combine SNCs and InDels later; print only one set of trackDb descriptions:
+  if ($vType eq "InDel" || $subset =~ /Nonsyn/ || $subset =~ /Syn/) {
+    print "        track dhcHumDerDenAnc$subset$fType\n";
+    print "        parent dhcHumDerDenAnc$view$isOff\n";
+    print "        subGroups view=$view subset=$subsetTweaked freq=$fType\n";
+    print "        shortLabel $shortLabel\n";
+    print "        longLabel $longLabel\n";
+    print "        color $color\n\n";
+  }
+  if ($fType eq "Fixed") {
+    # Fernando Racimo's request: separate out Fixed (in 1000Genomes) locations that are in dbSNP.
+    $cmd = "egrep -vw 'rs[0-9]+' $track.bed > tmp$track.bed";
+    system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
+    $cmd = "egrep -w 'rs[0-9]+' $track.bed > ${track}DbSnp.bed";
+    system($cmd); # grep returns nonzero if it can't find anything, but that's OK here.
+    $cmd = "mv tmp$track.bed $track.bed";
+    system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
+    if (-s "${track}DbSnp.bed" &&
+        ($vType eq "InDel" || $subset =~ /Nonsyn/ || $subset =~ /Syn/ ||
+         $subset eq "RegMotifHighInfo")) {
+      $shortLabel =~ s/Fxd/FxS/;
+      $longLabel =~ s/Fixed/Fixed+dbSNP/;
+      print "        track dhcHumDerDenAnc$subset${fType}DbSnp\n";
+      print "        parent dhcHumDerDenAnc$view$isOff\n";
+      print "        subGroups view=$view subset=$subsetTweaked freq=${fType}DbSnp\n";
+      print "        shortLabel $shortLabel\n";
+      print "        longLabel $longLabel\n";
+      print "        color $color\n\n";
+    }
+  }
 }
 '_EOF_'
-    # << emacs
+     # << emacs
     chmod a+x tsvToBedAndTrackDb.pl
     foreach f (*/Genome_VEP_*.tsv)
         ./tsvToBedAndTrackDb.pl $f
         if ($status != 0) break
     end
     # Check input and output file counts:
-    ls -1 */G*.tsv | wc -l
-#54
-    ls -1 *.bed | wc -l
-#54
+    ls -1 */G*_highfreq.tsv | wc -l
+#27
+    ls -1 *HighFreq.bed | wc -l
+#27
+    ls -1 */G*_fixed.tsv | wc -l
+#27
+    ls -1 *Fixed.bed | wc -l
+#27
+    ls -1 *FixedDbSnp.bed | wc -l
+#27
+    # 54 inputs, 81 outputs because Fixed was split into Fixed and FixedDbSnp
+
+    # Combine SNCs and InDels:
+    foreach indel (dhcHumDerDenAncInDel*.bed)
+      set snc = `echo $indel | sed -e 's/InDel/SNC/;'`
+      set both = `echo $indel | sed -e 's/InDel//;'`
+      if (! -e $snc) then
+        mv $indel $both
+      endif
+    end
+    foreach snc (dhcHumDerDenAncSNC*.bed)
+      set indel = `echo $snc | sed -e 's/SNC/InDel/;'`
+      set both = `echo $snc | sed -e 's/SNC//;'`
+      if (-e $indel) then
+        sort -k1,1 -k2n,2n $snc $indel > $both
+        rm $snc $indel
+      else
+        mv $snc $both
+      endif
+    end
+
     # bedToBigBed:
     foreach f (dhcHumDerDenAnc*.bed)
       if (-s $f) then
@@ -19652,12 +19708,16 @@ if (-s "$track.bed") {
         echo "Skipping $f (zero size)"
       endif
     end
-#Skipping dhcHumDerDenAncInDelCcdsInFrameNonsynHighFreq.bed (zero size)
-#Skipping dhcHumDerDenAncInDelInFrameNonsynHighFreq.bed (zero size)
+#Skipping dhcHumDerDenAncCcdsInFrameNonsynFixedDbSnp.bed (zero size)
+#Skipping dhcHumDerDenAncCcdsInFrameNonsynHighFreq.bed (zero size)
+#Skipping dhcHumDerDenAncInFrameNonsynFixedDbSnp.bed (zero size)
+#Skipping dhcHumDerDenAncInFrameNonsynHighFreq.bed (zero size)
     # Check bigBed file count:
+    ls -1 *.bed | wc -l
+#54
     ls -1 *.bb | wc -l
-#52
-    # We skipped two empty bed files, so that's OK.
+#50
+    # We skipped 4 empty bed files, so that's OK.
 
     # Install in /gbdb and load up.
     mkdir /gbdb/hg19/dhcHumDerDenAnc

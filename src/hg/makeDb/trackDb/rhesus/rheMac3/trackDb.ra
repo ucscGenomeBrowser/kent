@@ -32,7 +32,7 @@ track chainNetHg19 override
 visibility pack
 
 track chainNetMm10 override
-visibility pack
+visibility dense
 
 track xenoRefGene override
 visibility dense
