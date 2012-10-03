@@ -9,6 +9,9 @@ html gap
 track chainNetFr3 override
 visibility pack
 
+track genscan override
+visibility pack
+
 track chainNetMm10 override
 visibility pack
 
@@ -19,7 +22,7 @@ track mrna override
 visibility hide
 
 track xenoRefGene override
-visibility pack
+visibility dense
 
 searchTable gold
 searchMethod prefix
