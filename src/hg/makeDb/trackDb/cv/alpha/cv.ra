@@ -4722,10 +4722,10 @@ type Cell Line
 tier 3
 organism human
 description induced pluripotent stem cell derived from skin fibroblast
-lineage  induced pluripotent stem cell derived from skin fibroblast
+lineage induced pluripotent stem cell derived from skin fibroblast
 sex B
 tissue induced pluripotent stem cell
-vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
+vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
 termId BTO:0000001 (nonspecific)
@@ -6216,10 +6216,10 @@ tier 3
 organism human
 description hepatic stellate cells, liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient
 lineage endoderm
-karyotype  normal
+karyotype normal
 sex F
 tissue liver
-vendorName  Steve Choi, Duke University
+vendorName Steve Choi, Duke University
 vendorId Stellate
 orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
@@ -7909,7 +7909,7 @@ type Cell Line
 organism mouse
 tissue kidney
 category cellLine
-description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line.
+description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res. 2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is always the inactive X. This is an adherent cell line.
 age immortalized
 strain C57BL/6J
 vendorName Dr. Christine Disteche (University of Washington)
@@ -7971,7 +7971,7 @@ vendorId Skin
 orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 4556
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4556
-color  204,121,167
+color 204,121,167
 sex U
 protocol Ren:Tissue_Ren_protocol.pdf
 
@@ -8061,7 +8061,7 @@ strain Unknown
 description Stomach
 vendorName 1) CSHL lab; 2) LICR lab
 vendorId Stomach; Stomach
-orderUrl http://gingeraslab.cshl.edu/;  http://bioinformatics-renlab.ucsd.edu/rentrac/
+orderUrl http://gingeraslab.cshl.edu/; http://bioinformatics-renlab.ucsd.edu/rentrac/
 termId 6966
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6966
 color 230,159,0
@@ -10237,7 +10237,7 @@ lab Bernstein
 lots DAM1540736
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
-validation Human_-_:validation Human_-_H2AZ_(07-594)(Western_blot,ChIP):human_H2AZ_07-594_validation_Bernstein.pdf
+validation Human_-_:validation Human_-_H2A.Z_(07-594)(Western_blot,ChIP):human_H2AZ_07-594_validation_Bernstein.pdf
 label H2AZ (07-594)
 ##This does not appear in metaDb
 

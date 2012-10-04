@@ -10237,7 +10237,7 @@ lab Bernstein
 lots DAM1540736
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
-validation Human_-_:missing
+validation Human_-_:validation Human_-_H2A.Z_(07-594)(Western_blot,ChIP):human_H2AZ_07-594_validation_Bernstein.pdf
 label H2AZ (07-594)
 ##This does not appear in metaDb
 
@@ -10384,7 +10384,7 @@ lab Bernstein
 lots 455103
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_:missing
+validation Human_-_H3K9ac_(ab4441)(Western_blot,CHiP):human_H3K9ac_ab4441_validation_Bernstein.pdf
 label H3K9ac (ab4441)
 
 term H3K9Ac_(39137)
@@ -16713,7 +16713,7 @@ description A generic GEO accession number provided by the producing lab.
 searchable no
 cvDefined no
 hidden yes
-validate regex: ^GS[M,E][0-9]*i$
+validate regex: ^GS[M,E][0-9]*$
 priority 500
 # Superceded by geoSample? will be, but for now we can't sort the lab ones into geoSample or geoSeries easily
 requiredVars term,tag,type,description
