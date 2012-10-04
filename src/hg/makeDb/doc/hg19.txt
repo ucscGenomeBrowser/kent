@@ -8414,14 +8414,14 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # NHGRI GWAS CATALOG (DONE 8/1/12 angie)
 # NOTE: This assumes that the corresponding section in hg18.txt has just been run.
 #       It depends on the noCoords.tab file in the corresponding hg18 build directory.
-# Updated 6/4/12, 4/4/12, 2/21/12 (remove extra whitespace, translate non-ASCII to html), 2/6/12
+# 2012 updates: 8/1, 6/4, 4/4, 2/21 (remove extra whitespace, translate non-ASCII to html), 2/6
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
-    # Done once, don't need to redo:
+    # Done once per dbSNP build, don't need to redo until next dbSNP build is released:
     zcat ../snp135/snp135.bed.gz | cut -f 1-4  \
     | sort -k4,4 \
       > snp135Coords.bed
@@ -8434,9 +8434,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
+
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Read 9687 elements of size 22 from gwasCatalog.bed
+#Read 10661 elements of size 22 from gwasCatalog.bed
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
     # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
@@ -8449,7 +8450,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt
-#807 ambigStrand.txt
+#935 ambigStrand.txt
 
 
 ######################################################################## 
@@ -19572,7 +19573,7 @@ $fType =~ s/^(\w)/\u$1/;
 $fType =~ s/ighfreq/ighFreq/;
 my $fShort = ($fType eq "Fixed") ? "Fxd" : "HiF";
 my $shortLabel = "";
-my $longLabel = "Human Derived ($fType), Denisova Ancestral: ";
+my $longLabel = "Modern Human Derived ($fType), Denisova Ancestral: ";
 my $color = "0,0,0";
 my ($subset, $view);
 if ($gType) {

@@ -224,6 +224,9 @@ struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key);
 /* Look up the type of genotype FORMAT component key, in the definitions from the header,
  * and failing that, from the keys reserved in the spec. */
 
+char *vcfFilePooledStr(struct vcfFile *vcff, char *str);
+/* Allocate memory for a string from vcff's shared string pool. */
+
 #define VCF_NUM_COLS 10
 
 struct asObject *vcfAsObj();
