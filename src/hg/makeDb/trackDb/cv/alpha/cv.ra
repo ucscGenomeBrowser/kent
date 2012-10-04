@@ -228,7 +228,7 @@ description skeletal myoblasts derived from satellite cells from the pectoralis 
 lineage mesoderm
 sex M
 tissue skeletal muscle myoblast
-vendorName Woodring Wright, M.D., Ph.D.
+vendorName Dr. Woodring Wright
 vendorId (None)
 orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
 termId BTO:0000023
@@ -364,7 +364,7 @@ tissue blood
 childOf T_cells_CD4+
 karyotype normal
 lineage mesoderm
-vendorName David Randolph at University of Alabama, Birmingham
+vendorName Dr. David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:0000782
@@ -385,7 +385,7 @@ tissue blood
 childOf T_cells_CD4+
 karyotype normal
 lineage mesoderm
-vendorName David Randolph at University of Alabama, Birmingham
+vendorName Dr. David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:0000782
@@ -406,7 +406,7 @@ tissue blood
 childOf T_cells_CD4+
 karyotype normal
 lineage mesoderm
-vendorName David Randolph at University of Alabama, Birmingham
+vendorName Dr. David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:0000782
@@ -589,7 +589,7 @@ tissue colon
 lineage endoderm
 karyotype normal
 sex B
-vendorName BioChain ; BioChain ; BioChain ; BioChain
+vendorName BioChain; BioChain; BioChain; BioChain
 vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074; CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053
 orderUrl http://www.biochain.com; http://www.biochain.com; http://www.biochain.com; http://www.biochain.com
 termId BTO:0000269
@@ -1328,7 +1328,7 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 karyotype normal
-vendorName Heimfeld Lab, FHCRC
+vendorName Dr. Heimfeld Lab at FHCRC
 vendorId CD20+
 orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000776
@@ -1387,7 +1387,7 @@ description hematopoietic progenitor cells- mobilized, from donor RO01679.
 sex M
 tissue blood
 #tissue haematopoietic
-vendorName Heimfeld Lab,
+vendorName Dr. Heimfeld Lab at FHCRC
 vendorId FHCRC
 orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000725
@@ -1405,7 +1405,7 @@ lineage mesoderm
 karyotype normal
 sex M
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Wb11970640
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
@@ -1423,7 +1423,7 @@ lineage mesoderm
 karyotype normal
 sex F
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Wb78495824
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0000782
@@ -1459,7 +1459,7 @@ karyotype cancer
 sex F
 tissue blood
 #tissue haematopoietic
-vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
+vendorName Dr. Jennifer Brown at Harvard Medical School.
 vendorId CLL
 orderUrl http://www.dfhcc.harvard.edu/membership/profile/member/669/0/
 termId BTO:0001546
@@ -1523,7 +1523,7 @@ type Cell Line
 organism human
 description chorion cells (outermost of two fetal membranes), fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
 tissue fetal membrane
-vendorName Dr. Amy Murtha at Duke University (Durham, NC).
+vendorName Dr. Amy Murtha at Duke University
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
 lineage extraembryonic mesoderm, trophectoderm
 termId BTO:0000252
@@ -1595,7 +1595,7 @@ tissue blood
 childOf T_cells_CD4+
 karyotype normal
 lineage mesoderm
-vendorName David Randolph at University of Alabama, Birmingham
+vendorName Dr. David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:0000782
@@ -1616,7 +1616,7 @@ tissue blood
 childOf T_cells_CD4+
 karyotype normal
 lineage mesoderm
-vendorName David Randolph at University of Alabama, Birmingham
+vendorName Dr. David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:0000782
@@ -1637,7 +1637,7 @@ tissue blood
 childOf T_cells_CD4+
 karyotype normal
 lineage mesoderm
-vendorName David Randolph at University of Alabama, Birmingham
+vendorName Dr. David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:0000782
@@ -1708,7 +1708,7 @@ description Endometrium isolated from uterine lining
 karyotype normal
 sex F
 tissue endometrium
-vendorName Steven Young MD, PhD
+vendorName Dr. Steven Young
 vendorId Endometrium_OC
 orderUrl http://findadoc.unchealthcare.org/directory/profile.asp?dbase=main&setsize=10&last=young&pict_id=0002115
 termId BTO:0001422
@@ -1740,7 +1740,7 @@ organism human
 description fibroblasts taken from individuals with Parkinson's disease, AG20443, AG08395 and AG08396 were pooled for this sample
 tissue skin
 karyotype normal
-vendorName Paul Tesar (Case Western)
+vendorName Paul Tesar at Case Western University
 vendorId FibroP
 orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
@@ -1823,7 +1823,8 @@ description glioblastoma, these cells (aka H54 and D54) come from a surgical res
 tissue brain
 lineage ectoderm
 karyotype cancer
-vendorName Duke University Medical Center, requests for D54 cells should be directed to Darrell Bigner
+vendorName Dr. Darrell Bigner at Duke University Medical Center
+vendorId D54
 orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527
@@ -2568,7 +2569,7 @@ lineage mesoderm
 karyotype normal
 sex M
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId H0287
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002807
@@ -2584,7 +2585,7 @@ description undifferentiated embryonic stem cells
 lineage inner cell mass
 termId BTO:0001086
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
-vendorName WiCell
+vendorName WiCell Research Institute
 vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 sex U
@@ -2601,7 +2602,7 @@ tier 3
 lineage inner cell mass
 termId BTO:0001086
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
-vendorName WiCell
+vendorName WiCell Research Institute
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
@@ -2618,7 +2619,7 @@ lineage inner cell mass
 childOf H9ES
 termId BTO:0001086
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
-vendorName WiCell
+vendorName WiCell Research Institute
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
@@ -2635,7 +2636,7 @@ lineage inner cell mass
 childOf H9ES
 termId BTO:0001086
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
-vendorName WiCell
+vendorName WiCell Research Institute
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
@@ -2652,7 +2653,7 @@ lineage inner cell mass
 childOf H9ES
 termId BTO:0001086
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
-vendorName WiCell
+vendorName WiCell Research Institute
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
@@ -2669,7 +2670,7 @@ lineage inner cell mass
 childOf H9ES
 termId BTO:0001086
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
-vendorName WiCell
+vendorName WiCell Research Institute
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
@@ -2686,7 +2687,7 @@ lineage inner cell mass
 childOf H9ES
 termId BTO:0001086
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
-vendorName WiCell
+vendorName WiCell Research Institute
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
@@ -2703,7 +2704,7 @@ lineage inner cell mass
 childOf H9ES
 termId BTO:0001086
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001086
-vendorName WiCell
+vendorName WiCell Research Institute
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
 sex F
@@ -3296,7 +3297,7 @@ description foreskin fibroblast
 karyotype normal
 sex M
 tissue foreskin
-vendorName Dr. Torok-Storb, FHCRC
+vendorName Dr. Beverly Torok-Storb at Fred Hutchison Cancer Research Center
 vendorId HFF
 orderUrl http://myprofile.cos.com/torokstorb
 termId BTO:0002245
@@ -3314,7 +3315,7 @@ karyotype normal
 childOf HFF
 sex M
 tissue foreskin
-vendorName Dr. Torok-Storb, FHCRC
+vendorName Dr. Beverly Torok-Storb at Fred Hutchison Cancer Research Center
 vendorId HFF-Myc
 orderUrl http://myprofile.cos.com/torokstorb
 termId BTO:0002245
@@ -4279,7 +4280,7 @@ description HS27a Human Marrow Stromal Cells are fibroblastoid cells immortalize
 karyotype normal
 sex M
 tissue bone marrow
-vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
+vendorName Dr. Beverly Torok-Storb at Fred Hutchison Cancer Research Center
 vendorId HS27a
 orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
@@ -4297,7 +4298,7 @@ description HS5 Human Marrow Stromal Cells are fibroblastoid cells immortalized 
 karyotype normal
 sex M
 tissue bone marrow
-vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
+vendorName Dr. Beverly Torok-Storb at Fred Hutchison Cancer Research Center
 vendorId HS5
 orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
@@ -4315,7 +4316,7 @@ description These cells are primary fibroblastoid cells obtained from human bone
 karyotype normal
 sex M
 tissue bone marrow
-vendorName Dr. Beverly Torok-Storb, Fred Hutchison Cancer Research Center, Seattle, WA
+vendorName Dr. Beverly Torok-Storb at Fred Hutchison Cancer Research Center
 vendorId MSC
 orderUrl http://cceh.fhcrc.org/
 termId BTO:0000141
@@ -4544,7 +4545,7 @@ lineage endoderm
 karyotype cancer
 sex M
 tissue liver
-vendorName  Ravi Jhaveri, Duke University
+vendorName Dr. Ravi Jhaveri at Duke University
 vendorId Huh-7
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
@@ -4561,7 +4562,7 @@ lineage endoderm
 karyotype cancer
 sex M
 tissue liver
-vendorName  Ravi Jhaveri, Duke University
+vendorName Dr. Ravi Jhaveri at Duke University
 vendorId Huh-7.5
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
@@ -4725,7 +4726,7 @@ description induced pluripotent stem cell derived from skin fibroblast
 lineage  induced pluripotent stem cell derived from skin fibroblast
 sex B
 tissue induced pluripotent stem cell
-vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
+vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
 termId BTO:0000001 (nonspecific)
@@ -5070,7 +5071,7 @@ description medulloblastoma (aka D721), surgical resection from a patient with m
 tissue brain
 lineage ectoderm
 karyotype cancer
-vendorName Darrell Bigner, Duke University Medical Center
+vendorName Dr. Darrell Bigner at Duke University Medical Center
 orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359
@@ -5085,7 +5086,7 @@ organism human
 description Medulloblastoma cell line of neuron or neuron precurosr origin
 tissue brain
 karyotype cancer
-vendorName Darrell Bigner at Duke University
+vendorName Dr. Darrell Bigner at Duke University Medical Center
 vendorId Medullo_D341
 orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0001757
@@ -5257,7 +5258,7 @@ organism human
 tissue myometrium
 description myometrial cells
 karyotype normal
-vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
+vendorName Dr. Jennifer Condon of Magee Women's Research Institute
 orderUrl http://www.mwrif.org/188/condon-jeyasuria-lab
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
@@ -5745,7 +5746,7 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 vendorId PBDE
-vendorName Farnham lab
+vendorName Dr. Peggy Farnham at USC
 orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205
 termId BTO:0000574 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000574
@@ -5779,7 +5780,7 @@ description peripheral blood mononuclear cells
 tissue blood
 #tissue haematopoietic
 lineage mesoderm
-vendorName PBMC cells provided by E. Bresnick, UW Madison
+vendorName Dr. E.H. Bresnick at UW Madison
 vendorId PBMC
 orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
 termId BTO:0001025
@@ -6219,7 +6220,7 @@ lineage endoderm
 karyotype  normal
 sex F
 tissue liver
-vendorName  Steve Choi, Duke University
+vendorName Dr. Steve Choi at Duke University
 vendorId Stellate
 orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
@@ -6235,7 +6236,7 @@ tissue blood
 #tissue haematopoietic
 karyotype unknown
 lineage mesoderm
-vendorName David Randolph at University of Alabama, Birmingham
+vendorName Dr. David Randolph at University of Alabama, Birmingham
 vendorId vary
 orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:0000782
@@ -6267,10 +6268,10 @@ term TBEC
 tag TBEC
 type Cell Line
 organism human
-description trachea and bronchial epithelial cells, passage 2 primary, non-immortalized cells, donor was 21 years old
-vendorName National Disease Research Interchange-provided fresh lung tissue, designated DD009C in-house.
+description trachea and bronchial epithelial cells from frush lung tissue provided by National Disease Research Interchange, passage 2 primary, non-immortalized cells, donor was 21 years old
+vendorName National Disease Research Interchange
 tissue epithelium
-vendorId (see description)
+vendorId DD009C
 orderUrl http://www.ndriresource.org/
 lineage endoderm
 termId BTO:0001389 (non-specific)
@@ -6288,7 +6289,7 @@ tissue blood
 #tissue haematopoietic
 lineage mesoderm
 description primary Th1 T cells
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId None (primary pheresis of single normal subject)
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001678
@@ -6307,7 +6308,7 @@ lineage mesoderm
 karyotype normal donor is Asian, female 26 year old, primary pheresis of single normal subject
 sex F
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Wb33676984
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001678
@@ -6325,7 +6326,7 @@ lineage mesoderm
 karyotype normal
 sex M
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Wb54553204
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001678
@@ -6343,7 +6344,7 @@ lineage mesoderm
 karyotype normal
 sex B
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Th17
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002417
@@ -6359,7 +6360,7 @@ description primary Th2 T cells
 tissue blood
 #tissue haematopoietic
 lineage mesoderm
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId None (primary pheresis of single normal subject)
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001679
@@ -6378,7 +6379,7 @@ lineage mesoderm
 karyotype normal
 sex F
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Wb33676984
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001679
@@ -6396,7 +6397,7 @@ lineage mesoderm
 karyotype normal
 sex M
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Wb54553204
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0001679
@@ -6431,7 +6432,7 @@ lineage mesoderm
 karyotype normal
 sex M
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId TL010
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0002062
@@ -6449,7 +6450,7 @@ lineage mesoderm
 karyotype normal donor is Causasian, female 35 year old, primary pheresis of single normal subject
 sex F
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Wb78495824
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0004520
@@ -6467,7 +6468,7 @@ lineage mesoderm
 karyotype normal
 sex M
 tissue blood
-vendorName John Stamatoyannopoulos
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Wb83319432
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId BTO:0004520
@@ -6484,7 +6485,7 @@ tier 3
 karyotype normal
 sex F
 tissue urothelium
-vendorName lab of Dr. D Sens (University of N. Dakota)
+vendorName Dr. D Sens at University of N. Dakota
 vendorId Urothelia
 orderUrl http://pathology.med.und.nodak.edu/dept_home/MaryAnn.cfm
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A001245
@@ -6632,7 +6633,7 @@ category cellLine
 description Mammary
 age immortalized
 strain RIII
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId 3134
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7035
@@ -6651,7 +6652,7 @@ category cellLine
 description myeloid progenitor cells, CD34+
 age immortalized
 strain B6D2F1/J
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId 416B
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7043
@@ -6724,7 +6725,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Brown adipocytes tissue
-vendorName Jerrold M. Olefsky Lab, UCSD
+vendorName Dr. Jerrold M. Olefsky Lab at UCSD
 orderUrl http://endocrinology.ucsd.edu/Faculty/olefsky.html
 termId 7188
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
@@ -6743,7 +6744,7 @@ category primaryCells
 description B Cell , CD19+
 age adult-8wks
 strain C57BL/6
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId B-cell_(CD19+)
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7069
@@ -6801,7 +6802,7 @@ category primaryCells
 description Bone marrow derived macrophage
 age ageUnknown
 strain Unknown
-vendorName Genhong Cheng Lab, UCLA
+vendorName Dr. Genhong Cheng Lab at UCLA
 vendorId BMDM
 orderUrl http://www.mimg.ucla.edu/faculty/cheng/genhong.html
 termId 7058
@@ -6857,7 +6858,7 @@ category cellLine
 age immortalized
 strain C3H
 description Myoblast cell line derived from thigh muscle of C3H mice after crush injury
-vendorName Barbara Wold lab
+vendorName Dr. Barbara Wold at Caltech
 vendorId C2C12
 orderUrl http://woldlab.caltech.edu/
 termId 7125
@@ -6895,7 +6896,7 @@ strain Unknown
 description Cerebrum
 termId 7014
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7014
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Cerebrum
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 105,105,105
@@ -7163,7 +7164,7 @@ age E0
 strain 129S1/SV1mj
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId ES-CJ7
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
@@ -7318,7 +7319,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Adipose tissue
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId FatPad
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7108
@@ -7337,7 +7338,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Fibroblast
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Fibroblast
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6948
@@ -7466,7 +7467,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Genital Adipose tissue
-vendorName 1)Stam lab; 2)CSHL lab
+vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
 vendorId Genital Fat Pad; Gonadal Adipose Tissue
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 16230
@@ -7559,7 +7560,7 @@ strain Unknown
 description Kidney
 termId 6960
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6960
-vendorName 1)Stam lab ; 2)CSHL lab
+vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
 vendorId Kidney; Kidney
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 color 204,121,167
@@ -7594,7 +7595,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Large Intestine
-vendorName 1)Stam lab; 2)CSHL lab
+vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
 vendorId Large Intestine; Large Intestine
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 6982
@@ -7631,7 +7632,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Liver
-vendorName 1)Stam lab; 2)CSHL lab
+vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
 vendorId Liver; Liver
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 6963
@@ -7782,7 +7783,7 @@ tissue blood
 #tissue haematopoietic
 termId GO:0030218
 termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0030218
-vendorName Stam Lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId mG/ER
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 86,180,233
@@ -7912,7 +7913,7 @@ category cellLine
 description Mouse Embryonic Kidney Fibroblast. As described in Lingenfelter et al., 1998 (Nat Genet. 1998 18:212-3) and Yang et al., 2010 (Genome Res.  2010 20:614-22), PATSKI is a female interspecific mouse fibroblast that was derived from the embryonic  kidney of an M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X. This is an adherent cell line.
 age immortalized
 strain C57BL/6J
-vendorName Dr. Christine Disteche (University of Washington)
+vendorName Dr. Christine Disteche at University of Washington
 vendorId Patski
 orderUrl http://depts.washington.edu/chdd/iddrc/res_aff/disteche.html
 termId 6948
@@ -7948,7 +7949,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Retina
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Retina
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6944
@@ -7984,7 +7985,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Skeletal Muscle
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId Skeletal Muscle
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7125
@@ -8041,7 +8042,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Spleen
-vendorName 1) LICR lab; 2)Stam Lab; 3)CSHL lab
+vendorName 1) LICR lab; 2)Dr. John Stamatoyannopoulos at UW; 3)CSHL lab
 vendorId Spleen; Spleen; Spleen
 orderUrl http://bioinformatics-renlab.ucsd.edu/rentrac/; http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7038
@@ -8133,7 +8134,7 @@ age ageUnknown
 strain Unknown
 category primaryCells
 description Activated primary CD4 effector cells, isolated ex vivo
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId THelper-Activated
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
@@ -8152,7 +8153,7 @@ age ageUnknown
 strain Unknown
 category primaryCells
 description Naive T cells: CD4+, CD25-
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId T-Naive
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
@@ -8171,7 +8172,7 @@ age ageUnknown
 strain Unknown
 category primaryCells
 description Activated primary T regulatory cells, isolated ex vivo
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId TReg-Activated
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
@@ -8190,7 +8191,7 @@ age ageUnknown
 strain Unknown
 category primaryCells
 description Regulatory T cells CD4+,CD25+
-vendorName Stam lab
+vendorName Dr. John Stamatoyannopoulos at UW
 vendorId TReg
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
@@ -8226,7 +8227,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Whole Brain
-vendorName 1)Stam lab; 2)CSHL lab
+vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
 vendorId Whole Brain; Whole Brain
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7005
@@ -8246,7 +8247,7 @@ strain 129/Ola
 description Undifferentiated mouse embryonic stem cells
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
-vendorName Dr. Levasseur (University of Iowa)
+vendorName Dr. Levasseur at University of Iowa
 vendorId ZhBTc4
 orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 color 65,105,225
@@ -8584,7 +8585,7 @@ target BDP1
 targetClass Pol3F
 antibodyDescription Rabbit polyclonal - Antiserum 2663 was raised by immunizing rabbits with synthetic peptide CSDRYRIYKAQKLRE (human Bdp1 residues 139?153) coupled to KLH. Antibody Target: BDP1
 targetDescription 'B double-prime 1', subunit of RNA polymerase III transcription initiation factor IIIB
-vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
 vendorId 2663
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
@@ -8616,7 +8617,7 @@ target BHLHE40
 targetClass TFSS
 antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412). Antibody Target: BHLHE40
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
-vendorName Novus
+vendorName Novus Biologicals
 vendorId NB100-1800
 orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
 lab Snyder
@@ -8649,7 +8650,7 @@ target BRF1
 targetClass Pol3F
 antibodyDescription Rabbit polyclonal - Anti-BRF antibody 128 was raised by immunising rabbits with synthetic peptide KISSKINYSVLRGLS (human BRF residues 533-547) coupled to keyhole limpet haemocyanin. Antibody Target: BRF1
 targetDescription 'B-related factor 1', subunit of RNA polymerase III transcription initiation factor IIIB
-vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
 vendorId 128
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
@@ -8665,7 +8666,7 @@ target BRF2
 targetClass Pol3F
 antibodyDescription Antibody 4295 against Brf2 was raised by immunizing rabbits with keyhole limpet hemocyanin coupled to synthetic peptides VSRSQQRGLRRVRDLC and SDSEIEQYLRTPQEVR, corresponding to human Brf2 residues 66-80 and 385-400, respectively. Antibody Target: BRF2
 targetDescription Brf2 is a component of an alternate form of the RNA Polymerase III transcription factor TFIIIB.
-vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
 vendorId 4295
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
@@ -9354,7 +9355,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1. Antibody Target: eGFP-BACH1
 target eGFP-BACH1
 targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-BACH1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9370,7 +9371,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CCNE1. Antibody Target: eGFP-CCNE1
 target eGFP-CCNE1
 targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family, whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases. Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event. (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-CCNE1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9386,7 +9387,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CDKN1B. Antibody Target: eGFP-CDKN1B
 target eGFP-CDKN1B
 targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21. The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1 (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-CDKN1B
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9403,7 +9404,7 @@ targetClass TFSS
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor E2F1. Antibody Target: eGFP-E2F1
 target eGFP-E2F1
 targetDescription The protein encoded by this gene is a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-E2F1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9419,7 +9420,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ELF1. Antibody Target: eGFP-ELF1
 target eGFP-ELF1
 targetDescription This gene encodes an E26 transformation-specific related transcription factor. The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes. Alternative splicing results in multiple transcript variants (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-ELF1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9436,7 +9437,7 @@ targetClass TFSS
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ESRA. Antibody Target: eGFP-ESR
 target eGFP-ESR
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-ESR
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9453,7 +9454,7 @@ target FOS
 targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: FOS
 targetDescription Fos
-vendorName Kevin White
+vendorName Dr. Kevin White at University of Chicago
 vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
@@ -9470,7 +9471,7 @@ target GATA2
 targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: GATA2
 targetDescription GATA2
-vendorName Kevin White
+vendorName Dr. Kevin White at University of Chicago
 vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
@@ -9487,7 +9488,7 @@ target HDAC8
 targetClass HISase
 antibodyDescription Goat polyclonal. Antibody Target: HDAC8
 targetDescription HDAC8
-vendorName Kevin White
+vendorName Dr. Kevin White at University of Chicago
 vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
@@ -9503,7 +9504,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGB1. Antibody Target: eGFP-HMGB1
 target eGFP-HMGB1
 targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA. Involved in V(D)J recombination by acting as a cofactor of the RAG complex. (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-HMGB1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9519,7 +9520,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ILF2. Antibody Target: eGFP-ILF2
 target eGFP-ILF2
 targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2. In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase. (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-ILF2
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9536,7 +9537,7 @@ target JunB
 targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: JunB
 targetDescription JunB
-vendorName Kevin White
+vendorName Dr. Kevin White at University of Chicago
 vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
@@ -9553,7 +9554,7 @@ target JunD
 targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: JunD
 targetDescription JunD
-vendorName Kevin White
+vendorName Dr. Kevin White at University of Chicago
 vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
@@ -9569,7 +9570,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor MLL5. Antibody Target: eGFP-MLL5
 target eGFP-MLL5
 targetDescription This gene is a member of the myeloid/lymphoid or mixed-lineage leukemia (MLL) family and encodes a protein with an N-terminal PHD zinc finger and a central SET domain. Overexpression of the protein inhibits cell cycle progression. (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-MLL5
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9585,7 +9586,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NCOR1. Antibody Target: eGFP-NCOR1
 target eGFP-NCOR1
 targetDescription This gene encodes a protein that mediates ligand-independent transcription repression of thyroid-hormone and retinoic-acid receptors by promoting chromatin condensation and preventing access of the transcription machinery. It is part of a complex which also includes histone deacetylases and transcriptional regulators similar to the yeast protein Sin3p. This gene is located between the Charcot-Marie-Tooth and Smith-Magenis syndrome critical regions on chromosome 17 (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-NCOR1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9601,7 +9602,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90. Antibody Target: eGFP-NF90
 target eGFP-NF90
 targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45. (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-NF90
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9619,7 +9620,7 @@ target NR4A1
 targetClass TFSS
 antibodyDescription Goat polyclonal. Antibody Target: NR4A1
 targetDescription NR4A1
-vendorName Kevin White
+vendorName Dr. Kevin White at University of Chicago
 vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
@@ -9635,7 +9636,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA1. Antibody Target: eGFP-SMARCA1
 target eGFP-SMARCA1
 targetDescription This gene encodes a member of the SWI/SNF family of proteins. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes. (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-SMARCA1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9651,7 +9652,7 @@ type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA2. Antibody Target: eGFP-SMARCA2
 target eGFP-SMARCA2
 targetDescription The protein encoded by this gene is a member of the SWI/SNF family of proteins and is highly similar to the brahma protein of Drosophila. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-SMARCA2
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -9668,7 +9669,7 @@ targetClass TFSS
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor STAT1. Antibody Target: eGFP-STAT1
 target eGFP-STAT1
 targetDescription The protein encoded by this gene is a member of the STAT protein family. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6 (provided by RefSeq)
-vendorName Kevin White Lab, University of Chicago
+vendorName Dr. Kevin White at University of Chicago
 vendorId eGFP-STAT1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
@@ -10023,7 +10024,7 @@ type Antibody
 target GATA1
 targetDescription GATA-1 is a transcriptional activator which probably serves as a general switch factor for erythroid development. It binds to DNA sites with the consensus sequence [AT]GATA[AG} within regulatory regions of globin genes and of other genes expressed in erythroid cells.
 antibodyDescription Anti-GATA-1 rabbit polyclonal antibody was generated by using a purified GST fusion to amino acids 1-89 of mouse GATA-1. Antibody Target: GATA1
-vendorName Donated by Dr. E.H. Bresnick, UW Madison
+vendorName Dr. E.H. Bresnick at UW Madison
 vendorId GATA-1
 orderUrl http://stemcells.wisc.edu/node/101
 targetId GeneCard:GATA1
@@ -10069,7 +10070,7 @@ target GATA2
 targetClass TFSS
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal. Antibody Target: GATA2
-vendorName Donated by Dr. E.H. Bresnick, UW Madison
+vendorName Dr. E.H. Bresnick at UW Madison
 vendorId GATA-2
 orderUrl http://stemcells.wisc.edu/node/101
 targetId GeneCard:GATA2
@@ -10231,7 +10232,7 @@ target H2AZ
 antibodyDescription Rabbit polyclonal antibody raised against a peptide corresponding to the C-terminus of H2AZ. Antibody Target: H2AZ
 targetDescription H2A.Z is a sequence variant of Histone H2A.
 orderUrl http://www.millipore.com/catalogue/item/07-594
-vendorName Upstate (Millipore)
+vendorName Millipore
 vendorId 07-594
 lab Bernstein
 lots DAM1540736
@@ -10681,7 +10682,7 @@ type Antibody
 antibodyDescription Rabbit polyclonalantibody against residue 1700 and 1750 of human host cell factor C1
 target HCFC1
 targetDescription The epitope recognized by this antibody maps to a region between residue 1700 and 1750 of human host cell factor C1 (VP16-accessory protein).
-vendorName NovusBio
+vendorName Novus Biologicals
 vendorId NB100-68209
 orderUrl http://www.novusbio.com/HCFC1-Antibody_NB100-68209.html
 lab Snyder
@@ -10925,7 +10926,7 @@ type Antibody
 antibodyDescription Rabbit polyclonal antibody raised against a recombinant protein encompassing the amino-terminus of the murine IKZF1 protein. Antibody Target: IKZF1
 target IKZF1
 targetDescription IKAROS family zinc finger 1 (Ikaros or IKZF1) is a C2H2 zinc finger transcription factor that is associated with various chromatin-modifying complexes and is suggested to play a role in the development of lymphocytes, B- and T-cells.
-vendorName From the laboratory of Stephen Smale, UCLA
+vendorName Dr. Stephen Smale at UCLA
 vendorId IKZF1_(IkN)
 orderUrl http://people.healthsciences.ucla.edu/institution/personnel?personnel_id=45693
 lab Farnham
@@ -11605,7 +11606,7 @@ target NRSF
 targetClass TFSS
 antibodyDescription Mouse monoclonal. Antibody Target: NRSF
 targetDescription Neuron-restrictive silencer transcription factor
-vendorName David Anderson, Caltech
+vendorName Dr. David Anderson at Caltech
 vendorId  (Made by Protein Expression Center: pec@caltech.edu)
 orderUrl http://www.cns.caltech.edu/people/faculty/anderson.html
 lab Myers, Wold
@@ -12154,7 +12155,7 @@ target RPC155
 targetClass Pol3F
 antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
 targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
-vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
+vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
 vendorId 1900
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
@@ -12218,7 +12219,7 @@ target SETDB1
 targetClass HISase
 antibodyDescription Rabbit polyclonal. Antibody Target: SETDB1
 targetDescription SET domain, bifurcated 1, the SET domain is a highly conserved, approximately 150-amino acid motif implicated in the modulation of chromatin structure
-vendorName Proteintech Group
+vendorName Proteintech
 vendorId  11231-1-AP
 orderUrl http://www.ptglab.com/Products/SETDB1-Antibody-11231-1-AP.htm
 lab Farnham
@@ -12561,7 +12562,7 @@ targetClass HISase
 antibodyDescription rabbit polyclonal. Antibody Target: SUZ12
 target SUZ12
 targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
-vendorName Farnham lab
+vendorName Dr. Peggy Farnham at USC
 vendorId SUZ12
 orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205
 lab Farnham
@@ -13117,7 +13118,7 @@ type Antibody
 antibodyDescription Rabbit polyclonal antibody. The immunogen recognized by this antibody maps to a region between residue 250 and 300 of human zinc finger CCCH-type containing 11A.
 target ZC3H11A
 targetDescription ZC3H11A is a C3H1-type zinc finger protein. ZC3H11A has been identified as a protein that is phosphorylated upon DNA damage by ATM or ATR. The function of ZC3H11A remains uncharacterized.
-vendorName NovusBio
+vendorName Novus Biologicals
 vendorId NB100-74650
 orderUrl http://www.novusbio.com/ZC3H11A-Antibody_NB100-74650.html
 lab Snyder
@@ -13196,7 +13197,7 @@ type Antibody
 antibodyDescription A rabbit polyclonal antibody raised against a recombinant ZNF217 protein corresponding to the 1562-2207 nucleotides from a human ZNF217 cDNA. Antibody Target: ZNF217
 target ZNF217
 targetDescription ZNF217 is an important oncogene based on the high frequency of amplification and overexpression in many cancer types, but its molecular mode of gene regulation is poorly understood. ZNF217 has been purified in complexes that contain repressor proteins such as CtBP2, suggesting that it acts as a transcriptional repressor. ZNF217 contains seven C2H2 zinc finger domains and has been shown to bind to gene promoters
-vendorName From the lab of Dr. Paul Yaswen
+vendorName Dr. Paul Yaswen
 vendorId ZNF217
 orderUrl http://stemcellcenter.berkeley.edu/PIs/yaswen.html
 lab Farnham
