@@ -1075,6 +1075,16 @@ sqlFreeResult(&sr);
 return TRUE;
 }
 
+bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column)
+/* return TRUE if column exists in table. tableName can contain sql wildcards  */
+{
+    char query[1024];
+    safef(query, 1024, "SHOW COLUMNS FROM `%s` LIKE '%s'", tableName, column);
+    char buf[1024];
+    char *ret = sqlQuickQuery(conn, query, buf, 1024);
+    return (ret!=NULL);
+}
+
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table)
 /* Return row count if a table exists, -1 if it doesn't. */
 {

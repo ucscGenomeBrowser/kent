@@ -183,19 +183,19 @@ if (vcfFileStopDueToErrors(vcff))
 }
 
 static void *vcfFileAlloc(struct vcfFile *vcff, size_t size)
-/* allocate memory from the memory pool */
+/* Use vcff's local mem to allocate memory. */
 {
 return lmAlloc(vcff->pool->lm, size);
 }
 
 static char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
-/* allocate memory for a string and copy it */
+/* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return lmCloneStringZ(vcff->pool->lm, str, size);
 }
 
 static char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
-/* allocate memory for a string and copy it */
+/* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return vcfFileCloneStrZ(vcff, str, strlen(str));
 }
@@ -208,8 +208,8 @@ return vcfFileCloneStrZ(vcff, line+substr.rm_so, (substr.rm_eo - substr.rm_so));
 
 #define vcfFileCloneVar(var) lmCloneMem(vcff->pool->lm, var, sizeof(var));
 
-static char *vcfFilePooledStr(struct vcfFile *vcff, char *str)
-/* allocate memory for a string from the shared string pool */
+char *vcfFilePooledStr(struct vcfFile *vcff, char *str)
+/* Allocate memory for a string from vcff's shared string pool. */
 {
 return hashStoreName(vcff->pool, str);
 }
