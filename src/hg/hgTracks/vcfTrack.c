@@ -171,6 +171,41 @@ slReverse(&newList);
 vcff->records = newList;
 }
 
+static void trimIndelAlleles(struct vcfFile *vcff)
+/* For indels, VCF includes the left neighboring base; for example, if the alleles are
+ * AA/- following a G base, then the VCF record will start one base to the left and have
+ * "GAA" and "G" as the alleles.  That is not nice for display for two reasons:
+ * 1. Indels appear one base wider than their dbSNP entries.
+ * 2. In pgSnp display mode, the two alleles are always the same color.
+ * So here we take the liberty of trimming that left neighboring base for display. */
+{
+struct vcfRecord *rec;
+for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    if (rec->alleleCount > 1)
+	{
+	boolean allSameFirstBase = TRUE;
+	char firstBase = rec->alleles[0][0];
+	int i;
+	for (i = 1;  i < rec->alleleCount;  i++)
+	    if (rec->alleles[i][0] != firstBase)
+		{
+		allSameFirstBase = FALSE;
+		break;
+		}
+	if (allSameFirstBase)
+	    {
+	    rec->chromStart++;
+	    for (i = 0;  i < rec->alleleCount;  i++)
+		{
+		if (rec->alleles[i][1] == '\0')
+		    rec->alleles[i] = vcfFilePooledStr(vcff, "-");
+		else
+		    rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]+1);
+		}
+	    }
+	}
+}
+
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
@@ -1132,6 +1167,7 @@ if (errCatchStart(errCatch))
     if (vcff != NULL)
 	{
 	filterRecords(vcff, tg->tdb);
+	trimIndelAlleles(vcff);
 	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);

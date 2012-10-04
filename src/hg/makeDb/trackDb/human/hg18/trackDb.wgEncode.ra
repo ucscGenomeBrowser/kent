@@ -61,8 +61,7 @@ include wgEncodeRikenCage.ra
 include wgEncodeMapability.ra
 
 # tag change for UwAffyExon
-include wgEncodeUwAffyExonArray.ra beta,public
-include wgEncodeUwAffyExonArray.patch.ra alpha
+include wgEncodeUwAffyExonArray.ra
 
 # UW Histone (wrangler: Venkat, assisted by Tim)
 include wgEncodeUwChIPSeq.ra

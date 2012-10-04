@@ -102,7 +102,7 @@ geoSampleAccession GSM1003816
 grant Stam
 lab UW-m
 labVersion DS8497
-md5sum 565357606b779de1f0aa990542dea12e
+md5sum 04f9caad4f3d995addaed356e3fa5758
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -266,7 +266,7 @@ geoSampleAccession GSM1003815
 grant Stam
 lab UW-m
 labVersion DS14099
-md5sum f2a7de1768be47075c10b16f6bbd454b
+md5sum f798552dc64129b954af5afa9d576dc5
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -431,7 +431,7 @@ grant Stam
 lab UW-m
 labExpId DS16695
 labVersion 1
-md5sum 5be58df9be3fb38b6c0b96d047daf22c
+md5sum 877bbfeb2027c7c6748bd0e9d3d4d56c
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -599,7 +599,7 @@ geoSampleAccession GSM1003814
 grant Stam
 lab UW-m
 labVersion DS16168
-md5sum 1b2a60cb97bd1d7e3e1448b2aeb0f6b1
+md5sum bca50beea79c7337c2b8e757460d595a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -765,7 +765,7 @@ geoSampleAccession GSM1003813
 grant Stam
 lab UW-m
 labVersion DS17866
-md5sum 3d3d867c7d85186dbad1b7ba39ea7072
+md5sum f62471ad45fb2e26fc55197abea5c828
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -930,7 +930,7 @@ grant Stam
 lab UW-m
 labExpId DS13320
 labVersion 1
-md5sum 27a517bfc23ea9db33b21c8065f3cab1
+md5sum 7d786a146ab2026df89ca91e372d85ee
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1094,7 +1094,7 @@ geoSampleAccession GSM1003820
 grant Stam
 lab UW-m
 labVersion DS18138
-md5sum ec490ef1df662fb468abdf7bf160dc6f
+md5sum d61837dc373fe8b09bb60d853e5eb0fa
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1258,7 +1258,7 @@ geoSampleAccession GSM1003819
 grant Stam
 lab UW-m
 labVersion DS13948
-md5sum d262afcbe9abb158880aa56fbc7a46f2
+md5sum 041ca8defe4cb92ef650ca806fb0b752
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1422,7 +1422,7 @@ geoSampleAccession GSM1003818
 grant Stam
 lab UW-m
 labVersion DS14605
-md5sum a6b5e2a79f6eb2afba2ae69bb935835b
+md5sum b461dcd88bd8d7c1d5cd5b39804d57db
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1586,7 +1586,7 @@ geoSampleAccession GSM1003817
 grant Stam
 lab UW-m
 labVersion DS14479
-md5sum e1ed84c5ecf6890422f8d1d0850f1188
+md5sum ef9b8aea6fbb039fe1531989a12539c2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1750,7 +1750,7 @@ geoSampleAccession GSM1003824
 grant Stam
 lab UW-m
 labVersion DS13036
-md5sum 303cc08e6dc5fe1325a77558832bf51b
+md5sum 881fd612929f81222ff7c94e6a817714
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1915,7 +1915,7 @@ grant Stam
 lab UW-m
 labExpId DS16900
 labVersion 1
-md5sum 46fc319a2d04afec2d23c22c5955d8d9
+md5sum a17b235f257a0d286675c837be3e0ca3
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2080,7 +2080,7 @@ grant Stam
 lab UW-m
 labExpId DS20004
 labVersion 1
-md5sum 4fe7bd64f1cfc503dc103c7ae94f3f69
+md5sum 0743643a8c0148d3019530d53dc8bc84
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2245,7 +2245,7 @@ grant Stam
 lab UW-m
 labExpId DS17070
 labVersion 1
-md5sum d5a1cdb3f200b7194c6c8dc88e82e7fa
+md5sum 7771f2135c2df3d648ee5c9ad2830c47
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2409,7 +2409,7 @@ geoSampleAccession GSM1003827
 grant Stam
 lab UW-m
 labVersion DS18819
-md5sum 33bcc213acdd0fd99ab08fb6342badd2
+md5sum af4fa8435fbb65a0df2859e7c176485b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2655,7 +2655,7 @@ geoSampleAccession GSM1003825
 grant Stam
 lab UW-m
 labVersion DS17080
-md5sum b22690d2ce696e09ebe124c87f4b43a9
+md5sum b7c660468d27f408b7c96d2a46f06d54
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2681,7 +2681,7 @@ geoSampleAccession GSM1003825
 grant Stam
 lab UW-m
 labVersion DS16171
-md5sum 401a04ee26fe3d9d144eae85bff5a199
+md5sum 72c82230d366af4a09fe5ac8b618fd4a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2901,7 +2901,7 @@ geoSampleAccession GSM1003826
 grant Stam
 lab UW-m
 labVersion DS17864
-md5sum 1ba2934c20e9f9eab241eea8c8dc447a
+md5sum 837666625c331c2fe11d6206690521be
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3066,7 +3066,7 @@ grant Stam
 lab UW-m
 labExpId DS20149
 labVersion 1
-md5sum 53ae9f597dbfd9fee31754ceb58eda14
+md5sum 1ce2cfd87a2743bb32d66f6145191c10
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3230,7 +3230,7 @@ geoSampleAccession GSM1003823
 grant Stam
 lab UW-m
 labVersion DS12727
-md5sum 453ba600461568e23845e35d88697654
+md5sum 6ba41c468195f995993800012145121b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3394,7 +3394,7 @@ geoSampleAccession GSM1003828
 grant Stam
 lab UW-m
 labVersion DS14536
-md5sum 44a291e90177bef0044bca0fabfe48d8
+md5sum d65b9f17804a80a7251a13db9f9d714f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3588,7 +3588,7 @@ grant Stam
 lab UW-m
 labExpId DS17562
 labVersion 1
-md5sum a9e56914a3486d1e4ff72e87e1a0e9be
+md5sum e49410dd9a5fadae73e7b199c61dfd1f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3730,7 +3730,7 @@ grant Stam
 lab UW-m
 labExpId DS17616
 labVersion 1
-md5sum 8a231e8ae58d222af3b70608ff6c1be4
+md5sum b44656e749a75d3b2737677c3ef1df0a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3796,4 +3796,4 @@ tableName wgEncodeUwDgfZhbtc4129olaME0SigRep1
 tissueSourceType None
 view Signal
 
-# MAGIC: -1397577485
+# MAGIC: -387058820

@@ -1,0 +1,181 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes the construction of the browser database on
+# the mouse strains from NCBI build 38 (Dec 2011 freeze) aka:
+#	GRCm38 - Genome Reference Consortium Mouse Reference 38
+
+############################################################################
+# gather sequence and AGP definitions (DONE - 2012-09-28 - Hiram)
+    mkdir -p  /hive/data/genomes/mm10Strains1/genbank
+    cd /hive/data/genomes/mm10Strains1/genbank
+    # modified script from hg19Patch10 build, scans the FASTA and AGP
+    #   files from mm10/genbank/ for all the alternate sequence
+    #   to generate a fasta file and AGP file here with chr prefixes
+    #   for chrom names as is typical for UCSC browsers
+    ./getSequence.pl ../../mm10/genbank
+-rw-rw-r-- 1 18386569 Sep 28 11:01 ucsc.fa.gz
+-rw-rw-r-- 1    27454 Sep 28 11:01 ucsc.agp
+
+    # the script is:
+    cat << '_EOF_' > getSequence.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $debug = 1;
+my $patchName = "patch1";
+
+sub usage() {
+    print STDERR "usage: ./gatherNames.pl ../../mm10/genbank > ucscNames.${patchName}.txt\n";
+    print STDERR "expecting the Mus_musculus/GRCm38.p1/ hierarchy in ./genbank from NCBI\n";
+    exit 255;
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    usage;
+}
+
+my $patchDir = shift;
+
+if ( ! -d $patchDir ) {
+    print STDERR "ERROR: given directory $patchDir is not a directory or does not exist";
+    usage;
+}
+
+open (FA, "|gzip -c > ucsc.fa.gz") or die "can not write to ucsc.fa";
+my %glSize;
+my %ctgToChr;
+my %ctgToFastaName;
+# my $fasta = "$patchDir/PATCHES/alt_scaffolds/FASTA/alt.scaf.fa.gz";
+my @fastaList = split('\n',`find $patchDir -type f | grep FASTA | grep alt_scaffolds | grep -v UNKNOWN | grep alt.scaf.fa`);
+my @agpList = split('\n',`find $patchDir -type f | grep AGP | grep alt_scaffolds | grep -v UNKNOWN | grep alt.scaf.agp`);
+
+for (my $i = 0; $i < scalar(@fastaList); ++$i) {
+    my $fasta = $fastaList[$i];
+
+# get lengths of alternate scaffolds
+printf STDERR "# reading $fasta\n" if ($debug );
+open (FH, "faCount $fasta|") or die "can not faCount $fasta";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    next if ($line =~ m/^total/);
+    my ($gi, $len, $rest) = split('\s+', $line, 3);
+    my ($x, $acc, $y, $gl, $z) = split('\|', $gi);
+    die "ERROR: already exists glSize for {$gl}" if (exists($glSize{$gl}));
+    $glSize{$gl} = $len;
+    printf STDERR "# glSize{%s} <- %d\n", $gl, $len if ($debug);
+}
+close (FH);
+
+open (FH, "zcat $fasta|")
+        or die "ERROR: can not read $fasta";
+while ( my $line = <FH> ) {
+    if ($line !~ m/^>/) {
+        printf FA "%s", $line;
+    } else {
+    chomp $line;
+printf STDERR "# '%s'\n", $line;
+    my ($gi, $rest) = split('\s+',$line,2);
+    my ($x, $acc, $y, $gl, $z) = split('\|', $gi);
+    my $chr = $rest;
+    if ($chr =~ m/ unplaced /) {
+        printf STDERR "# WARN: unplaced: %s\n", $line;
+        $chr = "Un";
+    }
+    $chr =~ s/Mus musculus strain .* chromosome //;
+    $chr =~ s/Mus musculus chromosome //;
+    $chr =~ s/ .*//;
+    die "ERROR: already exists ctgToChr for {$gl} <- $chr" if (exists($ctgToChr{$gl}));
+    $ctgToChr{$gl} = $chr;
+printf STDERR "# ctgToChr{%s} <- %s\n", $gl, $chr;
+    die "ERROR: already exists ctgToFastaName for {$gl} <- $chr" if (exists($ctgToFastaName{$gl}));
+    $ctgToFastaName{$gl} = $gi;
+    $ctgToFastaName{$gl} =~ s/\|$//;
+    $ctgToFastaName{$gl} =~ s/^>//;
+    printf STDERR "# ctgToFastaName{%s} <- %s\n", $gl, $ctgToFastaName{$gl} if ($debug);
+    # fix the suffix .N to be _N
+    $gl =~ s/\./_/;
+    printf FA ">chr%s_%s\n", $chr, $gl;
+    } 
+}   
+close (FH); 
+}       # for (my $i = 0; $i < scalar(@fastaList); ++$i)
+close (FA); 
+    
+my $agpSequenceCount = 0;
+open (AG, ">ucsc.agp") or die "can not write to ucsc.agp";
+for (my $i = 0; $i < scalar(@agpList); ++$i) {
+    my $agp = $agpList[$i];
+    printf STDERR "# reading $agp\n" if ($debug );
+    open (FH, "zcat $agp|") or die "can not read $agp";
+    while (my $line = <FH>) {
+        next if ($line =~ m/^#/);
+        chomp $line;
+        my @a = split('\s+', $line);
+        my $gl = $a[0];
+        $a[3] = ++$agpSequenceCount;
+        if (exists($ctgToChr{$gl})) {
+            my $chr = $ctgToChr{$gl};
+            $gl =~ s/\./_/;
+            printf AG "chr%s_%s", $chr, $gl;
+        } else {
+            printf STDERR "WARN: can not find gl: $gl in ctgToChr\n";
+            $gl =~ s/\./_/;
+            printf AG "chrUn_%s", $gl;
+        }
+        for (my $i = 1; $i < scalar(@a); ++$i) {
+            printf AG "\t%s", $a[$i];
+        }
+        printf AG "\n";
+    }
+    close (FH);
+}   
+close (AG);
+'_EOF_'
+    # << happy emacs
+
+    # verify OK:
+    checkAgpAndFa ucsc.agp ucsc.fa.gz 2>&1 | tail -3
+# FASTA sequence entry
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+
+############################################################################
+# initial database build (DONE - 2012-09-28 - Hiram)
+    cd /hive/data/genomes/mm10Strains1
+    cat << '_EOF_' > mm10Strains1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db mm10Strains1
+clade haplotypes
+genomeCladePriority 200
+scientificName Mus musculus
+commonName mm10Haps
+assemblyDate Dec. 2011
+assemblyLabel GRCm38 Genome Reference Consortium Mouse Reference 38, alternate strains
+assemblyShortLabel Mouse strains
+orderKey 1300
+mitoAcc none
+fastaFiles /hive/data/genomes/mm10Strains1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/mm10Strains1/genbank/ucsc.agp
+# qualFiles /dev/null
+dbDbSpeciesDir mouse
+photoCreditURL http://www.jax.org/
+photoCreditName Photo courtesy The Jackson Laboratory
+ncbiGenomeId 52
+ncbiAssemblyId   416688
+ncbiAssemblyName   GRCm38.p1
+ncbiBioProject 51977
+genBankAccessionID GCA_000001635.3
+taxId   10090
+'_EOF_'
+    # << happy emacs
+
+    # verify fasta and AGP
+    makeGenomeDb.pl -stop=agp mm10Strains1.config.ra > agp.log 2>&1
+    # when OK, continue with database construction
+    makeGenomeDb.pl -continue=db mm10Strains1.config.ra > db.log 2>&1
+
+############################################################################

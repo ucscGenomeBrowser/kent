@@ -329,7 +329,7 @@ freez(&fileName);
 return randomIdList;
 }
 
-void showSchemaBam(char *table)
+void showSchemaBam(char *table, struct trackDb *tdb)
 /* Show schema on bam. */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -394,6 +394,7 @@ for (sam=samList; sam != NULL; sam = sam->next)
     hPrintf("</TR>\n");
     }
 hTableEnd();
+printTrackHtml(tdb);
 
 /* Clean up and go home. */
 bamClose(&fh);

@@ -2226,7 +2226,13 @@ if (protTiles)
     }
 else
     {
-    if (tileSize == 15)
+    if (tileSize == 18)
+	repMatch = 2;
+    else if (tileSize == 17)
+	repMatch = 4;
+    else if (tileSize == 16)
+	repMatch = 8;
+    else if (tileSize == 15)
 	repMatch = 16;
     else if (tileSize == 14)
 	repMatch = 32;

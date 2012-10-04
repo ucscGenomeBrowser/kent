@@ -16,6 +16,9 @@ visibility pack
 track ensGene override
 visibility pack
 
+track genscan override
+visibility pack
+
 track xenoRefGene override
 visibility pack
 

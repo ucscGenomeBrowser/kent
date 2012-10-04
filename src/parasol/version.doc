@@ -315,3 +315,5 @@
 	Added support for -results=path/results option to parasol pstat2 command.
 	This will help make jobTree able to retrieve status quickly without 
 	bogging things down.
+
+12.13   Add ability to flush the results file from para and parasol clients.

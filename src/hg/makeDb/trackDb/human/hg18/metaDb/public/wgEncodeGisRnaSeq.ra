@@ -1,3 +1,8 @@
+metaObject wgEncodeGisRnaSeq
+objType composite
+composite wgEncodeGisRnaSeq
+expVars lab,dataType,cell,localization,rnaExtract
+
 metaObject wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
 objType table
 cell GM12878
@@ -6,6 +11,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 269
 fileName wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya.tagAlign.gz
 grant Gingeras
 lab GIS
@@ -25,6 +31,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 270
 fileName wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya.tagAlign.gz
 grant Gingeras
 lab GIS
@@ -44,6 +51,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 fileName wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya.tagAlign.gz
 grant Gingeras
 lab GIS
@@ -63,6 +71,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 fileName wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya.tagAlign.gz
 grant Gingeras
 lab GIS
@@ -82,6 +91,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 269
 grant Gingeras
 lab GIS
 localization cytosol
@@ -90,7 +100,7 @@ replicate 1
 rnaExtract longPolyA
 subId 758
 tableName wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
 objType table
@@ -100,6 +110,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 270
 grant Gingeras
 lab GIS
 localization cell
@@ -108,7 +119,7 @@ replicate 1
 rnaExtract longPolyA
 subId 758
 tableName wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
 objType table
@@ -118,6 +129,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 grant Gingeras
 lab GIS
 localization cytosol
@@ -126,7 +138,7 @@ replicate 1
 rnaExtract longPolyA
 subId 758
 tableName wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
 objType table
@@ -136,6 +148,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 grant Gingeras
 lab GIS
 localization cytosol
@@ -144,7 +157,7 @@ replicate 1
 rnaExtract longPolyA
 subId 758
 tableName wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
-view AllRawSignal
+view RawSignal
 
 metaObject wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
 objType table
@@ -154,6 +167,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 269
 grant Gingeras
 lab GIS
 localization cytosol
@@ -172,6 +186,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 270
 grant Gingeras
 lab GIS
 localization cell
@@ -190,6 +205,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 grant Gingeras
 lab GIS
 localization cytosol
@@ -208,6 +224,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 grant Gingeras
 lab GIS
 localization cytosol
@@ -226,6 +243,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 269
 grant Gingeras
 lab GIS
 localization cytosol
@@ -244,6 +262,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 270
 grant Gingeras
 lab GIS
 localization cell
@@ -262,6 +281,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 grant Gingeras
 lab GIS
 localization cytosol
@@ -280,6 +300,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 grant Gingeras
 lab GIS
 localization cytosol
@@ -298,6 +319,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 269
 fileName wgEncodeGisRnaSeqRawData2Rep1Gm12878CytosolLongpolya.csqual.gz
 grant Gingeras
 lab GIS
@@ -316,6 +338,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 fileName wgEncodeGisRnaSeqRawData2Rep2K562CytosolLongpolya.csqual.gz
 grant Gingeras
 lab GIS
@@ -334,6 +357,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 270
 fileName wgEncodeGisRnaSeqRawData3Rep1H1hescCellLongpolya.fastq.gz
 grant Gingeras
 lab GIS
@@ -342,7 +366,7 @@ project wgEncode
 replicate 1
 rnaExtract longPolyA
 subId 758
-view RawData3
+view RawData
 
 metaObject wgEncodeGisRnaSeqRawData3Rep1K562CytosolLongpolya
 objType file
@@ -352,6 +376,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 fileName wgEncodeGisRnaSeqRawData3Rep1K562CytosolLongpolya.fastq.gz
 grant Gingeras
 lab GIS
@@ -360,7 +385,7 @@ project wgEncode
 replicate 1
 rnaExtract longPolyA
 subId 758
-view RawData3
+view RawData
 
 metaObject wgEncodeGisRnaSeqRawDataRep1Gm12878CytosolLongpolya
 objType file
@@ -370,6 +395,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 269
 fileName wgEncodeGisRnaSeqRawDataRep1Gm12878CytosolLongpolya.csfasta.gz
 grant Gingeras
 lab GIS
@@ -388,6 +414,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 fileName wgEncodeGisRnaSeqRawDataRep2K562CytosolLongpolya.csfasta.gz
 grant Gingeras
 lab GIS
@@ -406,6 +433,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 270
 fileName wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya.pairedTagAlign.gz
 grant Gingeras
 lab GIS
@@ -425,6 +453,7 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
+expId 271
 fileName wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya.pairedTagAlign.gz
 grant Gingeras
 lab GIS
@@ -436,4 +465,4 @@ subId 758
 tableName wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya
 view SplitAlign
 
-# MAGIC: 1080846082
+# MAGIC: 1936031801

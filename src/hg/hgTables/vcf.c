@@ -401,10 +401,9 @@ return idList;
 
 #define VCF_MAX_SCHEMA_COLS 20
 
-void showSchemaVcf(char *table)
+void showSchemaVcf(char *table, struct trackDb *tdb)
 /* Show schema on vcf. */
 {
-struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 struct sqlConnection *conn = hAllocConn(database);
 char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, hDefaultChrom(database));
 
@@ -472,6 +471,7 @@ for (i = 0;  i < 10;  i++)
     hPrintf("</TR>\n");
     }
 hTableEnd();
+printTrackHtml(tdb);
 
 /* Clean up and go home. */
 lineFileClose(&lf);

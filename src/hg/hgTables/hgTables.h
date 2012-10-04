@@ -71,6 +71,8 @@ char *curTableLabel();
 char *getScriptName();
 /* returns script name from environment or hardcoded for command line */
 
+void printTrackHtml(struct trackDb *tdb);
+/* If trackDb has html for table, print it out in a new section. */
 
 /* ---------- Other UI stuff. ----------------------*/
 
@@ -775,7 +777,7 @@ struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
 void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
 
-void showSchemaBigBed(char *table);
+void showSchemaBigBed(char *table, struct trackDb *tdb);
 /* Show schema on bigBed. */
 
 /* More stuff in bigBed.c that makes use of autoSql files. */
@@ -797,7 +799,7 @@ struct sqlFieldType *bamListFieldsAndTypes();
 struct hTableInfo *bamToHti(char *table);
 /* Get standard fields of BAM into hti structure. */
 
-void showSchemaBam(char *table);
+void showSchemaBam(char *table, struct trackDb *tdb);
 /* Show schema on bam. */
 
 void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
@@ -827,7 +829,7 @@ struct sqlFieldType *vcfListFieldsAndTypes();
 struct hTableInfo *vcfToHti(char *table);
 /* Get standard fields of VCF into hti structure. */
 
-void showSchemaVcf(char *table);
+void showSchemaVcf(char *table, struct trackDb *tdb);
 /* Show schema on VCF. */
 
 void vcfTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
