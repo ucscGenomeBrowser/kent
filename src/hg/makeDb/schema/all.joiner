@@ -102,11 +102,11 @@ set wgs $rn,$panTro,$galGal,$melGal,$myoLuc,$hetGla,$sarHar,$canFam,$bosTau,$fel
 set xrg $panTro,$galGal,$melGal,$myoLuc,$hetGla,$sarHar,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caeAng,$caePb,$caeRem,$caeJap,$caeSp11,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal,$macEug,$gorGor,$chrPic,$dasNov,$dipOrd,$echTel,$nomLeu,$otoGar,$susScr,$latCha,$papHam,$triMan,$geoFor,$speTri,$saiBol,$gadMor,$melUnd,$choHof,$eriEur,$micMur,$proCap,$pteVam,$sorAra,$tarSyr,$tupBel,$ochPri,$oreNil,$turTru,$vicPac
 
 # Ensembl gene track lists constructed from update procedure
-set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ce10,ci2,cioSav2,danRer7,dm3,equCab2,fr2,fr3,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,melGal1,mm9,mm10,monDom5,nomLeu1,ornAna1,oryCun2,oryLat2,panTro2,panTro4,ponAbe2,rheMac2,rn4,sacCer3,speTri2,susScr1,taeGut1,tetNig2,xenTro3
+set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,eriEur1,equCab2,felCat3,fr2,fr3,galGal3,gasAcu1,gorGor3,hg19,latCha1,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,ponAbe2,proCap1,pteVam1,rheMac2,rn4,sacCer3,sarHar1,sorAra1,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,xenTro3
 
 set ensGeneWgs choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
 
-set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,choHof1,dipOrd1,echTel1,eriEur1,micMur1,ochPri2,proCap1,pteVam1,sorAra1,tarSyr1,tupBel1,vicPac1
+set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,mm9,mm10
