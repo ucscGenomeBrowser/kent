@@ -229,7 +229,7 @@ lineage mesoderm
 sex M
 tissue skeletal muscle myoblast
 vendorName Dr. Woodring Wright
-vendorId (None)
+vendorId Missing
 orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
 termId BTO:0000023
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000023
@@ -3226,7 +3226,7 @@ karyotype normal
 sex B
 tissue liver
 vendorName zen-bio
-vendorId (missing)
+vendorId Missing
 orderUrl http://www.zen-bio.com/
 termId BTO:0000575
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000575
@@ -5879,7 +5879,7 @@ description prostate tissue purchased for CSHL project
 tissue prostate
 lineage endoderm
 vendorName ATCC
-vendorId (see protocol documents)
+vendorId Missing
 orderUrl http://www.atcc.org/
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
@@ -8778,7 +8778,7 @@ antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP 
 target CBP
 targetDescription CBP is a histone acetyl transferase that promotes transcription. CBP is recruited by a variety of transcription factors to promoters and enhancers.
 vendorName Santa Cruz Biotechnology
-vendorId sc369
+vendorId sc-369
 orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
 lab Struhl
 targetId GeneCard:CREBBP
@@ -9701,14 +9701,14 @@ target ELAVL1
 targetDescription (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
 antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
 vendorName 1) Santa Cruz Biotechnology; 2) Millipore
-vendorId SC-5261; 07-1735 is recommended replacement for AB5831
+vendorId sc-5261; 07-1735 is recommended replacement for AB5831
 orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html ; http://www.millipore.com/catalogue/item/07-1735
 lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId GeneCard:ELAVL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELAVL1
 validation Human_-_ELAVL1_(AB5831)(Western_blot,Immunoprecipitation):human_ELAVL1_AB5831_validation_Tenenbaum.pdf Human_-_ELAVL1_(07-1735)(Western_blot,Immunoprecipitation):human_ELAVL1_07-1735_validation_Tenenbaum.pdf Human_-_ELAVL1_(SC-5261)(Western_blot,Immunoprecipitation):human_ELAVL1_SC-5261_validation_Tenenbaum.pdf
-label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
+label ELAVL1 (sc-5261; 07-1735 is recommended replacement for AB5831)
 #This is a PROBLEM with multiple antibodies going to one term
 
 term ELF1_(SC-631)
@@ -10894,13 +10894,13 @@ antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 61-3
 target hSpt5
 targetDescription hSpt5 heterodimerizes with hSpt4 to form the DRB Sensitivity Inducing Factor (DSIF). DSIF play dual roles in elongation. First, in a conjunction with NELF, dephosphorylated state DSIF blocks RNA polymerase II (RNAPII) from shifting from early elongation to productive elongation. Second, after phosphorylation DSIF continues to associate with elongating RNAPII to facilitate recruitment of factors required for processing of the mRNA.
 vendorName Santa Cruz Biotechnology
-vendorId sc28678
+vendorId sc-28678
 orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
 lab Struhl
 targetId GeneCard:SUPT5H
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
 validation Human_-_hSpt5_(sc-28678)(Western_blot,Immunoprecipitation):human_hSpt5_sc-28678_validation_Struhl.pdf
-label hSpt5 (sc28678)
+label hSpt5 (sc-28678)
 
 term IGF2BP1
 tag IGF2BP1
@@ -10909,14 +10909,14 @@ target IGF2BP1
 targetDescription Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
 antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin. Antibody Target: IGF2BP1
 vendorName Santa Cruz Biotechnology
-vendorId SC-21027
+vendorId sc-21027
 orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
 lab Tenenbaum
 lots I0607(Nov2008)
 targetId GeneCard:IGF2BP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IGF2BP1
 validation Human_-_IGF2BP1_(07-104)(Western_blot,Immunoprecipitation):human_IGF2BP1_07-104_validation_Tenenbaum.pdf
-label IGF2BP1 (SC-21027)
+label IGF2BP1 (sc-21027)
 # This is a PROBLEM because the validation doc is not the same antibody as is listed in the object
 
 
@@ -11171,13 +11171,13 @@ targetClass TFSS
 antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin. Antibody Target: MafK
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
 vendorName Santa Cruz Biotechnology
-vendorId SC-477
+vendorId sc-477
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 lab Snyder
 targetId GeneCard:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation Human_-_MafK(sc477)(Immunoprecipitation,ChIP):human_MafK_sc477_validation_Snyder.pdf
-label MafK (SC-477)
+label MafK (sc-477)
 #lots
 
 term Max
@@ -11527,7 +11527,7 @@ targetDescription NFYA is the alpha subunit of the trimeric NFY transcription fa
 targetClass TFSS
 antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NFYA. Antibody Target: NFYA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId missing
+vendorId Missing
 orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
@@ -11543,7 +11543,7 @@ targetDescription NFYB is the beta subunit of the trimeric NFY transcription fac
 targetClass TFSS
 antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NFYB. Antibody Target: NFYB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId missing
+vendorId Missing
 orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
@@ -12498,13 +12498,13 @@ targetDescription peptide mapping at c-terminus of Human STAT2 p-113 (C-20) X
 targetClass TFSS
 antibodyDescription Rabbit polyclonal. Antibody Target: STAT2
 vendorName Santa Cruz Biotechnology
-vendorId sc-476x
+vendorId sc-476X
 orderUrl http://www.scbt.com/product.php?datasheet=476
 lab Snyder
 targetId GeneCard:STAT2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT2
 validation Human_-_STAT2(Immunoprecipitation,ChIP):human_STAT2_validation_Snyder.pdf
-label STAT2 (sc-476x)
+label STAT2 (sc-476X)
 
 term STAT3
 tag STAT3
