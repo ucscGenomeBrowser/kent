@@ -1374,6 +1374,26 @@ if(!loginSystemEnabled())
 
 if(scriptName)
     {
+    // Provide view menu for some CGIs.
+    struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
+    boolean hasViewMenu = TRUE;
+    if (endsWith(scriptName, "hgGenome"))
+        {
+	safef(buf, sizeof(buf), "../cgi-bin/hgGenome?%s&hgGenome_doPsOutput=1", uiVars);
+    	dyStringPrintf(viewMenu, "<li><a href='%s' id='%s'>%s</a></li>\n", buf, "pdfLink", "PDF/PS");
+        }
+    else
+	{
+	hasViewMenu = FALSE;
+	}
+    dyStringAppend(viewMenu, "</ul>\n</li>\n");
+    if (hasViewMenu)
+    	menuStr = replaceChars(menuStr, "<!-- OPTIONAL_VIEW_MENU -->", dyStringCannibalize(&viewMenu));
+    }
+
+
+if(scriptName)
+    {
     // Provide context sensitive help links for some CGIs.
     char *link = NULL;
     char *label = NULL;
