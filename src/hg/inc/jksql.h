@@ -244,6 +244,9 @@ boolean sqlDatabaseExists(char *database);
 boolean sqlTableExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table exists. */
 
+bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column);
+/* return TRUE if column exists in table. tableName can contain sql wildcards  */
+
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
 /* Return row count if a table exists, -1 if it doesn't. */
 

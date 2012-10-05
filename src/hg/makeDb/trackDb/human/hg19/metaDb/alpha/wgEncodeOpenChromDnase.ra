@@ -10069,6 +10069,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562BaseOverlapSignalV2.bigWig
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -10649,6 +10650,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562PkV2.narrowPeak.gz
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -11190,6 +11192,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562SigV2.bigWig
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
@@ -16161,4 +16164,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 517407523
+# MAGIC: 824085853
