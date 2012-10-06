@@ -171,40 +171,13 @@ slReverse(&newList);
 vcff->records = newList;
 }
 
-static void trimIndelAlleles(struct vcfFile *vcff)
-/* For indels, VCF includes the left neighboring base; for example, if the alleles are
- * AA/- following a G base, then the VCF record will start one base to the left and have
- * "GAA" and "G" as the alleles.  That is not nice for display for two reasons:
- * 1. Indels appear one base wider than their dbSNP entries.
- * 2. In pgSnp display mode, the two alleles are always the same color.
- * So here we take the liberty of trimming that left neighboring base for display. */
+struct pgSnpVcfStart
+/* This extends struct pgSnp by tacking on an original VCF chromStart at the end,
+ * for use by indelTweakMapItem below.  This can be cast to pgs. */
 {
-struct vcfRecord *rec;
-for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-    if (rec->alleleCount > 1)
-	{
-	boolean allSameFirstBase = TRUE;
-	char firstBase = rec->alleles[0][0];
-	int i;
-	for (i = 1;  i < rec->alleleCount;  i++)
-	    if (rec->alleles[i][0] != firstBase)
-		{
-		allSameFirstBase = FALSE;
-		break;
-		}
-	if (allSameFirstBase)
-	    {
-	    rec->chromStart++;
-	    for (i = 0;  i < rec->alleleCount;  i++)
-		{
-		if (rec->alleles[i][1] == '\0')
-		    rec->alleles[i] = vcfFilePooledStr(vcff, "-");
-		else
-		    rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]+1);
-		}
-	    }
-	}
-}
+    struct pgSnp pgs;
+    unsigned int vcfStart;
+};
 
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
@@ -216,7 +189,11 @@ int maxLen = 33;
 int maxAlCount = 5;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
+    struct pgSnpVcfStart *psvs = needMem(sizeof(*psvs));
+    psvs->vcfStart = vcfRecordTrimIndelLeftBase(rec);
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
+    memcpy(&(psvs->pgs), pgs, sizeof(*pgs));
+    pgs = (struct pgSnp *)psvs; // leak mem
     // Insertion sequences can be quite long; abbreviate here for display.
     int len = strlen(pgs->name);
     if (len > maxLen)
@@ -635,6 +612,7 @@ static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, unsign
 		       boolean isClustered, boolean isCenter, enum hapColorMode colorMode)
 /* Draw a stack of genotype bars for this record */
 {
+unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
 const double scale = scaleForPixels(width);
 int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
@@ -726,13 +704,13 @@ if (isCenter)
 	hvGfxLine(hvg, x1-2, yOff, x2+2, yOff, MG_BLACK);
 	hvGfxLine(hvg, x1-2, yBot, x2+2, yBot, MG_BLACK);
 	}
-    // Mouseover is handled separately by mapBoxForCenterVariant
+    // Mouseover was handled already by mapBoxForCenterVariant
     }
 else
     {
     struct dyString *dy = dyStringNew(0);
     gtSummaryString(rec, dy);
-    mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+    mapBoxHgcOrHgGene(hvg, chromStartMap, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
 		      rec->name, dy->string, NULL, TRUE, NULL);
     }
 if (colorMode == altOnlyMode)
@@ -1167,7 +1145,6 @@ if (errCatchStart(errCatch))
     if (vcff != NULL)
 	{
 	filterRecords(vcff, tg->tdb);
-	trimIndelAlleles(vcff);
 	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
@@ -1191,6 +1168,15 @@ if (errCatch->gotError || vcff == NULL)
 errCatchFree(&errCatch);
 }
 
+static void indelTweakMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+        char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* Pass the original vcf chromStart to pgSnpMapItem, so if we have trimmed an identical
+ * first base from item's alleles and start, we will still pass the correct start to hgc. */
+{
+struct pgSnpVcfStart *psvs = item;
+pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, end, x, y, width, height);
+}
+
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
@@ -1198,6 +1184,7 @@ void vcfTabixMethods(struct track *track)
 knetUdcInstall();
 #endif
 pgSnpMethods(track);
+track->mapItem = indelTweakMapItem;
 // Disinherit next/prev flag and methods since we don't support next/prev:
 track->nextExonButtonable = FALSE;
 track->nextPrevExon = NULL;

@@ -669,6 +669,43 @@ lineFileExpectWords(vcff->lf, expected, wordCount);
 return vcfRecordFromRow(vcff, words);
 }
 
+unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec)
+/* For indels, VCF includes the left neighboring base; for example, if the alleles are
+ * AA/- following a G base, then the VCF record will start one base to the left and have
+ * "GAA" and "G" as the alleles.  That is not nice for display for two reasons:
+ * 1. Indels appear one base wider than their dbSNP entries.
+ * 2. In pgSnp display mode, the two alleles are always the same color.
+ * However, for hgTracks' mapBox we need the correct chromStart for identifying the
+ * record in hgc -- so return the original chromStart. */
+{
+unsigned int chromStartOrig = rec->chromStart;
+struct vcfFile *vcff = rec->file;
+if (rec->alleleCount > 1)
+    {
+    boolean allSameFirstBase = TRUE;
+    char firstBase = rec->alleles[0][0];
+    int i;
+    for (i = 1;  i < rec->alleleCount;  i++)
+	if (rec->alleles[i][0] != firstBase)
+	    {
+	    allSameFirstBase = FALSE;
+	    break;
+	    }
+    if (allSameFirstBase)
+	{
+	rec->chromStart++;
+	for (i = 0;  i < rec->alleleCount;  i++)
+	    {
+	    if (rec->alleles[i][1] == '\0')
+		rec->alleles[i] = vcfFilePooledStr(vcff, "-");
+	    else
+		rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]+1);
+	    }
+	}
+    }
+return chromStartOrig;
+}
+
 static void vcfParseData(struct vcfFile *vcff, int maxRecords)
 /* Given a vcfFile into which the header has been parsed, and whose lineFile is positioned
  * at the beginning of a data row, parse and store all data rows from lineFile. */

@@ -627,15 +627,6 @@ if (oneFile != NULL)
            "any related files provided by the laboratory.\n",
            server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
-if (hIsPreviewHost())
-    printf("<BR><b>WARNING</b>: This data is provided for early access via the Preview Browser -- "
-           "it is unreviewed and subject to change. For high quality reviewed annotations, "
-           "see the <a target=_blank href='http://%s/cgi-bin/hgTracks?db=%s'>Genome Browser</a>.",
-           "genome.ucsc.edu", db);
-else
-    printf("<BR><b>NOTE</b>: Early access to additional track data may be available on the "
-           "<a target=_blank href='http://%s/cgi-bin/hgFileUi?db=%s&g=%s'>Preview Browser</A>.",
-           "genome-preview.ucsc.edu", db, tdb->track);
 }
 
 static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList,
