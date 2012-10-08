@@ -2472,10 +2472,7 @@ identifier ensemblProteinId3 external=Ensembl
     $gbd.ensemblXref3.protein dupeOk
     $gbd.sfAssign.seqID minCheck=0.01
 
-# list of db with dupe ensGene.name in v68
-set ensemblGeneNameDupeOk !choHof1,!dasNov2,!dipOrd1,!echTel1,!eriEur1,!macEug1,!micMur1,!ochPri2,!proCap1,!pteVam1,!sorAra1,!tarSyr1,!tupBel1,!turTru1,!vicPac1
-
-set avoidEnsemblTranscriptId !felCat3,!ce10,$ensemblGeneNameDupeOk
+set avoidEnsemblTranscriptId !felCat3,!ce10,!eriEur1,!dasNov2,!macEug1,!turTru1
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
@@ -2515,7 +2512,7 @@ identifier ensemblGeneScaffold external=Ensembl dependency
 # to avoid the error on assemblies with Ensembl Gene scaffolds:
 # Error: 7771 duplicates in vicPac1.ensGene.name including 'ENSVPAT00000000004'
 # list on this avoid list:
-set avoidEnsemblTranscriptId2 !ce6,!ce9,!ce10,!felCat3,!choHof1,!dipOrd1,!echTel1,!eriEur1,!micMur1,!ochPri2,!proCap1,!pteVam1,!sorAra1,!tarSyr1,!tupBel1,!vicPac1
+set avoidEnsemblTranscriptId2 !ce6,!ce9,!ce10,!felCat3,!choHof1,!dipOrd1,!echTel1,!eriEur1,!micMur1,!ochPri2,!proCap1,!pteVam1,!sorAra1,!tarSyr1,!tupBel1,!vicPac1,!dasNov2,!macEug1,!turTru1
 
 #pulled this line into its own rule to reflect lack of dependency
 identifier ensemblTranscriptId2 external=Ensembl
@@ -2538,10 +2535,6 @@ identifier ensemblTranscriptIdFelCat external=Ensembl dependency
     $felCat.ensPep.name minCheck=0.99
     felCat3.ensemblToGeneName.name minCheck=0.99
     felCat3.ensemblSource.name minCheck=0.99
-
-identifier ensemblGeneNameDupeOkAll external=Ensembl dependency
-"Ensembl Transcript ID"
-    $ensemblGeneNameDupeOk.ensGene.name dupeOk
 
 # UCSC to Ensembl chrom name translation
 identifier ensemblLinkId external=Ensembl dependency
