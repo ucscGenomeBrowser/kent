@@ -478,6 +478,31 @@ else
     return shadesOfGray[5];
 }
 
+INLINE void abbrevAndHandleRC(char *abbrevAl, size_t abbrevAlSize, const char *fullAl)
+/* Limit the size of displayed allele to abbrevAlSize-1 and handle reverse-complemented display. */
+{
+boolean fullLen = strlen(fullAl);
+boolean truncating = (fullLen > abbrevAlSize-1);
+if (truncating)
+    {
+    int truncLen = abbrevAlSize - 4;
+    if (revCmplDisp)
+	{
+	safencpy(abbrevAl, abbrevAlSize, (fullAl + fullLen - truncLen), truncLen);
+	reverseComplement(abbrevAl, truncLen);
+	}
+    else
+	safencpy(abbrevAl, abbrevAlSize, fullAl, truncLen);
+    safecat(abbrevAl, abbrevAlSize, "...");
+    }
+else
+    {
+    safecpy(abbrevAl, abbrevAlSize, fullAl);
+    if (revCmplDisp)
+	reverseComplement(abbrevAl, fullLen);
+    }
+}
+
 INLINE void gtSummaryString(struct vcfRecord *rec, struct dyString *dy)
 // Make pgSnp-like mouseover text, but with genotype counts instead of allele counts.
 {
@@ -505,29 +530,20 @@ for (i=0;  i < vcff->genotypeCount;  i++)
     else
 	gtOtherCount++;
     }
-// These are pooled strings! Restore when done.
-if (revCmplDisp)
-    {
-    for (i=0;  i < rec->alleleCount;  i++)
-	reverseComplement(rec->alleles[i], strlen(rec->alleles[i]));
-    }
+char refAl[16];
+abbrevAndHandleRC(refAl, sizeof(refAl), rec->alleles[0]);
+char altAl1[16];
+abbrevAndHandleRC(altAl1, sizeof(altAl1), rec->alleles[1]);
 if (sameString(chromName, "chrY"))
     dyStringPrintf(dy, "%s:%d %s:%d",
-		   rec->alleles[0], gtRefRefCount, rec->alleles[1], gtRefAltCount);
+		   refAl, gtRefRefCount, altAl1, gtRefAltCount);
 else
-    dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->alleles[0], rec->alleles[0], gtRefRefCount,
-		   rec->alleles[0], rec->alleles[1], gtRefAltCount,
-		   rec->alleles[1], rec->alleles[1], gtAltAltCount);
+    dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", refAl, refAl, gtRefRefCount,
+		   refAl, altAl1, gtRefAltCount, altAl1, altAl1, gtAltAltCount);
 if (gtUnkCount > 0)
     dyStringPrintf(dy, " unknown:%d", gtUnkCount);
 if (gtOtherCount > 0)
     dyStringPrintf(dy, " other:%d", gtOtherCount);
-// Restore original values of pooled strings.
-if (revCmplDisp)
-    {
-    for (i=0;  i < rec->alleleCount;  i++)
-	reverseComplement(rec->alleles[i], strlen(rec->alleles[i]));
-    }
 }
 
 void mapBoxForCenterVariant(struct vcfRecord *rec, struct hvGfx *hvg, struct track *tg,
@@ -535,6 +551,7 @@ void mapBoxForCenterVariant(struct vcfRecord *rec, struct hvGfx *hvg, struct tra
 /* Special mouseover for center variant */
 {
 struct dyString *dy = dyStringNew(0);
+unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
 gtSummaryString(rec, dy);
 dyStringAppend(dy, "   Haplotypes sorted on ");
 char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "centerVariantChrom");
@@ -553,7 +570,7 @@ if (w <= 1)
     x1--;
     w = 3;
     }
-mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+mapBoxHgcOrHgGene(hvg, chromStartMap, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
 		  rec->name, dy->string, NULL, TRUE, NULL);
 }
 
@@ -941,7 +958,7 @@ return y;
 }
 
 void initTitleHelper(struct titleHelper *th, char *track, int startIx, int centerIx, int endIx,
-		     int nRecords, const struct vcfFile *vcff)
+		     int nRecords, struct vcfFile *vcff)
 /* Set up info including arrays of ref & alt alleles for cluster mouseover. */
 {
 th->track = track;
@@ -958,9 +975,13 @@ for (rec = vcff->records, i = 0;  rec != NULL && i < endIx;  rec = rec->next, i+
     {
     if (i < startIx)
 	continue;
-    th->refs[i-startIx] = rec->alleles[0];
-    th->alts[i-startIx] = cloneString(rec->alleles[1]);
-    tolowers(th->alts[i-startIx]);
+    char refAl[16];
+    abbrevAndHandleRC(refAl, sizeof(refAl), rec->alleles[0]);
+    th->refs[i-startIx] = vcfFilePooledStr(vcff, refAl);
+    char altAl1[16];
+    abbrevAndHandleRC(altAl1, sizeof(altAl1), rec->alleles[1]);
+    tolowers(altAl1);
+    th->alts[i-startIx] = vcfFilePooledStr(vcff, altAl1);
     }
 }
 
@@ -1011,7 +1032,7 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 /* Split samples' chromosomes (haplotypes), cluster them by center-weighted
  * alpha similarity, and draw in the order determined by clustering. */
 {
-const struct vcfFile *vcff = tg->extraUiData;
+struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);

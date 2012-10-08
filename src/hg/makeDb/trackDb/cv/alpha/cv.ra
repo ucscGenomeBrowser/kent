@@ -8471,7 +8471,7 @@ orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
 lab Myers
 targetId GeneCard:BATF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BATF
-validation Human_-_:missing
+validation Human_-_BATF(SC-100974)(Western_blot):human_BATF_SC-100974_validation_Myers.pdf
 label BATF (sc-100974)
 
 term BCL11A
@@ -8759,7 +8759,7 @@ lab Epstein
 lots A302-524A-1
 targetId GeneCard:CBX2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX2
-validation Human_-_CBX2_(A302-524A)(ChIP,WesternBlot):human_CBX2_validation_Epstein.pdf
+validation Human_-_CBX2_(A302-524A)(ChIP,Western_blot):human_CBX2_validation_Epstein.pdf
 label CBX2 (A302-524A)
 
 term CBX3_(SC-101004)
@@ -8806,7 +8806,7 @@ lab Epstein
 lots A300-882A-1
 targetId GeneCard:CBX8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX8
-validation Human_-_CBX8_(A300-882A)(ChIP,WesternBlot):human_CBX8_validation_Epstein.pdf
+validation Human_-_CBX8_(A300-882A)(ChIP,Western_blot):human_CBX8_validation_Epstein.pdf
 label CBX8 (A300-882A)
 
 term CCNT2
@@ -9015,7 +9015,7 @@ lab Epstein
 lots A301-081A-1
 targetId GeneCard:CHD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD4
-validation Human_-_CHD4_(A301-081A)(ChIP,WesternBlot):human_CHD4_validation_Epstein.pdf
+validation Human_-_CHD4_(A301-081A)(ChIP,Western_blot):human_CHD4_validation_Epstein.pdf
 label CHD4&#47;Mi2 (A301-081A)
 
 term CHD7_(A301-223A-1)
@@ -9031,7 +9031,7 @@ lab Bernstein
 lots A301-223A-1
 targetId GeneCard:CHD7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD7
-validation CHD7_(A301-223A)(ChIP,WesternBlot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
+validation CHD7_(A301-223A)(ChIP,Western_blot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
 label CHD7 (A301-223A)
 
 term COREST_(ab24166)
@@ -9780,7 +9780,7 @@ lab Bernstein
 lots H2009
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation ESET_(166621)(ChIP,WesternBlot):human_ESET_166621_validation_Bernstein.pdf
+validation ESET_(166621)(ChIP,Western_blot):human_ESET_166621_validation_Bernstein.pdf
 label ESET&#47;SETDB1 (sc-166621)
 
 term ETS1
@@ -10820,7 +10820,7 @@ lab Bernstein
 lots GR22075-1
 targetId GeneCard:CBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
-validation HP1gamma_(ab10480)(ChIP,WesternBlot):human_HP1gamma_ab10480_validation_Bernstein.pdf
+validation HP1gamma_(ab10480)(ChIP,Western_blot):human_HP1gamma_ab10480_validation_Bernstein.pdf
 label HP1gamma (ab10480)
 
 term HSF1
@@ -10998,7 +10998,7 @@ lab Bernstein
 lots A300-861A-1
 targetId GeneCard:KDM4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM4A
-validation JMJD2A_(A300-861A)(ChIP,WesternBlot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
+validation JMJD2A_(A300-861A)(ChIP,Western_blot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
 label JMJD2A (A300-861A)
 
 term JunD
@@ -11046,7 +11046,7 @@ lab Bernstein
 lots NA
 targetId GeneCard:CREBBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
-validation KAT3A_(ab2832)(ChIP,WesternBlot):human_KAT3A_ab2832_validation_Bernstein.pdf
+validation KAT3A_(ab2832)(ChIP,Western_blot):human_KAT3A_ab2832_validation_Bernstein.pdf
 label KAT3A (ab2832)
 
 term LEF1_(SC-8592)
@@ -11077,7 +11077,7 @@ lab Epstein
 lots A300-215A-1
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
-validation Human_-_LSD1_(A300-215A)(ChIP,WesternBlot):human_LSD1_validation_Epstein.pdf
+validation Human_-_LSD1_(A300-215A)(ChIP,Western_blot):human_LSD1_validation_Epstein.pdf
 label LSD1&#47;KDM1A (A300-215A)
 
 term MafF_(M8194)
@@ -11479,7 +11479,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
-validation Human_-_NF-YA(Western_Blot,Immunoprecipitation):human_NF-YA_validation_Struhl.pdf
+validation Human_-_NF-YA(Western_blot,Immunoprecipitation):human_NF-YA_validation_Struhl.pdf
 label NF-YA
 
 term NF-YB
@@ -11495,7 +11495,7 @@ orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
-validation Human_-_NF-YB(Western_Blot,Immunoprecipitation):human_NF-YB_validation_Struhl.pdf
+validation Human_-_NF-YB(Western_blot,Immunoprecipitation):human_NF-YB_validation_Struhl.pdf
 label NF-YB
 
 #term NONO
@@ -11591,7 +11591,7 @@ lab Bernstein
 lots GR47579-1
 targetId GeneCard:WHSC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WHSC1
-validation NSD2_(ab75359)(ChIP,WesternBlot):human_NSD2_ab75359_validation_Bernstein.pdf
+validation NSD2_(ab75359)(ChIP,Western_blot):human_NSD2_ab75359_validation_Bernstein.pdf
 label NSD2 (ab75359)
 
 term p300
@@ -11607,7 +11607,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=585
 lab Myers
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_P300(SC-585)(Western_blot):human_P300_SC-585_validation_Myers.pdf  Mouse_-_P300(SC-585)(Western_blot):mouse_P300_SC-585_validation_Ren.pdf
 label P300&#47;EP300 (sc-585)
 
 term P300_KAT3B
@@ -11624,7 +11624,7 @@ lab Epstein
 lots A300-358A-1
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
-validation Human_-_P300_(A300-358A)(ChIP,WesternBlot):human_P300_validation_Epstein.pdf
+validation Human_-_P300_(A300-358A)(ChIP,Western_blot):human_P300_validation_Epstein.pdf
 label P300&#47;EP300&#47;KAT3B (A300-358A)
 
 term p300_(SC-584)
@@ -11752,7 +11752,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=891
 lab Myers
 targetId GeneCard:PBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PBX3
-validation Human_-_:missing
+validation Human_-_PBX3(SC-891)(Western_blot):human_PBX3_SC-891_validation_Myers.pdf
 label PBX3 (sc-891)
 
 term PCAF
@@ -11768,7 +11768,7 @@ lab Epstein
 lots A301-666A-1
 targetId GeneCard:KAT2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
-validation Human_-_PCAF_(A301-666A)(ChIP,WesternBlot):human_PCAF_validation_Epstein.pdf
+validation Human_-_PCAF_(A301-666A)(ChIP,Western_blot):human_PCAF_validation_Epstein.pdf
 label PCAF&#47;KAT2B (A301-666A)
 
 term PGC1A
@@ -11898,7 +11898,7 @@ orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-
 lab Myers
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Human_-_Pol2-4H8(ChIP,MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_Pol2-4H8(ChIP,MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_Pol2-4H8(ab5408)(Western_blot):mouse_Pol2-4H8_ab5408_validation_Hardison.pdf
 label Pol2-4H8 (ab5408)
 
 term Pol2(phosphoS2)
@@ -12044,7 +12044,7 @@ lab Epstein
 lots JH1786670
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
-validation Human_-_REST_(17-641)(ChIP,WesternBlot):human_REST_validation_Epstein.pdf
+validation Human_-_REST_(17-641)(ChIP,Western_blot):human_REST_validation_Epstein.pdf
 label REST (17-641)
 
 term ripInput
@@ -12074,7 +12074,7 @@ lab Epstein
 lots A302-869A-1
 targetId GeneCard:RNF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RNF2
-validation Human_-_RNF2_(A302-869A)(ChIP,WesternBlot):human_RNF2_validation_Epstein.pdf
+validation Human_-_RNF2_(A302-869A)(ChIP,Western_blot):human_RNF2_validation_Epstein.pdf
 label RNF2 (A302-869A)
 
 term RFX5_(200-401-194)
@@ -12251,7 +12251,7 @@ lab Bernstein
 lots GR24519-2
 targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
-validation SIRT6_(ab62739)(ChIP,WesternBlot):human_SIRT6_ab62739_validation_Bernstein.pdf
+validation SIRT6_(ab62739)(ChIP,Western_blot):human_SIRT6_ab62739_validation_Bernstein.pdf
 label SIRT6 (ab62739)
 
 term SIX5
@@ -13766,6 +13766,12 @@ tag INPUT
 type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
 label Input Control
+
+#term ripInput
+#tag RIPIN
+#type control 
+#description Total input for comparison for RIP experiments
+#label RIP input
 
 term Large_Fragment
 tag LARGEFRAGMENT
