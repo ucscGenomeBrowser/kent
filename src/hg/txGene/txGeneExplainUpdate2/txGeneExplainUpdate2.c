@@ -117,33 +117,61 @@ for (i=1; i<blockCount; ++i)
 return FALSE;
 }
 
+static void addCode(struct dyString *dy, char *code, int *numNotes)
+{
+(*numNotes)++;
+
+dyStringPrintf(dy, "%s,", code);
+}
+
 char *diffNote(struct bed *oldBed, struct bed *newBed)
 /* Return note explaining difference. */
 {
-char *note = "";
 boolean oldIsCoding = (oldBed->thickStart < oldBed->thickEnd);
 boolean newIsCoding = (newBed->thickStart < newBed->thickEnd);
 boolean bothCoding = (oldIsCoding && newIsCoding);
+struct dyString *dy = newDyString(64);
+int numNotes = 0;
 
 if (oldIsCoding != newIsCoding)
     {
     if (oldIsCoding)
-        note = "No longer considered protein coding";
+	addCode(dy, "becameNonCoding", &numNotes);
     else
-        note = "Now considered protein coding";
+	addCode(dy, "becameCoding", &numNotes);
     }
-else if (oldBed->blockCount != newBed->blockCount)
-    note = "Different number of exons";
-else if (bothCoding && (oldBed->thickStart < newBed->thickStart || oldBed->thickEnd > newBed->thickEnd))
-    note = "Bases removed from coding region";
-else if (bothCoding && (oldBed->thickStart > newBed->thickStart || oldBed->thickEnd < newBed->thickEnd))
-    note = "Bases added to coding region";
-else if (intronsDifferent(oldBed, newBed))
-    note = "Intron boundaries have changed";
-else if (oldBed->chromStart < newBed->chromStart || oldBed->chromEnd > newBed->chromEnd)
-    note = "Bases removed from UTR";
-else if (oldBed->chromStart > newBed->chromStart || oldBed->chromEnd < newBed->chromEnd)
-    note = "Bases added to UTR";
+
+if (oldBed->blockCount != newBed->blockCount)
+    addCode(dy, "differentNumberOfBlocks", &numNotes);
+
+if (bothCoding && (oldBed->thickStart < newBed->thickStart || oldBed->thickEnd > newBed->thickEnd))
+    addCode(dy, "basesRemovedFromCoding", &numNotes);
+
+if (bothCoding && (oldBed->thickStart > newBed->thickStart || oldBed->thickEnd < newBed->thickEnd))
+    addCode(dy, "basesAddedToCoding", &numNotes);
+
+if (intronsDifferent(oldBed, newBed))
+    addCode(dy, "intronsChanged", &numNotes);
+
+if (oldBed->chromStart < newBed->chromStart || oldBed->chromEnd > newBed->chromEnd)
+    addCode(dy, "basesRemovedFromUTR", &numNotes);
+
+if (oldBed->chromStart > newBed->chromStart || oldBed->chromEnd < newBed->chromEnd)
+    addCode(dy, "basesAddedToUTR", &numNotes);
+
+if (numNotes == 0)
+    addCode(dy, "noChange", &numNotes);
+
+char *note = dyStringCannibalize(&dy);
+
+/* remove final comma */
+if (note != NULL)
+    {
+    int noteLen = strlen(note);
+
+    note[noteLen - 1] = 0;
+    }
+
 return note;
 }
 
