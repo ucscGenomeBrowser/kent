@@ -580,9 +580,26 @@ chain 1550477 chrM_rCRS 16569 + 0 16569 chrM 16571 + 0 16571 526
     zcat process/hg19.allGenes.gp.gz | grep -w chrM \
         | sed -e "s/chrM/chrM_rCRS/g" > chrM_rCRS.gp
     liftOver -genePred chrM_rCRS.gp chrM.over.chain chrM.gp noMap.chrM
-    sed -e "s/^/585\t/" chrM.gp > chrM.tab
-    hgsql -e 'delete from ensGene where chrom="chrM";' hg19
-    hgsql -e 'LOAD DATA LOCAL INFILE "chrM.tab" INTO TABLE ensGene;' hg19
+    # check line count first:
+    zcat process/hg19.allGenes.gp.gz | wc -l
+    # 191891
+    zcat process/hg19.allGenes.gp.gz | grep -vw chrM | wc -l
+    # 191854
+    zcat process/hg19.allGenes.gp.gz | grep -w chrM | wc -l
+    # 37
+    cat chrM.gp | wc -l
+    # 37
+
+    # remove old chrM entries from process/hg19.allGenes.gp.gz
+    zcat process/hg19.allGenes.gp.gz | grep -vw chrM > hg19.allGenes.gp 
+    wc -l  hg19.allGenes.gp
+    # 191854 hg19.allGenes.gp
+    cat chrM.gp >> hg19.allGenes.gp
+    cat hg19.allGenes.gp | wc -l
+    # 191891
+    # load the ensGene table:
+    gzip hg19.allGenes.gp
+    hgLoadGenePred -genePredExt hg19 ensGene process/hg19.allGenes.gp.gz
 
 ############################################################################
 #  latCha1 - Coelacanth - Ensembl Genes version 68  (DONE - 2012-08-29 -

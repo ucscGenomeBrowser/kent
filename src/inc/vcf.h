@@ -200,6 +200,15 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
 struct vcfRecord *vcfRecordFromRow(struct vcfFile *vcff, char **words);
 /* Parse words from a VCF data line into a VCF record structure. */
 
+unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec);
+/* For indels, VCF includes the left neighboring base; for example, if the alleles are
+ * AA/- following a G base, then the VCF record will start one base to the left and have
+ * "GAA" and "G" as the alleles.  That is not nice for display for two reasons:
+ * 1. Indels appear one base wider than their dbSNP entries.
+ * 2. In pgSnp display mode, the two alleles are always the same color.
+ * However, for hgTracks' mapBox we need the correct chromStart for identifying the
+ * record in hgc -- so return the original chromStart. */
+
 void vcfFileFree(struct vcfFile **vcffPtr);
 /* Free a vcfFile object. */
 
@@ -223,6 +232,9 @@ const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *
 struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key);
 /* Look up the type of genotype FORMAT component key, in the definitions from the header,
  * and failing that, from the keys reserved in the spec. */
+
+char *vcfFilePooledStr(struct vcfFile *vcff, char *str);
+/* Allocate memory for a string from vcff's shared string pool. */
 
 #define VCF_NUM_COLS 10
 

@@ -171,6 +171,14 @@ slReverse(&newList);
 vcff->records = newList;
 }
 
+struct pgSnpVcfStart
+/* This extends struct pgSnp by tacking on an original VCF chromStart at the end,
+ * for use by indelTweakMapItem below.  This can be cast to pgs. */
+{
+    struct pgSnp pgs;
+    unsigned int vcfStart;
+};
+
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
@@ -181,7 +189,11 @@ int maxLen = 33;
 int maxAlCount = 5;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
+    struct pgSnpVcfStart *psvs = needMem(sizeof(*psvs));
+    psvs->vcfStart = vcfRecordTrimIndelLeftBase(rec);
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
+    memcpy(&(psvs->pgs), pgs, sizeof(*pgs));
+    pgs = (struct pgSnp *)psvs; // leak mem
     // Insertion sequences can be quite long; abbreviate here for display.
     int len = strlen(pgs->name);
     if (len > maxLen)
@@ -466,6 +478,31 @@ else
     return shadesOfGray[5];
 }
 
+INLINE void abbrevAndHandleRC(char *abbrevAl, size_t abbrevAlSize, const char *fullAl)
+/* Limit the size of displayed allele to abbrevAlSize-1 and handle reverse-complemented display. */
+{
+boolean fullLen = strlen(fullAl);
+boolean truncating = (fullLen > abbrevAlSize-1);
+if (truncating)
+    {
+    int truncLen = abbrevAlSize - 4;
+    if (revCmplDisp)
+	{
+	safencpy(abbrevAl, abbrevAlSize, (fullAl + fullLen - truncLen), truncLen);
+	reverseComplement(abbrevAl, truncLen);
+	}
+    else
+	safencpy(abbrevAl, abbrevAlSize, fullAl, truncLen);
+    safecat(abbrevAl, abbrevAlSize, "...");
+    }
+else
+    {
+    safecpy(abbrevAl, abbrevAlSize, fullAl);
+    if (revCmplDisp)
+	reverseComplement(abbrevAl, fullLen);
+    }
+}
+
 INLINE void gtSummaryString(struct vcfRecord *rec, struct dyString *dy)
 // Make pgSnp-like mouseover text, but with genotype counts instead of allele counts.
 {
@@ -493,29 +530,20 @@ for (i=0;  i < vcff->genotypeCount;  i++)
     else
 	gtOtherCount++;
     }
-// These are pooled strings! Restore when done.
-if (revCmplDisp)
-    {
-    for (i=0;  i < rec->alleleCount;  i++)
-	reverseComplement(rec->alleles[i], strlen(rec->alleles[i]));
-    }
+char refAl[16];
+abbrevAndHandleRC(refAl, sizeof(refAl), rec->alleles[0]);
+char altAl1[16];
+abbrevAndHandleRC(altAl1, sizeof(altAl1), rec->alleles[1]);
 if (sameString(chromName, "chrY"))
     dyStringPrintf(dy, "%s:%d %s:%d",
-		   rec->alleles[0], gtRefRefCount, rec->alleles[1], gtRefAltCount);
+		   refAl, gtRefRefCount, altAl1, gtRefAltCount);
 else
-    dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", rec->alleles[0], rec->alleles[0], gtRefRefCount,
-		   rec->alleles[0], rec->alleles[1], gtRefAltCount,
-		   rec->alleles[1], rec->alleles[1], gtAltAltCount);
+    dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", refAl, refAl, gtRefRefCount,
+		   refAl, altAl1, gtRefAltCount, altAl1, altAl1, gtAltAltCount);
 if (gtUnkCount > 0)
     dyStringPrintf(dy, " unknown:%d", gtUnkCount);
 if (gtOtherCount > 0)
     dyStringPrintf(dy, " other:%d", gtOtherCount);
-// Restore original values of pooled strings.
-if (revCmplDisp)
-    {
-    for (i=0;  i < rec->alleleCount;  i++)
-	reverseComplement(rec->alleles[i], strlen(rec->alleles[i]));
-    }
 }
 
 void mapBoxForCenterVariant(struct vcfRecord *rec, struct hvGfx *hvg, struct track *tg,
@@ -523,6 +551,7 @@ void mapBoxForCenterVariant(struct vcfRecord *rec, struct hvGfx *hvg, struct tra
 /* Special mouseover for center variant */
 {
 struct dyString *dy = dyStringNew(0);
+unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
 gtSummaryString(rec, dy);
 dyStringAppend(dy, "   Haplotypes sorted on ");
 char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "centerVariantChrom");
@@ -541,7 +570,7 @@ if (w <= 1)
     x1--;
     w = 3;
     }
-mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+mapBoxHgcOrHgGene(hvg, chromStartMap, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
 		  rec->name, dy->string, NULL, TRUE, NULL);
 }
 
@@ -600,6 +629,7 @@ static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, unsign
 		       boolean isClustered, boolean isCenter, enum hapColorMode colorMode)
 /* Draw a stack of genotype bars for this record */
 {
+unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
 const double scale = scaleForPixels(width);
 int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
@@ -691,13 +721,13 @@ if (isCenter)
 	hvGfxLine(hvg, x1-2, yOff, x2+2, yOff, MG_BLACK);
 	hvGfxLine(hvg, x1-2, yBot, x2+2, yBot, MG_BLACK);
 	}
-    // Mouseover is handled separately by mapBoxForCenterVariant
+    // Mouseover was handled already by mapBoxForCenterVariant
     }
 else
     {
     struct dyString *dy = dyStringNew(0);
     gtSummaryString(rec, dy);
-    mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
+    mapBoxHgcOrHgGene(hvg, chromStartMap, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
 		      rec->name, dy->string, NULL, TRUE, NULL);
     }
 if (colorMode == altOnlyMode)
@@ -928,7 +958,7 @@ return y;
 }
 
 void initTitleHelper(struct titleHelper *th, char *track, int startIx, int centerIx, int endIx,
-		     int nRecords, const struct vcfFile *vcff)
+		     int nRecords, struct vcfFile *vcff)
 /* Set up info including arrays of ref & alt alleles for cluster mouseover. */
 {
 th->track = track;
@@ -945,9 +975,13 @@ for (rec = vcff->records, i = 0;  rec != NULL && i < endIx;  rec = rec->next, i+
     {
     if (i < startIx)
 	continue;
-    th->refs[i-startIx] = rec->alleles[0];
-    th->alts[i-startIx] = cloneString(rec->alleles[1]);
-    tolowers(th->alts[i-startIx]);
+    char refAl[16];
+    abbrevAndHandleRC(refAl, sizeof(refAl), rec->alleles[0]);
+    th->refs[i-startIx] = vcfFilePooledStr(vcff, refAl);
+    char altAl1[16];
+    abbrevAndHandleRC(altAl1, sizeof(altAl1), rec->alleles[1]);
+    tolowers(altAl1);
+    th->alts[i-startIx] = vcfFilePooledStr(vcff, altAl1);
     }
 }
 
@@ -998,7 +1032,7 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 /* Split samples' chromosomes (haplotypes), cluster them by center-weighted
  * alpha similarity, and draw in the order determined by clustering. */
 {
-const struct vcfFile *vcff = tg->extraUiData;
+struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
@@ -1155,6 +1189,15 @@ if (errCatch->gotError || vcff == NULL)
 errCatchFree(&errCatch);
 }
 
+static void indelTweakMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+        char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* Pass the original vcf chromStart to pgSnpMapItem, so if we have trimmed an identical
+ * first base from item's alleles and start, we will still pass the correct start to hgc. */
+{
+struct pgSnpVcfStart *psvs = item;
+pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, end, x, y, width, height);
+}
+
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
@@ -1162,6 +1205,7 @@ void vcfTabixMethods(struct track *track)
 knetUdcInstall();
 #endif
 pgSnpMethods(track);
+track->mapItem = indelTweakMapItem;
 // Disinherit next/prev flag and methods since we don't support next/prev:
 track->nextExonButtonable = FALSE;
 track->nextPrevExon = NULL;

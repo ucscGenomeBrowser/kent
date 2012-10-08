@@ -86,6 +86,17 @@ if [ "${WC}" -gt 1 ]; then
 
     # build the new DECIPHER track tables
     ../buildDecipher `cat j.fn.txt`
+    ../validateDecipher.sh hg19
+
+    # now install
+    for i in `cat ../decipher.tables`
+    do 
+	n=$i"New"
+	o=$i"Old"
+	hgsqlSwapTables hg19 $n $i $o -dropTable3
+    done
+
+    echo "DECIPHER Installed `date`" 
 
     rm j.fn.txt
     rm j.fn.gpg

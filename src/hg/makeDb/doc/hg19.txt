@@ -8414,14 +8414,14 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # NHGRI GWAS CATALOG (DONE 8/1/12 angie)
 # NOTE: This assumes that the corresponding section in hg18.txt has just been run.
 #       It depends on the noCoords.tab file in the corresponding hg18 build directory.
-# Updated 6/4/12, 4/4/12, 2/21/12 (remove extra whitespace, translate non-ASCII to html), 2/6/12
+# 2012 updates: 8/1, 6/4, 4/4, 2/21 (remove extra whitespace, translate non-ASCII to html), 2/6
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
-    # Done once, don't need to redo:
+    # Done once per dbSNP build, don't need to redo until next dbSNP build is released:
     zcat ../snp135/snp135.bed.gz | cut -f 1-4  \
     | sort -k4,4 \
       > snp135Coords.bed
@@ -8434,9 +8434,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
+
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Read 9687 elements of size 22 from gwasCatalog.bed
+#Read 10661 elements of size 22 from gwasCatalog.bed
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
     # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
@@ -8449,7 +8450,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt
-#807 ambigStrand.txt
+#935 ambigStrand.txt
 
 
 ######################################################################## 
@@ -19471,7 +19472,7 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-# DENISOVA HIGH-COVERAGE ANALYSIS #8886 (DONE 9/28/12 angie)
+# DENISOVA HIGH-COVERAGE ANALYSIS #8886 (DONE 10/2/12 angie)
     mkdir /hive/data/genomes/hg19/bed/denisova
     cd /hive/data/genomes/hg19/bed/denisova
     # Fetched original .zip file on 9/6/12:
@@ -19538,9 +19539,11 @@ while (<>) {
       $w[$i] = "N/A" if ($w[$i] eq "-");
     }
   }
+  my $name = "$w[15]/$w[16]";
+  $name .= ":$w[21]" if (length($w[21]) > 1);
   # Add spaces to Extra for readability:
   $w[14] =~ s/;/; /g;
-  print join("\t", "chr$w[1]", $w[2], $chromEnd, "$w[15]/$w[16]", # BED 4
+  print join("\t", "chr$w[1]", $w[2], $chromEnd, $name,      # BED 4
              $w[5], $w[4], $w[14],                           # Feature, Gene, Extra
              $w[7], $w[8], $w[9], $w[10], $w[11], $w[12],    # Consequence, coding effect
              $w[15], $w[16], $w[17], $w[18], $w[19],         # Human, Den, etc. alleles
@@ -19569,11 +19572,10 @@ $gType =~ s/Grantham//;  $gType =~ s/^(\d)utr/Utr$1/; $gType =~ s/nframe/nFrame/
 $fType =~ s/^(\w)/\u$1/;
 $fType =~ s/ighfreq/ighFreq/;
 my $fShort = ($fType eq "Fixed") ? "Fxd" : "HiF";
-my $vShort = ($vType eq "InDel") ? "InD" : $vType;
-my $shortLabel = "$vShort ";
-my $longLabel = "Human Derived ($fType), Denisova Ancestral: ";
+my $shortLabel = "";
+my $longLabel = "Modern Human Derived ($fType), Denisova Ancestral: ";
 my $color = "0,0,0";
-my $subset;
+my ($subset, $view);
 if ($gType) {
   $subset = "$ccds$gType";
   if ($gType eq "Nonsyn" || $gType eq "Splice" || $gType eq "FrameshiftCoding" ||
@@ -19593,7 +19595,8 @@ if ($gType) {
     $gLong = "CCDS $gLong";
   }
   $shortLabel .= "$gShort $fShort";
-  $longLabel .= "${vType}s, $gLong";
+  $longLabel .= "$gLong";
+  $view = $ccds ? $ccds : "Ens";
 } elsif ($reg) {
   $color = "230,130,0";
   my ($rShort, $rLong);
@@ -19608,39 +19611,93 @@ if ($gType) {
     ($rShort, $rLong) = ("RegRegion", "Regulatory Region");
   }
   $shortLabel .= "$rShort $fShort";
-  $longLabel .= "${vType}s in $rLong";
+  $longLabel .= "$rLong";
+  $view = "Reg";
 } else {
   $subset = "All";
   $shortLabel .= "$fShort";
-  $longLabel .= "All ${vType}s";
+  $longLabel .= "All ";
+  $view = "All";
 }
 my $track = "dhcHumDerDenAnc$vType$subset$fType";
 my $cmd = "./trackify.pl $tsvPath > $track.bed";
-
-#***system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
-
-my $view = ($vType eq "SNC") ? "A_SNC" : "B_InDel";
-my $subsetTweaked = $subset;  $subsetTweaked =~ s/Syn/ZLast_Syn/;  $subsetTweaked =~ s/^Re/D_Re/;
+system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
 if (-s "$track.bed") {
-  print "        track $track\n";
-  print "        parent dhcHumDerDenAnc$vType\n";
-  print "        subGroups view=$view subset=$subsetTweaked freq=$fType\n";
-  print "        shortLabel $shortLabel\n";
-  print "        longLabel $longLabel\n";
-  print "        color $color\n\n";
+  my $subsetTweaked = $subset;  $subsetTweaked =~ s/Syn/ZLast_Syn/;
+  $subsetTweaked =~ s/^RegMotifH/DA_RegMotifH/;  $subsetTweaked =~ s/^RegM/DB_RegM/;
+  $subsetTweaked =~ s/^Reg/DC_Reg/;
+  my $isOff = "";
+  $isOff = " off" if ($subset =~ /Syn/ || $subset eq "Reg");
+  # We will combine SNCs and InDels later; print only one set of trackDb descriptions:
+  if ($vType eq "InDel" || $subset =~ /Nonsyn/ || $subset =~ /Syn/) {
+    print "        track dhcHumDerDenAnc$subset$fType\n";
+    print "        parent dhcHumDerDenAnc$view$isOff\n";
+    print "        subGroups view=$view subset=$subsetTweaked freq=$fType\n";
+    print "        shortLabel $shortLabel\n";
+    print "        longLabel $longLabel\n";
+    print "        color $color\n\n";
+  }
+  if ($fType eq "Fixed") {
+    # Fernando Racimo's request: separate out Fixed (in 1000Genomes) locations that are in dbSNP.
+    $cmd = "egrep -vw 'rs[0-9]+' $track.bed > tmp$track.bed";
+    system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
+    $cmd = "egrep -w 'rs[0-9]+' $track.bed > ${track}DbSnp.bed";
+    system($cmd); # grep returns nonzero if it can't find anything, but that's OK here.
+    $cmd = "mv tmp$track.bed $track.bed";
+    system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
+    if (-s "${track}DbSnp.bed" &&
+        ($vType eq "InDel" || $subset =~ /Nonsyn/ || $subset =~ /Syn/ ||
+         $subset eq "RegMotifHighInfo")) {
+      $shortLabel =~ s/Fxd/FxS/;
+      $longLabel =~ s/Fixed/Fixed+dbSNP/;
+      print "        track dhcHumDerDenAnc$subset${fType}DbSnp\n";
+      print "        parent dhcHumDerDenAnc$view$isOff\n";
+      print "        subGroups view=$view subset=$subsetTweaked freq=${fType}DbSnp\n";
+      print "        shortLabel $shortLabel\n";
+      print "        longLabel $longLabel\n";
+      print "        color $color\n\n";
+    }
+  }
 }
 '_EOF_'
-    # << emacs
+     # << emacs
     chmod a+x tsvToBedAndTrackDb.pl
     foreach f (*/Genome_VEP_*.tsv)
         ./tsvToBedAndTrackDb.pl $f
         if ($status != 0) break
     end
     # Check input and output file counts:
-    ls -1 */G*.tsv | wc -l
-#54
-    ls -1 *.bed | wc -l
-#54
+    ls -1 */G*_highfreq.tsv | wc -l
+#27
+    ls -1 *HighFreq.bed | wc -l
+#27
+    ls -1 */G*_fixed.tsv | wc -l
+#27
+    ls -1 *Fixed.bed | wc -l
+#27
+    ls -1 *FixedDbSnp.bed | wc -l
+#27
+    # 54 inputs, 81 outputs because Fixed was split into Fixed and FixedDbSnp
+
+    # Combine SNCs and InDels:
+    foreach indel (dhcHumDerDenAncInDel*.bed)
+      set snc = `echo $indel | sed -e 's/InDel/SNC/;'`
+      set both = `echo $indel | sed -e 's/InDel//;'`
+      if (! -e $snc) then
+        mv $indel $both
+      endif
+    end
+    foreach snc (dhcHumDerDenAncSNC*.bed)
+      set indel = `echo $snc | sed -e 's/SNC/InDel/;'`
+      set both = `echo $snc | sed -e 's/SNC//;'`
+      if (-e $indel) then
+        sort -k1,1 -k2n,2n $snc $indel > $both
+        rm $snc $indel
+      else
+        mv $snc $both
+      endif
+    end
+
     # bedToBigBed:
     foreach f (dhcHumDerDenAnc*.bed)
       if (-s $f) then
@@ -19652,12 +19709,16 @@ if (-s "$track.bed") {
         echo "Skipping $f (zero size)"
       endif
     end
-#Skipping dhcHumDerDenAncInDelCcdsInFrameNonsynHighFreq.bed (zero size)
-#Skipping dhcHumDerDenAncInDelInFrameNonsynHighFreq.bed (zero size)
+#Skipping dhcHumDerDenAncCcdsInFrameNonsynFixedDbSnp.bed (zero size)
+#Skipping dhcHumDerDenAncCcdsInFrameNonsynHighFreq.bed (zero size)
+#Skipping dhcHumDerDenAncInFrameNonsynFixedDbSnp.bed (zero size)
+#Skipping dhcHumDerDenAncInFrameNonsynHighFreq.bed (zero size)
     # Check bigBed file count:
+    ls -1 *.bed | wc -l
+#54
     ls -1 *.bb | wc -l
-#52
-    # We skipped two empty bed files, so that's OK.
+#50
+    # We skipped 4 empty bed files, so that's OK.
 
     # Install in /gbdb and load up.
     mkdir /gbdb/hg19/dhcHumDerDenAnc

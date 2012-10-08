@@ -29,6 +29,11 @@ if (!ajax)
 //if(tdbIsContainer(tdb) && !ajax)
 //    cartTdbTreeReshapeIfNeeded(cart,tdb);
 
+if (trackDbSetting(tdb, "wgEncode"))
+    {
+    printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
+           "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
+    }
 printf("<B style='font-size:200%%;'>%s</B>\n", tdb->longLabel);
 
 // If Composite, link to the hgTrackUi.  But if downloadsOnly then link to any superTrack.
@@ -55,7 +60,15 @@ else if (tdb->parent) //Print link for parent track
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     printf("<span id='navDown' style='float:right; display:none;'>");
-    // First put up a button to go to File Search
+
+    if (trackDbSetting(tdb, "wgEncode"))
+        {
+        // Link to ENCODE home page
+        printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE</A>");
+        printf("&nbsp;&nbsp;");
+        }
+
+    // Link to File Search
     printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadable files ...'>"
             "File Search</A>&nbsp;&nbsp;&nbsp;",db);
 

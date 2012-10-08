@@ -5,7 +5,6 @@
 
 #include <time.h>
 #include <stdio.h>
-#include <crypt.h>
 #include <fcntl.h>
 #include <sys/utsname.h>
 #include <sys/stat.h>

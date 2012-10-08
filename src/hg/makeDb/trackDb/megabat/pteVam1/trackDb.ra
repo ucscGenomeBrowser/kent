@@ -26,7 +26,7 @@ track rmsk override
 visibility hide
 
 track xenoRefGene override
-visibility squish
+visibility dense
 
 searchTable gold
 searchMethod prefix
