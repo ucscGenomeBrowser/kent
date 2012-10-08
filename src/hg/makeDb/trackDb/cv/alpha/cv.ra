@@ -102,8 +102,8 @@ vendorId HB-8065
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
 lineage endoderm
 karyotype cancer
-termId BTO:0000559
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+termId BTO:0000599
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000599
 color 189,0,157
 sex M
 tier 2
@@ -121,8 +121,8 @@ vendorId HB-8065
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
 lineage endoderm
 karyotype cancer
-termId BTO:0000559
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+termId BTO:0000599
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000599
 color 189,0,157
 sex M
 tier 2
