@@ -70,7 +70,7 @@ while (iRow < 20)
     }
 if (numNonZero == 0)
     gbError("%s: none of gbCdnaInfo string ids have non-zero values", dir);
-else if (numNonZero < 4)
+else if (numNonZero < 3)
     gbError("%s: accession %s: only %d of gbCdnaInfo string ids have non-zero values",
             acc,dir, numNonZero);
 }

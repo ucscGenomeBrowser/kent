@@ -13767,6 +13767,12 @@ type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
 label Input Control
 
+#term ripInput
+#tag RIPIN
+#type control 
+#description Total input for comparison for RIP experiments
+#label RIP input
+
 term Large_Fragment
 tag LARGEFRAGMENT
 type control
