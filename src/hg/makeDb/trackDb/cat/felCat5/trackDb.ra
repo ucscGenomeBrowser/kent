@@ -22,7 +22,7 @@ track refGene override
 visibility pack
 
 track xenoRefGene override
-visibility squish
+visibility dense
 
 searchTable gold
 searchMethod prefix

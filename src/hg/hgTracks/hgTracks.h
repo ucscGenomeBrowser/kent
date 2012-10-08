@@ -1328,6 +1328,10 @@ void pgSnpMethods (struct track *tg);
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
 
+void pgSnpMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName,
+		  char *mapItemName, int start, int end, int x, int y, int width, int height);
+/* create a special map box item with different pop-up statusLine with allele counts */
+
 void gvfMethods(struct track *tg);
 /* Load GVF variant data. */
 

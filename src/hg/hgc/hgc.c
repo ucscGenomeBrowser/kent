@@ -886,16 +886,6 @@ for (i=0; i<subCount; ++i)
 return s;
 }
 
-bool columnExists(struct sqlConnection *conn, char *tableName, char *column)
-/* checks if column exists in table */
-{
-    char query[1024];
-    safef(query, 1024, "SHOW COLUMNS FROM `%s` LIKE '%s'", tableName, column);
-    char buf[1024];
-    char *ret = sqlQuickQuery(conn, query, buf, 1024);
-    return (ret!=NULL);
-}
-
 void printItemDetailsHtml(struct trackDb *tdb, char *itemName)
 /* if track has an itemDetailsHtml, retrieve and print the HTML */
 {
@@ -904,7 +894,8 @@ if (tableName != NULL)
     {
     struct sqlConnection *conn = hAllocConn(database);
     struct itemDetailsHtml *html, *htmls;
-    if (columnExists(conn, tableName, "chrom"))
+    // if the details table has chrom/start/end columns, then use these to lookup html
+    if (sqlColumnExists(conn, tableName, "chrom"))
         {
         char *chrom = cgiString("c");
         int start   = cgiInt("o");
@@ -917,6 +908,7 @@ if (tableName != NULL)
                        start = '%d' and \
                        end = '%d'", tableName, itemName, chrom, start, end);
         }
+    // otherwise, assume that the itemName is unique 
     else 
         htmls = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
                        "select name, html from %s where name = '%s'", tableName, itemName);
