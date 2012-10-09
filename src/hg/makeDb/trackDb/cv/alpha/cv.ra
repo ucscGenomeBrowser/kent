@@ -229,8 +229,8 @@ tissue skeletal muscle myoblast
 vendorName Dr. Woodring Wright
 vendorId Missing
 orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
-termId BTO:0000023
-termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000023
+termId BTO:0005046
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0005046&termName=LHCN-M2%20cell
 protocol Wold:LHCNM2_Wold_protocol.pdf
 
 
