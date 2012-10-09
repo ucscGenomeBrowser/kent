@@ -22,7 +22,7 @@
 #define NA "<em>n/a</em>"
 
 static void printKeysWithDescriptions(struct vcfFile *vcff, int wordCount, char **words,
-				      struct vcfInfoDef *infoDefs)
+				      struct vcfInfoDef *infoDefs, boolean escapeHtml)
 /* Given an array of keys, print out a list of values with
  * descriptions if descriptions are available. */
 {
@@ -33,10 +33,11 @@ for (i = 0;  i < wordCount; i++)
 	printf(", ");
     char *key = words[i];
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, key);
+    char *htmlKey = escapeHtml ? htmlEncode(key) : key;
     if (def != NULL)
-	printf("%s (%s)", htmlEncode(key), def->description);
+	printf("%s (%s)", htmlKey, def->description);
     else
-	printf("%s", htmlEncode(key));
+	printf("%s", htmlKey);
     }
 printf("<BR>\n");
 }
@@ -51,7 +52,7 @@ if (rec->alleleCount < 2 || sameString(rec->alleles[1], "."))
     return;
     }
 struct vcfFile *vcff = rec->file;
-printKeysWithDescriptions(vcff, rec->alleleCount-1, &(displayAls[1]), vcff->altDefs);
+printKeysWithDescriptions(vcff, rec->alleleCount-1, &(displayAls[1]), vcff->altDefs, FALSE);
 }
 
 static void vcfQualDetails(struct vcfRecord *rec)
@@ -72,7 +73,7 @@ else
     printf("<B>Filter failures:</B> ");
     printf("<font style='font-weight: bold; color: #FF0000;'>\n");
     struct vcfFile *vcff = rec->file;
-    printKeysWithDescriptions(vcff, rec->filterCount, rec->filters, vcff->filterDefs);
+    printKeysWithDescriptions(vcff, rec->filterCount, rec->filters, vcff->filterDefs, TRUE);
     printf("</font>\n");
     }
 }
@@ -316,14 +317,15 @@ static void makeDisplayAlleles(struct vcfRecord *rec, boolean showLeftBase, char
 			       int endLength, char **displayAls)
 /* If necessary, show the left base that we trimmed and/or abbreviate long sequences. */
 {
+struct dyString *dy = dyStringNew(128);
 int i;
 for (i = 0;  i < rec->alleleCount; i++)
     {
-    struct dyString *dy = dyStringNew(128);
+    dyStringClear(dy);
     if (showLeftBase)
 	dyStringPrintf(dy, "(%c)", leftBase);
     abbreviateLongSeq(rec->alleles[i], endLength, dy);
-    displayAls[i] = dy->string; // leak some mem
+    displayAls[i] = htmlEncode(dy->string); // leak some mem
     }
 }
 
