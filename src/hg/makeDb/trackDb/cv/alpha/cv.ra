@@ -9606,15 +9606,14 @@ target ELAVL1
 targetDescription (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
 antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
 vendorName 1) Santa Cruz Biotechnology; 2) Millipore
-vendorId sc-5261; 07-1735 is recommended replacement for AB5831
+vendorId sc-5261; 07-1735
 orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html ; http://www.millipore.com/catalogue/item/07-1735
 lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId GeneCard:ELAVL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELAVL1
 validation Human_-_ELAVL1_(AB5831)(Western_blot,Immunoprecipitation):human_ELAVL1_AB5831_validation_Tenenbaum.pdf Human_-_ELAVL1_(07-1735)(Western_blot,Immunoprecipitation):human_ELAVL1_07-1735_validation_Tenenbaum.pdf Human_-_ELAVL1_(SC-5261)(Western_blot,Immunoprecipitation):human_ELAVL1_SC-5261_validation_Tenenbaum.pdf
-label ELAVL1 (sc-5261; 07-1735 is recommended replacement for AB5831)
-#This is a PROBLEM with multiple antibodies going to one term
+label ELAVL1 (sc-5261; 07-1735)
 
 term ELF1_(SC-631)
 tag ELF1
@@ -9929,7 +9928,7 @@ antibodyDescription rat monoclonal antibody raised against mouse recombinant GAT
 vendorName Santa Cruz Biotechnology
 vendorId sc-265
 orderUrl http://www.scbt.com/datasheet-265-gata-1-n6-antibody.html
-targetId GeneCard:Gata1
+targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Hardison
 validation Mouse_-_GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
@@ -9997,7 +9996,7 @@ lab Hardison
 lots J2108
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation Human_-_:missing Mouse_-_GATA2_(SC-9008)(Western_blot):mouse_GATA2_SC-9008_validation_Hardison.pdf
+validation Mouse_-_GATA2_(SC-9008)(Western_blot):mouse_GATA2_SC-9008_validation_Hardison.pdf
 label GATA2 (sc-9008)
 
 term GATA3_(SC-268)
@@ -10035,9 +10034,9 @@ label GATA3 (sc-269)
 term GCN5
 tag GCN5
 type Antibody
+antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: GCN5
 target GCN5
 targetClass HISase
-antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: GCN5
 targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
 vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
 vendorId GCN5
@@ -11014,9 +11013,9 @@ label LSD1&#47;KDM1A (A300-215A)
 term MafF_(M8194)
 tag MAFF
 type Antibody
-target MafF
+antibodyDescription Rabbit polyclonal. Raised against synthetic peptide corresponding to amino acids 147-163 of human MAFF. The immunizing peptide does not cross-react with other members of the family. Antibody Target: MAFF
+target MAFF
 targetClass TFSS
-antibodyDescription Rabbit polyclonal. Raised against synthetic peptide corresponding to amino acids 147-163 of human MAFF. The immunizing peptide does not cross-react with other members of the family. Antibody Target: MafF
 targetDescription The protein encoded by this gene is a (bZIP) transcription factor that lacks a transactivation domain. It is known to bind the US-2 DNA element in the promoter of the oxytocin receptor (OTR) gene and most likely heterodimerizes with other leucine zipper-containing proteins to enhance expression of the OTR gene during term pregnancy. Can also form homodimers, and since it lacks a transactivation domain, the homodimer may act as a repressor of transcription. May also be involved in the cellular stress response.
 vendorName Sigma-Aldrich
 vendorId M8194
@@ -11025,7 +11024,7 @@ lab Snyder
 targetId GeneCard:MAFF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFF
 validation Human_-_:missing
-label MafF (M8194)
+label MAFF (M8194)
 
 term MafK_(ab50322)
 tag MAFK
@@ -11287,13 +11286,13 @@ label NANOG (sc-33759)
 term NCoR
 tag NCOR
 type Antibody
-target NCOR
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: NCOR
+target NCOR1
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: NCOR1
 targetDescription The nuclear receptor corepressor protein (NCoR) mediates gene repression by interacting with nuclear receptors. NCoR mediates repression by associating with SIN3A/B and the histone deacetylases, HDAC1 and HDAC2, and promoting the formation of repressive chromatin structures.
 vendorName Bethyl Laboratories
 vendorId A301-145A
 orderUrl http://www.bethyl.com/product/A301-145A/
-lab Epstein
+lab Bernstein
 lots A301-145A-1
 targetId GeneCard:NCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
@@ -11352,9 +11351,9 @@ label NF-E2 (sc-291)
 term NF-E2_(SC-22827)
 tag NFE2b
 type Antibody
+antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NFE2 of human origin. Antibody Target: NFE2
 target NFE2
 targetClass TFSS
-antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NFE2 of human origin. Antibody Target: NFE2
 targetDescription Transcription factor NFE2 45 kDa subunit is a component of the NFE2 complex and essential for regulating erythroid and megakaryocytic maturation and differentiation. Binds to the hypersensitive site 2 (HS2) of the beta-globin control region (LCR). This subunit (NFE2)recognizes the TCAT/C sequence of the AP-1-like core palindrome present in a number of erythroid and megakaryocytic gene promoters. Requires MAFK or other small MAF proteins for binding to the NFE2 motif. May play a role in all aspects of hemoglobin production from globin and heme synthesis to procurement of iron. NFE2 has been shown to interact with CREB binding protein.
 vendorName Santa Cruz Biotechnology
 vendorId sc-22827
@@ -12268,9 +12267,9 @@ label SP4 (sc-645)
 term SPT20
 tag SPT20
 type Antibody
+antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen: C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids). Antibody Target: SPT20
 target SPT20
 targetClass HISase
-antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen: C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids). Antibody Target: SPT20
 targetDescription Also known as FAM48A or P38IP. It is a component of SAGA complex. Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
 vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
 vendorId SPT20
