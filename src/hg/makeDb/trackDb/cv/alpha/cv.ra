@@ -31,12 +31,11 @@
 # tier 		In human, specifies which table the cell type appears in in cellTypes.html.
 #		Not used in mouse. Should correspond to a "type tier" stanza. required
 # protocol      comma-separated list of format: tag_submittingLab_protocol.pdf. required.
-# category: 	T for tissue, L for cell line, or P for primary cells.  optional
+# category 	T for tissue, L for cell line, or P for primary cells.  optional
 
 term GM12878
 tag GM12878
 type Cell Line
-#tissue haematopoietic
 color 153,38,0
 description B-lymphocyte, lymphoblastoid, International HapMap Project - CEPH/Utah - European Caucasion, Epstein-Barr Virus
 karyotype normal
@@ -55,7 +54,6 @@ vendorName Coriell
 term K562
 tag K562
 type Cell Line
-#tissue haematopoietic
 color 46,0,184
 description leukemia, "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 karyotype cancer
@@ -74,7 +72,6 @@ vendorName ATCC
 term K562b
 tag K562b
 type Cell Line
-#tissue haematopoietic
 deprecated same as K562
 description leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 karyotype cancer
@@ -89,7 +86,6 @@ tier 1
 tissue blood
 vendorId CCL-243
 vendorName ATCC
-#color 46,0,184
 
 term HepG2
 tag HEPG2
@@ -145,23 +141,6 @@ tier 2
 tissue cervix
 vendorId CCL-2.2
 vendorName ATCC
-
-#term HeLa-S3_IFNg
-#tag HeLaS3IFNg
-#description cervical carcinoma (Interferon gamma treatment)
-#type Cell Line
-#organism human
-#tissue cervix
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
-#vendorName ATCC
-#vendorId CCL-2.2
-#lineage ectoderm
-#karyotype cancer
-#termId BTO:0000568
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
-#color 0,119,158
-#tier 3
-#protocol Protocol:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
 
 term HUVEC
 tag HUVEC
@@ -270,7 +249,6 @@ tier 2
 tissue epithelium
 vendorId CCL-185
 vendorName ATCC
-#formerly tier 3
 
 term AG04449
 tag AG04449
@@ -356,7 +334,6 @@ term Adult_CD4_naive
 tag ADULTCD4NAIVE
 type Cell Line
 label T cells CD4+ naive adult
-#tissue haematopoietic
 childOf T_cells_CD4+
 description CD4+ cells isolated from human blood and enriched for naive populations
 karyotype normal
@@ -377,7 +354,6 @@ term Adult_CD4_Th0
 tag ADULTCD4TH0
 type Cell Line
 label T cells CD4+ Th0 adult
-#tissue haematopoietic
 childOf T_cells_CD4+
 description CD4+ cells isolated from human blood and enriched for Th0 populations
 karyotype normal
@@ -398,7 +374,6 @@ term Adult_CD4_Th1
 tag ADULTCD4TH1
 type Cell Line
 label T cells CD4+ Th1 adult
-#tissue haematopoietic
 childOf T_cells_CD4+
 description CD4+ cells isolated from human blood and enriched for Th1 populations
 karyotype normal
@@ -558,25 +533,6 @@ tissue breast
 vendorId D4234086_A710031
 vendorName BioChain
 
-# Maybe some day this cell line will have data. ~Jeff
-#term BC_Cervix_BN0773
-#tag BCCERVIX
-#type Cell Line
-#tier 3
-#organism human
-#description uterine cervix, donor BN0773, age 44, Asian, DNA extract
-#tissue uterine cervix
-#lineage mesoderm
-## http://en.wikipedia.org/wiki/Paramesonephric_duct
-#karyotype normal
-#sex F
-#vendorName BioChain
-#vendorId D4234275_A511454
-#orderUrl http://www.biochain.com
-#termId BTO:0001421
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
-#protocol Myers:Myers_BioChain_protocol.pdf
-
 term Colon_BC
 tag COLONBC
 type Cell Line
@@ -594,11 +550,6 @@ tier 3
 tissue colon
 vendorId CP-S12-D1234090-05_A903056; CP-S10-R1234090-20_B402074; CP-S13-D1234090-05_B111123; CP-S10-R1234090-20_B111053
 vendorName BioChain; BioChain; BioChain; BioChain
-# The new terms Colon_BC, Esophagus_BC, Kidney_BC,
-# Lung_BC, Skeletal_Muscle_BC, Stomach_BC are out
-# of alphabetical order. This may make them easier
-# to review, but they should be moved to their
-# correct location after April 2012. ~Jeff
 
 term BC_Colon_01-11002
 tag BCCOLON
@@ -711,7 +662,6 @@ tier 3
 tissue jejunum
 vendorId CP-S13-D1234230-05_B402068; CP-S10-R1234230-20_A911037
 vendorName BioChain; BioChain
-# http://en.wikipedia.org/wiki/Jejunum
 
 term Kidney_BC
 tag KIDNEYBC
@@ -791,7 +741,6 @@ term BC_Leukocyte_UHN00204
 tag BCLEUKOCYTE
 type Cell Line
 label Leukocyte BC UHN00204
-#tissue haematopoietic
 description peripheral blood mononuclear cell, donor UHN00204, age 54, caucasian, DNA extract
 karyotype normal
 lineage mesoderm
@@ -1081,24 +1030,6 @@ tissue small intestine
 vendorId CP-S12-D1234226-05_B402067; CP-S10-R1234226-20_A612138
 vendorName BioChain; BioChain
 
-# Maybe some day this cell line will have data. ~Jeff
-#term BC_Spleen_01-11002
-#tag BCSPLEEN
-#type Cell Line
-#tier 3
-#organism human
-#description spleen, donor 01-11002, age 83, caucasian, RNA extract
-#tissue spleen
-#lineage mesoderm
-#karyotype normal
-#sex F
-#vendorName BioChain
-#vendorId CP-S10-R1234246-20_A612140
-#orderUrl http://www.biochain.com
-#termId BTO:0001281
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
-#protocol Myers:Myers_BioChain_protocol.pdf
-
 term BC_Spleen_H12817N
 tag BCSPLEENb
 type Cell Line
@@ -1312,14 +1243,12 @@ tier 2
 tissue monocytes
 vendorId Monocytes-CD14+
 vendorName S. Heimfeld Laboratory, FHCRC
-#formerly tier 3
 # Adding a derprecated term CD14+ for reference with other sorted cells.
 
 term CD20+
 tag CD20
 type Cell Line
 label B-cells CD20+
-#tissue haematopoietic
 description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis
 karyotype normal
 lineage mesoderm
@@ -1338,7 +1267,6 @@ term CD20+_RO01778
 tag CD20RO01778
 type Cell Line
 label B-cells CD20+ (RO01778)
-#tissue haematopoietic
 age 43
 childOf CD20+
 description B cells, caucasian, draw number 1, newly promoted to tier 2: not in 2011 analysis
@@ -1359,7 +1287,6 @@ term CD20+_RO01794
 tag CD20RO01794
 type Cell Line
 label B cells CD20+ RO01794
-#tissue haematopoietic
 age 27
 childOf CD20+
 description B cells, African American, draw number 1, newly promoted to tier 2: not in 2011 analysis
@@ -1380,7 +1307,6 @@ term CD34+_Mobilized
 tag CD34MOBILIZED
 type Cell Line
 label CD34+ Mobilized
-#tissue haematopoietic
 description hematopoietic progenitor cells- mobilized, from donor RO01679.
 orderUrl http://labs.fhcrc.org/heimfeld/index.html
 organism human
@@ -1449,7 +1375,6 @@ vendorName Dr. Yanwen Jiang
 term CLL
 tag CLL
 type Cell Line
-#tissue haematopoietic
 description chronic lymphocytic leukemia cell, T-cell lymphocyte
 karyotype cancer
 lineage mesoderm
@@ -1533,7 +1458,6 @@ vendorName Dr. Amy Murtha at Duke University
 term CMK
 tag CMK
 type Cell Line
-#tissue haematopoietic
 description acute megakaryocytic leukemia cells, "established from the peripheral blood of a 10-month-old boy with Down's syndrome and acute megakaryocytic leukemia (AML M7) at relapse in 1985" - DSMZ. (PMID: 3016165)
 karyotype cancer
 lineage mesoderm
@@ -1587,7 +1511,6 @@ term Cord_CD4_naive
 tag CORDCD4NAIVE
 type Cell Line
 label T cells CD4+ naive cord blood
-#tissue haematopoietic
 childOf T_cells_CD4+
 description CD4+ cells isolated from cord blood and enriched for naive populations
 karyotype normal
@@ -1608,7 +1531,6 @@ term Cord_CD4_Th0
 tag CORDCD4TH0
 type Cell Line
 label T cells CD4+ Th0 cord blood
-#tissue haematopoietic
 childOf T_cells_CD4+
 description CD4+ cells isolated from cord blood and enriched for Th0 populations
 karyotype normal
@@ -1629,7 +1551,6 @@ term Cord_CD4_Th1
 tag CORDCD4TH1
 type Cell Line
 label T cells CD4+ Th1 cord blood
-#tissue haematopoietic
 childOf T_cells_CD4+
 description CD4+ cells isolated from cord blood and enriched for Th1 populations
 karyotype normal
@@ -1664,7 +1585,6 @@ vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 term Dnd41
 tag DND41
 type Cell Line
-#tissue haematopoietic
 description T cell leukemia with Notch mutation
 karyotype cancer
 lineage mesoderm
@@ -1682,7 +1602,6 @@ vendorName DSMZ
 term ECC-1
 tag ECC1
 type Cell Line
-#tissue epithelium
 description epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes
 karyotype cancer
 lineage endoderm
@@ -1884,7 +1803,6 @@ vendorName Coriell
 term GM06990
 tag GM06990
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -1902,7 +1820,6 @@ vendorName Coriell
 term GM08714
 tag GM08714
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid cell line, Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo.
 lab Farnham
@@ -1957,7 +1874,6 @@ vendorName Coriell
 term GM10847
 tag GM10847
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -1975,7 +1891,6 @@ vendorName Coriell
 term GM12801
 tag GM12801
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -1993,7 +1908,6 @@ vendorName Coriell
 term GM12812
 tag GM12812
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 lab Stam
@@ -2012,7 +1926,6 @@ vendorName Coriell
 term GM12813
 tag GM12813
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 lab Stam
@@ -2031,7 +1944,6 @@ vendorName Coriell
 term GM12864
 tag GM12864
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2049,7 +1961,6 @@ vendorName Coriell
 term GM12865
 tag GM12865
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2067,7 +1978,6 @@ vendorName Coriell
 term GM12866
 tag GM12866
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed.
 lab Stam
@@ -2086,7 +1996,6 @@ vendorName Coriell
 term GM12867
 tag GM12867
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed.
 lab Stam
@@ -2105,7 +2014,6 @@ vendorName Coriell
 term GM12868
 tag GM12868
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed.
 lab Stam
@@ -2124,7 +2032,6 @@ vendorName Coriell
 term GM12869
 tag GM12869
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed.
 lab Stam
@@ -2143,7 +2050,6 @@ vendorName Coriell
 term GM12870
 tag GM12870
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed.
 lab Stam
@@ -2162,7 +2068,6 @@ vendorName Coriell
 term GM12871
 tag GM12871
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed.
 lab Stam
@@ -2181,7 +2086,6 @@ vendorName Coriell
 term GM12872
 tag GM12872
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2199,7 +2103,6 @@ vendorName Coriell
 term GM12873
 tag GM12873
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2217,7 +2120,6 @@ vendorName Coriell
 term GM12874
 tag GM12874
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2235,7 +2137,6 @@ vendorName Coriell
 term GM12875
 tag GM12875
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2253,7 +2154,6 @@ vendorName Coriell
 term GM12878-XiMat
 tag GM12878Xb
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 karyotype normal
@@ -2275,7 +2175,6 @@ vendorName Hunt Willard at Duke University
 #type Cell Line
 #organism human
 #description lymphoblastoid, cloned for paternal X inactivation, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
-#tissue haematopoietic
 #vendorName Hunt Willard at Duke University
 #vendorId GM12878-XiPat
 #orderUrl http://www.genome.duke.edu/people/faculty/willard/
@@ -2290,7 +2189,6 @@ vendorName Hunt Willard at Duke University
 term GM12891
 tag GM12891
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1463, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2308,7 +2206,6 @@ vendorName Coriell
 term GM12892
 tag GM12892
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1463, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2326,7 +2223,6 @@ vendorName Coriell
 term GM15510
 tag GM15510
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid NIGMS Human Genetic Cell Repository, DNA Polymorphism Discovery Resource Collection, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2380,7 +2276,6 @@ vendorName Coriell
 term GM18505
 tag GM18505
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2398,7 +2293,6 @@ vendorName Coriell
 term GM18507
 tag GM18507
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2416,7 +2310,6 @@ vendorName Coriell
 term GM18526
 tag GM18526
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid, International HapMap Project, Han Chinese in Beijing, China, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2434,7 +2327,6 @@ vendorName Coriell
 term GM18951
 tag GM18951
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid, International HapMap Project, Japanese in Tokyo, Japan, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2452,7 +2344,6 @@ vendorName Coriell
 term GM19099
 tag GM19099
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2470,7 +2361,6 @@ vendorName Coriell
 term GM19193
 tag GM19193
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2488,7 +2378,6 @@ vendorName Coriell
 term GM19238
 tag GM19238
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2506,7 +2395,6 @@ vendorName Coriell
 term GM19239
 tag GM19239
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -2524,7 +2412,6 @@ vendorName Coriell
 term GM19240
 tag GM19240
 type Cell Line
-#tissue haematopoietic
 childOf Lymphoblastoid_cell_line
 description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 lineage mesoderm
@@ -3406,7 +3293,6 @@ vendorName ScienCell
 term HL-60
 tag HL60
 type Cell Line
-#tissue haematopoietic
 description promyelocytic leukemia cells, (PMID: 276884)
 karyotype cancer
 lineage mesoderm
@@ -3424,7 +3310,6 @@ vendorName ATCC
 term HMEC
 tag HMEC
 type Cell Line
-#tissue epithelium
 description mammary epithelial cells
 karyotype normal
 lineage ectoderm
@@ -3442,7 +3327,6 @@ vendorName Lonza
 term HMEpC
 tag HMEPC
 type Cell Line
-#tissue epithelium
 description Mammary Epithelial Cells (placeholder, waiting on second lot/donor from PromoCell)
 karyotype normal
 lab Gingeras
@@ -3461,7 +3345,6 @@ vendorName PromoCell
 term HMEpC_6022801.3
 tag HMEPC60228013
 type Cell Line
-#tissue epithelium
 childOf HMEpC
 description Mammary Epithelial Cells
 karyotype normal
@@ -3497,7 +3380,6 @@ vendorName ScienCell
 term hMNC-PB
 tag HMNCPB
 type Cell Line
-#tissue haematopoietic
 description Mononuclear Cells (peripheral blood-single donor) from two individuals, hMNC-PB_0022330.9 and hMNC-PB_0082430.9
 karyotype normal
 lab Gingeras
@@ -3516,7 +3398,6 @@ vendorName PromoCell
 term hMNC-PB_0022330.9
 tag HMNCPB00223309
 type Cell Line
-#tissue haematopoietic
 childOf hMNC-PB
 description Mononuclear Cells, peripheral blood-single donor
 karyotype normal
@@ -3536,7 +3417,6 @@ vendorName PromoCell
 term hMNC-PB_0082430.9
 tag HMNCPB00824309
 type Cell Line
-#tissue haematopoietic
 childOf hMNC-PB
 description Mononuclear Cells, peripheral blood-single donor
 karyotype normal
@@ -3556,7 +3436,6 @@ vendorName PromoCell
 term hMNC-CB
 tag HMNCCB
 type Cell Line
-#tissue haematopoietic
 description Mononuclear Cells (umbilical cord blood-single donor) from two individuals, hMNC-CB_9111701.6 and hMNC-CB_8072802.6
 karyotype normal
 lab Gingeras
@@ -3575,7 +3454,6 @@ vendorName PromoCell
 term hMNC-CB_9111701.6
 tag HMNCCB91117016
 type Cell Line
-#tissue haematopoietic
 childOf hMNC-CB
 description Mononuclear Cells, umbilical cord blood-single donor
 karyotype normal
@@ -3595,7 +3473,6 @@ vendorName PromoCell
 term hMNC-CB_8072802.6
 tag HMNCCB80728026
 type Cell Line
-#tissue haematopoietic
 childOf hMNC-CB
 description Mononuclear Cells, umbilical cord blood-single donor
 karyotype normal
@@ -4145,7 +4022,6 @@ vendorName ScienCell
 term HPIEpC
 tag HPIEPC
 type Cell Line
-#tissue epithelium
 description Placental Epithelial Cells amniotic membrane
 karyotype normal
 lab Gingeras
@@ -4164,7 +4040,6 @@ vendorName PromoCell
 term HPIEpC_9012801.2
 tag HPIEPC90128012
 type Cell Line
-#tissue epithelium
 childOf HPIEpC
 description Placental Epithelial Cells amniotic membrane
 karyotype normal
@@ -4184,7 +4059,6 @@ vendorName PromoCell
 term HPIEpC_9041503.2
 tag HPIEPC90415032
 type Cell Line
-#tissue epithelium
 childOf HPIEpC
 description Placental Epithelial Cells amniotic membrane
 karyotype normal
@@ -4834,7 +4708,6 @@ vendorName Sigma-Aldrich
 term Jurkat
 tag JURKAT
 type Cell Line
-#tissue haematopoietic
 description T lymphoblastoid derived from an acute T cell leukemia, "The Jurkat cell line was established from the peripheral blood of a 14 year old boy by Schneider et al., and was originally designated JM." - ATCC. (PMID: 68013)
 karyotype cancer
 lineage mesoderm
@@ -4922,7 +4795,6 @@ vendorName ATCC
 term Loucy
 tag LOUCY
 type Cell Line
-#tissue haematopoietic
 description T cell leukemia
 karyotype cancer
 lineage mesoderm
@@ -4957,7 +4829,6 @@ vendorName NICHD ; NICHD ; NICHD ; CF Center ; CF Center
 term Lymphoblastoid_cell_line
 tag LYMPHOBLAST
 type Cell Line
-#tissue haematopoietic
 description parental cell type to lymphoblastoid cell lines
 karyotype normal
 lineage mesoderm
@@ -5029,7 +4900,6 @@ vendorName ATCC
 term MCF10A-Er-Src
 tag MCF10AES
 type Cell Line
-#tissue epithelium
 description mammary gland, non-tumorigenic epithelial, inducible cell line, derived from the MCF-10A parental cells and contain ER-Src, a derivative of the Src kinase oncoprotein (v-Src) that is fused to the ligand-binding domain of the estrogen receptor (ER)
 lineage ectoderm
 orderUrl https://struhl.med.harvard.edu/
@@ -5046,7 +4916,6 @@ vendorName Struhl laboratory
 term MDA-MB-231
 tag MDA
 type Cell Line
-#tissue epithelium
 description breast adenocarcinoma, epithelial cell line, derived from metastatic site: pleural effusion. (PMID: 730202)
 karyotype cancer
 lineage ectoderm
@@ -5284,7 +5153,6 @@ vendorName Dr. Yanwen Jiang
 term NB4
 tag NB4
 type Cell Line
-#tissue haematopoietic
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
 karyotype cancer
 lineage mesoderm
@@ -5338,7 +5206,6 @@ vendorName Lonza
 term NHBE_RA
 tag NHBERA
 type Cell Line
-#tissue epithelium
 description bronchial epithelial cells with retinoic acid
 karyotype normal
 lab Stam
@@ -5738,7 +5605,6 @@ vendorName Refer to publication or NDRI
 term PBDE
 tag PBDE
 type Cell Line
-#tissue haematopoietic
 description peripheral blood-derived erythroblasts
 lineage mesoderm
 orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205
@@ -5773,7 +5639,6 @@ vendorName Bouhassira Lab
 term PBMC
 tag PBMC
 type Cell Line
-#tissue haematopoietic
 description peripheral blood mononuclear cells
 lineage mesoderm
 orderUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
@@ -5839,7 +5704,6 @@ vendorName NICHD
 term PrEC
 tag PREC
 type Cell Line
-#tissue epithelium
 description prostate epithelial cell line
 karyotype normal
 lineage epithelial
@@ -5923,7 +5787,6 @@ vendorName NICHD
 term Raji
 tag RAJI
 type Cell Line
-#tissue haematopoietic
 description B lymphocyte, "The Raji line of lymphoblast-like cells was established by R.J.V. Pulvertaft in 1963 from a Burkitt's lymphoma of the left maxilla of an 11-year-old Black male." - ATCC. (PMID: 14086209)
 karyotype cancer
 lineage mesoderm
@@ -5993,7 +5856,6 @@ vendorName Lonza
 term RWPE1
 tag RWPE1
 type Cell Line
-#tissue epithelium
 description prostate epithelial
 karyotype normal
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-11609&Template=cellBiology
@@ -6229,7 +6091,6 @@ term T_cells_CD4+
 tag TCELLSCD4
 type Cell Line
 label T cells CD4+
-#tissue haematopoietic
 description Parent cell line for T cells CD4+.
 karyotype unknown
 lab Crawford
@@ -6282,7 +6143,6 @@ vendorName National Disease Research Interchange
 term Th1
 tag TH1
 type Cell Line
-#tissue haematopoietic
 description primary Th1 T cells
 lineage mesoderm
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -6353,7 +6213,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term Th2
 tag TH2
 type Cell Line
-#tissue haematopoietic
 description primary Th2 T cells
 lineage mesoderm
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -6406,7 +6265,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term T-47D
 tag T47D
 type Cell Line
-#tissue epithelium
 description epithelial cell line derived from a mammary ductal carcinoma.
 karyotype cancer
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-133&Template=cellBiology
@@ -6581,28 +6439,28 @@ vendorName Dr. Carl Mann, SBIGeM
 ### Mouse Cell Lines
 # Human cell types, template below
 # --------------------------
-# term (human-readable cell type name. required)
-# tag (machine-readable cell type name, no special characters. required.
-#       Uppercase except for a possible lowercase suffix to distinguish
-#       closely-related cell types)
-# type (informs pipeline code of stanza type. Should always be Cell Line. Required)
-# organism (used in many ways. Should correspond to a "type organism" stanza. required)
-# description (human-readable description of cell type, for cell type cellTypes.html. required)
-# tissue (general tissue type, for categorizing cell types. optional)
-# age (should correspond to a "type age". optional)
-# strain (should correspond to a "type strain". optional)
-# vendorName (name of vendor or lab that provides these cells. required)
-# vendorId (the ID of the cell type in the vendor's catalog. optional)
-# orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html. required)
-# karyotype (optional human-readable karyotype, for .html page. optional)
-# lineage (optional human-readable source of cell lines, e.g. 18 year old male. optional)
-# termId (ID for best ontology term. Optional but encouraged. Shown in cellTypes.html. optional)
-# termUrl (URL for term in the ontology. Links with termId on cellTypes.html. optiona)
-# color (specifies color code for track data of this cell type, rgb values. optional)
-# sex (used in documentation and validation. Should correspond to a "type sex" stanza. required)
-# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
-# category: (T for tissue, L for cell line, or P for primary cells. optional)
-# tier is NOT used in mouse
+# term		human-readable cell type name. required
+# tag 		machine-readable cell type name, no special characters. required.
+#       	Uppercase except for a possible lowercase suffix to distinguish
+#       	closely-related cell types
+# type 		informs pipeline code of stanza type. Should always be Cell Line. Required
+# organism 	used in many ways. Should correspond to a "type organism" stanza. required
+# description 	human-readable description of cell type, for cell type cellTypes.html. required
+# tissue 	general tissue type, for categorizing cell types. optional
+# age 		should correspond to a "type age". optional
+# strain 	should correspond to a "type strain". optional
+# vendorName 	name of vendor or lab that provides these cells. required
+# vendorId 	the ID of the cell type in the vendor's catalog. optional
+# orderUrl 	URL for ordering the cell type. Links with vendorId on cellTypes.html. required
+# karyotype 	human-readable karyotype, for .html page. optional
+# lineage 	human-readable source of cell lines, e.g. 18 year old male. optional
+# termId 	ID for best ontology term. Shown in cellTypes.html. optional
+# termUrl 	URL for term in the ontology. Links with termId on cellTypes.html. optiona
+# color 	specifies color code for track data of this cell type, rgb values. optional
+# sex 		used in documentation and validation. CV controlled. required
+# protocol 	comma-separated list of format: tag_submittingLab_protocol.pdf. optional
+# category 	T for tissue, L for cell line, or P for primary cells. optional
+# tier 		is NOT used in mouse
 
 term 10T1/2
 tag 10T12
@@ -6643,7 +6501,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term 416B
 tag 416B
 type Cell Line
-#tissue haematopoietic
 age immortalized
 category cellLine
 color 86,180,233
@@ -6662,7 +6519,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term A20
 tag A20
 type Cell Line
-#tissue haematopoietic
 age immortalized
 category cellLine
 color 86,180,233
@@ -6736,7 +6592,6 @@ term B-cell_(CD19+)
 tag BCELLCD19P
 type Cell Line
 label B-cell (CD19+)
-#tissue haematopoietic
 age adult-8wks
 category primaryCells
 color 86,180,233
@@ -6756,7 +6611,6 @@ term B-cell_(CD43-)
 tag BCELLCD43N
 type Cell Line
 label B-cell (CD43-)
-#tissue haematopoietic
 age adult-8wks
 category primaryCells
 color 86,180,233
@@ -6794,7 +6648,6 @@ term BMDM
 tag BMDM
 type Cell Line
 label Bone Marrow Derived Macrophage
-#tissue haematopoietic
 age ageUnknown
 category primaryCells
 color 86,180,233
@@ -6904,7 +6757,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term CH12
 tag CH12
 type Cell Line
-#tissue haematopoietic
 age immortalized
 category cellLine
 color 86,180,233
@@ -7290,7 +7142,6 @@ term Erythrobl
 tag ERYTHROBL
 type Cell Line
 label Erythroblast
-#tissue haematopoietic
 age ageUnknown
 category primaryCells
 color 153,38,0
@@ -7421,7 +7272,6 @@ vendorName Paulson Lab
 term G1E
 tag G1E
 type Cell Line
-#tissue haematopoietic
 age E0
 category cellLine
 color 153,38,0
@@ -7439,7 +7289,6 @@ vendorName Mitch Weiss lab
 term G1E-ER4
 tag G1EER4
 type Cell Line
-#tissue haematopoietic
 age E0
 category cellLine
 color 153,38,0
@@ -7566,7 +7415,6 @@ vendorName 1)Dr. John Stamatoyannopoulos at UW; 2)CSHL lab
 term L1210
 tag L1210
 type Cell Line
-#tissue haematopoietic
 age immortalized
 category cellLine
 color 86,180,233
@@ -7676,7 +7524,6 @@ vendorName CSHL lab
 term MEP
 tag MEP
 type Cell Line
-#tissue haematopoietic
 age ageUnknown
 category primaryCells
 color 86,180,233
@@ -7714,7 +7561,6 @@ term Megakaryo
 tag MEGAKARYO
 type Cell Line
 label Megakaryocyte
-#tissue haematopoietic
 age ageUnknown
 category primaryCells
 color 86,180,233
@@ -7732,7 +7578,6 @@ vendorName Mitch Weiss lab
 term MEL
 tag MEL
 type Cell Line
-#tissue haematopoietic
 age immortalized
 category cellLine
 color 86,180,233
@@ -7769,7 +7614,6 @@ vendorName Selleri lab, Cornell
 term mG/ER
 tag MGER
 type Cell Line
-#tissue haematopoietic
 age immortalized
 category cellLine
 color 86,180,233
@@ -7788,7 +7632,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term Myocyte
 tag MYOCYTE
 type Cell Line
-#tissue haematopoietic
 age ageUnknown
 category cellLine
 color 139,69,19
@@ -7807,7 +7650,6 @@ vendorName Hardison lab
 term Muscle
 tag MUSCLE
 type Cell Line
-#tissue haematopoietic
 age ageUnknown
 category Tissue
 color 139,69,19
@@ -7826,7 +7668,6 @@ vendorName Hardison lab
 term NIH-3T3
 tag NIH3T3
 type Cell Line
-#tissue haematopoietic
 age immortalized
 category cellLine
 color 86,180,233
@@ -8120,7 +7961,6 @@ vendorName 1)LICR lab; 2)CSHL lab
 term THelper-Activated
 tag THELPA
 type Cell Line
-#tissue haematopoietic
 age ageUnknown
 category primaryCells
 color 86,180,233
@@ -8139,7 +7979,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term T-Naive
 tag TNAIVE
 type Cell Line
-#tissue haematopoietic
 age ageUnknown
 category primaryCells
 color 86,180,233
@@ -8158,7 +7997,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term TReg-Activated
 tag TREGA
 type Cell Line
-#tissue haematopoietic
 age ageUnknown
 category primaryCells
 color 86,180,233
@@ -8177,7 +8015,6 @@ vendorName Dr. John Stamatoyannopoulos at UW
 term TReg
 tag TREG
 type Cell Line
-#tissue haematopoietic
 age ageUnknown
 category primaryCells
 color 86,180,233
@@ -13126,11 +12963,11 @@ vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232
 
 
 ### mapAlgorithm : Comparing map algorithms
-# term (human-readable map algorithm name)
-# tag (machine-readable map algorithm name, no special characters)
-# type (informs pipeline code of stanza type. Should always be mapAlgorithm)
-# description (human-readable description of the map algorithm, unclear where/if it's used)
-# label provisional labels, same as description
+# term 		human-readable map algorithm name
+# tag 		machine-readable map algorithm name, no special characters
+# type 		informs pipeline code of stanza type. Should always be mapAlgorithm
+# description 	human-readable description of the map algorithm, unclear where/if it's used
+# label 	provisional labels, same as description
 
 term NA
 tag NA
