@@ -1219,8 +1219,8 @@ karyotype cancer
 vendorName ATCC
 vendorId CRL-2268
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2268&Template=cellBiology
-termId BTO:0000932 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
+termId BTO:0001620
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001620&termName=SK-N-SH%20cell
 sex M
 tier 3
 protocol Stam:BE2-C_Stam_protocol.pdf Myers:BE2-C_Myers_protocol.pdf
@@ -4510,8 +4510,8 @@ protocol missing
 #vendorId HTB-11
 #orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
 #karyotype cancer
-#termId BTO:0000932 (non-specific)
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
+#termId BTO:0001620
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001620&termName=SK-N-SH%20cell
 #sex F
 #tier 3
 #protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
@@ -6071,8 +6071,8 @@ vendorId HTB-11
 lots 59257297
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
 karyotype cancer
-termId BTO:0000932 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
+termId BTO:0001620
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001620&termName=SK-N-SH%20cell
 sex F
 tier 2
 protocol Myers:SK-N-SH_Myers_protocol.pdf
