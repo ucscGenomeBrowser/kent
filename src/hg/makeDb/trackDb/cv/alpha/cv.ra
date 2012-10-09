@@ -45,8 +45,8 @@ vendorId GM12878
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
 karyotype normal
 lineage mesoderm
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId  EFO:0002784
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
 color 153,38,0
 sex F
 tier 1
@@ -1675,8 +1675,8 @@ tissue blood
 vendorName DSMZ
 vendorId Dnd41
 orderUrl http://www.dsmz.de/index.htm
-termId BTO:0002104
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002104
+termId BTO:0001106
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001106&termName=T-cell%20leukemia%20cell
 protocol Bernstein:Dnd41_Bernstein_protocol.pdf
 
 term ECC-1
@@ -2263,8 +2263,8 @@ vendorId GM12878-XiMat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
 lineage mesoderm
 childOf Lymphoblastoid_cell_line
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termId  EFO:0002784
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
 sex F
 tier 3
 protocol Myers:GM12878-XiMat_Myers_protocol.pdf
@@ -2281,8 +2281,8 @@ protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 #orderUrl http://www.genome.duke.edu/people/faculty/willard/
 #lineage mesoderm
 #childOf GM12878
-#termId BTO:0002026 (non-specific)
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+#termId  EFO:0002784
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
 #sex F
 #tier 3
 #protocol Myers:GM12878-XiPat_Myers_protocol.pdf
