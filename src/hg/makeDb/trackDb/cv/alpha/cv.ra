@@ -9611,7 +9611,7 @@ target ELAVL1
 targetDescription (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
 targetId GeneCard:ELAVL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELAVL1
-validation Human_-_ELAVL1_(AB5831)(Western_blot,Immunoprecipitation):human_ELAVL1_AB5831_validation_Tenenbaum.pdf Human_-_ELAVL1_(07-1735)(Western_blot,Immunoprecipitation):human_ELAVL1_07-1735_validation_Tenenbaum.pdf Human_-_ELAVL1_(SC-5261)(Western_blot,Immunoprecipitation):human_ELAVL1_SC-5261_validation_Tenenbaum.pdf
+validation Human_-_ELAVL1_(SC-5261)(Western_blot,Immunoprecipitation):human_ELAVL1_SC-5261_validation_Tenenbaum.pdf Human_-_ELAVL1_(07-1735)(Western_blot,Immunoprecipitation):human_ELAVL1_07-1735_validation_Tenenbaum.pdf
 vendorId sc-5261; 07-1735
 vendorName 1) Santa Cruz Biotechnology; 2) Millipore
 
@@ -10787,19 +10787,17 @@ vendorName Santa Cruz Biotechnology
 term IGF2BP1
 tag IGF2BP1
 type Antibody
-label IGF2BP1 (sc-21027)
-antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin. Antibody Target: IGF2BP1
+label IGF2BP1 (07-104)
+antibodyDescription Rabbit polyclonal affinity purified recognizes IGF2 mRNA-binding protein 3 at the C-terminus Antibody Target: IGF2BP1
 lab Tenenbaum
-lots I0607(Nov2008)
-orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
+orderUrl http://www.millipore.com/catalogue/item/07-104
 target IGF2BP1
 targetDescription Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
 targetId GeneCard:IGF2BP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IGF2BP1
 validation Human_-_IGF2BP1_(07-104)(Western_blot,Immunoprecipitation):human_IGF2BP1_07-104_validation_Tenenbaum.pdf
-vendorId sc-21027
-vendorName Santa Cruz Biotechnology
-# This is a PROBLEM because the validation doc is not the same antibody as is listed in the object
+vendorId 07-104
+vendorName Millipore
 
 
 term IKZF1_(IkN)_(UCLA)
@@ -11573,37 +11571,21 @@ validation Human_-_:missing
 vendorId sc-48343
 vendorName Santa Cruz Biotechnology
 
-term PABP
-tag PABP
+term PABPC1
+tag PABPC1
 type Antibody
-label PABP (04-1467)
-antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB. Antibody Target: PABP
+label PABPC1 (04-1467)
+antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of human, Rb, and Xenopus origin by IF, IP, and WB. Antibody Target: PABPC1
 lab Tenenbaum
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 target PABPC1
-targetDescription PolyA-binding protein
+targetDescription Poly(A) binding protein, cytoplasmic 1 (Homo sapiens).
 targetId GeneCard:PABPC1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PABPC10
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PABPC1
 validation Human_-_PABPC1_(04-1467)(Western_blot,Immunoprecipitation):human_PABPC1_04-1467_validation_Tenenbaum.pdf
 vendorId 04-1467
 vendorName Millipore
 # Note 05-847 equals 04-1467 in millipore database
-
-term PABPC1
-tag PABPC1
-type Antibody
-label PABPC1 (P6246)
-antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin. Antibody Target: PABPC1
-lab Tenenbaum
-lots 044K4810 (Nov 2008)
-orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
-target PABPC1
-targetDescription poly(A) binding protein, cytoplasmic 1 (Homo sapiens).
-targetId GeneCard:PABPC1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PABPC1
-validation Human_-_:missing
-vendorId P6246
-vendorName Sigma-Aldrich
 
 term PAX5-C20
 tag PAX5
@@ -12187,18 +12169,17 @@ vendorName Santa Cruz Biotechnology
 term SLBP
 tag SLBP
 type Antibody
-label SLBP (06-1376; 26522; MA156353)
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
+label SLBP (06-1376)
+antibodyDescription Rabbit polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. Antibody Target: SLBP
 lab Tenenbaum
-lots 3) 7308-S2
-orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
+orderUrl http://www.millipore.com/catalogue/item/06-1376
 target SLBP
 targetDescription Stem-loop binding protein (Homo sapiens)
 targetId GeneCard:SLBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SLBP
-validation Human_-_:missing
-vendorId 06-1376; 26522; MA156353
-vendorName 1)Millipore; 2)Santa Cruz Biotechnology; 3)Affinity Bioreagents
+validation Human_-_SLBP(Immunoprecipitation,Western_blot):human_SLBP_validation_Tenenbaum.pdf
+vendorId 06-1376
+vendorName Millipore
 
 term SMC3_(ab9263)
 tag SMC3
@@ -12431,16 +12412,15 @@ term T7Tag
 tag T7
 type Antibody
 label T7Tag (AB3790; Nov 69522)
-antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal). Antibody Target: T7Tag
+antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore and Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal). Antibody Target: T7Tag
 lab Tenenbaum
 orderUrl http://www.millipore.com/
 target T7Tag
-targetDescription Negative Control Ab (T7 Tag Mouse Monoclonal).
-targetId (input)
-validation Human_-_:missing
+targetDescription T7 (MASMTGGQQMG)
+targetId Negative Control
+validation Human_-_T7-Tag_(Negative Control):human_T7tag_validation_Tenenbaum.pdf
 vendorId AB3790; Nov_69522
 vendorName 1)Millipore; 2)Novagen
-#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 
 term TAF1
 tag TAF1
