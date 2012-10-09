@@ -11962,19 +11962,19 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation Human_-_REST_(17-641)(ChIP,Western_blot):human_REST_validation_Epstein.pdf
 label REST (17-641)
 
-term ripInput
-tag RIPIN
-type Antibody
-target ripInput
-targetDescription Total input for comparison for RIP experiments
-antibodyDescription Total input. Antibody Target: ripInput
-vendorId RIP Input
-vendorName Tenenbaum lab
-orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
-lab Tenenbaum
-targetId (input)
-validation Human_-_:missing
-label RIP input
+#term ripInput
+#tag RIPIN
+#type Antibody
+#target ripInput
+#targetDescription Total input for comparison for RIP experiments
+#antibodyDescription Total input. Antibody Target: ripInput
+#vendorId RIP Input
+#vendorName Tenenbaum lab
+#orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
+#lab Tenenbaum
+#targetId (input)
+#validation Human_-_:missing
+#label RIP input
 
 term RNF2
 tag RNF2
@@ -13682,11 +13682,11 @@ type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
 label Input Control
 
-#term ripInput
-#tag RIPIN
-#type control 
-#description Total input for comparison for RIP experiments
-#label RIP input
+term ripInput
+tag RIPIN
+type control 
+description Total input for comparison for RIP experiments
+label RIP input
 
 term Large_Fragment
 tag LARGEFRAGMENT
