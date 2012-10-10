@@ -18,6 +18,7 @@
 #include "hgFind.h"
 #include "hgTracks.h"
 #include "versionInfo.h"
+#include "net.h"
 #include "search.h"
 #include "imageV2.h"
 
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 measureTime(NULL);
+setConnFailuresEnabled(FALSE); // try TRUE in next release v274
 browserName = hBrowserName();
 organization = "UCSC";
 

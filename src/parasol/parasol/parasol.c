@@ -70,11 +70,18 @@ errAbort(
   "         options:\n"
   "            -results=resultFile fully qualified path to the results file, \n"
   "             or `results' in the current directory if not specified.\n"
-  "   parasol freeBatch\n"
+  "   parasol flushResults\n"
+  "         Flush results file.  Warns if batch has jobs queued or running.\n"
   "         options:\n"
   "            -results=resultFile fully qualified path to the results file, \n"
   "             or `results' in the current directory if not specified.\n"
-  "   Free all batch info on hub.  Works only if batch has nothing queued or running.\n"
+/* Note: since it might be abused, not making freeBatch available yet.
+  "   parasol freeBatch\n"
+  "         Free all batch info on hub.  Works only if batch has nothing queued or running.\n"
+  "         options:\n"
+  "            -results=resultFile fully qualified path to the results file, \n"
+  "             or `results' in the current directory if not specified.\n"
+*/
   "options:\n"
   "   -host=hostname - connect to a paraHub process on a remote host instead\n"
   "                    localhost.\n"
@@ -244,7 +251,7 @@ getResultsFile(results);
 dyStringPrintf(dy, "clearSickNodes %s %s", userName, results);
 response = hubCommandGetReciept(dy->string);
 if (!sameString(response, "0"))
-    errAbort("Couldn't clear sick nodes for %s %s\n", userName, results);
+    errAbort("Couldn't clear sick nodes for %s %s", userName, results);
 dyStringFree(&dy);
 freez(&response);
 }
@@ -437,15 +444,36 @@ char command[2*PATH_LEN];
 safef(command, sizeof(command), "freeBatch %s %s", getUser(), results);
 char *result = hubCommandGetReciept(command);
 if (result == NULL)
-    errAbort("result == NULL\n");
+    errAbort("result == NULL");
 if (sameOk(result, "-3"))
-    errAbort("User not found.\n");
+    errAbort("User not found.");
 if (sameOk(result, "-2"))
-    errAbort("Batch not found.\n");
+    errAbort("Batch not found.");
 if (sameOk(result, "-1"))
-    warn("Unable to free batch.  Jobs are queued or running.\n");
+    warn("Unable to free batch.  Jobs are queued or running.");
 if (sameOk(result, "0"))
     verbose(1, "Batch freed.\n");
+freez(&result);
+}
+
+void flushResults()
+/* Send msg to hub to flush results file */
+{
+char results[PATH_LEN];
+getResultsFile(results);
+char command[2*PATH_LEN];
+safef(command, sizeof(command), "flushResults %s %s", getUser(), results);
+char *result = hubCommandGetReciept(command);
+if (result == NULL)
+    errAbort("result == NULL");
+if (sameOk(result, "-3"))
+    errAbort("User not found.");
+if (sameOk(result, "-2"))
+    errAbort("Batch not found.");
+if (sameOk(result, "-1"))
+    warn("Flushed results. Some jobs are still queued or running.");
+if (sameOk(result, "0"))
+    verbose(1, "Flushed results.\n");
 freez(&result);
 }
 
@@ -562,12 +590,20 @@ else if (sameString(command, "ping"))
     }
 else if (sameString(command, "status"))
     status();
+else if (sameString(command, "flushResults"))
+    {
+    if (argc != 0)
+        usage();
+    flushResults();
+    }
+/* Not providing at this time for fear of abuse 
 else if (sameString(command, "freeBatch"))
     {
     if (argc != 0)
         usage();
     freeBatch();
     }
+*/
 else
     usage();
 }

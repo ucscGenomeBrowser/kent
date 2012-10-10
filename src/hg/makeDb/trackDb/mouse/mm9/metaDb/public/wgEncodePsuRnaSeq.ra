@@ -2,6 +2,7 @@ metaObject wgEncodePsuRnaSeq
 objType composite
 composite wgEncodePsuRnaSeq
 expVars lab,dataType,cell,treatment,labExpId
+geoSeriesAccession GSE40522
 
 metaObject wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep1
 objType table
@@ -73,6 +74,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003177
 expId 3177
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41RawDataRep1.fastq.gz
+geoSampleAccession GSM995540
 grant Hardison
 lab PSU-m
 labExpId single
@@ -101,6 +103,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003177
 expId 3177
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41RawDataRep2.fastq.gz
+geoSampleAccession GSM995540
 grant Hardison
 lab PSU-m
 labExpId single
@@ -129,6 +132,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003177
 expId 3177
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41SigRep1.bigWig
+geoSampleAccession GSM995540
 grant Hardison
 lab PSU-m
 labExpId single
@@ -158,6 +162,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003177
 expId 3177
 fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41SigRep2.bigWig
+geoSampleAccession GSM995540
 grant Hardison
 lab PSU-m
 labExpId single
@@ -245,6 +250,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003180
 expId 3180
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995533
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -273,6 +279,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003180
 expId 3180
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995533
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -301,6 +308,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003180
 expId 3180
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995533
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -329,6 +337,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003180
 expId 3180
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995533
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -357,6 +366,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003180
 expId 3180
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep1.bigWig
+geoSampleAccession GSM995533
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -386,6 +396,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003180
 expId 3180
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dMinusRawRep2.bigWig
+geoSampleAccession GSM995533
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -415,6 +426,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003180
 expId 3180
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep1.bigWig
+geoSampleAccession GSM995533
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -444,6 +456,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003180
 expId 3180
 fileName wgEncodePsuRnaSeqErythroblBE14halfCd1R2x99dPlusRawRep2.bigWig
+geoSampleAccession GSM995533
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -531,6 +544,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003182
 expId 3182
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995535
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -559,6 +573,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003182
 expId 3182
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995535
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -587,6 +602,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003182
 expId 3182
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995535
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -615,6 +631,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003182
 expId 3182
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995535
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -643,6 +660,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003182
 expId 3182
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dMinusRawRep1.bigWig
+geoSampleAccession GSM995535
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -672,6 +690,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003182
 expId 3182
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dMinusRawRep2.bigWig
+geoSampleAccession GSM995535
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -701,6 +720,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003182
 expId 3182
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dPlusRawRep1.bigWig
+geoSampleAccession GSM995535
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -730,6 +750,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003182
 expId 3182
 fileName wgEncodePsuRnaSeqFvlsBAdult810wksBalbcjR2x99dPlusRawRep2.bigWig
+geoSampleAccession GSM995535
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -817,6 +838,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003181
 expId 3181
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995534
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -845,6 +867,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003181
 expId 3181
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995534
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -873,6 +896,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003181
 expId 3181
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995534
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -901,6 +925,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003181
 expId 3181
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995534
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -929,6 +954,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003181
 expId 3181
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dMinusRawRep1.bigWig
+geoSampleAccession GSM995534
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -958,6 +984,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003181
 expId 3181
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dMinusRawRep2.bigWig
+geoSampleAccession GSM995534
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -987,6 +1014,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003181
 expId 3181
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dPlusRawRep1.bigWig
+geoSampleAccession GSM995534
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1016,6 +1044,7 @@ dateUnrestricted 2013-04-20
 dccAccession wgEncodeEM003181
 expId 3181
 fileName wgEncodePsuRnaSeqFvpBAdult810wksBalbcjR2x99dPlusRawRep2.bigWig
+geoSampleAccession GSM995534
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1074,6 +1103,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003178
 expId 3178
 fileName wgEncodePsuRnaSeqG1eME0S129R1x36RawDataRep1.fastq.gz
+geoSampleAccession GSM995530
 grant Hardison
 lab PSU-m
 labExpId single
@@ -1102,6 +1132,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003178
 expId 3178
 fileName wgEncodePsuRnaSeqG1eME0S129R1x36SigRep1.bigWig
+geoSampleAccession GSM995530
 grant Hardison
 lab PSU-m
 labExpId single
@@ -1160,6 +1191,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003178
 expId 3178
 fileName wgEncodePsuRnaSeqG1eME0S129R1x55RawDataRep2.fastq.gz
+geoSampleAccession GSM995530
 grant Hardison
 lab PSU-m
 labExpId single
@@ -1188,6 +1220,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003178
 expId 3178
 fileName wgEncodePsuRnaSeqG1eME0S129R1x55SigRep2.bigWig
+geoSampleAccession GSM995530
 grant Hardison
 lab PSU-m
 labExpId single
@@ -1275,6 +1308,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003183
 expId 3183
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995536
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1303,6 +1337,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003183
 expId 3183
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995536
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1331,6 +1366,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003183
 expId 3183
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995536
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1359,6 +1395,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003183
 expId 3183
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995536
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1387,6 +1424,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003183
 expId 3183
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep1.bigWig
+geoSampleAccession GSM995536
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1416,6 +1454,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003183
 expId 3183
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dMinusRawRep2.bigWig
+geoSampleAccession GSM995536
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1445,6 +1484,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003183
 expId 3183
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep1.bigWig
+geoSampleAccession GSM995536
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1474,6 +1514,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003183
 expId 3183
 fileName wgEncodePsuRnaSeqG1eME0S129R2x99dPlusRawRep2.bigWig
+geoSampleAccession GSM995536
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1561,6 +1602,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003179
 expId 3179
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hRawDataRep1.fastq.gz
+geoSampleAccession GSM995529
 grant Hardison
 lab PSU-m
 labExpId single
@@ -1589,6 +1631,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003179
 expId 3179
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hRawDataRep2.fastq.gz
+geoSampleAccession GSM995529
 grant Hardison
 lab PSU-m
 labExpId single
@@ -1617,6 +1660,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003179
 expId 3179
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hSigRep1.bigWig
+geoSampleAccession GSM995529
 grant Hardison
 lab PSU-m
 labExpId single
@@ -1646,6 +1690,7 @@ dateUnrestricted 2012-12-28
 dccAccession wgEncodeEM003179
 expId 3179
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hSigRep2.bigWig
+geoSampleAccession GSM995529
 grant Hardison
 lab PSU-m
 labExpId single
@@ -1791,6 +1836,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003185
 expId 3185
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995527
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1819,6 +1865,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003185
 expId 3185
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995527
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1847,6 +1894,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003185
 expId 3185
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995527
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1875,6 +1923,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003185
 expId 3185
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995527
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1903,6 +1952,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003185
 expId 3185
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep1.bigWig
+geoSampleAccession GSM995527
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1932,6 +1982,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003185
 expId 3185
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hMinusRawRep2.bigWig
+geoSampleAccession GSM995527
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1961,6 +2012,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003185
 expId 3185
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep1.bigWig
+geoSampleAccession GSM995527
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -1990,6 +2042,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003185
 expId 3185
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd14hPlusRawRep2.bigWig
+geoSampleAccession GSM995527
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2077,6 +2130,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003189
 expId 3189
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995539
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2105,6 +2159,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003189
 expId 3189
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995539
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2133,6 +2188,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003189
 expId 3189
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995539
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2161,6 +2217,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003189
 expId 3189
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995539
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2189,6 +2246,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003189
 expId 3189
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep1.bigWig
+geoSampleAccession GSM995539
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2218,6 +2276,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003189
 expId 3189
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hMinusRawRep2.bigWig
+geoSampleAccession GSM995539
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2247,6 +2306,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003189
 expId 3189
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep1.bigWig
+geoSampleAccession GSM995539
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2276,6 +2336,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003189
 expId 3189
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd24hPlusRawRep2.bigWig
+geoSampleAccession GSM995539
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2363,6 +2424,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEM003192
 expId 3192
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995541
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2391,6 +2453,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEM003192
 expId 3192
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995541
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2419,6 +2482,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEM003192
 expId 3192
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995541
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2447,6 +2511,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEM003192
 expId 3192
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995541
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2475,6 +2540,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEM003192
 expId 3192
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep1.bigWig
+geoSampleAccession GSM995541
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2504,6 +2570,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEM003192
 expId 3192
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hMinusRawRep2.bigWig
+geoSampleAccession GSM995541
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2533,6 +2600,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEM003192
 expId 3192
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep1.bigWig
+geoSampleAccession GSM995541
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2562,6 +2630,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEM003192
 expId 3192
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd30hPlusRawRep2.bigWig
+geoSampleAccession GSM995541
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2649,6 +2718,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003188
 expId 3188
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995538
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2677,6 +2747,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003188
 expId 3188
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995538
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2705,6 +2776,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003188
 expId 3188
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995538
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2733,6 +2805,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003188
 expId 3188
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995538
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2761,6 +2834,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003188
 expId 3188
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep1.bigWig
+geoSampleAccession GSM995538
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2790,6 +2864,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003188
 expId 3188
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hMinusRawRep2.bigWig
+geoSampleAccession GSM995538
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2819,6 +2894,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003188
 expId 3188
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep1.bigWig
+geoSampleAccession GSM995538
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2848,6 +2924,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003188
 expId 3188
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd3hPlusRawRep2.bigWig
+geoSampleAccession GSM995538
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2935,6 +3012,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003186
 expId 3186
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995531
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2963,6 +3041,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003186
 expId 3186
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995531
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -2991,6 +3070,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003186
 expId 3186
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995531
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3019,6 +3099,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003186
 expId 3186
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995531
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3047,6 +3128,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003186
 expId 3186
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep1.bigWig
+geoSampleAccession GSM995531
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3076,6 +3158,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003186
 expId 3186
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hMinusRawRep2.bigWig
+geoSampleAccession GSM995531
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3105,6 +3188,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003186
 expId 3186
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep1.bigWig
+geoSampleAccession GSM995531
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3134,6 +3218,7 @@ dateUnrestricted 2013-04-24
 dccAccession wgEncodeEM003186
 expId 3186
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dDiffd7hPlusRawRep2.bigWig
+geoSampleAccession GSM995531
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3163,6 +3248,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003187
 expId 3187
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995532
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3191,6 +3277,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003187
 expId 3187
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995532
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3219,6 +3306,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003187
 expId 3187
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995532
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3247,6 +3335,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003187
 expId 3187
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995532
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3275,6 +3364,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003187
 expId 3187
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep1.bigWig
+geoSampleAccession GSM995532
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3304,6 +3394,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003187
 expId 3187
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dMinusRawRep2.bigWig
+geoSampleAccession GSM995532
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3333,6 +3424,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003187
 expId 3187
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep1.bigWig
+geoSampleAccession GSM995532
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3362,6 +3454,7 @@ dateUnrestricted 2013-04-25
 dccAccession wgEncodeEM003187
 expId 3187
 fileName wgEncodePsuRnaSeqG1eer4ME0S129R2x99dPlusRawRep2.bigWig
+geoSampleAccession GSM995532
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3450,6 +3543,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEM003193
 expId 3193
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995537
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3478,6 +3572,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEM003193
 expId 3193
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995537
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3506,6 +3601,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEM003193
 expId 3193
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995537
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3534,6 +3630,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEM003193
 expId 3193
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995537
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3562,6 +3659,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEM003193
 expId 3193
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep1.bigWig
+geoSampleAccession GSM995537
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3591,6 +3689,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEM003193
 expId 3193
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dMinusRawRep2.bigWig
+geoSampleAccession GSM995537
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3621,6 +3720,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEM003193
 expId 3193
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep1.bigWig
+geoSampleAccession GSM995537
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3650,6 +3750,7 @@ dateUnrestricted 2013-04-28
 dccAccession wgEncodeEM003193
 expId 3193
 fileName wgEncodePsuRnaSeqMegakaryoBE14halfCd1R2x99dPlusRawRep2.bigWig
+geoSampleAccession GSM995537
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -3796,6 +3897,7 @@ dateUnrestricted 2013-04-26
 dccAccession wgEncodeEM003191
 expId 3191
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dRawDataRep1.fastq.gz
+geoSampleAccession GSM995526
 grant Hardison
 lab PSU-m
 labExpId single
@@ -3824,6 +3926,7 @@ dateUnrestricted 2013-04-26
 dccAccession wgEncodeEM003191
 expId 3191
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dRawDataRep2.fastq.gz
+geoSampleAccession GSM995526
 grant Hardison
 lab PSU-m
 labExpId single
@@ -3852,6 +3955,7 @@ dateUnrestricted 2013-04-26
 dccAccession wgEncodeEM003191
 expId 3191
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dSigRep1.bigWig
+geoSampleAccession GSM995526
 grant Hardison
 lab PSU-m
 labExpId single
@@ -3881,6 +3985,7 @@ dateUnrestricted 2013-04-26
 dccAccession wgEncodeEM003191
 expId 3191
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45Dm2p5dSigRep2.bigWig
+geoSampleAccession GSM995526
 grant Hardison
 lab PSU-m
 labExpId single
@@ -3910,6 +4015,7 @@ dateUnrestricted 2013-04-26
 dccAccession wgEncodeEM003190
 expId 3190
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45RawDataRep1.fastq.gz
+geoSampleAccession GSM995528
 grant Hardison
 lab PSU-m
 labExpId single
@@ -3938,6 +4044,7 @@ dateUnrestricted 2013-04-26
 dccAccession wgEncodeEM003190
 expId 3190
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45RawDataRep2.fastq.gz
+geoSampleAccession GSM995528
 grant Hardison
 lab PSU-m
 labExpId single
@@ -3966,6 +4073,7 @@ dateUnrestricted 2013-04-26
 dccAccession wgEncodeEM003190
 expId 3190
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45SigRep1.bigWig
+geoSampleAccession GSM995528
 grant Hardison
 lab PSU-m
 labExpId single
@@ -3995,6 +4103,7 @@ dateUnrestricted 2013-04-26
 dccAccession wgEncodeEM003190
 expId 3190
 fileName wgEncodePsuRnaSeqMelMImmortalUknR1x45SigRep2.bigWig
+geoSampleAccession GSM995528
 grant Hardison
 lab PSU-m
 labExpId single
@@ -4082,6 +4191,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003184
 expId 3184
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM995525
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -4110,6 +4220,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003184
 expId 3184
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dFastqRd1Rep2.fastq.gz
+geoSampleAccession GSM995525
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -4138,6 +4249,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003184
 expId 3184
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM995525
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -4166,6 +4278,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003184
 expId 3184
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dFastqRd2Rep2.fastq.gz
+geoSampleAccession GSM995525
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -4194,6 +4307,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003184
 expId 3184
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dMinusRawRep1.bigWig
+geoSampleAccession GSM995525
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -4223,6 +4337,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003184
 expId 3184
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dMinusRawRep2.bigWig
+geoSampleAccession GSM995525
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -4252,6 +4367,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003184
 expId 3184
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep1.bigWig
+geoSampleAccession GSM995525
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -4281,6 +4397,7 @@ dateUnrestricted 2013-04-22
 dccAccession wgEncodeEM003184
 expId 3184
 fileName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2.bigWig
+geoSampleAccession GSM995525
 grant Hardison
 lab PSU-m
 labExpId paired-end
@@ -4298,4 +4415,4 @@ tableName wgEncodePsuRnaSeqMepFAdult5wksC57bl6jR2x99dPlusRawRep2
 treatment None
 view PlusRawSignal
 
-# MAGIC: -1218450874
+# MAGIC: -1828071392

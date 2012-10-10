@@ -333,7 +333,7 @@ slFreeList(&chain);
 return retVal;
 }
 
-static void printTrackHtml(struct trackDb *tdb)
+void printTrackHtml(struct trackDb *tdb)
 /* If trackDb has html for table, print it out in a new section. */
 {
 if (tdb != NULL && isNotEmpty(tdb->html))
@@ -343,8 +343,18 @@ if (tdb != NULL && isNotEmpty(tdb->html))
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         puts(tdb->html);
     else
-        printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",
-               tdb->html);
+	{
+	// H2 (as in "<H2>Description</H2>") has a big top margin, which adds to
+	// the 10px start-of-web-section <tr> (except for IE < 8, above).
+	// Tim's trick for moving the text back up in this case, to look like more
+	// like details pages in which HR's bottom margin melts into H2's top margin:
+	char *s = skipLeadingSpaces(tdb->html);
+	if (startsWith("<H2>", s) || startsWith("<h2>", s))
+	    printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",
+		   tdb->html);
+	else
+	    puts(tdb->html);
+	}
     }
 }
 
@@ -441,6 +451,7 @@ static void showSchemaCtWiggle(char *table, struct customTrack *ct)
 {
 hPrintf("<B>Wiggle Custom Track ID:</B> %s<BR>\n", table);
 hPrintf("Wiggle custom tracks are stored in a dense binary format.");
+printTrackHtml(ct->tdb);
 }
 
 static void showSchemaCtChromGraph(char *table, struct customTrack *ct)
@@ -448,6 +459,7 @@ static void showSchemaCtChromGraph(char *table, struct customTrack *ct)
 {
 hPrintf("<B>ChromGraph Custom Track ID:</B> %s<BR>\n", table);
 hPrintf("ChromGraph custom tracks are stored in a dense binary format.");
+printTrackHtml(ct->tdb);
 }
 
 static void showSchemaCtMaf(char *table, struct customTrack *ct)
@@ -603,15 +615,20 @@ static void showSchemaHub(char *db, char *table)
 /* Show schema on a hub track. */
 {
 struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
+hubConnectAddDescription(db, tdb);
 char *type = cloneFirstWord(tdb->type);
-hPrintf("Binary file of type %s stored at %s<BR>\n",
-	type, trackDbSetting(tdb, "bigDataUrl"));
 if (sameString(type, "bigBed"))
-    showSchemaBigBed(table);
+    showSchemaBigBed(table, tdb);
 else if (sameString(type, "bam"))
-    showSchemaBam(table);
+    showSchemaBam(table, tdb);
 else if (sameString(type, "vcfTabix"))
-    showSchemaVcf(table);
+    showSchemaVcf(table, tdb);
+else
+    {
+    hPrintf("Binary file of type %s stored at %s<BR>\n",
+	    type, trackDbSetting(tdb, "bigDataUrl"));
+    printTrackHtml(tdb);
+    }
 }
 
 static void showSchemaWiki(struct trackDb *tdb, char *table)
@@ -619,21 +636,22 @@ static void showSchemaWiki(struct trackDb *tdb, char *table)
 {
 hPrintf("<B>User annotations to UCSC genes or genome regions</B><BR>\n");
 showSchemaDb(wikiDbName(), tdb, table);
+printTrackHtml(tdb);
 }
 
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-if (isBigBed(database, table, curTrack, ctLookupName))
-    showSchemaBigBed(table);
+if (isHubTrack(table))
+    showSchemaHub(db, table);
+else if (isBigBed(database, table, curTrack, ctLookupName))
+    showSchemaBigBed(table, tdb);
 else if (isBamTable(table))
-    showSchemaBam(table);
+    showSchemaBam(table, tdb);
 else if (isVcfTable(table))
-    showSchemaVcf(table);
+    showSchemaVcf(table, tdb);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
-else if (isHubTrack(table))
-    showSchemaHub(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
 else

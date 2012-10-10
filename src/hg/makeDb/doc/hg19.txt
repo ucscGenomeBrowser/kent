@@ -8414,14 +8414,14 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # NHGRI GWAS CATALOG (DONE 8/1/12 angie)
 # NOTE: This assumes that the corresponding section in hg18.txt has just been run.
 #       It depends on the noCoords.tab file in the corresponding hg18 build directory.
-# Updated 6/4/12, 4/4/12, 2/21/12 (remove extra whitespace, translate non-ASCII to html), 2/6/12
+# 2012 updates: 8/1, 6/4, 4/4, 2/21 (remove extra whitespace, translate non-ASCII to html), 2/6
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
-    # Done once, don't need to redo:
+    # Done once per dbSNP build, don't need to redo until next dbSNP build is released:
     zcat ../snp135/snp135.bed.gz | cut -f 1-4  \
     | sort -k4,4 \
       > snp135Coords.bed
@@ -8434,9 +8434,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
+
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Read 9687 elements of size 22 from gwasCatalog.bed
+#Read 10661 elements of size 22 from gwasCatalog.bed
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
     # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
@@ -8449,7 +8450,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt
-#807 ambigStrand.txt
+#935 ambigStrand.txt
 
 
 ######################################################################## 
@@ -18599,25 +18600,28 @@ do
 done
 
 #############################################################################
-# 1000 GENOMES PHASE 1 VARIANT CALLS (UPDATE DONE 7/20/12 angie)
+# 1000 GENOMES PHASE 1 VARIANT CALLS (UPDATE DONE 10/9/12 angie)
 # Autosomes and chrX loaded 5/21/12; chrY (and chrM but it's rCRS of course)
-# became available in July '12.
+# became available in July '12.  Existing released files were quietly updated
+# 10/1/12 with some new variant IDs.
     # This is a lot of data.  Use aspera (ascp) instead of ftp, run in a screen.
     screen -S phase1
     mkdir -p /hive/data/genomes/hg19/bed/1000Genomes/phase1
     cd /hive/data/genomes/hg19/bed/1000Genomes/phase1
     set ascpCmd = /opt/aspera/connect/bin/ascp
     set ascpArgs = '-i /opt/aspera/connect/etc/asperaweb_id_dsa.putty -QTr -l150M'
-    set phase1Path = anonftp@ftp-private.ncbi.nlm.nih.gov:/1000genomes/ftp/release/20110521
+    set phase1Path = anonftp@ftp-private.ncbi.nlm.nih.gov:/1000genomes/ftp/phase1/analysis_results/integrated_call_sets
     $ascpCmd $ascpArgs \
-      $phase1Path/README.indel_filtering_20120316 \
-      $phase1Path/README.phase1_integrated_release_version3_20120430 \
-      $phase1Path/phase1_integrated_calls.20101123.ALL.panel \
+      $phase1Path/README.ALL.BI_genome_strip_hq_chrY.20101123 \
+      $phase1Path/README_phase1_integrated_call_set_20120621 \
+      $phase1Path/integrated_call_samples.20101123.ALL.panel \
+      $phase1Path/integrated_call_samples.20101123.ped \
+      $phase1Path/uniq.chrY.human.ncbi37.txt \
       .
     # BTW if you see "Error 51 [Destination: Permission denied]" when reloading,
     # it's because the files are read-only -- move aside or rm, then try again.
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
-      set file = $phase1Path/ALL.chr$c.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+      set file = $phase1Path/ALL.chr$c.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz
       set cmd = "$ascpCmd $ascpArgs $file $file.tbi ."
       echo $cmd
       $cmd
@@ -18627,24 +18631,23 @@ done
     end
     du -sh --apparent .
 #142G    .
+    $ascpCmd $ascpArgs $phase1Path/ALL.chrY.genome_strip_hq.20101123.svs.low_coverage.genotypes.vcf.gz{,.tbi} .
+    $ascpCmd $ascpArgs $phase1Path/ALL.chrY.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz{,.tbi} .
+    # I wondered why they didn't merge the two chrY call sets (SNPs and SVs) --
+    # the SVS file has 456 individs and the SNPs file has 526.  At least the
+    # 456 are a subset of the 526... but for now I will just use the SNPs file.
+
+    # Grab chrMT even though we don't have liftOver for VCF at this point:
+    $ascpCmd $ascpArgs $phase1Path/ALL.chrMT.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz{,.tbi} .
+
     # Hmmmm, how much space do we have on /gbdb?  Well, link it on hgwdev anyway:
     mkdir /gbdb/hg19/1000Genomes
     ln -s `pwd`/*.vcf.gz* /gbdb/hg19/1000Genomes/
     cp /dev/null tgpPhase1.txt
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
-      set file = ALL.chr$c.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+      set file = ALL.chr$c.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz
       echo "/gbdb/hg19/1000Genomes/$file\tchr$c" >> tgpPhase1.txt
     end
-    hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt
-
-    # 7/20/12: add chrY. (would be nice to add chrM but we don't have liftOver for VCF, hmmm...)
-    cd /hive/data/genomes/hg19/bed/1000Genomes/phase1
-    wget ftp://ftp.ncbi.nih.gov/1000genomes/ftp/phase1/analysis_results/integrated_call_sets/ALL.chrY.genome_strip_hq.20101123.svs.low_coverage.genotypes.vcf.gz{,.tbi}
-    wget ftp://ftp.ncbi.nih.gov/1000genomes/ftp/phase1/analysis_results/integrated_call_sets/ALL.chrY.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz{,.tbi}
-    # I wondered why they didn't merge the two chrY call sets (SNPs and SVs) --
-    # the SVS file has 456 individs and the SNPs file has 526.  At least the
-    # 456 are a subset of the 526... but for now I will just use the SNPs file.
-    ln -s `pwd`/ALL.chrY.*vcf.gz* /gbdb/hg19/1000Genomes/
     echo "/gbdb/hg19/1000Genomes/ALL.chrY.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz\tchrY" \
       >> tgpPhase1.txt
     hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt
@@ -18837,7 +18840,8 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
-# DBSNP B137 / SNP137 (DONE 7/11/12)
+# DBSNP B137 / SNP137 (DONE 9/10/12)
+# Originally done 7/11/12; updated w/corrections from dbSNP 9/10/12 -- see below, #8360 note 36
 # Redmine #8360
     mkdir -p /hive/data/outside/dbSNP/137/human
     cd /hive/data/outside/dbSNP/137/human
@@ -18891,9 +18895,50 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue load \
       >>& do.log & tail -f do.log
 
+    # 9/10/12: update w/corrections from dbSNP:
+    cd /hive/data/outside/dbSNP/137/human/data
+    mv b137_SNPContigLoc.bcp.gz b137_SNPContigLoc.orig.bcp.gz
+    mv b137_SNPContigLocusId.bcp.gz b137_SNPContigLocusId.orig.bcp.gz
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/post_b137_fix_preview/b137_SNPContigLoc.bcp.gz
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/post_b137_fix_preview/b137_SNPContigLocusId.bcp.gz
+    hgsql hg19snp137 -e 'drop table b137_SNPContigLoc; drop table b137_SNPContigLocusId;'
+    hgsql hg19snp137 < schema/SNPContigLocs.sql
+    # Relevant subset of loadDbSnp.csh:
+    cd /hive/data/outside/dbSNP/137/human
+    setenv TMPDIR /data/tmp
+    set tmpDir = `mktemp -d $TMPDIR/doDbSnp.pl.translate.XXXXXX`
+    chmod 775 $tmpDir
+    pushd $tmpDir
+    echo $tmpDir > /hive/data/outside/dbSNP/137/human/workingDir
+    set t = b137_SNPContigLocusId
+    zcat /hive/data/outside/dbSNP/137/human/data/$t.bcp.gz | egrep -vw '(HuRef|CRA_TCAGchr7v2)'  | egrep -vw 'NW_003(3159[0-9][0-9]|5710[3-6][0-9])'\
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+    | hgLoadSqlTab -oldTable hg19snp137 $t placeholder stdin
+    hgsql hg19snp137 -e 'alter table b137_SNPContigLocusId add index (ctg_id);'
+    zcat /hive/data/outside/dbSNP/137/human/data/b137_ContigInfo.bcp.gz | egrep -vw '(HuRef|CRA_TCAGchr7v2)' \
+    | cut -f 1 | sort -n > b137_ContigInfo.ctg_id.txt
+    zcat /hive/data/outside/dbSNP/137/human/data/b137_SNPContigLoc.bcp.gz \
+    | grep -Fwf b137_ContigInfo.ctg_id.txt \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+      > tmp.tab
+    hgLoadSqlTab -oldTable hg19snp137 b137_SNPContigLoc placeholder tmp.tab
+    hgsql hg19snp137 -e 'alter table b137_SNPContigLoc add index (ctg_id);'
+    hgsql hg19snp137 -e 'create table ContigLocFix select cl.* from b137_SNPContigLoc as cl, b137_ContigInfo as ci where cl.ctg_id = ci.ctg_id;'
+    hgsql hg19snp137 -e 'alter table ContigLocFix add index (ctg_id);'
+    hgsql hg19snp137 -e 'drop table b137_SNPContigLoc; \
+                         rename table ContigLocFix to b137_SNPContigLoc;'
+    hgsql hg19snp137 -e 'alter table b137_SNPContigLoc add index (snp_id);'
+    popd
+    # Run the first parts of addToDbSnp (if(0)'d out the rest):
+    ./addToDbSnp.csh >>& do.log & tail -f do.log
+    # Redo from bigJoin onward...
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin \
+      >>& do.log & tail -f do.log
+
 
 #############################################################################
-# FILTER SNP137 (DONE 7/11/12 angie)
+# FILTER SNP137 (DONE 9/11/12 angie)
+# Originally done 7/11/12; updated 9/11/12 -- see SNP137 above
     # Redmine #8360
     # Make several tracks that are filtered subsets of snp137:
     # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp137Mult
@@ -18938,10 +18983,10 @@ EOF
        close($mult);  close($common); close($flagged);  close($misc); \
        print "snp137Mult:    $multCount\nsnp137Common:  $comCount\nsnp137Flagged: $flagCount\n" . \
              "leftover:      $miscCount\n";'
-#snp137Mult:    3541999
-#snp137Common:  13895608
-#snp137Flagged: 39458
-#leftover:      38720374
+#snp137Mult:    3540399
+#snp137Common:  13893708
+#snp137Flagged: 42211
+#leftover:      38680449
 
     # Load tables
     foreach subset (Mult Common Flagged)
@@ -18952,6 +18997,8 @@ EOF
 
 #############################################################################
 # SNP137 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 7/12/12 angie)
+# Chose not to redo this 9/11/12 (see SNP137 above) because this is only for SNVs
+# and only indel locations were changed.
     mkdir /hive/data/genomes/hg19/bed/snp137Ortho
     cd /hive/data/genomes/hg19/bed/snp137Ortho
     # Filter snp137 to to keep only uniquely mapped biallelic SNVs (class=single, length=1);
@@ -19093,9 +19140,11 @@ EOF
 
 
 ############################################################################
-# DBSNP CODING ANNOTATIONS (137) (DONE 7/30/12 angie)
-    # Originally done 7/11/12 but code 43 (stop-loss) was omitted, and filtering out
-    # NULL frame caused us to lose 45 (cds-indel) too.
+# DBSNP CODING ANNOTATIONS (137) (DONE 9/11/12 angie)
+# Originally done 7/11/12 but code 43 (stop-loss) was omitted, and filtering out
+# NULL frame caused us to lose 45 (cds-indel) too.
+# Updated 7/30/12 with corrections for that issue.
+# Updated 9/11/12 with extensive corrections from dbSNP (see SNP137 above, #8360 note 36)
     cd /hive/data/outside/dbSNP/137/human
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # For anything except an insertion (0 bases between flanks),
@@ -19124,18 +19173,18 @@ EOF
     | uniq \
       > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
-#4912900 ncbiCodingAnnotations.txt
+#4869082 ncbiCodingAnnotations.txt
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
-# 692334 3   (coding-synon)
-#2915183 8   (cds-reference -- ignored)
-#  36027 41  (nonsense)
-#1210823 42  (missense)
-#   1201 43  (stop-loss)
-#  41918 44  (frameshift)
-#  15414 45  (cds-indel)
-    # Lots of new 8's (reference) -- now including non-coding (frame = NULL),
+# 716393 3   (coding-synon)
+#2782782 8   (cds-reference -- ignored)
+# 41064 41  (nonsense)
+#1282302 42  (missense)
+#   1308 43  (stop-loss)
+#  42024 44  (frameshift)
+#   3209 45  (cds-indel)
+    # Lots more 8's (reference) than b135 -- now including non-coding (frame = NULL),
     # which we'll exclude here because this is supposed to be just coding stuff...
     # probably need to update how we show dbSNP's func annos anyway.
     # Gather up multiple annotation lines into one line per {snp, gene, frame}:
@@ -19177,11 +19226,13 @@ EOF
     hgLoadBed hg19 snp137CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp137CodingDbSnp.bed
-#Read 1959839 elements of size 11 from snp137CodingDbSnp.bed
+#Read 1956591 elements of size 11 from snp137CodingDbSnp.bed
 
 
 ############################################################################
 # SNPMASKED SEQUENCE FOR SNP137 (DONE 7/12/12 angie)
+# Chose not to redo this 9/11/12 (see SNP137 above) because this is only for SNVs
+# and only indel locations were changed.
     mkdir /hive/data/genomes/hg19/snp137Mask
     cd /hive/data/genomes/hg19/snp137Mask
     # Identify rsIds with various problems -- we will exclude those.
@@ -19724,3 +19775,366 @@ cat > getHistones.csh << 'EOF'
     ls -1 peaks/*.bed > peak.lst
 
 #######################################################################
+# DENISOVA HIGH-COVERAGE VARIANTS #8886 (DONE 9/6/12 angie)
+    mkdir /hive/data/genomes/hg19/bed/denisova
+    cd /hive/data/genomes/hg19/bed/denisova
+    # Get tabix-compressed+indexed VCF files for Denisova and 11 modern humans:
+    wget ftp://ucsc_paper_data:PHZuezz7@cdna.eva.mpg.de/hg19_1000g/\*
+    # Make /gbdb links and bbi tables, prefix dhcVcf for Denisova High-Coverage VCF:
+    foreach f (`pwd`/*.vcf.gz{,.tbi})
+      ln -s $f /gbdb/hg19/bbi/
+    end
+    foreach f (*.vcf.gz)
+      set track = dhcVcf$f:r:r
+      echo $track
+      hgBbiDbLink hg19 $track /gbdb/hg19/bbi/$f
+    end
+#dhcVcfDNK02
+#dhcVcfDenisovaPinky
+#dhcVcfHGDP00456
+#dhcVcfHGDP00521
+#dhcVcfHGDP00542
+#dhcVcfHGDP00665
+#dhcVcfHGDP00778
+#dhcVcfHGDP00927
+#dhcVcfHGDP00998
+#dhcVcfHGDP01029
+#dhcVcfHGDP01284
+#dhcVcfHGDP01307
+    # Add Denisova track group section:
+    hgsql hg19 -e "insert into grp values('denisova', 'Denisova Assembly and Analysis', 6.6, 1)"
+
+
+#########################################################################
+# DENISOVA HIGH-COVERAGE SEQUENCE READS #8886 (DONE 9/10/12)
+    cd /hive/data/genomes/hg19/bed/denisova
+    wget http://cdna.eva.mpg.de/denisova/alignments/T_hg19_1000g.bam
+    wget http://cdna.eva.mpg.de/denisova/alignments/T_hg19_1000g.bam.bai
+    # Tweak sequence names?  e.g. SN:GL000193.1 -> chr4_gl000193_random ?
+    ln -s `pwd`/T_hg19_1000g.bam{,.bai} /gbdb/hg19/bbi/
+    hgBbiDbLink hg19 dhcBamDenisova /gbdb/hg19/bbi/T_hg19_1000g.bam
+
+
+#########################################################################
+# DENISOVA HIGH-COVERAGE ANALYSIS #8886 (DONE 10/2/12 angie)
+    mkdir /hive/data/genomes/hg19/bed/denisova
+    cd /hive/data/genomes/hg19/bed/denisova
+    # Fetched original .zip file on 9/6/12:
+    wget --no-check-certificate https://bioinf.eva.mpg.de/download/HighCoverageDenisovaGenome/Denisova_catalog.zip
+    unzip Denisova_catalog.zip
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Denisova-derived_Human-ancestral/
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/GAD_Denisova-state/
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/GWAS_Denisova-state/
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Human-derived_Denisova-ancestral/
+#    cd /hive/data/genomes/hg19/bed/denisova/Denisova_zip/Human-derived_Denisova-state/
+
+    # 9/17/12 update: no zip, dir name change, and wget -r apparently doesn't work with
+    # https --no-check-cert, so just fetch updates alongside original files:
+    mv Denisova_zip Denisova_zip_orig
+    cp -p Denisiva_zip_orig DenHC_catalog
+    cd DenHC_catalog/Human-derived_Denisova-state
+    wget --no-check-certificate https://bioinf.eva.mpg.de/download/HighCoverageDenisovaGenome/DenHC_catalog/Human-derived_Denisova-state/Genome_CAT.tsv.gz
+    # Good, no incomplete lines now.  But what we really want to make a track for is
+    # Human-derived_Denisova-ancestral...
+    cd /hive/data/genomes/hg19/bed/denisova/DenHC_catalog/Human-derived_Denisova-ancestral
+    # There are two subdirs, InDels and SNCs, and each subdir has a whole bunch of files
+    # which we can make into BED4+ subtracks of a composite with views.
+    cat > trackify.pl <<'_EOF_'
+#!/usr/bin/env perl
+use warnings;
+use strict;
+my $isSNC = ($ARGV[0] =~ /SNC/);
+while (<>) {
+  next if (/^#/);
+  chomp;
+  my @w = split("\t");
+  my $chromEnd = $w[2];
+  $w[2]--; # chromStart -> 0-based
+  # Delete extra column (Grantham score) that appears only in nonsynon files:
+  splice(@w, 31, 1) if (scalar(@w) > 32);
+  # Measure allele lengths to determine whether this is an indel, and whether it's
+  # necessary to trim an identical first base from each allele:
+  my $humanFirstBase = substr($w[15], 0, 1);
+  my $humanLen = length($w[15]);
+  my $diffLengths = 0;
+  my $sameFirstBase = 1;
+  foreach my $i (16..19) {
+    next if ($w[$i] eq "N/A");
+    my $firstBase = substr($w[$i], 0, 1);
+    my $len = length($w[$i]);
+    $diffLengths = 1 if ($len != $humanLen);
+    $sameFirstBase = 0 if ($firstBase ne $humanFirstBase);
+  }
+  if ($sameFirstBase) {
+    foreach my $i (15..19) {
+      next if ($w[$i] eq "N/A");
+      $w[$i] =~ s/^$humanFirstBase// || die;
+      $w[$i] =~ s/^$/-/; # Some alleles have trailing "-", some don't; use "-" for deletion
+    }
+    $w[2]++; # adjust chromStart
+    $humanLen--;
+  }
+  if ($diffLengths) {
+    $chromEnd = $w[2] + $humanLen;
+  }
+  if ($isSNC) {
+    # "-" is used as N/A in SNCs/* -- tweak to N/A for consistency w/InDels files
+    foreach my $i (16..19) {
+      $w[$i] = "N/A" if ($w[$i] eq "-");
+    }
+  }
+  my $name = "$w[15]/$w[16]";
+  $name .= ":$w[21]" if (length($w[21]) > 1);
+  # Add spaces to Extra for readability:
+  $w[14] =~ s/;/; /g;
+  print join("\t", "chr$w[1]", $w[2], $chromEnd, $name,      # BED 4
+             $w[5], $w[4], $w[14],                           # Feature, Gene, Extra
+             $w[7], $w[8], $w[9], $w[10], $w[11], $w[12],    # Consequence, coding effect
+             $w[15], $w[16], $w[17], $w[18], $w[19],         # Human, Den, etc. alleles
+             $w[20], $w[21], $w[22], $w[23], $w[31]) . "\n"; # D zyg, dbSNP, 1000g freq, flag,strnd
+}
+'_EOF_'
+    # << emacs
+    chmod a+x trackify.pl
+
+    cat > tsvToBedAndTrackDb.pl << '_EOF_'
+#!/usr/bin/env perl
+# Parse a .tsv file path into descriptive components to use for track name and trackDb subGroups;
+# Call trackify.pl and if the resulting bed file is non-empty, print out subtrack .ra entry.
+use warnings;
+use strict;
+my $tsvPath = $ARGV[0];
+chomp $tsvPath;
+$tsvPath =~ m/^(InDels|SNCs)\/Genome_VEP(|(_genic(_ccds)?_(3utr|5utr|nonsyn_grantham|frameshift_coding|inframe_nonsyn|splice|syn))|(_regul(_motif)?(_highinfo)?))_formatted_(fixed|highfreq)/ || die;
+my ($vType, $ccds, $gType, $reg, $regMo, $regHi, $fType) = ($1, $4 || "", $5 || "", $6 || "",
+                                                            $7 || "", $8 || "", $9 || ""); 
+# Reformat file name components: _ to inital uppercase, etc.
+$vType =~ s/s$//;
+$ccds =~ s/_(\w)/\u$1/g;
+$gType =~ s/_(\w)/\u$1/g;  $gType =~ s/^(\w)/\u$1/;
+$gType =~ s/Grantham//;  $gType =~ s/^(\d)utr/Utr$1/; $gType =~ s/nframe/nFrame/;
+$fType =~ s/^(\w)/\u$1/;
+$fType =~ s/ighfreq/ighFreq/;
+my $fShort = ($fType eq "Fixed") ? "Fxd" : "HiF";
+my $shortLabel = "";
+my $longLabel = "Modern Human Derived ($fType), Denisova Ancestral: ";
+my $color = "0,0,0";
+my ($subset, $view);
+if ($gType) {
+  $subset = "$ccds$gType";
+  if ($gType eq "Nonsyn" || $gType eq "Splice" || $gType eq "FrameshiftCoding" ||
+      $gType eq "InFrameNonsyn") {
+    $color = "200,0,0";
+  } elsif ($gType =~ /^Utr/) {
+    $color = "0,0,200";
+  } elsif ($gType eq "Syn") {
+    $color = "0,200,0";
+  }
+  my ($gShort, $gLong) = ($gType, $gType);
+  $gShort =~ s/FrameshiftCoding/FrShft/; $gShort =~ s/InFrameNonsyn/InFrNS/;
+  $gLong =~ s/([a-z])([A-Z])/$1 $2/g;  $gLong =~ s/Utr(\d)/$1\' UTR/;
+  $gLong =~ s/In Frame/In-frame/;  $gLong =~ s/Nonsyn/Non-synonymous/;
+  if ($ccds) {
+    $gShort = "CC $gShort";
+    $gLong = "CCDS $gLong";
+  }
+  $shortLabel .= "$gShort $fShort";
+  $longLabel .= "$gLong";
+  $view = $ccds ? $ccds : "Ens";
+} elsif ($reg) {
+  $color = "230,130,0";
+  my ($rShort, $rLong);
+  if ($regHi) {
+    $subset = "RegMotifHighInfo";
+    ($rShort, $rLong) = ("RgMoHiInf", "Reg. Motif at High Inf Pos in TFBP");
+  } elsif ($regMo) {
+    $subset = "RegMotif";
+    ($rShort, $rLong) = ("RegMotif", "Regulatory Motif");
+  } else {
+    $subset = "Reg";
+    ($rShort, $rLong) = ("RegRegion", "Regulatory Region");
+  }
+  $shortLabel .= "$rShort $fShort";
+  $longLabel .= "$rLong";
+  $view = "Reg";
+} else {
+  $subset = "All";
+  $shortLabel .= "$fShort";
+  $longLabel .= "All ";
+  $view = "All";
+}
+my $track = "dhcHumDerDenAnc$vType$subset$fType";
+my $cmd = "./trackify.pl $tsvPath > $track.bed";
+system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
+if (-s "$track.bed") {
+  my $subsetTweaked = $subset;  $subsetTweaked =~ s/Syn/ZLast_Syn/;
+  $subsetTweaked =~ s/^RegMotifH/DA_RegMotifH/;  $subsetTweaked =~ s/^RegM/DB_RegM/;
+  $subsetTweaked =~ s/^Reg/DC_Reg/;
+  my $isOff = "";
+  $isOff = " off" if ($subset =~ /Syn/ || $subset eq "Reg");
+  # We will combine SNCs and InDels later; print only one set of trackDb descriptions:
+  if ($vType eq "InDel" || $subset =~ /Nonsyn/ || $subset =~ /Syn/) {
+    print "        track dhcHumDerDenAnc$subset$fType\n";
+    print "        parent dhcHumDerDenAnc$view$isOff\n";
+    print "        subGroups view=$view subset=$subsetTweaked freq=$fType\n";
+    print "        shortLabel $shortLabel\n";
+    print "        longLabel $longLabel\n";
+    print "        color $color\n\n";
+  }
+  if ($fType eq "Fixed") {
+    # Fernando Racimo's request: separate out Fixed (in 1000Genomes) locations that are in dbSNP.
+    $cmd = "egrep -vw 'rs[0-9]+' $track.bed > tmp$track.bed";
+    system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
+    $cmd = "egrep -w 'rs[0-9]+' $track.bed > ${track}DbSnp.bed";
+    system($cmd); # grep returns nonzero if it can't find anything, but that's OK here.
+    $cmd = "mv tmp$track.bed $track.bed";
+    system($cmd) == 0 || die "ERROR from \"$cmd\"\n\n";
+    if (-s "${track}DbSnp.bed" &&
+        ($vType eq "InDel" || $subset =~ /Nonsyn/ || $subset =~ /Syn/ ||
+         $subset eq "RegMotifHighInfo")) {
+      $shortLabel =~ s/Fxd/FxS/;
+      $longLabel =~ s/Fixed/Fixed+dbSNP/;
+      print "        track dhcHumDerDenAnc$subset${fType}DbSnp\n";
+      print "        parent dhcHumDerDenAnc$view$isOff\n";
+      print "        subGroups view=$view subset=$subsetTweaked freq=${fType}DbSnp\n";
+      print "        shortLabel $shortLabel\n";
+      print "        longLabel $longLabel\n";
+      print "        color $color\n\n";
+    }
+  }
+}
+'_EOF_'
+     # << emacs
+    chmod a+x tsvToBedAndTrackDb.pl
+    foreach f (*/Genome_VEP_*.tsv)
+        ./tsvToBedAndTrackDb.pl $f
+        if ($status != 0) break
+    end
+    # Check input and output file counts:
+    ls -1 */G*_highfreq.tsv | wc -l
+#27
+    ls -1 *HighFreq.bed | wc -l
+#27
+    ls -1 */G*_fixed.tsv | wc -l
+#27
+    ls -1 *Fixed.bed | wc -l
+#27
+    ls -1 *FixedDbSnp.bed | wc -l
+#27
+    # 54 inputs, 81 outputs because Fixed was split into Fixed and FixedDbSnp
+
+    # Combine SNCs and InDels:
+    foreach indel (dhcHumDerDenAncInDel*.bed)
+      set snc = `echo $indel | sed -e 's/InDel/SNC/;'`
+      set both = `echo $indel | sed -e 's/InDel//;'`
+      if (! -e $snc) then
+        mv $indel $both
+      endif
+    end
+    foreach snc (dhcHumDerDenAncSNC*.bed)
+      set indel = `echo $snc | sed -e 's/SNC/InDel/;'`
+      set both = `echo $snc | sed -e 's/SNC//;'`
+      if (-e $indel) then
+        sort -k1,1 -k2n,2n $snc $indel > $both
+        rm $snc $indel
+      else
+        mv $snc $both
+      endif
+    end
+
+    # bedToBigBed:
+    foreach f (dhcHumDerDenAnc*.bed)
+      if (-s $f) then
+        echo $f
+        bedToBigBed -verbose=0 -tab -type=bed4+19 -as=$HOME/kent/src/hg/lib/dhcHumDerDenAnc.as \
+          $f /hive/data/genomes/hg19/chrom.sizes $f:r.bb
+        if ($status != 0) break
+      else
+        echo "Skipping $f (zero size)"
+      endif
+    end
+#Skipping dhcHumDerDenAncCcdsInFrameNonsynFixedDbSnp.bed (zero size)
+#Skipping dhcHumDerDenAncCcdsInFrameNonsynHighFreq.bed (zero size)
+#Skipping dhcHumDerDenAncInFrameNonsynFixedDbSnp.bed (zero size)
+#Skipping dhcHumDerDenAncInFrameNonsynHighFreq.bed (zero size)
+    # Check bigBed file count:
+    ls -1 *.bed | wc -l
+#54
+    ls -1 *.bb | wc -l
+#50
+    # We skipped 4 empty bed files, so that's OK.
+
+    # Install in /gbdb and load up.
+    mkdir /gbdb/hg19/dhcHumDerDenAnc
+    ln -s `pwd`/dhcHumDerDenAnc*.bb /gbdb/hg19/dhcHumDerDenAnc/
+    foreach f (dhcHumDerDenAnc*.bb)
+      hgBbiDbLink hg19 $f:r /gbdb/hg19/dhcHumDerDenAnc/$f
+    end
+
+
+#########################################################################
+# recip best for mm10 (DONE - 2012-09-14 - Hiram)
+    # see also: redmine issue 9089
+    cd /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
+    time doRecipBest.pl -buildDir=`pwd` hg19 mm10 > rbest.log 2>&1
+    #   real    157m16.369s
+
+#########################################################################
+# NCBI patch 10 (DONE - 2012-09-26 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch10
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch10
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p10/ ./
+    # the scripts from patch9 were modified slightly to update and fix some
+    #	of the new names in this patch10
+    cp ../patch9/gatherNames.pl .
+    ./gatherNames.pl . > ucscNames.patch10.txt
+    # examine the names for sanity:
+    awk '{print $NF}' ucscNames.patch10.txt | sort
+    # and they should not be longer than 31 characters:
+    awk '{print $NF}' ucscNames.patch10.txt | sort | awk '{print length($0)}' \
+        | sort -n | tail
+    cp -p ../patch9/mkTables.pl .
+    ./mkTables.pl  patches.chrom.sizes ucscNames.patch10.txt PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz
+    # output to stdout is the contents of alt.scaf.agp.gz
+    # constructs files: ctgPos.txt chromInfo.txt gold.txt and gap.txt
+    cp -p ../patch9/mkCtgPos2.pl .
+    ./mkCtgPos2.pl ucscNames.patch10.txt patches.chrom.sizes > ctgPos2.txt
+    cp -p ../patch9/mkHapLocate.pl .
+    ./mkHapLocate.pl ctgPos.txt \
+	PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
+	> haplotypeLocations.bed
+    cp -p haplotypeLocations.bed altSequence.bed
+    ln -s ../patch2/before.patch2.hapLoc.bed hg19.hapLoc.bed
+    awk '{printf "%s\t%d\t%d\t%s\t500\t+\t%d\t%d\t32,32,190\n", $2,$3,$4,$5,$3,$4}' \
+hg19.hapLoc.bed >> altSequence.bed
+
+    # a new script for patch10
+    cp -p ../patch9/mkFasta.pl .
+    ./mkFasta.pl ucscNames.patch10.txt > hg19.patch10.fa
+    # the build of hg19Patch10 can be seen in hg19Patch10.txt
+
+    egrep -v "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    > altSeqPatchesP10.tab
+    egrep "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    | grep -v "^chrM_rCRS" > altSeqHaplotypesP10.tab
+    # verify only one lost
+    wc -l altSeqPatchesP10.tab altSeqHaplotypesP10.tab
+    #   112 altSeqPatchesP10.tab
+    #   80 altSeqHaplotypesP10.tab
+    #   192 total
+
+    wc -l altSequence.bed
+    #	193 altSequence.bed
+    hgLoadBed hg19 altSeqHaplotypesP10 altSeqHaplotypesP10.tab
+    #	Read 80 elements of size 6 from altSeqHaplotypesP10.tab
+    hgLoadBed hg19 altSeqPatchesP10 altSeqPatchesP10.tab
+    #	Read 112 elements of size 6 from altSeqPatchesP10.tab
+
+    #    these tables are part of human/hg19/altSeqComposite10.ra
+    #  Check the chrom coverage for the altSeqComposite10.ra listing:
+    cut -f1 altSequence.bed | sort -u | xargs echo
+# chr1 chr10 chr11 chr12 chr13 chr15 chr16 chr17 chr18 chr19 chr2 chr20 chr21 chr22 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chrM chrM_rCRS chrX
+
+##############################################################################

@@ -9,12 +9,11 @@ longLabel ENCODE Histone Modifications by Univ. Washington ChIP-seq
 group regulation
 subGroup1 view Views aPeaks=Peaks cHot=Hotspots zRawSig=Raw_Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t3BJ=BJ t3CACO2=Caco-2 t3GM06990=GM06990 t3GM12801=GM12801 t3GM12864=GM12864 t3GM12865=GM12865 t3GM12872=GM12872 t3GM12873=GM12873 t3GM12874=GM12874 t3GM12875=GM12875 t3HEK293=HEK293 t3HL60=HL-60 t3HMEC=HMEC t3HRE=HRE t3NHEK=NHEK t3SAEC=SAEC t3SKNSHRA=SK-N-SH_RA t3WERIRB1=WERI-Rb-1
-#subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3K36me3
 subGroup3 factor Factor CTCF=CTCF H3K04me3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3K36me3
 subGroup4 rank Rank m1st=1st m2nd=2nd
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rank
-dimensionZchecked 1st
-#fileSortOrder cell=Cell_Line view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+dimensionZchecked m1st
+fileSortOrder cell=Cell_Line view=View fileSize=Size fileType=File_Type dateUnrestricted=RESTRICTED<BR>Until
 sortOrder cellType=+ factor=+ rank=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks

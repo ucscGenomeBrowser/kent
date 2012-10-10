@@ -272,7 +272,6 @@ for (chain = chainsHit; chain != NULL; chain = next)
 	bed->thickEnd = thickEnd;
 	}
     slAddHead(&bedList, bed);
-
     if (tStart < subChain->tStart)
         {
         /* unmapped portion of target */
@@ -367,12 +366,12 @@ if (wordCount <= 0)
 return wordCount;
 }
 
-static int bedOverSmall(struct lineFile *lf, int fieldCount, 
+static int bedOverSmallEnds(struct lineFile *lf, int fieldCount, 
                         struct hash *chainHash, double minMatch, int minSizeT, 
                         int minSizeQ, int minChainT, int minChainQ, 
 			FILE *mapped, FILE *unmapped, bool multiple, 
                         char *chainTable, int bedPlus, bool hasBin, 
-                        bool tabSep, int *errCt)
+			bool tabSep, int ends, int *errCt)
 /* Do a bed without a block-list.
  * NOTE: it would be preferable to have all of the lift
  * functions work at the line level, rather than the file level.
@@ -383,10 +382,12 @@ static int bedOverSmall(struct lineFile *lf, int fieldCount,
 int i, wordCount, s, e;
 char *words[LIFTOVER_MAX_WORDS], *chrom;
 char strand = '.', strandString[2];
-char *error;
+char *error, *error2 = NULL;
 int ct = 0;
 int errs = 0;
 struct bed *bedList = NULL, *unmappedBedList = NULL;
+/* result lists for -ends option */
+struct bed *bedList2 = NULL, *unmappedBedList2 = NULL;
 int totalUnmapped = 0;
 double unmappedRatio;
 int totalUnmappedAll = 0;
@@ -410,6 +411,9 @@ while ((wordCount =
     e = lineFileNeedFullNum(lf, words, 2);
     bool useThick = FALSE;
     int thickStart = 0, thickEnd = 0;
+    int afterS = s + ends;
+    int beforeE = e - ends;
+    bool doEnds = ((ends > 0) && (beforeE > afterS));
     if (s > e)
 	errAbort(
 	"ERROR: start coordinate is after end coordinate (chromStart > chromEnd) on line %d of bed file %s\nERROR: %s %d %d", 
@@ -428,11 +432,66 @@ while ((wordCount =
 	thickStart = lineFileNeedFullNum(lf, words, 6);
 	thickEnd = lineFileNeedFullNum(lf, words, 7);
 	}
-    error = remapRange(chainHash, minMatch, minSizeT, minSizeQ, minChainT, 
+    if (doEnds)
+	{
+	if (useThick)
+	    errAbort("Can only lift BED6 or lower with -ends option");
+	if (multiple)
+	    errAbort("Cannot use -multiple with -ends");
+	error = remapRange(chainHash, minMatch, minSizeT, minSizeQ, minChainT, 
+		       minChainQ, chrom, s, afterS, strand,
+		       thickStart, thickEnd, useThick, minMatch, 
+		       region, db, chainTableName, &bedList, &unmappedBedList);	
+	error2 = remapRange(chainHash, minMatch, minSizeT, minSizeQ, minChainT, 
+		       minChainQ, chrom, beforeE, e, strand,
+		       thickStart, thickEnd, useThick, minMatch, 
+		       region, db, chainTableName, &bedList2, &unmappedBedList2);	
+	}
+    else
+	error = remapRange(chainHash, minMatch, minSizeT, minSizeQ, minChainT, 
 		       minChainQ, chrom, s, e, strand,
 		       thickStart, thickEnd, useThick, minMatch, 
 		       region, db, chainTableName, &bedList, &unmappedBedList);
-    if (error == NULL)
+    if (doEnds && !error && !error2 && bedList && bedList2 && (slCount(bedList) == 1) && (slCount(bedList2) == 1)
+	&& sameString(bedList->chrom, bedList2->chrom) && (bedList->chromStart < bedList2->chromEnd)
+	&& (((wordCount >= 6) && ((bedPlus == 0) || (bedPlus >= 6)) && (bedList->strand[0] == bedList2->strand[0])) || (wordCount < 6) || (bedPlus < 6)))
+	{
+	/* really the most restrictive in terms of mapping */
+	if (hasBin)
+	    fprintf(f, "%d\t", binFromRange(bedList->chromStart, bedList2->chromEnd));
+	fprintf(f, "%s\t%d\t%d", bedList->chrom, bedList->chromStart, bedList2->chromEnd);
+	for (i=3; i<wordCount; ++i)
+	    {
+	    if (i == 5 && (bedPlus == 0 || bedPlus >= 6))
+		/* get strand from remap */
+		fprintf(f, "\t%c", bedList->strand[0]);
+	    else
+		/* everything else just passed through */
+		fprintf(f, "\t%s", words[i]);
+	    }
+	fprintf(f, "\n");
+	ct++;
+	}
+    else if (doEnds)
+	{
+	/* error like below */
+	f = unmapped;
+        strandString[0] = strand;
+        strandString[1] = 0;
+        words[5] = strandString;
+	if (error || error2)
+	    fprintf(f, "#%s on one or both ends\n", (error) ? error : error2);
+	else if (!bedList || !bedList2 || (slCount(bedList) > 1) || (slCount(bedList2) > 1)
+		 || !sameString(bedList->chrom, bedList2->chrom) || (bedList->chromStart >= bedList2->chromEnd)
+		 || (((wordCount >= 6) && ((bedPlus == 0) || (bedPlus >= 6))) && (bedList->strand[0] != bedList2->strand[0])))
+	    fprintf(f, "#ends mapped differently or incompletely\n");
+        fprintf(f, "%s\t%d\t%d", chrom, s, e);
+        for (i=3; i<wordCount; ++i)
+            fprintf(f, "\t%s", words[i]);
+        fprintf(f, "\n");
+	errs++;
+	}
+    else if (error == NULL)
         {
         /* successfully mapped */
         int ix = 1;
@@ -511,6 +570,24 @@ if (errCt)
 mappedRatio = (totalBases - totalUnmappedAll)*100.0 / totalBases;
 verbose(2, "Mapped bases: \t%5.0f%%\n", mappedRatio);
 return ct;
+}
+
+static int bedOverSmall(struct lineFile *lf, int fieldCount, 
+                        struct hash *chainHash, double minMatch, int minSizeT, 
+                        int minSizeQ, int minChainT, int minChainQ, 
+			FILE *mapped, FILE *unmapped, bool multiple, 
+                        char *chainTable, int bedPlus, bool hasBin, 
+                        bool tabSep, int *errCt)
+/* Do a bed without a block-list.
+ * NOTE: it would be preferable to have all of the lift
+ * functions work at the line level, rather than the file level.
+ * Multiple option can be used with bed3 -- it will write a list of
+ * regions as a bed4, where score is the "part #". This is used for
+ * ENCODE region mapping */  
+{
+return bedOverSmallEnds(lf, fieldCount, chainHash, minMatch, 
+                        minSizeT, minSizeQ, minChainT, minChainQ, mapped, unmapped, 
+			multiple, chainTable, bedPlus, hasBin, tabSep, 0, errCt);
 }
 
 static void shortGffLine(struct lineFile *lf)
@@ -1053,11 +1130,13 @@ if (errCt)
 return ct;
 }
 
-int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,  
+
+
+int liftOverBedPlusEnds(char *fileName, struct hash *chainHash, double minMatch,  
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
                     bool multiple, char *chainTable, int bedPlus, bool hasBin, 
-                    bool tabSep, int *errCt)
+                    bool tabSep, int ends, int *errCt)
 /* Lift bed N+ file.
  * Return the number of records successfully converted */
 {
@@ -1084,15 +1163,38 @@ if (lineFileNextReal(lf, &line))
     if (bedFieldCount == 0)
         bedFieldCount = wordCount;
     if (bedFieldCount <= 10)
+	{
+	if (ends)
+	    ct = bedOverSmallEnds(lf, wordCount, chainHash, minMatch, 
+                        minSizeT, minSizeQ, minChainT, minChainQ, f, unmapped, 
+			multiple, chainTable, bedPlus, hasBin, tabSep, ends, errCt);
+	else
 	 ct = bedOverSmall(lf, wordCount, chainHash, minMatch, 
                         minSizeT, minSizeQ, minChainT, minChainQ, f, unmapped, 
                         multiple, chainTable, bedPlus, hasBin, tabSep, errCt);
+	}
+    else if (ends)
+	errAbort("Cannot use -ends with blocked BED\n");
     else
 	 ct = bedOverBig(lf, wordCount, chainHash, minMatch, minBlocks, 
                         fudgeThick, f, unmapped, bedPlus, hasBin, tabSep, errCt);
     }
 lineFileClose(&lf);
 return ct;
+}
+
+int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,  
+                    double minBlocks, int minSizeT, int minSizeQ, int minChainT,
+                    int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
+                    bool multiple, char *chainTable, int bedPlus, bool hasBin, 
+                    bool tabSep, int *errCt)
+/* Lift bed N+ file.
+ * Return the number of records successfully converted */
+{
+return liftOverBedPlusEnds(fileName, chainHash, minMatch, minBlocks,
+                        minSizeT, minSizeQ, minChainT, minChainQ,
+                        fudgeThick, f, unmapped, multiple, chainTable,
+			    0, FALSE, FALSE, 0, errCt);
 }
 
 int liftOverBed(char *fileName, struct hash *chainHash, 

@@ -157,6 +157,16 @@ if (bwf != NULL)
     }
 }
 
+static void chromIdSizeHandleSwapped(boolean isSwapped, struct bbiChromIdSize *idSize)
+/* Swap bytes in chromosome Id and Size as needed. */
+{
+if (isSwapped)
+    {
+    idSize->chromId = byteSwap32(idSize->chromId);
+    idSize->chromSize = byteSwap32(idSize->chromSize);
+    }
+}
+
 
 struct fileOffsetSize *bbiOverlappingBlocks(struct bbiFile *bbi, struct cirTreeFile *ctf,
 	char *chrom, bits32 start, bits32 end, bits32 *retChromId)
@@ -165,8 +175,7 @@ struct fileOffsetSize *bbiOverlappingBlocks(struct bbiFile *bbi, struct cirTreeF
 struct bbiChromIdSize idSize;
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return NULL;
-if (bbi->isSwapped)
-    idSize.chromId = byteSwap32(idSize.chromId);
+chromIdSizeHandleSwapped(bbi->isSwapped, &idSize);
 if (retChromId != NULL)
     *retChromId = idSize.chromId;
 return cirTreeFindOverlappingBlocks(ctf, idSize.chromId, start, end);
@@ -186,15 +195,11 @@ struct chromNameCallbackContext *c = context;
 struct bbiChromInfo *info;
 struct bbiChromIdSize *idSize = val;
 assert(valSize == sizeof(*idSize));
+chromIdSizeHandleSwapped(c->isSwapped, idSize);
 AllocVar(info);
 info->name = cloneStringZ(key, keySize);
 info->id = idSize->chromId;
 info->size = idSize->chromSize;
-if (c->isSwapped)
-    {
-    info->id = byteSwap32(info->id);
-    info->size = byteSwap32(info->size);
-    }
 slAddHead(&c->list, info);
 }
 
@@ -215,6 +220,7 @@ bits32 bbiChromSize(struct bbiFile *bbi, char *chrom)
 struct bbiChromIdSize idSize;
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return 0;
+chromIdSizeHandleSwapped(bbi->isSwapped, &idSize);
 return idSize.chromSize;
 }
 
@@ -303,12 +309,29 @@ sum->chromId = udcReadBits32(udc, isSwapped);
 sum->start = udcReadBits32(udc, isSwapped);
 sum->end = udcReadBits32(udc, isSwapped);
 sum->validCount = udcReadBits32(udc, isSwapped);
+// looks like a bug to me, these should call udcReadFloat() 
 udcMustReadOne(udc, sum->minVal);
 udcMustReadOne(udc, sum->maxVal);
 udcMustReadOne(udc, sum->sumData);
 udcMustReadOne(udc, sum->sumSquares);
 }
 #endif /* UNUSED */
+
+static void bbiSummaryHandleSwapped(struct bbiFile *bbi, struct bbiSummaryOnDisk *in)
+/* Swap integer fields in summary as needed. */
+{
+if (bbi->isSwapped)
+    {
+    in->chromId = byteSwap32(in->chromId);
+    in->start = byteSwap32(in->start);
+    in->end = byteSwap32(in->end);
+    in->validCount = byteSwap32(in->validCount);
+    in->minVal = byteSwapFloat(in->minVal);
+    in->maxVal = byteSwapFloat(in->maxVal);
+    in->sumData = byteSwapFloat(in->sumData);
+    in->sumSquares = byteSwapFloat(in->sumSquares);
+    }
+}
 
 static struct bbiSummary *bbiSummaryFromOnDisk(struct bbiSummaryOnDisk *in)
 /* Create a bbiSummary unlinked to anything from input in onDisk format. */
@@ -326,7 +349,7 @@ out->sumSquares = in->sumSquares;
 return out;
 }
 
-static struct bbiSummary *bbiSummariesInRegion(struct bbiZoomLevel *zoom, struct bbiFile *bbi, 
+struct bbiSummary *bbiSummariesInRegion(struct bbiZoomLevel *zoom, struct bbiFile *bbi, 
 	int chromId, bits32 start, bits32 end)
 /* Return list of all summaries in region at given zoom level of bbiFile. */
 {
@@ -386,6 +409,7 @@ for (block = blockList; block != NULL; )
 	    {
 	    dSum = (void *)blockPt;
 	    blockPt += sizeof(*dSum);
+	    bbiSummaryHandleSwapped(bbi, dSum);
 	    if (dSum->chromId == chromId)
 		{
 		int s = max(dSum->start, start);
@@ -451,11 +475,12 @@ return validCount;
 }
 
 static int bbiChromId(struct bbiFile *bbi, char *chrom)
-/* Return chromosome size */
+/* Return chromosome Id */
 {
 struct bbiChromIdSize idSize;
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return -1;
+chromIdSizeHandleSwapped(bbi->isSwapped, &idSize);
 return idSize.chromId;
 }
 

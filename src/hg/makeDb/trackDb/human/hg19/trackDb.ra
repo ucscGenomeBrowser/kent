@@ -3,6 +3,7 @@
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
+include trackDb.denisova.ra
 
 #large composites
 include uMassBrainHistone.ra
@@ -808,14 +809,8 @@ html hg19mammalChainNet
         type chain felCat4
         otherDb felCat4
 
-        track chainCanFam2
-    #replaces record chainCanFam2 in parent dir missing/extra priority
-        subTrack placentalChainNetViewchain off
-        subGroups view=chain species=pDog clade=bLaura
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain canFam2
-        otherDb canFam2
+include chainCanFam2.ra beta,public
+include chainCanFam3.ra alpha
 
         track chainDasNov2
         subTrack placentalChainNetViewchain off
@@ -1029,14 +1024,8 @@ html hg19mammalChainNet
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
-        track netCanFam2
-    #replaces record netCanFam2 in parent dir missing/extra priority
-        subTrack placentalChainNetViewnet on 
-        subGroups view=net species=pDog clade=bLaura
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign canFam2 chainCanFam2
-        otherDb canFam2
+include netCanFam2.ra beta,public
+include netCanFam3.ra alpha
 
         track netDasNov2
         subTrack placentalChainNetViewnet on 
@@ -2048,13 +2037,40 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track tgpPhase1
-shortLabel 1000Genomes Ph 1
+shortLabel 1000G Ph1 Vars
 longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, InDels, SVs
 type vcfTabix
 group varRep
 priority 99.1
 visibility hide
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+
+track tgpPhase1Accessibility
+compositeTrack on
+shortLabel 1000G Ph1 Accsbl
+longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions
+type bigBed 3
+priority 99.11
+visibility hide
+group varRep
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
+
+    track tgpPhase1AccessibilityPilotCriteria
+    subTrack tgpPhase1Accessibility
+    shortLabel 1000G Accs Pilot
+    longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Pilot Level Criteria
+    color 100,100,100
+
+    track tgpPhase1AccessibilityStrictCriteria
+    subTrack tgpPhase1Accessibility
+    shortLabel 1000G Accs Strict
+    longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Strict Criteria
+    color 0,0,0
+
+track tgpRecombRate override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
 
 searchTable nscanGene
 searchType genePred
@@ -2300,9 +2316,11 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
-include altSeqComposite5.ra
+include altSeqComposite5.ra alpha
 
-include altSeqComposite9.ra
+include altSeqComposite9.ra alpha,beta,public
+
+include altSeqComposite10.ra alpha
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
@@ -2585,7 +2603,7 @@ noInherit on
 #include jkExperiments.ra
 
 track genotypeArrays
-shortLabel Arrays
+shortLabel SNP/CNV Arrays
 longLabel Microarray probesets
 compositeTrack on
 group varRep
@@ -2594,13 +2612,49 @@ noScoreFilter .
 noInherit on
 type bed 3 .
 
+    track snpArrayAffy6
+    parent genotypeArrays
+    shortLabel Affy SNP 6.0
+    longLabel Affymetrix SNP 6.0
+    type bed 6 +
+    priority 1
+
+    track snpArrayAffy6SV
+    parent genotypeArrays
+    shortLabel Affy SNP 6.0 SV
+    longLabel Affymetrix SNP 6.0 Structural Variation
+    type bed 6 +
+    origAssembly hg18
+    priority 2
+
+    track snpArrayAffy5
+    parent genotypeArrays off
+    shortLabel Affy SNP 5.0
+    longLabel Affymetrix SNP 5.0
+    type bed 6 +
+    priority 3
+
+    track snpArrayAffy250Nsp
+    parent genotypeArrays off
+    shortLabel Affy 250KNsp
+    longLabel Affymetrix GeneChip Human Mapping 250K Nsp
+    type bed 6 +
+    priority 4
+
+    track snpArrayAffy250Sty
+    parent genotypeArrays off
+    shortLabel Affy 250KSty
+    longLabel Affymetrix GeneChip Human Mapping 250K Sty
+    type bed 6 +
+    priority 5
+
     track affyCytoScan
     parent genotypeArrays
     shortLabel Affy CytoScan
     longLabel Affymetrix Cytoscan CNV and SNP array probeset
-    priority 0
     itemRgb on
     type bed 9 .
+    priority 6
 
     track agilentCgh1x1m
     parent genotypeArrays
@@ -2608,7 +2662,7 @@ type bed 3 .
     longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
     color 0,128,0
     type bed 4 .
-    priority 1
+    priority 7
 
     track agilentHrd1x1m
     parent genotypeArrays
@@ -2616,7 +2670,7 @@ type bed 3 .
     longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
     color 255,128,0
     type bed 4 .
-    priority 2
+    priority 8
 
     track agilentCghSnp2x400k
     parent genotypeArrays
@@ -2625,7 +2679,7 @@ type bed 3 .
     color 0,0,128
     type bed 9 .
     itemRgb on
-    priority 3
+    priority 9
 
     track agilentCgh2x400k
     parent genotypeArrays
@@ -2633,7 +2687,7 @@ type bed 3 .
     longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
     color 0,128,0
     type bed 4 .
-    priority 4
+    priority 10
 
     track agilentCghSnpCancer4x180k
     parent genotypeArrays
@@ -2642,7 +2696,7 @@ type bed 3 .
     color 0,0,128
     type bed 9 .
     itemRgb on
-    priority 5
+    priority 11
 
     track agilentCghSnp4x180k
     parent genotypeArrays
@@ -2651,7 +2705,7 @@ type bed 3 .
     color 0,0,128
     type bed 9 .
     itemRgb on
-    priority 6
+    priority 12
 
     track agilentCgh4x180k
     parent genotypeArrays
@@ -2659,7 +2713,7 @@ type bed 3 .
     longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
     color 255,128,0
     type bed 4 .
-    priority 7
+    priority 13
 
     track agilentCgh8x60k
     parent genotypeArrays
@@ -2667,7 +2721,7 @@ type bed 3 .
     longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
     type bed 4 .
     color 0,128,0
-    priority 8
+    priority 14
 
     track agilentCgh1x244k
     parent genotypeArrays
@@ -2675,7 +2729,7 @@ type bed 3 .
     longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
     color 255,128,0
     type bed 4 .
-    priority 9
+    priority 15
 
     track agilentCgh2x105k
     parent genotypeArrays
@@ -2683,7 +2737,7 @@ type bed 3 .
     longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
     color 0,128,0
     type bed 4 .
-    priority 10
+    priority 16
 
     track agilentCgh4x44k
     parent genotypeArrays
@@ -2691,7 +2745,56 @@ type bed 3 .
     longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
     color 255,128,0
     type bed 4 .
-    priority 11
+    priority 17
+
+    track snpArrayIllumina650
+    parent genotypeArrays off
+    shortLabel Illumina 650
+    longLabel Illumina Human Hap 650v3
+    type bed 6 +
+    priority 18
+
+    track snpArrayIllumina550
+    parent genotypeArrays off
+    shortLabel Illumina 550
+    longLabel Illumina Human Hap 550v3
+    type bed 6 +
+    priority 18
+
+    track snpArrayIllumina300
+    parent genotypeArrays off
+    shortLabel Illumina 300
+    longLabel Illumina Human Hap 300v3
+    type bed 6 +
+    priority 19
+
+    track snpArrayIllumina1M
+    parent genotypeArrays
+    shortLabel Illumina 1M-Duo
+    longLabel Illumina Human1M-Duo
+    type bed 6 +
+    priority 20
+
+    track snpArrayIlluminaHumanCytoSNP_12
+    parent genotypeArrays
+    shortLabel Illumina Cyto-12
+    longLabel Illumina Human CytoSNP-12
+    type bed 6 +
+    priority 21
+
+    track snpArrayIlluminaHuman660W_Quad
+    parent genotypeArrays
+    shortLabel Illumina 660W-Q
+    longLabel Illumina Human 660W-Quad
+    type bed 6 +
+    priority 22
+
+    track snpArrayIlluminaHumanOmni1_Quad
+    parent genotypeArrays
+    shortLabel Illumina Omni1-Q
+    longLabel Illumina Human Omni1-Quad
+    type bed 6 +
+    priority 22
 
 track tfbsConsSites
 shortLabel TFBS Conserved

@@ -49,7 +49,7 @@ DNaseI-induced DNA cut) coincides with the given position.
 (at a 20 bp step across the genome).
 </DL>
 NOTE: The names of the signal views in this track are reversed from conventions used in
-other ENCODE tracks, where the less processed signal is termed 'Raw'.
+other ENCODE tracks, where the less processed signal is termed "Raw".
 <p>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM> 
 cleavage sites across the genome mapped using the Digital DNaseI methodology 
 (see below).  
@@ -63,18 +63,16 @@ cleavage sites across the genome mapped using the Digital DNaseI methodology
 Cells were grown according to the approved
 <a href="/ENCODE/protocols/cell/mouse" target="_blank">ENCODE cell culture
 protocols</a>.  Digital DNaseI was performed by DNaseI digestion of
-intact nuclei, followed by isolating DNaseI 'double-hit' fragments as
-described in Sabo <EM>et al.</EM> (2006), and direct sequencing of
-fragment ends (which correspond to <EM>in vivo</EM> DNaseI cleavage
+intact nuclei, followed by isolating DNaseI "double-hit" fragments (Sabo <EM>et al.</EM>, 2006),
+and direct sequencing of fragment ends (which correspond to <EM>in vivo</EM> DNaseI cleavage
 sites) using the Solexa platform (27 bp reads).  High-quality reads were
 mapped to the NCBI37/mm9 mouse genome using Bowtie 0.12.5;
 only unique mappings were kept. DNaseI sensitivity is directly reflected 
 in raw tag density (<I>Raw Signal</I>), which is shown
 in the track as density of tags mapping within a 150 bp sliding window
 (at a 20 bp step across the genome).  DNaseI hypersensitive zones
-(<I>HotSpots</I>) were identified using the HotSpot algorithm
-described in Sabo <EM>et al.</EM> (2004).  False discovery rate thresholds 
-of 1.0% (FDR 0.01) were computed for each cell type by applying
+(<I>HotSpots</I>) were identified using the HotSpot algorithm (Sabo <EM>et al.</EM>, 2004).
+False discovery rate thresholds of 1.0% (FDR 0.01) were computed for each cell type by applying
 the HotSpot algorithm to an equivalent number of random uniquely
 mapping 36-mers.  DNaseI hypersensitive sites (DHSs or <I>Peaks</I>)
 were identified as signal peaks within 1.0% (FDR 0.01) hypersensitive zones
@@ -90,6 +88,13 @@ of over 200 million tags.
 Results were validated by 
 conventional DNaseI hypersensitivity assays using end-labeling/Southern 
 blotting methods. 
+</p>
+
+<h2>Release Notes</h2>
+
+<p>
+This is Release 1 (Aug 2012) of this track, which contains a total of 22 DNaseI
+Digital Genomic Footprinting (DNaseI DGF) experiments.
 </p>
 
 <H2>Credits</H2>
@@ -120,5 +125,5 @@ Genome-scale mapping of DNase I sensitivity in vivo using tiling DNA microarrays
 
 Data users may freely use ENCODE data, but may not, without prior consent, submit publications that use an 
 unpublished ENCODE dataset until nine months following the release of the dataset. This date is listed in 
-the <em>Restricted Until</em> column on the track configuration page and the download page. 
+the <em>Restricted Until</em> column, above. 
 The full data release policy for ENCODE is available <a href="/ENCODE/terms.html" target="_blank">here</a>.

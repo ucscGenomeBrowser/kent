@@ -21,10 +21,88 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-
 /* Brought errno in to get more useful error messages */
 
 extern int errno;
+
+/* when there are many cts, threads, hubtracks, etc
+ * need a quick way to remember failures to not repeat them */
+
+struct connFailure
+/* remember connect failure */
+    {
+    char *hostName;       /* hostName */
+    int port;             /* port */
+    char *errorString;    /* error message to report next time */
+    };
+
+#define MAXCONNFAILURES 1024
+static struct connFailure connFailures[MAXCONNFAILURES];
+static int numConnFailures = 0;
+static pthread_mutex_t cfMutex = PTHREAD_MUTEX_INITIALIZER;
+static boolean connFailuresEnabled = FALSE;
+
+void setConnFailuresEnabled(boolean val)
+/* Turn on or off the connFailures feature */
+{
+connFailuresEnabled = val;
+}
+
+boolean checkConnFailure(char *hostName, int port, char **pErrStr)
+/* check if this hostName:port has already had failure
+ *  which can save time and avoid more timeouts */
+{
+if (!connFailuresEnabled)
+    return FALSE;
+pthread_mutex_lock( &cfMutex );
+int imax = numConnFailures;
+pthread_mutex_unlock( &cfMutex );
+struct connFailure *cf = connFailures;
+int i;
+boolean result = FALSE;
+for(i=0;i<imax;++i)
+    {
+    if (sameString(cf->hostName, hostName) && cf->port == port)
+	{
+	if (pErrStr)
+	    {
+	    *pErrStr = cf->errorString;
+	    }
+	result = TRUE;
+	break;
+	}
+    ++cf;
+    }
+return result;
+}
+
+
+void addConnFailure(char *hostName, int port, char *format, ...)
+/* add a failure to connFailures[]
+ *  which can save time and avoid more timeouts */
+{
+if (!connFailuresEnabled)
+    return;
+char errorString[1024];
+va_list args;
+vasafef(errorString, sizeof errorString, format, args);
+va_end(args);
+if (!checkConnFailure(hostName,port,NULL))
+    {
+    pthread_mutex_lock( &cfMutex );
+    if (numConnFailures < MAXCONNFAILURES)
+	{
+	struct connFailure *cf = connFailures + numConnFailures;
+	cf->hostName = cloneString(hostName);
+	cf->port = port;
+	cf->errorString = cloneString(errorString);
+	numConnFailures++;
+	}
+    pthread_mutex_unlock( &cfMutex );
+    }
+}
+
+
 
 static int netStreamSocket()
 /* Create a TCP/IP streaming socket.  Complain and return something
@@ -36,6 +114,47 @@ if (sd < 0)
 return sd;
 }
 
+static int setSocketNonBlocking(int sd, boolean set)
+/* Use socket control flags to set O_NONBLOCK if set==TRUE,
+ * or clear it if set==FALSE.
+ * Return -1 if there are any errors, 0 if successful. i
+ * Also closes sd if error. */
+{
+long fcntlFlags;
+// Set or clear non-blocking
+if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0) 
+    {
+    warn("Error fcntl(..., F_GETFL) (%s)", strerror(errno));
+    return -1;
+    }
+if (set)
+    fcntlFlags |= O_NONBLOCK;
+else
+    fcntlFlags &= (~O_NONBLOCK);
+if (fcntl(sd, F_SETFL, fcntlFlags) < 0) 
+    {
+    warn("Error fcntl(..., F_SETFL) (%s)", strerror(errno));
+    return -1;
+    }
+return 0;
+}
+
+static struct timeval tvMinus(struct timeval a, struct timeval b)
+/* Return the result of a - b; this handles wrapping of milliseconds. 
+ * result.tv_usec will always be positive. 
+ * result.tv_sec will be negative if b > a. */
+{
+// subtract b from a.
+if (a.tv_usec < b.tv_usec)
+    {
+    a.tv_usec += 1000000;
+    a.tv_sec--;
+    }
+a.tv_usec -= b.tv_usec;
+a.tv_sec -= b.tv_sec;
+return a;
+}
+
 static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
 /* In order to avoid a very long default timeout (several minutes) for hosts that will
  * not answer the port, we are forced to connect non-blocking.
@@ -45,8 +164,13 @@ int sd;
 struct sockaddr_in sai;		/* Some system socket info. */
 int res;
 fd_set mySet;
-struct timeval lTime;
-long fcntlFlags;
+
+char *errorString = NULL;
+if (checkConnFailure(hostName, port, &errorString))
+    {
+    warn("%s", errorString);
+    return -1;
+    }
 
 if (hostName == NULL)
     {
@@ -58,17 +182,9 @@ if (!internetFillInAddress(hostName, port, &sai))
 if ((sd = netStreamSocket()) < 0)
     return sd;
 
-// Set non-blocking
-if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0) 
+// Set socket to nonblocking so we can manage our own timeout time.
+if (setSocketNonBlocking(sd, TRUE) < 0)
     {
-    warn("Error fcntl(..., F_GETFL) (%s)", strerror(errno));
-    close(sd);
-    return -1;
-    }
-fcntlFlags |= O_NONBLOCK;
-if (fcntl(sd, F_SETFL, fcntlFlags) < 0) 
-    {
-    warn("Error fcntl(..., F_SETFL) (%s)", strerror(errno));
     close(sd);
     return -1;
     }
@@ -79,16 +195,35 @@ if (res < 0)
     {
     if (errno == EINPROGRESS)
 	{
+	struct timeval startTime;
+	gettimeofday(&startTime, NULL);
+	struct timeval remainingTime;
+	remainingTime.tv_sec = (long) (msTimeout/1000);
+	remainingTime.tv_usec = (long) (((msTimeout/1000)-remainingTime.tv_sec)*1000000);
 	while (1) 
 	    {
-	    lTime.tv_sec = (long) (msTimeout/1000);
-	    lTime.tv_usec = (long) (((msTimeout/1000)-lTime.tv_sec)*1000000);
 	    FD_ZERO(&mySet);
 	    FD_SET(sd, &mySet);
-	    res = select(sd+1, NULL, &mySet, &mySet, &lTime);
+	    // use tempTime (instead of using remainingTime directly) because on some platforms select() may modify the time val.
+	    struct timeval tempTime = remainingTime;
+	    res = select(sd+1, NULL, &mySet, &mySet, &tempTime);  
 	    if (res < 0) 
 		{
-		if (errno != EINTR) 
+		if (errno == EINTR)  // Ignore the interrupt 
+		    {
+                    // Subtract the elapsed time from remaining time since some platforms need this.
+		    struct timeval newTime;
+		    gettimeofday(&newTime, NULL);
+                    struct timeval elapsedTime = tvMinus(newTime, startTime);
+		    remainingTime = tvMinus(remainingTime, elapsedTime);
+		    if (remainingTime.tv_sec < 0)  // means our timeout has more than expired
+			{
+			remainingTime.tv_sec = 0;
+			remainingTime.tv_usec = 0;
+			}
+		    startTime = newTime;
+		    }
+		else
 		    {
 		    warn("Error in select() during TCP non-blocking connect %d - %s", errno, strerror(errno));
 		    close(sd);
@@ -112,6 +247,9 @@ if (res < 0)
                 if (valOpt)
                     {
                     warn("Error in TCP non-blocking connect() %d - %s", valOpt, strerror(valOpt));
+		    if (valOpt == ETIMEDOUT)
+    			addConnFailure(hostName, port,
+			 "Error in TCP non-blocking connect() %d - %s", valOpt, strerror(valOpt));
                     close(sd);
                     return -1;
                     }
@@ -119,6 +257,8 @@ if (res < 0)
 		}
 	    else
 		{
+		addConnFailure(hostName, port,
+		     "TCP non-blocking connect() to %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, msTimeout);
 		warn("TCP non-blocking connect() to %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, msTimeout);
 		close(sd);
 		return -1;
@@ -134,16 +274,8 @@ if (res < 0)
     }
 
 // Set to blocking mode again
-if ((fcntlFlags = fcntl(sd, F_GETFL, NULL)) < 0)
+if (setSocketNonBlocking(sd, FALSE) < 0)
     {
-    warn("Error fcntl(..., F_GETFL) (%s)", strerror(errno));
-    close(sd);
-    return -1;
-    }
-fcntlFlags &= (~O_NONBLOCK);
-if (fcntl(sd, F_SETFL, fcntlFlags) < 0)
-    {
-    warn("Error fcntl(..., F_SETFL) (%s)", strerror(errno));
     close(sd);
     return -1;
     }
@@ -156,7 +288,7 @@ return sd;
 int netConnect(char *hostName, int port)
 /* Start connection with a server. */
 {
-return netConnectWithTimeout(hostName, port, 10000); // 10 seconds connect timeout
+return netConnectWithTimeout(hostName, port, DEFAULTCONNECTTIMEOUTMSEC); // 10 seconds connect timeout
 }
 
 int netMustConnect(char *hostName, int port)

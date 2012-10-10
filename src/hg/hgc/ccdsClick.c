@@ -13,7 +13,7 @@
 #include "mgcClick.h"
 #include "htmshell.h"
 
-struct ccdsInfo *getCcdsUrlForSrcDb(struct sqlConnection *conn, char *acc)
+static struct ccdsInfo *getCcdsInfoForSrcDb(struct sqlConnection *conn, char *acc)
 /* Get a ccdsInfo object for a RefSeq, ensembl, or vega gene, if it
  * exists, otherwise return NULL */
 {
@@ -23,8 +23,14 @@ else
     return NULL;
 }
 
-void printCcdsUrlForSrcDb(struct sqlConnection *conn, struct ccdsInfo *ccdsInfo)
-/* Print out CCDS URL for a refseq, ensembl, or vega gene, if it
+void printCcdsExtUrl(char *ccdsId)
+/* Print out URL to link to CCDS database at NCBI */
+{
+printf("http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&BUILDS=ALLBUILDS&DATA=%s", ccdsId);
+}
+
+static void printCcdsUrlForSrcDb(struct sqlConnection *conn, struct ccdsInfo *ccdsInfo)
+/* Print out CCDS hgc URL for a refseq, ensembl, or vega gene, if it
  * exists.  */
 {
 printf("../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
@@ -33,10 +39,10 @@ printf("../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
 }
 
 void printCcdsForSrcDb(struct sqlConnection *conn, char *acc)
-/* Print out CCDS link for a refseq, ensembl, or vega gene, if it
+/* Print out CCDS hgc link for a refseq, ensembl, or vega gene, if it
  * exists.  */
 {
-struct ccdsInfo *ccdsInfo = getCcdsUrlForSrcDb(conn, acc);;
+struct ccdsInfo *ccdsInfo = getCcdsInfoForSrcDb(conn, acc);;
 if (ccdsInfo != NULL)
     {
     printf("<B>CCDS:</B> <A href=\"");
@@ -58,9 +64,8 @@ slSort(&ccdsGenes, ccdsGeneMapCcdsIdCmp);
 return ccdsGenes;
 }
 
-
 void printCcdsUrl(struct sqlConnection *conn, char *ccdsId)
-/* Print out CCDS url for a gene  */
+/* Print out CCDS hgc URL for a gene  */
 {
 printf("../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
        cartSidUrlString(cart), ccdsId, seqName, 
@@ -322,9 +327,9 @@ printf("</TR>\n");
 
 /* CCDS databases */
 printf("<TR>\n");
-printf("<TH>CCDS database");
-printf("<TD> <A HREF=\"http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&BUILDS=ALLBUILDS&DATA=%s\" TARGET=_blank>%s</A>",
-       ccdsId, ccdsId);
+printf("<TH>CCDS database<TD> <A HREF=\"");
+printCcdsExtUrl(ccdsId);
+printf("\" TARGET=_blank>%s</A>", ccdsId);
 printf("</TR>\n");
 
 printf("</TBODY></TABLE>\n");

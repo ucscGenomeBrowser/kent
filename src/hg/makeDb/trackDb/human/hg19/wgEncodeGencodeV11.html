@@ -68,16 +68,16 @@ you wish to hide.</P>
 using the following criteria:</p>
 <ul>
   <li> Transcript class: filter by the basic biological function of a transcript
-    annotation</li>
+    annotation
     <ul>
      <li> All - don't filter by transcript class</li>
      <li> coding - display protein coding transcripts, including polymorphic pseudogenes</li>
      <li> nonCoding - display non-protein coding transcripts</li>
      <li> pseudo - display pseudogene transcript annotations</li>
-     <li> problem - display problem transcripts</li>
+     <li> problem - display problem transcripts (Biotypes of <em>retained_intron</em>, <em>TEC</em>, or <em>disrupted_domain</em>)</li>
    </ul>
-
-  <li> Transcript Annotation Method: filter by the method used to create the annotation</li>
+  </li>
+  <li> Transcript Annotation Method: filter by the method used to create the annotation
    <ul>
      <li> All - don't filter by transcript class</li>
      <li> manual - display manually created annotations, including those that are 
@@ -89,37 +89,20 @@ using the following criteria:</p>
      <li> automatic_only - display automatically created annotations that were
        not annotated by the manual method</li>
    </ul>
-
+  </li>
   <li> Transcript Biotype: filter transcripts by
        <a href="http://www.gencodegenes.org/gencode_biotypes.html" target="_blank">biotype</a></li>
 </ul>
 
 <p><b>Coloring</b> for the gene annotations is based on the annotation type: </p>
-<ul><b>
-  <li><font color="#0c0c78">coding</font> </li>
-  <li><font color="#006400">non-coding</font> </li>
-  <li><font color="#ff33ff">pseudogene</font> </li>
-  <li><font color="#fe0000">problem</font></li>
-  <li><font color="#ff33ff">all 2-way pseudogenes</font></li>
-  <li><font color="#000000">all polyA annotations</font></li>
-  </b>
+<ul>
+  <li><font color="#0c0c78"><b>coding</b></font> 
+  <li><font color="#006400"><b>non-coding</b></font> 
+  <li><font color="#ff33ff"><b>pseudogene</b></font> 
+  <li><font color="#fe0000"><b>problem</b></font>
+  <li><font color="#ff33ff"><b>all 2-way pseudogenes</b></font>
+  <li><font color="#000000"><b>all polyA annotations</b></font>
 </ul>
-
-<!--<table border="1">
-  <tr><th>Manual and automatic
-      <td><font color="#0c0c78">coding</font>
-      <td><font color="#006400">non-coding</font>
-      <td><font color="#ff33ff">pseudogene</font>
-      <td><font color="#fe0000">problem</font>
-  </tr>
-  <tr><th>2-way pseudogene
-      <td colspan="4"><font color="#ff33ff">all</font>
-  </tr>
-  <tr><th>PolyA annotations
-      <td colspan="4"><font color="#000000">all</font>
-  </tr>
-</table>
--->
 
 <p><b>Metadata</b> for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
 
@@ -147,20 +130,22 @@ gene locus.
 </p>
 <ul>
   <li> Criteria for selection of coding transcripts (including polymorphic pseudogenes) at a given
-       locus:</li>
+       locus:
     <ul>
       <li> All full-length coding transcripts (except problem transcripts or transcripts that are
            not nonsense-mediated decay) were included in the basic set.</li>
       <li> If there were no transcripts meeting the above criteria, then the partial coding
            transcript with the largest CDS was included in the basic set.</li>
     </ul>
-  <li> Criteria for selection of non-coding transcripts at a given locus:</li>
+  </li>
+  <li> Criteria for selection of non-coding transcripts at a given locus:
     <ul>
       <li> All full-length non-coding transcripts with a well characterized biotype (see below) were
            included in the basic set.</li>
       <li> If there were no transcripts meeting the above criteria, then the largest non-coding
            transcript was included in the basic set.</li>
     </ul>
+  </li>
 </ul>
 
 <P>
@@ -225,7 +210,7 @@ are allowed to differ.</p>
   <li> <a name="tsl3"><b>tsl3</b></a> - the only support is from a single EST</li>
   <li> <a name="tsl4"><b>tsl4</b></a> - the best supporting EST is flagged as suspect</li>
   <li> <a name="tsl5"><b>tsl5</b></a> - no single transcript supports the model structure</li>
-  <li> <a name="tslNA"><b>tslNA</b></a> - the transcript was not analyzed for one of the following reasons:</li>
+  <li> <a name="tslNA"><b>tslNA</b></a> - the transcript was not analyzed for one of the following reasons:
     <ul>
       <li> pseudogene annotation, including transcribed pseudogenes
       <li> human leukocyte antigen (HLA) transcript
@@ -240,7 +225,8 @@ are allowed to differ.</p>
 
 <P>
 Selected transcript models are verified experimentally by RT-PCR amplification followed by sequencing.
-Those experiments can be found at GEO:
+Those experiments can be found at GEO:</P>
+
 <ul>
  <!-- <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30619" target="_blank"><b>GSE30619:[E-MTAB-612]</b></a> - Batch I is based on annotation from July 2008 (without pseudogenes).</li>
   <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE25711" target="_blank"><b>GSE25711:[E-MTAB-407]</b></a> - Batch II is based on annotation from April 2009. </li>
@@ -249,7 +235,6 @@ Those experiments can be found at GEO:
   <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34820" target="_blank"><b>GSE34820:[E-MTAB-737]</b></a> - Batch V is based on annotations from GENCODE 6 (November 2010).</li>
   <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34821" target="_blank"><b>GSE34821:[E-MTAB-831]</b></a> - Batch VI is based on annotations from GENCODE 6 (November 2010) as well as transcript models predicted by the Ensembl Genebuild group based on the Illumina Human BodyMap 2.0 data. </li>
 </ul>
-</P>
 <P> See Harrow <em>et al.</em> (2006) for information on verification
 techniques.
 </P>
@@ -342,4 +327,6 @@ GENCODE: producing a reference annotation for ENCODE</a>.
 </p>
 
 <h2>Data Release Policy</h2>
-<p>Data users may freely use ENCODE data, but may not, without prior consent, submit publications that use an unpublished ENCODE dataset until nine months following the release of the dataset. This date is listed in the Restricted Until column, above. The full data release policy for ENCODE is available <a HREF="../ENCODE/terms.html" TARGET=_BLANK>here</a>.</p>
+<p>GENCODE data are available for use without restrictions.
+The full data release policy for ENCODE is available
+<a HREF="../ENCODE/terms.html" TARGET=_BLANK>here</a>.</p>

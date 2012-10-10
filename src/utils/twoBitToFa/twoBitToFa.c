@@ -27,6 +27,7 @@ errAbort(
   "   -noMask - convert sequence to all upper case\n"
   "   -bpt=index.bpt - use bpt index instead of built in one\n"
   "   -bed=input.bed - grab sequences specified by input.bed. Will exclude introns\n"
+  "   -bedPos        - with -bed, to use chrom:start-end as the fasta ID in output.fa\n"
   "\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"
@@ -45,6 +46,7 @@ char *clSeqList = NULL; /* file containing list of seq names */
 bool noMask = FALSE;  /* convert seq to upper case */
 char *clBpt = NULL;	/* External index file. */
 char *clBed = NULL;	/* Bed file that specifies bounds of sequences. */
+bool clBedPos = FALSE;
 
 static struct optionSpec options[] = {
    {"seq", OPTION_STRING},
@@ -54,6 +56,7 @@ static struct optionSpec options[] = {
    {"noMask", OPTION_BOOLEAN},
    {"bpt", OPTION_STRING},
    {"bed", OPTION_STRING},
+   {"bedPos", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -126,7 +129,18 @@ struct bed *bed, *bedList = bedLoadAll(bedFileName);
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     struct dnaSeq *seq = twoBitAndBedToSeq(tbf, bed);
-    faWriteNext(outFile, seq->name, seq->dna, seq->size);
+    char* seqName = NULL;
+    if (clBedPos) 
+        {
+        char buf[1024];
+        safef(buf, 1024, "%s:%d-%d", bed->chrom, bed->chromStart, bed->chromEnd);
+        seqName = buf;
+        }
+    else
+        seqName = seq->name;
+    if (noMask)
+        toUpperN(seq->dna, seq->size);
+    faWriteNext(outFile, seqName, seq->dna, seq->size);
     dnaSeqFree(&seq);
     }
 }
@@ -151,6 +165,10 @@ else if (clSeqList != NULL)
     tbs = twoBitSpecNewFile(inName, clSeqList);
 else
     tbs = twoBitSpecNew(inName);
+
+if (tbs == NULL)
+    errAbort("%s is not a twoBit file", inName);
+
 if (tbs->seqs != NULL && clBpt != NULL)
     tbf = twoBitOpenExternalBptIndex(tbs->fileName, clBpt);
 else
@@ -183,6 +201,11 @@ clEnd = optionInt("end", clEnd);
 clSeqList = optionVal("seqList", clSeqList);
 clBpt = optionVal("bpt", clBpt);
 clBed = optionVal("bed", clBed);
+clBedPos = optionExists("bedPos");
+noMask = optionExists("noMask");
+
+if (clBedPos && !clBed) 
+    errAbort("the -bedPos option requires the -bed option");
 if (clBed != NULL)
     {
     if (clSeqList != NULL)
@@ -194,7 +217,7 @@ if ((clStart > clEnd) && (clSeq == NULL))
     errAbort("must specify -seq with -start and -end");
 if ((clSeq != NULL) && (clSeqList != NULL))
     errAbort("can't specify both -seq and -seqList");
-noMask = optionExists("noMask");
+
 dnaUtilOpen();
 twoBitToFa(argv[1], argv[2]);
 return 0;

@@ -1,10 +1,10 @@
-setenv BRANCHNN 271
-setenv TODAY 2012-08-07             # v271 final
-setenv LASTWEEK 2012-07-17          # v270 final
-setenv REVIEWDAY 2012-08-14         # v272 preview
-setenv LASTREVIEWDAY  2012-07-24    # v271 preview
-setenv REVIEW2DAY 2012-08-21        # v272 preview2
-setenv LASTREVIEW2DAY 2012-07-31    # v271 preview2
+setenv BRANCHNN 274
+setenv TODAY 2012-10-09             # v274 final
+setenv LASTWEEK 2012-09-18          # v273 final
+setenv REVIEWDAY 2012-09-25         # v274 preview
+setenv LASTREVIEWDAY  2012-09-04    # v273 preview
+setenv REVIEW2DAY 2012-10-02        # v274 preview2
+setenv LASTREVIEW2DAY 2012-09-11    # v273 preview2
 
 
 setenv BUILDHOME /cluster/bin/build

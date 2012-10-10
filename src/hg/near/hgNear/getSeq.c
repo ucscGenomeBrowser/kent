@@ -210,7 +210,7 @@ static void getGenomic(struct sqlConnection *conn,
 /* Put up dialog to get genomic sequence. */
 {
 struct hTableInfo *hti = hFindTableInfo(database, NULL, genomeSetting("geneTable"));
-hPrintf("<H2>Get Genomic Sequence Near Gene</H2>");
+makeTitle("Get Genomic Sequence Near Gene", NULL);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
 hgSeqOptionsHtiCart(hti, cart);
@@ -230,6 +230,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 boolean hasBin = hOffsetPastBin(database, NULL, table);
+makeTitle("Genomic Sequence", NULL);
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
@@ -255,13 +256,24 @@ void doGetSeq(struct sqlConnection *conn, struct column *colList,
 /* Put up the get sequence page. */
 {
 if (sameString(how, "protein"))
+    {
+    makeTitle("Protein Sequence", NULL);
     getProtein(conn, colList, geneList);
+    }
 else if (sameString(how, "mRNA"))
+    {
+    makeTitle("mRNA Sequence", NULL);
     getMrna(conn, colList, geneList);
+    }
 else if (sameString(how, "promoter"))
+    {
+    makeTitle("Promoter Sequence", NULL);
     getPromoter(conn, colList, geneList);
+    }
 else if (sameString(how, "genomic"))
+    {
     getGenomic(conn, colList, geneList);
+    }
 else
     errAbort("Unrecognized %s value %s", getSeqHowVarName, how);
 }
@@ -277,7 +289,7 @@ cgiMakeRadioButton(howName, how, sameString(how, oldVal));
 void doGetSeqPage(struct sqlConnection *conn, struct column *colList)
 /* Put up the get sequence page asking how to get sequence. */
 {
-hPrintf("<H2>Get Sequence</H2>");
+makeTitle("Get Sequence", NULL);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
 hPrintf("Select sequence type:<BR>\n");

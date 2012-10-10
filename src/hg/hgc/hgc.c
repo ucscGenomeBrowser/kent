@@ -893,9 +893,26 @@ char *tableName = trackDbSetting(tdb, "itemDetailsHtmlTable");
 if (tableName != NULL)
     {
     struct sqlConnection *conn = hAllocConn(database);
-    struct itemDetailsHtml *html, *htmls
-        = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
+    struct itemDetailsHtml *html, *htmls;
+    // if the details table has chrom/start/end columns, then use these to lookup html
+    if (sqlColumnExists(conn, tableName, "chrom"))
+        {
+        char *chrom = cgiString("c");
+        int start   = cgiInt("o");
+        int end     = cgiInt("t");
+
+        htmls = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
+                       "select name, html from %s where \
+                       name = '%s' and \
+                       chrom = '%s' and \
+                       start = '%d' and \
+                       end = '%d'", tableName, itemName, chrom, start, end);
+        }
+    // otherwise, assume that the itemName is unique 
+    else 
+        htmls = sqlQueryObjs(conn, (sqlLoadFunc)itemDetailsHtmlLoad, sqlQueryMulti,
                        "select name, html from %s where name = '%s'", tableName, itemName);
+
     for (html = htmls; html != NULL; html = html->next)
         printf("<br>\n%s\n", html->html);
     itemDetailsHtmlFreeList(&htmls);
@@ -9270,6 +9287,14 @@ if (row != NULL)
     examined_samples    = row[ii];ii++;
     mut_freq            = row[ii];ii++;
 
+    // chromosome name adjustment
+    if (sameString(chromosome, "23"))
+	chromosome = "X";    
+    if (sameString(chromosome, "24"))
+	chromosome = "Y";    
+    if (sameString(chromosome, "25"))
+	chromosome = "M";    
+
     chp = strstr(itemName, "COSM")+strlen("COSM");
     printf("<B>COSMIC ID:</B> %s", chp);
 
@@ -9281,7 +9306,7 @@ if (row != NULL)
 
     printf("<BR><B>Gene Name:</B> %s\n", gene_name);
     printf("<BR><B>Accession Number:</B> %s\n", accession_number);
-    printf("<BR><B>Genomic Position:</B> %s:%s-%s", chromosome, grch37_start, grch37_stop);
+    printf("<BR><B>Genomic Position:</B> chr%s:%s-%s", chromosome, grch37_start, grch37_stop);
     printf("<BR><B>Mutation Description:</B> %s\n", mut_description);
     printf("<BR><B>Mutation Syntax CDS:</B> %s\n", mut_syntax_cds);
     printf("<BR><B>Mutation Syntax AA:</B> %s\n", mut_syntax_aa);

@@ -493,7 +493,8 @@ char *defaultLabel = NULL;
 int numClades = 0;
 
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
-struct sqlResult *sr = sqlGetResult(conn, "select name, label from clade order by priority");
+// get only the clades that have actual active genomes
+struct sqlResult *sr = sqlGetResult(conn, "SELECT DISTINCT(c.name), c.label FROM clade c, genomeClade g, dbDb d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     clades[numClades] = cloneString(row[0]);
@@ -504,6 +505,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (numClades >= ArraySize(clades))
         internalErr();
     }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
 
 cgiMakeDropListFull(cladeCgiName, labels, clades, numClades,
                     defaultLabel, onChangeText);
@@ -1368,6 +1371,32 @@ freez(&menuStr);
 menuStr = dyStringCannibalize(&dy);
 if(!loginSystemEnabled())
     stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
+
+if(scriptName)
+    {
+    // Provide view menu for some CGIs.
+    struct dyString *viewItems = dyStringCreate("");
+    boolean hasViewMenu = TRUE;
+    if (endsWith(scriptName, "hgGenome"))
+        {
+	safef(buf, sizeof(buf), "../cgi-bin/hgGenome?%s&hgGenome_doPsOutput=1", uiVars);
+    	dyStringPrintf(viewItems, "<li><a href='%s' id='%s'>%s</a></li>\n", buf, "pdfLink", "PDF/PS");
+        }
+    else
+	{
+	hasViewMenu = FALSE;
+	}
+    if (hasViewMenu)
+	{
+	struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
+	dyStringAppend(viewMenu, viewItems->string);
+	dyStringAppend(viewMenu, "</ul>\n</li>\n");
+    	menuStr = replaceChars(menuStr, "<!-- OPTIONAL_VIEW_MENU -->", viewMenu->string);
+	dyStringFree(&viewMenu);
+	}
+    dyStringFree(&viewItems);
+    }
+
 
 if(scriptName)
     {

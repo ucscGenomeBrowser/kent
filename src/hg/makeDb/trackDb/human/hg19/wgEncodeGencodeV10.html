@@ -30,26 +30,34 @@ you wish to hide.</P>
 <dl>
 <dt><i>Genes</i></dt>
 <dd> The gene annotations in this view are divided into three subtracks:
-  <li><em>GENCODE Basic set</em> is a subset of the <em>Comprehensive set</em>. 
+  <ul>
+  <li><em>GENCODE Basic set</em> is a subset of the <em>Comprehensive set</em>.
     The selection criteria are described in the <a href="#basicSetSelection">methods section</a>.
   <li><em>GENCODE Comprehensive set</em> contains all GENCODE coding and non-coding transcript annotations,
     including polymorphic pseudogenes.  This includes both manual and
     automatic annotations.  This is a super-set of the <em>Basic set</em>.
   <li><em>GENCODE Pseudogenes</em> - all pseudogene annotations except polymorphic pseudogenes.
+  </ul>
 </dd>
 <dt><i>2-way</i></dt> 
-<dd><li><em>GENCODE 2-way Pseudogenes</em> contains pseudogenes predicted by both the Yale
+<dd>
+  <ul>
+  <li><em>GENCODE 2-way Pseudogenes</em> contains pseudogenes predicted by both the Yale
     Pseudopipe and UCSC Retrofinder pipelines. 
     The set was derived by looking for 50 base pairs
     of overlap between pseudogenes derived from both sets based on their 
     chromosomal coordinates.  When multiple Pseudopipe
     predictions map to a single Retrofinder prediction, only one match is kept
     for the 2-way consensus set.
+  </ul>
 </dd>
 <dt><i>PolyA</i></dt>
-<dd><li><em>GENCODE PolyA</em> contains polyA signals and sites manually annotated on
+<dd>
+  <ul>
+  <li><em>GENCODE PolyA</em> contains polyA signals and sites manually annotated on
     the genome based on transcribed evidence (ESTs and cDNAs) of 3' end of
     transcripts containing at least 3 A's not matching the genome.
+  </ul>
 </dd>
 </dl>
 
@@ -63,7 +71,7 @@ using the following criteria:
      <li> coding - display protein coding transcripts, including polymorphic pseudogenes
      <li> nonCoding - display non-protein coding transcripts
      <li> pseudo - display pseudogene transcript annotations
-     <li> problem - display problem transcripts
+     <li> problem - display problem transcripts (Biotypes of <em>retained_intron</em>, <em>TEC</em>, or <em>disrupted_domain</em>)
    </ul>
 
   <li> Transcript Annotation Method: filter by the method used to create the annotation
@@ -84,30 +92,14 @@ using the following criteria:
 </ul>
 
 <b>Coloring</b> for the gene annotations is based on the annotation type: 
-<ul><b>
-  <li><font color="#0c0c78">coding</font> 
-  <li><font color="#006400">non-coding</font> 
-  <li><font color="#ff33ff">pseudogene</font> 
-  <li><font color="#fe0000">problem</font>
-  <li><font color="#ff33ff">all 2-way pseudogenes</font>
-  <li><font color="#000000">all polyA annotations</font>
-</ul></b>
-
-<!--<table border="1">
-  <tr><th>Manual and automatic
-      <td><font color="#0c0c78">coding</font>
-      <td><font color="#006400">non-coding</font>
-      <td><font color="#ff33ff">pseudogene</font>
-      <td><font color="#fe0000">problem</font>
-  </tr>
-  <tr><th>2-way pseudogene
-      <td colspan="4"><font color="#ff33ff">all</font>
-  </tr>
-  <tr><th>PolyA annotations
-      <td colspan="4"><font color="#000000">all</font>
-  </tr>
-</table>
--->
+<ul>
+  <li><font color="#0c0c78"><b>coding</b></font> 
+  <li><font color="#006400"><b>non-coding</b></font> 
+  <li><font color="#ff33ff"><b>pseudogene</b></font> 
+  <li><font color="#fe0000"><b>problem</b></font>
+  <li><font color="#ff33ff"><b>all 2-way pseudogenes</b></font>
+  <li><font color="#000000"><b>all polyA annotations</b></font>
+</ul>
 
 <p><b>Metadata</b> for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
 
@@ -231,7 +223,8 @@ and Vega 45 from Oct 2011.  Also see:
 
 <P>
 Selected transcript models are verified experimentally by RT-PCR amplification followed by sequencing.
-Those experiments can be found at GEO:
+Those experiments can be found at GEO:</P>
+
 <ul>
  <!-- <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30619" target="_blank"><b>GSE30619:[E-MTAB-612]</b></a> - Batch I is based on annotation from July 2008 (without pseudogenes).</li>
   <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE25711" target="_blank"><b>GSE25711:[E-MTAB-407]</b></a> - Batch II is based on annotation from April 2009. </li>
@@ -240,7 +233,6 @@ Those experiments can be found at GEO:
   <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34820" target="_blank"><b>GSE34820:[E-MTAB-737]</b></a> - Batch V is based on annotations from GENCODE 6 (November 2010).</li>
   <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34821" target="_blank"><b>GSE34821:[E-MTAB-831]</b></a> - Batch VI is based on annotations from GENCODE 6 (November 2010) as well as transcript models predicted by the Ensembl Genebuild group based on the Illumina Human BodyMap 2.0 data. </li>
 </ul>
-</P>
 <P> See Harrow <em>et al.</em> (2006) for information on verification
 techniques.
 </P>
@@ -324,10 +316,6 @@ for ENCODE</a>. <em>Genome Biol</em>. 2006;7 Suppl
 
 
 <h2> Data Release Policy </h2>
-
-<p>Data users may freely use ENCODE data, but may not, without prior
-consent, submit publications that use an unpublished ENCODE dataset until
-nine months following the release of the dataset.  This date is listed in
-the <EM>Restricted Until</EM> column on the track configuration page and
-the download page.  The full data release policy for ENCODE is available
+<p>GENCODE data are available for use without restrictions.
+The full data release policy for ENCODE is available
 <a HREF="../ENCODE/terms.html" TARGET=_BLANK>here</a>.</p>

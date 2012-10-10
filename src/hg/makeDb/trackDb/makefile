@@ -44,7 +44,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	ailMel1 \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
 	felCat3 felCat4  \
-	mm6 mm7 mm8 mm9 mm10 \
+	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 \
 	rn3 rn4 rn5 \
 	speTri1 speTri2 cavPor3 \
         chiLan1 \
@@ -54,6 +54,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 \
 	equCab1 \
 	equCab2 \
+	cerSim1 \
 	oviAri1 \
 	susScr1 susScr2 susScr3 \
 	eriEur1 sorAra1 turTru1 turTru2 vicPac1 pteVam1 tarSyr1 \
@@ -64,6 +65,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	loxAfr1 loxAfr2 loxAfr3 \
 	echTel1 \
 	monDom1 monDom4 monDom5 \
+	allMis1 \
 	chrPic1 \
 	anoCar1 anoCar2 \
 	geoFor1 melUnd1 \

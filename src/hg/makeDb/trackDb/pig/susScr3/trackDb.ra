@@ -10,11 +10,17 @@ html gap
 track chainNetMm10 override
 visibility pack
 
+track gc5BaseBw override
+visibility full
+
+track genscan override
+visibility pack
+
 track refGene override
 visibility pack
 
 track xenoRefGene override
-visibility pack
+visibility dense
 
 searchTable genscan
 searchType genePred

@@ -677,6 +677,20 @@
     http://genome.ucsc.edu/FAQ/FAQformat.html</A>.</P>
 </DIV>
 
+<DIV class="bigBed_intro">
+<H3>bigBed: Item or region tracks</H3>
+    <P>Some of the most
+    common track types are those that highlight regions or items of
+    varying size in a genome assembly.  There are many variations to the
+    "items" track, most of which are specified with a bigBed format.  
+    These two formats are really a cluster of many
+    formats all starting with three common fields (chromosome start end)
+    and having optionally many more fields.  For complete bigBed
+    format definitions please see:
+    <A HREF="../bigBed.html">
+    http://genome.ucsc.edu/goldenPath/help/bigBed.html</A>.</P>
+</DIV>
+
 <DIV class="bed"><span class="types bed bigBed"></span>
 <div class="format">
     <code>type bed &lt;3-12&gt; [+/.]</code><BR>
@@ -684,6 +698,17 @@
     <P>Both bed and bigBed
     declare the number of standard bed fields in the data.  There may
     be additional fields following these standard ones.  If so, the
+    type should end with a '<code>+</code>' (plus).  Even if there are not
+    additional non-standard fields, the additional parameter '<code>.</code>' (dot)
+    is needed, if this track is meant to be configurable.</P>
+    <P><em>Examples can be found below.</em></P>
+</DIV>
+
+<DIV class="bigBed"><span class="types bigBed"></span>
+<div class="format">
+    <code>type bigBed &lt;3-12&gt; [+/.]</code></div>
+    <P>Type bigBed declares the number of standard "bed" fields in the data.  
+    There may be additional fields following these standard ones.  If so, the
     type should end with a '<code>+</code>' (plus).  Even if there are not
     additional non-standard fields, the additional parameter '<code>.</code>' (dot)
     is needed, if this track is meant to be configurable.</P>
@@ -717,11 +742,13 @@
 </DIV>
 
 <DIV class="colorByStrand"><span class="types bed bigBed"></span>
-<div class="format"><code>colorByStrand &lt;red.green.blue&gt; &lt;red.green.blue&gt;</code></div>
+<div class="format"><code>colorByStrand &lt;red,green,blue&gt; &lt;red,green,blue&gt;</code></div>
     <P>To color items
     differently by the strand they align to, use the colorByStrand
     setting.  The first color will be used for plus strand alignments
-    and the second for the minus strand.</P>
+    and the second for the minus strand.  This setting is incompatible with <code>spectrum</code>
+    and all items on the same strand will have the same color, regardless of the item's
+    <code>score</score>.</P>
     <P><B>Example:</B></P>
     <pre>   colorByStrand 255,0,0 0,0,255</pre>
     <P>Plus strand alignements are red and minus
@@ -764,10 +791,10 @@
 </DIV>
 
 <DIV class="denseCoverage"><span class="types bigBed"></span>
-<div class="format"><code>denseCoverage &lt;maxVal &gt;</code></div>
+<div class="format"><code>denseCoverage &lt;maxVal&gt;</code></div>
     <P><I>bigBed specific</I></P>
     <P>Type bigBed tracks
-    nn dense mode do a density plot based on maximum coverage seen at
+    in dense mode do a density plot based on maximum coverage seen at
     each pixel.  The maxVal corresponds to the count at which the plot
     gets as dark as it can get.  If maxVal is 0 then this will be
     calculated from the data itself.</P>
@@ -841,6 +868,32 @@
     is floating-point, will be filtered by range.  The expected data
     range is 0-15 and by default only items with pValues within 3-15
     will be displayed.</P>
+</DIV>
+
+<DIV class="scoreFilter"><span class="types bigBed"></span>
+<div class="format">
+    <code>scoreFilter &lt;low&gt;[:&lt;high&gt;]</code><BR>
+    <code>scoreFilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
+    </div>
+    <P>Type <code>bigBed</code> tracks can be filtered on the standard bed field
+    <code>score</code>.  This numerical filter is requested by the 
+    <code>scoreFilter</code> setting, which should include the default value.  
+    </P>
+    <P>By default the range
+    of values for a score filter is from 0 to 1000.  However, you
+    can explicitly set the upper and lower limit of the filter by
+    setting <code>scoreFilterLimits</code>.
+    </P>
+    <P>The score filter will exclude items that fall below the setting. That is, a
+    scoreFilter of 800 will exclude all items with a score below 800.</P>
+    <P><B>Example:</B></P>
+    <pre>
+    scoreFilter 300
+    scoreFilterLimits 200:1000</pre>
+    <P>The standard bed
+    field of <code>score</code>, which is an integer will be used to filter items
+    in the track.  By default, items with scores below 300 will be
+    excluded.  The filter cannot be set to less than 200 or more than 1000..</P>
 </DIV>
 
 <DIV class="filterBy"><span class="types bed genePred psl"></span>
@@ -1369,6 +1422,45 @@
     standard 6.</P>
 </DIV>
 
+<DIV class="bigBed_example"><span class="types bigBed"></span>
+<div class="format"><B>Examples of item base types:</B></div>
+    <pre>
+    type bigBed 6 +
+    colorByStrand 255,0,0 0,0,255
+      ...    </pre>
+    <P>The type setting for
+    a bed and a bigBed are nearly identical.  Here, both type settings
+    would define a track with the first 6 standard bed fields defined
+    (up to <code>strand</code>) and with additional fields defined
+    after those 6.  Notice that plus strand items are colored red,
+    while minus strand items are blue.</P><BR>
+
+    <pre>
+    type bigBed 8 .
+    scoreFilter 700
+    scoreFilterLimits 100:1000
+    thickDrawItem on
+    spectrum on
+    scoreMin 700
+    scoreMax 900
+    color 0,0,255
+    minGrayLevel   4
+      ...    </pre>
+    <P>A bigBed track with
+    the first 8 standard bed fields (through <code>thickEnd</code>),
+    and no additional fields.  The '<code>.</code>' is required to tell
+    the Browser that the user may configure this track.  The score
+    filter is explicitly declared to default to 700, and an allowable
+    range for the score suggests there are no values below 100 worth
+    looking at.  This example also sets the items to blue and presents
+    a spectrum or gradation of darkness based upon the score range.
+    Items with score 700 or less are the lightest, and items with
+    score 900 or more are the darkest blue.  Finally the lightest
+    shade set to be not too light with the poorly named <code>minGrayLevel</code>
+    setting.  No doubt 4 was chosen after experimentation to see how
+    it actually looks in the Browser.</P><BR>
+</DIV>
+
 
 <!-- - - - - - - - WIG/BIGWIG settings - - - - - - - -->
 <DIV class="wig_intro">
@@ -1385,6 +1477,18 @@
     http://genome.ucsc.edu/FAQ/FAQformat.html</A>.</P>
 </DIV>
 
+<DIV class="bigWig_intro">
+<H3>bigWig/bamWig:  signal graphing tracks </H3>
+    <P>Another set of common track types are those that graph a density signal along
+    the genome. The graph can be a continuously varying density plot or
+    one that displays a density signal in only certain regions.  For data hubs
+    the most common signal track type is <code>bigWig</code>.
+    For detailed specifications of the <code>bigWig</code> remote data
+    file format and how to prepare them for display in the Genome Browser please
+    see: <A HREF="../bigWig.html">
+    http://genome.ucsc.edu/goldenPath/help/bigWig.html</A>.</P>
+</DIV>
+
 <DIV class="wig"><span class="types wig bigWig bamWig"></span>
 <div class="format">
     <code>type wig &lt;low#&gt; &lt;high#&gt;</code><BR>
@@ -1392,6 +1496,16 @@
     <code>type bamWig &lt;#&gt; &lt;#&gt;</code></div>
     <P>MySQL tables of type
     <code>wig</code> and remote data files of type <code>bigWig</code>
+    or <code>bamWig</code> must declare the expected signal range for
+    the data.</P>
+    <P><em>Examples can be found below.</em></P>
+</DIV>
+
+<DIV class="bigWig"><span class="types bigWig bamWig"></span>
+<div class="format">
+    <code>type bigWig &lt;#&gt; &lt;#&gt;</code><BR>
+    <code>type bamWig &lt;#&gt; &lt;#&gt;</code></div>
+    <P>The remote data files of type <code>bigWig</code>
     or <code>bamWig</code> must declare the expected signal range for
     the data.</P>
     <P><em>Examples can be found below.</em></P>
@@ -1672,6 +1786,30 @@
     define a signal in varying granularities of windows with or
     without gaps.
     </P>
+</DIV>
+
+<DIV class="bigWig_example"><span class="types bigWig"></span>
+<div class="format"><B>Example of signal graphing tracks:</B></div>
+    <pre>
+    type bigWig -0.25 37.6
+    windowingFunction mean+whiskers
+    viewLimits 5:20
+    viewLimitsMax 0:37.6
+    maxHeightPixels 100:32:8
+    yLineOnOff on
+    yLineMark 15
+    gridDefault on
+    color 128,0,128
+      ...  </pre>
+    <P>This bigwig format
+    signal is held in a data file (which may be remote).  The more
+    informative mean+whiskers windowing function is used by default in
+    this track and the signal will be 32 pixels high in the Browser
+    image display.  Notice that even though the signal value may be
+    less than zero, that portion of the signal is not available to be
+    displayed.  There will be a line at y=0 and another at y=15, which
+    may be a threshold value for this signal.  Finally notice the
+    track will be colored purple.</P><BR>
 </DIV>
 
 
@@ -3872,9 +4010,40 @@ for each cell associated with the particular TF binding location.</P>
 </DIV>
 
 <DIV class="subGroups_example"><span class="types superGroups"></span>
-<div class="format"><B>Example of a Composite track with Subgroups:</B></div>
+<div class="format"><B>Examples of Composite tracks with Subgroups:</B></div>
     <pre>
     track myComposite
+    composite on
+    subGroup1 cellLine Cell_Line \
+            A1GM12=GM12878 \
+            CD14=CD14&amp;#43; &hellip;
+    subGroup2 ab Antibody \
+            H3K04ME3=H3K4me3 \
+            H3K36ME3=H3K36me3 &hellip;
+    dimensions dimX=ab dimY=cellLine
+    sortOrder cell=+ ab=+
+      ...
+
+        track myFirstSubtrack
+        parent myComposite on
+        subGroups cellLine=CD14 ab=H3K04ME3
+          ...    </pre>
+    <P>A composite with
+    one subtrack and two subgroups is shown.  Notice that the
+    dimensions setting declares X and Y dimensions so those will be in
+    a 2D matrix on the composite's configuration page.  Notice that the
+    title of the cellLine subgroup contains a blank space filled in
+    with '<code>_</code>'.  The second cell line includes an HTML code
+    in the title for '<code>+</code>', making the user see "CD14+"
+    as the cell line. The two subgroups participate in the default
+    sort order, but they each have non-standard sort orders.  For
+    cells, GM12878 sorts first by starting its tag with "A".  The 
+    antibodies have numbers in their titles, but the tags expand
+    the number with "0" to pad the spacing.  This ensures
+    H3K4me3 sorts before H3K36me3.</P>
+
+    <pre>
+    track myCompositeIs3D
     composite on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
@@ -3897,30 +4066,21 @@ for each cell associated with the particular TF binding location.</P>
                 fileSize=Size
       ...
 
-        track myFirstSubtrack
-        parent myComposite on
+        track myFirstSubtrackIn3D
+        parent myCompositeIs3D on
         subGroups cellLine=CD14 ab=H3K04ME3 treat=ZNONE
           ...    </pre>
-    <P>The composite with
-    one subtrack and three subgroups is shown.  Notice that the
+    <P>In this second example composite,
+    one subtrack and three subgroups is shown.  As in the previous example, the
     dimensions setting declares X and Y dimensions so those will be in
-    a 2D matrix on the composite's configuration page.  Also
-    notice that a third dimension is declared as the "A"
+    a 2D matrix of "Antibody" and "Cell Line" options.  Also
+    notice that a third "Treatment" subgroup is declared as the "A"
     dimension and the user will be able to select subtracks for this
-    dimension by a drop down multi-select filter box.  Notice that the
-    title of the cellLine subgroup contains a blank space filled in
-    with '<code>_</code>'.  The second cell line includes an HTML code
-    in the title for '<code>+</code>', making the user see "CD14+"
-    as the cell line. All three subgroups participate in the default
-    sort order, but they each have non-standard sort orders.  For
-    cells, GM12878 sorts first by starting its tag with "A".
-        The antibodies have numbers in their titles, but the tags expand
-    the number with "0" to pad the spacing.  This ensures
-    H3K4me3 sorts before H3K36me3.  Finally the treatment "None"
-    sorts after "TNF-alpha" by beginning the tag with a
-    "Z".  That said, the default sort order on the
-    treatment group is reverse, so that "None" will be
-    seen first.  Also note that for this "A" dimension,
+    dimension by a drop down multi-select filter box.  All three subgroups 
+    participate in the default sort order, and now the treatment subgroup is 
+    sorted in reverse order by default.  Also the "None" treatment
+    sorts before all others (in reverse order) by beginning the tag with
+    a "Z".  Also note that for this "A" dimension,
     the "None" treatment will be selected by default.  By
     declaring the proper settings, using subGroups to organize a
     composite can be quite powerful.</P>
@@ -3950,6 +4110,78 @@ for each cell associated with the particular TF binding location.</P>
     the trackDb settings, if done correctly, can tie all these
     elements together in a nice cohesive package.</P>
 </DIV>
+
+<DIV class="subGroups_hub_example"><span class="types superGroups"></span>
+<div class="format"><B>Examples of Composite tracks with Subgroups:</B></div>
+    <pre>
+    track myComposite
+    composite on
+    subGroup1 cellLine Cell_Line \
+            A1GM12=GM12878 \
+            CD14=CD14&amp;#43; &hellip;
+    subGroup2 ab Antibody \
+            H3K04ME3=H3K4me3 \
+            H3K36ME3=H3K36me3 &hellip;
+    dimensions dimX=ab dimY=cellLine
+    sortOrder cell=+ ab=+
+      ...
+
+        track myFirstSubtrack
+        parent myComposite on
+        subGroups cellLine=CD14 ab=H3K04ME3
+          ...    </pre>
+    <P>A composite with
+    one subtrack and two subgroups is shown.  Notice that the
+    dimensions setting declares X and Y dimensions so those will be in
+    a 2D matrix on the composite's configuration page.  Notice that the
+    title of the cellLine subgroup contains a blank space filled in
+    with '<code>_</code>'.  The second cell line includes an HTML code
+    in the title for '<code>+</code>', making the user see "CD14+"
+    as the cell line. The two subgroups participate in the default
+    sort order, but they each have non-standard sort orders.  For
+    cells, GM12878 sorts first by starting its tag with "A".  The 
+    antibodies have numbers in their titles, but the tags expand
+    the number with "0" to pad the spacing.  This ensures
+    H3K4me3 sorts before H3K36me3.</P>
+
+    <pre>
+    track myCompositeIs3D
+    composite on
+    subGroup1 cellLine Cell_Line \
+            A1GM12=GM12878 \
+            CD14=CD14&amp;#43; &hellip;
+    subGroup2 ab Antibody \
+            H3K04ME3=H3K4me3 \
+            H3K36ME3=H3K36me3 &hellip;
+    subGroup3 treat Treatment \
+            TNFA=TNF-alpha \
+            ZNONE=None &hellip;
+    dimensions dimX=ab dimY=cellLine dimA=treat
+    filterComposite dimA
+    dimensionAchecked ZNONE
+    sortOrder cell=+ ab=+ treat=-
+      ...
+
+        track myFirstSubtrackIn3D
+        parent myCompositeIs3D on
+        subGroups cellLine=CD14 ab=H3K04ME3 treat=ZNONE
+          ...    </pre>
+    <P>In this second example composite,
+    one subtrack and three subgroups is shown.  As in the previous example, the
+    dimensions setting declares X and Y dimensions so those will be in
+    a 2D matrix of "Antibody" and "Cell Line" options.  Also
+    notice that a third "Treatment" subgroup is declared as the "A"
+    dimension and the user will be able to select subtracks for this
+    dimension by a drop down multi-select filter box.  All three subgroups 
+    participate in the default sort order, and now the treatment subgroup is 
+    sorted in reverse order by default.  Also the "None" treatment
+    sorts before all others (in reverse order) by beginning the tag with
+    a "Z".  Also note that for this "A" dimension,
+    the "None" treatment will be selected by default.  By
+    declaring the proper settings, using subGroups to organize a
+    composite can be quite powerful.</P>
+</DIV>
+
 
 
 <!-- - - - - - - - VIEW settings - - - - - - - -->
@@ -4063,7 +4295,7 @@ for each cell associated with the particular TF binding location.</P>
 <DIV class="view_example"><span class="types view"></span>
 <div class="format"><B>Example of a Composite track with Views:</B></div>
     <pre>
-    track myComposite
+    track myMultiViewComposite
     composite on
     visibility dense
     subGroup1 view Views PK=Peaks SIG=Signals
@@ -4079,7 +4311,7 @@ for each cell associated with the particular TF binding location.</P>
       ...
 
         track myViewPeaks
-        parent myComposite
+        parent myMultiViewComposite
         shortLabel Peaks
         view PK
         visibility pack
@@ -4089,7 +4321,7 @@ for each cell associated with the particular TF binding location.</P>
         viewUi on
           ...
 
-            track myFirstSubtrack
+            track myFirstPeakSubtrack
             parent myViewPeaks on
             subGroups cell=CD14 ab=H3K04ME3 view=PK
               ...    </pre>

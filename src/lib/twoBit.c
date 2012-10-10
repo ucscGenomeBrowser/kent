@@ -275,11 +275,26 @@ if (tbf != NULL)
     }
 }
 
+boolean twoBitSigRead(FILE *f, boolean *isSwapped)
+/* read twoBit signature, return FALSE if not good 
+ * set isSwapped to TRUE if twoBit file is byte swapped */
+{
+bits32 sig;
+
+*isSwapped = FALSE;
+mustReadOne(f, sig);
+if (sig == twoBitSwapSig)
+    *isSwapped = TRUE;
+else if (sig != twoBitSig)
+    return FALSE;
+
+return TRUE;
+}
+
 static struct twoBitFile *twoBitOpenReadHeader(char *fileName)
 /* Open file, read in header but not index.  
  * Squawk and die if there is a problem. */
 {
-bits32 sig;
 struct twoBitFile *tbf;
 boolean isSwapped = FALSE;
 FILE *f = mustOpen(fileName, "rb");
@@ -287,11 +302,11 @@ FILE *f = mustOpen(fileName, "rb");
 /* Allocate header verify signature, and read in
  * the constant-length bits. */
 AllocVar(tbf);
-mustReadOne(f, sig);
-if (sig == twoBitSwapSig)
-    isSwapped = tbf->isSwapped = TRUE;
-else if (sig != twoBitSig)
+
+if (!twoBitSigRead(f, &isSwapped))
     errAbort("%s doesn't have a valid twoBitSig", fileName);
+
+tbf->isSwapped = isSwapped;
 tbf->fileName = cloneString(fileName);
 tbf->f = f;
 tbf->version = readBits32(f, isSwapped);
@@ -770,7 +785,13 @@ return list;
 boolean twoBitIsFile(char *fileName)
 /* Return TRUE if file is in .2bit format. */
 {
-return endsWith(fileName, ".2bit");
+FILE *f = mustOpen(fileName, "rb");
+boolean isSwapped;
+boolean isTwoBit = twoBitSigRead(f, &isSwapped);
+
+fclose(f);
+
+return isTwoBit;
 }
 
 boolean twoBitParseRange(char *rangeSpec, char **retFile, 
@@ -932,7 +953,8 @@ else
     *e++ = '\0';
     s = e;
     }
-if (!endsWith(spec->fileName, ".2bit"))
+
+if (!twoBitIsFile(spec->fileName))
     {
     twoBitSpecFree(&spec);
     return NULL; /* not a 2bit file */

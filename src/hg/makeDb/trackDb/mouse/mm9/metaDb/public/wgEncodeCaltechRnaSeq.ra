@@ -77,6 +77,7 @@ dateUnrestricted 2012-12-19
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM929772
 grant Hardison
 insertLength 200
 lab Caltech-m
@@ -106,6 +107,7 @@ dateUnrestricted 2012-12-19
 dccAccession wgEncodeEM002734
 expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM929772
 grant Hardison
 insertLength 200
 lab Caltech-m
@@ -197,6 +199,7 @@ dateUnrestricted 2012-12-20
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
+geoSampleAccession GSM929773
 grant Hardison
 insertLength 200
 lab Caltech-m
@@ -226,6 +229,7 @@ dateUnrestricted 2012-12-20
 dccAccession wgEncodeEM002735
 expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
+geoSampleAccession GSM929773
 grant Hardison
 insertLength 200
 lab Caltech-m
@@ -377,12 +381,13 @@ dateUnrestricted 2012-11-01
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
+geoSampleAccession GSM929775
 grant Hardison
 insertLength 200
 lab Caltech-m
 labExpId 10986
 mapAlgorithm TH131
-md5sum 25d259de0a0dd30481a34ec9128a9dab
+md5sum 45ca606b2883e1fd96b5ff1115d2ba75
 project wgEncode
 readType 2x75
 replicate 1
@@ -406,12 +411,13 @@ dateUnrestricted 2012-11-01
 dccAccession wgEncodeEM002733
 expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
+geoSampleAccession GSM929775
 grant Hardison
 insertLength 200
 lab Caltech-m
 labExpId 10986
 mapAlgorithm TH131
-md5sum 56df5f1cae6d2b956920cd03aa749778
+md5sum d1cbc37896d3b5ca149ab523e21332c3
 project wgEncode
 readType 2x75
 replicate 1
@@ -497,12 +503,13 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
+geoSampleAccession GSM929774
 grant Hardison
 insertLength 200
 lab Caltech-m
 labExpId 10985
 mapAlgorithm TH131
-md5sum 9098a7660e9b4334be29247bb1fadc4f
+md5sum d35aaa9b2b504a0f0144cfbdeb1d2e1f
 project wgEncode
 readType 2x75
 replicate 1
@@ -526,12 +533,13 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEM002732
 expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
+geoSampleAccession GSM929774
 grant Hardison
 insertLength 200
 lab Caltech-m
 labExpId 10985
 mapAlgorithm TH131
-md5sum 53e843c4719d1aa3d563cabf55bcdf64
+md5sum e6987968c2c4c0a90d44fa8a63ae86e6
 project wgEncode
 readType 2x75
 replicate 1
@@ -604,4 +612,4 @@ tableName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200SigRep1
 treatment None
 view Signal
 
-# MAGIC: 1914921394
+# MAGIC: 983370291

@@ -2,6 +2,7 @@
 #include "common.h"
 #include "hgc.h"
 #include "gencodeClick.h"
+#include "ccdsClick.h"
 #include "genePred.h"
 #include "genePredReader.h"
 #include "ensFace.h"
@@ -29,8 +30,31 @@
  *    
  */
 
-/* size for buffering URL strings */
-static const int urlBufSize = 512;
+/* Various URLs and URL templates.  At one time, these were in the ra file,
+ * but that didn't prove that helpful and end up requiring updated the ra
+ * files for every GENCODE version if a URL was added or changed. */
+//FIXME: clean up RA files when CGIs no longer need them
+static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/gencode_biotypes.html";
+static char *ensemblTranscriptIdUrl = "http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s";
+static char *ensemblGeneIdUrl = "http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s";
+static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s";
+static char *vegaGeneIdUrl = "http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?db=core;g=%s";
+static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
+static char *hgncUrl = "http://www.genenames.org/data/hgnc_data.php?match=%s";
+static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
+static char *apprisHomeUrl = "http://appris.bioinfo.cnio.es/";
+static char *apprisGeneUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Gene_Id";
+static char *apprisTranscriptUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Transcript_Id";
+
+static char *getBaseAcc(char *acc, char *accBuf, int accBufSize)
+/* get the accession with version number dropped. */
+{
+safecpy(accBuf, accBufSize, acc);
+char *dot = strchr(accBuf, '.');
+if (dot != NULL)
+    *dot = '\0';
+return accBuf;
+}
 
 static char *getGencodeTable(struct trackDb *tdb, char *tableBase)
 /* get a table name from the settings. */
@@ -148,30 +172,23 @@ else
     }
 }
 
-
-static char *mkExtIdUrl(struct trackDb *tdb,  char *id, char *settingName, char *urlBuf)
-/* generate a url to a external database given an id and the name of a setting
- * containing the sprintf URL template.*/
-{
-safef(urlBuf, urlBufSize, trackDbRequiredSetting(tdb, settingName), id);
-return urlBuf;
-}
-
-static void prExtIdAnchor(struct trackDb *tdb,  char *id, char *settingName)
+static void prExtIdAnchor(char *id, char *urlTemplate)
 /* if an id to an external database is not empty, print an HTML anchor to it */
 {
-char urlBuf[urlBufSize];
 if (!isEmpty(id))
-    printf("<a href=\"%s\" target=_blank>%s</a>", mkExtIdUrl(tdb, id, settingName, urlBuf), id);
+    {
+    char urlBuf[512];
+    safef(urlBuf, sizeof(urlBuf), urlTemplate, id);
+    printf("<a href=\"%s\" target=_blank>%s</a>", urlBuf, id);
+    }
 }
 
-static void prTdExtIdAnchor(struct trackDb *tdb,  char *id, char *settingName)
+static void prTdExtIdAnchor(char *id, char *urlTemplate)
 /* print a table data element with an anchor for a id */
 {
 printf("<td>");
-prExtIdAnchor(tdb, id, settingName);
+prExtIdAnchor(id, urlTemplate);
 }
-
 
 static void writePosLink(char *chrom, int chromStart, int chromEnd)
 /* write link to a genomic position */
@@ -199,13 +216,13 @@ printf("<tr><th><th>Transcript<th>Gene</tr>\n");
 printf("</thead><tbody>\n");
 
 printf("<tr><th>Gencode id");
-prTdExtIdAnchor(tdb, transAttrs->transcriptId, "ensemblTranscriptIdUrl");
-prTdExtIdAnchor(tdb, transAttrs->geneId, "ensemblGeneIdUrl");
+prTdExtIdAnchor(transAttrs->transcriptId, ensemblTranscriptIdUrl);
+prTdExtIdAnchor(transAttrs->geneId, ensemblGeneIdUrl);
 printf("</tr>\n");
 
 printf("<tr><th>HAVANA manual id");
-prTdExtIdAnchor(tdb, transAttrs->havanaTranscriptId, "vegaTranscriptIdUrl");
-prTdExtIdAnchor(tdb, transAttrs->havanaGeneId, "vegaGeneIdUrl");
+prTdExtIdAnchor(transAttrs->havanaTranscriptId, vegaTranscriptIdUrl);
+prTdExtIdAnchor(transAttrs->havanaGeneId, vegaGeneIdUrl);
 printf("</tr>\n");
 
 printf("<tr><th>Position");
@@ -217,18 +234,42 @@ printf("</tr>\n");
 
 printf("<tr><th>Strand<td>%s<td></tr>\n", transAnno->strand);
 
-printf("<tr><th><a href=\"http://www.gencodegenes.org/gencode_biotypes.html\">Biotype</a><td>%s<td>%s</tr>\n", transAttrs->transcriptType, transAttrs->geneType);
-/* FIXME: add href o */
+printf("<tr><th><a href=\"%s\">Biotype</a><td>%s<td>%s</tr>\n", gencodeBiotypesUrl, transAttrs->transcriptType, transAttrs->geneType);
+
 printf("<tr><th>Status<td>%s<td>%s</tr>\n", transAttrs->transcriptStatus, transAttrs->geneStatus);
+
 printf("<tr><th>Annotation Level<td>%s (%d)<td></tr>\n", getLevelDesc(transAttrs->level), transAttrs->level);
+
 printf("<tr><th>Annotation Method<td>%s<td>%s</tr>\n", getMethodDesc(transcriptSource->source), getMethodDesc(geneSource->source));
+
 if (haveTsl)
     {
     char *tslDesc = getSupportLevelDesc(tsl);
     printf("<tr><th><a href=\"#tsl\">Transcription Support Level</a><td><a href=\"#%s\">%s</a><td></tr>\n", tslDesc, tslDesc);
     }
-printf("<tr><th>HUGO gene<td colspan=2>%s</tr>\n", transAttrs->geneName);
-printf("<tr><th>CCDS<td>%s<td></tr>\n", transAttrs->ccdsId);
+printf("<tr><th>HGNC gene symbol<td colspan=2>");
+prExtIdAnchor(transAttrs->geneName, hgncUrl);
+printf("</tr>\n");
+
+printf("<tr><th>CCDS<td>");
+if (!isEmpty(transAttrs->ccdsId))
+    {
+    printf("<a href=\"");
+    printCcdsExtUrl(transAttrs->ccdsId);
+    printf("\" target=_blank>%s</a>", transAttrs->ccdsId);
+    }
+printf("<td></tr>\n");
+
+printf("<tr><th>GeneCards<td colspan=2>");
+prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
+printf("</tr>\n");
+
+printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
+char accBuf[64];
+prTdExtIdAnchor(getBaseAcc(transAttrs->transcriptId, accBuf, sizeof(accBuf)), apprisGeneUrl);
+prTdExtIdAnchor(getBaseAcc(transAttrs->geneId, accBuf, sizeof(accBuf)), apprisTranscriptUrl);
+printf("</tr>\n");
+
 // FIXME: add sequence here??
 printf("</tbody></table>\n");
 }
@@ -649,7 +690,7 @@ safef(header, sizeof(header), "GENCODE 2-way consensus pseudogene %s", gencodeId
 cartWebStart(cart, database, "%s", header);
 printf("<H2>%s</H2>\n", header);
 printf("<b>Yale id:</b> ");
-prExtIdAnchor(tdb, gencodeId, "yalePseudoUrl");
+prExtIdAnchor(gencodeId, yalePseudoUrl);
 printf("<br>");
 printPos(pseudoAnno->chrom, pseudoAnno->txStart, pseudoAnno->txEnd, pseudoAnno->strand, FALSE, NULL);
 }
