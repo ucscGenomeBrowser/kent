@@ -317,3 +317,6 @@
 	bogging things down.
 
 12.13   Add ability to flush the results file from para and parasol clients.
+
+12.14   Fixed paraNode to correctly enforce memory use limits via RLIMIT_AS and RLIMIT_DATA instead of RLIMIT_CORE.
+
