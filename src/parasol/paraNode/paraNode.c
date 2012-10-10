@@ -361,6 +361,23 @@ void execProc(char *managingHost, char *jobIdString, char *reserved,
 {
 if ((grandChildId = forkOrDie()) == 0)
     {
+    // use rlimit to limit RAM available to process so it will not hog the machine unfairly.
+    if (sizeof(long) == 4 && memLimit > 4294967295LL)  // 4GB is max value on 32-bit platform.
+	{
+	logWarn("memLimit %lld exceeds address space on 32-bit machine, treating it as 4GB limit", memLimit);
+	memLimit = 4294967295LL;
+	}
+    struct rlimit rlim;
+    rlim.rlim_cur = rlim.rlim_max = memLimit;
+    if (setrlimit(RLIMIT_DATA, &rlim) < 0)
+	logWarn("setrlimit failed with RLIMIT_DATA rlim_cur=%lld rlim_max=%lld"
+	    , (long long) rlim.rlim_cur , (long long) rlim.rlim_max); 
+    // although RLIMIT_AS is not supported/enforced on all platforms,
+    // it is useful for linux and some other unix OSes. 
+    if (setrlimit(RLIMIT_AS, &rlim) < 0)
+	logWarn("setrlimit failed with RLIMIT_AS rlim_cur=%lld rlim_max=%lld"
+	    , (long long) rlim.rlim_cur , (long long) rlim.rlim_max); 
+
     char *homeDir = "";
 
     /* Change to given user (if root) */
@@ -376,11 +393,6 @@ if ((grandChildId = forkOrDie()) == 0)
     setsid();
     // setpgid(0,0);
     umask(umaskVal); 
-
-    struct rlimit rlim;
-    rlim.rlim_cur = rlim.rlim_max = memLimit;
-    if(setrlimit(RLIMIT_CORE, &rlim) < 0)
-    perror("setrlimit"); 
 
 
     /* Update environment. */

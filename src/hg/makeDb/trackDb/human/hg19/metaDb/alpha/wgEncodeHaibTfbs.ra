@@ -12089,7 +12089,6 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-dccAccession wgEncodeEH003267
 expId 3267
 fileName wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111AlnRep1.bam,wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111AlnRep1.bam.bai
 grant Myers
@@ -12115,7 +12114,6 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-dccAccession wgEncodeEH003267
 expId 3267
 fileName wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111AlnRep2.bam,wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111AlnRep2.bam.bai
 grant Myers
@@ -12141,7 +12139,6 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-dccAccession wgEncodeEH003267
 expId 3267
 fileName wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111PkRep1.broadPeak.gz
 grant Myers
@@ -12169,7 +12166,6 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-dccAccession wgEncodeEH003267
 expId 3267
 fileName wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111PkRep2.broadPeak.gz
 grant Myers
@@ -12197,7 +12193,6 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-dccAccession wgEncodeEH003267
 expId 3267
 fileName wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111RawDataRep1.fastq.gz
 grant Myers
@@ -12223,7 +12218,6 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-dccAccession wgEncodeEH003267
 expId 3267
 fileName wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111RawDataRep2.fastq.gz
 grant Myers
@@ -12249,7 +12243,6 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-dccAccession wgEncodeEH003267
 expId 3267
 fileName wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111RawRep1.bigWig
 grant Myers
@@ -12276,7 +12269,6 @@ dataType ChipSeq
 dataVersion ENCODE Jul 2012 Freeze
 dateSubmitted 2012-07-28
 dateUnrestricted 2013-04-28
-dccAccession wgEncodeEH003267
 expId 3267
 fileName wgEncodeHaibTfbsEcc1Mybl2sc81192V0422111RawRep2.bigWig
 grant Myers
@@ -83963,4 +83955,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -824027895
+# MAGIC: 672341081

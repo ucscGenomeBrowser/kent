@@ -48,6 +48,13 @@ char *ensOrgNameFromScientificName(char *scientificName)
          * scientific name */
         return "Gorilla_gorilla";
         }
+    if (sameWord(scientificName, "Spermophilus tridecemlineatus"))
+        {
+        /* special case for squirrel, whose scientific name has been
+         * changed from Spermophilusv to Ictidomys at ensembl */
+        return "Ictidomys_tridecemlineatus";
+        }
+
     /* replace spaces with underscores, assume max two spaces
      * (species and sub-species).  */
     res = cloneString(scientificName);
