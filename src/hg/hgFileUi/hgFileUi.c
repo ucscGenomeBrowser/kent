@@ -110,6 +110,14 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     // Add pennantIcon
     printPennantIconNote(tdb);
 
+    char *html = tdb->html;
+    if (trackDbSetting(tdb, "wgEncode"))
+        {
+        // add anchor to Credits section of ENCODE HTML page so contacts are easily found (on top menu)
+        html = replaceChars(tdb->html, "2>Credits", "2></H2><A NAME='TRACK_CREDITS'></A>\n<H2>Credits</H2>");
+        }
+    puts(html);
+
     puts(tdb->html);
     printf("</td><td nowrap>");
     cgiDown(0.7); // positions top link below line
