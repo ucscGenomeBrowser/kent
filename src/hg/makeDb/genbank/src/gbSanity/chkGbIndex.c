@@ -106,11 +106,13 @@ chkEntryAligned(entry);
 }
 
 static boolean shouldCheck(struct gbEntry* entry)
-/* should an entry be checked */
+/* should an entry be checked.  At this point we always check it, but
+ * we used to only check it under these conditions:
+ * ((entry->processed == NULL) || (entry->processed->molType == mol_mRNA)
+ *      || (entry->processed->update->release->srcDb == GB_REFSEQ))
+ */
 {
-// check entries with no processed, or genbanks of type mRNA or any refseq
-return ((entry->processed == NULL) || (entry->processed->molType == mol_mRNA)
-        || (entry->processed->update->release->srcDb == GB_REFSEQ));
+return TRUE;
 }
 
 void chkGbIndex(struct gbSelect* select, struct metaDataTbls* metaDataTbls)

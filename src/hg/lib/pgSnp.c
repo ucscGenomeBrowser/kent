@@ -810,15 +810,9 @@ if (rec->alleleCount == 2 && sameString(rec->alleles[1], "."))
     alCount = 1;
 else if (rec->alleleCount >= 2)
     {
-    // append /-sep'd alternate alleles, unless/until it gets too long:
+    // append /-sep'd alternate alleles
     for (i = 1;  i < rec->alleleCount;  i++)
-	{
-	if ((dy->stringSize + 1 + strlen(rec->alleles[i])) > VCF_MAX_ALLELE_LEN)
-	    break;
 	dyStringPrintf(dy, "/%s", rec->alleles[i]);
-	}
-    if (i < rec->alleleCount)
-	alCount = i;
     }
 pgs->name = cloneStringZ(dy->string, dy->stringSize+1);
 pgs->alleleCount = alCount;
