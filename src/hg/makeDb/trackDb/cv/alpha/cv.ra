@@ -8250,7 +8250,7 @@ term Bach1_(sc-14700)
 tag BACH1SC14700
 type Antibody
 label BACH1 (sc-14700)
-antibodyDescription BACH1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of BACH1 of human origin. Antibody Target: BACH1
+antibodyDescription Goat polyclonal. BACH1 (C-20) is an affinity purified antibody raised against a peptide mapping near the C-terminus of BACH1 of human origin. Antibody Target: BACH1
 lab Snyder
 lots E1503
 orderUrl http://www.scbt.com/datasheet-14700-bach1-c-20-antibody.html
@@ -8267,7 +8267,7 @@ term BAF155
 tag BAF155
 type Antibody
 label BAF155 (sc-10756)
-antibodyDescription BAF155 (H-76) is a rabbit polyclonal antibody raised against amino acids 998-1073 of BAF155 of human origin. Antibody Target: SMARCC1
+antibodyDescription Rabbit polyclonal. BAF155 (H-76) is raised against amino acids 998-1073 of BAF155 of human origin. Antibody Target: SMARCC1
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
 target SMARCC1
@@ -8283,7 +8283,7 @@ term BAF170
 tag BAF170
 type Antibody
 label BAF170 (sc-10757)
-antibodyDescription Rabbit polycolonal. BAF170 (H-116) is raised against amino acids 1093-1208 of BAF170 of human origin. Antibody Target: SMARCC2
+antibodyDescription Rabbit polyclonal. BAF170 (H-116) is raised against amino acids 1093-1208 of BAF170 of human origin. Antibody Target: SMARCC2
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-10757-baf170-h-116-antibody.html
 target SMARCC2
@@ -8460,7 +8460,7 @@ term BRF2
 tag BRF2
 type Antibody
 label BRF2 (4295)
-antibodyDescription Antibody 4295 against Brf2 was raised by immunizing rabbits with keyhole limpet hemocyanin coupled to synthetic peptides VSRSQQRGLRRVRDLC and SDSEIEQYLRTPQEVR, corresponding to human Brf2 residues 66-80 and 385-400, respectively. Antibody Target: BRF2
+antibodyDescription Rabbit. Raised by immunizing rabbits with keyhole limpet hemocyanin coupled to synthetic peptides VSRSQQRGLRRVRDLC and SDSEIEQYLRTPQEVR, corresponding to human Brf2 residues 66-80 and 385-400, respectively. Antibody Target: BRF2
 lab Struhl
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 target BRF2
@@ -8587,7 +8587,7 @@ term CBX2
 tag CBX2
 type Antibody
 label CBX2 (A302-524A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated. Antibody Target: CBX2
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated. Antibody Target: CBX2
 lab Epstein
 lots A302-524A-1
 orderUrl http://www.bethyl.com/product/A302-524A
@@ -8619,7 +8619,7 @@ term CBX8
 tag CBX8
 type Antibody
 label CBX8 (A300-882A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: CBX8
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: CBX8
 lab Epstein
 lots A300-882A-1
 orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
@@ -8635,7 +8635,7 @@ term CCNT2
 tag CCNT2
 type Antibody
 label CCNT2 (sc-12419)
-antibodyDescription Goal polyclonal. Raised against an internal region of human CycT2a/b. Recommeded for detection of CycT2a/b of rat, mouse or human origin. Vendor recommeds it use for the folloiwng applications: WB, IF and ELISA. Antibody Target: CCNT2
+antibodyDescription Goat polyclonal. Raised against an internal region of human CycT2a/b. Recommeded for detection of CycT2a/b of rat, mouse or human origin. Vendor recommeds it use for the folloiwng applications: WB, IF and ELISA. Antibody Target: CCNT2
 lab Struhl
 lots H2306
 orderUrl http://www.scbt.com/datasheet-12419-cyclin-t2a-b-a-20-antibody.html
@@ -8765,7 +8765,7 @@ term CHD1_(A301-218A)
 tag CHD1A301218A
 type Antibody
 label CHD1 (A301-218A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: CHD1
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: CHD1
 lab Bernstein
 lots A301-218A-1
 orderUrl http://www.bethyl.com/product/A301-218A
@@ -8813,7 +8813,7 @@ term CHD4_Mi2
 tag CHD4MI2
 type Antibody
 label CHD4&#47;Mi2 (A301-081A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: CHD4
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: CHD4
 lab Epstein
 lots A301-081A-1
 orderUrl http://www.bethyl.com/product/A301-081A/CHD4Mi2_beta_Antibody?referrer=search_default
@@ -9036,7 +9036,7 @@ term E2F1
 tag E2F1
 type Antibody
 label E2F1 (05-379)
-antibodyDescription E2F1(KH20 and KH95) is a mouse monoclonal antibody. The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386. Recommended for detection of E2F1 of H and Xn origin by WB and IP. Antibody Target: E2F1
+antibodyDescription Mouse monoclonal. E2F1(KH20 and KH95) Epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386. Recommended for detection of E2F1 of H and Xn origin by WB and IP. Antibody Target: E2F1
 lab Farnham
 orderUrl http://www.millipore.com/catalogue/item/05-379#
 target E2F1
@@ -9052,7 +9052,7 @@ term E2F4
 tag E2F4
 type Antibody
 label E2F4 (sc-866)
-antibodyDescription rabbit polyclonal. Antibody Target: E2F4
+antibodyDescription Rabbit polyclonal. Antibody Target: E2F4
 lab Farnham, Snyder
 orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
 target E2F4
@@ -9505,7 +9505,7 @@ term ERalpha_a
 tag ERAA
 type Antibody
 label ERalpha a (sc-543)
-antibodyDescription Rabbit affinity purified polyclonal antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ESR1
+antibodyDescription Rabbit polyclonal affinity purified antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ESR1
 lab Ruan
 lots C2510, G1509
 orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
@@ -9538,7 +9538,7 @@ term ESET_(166621)
 tag ESET166621
 type Antibody
 label ESET&#47;SETDB1 (sc-166621)
-antibodyDescription mouse monoclonal IgG2b, specific for an epitope mapping between amino acids 1195-1228 near the C-terminus of human ESET. Antibody Target: SETDB1
+antibodyDescription Mouse monoclonal IgG2b, specific for an epitope mapping between amino acids 1195-1228 near the C-terminus of human ESET. Antibody Target: SETDB1
 lab Bernstein
 lots H2009
 orderUrl http://www.scbt.com/datasheet-166621-eset-a-1-antibody.html
@@ -9587,7 +9587,7 @@ term FLI1_(sc-356)
 tag FLI1SC356
 type Antibody
 label FLI1 (sc-356)
-antibodyDescription FLI1 (C-19) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin. Antibody Target: FLI1
+antibodyDescription Rabbit polyclonal. FLI1 (C-19) is an affinity purified antibody raised against a peptide mapping at the C-terminus of FLI1 of mouse origin. Antibody Target: FLI1
 lab Hardison
 lots E1211
 orderUrl http://www.scbt.com/datasheet-356-fli-1-c-19-antibody.html
@@ -9745,7 +9745,7 @@ term GATA-1
 tag GATA1
 type Antibody
 label GATA1
-antibodyDescription Anti-GATA-1 rabbit polyclonal antibody was generated by using a purified GST fusion to amino acids 1-89 of mouse GATA-1. Antibody Target: GATA1
+antibodyDescription Rabbit polyclonal antibody generated using a purified GST fusion to amino acids 1-89 of mouse GATA-1. Antibody Target: GATA1
 lab Farnham
 orderUrl http://stemcells.wisc.edu/node/101
 target GATA1
@@ -9760,7 +9760,7 @@ term GATA1_(SC-265)
 tag GATA1a
 type Antibody
 label GATA1 (sc-265)
-antibodyDescription rat monoclonal antibody raised against mouse recombinant GATA1; recommended for detection of GATA1 of mouse, rat and human origin. Antibody Target: GATA1
+antibodyDescription Rat monoclonal antibody raised against mouse recombinant GATA1; recommended for detection of GATA1 of mouse, rat and human origin. Antibody Target: GATA1
 lab Hardison
 orderUrl http://www.scbt.com/datasheet-265-gata-1-n6-antibody.html
 target GATA1
@@ -9888,7 +9888,7 @@ term GR
 tag GR
 type Antibody
 label GR (sc-1003)
-antibodyDescription Rabbit Polyclonal. Antibody Target: GR
+antibodyDescription Rabbit polyclonal. Antibody Target: GR
 lab Myers
 lots A2508, E1908
 orderUrl http://www.scbt.com/product.php?datasheet=1003
@@ -9920,7 +9920,7 @@ term GTF2B
 tag GTF2B
 type Antibody
 label GTF2B (sc-225)
-antibodyDescription rabbit polyclonal IgG, 200 ?g/ml. epitope mapping near the C-terminus of TFIIB of human origin. Antibody Target: GTF2B
+antibodyDescription Rabbit polyclonal IgG, 200 ?g/ml. epitope mapping near the C-terminus of TFIIB of human origin. Antibody Target: GTF2B
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
 target GTF2B
@@ -9968,7 +9968,7 @@ term H3ac_(06-599)
 tag H3AC06599
 type Antibody
 label H3ac (06-599)
-antibodyDescription rabbit polyclonal antibody raised against a KLH-conjugated peptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]STGG[K*]APRKQLC) where K* is acetylated. Antibody Target: H3ac
+antibodyDescription Rabbit polyclonal antibody raised against a KLH-conjugated peptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]STGG[K*]APRKQLC) where K* is acetylated. Antibody Target: H3ac
 lab Wold
 lots missing
 orderUrl http://www.millipore.com/catalogue/item/06-599
@@ -9984,7 +9984,7 @@ term H3K4me1
 tag H3K04ME1
 type Antibody
 label H3K4me1 (ab8895)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K4me1
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K4me1
 lab Bernstein, Ren, Hardison
 lots 383111, 720417
 orderUrl http://www.abcam.com/index.html?datasheet=8895
@@ -10001,7 +10001,7 @@ term H3K4me1_(pAb-037-050)
 tag H3K04ME1b
 type Antibody
 label H3K4me1 (pAb-037-050)
-antibodyDescription Polyclonal antibody raised in rabbit against histone H3 containing the monomethylated lysine 4 (H3K4me1), using a KLH-conjugated synthetic peptide. Antibody Target: H3K4me1
+antibodyDescription Rabbit polyclonal antibody raised against histone H3 containing the monomethylated lysine 4 (H3K4me1), using a KLH-conjugated synthetic peptide. Antibody Target: H3K4me1
 lab Farnham
 lots Lot# A399-002341P
 orderUrl http://www.diagenode.com/en/catalog/antibodies-3/histone-h3-and-modified-h3-27/product/h3k4me1-polyclonal-antibody-37
@@ -10017,7 +10017,7 @@ term H3K4me2
 tag H3K04ME2
 type Antibody
 label H3K4me2 (ab7766)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K4me2
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K4me2
 lab Bernstein
 lots 56293
 orderUrl http://www.abcam.com/index.html?datasheet=7766
@@ -10049,7 +10049,7 @@ term H3K4me3
 tag H3K04ME3
 type Antibody
 label H3K4me3 (07-473)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K4me3
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K4me3
 lab Bernstein, Hardison
 lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
 orderUrl http://www.abcam.com/index.html?datasheet=8580; http://www.millipore.com/catalogue/item/07-473
@@ -10097,7 +10097,7 @@ term H3K9ac
 tag H3K09AC
 type Antibody
 label H3K9ac (ab4441)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K9ac
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
 lab Bernstein
 lots 455103
 orderUrl http://www.abcam.com/index.html?datasheet=4441
@@ -10160,7 +10160,7 @@ term H3K9me1
 tag H3K09ME1
 type Antibody
 label H3K9me1 (ab8896)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K9me1
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K9me1
 lab Bernstein
 lots 104560
 orderUrl http://www.abcam.com/index.html?datasheet=8896
@@ -10176,7 +10176,7 @@ term H3K9me3
 tag H3K09ME3
 type Antibody
 label H3K9me3 (ab8898)
-antibodyDescription rabbit polyclonal, ChIP grade. Antibody Target: H3K9me3
+antibodyDescription Rabbit polyclonal, ChIP grade. Antibody Target: H3K9me3
 lab Farnham, Ren, Hardison
 lots 19208002
 orderUrl http://www.abcam.com/index.html?datasheet=8898
@@ -10209,7 +10209,7 @@ term H3K27ac
 tag H3K27AC
 type Antibody
 label H3K27ac (ab4729)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K27ac
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K27ac
 lab Bernstein
 lots 31456
 orderUrl http://www.abcam.com/index.html?datasheet=4729
@@ -10240,7 +10240,7 @@ term H3K27me3
 tag H3K27ME3
 type Antibody
 label H3K27me3 (07-449)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K27me3
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K27me3
 lab Bernstein, Hardison
 lots DAM1387952
 orderUrl http://www.millipore.com/catalogue/item/07-449
@@ -10272,7 +10272,7 @@ term H3K27me3B
 tag H3K27ME3b
 type Antibody
 label H3K27me3 (9733S)
-antibodyDescription rabbit monoclonal. Antibody Target: H3K27me3
+antibodyDescription Rabbit monoclonal. Antibody Target: H3K27me3
 lab Farnham
 lots 1
 orderUrl http://www.cellsignal.com/products/9733.html
@@ -10288,7 +10288,7 @@ term H3K36me3
 tag H3K36ME3
 type Antibody
 label H3K36me3 (ab9050)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K36me3
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K36me3
 lab Bernstein, Ren, Hardison
 lots 136353, 707946
 orderUrl http://www.abcam.com/index.html?datasheet=9050
@@ -10305,7 +10305,7 @@ term H3K36me3B
 tag H3K36ME3b
 type Antibody
 label H3K36me3 (9763S)
-antibodyDescription rabbit polyclonal. Antibody Target: H3K36me3
+antibodyDescription Rabbit polyclonal. Antibody Target: H3K36me3
 lab Farnham
 orderUrl http://www.cellsignal.com/products/9763.html
 target H3K36me3
@@ -10369,7 +10369,7 @@ term H4K20me1
 tag H4K20ME1
 type Antibody
 label H4K20me1 (ab9051)
-antibodyDescription rabbit polyclonal. Antibody Target: H4K20me1
+antibodyDescription Rabbit polyclonal. Antibody Target: H4K20me1
 lab Bernstein
 lots 104513
 orderUrl http://www.abcam.com/index.html?datasheet=9051
@@ -10385,7 +10385,7 @@ term HA-E2F1
 tag HAE2F1
 type Antibody
 label HA-E2F1 (MMS-101P)
-antibodyDescription Mouse Monoclonal antibody HA.11 clone 16B12 was raised against the twelve amino acid peptide CYPYDVPDYASL. This second-generation HA antibody is an excellent substitute for the 12CA5 monoclonal antibody. The HA.11 antibody recognizes the influenza hemagglutinin epitope (YPYDVPDYA) which has been used extensively as a general epitope tag in expression vectors. The extreme specificity of the antibody allows unambiguous identification and quantitative analysis of the tagged protein. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus. Antibody Target: HA-E2F1
+antibodyDescription Mouse monoclonal antibody HA.11 clone 16B12 was raised against the twelve amino acid peptide CYPYDVPDYASL. This second-generation HA antibody is an excellent substitute for the 12CA5 monoclonal antibody. The HA.11 antibody recognizes the influenza hemagglutinin epitope (YPYDVPDYA) which has been used extensively as a general epitope tag in expression vectors. The extreme specificity of the antibody allows unambiguous identification and quantitative analysis of the tagged protein. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus. Antibody Target: HA-E2F1
 lab Farnham
 orderUrl https://store.crpinc.com/datasheet.aspx?catalogno=MMS-101P
 target HA-E2F1
@@ -10399,7 +10399,7 @@ vendorName Covance
 term HCFC1_(NB100-68209)
 tag HCFC1NB10068209
 type Antibody
-antibodyDescription Rabbit polyclonalantibody against residue 1700 and 1750 of human host cell factor C1
+antibodyDescription Rabbit polyclonal antibody against residue 1700 and 1750 of human host cell factor C1
 lab Snyder
 lots A1
 orderUrl http://www.novusbio.com/HCFC1-Antibody_NB100-68209.html
@@ -10415,7 +10415,7 @@ term HDAC1_(SC-6298)
 tag HDAC1SC6298
 type Antibody
 label HDAC1 (sc-6298)
-antibodyDescription goat polyclonal IgG, 200 micrograms/ml, epitope mapping at the C-terminus of HDAC1 of human origin. Antibody Target: HDAC1
+antibodyDescription Goat polyclonal IgG, 200 micrograms/ml, epitope mapping at the C-terminus of HDAC1 of human origin. Antibody Target: HDAC1
 lab Bernstein
 lots H0509
 orderUrl http://www.scbt.com/datasheet-6298-hdac1-c-19-antibody.html
@@ -10479,7 +10479,7 @@ term HEY1
 tag HEY1
 type Antibody
 label HEY1 (sc-16424)
-antibodyDescription HRT1 (C-20) Goat polyclonal IgG, 200 ?g/ml. Epitope mapping near the C-terminus of HRT1 of human origin. Antibody Target: HEY1
+antibodyDescription Goat polyclonal IgG HRT1 (C-20) Epitope mapping near the C-terminus of HRT1 of human origin. Antibody Target: HEY1
 deprecated data withdrawn
 lab Myers
 orderUrl http://www.scbt.com/datasheet-16424-hrt1-c-20-antibody.html
@@ -10657,7 +10657,7 @@ term Ini1
 tag INI1
 type Antibody
 label INI1 (sc-16189)
-antibodyDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: INI1
+antibodyDescription Goat polyclonal. Ini1 (C-20) is an affinity purified antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: INI1
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
 target INI1
@@ -10673,7 +10673,7 @@ term IRF1
 tag IRF1
 type Antibody
 label IRF1 (sc-497)
-antibodyDescription IRF-1 (C-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of IRF-1 of human origin. Antibody Target: IRF1
+antibodyDescription Rabbit polyclonal. IRF-1 (C-20) is an affinity purified antibody raised against a peptide mapping at the C-terminus of IRF-1 of human origin. Antibody Target: IRF1
 lab Farnham
 orderUrl http://www.scbt.com/datasheet-497-irf-1-c-20-antibody.html
 target IRF1
@@ -10689,7 +10689,7 @@ term IRF3
 tag IRF3
 type Antibody
 label IRF3 (sc-9082)
-antibodyDescription Rabbit polyclonal; epitope corresponding to amino acids 1-425 of IRF-3 of human origin. Antibody Target: IRF3
+antibodyDescription Rabbit polyclonal. Epitope corresponding to amino acids 1-425 of IRF-3 of human origin. Antibody Target: IRF3
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-9082-irf-3-fl-425-antibody.html
 target IRF3
@@ -10754,7 +10754,7 @@ term JMJD2A_(A300-861A-1)
 tag JMJD2AA300861A1
 type Antibody
 label JMJD2A (A300-861A)
-antibodyDescription rabbit polyclonal antigen affinity purified, unconjugated, liquid
+antibodyDescription Rabbit polyclonal antigen affinity purified, unconjugated, liquid
 lab Bernstein
 lots A300-861A-1
 orderUrl http://www.bethyl.com/product/A300-861A
@@ -10770,7 +10770,7 @@ term JunD
 tag JUND
 type Antibody
 label JunD (sc-74)
-antibodyDescription rabbit polyclonal IgG. Antibody Target: JunD
+antibodyDescription Rabbit polyclonal IgG. Antibody Target: JunD
 lab Snyder
 orderUrl http://www.scbt.com/product.php?datasheet=74
 target JunD
@@ -10786,7 +10786,7 @@ term KAP1
 tag KAP1
 type Antibody
 label KAP1 (ab10483)
-antibodyDescription rabbit polyclonal. Antibody Target: KAP1
+antibodyDescription Rabbit polyclonal. Antibody Target: KAP1
 lab Farnham
 orderUrl http://www.abcam.com/index.html?datasheet=10483
 target KAP1
@@ -10802,7 +10802,7 @@ term KAT3A_(ab2832)
 tag KAT3AAB2832
 type Antibody
 label KAT3A (ab2832)
-antibodyDescription rabbit polyclonal to a synthetic peptide, ATSSPATSQTGPGIC, corresponding to amino acids 162-176 in the nuclear factor binding domain of Human KAT3A / CBP.
+antibodyDescription Rabbit polyclonal to a synthetic peptide, ATSSPATSQTGPGIC, corresponding to amino acids 162-176 in the nuclear factor binding domain of Human KAT3A / CBP.
 lab Bernstein
 lots NA
 orderUrl http://www.abcam.com/KAT3A--CBP-antibody-ChIP-Grade-ab2832.html
@@ -10833,7 +10833,7 @@ term LSD1
 tag LSD1
 type Antibody
 label LSD1&#47;KDM1A (A300-215A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 lab Epstein
 lots A300-215A-1
 orderUrl http://www.bethyl.com/product/A300-215A/
@@ -10976,7 +10976,7 @@ term MEF2_(sc-17785)
 tag MEF2SC17785
 type Antibody
 label MEF2 (sc-17785)
-antibodyDescription mouse monoclonal antibody raised against amino acids 1-300 mapping at the N-terminus of MEF-2A of human origin; recommended for detection of a broad range of MEF-2 family members of mouse, rat and human origin. Antibody Target: MEF2
+antibodyDescription Mouse monoclonal antibody raised against amino acids 1-300 mapping at the N-terminus of MEF-2A of human origin; recommended for detection of a broad range of MEF-2 family members of mouse, rat and human origin. Antibody Target: MEF2
 lab Wold
 lots missing
 orderUrl http://www.scbt.com/datasheet-17785-mef-2-b-4-antibody.html
@@ -11074,7 +11074,7 @@ term MyoD_(sc-32758)
 tag SC32758
 type Antibody
 label MYOD (sc-32758)
-antibodyDescription mouse monoclonal antibody raised against recombinant MYOD of mouse origin with an epitope mapping to amino acids 180-189. Antibody Target: MYOD
+antibodyDescription Mouse monoclonal antibody raised against recombinant MYOD of mouse origin with an epitope mapping to amino acids 180-189. Antibody Target: MYOD
 lab Wold
 lots missing
 orderUrl http://www.scbt.com/datasheet-32758-myod-5-8a-antibody.html
@@ -11090,7 +11090,7 @@ term Myogenin_(sc-12732)
 tag SC12732
 type Antibody
 label Myogenin (sc-12732)
-antibodyDescription mouse monoclonal antibody; epitope mapping within amino acids 138-158 of myogenin of rat origin. Antibody Target: MYOG
+antibodyDescription Mouse monoclonal antibody; epitope mapping within amino acids 138-158 of myogenin of rat origin. Antibody Target: MYOG
 lab Wold
 orderUrl http://www.scbt.com/datasheet-12732-myogenin-f5d-antibody.html
 target MYOG
@@ -11122,7 +11122,7 @@ term NCoR
 tag NCOR
 type Antibody
 label NCoR (A301-145A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: NCOR1
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: NCOR1
 lab Bernstein
 lots A301-145A-1
 orderUrl http://www.bethyl.com/product/A301-145A/
@@ -11187,7 +11187,7 @@ term NF-E2_(SC-22827)
 tag NFE2b
 type Antibody
 label NF-E2 (sc-22827)
-antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NFE2 of human origin. Antibody Target: NFE2
+antibodyDescription Rabbit polyclonal, epitope: 1-230 mapping at the N-terminus of NFE2 of human origin. Antibody Target: NFE2
 lab Snyder
 orderUrl http://www.scbt.com/product.php?datasheet=22827
 target NFE2
@@ -11235,7 +11235,7 @@ term NF-YA
 tag NFYA
 type Antibody
 label NF-YA
-antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NFYA. Antibody Target: NFYA
+antibodyDescription Rabbit polyclonal affinity purified raised against amino acids 139-347 of recombinant human NFYA. Antibody Target: NFYA
 lab Struhl
 orderUrl http://www.unimi.it/didattica/scienzemfn/
 target NFYA
@@ -11251,7 +11251,7 @@ term NF-YB
 tag NFYB
 type Antibody
 label NF-YB
-antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NFYB. Antibody Target: NFYB
+antibodyDescription Rabbit polyclonal affinity purified raised against recombinant full length human NFYB. Antibody Target: NFYB
 lab Struhl
 orderUrl http://www.unimi.it/didattica/scienzemfn/
 target NFYB
@@ -11331,7 +11331,7 @@ term NSD2_(ab75359)
 tag NSD2AB75359
 type Antibody
 label NSD2 (ab75359)
-antibodyDescription mouse monoclonal, raised against a fusion protein, corresponding to amino acids 1-647 of Human GST-WHSC1/NSD2.
+antibodyDescription Mouse monoclonal, raised against a fusion protein, corresponding to amino acids 1-647 of Human GST-WHSC1/NSD2.
 lab Bernstein
 lots GR47579-1
 orderUrl http://www.abcam.com/WHSC1NSD2-antibody-29D1-ab75359.html
@@ -11347,7 +11347,7 @@ term p300
 tag P300
 type Antibody
 label P300&#47;EP300 (sc-585)
-antibodyDescription Rabbit Polyclonal. Antibody Target: P300
+antibodyDescription Rabbit polyclonal. Antibody Target: P300
 lab Myers
 orderUrl http://www.scbt.com/product.php?datasheet=585
 target P300
@@ -11363,7 +11363,7 @@ term P300_KAT3B
 tag P300KAT3B
 type Antibody
 label P300&#47;EP300&#47;KAT3B (A300-358A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 lab Epstein
 lots A300-358A-1
 orderUrl http://www.bethyl.com/product/A300-358A/p300_Antibody?referrer=search_default
@@ -11396,7 +11396,7 @@ term p300_(SC-48343)
 tag P300c
 type Antibody
 label P300&#47;EP300 (sc-48343)
-antibodyDescription mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: P300
+antibodyDescription Mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: P300
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-48343-p300-f-4-antibody.html
 target P300
@@ -11460,7 +11460,7 @@ term PAX5_(N-15)
 tag PAX5c
 type Antibody
 label PAX5 (ab12000)
-antibodyDescription rabbit polyclonal antibody; epitope is a synthetic peptide: MDLEKNYPTPRTSRT, corresponding to amino acids 1-15 of Human PAX5, cross-reacts with human and mouse PAX5. Antibody Target: PAX5
+antibodyDescription Rabbit polyclonal antibody; epitope is a synthetic peptide: MDLEKNYPTPRTSRT, corresponding to amino acids 1-15 of Human PAX5, cross-reacts with human and mouse PAX5. Antibody Target: PAX5
 lab Hardison
 orderUrl http://www.abcam.com/PAX5-antibody-ab12000.html
 target PAX5
@@ -11476,7 +11476,7 @@ term Pbx3
 tag PBX3
 type Antibody
 label PBX3 (sc-891)
-antibodyDescription Rabbit Polyclonal IgG. Antibody Target: PBX3
+antibodyDescription Rabbit polyclonal IgG. Antibody Target: PBX3
 lab Myers
 orderUrl http://www.scbt.com/product.php?datasheet=891
 target PBX3
@@ -11492,7 +11492,7 @@ term PCAF
 tag PCAF
 type Antibody
 label PCAF&#47;KAT2B (A301-666A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 lab Epstein
 lots A301-666A-1
 orderUrl http://www.bethyl.com/product/A301-666A/PCAF_Antibody?referrer=search_default
@@ -11508,7 +11508,7 @@ term PGC1A
 tag PGC1A
 type Antibody
 label PGC1A (sc-13067)
-antibodyDescription rabbit polyclonal IgG. Antibody Target: PGC1A
+antibodyDescription Rabbit polyclonal IgG. Antibody Target: PGC1A
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-13067-pgc-1-h-300-antibody.html
 target PGC1A
@@ -11588,7 +11588,7 @@ term Pol2
 tag POL2
 type Antibody
 label POL2 (MMS-126R)
-antibodyDescription mouse monoclonal, clone 8WG16. Antibody Target: POL2
+antibodyDescription Mouse monoclonal, clone 8WG16. Antibody Target: POL2
 lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
@@ -11605,7 +11605,7 @@ term Pol2(b)
 tag POL2b
 type Antibody
 label POL2B (MMS-128P)
-antibodyDescription mouse monoclonal, clone CTD4H8. Antibody Target: POL2B
+antibodyDescription Mouse monoclonal, clone CTD4H8. Antibody Target: POL2B
 lab Bernstein
 lots 147337002
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
@@ -11654,7 +11654,7 @@ term Pol3
 tag POL3
 type Antibody
 label POL3 (sc-21754)
-antibodyDescription mouse monoclonal IgG1. Antibody Target: POL3
+antibodyDescription Mouse monoclonal IgG1. Antibody Target: POL3
 lab Snyder
 orderUrl http://www.scbt.com/product.php?datasheet=21754
 target POL3
@@ -11686,7 +11686,7 @@ term POU2F2
 tag POU2F2
 type Antibody
 label POU2F2 (sc-233)
-antibodyDescription Oct-2(C-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of Oct-2 of human origin. Recommended for detection of Oct-2 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: POU2F2
+antibodyDescription Rabbit polyclonal. Oct-2(C-20) is an affinity purified antibody raised against a peptide mapping at the C-terminus of Oct-2 of human origin. Recommended for detection of Oct-2 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: POU2F2
 lab Myers
 orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 target POU2F2
@@ -11702,7 +11702,7 @@ term PRDM1_(9115)
 tag PRDM1
 type Antibody
 label PRDM1 (9115)
-antibodyDescription Rabbit Monoclonal antibody against a synthetic peptide corresponding to residues surrounding Val90 of human PRDI-BF1. Antibody Target: PRDM1
+antibodyDescription Rabbit monoclonal antibody against a synthetic peptide corresponding to residues surrounding Val90 of human PRDI-BF1. Antibody Target: PRDM1
 lab Snyder
 orderUrl http://www.cellsignal.com/products/9115.html#references
 target PRDM1
@@ -11718,7 +11718,7 @@ term PU.1
 tag PU1
 type Antibody
 label PU1 (sc-22805)
-antibodyDescription Rabbit Polyclonal IgG. Antibody Target: PU1
+antibodyDescription Rabbit polyclonal IgG. Antibody Target: PU1
 lab Myers
 orderUrl http://www.scbt.com/product.php?datasheet=22805
 target PU1
@@ -11767,7 +11767,7 @@ term REST
 tag REST
 type Antibody
 label REST (17-641)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 lab Epstein
 lots JH1786670
 orderUrl http://www.millipore.com/catalogue/item/17-641
@@ -11798,7 +11798,7 @@ term RNF2
 tag RNF2
 type Antibody
 label RNF2 (A302-869A)
-antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 lab Epstein
 lots A302-869A-1
 orderUrl http://www.bethyl.com/product/A302-869A/RNF2__Antibody?referrer=RNF2
@@ -11862,7 +11862,7 @@ term RXRA
 tag RXRA
 type Antibody
 label RXRA (sc-553)
-antibodyDescription RXRa(D-20) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the N-terminus of RXRalpha of human origin. Recommended for detection of RXRalpha of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: RXRA
+antibodyDescription Rabbit polyclonal. RXRa(D-20) is an affinity purified antibody raised against a peptide mapping at the N-terminus of RXRalpha of human origin. Recommended for detection of RXRalpha of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: RXRA
 lab Myers
 orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
 target RXRA
@@ -11910,7 +11910,7 @@ term SETDB1_(SC-66884)
 tag SETDB1b
 type Antibody
 label SETDB1 (sc-66884)
-antibodyDescription SETDB1 (H-300) is an affinity purified rabbit polyclonal antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog. Antibody Target: SETDB1
+antibodyDescription Rabbit polyclonal. SETDB1 (H-300) is an affinity purified antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog. Antibody Target: SETDB1
 lab Farnham
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 target SETDB1
@@ -11991,7 +11991,7 @@ term SIX5
 tag SIX5
 type Antibody
 label SIX5 (sc-55706)
-antibodyDescription Six5 (K-20) Goat polyclonal IgG, 200?g/ml. Epitope mapping near the C-terminus of Six5 of human origin. Recommended for detection of Six5 of human origin by WB, IF and ELISA. Antibody Target: SIX5
+antibodyDescription Goat polyclonal IgG. Six5 (K-20) Epitope mapping near the C-terminus of Six5 of human origin. Recommended for detection of Six5 of human origin by WB, IF and ELISA. Antibody Target: SIX5
 lab Myers
 orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
 target SIX5
@@ -12037,7 +12037,7 @@ term SP1
 tag SP1
 type Antibody
 label SP1 (sc-17824)
-antibodyDescription Sp1(E-3) is a mouse monoclonal antibody raised against amino acids 121-345 mapping near the N-terminus of Sp1 ofhuman origin. Recommended for detection of Sp1 of m, r and h origin by WB, IP, IF and ELISA. Antibody Target: SP1
+antibodyDescription Mouse monoclonal. Sp1(E-3) is raised against amino acids 121-345 mapping near the N-terminus of Sp1 ofhuman origin. Recommended for detection of Sp1 of m, r and h origin by WB, IP, IF and ELISA. Antibody Target: SP1
 lab Myers
 orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
 target SP1
@@ -12151,7 +12151,7 @@ term STAT1
 tag STAT1
 type Antibody
 label STAT1 (sc-345)
-antibodyDescription rabbit polyclonal to STAT1 (alpha) p-91 (C-24). Antibody Target: STAT1
+antibodyDescription Rabbit polyclonal to STAT1 (alpha) p-91 (C-24). Antibody Target: STAT1
 lab Snyder
 lots G2406 and K2106
 orderUrl http://www.scbt.com/product.php?datasheet=345
@@ -12184,7 +12184,7 @@ term STAT3
 tag STAT3
 type Antibody
 label STAT3 (sc-482)
-antibodyDescription Rabbit polyclonal; epitope mapping at the C-terminus of Stat3 of mouse origin. Antibody Target: STAT3
+antibodyDescription Rabbit polyclonal. Epitope mapping at the C-terminus of Stat3 of mouse origin. Antibody Target: STAT3
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-482-stat3-c-20-antibody.html
 target STAT3
@@ -12233,7 +12233,7 @@ term SUZ12
 tag SUZ12
 type Antibody
 label SUZ12 (SUZ12)
-antibodyDescription rabbit polyclonal. Antibody Target: SUZ12
+antibodyDescription Rabbit polyclonal. Antibody Target: SUZ12
 lab Farnham
 orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205
 target SUZ12
@@ -12249,7 +12249,7 @@ term T7Tag
 tag T7
 type Antibody
 label T7Tag (AB3790; Nov 69522)
-antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore and Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal). Antibody Target: T7Tag
+antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore and Novagen 69522 Negative Control Ab (T7 Tag Mouse monoclonal). Antibody Target: T7Tag
 lab Tenenbaum
 orderUrl http://www.millipore.com/
 target T7Tag
@@ -12297,7 +12297,7 @@ term TAL1_(SC-12984)
 tag TAL1
 type Antibody
 label TAL1 (sc-12984)
-antibodyDescription goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin, recommended for detection of TAL1 of mouse, rat and human origin. Antibody Target: TAL1
+antibodyDescription Goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin, recommended for detection of TAL1 of mouse, rat and human origin. Antibody Target: TAL1
 lab Hardison
 orderUrl http://www.scbt.com/datasheet-12984-tal1-c-21-antibody.html
 target TAL1
@@ -12377,7 +12377,7 @@ term TCF12
 tag TCF12
 type Antibody
 label TCF12 (sc-357)
-antibodyDescription HEB (A-20) Rabbit polyclonal IgG, 200 ?g/ml. Epitope mapping within the C-terminus of HEB of human origin. Antibody Target: TCF12
+antibodyDescription Rabbit polyclonal IgG HEB (A-20) Epitope mapping within the C-terminus of HEB of human origin. Antibody Target: TCF12
 lab Myers
 orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 target TCF12
@@ -12393,7 +12393,7 @@ term TCF3_(SC-349)
 tag TCF3
 type Antibody
 label TCF3 (sc-349)
-antibodyDescription E2A.E12(V-18) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Recommended for detection of E12 and E47 of m, r and h origin by WB, IP, IF, IHC(P), ELISA and indirect FCM using PE (sc-3739)- or FITC (sc-2012)-conjugated goat anti-rabbit IgG. Antibody Target: TCF3
+antibodyDescription Rabbit polyclonal. E2A.E12(V-18) is an affinity purified antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Recommended for detection of E12 and E47 of m, r and h origin by WB, IP, IF, IHC(P), ELISA and indirect FCM using PE (sc-3739)- or FITC (sc-2012)-conjugated goat anti-rabbit IgG. Antibody Target: TCF3
 lab Myers
 lots A1111
 orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
@@ -12494,7 +12494,7 @@ term TFIIIC-110
 tag TF3C110
 type Antibody
 label TFIIIC-110 (4286)
-antibodyDescription rabbit polyclonal. Antibody Target: TFIIIC-110
+antibodyDescription Rabbit polyclonal. Antibody Target: TFIIIC-110
 lab Struhl
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 target TFIIIC-110
@@ -12592,7 +12592,7 @@ term UBF_(sc-13125)
 tag UBFSC13125
 type Antibody
 label UBF (sc-13125)
-antibodyDescription UBF (F-9) is a mouse monoclonal antibody raised against amino acids 1-220 of UBF of human origin. Antibody Target: UBTF
+antibodyDescription Mouse monoclonal. UBF (F-9) is raised against amino acids 1-220 of UBF of human origin. Antibody Target: UBTF
 lab Snyder
 lots B1804
 orderUrl http://www.scbt.com/datasheet-13125-ubf-f-9-antibody.html
@@ -12691,7 +12691,7 @@ term WHIP
 tag WHIP
 type Antibody
 label WHIP (ab4731)
-antibodyDescription Rabbit polyclonal; Immunogen:Synthetic peptide: SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WHIP
+antibodyDescription Rabbit polyclonal. Immunogen: (Synthetic peptide) SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WHIP
 lab Snyder
 orderUrl http://www.abcam.com/WHIP-antibody-ab4731.html
 target WHIP
@@ -12756,7 +12756,7 @@ term ZBTB33
 tag ZBTB33
 type Antibody
 label ZBTB33 (sc-23871)
-antibodyDescription Kaiso (6F8) Mouse monoclonal IgG1. Raised against amino acids 1-504 representing full length Kaiso of human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA. Antibody Target: ZBTB33
+antibodyDescription Mouse monoclonal IgG1. Kaiso (6F8) was raised against amino acids 1-504 representing full length Kaiso of human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA. Antibody Target: ZBTB33
 lab Myers
 orderUrl http://www.scbt.com/datasheet-23871-kaiso-6f8-antibody.html
 target ZBTB33
@@ -12852,7 +12852,7 @@ vendorName Proteintech
 term ZNF-MIZD-CP1_(ab65767)
 tag ZNFMIZDCP1AB65767
 type Antibody
-antibodyDescription Rabbit Polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1.
+antibodyDescription Rabbit polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1.
 lab Snyder
 lots GR30927-1
 orderUrl http://www.abcam.com/Zinc-finger-MIZ-domain-containing-protein-1-antibody-ab65767.html
@@ -12868,7 +12868,7 @@ term ZNF217
 tag ZNF217
 type Antibody
 label ZNF217 (ZNF217)
-antibodyDescription A rabbit polyclonal antibody raised against a recombinant ZNF217 protein corresponding to the 1562-2207 nucleotides from a human ZNF217 cDNA. Antibody Target: ZNF217
+antibodyDescription Rabbit polyclonal antibody raised against a recombinant ZNF217 protein corresponding to the 1562-2207 nucleotides from a human ZNF217 cDNA. Antibody Target: ZNF217
 lab Farnham
 lots N/A
 orderUrl http://stemcellcenter.berkeley.edu/PIs/yaswen.html
@@ -12949,7 +12949,7 @@ term ZZZ3
 tag ZZZ3
 type Antibody
 label ZZZ3
-antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW). Antibody Target: ZZZ3
+antibodyDescription Rabbit polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW). Antibody Target: ZZZ3
 lab Struhl
 orderUrl http://www.igbmc.fr
 target ZZZ3
