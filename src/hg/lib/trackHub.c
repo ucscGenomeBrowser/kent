@@ -448,6 +448,63 @@ if (relativeUrl != NULL)
 return retVal;
 }
 
+static void fixName(char *name)
+/* change all characters other than alphanumeric, dash, and underbar
+ * to underbar */
+{
+if (name == NULL)
+    return;
+
+char *in = name;
+char c;
+
+for(; (c = *in) != 0; in++)
+    {
+    if (c == ' ')
+	break;
+
+    if (!(isalnum(c) || c == '-' || c == '_'))
+	*in = '_';
+    }
+}
+
+static void polishOneTrack( struct trackHub *hub, struct trackDb *bt,
+    struct hash *hash)
+/* get rid of special characters in track name, squirrel away a copy
+ * of the original name for html retrieval, make sure there aren't 
+ * two tracks with the same name */
+{
+char *htmlName = trackDbSetting(bt, "html");
+
+/* if the user didn't specify an html variable, set it to be the original
+ * track name */
+if (htmlName == NULL)
+    trackDbAddSetting(bt, "html", bt->track);
+
+fixName(bt->track);
+
+if (hashLookup(hash, bt->track) != NULL)
+    errAbort("more than one track called %s in hub %s\n", bt->track, hub->url);
+hashStore(hash, bt->track);
+}
+
+void trackHubPolishTrackNames(struct trackHub *hub, struct trackDb *tdbList)
+/* remove all the special characters from trackHub track names */
+{
+struct trackDb *next, *tdb;
+struct hash *nameHash = hashNew(5);
+
+for (tdb = tdbList; tdb != NULL; tdb = next)
+    {
+    next = tdb->next;
+    polishOneTrack(hub, tdb, nameHash);
+    if (tdb->subtracks != NULL)
+	{
+	trackHubPolishTrackNames(hub, tdb->subtracks);
+	}
+    }
+}
+
 static int hubCheckGenome(struct trackHub *hub, struct trackHubGenome *genome,
     struct dyString *errors, boolean checkTracks)
 /* Check out genome within hub. */
@@ -457,7 +514,10 @@ struct trackDb *tdbList = NULL;
 int retVal = 0;
 
 if (errCatchStart(errCatch))
+    {
     tdbList = trackHubTracksForGenome(hub, genome);
+    trackHubPolishTrackNames(hub, tdbList);
+    }
 errCatchEnd(errCatch);
 
 if (errCatch->gotError)
