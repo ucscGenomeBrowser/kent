@@ -8195,7 +8195,7 @@ targetId GeneCard:ATF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
 validation Human_-_ATF2_(9221)(Western_blot,Immunoprecipitation):human_ATF2_9221_validation_Struhl.pdf
 vendorId 9221
-vendorName Cell Signaling
+vendorName Cell Signaling Technology
 
 
 term ATF2_(sc-6233)
@@ -8389,7 +8389,7 @@ targetId GeneCard:BDP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BDP1
 validation Human_-_BDP1(2663):human_BDP1_2663_validation_Struhl.pdf
 vendorId 2663
-vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
+vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
 term BHLHE40
 tag BHLHE40
@@ -8454,7 +8454,7 @@ targetId GeneCard:BRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF1
 validation Human_-_BRF1(128):human_BRF1_128_validation_Struhl.pdf
 vendorId 128
-vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
+vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
 term BRF2
 tag BRF2
@@ -8470,7 +8470,7 @@ targetId GeneCard:BRF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2
 validation Human_-_BRF2(4295):human_BRF2_4295_validation_Struhl.pdf
 vendorId 4295
-vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
+vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
 term Brg1
 tag BRG1
@@ -8901,7 +8901,7 @@ targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
 validation Human_-_CREB1_(9188)_(Cell_Signaling_9198)(Western_blot,ChIP):human_CREB1_9198_validation_Struhl.pdf
 vendorId 9198
-vendorName Cell Signaling
+vendorName Cell Signaling Technology
 
 term CREB1_(SC-240)
 tag CREB1SC240
@@ -8950,7 +8950,7 @@ targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation CTCF_(2899)(Western_blot):human_CTCF_2899_validation_Stam.pdf
 vendorId 2899
-vendorName Cell Signaling
+vendorName Cell Signaling Technology
 
 term CTCF_(SC-15914)
 tag CTCFb
@@ -9105,7 +9105,7 @@ label BACH1 (eGFP-BACH1)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1. Antibody Target: eGFP-BACH1
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-BACH1
 targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
 targetId GeneCard:BACH1
@@ -9121,7 +9121,7 @@ label CCNE1 (eGFP-CCNE1)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CCNE1. Antibody Target: eGFP-CCNE1
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-CCNE1
 targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family, whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases. Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event. (provided by RefSeq)
 targetId GeneCard:CCNE1
@@ -9137,7 +9137,7 @@ label CDKN1B (eGFP-CDKN1B)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CDKN1B. Antibody Target: eGFP-CDKN1B
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-CDKN1B
 targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21. The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1 (provided by RefSeq)
 targetId GeneCard:CDKN1B
@@ -9153,7 +9153,7 @@ label E2F1 (eGFP-E2F1)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor E2F1. Antibody Target: eGFP-E2F1
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-E2F1
 targetClass TFSS
 targetDescription The protein encoded by this gene is a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses (provided by RefSeq)
@@ -9170,7 +9170,7 @@ label ELF1 (eGFP-ELF1)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ELF1. Antibody Target: eGFP-ELF1
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-ELF1
 targetDescription This gene encodes an E26 transformation-specific related transcription factor. The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes. Alternative splicing results in multiple transcript variants (provided by RefSeq)
 targetId GeneCard:ELF1
@@ -9186,7 +9186,7 @@ label ESR (eGFP-ESR)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ESRA. Antibody Target: eGFP-ESR
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-ESR
 targetClass TFSS
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. (provided by RefSeq)
@@ -9251,7 +9251,7 @@ label HMGB1 (eGFP-HMGB1)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGB1. Antibody Target: eGFP-HMGB1
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-HMGB1
 targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA. Involved in V(D)J recombination by acting as a cofactor of the RAG complex. (provided by RefSeq)
 targetId GeneCard:HMGB1
@@ -9267,7 +9267,7 @@ label ILF2 (eGFP-ILF2)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ILF2. Antibody Target: eGFP-ILF2
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-ILF2
 targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2. In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase. (provided by RefSeq)
 targetId GeneCard:ILF2
@@ -9315,7 +9315,7 @@ label MLL5 (eGFP-MLL5)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor MLL5. Antibody Target: eGFP-MLL5
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-MLL5
 targetDescription This gene is a member of the myeloid/lymphoid or mixed-lineage leukemia (MLL) family and encodes a protein with an N-terminal PHD zinc finger and a central SET domain. Overexpression of the protein inhibits cell cycle progression. (provided by RefSeq)
 targetId GeneCard:MLL5
@@ -9331,7 +9331,7 @@ label NCOR1 (eGFP-NCOR1)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NCOR1. Antibody Target: eGFP-NCOR1
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-NCOR1
 targetDescription This gene encodes a protein that mediates ligand-independent transcription repression of thyroid-hormone and retinoic-acid receptors by promoting chromatin condensation and preventing access of the transcription machinery. It is part of a complex which also includes histone deacetylases and transcriptional regulators similar to the yeast protein Sin3p. This gene is located between the Charcot-Marie-Tooth and Smith-Magenis syndrome critical regions on chromosome 17 (provided by RefSeq)
 targetId GeneCard:NCOR1
@@ -9347,7 +9347,7 @@ label NF90 (eGFP-NF90)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90. Antibody Target: eGFP-NF90
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-NF90
 targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45. (provided by RefSeq)
 targetId GeneCard:ILF3
@@ -9379,7 +9379,7 @@ label SMARCA1 (eGFP-SMARCA1)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA1. Antibody Target: eGFP-SMARCA1
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-SMARCA1
 targetDescription This gene encodes a member of the SWI/SNF family of proteins. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes. (provided by RefSeq)
 targetId GeneCard:SMARCA1
@@ -9395,7 +9395,7 @@ label SMARCA2 (eGFP-SMARCA2)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA2. Antibody Target: eGFP-SMARCA2
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-SMARCA2
 targetDescription The protein encoded by this gene is a member of the SWI/SNF family of proteins and is highly similar to the brahma protein of Drosophila. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes (provided by RefSeq)
 targetId GeneCard:SMARCA2
@@ -9411,7 +9411,7 @@ label STAT1 (eGFP-STAT1)
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor STAT1. Antibody Target: eGFP-STAT1
 lab White
 lots 1
-orderUrl http://www.igsb.org/labs/kevin-white/
+orderUrl http://www.genes.uchicago.edu/white.html
 target eGFP-STAT1
 targetClass TFSS
 targetDescription The protein encoded by this gene is a member of the STAT protein family. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6 (provided by RefSeq)
@@ -9882,7 +9882,7 @@ targetId GeneCard:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A
 validation Human_-_:missing
 vendorId GCN5
-vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
+vendorName Dr. Lazlo Tora at Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
 
 term GR
 tag GR
@@ -10091,7 +10091,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K4me3B(Western_blot,Competitor_peptides):human_H3K4me3B_validation_Farnham.pdf
 vendorId 9751S
-vendorName Cell Signaling
+vendorName Cell Signaling Technology
 
 term H3K9ac
 tag H3K09AC
@@ -10138,7 +10138,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K9Ac_(9649)(Western_blot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
 vendorId 9649
-vendorName Cell Signaling
+vendorName Cell Signaling Technology
 
 term H3K9acB
 tag H3K09ACb
@@ -10203,7 +10203,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K9me3_(9754)(Western_blot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
 vendorId 9754
-vendorName Cell Signaling
+vendorName Cell Signaling Technology
 
 term H3K27ac
 tag H3K27AC
@@ -10282,7 +10282,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K27me3B(Western_blot,Peptide_ELISA):human_H3K27me3B_validation_Farnham.pdf
 vendorId 9733S
-vendorName Cell Signaling
+vendorName Cell Signaling Technology
 
 term H3K36me3
 tag H3K36ME3
@@ -10314,7 +10314,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K36me3B(Western_blot,Peptide_ELISA):human_H3K36me3B_validation_Farnham.pdf
 vendorId 9763S
-vendorName Cell Signaling
+vendorName Cell Signaling Technology
 #lots
 
 term H3K79me2
@@ -11244,8 +11244,8 @@ targetDescription NFYA is the alpha subunit of the trimeric NFY transcription fa
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
 validation Human_-_NF-YA(Western_blot,Immunoprecipitation):human_NF-YA_validation_Struhl.pdf
-vendorId Missing
-vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
+vendorId NF-YA
+vendorName Dr. R. Mantovani at Universita degli Studi di Milano
 
 term NF-YB
 tag NFYB
@@ -11260,8 +11260,8 @@ targetDescription NFYB is the beta subunit of the trimeric NFY transcription fac
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
 validation Human_-_NF-YB(Western_blot,Immunoprecipitation):human_NF-YB_validation_Struhl.pdf
-vendorId Missing
-vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
+vendorId NF-YB
+vendorName Dr. R. Mantovani at Universita degli Studi di Milano
 
 term Nrf1
 tag NRF1
@@ -11566,7 +11566,7 @@ targetId GeneCard:KDM5B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation Human_-_PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
 vendorId PLU1
-vendorName YangShi lab
+vendorName Dr. Yang Shi at Harvard 
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -11840,7 +11840,7 @@ targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
 validation Human_-_RPC155(1900):human_RPC155_1900_validation_Struhl.pdf
 vendorId 1900
-vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
+vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
 term RUNX3_(SC-101553)
 tag RUNX3SC101553
@@ -12096,7 +12096,7 @@ targetId GeneCard:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A
 validation Human_-_:missing
 vendorId SPT20
-vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
+vendorName Dr. Lazlo Tora at Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
 
 term SREBP1
 tag SREBP1
@@ -12504,7 +12504,7 @@ targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 validation Human_-_TFIIIC-110(4286):human_TFIIIC-110_4286_validation_Struhl.pdf
 vendorId 4286
-vendorName Dr. Robert J. White, Beatson Institute for Cancer Research, UK
+vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
 term THAP1_(SC-98174)
 tag THAP1
@@ -12553,7 +12553,7 @@ targetId GeneCard:NR2C2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR2C2
 validation Human_-_TR4_(Western_blot,ChIP):human_TR4_validation_Farnham.pdf
 vendorId TR4
-vendorName Donated by Dr. J.D.Engel, University of Michigan
+vendorName Dr. J.D. Engel at University of Michigan
 
 term TRIM28_(SC-81411)
 tag TRIM28SC81411
@@ -12878,7 +12878,7 @@ targetId GeneCard:ZNF217
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF217
 validation Human_-_ZNF217_(Western_blot,SiRNA):human_ZNF217_validation_Farnham.pdf
 vendorId ZNF217
-vendorName Dr. Paul Yaswen
+vendorName Dr. Paul Yaswen at UC Berkeley
 
 term ZNF263
 tag ZNF263
@@ -12959,7 +12959,7 @@ targetId GeneCard:ZZZ3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation Human_-_:missing
 vendorId ZZZ3
-vendorName Dr. Lazlo Tora, Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
+vendorName Dr. Lazlo Tora at Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
 
 
 ### mapAlgorithm : Comparing map algorithms
