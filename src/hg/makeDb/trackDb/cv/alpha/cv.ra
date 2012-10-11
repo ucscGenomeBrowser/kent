@@ -8336,6 +8336,7 @@ lab Myers
 lots B2811
 orderUrl http://www.scbt.com/datasheet-56011-bcl-11a-14b5-antibody.html
 target BCL11A
+targetClass TFSS
 targetDescription This gene encodes a C2H2 type zinc-finger protein by its similarity to the mouse Bcl11a/Evi9 protein. The corresponding mouse gene is a common site of retroviral integration in myeloid leukemia, and may function as a leukemia disease gene, in part, through its interaction with BCL6. During hematopoietic cell differentiation, this gene is down-regulated. It is possibly involved in lymphoma pathogenesis since translocations associated with B-cell malignancies also deregulates its expression. Multiple transcript variants encoding several different isoforms have been found for this gene. (provided by RefSeq)
 targetId GeneCard:BCL11A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
@@ -8945,6 +8946,7 @@ lab Stam
 lots Lot1
 orderUrl http://www.cellsignal.com/products/2899.html
 target CTCF
+targetClass TFSS
 targetDescription CTCF is a ubiquitously expressed 11 zinc-finger protein that plays a central role in multiple complex processes, including transcription, imprinting, long-range chromatin interactions, subnuclear localization. CTCF has also been connected with multiple malignancies.
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
@@ -10116,7 +10118,7 @@ antibodyDescription Rabbit polyclonal to Histone H3 K9 acetylation
 lab Ren
 lots 1008001
 orderUrl http://www.activemotif.com/catalog/details/39137/histone-h3-acetyl-lys9-antibody-pab
-target H3K9Ac
+target H3K9ac
 targetDescription Detect only Histone H3 K9 acetylation
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
@@ -10127,13 +10129,13 @@ vendorName Active Motif
 term H3K9Ac_(9649)
 tag H3K09ACc
 type Antibody
-label H3K9Ac (9649)
-antibodyDescription Rabbit monoclonal antibody corrresponds to the amino terminus of acetyl-histone H3 (Lys9), this antibody does not cross-react with other acetylated histones. Antibody Target: H3K9Ac
+label H3K9ac (9649)
+antibodyDescription Rabbit monoclonal antibody corrresponds to the amino terminus of acetyl-histone H3 (Lys9), this antibody does not cross-react with other acetylated histones. Antibody Target: H3K9ac
 lab Farnham
 lots 1
 orderUrl http://www.cellsignal.com/products/9649.html
-target H3K9Ac
-targetDescription H3K9Ac, acetyl-histone H3 (Lys9)
+target H3K9ac
+targetDescription H3K9ac, acetyl-histone H3 (Lys9)
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K9Ac_(9649)(Western_blot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
@@ -10228,7 +10230,7 @@ antibodyDescription Rabbit polyclonal to Histone H3 K27 acetylation
 lab Ren
 lots 19208002
 orderUrl http://www.activemotif.com/catalog/details/39133/histone-h3-acetyl-lys27-antibody-pab
-target H3K27Ac
+target H3K27ac
 targetDescription Specific for detecting Histone H3 K27 acetylation only
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
@@ -10864,11 +10866,11 @@ vendorName Sigma-Aldrich
 term MafK_(ab50322)
 tag MAFK
 type Antibody
-label MafK (ab50322)
-antibodyDescription Rabbit polyclonal. Raised against synthetic peptide: TTNPKPNKALKVKKEA conjugated to KLH by a C-terminal Cysteine residue linker, corresponding to amino acids 2-17 of Human MAFK. Antibody Target: MafK
+label MAFK (ab50322)
+antibodyDescription Rabbit polyclonal. Raised against synthetic peptide: TTNPKPNKALKVKKEA conjugated to KLH by a C-terminal Cysteine residue linker, corresponding to amino acids 2-17 of Human MAFK. Antibody Target: MAFK
 lab Snyder
 orderUrl http://www.abcam.com/MAFK-antibody-ab50322.html
-target MafK
+target MAFK
 targetClass TFSS
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
 targetId GeneCard:MAFK
@@ -10880,11 +10882,11 @@ vendorName abcam
 term MafK_(SC-477)
 tag MAFKb
 type Antibody
-label MafK (sc-477)
-antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin. Antibody Target: MafK
+label MAFK (sc-477)
+antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin. Antibody Target: MAFK
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
-target MafK
+target MAFK
 targetClass TFSS
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
 targetId GeneCard:MAFK
@@ -10896,12 +10898,12 @@ vendorName Santa Cruz Biotechnology
 term Max
 tag MAX
 type Antibody
-label Max (sc-197)
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin. Antibody Target: Max
+label MAX (sc-197)
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin. Antibody Target: MAX
 lab Myers, Snyder
 lots J0809
 orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
-target Max
+target MAX
 targetClass TFSS
 targetDescription The protein encoded by this gene is a member of the basic helix-loop-helix leucine zipper (bHLHZ) family of transcription factors. It is able to form homodimers and heterodimers with other family members, which include Mad, Mxi1 and Myc. Myc is an oncoprotein implicated in cell proliferation, differentiation and apoptosis. The homodimers and heterodimers compete for a common DNA target site (the E box) and rearrangement among these dimer forms provides a complex system of transcriptional regulation. Multiple alternatively spliced transcript variants have been described for this gene but the full-length nature for some of them is unknown (RefSeq).
 targetId GeneCard:MAX
@@ -10981,6 +10983,7 @@ lab Wold
 lots missing
 orderUrl http://www.scbt.com/datasheet-17785-mef-2-b-4-antibody.html
 target MEF2
+targetClass TFSS
 targetDescription The MADS box transcription enhancer factor 2 (MEF2) family of proteins plays a role in myogenesis.
 targetId GeneCard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
@@ -11914,6 +11917,7 @@ antibodyDescription Rabbit polyclonal. SETDB1 (H-300) is an affinity purified an
 lab Farnham
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 target SETDB1
+targetClass HISase
 targetDescription SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
@@ -12250,11 +12254,12 @@ tag T7
 type Antibody
 label T7Tag (AB3790; Nov 69522)
 antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore and Novagen 69522 Negative Control Ab (T7 Tag Mouse monoclonal). Antibody Target: T7Tag
-lab Tenenbaum
-orderUrl http://www.millipore.com/
+lab Tenenbaum0
+orderUrl http://www.millipore.com/catalogue/item/ab3790
 target T7Tag
 targetDescription T7 (MASMTGGQQMG)
 targetId Negative Control
+targetUrl http://www.millipore.com/catalogue/item/ab3790
 validation Human_-_T7-Tag_(Negative Control):human_T7tag_validation_Tenenbaum.pdf
 vendorId AB3790; Nov_69522
 vendorName 1)Millipore; 2)Novagen
