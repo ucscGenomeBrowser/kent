@@ -82,6 +82,8 @@ static struct optionSpec optionSpecs[] = {
     {"log", OPTION_STRING},
     {"debug", OPTION_BOOLEAN},
     {"noResume", OPTION_BOOLEAN},
+    {"ramUnit", OPTION_STRING},
+    {"defaultJobRam", OPTION_INT},
     {NULL, 0}
 };
 
@@ -130,6 +132,12 @@ errAbort("paraHub - parasol hub server version %s\n"
          "   -log=file  Log to file instead of syslog.\n"
          "   -debug  Don't daemonize\n"
 	 "   -noResume  Don't try to reconnect with jobs running on nodes.\n"
+         "   -ramUnit=N  Number of bytes of RAM in the base unit used by the jobs.\n"
+         "      Default is RAM on node divided by number of cpus on node.\n"
+         "      Shorthand expressions allow t,g,m,k for tera, giga, mega, kilo.\n"
+         "      e.g. 4g = 4 Gigabytes.\n"
+	 "   -defaultJobRam=N Number of ram units in a job has no specified ram usage.\n"
+	 "      Defaults to 1.\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
 	 );
@@ -1071,6 +1079,8 @@ while(TRUE)
 
     job->machine = machine;
     job->lastChecked = job->startTime = job->lastClockIn = now;
+    if (!(job->ram))  /* if no ram size specified, use the default */
+	job->ram = batch->ram * ramUnit;
     spokeSendJob(spoke, machine, job);
     return TRUE;
     }
@@ -2957,10 +2967,12 @@ while (lineFileRow(lf, row))
 	{
 	firstTime = FALSE;
 	cpuUnit = 1;       /* 1 CPU */
-	ramUnit = ((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
+	if (!optionExists("ramUnit"))
+    	    ramUnit = ((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
 	defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
 	/* number of ramUnits in default job usage, resolves to just 1 currently */
-	defaultJobRam = (((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus) / ramUnit;
+	if (!optionExists("defaultJobRam"))
+    	    defaultJobRam = (((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus) / ramUnit;
 	}
 
     int c = 0, r = 0;
@@ -3403,6 +3415,18 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
+if (optionExists("ramUnit"))
+    {
+    ramUnit = paraParseRam(optionVal("ramUnit", ""));
+    if (ramUnit == -1)
+	errAbort("Invalid RAM expression '%s' in '-ramUnit=' option", optionVal("ramUnit", ""));
+    }
+if (optionExists("defaultJobRam"))
+    {
+    defaultJobRam = optionInt("defaultJobRam", defaultJobRam);
+    if (defaultJobRam < 1)
+	errAbort("Invalid defaultJobRam specified in option -defaultJobRam=%d", defaultJobRam);
+    }
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);

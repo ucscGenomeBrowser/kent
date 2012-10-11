@@ -491,6 +491,7 @@ values.  To find the symbolic name of a composite track, look in the
 <em>tableName</em> field in the <em>trackDb</em> table, or mouseover the track
 name in the track control section. It is not possible to display only a subset
 of the subtracks at this time.
+
 <UL>
    <LI><B>position <<I>position</I>></B> - Determines the part of the genome
    that the Genome Browser will initially open to, in chromosome:start-end format.  
@@ -498,32 +499,42 @@ of the subtracks at this time.
 	specified width in pixels.--->
    <LI><B>hide all</B> - Hides all annotation tracks except for those listed
    in the custom track file.
-   <LI><B>hide <<I>track_name(s)</I>></B> - Hides the listed tracks.
+   <LI><B>hide &lt;<I>track_primary_table_name(s)</I>&gt;</B> - Hides the listed tracks.
    Multiple track names should be space-separated. 
    <LI><B>dense all</B> - Displays all tracks in dense mode. NOTE: Use the
    &quot;all&quot; option cautiously. If the
    browser display includes a large number of tracks or a large position 
    range, this option may overload your browser's resources and cause an
    error or timeout.
-   <LI><B>dense <<I>track_name(s)</I>></B> - Displays the specified tracks in
+   <LI><B>dense &lt;<I>track_primary_table_name(s)</I>&gt;</B> - Displays the specified tracks in
    dense mode. Symbolic names must be used. Multiple track names should be
    space-separated. 
    <LI><B>pack all</B> - Displays all tracks in pack mode. See NOTE for 
    &quot;dense all&quot;.
-   <LI><B>pack <<I>track_name(s)</I>></B> - Displays the specified tracks in
+   <LI><B>pack &lt;<I>track_primary_table_name(s)</I>&gt;</B> - Displays the specified tracks in
    pack mode. Symbolic names must be used. Multiple track names should be 
    space-separated. 
    <LI><B>squish all</B> - Displays all tracks in squish mode. See NOTE for 
    &quot;dense all&quot;.
-   <LI><B>squish <<I>track_name(s)</I>></B> - Displays the specified tracks in
+   <LI><B>squish &lt;<I>track_primary_table_name(s)</I>&gt;</B> - Displays the specified tracks in
    squish mode. Symbolic names must be used. Multiple track names should be 
    space-separated. 
    <LI><B>full all</B> - Displays all tracks in full mode. See NOTE for 
    &quot;dense all&quot;.
-   <LI><B>full <<I>track_name(s)</I>></B> - Displays the specified tracks in
+   <LI><B>full &lt;<I>track_primary_table_name(s)</I>&gt;</B> - Displays the specified tracks in
    full mode. Symbolic names must be used. Multiple track names should be 
    space-separated. 
 </UL>
+
+<p>Definition: <strong><i>&lt;track_primary_table_name(s)&gt;</i></strong>. You can find the primary table
+name by clicking "View Table Schema" from the track's description page, or from the Table Browser. 
+It will be listed as the Primary Table. Alternatively, you can mouse-over the track label in the 
+Browser and look at the URL the link points to. The part after the g= in the URL is the tracks 
+primary table name (e.g., for UCSC Genes you will see g=knownGene in the URL. The track primary 
+table is knownGene).</p>
+
+
+
 <P>
 Note that the Genome Browser will open to the range defined in the
 Gateway page <I>search term</I> box or the position saved as the 
