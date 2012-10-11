@@ -1097,6 +1097,10 @@ boolean bedExactMatch(struct bed *oldBed, struct bed *newBed)
 {
 if (oldBed->blockCount != newBed->blockCount)
     return FALSE;
+if (oldBed->thickStart != newBed->thickStart)
+    return FALSE;
+if (oldBed->thickEnd != newBed->thickEnd)
+    return FALSE;
 int oldSize = bedTotalBlockSize(oldBed);
 int newSize = bedTotalBlockSize(newBed);
 int overlap = bedSameStrandOverlap(oldBed, newBed);
