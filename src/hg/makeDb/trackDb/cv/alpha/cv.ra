@@ -3,35 +3,35 @@
 
 # BEFORE YOU EDIT THIS FILE!!!
 # - remember standard cv.ra editing protocol: after you add or modify any stanza,
-#   add the keyword "Provisional" to the description line
+# add the keyword "Provisional" to the description line
 #
 # NOTE: the revision history of this file was lost when it was moved in the repository.
-#     For history prior to Oct. 11, 2010  see the files v242_cv* in this directory.
+# For history prior to Oct. 11, 2010 see the files v242_cv* in this directory.
 #
 # Human cell types, template below
 # --------------------------
 # term		human-readable cell type name. required
 # tag		machine-readable cell type name, no special characters. required.
-#      		upnercase except for possibly a brief lowercase suffix
-#      		closely-related cell types
-# type 		informs pipeline code of stanza type.  Should always be Cell Line. Required
-# organism	used in many ways.  Should correspond to a "type organism" stanza. required
+#		upnercase except for possibly a brief lowercase suffix
+#		closely-related cell types
+# type 		informs pipeline code of stanza type. Should always be Cell Line. Required
+# organism	used in many ways. Should correspond to a "type organism" stanza. required
 # description 	human-readable description of cell type, for cell type cellTypes.html. required
 # tissue 	general tissue type, for categorizing cell types.
-#          	all words uppercase, space separated, optional
+#		all words uppercase, space separated, optional
 # vendorName 	name of vendor or lab that provides these cells. required
 # vendorId 	the ID of the cell type in the vendor's catalog. optional
 # orderUrl 	URL for ordering the cell type. Links with vendorId on cellTypes.html. required
 # karyotype 	human-readable karyotype, for .html page. optional
 # lineage 	human-readable source of cell lines, e.g. 18 year old male. optional
-# termId 	ID for best term in the BTO.  Shown in cellTypes.html. optional
+# termId 	ID for best term in the BTO. Shown in cellTypes.html. optional
 # termUrl	(URL for term in the ontology. Links with termId on cellTypes.html. optional
 # color 	specifies color code for track data of this cell type, rgb values. optional
 # sex 		used in documentation and validation. required
 # tier 		In human, specifies which table the cell type appears in in cellTypes.html.
 #		Not used in mouse. Should correspond to a "type tier" stanza. required
-# protocol      comma-separated list of format: tag_submittingLab_protocol.pdf. required.
-# category 	T for tissue, L for cell line, or P for primary cells.  optional
+# protocol	comma-separated list of format: tag_submittingLab_protocol.pdf. required.
+# category 	T for tissue, L for cell line, or P for primary cells. optional
 
 term GM12878
 tag GM12878
@@ -44,7 +44,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&P
 organism human
 protocol ENCODE:GM12878_protocol.pdf
 sex F
-termId  BTO:0002062
+termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 1
 tissue blood
@@ -2162,7 +2162,7 @@ orderUrl http://www.genome.duke.edu/people/faculty/willard/
 organism human
 protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 sex F
-termId  BTO:0002062
+termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
 tissue blood
@@ -2180,7 +2180,7 @@ vendorName Hunt Willard at Duke University
 #orderUrl http://www.genome.duke.edu/people/faculty/willard/
 #lineage mesoderm
 #childOf GM12878
-#termId  BTO:0002062
+#termId BTO:0002062
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 #sex F
 #tier 3
@@ -6441,8 +6441,8 @@ vendorName Dr. Carl Mann, SBIGeM
 # --------------------------
 # term		human-readable cell type name. required
 # tag 		machine-readable cell type name, no special characters. required.
-#       	Uppercase except for a possible lowercase suffix to distinguish
-#       	closely-related cell types
+#		Uppercase except for a possible lowercase suffix to distinguish
+#		closely-related cell types
 # type 		informs pipeline code of stanza type. Should always be Cell Line. Required
 # organism 	used in many ways. Should correspond to a "type organism" stanza. required
 # description 	human-readable description of cell type, for cell type cellTypes.html. required
@@ -8093,7 +8093,7 @@ vendorName Dr. Levasseur at University of Iowa
 # type 			informs pipeline code of stanza type. Should always be Antibody
 # antibodyDescription 	human-readable description. Used in antibodies.html
 # targetDescription 	human-readable description of what the antibody targets.
-#                       Used in antibodies.html
+#			Used in antibodies.html
 # targetId 		some external ID of the target. Used in antibodies.html
 # targetUrl		GeneCard link
 # vendorName 		name of vendor or lab that provides these antibodies
@@ -11359,7 +11359,7 @@ targetClass HISase
 targetDescription EP300(c-20)
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
-validation Human_-_P300(SC-585)(Western_blot):human_P300_SC-585_validation_Myers.pdf  Mouse_-_P300(SC-585)(Western_blot):mouse_P300_SC-585_validation_Ren.pdf
+validation Human_-_P300(SC-585)(Western_blot):human_P300_SC-585_validation_Myers.pdf Mouse_-_P300(SC-585)(Western_blot):mouse_P300_SC-585_validation_Ren.pdf
 vendorId sc-585
 vendorName Santa Cruz Biotechnology
 
@@ -16272,32 +16272,32 @@ projectName FSU
 # This is a very important table of definitions which may be used by CGIs, but will not get into the MDB
 #
 # Definition of specialized settings:
-#   searchable [no/select/date/numeric] DEFAULT: NO
-#       select: drop-down selection of values discovered in mdb
-#  multiSelect: drop-down check-box list allowing selection of multiple values (e.g. [GM12878,K562] means search for either)
-#     freeText: searches by free text accept the wild card '%' and any subset of text
-#     wildList: one or more values delimited by commas ('%' wildcards accepted)
-#         date: by less than or greater than date range (not yet implemented)
-#      numeric: numeric by range (not yet implemented)
+# searchable [no/select/date/numeric] DEFAULT: NO
+# select: drop-down selection of values discovered in mdb
+# multiSelect: drop-down check-box list allowing selection of multiple values (e.g. [GM12878,K562] means search for either)
+# freeText: searches by free text accept the wild card '%' and any subset of text
+# wildList: one or more values delimited by commas ('%' wildcards accepted)
+# date: by less than or greater than date range (not yet implemented)
+# numeric: numeric by range (not yet implemented)
 #
-#    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
+# cvDefined [no/yes] DEFAULT: NO. Yes when every possible value must be in cv.ra
 #
-#       hidden [no/yes/beta,public]  DEFAULT: no.  Yes when users should not see this internal metadata.
-#              use comma delimited list of alpha,beta,public to restrict visibility from certain machines.
+# hidden [no/yes/beta,public DEFAULT: no. Yes when users should not see this internal metadata.
+#		use comma delimited list of alpha,beta,public to restrict visibility from certain machines.
 #
-#     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values. ENFORCED by mdbPrint -validate
-#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
-#               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
-#         date: must be date in YYYY-MM-DD format
-#       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
-#        float: must be floating point number
-#      integer: must be integer
-#      "list:": must be one of several terms in comma delimeited list (e.g. "list: yes,no,maybe" )  # ("list:" includes colon)
-#         none: not validated in any way
-#     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
-#    # NOTE: that validate rules may end comment delimited by a '#'
+# validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values. ENFORCED by mdbPrint -validate
+# cv: 		must be defined term in cv (e.g. cell=GM12878). "cv or None" indicates that "None is also acceptable.
+#		"cv or control" indicates that cv-defined terms of type "control" are also acceptable.
+# date: 	must be date in YYYY-MM-DD format
+# exists: not enforced. (e.g. fileName could be validated to exist in download directory)
+# float: must be floating point number
+# integer: must be integer
+# "list:": must be one of several terms in comma delimeited list (e.g. "list: yes,no,maybe" ) # ("list:" includes colon)
+# none: not validated in any way
+#"regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" ) # ("regex:" includes colon)
+# # NOTE: that validate rules may end comment delimited by a '#'
 #
-#     priority Like in trackDb.ra this is used for enforcing a sort order in certain circumstances, with lower numbers implying greater priority.
+# priority Like in trackDb.ra this is used for enforcing a sort order in certain circumstances, with lower numbers implying greater priority.
 #	At beginnning:
 #   	  10s: objStatus:1 project:10 grant:15 lab:20 composite:25 dataType:30 view:35
 #	Experiment defining:
