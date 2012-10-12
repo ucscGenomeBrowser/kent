@@ -3,35 +3,35 @@
 
 # BEFORE YOU EDIT THIS FILE!!!
 # - remember standard cv.ra editing protocol: after you add or modify any stanza,
-#   add the keyword "Provisional" to the description line
+# add the keyword "Provisional" to the description line
 #
 # NOTE: the revision history of this file was lost when it was moved in the repository.
-#     For history prior to Oct. 11, 2010  see the files v242_cv* in this directory.
+# For history prior to Oct. 11, 2010 see the files v242_cv* in this directory.
 #
 # Human cell types, template below
 # --------------------------
 # term		human-readable cell type name. required
 # tag		machine-readable cell type name, no special characters. required.
-#      		upnercase except for possibly a brief lowercase suffix
-#      		closely-related cell types
-# type 		informs pipeline code of stanza type.  Should always be Cell Line. Required
-# organism	used in many ways.  Should correspond to a "type organism" stanza. required
+#		upnercase except for possibly a brief lowercase suffix
+#		closely-related cell types
+# type 		informs pipeline code of stanza type. Should always be Cell Line. Required
+# organism	used in many ways. Should correspond to a "type organism" stanza. required
 # description 	human-readable description of cell type, for cell type cellTypes.html. required
 # tissue 	general tissue type, for categorizing cell types.
-#          	all words uppercase, space separated, optional
+#		all words uppercase, space separated, optional
 # vendorName 	name of vendor or lab that provides these cells. required
 # vendorId 	the ID of the cell type in the vendor's catalog. optional
 # orderUrl 	URL for ordering the cell type. Links with vendorId on cellTypes.html. required
 # karyotype 	human-readable karyotype, for .html page. optional
 # lineage 	human-readable source of cell lines, e.g. 18 year old male. optional
-# termId 	ID for best term in the BTO.  Shown in cellTypes.html. optional
+# termId 	ID for best term in the BTO. Shown in cellTypes.html. optional
 # termUrl	(URL for term in the ontology. Links with termId on cellTypes.html. optional
 # color 	specifies color code for track data of this cell type, rgb values. optional
 # sex 		used in documentation and validation. required
 # tier 		In human, specifies which table the cell type appears in in cellTypes.html.
 #		Not used in mouse. Should correspond to a "type tier" stanza. required
-# protocol      comma-separated list of format: tag_submittingLab_protocol.pdf. required.
-# category 	T for tissue, L for cell line, or P for primary cells.  optional
+# protocol	comma-separated list of format: tag_submittingLab_protocol.pdf. required.
+# category 	T for tissue, L for cell line, or P for primary cells. optional
 
 term GM12878
 tag GM12878
@@ -44,8 +44,8 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&P
 organism human
 protocol ENCODE:GM12878_protocol.pdf
 sex F
-termId  EFO:0002784
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 1
 tissue blood
 vendorId GM12878
@@ -2162,8 +2162,8 @@ orderUrl http://www.genome.duke.edu/people/faculty/willard/
 organism human
 protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 sex F
-termId  EFO:0002784
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
 tissue blood
 vendorId GM12878-XiMat
@@ -2180,8 +2180,8 @@ vendorName Hunt Willard at Duke University
 #orderUrl http://www.genome.duke.edu/people/faculty/willard/
 #lineage mesoderm
 #childOf GM12878
-#termId  EFO:0002784
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
+#termId BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 #sex F
 #tier 3
 #protocol Myers:GM12878-XiPat_Myers_protocol.pdf
@@ -6441,8 +6441,8 @@ vendorName Dr. Carl Mann, SBIGeM
 # --------------------------
 # term		human-readable cell type name. required
 # tag 		machine-readable cell type name, no special characters. required.
-#       	Uppercase except for a possible lowercase suffix to distinguish
-#       	closely-related cell types
+#		Uppercase except for a possible lowercase suffix to distinguish
+#		closely-related cell types
 # type 		informs pipeline code of stanza type. Should always be Cell Line. Required
 # organism 	used in many ways. Should correspond to a "type organism" stanza. required
 # description 	human-readable description of cell type, for cell type cellTypes.html. required
@@ -8093,7 +8093,7 @@ vendorName Dr. Levasseur at University of Iowa
 # type 			informs pipeline code of stanza type. Should always be Antibody
 # antibodyDescription 	human-readable description. Used in antibodies.html
 # targetDescription 	human-readable description of what the antibody targets.
-#                       Used in antibodies.html
+#			Used in antibodies.html
 # targetId 		some external ID of the target. Used in antibodies.html
 # targetUrl		GeneCard link
 # vendorName 		name of vendor or lab that provides these antibodies
@@ -8461,7 +8461,7 @@ term BRF2
 tag BRF2
 type Antibody
 label BRF2 (4295)
-antibodyDescription Rabbit. Raised by immunizing rabbits with keyhole limpet hemocyanin coupled to synthetic peptides VSRSQQRGLRRVRDLC and SDSEIEQYLRTPQEVR, corresponding to human Brf2 residues 66-80 and 385-400, respectively. Antibody Target: BRF2
+antibodyDescription Rabbit polyclonal raised by immunizing rabbits with keyhole limpet hemocyanin coupled to synthetic peptides VSRSQQRGLRRVRDLC and SDSEIEQYLRTPQEVR, corresponding to human Brf2 residues 66-80 and 385-400, respectively. Antibody Target: BRF2
 lab Struhl
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 target BRF2
@@ -8589,7 +8589,7 @@ tag CBX2
 type Antibody
 label CBX2 (A302-524A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated. Antibody Target: CBX2
-lab Epstein
+lab Bernstein
 lots A302-524A-1
 orderUrl http://www.bethyl.com/product/A302-524A
 target CBX2
@@ -8621,7 +8621,7 @@ tag CBX8
 type Antibody
 label CBX8 (A300-882A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: CBX8
-lab Epstein
+lab Bernstein
 lots A300-882A-1
 orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
 target CBX8
@@ -8815,7 +8815,7 @@ tag CHD4MI2
 type Antibody
 label CHD4&#47;Mi2 (A301-081A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: CHD4
-lab Epstein
+lab Bernstein
 lots A301-081A-1
 orderUrl http://www.bethyl.com/product/A301-081A/CHD4Mi2_beta_Antibody?referrer=search_default
 target CHD4
@@ -8846,7 +8846,7 @@ term COREST_(ab24166)
 tag CORESTAB24166
 type Antibody
 label RCOR1&#47;COREST (ab24166)
-antibodyDescription Synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST. Note: This antibody has since been discontinued. Full product information is attached as part of validation document. Antibody Target: RCOR1
+antibodyDescription Rabbit polyclonal synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST. Note: This antibody has since been discontinued. Full product information is attached as part of validation document. Antibody Target: RCOR1
 lab Snyder
 lots 834865
 orderUrl http://www.abcam.com/CoREST-antibody-ChIP-Grade-ab24166.html
@@ -9573,7 +9573,7 @@ term EZH2_(39875)
 tag EZH239875
 type Antibody
 label EZH2 (39875)
-antibodyDescription This EZH2 antibody was raised against a recombinant protein corresponding to amino acids 353-451 of human EZH2. Antibody Target: EZH2
+antibodyDescription Mouse monoclonal raised against a recombinant protein corresponding to amino acids 353-451 of human EZH2. Antibody Target: EZH2
 lab Bernstein
 lots 27210001
 orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
@@ -9874,29 +9874,29 @@ term GCN5
 tag GCN5
 type Antibody
 label GCN5
-antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: GCN5
+antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: KAT2A
 lab Struhl
 orderUrl http://www.igbmc.fr
-target GCN5
+target KAT2A
 targetClass HISase
 targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
 targetId GeneCard:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A
 validation Human_-_:missing
-vendorId GCN5
+vendorId GCN5 (2676)
 vendorName Dr. Lazlo Tora at Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
 
 term GR
 tag GR
 type Antibody
 label GR (sc-1003)
-antibodyDescription Rabbit polyclonal. Antibody Target: GR
+antibodyDescription Rabbit polyclonal. Anti-GR. Antibody Target: NR3C1
 lab Myers
 lots A2508, E1908
 orderUrl http://www.scbt.com/product.php?datasheet=1003
-target GR
+target NR3C1
 targetClass TFSS
-targetDescription Glucocorticoid Receptor
+targetDescription Nuclear receptor subfamily 3, group C, member 1 (glucocorticoid receptor)
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation Human_-_GR(Immunoblot):human_GR_M-20_validation_Myers.pdf
@@ -9922,15 +9922,16 @@ term GTF2B
 tag GTF2B
 type Antibody
 label GTF2B (sc-225)
-antibodyDescription Rabbit polyclonal IgG, 200 ?g/ml. epitope mapping near the C-terminus of TFIIB of human origin. Antibody Target: GTF2B
+antibodyDescription Rabbit polyclonal. Raised against an epitope mapping to C-terminus of human TFIIB. Recommended for detection of TFIIB p33 of mouse, rabbit and human origin. Antibody Target: GTF2B
 lab Struhl
+lots J1905
 orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
 target GTF2B
 targetClass TFNS
 targetDescription DNA- binding general transcription factor
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
-validation Human_-_:missing
+validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-Seq):human_TFIIB_sc-225X_validation_Struhl.pdf
 vendorId sc-225
 vendorName Santa Cruz Biotechnology
 
@@ -9954,12 +9955,12 @@ term H2A.Z
 tag H2AZ
 type Antibody
 label H2AZ (07-594)
-antibodyDescription Rabbit polyclonal antibody raised against a peptide corresponding to the C-terminus of H2AZ. Antibody Target: H2AFZ
+antibodyDescription Rabbit polyclonal antibody raised against a peptide corresponding to the C-terminus of H2A.Z. Antibody Target: H2AFZ
 lab Bernstein
 lots DAM1540736
 orderUrl http://www.millipore.com/catalogue/item/07-594
 target H2AFZ
-targetDescription H2A.Z is a sequence variant of Histone H2A.
+targetDescription H2A.Z (H2AFZ) is a sequence variant of Histone H2A.
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
 validation Human_-_:validation Human_-_H2A.Z_(07-594)(Western_blot,ChIP):human_H2AZ_07-594_validation_Bernstein.pdf
@@ -10067,7 +10068,7 @@ vendorName 1)abcam; 2)Millipore
 term H3K4me3_(04-745)
 tag H3K4ME304745
 type Antibody
-antibodyDescription Anti-trimethyl-Histone H3 (Lys4) Antibody, clone MC315
+antibodyDescription Rabbit monoclonal anti-trimethyl-Histone H3 (Lys4) Antibody, clone MC315
 lab Ren
 lots NG1643014
 orderUrl http://www.millipore.com/catalogue/item/04-745
@@ -10433,7 +10434,7 @@ term HDAC2_(A300-705A)
 tag HDAC2A300705A
 type Antibody
 label HDAC2 (A300-705A)
-antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: HDAC2
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: HDAC2
 lab Bernstein
 lots A300-705A-1
 orderUrl http://www.bethyl.com/product/A300-705A
@@ -10465,7 +10466,7 @@ term HDAC6_(A301-341A)
 tag HDAC6A301341A
 type Antibody
 label HDAC6 (A301-341A)
-antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: HDAC6
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: HDAC6
 lab Bernstein
 lots A301-341A-1
 orderUrl http://www.bethyl.com/product/A301-341A/HDAC6_Antibody
@@ -10835,11 +10836,11 @@ term LSD1
 tag LSD1
 type Antibody
 label LSD1&#47;KDM1A (A300-215A)
-antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
-lab Epstein
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: KDM1A
+lab Bernstein
 lots A300-215A-1
 orderUrl http://www.bethyl.com/product/A300-215A/
-target LSD1
+target KDM1A
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
@@ -11044,7 +11045,7 @@ term Mxi1_(AF4185)
 tag MXI1
 type Antibody
 label MXI1 (AF4185)
-antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1. Antibody Target: MXI1
+antibodyDescription Goat polyclonal IgG raised against E. coli-derived rhMxi1. Antibody Target: MXI1
 lab Snyder
 lots ZIJ01
 orderUrl http://www.rndsystems.com/pdf/AF4185.pdf
@@ -11141,7 +11142,7 @@ term NELFe
 tag NELFE
 type Antibody
 label NELF-E (sc-32912)
-antibodyDescription NELF-E (RDBP). Antibody Target: RDBP
+antibodyDescription Rabbit polyclonal NELF-E (RDBP). Antibody Target: RDBP
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-32912-nelf-e-h-140-antibody.html
 target RDBP 
@@ -11358,7 +11359,7 @@ targetClass HISase
 targetDescription EP300(c-20)
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
-validation Human_-_P300(SC-585)(Western_blot):human_P300_SC-585_validation_Myers.pdf  Mouse_-_P300(SC-585)(Western_blot):mouse_P300_SC-585_validation_Ren.pdf
+validation Human_-_P300(SC-585)(Western_blot):human_P300_SC-585_validation_Myers.pdf Mouse_-_P300(SC-585)(Western_blot):mouse_P300_SC-585_validation_Ren.pdf
 vendorId sc-585
 vendorName Santa Cruz Biotechnology
 
@@ -11366,11 +11367,11 @@ term P300_KAT3B
 tag P300KAT3B
 type Antibody
 label P300&#47;EP300&#47;KAT3B (A300-358A)
-antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
-lab Epstein
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: EP300
+lab Bernstein
 lots A300-358A-1
 orderUrl http://www.bethyl.com/product/A300-358A/p300_Antibody?referrer=search_default
-target P300
+target EP300
 targetClass HISase
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
 targetId GeneCard:EP300
@@ -11383,10 +11384,10 @@ term p300_(SC-584)
 tag P300b
 type Antibody
 label P300&#47;EP300 (sc-584)
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin. Antibody Target: P300
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin. Antibody Target: EP300
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-584-p300-n-15-antibody.html
-target P300
+target EP300
 targetClass HISase
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
 targetId GeneCard:EP300
@@ -11399,10 +11400,10 @@ term p300_(SC-48343)
 tag P300c
 type Antibody
 label P300&#47;EP300 (sc-48343)
-antibodyDescription Mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: P300
+antibodyDescription Mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: EP300
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-48343-p300-f-4-antibody.html
-target P300
+target EP300
 targetClass HISase
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein.
 targetId GeneCard:EP300
@@ -11511,10 +11512,10 @@ term PGC1A
 tag PGC1A
 type Antibody
 label PGC1A (sc-13067)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: PGC1A
+antibodyDescription Rabbit polyclonal IgG. PGC-1 Antibody (H-300) Epitope corresponding to amino acids 1-300 mapping at the N-terminus of PPARP&#947 coactivator-1 (PGC-1) of human origin. Antibody Target: PPARGC1A
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-13067-pgc-1-h-300-antibody.html
-target PGC1A
+target PPARGC1A
 targetClass TFSS
 targetDescription The protein encoded by this gene is a transcriptional coactivator that regulates the genes involved in energy metabolism. This protein interacts with PPARgamma, which permits the interaction of this protein with multiple transcription factors. This protein can interact with, and regulate the activities of, cAMP response element binding protein (CREB) and nuclear respiratory factors (NRFs).
 targetId GeneCard:PPARGC1A
@@ -11527,7 +11528,7 @@ term PHF8_(A301-772A)
 tag PHF8A301772A
 type Antibody
 label PHF8 (A301-772A)
-antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: PHF8
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: PHF8
 lab Bernstein
 lots A301-772A-1
 orderUrl http://www.bethyl.com/product/A301-772A
@@ -11558,17 +11559,16 @@ vendorName Santa Cruz Biotechnology
 term PLU1
 tag PLU1
 type Antibody
-label PLU1
-antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: PLU1
+label PLU-1
+antibodyDescription Rabbit polyclonal Antigen Anti-PLU-1 Affinity Purified, Unconjugated, Liquid. Antibody Target: KDM5B
 lab Bernstein
-lots missing
 orderUrl http://cellbio.med.harvard.edu/faculty/shi/
-target PLU1
+target KDM5B
 targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
 targetId GeneCard:KDM5B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation Human_-_PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
-vendorId PLU1
+vendorId PLU-1
 vendorName Dr. Yang Shi at Harvard 
 
 term PML_(SC-71910)
@@ -11720,11 +11720,11 @@ vendorName Cell Signaling Technology
 term PU.1
 tag PU1
 type Antibody
-label PU1 (sc-22805)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: PU1
+label PU.1 (sc-22805)
+antibodyDescription Rabbit polyclonal IgG. Antibody Target: SPI1
 lab Myers
 orderUrl http://www.scbt.com/product.php?datasheet=22805
-target PU1
+target SPI1
 targetClass TFSS
 targetDescription PU.1 (H-135)
 targetId GeneCard:SPI1
@@ -11754,7 +11754,7 @@ term RBBP5_(A300-109A)
 tag RBBP5A300109A
 type Antibody
 label RBBP5 (A300-109A)
-antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: RBBP5
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: RBBP5
 lab Bernstein
 lots A300-109A-2
 orderUrl http://www.bethyl.com/product/A300-109A
@@ -11771,7 +11771,7 @@ tag REST
 type Antibody
 label REST (17-641)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
-lab Epstein
+lab Bernstein
 lots JH1786670
 orderUrl http://www.millipore.com/catalogue/item/17-641
 target REST
@@ -11802,7 +11802,7 @@ tag RNF2
 type Antibody
 label RNF2 (A302-869A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
-lab Epstein
+lab Bernstein
 lots A302-869A-1
 orderUrl http://www.bethyl.com/product/A302-869A/RNF2__Antibody?referrer=RNF2
 target RNF2
@@ -11881,7 +11881,7 @@ term SAP30_(39731)
 tag SAP3039731
 type Antibody
 label SAP30 (39731)
-antibodyDescription This SAP30 antibody (pAb) was raised against recombinant full length human SAP30 protein. Antibody Target: SAP30
+antibodyDescription Rabbit polyclonal SAP30 antibody (pAb) raised against recombinant full length human SAP30 protein. Antibody Target: SAP30
 lab Bernstein
 lots 4710001
 orderUrl http://www.activemotif.com/catalog/details/39731.html
@@ -12089,19 +12089,19 @@ vendorName Santa Cruz Biotechnology
 term SPT20
 tag SPT20
 type Antibody
-label SPT20
-antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen: C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids). Antibody Target: SPT20
+label SPT20/FAM48A (3006)
+antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen: C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids). Antibody Target: FAM48A
 lab Struhl
 orderUrl http://www.igbmc.fr
-target SPT20
+target FAM48A
 targetClass HISase
 targetDescription Also known as FAM48A or P38IP. It is a component of SAGA complex. Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
 targetId GeneCard:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A
 validation Human_-_:missing
-vendorId SPT20
+vendorId SPT20 (3006)
 vendorName Dr. Lazlo Tora at Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
-
+ 
 term SREBP1
 tag SREBP1
 type Antibody
@@ -12220,7 +12220,7 @@ term SUZ12_(05-1317)
 tag SUZ12051317
 type Antibody
 label SUZ12 (05-1317)
-antibodyDescription Recombinant protein corresponding to human SUZ12. Antibody Target: SUZ12
+antibodyDescription Mouse monoclonal recombinant protein corresponding to human SUZ12. Antibody Target: SUZ12
 lab Bernstein
 lots NRG1665726
 orderUrl http://www.millipore.com/catalogue/item/05-1317&open&cid=BIOS-A-BIOC-2538-1102-RC
@@ -12477,38 +12477,20 @@ validation Human_-_TEAD4_(SC-101184)(Western_blot,IP-Mass_Spec):human_TEAD4_SC-1
 vendorId sc-101184
 vendorName Santa Cruz Biotechnology
 
-term TFIIB
-tag TFIIB
-type Antibody
-label TFIIB (sc-225)
-antibodyDescription Rabbit polyclonal. Raised against an epitope mapping to C-terminus of human TFIIB. Recommended for detection of TFIIB p33 of mouse, rabbit and human origin. Supports following applications: WB, IP, IF, ELISA, FCM and ChIP. Antibody Target: TFIIB
-lab Struhl
-lots J1905
-orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
-target TFIIB
-targetDescription TFIIB is a general transcription factor that is believed to play a critical role in recruiting RNA polymerase II to the pre-initiation complex to activate transcription. TFIIB binds to the core promoter element indirectly via TFIID subunit TBP (TATA-binding protein) and directly via the TFIIB-response element (BRE). TFIIB directly recruits RNA polymerase II to the pre-initiation complex.
-targetId GeneCard:GTF2B
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
-validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-Seq):human_TFIIB_sc-225X_validation_Struhl.pdf
-vendorId sc-225
-vendorName Santa Cruz Biotechnology
-##This does not appear in metaDb
-### This needs to merge with the other sc-225
-
 term TFIIIC-110
 tag TF3C110
 type Antibody
 label TFIIIC-110 (4286)
-antibodyDescription Rabbit polyclonal. Antibody Target: TFIIIC-110
+antibodyDescription Rabbit polyclonal. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin. Antibody Target: GTF3C2
 lab Struhl
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
-target TFIIIC-110
+target GTF3C2
 targetClass Pol3F
-targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin.
-targetId GeneCard:GTF2B
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
+targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. 
+targetId GeneCard:GTF3C2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF3C2
 validation Human_-_TFIIIC-110(4286):human_TFIIIC-110_4286_validation_Struhl.pdf
-vendorId 4286
+vendorId TFIIIC-110 4286
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
 term THAP1_(SC-98174)
@@ -12548,10 +12530,10 @@ term TR4
 tag TR4
 type Antibody
 label TR4
-antibodyDescription Rabbit polyclonal. Antibody Target: TR4
+antibodyDescription Rabbit polyclonal Anti-TR4. Antibody Target: NR2C2
 lab Farnham
 orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname=engel
-target TR4
+target NR2C2
 targetClass TFSS
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 targetId GeneCard:NR2C2
@@ -16290,32 +16272,32 @@ projectName FSU
 # This is a very important table of definitions which may be used by CGIs, but will not get into the MDB
 #
 # Definition of specialized settings:
-#   searchable [no/select/date/numeric] DEFAULT: NO
-#       select: drop-down selection of values discovered in mdb
-#  multiSelect: drop-down check-box list allowing selection of multiple values (e.g. [GM12878,K562] means search for either)
-#     freeText: searches by free text accept the wild card '%' and any subset of text
-#     wildList: one or more values delimited by commas ('%' wildcards accepted)
-#         date: by less than or greater than date range (not yet implemented)
-#      numeric: numeric by range (not yet implemented)
+# searchable [no/select/date/numeric] DEFAULT: NO
+# select: drop-down selection of values discovered in mdb
+# multiSelect: drop-down check-box list allowing selection of multiple values (e.g. [GM12878,K562] means search for either)
+# freeText: searches by free text accept the wild card '%' and any subset of text
+# wildList: one or more values delimited by commas ('%' wildcards accepted)
+# date: by less than or greater than date range (not yet implemented)
+# numeric: numeric by range (not yet implemented)
 #
-#    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
+# cvDefined [no/yes] DEFAULT: NO. Yes when every possible value must be in cv.ra
 #
-#       hidden [no/yes/beta,public]  DEFAULT: no.  Yes when users should not see this internal metadata.
-#              use comma delimited list of alpha,beta,public to restrict visibility from certain machines.
+# hidden [no/yes/beta,public DEFAULT: no. Yes when users should not see this internal metadata.
+#		use comma delimited list of alpha,beta,public to restrict visibility from certain machines.
 #
-#     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values. ENFORCED by mdbPrint -validate
-#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
-#               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
-#         date: must be date in YYYY-MM-DD format
-#       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
-#        float: must be floating point number
-#      integer: must be integer
-#      "list:": must be one of several terms in comma delimeited list (e.g. "list: yes,no,maybe" )  # ("list:" includes colon)
-#         none: not validated in any way
-#     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
-#    # NOTE: that validate rules may end comment delimited by a '#'
+# validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values. ENFORCED by mdbPrint -validate
+# cv: 		must be defined term in cv (e.g. cell=GM12878). "cv or None" indicates that "None is also acceptable.
+#		"cv or control" indicates that cv-defined terms of type "control" are also acceptable.
+# date: 	must be date in YYYY-MM-DD format
+# exists: not enforced. (e.g. fileName could be validated to exist in download directory)
+# float: must be floating point number
+# integer: must be integer
+# "list:": must be one of several terms in comma delimeited list (e.g. "list: yes,no,maybe" ) # ("list:" includes colon)
+# none: not validated in any way
+#"regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" ) # ("regex:" includes colon)
+# # NOTE: that validate rules may end comment delimited by a '#'
 #
-#     priority Like in trackDb.ra this is used for enforcing a sort order in certain circumstances, with lower numbers implying greater priority.
+# priority Like in trackDb.ra this is used for enforcing a sort order in certain circumstances, with lower numbers implying greater priority.
 #	At beginnning:
 #   	  10s: objStatus:1 project:10 grant:15 lab:20 composite:25 dataType:30 view:35
 #	Experiment defining:
