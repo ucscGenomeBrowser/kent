@@ -362,12 +362,12 @@ static char *urlToLogoUrl(char *urlOrig)
 {
 // get top-level domain
 char url[1024];
-memcpy(url, urlOrig, 1024);
+memcpy(url, urlOrig, sizeof(url));
 char *urlParts[20];
 int partCount = chopString(url, ".", urlParts, ArraySize(urlParts));
 // construct path
-char *logoUrl = needMem(1024);
-safef(logoUrl, 1024, "../images/pubs_%s.png", urlParts[partCount-2]);
+char *logoUrl = needMem(sizeof(url));
+safef(logoUrl, sizeof(url), "../images/pubs_%s.png", urlParts[partCount-2]);
 return logoUrl;
 }
 
