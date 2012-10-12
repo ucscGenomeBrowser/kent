@@ -8589,7 +8589,7 @@ tag CBX2
 type Antibody
 label CBX2 (A302-524A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated. Antibody Target: CBX2
-lab Epstein
+lab Bernstein
 lots A302-524A-1
 orderUrl http://www.bethyl.com/product/A302-524A
 target CBX2
@@ -8621,7 +8621,7 @@ tag CBX8
 type Antibody
 label CBX8 (A300-882A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: CBX8
-lab Epstein
+lab Bernstein
 lots A300-882A-1
 orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
 target CBX8
@@ -8815,7 +8815,7 @@ tag CHD4MI2
 type Antibody
 label CHD4&#47;Mi2 (A301-081A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: CHD4
-lab Epstein
+lab Bernstein
 lots A301-081A-1
 orderUrl http://www.bethyl.com/product/A301-081A/CHD4Mi2_beta_Antibody?referrer=search_default
 target CHD4
@@ -9874,29 +9874,29 @@ term GCN5
 tag GCN5
 type Antibody
 label GCN5
-antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: GCN5
+antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: KAT2A
 lab Struhl
 orderUrl http://www.igbmc.fr
-target GCN5
+target KAT2A
 targetClass HISase
 targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
 targetId GeneCard:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A
 validation Human_-_:missing
-vendorId GCN5
+vendorId GCN5 (2676)
 vendorName Dr. Lazlo Tora at Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
 
 term GR
 tag GR
 type Antibody
 label GR (sc-1003)
-antibodyDescription Rabbit polyclonal. Antibody Target: GR
+antibodyDescription Rabbit polyclonal. Anti-GR. Antibody Target: NR3C1
 lab Myers
 lots A2508, E1908
 orderUrl http://www.scbt.com/product.php?datasheet=1003
-target GR
+target NR3C1
 targetClass TFSS
-targetDescription Glucocorticoid Receptor
+targetDescription Nuclear receptor subfamily 3, group C, member 1 (glucocorticoid receptor)
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation Human_-_GR(Immunoblot):human_GR_M-20_validation_Myers.pdf
@@ -10836,11 +10836,11 @@ term LSD1
 tag LSD1
 type Antibody
 label LSD1&#47;KDM1A (A300-215A)
-antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
-lab Epstein
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid Antibody Target: KDM1A
+lab Bernstein
 lots A300-215A-1
 orderUrl http://www.bethyl.com/product/A300-215A/
-target LSD1
+target KDM1A
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
@@ -11368,7 +11368,7 @@ tag P300KAT3B
 type Antibody
 label P300&#47;EP300&#47;KAT3B (A300-358A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: EP300
-lab Epstein
+lab Bernstein
 lots A300-358A-1
 orderUrl http://www.bethyl.com/product/A300-358A/p300_Antibody?referrer=search_default
 target EP300
@@ -11512,10 +11512,10 @@ term PGC1A
 tag PGC1A
 type Antibody
 label PGC1A (sc-13067)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: PGC1A
+antibodyDescription Rabbit polyclonal IgG. PGC-1 Antibody (H-300) Epitope corresponding to amino acids 1-300 mapping at the N-terminus of PPARγ coactivator-1 (PGC-1) of human origin. Antibody Target: PPARGC1A
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-13067-pgc-1-h-300-antibody.html
-target PGC1A
+target PPARGC1A
 targetClass TFSS
 targetDescription The protein encoded by this gene is a transcriptional coactivator that regulates the genes involved in energy metabolism. This protein interacts with PPARgamma, which permits the interaction of this protein with multiple transcription factors. This protein can interact with, and regulate the activities of, cAMP response element binding protein (CREB) and nuclear respiratory factors (NRFs).
 targetId GeneCard:PPARGC1A
@@ -11559,17 +11559,16 @@ vendorName Santa Cruz Biotechnology
 term PLU1
 tag PLU1
 type Antibody
-label PLU1
-antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: PLU1
+label PLU-1
+antibodyDescription Polyclonal Antigen Anti-PLU-1 Affinity Purified, Unconjugated, Liquid. Antibody Target: KDM5B
 lab Bernstein
-lots missing
 orderUrl http://cellbio.med.harvard.edu/faculty/shi/
-target PLU1
+target KDM5B
 targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
 targetId GeneCard:KDM5B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation Human_-_PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
-vendorId PLU1
+vendorId PLU-1
 vendorName Dr. Yang Shi at Harvard 
 
 term PML_(SC-71910)
@@ -11772,7 +11771,7 @@ tag REST
 type Antibody
 label REST (17-641)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
-lab Epstein
+lab Bernstein
 lots JH1786670
 orderUrl http://www.millipore.com/catalogue/item/17-641
 target REST
@@ -11803,7 +11802,7 @@ tag RNF2
 type Antibody
 label RNF2 (A302-869A)
 antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
-lab Epstein
+lab Bernstein
 lots A302-869A-1
 orderUrl http://www.bethyl.com/product/A302-869A/RNF2__Antibody?referrer=RNF2
 target RNF2
@@ -12483,16 +12482,16 @@ term TFIIIC-110
 tag TF3C110
 type Antibody
 label TFIIIC-110 (4286)
-antibodyDescription Rabbit polyclonal. Antibody Target: TFIIIC-110
+antibodyDescription Rabbit polyclonal. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin. Antibody Target: GTF3C2
 lab Struhl
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
-target TFIIIC-110
+target GTF3C2
 targetClass Pol3F
-targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin.
-targetId GeneCard:GTF2B
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
+targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. 
+targetId GeneCard:GTF3C2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF3C2
 validation Human_-_TFIIIC-110(4286):human_TFIIIC-110_4286_validation_Struhl.pdf
-vendorId 4286
+vendorId TFIIIC-110 4286
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
 term THAP1_(SC-98174)
@@ -12532,10 +12531,10 @@ term TR4
 tag TR4
 type Antibody
 label TR4
-antibodyDescription Rabbit polyclonal. Antibody Target: TR4
+antibodyDescription Rabbit polyclonal Anti-TR4. Antibody Target: NR2C2
 lab Farnham
 orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname=engel
-target TR4
+target NR2C2
 targetClass TFSS
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 targetId GeneCard:NR2C2
