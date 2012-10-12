@@ -44,8 +44,8 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&P
 organism human
 protocol ENCODE:GM12878_protocol.pdf
 sex F
-termId  EFO:0002784
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
+termId  BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 1
 tissue blood
 vendorId GM12878
@@ -2162,8 +2162,8 @@ orderUrl http://www.genome.duke.edu/people/faculty/willard/
 organism human
 protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 sex F
-termId  EFO:0002784
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
+termId  BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
 tissue blood
 vendorId GM12878-XiMat
@@ -2180,8 +2180,8 @@ vendorName Hunt Willard at Duke University
 #orderUrl http://www.genome.duke.edu/people/faculty/willard/
 #lineage mesoderm
 #childOf GM12878
-#termId  EFO:0002784
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=EFO&termId=EFO%3A0002784&termName=GM12878
+#termId  BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 #sex F
 #tier 3
 #protocol Myers:GM12878-XiPat_Myers_protocol.pdf
