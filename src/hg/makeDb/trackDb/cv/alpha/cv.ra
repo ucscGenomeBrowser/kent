@@ -9922,15 +9922,16 @@ term GTF2B
 tag GTF2B
 type Antibody
 label GTF2B (sc-225)
-antibodyDescription Rabbit polyclonal IgG, 200 ?g/ml. epitope mapping near the C-terminus of TFIIB of human origin. Antibody Target: GTF2B
+antibodyDescription Rabbit polyclonal. Raised against an epitope mapping to C-terminus of human TFIIB. Recommended for detection of TFIIB p33 of mouse, rabbit and human origin. Antibody Target: GTF2B
 lab Struhl
+lots J1905
 orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
 target GTF2B
 targetClass TFNS
 targetDescription DNA- binding general transcription factor
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
-validation Human_-_:missing
+validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-Seq):human_TFIIB_sc-225X_validation_Struhl.pdf
 vendorId sc-225
 vendorName Santa Cruz Biotechnology
 
@@ -11366,11 +11367,11 @@ term P300_KAT3B
 tag P300KAT3B
 type Antibody
 label P300&#47;EP300&#47;KAT3B (A300-358A)
-antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: EP300
 lab Epstein
 lots A300-358A-1
 orderUrl http://www.bethyl.com/product/A300-358A/p300_Antibody?referrer=search_default
-target P300
+target EP300
 targetClass HISase
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
 targetId GeneCard:EP300
@@ -11383,10 +11384,10 @@ term p300_(SC-584)
 tag P300b
 type Antibody
 label P300&#47;EP300 (sc-584)
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin. Antibody Target: P300
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin. Antibody Target: EP300
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-584-p300-n-15-antibody.html
-target P300
+target EP300
 targetClass HISase
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
 targetId GeneCard:EP300
@@ -11399,10 +11400,10 @@ term p300_(SC-48343)
 tag P300c
 type Antibody
 label P300&#47;EP300 (sc-48343)
-antibodyDescription Mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: P300
+antibodyDescription Mouse monoclonal raised against amino acids 774-1045 of p300 of human origin. Antibody Target: EP300
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-48343-p300-f-4-antibody.html
-target P300
+target EP300
 targetClass HISase
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein.
 targetId GeneCard:EP300
@@ -12101,7 +12102,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A
 validation Human_-_:missing
 vendorId SPT20
 vendorName Dr. Lazlo Tora at Institut de G&#232n&#232tique et de Biologie Mol&#232culaire et Cellulaire
-
+# PROBLEM  Cricket does not find any reference to a link between the symbol SPT20 or mSPT20 and FAM48A that cannot be traced back to our site.
+ 
 term SREBP1
 tag SREBP1
 type Antibody
@@ -12476,24 +12478,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
 validation Human_-_TEAD4_(SC-101184)(Western_blot,IP-Mass_Spec):human_TEAD4_SC-101184_validation_Myers.pdf
 vendorId sc-101184
 vendorName Santa Cruz Biotechnology
-
-term TFIIB
-tag TFIIB
-type Antibody
-label TFIIB (sc-225)
-antibodyDescription Rabbit polyclonal. Raised against an epitope mapping to C-terminus of human TFIIB. Recommended for detection of TFIIB p33 of mouse, rabbit and human origin. Supports following applications: WB, IP, IF, ELISA, FCM and ChIP. Antibody Target: TFIIB
-lab Struhl
-lots J1905
-orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
-target TFIIB
-targetDescription TFIIB is a general transcription factor that is believed to play a critical role in recruiting RNA polymerase II to the pre-initiation complex to activate transcription. TFIIB binds to the core promoter element indirectly via TFIID subunit TBP (TATA-binding protein) and directly via the TFIIB-response element (BRE). TFIIB directly recruits RNA polymerase II to the pre-initiation complex.
-targetId GeneCard:GTF2B
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
-validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-Seq):human_TFIIB_sc-225X_validation_Struhl.pdf
-vendorId sc-225
-vendorName Santa Cruz Biotechnology
-##This does not appear in metaDb
-### This needs to merge with the other sc-225
 
 term TFIIIC-110
 tag TF3C110
