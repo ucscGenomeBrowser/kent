@@ -1,4 +1,7 @@
 
+track quality override
+type wig 0 90
+
 track blastHg17KG override
 shortLabel Human Proteins
 longLabel Human (hg17) proteins mapped by chained tBLASTn
