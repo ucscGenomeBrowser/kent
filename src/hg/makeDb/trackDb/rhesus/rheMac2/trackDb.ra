@@ -1,7 +1,4 @@
 
-track quality override
-type wig 0 60
-
 track ctgPos override
 shortLabel Contigs
 longLabel Assembly Contigs
