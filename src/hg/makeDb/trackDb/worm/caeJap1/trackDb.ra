@@ -2,6 +2,9 @@
 track gold override
 visibility dense
 
+track quality override
+type wig 0 97
+
 # Local declaration so that local ctgPos2.html is picked up.
 track ctgPos2 override
 visibility dense

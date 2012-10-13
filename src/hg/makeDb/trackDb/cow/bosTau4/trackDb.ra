@@ -1,5 +1,8 @@
 include trackDb.chainNet.ra
 
+track quality override
+type wig 0 99
+
 track multiz5way
 shortLabel Conservation
 longLabel 5-Way Multiz Alignment & Conservation

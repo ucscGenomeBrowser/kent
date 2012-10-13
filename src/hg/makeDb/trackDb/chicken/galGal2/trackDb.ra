@@ -2,6 +2,9 @@
 
 include trackDb.chainNet.ra
 
+track quality override
+type wig 0 97
+
 track supercontig
 shortLabel Supercontigs
 longLabel Supercontigs from Whole Genome Shotgun Assembly

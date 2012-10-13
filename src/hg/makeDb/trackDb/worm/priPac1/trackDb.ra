@@ -2,6 +2,9 @@
 track gold override
 priority 9
 
+track quality override
+type wig 0 97
+
 #Overrides from priority.ra
 
 track chainCe4 override
