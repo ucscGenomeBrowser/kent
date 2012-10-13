@@ -3,6 +3,9 @@ track gold override
 visibility pack
 html gold
 
+track quality override
+type wig 0 63
+
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
