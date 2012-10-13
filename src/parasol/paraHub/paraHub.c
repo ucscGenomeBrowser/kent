@@ -185,7 +185,7 @@ struct rudp *rudpOut;	/* Our rUDP socket. */
 
 // TODO make commandline param options to override defaults for unit sizes?
 /*  using machines list spec info for defaults */
-int cpuUnit = 1;                   /* 1 CPU */
+int cpuUnit = 1;                   /* 1 CPU */  /* someday this could be float 0.5 */
 long long ramUnit = 512 * 1024 * 1024;  /* 500 MB */
 int defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
 int defaultJobRam = 1;        /* number of ramUnits in default job usage */
@@ -748,7 +748,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 		    //pmPrintf(pm, "preserving batch %s on machine %s", batch->name, mach->name);
 		    //pmSend(pm, rudpOut);
 		    }
-		allocateResourcesToMachine(mach, batch, user, &r, &c);
+		allocateResourcesToMachine(mach, batch, user, &c, &r);
 		}
 	    }
 
@@ -863,7 +863,7 @@ while(TRUE)
 	    //pmSend(pm, rudpOut);
 	    }
 
-	allocateResourcesToMachine(mach, batch, user, &r, &c);
+	allocateResourcesToMachine(mach, batch, user, &c, &r);
 
 	if (pm) 
 	    {
@@ -1079,8 +1079,6 @@ while(TRUE)
 
     job->machine = machine;
     job->lastChecked = job->startTime = job->lastClockIn = now;
-    if (!(job->ram))  /* if no ram size specified, use the default */
-	job->ram = batch->ram * ramUnit;
     spokeSendJob(spoke, machine, job);
     return TRUE;
     }
@@ -1920,11 +1918,20 @@ int oldRam = batch->ram;
 if (job->cpus) 
     batch->cpu = (job->cpus + 0.5) / cpuUnit;  /* rounding */
 else
+    {
+    /* if no cpus specified, use the default */
     batch->cpu = defaultJobCpu;
+    job->cpus = defaultJobCpu * cpuUnit;
+    }
 if (job->ram) 
-    batch->ram = (job->ram + (0.5*ramUnit)) / ramUnit;   /* rounding */
+    batch->ram = 1 + (job->ram - 1) / ramUnit;   /* any remainder will be rounded upwards
+        e.g.  1 to 1024m --> 1G but 1025m --> 2G if unit is 1G.   0m would just cause default ram usage. */
 else
+    {
+    /* if no ram size specified, use the default */
     batch->ram = defaultJobRam;
+    job->ram = defaultJobRam * ramUnit;
+    }
 
 if (oldCpu != batch->cpu || oldRam != batch->ram)
     {

@@ -378,7 +378,7 @@ if ((grandChildId = forkOrDie()) == 0)
 	logWarn("setrlimit failed with RLIMIT_AS rlim_cur=%lld rlim_max=%lld"
 	    , (long long) rlim.rlim_cur , (long long) rlim.rlim_max); 
 
-    { // DEBUG REMOVE
+    if (0) { // change to 1 for debugging
     logInfo("memLimit=%lld", memLimit);
     struct rlimit rlim; 
     int rv; 
