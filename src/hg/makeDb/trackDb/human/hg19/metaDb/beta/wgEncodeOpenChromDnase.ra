@@ -373,6 +373,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002562
 expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008572
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -393,6 +394,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002562
 expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0Pk.narrowPeak.gz
+geoSampleAccession GSM1008572
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -413,6 +415,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002562
 expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0RawDataRep1.fastq.gz
+geoSampleAccession GSM1008572
 grant Crawford
 lab Duke
 md5sum 9f693a94fd14b0108873cd0fa0bc49fc
@@ -432,6 +435,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002562
 expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0RawDataRep2.fastq.gz
+geoSampleAccession GSM1008572
 grant Crawford
 lab Duke
 md5sum 3f634fedb4a1555e0210fdb5f616f3aa
@@ -451,6 +455,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002562
 expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0Sig.bigWig
+geoSampleAccession GSM1008572
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -511,6 +516,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002563
 expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008604
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -531,6 +537,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002563
 expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1Pk.narrowPeak.gz
+geoSampleAccession GSM1008604
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -551,6 +558,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002563
 expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1RawDataRep1.fastq.gz
+geoSampleAccession GSM1008604
 grant Crawford
 lab Duke
 md5sum 7a4acbf00dfaa60c3a9fb4dc4667faec
@@ -570,6 +578,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002563
 expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1RawDataRep2.fastq.gz
+geoSampleAccession GSM1008604
 grant Crawford
 lab Duke
 md5sum 433335d1a3f3d02e36726b4d6fcbf263
@@ -589,6 +598,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002563
 expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1Sig.bigWig
+geoSampleAccession GSM1008604
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -774,6 +784,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003465
 expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008588
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -794,6 +805,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003465
 expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794Pk.narrowPeak.gz
+geoSampleAccession GSM1008588
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -814,6 +826,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003465
 expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794RawDataRep1.fastq.gz
+geoSampleAccession GSM1008588
 grant Crawford
 lab Duke
 md5sum 1f53f4102f7ac554ddcd234b759e4fc2
@@ -833,6 +846,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003465
 expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794RawDataRep2.fastq.gz
+geoSampleAccession GSM1008588
 grant Crawford
 lab Duke
 md5sum 4db5ace8f49881d1c5a513b0f14a28dd
@@ -852,6 +866,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003465
 expId 3465
 fileName wgEncodeOpenChromDnaseCd20ro01794Sig.bigWig
+geoSampleAccession GSM1008588
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -912,6 +927,7 @@ dateUnrestricted 2013-04-09
 dccAccession wgEncodeEH003481
 expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008583
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -932,6 +948,7 @@ dateUnrestricted 2013-04-09
 dccAccession wgEncodeEH003481
 expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocPk.narrowPeak.gz
+geoSampleAccession GSM1008583
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -952,6 +969,7 @@ dateUnrestricted 2013-04-09
 dccAccession wgEncodeEH003481
 expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocRawDataRep1.fastq.gz
+geoSampleAccession GSM1008583
 grant Crawford
 lab Duke
 md5sum c52b82cfdad2ddfb527c9af06f498969
@@ -971,6 +989,7 @@ dateUnrestricted 2013-04-09
 dccAccession wgEncodeEH003481
 expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocRawDataRep2.fastq.gz
+geoSampleAccession GSM1008583
 grant Crawford
 lab Duke
 md5sum dd52d222e13fc5c5217ad037ee9faf27
@@ -990,6 +1009,7 @@ dateUnrestricted 2013-04-09
 dccAccession wgEncodeEH003481
 expId 3481
 fileName wgEncodeOpenChromDnaseCerebellumocSig.bigWig
+geoSampleAccession GSM1008583
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -1050,6 +1070,7 @@ dateUnrestricted 2013-04-07
 dccAccession wgEncodeEH003480
 expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008578
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1070,6 +1091,7 @@ dateUnrestricted 2013-04-07
 dccAccession wgEncodeEH003480
 expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocPk.narrowPeak.gz
+geoSampleAccession GSM1008578
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -1090,6 +1112,7 @@ dateUnrestricted 2013-04-07
 dccAccession wgEncodeEH003480
 expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep1.fastq.gz
+geoSampleAccession GSM1008578
 grant Crawford
 lab Duke
 md5sum 1cdf7ab014347ef3ac44a6efc90afe7c
@@ -1109,6 +1132,7 @@ dateUnrestricted 2013-04-07
 dccAccession wgEncodeEH003480
 expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocRawDataRep2.fastq.gz
+geoSampleAccession GSM1008578
 grant Crawford
 lab Duke
 md5sum 0f8c2ce4280865662b1a5f7125dad867
@@ -1128,6 +1152,7 @@ dateUnrestricted 2013-04-07
 dccAccession wgEncodeEH003480
 expId 3480
 fileName wgEncodeOpenChromDnaseCerebrumfrontalocSig.bigWig
+geoSampleAccession GSM1008578
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -1490,6 +1515,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002549
 expId 2549
 fileName wgEncodeOpenChromDnaseColo829BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008571
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1510,6 +1536,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002549
 expId 2549
 fileName wgEncodeOpenChromDnaseColo829Pk.narrowPeak.gz
+geoSampleAccession GSM1008571
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -1530,6 +1557,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002549
 expId 2549
 fileName wgEncodeOpenChromDnaseColo829RawDataRep1.fastq.gz
+geoSampleAccession GSM1008571
 grant Crawford
 lab Duke
 md5sum 2da78d22e0662dda9bbab1cda83e544b
@@ -1549,6 +1577,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002549
 expId 2549
 fileName wgEncodeOpenChromDnaseColo829RawDataRep2.fastq.gz
+geoSampleAccession GSM1008571
 grant Crawford
 lab Duke
 md5sum c837a1b73cc39fa7eda7969cb39be330
@@ -1568,6 +1597,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002549
 expId 2549
 fileName wgEncodeOpenChromDnaseColo829Sig.bigWig
+geoSampleAccession GSM1008571
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -1630,6 +1660,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002555
 expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008597
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1651,6 +1682,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002555
 expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hPk.narrowPeak.gz
+geoSampleAccession GSM1008597
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -1672,6 +1704,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002555
 expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hRawDataRep1.fastq.gz
+geoSampleAccession GSM1008597
 grant Crawford
 lab Duke
 md5sum 19e76f334aeef4c94e2b4476444e2536
@@ -1692,6 +1725,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002555
 expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hRawDataRep2.fastq.gz
+geoSampleAccession GSM1008597
 grant Crawford
 lab Duke
 md5sum f4cc150068d37d5eb39ca19030689b6b
@@ -1712,6 +1746,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002555
 expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hSig.bigWig
+geoSampleAccession GSM1008597
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -1775,6 +1810,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002564
 expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008574
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1796,6 +1832,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002564
 expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mPk.narrowPeak.gz
+geoSampleAccession GSM1008574
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -1817,6 +1854,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002564
 expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mRawDataRep1.fastq.gz
+geoSampleAccession GSM1008574
 grant Crawford
 lab Duke
 md5sum 285d1958b2964aa45962b98728b8224e
@@ -1837,6 +1875,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002564
 expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mRawDataRep2.fastq.gz
+geoSampleAccession GSM1008574
 grant Crawford
 lab Duke
 md5sum 6d972510247a651345720d17bf2c24d8
@@ -1857,6 +1896,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002564
 expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mSig.bigWig
+geoSampleAccession GSM1008574
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -2059,6 +2099,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003476
 expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008563
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2121,6 +2162,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003477
 expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008564
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2142,6 +2184,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003477
 expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonPk.narrowPeak.gz
+geoSampleAccession GSM1008564
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -2163,6 +2206,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003477
 expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep1.fastq.gz
+geoSampleAccession GSM1008564
 grant Crawford
 lab Duke
 md5sum 73264db0ccd068f590d9baf4cc8ec512
@@ -2183,6 +2227,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003477
 expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonRawDataRep2.fastq.gz
+geoSampleAccession GSM1008564
 grant Crawford
 lab Duke
 md5sum 0e515f6da0584a1bcfeddc9a207e7ad3
@@ -2203,6 +2248,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003477
 expId 3477
 fileName wgEncodeOpenChromDnaseFibroblgm03348LenticonSig.bigWig
+geoSampleAccession GSM1008564
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -2266,6 +2312,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003473
 expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008568
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2287,6 +2334,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003473
 expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodPk.narrowPeak.gz
+geoSampleAccession GSM1008568
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -2308,6 +2356,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003473
 expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep1.fastq.gz
+geoSampleAccession GSM1008568
 grant Crawford
 lab Duke
 md5sum eff59dde4fa2ad05ded35c5b861064f5
@@ -2328,6 +2377,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003473
 expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodRawDataRep2.fastq.gz
+geoSampleAccession GSM1008568
 grant Crawford
 lab Duke
 md5sum 41c6230dfd67855385583d61c230c55a
@@ -2348,6 +2398,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003473
 expId 3473
 fileName wgEncodeOpenChromDnaseFibroblgm03348LentimyodSig.bigWig
+geoSampleAccession GSM1008568
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -2369,6 +2420,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003476
 expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348Pk.narrowPeak.gz
+geoSampleAccession GSM1008563
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -2389,6 +2441,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003476
 expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348RawDataRep1.fastq.gz
+geoSampleAccession GSM1008563
 grant Crawford
 lab Duke
 md5sum 4742a053abe67d36eb330e98a26e28d5
@@ -2408,6 +2461,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003476
 expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348RawDataRep2.fastq.gz
+geoSampleAccession GSM1008563
 grant Crawford
 lab Duke
 md5sum 536ce8cff68fcbd562e6328e0aaa28be
@@ -2427,6 +2481,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003476
 expId 3476
 fileName wgEncodeOpenChromDnaseFibroblgm03348Sig.bigWig
+geoSampleAccession GSM1008563
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -2657,6 +2712,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002567
 expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008575
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2677,6 +2733,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002567
 expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395Pk.narrowPeak.gz
+geoSampleAccession GSM1008575
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -2697,6 +2754,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002567
 expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395RawDataRep1.fastq.gz
+geoSampleAccession GSM1008575
 grant Crawford
 lab Duke
 md5sum c67dbc2e5bb3175dbc1e31153a1f2b2c
@@ -2716,6 +2774,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002567
 expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395RawDataRep2.fastq.gz
+geoSampleAccession GSM1008575
 grant Crawford
 lab Duke
 md5sum 576d6e4d955ab633c09019b429d90578
@@ -2735,6 +2794,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002567
 expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395RawDataRep3.fastq.gz
+geoSampleAccession GSM1008575
 grant Crawford
 lab Duke
 md5sum 39e574a67290572c2886294587d0b844
@@ -2754,6 +2814,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002567
 expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395Sig.bigWig
+geoSampleAccession GSM1008575
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -2834,6 +2895,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002568
 expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008562
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2854,6 +2916,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002568
 expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396Pk.narrowPeak.gz
+geoSampleAccession GSM1008562
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -2874,6 +2937,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002568
 expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396RawDataRep1.fastq.gz
+geoSampleAccession GSM1008562
 grant Crawford
 lab Duke
 md5sum 8ad825cbd0e8e154a2fd36d0bd3fec67
@@ -2893,6 +2957,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002568
 expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396RawDataRep2.fastq.gz
+geoSampleAccession GSM1008562
 grant Crawford
 lab Duke
 md5sum f969dba25eac6810963efe7d89e07df8
@@ -2912,6 +2977,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002568
 expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396RawDataRep3.fastq.gz
+geoSampleAccession GSM1008562
 grant Crawford
 lab Duke
 md5sum bdac6fc8b019d57a23c4b5ddf6cd26b2
@@ -2931,6 +2997,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002568
 expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396Sig.bigWig
+geoSampleAccession GSM1008562
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -3011,6 +3078,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002569
 expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008561
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -3031,6 +3099,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002569
 expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443Pk.narrowPeak.gz
+geoSampleAccession GSM1008561
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -3051,6 +3120,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002569
 expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443RawDataRep1.fastq.gz
+geoSampleAccession GSM1008561
 grant Crawford
 lab Duke
 md5sum e272b0dab5b5256b970b5a675ce5db7f
@@ -3070,6 +3140,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002569
 expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443RawDataRep2.fastq.gz
+geoSampleAccession GSM1008561
 grant Crawford
 lab Duke
 md5sum 20341344f05182ff554388e7443f69e3
@@ -3089,6 +3160,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002569
 expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443RawDataRep3.fastq.gz
+geoSampleAccession GSM1008561
 grant Crawford
 lab Duke
 md5sum a8d637e74ae8f7389783885f5c30a290
@@ -3108,6 +3180,7 @@ dateUnrestricted 2012-11-07
 dccAccession wgEncodeEH002569
 expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443Sig.bigWig
+geoSampleAccession GSM1008561
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -3168,6 +3241,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003471
 expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008566
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -3188,6 +3262,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003471
 expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocPk.narrowPeak.gz
+geoSampleAccession GSM1008566
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -3208,6 +3283,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003471
 expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocRawDataRep1.fastq.gz
+geoSampleAccession GSM1008566
 grant Crawford
 lab Duke
 md5sum ef22aa416b716332ba43851d740ac250
@@ -3227,6 +3303,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003471
 expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocRawDataRep2.fastq.gz
+geoSampleAccession GSM1008566
 grant Crawford
 lab Duke
 md5sum b662efd05da3f6208f013d1cc4d72a0f
@@ -3246,6 +3323,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003471
 expId 3471
 fileName wgEncodeOpenChromDnaseFrontalcortexocSig.bigWig
+geoSampleAccession GSM1008566
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -3306,6 +3384,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003474
 expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008579
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -3326,6 +3405,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003474
 expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellPk.narrowPeak.gz
+geoSampleAccession GSM1008579
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -3346,6 +3426,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003474
 expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellRawDataRep1.fastq.gz
+geoSampleAccession GSM1008579
 grant Crawford
 lab Duke
 md5sum 59e44151bf7883caab20521069deb097
@@ -3365,6 +3446,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003474
 expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellRawDataRep2.fastq.gz
+geoSampleAccession GSM1008579
 grant Crawford
 lab Duke
 md5sum b676e983bb7aabfd4329c8a95c1c6b1c
@@ -3384,6 +3466,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003474
 expId 3474
 fileName wgEncodeOpenChromDnaseGcbcellSig.bigWig
+geoSampleAccession GSM1008579
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -3603,6 +3686,7 @@ dateUnrestricted 2013-04-19
 dccAccession wgEncodeEH003487
 expId 3487
 fileName wgEncodeOpenChromDnaseGm10248BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008589
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -3623,6 +3707,7 @@ dateUnrestricted 2013-04-19
 dccAccession wgEncodeEH003487
 expId 3487
 fileName wgEncodeOpenChromDnaseGm10248Pk.narrowPeak.gz
+geoSampleAccession GSM1008589
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -3643,6 +3728,7 @@ dateUnrestricted 2013-04-19
 dccAccession wgEncodeEH003487
 expId 3487
 fileName wgEncodeOpenChromDnaseGm10248RawDataRep1.fastq.gz
+geoSampleAccession GSM1008589
 grant Crawford
 lab Duke
 md5sum e1769b4651971e99e3d79c8f35c1223b
@@ -3662,6 +3748,7 @@ dateUnrestricted 2013-04-19
 dccAccession wgEncodeEH003487
 expId 3487
 fileName wgEncodeOpenChromDnaseGm10248RawDataRep2.fastq.gz
+geoSampleAccession GSM1008589
 grant Crawford
 lab Duke
 md5sum c607cf4199eea4407fc6df2074796f1f
@@ -3681,6 +3768,7 @@ dateUnrestricted 2013-04-19
 dccAccession wgEncodeEH003487
 expId 3487
 fileName wgEncodeOpenChromDnaseGm10248Sig.bigWig
+geoSampleAccession GSM1008589
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -3741,6 +3829,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003484
 expId 3484
 fileName wgEncodeOpenChromDnaseGm10266BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008590
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -3761,6 +3850,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003484
 expId 3484
 fileName wgEncodeOpenChromDnaseGm10266Pk.narrowPeak.gz
+geoSampleAccession GSM1008590
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -3781,6 +3871,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003484
 expId 3484
 fileName wgEncodeOpenChromDnaseGm10266RawDataRep1.fastq.gz
+geoSampleAccession GSM1008590
 grant Crawford
 lab Duke
 md5sum 77040ec52611ee66056db3ccc297d791
@@ -3800,6 +3891,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003484
 expId 3484
 fileName wgEncodeOpenChromDnaseGm10266RawDataRep2.fastq.gz
+geoSampleAccession GSM1008590
 grant Crawford
 lab Duke
 md5sum 663779f0788c696ccbe7ec392ecdfdae
@@ -3819,6 +3911,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003484
 expId 3484
 fileName wgEncodeOpenChromDnaseGm10266Sig.bigWig
+geoSampleAccession GSM1008590
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -4536,6 +4629,7 @@ dateUnrestricted 2013-04-16
 dccAccession wgEncodeEH003486
 expId 3486
 fileName wgEncodeOpenChromDnaseGm13976BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008591
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -4556,6 +4650,7 @@ dateUnrestricted 2013-04-16
 dccAccession wgEncodeEH003486
 expId 3486
 fileName wgEncodeOpenChromDnaseGm13976Pk.narrowPeak.gz
+geoSampleAccession GSM1008591
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -4576,6 +4671,7 @@ dateUnrestricted 2013-04-16
 dccAccession wgEncodeEH003486
 expId 3486
 fileName wgEncodeOpenChromDnaseGm13976RawDataRep1.fastq.gz
+geoSampleAccession GSM1008591
 grant Crawford
 lab Duke
 md5sum eb01af31153230f6f8fa7a5e5fc9f055
@@ -4595,6 +4691,7 @@ dateUnrestricted 2013-04-16
 dccAccession wgEncodeEH003486
 expId 3486
 fileName wgEncodeOpenChromDnaseGm13976RawDataRep2.fastq.gz
+geoSampleAccession GSM1008591
 grant Crawford
 lab Duke
 md5sum d08fcfdcdbf3f7695ec99c21c8257c65
@@ -4614,6 +4711,7 @@ dateUnrestricted 2013-04-16
 dccAccession wgEncodeEH003486
 expId 3486
 fileName wgEncodeOpenChromDnaseGm13976Sig.bigWig
+geoSampleAccession GSM1008591
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -4674,6 +4772,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003488
 expId 3488
 fileName wgEncodeOpenChromDnaseGm13977BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008556
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -4694,6 +4793,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003488
 expId 3488
 fileName wgEncodeOpenChromDnaseGm13977Pk.narrowPeak.gz
+geoSampleAccession GSM1008556
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -4714,6 +4814,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003488
 expId 3488
 fileName wgEncodeOpenChromDnaseGm13977RawDataRep1.fastq.gz
+geoSampleAccession GSM1008556
 grant Crawford
 lab Duke
 md5sum c82611cf11241172148ff4b849f8f321
@@ -4733,6 +4834,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003488
 expId 3488
 fileName wgEncodeOpenChromDnaseGm13977RawDataRep2.fastq.gz
+geoSampleAccession GSM1008556
 grant Crawford
 lab Duke
 md5sum 15bb366e3ce5a6295f918dbb494db9b7
@@ -4752,6 +4854,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003488
 expId 3488
 fileName wgEncodeOpenChromDnaseGm13977Sig.bigWig
+geoSampleAccession GSM1008556
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -5561,6 +5664,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003485
 expId 3485
 fileName wgEncodeOpenChromDnaseGm20000BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008587
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -5581,6 +5685,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003485
 expId 3485
 fileName wgEncodeOpenChromDnaseGm20000Pk.narrowPeak.gz
+geoSampleAccession GSM1008587
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -5601,6 +5706,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003485
 expId 3485
 fileName wgEncodeOpenChromDnaseGm20000RawDataRep1.fastq.gz
+geoSampleAccession GSM1008587
 grant Crawford
 lab Duke
 md5sum efe9e466a09bc7347e20c007c1cf1bb0
@@ -5620,6 +5726,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003485
 expId 3485
 fileName wgEncodeOpenChromDnaseGm20000RawDataRep2.fastq.gz
+geoSampleAccession GSM1008587
 grant Crawford
 lab Duke
 md5sum 531be71b44867abe0708ca77445d1079
@@ -5639,6 +5746,7 @@ dateUnrestricted 2013-04-15
 dccAccession wgEncodeEH003485
 expId 3485
 fileName wgEncodeOpenChromDnaseGm20000Sig.bigWig
+geoSampleAccession GSM1008587
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -5883,6 +5991,7 @@ dateUnrestricted 2012-09-29
 dccAccession wgEncodeEH002554
 expId 2554
 fileName wgEncodeOpenChromDnaseH7esBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008596
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -5903,6 +6012,7 @@ dateUnrestricted 2012-09-29
 dccAccession wgEncodeEH002554
 expId 2554
 fileName wgEncodeOpenChromDnaseH7esPk.narrowPeak.gz
+geoSampleAccession GSM1008596
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -5923,6 +6033,7 @@ dateUnrestricted 2012-09-29
 dccAccession wgEncodeEH002554
 expId 2554
 fileName wgEncodeOpenChromDnaseH7esRawDataRep1.fastq.gz
+geoSampleAccession GSM1008596
 grant Crawford
 lab Duke
 md5sum b9c47641b71c1455b27b2c309e9fb14d
@@ -5942,6 +6053,7 @@ dateUnrestricted 2012-09-29
 dccAccession wgEncodeEH002554
 expId 2554
 fileName wgEncodeOpenChromDnaseH7esRawDataRep2.fastq.gz
+geoSampleAccession GSM1008596
 grant Crawford
 lab Duke
 md5sum 381f27bb1b1b35cf76c013aee8a0fa91
@@ -5961,6 +6073,7 @@ dateUnrestricted 2012-09-29
 dccAccession wgEncodeEH002554
 expId 2554
 fileName wgEncodeOpenChromDnaseH7esRawDataRep3.fastq.gz
+geoSampleAccession GSM1008596
 grant Crawford
 lab Duke
 md5sum 6e6565f5feb4560cf6527799312931de
@@ -5980,6 +6093,7 @@ dateUnrestricted 2012-09-29
 dccAccession wgEncodeEH002554
 expId 2554
 fileName wgEncodeOpenChromDnaseH7esSig.bigWig
+geoSampleAccession GSM1008596
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -6204,6 +6318,7 @@ dateUnrestricted 2013-04-05
 dccAccession wgEncodeEH003479
 expId 3479
 fileName wgEncodeOpenChromDnaseHeartocBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008559
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -6224,6 +6339,7 @@ dateUnrestricted 2013-04-05
 dccAccession wgEncodeEH003479
 expId 3479
 fileName wgEncodeOpenChromDnaseHeartocPk.narrowPeak.gz
+geoSampleAccession GSM1008559
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -6244,6 +6360,7 @@ dateUnrestricted 2013-04-05
 dccAccession wgEncodeEH003479
 expId 3479
 fileName wgEncodeOpenChromDnaseHeartocRawDataRep1.fastq.gz
+geoSampleAccession GSM1008559
 grant Crawford
 lab Duke
 md5sum 5c54475f7f70170bed9b3958755aa255
@@ -6263,6 +6380,7 @@ dateUnrestricted 2013-04-05
 dccAccession wgEncodeEH003479
 expId 3479
 fileName wgEncodeOpenChromDnaseHeartocRawDataRep2.fastq.gz
+geoSampleAccession GSM1008559
 grant Crawford
 lab Duke
 md5sum 4c0cb2461a9dcc11d15aa6ffb329de85
@@ -6282,6 +6400,7 @@ dateUnrestricted 2013-04-05
 dccAccession wgEncodeEH003479
 expId 3479
 fileName wgEncodeOpenChromDnaseHeartocSig.bigWig
+geoSampleAccession GSM1008559
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -6342,6 +6461,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002565
 expId 2565
 fileName wgEncodeOpenChromDnaseHek293tBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008573
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -6362,6 +6482,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002565
 expId 2565
 fileName wgEncodeOpenChromDnaseHek293tPk.narrowPeak.gz
+geoSampleAccession GSM1008573
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -6382,6 +6503,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002565
 expId 2565
 fileName wgEncodeOpenChromDnaseHek293tRawDataRep1.fastq.gz
+geoSampleAccession GSM1008573
 grant Crawford
 lab Duke
 md5sum d141ef43f3212dff4f3897cb4b9dce6f
@@ -6401,6 +6523,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002565
 expId 2565
 fileName wgEncodeOpenChromDnaseHek293tRawDataRep2.fastq.gz
+geoSampleAccession GSM1008573
 grant Crawford
 lab Duke
 md5sum cc1558383632809ace0b3ea2f88c0b72
@@ -6420,6 +6543,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002565
 expId 2565
 fileName wgEncodeOpenChromDnaseHek293tSig.bigWig
+geoSampleAccession GSM1008573
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -7719,6 +7843,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002550
 expId 2550
 fileName wgEncodeOpenChromDnaseHsmmembBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008592
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -7739,6 +7864,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002550
 expId 2550
 fileName wgEncodeOpenChromDnaseHsmmembPk.narrowPeak.gz
+geoSampleAccession GSM1008592
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -7759,6 +7885,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002550
 expId 2550
 fileName wgEncodeOpenChromDnaseHsmmembSig.bigWig
+geoSampleAccession GSM1008592
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -7839,6 +7966,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002556
 expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008598
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -7859,6 +7987,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002556
 expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdPk.narrowPeak.gz
+geoSampleAccession GSM1008598
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -7879,6 +8008,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002556
 expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdSig.bigWig
+geoSampleAccession GSM1008598
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -8745,6 +8875,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003482
 expId 3482
 fileName wgEncodeOpenChromDnaseImr90BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008586
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -8765,6 +8896,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003482
 expId 3482
 fileName wgEncodeOpenChromDnaseImr90Pk.narrowPeak.gz
+geoSampleAccession GSM1008586
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -8785,6 +8917,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003482
 expId 3482
 fileName wgEncodeOpenChromDnaseImr90RawDataRep1.fastq.gz
+geoSampleAccession GSM1008586
 grant Crawford
 lab Duke
 md5sum 01403a7390c8603753c1c7ca051aa36b
@@ -8804,6 +8937,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003482
 expId 3482
 fileName wgEncodeOpenChromDnaseImr90RawDataRep2.fastq.gz
+geoSampleAccession GSM1008586
 grant Crawford
 lab Duke
 md5sum 48b469963dc56da3c910971feacf9855
@@ -8823,6 +8957,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003482
 expId 3482
 fileName wgEncodeOpenChromDnaseImr90Sig.bigWig
+geoSampleAccession GSM1008586
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -9027,6 +9162,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002560
 expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008570
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -9047,6 +9183,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002560
 expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1Pk.narrowPeak.gz
+geoSampleAccession GSM1008570
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -9067,6 +9204,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002560
 expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1RawDataRep1.fastq.gz
+geoSampleAccession GSM1008570
 grant Crawford
 lab Duke
 md5sum 3468dacc87659c86c8bd8ef8b6daf106
@@ -9086,6 +9224,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002560
 expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1RawDataRep2.fastq.gz
+geoSampleAccession GSM1008570
 grant Crawford
 lab Duke
 md5sum c9105e685f71bb9441256d12aeb2d704
@@ -9105,6 +9244,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002560
 expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1Sig.bigWig
+geoSampleAccession GSM1008570
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -9185,6 +9325,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002561
 expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008569
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -9205,6 +9346,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002561
 expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11Pk.narrowPeak.gz
+geoSampleAccession GSM1008569
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -9225,6 +9367,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002561
 expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11RawDataRep1.fastq.gz
+geoSampleAccession GSM1008569
 grant Crawford
 lab Duke
 md5sum 197f113eee792c44f578f1b6c4f18d5b
@@ -9244,6 +9387,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002561
 expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11RawDataRep2.fastq.gz
+geoSampleAccession GSM1008569
 grant Crawford
 lab Duke
 md5sum 9c0a5805666ba83714278ddea378da85
@@ -9263,6 +9407,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002561
 expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11RawDataRep3.fastq.gz
+geoSampleAccession GSM1008569
 grant Crawford
 lab Duke
 md5sum d2d768c7d72344e4c745d314ab3526f9
@@ -9282,6 +9427,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002561
 expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11Sig.bigWig
+geoSampleAccession GSM1008569
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -9362,6 +9508,7 @@ dateUnrestricted 2012-11-01
 dccAccession wgEncodeEH002558
 expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008600
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -9382,6 +9529,7 @@ dateUnrestricted 2012-11-01
 dccAccession wgEncodeEH002558
 expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7Pk.narrowPeak.gz
+geoSampleAccession GSM1008600
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -9402,6 +9550,7 @@ dateUnrestricted 2012-11-01
 dccAccession wgEncodeEH002558
 expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7RawDataRep1.fastq.gz
+geoSampleAccession GSM1008600
 grant Crawford
 lab Duke
 md5sum fd7bdec9c9ac0b1ba64cb11ba7a99e13
@@ -9421,6 +9570,7 @@ dateUnrestricted 2012-11-01
 dccAccession wgEncodeEH002558
 expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7RawDataRep2.fastq.gz
+geoSampleAccession GSM1008600
 grant Crawford
 lab Duke
 md5sum ac6f9daa7355ee64582d7dca28001fb7
@@ -9440,6 +9590,7 @@ dateUnrestricted 2012-11-01
 dccAccession wgEncodeEH002558
 expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7RawDataRep3.fastq.gz
+geoSampleAccession GSM1008600
 grant Crawford
 lab Duke
 md5sum b5b2ca3848b2a698edb6494b7d9317b1
@@ -9459,6 +9610,7 @@ dateUnrestricted 2012-11-01
 dccAccession wgEncodeEH002558
 expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7Sig.bigWig
+geoSampleAccession GSM1008600
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -9521,6 +9673,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002551
 expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008593
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -9542,6 +9695,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002551
 expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mPk.narrowPeak.gz
+geoSampleAccession GSM1008593
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -9563,6 +9717,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002551
 expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mRawDataRep1.fastq.gz
+geoSampleAccession GSM1008593
 grant Crawford
 lab Duke
 md5sum a5e45d51a61769ce37935b9f12f32725
@@ -9583,6 +9738,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002551
 expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mRawDataRep2.fastq.gz
+geoSampleAccession GSM1008593
 grant Crawford
 lab Duke
 md5sum 8165b77e69242d7c96fb95e5416292ec
@@ -9603,6 +9759,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002551
 expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mSig.bigWig
+geoSampleAccession GSM1008593
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -9666,6 +9823,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002552
 expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008594
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -9687,6 +9845,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002552
 expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030Pk.narrowPeak.gz
+geoSampleAccession GSM1008594
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -9708,6 +9867,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002552
 expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030RawDataRep1.fastq.gz
+geoSampleAccession GSM1008594
 grant Crawford
 lab Duke
 md5sum 15c18eef1c37929fc1612a313c5f8573
@@ -9728,6 +9888,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002552
 expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030RawDataRep2.fastq.gz
+geoSampleAccession GSM1008594
 grant Crawford
 lab Duke
 md5sum 037485c15105a7394aec0aca3ceffa45
@@ -9748,6 +9909,7 @@ dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002552
 expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030Sig.bigWig
+geoSampleAccession GSM1008594
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -9907,6 +10069,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562BaseOverlapSignalV2.bigWig
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -9991,6 +10154,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003469
 expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008602
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -10012,6 +10176,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003469
 expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phasePk.narrowPeak.gz
+geoSampleAccession GSM1008602
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -10033,6 +10198,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003469
 expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep1.fastq.gz
+geoSampleAccession GSM1008602
 grant Crawford
 lab Duke
 md5sum 24b9c6fc6400d5ae36f074681b5ea72d
@@ -10053,6 +10219,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003469
 expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep2.fastq.gz
+geoSampleAccession GSM1008602
 grant Crawford
 lab Duke
 md5sum 780431663723e65b8a5c46cd740da289
@@ -10073,6 +10240,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003469
 expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseRawDataRep3.fastq.gz
+geoSampleAccession GSM1008602
 grant Crawford
 lab Duke
 md5sum a40b8244d9fda2a62a60263e2e3d8d37
@@ -10093,6 +10261,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003469
 expId 3469
 fileName wgEncodeOpenChromDnaseK562G1phaseSig.bigWig
+geoSampleAccession GSM1008602
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
@@ -10177,6 +10346,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003472
 expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008567
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -10198,6 +10368,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003472
 expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphasePk.narrowPeak.gz
+geoSampleAccession GSM1008567
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -10219,6 +10390,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003472
 expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep1.fastq.gz
+geoSampleAccession GSM1008567
 grant Crawford
 lab Duke
 md5sum 95103e37f50caa9c49d925e53c23a41d
@@ -10239,6 +10411,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003472
 expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep2.fastq.gz
+geoSampleAccession GSM1008567
 grant Crawford
 lab Duke
 md5sum e7d5ddf357b9b078f796b720a81ebf4b
@@ -10259,6 +10432,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003472
 expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseRawDataRep3.fastq.gz
+geoSampleAccession GSM1008567
 grant Crawford
 lab Duke
 md5sum 2ab731aae71ce0e039ef64bde8a35f88
@@ -10279,6 +10453,7 @@ dateUnrestricted 2013-03-27
 dccAccession wgEncodeEH003472
 expId 3472
 fileName wgEncodeOpenChromDnaseK562G2mphaseSig.bigWig
+geoSampleAccession GSM1008567
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
@@ -10342,6 +10517,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002559
 expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008601
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -10363,6 +10539,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002559
 expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutPk.narrowPeak.gz
+geoSampleAccession GSM1008601
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -10384,6 +10561,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002559
 expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutRawDataRep1.fastq.gz
+geoSampleAccession GSM1008601
 grant Crawford
 lab Duke
 md5sum 4bbb17ae681d87da86a8bd918be16153
@@ -10404,6 +10582,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002559
 expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutRawDataRep2.fastq.gz
+geoSampleAccession GSM1008601
 grant Crawford
 lab Duke
 md5sum d0d855fff7688454e724a2b006010f56
@@ -10424,6 +10603,7 @@ dateUnrestricted 2012-11-02
 dccAccession wgEncodeEH002559
 expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutSig.bigWig
+geoSampleAccession GSM1008601
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
@@ -10470,6 +10650,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562PkV2.narrowPeak.gz
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -10515,6 +10696,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562RawDataRep1V2.fastq.gz
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 md5sum f2cf4aca12268a5215eb6bac18bbafe5
@@ -10559,6 +10741,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562RawDataRep2V2.fastq.gz
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 md5sum c46596dc57167146ce6a0c0f02721c0b
@@ -10579,6 +10762,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562RawDataRep3V2.fastq.gz
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 md5sum b8d22b786c97af485ef7ad751add1e6e
@@ -10662,6 +10846,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEH003490
 expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008558
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -10683,6 +10868,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEH003490
 expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrPk.narrowPeak.gz
+geoSampleAccession GSM1008558
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -10704,6 +10890,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEH003490
 expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrRawDataRep1.fastq.gz
+geoSampleAccession GSM1008558
 grant Crawford
 lab Duke
 md5sum ed9732791ed9996ec5d455600c8389e9
@@ -10724,6 +10911,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEH003490
 expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrRawDataRep2.fastq.gz
+geoSampleAccession GSM1008558
 grant Crawford
 lab Duke
 md5sum a9e99f2fa0d902d31e18b889b2989bc1
@@ -10744,6 +10932,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEH003490
 expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrRawDataRep3.fastq.gz
+geoSampleAccession GSM1008558
 grant Crawford
 lab Duke
 md5sum 7d4c5af9e3d3298c83425ed22e147ea5
@@ -10764,6 +10953,7 @@ dateUnrestricted 2013-05-01
 dccAccession wgEncodeEH003490
 expId 3490
 fileName wgEncodeOpenChromDnaseK562Saha1u72hrSig.bigWig
+geoSampleAccession GSM1008558
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
@@ -10848,6 +11038,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003489
 expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008580
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -10869,6 +11060,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003489
 expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlPk.narrowPeak.gz
+geoSampleAccession GSM1008580
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -10890,6 +11082,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003489
 expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlRawDataRep1.fastq.gz
+geoSampleAccession GSM1008580
 grant Crawford
 lab Duke
 md5sum 638a438998cd023b70c24f785aa3ffa2
@@ -10910,6 +11103,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003489
 expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlRawDataRep2.fastq.gz
+geoSampleAccession GSM1008580
 grant Crawford
 lab Duke
 md5sum fa208c5ca019db1b5f7718041767e23a
@@ -10930,6 +11124,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003489
 expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlRawDataRep3.fastq.gz
+geoSampleAccession GSM1008580
 grant Crawford
 lab Duke
 md5sum b8b7ca1f84e01ee1f6ae5c3932ec700c
@@ -10950,6 +11145,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003489
 expId 3489
 fileName wgEncodeOpenChromDnaseK562SahactrlSig.bigWig
+geoSampleAccession GSM1008580
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
@@ -10996,6 +11192,7 @@ dateUnrestricted 2012-11-28
 dccAccession wgEncodeEH000530
 expId 530
 fileName wgEncodeOpenChromDnaseK562SigV2.bigWig
+geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
@@ -11586,6 +11783,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003467
 expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008581
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -11607,6 +11805,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003467
 expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaPk.narrowPeak.gz
+geoSampleAccession GSM1008581
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -11628,6 +11827,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003467
 expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep1.fastq.gz
+geoSampleAccession GSM1008581
 grant Crawford
 lab Duke
 md5sum cd367b150d2fb30fe4b2e25af94d979c
@@ -11648,6 +11848,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003467
 expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep2.fastq.gz
+geoSampleAccession GSM1008581
 grant Crawford
 lab Duke
 md5sum b765407b6d423fe85fbfa8ca8f2e1408
@@ -11668,6 +11869,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003467
 expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaRawDataRep3.fastq.gz
+geoSampleAccession GSM1008581
 grant Crawford
 lab Duke
 md5sum c701b01932179b28b7b10fe968ab6a30
@@ -11688,6 +11890,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003467
 expId 3467
 fileName wgEncodeOpenChromDnaseMcf7CtcfshrnaSig.bigWig
+geoSampleAccession GSM1008581
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_MCF7
@@ -11903,6 +12106,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003470
 expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008565
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -11924,6 +12128,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003470
 expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconPk.narrowPeak.gz
+geoSampleAccession GSM1008565
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -11945,6 +12150,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003470
 expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconRawDataRep1.fastq.gz
+geoSampleAccession GSM1008565
 grant Crawford
 lab Duke
 md5sum 575deb1cb105871a2baad5a925f9d77b
@@ -11965,6 +12171,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003470
 expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconRawDataRep2.fastq.gz
+geoSampleAccession GSM1008565
 grant Crawford
 lab Duke
 md5sum d266ae33813dbb62bf969dfa9ced39a1
@@ -11985,6 +12192,7 @@ dateUnrestricted 2013-03-26
 dccAccession wgEncodeEH003470
 expId 3470
 fileName wgEncodeOpenChromDnaseMcf7HypoxlacconSig.bigWig
+geoSampleAccession GSM1008565
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_MCF7
@@ -12093,6 +12301,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003468
 expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008603
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -12114,6 +12323,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003468
 expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaPk.narrowPeak.gz
+geoSampleAccession GSM1008603
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -12135,6 +12345,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003468
 expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep1.fastq.gz
+geoSampleAccession GSM1008603
 grant Crawford
 lab Duke
 md5sum 021d37235970ab2a73219daa502bfdb9
@@ -12155,6 +12366,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003468
 expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep2.fastq.gz
+geoSampleAccession GSM1008603
 grant Crawford
 lab Duke
 md5sum e98df272de5650e6319222b5928b64a7
@@ -12175,6 +12387,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003468
 expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaRawDataRep3.fastq.gz
+geoSampleAccession GSM1008603
 grant Crawford
 lab Duke
 md5sum 8a52f56398513604b1bd5e8ef930f1e0
@@ -12195,6 +12408,7 @@ dateUnrestricted 2013-02-02
 dccAccession wgEncodeEH003468
 expId 3468
 fileName wgEncodeOpenChromDnaseMcf7RandshrnaSig.bigWig
+geoSampleAccession GSM1008603
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_MCF7
@@ -12511,6 +12725,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH002688
 expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008577
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -12531,6 +12746,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH002688
 expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341Pk.narrowPeak.gz
+geoSampleAccession GSM1008577
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -12551,6 +12767,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH002688
 expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341RawDataRep1.fastq.gz
+geoSampleAccession GSM1008577
 grant Crawford
 lab Duke
 md5sum 927146e7d0686cfef7be39430a7e2177
@@ -12570,6 +12787,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH002688
 expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341RawDataRep2.fastq.gz
+geoSampleAccession GSM1008577
 grant Crawford
 lab Duke
 md5sum f8ea8197da07a42b82e71cdc52bc5811
@@ -12589,6 +12807,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH002688
 expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341Sig.bigWig
+geoSampleAccession GSM1008577
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -12649,6 +12868,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002557
 expId 2557
 fileName wgEncodeOpenChromDnaseMel2183BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008599
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -12669,6 +12889,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002557
 expId 2557
 fileName wgEncodeOpenChromDnaseMel2183Pk.narrowPeak.gz
+geoSampleAccession GSM1008599
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -12689,6 +12910,7 @@ dateUnrestricted 2012-10-31
 dccAccession wgEncodeEH002557
 expId 2557
 fileName wgEncodeOpenChromDnaseMel2183Sig.bigWig
+geoSampleAccession GSM1008599
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -12908,6 +13130,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003466
 expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008582
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -12928,6 +13151,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003466
 expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14Pk.narrowPeak.gz
+geoSampleAccession GSM1008582
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -12948,6 +13172,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003466
 expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14RawDataRep1.fastq.gz
+geoSampleAccession GSM1008582
 grant Crawford
 lab Duke
 md5sum e418f54e1f06e5d458ec26c7eb14badc
@@ -12967,6 +13192,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003466
 expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14RawDataRep2.fastq.gz
+geoSampleAccession GSM1008582
 grant Crawford
 lab Duke
 md5sum c7d9940ea8bc5ac1f58f6dae8990b2e9
@@ -12986,6 +13212,7 @@ dateUnrestricted 2013-01-25
 dccAccession wgEncodeEH003466
 expId 3466
 fileName wgEncodeOpenChromDnaseMonocd14Sig.bigWig
+geoSampleAccession GSM1008582
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_CD14_monocytes
@@ -13192,6 +13419,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003478
 expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008557
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -13212,6 +13440,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003478
 expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellPk.narrowPeak.gz
+geoSampleAccession GSM1008557
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -13232,6 +13461,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003478
 expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellRawDataRep1.fastq.gz
+geoSampleAccession GSM1008557
 grant Crawford
 lab Duke
 md5sum 51c77ec8973e74a66f4edb09f92b074e
@@ -13251,6 +13481,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003478
 expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellRawDataRep2.fastq.gz
+geoSampleAccession GSM1008557
 grant Crawford
 lab Duke
 md5sum 700bd3e0f89fd2874c1a9ca4c216bf77
@@ -13270,6 +13501,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003478
 expId 3478
 fileName wgEncodeOpenChromDnaseNaivebcellSig.bigWig
+geoSampleAccession GSM1008557
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -13535,6 +13767,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003475
 expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008584
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -13555,6 +13788,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003475
 expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurospherePk.narrowPeak.gz
+geoSampleAccession GSM1008584
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -13575,6 +13809,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003475
 expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep1.fastq.gz
+geoSampleAccession GSM1008584
 grant Crawford
 lab Duke
 md5sum 4080128c48a952334c83f480da9df2da
@@ -13594,6 +13829,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003475
 expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep2.fastq.gz
+geoSampleAccession GSM1008584
 grant Crawford
 lab Duke
 md5sum c67f11fc12e2925635fe7cbe3299c52b
@@ -13613,6 +13849,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003475
 expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereRawDataRep3.fastq.gz
+geoSampleAccession GSM1008584
 grant Crawford
 lab Duke
 md5sum db546421aaa60935c93cd776bebf7d52
@@ -13632,6 +13869,7 @@ dateUnrestricted 2013-04-02
 dccAccession wgEncodeEH003475
 expId 3475
 fileName wgEncodeOpenChromDnaseOlfneurosphereSig.bigWig
+geoSampleAccession GSM1008584
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -14434,6 +14672,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003491
 expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008560
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -14454,6 +14693,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003491
 expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocPk.narrowPeak.gz
+geoSampleAccession GSM1008560
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -14474,6 +14714,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003491
 expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocRawDataRep1.fastq.gz
+geoSampleAccession GSM1008560
 grant Crawford
 lab Duke
 md5sum 2000086c4e92799276164177b719c98a
@@ -14493,6 +14734,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003491
 expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocRawDataRep2.fastq.gz
+geoSampleAccession GSM1008560
 grant Crawford
 lab Duke
 md5sum d818465eea3a2162da6ed217fa9cd802
@@ -14512,6 +14754,7 @@ dateUnrestricted 2013-04-30
 dccAccession wgEncodeEH003491
 expId 3491
 fileName wgEncodeOpenChromDnasePsoasmuscleocSig.bigWig
+geoSampleAccession GSM1008560
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -14572,6 +14815,7 @@ dateUnrestricted 2012-07-03
 dccAccession wgEncodeEH002553
 expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1BaseOverlapSignal.bigWig
+geoSampleAccession GSM1008595
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -14592,6 +14836,7 @@ dateUnrestricted 2012-07-03
 dccAccession wgEncodeEH002553
 expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1Pk.narrowPeak.gz
+geoSampleAccession GSM1008595
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -14612,6 +14857,7 @@ dateUnrestricted 2012-07-03
 dccAccession wgEncodeEH002553
 expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1RawDataRep1.fastq.gz
+geoSampleAccession GSM1008595
 grant Crawford
 lab Duke
 md5sum f7d73f5bebade9cc562a45d887ac8ca5
@@ -14631,6 +14877,7 @@ dateUnrestricted 2012-07-03
 dccAccession wgEncodeEH002553
 expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1RawDataRep2.fastq.gz
+geoSampleAccession GSM1008595
 grant Crawford
 lab Duke
 md5sum e23b55692a877880a2393f246c96c0e5
@@ -14650,6 +14897,7 @@ dateUnrestricted 2012-07-03
 dccAccession wgEncodeEH002553
 expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1Sig.bigWig
+geoSampleAccession GSM1008595
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -14710,6 +14958,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003483
 expId 3483
 fileName wgEncodeOpenChromDnaseSknshBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008585
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -14730,6 +14979,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003483
 expId 3483
 fileName wgEncodeOpenChromDnaseSknshPk.narrowPeak.gz
+geoSampleAccession GSM1008585
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -14750,6 +15000,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003483
 expId 3483
 fileName wgEncodeOpenChromDnaseSknshRawDataRep1.fastq.gz
+geoSampleAccession GSM1008585
 grant Crawford
 lab Duke
 md5sum 1435db158da2837e3b9d1035e58bd2c0
@@ -14769,6 +15020,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003483
 expId 3483
 fileName wgEncodeOpenChromDnaseSknshRawDataRep2.fastq.gz
+geoSampleAccession GSM1008585
 grant Crawford
 lab Duke
 md5sum feeaee518d43415f384c3d91c572dc61
@@ -14788,6 +15040,7 @@ dateUnrestricted 2013-04-14
 dccAccession wgEncodeEH003483
 expId 3483
 fileName wgEncodeOpenChromDnaseSknshSig.bigWig
+geoSampleAccession GSM1008585
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -15078,6 +15331,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002566
 expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mBaseOverlapSignal.bigWig
+geoSampleAccession GSM1008576
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -15099,6 +15353,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002566
 expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mPk.narrowPeak.gz
+geoSampleAccession GSM1008576
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -15120,6 +15375,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002566
 expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mRawDataRep1.fastq.gz
+geoSampleAccession GSM1008576
 grant Crawford
 lab Duke
 md5sum 8c2dde121113f9601b033da84a4037ed
@@ -15140,6 +15396,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002566
 expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mRawDataRep2.fastq.gz
+geoSampleAccession GSM1008576
 grant Crawford
 lab Duke
 md5sum 731364a933a1eada5410994cb9d58a50
@@ -15160,6 +15417,7 @@ dateUnrestricted 2012-11-03
 dccAccession wgEncodeEH002566
 expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mSig.bigWig
+geoSampleAccession GSM1008576
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -15313,6 +15571,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrothelBaseOverlapSignalV2.bigWig
+geoSampleAccession GSM1008605
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -15334,6 +15593,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrothelPkV2.narrowPeak.gz
+geoSampleAccession GSM1008605
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -15355,6 +15615,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrothelRawDataRep1V2.fastq.gz
+geoSampleAccession GSM1008605
 grant Crawford
 lab Duke
 md5sum 31aebf39dd23dcbb2b09bcc66176f9a9
@@ -15375,6 +15636,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrothelRawDataRep2V2.fastq.gz
+geoSampleAccession GSM1008605
 grant Crawford
 lab Duke
 md5sum 498b3de6794dd451ece28dd81fbf8991
@@ -15395,6 +15657,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrothelSigV2.bigWig
+geoSampleAccession GSM1008605
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -15460,6 +15723,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189BaseOverlapSignalV2.bigWig
+geoSampleAccession GSM1008606
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -15482,6 +15746,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189PkV2.narrowPeak.gz
+geoSampleAccession GSM1008606
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -15504,6 +15769,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189RawDataRep1V2.fastq.gz
+geoSampleAccession GSM1008606
 grant Crawford
 lab Duke
 md5sum 234e44898336c911255d9b895784bb2c
@@ -15525,6 +15791,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189RawDataRep2V2.fastq.gz
+geoSampleAccession GSM1008606
 grant Crawford
 lab Duke
 md5sum 4615c36124d0c2694c6544da49c76596
@@ -15546,6 +15813,7 @@ dateUnrestricted 2012-12-13
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189SigV2.bigWig
+geoSampleAccession GSM1008606
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -15896,4 +16164,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1532213114
+# MAGIC: 824085853
