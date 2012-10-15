@@ -59,7 +59,6 @@ if [ "${WC}" -gt 1 ]; then
     ../buildISCA.csh
     ../validateISCA.sh hg19
 
-    exit 0
     # now install
     for i in `cat ../isca.tables`
     do 
