@@ -10068,6 +10068,7 @@ vendorName 1)abcam; 2)Millipore
 term H3K4me3_(04-745)
 tag H3K4ME304745
 type Antibody
+label H3K4me3 (04-745)
 antibodyDescription Rabbit monoclonal anti-trimethyl-Histone H3 (Lys4) Antibody, clone MC315
 lab Ren
 lots NG1643014
@@ -10613,10 +10614,10 @@ term hSpt5_(sc-28678)
 tag HSPT5SC28678
 type Antibody
 label hSpt5 (sc-28678)
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: hSpt5
+antibodyDescription Rabbit polyclonal. SPT5 Antibody (H-300) epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: SUPT5H 
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
-target hSpt5
+target SUPT5H
 targetDescription hSpt5 heterodimerizes with hSpt4 to form the DRB Sensitivity Inducing Factor (DSIF). DSIF play dual roles in elongation. First, in a conjunction with NELF, dephosphorylated state DSIF blocks RNA polymerase II (RNAPII) from shifting from early elongation to productive elongation. Second, after phosphorylation DSIF continues to associate with elongating RNAPII to facilitate recruitment of factors required for processing of the mRNA.
 targetId GeneCard:SUPT5H
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
@@ -10789,7 +10790,7 @@ term KAP1
 tag KAP1
 type Antibody
 label KAP1 (ab10483)
-antibodyDescription Rabbit polyclonal. Antibody Target: KAP1
+antibodyDescription Rabbit polyclonal. Immunogen was a synthetic peptide, which represented a portion of human tripartite motif-containing 28 (KAP1) encoded within exon 1. Antibody Target: TRIM28
 lab Farnham
 orderUrl http://www.abcam.com/index.html?datasheet=10483
 target KAP1
@@ -11591,11 +11592,11 @@ term Pol2
 tag POL2
 type Antibody
 label POL2 (MMS-126R)
-antibodyDescription Mouse monoclonal, clone 8WG16. Antibody Target: POL2
+antibodyDescription Mouse monoclonal, clone 8WG16. Antibody Target: POLR2A
 lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
-target POL2
+target POLR2A
 targetClass Pol2
 targetDescription RNA Polymerase II
 targetId GeneCard:POLR2A
@@ -11607,12 +11608,12 @@ vendorName Covance
 term Pol2(b)
 tag POL2b
 type Antibody
-label POL2B (MMS-128P)
-antibodyDescription Mouse monoclonal, clone CTD4H8. Antibody Target: POL2B
+label POL2A (MMS-128P)
+antibodyDescription Mouse monoclonal, clone CTD4H8. Antibody Target: POLR2A
 lab Bernstein
 lots 147337002
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
-target POL2B
+target POLR2A
 targetClass Pol2
 targetDescription RNA polymerase II. Is responsible for RNA transcription. It is generally enriched at 5' gene ends, probably due to higher rate of occupancy associated with transition from initiation to elongation.
 targetId GeneCard:POLR2A
@@ -11625,10 +11626,10 @@ term Pol2-4H8
 tag POL24H8
 type Antibody
 label Pol2-4H8 (ab5408)
-antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade. Antibody Target: POL2
+antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade. Antibody Target: POLR2A
 lab Myers
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
-target POL24H8
+target POLR2A
 targetClass Pol2
 targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes
 targetId GeneCard:POLR2A
@@ -11640,11 +11641,11 @@ vendorName abcam
 term Pol2(phosphoS2)
 tag POL2S2
 type Antibody
-label POL2S2 (ab5095)
-antibodyDescription Rabbit polyclonal against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2. Antibody Target: POL2S2
+label POL2 (phospho S2) (ab5095)
+antibodyDescription Rabbit polyclonal against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2. Antibody Target: POLR2A
 lab Snyder
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-phospho-S2-antibody-ChIP-Grade-ab5095.html
-target POL2S2
+target POLR2A
 targetClass Pol2
 targetDescription RNA polymerase II, large subunit- specific for phosphorylated C-terminal domain.
 targetId GeneCard:POLR2A
@@ -12252,8 +12253,8 @@ vendorName Dr. Peggy Farnham at USC
 term T7Tag
 tag T7
 type Antibody
-label T7Tag (AB3790; Nov 69522)
-antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore and Novagen 69522 Negative Control Ab (T7 Tag Mouse monoclonal). Antibody Target: T7Tag
+label T7Tag (AB3790)
+antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore. Antibody Target: T7Tag
 lab Tenenbaum
 orderUrl http://www.millipore.com/catalogue/item/ab3790
 target T7Tag
@@ -12261,8 +12262,8 @@ targetDescription T7 (MASMTGGQQMG)
 targetId Negative Control
 targetUrl http://www.millipore.com/catalogue/item/ab3790
 validation Human_-_T7-Tag_(Negative Control):human_T7tag_validation_Tenenbaum.pdf
-vendorId AB3790; Nov_69522
-vendorName 1)Millipore; 2)Novagen
+vendorId AB3790
+vendorName Millipore
 
 term TAF1
 tag TAF1
@@ -12318,11 +12319,11 @@ term TBLR1_(ab24550)
 tag TBLR1AB24550
 type Antibody
 label TBLR1 (ab24550)
-antibodyDescription Rabbit polyclonal, immunogen: Recombinant full length protein (Human). Antibody Target: TBLR1
+antibodyDescription Rabbit polyclonal, immunogen: Recombinant full length protein (Human). Antibody Target: TBL1XR1
 lab Snyder
 lots GR340121
 orderUrl http://www.abcam.com/TBLR1-antibody-ChIP-Grade-ab24550.html
-target TBLR1
+target TBL1XR1
 targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
 targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
@@ -12333,11 +12334,11 @@ vendorName abcam
 term TBLR1_(NB600-270)
 tag TBLR1NB600270
 type Antibody
-antibodyDescription Rabbit polyclonal, immunogen: A synthetic peptide that maps to a region between residues 100 and 150 of human TBL1-related Protein 1 using the numbering given in SwissProt entry Q9BZK7.
+antibodyDescription Rabbit polyclonal, immunogen: A synthetic peptide that maps to a region between residues 100 and 150 of human TBL1-related Protein 1 using the numbering given in SwissProt entry Q9BZK7. Antibody Target: TBL1XR1
 lab Snyder
 lots 1
 orderUrl http://www.novusbio.com/TBLR1-Antibody_NB600-270.html
-target TBLR1
+target TBL1XR1
 targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
 targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
@@ -12678,10 +12679,10 @@ term WHIP
 tag WHIP
 type Antibody
 label WHIP (ab4731)
-antibodyDescription Rabbit polyclonal. Immunogen: (Synthetic peptide) SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WHIP
+antibodyDescription Rabbit polyclonal. Immunogen: (Synthetic peptide) SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WRNIP1
 lab Snyder
 orderUrl http://www.abcam.com/WHIP-antibody-ab4731.html
-target WHIP
+target WRNIP1
 targetClass DNARep
 targetDescription Interacts with the N-terminal portion of Werner protein containing the exonuclease domain, shows homology to replication factor C family proteins, and is conserved from E. coli to human. Studies in yeast suggest that this gene may influence the aging process. Functions as a modulator for initiation or reinitiation events during DNA polymerase delta-mediated DNA synthesis. Has an intrinsic ATPase activity that functions as a sensor of DNA damage or of arrested replication forks and regulates the extent of DNA synthesis.
 targetId GeneCard:WRNIP1
@@ -12839,11 +12840,12 @@ vendorName Proteintech
 term ZNF-MIZD-CP1_(ab65767)
 tag ZNFMIZDCP1AB65767
 type Antibody
-antibodyDescription Rabbit polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1.
+label ZMIZ1 (ab65767)
+antibodyDescription Rabbit polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1. Antibody Target: ZMIZ1
 lab Snyder
 lots GR30927-1
 orderUrl http://www.abcam.com/Zinc-finger-MIZ-domain-containing-protein-1-antibody-ab65767.html
-target ZNF-MIZD-CP1
+target ZMIZ1
 targetDescription Zinc finger MIZ domain-containing protein 1 that increases ligand-dependent transcriptional activity of AR and promotes AR sumoylation. The stimulation of AR activity is dependent upon sumoylation.
 targetId GeneCard:ZMIZ1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZMIZ1
@@ -12920,6 +12922,7 @@ vendorName Abnova
 term ZNF384_(HPA004051)
 tag ZNF384HPA004051
 type Antibody
+label ZNF384 (HPA004051)
 antibodyDescription Rabbit polyclonal generated using the immunogen: Zinc finger protein 384 recombinant protein epitope signature tag (PrEST)
 lab Snyder
 lots A57874
