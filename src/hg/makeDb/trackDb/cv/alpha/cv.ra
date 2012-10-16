@@ -10981,23 +10981,6 @@ validation Human_-_Med26_(sc-48776)(Western_blot,Immunoprecipitation):human_Med2
 vendorId sc-48776
 vendorName Santa Cruz Biotechnology
 
-term MEF2_(sc-17785)
-tag MEF2SC17785
-type Antibody
-label MEF2A (sc-17785)
-antibodyDescription Mouse monoclonal antibody raised against amino acids 1-300 mapping at the N-terminus of MEF-2A of human origin; recommended for detection of a broad range of MEF-2 family members of mouse, rat and human origin. Antibody Target: MEF2A
-lab Wold
-lots missing
-orderUrl http://www.scbt.com/datasheet-17785-mef-2-b-4-antibody.html
-target MEF2A
-targetClass TFSS
-targetDescription The MADS box transcription enhancer factor 2 (MEF2) family of proteins plays a role in myogenesis.
-targetId GeneCard:MEF2A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
-validation 
-vendorId sc-17785
-vendorName Santa Cruz Biotechnology
-
 term MEF2A
 tag MEF2A
 type Antibody
@@ -11300,7 +11283,7 @@ target GABPA
 targetDescription epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-alpha of human origin
 targetId GeneCard:GABPA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
-validation 
+validation Mouse_-_:missing
 vendorId sc-22810
 vendorName Santa Cruz Biotechnology
 
@@ -12428,11 +12411,12 @@ target TCF4
 targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
-validation 
+validation Human-_-:missing
 vendorId 2569S
 vendorName Cell Signaling Technology
 # TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
 # TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
+# only on hg18
 
 term TCF7L2
 tag TCF7L2
