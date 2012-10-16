@@ -3,3 +3,7 @@ track gold override
 shortLabel Scaffolds
 longLabel Assembly Scaffolds (Supercontigs)
 priority 9
+
+track quality override
+type wig 0 97
+

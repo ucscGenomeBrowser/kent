@@ -1,4 +1,7 @@
 
+track quality override
+type wig 0 68
+
 # Jim thought we should hide this
 track xenoRefGene override
 visibility hide

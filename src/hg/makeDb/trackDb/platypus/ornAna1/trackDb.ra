@@ -1,3 +1,6 @@
+track quality override
+type wig 0 97
+
 track wssdCoverage
 shortLabel WSSD Coverage
 longLabel Regions Assayed for SDD
