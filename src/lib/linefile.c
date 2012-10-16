@@ -197,6 +197,12 @@ lf->buf = s;
 return lf;
 }
 
+#if (defined USE_SAMTABIX || (defined USE_TABIX && !defined KNETFILE_HOOKS))
+// UCSC aliases for backwards compatibility with independently patched & linked samtools and tabix:
+#define ti_bgzf_tell bgzf_tell
+#define ti_bgzf_read bgzf_read
+#endif
+
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 /* Wrap a line file around a data file that has been compressed and indexed
  * by the tabix command line program.  The index file <fileOrUrl>.tbi must be
