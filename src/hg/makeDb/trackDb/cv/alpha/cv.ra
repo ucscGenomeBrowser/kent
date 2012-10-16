@@ -10049,7 +10049,7 @@ target H3K4me2
 targetDescription Histone H3 dimethylated on Lysine 4. Marks promoters and enhancers.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me2_(ab32356)(Dot_blot,Western_blot):human_H3K4me2_ab32356_validation_Ren.pdf
+validation Mouse_-_H3K4me2_(ab32356)(Dot_blot,Western_blot):human_H3K4me2_ab32356_validation_Ren.pdf
 vendorId ab32356
 vendorName abcam
 
