@@ -6847,6 +6847,7 @@ vendorName CSHL lab
 term EPC_(CD117+_CD71-_TER119-)
 tag EPCPMM
 type Cell Line
+label EPC (CD117+ CD71- TER119-)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -6865,6 +6866,7 @@ vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 term EPC_(CD117+_CD71+_TER119-)
 tag EPCPPM
 type Cell Line
+label EPC (CD117+ CD71+ TER119-)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -6883,6 +6885,7 @@ vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 term EPC_(CD117-_CD71+_TER119+)
 tag EPCMPP
 type Cell Line
+label EPC (CD117- CD71+ TER119+)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -6901,6 +6904,7 @@ vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 term EPC_(CD117-_CD71-_TER119+)
 tag EPCMMP
 type Cell Line
+label EPC (CD117- CD71- TER119+)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -6919,6 +6923,7 @@ vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 term EPC_(CD117+_CD71+_TER119+)
 tag EPCPPP
 type Cell Line
+label EPC (CD117+ CD71+ TER119+)
 age ageUnknown
 category primaryCell
 color 153,38,0

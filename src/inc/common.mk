@@ -55,62 +55,64 @@ ifneq (${COLOR32},0)
     HG_DEFS+=-DCOLOR32
 endif
 
-# autodetect local installation of samtools:
-ifeq (${SAMDIR},)
-  SAMDIR = /hive/data/outside/samtools/samtools-0.1.18/${MACHTYPE}
-  ifneq ($(wildcard ${SAMDIR}),)
-     KNETFILE_HOOKS=1
-  endif
-endif
-ifeq (${USE_BAM},)
-  ifneq ($(wildcard ${SAMDIR}),)
-     USE_BAM=1
-  endif
+# autodetect UCSC installation of samtabix:
+ifeq (${SAMTABIXDIR},)
+    SAMTABIXDIR = /hive/data/outside/samtabix/${MACHTYPE}
+    ifneq ($(wildcard ${SAMTABIXDIR}),)
+        ifeq (${USE_SAMTABIX},)
+          USE_SAMTABIX=1
+        endif
+    endif
 endif
 
-# libbam (samtools, and Angie's KNETFILE_HOOKS extension to it): disabled by default
-ifeq (${USE_BAM},1)
-    ifeq (${SAMINC},)
-        SAMINC = ${SAMDIR}
+# libsamtabix (samtools + tabix + Angie's KNETFILE_HOOKS extension to it): disabled by default
+ifeq (${USE_SAMTABIX},1)
+    KNETFILE_HOOKS=1
+    USE_BAM=1
+    USE_TABIX=1
+    ifeq (${SAMTABIXINC},)
+        SAMTABIXINC = ${SAMTABIXDIR}
     endif
-    ifeq (${SAMLIB},)
-        SAMLIB = ${SAMDIR}/libbam.a
+    ifeq (${SAMTABIXLIB},)
+        SAMTABIXLIB = ${SAMTABIXDIR}/libsamtabix.a
     endif
-    HG_INC += -I${SAMINC}
-    L+=${SAMLIB}
-    HG_DEFS+=-DUSE_BAM
-    ifeq (${KNETFILE_HOOKS},1)
+    HG_INC += -I${SAMTABIXINC}
+    L+=${SAMTABIXLIB} -lz
+    HG_DEFS+=-DUSE_SAMTABIX -DUSE_BAM -DUSE_TABIX -DKNETFILE_HOOKS
+else
+  # Deprecated but supported for mirrors, for now: independent samtools and tabix libs
+
+  # libbam (samtools, and Angie's KNETFILE_HOOKS extension to it): disabled by default
+  ifeq (${USE_BAM},1)
+      ifeq (${SAMINC},)
+          SAMINC = ${SAMDIR}
+      endif
+      ifeq (${SAMLIB},)
+          SAMLIB = ${SAMDIR}/libbam.a
+      endif
+      HG_INC += -I${SAMINC}
+      L+=${SAMLIB}
+      HG_DEFS+=-DUSE_BAM
+      ifeq (${KNETFILE_HOOKS},1)
+          HG_DEFS+=-DKNETFILE_HOOKS
+      endif
+  endif
+
+  # libtabix and Angie's KNETFILE_HOOKS extension to it: disabled by default
+  ifeq (${USE_TABIX},1)
+      ifeq (${TABIXINC},)
+          TABIXINC = ${TABIXDIR}
+      endif
+      ifeq (${TABIXLIB},)
+          TABIXLIB = ${TABIXDIR}/libtabix.a
+      endif
+      HG_INC += -I${TABIXINC}
+      L+=${TABIXLIB} -lz
+      HG_DEFS+=-DUSE_TABIX
+      ifeq (${KNETFILE_HOOKS},1)
 	HG_DEFS+=-DKNETFILE_HOOKS
-    endif
-endif
-
-# As we do for bam/samtools, so do for tabix.  autodetect local installation:
-ifeq (${TABIXDIR},)
-  TABIXDIR = /hive/data/outside/tabix/tabix-0.2.5/${MACHTYPE}
-  ifneq ($(wildcard ${TABIXDIR}),)
-     KNETFILE_HOOKS=1
+      endif
   endif
-endif
-ifeq (${USE_TABIX},)
-  ifneq ($(wildcard ${TABIXDIR}),)
-     USE_TABIX=1
-  endif
-endif
-
-# libtabix and Angie's KNETFILE_HOOKS extension to it: disabled by default
-ifeq (${USE_TABIX},1)
-    ifeq (${TABIXINC},)
-        TABIXINC = ${TABIXDIR}
-    endif
-    ifeq (${TABIXLIB},)
-        TABIXLIB = ${TABIXDIR}/libtabix.a
-    endif
-    HG_INC += -I${TABIXINC}
-    L+=${TABIXLIB} -lz
-    HG_DEFS+=-DUSE_TABIX
-    ifeq (${KNETFILE_HOOKS},1)
-	HG_DEFS+=-DKNETFILE_HOOKS
-    endif
 endif
 
 SYS = $(shell uname -s)
