@@ -7,3 +7,5 @@ visibility full
 track windowmaskerSdust override
 visibility dense
 
+track quality override
+type wig 0 97

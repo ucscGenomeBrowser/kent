@@ -18600,25 +18600,28 @@ do
 done
 
 #############################################################################
-# 1000 GENOMES PHASE 1 VARIANT CALLS (UPDATE DONE 7/20/12 angie)
+# 1000 GENOMES PHASE 1 VARIANT CALLS (UPDATE DONE 10/9/12 angie)
 # Autosomes and chrX loaded 5/21/12; chrY (and chrM but it's rCRS of course)
-# became available in July '12.
+# became available in July '12.  Existing released files were quietly updated
+# 10/1/12 with some new variant IDs.
     # This is a lot of data.  Use aspera (ascp) instead of ftp, run in a screen.
     screen -S phase1
     mkdir -p /hive/data/genomes/hg19/bed/1000Genomes/phase1
     cd /hive/data/genomes/hg19/bed/1000Genomes/phase1
     set ascpCmd = /opt/aspera/connect/bin/ascp
     set ascpArgs = '-i /opt/aspera/connect/etc/asperaweb_id_dsa.putty -QTr -l150M'
-    set phase1Path = anonftp@ftp-private.ncbi.nlm.nih.gov:/1000genomes/ftp/release/20110521
+    set phase1Path = anonftp@ftp-private.ncbi.nlm.nih.gov:/1000genomes/ftp/phase1/analysis_results/integrated_call_sets
     $ascpCmd $ascpArgs \
-      $phase1Path/README.indel_filtering_20120316 \
-      $phase1Path/README.phase1_integrated_release_version3_20120430 \
-      $phase1Path/phase1_integrated_calls.20101123.ALL.panel \
+      $phase1Path/README.ALL.BI_genome_strip_hq_chrY.20101123 \
+      $phase1Path/README_phase1_integrated_call_set_20120621 \
+      $phase1Path/integrated_call_samples.20101123.ALL.panel \
+      $phase1Path/integrated_call_samples.20101123.ped \
+      $phase1Path/uniq.chrY.human.ncbi37.txt \
       .
     # BTW if you see "Error 51 [Destination: Permission denied]" when reloading,
     # it's because the files are read-only -- move aside or rm, then try again.
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
-      set file = $phase1Path/ALL.chr$c.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+      set file = $phase1Path/ALL.chr$c.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz
       set cmd = "$ascpCmd $ascpArgs $file $file.tbi ."
       echo $cmd
       $cmd
@@ -18628,24 +18631,23 @@ done
     end
     du -sh --apparent .
 #142G    .
+    $ascpCmd $ascpArgs $phase1Path/ALL.chrY.genome_strip_hq.20101123.svs.low_coverage.genotypes.vcf.gz{,.tbi} .
+    $ascpCmd $ascpArgs $phase1Path/ALL.chrY.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz{,.tbi} .
+    # I wondered why they didn't merge the two chrY call sets (SNPs and SVs) --
+    # the SVS file has 456 individs and the SNPs file has 526.  At least the
+    # 456 are a subset of the 526... but for now I will just use the SNPs file.
+
+    # Grab chrMT even though we don't have liftOver for VCF at this point:
+    $ascpCmd $ascpArgs $phase1Path/ALL.chrMT.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz{,.tbi} .
+
     # Hmmmm, how much space do we have on /gbdb?  Well, link it on hgwdev anyway:
     mkdir /gbdb/hg19/1000Genomes
     ln -s `pwd`/*.vcf.gz* /gbdb/hg19/1000Genomes/
     cp /dev/null tgpPhase1.txt
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
-      set file = ALL.chr$c.phase1_release_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+      set file = ALL.chr$c.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz
       echo "/gbdb/hg19/1000Genomes/$file\tchr$c" >> tgpPhase1.txt
     end
-    hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt
-
-    # 7/20/12: add chrY. (would be nice to add chrM but we don't have liftOver for VCF, hmmm...)
-    cd /hive/data/genomes/hg19/bed/1000Genomes/phase1
-    wget ftp://ftp.ncbi.nih.gov/1000genomes/ftp/phase1/analysis_results/integrated_call_sets/ALL.chrY.genome_strip_hq.20101123.svs.low_coverage.genotypes.vcf.gz{,.tbi}
-    wget ftp://ftp.ncbi.nih.gov/1000genomes/ftp/phase1/analysis_results/integrated_call_sets/ALL.chrY.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz{,.tbi}
-    # I wondered why they didn't merge the two chrY call sets (SNPs and SVs) --
-    # the SVS file has 456 individs and the SNPs file has 526.  At least the
-    # 456 are a subset of the 526... but for now I will just use the SNPs file.
-    ln -s `pwd`/ALL.chrY.*vcf.gz* /gbdb/hg19/1000Genomes/
     echo "/gbdb/hg19/1000Genomes/ALL.chrY.phase1_samtools_si.20101123.snps.low_coverage.genotypes.vcf.gz\tchrY" \
       >> tgpPhase1.txt
     hgLoadSqlTab hg19 tgpPhase1 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase1.txt

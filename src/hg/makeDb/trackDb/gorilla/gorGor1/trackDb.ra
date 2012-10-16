@@ -1,4 +1,7 @@
 
+track quality override
+type wig 0 93
+
 # Local declaration so that local ctgPos2.html is picked up.
 track ctgPos2
 shortLabel Scaffolds
