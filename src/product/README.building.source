@@ -232,6 +232,17 @@ make: *** [aliType.o] Error 1
     or equivalent:
     export PNGLIB='-L/opt/local/lib -lpng'
 
+9. Build fails with complains about missing functions dlclose, dlopen:
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `add_plugin':
+  (.text+0x1ed): undefined reference to `dlclose'
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `mysql_client_plugin_deinit':
+  (.text+0x28b): undefined reference to `dlclose'
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `mysql_load_plugin_v':
+  (.text+0x51e): undefined reference to `dlopen'
+
+  To add the library that includes these functions, add '-ldl' to the
+  MYSQLLIBS string: MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -ldl -lz"
+
 ====================================================================
-This file last updated: 2011/04/01 09:05:00
+This file last updated: 2012/10/17 14:00
 ====================================================================
