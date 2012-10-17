@@ -126,6 +126,7 @@ DIRS = \
 	nibSize \
 	nt4Frag \
 	paraFetch \
+	paraSync \
 	pslLiftSubrangeBlat \
 	pslToPslx \
 	pslToXa \
