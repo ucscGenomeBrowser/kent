@@ -8406,10 +8406,10 @@ lab Myers, Snyder
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 target BHLHE40
 targetClass TFSS
-targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
+targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf Mouse_-_BHLEH40(Immunoprecipitation,IP-Mass_Spec):mouse_BHLEH40_DEC1_validation_Snyder.pdf
+validation Human_-_BHLHE40(Immunoblot):human_BHLHE40_S-8_validation_Myers.pdf Mouse_-_:missing
 vendorId sc-101023
 vendorName Santa Cruz Biotechnology
 
@@ -8426,7 +8426,7 @@ targetClass TFSS
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-Mass_Spec):human_BHLHE40_NB100-1800_validation_Snyder.pdf Mouse-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-Mass_Spec):mouse_BHLHE40_NB100-1800_validation_Snyder.pdf
 vendorId NB100-1800
 vendorName Novus Biologicals
 
