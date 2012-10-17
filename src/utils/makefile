@@ -97,6 +97,7 @@ DIRS = \
 	faNoise \
 	faOneRecord \
 	faPolyASizes \
+	faRandomize \
 	faRc \
 	faSimplify \
 	faSize \
