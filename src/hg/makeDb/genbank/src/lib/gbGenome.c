@@ -93,7 +93,7 @@ static char *susScrNames[] = {"Sus scrofa", "Sus scrofa coreanus", "Sus scrofa d
                               "Sus scrofa domestica", "Sus scrofa ussuricus", NULL};
 static char *ornAnaNames[] = {"Ornithorhynchus anatinus", NULL};
 static char *petMarNames[] = {"Petromyzon marinus", NULL};
-static char *braFloNames[] = {"Branchiostoma floridae", NULL};
+static char *braFloNames[] = {"Branchiostoma floridae", "Branchiostoma belcheri", "Branchiostoma belcheri tsingtauense", "Branchiostoma californiense", "Branchiostoma japonicum", "Branchiostoma lanceolatum", NULL};
 static char *priPacNames[] = {"Pristionchus pacificus", NULL};
 static char *aplCalNames[] = {"Aplysia californica", NULL};
 /* hypothetical ancestor, will never match native */
