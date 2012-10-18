@@ -8120,7 +8120,7 @@ targetClass TFSS
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes. AP-2 factors bind to the consensus sequence 5' -GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development. They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC. AP-2alpha is the only AP-2 protein required for early morphogenesis of the lens vesicle (by similarity).
 targetId GeneCard:TFAP2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
-validation Human_-_AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
+validation Human_-_AP-2alpha_(siRNA,ChIP-seq):human_AP-2alpha_validation_Farnham.pdf
 vendorId sc-8975
 vendorName Santa Cruz Biotechnology
 
@@ -8136,7 +8136,7 @@ targetClass TFSS
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes. AP-2 factors bind to the consensus sequence 5'-GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development. They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.
 targetId GeneCard:TFAP2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C
-validation Human_-_AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
+validation Human_-_AP-2alpha_(siRNA,ChIP-seq):human_AP-2alpha_validation_Farnham.pdf
 vendorId sc-8977
 vendorName Santa Cruz Biotechnology
 
@@ -8152,7 +8152,7 @@ target ARID3A
 targetDescription This gene encodes a member of the ARID (AT-rich interaction domain) family of DNA binding proteins. It was found by homology to the Drosophila dead ringer gene, which is important for normal embryogenesis. Other ARID family members have roles in embryonic patterning, cell lineage gene regulation, cell cycle control, transcriptional regulation, and possibly in chromatin structure modification. (provided by RefSeq)
 targetId GeneCard:ARID3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ARID3A
-validation Human_-_ARID3A_(NB100-279)(Immunoprecipitation,ChIP):human_ARID3A_NB100-279_validation_Snyder.pdf
+validation Human_-_ARID3A_(NB100-279)(Immunoprecipitation,ChIP-seq):human_ARID3A_NB100-279_validation_Snyder.pdf
 vendorId NB100-279
 vendorName Novus Biologicals
 
@@ -8168,7 +8168,7 @@ target ARID3A
 targetDescription This gene encodes a member of the ARID (AT-rich interaction domain) family of DNA binding proteins. It was found by homology to the Drosophila dead ringer gene, which is important for normal embryogenesis. Other ARID family members have roles in embryonic patterning, cell lineage gene regulation, cell cycle control, transcriptional regulation, and possibly in chromatin structure modification. (provided by RefSeq)
 targetId GeneCard:ARID3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ARID3A
-validation Human_-_ARID3A_(sc-8821)(Immunoprecipitation,ChIP):human_ARID3A_sc-8821_validation_Snyder.pdf
+validation Human_-_ARID3A_(sc-8821)(Immunoprecipitation,ChIP-seq):human_ARID3A_sc-8821_validation_Snyder.pdf
 vendorId sc-8821
 vendorName Santa Cruz Biotechnology
 
@@ -8183,7 +8183,7 @@ target ATF1
 targetDescription ATF1 is a bZip transcription factor from the CREB family. ATF1 binds to both cAMP response elements (TGACGTCA).
 targetId GeneCard:ATF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF1
-validation Human_-_ATF1_(06-325)(Western_blot,ChIP):human_ATF1_06-325_validation_Struhl.pdf
+validation Human_-_ATF1_(06-325)(Western_blot,ChIP-seq):human_ATF1_06-325_validation_Struhl.pdf
 vendorId 06-325
 vendorName Millipore
 
@@ -8214,7 +8214,7 @@ target ATF2
 targetDescription ATF2 is a bZip transcription factor from the CREB family. ATF2 binds to both cAMP response elements (TGACGTCA) and TPA responsive element (TGAGTCA) and is known to heterodimerize with JUN members of the AP1 family of transcription factors. ATF2 is activated by phosphorylation of Thr71 by the stress activated p38 mitogen activated protein kinases.
 targetId GeneCard:ATF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
-validation Human_-_ATF2_(sc-6233)(Western_blot,ChIP):human_ATF2_sc-6233_validation_Struhl.pdf
+validation Human_-_ATF2_(sc-6233)(Western_blot,ChIP-seq):human_ATF2_sc-6233_validation_Struhl.pdf
 vendorId sc-6233
 vendorName Santa Cruz Biotechnology
 
@@ -8263,7 +8263,7 @@ target BACH1
 targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members. These BTB/POZ domains facilitate protein-protein interactions and formation of homo- and/or hetero-oligomers. When this encoded protein forms a heterodimer with MafK, it functions as a repressor of Maf recognition element (MARE) and transcription is repressed. Multiple alternatively spliced transcript variants have been identified for this gene. (provided by RefSeq)
 targetId GeneCard:BACH1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
-validation Human_-_Bach1_(sc-14700)(Immunoblots,IP-Mass_spec):human_Bach1_sc-14700_validation_Snyder.pdf
+validation Human_-_Bach1_(sc-14700)(Immunoblot,IP-MassSpec):human_Bach1_sc-14700_validation_Snyder.pdf
 vendorId sc-14700
 vendorName Santa Cruz Biotechnology
 
@@ -8280,7 +8280,7 @@ targetClass ChromRem
 targetDescription BAF155 (SMARCC1, Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
-validation Human_-_BAF155(Immunoprecipitation,IP-Mass_spec):human_BAF155_validation_Snyder.pdf
+validation Human_-_BAF155(Immunoprecipitation,IP-MassSpec):human_BAF155_validation_Snyder.pdf
 vendorId sc-10756
 vendorName Santa Cruz Biotechnology
 
@@ -8296,7 +8296,7 @@ targetClass ChromRem
 targetDescription BAF170 (SMARCC2, Brg1-Associated Factor, 170 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
-validation Human_-_BAF170(Immunoprecipitation,IP-Mass_spec):human_BAF170_validation_Snyder.pdf
+validation Human_-_BAF170(Immunoprecipitation,IP-MassSpec):human_BAF170_validation_Snyder.pdf
 vendorId sc-10757
 vendorName Santa Cruz Biotechnology
 
@@ -8345,7 +8345,7 @@ targetClass TFSS
 targetDescription This gene encodes a C2H2 type zinc-finger protein by its similarity to the mouse Bcl11a/Evi9 protein. The corresponding mouse gene is a common site of retroviral integration in myeloid leukemia, and may function as a leukemia disease gene, in part, through its interaction with BCL6. During hematopoietic cell differentiation, this gene is down-regulated. It is possibly involved in lymphoma pathogenesis since translocations associated with B-cell malignancies also deregulates its expression. Multiple transcript variants encoding several different isoforms have been found for this gene. (provided by RefSeq)
 targetId GeneCard:BCL11A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
-validation Human_-_BCL11A_(SC-56011)(Western_blot,IP-Mass_Spec):human_BCL11A_SC-56011_validation_Myers.pdf
+validation Human_-_BCL11A_(SC-56011)(Western_blot,IP-MassSpec):human_BCL11A_SC-56011_validation_Myers.pdf
 vendorId sc-56011
 vendorName Santa Cruz Biotechnology
 
@@ -8393,7 +8393,7 @@ targetClass Pol3F
 targetDescription 'B double-prime 1', subunit of RNA polymerase III transcription initiation factor IIIB
 targetId GeneCard:BDP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BDP1
-validation Human_-_BDP1(2663):human_BDP1_2663_validation_Struhl.pdf
+validation Human_-_BDP1(2663)(IP-MassSpec,Co-occupancy):human_BDP1_2663_validation_Struhl.pdf
 vendorId 2663
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
@@ -8409,7 +8409,7 @@ targetClass TFSS
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf Mouse_-_BHLEH40(Immunoprecipitation,IP-Mass_Spec):mouse_BHLEH40_DEC1_validation_Snyder.pdf
+validation Human_-_BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf Mouse_-_BHLEH40(Immunoprecipitation,IP-MassSpec):mouse_BHLEH40_DEC1_validation_Snyder.pdf
 vendorId sc-101023
 vendorName Santa Cruz Biotechnology
 
@@ -8442,7 +8442,7 @@ targetClass TFSS
 targetDescription Nuclear phosphoprotein that plays a role in maintaining genomic stability, and acts as a tumor suppressor. Associates with RNA polymerase II, and through the C-terminal domain, also interacts with histone deacetylase complexes. Plays a role in transcription, DNA repair of double-stranded breaks, and recombination. Mutations in this gene are responsible for approximately 40% of inherited breast cancers and more than 80% of inherited breast and ovarian cancers.
 targetId GeneCard:BRCA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA1
-validation Human_-_BRCA1_(A300-000A)(Western_blot,IP-Mass_Spec):human_BRCA1_validation_Snyder.pdf
+validation Human_-_BRCA1_(A300-000A)(Western_blot,IP-MassSpec):human_BRCA1_validation_Snyder.pdf
 vendorId A300-000A
 vendorName Bethyl Laboratories
 
@@ -8458,7 +8458,7 @@ targetClass Pol3F
 targetDescription 'B-related factor 1', subunit of RNA polymerase III transcription initiation factor IIIB
 targetId GeneCard:BRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF1
-validation Human_-_BRF1(128):human_BRF1_128_validation_Struhl.pdf
+validation Human_-_BRF1(128)(IP-MassSpec,Co-occupancy):human_BRF1_128_validation_Struhl.pdf
 vendorId 128
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
@@ -8474,7 +8474,7 @@ targetClass Pol3F
 targetDescription Brf2 is a component of an alternate form of the RNA Polymerase III transcription factor TFIIIB.
 targetId GeneCard:BRF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2
-validation Human_-_BRF2(4295):human_BRF2_4295_validation_Struhl.pdf
+validation Human_-_BRF2(4295)(Western_blot,Correlation):human_BRF2_4295_validation_Struhl.pdf
 vendorId 4295
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
@@ -8490,7 +8490,7 @@ targetClass ChromRem
 targetDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
-validation Human_-_BRG1(Immunoprecipitation,IP-Mass_spec):human_BRG1_validation_Snyder.pdf
+validation Human_-_BRG1(Immunoprecipitation,IP-MassSpec):human_BRG1_validation_Snyder.pdf
 vendorId sc-17796
 vendorName Santa Cruz Biotechnology
 
@@ -8506,7 +8506,7 @@ target BTF3
 targetDescription This gene encodes the basic transcription factor 3. This protein forms a stable complex with RNA polymerase IIB and is required for transcriptional initiation. Alternative splicing results in multiple transcript variants encoding different isoforms. This gene has multiple pseudogenes. (provided by RefSeq)
 targetId GeneCard:BTF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BTF3
-validation Human_-_BTF3_(SC-166093):human_BTF3_SC-166093_validation_Myers.pdf
+validation Human_-_BTF3_(SC-166093)(Western_blot,IP-MassSpec):human_BTF3_SC-166093_validation_Myers.pdf
 vendorId sc-166093
 vendorName Santa Cruz Biotechnology
 
@@ -8522,7 +8522,7 @@ targetClass TFSS
 targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1. Proto-oncogene c-Jun is a leucine-zipper.
 targetId GeneCard:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
-validation Human_-_c-Fos_(sc-7202)(Immunoprecipiation,Motif_Enrichment):human_c-Fos_validation_Snyder.pdf
+validation Human_-_c-Fos_(sc-7202)(Immunoprecipitation,Motif_Enrichment):human_c-Fos_validation_Snyder.pdf
 vendorId sc-7202
 vendorName Santa Cruz Biotechnology
 
@@ -8538,7 +8538,7 @@ targetClass TFSS
 targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1. Proto-oncogene c-Jun is a leucine-zipper.
 targetId GeneCard:JUN
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUN
-validation Human_-_c-Jun(Immunoprecipitation,Motif_Enrichment):human_c-Jun_validation_Snyder.pdf Mouse_-_c-Jun(Immunoprecipitation,ChIP):mouse_c-Jun_validation_Snyder.pdf
+validation Human_-_c-Jun(Immunoprecipitation,Motif_Enrichment):human_c-Jun_validation_Snyder.pdf Mouse_-_c-Jun(Immunoprecipitation,ChIP-seq):mouse_c-Jun_validation_Snyder.pdf
 vendorId sc-1694
 vendorName Santa Cruz Biotechnology
 
@@ -8570,7 +8570,7 @@ targetClass TFSS
 targetDescription transcription factor; c-Myc-encoded proteins function in cell proliferation,differentiation and neoplastic disease
 targetId GeneCard:MYC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
-validation Human_-_c-Myc_(sc-764)(Western_blot):human_c-MYC_SC-764X_image_validation.pdf Mouse_-_c-Myc_(sc-764)(Immunoprecipitation,ChIP):mouse_c-Myc_validation_Snyder.pdf
+validation Human_-_c-Myc_(sc-764)(Western_blot):human_c-MYC_SC-764X_image_validation.pdf Mouse_-_c-Myc_(sc-764)(Immunoprecipitation,ChIP-seq):mouse_c-Myc_validation_Snyder.pdf
 vendorId sc-764
 vendorName Santa Cruz Biotechnology
 
@@ -8585,7 +8585,7 @@ target CREBBP
 targetDescription CBP is a histone acetyl transferase that promotes transcription. CBP is recruited by a variety of transcription factors to promoters and enhancers.
 targetId GeneCard:CREBBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
-validation Human_-_CBP_(sc-369)(Western_blot,ChIP):human_CBP_sc-369_validation_Struhl.pdf
+validation Human_-_CBP_(sc-369)(Western_blot,ChIP-seq):human_CBP_sc-369_validation_Struhl.pdf
 vendorId sc-369
 vendorName Santa Cruz Biotechnology
 
@@ -8601,7 +8601,7 @@ target CBX2
 targetDescription Chromobox protein homolog 2 is a component of the polycomb group (PcG) multiprotein PRC1 complex, a complex required to maintain the transcriptionally repressive state of many genes, including Hox genes, throughout development. [taken from the Universal Protein Resource (UniProt) www.uniprot.org/uniprot/P19474]
 targetId GeneCard:CBX2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX2
-validation Human_-_CBX2_(A302-524A)(ChIP,Western_blot):human_CBX2_validation_Epstein.pdf
+validation Human_-_CBX2_(A302-524A)(ChIP-seq,Western_blot):human_CBX2_validation_Epstein.pdf
 vendorId A302-524A
 vendorName Bethyl Laboratories
 
@@ -8617,7 +8617,7 @@ target CBX3
 targetDescription At the nuclear envelope, the nuclear lamina and heterochromatin are adjacent to the inner nuclear membrane. The protein encoded by this gene binds DNA and is a component of heterochromatin. This protein also can bind lamin B receptor, an integral membrane protein found in the inner nuclear membrane. The dual binding functions of the encoded protein may explain the association of heterochromatin with the inner nuclear membrane. This protein binds histone H3 tails methylated at Lys-9 sites. This protein is also recruited to sites of ultraviolet-induced DNA damage and double-strand breaks. Two transcript variants encoding the same protein but differing in the 5' UTR, have been found for this gene.
 targetId GeneCard:CBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
-validation Human_-_CBX3_(SC-101004)(Western_blot,IP-Mass_spec):human_CBX3_SC-101004_validation_Myers.pdf
+validation Human_-_CBX3_(SC-101004)(Western_blot,IP-MassSpec):human_CBX3_SC-101004_validation_Myers.pdf
 vendorId sc-101004
 vendorName Santa Cruz Biotechnology
 
@@ -8633,7 +8633,7 @@ target CBX8
 targetDescription CBX8 is part of the polycomb group of proteins that are important in embryogenesis and human tumorigenesis and regulates a number of genes involved in cell growth and survival. There are at least 5 CBX proteins in mammals. CBX proteins associate with the core polycomb repressive complex 1 (PRC1) that functions to maintain the transcriptionally repressive state of genes during development.
 targetId GeneCard:CBX8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX8
-validation Human_-_CBX8_(A300-882A)(ChIP,Western_blot):human_CBX8_validation_Epstein.pdf
+validation Human_-_CBX8_(A300-882A)(ChIP-seq,Western_blot):human_CBX8_validation_Epstein.pdf
 vendorId A300-882A
 vendorName Bethyl Laboratories
 
@@ -8665,7 +8665,7 @@ target CDK9
 targetDescription Cyclin dependent kinase 9 (CDK9) heterodimerizes with Cyclin T1 or Cyclin T2. The heterodimer is also known as positive elongation factor B (P-TEFb) and is responsible for the phosphorylation of Ser2 of the RNA polymerase II C-terminal
 targetId GeneCard:CDK9
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDK9
-validation Human_-_CDK9_(ab75898)(Western_blot,ChIP):human_CDK9_ab75898_validation_Struhl.pdf
+validation Human_-_CDK9_(ab75898)(Western_blot,ChIP-seq):human_CDK9_ab75898_validation_Struhl.pdf
 vendorId ab75898
 vendorName abcam
 
@@ -8681,7 +8681,7 @@ target CUX1
 targetDescription CDP (for CCAAT displacement protein) was identified as a repressor for tran- scription of developmentally regulated genes. It is a homeodomain protein that appears to compete with transcriptional activating proteins for binding to the promoter regions of various genes. CDP contains three cut repeats which function as DNA binding domains. It has been demonstrated that cut repeat domains have the capacity to bind to DNA in conjunction with or independently of homeodomain DNA binding. CDP has been shown to be the DNA-binding subunit of the HiNF-D complex, which contains cyclin A, Cdc2 and an Rb-related protein in addition to CDP. Histone expression is required for the transition to S phase in the cell cycle. The HiNF-D complex regulates the transcription of Histone H4, H3 and H1 genes, allowing cells to progress from G1 to S phase.
 targetId GeneCard:CUX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CUX1
-validation Human_-_CDP_(sc-6327)(Immunoprecipitation,IP-Mass_Spec):human_CDP_BioTech_validation_Snyder.pdf
+validation Human_-_CDP_(sc-6327)(Immunoprecipitation,IP-MassSpec):human_CDP_BioTech_validation_Snyder.pdf
 vendorId sc-6327
 vendorName Santa Cruz Biotechnology
 
@@ -8715,7 +8715,7 @@ targetClass TFSS
 targetDescription The protein encoded by this intronless gene is a bZIP transcription factor which can bind as a homodimer to certain DNA regulatory regions. It can also form heterodimers with the related proteins CEBP-alpha, CEBP-delta, and CEBP-gamma. The encoded protein is important in the regulation of genes involved in immune and inflammatory responses and has been shown to bind to the IL-1 response element in the IL-6 gene, as well as to regulatory regions of several acute-phase and cytokine genes. In addition, the encoded protein can bind the promoter and upstream element and stimulate the expression of the collagen type I gene (provided by RefSeq).
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
-validation Human_-_CEBPB_(SC-150)(Western_blot,IP-Mass_Spec):human_CEBPB_SC-150_validation_Myers.pdf
+validation Human_-_CEBPB_(SC-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf
 vendorId sc-150
 vendorName Santa Cruz Biotechnology
 #This antibody had the wrong vendorId SC-49548, it should be SC-150.
@@ -8732,7 +8732,7 @@ target CEBPD
 targetDescription The protein encoded by this intronless gene is a bZIP transcription factor which can bind as a homodimer to certain DNA regulatory regions. It can also form heterodimers with the related protein CEBP-alpha. The encoded protein is important in the regulation of genes involved in immune and inflammatory responses, and may be involved in the regulation of genes associated with activation and/or differentiation of macrophages. The cytogenetic location of this locus has been reported as both 8p11 and 8q11 (provided by RefSeq).
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
-validation Human_-_CEBPD_(SC-636)(Western_blot,IP-Mass_Spec):human_CEBPD_SC-636_validation_Myers.pdf
+validation Human_-_CEBPD_(SC-636)(Western_blot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
 vendorId sc-636
 vendorName Santa Cruz Biotechnology
 
@@ -8748,7 +8748,7 @@ target CEBPZ
 targetDescription Stimulates transcription from the HSP70 promoter.
 targetId GeneCard:CEBPZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPZ
-validation Human_-_CEBPZ(Immunoprecipitation,IP-Mass_spec):human_CEBPZ_validation_Snyder.pdf
+validation Human_-_CEBPZ(Immunoprecipitation,IP-MassSpec):human_CEBPZ_validation_Snyder.pdf
 vendorId SAB2100398
 vendorName Sigma-Aldrich
 
@@ -8795,7 +8795,7 @@ target CHD1
 targetDescription ATP-dependent chromatin-remodeling factor which functions as substrate recognition component of the transcription regulatory histone acetylation (HAT) complex SAGA. Regulates polymerase II transcription. Also required for efficient transcription by RNA polymerase I, and more specifically the polymerase I transcription termination step. Also required to maintain a specific chromatin configuration across the genome. Is also associated with histone deacetylase (HDAC) activity (By similarity). Required for the bridging of SNF2, the FACT complex, the PAF complex as well as the U2 snRNP complex to H3K4me3. Required for maintaining open chromatin and pluripotency in embryonic stem cells
 targetId GeneCard:CHD1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
-validation Human_-_CHD1_(NB100-60411)(Immunoprecipitation,IP-Mass_spec):human_CHD1_NB100-60411_validation_Snyder.pdf Mouse_-_CHD1_(NB100-60411)(Immunoprecipitation,ChIP):mouse_CHD1_validation_Snyder.pdf
+validation Human_-_CHD1_(NB100-60411)(Immunoprecipitation,IP-MassSpec):human_CHD1_NB100-60411_validation_Snyder.pdf Mouse_-_CHD1_(NB100-60411)(Immunoprecipitation,ChIP-seq):mouse_CHD1_validation_Snyder.pdf
 vendorId NB100-60411
 vendorName Novus Biologicals
 
@@ -8827,7 +8827,7 @@ target CHD4
 targetDescription CHD4/Mi2beta is a helicase component of the nucleosome remodeling and deacetylase (NuRD) complex that functions to remodel chromatin and repress transcription. Outside of the NuRD complex, CHD4/Mi2beta can function as an activator of transcription in association with p300 histone acetyltransferase.
 targetId GeneCard:CHD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD4
-validation Human_-_CHD4_(A301-081A)(ChIP,Western_blot):human_CHD4_validation_Epstein.pdf
+validation Human_-_CHD4_(A301-081A)(ChIP-seq,Western_blot):human_CHD4_validation_Epstein.pdf
 vendorId A301-081A
 vendorName Bethyl Laboratories
 
@@ -8843,7 +8843,7 @@ target CHD7
 targetDescription CHD7 is a member of the CHD (chromodomain-helicase-DNA-binding) family of proteins that interacts with nucleosomes and plays a role in chromatin remodeling to modulate transcription.
 targetId GeneCard:CHD7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD7
-validation Human_-_CHD7_(A301-223A)(ChIP,Western_blot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
+validation Human_-_CHD7_(A301-223A)(ChIP-seq,Western_blot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
 vendorId A301-223A
 vendorName Bethyl Laboratories
 
@@ -8859,7 +8859,7 @@ target RCOR1
 targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells. In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
 targetId GeneCard:RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST_(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
+validation Human_-_COREST_(ab24166)(Western_blot,ChIP-seq):human_COREST_ab24166_validation_Snyder.pdf
 vendorId ab24166
 vendorName abcam
 
@@ -8875,7 +8875,7 @@ target RCOR1
 targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells. In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
 targetId GeneCard:RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):human_COREST_sc-30189_validation_Snyder.pdf Mouse_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):mouse_COREST_sc-30189_validation_Snyder.pdf
+validation Human_-_COREST_(sc-30189)(Immunoprecipitation,ChIP-seq):human_COREST_sc-30189_validation_Snyder.pdf Mouse_-_COREST_(sc-30189)(Immunoprecipitation,ChIP-seq):mouse_COREST_sc-30189_validation_Snyder.pdf
 vendorId sc-30189
 vendorName Santa Cruz Biotechnology
 
@@ -8890,7 +8890,7 @@ target CREB1
 targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in neurite outgrowth and neuronal differentiation.
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_(06-863)(Western_blot,ChIP):human_CREB1_06-863_validation_Struhl.pdf
+validation Human_-_CREB1_(06-863)(Western_blot,ChIP-seq):human_CREB1_06-863_validation_Struhl.pdf
 vendorId 06-863
 vendorName Millipore
 
@@ -8905,7 +8905,7 @@ target CREB1
 targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in neurite outgrowth and neuronal differentiation.
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_(9188)_(Cell_Signaling_9198)(Western_blot,ChIP):human_CREB1_9198_validation_Struhl.pdf
+validation Human_-_CREB1_(9188)_(Cell_Signaling_9198)(Western_blot,ChIP-seq):human_CREB1_9198_validation_Struhl.pdf
 vendorId 9198
 vendorName Cell Signaling Technology
 
@@ -8921,7 +8921,7 @@ target CREB1
 targetDescription This gene encodes a transcription factor that is a member of the leucine zipper family of DNA binding proteins. This protein binds as a homodimer to the cAMP-responsive element, an octameric palindrome. The protein is phosphorylated by several protein kinases, and induces transcription of genes in response to hormonal stimulation of the cAMP pathway. Alternate splicing of this gene results in two transcript variants encoding different isoforms. (provided by RefSeq)
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_(SC-240)(Western_blot,IP-Mass_Spec):human_CREB1_SC-240_validation_Myers.pdf
+validation Human_-_CREB1_(SC-240)(Western_blot,IP-MassSpec):human_CREB1_SC-240_validation_Myers.pdf
 vendorId sc-240
 vendorName Santa Cruz Biotechnology
 
@@ -8938,7 +8938,7 @@ targetClass TFSS
 targetDescription CTCF zinc finger transcription factor. A sequence specific DNA binding protein that functions as an insulator, blocking enhancer activity. It has also been suggested to block the spreading of chromatin structure in certain instances.
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
-validation Human_-_CTCF_(07-729)(Western_blot,Motif_enrichment):human_CTCF_validation_Myers.pdf Human_-_CTCF_(07-729)(Western_blot):human_CTCF_07-729_validation_Snyder.pdf Mouse_-_CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
+validation Human_-_CTCF_(07-729)(Western_blot,Motif_Enrichment):human_CTCF_validation_Myers.pdf Human_-_CTCF_(07-729)(Western_blot):human_CTCF_07-729_validation_Snyder.pdf Mouse_-_CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 vendorId 07-729
 vendorName Millipore
 
@@ -9020,7 +9020,7 @@ target CTBP2
 targetDescription C-terminal binding protein 2
 targetId GeneCard:CTBP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2
-validation Human_-_CtBP2(Western_blot,siRna):human_CtBP2_validation_Farnham.pdf
+validation Human_-_CtBP2(Western_blot,siRNA):human_CtBP2_validation_Farnham.pdf
 vendorId 612044
 vendorName BD Biosciences
 
@@ -9051,7 +9051,7 @@ targetClass TFSS
 targetDescription E2F1, the original member of the E2F family of transcription factors, was identified as a cellular protein with DNA binding activity associated with the adenovirus E2 gene promoter. E2F1 is cell cycle regulated with very low levels in early G1, then increasing levels as cells move from G1 to S, and highest levels of protein at the G1/S boundary, which is consistent with its role in S-phase entry.
 targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
-validation Human_-_E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
+validation Human_-_E2F1(Immunoprecipitation-Western_blot,ChIP-seq):human_E2F1_HA-E2F1_validation_Farnham.pdf
 vendorId 05-379
 vendorName Millipore
 
@@ -9067,7 +9067,7 @@ targetClass TFSS
 targetDescription mapping at the C-terminus of E2F4 of human origin
 targetId GeneCard:E2F4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F4
-validation Human_-_E2F4(Immunoprecipitation-Western_blot,ChIP):human_E2F4_validation_Farnham.pdf Mouse_-_E2F4_(Immunoprecipitation,ChIP):mouse_E2F4_validation_Snyder.pdf
+validation Human_-_E2F4(Immunoprecipitation-Western_blot,ChIP-seq):human_E2F4_validation_Farnham.pdf Mouse_-_E2F4_(Immunoprecipitation,ChIP-seq):mouse_E2F4_validation_Snyder.pdf
 vendorId sc-866
 vendorName Santa Cruz Biotechnology
 
@@ -9101,7 +9101,7 @@ targetClass TFSS
 targetDescription Early B-cell factor 1. Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity).
 targetId GeneCard:EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation Human_-_EBF1_(SC-137065)(Immunoprecipitation-Western_blotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
+validation Human_-_EBF1_(SC-137065)(Immunoprecipitation-Western_blot,MassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 vendorId sc-137065
 vendorName Santa Cruz Biotechnology
 
@@ -9488,7 +9488,7 @@ target ELK1
 targetDescription Elk-1 is a transcription factor that is part of the ets oncogene superfamily. Elk-1 forms a ternary complex with the serum response factors, SRE and SRF, mediating gene activity in response to serum and growth factors. Activation by several mitogen- activated protein kinases (Erk1 and Erk2) mediates the immediate early responses of the c-fos promoter to growth factors and other stimuli.
 targetId GeneCard:ELK1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK1
-validation Human_-_ELK1(1277-1)(Immunoprecipitation,IP-Mass_spec):human_ELK1_1277-1_validation_Snyder.pdf
+validation Human_-_ELK1(1277-1)(Immunoprecipitation,IP-MassSpec):human_ELK1_1277-1_validation_Snyder.pdf
 vendorId 1277-1
 vendorName Epitomics
 
@@ -9521,7 +9521,7 @@ targetClass TFSS
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
-validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,MassSpect):human_ERalpha_a_validation_Myers.pdf
+validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,MassSpec):human_ERalpha_a_validation_Myers.pdf
 vendorId sc-543
 vendorName Santa Cruz Biotechnology
 
@@ -9553,7 +9553,7 @@ target SETDB1
 targetDescription ERG-associated protein with SET domain (ESET), also designated Histone H3-K9 methyltransferase 4 or SET domain bifurcated 1, is a nuclear protein belonging to the histone-lysine methyltransferase family. ESET is a histone methyltransferase, methylating Lys-9 of histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity.
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation Human_-_ESET_(166621)(ChIP,Western_blot):human_ESET_166621_validation_Bernstein.pdf
+validation Human_-_ESET_(166621)(ChIP-seq,Western_blot):human_ESET_166621_validation_Bernstein.pdf
 vendorId sc-166621
 vendorName Santa Cruz Biotechnology
 
@@ -9712,7 +9712,7 @@ target FOXM1
 targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq, Jul 2011)
 targetId GeneCard:FOXM1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXM1
-validation Human_-_FOXM1_(sc-502)(Western_blot,ChIP):human_FOXM1_sc-502_validation_Myers.pdf
+validation Human_-_FOXM1_(sc-502)(Western_blot,ChIP-seq):human_FOXM1_sc-502_validation_Myers.pdf
 vendorId sc-502
 vendorName Santa Cruz Biotechnology
 
@@ -9759,7 +9759,7 @@ target GATA1
 targetDescription GATA-1 is a transcriptional activator which probably serves as a general switch factor for erythroid development. It binds to DNA sites with the consensus sequence [AT]GATA[AG} within regulatory regions of globin genes and of other genes expressed in erythroid cells.
 targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
-validation Human_-_GATA-1_(Western_blot,ChIP):human_GATA-1_validation_Farnham.pdf Mouse_-_:missing
+validation Human_-_GATA-1_(Western_blot,ChIP-seq):human_GATA-1_validation_Farnham.pdf Mouse_-_:missing
 vendorId GATA-1
 vendorName Dr. E.H. Bresnick at UW Madison
 
@@ -9871,7 +9871,7 @@ target GATA3
 targetDescription This gene encodes a protein which belongs to the GATA family of transcription factors. The protein contains two GATA-type zinc fingers and is a n important regulator of T-cell development and plays an important role in endothelial cell biology. Defects in this gene are the cause of hypoparathyroidism with sensorineural deafness and renal dysplasia (provided by RefSeq)
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation Human_-_GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
+validation Human_-_GATA3_SC-269_(siRNA,ChIP-seq):human_GATA3_SC-269_validation_Farnham.pdf
 vendorId sc-269
 vendorName Santa Cruz Biotechnology
 
@@ -9919,7 +9919,7 @@ target GRp20
 targetDescription epitope mapping at the C-terminus of GR alpha of human origin
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
-validation Human_-_GRp20_(sc-1002)(Western_blot,IP-Mass_Spec):human_GRP20_validation_Snyder.pdf
+validation Human_-_GRp20_(sc-1002)(Western_blot,IP-MassSpec):human_GRP20_validation_Snyder.pdf
 vendorId sc-1002
 vendorName Santa Cruz Biotechnology
 
@@ -9936,7 +9936,7 @@ targetClass TFNS
 targetDescription DNA- binding general transcription factor
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
-validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-Seq):human_TFIIB_sc-225X_validation_Struhl.pdf
+validation Human_-_TFIIB_(SC-225)(Western_blot,ChIP-seq):human_TFIIB_sc-225X_validation_Struhl.pdf
 vendorId sc-225
 vendorName Santa Cruz Biotechnology
 
@@ -9968,7 +9968,7 @@ target H2AFZ
 targetDescription H2A.Z (H2AFZ) is a sequence variant of Histone H2A.
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
-validation Human_-_:validation Human_-_H2A.Z_(07-594)(Western_blot,ChIP):human_H2AZ_07-594_validation_Bernstein.pdf
+validation Human_-_H2A.Z_(07-594)(Western_blot,ChIP-seq):human_H2AZ_07-594_validation_Bernstein.pdf
 vendorId 07-594
 vendorName Millipore
 
@@ -10017,7 +10017,7 @@ target H3K4me1
 targetDescription Histones are the main constituents of the protein part of chromosomes of eukaryotic cells. They are rich in the amino acids arginine and lysine and have been greatly conserved during evolution.Histone tails undergo numerous posttranslational modifications. This antibodies recognizes histone H3 monomethylated on lysine 4.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me1_(pAb-037-050)(Western_blot,DotBlot):human_H3K4me1_pAb-037-050_validation_Farnham.pdf
+validation Human_-_H3K4me1_(pAb-037-050)(Western_blot,Dot_blot):human_H3K4me1_pAb-037-050_validation_Farnham.pdf
 vendorId pAb-037-050
 vendorName Diagenode
 
@@ -10114,7 +10114,7 @@ target H3K9ac
 targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9ac_(ab4441)(Western_blot,CHiP):human_H3K9ac_ab4441_validation_Bernstein.pdf
+validation Human_-_H3K9ac_(ab4441)(Western_blot,ChIP-seq):human_H3K9ac_ab4441_validation_Bernstein.pdf
 vendorId ab4441
 vendorName abcam
 
@@ -10145,7 +10145,7 @@ target H3K9ac
 targetDescription H3K9ac, acetyl-histone H3 (Lys9)
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9Ac_(9649)(Western_blot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
+validation Human_-_H3K9Ac_(9649)(Western_blot,Dot_blot):human_H3K9Ac_9649_validation_Farnham.pdf
 vendorId 9649
 vendorName Cell Signaling Technology
 
@@ -10161,7 +10161,7 @@ target H3K9ac
 targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9Ac_(07-352)(Western_blot,ChIP):human_H3K9Ac_07-352_validation_Farnham.pdf
+validation Human_-_H3K9Ac_(07-352)(Western_blot,ChIP-seq):human_H3K9Ac_07-352_validation_Farnham.pdf
 vendorId 07-352
 vendorName Millipore
 
@@ -10210,7 +10210,7 @@ target H3K9me3
 targetDescription histone cluster 2, H3c, HIST2H3C
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9me3_(9754)(Western_blot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
+validation Human_-_H3K9me3_(9754)(Western_blot,Peptide_ELISA):human_H3K9me3_9754_validation_Farnham.pdf
 vendorId 9754
 vendorName Cell Signaling Technology
 
@@ -10401,7 +10401,7 @@ target HA-E2F1
 targetDescription The HA-E2F1 protein is a derivative of E2F1, a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses. The E2F proteins contain several evolutionary conserved domains found in most members of the family. These domains include a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. This version of E2F1 includes an N terminal HA tag and a modified ER ligand binding domain to allow regulated translocation to the nucleus.
 targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
-validation Human_-_HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
+validation Human_-_HA-E2F1(Immunoprecipitation-Western_blot,ChIP-seq):human_E2F1_HA-E2F1_validation_Farnham.pdf
 vendorId MMS-101P
 vendorName Covance
 
@@ -10416,7 +10416,7 @@ target HCFC1
 targetDescription The epitope recognized by this antibody maps to a region between residue 1700 and 1750 of human host cell factor C1 (VP16-accessory protein).
 targetId GeneCard:HCFC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HCFC1
-validation Human_-_HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):human_HCFC1_NB100-68209_validation_Snyder.pdf Mouse_-_HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):mouse_HCFC1_validation_Snyder.pdf
+validation Human_-_HCFC1_(NB100-68209)(Immunoprecipitation,IP-MassSpec):human_HCFC1_NB100-68209_validation_Snyder.pdf Mouse_-_HCFC1_(NB100-68209)(Immunoprecipitation,IP-MassSpec):mouse_HCFC1_validation_Snyder.pdf
 vendorId NB100-68209
 vendorName Novus Biologicals
 
@@ -10579,7 +10579,7 @@ targetClass TFSS
 targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene
 targetId GeneCard:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
-validation Human_-_HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
+validation Human_-_HNF4G_(SC-6558)(ChIP-seq,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 vendorId sc-6558
 vendorName Santa Cruz Biotechnology
 
@@ -10595,7 +10595,7 @@ target CBX3
 targetDescription CBX3 seems to be involved in transcriptional silencing in heterochromatin-like complexes. It recognizes and binds histone H3 tails methylated at Lys-9, leading to epigenetic repression. It may contribute to the association of the heterochromatin with the inner nuclear membrane through its interaction with lamin B receptor (LBR).
 targetId GeneCard:CBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
-validation Human_-_HP1gamma_(ab10480)(ChIP,Western_blot):human_HP1gamma_ab10480_validation_Bernstein.pdf
+validation Human_-_HP1gamma_(ab10480)(ChIP-seq,Western_blot):human_HP1gamma_ab10480_validation_Bernstein.pdf
 vendorId ab10480
 vendorName abcam
 
@@ -10658,7 +10658,7 @@ target IKZF1
 targetDescription IKAROS family zinc finger 1 (Ikaros or IKZF1) is a C2H2 zinc finger transcription factor that is associated with various chromatin-modifying complexes and is suggested to play a role in the development of lymphocytes, B- and T-cells.
 targetId GeneCard:IKZF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IKZF1
-validation Human_-_IKZF1_(IkN)_(UCLA)(Western_blot,ChIPseq):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
+validation Human_-_IKZF1_(IkN)_(UCLA)(Western_blot,ChIP-seq):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
 vendorId IKZF1_(IkN)
 vendorName Dr. Stephen Smale at UCLA
 
@@ -10674,7 +10674,7 @@ targetClass ChromRem
 targetDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCB1
-validation Human_-_INI1(Immunoprecipitation,IP-Mass_spec):human_INI1_validation_Snyder.pdf
+validation Human_-_INI1(Immunoprecipitation,IP-MassSpec):human_INI1_validation_Snyder.pdf
 vendorId sc-16189
 vendorName Santa Cruz Biotechnology
 
@@ -10771,7 +10771,7 @@ target KDM4A
 targetDescription JMJD2A is a member of the jumonji (jmj) domain containing gene family of histone demethylases that plays a role in chromatin regulation and influences transcriptional activation and suppression. JMJD2A is a trimethylation-specific demethylase and functions as a transcriptional repressor.
 targetId GeneCard:KDM4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM4A
-validation Human_-_JMJD2A_(A300-861A)(ChIP,Western_blot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
+validation Human_-_JMJD2A_(A300-861A)(ChIP-seq,Western_blot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
 vendorId A300-861A
 vendorName Bethyl Laboratories
 
@@ -10787,9 +10787,10 @@ targetClass TFSS
 targetDescription The protein encoded by this intronless gene is a member of the JUN family, and a functional component of the AP1 transcription factor complex. It has been proposed to protect cells from p53-dependent senescence and apoptosis. Alternate translation initiation site usage results in the production of different isoforms. (provided by RefSeq)
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
-validation Human_-_JunD(sc-74)(ChIP_MS,MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_JunD(sc-74)(Western_blot,IP-MassSpec):human_JunD_validation_Myers.pdf Mouse_-_:missing
 vendorId sc-74
 vendorName Santa Cruz Biotechnology
+#Only one validation is in the file
 
 term KAP1
 tag KAP1
@@ -10819,7 +10820,7 @@ target CREBBP
 targetDescription Cyclic AMP-responsive enhancer binding protein (CREB) binding protein (CBP) and p300 are closely related transcriptional coactivators that have been shown to directly interact with many different DNA-binding transcription factors. Both CBP and p300 have been shown to display histone acetyltransferase (HAT) activity, capable of acetylating all four core histone particles in nucleosomes.
 targetId GeneCard:CREBBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
-validation Human_-_KAT3A_(ab2832)(ChIP,Western_blot):human_KAT3A_ab2832_validation_Bernstein.pdf
+validation Human_-_KAT3A_(ab2832)(ChIP-seq,Western_blot):human_KAT3A_ab2832_validation_Bernstein.pdf
 vendorId ab2832
 vendorName abcam
 
@@ -10850,7 +10851,7 @@ target KDM1A
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
-validation Human_-_LSD1_(A300-215A)(ChIP,Western_blot):human_LSD1_validation_Epstein.pdf
+validation Human_-_LSD1_(A300-215A)(ChIP-seq,Western_blot):human_LSD1_validation_Epstein.pdf
 vendorId A300-215A
 vendorName Bethyl Laboratories
 
@@ -10882,7 +10883,7 @@ targetClass TFSS
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
 targetId GeneCard:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
-validation Human_-_MAFK_(ab50322)(Immunoprecipitation,ChIP):human_MafK_ab50322_validation_Snyder.pdf Mouse_-_MAFK_(ab50322)(Immunoprecipitation,ChIP):mouse_MafK_ab50322_validation_Snyder.pdf
+validation Human_-_MAFK_(ab50322)(Immunoprecipitation,ChIP-seq):human_MafK_ab50322_validation_Snyder.pdf Mouse_-_MAFK_(ab50322)(Immunoprecipitation,ChIP-seq):mouse_MafK_ab50322_validation_Snyder.pdf
 vendorId ab50322
 vendorName abcam
 
@@ -10898,7 +10899,7 @@ targetClass TFSS
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
 targetId GeneCard:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
-validation Human_-_MafK(sc477)(Immunoprecipitation,ChIP):human_MafK_sc477_validation_Snyder.pdf
+validation Human_-_MafK(sc477)(Immunoprecipitation,ChIP-seq):human_MafK_sc477_validation_Snyder.pdf
 vendorId sc-477
 vendorName Santa Cruz Biotechnology
 
@@ -10931,7 +10932,7 @@ target MAZ
 targetDescription May function as a transcription factor with dual roles in transcription initiation and termination. Binds to two sites, ME1a1 and ME1a2, within the MYC promoter having greater affinity for the former. Also binds to multiple G/C-rich sites within the promoter of the Sp1 family of transcription factors.
 targetId GeneCard:MAZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAZ
-validation Human_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):human_MAZ_ab85725_validation_Snyder.pdf Mouse_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):mouse_MAZ_ab85725_validation_Snyder.pdf
+validation Human_-_MAZ(ab85725)(Immunoprecipitation,IP-MassSpec):human_MAZ_ab85725_validation_Snyder.pdf Mouse_-_MAZ(ab85725)(Immunoprecipitation,IP-MassSpec):mouse_MAZ_ab85725_validation_Snyder.pdf
 vendorId ab85725
 vendorName abcam
 
@@ -11010,7 +11011,7 @@ targetClass TFSS
 targetDescription This locus encodes a member of the MADS box transcription enhancer factor 2 (MEF2) family of proteins, which play a role in myogenesis. The encoded protein, MEF2 polypeptide C, has both trans-activating and DNA binding activities. This protein may play a role in maintaining the differentiated state of muscle cells. Mutations and deletions at this locus have been associated with severe mental retardation, stereotypic movements, epilepsy, and cerebral malformation. Alternatively spliced transcript variants have been described. (provided by RefSeq)
 targetId GeneCard:MEF2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
-validation Human_-_MEF2C_(sc-13268)(Western_blot,Motif_enrichment):human_MEF2C_SC-13268_validation_Myers.pdf
+validation Human_-_MEF2C_(sc-13268)(Western_blot,Motif_Enrichment):human_MEF2C_SC-13268_validation_Myers.pdf
 vendorId sc-13268
 vendorName Santa Cruz Biotechnology
 
@@ -11043,7 +11044,7 @@ targetClass TFSS
 targetDescription Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
 targetId GeneCard:MXI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
-validation Human_-_MXI1(Immunoprecipitation,IP-Mass_spec):human_MXI1_validation_Snyder.pdf Mouse_-_MXI1(Immunoprecipitation,IP-Mass_spec):mouse_Mxi1_validation_Snyder.pdf
+validation Human_-_MXI1(Immunoprecipitation,IP-MassSpec):human_MXI1_validation_Snyder.pdf Mouse_-_MXI1(Immunoprecipitation,IP-MassSpec):mouse_Mxi1_validation_Snyder.pdf
 vendorId AF4185
 vendorName R&D Systems
 
@@ -11139,7 +11140,7 @@ targetClass TFNS
 targetDescription NELF-E (RDBP) is a part of the negative elongation factor complex which binds to RNAPII to suppress elongation.
 targetId GeneCard:RDBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
-validation Human_-_NELFe_(SC-32912)(Western_blot,ChIP-Seq):human_NELFe_sc-32912_validation_Struhl.pdf Mouse_-_:missing
+validation Human_-_NELFe_(SC-32912)(Western_blot,ChIP-seq):human_NELFe_sc-32912_validation_Struhl.pdf Mouse_-_:missing
 vendorId sc-32912
 vendorName Santa Cruz Biotechnology
 
@@ -11155,7 +11156,7 @@ target NFIC
 targetDescription Recognizes and binds the palindromic sequence 5'-TTGGCNNNNNGCCAA-3' present in viral and cellular promoters and in the origin of replication of adenovirus type 2. These proteins are individually capable of activating transcription and replication.
 targetId GeneCard:NFIC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFIC
-validation Human_-_NFIC_(SC-81335)(Western_blot,IP-Mass_Spec):human_NFIC_SC-81335_validation_Myers.pdf
+validation Human_-_NFIC_(SC-81335)(Western_blot,IP-MassSpec):human_NFIC_SC-81335_validation_Myers.pdf
 vendorId sc-81335
 vendorName Santa Cruz Biotechnology
 
@@ -11268,7 +11269,7 @@ targetClass TFSS
 targetDescription NRF1 is the mammalian homolog to the erect wing (ewg) Drosophila protein that is required for proper development of the central nervous system and indirect flight muscles. In mammals NRF1 functions as a transcription factor that activates the expression of the EIF2S1 (EIF-alpha) gene. This protein links the transcriptional modulation of key metabolic genes to cellular growth and development, and has been implicated in the control of nuclear genes required for respiration, heme biosynthesis and mitochondrialDNA transcription and replication. NRF1 forms a homodimer and binds DNA as a dimer. NRF1 shows a nuclear localization and is expressed widely in embryonic, fetal and adult tissues. Phosphorylation of NRF1 enhances DNA binding.
 targetId GeneCard:NRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NRF1
-validation Human_-_NRF1(Immunoblots,Motif_Enrichment):human_NRF1_validation_Snyder.pdf
+validation Human_-_NRF1(Immunoblot,Motif_Enrichment):human_NRF1_validation_Snyder.pdf
 vendorId ab55744
 vendorName abcam
 
@@ -11300,7 +11301,7 @@ targetClass TFSS
 targetDescription Neuron-restrictive silencer transcription factor
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
-validation Human_-_NRSF_(Western_blot,Motif_enrichment):human_NRSF_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_NRSF_(Western_blot,Motif_Enrichment):human_NRSF_validation_Myers.pdf Mouse_-_:missing
 vendorId NRSF
 vendorName Dr. David Anderson at Protein Expression Center (pec@caltech.edu)
 
@@ -11316,7 +11317,7 @@ target NR2F2
 targetDescription This gene encodes a member of the steroid thyroid hormone superfamily of nuclear receptors. The encoded protein is a ligand inducible transcription factor that is involved in the regulation of many different genes. Alternate splicing results in multiple transcript variants. (provided by RefSeq)
 targetId GeneCard:NR2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR2F2
-validation Human_-_NR2F2_(sc-271940)(Western_blot,IP-Mass_spec):human_NR2F2_SC-271940_validation_Myers.pdf
+validation Human_-_NR2F2_(sc-271940)(Western_blot,IP-MassSpec):human_NR2F2_SC-271940_validation_Myers.pdf
 vendorId sc-271940
 vendorName Santa Cruz Biotechnology
 
@@ -11332,7 +11333,7 @@ target WHSC1
 targetDescription This is a probable histone methyltransferase, which may act as a transcription regulator that binds DNA and suppresses IL5 transcription.
 targetId GeneCard:WHSC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WHSC1
-validation Human_-_NSD2_(ab75359)(ChIP,Western_blot):human_NSD2_ab75359_validation_Bernstein.pdf
+validation Human_-_NSD2_(ab75359)(ChIP-seq,Western_blot):human_NSD2_ab75359_validation_Bernstein.pdf
 vendorId ab75359
 vendorName abcam
 
@@ -11365,7 +11366,7 @@ targetClass HISase
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
-validation Human_-_P300_(A300-358A)(ChIP,Western_blot):human_P300_validation_Epstein.pdf
+validation Human_-_P300_(A300-358A)(ChIP-seq,Western_blot):human_P300_validation_Epstein.pdf
 vendorId A300-358A
 vendorName Bethyl Laboratories
 
@@ -11493,7 +11494,7 @@ target KAT2B
 targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
 targetId GeneCard:KAT2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
-validation Human_-_PCAF_(A301-666A)(ChIP,Western_blot):human_PCAF_validation_Epstein.pdf
+validation Human_-_PCAF_(A301-666A)(ChIP-seq,Western_blot):human_PCAF_validation_Epstein.pdf
 vendorId A301-666A
 vendorName Bethyl Laboratories
 
@@ -11589,7 +11590,7 @@ targetClass Pol2
 targetDescription RNA Polymerase II
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Human_-_Pol2(Immunoprecipitation,IP-Mass_spec):human_Pol2_validation_Snyder.pdf Mouse_-_Pol2(Immunoprecipitation,IP-Mass_spec):mouse_Pol2_validation_Snyder.pdf
+validation Human_-_Pol2(Immunoprecipitation,IP-MassSpec):human_Pol2_validation_Snyder.pdf Mouse_-_Pol2(Immunoprecipitation,IP-MassSpec):mouse_Pol2_validation_Snyder.pdf
 vendorId MMS-126R
 vendorName Covance
 
@@ -11622,7 +11623,7 @@ targetClass Pol2
 targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Human_-_Pol2-4H8(ChIP,MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_Pol2-4H8(ab5408)(Western_blot):mouse_Pol2-4H8_ab5408_validation_Hardison.pdf
+validation Human_-_Pol2-4H8(ChIP-seq,MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_Pol2-4H8(ab5408)(Western_blot):mouse_Pol2-4H8_ab5408_validation_Hardison.pdf
 vendorId ab5408
 vendorName abcam
 
@@ -11638,7 +11639,7 @@ targetClass Pol2
 targetDescription RNA polymerase II, large subunit- specific for phosphorylated C-terminal domain.
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Human_-_POL2S2_(ab5095)(Immunoprecipitation,IP-Mass_Spec):human_PolIIS2_validation_Snyder.pdf Mouse_-_PolIIS2_(ab5095)(Immunoprecipitation,IP-Mass_Spec):mouse_PolIIS2_validation_Snyder.pdf
+validation Human_-_POL2S2_(ab5095)(Immunoprecipitation,IP-MassSpec):human_PolIIS2_validation_Snyder.pdf Mouse_-_PolIIS2_(ab5095)(Immunoprecipitation,IP-MassSpec):mouse_PolIIS2_validation_Snyder.pdf
 vendorId ab5095
 vendorName abcam
 
@@ -11653,7 +11654,7 @@ target POL3
 targetDescription RNA Polymerase III
 targetId GeneCard:POLR3G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
-validation Human_-_Pol3(Immunoprecipitation,IP-Mass_spec):human_Pol3_validation_Snyder.pdf
+validation Human_-_Pol3(Immunoprecipitation,IP-MassSpec):human_Pol3_validation_Snyder.pdf
 vendorId sc-21754
 vendorName Santa Cruz Biotechnology
 
@@ -11768,7 +11769,7 @@ targetClass TFSS
 targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues. A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes. Target is GST fusion amino acids 801-1097 of human REST.
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
-validation Human_-_REST_(17-641)(ChIP,Western_blot):human_REST_validation_Epstein.pdf
+validation Human_-_REST_(17-641)(ChIP-seq,Western_blot):human_REST_validation_Epstein.pdf
 vendorId 17-641
 vendorName Millipore
 
@@ -11798,7 +11799,7 @@ target RNF2
 targetDescription Ring finger protein 2 (RNF2) is a polycomb group (PcG) protein. RNF2 has been shown to interact with, and suppress the activity of, transcription factor CP2 (TFCP2/CP2).
 targetId GeneCard:RNF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RNF2
-validation Human_-_RNF2_(A302-869A)(ChIP,Western_blot):human_RNF2_validation_Epstein.pdf
+validation Human_-_RNF2_(A302-869A)(ChIP-seq,Western_blot):human_RNF2_validation_Epstein.pdf
 vendorId A302-869A
 vendorName Bethyl Laboratories
 
@@ -11830,7 +11831,7 @@ targetClass Pol3F
 targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
 targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
-validation Human_-_RPC155(1900):human_RPC155_1900_validation_Struhl.pdf
+validation Human_-_RPC155(1900)(Western_blot,Correlation):human_RPC155_1900_validation_Struhl.pdf
 vendorId 1900
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
@@ -11846,7 +11847,7 @@ target RUNX3
 targetDescription This gene encodes a member of the runt domain-containing family of transcription factors. A heterodimer of this protein and a beta subunit forms a complex that binds to the core DNA sequence 5'-PYGPYGGT-3' found in a number of enhancers and promoters, and can either activate or suppress transcription. It also interacts with other transcription factors. It functions as a tumor suppressor, and the gene is frequently deleted or transcriptionally silenced in cancer. Multiple transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq)
 targetId GeneCard:RUNX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RUNX3
-validation Human_-_RUNX3_(SC-101553)(Western_blot,IP-Mass_Spec):human_RUNX3_SC-101553_validation_Myers.pdf
+validation Human_-_RUNX3_(SC-101553)(Western_blot,IP-MassSpec):human_RUNX3_SC-101553_validation_Myers.pdf
 vendorId sc-101553
 vendorName Santa Cruz Biotechnology
 
@@ -11894,7 +11895,7 @@ targetClass HISase
 targetDescription SET domain, bifurcated 1, the SET domain is a highly conserved, approximately 150-amino acid motif implicated in the modulation of chromatin structure
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation Human_-_SETDB1(Western_blot,ChIPseq):human_SETDB1_validation_Farnham.pdf
+validation Human_-_SETDB1(Western_blot,ChIP-seq):human_SETDB1_validation_Farnham.pdf
 vendorId 11231-1-AP
 vendorName Proteintech
 
@@ -11910,7 +11911,7 @@ targetClass HISase
 targetDescription SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation Human_-_SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):human_SETDB1-SC66884_validation_Farnham.pdf
+validation Human_-_SETDB1_SC-66884(Immunoprecipitation,Western_blot,ChIP-seq):human_SETDB1-SC66884_validation_Farnham.pdf
 vendorId sc-66884
 vendorName Santa Cruz Biotechnology
 
@@ -11927,7 +11928,7 @@ targetClass HISase
 targetDescription Mammalian Sin 3 (mSin 3) is closely related to the yeast SIN3 repressor protein involved in the transcriptional repression of many genes. Containing 4 paired amphipathic helix domains (PAH domains), mSin 3A and mSin 3B have been shown to directly interact with several other transcriptional repressor proteins including HDAC 1, HDAC 2, RbAp 46, the methyl CpG binding protein MeCP 2, the Mad/Max heterodimer, and the corepressors silencing mediator of retinoic acid &amp; thyroid hormone receptor (SMRT) and nuclear receptor corepressor (N-CoR).
 targetId GeneCard:SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Human_-_SIN3A_(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_SIN3A_(NB600-1263)(Immunoprecipitation):mouse_SIN3A_NB600-1263_validation_Snyder.pdf
+validation Human_-_SIN3A_(NB600-1263)(Immunoprecipitation,ChIP-seq):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_SIN3A_(NB600-1263)(Immunoprecipitation):mouse_SIN3A_NB600-1263_validation_Snyder.pdf
 vendorId NB600-1263
 vendorName Novus Biologicals
 
@@ -11959,9 +11960,10 @@ targetClass HISase
 targetDescription A synthetic peptide made to an internal region of the human SIRT6 protein
 targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
-validation Human_-_SIRT6(ab48192):human_SIRT6_ab48192_validation_Struhl.pdf
+validation Human_-_SIRT6(ab48192)(missing):human_SIRT6_ab48192_validation_Struhl.pdf
 vendorId ab48192
 vendorName abcam
+#thie doc has nothing in it
 
 term SIRT6_(ab62739)
 tag SIRT6AB62739
@@ -11976,7 +11978,7 @@ targetClass HISase
 targetDescription NAD-dependent protein deacetylase. Has deacetylase activity towards Lys-9 and Lys-56 of histone H3. Modulates acetylation of histone H3 in telomeric chromatin during the S-phase of the cell cycle. Deacetylates Lys-9 of histone H3 at NF-kappa-B target promoters and may down-regulate the expression of a subset of NF-kappa-B target genes.
 targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
-validation Human_-_SIRT6_(ab62739)(ChIP,Western_blot):human_SIRT6_ab62739_validation_Bernstein.pdf
+validation Human_-_SIRT6_(ab62739)(ChIP-seq,Western_blot):human_SIRT6_ab62739_validation_Bernstein.pdf
 vendorId ab62739
 vendorName abcam
 
@@ -11992,7 +11994,7 @@ targetClass TFSS
 targetDescription The protein encoded by this gene is a homeodomain-containing transcription factor that appears to function in the regulation of organogenesis. This gene is located downstream of the dystrophia myotonica-protein kinase gene. Mutations in this geneare a cause of branchiootorenal syndrome type 2.
 targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
-validation Human_-_SIX5(ChIP,MassSpec):human_SIX5_validation_Myers.pdf
+validation Human_-_SIX5(ChIP-seq,MassSpec):human_SIX5_validation_Myers.pdf
 vendorId sc-55706
 vendorName Santa Cruz Biotechnology
 
@@ -12022,7 +12024,7 @@ target SMC3
 targetDescription Involved in chromosome cohesion during cell cycle and in DNA repair. Central component of cohesin complex. The cohesin complex is required for the cohesion of sister chromatids after DNA replication.
 targetId GeneCard:SMC3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMC3
-validation Human_-_SMC3(Immunoprecipitation,ChIP):human_SMC3_validation_Snyder.pdf Mouse_-_SMC3(Immunoprecipitation,ChIP):mouse_SMC3_validation_Snyder.pdf
+validation Human_-_SMC3(Immunoprecipitation,ChIP-seq):human_SMC3_validation_Snyder.pdf Mouse_-_SMC3(Immunoprecipitation,ChIP-seq):mouse_SMC3_validation_Snyder.pdf
 vendorId ab9263
 vendorName abcam
 
@@ -12103,7 +12105,7 @@ targetClass TFSS
 targetDescription Sterol regulatory element binding transcription factor 1
 targetId GeneCard:SREBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF1
-validation Human_-_SREBP1_(sc-8984)(Western_blot,IP-Mass_Spec):human_SREBP1_validation_Snyder.pdf
+validation Human_-_SREBP1_(sc-8984)(Western_blot,IP-MassSpec):human_SREBP1_validation_Snyder.pdf
 vendorId sc-8984
 vendorName Santa Cruz Biotechnology
 
@@ -12119,7 +12121,7 @@ targetClass TFSS
 targetDescription Sterol regulatory element binding transcription factor 2
 targetId GeneCard:SREBF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF2
-validation Human_-_SREBP2_(10007663)(Western_blot,IP-Mass_SPec):human_SREBP2_validation_Snyder.pdf
+validation Human_-_SREBP2_(10007663)(Western_blot,IP-MassSpec):human_SREBP2_validation_Snyder.pdf
 vendorId 10007663
 vendorName Cayman Chemical
 
@@ -12169,7 +12171,7 @@ targetClass TFSS
 targetDescription peptide mapping at c-terminus of Human STAT2 p-113 (C-20) X
 targetId GeneCard:STAT2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT2
-validation Human_-_STAT2(Immunoprecipitation,ChIP):human_STAT2_validation_Snyder.pdf
+validation Human_-_STAT2(Immunoprecipitation,ChIP-seq):human_STAT2_validation_Snyder.pdf
 vendorId sc-476X
 vendorName Santa Cruz Biotechnology
 
@@ -12185,7 +12187,7 @@ targetClass TFSS
 targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression of a variety of genes with roles in processes such as cell growth and apoptosis.
 targetId GeneCard:STAT3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT3
-validation Human_-_STAT3(Immunoprecipitation,IP-Mass_Spec):human_STAT3_validation_Snyder.pdf
+validation Human_-_STAT3(Immunoprecipitation,IP-MassSpec):human_STAT3_validation_Snyder.pdf
 vendorId sc-482
 vendorName Santa Cruz Biotechnology
 
@@ -12201,7 +12203,7 @@ target STAT5A
 targetDescription The protein encoded by this gene is a member of the STAT family of transcription factors. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo- or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein is activated by, and mediates the responses of many cell ligands, such as IL2, IL3, IL7 GM-CSF, erythropoietin, thrombopoietin, and different growth hormones. Activation of this protein in myeloma and lymphoma associated with a TEL/JAK2 gene fusion is independent of cell stimulus and has been shown to be essential for the tumorigenesis. The mouse counterpart of this gene is found to induce the expression of BCL2L1/BCL-X(L), which suggests the antiapoptotic function of this gene in cells. (provided by RefSeq)
 targetId GeneCard:STAT5A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
-validation Human_-_STAT5A_(SC-74442):human_STAT5A_SC-74442_validation_Myers.pdf
+validation Human_-_STAT5A_(SC-74442)(Western_blot,IP-MassSpec):human_STAT5A_SC-74442_validation_Myers.pdf
 vendorId sc-74442
 vendorName Santa Cruz Biotechnology
 
@@ -12234,7 +12236,7 @@ targetClass HISase
 targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
-validation Human_-_SUZ12_(Western_blot,ChIP):human_SUZ12_validation_Farnham.pdf
+validation Human_-_SUZ12_(Western_blot,ChIP-seq):human_SUZ12_validation_Farnham.pdf
 vendorId SUZ12
 vendorName Dr. Peggy Farnham at USC
 
@@ -12266,7 +12268,7 @@ targetClass TFNS
 targetDescription TAF1 RNA polymerase II, TATA box binding protein (TBP)-associated factor, 250kDa. Also designated TAF250.
 targetId GeneCard:TAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF1
-validation Human_-_TAF1(ChIP,MassSpec):human_TAF1_validation_Myers.pdf
+validation Human_-_TAF1(ChIP-seq,MassSpec):human_TAF1_validation_Myers.pdf
 vendorId sc-735
 vendorName Santa Cruz Biotechnology
 
@@ -12299,7 +12301,7 @@ targetClass TFSS
 targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basic helix-loop-helix transcription factor known to regulate embryonic hematopoiesis.
 targetId GeneCard:TAL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
-validation Human_-_TAL1(Immunoprecipitation,IP-Mass_spec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
+validation Human_-_TAL1(Immunoprecipitation,IP-MassSpec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 vendorId sc-12984
 vendorName Santa Cruz Biotechnology
 
@@ -12315,7 +12317,7 @@ target TBL1XR1
 targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
 targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
-validation Human_-_TBLR1_(ab24550)(Immunoprecipitation,ChIP):human_TBLR1_ab24550_validation_Snyder.pdf
+validation Human_-_TBLR1_(ab24550)(Immunoprecipitation,ChIP-seq):human_TBLR1_ab24550_validation_Snyder.pdf
 vendorId ab24550
 vendorName abcam
 
@@ -12330,7 +12332,7 @@ target TBL1XR1
 targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
 targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
-validation Human_-_TBLR1_(NB600-270)(Immunoprecipitation,ChIP):human_TBLR1_NB600-270_validation_Snyder.pdf
+validation Human_-_TBLR1_(NB600-270)(Immunoprecipitation,ChIP-seq):human_TBLR1_NB600-270_validation_Snyder.pdf
 vendorId NB600-270
 vendorName Novus Biologicals
 
@@ -12430,7 +12432,7 @@ targetClass TFSS
 targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
-validation Human_-_TCF7L2(Immunoprecipitation,ChIP):human_TCF7L2_validation_Farnham.pdf
+validation Human_-_TCF7L2(Immunoprecipitation,ChIP-seq):human_TCF7L2_validation_Farnham.pdf
 vendorId 2569
 vendorName Cell Signaling Technology
 
@@ -12447,7 +12449,7 @@ targetClass TFSS
 targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
-validation Human_-_TCF7L2_C9B9_(2565)(Immunoprecipitation,ChIP):human_TCF7L2_C9B9_2565_validation_Farnham.pdf
+validation Human_-_TCF7L2_C9B9_(2565)(Immunoprecipitation,ChIP-seq):human_TCF7L2_C9B9_2565_validation_Farnham.pdf
 vendorId 2565
 vendorName Cell Signaling Technology
 
@@ -12463,7 +12465,7 @@ target TEAD4
 targetDescription Member of the transcriptional enhancer factor (TEF) family of transcription factors, which contain the TEA/ATTS DNA-binding domain. It is preferentially expressed in the skeletal muscle, and binds to the M-CAT regulatory element found in promoters of muscle-specific genes to direct their gene expression.
 targetId GeneCard:TEAD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
-validation Human_-_TEAD4_(SC-101184)(Western_blot,IP-Mass_Spec):human_TEAD4_SC-101184_validation_Myers.pdf
+validation Human_-_TEAD4_(SC-101184)(Western_blot,IP-MassSpec):human_TEAD4_SC-101184_validation_Myers.pdf
 vendorId sc-101184
 vendorName Santa Cruz Biotechnology
 
@@ -12479,7 +12481,7 @@ targetClass Pol3F
 targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. 
 targetId GeneCard:GTF3C2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF3C2
-validation Human_-_TFIIIC-110(4286):human_TFIIIC-110_4286_validation_Struhl.pdf
+validation Human_-_TFIIIC-110(4286)(IP-MassSpec,Correlation):human_TFIIIC-110_4286_validation_Struhl.pdf
 vendorId TFIIIC-110 4286
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
@@ -12512,7 +12514,7 @@ target TP53
 targetDescription This gene encodes tumor protein p53, which responds to diverse cellular stresses to regulate target genes that induce cell cycle arrest, apoptosis, senescence, DNA repair, or changes in metabolism. p53 protein is expressed at low level in normal cells and at a high level in a variety of transformed cell lines, where it's believed to contribute to transformation and malignancy. p53 is a DNA-binding protein containing transcription activation, DNA-binding, and oligomerization domains. It is postulated to bind to a p53-binding site and activate expression of downstream genes that inhibit growth and/or invasion, and thus function as a tumor suppressor. Mutants of p53 that frequently occur in a number of different human cancers fail to bind the consensus DNA binding site, and hence cause the loss of tumor suppressor activity. Alterations of this gene occur not only as somatic mutations in human malignancies, but also as germline mutations in some cancer-prone families with Li-Fraumeni syndrome. Multiple p53 variants due to alternative promoters and multiple alternative splicing have been found. These variants encode distinct isoforms, which can regulate p53 transcriptional activity. (provided by RefSeq)
 targetId GeneCard:TP53
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53
-validation Human_-_TP53_(sc-126)(Western_blot,ChIP)(:human_TP53_sc-126_validation_Myers.pdf
+validation Human_-_TP53_(sc-126)(Western_blot,ChIP-seq)(:human_TP53_sc-126_validation_Myers.pdf
 vendorId sc-126
 vendorName Santa Cruz Biotechnology
 
@@ -12528,7 +12530,7 @@ targetClass TFSS
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 targetId GeneCard:NR2C2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR2C2
-validation Human_-_TR4_(Western_blot,ChIP):human_TR4_validation_Farnham.pdf
+validation Human_-_TR4_(Western_blot,ChIP-seq):human_TR4_validation_Farnham.pdf
 vendorId TR4
 vendorName Dr. J.D. Engel at University of Michigan
 
@@ -12545,7 +12547,7 @@ targetClass HISase
 targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors. The protein localizes to the nucleus and is thought to associate with specific chromatin regions. The protein is a member of the tripartite motif family. This tripartite motif includes three zinc-binding domains, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
 targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
-validation Human_-_TRIM28_(sc-81411)(Western_blot,ChIP):human_TRIM28_sc-81411_validation_Myers.pdf
+validation Human_-_TRIM28_(sc-81411)(Western_blot,ChIP-seq):human_TRIM28_sc-81411_validation_Myers.pdf
 vendorId sc-81411
 vendorName Santa Cruz Biotechnology
 
@@ -12561,7 +12563,7 @@ target TRIM37
 targetDescription This gene encodes a member of the tripartite motif (TRIM) family, whose members are involved in diverse cellular functions such as developmental patterning and oncogenesis. The TRIM motif includes zinc-binding domains, a RING finger region, a B-box motif and a coiled-coil domain. The RING finger and B-box domains chelate zinc and might be involved in protein-protein and/or protein-nucleic acid interactions. The gene mutations are associated with mulibrey (muscle-liver-brain-eye) nanism, an autosomal recessive disorder that involves several tissues of mesodermal origin. Alternatively spliced transcript variants encoding the same protein have been identified. (provided by RefSeq)
 targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
-validation Human_-_TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
+validation Human_-_TRIM37_(SC-49548)(ChIP-seq,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 vendorId sc-49548
 vendorName Santa Cruz Biotechnology
 
@@ -12577,7 +12579,7 @@ target UBTF
 targetDescription Upstream binding factor (UBF) is a transcription factor required for expression of the 18S, 5.8S, and 28S ribosomal RNAs, along with SL1 (a complex of TBP (MIM 600075) and multiple TBP-associated factors or 'TAFs'). Two UBF polypeptides, of 94 and 97 kD, exist in the human (Bell et al., 1988 (PubMed 3413483)). UBF is a nucleolar phosphoprotein with both DNA binding and transactivation domains. Sequence-specific DNA binding to the core and upstream control elements of the human rRNA promoter is mediated through several HMG boxes
 targetId GeneCard:UBTF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=UBTF
-validation Human_-_UBF_(sc-13125)(Immunoprecipitation,ChIP):human_UBF_sc-13125_validation_Snyder.pdf Mouse_-_UBF_(sc-13125)(Immunoprecipitation,ChIP):mouse_UBF_validation_Snyder.pdf
+validation Human_-_UBF_(sc-13125)(Immunoprecipitation,ChIP-seq):human_UBF_sc-13125_validation_Snyder.pdf Mouse_-_UBF_(sc-13125)(Immunoprecipitation,ChIP-seq):mouse_UBF_validation_Snyder.pdf
 vendorId sc-13125
 vendorName Santa Cruz Biotechnology
 
@@ -12594,7 +12596,7 @@ target UBTF
 targetDescription Upstream binding factor (UBF) is a transcription factor required for expression of the 18S, 5.8S, and 28S ribosomal RNAs, along with SL1 (a complex of TBP (MIM 600075) and multiple TBP-associated factors or 'TAFs'). Two UBF polypeptides, of 94 and 97 kD, exist in the human (Bell et al., 1988 (PubMed 3413483)). UBF is a nucleolar phosphoprotein with both DNA binding and transactivation domains. Sequence-specific DNA binding to the core and upstream control elements of the human rRNA promoter is mediated through several HMG boxes
 targetId GeneCard:UBTF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=UBTF
-validation Human_-_UBTF_(SAB1404509)(Immunoprecipitation,ChIP):human_UBTF_SAB1404509_validation_Snyder.pdf
+validation Human_-_UBTF_(SAB1404509)(Immunoprecipitation,ChIP-seq):human_UBTF_SAB1404509_validation_Snyder.pdf
 vendorId SAB1404509
 vendorName Sigma-Aldrich
 
@@ -12676,7 +12678,7 @@ targetClass DNARep
 targetDescription Interacts with the N-terminal portion of Werner protein containing the exonuclease domain, shows homology to replication factor C family proteins, and is conserved from E. coli to human. Studies in yeast suggest that this gene may influence the aging process. Functions as a modulator for initiation or reinitiation events during DNA polymerase delta-mediated DNA synthesis. Has an intrinsic ATPase activity that functions as a sensor of DNA damage or of arrested replication forks and regulates the extent of DNA synthesis.
 targetId GeneCard:WRNIP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WRNIP1
-validation Human_-_WHIP_(ab4731)(Western_blot,IP-Mass_Spec):human_WHIP_validation_Snyder.pdf
+validation Human_-_WHIP_(ab4731)(Western_blot,IP-MassSpec):human_WHIP_validation_Snyder.pdf
 vendorId ab4731
 vendorName abcam
 
@@ -12709,7 +12711,7 @@ targetClass TFSS
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703_validation_Farnham.pdf Human_-_YY1_(sc-1703)(Western_blot,IP-Mass_Spec):human_YY1_sc-1703_validation_Myers.pdf
+validation Human_-_YY1_(sc-1703)(Western_blot,IP-MassSpec):human_YY1_sc-1703_validation_Farnham.pdf Human_-_YY1_(sc-1703)(Western_blot,IP-MassSpec):human_YY1_sc-1703_validation_Myers.pdf
 vendorId sc-1703
 vendorName Santa Cruz Biotechnology
 
@@ -12773,7 +12775,7 @@ target ZC3H11A
 targetDescription ZC3H11A is a C3H1-type zinc finger protein. ZC3H11A has been identified as a protein that is phosphorylated upon DNA damage by ATM or ATR. The function of ZC3H11A remains uncharacterized.
 targetId GeneCard:ZC3H11A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZC3H11A
-validation Human_-_ZC3H11A_(NB100-74650)(Immunoprecipitation,IP-Mass_Spec):human_ZC3H11A_NB100-74650_validation_Snyder.pdf Mouse_-_ZC3H11A_(NB100-74650)(Immunoprecipitation,IP-Mass_Spec):mouse_ZC3H11A_validation_Snyder.pdf
+validation Human_-_ZC3H11A_(NB100-74650)(Immunoprecipitation,IP-MassSpec):human_ZC3H11A_NB100-74650_validation_Snyder.pdf Mouse_-_ZC3H11A_(NB100-74650)(Immunoprecipitation,IP-MassSpec):mouse_ZC3H11A_validation_Snyder.pdf
 vendorId NB100-74650
 vendorName Novus Biologicals
 
@@ -12806,7 +12808,7 @@ target ZKSCAN1
 targetDescription The ZKSCAN1 gene encodes a transcriptional regulator of the KRAB (Kruppel-associated box) subfamily of zinc finger proteins, which contain repeated Cys2-His2 (C2H2) zinc finger domains that are connected by conserved sequences, called H/C links. Transcriptional regulatory proteins containing tandemly repeated zinc finger domains are thought to be involved in both normal and abnormal cellular proliferation and differentiation.
 targetId GeneCard:ZKSCAN1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZKSCAN1
-validation Human_-_ZKSCAN1_(HPA006672)(Immunoprecipitation,IP-Mass_spec):human_ZKSCAN1_HPA006672_validation_Snyder.pdf Mouse_-_ZKSCAN1_(HPA006672)(Immunoprecipitation,IP-Mass_spec):mouse_ZKSCAN1_validation_Snyder.pdf
+validation Human_-_ZKSCAN1_(HPA006672)(Immunoprecipitation,IP-MassSpec):human_ZKSCAN1_HPA006672_validation_Snyder.pdf Mouse_-_ZKSCAN1_(HPA006672)(Immunoprecipitation,IP-MassSpec):mouse_ZKSCAN1_validation_Snyder.pdf
 vendorId HPA006672
 vendorName Sigma-Aldrich
 
@@ -12822,7 +12824,7 @@ targetClass TFSS
 targetDescription Transcriptional activator. Activates the gene for selenocysteine tRNA (tRNAsec). Binds to the SPH motif of small nuclear RNA (snRNA) gene promoters. Participates to efficient U6 RNA polymerase III transcription via its interaction with CHD8
 targetId GeneCard:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
-validation Human_-_Znf143_(16618-1-AP)(Immunoprecipitation,IP-Mass_spec):human_ZNF143_validation_Snyder.pdf
+validation Human_-_Znf143_(16618-1-AP)(Immunoprecipitation,IP-MassSpec):human_ZNF143_validation_Snyder.pdf
 vendorId 16618-1-AP
 vendorName Proteintech
 
@@ -12838,7 +12840,7 @@ target ZMIZ1
 targetDescription Zinc finger MIZ domain-containing protein 1 that increases ligand-dependent transcriptional activity of AR and promotes AR sumoylation. The stimulation of AR activity is dependent upon sumoylation.
 targetId GeneCard:ZMIZ1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZMIZ1
-validation Human_-_ZNF-MIZD-CP1_(ab65767)(Immunoprecipitation,IP-Mass_Spec):human_ZNF-MIZD-CP1_ab65767_validation_Snyder.pdf Mouse_-_ZMIZ1_(ab65676)(Immunoprecipitation,IP-Mass_Spec):mouse_ZMIZ1_validation_Snyder.pdf
+validation Human_-_ZNF-MIZD-CP1_(ab65767)(Immunoprecipitation,IP-MassSpec):human_ZNF-MIZD-CP1_ab65767_validation_Snyder.pdf Mouse_-_ZMIZ1_(ab65676)(Immunoprecipitation,IP-MassSpec):mouse_ZMIZ1_validation_Snyder.pdf
 vendorId ab65767
 vendorName abcam
 
@@ -12854,7 +12856,7 @@ target ZNF217
 targetDescription ZNF217 is an important oncogene based on the high frequency of amplification and overexpression in many cancer types, but its molecular mode of gene regulation is poorly understood. ZNF217 has been purified in complexes that contain repressor proteins such as CtBP2, suggesting that it acts as a transcriptional repressor. ZNF217 contains seven C2H2 zinc finger domains and has been shown to bind to gene promoters
 targetId GeneCard:ZNF217
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF217
-validation Human_-_ZNF217_(Western_blot,SiRNA):human_ZNF217_validation_Farnham.pdf
+validation Human_-_ZNF217_(Western_blot,siRNA):human_ZNF217_validation_Farnham.pdf
 vendorId ZNF217
 vendorName Dr. Paul Yaswen at UC Berkeley
 
@@ -12904,7 +12906,7 @@ targetClass TFSS
 targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.
 targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
-validation Human_-_ZNF274_(M01)(Western_blot,ChIPseq):human_ZNF274_M01_validation_Farnham.pdf
+validation Human_-_ZNF274_(M01)(Western_blot,ChIP-seq):human_ZNF274_M01_validation_Farnham.pdf
 vendorId H00010782-M01
 vendorName Abnova
 
@@ -12920,7 +12922,7 @@ target ZNF384
 targetDescription This gene encodes a C2H2-type zinc finger protein, which may function as a transcription factor. This gene also contains long CAG trinucleotide repeats that encode consecutive glutamine residues. The protein appears to bind and regulate the promoters of the extracellular matrix genes MMP1, MMP3, MMP7 and COL1A1. Studies in mouse suggest that nuclear matrix transcription factors (NP/NMP4) may be part of a general mechanical pathway that couples cell construction and function during extracellular matrix remodeling. Alternative splicing results in multiple transcript variants. Recurrent rearrangements of this gene with the Ewing's sarcoma gene, EWSR1 on chromosome 22, or with the TAF15 gene on chromosome 17, or with the TCF3 (E2A) gene on chromosome 19, have been observed in acute leukemia. A related pseudogene has been identified on chromosome 7.
 targetId GeneCard:ZNF384
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF384
-validation Human_-_ZNF384_(HPA004051)(Immunoprecipitation,IP-Mass_Spec):human_ZNF384_HPA004051_validation_Snyder.pdf Mouse_-_ZNF384_(HPA004051)(Immunoprecipitation,IP-Mass_Spec):mouse_ZNF384_validation_Snyder.pdf
+validation Human_-_ZNF384_(HPA004051)(Immunoprecipitation,IP-MassSpec):human_ZNF384_HPA004051_validation_Snyder.pdf Mouse_-_ZNF384_(HPA004051)(Immunoprecipitation,IP-MassSpec):mouse_ZNF384_validation_Snyder.pdf
 vendorId HPA004051
 vendorName Sigma-Aldrich
 
