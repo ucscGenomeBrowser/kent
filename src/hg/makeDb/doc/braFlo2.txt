@@ -24,7 +24,7 @@
 "ftp://ftp.jgi-psf.org/pub/JGI_data/Branchiostoma_floridae/v1.0/Bfloridae_v1.0_FilteredModelsMappedToAssemblyv2.0.gff.gz"
 
     # verify the size of the sequence here:
-    faSize Branchiostoma_floridae_v2.0.assembly.fasta.gz 
+    faSize Branchiostoma_floridae_v2.0.assembly.fasta.gz
 # 521895125 bases (41491626 N's 480403499 real 480403499 upper 0 lower)
 #       in 398 sequences in 1 files
 # Total size: mean 1311294.3 sd 1603996.2 min 70934 (Bf_V2_432)
@@ -40,7 +40,7 @@
     #   real    0m8.142s
 
 ##########################################################################
-# Initial makeGenomeDb.pl (DONE - 2012-10-12 - Hiram)
+# Initial makeGenomeDb.pl (DONE - 2012-10-18 - Hiram)
     # obtain a template for this from the source tree:
     # kent/src/hg/utils/automation/configFiles/
     # and check it back into the source tree when completed here:
@@ -99,15 +99,14 @@ taxId 7739
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek braFlo2 > do.log 2>&1 &
-XXX - running - Thu Oct 18 12:54:07 PDT 2012
-    #   real    116m3.942s
+    #   about 2h 08m
 
     cat faSize.rmsk.txt
-# 885550958 bases (238182824 N's 647368134 real 558171034 upper 89197100 lower)
-#       in 25006 sequences in 1 files
-# Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-#       max 4695893 (GL476399) median 8272
-# %10.07 masked total, %13.78 masked real
+# 521910208 bases (41491626 N's 480418582 real 417739234 upper
+#       62679348 lower) in 399 sequences in 1 files
+# Total size: mean 1308045.6 sd 1603293.6 min 15083 (chrM)
+#       max 11512737 (Bf_V2_196) median 749143
+# %12.01 masked total, %13.05 masked real
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
@@ -115,7 +114,7 @@ XXX - running - Thu Oct 18 12:54:07 PDT 2012
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
     featureBits -countGaps braFlo2 rmsk
-    #   89259257 bases of 885550958 (10.080%) in intersection
+    #   62750811 bases of 521910208 (12.023%) in intersection
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -128,15 +127,14 @@ XXX - running - Thu Oct 18 12:54:07 PDT 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	braFlo2 > do.log 2>&1 &
-XXX - running - Thu Oct 18 12:54:07 PDT 2012
-    #   real    53m17.048s
+    #   real  7m29.437s
 
     cat fb.simpleRepeat
-    #   72167005 bases of 647368134 (11.148%) in intersection
+    #   27932824 bases of 480418582 (5.814%) in intersection
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2012-10-12 - Hiram)
+#	(DONE - 2012-10-18 - Hiram)
     mkdir /hive/data/genomes/braFlo2/bed/gap
     cd /hive/data/genomes/braFlo2/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
@@ -160,85 +158,86 @@ XXX - running - Thu Oct 18 12:54:07 PDT 2012
     #   48763 yes
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2012-10-12 - Hiram)
+## WINDOWMASKER (DONE - 2012-10-18 - Hiram)
     mkdir /hive/data/genomes/braFlo2/bed/windowMasker
     cd /hive/data/genomes/braFlo2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev braFlo2 > do.log 2>&1 &
-XXX - running - Thu Oct 18 12:54:07 PDT 2012
-    #   real    84m58.718s
+    #   real    29m34.682s
 
     # Masking statistics
     cat faSize.braFlo2.wmsk.txt
-    #   885550958 bases (238182824 N's 647368134 real 379325983
-    #   upper 268042151 lower) in 25006 sequences in 1 files
-    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-    #   max 4695893 (GL476399) median 8272
-    #   %30.27 masked total, %41.40 masked real
+    #   521910208 bases (41491626 N's 480418582 real 360734768 upper
+    #   119683814 lower) in 399 sequences in 1 files
+    #   Total size: mean 1308045.6 sd 1603293.6 min 15083 (chrM)
+    #   max 11512737 (Bf_V2_196) median 749143
+    #   %22.93 masked total, %24.91 masked real
+
 
     cat faSize.braFlo2.wmsk.sdust.txt
-    #   885550958 bases (238182824 N's 647368134 real 372789139
-    #   upper 274578995 lower) in 25006 sequences in 1 files
-    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-    #   max 4695893 (GL476399) median 8272
-    #   %31.01 masked total, %42.41 masked real
+    #   521910208 bases (41491626 N's 480418582 real 358135693 upper
+    #   122282889 lower) in 399 sequences in 1 files
+    #   Total size: mean 1308045.6 sd 1603293.6 min 15083 (chrM)
+    #   max 11512737 (Bf_V2_196) median 749143
+    #   %23.43 masked total, %25.45 masked real
 
     cat faSize.braFlo2.cleanWMSdust.txt
-    #   885550958 bases (238182824 N's 647368134 real 372789139
-    #   upper 274578995 lower) in 25006 sequences in 1 files
-    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-    #   max 4695893 (GL476399) median 8272
-    #   %31.01 masked total, %42.41 masked real
+    #   521910208 bases (41491626 N's 480418582 real 358135693 upper
+    #   122282889 lower) in 399 sequences in 1 files
+    #   Total size: mean 1308045.6 sd 1603293.6 min 15083 (chrM)
+    #   max 11512737 (Bf_V2_196) median 749143
+    #   %23.43 masked total, %25.45 masked real
 
     cat fb.braFlo2.windowmaskerSdust.clean.txt
-    #   274578995 bases of 885550958 (31.007%) in intersection
+    #   122282889 bases of 521910208 (23.430%) in intersection
 
     # how much does this window masker and repeat masker overlap:
     # can be done after rmsk is done.  The script will often
     #   fail on this command in the doLoad.csh if RM is not yet
     #   complete and these are running at the same time:
     featureBits -countGaps braFlo2 rmsk windowmaskerSdust
-    #   32967187 bases of 1065292181 (3.095%) in intersection
+    #   39427484 bases of 521910208 (7.554%) in intersection
 
     # if the script did fail on that command, finish it:
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-continue=cleanup -dbHost=hgwdev braFlo2 > cleanup.log 2>&1 &
-    #   real    0m35.452s
+    #   real    0m26.511s
 
 ##########################################################################
-# add simpleRepeats to WindowMasker result (DONE - 2012-10-15 - Hiram)
+# add simpleRepeats to WindowMasker result (DONE - 2012-10-18 - Hiram)
     # add to rmsk after it is done:
     cd /hive/data/genomes/braFlo2
     twoBitMask -add bed/windowMasker/braFlo2.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed braFlo2.2bit
-
     #	you can safely ignore the warning about fields >= 13
+
     twoBitToFa braFlo2.2bit stdout | faSize stdin > faSize.braFlo2.2bit.txt
     cat faSize.braFlo2.2bit.txt
-    #   885550958 bases (238182824 N's 647368134 real 372434798
-    #   upper 274933336 lower) in 25006 sequences in 1 files
-    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-    #   max 4695893 (GL476399) median 8272
-    #   %31.05 masked total, %42.47 masked real
+    #   521910208 bases (41491626 N's 480418582 real 357982777 upper
+    #   122435805 lower) in 399 sequences in 1 files
+    #   Total size: mean 1308045.6 sd 1603293.6 min 15083 (chrM)
+    #   max 11512737 (Bf_V2_196) median 749143
+    #   %23.46 masked total, %25.49 masked real
 
     rm /gbdb/braFlo2/braFlo2.2bit
     ln -s `pwd`/braFlo2.2bit /gbdb/braFlo2/braFlo2.2bit
 
 ##########################################################################
-# cpgIslands - (DONE - 2012-10-15 - Hiram)
+# cpgIslands - (DONE - 2012-10-18 - Hiram)
     mkdir /hive/data/genomes/braFlo2/bed/cpgIslands
     cd /hive/data/genomes/braFlo2/bed/cpgIslands
     time doCpgIslands.pl braFlo2 > do.log 2>&1
-    #   real    27m18.237s
+    #   real    2m1.014s
 
     cat fb.braFlo2.cpgIslandExt.txt
-    #   39998562 bases of 647368134 (6.179%) in intersection
+    #   12333134 bases of 480418582 (2.567%) in intersection
 
 #########################################################################
-# genscan - (DONE - 2012-10-15 - Hiram)
+# genscan - (DONE - 2012-10-18 - Hiram)
     mkdir /hive/data/genomes/braFlo2/bed/genscan
     cd /hive/data/genomes/braFlo2/bed/genscan
     time doGenscan.pl braFlo2 > do.log 2>&1
+XXX - running - Thu Oct 18 15:13:53 PDT 2012
     #   real    33m41.740s
 
     cat fb.braFlo2.genscan.txt
@@ -250,26 +249,30 @@ XXX - running - Thu Oct 18 12:54:07 PDT 2012
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-10-16 - Hiram)
     # Use -repMatch=400, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
+    #   521910208 bases (41491626 N's 480418582 real 357982777 upper
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 885550958 / 2897316137 \) \* 1024
-    #   ( 885550958 / 2897316137 ) * 1024 = 312.980751
+    calc \( 480418582 / 2897316137 \) \* 1024
+    #   ( 480418582 / 2897316137 ) * 1024 = 169.794598
 
-    # round up to 350 (petMar1 was 200)
+    # round up to 200 (braFlo1 was 328)
 
     cd /hive/data/genomes/braFlo2
     time blat braFlo2.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/braFlo2.11.ooc -repMatch=350
-    #   Wrote 15692 overused 11-mers to jkStuff/braFlo2.11.ooc
-    #   real    1m58.096s
+      -makeOoc=jkStuff/braFlo2.11.ooc -repMatch=200
+    #   Wrote 8172 overused 11-mers to jkStuff/braFlo2.11.ooc
+    #   real    0m13.652s
 
-    # there are no non-bridged gaps, no lift file needed for genbank
+    # there are bridged gaps, constuct lift file needed for genbank
     hgsql -N -e "select bridge from gap;" braFlo2 | sort | uniq -c
+    #   74 no
+    #   48763 yes
+
     #   48808 yes
 #    cd /hive/data/genomes/braFlo2/jkStuff
-#    gapToLift braFlo2 braFlo2.nonBridged.lift -bedFile=braFlo2.nonBridged.bed
+    gapToLift braFlo2 braFlo2.nonBridged.lift -bedFile=braFlo2.nonBridged.bed
     # largest non-bridged contig:
-#    awk '{print $3-$2,$0}' braFlo2.nonBridged.bed | sort -nr | head
-    #   123773608 chrX  95534   123869142       chrX.01
+    awk '{print $3-$2,$0}' braFlo2.nonBridged.bed | sort -nr | head
+    #   11512737 Bf_V2_196      0       11512737        Bf_V2_196.00
 
 #########################################################################
 # AUTO UPDATE GENBANK (DONE - 2012-10-16 - Hiram)
@@ -277,18 +280,23 @@ XXX - running - Thu Oct 18 12:54:07 PDT 2012
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Petromyzon marinus      1072    120732  0
+# Branchiostoma belcheri  252     507     0
+# Branchiostoma belcheri tsingtauense     197     86      0
+# Branchiostoma californiense     9       0       0
+# Branchiostoma floridae  400     334509  0
+# Branchiostoma japonicum 15      1       0
+# Branchiostoma lanceolatum       59695   2       0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add braFlo2 just before petMar1
-# braFlo2 (Petromyzon marinus - Lamprey)
+# braFlo2 (Branchiostoma floridae - Lancelet)
 braFlo2.serverGenome = /hive/data/genomes/braFlo2/braFlo2.2bit
 braFlo2.clusterGenome = /hive/data/genomes/braFlo2/braFlo2.2bit
 braFlo2.ooc = /hive/data/genomes/braFlo2/jkStuff/braFlo2.11.ooc
-braFlo2.lift = no
+braFlo2.lift = /hive/data/genomes/braFlo2/jkStuff/braFlo2.nonBridged.lift
 braFlo2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
 braFlo2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
 braFlo2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
@@ -302,15 +310,25 @@ braFlo2.downloadDir = braFlo2
 braFlo2.perChromTables = no
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding braFlo2 Lamprey redmine 9153" etc/genbank.conf
+    git commit -m "adding braFlo2 - Lancelet - Branchiostoma floridae" etc/genbank.conf
+
     git push
     make etc-update
+
+    # add additional species names to the Branchiostoma name list:
+    git commit -m "adding additional Lancelet names for Branchiostoma" \
+        src/lib/gbGenome.c
+    make install-server
+
+static char *braFloNames[] = {"Branchiostoma floridae", "Branchiostoma belcheri", "Branchiostoma belcheri tsingtauense", "Branchiostoma californiense", "Branchiostoma japonicum", "Branchiostoma lanceolatum", NULL};
+
 
     ssh hgwdev			# used to do this on "genbank" machine
     screen -S braFlo2           # long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial braFlo2 &
-    #   var/build/logs/2012.10.16-09:06:37.braFlo2.initalign.log
+    #   var/build/logs/2012.10.18-15:41:22.braFlo2.initalign.log
+XXX - running - Thu Oct 18 15:41:38 PDT 2012
     #   real    555m47.178s
 
     # load database when finished
