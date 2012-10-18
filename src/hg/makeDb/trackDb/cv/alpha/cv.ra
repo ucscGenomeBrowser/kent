@@ -8406,10 +8406,10 @@ lab Myers, Snyder
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 target BHLHE40
 targetClass TFSS
-targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
+targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf Mouse_-_BHLEH40(Immunoprecipitation,IP-MassSpec):mouse_BHLEH40_DEC1_validation_Snyder.pdf
+validation Human_-_BHLHE40(Immunoblot):human_BHLHE40_S-8_validation_Myers.pdf
 vendorId sc-101023
 vendorName Santa Cruz Biotechnology
 
@@ -8426,7 +8426,7 @@ targetClass TFSS
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-Mass_Spec):human_BHLHE40_NB100-1800_validation_Snyder.pdf Mouse-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-Mass_Spec):mouse_BHLHE40_NB100-1800_validation_Snyder.pdf
 vendorId NB100-1800
 vendorName Novus Biologicals
 
@@ -10801,7 +10801,7 @@ lab Farnham
 orderUrl http://www.abcam.com/index.html?datasheet=10483
 target KAP1
 targetClass HISase
-targetDescription KRAB Associated Protein 1, helps regulate transcriptional repression
+targetDescription KRAB Associated Protein 1, helps regulate transcriptional repression.
 targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation Human_-_KAP1(Western_blot,Immunoprecipitation-Western_blot):human_KAP1_validation_Farnham.pdf
@@ -11620,7 +11620,7 @@ lab Myers
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
 target POLR2A
 targetClass Pol2
-targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes
+targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes.
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation Human_-_Pol2-4H8(ChIP-seq,MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_Pol2-4H8(ab5408)(Western_blot):mouse_Pol2-4H8_ab5408_validation_Hardison.pdf
@@ -12314,7 +12314,7 @@ lab Snyder
 lots GR340121
 orderUrl http://www.abcam.com/TBLR1-antibody-ChIP-Grade-ab24550.html
 target TBL1XR1
-targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
+targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation.
 targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
 validation Human_-_TBLR1_(ab24550)(Immunoprecipitation,ChIP-seq):human_TBLR1_ab24550_validation_Snyder.pdf
@@ -12329,7 +12329,7 @@ lab Snyder
 lots 1
 orderUrl http://www.novusbio.com/TBLR1-Antibody_NB600-270.html
 target TBL1XR1
-targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
+targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation.
 targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
 validation Human_-_TBLR1_(NB600-270)(Immunoprecipitation,ChIP-seq):human_TBLR1_NB600-270_validation_Snyder.pdf

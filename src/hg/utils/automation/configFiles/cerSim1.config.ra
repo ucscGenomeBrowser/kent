@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db cerSim1
+clade mammal
+genomeCladePriority 45
+scientificName Ceratotherium simum
+commonName White rhinoceros
+assemblyDate May 2012
+assemblyLabel Broad Institute
+assemblyShortLabel CerSimSim1.0
+orderKey 2415
+mitoAcc NC_001808
+fastaFiles /hive/data/genomes/cerSim1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/cerSim1/genbank/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir rhino
+photoCreditURL http://commons.wikimedia.org/wiki/User:Esculapio
+photoCreditName Photo courtesy of Wikimedia Commons user Esculapio
+ncbiGenomeId 11839
+ncbiAssemblyId 406328
+ncbiAssemblyName CerSimSim1.0
+ncbiBioProject 74583
+genBankAccessionID GCA_000283155.1
+taxId 73337

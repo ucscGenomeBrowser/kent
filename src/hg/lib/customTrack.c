@@ -623,8 +623,14 @@ else
 boolean customTrackIsCompressed(char *fileName)
 /* test for file suffix indicating compression */
 {
-    return (endsWith(fileName,".gz") || endsWith(fileName,".Z")  ||
-            endsWith(fileName,".bz2"));
+char *fileNameDecoded = cloneString(fileName);
+cgiDecode(fileName, fileNameDecoded, strlen(fileName));
+boolean result = 
+    (endsWith(fileNameDecoded,".gz") || 
+     endsWith(fileNameDecoded,".Z")  ||
+     endsWith(fileNameDecoded,".bz2"));
+freeMem(fileNameDecoded);
+return result;
 }
 
 static char *prepCompressedFile(struct cart *cart, char *fileName,
