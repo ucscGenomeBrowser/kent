@@ -6847,6 +6847,7 @@ vendorName CSHL lab
 term EPC_(CD117+_CD71-_TER119-)
 tag EPCPMM
 type Cell Line
+label EPC (CD117+ CD71- TER119-)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -6865,6 +6866,7 @@ vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 term EPC_(CD117+_CD71+_TER119-)
 tag EPCPPM
 type Cell Line
+label EPC (CD117+ CD71+ TER119-)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -6883,6 +6885,7 @@ vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 term EPC_(CD117-_CD71+_TER119+)
 tag EPCMPP
 type Cell Line
+label EPC (CD117- CD71+ TER119+)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -6901,6 +6904,7 @@ vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 term EPC_(CD117-_CD71-_TER119+)
 tag EPCMMP
 type Cell Line
+label EPC (CD117- CD71- TER119+)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -6919,6 +6923,7 @@ vendorName M. Bender, R. Byron (Fred Hutchinson Cancer Research Center)
 term EPC_(CD117+_CD71+_TER119+)
 tag EPCPPP
 type Cell Line
+label EPC (CD117+ CD71+ TER119+)
 age ageUnknown
 category primaryCell
 color 153,38,0
@@ -8401,10 +8406,10 @@ lab Myers, Snyder
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 target BHLHE40
 targetClass TFSS
-targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differe
+targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf Mouse_-_BHLEH40(Immunoprecipitation,IP-Mass_Spec):mouse_BHLEH40_DEC1_validation_Snyder.pdf
+validation Human_-_BHLHE40(Immunoblot):human_BHLHE40_S-8_validation_Myers.pdf Mouse_-_:missing
 vendorId sc-101023
 vendorName Santa Cruz Biotechnology
 
@@ -8421,7 +8426,7 @@ targetClass TFSS
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-Mass_Spec):human_BHLHE40_NB100-1800_validation_Snyder.pdf Mouse-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-Mass_Spec):mouse_BHLHE40_NB100-1800_validation_Snyder.pdf
 vendorId NB100-1800
 vendorName Novus Biologicals
 
@@ -8676,7 +8681,7 @@ target CUX1
 targetDescription CDP (for CCAAT displacement protein) was identified as a repressor for tran- scription of developmentally regulated genes. It is a homeodomain protein that appears to compete with transcriptional activating proteins for binding to the promoter regions of various genes. CDP contains three cut repeats which function as DNA binding domains. It has been demonstrated that cut repeat domains have the capacity to bind to DNA in conjunction with or independently of homeodomain DNA binding. CDP has been shown to be the DNA-binding subunit of the HiNF-D complex, which contains cyclin A, Cdc2 and an Rb-related protein in addition to CDP. Histone expression is required for the transition to S phase in the cell cycle. The HiNF-D complex regulates the transcription of Histone H4, H3 and H1 genes, allowing cells to progress from G1 to S phase.
 targetId GeneCard:CUX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CUX1
-validation CDP_(sc-6327)(Immunoprecipitation,IP-Mass_Spec):human_CDP_BioTech_validation_Snyder.pdf
+validation Human_-_CDP_(sc-6327)(Immunoprecipitation,IP-Mass_Spec):human_CDP_BioTech_validation_Snyder.pdf
 vendorId sc-6327
 vendorName Santa Cruz Biotechnology
 
@@ -8838,7 +8843,7 @@ target CHD7
 targetDescription CHD7 is a member of the CHD (chromodomain-helicase-DNA-binding) family of proteins that interacts with nucleosomes and plays a role in chromatin remodeling to modulate transcription.
 targetId GeneCard:CHD7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD7
-validation CHD7_(A301-223A)(ChIP,Western_blot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
+validation Human_-_CHD7_(A301-223A)(ChIP,Western_blot):human_CHD7_A301-223A-1_validation_Bernstein.pdf
 vendorId A301-223A
 vendorName Bethyl Laboratories
 
@@ -8950,7 +8955,7 @@ targetClass TFSS
 targetDescription CTCF is a ubiquitously expressed 11 zinc-finger protein that plays a central role in multiple complex processes, including transcription, imprinting, long-range chromatin interactions, subnuclear localization. CTCF has also been connected with multiple malignancies.
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
-validation CTCF_(2899)(Western_blot):human_CTCF_2899_validation_Stam.pdf
+validation Human_-_CTCF_(2899)(Western_blot):human_CTCF_2899_validation_Stam.pdf
 vendorId 2899
 vendorName Cell Signaling Technology
 
@@ -9548,7 +9553,7 @@ target SETDB1
 targetDescription ERG-associated protein with SET domain (ESET), also designated Histone H3-K9 methyltransferase 4 or SET domain bifurcated 1, is a nuclear protein belonging to the histone-lysine methyltransferase family. ESET is a histone methyltransferase, methylating Lys-9 of histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity.
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation ESET_(166621)(ChIP,Western_blot):human_ESET_166621_validation_Bernstein.pdf
+validation Human_-_ESET_(166621)(ChIP,Western_blot):human_ESET_166621_validation_Bernstein.pdf
 vendorId sc-166621
 vendorName Santa Cruz Biotechnology
 
@@ -10068,6 +10073,7 @@ vendorName 1)abcam; 2)Millipore
 term H3K4me3_(04-745)
 tag H3K4ME304745
 type Antibody
+label H3K4me3 (04-745)
 antibodyDescription Rabbit monoclonal anti-trimethyl-Histone H3 (Lys4) Antibody, clone MC315
 lab Ren
 lots NG1643014
@@ -10235,7 +10241,7 @@ target H3K27ac
 targetDescription Specific for detecting Histone H3 K27 acetylation only
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation H3K27Ac_(39133)(Dot_blot,Western_blot):human_H3K27Ac_39133_validation_Ren.pdf
+validation Mouse_-_H3K27Ac_(39133)(Dot_blot,Western_blot):human_H3K27Ac_39133_validation_Ren.pdf
 vendorId 39133
 vendorName Active Motif
 
@@ -10410,7 +10416,7 @@ target HCFC1
 targetDescription The epitope recognized by this antibody maps to a region between residue 1700 and 1750 of human host cell factor C1 (VP16-accessory protein).
 targetId GeneCard:HCFC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HCFC1
-validation HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):human_HCFC1_NB100-68209_validation_Snyder.pdf Mouse_-_HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):mouse_HCFC1_validation_Snyder.pdf
+validation Human_-_HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):human_HCFC1_NB100-68209_validation_Snyder.pdf Mouse_-_HCFC1_(NB100-68209)(Immunoprecipitation,IP-Mass_Spec):mouse_HCFC1_validation_Snyder.pdf
 vendorId NB100-68209
 vendorName Novus Biologicals
 
@@ -10589,7 +10595,7 @@ target CBX3
 targetDescription CBX3 seems to be involved in transcriptional silencing in heterochromatin-like complexes. It recognizes and binds histone H3 tails methylated at Lys-9, leading to epigenetic repression. It may contribute to the association of the heterochromatin with the inner nuclear membrane through its interaction with lamin B receptor (LBR).
 targetId GeneCard:CBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
-validation HP1gamma_(ab10480)(ChIP,Western_blot):human_HP1gamma_ab10480_validation_Bernstein.pdf
+validation Human_-_HP1gamma_(ab10480)(ChIP,Western_blot):human_HP1gamma_ab10480_validation_Bernstein.pdf
 vendorId ab10480
 vendorName abcam
 
@@ -10613,10 +10619,10 @@ term hSpt5_(sc-28678)
 tag HSPT5SC28678
 type Antibody
 label hSpt5 (sc-28678)
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: hSpt5
+antibodyDescription Rabbit polyclonal. SPT5 Antibody (H-300) epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: SUPT5H 
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
-target hSpt5
+target SUPT5H
 targetDescription hSpt5 heterodimerizes with hSpt4 to form the DRB Sensitivity Inducing Factor (DSIF). DSIF play dual roles in elongation. First, in a conjunction with NELF, dephosphorylated state DSIF blocks RNA polymerase II (RNAPII) from shifting from early elongation to productive elongation. Second, after phosphorylation DSIF continues to associate with elongating RNAPII to facilitate recruitment of factors required for processing of the mRNA.
 targetId GeneCard:SUPT5H
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
@@ -10765,7 +10771,7 @@ target KDM4A
 targetDescription JMJD2A is a member of the jumonji (jmj) domain containing gene family of histone demethylases that plays a role in chromatin regulation and influences transcriptional activation and suppression. JMJD2A is a trimethylation-specific demethylase and functions as a transcriptional repressor.
 targetId GeneCard:KDM4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM4A
-validation JMJD2A_(A300-861A)(ChIP,Western_blot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
+validation Human_-_JMJD2A_(A300-861A)(ChIP,Western_blot):human_JMJD2A_A300-861A-1_validation_Bernstein.pdf
 vendorId A300-861A
 vendorName Bethyl Laboratories
 
@@ -10789,7 +10795,7 @@ term KAP1
 tag KAP1
 type Antibody
 label KAP1 (ab10483)
-antibodyDescription Rabbit polyclonal. Antibody Target: KAP1
+antibodyDescription Rabbit polyclonal. Immunogen was a synthetic peptide, which represented a portion of human tripartite motif-containing 28 (KAP1) encoded within exon 1. Antibody Target: TRIM28
 lab Farnham
 orderUrl http://www.abcam.com/index.html?datasheet=10483
 target KAP1
@@ -10813,7 +10819,7 @@ target CREBBP
 targetDescription Cyclic AMP-responsive enhancer binding protein (CREB) binding protein (CBP) and p300 are closely related transcriptional coactivators that have been shown to directly interact with many different DNA-binding transcription factors. Both CBP and p300 have been shown to display histone acetyltransferase (HAT) activity, capable of acetylating all four core histone particles in nucleosomes.
 targetId GeneCard:CREBBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
-validation KAT3A_(ab2832)(ChIP,Western_blot):human_KAT3A_ab2832_validation_Bernstein.pdf
+validation Human_-_KAT3A_(ab2832)(ChIP,Western_blot):human_KAT3A_ab2832_validation_Bernstein.pdf
 vendorId ab2832
 vendorName abcam
 
@@ -10973,23 +10979,6 @@ targetId GeneCard:MED26
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26
 validation Human_-_Med26_(sc-48776)(Western_blot,Immunoprecipitation):human_Med26_sc-48776_validation_Struhl.pdf
 vendorId sc-48776
-vendorName Santa Cruz Biotechnology
-
-term MEF2_(sc-17785)
-tag MEF2SC17785
-type Antibody
-label MEF2A (sc-17785)
-antibodyDescription Mouse monoclonal antibody raised against amino acids 1-300 mapping at the N-terminus of MEF-2A of human origin; recommended for detection of a broad range of MEF-2 family members of mouse, rat and human origin. Antibody Target: MEF2A
-lab Wold
-lots missing
-orderUrl http://www.scbt.com/datasheet-17785-mef-2-b-4-antibody.html
-target MEF2A
-targetClass TFSS
-targetDescription The MADS box transcription enhancer factor 2 (MEF2) family of proteins plays a role in myogenesis.
-targetId GeneCard:MEF2A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
-validation 
-vendorId sc-17785
 vendorName Santa Cruz Biotechnology
 
 term MEF2A
@@ -11294,7 +11283,7 @@ target GABPA
 targetDescription epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-alpha of human origin
 targetId GeneCard:GABPA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
-validation 
+validation Mouse_-_:missing
 vendorId sc-22810
 vendorName Santa Cruz Biotechnology
 
@@ -11343,7 +11332,7 @@ target WHSC1
 targetDescription This is a probable histone methyltransferase, which may act as a transcription regulator that binds DNA and suppresses IL5 transcription.
 targetId GeneCard:WHSC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WHSC1
-validation NSD2_(ab75359)(ChIP,Western_blot):human_NSD2_ab75359_validation_Bernstein.pdf
+validation Human_-_NSD2_(ab75359)(ChIP,Western_blot):human_NSD2_ab75359_validation_Bernstein.pdf
 vendorId ab75359
 vendorName abcam
 
@@ -11591,11 +11580,11 @@ term Pol2
 tag POL2
 type Antibody
 label POL2 (MMS-126R)
-antibodyDescription Mouse monoclonal, clone 8WG16. Antibody Target: POL2
+antibodyDescription Mouse monoclonal, clone 8WG16. Antibody Target: POLR2A
 lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
-target POL2
+target POLR2A
 targetClass Pol2
 targetDescription RNA Polymerase II
 targetId GeneCard:POLR2A
@@ -11607,12 +11596,12 @@ vendorName Covance
 term Pol2(b)
 tag POL2b
 type Antibody
-label POL2B (MMS-128P)
-antibodyDescription Mouse monoclonal, clone CTD4H8. Antibody Target: POL2B
+label POL2A (MMS-128P)
+antibodyDescription Mouse monoclonal, clone CTD4H8. Antibody Target: POLR2A
 lab Bernstein
 lots 147337002
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
-target POL2B
+target POLR2A
 targetClass Pol2
 targetDescription RNA polymerase II. Is responsible for RNA transcription. It is generally enriched at 5' gene ends, probably due to higher rate of occupancy associated with transition from initiation to elongation.
 targetId GeneCard:POLR2A
@@ -11625,10 +11614,10 @@ term Pol2-4H8
 tag POL24H8
 type Antibody
 label Pol2-4H8 (ab5408)
-antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade. Antibody Target: POL2
+antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade. Antibody Target: POLR2A
 lab Myers
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
-target POL24H8
+target POLR2A
 targetClass Pol2
 targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes
 targetId GeneCard:POLR2A
@@ -11640,11 +11629,11 @@ vendorName abcam
 term Pol2(phosphoS2)
 tag POL2S2
 type Antibody
-label POL2S2 (ab5095)
-antibodyDescription Rabbit polyclonal against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2. Antibody Target: POL2S2
+label POL2 (phospho S2) (ab5095)
+antibodyDescription Rabbit polyclonal against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2. Antibody Target: POLR2A
 lab Snyder
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-phospho-S2-antibody-ChIP-Grade-ab5095.html
-target POL2S2
+target POLR2A
 targetClass Pol2
 targetDescription RNA polymerase II, large subunit- specific for phosphorylated C-terminal domain.
 targetId GeneCard:POLR2A
@@ -11987,7 +11976,7 @@ targetClass HISase
 targetDescription NAD-dependent protein deacetylase. Has deacetylase activity towards Lys-9 and Lys-56 of histone H3. Modulates acetylation of histone H3 in telomeric chromatin during the S-phase of the cell cycle. Deacetylates Lys-9 of histone H3 at NF-kappa-B target promoters and may down-regulate the expression of a subset of NF-kappa-B target genes.
 targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
-validation SIRT6_(ab62739)(ChIP,Western_blot):human_SIRT6_ab62739_validation_Bernstein.pdf
+validation Human_-_SIRT6_(ab62739)(ChIP,Western_blot):human_SIRT6_ab62739_validation_Bernstein.pdf
 vendorId ab62739
 vendorName abcam
 
@@ -12252,17 +12241,17 @@ vendorName Dr. Peggy Farnham at USC
 term T7Tag
 tag T7
 type Antibody
-label T7Tag (AB3790; Nov 69522)
-antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore and Novagen 69522 Negative Control Ab (T7 Tag Mouse monoclonal). Antibody Target: T7Tag
+label T7Tag (AB3790)
+antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore. Antibody Target: T7Tag
 lab Tenenbaum
 orderUrl http://www.millipore.com/catalogue/item/ab3790
 target T7Tag
 targetDescription T7 (MASMTGGQQMG)
 targetId Negative Control
 targetUrl http://www.millipore.com/catalogue/item/ab3790
-validation Human_-_T7-Tag_(Negative Control):human_T7tag_validation_Tenenbaum.pdf
-vendorId AB3790; Nov_69522
-vendorName 1)Millipore; 2)Novagen
+validation Human_-_T7-Tag_(Negative_Control):human_T7tag_validation_Tenenbaum.pdf
+vendorId AB3790
+vendorName Millipore
 
 term TAF1
 tag TAF1
@@ -12318,11 +12307,11 @@ term TBLR1_(ab24550)
 tag TBLR1AB24550
 type Antibody
 label TBLR1 (ab24550)
-antibodyDescription Rabbit polyclonal, immunogen: Recombinant full length protein (Human). Antibody Target: TBLR1
+antibodyDescription Rabbit polyclonal, immunogen: Recombinant full length protein (Human). Antibody Target: TBL1XR1
 lab Snyder
 lots GR340121
 orderUrl http://www.abcam.com/TBLR1-antibody-ChIP-Grade-ab24550.html
-target TBLR1
+target TBL1XR1
 targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
 targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
@@ -12333,15 +12322,15 @@ vendorName abcam
 term TBLR1_(NB600-270)
 tag TBLR1NB600270
 type Antibody
-antibodyDescription Rabbit polyclonal, immunogen: A synthetic peptide that maps to a region between residues 100 and 150 of human TBL1-related Protein 1 using the numbering given in SwissProt entry Q9BZK7.
+antibodyDescription Rabbit polyclonal, immunogen: A synthetic peptide that maps to a region between residues 100 and 150 of human TBL1-related Protein 1 using the numbering given in SwissProt entry Q9BZK7. Antibody Target: TBL1XR1
 lab Snyder
 lots 1
 orderUrl http://www.novusbio.com/TBLR1-Antibody_NB600-270.html
-target TBLR1
+target TBL1XR1
 targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
 targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
-validation TBLR1_(NB600-270)(Immunoprecipitation,ChIP):human_TBLR1_NB600-270_validation_Snyder.pdf
+validation Human_-_TBLR1_(NB600-270)(Immunoprecipitation,ChIP):human_TBLR1_NB600-270_validation_Snyder.pdf
 vendorId NB600-270
 vendorName Novus Biologicals
 
@@ -12422,11 +12411,12 @@ target TCF4
 targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
-validation 
+validation Human-_-:missing
 vendorId 2569S
 vendorName Cell Signaling Technology
 # TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
 # TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
+# only on hg18
 
 term TCF7L2
 tag TCF7L2
@@ -12678,10 +12668,10 @@ term WHIP
 tag WHIP
 type Antibody
 label WHIP (ab4731)
-antibodyDescription Rabbit polyclonal. Immunogen: (Synthetic peptide) SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WHIP
+antibodyDescription Rabbit polyclonal. Immunogen: (Synthetic peptide) SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WRNIP1
 lab Snyder
 orderUrl http://www.abcam.com/WHIP-antibody-ab4731.html
-target WHIP
+target WRNIP1
 targetClass DNARep
 targetDescription Interacts with the N-terminal portion of Werner protein containing the exonuclease domain, shows homology to replication factor C family proteins, and is conserved from E. coli to human. Studies in yeast suggest that this gene may influence the aging process. Functions as a modulator for initiation or reinitiation events during DNA polymerase delta-mediated DNA synthesis. Has an intrinsic ATPase activity that functions as a sensor of DNA damage or of arrested replication forks and regulates the extent of DNA synthesis.
 targetId GeneCard:WRNIP1
@@ -12839,11 +12829,12 @@ vendorName Proteintech
 term ZNF-MIZD-CP1_(ab65767)
 tag ZNFMIZDCP1AB65767
 type Antibody
-antibodyDescription Rabbit polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1.
+label ZMIZ1 (ab65767)
+antibodyDescription Rabbit polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1. Antibody Target: ZMIZ1
 lab Snyder
 lots GR30927-1
 orderUrl http://www.abcam.com/Zinc-finger-MIZ-domain-containing-protein-1-antibody-ab65767.html
-target ZNF-MIZD-CP1
+target ZMIZ1
 targetDescription Zinc finger MIZ domain-containing protein 1 that increases ligand-dependent transcriptional activity of AR and promotes AR sumoylation. The stimulation of AR activity is dependent upon sumoylation.
 targetId GeneCard:ZMIZ1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZMIZ1
@@ -12920,6 +12911,7 @@ vendorName Abnova
 term ZNF384_(HPA004051)
 tag ZNF384HPA004051
 type Antibody
+label ZNF384 (HPA004051)
 antibodyDescription Rabbit polyclonal generated using the immunogen: Zinc finger protein 384 recombinant protein epitope signature tag (PrEST)
 lab Snyder
 lots A57874

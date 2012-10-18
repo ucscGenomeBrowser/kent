@@ -13,6 +13,7 @@
 #include "linefile.h"
 #include "pipeline.h"
 #include "localmem.h"
+#include "cheapcgi.h"
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -39,16 +40,25 @@ static char *Z_READ[] = {"gzip", "-dc", NULL};
 static char *BZ2_READ[] = {"bzip2", "-dc", NULL};
 static char *ZIP_READ[] = {"gzip", "-dc", NULL};
 
-if (endsWith(fileName, ".gz"))
-    return GZ_READ;
-else if (endsWith(fileName, ".Z"))
-    return Z_READ;
-else if (endsWith(fileName, ".bz2"))
-    return BZ2_READ;
-else if (endsWith(fileName, ".zip"))
-    return ZIP_READ;
-else
-    return NULL;
+char **result = NULL;
+char *fileNameDecoded = cloneString(fileName);
+if (startsWith("http://" , fileName)
+ || startsWith("https://", fileName)
+ || startsWith("ftp://",   fileName))
+    cgiDecode(fileName, fileNameDecoded, strlen(fileName));
+
+if      (endsWith(fileNameDecoded, ".gz"))
+    result = GZ_READ;
+else if (endsWith(fileNameDecoded, ".Z"))
+    result = Z_READ;
+else if (endsWith(fileNameDecoded, ".bz2"))
+    result = BZ2_READ;
+else if (endsWith(fileNameDecoded, ".zip"))
+    result = ZIP_READ;
+
+freeMem(fileNameDecoded);
+return result;
+
 }
 
 static void metaDataAdd(struct lineFile *lf, char *line)
@@ -196,6 +206,12 @@ lf->zTerm = zTerm;
 lf->buf = s;
 return lf;
 }
+
+#if (defined USE_SAMTABIX || (defined USE_TABIX && !defined KNETFILE_HOOKS))
+// UCSC aliases for backwards compatibility with independently patched & linked samtools and tabix:
+#define ti_bgzf_tell bgzf_tell
+#define ti_bgzf_read bgzf_read
+#endif
 
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 /* Wrap a line file around a data file that has been compressed and indexed

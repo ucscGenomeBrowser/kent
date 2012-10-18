@@ -5,7 +5,12 @@ tooMuch=0.1000   # how much change (either gain or loss) is too much
 
 for i in `cat ../isca.tables`
 do 
-    fields='*'
+    if test $i == "iscaPathGainCum" -o $i == "iscaPathLossCum"
+    then
+	fields='*'
+    else
+	fields="chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd"
+    fi
     echo "select $fields from $i" |  hgsql $db | tail -n +2 | sort > $i.out
     f=$i"New"
     echo "select $fields from $f" |hgsql $db | tail -n +2 | sort > $f.out

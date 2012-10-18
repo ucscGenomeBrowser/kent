@@ -13,3 +13,6 @@ faRandomize: ${O}
 
 clean::
 	rm -f ${O}
+
+compile::  ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}

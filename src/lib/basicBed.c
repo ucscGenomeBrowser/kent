@@ -1095,11 +1095,18 @@ return overlap;
 boolean bedExactMatch(struct bed *oldBed, struct bed *newBed)
 /* Return TRUE if it's an exact match. */
 {
+boolean oldCoding = (oldBed->thickStart != oldBed->thickEnd);
+boolean newCoding = (newBed->thickStart != newBed->thickEnd);
+
+if (oldCoding != newCoding)
+    return FALSE;
+/* non-coding bed's have different standards for what exactly
+ * goes into these fields.  The standard just says they should
+ * be equal */
+if (oldCoding && ((oldBed->thickStart != newBed->thickStart) ||
+    (oldBed->thickEnd != newBed->thickEnd)))
+    return FALSE;
 if (oldBed->blockCount != newBed->blockCount)
-    return FALSE;
-if (oldBed->thickStart != newBed->thickStart)
-    return FALSE;
-if (oldBed->thickEnd != newBed->thickEnd)
     return FALSE;
 int oldSize = bedTotalBlockSize(oldBed);
 int newSize = bedTotalBlockSize(newBed);
