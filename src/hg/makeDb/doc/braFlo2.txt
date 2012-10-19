@@ -328,18 +328,17 @@ static char *braFloNames[] = {"Branchiostoma floridae", "Branchiostoma belcheri"
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial braFlo2 &
     #   var/build/logs/2012.10.18-15:41:22.braFlo2.initalign.log
-XXX - running - Thu Oct 18 15:41:38 PDT 2012
-    #   real    555m47.178s
+    #   real    519m54.979s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad braFlo2 &
-    #   real    28m17.094s
-    #   var/dbload/hgwdev/logs/2012.10.17-10:24:04.dbload.log
+    #   real    25m44.492s
+    #   var/dbload/hgwdev/logs/2012.10.19-09:53:53.dbload.log
 
     # check the end of that dbload.log to see if it was successful
-    #   hgwdev 2012.10.17-10:52:21 dbload: finish
+    #   hgwdev 2012.10.19-10:19:36 dbload: finish
 
     # enable daily alignment and update of hgwdev (DONE - 2012-05-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
@@ -350,6 +349,7 @@ XXX - running - Thu Oct 18 15:41:38 PDT 2012
     git push
     make etc-update
 
+XXX - ready to continue - Fri Oct 19 10:31:19 PDT 2012
 #########################################################################
 # set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
     hgsql -e \
@@ -394,43 +394,3 @@ XXX - running - Thu Oct 18 15:41:38 PDT 2012
     #	test it with some sequence
 
 ############################################################################
-#  lastz braFlo1 Lancelet (DONE - 2012-10-18 - Hiram)
-    screen -S braFlo2	# use a screen to control this multi-day job
-    mkdir /cluster/data/braFlo2/bed/lastzBraFlo1.2012-10-18
-    cd /cluster/data/braFlo2/bed/lastzBraFlo1.2012-10-18
-
-    cat << '_EOF_' > DEF
-# Lamprey vs. Lancelet
-
-BLASTZ_H=2000
-BLASTZ_Y=3400
-BLASTZ_L=6000
-BLASTZ_K=2200
-BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-
-# TARGET: Lamprey braFlo2
-SEQ1_DIR=/hive/data/genomes/braFlo2/braFlo2.2bit
-SEQ1_LEN=/hive/data/genomes/braFlo2/chrom.sizes
-SEQ1_CHUNK=10000000
-SEQ1_LIMIT=200
-SEQ1_LAP=10000
-
-# TARGET: Lancelet braFlo1
-# largest chunk big enough for largest scaffold
-#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
-SEQ2_DIR=/scratch/data/braFlo1/braFlo1.2bit
-SEQ2_LEN=/scratch/data/braFlo1/chrom.sizes
-SEQ2_CTGDIR=/scratch/data/braFlo1/braFlo1UnScaffolds.2bit
-SEQ2_CTGLEN=/scratch/data/braFlo1/braFlo1UnScaffolds.sizes
-SEQ2_LIFT=/san/sanvol1/scratch/braFlo1/braFlo1.lift
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=50
-SEQ2_LAP=0
-
-BASE=/cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11
-TMPDIR=/scratch/tmp
-'_EOF_'
-    # << happy emacs
-
-############################################################################
-
