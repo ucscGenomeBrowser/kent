@@ -167,10 +167,15 @@ if (row != NULL)
 
     char *errorMessage = cloneString(row[2]);
     if (isEmpty(errorMessage))
+	{
 	hub->trackHub = fetchHub( hub->hubUrl, &errorMessage);
-    if (errorMessage != NULL)
-	hub->errorMessage = cloneString(errorMessage);
-
+	if (errorMessage != NULL)
+	    {
+	    hub->errorMessage = cloneString(errorMessage);
+	    warn("%s", hub->errorMessage);
+	    hubUpdateStatus( hub->errorMessage, hub);
+	    }
+	}
     }
 sqlFreeResult(&sr);
 return hub;
