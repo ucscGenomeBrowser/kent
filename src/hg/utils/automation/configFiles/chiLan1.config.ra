@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db chiLan1
+clade mammal
+genomeCladePriority 35
+scientificName Chinchilla lanigera
+commonName Chinchilla
+assemblyDate May 2012 
+assemblyLabel Broad Institute
+assemblyShortLabel ChiLan1.0
+orderKey 1700
+mitoAcc none
+fastaFiles /hive/data/genomes/chiLan1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/chiLan1/genbank/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir chiLan
+photoCreditURL http://commons.wikimedia.org/wiki/File:Chinchilla_lanigera_%28Wroclaw_zoo%29-2.JPG
+photoCreditName Photo courtesy of Gu%C3%A9rin Nicolas, Wikimedia Commons
+ncbiGenomeId 10466
+ncbiAssemblyId 397218
+ncbiAssemblyName ChiLan1.0
+ncbiBioProject 68239
+genBankAccessionID GCA_000276665.1
+taxId 34839

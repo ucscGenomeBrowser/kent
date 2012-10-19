@@ -1,10 +1,10 @@
-track primateChainNet
+track euarchontoglireChainNet
 compositeTrack on
-shortLabel Primate Chain/Net
-longLabel Primate Genomes, Chain and Net Alignments
+shortLabel Euarch Chain/Net
+longLabel Euarchontoglire Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aBushbaby=Bushbaby bMouseLemur=Mouse_Lemur cTarsier=Tarsier dMarmoset=Marmoset eSquirrelMonkey=Squirrel_Monkey fBaboon=Baboon gChineseRhesus=Chinese_Rhesus hGibbon=Gibbon iOrangutan=Orangutan jGorilla=Gorilla kChimp=Chimp lHuman=Human
-subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cPlaty=Platyrrhini dHaplo=Haplorrhini eStrep=Strepsirrhini
+subGroup2 species Species aTShrew=Tree_shrew bBushbaby=Bushbaby bMouseLemur=Mouse_Lemur cTarsier=Tarsier dMarmoset=Marmoset eSquirrelMonkey=Squirrel_Monkey fBaboon=Baboon gChineseRhesus=Chinese_Rhesus hGibbon=Gibbon iOrangutan=Orangutan jGorilla=Gorilla kChimp=Chimp lHuman=Human
+subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cPlaty=Platyrrhini dHaplo=Haplorrhini eStrep=Strepsirrhini fScan=Scandentia
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -20,23 +20,31 @@ sortOrder species=+ view=+ clade=+
 configurable on
 html chainNet
 
-    track primateChainNetViewchain
+    track euarchontoglireChainNetViewchain
     shortLabel Chains
     view chain
     visibility pack
-    subTrack primateChainNet
+    subTrack euarchontoglireChainNet
     spectrum on
 
+        track chainTupBel1
+        subTrack euarchontoglireChainNetViewchain off
+        subGroups view=chain species=aTShrew clade=fScan
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain tupBel1
+        otherDb tupBel1
+
         track chainOtoGar3
-        subTrack primateChainNetViewchain on
-        subGroups view=chain species=aBushbaby clade=eStrep
+        subTrack euarchontoglireChainNetViewchain on
+        subGroups view=chain species=bBushbaby clade=eStrep
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain otoGar3
         otherDb otoGar3
 
         track chainMicMur1
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=bMouseLemur clade=eStrep
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -44,7 +52,7 @@ html chainNet
         otherDb micMur1
 
         track chainTarSyr1
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=cTarsier clade=dHaplo
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -52,7 +60,7 @@ html chainNet
         otherDb tarSyr1
 
         track chainCalJac3
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=dMarmoset clade=cPlaty
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -60,7 +68,7 @@ html chainNet
         otherDb calJac3
 
         track chainSaiBol1
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=eSquirrelMonkey clade=cPlaty
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -68,7 +76,7 @@ html chainNet
         otherDb saiBol1
 
         track chainPapHam1
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=fBaboon clade=bCerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -76,7 +84,7 @@ html chainNet
         otherDb papHam1
 
         track chainRheMac3
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=gChineseRhesus clade=bCerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -84,7 +92,7 @@ html chainNet
         otherDb rheMac3
 
         track chainNomLeu2
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=hGibbon clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -92,7 +100,7 @@ html chainNet
         otherDb nomLeu2
 
         track chainPonAbe2
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=iOrangutan clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -100,7 +108,7 @@ html chainNet
         otherDb ponAbe2
 
         track chainGorGor3
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=jGorilla clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -108,7 +116,7 @@ html chainNet
         otherDb gorGor3
 
         track chainPanTro4
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=kChimp clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -116,29 +124,37 @@ html chainNet
         otherDb panTro4
 
         track chainHg19
-        subTrack primateChainNetViewchain off
+        subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=lHuman clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain hg19
         otherDb hg19
 
-    track primateChainNetViewnet
+    track euarchontoglireChainNetViewnet
     shortLabel Nets
     view net
     visibility dense
-    subTrack primateChainNet
+    subTrack euarchontoglireChainNet
+
+        track netTupBel1
+        subTrack euarchontoglireChainNetViewnet off 
+        subGroups view=net species=aTShrew clade=fScan
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign tupBel1 chainTupBel1
+        otherDb tupBel1
 
         track netOtoGar3
-        subTrack primateChainNetViewnet on 
-        subGroups view=net species=aBushbaby clade=eStrep
+        subTrack euarchontoglireChainNetViewnet on 
+        subGroups view=net species=bBushbaby clade=eStrep
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign otoGar3 chainOtoGar3
         otherDb otoGar3
 
         track netMicMur1
-        subTrack primateChainNetViewnet off
+        subTrack euarchontoglireChainNetViewnet off
         subGroups view=net species=bMouseLemur clade=eStrep
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -146,7 +162,7 @@ html chainNet
         otherDb micMur1
 
         track netTarSyr1
-        subTrack primateChainNetViewnet on 
+        subTrack euarchontoglireChainNetViewnet on 
         subGroups view=net species=cTarsier clade=dHaplo
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -154,7 +170,7 @@ html chainNet
         otherDb tarSyr1
 
         track netCalJac3
-        subTrack primateChainNetViewnet off
+        subTrack euarchontoglireChainNetViewnet off
         subGroups view=net species=dMarmoset clade=cPlaty
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -162,7 +178,7 @@ html chainNet
         otherDb calJac3
 
         track netSaiBol1
-        subTrack primateChainNetViewnet on 
+        subTrack euarchontoglireChainNetViewnet on 
         subGroups view=net species=eSquirrelMonkey clade=cPlaty
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -170,7 +186,7 @@ html chainNet
         otherDb saiBol1
 
         track netPapHam1
-        subTrack primateChainNetViewnet off
+        subTrack euarchontoglireChainNetViewnet off
         subGroups view=net species=fBaboon clade=bCerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -178,7 +194,7 @@ html chainNet
         otherDb papHam1
 
         track netRheMac3
-        subTrack primateChainNetViewnet on 
+        subTrack euarchontoglireChainNetViewnet on 
         subGroups view=net species=gChineseRhesus clade=bCerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -186,7 +202,7 @@ html chainNet
         otherDb rheMac3
 
         track netNomLeu2
-        subTrack primateChainNetViewnet off
+        subTrack euarchontoglireChainNetViewnet off
         subGroups view=net species=hGibbon clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -194,7 +210,7 @@ html chainNet
         otherDb nomLeu2
 
         track netPonAbe2
-        subTrack primateChainNetViewnet off
+        subTrack euarchontoglireChainNetViewnet off
         subGroups view=net species=iOrangutan clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -202,7 +218,7 @@ html chainNet
         otherDb ponAbe2
 
         track netGorGor3
-        subTrack primateChainNetViewnet on
+        subTrack euarchontoglireChainNetViewnet on
         subGroups view=net species=jGorilla clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -210,7 +226,7 @@ html chainNet
         otherDb gorGor3
 
         track netPanTro4
-        subTrack primateChainNetViewnet on
+        subTrack euarchontoglireChainNetViewnet on
         subGroups view=net species=kChimp clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -218,7 +234,7 @@ html chainNet
         otherDb panTro4
 
         track netHg19
-        subTrack primateChainNetViewnet on
+        subTrack euarchontoglireChainNetViewnet on
         subGroups view=net species=lHuman clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net

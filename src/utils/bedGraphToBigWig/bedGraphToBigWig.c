@@ -25,7 +25,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedGraphToBigWig v %d - Convert a bedGraph program to bigWig.\n"
+  "bedGraphToBigWig v %d - Convert a bedGraph file to bigWig format.\n"
   "usage:\n"
   "   bedGraphToBigWig in.bedGraph chrom.sizes out.bw\n"
   "where in.bedGraph is a four column file in the format:\n"

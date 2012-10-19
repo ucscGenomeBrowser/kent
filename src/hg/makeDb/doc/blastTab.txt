@@ -446,3 +446,402 @@ done
 # hgLoadBlastTab sacCer2 drBlastTab run.danRer6.sacCer2/recipBest.tab
 # Loading database with 2174 rows
 
+###########################################################################
+# updating drBlastTab for new EnsGene release (DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/danRer7/bed/ensGene.68/blastTab
+    cd /hive/data/genomes/danRer7/bed/ensGene.68/blastTab
+    cat << '_EOF_' > prepFasta.sh
+#!/bin/sh
+
+export sacCer="sacCer3"
+export ce="ce6"
+export danRer="danRer7"
+export dm="dm3"
+export rn="rn4"
+export hg="hg19"
+export mm="mm10"
+export rnGene="rgdGene2"
+export runDir="/hive/data/genomes/danRer7/bed/ensGene.68/blastTab"
+
+mkdir -p ${runDir}
+cd ${runDir}
+# get all the protein sets to be used here
+pepPredToFa ${danRer} ensPep ${danRer}.ensembl.faa
+pepPredToFa ${sacCer} sgdPep ${sacCer}.sgd.faa
+pepPredToFa ${dm} flyBasePep ${dm}.flyBase.faa
+pepPredToFa ${ce} sangerPep ${ce}.sanger.faa
+pepPredToFa ${rn} ${rnGene}Pep ${rn}.${rnGene}.faa
+for D in ${hg} ${mm}
+do
+pepPredToFa $D knownGenePep $D.known.faa
+done
+
+# known gene tables
+for D in ${hg} ${mm}
+do
+mkdir -p $D
+echo "targetGenesetPrefix known
+targetDb $D" > ${D}/${D}.config.ra
+echo "queryDbs ${hg} ${mm} ${rn} ${ce} ${dm} ${danRer} ${sacCer}" \
+        | sed -e "s/ ${D}//" >> ${D}/${D}.config.ra
+echo "${hg}Fa ${runDir}/${hg}.known.faa
+${mm}Fa ${runDir}/${mm}.known.faa
+${rn}Fa ${runDir}/${rn}.${rnGene}.faa
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${ce}Fa ${runDir}/${ce}.sanger.faa
+${dm}Fa ${runDir}/${dm}.flyBase.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" >> ${D}/${D}.config.ra
+done
+
+for D in ${rn}
+do
+mkdir -p $D
+echo "targetGenesetPrefix ${rnGene}
+targetDb $D" > ${D}/${D}.config.ra
+echo "queryDbs ${hg} ${mm} ${rn} ${ce} ${dm} ${danRer} ${sacCer}" \
+        | sed -e "s/ ${D}//" >> ${D}/${D}.config.ra
+echo "${hg}Fa ${runDir}/${hg}.known.faa
+${mm}Fa ${runDir}/${mm}.known.faa
+${rn}Fa ${runDir}/${rn}.${rnGene}.faa
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${ce}Fa ${runDir}/${ce}.sanger.faa
+${dm}Fa ${runDir}/${dm}.flyBase.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" >> ${D}/${D}.config.ra
+done
+
+for D in ${sacCer}
+do
+mkdir -p $D
+echo "targetGenesetPrefix sgd
+targetDb $D
+queryDbs ${hg} ${mm} ${rn} ${ce} ${dm} ${danRer}
+${hg}Fa ${runDir}/${hg}.known.faa
+${mm}Fa ${runDir}/${mm}.known.faa
+${rn}Fa ${runDir}/${rn}.${rnGene}.faa
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${ce}Fa ${runDir}/${ce}.sanger.faa
+${dm}Fa ${runDir}/${dm}.flyBase.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+
+# flyBase table
+for D in ${dm}
+do
+mkdir -p $D
+echo "targetGenesetPrefix flyBase
+targetDb $D
+queryDbs ${hg} ${mm} ${rn} ${ce} ${sacCer} ${danRer}
+${hg}Fa ${runDir}/${hg}.known.faa
+${mm}Fa ${runDir}/${mm}.known.faa
+${rn}Fa ${runDir}/${rn}.${rnGene}.faa
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${ce}Fa ${runDir}/${ce}.sanger.faa
+${dm}Fa ${runDir}/${dm}.flyBase.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+
+# sanger table
+for D in ${ce}
+do
+mkdir -p $D
+echo "targetGenesetPrefix sanger
+targetDb $D
+queryDbs ${hg} ${mm} ${rn} ${dm} ${sacCer} ${danRer}
+${hg}Fa ${runDir}/${hg}.known.faa
+${mm}Fa ${runDir}/${mm}.known.faa
+${rn}Fa ${runDir}/${rn}.${rnGene}.faa
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${ce}Fa ${runDir}/${ce}.sanger.faa
+${dm}Fa ${runDir}/${dm}.flyBase.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+
+# Zebrafish danRer7 Ensembl genes
+for D in ${danRer}
+do
+mkdir -p $D
+echo "targetGenesetPrefix ensembl
+targetDb $D
+queryDbs ${hg} ${mm} ${rn} ${ce} ${dm} ${sacCer}
+${hg}Fa ${runDir}/${hg}.known.faa
+${mm}Fa ${runDir}/${mm}.known.faa
+${rn}Fa ${runDir}/${rn}.${rnGene}.faa
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${ce}Fa ${runDir}/${ce}.sanger.faa
+${dm}Fa ${runDir}/${dm}.flyBase.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+
+'_EOF_'
+    # << happy emacs
+
+    chmod +x prepFasta.sh
+    ./prepFasta.sh
+
+    cat << '_EOF_' > runAll.sh
+#!/bin/sh
+
+export sacCer="sacCer3"
+export ce="ce6"
+export danRer="danRer7"
+export dm="dm3"
+export rn="rn4"
+export hg="hg19"
+export mm="mm10"
+export TOP="/hive/data/genomes/danRer7/bed/ensGene.68/blastTab"
+
+for G in ${sacCer} ${ce} ${danRer} ${dm} ${rn} ${hg} ${mm}
+do
+    cd "${TOP}/${G}"
+    time nice -n +19 doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -clusterHub=swarm ${G}.config.ra > do.log 2>&1
+done
+'_EOF_'
+    # << happy emacs
+
+    chmod +x runAll.sh
+    ./runAll.sh
+
+    # need to also do mm9 and sacCer2, save mm10, sacCer3 result:
+    mv danRer7 danRer7.mm10.sacCer3
+
+    cat << '_EOF_' > prepMm9.sh
+#!/bin/sh
+
+export sacCer="sacCer3"
+export ce="ce6"
+export danRer="danRer7"
+export dm="dm3"
+export rn="rn4"
+export hg="hg19"
+export mm="mm9"
+export rnGene="rgdGene2"
+export runDir="/hive/data/genomes/danRer7/bed/ensGene.68/blastTab"
+
+cd ${runDir}
+for D in ${mm}
+do
+pepPredToFa $D knownGenePep $D.known.faa
+done
+
+# known gene tables
+for D in ${mm}
+do
+mkdir -p $D
+echo "targetGenesetPrefix known
+targetDb $D" > ${D}/${D}.config.ra
+echo "queryDbs ${hg} ${mm} ${rn} ${ce} ${dm} ${danRer} ${sacCer}" \
+        | sed -e "s/ ${D}//" >> ${D}/${D}.config.ra
+echo "${hg}Fa ${runDir}/${hg}.known.faa
+${mm}Fa ${runDir}/${mm}.known.faa
+${rn}Fa ${runDir}/${rn}.${rnGene}.faa
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${ce}Fa ${runDir}/${ce}.sanger.faa
+${dm}Fa ${runDir}/${dm}.flyBase.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" >> ${D}/${D}.config.ra
+done
+
+# Zebrafish danRer7 Ensembl genes
+for D in ${danRer}
+do
+mkdir -p $D
+echo "targetGenesetPrefix ensembl
+targetDb $D
+queryDbs ${mm}
+${hg}Fa ${runDir}/${hg}.known.faa
+${mm}Fa ${runDir}/${mm}.known.faa
+${rn}Fa ${runDir}/${rn}.${rnGene}.faa
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${ce}Fa ${runDir}/${ce}.sanger.faa
+${dm}Fa ${runDir}/${dm}.flyBase.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x prepMm9.sh
+    ./prepMm9.sh
+
+export TOP="/hive/data/genomes/danRer7/bed/ensGene.68/blastTab"
+
+for G in danRer7 mm9
+do
+    cd "${TOP}/${G}"
+    time nice -n +19 doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -clusterHub=swarm ${G}.config.ra > do.log 2>&1
+done
+
+    # and the sacCer2, save the mm9 result
+    mv danRer7 danRer7.mm9
+
+    cat << '_EOF_' > prepMm9.sh
+#!/bin/sh
+
+export sacCer="sacCer2"
+export ce="ce6"
+export danRer="danRer7"
+export dm="dm3"
+export rn="rn4"
+export hg="hg19"
+export mm="mm9"
+export rnGene="rgdGene2"
+export runDir="/hive/data/genomes/danRer7/bed/ensGene.68/blastTab"
+
+cd ${runDir}
+# get all the protein sets to be used here
+# pepPredToFa ${sacCer} sgdPep ${sacCer}.sgd.faa
+
+for D in ${sacCer}
+do
+mkdir -p $D
+echo "targetGenesetPrefix sgd
+targetDb $D
+queryDbs ${danRer}
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+
+# Zebrafish danRer7 Ensembl genes
+for D in ${danRer}
+do
+mkdir -p $D
+echo "targetGenesetPrefix ensembl
+targetDb $D
+queryDbs ${sacCer}
+${sacCer}Fa ${runDir}/${sacCer}.sgd.faa
+${danRer}Fa ${runDir}/${danRer}.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x prepSacCer2.sh
+    ./prepSacCer2.sh
+
+export TOP="/hive/data/genomes/danRer7/bed/ensGene.68/blastTab"
+
+for G in danRer7 sacCer2
+do
+    cd "${TOP}/${G}"
+    time nice -n +19 doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -clusterHub=swarm ${G}.config.ra > do.log 2>&1
+done
+
+    #####  Now run recip best business, this requires moving
+    #### the different danRer7 directory results around to get them
+    #### in place for mm9 and sacCer2 vs the mm10 sacCer3 results
+
+    mkdir /hive/data/genomes/danRer7/bed/ensGene.68/blastTab/recip
+    cd /hive/data/genomes/danRer7/bed/ensGene.68/blastTab/recip
+
+    cat << '_EOF_' > recipBest.sh
+#!/bin/sh
+
+export TOP="/hive/data/genomes/danRer7/bed/ensGene.68/blastTab/recip"
+cd $TOP
+
+DB=danRer7
+# for tDB in hg19 mm10 rn4 ce6 dm3 sacCer3
+# for tDB in sacCer2
+# for tDB in mm9
+for tDB in mm10
+do
+    echo $DB
+    aToB=run.${DB}.${tDB}
+    bToA=run.${tDB}.${DB}
+    mkdir -p $aToB $bToA
+    cat ../${tDB}/$aToB/out/*.tab > $aToB/all.tab
+    cat ../${tDB}/$bToA/out/*.tab > $bToA/all.tab
+    blastRecipBest $aToB/all.tab $bToA/all.tab \
+        $aToB/recipBest.tab $bToA/recipBest.tab
+    dbBlastTab=xxBlastTab
+    case $DB in
+        ce6) dbBlastTab=ceBlastTab;;
+        dm3) dbBlastTab=dmBlastTab;;
+        danRer7) dbBlastTab=drBlastTab;;
+        sacCer2) dbBlastTab=scBlastTab;;
+    esac
+    echo "hgLoadBlastTab ${tDB} $dbBlastTab $aToB/recipBest.tab"
+#    hgLoadBlastTab ${tDB} $dbBlastTab $aToB/recipBest.tab
+done
+'_EOF_'
+    # << happy emacs
+
+    # survey tables before loading:
+for D in hg19 mm9 mm10 rn4 dm3 ce6 sacCer3 sacCer2
+do
+    echo hgsql -e \"select count'(*)' from drBlastTab\;\" $D
+    hgsql -N -e "select count(*) from drBlastTab;" $D | cat
+    wc -l run.${D}.danRer7/recipBest.tab
+done > survey.result.before
+
+    # load all the drBlastTab tables:
+for D in ce6 dm3 hg19 mm10 mm9 rn4 sacCer2 sacCer3
+do
+    ls -og run.$D.danRer7/recipBest.tab
+    echo "hgLoadBlastTab $D drBlastTab -maxPer=1 run.$D.danRer7/recipBest.tab"
+    hgLoadBlastTab $D drBlastTab -maxPer=1 run.$D.danRer7/recipBest.tab
+done
+
+
+    # survey tables after loading:
+for D in hg19 mm9 mm10 rn4 dm3 ce6 sacCer3 sacCer2
+do
+    echo hgsql -e \"select count'(*)' from drBlastTab\;\" $D
+    hgsql -N -e "select count(*) from drBlastTab;" $D | cat
+    wc -l run.${D}.danRer7/recipBest.tab
+done > survey.result.after
+
+    # verify table row counts are not too much different:
+    diff survey.result.before survey.result.after
+2c2
+< 13021
+---
+> 13076
+5c5
+< 12886
+---
+> 12904
+8c8
+< 12881
+---
+> 12918
+11c11
+< 7827
+---
+> 8928
+14c14
+< 5924
+---
+> 5929
+17c17
+< 4956
+---
+> 4958
+20c20
+< 3893
+---
+> 2386
+23c23
+< 2229
+---
+> 2231
+
+###########################################################################

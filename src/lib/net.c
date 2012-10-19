@@ -1689,9 +1689,14 @@ else
 	    url = newUrl;
 	    }
 	}
-    if (endsWith(url, ".gz") ||
-	endsWith(url, ".Z")  ||
-    	endsWith(url, ".bz2"))
+    char *urlDecoded = cloneString(url);
+    cgiDecode(url, urlDecoded, strlen(url));
+    boolean isCompressed =
+	(endsWith(urlDecoded,".gz") ||
+   	 endsWith(urlDecoded,".Z")  ||
+	 endsWith(urlDecoded,".bz2"));
+    freeMem(urlDecoded);
+    if (isCompressed)
 	{
 	lf = lineFileDecompressFd(url, TRUE, sd);
            /* url needed only for compress type determination */
