@@ -112,7 +112,7 @@ shortLabel Modern Derived
 longLabel Modern Human Derived, Denisova Ancestral
 group denisova
 subGroup1 view View All=All Ccds=Consensus_Coding_Sequence_(CCDS) Ens=Ensembl_Transcripts Reg=Regulatory_Regions
-subGroup2 subset Subset All=All CcdsUtr3=CCDS_3'_UTR CcdsUtr5=CCDS_5'_UTR CcdsFrameshiftCoding=CCDS_Frameshift CcdsInFrameNonsyn=CCDS_In-frame_Non-synonymous CcdsNonsyn=CCDS_Non-synonymous CcdsSplice=CCDS_Splice_Site CcdsZLast_Syn=CCDS_Synonymous DA_RegMotifHighInfo=Regulatory_Motif_(High_Info) DB_RegMotif=Regulatory_Motif DC_Reg=Regulatory_Region Utr3=Ensembl_3'_UTR Utr5=Ensembl_5'_UTR FrameshiftCoding=Ensembl_Frameshift InFrameNonsyn=Ensembl_In-frame_Non-synonymous Nonsyn=Ensembl_Non-synonymous Splice=Ensembl_Splice_Site ZLast_Syn=Ensembl_Synonymous
+subGroup2 subset Subset All=All CcdsUtr3=CCDS_3'_UTR CcdsUtr5=CCDS_5'_UTR CcdsFrameshiftCoding=CCDS_Frameshift CcdsInFrameNonsyn=CCDS_In-frame_Non-synonymous CcdsNonsyn=CCDS_Non-synonymous CcdsSplice=CCDS_Splice_Site CcdsZLast_Syn=CCDS_Synonymous DA_RegMotifHighInfo=Reg._Motif:_Highly_Informative_Pos. DB_RegMotif=Regulatory_Motif DC_Reg=Regulatory_Region Utr3=Ensembl_3'_UTR Utr5=Ensembl_5'_UTR FrameshiftCoding=Ensembl_Frameshift InFrameNonsyn=Ensembl_In-frame_Non-synonymous Nonsyn=Ensembl_Non-synonymous Splice=Ensembl_Splice_Site ZLast_Syn=Ensembl_Synonymous
 subGroup3 freq Frequency Fixed=Fixed_(>99%)_in_1000_Genomes_Phase_1 FixedDbSnp=Fixed_(>99%)_in_1000_Genomes_Phase_1_but_in_dbSNP HighFreq=High_Frequency_(>90%)_in_1000_Genomes_Phase_1
 dimensions dimensionX=subset dimensionY=freq
 sortOrder subset=+ freq=+
@@ -478,20 +478,20 @@ type bigBed 4 +
         parent dhcHumDerDenAncReg
         subGroups view=Reg subset=DA_RegMotifHighInfo freq=Fixed
         shortLabel RgMoHiInf Fxd
-        longLabel Modern Human Derived (Fixed), Denisova Ancestral: Reg. Motif at High Inf Pos in TFBP
+        longLabel Modern Human Derived (Fixed), Denisova Ancestral: High Inf Pos in TFBP
         color 230,60,0
 
         track dhcHumDerDenAncRegMotifHighInfoFixedDbSnp
         parent dhcHumDerDenAncReg
         subGroups view=Reg subset=DA_RegMotifHighInfo freq=FixedDbSnp
         shortLabel RgMoHiInf FxS
-        longLabel Modern Human Derived (Fixed+dbSNP), Denisova Ancestral: Reg. Motif at High Inf Pos in TFBP
+        longLabel Modern Human Derived (Fixed+dbSNP), Denisova Ancestral: High Inf Pos in TFBP
         color 230,60,0
 
         track dhcHumDerDenAncRegMotifHighInfoHighFreq
         parent dhcHumDerDenAncReg
         subGroups view=Reg subset=DA_RegMotifHighInfo freq=HighFreq
         shortLabel RgMoHiInf HiF
-        longLabel Modern Human Derived (HighFreq), Denisova Ancestral: Reg. Motif at High Inf Pos in TFBP
+        longLabel Modern Human Derived (HighFreq), Denisova Ancestral: High Inf Pos in TFBP
         color 230,60,0
 
