@@ -302,7 +302,7 @@ taxId 7757
 # Petromyzon marinus      1072    120732  0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add petMar2 just before petMar1
@@ -398,14 +398,13 @@ petMar2.perChromTables = no
     #	test it with some sequence
 
 ############################################################################
-#  lastz braFlo1 Lancelet (DONE - 2012-10-18 - Hiram)
+#  lastz braFlo2 Lancelet (DONE - 2012-10-19,22 - Hiram)
     screen -S petMar2	# use a screen to control this multi-day job
-    mkdir /cluster/data/petMar2/bed/lastzBraFlo1.2012-10-18
-    cd /cluster/data/petMar2/bed/lastzBraFlo1.2012-10-18
+    mkdir /cluster/data/petMar2/bed/lastzBraFlo2.2012-10-19
+    cd /cluster/data/petMar2/bed/lastzBraFlo2.2012-10-19
 
     cat << '_EOF_' > DEF
 # Lamprey vs. Lancelet
-
 BLASTZ_H=2000
 BLASTZ_Y=3400
 BLASTZ_L=6000
@@ -416,24 +415,54 @@ BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 SEQ1_DIR=/hive/data/genomes/petMar2/petMar2.2bit
 SEQ1_LEN=/hive/data/genomes/petMar2/chrom.sizes
 SEQ1_CHUNK=10000000
-SEQ1_LIMIT=200
+SEQ1_LIMIT=20
 SEQ1_LAP=10000
 
-# TARGET: Lancelet braFlo1
+# TARGET: Lancelet braFlo2
 # largest chunk big enough for largest scaffold
 #       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
-SEQ2_DIR=/scratch/data/braFlo1/braFlo1.2bit
-SEQ2_LEN=/scratch/data/braFlo1/chrom.sizes
-SEQ2_CTGDIR=/scratch/data/braFlo1/braFlo1UnScaffolds.2bit
-SEQ2_CTGLEN=/scratch/data/braFlo1/braFlo1UnScaffolds.sizes
-SEQ2_LIFT=/san/sanvol1/scratch/braFlo1/braFlo1.lift
-SEQ2_CHUNK=20000000
+SEQ2_DIR=/hive/data/genomes/braFlo2/braFlo2.2bit
+SEQ2_LEN=/hive/data/genomes/braFlo2/chrom.sizes
+SEQ2_CHUNK=12000000
 SEQ2_LIMIT=50
 SEQ2_LAP=0
 
-BASE=/cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11
+BASE=/hive/data/genomes/petMar2/bed/lastzBraFlo2.2012-10-19
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ?_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -smallClusterHub=encodek > do.log 2>&1 &
+    #   real    781m50.666s
+    cat fb.petMar2.chainBraFlo2Link.txt
+    #  19549078 bases of 647368134 (3.020%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s lastzBraFlo2.2012-10-19 lastz.braFlo2
+
+    #	and for the swap
+    mkdir /hive/data/genomes/braFlo2/bed/blastz.petMar2.swap
+    cd /hive/data/genomes/braFlo2/bed/blastz.petMar2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/petMar2/bed/lastzBraFlo2.2012-10-19/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -smallClusterHub=encodek > swap.log 2>&1 &
+
+    #   real    15m22.099s
+    cat  fb.braFlo2.chainPetMar2Link.txt
+    #	15668603 bases of 480418582 (3.261%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/braFlo2/bed
+    ln -s blastz.petMar2.swap lastz.petMar2
 
 ############################################################################

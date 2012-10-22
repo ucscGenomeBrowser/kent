@@ -8853,17 +8853,17 @@ urlLabel NCBI Nucleotide:
 ##########################################################################
 ##  CYTOBAND - ideogram track (DONE - 2012-10-19 - Hiram)
     ssh hgwdev
-    mkdir -p  /hive/data/genomes/mm10/bed/ideogram/ncbi
-    cd /hive/data/genomes/mm10/bed/ideogram/ncbi
+    mkdir -p /hive/data/outside/ncbi/ideogram/2012-10
+    cd /hive/data/outside/ncbi/ideogram/2012-10
     # fetch all the ideogram files:
     rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ ./
 
-    # Create bed file
-    cd /hive/data/genomes/mm10/bed/ideogram
+    mkdir /hive/data/genomes/mm10/bed/cytoband
+    cd /hive/data/genomes/mm10/bed/cytoband
 
-    # (this script fixed up to eliminate one of the lines from ideogram file)
+    # Create bed file
     $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
-        ncbi/ideogram_10090_GCF_000000055.19_NA_V2
+/hive/data/outside/ncbi/ideogram/2012-10/ideogram_10090_GCF_000000055.19_NA_V2
 
     ## can now verify before load:
     $HOME/kent/src/utils/ncbi/cytoBandVerify.pl
