@@ -11912,6 +11912,7 @@ targetDescription SETDB1 is a H3K9-selective histone methyltransferase, methylat
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation Human_-_SETDB1_SC-66884(Immunoprecipitation,Western_blot,ChIP-seq):human_SETDB1-SC66884_validation_Farnham.pdf
+validation Human_-_SETDB1_(sc-66884)(Immunoprecipitation,Western_blot,ChIP-seq):human_SETDB1_SC66884_validation_Farnham.pdf
 vendorId sc-66884
 vendorName Santa Cruz Biotechnology
 
