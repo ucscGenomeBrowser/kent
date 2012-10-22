@@ -8136,7 +8136,7 @@ targetClass TFSS
 targetDescription Sequence-specific DNA-binding protein that interacts with inducible viral and cellular enhancer elements to regulate transcription of selected genes. AP-2 factors bind to the consensus sequence 5'-GCCNNNGGC-3' and activate genes involved in a large spectrum of important biological functions including proper eye, face, body wall, limb and neural tube development. They also suppress a number of genes including MCAM/MUC18, C/EBP alpha and MYC.
 targetId GeneCard:TFAP2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C
-validation Human_-_AP-2alpha_(siRNA,ChIP-seq):human_AP-2alpha_validation_Farnham.pdf
+validation Human_-_AP-2gamma_(siRNA,ChIP-seq):human_AP-2gamma_validation_Farnham.pdf
 vendorId sc-8977
 vendorName Santa Cruz Biotechnology
 
@@ -8570,7 +8570,7 @@ targetClass TFSS
 targetDescription transcription factor; c-Myc-encoded proteins function in cell proliferation,differentiation and neoplastic disease
 targetId GeneCard:MYC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
-validation Human_-_c-Myc_(sc-764)(Western_blot):human_c-MYC_SC-764X_image_validation.pdf Mouse_-_c-Myc_(sc-764)(Immunoprecipitation,ChIP-seq):mouse_c-Myc_validation_Snyder.pdf
+validation Human_-_c-Myc_(sc-764)(Western_blot):human_c-MYC_SC-764X_image_validation_Crawford.pdf Mouse_-_c-Myc_(sc-764)(Immunoprecipitation,ChIP-seq):mouse_c-Myc_validation_Snyder.pdf
 vendorId sc-764
 vendorName Santa Cruz Biotechnology
 
@@ -11719,7 +11719,7 @@ targetClass TFSS
 targetDescription PU.1 (H-135)
 targetId GeneCard:SPI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
-validation Human_-_PU.1(Immunoprecipitation-Western_blot,MassSpec):human_PU.1_validation_Myers.pdf
+validation Human_-_PU1(Immunoprecipitation-Western_blot,MassSpec):human_PU1_validation_Myers.pdf
 vendorId sc-22805
 vendorName Santa Cruz Biotechnology
 
