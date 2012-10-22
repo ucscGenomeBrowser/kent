@@ -8226,7 +8226,7 @@ type Antibody
 label ATF2 (sc-81188)
 antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of ATF2 of human origin. Antibody Target: ATF2
 lab Myers
-lots A1111
+lots H0609
 orderUrl http://datasheets.scbt.com/sc-81188.pdf
 target ATF2
 targetDescription This gene encodes a transcription factor that is a member of the leucine zipper family of DNA binding proteins. This protein binds to the cAMP-responsive element (CRE), an octameric palindrome. The protein forms a homodimer or heterodimer with c-Jun and stimulates CRE-dependent transcription. The protein is also a histone acetyltransferase (HAT) that specifically acetylates histones H2B and H4 in vitro; thus it may represent a class of sequence-specific factors that activate transcription by direct effects on chromatin components. Additional transcript variants have been identified but their biological validity has not been determined. (provided by RefSeq)
@@ -8249,7 +8249,7 @@ targetClass TFSS
 targetDescription Activating transcription factor 3. A bZIP transcription factor and member of the Ca2+/cAMP response element-binding (CREB) protein family. ATF3 is found to act both as an activator and repressor of transcription.
 targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
-validation Human_-_ATF3(Immunoblot):human_ATF3_validation_Myers.pdf
+validation Human_-_ATF3(sc-188)(Immunoblot):human_ATF3_SC-188_validation_Myers.pdf
 vendorId sc-188
 vendorName Santa Cruz Biotechnology
 
@@ -8282,7 +8282,7 @@ targetClass ChromRem
 targetDescription BAF155 (SMARCC1, Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
-validation Human_-_BAF155(Immunoprecipitation,IP-MassSpec):human_BAF155_validation_Snyder.pdf
+validation Human_-_BAF155(sc-10756)(Immunoprecipitation,IP-MassSpec):human_BAF155_SC-10756_validation_Snyder.pdf
 vendorId sc-10756
 vendorName Santa Cruz Biotechnology
 
