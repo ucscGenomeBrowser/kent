@@ -8292,6 +8292,7 @@ type Antibody
 label BAF170 (sc-10757)
 antibodyDescription Rabbit polyclonal. BAF170 (H-116) is raised against amino acids 1093-1208 of BAF170 of human origin. Antibody Target: SMARCC2
 lab Snyder
+lots E0204
 orderUrl http://www.scbt.com/datasheet-10757-baf170-h-116-antibody.html
 target SMARCC2
 targetClass ChromRem
