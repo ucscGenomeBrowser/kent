@@ -8601,7 +8601,7 @@ target CBX2
 targetDescription Chromobox protein homolog 2 is a component of the polycomb group (PcG) multiprotein PRC1 complex, a complex required to maintain the transcriptionally repressive state of many genes, including Hox genes, throughout development. [taken from the Universal Protein Resource (UniProt) www.uniprot.org/uniprot/P19474]
 targetId GeneCard:CBX2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX2
-validation Human_-_CBX2_(A302-524A)(ChIP-seq,Western_blot):human_CBX2_validation_Epstein.pdf
+validation Human_-_CBX2_(A302-524A)(ChIP-seq,Western_blot):human_CBX2_validation_Bernstein.pdf
 vendorId A302-524A
 vendorName Bethyl Laboratories
 
@@ -8633,7 +8633,7 @@ target CBX8
 targetDescription CBX8 is part of the polycomb group of proteins that are important in embryogenesis and human tumorigenesis and regulates a number of genes involved in cell growth and survival. There are at least 5 CBX proteins in mammals. CBX proteins associate with the core polycomb repressive complex 1 (PRC1) that functions to maintain the transcriptionally repressive state of genes during development.
 targetId GeneCard:CBX8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX8
-validation Human_-_CBX8_(A300-882A)(ChIP-seq,Western_blot):human_CBX8_validation_Epstein.pdf
+validation Human_-_CBX8_(A300-882A)(ChIP-seq,Western_blot):human_CBX8_validation_Bernstein.pdf
 vendorId A300-882A
 vendorName Bethyl Laboratories
 
@@ -8827,7 +8827,7 @@ target CHD4
 targetDescription CHD4/Mi2beta is a helicase component of the nucleosome remodeling and deacetylase (NuRD) complex that functions to remodel chromatin and repress transcription. Outside of the NuRD complex, CHD4/Mi2beta can function as an activator of transcription in association with p300 histone acetyltransferase.
 targetId GeneCard:CHD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD4
-validation Human_-_CHD4_(A301-081A)(ChIP-seq,Western_blot):human_CHD4_validation_Epstein.pdf
+validation Human_-_CHD4_(A301-081A)(ChIP-seq,Western_blot):human_CHD4_validation_Bernstein.pdf
 vendorId A301-081A
 vendorName Bethyl Laboratories
 
@@ -10851,7 +10851,7 @@ target KDM1A
 targetDescription BHC110/LSD1 is a histone demethylase and a component of several histone deacetylase complexes. BHC110/LSD1 is able to specifically catalyze the demethylation of Lys4 of histone H3. As part of histone deacetylase complexes BHC110/LSD1 functions as a corepressor of transcription.
 targetId GeneCard:KDM1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM1A
-validation Human_-_LSD1_(A300-215A)(ChIP-seq,Western_blot):human_LSD1_validation_Epstein.pdf
+validation Human_-_LSD1_(A300-215A)(ChIP-seq,Western_blot):human_LSD1_validation_Bernstein.pdf
 vendorId A300-215A
 vendorName Bethyl Laboratories
 
@@ -11366,7 +11366,7 @@ targetClass HISase
 targetDescription Histone acetyltransferase with sequence similarity to CBP (CREB-binding protein). Regulates transcription by influencing chromatin organization. P300 has been demonstrated to bind to phosphorylated CREB to mediate cAMP-gene regulation.
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
-validation Human_-_P300_(A300-358A)(ChIP-seq,Western_blot):human_P300_validation_Epstein.pdf
+validation Human_-_P300_(A300-358A)(ChIP-seq,Western_blot):human_P300_validation_Bernstein.pdf
 vendorId A300-358A
 vendorName Bethyl Laboratories
 
@@ -11494,7 +11494,7 @@ target KAT2B
 targetDescription PCAF (P300/CBP-associated factor) is a histone acetyltransferase (HAT) identified as a factor that associates with P300/CBP, a transcriptional coactivator of nuclear hormone receptors and other transcription factors.
 targetId GeneCard:KAT2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2B
-validation Human_-_PCAF_(A301-666A)(ChIP-seq,Western_blot):human_PCAF_validation_Epstein.pdf
+validation Human_-_PCAF_(A301-666A)(ChIP-seq,Western_blot):human_PCAF_validation_Bernstein.pdf
 vendorId A301-666A
 vendorName Bethyl Laboratories
 
@@ -11769,7 +11769,7 @@ targetClass TFSS
 targetDescription A transcriptional repressor which represses neuronal genes in non-neuronal tissues. A member of the Kruppel-type zinc finger transcription factor family. Represses transcription by binding a DNA sequence element called the neuron-restrictive silencer element (NRSE) by associating with two corepressors, mSin3 and CoREST, which recruit HDACs to the promoters of REST-regulated genes. Target is GST fusion amino acids 801-1097 of human REST.
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
-validation Human_-_REST_(17-641)(ChIP-seq,Western_blot):human_REST_validation_Epstein.pdf
+validation Human_-_REST_(17-641)(ChIP-seq,Western_blot):human_REST_validation_Bernstein.pdf
 vendorId 17-641
 vendorName Millipore
 
@@ -11799,7 +11799,7 @@ target RNF2
 targetDescription Ring finger protein 2 (RNF2) is a polycomb group (PcG) protein. RNF2 has been shown to interact with, and suppress the activity of, transcription factor CP2 (TFCP2/CP2).
 targetId GeneCard:RNF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RNF2
-validation Human_-_RNF2_(A302-869A)(ChIP-seq,Western_blot):human_RNF2_validation_Epstein.pdf
+validation Human_-_RNF2_(A302-869A)(ChIP-seq,Western_blot):human_RNF2_validation_Bernstein.pdf
 vendorId A302-869A
 vendorName Bethyl Laboratories
 
