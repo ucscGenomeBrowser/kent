@@ -8849,3 +8849,32 @@ visibility hide
 type bedDetail 8
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI Nucleotide:
+
+##########################################################################
+##  CYTOBAND - ideogram track (DONE - 2012-10-19 - Hiram)
+    ssh hgwdev
+    mkdir -p /hive/data/outside/ncbi/ideogram/2012-10
+    cd /hive/data/outside/ncbi/ideogram/2012-10
+    # fetch all the ideogram files:
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ ./
+
+    mkdir /hive/data/genomes/mm10/bed/cytoband
+    cd /hive/data/genomes/mm10/bed/cytoband
+
+    # Create bed file
+    $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
+/hive/data/outside/ncbi/ideogram/2012-10/ideogram_10090_GCF_000000055.19_NA_V2
+
+    ## can now verify before load:
+    $HOME/kent/src/utils/ncbi/cytoBandVerify.pl
+    #	everything checks out OK on 21 chroms
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql \
+	mm10 cytoBand cytoBand.bed
+    #   Read 403 elements of size 5 from cytoBand.bed
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql -e "drop table cytoBandIdeo;" mm10
+    hgsql mm10 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
+
+##########################################################################

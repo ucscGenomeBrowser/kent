@@ -3,8 +3,8 @@ compositeTrack on
 shortLabel Glires Chain/Net
 longLabel Glires Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aRat=Rat bKRat=Kangaroo_Rat cNMRat=Naked_mole_rat dGPig=Guinea_pig  eSquirrel=Squirrel fRabbit=Rabbit gPika=Pika hTShrew=Tree_shrew
-subGroup3 clade Clade aRodent=Rodentia bLagomorpha=Lagomorpha cScan=Scandentia
+subGroup2 species Species aRat=Rat bKRat=Kangaroo_Rat cNMRat=Naked_mole_rat dGPig=Guinea_pig  eSquirrel=Squirrel fRabbit=Rabbit gPika=Pika
+subGroup3 clade Clade aRodent=Rodentia bLagomorpha=Lagomorpha
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -83,13 +83,6 @@ html chainNet
         type chain ochPri2
         otherDb ochPri2
 
-        track chainTupBel1
-        subTrack gliresChainNetViewchain off
-        subGroups view=chain species=hTShrew clade=cScan
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain tupBel1
-        otherDb tupBel1
 
     track gliresChainNetViewnet
     shortLabel Nets
@@ -152,11 +145,3 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ochPri2 chainOchPri2
         otherDb ochPri2
-
-        track netTupBel1
-        subTrack gliresChainNetViewnet off
-        subGroups view=net species=hTShrew clade=cScan
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign tupBel1 chainTupBel1
-        otherDb tupBel1

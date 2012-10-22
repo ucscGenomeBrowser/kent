@@ -2,9 +2,9 @@
 
 # 	$Id: makefile,v 1.156 2010/03/03 02:53:30 markd Exp $
 
-BROWSER_BINS=hgLogin cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
-        hgGateway hgGene hgGenome hgPcr hgSession hgSuggest hgTables hgTracks \
-	hgTrackUi hgc hgApi cartDump near/hgNear \
+BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
+        hgGateway hgGene hgGenome hgLogin hgPcr hgSession hgSuggest \
+        hgTables hgTracks hgTrackUi hgc hgApi cartDump near/hgNear \
 	hgLiftOver visiGene/hgVisiGene \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab encode/hgEncodeApi \
