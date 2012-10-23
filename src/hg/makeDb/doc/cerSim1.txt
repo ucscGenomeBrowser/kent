@@ -418,14 +418,13 @@ XXX - to be done - Tue Oct 16 15:03:19 PDT 2012
     ssh hgwbeta "hgsql qapushq < /tmp/cerSim1.sql"
 
 ##########################################################################
-#  BLATSERVERS ENTRY (DONE - 2012-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2012-10-23 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
-XXX - to be done - Tue Oct 16 15:03:19 PDT 2012
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("cerSim1", "blat4d", "17806", "1", "0"); \
+	VALUES ("cerSim1", "blat4a", "17838", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("cerSim1", "blat4d", "17807", "0", "1");' \
+	VALUES ("cerSim1", "blat4a", "17839", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

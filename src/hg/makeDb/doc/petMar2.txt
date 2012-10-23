@@ -387,14 +387,14 @@ petMar2.perChromTables = no
     ssh hgwbeta "hgsql qapushq < /tmp/petMar2.sql"
 
 ##########################################################################
-#  BLATSERVERS ENTRY (DONE - 2012-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2012-10-23 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("petMar2", "blat4d", "17806", "1", "0"); \
+	VALUES ("petMar2", "blat4b", "17838", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("petMar2", "blat4d", "17807", "0", "1");' \
+	VALUES ("petMar2", "blat4b", "17839", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
