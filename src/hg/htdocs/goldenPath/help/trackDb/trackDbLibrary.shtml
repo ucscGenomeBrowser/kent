@@ -2202,7 +2202,7 @@
     <P>The bam coloring options are all user-configurable within the browser. If your
     bam dataset contains no color tags, this setting should be included to block the
     Browser from offering the option to color tags by an embedded RGB value.</P>
-    <P><class="example" /><B>Examples:</B></P>
+    <P><hr class="example" /><B>Examples:</B></P>
     <pre>
     bamColorMode strand
     noColorTag    </pre>
@@ -2291,12 +2291,12 @@
     bases). Use a larger range to increase the likelihood that both
     reads in a pair will be found even when only one read is in
     the viewed region.  Use a smaller range to speed image rendering.</P>
-    <P><class="example" /><B>Example:</B></P>
+    <P><hr class="example" /><B>Example:</B></P>
     <pre>
     pairedEndsByName .
     pairSearchRange 5000    </pre>
     <P>The dataset includes paired end tags. The maximum search range to join tag pairs
-    by name is capped at 5000.</P.
+    by name is capped at 5000.</P>
 </DIV>
 
 <DIV class="showNames"><span class="types bam"></span>
