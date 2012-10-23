@@ -355,24 +355,25 @@ petMar2.perChromTables = no
     make etc-update
 
 #########################################################################
-# set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
+# set default position as recommended from Jeramiah Smith
+#       (DONE - 2012-10-23 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="JH739914:135428-435957" where name="petMar2";' \
+'update dbDb set defaultPos="GL476334:480870-830419" where name="petMar2";' \
 	hgcentraltest
 
 ############################################################################
-# downloads and pushQ entry (DONE - 2012-07-27 - Hiram)
+# downloads and pushQ entry (DONE - 2012-10-23 - Hiram)
     # after adding petMar2 to the all.joiner file and verifying that
     #   joinerCheck is clean, can construct the downloads:
     cd /hive/data/genomes/petMar2
     time makeDownloads.pl -workhorse=hgwdev petMar2
-    #   real    11m40.799s
+    #   real    5m51.143s
 
     mkdir /hive/data/genomes/petMar2/pushQ
     cd /hive/data/genomes/petMar2/pushQ
     # Mark says don't let the transMap track get there
-    time makePushQSql.pl petMar2 2> stderr.txt | grep -v transMap > petMar2.sql
-    #   real    3m52.778s
+    time makePushQSql.pl petMar2 2> stderr.txt > petMar2.sql
+    #   real    3m38.916s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/petMar2/wib/gc5Base.wib
@@ -382,7 +383,7 @@ petMar2.perChromTables = no
 # WARNING: petMar2 does not have extFile
 # WARNING: petMar2 does not have estOrientInfo
 
-    scp -p petMar2.sql hgwbeta:/tmp
+    scp -p petMar2.sql hgwbeta:/tmp/
     ssh hgwbeta "hgsql qapushq < /tmp/petMar2.sql"
 
 ##########################################################################
