@@ -10173,6 +10173,7 @@ tag H3K09ME1
 type Antibody
 label H3K9me1 (ab8896)
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K9me1
+deprecated This was not found to be an effective antibody
 lab Bernstein
 lots 104560
 orderUrl http://www.abcam.com/index.html?datasheet=8896
@@ -11602,6 +11603,7 @@ tag POL2b
 type Antibody
 label POL2A (MMS-128P)
 antibodyDescription Mouse monoclonal, clone CTD4H8. Antibody Target: POLR2A
+deprecated This was not found the be an effective antibody
 lab Bernstein
 lots 147337002
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
