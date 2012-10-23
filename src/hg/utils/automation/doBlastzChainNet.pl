@@ -1152,7 +1152,7 @@ overlapping by " . &commafy($defVars{SEQ1_LAP}) . " bases for alignment.";
 by " . &commafy($defVars{SEQ1_LAP}) . " bases for alignment.  " .
 "A similar process was followed for $qDb,
 with chunks of " . &commafy($chunkPlusLap2) . " overlapping by " .
-&commafy($defVars{SEQ2_LAP}) . ".)";
+&commafy($defVars{SEQ2_LAP}) . ".";
   }
   $lap .= "  Following alignment, the
 coordinates of the chunk alignments were corrected by the
