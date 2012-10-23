@@ -466,3 +466,25 @@ TMPDIR=/scratch/tmp
     ln -s blastz.petMar2.swap lastz.petMar2
 
 ############################################################################
+# lastz swap Mouse mm10 (DONE - 2012-10-22 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19
+    cat fb.mm10.chainPetMar2Link.txt
+    #   28262565 bases of 2652783500 (1.065%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/petMar2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/petMar2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    7m2.754s
+    cat  fb.petMar2.chainHg19Link.txt
+    #	20923095 bases of 647368134 (3.232%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################

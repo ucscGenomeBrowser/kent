@@ -8114,6 +8114,7 @@ type Antibody
 label AP-2alpha (sc-8975)
 antibodyDescription Rabbit polyclonal - AP-2alpha (H-79) is a rabbit polyclonal antibody raised against amino acids 130-209 mapping within an internal region of AP-2alpha of human origin. Antibody Target: TFAP2A
 lab Farnham
+lots E0804
 orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
 target TFAP2A
 targetClass TFSS
@@ -8130,6 +8131,7 @@ type Antibody
 label AP-2gamma (sc-8977)
 antibodyDescription Rabbit polyclonal - AP-2Y (H-77) is a rabbit polyclonal antibody raised against amino acids 145-221 mapping with in an internal region of AP-2Y of human origin. Antibody Target: TFAP2C
 lab Farnham
+lots G1404
 orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
 target TFAP2C
 targetClass TFSS
@@ -8144,7 +8146,7 @@ term ARID3A_(NB100-279)
 tag ARID3ANB100279
 type Antibody
 label ARID3A (NB100-279)
-antibodyDescription Rabbit polyclonal, Immunogen: A synthetic peptide, which represented a portion of human Dead Ringer-Like 1 encoded within exon 8. Antibody Target: ARID3A
+antibodyDescription Rabbit polyclonal affinity purified antibody. Immunogen: A synthetic peptide, which represented a portion of human Dead Ringer-Like 1 encoded within exon 8. Antibody Target: ARID3A
 lab Snyder
 lots A1
 orderUrl http://www.novusbio.com/DRIL1-Antibody_NB100-279.html
@@ -8176,7 +8178,7 @@ term ATF1_(06-325)
 tag ATF106325
 type Antibody
 label ATF1 (06-325)
-antibodyDescription Sheep polyclonal, immunogen: CPVTLTSQTTKTDDPQL. Antibody Target: ATF1
+antibodyDescription Sheep polyclonal protein A/G affinity purified, immunogen: CPVTLTSQTTKTDDPQL. Antibody Target: ATF1
 lab Struhl
 orderUrl http://www.millipore.com/coa/tech1/74jm6a
 target ATF1
@@ -8207,7 +8209,7 @@ term ATF2_(sc-6233)
 tag ATF2SC6233
 type Antibody
 label ATF2 (sc-6233)
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 1-96 mapping at the N-terminus of ATF-2 of human origin. Antibody Target: ATF2
+antibodyDescription Rabbit polyclonal protein A/G affinity purified, epitope corresponding to amino acids 1-96 mapping at the N-terminus of ATF-2 of human origin. Antibody Target: ATF2
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-6233-atf-2-n-96-antibody.html
 target ATF2
@@ -8224,13 +8226,13 @@ type Antibody
 label ATF2 (sc-81188)
 antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of ATF2 of human origin. Antibody Target: ATF2
 lab Myers
-lots A1111
-orderUrl http://www.scbt.com/datasheet-81188-atf-2-atf25i062-antibody.html
+lots H0609
+orderUrl http://datasheets.scbt.com/sc-81188.pdf
 target ATF2
 targetDescription This gene encodes a transcription factor that is a member of the leucine zipper family of DNA binding proteins. This protein binds to the cAMP-responsive element (CRE), an octameric palindrome. The protein forms a homodimer or heterodimer with c-Jun and stimulates CRE-dependent transcription. The protein is also a histone acetyltransferase (HAT) that specifically acetylates histones H2B and H4 in vitro; thus it may represent a class of sequence-specific factors that activate transcription by direct effects on chromatin components. Additional transcript variants have been identified but their biological validity has not been determined. (provided by RefSeq)
 targetId GeneCard:ATF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
-validation Human_-_ATF2_(sc-81188)(Western_blot,IP-MassSpec):human_ATF2_SC-81188_sc-81188_validation_Myers.pdf
+validation Human_-_ATF2_(sc-81188)(Western_blot,IP-MassSpec):human_ATF2_SC-81188_validation_Myers.pdf
 vendorId sc-81188
 vendorName Santa Cruz Biotechnology
 
@@ -8247,7 +8249,7 @@ targetClass TFSS
 targetDescription Activating transcription factor 3. A bZIP transcription factor and member of the Ca2+/cAMP response element-binding (CREB) protein family. ATF3 is found to act both as an activator and repressor of transcription.
 targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
-validation Human_-_ATF3(Immunoblot):human_ATF3_validation_Myers.pdf
+validation Human_-_ATF3(sc-188)(Immunoblot):human_ATF3_SC-188_validation_Myers.pdf
 vendorId sc-188
 vendorName Santa Cruz Biotechnology
 
@@ -8280,7 +8282,7 @@ targetClass ChromRem
 targetDescription BAF155 (SMARCC1, Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
-validation Human_-_BAF155(Immunoprecipitation,IP-MassSpec):human_BAF155_validation_Snyder.pdf
+validation Human_-_BAF155(sc-10756)(Immunoprecipitation,IP-MassSpec):human_BAF155_SC-10756_validation_Snyder.pdf
 vendorId sc-10756
 vendorName Santa Cruz Biotechnology
 
@@ -8290,6 +8292,7 @@ type Antibody
 label BAF170 (sc-10757)
 antibodyDescription Rabbit polyclonal. BAF170 (H-116) is raised against amino acids 1093-1208 of BAF170 of human origin. Antibody Target: SMARCC2
 lab Snyder
+lots E0204
 orderUrl http://www.scbt.com/datasheet-10757-baf170-h-116-antibody.html
 target SMARCC2
 targetClass ChromRem
@@ -11911,7 +11914,6 @@ targetClass HISase
 targetDescription SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation Human_-_SETDB1_SC-66884(Immunoprecipitation,Western_blot,ChIP-seq):human_SETDB1-SC66884_validation_Farnham.pdf
 validation Human_-_SETDB1_(sc-66884)(Immunoprecipitation,Western_blot,ChIP-seq):human_SETDB1_SC66884_validation_Farnham.pdf
 vendorId sc-66884
 vendorName Santa Cruz Biotechnology
