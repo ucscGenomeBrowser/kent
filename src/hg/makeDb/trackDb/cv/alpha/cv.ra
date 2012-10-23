@@ -8242,7 +8242,7 @@ type Antibody
 label ATF3 (sc-188)
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of ATF3 of human origin. Antibody Target: ATF3
 lab Myers
-lots J2209, E1406
+lots J2209 E1406
 orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
 target ATF3
 targetClass TFSS
@@ -8422,14 +8422,13 @@ type Antibody
 label BHLHE40 (NB100-1800)
 antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412). Antibody Target: BHLHE40
 lab Snyder
-lots N/A
 orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
 target BHLHE40
 targetClass TFSS
 targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
-validation Human_-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-Mass_Spec):human_BHLHE40_NB100-1800_validation_Snyder.pdf Mouse-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-Mass_Spec):mouse_BHLHE40_NB100-1800_validation_Snyder.pdf
+validation Human_-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-MassSpec):human_BHLHE40_NB100-1800_validation_Snyder.pdf Mouse-_BHLHE40_(NB100-1800)(Immunoprecipitation,IP-MassSpec):mouse_BHLHE40_NB100-1800_validation_Snyder.pdf
 vendorId NB100-1800
 vendorName Novus Biologicals
 
@@ -8565,7 +8564,7 @@ tag CMYC
 type Antibody
 label c-Myc (sc-764)
 antibodyDescription Rabbit polyclonal to amino acids 1-262 of c-Myc human origin. Antibody Target: MYC
-lab Iyer, Snyder
+lab Crawford, Snyder
 lots H0107
 orderUrl http://www.scbt.com/product.php?datasheet=764
 target MYC
@@ -8692,16 +8691,16 @@ term CEBPB
 tag CEBPB
 type Antibody
 label CEBPB (sc-150)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: CEBPB
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of CEBPB of rat origin. Antibody Target: CEBPB
 lab Snyder, Myers
-lots I1010 (Myers)
+lots I1010
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 target CEBPB
 targetClass TFSS
 targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
-validation Human_-_CEPBbeta(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf Human_-_CEBPB(sc-150)(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
 vendorId sc-150
 vendorName Santa Cruz Biotechnology
 
@@ -8710,18 +8709,17 @@ tag CEBPBSC150
 type Antibody
 label CEBPB (sc-150)
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of CEBPB of rat origin. Antibody Target: CEBPB
-lab Myers
+lab Snyder,Myers
 lots I1010
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 target CEBPB
 targetClass TFSS
-targetDescription The protein encoded by this intronless gene is a bZIP transcription factor which can bind as a homodimer to certain DNA regulatory regions. It can also form heterodimers with the related proteins CEBP-alpha, CEBP-delta, and CEBP-gamma. The encoded protein is important in the regulation of genes involved in immune and inflammatory responses and has been shown to bind to the IL-1 response element in the IL-6 gene, as well as to regulatory regions of several acute-phase and cytokine genes. In addition, the encoded protein can bind the promoter and upstream element and stimulate the expression of the collagen type I gene (provided by RefSeq).
+targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
-validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf
+validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf Human_-_CEBPB(sc-150)(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
 vendorId sc-150
 vendorName Santa Cruz Biotechnology
-#This antibody had the wrong vendorId SC-49548, it should be SC-150.
 
 term CEBPD_(SC-636)
 tag CEBPDSC636
@@ -8933,8 +8931,8 @@ tag CTCF
 type Antibody
 label CTCF (07-729)
 antibodyDescription Rabbit polyclonal. Antibody Target: CTCF
-lab Myers, Hardison
-lots 1350637, DAM1472197
+lab Myers, Hardison, Snyder
+lots 1350637 DAM1472197
 orderUrl http://www.millipore.com/catalogue/item/07-729
 target CTCF
 targetClass TFSS
@@ -8951,7 +8949,7 @@ type Antibody
 label CTCF (2899)
 antibodyDescription Rabbit polyclonal, detects endogenous levels of total CTCF protein and doesn't cross-react with BORIS. Antibody Target: CTCF
 lab Stam
-lots Lot1
+lots 1
 orderUrl http://www.cellsignal.com/products/2899.html
 target CTCF
 targetClass TFSS
@@ -9436,7 +9434,7 @@ tag EGR1
 type Antibody
 label EGR1 (sc-110)
 antibodyDescription Rabbit polyclonal, EGR-1 (588). Antibody Target: EGR1
-lab Farnham
+lab Farnham,Myers
 orderUrl http://www.scbt.com/product.php?datasheet=110
 target EGR1
 targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factors belonging to the Egr C2H2-type zinc-finger protein family and containing three C2H2-type zinc fingers. As immediate early proteins, Egr transcription factors are rapidly induced by diverse extracellular stimuli. Egr proteins are subject to tight differential control through diverse mechanisms at several levels of regulation including transcriptional, translational and post-translational (including glyco- sylation, phosphorylation and redox) mechanisms and protein-protein inter- action. Egr-1 binds to the DNA sequence 5'-CGCCCCCGC-3' (EGR-site), there- by activating transcription of target genes whose products are required for mitogenisis and differentiation. Egr-2 binds specific DNA sites located in the promoter region of HoxA4. Egr-2 defects cause congenital hypomyelination neuropathy (also designated Charcot-Marie-tooth disease) and Dejerine- Sottas neuropathology (also designated hereditary motor and sensory neuro- pathy III. Egr-3 is involved in muscle spindle development and is expressed in T cells 20 minutes following activation. EGR-4 binds to the EGR consensus motif GCGTGGGCG, functions as a transcriptional repressor, and displays autoregulatory activities, downregulating its on gene promoter in a dose dependent manner.
@@ -9450,9 +9448,9 @@ term ELAVL1
 tag ELAVL1
 type Antibody
 label ELAVL1 (sc-5261; 07-1735)
-antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
+antibodyDescription Mouse monoclonal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
 lab Tenenbaum
-lots 1) B2508(Nov2008)
+lots 1) B2508
 orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html ; http://www.millipore.com/catalogue/item/07-1735
 target ELAVL1
 targetDescription (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
@@ -9516,8 +9514,8 @@ tag ERAA
 type Antibody
 label ERalpha a (sc-543)
 antibodyDescription Rabbit polyclonal affinity purified antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ESR1
-lab Ruan
-lots C2510, G1509
+lab Ruan, Myers
+lots C2510 G1509
 orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
 target ESR1
 targetClass TFSS
@@ -9900,7 +9898,7 @@ type Antibody
 label GR (sc-1003)
 antibodyDescription Rabbit polyclonal. Anti-GR. Antibody Target: NR3C1
 lab Myers
-lots A2508, E1908
+lots A2508  E1908
 orderUrl http://www.scbt.com/product.php?datasheet=1003
 target NR3C1
 targetClass TFSS
@@ -9981,7 +9979,6 @@ type Antibody
 label H3ac (06-599)
 antibodyDescription Rabbit polyclonal antibody raised against a KLH-conjugated peptide corresponding to amino acids 1-20 of Tetrahymena histone H3 (ARTKQTAR[K*]STGG[K*]APRKQLC) where K* is acetylated. Antibody Target: H3ac
 lab Wold
-lots missing
 orderUrl http://www.millipore.com/catalogue/item/06-599
 target H3ac
 targetDescription missing
@@ -9997,7 +9994,7 @@ type Antibody
 label H3K4me1 (ab8895)
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K4me1
 lab Bernstein, Ren, Hardison
-lots 383111, 720417
+lots 383111 720417
 orderUrl http://www.abcam.com/index.html?datasheet=8895
 target H3K4me1
 targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and downstream of transcription starts.
@@ -10014,7 +10011,7 @@ type Antibody
 label H3K4me1 (pAb-037-050)
 antibodyDescription Rabbit polyclonal antibody raised against histone H3 containing the monomethylated lysine 4 (H3K4me1), using a KLH-conjugated synthetic peptide. Antibody Target: H3K4me1
 lab Farnham
-lots Lot# A399-002341P
+lots A399-002341P
 orderUrl http://www.diagenode.com/en/catalog/antibodies-3/histone-h3-and-modified-h3-27/product/h3k4me1-polyclonal-antibody-37
 target H3K4me1
 targetDescription Histones are the main constituents of the protein part of chromosomes of eukaryotic cells. They are rich in the amino acids arginine and lysine and have been greatly conserved during evolution.Histone tails undergo numerous posttranslational modifications. This antibodies recognizes histone H3 monomethylated on lysine 4.
@@ -10046,7 +10043,7 @@ type Antibody
 label H3K4me2 (ab32356)
 antibodyDescription Rabbit monoclonal [Y47] to Histone H3 (di methyl K4) - ChIP Grade. Antibody Target: H3K4me2
 lab Wold, Ren
-lots 870402, 577702
+lots 870402 577702
 orderUrl http://www.abcam.com/Histone-H3-di-methyl-K4-antibody-Y47-ChIP-Grade-ab32356.html
 target H3K4me2
 targetDescription Histone H3 dimethylated on Lysine 4. Marks promoters and enhancers.
@@ -10062,7 +10059,7 @@ type Antibody
 label H3K4me3 (07-473)
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K4me3
 lab Bernstein, Hardison
-lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
+lots 498616 331024(ab8580)  R0903B0054(07-473)
 orderUrl http://www.abcam.com/index.html?datasheet=8580; http://www.millipore.com/catalogue/item/07-473
 target H3K4me3
 targetDescription Histone H3 (tri methyl K4). Marks promoters that are active or poised to be activated.
@@ -10095,7 +10092,7 @@ type Antibody
 label H3K4me3 (9751S)
 antibodyDescription Rabbit monoclonal antibody. Antibody Target: H3K4me3
 lab Farnham
-lots 1,2
+lots 1 2
 orderUrl http://www.cellsignal.com/products/9751.html
 target H3K4me3
 targetDescription Histone H3 (tri-methyl K4) marks promoters in chromatin regions
@@ -10158,7 +10155,6 @@ type Antibody
 label H3K9ac (07-352)
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
 lab Farnham
-lots unknown
 orderUrl http://www.millipore.com/catalogue/item/07-352
 target H3K9ac
 targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
@@ -10190,7 +10186,7 @@ tag H3K09ME3
 type Antibody
 label H3K9me3 (ab8898)
 antibodyDescription Rabbit polyclonal, ChIP grade. Antibody Target: H3K9me3
-lab Farnham, Ren, Hardison
+lab Farnham, Ren, Hardison, Bernstein
 lots 19208002
 orderUrl http://www.abcam.com/index.html?datasheet=8898
 target H3K9me3
@@ -10208,7 +10204,7 @@ type Antibody
 label H3K9me3 (9754)
 antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibody was purified by protein A and peptide affinity chromatography. Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 only when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methylated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, mono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20. Antibody Target: H3K9me3
 lab Farnham
-lots Lot#1
+lots 1
 orderUrl http://www.cellsignal.com/products/9754.html
 target H3K9me3
 targetDescription histone cluster 2, H3c, HIST2H3C
@@ -10303,7 +10299,7 @@ type Antibody
 label H3K36me3 (ab9050)
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K36me3
 lab Bernstein, Ren, Hardison
-lots 136353, 707946
+lots 136353 707946
 orderUrl http://www.abcam.com/index.html?datasheet=9050
 target H3K36me3
 targetDescription Specific for histone H3 tri methylated at lysine 36, weakly reacts with H3K36me2. Marks regions of RNAPII elongation, including coding and non-coding transcripts.
@@ -10656,7 +10652,6 @@ type Antibody
 label IKZF1 (IKZF1 (IkN))
 antibodyDescription Rabbit polyclonal antibody raised against a recombinant protein encompassing the amino-terminus of the murine IKZF1 protein. Antibody Target: IKZF1
 lab Farnham
-lots N/A
 orderUrl http://people.healthsciences.ucla.edu/institution/personnel?personnel_id=45693
 target IKZF1
 targetDescription IKAROS family zinc finger 1 (Ikaros or IKZF1) is a C2H2 zinc finger transcription factor that is associated with various chromatin-modifying complexes and is suggested to play a role in the development of lymphocytes, B- and T-cells.
@@ -10784,7 +10779,7 @@ tag JUND
 type Antibody
 label JunD (sc-74)
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: JunD
-lab Snyder
+lab Myers, Snyder 
 orderUrl http://www.scbt.com/product.php?datasheet=74
 target JunD
 targetClass TFSS
@@ -10818,7 +10813,6 @@ type Antibody
 label KAT3A (ab2832)
 antibodyDescription Rabbit polyclonal to a synthetic peptide, ATSSPATSQTGPGIC, corresponding to amino acids 162-176 in the nuclear factor binding domain of Human KAT3A / CBP. Antibody Target: CREBBP
 lab Bernstein
-lots NA
 orderUrl http://www.abcam.com/KAT3A--CBP-antibody-ChIP-Grade-ab2832.html
 target CREBBP
 targetDescription Cyclic AMP-responsive enhancer binding protein (CREB) binding protein (CBP) and p300 are closely related transcriptional coactivators that have been shown to directly interact with many different DNA-binding transcription factors. Both CBP and p300 have been shown to display histone acetyltransferase (HAT) activity, capable of acetylating all four core histone particles in nucleosomes.
@@ -11074,7 +11068,6 @@ type Antibody
 label MYOD (sc-32758)
 antibodyDescription Mouse monoclonal antibody raised against recombinant MYOD of mouse origin with an epitope mapping to amino acids 180-189. Antibody Target: MYOD1
 lab Wold
-lots missing
 orderUrl http://www.scbt.com/datasheet-32758-myod-5-8a-antibody.html
 target MYOD1
 targetDescription This gene encodes a nuclear protein that belongs to the basic helix-loop-helix family of transcription factors and the myogenic factors subfamily. It regulates muscle cell differentiation by inducing cell cycle arrest, a prerequisite for myogenic initiation. The protein is also involved in muscle regeneration. It activates its own transcription which may stabilize commitment to myogenesis. (provided by RefSeq)
@@ -11346,7 +11339,7 @@ tag P300
 type Antibody
 label P300&#47;EP300 (sc-585)
 antibodyDescription Rabbit polyclonal. Antibody Target: EP300
-lab Myers
+lab Myers, Ren
 orderUrl http://www.scbt.com/product.php?datasheet=585
 target EP300
 targetClass HISase
@@ -11587,7 +11580,7 @@ type Antibody
 label POL2 (MMS-126R)
 antibodyDescription Mouse monoclonal, clone 8WG16. Antibody Target: POLR2A
 lab Farnham, Iyer, Snyder
-lots 14861301, 14922701
+lots 14861301  14922701
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 target POLR2A
 targetClass Pol2
@@ -11621,7 +11614,7 @@ tag POL24H8
 type Antibody
 label Pol2-4H8 (ab5408)
 antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade. Antibody Target: POLR2A
-lab Myers
+lab Myers,Hardison
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
 target POLR2A
 targetClass Pol2
@@ -11734,7 +11727,7 @@ type Antibody
 label RAD21 (ab992)
 antibodyDescription Rabbit polyclonal. Antibody Target: RAD21
 lab Snyder
-lots 940739, 891751
+lots 940739 891751
 orderUrl http://www.abcam.com/index.html?datasheet=992
 target RAD21
 targetClass DNARep
@@ -12152,7 +12145,7 @@ type Antibody
 label STAT1 (sc-345)
 antibodyDescription Rabbit polyclonal to STAT1 (alpha) p-91 (C-24). Antibody Target: STAT1
 lab Snyder
-lots G2406 and K2106
+lots G2406 K2106
 orderUrl http://www.scbt.com/product.php?datasheet=345
 target STAT1
 targetClass TFSS
@@ -12298,7 +12291,7 @@ tag TAL1
 type Antibody
 label TAL1 (sc-12984)
 antibodyDescription Goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin, recommended for detection of TAL1 of mouse, rat and human origin. Antibody Target: TAL1
-lab Hardison
+lab Hardison, Snyder
 orderUrl http://www.scbt.com/datasheet-12984-tal1-c-21-antibody.html
 target TAL1
 targetClass TFSS
@@ -12854,7 +12847,6 @@ type Antibody
 label ZNF217 (ZNF217)
 antibodyDescription Rabbit polyclonal antibody raised against a recombinant ZNF217 protein corresponding to the 1562-2207 nucleotides from a human ZNF217 cDNA. Antibody Target: ZNF217
 lab Farnham
-lots N/A
 orderUrl http://stemcellcenter.berkeley.edu/PIs/yaswen.html
 target ZNF217
 targetDescription ZNF217 is an important oncogene based on the high frequency of amplification and overexpression in many cancer types, but its molecular mode of gene regulation is poorly understood. ZNF217 has been purified in complexes that contain repressor proteins such as CtBP2, suggesting that it acts as a transcriptional repressor. ZNF217 contains seven C2H2 zinc finger domains and has been shown to bind to gene promoters
@@ -16357,7 +16349,7 @@ label GENCODE annotation.
 cvDefined no
 deprecated No longer neede by GENCODE
 description GENCODE specifies if an annotation is done manually or automatically.
-optionalVars label,validation,targetUrl,lots,displayName,deprecated
+optionalVars label,validation,targetUrl,displayName,deprecated
 priority 590
 requiredVars term,tag,type,target,antibodyDescription,targetDescription,vendorName,vendorId,orderUrl,targetId,lab
 searchable no
