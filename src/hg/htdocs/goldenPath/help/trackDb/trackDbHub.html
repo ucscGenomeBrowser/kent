@@ -59,6 +59,8 @@
 
 <P>The remainder of this document is divided into the following sections and should be
 used as a ready reference.</P>
+<IMG class='toggle all' />&nbsp;<I>Expand/close descriptions of settings
+in the sections below.</I>
 
 <OL>
     <LI><A HREF="#commonSettings">Common trackDb settings</A></LI>
@@ -66,8 +68,8 @@ used as a ready reference.</P>
     <UL>
         <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>:
                                                                 Item or region tracks</LI>
-        <LI><A HREF="#bigWig_-_Signal_Graphing_Track_Settings">bigwWg/bamWig</A>:
-                                                                signal graphing tracks</LI>
+        <LI><A HREF="#bigWig_-_Signal_Graphing_Track_Settings">bigWig, bamWig</A>:
+                                                                Signal graphing tracks</LI>
         <LI><A HREF="#bam">bam</A>: Compressed Sequence Alignment/Map tracks</LI>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
     </UL></LI>
@@ -84,7 +86,6 @@ used as a ready reference.</P>
     </UL></LI>
     <LI><A HREF="#toc">Table of Contents</A></LI>
 </OL>
-<IMG class='toggle all' />&nbsp;<I>Open/close all details.</I>
 </div></div>
 
 <!-- Next section -->
@@ -191,9 +192,9 @@ used as a ready reference.</P>
 </div>
 <div class="borderGuard">
 
-<P>Many settings are only
-valid for certain types of tracks.  Below many of these track types
-are described along with their type specific settings.</P>
+<P>Many settings are 
+valid only for certain types of tracks.  Many of these tracks 
+are described below along with settings specific to their types.</P>
 
 <A name="bigBed"></A>
 <TABLE class="settingsTable" id="bigBed_-_Item_or_Region_Track_Settings">
@@ -258,7 +259,7 @@ are described along with their type specific settings.</P>
 
 <TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
     <TR VALIGN=TOP><TH><A name="item_lessFrequent"></A>
-            <IMG class='toggle oneSection' />&nbsp;Less frequently used item track settings:
+            <IMG class='toggle oneSection' />&nbsp;Less frequently used item track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="bedNameLabel"><A name="bedNameLabel"></A><IMG class='toggle detail'>
         <div class="format"><code>bedNameLabel &lt;label&gt;</code></div>
@@ -291,7 +292,7 @@ are described along with their type specific settings.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="bigBed_example">
         <A name="bigBed_Examples"></A><IMG class='toggle detail'>
-        <div class="format"><B>Examples of item base types:</B></div>
+        <div class="format"><B>Examples of item base types</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -358,7 +359,7 @@ are described along with their type specific settings.</P>
             <code>gridDefault   on</code></div>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="bigWig_example"><IMG class='toggle detail'>
-        <div class="format"><B>Examples of signal graphing tracks:</B></div>
+        <div class="format"><B>Examples of signal graphing tracks</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -397,6 +398,7 @@ are described along with their type specific settings.</P>
         <div class="format"><code>noColorTag .</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bamSkipPrintQualScore"><A name="bamSkipPrintQualScore"></A>
+        <IMG class='toggle detail'>
         <div class="format"><code>bamSkipPrintQualScore .</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="indelDoubleInsert">
@@ -434,7 +436,7 @@ are described along with their type specific settings.</P>
             <A onclick="return jumpTo(this);" HREF="#">showDiffBasesMaxZoom</A>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="bam_example"><IMG class='toggle detail'>
-        <div class="format"><B>Example for bam track:</B></div>
+        <div class="format"><B>Example of a bam track</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -460,7 +462,7 @@ are described along with their type specific settings.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="vcfTabix_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Example of a VCF track:</B></div>
+        <div class="format"><B>Example of a VCF track</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -488,7 +490,7 @@ into a single image.</P>
 <TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
 <THEAD><TR><TD><DIV ID="superTrack_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;Supertrack (aka Folders or Containers) track settings
+        &nbsp;Supertrack (Folders or Containers) settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="superTrack"><IMG class='toggle detail'>
         <div class="format"><code>superTrack on</code></div>
@@ -499,7 +501,7 @@ into a single image.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="superTrack_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Example of a Supertrack track:</B></div>
+        <div class="format"><B>Example of a Supertrack</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -526,7 +528,7 @@ into a single image.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="compositeTrack_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Example of a Composite track:</B></div>
+        <div class="format"><B>Example of a Composite track</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -567,7 +569,7 @@ into a single image.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="subGroups_hub_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Examples of Composite tracks with Subgroups:</B></div>
+        <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -597,7 +599,7 @@ into a single image.</P>
         <div class="format"><code>configurable &lt;off/on&gt;</code></div>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="view_example"><IMG class='toggle detail'>
-        <div class="format"><B>Example of a Composite track with Views:</B></div>
+        <div class="format"><B>Example of a Composite track with Views</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -624,7 +626,7 @@ into a single image.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="container_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Example of an Aggregate track:</B></div>
+        <div class="format"><B>Example of an Aggregate track</B></div>
     </TD></TR>
 </TABLE>
 </div></div>
