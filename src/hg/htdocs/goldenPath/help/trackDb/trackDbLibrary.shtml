@@ -183,7 +183,6 @@
     <P>
     <A onclick="return jumpTo(this);" HREF="#">altGraphX</A>,
     <A onclick="return jumpTo(this);" HREF="#">bam</A>,
-    <A onclick="return jumpTo(this);" HREF="#">bamWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">bed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bed5FloatScore</A>,
     <A onclick="return jumpTo(this);" HREF="#">bedGraph</A>,
@@ -1483,7 +1482,7 @@
 
 <!-- - - - - - - - WIG/BIGWIG settings - - - - - - - -->
 <DIV class="wig_intro">
-<H3>wig, bigWig, bedGraph, and bamWig: Signal graphing tracks </H3>
+<H3>wig, bigWig, and bedGraph: Signal graphing tracks </H3>
     <P>Another set of common track types is one that graphs a density signal along
     the genome. The graph can be a continuously varying density plot or
     one that displays a density signal in only certain regions.  The
@@ -1496,7 +1495,7 @@
 </DIV>
 
 <DIV class="bigWig_intro">
-<H3>bigWig, bamWig:  Signal graphing tracks </H3>
+<H3>bigWig:  Signal graphing tracks </H3>
     <P>Another set of common track types are those that graph a density signal along
     the genome. The graph can be a continuously varying density plot or
     one that displays a density signal in only certain regions.  For data hubs
@@ -1507,24 +1506,22 @@
     http://genome.ucsc.edu/goldenPath/help/bigWig.html</A>.</P>
 </DIV>
 
-<DIV class="wig"><span class="types wig bigWig bamWig"></span>
+<DIV class="wig"><span class="types wig bigWig"></span>
 <div class="format">
     <code>type wig &lt;low#&gt; &lt;high#&gt;</code><BR>
-    <code>type bigWig &lt;#&gt; &lt;#&gt;</code><BR>
-    <code>type bamWig &lt;#&gt; &lt;#&gt;</code></div>
+    <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
     <P>MySQL tables of type
     <code>wig</code> and remote data files of type <code>bigWig</code>
-    or <code>bamWig</code> must declare the expected signal range for
+    must declare the expected signal range for
     the data.</P>
     <P><em>Examples can be found below.</em></P>
 </DIV>
 
-<DIV class="bigWig"><span class="types bigWig bamWig"></span>
+<DIV class="bigWig"><span class="types bigWig"></span>
 <div class="format">
-    <code>type bigWig &lt;#&gt; &lt;#&gt;</code><BR>
-    <code>type bamWig &lt;#&gt; &lt;#&gt;</code></div>
+    <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
     <P>The remote data files of type <code>bigWig</code>
-    or <code>bamWig</code> must declare the expected signal range for
+    must declare the expected signal range for
     the data.</P>
     <P><em>Examples can be found below.</em></P>
 </DIV>
@@ -1578,7 +1575,7 @@
     </P>
 </DIV>
 
-<DIV class="autoScale"><span class="types wig bigWig bedGraph bamWig"></span>
+<DIV class="autoScale"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>autoScale &lt;off/on&gt;</code></div>
     <P>The graph of the
     data displayed in the Browser image is usually scaled on the y
@@ -1595,7 +1592,7 @@
     <pre>   autoScale on</pre>
 </DIV>
 
-<DIV class="graphTypeDefault"><span class="types wig bigWig bedGraph bamWig"></span>
+<DIV class="graphTypeDefault"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>graphTypeDefault points</code></div>
     <P>The signal can be
     graphed as either <code>points</code> displayed at the signal
@@ -1605,7 +1602,7 @@
     <pre>   graphTypeDefault points</pre>
 </DIV>
 
-<DIV class="maxHeightPixels"><span class="types wig bigWig bedGraph bamWig"></span>
+<DIV class="maxHeightPixels"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>maxHeightPixels &lt;max:default:min&gt;</code></div>
     <P>The amount of
     vertical viewing space for your signal track should be declared,
@@ -1644,7 +1641,7 @@
     <pre>   spanList 1</pre>
 </DIV>
 
-<DIV class="smoothingWindow"><span class="types wig bigWig bedGraph bamWig"></span>
+<DIV class="smoothingWindow"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>smoothingWindow &lt;off/1-16&gt;</code></div>
     <P>Often signal
     information is chunky, because a single value is given for a number of
@@ -1657,7 +1654,7 @@
     <pre>   smoothingWindow 4</pre>
 </DIV>
 
-<DIV class="transformFunc"><span class="types wig bigWig bedGraph bamWig bed"></span>
+<DIV class="transformFunc"><span class="types wig bigWig bedGraph bed"></span>
 <div class="format"><code>transformFunc &lt;NONE/LOG&gt;</code></div>
     <P>The track's signal
     can be presented in log scale with this user-configurable setting. Default: NONE.</P>
@@ -1665,7 +1662,7 @@
     <pre>   transformFunc LOG</pre>
 </DIV>
 
-<DIV class="viewLimits"><span class="types wig bigWig bedGraph bamWig"></span>
+<DIV class="viewLimits"><span class="types wig bigWig bedGraph"></span>
 <div class="format">
     <code>viewLimits &lt;lower:upper&gt;</code><BR>
     <code>viewLimitsMax &lt;lower:upper&gt;</code></div>
@@ -1708,7 +1705,7 @@
     purpose of highlighting the signal track.</P>
 </DIV>
 
-<DIV class="windowingFunction"><span class="types wig bigWig bedGraph bamWig"></span>
+<DIV class="windowingFunction"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>windowingFunction  &lt;mean/mean+whiskers/maximum/minimum&gt;</code></div>
     <P>Depending upon how large of a genomic region
     is displayed in the Browser image, it may be necessary to summarize
@@ -1731,7 +1728,7 @@
     may change this setting.</P>
 </DIV>
 
-<DIV class="yLineMark"><span class="types wig bigWig bedGraph bamWig"></span>
+<DIV class="yLineMark"><span class="types wig bigWig bedGraph"></span>
 <div class="format">
     <code>yLineMark &lt;#&gt;</code><BR>
     <code>yLineOnOff &lt;off/on&gt;</code><BR>
