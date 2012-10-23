@@ -135,7 +135,7 @@ else
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/vcf.html'>VCF</A>,\n"
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format13'>broadPeak</A>,\n"
-  " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format14'>narrowPeak</A>,\n"
+  " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format12'>narrowPeak</A>,\n"
   " or <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format2'>PSL</A>\n"
   " formats. To configure the display, set\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
