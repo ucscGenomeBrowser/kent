@@ -1304,7 +1304,7 @@ All files in this directory are freely available for public use.
 References
 
 Chiaromonte F, Yap VB, Miller W. Scoring pairwise genomic sequence
-alignments. Pac Symp Biocomput.  2002;:115-26.
+alignments. Pac Symp Biocomput.  2002:115-26.
 
 Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
 Evolution's cauldron: Duplication, deletion, and rearrangement in the
