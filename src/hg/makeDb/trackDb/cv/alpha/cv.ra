@@ -8692,7 +8692,7 @@ term CEBPB
 tag CEBPB
 type Antibody
 label CEBPB (sc-150)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: CEBPB
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of CEBPB of rat origin. Antibody Target: CEBPB
 lab Snyder, Myers
 lots I1010 (Myers)
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
@@ -8701,7 +8701,7 @@ targetClass TFSS
 targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
-validation Human_-_CEPBbeta(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf Human_-_CEBPB(sc-150)(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
 vendorId sc-150
 vendorName Santa Cruz Biotechnology
 
@@ -8710,18 +8710,17 @@ tag CEBPBSC150
 type Antibody
 label CEBPB (sc-150)
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of CEBPB of rat origin. Antibody Target: CEBPB
-lab Myers
+lab Snyder,Myers
 lots I1010
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 target CEBPB
 targetClass TFSS
-targetDescription The protein encoded by this intronless gene is a bZIP transcription factor which can bind as a homodimer to certain DNA regulatory regions. It can also form heterodimers with the related proteins CEBP-alpha, CEBP-delta, and CEBP-gamma. The encoded protein is important in the regulation of genes involved in immune and inflammatory responses and has been shown to bind to the IL-1 response element in the IL-6 gene, as well as to regulatory regions of several acute-phase and cytokine genes. In addition, the encoded protein can bind the promoter and upstream element and stimulate the expression of the collagen type I gene (provided by RefSeq).
+targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
-validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf
+validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf Human_-_CEBPB(sc-150)(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
 vendorId sc-150
 vendorName Santa Cruz Biotechnology
-#This antibody had the wrong vendorId SC-49548, it should be SC-150.
 
 term CEBPD_(SC-636)
 tag CEBPDSC636
@@ -9450,7 +9449,7 @@ term ELAVL1
 tag ELAVL1
 type Antibody
 label ELAVL1 (sc-5261; 07-1735)
-antibodyDescription 1) Mouse monoclonal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
+antibodyDescription Mouse monoclonal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
 lab Tenenbaum
 lots 1) B2508(Nov2008)
 orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html ; http://www.millipore.com/catalogue/item/07-1735
