@@ -24,7 +24,7 @@
 # rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Alligator_mississippiensis/allMis0.2/
 
 ##########################################################################
-# Download sequence (DONE - 2012-08-08 - Hiram)
+# Download sequence (DONE - 2012-08-23 - Hiram)
     mkdir /hive/data/genomes/allMis1
     cd /hive/data/genomes/allMis1
     mkdir genbank
@@ -54,18 +54,372 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Alliga
 # All AGP and FASTA entries agree - both files are valid
     #   real    0m59.548s
 
-XXX photo to be done, might use:
-XXX     https://green.soe.ucsc.edu/sites/default/files/ed-gator.JPG
-
     mkdir /hive/data/genomes/allMis1/photograph
     cd /hive/data/genomes/allMis1/photograph
-    wget -O female_galapagos_medium_ground_finch.jpg \
-http://upload.wikimedia.org/wikipedia/commons/7/7b/Female_Gal%C3%A1pagos_medium_ground_finch.jpg
-    convert -geometry "350x350" female_galapagos_medium_ground_finch.jpg \
-        Geospiza_fortis.jpg
+    wget --timestamping \
+        http://www.nasa.gov/centers/kennedy/images/content/91159main_93pc780.jpg
+
+    convert -geometry "220x300" 91159main_93pc780.jpg \
+        Alligator_Mississippiensis.jpg
     # check this .jpg file into the source tree kent/src/hg/htdocs/images/
-    git commit -m "from Wikimedia Commons - Charlesjsharp" Geospiza_fortis.jpg
+    git commit -m "gator photo from NASA Kennedy" Alligator_Mississippiensis.jpg
     # and copy to /usr/local/apache/htdocs/images
-    cp -p Geospiza_fortis.jpg /usr/local/apache/htdocs/images
+    cp -p Alligator_Mississippiensis.jpg /usr/local/apache/htdocs/images
 
 ##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2012-08-23 - Hiram)
+    # obtain a template for this from the source tree:
+    # kent/src/hg/utils/automation/configFiles/
+    # and check it back into the source tree when completed here:
+    cd /hive/data/genomes/geoFor1
+    cat << '_EOF_' > geoFor1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db allMis1
+clade vertebrate
+genomeCladePriority 68
+scientificName Alligator Mississippiensis
+commonName American alligator
+assemblyDate Aug. 2012
+assemblyLabel International Crocodilian Genomes Working Group
+assemblyShortLabel allMis0.2
+orderKey 4380
+mitoAcc NC_001922
+fastaFiles /hive/data/genomes/allMis1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/allMis1/genbank/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir gator
+photoCreditURL http://green.soe.ucsc.edu/
+photoCreditName Photo courtesy of the Green Lab, U.C. Santa Cruz
+ncbiGenomeId 13409
+ncbiAssemblyId 406428
+ncbiAssemblyName allMis0.2
+ncbiBioProject 159843
+genBankAccessionID GCA_000281125.1
+taxId 8496
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp allMis1.config.ra > agp.log 2>&1
+    #   real    2m32.247s
+    # verify OK:
+    tail -1 agp.log
+    #   *** All done!  (through the 'agp' step)
+
+    # finish it off
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+        -dbHost=hgwdev allMis1.config.ra > db.log 2>&1
+    #   real    16m30.326s
+    # was missing the photograph, it needs to exist for this to complete:
+    time makeGenomeDb.pl -continue=trackDb -workhorse=hgwdev \
+        -fileServer=hgwdev -dbHost=hgwdev allMis1.config.ra > trackDb.log 2>&1
+
+    #   real    9m24.133s
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/allMis1.unmasked.2bit /gbdb/allMis1/allMis1.2bit
+    #	browser should function now
+
+    hgsql -e 'update defaultDb set name="allMis1" where name="allMis9";' \
+        hgcentraltest
+
+##########################################################################
+# running repeat masker (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/allMis1/bed/repeatMasker
+    cd /hive/data/genomes/allMis1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek allMis1 > do.log 2>&1 &
+    #   real     50m40.986s
+XXX - finished ! - checking with Robert Hubley about this
+    # try this again with special library via John St. John - David Ray
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+        -customLib `pwd`/aMiss.rmsk.lib.v2.fa \
+	-smallClusterHub=encodek allMis1 > do.log 2>&1 &
+    #   real    160m45.535s
+XXX - finished ! - checking with Robert Hubley about this for a newer repeat lib
+
+    cat faSize.rmsk.txt
+    #   2174259888 bases (45539765 N's 2128720123 real 1587364247 upper
+    #   541355876 lower) in 14645 sequences in 1 files
+    #   Total size: mean 148464.3 sd 283017.8 min 816 (AKHW01085896)
+    #   max 4958242 (JH738473) median 25754
+    #   %24.90 masked total, %25.43 masked real
+
+    egrep -i "versi|relea" do.log
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+# CC   RELEASE 20110920;
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+
+    featureBits -countGaps allMis1 rmsk
+    #   60063362 bases of 1065292181 (5.638%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-08-28 - Hiram)
+    mkdir /hive/data/genomes/allMis1/bed/simpleRepeat
+    cd /hive/data/genomes/allMis1/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	allMis1 > do.log 2>&1 &
+    #   real    9m46.133s
+
+    cat fb.simpleRepeat
+    #   22565360 bases of 2129659933 (1.060%) in intersection
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/allMis1/bed/gap
+    cd /hive/data/genomes/allMis1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../allMis1.unmasked.2bit > findMotif.txt 2>&1
+    #   real    0m29.584s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits allMis1 -not gap -bed=notGap.bed
+    #   2129659933 bases of 2129659933 (100.000%) in intersection
+    #   real    0m16.373s
+
+    # can see now if allGaps.bed actually is all the gaps:
+    hgsql -N -e "select size from gap;" allMis1 | ave stdin | grep total
+# total 44599955.000000
+    ave -col=5 allGaps.bed | grep total
+# total 45539765.000000
+    # not the same count, not all gaps are marked
+
+    time featureBits allMis1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   939810 bases of 2129659933 (0.044%) in intersection
+    #   real    44m59.537s
+XXX - ready to continue this
+
+    # check if any non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" allMis1 | sort | uniq -c
+    #  68589 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/allMis1/bed/windowMasker
+    cd /hive/data/genomes/allMis1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev allMis1 > do.log 2>&1 &
+    #   real    161m54.809s
+XXX - ready to continue - Wed Aug 29 11:13:21 PDT 2012
+
+    # Masking statistics
+    cat faSize.allMis1.wmsk.txt
+    #   2174259888 bases (45539765 N's 2128720123 real 1521018315 upper
+    #   607701808 lower) in 14645 sequences in 1 files
+    #   Total size: mean 148464.3 sd 283017.8 min 816 (AKHW01085896)
+    #   max 4958242 (JH738473) median 25754
+    #   %27.95 masked total, %28.55 masked real
+
+    cat faSize.allMis1.wmsk.sdust.txt
+    #   2174259888 bases (45539765 N's 2128720123 real 1508788037
+    #   upper 619932086 lower) in 14645 sequences in 1 files
+    #   Total size: mean 148464.3 sd 283017.8 min 816 (AKHW01085896)
+    #   max 4958242 (JH738473) median 25754
+    #   %28.51 masked total, %29.12 masked real
+
+    cat faSize.allMis1.cleanWMSdust.txt
+    #   2174259888 bases (45539765 N's 2128720123 real 1508788037
+    #   upper 619932086 lower) in 14645 sequences in 1 files
+    #   Total size: mean 148464.3 sd 283017.8 min 816 (AKHW01085896)
+    #   max 4958242 (JH738473) median 25754
+    #   %28.51 masked total, %29.12 masked real
+
+    cat fb.allMis1.windowmaskerSdust.clean.txt
+    #   619953052 bases of 2174259888 (28.513%) in intersection
+
+    # how much does this window masker and repeat masker overlap:
+    # can be done after rmsk is done
+XXX - waiting for RM to finish - Wed Aug 29 11:20:00 PDT 2012
+    featureBits -countGaps allMis1 rmsk windowmaskerSdust
+    #   32967187 bases of 1065292181 (3.095%) in intersection
+
+##########################################################################
+# add simpleRepeats to WindowMasker result (DONE - 2012-07-26 - Hiram)
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/allMis1
+    twoBitMask -add bed/windowMasker/allMis1.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed allMis1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa allMis1.2bit stdout | faSize stdin > faSize.allMis1.2bit.txt
+    cat faSize.allMis1.2bit.txt
+    #   1065292181 bases (24006152 N's 1041286029 real 833083628 upper
+    #           208202401 lower) in 27239 sequences in 1 files
+    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
+    #           max 30495534 (JH739887) median 598
+    #   %19.54 masked total, %19.99 masked real
+
+    rm /gbdb/allMis1/allMis1.2bit
+    ln -s `pwd`/allMis1.2bit /gbdb/allMis1/allMis1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/allMis1/bed/cpgIslands
+    cd /hive/data/genomes/allMis1/bed/cpgIslands
+    time doCpgIslands.pl allMis1 > do.log 2>&1
+    #   real    17m6.876s
+
+    cat fb.allMis1.cpgIslandExt.txt
+    #   5087816 bases of 1041286029 (0.489%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2012-07-26 - Hiram)
+    mkdir /hive/data/genomes/allMis1/bed/genscan
+    cd /hive/data/genomes/allMis1/bed/genscan
+    time doGenscan.pl allMis1 > do.log 2>&1
+    #   real    31m32.788s
+# Completed: 27239 of 27239 jobs
+# CPU time in finished jobs:         28s       0.47m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                 96830s    1613.83m    26.90h    1.12d  0.003 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:           154s       2.57m     0.04h    0.00d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    cat fb.allMis1.genscan.txt
+    #   18118133 bases of 1041286029 (1.740%) in intersection
+    cat fb.allMis1.genscanSubopt.txt
+    #   22582067 bases of 1041286029 (2.169%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-07-26 - Hiram)
+    # Use -repMatch=400, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1041286029 / 2897316137 \) \* 1024
+    #   ( 1041286029 / 2897316137 ) * 1024 = 368.022281
+
+    # round up to 400 (melUnd1 was also 400)
+
+    cd /hive/data/genomes/allMis1
+    time blat allMis1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/allMis1.11.ooc -repMatch=400
+    #   Wrote 14450 overused 11-mers to jkStuff/allMis1.11.ooc
+    #   real    0m32.689s
+    #   melUnd1 was: Wrote 14287 overused 11-mers to jkStuff/melUnd1.11.ooc
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" allMis1 | sort | uniq -c
+    #   68589 yes
+#    cd /hive/data/genomes/allMis1/jkStuff
+#    gapToLift allMis1 allMis1.nonBridged.lift -bedFile=allMis1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' allMis1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-07-26 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Geospiza fortis	1	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add allMis1 just after ce2
+# allMis1 (Medium Ground Finch - Darwin finch)
+allMis1.serverGenome = /hive/data/genomes/allMis1/allMis1.2bit
+allMis1.clusterGenome = /hive/data/genomes/allMis1/allMis1.2bit
+allMis1.ooc = /hive/data/genomes/allMis1/jkStuff/allMis1.11.ooc
+allMis1.lift = no
+allMis1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+allMis1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+allMis1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+allMis1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+allMis1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+allMis1.refseq.mrna.native.load = no
+allMis1.refseq.mrna.xeno.load = yes
+allMis1.genbank.mrna.xeno.load = no
+allMis1.genbank.est.native.load = no
+allMis1.downloadDir = allMis1
+allMis1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding allMis1 medium ground finch" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding definition for geoForNames" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S allMis1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial allMis1 &
+    #   var/build/logs/2012.07.26-22:50:11.allMis1.initalign.log
+    #   real    175m22.294s
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad allMis1 &
+    #   real    9m57.487s
+    #   var/dbload/hgwdev/logs/2012.07.27-14:05:35.dbload.log
+
+    # check the end of that dbload.log to see if it was successful
+    #   hgwdev 2012.07.27-14:15:33 dbload: finish
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-05-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add allMis1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added allMis1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="JH739914:135428-435957" where name="allMis1";' \
+	hgcentraltest
+
+############################################################################
+# downloads and pushQ entry (DONE - 2012-07-27 - Hiram)
+    # after adding allMis1 to the all.joiner file and verifying that
+    #   joinerCheck is clean, can construct the downloads:
+    cd /hive/data/genomes/allMis1
+    time makeDownloads.pl -workhorse=hgwdev allMis1
+    #   real    11m40.799s
+
+    mkdir /hive/data/genomes/allMis1/pushQ
+    cd /hive/data/genomes/allMis1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl allMis1 2> stderr.txt | grep -v transMap > allMis1.sql
+    #   real    3m52.778s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/allMis1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/allMis1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/allMis1/bbi/quality.bw
+# WARNING: allMis1 does not have seq
+# WARNING: allMis1 does not have extFile
+# WARNING: allMis1 does not have estOrientInfo
+
+    scp -p allMis1.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/allMis1.sql"
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2012-08-03 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("allMis1", "blat4d", "17806", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("allMis1", "blat4d", "17807", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################

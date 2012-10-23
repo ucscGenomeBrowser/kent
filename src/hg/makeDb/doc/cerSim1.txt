@@ -385,26 +385,26 @@ cerSim1.perChromTables = no
     git push
     make etc-update
 
-XXX - ready to continue - Wed Sep  5 16:12:53 PDT 2012
 #########################################################################
 # set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
+XXX - to be done - Tue Oct 16 15:03:19 PDT 2012
     hgsql -e \
 'update dbDb set defaultPos="JH739914:135428-435957" where name="cerSim1";' \
 	hgcentraltest
 
 ############################################################################
-# downloads and pushQ entry (DONE - 2012-07-27 - Hiram)
+# downloads and pushQ entry (DONE - 2012-10-16 - Hiram)
     # after adding cerSim1 to the all.joiner file and verifying that
     #   joinerCheck is clean, can construct the downloads:
     cd /hive/data/genomes/cerSim1
     time makeDownloads.pl -workhorse=hgwdev cerSim1
-    #   real    11m40.799s
+    #   real    23m8.762s
 
     mkdir /hive/data/genomes/cerSim1/pushQ
     cd /hive/data/genomes/cerSim1/pushQ
     # Mark says don't let the transMap track get there
-    time makePushQSql.pl cerSim1 2> stderr.txt | grep -v transMap > cerSim1.sql
-    #   real    3m52.778s
+    time makePushQSql.pl cerSim1 2> stderr.txt > cerSim1.sql
+    #   real    3m39.347s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/cerSim1/wib/gc5Base.wib
@@ -421,7 +421,7 @@ XXX - ready to continue - Wed Sep  5 16:12:53 PDT 2012
 #  BLATSERVERS ENTRY (DONE - 2012-08-03 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
-
+XXX - to be done - Tue Oct 16 15:03:19 PDT 2012
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
 	VALUES ("cerSim1", "blat4d", "17806", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \

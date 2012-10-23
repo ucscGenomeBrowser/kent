@@ -1617,7 +1617,7 @@ identifier proteinAccession typeOf=genbankAccession fuzzy
     $kgDb.kgProtAlias.alias
     $kgDb.kgSpAlias.alias minCheck=0.1
     $kgDb.kgXref.protAcc
-    $gbd.refLink.protAcc
+    $gbd,!dm3.refLink.protAcc
 
 identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."

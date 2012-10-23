@@ -41,6 +41,7 @@ my $chrCount = 0;
 foreach my $chr (sort (keys %chromInfo)) {
     next if ($chr =~ m/random/);
     next if ($chr =~ m/chrM/);
+    next if ($chr =~ m/chrUn/);
     die "no zero coordinate on chrom $chr" if (!exists($zeros{$chr}));
     die "no end coordinate on chrom $chr" if (!exists($ends{$chr}));
     ++$chrCount;
