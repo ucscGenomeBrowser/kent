@@ -407,6 +407,13 @@ void printOtherSnpMappings(char *table, char *name, int start,
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 /* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
 
+void printDbSnpRsUrl(char *rsId, char *labelFormat, ...)
+/* Print a link to dbSNP's report page for an rs[0-9]+ ID. */
+#ifdef __GNUC__
+__attribute__((format(printf, 2, 3)))
+#endif
+    ;
+
 void doBamDetails(struct trackDb *tdb, char *item);
 /* Show details of an alignment from a BAM file. */
 
