@@ -573,3 +573,25 @@ TMPDIR=/scratch/tmp
     ln -s blastz.melUnd1.swap lastz.melUnd1
 
 ##############################################################################
+# lastz Mouse mm10 (DONE - 2012-04-02 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzMelUnd1.2012-03-29
+    cat fb.mm10.chainMelUnd1Link.txt
+    #	95217653 bases of 2652783500 (3.589%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/melUnd1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/melUnd1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzMelUnd1.2012-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    9m9.260s
+    cat  fb.melUnd1.chainMm10Link.txt
+    #	79867911 bases of 1086614815 (7.350%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/melUnd1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
