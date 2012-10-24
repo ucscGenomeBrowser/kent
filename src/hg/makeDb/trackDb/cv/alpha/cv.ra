@@ -8307,7 +8307,7 @@ term BATF
 tag BATF
 type Antibody
 label BATF (sc-100974)
-antibodyDescription Mouse monoclonal. Raised against recombinant B-ATF of human origin. Recommended for detection of B-ATF of m, r and h origin by WB, IP and ELISA. Antibody Target: BATF
+antibodyDescription Mouse monoclonal. Raised against recombinant B-ATF of human origin. Antibody Target: BATF
 lab Myers
 orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
 target BATF
@@ -8323,7 +8323,7 @@ term BCL11A
 tag BCL11A
 type Antibody
 label BCL11A (ab19489)
-antibodyDescription Mouse monoclonal [18B12DE6] to Ctip1. Raised against a cocktail of BCL11A fusion proteins. Reacts with human and mouse. Tested for ICC/IF, IHC-P, IP, WB. Antibody Target: BCL11A
+antibodyDescription Mouse monoclonal [18B12DE6] to Ctip1. Raised against a cocktail of BCL11A fusion proteins. Antibody Target: BCL11A
 lab Myers
 orderUrl http://www.abcam.com/Ctip1-antibody-18B12DE6-ab19489.html
 target BCL11A
@@ -8356,7 +8356,7 @@ term BCL3
 tag BCL3
 type Antibody
 label BCL3 (sc-185)
-antibodyDescription Rabbit polyclonal. Bcl-3(C-14) is an affinity purified antibody raised against a peptide mapping at the C-terminus of Bcl-3 of human origin. Recommended for detection of Bcl-3 of mouse, rat and human origin by WB, IP, IF and ELISA. Antibody Target: BCL3
+antibodyDescription Rabbit polyclonal. Bcl-3(C-14) is an affinity purified antibody raised against a peptide mapping at the C-terminus of Bcl-3 of human origin. Antibody Target: BCL3
 lab Myers
 orderUrl http://www.scbt.com/datasheet-185-bcl-3-c-14-antibody.html
 target BCL3
@@ -8404,7 +8404,7 @@ term BHLHE40
 tag BHLHE40
 type Antibody
 label BHLHE40 (sc-101023)
-antibodyDescription Mouse monoclonal. Dec-1(S-8) is an IgG2b antibody raised against recombinant DEC1 of human origin. Recommended for detection of DEC1 of mouse and human origin by WB, IP and ELISA. Antibody Target: BHLHE40
+antibodyDescription Mouse monoclonal. Dec-1(S-8) is an IgG2b antibody raised against recombinant DEC1 of human origin. Antibody Target: BHLHE40
 lab Myers, Snyder
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 target BHLHE40
@@ -8627,7 +8627,7 @@ term CBX8
 tag CBX8
 type Antibody
 label CBX8 (A300-882A)
-antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated, Liquid. Antibody Target: CBX8
+antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated Antibody Target: CBX8
 lab Bernstein
 lots A300-882A-1
 orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
@@ -8643,7 +8643,7 @@ term CCNT2
 tag CCNT2
 type Antibody
 label CCNT2 (sc-12419)
-antibodyDescription Goat polyclonal. Raised against an internal region of human CycT2a/b. Recommeded for detection of CycT2a/b of rat, mouse or human origin. Vendor recommeds it use for the folloiwng applications: WB, IF and ELISA. Antibody Target: CCNT2
+antibodyDescription Goat polyclonal. Raised against an internal region of human CycT2a/b. Antibody Target: CCNT2
 lab Struhl
 lots H2306
 orderUrl http://www.scbt.com/datasheet-12419-cyclin-t2a-b-a-20-antibody.html
@@ -8757,7 +8757,7 @@ term CELF1
 tag CELF1
 type Antibody
 label CELF1 (05-621)
-antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA. Antibody Target: CELF1
+antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Antibody Target: CELF1
 lab Tenenbaum
 orderUrl http://www.millipore.com/
 target CELF1
@@ -8868,7 +8868,7 @@ term COREST_(sc-30189)
 tag CORESTSC30189
 type Antibody
 label RCOR1&#47;COREST (sc30189)
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin. Antibody Target: RCOR1
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin Antibody Target: RCOR1
 lab Snyder
 lots C0806
 orderUrl http://www.scbt.com/datasheet-30189-corest-h-65-antibody.html
@@ -9044,7 +9044,7 @@ term E2F1
 tag E2F1
 type Antibody
 label E2F1 (05-379)
-antibodyDescription Mouse monoclonal. E2F1(KH20 and KH95) Epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386. Recommended for detection of E2F1 of H and Xn origin by WB and IP. Antibody Target: E2F1
+antibodyDescription Mouse monoclonal. E2F1(KH20 and KH95) Epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386. Antibody Target: E2F1
 lab Farnham
 orderUrl http://www.millipore.com/catalogue/item/05-379#
 target E2F1
@@ -9513,7 +9513,7 @@ term ERalpha_a
 tag ERAA
 type Antibody
 label ERalpha a (sc-543)
-antibodyDescription Rabbit polyclonal affinity purified antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Recommended for detection of estrogen receptor of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: ESR1
+antibodyDescription Rabbit polyclonal affinity purified antibody. Epitope is the C-terminus of human estrogen receptor alpha (ESR1). Antibody Target: ESR1
 lab Ruan, Myers
 lots C2510 G1509
 orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
@@ -9643,7 +9643,7 @@ term FOSL2
 tag FOSL2
 type Antibody
 label FOSL2 (sc-604)
-antibodyDescription Rabbit polyclonal. Fra-2(Q-20) is an affinity purified raised against the N-terminus of Fra-2 of human origin. Recommended for detection of Fra-2 of m, r, h and chicken origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: FOSL2
+antibodyDescription Rabbit polyclonal. Fra-2(Q-20) is an affinity purified raised against the N-terminus of Fra-2 of human origin. Antibody Target: FOSL2
 lab Myers
 orderUrl http://www.scbt.com/datasheet-604-fra-2-q-20-antibody.html
 target FOSL2
@@ -11403,7 +11403,7 @@ term PABPC1
 tag PABPC1
 type Antibody
 label PABPC1 (04-1467)
-antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of human, Rb, and Xenopus origin by IF, IP, and WB. Antibody Target: PABPC1
+antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Antibody Target: PABPC1
 lab Tenenbaum
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 target PABPC1
@@ -11419,7 +11419,7 @@ term PAX5-C20
 tag PAX5
 type Antibody
 label PAX5 (sc-1974)
-antibodyDescription Goat polyclonal IgG, 200 micrograms/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: PAX5
+antibodyDescription Goat polyclonal IgG, 200 micrograms/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Antibody Target: PAX5
 lab Myers
 orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 target PAX5
@@ -11435,7 +11435,7 @@ term PAX5-N19
 tag PAX5b
 type Antibody
 label PAX5 (sc-1975)
-antibodyDescription Goat polyclonal IgG, 200 micrograms /ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA. Antibody Target: PAX5
+antibodyDescription Goat polyclonal IgG epitope mapping at the N-terminus of Pax-5 of human origin. Antibody Target: PAX5
 lab Myers
 orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 target PAX5
@@ -11677,7 +11677,7 @@ term POU2F2
 tag POU2F2
 type Antibody
 label POU2F2 (sc-233)
-antibodyDescription Rabbit polyclonal. Oct-2(C-20) is an affinity purified antibody raised against a peptide mapping at the C-terminus of Oct-2 of human origin. Recommended for detection of Oct-2 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: POU2F2
+antibodyDescription Rabbit polyclonal. Oct-2(C-20) is an affinity purified antibody raised against a peptide mapping at the C-terminus of Oct-2 of human origin. Antibody Target: POU2F2
 lab Myers
 orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 target POU2F2
@@ -11853,7 +11853,7 @@ term RXRA
 tag RXRA
 type Antibody
 label RXRA (sc-553)
-antibodyDescription Rabbit polyclonal. RXRa(D-20) is an affinity purified antibody raised against a peptide mapping at the N-terminus of RXRalpha of human origin. Recommended for detection of RXRalpha of m, r and h origin by WB, IP, IF, IHC(P) and ELISA. Antibody Target: RXRA
+antibodyDescription Rabbit polyclonal. RXRa(D-20) is an affinity purified antibody raised against a peptide mapping at the N-terminus of RXRalpha of human origin. Antibody Target: RXRA
 lab Myers
 orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
 target RXRA
@@ -11901,7 +11901,7 @@ term SETDB1_(SC-66884)
 tag SETDB1b
 type Antibody
 label SETDB1 (sc-66884)
-antibodyDescription Rabbit polyclonal. SETDB1 (H-300) is an affinity purified antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog. Antibody Target: SETDB1
+antibodyDescription Rabbit polyclonal. SETDB1 (H-300) is an affinity purified antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Antibody Target: SETDB1
 lab Farnham
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 target SETDB1
@@ -11983,7 +11983,7 @@ term SIX5
 tag SIX5
 type Antibody
 label SIX5 (sc-55706)
-antibodyDescription Goat polyclonal IgG. Six5 (K-20) Epitope mapping near the C-terminus of Six5 of human origin. Recommended for detection of Six5 of human origin by WB, IF and ELISA. Antibody Target: SIX5
+antibodyDescription Goat polyclonal IgG. Six5 (K-20) Epitope mapping near the C-terminus of Six5 of human origin. Antibody Target: SIX5
 lab Myers
 orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
 target SIX5
@@ -11999,7 +11999,7 @@ term SLBP
 tag SLBP
 type Antibody
 label SLBP (06-1376)
-antibodyDescription Rabbit polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. Antibody Target: SLBP
+antibodyDescription Rabbit polyclonal. Antibody Target: SLBP
 lab Tenenbaum
 orderUrl http://www.millipore.com/catalogue/item/06-1376
 target SLBP
@@ -12029,7 +12029,7 @@ term SP1
 tag SP1
 type Antibody
 label SP1 (sc-17824)
-antibodyDescription Mouse monoclonal. Sp1(E-3) is raised against amino acids 121-345 mapping near the N-terminus of Sp1 ofhuman origin. Recommended for detection of Sp1 of m, r and h origin by WB, IP, IF and ELISA. Antibody Target: SP1
+antibodyDescription Mouse monoclonal. Sp1(E-3) is raised against amino acids 121-345 mapping near the N-terminus of Sp1 of human origin. Antibody Target: SP1
 lab Myers
 orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
 target SP1
@@ -12192,7 +12192,7 @@ term STAT5A_(SC-74442)
 tag STAT5ASC74442
 type Antibody
 label STAT5A (sc-74442)
-antibodyDescription Mouse monoclonal IgG, recommended for the detection of Stat5a and Stat5b of human origin by WB, IP, IF and ELISA. Antibody Target: STAT5A
+antibodyDescription Mouse monoclonal IgG. Antibody Target: STAT5A
 lab Myers
 lots G0208
 orderUrl http://www.scbt.com/datasheet-74442-stat5-a-9-antibody.html
@@ -12290,7 +12290,7 @@ term TAL1_(SC-12984)
 tag TAL1
 type Antibody
 label TAL1 (sc-12984)
-antibodyDescription Goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin, recommended for detection of TAL1 of mouse, rat and human origin. Antibody Target: TAL1
+antibodyDescription Goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin. Antibody Target: TAL1
 lab Hardison, Snyder
 orderUrl http://www.scbt.com/datasheet-12984-tal1-c-21-antibody.html
 target TAL1
@@ -12386,7 +12386,7 @@ term TCF3_(SC-349)
 tag TCF3
 type Antibody
 label TCF3 (sc-349)
-antibodyDescription Rabbit polyclonal. E2A.E12(V-18) is an affinity purified antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Recommended for detection of E12 and E47 of m, r and h origin by WB, IP, IF, IHC(P), ELISA and indirect FCM using PE (sc-3739)- or FITC (sc-2012)-conjugated goat anti-rabbit IgG. Antibody Target: TCF3
+antibodyDescription Rabbit polyclonal. E2A.E12(V-18) is an affinity purified antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Antibody Target: TCF3
 lab Myers
 lots A1111
 orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
@@ -12650,7 +12650,7 @@ term USF2_(C-20)
 tag USF2b
 type Antibody
 label USF2 (sc-862)
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of USF-2 of mouse origin. Recommended for detection of USF-2 p44 of mouse, rat and human. Antibody Target: USF2
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of USF-2 of mouse origin. Antibody Target: USF2
 lab Myers
 lots J0908
 orderUrl http://www.scbt.com/datasheet-862-usf-2-c-20-antibody.html
@@ -12732,7 +12732,7 @@ term ZBTB33
 tag ZBTB33
 type Antibody
 label ZBTB33 (sc-23871)
-antibodyDescription Mouse monoclonal IgG1. Kaiso (6F8) was raised against amino acids 1-504 representing full length Kaiso of human origin. Recommended for detection of Kaiso of m, r, h, canine and chicken origin by WB, IP, IF and ELISA. Antibody Target: ZBTB33
+antibodyDescription Mouse monoclonal IgG1. Kaiso (6F8) was raised against amino acids 1-504 representing full length Kaiso of human origin. Antibody Target: ZBTB33
 lab Myers
 orderUrl http://www.scbt.com/datasheet-23871-kaiso-6f8-antibody.html
 target ZBTB33
@@ -12876,7 +12876,7 @@ term ZNF274
 tag ZNF274
 type Antibody
 label ZNF274 (H00010782-A01)
-antibodyDescription Mouse polyclonal antibody raised against a partial recombinant ZNF274 (GST-fusion of a.a.420-531 of human ZNF274 protein). Works in IP, WB and ELISA. Antibody Target: ZNF274
+antibodyDescription Mouse polyclonal antibody raised against a partial recombinant ZNF274 (GST-fusion of a.a.420-531 of human ZNF274 protein). Antibody Target: ZNF274
 lab Farnham
 lots 060729QCS1
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-A01
