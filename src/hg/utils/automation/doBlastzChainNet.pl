@@ -1061,11 +1061,14 @@ md5sum $tDb.$qDb.all.chain.gz $net > md5sum.txt
 _EOF_
   );
   if (! $isSelf) {
+    my $axt = ($splitRef ?
+	       "md5sum axtNet/*.gz >> axtChain/md5sum.txt" :
+	       "cd axtNet\nmd5sum *.gz >> ../axtChain/md5sum.txt");
     $bossScript->add(<<_EOF_
 rm -f $liftOverDir/$over
 cp -p $altOver $liftOverDir/$over
 cd ..
-md5sum axtNet/*.gz >> axtChain/md5sum.txt
+$axt
 _EOF_
     );
   }
