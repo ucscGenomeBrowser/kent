@@ -145,15 +145,9 @@ in the sections below.</I>
     <TR VALIGN=TOP><TD class="dataVersion"><A name="dataVersion"></A><IMG class='toggle detail'>
         <div class="format"><code>dataVersion &lt;str&gt;</code></div>
     </TD></TR>
-    <TR class="related1st" VALIGN=TOP><TD class="directUrl">
-        <A name="directUrl"></A>
-        <A name="hgsid"></A><IMG class='toggle detail setA'>
-        <div class="format"><I>Related settings:</I><BR>
-            <code>directUrl &lt;url&gt;</code><div>
-    </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="hgsid">
-        <IMG class='toggle detail setA'>
-        <div class="format"><code>hgsid on</code></div>
+    <TR VALIGN=TOP><TD class="directUrl_for_hubs">
+        <A name="directUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code>directUrl &lt;url&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="otherDb"><A name="otherDb"></A><IMG class='toggle detail'>
         <div class="format"><code>otherDb &lt;otherDb&gt;</code></div>
@@ -268,10 +262,6 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="exonArrowsDense">
         <A name="exonArrowsDense"></A><IMG class='toggle detail'>
         <div class="format"><code>exonArrowsDense &lt;off/on&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="itemDetailsHtmlTable">
-        <A name="itemDetailsHtmlTable"></A><IMG class='toggle detail'>
-        <div class="format"><code>itemDetailsHtmlTable &lt;table&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="itemImagePath">
             <A name="itemImagePath"></A>
@@ -478,10 +468,9 @@ into sets and hierarchies</div>
 </div>
 <div class="borderGuard">
 
-<P>All tracks are
-organized into one of the major groupings.  However there are several
-more advanced hierarchical organizing options.  There is even an
-option to combine the data of multiple tables of remote data files
+<P>All tracks for a hub are treated as a single group within the Browser.  
+However hub tracks can be further subdivided with into advanced hierarchical 
+organizations.  There is even an option to combine the data of multiple remote data files 
 into a single image.</P>
 
 <A name="group"></A>
@@ -507,7 +496,7 @@ into a single image.</P>
 
 <A name="compositeTrack"></A>
 <TABLE class="settingsTable" id="Composite_Track_Settings">
-<THEAD><TR><TD><DIV ID="compositeTrack_intro" class="intro"></DIV></TD></TR></THEAD>
+<THEAD><TR><TD><DIV ID="compositeTrack_hub_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>&nbsp;Composite track settings</TH></TR>
     <TR VALIGN=TOP><TD class="compositeTrack"><IMG class='toggle detail'>
         <div class="format"><code>compositeTrack on</code></div>
@@ -623,7 +612,7 @@ into a single image.</P>
         <A name="showSubtrackColorOnUi"></A><IMG class='toggle detail'>
         <div class="format"><code>showSubtrackColorOnUi on</code></div>
     </TD></TR>
-    <TR class="examples" VALIGN=TOP><TD class="container_example">
+    <TR class="examples" VALIGN=TOP><TD class="container_hub_example">
         <IMG class='toggle detail'>
         <div class="format"><B>Example of an Aggregate track</B></div>
     </TD></TR>
