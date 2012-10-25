@@ -4,10 +4,13 @@ hgTrackDb converts the information here into
 a 'trackDb' table in the assembly's MySQL database.
 
 SEE ALSO: source tree file: src/product/README.trackDb
-	for a general discussion of developing tracks.
+	  for a general discussion of developing tracks.
 
-	http://genome.ucsc.edu/admin/hgFindSpecHowTo.html
-	for instructions on hgFindSpec.
+          trackDb.ra documentation:
+          http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html
+
+	  http://genome.ucsc.edu/admin/hgFindSpecHowTo.html
+	  for instructions on hgFindSpec.
 
 The bulk of the information about a track is
 contained in the trackDb.ra file.  Tracks are
