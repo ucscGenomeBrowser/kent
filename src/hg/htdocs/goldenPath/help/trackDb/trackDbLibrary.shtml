@@ -198,7 +198,7 @@
 <!-- - - - - - - - COMMON settings - - - - - - - -->
 <DIV class="commonSettings_intro">
     The following settings, which must be defined for each trackDb record, are common to all
-    data format types.  The first four settings are required for all tracks.  Some type-specific
+    data format types.  The first few settings are required for all tracks.  Some type-specific
     requirements will be mentioned in the appropriate sections to follow.
 </DIV>
 
@@ -393,10 +393,10 @@
 
 <DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabIx"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
-    <P><I>REQUIRED FOR HUBS</I></P>
+    <P>Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
-    This setting is required for all data tracks in a track hub.  It is seldom used for
-    built-in tracks.</P>
+    This setting is required for all data tracks in a track hub.  It is currently not
+    supported for local tracks.</P>  <!-- THIS SHOULD BE FIXED for local tracks! -->
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
@@ -491,7 +491,6 @@
 
 <DIV class="dataVersion"><span class="types all"></span>
 <div class="format"><code>dataVersion &lt;str&gt;</code></div>
-    <P><I>NOT FOR HUBS.</I></P>
     <P>Many tracks undergo multiple revisions over time.  In some cases,
     the older versions should be retained, but even if they are not, it can be
     useful to declare the current version of the track.  Use
@@ -512,8 +511,8 @@
     <UL>
     <LI>%s - item name</LI>
     <LI>%s - chromosome name</LI>
-    <LI>%d - chromosome start position</LI>
-    <LI>%d - chromosome end position</LI>
+    <LI>%d - chromosome start position (relative to zero)</LI>
+    <LI>%d - chromosome end position (relative to one)</LI>
     <LI>%s - track name</LI>
     <LI>%s - database name</LI>
     </UL>
@@ -540,6 +539,27 @@
     hgsid on    </pre>
     <P>In this example the URL specified by <code>directUrl</code> will have the user's
     Browser ID appended so that cart settings will be available.</P>
+</DIV>
+
+<DIV class="directUrl_for_hubs"><span class="types all"></span>
+<div class="format"><code>directUrl &lt;url&gt;</code></div>
+    <P>By default, items shown in the Browser image can be linked to a details page giving
+    information about that item.  The link can
+    instead go to the URL declared here.  The URL is formatted as a
+    printf line including the following fields in this order:</P>
+    <UL>
+    <LI>%s - item name</LI>
+    <LI>%s - chromosome name</LI>
+    <LI>%d - chromosome start position (relative to zero)</LI>
+    <LI>%d - chromosome end position (relative to one)</LI>
+    <LI>%s - track name</LI>
+    <LI>%s - database name</LI>
+    </UL>
+    <P><I>Not all fields need be present, but those present must be in this
+    order, and if a later field is present, all earlier fields must be used.</I>
+    The URL can either be a full external URL or local to the web site.</P>
+    <P><B>Example:</B></P>
+    <pre>   directUrl http://mygenes.org/cgi-bin/geneView/%s</pre>
 </DIV>
 
 <DIV class="otherDb"><span class="types all"></span>
@@ -671,8 +691,8 @@
     <LI>$T - database table name</LI>
     <LI>$S - chromomosome name (scaffold name on
     scaffold assemblies)</LI>
-    <LI>$[ - chromStart location (zero relative)</LI>
-    <LI>$] - chromEnd location</LI>
+    <LI>$[ - chromStart location (relative to zero)</LI>
+    <LI>$] - chromEnd location (relative to one)</LI>
     <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
     <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
     <LI>  $D - database name</LI>
@@ -683,7 +703,7 @@
     <P>Note that url2 is also supported for a second
     external link.
     </P>
-    <P>An additional setting can be used to find an ID
+    <P>For local (non-hub) tracks, an additional setting can be used to find an ID
     from another table based upon the item name or id from the track's
     table.  The value found will replace the "<code>$$</code>" token in the <code>url</code>.
         Note that the format of this trackDb setting is a normal C
@@ -746,8 +766,8 @@
     <P>Some of the most
     common track types are those that highlight regions or items of
     varying size in a genome assembly.  There are many variations to the
-    "items" track, most of which are specified with a bigBed format.  
-    These two formats are really a cluster of many
+    "items" track, most of which can be represented with a bigBed format.  
+    This format is really a cluster of many
     formats all starting with three common fields (chromosome start end)
     and having optionally many more fields.  For complete bigBed
     format definitions please see the 
@@ -1157,7 +1177,7 @@
     would make "noScoreFilter on" the unneeded default. -->
     <P><B>Example:</B></P>
     <pre>
-    type bed 6 +
+    type bigBed 6 +
     noScoreFilter on    </pre>
 </DIV>
 
@@ -1372,6 +1392,7 @@
 
 <DIV class="itemDetailsHtmlTable"><span class="types bed genePred psl"></span>
 <div class="format"><code>itemDetailsHtmlTable &lt;table&gt;</code></div>
+    <P><I>NOT FOR HUBS.  Supplemental table must be in local database.</I></P>
     <P>Use this setting to specify a table, indexed by item name, that
      contains an optional HTML fragment to display on the details page for
      this item.  The expected columns in the table are "name" and "html".</P>
@@ -1657,9 +1678,8 @@
 <DIV class="graphTypeDefault"><span class="types wig bigWig bedGraph"></span>
 <div class="format"><code>graphTypeDefault points</code></div>
     <P>The signal can be
-    graphed as either <code>points</code> displayed at the signal
-    value, or the default space-filling <code>bars</code>. 
-    code>".</P>
+    graphed as either "<code>points</code>" displayed at the signal
+    value, or the default space-filling "<code>bars</code>".</P>
     <P><B>Example:</B></P>
     <pre>   graphTypeDefault points</pre>
 </DIV>
@@ -1776,7 +1796,7 @@
     a single pixel.  By default
     the single pixel represents the <code>mean</code> of the data, though the
     <code>maximum</code> or <code>minimum</code> can alternatively be displayed.  A more informative
-    option is often code>mean+whiskers</code>.  This setting displays the
+    option is often <code>mean+whiskers</code>.  This setting displays the
     mean, max and one standard deviation above mean, differentiated by shading. 
     The mean is displayed as the darkest shade, one stdDev above mean as 
     slightly lighter, and the max as the lightest shade.
@@ -2202,7 +2222,7 @@
     <P>The bam coloring options are all user-configurable within the browser. If your
     bam dataset contains no color tags, this setting should be included to block the
     Browser from offering the option to color tags by an embedded RGB value.</P>
-    <P><class="example" /><B>Examples:</B></P>
+    <P><hr class="example" /><B>Examples:</B></P>
     <pre>
     bamColorMode strand
     noColorTag    </pre>
@@ -2291,12 +2311,12 @@
     bases). Use a larger range to increase the likelihood that both
     reads in a pair will be found even when only one read is in
     the viewed region.  Use a smaller range to speed image rendering.</P>
-    <P><class="example" /><B>Example:</B></P>
+    <P><hr class="example" /><B>Example:</B></P>
     <pre>
     pairedEndsByName .
     pairSearchRange 5000    </pre>
     <P>The dataset includes paired end tags. The maximum search range to join tag pairs
-    by name is capped at 5000.</P.
+    by name is capped at 5000.</P>
 </DIV>
 
 <DIV class="showNames"><span class="types bam"></span>
@@ -3849,12 +3869,31 @@ for each cell associated with the particular TF binding location.</P>
     in most cases individual subtracks can be configured by the user
     independently of the composite settings.  However, once individual
     subtrack settings are made, they can be overridden by new choices made at
-    the composite level.  It may be helpful to read the "<I>Note about
-    inheritance</I>" found below.</P>
+    the composite level.  It may be helpful to read the "<A href='#inheritance'>Note about
+    inheritance</A>" found below.</P>
     <P><I>Currently only the following track types can be organized into a 
     composite: item-based tracks (bed, bigBeg, broadPeaks, etc.), signal-based
     tracks (wig, bigWig, etc.), other remote file-based tracks (bams,
     vcf, etc.), chains/nets, genePred, psl, and wigMaf-type tracks.</I></P>
+</DIV>
+
+<DIV class="compositeTrack_hub_intro">
+<H3>Composite Tracks</H3>
+    <P>Composite tracks are
+    another level of hierarchy and are meant to group very similar tracks
+    (called "subtracks") together such that they can all
+    share the same configuration settings.  In its simplest form a
+    composite holds tracks all of the same type (such as bigBed).
+    Initially, all track within the set are configured identically.
+    Usually only some of the subtracks are visible by default, and these
+    will have the same display mode (e.g., <code>dense</code>)
+    and optional settings (e.g., <code>viewLimits</code>).
+    While default settings cover the entire composite of related tracks,
+    in most cases individual subtracks can be configured by the user
+    independently of the composite settings.  However, once individual
+    subtrack settings are made, they can be overridden by new choices made at
+    the composite level.  It may be helpful to read the "<A href='#inheritance'>Note about
+    inheritance</A>" found below.</P>
 </DIV>
 
 <DIV class="compositeTrack"><span class="types compositeTrack"></span>
@@ -3881,8 +3920,10 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><code>allButtonPair on</code></div>
     <P>When a simple composite track presents a short list of
     subtracks, it can be convenient for the user to have an easy way to select or
-    deselect all of them.  Include this setting to display a [+]
-    plus and [-] minus button pair for the user's convenience.  If
+    deselect all of them.  Include this setting to display an "All 
+    <img style='vertical-align:middle;' src='/images/add_sm.gif' /><img style='vertical-align:middle;' src='/images/remove_sm.gif' />"
+    <!-- Don't break the long line above, so that the buttons have no daylight between them -->
+    (plus and minus button pair) for the user's convenience.  If
     the list contains more than 10 subtracks, other methods may be
     more useful for organizing and selecting subtracks (described below).
     </P>
@@ -3903,13 +3944,19 @@ for each cell associated with the particular TF binding location.</P>
 
 <DIV class="dragAndDrop"><span class="types compositeTrack"></span>
 <div class="format"><code>dragAndDrop on</code></div>
-<!--
-    <P><I>TODO: Should be made obsolete (and default behavior)</I></P>
+<!-- TIM to DONNA: your edit confused the 2 different types of drag-and-drop
+    This setting is for within the configuration page and may affect the image.
+    There is also the drag and drop within the image that will not affect the cfg page.
+    Only this one is optional and has a setting.  I am making another attempt: 
 -->
-    <P>The subtrack list can be rearranged by setting
-    a sortOrder (described below in the Subgroup section) or by allowing the user to drag
-    and drop the subtracks within the Browser image.  It is generally recommended to enable
-    drag-and-drop for the user by setting <code>dragAndDrop</code> to "on". </P>
+    <!-- <P><I>TODO: Should be made obsolete (and default behavior)</I></P> -->
+    <P>The subtrack list in the configuration page can be rearranged by setting
+    a <A onclick="return jumpTo(this);" HREF="#">sortOrder<A>, as described below, 
+    or by allowing the user to drag and drop the subtracks to a new order 
+    if enabled with this setting. The changed order will also be seen in the track 
+    image.  However, the order of tracks can always be rearranged through 
+    drag and drop, directly in the image.  Reordering subtracks in the image 
+    will not be reflected in the configuration page.</P>
 </DIV>
 
 
@@ -3964,7 +4011,7 @@ for each cell associated with the particular TF binding location.</P>
     but use of these should be avoided or minimized.</P>
 </DIV>
 
-<DIV class="subGroupN"><span class="types superGroups"></span>
+<DIV class="subGroupN"><span class="types subGroups"></span>
 <div class="format">
     <code>subGroup1 &lt;gTag1&gt; &lt;gTitle1&gt; &lt;mTag1a=mTitle1a&gt;
                         [mTag1b=mTitle1b&hellip;]</code><BR>
@@ -3982,14 +4029,14 @@ for each cell associated with the particular TF binding location.</P>
     selection matrix that is displayed to the user, e.g.,"Antibody". Spaces within
     titles must be replaced by '<code>_</code>'.  A limited amount
     of HTML is allowed in titles, such as the insertion  of Greek letters using an HTML
-    code. Any use of HRML should be tested to ensure that it displays correctly.</li>
+    code. Any use of HTML should be tested to ensure that it displays correctly.</li>
     </ul>
     <P>Because subgroup settings are often lengthy, it is recommended that the 
     '<code>\</code>' line continuation character be used to break up the setting over
     multiple lines for easier reading. 
 </DIV>
 
-<DIV class="subGroups"><span class="types superGroups"></span>
+<DIV class="subGroups"><span class="types subGroups"></span>
 <div class="format"><code>subGroups &lt;gTag1=mTag1?&gt; [gTag2= mTag2?]</code></div>
     <P>The subtracks themselves declare their
     membership in a group with the <code>subGroups</code> setting.
@@ -3999,7 +4046,7 @@ for each cell associated with the particular TF binding location.</P>
     group's member tag (e.g. mTag1b) as gTag1=mTag1b (cell=K562).</P>
 </DIV>
 
-<DIV class="dimensions"><span class="types superGroups"></span>
+<DIV class="dimensions"><span class="types subGroups"></span>
 <div class="format"><code>dimensions &lt;dimX=gTag#&gt; [dimY=gTag#] [dimA=gTag# ...]</code></div>
     <P>In order to define the type of UI desired for
     selecting subtracks based upon groups, additional settings are
@@ -4008,7 +4055,7 @@ for each cell associated with the particular TF binding location.</P>
     "abc") can be declared with this setting as dimA, dimB, etc.</P>
 </DIV>
 
-<DIV class="filterComposite"><span class="types superGroups"></span>
+<DIV class="filterComposite"><span class="types subGroups"></span>
 <div class="format"><code>filterComposite &lt;dim[A/B/C][=one]&gt; [dimB dimC ...]</code></div>
     <P>For the "abc"
     dimensions, rows of checkboxes will be shown by default.  However, this
@@ -4029,7 +4076,7 @@ for each cell associated with the particular TF binding location.</P>
     case.</P>
 </DIV>
 
-<DIV class="dimensionAchecked"><span class="types superGroups"></span>
+<DIV class="dimensionAchecked"><span class="types subGroups"></span>
     <div class="format"><code>dimension&lt;?&gt;checked &lt;mTag1a&gt;
                                 [mTag1b &hellip;]</code></div>
     <P>One more complication in the selection process is
@@ -4040,7 +4087,7 @@ for each cell associated with the particular TF binding location.</P>
     dimension&lt;?&gt;checked setting.</P>
 </DIV>
 
-<DIV class="controlledVocabulary"><span class="types superGroups"></span>
+<DIV class="controlledVocabulary"><span class="types subGroups"></span>
 <div class="format"><code>controlledVocabulary &lt;pathToFile&gt; &lt;gTag#=mdbVar&gt;
                             [gTag#=mdbVar &hellip;]</code></div>
     <P><I>NOT FOR HUBS. Currently used only by ENCODE</I></P>
@@ -4062,19 +4109,20 @@ for each cell associated with the particular TF binding location.</P>
 -->
 </DIV>
 
-<DIV class="sortOrder"><span class="types superGroups"></span>
+<DIV class="sortOrder"><span class="types subGroups"></span>
 <div class="format"><code>sortOrder &lt;gTag#=+/-&gt; [gTag#=- &hellip;]</code></div>
     <P>When declaring subgroups, it is often useful to
     sort the subtrack list by those subgroups.  By including a
     sortOrder setting, long sets of subtracks are more easily
     organized and navigated by the user.  If there are only a few
-    subtracks in the composite, sorting may be of little value.
+    subtracks in the composite, sorting may be of little value and 
+    <A onclick="return jumpTo(this);" HREF="#">dragAndDrop</a> may be a better option.
     Currently only subgroups can be defined in the sortOrder, but it
     is anticipated that this will expand to include short and long
     labels as well.</P>
 </DIV>
 
-<DIV class="fileSortOrder"><span class="types superGroups downloadsOnly"></span>
+<DIV class="fileSortOrder"><span class="types subGroups downloadsOnly"></span>
 <div class="format"><code>fileSortOrder &lt;var=val&gt; [var=val ...]</code></div>
     <P><I>NOT FOR HUBS. Currently used only by ENCODE</I></P>
     <P>Some composite track sets have their own
@@ -4096,7 +4144,7 @@ for each cell associated with the particular TF binding location.</P>
     </P>
 </DIV>
 
-<DIV class="subGroups_example"><span class="types superGroups"></span>
+<DIV class="subGroups_example"><span class="types subGroups"></span>
 <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
     <pre>
     track myComposite
@@ -4200,7 +4248,7 @@ for each cell associated with the particular TF binding location.</P>
 
 </DIV>
 
-<DIV class="subGroups_hub_example"><span class="types superGroups"></span>
+<DIV class="subGroups_hub_example"><span class="types subGroups"></span>
 <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
     <pre>
     track myComposite
@@ -4297,7 +4345,8 @@ for each cell associated with the particular TF binding location.</P>
     multiple views has only views as children, and each view will have one
     or more subtracks as children.  The three levels must be defined
     together with indenting to make the hierarchy obvious.</P>
-    <P><I><U>A note about
+    
+    <P id='inheritance'><div class="hintBox"><I><U>A note about
     inheritance.</U></I> Subtracks
     will inherit settings from their parents (both from composites and
     from views).  This is true when the setting is inheritable, which is generally
@@ -4311,9 +4360,9 @@ for each cell associated with the particular TF binding location.</P>
     a parent-level setting will override all settings of
     the same type for its children.  If the user subsequently makes a subtrack
     setting, it will override the inherited setting for that one
-    subtrack.</P>
-    <P>An anomaly within the inheritance scheme is the "<code>visiblity</code>" setting.  Unlike
-    other settings, visibility is cumulatively restrictive from the
+    subtrack.<BR><BR>
+    An anomaly within the inheritance scheme is the "<code>visiblity</code>" (display mode) 
+    setting.  Unlike other settings, visibility is cumulatively restrictive from the
     supertrack level.  That is, if the parent has a visibility of  "<code>dense</code>" and the 
     child's visibility is
     "<code>pack</code>", the child will be displayed as "<code>dense</code>". if the parent is
@@ -4324,7 +4373,7 @@ for each cell associated with the particular TF binding location.</P>
     greater than what was inherited from parents, that subtrack's
     visibility will override the inheritance.  While the subtleties of
     inheritance can be hard to explain, they are often intuitive in
-    practice.</P>
+    practice.</div></P>
 </DIV>
 
 <DIV class="view"><span class="types view"></span>
@@ -4347,7 +4396,9 @@ for each cell associated with the particular TF binding location.</P>
     <code>parent &lt;viewName&gt; [off/on]</code></div>
     <P>A subtrack declares its membership in a view
     both as subgroup membership and with a parent setting that refers
-    to the view track name.</P>
+    to the view track name.  Note that a track can only have one parent.  
+    When the subtrack's parent is a view, the composite track is 
+    its <em>implicit</em> grandparent.</P>
 </DIV>
 
 <DIV class="viewUi"><span class="types view"></span>
@@ -4424,14 +4475,22 @@ for each cell associated with the particular TF binding location.</P>
     the whole tree can be defined at the composite level; any setting
     that is common to the view can be set at the view level; and any
     setting that is specific to one subtrack should be set at that
-    level.  Inheritance works by a "closest to home" logic
-    in almost all cases, meaning the nearest setting overrides higher
-    settings.  One exception to this is visibility, where the setting
-    at a higher level limits the range at the lower level.  From this,
-    we can see that the subtrack shown inherits its track type from
+    level.  Remembering <A href='#inheritance'>inheritance</A>, we 
+    can see that the subtrack shown inherits its track type from
     the view, but has its default visibility limited by the composite.
     That is, it inherits packed visibility from the view but the
     composite will show all visible subtracks as dense.</P>
+
+    <P>One additional thing to note is that this composite track is
+    "<code>type bed 3</code>".  Composites do not need a type to define 
+    their data format, since all data is associated with subtracks. Further, 
+    multi-view composites almost always have multiple data formats.  
+    But the "type" also controls what configuration options may be offered 
+    for a track.  Typically, a single level composite has the same type as 
+    all of its subtracks and offers user configuration options at the top 
+    level. But a multi-view composite is most often given the bare-bones 
+    "<code>type bed 3</code>", and offers user configuration options at 
+    the view level.  Exceptions to this pattern do exist but they are rare.</P>
 </DIV>
 
 
@@ -4506,7 +4565,7 @@ for each cell associated with the particular TF binding location.</P>
     container multiWig
     aggregate transparentOverlay
     showSubtrackColorOnUi on
-    type bigBed 0 1000
+    type bigWig 0 1000
     viewLimits 0:10
     maxHeighPixels 100:32:8
       ...
@@ -4536,12 +4595,44 @@ for each cell associated with the particular TF binding location.</P>
     Usually the table (or remote file root) name is the same as the
     track name.  The track name is a unique key.  But it is frequently
     the case that a table or remote data file may be displayed as an
-    individual track or subtrack, as well  as part of an signal overlay
+    individual track or subtrack, as well  as part of a signal overlay
     track.  Setting the table name here suggests that a track named
     "myFirstWig" also exists and is displaying the same data used in
     this overlay track.</P>
 </DIV>
 
+<DIV class="container_hub_example"><span class="types container multiWig"></span>
+<div class="format"><B>Example of an Aggregate track</B></div>
+    <pre>
+    track myMultiWig
+    container multiWig
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    type bigWig 0 1000
+    viewLimits 0:10
+    maxHeighPixels 100:32:8
+      ...
+
+        track myFirstOverlaySig
+        parent myMultiWig
+        color 255,128,128
+        bigWig 0 1139
+          ...
+
+        track myFirstBigWig
+        parent myMultiWig
+        color 120,235,204
+          ...    </pre>
+    <P>This container is for a transparent overlay of
+    signal tracks with 2 subtracks shown.  The tracks are
+    of type "<code>bigWig</code>".  Notice that the first subtrack has a slightly
+    larger range than the others.  The signal dimensions are close
+    enough in this case, and the default viewLimit applied to all
+    subtracks suggests that any signal above 10 is interpreted as
+    strong. Note that each subtrack must define its color, and
+    in this example, that color will be seen in the track
+    configuration page as well as in the image.</P>
+</DIV>
 
 <!-- - - - - - - - CUSTOM settings - - - - - - - -->
 <DIV class="customTracks_intro">
