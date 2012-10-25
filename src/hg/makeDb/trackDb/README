@@ -26,7 +26,7 @@ without requiring an entry in trackDb.ra.
 
 There may be subdirectories for each organism such
 as 'mouse', and underneath these directories for
-each database, such as 'hg7'.  There are a trackDb.ra
+each database, such as 'mm10'.  There are a trackDb.ra
 file and xxx.html files in these subdirectories.
 Track descriptions in the subdirectory will
 over-ride track descriptions in the parent directory.
