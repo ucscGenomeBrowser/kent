@@ -1,7 +1,7 @@
 This directory contains the track database for
 the UCSC human genome browser.  The program
 hgTrackDb converts the information here into
-a 'trackDb' table in the hgN MySQL database.
+a 'trackDb' table in the assembly's MySQL database.
 
 SEE ALSO: source tree file: src/product/README.trackDb
 	for a general discussion of developing tracks.
