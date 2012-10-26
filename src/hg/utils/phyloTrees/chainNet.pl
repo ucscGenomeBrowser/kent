@@ -11,13 +11,21 @@ use lib "$Bin";
 # new genomes since the 46-way construction.  This will keep
 #	the priority numbers the same for the previous 46 and place
 #	these new ones in between the previous ones.
-my $newAssemblies = "nomLeu1 melGal1 ailMel susScr oviAri";
+my $newAssemblies = "nomLeu hetGla susScr oviAri ailMel sarHar melGal allMis croPor latCha oreNil chrPic gadMor saiBol melUnd triMan geoFor cerSim";
 my $newAssemblyOffset = 5;
+# second level of adding new assemblies, these are right next to another
+# new one, they need half of the offset as the above
 my $offsetNway = 10;
 my $reroot = "$Bin/rerootTree.pl";
 my $hgsql = "hgsql";
 my $home = $ENV{'HOME'};
-my $dissectTree = "$home/kent/src/hg/utils/phyloTrees/51way.dissect.txt";
+my $dissectTree = "$home/kent/src/hg/utils/phyloTrees/64way.dissect.txt";
+my $specificOffsets = "allMis croPor melUnd";
+my %specificOffsets = (
+"croPor" => 561.3,
+"allMis" => 562.3,
+"melUnd" => 563.3,
+);
 
 my $argc = scalar(@ARGV);
 
@@ -26,8 +34,7 @@ if ($argc != 1) {
     printf STDERR "usage:\n    chainNet.pl <db>\n";
     printf STDERR "<db> - an existing UCSC database\n";
     printf STDERR "will be using commands: rerootTree.pl and hgsql\n";
-    printf STDERR "and expecting to find \$HOME/kent/src/hg/utils/phyloTrees/51way.dissect.txt\n";
-    printf STDERR "using:\n";
+    printf STDERR "therefore expecting to find:\n";
     printf STDERR "$reroot\n";
     printf STDERR "$dissectTree\n";
     exit 255;
@@ -37,7 +44,7 @@ my $initialPrio = 200.3;
 my $db = shift;
 my $dbCount = 0;
 my %priorities;
-my $priority = $initialPrio;
+my $priority = $initialPrio - $offsetNway;
 my $stripName = $db;
 $stripName =~ s/[0-9]+$//;
 
@@ -63,6 +70,7 @@ if ($actualTreeName eq "notFound") {
     exit 255;
 }
 
+my $nextOffset = $offsetNway;
 # reroot the tree to that database name
 open (FH, "$reroot $actualTreeName $dissectTree 2> /dev/null|") or die "can not run rerootTree.pl";
 while (my $line = <FH>) {
@@ -70,12 +78,23 @@ while (my $line = <FH>) {
     $line =~ s/[0-9]+$//;
     if (!exists($priorities{lcfirst($line)})) {
 	if ($newAssemblies =~ m/$line/) {
-	    $priority -= $newAssemblyOffset;
-	    $priorities{lcfirst($line)} = $priority;
-	    $priority += $newAssemblyOffset;
+            my $kludgePriority = $priority;
+            if ($specificOffsets =~ m/$line/) {
+                my $name = $line;
+                $name =~ s/[0-9]+$//;
+                $kludgePriority = $specificOffsets{$name};
+            } else {
+                $kludgePriority += $newAssemblyOffset;
+                $priority += $newAssemblyOffset;
+                $nextOffset = $newAssemblyOffset;
+            }
+#            printf STDERR "%s: %s\n", lcfirst($line), $kludgePriority;
+	    $priorities{lcfirst($line)} = $kludgePriority;
 	} else {
+	    $priority += $nextOffset;
+#            printf STDERR "%s: %s\n", lcfirst($line), $priority;
 	    $priorities{lcfirst($line)} = $priority;
-	    $priority += $offsetNway;
+            $nextOffset = $offsetNway;
         }
     }
 }
