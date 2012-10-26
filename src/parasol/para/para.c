@@ -150,8 +150,14 @@ errAbort(
   "   Set batch priority. Values explained under 'push' options above.\n"
   "para maxJob 999\n"
   "   Set batch maxJob. Values explained under 'push' options above.\n"
+  "para ram 999\n"
+  "   Set batch ram usage. Values explained under 'push' options above.\n"
+  "para cpu 999\n"
+  "   Set batch cpu usage. Values explained under 'push' options above.\n"
   "para resetCounts\n"
   "   Set batch done and crash counters to 0.\n"
+  "para flushResults\n"
+  "   Flush results file.  Warns if batch has jobs queued or running.\n"
   "para freeBatch\n"
   "   Free all batch info on hub.  Works only if batch has nothing queued or running.\n"
   "para showSickNodes\n"
@@ -876,7 +882,7 @@ dyStringPrintf(dy, "setMaxJob %s %s %d", getUser(), resultsName, maxJob);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (result == NULL || sameString(result, "-2"))
-    errAbort("Couldn't set maxJob %d for %s\n", maxJob, batchDir);
+    errAbort("Couldn't set maxJob %d for %s", maxJob, batchDir);
 freez(&result);
 verbose(1, "Told hub to set maxJob %d\n",maxJob);
 }
@@ -1361,7 +1367,7 @@ dyStringPrintf(dy, "clearSickNodes %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (!sameString(result, "0"))
-    errAbort("Couldn't clear sick nodes for %s\n", batchDir);
+    errAbort("Couldn't clear sick nodes for %s", batchDir);
 freez(&result);
 verbose(1, "Told hub to clear sick nodes\n");
 }
@@ -1803,15 +1809,38 @@ result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 verbose(1, "Told hub to free all batch-related resources\n");
 if (result == NULL)
-    errAbort("result == NULL\n");
+    errAbort("result == NULL");
 if (sameOk(result, "-3"))
-    errAbort("User not found.\n");
+    errAbort("User not found.");
 if (sameOk(result, "-2"))
-    errAbort("Batch not found.\n");
+    errAbort("Batch not found.");
 if (sameOk(result, "-1"))
-    warn("Unable to free batch.  Jobs are queued or running.\n");
+    warn("Unable to free batch.  Jobs are queued or running.");
 if (sameOk(result, "0"))
     verbose(1, "Batch freed.\n");
+freez(&result);
+}
+
+
+void flushResults()
+/* Send msg to hub to flush results file */
+{
+struct dyString *dy = newDyString(1024);
+char *result;
+dyStringPrintf(dy, "flushResults %s %s", getUser(), resultsName);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+verbose(1, "Told hub to flush the results file\n");
+if (result == NULL)
+    errAbort("result == NULL");
+if (sameOk(result, "-3"))
+    errAbort("User not found.");
+if (sameOk(result, "-2"))
+    errAbort("Batch not found.");
+if (sameOk(result, "-1"))
+    warn("Flushed results. Some jobs are still queued or running.");
+if (sameOk(result, "0"))
+    verbose(1, "Flushed results.\n");
 freez(&result);
 }
 
@@ -1980,6 +2009,37 @@ if (gotEnd)
     return lastEnd - firstSub;
 else
     return now - firstSub;
+}
+
+
+void paraRam(char *batch, char *val)
+/* set batch ram = val */
+{
+long long newRam = paraParseRam(val);
+if (newRam == -1)
+    usage();
+struct jobDb *db = readBatch(batch);
+struct job *job;
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    job->ramUsed = newRam;
+    }
+atomicWriteBatch(db, batch);
+}
+
+void paraCpu(char *batch, char *val)
+/* set batch cpu = val */
+{
+float newCpus = sqlFloat(val);
+if (newCpus < 0)
+    usage();
+struct jobDb *db = readBatch(batch);
+struct job *job;
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    job->cpusUsed = newCpus;
+    }
+atomicWriteBatch(db, batch);
 }
 
 void paraTimes(char *batch)
@@ -2262,6 +2322,18 @@ else if (sameWord(command, "maxJob") || sameWord(command, "maxNode"))
 	warn("maxNode deprecated, use maxJob");
     paraMaxJob(argv[2]);
     }
+else if (sameWord(command, "ram"))
+    {
+    if (argc != 3)
+        usage();
+    paraRam(batch, argv[2]);
+    }
+else if (sameWord(command, "cpu"))
+    {
+    if (argc != 3)
+        usage();
+    paraCpu(batch, argv[2]);
+    }
 else if (sameWord(command, "resetCounts"))
     {
     if (argc != 2)
@@ -2273,6 +2345,12 @@ else if (sameWord(command, "freeBatch"))
     if (argc != 2)
         usage();
     freeBatch();
+    }
+else if (sameWord(command, "flushResults"))
+    {
+    if (argc != 2)
+        usage();
+    flushResults();
     }
 else if (sameWord(command, "clearSickNodes"))
     {

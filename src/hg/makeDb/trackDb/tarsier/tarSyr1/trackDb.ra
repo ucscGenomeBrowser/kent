@@ -2,6 +2,9 @@
 track gold override
 html gold
 
+track quality override
+type wig 0 99
+
 # Local declaration so that local gap.html is picked up.
 track gap override
 visibility hide
@@ -16,11 +19,17 @@ visibility pack
 track ensGene override
 visibility pack
 
+track gc5Base override
+visibility full
+
+track genscan override
+visibility pack
+
 track mrna override
 visibility hide
 
 track xenoRefGene override
-visibility pack
+visibility dense
 
 searchTable gold
 searchMethod prefix

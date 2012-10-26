@@ -486,8 +486,8 @@ if (ggList != NULL)
     }
 else
     {
-    hPrintf("<BR>No graph data is available for this assembly.  "
-	    "Upload your own data or import from a table or custom track.");
+    hPrintf("<BR><B>No graph data is available for this assembly.  "
+	    "Upload your own data or import from a table or custom track.</B>");
     }
 return result;
 }
@@ -520,6 +520,7 @@ if (result)
 	printf("<BR><BR>PDF format not available");
     freez(&pdfFile);
     }
+printf("<BR><BR><A HREF=\"../cgi-bin/hgGenome\">Return</A>");
 cartWebEnd();
 }
 

@@ -1,0 +1,537 @@
+# for emacs: -*- mode: sh; -*-
+
+#       DATE:   24-Sep-2010
+#       ORGANISM:       Petromyzon marinus
+#       TAXID:  7757
+#       ASSEMBLY LONG NAME:     Petromyzon_marinus-7.0
+#       ASSEMBLY SHORT NAME:    Petromyzon_marinus-7.0
+#  ASSEMBLY SUBMITTER:  Genome Sequencing Center, Washington University School
+#       of Medicine
+#       ASSEMBLY TYPE:  Haploid
+#       NUMBER OF ASSEMBLY-UNITS:       1
+#       Assembly Accession:     GCA_000148955.1
+
+#       FTP-RELEASE DATE: 05-Oct-2012
+
+#       http://www.ncbi.nlm.nih.gov/genome/287
+#       http://www.ncbi.nlm.nih.gov/assembly/171978/
+#       http://www.ncbi.nlm.nih.gov/bioproject/12880
+
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEFG01
+#       Genome Coverage : 5.0x
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7757
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Petromyzon_marinus/Petromyzon_marinus-7.0/
+
+##########################################################################
+# Download sequence (DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/petMar2
+    cd /hive/data/genomes/petMar2
+    mkdir genbank
+    cd genbank
+    time rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Petromyzon_marinus/Petromyzon_marinus-7.0/ ./
+    #   real    3m8.737s
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 885534757 bases (238182824 N's 647351933 real 647351933 upper 0 lower)
+#       in 25005 sequences in 1 files
+# Total size: mean 35414.3 sd 103881.7 min 61 (gi|308127011|gb|GL501025.1|)
+#       max 4695893 (gi|308151637|gb|GL476399.1|) median 8270
+# %0.00 masked total, %0.00 masked real
+
+
+    # strip the names down to something reasonable, they can all be:
+    # >GL[0-9]
+    # since they are all .1 versions:
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+        | sed -e "s/^>.*GL/>GL/; s/.1. Petromyzon.*//" \
+        | gzip -c > ucsc.fa.gz
+    zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+        | sed -e "s/^\(GL[0-9]*\).1/\1/;" | gzip -c > ucsc.agp.gz
+    time checkAgpAndFa  ucsc.agp.gz ucsc.fa.gz 2>&1 | tail -2
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+    #   real    0m12.951s
+
+    mkdir /hive/data/genomes/petMar2/photograph
+    cd /hive/data/genomes/petMar2/photograph
+    wget --timestamping \
+        http://www.nasa.gov/centers/kennedy/images/content/91159main_93pc780.jpg
+
+    convert -geometry "220x300" 91159main_93pc780.jpg \
+        Alligator_Mississippiensis.jpg
+    # check this .jpg file into the source tree kent/src/hg/htdocs/images/
+    git commit -m "gator photo from NASA Kennedy" Alligator_Mississippiensis.jpg
+    # and copy to /usr/local/apache/htdocs/images
+    cp -p Alligator_Mississippiensis.jpg /usr/local/apache/htdocs/images
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2012-10-12 - Hiram)
+    # obtain a template for this from the source tree:
+    # kent/src/hg/utils/automation/configFiles/
+    # and check it back into the source tree when completed here:
+    cd /hive/data/genomes/geoFor1
+    cat << '_EOF_' > petMar2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db petMar2
+clade vertebrate
+genomeCladePriority 130
+scientificName Petromyzon marinus
+commonName Lamprey
+assemblyDate Sep. 2010
+assemblyLabel GSC Washington University School of Medicine
+assemblyShortLabel WUGSC 7.0
+orderKey 4799
+mitoAcc NC_001626
+fastaFiles /hive/data/genomes/petMar2/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/petMar2/genbank/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir lamprey
+photoCreditURL http://epa.gov/greatlakes/images/index.htm
+photoCreditName Photo courtesy of U.S. Environmental Protection Agency
+ncbiGenomeId 287
+ncbiAssemblyId 171978
+ncbiAssemblyName Petromyzon_Marinus-7.0
+ncbiBioProject 12880
+genBankAccessionID GCA_000148955.1
+taxId 7757
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp petMar2.config.ra > agp.log 2>&1
+    #   real    1m6.334s
+    # verify OK:
+    tail -1 agp.log
+    #   *** All done!  (through the 'agp' step)
+
+    # finish it off
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+        -dbHost=hgwdev petMar2.config.ra > db.log 2>&1
+    #   real    5m25.795s
+
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/petMar2.unmasked.2bit /gbdb/petMar2/petMar2.2bit
+    #	browser should function now, add the files from the trackDb
+    #   hierarchy here to the source tree
+
+##########################################################################
+# running repeat masker (DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/petMar2/bed/repeatMasker
+    cd /hive/data/genomes/petMar2/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek petMar2 > do.log 2>&1 &
+    #   real    116m3.942s
+
+    cat faSize.rmsk.txt
+# 885550958 bases (238182824 N's 647368134 real 558171034 upper 89197100 lower)
+#       in 25006 sequences in 1 files
+# Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+#       max 4695893 (GL476399) median 8272
+# %10.07 masked total, %13.78 masked real
+
+    egrep -i "versi|relea" do.log
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+# CC   RELEASE 20110920;
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+
+    featureBits -countGaps petMar2 rmsk
+    #   89259257 bases of 885550958 (10.080%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/petMar2/bed/simpleRepeat
+    cd /hive/data/genomes/petMar2/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	petMar2 > do.log 2>&1 &
+    #   real    53m17.048s
+
+    cat fb.simpleRepeat
+    #   72167005 bases of 647368134 (11.148%) in intersection
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/petMar2/bed/gap
+    cd /hive/data/genomes/petMar2/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../petMar2.unmasked.2bit > findMotif.txt 2>&1
+    #   real    0m12.841s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits petMar2 -not gap -bed=notGap.bed
+    #   647368134 bases of 647368134 (100.000%) in intersection
+    #   real    0m7.993s
+
+    # can see now if allGaps.bed actually is all the gaps:
+    hgsql -N -e "select size from gap;" petMar2 | ave stdin | grep total
+# total 238182824.000000
+    ave -col=5 allGaps.bed | grep total
+# total 238182824.000000
+    # same count, no new gaps
+
+    # check if any non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" petMar2 | sort | uniq -c
+    #  48808 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/petMar2/bed/windowMasker
+    cd /hive/data/genomes/petMar2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev petMar2 > do.log 2>&1 &
+    #   real    84m58.718s
+
+    # Masking statistics
+    cat faSize.petMar2.wmsk.txt
+    #   885550958 bases (238182824 N's 647368134 real 379325983
+    #   upper 268042151 lower) in 25006 sequences in 1 files
+    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+    #   max 4695893 (GL476399) median 8272
+    #   %30.27 masked total, %41.40 masked real
+
+    cat faSize.petMar2.wmsk.sdust.txt
+    #   885550958 bases (238182824 N's 647368134 real 372789139
+    #   upper 274578995 lower) in 25006 sequences in 1 files
+    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+    #   max 4695893 (GL476399) median 8272
+    #   %31.01 masked total, %42.41 masked real
+
+    cat faSize.petMar2.cleanWMSdust.txt
+    #   885550958 bases (238182824 N's 647368134 real 372789139
+    #   upper 274578995 lower) in 25006 sequences in 1 files
+    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+    #   max 4695893 (GL476399) median 8272
+    #   %31.01 masked total, %42.41 masked real
+
+    cat fb.petMar2.windowmaskerSdust.clean.txt
+    #   274578995 bases of 885550958 (31.007%) in intersection
+
+    # how much does this window masker and repeat masker overlap:
+    # can be done after rmsk is done.  The script will often
+    #   fail on this command in the doLoad.csh if RM is not yet
+    #   complete and these are running at the same time:
+    featureBits -countGaps petMar2 rmsk windowmaskerSdust
+    #   32967187 bases of 1065292181 (3.095%) in intersection
+
+    # if the script did fail on that command, finish it:
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-continue=cleanup -dbHost=hgwdev petMar2 > cleanup.log 2>&1 &
+    #   real    0m35.452s
+
+##########################################################################
+# add simpleRepeats to WindowMasker result (DONE - 2012-10-15 - Hiram)
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/petMar2
+    twoBitMask -add bed/windowMasker/petMar2.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed petMar2.2bit
+
+    #	you can safely ignore the warning about fields >= 13
+    twoBitToFa petMar2.2bit stdout | faSize stdin > faSize.petMar2.2bit.txt
+    cat faSize.petMar2.2bit.txt
+    #   885550958 bases (238182824 N's 647368134 real 372434798
+    #   upper 274933336 lower) in 25006 sequences in 1 files
+    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+    #   max 4695893 (GL476399) median 8272
+    #   %31.05 masked total, %42.47 masked real
+
+    rm /gbdb/petMar2/petMar2.2bit
+    ln -s `pwd`/petMar2.2bit /gbdb/petMar2/petMar2.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2012-10-15 - Hiram)
+    mkdir /hive/data/genomes/petMar2/bed/cpgIslands
+    cd /hive/data/genomes/petMar2/bed/cpgIslands
+    time doCpgIslands.pl petMar2 > do.log 2>&1
+    #   real    27m18.237s
+
+    cat fb.petMar2.cpgIslandExt.txt
+    #   39998562 bases of 647368134 (6.179%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2012-10-15 - Hiram)
+    mkdir /hive/data/genomes/petMar2/bed/genscan
+    cd /hive/data/genomes/petMar2/bed/genscan
+    time doGenscan.pl petMar2 > do.log 2>&1
+    #   real    33m41.740s
+
+    cat fb.petMar2.genscan.txt
+    #   25257909 bases of 647368134 (3.902%) in intersection
+    cat fb.petMar2.genscanSubopt.txt
+    #   23439935 bases of 647368134 (3.621%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-10-16 - Hiram)
+    # Use -repMatch=400, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 885550958 / 2897316137 \) \* 1024
+    #   ( 885550958 / 2897316137 ) * 1024 = 312.980751
+
+    # round up to 350 (petMar1 was 200)
+
+    cd /hive/data/genomes/petMar2
+    time blat petMar2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/petMar2.11.ooc -repMatch=350
+    #   Wrote 15692 overused 11-mers to jkStuff/petMar2.11.ooc
+    #   real    1m58.096s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" petMar2 | sort | uniq -c
+    #   48808 yes
+#    cd /hive/data/genomes/petMar2/jkStuff
+#    gapToLift petMar2 petMar2.nonBridged.lift -bedFile=petMar2.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' petMar2.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-10-16 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Petromyzon marinus      1072    120732  0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add petMar2 just before petMar1
+# petMar2 (Petromyzon marinus - Lamprey)
+petMar2.serverGenome = /hive/data/genomes/petMar2/petMar2.2bit
+petMar2.clusterGenome = /hive/data/genomes/petMar2/petMar2.2bit
+petMar2.ooc = /hive/data/genomes/petMar2/jkStuff/petMar2.11.ooc
+petMar2.lift = no
+petMar2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+petMar2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+petMar2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+petMar2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+petMar2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+petMar2.refseq.mrna.native.load = yes
+petMar2.refseq.mrna.xeno.load = yes
+petMar2.genbank.mrna.xeno.load = no
+petMar2.genbank.est.native.load = yes
+petMar2.downloadDir = petMar2
+petMar2.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding petMar2 Lamprey redmine 9153" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S petMar2           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial petMar2 &
+    #   var/build/logs/2012.10.16-09:06:37.petMar2.initalign.log
+    #   real    555m47.178s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad petMar2 &
+    #   real    28m17.094s
+    #   var/dbload/hgwdev/logs/2012.10.17-10:24:04.dbload.log
+
+    # check the end of that dbload.log to see if it was successful
+    #   hgwdev 2012.10.17-10:52:21 dbload: finish
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-05-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add petMar2 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added petMar2." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position as recommended from Jeramiah Smith
+#       (DONE - 2012-10-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="GL476334:480870-830419" where name="petMar2";' \
+	hgcentraltest
+
+############################################################################
+# downloads and pushQ entry (DONE - 2012-10-23 - Hiram)
+    # after adding petMar2 to the all.joiner file and verifying that
+    #   joinerCheck is clean, can construct the downloads:
+    cd /hive/data/genomes/petMar2
+    time makeDownloads.pl -workhorse=hgwdev petMar2
+    #   real    5m51.143s
+
+    mkdir /hive/data/genomes/petMar2/pushQ
+    cd /hive/data/genomes/petMar2/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl petMar2 2> stderr.txt > petMar2.sql
+    #   real    3m38.916s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/petMar2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/petMar2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/petMar2/bbi/quality.bw
+# WARNING: petMar2 does not have seq
+# WARNING: petMar2 does not have extFile
+# WARNING: petMar2 does not have estOrientInfo
+
+    scp -p petMar2.sql hgwbeta:/tmp/
+    ssh hgwbeta "hgsql qapushq < /tmp/petMar2.sql"
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2012-10-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("petMar2", "blat4b", "17838", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("petMar2", "blat4b", "17839", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+#  lastz braFlo2 Lancelet (DONE - 2012-10-19,22 - Hiram)
+    screen -S petMar2	# use a screen to control this multi-day job
+    mkdir /cluster/data/petMar2/bed/lastzBraFlo2.2012-10-19
+    cd /cluster/data/petMar2/bed/lastzBraFlo2.2012-10-19
+
+    cat << '_EOF_' > DEF
+# Lamprey vs. Lancelet
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Lamprey petMar2
+SEQ1_DIR=/hive/data/genomes/petMar2/petMar2.2bit
+SEQ1_LEN=/hive/data/genomes/petMar2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# TARGET: Lancelet braFlo2
+# largest chunk big enough for largest scaffold
+#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
+SEQ2_DIR=/hive/data/genomes/braFlo2/braFlo2.2bit
+SEQ2_LEN=/hive/data/genomes/braFlo2/chrom.sizes
+SEQ2_CHUNK=12000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/petMar2/bed/lastzBraFlo2.2012-10-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ?_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -smallClusterHub=encodek > do.log 2>&1 &
+    #   real    781m50.666s
+    cat fb.petMar2.chainBraFlo2Link.txt
+    #  19549078 bases of 647368134 (3.020%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s lastzBraFlo2.2012-10-19 lastz.braFlo2
+
+    #	and for the swap
+    mkdir /hive/data/genomes/braFlo2/bed/blastz.petMar2.swap
+    cd /hive/data/genomes/braFlo2/bed/blastz.petMar2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/petMar2/bed/lastzBraFlo2.2012-10-19/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -smallClusterHub=encodek > swap.log 2>&1 &
+
+    #   real    15m22.099s
+    cat  fb.braFlo2.chainPetMar2Link.txt
+    #	15668603 bases of 480418582 (3.261%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/braFlo2/bed
+    ln -s blastz.petMar2.swap lastz.petMar2
+
+############################################################################
+# lastz swap Mouse mm10 (DONE - 2012-10-22 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19
+    cat fb.mm10.chainPetMar2Link.txt
+    #   28262565 bases of 2652783500 (1.065%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/petMar2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/petMar2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    7m2.754s
+    cat  fb.petMar2.chainHg19Link.txt
+    #	20923095 bases of 647368134 (3.232%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz Opossum monDom5 (DONE - 2012-10-24 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/monDom5/bed/lastzPetMar2.2012-10-23
+    cat fb.monDom5.chainPetMar2Link.txt
+    #	25404425 bases of 3501660299 (0.725%) in intersection
+
+    #	and this swap
+    mkdir /cluster/data/petMar2/bed/blastz.monDom5.swap
+    cd /cluster/data/petMar2/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/monDom5/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #	real    11m54.144s
+    cat fb.petMar2.chainMonDom5Link.txt
+    #	16944977 bases of 647368134 (2.618%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+############################################################################
+# lastz Medaka oryLat2 (DONE - 2012-10-24 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/oryLat2/bed/lastzPetMar2.2012-10-23
+    cat fb.oryLat2.chainPetMar2Link.txt
+    #	42137127 bases of 700386597 (6.016%) in intersection
+
+    #	And, for this swap:
+    mkdir /cluster/data/petMar2/bed/blastz.oryLat2.swap
+    cd /cluster/data/petMar2/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/hive/data/genomes/oryLat2/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=encodek -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    8m42.333s
+    cat fb.petMar2.chainOryLat2Link.txt
+    #	31889826 bases of 647368134 (4.926%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.oryLat2.swap lastz.oryLat2
+
+#########################################################################

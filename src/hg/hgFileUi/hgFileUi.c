@@ -29,10 +29,15 @@ if (!ajax)
 //if(tdbIsContainer(tdb) && !ajax)
 //    cartTdbTreeReshapeIfNeeded(cart,tdb);
 
-printf("<B style='font-family:serif; font-size:200%%;'>%s</B>\n", tdb->longLabel);
+if (trackDbSetting(tdb, "wgEncode"))
+    {
+    printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
+           "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
+    }
+printf("<B style='font-size:200%%;'>%s</B>\n", tdb->longLabel);
 
 // If Composite, link to the hgTrackUi.  But if downloadsOnly then link to any superTrack.
-#define LINK_TO_PARENT "%s<B style='font-family:serif;'>(<A HREF='%s?%s=%u&c=%s&g=%s' " \
+#define LINK_TO_PARENT "%s<b>(<A HREF='%s?%s=%u&c=%s&g=%s' " \
                        "title='Link to %s track settings'><IMG height=12 " \
                        "src='../images/ab_up.gif'>%s</A>)</B>\n"
 if (tdbIsComposite(tdb))
@@ -55,7 +60,15 @@ else if (tdb->parent) //Print link for parent track
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     printf("<span id='navDown' style='float:right; display:none;'>");
-    // First put up a button to go to File Search
+
+    if (trackDbSetting(tdb, "wgEncode"))
+        {
+        // Link to ENCODE home page
+        printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE</A>");
+        printf("&nbsp;&nbsp;");
+        }
+
+    // Link to File Search
     printf("<A HREF='hgFileSearch?db=%s' TITLE='Search for other downloadable files ...'>"
             "File Search</A>&nbsp;&nbsp;&nbsp;",db);
 
@@ -66,6 +79,11 @@ if (tdb->html != NULL && tdb->html[0] != 0)
         downArrow = "&darr;";
     printf("<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",
            downArrow);
+    if (trackDbSetting(tdb, "wgEncode"))
+        {
+        printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
+           "Contact%s</A>", downArrow);
+        }
     printf("</span>");
     }
 puts("<BR>");
@@ -96,6 +114,14 @@ if (tdb->html != NULL && tdb->html[0] != 0)
 
     // Add pennantIcon
     printPennantIconNote(tdb);
+
+    char *html = tdb->html;
+    if (trackDbSetting(tdb, "wgEncode"))
+        {
+        // add anchor to Credits section of ENCODE HTML page so contacts are easily found (on top menu)
+        html = replaceChars(tdb->html, "2>Credits", "2></H2><A NAME='TRACK_CREDITS'></A>\n<H2>Credits</H2>");
+        }
+    puts(html);
 
     puts(tdb->html);
     printf("</td><td nowrap>");

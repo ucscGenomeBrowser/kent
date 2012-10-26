@@ -1696,9 +1696,11 @@ page for more information about VCF custom tracks.</P>
 <P>
 Here is an example of narrowPeak format:</P>
 <PRE>
-chrX    9091548 9091648 .       0       .       182     5.0945  -1  50
-chrX    9358722 9358822 .       0       .       91      4.6052  -1  40
-chrX    9391082 9391182 .       0       .       182     9.2103  -1  75
+track type=narrowPeak visibility=3 db=hg19 name="nPk" description="ENCODE narrowPeak Example"
+browser position chr1:9356000-9365000
+chr1    9356548 9356648 .       0       .       182     5.0945  -1  50
+chr1    9358722 9358822 .       0       .       91      4.6052  -1  40
+chr1    9361082 9361182 .       0       .       182     9.2103  -1  75
 </PRE>
 
         		     </td><td width=15></td></tr>
@@ -1755,7 +1757,16 @@ This format is used to provide called regions of signal enrichment based on pool
         false discovery rate (-log10). Use -1 if no qValue is assigned.
 </ol>
 <P>
-        		     </td><td width=15></td></tr>
+Here is an example of broadPeak format:</P>
+<PRE>
+track type=broadPeak visibility=3 db=hg19 name="bPk" description="ENCODE broadPeak Example"
+browser position chr1:798200-800700
+chr1     798256 798454 .       116      .       4.89716 3.70716 -1
+chr1     799435 799507 .       103      .       2.46426 1.54117 -1
+chr1     800141 800596 .       107      .       3.22803 2.12614 -1
+</Pre>
+
+        		     </Td><td width=15></td></tr>
 	    		</table><br>
 		     </td></tr>
 		</table>
@@ -1966,7 +1977,7 @@ ENCODE peptideMapping: BED6+4 format</b></font></td>
 		      chromEnd base is not included in the display of the feature. For
 		      example, the first 100 bases of a chromosome are defined as
 		      chromStart=0, chromEnd=100, and span the bases numbered 0-99. </li>
-		    <li><b>name</b> - Identifier of paired-read. </li>
+		    <li><b>name</b> - The peptide sequence. </li>
 		    <li><b>score</b> - Indicates uniqueness or quality
 		      (preferably 1000/alignment-count). </li>
 		    <li><b>strand</b> - Orientation of this read (+ or -). </li>

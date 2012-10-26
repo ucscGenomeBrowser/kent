@@ -165,7 +165,7 @@ boolean chromosomeColorsMade = FALSE;
 int z;
 int maxCount;
 int bestColor;
-int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
@@ -4832,7 +4832,7 @@ proteinID= sqlGetField(database, "knownGene", "proteinID", cond_str);
 if (proteinID != NULL && protDbName != NULL)
     {
     sprintf(cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
-    ans= sqlGetField(protDbName, "spXref2", "displayID", cond_str);
+    ans= sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     if (ans != NULL)
         {
         col = tg->ixColor;

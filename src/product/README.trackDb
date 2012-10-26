@@ -3,6 +3,7 @@ README.trackDb
 Creating tracks in the browser.
 
 See also:
+http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html
 http://genomewiki.ucsc.edu/index.php/Local_tracks_at_mirror_sites
 
 A track needs two items to make it exist in the browser:

@@ -15,7 +15,7 @@ set spdb = sp$spdate
 hgsqladmin create $db
 
 cd /hive/data/inside/proteins
-mkdir $date
+mkdir -p $date
 cd $date
 mkdir build
 
@@ -73,6 +73,7 @@ hgsql $db -e 'delete spXref3 from spXref3, spXref3B where spXref3.accession=spXr
 hgsql $db -e "drop table spXref3B"
 
 
+#ifdef DIDNTDO
 ######################################################################
 # BUILD spXref2 TABLE 
 
@@ -81,7 +82,6 @@ cd /hive/data/inside/proteins/$date/build
 spToSpXref2 $spdate >spXref2.tab
 
 
-#ifdef DIDNTDO
 # create and load the big spXref2 table
 hgsql $db < $kent/src/hg/lib/spXref2.sql
 cd /hive/data/inside/proteins/$date/build
@@ -120,42 +120,83 @@ gunzip -c Pfam-A.full.gz | pfamXref $db stdin pfamADesc.tab pfamAXref.tab >pfamX
 hgLoadSqlTab $db pfamDesc $kent/src/hg/lib/pfamDesc.sql pfamADesc.tab
 
 
-# STOPPED HERE
 hgLoadSqlTab $db pfamXref $kent/src/hg/lib/pfamXref.sql pfamAXref.tab
 
 #	Build the pdbSP table, new process using extDbRef data from spXXXXXX
 
-cd /hive/data/inside/proteins/111004
+cd /hive/data/inside/proteins/$date
 
-hgsql sp111004 -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb where x.acc=d.acc and extDb.val="PDB" and x.extDb=extDb.id'|sort -u >pdbSP.tab
+hgsql $spdb -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb where x.acc=d.acc and extDb.val="PDB" and x.extDb=extDb.id'|sort -u >pdbSP.tab
 
-hgLoadSqlTab proteins111004 pdbSP $kent/src/hg/lib/pdbSP.sql pdbSP.tab
+hgLoadSqlTab $db pdbSP $kent/src/hg/lib/pdbSP.sql pdbSP.tab
 
 #	Build the spDisease table
+cd /hive/data/inside/proteins/$date
 
 hgsql -N -e \
 'select comment.acc, displayId.val, commentVal.val from comment, commentVal, commentType ct, displayId where comment.commentType=ct.id and ct.val="DISEASE" and commentVal.id=comment.commentVal and displayId.acc=comment.acc;' \
-sp111004 > spDisease.tab
+$spdb > spDisease.tab
+wc  spDisease.tab
+#   4909  289325 2100354 spDisease.tab
 
-hgLoadSqlTab proteins111004 spDisease $kent/src/hg/lib/spDisease.sql spDisease.tab
+hgLoadSqlTab $db spDisease $kent/src/hg/lib/spDisease.sql spDisease.tab
 
 # create swInterPro table
 
-cd /hive/data/inside/proteins/111004/build
+cd /hive/data/inside/proteins/$date/build
 # Fetch interpro file, last time like so:
 wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz"
 gunzip protein2ipr.dat.gz
-# rearrange col positioin to match the old format
-cut -f 1 protein2ipr.dat >j1
-cut -f 2,3 protein2ipr.dat >j23
-cut -f 4,5,6 protein2ipr.dat >j456
-paste j1 j456 j23 > interProXref.tab
-rm j1 j456 j23
+# rearrange col position to match the old format
+awk '{print $1,$4,$5,$6,$2,$3}' protein2ipr.dat > interProXref.tab
 
-hgLoadSqlTab proteins111004 interProXref $kent/src/hg/lib/interProXref.sql ./interProXref.tab
+hgLoadSqlTab $db  interProXref $kent/src/hg/lib/interProXref.sql ./interProXref.tab
 
-hgsql proteins111004 -N -e 'select accession, interProId from interProXref;'|sort -u >swInterPro.tab
-hgLoadSqlTab proteins111004 swInterPro $kent/src/hg/lib/swInterPro.sql ./swInterPro.tab
+hgsql $db  -N -e 'select accession, interProId from interProXref;'|sort -u >swInterPro.tab
+hgLoadSqlTab $db  swInterPro $kent/src/hg/lib/swInterPro.sql ./swInterPro.tab
+
+cd /hive/data/inside/proteins/$date
+mkdir alias
+cd alias
+
+# this is very funky, but I'm leaving it in for the moment (braney)
+hgsql $db -N -e 'select accession, accession,  "uAcc", "2006-01-15" from spXref3' >j1.tmp
+hgsql $db -N -e 'select accession, accession2, "u2Ac", "2006-01-15" from spSecondaryID' >j2.tmp
+hgsql $db -N -e 'select accession, displayID,  "uDis", "2006-01-15" from spXref3' >j3.tmp
+hgsql proteins040515 -N -e 'select accession, displayID,  "oDis", "2004-05-15" from spXref3' >j4.tmp
+
+cat j1.tmp j2.tmp j3.tmp j4.tmp >uniProtAlias.tab
+rm j1.tmp j2.tmp j3.tmp j4.tmp
+
+hgLoadSqlTab $db uniProtAlias $kent/src/hg/lib/uniProtAlias.sql ./uniProtAlias.tab
+hgsql $db -e 'create index alias on uniProtAlias(alias)'
+
+hgsql proteins111004 -N -e 'select * from spOldNew' >spOldNew.tab
+hgLoadSqlTab $db spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
+
+hgsql $db -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
+hgsql $db -e 'create index newDisplayId on spOldNew(newDisplayId)'
+
+# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
+cd /hive/data/inside/proteins/$date
+
+hgsql $db  -N -e 'select accession,accession from spXref3' >j1
+cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
+cat j1 |grep -v "-" >>j3
+cat j2 j3 |sort -u >spVariant.tab
+rm j1 j2 j3
+
+
+hgLoadSqlTab $db  spVariant $kent/src/hg/lib/spVariant.sql ./spVariant.tab
+hgsql $db  -e 'create index parent on spVariant(parent)'
+
+#this is build of reactome tables
+cd /hive/data/outside/reactome
+cd reactome41/
+sed '1,4d' ucsc_events41 | hgLoadSqlTab proteome spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql stdin
+sed '1,6d' ucsc_entity41 | hgLoadSqlTab proteome spReactomeId ~/kent/src/hg/lib/spReactomeId.sql stdin
+
+#STOPPED HERE
 
 # BUILD TABLES FOR pbGlobal (PB V1.1).  These tables are used by the Proteome
 # Browser.  
@@ -224,28 +265,6 @@ hgsql proteins060115 -N -e "select * from pbStamp" > pbStamp.tab
 
 hgLoadSqlTab proteins111004 pbStamp $kent/src/hg/lib/pbStamp.sql ./pbStamp.tab
 
-cd /hive/data/inside/proteins/111004
-mkdir alias
-cd alias
-
-hgsql proteins111004 -N -e 'select accession, accession,  "uAcc", "2006-01-15" from spXref3' >j1.tmp
-hgsql proteins111004 -N -e 'select accession, accession2, "u2Ac", "2006-01-15" from spSecondaryID' >j2.tmp
-hgsql proteins111004 -N -e 'select accession, displayID,  "uDis", "2006-01-15" from spXref3' >j3.tmp
-hgsql proteins040515 -N -e 'select accession, displayID,  "oDis", "2004-05-15" from spXref3' >j4.tmp
-# PLEASE NOTE: proteins041115 was later deleted by Fan when hgwdev mySQL space was at 100%.
-# So, use protein040515 instead.
-
-cat j1.tmp j2.tmp j3.tmp j4.tmp >uniProtAlias.tab
-rm j1.tmp j2.tmp j3.tmp j4.tmp
-
-hgLoadSqlTab proteins111004 uniProtAlias $kent/src/hg/lib/uniProtAlias.sql ./uniProtAlias.tab
-hgsql proteins111004 -e 'create index alias on uniProtAlias(alias)'
-
-hgsql proteins050415 -N -e 'select * from spOldNew' >spOldNew.tab
-hgLoadSqlTab proteins111004 spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
-
-hgsql proteins111004 -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
-hgsql proteins111004 -e 'create index newDisplayId on spOldNew(newDisplayId)'
 
 # Build spDeleted table
 
@@ -262,17 +281,6 @@ hgLoadSqlTab proteins111004 spDeleted $kent/src/hg/lib/spDeleted.sql ./spDeleted
 # move this endif statement past business that has successfully been completed
 endif # BRACKET		
 
-# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
-
-hgsql proteins111004 -N -e 'select accession,accession from spXref3' >j1
-cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
-cat j1 |grep -v "-" >>j3
-cat j2 j3 |sort -u >spVariant.tab
-rm j1 j2 j3
-
-
-hgLoadSqlTab proteins111004 spVariant $kent/src/hg/lib/spVariant.sql ./spVariant.tab
-hgsql proteins111004 -e 'create index parent on spVariant(parent)'
 
 # EXTEND pfamXref TO COVER VARIANT SPLICE PROTEINS
 
@@ -691,3 +699,4 @@ hgsql rn4 -N -e \
 # these lists are e-mailed to someone at Reactome for updating their site, presumably.
 
 endif # BRACKET
+

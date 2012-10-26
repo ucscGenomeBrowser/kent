@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-L += -lm $(MYSQLLIBS)
+L += $(MYSQLLIBS) -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 

@@ -4931,6 +4931,7 @@ dateUnrestricted 2013-03-06
 dccAccession wgEncodeEM002589
 expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM918741
 grant Ren
 lab LICR-m
 labVersion 10/11/10 Lane 7B
@@ -4992,6 +4993,7 @@ dateUnrestricted 2013-03-06
 dccAccession wgEncodeEM002589
 expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM918741
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5B
@@ -5202,6 +5204,7 @@ dateUnrestricted 2013-03-06
 dccAccession wgEncodeEM002482
 expId 2482
 fileName wgEncodeLicrTfbsLimbInputUE14halfC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM918719
 grant Ren
 lab LICR-m
 labVersion 12/14/10 Lane 7D
@@ -5443,6 +5446,7 @@ dateUnrestricted 2013-03-06
 dccAccession wgEncodeEM002590
 expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM918708
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 1D
@@ -5504,6 +5508,7 @@ dateUnrestricted 2013-03-06
 dccAccession wgEncodeEM002590
 expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM918708
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 5A
@@ -8268,159 +8273,6 @@ subId 5321
 tableName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig
 view Signal
 
-metaObject wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep1
-objType file
-age adult-8wks
-antibody Input
-cell Placenta
-composite wgEncodeLicrTfbs
-control std
-controlId wgEncodeEM002510
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-15
-dccAccession wgEncodeEM002510
-expId 2510
-fileName wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep1.bam.bai
-grant Ren
-lab LICR-m
-labVersion 1/18/11 Lane 1
-md5sum f231ffb8c9dc1ec2e222bb93041097ed,6264d991b8ebdf0ebd0427773e8a2e14
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion Bowtie
-strain C57BL/6
-subId 5747
-view Alignments
-
-metaObject wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep2
-objType file
-age adult-8wks
-antibody Input
-cell Placenta
-composite wgEncodeLicrTfbs
-control std
-controlId wgEncodeEM002510
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-15
-dccAccession wgEncodeEM002510
-expId 2510
-fileName wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep2.bam.bai
-grant Ren
-lab LICR-m
-labVersion 1/18/11 Lane 2
-md5sum 42edbb82dc96a37ef2571d24767d1958,87321416ccf0aec973cb3444393a47c1
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion Bowtie
-strain C57BL/6
-subId 5747
-view Alignments
-
-metaObject wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdRawDataRep1
-objType file
-age adult-8wks
-antibody Input
-cell Placenta
-composite wgEncodeLicrTfbs
-control std
-controlId wgEncodeEM002510
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-15
-dccAccession wgEncodeEM002510
-expId 2510
-fileName wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdRawDataRep1.fastq.gz
-geoSampleAccession GSM918762
-grant Ren
-lab LICR-m
-labVersion 1/18/11 Lane 1
-md5sum d78be60ce4073b12151aed92856d34fc
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion Bowtie
-strain C57BL/6
-subId 5747
-view RawData
-
-metaObject wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdRawDataRep2
-objType file
-age adult-8wks
-antibody Input
-cell Placenta
-composite wgEncodeLicrTfbs
-control std
-controlId wgEncodeEM002510
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-15
-dccAccession wgEncodeEM002510
-expId 2510
-fileName wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdRawDataRep2.fastq.gz
-geoSampleAccession GSM918762
-grant Ren
-lab LICR-m
-labVersion 1/18/11 Lane 2
-md5sum 717f817d91049541fb6d4289e225d5b1
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion Bowtie
-strain C57BL/6
-subId 5747
-view RawData
-
-metaObject wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdSig
-objType table
-age adult-8wks
-antibody Input
-cell Placenta
-composite wgEncodeLicrTfbs
-control std
-controlId wgEncodeEM002510
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-02-16
-dateUnrestricted 2012-11-15
-dccAccession wgEncodeEM002510
-expId 2510
-fileName wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdSig.bigWig
-geoSampleAccession GSM918762
-grant Ren
-lab LICR-m
-labVersion Pooled & filtered
-md5sum 0ceca399c1aaf77cb69661bf34df4d69
-objStatus revoked - Only the input (control) datasets are submitted, no corresponding Tfbs datasets are submitted
-project wgEncode
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-softwareVersion Custom Scripts
-strain C57BL/6
-subId 5747
-tableName wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdSig
-view Signal
-
 metaObject wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -8555,6 +8407,7 @@ dateUnrestricted 2013-03-06
 dccAccession wgEncodeEM002591
 expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM918709
 grant Ren
 lab LICR-m
 labVersion 12/14/10 Lane 6D
@@ -9125,6 +8978,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM001700
 expId 1700
 fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM918745
 grant Ren
 lab LICR-m
 labVersion 09/19/10 Lane 8B
@@ -9187,6 +9041,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM001700
 expId 1700
 fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM918745
 grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 1E
@@ -9371,6 +9226,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM001459
 expId 1459
 fileName wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM918763
 grant Ren
 lab LICR-m
 labVersion 08/10/10 Lane 2B
@@ -10805,6 +10661,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM002595
 expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM918730
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 6A
@@ -10866,6 +10723,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM002595
 expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM918730
 grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 4B
@@ -11076,6 +10934,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM002494
 expId 2494
 fileName wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM918752
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 2C
@@ -11317,6 +11176,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM002596
 expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM918706
 grant Ren
 lab LICR-m
 labVersion 11/5/10 Lane 2G
@@ -11378,6 +11238,7 @@ dateUnrestricted 2013-03-05
 dccAccession wgEncodeEM002596
 expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM918706
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3B
@@ -11423,4 +11284,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 1036124156
+# MAGIC: -1080663005

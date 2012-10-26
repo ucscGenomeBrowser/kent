@@ -10,6 +10,7 @@ subGroup2 rep Replicate rep1=1 rep2=2
 # dimensions dimensionX=cellType dimensionY=rep
 dimensions dimensionX=rep dimensionY=cellType
 boxedCfg on
+fileSortOrder cell=Cell_Line view=View replicate=Lab<BR>Replicate fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder cellType=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks

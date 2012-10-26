@@ -183,19 +183,19 @@ if (vcfFileStopDueToErrors(vcff))
 }
 
 static void *vcfFileAlloc(struct vcfFile *vcff, size_t size)
-/* allocate memory from the memory pool */
+/* Use vcff's local mem to allocate memory. */
 {
 return lmAlloc(vcff->pool->lm, size);
 }
 
 static char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
-/* allocate memory for a string and copy it */
+/* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return lmCloneStringZ(vcff->pool->lm, str, size);
 }
 
 static char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
-/* allocate memory for a string and copy it */
+/* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return vcfFileCloneStrZ(vcff, str, strlen(str));
 }
@@ -208,8 +208,8 @@ return vcfFileCloneStrZ(vcff, line+substr.rm_so, (substr.rm_eo - substr.rm_so));
 
 #define vcfFileCloneVar(var) lmCloneMem(vcff->pool->lm, var, sizeof(var));
 
-static char *vcfFilePooledStr(struct vcfFile *vcff, char *str)
-/* allocate memory for a string from the shared string pool */
+char *vcfFilePooledStr(struct vcfFile *vcff, char *str)
+/* Allocate memory for a string from vcff's shared string pool. */
 {
 return hashStoreName(vcff->pool, str);
 }
@@ -667,6 +667,43 @@ if (vcff->genotypeCount > 0)
     expected = 9 + vcff->genotypeCount;
 lineFileExpectWords(vcff->lf, expected, wordCount);
 return vcfRecordFromRow(vcff, words);
+}
+
+unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec)
+/* For indels, VCF includes the left neighboring base; for example, if the alleles are
+ * AA/- following a G base, then the VCF record will start one base to the left and have
+ * "GAA" and "G" as the alleles.  That is not nice for display for two reasons:
+ * 1. Indels appear one base wider than their dbSNP entries.
+ * 2. In pgSnp display mode, the two alleles are always the same color.
+ * However, for hgTracks' mapBox we need the correct chromStart for identifying the
+ * record in hgc -- so return the original chromStart. */
+{
+unsigned int chromStartOrig = rec->chromStart;
+struct vcfFile *vcff = rec->file;
+if (rec->alleleCount > 1)
+    {
+    boolean allSameFirstBase = TRUE;
+    char firstBase = rec->alleles[0][0];
+    int i;
+    for (i = 1;  i < rec->alleleCount;  i++)
+	if (rec->alleles[i][0] != firstBase)
+	    {
+	    allSameFirstBase = FALSE;
+	    break;
+	    }
+    if (allSameFirstBase)
+	{
+	rec->chromStart++;
+	for (i = 0;  i < rec->alleleCount;  i++)
+	    {
+	    if (rec->alleles[i][1] == '\0')
+		rec->alleles[i] = vcfFilePooledStr(vcff, "-");
+	    else
+		rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]+1);
+	    }
+	}
+    }
+return chromStartOrig;
 }
 
 static void vcfParseData(struct vcfFile *vcff, int maxRecords)

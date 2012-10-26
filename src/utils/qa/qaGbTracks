@@ -22,10 +22,12 @@ The following tests are run:
   checkTblCoords
   genePredCheck
   pslCheck
-  featureBits
-  (a version of) countPerChrom
 
-  creates 3 files:  outFile.summary, outFile.log, outFile.chrom
+The following statistics are recorded: 
+  featureBits
+  item count per chromosome stats
+
+  creates 2 files:  outFile.summary, outFile.log
         """)
     parser.add_argument('db', help='the database to check')
     parser.add_argument('-f', dest='tableFile', nargs=1, type=argparse.FileType('r'),
@@ -38,6 +40,12 @@ The following tests are run:
         args.table.extend((args.tableFile[0].read()).split())
         args.tableFile[0].close()
     return args
+
+def checkTablesReceived(tableList, outFile):
+    """Raises an exception if the tableList is empty. (Necessary because both ways of specifying
+    tables are optional.)"""
+    if not tableList:
+        raise Exception("Received outFile name '" + outFile + "', but no tables were specified.")
 
 def tableExists(db, table):
     """True if the table exists in the given database."""
@@ -60,38 +68,28 @@ def runTests(db, tableList, reporter, sumTable):
         reporter.writeLine(db + "." + table +":\n")
         table = factory.tableQaFactory(db, table, reporter, sumTable)
         table.validate()
+        reporter.writeBlankLine()
         table.statistics()
-    reporter.writeLine(delimiterLine)
     reporter.writeLine("Tests complete:")
     reporter.writeTimestamp()
 
 def writeSummaryFile(sumTable, sumFile):
     sumFile.write(sumTable.tabSeparated())
 
-def runChromCounts(db, tableList, chromFile):
-    chromFile.write(time.asctime() + "\n")
-    chromFile.write("Database: " + db + "\n\n")
-    tableSet = set(tableList)
-    output, tablecounts = tableCheck.countPerChrom(db, tableSet)
-    for line in output:
-        chromFile.write(line + "\n")
-
 args = parseCommandLine()
 tableList = args.table
 db = args.db
 outFile = args.outFile
+checkTablesReceived(tableList, outFile)
 checkTablesExist(db, tableList)
 
 logFile = open(outFile + ".log", "w")
-chromFile = open(outFile + ".chroms", "w")
 sumFile = open(outFile + ".summary", "w")
 reporter = reporter.Reporter(logFile)
 sumTable = summary.SumTable()
 
 runTests(db, tableList, reporter, sumTable)
-runChromCounts(db, tableList, chromFile)
 writeSummaryFile(sumTable, sumFile)
 
 logFile.close()
 sumFile.close()
-chromFile.close()

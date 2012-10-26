@@ -2536,25 +2536,6 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
 printf("</TABLE>");
 }
 
-void previewLinks(char *db, struct trackDb *tdb)
-/* Informational messages about preview browser (ENCODE tracks only) */
-{
-if (trackDbSetting(tdb, "wgEncode") != NULL)
-    {
-    if (hIsPreviewHost())
-        {
-        printf("<p><b>WARNING</b>: This data is provided for early access via the Preview Browser -- it is unreviewed and subject to change. For high quality reviewed annotations, see the <a target=_blank href='http://%s/cgi-bin/hgTracks?db=%s'>Genome Browser</a>.",
-            "genome.ucsc.edu", db);
-        }
-    else
-        {
-        // TODO: use hTrackUiName()
-        printf("<p><b>NOTE</b>: Early access to additional track data may be available on the <a target=_blank href='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s'>Preview Browser</A>.",
-            "genome-preview.ucsc.edu", db, tdb->track);
-        }
-    }
-}
-
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Draw track specific parts of UI. */
 {
@@ -2737,7 +2718,6 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
         hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
-    previewLinks(database, tdb);
     extraUiLinks(database,tdb);
     }
 }
@@ -2973,13 +2953,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))
             {
-            if (!hIsPreviewHost())
-                {
-                // TODO: get from hui.c
-                printf("<A TARGET=_BLANK HREF='http://%s/cgi-bin/hgTrackUi?db=%s&g=%s' "
-                       "TITLE='Early access to unreviewed new data on the Preview Browser...'>"
-                       "Preview</A>", "genome-preview.ucsc.edu", database, tdb->track);
-                }
+            printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE</A>");
             printf("&nbsp;&nbsp;");
             makeDownloadsLink(database, tdb);
             }
@@ -2988,9 +2962,14 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         if (browser == btIE || browser == btFF)
             downArrow = "&darr;";
         printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtracks section of "
-               "page'>Subtracks%s</A>",downArrow);
+               "page'>Subtracks%s</A>", downArrow);
         printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
-               "Description%s</A>",downArrow);
+               "Description%s</A>", downArrow);
+        if (trackDbSetting(tdb, "wgEncode"))
+            {
+            printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
+               "Contact%s</A>", downArrow);
+            }
         printf("&nbsp;</span>");
         }
     }
@@ -3054,7 +3033,14 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     // Add pennantIcon
     printPennantIconNote(tdb);
 
-    puts(tdb->html);
+    char *html = tdb->html;
+    if (trackDbSetting(tdb, "wgEncode"))
+        {
+        // add anchor to Credits section of ENCODE HTML page so lab contacts are easily found (on top menu)
+        html = replaceChars(tdb->html, "2>Credits", "2></H2><A NAME='TRACK_CREDITS'></A>\n<H2>Credits</H2>");
+        }
+    puts(html);
+
     printf("</td><td nowrap>");
     cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);

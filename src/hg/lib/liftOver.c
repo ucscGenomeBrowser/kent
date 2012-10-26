@@ -1194,7 +1194,7 @@ int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,
 return liftOverBedPlusEnds(fileName, chainHash, minMatch, minBlocks,
                         minSizeT, minSizeQ, minChainT, minChainQ,
                         fudgeThick, f, unmapped, multiple, chainTable,
-			    0, FALSE, FALSE, 0, errCt);
+			bedPlus, hasBin, tabSep, 0, errCt);
 }
 
 int liftOverBed(char *fileName, struct hash *chainHash, 

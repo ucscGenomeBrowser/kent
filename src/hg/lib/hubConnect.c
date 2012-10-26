@@ -165,12 +165,17 @@ if (row != NULL)
     hub->hubUrl = cloneString(row[0]);
     hub->status = sqlUnsigned(row[1]);
 
-    char *errorMessage = cloneString(row[2]);
-    if (isEmpty(errorMessage))
+    if (isEmpty(row[2]))
+	{
+	char *errorMessage = NULL;
 	hub->trackHub = fetchHub( hub->hubUrl, &errorMessage);
-    if (errorMessage != NULL)
-	hub->errorMessage = cloneString(errorMessage);
-
+	if (errorMessage != NULL)
+	    {
+	    hub->errorMessage = cloneString(errorMessage);
+	    warn("%s", hub->errorMessage);
+	    hubUpdateStatus( hub->errorMessage, hub);
+	    }
+	}
     }
 sqlFreeResult(&sr);
 return hub;
@@ -249,7 +254,9 @@ return  val;
 char *hubConnectSkipHubPrefix(char *trackName)
 /* Given something like "hub_123_myWig" return myWig.  Don't free this, it's not allocated */
 {
-assert(startsWith("hub_", trackName));
+if(!startsWith("hub_", trackName))
+    return trackName;
+
 trackName += 4;
 trackName = strchr(trackName, '_');
 assert(trackName != NULL);
@@ -298,6 +305,48 @@ for(tdb = tdbList; tdb; tdb = next)
 return p;
 }
 
+static void addOneDescription(char *trackDbFile, struct trackDb *tdb)
+/* Fetch tdb->track's html description and store in tdb->html. */
+{
+/* html setting should always be set because we set it at load time */
+char *htmlName = trackDbSetting(tdb, "html");
+assert(htmlName != NULL);
+
+char *simpleName = hubConnectSkipHubPrefix(htmlName);
+char *url = trackHubRelativeUrl(trackDbFile, simpleName);
+char buffer[10*1024];
+safef(buffer, sizeof buffer, "%s.html", url);
+tdb->html = netReadTextFileIfExists(buffer);
+freez(&url);
+}
+
+static void addDescription(char *trackDbFile, struct trackDb *tdb)
+/* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
+ * and store in tdb->html. */
+{
+addOneDescription(trackDbFile, tdb);
+if (isEmpty(tdb->html))
+    {
+    struct trackDb *parent;
+    for (parent = tdb->parent;  isEmpty(tdb->html) && parent != NULL;  parent = parent->parent)
+	{
+	addOneDescription(trackDbFile, parent);
+	if (isNotEmpty(parent->html))
+	    tdb->html = cloneString(parent->html);
+	}
+    }
+}
+
+void hubConnectAddDescription(char *database, struct trackDb *tdb)
+/* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
+ * and store in tdb->html. */
+{
+unsigned hubId = hubIdFromTrackName(tdb->track);
+struct trackHub *hub = trackHubFromId(hubId);
+struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+addDescription(hubGenome->trackDbFile, tdb);
+}
+
 struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database, 
     char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
@@ -311,6 +360,7 @@ struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
+trackHubPolishTrackNames(hub, tdbList);
 rAddTrackListToHash(trackHash, tdbList, NULL, FALSE);
 if (pTdbList != NULL)
     *pTdbList = slCat(*pTdbList, tdbList);
@@ -326,15 +376,7 @@ if (tdb == NULL)
 /* Note: this does NOT add the HTML for supertrack kids */
 struct trackDb *parent;
 for (parent = tdb; parent != NULL; parent = parent->parent)
-    {
-    char *simpleName = hubConnectSkipHubPrefix(tdb->track);
-    char *url = trackHubRelativeUrl(hubGenome->trackDbFile, simpleName);
-    char buffer[10*1024];
-    safef(buffer, sizeof buffer, "%s.html", url);
-
-    parent->html = netReadTextFileIfExists(buffer);
-    freez(&url);
-    }
+    addDescription(hubGenome->trackDbFile, parent);
 trackHubClose(&hub);
 
 return tdb;
@@ -602,6 +644,7 @@ if (trackHub != NULL)
 	tdbList = trackDbLinkUpGenerations(tdbList);
 	tdbList = trackDbPolishAfterLinkup(tdbList, database);
 	trackDbPrioritizeContainerItems(tdbList);
+	trackHubPolishTrackNames(trackHub, tdbList);
 	if (tdbList != NULL)
 	    slAddHead(pHubList, trackHub);
 	}

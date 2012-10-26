@@ -1,4 +1,7 @@
 
+track quality override
+type wig 0 63
+
 track nscanGene override
 visibility pack
 informant  Guinea pig N-SCAN uses human (hg18) as the informant.

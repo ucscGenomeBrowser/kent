@@ -2,6 +2,7 @@ metaObject wgEncodeHaibMethylSeq
 objType composite
 composite wgEncodeHaibMethylSeq
 expVars lab,dataType,cell
+geoSeriesAccession GSE41304
 
 metaObject wgEncodeHaibMethylSeqBg02esHpaAlnRep1
 objType file
@@ -36,6 +37,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000279
 expId 279
 fileName wgEncodeHaibMethylSeqBg02esRegionsRep1.bed9.gz
+geoSampleAccession GSM1014214
 grant Myers
 lab HudsonAlpha
 md5sum 02bade1f70a521257fc357dcfade964f
@@ -100,6 +102,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000280
 expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdRegionsRep1.bed9.gz
+geoSampleAccession GSM1014212
 grant Myers
 lab HudsonAlpha
 md5sum 61eb1857315a91bca4a8870a9a3cd40a
@@ -120,6 +123,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000280
 expId 280
 fileName wgEncodeHaibMethylSeqBg02esebdRegionsRep2.bed9.gz
+geoSampleAccession GSM1014212
 grant Myers
 lab HudsonAlpha
 md5sum a48f83cda47570c005bdbd69648fb171
@@ -184,6 +188,7 @@ dateUnrestricted 2010-04-15
 dccAccession wgEncodeEH000294
 expId 294
 fileName wgEncodeHaibMethylSeqGm12878HpaRawDataRep1.fastq.gz
+geoSampleAccession GSM1014215
 grant Myers
 lab HudsonAlpha
 md5sum 5b352fc47983875e7472722529f14706
@@ -205,6 +210,7 @@ dateUnrestricted 2010-04-15
 dccAccession wgEncodeEH000294
 expId 294
 fileName wgEncodeHaibMethylSeqGm12878HpaRawDataRep2.fastq.gz
+geoSampleAccession GSM1014215
 grant Myers
 lab HudsonAlpha
 md5sum 938c9a5183f59fe030d827c5b53e5c29
@@ -270,6 +276,7 @@ dateUnrestricted 2010-04-15
 dccAccession wgEncodeEH000294
 expId 294
 fileName wgEncodeHaibMethylSeqGm12878MspRawDataRep1.fastq.gz
+geoSampleAccession GSM1014215
 grant Myers
 lab HudsonAlpha
 md5sum d29cf1c385d10d577ebb3e68033c2113
@@ -291,6 +298,7 @@ dateUnrestricted 2010-04-15
 dccAccession wgEncodeEH000294
 expId 294
 fileName wgEncodeHaibMethylSeqGm12878MspRawDataRep2.fastq.gz
+geoSampleAccession GSM1014215
 grant Myers
 lab HudsonAlpha
 md5sum 0c622fb47f1179c962ef58b0fc8dfa8b
@@ -312,6 +320,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000294
 expId 294
 fileName wgEncodeHaibMethylSeqGm12878RegionsRep1.bed9.gz
+geoSampleAccession GSM1014215
 grant Myers
 lab HudsonAlpha
 md5sum 360700f024ef158cd4db35614f4397b1
@@ -332,6 +341,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000294
 expId 294
 fileName wgEncodeHaibMethylSeqGm12878RegionsRep2.bed9.gz
+geoSampleAccession GSM1014215
 grant Myers
 lab HudsonAlpha
 md5sum 04f9729b1f49c3f6260e416bf53a651c
@@ -396,6 +406,7 @@ dateUnrestricted 2010-08-25
 dccAccession wgEncodeEH000300
 expId 300
 fileName wgEncodeHaibMethylSeqGm12891HpaRawDataRep1.fastq.gz
+geoSampleAccession GSM1014204
 grant Myers
 lab HudsonAlpha
 md5sum f72fa091724c8f41756762fa7f59072c
@@ -417,6 +428,7 @@ dateUnrestricted 2010-08-25
 dccAccession wgEncodeEH000300
 expId 300
 fileName wgEncodeHaibMethylSeqGm12891HpaRawDataRep2.fastq.gz
+geoSampleAccession GSM1014204
 grant Myers
 lab HudsonAlpha
 md5sum b9c03f962bec9522cd57ad1e36a7e136
@@ -482,6 +494,7 @@ dateUnrestricted 2010-08-25
 dccAccession wgEncodeEH000300
 expId 300
 fileName wgEncodeHaibMethylSeqGm12891MspRawDataRep1.fastq.gz
+geoSampleAccession GSM1014204
 grant Myers
 lab HudsonAlpha
 md5sum 7e70259c65411a60b2a03f57d5131f72
@@ -503,6 +516,7 @@ dateUnrestricted 2010-08-25
 dccAccession wgEncodeEH000300
 expId 300
 fileName wgEncodeHaibMethylSeqGm12891MspRawDataRep2.fastq.gz
+geoSampleAccession GSM1014204
 grant Myers
 lab HudsonAlpha
 md5sum 351f63a5dbc9b852466c290e0d33f68c
@@ -524,6 +538,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000300
 expId 300
 fileName wgEncodeHaibMethylSeqGm12891RegionsRep1.bed9.gz
+geoSampleAccession GSM1014204
 grant Myers
 lab HudsonAlpha
 md5sum 084bc0f6a134769fcf8984454237cbcb
@@ -544,6 +559,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000300
 expId 300
 fileName wgEncodeHaibMethylSeqGm12891RegionsRep2.bed9.gz
+geoSampleAccession GSM1014204
 grant Myers
 lab HudsonAlpha
 md5sum 25e6ea0d5c0b141a705d64004833a198
@@ -608,6 +624,7 @@ dateUnrestricted 2010-08-29
 dccAccession wgEncodeEH000303
 expId 303
 fileName wgEncodeHaibMethylSeqGm12892HpaRawDataRep1.fastq.gz
+geoSampleAccession GSM1014206
 grant Myers
 lab HudsonAlpha
 md5sum 975b4e2c6c39cf69f1d1ee513cce87cf
@@ -629,6 +646,7 @@ dateUnrestricted 2010-08-29
 dccAccession wgEncodeEH000303
 expId 303
 fileName wgEncodeHaibMethylSeqGm12892HpaRawDataRep2.fastq.gz
+geoSampleAccession GSM1014206
 grant Myers
 lab HudsonAlpha
 md5sum 365e3b9d23f0b4f2ae02d5e339813e6c
@@ -694,6 +712,7 @@ dateUnrestricted 2010-08-29
 dccAccession wgEncodeEH000303
 expId 303
 fileName wgEncodeHaibMethylSeqGm12892MspRawDataRep1.fastq.gz
+geoSampleAccession GSM1014206
 grant Myers
 lab HudsonAlpha
 md5sum 6538cd8b3d98d97d2b2f415a554e106e
@@ -715,6 +734,7 @@ dateUnrestricted 2010-08-29
 dccAccession wgEncodeEH000303
 expId 303
 fileName wgEncodeHaibMethylSeqGm12892MspRawDataRep2.fastq.gz
+geoSampleAccession GSM1014206
 grant Myers
 lab HudsonAlpha
 md5sum 7fd1f812cd72727576c2571baeedeecf
@@ -736,6 +756,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000303
 expId 303
 fileName wgEncodeHaibMethylSeqGm12892RegionsRep1.bed9.gz
+geoSampleAccession GSM1014206
 grant Myers
 lab HudsonAlpha
 md5sum 14dbc4e0f7c59789f7bdcdf8240078f3
@@ -756,6 +777,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000303
 expId 303
 fileName wgEncodeHaibMethylSeqGm12892RegionsRep2.bed9.gz
+geoSampleAccession GSM1014206
 grant Myers
 lab HudsonAlpha
 md5sum 78e40ed8b22f952725cd8534e4e6c565
@@ -820,6 +842,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000306
 expId 306
 fileName wgEncodeHaibMethylSeqH1hescHpaRawDataRep1.fastq.gz
+geoSampleAccession GSM1014207
 grant Myers
 lab HudsonAlpha
 labExpId SL605
@@ -843,6 +866,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000306
 expId 306
 fileName wgEncodeHaibMethylSeqH1hescHpaRawDataRep2.fastq.gz
+geoSampleAccession GSM1014207
 grant Myers
 lab HudsonAlpha
 labExpId SL659
@@ -910,10 +934,12 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000306
 expId 306
 fileName wgEncodeHaibMethylSeqH1hescMspRawDataRep1.fastq.gz
+geoSampleAccession GSM1014207
 grant Myers
 lab HudsonAlpha
 labExpId SL605
 md5sum 5b9b40d1211bfc23bd795ba4c5c7c049
+objStatus corrupted file
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -933,6 +959,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000306
 expId 306
 fileName wgEncodeHaibMethylSeqH1hescMspRawDataRep2.fastq.gz
+geoSampleAccession GSM1014207
 grant Myers
 lab HudsonAlpha
 labExpId SL659
@@ -956,6 +983,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000306
 expId 306
 fileName wgEncodeHaibMethylSeqH1hescRegionsRep1.bed9.gz
+geoSampleAccession GSM1014207
 grant Myers
 lab HudsonAlpha
 md5sum 224d338c7eab9891defd97541659d1aa
@@ -976,6 +1004,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000306
 expId 306
 fileName wgEncodeHaibMethylSeqH1hescRegionsRep2.bed9.gz
+geoSampleAccession GSM1014207
 grant Myers
 lab HudsonAlpha
 md5sum 8471d201a96eda5215968815e0b33603
@@ -1018,6 +1047,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000281
 expId 281
 fileName wgEncodeHaibMethylSeqH9esRegionsRep1.bed9.gz
+geoSampleAccession GSM1014213
 grant Myers
 lab HudsonAlpha
 md5sum ca9019e709d16b61beb69a8114f8970a
@@ -1060,6 +1090,7 @@ dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH000283
 expId 283
 fileName wgEncodeHaibMethylSeqH9esafpminusRegionsRep1.bed9.gz
+geoSampleAccession GSM1014218
 grant Myers
 lab HudsonAlpha
 md5sum 927e12bbd81c3bdb6f0010de7268e177
@@ -1102,6 +1133,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000282
 expId 282
 fileName wgEncodeHaibMethylSeqH9esafpplusRegionsRep1.bed9.gz
+geoSampleAccession GSM1014216
 grant Myers
 lab HudsonAlpha
 md5sum a33ee91b405e9b478b0649ca9dadadd9
@@ -1144,6 +1176,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000284
 expId 284
 fileName wgEncodeHaibMethylSeqH9escmRegionsRep1.bed9.gz
+geoSampleAccession GSM1014208
 grant Myers
 lab HudsonAlpha
 md5sum e0d74d115c0d369b099787206ad2f65e
@@ -1186,6 +1219,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000285
 expId 285
 fileName wgEncodeHaibMethylSeqH9eseRegionsRep1.bed9.gz
+geoSampleAccession GSM1014217
 grant Myers
 lab HudsonAlpha
 md5sum a237a8c6a02de1b6f7c9d4681a7e0939
@@ -1228,6 +1262,7 @@ dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH000286
 expId 286
 fileName wgEncodeHaibMethylSeqH9esebRegionsRep1.bed9.gz
+geoSampleAccession GSM1014220
 grant Myers
 lab HudsonAlpha
 md5sum 9dabf4d69d6dd92b0c54a2a7fdb1f8b7
@@ -1270,6 +1305,7 @@ dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH000287
 expId 287
 fileName wgEncodeHaibMethylSeqH9esebdRegionsRep1.bed9.gz
+geoSampleAccession GSM1014219
 grant Myers
 lab HudsonAlpha
 md5sum 8df7a198c3af69512e5d2a1a56ee510a
@@ -1312,6 +1348,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000288
 expId 288
 fileName wgEncodeHaibMethylSeqHalRegionsRep1.bed9.gz
+geoSampleAccession GSM1014210
 grant Myers
 lab HudsonAlpha
 md5sum 29905f1c68464955d134446d20d24854
@@ -1397,6 +1434,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000289
 expId 289
 fileName wgEncodeHaibMethylSeqHct116RegionsRep1.bed9.gz
+geoSampleAccession GSM1014209
 grant Myers
 lab HudsonAlpha
 md5sum 2138e29b9bedeab320f14e17f16f2e6b
@@ -1417,6 +1455,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000289
 expId 289
 fileName wgEncodeHaibMethylSeqHct116RegionsRep2.bed9.gz
+geoSampleAccession GSM1014209
 grant Myers
 lab HudsonAlpha
 md5sum 8b945bc393953a887921ca675e6f2472
@@ -1481,6 +1520,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000309
 expId 309
 fileName wgEncodeHaibMethylSeqHelas3HpaPcr2xRawDataRep1.fastq.gz
+geoSampleAccession GSM1014202
 grant Myers
 lab HudsonAlpha
 labExpId SL577
@@ -1504,6 +1544,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000309
 expId 309
 fileName wgEncodeHaibMethylSeqHelas3HpaPcr2xRawDataRep2.fastq.gz
+geoSampleAccession GSM1014202
 grant Myers
 lab HudsonAlpha
 labExpId SL603
@@ -1571,6 +1612,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000309
 expId 309
 fileName wgEncodeHaibMethylSeqHelas3MspPcr2xRawDataRep1.fastq.gz
+geoSampleAccession GSM1014202
 grant Myers
 lab HudsonAlpha
 labExpId SL574
@@ -1594,6 +1636,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000309
 expId 309
 fileName wgEncodeHaibMethylSeqHelas3MspPcr2xRawDataRep2.fastq.gz
+geoSampleAccession GSM1014202
 grant Myers
 lab HudsonAlpha
 labExpId SL602
@@ -1617,6 +1660,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000309
 expId 309
 fileName wgEncodeHaibMethylSeqHelas3RegionsRep1.bed9.gz
+geoSampleAccession GSM1014202
 grant Myers
 lab HudsonAlpha
 md5sum 1ddec122dee67d53df20795f049d3498
@@ -1637,6 +1681,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000309
 expId 309
 fileName wgEncodeHaibMethylSeqHelas3RegionsRep2.bed9.gz
+geoSampleAccession GSM1014202
 grant Myers
 lab HudsonAlpha
 md5sum efbb0fc5ab0aee951d783a10b8a107ae
@@ -1701,6 +1746,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000312
 expId 312
 fileName wgEncodeHaibMethylSeqHepg2HpaPcr2xRawDataRep1.fastq.gz
+geoSampleAccession GSM1014205
 grant Myers
 lab HudsonAlpha
 labExpId SL578
@@ -1724,6 +1770,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000312
 expId 312
 fileName wgEncodeHaibMethylSeqHepg2HpaPcr2xRawDataRep2.fastq.gz
+geoSampleAccession GSM1014205
 grant Myers
 lab HudsonAlpha
 labExpId SL579
@@ -1791,6 +1838,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000312
 expId 312
 fileName wgEncodeHaibMethylSeqHepg2MspPcr2xRawDataRep1.fastq.gz
+geoSampleAccession GSM1014205
 grant Myers
 lab HudsonAlpha
 labExpId SL575
@@ -1814,6 +1862,7 @@ dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000312
 expId 312
 fileName wgEncodeHaibMethylSeqHepg2MspPcr2xRawDataRep2.fastq.gz
+geoSampleAccession GSM1014205
 grant Myers
 lab HudsonAlpha
 labExpId SL576
@@ -1837,6 +1886,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000312
 expId 312
 fileName wgEncodeHaibMethylSeqHepg2RegionsRep1.bed9.gz
+geoSampleAccession GSM1014205
 grant Myers
 lab HudsonAlpha
 md5sum 2828747f3b711e689063f862347d89a4
@@ -1857,6 +1907,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000312
 expId 312
 fileName wgEncodeHaibMethylSeqHepg2RegionsRep2.bed9.gz
+geoSampleAccession GSM1014205
 grant Myers
 lab HudsonAlpha
 md5sum a7be699b22509a47d0f992407da9d57c
@@ -1899,6 +1950,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000290
 expId 290
 fileName wgEncodeHaibMethylSeqHfl11wRegionsRep1.bed9.gz
+geoSampleAccession GSM1014211
 grant Myers
 lab HudsonAlpha
 md5sum 5ac99e547d1df244b0880a20217e4ca1
@@ -1941,6 +1993,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000291
 expId 291
 fileName wgEncodeHaibMethylSeqHfl24wRegionsRep1.bed9.gz
+geoSampleAccession GSM1014201
 grant Myers
 lab HudsonAlpha
 md5sum d954f804540416c19c9f258afed5d994
@@ -2005,6 +2058,7 @@ dateUnrestricted 2010-04-15
 dccAccession wgEncodeEH000297
 expId 297
 fileName wgEncodeHaibMethylSeqK562HpaRawDataRep1.fastq.gz
+geoSampleAccession GSM1014203
 grant Myers
 lab HudsonAlpha
 md5sum 50dd54b1ca88791bc5eb2539ab432151
@@ -2026,6 +2080,7 @@ dateUnrestricted 2010-04-15
 dccAccession wgEncodeEH000297
 expId 297
 fileName wgEncodeHaibMethylSeqK562HpaRawDataRep2.fastq.gz
+geoSampleAccession GSM1014203
 grant Myers
 lab HudsonAlpha
 md5sum 28ce75f5100950993e884b41c326ebc8
@@ -2091,6 +2146,7 @@ dateUnrestricted 2010-04-15
 dccAccession wgEncodeEH000297
 expId 297
 fileName wgEncodeHaibMethylSeqK562MspRawDataRep1.fastq.gz
+geoSampleAccession GSM1014203
 grant Myers
 lab HudsonAlpha
 md5sum a2d9aae5b8299b70a54549f78141a66c
@@ -2112,6 +2168,7 @@ dateUnrestricted 2010-04-15
 dccAccession wgEncodeEH000297
 expId 297
 fileName wgEncodeHaibMethylSeqK562MspRawDataRep2.fastq.gz
+geoSampleAccession GSM1014203
 grant Myers
 lab HudsonAlpha
 md5sum b12cf549402e74906f93613e98248855
@@ -2133,6 +2190,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000297
 expId 297
 fileName wgEncodeHaibMethylSeqK562RegionsRep1.bed9.gz
+geoSampleAccession GSM1014203
 grant Myers
 lab HudsonAlpha
 md5sum b595712139352962660e43049fbc53c2
@@ -2153,6 +2211,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000297
 expId 297
 fileName wgEncodeHaibMethylSeqK562RegionsRep2.bed9.gz
+geoSampleAccession GSM1014203
 grant Myers
 lab HudsonAlpha
 md5sum 9b45633c99f81d7a94de65962b16e654
@@ -2162,4 +2221,4 @@ subId 1247
 tableName wgEncodeHaibMethylSeqK562RegionsRep2
 view Regions
 
-# MAGIC: 193645102
+# MAGIC: -495902886

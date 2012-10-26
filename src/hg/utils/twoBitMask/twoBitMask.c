@@ -235,8 +235,6 @@ if (! twoBitIsFile(inName))
     else
 	errAbort("Input %s does not look like a proper .2bit file.", inName);
     }
-if (! twoBitIsFile(outName))
-    errAbort("Output %s does not look like a proper .2bit file.", outName);
 
 twoBitList = slurpInput(inName, tbHash, bitmapHash);
 

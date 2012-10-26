@@ -66,17 +66,17 @@ used as a ready reference.</P>
     <UL>
         <LI><A HREF="#bed_-_Item_or_Region_Track_Settings">bed/bigBed</A>:
                                                                 Item or region tracks</LI>
-        <LI><A HREF="#wig_-_Signal_Graphing_Track_Settings">wig/bigWig/bedGraph/bamWig</A>:
-                                                                signal graphing tracks</LI>
+        <LI><A HREF="#wig_-_Signal_Graphing_Track_Settings">wig/bigWig/bedGraph</A>:
+                                                                Signal graphing tracks</LI>
         <LI><A HREF="#genePred">genePred</A>: Gene models and predictions</LI>
         <LI><A HREF="#bam">bam</A>: Compressed Sequence Alignment/Map tracks</LI>
         <LI><A HREF="#pgSnp">pgSnp</A>: Personal Genome SNP tracks</LI>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
-        <LI><A HREF="#psl">psl</A>: sequence alignments</LI>
-        <LI><A HREF="#chain">chain and netAlign</A>: paired sequence alignments</LI>
+        <LI><A HREF="#psl">psl</A>: Sequence alignments</LI>
+        <LI><A HREF="#chain">chain and netAlign</A>: Paired sequence alignments</LI>
         <LI><A HREF="#wigMaf">wigMaf</A>: Multiple alignments</LI>
         <LI><A HREF="#expRatio">expRatio</A>: Microarray expression data</LI>
-        <LI><A HREF="#snp">snp</A>: short genetic variants from dbSNP</LI>
+        <LI><A HREF="#snp">snp</A>: Short genetic variants from dbSNP</LI>
         <LI><A HREF="#rareTypes">Specialize or rarely used</A>:<BR>
             <A HREF="#altGraphX">altGraphX</A>,
             <A HREF="#bedDetail">bedDetail</A>,
@@ -92,7 +92,7 @@ used as a ready reference.</P>
         &ndash; with examples
     <UL>
         <LI><A HREF="#group">Predefined major track groupings</A></LI>
-        <LI><A HREF="#superTrack">Supertracks (AKA Folders or Containers)</A></LI>
+        <LI><A HREF="#superTrack">Supertracks (Folders or Containers)</A></LI>
         <LI><A HREF="#compositeTrack">Composite Tracks</A>
         <UL>
             <LI><A HREF="#subGroups">Subgroups</A></LI>
@@ -102,7 +102,7 @@ used as a ready reference.</P>
     </UL></LI>
     <LI><A HREF="#customTracks">Special settings for custom tracks</A></LI>
     <LI><A HREF="#loosers">Obscure or special cases</A> &ndash; (aka Rejections)</LI>
-    <LI><A HREF="#toc">Table of Contents (<I>self-assembled</I>)</A></LI>
+    <LI><A HREF="#toc">Table of Contents</A></LI>
 </OL>
 <IMG class='toggle all' />&nbsp;<I>Open/close all details.</I>
 </div></div>
@@ -231,9 +231,9 @@ used as a ready reference.</P>
 </div>
 <div class="borderGuard">
 
-<P>Many settings are only
-valid for certain types of tracks.  Below many of these track types
-are described along with their type specific settings.</P>
+<P>Many settings are valid only
+for certain types of tracks.  These track types
+are described below along with the settings specific to their types.</P>
 
 <A name="bed"><A name="bigBed"></A>
 <TABLE class="settingsTable" id="bed_-_Item_or_Region_Track_Settings">
@@ -337,7 +337,7 @@ are described along with their type specific settings.</P>
 
 <TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
     <TR VALIGN=TOP><TH><A name="item_lessFrequent"></A>
-            <IMG class='toggle oneSection' />&nbsp;Less frequently used item track settings:
+            <IMG class='toggle oneSection' />&nbsp;Less frequently used item track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="bedFilter"><A name="bedFilter"></A><IMG class='toggle detail'>
         <div class="format"><code>bedFilter on</code></div>
@@ -412,22 +412,21 @@ are described along with their type specific settings.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="bed_example">
         <A name="bed_Examples"></A><IMG class='toggle detail'>
-        <div class="format"><B>Examples of item base types:</B></div>
+        <div class="format"><B>Examples of item base types</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
 
-<A name="wig"><A name="bigWig"><A name="bedGraph"><A name="bamWig"></A>
+<A name="wig"><A name="bigWig"><A name="bedGraph">
 <TABLE class="settingsTable" id="wig_-_Signal_Graphing_Track_Settings">
 <THEAD><TR><TD><DIV ID="wig_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;wig/bigWig - Signal graphing track settings
+        &nbsp;wig,bigWig - Signal graphing track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="wig"><IMG class='toggle detail'>
         <div class="format">
             <code>type wig &lt;low#&gt; &lt;high#&gt;</code><BR>
-            <code>type bigWig &lt;#&gt; &lt;#&gt;</code><BR>
-            <code>type bamWig &lt;#&gt; &lt;#&gt;</code></div>
+            <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="minLimit">
             <A name="minLimit"></A>
@@ -494,7 +493,7 @@ are described along with their type specific settings.</P>
             <code>gridDefault   on</code></div>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="wig_example"><IMG class='toggle detail'>
-        <div class="format"><B>Examples of signal graphing tracks:</B></div>
+        <div class="format"><B>Examples of signal graphing tracks</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -563,7 +562,7 @@ are described along with their type specific settings.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP>
         <TD class="genePred_example"><IMG class='toggle detail'>
-        <div class="format"><B>Examples of genePred track: </B></div>
+        <div class="format"><B>Examples of genePred tracks</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -602,6 +601,7 @@ are described along with their type specific settings.</P>
         <div class="format"><code>noColorTag .</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bamSkipPrintQualScore"><A name="bamSkipPrintQualScore"></A>
+        <IMG class='toggle detail'>
         <div class="format"><code>bamSkipPrintQualScore .</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="indelDoubleInsert">
@@ -696,7 +696,7 @@ are described along with their type specific settings.</P>
 <TABLE class="settingsTable" id="psl_-_Sequence_Alignment_Track_Settings">
 <THEAD><TR><TD><DIV ID="psl_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;psl - sequence alignment tracks settings
+        &nbsp;psl - Sequence alignment tracks settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="psl"><IMG class='toggle detail'>
         <div class="format"><code>type psl &lt;subtype&gt; [otherDb]</code></div>
@@ -750,7 +750,7 @@ are described along with their type specific settings.</P>
             <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="psl_example"><IMG class='toggle detail'>
-        <div class="format"><B>Examples of psl alignment tracks:</B></div>
+        <div class="format"><B>Examples of psl alignment tracks</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -805,7 +805,7 @@ are described along with their type specific settings.</P>
     </TD></TR> -->
     <TR class="examples" VALIGN=TOP><TD class="chain_netAlign_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Examples of chain and netAlign tracks:</B></div>
+        <div class="format"><B>Examples of chain and netAlign tracks</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -865,7 +865,7 @@ are described along with their type specific settings.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="wigMaf_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Examples of wigMaf tracks:</B></div>
+        <div class="format"><B>Examples of wigMaf tracks</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -905,7 +905,7 @@ are described along with their type specific settings.</P>
 <TABLE class="settingsTable" id="snp_-_short_genetic_variants_from_dbSNP_Track_Settings">
 <THEAD><TR><TD><DIV ID="snp_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
-        &nbsp;snp - short genetic variants from dbSNP track settings
+        &nbsp;snp - Short genetic variants from dbSNP track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="snp"><IMG class='toggle detail'>
         <div class="format"><code>type bed 6 +</code></div>
@@ -1198,7 +1198,7 @@ into a single image.</P>
 <TABLE class="settingsTable" id="superTrack_-_Folder_Track_Settings">
 <THEAD><TR><TD><DIV ID="superTrack_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;Supertrack (aka Folders or Containers) track settings
+        &nbsp;Supertrack (Folders or Containers) track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="superTrack"><IMG class='toggle detail'>
         <div class="format"><code>superTrack on</code></div>
@@ -1209,7 +1209,7 @@ into a single image.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="superTrack_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Example of a Supertrack track:</B></div>
+        <div class="format"><B>Example of a Supertrack:</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -1285,7 +1285,7 @@ into a single image.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="subGroups_example">
         <IMG class='toggle detail'>
-        <div class="format"><B>Examples of Composite tracks with Subgroups:</B></div>
+        <div class="format"><B>Examples of Composite tracks with Subgroups</B></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -1555,7 +1555,7 @@ bigWig</P>
     <TR VALIGN=TOP>
         <TD class="dividers"><A name="dividers"></A><code>dividers</code></TD>
         <TD>all</TD>
-        <TD><I>(Jim says KEEP_UGLY)</I>
+        <TD><!-- <I>(Jim says KEEP_UGLY)</I> -->
             OBSOLETE: use <A onclick="return jumpTo(this);" HREF="#">sortOrder</A> instead.</TD>
     </TR>
     <TR VALIGN=TOP>
@@ -1603,7 +1603,7 @@ bigWig</P>
     </TR>
     <TR VALIGN=TOP>
         <TD class="extraFields"><A name="extraFields"></A><code>extraFields</code></TD><TD>bed</TD>
-        <TD>OBSOLETE:  (Jim hates it) replaced by looking up "as" table
+        <TD>OBSOLETE:  <!-- (Jim hates it) --> replaced by looking up "as" table
             description.  However, that method does not allow for:
             <UL>
             <LI> selective inclusion/exclusion of fields</LI>
@@ -1641,7 +1641,7 @@ bigWig</P>
     <TR VALIGN=TOP>
         <TD class="graphType"><A name="graphType"></A><code>graphType</code></TD>
         <TD>bedGraph</TD>
-        <TD><I>(Jim says KEEP)</I> Not found in code.  Probably typo of graphTypeDefault.
+        <TD><!-- <I>(Jim says KEEP)</I> --> Not found in code.  Probably typo of graphTypeDefault.
             (rare hg18.encodeRegulomeDnaseArray)
         </TD>
     </TR>
@@ -1739,7 +1739,7 @@ bigWig</P>
     <TR VALIGN=TOP>
         <TD class="nextItemButton"><A name="nextItemButton"></A><code>nextItemButton</code></TD>
         <TD>all</TD>
-        <TD><I>(Jim says LOSE)</I>  This setting lets you override
+        <TD><!-- <I>(Jim says LOSE)</I> --> This setting lets you override
             the Browser wide setting to disable nextItem arrows (which is off
             by default).  When this is on, the nextItem arrows will show up
             for your track.  The opposite does not seem to be the case, where
@@ -1753,8 +1753,8 @@ bigWig</P>
             OBSOLETE but there continue to be edge cases where this setting
             has some affect.  Currently only 2 places this is read this:</P>
             <OL>
-            <LI>in hdb to makesuperChildren inherit settings from their superTrack.  This done
-            by putting the super settings into the child's settings hash.</LI>
+            <LI>in hdb to makesuperChildren inherit settings from their supertrack.  This is 
+            done by putting the super settings into the child's settings hash.</LI>
             <LI>tdbQuery where it appears to have no affect.</LI>
             </OL>
         </TD>
@@ -1979,7 +1979,7 @@ bigWig</P>
     </TR>
     <TR VALIGN=TOP>
         <TD class="txInfo"><A name="txInfo"></A><code>txInfo</code></TD><TD>genePred</TD>
-        <TD>Only seems to be used in Jim's experimental tracks in hg18 and mm8.</TD>
+        <TD>Only seems to be used in <!-- Jim's --> experimental tracks in hg18 and mm8.</TD>
     </TR>
     <TR VALIGN=TOP>
         <TD class="urlName"><A name="urlName"></A><code>urlName</code></TD><TD>genePred</TD>

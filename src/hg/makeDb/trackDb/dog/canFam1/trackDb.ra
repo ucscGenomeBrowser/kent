@@ -2,6 +2,9 @@
 
 include trackDb.chainNet.ra
 
+track quality override
+type wig 0 51
+
 track bacEndPairs
 #replaces record bacEndPairs in parent dir missing/extra color,altColor
 shortLabel BAC End Pairs

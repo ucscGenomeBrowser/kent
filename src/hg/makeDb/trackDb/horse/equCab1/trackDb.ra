@@ -2,6 +2,9 @@
 
 include trackDb.chainNet.ra
 
+track quality override
+type wig 0 63
+
 track nscanGene override
 informant Horse N-SCAN uses human (hg18) as the informant and iterative pseudogene masking. 
 

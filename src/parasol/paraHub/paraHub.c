@@ -92,6 +92,8 @@ static struct optionSpec optionSpecs[] = {
     {"log", OPTION_STRING},
     {"debug", OPTION_BOOLEAN},
     {"noResume", OPTION_BOOLEAN},
+    {"ramUnit", OPTION_STRING},
+    {"defaultJobRam", OPTION_INT},
     {NULL, 0}
 };
 
@@ -140,6 +142,12 @@ errAbort("paraHub - parasol hub server version %s\n"
          "   -log=file  Log to file instead of syslog.\n"
          "   -debug  Don't daemonize\n"
 	 "   -noResume  Don't try to reconnect with jobs running on nodes.\n"
+         "   -ramUnit=N  Number of bytes of RAM in the base unit used by the jobs.\n"
+         "      Default is RAM on node divided by number of cpus on node.\n"
+         "      Shorthand expressions allow t,g,m,k for tera, giga, mega, kilo.\n"
+         "      e.g. 4g = 4 Gigabytes.\n"
+	 "   -defaultJobRam=N Number of ram units in a job has no specified ram usage.\n"
+	 "      Defaults to 1.\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
 	 );
@@ -187,7 +195,7 @@ struct rudp *rudpOut;	/* Our rUDP socket. */
 
 // TODO make commandline param options to override defaults for unit sizes?
 /*  using machines list spec info for defaults */
-int cpuUnit = 1;                   /* 1 CPU */
+int cpuUnit = 1;                   /* 1 CPU */  /* someday this could be float 0.5 */
 long long ramUnit = 512 * 1024 * 1024;  /* 500 MB */
 int defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
 int defaultJobRam = 1;        /* number of ramUnits in default job usage */
@@ -750,7 +758,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 		    //pmPrintf(pm, "preserving batch %s on machine %s", batch->name, mach->name);
 		    //pmSend(pm, rudpOut);
 		    }
-		allocateResourcesToMachine(mach, batch, user, &r, &c);
+		allocateResourcesToMachine(mach, batch, user, &c, &r);
 		}
 	    }
 
@@ -865,7 +873,7 @@ while(TRUE)
 	    //pmSend(pm, rudpOut);
 	    }
 
-	allocateResourcesToMachine(mach, batch, user, &r, &c);
+	allocateResourcesToMachine(mach, batch, user, &c, &r);
 
 	if (pm) 
 	    {
@@ -1920,11 +1928,20 @@ int oldRam = batch->ram;
 if (job->cpus) 
     batch->cpu = (job->cpus + 0.5) / cpuUnit;  /* rounding */
 else
+    {
+    /* if no cpus specified, use the default */
     batch->cpu = defaultJobCpu;
+    job->cpus = defaultJobCpu * cpuUnit;
+    }
 if (job->ram) 
-    batch->ram = (job->ram + (0.5*ramUnit)) / ramUnit;   /* rounding */
+    batch->ram = 1 + (job->ram - 1) / ramUnit;   /* any remainder will be rounded upwards
+        e.g.  1 to 1024m --> 1G but 1025m --> 2G if unit is 1G.   0m would just cause default ram usage. */
 else
+    {
+    /* if no ram size specified, use the default */
     batch->ram = defaultJobRam;
+    job->ram = defaultJobRam * ramUnit;
+    }
 
 if (oldCpu != batch->cpu || oldRam != batch->ram)
     {
@@ -2107,9 +2124,51 @@ return freeBatch(userName, batchName);
 
 void freeBatchAcknowledge(char *line, struct paraMessage *pm)
 /* Free batch resources.  Line format is <user> <dir>
-* Returns 0 if success or some err # if a problem.  Sends result back to client. */
+ * Returns 0 if success or some err # if a problem.  Sends result back to client. */
 {
 int result = freeBatchFromMessage(line);
+pmClear(pm);
+pmPrintf(pm, "%d",result);
+pmSend(pm, rudpOut);
+}
+
+
+int flushResultsByRequest(char *userName, char *batchName)
+/* Flush results file. Return 0 if nothing running and queue empty. */
+{
+struct user *user = findUser(userName);
+if (user == NULL) return -3;
+struct hashEl *hel = hashLookup(stringHash, batchName);
+if (hel == NULL) return -2;
+char *name = hel->name;
+struct batch *batch = findBatchInList(user->curBatches, name);
+if (batch == NULL)
+    batch = findBatchInList(user->oldBatches, name);
+if (batch == NULL) return -2;
+flushResults(batch->name);
+logDebug("paraHub: User %s flushed results batch %s", userName, batchName);
+/* return 0 if nothing running and queue empty */
+if (batch->runningCount > 0) return -1;
+if (!dlEnd(batch->jobQueue->head)) return -1;
+return 0;
+}
+
+int flushResultsFromMessage(char *line)
+/* Parse out flushResults message and flush the results file. */
+{
+char *userName, *batchName;
+if ((userName = nextWord(&line)) == NULL)
+    return -2;
+if ((batchName = nextWord(&line)) == NULL)
+    return -2;
+return flushResultsByRequest(userName, batchName);
+}
+
+void flushResultsAcknowledge(char *line, struct paraMessage *pm)
+/* Flush results file.  Line format is <user> <dir>
+ * Returns 0 if success or some err # if a problem.  Sends result back to client. */
+{
+int result = flushResultsFromMessage(line);
 pmClear(pm);
 pmPrintf(pm, "%d",result);
 pmSend(pm, rudpOut);
@@ -2925,10 +2984,12 @@ while (lineFileRow(lf, row))
 	{
 	firstTime = FALSE;
 	cpuUnit = 1;       /* 1 CPU */
-	ramUnit = ((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
+	if (!optionExists("ramUnit"))
+    	    ramUnit = ((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
 	defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
 	/* number of ramUnits in default job usage, resolves to just 1 currently */
-	defaultJobRam = (((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus) / ramUnit;
+	if (!optionExists("defaultJobRam"))
+    	    defaultJobRam = (((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus) / ramUnit;
 	}
 
     int c = 0, r = 0;
@@ -3295,6 +3356,8 @@ for (;;)
          resetCountsAcknowledge(line, pm);
     else if (sameWord(command, "freeBatch"))
          freeBatchAcknowledge(line, pm);
+    else if (sameWord(command, "flushResults"))
+         flushResultsAcknowledge(line, pm);
     else if (sameWord(command, "showSickNodes"))
 	 showSickNodesAcknowledge(line, pm);
     else if (sameWord(command, "clearSickNodes"))
@@ -3369,6 +3432,18 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
+if (optionExists("ramUnit"))
+    {
+    ramUnit = paraParseRam(optionVal("ramUnit", ""));
+    if (ramUnit == -1)
+	errAbort("Invalid RAM expression '%s' in '-ramUnit=' option", optionVal("ramUnit", ""));
+    }
+if (optionExists("defaultJobRam"))
+    {
+    defaultJobRam = optionInt("defaultJobRam", defaultJobRam);
+    if (defaultJobRam < 1)
+	errAbort("Invalid defaultJobRam specified in option -defaultJobRam=%d", defaultJobRam);
+    }
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);

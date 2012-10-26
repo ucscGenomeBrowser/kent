@@ -357,6 +357,20 @@ freeMem(sectionList);
 sqlFreeResult(&sr);
 }
 
+static char *urlToLogoUrl(char *urlOrig)
+/* return a string with relative path of logo for publisher given the url of fulltext, has to be freed */
+{
+// get top-level domain
+char url[1024];
+memcpy(url, urlOrig, sizeof(url));
+char *urlParts[20];
+int partCount = chopString(url, ".", urlParts, ArraySize(urlParts));
+// construct path
+char *logoUrl = needMem(sizeof(url));
+safef(logoUrl, sizeof(url), "../images/pubs_%s.png", urlParts[partCount-2]);
+return logoUrl;
+}
+
 static char *printArticleInfo(struct sqlConnection *conn, char *item, char *pubsArticleTable)
 /* Header with information about paper, return documentId */
 {
@@ -394,13 +408,24 @@ if (stringIn("sciencedirect.com", url))
     pubsIsElsevier = TRUE;
     }
 
+// logo of publisher
+char *logoUrl = urlToLogoUrl(url);
+printf("<a href=\"%s\"><img align=\"right\" hspace=\"20\" src=\"%s\"></a>\n", url, logoUrl);
+freeMem(logoUrl);
+
 printf("<P>%s</P>\n", authors);
-printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A>\n", url, title);
+printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B>\n", url, title);
+printf("</A>\n");
+
+
 printf("<P style=\"width:800px; font-size:80%%\">%s", cit);
 if (strlen(pmid)!=0 && strcmp(pmid, "0"))
     printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
 printf("</P>\n");
 printf("<P style=\"width:800px; font-size:100%%\">%s</P>\n", abstract);
+
+if (pubsIsElsevier)
+    printf("<P><SMALL>Copyright 2012 Elsevier B.V. All rights reserved.</SMALL></P>");
 
 sqlFreeResult(&sr);
 return articleId;
@@ -665,8 +690,6 @@ else
 if (skippedRows)
     printSeqSection(articleId, "Other Sequences in this article", \
         fileDesc, conn, clickedSeqs, 0, fasta, pslTable, articleTable);
-if (pubsIsElsevier)
-    printf("<P><SMALL>Copyright 2012 Elsevier B.V. All rights reserved.</SMALL></P>");
 freeHash(&clickedSeqs);
 }
 
