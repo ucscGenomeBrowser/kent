@@ -234,8 +234,7 @@ var tdbDoc = {
                 // Should now have a full set of settings to add to TOC
                 if ($(tocTable).find('thead').length === 0)
                     $(tocTable).prepend( "<THEAD><TR><TD colspan='3'>"+
-                               "<H3>Table of Contents (<I>self-assembled</I>)"+
-                               "</H3></TD></TR></THEAD>" );
+                               "<H3>Table of Contents</H3></TD></TR></THEAD>" );
                 if ($(tocTable).find('th').length === 0)
                     $(tocTable).append( "<TR VALIGN=TOP><TH WIDTH=100>Setting</TH>"+
                                         "<TH WIDTH='25%'>For Types</TH><TH>Documented</TH></TR>" );
