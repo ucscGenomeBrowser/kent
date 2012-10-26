@@ -49,7 +49,6 @@ track chainNetBosTau7 override
 priority 340.3
 chainMinScore 5000
 chainLinearGap loose
-shortLabel $o_db Chain/Net
 
 track chainNetBosTau6 override
 matrixHeader A, C, G, T
