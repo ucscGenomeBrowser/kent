@@ -4,10 +4,10 @@ L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-A = alphaChain
-O = alphaChain.o
+A = alphaAsm
+O = alphaAsm.o
 
-alphaChain: ${O} ${MYLIBS}
+alphaAsm: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 #       ${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
@@ -18,4 +18,5 @@ clean::
 	rm -f ${A}${EXE} ${O}
 
 test:
-	alphaChain DYZ3_alphaChain.txt DYZ3_alphaChain_monOrder.txt test.out chain=test.before afterChain=test.after outSize=10000 seed=0
+	alphaAsm yReads.txt yTypeOrder.txt test.out chain=test.before afterChain=test.after outSize=10000 seed=0 verbose=1
+
