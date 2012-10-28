@@ -1,7 +1,7 @@
 /* paraHub - Parasol hub server.  This is the heart of the parasol system
  * and consists of several threads - sucketSucker, heartbeat, a collection
  * of spokes, as well as the main hub thread.  The system is synchronized
- * around a message queue.
+ * around a message queue that the hub reads and the other threads write.
  *
  * The purpose of socketSucker is to move messages from the UDP
  * socket, which has a limited queue size, to the message queue, which
@@ -11,16 +11,26 @@
  * delivering messages to multiple nodes simultaniously.  The heartbeat
  * daemon simply sits in a loop adding a heartbeat message to the message
  * queue every 15 seconds or so. The hub thead is responsible for
- * keeping track of everything. The hub thread puts jobs 
- * on the job list, moves machines from the busy list to the free list,  
- * and calls the 'runner' routines, and appends job results to results
- * files in batch directories.
+ * keeping track of everything. 
+ * 
+ * The hub keeps track of users, batches, jobs, and machines.  It tries
+ * to balance machine usage between users and between batches.  If a machine
+ * goes down it will restart the jobs the machine was running on other machines.
+ * When a job finishes it will add a line about the job to the results file
+ * associated with the batch.
  *
- * The runner routine looks to see if there is a free machine, a free spoke,
- * and a job to run.  If so it will send a message to the spoke telling
- * it to run the job on the machine,  and then move the job from the 'pending'
- * to the 'running' list,  the spoke from the freeSpoke to the busySpoke list, 
- * and the machine from the freeMachine to the busyMachine list.   This
+ * A fair bit of the hub's code is devoted to scheduling.  It does this by
+ * periodically "planning" what batches to associate with what machines.
+ * When a machine is free it will run the next job from one of it's batches.
+ * A number of events including a new batch of jobs, machines being added or
+ * removed, and so forth can make the system decide it needs to replan.  The
+ * replanning itself is done in the next heartbeat.
+ *
+ * When the plan is in place, the most common thing the system does is
+ * try to run the next job.  It keeps lists of free machines and free spokes,
+ * and for the most part just just takes the next machine, a job from one
+ * of the batches the machine is running, and the next free spoke, and sends
+ * a message to the machine via the spoke to run the job. This
  * indirection of starting jobs via a separate spoke process avoids the
  * hub daemon itself having to wait for a response from a compute node
  * over the network.
