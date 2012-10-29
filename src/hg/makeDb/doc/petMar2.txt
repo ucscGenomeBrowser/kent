@@ -535,3 +535,22 @@ TMPDIR=/scratch/tmp
     ln -s blastz.oryLat2.swap lastz.oryLat2
 
 #########################################################################
+# lastz Lamprey petMar2 (DONE - 2012-10-29 - Hiram)
+    # the original alignment
+    cd /cluster/data/galGal4/bed/lastzPetMar2.2012-10-23
+    cat fb.galGal4.chainPetMar2Link.txt
+    #	18440677 bases of 1032854810 (1.785%) in intersection
+
+    #	and this swap
+    mkdir /cluster/data/petMar2/bed/blastz.galGal4.swap
+    cd /cluster/data/petMar2/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal4/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #	real    6m41.091s
+    cat fb.petMar2.chainGalGal4Link.txt
+    #	18576173 bases of 647368134 (2.869%) in intersection
+
+############################################################################
