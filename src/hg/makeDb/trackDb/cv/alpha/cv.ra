@@ -13325,6 +13325,8 @@ type control
 label Control
 description This data represents a control being compared with the other tracks in the set.
 
+
+# These are for White Lab from UChicago.  They are only named separatly to have unique names.  They are all really control.
 term Control_eGFP-BACH1
 tag CONTROLBACH1
 type control
@@ -13343,17 +13345,17 @@ type control
 label eGFP-CDKN1B
 description This data represents a control being compared to experiments using antibody eGFP-CDKN1B
 
-term Control_eGFP-E2F1
-tag CONTROLE2F1
-type control
-label eGFP-E2F1
-description This data represents a control being compared to experiments using antibody eGFP-E2F1
-
-term Control_eGFP-EKLF1
-tag CONTROLEKLF1
-type control
-label eGFP-EKLF1
-description This data represents a control being compared to experiments using antibody eGFP-EKLF1
+#term Control_eGFP-E2F1
+#tag CONTROLE2F1
+#type control
+#label eGFP-E2F1
+#description This data represents a control being compared to experiments using antibody eGFP-E2F1
+#
+#term Control_eGFP-EKLF1
+#tag CONTROLEKLF1
+#type control
+#label eGFP-EKLF1
+#description This data represents a control being compared to experiments using antibody eGFP-EKLF1
 
 term Control_eGFP-ELF1
 tag CONTROLELF1
@@ -13385,11 +13387,11 @@ type control
 label eGFP-HDAC8
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
 
-term Control_eGFP-HMGB1
-tag CONTROLHMGB1
-type control
-label eGFP-HMGB1
-description This data represents a control being compared to experiments using antibody eGFP-HMGB1
+#term Control_eGFP-HMGB1
+#tag CONTROLHMGB1
+#type control
+#label eGFP-HMGB1
+#description This data represents a control being compared to experiments using antibody eGFP-HMGB1
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
@@ -13433,17 +13435,17 @@ type control
 label eGFP-NR4A1
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
 
-term Control_eGFP-SMARCA1
-tag CONTROLSMARCA1
-type control
-label eGFP-SMARCA1
-description This data represents a control being compared to experiments using antibody eGFP-SMARCA1
+#term Control_eGFP-SMARCA1
+#tag CONTROLSMARCA1
+#type control
+#label eGFP-SMARCA1
+#description This data represents a control being compared to experiments using antibody eGFP-SMARCA1
 
-term Control_eGFP-SMARCA2
-tag CONTROLSMARCA2
-type control
-label eGFP-SMARCA2
-description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
+#term Control_eGFP-SMARCA2
+#tag CONTROLSMARCA2
+#type control
+#label eGFP-SMARCA2
+#description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
 
 term Control_eGFP-STAT1
 tag CONTROLSTAT1
@@ -13451,6 +13453,9 @@ type control
 label eGFP-STAT1
 description This data represents a control being compared to experiments using antibody eGFP-STAT1
 
+
+# These 3 are used by Caltech TFBS mouse experiments and Cricket thinks that they only exist to have unique names
+ 
 term Control_32bp
 tag CNTRL32B
 type control
@@ -13469,12 +13474,14 @@ type control
 label Control 50bp
 description This data represents a control being compared to experiments using read length of 50 bp
 
+#This is used on all Chip-seq experiments to inicate that there is no antibody
 term Input
 tag INPUT
 type control
 label Input Control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
 
+#This is used for RIP experiments as an antibody when there is no control
 term ripInput
 tag RIPIN
 type control
@@ -13493,11 +13500,11 @@ type control
 label Naked DNA
 description Control signal from Naked DNA.
 
-term Reference_Genome
-tag REFERENCEGENOME
-type control
-label Reference Genome
-description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
+#term Reference_Genome
+#tag REFERENCEGENOME
+#type control
+#label Reference Genome
+#description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
 
 term RevXlinkChromatin
 tag RXLCH
@@ -13519,6 +13526,7 @@ type control
 label Standard Control
 description Standard input signal for most experiments.
 
+# This final set was used by Stanford and can really fit into antibodies
 term IgG-goat
 tag IGGGOAT
 type control
