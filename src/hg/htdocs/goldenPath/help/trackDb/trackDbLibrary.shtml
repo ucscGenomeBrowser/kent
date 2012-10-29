@@ -396,7 +396,8 @@
     <P>Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
     This setting is required for all data tracks in a track hub.  It is currently not
-    supported for local tracks.</P>  <!-- THIS SHOULD BE FIXED for local tracks! -->
+    supported for local tracks.</P>  
+<!-- THIS SHOULD BE FIXED for local tracks! -->
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
@@ -709,7 +710,15 @@
         Note that the format of this trackDb setting is a normal C
     language format so that the item will replace the "%s"
     token in the sql statement.</P>
-    <!--DONNA - I don't quite understand the idInUrlSql usage -->
+    <!-- DONNA - I don't quite understand the idInUrlSql usage 
+    TIM responds: By default the ID is the bed column 'name'.  That is what the $$ token
+    gets replaced with in the url provided.  The idUnUrlSql allows having a separate table
+    in the mysql database that holds an alternate id.  No doubt this setting was for a 
+    special case added by one engineer for one specific result.  Nevertheless, it is now one 
+    of our many settings I needed to document.  So if a wrangler has a case where the 
+    'name' in their bed table can be used to look up a different name in a different table, 
+    AND that different name is what they need use as an id in their url, THEN this is 
+    the obscure setting for them. -->
     <P><B>Example:</B></P>
     <pre>
     url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
@@ -1102,7 +1111,7 @@
     and will always have the problem that zoomed out will not support
     filtering.  The Browser UI should show when tracks are filtered,
     so that losing the filter is obvious!</I></P>
--->
+    -->
 </DIV>
 
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
@@ -1242,13 +1251,11 @@
     Activating this setting provides the bed filter type controls that allow you to filter
     bed items by name with wildcard matching.
     </P>
-<!--
-    <P><I>TODO: this should
+    <!-- <P><I>TODO: this should
     be rewritten to be allowed on any item based data source and not
     exclude other filtering options as well.  (That is, convert this
     to filterByWild or filterByWildList)</I>
-    </P>
--->
+    </P> -->
     <P><B>Example:</B></P>
     <pre>   bedFilter  on</pre>
     <P>The bed track will be be filterable by the bed
@@ -1376,10 +1383,9 @@
     baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showCdsAllScales .    </pre>
-    <!-- DONNA -- redo -->
-    <P><I>TODO: Explain examples, expand option
-    explanation</I></P>
-    <!-- DONNA -- finish -->
+    <!-- DONNA -- redo 
+    <P><I>TODO: Explain examples, expand option explanation</I></P>
+    DONNA -- finish -->
 </DIV>
 
 <DIV class="exonArrowsDense"><span class="types bed"></span>
@@ -1643,10 +1649,7 @@
     but rather are declared with 2 separate settings, <code>minLimit</code> and
     <code>maxLimit</code>.
     </P>
-<!--
-    <P><I>TODO: Deprecate
-    minLimit/maxLimit.</I></P>
--->
+    <!--  <P><I>TODO: Deprecate minLimit/maxLimit.</I></P> -->
     <P><em>Examples can be found below.</em></P>
 </DIV>
 
@@ -2774,8 +2777,7 @@
     Reflects uncertainty in the relationship between the DNA of both species, due
     to lack of sequence in relevant portions of the aligning species.</LI>
     </UL>
-    These display conventions make it easier to visualize the columns in
-stacked
+    These display conventions make it easier to visualize the columns in stacked
     alignments, but they also tend to clutter the display.  The user has the option to remove
     these placeholders by unchecking the "Display chains between alignments" option.  To
     set the default of this option to off, set <code>irows</code> to "<code>off</code>".
@@ -2987,11 +2989,9 @@ stacked
     trackDb file associated with the track's genome assembly. Each
     microarray track set must also have an associated
     microarrayGroups.ra configuration file that contains additional
-    information about the data in each of the arrays. Please refer to
-the
-    <A
-HREF="http://genomewiki.ucsc.edu/index.php/Microarray_track">microarray
-track</A> section of the UCSC genomewiki
+    information about the data in each of the arrays. Please refer to the
+    <A HREF="http://genomewiki.ucsc.edu/index.php/Microarray_track">microarray track</A> 
+    section of the UCSC genomewiki
     for information on how to prepare microarray tracks.  In particular,
     that document describes the format of the groupings.ra file that
     must be associated with an expRatio track.</P>
@@ -3013,8 +3013,7 @@ track</A> section of the UCSC genomewiki
     <P>If microarray data
     includes gene model or blocks within items, then the data can
     be viewed as exons and introns by setting <code>expDrawExons</code>
-to on.  The
-    setting is configurable by the user.</P>
+    to on.  The setting is configurable by the user.</P>
     <P><B>Example:</B></P>
     <pre>   expDrawExons on</pre>
 </DIV>
@@ -3052,9 +3051,8 @@ to on.  The
     <P>A microarray dataset
     must refer to a specific set of configurations to load from the
     microArrayGroups.ra file.  Please refer to the
-    <A
-HREF="http://genomewiki.ucsc.edu/index.php/Microarray_track">microarray
-track</A> section of the UCSC genomewiki
+    <A HREF="http://genomewiki.ucsc.edu/index.php/Microarray_track">microarray track</A> 
+    section of the UCSC genomewiki
     for detailed instructions on the location of this file and its
     format.  Use the "<code>groupings</code>" setting to point to a stanza keyed on
     "<code>name</code>" in that file.</P>
@@ -3710,8 +3708,7 @@ for each cell associated with the particular TF binding location.</P>
     <P>This is a specialized
     format track that shows the snaking course of bi-directional and
     overlapping alignments.  This format can help illustrate inversion
-    type rearrangements that align to the plus strand, then the minus
-strand, 
+    type rearrangements that align to the plus strand, then the minus strand, 
     and again to the plus strand.  It can also be used to illustrate overlapping
     alignments, such as when a duplication has occurred compared to the
     reference genome.</P>
@@ -3918,7 +3915,7 @@ strand,
 <div class="format"><code>allButtonPair on</code></div>
     <P>When a simple composite track presents a short list of
     subtracks, it can be convenient for the user to have an easy way to select or
-    deselect all of them.  Include this setting to display an "All 
+    deselect all of them.  Include this setting to display an "<B>All</B> 
     <img style='vertical-align:middle;' src='/images/add_sm.gif' /><img style='vertical-align:middle;' src='/images/remove_sm.gif' />"
     <!-- Don't break the long line above, so that the buttons have no daylight between them -->
     (plus and minus button pair) for the user's convenience.  If
@@ -3929,10 +3926,7 @@ strand,
 
 <DIV class="centerLabelsDense"><span class="types compositeTrack"></span>
 <div class="format"><code>centerLabelsDense &lt;off/on&gt;</code></div>
-<!--
-    <P><I>TODO: Should be made obsolete, with subtracks always sharing one label.</I>
-    </P>
--->
+    <!-- <P><I>TODO: Should be made obsolete, with subtracks always sharing one label.</I> </P> -->
     <P>By default, only the composite track's single center label is shown when the 
     subtracks are displayed together in the Browser dense mode. 
     If <code>centerLabelsDense</code> is set to "on", the Browser will display a center 
@@ -4095,11 +4089,9 @@ strand,
     links, each subGroup's tag must be tied to the actual metaDb
     term.
     </P>
-<!--
-    <P><I>TODO: Currently the file declared in this
+    <!-- <P><I>TODO: Currently the file declared in this
     setting is not used, as the cv.ra file is always found in its
-    standard location.</I></P>
--->
+    standard location.</I></P> -->
 </DIV>
 
 <DIV class="sortOrder"><span class="types subGroups"></span>
@@ -4358,7 +4350,7 @@ strand,
     setting.  Unlike other settings, visibility is cumulatively restrictive from the
     supertrack level.  That is, if the parent has a visibility of  "<code>dense</code>" and the 
     child's visibility is
-    "<code>pack</code>", the child will be displayed as "<code>dense</code>". if the parent is
+    "<code>pack</code>", the child will be displayed as "<code>dense</code>". If the parent is
     subsequently changed to "<code>full</code>" display mode, the child will now be shown in 
     "<code>pack</code>" mode.  At the trackDb
     level, default visibility is always cumulatively restrictive.
