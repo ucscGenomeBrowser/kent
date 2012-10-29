@@ -350,7 +350,7 @@ int netConnectHttps(char *hostName, int port)
 char *errorString = NULL;
 if (checkConnFailure(hostName, port, &errorString))
     {
-    warn(errorString);
+    warn("%s", errorString);
     return -1;
     }
 

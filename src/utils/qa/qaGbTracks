@@ -41,6 +41,12 @@ The following statistics are recorded:
         args.tableFile[0].close()
     return args
 
+def checkTablesReceived(tableList, outFile):
+    """Raises an exception if the tableList is empty. (Necessary because both ways of specifying
+    tables are optional.)"""
+    if not tableList:
+        raise Exception("Received outFile name '" + outFile + "', but no tables were specified.")
+
 def tableExists(db, table):
     """True if the table exists in the given database."""
     sqlResult = qaUtils.callHgsql(db, "show tables like '" + table + "'")
@@ -74,6 +80,7 @@ args = parseCommandLine()
 tableList = args.table
 db = args.db
 outFile = args.outFile
+checkTablesReceived(tableList, outFile)
 checkTablesExist(db, tableList)
 
 logFile = open(outFile + ".log", "w")

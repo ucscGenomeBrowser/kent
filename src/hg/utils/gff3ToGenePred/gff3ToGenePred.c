@@ -18,7 +18,7 @@ errAbort(
   "options:\n"
   "  -maxParseErrors=50 - Maximum number of parsing errors before aborting. A negative\n"
   "   value will allow an unlimited number of errors.  Default is 50.\n"
-  "  -maxConverErrors=50 - Maximum number of conversion errors before aborting. A negative\n"
+  "  -maxConvertErrors=50 - Maximum number of conversion errors before aborting. A negative\n"
   "   value will allow an unlimited number of errors.  Default is 50.\n"
   "  -honorStartStopCodons - only set CDS start/stop status to complete if there are\n"
   "   corresponding start_stop codon records\n"

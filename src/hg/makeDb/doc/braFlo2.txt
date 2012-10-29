@@ -394,3 +394,27 @@ XXX - ready to continue - Fri Oct 19 10:31:19 PDT 2012
     #	test it with some sequence
 
 ############################################################################
+# lastz Lamprey petMar2 (DONE - 2012-10-22 - Hiram)
+    # the original alignment:
+    cd /hive/data/genomes/petMar2/bed/lastzBraFlo2.2012-10-19/DEF \
+    cat fb.petMar2.chainBraFlo2Link.txt
+    #  19549078 bases of 647368134 (3.020%) in intersection
+
+    #	and this swap
+    mkdir /hive/data/genomes/braFlo2/bed/blastz.petMar2.swap
+    cd /hive/data/genomes/braFlo2/bed/blastz.petMar2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/petMar2/bed/lastzBraFlo2.2012-10-19/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -smallClusterHub=encodek > swap.log 2>&1 &
+
+    #   real    15m22.099s
+    cat  fb.braFlo2.chainPetMar2Link.txt
+    #	15668603 bases of 480418582 (3.261%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/braFlo2/bed
+    ln -s blastz.petMar2.swap lastz.petMar2
+
+############################################################################

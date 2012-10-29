@@ -52,7 +52,7 @@
                 For questions about the ENCODE Quality Metrics, contact
                 <a target=_blank href="http://www.genome.gov/27545735">Mike Pazin, NHGRI</a>.</p>
                 </p>
-                <p class="date">Updated 25 July 2012</p>
+                <p class="date">Updated 18 October 2012</p>
             </div><!--end content-->
         </div><!--end wrapper-->
 
@@ -146,48 +146,52 @@
                         </p>
 
                         <p><b>Normalized Strand Cross-correlation coefficient (NSC):</b><br>
-                        A measure of enrichment derived without dependence on prior determination of enriched
-                        regions. Higher values indicate more enrichment, values less than 1.1 are relatively low
-                        NSC scores, and the minimum possible value is 1 (no enrichment). Forward and reverse strand
-                        read coverage signal tracks are computed (number of unique mapping read starts at each base
-                        in the genome on the + and - strand separately). The forward and reverse tracks are shifted
-                        towards and away from each other by incremental distances and for each shift, the Pearson
-                        correlation coefficient is computed. In this way, a cross-correlation profile is computed
-                        representing the correlation between forward and reverse strand coverage at different shifts.
-                        The highest cross-correlation value is obtained at a strand shift equal to the predominant
-                        fragment length in the dataset as a result of clustering/enrichment of relative fixed-size
-                        fragments around the binding sites of the target factor. The NSC is the ratio of the maximal
-                        cross-correlation value (which occurs at strand shift equal to fragment length) divided by the
-                        background cross-correlation (minimum cross-correlation value over all strand shifts). This
-                        score is sensitive to technical effects; for example, high-quality antibodies such as H3K4me3
-                        and CTCF score well for all cell types and ENCODE production groups, and variation in enrichment
-                        in particular IPs is detected as stochastic variation. This score is also sensitive to biological
-                        effects; narrow marks score higher than broad marks (H3K4me3 v H3K36me3, H3K27me3) for all cell
-                        types and ENCODE production groups, and features present in some individual cells but not others
-                        in a population are expected to have lower scores.
+                        A measure of enrichment derived without dependence on prior determination of enriched regions.
+                        Forward and reverse strand read coverage signal tracks are computed (number of unique mapping
+                        read starts at each base in the genome on the + and - strand counted separately). The forward
+                        and reverse tracks are shifted towards and away from each other by incremental distances and
+                        for each shift, the Pearson correlation coefficient is computed. In this way, a cross-correlation
+                        profile is computed, representing the correlation between forward and reverse strand coverage at
+                        different shifts. The highest cross-correlation value is obtained at a strand shift equal to the
+                        predominant fragment length in the dataset as a result of clustering/enrichment of relative
+                        fixed-size fragments around the binding sites of the target factor or feature. 
+                        </p>
+
+                        <p>
+                        The NSC is the ratio of the maximal cross-correlation value (which occurs at strand shift equal
+                        to fragment length) divided by the background cross-correlation (minimum cross-correlation value
+                        over all possible strand shifts). Higher values indicate more enrichment, values less than 1.1 are
+                        relatively low NSC scores, and the minimum possible value is 1 (no enrichment). This score is
+                        sensitive to technical effects; for example, high-quality antibodies such as H3K4me3 and CTCF score
+                        well for all cell types and ENCODE production groups, and variation in enrichment in particular IPs
+                        is detected as stochastic variation. This score is also sensitive to biological effects; narrow marks
+                        score higher than broad marks (H3K4me3 vs H3K36me3, H3K27me3) for all cell types and ENCODE production
+                        groups, and features present in some individual cells, but not others, in a population are expected
+                        to have lower scores.
                         </p>
 
                         <p><b>Relative Strand Cross-correlation coefficient (RSC):</b><br>
-                        A measure of enrichment derived without dependence on prior determination of enriched
-                        regions. The minimum possible value is 0 (no signal), highly enriched experiments have
-                        values greater than 1, and values much less than 1 may indicate low quality. Forward
-                        and reverse strand read coverage signal tracks are computed (number of unique mapping
-                        read starts at each base in the genome on the + and - strand separately). The forward
-                        and reverse tracks are shifted towards and away from each other by incremental distances
-                        and for each shift, the Pearson correlation coefficient is computed. In this way, a
-                        cross-correlation profile is computed representing the correlation values between forward
-                        and reverse strand coverage at different shifts. The highest cross-correlation value is
-                        obtained at a strand shift equal to the predominant fragment length in the dataset as a
-                        result of clustering/enrichment of relative fixed-size fragments around the binding sites
-                        of the target factor. For short-read datasets (&lt; 100 bp reads) and large genomes with
-                        a significant number of non-uniquely mappable positions (e.g., human and mouse), a
-                        cross-correlation phantom-peak is also observed at a strand-shift equal to the read length.
-                        This read-length peak is an effect of the variable and dispersed mappability of positions
-                        across the genome. For a significantly enriched dataset, the fragment length cross-correlation
-                        peak (representing clustering of fragments around target sites) should be larger than the
-                        mappability-based read-length peak. The RSC is the ratio of the fragment-length cross-correlation
-                        value minus the background cross-correlation value, divided by the phantom-peak cross-correlation
-                        value minus the background cross-correlation value.
+                        A measure of enrichment derived without dependence on prior determination of enriched regions.
+                        Forward and reverse strand read coverage signal tracks are computed (number of unique mapping read
+                        starts at each base in the genome on the + and - strand counted separately). The forward and reverse
+                        tracks are shifted towards and away from each other by incremental distances and for each shift, the
+                        Pearson correlation coefficient is computed. In this way, a cross-correlation profile is computed
+                        representing the correlation values between forward and reverse strand coverage at different shifts.
+                        The highest cross-correlation value is obtained at a strand shift equal to the predominant fragment
+                        length in the dataset as a result of clustering/enrichment of relative fixed-size fragments around
+                        the binding sites of the target factor. For short-read datasets (&lt; 100 bp reads) and large genomes
+                        with a significant number of non-uniquely mappable positions (e.g., human and mouse), a
+                        cross-correlation phantom-peak is also observed at a strand-shift equal to the read length. This
+                        read-length  peak is an effect of the variable and dispersed mappability of positions across the
+                        genome. For a significantly enriched dataset, the fragment length cross-correlation peak (representing
+                        clustering of fragments around target sites) should be larger than the mappability-based read-length peak. 
+                        </p>
+
+                        <p>
+                        The RSC is the ratio of the fragment-length cross-correlation value minus the background
+                        cross-correlation value, divided by the phantom-peak cross-correlation value minus the background
+                        cross-correlation value. The minimum possible value is 0 (no signal), highly enriched experiments have
+                        values greater than 1, and values much less than 1 may indicate low quality.
                         </p>
 
             </div><!--end content-->
