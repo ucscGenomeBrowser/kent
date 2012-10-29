@@ -2068,3 +2068,67 @@ exit
 pubBlat load
 #--pubEnd
 
+#########################################################################
+# LASTZ/CHAIN/NET Medaka oryLat2 (DONE - 2012-10-23 - Hiram)
+    screen -S oryLat2PetMar2 # use screen to control this job
+    mkdir /cluster/data/oryLat2/bed/lastzPetMar2.2012-10-23
+    cd /cluster/data/oryLat2/bed/lastzPetMar2.2012-10-23
+
+    cat << '_EOF_' > DEF
+# Medaka vs. Lamprey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat2 (40M chunks covers the largest chrom in one gulp)
+SEQ1_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ1_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=25
+SEQ1_LAP=10000
+
+# QUERY: Lamprey petMar2, sequence is in contigs
+SEQ2_DIR=/hive/data/genomes/petMar2/petMar2.2bit
+SEQ2_LEN=/hive/data/genomes/petMar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/oryLat2/bed/lastzPetMar2.2012-10-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -verbose=2 > do.log 2>&1 &
+    #	real    654m52.829s
+    cat fb.oryLat2.chainPetMar2Link.txt
+    #	42137127 bases of 700386597 (6.016%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/oryLat2/bed
+    ln -s lastzPetMar2.2012-10-23 lastz.petMar2
+
+    #	And, for the swap:
+    mkdir /cluster/data/petMar2/bed/blastz.oryLat2.swap
+    cd /cluster/data/petMar2/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/hive/data/genomes/oryLat2/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=encodek -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    8m42.333s
+    cat fb.petMar2.chainOryLat2Link.txt
+    #	31889826 bases of 647368134 (4.926%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.oryLat2.swap lastz.oryLat2
+
+#########################################################################

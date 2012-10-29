@@ -355,24 +355,25 @@ petMar2.perChromTables = no
     make etc-update
 
 #########################################################################
-# set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
+# set default position as recommended from Jeramiah Smith
+#       (DONE - 2012-10-23 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="JH739914:135428-435957" where name="petMar2";' \
+'update dbDb set defaultPos="GL476334:480870-830419" where name="petMar2";' \
 	hgcentraltest
 
 ############################################################################
-# downloads and pushQ entry (DONE - 2012-07-27 - Hiram)
+# downloads and pushQ entry (DONE - 2012-10-23 - Hiram)
     # after adding petMar2 to the all.joiner file and verifying that
     #   joinerCheck is clean, can construct the downloads:
     cd /hive/data/genomes/petMar2
     time makeDownloads.pl -workhorse=hgwdev petMar2
-    #   real    11m40.799s
+    #   real    5m51.143s
 
     mkdir /hive/data/genomes/petMar2/pushQ
     cd /hive/data/genomes/petMar2/pushQ
     # Mark says don't let the transMap track get there
-    time makePushQSql.pl petMar2 2> stderr.txt | grep -v transMap > petMar2.sql
-    #   real    3m52.778s
+    time makePushQSql.pl petMar2 2> stderr.txt > petMar2.sql
+    #   real    3m38.916s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/petMar2/wib/gc5Base.wib
@@ -382,18 +383,18 @@ petMar2.perChromTables = no
 # WARNING: petMar2 does not have extFile
 # WARNING: petMar2 does not have estOrientInfo
 
-    scp -p petMar2.sql hgwbeta:/tmp
+    scp -p petMar2.sql hgwbeta:/tmp/
     ssh hgwbeta "hgsql qapushq < /tmp/petMar2.sql"
 
 ##########################################################################
-#  BLATSERVERS ENTRY (DONE - 2012-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2012-10-23 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("petMar2", "blat4d", "17806", "1", "0"); \
+	VALUES ("petMar2", "blat4b", "17838", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("petMar2", "blat4d", "17807", "0", "1");' \
+	VALUES ("petMar2", "blat4b", "17839", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
@@ -464,5 +465,92 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/braFlo2/bed
     ln -s blastz.petMar2.swap lastz.petMar2
+
+############################################################################
+# lastz swap Mouse mm10 (DONE - 2012-10-22 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19
+    cat fb.mm10.chainPetMar2Link.txt
+    #   28262565 bases of 2652783500 (1.065%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/petMar2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/petMar2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    7m2.754s
+    cat  fb.petMar2.chainHg19Link.txt
+    #	20923095 bases of 647368134 (3.232%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz Opossum monDom5 (DONE - 2012-10-24 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/monDom5/bed/lastzPetMar2.2012-10-23
+    cat fb.monDom5.chainPetMar2Link.txt
+    #	25404425 bases of 3501660299 (0.725%) in intersection
+
+    #	and this swap
+    mkdir /cluster/data/petMar2/bed/blastz.monDom5.swap
+    cd /cluster/data/petMar2/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/monDom5/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #	real    11m54.144s
+    cat fb.petMar2.chainMonDom5Link.txt
+    #	16944977 bases of 647368134 (2.618%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+############################################################################
+# lastz Medaka oryLat2 (DONE - 2012-10-24 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/oryLat2/bed/lastzPetMar2.2012-10-23
+    cat fb.oryLat2.chainPetMar2Link.txt
+    #	42137127 bases of 700386597 (6.016%) in intersection
+
+    #	And, for this swap:
+    mkdir /cluster/data/petMar2/bed/blastz.oryLat2.swap
+    cd /cluster/data/petMar2/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/hive/data/genomes/oryLat2/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=encodek -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    8m42.333s
+    cat fb.petMar2.chainOryLat2Link.txt
+    #	31889826 bases of 647368134 (4.926%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.oryLat2.swap lastz.oryLat2
+
+#########################################################################
+# lastz Lamprey petMar2 (DONE - 2012-10-29 - Hiram)
+    # the original alignment
+    cd /cluster/data/galGal4/bed/lastzPetMar2.2012-10-23
+    cat fb.galGal4.chainPetMar2Link.txt
+    #	18440677 bases of 1032854810 (1.785%) in intersection
+
+    #	and this swap
+    mkdir /cluster/data/petMar2/bed/blastz.galGal4.swap
+    cd /cluster/data/petMar2/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal4/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #	real    6m41.091s
+    cat fb.petMar2.chainGalGal4Link.txt
+    #	18576173 bases of 647368134 (2.869%) in intersection
 
 ############################################################################
