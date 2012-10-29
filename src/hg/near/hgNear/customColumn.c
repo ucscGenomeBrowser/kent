@@ -447,6 +447,10 @@ uniqHash = hashColumns(*pColList);
 /* Loop through and add columns from each URL. */
 while ((url = nextWord(&urlList)) != NULL)
     {
+    if (!(startsWith("http://" , url)
+       || startsWith("https://", url)
+       || startsWith("ftp://"  , url)))
+	errAbort("Invalid url [%s]. URLs must start with http://, https://, or ftp://", url);
     struct lineFile *lf = netLineFileOpen(url);
     struct column *newList = verifyCopyColumns(conn, lf, f, *pColList, uniqHash);
     customCols = slCat(newList, customCols);
