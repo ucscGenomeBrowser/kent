@@ -700,3 +700,68 @@ TMPDIR=/scratch/tmp
     ln -s blastz.galGal4.swap lastz.galGal4
 
 ##############################################################################
+#  LASTZ petMar2 Lamprey (DONE - 2012-10-23 - Hiram)
+    screen -S galGal4PetMar2	# use a screen to control this multi-day job
+    mkdir /cluster/data/galGal4/bed/lastzPetMar2.2012-10-23
+    cd /cluster/data/galGal4/bed/lastzPetMar2.2012-10-23
+
+    cat << '_EOF_' > DEF
+# Chicken vs Lamprey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal4
+SEQ1_DIR=/hive/data/genomes/galGal4/galGal4.2bit
+SEQ1_LEN=/hive/data/genomes/galGal4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Lamprey petMar2
+SEQ2_DIR=/hive/data/genomes/petMar2/petMar2.2bit
+SEQ2_LEN=/hive/data/genomes/petMar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/galGal4/bed/lastzPetMar2.2012-10-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # why is memk used here for big hub ?  Should have been swarm
+    time nice -n +19 doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=memk -verbose=2 > do.log 2>&1 &
+    # shut this down on memk after awhile and finished it on swarm
+    # real 4136m52.553s
+    #	continuing after finishing on swarm:
+    time nice -n +19 doBlastzChainNet.pl \
+	-continue=cat `pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -verbose=2 > cat.log 2>&1 &
+    #   Elapsed time: 49m2s
+
+    cat fb.galGal4.chainPetMar2Link.txt
+    #	18440677 bases of 1032854810 (1.785%) in intersection
+
+    #	and the swap
+    mkdir /cluster/data/petMar2/bed/blastz.galGal4.swap
+    cd /cluster/data/petMar2/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal4/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #	real    6m41.091s
+    cat fb.petMar2.chainGalGal4Link.txt
+    #	18576173 bases of 647368134 (2.869%) in intersection
+
+############################################################################
