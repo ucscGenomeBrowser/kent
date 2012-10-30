@@ -16,18 +16,18 @@
 # ASSEMBLY TYPE:	Haploid
 # NUMBER OF ASSEMBLY-UNITS:	1
 # ASSEMBLY ACCESSION:	GCA_000003205.4
-# 
+#
 # FTP-RELEASE DATE: 03-Nov-2011
 
 
-# Bos taurus (NCBI Project ID: 12555, Accession: GCA_000003205.4) 
+# Bos taurus (NCBI Project ID: 12555, Accession: GCA_000003205.4)
 #   by Bovine Genome Sequencing and Analysis Consortiumn
-#    assembly] sequence: 
+#    assembly] sequence:
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Bos_taurus/Btau_4.6.1/
 # Project 12555
 # url:
 # http://www.ncbi.nlm.nih.gov/nuccore/AAFC00000000
-# chrM: AY526085 
+# chrM: AY526085
 # http://www.ncbi.nlm.nih.gov/nuccore/AY526085.1
 
 # http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAFC00
@@ -44,14 +44,14 @@
 "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Bos_taurus/Btau_4.6.1/*"
     # FINISHED --2011-12-16 15:36:00--
     # Downloaded: 244 files, 2.1G in 30m 24s (1.17 MB/s)
-    # Read ASSEMBLY_INFO 
+    # Read ASSEMBLY_INFO
 
     # measure total sequence in this assembly
     faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa \
         Primary_Assembly/unplaced_scaffolds/FASTA/un*.fa.gz
-# 2981103241 bases (176446405 N's 2804656836 real 2804656836 upper 
+# 2981103241 bases (176446405 N's 2804656836 real 2804656836 upper
 # 0 lower) in 11691 sequences in 32 files
-# Total size: mean 254991.3 sd 4719241.6 min 152 (gi|346076751|gb|JH125284.1|) 
+# Total size: mean 254991.3 sd 4719241.6 min 152 (gi|346076751|gb|JH125284.1|)
 # max 161428367 (gi|346683426|gb|CM000177.5|) median 8572
 # N count: mean 15092.5 sd 280692.5
 # U count: mean 239898.8 sd 4441763.7
@@ -83,19 +83,19 @@ do
     zcat ${S}/FASTA/chr${C}.fa.gz | grep -v "^>" >> ucscChr/chr${C}.fa
     gzip ucscChr/chr${C}.fa &
 done
-   # Check them with faSize 
+   # Check them with faSize
     faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
-    # 2673141463 bases (159233025 N's 2513908438 real 2513908438 upper 
+    # 2673141463 bases (159233025 N's 2513908438 real 2513908438 upper
     # 0 lower) in 31 sequences in 31 files
 
     faSize ucscChr/chr*.fa.gz
-    #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper 
+    #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper
     #  0 lower) in 30 sequences in 30 files
 
     # For unplaced scalfolds, named them as chrUn_xxxxxxxx
-    #   where xxxxxx is the original access id as: chrUn_JH121286  
+    #   where xxxxxx is the original access id as: chrUn_JH121286
     #   The ".1" at the end (if any) need to be filter out since
-    #   MySQL does not allow "." as part of the table name and 
+    #   MySQL does not allow "." as part of the table name and
     #   will casue problems in genbank task step later
 
 export S=Primary_Assembly/unplaced_scaffolds
@@ -112,13 +112,13 @@ zcat ${S}/FASTA/unplaced.scaf.fa.gz \
 zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    #     11660   11660   46640
 
-   # Check them with faSize 
+   # Check them with faSize
    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
-   # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
+   # 307961778 bases (17213380 N's 290748398 real 290748398 upper
    # 0 lower) in 11660 sequences in 1 files
 
    faSize ucscChr/chrUn.fa.gz
-   # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
+   # 307961778 bases (17213380 N's 290748398 real 290748398 upper
    # 0 lower) in 11660 sequences in 1 files
 
     # N50
@@ -168,7 +168,7 @@ genomeCladePriority 31
 scientificName Bos taurus
 commonName Cow
 assemblyDate OCt. 2011
-assemblyLabel Baylor Btau_4.6.1 
+assemblyLabel Baylor Btau_4.6.1
 assemblyShortLabel Btau_4.6.1
 orderKey 236
 mitoAcc AY526085
@@ -221,7 +221,7 @@ taxId 9913
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit bosTau7 > do.log 2>&1 &
     #   real    472m4.476s
     cat faSize.rmsk.txt
-    # 2981119579 bases (176446405 N's 2804673174 real 1415188620 upper 
+    # 2981119579 bases (176446405 N's 2804673174 real 1415188620 upper
     # 1389484554 lower) in 11692 sequences in 1 files
     # %46.61 masked total, %49.54 masked real
 
@@ -235,7 +235,7 @@ taxId 9913
         bosTau7 > do.log 2>&1 &
     #   real    39m2.413s
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     # 40432561 bases of 2804801325 (1.442%) in intersection
 
     #	add to the repeatMasker
@@ -244,7 +244,7 @@ taxId 9913
     #	safe to ignore warnings about >=13 fields
     twoBitToFa bosTau7.2bit stdout | faSize stdin > bosTau7.2bit.faSize.txt
     cat bosTau7.2bit.faSize.txt
-    # 2981119579 bases (176446405 N's 2804673174 real 1414674956 upper 
+    # 2981119579 bases (176446405 N's 2804673174 real 1414674956 upper
     # 1389998218 lower) in 11692 sequences in 1 files
     # %46.63 masked total, %49.56 masked real
 
@@ -302,7 +302,7 @@ close (FH);
     #  Loaded 12612  elements of size 8
     #	adding this many:
     wc -l bed.tab
-    #   12612 bed.tab 
+    #   12612 bed.tab
     #	starting with this many
     hgsql -e "select count(*) from gap;" bosTau7
     #	69725
@@ -323,12 +323,12 @@ close (FH);
 
     # Masking statistics
     twoBitToFa bosTau7.wmsk.2bit stdout | faSize stdin
-    # 2981119579 bases (176446405 N's 2804673174 real 1660551615 upper 
+    # 2981119579 bases (176446405 N's 2804673174 real 1660551615 upper
     # 1144121559 lower) in 11692 sequences in 1 files
     # %38.38 masked total, %40.79 masked real
 
     twoBitToFa bosTau7.wmsk.sdust.2bit stdout | faSize stdin
-    # 2981119579 bases (176446405 N's 2804673174 real 1645487915 upper 
+    # 2981119579 bases (176446405 N's 2804673174 real 1645487915 upper
     # 1159185259 lower) in 11692 sequences in 1 files
     # %38.88 masked total, %41.33 masked real
 
@@ -366,7 +366,7 @@ close (FH);
     twoBitToFa bosTau7.cleanWMSdust.2bit stdout | faSize stdin \
         > bosTau7.cleanWMSdust.faSize.txt
     cat bosTau7.cleanWMSdust.faSize.txt
-    # 2981119579 bases (176446405 N's 2804673174 real 1645487915 upper 
+    # 2981119579 bases (176446405 N's 2804673174 real 1645487915 upper
     # 1159185259 lower) in 11692 sequences in 1 files
     # %38.88 masked total, %41.33 masked real
 
@@ -376,7 +376,7 @@ close (FH);
 
 ########################################################################
 # Create kluster run files (DONE - 2012-01-05 - Chin)
-    # numerator is bosTau7 gapless bases "real" as reported by: 
+    # numerator is bosTau7 gapless bases "real" as reported by:
     featureBits -noRandom -noHap bosTau7 gap
     # 159233025 bases of 2513924776 (6.334%) in intersection
 
@@ -402,7 +402,7 @@ close (FH);
 	-e 'select * from gap where bridge="no" order by size;' bosTau7 \
 	| sort -k7,7nr
     #   most non-bridges gaps have size = 5000, follow pig's example (most
-    #   100, but use 5000) 
+    #   100, but use 5000)
     #	decide on a minimum gap for this break, use either 100 or 5000 will
     #	generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
     #   so use 100 here to get more liftOver row.
@@ -461,7 +461,7 @@ bosTau7.upstreamGeneTbl = refGene
     make etc-update
 
 
-# Edit src/lib/gbGenome.c to add new species.  Skipped 
+# Edit src/lib/gbGenome.c to add new species.  Skipped
 
     screen	#  control this business with a screen since it takes a while
     cd /cluster/data/genbank
@@ -495,7 +495,7 @@ bosTau7.upstreamGeneTbl = refGene
 ##########################################################################
 #  BLATSERVERS ENTRY (DONE 2012-01-13 - Chin)
 #       After getting a blat server assigned by the Blat Server Gods,
-#  
+#
 #  bosTau7 (trans) on blatx port 17842
 #  bosTau7 (untrans) on blatx port 17843
 
@@ -568,7 +568,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # based on result of
     # hgsql -N -e "select type from ctgPos2;" bosTau7 | sort | uniq
     # W
-    # prepare the src/hg/makeDb/trackDb/cow/bosTau7/ctgPos2.html 
+    # prepare the src/hg/makeDb/trackDb/cow/bosTau7/ctgPos2.html
 
 
 ############################################################################
@@ -586,7 +586,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
     mv tmp.c cpg_lh.c
     make
-    cd ../../ 
+    cd ../../
     ln -s hg3rdParty/cpgIslands/cpglh.exe
     mkdir -p hardMaskedFa
     cut -f1 ../../chrom.sizes | while read C
@@ -596,8 +596,8 @@ do
         | maskOutFa stdin hard hardMaskedFa/${C}.fa
 done
 
-    ssh swarm 
-    cd /hive/data/genomes/bosTau7/bed/cpgIsland 
+    ssh swarm
+    cd /hive/data/genomes/bosTau7/bed/cpgIsland
     mkdir results
     cut -f1 ../../chrom.sizes > chr.list
     cat << '_EOF_' > template
@@ -699,7 +699,7 @@ BASE=/cluster/data/bosTau7/bed/blastzOrnAna1.2012-01-18
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
-    
+
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
@@ -710,7 +710,7 @@ TMPDIR=/scratch/tmp
  *** Make sure that goldenPath/bosTau7/vsOrnAna1/README.txt is accurate.
  *** Add {chain,net}OrnAna1 tracks to trackDb.ra if necessary.
 
-    # filter with doRecipBest.pl 
+    # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         bosTau7 ornAna1 > rbest.log 2>&1
     # real    12m55.429s
@@ -744,7 +744,7 @@ TMPDIR=/scratch/tmp
     screen # use a screen to manage this multi-day job
     mkdir /hive/data/genomes/bosTau7/bed/lastzSusScr2.2012-01-20
     cd /hive/data/genomes/bosTau7/bed/lastzSusScr2.2012-01-20
-    
+
     cat << '_EOF_' > DEF
 # Pig vs. Cow
 BLASTZ_M=50
@@ -802,7 +802,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm9/bed
     ln -s  lastzBosTau7.2012-01-22 lastz.bosTau7
 
-    #   and the swap 
+    #   and the swap
     mkdir /hive/data/genomes/bosTau7/bed/blastz.mm9.swap
     cd /hive/data/genomes/bosTau7/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -846,7 +846,7 @@ TMPDIR=/scratch/tmp
     cat fb.canFam2.chainBosTau7Link.txt
     # 1381869475 bases of 2384996543 (57.940%) in intersection
 
-    #   and the swap 
+    #   and the swap
     mkdir /hive/data/genomes/bosTau7/bed/blastz.canFam2.swap
     cd /hive/data/genomes/bosTau7/bed/blastz.canFam2.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -1051,7 +1051,7 @@ done
     # WARNING: hgwdev does not have /gbdb/bosTau7/bbi/quality.bw
     # WARNING: bosTau7 does not have seq
     # WARNING: bosTau7 does not have extFile
-    # 
+    #
     # WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
     # supporting and genbank tables) which tracks to assign these tables to:
     #   tableList
@@ -1219,7 +1219,7 @@ TMPDIR=/scratch/tmp
     -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #   real    7776m13.787s
     cat fb.bosTau7.chainTurTru2Link.txt
-    #   1696154184 bases of 2804673174 (60.476%) in intersection    
+    #   1696154184 bases of 2804673174 (60.476%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/bosTau7/bed
     ln -s lastzTurTru2.2012-06-19 lastz.turTru2
@@ -1246,6 +1246,65 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/turTru2/bed
     ln -s blastz.bosTau7.swap lastz.bosTau7
 
-
 ############################################################################
+# lastz White Rhino cerSim1 (DONE - 2012-10-24 - Hiram)
+    screen -S bosTau7CerSim1
+    mkdir /hive/data/genomes/bosTau7/bed/lastzCerSim1.2012-10-24
+    cd /hive/data/genomes/bosTau7/bed/lastzCerSim1.2012-10-24
 
+    cat << '_EOF_' > DEF
+# Cow vs White Rhino
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_M=50
+
+# TARGET: Cow BosTau7
+SEQ1_DIR=/scratch/data/bosTau7/bosTau7.2bit
+SEQ1_LEN=/scratch/data/bosTau7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=50
+SEQ1_LAP=10000
+
+# QUERY: White Rhino CerSim1
+SEQ2_DIR=/hive/data/genomes/cerSim1/cerSim1.2bit
+SEQ2_LEN=/hive/data/genomes/cerSim1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau7/bed/lastzCerSim1.2012-10-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+	-qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -verbose=2 > do.log 2>&1 &
+    #   real    7139m16.881s
+
+    cat fb.bosTau7.chainCerSim1Link.txt
+    #   1628320914 bases of 2804673174 (58.057%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s lastzCerSim1.2012-10-24 lastz.cerSim1
+
+    # and the swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.bosTau7.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.bosTau7.swap
+    time nice -n +19 doBlastzChainNet.pl \
+        /hive/data/genomes/bosTau7/bed/lastzCerSim1.2012-10-24/DEF \
+	-workhorse=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #   real    120m35.871s
+
+    cat fb.cerSim1.chainBosTau7Link.txt
+    #   1592093865 bases of 2366858012 (67.266%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
+##############################################################################
