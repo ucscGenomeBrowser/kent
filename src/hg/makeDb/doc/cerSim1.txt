@@ -473,3 +473,26 @@ XXX - to be done - Tue Oct 16 15:03:19 PDT 2012
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################
+# lastz swap Opossum monDom5 (DONE - 2012-10-30 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/monDom5/bed/lastzCerSim1.2012-10-23
+    cat fb.monDom5.chainCerSim1Link.txt
+    #	370181399 bases of 3501660299 (10.572%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.monDom5.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/monDom5/bed/lastzCerSim1.2012-10-23/DEF \
+	-verbose=2 -bigClusterHub=swarm \
+        -swap -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    69m55.609s
+    cat fb.cerSim1.chainMonDom5Link.txt
+    #	362581231 bases of 2366858012 (15.319%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+#########################################################################
