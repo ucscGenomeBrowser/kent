@@ -20,6 +20,7 @@ errAbort(
   "Where the fileListFile is a list of narrowPeak format files,\n"
   "and type is one of:\n"
   "        ans01 - Anshul's uniform peaks from Jan 2011 ENCODE freeze\n"
+  "        ans02 - Anshul's uniform peaks from June 2012 ENCODE freeze\n"
   "        uw01 - From UW DNase file names for hg18\n"
   "        uw02 - From UW DNase file names for hg19 as of Jan 2011 freeze\n"
   "        enh01 - From enhancer picks\n"
@@ -189,6 +190,35 @@ if (patPos == NULL)
 fprintf(f, "\twgEncode%s1", midString);
 }
 
+void ans02MetaOut(FILE *f, char *midString)
+/* Version of function used for Anshul's TFBS uniform peak calling ENCODE June 2012 freeze. */
+/* NOTE: Including single-replicate data sets (Rep1).  This is different from ans01
+ * Input string has common prefix stripped -- starts with lab/dataType, e.g. 'HaibTfbs.*'
+ * Patterns are:  *Rep[0-1].bam, *Rep[0-1]V[1-9].bam.  
+ * Convert Rep0 to Rep1 to obtain a valid UCSC object name.  Rep0 is Anshul's pooling convention.*/
+{
+char *pattern;
+char *patPos;
+
+
+pattern = "Rep";
+patPos = stringIn(pattern, midString);
+if (patPos == NULL)
+    errAbort("Can't find %s in %s\n", pattern, midString);
+
+// force to Rep1 
+patPos += strlen(pattern);
+*patPos = '1';
+
+pattern = ".bam_VS";
+patPos = stringIn(pattern, patPos);
+if (patPos == NULL)
+    errAbort("Can't find %s in %s\n", pattern, midString);
+*patPos = 0;
+
+fprintf(f, "\twgEncode%s", midString);
+}
+
 void oldAns01MetaOut(FILE *f, char *midString)
 /* Version of function used for Anshul's TFBS uniform peak calling ENCODE Jan 2011 freeze. */
 {
@@ -268,6 +298,8 @@ for (in = inList; in != NULL; in = in->next)
 	uw02MetaOut(f, midString);
     else if (sameString(type, "ans01"))
 	ans01MetaOut(f, midString);
+    else if (sameString(type, "ans02"))
+        ans02MetaOut(f, midString);
     else if (sameString(type, "enh01"))
         enh01MetaOut(f, midString);
     else if (sameString(type, "awgDnase01"))
