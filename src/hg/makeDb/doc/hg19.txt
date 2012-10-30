@@ -19503,6 +19503,25 @@ cat > pool.csh << 'EOF'
 'EOF'
     csh pool.csh >&! pool.out &
 
+    # got 8 cells, two failed -- CD20 and IMR90, may be rescuable, but continuing 
+    #  for now with others to see if its worth it.
+
+cat > big.csh << 'EOF'
+    foreach i (*.bedGraph)
+        echo processing $i
+        bedGraphToBigWig $i /cluster/data/hg19/chrom.sizes $i:r.bw
+    end
+'EOF'
+    csh big.csh >&! big.out &
+
+    # add to database
+    set dir = /gbdb/hg19/bbi/encodeRegV2
+    mkdir $dir
+    ln -s `pwd`/*.bw $dir
+    foreach i (*.bw)
+        hgBbiDbLink hg19 $i:r $dir/$i
+    end
+
     ######
     # Handle the RNA seq, starting by pooling it and filtering out multiple
     # mapping and blacklisted regions.
@@ -19631,9 +19650,15 @@ chr1    10180   10330   .       0       .       26.000000       -1      -1      
     # Tamoxifen -> Tam10030 (Duke) or 40HAM20nM72hr (UW), Estradiol -> Est10nm30m, Ifna4h, Andro, Hypox
     # TODO: Edit to rename
 
-    # Make cluster table:  wgEncodeRegDnaseClusteredV2 (bed5, with name=#datasets represented in cluster)
 
+    # generate a normalization factor to
+    # convert signalValue to score (0-1000).  Also note score field; narrowPeak is 7 (default)
+    # output format:
+    # <filename> 0 1 2 <scoreIx> <scoreFactor>
+    # wgEncodeAwgDnaseDuke8988tPeak.bed       0       1       2       6       10.7234 .
     regClusterMakeTableOfTables awgDnase01 peak.lst peak.table -verbose=3 >&! regTable.out &
+
+    # Make cluster table:  wgEncodeRegDnaseClusteredV2 (bed5, with name=#datasets represented in cluster)
     regCluster peak.table /dev/null peak.bed
     #Read 125 sources from peak.table
     # 2233542 singly-linked clusters, 2343745 clusters in 24 chromosomes
@@ -19714,7 +19739,7 @@ cat > getHistones.csh << 'EOF'
     wget http://www.ebi.ac.uk/~anshul/public/encodeRawData/rawsignal/jan2011/pooledReps/bigwig/wgEncodeBroadHistoneHepg2H3k4me1Std_1Reps.norm5.rawsignal.bw
 
     ######
-    # TFBS
+    # TFBS from Jan2011 freeze
     ######
     # The TFBS track is a specialized type:  factorSource.  Requires 3 tables:
     #   track table: wgEncodeRegTfbsClustered (bed15)
@@ -19755,9 +19780,9 @@ cat > getHistones.csh << 'EOF'
     #  subGroups tier=3 cellType=HCFaa factor=CTCF antibody=CTCF lab=UW treatment=None protocol=Std quality=Good method=SPP
     # Note 'quality'.  Think about dropping those with quality='Caution'. Unfortunately some
     #  Tier1 , esp. Pol2 are only available with this quality
-    # Q: What does Rep1 mean ?  Most are 'Rep0'
+    # Q: What does Rep1 mean ?  Most are 'Rep0' (Answer from Anshul -- Rep0 are pooled, Rep1 were single-rep but adequate qual)
     # (Jim's methods exluded those not based on 2 replicates)
-    # Q: Why are some datasets 'StdAln' and some are 'Aln' ?
+    # Q: Why are some datasets 'StdAln' and some are 'Aln' ? (Answer from Anshul -- names are from UCSC)
     # Q: How is quality assigned ?
 
     # rename to UCSC style and convert to bed: wgEncodeAwgDnase<lab><cell>Peak
@@ -19773,6 +19798,172 @@ cat > getHistones.csh << 'EOF'
     # MAX, POL2, RAD21, SRF, YY1
 
     ls -1 peaks/*.bed > peak.lst
+
+    ######
+    # TFBS from July 2012 freeze
+    #  Uniform processing with slightly more relaxed threshold (2% FDR vs 1% based on
+    #   input Anshul received from users.  And there are more data sets (708 vs. 495)
+    #   Based on Anshul's recommendations, using 'optimal' SPP peaks, with black list filtering
+    #   (as in previous track)
+    ######
+  
+    cd /hive/data/genomes/hg19/bed/wgEncodeRegV2
+    mkdir -p tfbs2012/peaks
+    cd tfbs2012/peaks
+    ls -l filelist.txt
+    # 708 filelist.txt
+    # Downloaded from
+    # set user = encode-box-01
+    # set pwd = enc*deDOWN
+    wget -r -nd -np --ftp-user=$user --ftp-password=$pwd ftp://ftp-private.ebi.ac.uk/byDataType/peaks/june2012/spp/optimal
+    # using the user name and password in the ENCODE wiki at:
+    # http://encodewiki.ucsc.edu/EncodeDCC/index.php/Notes_on_using_the_Aspera_client_(and_EBI_ftp)
+    # These are also available at:
+    # http://www.ebi.ac.uk/~anshul/public/encodeRawData/peaks_spp/mar2012/distinct/idrOptimalBlackListFilt
+
+    # NOTE: quality metrics are available here:
+    # https://docs.google.com/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc#gid=7
+    # -> Check with Anshul for list of data sets to exclude from clustering based on quality.
+    # For now, use all.
+    # sample filename:
+    #   spp.idrOptimal.bf.wgEncodeSydhTfbsHct116Pol2UcdAlnRep0.bam_VS_wgEncodeSydhTfbsHct116InputUcdAlnRep1.bam.narrowPeak.gz
+
+    cd ..
+    ls peaks/*.narrowPeak.gz > peak.lst
+
+    # extract UCSC object name from peaks file name, and generate a per-file normalization factor to
+    # convert signalValues to scores (0-1000).  
+    # Also note score field position; for narrowPeak this is 6 (default)
+    # output format:
+    # <filename> 0 1 2 <scoreCol> <scoreNormFactor>
+    # (fields 2, 3, 4 are unused)
+
+    regClusterMakeTableOfTables ans02 peak.lst partial.table -verbose=3 >&! regTable.out &
+    wc -l partial.table
+    # 708
+    head -1 partial.table
+    # peaks/spp.idrOptimal.bf.wgEncodeBroadHistoneDnd41CtcfAlnRep0.bam_VS_wgEncodeBroadHistoneDnd41ControlStdAlnRep0.bam.narrowPeak.gz        0       1       2       6       4.52593 wgEncodeBroadHistoneDnd41CtcfAlnRep1 
+
+    # add metadata from metaDb or as fallback, from parsing filename
+    regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
+
+    # failed in 1 object: 
+    # Can't get metadata for wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep1 from metaDb, parsing filename 
+    # UCSC metadata has Rep3 for pcr2x protocol, but V0415101 for others ?
+    # Tweak this one as special case:
+    # TODO: revisit this
+    sed 's/wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep1/wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep3/' partial.table > partial.fixed.table  
+
+    # cluster by antibody, and by target
+    regClusterAttachMetadataToTableOfTables hg19 partial.fixed.table withDupes.table -verbose=3
+    regClusterAttachMetadataToTableOfTables -antibodyTarget hg19 partial.fixed.table withDupes.target.table -verbose=3
+
+    # find dupes in target-based table (already done for antibody-based)
+
+    # 91 cell types, 201 antibodies (176 targets), 28 treatments, 9 labs
+
+    # limit to single cell/factor/treatment (remove cross-lab duplication).
+    # Consider pooling instead ??  Or picking based on quality metrics ?
+    # -> wait for Anshul's recommendations (he will summarize) -- now they are too
+    #   hard to compare:
+    # https://docs.google.com/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc#gid=7 
+    # eg., there are GM12878-CTCF from 4 labs, and all have some error highlighting
+    # Reusing Jim's priorities (Broad, Snyd, OpenChrom, Haib); I'm ranking UW just below OpenChrom (Kate)
+    # Also, when multiple from a single lab prioritizing what appear to be newer controls & protocols:
+    # HAIB: V<date>, PCR?x
+    # SYDH: iggrab, iggmus, std
+      # One more complication - there are often several cases where there is
+      # more than one data set on the same cell+treatment+antibody combination. 
+      # For good reasons hgBedToBedExps only wants one.
+      # This next bit filters them out based on a picks file that was hand
+      # created - picksFromDupes.  This was based on the criteria that
+      # the Broad CTCF were used,  and that Snyd was used in preference
+      # to OpenChromatin, which in turn was used in preference over Haib.
+      # The rational for this is the Broad CTCF set has been in use for a 
+      # while with no complaints,  and when examing the Pol2 signals, which
+      # were with CTCF the main component of the Dupes, the Haib were the
+      # weakest and the Snyd the strongest.  
+      cp ~/src/hg/regulate/wgEncodeReg/picksFromDupes.tab .
+      wgEncodeRegTfbsDedupeHelp withDupes.table picksFromDupes.tab peak.table
+
+    # wc -l peak.table
+    # 656
+    # reduced by 52
+
+    # Make three column file: fileName, cell+treatment, antibody
+    awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
+    awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' withDupes.target.table > fileCellAb.target.tab
+
+    # Create config file out for clustering job, using a table assigning
+    # cell lines+treatments to single letter codes edited by hand.
+
+    # Find cell types that aren't yet in cellLetter file:
+    cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter2.tab cellLetter3.tab
+    regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter3.tab -noLetter > & ! noLetter.out &
+    sort noLetter.out | uniq | awk '{print $2}' > noLetter.txt
+    wc -l noLetter.txt
+    # 43 new cell type+treatment combos
+    cat noLetter.txt >> cellLetter3.tab
+
+    # hand-edit in codes, promoting Tier 2.5 to caps (A549, MCF-7, SK-N-SH, IMR90)
+
+    regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter3.tab
+    regClusterBedExpCfg -tabList fileCellAb.target.tab cluster.target.cfg -cellLetter=cellLetter3.tab -noLetter
+
+    # Do the actual clustering 
+    hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps >&! beds2exps.out
+    # 17 errs (dupes detected) --> add these to picksFromDupes2 and hand edit
+    # NOTE: 4 of these were from same lab, different protocols, etc.:
+    # USF-1, A549+EtOH; NRSF, HepG2; NRSF, SK-N-SH; Pol2(phosphS2), K562
+    # Leaving these out for now (hand-editing peak.table), saving in file dupesBad.txt
+    cat picksFromDupes.tab beds2exps.out | sort >  picksFromDupes2.tab
+    wc -l picksFromDupes2.tab
+    # 52
+    wgEncodeRegTfbsDedupeHelp withDupes.table picksFromDupes2.tab peak.table
+
+    # Prune above 4 dupes, and redo config & clustering
+    wc -l peak.table
+    # 635
+    awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
+    regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter3.tab
+    hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps > beds2exps2.out
+    # Loaded 635 records from cluster.cfg
+    # Got 131 sources
+    # Got 201 factors
+
+    # Load database
+    hgLoadBed hg19 wgEncodeRegTfbsClusteredV3 peak.bed
+    # Read 4735242 elements of size 15 from peak.bed
+    # was 2750490 in previous version 
+    hgLoadSqlTab hg19 wgEncodeRegTfbsCellsV3 ~/kent/src/hg/lib/expRecord.sql peak.exps
+
+    # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
+    awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table > wgEncodeRegTfbsClusteredInputs3.tab
+    hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputsV3 ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputsV3.tab
+    #######################################################################
+
+    # continue with target-based clustering
+    hgBedsToBedExps -dupeLetterOk cluster.target.cfg peak.target.bed peak.target.exps >&! beds2exps.target.out
+    wc -l beds2exps.target.out
+    # 95 dupes
+
+    # NOTE: this was too laborious by hand.  When redone, script to list pairs in date submitted/resubmitted or experiment ID order, to ease picking later experiment
+
+
+    # EXPERIMENTAL:  TF motif tracks, from EMBL/Aus (MEME toolkit)
+    # These are generated using FIMO tool:
+    # Charles E. Grant, Timothy L. Bailey, and William Stafford Noble, "FIMO: Scanning for occurrences of a given motif", Bioinformatics 27(7):10171018, 2011
+    # http://bioinformatics.oxfordjournals.org/content/early/2011/02/16/bioinformatics.btr064.full
+    #  http://meme.ebi.edu.au/meme/cgi-bin/fimo.cgi
+
+    mkdir /cluster/data/hg19/bed/tfbsFimo
+    cd /cluster/data/hg19/bed/tfbsFimo
+
+    hgLoadBed hg19 tfbsFimoJaspar TfMotifsFIMO_Jaspar.hg19.bed
+    # Read 1386302 elements of size 6 from TfMotifsFIMO_Jaspar.hg19.bed
+
+    hgLoadBed hg19 tfbsFimoTransfac TfMotifsFIMO_Transfac.hg19.bed
+    # Read 3665198 elements of size 6 from TfMotifsFIMO_Transfac.hg19.bed
 
 #######################################################################
 # DENISOVA HIGH-COVERAGE VARIANTS #8886 (DONE 9/6/12 angie)
