@@ -2,6 +2,9 @@
 
 # This file describes browser build for the papAnu2
 #	Olive Baboon - Papio anubis - Mar 2012
+#
+# Note: The previous assembly papHam1 is from the same animal
+#        used for this assembly.
 
 
 #	http://www.ncbi.nlm.nih.gov/genome/394
@@ -49,7 +52,7 @@
     #  %0.00 masked total, %0.00 masked real
 
 #############################################################################
-# process into UCSC naming scheme (working - 2012-07-19 - Chin)
+# process into UCSC naming scheme (DONE - 2012-07-19 - Chin)
     mkdir /hive/data/genomes/papAnu2/ucsc
     cd /hive/data/genomes/papAnu2/ucsc
 
@@ -413,7 +416,7 @@ close (FH);
     #   901904342 bases of 2948380710 (30.590%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (working - 2012-08-07 - Chin)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-08-07 - Chin)
     #	since rmsk masks so very little of the genome, use the clean WM mask
     #	on the genome sequence
     cd /hive/data/genomes/papAnu2
@@ -421,13 +424,12 @@ close (FH);
 	bed/simpleRepeat/trfMask.bed papAnu2.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa papAnu2.2bit stdout | faSize stdin > faSize.papAnu2.txt
-XXXX 2012-08-07
     cat faSize.papAnu2.txt
-    #   927696114 bases (111611440 N's 816084674 real 607935500 upper
-    #   208149174 lower) in 5678 sequences in 1 files
-    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
-    #   max 51042256 (chrLG7) median 2009
-    #   %22.44 masked total, %25.51 masked real
+    #   2948380710 bases (55130419 N's 2893250291 real 1766238769 upper 
+    #   1127011522 lower) in 63250 sequences in 1 files
+    #   Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925) 
+    #   max 220367699 (chr1) median 1416
+    #   ma%38.22 masked total, %38.95 masked real
 
     #	create symlink to gbdb
     ssh hgwdev
@@ -478,70 +480,73 @@ XXXX 2012-08-07
     #   49808228 bases of 2893250291 (1.722%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (working - 2012-05-03 - Chin)
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-10-23 - Chin)
     # Use -repMatch=900, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 816084674 / 2897316137 \) \* 1024
-    #	( 816084674 / 2897316137 ) * 1024 = 288.429245
+    calc \( 2893250291 / 2897316137 \) \* 1024
+    #   ( 2893250291 / 2897316137 ) * 1024 = 1022.563006
 
-    # round up to 300
+    # round up to 1025
 
     cd /hive/data/genomes/papAnu2
     time blat papAnu2.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/papAnu2.11.ooc -repMatch=300
-    #   Wrote 16614 overused 11-mers to jkStuff/papAnu2.11.ooc
-    #   real    0m28.015s
+      -makeOoc=jkStuff/papAnu2.11.ooc -repMatch=1025
+    # Wrote 29128 overused 11-mers to jkStuff/papAnu2.11.ooc
+    # Done making jkStuff/papAnu2.11.ooc
+    # real    1m41.286s
 
     # there are non-bridged gaps, construct lift file needed for genbank
     hgsql -N -e "select bridge from gap;" papAnu2 | sort | uniq -c
-    #   232 no
-    #   71845 yes
+    #    9250 no
+    #  130389 yes
 
     cd /hive/data/genomes/papAnu2/jkStuff
     gapToLift papAnu2 papAnu2.nonBridged.lift -bedFile=papAnu2.nonBridged.bed
     # largest non-bridged contig:
     awk '{print $3-$2,$0}' papAnu2.nonBridged.bed | sort -nr | head
-    #   13623339 chrLG1 17571448        31194787        chrLG1.07
+    #  3614795 chr4    105018890       108633685       chr4.306
 
 #########################################################################
-# AUTO UPDATE GENBANK (working - 2012-05-03 - Chin)
+# AUTO UPDATE GENBANK (DONE - 2012-10-23 - Chin)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
-# organism       mrnaCnt estCnt  refSeqCnt
-# Oreochromis niloticus	351	120993	0
-    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Papio anubis    227     145582  462
 
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
     ssh hgwdev  
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # edit etc/genbank.conf to add papAnu2 just after ce2
-# papAnu2 (Nile tilapia)
+    # edit etc/genbank.conf to add papAnu2 just ibefore papHam1
+# papAnu2 (baboon)
 papAnu2.serverGenome = /hive/data/genomes/papAnu2/papAnu2.2bit
 papAnu2.clusterGenome = /hive/data/genomes/papAnu2/papAnu2.2bit
 papAnu2.ooc = /hive/data/genomes/papAnu2/jkStuff/papAnu2.11.ooc
 papAnu2.lift = /hive/data/genomes/papAnu2/jkStuff/papAnu2.nonBridged.lift
-papAnu2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-papAnu2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-papAnu2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-papAnu2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-papAnu2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-papAnu2.refseq.mrna.native.load = yes
-papAnu2.refseq.mrna.xeno.load = yes
-papAnu2.genbank.mrna.xeno.load = yes
-papAnu2.genbank.est.native.load = yes
-papAnu2.downloadDir = papAnu2
 papAnu2.perChromTables = no
+papAnu2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+papAnu2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+papAnu2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+papAnu2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+papAnu2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+papAnu2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+papAnu2.downloadDir = papAnu2
+papAnu2.refseq.mrna.native.load  = yes
+papAnu2.refseq.mrna.xeno.load  = yes
+papAnu2.genbank.mrna.xeno.load = yes
+papAnu2.genbank.mrna.xeno.loadDesc = yes
+papAnu2.genbank.est.native.load = yes
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding papAnu2 Nile tilapia" etc/genbank.conf
+    git commit -m "adding papAnu2 Papio anubis" etc/genbank.conf
     git push
     make etc-update
 
     git pull
     # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "adding definition for oreNilNames" \
+    git commit -m "adding definition for papAnulNames" \
         src/lib/gbGenome.c
     git push
     make install-server
@@ -551,16 +556,16 @@ papAnu2.perChromTables = no
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial papAnu2 &
     #   var/build/logs/2012.06.08-09:52:19.papAnu2.initalign.log
-    #   real    1252m57.323s
+    #   real    1641m58.577s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad papAnu2 &
-    #	logFile:  var/dbload/hgwdev/logs/2012.06.11-10:16:13.dbload.log
-    #   real    30m6.085s
+    #	logFile: var/dbload/hgwdev/logs/2012.10.26-10:34:02.dbload.log
+    #   real    106m43.697s
 
-    # enable daily alignment and update of hgwdev (working - 2012-05-11 - Chin)
+    # enable daily alignment and update of hgwdev 
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add papAnu2 to:
@@ -569,5 +574,61 @@ papAnu2.perChromTables = no
     git push
     make etc-update
 
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2012-10-19 - Chin)
+#       After getting a blat server assigned by the Blat Server Gods,
+# blat4c
+# port 17838 trans
+# port 17839 untrans
+ 
+    ssh hgwdev
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("papAnu2", "blat4c", "17838", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("papAnu2", "blat4c", "17839", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
+
 #########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2012-10-30 - Chin)
+
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    # add melGal after galGal
+    joinerCheck -database=papAnu2 -all all.joiner
+
+    cd /hive/data/genomes/papAnu2
+    time makeDownloads.pl -workhorse=hgwdev papAnu2 > makeDownloads.log 2>&1
+    #   real    12m40.799s
+ *** All done!
+ *** Please take a look at the downloads for papAnu2 using a web browser.
+ *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/papAnu2.
+ *** Edit each README.txt to resolve any notes marked with "***":
+     /cluster/data/papAnu2/goldenPath/database/README.txt
+     /cluster/data/papAnu2/goldenPath/bigZips/README.txt
+     (The htdocs/goldenPath/papAnu2/*/README.txt "files" are just links to those.)
+ *** If you have to make any edits that would always apply to future
+     assemblies from the same sequencing center, please edit them into
+     ~/kent/src/hg/utils/automation/makeDownloads.pl (or ask Angie for help).
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/papAnu2/pushQ
+    cd /hive/data/genomes/papAnu2/pushQ
+    time makePushQSql.pl papAnu2 > papAnu2.pushQ.sql 2> stderr.out
+    #   real    3m39.043s
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/papAnu2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/papAnu2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/papAnu2/bbi/quality.bw
+    # WARNING: papAnu2 does not have seq
+    # WARNING: papAnu2 does not have extFile
+    # 
+
+    #   copy it to hgwbeta
+    scp -p papAnu2.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/papAnu2.pushQ.sql"
+    #   in that pushQ entry walk through each track entry and see if the table
+    #   sizes will set properly
+
 #########################################################################
