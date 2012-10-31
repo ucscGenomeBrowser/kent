@@ -488,6 +488,28 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/petMar2/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+############################################################################
+# lastz swap Human hg19 (DONE - 2012-10-17 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17
+    cat fb.hg19.chainPetMar2Link.txt
+    #   30305028 bases of 2897316137 (1.046%) in intersection
+
+    #	and this swap
+    mkdir /hive/data/genomes/petMar2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/petMar2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    15m22.099s
+    cat  fb.petMar2.chainHg19Link.txt
+    #	21515660 bases of 647368134 (3.324%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
 #########################################################################
 # lastz Opossum monDom5 (DONE - 2012-10-24 - Hiram)
     # the original alignment
@@ -554,3 +576,201 @@ TMPDIR=/scratch/tmp
     #	18576173 bases of 647368134 (2.869%) in intersection
 
 ############################################################################
+## 9-Way Multiz (DONE - 2011-09-28 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way
+    cd /hive/data/genomes/petMar2/bed/multiz7way
+
+    # working on: petMar2 braFlo2 oryLat2 galGal4 monDom5 mm10 hg19
+
+    #	All distances remain as specified in the 65way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but \
+        petMar1,oryLat2,galGal4,monDom5,mm10,hg19 \
+	$HOME/kent/src/hg/utils/phyloTrees/65way.nh \
+        | sed -e "s/petMar1/petMar2/;" > 6way.nh
+    # this comes out as:
+(((((hg19:0.148845,mm10:0.356483):0.278985,monDom5:0.340786):0.181168,
+galGal4:0.337395):0.461354,oryLat2:0.915559):0.526688,petMar2:0.526688);
+    # adding braFlo2 and rearrange to get petMar2 at the top
+
+((petMar2:0.526688,(oryLat2:0.915559,
+(galGal4:0.337395,((hg19:0.148845,mm10:0.356483):0.278985,
+monDom5:0.340786):0.181168):0.461354):0.526688):0.4,braFlo2:2.1);
+
+    # save that in petMar2.7way.nh
+    echo '((petMar2:0.526688,(oryLat2:0.915559,(galGal4:0.337395,((hg19:0.148845,mm10:0.356483):0.278985,monDom5:0.340786):0.181168):0.461354):0.526688):0.4,braFlo2:2.1);' > petMar2.7way.nh
+
+    # convert to common names
+    /cluster/bin/phast/tree_doctor --rename \
+"petMar2->Lamprey; monDom5->Opossum; hg19->Human; mm10->Mouse; oryLat2->Medaka; galGal4->Chicken; braFlo2->Lancelet" \
+petMar2.7way.nh > petMar2.commonNames.7way.nh
+
+# ((Lamprey:0.526688,(Medaka:0.915559,(Chicken:0.337395
+# ((Human:0.148845,Mouse:0.356483):0.278985,
+# Opossum:0.340786):0.181168):0.461354):0.526688):0.400000,Lancelet:2.100000);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/petMar2_7way.png
+
+    #	Use this output to create the table below
+    /cluster/bin/phast/all_dists petMar2.7way.nh | grep -i petMar \
+        | sort -k3n | sed -e "s/petMar2\t//"
+galGal4 1.852125
+oryLat2 1.968935
+monDom5 2.036684
+hg19    2.123728
+mm10    2.331366
+braFlo2 3.026688
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#                         featureBits chainLink measures
+#                                   chainPetMar2Link         chain linearGap
+#    distance                    on petMar2  on other     minScore
+#  1  1.852 - chicken galGal4   (%  2.87) (%  1.79)       5000     loose
+#  2  1.969 - medaka oryLat2    (%  4.93) (%  6.02)       5000     loose
+#  3  2.037 - opossum monDom5   (%  2.62) (%  0.73)       5000     loose
+#  4  2.124 - human hg19        (%  3.32) (%  1.05)       5000     loose
+#  5  2.331 - mouse mm10        (%  3.23) (%  1.07)       5000     loose
+#  6  3.027 - lancelet braFlo2  (%  3.26) (%  3.02)       5000     loose
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	petMar2.7way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way/mafSplit
+    cd /hive/data/genomes/petMar2/bed/multiz7way/mafSplit
+    for D in `sed -e "s/petMar2 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=9 /dev/null . ../../../lastz.${D}/axtChain/petMar2.${D}.maf.gz"
+    mafSplit -byTarget -useHashedName=9 /dev/null . \
+	../../../lastz.${D}/mafNet/petMar2.${D}.net.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 3072
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 512 maf.list
+
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way/splitRun
+    cd /hive/data/genomes/petMar2/bed/multiz7way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = petMar2
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/petMar2/bed/multiz7way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/petMar2/bed/multiz7way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/petMar2/bed/multiz7way/splitRun/run
+    # the tac reverses the list to get the small jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    para -ram=8g create jobList
+# Completed: 512 of 512 jobs
+# CPU time in finished jobs:       2394s      39.89m     0.66h    0.03d  0.000 y
+# IO & Wait Time:                  1504s      25.07m     0.42h    0.02d  0.000 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              28s       0.47m     0.01h    0.00d
+# Submission to last job:           180s       3.00m     0.05h    0.00d
+
+    # assemble into a single maf file
+    cd /hive/data/genomes/petMar2/bed/multiz7way
+    head -1 splitRun/maf/001.maf > multiz7way.maf
+    for F in splitRun/maf/*.maf
+do
+    egrep -v "^#" ${F}
+done >> multiz7way.maf
+    tail -1 splitRun/maf/001.maf >> multiz7way.maf
+
+# -rw-rw-r-- 1 318952823 Oct 31 09:52 multiz7way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/petMar2/bed/multiz7way
+    mkdir /gbdb/petMar2/multiz7way
+    ln -s `pwd`/multiz7way.maf /gbdb/petMar2/multiz7way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf petMar2 multiz7way
+    #	Indexing and tabulating /gbdb/petMar2/multiz7way/multiz7way.maf
+    #	Loaded 657947 mafs in 1 files from /gbdb/petMar2/multiz7way
+    #	real    0m13.264s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 petMar2 multiz7waySummary \
+	/gbdb/petMar2/multiz7way/multiz7way.maf
+    #   Created 10750 summary blocks from 87098 components and 657947 mafs
+    #   from /gbdb/petMar2/multiz7way/multiz7way.maf
+    #   real    0m9.484s
+
+    wc -l multiz7way*.tab
+    #   657947 multiz7way.tab
+    #   10750 multiz7waySummary.tab
+    #   668697 total
+
+    rm multiz7way*.tab
+
+#######################################################################
