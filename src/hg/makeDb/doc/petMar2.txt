@@ -576,7 +576,7 @@ TMPDIR=/scratch/tmp
     #	18576173 bases of 647368134 (2.869%) in intersection
 
 ############################################################################
-## 9-Way Multiz (DONE - 2011-09-28 - Hiram)
+## 9-Way Multiz (DONE - 2011-10-31 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/petMar2/bed/multiz7way
     cd /hive/data/genomes/petMar2/bed/multiz7way
@@ -774,3 +774,241 @@ done >> multiz7way.maf
     rm multiz7way*.tab
 
 #######################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2012-10-31 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir -p /hive/data/genomes/petMar2/bed/multiz7way/anno/mafSplit
+    cd /hive/data/genomes/petMar2/bed/multiz7way/anno/mafSplit
+
+    time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz7way.maf
+    #   real    2m49.680s
+    find . -type f | wc
+    #   11879   11879  225697
+
+    cd /hive/data/genomes/petMar2/bed/multiz7way/anno
+    # check for N.bed files everywhere:
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+        cd /hive/data/genomes/${DB}
+        echo twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+        cd /hive/data/genomes/petMar2/bed/multiz7way/anno
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/petMar2/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S petMar2      # use a screen to control this longish job
+    ssh swarm
+    cd /hive/data/genomes/petMar2/bed/multiz7way/anno
+    mkdir result
+    find ./mafSplit -type d | sed -e 's#./mafSplit##' | while read D
+do
+    echo mkdir -p result${D}
+    mkdir -p result${D}
+done
+
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/petMar2/petMar2.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 11879 of 11879 jobs
+# CPU time in finished jobs:       1254s      20.90m     0.35h    0.01d  0.000 y
+# IO & Wait Time:                 30487s     508.11m     8.47h    0.35d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:           222s       3.70m     0.06h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/0/0/GL486032.maf > petMar2.7way.maf
+    find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> petMar2.7way.maf
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/0/0/GL486032.maf >> petMar2.7way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> petMar2.7way.maf
+    ls -og
+# -rw-rw-r--  1 601617382 Oct 31 11:38 petMar2.7way.maf
+# -rw-rw-r--  1 6488856099 Aug  3 09:02 petMar2.7way.maf
+    du -hsc petMar2.7way.maf
+    #   574M    petMar2.7way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/petMar2/multiz7way/multiz7way.maf   # remove previous results
+
+    ln -s `pwd`/petMar2.7way.maf /gbdb/petMar2/multiz7way/multiz7way.maf
+
+    # Load into database
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/petMar2/multiz7way \
+        petMar2 multiz7way
+    #   Loaded 737312 mafs in 1 files from /gbdb/petMar2/multiz7way
+    #   real    1m18.999s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 petMar2 multiz7waySummary \
+        /gbdb/petMar2/multiz7way/multiz7way.maf
+    #   Created 10750 summary blocks from 87098 components and 737312 mafs
+    #   from /gbdb/petMar2/multiz7way/multiz7way.maf
+    #   real    0m5.948s
+
+    ls -og multiz7way*.tab
+# -rw-rw-r--  1   33913083 Oct 31 11:40 multiz7way.tab
+# -rw-rw-r--  1     509732 Oct 31 11:41 multiz7waySummary.tab
+
+    rm multiz7way*.tab
+
+######################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2012-10-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way/frames
+    cd /hive/data/genomes/petMar2/bed/multiz7way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "xenoRefGene" ) then
+           echo -n "${table}: "
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+           echo -n "${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg19 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    ./showGenes.csh
+# petMar2: xenoRefGene: 106711, Mrnas: 121803
+# oryLat2: ensGene: 25397, refGene: 603, xenoRefGene: 210346, Mrnas: 668558
+# galGal4: refGene: 5675, xenoRefGene: 193694, Mrnas: 636120
+# hg19: ensGene: 191891, knownGene: 80922, mgcGenes: 31383, refGene: 43766, xenoRefGene: 151207, Mrnas: 10668295
+# mm10: ensGene: 90956, knownGene: 59121, mgcGenes: 26768, refGene: 30818, xenoRefGene: 148264, Mrnas: 5217291
+# monDom5: ensGene: 35113, refGene: 479, xenoRefGene: 242075, Mrnas: 2429
+# braFlo2: xenoRefGene: 107859, Mrnas: 334902
+
+    # from that summary, use these gene sets:
+    # xenoRefGene - petMar2 galGal4 braFlo2
+    # ensGene - oryLat2 monDom5
+    # knownGene - hg19 mm10
+
+    mkdir genes
+    #   1. knownGene: hg19 mm10
+    for DB in hg19 mm10
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+done
+    #   2. ensGene:
+    for DB in oryLat2 monDom5
+do
+    hgsql -N -e "select * from ensGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   3. xenoRefGene:
+    for DB in petMar2 galGal4 braFlo2
+do
+    hgsql -N -e "select * from xenoRefGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/braFlo2.gp.gz: 7302
+# genes/galGal4.gp.gz: 13103
+# genes/hg19.gp.gz: 20718
+# genes/mm10.gp.gz: 20985
+# genes/monDom5.gp.gz: 19188
+# genes/oryLat2.gp.gz: 19576
+# genes/petMar2.gp.gz: 7045
+
+    time (cat ../anno/petMar2.7way.maf \
+	| nice -n +19 genePredToMafFrames petMar2 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz7wayFrames.bed.gz)
+    #   real    1m26.514s
+
+    # verify there are frames on everything, should be 7 species:
+    zcat multiz7wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
+#       43049 braFlo2
+#       108007 galGal4
+#       155710 hg19
+#       144138 mm10
+#       122037 monDom5
+#       142739 oryLat2
+#       51144 petMar2
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/petMar2/bed/multiz7way/frames
+    time hgLoadMafFrames petMar2 multiz7wayFrames multiz7wayFrames.bed.gz
+    #   real    0m6.618s
+    time featureBits -countGaps petMar2 multiz7wayFrames
+    time featureBits -countGaps petMar2 multiz7wayFrames
+    #   13842090 bases of 885550958 (1.563%) in intersection
+    #   real    0m12.118s
+
+    #   enable the trackDb entries:
+# frames multiz7wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
