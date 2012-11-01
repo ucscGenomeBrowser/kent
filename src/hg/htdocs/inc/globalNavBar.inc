@@ -28,9 +28,17 @@
 </li>
 <li class="menuparent" id="mirrors"><span>Mirrors</span>
 	<ul style="display: none; visibility: hidden;">
-	<!-- OPTIONAL_GEO_MIRROR_ITEMS -->
-	<li><a href="../mirror.html">Third Party Mirrors</a></li>
-	<li class="last"><a href="../admin/mirror.html">Mirroring Instructions</a></li>
+	<li class="first"><a href="../mirror.html">Third Party Mirrors</a></li>
+	<li><a href="../admin/mirror.html">Mirroring Instructions</a></li>
+
+        <!-- OPTIONAL_GEO_MIRROR_ITEMS -->
+	<li class="noHighlight"><hr></li>
+        <li id="serverEuroLink">
+            <img alt="X" width="16" height="16" style="float: left;" src="../images/greenChecksm.png">
+            <a href="http://genome-euro.ucsc.edu/cgi-bin/hgGateway">Use Europe Server</a></li>
+        <li class="last" id="serverUSLink">
+            <img alt="X" width="16" height="16" style="float: left;" src="../images/greenChecksm.png">
+            <a href="http://genome.ucsc.edu/cgi-bin/hgGateway">Use US Server</a></li>
 	</ul>
 </li>
 <li class="menuparent" id="downloads"><span>Downloads</span>
@@ -89,4 +97,57 @@
 <!--//--><![CDATA[//><!--
 jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay": 800, "speed": 1 }, "thickbox": { "close": "Close", "next": "Next \x3e", "prev": "\x3c Prev", "esc_key": "or Esc Key", "next_close": "Next / Close on last", "image_count": "Image !current of !total" }, "custom_search": { "form_target": "_self", "solr": 0 } });
 //--><!]]>
+
+/* geographic server (mirror) support
+
+   Customize 'Mirrors' drop-down menu based on current server.  If the server
+   is a UCSC-sponsored site (USA/Ca or European), show this in drop-down menu
+   with a checkmark, and allow user to change server.
+
+   NOTE: development servers at UCSC SOE are recognized as US servers
+
+   NOTE:  if further JS is needed for nav bar, this should be moved
+   into a new globalNavBar.js file
+
+   http://genomewiki.ucsc.edu/genecats/index.php/Euronode
+*/
+
+$(function() {
+    var hostName = window.location.hostname;
+
+    function hideGeoServers() {
+        // remove geo servers and separator from dropdown menu
+        $('#serverEuroLink').hide();
+        $('#serverUSLink').hide();
+        $('#mirrors hr').hide();
+    }
+
+    function setGeoServerEuro(isEuro) {
+        // show checkmark on active server and disable selecting it
+        if (isEuro) {
+            $('#serverEuroLink').addClass('noHighlight');
+            $('#serverEuroLink a').removeAttr('href');
+            $('#serverUSLink img').hide();
+        } else {
+            $('#serverUSLink').addClass('noHighlight');
+            $('#serverUSLink a').removeAttr('href');
+            $('#serverEuroLink img').hide();
+        }
+    }
+
+    if (hostName.match(/^euronode\.ucsc\.edu/i) || hostName === "hgwdev-demo1.cse.ucsc.edu") {
+            // NOTE: consider creating JS variables for test servers
+        // Europe server - disable highlight and link for Europe, hide checkmark for US
+        setGeoServerEuro(true);
+    } else if (hostName === "hgwdev-demo2.cse.ucsc.edu") {
+        // Test 3rd party servers
+        hideGeoServers();
+    } else if (hostName.match(/genome\.ucsc\.edu|\.soe\.ucsc\.edu|\.cse\.ucsc\.edu/i)) {
+        // US server - disable highlight and link for US, hide checkmark for Euro
+        setGeoServerEuro(false);
+    } else {
+        hideGeoServers();
+    }
+});
+
 </script>
