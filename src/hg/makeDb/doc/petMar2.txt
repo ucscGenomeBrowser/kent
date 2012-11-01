@@ -1427,3 +1427,190 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
+# phyloP for 7-way (DONE - 2012-11-01 - Hiram)
+    # run phyloP with score=LRT
+    ssh swarm
+    mkdir /cluster/data/petMar2/bed/multiz7way/consPhyloP
+    cd /cluster/data/petMar2/bed/multiz7way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.590
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.590 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.205000 0.295000 0.295000 0.205000
+
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set d = $f:h
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set grp = $cwd:t
+set cons = /hive/data/genomes/petMar2/bed/multiz7way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/petMar2/bed/multiz7way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$file1.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	8387 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way/consPhyloP/all
+    cd /hive/data/genomes/petMar2/bed/multiz7way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise.  Either run on one of the small
+    #	klusters or use the -ram=8g on the para create
+    para -ram=8g create jobList
+    para try ... check ... push ... etc ...
+    para time > run.time
+# Completed: 8387 of 8387 jobs
+# CPU time in finished jobs:       1969s      32.82m     0.55h    0.02d  0.000 y
+# IO & Wait Time:                 64734s    1078.89m    17.98h    0.75d  0.002 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              15s       0.25m     0.00h    0.00d
+# Submission to last job:           571s       9.52m     0.16h    0.01d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.wigFix.gz) &
+    #   real    3m41.174s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/petMar2/chrom.sizes \
+	phyloP7way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=28731: VmPeak:      566916 kB
+    #   real    0m45.403s
+
+
+    bigWigInfo phyloP7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 87,257,681
+# primaryIndexSize: 3,862,312
+# zoomLevels: 10
+# chromCount: 8387
+# basesCovered: 48,766,790
+# mean: 0.463019
+# min: -1.587000
+# max: 2.410000
+# std: 0.735417
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigEncode stdin phyloP7way.wig phyloP7way.wib) &
+    #   Converted stdin, upper limit 2.41, lower limit -1.59
+    #   real    0m17.659s
+
+    du -hsc *.wi?
+    #   47M     phyloP7way.wib
+    #   12M     phyloP7way.wig
+    #   58M     total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP7way.wib /gbdb/petMar2/multiz7way/phyloP7way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/petMar2/multiz7way petMar2 \
+	phyloP7way phyloP7way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh petMar2 phyloP7way
+# db.table      min max mean count sumData
+# petMar2.phyloP7way  -1.587 2.41 0.463019 48766790 2.25799e+07
+#       stdDev viewLimits
+#       0.735417 viewLimits=-1.587:2.41
+
+    #	that range is: 1.587+2.41 = 3.997 for hBinSize=0.003997
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.003997 -hBinCount=1000 -hMinVal=-4.711 -verbose=2 \
+	    -db=petMar2 phyloP7way > histogram.data 2>&1
+    #   real    0m55.916s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000643
+# median 0.003202
+# Q3 0.006999
+# average 0.004566
+# min 0.000008
+# max 0.025350
+# count 219
+# total 1.000000
+# standard deviation 0.004545
+
+XXX not sure if this is correct
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Lamprey petMar2 Histogram phyloP7way track"
+set xlabel " phyloP7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.007]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
