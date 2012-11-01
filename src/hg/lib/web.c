@@ -223,7 +223,14 @@ if (withLogo)
 char *menuStr = menuBar(theCart);
 if(menuStr)
     {
+    // NOTE: this jsInclude may be gratuitous (menuBar does it already).  Ask Larry...
     jsIncludeFile("jquery.js", NULL);
+    if (geoMirrorEnabled())
+        {
+        // notify client to provide Geo mirror functionality (e.g. in nav bar)
+        printf("<script type='text/javascript'>var GB_geoMirror = %d;</script>\n", 
+                sqlUnsigned(geoMirrorNode()));
+        }
     puts(menuStr);
     }
 

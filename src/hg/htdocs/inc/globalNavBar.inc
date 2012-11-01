@@ -102,14 +102,16 @@ jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay
 
    Customize 'Mirrors' drop-down menu based on current server.  If the server
    is a UCSC-sponsored site (USA/Ca or European), show this in drop-down menu
-   with a checkmark, and allow user to change server.
+   with a checkmark, and allow user to change server.  Based on design notes here:
+        http://genomewiki.ucsc.edu/genecats/index.php/Euronode
 
    NOTE: development servers at UCSC SOE are recognized as US servers
 
    NOTE:  if further JS is needed for nav bar, this should be moved
    into a new globalNavBar.js file
 
-   http://genomewiki.ucsc.edu/genecats/index.php/Euronode
+   NOTE: More generalized implementation would use hgcentral.gbNode table
+   to populate menu items. Consider this if more nodes are deployed.
 */
 
 $(function() {
@@ -134,9 +136,12 @@ $(function() {
             $('#serverEuroLink img').hide();
         }
     }
+    if (typeof GB_geoMirror === 'undefined') {
+        hideGeoServers();
+        return;
+    }
 
     if (hostName.match(/^euronode\.ucsc\.edu/i) || hostName === "hgwdev-demo1.cse.ucsc.edu") {
-            // NOTE: consider creating JS variables for test servers
         // Europe server - disable highlight and link for Europe, hide checkmark for US
         setGeoServerEuro(true);
     } else if (hostName === "hgwdev-demo2.cse.ucsc.edu") {
