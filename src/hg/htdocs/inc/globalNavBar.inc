@@ -32,7 +32,7 @@
 	<li><a href="../admin/mirror.html">Mirroring Instructions</a></li>
 
         <!-- OPTIONAL_GEO_MIRROR_ITEMS -->
-	<li class="noHighlight"><hr></li>
+	<li id="geoMirrorMenu" class="noHighlight"><hr></li>
         <li id="serverEuroLink">
             <img alt="X" width="16" height="16" style="float: left;" src="../images/greenChecksm.png">
             <a href="http://genome-euro.ucsc.edu/cgi-bin/hgGateway">Use Europe Server</a></li>
@@ -105,13 +105,15 @@ jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay
    with a checkmark, and allow user to change server.  Based on design notes here:
         http://genomewiki.ucsc.edu/genecats/index.php/Euronode
 
-   NOTE: development servers at UCSC SOE are recognized as US servers
+   NOTE: More generalized implementation would use hgcentral.gbNode table
+   to populate menu items and locate redirects.  This implementation uses the
+   spec from above wiki page:
+        browser.node=1 -> US server (genome.ucsc.edu)
+        browser.node=2 -> Europe server (genome-euro.ucsc.edu)
 
    NOTE:  if further JS is needed for nav bar, this should be moved
    into a new globalNavBar.js file
 
-   NOTE: More generalized implementation would use hgcentral.gbNode table
-   to populate menu items. Consider this if more nodes are deployed.
 */
 
 $(function() {
@@ -137,19 +139,17 @@ $(function() {
         }
     }
     if (typeof GB_geoMirror === 'undefined') {
+        // development servers and 3rd party mirrors
         hideGeoServers();
         return;
     }
 
-    if (hostName.match(/^euronode\.ucsc\.edu/i) || hostName === "hgwdev-demo1.cse.ucsc.edu") {
-        // Europe server - disable highlight and link for Europe, hide checkmark for US
-        setGeoServerEuro(true);
-    } else if (hostName === "hgwdev-demo2.cse.ucsc.edu") {
-        // Test 3rd party servers
-        hideGeoServers();
-    } else if (hostName.match(/genome\.ucsc\.edu|\.soe\.ucsc\.edu|\.cse\.ucsc\.edu/i)) {
+    if (GB_geoMirror == 1) {
         // US server - disable highlight and link for US, hide checkmark for Euro
         setGeoServerEuro(false);
+    } else if (GB_geoMirror === 2) {
+        // Europe server - disable highlight and link for Europe, hide checkmark for US
+        setGeoServerEuro(true);
     } else {
         hideGeoServers();
     }
