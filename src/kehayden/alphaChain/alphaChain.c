@@ -832,6 +832,7 @@ if (optionExists("afterChain"))
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+warn("Program obsolete - try using alphaAsm instead");
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
