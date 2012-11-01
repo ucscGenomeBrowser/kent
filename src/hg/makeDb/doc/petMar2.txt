@@ -1002,7 +1002,6 @@ done
     time hgLoadMafFrames petMar2 multiz7wayFrames multiz7wayFrames.bed.gz
     #   real    0m6.618s
     time featureBits -countGaps petMar2 multiz7wayFrames
-    time featureBits -countGaps petMar2 multiz7wayFrames
     #   13842090 bases of 885550958 (1.563%) in intersection
     #   real    0m12.118s
 
@@ -1010,5 +1009,144 @@ done
 # frames multiz7wayFrames
 # irows on
     #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from the 7-way (DONE - 2012-11-01 - Hiram)
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way/4d
+    cd /hive/data/genomes/petMar2/bed/multiz7way/4d
+
+    # the annotated maf is:
+    ../anno/petMar2.7way.maf
+
+    # using xenoRefGene for petMar2, only transcribed genes
+    hgsql -N -e "select * from xenoRefGene where cdsEnd > cdsStart" petMar2 \
+        | cut -f2- > xenoRefGene.gp
+
+    genePredSingleCover xenoRefGene.gp stdout | sort > xenoRefGeneNR.gp
+    wc -l *.gp
+    #   102617 xenoRefGene.gp
+    #   7445 xenoRefGeneNR.gp
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=2 -byTarget -useFullSequenceName \
+        /dev/null . ../../anno/petMar2.7way.maf
+    #   real    0m48.328s
+    find . -type f | wc -l
+    #   11879
+    ssh swarm
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way/4d/run
+    cd /hive/data/genomes/petMar2/bed/multiz7way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/petMar2/bed/multiz7way"
+set c = $1:r
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /scratch/tmp
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/xenoRefGeneNR.gp | sed -e "s/\t$c\t/\tpetMar2.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f $c.gp $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check
+    para time
+# Completed: 11800 of 11879 jobs
+# Crashed: 79 jobs
+# CPU time in finished jobs:        426s       7.10m     0.12h    0.00d  0.000 y
+# IO & Wait Time:                 30153s     502.55m     8.38h    0.35d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:          1054s      17.57m     0.29h    0.01d
+
+    # not all of them work perfectly.  I checked one of the failures,
+    #   the SS file had no contents beyond the header
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/petMar2/bed/multiz7way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # size 1 is also an empty file:
+    find ./mfa -type f -size 1c | xargs rm -f
+
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/?/?/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #   >petMar2
+    #   >oryLat2
+    #   >galGal4
+    #   >hg19
+    #   >mm10
+    #   >monDom5
+    #   >braFlo2
+
+    # tree_commas.nh looks like:
+    cat ../tree-commas.nh
+    #   ((petMar2,(oryLat2,(galGal4,((hg19,mm10),monDom5)))),braFlo2)
+
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ../tree-commas.nh 4d.all.mfa
+    #   real    0m24.321s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE:
+# ((petMar2:0.655566,(oryLat2:0.576383,(galGal4:0.435419,((hg19:0.178124,mm10:0.268035):0.164842,monDom5:0.353663):0.132512):0.298109):0.126991):0.337451,braFlo2:0.337451);
+
+    cat ../species.list | tr '[ ]' '[\n]' > all.list
+
+
+    grep TREE all.mod | sed -e 's/TREE: //' > all.nh
+    /cluster/bin/phast/all_dists all.nh |grep petMar2 | sort -k3n \
+        | sed -e "s/petMar2.//; s/^/    #  /"
+    #  braFlo2  1.330468
+    #  oryLat2  1.358940
+    #  galGal4  1.516085
+    #  hg19     1.556144
+    #  monDom5  1.566841
+    #  mm10     1.646055
+
+    # those are much shorter branch lengths than from the 65way.nh:
+    /cluster/bin/phast/all_dists ../petMar2.7way.nh | grep petMar2 \
+        | sort -k3n | sed -e "s/petMar2.//; s/^/
+    #  galGal4  1.852125
+    #  oryLat2  1.968935
+    #  monDom5  2.036684
+    #  hg19     2.123728
+    #  mm10     2.331366
+    #  braFlo2  3.026688
 
 #########################################################################
