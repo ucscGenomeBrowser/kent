@@ -42,8 +42,8 @@ priority 103.29
     view phyloP
     visibility full
     subTrack cons7way
-    viewLimits -3:0.5
-    viewLimitsMax -4.611:0.934
+    viewLimits -1.6:2.42
+    viewLimitsMax -1.587:2.41
 
         track phyloP7way
         subTrack cons7wayViewphyloP off
@@ -52,9 +52,8 @@ priority 103.29
         longLabel 7 vertebrates Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.711 0.934
+        type wig -1.587 2.41
         maxHeightPixels 100:50:11
-        viewLimits -3.107:0.934
         autoScale off
         spanList 1
         windowingFunction mean
