@@ -136,8 +136,6 @@ struct slName *getDbListForGenome()
 struct hash *hash = sqlHashOfDatabases();
 struct slName *dbList = NULL;
 addIfExists(hash, &dbList, database);
-addIfExists(hash, &dbList, "swissProt");
-addIfExists(hash, &dbList, "proteins");
 addIfExists(hash, &dbList, "uniProt");
 addIfExists(hash, &dbList, "proteome");
 addIfExists(hash, &dbList, "go");

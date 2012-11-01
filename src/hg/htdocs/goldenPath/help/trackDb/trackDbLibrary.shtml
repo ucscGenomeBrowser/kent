@@ -396,7 +396,8 @@
     <P>Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
     This setting is required for all data tracks in a track hub.  It is currently not
-    supported for local tracks.</P>  <!-- THIS SHOULD BE FIXED for local tracks! -->
+    supported for local tracks.</P>  
+<!-- THIS SHOULD BE FIXED for local tracks! -->
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
@@ -709,7 +710,15 @@
         Note that the format of this trackDb setting is a normal C
     language format so that the item will replace the "%s"
     token in the sql statement.</P>
-    <!--DONNA - I don't quite understand the idInUrlSql usage -->
+    <!-- DONNA - I don't quite understand the idInUrlSql usage 
+    TIM responds: By default the ID is the bed column 'name'.  That is what the $$ token
+    gets replaced with in the url provided.  The idUnUrlSql allows having a separate table
+    in the mysql database that holds an alternate id.  No doubt this setting was for a 
+    special case added by one engineer for one specific result.  Nevertheless, it is now one 
+    of our many settings I needed to document.  So if a wrangler has a case where the 
+    'name' in their bed table can be used to look up a different name in a different table, 
+    AND that different name is what they need use as an id in their url, THEN this is 
+    the obscure setting for them. -->
     <P><B>Example:</B></P>
     <pre>
     url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
@@ -1102,7 +1111,7 @@
     and will always have the problem that zoomed out will not support
     filtering.  The Browser UI should show when tracks are filtered,
     so that losing the filter is obvious!</I></P>
--->
+    -->
 </DIV>
 
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
@@ -1242,13 +1251,11 @@
     Activating this setting provides the bed filter type controls that allow you to filter
     bed items by name with wildcard matching.
     </P>
-<!--
-    <P><I>TODO: this should
+    <!-- <P><I>TODO: this should
     be rewritten to be allowed on any item based data source and not
     exclude other filtering options as well.  (That is, convert this
     to filterByWild or filterByWildList)</I>
-    </P>
--->
+    </P> -->
     <P><B>Example:</B></P>
     <pre>   bedFilter  on</pre>
     <P>The bed track will be be filterable by the bed
@@ -1376,10 +1383,9 @@
     baseColorTickColor lighterShade
     showDiffBasesAllScales .
     showCdsAllScales .    </pre>
-    <!-- DONNA -- redo -->
-    <P><I>TODO: Explain examples, expand option
-    explanation</I></P>
-    <!-- DONNA -- finish -->
+    <!-- DONNA -- redo 
+    <P><I>TODO: Explain examples, expand option explanation</I></P>
+    DONNA -- finish -->
 </DIV>
 
 <DIV class="exonArrowsDense"><span class="types bed"></span>
@@ -1643,10 +1649,7 @@
     but rather are declared with 2 separate settings, <code>minLimit</code> and
     <code>maxLimit</code>.
     </P>
-<!--
-    <P><I>TODO: Deprecate
-    minLimit/maxLimit.</I></P>
--->
+    <!--  <P><I>TODO: Deprecate minLimit/maxLimit.</I></P> -->
     <P><em>Examples can be found below.</em></P>
 </DIV>
 
@@ -1762,11 +1765,6 @@
     will not be displayed.  Even though the full data range extends to
     100, these settings suggest that scores of 20 or more are all
     considered highly relevant.</P>
-    <!-- DONNA - this seems contradictory. Shouldn't scores above 20 be outliers? 
-    TIM answers: Scores/signal above 20 in this example may not be "outliers".  By topping out
-    at 20, the user may be saying that any signal of 20 and above is "significant". 
-    There may also be outliers at 100 or 1000 that should not be allowed to overpower and 
-    obscure signal peaks of 23 or 24. -->
 </DIV>
 
 <DIV class="wigColorBy"><span class="types wig"></span>
@@ -2475,8 +2473,6 @@
     <pre>   ucscRetroInfo ucscRetroInfo1</pre>
 </DIV>
 
-<!-- STOPPED HERE -->
-
 <DIV class="psl_example"><span class="types psl"></span>
 <div class="format"><B>Examples of psl alignment tracks</B></div>
     <pre>
@@ -2550,30 +2546,30 @@
     alignments, separated by either single or double lines.  The single
     lines appear when an insertion occurs in the target or a deletion
     occurs in the querying species.  Double lines represent gaps in both
-    species which could result from a number of causes (e.g. an inversion
+    species that could result from a number of causes (e.g. an inversion
     in one species).  For more information on the "chain" format, please
-    refer to: <A HREF="../chain.html">
-    http://genome.ucsc.edu/goldenPath/help/chain.html</A></P>
+    refer to <A HREF="../chain.html">
+    http://genome.ucsc.edu/goldenPath/help/chain.html</A>.</P>
     <P>A netAlign track
-    represents the best chain for each region in target genome.  The net
+    represents the best chain for each region in the target genome.  The net
     track will show the largest, highest scoring chains that span a
-    region.  When these chains have gaps, they may be "filled in"
-    with additional chains, shown at a lower level, and gaps in thes
+    region.  When these chains have gaps, they may be filled in
+    with additional chains, shown at a lower level, and gaps in these
     chains may in turn be filled at an even lower level.  These levels
-    help to visualizing genome rearrangements such as inversions and
-    retroposed elements.    For more information on the "netAlign"
-    format, please refer to:
+    help in visualizing genome rearrangements such as inversions and
+    retroposed elements.    For more information on the netAlign
+    format, please refer to
     <A HREF="../net.html">
-    http://genome.ucsc.edu/goldenPath/help/net.html</A></P>
+    http://genome.ucsc.edu/goldenPath/help/net.html</A>.</P>
 </DIV>
 
 <DIV class="chain"><span class="types chain"></span>
 <div class="format">
     <code>type chain &lt;otherDb&gt;</code><BR>
     <code>otherDb &lt;otherDb&gt;</code></div>
-    <P>Tracks of type chain show sequence alignments
-    from another species to the reference genome.    This type
-    requires the other species assembly db to be named in both the
+    <P>Tracks of type <code>chain</code> show sequence alignments
+    from another species to the reference genome. This type
+    requires the assembly database of the other species to be named in both the
     type setting and in the "<code>otherDb</code>" setting.</P>
     <P><em>Example can be found below.</em></P>
 </DIV>
@@ -2582,10 +2578,10 @@
 <div class="format">
     <code>type netAlign &lt;otherDb&gt; &lt;otherChainTable&gt;</code><BR>
     <code>otherDb &lt;otherDb&gt;</code></div>
-    <P>tracks of type netAlign show the best chains of
+    <P>Tracks of type netAlign show the best chains of
     sequence alignments from another species to the reference genome.
     Gaps are filled in levels, where possible.  This type requires the
-    other species assembly db to be named in both the type setting and
+    assembly database of the other species to be named in both the type setting and
     in the "<code>otherDb</code>" setting.</P>
     <P><em>Example can be found below.</em></P>
 </DIV>
@@ -2597,9 +2593,8 @@
     setting.  The three options are:</P>
     <UL>
     <LI><code>Chromosome</code> - default</LI>
-    <LI><code>Normalized Score</code> - chains are
-    colored by score</LI>
-    <LI><code>Black</code> - no coloring occurs.</LI>
+    <LI><code>Normalized Score</code> - chains are colored by score</LI>
+    <LI><code>Black</code> - no coloring occurs</LI>
     </UL>
     <P>This setting affects
     <code>chain</code> but not <code>netAlign</code> type tracks.</P>
@@ -2614,8 +2609,8 @@
     the track.  It represents the gap scoring matrix used and will be
     either:</P>
     <UL>
-    <LI><code>loose</code> - chicken/human linear gap costs.</LI>
-    <LI><code>medium</code>  - mouse/human linear gap costs.</LI>
+    <LI><code>loose</code> - chicken/human linear gap costs</LI>
+    <LI><code>medium</code>  - mouse/human linear gap costs</LI>
     </UL>
     <P>This setting is for both <code>chain</code> and <code>netAlign</code>
     type tracks.</P>
@@ -2637,10 +2632,10 @@
 <DIV class="chainNormScoreAvailable"><span class="types chain netAlign bed"></span>
 <div class="format"><code>chainNormScoreAvailable &lt;yes/no&gt;</code></div>
     <P>A given chain or netAlign track may or may not
-    have a filled in normScore column.  If the column exists, then
-    it's value can be displayed in the item details page of the
-    Browser.  Set chainNormScoreAvailable to <code>yes</code> to see
-    the score.  Item coloring based upon score as selected by the
+    have a populated normScore column.  If the column exists, then
+    its value can be displayed in the item details page of the
+    Browser by setting chainNormScoreAvailable to <code>yes</code>. 
+    Item coloring based upon score as selected by the
     <code>chainColor Normalized Score</code> setting also requires
     this setting to be <code>yes</code>.</P>
     <P><B>Example:</B></P>
@@ -2666,8 +2661,8 @@
     <LI>The <code>matrix</code> to be used must be defined
     with this trackDb setting.  The format of this setting is the cell
     size of the matrix which for DNA alignments is 16.  This size is
-    separated by space from the comma delimited array of all the
-    values as the matrix cells ar filled in left to right and top to
+    separated by a space from the comma-delimited array of all the
+    values as the matrix cells are filled in left to right and top to
     bottom.</LI>
     <LI>The <code>matrixHeader</code> setting should be
     used to define the order of base transitions in the matrix.
@@ -2720,8 +2715,8 @@
     <P>Both the chain and netAlign tracks above are
     for alignments of the query species/assembly <code>rheMac2</code>
     against the target species determined by the database this trackDb
-    blelongs to (e.g. human/hg19).  Because the netAlign track is
-    based upon the data in the chain track, it references track in its
+    belongs to (e.g., human/hg19).  Because the netAlign track is
+    based upon the data in the chain track, it references the track in its
     type setting.  Both tracks use the same matrix, chainMinScore and
     linear gap settings.  Methods to group these two tracks into a
     single set that share settings are described later in this
@@ -2782,10 +2777,10 @@
     Reflects uncertainty in the relationship between the DNA of both species, due
     to lack of sequence in relevant portions of the aligning species.</LI>
     </UL>
-    The result makes following columns in stacked alignments easier.
-    However, this also clutters the display.  The user has the option to remove
+    These display conventions make it easier to visualize the columns in stacked
+    alignments, but they also tend to clutter the display.  The user has the option to remove
     these placeholders by unchecking the "Display chains between alignments" option.  To
-    default this option to off, then set <code>irows</code> to "<code>off</code>".
+    set the default of this option to off, set <code>irows</code> to "<code>off</code>".
                 </P>
     <P><B>Example:</B></P>
     <pre>   irows off</pre>
@@ -2793,7 +2788,7 @@
 
 <DIV class="itemFirstCharCase"><span class="types wigMaf"></span>
 <div class="format"><code>itemFirstCharCase noChange</code></div>
-    <P>This controls if
+    <P>This controls if 
     species names in the multiple alignment should be capitalized in
     the pairwise display.  Set "<code>noChange</code>" to avoid forcing
     the first letter to lower case.
@@ -2826,11 +2821,11 @@
 <DIV class="speciesDefaultOff"><span class="types wigMaf"></span>
 <div class="format"><code>speciesDefaultOff &lt;species1&gt; [species2 ...]</code></div>
     <P>To control which of
-    the stacked pairwise alignments is displayed by default use
+    the stacked pairwise alignments are displayed or hidden by default, use
     <code>speciesDefaultOff</code> to list the species alignments that will not be
-    displayed by default.  Each species is specified as in the MAF
-    file Organism names except with embedded dots and/or spaces, these
-    are stripped and replaced with underscore (e.g. C. elegans -&gt;
+    displayed.  Each species is specified as in the MAF
+    file Organism names except embedded dots and/or spaces 
+    are replaced with underscores (e.g. C. elegans -&gt;
     c_elegans).</P>
     <P><B>Example:</B></P>
     <pre>   speciesDefaultOff galGal2 fr1 danRer1</pre>
@@ -2877,9 +2872,9 @@
 
 <DIV class="summary"><span class="types wigMaf"></span>
 <div class="format"><code>summary &lt;tableName&gt;</code></div>
-    <P>This setting contains table name of maf summary table. The summary
+    <P>This setting contains table name of MAF summary table. The summary
     view is used when the browser display is zoomed out to contain a million
-    or more basepairs.  A summary table is created from a multiple alignment maf
+    or more basepairs.  A summary table is created from a multiple alignment MAF
     file using the utility <code>hgLoadMafSummary</code>.</P>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
@@ -2902,15 +2897,15 @@
     one conservation signal can be included with your MAF display by
     using this setting.  When you include conservation wiggles, you
     can also include the standard settings for controlling signal type
-    tracks.  The setting includes three parts, then optionally
+    tracks.  The setting includes three parts, then (optionally)
     additional sets of three, all delimited by white space.  The first
     table is the default. The <code>leftLabel</code> is used to
     prefix the label "Cons" in the left label area of the Browser
     image.  The <code>uiLabel</code> is displayed in the track
     configuration page.  If only one table is listed, and no label is
     present, the default label "Conservation" will be
-    displayed.  The labels cannot contain spaces, but  '<code>_</code>';
-    underscores will be translated to spaces in the display.</P>
+    displayed.  The labels cannot contain spaces, but underscores (<code>_</code>)
+    will be translated to spaces in the display.</P>
     <P>Note: directly
     pairing the conservation signals within the wigMaf track is an
     older way of doing things.  It is easier to give users control of
@@ -2941,12 +2936,12 @@
       ...    </pre>
     <P>This 8-way
     multi-alignment for the hg17 human assembly is defined to include
-    a summary table, tree image and one wiggle table, containing the
-    conservation score for the 8 species.  Notice that the last three
-    species, pairwise alignments are left off by default, and each
+    a summary table, tree image and one wiggle table containing the
+    conservation score for the 8 species.  Notice that the pairwise alignments 
+    for the last three species are turned off by default, and each
     pairwise alignment will have a height of 10 pixels.  With few
-    species displayed by default, the irows is defaulting to off as
-    well, which will make for a cleaner display. Since there is a
+    species displayed by default, irows defaults to "off" as
+    well, which will result in a cleaner display. Since there is a
     conservation wiggle, there are additional settings for that
     signal.
     </P><BR>
@@ -2966,13 +2961,13 @@
     pairwiseHeight 10
       ...    </pre>
     <P>For this wigMaf
-    track, there is no wiggle defined.  This is because, in this real
-    world hg19 example, the several conservations signals to be
+    track, there is no wiggle defined.  In this actual
+    example taken from the hg19 Genome Browser, the several conservation signals 
     displayed in concert with this multiple alignment are separate
-    signal type tracks defined as part of the "Conservation"
-    composite track.   See discussion of composites below.  Notice
+    signal-type tracks defined as part of the "Conservation"
+    composite track (see discussion of composites below).  Notice
     that the 46 species in this alignment are organized into clades
-    with the "<code>speciesGroups</code>" setting.  Each clade has its
+    using the "<code>speciesGroups</code>" setting.  Each clade has its
     own "<code>sGroup</code>" setting to declare the order within (not
     all species shown).</P>
 </DIV>
@@ -2984,7 +2979,7 @@
     <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>Though
     many microarray experiments have been superseded by high-throughput
-    sequencing (e.g. ChIP-seq) experiments, plenty of microarray tracks
+    sequencing (e.g., ChIP-seq) experiments, several microarray tracks
     still exist.  Further, microarray experiments can be the economical
     or practical choice in many instances. The datasets for the built-in
     microarray tracks in the Genome Browser are stored in bed 12+3 (bed
@@ -2994,9 +2989,9 @@
     trackDb file associated with the track's genome assembly. Each
     microarray track set must also have an associated
     microarrayGroups.ra configuration file that contains additional
-    information about the data in each of the arrays. Please refer to
-    <A HREF="http://genomewiki.ucsc.edu/index.php/Microarray_track">
-    http://genomewiki.ucsc.edu/index.php/Microarray_track</A>
+    information about the data in each of the arrays. Please refer to the
+    <A HREF="http://genomewiki.ucsc.edu/index.php/Microarray_track">microarray track</A> 
+    section of the UCSC genomewiki
     for information on how to prepare microarray tracks.  In particular,
     that document describes the format of the groupings.ra file that
     must be associated with an expRatio track.</P>
@@ -3016,9 +3011,9 @@
 <DIV class="expDrawExons"><span class="types expRatio"></span>
 <div class="format"><code>expDrawExons on</code></div>
     <P>If microarray data
-    is includes gene model or blocks within items, then the data can
-    be viewed as exons and introns by turning this setting on.  The
-    setting is configurable by the user.</P>
+    includes gene model or blocks within items, then the data can
+    be viewed as exons and introns by setting <code>expDrawExons</code>
+    to on.  The setting is configurable by the user.</P>
     <P><B>Example:</B></P>
     <pre>   expDrawExons on</pre>
 </DIV>
@@ -3034,7 +3029,7 @@
 <DIV class="expStep"><span class="types expRatio bed"></span>
 <div class="format"><code>expStep &lt;#&gt;</code></div>
     <P>Amount to step in
-    visible expression scale.  Some round number close to <code>expScale</code> divided
+    visible expression scale.  A round number close to <code>expScale</code> divided
     by 8 is best.</P>
     <P><B>Example:</B></P>
     <pre>
@@ -3044,8 +3039,8 @@
 
 <DIV class="expTable"><span class="types expRatio bed"></span>
 <div class="format"><code>expTable &lt;tableName&gt;</code></div>
-    <P>This setting holds
-    the name of a table to be found in the common <code>hgFixed</code>
+    <P>This setting specifies
+    the name of a table in the common <code>hgFixed</code>
     database that contains names of experiments, etc.</P>
     <!-- <P><I>TODO: Don't know where this gets read
     in C code???</I></P> -->
@@ -3055,9 +3050,9 @@
 <div class="format"><code>groupings &lt;fileName&gt;</code></div>
     <P>A microarray dataset
     must refer to a specific set of configurations to load from the
-    microArrayGroups.ra file.  Please refer to
-    <A HREF="http://genomewiki.ucsc.edu/index.php/Microarray_track">
-             http://genomewiki.ucsc.edu/index.php/Microarray_track</A>
+    microArrayGroups.ra file.  Please refer to the
+    <A HREF="http://genomewiki.ucsc.edu/index.php/Microarray_track">microarray track</A> 
+    section of the UCSC genomewiki
     for detailed instructions on the location of this file and its
     format.  Use the "<code>groupings</code>" setting to point to a stanza keyed on
     "<code>name</code>" in that file.</P>
@@ -3129,14 +3124,14 @@
 <div class="format"><code>codingAnnoLabel_&lt;table&gt; &lt;text&gt;</code></div>
     <P><I>Deprecated; will probably be removed.</I>
     This specifies a text label for display of &lt;table&gt;'s
-    predictions of a SNP's effect on a protein coding gene.</P>
+    predictions of a SNP's effect on a protein-coding gene.</P>
 </DIV>
 
 <DIV class="codingAnnotations"><span class="types snp"></span>
 <div class="format"><code>codingAnnotations &lt;table&gt;[,table]</code></div>
     <P><I>Deprecated; will probably be removed.</I>
-    This specifies one or more tables containing predictions of SNPs'
-    effects on protein coding coding genes.</P>
+    This specifies one or more tables containing predictions of SNP
+    effects on protein-coding genes.</P>
 </DIV>
 
 <DIV class="defaultGeneTracks"><span class="types snp"></span>
@@ -3145,7 +3140,7 @@
     affect on a gene from any genePred track.
     Since there are often many gene tracks and models, the prediction
     will depend upon the gene model used.  The user has a chance to
-    choose from those available, but this setting allows establishing
+    choose from those available, but this setting establishes
     a default gene track or tracks to base predictions on.</P>
     <P><B>Example</B>:</P>
     <pre>   defaultGeneTracks knownGenes</pre>
@@ -3168,7 +3163,7 @@
 <DIV class="hapmapPhase"><span class="types snp"></span>
 <div class="format"><code>hapmapPhase &lt;II|III&gt;</code></div>
     <P>The SNP details page looks for the SNP's ID in HapMap track tables
-    which have different names and contents depending on whether they
+    that have different names and contents depending on whether they
     were loaded from HapMap phase II or HapMap phase III data.
     (This setting is also used by HapMap SNPs tracks.)</P>
 </DIV>
@@ -3190,8 +3185,9 @@
 <DIV class="snpExceptions"><span class="types snp"></span>
 <div class="format"><code>snpExceptions &lt;table&gt;</code></div>
     <P>This specifies an auxiliary table that contains annotations of unusual
-    properties of variants.  As of dbSNP build 132, exceptions are incorporated
-    into the main snp<em>NNN</em> table and this setting does not apply.</P>
+    properties of variants.  This setting applies only to versions prior to dbSNP 
+    build 132; starting with build 132, exceptions are incorporated into the 
+    main snp<em>NNN</em> table and an auxiliary table is no longer needed.</P>
 </DIV>
 
 <DIV class="snpExceptionDesc"><span class="types snp"></span>
@@ -3231,9 +3227,9 @@
     </pre>
     <P>This track displays variants from dbSNP build 135 with Minor Allele Frequency (MAF)
     of at least 1%.  Flanking sequence file offsets come from the snp135Seq table,
-    descriptions of unusual properties come from the snp135ExceptionDesc table,
-    effects of variants on protein coding genes are shown with respect to the table
-    knownGene (UCSC Genes track) by default, and if the viewed region is more than
+    descriptions of unusual properties are taken from the snp135ExceptionDesc table,
+    and effects of variants on protein-coding genes are shown with respect to the table
+    knownGene (UCSC Genes track) by default. If the viewed region is more than
     10,000,000 base pairs, the data will not be loaded and drawn.</P>
 </DIV>
 
@@ -3250,7 +3246,7 @@
     discovered by the project. The format has been subsequently adopted by other large
     projects. When a VCF file is compressed and indexed
     using <A HREF="http://samtools.sourceforge.net/tabix.shtml" TARGET="_blank">tabix</A>
-    and then made web-accesible, the Browser will fetch only the portions of
+    and then made web-accessible, the Browser will fetch only the portions of
     the file necessary to display items in the viewed region. In other
     words, this is a remote data file format, as are the BAM, bigBed and bigWig formats.
     Please refer to the
@@ -3528,8 +3524,8 @@
       ...    </pre>
     <P>The Browser will not provide visualization of
     this track but will provide access to downloading any number of
-    files organized into a single group.  The downloads page will
-    present those files in a table with a number of columns that are
+    files organized into a single group.  The downloads page 
+    presents those files in a table with a number of columns that are
     sortable and possibly filterable.  Much of the presentation and
     organization relies upon settings established in the metaDb for
     this track. However, the <code>fileSortOrder</code> setting has requested six
@@ -3542,7 +3538,7 @@
 <H3>encodeFiveC: Five C Chromatin interaction track</H3>
     <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
-    format track that wa used for displaying long distance
+    format track that was used for displaying long distance
     chromatin/chromatin interaction evidence.  Essentially a "<code>bed</code>"
     type track displaying locations in the genome.  The details page of
     each location presents a list of other locations within the genome
@@ -3551,7 +3547,7 @@
 
 <DIV class="encodeFiveC"><span class="types encodeFiveC"></span>
 <div class="format"><code>type encodeFiveC</code></div>
-    <P>A specialized track was used to show the
+    <P>A specialized track that was used to show the
     locations where  chromatin may have interactions with other
     chromatin locations.
     </P>
@@ -3561,7 +3557,7 @@
 <div class="format"><code>interTable &lt;tableName&gt;</code></div>
     <P>Each location found in the track's main table
     should have associated regions defined in the interactions table
-    which is named with this setting.  The interactions table format
+    named with this setting.  The interactions table format
     is essentially a "bed 7 + 1".</P>
 </DIV>
 
@@ -3597,7 +3593,7 @@
     "item" based track of "<code>bed 15</code>" format, the same format
     used for type <code>expRatio</code>.  Its purpose is to
     display transcription factors as detected in multiple cell lines,
-    though it might be adaptable for any type of item that might pile up
+    though it might be adaptable for any type of item that piles up
     into overlapping locations and will belong to one of several
     categories.  However, this type was specifically designed for
     combining transcription factor (TF) binding evidence from multiple
@@ -3605,7 +3601,7 @@
     items or regions where there is evidence of TF binding. To the left
     of each item, the factor name is displayed, while to the right a
     coded list of cell types where the evidence has been found is
-    displayed.  Unlike most item based tracks, a second table is required
+    displayed.  Unlike most item-based tracks, a second table is required
     to describe the cell lines.  Use the program hgBedsToBedExp to create
     the tables from a collection of simpler beds, one for each
     transcription factor/cell interaction.</P>
@@ -3671,7 +3667,7 @@ for each cell associated with the particular TF binding location.</P>
 <H3>rmsk: Repeat masking tracks</H3>
     <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
-    format track that is only used for the repeat masking track.  For
+    format track that is used only for the repeat-masking track.  For
     completeness it is being briefly described here.  These tracks are
     created created by using Arian
     Smit's <A HREF="http://www.repeatmasker.org/" TARGET="_blank">RepeatMasker</A>
@@ -3683,7 +3679,7 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><code>type rmsk</code></div>
     <P>The repeat masker
     tracks contain uniquely formattted data for the special function
-    of repeat masking.
+    of repeat-masking.
     </P>
     <P><em>Example can be found below.</em></P>
 </DIV>
@@ -3711,10 +3707,10 @@ for each cell associated with the particular TF binding location.</P>
     <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
     format track that shows the snaking course of bi-directional and
-    overlapping alignments.  This format can help illustrate inversion
-    type rearrangements that align to the plus then the minus and again
-    to the plus strand.  It can also be used to illustrate overlapping
-    alignments such as when a duplication has occurred compared to the
+    overlapping alignments.  This format can help illustrate inversion-type 
+    rearrangements that align to the plus strand, then the minus strand, 
+    and again to the plus strand.  It can also be used to illustrate overlapping
+    alignments, such as when a duplication has occurred compared to the
     reference genome.</P>
 </DIV>
 
@@ -3728,9 +3724,8 @@ for each cell associated with the particular TF binding location.</P>
     this type is almost always a mapping between two species or two
     assemblies of the same species, the type must also declare that
     species/assembly by database name.</P>
-    <P>As with chains and netAligns which also
-    typically show mappings between to assemblies, the "<code>otherDb</code>"
-    setting is also needed to declare which other genome and assembly
+    <P>As with chains and netAligns, which typically show mappings between two assemblies, 
+    the "<code>otherDb</code>" setting is also needed to declare which other genome and assembly
     the data in this track represents.</P>
 </DIV>
 
@@ -3920,7 +3915,7 @@ for each cell associated with the particular TF binding location.</P>
 <div class="format"><code>allButtonPair on</code></div>
     <P>When a simple composite track presents a short list of
     subtracks, it can be convenient for the user to have an easy way to select or
-    deselect all of them.  Include this setting to display an "All 
+    deselect all of them.  Include this setting to display an "<B>All</B> 
     <img style='vertical-align:middle;' src='/images/add_sm.gif' /><img style='vertical-align:middle;' src='/images/remove_sm.gif' />"
     <!-- Don't break the long line above, so that the buttons have no daylight between them -->
     (plus and minus button pair) for the user's convenience.  If
@@ -3931,10 +3926,7 @@ for each cell associated with the particular TF binding location.</P>
 
 <DIV class="centerLabelsDense"><span class="types compositeTrack"></span>
 <div class="format"><code>centerLabelsDense &lt;off/on&gt;</code></div>
-<!--
-    <P><I>TODO: Should be made obsolete, with subtracks always sharing one label.</I>
-    </P>
--->
+    <!-- <P><I>TODO: Should be made obsolete, with subtracks always sharing one label.</I> </P> -->
     <P>By default, only the composite track's single center label is shown when the 
     subtracks are displayed together in the Browser dense mode. 
     If <code>centerLabelsDense</code> is set to "on", the Browser will display a center 
@@ -3944,14 +3936,9 @@ for each cell associated with the particular TF binding location.</P>
 
 <DIV class="dragAndDrop"><span class="types compositeTrack"></span>
 <div class="format"><code>dragAndDrop on</code></div>
-<!-- TIM to DONNA: your edit confused the 2 different types of drag-and-drop
-    This setting is for within the configuration page and may affect the image.
-    There is also the drag and drop within the image that will not affect the cfg page.
-    Only this one is optional and has a setting.  I am making another attempt: 
--->
     <!-- <P><I>TODO: Should be made obsolete (and default behavior)</I></P> -->
     <P>The subtrack list in the configuration page can be rearranged by setting
-    a <A onclick="return jumpTo(this);" HREF="#">sortOrder<A>, as described below, 
+    a <A onclick="return jumpTo(this);" HREF="#">sortOrder</A>, as described below, 
     or by allowing the user to drag and drop the subtracks to a new order 
     if enabled with this setting. The changed order will also be seen in the track 
     image.  However, the order of tracks can always be rearranged through 
@@ -4102,11 +4089,9 @@ for each cell associated with the particular TF binding location.</P>
     links, each subGroup's tag must be tied to the actual metaDb
     term.
     </P>
-<!--
-    <P><I>TODO: Currently the file declared in this
+    <!-- <P><I>TODO: Currently the file declared in this
     setting is not used, as the cv.ra file is always found in its
-    standard location.</I></P>
--->
+    standard location.</I></P> -->
 </DIV>
 
 <DIV class="sortOrder"><span class="types subGroups"></span>
@@ -4365,7 +4350,7 @@ for each cell associated with the particular TF binding location.</P>
     setting.  Unlike other settings, visibility is cumulatively restrictive from the
     supertrack level.  That is, if the parent has a visibility of  "<code>dense</code>" and the 
     child's visibility is
-    "<code>pack</code>", the child will be displayed as "<code>dense</code>". if the parent is
+    "<code>pack</code>", the child will be displayed as "<code>dense</code>". If the parent is
     subsequently changed to "<code>full</code>" display mode, the child will now be shown in 
     "<code>pack</code>" mode.  At the trackDb
     level, default visibility is always cumulatively restrictive.
