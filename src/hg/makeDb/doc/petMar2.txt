@@ -1574,23 +1574,22 @@ sleep 4
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.003997 -hBinCount=1000 -hMinVal=-4.711 -verbose=2 \
+	-hBinSize=0.003997 -hBinCount=1000 -hMinVal=-1.588 -verbose=2 \
 	    -db=petMar2 phyloP7way > histogram.data 2>&1
     #   real    0m55.916s
 
     # find out the range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
-# Q1 0.000643
-# median 0.003202
-# Q3 0.006999
-# average 0.004566
-# min 0.000008
-# max 0.025350
-# count 219
-# total 1.000000
-# standard deviation 0.004545
+# Q1 0.000122
+# median 0.000394
+# Q3 0.000879
+# average 0.001035
+# min 0.000000
+# max 0.019782
+# count 966
+# total 1.000001
+# standard deviation 0.002140
 
-XXX not sure if this is correct
     #	create plot of histogram:
     cat << '_EOF_' | gnuplot > histo.png
 set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
@@ -1604,7 +1603,7 @@ set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.007]
+set yrange [0:0.02]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
