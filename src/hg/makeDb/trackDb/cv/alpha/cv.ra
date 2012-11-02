@@ -9375,7 +9375,7 @@ target NR4A1
 targetClass TFSS
 targetDescription NR4A1
 targetId GeneCard:NR4A1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR4A1
 validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 vendorId eGFP-NR4A1
 vendorName Dr. Kevin White at University of Chicago
