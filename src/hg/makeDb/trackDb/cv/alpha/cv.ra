@@ -9303,7 +9303,7 @@ vendorName Dr. Kevin White at University of Chicago
 term eGFP-JunD
 tag JUNDe
 type Antibody
-label JUND (eGFP-JunD)
+label JUND (eGFP-JUND)
 antibodyDescription Goat polyclonal. Antibody Target: JUND
 lab White
 orderUrl http://www.genes.uchicago.edu/white.html
@@ -10777,11 +10777,11 @@ vendorName Bethyl Laboratories
 term JunD
 tag JUND
 type Antibody
-label JunD (sc-74)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: JunD
+label JUND (sc-74)
+antibodyDescription Rabbit polyclonal IgG. Antibody Target: JUND
 lab Myers, Snyder 
 orderUrl http://www.scbt.com/product.php?datasheet=74
-target JunD
+target JUND
 targetClass TFSS
 targetDescription The protein encoded by this intronless gene is a member of the JUN family, and a functional component of the AP1 transcription factor complex. It has been proposed to protect cells from p53-dependent senescence and apoptosis. Alternate translation initiation site usage results in the production of different isoforms. (provided by RefSeq)
 targetId GeneCard:JUND
@@ -13399,17 +13399,17 @@ type control
 label eGFP-ILF2
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
 
-term Control_eGFP-JunB
+term Control_eGFP-JUNB
 tag CONTROLJUNB
 type control
 label eGFP-JunB
 description This data represents a control being compared to experiments using antibody eGFP-JunB
 
-term Control_eGFP-JunD
+term Control_eGFP-JUND
 tag CONTROLJUND
 type control
-label eGFP-JunD
-description This data represents a control being compared to experiments using antibody eGFP-JunD
+label eGFP-JUND
+description This data represents a control being compared to experiments using antibody eGFP-JUND
 
 term Control_eGFP-MLL5
 tag CONTROLMLL5
