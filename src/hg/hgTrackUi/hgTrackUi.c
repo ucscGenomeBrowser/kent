@@ -3144,17 +3144,6 @@ if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
    }
-char *super = trackDbGetSupertrackName(tdb);
-if (super)
-    {
-    /* configured as a supertrack member in trackDb */
-    if (tdb->parent && sameString(super,tdb->parent->track))
-        {              // check trackName because super is returned for any level child
-        /* the supertrack is also configured, so use supertrack defaults */
-        tdbMarkAsSuperTrack(tdb->parent);
-        trackDbSuperMemberSettings(tdb);
-        }
-    }
 char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
                tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
 if(cartOptionalString(cart, "ajax"))
