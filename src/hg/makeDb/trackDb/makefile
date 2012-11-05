@@ -152,7 +152,7 @@ update: #clean
 # see kent/src/product/ex.hg/conf for details
 
 alpha: clean
-	#${GIT} pull
+	${GIT} pull
 	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
 	${MKDIR} ${CGI_BIN}/encode
