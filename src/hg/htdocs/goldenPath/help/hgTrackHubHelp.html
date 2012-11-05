@@ -491,13 +491,17 @@ have a 1:1 correspondence with the database names defined by the
 
 <p><B>Step 7. Create the trackDb.txt files</B><BR>
 The trackDb.txt file, which is based on the Genome Browser 
-<a href ="trackDb/trackDbHub.html">.ra format</a>,
-is the most complicated of the text files in the
+.ra format, is the most complicated of the text files in the
 hub directory. It contains a stanza for each of the data files for the
 given assembly that defines display and configuration properties for the
 track. If the tracks are grouped into larger entities, such as 
 composite or super-tracks, the larger entities will have a stanza in the
 file as well.</p>
+
+<p>The <a href ="trackDb/trackDbHub.html">Track Database Definition Document</a>
+will help you understand how to create a trackDb.txt file. It goes into
+great detail about how to declare dataset display settings and values.
+</p>
 
 <P>At a minimum, each trackDb.txt file must contain at least five tags: </p>
 
@@ -570,8 +574,7 @@ that are not associated with a particular view.</UL>
 <HR>
 
 <P><B>Step 8. Create track description files</B><BR>
-Each track in the hub may have an associated 
-<a href="trackDb/trackDbHub.html#html">description file</a> 
+Each track in the hub may have an associated description file 
 that describes the track to viewers. The file provides detailed information 
 about the data displayed in the track, including methods used to produce and 
 validate the data, background information, display conventions, 

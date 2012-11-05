@@ -75,6 +75,7 @@ baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
+html est.new
 
 track tightEst
 shortLabel Tight ESTs
@@ -165,7 +166,7 @@ termRegex N(M|R)_[0-9]{6}[0-9]*
 searchPriority 9.5
 
 searchName mrnaAcc
-searchTable all_mrna
+searchTable gbCdnaInfo
 searchMethod prefix
 searchType mrnaAcc
 shortCircuit 1
@@ -185,7 +186,7 @@ searchPriority 2.1
 grepIndex refLinkGrep/refLink.mrnaAccProduct
 
 searchName mrnaKeyword
-searchTable all_mrna
+searchTable gbCdnaInfo
 searchType mrnaKeyword
 searchPriority 15
 grepIndex genbankGrep
