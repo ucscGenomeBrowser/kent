@@ -1,0 +1,196 @@
+track Chd1a301218aStd
+shortLabel Chd1a301218aStd
+longLabel Chd1a301218aStd
+group regulation
+type bigWig 0 13
+parent encode
+
+track Chd7a301223a1
+shortLabel Chd7a301223a1
+longLabel Chd7a301223a1
+group regulation
+type bigWig 0 13
+parent encode
+
+track CtcfStd
+shortLabel CtcfStd
+longLabel CtcfStd
+group regulation
+type bigWig 0 13
+parent encode
+
+track Ezh239875
+shortLabel Ezh239875
+longLabel Ezh239875
+group regulation
+type bigWig 0 13
+parent encode
+
+track H2azStd
+shortLabel H2azStd
+longLabel H2azStd
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k09me3Std
+shortLabel H3k09me3Std
+longLabel H3k09me3Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k27acStd
+shortLabel H3k27acStd
+longLabel H3k27acStd
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k27me3Std
+shortLabel H3k27me3Std
+longLabel H3k27me3Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k36me3Std
+shortLabel H3k36me3Std
+longLabel H3k36me3Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k4me1Std
+shortLabel H3k4me1Std
+longLabel H3k4me1Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k4me2Std
+shortLabel H3k4me2Std
+longLabel H3k4me2Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k4me3Std
+shortLabel H3k4me3Std
+longLabel H3k4me3Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k79me2Std
+shortLabel H3k79me2Std
+longLabel H3k79me2Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track H3k9acStd
+shortLabel H3k9acStd
+longLabel H3k9acStd
+group regulation
+type bigWig 0 13
+parent encode
+
+track H4k20me1Std
+shortLabel H4k20me1Std
+longLabel H4k20me1Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track Hdac2a300705a
+shortLabel Hdac2a300705a
+longLabel Hdac2a300705a
+group regulation
+type bigWig 0 13
+parent encode
+
+track Hdac6a301341a
+shortLabel Hdac6a301341a
+longLabel Hdac6a301341a
+group regulation
+type bigWig 0 13
+parent encode
+
+track Jarid1aab26049Std
+shortLabel Jarid1aab26049Std
+longLabel Jarid1aab26049Std
+group regulation
+type bigWig 0 13
+parent encode
+
+track Jmjd2aa300861a1
+shortLabel Jmjd2aa300861a1
+longLabel Jmjd2aa300861a1
+group regulation
+type bigWig 0 13
+parent encode
+
+track P300kat3b
+shortLabel P300kat3b
+longLabel P300kat3b
+group regulation
+type bigWig 0 13
+parent encode
+
+track Phf8a301772a
+shortLabel Phf8a301772a
+longLabel Phf8a301772a
+group regulation
+type bigWig 0 13
+parent encode
+
+track Plu1
+shortLabel Plu1
+longLabel Plu1
+group regulation
+type bigWig 0 13
+parent encode
+
+track Rbbp5a300109aStd
+shortLabel Rbbp5a300109aStd
+longLabel Rbbp5a300109aStd
+group regulation
+type bigWig 0 13
+parent encode
+
+track Sap3039731
+shortLabel Sap3039731
+longLabel Sap3039731
+group regulation
+type bigWig 0 13
+parent encode
+
+track Sirt6
+shortLabel Sirt6
+longLabel Sirt6
+group regulation
+type bigWig 0 13
+parent encode
+
+track Suz12051317
+shortLabel Suz12051317
+longLabel Suz12051317
+group regulation
+type bigWig 0 13
+parent encode
+
+track chaetocin01vs03
+shortLabel chaetocin01vs03
+longLabel chaetocin01vs03
+group regulation
+type bigWig 0 13
+parent encode
+
+track chaetocin06vs03
+shortLabel chaetocin06vs03
+longLabel chaetocin06vs03
+group regulation
+type bigWig 0 13
+parent encode
+

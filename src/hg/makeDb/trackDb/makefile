@@ -122,7 +122,9 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	choHof1 \
 	sacCer1 sacCer2 sacCer3 \
 	sc1 \
-	h1n1 
+	h1n1 \
+	centromers1
+
 
 GSID_DBS = \
 	hiv1 vax004 hivgne8 hivmn hivmn1 hivmn2 hivgne8v2 hivVax003Vax004
@@ -150,7 +152,7 @@ update: #clean
 # see kent/src/product/ex.hg/conf for details
 
 alpha: clean
-	${GIT} pull
+	#${GIT} pull
 	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
 	${MKDIR} ${CGI_BIN}/encode
