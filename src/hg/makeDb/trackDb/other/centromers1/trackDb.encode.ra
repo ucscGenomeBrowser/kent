@@ -4,6 +4,7 @@ longLabel Chd1a301218aStd
 group regulation
 type bigWig 0 13
 parent encode
+color 250,0,0
 
 track Chd7a301223a1
 shortLabel Chd7a301223a1
