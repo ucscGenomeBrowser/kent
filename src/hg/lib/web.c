@@ -223,7 +223,17 @@ if (withLogo)
 char *menuStr = menuBar(theCart);
 if(menuStr)
     {
+    // NOTE: this jsInclude may be gratuitous (menuBar does it already).
     jsIncludeFile("jquery.js", NULL);
+    if (geoMirrorEnabled())
+        {
+        // notify client to provide Geo mirror functionality (e.g. in nav bar)
+        printf("<script type='text/javascript'>var GB_geoMirror = %d;</script>\n", 
+                sqlUnsigned(geoMirrorNode()));
+        /* TODO: consider dumping hgcentral.gbNode table here as well so UI
+                can share w/ browser GEO mirror redirect code
+                */
+        }
     puts(menuStr);
     }
 

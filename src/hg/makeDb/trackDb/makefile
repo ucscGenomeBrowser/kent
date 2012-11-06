@@ -34,7 +34,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	gorGor1 gorGor2 gorGor3 \
         nomLeu1 nomLeu2 \
 	ponAbe2 \
-	rheMac2,rheMac3 \
+	rheMac2 rheMac3 \
 	papHam1 \
     papAnu2 \
 	macEug1 macEug2 \
@@ -122,7 +122,9 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	choHof1 \
 	sacCer1 sacCer2 sacCer3 \
 	sc1 \
-	h1n1 
+	h1n1 \
+	centromers1
+
 
 GSID_DBS = \
 	hiv1 vax004 hivgne8 hivmn hivmn1 hivmn2 hivgne8v2 hivVax003Vax004

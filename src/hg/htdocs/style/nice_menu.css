@@ -376,7 +376,15 @@ ul.nice-menu ul li:hover, ul.nice-menu ul li:active {
 }
 /* END - GREG ADDED STYLES */ 
 
+/************************************/
+/* More styles for Nav Bar from UCSC */
 
+/* provide class to suppress highlighting on dropdown menu items (e.g. horiz rule) */
+ul.nice-menu ul .noHighlight:hover, ul.nice-menu ul li.noHighlight a:hover {
+    color:#121e9b !important;
+    background-color: #fff !important;
+}
+/************************************/
 
 ul.nice-menu ul li a {
 	padding:0;
@@ -407,6 +415,7 @@ ul.nice-menu li.menuparent li a {
 	padding:8px;
 	padding-right:0px;
 }
+
 ul.nice-menu-down li li.menuparent {
 	background:#ffffff;
 }
@@ -435,7 +444,6 @@ ul.nice-menu-down li ul li ul {
 	left:141px;
 	top:0px;
 }
-
 
 /* over-riding HGStyle for demo */
 .blueToggleBar {
@@ -490,3 +498,4 @@ a > .sf-sub-indicator {  /* give all except IE6 the correct values */
 	top:			.8em;
 	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
 }
+
