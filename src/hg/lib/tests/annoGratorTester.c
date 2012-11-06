@@ -2,6 +2,7 @@
 
 #include "annoGratorQuery.h"
 #include "annoGratorGpVar.h"
+#include "annoStreamBigBed.h"
 #include "annoStreamDb.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
@@ -9,7 +10,11 @@
 #include "annoFormatTab.h"
 #include "dystring.h"
 #include "pgSnp.h"
+#include "udc.h"
 #include "vcf.h"
+#if (defined USE_TABIX && defined KNETFILE_HOOKS)
+#include "knetUdc.h"
+#endif//def USE_TABIX && KNETFILE_HOOKS
 
 // Names of tests:
 static const char *pgSnpDbToTabOut = "pgSnpDbToTabOut";
@@ -20,6 +25,7 @@ static const char *snpConsDbToTabOutShort = "snpConsDbToTabOutShort";
 static const char *snpConsDbToTabOutLong = "snpConsDbToTabOutLong";
 static const char *vcfEx1 = "vcfEx1";
 static const char *vcfEx2 = "vcfEx2";
+static const char *bigBedToTabOut = "bigBedToTabOut";
 
 void usage()
 /* explain usage and exit */
@@ -37,9 +43,10 @@ errAbort(
     "    %s\n"
     "    %s\n"
     "    %s\n"
+    "    %s\n"
     , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong,
     snpConsDbToTabOutShort, snpConsDbToTabOutLong,
-    vcfEx1, vcfEx2
+    vcfEx1, vcfEx2, bigBedToTabOut
     );
 }
 
@@ -70,6 +77,10 @@ else if (info->type == arVcf)
     boolean looksLikeTabix = endsWith(info->tableFileUrl, ".gz");
     streamer = annoStreamVcfNew(info->tableFileUrl, looksLikeTabix, BIGNUM);
     }
+else if (endsWith(info->tableFileUrl, ".bb"))
+    {
+    streamer = annoStreamBigBedNew(info->tableFileUrl, BIGNUM);
+    }
 else
     errAbort("Make a generic file streamer for %s!", info->tableFileUrl);
 return streamer;
@@ -89,15 +100,13 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     struct annoGrator *grator = NULL;
     if (grInfo->type == arWig)
 	grator = annoGrateWigDbNew(grInfo->db, grInfo->tableFileUrl, BIGNUM);
-    else if (doGpFx)
-	{
-	struct annoStreamer *src = streamerFromInfo(grInfo);
-	grator = annoGratorGpVarNew(src);
-	}
     else
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
-	grator = annoGratorNew(src);
+	if (doGpFx)
+	    grator = annoGratorGpVarNew(src);
+	else
+	    grator = annoGratorNew(src);
 	}
     slAddHead(&gratorList, grator);
     }
@@ -129,7 +138,8 @@ if (!doAllTests)
 	sameString(argv[2], snpConsDbToTabOutShort) ||
 	sameString(argv[2], snpConsDbToTabOutLong) ||
 	sameString(argv[2], vcfEx1) ||
-	sameString(argv[2], vcfEx2))
+	sameString(argv[2], vcfEx2) ||
+	sameString(argv[2], bigBedToTabOut))
 	test = cloneString(argv[2]);
     else
 	{
@@ -137,6 +147,10 @@ if (!doAllTests)
 	usage();
 	}
     }
+
+if (udcCacheTimeout() < 300)
+    udcSetCacheTimeout(300);
+udcSetDefaultDir("./udcCache");
 
 struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", db, db);
 struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
@@ -172,6 +186,9 @@ if (doAllTests || sameString(test, snpConsDbToTabOutShort) ||
 // Fifth test: VCF with genotypes
 if (doAllTests || sameString(test, vcfEx1))
     {
+#if (defined USE_TABIX && defined KNETFILE_HOOKS)
+    knetUdcInstall();
+#endif//def USE_TABIX && KNETFILE_HOOKS
     struct streamerInfo vcfEx1 = { NULL, NULL,
 			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz",
 				   arVcf, vcfAsObj() };
@@ -227,5 +244,14 @@ if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
     dbToTabOut(&pg2SnpInfo, tbf, "stdout", "chr3",124646699,124646718, TRUE);
     */
     }
+
+if (doAllTests || sameString(test, bigBedToTabOut))
+    {
+    struct streamerInfo bigBedInfo = { NULL, NULL,
+			   "http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb",
+				       arWords, NULL };
+    dbToTabOut(&bigBedInfo, tbf, "stdout", "chr21", 34716800, 34733700, FALSE);
+    }
+
 return 0;
 }

@@ -106,7 +106,6 @@ verboseTime(2,"After makeActiveImage");
 
 int main(int argc, char *argv[])
 {
-setConnFailuresEnabled(FALSE); // try TRUE in next release v274
 if(argc == 1)
     {
     // CGI call
