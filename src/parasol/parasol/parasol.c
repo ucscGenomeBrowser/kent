@@ -452,7 +452,7 @@ if (sameOk(result, "-2"))
 if (sameOk(result, "-1"))
     warn("Unable to free batch.  Jobs are queued or running.");
 if (sameOk(result, "0"))
-    verbose(1, "Batch freed.\n");
+    printf("Batch freed.\n");
 freez(&result);
 }
 
@@ -473,7 +473,7 @@ if (sameOk(result, "-2"))
 if (sameOk(result, "-1"))
     warn("Flushed results. Some jobs are still queued or running.");
 if (sameOk(result, "0"))
-    verbose(1, "Flushed results.\n");
+    printf("Flushed results.\n");
 freez(&result);
 }
 
