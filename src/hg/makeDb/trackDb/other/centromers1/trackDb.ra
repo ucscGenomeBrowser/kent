@@ -8,7 +8,7 @@ shortLabel Monomers
 longLabel Higher Order Repeat
 group genes
 visibility dense
-color 80,30,30
+color 255,140,0
 type bed 4
 
 track encode
