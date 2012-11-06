@@ -14,7 +14,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track CTCF
+track CtcfStd
 shortLabel CTCF
 longLabel CTCF
 group regulation
@@ -22,7 +22,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track EZH2
+track Ezh239875
 shortLabel EZH2
 longLabel EZH2
 group regulation
@@ -30,7 +30,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H2Az
+track H2azStd
 shortLabel H2Az
 longLabel H2Az
 group regulation
@@ -38,7 +38,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H3K9me3
+track H3k09me3Std
 shortLabel H3K9me3
 longLabel H3K9me3
 group regulation
@@ -46,7 +46,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H3K27ac
+track H3k27acStd
 shortLabel H3K27ac
 longLabel H3K27ac
 group regulation
@@ -62,7 +62,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H3K36me3
+track H3k36me3Std
 shortLabel H3K36me3
 longLabel H3K36me3
 group regulation
@@ -70,7 +70,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H3K4me1
+track H3k4me1Std
 shortLabel H3K4me1
 longLabel H3K4me1
 group regulation
@@ -86,7 +86,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H3K4me3
+track H3k4me3Std
 shortLabel H3K4me3
 longLabel H3K4me3
 group regulation
@@ -94,7 +94,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H3K79me2
+track H3k79me2Std
 shortLabel H3K79me2
 longLabel H3K79me2
 group regulation
@@ -102,7 +102,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H3K9ac
+track H3k9acStd
 shortLabel H3K9ac
 longLabel H3K9ac
 group regulation
@@ -110,7 +110,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track H4K20me1
+track H4k20me1Std
 shortLabel H4K20me1
 longLabel H4K20me1
 group regulation
@@ -118,7 +118,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track HDAC2
+track Hdac2a300705a
 shortLabel HDAC2
 longLabel HDAC2
 group regulation
@@ -126,7 +126,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track HDAC6
+track Hdac6a301341a
 shortLabel HDAC6
 longLabel HDAC6
 group regulation
@@ -134,7 +134,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track JARID1A
+track Jarid1aab26049Std
 shortLabel JARID1A
 longLabel JARID1A
 group regulation
@@ -142,7 +142,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track JMJD2
+track Jmjd2aa300861a1
 shortLabel JMJD2
 longLabel JMJD1
 group regulation
@@ -150,7 +150,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track P300
+track P300kat3b
 shortLabel P300
 longLabel P300
 group regulation
@@ -158,7 +158,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track PHF8
+track Phf8a301772a
 shortLabel PHF8
 longLabel PHF8
 group regulation
@@ -166,7 +166,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track PLU1
+track Plu1
 shortLabel PLU1
 longLabel PLU1
 group regulation
@@ -174,7 +174,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track RBBP5
+track Rbbp5a300109aStd
 shortLabel RBBP5
 longLabel RBBP5
 group regulation
@@ -183,13 +183,13 @@ parent encode
 color 250,0,0
 
 track Sap3039731
-shortLabel Sap3039731
-longLabel Sap3039731
+shortLabel SAP
+longLabel SAP
 group regulation
 type bigWig 0 13
 parent encode
 
-track SIRT6
+track Sirt6
 shortLabel SIRT6
 longLabel SIRT6
 group regulation
@@ -197,7 +197,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track SUZ12
+track Suz12051317
 shortLabel SUZ12
 longLabel SUZ12
 group regulation
