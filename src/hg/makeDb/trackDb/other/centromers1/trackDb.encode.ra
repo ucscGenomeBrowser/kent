@@ -1,4 +1,4 @@
-track CHD1
+track Chd1a301218aStd
 shortLabel CHD1
 longLabel CHD1
 group regulation
@@ -6,7 +6,7 @@ type bigWig 0 13
 parent encode
 color 250,0,0
 
-track CHD7
+track Chd7a301223a1
 shortLabel CHD7
 longLabel CHD7
 group regulation
