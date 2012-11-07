@@ -64,6 +64,9 @@ for the following list of databases.  When you add other
 databases, you will need to add these permissions to your
 databases.
 
+( MySQL version 5.5 requires the LOCK TABLES permission here )
+( FILE, CREATE, DROP, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES on ${DB}.* )
+
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
     mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
