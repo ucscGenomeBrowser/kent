@@ -135,5 +135,3 @@ To test this access with your ~/.hg.conf file in place:
 $ hgsql -e "show tables;" hgcentral
 
 ====================================================================
-This file last updated: $Date: 2010/12/02 09:32:56 $
-====================================================================
