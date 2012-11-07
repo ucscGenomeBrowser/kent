@@ -11644,11 +11644,11 @@ vendorName abcam
 term Pol3
 tag POL3
 type Antibody
-label POL3 (sc-21754)
-antibodyDescription Mouse monoclonal IgG1. Antibody Target: POL3
+label POL III(sc-21754)
+antibodyDescription Mouse monoclonal IgG1. Antibody Target: POLR3G
 lab Snyder
 orderUrl http://www.scbt.com/product.php?datasheet=21754
-target POL3
+target POLR3G
 targetDescription RNA Polymerase III
 targetId GeneCard:POLR3G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
