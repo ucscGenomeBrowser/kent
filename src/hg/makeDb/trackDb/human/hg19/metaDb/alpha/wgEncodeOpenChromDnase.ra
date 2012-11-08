@@ -15837,7 +15837,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrotsaAlnRep1.bam,wgEncodeOpenChromDnaseUrotsaAlnRep1.bam.bai
-geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -15861,7 +15860,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrotsaAlnRep2.bam,wgEncodeOpenChromDnaseUrotsaAlnRep2.bam.bai
-geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -15885,7 +15883,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal.bigWig
-geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -15909,7 +15906,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrotsaPk.narrowPeak.gz
-geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -15933,7 +15929,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrotsaRawDataRep1.fastq.gz
-geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 md5sum 28fdca872f04a062066eeed4c70c8e73
@@ -15956,7 +15951,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrotsaRawDataRep2.fastq.gz
-geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 md5sum 20153637685fdffc5d2ade517cd7fe56
@@ -15979,7 +15973,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
 fileName wgEncodeOpenChromDnaseUrotsaSig.bigWig
-geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -16003,7 +15996,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep1.bam,wgEncodeOpenChromDnaseUrotsaUt189AlnRep1.bam.bai
-geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -16028,7 +16020,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep2.bam,wgEncodeOpenChromDnaseUrotsaUt189AlnRep2.bam.bai
-geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -16053,7 +16044,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal.bigWig
-geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -16078,7 +16068,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrotsaUt189Pk.narrowPeak.gz
-geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
@@ -16103,7 +16092,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrotsaUt189RawDataRep1.fastq.gz
-geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 md5sum 219ad2dfbd9a4738ca500ee93c15e222
@@ -16127,7 +16115,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrotsaUt189RawDataRep2.fastq.gz
-geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 md5sum 1ca11ec108ddaa453d580383aa642765
@@ -16151,7 +16138,6 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
 fileName wgEncodeOpenChromDnaseUrotsaUt189Sig.bigWig
-geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -16164,4 +16150,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 824085853
+# MAGIC: -607079547

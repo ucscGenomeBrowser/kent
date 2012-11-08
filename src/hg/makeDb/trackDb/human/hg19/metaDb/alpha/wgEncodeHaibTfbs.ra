@@ -45655,7 +45655,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001502
 expId 1502
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep1.bam,wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep1.bam.bai
-geoSampleAccession GSM803448
 grant Myers
 lab HudsonAlpha
 labExpId SL1057
@@ -45683,7 +45682,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001502
 expId 1502
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep2.bam,wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep2.bam.bai
-geoSampleAccession GSM803448
 grant Myers
 lab HudsonAlpha
 labExpId SL1170
@@ -45711,7 +45709,6 @@ dateUnrestricted 2011-03-07
 dccAccession wgEncodeEH001502
 expId 1502
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101PkRep1.broadPeak.gz
-geoSampleAccession GSM803448
 grant Myers
 lab HudsonAlpha
 labExpId SL1057
@@ -45741,7 +45738,6 @@ dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH001502
 expId 1502
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101PkRep2.broadPeak.gz
-geoSampleAccession GSM803448
 grant Myers
 lab HudsonAlpha
 labExpId SL1170
@@ -45771,7 +45767,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH001502
 expId 1502
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101RawDataRep1.fastq.gz
-geoSampleAccession GSM803448
 grant Myers
 lab HudsonAlpha
 labExpId SL1057
@@ -45799,7 +45794,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH001502
 expId 1502
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101RawDataRep2.fastq.gz
-geoSampleAccession GSM803448
 grant Myers
 lab HudsonAlpha
 labExpId SL1170
@@ -45826,7 +45820,6 @@ dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001502
 expId 1502
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101RawRep1.bigWig
-geoSampleAccession GSM803448
 grant Myers
 lab HudsonAlpha
 labExpId SL1057
@@ -45854,7 +45847,6 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001502
 expId 1502
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101RawRep2.bigWig
-geoSampleAccession GSM803448
 grant Myers
 lab HudsonAlpha
 labExpId SL1170
@@ -54540,7 +54532,6 @@ dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001570
 expId 1570
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep1.bam,wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep1.bam.bai
-geoSampleAccession GSM803518
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
@@ -54567,7 +54558,6 @@ dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001570
 expId 1570
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep2.bam,wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep2.bam.bai
-geoSampleAccession GSM803518
 grant Myers
 lab HudsonAlpha
 labExpId SL1511
@@ -54594,7 +54584,6 @@ dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001570
 expId 1570
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1.broadPeak.gz
-geoSampleAccession GSM803518
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
@@ -54623,7 +54612,6 @@ dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001570
 expId 1570
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2.broadPeak.gz
-geoSampleAccession GSM803518
 grant Myers
 lab HudsonAlpha
 labExpId SL1511
@@ -54652,7 +54640,6 @@ dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001570
 expId 1570
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawDataRep1.fastq.gz
-geoSampleAccession GSM803518
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
@@ -54679,7 +54666,6 @@ dateUnrestricted 2011-09-17
 dccAccession wgEncodeEH001570
 expId 1570
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawDataRep2.fastq.gz
-geoSampleAccession GSM803518
 grant Myers
 lab HudsonAlpha
 labExpId SL1511
@@ -54706,7 +54692,6 @@ dateUnrestricted 2011-08-28
 dccAccession wgEncodeEH001570
 expId 1570
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep1.bigWig
-geoSampleAccession GSM803518
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
@@ -54734,7 +54719,6 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001570
 expId 1570
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep2.bigWig
-geoSampleAccession GSM803518
 grant Myers
 lab HudsonAlpha
 labExpId SL1511
@@ -58286,7 +58270,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep1.bam,wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep1.bam.bai
-geoSampleAccession GSM803385
 grant Myers
 lab HudsonAlpha
 labExpId SL845
@@ -58315,7 +58298,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep2.bam,wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep2.bam.bai
-geoSampleAccession GSM803385
 grant Myers
 lab HudsonAlpha
 labExpId SL987
@@ -58344,7 +58326,6 @@ dateUnrestricted 2010-07-26
 dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xPkRep1.broadPeak.gz
-geoSampleAccession GSM803385
 grant Myers
 lab HudsonAlpha
 labExpId SL845
@@ -58375,7 +58356,6 @@ dateUnrestricted 2010-07-26
 dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xPkRep2.broadPeak.gz
-geoSampleAccession GSM803385
 grant Myers
 lab HudsonAlpha
 labExpId SL987
@@ -58405,7 +58385,6 @@ dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xRawRep1.bigWig
-geoSampleAccession GSM803385
 grant Myers
 lab HudsonAlpha
 labExpId SL845
@@ -58433,7 +58412,6 @@ dateUnrestricted 2011-08-30
 dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xRawRep2.bigWig
-geoSampleAccession GSM803385
 grant Myers
 lab HudsonAlpha
 labExpId SL987
@@ -58461,7 +58439,6 @@ dateUnrestricted 2010-08-19
 dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHaibTfbsK562Hey1RawDataRep1.fastq.gz
-geoSampleAccession GSM803385
 grant Myers
 lab HudsonAlpha
 labExpId SL845
@@ -58490,7 +58467,6 @@ dateUnrestricted 2010-08-19
 dccAccession wgEncodeEH001481
 expId 1481
 fileName wgEncodeHaibTfbsK562Hey1RawDataRep2.fastq.gz
-geoSampleAccession GSM803385
 grant Myers
 lab HudsonAlpha
 labExpId SL987
@@ -83955,4 +83931,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 672341081
+# MAGIC: -1781073911
