@@ -88,6 +88,10 @@ do
 	on ${DB}.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
 done
+# Note that for mysql 5.0 this works,
+# but mysql 5.1 and 5.5 require the INSERT privilege as well.
+# Mysql 5.6.3 and later do not need additional priveleges.
+
 
 A third MySQL user can be created with read-write access to only
 the hgcentral database.  For example, a user: "readwrite"
