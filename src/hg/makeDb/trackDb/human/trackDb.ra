@@ -3883,98 +3883,89 @@ longLabel International Standards for Cytogenomic Arrays Consortium
 group phenDis
 priority 110
 visibility hide
-type bed
-noInherit on
-urlLabel ISCA details: 
+subGroup1 view Views atot=Total cnv=CNVs
+subGroup2 phen Phenotype ben=Benign path=Pathogenic unk=Unknown
+subGroup3 level Confidence cur=Curated det=Determined lik=Likely unc=Uncertain
+dimensions dimensionY=phen dimensionX=level
+sortOrder phen=+ level=+ view=+
+type bed 3
 
-    track iscaPathGainCum
+    track iscaViewTotal
+    shortLabel Total (Graphical)
+    view atot
+    visibility full
     parent iscaComposite
-    shortLabel ISCA Path Gain
-    longLabel ISCA CNVs: Pathogenic Gain Total
+    viewUi on
     type bedGraph 4
     maxHeightPixels 128:57:16
     viewLimits 0:100
     alwaysZero on
-    color 0,0,200
-    visibility full
-    priority 1
 
-    track iscaPathLossCum
-    parent iscaComposite
-    shortLabel ISCA Path Loss
-    longLabel ISCA CNVs: Pathogenic Loss Total
-    type bedGraph 4
-    maxHeightPixels 128:57:16
-    viewLimits 0:100
-    alwaysZero on
-    color 200,0,0
-    visibility full
-    priority 2
+	track iscaPathGainCum
+	parent iscaViewTotal
+	shortLabel ISCA Path Gain
+	longLabel ISCA CNVs: Pathogenic Gain Total
+	color 0,0,200
+        subGroups view=atot phen=path level=det
 
-    track iscaCuratedPathogenic
-    parent iscaComposite
-    shortLabel ISCA Curated Path
-    longLabel ISCA CNVs: Curated Pathogenic
-    type gvf
-    noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    visibility hide
-    priority 3
+	track iscaPathLossCum
+	parent iscaViewTotal
+	shortLabel ISCA Path Loss
+	longLabel ISCA CNVs: Pathogenic Loss Total
+	color 200,0,0
+        subGroups view=atot phen=path level=det
 
-    track iscaCuratedBenign
-    parent iscaComposite
-    shortLabel ISCA Curated Ben
-    longLabel ISCA CNVs: Curated Benign
-    type gvf
-    noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 4
-
-    track iscaPathogenic
-    parent iscaComposite
-    shortLabel ISCA Pathogenic
-    longLabel ISCA CNVs: Pathogenic
-    type gvf
-    noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
+    track iscaViewDetail
+    shortLabel CNVs
+    view cnv
     visibility pack
-    priority 5
-
-    track iscaLikelyPathogenic
     parent iscaComposite
-    shortLabel ISCA Uncert Path
-    longLabel ISCA CNVs: Uncertain: Likely Pathogenic
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 6
+    urlLabel ISCA details: 
 
-    track iscaUncertain
-    parent iscaComposite
-    shortLabel ISCA Uncertain
-    longLabel ISCA CNVs: Uncertain
-    type gvf
-    noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 7
+	track iscaCuratedPathogenic
+	parent iscaViewDetail off
+	shortLabel ISCA Curated Path
+	longLabel ISCA CNVs: Curated Pathogenic
+        subGroups view=cnv phen=path level=cur
 
-    track iscaLikelyBenign
-    parent iscaComposite
-    shortLabel ISCA Uncert Ben
-    longLabel ISCA CNVs: Uncertain: Likely Benign
-    type gvf
-    noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 8
+	track iscaCuratedBenign
+	parent iscaViewDetail off
+	shortLabel ISCA Curated Ben
+	longLabel ISCA CNVs: Curated Benign
+        subGroups view=cnv phen=ben level=cur
 
-    track iscaBenign
-    parent iscaComposite
-    shortLabel ISCA Benign
-    longLabel ISCA CNVs: Benign
-    type gvf
-    noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    priority 9
+	track iscaPathogenic
+	parent iscaViewDetail
+	shortLabel ISCA Pathogenic
+	longLabel ISCA CNVs: Pathogenic
+        subGroups view=cnv phen=path level=det
+
+	track iscaLikelyPathogenic
+	parent iscaViewDetail off
+	shortLabel ISCA Uncert Path
+	longLabel ISCA CNVs: Uncertain: Likely Pathogenic
+        subGroups view=cnv phen=path level=lik
+
+	track iscaUncertain
+	parent iscaViewDetail off
+	shortLabel ISCA Uncertain
+	longLabel ISCA CNVs: Uncertain
+        subGroups view=cnv phen=unk level=unc
+
+	track iscaLikelyBenign
+	parent iscaViewDetail off
+	shortLabel ISCA Uncert Ben
+	longLabel ISCA CNVs: Uncertain: Likely Benign
+        subGroups view=cnv phen=ben level=lik
+
+	track iscaBenign
+	parent iscaViewDetail off
+	shortLabel ISCA Benign
+	longLabel ISCA CNVs: Benign
+        subGroups view=cnv phen=ben level=det
 
 searchName decipherId
 searchTable decipher

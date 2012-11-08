@@ -2329,23 +2329,17 @@
 <div class="format"><B>Example of a bam track</B></div>
     <pre>
     type bam
-    bigDataUrl barneysSon.bam
+    bigDataUrl http://hgdownload/ucsc.edu/goldenPath/hg19/bambam/barneysSon.bam
     pairEndsByName on
     showNames off
     bamColorMode off
     bamGrayMode aliQual
-    baseColorDefault diffBases
-    baseColorUseSequence lfExtra
     indelDoubleInsert on
     indelQueryInsert on
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 100
     maxWindowToDraw 10000
       ...    </pre>
-    <P>The bam data is held
-    in the local file "barneysSon.bam" (alternatively, bigDataUrl could be a 
-    URL pointing to a file at a remote internet-accessible location).  
-    In addition to the data file, an
+    <P>The bam data is held in the file "barneysSon.bam" which is at an 
+    internet-accessible location.  In addition to the data file, an
     associated index file must reside at the same location. The index file must have the
     same name as the data file, with ".bai" appended (e.g. <code>barneysSon.bam.bai</code>).</P>
 </DIV>

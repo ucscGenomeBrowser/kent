@@ -1,0 +1,223 @@
+track Chd1a301218aStd
+shortLabel CHD1
+longLabel CHD1
+group regulation
+type bigWig 0 13
+parent encode
+color 95,158,160
+
+track Chd7a301223a1
+shortLabel CHD7
+longLabel CHD7
+group regulation
+type bigWig 0 13
+parent encode
+color 0,0,250
+
+track CtcfStd
+shortLabel CTCF
+longLabel CTCF
+group regulation
+type bigWig 0 13
+parent encode
+color 208,32,144
+
+track Ezh239875
+shortLabel EZH2
+longLabel EZH2
+group regulation
+type bigWig 0 13
+parent encode
+color 0,0,0
+
+track H2azStd
+shortLabel H2Az
+longLabel H2Az
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3k09me3Std
+shortLabel H3K9me3
+longLabel H3K9me3
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3k27acStd
+shortLabel H3K27ac
+longLabel H3K27ac
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3K27me3
+shortLabel H3K27me3
+longLabel H3K27me3
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3k36me3Std
+shortLabel H3K36me3
+longLabel H3K36me3
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3k4me1Std
+shortLabel H3K4me1
+longLabel H3K4me1
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3K4me2
+shortLabel H3K4me2
+longLabel H3K4me2
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3k4me3Std
+shortLabel H3K4me3
+longLabel H3K4me3
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3k79me2Std
+shortLabel H3K79me2
+longLabel H3K79me2
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H3k9acStd
+shortLabel H3K9ac
+longLabel H3K9ac
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track H4k20me1Std
+shortLabel H4K20me1
+longLabel H4K20me1
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track Hdac2a300705a
+shortLabel HDAC2
+longLabel HDAC2
+group regulation
+type bigWig 0 13
+parent encode
+color 46,139,87
+
+track Hdac6a301341a
+shortLabel HDAC6
+longLabel HDAC6
+group regulation
+type bigWig 0 13
+parent encode
+color 165,42,42
+
+track Jarid1aab26049Std
+shortLabel JARID1A
+longLabel JARID1A
+group regulation
+type bigWig 0 13
+parent encode
+color 105,105,105
+
+track Jmjd2aa300861a1
+shortLabel JMJD2
+longLabel JMJD1
+group regulation
+type bigWig 0 13
+parent encode
+color 148,0,211
+
+track P300kat3b
+shortLabel P300
+longLabel P300
+group regulation
+type bigWig 0 13
+parent encode
+color 123,104,238
+
+track Phf8a301772a
+shortLabel PHF8
+longLabel PHF8
+group regulation
+type bigWig 0 13
+parent encode
+color 0,250,154
+
+track Plu1
+shortLabel PLU1
+longLabel PLU1
+group regulation
+type bigWig 0 13
+parent encode
+color 205,133,63
+
+track Rbbp5a300109aStd
+shortLabel RBBP5
+longLabel RBBP5
+group regulation
+type bigWig 0 13
+parent encode
+color 210,105,30
+
+track Sap3039731
+shortLabel SAP
+longLabel SAP
+group regulation
+type bigWig 0 13
+parent encode
+color 219,112,147
+
+track Sirt6
+shortLabel SIRT6
+longLabel SIRT6
+group regulation
+type bigWig 0 13
+parent encode
+color 72,61,139
+
+track Suz12051317
+shortLabel SUZ12
+longLabel SUZ12
+group regulation
+type bigWig 0 13
+parent encode
+color 255,165,0
+
+track chaetocin01vs03
+shortLabel chaetocin01vs03
+longLabel chaetocin01vs03
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0
+
+track chaetocin06vs03
+shortLabel chaetocin06vs03
+longLabel chaetocin06vs03
+group regulation
+type bigWig 0 13
+parent encode
+color 250,0,0

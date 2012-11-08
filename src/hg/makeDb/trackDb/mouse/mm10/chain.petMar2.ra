@@ -1,0 +1,7 @@
+        track chainPetMar2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=tLamprey clade=fPetro
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain petMar2
+        otherDb petMar2

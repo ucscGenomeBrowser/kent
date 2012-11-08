@@ -64,6 +64,9 @@ for the following list of databases.  When you add other
 databases, you will need to add these permissions to your
 databases.
 
+( MySQL version 5.5 requires the LOCK TABLES permission here )
+( FILE, CREATE, DROP, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES on ${DB}.* )
+
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
     mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
@@ -80,11 +83,15 @@ with password: "access"
 
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, \
+    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, \
         CREATE TEMPORARY TABLES \
 	on ${DB}.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
 done
+# Note that for mysql 5.0 this works,
+# but mysql 5.1 and 5.5 require the INSERT privilege as well.
+# Mysql 5.6.3 and later do not need additional priveleges.
+
 
 A third MySQL user can be created with read-write access to only
 the hgcentral database.  For example, a user: "readwrite"
@@ -134,6 +141,4 @@ To test this access with your ~/.hg.conf file in place:
 
 $ hgsql -e "show tables;" hgcentral
 
-====================================================================
-This file last updated: $Date: 2010/12/02 09:32:56 $
 ====================================================================

@@ -254,6 +254,6 @@ make: *** [aliType.o] Error 1
   MYSQLLIBS string: MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -ldl -lz"
 
 ====================================================================
-This file last updated: 2012/10/17 14:00 OR for more details see:
+For more details see:
 http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=history;f=src/product/README.building.source
 ====================================================================
