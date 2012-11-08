@@ -1,0 +1,7 @@
+        track netPetMar1
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=tLamprey clade=fPetro
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign petMar1 chainPetMar1
+        otherDb petMar1
