@@ -25,14 +25,14 @@ set oldDb = mm9
 set xdb = hg19
 set Xdb = Hg19
 set ydb = canFam3
-set zdb = rn5
+set zdb = rn4
 set spDb = sp120323 
 #set pbDb = proteins111004
-set ratDb = rn5
-set RatDb = Rn5
+set ratDb = rn4
+set RatDb = Rn4
 set fishDb = danRer7
 set flyDb = dm3
-set wormDb = ce10
+set wormDb = ce6
 set yeastDb = sacCer3
 
 # The net alignment for the closely-related species indicated in $xdb
@@ -72,10 +72,10 @@ set vgTextDbs = (mm8 mm9 hg18 hg19 $tempDb)
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
 set xdbFa = $genomes/$xdb/bed/ucsc.13/ucscGenes.faa
-set ratFa = $genomes/$ratDb/bed/blastp/rn5.refGenePep.faa
+set ratFa = $genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
-set wormFa = $genomes/$wormDb/bed/blastp/ensPep.faa
+set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
 set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 
 # Other files needed
@@ -1103,15 +1103,16 @@ hgsql -e "select  count(*) from hgBlastTab\G" $oldDb | tail -n +2
 hgsql -e "select  count(*) from hgBlastTab\G" $db | tail -n +2
 # count(*): 39713
 
-synBlastp.csh $tempDb $ratDb refGene
-# old number of unique query values: 41359
-# old number of unique target values 15616
-# new number of unique query values: 33367
-# new number of unique target values 15316
+synBlastp.csh $tempDb $ratDb rgdGene2
+# old number of unique query values: 38112
+# old number of unique target values 10526
+# new number of unique query values: 17901
+# new number of unique target values 8085
+
 hgsql -e "select  count(*) from rnBlastTab\G" $oldDb | tail -n +2
 # count(*): 17832
 hgsql -e "select  count(*) from rnBlastTab\G" $db | tail -n +2
-# count(*): 33367
+# count(*): 17901
 
 
 # Make reciprocal best subset for the blastp pairs that are too
@@ -1127,7 +1128,7 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $fishDb tfBlastTab $bToA/recipBest.tab
 hgsql -e "select  count(*) from drBlastTab\G" $oldDb | tail -n +2
-# count(*): 12886
+# count(*): 12904
 hgsql -e "select  count(*) from drBlastTab\G" $db | tail -n +2
 # count(*): 12881
 
@@ -1158,7 +1159,7 @@ hgLoadBlastTab $wormDb tfBlastTab $bToA/recipBest.tab
 hgsql -e "select  count(*) from ceBlastTab\G" $oldDb | tail -n +2
 # count(*): 4955
 hgsql -e "select  count(*) from ceBlastTab\G" $db | tail -n +2
-# count(*): 4978
+# count(*): 4957
 
 # Us vs. yeast
 cd $dir/hgNearBlastp
