@@ -83,7 +83,7 @@ with password: "access"
 
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, \
+    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, \
         CREATE TEMPORARY TABLES \
 	on ${DB}.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
