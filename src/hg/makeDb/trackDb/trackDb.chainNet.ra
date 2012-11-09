@@ -2368,6 +2368,7 @@ html chainNet
 
 # changes to perMar[12] here need to also correspond to
 # the same tags in mouse/mm10/trackDb.vertebrateChainNet.ra
+# and the chainNetPetMar1 override in medaka/trackDb.chainNet.ra
 
 include chainNetPetMar2.ra alpha
 
