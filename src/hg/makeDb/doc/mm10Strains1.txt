@@ -493,7 +493,10 @@ end
     # checked: 946 failed: 0 errors: 0
 
     # load this PSL track
-    hgLoadPsl mm10 -table=mm10Strains1LiftOverPsl fixup.mm10.mm10Strains1.over.psl
+    hgLoadPsl mm10 -table=altSeqLiftOverPslStrains1 fixup.mm10.mm10Strains1.over.psl
+    # using this name on this table since hgc code triggers off of
+    # the beginning: "altSeqLiftOverPsl" to display the sequence
+    # from the seqMm10Strains1 and extMm10Strains1 tables loaded below
 
 ############################################################################
 # Add this sequence to mm10 (DONE - 2012-11-08 - Hiram)
