@@ -19371,6 +19371,32 @@ Number of deleted IDs: 4
 Number of added IDs: 29530
 
 ############################################################################
+# UPDATE COSMIC TRACK - v61 (DONE - 2012-11-09 - Hiram)
+
+time ~/kent/src/hg/utils/automation/loadCosmic.pl -dryRun hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v61_260912.csv.gz
+#       real    1m10.070s
+New length: 220318
+Old length: 166164
+Percent bed overlap with previous version: 100.00%
+Number of deleted IDs: 28
+Number of added IDs: 54182
+time ~/kent/src/hg/utils/automation/loadCosmic.pl hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v61_260912.csv.gz
+#       real    0m8.251so
+# Loading COSMIC v61
+# New length: 220318
+# Old length: 166164
+# Percent bed overlap with previous version: 100.00%
+# Number of deleted IDs: 28
+# Number of added IDs: 54182
+# Scanning through 1 files
+# Reading cosmic.bed
+# Read 220318 elements of size 4 from cosmic.bed
+# Sorted
+# Creating table definition for cosmic
+# Saving bed.tab
+# Loading hg19
+
+############################################################################
 # lastz Medium Ground Finch geoFor1 (DONE - 2012-07-29 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S hg19
@@ -19933,3 +19959,22 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
+# construct liftOver to hg17 (DONE - 2012-11-08 - Hiram)
+    screen -S hg17	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/hg19/bed/blat.hg17.2012-11-08
+    cd /hive/data/genomes/hg19/bed/blat.hg17.2012-11-08
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/hg19/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev hg19 hg17 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/hg19/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev hg19 hg17 > do.log 2>&1
+    #	real    333m16.756s
+
+    # verify this file exists:
+    #	/gbdb/hg19/liftOver/hg19ToHg17.over.chain.gz
+    # and try out the conversion on genome-test from hg19 to hg17
+
+############################################################################
