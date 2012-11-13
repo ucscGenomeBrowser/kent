@@ -1144,16 +1144,17 @@ char *fileOrUrl = NULL;
 /* Figure out url or file name. */
 if (tg->parallelLoading)
     {
-    /* do not use mysql uring parallel-fetch load */
+    /* do not use mysql during parallel-fetch load */
     fileOrUrl = trackDbSetting(tg->tdb, "bigDataUrl");
     }
 else
     {
-    // TODO: may need to handle per-chrom files like bam, maybe fold bamFileNameFromTable into this:
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
     fileOrUrl = bbiNameFromSettingOrTableChrom(tg->tdb, conn, tg->table, chromName);
     hFreeConn(&conn);
     }
+if (isEmpty(fileOrUrl))
+    return;
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
