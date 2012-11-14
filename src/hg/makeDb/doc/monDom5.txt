@@ -295,7 +295,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 ## ... so, tcsh it is.
      tcsh
      time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl -continue=cat \
-         -workhorse=hgwdev -bigClusterHub=swarm -buildDir=`pwd` \ 
+         -workhorse=hgwdev -bigClusterHub=swarm -buildDir=`pwd` \
          monDom5 > doAfterCat.log
 #0.389u 0.348s 1:12:48.52 0.0%   0+0k 0+0io 1pf+0w
 
@@ -358,7 +358,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 ## CPG ISLANDS (DONE 2008-12-03, Andy)
     ssh hgwdev
     screen -S monDom5_CpG
-    ~/kent/src/hg/utils/automation/doCpgIslands.pl monDom5 
+    ~/kent/src/hg/utils/automation/doCpgIslands.pl monDom5
     ## [detach screen]
     ## took an hour or two
     featureBits monDom5 cpgIslandExt
@@ -374,7 +374,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
     ## ... 8 hippos
         ssh swarm
         cd /hive/data/genomes/monDom4/bed/blat.monDom5.2008-12-04/run.blat
-        ## edit job.csh and add -maxIntron=1 -mask=lower 
+        ## edit job.csh and add -maxIntron=1 -mask=lower
         ## to blat command and up minScore to 5000 and minIdentity to 99
         para stop
         para push
@@ -405,18 +405,18 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
     ## edit genbank.conf: search monDom4, copy and paste that whole entry
     ## and replace monDom4 with monDom5:
     ## cvs ci genbank.conf
-    make etc-update 
+    make etc-update
     ssh genbank
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial monDom5 &
-    # logFile: var/build/logs/2008.12.11-16:37:37.monDom5.initalign.log 
+    # logFile: var/build/logs/2008.12.11-16:37:37.monDom5.initalign.log
 #real    633m58.880s
 ##user    96m10.868s
 #sys     35m42.207s
-    exit 
-    ## we're back on hgwdev 
+    exit
+    ## we're back on hgwdev
     nice -n 19 ./bin/gbDbLoadStep -drop -initialLoad  monDom5 &
-#logFile: var/dbload/genbank/logs/2008.12.15-10:44:36.dbload.log    
+#logFile: var/dbload/genbank/logs/2008.12.15-10:44:36.dbload.log
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
     ## add monDom5 to:
@@ -427,7 +427,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 
 ##########################################################################
 ## BLAT (DONE 2008-01-20 Andy)
-# e-mail cluster-admin and ask for a server and tell them about 
+# e-mail cluster-admin and ask for a server and tell them about
 # /gbdb/monDom5/monDom5.2bit
 # then
 ssh hgwdev
@@ -446,14 +446,14 @@ Query OK, 1 row affected (0.00 sec)
     mkdir /cluster/data/monDom5/blastDb
 
     cat broad/Monodelphis5.0.agp |         awk '/^chrUn/ {if ($5 == "W")
-      { 
-	printf "echo \\>%s\n",$6 ; 
-	printf "twoBitToFa monDom5.2bit:chrUn:%d-%d stdout  | tail -n +2\n", $2,$3 
+      {
+	printf "echo \\>%s\n",$6 ;
+	printf "twoBitToFa monDom5.2bit:chrUn:%d-%d stdout  | tail -n +2\n", $2,$3
       }}' > script
 
     sh script > chrUn.fa
      grep -v chrUn chrom.sizes | awk '{ printf "twoBitToFa monDom5.2bit:%s stdout \n", $1}' >  script
-    
+
     sh script > chrNotUn.fa
 
     cat chrUn.fa chrNotUn.fa | faToTwoBit stdin monDom5.chrUnAsContigs.2bit
@@ -467,7 +467,7 @@ Query OK, 1 row affected (0.00 sec)
 
     awk '{if ($2 <= 1000000) print $1}' monDom5.chrUnAsContigs.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  monDom5.chrUnAsContigs.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     ls blastDb/y* | wc -l
 # 88
     rm temp.fa less1meg.lst
@@ -488,7 +488,7 @@ Query OK, 1 row affected (0.00 sec)
 # 4454 query.lst
 
 
-   # we want around 1000000 jobs 
+   # we want around 1000000 jobs
    calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(1000000/`wc query.lst | awk '{print $1}'`\)
 
 # 36727/(1000000/4454) = 163.582058
@@ -496,9 +496,9 @@ Query OK, 1 row affected (0.00 sec)
    mkdir -p kgfa
    split -l 164 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -533,20 +533,20 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/monDom5/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/monDom5/bed/tblastn.hg18KG
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -567,7 +567,7 @@ exit 1
     cd /cluster/data/monDom5/bed/tblastn.hg18KG
 
     cat << _EOF_ > splitOne
-    (cd \$1; 
+    (cd \$1;
     grep -h -v contig q.*.psl | pslSplitOnTarget stdin chroms
     grep -h  contig q.*.psl > chroms/contigs.psl
     )
@@ -601,7 +601,7 @@ chainOne $(path1)
 '_EOF_'
 
     cat << '_EOF_' > chainOne
-( 
+(
 f=`basename $1`;
 d=`dirname $1`;
 if simpleChain -prot -outPsl -maxGap=150000 $1 $d/c.$f.tmp
@@ -643,16 +643,16 @@ fi
     pslCheck -prot blastHg18KG.psl
 # checked: 71490 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/monDom5/bed/tblastn.hg18KG
     hgLoadPsl monDom5 blastHg18KG.psl
 
     # check coverage
-    featureBits monDom5 blastHg18KG 
+    featureBits monDom5 blastHg18KG
 # 33631308 bases of 3501660299 (0.960%) in intersection
 
-    featureBits monDom4 blastHg18KG 
+    featureBits monDom4 blastHg18KG
 # 19424941 bases of 3501643220 (0.555%) in intersection
 
     featureBits monDom5 all_mrna blastHg18KG  -enrichment
@@ -703,9 +703,9 @@ sed 's/chunk/opossum/' my.bed > genscan.subopt.bed
 catDir gtf | liftUp my.gtf chunks.lft error stdin
 sed 's/chunk/opossum/g' my.gtf > genscan.gtf
 catDir pep | sed 's/chunk/opossum/' > genscan.pep.fa
-ldHgGene -gtf monDom5 genscan genscan.gtf 
-hgPepPred monDom5 generic genscanPep genscan.pep.fa 
-hgLoadBed monDom5 genscanSubopt genscan.subopt.bed 
+ldHgGene -gtf monDom5 genscan genscan.gtf
+hgPepPred monDom5 generic genscanPep genscan.pep.fa
+hgLoadBed monDom5 genscanSubopt genscan.subopt.bed
 
 #########################################################################
 #  BIGZIPS/DOWNLOADS (DONE, 2009-06-08 Andy)
@@ -721,11 +721,11 @@ hgLoadBed monDom5 genscanSubopt genscan.subopt.bed
     for c in `cut -f1 ../../chrom.sizes`; do
       echo $c;
       twoBitToFa ../../monDom5.unmasked.2bit:$c stdout \
-        | gzip -c > $c.fa.gz; 
+        | gzip -c > $c.fa.gz;
     done
     md5sum *.fa.gz R*.txt > md5sum.txt
     cd ../../
-    for c in `cut -f1 chrom.sizes`; do 
+    for c in `cut -f1 chrom.sizes`; do
       echo ${c#chr};
       pushd ${c#chr};
         cp ../downloads/chromosomes/${c}.fa.gz .
@@ -734,9 +734,9 @@ hgLoadBed monDom5 genscanSubopt genscan.subopt.bed
     done
     tar cvzf downloads/bigZips/chromFa.tar.gz ?/chr*.fa Un/chrUn.fa
     tar cvzf downloads/bigZips/chromOut.tar.gz ?/chr*.fa.out Un/chrUn.fa.out
-    for c in `cut -f1 chrom.sizes`; do echo $c; twoBitToFa monDom5.2bit:$c ${c#chr}/${c}.fa.masked; done   
+    for c in `cut -f1 chrom.sizes`; do echo $c; twoBitToFa monDom5.2bit:$c ${c#chr}/${c}.fa.masked; done
     tar cvzf downloads/bigZips/chromFaMasked.tar.gz ?/chr*.fa.masked \
-	Un/chrUn.fa.masked 
+	Un/chrUn.fa.masked
     #real    17m19.439s
     cd bed/simpleRepeat/
     mkdir trfMask
@@ -762,7 +762,7 @@ hgLoadBed monDom5 genscanSubopt genscan.subopt.bed
     cd database/
     cp ../../monDom4/database/README.txt .
     # [edit README.txt]
-  
+
 #########################################################################
 #nscanGene (2009-06-23 markd)
    # nscanGene track from WUSTL
@@ -772,7 +772,7 @@ hgLoadBed monDom5 genscanSubopt genscan.subopt.bed
    wget http://mblab.wustl.edu/predictions/possum/monDom5/README
    wget http://mblab.wustl.edu/predictions/possum/monDom5/monDom5.gtf
    wget -r -np  -e robots=off -l 1 http://mblab.wustl.edu/predictions/possum/monDom5/chr_ptx/
-    nice bzip2 chr_ptx/* monDom5.gtf 
+    nice bzip2 chr_ptx/* monDom5.gtf
 
    # load track
    gtfToGenePred -genePredExt monDom5.gtf.bz2 stdout| hgLoadGenePred -genePredExt monDom5 nscanGene stdin
@@ -835,7 +835,7 @@ TMPDIR=/scratch/tmp
 	-continue=cat -workhorse=hgwdev \
 	-chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
     #	real    957m25.164s
-    cat fb.monDom5.chainEquCab2Link.txt 
+    cat fb.monDom5.chainEquCab2Link.txt
     #	355004426 bases of 3501660299 (10.138%) in intersection
 
     mkdir /hive/data/genomes/equCab2/bed/blastz.monDom5.swap
@@ -846,7 +846,7 @@ TMPDIR=/scratch/tmp
 	-swap -workhorse=hgwdev \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    320m3.573s
-    cat fb.equCab2.chainMonDom5Link.txt 
+    cat fb.equCab2.chainMonDom5Link.txt
     #	351787662 bases of 2428790173 (14.484%) in intersection
 
 #########################################################################
@@ -868,11 +868,11 @@ see doc/builds.txt for specific details.
 
 ###########################################################################
 # ALIGNMENTS/CHAINS/NETS (DONE Dec 2008, Andy)
-# 
-# To be honest I didn't really concentrate on getting the whole enchilada of 
-# make-notes into record, because the whole process is so robotic.  
-# 
-# I'll start with the DEF files.  These have varying parameters based on 
+#
+# To be honest I didn't really concentrate on getting the whole enchilada of
+# make-notes into record, because the whole process is so robotic.
+#
+# I'll start with the DEF files.  These have varying parameters based on
 # the query species.  So here's the various DEF parameters:
 #
      DB    H    Y     L    K   T   M   A_R*      Q  1CHUNK 1LAP 2CHUNK 2LAP 2LIMIT
@@ -896,7 +896,7 @@ xenTro2 2000 3400  8000 2200   -  50     -  HoxD55      5M  10K    20M    0    1
 # In most of those cases I was looking to the DEF variables in the monDom4 version
 # of the alignment.  In the case of macEug1, the variable settings were given by
 # Webb Miller.
-# 
+#
 # After all the DEF files are created, it's time to run doBlastzChainNet.pl
 # In the case of monDom5, they all have the profile of this:
 
@@ -907,7 +907,7 @@ screen -S otherDb_monDom5
 doBlastzChainNet.pl -bigClusterHub swarm -stop cat DEF >& doUntilCat.log
 #[detach screen, come back when it's done]
 
-# The reason I'd stop after the cat step is that I was having better results 
+# The reason I'd stop after the cat step is that I was having better results
 # using swarm for chaining instead of memk.  At the time, memk only had a dozen
 # nodes, and usually only 8 would be online.  Because of the large chromosomes,
 # the chaining step would be bottlenecked by the hippo jobs on the big chroms.
@@ -934,27 +934,27 @@ para stop; para resetCounts; para -ram=8g -cpu=4 create jobList; para push
 # more memk nodes.  However the oppossum is a particularly difficult species to
 # chain, so I'm just mentioning it anyway.  Later when doing alignments on hg19,
 # memk was up to the task just fine.
-# 
+#
 # Also of note is the inconsistency of DEF parameter settings.  When monDom6
 # happens, someone will probably look here to see what was done with monDom5.
 # If I have any advice it's to take an approach like the one with hg19 and
 # use consistent parameters as much as possible and set them according to
-# different tiers of evolutionary distance.  
+# different tiers of evolutionary distance.
 
 
 ####################################################################
 # RELOAD CHAINS/NETS AS NON-SPLIT (2009-06-09, Andy)
 
-for d in blastz.*; do 
-   if [ $d != "blastz.bosTau4" ]; then 
+for d in blastz.*; do
+   if [ $d != "blastz.bosTau4" ]; then
       db=${d#blastz.};
-      Db=`echo $db | sed 's/^./\u&/'`; 
+      Db=`echo $db | sed 's/^./\u&/'`;
       echo Loading $db chains into monDom5...;
       time nice -n +19 hgLoadChain -tIndex monDom5 chain$Db \
          blastz.$db/axtChain/monDom5.$db.all.chain.gz;
-    fi; 
+    fi;
 done >& unsplit/chainReloads.log
-# problem with macEug1 
+# problem with macEug1
 
 cd blastz.macEug1/axtChain/
 time nice -n +19 hgLoadChain -tIndex monDom5 chainMacEug1 monDom5.macEug1.all.chain.gz
@@ -993,9 +993,9 @@ see doc/builds.txt for specific details.
 ssh hgwdev
 mkdir /hive/data/genomes/monDom5/bed/multiz9way
 cd /hive/data/genomes/monDom5/bed/multiz9way
-## Build the tree by pruning out the 8 species from the recent 44way, 
+## Build the tree by pruning out the 8 species from the recent 44way,
 ## changing monDom4 to monDom5, and adding macEug1
-## (Wallaby placement deduced from (Margulies et al.,PNAS 2004) ). 
+## (Wallaby placement deduced from (Margulies et al.,PNAS 2004) ).
 /cluster/bin/phast/tree_doctor \
    --prune-all-but=hg18,mm9,canFam2,ornAna1,galGal3,xenTro2,danRer5,monDom4 \
    /hive/data/genomes/hg18/bed/multiz44way/44way.nh | \
@@ -1008,7 +1008,7 @@ mkdir mafLinks
 cd mafLinks
 bash
 for db in hg18 mm9 canFam2 macEug1 ornAna1 galGal3 xenTro2 danRer5; do
-   mkdir $db; pushd $db; 
+   mkdir $db; pushd $db;
    if [ -e /hive/data/genomes/monDom5/bed/blastz.${db}/mafSynNet ]; then
       ln -s /hive/data/genomes/monDom5/bed/blastz.${db}/mafSynNet/* .
    else
@@ -1024,7 +1024,7 @@ mafSplitPos -minGap=50000 monDom5 10 mafSplit.bed
 for db in `ls -1 mafLinks`; do
    mkdir mafSplit/$db
    pushd mafSplit/$db
-   mafSplit ../../mafSplit.bed monDom5_ ../../mafLinks/${db}/chr*.maf.gz \ 
+   mafSplit ../../mafSplit.bed monDom5_ ../../mafLinks/${db}/chr*.maf.gz \
       -verbose=2
    popd
 done
@@ -1040,7 +1040,8 @@ cd /hive/data/genomes/monDom5/bed/multiz9way
 mkdir -p multizRun/run/penn multizRun/maf
 cd multizRun/run/
 cp -p /cluster/bin/penn/multiz.2008-11-25/{multiz,maf_project,autoMZ} penn/
-cat > autoMultiz.csh << '_EOF_'                                                                                                   
+cat > autoMultiz.csh << '_EOF_'
+
 #!/bin/csh -ef
 set db = monDom5
 set c = $1
@@ -1148,7 +1149,7 @@ qaToQac /hive/data/genomes/macEug1/baylor/macEug1.contigs.onlyInAgp.qa.gz \
 qacAddGapIdx /hive/data/genomes/macEug1/baylor/macEug1.agp macEug1.noIdx.qac \
    macEug1.qac macEug1.qdx
 for db in canFam2 galGal3 macEug1 monDom5 ornAna1 rn5; do
-    echo $db | awk 'BEGIN{OFS="\t"}{print $1, "/hive/data/genomes/monDom5/bed/multiz9way/quals/qa";}'; 
+    echo $db | awk 'BEGIN{OFS="\t"}{print $1, "/hive/data/genomes/monDom5/bed/multiz9way/quals/qa";}';
 done > quals.lst
 cat << '_EOF_' > gsub
 #LOOP
@@ -1179,7 +1180,7 @@ cd ../
 mkdir -p genes/{genePreds,inMaf,chrFrames}
 cd genes/genePreds/
 ## human/mouse use known genes
-for db in hg18 mm9; do 
+for db in hg18 mm9; do
    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${db} | \
      genePredSingleCover stdin stdout | gzip -c > ${db}.gp.gz
 done
@@ -1244,10 +1245,10 @@ popd
 cd ../../
 
 ## phastCons
-##   1. collect all mafs with all nine species in components.  
+##   1. collect all mafs with all nine species in components.
 mkdir cons
 cd cons/
-for chrom in `ls -1 ../initialMafs/`; do 
+for chrom in `ls -1 ../initialMafs/`; do
    for db in `cat ../species.lst`; do
        maf=../initialMafs/$chrom
        if [ -e withAllNine.$chrom ]; then
@@ -1372,7 +1373,7 @@ para time
 #Longest finished job:            8998s     149.97m     2.50h    0.10d
 #Submission to last job:          9217s     153.62m     2.56h    0.11d
 
-## OK now average these 
+## OK now average these
 cd ../
 ls trees/*.cons.mod > cons.txt
 phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod
@@ -1399,7 +1400,7 @@ cat << '_EOF_' > gsub
 ./msa.sh $(path1) { check exists $(root1) }
 #ENDLOOP
 '_EOF_'
-ssh swarm 
+ssh swarm
 cd /hive/data/genomes/monDom5/bed/multiz9way/cons/msa_split.bigMafs
 gensub2 mafs.lst single gsub spec
 para create spec
@@ -1473,7 +1474,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
     #	real    992m51.260s
-    cat fb.monDom5.chainSusScr1Link.txt 
+    cat fb.monDom5.chainSusScr1Link.txt
     #	179898391 bases of 3501660299 (5.138%) in intersection
 
     mkdir /hive/data/genomes/susScr1/bed/blastz.monDom5.swap
@@ -1484,7 +1485,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    97m35.156s
-    cat fb.susScr1.chainMonDom5Link.txt 
+    cat fb.susScr1.chainMonDom5Link.txt
     #	182834626 bases of 2231332019 (8.194%) in intersection
 
 #########################################################################
@@ -1520,7 +1521,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
     #	real    492m43.088s
-    cat fb.monDom5.chainAilMel1Link.txt 
+    cat fb.monDom5.chainAilMel1Link.txt
     #	223510659 bases of 3501660299 (6.383%) in intersection
 
     mkdir /hive/data/genomes/ailMel1/bed/blastz.monDom5.swap
@@ -1531,7 +1532,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    69m35.464s
-    cat fb.ailMel1.chainMonDom5Link.txt 
+    cat fb.ailMel1.chainMonDom5Link.txt
     #	211209682 bases of 2245312831 (9.407%) in intersection
 
 ##############################################################################
@@ -1567,7 +1568,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=loose \
 	> do.log 2>&1 &
     #	real    2772m44.886s
-    cat fb.monDom5.chainCalJac3Link.txt 
+    cat fb.monDom5.chainCalJac3Link.txt
     #	216197506 bases of 3501660299 (6.174%) in intersection
 
     mkdir /hive/data/genomes/calJac3/bed/blastz.monDom5.swap
@@ -1578,7 +1579,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    110m13.435s
-    cat fb.calJac3.chainMonDom5Link.txt 
+    cat fb.calJac3.chainMonDom5Link.txt
     #	217614612 bases of 2752505800 (7.906%) in intersection
 
 #######################################################################
@@ -1636,7 +1637,7 @@ TMPDIR=/scratch/tmp
         -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     # real    181m0.411s
 
-    #  step 'syntenicNet' failed, continue 
+    #  step 'syntenicNet' failed, continue
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/monDom5/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
@@ -1682,7 +1683,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
     #	Elapsed time: 1132m5s
-    cat fb.monDom5.chainSusScr2Link.txt 
+    cat fb.monDom5.chainSusScr2Link.txt
     #	179898307 bases of 3501660299 (5.138%) in intersection
 
     mkdir /hive/data/genomes/susScr2/bed/blastz.monDom5.swap
@@ -1694,7 +1695,7 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	Elapsed time: 82m55s
 
-    cat fb.susScr2.chainMonDom5Link.txt 
+    cat fb.susScr2.chainMonDom5Link.txt
     #	182834643 bases of 2231298548 (8.194%) in intersection
 
 ##############################################################################
@@ -1749,7 +1750,7 @@ TMPDIR=/scratch/tmp
 # lastz Rabbit oryCun2 swap (DONE - 2010-01-25 - Hiram)
     #	original alignment
     cd /hive/data/genomes/oryCun2/bed/lastzMonDom5.2010-01-21
-    cat fb.oryCun2.chainMonDom5Link.txt 
+    cat fb.oryCun2.chainMonDom5Link.txt
     #	176460344 bases of 2604023284 (6.776%) in intersection
 
     #	and the swap
@@ -1761,7 +1762,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    74m20.206s
-    cat fb.monDom5.chainOryCun2Link.txt 
+    cat fb.monDom5.chainOryCun2Link.txt
     #	178331930 bases of 3501660299 (5.093%) in intersection
 
 #########################################################################
@@ -1801,7 +1802,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/monDom5/bed
     ln -s lastzMelGal1.2011-03-30 lastz.melGal1
 
-    #   running the swap 
+    #   running the swap
     mkdir /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
     cd /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -1919,7 +1920,7 @@ TMPDIR=/scratch/tmp
         -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    66m38.348s
 
-    cat fb.xenTro3.chainMonDom5Link.txt 
+    cat fb.xenTro3.chainMonDom5Link.txt
     #	74593612 bases of 1358334882 (5.492%) in intersection
 
     cd /hive/data/genomes/xenTro3/bed
@@ -1959,7 +1960,7 @@ TMPDIR=/scratch/tmp
         > do.log 2>&1 &
     #   real 528m3.128s
    # cat step failed due to "memkk" error, continue to run
-    rm -r /cluster/data/monDom5/bed/lastzLoxAfr3.2011-11-10/run.cat/ 
+    rm -r /cluster/data/monDom5/bed/lastzLoxAfr3.2011-11-10/run.cat/
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         `pwd`/DEF \
         -continue cat \
@@ -1984,7 +1985,7 @@ TMPDIR=/scratch/tmp
     #   real    6m7.179s
 
     mkdir /hive/data/genomes/loxAfr3/bed/blastz.monDom5.swap
-    cd /hive/data/genomes/loxAfr3/bed/blastz.monDom5.swap 
+    cd /hive/data/genomes/loxAfr3/bed/blastz.monDom5.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/monDom5/bed/lastzLoxAfr3.2011-11-10/DEF \
         -swap -noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
@@ -1997,7 +1998,6 @@ TMPDIR=/scratch/tmp
 
     cd /hive/data/genomes/loxAfr3/bed
     ln -s blastz.monDom5.swap lastz.monDom5
-                                              
 
 ##############################################################################
 # LASTZ Cow bosTau7 (DONE - 2012-01-26- Chin)
@@ -2076,6 +2076,145 @@ TMPDIR=/scratch/tmp
     #   214801189 bases of 2639145830 (8.139%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/rheMac3/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+#########################################################################
+#  LASTZ petMar2 Lamprey (DONE - 2012-10-23 - Hiram)
+    screen -S monDom5PetMar2	# use a screen to control this multi-day job
+    mkdir /cluster/data/monDom5/bed/lastzPetMar2.2012-10-23
+    cd /cluster/data/monDom5/bed/lastzPetMar2.2012-10-23
+
+    cat << '_EOF_' > DEF
+# Opossum vs Lamprey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Opossum monDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Lamprey petMar2
+SEQ2_DIR=/hive/data/genomes/petMar2/petMar2.2bit
+SEQ2_LEN=/hive/data/genomes/petMar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/monDom5/bed/lastzPetMar2.2012-10-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    483m8.591s
+    cat fb.monDom5.chainPetMar2Link.txt
+    #	25404425 bases of 3501660299 (0.725%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/monDom5/bed
+    ln -s lastzPetMar2.2012-10-23 lastz.petMar2
+
+    #	and the swap
+    mkdir /cluster/data/petMar2/bed/blastz.monDom5.swap
+    cd /cluster/data/petMar2/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/monDom5/bed/lastzPetMar2.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #	real    11m54.144s
+    cat fb.petMar2.chainMonDom5Link.txt
+    #	16944977 bases of 647368134 (2.618%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+############################################################################
+# lastz White Rhino cerSim1 (DONE - 2012-10-23 - Hiram)
+    screen -S monDomr5CerSim1
+    mkdir /hive/data/genomes/monDom5/bed/lastzCerSim1.2012-10-23
+    cd /hive/data/genomes/monDom5/bed/lastzCerSim1.2012-10-23
+
+    cat << '_EOF_' > DEF
+# opossum vs. White Rhino
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Opossum (monDom5)
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: White Rhino CerSim1
+SEQ2_DIR=/hive/data/genomes/cerSim1/cerSim1.2bit
+SEQ2_LEN=/hive/data/genomes/cerSim1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/monDom5/bed/lastzCerSim1.2012-10-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    1598m7.927s
+    # problem chaining, running out of memory, running these three on hgwdev
+    #   manually:
+export maxMem=188743680
+ulimit -S -m $maxMem -v $maxMem
+./chain.csh monDom5.2bit:chr3: chain/monDom5.2bit:chr3:.chain &
+./chain.csh monDom5.2bit:chr4: chain/monDom5.2bit:chr4:.chain &
+./chain.csh monDom5.2bit:chr1: chain/monDom5.2bit:chr1:.chain
+wait
+    #   real    422m31.359s
+    time doBlastzChainNet.pl -verbose=2 \
+        -continue=chainMerge `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > chainMerge.log 2>&1 &
+    #   real    63m24.561s
+
+    cat fb.monDom5.chainCerSim1Link.txt
+    #	370181399 bases of 3501660299 (10.572%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/monDom5/bed
+    ln -s lastzCerSim1.2012-10-23 lastz.cerSim1
+
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.monDom5.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/monDom5/bed/lastzCerSim1.2012-10-23/DEF \
+	-verbose=2 -bigClusterHub=swarm \
+        -swap -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    69m55.609s
+    cat fb.cerSim1.chainMonDom5Link.txt
+    #	362581231 bases of 2366858012 (15.319%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
     ln -s blastz.monDom5.swap lastz.monDom5
 
 #########################################################################

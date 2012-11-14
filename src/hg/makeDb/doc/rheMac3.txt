@@ -561,7 +561,6 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # based on result of
     # hgsql -N -e "select type from ctgPos2;" rheMac3 | sort | uniq
     # W
-XXXX TODO: html
     # prepare the src/hg/makeDb/trackDb/cow/rheMac3/ctgPos2.html 
 
 ############################################################################
@@ -1015,5 +1014,192 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	 rheMac3 rheMac2 > do.log 2>&1
     #   real    99m53.205s
+
+
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE 2012-10-15 - Chin)
+
+    mkdir /hive/data/genomes/rheMac3/bed/genscan
+    cd /hive/data/genomes/rheMac3/bed/genscan
+    time doGenscan.pl rheMac3 > do.log 2>&1
+    #   real    284m5.600s
+
+    #   This is not working.  Need to run these split
+    mkdir /hive/data/genomes/rheMac3/bed/genscan/splitRun
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun
+    cp ../../../jkStuff/rheMac3.nonBridged.lift .
+    gapToLift rheMac3 rheMac3.nonBridged.lift -bedFile=rheMac3.nonBridged.bed
+
+    for C in 3 8 13 14 19 20 X
+do
+    echo chr${C}
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun
+    grep -w "chr${C}" rheMac3.nonBridged.lift | grep -v random \
+        | sed -e "s/chr${C}./chr${C}_/" > chr${C}.nonBridged.lift
+    mkdir chr${C}
+    faToTwoBit ../hardMaskedFa/00?/chr${C}.fa chr${C}/chr${C}.2bit
+    ~/kent/src/hg/utils/lft2BitToFa.pl chr${C}/chr${C}.2bit \
+        chr${C}.nonBridged.lift > chr${C}/chr${C}.nonBridged.fa
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/chr${C}
+    mkdir split${C}
+    faSplit sequence chr${C}.nonBridged.fa 100 split${C}/chr${C}_
+done
+    # verify lift files are sane:
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun
+    awk '{print $4}' chr*.nonBridged.lift | sort | uniq -c
+    # should see the list of chroms:
+    #    246 chr13
+    #    127 chr14
+    #    139 chr19
+    #     98 chr20
+    #    317 chr3
+    #    169 chr8
+    #    330 chrX
+
+   for C in 3 8 13 14 19 20 X
+do
+    echo chr${C}
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/chr${C}
+    echo '#!/bin/sh' > cmdList.sh
+    export NL=-1
+    ls split${C} | while read F
+  do
+  NL=`echo $NL | awk '{print $1+1}'`
+  if [ "${NL}" -gt 7 ]; then
+    NL=0
+    echo "echo waiting before $F" >> cmdList.sh
+    echo wait >> cmdList.sh
+  fi
+  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &"
+  done >> cmdList.sh
+    echo "echo waiting at end" >> cmdList.sh
+    echo "wait" >> cmdList.sh
+    chmod +x cmdList.sh
+    rm -fr gtf pep subopt
+    mkdir gtf pep subopt
+done
+
+    # run chr20 first to test script
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/chr20
+    time ./cmdList.sh > ../chr20.log 2>&1
+    # real    6m59.465s
+# running the rest: 3 8 13 14 19 X
+for C in chr3  chr8 chr13 chr14 chr19 chrX
+do
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/${C}
+    time ./cmdList.sh > ../${C}.log 2>&1
+done
+    # chr3 real    9m41.925s
+    # chr8 real    18m50.934s
+    # chr13 real    11m1.742s
+    # chr14 real    16m32.590s
+    # chr19 real    5m8.588s
+    # chrX real    8m48.507s
+
+    # collecting the results:
+    # run chr20 first:
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/chr20
+    cat gtf/chr20_*.gtf | liftUp -type=.gtf stdout ../chr20.nonBridged.lift error stdin \
+        | sed -e "s/chr20_0\([0-4]\)\./chr20.\1/g" > chr20.gtf
+cat subopt/chr20_*.bed | liftUp -type=.bed stdout ../chr20.nonBridged.lift error stdin \
+        | sed -e "s/chr20_0\([0-4]\)\./chr20.\1/g" > chr20.subopt.bed
+cat pep/chr20_*.pep | sed -e "s/chr20_0\([0-4]\)\./chr20.\1/g" > chr20.pep
+ls -l ../../gtf/00?/chr20.gtf ../../pep/00?/chr20.pep ../../subopt/00?/chr20.bed
+ls -l chr20.gtf chr20.pep chr20.subopt.bed
+
+    # run the rest
+for C in chr3  chr8 chr13 chr14 chr19 chrX
+do
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/${C}
+    cat gtf/${C}_*.gtf | liftUp -type=.gtf stdout ../${C}.nonBridged.lift error stdin \
+        | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.gtf
+cat subopt/${C}_*.bed | liftUp -type=.bed stdout ../${C}.nonBridged.lift error stdin \
+        | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.subopt.bed
+cat pep/${C}_*.pep | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.pep
+ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
+ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
+done
+    # after verifying the sizes of the files seem same compared to what
+    #   happened in the main run:
+for C in chr3  chr8 chr13 chr14 chr19 chr20 chrX
+do
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/${C}
+   ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
+    ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun
+done
+-rw-rw-r-- 1 chinhli genecats 0 Oct 15 14:05 ../../gtf/000/chr3.gtf
+-rw-rw-r-- 1 chinhli genecats 0 Oct 15 14:05 ../../pep/000/chr3.pep
+-rw-rw-r-- 1 chinhli genecats 0 Oct 15 14:05 ../../subopt/000/chr3.bed
+-rw-rw-r-- 1 chinhli genecats 2622960 Oct 16 15:51 chr3.gtf
+-rw-rw-r-- 1 chinhli genecats 1108696 Oct 16 15:51 chr3.pep
+-rw-rw-r-- 1 chinhli genecats 1419193 Oct 16 15:51 chr3.subopt.bed
+-rw-rw-r-- 1 chinhli genecats 0 Oct 15 16:46 ../../gtf/000/chr8.gtf
+....
+....
+-rw-rw-r-- 1 chinhli genecats  619333 Oct 16 15:49 chr20.subopt.bed
+-rw-rw-r-- 1 chinhli genecats 0 Oct 15 16:46 ../../gtf/000/chrX.gtf
+-rw-rw-r-- 1 chinhli genecats 0 Oct 15 16:46 ../../pep/000/chrX.pep
+-rw-rw-r-- 1 chinhli genecats 0 Oct 15 16:46 ../../subopt/000/chrX.bed
+-rw-rw-r-- 1 chinhli genecats 1347712 Oct 16 15:52 chrX.gtf
+-rw-rw-r-- 1 chinhli genecats  641978 Oct 16 15:52 chrX.pep
+-rw-rw-r-- 1 chinhli genecats  784120 Oct 16 15:52 chrX.subopt.bed
+
+
+    # this is tricky, it is counting on the file existing, empty or
+    # otherwise
+for C in chr3  chr8 chr13 chr14 chr19 chr20 chrX
+do
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/${C}
+    D=`ls ../../gtf/00?/${C}.gtf`
+    rm -f "${D}"
+    cp -p ${C}.gtf "${D}"
+    D=`ls ../../pep/00?/${C}.pep`
+    rm -f "${D}"
+    cp -p ${C}.pep "${D}"
+    D=`ls ../../subopt/00?/${C}.bed`
+    rm -f "${D}"
+    cp -p ${C}.subopt.bed "${D}"
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun
+done
+
+    # verify size again:
+for C in chr3  chr8 chr13 chr14 chr19 chr20 chrX
+do
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun/${C}
+   ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
+    ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
+    cd /hive/data/genomes/rheMac3/bed/genscan/splitRun
+done
+-rw-rw-r-- 1 chinhli genecats 2622960 Oct 16 15:51 ../../gtf/000/chr3.gtf
+-rw-rw-r-- 1 chinhli genecats 1108696 Oct 16 15:51 ../../pep/000/chr3.pep
+-rw-rw-r-- 1 chinhli genecats 1419193 Oct 16 15:51 ../../subopt/000/chr3.bed
+-rw-rw-r-- 1 chinhli genecats 2622960 Oct 16 15:51 chr3.gtf
+-rw-rw-r-- 1 chinhli genecats 1108696 Oct 16 15:51 chr3.pep
+-rw-rw-r-- 1 chinhli genecats 1419193 Oct 16 15:51 chr3.subopt.bed
+-rw-rw-r-- 1 chinhli genecats  973693 Oct 16 15:51 chr8.subopt.bed
+....
+...
+...
+-rw-rw-r-- 1 chinhli genecats  619333 Oct 16 15:49 chr20.subopt.bed
+-rw-rw-r-- 1 chinhli genecats 1347712 Oct 16 15:52 ../../gtf/000/chrX.gtf
+-rw-rw-r-- 1 chinhli genecats  641978 Oct 16 15:52 ../../pep/000/chrX.pep
+-rw-rw-r-- 1 chinhli genecats  784120 Oct 16 15:52 ../../subopt/000/chrX.bed
+-rw-rw-r-- 1 chinhli genecats 1347712 Oct 16 15:52 chrX.gtf
+-rw-rw-r-- 1 chinhli genecats  641978 Oct 16 15:52 chrX.pep
+-rw-rw-r-- 1 chinhli genecats  784120 Oct 16 15:52 chrX.subopt.bed
+
+    # genes found have been copied over to ../../gtf. pep and s
+    # Now, we can continue
+    cd /hive/data/genomes/rheMac3/bed/genscan
+    time doGenscan.pl -continue=makeBed -workhorse=hgwdev -dbHost=hgwdev \
+        rheMac3 > makeBed.log 2>&1
+    #   real    7m58.322s
+
+    cat fb.rheMac3.genscan.txt
+    #   50606442 bases of 2639145830 (1.918%) in intersection
+    cat fb.rheMac3.genscanSubopt.txt
+    #   51718033 bases of 2639145830 (1.960%) in intersection
+
 
 #############################################################################

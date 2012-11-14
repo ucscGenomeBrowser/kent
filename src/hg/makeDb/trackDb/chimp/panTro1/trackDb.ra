@@ -16,7 +16,7 @@ shortLabel Scaffolds
 longLabel Assembly Scaffolds
 
 track quality override
-type wig 0 70
+type wig 0 68
 
 track gc5Base
 #replaces record gc5Base in parent dir missing/extra spanList

@@ -97,6 +97,7 @@ DIRS = \
 	faNoise \
 	faOneRecord \
 	faPolyASizes \
+	faRandomize \
 	faRc \
 	faSimplify \
 	faSize \
@@ -125,6 +126,7 @@ DIRS = \
 	nibSize \
 	nt4Frag \
 	paraFetch \
+	paraSync \
 	pslLiftSubrangeBlat \
 	pslToPslx \
 	pslToXa \

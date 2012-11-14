@@ -114,7 +114,7 @@ dbDbSpeciesDir lamprey
     #	Loaded 4919722 elements of size 4
     featureBits petMar1 windowmaskerSdust > fb.petMar1.cleanWMask.txt 2>&1
     #	337663807 bases of 831696438 (40.599%) in intersection
- 
+
 ##########################################################################
 #	Running TRF simple repeats (DONE - 2008-01-26 - Hiram)
     ssh kkstore04
@@ -165,7 +165,7 @@ dbDbSpeciesDir lamprey
     #	test it with some sequence
 
 ############################################################################
-## Reset default position to 
+## Reset default position to
 #	Where RHO1 protein is found via blat:
 #	GEMSLWSLVV LAIERYIVIC KPMGNFRFGS THAYMGVAFT WFMALSCAAP PLVGWSR
     ssh hgwdev
@@ -174,8 +174,8 @@ dbDbSpeciesDir lamprey
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE - 2008-01-29 - Hiram)
-    # Use -repMatch=200 (based on size -- for human we use 1024, and 
-    # medaka size is ~20% of human judging by gapless oryLat1 vs. hg18 
+    # Use -repMatch=200 (based on size -- for human we use 1024, and
+    # medaka size is ~20% of human judging by gapless oryLat1 vs. hg18
     # genome sizes from featureBits.
     ssh kkstore04
     cd /cluster/data/petMar1
@@ -1022,15 +1022,15 @@ XXX - running 2008-04-23 09:58
     if test -s 1meg.lst; then
 	twoBitToFa -seqList=1meg.lst  petMar1.unmasked.2bit temp.fa
 	faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
-	rm temp.fa 
+	rm temp.fa
     fi
     rm 1meg.lst
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     if test -s less1meg.lst; then
 	twoBitToFa -seqList=less1meg.lst  petMar1.unmasked.2bit temp.fa
-	faSplit about temp.fa 1000000 blastDb/y 
-	rm temp.fa 
+	faSplit about temp.fa 1000000 blastDb/y
+	rm temp.fa
     fi
     rm less1meg.lst
 
@@ -1045,8 +1045,8 @@ XXX - running 2008-04-23 09:58
 
     mkdir -p /san/sanvol1/scratch/petMar1/blastDb
     cd /cluster/data/petMar1/blastDb
-    for i in nhr nin nsq; 
-    do 
+    for i in nhr nin nsq;
+    do
 	echo $i
 	cp *.$i /san/sanvol1/scratch/petMar1/blastDb
     done
@@ -1070,9 +1070,9 @@ XXX - running 2008-04-23 09:58
    split -l $numKGFiles /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/petMar1/bed/tblastn.hg18KG/kgfa/kg
    ln -s /cluster/bluearc/petMar1/bed/tblastn.hg18KG/kgfa kgfa
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
      done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -1113,21 +1113,21 @@ then
 	fi
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
-    exit 
-    
+    exit
+
     ssh pk
     cd /cluster/data/petMar1/bed/tblastn.hg18KG
     para create blastSpec
@@ -1185,17 +1185,17 @@ chainOne $(path1)
     cd ..
     pslCheck blastHg18KG.psl
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/petMar1/bed/tblastn.hg18KG
     hgLoadPsl petMar1 blastHg18KG.psl
 
     # check coverage
-    featureBits petMar1 blastHg18KG 
+    featureBits petMar1 blastHg18KG
 # 7171010 bases of 831696438 (0.862%) in intersection
 
     featureBits petMar1 xenoRefGene:cds blastHg18KG  -enrichment
-# xenoRefGene:cds 0.676%, blastHg18KG 0.862%, both 0.362%, cover 53.51%, enrich 62.06x 
+# xenoRefGene:cds 0.676%, blastHg18KG 0.862%, both 0.362%, cover 53.51%, enrich 62.06x
 
     ssh kkstore05
     rm -rf /cluster/data/petMar1/bed/tblastn.hg18KG/blastOut
@@ -1296,7 +1296,7 @@ done
 #############################################################################
 # phastCons 6-way (DONE - 2008-04-28 - Hiram)
 
-    # split 6way mafs into 10M chunks and generate sufficient statistics 
+    # split 6way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh memk
     mkdir /cluster/data/petMar1/bed/multiz6way/msa.split
@@ -1474,7 +1474,7 @@ rm -fr $tmp
     time nice -n +19 hgLoadBed petMar1 phastConsElements6way mostConserved.bed
     #	Loaded 76016 elements of size 5
 
-    # Try for 5% overall cov, and 70% CDS cov 
+    # Try for 5% overall cov, and 70% CDS cov
     #	We don't have any gene tracks to compare CDS coverage
     #	--rho .31 --expected-length 45 --target-coverage .3
     featureBits petMar1 phastConsElements6way
@@ -1483,7 +1483,7 @@ rm -fr $tmp
     # Create merged posterier probability file and wiggle track data files
     # currently doesn't matter where this is performed, the san is the same
     # network distance from all machines.
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     cd /san/sanvol1/scratch/petMar1/multiz6way/cons/all
     mkdir -p phastCons6wayScores
@@ -1676,7 +1676,7 @@ done
     mkdir /usr/local/apache/htdocs/goldenPath/petMar1/phastCons6way
     cd /cluster/data/petMar1/bed/multiz6way/downloads/multiz6way
     ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/petMar1/multiz6way
-    rm /usr/local/apache/htdocs/goldenPath/petMar1/multiz6way/mkUpstream.sh 
+    rm /usr/local/apache/htdocs/goldenPath/petMar1/multiz6way/mkUpstream.sh
     cd ../phastCons6way
     ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/petMar1/phastCons6way
     #	if your ln -s `pwd`/* made extra links to files you don't want there,
@@ -1758,4 +1758,23 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+############################################################################
+# construct liftOver to petMar2 (DONE - 2012-10-16 - Hiram)
+    screen	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/petMar1/bed/blat.petMar2.2012-10-16
+    cd /hive/data/genomes/petMar1/bed/blat.petMar2.2012-10-16
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/petMar1/petMar1.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev petMar1 petMar2 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/petMar1/petMar1.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev petMar1 petMar2 > do.log 2>&1
+    #	real    87m15.687s
+
+    # verify this file exists:
+    #	/gbdb/petMar1/liftOver/petMar1ToPetMar2.over.chain.gz
+    # and try out the conversion on genome-test from petMar1 to petMar2
+
 ############################################################################

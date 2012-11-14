@@ -89,6 +89,7 @@ int trackHubCheck(char *hubUrl, struct dyString *errors, boolean checkTracks);
  *      if checkTracks is TRUE, individual tracks are checked
  *      return 0 if hub has no errors, 1 otherwise */
 
-
+void trackHubPolishTrackNames(struct trackHub *hub, struct trackDb *tdbList);
+/* remove all the special characters from trackHub track names */
 #endif /* TRACKHUB_H */
 

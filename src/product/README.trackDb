@@ -3,6 +3,7 @@ README.trackDb
 Creating tracks in the browser.
 
 See also:
+http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbDoc.html
 http://genomewiki.ucsc.edu/index.php/Local_tracks_at_mirror_sites
 
 A track needs two items to make it exist in the browser:
@@ -147,4 +148,3 @@ binary every time, thus always picking up any potentially new
 library.
 
 ====================================================================
-This file last updated: $Date: 2010/10/25 09:44:02 $

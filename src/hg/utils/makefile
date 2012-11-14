@@ -14,6 +14,7 @@ USE_DIRS = $(DIRS)
 
 DIRS = \
 	bedToPsl \
+	bedExtendRanges \
 	bedWeedOverlapping \
 	chromGraphFromBin \
 	chromGraphToBin \
@@ -21,6 +22,7 @@ DIRS = \
 	crTreeSearchBed \
 	gapToLift \
 	hubCheck hubPublicCheck \
+        makeTableList \
 	oligoMatch \
 	positionalTblCheck \
 	safePush \

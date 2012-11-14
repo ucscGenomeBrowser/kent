@@ -2896,7 +2896,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    else
 		{
 		errAbort("Unrecognized format type=%s line %d of %s",
-			type, lf->lineIx, lf->fileName);
+			 (type? type : "NULL"),
+			 (lf ? lf->lineIx : 0), (lf ? lf->fileName : "NULL file"));
 		}
 	    }
         char *dataUrl = NULL;

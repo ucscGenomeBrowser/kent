@@ -165,12 +165,17 @@ if (row != NULL)
     hub->hubUrl = cloneString(row[0]);
     hub->status = sqlUnsigned(row[1]);
 
-    char *errorMessage = cloneString(row[2]);
-    if (isEmpty(errorMessage))
+    if (isEmpty(row[2]))
+	{
+	char *errorMessage = NULL;
 	hub->trackHub = fetchHub( hub->hubUrl, &errorMessage);
-    if (errorMessage != NULL)
-	hub->errorMessage = cloneString(errorMessage);
-
+	if (errorMessage != NULL)
+	    {
+	    hub->errorMessage = cloneString(errorMessage);
+	    warn("%s", hub->errorMessage);
+	    hubUpdateStatus( hub->errorMessage, hub);
+	    }
+	}
     }
 sqlFreeResult(&sr);
 return hub;
@@ -249,7 +254,9 @@ return  val;
 char *hubConnectSkipHubPrefix(char *trackName)
 /* Given something like "hub_123_myWig" return myWig.  Don't free this, it's not allocated */
 {
-assert(startsWith("hub_", trackName));
+if(!startsWith("hub_", trackName))
+    return trackName;
+
 trackName += 4;
 trackName = strchr(trackName, '_');
 assert(trackName != NULL);
@@ -301,7 +308,11 @@ return p;
 static void addOneDescription(char *trackDbFile, struct trackDb *tdb)
 /* Fetch tdb->track's html description and store in tdb->html. */
 {
-char *simpleName = hubConnectSkipHubPrefix(tdb->track);
+/* html setting should always be set because we set it at load time */
+char *htmlName = trackDbSetting(tdb, "html");
+assert(htmlName != NULL);
+
+char *simpleName = hubConnectSkipHubPrefix(htmlName);
 char *url = trackHubRelativeUrl(trackDbFile, simpleName);
 char buffer[10*1024];
 safef(buffer, sizeof buffer, "%s.html", url);
@@ -349,6 +360,7 @@ struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
+trackHubPolishTrackNames(hub, tdbList);
 rAddTrackListToHash(trackHash, tdbList, NULL, FALSE);
 if (pTdbList != NULL)
     *pTdbList = slCat(*pTdbList, tdbList);
@@ -632,6 +644,7 @@ if (trackHub != NULL)
 	tdbList = trackDbLinkUpGenerations(tdbList);
 	tdbList = trackDbPolishAfterLinkup(tdbList, database);
 	trackDbPrioritizeContainerItems(tdbList);
+	trackHubPolishTrackNames(trackHub, tdbList);
 	if (tdbList != NULL)
 	    slAddHead(pHubList, trackHub);
 	}

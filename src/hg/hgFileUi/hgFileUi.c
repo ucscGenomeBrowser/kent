@@ -79,6 +79,11 @@ if (tdb->html != NULL && tdb->html[0] != 0)
         downArrow = "&darr;";
     printf("<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",
            downArrow);
+    if (trackDbSetting(tdb, "wgEncode"))
+        {
+        printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
+           "Contact%s</A>", downArrow);
+        }
     printf("</span>");
     }
 puts("<BR>");

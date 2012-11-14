@@ -4,18 +4,21 @@ L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
+A = hgGcPercent
 O = hgGcPercent.o 
 
-hgGcPercent: $O ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgGcPercent \
+all::   ${A}
+
+${A}: $O ../../../lib/${MACHTYPE}/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} \
 		$O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgGcPercent${EXE}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 compile: $O ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o hgGcPercent ${O} ${MYLIBS} $L
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} ${O} ${MYLIBS} $L
 
 lib:
 	cd ../../../lib && ${MAKE}
 
 clean:
-	rm -f ${O} hgGcPercent
+	rm -f ${O} ${A}${EXE}

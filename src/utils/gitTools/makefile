@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 GITTOOLS= 
-GITSCRIPTS= gitFiles gilt 
+GITSCRIPTS= gitFiles gilt gitu
 
 all: ${GITTOOLS:%=${BINDIR}/%} ${GITSCRIPTS:%=${SCRIPTS}/%}
 

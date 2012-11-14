@@ -10,6 +10,7 @@
 #include "memgfx.h"
 #include "hvGfx.h"
 #include "portable.h"
+#include "regexHelper.h"
 #include "errabort.h"
 #include "dystring.h"
 #include "nib.h"
@@ -237,6 +238,7 @@
 #include "yaleGencodeAssoc.h"
 #include "itemDetailsHtml.h"
 #include "trackVersion.h"
+#include "numtsClick.h"
 
 static char *rootDir = "hgcData";
 
@@ -14813,6 +14815,18 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void printDbSnpRsUrl(char *rsId, char *labelFormat, ...)
+/* Print a link to dbSNP's report page for an rs[0-9]+ ID. */
+{
+printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s\" "
+       "TARGET=_BLANK>", rsId);
+va_list args;
+va_start(args, labelFormat);
+vprintf(labelFormat, args);
+va_end(args);
+printf("</A>");
+}
+
 char *validateOrGetRsId(char *name, struct sqlConnection *conn)
 /* If necessary, get the rsId from the affy120K or affy10K table,
    given the affyId.  rsId is more common, affy120K is next, affy10K least.
@@ -15018,15 +15032,17 @@ else
 printId = doDbSnpRs(itemName);
 if (printId)
     {
-    printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    puts("<BR>");
     if (sameString(printId, "valid"))
         {
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A>\n", itemName);
+	printDbSnpRsUrl(itemName, "dbSNP link");
+	putchar('\n');
 	doSnpEntrezGeneLink(tdb, itemName);
 	}
     else
 	{
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link (%s)</A>\n", printId, printId);
+	printDbSnpRsUrl(printId, "dbSNP link (%s)", printId);
+	putchar('\n');
 	doSnpEntrezGeneLink(tdb, printId);
 	}
     }
@@ -15531,8 +15547,8 @@ while ((row = sqlNextRow(sr))!=NULL)
     }
 if (startsWith("rs",itemName))
     {
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-    printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
+    printDbSnpRsUrl(itemName, "dbSNP");
+    putchar('\n');
     doSnpEntrezGeneLink(tdb, itemName);
     }
 if (hTableExists(database, "snpExceptions") && differentString(exception,"0"))
@@ -15576,11 +15592,11 @@ if (snp!=NULL)
     printf("%s</span><BR>\n",snp->sequenceA);
     printf("<B>Sequence of Allele B:</B>&nbsp;<span style='font-family:Courier;'>");
     printf("%s</span><BR>\n",snp->sequenceB);
-    if (snp->rsId>0)
+    if (isNotEmpty(snp->rsId))
 	{
-	printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A><BR>\n",
-	       snp->rsId, snp->rsId);
+	puts("<BR>");
+	printDbSnpRsUrl(snp->rsId, "dbSNP link for %s", snp->rsId);
+	puts("<BR>");
 	}
     doSnpEntrezGeneLink(tdb, snp->rsId);
     printf("<BR>Genotypes:<BR>");
@@ -16155,9 +16171,9 @@ if (snp!=NULL)
 
     if (strncmp(snp->rsId,"unmapped",8))
 	{
-	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n",
-	       snp->rsId, snp->rsId);
+	puts("<P>");
+	printDbSnpRsUrl(snp->rsId, "dbSNP link for %s", snp->rsId);
+	puts("</P>");
 	}
     printf("<BR><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
     printf("%s\" TARGET=_blank>TSC link for %s</A>\n",
@@ -17605,9 +17621,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Reported gene(s):</B> %s<BR>\n", subNrNs(gc->genes));
     char *strongAllele = NULL, *strongRsID = splitSnpAndAllele(gc->riskAllele, &strongAllele);
     if (strongRsID)
-	printf("<B>Strongest SNP-Risk allele:</B> "
-	       "<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s\" "
-	       "TARGET=_BLANK>%s</A>-%s<BR>\n", strongRsID, strongRsID, strongAllele);
+	{
+	printf("<B>Strongest SNP-Risk allele:</B> ");
+	printDbSnpRsUrl(strongRsID, "%s", strongRsID);
+	printf("-%s<BR>\n", strongAllele);
+	}
     else
 	printf("<B>Strongest SNP-Risk allele:</B> %s<BR>\n", subNrNs(gc->riskAllele));
     gwasCatalogCheckSnpAlleles(tdb, gc);
@@ -20072,7 +20090,7 @@ printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
 else if (sameWord(type, "encodePeak"))
-    doEncodePeak(ct->tdb, ct, itemName);
+    doEncodePeak(ct->tdb, ct, fileName);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
 else if (sameWord(type, "bigBed"))
@@ -21182,8 +21200,9 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 struct hapmapSnps *item = hapmapSnpsLoad(row+rowOffset);
-printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?"
-       "type=rs&rs=%s\" TARGET=_blank> %s</A><BR>\n", itemName, itemName);
+printf("<B>SNP rsId:</B> ");
+printDbSnpRsUrl(itemName, "%s", itemName);
+puts("<BR>");
 printf("<B>Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A><BR>\n",
        hgTracksPathAndSettings(), database, item->chrom, item->chromStart+1, item->chromEnd,
        item->chrom, item->chromStart+1, item->chromEnd);
@@ -22325,16 +22344,16 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (sameString(dataSource, "Affy"))
         {
         printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A> (log in required, registration is free)\n", itemName);
-        if (!sameString(row[3], "unknown"))
+        if (regexMatch(row[3], "^rs[0-9]+$"))
             {
-            printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-            printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", row[3], row[3]);
+	    printf("<BR>");
+	    printDbSnpRsUrl(row[3], "dbSNP (%s)", row[3]);
 	    }
 	}
-    else
+    else if (regexMatch(itemName, "^rs[0-9]+$"))
         {
-        printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", itemName, itemName);
+	printf("<BR>");
+	printDbSnpRsUrl(itemName, "dbSNP (%s)", itemName);
 	}
     }
 sqlFreeResult(&sr);
@@ -22387,16 +22406,16 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (sameString(dataSource, "Affy"))
         {
         printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A> (log in required, registration is free)\n", itemName);
-        if (!sameString(row[3], "unknown"))
+        if (regexMatch(row[3], "^rs[0-9]+$"))
             {
-            printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-            printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", row[3], row[3]);
+            printf("<BR>");
+	    printDbSnpRsUrl(row[3], "dbSNP (%s)", row[3]);
 	    }
 	}
-    else
+    else if (regexMatch(itemName, "^rs[0-9]+$"))
         {
-        printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", itemName, itemName);
+        printf("<BR>");
+	printDbSnpRsUrl(itemName, "dbSNP (%s)", itemName);
 	}
     }
 sqlFreeResult(&sr);
@@ -23896,138 +23915,6 @@ if (tdb == NULL)
 return tdb;
 }
 
-void doNumtS(struct trackDb *tdb, char *itemName)
-/* Put up page for NumtS. */
-{
-char *table = tdb->table;
-struct sqlConnection *conn = hAllocConn(database);
-struct bed *bed;
-char query[512];
-struct sqlResult *sr;
-char **row;
-boolean firstTime = TRUE;
-int start = cartInt(cart, "o");
-int num = 6;
-char itemNameDash[64]; /* itenName appended with a "_" */
-char itemNameTrimmed[64]; /* itemName trimed at last "_" */
-int sDiff = 30; /* acceptable difference of genomics size */
-/* message strings */
-char *clickMsg = NULL;
-char *openMsg1 = "Click 'browser' link below to open Genome Browser at genomic position where";
-char *openMsg2 = "maps\n";
-char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochondrial position where";
-
-
-genericHeader(tdb, itemName);
-genericBedClick(conn, tdb, itemName, start, num);
-
-safecpy(itemNameDash, sizeof(itemNameDash),itemName);
-safecat(itemNameDash,64,"_");
-safecpy(itemNameTrimmed, sizeof(itemNameTrimmed),itemName);
-chopSuffixAt(itemNameTrimmed, '_');
-
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s where name='%s'",
-      table, itemName);
-sr = sqlGetResult(conn, query);
-int sSize=0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-        bed = bedLoad6(row);
-        sSize = bed->chromEnd - bed->chromStart;
-        /* printf("sSize is: %5d <BR>", sSize); */
-    }
-
-
-if (sameString("hg18", database))
-{
-  if (sameString("numtS", table))
-      {
-      safef(query, sizeof(query),
-          "select  chrom, chromStart, chromEnd, name, score, strand "
-          "from numtSMitochondrionChrPlacement where ( "
-          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-      clickMsg = openMsgM;
-      }
-    else if (sameString("numtSAssembled", table))
-      {
-      safef(query, sizeof(query),
-          "select  chrom, chromStart, chromEnd, name, score, strand "
-          "from numtSMitochondrionChrPlacement where ( "
-          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-      clickMsg = openMsgM;
-      }
-    else if (sameString("numtSMitochondrion", table))
-      {
-      safef(query, sizeof(query),
-          "select  chrom, chromStart, chromEnd, name, score, strand "
-          "from numtS where ( "
-          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-      clickMsg = openMsg1;
-        }
-    else if (sameString("numtSMitochondrionChrPlacement", table))
-      {
-      safef(query, sizeof(query),
-          "select  chrom, chromStart, chromEnd, name, score, strand "
-          "from numtS where ( "
-          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-      clickMsg = openMsg1;
-      }
-} else {
-  if (sameString("numtS", table) || sameString("numtSAssembled", table))
-     {
-     safef(query, sizeof(query),
-         "select  chrom, chromStart, chromEnd, name, score, strand "
-         "from numtSMitochondrion where name = '%s'  ", itemName);
-     clickMsg = openMsgM;
-     }
-  else if (sameString("numtSMitochondrion", table))
-     {
-      safef(query, sizeof(query),
-          "select  chrom, chromStart, chromEnd, name, score, strand "
-          "from numtS where name = '%s'", itemName);
-      clickMsg = openMsg1;
-     }
-}
-
-    sr = sqlGetResult(conn, query);
-    firstTime = TRUE;
-
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        printf("<PRE><TT>");
-        if (firstTime)
-            {
-            firstTime = FALSE;
-        printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
-
-            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
-            printf("--------|--------------------------------------------------------------------------------------------\n");
-
-            }
-        bed = bedLoad6(row);
-        printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
-               hgTracksPathAndSettings(), database,
-               bed->chrom, bed->chromStart+1, bed->chromEnd);
-
-        printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
-            bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
-            (bed->chromEnd - bed->chromStart),bed->score, bed->strand);
-
-        printf("</TT></PRE>");
-        }
-
- printf("<BR>");
- printTrackHtml(tdb);
- hFreeConn(&conn);
-}
 void doGeneReviews(struct trackDb *tdb, char *itemName)
 /* generate the detail page for geneReviews */
 {

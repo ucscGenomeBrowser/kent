@@ -17,12 +17,12 @@ static struct optionSpec optionSpecs[] =
 void usage() 
 /* Report usage and quit. */
 {
-errAbort("faRandomize - Program to create random fasta records using\n"
-	 "same base frequency as seen in original fasta records.\n"
-	 "Use optional -seed flag to specify seed for random number\n"
-	 "generator.\n"
-	 "usage:\n   "
-	 "faRandomize in.fa randomized.fa\n");
+errAbort("faRandomize - Program to create random fasta records\n"
+    "usage:\n"
+    "  faRandomize [-seed=N] in.fa randomized.fa\n"
+    "    Use optional -seed argument to specify seed (integer) for random\n"
+    "    number generator (rand).  Generated sequence has the\n"
+    "    same base frequency as seen in original fasta records.");
 }
 
 struct dnaSeq *randomizedSequence(struct dnaSeq *seq)

@@ -539,13 +539,23 @@ However, the <I>qStart</I> and <I>qEnd</I> are not reversed. To convert one to t
                 <TR><TD WIDTH=10>&nbsp;</TD>
 		    <TD>
 	            <P>
-<P>GFF (General Feature Format) lines are based on the GFF standard file format.  GFF
-lines have nine required fields that <I>must</I> be tab-separated. If the fields are
-separated by spaces instead of tabs, the track will not display correctly. For more
-information on GFF format, refer to <A
-HREF="http://www.sanger.ac.uk/resources/software/gff/"
-target="_blank">http://www.sanger.ac.uk/resources/software/gff/</A>.</P>
-<P>If you would like to obtain browser data in GFF (GTF) format, please refer to
+<p>
+GFF (General Feature Format) lines are based on the Sanger
+<a href="http://www.sanger.ac.uk/resources/software/gff/spec.html" target="_blank">
+GFF2 specification</a>. GFF lines have nine required fields that <I>must</I> be
+tab-separated. If the fields are separated by spaces instead of tabs, the track will not
+display correctly. For more information on GFF format, refer to Sanger's
+<a href="http://www.sanger.ac.uk/resources/software/gff/" target="_blank">
+GFF page</a>.
+</p>
+
+<p>
+Note that there is also a GFF3 specification that is not currently supported by the Browser.
+All GFF tracks must be formatted according to Sanger's GFF2 specification.
+</p>
+
+<p>
+If you would like to obtain browser data in GFF (GTF) format, please refer to
 <A HREF="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format" TARGET="_blank">
 Genes in gtf or gff format</A> on the Wiki.</P>
 <P>
@@ -1696,9 +1706,11 @@ page for more information about VCF custom tracks.</P>
 <P>
 Here is an example of narrowPeak format:</P>
 <PRE>
-chrX    9091548 9091648 .       0       .       182     5.0945  -1  50
-chrX    9358722 9358822 .       0       .       91      4.6052  -1  40
-chrX    9391082 9391182 .       0       .       182     9.2103  -1  75
+track type=narrowPeak visibility=3 db=hg19 name="nPk" description="ENCODE narrowPeak Example"
+browser position chr1:9356000-9365000
+chr1    9356548 9356648 .       0       .       182     5.0945  -1  50
+chr1    9358722 9358822 .       0       .       91      4.6052  -1  40
+chr1    9361082 9361182 .       0       .       182     9.2103  -1  75
 </PRE>
 
         		     </td><td width=15></td></tr>
@@ -1755,7 +1767,16 @@ This format is used to provide called regions of signal enrichment based on pool
         false discovery rate (-log10). Use -1 if no qValue is assigned.
 </ol>
 <P>
-        		     </td><td width=15></td></tr>
+Here is an example of broadPeak format:</P>
+<PRE>
+track type=broadPeak visibility=3 db=hg19 name="bPk" description="ENCODE broadPeak Example"
+browser position chr1:798200-800700
+chr1     798256 798454 .       116      .       4.89716 3.70716 -1
+chr1     799435 799507 .       103      .       2.46426 1.54117 -1
+chr1     800141 800596 .       107      .       3.22803 2.12614 -1
+</Pre>
+
+        		     </Td><td width=15></td></tr>
 	    		</table><br>
 		     </td></tr>
 		</table>

@@ -1868,7 +1868,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
-# LASTZ kangaroo rat hetGla1 (DONE - 2012-03-15 - Hiram)
+# LASTZ Naked mole-rat hetGla1 (DONE - 2012-03-15 - Hiram)
     #	establish a screen to control this job
     screen -S mm10HetGla1
     mkdir /hive/data/genomes/mm10/bed/lastzHetGla1.2012-03-15
@@ -1877,7 +1877,7 @@ TMPDIR=/scratch/tmp
     # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
     #	number of jobs, 50,000 to something under 100,000
     cat << '_EOF_' > DEF
-# kangaroo rat vs mouse
+# Naked mole-rat vs mouse
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
 # TARGET: Mouse Mm10
 SEQ1_DIR=/scratch/data/mm10/mm10.2bit
@@ -1885,7 +1885,7 @@ SEQ1_LEN=/scratch/data/mm10/chrom.sizes
 SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 
-# QUERY: kangaroo rat HetGla1
+# QUERY: Naked mole-rat HetGla1
 SEQ2_DIR=/scratch/data/hetGla1/hetGla1.2bit
 SEQ2_LEN=/scratch/data/hetGla1/chrom.sizes
 SEQ2_CHUNK=10000000
@@ -3393,7 +3393,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################
-# LASTZ wallaby triMan1 (DONE - 2012-03-29 - Hiram)
+# LASTZ Manatee triMan1 (DONE - 2012-03-29 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S mm10TriMan1
     mkdir /hive/data/genomes/mm10/bed/lastzTriMan1.2012-03-29
@@ -5412,28 +5412,28 @@ end
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" hg19 \
       | genePredSingleCover stdin stdout | gzip -2c \
         > genes/hg19.gp.gz
-    #   2. refGene:
+    #   2. refGene, want the full extended genePred:
     for DB in `cat refGene.list`
 do
-hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from refGene" ${DB} \
+hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
     echo "${DB} done"
 done
-    #   3. ensGene:
+    #   3. ensGene, want the full extended genePred:
     for DB in `cat ensGene.list`
 do
-hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+hgsql -N -e "select * from ensGene" ${DB} | cut -f2- \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
     echo "${DB} done"
 done
-    #   4. xenoRefGene:
+    #   4. xenoRefGene, want the full extended genePred:
     for DB in `cat xenoRG.list`
 do
-hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${DB} \
+hgsql -N -e "select * from xenoRefGene" ${DB} | cut -f2- \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
@@ -5442,7 +5442,7 @@ done
     #   5. genscan: gadMor1 melUnd1 oreNil2 speTri2 turTru2
     for DB in `cat genscan.list`
 do
-hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from genscan" ${DB} \
+hgsql -N -e "select * from xenoRefGene" ${DB} | cut -f2- \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
@@ -5458,67 +5458,64 @@ done
 
 # genes/ailMel1.gp.gz: 19204
 # genes/anoCar2.gp.gz: 17766
-# genes/bosTau7.gp.gz: 12957
+# genes/bosTau7.gp.gz: 12958
 # genes/calJac3.gp.gz: 20843
-# genes/canFam3.gp.gz: 20843
+# genes/canFam3.gp.gz: 20652
 # genes/cavPor3.gp.gz: 18631
 # genes/choHof1.gp.gz: 12403
-# genes/chrPic1.gp.gz: 19420
-# genes/danRer7.gp.gz: 13889
-# genes/dasNov3.gp.gz: 29342
+# genes/chrPic1.gp.gz: 19433
+# genes/danRer7.gp.gz: 13902
+# genes/dasNov3.gp.gz: 29551
 # genes/dipOrd1.gp.gz: 15784
 # genes/echTel1.gp.gz: 16499
 # genes/equCab2.gp.gz: 20403
-# genes/eriEur1.gp.gz: 14538
-# genes/felCat5.gp.gz: 19472
+# genes/eriEur1.gp.gz: 11712
+# genes/felCat5.gp.gz: 19512
 # genes/fr3.gp.gz: 18014
-# genes/gadMor1.gp.gz: 64189
-# genes/galGal4.gp.gz: 4869
+# genes/gadMor1.gp.gz: 27572
+# genes/galGal4.gp.gz: 4892
 # genes/gasAcu1.gp.gz: 20631
 # genes/gorGor3.gp.gz: 20759
-# genes/hetGla2.gp.gz: 25587
+# genes/hetGla2.gp.gz: 25749
 # genes/hg19.gp.gz: 20718
-# genes/latCha1.gp.gz: 18773
+# genes/latCha1.gp.gz: 18786
 # genes/loxAfr3.gp.gz: 19986
-# genes/macEug2.gp.gz: 24750
+# genes/macEug2.gp.gz: 26006
 # genes/melGal1.gp.gz: 14050
-# genes/melUnd1.gp.gz: 24095
+# genes/melUnd1.gp.gz: 15296
 # genes/micMur1.gp.gz: 16240
-# genes/mm10.gp.gz: 20249
+# genes/mm10.gp.gz: 20985
 # genes/monDom5.gp.gz: 19188
 # genes/myoLuc2.gp.gz: 19685
-# genes/nomLeu2.gp.gz: 22997
+# genes/nomLeu2.gp.gz: 22996
 # genes/ochPri2.gp.gz: 15970
-# genes/oreNil2.gp.gz: 28730
+# genes/oreNil2.gp.gz: 18636
 # genes/ornAna1.gp.gz: 17728
 # genes/oryCun2.gp.gz: 18921
 # genes/oryLat2.gp.gz: 19576
-# genes/otoGar3.gp.gz: 23998
-# genes/oviAri1.gp.gz: 17761
+# genes/otoGar3.gp.gz: 24061
+# genes/oviAri1.gp.gz: 17890
 # genes/panTro4.gp.gz: 18647
-# genes/papHam1.gp.gz: 27034
-# genes/petMar1.gp.gz: 9867
+# genes/papHam1.gp.gz: 27842
+# genes/petMar1.gp.gz: 11089
 # genes/ponAbe2.gp.gz: 19895
 # genes/proCap1.gp.gz: 16043
 # genes/pteVam1.gp.gz: 16966
-# genes/ponAbe2.gp.gz: 19895
-# genes/proCap1.gp.gz: 16043
-# genes/pteVam1.gp.gz: 16966
-# genes/rheMac3.gp.gz: 5558
-# genes/rn5.gp.gz: 16114
-# genes/saiBol1.gp.gz: 23302
-# genes/sarHar1.gp.gz: 20649
+# genes/rheMac3.gp.gz: 5580
+# genes/rn5.gp.gz: 16393
+# genes/saiBol1.gp.gz: 23419
+# genes/sarHar1.gp.gz: 20694
 # genes/sorAra1.gp.gz: 13156
-# genes/speTri2.gp.gz: 44222
-# genes/susScr3.gp.gz: 3753
-# genes/taeGut1.gp.gz: 17343
+# genes/speTri2.gp.gz: 22377
+# genes/susScr3.gp.gz: 3771
+# genes/taeGut1.gp.gz: 17354
 # genes/tarSyr1.gp.gz: 13615
 # genes/tetNig2.gp.gz: 19539
-# genes/triMan1.gp.gz: 19378
+# genes/triMan1.gp.gz: 19514
 # genes/tupBel1.gp.gz: 15407
-# genes/turTru2.gp.gz: 68272
+# genes/turTru2.gp.gz: 28375
 # genes/vicPac1.gp.gz: 11754
-# genes/xenTro3.gp.gz: 8456
+# genes/xenTro3.gp.gz: 8447
 
     # kluster job to annotate each maf file
     screen -S mm10      # manage long running procedure with screen
@@ -5554,12 +5551,12 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
     gensub2 chr.list gene.list template jobList
     para -ram=8g create jobList
     para try ... check ... push
-# Completed: 3894 of 3894 jobs
-# CPU time in finished jobs:      84054s    1400.91m    23.35h    0.97d  0.003 y
-# IO & Wait Time:               2422614s   40376.89m   672.95h   28.04d  0.077 y
-# Average job time:                 644s      10.73m     0.18h    0.01d
-# Longest finished job:            4090s      68.17m     1.14h    0.05d
-# Submission to last job:         10377s     172.95m     2.88h    0.12d
+# Completed: 3960 of 3960 jobs
+# CPU time in finished jobs:      85610s    1426.83m    23.78h    0.99d  0.003 y
+# IO & Wait Time:               2030956s   33849.27m   564.15h   23.51d  0.064 y
+# Average job time:                 534s       8.91m     0.15h    0.01d
+# Longest finished job:            3877s      64.62m     1.08h    0.04d
+# Submission to last job:         12974s     216.23m     3.60h    0.15d
 
     # collect all results into one file:
     cd /hive/data/genomes/mm10/bed/multiz60way/frames
@@ -5587,12 +5584,13 @@ done | sort -k1,1 -k2,2n > multiz60wayFrames.bed
     ssh hgwdev
     cd /hive/data/genomes/mm10/bed/multiz60way/frames
     time gzip multiz60wayFrames.bed
-    #   real    1m25.102s
+    #   real    0m51.826s
+    # reloading this table 2012-10-11 with more accurate frames:
     time hgLoadMafFrames mm10 multiz60wayFrames multiz60wayFrames.bed.gz
-    #   real    3m0.325s
+    #   real    3m2.449s
     time featureBits -countGaps mm10 multiz60wayFrames
-    #   78707910 bases of 2730871774 (2.882%) in intersection
-    #   real    1m51.051s
+    #   57707702 bases of 2730871774 (2.113%) in intersection
+    #   real    1m45.141s
 
     #   enable the trackDb entries:
 # frames multiz60wayFrames
@@ -6166,7 +6164,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     sort ../../4d/vertebrate.list > vertebrate.list
     comm -13 glire.list vertebrate.list | xargs echo \
         | sed -e "s/ /,/g" > glire.non-inf
-    
+
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     para -ram=8g create jobList
     para try ... check ... push ... etc.
@@ -6330,7 +6328,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     sort ../../4d/vertebrate.list > vertebrate.list
     comm -13 euarchontoglires.list vertebrate.list | xargs echo \
         | sed -e "s/ /,/g" > euarchontoglires.non-inf
-    
+
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     para -ram=8g create jobList
     para try ... check ... push ... etc.
@@ -7311,7 +7309,7 @@ std: 0.602992
 # mm10.phyloP60wayGlire -4.346 1.165 0.0731873 1929686275 1.41229e+08
 #	stdDev viewLimits
 #       0.602992 viewLimits=-2.94177:1.165
-    #	that range is: 4.346+1.165 = 5.511 -> hBinSize=0.005511 
+    #	that range is: 4.346+1.165 = 5.511 -> hBinSize=0.005511
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
@@ -7416,7 +7414,7 @@ std: 0.689759
 #       1.51941e+08 0.689759 viewLimits=-3.37006:1.753
     #   real    0m26.197s
 
-    #	that range is: 12.704+1.753 = 14.457 -> hBinSize=0.014457 
+    #	that range is: 12.704+1.753 = 14.457 -> hBinSize=0.014457
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
@@ -7923,7 +7921,7 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/phyloP60way/mm10.60way
 
     ln -s ../../consPhyloP/all/phyloP60way.bw mm10.60way.phyloP60way.bw
     ln -s ../../consPhyloP/glire/phyloP60wayGlire.bw \
-        mm10.60way.phyloP60wayGlire.bw 
+        mm10.60way.phyloP60wayGlire.bw
     ln -s ../../consPhyloP/vertebrate/phyloP60wayVertebrate.bw \
         mm10.60way.phyloP60wayVertebrate.bw
     ln -s ../../consPhyloP/placental/phyloP60wayPlacental.bw \
@@ -8265,7 +8263,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
-# LASTZ kangaroo rat hetGla2 (DONE - 2012-04-14 - Hiram)
+# LASTZ naked mole rat hetGla2 (DONE - 2012-04-14 - Hiram)
     #	establish a screen to control this job
     screen -S mm10HetGla2
     mkdir /hive/data/genomes/mm10/bed/lastzHetGla2.2012-04-14
@@ -8274,7 +8272,7 @@ TMPDIR=/scratch/tmp
     # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
     #	number of jobs, 50,000 to something under 100,000
     cat << '_EOF_' > DEF
-# kangaroo rat vs mouse
+# naked mole rat vs mouse
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
 # TARGET: Mouse Mm10
 SEQ1_DIR=/scratch/data/mm10/mm10.2bit
@@ -8282,7 +8280,7 @@ SEQ1_LEN=/scratch/data/mm10/chrom.sizes
 SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 
-# QUERY: kangaroo rat HetGla2
+# QUERY: naked mole rat HetGla2
 SEQ2_DIR=/hive/data/genomes/hetGla2/hetGla2.2bit
 SEQ2_LEN=/hive/data/genomes/hetGla2/chrom.sizes
 SEQ2_CHUNK=10000000
@@ -8720,5 +8718,289 @@ CREATE TABLE ucscToEnsembl (
     # construct the table after running the script once manually:
     hgBbiDbLink mm10 grcIncidentDb \
         "http://genomewiki.ucsc.edu/images/a/a4/Mm10.grcIncidentDb.bb"
+
+#########################################################################
+# GRCm38.p1 patch 1 (DONE - 2012-09-21 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/patch1
+    cd /hive/data/genomes/mm10/bed/patch1
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38.p1/ ./genbank/
+    # slight modifications to this script from hg19 patch9 work:
+    ./gatherNames.pl genbank > ucscNames.patch1.txt
+    # examine the names for sanity:
+    awk '{print $NF}' ucscNames.patch1.txt | sort
+    # and they should not be longer than 31 characters:
+    awk '{print $NF}' ucscNames.patch1.txt | sort | awk '{print length($0)}' \
+        | sort -n | tail
+    # script from hg19 patch9, update the variable patchName
+     ./mkTables.pl patches.chrom.sizes ucscNames.patch1.txt genbank/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz
+    # output to stdout is the contents of alt.scaf.agp.gz
+    # constructs ctgPos.txt chromInfo.txt gap.txt gold.txt
+    # script from hg19 patch9, update the variable patchName
+    ./mkCtgPos2.pl ucscNames.patch1.txt patches.chrom.sizes > ctgPos2.txt
+    cp -p ../patch5/mkHapLocate.pl .
+    ./mkHapLocate.pl ctgPos.txt \
+	PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
+	> haplotypeLocations.bed
+    cp -p haplotypeLocations.bed altSequence.bed
+
+    ./mkFasta.pl ucscNames.patch1.txt > mm10.patch1.fa
+    # the build of mm10Patch1 can be seen in mm10Patch1.txt
+
+    egrep -v "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    > altSeqPatchesP1.tab
+    # no haplotypes yet, this is nothing:
+    egrep "32,32,190" altSequence.bed  \
+	| awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,$5,$6}' \
+	    > altSeqHaplotypesP1.tab
+    # verify none lost
+    wc -l altSequence.bed altSeqPatchesP1.tab altSeqHaplotypesP1.tab
+    #   9 altSequence.bed
+    #   9 altSeqPatchesP1.tab
+    #   0 altSeqHaplotypesP1.tab
+
+    # not necessary, there are none yet:
+    hgLoadBed mm10 altSeqHaplotypesP1 altSeqHaplotypesP1.tab
+    #	Loaded 75 elements of size 6
+    hgLoadBed mm10 altSeqPatchesP1 altSeqPatchesP1.tab
+    #   Read 9 elements of size 6 from altSeqPatchesP1.tab
+
+    #    these tables are part of mouse/mm10/altSeqComposite1.ra
+
+##############################################################################
+# Haplotype track (WORKING - 2012-10-01 - Hiram)
+
+    cat << '_EOF_' > mkBedFile.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $debug = 1;
+
+sub usage() {
+    print STDERR "usage: ./mkBedFile.pl ../../mm10/genbank > mm10Haplotypes.bed\n";
+    print STDERR "expecting the Mus_musculus/GRCm38.p1/ hierarchy in ./genbank from NCBI\n";
+    exit 255;
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    usage;
+}
+
+my $patchDir = shift;
+
+if ( ! -d $patchDir ) {
+    print STDERR "ERROR: given directory $patchDir is not a directory or does not exist";
+    usage;
+}
+
+my %glSize;
+my %ctgToChr;
+my %ctgToFastaName;
+# my $fasta = "$patchDir/PATCHES/alt_scaffolds/FASTA/alt.scaf.fa.gz";
+my @placeList = split('\n',`find $patchDir -type f | grep placement.txt | grep alt_scaffolds | grep -v UNKNOWN`);
+for (my $i = 0; $i < scalar(@placeList); ++$i) {
+    printf STDERR "# %s\n", $placeList[$i];
+    open (FH, "grep -v '^#' $placeList[$i]|") or die "can not read $placeList[$i]";
+    while (my $line = <FH>) {
+#        printf STDERR "%s", $line;
+        chomp $line;
+        my @a = split('\s+', $line);
+        next if ($a[11] eq "na");
+        $a[8] = "+" if ($a[8] eq "b");
+        my $descr = sprintf("<B>Region&nbsp;name:&nbsp;</B>%s", $a[7]);
+        printf "chr%s\t%d\t%d\t%s\t0\t%s\t%s\t%s\n",
+                $a[5], $a[11], $a[12], $a[0], $a[8], $a[3], $descr;
+    }
+    close (FH);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x mkBedFile.pl
+
+    ./mkBedFile.pl > mm10Haplotypes.bedDetail
+    cat << '_EOF_' > mm10Haplotypes.sql
+CREATE TABLE mm10Haplotypes (
+    chrom varchar(255) not null,   # Reference sequence chromosome or scaffold
+    chromStart int unsigned not null,   # Start position in chromosome
+    chromEnd int unsigned not null,     # End position in chromosome
+    name varchar(255) not null, # Short Name of item
+    score int unsigned, # Score from 0-1000
+    strand char(1),     # + or -
+    id varchar(255) not null,   # ID to bed used in URL to link back
+    description longblob not null, # Long description of item for the details page
+    #Indices
+    INDEX(chrom, chromStart)
+);
+'_EOF_'
+
+    hgLoadSqlTab mm10 mm10Haplotypes mm10Haplotypes.sql mm10Haplotypes.bedDetail
+
+    # trackDb entry:
+track mm10Haplotypes
+shortLabel Alt. strains
+longLabel Alternate mouse strains, mapped to reference as haplotypes
+group varRep
+priority 111
+visibility hide
+type bedDetail 8
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel NCBI Nucleotide:
+
+##########################################################################
+##  CYTOBAND - ideogram track (DONE - 2012-10-19 - Hiram)
+    ssh hgwdev
+    mkdir -p /hive/data/outside/ncbi/ideogram/2012-10
+    cd /hive/data/outside/ncbi/ideogram/2012-10
+    # fetch all the ideogram files:
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ ./
+
+    mkdir /hive/data/genomes/mm10/bed/cytoband
+    cd /hive/data/genomes/mm10/bed/cytoband
+
+    # Create bed file
+    $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
+/hive/data/outside/ncbi/ideogram/2012-10/ideogram_10090_GCF_000000055.19_NA_V2
+
+    ## can now verify before load:
+    $HOME/kent/src/utils/ncbi/cytoBandVerify.pl
+    #	everything checks out OK on 21 chroms
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql \
+	mm10 cytoBand cytoBand.bed
+    #   Read 403 elements of size 5 from cytoBand.bed
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql -e "drop table cytoBandIdeo;" mm10
+    hgsql mm10 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
+
+##########################################################################
+# lastz Lamprey petMar2 (DONE - 2012-10-17 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S petMar2
+    mkdir /hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19
+    cd /hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Lamprey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Lamprey PetMar2
+SEQ2_DIR=/hive/data/genomes/petMar2/petMar2.2bit
+SEQ2_LEN=/hive/data/genomes/petMar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=60
+
+BASE=/hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-qRepeats=windowmaskerSdust \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #   real    218m29.078s
+
+    cat fb.mm10.chainPetMar2Link.txt
+    #   28262565 bases of 2652783500 (1.065%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzPetMar2.2012-10-19 lastz.petMar2
+
+    #	and for the swap
+    mkdir /hive/data/genomes/petMar2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/petMar2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPetMar2.2012-10-19/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    7m2.754s
+    cat  fb.petMar2.chainHg19Link.txt
+    #	20923095 bases of 647368134 (3.232%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz White Rhino cerSim1 (DONE - 2012-10-23 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10CerSim1
+    mkdir /hive/data/genomes/mm10/bed/lastzCerSim1.2012-10-23
+    cd /hive/data/genomes/mm10/bed/lastzCerSim1.2012-10-23
+
+    cat << '_EOF_' > DEF
+# Mouse vs. White Rhino
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: White Rhino CerSim1
+SEQ2_DIR=/hive/data/genomes/cerSim1/cerSim1.2bit
+SEQ2_LEN=/hive/data/genomes/cerSim1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/mm10/bed/lastzCerSim1.2012-10-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    992m45.890s
+
+    cat fb.mm10.chainCerSim1Link.txt
+    #   942281365 bases of 2652783500 (35.520%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzCerSim1.2012-10-23 lastz.cerSim1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCerSim1.2012-10-23/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    62m44s
+    cat  fb.cerSim1.chainMm10Link.txt
+    #	926131511 bases of 2366858012 (39.129%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################

@@ -855,3 +855,25 @@ TMPDIR=/scratch/tmp
     ssh hgwbeta "hgsql qapushq < /tmp/panTro4.sql"
 
 ############################################################################
+# lastz mouse Mm10 (DONE - 2012-03-10 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/mm10/bed/lastzPanTro4.2012-03-09
+    cat fb.mm10.chainPanTro4Link.txt
+    #	919836299 bases of 2652783500 (34.674%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/panTro4/bed/blastz.mm10.swap
+    cd /hive/data/genomes/panTro4/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPanTro4.2012-03-09/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    73m23.855s
+    cat fb.panTro4.chainMm10Link.txt
+    #	926540065 bases of 2902338967 (31.924%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/panTro4/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################

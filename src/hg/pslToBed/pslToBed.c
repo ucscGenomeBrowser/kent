@@ -107,7 +107,7 @@ while ((psl = pslNext(pslLf)) != NULL)
 	{
 	struct cds *cds = hashFindVal(cdsHash, psl->qName);
 	if (cds == NULL)
-	    bed->thickStart = bed->thickEnd = 0;
+	    bed->thickStart = bed->thickEnd = bed->chromStart;
 	else
 	    setThick(psl, bed, cds);
 	}

@@ -28,6 +28,9 @@ while ($line = <FILE>) {
     if (($start > 0) && ($start > $prevend)) {
 	$start--;
     }
+    # the first band on a chrom says it starts at '2' instead of '1'
+    # we want zero for that
+    $start = 0 if (1 == $start);
     # Checks for observed errors in NCBI file
     if ($start == $prevstart) {
 	$start = $prevend + 1;

@@ -2,6 +2,9 @@
 
 include trackDb.chainNet.ra
 
+track quality override
+type wig 0 90
+
 track contigOrient
 shortLabel Contig Orient
 longLabel Contig Orientation

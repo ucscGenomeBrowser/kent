@@ -1,4 +1,7 @@
 
+track quality override
+type wig 0 97
+
 track multiz6way
 shortLabel Conservation
 longLabel 6-Way Multiz Alignment & Conservation 

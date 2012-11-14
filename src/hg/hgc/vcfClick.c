@@ -15,6 +15,7 @@
 #include "udc.h"
 #endif//def USE_TABIX && KNETFILE_HOOKS
 #include "pgSnp.h"
+#include "regexHelper.h"
 #include "trashDir.h"
 #include "vcf.h"
 #include "vcfUi.h"
@@ -22,7 +23,7 @@
 #define NA "<em>n/a</em>"
 
 static void printKeysWithDescriptions(struct vcfFile *vcff, int wordCount, char **words,
-				      struct vcfInfoDef *infoDefs, boolean escapeHtml)
+				      struct vcfInfoDef *infoDefs)
 /* Given an array of keys, print out a list of values with
  * descriptions if descriptions are available. */
 {
@@ -33,7 +34,7 @@ for (i = 0;  i < wordCount; i++)
 	printf(", ");
     char *key = words[i];
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, key);
-    char *htmlKey = escapeHtml ? htmlEncode(key) : key;
+    char *htmlKey = htmlEncode(key);
     if (def != NULL)
 	printf("%s (%s)", htmlKey, def->description);
     else
@@ -52,7 +53,7 @@ if (rec->alleleCount < 2 || sameString(rec->alleles[1], "."))
     return;
     }
 struct vcfFile *vcff = rec->file;
-printKeysWithDescriptions(vcff, rec->alleleCount-1, &(displayAls[1]), vcff->altDefs, FALSE);
+printKeysWithDescriptions(vcff, rec->alleleCount-1, &(displayAls[1]), vcff->altDefs);
 }
 
 static void vcfQualDetails(struct vcfRecord *rec)
@@ -73,7 +74,7 @@ else
     printf("<B>Filter failures:</B> ");
     printf("<font style='font-weight: bold; color: #FF0000;'>\n");
     struct vcfFile *vcff = rec->file;
-    printKeysWithDescriptions(vcff, rec->filterCount, rec->filters, vcff->filterDefs, TRUE);
+    printKeysWithDescriptions(vcff, rec->filterCount, rec->filters, vcff->filterDefs);
     printf("</font>\n");
     }
 }
@@ -295,7 +296,7 @@ if (hTableExists(database, genePredTable))
     }
 }
 
-static void abbreviateLongSeq(char *seqIn, int endLength, struct dyString *dy)
+static void abbreviateLongSeq(char *seqIn, int endLength, boolean showLength, struct dyString *dy)
 /* If seqIn is longer than 2*endLength plus abbreviation fudge, abbreviate it
  * to its first endLength bases, ellipsis that says how many bases are skipped,
  * and its last endLength bases; add result to dy. */
@@ -305,16 +306,21 @@ int seqInLen = strlen(seqIn);
 if (seqInLen > threshold)
     {
     dyStringAppendN(dy, seqIn, endLength);
-    int skippedLen = seqInLen-2*endLength;
-    dyStringPrintf(dy, "...&lt;%d bases&gt;...%s",
-		   skippedLen, seqIn+seqInLen-endLength);
+    dyStringAppend(dy, "...");
+    if (showLength)
+	{
+	int skippedLen = seqInLen-2*endLength;
+	dyStringPrintf(dy, "<%d bases>...", skippedLen);
+	}
+    dyStringAppend(dy, seqIn+seqInLen-endLength);
     }
 else
     dyStringAppend(dy, seqIn);
 }
 
 static void makeDisplayAlleles(struct vcfRecord *rec, boolean showLeftBase, char leftBase,
-			       int endLength, char **displayAls)
+			       int endLength, boolean showLength, boolean encodeHtml,
+			       char **displayAls)
 /* If necessary, show the left base that we trimmed and/or abbreviate long sequences. */
 {
 struct dyString *dy = dyStringNew(128);
@@ -324,8 +330,11 @@ for (i = 0;  i < rec->alleleCount; i++)
     dyStringClear(dy);
     if (showLeftBase)
 	dyStringPrintf(dy, "(%c)", leftBase);
-    abbreviateLongSeq(rec->alleles[i], endLength, dy);
-    displayAls[i] = htmlEncode(dy->string); // leak some mem
+    abbreviateLongSeq(rec->alleles[i], endLength, showLength, dy);
+    if (encodeHtml)
+	displayAls[i] = htmlEncode(dy->string);
+    else
+	displayAls[i] = cloneString(dy->string);
     }
 }
 
@@ -334,6 +343,19 @@ static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec)
  * (using seqName instead of rec->chrom because rec->chrom might lack "chr"). */
 {
 printf("<B>Name:</B> %s<BR>\n", rec->name);
+// Since these are variants, if it looks like a dbSNP or dbVar ID, provide a link:
+if (regexMatch(rec->name, "^rs[0-9]+$"))
+    {
+    printf("<B>dbSNP:</B> ");
+    printDbSnpRsUrl(rec->name, "%s", rec->name);
+    puts("<BR>");
+    }
+else if (regexMatch(rec->name, "^[en]ss?v[0-9]+$"))
+    {
+    printf("<B>dbVar:</B> ");
+    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
+	   "TARGET=_BLANK>%s</A><BR>\n", rec->name, rec->name);
+    }
 printCustomUrl(tdb, rec->name, TRUE);
 static char *formName = "vcfCfgHapCenter";
 printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
@@ -345,7 +367,7 @@ char leftBase = rec->alleles[0][0];
 unsigned int vcfStart = vcfRecordTrimIndelLeftBase(rec);
 boolean showLeftBase = (rec->chromStart == vcfStart+1);
 char *displayAls[rec->alleleCount];
-makeDisplayAlleles(rec, showLeftBase, leftBase, 20, displayAls);
+makeDisplayAlleles(rec, showLeftBase, leftBase, 20, TRUE, FALSE, displayAls);
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);
 printf("<B>Reference allele:</B> %s<BR>\n", displayAls[0]);
 vcfAltAlleleDetails(rec, displayAls);
@@ -353,7 +375,7 @@ vcfQualDetails(rec);
 vcfFilterDetails(rec);
 vcfInfoDetails(rec);
 pgSnpCodingDetail(rec);
-makeDisplayAlleles(rec, showLeftBase, leftBase, 5, displayAls);
+makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
 vcfGenotypesDetails(rec, tdb->track, displayAls);
 }
 
@@ -368,7 +390,6 @@ if (udcCacheTimeout() < 300)
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-// TODO: will need to handle per-chrom files like bam, maybe fold bamFileNameFromTable into this::
 char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
 hFreeConn(&conn);
 int vcfMaxErr = -1;

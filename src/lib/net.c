@@ -22,87 +22,7 @@
 #include "obscure.h"
 
 /* Brought errno in to get more useful error messages */
-
 extern int errno;
-
-/* when there are many cts, threads, hubtracks, etc
- * need a quick way to remember failures to not repeat them */
-
-struct connFailure
-/* remember connect failure */
-    {
-    char *hostName;       /* hostName */
-    int port;             /* port */
-    char *errorString;    /* error message to report next time */
-    };
-
-#define MAXCONNFAILURES 1024
-static struct connFailure connFailures[MAXCONNFAILURES];
-static int numConnFailures = 0;
-static pthread_mutex_t cfMutex = PTHREAD_MUTEX_INITIALIZER;
-static boolean connFailuresEnabled = FALSE;
-
-void setConnFailuresEnabled(boolean val)
-/* Turn on or off the connFailures feature */
-{
-connFailuresEnabled = val;
-}
-
-boolean checkConnFailure(char *hostName, int port, char **pErrStr)
-/* check if this hostName:port has already had failure
- *  which can save time and avoid more timeouts */
-{
-if (!connFailuresEnabled)
-    return FALSE;
-pthread_mutex_lock( &cfMutex );
-int imax = numConnFailures;
-pthread_mutex_unlock( &cfMutex );
-struct connFailure *cf = connFailures;
-int i;
-boolean result = FALSE;
-for(i=0;i<imax;++i)
-    {
-    if (sameString(cf->hostName, hostName) && cf->port == port)
-	{
-	if (pErrStr)
-	    {
-	    *pErrStr = cf->errorString;
-	    }
-	result = TRUE;
-	break;
-	}
-    ++cf;
-    }
-return result;
-}
-
-
-void addConnFailure(char *hostName, int port, char *format, ...)
-/* add a failure to connFailures[]
- *  which can save time and avoid more timeouts */
-{
-if (!connFailuresEnabled)
-    return;
-char errorString[1024];
-va_list args;
-vasafef(errorString, sizeof errorString, format, args);
-va_end(args);
-if (!checkConnFailure(hostName,port,NULL))
-    {
-    pthread_mutex_lock( &cfMutex );
-    if (numConnFailures < MAXCONNFAILURES)
-	{
-	struct connFailure *cf = connFailures + numConnFailures;
-	cf->hostName = cloneString(hostName);
-	cf->port = port;
-	cf->errorString = cloneString(errorString);
-	numConnFailures++;
-	}
-    pthread_mutex_unlock( &cfMutex );
-    }
-}
-
-
 
 static int netStreamSocket()
 /* Create a TCP/IP streaming socket.  Complain and return something
@@ -164,13 +84,6 @@ int sd;
 struct sockaddr_in sai;		/* Some system socket info. */
 int res;
 fd_set mySet;
-
-char *errorString = NULL;
-if (checkConnFailure(hostName, port, &errorString))
-    {
-    warn("%s", errorString);
-    return -1;
-    }
 
 if (hostName == NULL)
     {
@@ -247,9 +160,6 @@ if (res < 0)
                 if (valOpt)
                     {
                     warn("Error in TCP non-blocking connect() %d - %s", valOpt, strerror(valOpt));
-		    if (valOpt == ETIMEDOUT)
-    			addConnFailure(hostName, port,
-			 "Error in TCP non-blocking connect() %d - %s", valOpt, strerror(valOpt));
                     close(sd);
                     return -1;
                     }
@@ -257,8 +167,6 @@ if (res < 0)
 		}
 	    else
 		{
-		addConnFailure(hostName, port,
-		     "TCP non-blocking connect() to %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, msTimeout);
 		warn("TCP non-blocking connect() to %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, msTimeout);
 		close(sd);
 		return -1;
@@ -1689,9 +1597,14 @@ else
 	    url = newUrl;
 	    }
 	}
-    if (endsWith(url, ".gz") ||
-	endsWith(url, ".Z")  ||
-    	endsWith(url, ".bz2"))
+    char *urlDecoded = cloneString(url);
+    cgiDecode(url, urlDecoded, strlen(url));
+    boolean isCompressed =
+	(endsWith(urlDecoded,".gz") ||
+   	 endsWith(urlDecoded,".Z")  ||
+	 endsWith(urlDecoded,".bz2"));
+    freeMem(urlDecoded);
+    if (isCompressed)
 	{
 	lf = lineFileDecompressFd(url, TRUE, sd);
            /* url needed only for compress type determination */

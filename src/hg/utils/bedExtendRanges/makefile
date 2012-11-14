@@ -9,12 +9,15 @@ O = ${A}.o
 
 GOODFILES = bed7.txt bed8.txt chromBoundaries.txt
 
-compile: $(O) $(MYLIBS)
+all:: $(O) $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O $(MYLIBS) $L
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-clean:
-	rm -f $(O)
+compile:: $(O) $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O $(MYLIBS) $L
+
+clean::
+	rm -f $(O) ${A}
 
 test: good
 	

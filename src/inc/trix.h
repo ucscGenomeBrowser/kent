@@ -1,5 +1,6 @@
 /* trix - text retrieval index.  Stuff for fast two level index
- * of text for fast word searches. */
+ * of text for fast word searches.  Generally you use the ixIxx program
+ * to make the indexes. */
 
 struct trix
 /* A two level index */
@@ -34,9 +35,10 @@ struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **wor
 	boolean expand);
 /* Return a list of items that match all words.  This will be sorted so that
  * multiple-word matches where the words are closer to each other and in the
- * right order will be first.  Do a trixSearchResultFreeList when done. 
- * If expand is TRUE then this will match not only the input words, but also
- * additional words that start with the input words. */
+ * right order will be first.  Single word matches will be prioritized so that those
+ * closer to the start of the search text will appear before those later.
+ * Do a trixSearchResultFreeList when done.  If expand is TRUE then this will match not 
+ * only the input words, but also additional words that start with the input words. */
 
 void trixSearchResultFree(struct trixSearchResult **pTsr);
 /* Free up data associated with trixSearchResult. */

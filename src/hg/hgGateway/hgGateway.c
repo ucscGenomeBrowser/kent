@@ -79,7 +79,7 @@ cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTracks");
 
 puts("<table><tr>");
 if (gotClade)
-    puts("<td align=center valign=baseline>clade</td>");
+    puts("<td align=center valign=baseline>group</td>");
 puts("<td align=center valign=baseline>genome</td>\n"
      "<td align=center valign=baseline>assembly</td>\n"
      "<td align=center valign=baseline>position</td>\n"

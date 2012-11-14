@@ -75,7 +75,11 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
     track netHg18 override
     shortLabel $o_db Net
 
+track chainNetPetMar2 override
+priority 650.3
+
 track chainNetPetMar1 override
+release beta,public
 priority 650.3
 chainMinScore 3000
 chainLinearGap medium

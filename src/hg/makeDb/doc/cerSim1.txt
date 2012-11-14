@@ -327,7 +327,7 @@ taxId 73337
 # Ceratotherium simum     12      0       0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add cerSim1 just after equCab1
@@ -385,26 +385,26 @@ cerSim1.perChromTables = no
     git push
     make etc-update
 
-XXX - ready to continue - Wed Sep  5 16:12:53 PDT 2012
 #########################################################################
 # set default position to FOXP2 gene displays  (DONE - 2012-08-02 - Hiram)
+XXX - to be done - Tue Oct 16 15:03:19 PDT 2012
     hgsql -e \
 'update dbDb set defaultPos="JH739914:135428-435957" where name="cerSim1";' \
 	hgcentraltest
 
 ############################################################################
-# downloads and pushQ entry (DONE - 2012-07-27 - Hiram)
+# downloads and pushQ entry (DONE - 2012-10-16 - Hiram)
     # after adding cerSim1 to the all.joiner file and verifying that
     #   joinerCheck is clean, can construct the downloads:
     cd /hive/data/genomes/cerSim1
     time makeDownloads.pl -workhorse=hgwdev cerSim1
-    #   real    11m40.799s
+    #   real    23m8.762s
 
     mkdir /hive/data/genomes/cerSim1/pushQ
     cd /hive/data/genomes/cerSim1/pushQ
     # Mark says don't let the transMap track get there
-    time makePushQSql.pl cerSim1 2> stderr.txt | grep -v transMap > cerSim1.sql
-    #   real    3m52.778s
+    time makePushQSql.pl cerSim1 2> stderr.txt > cerSim1.sql
+    #   real    3m39.347s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/cerSim1/wib/gc5Base.wib
@@ -418,15 +418,105 @@ XXX - ready to continue - Wed Sep  5 16:12:53 PDT 2012
     ssh hgwbeta "hgsql qapushq < /tmp/cerSim1.sql"
 
 ##########################################################################
-#  BLATSERVERS ENTRY (DONE - 2012-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2012-10-23 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
-
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("cerSim1", "blat4d", "17806", "1", "0"); \
+	VALUES ("cerSim1", "blat4a", "17838", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("cerSim1", "blat4d", "17807", "0", "1");' \
+	VALUES ("cerSim1", "blat4a", "17839", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
+# lastz Human hg19 (DONE - 2012-10-23 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzCerSim1.2012-10-17
+    cat fb.hg19.chainCerSim1Link.txt
+    #   1683424317 bases of 2897316137 (58.103%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzCerSim1.2012-10-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real     100m36s
+    cat  fb.cerSim1.chainHg19Link.txt
+    #	1637961407 bases of 2366858012 (69.204%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# lastz Mouse mm10 (DONE - 2012-10-24 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/mm10/bed/lastzCerSim1.2012-10-23
+    cat fb.mm10.chainCerSim1Link.txt
+    #   942281365 bases of 2652783500 (35.520%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCerSim1.2012-10-23/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    62m44s
+    cat  fb.cerSim1.chainMm10Link.txt
+    #	926131511 bases of 2366858012 (39.129%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz swap Opossum monDom5 (DONE - 2012-10-30 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/monDom5/bed/lastzCerSim1.2012-10-23
+    cat fb.monDom5.chainCerSim1Link.txt
+    #	370181399 bases of 3501660299 (10.572%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.monDom5.swap
+    time doBlastzChainNet.pl \
+	/hive/data/genomes/monDom5/bed/lastzCerSim1.2012-10-23/DEF \
+	-verbose=2 -bigClusterHub=swarm \
+        -swap -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    69m55.609s
+    cat fb.cerSim1.chainMonDom5Link.txt
+    #	362581231 bases of 2366858012 (15.319%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+#########################################################################
+# lastz swap Cow bosTau7 (DONE - 2012-10-30 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/bosTau7/bed/lastzCerSim1.2012-10-24
+    cat fb.bosTau7.chainCerSim1Link.txt
+    #   1628320914 bases of 2804673174 (58.057%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.bosTau7.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.bosTau7.swap
+    time nice -n +19 doBlastzChainNet.pl \
+        /hive/data/genomes/bosTau7/bed/lastzCerSim1.2012-10-24/DEF \
+	-workhorse=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #   real    120m35.871s
+
+    cat fb.cerSim1.chainBosTau7Link.txt
+    #   1592093865 bases of 2366858012 (67.266%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
+##############################################################################

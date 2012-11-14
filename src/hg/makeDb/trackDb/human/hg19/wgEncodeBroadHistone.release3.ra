@@ -62,11 +62,11 @@ longLabel Histone Modifications by ChIP-seq from ENCODE/Broad Institute
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nbsp;(Tier_1) t1K562=K562&nbsp;(Tier_1) t2A549=A549&nbsp;(Tier_2) t2BCELLSCD20=B_cells_CD20+&nbsp;(Tier_2) t2BCELLSCD20RO01794=B_cells_CD20+_RO01794&nbsp;(Tier_2) t2HELAS3=HeLa-S3&nbsp;(Tier_2) t2HEPG2=HepG2&nbsp;(Tier_2) t2HUVEC=HUVEC&nbsp;(Tier_2) t2MONOCYTESCD14RO01746=Monocytes_CD14+_RO01746&nbsp;(Tier_2) t3DND41=Dnd41 t3HMEC=HMEC t3HSMM=HSMM t3HSMMTUBE=HSMMtube t3NHA=NH-A t3NHDFAD=NHDF-Ad t3NHEK=NHEK t3NHLF=NHLF t3OSTEOBLASTS=Osteoblasts
-subGroup3 factor Antibody CBPSC369=CBP_(SC-369) CBX2=CBX2 CBX3SC101004=CBX3_(SC-101004) CBX8=CBX8 CHD1A301218A=CHD1_(A301-218A) CHD4MI2=CHD4_Mi2 CHD7A301223A1=CHD7_(A301-223A-1) CTCF=CTCF EZH239875=EZH2_(39875) H2AZ=H2A.Z H3K04ME1=H3K4me1 H3K04ME2=H3K4me2 H3K04ME3=H3K4me3 H3K09AC=H3K9ac H3K09me1=H3K9me1 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H4K20ME1=H4K20me1 HDAC1SC6298=HDAC1_(SC-6298) HDAC2A300705A=HDAC2_(A300-705A) HDAC6A301341A=HDAC6_(A301-341A) JARID1AAB26049=JARID1A_(ab26049) JMJD2AA300861A1=JMJD2A_(A300-861A-1) LSD1=LSD1 NCOR=NCoR NSD2AB75359=NSD2_(ab75359) P300=P300 P300KAT3B=P300_KAT3B PCAF=PCAF PHF8A301772A=PHF8_(A301-772A) PLU1=PLU1 POL2B=Pol2(b) RBBP5A300109A=RBBP5_(A300-109A) REST=REST RNF2=RNF2 RNF2=RNF2 SAP3039731=SAP30_(39731) SETDB1=SETDB1 SIRT6=SIRT6 SUZ12051317=SUZ12_(05-1317) zCTRL=Input_Control
+subGroup3 factor Antibody CBPSC369=CBP_(SC-369) CBX2=CBX2 CBX3SC101004=CBX3_(SC-101004) CBX8=CBX8 CHD1A301218A=CHD1_(A301-218A) CHD4MI2=CHD4_Mi2 CHD7A301223A1=CHD7_(A301-223A-1) CTCF=CTCF EZH239875=EZH2_(39875) H2AZ=H2A.Z H3K04ME1=H3K4me1 H3K04ME2=H3K4me2 H3K04ME3=H3K4me3 H3K09AC=H3K9ac H3K09me1=H3K9me1 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H4K20ME1=H4K20me1 HDAC1SC6298=HDAC1_(SC-6298) HDAC2A300705A=HDAC2_(A300-705A) HDAC6A301341A=HDAC6_(A301-341A) JARID1AAB26049=JARID1A_(ab26049) JMJD2AA300861A1=JMJD2A_(A300-861A-1) LSD1=LSD1 NCOR=NCoR NSD2AB75359=NSD2_(ab75359) P300=P300 P300KAT3B=P300_KAT3B PCAF=PCAF PHF8A301772A=PHF8_(A301-772A) PLU1=PLU1 POL2=Pol2_(MMS-128P) RBBP5A300109A=RBBP5_(A300-109A) REST=REST RNF2=RNF2 RNF2=RNF2 SAP3039731=SAP30_(39731) SETDB1=SETDB1 SIRT6=SIRT6 SUZ12051317=SUZ12_(05-1317) zCTRL=Input_Control
 subGroup4 treatment Treatment DEX100NM=DEX_100_nM ETOH02=EtOH_0.02% zNONE=None
 dimensions dimensionY=cellType dimensionX=factor
 sortOrder cellType=+ factor=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View replicate=Rep dccAccession=UCSC_Accession geoSampleAcession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View replicate=Rep dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
@@ -548,9 +548,9 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneHelas3Pol2bStdPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel HeLa-S3 Pol2(b)
-        longLabel HeLa-S3 Pol2(b) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=POL2B cellType=t2HELAS3 treatment=zNONE
+        shortLabel HeLa-S3 Pol2
+        longLabel HeLa-S3 Pol2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        subGroups view=Peaks factor=POL2 cellType=t2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         # subId=2860 dateSubmitted=2010-11-05
@@ -728,9 +728,9 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneHuvecPol2bStdPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel HUVEC Pol2(b)
-        longLabel HUVEC Pol2(b) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=POL2B cellType=t2HUVEC treatment=zNONE
+        shortLabel HUVEC Pol2
+        longLabel HUVEC Pol2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        subGroups view=Peaks factor=POL2 cellType=t2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         # subId=2882 dateSubmitted=2010-11-05
@@ -827,9 +827,9 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneK562Pol2bStdPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel K562 Pol2(b)
-        longLabel K562 Pol2(b) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=POL2B cellType=t1K562 treatment=zNONE
+        shortLabel K562 Pol2
+        longLabel K562 Pol2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        subGroups view=Peaks factor=POL2 cellType=t1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         # subId=2894 dateSubmitted=2010-11-05
@@ -974,9 +974,9 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneNhekPol2bStdPk
         parent wgEncodeBroadHistoneViewPeaks off
-        shortLabel NHEK Pol2(b)
-        longLabel NHEK Pol2(b) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=POL2B cellType=t3NHEK treatment=zNONE
+        shortLabel NHEK Pol2
+        longLabel NHEK Pol2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
+        subGroups view=Peaks factor=POL2 cellType=t3NHEK treatment=zNONE
         type broadPeak
         color 179,0,134
         # subId=2913 dateSubmitted=2010-11-05
@@ -3010,9 +3010,9 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneHuvecPol2bStdSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC Pol2(b)
-        longLabel HUVEC Pol2(b) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=POL2B cellType=t2HUVEC treatment=zNONE
+        shortLabel HUVEC Pol2
+        longLabel HUVEC Pol2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        subGroups view=Signal factor=POL2 cellType=t2HUVEC treatment=zNONE
         type bigWig 0.040000 8296.240234
         color 224,75,0
         # subId=1727 dateSubmitted=2010-06-21
@@ -3089,9 +3089,9 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneNhekPol2bStdSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK Pol2(b)
-        longLabel NHEK Pol2(b) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=POL2B cellType=t3NHEK treatment=zNONE
+        shortLabel NHEK Pol2
+        longLabel NHEK Pol2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        subGroups view=Signal factor=POL2 cellType=t3NHEK treatment=zNONE
         type bigWig 0.040000 3405.360107
         color 179,0,134
         # subId=1737 dateSubmitted=2010-06-21
@@ -3133,7 +3133,7 @@ html wgEncodeBroadHistone.release3
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 Pol2(b)
         longLabel HeLa-S3 Pol2(b) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=POL2B cellType=t2HELAS3 treatment=zNONE
+        subGroups view=Signal factor=POL2 cellType=t2HELAS3 treatment=zNONE
         type bigWig 0.040000 48100.679688
         color 0,119,158
         # subId=1743 dateSubmitted=2010-06-21
@@ -3519,9 +3519,9 @@ html wgEncodeBroadHistone.release3
 
         track wgEncodeBroadHistoneK562Pol2bStdSig
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 Pol2(b)
-        longLabel K562 Pol2(b) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=POL2B cellType=t1K562 treatment=zNONE
+        shortLabel K562 Pol2
+        longLabel K562 Pol2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
+        subGroups view=Signal factor=POL2 cellType=t1K562 treatment=zNONE
         type bigWig 0.040000 16058.919922
         color 46,0,184
         # subId=1789 dateSubmitted=2010-06-21

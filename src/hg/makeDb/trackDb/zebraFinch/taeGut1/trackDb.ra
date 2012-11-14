@@ -1,3 +1,5 @@
+track quality override
+type wig 0 99
 
 track nscanGene override
 informant Zebra Finch N-SCAN uses chicken (galGal3) as the informant

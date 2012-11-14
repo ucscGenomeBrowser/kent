@@ -378,6 +378,23 @@ if ((grandChildId = forkOrDie()) == 0)
 	logWarn("setrlimit failed with RLIMIT_AS rlim_cur=%lld rlim_max=%lld"
 	    , (long long) rlim.rlim_cur , (long long) rlim.rlim_max); 
 
+    if (0) { // change to 1 for debugging
+    logInfo("memLimit=%lld", memLimit);
+    struct rlimit rlim; 
+    int rv; 
+    rv = getrlimit(RLIMIT_DATA,&rlim); 
+    if ( rv == -1 ) 
+	logWarn("error getrlimit RLIMIT_DATA %s", strerror(errno)); 
+    else 
+    	logInfo("rlimit_data:%lu,%lu\n", rlim.rlim_max, rlim.rlim_cur); 
+    rv = getrlimit(RLIMIT_AS,&rlim); 
+    if ( rv == -1 ) 
+	logWarn("error getrlimit RLIMIT_AS %s", strerror(errno)); 
+    else 
+    	logInfo("rlimit_as:%lu,%lu\n", rlim.rlim_max, rlim.rlim_cur); 
+    }
+
+
     char *homeDir = "";
 
     /* Change to given user (if root) */

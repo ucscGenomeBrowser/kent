@@ -41,6 +41,8 @@ static boolean regexMatchSubstrMaybeCase(const char *string, const char *exp,
 /* Return TRUE if string matches regular expression exp;
  * regexec fills in substrArr with substring offsets. */
 {
+if (string == NULL)
+    return FALSE;
 int compileFlags = REG_EXTENDED;
 char desc[256];
 safecpy(desc, sizeof(desc), "Regular expression");

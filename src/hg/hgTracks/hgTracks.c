@@ -3430,7 +3430,10 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    }
         errCatchEnd(errCatch);
         if (errCatch->gotError)
+	    {
+	    warn("%s", errCatch->message->string);
 	    hubUpdateStatus( errCatch->message->string, hub);
+	    }
 	else
 	    hubUpdateStatus(NULL, hub);
         errCatchFree(&errCatch);

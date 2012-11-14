@@ -528,76 +528,6 @@ while (hel != NULL)
 return matchingSettings;
 }
 
-struct superTrackInfo {
-    boolean isSuper;
-    boolean isShow;
-    char *parentName;
-    enum trackVisibility defaultVis;
-};
-
-static struct superTrackInfo *getSuperTrackInfo(struct trackDb *tdb)
-/* Get info from supertrack setting.  There are 2 forms:
- * Parent:   'superTrack on [show]'
- * Child:    'superTrack <parent> [vis]
- * Return null if there is no such setting. */
-{
-char *setting = trackDbSetting(tdb, "superTrack");
-if (!setting)
-    return NULL;
-char *words[8];
-int wordCt = chopLine(cloneString(setting), words);
-if (wordCt < 1)
-    return NULL;
-struct superTrackInfo *stInfo;
-AllocVar(stInfo);
-if (sameString("on", words[0]))
-    {
-    /* parent */
-    stInfo->isSuper = TRUE;
-    if ((wordCt > 1) && sameString("show", words[1]))
-        stInfo->isShow = TRUE;
-    }
-else
-    {
-    /* child */
-    stInfo->parentName = cloneString(words[0]);
-    if (wordCt > 1)
-        stInfo->defaultVis = max(0, hTvFromStringNoAbort(words[1]));
-    }
-return stInfo;
-}
-
-char *trackDbGetSupertrackName(struct trackDb *tdb)
-/* Find name of supertrack if this track is a member */
-{
-char *ret = NULL;
-struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
-if (stInfo)
-    {
-    if (stInfo->parentName)
-        ret = cloneString(stInfo->parentName);
-    freeMem(stInfo);
-    }
-return ret;
-}
-
-void trackDbSuperMemberSettings(struct trackDb *tdb)
-/* Set fields in trackDb to indicate this is a member of a
- * supertrack. */
-{
-struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
-if (stInfo == NULL || stInfo->isSuper)
-    return;
-tdb->parentName = cloneString(stInfo->parentName);
-tdb->visibility = stInfo->defaultVis;
-tdbMarkAsSuperTrackChild(tdb);
-if (tdb->parent)
-    {
-    tdbMarkAsSuperTrack(tdb->parent);
-    }
-freeMem(stInfo);
-}
-
 char *maybeSkipHubPrefix(char *track)
 {
 if (!startsWith("hub_", track))
@@ -616,40 +546,53 @@ void trackDbSuperMarkup(struct trackDb *tdbList)
 {
 struct trackDb *tdb;
 struct hash *superHash = hashNew(0);
-struct superTrackInfo *stInfo;
+char *setting = NULL;
+char *words[3];
+int wordCt = 0;
 
 /* find supertracks, setup their settings */
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    stInfo = getSuperTrackInfo(tdb);
-    if (!stInfo)
+    setting = trackDbLocalSetting(tdb, "superTrack");
+    if (!setting)
         continue;
-    if (stInfo->isSuper)
+    wordCt = chopLine(cloneString(setting), words);
+    if (sameWord("on", words[0]))
         {
-        tdbMarkAsSuperTrack(tdb);
-        tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->track))
+            {
             hashAdd(superHash, maybeSkipHubPrefix(tdb->track), tdb);
+            tdbMarkAsSuperTrack(tdb);
+            if ((wordCt > 1) && sameString("show", words[1]))
+                tdb->isShow = TRUE;
+            }
         }
-    freeMem(stInfo);
+    freeMem(words[0]);
     }
 /* adjust settings on supertrack members after verifying they have
  * a supertrack configured in this trackDb */
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    stInfo = getSuperTrackInfo(tdb);
-    if (!stInfo)
+    if (tdbIsSuperTrack(tdb) || tdb->parent != NULL)
         continue;
-    if (!stInfo->isSuper)
+    setting = trackDbLocalSetting(tdb, "parent");
+    if (!setting)
+        setting = trackDbLocalSetting(tdb, "superTrack");  // Old style
+    if (!setting)
+        continue;
+    wordCt = chopLine(cloneString(setting), words);
+    assert(differentString("on", words[0])); // already weeded out "superTrack on"
+    tdb->parent = hashFindVal(superHash, words[0]);
+    if (tdb->parent)
         {
-        tdb->parent = hashFindVal(superHash, stInfo->parentName);
-        if (tdb->parent)
-	    {
-            trackDbSuperMemberSettings(tdb);
-	    }
+        tdbMarkAsSuperTrackChild(tdb);
+        tdb->parentName = cloneString(words[0]);
+        if (wordCt > 1)
+            tdb->visibility = max(0, hTvFromStringNoAbort(words[1]));
         }
-    freeMem(stInfo);
+    freeMem(words[0]);
     }
+hashFree(&superHash);
 }
 
 char *trackDbOrigAssembly(struct trackDb *tdb)
@@ -712,7 +655,7 @@ else if (startsWithWord("genePred",type)
 else if (sameWord("bedLogR",type)
      ||  sameWord("peptideMapping", type))
     cType = cfgBedScore;
-else if (startsWith("bed ", type) || startsWith("bigBed", type))
+else if (startsWith("bed ", type) || startsWith("bigBed", type) || startsWith("bedDetail", type))
     {
     if (trackDbSetting(tdb, "bedFilter") != NULL)
         cType = cfgBedFilt;
@@ -751,7 +694,7 @@ else if (sameWord("vcfTabix",type))
 
 if (cType == cfgNone && warnIfNecessary)
     {
-    if (!startsWith("bed ", type) && !startsWith("bigBed", type) && !startsWith("gvf", type)
+    if (!startsWith("bed ", type) && !startsWith("bedDetail", type) && !startsWith("bigBed", type) && !startsWith("gvf", type)
         && subgroupFind(tdb, "view", NULL))
         warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->track);
     }
@@ -978,13 +921,14 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
     char *subtrackSetting = trackDbLocalSetting(tdb, "parent");
-    if (subtrackSetting != NULL)
+    if (subtrackSetting != NULL
+    && !tdbIsSuperTrackChild(tdb)) // superChildren cannot be in both subtracks list AND tdbList
         {
 	char *parentName = cloneFirstWord(subtrackSetting);
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
 	    {
-	    slAddHead(&parent->subtracks, tdb);
+	    slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
 	    tdb->parent = parent;
 	    }
 	else

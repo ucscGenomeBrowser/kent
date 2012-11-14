@@ -320,3 +320,7 @@
 
 12.14   Fixed paraNode to correctly enforce memory use limits via RLIMIT_AS and RLIMIT_DATA instead of RLIMIT_CORE.
 
+12.15   Just a quick bugfix for default rlimit value.  Added commands to para to change ram and cpu after batch created.
+        Added commandline parameters to paraHub for ramUnit size and defaultJobRam for default job size.
+
+12.16   Fixed bug in planner where r and c parameters were reversed which means the ramUnit option to paraHub now works.

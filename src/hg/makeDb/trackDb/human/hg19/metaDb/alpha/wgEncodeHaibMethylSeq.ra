@@ -939,6 +939,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL605
 md5sum 5b9b40d1211bfc23bd795ba4c5c7c049
+objStatus revoked - corrupted file
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -2220,4 +2221,4 @@ subId 1247
 tableName wgEncodeHaibMethylSeqK562RegionsRep2
 view Regions
 
-# MAGIC: -1059589609
+# MAGIC: 577839799

@@ -9,7 +9,7 @@ longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 H1=H1-hESC HEPG2=HepG2 HMEC=HMEC HSMM=HSMM HUVEC=HUVEC K562=K562 NHEK=NHEK NHLF=NHLF
-subGroup3 factor Antibody CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Input_Control
+subGroup3 factor Antibody CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2=Pol2 zCTRL=Input_Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -431,9 +431,9 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeBroadChipSeqPeaksHuvecPol2b
         subTrack wgEncodeBroadChipSeqViewPeaks off
-        shortLabel HUVEC Pol2(b) P
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), HUVEC)
-        subGroups view=Peaks factor=Pol2b cellType=HUVEC
+        shortLabel HUVEC Pol2 P
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2, HUVEC)
+        subGroups view=Peaks factor=Pol2 cellType=HUVEC
         type broadPeak
         color 224,75,0
 
@@ -519,9 +519,9 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeBroadChipSeqPeaksK562Pol2b
         subTrack wgEncodeBroadChipSeqViewPeaks off
-        shortLabel K562 Pol2(b) P
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), K562)
-        subGroups view=Peaks factor=Pol2b cellType=K562
+        shortLabel K562 Pol2 P
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2, K562)
+        subGroups view=Peaks factor=Pol2 cellType=K562
         type broadPeak
         color 46,0,184
 
@@ -607,9 +607,9 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeBroadChipSeqPeaksNhekPol2b
         subTrack wgEncodeBroadChipSeqViewPeaks off
-        shortLabel NHEK Pol2(b) P
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), NHEK)
-        subGroups view=Peaks factor=Pol2b cellType=NHEK
+        shortLabel NHEK Pol2 P
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2, NHEK)
+        subGroups view=Peaks factor=Pol2 cellType=NHEK
         type broadPeak
         color 179,0,134
 
@@ -1127,9 +1127,9 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeBroadChipSeqSignalHuvecPol2b
         subTrack wgEncodeBroadChipSeqViewSignal off
-        shortLabel HUVEC Pol2(b) S
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), HUVEC)
-        subGroups view=Signal factor=Pol2b cellType=HUVEC
+        shortLabel HUVEC Pol2 S
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2, HUVEC)
+        subGroups view=Signal factor=Pol2 cellType=HUVEC
         type wig 0.00 8889.75
         color 224,75,0
 
@@ -1223,9 +1223,9 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeBroadChipSeqSignalK562Pol2b
         subTrack wgEncodeBroadChipSeqViewSignal off
-        shortLabel K562 Pol2(b) S
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), K562)
-        subGroups view=Signal factor=Pol2b cellType=K562
+        shortLabel K562 Pol2 S
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2, K562)
+        subGroups view=Signal factor=Pol2 cellType=K562
         type wig 0.00 17110.00
         color 46,0,184
 
@@ -1319,9 +1319,9 @@ dataVersion through the ENCODE Jan 2010 Freeze
 
         track wgEncodeBroadChipSeqSignalNhekPol2b
         subTrack wgEncodeBroadChipSeqViewSignal off
-        shortLabel NHEK Pol2(b) S
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), NHEK)
-        subGroups view=Signal factor=Pol2b cellType=NHEK
+        shortLabel NHEK Pol2 S
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2, NHEK)
+        subGroups view=Signal factor=Pol2 cellType=NHEK
         type wig 0.00 5604.25
         color 179,0,134
 

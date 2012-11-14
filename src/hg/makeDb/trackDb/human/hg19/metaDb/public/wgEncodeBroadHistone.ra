@@ -7691,6 +7691,7 @@ dateUnrestricted 2011-08-05
 dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadHistoneGm12878H3k04me1StdPkV2.broadPeak.gz
+geoSampleAccession GSM733772
 grant Bernstein
 lab Broad
 md5sum 34adb845d790386f518dd0f7bf3dc69f
@@ -7718,6 +7719,7 @@ dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadHistoneGm12878H3k04me1StdRawDataRep1V2.fastq.gz
+geoSampleAccession GSM733772
 grant Bernstein
 lab Broad
 md5sum c1e2c4a2ad1db7ed52cafa736d55b55e
@@ -7745,6 +7747,7 @@ dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
 expId 33
 fileName wgEncodeBroadHistoneGm12878H3k04me1StdSigV2.bigWig
+geoSampleAccession GSM733772
 grant Bernstein
 lab Broad
 md5sum b16abc080d5ac228e63aaae8b5b23d5d
@@ -7771,6 +7774,7 @@ dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadHistoneGm12878H3k04me3StdAlnRep2V2.bam,wgEncodeBroadHistoneGm12878H3k04me3StdAlnRep2V2.bam.bai
+geoSampleAccession GSM733708
 grant Bernstein
 lab Broad
 md5sum feff6d4ef1504ac76f754c515ba44bc1,1bbb2d3986545f79fadcd4c5c7784e46
@@ -7797,6 +7801,7 @@ dateUnrestricted 2011-08-05
 dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadHistoneGm12878H3k04me3StdPkV2.broadPeak.gz
+geoSampleAccession GSM733708
 grant Bernstein
 lab Broad
 md5sum 8c6914d0d444aeffe483fcae3897cace
@@ -7824,6 +7829,7 @@ dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadHistoneGm12878H3k04me3StdRawDataRep2V2.fastq.gz
+geoSampleAccession GSM733708
 grant Bernstein
 lab Broad
 md5sum 0cc8afc706d8d4472f5fcd495579dbd4
@@ -7851,6 +7857,7 @@ dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
 expId 28
 fileName wgEncodeBroadHistoneGm12878H3k04me3StdSigV2.bigWig
+geoSampleAccession GSM733708
 grant Bernstein
 lab Broad
 md5sum 0c9fc6c576454b0cdda175b393308ae8
@@ -8152,6 +8159,7 @@ dateUnrestricted 2011-08-05
 dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdPkV2.broadPeak.gz
+geoSampleAccession GSM733758
 grant Bernstein
 lab Broad
 md5sum 6f044a3e75bc50d3e25a0a21f5767dc8
@@ -8233,6 +8241,7 @@ dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdRawDataRep3V2.fastq.gz
+geoSampleAccession GSM733758
 grant Bernstein
 lab Broad
 md5sum 0bf4fe41d224f74b53bab1539d611419
@@ -8287,6 +8296,7 @@ dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
 expId 31
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdSigV2.bigWig
+geoSampleAccession GSM733758
 grant Bernstein
 lab Broad
 md5sum d7d3fb6cf86f55982278e0265e588c46
@@ -47617,4 +47627,4 @@ tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 treatment None
 view Signal
 
-# MAGIC: 2075080531
+# MAGIC: -1197632601

@@ -1,4 +1,7 @@
 
+track quality override
+type wig 0 50
+
 track multiz8way
 shortLabel Conservation
 longLabel 8 Species Multiz Alignment & Conservation 

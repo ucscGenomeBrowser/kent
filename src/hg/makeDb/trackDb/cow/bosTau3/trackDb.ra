@@ -2,6 +2,9 @@
 
 include trackDb.chainNet.ra
 
+track quality override
+type wig 0 99
+
 track scaffold
 shortLabel Scaffolds
 longLabel Assembly Scaffolds

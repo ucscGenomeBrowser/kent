@@ -1061,11 +1061,14 @@ md5sum $tDb.$qDb.all.chain.gz $net > md5sum.txt
 _EOF_
   );
   if (! $isSelf) {
+    my $axt = ($splitRef ?
+	       "md5sum axtNet/*.gz >> axtChain/md5sum.txt" :
+	       "cd axtNet\nmd5sum *.gz >> ../axtChain/md5sum.txt");
     $bossScript->add(<<_EOF_
 rm -f $liftOverDir/$over
 cp -p $altOver $liftOverDir/$over
 cd ..
-md5sum axtNet/*.gz >> axtChain/md5sum.txt
+$axt
 _EOF_
     );
   }
@@ -1152,7 +1155,7 @@ overlapping by " . &commafy($defVars{SEQ1_LAP}) . " bases for alignment.";
 by " . &commafy($defVars{SEQ1_LAP}) . " bases for alignment.  " .
 "A similar process was followed for $qDb,
 with chunks of " . &commafy($chunkPlusLap2) . " overlapping by " .
-&commafy($defVars{SEQ2_LAP}) . ".)";
+&commafy($defVars{SEQ2_LAP}) . ".";
   }
   $lap .= "  Following alignment, the
 coordinates of the chunk alignments were corrected by the
@@ -1191,13 +1194,18 @@ Penn State.";
     }
   }
   my $desc = $isSelf ? 
-"This directory contains alignments of $tGenome ($tDb, $tDate,
-$tSource) to itself." :
+"This directory contains alignments of
+    $tGenome ($tDb, $tDate,
+    $tSource) to itself." :
 "This directory contains alignments of the following assemblies:
 
-  - target/reference: $tGenome ($tDb, $tDate, $tSource)
+  - target/reference: $tGenome
+    ($tDb, $tDate,
+    $tSource)
 
-  - query: $qGenome ($qDb, $qDate, $qSource)";
+  - query: $qGenome
+    ($qDb, $qDate,
+    $qSource)";
 
   print $fh "$desc
 
@@ -1304,7 +1312,7 @@ All files in this directory are freely available for public use.
 References
 
 Chiaromonte F, Yap VB, Miller W. Scoring pairwise genomic sequence
-alignments. Pac Symp Biocomput.  2002;:115-26.
+alignments. Pac Symp Biocomput.  2002:115-26.
 
 Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
 Evolution's cauldron: Duplication, deletion, and rearrangement in the

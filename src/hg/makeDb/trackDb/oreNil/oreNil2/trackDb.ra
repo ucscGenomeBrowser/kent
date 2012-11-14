@@ -9,6 +9,9 @@ html gap
 
 track chainNetMm10 override
 visibility pack
+chainMinScore 5000
+chainLinearGap loose
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
 track genscan override
 visibility pack

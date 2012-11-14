@@ -1,4 +1,7 @@
 
+track quality override
+type wig 0 68
+
 track ctgPos2
 shortLabel Scaffolds
 longLabel Assembly Scaffolds

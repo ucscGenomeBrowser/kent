@@ -6,7 +6,8 @@ if ("$HOST" != "hgwbeta") then
  exit 1
 endif
 
-# build 64 and 32 bit userApps and push it to hgdownload
+#9403# # build 64 and 32 bit userApps and push it to hgdownload
+# build 64 bit userApps and push it to hgdownload
 
 set ScriptStart=`date`
 echo
@@ -20,16 +21,16 @@ endif
 echo "Build 64-BIT userApps complete  [${0}: START=${ScriptStart} END=`date`]"
 
 
-set ScriptStart=`date`
-echo
-echo  "NOW STARTING 32-BIT userApps BUILD ON $BOX32 [${0}: `date`]"
-echo
-ssh -n $BOX32 $WEEKLYBLD/makeUserApps.csh
-if ( $status ) then
-    echo "build 32-BIT userApps on $BOX32 failed"
-    exit 1
-endif
-echo "Build 32-BIT userApps complete  [${0}: START=${ScriptStart} END=`date`]"
+#9403# set ScriptStart=`date`
+#9403# echo
+#9403# echo  "NOW STARTING 32-BIT userApps BUILD ON $BOX32 [${0}: `date`]"
+#9403# echo
+#9403# ssh -n $BOX32 $WEEKLYBLD/makeUserApps.csh
+#9403# if ( $status ) then
+#9403#     echo "build 32-BIT userApps on $BOX32 failed"
+#9403#     exit 1
+#9403# endif
+#9403# echo "Build 32-BIT userApps complete  [${0}: START=${ScriptStart} END=`date`]"
 
 
 echo

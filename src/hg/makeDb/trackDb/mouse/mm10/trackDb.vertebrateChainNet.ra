@@ -187,13 +187,12 @@ html vertebrateChainNet
         type chain oryLat2
         otherDb oryLat2
 
-        track chainPetMar1
-        subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=tLamprey clade=fPetro
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain petMar1
-        otherDb petMar1
+# changes to perMar[12] here need to also correspond to
+# the same tags in ../../trackDb.chainNet.ra 
+
+include chain.petMar1.ra beta,public
+
+include chain.petMar2.ra alpha
 
     track vertebrateChainNetViewnet
     shortLabel Nets
@@ -361,10 +360,9 @@ html vertebrateChainNet
         type netAlign oryLat2 chainOryLat2
         otherDb oryLat2
 
-        track netPetMar1
-        subTrack vertebrateChainNetViewnet on
-        subGroups view=net species=tLamprey clade=fPetro
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign petMar1 chainPetMar1
-        otherDb petMar1
+# changes to perMar[12] here need to also correspond to
+# the same tags in ../../trackDb.chainNet.ra 
+
+include net.petMar1.ra beta,public
+
+include net.petMar2.ra alpha

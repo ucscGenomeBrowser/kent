@@ -16,7 +16,7 @@ LASTNN=$((BRANCHNN - 1))
 echo "To those who need reminding..."
 echo ""
 echo "v${BRANCHNN} has been built successfully on beta."
-echo "If you have checked in changes that will affect this release, it is time to do your code summaries. They are due to Donna by 5pm tomorrow."
+echo "If you have checked in changes that will affect this release, it is time to do your code summaries. They are due to Ann by 5pm tomorrow."
 echo ""
 echo "The end of this message contains the log of all your changes for this build."
 echo ""

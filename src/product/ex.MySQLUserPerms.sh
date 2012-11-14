@@ -52,11 +52,13 @@ fi
 #	When new databases are added, this would need to be repeated.
 #	The alternative would be to open up access to all databases *.*
 #	The permissions here are also limited to localhost only.
+#    MySQL version 5.5 requires the LOCK TABLES permission here
+#    CREATE, DROP, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES on ${DB}.*
 #
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    ${MYSQL} -e "GRANT SELECT, INSERT, UPDATE, \
-	DELETE, CREATE, DROP, ALTER on ${DB}.* TO browser@localhost \
+    ${MYSQL} -e "GRANT SELECT, INSERT, UPDATE, DELETE, FILE, \
+	CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on ${DB}.* TO browser@localhost \
 	IDENTIFIED BY 'genome';" mysql
 done
 # FILE permission for this user to all databases to allow DB table loading with

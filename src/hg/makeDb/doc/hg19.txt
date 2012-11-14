@@ -18840,8 +18840,9 @@ TMPDIR=/scratch/tmp
 
 
 ##############################################################################
-# DBSNP B137 / SNP137 (DONE 9/10/12)
-# Originally done 7/11/12; updated w/corrections from dbSNP 9/10/12 -- see below, #8360 note 36
+# DBSNP B137 / SNP137 (DONE 11/9/12)
+# Originally done 7/11/12; updated w/corrections from dbSNP 9/10/12, 10/10, 11/9/12
+# -- see comments below and #8360 note 36, 42, 45
 # Redmine #8360
     mkdir -p /hive/data/outside/dbSNP/137/human
     cd /hive/data/outside/dbSNP/137/human
@@ -18895,12 +18896,91 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue load \
       >>& do.log & tail -f do.log
 
-    # 9/10/12: update w/corrections from dbSNP:
+    # 9/10/12, 10/10/12, 11/9/12: updates w/corrections from dbSNP.
+    # The 9/10 update included SNPContigLoc with some corrected mappings -- and some
+    # dropped mappings!
+    # All 3 updates included new SNPContigLocusId (func predictions).
+    # So, last time I'm doing this for snp137 -- new SNPContigLocusId, and
+    # new SNPContigLoc with dropped lines added back in from original SNPContigLoc.
     cd /hive/data/outside/dbSNP/137/human/data
+    # 9/10:
     mv b137_SNPContigLoc.bcp.gz b137_SNPContigLoc.orig.bcp.gz
     mv b137_SNPContigLocusId.bcp.gz b137_SNPContigLocusId.orig.bcp.gz
     wget ftp://ftp.ncbi.nih.gov/snp/temp/post_b137_fix_preview/b137_SNPContigLoc.bcp.gz
     wget ftp://ftp.ncbi.nih.gov/snp/temp/post_b137_fix_preview/b137_SNPContigLocusId.bcp.gz
+    # 10/10:
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/post_b137_fix_preview/b137_SNPContigLocusId_before_QA.bcp
+    mv b137_SNPContigLocusId.bcp.gz b137_SNPContigLocusId.120910.bcp.gz
+    gzip b137_SNPContigLocusId_before_QA.bcp
+    ln -s b137_SNPContigLocusId.bcp.gz b137_SNPContigLocusId_before_QA.bcp.gz
+    # 11/9:
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/post_b137_fix_preview/2012_nov_08_preview/b137_SNPContigLocusId.bcp.gz
+    mv b137_SNPContigLocusId.bcp.gz b137_SNPContigLocusId.121108.bcp.gz
+    ln -s b137_SNPContigLocusId.121108.bcp.gz b137_SNPContigLocusId.bcp.gz
+    # No update to SNPContigLoc, which in the Sep. update dropped some mappings
+    # from the original.  Add the dropped mappings back:
+    cd /hive/data/outside/dbSNP/137/human/data
+    cat > combineContigLoc.pl <<EOF
+#!/usr/bin/env perl
+# The latest b137_SNPContigLoc.bcp.gz contains some corrected mappings -
+# but it is also missing some mappings that it should have!
+# So step through the numerically sorted (by {snp_id, ctg_id, asn_from})
+# new and old files; if the old file has something that the new file does not,
+# add it back in.
+
+use warnings;
+use strict;
+
+open(my $fNew, "zcat b137_SNPContigLoc.bcp.gz |") || die "$!";
+open(my $fOld, "zcat b137_SNPContigLoc.orig.bcp.gz |") || die "$!";
+open(my $fOut, "| gzip -c > b137_SNPContigLoc.merged.bcp.gz") || die "$!";
+
+sub cmpLocs {
+  my ($newRef, $oldRef) = @_;
+  if (!defined $newRef->[1] || !defined $oldRef->[1]) {
+    die;
+  }
+  my $diff = $newRef->[1] <=> $oldRef->[1];
+  return $diff unless ($diff == 0);
+  $diff = $newRef->[2] <=> $oldRef->[2];
+  return $diff unless ($diff == 0);
+  $diff = $newRef->[3] <=> $oldRef->[3];
+  return $diff;
+}
+
+my @old = split("\t", <$fOld>);
+
+while (<$fNew>) {
+  my @new = split("\t");
+  if (defined $old[1]) {
+    my $diff = &cmpLocs(\@new, \@old);
+    while ($diff > 0) {
+      # old file's line is missing from the new file -- print old line & get next old line
+      print $fOut join("\t", @old);
+      my $nextOld = <$fOld>;
+      @old = split("\t", $nextOld);
+      last if (! defined $old[1]);
+      $diff = &cmpLocs(\@new, \@old);
+    }
+    if ($diff == 0) {
+      # same line in new and old -- advance to next line from old file
+      @old = split("\t", <$fOld>);
+    }
+  }
+  # always print line from new file.
+  print $fOut join("\t", @new);
+}
+if (defined $old[1]) {
+  print $fOut join("\t", @old);
+  while (<$fOld>) {
+    print $fOut $_;
+  }
+}
+EOF
+    chmod a+x combineContigLoc.pl
+    ./combineContigLoc.pl
+
+    # Redo the parts of the doDbSnp.pl process that depend on SNPContigLoc and SNPContigLocusId:
     hgsql hg19snp137 -e 'drop table b137_SNPContigLoc; drop table b137_SNPContigLocusId;'
     hgsql hg19snp137 < schema/SNPContigLocs.sql
     # Relevant subset of loadDbSnp.csh:
@@ -18917,7 +18997,7 @@ EOF
     hgsql hg19snp137 -e 'alter table b137_SNPContigLocusId add index (ctg_id);'
     zcat /hive/data/outside/dbSNP/137/human/data/b137_ContigInfo.bcp.gz | egrep -vw '(HuRef|CRA_TCAGchr7v2)' \
     | cut -f 1 | sort -n > b137_ContigInfo.ctg_id.txt
-    zcat /hive/data/outside/dbSNP/137/human/data/b137_SNPContigLoc.bcp.gz \
+    zcat /hive/data/outside/dbSNP/137/human/data/b137_SNPContigLoc.merged.bcp.gz \
     | grep -Fwf b137_ContigInfo.ctg_id.txt \
     | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
       > tmp.tab
@@ -18937,8 +19017,8 @@ EOF
 
 
 #############################################################################
-# FILTER SNP137 (DONE 9/11/12 angie)
-# Originally done 7/11/12; updated 9/11/12 -- see SNP137 above
+# FILTER SNP137 (DONE 11/10/12 angie)
+# Originally done 7/11/12; updated 9/11/12, 10/15/12, 11/9/12 -- see SNP137 above
     # Redmine #8360
     # Make several tracks that are filtered subsets of snp137:
     # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp137Mult
@@ -18983,10 +19063,10 @@ EOF
        close($mult);  close($common); close($flagged);  close($misc); \
        print "snp137Mult:    $multCount\nsnp137Common:  $comCount\nsnp137Flagged: $flagCount\n" . \
              "leftover:      $miscCount\n";'
-#snp137Mult:    3540399
-#snp137Common:  13893708
-#snp137Flagged: 42211
-#leftover:      38680449
+#snp137Mult:    3633662
+#snp137Common:  13894623
+#snp137Flagged: 42733
+#leftover:      38677681
 
     # Load tables
     foreach subset (Mult Common Flagged)
@@ -19140,11 +19220,13 @@ EOF
 
 
 ############################################################################
-# DBSNP CODING ANNOTATIONS (137) (DONE 9/11/12 angie)
+# DBSNP CODING ANNOTATIONS (137) (DONE 11/10/12 angie)
 # Originally done 7/11/12 but code 43 (stop-loss) was omitted, and filtering out
 # NULL frame caused us to lose 45 (cds-indel) too.
 # Updated 7/30/12 with corrections for that issue.
 # Updated 9/11/12 with extensive corrections from dbSNP (see SNP137 above, #8360 note 36)
+# Updated 10/15/12 w/more corrections (see SNP137 above, #8360 note 42)
+# Updated 11/9/12 w/more corrections (see SNP137 above, #8360 note 45)
     cd /hive/data/outside/dbSNP/137/human
     # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
     # For anything except an insertion (0 bases between flanks),
@@ -19173,20 +19255,21 @@ EOF
     | uniq \
       > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
-#4869082 ncbiCodingAnnotations.txt
+#3873975 ncbiCodingAnnotations.txt
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
-# 716393 3   (coding-synon)
-#2782782 8   (cds-reference -- ignored)
-# 41064 41  (nonsense)
-#1282302 42  (missense)
-#   1308 43  (stop-loss)
-#  42024 44  (frameshift)
-#   3209 45  (cds-indel)
-    # Lots more 8's (reference) than b135 -- now including non-coding (frame = NULL),
+# 681327 3   (coding-synon)
+#1917237 8   (cds-reference -- ignored)
+#  35591 41  (nonsense)
+#1190533 42  (missense)
+#   1153 43  (stop-loss)
+#  41695 44  (frameshift)
+#   6439 45  (cds-indel)
+    # In b137, the functional annotations include non-coding (frame = NULL),
     # which we'll exclude here because this is supposed to be just coding stuff...
-    # probably need to update how we show dbSNP's func annos anyway.
+    # probably need to update how we show dbSNP's func annos anyway, e.g.
+    # it is a shame that we toss out codon number and transcript offset.
     # Gather up multiple annotation lines into one line per {snp, gene, frame}:
     perl -e  'while (<>) { chomp; \
                 my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
@@ -19226,7 +19309,7 @@ EOF
     hgLoadBed hg19 snp137CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       snp137CodingDbSnp.bed
-#Read 1956591 elements of size 11 from snp137CodingDbSnp.bed
+#Read 1922594 elements of size 11 from snp137CodingDbSnp.bed
 
 
 ############################################################################
@@ -19369,6 +19452,32 @@ Old length: 136638
 Percent bed overlap with previous version: 100.00%
 Number of deleted IDs: 4
 Number of added IDs: 29530
+
+############################################################################
+# UPDATE COSMIC TRACK - v61 (DONE - 2012-11-09 - Hiram)
+
+time ~/kent/src/hg/utils/automation/loadCosmic.pl -dryRun hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v61_260912.csv.gz
+#       real    1m10.070s
+New length: 220318
+Old length: 166164
+Percent bed overlap with previous version: 100.00%
+Number of deleted IDs: 28
+Number of added IDs: 54182
+time ~/kent/src/hg/utils/automation/loadCosmic.pl hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v61_260912.csv.gz
+#       real    0m8.251so
+# Loading COSMIC v61
+# New length: 220318
+# Old length: 166164
+# Percent bed overlap with previous version: 100.00%
+# Number of deleted IDs: 28
+# Number of added IDs: 54182
+# Scanning through 1 files
+# Reading cosmic.bed
+# Read 220318 elements of size 4 from cosmic.bed
+# Sorted
+# Creating table definition for cosmic
+# Saving bed.tab
+# Loading hg19
 
 ############################################################################
 # lastz Medium Ground Finch geoFor1 (DONE - 2012-07-29 - Hiram)
@@ -20329,3 +20438,159 @@ hg19.hapLoc.bed >> altSequence.bed
 # chr1 chr10 chr11 chr12 chr13 chr15 chr16 chr17 chr18 chr19 chr2 chr20 chr21 chr22 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chrM chrM_rCRS chrX
 
 ##############################################################################
+# lastz Lamprey petMar2 (DONE - 2012-10-17 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S petMar2
+    mkdir /hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17
+    cd /hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17
+
+    cat << '_EOF_' > DEF
+# Human vs. Lamprey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Lamprey PetMar2
+SEQ2_DIR=/hive/data/genomes/petMar2/petMar2.2bit
+SEQ2_LEN=/hive/data/genomes/petMar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=60
+
+BASE=/hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #   real    76m34.446s
+
+    cat fb.hg19.chainPetMar2Link.txt
+    #   30305028 bases of 2897316137 (1.046%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzPetMar2.2012-10-17 lastz.petMar2
+
+    #	and for the swap
+    mkdir /hive/data/genomes/petMar2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/petMar2/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzPetMar2.2012-10-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    15m22.099s
+    cat  fb.petMar2.chainHg19Link.txt
+    #	21515660 bases of 647368134 (3.324%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar2/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# lastz White Rhino cerSim1 (DONE - 2012-10-17 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S cerSim1
+    mkdir /hive/data/genomes/hg19/bed/lastzCerSim1.2012-10-17
+    cd /hive/data/genomes/hg19/bed/lastzCerSim1.2012-10-17
+
+    cat << '_EOF_' > DEF
+# Human vs. White Rhino
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: White Rhino CerSim1
+SEQ2_DIR=/hive/data/genomes/cerSim1/cerSim1.2bit
+SEQ2_LEN=/hive/data/genomes/cerSim1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=60
+
+BASE=/hive/data/genomes/hg19/bed/lastzCerSim1.2012-10-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    1272m58.952s
+    #   problem in chaining chr19, running it manually on hgwdev:
+    cd /hive/data/genomes/hg19/bed/lastzCerSim1.2012-10-17/axtChain/run
+export maxMem=83886080
+ulimit -S -m $maxMem -v $maxMem
+ulimit -a
+time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
+    #   real    147m46.959s
+    # very impressive:
+    #   -rw-rw-r-- 1 707886253 Oct 18 13:03 hg19.2bit:chr19:.chain
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=chainMerge `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1 &
+    #   real    99m4.624s
+
+    cat fb.hg19.chainCerSim1Link.txt
+    #   1683424317 bases of 2897316137 (58.103%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzCerSim1.2012-10-17 lastz.cerSim1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzCerSim1.2012-10-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real     100m36s
+    cat  fb.cerSim1.chainHg19Link.txt
+    #	1637961407 bases of 2366858012 (69.204%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# construct liftOver to hg17 (DONE - 2012-11-08 - Hiram)
+    screen -S hg17	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/hg19/bed/blat.hg17.2012-11-08
+    cd /hive/data/genomes/hg19/bed/blat.hg17.2012-11-08
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/hg19/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev hg19 hg17 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/hg19/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev hg19 hg17 > do.log 2>&1
+    #	real    333m16.756s
+
+    # verify this file exists:
+    #	/gbdb/hg19/liftOver/hg19ToHg17.over.chain.gz
+    # and try out the conversion on genome-test from hg19 to hg17
+
+############################################################################

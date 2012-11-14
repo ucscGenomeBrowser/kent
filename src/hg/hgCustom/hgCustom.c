@@ -134,6 +134,8 @@ else
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1.7'>BED detail</A>,\n"
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/vcf.html'>VCF</A>,\n"
+  " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format13'>broadPeak</A>,\n"
+  " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format12'>narrowPeak</A>,\n"
   " or <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format2'>PSL</A>\n"
   " formats. To configure the display, set\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
@@ -1335,7 +1337,6 @@ int main(int argc, char *argv[])
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-setConnFailuresEnabled(FALSE); // try TRUE in next release v274
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

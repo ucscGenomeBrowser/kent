@@ -73,7 +73,7 @@ HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred \
 
 HG_HGWIGGLE_APP = hgWiggle
 
-BLAT_APPLIST = blat gfClient gfServer 
+HG_LOAD_APPLIST = hgGcPercent
 
 userApps: topLibs hgLib
 	@for P in ${UTILS_APPLIST}; do \
@@ -87,6 +87,9 @@ userApps: topLibs hgLib
 	done
 	@for P in ${HG_HGWIGGLE_APP}; do \
 	    ( cd hg/makeDb/hgLoadWiggle && echo hg/makeDb/hgLoadWiggle && ${MAKE} $${P} ) ; \
+	done
+	@for P in ${HG_LOAD_APPLIST}; do \
+	    ( cd hg/makeDb/$${P} && echo hg/makeDb/$${P} && ${MAKE} $${P} ) ; \
 	done
 	@for P in ${BLAT_APPLIST}; do \
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \

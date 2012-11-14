@@ -10,5 +10,6 @@ all:
 	cd makepgo && ${MAKE}
 	cd stToXao && ${MAKE}
 	cd ixIxx && ${MAKE}
+	cd trixSearch && ${MAKE}
 
 clean::

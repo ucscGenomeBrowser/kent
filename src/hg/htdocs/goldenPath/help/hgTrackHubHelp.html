@@ -490,22 +490,27 @@ have a 1:1 correspondence with the database names defined by the
 <HR>
 
 <p><B>Step 7. Create the trackDb.txt files</B><BR>
-The trackDb.txt file, which is based on the Genome Browser <em>.ra</em>
-format, is the most complicated of the text files in the
+The trackDb.txt file, which is based on the Genome Browser 
+.ra format, is the most complicated of the text files in the
 hub directory. It contains a stanza for each of the data files for the
 given assembly that defines display and configuration properties for the
 track. If the tracks are grouped into larger entities, such as 
 composite or super-tracks, the larger entities will have a stanza in the
 file as well.</p>
 
+<p>The <a href ="trackDb/trackDbHub.html">Track Database Definition Document</a>
+will help you understand how to create a trackDb.txt file. It goes into
+great detail about how to declare dataset display settings and values.
+</p>
+
 <P>At a minimum, each trackDb.txt file must contain at least five tags: </p>
 
 <BLOCKQUOTE><TT>
-<B>track</B> <em>track_name</em><BR>
-<B>bigDataUrl</B> <em>track_data_URL</em><BR>
-<B>shortLabel</B> <em>short_label</em><BR>
-<B>longLabel</B> <em>long_label</em><BR>
-<B>type</B> <em>track_type</em><BR>
+<A href="trackDb/trackDbHub.html#track"><B>track</B></A> <em>track_name</em><BR>
+<A href="trackDb/trackDbHub.html#bigDataUrl"><B>bigDataUrl</B></A> <em>track_data_URL</em><BR>
+<A href="trackDb/trackDbHub.html#shortLabel"><B>shortLabel</B></A> <em>short_label</em><BR>
+<A href="trackDb/trackDbHub.html#longLabel"><B>longLabel</B></A> <em>long_label</em><BR>
+<A href="trackDb/trackDbHub.html#type"><B>type</B></A> <em>track_type</em><BR>
 </TT></BLOCKQUOTE>
 
 <P><em>track</em> - the symbolic name of the track. The first character
@@ -565,11 +570,6 @@ on the title of the view drop-down), there is often another set of controls abov
 drop-downs (just under the 'Overall display mode'). This set of controls is not associated with a
 particular view and clashes with the view controls. It is recommended to remove the controls
 that are not associated with a particular view.</UL>
-
-<!-- Note/Question: This section could use some more work. Does anyone
-have detailed
-information about which trackDb settings are/aren't supported? -->
-
 
 <HR>
 

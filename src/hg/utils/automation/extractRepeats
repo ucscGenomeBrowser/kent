@@ -1,0 +1,73 @@
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+#	script: extractRepeats
+#		formerly known as: extractLinSpecReps
+#
+#	Reading the marked up .out files as marked by DateRepeats
+#	script which added some columns to the end of each line.
+#	The extra columns have one of the following four characters:
+#	? - 0 X
+#	So, for each line that matches "\s+[X0\?-]\s+$"
+#	(there happens to be white space at the ends of the line)
+#	These are the full marked up lines, extract the marks
+#	at the end of the line, examine them to see if they match
+#	the desired combination, and when matched, output the 
+#	line to stdout
+
+my $argc = @ARGV;
+
+if ( $argc != 2 ) {
+    print "usage: $0 exclude-column marked.out.file > file.out.spec\n";
+    print "            where exclude-column is 1, 2 ... N\n";
+    print "               corresponding to column produced by DateRepeats\n";
+    exit 0;
+}
+
+my $column = $ARGV[0];
+my $file = $ARGV[1];
+
+die "column must be > 1" if ($column < 1);
+
+open (FILE, $file) || die "can't open file $file\n";
+
+# read 2 header lines
+my $line = <FILE>;
+print $line;
+$line = <FILE>;
+print $line;
+
+# read data lines, printing only those with 0 in selected column
+#	An attempt was made to match the end of the line with a pattern
+#	that would capture the fields, but could not work out a pattern
+#	that would do the trick.  So, this brute force method, go to the
+#	end of the line, scan backwards until the "repeat number"
+#	column is found, then use that count of columns to determine
+#	which column is being examined.
+while ($line = <FILE>) {
+    chomp ($line);
+    my @fields = split('\s+',$line);
+    my $endField = scalar(@fields) - 1;
+    if ($endField > 10) {
+        my $i = $endField;
+        #	scan back as long as one of these single characters is matched
+        for ( ; $i > 10; --$i) {
+            if ($fields[$i] !~ m/^[X0\?-]$/) { last; }
+        }
+        my $compColumns = $endField - $i;
+        my $matchColumn = ($endField - $compColumns + 1) + ($column - 1);
+        if ($matchColumn > $endField)
+            {
+            printf STDERR
+                "ERROR: line $.: requested match column %d is past end of line\n",
+                    $column;
+            print STDERR "ERROR: there are only $compColumns to select from\n";
+            exit 255;
+            }
+        if ($fields[$matchColumn] eq "0") {
+            print "$line\n";
+        }
+    }
+}

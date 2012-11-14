@@ -56,7 +56,8 @@ word = nextWord(&line);
 if (word == NULL)
     errAbort("Expecting table name on same line as CREATE TABLE");
 dyStringPrintf(dy, "CREATE TABLE %s ", table);
-dyStringAppend(dy, line);
+if (line != NULL)
+    dyStringAppend(dy, line);
 dyStringAppendC(dy, '\n');
 while (lineFileNext(lf, &line, NULL))
     {

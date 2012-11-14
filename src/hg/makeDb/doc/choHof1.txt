@@ -222,6 +222,8 @@ choHof1.perChromTables = no
     # after setting genbank.mrna.xeno.load = no
     #   var/build/logs/2012.05.31-10:16:29.choHof1.initalign.log
     #   real    1472m49.406s
+    #   2012-10-10 - see if genbank.mrna.xeno.load = yes is now viable
+    #   real    1098m41.122s
 
     # load database when finished
     ssh hgwdev
@@ -229,6 +231,8 @@ choHof1.perChromTables = no
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad choHof1 &
     #	logFile: var/dbload/hgwdev/logs/2012.06.10-16:52:16.dbload.log
     #   real    10m9.448s
+    # Reloaded with genbank.mrna.xeno.load on Thu Oct 11 08:29:06 PDT 2012
+    #   real    48m53.920s
 
     # enable daily alignment and update of hgwdev (DONE - 2012-06-11 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank

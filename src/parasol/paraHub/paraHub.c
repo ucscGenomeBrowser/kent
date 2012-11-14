@@ -1,7 +1,7 @@
 /* paraHub - Parasol hub server.  This is the heart of the parasol system
  * and consists of several threads - sucketSucker, heartbeat, a collection
  * of spokes, as well as the main hub thread.  The system is synchronized
- * around a message queue.
+ * around a message queue that the hub reads and the other threads write.
  *
  * The purpose of socketSucker is to move messages from the UDP
  * socket, which has a limited queue size, to the message queue, which
@@ -11,16 +11,26 @@
  * delivering messages to multiple nodes simultaniously.  The heartbeat
  * daemon simply sits in a loop adding a heartbeat message to the message
  * queue every 15 seconds or so. The hub thead is responsible for
- * keeping track of everything. The hub thread puts jobs 
- * on the job list, moves machines from the busy list to the free list,  
- * and calls the 'runner' routines, and appends job results to results
- * files in batch directories.
+ * keeping track of everything. 
+ * 
+ * The hub keeps track of users, batches, jobs, and machines.  It tries
+ * to balance machine usage between users and between batches.  If a machine
+ * goes down it will restart the jobs the machine was running on other machines.
+ * When a job finishes it will add a line about the job to the results file
+ * associated with the batch.
  *
- * The runner routine looks to see if there is a free machine, a free spoke,
- * and a job to run.  If so it will send a message to the spoke telling
- * it to run the job on the machine,  and then move the job from the 'pending'
- * to the 'running' list,  the spoke from the freeSpoke to the busySpoke list, 
- * and the machine from the freeMachine to the busyMachine list.   This
+ * A fair bit of the hub's code is devoted to scheduling.  It does this by
+ * periodically "planning" what batches to associate with what machines.
+ * When a machine is free it will run the next job from one of it's batches.
+ * A number of events including a new batch of jobs, machines being added or
+ * removed, and so forth can make the system decide it needs to replan.  The
+ * replanning itself is done in the next heartbeat.
+ *
+ * When the plan is in place, the most common thing the system does is
+ * try to run the next job.  It keeps lists of free machines and free spokes,
+ * and for the most part just just takes the next machine, a job from one
+ * of the batches the machine is running, and the next free spoke, and sends
+ * a message to the machine via the spoke to run the job. This
  * indirection of starting jobs via a separate spoke process avoids the
  * hub daemon itself having to wait for a response from a compute node
  * over the network.
@@ -82,6 +92,8 @@ static struct optionSpec optionSpecs[] = {
     {"log", OPTION_STRING},
     {"debug", OPTION_BOOLEAN},
     {"noResume", OPTION_BOOLEAN},
+    {"ramUnit", OPTION_STRING},
+    {"defaultJobRam", OPTION_INT},
     {NULL, 0}
 };
 
@@ -130,6 +142,12 @@ errAbort("paraHub - parasol hub server version %s\n"
          "   -log=file  Log to file instead of syslog.\n"
          "   -debug  Don't daemonize\n"
 	 "   -noResume  Don't try to reconnect with jobs running on nodes.\n"
+         "   -ramUnit=N  Number of bytes of RAM in the base unit used by the jobs.\n"
+         "      Default is RAM on node divided by number of cpus on node.\n"
+         "      Shorthand expressions allow t,g,m,k for tera, giga, mega, kilo.\n"
+         "      e.g. 4g = 4 Gigabytes.\n"
+	 "   -defaultJobRam=N Number of ram units in a job has no specified ram usage.\n"
+	 "      Defaults to 1.\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
 	 );
@@ -177,7 +195,7 @@ struct rudp *rudpOut;	/* Our rUDP socket. */
 
 // TODO make commandline param options to override defaults for unit sizes?
 /*  using machines list spec info for defaults */
-int cpuUnit = 1;                   /* 1 CPU */
+int cpuUnit = 1;                   /* 1 CPU */  /* someday this could be float 0.5 */
 long long ramUnit = 512 * 1024 * 1024;  /* 500 MB */
 int defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
 int defaultJobRam = 1;        /* number of ramUnits in default job usage */
@@ -740,7 +758,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 		    //pmPrintf(pm, "preserving batch %s on machine %s", batch->name, mach->name);
 		    //pmSend(pm, rudpOut);
 		    }
-		allocateResourcesToMachine(mach, batch, user, &r, &c);
+		allocateResourcesToMachine(mach, batch, user, &c, &r);
 		}
 	    }
 
@@ -855,7 +873,7 @@ while(TRUE)
 	    //pmSend(pm, rudpOut);
 	    }
 
-	allocateResourcesToMachine(mach, batch, user, &r, &c);
+	allocateResourcesToMachine(mach, batch, user, &c, &r);
 
 	if (pm) 
 	    {
@@ -1910,11 +1928,20 @@ int oldRam = batch->ram;
 if (job->cpus) 
     batch->cpu = (job->cpus + 0.5) / cpuUnit;  /* rounding */
 else
+    {
+    /* if no cpus specified, use the default */
     batch->cpu = defaultJobCpu;
+    job->cpus = defaultJobCpu * cpuUnit;
+    }
 if (job->ram) 
-    batch->ram = (job->ram + (0.5*ramUnit)) / ramUnit;   /* rounding */
+    batch->ram = 1 + (job->ram - 1) / ramUnit;   /* any remainder will be rounded upwards
+        e.g.  1 to 1024m --> 1G but 1025m --> 2G if unit is 1G.   0m would just cause default ram usage. */
 else
+    {
+    /* if no ram size specified, use the default */
     batch->ram = defaultJobRam;
+    job->ram = defaultJobRam * ramUnit;
+    }
 
 if (oldCpu != batch->cpu || oldRam != batch->ram)
     {
@@ -2957,10 +2984,12 @@ while (lineFileRow(lf, row))
 	{
 	firstTime = FALSE;
 	cpuUnit = 1;       /* 1 CPU */
-	ramUnit = ((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
+	if (!optionExists("ramUnit"))
+    	    ramUnit = ((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
 	defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
 	/* number of ramUnits in default job usage, resolves to just 1 currently */
-	defaultJobRam = (((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus) / ramUnit;
+	if (!optionExists("defaultJobRam"))
+    	    defaultJobRam = (((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus) / ramUnit;
 	}
 
     int c = 0, r = 0;
@@ -3403,6 +3432,18 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
+if (optionExists("ramUnit"))
+    {
+    ramUnit = paraParseRam(optionVal("ramUnit", ""));
+    if (ramUnit == -1)
+	errAbort("Invalid RAM expression '%s' in '-ramUnit=' option", optionVal("ramUnit", ""));
+    }
+if (optionExists("defaultJobRam"))
+    {
+    defaultJobRam = optionInt("defaultJobRam", defaultJobRam);
+    if (defaultJobRam < 1)
+	errAbort("Invalid defaultJobRam specified in option -defaultJobRam=%d", defaultJobRam);
+    }
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);

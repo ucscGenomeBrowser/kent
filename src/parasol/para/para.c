@@ -150,6 +150,10 @@ errAbort(
   "   Set batch priority. Values explained under 'push' options above.\n"
   "para maxJob 999\n"
   "   Set batch maxJob. Values explained under 'push' options above.\n"
+  "para ram 999\n"
+  "   Set batch ram usage. Values explained under 'push' options above.\n"
+  "para cpu 999\n"
+  "   Set batch cpu usage. Values explained under 'push' options above.\n"
   "para resetCounts\n"
   "   Set batch done and crash counters to 0.\n"
   "para flushResults\n"
@@ -2007,6 +2011,37 @@ else
     return now - firstSub;
 }
 
+
+void paraRam(char *batch, char *val)
+/* set batch ram = val */
+{
+long long newRam = paraParseRam(val);
+if (newRam == -1)
+    usage();
+struct jobDb *db = readBatch(batch);
+struct job *job;
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    job->ramUsed = newRam;
+    }
+atomicWriteBatch(db, batch);
+}
+
+void paraCpu(char *batch, char *val)
+/* set batch cpu = val */
+{
+float newCpus = sqlFloat(val);
+if (newCpus < 0)
+    usage();
+struct jobDb *db = readBatch(batch);
+struct job *job;
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    job->cpusUsed = newCpus;
+    }
+atomicWriteBatch(db, batch);
+}
+
 void paraTimes(char *batch)
 /* Report times of run. */
 {
@@ -2286,6 +2321,18 @@ else if (sameWord(command, "maxJob") || sameWord(command, "maxNode"))
     if (sameWord(command, "maxNode"))
 	warn("maxNode deprecated, use maxJob");
     paraMaxJob(argv[2]);
+    }
+else if (sameWord(command, "ram"))
+    {
+    if (argc != 3)
+        usage();
+    paraRam(batch, argv[2]);
+    }
+else if (sameWord(command, "cpu"))
+    {
+    if (argc != 3)
+        usage();
+    paraCpu(batch, argv[2]);
     }
 else if (sameWord(command, "resetCounts"))
     {

@@ -6,6 +6,9 @@ chainMinScore 2000
 chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
+track chainNetGeoFor1 override
+priority 215.3
+
 track chainNetAnoCar2 override
 priority 220.3
 
@@ -153,6 +156,9 @@ shortLabel $o_db Chain/Net
 track chainNetTetNig1 override
 priority 640.3
 chainMinScore 1000
+
+track chainNetPetMar2 override
+priority 650.3
 
 track chainNetPetMar1 override
 priority 650.3

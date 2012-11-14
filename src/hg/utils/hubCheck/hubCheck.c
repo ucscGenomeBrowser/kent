@@ -82,6 +82,7 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 
+udcSetCacheTimeout(1);
 char *browserMachine = NULL;
 browserMachine = optionVal("clear", browserMachine) ;
 if (browserMachine != NULL)

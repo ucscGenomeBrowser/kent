@@ -62,7 +62,7 @@ return TRUE;
 
 static char *mixedCaseName(char *prefix, char *orig)
 /* Convert var_like_this or VAR_LIKE_THIS or even
- * var-like-this to varLikeThis. */
+ * var-like-this or var:likeThis to varLikeThis. */
 {
 char *mixed;
 char *d, *s = orig;

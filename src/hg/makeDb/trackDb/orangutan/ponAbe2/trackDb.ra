@@ -2,6 +2,9 @@
 track gold override
 longLabel Assembly from Contigs
 
+track quality override
+type wig 0 98
+
 track multiz8way
 shortLabel Conservation
 longLabel 8-Way Multiz Alignment & Conservation 

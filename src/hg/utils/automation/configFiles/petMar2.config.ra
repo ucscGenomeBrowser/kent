@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db petMar2
+clade vertebrate
+genomeCladePriority 130
+scientificName Petromyzon marinus
+commonName Lamprey
+assemblyDate Sep. 2010
+assemblyLabel GSC Washington University School of Medicine
+assemblyShortLabel WUGSC 7.0
+orderKey 4799
+mitoAcc NC_001626
+fastaFiles /hive/data/genomes/petMar2/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/petMar2/genbank/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir lamprey
+photoCreditURL http://epa.gov/greatlakes/images/index.htm
+photoCreditName Photo courtesy of U.S. Environmental Protection Agency
+ncbiGenomeId 287
+ncbiAssemblyId 171978
+ncbiAssemblyName Petromyzon_Marinus-7.0
+ncbiBioProject 12880
+genBankAccessionID GCA_000148955.1
+taxId 7757

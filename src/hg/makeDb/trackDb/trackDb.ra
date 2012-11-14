@@ -1952,6 +1952,14 @@ color 0,0,0
 useScore 1
 type bed 6 +
 
+searchTable ensemblGeneScaffold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex GS_[0-9]+(\.[0-9]+)?
+searchPriority 18
+
+
 track blatHg16KG
 shortLabel Human knownGene BLAT
 longLabel Human knownGene BLAT

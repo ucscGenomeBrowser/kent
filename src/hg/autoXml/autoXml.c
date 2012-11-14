@@ -182,7 +182,7 @@ for (el = elList; el != NULL; el = el->next)
 		char *quote = "\"";
 		if (sameString(att->type, "INT") || sameString(att->type, "FLOAT"))
 		    quote = "";
-	        fprintf(f, "    obj->%s = %s%s%s;\n", att->name, quote, att->usual, quote);
+	        fprintf(f, "    obj->%s = %s%s%s;\n", att->mixedCaseName, quote, att->usual, quote);
 		}
 	    }
 	fprintf(f, "    for (i=0; atts[i] != NULL; i += 2)\n");
@@ -193,11 +193,11 @@ for (el = elList; el != NULL; el = el->next)
 	    fprintf(f, "        %s (sameString(name, \"%s\"))\n",
 		    (first ? "if " : "else if"), att->name);
 	    if (sameWord(att->type, "INT"))
-		fprintf(f, "            obj->%s = atoi(val);\n", att->name);
+		fprintf(f, "            obj->%s = atoi(val);\n", att->mixedCaseName);
 	    else if (sameWord(att->type, "FLOAT"))
-		fprintf(f, "            obj->%s = atof(val);\n", att->name);
+		fprintf(f, "            obj->%s = atof(val);\n", att->mixedCaseName);
 	    else
-	        fprintf(f, "            obj->%s = cloneString(val);\n", att->name);
+	        fprintf(f, "            obj->%s = cloneString(val);\n", att->mixedCaseName);
 	    first = FALSE;
 	    }
 	if (picky)
@@ -216,7 +216,7 @@ for (el = elList; el != NULL; el = el->next)
 		    }
 		else
 		    {
-		    fprintf(f, "    if (obj->%s == NULL)\n", att->name);
+		    fprintf(f, "    if (obj->%s == NULL)\n", att->mixedCaseName);
 		    fprintf(f, "        xapError(xp, \"missing %s\");\n", att->name);
 		    }
 		}
@@ -386,7 +386,7 @@ for (el = elList; el != NULL; el = el->next)
 	 }
     for (att = el->attributes; att != NULL; att = att->next)
 	{
-	fprintf(f, "    %s%s;", cAttType(att->type), att->name);
+	fprintf(f, "    %s%s;", cAttType(att->type), att->mixedCaseName);
 	if (att->required)
 	    fprintf(f, "\t/* Required */");
 	else 
@@ -487,21 +487,21 @@ else
     for (att = el->attributes; att != NULL; att = att->next)
         {
 	if (att->required )
-	    fprintf(f, "fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
+	    fprintf(f, "fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->mixedCaseName);
 	else
 	    {
 	    if (sameString(att->type, "INT") || sameString(att->type, "FLOAT"))
 	        {
 		if (positiveOnly)
 		    {
-		    fprintf(f, "if (obj->%s >= 0)\n    ", att->name);
+		    fprintf(f, "if (obj->%s >= 0)\n    ", att->mixedCaseName);
 		    }
-	        fprintf(f, "fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
+	        fprintf(f, "fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->mixedCaseName);
 		}
 	    else
 		{
-		fprintf(f, "if (obj->%s != NULL)\n", att->name);
-		fprintf(f, "    fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
+		fprintf(f, "if (obj->%s != NULL)\n", att->mixedCaseName);
+		fprintf(f, "    fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->mixedCaseName);
 		}
 	    }
 	}
@@ -595,7 +595,7 @@ fprintf(f, "if (obj == NULL) return;\n");
 for (att = el->attributes; att != NULL; att = att->next)
     {
     if (!sameString(att->type, "INT") && !sameString(att->type, "FLOAT"))
-	fprintf(f, "freeMem(obj->%s);\n", att->name);
+	fprintf(f, "freeMem(obj->%s);\n", att->mixedCaseName);
     }
 if (el->textType != NULL)
     {

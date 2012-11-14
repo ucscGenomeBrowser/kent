@@ -74,7 +74,7 @@ conn = hAllocConn(db);
 peakType = encodePeakInferTypeFromTable(db, table, tdb->type);
 if (peakType == 0)
     errAbort("unrecognized peak type from table %s", tdb->table);
-genericHeader(tdb, NULL);  // genericClickHandlerPlus gets there first anyway and overrides this which is now moot.
+genericHeader(tdb, NULL);  // genericClickHandlerPlus gets there first anyway (maybe except for encodePeak custom tracks).
 sr = hOrderedRangeQuery(conn, table, chrom, start, end,
 			NULL, &rowOffset);
 while((row = sqlNextRow(sr)) != NULL)

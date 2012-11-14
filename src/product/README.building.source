@@ -33,7 +33,7 @@ Following the instructions in scripts/README
 	Other users do report successful operation on other systems.
 
         Depending upon what libraries you have installed locally, you may want
-        to  set one or more of these variables: USE_SSL, USE_BAM, USE_TABIX.
+        to set environment variables USE_SSL and/or USE_SAMTABIX.
 
 	See also:
 	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
@@ -93,6 +93,16 @@ Following the instructions in scripts/README
 	you will see an error message:
 	  No openssl available in netMustConnectHttps for <hostName> : <port>
         SSL is also useful for accessing bigWig and bigBed over HTTPS.
+
+4b. optional SAM/BAM and tabix (for VCF) support:
+	If you want to display BAM and VCF tracks, download and build samtabix
+	(a merge of Heng Li's samtools and tabix libraries):
+	https://github.com/AngieHinrichs/samtabix
+        Add the following environment variables to .bashrc or .tcshrc,
+	OR alternatively add these lines at the top of kent/src/inc/common.mk,
+	replacing "/path/to/samtabix" with your local samtabix directory:
+	  USE_SAMTABIX=1
+	  SAMTABIXDIR=/path/to/samtabix
 
 4.  In the source tree, perform the following:
 	$ cd kent/src
@@ -232,6 +242,18 @@ make: *** [aliType.o] Error 1
     or equivalent:
     export PNGLIB='-L/opt/local/lib -lpng'
 
+9. Build fails with complains about missing functions dlclose, dlopen:
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `add_plugin':
+  (.text+0x1ed): undefined reference to `dlclose'
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `mysql_client_plugin_deinit':
+  (.text+0x28b): undefined reference to `dlclose'
+  /usr/lib/x86_64-linux-gnu/libmysqlclient.a(client_plugin.c.o): In function `mysql_load_plugin_v':
+  (.text+0x51e): undefined reference to `dlopen'
+
+  To add the library that includes these functions, add '-ldl' to the
+  MYSQLLIBS string: MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -ldl -lz"
+
 ====================================================================
-This file last updated: 2011/04/01 09:05:00
+For more details see:
+http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=history;f=src/product/README.building.source
 ====================================================================

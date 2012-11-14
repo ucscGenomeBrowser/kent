@@ -1,6 +1,6 @@
 # chainNet tracks
 include trackDb.gliresChainNet.ra
-include trackDb.primatesChainNet.ra
+include trackDb.euarchontoglireChainNet.ra
 include trackDb.placentalsChainNet.ra
 include trackDb.vertebrateChainNet.ra
 include trackDb.previousVersionsChainNet.ra
@@ -49,3 +49,5 @@ color 20,20,170
 type bed 12
 
 include altSeqComposite1.ra
+
+include mm10Strains1Composite.ra

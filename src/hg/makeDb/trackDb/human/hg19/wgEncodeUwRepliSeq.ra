@@ -278,7 +278,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4866 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqHelasv3ValleysRep1
+        track wgEncodeUwRepliSeqHelas3ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel HeLa-S3 Vly 1
         longLabel HeLa-S3-Phase Repli-seq Valleys Rep 1 from ENCODE/UW
@@ -317,7 +317,7 @@ wgEncode 1
         origAssembly hg19
         # subId=5040 dateSubmitted=2011-11-01
 
-        track wgEncodeUwRepliSeqGm1281v3ValleysRep1
+        track wgEncodeUwRepliSeqGm12813ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel GM12813 Vly 1
         longLabel GM12813 Repli-seq Valleys Rep 1 from ENCODE/UW
@@ -363,7 +363,7 @@ wgEncode 1
         color 153,38,0
         # subId=4828 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqGm12878Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqGm12878S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel GM12878 S1 1
         longLabel GM12878 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -403,7 +403,7 @@ wgEncode 1
         color 153,38,0
         # subId=4828 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqK562Gv1PctSignalRep1
+        track wgEncodeUwRepliSeqK562G1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel K562 G1 1
         longLabel K562 G1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -423,7 +423,7 @@ wgEncode 1
         color 46,0,184
         # subId=4859 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqK56p2Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqK562S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel K562 S1 1
         longLabel K562 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -481,7 +481,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4858 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqImr90Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqImr90S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel IMR90 S1 1
         longLabel IMR90 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -535,7 +535,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4860 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqMcf7Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqMcf7S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel MCF-7 S1 1
         longLabel MCF-7 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -591,7 +591,7 @@ wgEncode 1
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqNhekSv1PctSignalRep1
+        track wgEncodeUwRepliSeqNhekS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel NHEK S1 1
         longLabel NHEK S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -651,7 +651,7 @@ wgEncode 1
         # subId=4862 dateSubmitted=2011-10-27
         # was wgEncodeUwRepliSeqSknshraG2PctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
-        track wgEncodeUwRepliSeqSknshSv1PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel SK-N-SH S1 1
         longLabel SK-N-SH S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -659,7 +659,7 @@ wgEncode 1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
-        # was wgEncodeUwRepliSeqSknshraSv1PctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
+        # was wgEncodeUwRepliSeqSknshraS1PctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
         track wgEncodeUwRepliSeqSknshS2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
@@ -709,7 +709,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4863 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqBjSv1PctSignalRep1
+        track wgEncodeUwRepliSeqBjS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S1 1
         longLabel BJ S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -763,7 +763,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4864 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqBjSv1PctSignalRep2
+        track wgEncodeUwRepliSeqBjS1PctSignalRep2
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S1 2
         longLabel BJ S1-Phase Repli-seq Percentage-normalized Signal Rep 2 from ENCODE/UW
@@ -817,7 +817,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4865 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqGm06990Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqGm06990S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM06990 S1 1
         longLabel GM06990 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -853,7 +853,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4865 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqGm1280p1G1bPctSignalRep1
+        track wgEncodeUwRepliSeqGm12801G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12801 G1b 1
         longLabel GM12801 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -871,7 +871,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4866 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqGm12801Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqGm12801S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12801 S1 1
         longLabel GM12801 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -927,7 +927,7 @@ wgEncode 1
         color 0,119,158
         # subId=4869 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqHelas3Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqHelas3S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HeLa-S3 S1 1
         longLabel HeLa-S3 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -937,7 +937,7 @@ wgEncode 1
         color 0,119,158
         # subId=4869 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqHelasp3S2PctSignalRep1
+        track wgEncodeUwRepliSeqHelas3S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HeLa-S3 S2 1
         longLabel HeLa-S3 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -987,7 +987,7 @@ wgEncode 1
         color 189,0,157
         # subId=4870 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqHepgp2Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqHepg2S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HepG2 S1 1
         longLabel HepG2 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -1047,7 +1047,7 @@ wgEncode 1
         color 224,75,0
         # subId=4871 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqHuvecSv1PctSignalRep1
+        track wgEncodeUwRepliSeqHuvecS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HUVEC S1 1
         longLabel HUVEC S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -1105,7 +1105,7 @@ wgEncode 1
         origAssembly hg19
         # subId=5040 dateSubmitted=2011-11-01
 
-        track wgEncodeUwRepliSeqBg02esSv1PctSignalRep1
+        track wgEncodeUwRepliSeqBg02esS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BG02ES S1 1
         longLabel BG02ES S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -1159,7 +1159,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4868 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqGm12813Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqGm12813S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12813 S1 1
         longLabel GM12813 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -1168,7 +1168,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4868 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqGm1281p3S2PctSignalRep1
+        track wgEncodeUwRepliSeqGm12813S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12813 S2 1
         longLabel GM12813 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
@@ -1213,7 +1213,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4867 dateSubmitted=2011-10-27
 
-        track wgEncodeUwRepliSeqGm1281p2Sv1PctSignalRep1
+        track wgEncodeUwRepliSeqGm12812S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12812 S1 1
         longLabel GM12812 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW

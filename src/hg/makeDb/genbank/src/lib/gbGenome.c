@@ -36,7 +36,8 @@ static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
 static char *panTroNames[] = {"Pan troglodytes", "Pan troglodytes troglodytes", 
                               "Pan troglodytes verus", NULL};
 static char *gorGorNames[] = {"Gorilla gorilla", "Gorilla gorilla gorilla", "Gorilla gorilla uellensis", "Gorilla gorilla diehli", "Gorilla gorilla graueri", "Gorilla berengi", NULL};
-static char *papHamNames[] = {"Papio hamadryas", "Papio hamadryas hamadryas", NULL};
+static char *papAnuNames[] = {"Papio anubis", "Papio hamadryas", "Papio hamadryas hamadryas", NULL};
+static char *papHamNames[] = {"Papio hamadryas", "Papio hamadryas hamadryas", "Papio anubis", NULL};
 static char *ponAbeNames[] = {"Pongo abelii", "Pongo pygmaeus",
 		"Pongo pygmaeus pygmaeus", "Pongo pygmaeus abelii", NULL};
 static char *rheMacNames[] = {"Macaca mulatta", NULL};
@@ -93,7 +94,7 @@ static char *susScrNames[] = {"Sus scrofa", "Sus scrofa coreanus", "Sus scrofa d
                               "Sus scrofa domestica", "Sus scrofa ussuricus", NULL};
 static char *ornAnaNames[] = {"Ornithorhynchus anatinus", NULL};
 static char *petMarNames[] = {"Petromyzon marinus", NULL};
-static char *braFloNames[] = {"Branchiostoma floridae", NULL};
+static char *braFloNames[] = {"Branchiostoma floridae", "Branchiostoma belcheri", "Branchiostoma belcheri tsingtauense", "Branchiostoma californiense", "Branchiostoma japonicum", "Branchiostoma lanceolatum", NULL};
 static char *priPacNames[] = {"Pristionchus pacificus", NULL};
 static char *aplCalNames[] = {"Aplysia californica", NULL};
 /* hypothetical ancestor, will never match native */
@@ -141,6 +142,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"sacCer", sacCerNames},
     {"panTro", panTroNames},
     {"gorGor", gorGorNames},
+    {"papAnu", papAnuNames},
     {"papHam", papHamNames},
     {"ponAbe", ponAbeNames},
     {"rheMac", rheMacNames},
