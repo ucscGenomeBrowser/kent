@@ -1791,34 +1791,33 @@ dyStringPrintf(query, "SELECT %s,%s", hti->startField, hti->endField);
 if (hti->nameField[0] != 0)
     dyStringPrintf(query, ",%s", hti->nameField);
 else
-    dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
+    dyStringAppend(query, ",0");
 // row[3] -> score or placeholder
 if (hti->scoreField[0] != 0)
     dyStringPrintf(query, ",%s", hti->scoreField);
 else
-    dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
+    dyStringAppend(query, ",0");
 // row[4] -> strand or placeholder
 if (hti->strandField[0] != 0)
     dyStringPrintf(query, ",%s", hti->strandField);
 else
-    dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
+    dyStringAppend(query, ",0");
 // row[5], row[6] -> cdsStart, cdsEnd or placeholders
 if (hti->cdsStartField[0] != 0)
     dyStringPrintf(query, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
 else
-    dyStringPrintf(query, ",%s,%s", hti->startField, hti->startField);  // keep the same #fields!
+    dyStringAppend(query, ",0,0");
 // row[7], row[8], row[9] -> count, starts, ends/sizes or empty.
 if (hti->startsField[0] != 0)
     dyStringPrintf(query, ",%s,%s,%s", hti->countField, hti->startsField,
 		   hti->endsSizesField);
 else
-    dyStringPrintf(query, ",%s,%s,%s", hti->startField, hti->startField,
-		   hti->startField);  // keep same #fields!
+    dyStringAppend(query, ",0,0,0");
 // row[10] -> tSize for PSL '-' strand coord-swizzling only:
 if (sameString("tStarts", hti->startsField))
     dyStringAppend(query, ",tSize");
 else
-    dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
+    dyStringAppend(query, ",0");
 dyStringPrintf(query, " FROM %s", fullTableName);
 if (chromEnd != 0)
     {
