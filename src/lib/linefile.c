@@ -221,6 +221,8 @@ struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
  * with the tabix C library. */
 {
 #ifdef USE_TABIX
+if (fileOrUrl == NULL)
+    errAbort("lineFileTabixMayOpen: fileOrUrl is NULL");
 int tbiNameSize = strlen(fileOrUrl) + strlen(".tbi") + 1;
 char *tbiName = needMem(tbiNameSize);
 safef(tbiName, tbiNameSize, "%s.tbi", fileOrUrl);
