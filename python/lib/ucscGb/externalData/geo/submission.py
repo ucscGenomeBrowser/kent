@@ -24,8 +24,9 @@ localizationMapping = {
 
 # map our instrument names to GEO's names
 instrumentModels = {
-    'Illumina_GA2x': 'Illumina Genome Analyzer II',
+    'Illumina_GA2x': 'Illumina Genome Analyzer IIx',
     'Illumina_GA2': 'Illumina Genome Analyzer II',
+    'Illumina_GA2e': 'Illumina Genome Analyzer II',
     'Illumina_HiSeq_2000': 'Illumina HiSeq 2000',
     'Illumina_GA1': 'Illumina Genome Analyzer',
     'Illumina_GA1_or_GA2': 'Illumina Genome Analyzer, Illumina Genome Analyzer II',
