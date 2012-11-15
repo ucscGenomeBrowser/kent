@@ -67,21 +67,16 @@ if (string != NULL)
 return string;
 }
 
-static void addGenomesToHash(struct hubConnectStatus *hub, struct hash *hash)
-/* add supported assembly names from trackHub to hash */
+static void printGenomes(struct trackHub *thub)
+/* print supported assembly names from trackHub */
 {
-if (hub == NULL)
-    return;
+/* List of associated genomes. */
+struct trackHubGenome *genomes = thub->genomeList;	
+struct dyString *dy = newDyString(100);
 
-struct trackHub *thub = hub->trackHub;
-if (thub != NULL)
-    {
-    /* List of associated genomes. */
-    struct trackHubGenome *genomes = thub->genomeList;	
-
-    for(; genomes; genomes = genomes->next)
-	hashStore(hash, genomes->name);
-    }
+for(; genomes; genomes = genomes->next)
+    dyStringPrintf(dy,"%s,", genomes->name);
+ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
 }
 
 static void hgHubConnectUnlisted(struct hubConnectStatus *hubList, 
@@ -108,7 +103,6 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> \n"
 int unlistedHubCount = 0;
 struct hubConnectStatus *unlistedHubList = NULL;
 struct hubConnectStatus *hub, *nextHub;
-struct hash *assHash = newHash(5);
 
 for(hub = hubList; hub; hub = nextHub)
     {
@@ -116,27 +110,12 @@ for(hub = hubList; hub; hub = nextHub)
     // if url is not in publicHash, it's unlisted */
     if (!((publicHash != NULL) && hashLookup(publicHash, hub->hubUrl)))
 	{
-	addGenomesToHash(hub, assHash);
 	unlistedHubCount++;
 	slAddHead(&unlistedHubList, hub);
 	}
     }
 
 hubList = NULL;  // hubList no longer valid
-
-struct hashCookie cookie = hashFirst(assHash);
-struct dyString *dy = newDyString(100);
-struct hashEl *hel;
-int numAssemblies = 0;
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    dyStringPrintf(dy,"%s,", hel->name);
-    numAssemblies++;
-    }
-
-char *dbList = NULL;
-if (numAssemblies)   
-    dbList = dyStringCannibalize(&dy);
 
 if (unlistedHubCount == 0)
     {
@@ -203,7 +182,10 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
-    ourPrintCell(removeLastComma(dbList));
+    if (hub->trackHub != NULL)
+	printGenomes(hub->trackHub);
+    else
+	ourPrintCell("");
     ourPrintCell(hub->hubUrl);
 
     ourCellStart();
