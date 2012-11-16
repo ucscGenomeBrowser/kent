@@ -79,6 +79,7 @@ dateUnrestricted 2012-11-29
 dccAccession wgEncodeEM002656
 expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdRawDataRep1.fastq.gz
+geoSampleAccession GSM918713
 grant Ren
 lab LICR-m
 labVersion 7/13/2010 Lane 5
@@ -109,6 +110,7 @@ dateUnrestricted 2012-11-29
 dccAccession wgEncodeEM002656
 expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdRawDataRep2.fastq.gz
+geoSampleAccession GSM918713
 grant Ren
 lab LICR-m
 labVersion 6/3/2011 Lane 4-1
@@ -139,6 +141,7 @@ dateUnrestricted 2012-11-29
 dccAccession wgEncodeEM002656
 expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdSig.bigWig
+geoSampleAccession GSM918713
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
@@ -11281,4 +11284,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1387344779
+# MAGIC: -1080663005
