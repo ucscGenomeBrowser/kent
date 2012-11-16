@@ -3011,7 +3011,7 @@ searchMethod exact
 searchType bed
 searchPriority 10
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex COSM*
+termRegex COSM[0-9]+
 
 searchTable wgRnaOld
 searchMethod fuzzy
@@ -4160,34 +4160,34 @@ html numtSeq
 searchTable numtSMitochondrionChrPlacement
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 searchTable numtSMitochondrion
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 searchTable numtS
 searchMethod exact
 searchType bed 
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
-    
+termRegex HSA_NumtS_.*
+
 searchTable numtSAssembled
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 include decode.rmap.ra
 
