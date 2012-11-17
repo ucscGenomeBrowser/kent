@@ -408,22 +408,20 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 	struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
 	struct hapCluster *c1 = hapArray[gtIx];
 	struct hapCluster *c2 = hapArray[gtCount + gtIx]; // hardwired ploidy=2
+	c1->gtHapIx = gtIx << 1;
+	c1->leafCount = 1;
 	if (gt->isPhased || gt->isHaploid || (gt->hapIxA == gt->hapIxB))
 	    {
-	    // first chromosome:
-	    c1->leafCount = 1;
+	    // first haplotype's counts:
 	    if (gt->hapIxA < 0)
 		c1->unkCounts[countIx] = 1;
 	    else if (gt->hapIxA == 0)
 		c1->refCounts[countIx] = 1;
 	    if (gt->isHaploid)
-		{
 		haveHaploid = TRUE;
-		c1->gtHapIx = gtIx;
-		}
 	    else
 		{
-		c1->gtHapIx = gtIx << 1;
+		// got second haplotype, fill in its counts:
 		c2->gtHapIx = (gtIx << 1) | 1;
 		c2->leafCount = 1;
 		if (gt->hapIxB < 0)
@@ -435,9 +433,8 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 	else
 	    {
 	    // Missing data or unphased heterozygote, don't use haplotype info for clustering
-	    c1->leafCount = c2->leafCount = 1;
-	    c1->gtHapIx = gtIx << 1;
 	    c2->gtHapIx = (gtIx << 1) | 1;
+	    c2->leafCount = 1;
 	    c1->unkCounts[countIx] = c2->unkCounts[countIx] = 1;
 	    }
 	}
@@ -457,7 +454,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
     }
 struct hacTree *ht = hacTreeFromItems((struct slList *)(hapArray[0]), lm,
 				      cwaDistance, cwaMerge, cwaCmp, &helper);
-unsigned short *gtHapOrder = needMem(vcff->genotypeCount * 2 * sizeof(unsigned short));
+unsigned short *gtHapOrder = needMem(vcff->genotypeCount * ploidy * sizeof(unsigned short));
 rSetGtHapOrder(ht, gtHapOrder, retGtHapEnd);
 *retTree = ht;
 return gtHapOrder;
@@ -662,34 +659,21 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
     for (gtHapOrderIx = gtHapOrderIxStart;  gtHapOrderIx < gtHapOrderIxEnd;  gtHapOrderIx++)
 	{
 	int gtHapIx = gtHapOrder[gtHapOrderIx];
-	int ploidy = (sameString(chromName, "chrY")) ? 1 : 2;
-	int hapIx = (ploidy == 1) ? 0 : gtHapIx & 1;
-	int gtIx = (ploidy == 1) ? gtHapIx : gtHapIx >>1;
+	int hapIx = gtHapIx & 1;
+	int gtIx = gtHapIx >>1;
 	struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
-	if (ploidy == 2)
+	if (gt->isPhased || gt->isHaploid || (gt->hapIxA == gt->hapIxB))
 	    {
-	    if (!gt->isPhased && gt->hapIxA != gt->hapIxB)
+	    int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
+	    if (alIx < 0)
 		unks++;
-	    else
-		{
-		int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
-		if (alIx < 0)
-		    unks++;
-		else if (alIx > 0)
-		    alts++;
-		else
-		    refs++;
-		}
-	    }
-	else
-	    {
-	    if (gt->hapIxA < 0)
-		unks++;
-	    else if (gt->hapIxA > 0)
+	    else if (alIx > 0)
 		alts++;
 	    else
 		refs++;
 	    }
+	else
+	    unks++;
 	}
     int y = yOff + extraPixel + pixIx;
     Color col;
@@ -918,12 +902,13 @@ struct yFromNodeHelper
     };
 
 void initYFromNodeHelper(struct yFromNodeHelper *helper, int yOff, int height,
-			 unsigned short gtHapCount, unsigned short *gtHapOrder)
+			 unsigned short gtHapCount, unsigned short *gtHapOrder,
+			 int genotypeCount)
 /* Build a mapping of genotype and haplotype to pixel y coords. */
 {
 helper->gtHapCount = gtHapCount;
-helper->gtHapIxToPxStart = needMem(gtHapCount * sizeof(unsigned short));
-helper->gtHapIxToPxEnd = needMem(gtHapCount * sizeof(unsigned short));
+helper->gtHapIxToPxStart = needMem(genotypeCount * 2 * sizeof(unsigned short));
+helper->gtHapIxToPxEnd = needMem(genotypeCount * 2 * sizeof(unsigned short));
 double pxPerHap = (double)height / gtHapCount;
 int i;
 for (i = 0;  i < gtHapCount;  i++)
@@ -945,8 +930,6 @@ static int yFromHapNode(const struct slList *itemOrCluster, void *extraData,
 {
 unsigned short gtHapIx = ((const struct hapCluster *)itemOrCluster)->gtHapIx;
 struct yFromNodeHelper *helper = extraData;
-if (gtHapIx >= helper->gtHapCount)
-    errAbort("vcfTrack.c: gtHapIx %d out of range [0,%d).", gtHapIx, helper->gtHapCount);
 int y;
 if (yType == yrtStart)
     y = helper->gtHapIxToPxStart[gtHapIx];
@@ -1081,7 +1064,8 @@ drawOneRec(centerRec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, TRUE, 
 int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
 int hapHeight = tg->height- CLIP_PAD - 2*extraPixel;
 struct yFromNodeHelper yHelper = {0, NULL, NULL};
-initYFromNodeHelper(&yHelper, yOff+extraPixel, hapHeight, gtHapCount, gtHapOrder);
+initYFromNodeHelper(&yHelper, yOff+extraPixel, hapHeight, gtHapCount, gtHapOrder,
+		    vcff->genotypeCount);
 struct titleHelper titleHelper = { NULL, 0, 0, 0, 0, NULL, NULL };
 initTitleHelper(&titleHelper, tg->track, startIx, centerIx, endIx, nRecords, vcff);
 char *treeAngle = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, VCF_HAP_TREEANGLE_VAR,

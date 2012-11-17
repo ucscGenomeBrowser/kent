@@ -1170,21 +1170,22 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v10
+release beta,public
 
-track dgvBeta
-shortLabel DGV Beta
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del) -- Beta Site
+track dgv
+shortLabel DGV
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
 priority 144.8
 visibility hide
-color 0,100,0
 itemRgb on
 type bed 9 +
 noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
 url http://dgvbeta.tcag.ca/dgv/app/variant?id=$$&ref=$D
-dataVersion beta
+dataVersion beta (Nov. 14, 2012)
+release alpha
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -3011,7 +3012,7 @@ searchMethod exact
 searchType bed
 searchPriority 10
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex COSM*
+termRegex COSM[0-9]+
 
 searchTable wgRnaOld
 searchMethod fuzzy
@@ -4160,34 +4161,34 @@ html numtSeq
 searchTable numtSMitochondrionChrPlacement
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 searchTable numtSMitochondrion
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 searchTable numtS
 searchMethod exact
 searchType bed 
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
-    
+termRegex HSA_NumtS_.*
+
 searchTable numtSAssembled
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 include decode.rmap.ra
 
@@ -4209,3 +4210,9 @@ searchPriority 50
 xrefTable geneReviewsRefGene
 xrefQuery select geneSymbol,diseaseName from %s where diseaseName like '%%%s%%'
 searchBoth on
+
+searchTable dgv
+searchType bed
+searchPriority 50
+termRegex [en]ss?v[0-9]+
+release alpha

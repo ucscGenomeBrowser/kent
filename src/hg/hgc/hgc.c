@@ -16051,7 +16051,7 @@ int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 genericHeader(tdb, id);
 printCustomUrl(tdb, id, FALSE);
 
-safef(query, sizeof(query), "select * from dgv where name = '%s'", id);
+safef(query, sizeof(query), "select * from %s where name = '%s'", tdb->table, id);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -24685,7 +24685,7 @@ else if (sameWord(table, "delConrad2"))
     {
     doDelConrad2(tdb, item);
     }
-else if (sameWord(table, "dgv"))
+else if (sameWord(table, "dgv") || sameWord(table, "dgvBeta"))
     {
     doDgv(tdb, item);
     }
