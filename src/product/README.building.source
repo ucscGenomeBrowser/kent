@@ -97,7 +97,9 @@ Following the instructions in scripts/README
 4b. optional SAM/BAM and tabix (for VCF) support:
 	If you want to display BAM and VCF tracks, download and build samtabix
 	(a merge of Heng Li's samtools and tabix libraries):
-	https://github.com/AngieHinrichs/samtabix
+	  git clone http://genome-source.cse.ucsc.edu/samtabix.git samtabix
+	  cd samtabix
+	  make
         Add the following environment variables to .bashrc or .tcshrc,
 	OR alternatively add these lines at the top of kent/src/inc/common.mk,
 	replacing "/path/to/samtabix" with your local samtabix directory:
@@ -254,6 +256,6 @@ make: *** [aliType.o] Error 1
   MYSQLLIBS string: MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -ldl -lz"
 
 ====================================================================
-This file last updated: 2012/10/17 14:00 OR for more details see:
+For more details see:
 http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=history;f=src/product/README.building.source
 ====================================================================

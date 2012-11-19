@@ -1042,7 +1042,7 @@ to find Genome Browser tracks that match specific selection criteria.
 <UL>
 <LI><A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/">Using FTP</A>
 (recommended)
-<LI><A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#$anchorRoot">Using HTML</A>
+<LI><A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#$anchorRoot">Using HTTP</A>
 <LI><A HREF="../goldenPath/credits.html#${anchorRoot}_credits">Data use conditions and
 restrictions</A>
 <LI><A HREF="../goldenPath/credits.html#${anchorRoot}_credits">Acknowledgments</A>

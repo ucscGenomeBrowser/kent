@@ -882,4 +882,29 @@ chainOne $(path1)
 	 susScr2 susScr3 > do.log 2>&1
     #	real    28m35.606s
 
+############################################################################
+# NUMTS TRACK (working 2012-11-01 - Chin)
+
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/susScr2/bed/NumtS
+    cd /hive/data/genomes/susScr2/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/Sus_scrofa_2/* .
+    cat tracks_NumtS_nuclear_SusScrofa2 | grep -v "^track" > susScr2NumtS.bed
+    cat tracks_NumtS_assembled_SusScrofa2 | grep -v "^track" > susScr2NumtSAssembled.bed
+    cat tracks_mit_NumtS_SusScrofa2 | grep -v "^track" >  susScr2NumtSMitochondrion.bed
+
+    # load the 3 bed files to susScr2
+    hgLoadBed susScr2  numtSAssembled  susScr2NumtSAssembled.bed
+    hgLoadBed susScr2 numtS susScr2NumtS.bed
+    hgLoadBed susScr2 numtSMitochondrion susScr2NumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/susScr2/NumtS
+    ln -s `pwd`/SusScrofa-2_NumtS_seqs.sorted.bam{,.bai} /gbdb/susScr2/NumtS/
+    hgBbiDbLink susScr2 bamAllNumtSSorted /gbdb/susScr2/NumtS/SusScrofa-2_NumtS_seqs.sorted.bam
+    # setup trackDb for susScr2
+
 #############################################################################

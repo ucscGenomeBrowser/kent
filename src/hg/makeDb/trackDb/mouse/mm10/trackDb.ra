@@ -49,3 +49,5 @@ color 20,20,170
 type bed 12
 
 include altSeqComposite1.ra
+
+include mm10Strains1Composite.ra

@@ -177,7 +177,8 @@ CREATE TABLE [dbo].[CcdsStatistics] (
         [tax_id] [int] NOT NULL ,
         [ncbi_build_number] [int] NOT NULL ,
         [ncbi_build_version] [int] NOT NULL ,
-        [statistics_html] [text] COLLATE Latin1_General_BIN NULL
+        [statistics_html] [text] COLLATE Latin1_General_BIN NULL ,
+        [build_uid] [int] NOT NULL 
 ) ON [PRIMARY]
 go
 

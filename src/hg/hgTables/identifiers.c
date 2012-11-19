@@ -77,7 +77,8 @@ if (isVcfTable(table))
 else
     {
     char fullTable[HDB_MAX_TABLE_STRING];
-    if (! hFindSplitTable(database, NULL, table, fullTable, NULL))
+    char *c = strchr(table, '.');
+    if (c || ! hFindSplitTable(database, NULL, table, fullTable, NULL))
 	safecpy(fullTable, sizeof(fullTable), table);
     return sqlRandomSampleConn(conn, fullTable, field, count);
     }
@@ -124,7 +125,13 @@ if (!isCustomTrack(curTable))
 	{
 	char tmpTable[512];
 	char query[2048];
-	safef(tmpTable, sizeof(tmpTable), "tmp%s%s", curTable, xrefTable);
+	// do not use any db. prefix on curTable for name
+	char *plainCurTable = strrchr(curTable, '.');  
+	if (plainCurTable)
+	    plainCurTable++;
+	else
+	    plainCurTable = curTable;
+	safef(tmpTable, sizeof(tmpTable), "hgTemp.tmp%s%s", plainCurTable, xrefTable);
 	if (differentString(xrefTable, curTable))
 	    safef(query, sizeof(query),
 		  "create temporary table %s select %s.%s as %s from %s,%s "
@@ -169,7 +176,10 @@ hPrintf("<FORM ACTION=\"%s\" METHOD=%s>\n", getScriptName(),
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.\n");
-explainIdentifiers(alternateConn, idField);
+if (sqlDatabaseExists("hgTemp"))
+    explainIdentifiers(alternateConn, idField);
+else
+    warn("No hgTemp database found for temporary tables.<br>Please src/product/README.mysql.setup for more information.");
 hPrintf("<BR>\n");
 cgiMakeTextArea(hgtaPastedIdentifiers, oldPasted, 10, 70);
 hPrintf("<BR>\n");

@@ -113,7 +113,7 @@ class MdbStanza(RaStanza):
             if expVars[0] in self:
                 self._title = self[expVars[0]].replace('-m', '')
             else:
-                self._title = None
+                self._title = 'None'
             for expVar in expVars[1:len(expVars)]:
                 if expVar in self and self[expVar] != 'None':
                     self._title += '_' + self[expVar]

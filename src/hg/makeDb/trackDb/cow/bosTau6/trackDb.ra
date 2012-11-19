@@ -31,3 +31,27 @@ shortCircuit 1
 termRegex [DN][AC][A_][A0]0[0-9]+(\.1)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
+
+
+
+track numtSeq2012 override
+longLabel Cow NumtS mitochondrial sequence
+html numtSeqBosTau6
+
+    track numtS override
+    longLabel Cow NumtS
+    html numtSeqBosTau6
+   
+    track numtSAssembled override
+    longLabel Cow NumtS assembled
+    html numtSeqBosTau6
+
+    track numtSMitochondrion override
+    longLabel Cow NumtS on mitochondrion
+    html numtSeqBosTau6
+
+    track  bamAllNumtSSorted override
+    longLabel Cow NumtS on mitochondrion SNPs
+    html numtSeqBosTau6
+
+

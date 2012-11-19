@@ -20992,7 +20992,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14AlnRep1.bam,wgEncodeUwDnaseMonocd14AlnRep1.bam.bai
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21016,7 +21015,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14HotspotsRep1.broadPeak.gz
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21041,7 +21039,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14PkRep1.narrowPeak.gz
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21066,7 +21063,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14RawDataRep1.fastq.gz
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21089,7 +21085,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14RawRep1.bigWig
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21114,7 +21109,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14ro1746AlnRep1.bam,wgEncodeUwDnaseMonocd14ro1746AlnRep1.bam.bai
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21188,7 +21182,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14ro1746HotspotsRep1.broadPeak.gz
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21266,7 +21259,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14ro1746PkRep1.narrowPeak.gz
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21344,7 +21336,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14ro1746RawDataRep1.fastq.gz
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -21416,7 +21407,6 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 expId 1196
 fileName wgEncodeUwDnaseMonocd14ro1746RawRep1.bigWig
-geoSampleAccession GSM736513
 grant Stam
 lab UW
 labExpId DS16508
@@ -28121,4 +28111,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -2144016446
+# MAGIC: 1128695270

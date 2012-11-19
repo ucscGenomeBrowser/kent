@@ -157,7 +157,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001058
 expId 1058
 fileName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443941
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -206,7 +205,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001058
 expId 1058
 fileName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443940
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -255,7 +253,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001059
 expId 1059
 fileName wgEncodeDukeAffyExonAosmcSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443938
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -304,7 +301,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001059
 expId 1059
 fileName wgEncodeDukeAffyExonAosmcSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443939
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -353,7 +349,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001060
 expId 1060
 fileName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443942
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -402,7 +397,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001060
 expId 1060
 fileName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443943
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -452,7 +446,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000214
 expId 214
 fileName wgEncodeDukeAffyExonAstrocySimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396630
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -478,7 +471,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000214
 expId 214
 fileName wgEncodeDukeAffyExonAstrocySimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396631
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -504,7 +496,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000215
 expId 215
 fileName wgEncodeDukeAffyExonChorionSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443912
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -696,7 +687,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000216
 expId 216
 fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443908
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -746,7 +736,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000216
 expId 216
 fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443909
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1075,7 +1064,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000224
 expId 224
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396647
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1125,7 +1113,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000224
 expId 224
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396648
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1174,7 +1161,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH000224
 expId 224
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep3.broadPeak.gz
-geoSampleAccession GSM443927
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1223,7 +1209,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH000224
 expId 224
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep4.broadPeak.gz
-geoSampleAccession GSM443928
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1420,7 +1405,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000218
 expId 218
 fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396634
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1470,7 +1454,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000218
 expId 218
 fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396635
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1520,7 +1503,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000219
 expId 219
 fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396636
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1570,7 +1552,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000219
 expId 219
 fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396637
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1620,7 +1601,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000220
 expId 220
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396638
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1670,7 +1650,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000220
 expId 220
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396639
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1720,7 +1699,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000220
 expId 220
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep3.broadPeak.gz
-geoSampleAccession GSM396640
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1770,7 +1748,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000221
 expId 221
 fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396641
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1820,7 +1797,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000221
 expId 221
 fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396642
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1870,7 +1846,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000222
 expId 222
 fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396643
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1920,7 +1895,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000222
 expId 222
 fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396644
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -1970,7 +1944,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000223
 expId 223
 fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396645
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2020,7 +1993,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000223
 expId 223
 fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396646
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2471,7 +2443,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000228
 expId 228
 fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443929
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2521,7 +2492,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000228
 expId 228
 fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443930
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2571,7 +2541,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000229
 expId 229
 fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443931
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2621,7 +2590,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000229
 expId 229
 fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443932
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2671,7 +2639,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000227
 expId 227
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396649
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2721,7 +2688,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000227
 expId 227
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396650
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2771,7 +2737,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000227
 expId 227
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep3.broadPeak.gz
-geoSampleAccession GSM396651
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2868,7 +2833,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001069
 expId 1069
 fileName wgEncodeDukeAffyExonHepatocytesSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443933
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2918,7 +2882,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000230
 expId 230
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396652
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -2968,7 +2931,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000230
 expId 230
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396653
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3018,7 +2980,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000230
 expId 230
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep3.broadPeak.gz
-geoSampleAccession GSM396654
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3068,7 +3029,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000225
 expId 225
 fileName wgEncodeDukeAffyExonHmecSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396655
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3118,7 +3078,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000225
 expId 225
 fileName wgEncodeDukeAffyExonHmecSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396656
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3263,7 +3222,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001066
 expId 1066
 fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443914
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3312,7 +3270,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001066
 expId 1066
 fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443916
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3361,7 +3318,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001066
 expId 1066
 fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep3.broadPeak.gz
-geoSampleAccession GSM443918
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3479,7 +3435,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001067
 expId 1067
 fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443913
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3528,7 +3483,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001067
 expId 1067
 fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443915
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3577,7 +3531,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001067
 expId 1067
 fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep3.broadPeak.gz
-geoSampleAccession GSM443917
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3934,7 +3887,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000226
 expId 226
 fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396657
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -3984,7 +3936,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000226
 expId 226
 fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396658
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -4503,7 +4454,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000234
 expId 234
 fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443921
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -4552,7 +4502,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000234
 expId 234
 fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443922
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -4602,7 +4551,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000233
 expId 233
 fileName wgEncodeDukeAffyExonLncapSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443919
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -4652,7 +4600,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000233
 expId 233
 fileName wgEncodeDukeAffyExonLncapSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443920
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -4771,7 +4718,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000236
 expId 236
 fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443925
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -4821,7 +4767,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000236
 expId 236
 fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443926
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5110,7 +5055,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000238
 expId 238
 fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396632
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5160,7 +5104,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000238
 expId 238
 fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396633
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5303,7 +5246,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001073
 expId 1073
 fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443944
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5352,7 +5294,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001073
 expId 1073
 fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443945
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5401,7 +5342,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001073
 expId 1073
 fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep3.broadPeak.gz
-geoSampleAccession GSM443946
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5450,7 +5390,6 @@ dateUnrestricted 2011-09-14
 dccAccession wgEncodeEH001073
 expId 1073
 fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep4.broadPeak.gz
-geoSampleAccession GSM443947
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5694,7 +5633,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000239
 expId 239
 fileName wgEncodeDukeAffyExonNhekSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396659
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5745,7 +5683,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000239
 expId 239
 fileName wgEncodeDukeAffyExonNhekSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396660
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5868,7 +5805,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000240
 expId 240
 fileName wgEncodeDukeAffyExonOsteoblSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM396661
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5894,7 +5830,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000240
 expId 240
 fileName wgEncodeDukeAffyExonOsteoblSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM396662
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5944,7 +5879,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000241
 expId 241
 fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep1.broadPeak.gz
-geoSampleAccession GSM443906
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -5994,7 +5928,6 @@ dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000241
 expId 241
 fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep2.broadPeak.gz
-geoSampleAccession GSM443907
 grant Crawford
 lab Duke
 labVersion 1.0
@@ -6291,4 +6224,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: 1533441042
+# MAGIC: -1020520990

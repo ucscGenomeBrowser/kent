@@ -1,6 +1,7 @@
 import re
 import os
-from ucscGb.encode import  encodeUtils
+from ucscGb.gbData import ordereddict
+from ucscGb.encode import encodeUtils
 from ucscGb.gbData.ra.raFile import RaFile
 from ucscGb.gbData.ra.raStanza import RaStanza
 
@@ -145,7 +146,16 @@ class CvStanza(RaStanza):
                 
             else:
                 self[raKey] = raVal
-        
+    
+    def __setitem__(self, key, value):
+        ordereddict.OrderedDict.__setitem__(self, key, value)
+        ordereddict.OrderedDict.sort(self)
+        ordereddict.OrderedDict.reorder(self, 0, 'term')
+        ordereddict.OrderedDict.reorder(self, 1, 'tag')
+        ordereddict.OrderedDict.reorder(self, 2, 'type')
+        if 'label' in self.keys():
+            ordereddict.OrderedDict.reorder(self, 3, 'label')
+    
 #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
 #           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
 #               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
@@ -160,13 +170,16 @@ class CvStanza(RaStanza):
         
     def validate(self, cvfile):
         type = self['type']
-        if self['type'] == 'Cell Line': # :(
+        if self['type'] == 'Cell Line' or self['type'] == 'cell' or self['type'] == 'cellType': # :(
             if 'organism' in self and self['organism'] == 'human':
                 type = 'cellType'
             elif 'organism' in self and self['organism'] == 'mouse':
                 type = 'mouseCellType'
             else:
                 cvfile.handler(OrganismError(self))
+                
+        if self['type'] == 'Antibody':
+            type == 'antibody'
         
         typeStanza = cvfile.getTypeOfTermStanza(type)
         if typeStanza == None:

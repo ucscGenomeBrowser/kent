@@ -1613,3 +1613,206 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# construct download files for 7-way (DONE - 2012-11-07 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/multiz7way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/phastCons7way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/phyloP7way
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way/downloads
+    cd /hive/data/genomes/petMar2/bed/multiz7way/downloads
+    mkdir multiz7way phastCons7way phyloP7way
+    cd multiz7way
+    time cp -p ../../anno/petMar2.7way.maf .
+    #   real    0m23.447s
+    time gzip *.maf
+    #   real    1m35.589s
+
+    ln -s ../../petMar2.7way.nh .
+    ln -s ../../petMar2.commonNames.7way.nh ./petMar2.7way.commonNames.nh
+    time md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    1m55.317s
+    ln -s `pwd`/* \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/multiz7way
+
+    du -hsc *.maf.gz ../../anno/petMar2.7way.maf
+    #   140M    petMar2.7way.maf.gz
+    #   574M    ../../anno/petMar2.7way.maf
+    #   714M    total
+
+    #####################################################################
+    cd /hive/data/genomes/petMar2/bed/multiz7way/downloads/phastCons7way
+    mkdir birds vertebrate petMar2.7way.phastCons
+
+    ln -s ../../cons/all/downloads/phastCons7way.wigFix.gz \
+        ./petMar2.phastCons7way.wigFix.gz
+    ln -s ../../cons/all/phastCons7way.bw ./petMar2.phastCons7way.bw
+    ln -s ../../cons/all/all.mod ./petMar2.phastCons7way.mod
+    time md5sum *.gz *.mod *.bw > md5sum.txt &
+    #   real    0m12.119s
+    ln -s `pwd`/* `pwd`/README.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/phastCons7way
+    # obtain the README.txt from geoFor1/phastCons7way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/phastCons7way
+
+    #####################################################################
+    cd /hive/data/genomes/petMar2/bed/multiz7way/downloads/phyloP7way
+
+    ln -s ../../consPhyloP/all/downloads/phyloP7way.wigFix.gz \
+        ./petMar2.phyloP7way.wigFix.gz
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m56.253s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/phyloP7way
+
+    ln -s ../../consPhyloP/run.phyloP/all.mod petMar2.phyloP7way.mod
+
+    ln -s ../../consPhyloP/all/phyloP7way.bw petMar2.phyloP7way.bw
+
+    time md5sum *.mod *.bw *.gz > md5sum.txt &
+    #   real    0m5.607s
+
+    # obtain the README.txt from geoFor1/phyloP7way and update for this
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/phyloP7way
+
+    ###########################################################################
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/petMar2/bed/multiz7way/downloads/multiz7way
+    # bash script
+#!/bin/sh
+export geneTbl="xenoRefGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits petMar2 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags petMar2 multiz7way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/petMar2/bed/multiz7way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    #   real    0m36.527s
+
+    md5sum upstream*.gz >> md5sum.txt
+
+    # some other symlinks were already made above
+    # obtain the README.txt from geoFor1/multiz7way and update for this
+    #   situation
+    ln -s `pwd`/upstream*.gz README.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/petMar2/multiz7way
+
+#############################################################################
+# hgPal downloads (DONE - Hiram - 2012-11-07)
+#   FASTA from 7-way for xenoRefGene
+
+    ssh hgwdev
+    screen -S petMar2HgPal
+    mkdir /hive/data/genomes/petMar2/bed/multiz7way/pal
+    cd /hive/data/genomes/petMar2/bed/multiz7way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # there are too many scaffolds to allow all the results to end up
+    #   in one directory.  The procedure here will distribute the results
+    #   into ten different directories.  This isn't an actual kluster
+    #   run because the mafGene command needs database access.
+
+    # count the scaffolds
+    wc -l ../../../chrom.sizes
+    #   25006 ../../../chrom.sizes
+    # divide by 10 indicates 2501 files per directory, this script
+    # constructs the file names divided into ten directories:
+export dirCount=0
+export count=0
+for C in `sort -k2n ../../../chrom.sizes | cut -f1`
+do
+    echo "${dirCount}/${C}"
+    count=`echo $count | awk '{print $1+1}'`
+    if [ $count -gt 2501 ]; then
+        dirCount=`echo $dirCount | awk '{print $1+1}'`
+        count=0;
+    fi
+done  > file.list
+
+    # constructing a job list
+    cat << '_EOF_' > template
+#LOOP
+./runOne.csh $(root1) exonNuc/$(path1).fa.gz exonAA/$(path1).fa.gz
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > runOne.csh
+#!/bin/csh -efx
+
+set chrom = $1
+set resultNuc = $2
+set resultAA = $3
+set mz=multiz7way
+set gp=xenoRefGene
+set db=petMar2
+mkdir -p $resultNuc:h
+mkdir -p $resultAA:h
+
+mafGene -chrom=$chrom -exons -noTrans $db $mz $gp order.list stdout | gzip -c > ${resultNuc}
+mafGene -chrom=$chrom -exons $db $mz $gp order.list stdout | gzip -c > ${resultAA}
+'_EOF_'
+    chmod +x runOne.csh
+
+    gensub2 file.list single template jobList
+
+    # run 30 of the jobs at a time on hgwdev:
+    cat << '_EOF_' > run30.sh
+#!/bin/sh
+
+export NL=-1
+cat jobList | while read L
+do
+    NL=`echo $NL | awk '{print $1+1}'`
+    if [ "${NL}" -lt 30 ]; then
+        echo "${L} &"
+        ${L} &
+    else
+        NL=0
+        wait
+        echo "${L} &"
+        ${L} &
+    fi
+done
+
+wait
+'_EOF_'
+
+    chmod +x run30.sh
+    ./run30.sh
+
+    export mz=multiz7way
+    export gp=xenoRefGene
+    export db=petMar2
+    time (find ./exonAA -type f | xargs zcat | gzip -c > $gp.$mz.exonAA.fa.gz)
+    time (find ./exonNuc -type f | xargs zcat | gzip -c > $gp.$mz.exonNuc.fa.gz)
+    #   about 15 minutes to run those two commands in series, 8 minutes each
+    #   in parallel
+
+    # check how many genes are used:
+    zcat xenoRefGene.multiz7way.exonAA.fa.gz | grep petMar2 \
+        | sed -e "s/_petMar2.*//" | sort | uniq -c | sort -rn | wc -l
+    #   70544
+    zcat xenoRefGene.multiz7way.exonNuc.fa.gz | grep petMar2 \
+        | sed -e "s/_petMar2.*//" | sort | uniq -c | sort -rn | wc -l
+    #   70545
+
+    # no longer need these files since they have all been packaged up
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz7way
+    export gp=xenoRefGene
+    export db=petMar2
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz
+    md5sum *.fa.gz >> $pd/md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+#############################################################################
