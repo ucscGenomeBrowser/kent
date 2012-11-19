@@ -8697,7 +8697,7 @@ lots I1010
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 target CEBPB
 targetClass TFSS
-targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
+targetDescription Epitope mapping at the C-terminus of C/EBP-beta of rat origin
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf Human_-_CEBPB(sc-150)(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
@@ -8714,7 +8714,7 @@ lots I1010
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 target CEBPB
 targetClass TFSS
-targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
+targetDescription Epitope mapping at the C-terminus of C/EBP-beta of rat origin
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf Human_-_CEBPB(sc-150)(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
@@ -9535,7 +9535,7 @@ lab Snyder
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 target ESRRA
 targetClass TFSS
-targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
+targetDescription Epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 targetId GeneCard:ESRRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 validation Human_-_ERRA(Western_blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
@@ -9917,7 +9917,7 @@ antibodyDescription Rabbit polyclonal IgG. Antibody Target: GRp20
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-1002-gr-p-20-antibody.html
 target GRp20
-targetDescription epitope mapping at the C-terminus of GR alpha of human origin
+targetDescription Epitope mapping at the C-terminus of GR alpha of human origin
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation Human_-_GRp20_(sc-1002)(Western_blot,IP-MassSpec):human_GRP20_validation_Snyder.pdf
@@ -10169,7 +10169,7 @@ tag H3K09ME1
 type Antibody
 label H3K9me1 (ab8896)
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K9me1
-deprecated This was not found to be an effective antibody
+deprecated This was not found to be an effective antibody.
 lab Bernstein
 lots 104560
 orderUrl http://www.abcam.com/index.html?datasheet=8896
@@ -10542,7 +10542,7 @@ lab Snyder
 orderUrl http://www.scbt.com/datasheet-6556-hnf-4alpha-c-19-antibody.html
 target HNF4A
 targetClass TFSS
-targetDescription epitope mapping at the C-terminus of Rab 11 of human origin
+targetDescription Epitope mapping at the C-terminus of Rab 11 of human origin
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation Human_-_:missing
@@ -10608,7 +10608,7 @@ lab Snyder
 orderUrl http://www.scbt.com/datasheet-9144-hsf1-h-311-antibody.html
 target HSF1
 targetClass TFSS
-targetDescription epitope corresponding to amino acids 219-529 of heat shock transcription factor 1 (HSF1) of human origin
+targetDescription Epitope corresponding to amino acids 219-529 of heat shock transcription factor 1 (HSF1) of human origin
 targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
 validation Human_-_HSF1(Immunoprecipitation,Motif_Enrichment):human_HSF1_validation_Snyder.pdf
@@ -11278,7 +11278,7 @@ antibodyDescription Rabbit polyclonal IgG. Epitope corresponding to amino acids 
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-22810-gabp-alpha-h-180-antibody.html
 target GABPA
-targetDescription epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-&#945 of human origin
+targetDescription Epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-&#945 of human origin
 targetId GeneCard:GABPA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
 validation Mouse_-_:missing
@@ -11596,7 +11596,7 @@ tag POL2b
 type Antibody
 label POL2A (MMS-128P)
 antibodyDescription Mouse monoclonal, clone CTD4H8. Antibody Target: POLR2A
-deprecated This was not found the be an effective antibody
+deprecated This was not found the be an effective antibody.
 lab Bernstein
 lots 147337002
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
