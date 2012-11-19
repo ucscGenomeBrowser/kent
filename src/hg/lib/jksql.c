@@ -2399,15 +2399,21 @@ char seedString[256] = "";
  * The temporary table is visible only to the current connection, so
  * doesn't have to be very uniquely named, and will disappear when the
  * connection is closed. */
+/* check if table has 'db.' prefix in it */
+char *plainTable = strrchr(table, '.');
+if (plainTable)
+    plainTable++;
+else
+    plainTable = table;
 safef(query, sizeof(query),
-      "create temporary table tmp%s select %s from %s limit 100000",
-      table, field, table);
+      "create temporary table hgTemp.tmp%s select %s from %s limit 100000",
+      plainTable, field, table);
 sqlUpdate(conn, query);
 if (seed != -1)
     safef(seedString,sizeof(seedString),"%d",seed);
-safef(query, sizeof(query), "select distinct %s from tmp%s "
+safef(query, sizeof(query), "select distinct %s from hgTemp.tmp%s "
       "order by rand(%s) limit %d",
-      field, table, seedString, count);
+      field, plainTable, seedString, count);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

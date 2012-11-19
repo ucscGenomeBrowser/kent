@@ -8697,7 +8697,7 @@ lots I1010
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 target CEBPB
 targetClass TFSS
-targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
+targetDescription Epitope mapping at the C-terminus of C/EBP-beta of rat origin
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf Human_-_CEBPB(sc-150)(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
@@ -8714,7 +8714,7 @@ lots I1010
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 target CEBPB
 targetClass TFSS
-targetDescription epitope mapping at the C-terminus of C/EBP-beta of rat origin
+targetDescription Epitope mapping at the C-terminus of C/EBP-beta of rat origin
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 validation Human_-_CEBPB_(sc-150)(Western_blot,IP-MassSpec):human_CEBPB_SC-150_validation_Myers.pdf Human_-_CEBPB(sc-150)(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
@@ -9303,7 +9303,7 @@ vendorName Dr. Kevin White at University of Chicago
 term eGFP-JunD
 tag JUNDe
 type Antibody
-label JUND (eGFP-JunD)
+label JUND (eGFP-JUND)
 antibodyDescription Goat polyclonal. Antibody Target: JUND
 lab White
 orderUrl http://www.genes.uchicago.edu/white.html
@@ -9375,7 +9375,7 @@ target NR4A1
 targetClass TFSS
 targetDescription NR4A1
 targetId GeneCard:NR4A1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR4A1
 validation Human_-_eGFP(Western_blot,Immunoprecipitation):human_validation_White.pdf
 vendorId eGFP-NR4A1
 vendorName Dr. Kevin White at University of Chicago
@@ -9535,7 +9535,7 @@ lab Snyder
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 target ESRRA
 targetClass TFSS
-targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
+targetDescription Epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 targetId GeneCard:ESRRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 validation Human_-_ERRA(Western_blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
@@ -9603,7 +9603,7 @@ target FLI1
 targetDescription Fli1 (Friend leukemia virus integration 1) is a member of a family of genes identified on the basis of their homology to the v-Ets oncogene isolated from the E26 erythoblastosis virus.
 targetId GeneCard:FLI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
-validation Human_-_FLI1_(sc-356)(Western_blot):human_FLI1_sc-356_validation_Hardison.pdf Mouse_-_FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
+validation Mouse_-_FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
 vendorId sc-356
 vendorName Santa Cruz Biotechnology
 
@@ -9917,7 +9917,7 @@ antibodyDescription Rabbit polyclonal IgG. Antibody Target: GRp20
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-1002-gr-p-20-antibody.html
 target GRp20
-targetDescription epitope mapping at the C-terminus of GR alpha of human origin
+targetDescription Epitope mapping at the C-terminus of GR alpha of human origin
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation Human_-_GRp20_(sc-1002)(Western_blot,IP-MassSpec):human_GRP20_validation_Snyder.pdf
@@ -10169,7 +10169,7 @@ tag H3K09ME1
 type Antibody
 label H3K9me1 (ab8896)
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K9me1
-deprecated This was not found to be an effective antibody
+deprecated This was not found to be an effective antibody.
 lab Bernstein
 lots 104560
 orderUrl http://www.abcam.com/index.html?datasheet=8896
@@ -10542,7 +10542,7 @@ lab Snyder
 orderUrl http://www.scbt.com/datasheet-6556-hnf-4alpha-c-19-antibody.html
 target HNF4A
 targetClass TFSS
-targetDescription epitope mapping at the C-terminus of Rab 11 of human origin
+targetDescription Epitope mapping at the C-terminus of Rab 11 of human origin
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation Human_-_:missing
@@ -10608,7 +10608,7 @@ lab Snyder
 orderUrl http://www.scbt.com/datasheet-9144-hsf1-h-311-antibody.html
 target HSF1
 targetClass TFSS
-targetDescription epitope corresponding to amino acids 219-529 of heat shock transcription factor 1 (HSF1) of human origin
+targetDescription Epitope corresponding to amino acids 219-529 of heat shock transcription factor 1 (HSF1) of human origin
 targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
 validation Human_-_HSF1(Immunoprecipitation,Motif_Enrichment):human_HSF1_validation_Snyder.pdf
@@ -10777,11 +10777,11 @@ vendorName Bethyl Laboratories
 term JunD
 tag JUND
 type Antibody
-label JunD (sc-74)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: JunD
+label JUND (sc-74)
+antibodyDescription Rabbit polyclonal IgG. Antibody Target: JUND
 lab Myers, Snyder 
 orderUrl http://www.scbt.com/product.php?datasheet=74
-target JunD
+target JUND
 targetClass TFSS
 targetDescription The protein encoded by this intronless gene is a member of the JUN family, and a functional component of the AP1 transcription factor complex. It has been proposed to protect cells from p53-dependent senescence and apoptosis. Alternate translation initiation site usage results in the production of different isoforms. (provided by RefSeq)
 targetId GeneCard:JUND
@@ -11278,7 +11278,7 @@ antibodyDescription Rabbit polyclonal IgG. Epitope corresponding to amino acids 
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-22810-gabp-alpha-h-180-antibody.html
 target GABPA
-targetDescription epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-&#945 of human origin
+targetDescription Epitope corresponding to amino acids 1-180 mapping at the N-terminus of GABP-&#945 of human origin
 targetId GeneCard:GABPA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
 validation Mouse_-_:missing
@@ -11596,7 +11596,7 @@ tag POL2b
 type Antibody
 label POL2A (MMS-128P)
 antibodyDescription Mouse monoclonal, clone CTD4H8. Antibody Target: POLR2A
-deprecated This was not found the be an effective antibody
+deprecated This was not found the be an effective antibody.
 lab Bernstein
 lots 147337002
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
@@ -11644,11 +11644,11 @@ vendorName abcam
 term Pol3
 tag POL3
 type Antibody
-label POL3 (sc-21754)
-antibodyDescription Mouse monoclonal IgG1. Antibody Target: POL3
+label POL III(sc-21754)
+antibodyDescription Mouse monoclonal IgG1. Antibody Target: POLR3G
 lab Snyder
 orderUrl http://www.scbt.com/product.php?datasheet=21754
-target POL3
+target POLR3G
 targetDescription RNA Polymerase III
 targetId GeneCard:POLR3G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
@@ -13399,17 +13399,17 @@ type control
 label eGFP-ILF2
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
 
-term Control_eGFP-JunB
+term Control_eGFP-JUNB
 tag CONTROLJUNB
 type control
 label eGFP-JunB
 description This data represents a control being compared to experiments using antibody eGFP-JunB
 
-term Control_eGFP-JunD
+term Control_eGFP-JUND
 tag CONTROLJUND
 type control
-label eGFP-JunD
-description This data represents a control being compared to experiments using antibody eGFP-JunD
+label eGFP-JUND
+description This data represents a control being compared to experiments using antibody eGFP-JUND
 
 term Control_eGFP-MLL5
 tag CONTROLMLL5

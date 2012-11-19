@@ -9222,71 +9222,42 @@ TMPDIR=/scratch/tmp
 
 ########################################################################
 # DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie - color change 2/22/11 #2917)
-    ssh hgwdev
-    mkdir /hive/data/genomes/hg19/bed/dgv.v10
-    cd /hive/data/genomes/hg19/bed/dgv.v10
-    wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg19.v10.nov.2010.txt
-    wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg19.v10.nov.2010.txt
-    # shuffle fields into bed9+ w/itemRgb
-    set purple = "200,0,200"
-    set red = "200,0,0"
-    set blue = "0,0,200"
-    set brown = "139,69,19"
-    foreach f (*.v10.*.txt)
-      tail -n +2 $f \
-      | perl -wpe 'chomp; \
-        ($id, $landmark, $chr, $start, $end, $varType, \
-         undef, undef, undef, $ref, $pmid, $method, \
-         $gain, $loss, undef, undef, $sample) = split("\t"); \
-        $id =~ s/^Variation_//; \
-        $start-- unless ($start == 0); \
-        $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = ($varType =~ /^Inv/) ? "'$purple'" : "'$brown'"; \
-        if ($gain ne "" || $loss ne "") { \
-          $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
-          $rgb = "'$blue'" if ($gain > 0 && $loss == 0); \
-          $rgb = "'$red'" if ($loss > 0 && $gain == 0); \
-        } \
-        $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
-                  $start, $start, $rgb, $landmark, $varType, \
-                  $ref, $pmid, $method, $sample) . "\n";' \
-          > $f:r.bed
-    end
-    hgLoadBed hg19 dgv *.bed \
-      -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 101605 elements of size 15
-      hgsql hg19 -NBe 'select count(distinct(pubMedId)) from dgv;'
-#42
-
 # 2/22/11 color change (Bug #2917): swap blue and red; green -> brown
-
+# Old DGV format is obsolete; see the following section.
 
 #######################################################################
-# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 6/11/12 angie)
-    # DGV has changed their data format; this is a dry-run that won't be pushed
-    # until the changes are no longer considered beta and the integration of
-    # older studies w/new-from-dbVar/DGVa is complete.
+# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 11/16/12 angie)
+    # DGV has changed their data format, and for the time being the data are
+    # served by a beta web site, http://dgvbeta.tcag.ca/ ; in time that will
+    # replace their current site.
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg19/bed/dgv/$today
     cd /hive/data/genomes/hg19/bed/dgv/$today
-    wget http://dgvbeta.tcag.ca/dgv/docs/GRCh37_hg19_2012-03-29.txt
+    wget http://dgvbeta.tcag.ca/ dgv/docs/GRCh37_hg19_2012-11-14.txt
     head -1 GRCh37_hg19*.txt
-#variantid       chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergeid frequency       samplesize      cohortdescription       genes   accessions
-    # It's more complicated than Gain/Loss/Complex or Inversion now:
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergeid mergedorsample  frequency       samplesize      cohortdescription       genes
+    # It's more complicated than Gain/Loss/Complex or Inversion now (+ stray commas):
     cut -f 5,6 GRCh37_hg19*.txt | sort | uniq -c | head -100
-#  61559 CNV     ""
-#  28507 CNV     CNV
-#   1981 CNV     Complex
-#   3341 CNV     Deletion
-#    585 CNV     Duplication
-#  56904 CNV     Gain
-#  18210 CNV     Insertion
-# 291524 CNV     Loss
-#    542 OTHER   ""
-#   1668 OTHER   Inversion
+#  21336 CNV     ""
+#  26687 CNV     CNV
+#   2974 CNV     Complex
+#      5 CNV     ,Complex
+# 185262 CNV     Deletion
+#  17032 CNV     Duplication
+# 122460 CNV     Gain
+#      9 CNV     Gain,
+#   4120 CNV     Gain+Loss
+#    202 CNV     Gain,Loss
+#  27110 CNV     Insertion
+#     10 CNV     Insertion,
+# 447480 CNV     Loss
+#     42 CNV     Loss,
+#    292 OTHER   ""
+#     16 OTHER   ,Inversion
+#     42 OTHER   Complex
+#   2461 OTHER   Inversion
 #    202 OTHER   Tandem duplication
+#      1 varianttype     variantsubtype
     # shuffle fields into bed9+ w/itemRgb
     set purple = "200,0,200"
     set red = "200,0,0"
@@ -9294,11 +9265,16 @@ TMPDIR=/scratch/tmp
     set brown = "139,69,19"
     tail -n +2 GRCh37_hg19*.txt \
     | perl -wpe 'chomp; \
+      s/""//; \
       ($id, $chr, $start, $end, $varType, $varSubType, $ref, $pmid, $method, $platform, \
-       undef, undef, $sampleSize, $sampleDesc, $genes, undef) = split("\t"); \
+       undef, undef, undef, $sampleSize, $sampleDesc, $genes) = split("\t"); \
       $start-- unless ($start == 0); \
       $landmark = $genes; \
+      $landmark =~ s/,/, /g; \
+      $varSubType =~ s/^,//;  $varSubType =~ s/,$//; \
       $varTypeOut = "$varType ($varSubType)"; \
+      $ref =~ s/_/ /g; \
+      $method =~ s/_/ /g;  $method =~ s/,/, /g; \
       $sample = $sampleDesc; \
       $sample .= " (sample size: $sampleSize)" if ($sampleSize); \
       $method .= " ($platform)" if ($platform && $platform ne "Not Provided"); \
@@ -9308,9 +9284,10 @@ TMPDIR=/scratch/tmp
           $rgb = "'$blue'"; \
         } elsif ($varSubType eq "Loss" ||$varSubType eq "Deletion") { \
           $rgb = "'$red'"; \
+        } elsif ($varSubType eq "") { \
+          $varTypeOut = $varType; \
         } else { \
           $rgb = "'$brown'"; \
-          $varTypeOut = $varType if ($varSubType ne "Complex"); \
         } \
       } elsif ($varType eq "OTHER") { \
         if ($varSubType eq "Inversion") { \
@@ -9322,12 +9299,12 @@ TMPDIR=/scratch/tmp
         } \
       } \
       $_ = join("\t", "chr$chr", $start, $end, $id, 0, "+", \
-                $start, $start, $rgb, $landmark, $varType, \
+                $start, $start, $rgb, $landmark, $varTypeOut, \
                 $ref, $pmid, $method, $sample) . "\n";' \
         > dgv.bed
-    hgLoadBed hg19 dgvBeta dgv.bed \
+    hgLoadBed hg19 dgv dgv.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -renameSqlTable -tab
-#Read 465023 elements of size 15 from dgv.bed
+#Read 857742 elements of size 15 from dgv.bed
 
 
 #######################################################################
