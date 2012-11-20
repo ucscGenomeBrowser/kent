@@ -71,8 +71,13 @@
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
 			"How do UCSC's release numbers correspond to those of other organizations, such as NCBI?"
 			<P>
-			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-		        <BR>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR>
+
+                        The first release of an assembly is given a name using the first three characters of the organism's
+                        genus and species classification in the format gggSss#, with subsequent assemblies incrementing
+                        the number.  Assemblies predating the 2003 introduction of the six-letter naming system were
+                        given two-letter names in a similar gs# format.
+                        <BR>
 <!--
     <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>        
 	<TR><TD WIDTH=10></TD><TD>
@@ -587,8 +592,8 @@
 			corresponding UCSC database name or NCBI build number, use the <A HREF="#release1">
 			release table</A>.
 			<P>
-			UCSC database labels are of the form hg<em>n</em>, 
-			panTro<em>n</em>, etc. The letters designate the organism,
+			UCSC database labels are of the form hg<em>#</em>, 
+			panTro<em>#</em>, etc. The letters designate the organism,
 			e.g. <em>hg</em> for human genome or <em>panTro</em> for
 			<em>Pan troglodytes</em>. The number denotes the UCSC 
 		   	assembly version for that organism.  For example, ce1 
