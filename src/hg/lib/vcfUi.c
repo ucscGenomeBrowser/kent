@@ -131,8 +131,15 @@ if (udcCacheTimeout() < 300)
 #endif//def USE_TABIX && KNETFILE_HOOKS
 char *db = cartString(cart, "db");
 struct sqlConnection *conn = hAllocConnTrack(db, tdb);
-char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, hDefaultChrom(db));
+char *fileOrUrl = NULL;
+char *chrom = cartOptionalString(cart, "c");
+if (chrom != NULL)
+    fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, chrom);
+if (fileOrUrl == NULL)
+    fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, hDefaultChrom(db));
 hFreeConn(&conn);
+if (fileOrUrl == NULL)
+    return NULL;
 int vcfMaxErr = 100;
 struct vcfFile *vcff = NULL;
 /* protect against temporary network error */

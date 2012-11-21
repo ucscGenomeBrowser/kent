@@ -752,13 +752,14 @@ html wgEncodeCshlLongRnaSeq.release3
         color 46,0,184
         # subId=2709 dateSubmitted=2010-10-25
 
-        track wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3
-        parent wgEncodeCshlLongRnaSeqViewPlusSig off
-        shortLabel K562 nlus tot + 1
-        longLabel K562 nucleolus total RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-        subGroups view=PlusSignal cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep3 rank=rank1
-        type bigWig 1.000000 3553953.000000
-        color 46,0,184
+        #REVOKED
+        #track wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3
+        #parent wgEncodeCshlLongRnaSeqViewPlusSig off
+        #shortLabel K562 nlus tot + 1
+        #longLabel K562 nucleolus total RNA-seq Plus signal Rep 1 from ENCODE/CSHL
+        #subGroups view=PlusSignal cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep3 rank=rank1
+        #type bigWig 1.000000 3553953.000000
+        #color 46,0,184
         # subId=2706 dateSubmitted=2010-10-25
 
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep2
@@ -2459,13 +2460,14 @@ html wgEncodeCshlLongRnaSeq.release3
         color 46,0,184
         # subId=2709 dateSubmitted=2010-10-25
 
-        track wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
-        parent wgEncodeCshlLongRnaSeqViewMinusSig off
-        shortLabel K562 nlus tot - 1
-        longLabel K562 nucleolus total RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-        subGroups view=MinusSignal cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep3 rank=rank1
-        type bigWig 1.000000 4348115.000000
-        color 46,0,184
+        #REVOKED
+        #track wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
+        #parent wgEncodeCshlLongRnaSeqViewMinusSig off
+        #shortLabel K562 nlus tot - 1
+        #longLabel K562 nucleolus total RNA-seq Minus signal Rep 1 from ENCODE/CSHL
+        #subGroups view=MinusSignal cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep3 rank=rank1
+        #type bigWig 1.000000 4348115.000000
+        #color 46,0,184
         # subId=2706 dateSubmitted=2010-10-25
 
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep2
@@ -4171,13 +4173,14 @@ html wgEncodeCshlLongRnaSeq.release3
         color 46,0,184
         # subId=2709 dateSubmitted=2010-10-25
 
-        track wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3
-        parent wgEncodeCshlLongRnaSeqViewAlignments off
-        shortLabel K562 nlus tot A 1
-        longLabel K562 nucleolus total RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        subGroups view=Alignments cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep3 rank=rank1
-        type bam
-        color 46,0,184
+        #REVOKED
+        #track wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3
+        #parent wgEncodeCshlLongRnaSeqViewAlignments off
+        #shortLabel K562 nlus tot A 1
+        #longLabel K562 nucleolus total RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        #subGroups view=Alignments cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep3 rank=rank1
+        #type bam
+        #color 46,0,184
         # subId=2706 dateSubmitted=2010-10-25
 
         track wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2
@@ -5396,13 +5399,14 @@ html wgEncodeCshlLongRnaSeq.release3
         color 46,0,184
         # subId=3643 dateSubmitted=2011-02-18
 
-        track wgEncodeCshlLongRnaSeqK562NucleolusTotalContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel K562 nlus tot C
-        longLabel K562 nucleolus total RNA-seq Contigs Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled rank=none cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL
-        type bed 6 +
-        color 46,0,184
+        #REVOKE
+        #track wgEncodeCshlLongRnaSeqK562NucleolusTotalContigs
+        #parent wgEncodeCshlLongRnaSeqViewContigs off
+        #shortLabel K562 nlus tot C
+        #longLabel K562 nucleolus total RNA-seq Contigs Pooled from ENCODE/CSHL
+        #subGroups view=Contigs rep=Pooled rank=none cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL
+        #type bed 6 +
+        #color 46,0,184
         # subId=3644 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562NucleoplasmTotalContigs
@@ -6315,13 +6319,14 @@ html wgEncodeCshlLongRnaSeq.release3
         color 46,0,184
         # subId=3643 dateSubmitted=2011-02-18
 
-        track wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
-        shortLabel K562 nlus tot J
-        longLabel K562 nucleolus total RNA-seq Junctions Pooled from ENCODE/CSHL
-        subGroups view=Junctions cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=Pooled rank=none
-        type bed 6 +
-        color 46,0,184
+        #REVOKED
+        #track wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions
+        #parent wgEncodeCshlLongRnaSeqViewJunctions off
+        #shortLabel K562 nlus tot J
+        #longLabel K562 nucleolus total RNA-seq Junctions Pooled from ENCODE/CSHL
+        #subGroups view=Junctions cellType=t1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=Pooled rank=none
+        #type bed 6 +
+        #color 46,0,184
         # subId=3644 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562NucleoplasmTotalJunctions

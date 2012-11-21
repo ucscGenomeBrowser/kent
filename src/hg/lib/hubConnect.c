@@ -164,6 +164,7 @@ if (row != NULL)
     hub->id = id;
     hub->hubUrl = cloneString(row[0]);
     hub->status = sqlUnsigned(row[1]);
+    hub->errorMessage = cloneString(row[2]);
 
     if (isEmpty(row[2]))
 	{

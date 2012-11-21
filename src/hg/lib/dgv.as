@@ -10,10 +10,10 @@ table dgv
     uint thickStart;    "Same as chromStart (placeholder for BED 9+ format)"
     uint thickEnd;      "Same as chromEnd (placeholder for BED 9+ format)"
     uint itemRgb;	"Item R,G,B color."
-    string landmark;    "Genomic marker near the variation locus"
+    lstring landmark;    "Genomic marker near the variation locus"
     string varType;     "Type of variation"
     string reference;   "Literature reference for the study that included this variant"
     uint pubMedId;      "For linking to pubMed abstract of reference"
-    string method;      "Brief description of method/platform"
+    lstring method;      "Brief description of method/platform"
     lstring sample;     "Description of sample population for the study"
     )

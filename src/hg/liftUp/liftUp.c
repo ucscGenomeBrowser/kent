@@ -32,9 +32,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
- "liftUp - change coordinates of .psl, .agp, .gap, .gl, .out, .gff, .gtf .bscore \n"
- ".tab .gdup .axt .chain .net, genePred, .wab, .bed, or .bed8 files to parent\n"
- "coordinate system.\n"
+ "liftUp - change coordinates of .psl, .agp, .gap, .gl, .out, .align, .gff, .gtf\n"
+ ".bscore .tab .gdup .axt .chain .net, genePred, .wab, .bed, or .bed8 files to\n"
+ "parent coordinate system.\n"
  "\n"
  "usage:\n"
  "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
@@ -108,6 +108,13 @@ enum how
 };
 enum how how = warnMissing;
 
+enum RMAlignFormats
+{
+    preRM330,  /* outline format, no id */
+    RM330,     /* outline format, with id */
+    RM400,     /* catline format, with id */
+    unknown
+};
 
 char *rmChromPrefix(char *s)
 /* Remove chromosome prefix if any. */
@@ -175,6 +182,18 @@ for (i=0; i<count; ++i)
     lineFileNext(lf, &line, &lineSize);
 }
 
+static bool isNum(char *s)
+/* verify the word is numeric before passing to functions like numField */
+{
+/* should get to *s == 0 if they are all digits */
+while (*s != 0 && isdigit(*s))
+    ++s;
+if (*s != 0)
+   return FALSE;
+else
+   return TRUE;
+}
+
 int numField(char **words, int field, int skip, struct lineFile *lf)
 /* Read field from words as number.  lf parameter just for error reporting. */
 {
@@ -208,8 +227,195 @@ if (spec && spec->strand == '-')
     errAbort("Can't handle lifts with - strands for this input type");
 }
 
-void liftOut(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
-/* Lift up coordinates in .out file.  Add offset to id (15th) column to 
+void liftAlign(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+/* Lift up coordinates in .align file.  Add offset to id column to
+ * maintain non-overlapping id ranges for different input files.
+ * -Robert Hubley Oct-2012 */
+{
+FILE *dest = mustOpen(destFile, "w");
+char *source = NULL;
+int i = 0;
+struct lineFile *lf;
+int lineSize, wordCount;
+char *line, *words[32];
+char origLine[256];
+char seqId[32];
+char *s;
+int begin, end, left;
+char leftString[18];
+int highestIdSoFar = 0, idOffset = 0;
+char idStr[32];
+struct liftSpec *spec = NULL;
+char *newName = NULL;
+enum RMAlignFormats alignFmt = unknown;
+int inAlignHdr = 0;
+
+seqId[0] = 0;
+for (i=0; i<sourceCount; ++i)
+    {
+    source = sources[i];
+    verbose(1, "Lifting %s\n", source);
+    if (!fileExists(source))
+	{
+	warn("%s does not exist\n", source);
+	continue;
+	}
+    lf = lineFileOpen(source, TRUE);
+    while (lineFileNext(lf, &line, &lineSize))
+	{
+        // Save a copy of the line in case we need to print it later
+        safef(origLine, sizeof(origLine), "%s", line);
+	wordCount = chopLine(line, words);
+        inAlignHdr = 0;
+
+        if ( ( wordCount == 14 || wordCount == 15 )
+             && ( words[8][0] == '+' || words[8][0] == 'C' ) &&
+              ! isNum( words[10] ) && words[10][0] != '(' )
+        {
+          //  Prior to RM-3.3.0 we used the outlines format in the *.align file.
+          //     - Exactly 14 columns ( independent of orientation )
+          //     - No ID column
+          //
+          //  i.e.
+          //  4682  10.10 0.76 0.15  chr10 53293 53947 (135320790) + L1PBa1_5end
+          //     LINE/L1  934   1592    (0)
+          //
+          if ( wordCount == 14 )
+	    errAbort("This is an older alignment format.  liftUp does not support this format at this time.");
+          //  In RM-3.3.0 we used the outlines format in the *.align file, but we
+          //  *did* have an ID field.  So exactly 15 columns ( independent of orientation ).
+          //
+          //  i.e.
+          //   230  29.52 9.03 8.28  seq  309   452 (22840) + L3  LINE/CR1
+          //      3656   3800  (299)   1
+          //
+          inAlignHdr = 1;
+          alignFmt = RM330;
+        }
+        // RM-4.0.0 and up:
+        //  Now we are using CM format with 14 or 15 columns depending
+        //  on the orientation.
+        //
+        //  i.e.
+        //  23 22.22 9.72 0.00 chr1:500000-1000000 21721 21792 (478208) C MER4D#LTR/ERV1 (3)
+        //      900 822 m_b1s452i1 2
+        //
+        else if ( ( wordCount == 14 && words[11][0] == '(' ) ||
+             ( wordCount == 15 && strlen( words[8] ) == 1 &&
+                 words[8][0] == 'C' ) )
+        {
+          inAlignHdr = 1;
+          alignFmt = RM400;
+        }
+
+        if ( inAlignHdr )
+        {
+          // Annotation line
+          safef(seqId, sizeof(seqId), "%s", words[4]);
+	  begin = numField(words, 5, 0, lf);
+          end = numField(words, 6, 0, lf);
+	  s = words[7];
+	  if (s[0] != '(')
+	     errAbort("Expecting parenthesized field 8 line %d of %s", lf->lineIx, lf->fileName);
+	  left = numField(words, 7, 1, lf);
+          int numId = 0;
+
+          if ( alignFmt == RM400 )
+          {
+            if ( wordCount == 14 )
+	      numId = sqlUnsigned(words[13]) + idOffset;
+            else
+	      numId = sqlUnsigned(words[14]) + idOffset;
+          }
+          else
+          {
+            numId = sqlUnsigned(words[14]) + idOffset;
+          }
+
+	  if (numId > highestIdSoFar)
+	     highestIdSoFar = numId;
+
+	  safef(idStr, sizeof(idStr), "%d", numId);
+          spec = findLift(liftHash, words[4], lf);
+	  if (spec == NULL)
+	  {
+	    if (how == carryMissing)
+            {
+	      newName = words[4];
+            }
+	    else
+	      continue;
+	  }
+	  else
+	  {
+	    cantHandleSpecRevStrand(spec);
+	    begin += spec->offset;
+	    end += spec->offset;
+	    left = spec->newSize - end;
+	    newName = spec->newName;
+	  }
+	  sprintf(leftString, "(%d)", left);
+
+          if ( alignFmt == RM400 )
+          {
+            if ( wordCount == 14 )
+              fprintf(dest,
+              "%s %s %s %s %s %d %d %s %s %s %s %s %s %s\n",
+              words[0], words[1], words[2], words[3], newName,
+              begin, end, leftString,
+              words[8], words[9], words[10], words[11], words[12], idStr);
+            else
+              fprintf(dest,
+	      "%s %s %s %s %s %d %d %s %s %s %s %s %s %s %s\n",
+	      words[0], words[1], words[2], words[3], newName,
+	      begin, end, leftString,
+	      words[8], words[9], words[10], words[11], words[12], words[13], idStr);
+          }
+          else
+          {
+              fprintf(dest,
+	      "%s %s %s %s %s %d %d %s %s %s %s %s %s %s %s\n",
+	      words[0], words[1], words[2], words[3], newName,
+	      begin, end, leftString,
+	      words[8], words[9], words[10], words[11], words[12], words[13], idStr);
+          }
+
+        }
+        else if ( spec && wordCount == 4 && isNum( words[1] )
+                  && isNum( words[3] ) && seqId[0] != '\0'
+                  && strstr( seqId, words[0] ) == seqId )
+          {
+          // Alignment data -- specifically a line with query coords
+	  begin = numField(words, 1, 0, lf);
+          end = numField(words, 3, 0, lf);
+	  begin += spec->offset;
+	  end += spec->offset;
+          if ( alignFmt == RM400 )
+          {
+            fprintf(dest, "  %-13.13s %10d %s %d\n",
+	            newName, begin, words[2], end );
+          }
+          else
+          {
+            fprintf(dest, "  %-12.12s %9d %s %d\n",
+	            newName, begin, words[2], end );
+          }
+        }
+        else // All remaining lines just get printed.
+           fprintf(dest, "%s\n", origLine );
+      }
+      lineFileClose(&lf);
+      idOffset = highestIdSoFar;
+    }
+if (ferror(dest))
+    errAbort("error writing %s", destFile);
+fclose(dest);
+}
+
+
+void liftOut(char *destFile, struct hash *liftHash, int sourceCount,
+             char *sources[])
+/* Lift up coordinates in .out file.  Add offset to id (15th) column to
  * maintain non-overlapping id ranges for different input files. */
 {
 FILE *dest = mustOpen(destFile, "w");
@@ -279,7 +485,7 @@ for (i=0; i<sourceCount; ++i)
 	    errAbort("Expecting parenthesized field 8 line %d of %s", lf->lineIx, lf->fileName);
 	left = numField(words, 7, 1, lf);
 	spec = findLift(liftHash, words[4], lf);
-	if (spec == NULL) 
+	if (spec == NULL)
 	    {
 	    if (how == carryMissing)
 	        newName = words[4];
@@ -295,7 +501,7 @@ for (i=0; i<sourceCount; ++i)
 	    newName = spec->newName;
 	    }
 	sprintf(leftString, "(%d)", left);
-	fprintf(dest, 
+	fprintf(dest,
 	  "%5s %5s %4s %4s  %-9s %7d %7d %9s %1s  %-14s %-19s %6s %4s %6s %6s\n",
 	  words[0], words[1], words[2], words[3], newName,
 	  begin, end, leftString,
@@ -497,7 +703,7 @@ for (i=0; i<sourceCount; ++i)
 				starts[j] = spec->newSize - tr;
 				}
 			    }
-			psl->strand[strandChar] = 
+			psl->strand[strandChar] =
 			    flipStrand(psl->strand[strandChar]);
 			}
 		    else
@@ -508,12 +714,12 @@ for (i=0; i<sourceCount; ++i)
 			    {
 			    for (j=0; j<blockCount; ++j)
 				{
-				psl->tStarts[j] = psl->tSize - 
+				psl->tStarts[j] = psl->tSize -
 				    (psl->tStarts[j] + blockSizes[j]) + offset;
-				psl->qStarts[j] = psl->qSize - 
+				psl->qStarts[j] = psl->qSize -
 				    (psl->qStarts[j] + blockSizes[j]);	/* no offset. */
 				}
-			    psl->strand[1-strandChar] = 
+			    psl->strand[1-strandChar] =
 				flipStrand(psl->strand[1-strandChar]);
 			    reverseUnsigned(blockSizes, blockCount);
 			    reverseUnsigned(psl->qStarts, blockCount);
@@ -560,7 +766,7 @@ if (ferror(dest))
 fclose(dest);
 }
 
-void liftAxt(char *destFile, struct hash *liftHash, 
+void liftAxt(char *destFile, struct hash *liftHash,
 	int sourceCount, char *sources[], boolean querySide)
 /* Lift up coordinates in .axt file. */
 {
@@ -630,7 +836,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
     }
 }
 
-void liftChain(char *destFile, struct hash *liftHash, 
+void liftChain(char *destFile, struct hash *liftHash,
         int sourceCount, char *sources[], boolean querySide)
 /* Lift up coordinates in .chain file. */
 {
@@ -671,7 +877,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 		        chain->qStart += spec->offset;
 		    else
 		        {
-			chain->qStart = spec->newSize - spec->offset 
+			chain->qStart = spec->newSize - spec->offset
 				- (chain->qSize - chain->qStart);
 			}
 		    chain->qEnd = chain->qStart + qSpan;
@@ -752,7 +958,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 }
 
 void liftFillsT(struct cnFill *fillList, struct liftSpec *spec)
-    /* Lift target coords in each element of fillList and recursively descend to 
+    /* Lift target coords in each element of fillList and recursively descend to
      * children of each element if necessary. */
 {
     struct cnFill *fill;
@@ -767,7 +973,7 @@ void liftFillsT(struct cnFill *fillList, struct liftSpec *spec)
 
 void liftFillsQ(struct cnFill *fillList, struct hash *nameHash,
         struct hash *liftHash, struct lineFile *lf)
-/* Lift query coords in each element of fillList and recursively descend to 
+/* Lift query coords in each element of fillList and recursively descend to
  * children of each element if necessary.  lf is only for err reporting. */
 {
     struct cnFill *fill;
@@ -788,8 +994,8 @@ void liftFillsQ(struct cnFill *fillList, struct hash *nameHash,
             fill->qName = spec->newName;
             fill->qStart += spec->offset;
             }
-        // nameHash needs to be completely rebuilt with all strings it contained 
-        // before (see chainNet.c::cnFillFromLine), regardless of whether we're 
+        // nameHash needs to be completely rebuilt with all strings it contained
+        // before (see chainNet.c::cnFillFromLine), regardless of whether we're
         // changing their values:
         fill->qName = hashStoreName(nameHash, fill->qName);
         fill->type  = hashStoreName(nameHash, fill->type);
@@ -800,7 +1006,7 @@ void liftFillsQ(struct cnFill *fillList, struct hash *nameHash,
 }
 
 
-void liftNet(char *destFile, struct hash *liftHash, 
+void liftNet(char *destFile, struct hash *liftHash,
         int sourceCount, char *sources[], boolean querySide)
 /* Lift up coordinates in .net file. */
 {
@@ -855,7 +1061,7 @@ void liftNet(char *destFile, struct hash *liftHash,
 }
 
 
-void liftWab(char *destFile, struct hash *liftHash, 
+void liftWab(char *destFile, struct hash *liftHash,
         int sourceCount, char *sources[], boolean querySide)
 /* Lift up coordinates in .wab file. */
 {
@@ -980,7 +1186,7 @@ void liftAgp(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
                     {
                     char *gapType = "contig";
                     char *ctg = rmChromPrefix(contig);
-                    int gapSize = chromInsertsGapSize(chromInserts, 
+                    int gapSize = chromInsertsGapSize(chromInserts,
                             ctg, firstContig);
                     if (hashLookup(contigsHash, contig))
                         errAbort("Contig repeated line %d of %s", lf->lineIx, lf->fileName);
@@ -1220,9 +1426,9 @@ if (c > m) m = c;
 return m;
 }
 
-void liftTabbed(char *destFile, struct hash *liftHash, 
+void liftTabbed(char *destFile, struct hash *liftHash,
    int sourceCount, char *sources[],
-   int ctgWord, int startWord, int endWord, 
+   int ctgWord, int startWord, int endWord,
    boolean doubleLift, int ctgWord2, int startWord2, int endWord2,
    int startOffset, int strandWord)
 /* Generic lift a tab-separated file with contig, start, and end fields.
@@ -1264,8 +1470,8 @@ for (i=0; i<sourceCount; ++i)
 	if (wordCount == 0)
 	    continue;
 	if (wordCount < minFieldCount)
-	   errAbort("Expecting at least %d words line %d of %s", 
-	   	minFieldCount, lf->lineIx, lf->fileName); 
+	   errAbort("Expecting at least %d words line %d of %s",
+	   	minFieldCount, lf->lineIx, lf->fileName);
 	contig = words[ctgWord];
 	contig = rmChromPrefix(contig);
 	if (startWord >= 0)
@@ -1381,7 +1587,7 @@ if (!anyHits)
 
 void liftBed(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
 /* Lift Browser Extensible Data file.  This is a tab
- * separated file where first three fields are 
+ * separated file where first three fields are
  * seq, start, end.  This also sorts the result. */
 {
 liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, FALSE, 0, 0, 0, 0, 5);
@@ -1426,7 +1632,7 @@ char *contigInDir(char *name, char dirBuf[256])
 /* Figure out which contig we're in by the file name. It should be the directory
  * before us. */
 {
-char root[128], ext[64]; 
+char root[128], ext[64];
 char *s, *contig;
 int len;
 
@@ -1444,16 +1650,16 @@ else
     contig = dirBuf;
 verbose(2,"#\ts: %s\n", s);
 return contig;
-} 
+}
 
-void liftGl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[]) 
-/* Lift up coordinates in .gl file. */ 
-{ 
+void liftGl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+/* Lift up coordinates in .gl file. */
+{
 char dirBuf[256], chromName[256];
-int i; 
-char *source; 
-char *contig; 
-FILE *dest = mustOpen(destFile, "w"); 
+int i;
+char *source;
+char *contig;
+FILE *dest = mustOpen(destFile, "w");
 struct lineFile *lf = NULL;
 int lineSize, wordCount;
 char *line, *words[32];
@@ -1535,11 +1741,17 @@ if (endsWith(destType, ".out"))
     liftHash = hashLift(lifts, FALSE);
     liftOut(destFile, liftHash, sourceCount, sources);
     }
+else if (endsWith(destType, ".align"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, FALSE);
+    liftAlign(destFile, liftHash, sourceCount, sources);
+    }
 else if (endsWith(destType, ".pslx") || endsWith(destType, ".xa") || endsWith(destType, ".psl"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
-    liftPsl(destFile, liftHash, sourceCount, sources, 
+    liftPsl(destFile, liftHash, sourceCount, sources,
     	optionExists("pslQ") || optionExists("pslq"), !endsWith(destType, ".psl") );
     }
 else if (endsWith(destType, ".agp"))
@@ -1638,7 +1850,7 @@ else if (strstr(destType, ".wab"))
     liftWab(destFile, liftHash, sourceCount, sources,
     	optionExists("wabaQ") || optionExists("wabaq"));
     }
-else 
+else
     {
     errAbort("Unknown file suffix for %s\n", destType);
     }

@@ -83,11 +83,19 @@ with password: "access"
 
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, \
-        CREATE TEMPORARY TABLES \
+    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT \
 	on ${DB}.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
 done
+
+Now create a database to hold temporary tables.
+
+    mysql -u root -p${SQL_PASSWORD} -e "create database hgTemp"
+
+    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, \
+        CREATE TEMPORARY TABLES \
+	on hgTemp.* TO \
+	readonly@localhost IDENTIFIED BY 'access';" mysql
 
 A third MySQL user can be created with read-write access to only
 the hgcentral database.  For example, a user: "readwrite"
@@ -137,6 +145,4 @@ To test this access with your ~/.hg.conf file in place:
 
 $ hgsql -e "show tables;" hgcentral
 
-====================================================================
-This file last updated: $Date: 2010/12/02 09:32:56 $
 ====================================================================

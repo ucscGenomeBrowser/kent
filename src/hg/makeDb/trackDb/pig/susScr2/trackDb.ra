@@ -68,3 +68,27 @@ shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex [A-Z57][-A-Z0-9_]+
+
+
+ck numtSeq2012 override
+longLabel Pig NumtS mitochondrial sequence
+html numtSeqSusScr2
+
+    track numtS override
+    longLabel Pig NumtS
+    html numtSeqSusScr2
+
+    track numtSAssembled override
+    longLabel Pig NumtS assembled
+    html numtSeqSusScr2
+
+    track numtSMitochondrion override
+    longLabel Pig NumtS on mitochondrion
+    html numtSeqSusScr2
+
+    track  bamAllNumtSSorted override
+    longLabel Pig NumtS on mitochondrion SNPs
+    html numtSeqSusScr2
+
+
+### add search rules here
