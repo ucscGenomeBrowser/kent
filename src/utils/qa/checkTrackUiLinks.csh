@@ -94,8 +94,8 @@ if ("all" == $tableinput) then
     echo "======================"
     cat error
     @ errorCount = $errorCount + 1
-    rm -f error
   endif
+  rm -f error
 endif
 
 foreach table ($tables)
@@ -112,13 +112,15 @@ foreach table ($tables)
     sleep 2
   endif
   if ( `wc -w error | awk '{print $1}'` != 0 ) then
-    echo
-    echo $table
-    echo "============="
-    cat error
-    @ errorCount = $errorCount + 1
-    rm -f error
+    if ( `cat error` != "403 from http://hgwbeta.cse.ucsc.edu/cgi-bin/" ) then
+      echo
+      echo $table
+      echo "============="
+      cat error
+      @ errorCount = $errorCount + 1
+    endif
   endif
+  rm -f error
 end
 echo
 echo "Summary"
