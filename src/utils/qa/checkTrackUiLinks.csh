@@ -94,9 +94,6 @@ if ("all" == $tableinput) then
 endif
 
 foreach table ($tables)
-  echo
-  echo $table
-  echo "============="
   # check to see if the table exists on the machine
   getField.csh $db trackDb tableName $machine | grep -w $table > /dev/null
   if ( $status ) then
@@ -104,11 +101,17 @@ foreach table ($tables)
     continue
   endif
   set target="$baseUrl/cgi-bin/hgTrackUi?hgsid=$hgsid&db=$db&g=$table"
-  htmlCheck checkLinks "$target" 
+  htmlCheck checkLinks "$target" >& error
   # slow it down if hitting the RR
   if ( "true" == $rr ) then
     sleep 2
-  endif 
-end 
+  endif
+  if ( `wc -w error | awk '{print $1}'` != 0 ) then
+    echo
+    echo $table
+    echo "============="
+    cat error
+    rm -f error
+  endif
+end
 echo
-
