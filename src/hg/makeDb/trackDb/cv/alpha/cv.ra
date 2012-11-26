@@ -13399,13 +13399,13 @@ type control
 label eGFP-ILF2
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
 
-term Control_eGFP-JUNB
+term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
 label eGFP-JunB
 description This data represents a control being compared to experiments using antibody eGFP-JunB
 
-term Control_eGFP-JUND
+term Control_eGFP-JunD
 tag CONTROLJUND
 type control
 label eGFP-JUND
