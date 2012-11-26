@@ -85,12 +85,15 @@ if ("all" == $tableinput) then
   set tables=`getField.csh $db trackDb tableName $machine \
      | grep -v tableName`
   set target="$baseUrl/cgi-bin/hgGateway?hgsid=$hgsid&db=$db"
-  # check description page if doing all of an assambly
-  echo
-  echo "description.html page:"
-  echo "======================"
-  htmlCheck checkLinks "$target" 
-  echo
+  # check description page if doing all of an assembly
+  htmlCheck checkLinks "$target" >& error
+  if ( `wc -w error | awk '{print $1}'` != 0 ) then
+    echo
+    echo "description.html page:"
+    echo "======================"
+    cat error
+    rm -f error
+  endif
 endif
 
 foreach table ($tables)
