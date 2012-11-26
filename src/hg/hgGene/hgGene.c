@@ -556,54 +556,26 @@ return NULL;
 }
 
 static void getGenePosition(struct sqlConnection *conn)
-/* Get gene position - from cart if it looks valid,
- * otherwise from database. */
+/* Get gene position from database. */
 {
-char *oldGene = hashFindVal(oldVars, hggGene);
-char *oldStarts = hashFindVal(oldVars, hggStart);
-char *oldEnds = hashFindVal(oldVars, hggEnd);
-char *newGene = curGeneId;
-char *newChrom = cartOptionalString(cart, hggChrom);
-char *newStarts = cartOptionalString(cart, hggStart);
-char *newEnds = cartOptionalString(cart, hggEnd);
-
-if (newChrom != NULL
-	&& !sameString(newChrom, "none")
-	&& newStarts != NULL
-	&& newEnds != NULL)
+char *table = genomeSetting("knownGene");
+char query[256];
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query),
+    "select chrom,txStart,txEnd from %s where name = '%s'"
+    , table, curGeneId);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
     {
-    if (IS_CART_VAR_EMPTY(oldGene) || IS_CART_VAR_EMPTY(oldStarts) || IS_CART_VAR_EMPTY(oldEnds)
-    	|| sameString(oldGene, newGene))
-	{
-	curGeneChrom = newChrom;
-	curGeneStart = atoi(newStarts);
-	curGeneEnd = atoi(newEnds);
-	return;
-	}
+    curGeneChrom = cloneString(row[0]);
+    curGeneStart = atoi(row[1]);
+    curGeneEnd = atoi(row[2]);
     }
-
-/* If we made it to here we can't find/don't trust the cart position
- * info.  We'll look it up from the database instead. */
-    {
-    char *table = genomeSetting("knownGene");
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    safef(query, sizeof(query),
-    	"select chrom,txStart,txEnd from %s where name = '%s'"
-	, table, curGeneId);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        {
-	curGeneChrom = cloneString(row[0]);
-	curGeneStart = atoi(row[1]);
-	curGeneEnd = atoi(row[2]);
-	}
-    else
-        hUserAbort("Couldn't find %s in %s.%s", curGeneId, database, table);
-    sqlFreeResult(&sr);
-    }
+else
+    hUserAbort("Couldn't find %s in %s.%s", curGeneId, database, table);
+sqlFreeResult(&sr);
 }
 
 struct genePred *getCurGenePred(struct sqlConnection *conn)
