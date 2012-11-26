@@ -18,6 +18,7 @@ set baseUrl=""
 set target=""
 set hgsid=""
 set db=""
+set errorCount=0
 
 if ( $#argv < 2 || $#argv > 3 ) then
   echo
@@ -92,6 +93,7 @@ if ("all" == $tableinput) then
     echo "description.html page:"
     echo "======================"
     cat error
+    @ errorCount = $errorCount + 1
     rm -f error
   endif
 endif
@@ -114,7 +116,20 @@ foreach table ($tables)
     echo $table
     echo "============="
     cat error
+    @ errorCount = $errorCount + 1
     rm -f error
   endif
 end
+echo
+echo "Summary"
+echo "======="
+if ( $errorCount > 0) then
+  if ( $errorCount == 1) then
+    echo $errorCount "error found"
+  else
+    echo $errorCount "errors found"
+  endif
+else
+  echo "No errors found!"
+endif
 echo
