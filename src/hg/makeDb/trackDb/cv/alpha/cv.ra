@@ -6948,7 +6948,7 @@ color 65,105,225
 description epidermal stem cell
 orderUrl http://gilbertlab.bio.fsu.edu/
 organism mouse
-protocol missing
+protocol Gilbert:EpiSC-5_Gilbert_protocol.pdf
 sex M
 strain 129
 termId 233
@@ -6965,7 +6965,7 @@ color 65,105,225
 description epidermal stem cell
 orderUrl http://gilbertlab.bio.fsu.edu/
 organism mouse
-protocol missing
+protocol Gilbert:EpiSC-7_Gilbert_protocol.pdf
 sex M
 strain 129
 termId 50

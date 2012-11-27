@@ -4614,7 +4614,7 @@ lab Gilbert
 lineage missing
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 organism human
-protocol missing
+protocol Gilbert:IPSHFIB2IPS4_Gilbert_protocol.pdf
 sex M
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -4632,7 +4632,7 @@ lab Gilbert
 lineage missing
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 organism human
-protocol missing
+protocol Gilbert:IPSHFIB2IPS5_Gilbert_protocol.pdf
 sex M
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -6948,7 +6948,7 @@ color 65,105,225
 description epidermal stem cell
 orderUrl http://gilbertlab.bio.fsu.edu/
 organism mouse
-protocol missing
+protocol Gilbert:EpiSC-5_Gilbert_protocol.pdf
 sex M
 strain 129
 termId 233
@@ -6965,7 +6965,7 @@ color 65,105,225
 description epidermal stem cell
 orderUrl http://gilbertlab.bio.fsu.edu/
 organism mouse
-protocol missing
+protocol Gilbert:EpiSC-7_Gilbert_protocol.pdf
 sex M
 strain 129
 termId 50
@@ -7067,7 +7067,7 @@ color 65,105,225
 description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5
 orderUrl http://gilbertlab.bio.fsu.edu/
 organism mouse
-protocol missing
+protocol Gilbert:ES-EM5Sox17huCD25_Gilbert_protocol.pdf
 sex U
 strain 129/Ola
 vendorId ES-GscgfpSox17huCD25
@@ -7426,7 +7426,7 @@ color 86,180,233
 description lymphoblast from 8 month female
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=ccl-219&Template=cellBiology
 organism mouse
-protocol missing
+protocol Gilbert:L1210_Gilbert_protocol.pdf
 sex F
 strain DBA/2
 termId 7077
@@ -9195,7 +9195,7 @@ antibodyDescription Goat polyclonal raised against e-GFP tagged transcription fa
 lab White
 lots 1
 orderUrl http://www.genes.uchicago.edu/white.html
-target eGFP-ESR
+target eGFP-ESR1
 targetClass TFSS
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. (provided by RefSeq)
 targetId GeneCard:ESR
@@ -9227,7 +9227,7 @@ label GATA2 (eGFP-GATA2)
 antibodyDescription Goat polyclonal. Antibody Target: GATA2
 lab White
 orderUrl http://www.genes.uchicago.edu/white.html
-target GATA2
+target eGFP-GATA2
 targetClass TFSS
 targetDescription GATA2
 targetId GeneCard:GATA2
@@ -9243,7 +9243,7 @@ label HDAC8 (eGFP-HDAC8)
 antibodyDescription Goat polyclonal. Antibody Target: eGFP-HDAC8
 lab White
 orderUrl http://www.genes.uchicago.edu/white.html
-target HDAC8
+target eGFP-HDAC8
 targetClass HISase
 targetDescription HDAC8
 targetId GeneCard:HDAC8
@@ -9291,7 +9291,7 @@ label JUNB (eGFP-JunB)
 antibodyDescription Goat polyclonal. Antibody Target: JUNB
 lab White
 orderUrl http://www.genes.uchicago.edu/white.html
-target JUNB
+target eGFP-JUNB
 targetClass TFSS
 targetDescription JUNB
 targetId GeneCard:JUNB
@@ -9307,7 +9307,7 @@ label JUND (eGFP-JUND)
 antibodyDescription Goat polyclonal. Antibody Target: JUND
 lab White
 orderUrl http://www.genes.uchicago.edu/white.html
-target JUND
+target eGFP-JUND
 targetClass TFSS
 targetDescription JUND
 targetId GeneCard:JUND
@@ -9371,7 +9371,7 @@ label NR4A1 (eGFP-NR4A1)
 antibodyDescription Goat polyclonal. Antibody Target: NR4A1
 lab White
 orderUrl http://www.genes.uchicago.edu/white.html
-target NR4A1
+target eGFP-NR4A1
 targetClass TFSS
 targetDescription NR4A1
 targetId GeneCard:NR4A1
@@ -12406,7 +12406,7 @@ antibodyDescription Rabbit monoclonal. Antibody Target: TCF4
 deprecated same as TCF7L2
 lab Farnham
 orderUrl http://www.cellsignal.com/products/2569.html
-target TCF4
+target TCF7L2
 targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
@@ -13399,13 +13399,13 @@ type control
 label eGFP-ILF2
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
 
-term Control_eGFP-JUNB
+term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
 label eGFP-JunB
 description This data represents a control being compared to experiments using antibody eGFP-JunB
 
-term Control_eGFP-JUND
+term Control_eGFP-JunD
 tag CONTROLJUND
 type control
 label eGFP-JUND
