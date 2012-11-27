@@ -10000,7 +10000,7 @@ target H3K4me1
 targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and downstream of transcription starts.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Human_-_H3K4me1(ab8895)(Dot_blot,Western_blot):human_H3K4me1_ab8895_validation_Ren.pdf Mouse_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Hardison.pdf
+validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot,Western_blot):mouse_H3K4me1_ab8895_validation_Ren.pdf Mouse_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Hardison.pdf
 vendorId ab8895
 vendorName abcam
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
@@ -10082,7 +10082,7 @@ target H3K4me3
 targetDescription Detect only histone H3 containing trimethyl-lysine 4
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me3_(04-745)(Dot_blot,Western_blot):human_H3K4me3_04-745_validation_Ren.pdf
+validation Mouse_-_H3K4me3_(04-745)(Dot_blot,Western_blot):mouse_H3K4me3_04-745_validation_Ren.pdf
 vendorId 04-745
 vendorName Millipore
 
@@ -10129,7 +10129,7 @@ target H3K9ac
 targetDescription Detect only Histone H3 K9 acetylation
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9Ac_(39137)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf
+validation Mouse_-_H3K9Ac_(39137)(Dot_blot,Western_blot):mouse_H3K9Ac_39137_validation_Ren.pdf
 vendorId 39137
 vendorName Active Motif
 
@@ -10193,7 +10193,7 @@ target H3K9me3
 targetDescription Histone H3 (tri methyl K9). Is associated with repressive heterochromatic state (silenced chromatin). NOTE CONTRAST to H3K9me1 which is associated with active and accessible regions.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Human_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):human_H3K9Ac_39137_validation_Ren.pdf Mouse_-_H3K9me3_(ab8898)(Dot_blot):human_H3K9me3_validation_Hardison.pdf
+validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Human_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):human_H3K9me3_ab8898_validation_Ren.pdf Mouse_-_H3K9me3_(ab8898)(Dot_blot):human_H3K9me3_validation_Hardison.pdf
 vendorId ab8898
 vendorName abcam
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
@@ -10273,7 +10273,7 @@ target H3K27me3
 targetDescription This antibody only detects Histone H3 trimethylated on Lysine 27
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K27me3_(39155)(Dot_blot,Western_blot):human_H3K27me3_39155_validation_Ren.pdf
+validation Mouse_-_H3K27me3_(39155)(Dot_blot,Western_blot):mouse_H3K27me3_39155_validation_Ren.pdf
 vendorId 39155
 vendorName Active Motif
 
@@ -10305,7 +10305,7 @@ target H3K36me3
 targetDescription Specific for histone H3 tri methylated at lysine 36, weakly reacts with H3K36me2. Marks regions of RNAPII elongation, including coding and non-coding transcripts.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Human_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):human_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot):human_H3K36me3_validation_Hardison.pdf
+validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):mouse_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot):human_H3K36me3_validation_Hardison.pdf
 vendorId ab9050
 vendorName abcam
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
