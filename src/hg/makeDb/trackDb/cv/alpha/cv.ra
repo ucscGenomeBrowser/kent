@@ -4614,7 +4614,7 @@ lab Gilbert
 lineage missing
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 organism human
-protocol missing
+protocol Gilbert:IPSHFIB2IPS4_Gilbert_protocol.pdf
 sex M
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -4632,7 +4632,7 @@ lab Gilbert
 lineage missing
 orderUrl http://www.hsci.harvard.edu/ipscore/node/3
 organism human
-protocol missing
+protocol Gilbert:IPSHFIB2IPS5_Gilbert_protocol.pdf
 sex M
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
@@ -6948,7 +6948,7 @@ color 65,105,225
 description epidermal stem cell
 orderUrl http://gilbertlab.bio.fsu.edu/
 organism mouse
-protocol missing
+protocol Gilbert:EpiSC-5_Gilbert_protocol.pdf
 sex M
 strain 129
 termId 233
@@ -6965,7 +6965,7 @@ color 65,105,225
 description epidermal stem cell
 orderUrl http://gilbertlab.bio.fsu.edu/
 organism mouse
-protocol missing
+protocol Gilbert:EpiSC-7_Gilbert_protocol.pdf
 sex M
 strain 129
 termId 50
@@ -7067,7 +7067,7 @@ color 65,105,225
 description ES cell line that bears the gfp and human IL2R alpha (also known as CD25) marker genes in the goosecoid (Gsc) and Sox17 loci, derived from EB5
 orderUrl http://gilbertlab.bio.fsu.edu/
 organism mouse
-protocol missing
+protocol Gilbert:ES-EM5Sox17huCD25_Gilbert_protocol.pdf
 sex U
 strain 129/Ola
 vendorId ES-GscgfpSox17huCD25
@@ -7426,7 +7426,7 @@ color 86,180,233
 description lymphoblast from 8 month female
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=ccl-219&Template=cellBiology
 organism mouse
-protocol missing
+protocol Gilbert:L1210_Gilbert_protocol.pdf
 sex F
 strain DBA/2
 termId 7077
@@ -13399,13 +13399,13 @@ type control
 label eGFP-ILF2
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
 
-term Control_eGFP-JUNB
+term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
 label eGFP-JunB
 description This data represents a control being compared to experiments using antibody eGFP-JunB
 
-term Control_eGFP-JUND
+term Control_eGFP-JunD
 tag CONTROLJUND
 type control
 label eGFP-JUND
