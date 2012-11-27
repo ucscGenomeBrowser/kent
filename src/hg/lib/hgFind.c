@@ -1050,7 +1050,9 @@ spec += len;
 c = spec[0];
 if (c != 'p' && c != 'q')
     return FALSE;
-if (!isdigit(spec[1]))
+/* the mouse bands can have a letter here, A-H, searchType cytoBand
+ * doesn't seem to use the termRegx */
+if (!(isdigit(spec[1]) || (1 == countChars("ABCDEFGH", spec[1]))))
     return FALSE;
 
 /* Make sure rest is digits with maybe one '.' */
