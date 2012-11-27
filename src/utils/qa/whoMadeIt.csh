@@ -30,27 +30,37 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-set cwd=`pwd`
 cd ~/kent
 set location=`find . -name $program`
+echo
 
+# find out if input location is a directory
+# and prepend the path to each filename
+# omitting dot oh files
+git blame $location >& /dev/null
+if ( $status == 128 ) then
+  set full=""
+  set files=`ls $location | egrep -v '.o$'`
+  foreach file ( $files )
+    set full="`echo $full` $location/$file"
+  end
+  set location=`echo $full`
+endif
 
 foreach file ( $location )
-  cvs annotate $file| awk '{print $2}' | sed -e "s/^(//" | sort \
+  echo $file
+  git blame $file | awk -F'(' '{print $2}' \
+    | awk -F'20' '{print $1}' | sort \
     | uniq -c | sort -k2 -nr >& xxOutFilexx
   set size=`cat xxOutFilexx | awk '{total+=$1} END {print total}'`
   cat xxOutFilexx
   if ( `wc -l xxOutFilexx | awk '{print $1}'` > 1 ) then
     echo "-----" "-----" | awk '{printf("%7s %-10s\n", $1, $2)}'
     echo $size "total" | awk '{printf("%7s %-10s\n", $1, $2)}'
-    echo
   endif 
   rm xxOutFilexx
+  echo
 end
 
-
-
 echo
-
-
 

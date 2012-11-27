@@ -41,7 +41,7 @@ mdbWhitelist = [
 def isRawFile(file):
     return (file.extension == 'fastq' or file.extension == 'csfasta' or file.extension == 'csqual')
     
-def isSupplimentaryFile(file):
+def isSupplementaryFile(file):
     return (not isRawFile(file)) and file.extension != 'fasta'
     
 def sampleTitle(stanza, expVars, warn=False, rep=False):
@@ -306,7 +306,7 @@ def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping
             for fname in stanza['fileName'].split(','):
                 file = compositeTrack.files[fname]
         
-                if isSupplimentaryFile(file):
+                if isSupplementaryFile(file):
                     sample['!Sample_supplementary_file_' + str(count)] = linkName(file, compositeTrack)
                     
                     if not all:
@@ -478,7 +478,7 @@ def createMicroArraySoftFile(compositeTrack, cv, expIds, expVars, geoMapping, se
             for fname in stanza['fileName'].split(','):
                 file = compositeTrack.files[fname]
         
-                if isSupplimentaryFile(file):
+                if isSupplementaryFile(file):
                     sample['!Sample_supplementary_file_' + str(count)] = linkName(file, compositeTrack)
                     
                     if file.md5sum != None:
