@@ -761,6 +761,8 @@ while (lineFileNextReal(lf, &line))
     }
 slReverse(&readList);
 store->readList = readList;
+if (store->readList == NULL)
+    errAbort("%s contains no reads", lf->fileName);
 lineFileClose(&lf);
 connectReadsToMonomers(store);
 }
