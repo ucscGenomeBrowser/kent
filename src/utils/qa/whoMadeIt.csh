@@ -29,6 +29,7 @@ if ( $#argv != 1 ) then
   echo
   echo "  gets info about who wrote the lines in a program."
   echo "  expects your source tree in your ~/kent directory."
+  echo "  will work on a directory name."
   echo
   echo "    usage:  program"
   echo
