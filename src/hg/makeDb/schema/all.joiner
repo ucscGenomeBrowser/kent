@@ -4192,6 +4192,9 @@ tablesIgnored $hg
     syntenyRat
     tajd%
     targetScanS
+    tgpPhase1
+    tgpPhase1AccessibilityPilotCriteria
+    tgpPhase1AccessibilityStrictCriteria
     vistaEnhancers
     wgRna
     zoom1_affyTranscriptome

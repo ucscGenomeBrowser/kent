@@ -18634,6 +18634,22 @@ done
 
 
 ############################################################################
+# 1000 GENOMES PAIRED-END ACCESSIBLE REGIONS (#1079) (DONE 8/22/12 angie)
+    # Data provided by Tom Blackwell at University of Michigan
+    mkdir /hive/data/genomes/hg19/bed/1000Genomes/phase1Mapability
+    cd /hive/data/genomes/hg19/bed/1000Genomes/phase1Mapability
+    wget -r ftp://share.sph.umich.edu/public
+    ln -s `pwd`/share.sph.umich.edu/public/paired.end.mapping.1000G..pilot.bb \
+      /gbdb/hg19/1000Genomes/
+    ln -s `pwd`/share.sph.umich.edu/public/paired.end.mapping.1000G.strict.bb \
+      /gbdb/hg19/1000Genomes/
+    hgBbiLink hg19 tgpPhase1AccessibilityPilotCriteria \
+      /gbdb/hg19/1000Genomes/paired.end.mapping.1000G..pilot.bb
+    hgBbiLink hg19 tgpPhase1AccessibilityStrictCriteria \
+      /gbdb/hg19/1000Genomes/paired.end.mapping.1000G.strict.bb
+
+
+############################################################################
 # UPDATE COSMIC TRACK - v59 (DONE 2012-05-23 larrym)
 
 ~/kent/src/hg/utils/automation/loadCosmic.pl -oldVer=55 hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v59_230512.csv

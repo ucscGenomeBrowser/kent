@@ -19,6 +19,7 @@ set target=""
 set hgsid=""
 set db=""
 set errorCount=0
+set totalCount=0
 
 if ( $#argv < 2 || $#argv > 3 ) then
   echo
@@ -107,6 +108,9 @@ foreach table ($tables)
   endif
   set target="$baseUrl/cgi-bin/hgTrackUi?hgsid=$hgsid&db=$db&g=$table"
   htmlCheck checkLinks "$target" >& error
+  # trap internal same-page anchors and discard
+  cat error | egrep -v "doesn't exist" > error2
+  mv error2 error
   # slow it down if hitting the RR
   if ( "true" == $rr ) then
     sleep 2
@@ -120,16 +124,22 @@ foreach table ($tables)
       @ errorCount = $errorCount + 1
     endif
   endif
+  @ totalCount = $totalCount + 1
   rm -f error
 end
 echo
 echo "Summary"
 echo "======="
+if ( $totalCount == 1 ) then
+  echo $totalCount "table checked"
+else
+  echo $totalCount "tables checked"
+endif
 if ( $errorCount > 0) then
   if ( $errorCount == 1) then
-    echo $errorCount "error found"
+    echo $errorCount "table with error(s) found"
   else
-    echo $errorCount "errors found"
+    echo $errorCount "tables with errors found"
   endif
 else
   echo "No errors found!"

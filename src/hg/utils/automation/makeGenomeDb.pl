@@ -199,6 +199,9 @@ subsetLittleIds Y
   - ok if agp little ids (col6) are a subset of fasta sequences
     rather than requiring an exact match 
 
+doNotCheckDuplicates Y
+  - do not stop build if duplicate sequences are found in genome
+
 " if ($detailed);
   print STDERR "\n";
   exit $status;
@@ -225,7 +228,7 @@ my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $o
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
     $clade, $genomeCladePriority);
 # Optional config parameters:
-my ($commonName, $agpFiles, $qualFiles, $mitoSize, $subsetLittleIds);
+my ($commonName, $agpFiles, $doNotCheckDuplicates, $qualFiles, $mitoSize, $subsetLittleIds);
 # Other globals:
 my ($gotMito, $gotAgp, $gotQual, $topDir, $chromBased, $forceDescription);
 my ($bedDir, $scriptDir, $endNotes);
@@ -315,6 +318,7 @@ sub parseConfig {
   $commonName = &optionalVar('commonName', \%config);
   $commonName =~ s/^(\w)(.*)/\u$1\L$2/;  # Capitalize only the first word
   $agpFiles = &optionalVar('agpFiles', \%config);
+  $doNotCheckDuplicates = &optionalVar('doNotCheckDuplicates', \%config);
   $qualFiles = &optionalVar('qualFiles', \%config);
   $mitoSize = &optionalVar('mitoSize', \%config);
   $subsetLittleIds = &optionalVar('subsetLittleIds', \%config);
@@ -513,14 +517,19 @@ _EOF_
 
   # Having made the unmasked .2bit, make chrom.sizes and chromInfo.tab:
   # verify no dots allowed in chrom names
+  if (! defined $doNotCheckDuplicates || ($doNotCheckDuplicates eq "N")) {
   $bossScript->add(<<_EOF_
-
 twoBitDup $db.unmasked.2bit > jkStuff/twoBitDup.txt
 if (`wc -l < jkStuff/twoBitDup.txt` > 0) then
   echo "ERROR: duplicate sequence found in $db.unmasked.2bit"
   exit 1
 endif
+_EOF_
+  );
+  }
 
+
+  $bossScript->add(<<_EOF_
 twoBitInfo $db.unmasked.2bit stdout | sort -k2nr > chrom.sizes
 
 # if no dots in chrom names, should have only one kind of field size:
@@ -1329,6 +1338,8 @@ $HgAutomate::git archive --remote=git://genome-source.cse.ucsc.edu/kent.git \\
   --prefix=kent/ HEAD src/hg/makeDb/trackDb/loadTracks \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
+src/hg/makeDb/trackDb/chainNetPetMar1.ra \\
+src/hg/makeDb/trackDb/chainNetPetMar2.ra \\
 src/hg/makeDb/trackDb/trackDb.nt.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.new.ra \\

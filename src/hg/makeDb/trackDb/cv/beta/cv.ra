@@ -11121,7 +11121,7 @@ target NCOR1
 targetDescription The nuclear receptor corepressor protein (NCoR) mediates gene repression by interacting with nuclear receptors. NCoR mediates repression by associating with SIN3A/B and the histone deacetylases, HDAC1 and HDAC2, and promoting the formation of repressive chromatin structures.
 targetId GeneCard:NCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
-validation Human_-_:missing
+validation Human_-_NCOR_(A301-145A)(ChIP-seq,Western_blot):human_NCOR_A301-145A_validation_Bernstein.pdf
 vendorId A301-145A
 vendorName Bethyl Laboratories
 

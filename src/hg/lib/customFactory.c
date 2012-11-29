@@ -1,6 +1,7 @@
 /* customFactory - a polymorphic object for handling
  * creating various types of custom tracks. */
 
+#include <pthread.h>
 #include "common.h"
 #include "errCatch.h"
 #include "hash.h"
@@ -2759,6 +2760,118 @@ if (setting)
 return trackDbSetting(ct->tdb, "genome");
 }
 
+struct paraFetchData
+    {
+    struct paraFetchData *next;
+    struct customTrack *track;
+    struct customFactory *fac;
+    boolean done;
+    };
+
+static pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
+static struct paraFetchData *pfdList = NULL, *pfdRunning = NULL, *pfdDone = NULL, *pfdNeverStarted = NULL;
+
+static void *remoteParallelLoad(void *threadParam)
+/* Each thread loads tracks in parallel until all work is done. */
+{
+pthread_t *pthread = threadParam;
+struct paraFetchData *pfd = NULL;
+pthread_detach(*pthread);  // this thread will never join back with it's progenitor
+    // Canceled threads that might leave locks behind,
+    // so the theads are detached and will be neither joined nor canceled.
+boolean allDone = FALSE;
+while(1)
+    {
+    pthread_mutex_lock( &pfdMutex );
+    if (!pfdList)
+	{
+	allDone = TRUE;
+	}
+    else
+	{  // move it from the waiting queue to the running queue
+	pfd = slPopHead(&pfdList);
+	slAddHead(&pfdRunning, pfd);
+        }
+    pthread_mutex_unlock( &pfdMutex );
+    if (allDone)
+	return NULL;
+
+    /* protect against errAbort */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	pfd->done = FALSE;
+	pfd->fac->loader(pfd->fac, NULL, NULL, pfd->track, FALSE);
+	pfd->done = TRUE;
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	pfd->track->networkErrMsg = cloneString(errCatch->message->string);
+	pfd->done = TRUE;
+	}
+    errCatchFree(&errCatch);
+
+    pthread_mutex_lock( &pfdMutex );
+    slRemoveEl(&pfdRunning, pfd);  // this list will not be huge
+    slAddHead(&pfdDone, pfd);
+    pthread_mutex_unlock( &pfdMutex );
+
+    }
+}
+
+static int remoteParallelLoadWait(int maxTimeInSeconds)
+/* Wait, checking to see if finished (completed or errAborted).
+ * If timed-out or never-ran, record error status.
+ * Return error count. */
+{
+int maxTimeInMilliseconds = 1000 * maxTimeInSeconds;
+struct paraFetchData *pfd;
+int errCount = 0;
+int waitTime = 0;
+while(1)
+    {
+    sleep1000(50); // milliseconds
+    waitTime += 50;
+    boolean done = TRUE;
+    pthread_mutex_lock( &pfdMutex );
+    if (pfdList || pfdRunning)
+	done = FALSE;
+    pthread_mutex_unlock( &pfdMutex );
+    if (done)
+        break;
+    if (waitTime >= maxTimeInMilliseconds)
+        break;
+    }
+pthread_mutex_lock( &pfdMutex );
+pfdNeverStarted = pfdList;
+pfdList = NULL;  // stop the workers from starting any more waiting track loads
+for (pfd = pfdNeverStarted; pfd; pfd = pfd->next)
+    {
+    // track was never even started
+    char temp[256];
+    safef(temp, sizeof temp, "Ran out of time (%d milliseconds) unable to process  %s", maxTimeInMilliseconds, pfd->track->tdb->track);
+    pfd->track->networkErrMsg = cloneString(temp);
+    ++errCount;
+    }
+for (pfd = pfdRunning; pfd; pfd = pfd->next)
+    {
+    // unfinished track
+    char temp[256];
+    safef(temp, sizeof temp, "Timeout %d milliseconds exceeded processing %s", maxTimeInMilliseconds, pfd->track->tdb->track);
+    pfd->track->networkErrMsg = cloneString(temp);
+    ++errCount;
+    }
+for (pfd = pfdDone; pfd; pfd = pfd->next)
+    {
+    // some done tracks may have errors
+    if (pfd->track->networkErrMsg)
+        ++errCount;
+    }
+pthread_mutex_unlock( &pfdMutex );
+return errCount;
+}
+
 static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
 	boolean isFile, struct slName **retBrowserLines,
 	boolean mustBeCurrentDb)
@@ -2790,6 +2903,8 @@ if (dbTrack)
     /* warnings from here are not visible to user because of higher-level catching
      * if we want to make the warning visible, have to extend behavior of customTrack.c */
     }
+
+int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
 
 struct lineFile *lf = customLineFile(text, isFile);
 
@@ -2907,7 +3022,20 @@ while ((line = customPpNextReal(cpp)) != NULL)
                 startsWith("ftp://"  , lf->fileName)
                 ))
             dataUrl = cloneString(lf->fileName);
-	oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
+	char *bigDataUrl = hashFindVal(track->tdb->settingsHash, "bigDataUrl");
+	if (bigDataUrl && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
+                                       //  (unless ptMax == 0 which means turn parallel loading off)
+	    { 
+	    struct paraFetchData *pfd;
+	    AllocVar(pfd);
+	    pfd->track = track;  // need pointer to be stable
+	    pfd->fac = fac;
+	    slAddHead(&pfdList, pfd);
+    	    oneList = track;
+	    }
+	else
+    	    oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
+
 	/* Save a few more settings. */
 	for (oneTrack = oneList; oneTrack != NULL; oneTrack = oneTrack->next)
 	    {
@@ -2925,6 +3053,34 @@ while ((line = customPpNextReal(cpp)) != NULL)
     trackList = slCat(trackList, oneList);
     }
 
+// Call the fac loader in parallel on all the bigDataUrl custom tracks
+// using pthreads to avoid long serial timeouts 
+pthread_t *threads = NULL;
+if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
+    {
+    /* launch parallel threads */
+    ptMax = min(ptMax, slCount(pfdList));
+    if (ptMax > 0)
+	{
+	AllocArray(threads, ptMax);
+	int pt;
+	for (pt = 0; pt < ptMax; ++pt)
+	    {
+	    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
+	    if (rc)
+		{
+		errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
+		}
+	    }
+	}
+    }
+if (ptMax > 0)
+    {
+    /* wait for remote parallel load to finish */
+    remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+    }
+
+
 struct slName *browserLines = customPpTakeBrowserLines(cpp);
 char *initialPos = browserLinePosition(browserLines);
 
@@ -2932,30 +3088,30 @@ char *initialPos = browserLinePosition(browserLines);
  * and adjust priorities so tracks are not all on top of each other
  * if no priority given. */
 for (track = trackList; track != NULL; track = track->next)
-     {
-     if (track->tdb->priority == 0)
-         {
-	 prio += 0.001;
-	 track->tdb->priority = prio;
-	 }
+    {
+    if (track->tdb->priority == 0)
+	{
+	prio += 0.001;
+	track->tdb->priority = prio;
+	}
     if (initialPos)
-        ctAddToSettings(track, "initialPos", initialPos);
+	ctAddToSettings(track, "initialPos", initialPos);
     if (track->bedList)
-        {
-        /* save item count and first item because if track is
-         * loaded to the database, the bedList will be available next time */
-        struct dyString *ds = dyStringNew(0);
-        dyStringPrintf(ds, "%d", slCount(track->bedList));
-        ctAddToSettings(track, "itemCount", cloneString(ds->string));
-        dyStringClear(ds);
-        dyStringPrintf(ds, "%s:%d-%d", track->bedList->chrom,
-                track->bedList->chromStart, track->bedList->chromEnd);
-        ctAddToSettings(track, "firstItemPos", cloneString(ds->string));
-        dyStringFree(&ds);
-        }
+	{
+	/* save item count and first item because if track is
+	 * loaded to the database, the bedList will be available next time */
+	struct dyString *ds = dyStringNew(0);
+	dyStringPrintf(ds, "%d", slCount(track->bedList));
+	ctAddToSettings(track, "itemCount", cloneString(ds->string));
+	dyStringClear(ds);
+	dyStringPrintf(ds, "%s:%d-%d", track->bedList->chrom,
+		track->bedList->chromStart, track->bedList->chromEnd);
+	ctAddToSettings(track, "firstItemPos", cloneString(ds->string));
+	dyStringFree(&ds);
+	}
     char *setting = browserLinesToSetting(browserLines);
     if (setting)
-        ctAddToSettings(track, "browserLines", setting);
+	ctAddToSettings(track, "browserLines", setting);
     trackDbPolish(track->tdb);
     }
 
