@@ -107,6 +107,9 @@ foreach table ($tables)
   endif
   set target="$baseUrl/cgi-bin/hgTrackUi?hgsid=$hgsid&db=$db&g=$table"
   htmlCheck checkLinks "$target" >& error
+  # trap internal same-page anchors and discard
+  cat error | egrep -v "doesn't exist" > error2
+  mv error2 error
   # slow it down if hitting the RR
   if ( "true" == $rr ) then
     sleep 2
@@ -127,9 +130,9 @@ echo "Summary"
 echo "======="
 if ( $errorCount > 0) then
   if ( $errorCount == 1) then
-    echo $errorCount "error found"
+    echo $errorCount "table with error(s) found"
   else
-    echo $errorCount "errors found"
+    echo $errorCount "tables with errors found"
   endif
 else
   echo "No errors found!"
