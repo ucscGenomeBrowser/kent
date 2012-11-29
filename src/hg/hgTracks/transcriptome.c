@@ -103,8 +103,6 @@ tg->itemColor = affyTransfragColor;
 tg->loadItems = affyTransfragsLoad;
 }
 
-#define AFFY_PHASE2_FIX
-
 static Color affyTxnPhase2ItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Color for an affyTransfrag item. Different colors are returned depending
    on name. 
