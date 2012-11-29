@@ -103,6 +103,8 @@ tg->itemColor = affyTransfragColor;
 tg->loadItems = affyTransfragsLoad;
 }
 
+#define AFFY_PHASE2_FIX
+
 static Color affyTxnPhase2ItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Color for an affyTransfrag item. Different colors are returned depending
    on name. 
@@ -141,14 +143,6 @@ switch(bed->name[0])
 return tg->ixColor;
 }
 
-static void affyTxnPhase2DrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-				 struct hvGfx *hvg, int xOff, int yOff, int width, int height, 
-				 boolean withCenterLabels, MgFont *font,
-				 Color color, enum trackVisibility vis)
-{
-/* Don't do anything here, let subtracks draw their own labels. */
-}
-
 static void affyTxnPhase2BedDrawLeftLabels(struct track *track, int seqStart, int seqEnd,
 				    struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 				    boolean withCenterLabels, MgFont *font, Color color,
@@ -182,13 +176,6 @@ static char *affyTxnP2ItemName(struct track *track, void *item)
 return "";
 }
 
-static int affyTxnPhase2TotalHeight(struct track *track, enum trackVisibility vis)
-/* Get the total height for affyTxnPhase 2 data. */
-{
-/* this has all been figured out in affyTxnPhase2Load() */
-return track->height;
-}
-
 static void affyTxnPhase2MapItem(struct track *tg, struct hvGfx *hvg, void *item, 
 			  char *itemName, char *mapItemName, int start, int end, 
 			  int x, int y, int width, int height)
@@ -196,142 +183,15 @@ static void affyTxnPhase2MapItem(struct track *tg, struct hvGfx *hvg, void *item
 {
 }
 
-static void affyTxnPhase2Load(struct track *track)
-/* Load up the items for affyTxnPhase2 track and set the visibility
-   for the track. */
-{
-struct track *sub = NULL;
-int totalHeight=0;
-boolean first = TRUE;
-boolean tooBig = (winEnd - winStart) > 1000000;
-enum trackVisibility tnfgVis = tvHide;
-char *visString = cartUsualString(cart, "hgt.affyPhase2.tnfg", "hide");
-tnfgVis = hTvFromString(visString);
-
-slReverse(&track->subtracks);
-
-/* After a megabase, just give the packed view. */
-if(tooBig && track->visibility == tvFull)
-    track->limitedVis = tvDense;
-else
-    track->limitedVis = track->visibility;
-
-/* Hide the transfrags tracks when not in full. */
-if(track->limitedVis != tvFull)
-    tnfgVis = tvHide;
-
-/* Override composite default settings. */
-for(sub = track->subtracks; sub != NULL; sub = sub->next)
-    {
-    if(stringIn("bed", sub->tdb->type) && track->limitedVis == tvFull) 
-	{
-	sub->visibility = tnfgVis;
-	sub->mapsSelf = TRUE;
-	sub->mapItem = affyTxnPhase2MapItem;
-	}
-    if(stringIn("wig", sub->tdb->type))
-	{
-//	sub->mapItem = affyTxnPhase2MapItem;
-	sub->mapsSelf = FALSE;
-	sub->extraUiData = CloneVar((struct wigCartOptions *)track->extraUiData);
-	if(trackDbSetting(sub->tdb, "wigColorBy") != NULL)
-	    ((struct wigCartOptions *)sub->extraUiData)->colorTrack = trackDbSetting(sub->tdb, "wigColorBy");
-	}
-    }
-
-/* For the composite track we are going to display the first
-   track. */
-if(track->limitedVis == tvDense)
-    {
-    for(sub = track->subtracks; sub != NULL; sub = sub->next)
-	{
-	if(first && stringIn("wig", sub->tdb->type))
-	    {
-	    struct dyString *s = newDyString(128);
-	    /* Display first track as full when in dense mode. */
-	    sub->visibility = tvFull;
-	    /* Display parent track name when we are not in full mode. */
-	    dyStringPrintf(s, "%s (%s)", track->longLabel, sub->shortLabel);
-	    freez(&sub->shortLabel);
-	    sub->shortLabel = cloneString(track->shortLabel);
-	    freez(&track->longLabel);
-	    track->longLabel = cloneString(s->string);
-	    dyStringFree(&s);
-	    assert(sub->tdb->settingsHash);
-	    assert(track->tdb->settingsHash);
-	    /* For legacy carts remove existing track settings. */
-	    if(trackDbSetting(sub->tdb, "centerLabelsDense"))
-		hashRemove(sub->tdb->settingsHash, "centerLabelsDense");
-	    if(trackDbSetting(track->tdb, "centerLabelsDense"))
-		hashRemove(track->tdb->settingsHash, "centerLabelsDense");
-	    
-	    /* When in dense mode a composite track is supposed to print its center
-	       label and surpress the center lable of subtracks, otherwise the
-	       click map gets out of sync. Since we are going to draw using the
-	       first track, turn its labels off and the label for the main track on. */
-	    hashAdd(sub->tdb->settingsHash, "centerLabelsDense", "off");
-	    hashAdd(track->tdb->settingsHash, "centerLabelsDense", "on");
-	    first = FALSE;
-	    }
-	else 
-	    {
-	    sub->visibility = tvHide;
-	    sub->limitedVis = tvHide;
-	    sub->limitedVisSet = TRUE;
-	    }
-	}
-    }
-else
-    {
-    assert(track->tdb->settingsHash);
-    if(trackDbSetting(track->tdb, "centerLabelsDense"))
-	hashRemove(track->tdb->settingsHash, "centerLabelsDense");
-    hashAdd(track->tdb->settingsHash, "centerLabelsDense", "off");
-    }
-
-/* Load up everything appropriate. */
-for(sub = track->subtracks; sub != NULL; sub = sub->next)
-    {
-    /* If sub is visibile load it and set the visibility. */
-    if(sub->visibility != tvHide && 
-       isSubtrackVisible(sub))
-	{
-	enum trackVisibility tmpVis = sub->visibility;
-	sub->loadItems(sub);
-	if(stringIn("bed", sub->tdb->type) && 
-	   slCount(sub->items) > 1000)
-	    sub->visibility = tvDense;
-	limitVisibility(sub);
-	sub->visibility = tmpVis;
-	totalHeight += sub->height;
-	}
-    else 
-	{
-	sub->limitedVis = tvHide;
-	sub->limitedVisSet = TRUE;
-	}
-    }
-track->height = totalHeight;
-track->limitedVisSet = TRUE;
-
-}
-
 void affyTxnPhase2Methods(struct track *track)
 /* Methods for dealing with a composite transcriptome tracks. */
 {
-struct track *sub = NULL;
-track->loadItems = affyTxnPhase2Load;
-track->totalHeight = affyTxnPhase2TotalHeight;
-track->drawLeftLabels = affyTxnPhase2DrawLeftLabels;
-
-/* Initialize the bed version with some special handlers. */
-for(sub = track->subtracks; sub != NULL; sub = sub->next)
+if (track->subtracks == NULL && stringIn("bed", track->tdb->type))
     {
-    if(stringIn("bed", sub->tdb->type)) 
-	{
-	sub->itemName = affyTxnP2ItemName;
-	sub->drawLeftLabels = affyTxnPhase2BedDrawLeftLabels;
-	sub->itemColor = affyTxnPhase2ItemColor;
-	}
+    track->itemName = affyTxnP2ItemName;
+    track->drawLeftLabels = affyTxnPhase2BedDrawLeftLabels;
+    track->itemColor = affyTxnPhase2ItemColor;
+    track->mapsSelf = TRUE;
+    track->mapItem = affyTxnPhase2MapItem;
     }
 }
