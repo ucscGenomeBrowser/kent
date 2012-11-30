@@ -1076,6 +1076,8 @@ while (lineFileNextReal(lf, &line))
 	    lf->lineIx, lf->fileName);
     }
 slReverse(&store->typeList);
+if (store->typeList == NULL)
+    errAbort("%s is empty", lf->fileName);
 lineFileClose(&lf);
 hashFree(&uniq);
 verbose(2, "Added %d types containing %d words from %s\n", 
