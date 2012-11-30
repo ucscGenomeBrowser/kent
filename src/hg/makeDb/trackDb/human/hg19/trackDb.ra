@@ -2038,7 +2038,7 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track tgpPhase1
 shortLabel 1000G Ph1 Vars
-longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, InDels, SVs
+longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, Indels, SVs
 type vcfTabix
 group varRep
 priority 99.1
