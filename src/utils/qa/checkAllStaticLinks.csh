@@ -10,58 +10,59 @@ source `which qaConfig.csh`
 ###############################################
 
 set filePath=""
-set yymmdd="today"
-set file=""
-set currDir=$cwd
-
-
+set excludeList=""
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
  exit 1
 endif
 
-
-
-if ($#argv == 0 || $#argv > 2) then
+if ( $#argv != 1 ) then
   # wrong number of command line args
   echo
   echo "  checks all the static links in htdocs tree."
   echo "  uses directory on beta."
   echo "  excludes files listed in /cluster/bin/scripts/linkCheckExclude"
   echo
-  echo '    usage: <file of paths | all> [yymmdd]'
+  echo '    usage: <fileOfPaths | all>'
   echo '       "all" uses /cluster/bin/scripts/staticpaths'
-  echo '        yymmdd: any dateString for output files. defaults to "today"'
   echo
   exit
+endif
+
+if ($argv[1] == "all") then
+  ## get all html-containing paths
+  # find /usr/local/apache/htdocs -name "*.html" > htmlfiles
+  # rm -f htmldirs
+  # foreach file ( `cat htmlfiles` )
+  #   dirname $file >> htmldirs
+  # end
+  # cat htmldirs | sort -u
+  # rm -f htmlfiles
+
+  # use default list of paths
+  set pathfile="/cluster/bin/scripts/staticpaths"
 else
-  if ($argv[1] == "all") then
-    # use default list of paths
-    set pathfile="/cluster/bin/scripts/staticpaths"
-  else
-    set pathfile=$argv[1]
-    file $pathfile | grep -q "ASCII text"
-    if ( $status ) then
-      echo "\n file of paths $pathfile does not exist\n"
-      exit 1
-    endif
-  endif
-  if ($#argv == 2) then
-    set yymmdd=$argv[2]
+  set pathfile=$argv[1]
+  file $pathfile | grep -q "ASCII text"
+  if ( $status ) then
+    echo "\n file of paths $pathfile does not exist\n"
+    exit 1
   endif
 endif
 
-cp /cluster/bin/scripts/linkCheckExclude excludeList >& /dev/null
+set excludeList=/cluster/bin/scripts/linkCheckExclude
 if ( $status ) then
-  echo "\nexclude file does not exist\n" 
+  echo "\n exclude file does not exist\n"
   exit 1
 endif
+
 foreach filePath (`cat $pathfile`)
   echo "filePath: $filePath"
-  checkStaticLinks.csh $filePath $yymmdd excludeList
+  echo "excludeList: $excludeList"
+  checkStaticLinks.csh $filePath $excludeList
   if ( $status ) then
-    echo "\nexclude file does not exist\n" 
+    echo "\n exclude file does not exist\n"
     exit 1
   endif
 end
