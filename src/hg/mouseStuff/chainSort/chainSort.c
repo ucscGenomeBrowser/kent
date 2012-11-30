@@ -12,7 +12,8 @@ void usage()
 errAbort(
   "chainSort - Sort chains.  By default sorts by score.\n"
   "Note this loads all chains into memory, so it is not\n"
-  "suitable for large sets.  Use chainMergeSort for that\n"
+  "suitable for large sets.  Instead, run chainSort on\n"
+  "multiple small files, followed by chainMergeSort.\n"
   "usage:\n"
   "   chainSort inFile outFile\n"
   "Note that inFile and outFile can be the same\n"

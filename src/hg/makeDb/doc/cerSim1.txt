@@ -327,7 +327,7 @@ taxId 73337
 # Ceratotherium simum     12      0       0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add cerSim1 just after equCab1
@@ -496,3 +496,27 @@ XXX - to be done - Tue Oct 16 15:03:19 PDT 2012
     ln -s blastz.monDom5.swap lastz.monDom5
 
 #########################################################################
+# lastz swap Cow bosTau7 (DONE - 2012-10-30 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/bosTau7/bed/lastzCerSim1.2012-10-24
+    cat fb.bosTau7.chainCerSim1Link.txt
+    #   1628320914 bases of 2804673174 (58.057%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.bosTau7.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.bosTau7.swap
+    time nice -n +19 doBlastzChainNet.pl \
+        /hive/data/genomes/bosTau7/bed/lastzCerSim1.2012-10-24/DEF \
+	-workhorse=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #   real    120m35.871s
+
+    cat fb.cerSim1.chainBosTau7Link.txt
+    #   1592093865 bases of 2366858012 (67.266%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cerSim1/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
+##############################################################################

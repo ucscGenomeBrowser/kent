@@ -164,6 +164,7 @@ if (row != NULL)
     hub->id = id;
     hub->hubUrl = cloneString(row[0]);
     hub->status = sqlUnsigned(row[1]);
+    hub->errorMessage = cloneString(row[2]);
 
     if (isEmpty(row[2]))
 	{
@@ -344,6 +345,7 @@ void hubConnectAddDescription(char *database, struct trackDb *tdb)
 unsigned hubId = hubIdFromTrackName(tdb->track);
 struct trackHub *hub = trackHubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+trackHubPolishTrackNames(hub, tdb);
 addDescription(hubGenome->trackDbFile, tdb);
 }
 

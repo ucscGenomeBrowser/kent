@@ -8,19 +8,10 @@ name drosophila
 db dm3
 
 name rat
-db rn5
-shortLabel Rat
-tables rnBlastTab 
-idSql select target from rnBlastTab where query = '%s'
-geneTable refGene
-# no pep table at the moment
-geneUrl ../cgi-bin/hgc?g=refGene&i=%s
-genomeUrl ../cgi-bin/hgTracks?db=rn5&position=%s
-otherName RefGene
-otherUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+db rn4
 
 name cElegans
-db ce10
+db ce6
 
 name yeast
 db sacCer3

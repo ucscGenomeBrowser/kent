@@ -191,10 +191,8 @@ DROP TABLE IF EXISTS CcdsStatistics;
 CREATE TABLE CcdsStatistics (
         statistics_uid int PRIMARY KEY NOT NULL ,
         statistics_type_uid int NOT NULL ,
-        tax_id int NOT NULL ,
-        ncbi_build_number int NOT NULL ,
-        ncbi_build_version int NOT NULL ,
-        statistics_html text NULL
+        statistics_html text NULL ,
+        build_uid int NOT NULL 
 ) 
 ;
 

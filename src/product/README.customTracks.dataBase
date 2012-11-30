@@ -78,7 +78,7 @@ Select, Insert, Update, Delete, Create, Drop, Alter
 for example with your MySQL root user account:
 hgsql -hctdbhost -uroot -p -e \
     "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER" \
-    on customTrash TO ctdbuser@yourWebHost IDENTIFIED by 'ctdbpasswd';" mysql
+    on customTrash.* TO ctdbuser@yourWebHost IDENTIFIED by 'ctdbpasswd';" mysql
 
 Optionally, a temporary read-write directory used during database
 loading can be specified:
@@ -227,4 +227,3 @@ It remains to be seen just how good the error reporting system is for
 illegal data.
 
 ====================================================================
-This file last updated: $Date: 2007/04/10 23:16:01 $

@@ -70,4 +70,4 @@ ${BIN_DIR}/customTrackTester: customTrackTester.o ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 clean:
-	rm -rf *.o bin output *.tmp loader
+	rm -rf *.o bin output *.tmp loader udcCache

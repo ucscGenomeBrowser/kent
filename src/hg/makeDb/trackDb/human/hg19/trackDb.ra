@@ -2038,7 +2038,7 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track tgpPhase1
 shortLabel 1000G Ph1 Vars
-longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, InDels, SVs
+longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, Indels, SVs
 type vcfTabix
 group varRep
 priority 99.1
@@ -2058,7 +2058,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
     track tgpPhase1AccessibilityPilotCriteria
     subTrack tgpPhase1Accessibility
     shortLabel 1000G Accs Pilot
-    longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Pilot Level Criteria
+    longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions - Pilot Criteria
     color 100,100,100
 
     track tgpPhase1AccessibilityStrictCriteria

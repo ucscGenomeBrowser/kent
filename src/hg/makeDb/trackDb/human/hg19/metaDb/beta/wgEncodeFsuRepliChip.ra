@@ -15,6 +15,7 @@ dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002768
 expId 2768
 fileName wgEncodeFsuRepliChipBg02esRawDataRep1.pair.tar.gz
+geoSampleAccession GSM500933
 grant Gilbert
 lab FSU
 labExpId BG02hESC_R1_293676
@@ -37,6 +38,7 @@ dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002768
 expId 2768
 fileName wgEncodeFsuRepliChipBg02esRawDataRep2.pair.tar.gz
+geoSampleAccession GSM500934
 grant Gilbert
 lab FSU
 labExpId BG02hESC_R2_294988
@@ -323,6 +325,7 @@ dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002771
 expId 2771
 fileName wgEncodeFsuRepliChipH7esRawDataRep1.pair.tar.gz
+geoSampleAccession GSM500935
 grant Gilbert
 lab FSU
 labExpId H7hESC_R1_294986
@@ -411,6 +414,7 @@ dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH002772
 expId 2772
 fileName wgEncodeFsuRepliChipH9esRawDataRep1.pair.tar.gz
+geoSampleAccession GSM500936
 grant Gilbert
 lab FSU
 labExpId H9hESC_R1_294986
@@ -543,6 +547,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003044
 expId 3044
 fileName wgEncodeFsuRepliChipIpshfib2ips4RawDataRep1.tar.gz
+geoSampleAccession GSM500937
 grant Gilbert
 lab FSU
 labExpId hFib-iPS4_R1_294988
@@ -566,6 +571,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003044
 expId 3044
 fileName wgEncodeFsuRepliChipIpshfib2ips4RawDataRep2.tar.gz
+geoSampleAccession GSM500938
 grant Gilbert
 lab FSU
 labExpId hFib-iPS4_R2_293676
@@ -635,6 +641,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003045
 expId 3045
 fileName wgEncodeFsuRepliChipIpshfib2ips5RawDataRep1.tar.gz
+geoSampleAccession GSM500939
 grant Gilbert
 lab FSU
 labExpId hFib-iPS5_R1_294988
@@ -658,6 +665,7 @@ dateUnrestricted 2012-07-28
 dccAccession wgEncodeEH003045
 expId 3045
 fileName wgEncodeFsuRepliChipIpshfib2ips5RawDataRep2.tar.gz
+geoSampleAccession GSM500940
 grant Gilbert
 lab FSU
 labExpId hFib-iPS5_R2_294709
@@ -715,4 +723,4 @@ subId 7727
 tableName wgEncodeFsuRepliChipIpshfib2ips5WaveSignalRep2
 view WaveSignal
 
-# MAGIC: -1775123813
+# MAGIC: -957344372

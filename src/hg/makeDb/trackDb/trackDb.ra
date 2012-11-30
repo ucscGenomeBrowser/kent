@@ -3128,3 +3128,71 @@ type bed 12
 priority 37.14
 color 20,0,250
 url http://pfam.sanger.ac.uk/family/$$
+
+
+track numtSeq2012
+compositeTrack on
+shortLabel NumtS Sequence
+longLabel $Organism NumtS mitochondrial sequence
+group varRep
+priority 500.5
+visibility hide
+noInherit on
+type bed 3 .
+html numtSeq2012
+
+    track numtS
+    parent numtSeq2012
+    shortLabel NumtS
+    longLabel $Organism NumtS
+    color 0,60,120
+    useScore 1
+    priority 1
+    type bed 6 .
+    html numtSeq2012
+   
+    track numtSAssembled
+    parent numtSeq2012
+    shortLabel NumtS assembled
+    longLabel $Organism NumtS assembled
+    color 0,60,120
+    priority 2
+    useScore 1
+    type bed 12 .
+    html numtSeq2012
+
+    track numtSMitochondrion
+    parent numtSeq2012
+    shortLabel NumtS on mitochondrion
+    longLabel $Organism NumtS on mitochondrion
+    useScore 1
+    color 0,60,120
+    priority 3
+    type bed 6 .
+    html numtSeq2012
+    chromosomes chrM
+
+    track  bamAllNumtSSorted
+    parent numtSeq2012
+    shortLabel NumtS SNPs
+    longLabel $Organism NumtS on mitochondrion SNPs
+    priority 4
+    visibility pack
+    configurable on
+    type bam
+    bamSkipPrintQualScore .
+    chromosomes chrM
+    pairEndsByName on
+    showNames on
+    noColorTag .
+    bamColorMode strand
+    bamGrayMode aliQual
+    aliQualRange 0:255
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    maxWindowToDraw 1000000
+

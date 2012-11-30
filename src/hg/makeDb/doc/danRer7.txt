@@ -2430,4 +2430,26 @@ TMPDIR=/scratch/tmp
     cat fb.xenTro3.chainDanRer7Link.txt 
     #	96539932 bases of 1358334882 (7.107%) in intersection
 
+########################################################################
+# lastz rn5 rat (DONE - 2012-11-14 - Hiram)
+    # the original alignment:
+    cd /hive/data/genomes/rn5/bed/lastzDanRer7.2012-11-13
+    cat fb.rn5.chainDanRer7Link.txt
+    #	66573209 bases of 2572853723 (2.588%) in intersection
+
+    #	and this swap:
+    mkdir /hive/data/genomes/danRer7/bed/blastz.rn5.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.rn5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn5/bed/lastzDanRer7.2012-11-13/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    15m5.664s
+    cat  fb.danRer7.chainRn5Link.txt
+    #	68007020 bases of 1409770109 (4.824%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/danRer7/bed
+    ln -s blastz.rn5.swap lastz.rn5
+
 #########################################################################

@@ -655,7 +655,7 @@ else if (startsWithWord("genePred",type)
 else if (sameWord("bedLogR",type)
      ||  sameWord("peptideMapping", type))
     cType = cfgBedScore;
-else if (startsWith("bed ", type) || startsWith("bigBed", type))
+else if (startsWith("bed ", type) || startsWith("bigBed", type) || startsWith("bedDetail", type))
     {
     if (trackDbSetting(tdb, "bedFilter") != NULL)
         cType = cfgBedFilt;
@@ -694,7 +694,7 @@ else if (sameWord("vcfTabix",type))
 
 if (cType == cfgNone && warnIfNecessary)
     {
-    if (!startsWith("bed ", type) && !startsWith("bigBed", type) && !startsWith("gvf", type)
+    if (!startsWith("bed ", type) && !startsWith("bedDetail", type) && !startsWith("bigBed", type) && !startsWith("gvf", type)
         && subgroupFind(tdb, "view", NULL))
         warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->track);
     }

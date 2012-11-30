@@ -10,6 +10,7 @@ exec </dev/null
 
 # location of the genbank root and files on the remote build server
 gbBuildServer=hgwdev.cse.ucsc.edu
+rsyncCommand="udr rsync"
 rsyncPort="ssh"
 rsyncOpts="-ra"
 
@@ -31,6 +32,6 @@ gbdb=/data2/gbdb
 # and is less than one day old,  error if older.
 gbCheckLock $gbRoot/var/copy/run/copy.lock
 
-gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
+gbCopyStep -rsyncCommand="$rsyncCommand" -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
 
 # we don't put put a completed message, as gbCopyStep does the checking.

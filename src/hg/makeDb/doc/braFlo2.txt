@@ -9,6 +9,8 @@
 #       http://www.ncbi.nlm.nih.gov/bioproject/11858 - chrM NC_000834
 
 #       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEP02
+#       http://www.nature.com/nature/journal/v453/n7198/full/nature06967.html
+#       Nature paper says 11.5X WGS coverage
 
 #       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7739
 

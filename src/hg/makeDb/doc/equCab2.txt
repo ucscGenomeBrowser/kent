@@ -69,7 +69,7 @@ sub printUnGapped
 {
 # print a non-bridged gap for single line unknown chromosomes.
     my ($prev) = @_;
-    
+
     print "chrUn\t";
     print $prev + 1, "\t";
     print $prev + 1000, "\t";
@@ -369,14 +369,14 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #	corrected chr27:
     2367070107 + 107858955 + (9603 * 1000) = 2484532062
     # i.e. correct size
-    
+
     cd jkStuff
     faToTwoBit chr.fa chrUn.fa ../equCab2.UnScaffolds.2bit
     cd ..
     twoBitInfo equCab2.UnScaffolds.2bit equCab2.UnScaffolds.sizes
     cp -p equCab2.UnScaffolds.2bit /san/sanvol1/scratch/equCab2
     cp -p equCab2.UnScaffolds.sizes /san/sanvol1/scratch/equCab2
-    
+
     # run via hg18.txt
 
 #########################################################################
@@ -410,7 +410,7 @@ equCab2.downloadDir = equCab2
     cd /cluster/data/genbank
     time /bin/nice -n 19 bin/gbAlignStep -initial equCab2 &
     #	logFile: var/build/logs/2008.04.09-11:33:43.equCab2.initalign.log
-    
+
     # failed (problem with a machine that didn't have proper rsync, so we rsync'ed that
     # machine and re-ran the batch):
     para -retries=6 push
@@ -459,8 +459,8 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
     #	39746402 bases of 2454424288 (1.619%) in intersection
 
 ############################################################################
-# SWAP equCab2 -> hg18 
- 
+# SWAP equCab2 -> hg18
+
     mkdir /cluster/data/equCab2/bed/blastz.hg18.swap
     cd /cluster/data/bosTau4/bed/blastz.hg18.swap
     time /bin/nice -n 19 doBlastzChainNet.pl \
@@ -473,7 +473,7 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
     126450610 bases of 183561855 (68.887%) in intersection
 
 ############################################################################
-# SWAP equCab2 -> mm9 (DONE - 2008-04-17 - larrym) 
+# SWAP equCab2 -> mm9 (DONE - 2008-04-17 - larrym)
     mkdir /cluster/data/equCab2/bed/blastz.mm9.swap
     cd /cluster/data/equCab2/bed/blastz.mm9.swap
     time /bin/nice -n 19 doBlastzChainNet.pl \
@@ -523,14 +523,14 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
     if test -s 1meg.lst; then
 	twoBitToFa -seqList=1meg.lst  $twobit temp.fa
 	faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
-	rm temp.fa 
+	rm temp.fa
     fi
 
     awk '{if ($2 <= 1000000) print $1}' $sizes > less1meg.lst
     if test -s less1meg.lst; then
 	twoBitToFa -seqList=less1meg.lst $twobit temp.fa
-	faSplit about temp.fa 1000000 blastDb/y 
-	rm temp.fa 
+	faSplit about temp.fa 1000000 blastDb/y
+	rm temp.fa
     fi
     wc 1meg.lst less1meg.lst
 #   39    39     252 1meg.lst
@@ -553,8 +553,8 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
 
     mkdir -p /san/sanvol1/scratch/equCab2/blastDb
     cd /cluster/data/equCab2/blastDb
-    for i in nhr nin nsq; 
-    do 
+    for i in nhr nin nsq;
+    do
 	echo $i
 	cp *.$i /san/sanvol1/scratch/equCab2/blastDb
     done
@@ -572,16 +572,16 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
    numGenes=`wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`
    numQueries=`wc query.lst | awk '{print $1}'`
    numKGFiles=`awk -v ng=$numGenes -v nq=$numQueries -v nj=$numJobs 'BEGIN {printf "%d", ng/(nj/nq);exit}' `
-    echo $numJobs 
+    echo $numJobs
 # 251049
 
    mkdir -p /cluster/bluearc/equCab2/bed/tblastn.hg18KG/kgfa
    split -l $numKGFiles /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/equCab2/bed/tblastn.hg18KG/kgfa/kg
    ln -s /cluster/bluearc/equCab2/bed/tblastn.hg18KG/kgfa kgfa
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
      done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -622,21 +622,21 @@ then
 	fi
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
-    exit 
-    
+    exit
+
     ssh pk
     cd /cluster/data/equCab2/bed/tblastn.hg18KG
     para create blastSpec
@@ -696,13 +696,13 @@ chainOne $(path1)
     pslCheck preblastHg18KG.psl
     liftUp -nosort -type=".psl" -nohead blastHg18KG.psl /cluster/data/equCab2/jkStuff/chrUn.lift carry preblastHg18KG.psl
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/equCab2/bed/tblastn.hg18KG
     hgLoadPsl equCab2 blastHg18KG.psl
 
     # check coverage
-    featureBits equCab2 blastHg18KG 
+    featureBits equCab2 blastHg18KG
 # 41055754 bases of 2454424288 (1.673%) in intersection
 
     featureBits equCab2 refGene:cds blastHg18KG  -enrichment
@@ -794,7 +794,7 @@ rearranged to get horse on top:
     Platypus_ornAna1:0.488110):0.118797,Chicken_galGal3:0.488824);
 '_EOF_'
 
-    sed -e 's/[()]//g; s/ /\n/g; s/,/\n/g' equCab2.6-way.nh 
+    sed -e 's/[()]//g; s/ /\n/g; s/,/\n/g' equCab2.6-way.nh
         | sed -e "s/[ \t]*//g; /^[ \t]$/d; /^$/d" | sort -u \
         | sed -e "s/.*_//; s/:.*//" | sort > species.list
 
@@ -1129,7 +1129,7 @@ done | xargs cat | \
         hgLoadMafSummary equCab2 -minSize=30000 -mergeGap=1500 \
             -maxSize=200000  multiz6waySummary stdin
     # Created 705120 summary blocks from 12830585 components and 6251455 mafs from stdin
-    #        
+    #
     #	by loading this into the table multiz6waySummary, it will replace
     #	the previously loaded table with the unannotated mafs
     #	remove the multiz6way*.tab files in this /scratch/tmp directory
@@ -1277,7 +1277,7 @@ after switching hg18 => ensGene:
 #############################################################################
 # phastCons 6-way (DONE - 2008-05-09 - larrym)
 
-    # split 6way mafs into 10M chunks and generate sufficient statistics 
+    # split 6way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh kki
     mkdir /cluster/data/equCab2/bed/multiz6way/msa.split
@@ -1415,7 +1415,7 @@ rm -fr $tmp
     ../../mm9.30way.mod \
 --prune-all-but=equCab1,hg18,galGal3,mm9,canFam2,ornAna1 \
 	> all.mod
-    # edit all.mod to s/equCab2/equCab1/;    
+    # edit all.mod to s/equCab2/equCab1/;
     # TREE: ((((mm9:0.325818,hg18:0.136019):0.019763,(canFam2:0.149350,equCab2:0.099323):0.038613):0.332197,ornAna1:0.488110):0.118797,galGal3:0.488824);
 
     cd ../run.cons/all
@@ -1453,7 +1453,7 @@ rm -fr $tmp
     # 3.212u 0.439s 0:22.68 16.0%	0+0k 0+0io 0pf+0w
     # Loaded 1036081 elements of size 5
 
-    # Try for 5% overall cov, and 70% CDS cov 
+    # Try for 5% overall cov, and 70% CDS cov
     #	We don't have any gene tracks to compare CDS coverage
     #	--rho .31 --expected-length 45 --target-coverage .3
     featureBits equCab2 phastConsElements6way
@@ -1462,7 +1462,7 @@ rm -fr $tmp
     # Create merged posterier probability file and wiggle track data files
     # currently doesn't matter where this is performed, the san is the same
     # network distance from all machines.
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     cd /san/sanvol1/scratch/equCab2/multiz6way/cons/all
     mkdir -p phastCons6wayScores
@@ -2099,7 +2099,7 @@ done
     time /bin/nice -n 19 bin/gbAlignStep -initial equCab2 &
     # logFile: var/build/logs/2008.09.10-15:27:53.equCab2.initalign.log
     # 8970.392u 3173.177s 8:20:43.48 40.4%    0+0k 0+0io 1233pf+0w
-    
+
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
@@ -2160,7 +2160,7 @@ Error: 8972 of 483510 elements of equCab2.transMapInfoMRna.mappedId are not in k
 Example miss: A10156.1-1.2
 
  equCab2.transMapInfoSplicedEst.mappedId - hits 6221957 of 6399157
-Error: 177200 of 6399157 elements of 
+Error: 177200 of 6399157 elements of
 Example miss: AA000021.1-1.2
 
 select count(*) from nscanPep where name >= 'CHR27.199.1' and name <= 'CHR28';
@@ -2212,7 +2212,7 @@ update equCab2.transMapAlnSplicedEst set tSize=39960074 where tName="chr27" and 
 # Re-Run GalGal3 lastz (DONE - 2009-07-01 - Hiram)
     #	 primary run
     cd /hive/data/genomes/galGal3/bed/lastzEquCab2.2009-06-29
-    cat fb.galGal3.chainEquCab2Link.txt 
+    cat fb.galGal3.chainEquCab2Link.txt
     #	68476046 bases of 1042591351 (6.568%) in intersection
 
     #	running the swap
@@ -2224,7 +2224,7 @@ update equCab2.transMapAlnSplicedEst set tSize=39960074 where tName="chr27" and 
 	-swap -workhorse=hgwdev \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    10m1.381s
-    cat fb.equCab2.chainGalGal3Link.txt 
+    cat fb.equCab2.chainGalGal3Link.txt
     #	73336799 bases of 2428790173 (3.019%) in intersection
 
 ############################################################################
@@ -2264,7 +2264,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev \
 	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
     #	real    1413m12.090s
-    cat fb.equCab2.chainOrnAna1Link.txt 
+    cat fb.equCab2.chainOrnAna1Link.txt
     #	132750149 bases of 2428790173 (5.466%) in intersection
 
     mkdir /hive/data/genomes/ornAna1/bed/blastz.equCab2.swap
@@ -2275,14 +2275,14 @@ TMPDIR=/scratch/tmp
 	-swap -workhorse=hgwdev \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    115m47.611s
-    cat fb.ornAna1.chainEquCab2Link.txt 
+    cat fb.ornAna1.chainEquCab2Link.txt
     #	132776204 bases of 1842236818 (7.207%) in intersection
 
 ############################################################################
 # lastz swap to Dog CanFam2 (DONE - 2009-07-01 - Hiram)
     #	the original lastz
     cd /hive/data/genomes/canFam2/bed/lastzEquCab2.2009-06-29
-    cat fb.canFam2.chainEquCab2Link.txt 
+    cat fb.canFam2.chainEquCab2Link.txt
     #	1676663178 bases of 2384996543 (70.300%) in intersection
 
     mkdir /hive/data/genomes/equCab2/bed/blastz.canFam2.swap
@@ -2292,14 +2292,14 @@ TMPDIR=/scratch/tmp
 	-swap -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    286m51.658s
-    fb.equCab2.chainCanFam2Link.txt 
+    fb.equCab2.chainCanFam2Link.txt
     #	1721407500 bases of 2428790173 (70.875%) in intersection
 
 ############################################################################
 # lastz swap to Mouse Mm9 (DONE - 2009-07-02 - Hiram)
     #	the original lastz
     cd /hive/data/genomes/mm9/bed/lastzEquCab2.2009-06-29
-    cat fb.mm9.chainEquCab2Link.txt 
+    cat fb.mm9.chainEquCab2Link.txt
     #	912421053 bases of 2620346127 (34.821%) in intersection
 
     mkdir /hive/data/genomes/equCab2/bed/blastz.mm9.swap
@@ -2309,14 +2309,14 @@ TMPDIR=/scratch/tmp
 	-swap -noLoadChainSplit -verbose=2 -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real  122m25.314s
-    cat fb.equCab2.chainMm9Link.txt 
+    cat fb.equCab2.chainMm9Link.txt
     #	902295813 bases of 2428790173 (37.150%) in intersection
 
 ############################################################################
 # lastz swap to Opossum MonDom5 (DONE - 2009-07-02 - Hiram)
     #	the original lastz
     cd /hive/data/genomes/monDom5/bed/lastzEquCab2.2009-06-29
-    cat fb.monDom5.chainEquCab2Link.txt 
+    cat fb.monDom5.chainEquCab2Link.txt
     #	355004426 bases of 3501660299 (10.138%) in intersection
 
     mkdir /hive/data/genomes/equCab2/bed/blastz.monDom5.swap
@@ -2327,14 +2327,14 @@ TMPDIR=/scratch/tmp
 	-swap -workhorse=hgwdev \
 	-chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	real    320m3.573s
-    cat fb.equCab2.chainMonDom5Link.txt 
+    cat fb.equCab2.chainMonDom5Link.txt
     #	351787662 bases of 2428790173 (14.484%) in intersection
 
 #########################################################################
 # lastz swap to Human Hg18 (DONE - 2009-07-02 - Hiram)
     #	the original lastz
     cd /hive/data/genomes/hg18/bed/lastzEquCab2.2009-06-29
-    cat fb.hg18.chainEquCab2Link.txt 
+    cat fb.hg18.chainEquCab2Link.txt
     #	1647122438 bases of 2881515245 (57.162%) in intersection
 
     mkdir /hive/data/genomes/equCab2/bed/blastz.hg18.swap
@@ -2345,7 +2345,7 @@ TMPDIR=/scratch/tmp
 	-swap -workhorse=hgwdev \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    238m42.004s
-    cat fb.equCab2.chainHg18Link.txt 
+    cat fb.equCab2.chainHg18Link.txt
     #	1622340736 bases of 2428790173 (66.796%) in intersection
 
 ############################################################################
@@ -2406,7 +2406,7 @@ TMPDIR=/scratch/tmp
         -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #   real    397m26.503s
     cat fb.equCab2.chainOviAri1Link.txt
-    #   1012763540 bases of 2428790173 (41.698%) in intersection 
+    #   1012763540 bases of 2428790173 (41.698%) in intersection
 
     mkdir /hive/data/genomes/oviAri1/bed/blastz.equCab2.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.equCab2.swap
@@ -2427,7 +2427,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/outside/dbSNP/130/horse
     # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
     # to find the subdir name to use as orgDir below (horse_9796 in this case).
-    # Then click into that directory and look for file names like 
+    # Then click into that directory and look for file names like
     #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
     # -- use the first num for build and the second num_num for buildAssembly:
     cat > config.ra <<EOF
@@ -2481,7 +2481,7 @@ EOF
 ############################################################################
 # SWAP lastz mm10 (DONE - 2012-03-19 - Hiram)
     # original alignment to mm10
-    cat /hive/data/genomes/mm10/bed/lastzEquCab2.2012-03-16/fb.mm10.chainEquCab2Link.txt 
+    cat /hive/data/genomes/mm10/bed/lastzEquCab2.2012-03-16/fb.mm10.chainEquCab2Link.txt
     #	912967841 bases of 2652783500 (34.415%) in intersection
 
     # and this swap
@@ -2493,10 +2493,64 @@ EOF
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    87m2.261s
-    cat fb.equCab2.chainMm10Link.txt 
+    cat fb.equCab2.chainMm10Link.txt
     #	901995882 bases of 2428790173 (37.138%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/equCab2/bed
     ln -s blastz.mm10.swap lastz.mm10
+
+###########################################################################
+# lastz White Rhino cerSim1 (DONE - 2012-10-23 - Hiram)
+    screen -S equCab2CerSim1
+    mkdir /hive/data/genomes/equCab2/bed/lastzCerSim1.2012-10-23
+    cd /hive/data/genomes/equCab2/bed/lastzCerSim1.2012-10-23
+
+    cat << '_EOF_' > DEF
+# Horse vs White Rhino
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_M=50
+
+# TARGET: Horse EquCab2
+SEQ1_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ1_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/equCab2/equCab2.UnScaffolds.2bit
+SEQ1_CTGLEN=/hive/data/genomes/equCab2/equCab2.UnScaffolds.sizes
+SEQ1_LIFT=/hive/data/genomes/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=50
+SEQ1_LAP=10000
+
+# QUERY: White Rhino CerSim1
+SEQ2_DIR=/hive/data/genomes/cerSim1/cerSim1.2bit
+SEQ2_LEN=/hive/data/genomes/cerSim1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/equCab2/bed/lastzCerSim1.2012-10-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+	-qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -verbose=2 > do.log 2>&1 &
+    #   real    7847m25.844s
+    #   broken chain run on encodek, attempted finish up on swarm last 34 jobs
+    # something is odd for these chaining operations, running manually,
+    # the last 20 jobs on hgwdev, total time parallel running them all:
+    #   real    5539m3.710s -> over 92 hours !
+    # and they are gigantic files:
+# -rw-rw-r-- 1 6979748026 Nov  4 23:57 equCab2.UnScaffolds.2bit:chrX:.chain
+# -rw-rw-r-- 1 6415261877 Nov  5 04:59 equCab2.UnScaffolds.2bit:chr1:.chain
+
+    time nice -n +19 doBlastzChainNet.pl \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainMerge -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -verbose=2 > chainMerge.log 2>&1 &
+XXX - running - Mon Nov  5 10:39:45 PST 2012
 
 ##############################################################################

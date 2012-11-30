@@ -28,9 +28,17 @@
 </li>
 <li class="menuparent" id="mirrors"><span>Mirrors</span>
 	<ul style="display: none; visibility: hidden;">
-	<!-- OPTIONAL_GEO_MIRROR_ITEMS -->
-	<li><a href="../mirror.html">Third Party Mirrors</a></li>
-	<li class="last"><a href="../admin/mirror.html">Mirroring Instructions</a></li>
+	<li class="first"><a href="../mirror.html">Third Party Mirrors</a></li>
+	<li><a href="../admin/mirror.html">Mirroring Instructions</a></li>
+
+        <!-- OPTIONAL_GEO_MIRROR_ITEMS -->
+	<li id="geoMirrorMenu" class="noHighlight"><hr></li>
+        <li id="serverEuroLink">
+            <img alt="X" width="16" height="16" style="float: left;" src="../images/greenChecksm.png">
+            <a href="http://genome-euro.ucsc.edu/cgi-bin/hgGateway">Use Europe Server</a></li>
+        <li class="last" id="serverUSLink">
+            <img alt="X" width="16" height="16" style="float: left;" src="../images/greenChecksm.png">
+            <a href="http://genome.ucsc.edu/cgi-bin/hgGateway">Use US Server</a></li>
 	</ul>
 </li>
 <li class="menuparent" id="downloads"><span>Downloads</span>
@@ -89,4 +97,62 @@
 <!--//--><![CDATA[//><!--
 jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay": 800, "speed": 1 }, "thickbox": { "close": "Close", "next": "Next \x3e", "prev": "\x3c Prev", "esc_key": "or Esc Key", "next_close": "Next / Close on last", "image_count": "Image !current of !total" }, "custom_search": { "form_target": "_self", "solr": 0 } });
 //--><!]]>
+
+/* geographic server (mirror) support
+
+   Customize 'Mirrors' drop-down menu based on current server.  If the server
+   is a UCSC-sponsored site (USA/Ca or European), show this in drop-down menu
+   with a checkmark, and allow user to change server.  Based on design notes here:
+        http://genomewiki.ucsc.edu/genecats/index.php/Euronode
+
+   NOTE: More generalized implementation would use hgcentral.gbNode table
+   to populate menu items and locate redirects.  This implementation uses the
+   spec from above wiki page:
+        browser.node=1 -> US server (genome.ucsc.edu)
+        browser.node=2 -> Europe server (genome-euro.ucsc.edu)
+
+   NOTE:  if further JS is needed for nav bar, this should be moved
+   into a new globalNavBar.js file
+
+*/
+
+$(function() {
+    var hostName = window.location.hostname;
+
+    function hideGeoServers() {
+        // remove geo servers and separator from dropdown menu
+        $('#serverEuroLink').hide();
+        $('#serverUSLink').hide();
+        $('#mirrors hr').hide();
+    }
+
+    function setGeoServerEuro(isEuro) {
+        // show checkmark on active server and disable selecting it
+        if (isEuro) {
+            $('#serverEuroLink').addClass('noHighlight');
+            $('#serverEuroLink a').removeAttr('href');
+            $('#serverUSLink img').hide();
+        } else {
+            $('#serverUSLink').addClass('noHighlight');
+            $('#serverUSLink a').removeAttr('href');
+            $('#serverEuroLink img').hide();
+        }
+    }
+    if (typeof GB_geoMirror === 'undefined') {
+        // development servers and 3rd party mirrors
+        hideGeoServers();
+        return;
+    }
+
+    if (GB_geoMirror == 1) {
+        // US server - disable highlight and link for US, hide checkmark for Euro
+        setGeoServerEuro(false);
+    } else if (GB_geoMirror === 2) {
+        // Europe server - disable highlight and link for Europe, hide checkmark for US
+        setGeoServerEuro(true);
+    } else {
+        hideGeoServers();
+    }
+});
+
 </script>

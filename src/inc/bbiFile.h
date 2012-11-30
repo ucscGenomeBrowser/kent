@@ -4,6 +4,7 @@
 #define BBIFILE_H
 
 #include "cirTree.h"
+#include "linefile.h"
 
 /* bigWig/bigBed file structure:
  *     fixedWidthHeader

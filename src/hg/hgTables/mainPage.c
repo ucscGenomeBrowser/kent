@@ -136,8 +136,6 @@ struct slName *getDbListForGenome()
 struct hash *hash = sqlHashOfDatabases();
 struct slName *dbList = NULL;
 addIfExists(hash, &dbList, database);
-addIfExists(hash, &dbList, "swissProt");
-addIfExists(hash, &dbList, "proteins");
 addIfExists(hash, &dbList, "uniProt");
 addIfExists(hash, &dbList, "proteome");
 addIfExists(hash, &dbList, "go");
@@ -628,7 +626,7 @@ hPrintf("<TABLE BORDER=0>\n");
     {
     hPrintf("<TR><TD>");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
-    if (strchr(curTable, '.') == NULL)  /* In same database */
+    if (isHubTrack(curTable) || (strchr(curTable, '.') == NULL))  /* In same database */
         {
         hti = getHti(database, curTable, conn);
         isPositional = htiIsPositional(hti);

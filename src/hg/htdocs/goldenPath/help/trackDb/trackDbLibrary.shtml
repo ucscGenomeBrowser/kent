@@ -2329,23 +2329,17 @@
 <div class="format"><B>Example of a bam track</B></div>
     <pre>
     type bam
-    bigDataUrl barneysSon.bam
+    bigDataUrl http://hgdownload/ucsc.edu/goldenPath/hg19/bambam/barneysSon.bam
     pairEndsByName on
     showNames off
     bamColorMode off
     bamGrayMode aliQual
-    baseColorDefault diffBases
-    baseColorUseSequence lfExtra
     indelDoubleInsert on
     indelQueryInsert on
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 100
     maxWindowToDraw 10000
       ...    </pre>
-    <P>The bam data is held
-    in the local file "barneysSon.bam" (alternatively, bigDataUrl could be a 
-    URL pointing to a file at a remote internet-accessible location).  
-    In addition to the data file, an
+    <P>The bam data is held in the file "barneysSon.bam" which is at an 
+    internet-accessible location.  In addition to the data file, an
     associated index file must reside at the same location. The index file must have the
     same name as the data file, with ".bai" appended (e.g. <code>barneysSon.bam.bai</code>).</P>
 </DIV>
@@ -2556,7 +2550,7 @@
     region.  When these chains have gaps, they may be filled in
     with additional chains, shown at a lower level, and gaps in these
     chains may in turn be filled at an even lower level.  These levels
-    help to visualize genome rearrangements such as inversions and
+    help in visualizing genome rearrangements such as inversions and
     retroposed elements.    For more information on the netAlign
     format, please refer to
     <A HREF="../net.html">
@@ -2897,7 +2891,7 @@
     one conservation signal can be included with your MAF display by
     using this setting.  When you include conservation wiggles, you
     can also include the standard settings for controlling signal type
-    tracks.  The setting includes three parts, then optional
+    tracks.  The setting includes three parts, then (optionally)
     additional sets of three, all delimited by white space.  The first
     table is the default. The <code>leftLabel</code> is used to
     prefix the label "Cons" in the left label area of the Browser
@@ -2940,7 +2934,7 @@
     conservation score for the 8 species.  Notice that the pairwise alignments 
     for the last three species are turned off by default, and each
     pairwise alignment will have a height of 10 pixels.  With few
-    species displayed by default, irows defaults to off as
+    species displayed by default, irows defaults to "off" as
     well, which will result in a cleaner display. Since there is a
     conservation wiggle, there are additional settings for that
     signal.
@@ -2962,9 +2956,9 @@
       ...    </pre>
     <P>For this wigMaf
     track, there is no wiggle defined.  In this actual
-    example taken from the hg19 Genome Browser, the several conservations signals 
+    example taken from the hg19 Genome Browser, the several conservation signals 
     displayed in concert with this multiple alignment are separate
-    signal type tracks defined as part of the "Conservation"
+    signal-type tracks defined as part of the "Conservation"
     composite track (see discussion of composites below).  Notice
     that the 46 species in this alignment are organized into clades
     using the "<code>speciesGroups</code>" setting.  Each clade has its
@@ -2979,7 +2973,7 @@
     <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>Though
     many microarray experiments have been superseded by high-throughput
-    sequencing (e.g., ChIP-seq) experiments, plenty of microarray tracks
+    sequencing (e.g., ChIP-seq) experiments, several microarray tracks
     still exist.  Further, microarray experiments can be the economical
     or practical choice in many instances. The datasets for the built-in
     microarray tracks in the Genome Browser are stored in bed 12+3 (bed
@@ -3707,8 +3701,8 @@ for each cell associated with the particular TF binding location.</P>
     <P><I>NOT FOR HUBS.</I></P>
     <P>This is a specialized
     format track that shows the snaking course of bi-directional and
-    overlapping alignments.  This format can help illustrate inversion
-    type rearrangements that align to the plus strand, then the minus strand, 
+    overlapping alignments.  This format can help illustrate inversion-type 
+    rearrangements that align to the plus strand, then the minus strand, 
     and again to the plus strand.  It can also be used to illustrate overlapping
     alignments, such as when a duplication has occurred compared to the
     reference genome.</P>
@@ -3724,7 +3718,7 @@ for each cell associated with the particular TF binding location.</P>
     this type is almost always a mapping between two species or two
     assemblies of the same species, the type must also declare that
     species/assembly by database name.</P>
-    <P>As with chains and netAligns, which typically show mappings between to assemblies, 
+    <P>As with chains and netAligns, which typically show mappings between two assemblies, 
     the "<code>otherDb</code>" setting is also needed to declare which other genome and assembly
     the data in this track represents.</P>
 </DIV>
@@ -3758,7 +3752,7 @@ for each cell associated with the particular TF binding location.</P>
     <P>All tracks belong to
     one of several groups.  Hub tracks belong to the group that
     encompasses their hub.  Other tracks belong to one of the
-    predefined groups.  For hg19 the following groups are defined as:</P>
+    predefined groups.  For hg19 the following groups are defined:</P>
     <UL>
     <LI><code>map</code> - "Mapping and Sequence"</LI>
     <LI><code>phenDis</code> - "Phenotype and Disease Associations"</LI>

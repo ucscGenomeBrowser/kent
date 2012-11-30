@@ -68,6 +68,7 @@ set oryLat oryLat2
 set otoGar otoGar1,otoGar3
 set oviAri oviAri1
 set panTro panTro1,panTro2,panTro3,panTro4
+set papAnu papAnu2
 set papHam papHam1
 set petMar petMar1,petMar2
 set ponAbe ponAbe2
@@ -93,14 +94,14 @@ set vicPac vicPac1
 set xenTro xenTro1,xenTro2,xenTro3
 
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$anoCar,$anoGam,$apiMel,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$cavPor,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,$cioSav,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$echTel,$equCab,$eriEur,$felCat,$fr,$gadMor,$galGal,$gasAcu,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$myoLuc,$nomLeu,$ochPri,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$turTru,$vicPac,$xenTro
+set gbd $ailMel,$anoCar,$anoGam,$apiMel,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$cavPor,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,$cioSav,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$echTel,$equCab,$eriEur,$felCat,$fr,$gadMor,$galGal,$gasAcu,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$myoLuc,$nomLeu,$ochPri,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$turTru,$vicPac,$xenTro
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
 set wgs $ailMel,$aplCal,$bosTau,$bruMal,$calJac,$canFam,$cavPor,$choHof,$chrPic,$cioSav,$dasNov,$dipOrd,$echTel,$eriEur,$felCat,$fr,$galGal,$haeCon,$hetGla,$macEug,$melGal,$melHap,$melInc,$micMur,$monDom,$myoLuc,$nomLeu,$ochPri,$otoGar,$oryCun,$oryLat,$oviAri,$panTro,$proCap,$pteVam,$rn,$sarHar,$sorAra,$speTri,$susScr,$taeGut,$tarSyr,$tetNig,$tupBel,$turTru,$vicPac
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $ailMel,$anoCar,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$canFam,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,danRer6,danRer7,$dasNov,$dipOrd,$dp,$droMult,$droYak,$echTel,$eriEur,$felCat,$gadMor,$galGal,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$myoLuc,$nomLeu,$ochPri,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$turTru,$vicPac
+set xrg $ailMel,$anoCar,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$canFam,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,danRer6,danRer7,$dasNov,$dipOrd,$dp,$droMult,$droYak,$echTel,$eriEur,$felCat,$gadMor,$galGal,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$myoLuc,$nomLeu,$ochPri,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$turTru,$vicPac
 
 # Ensembl gene track lists constructed from update procedure
 set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,eriEur1,equCab2,felCat3,fr2,fr3,galGal3,gasAcu1,gorGor3,hg19,latCha1,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,myoLuc2,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,ponAbe2,proCap1,pteVam1,rheMac2,rn4,sacCer3,sarHar1,sorAra1,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,xenTro3
@@ -134,7 +135,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1,loxAfr3
-set transMapDb anoCar1,anoCar2,bosTau4,calJac1,calJac3,canFam2,cavPor3,choHof1,danRer5,danRer6,equCab2,felCat3,fr2,fr3,galGal3,gasAcu1,hg18,hg19,mm9,mm10,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,xenTro3,loxAfr3,papHam1,micMur1,echTel1,speTri2,saiBol1,gadMor1,melUnd1,eriEur1,proCap1,pteVam1,sorAra1,tarSyr1,tupBel1,ochPri2,oreNil2,turTru2,vicPac1,panTro4
+set transMapDb anoCar1,anoCar2,bosTau4,calJac1,calJac3,canFam2,cavPor3,choHof1,danRer5,danRer6,equCab2,felCat3,fr2,fr3,galGal3,gasAcu1,hg18,hg19,mm9,mm10,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,xenTro3,loxAfr3,papAnu2,papHam1,micMur1,echTel1,speTri2,saiBol1,gadMor1,melUnd1,eriEur1,proCap1,pteVam1,sorAra1,tarSyr1,tupBel1,ochPri2,oreNil2,turTru2,vicPac1,panTro4
 
 # Define ucscRetro databases
 set ucscRetroDb hg18,hg19,mm9,mm10
@@ -4192,6 +4193,9 @@ tablesIgnored $hg
     syntenyRat
     tajd%
     targetScanS
+    tgpPhase1
+    tgpPhase1AccessibilityPilotCriteria
+    tgpPhase1AccessibilityStrictCriteria
     vistaEnhancers
     wgRna
     zoom1_affyTranscriptome
@@ -4315,6 +4319,9 @@ tablesIgnored micMur1
     tableList
 
 tablesIgnored ochPri2
+    tableList
+
+tablesIgnored papAnu2
     tableList
 
 tablesIgnored papHam1

@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 measureTime(NULL);
-setConnFailuresEnabled(FALSE); // try TRUE in next release v274
 browserName = hBrowserName();
 organization = "UCSC";
 
