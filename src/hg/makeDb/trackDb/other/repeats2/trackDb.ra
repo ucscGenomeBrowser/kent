@@ -8,3 +8,11 @@ track gap override
 visibility hide
 html gap
 
+track kap1SummitCoverage
+shortLabel KAP1 coverage
+longLabel Coverage of KAP1 MACS summits +- 10 bp
+group regulation
+visibility full
+color 30,30,0
+type bigWig 0 200
+priority 50
