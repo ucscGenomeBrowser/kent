@@ -18,5 +18,6 @@ clean::
 	rm -f ${A}${EXE} ${O}
 
 test:
-	alphaAsm yReads.txt yTypeOrder.txt test.out chain=test.before afterChain=test.after outSize=10000 seed=0 verbose=1
+	alphaAsm yReads.txt yTypeOrder.txt testY.out chain=testY.before afterChain=testY.after outSize=10000 seed=0 verbose=1
+	alphaAsm 3Reads.txt 3TypeOrder.txt test3.out chain=test3.before afterChain=test3.after outSize=17543 seed=0 verbose=1
 

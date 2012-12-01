@@ -5,7 +5,7 @@ name zebrafish
 db danRer7
 
 name mouse
-db mm9
+db mm10
 
 name rat
 db rn4

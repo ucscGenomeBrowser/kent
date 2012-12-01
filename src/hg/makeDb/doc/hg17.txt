@@ -24356,7 +24356,7 @@ See hg18.txt for details.
 # Old DGV format is obsolete; see the following section.
 
 #######################################################################
-# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 11/16/12 angie)
+# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 11/16/12 angie, coord tweaks 11/30/12)
     # DGV has changed their data format, and for the time being the data are
     # served by a beta web site, http://dgvbeta.tcag.ca/ ; in time that will
     # replace their current site.
@@ -24431,6 +24431,15 @@ See hg18.txt for details.
     hgLoadBed hg17 dgv dgv.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -renameSqlTable -tab
 #Read 221263 elements of size 15 from dgv.bed
+    # 11/30/12: checkTableCoords caught some coords past the end of a few
+    # chromosomes.  DGV is looking into it.  Truncate:
+    hgsql hg17 -e 'update dgv set chromEnd = 154824264 where chrom = "chrX" && chromEnd > 154824264'
+    hgsql hg17 -e 'update dgv set chromEnd = 199505740 where chrom = "chr3" && chromEnd > 199505740'
+    hgsql hg17 -e 'update dgv set chromEnd = 170975699 where chrom = "chr6" && chromEnd > 170975699'
+    hgsql hg17 -e 'update dgv set chromEnd = 158628139 where chrom = "chr7" && chromEnd > 158628139'
+    hgsql hg17 -e 'update dgv set chromEnd = 138429268 where chrom = "chr9" && chromEnd > 138429268'
+    checkTableCoords -verbose=2 hg17 dgv
+    # No output, good.
 
 
 ############################################################################

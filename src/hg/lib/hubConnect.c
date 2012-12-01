@@ -345,6 +345,7 @@ void hubConnectAddDescription(char *database, struct trackDb *tdb)
 unsigned hubId = hubIdFromTrackName(tdb->track);
 struct trackHub *hub = trackHubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+trackHubPolishTrackNames(hub, tdb);
 addDescription(hubGenome->trackDbFile, tdb);
 }
 

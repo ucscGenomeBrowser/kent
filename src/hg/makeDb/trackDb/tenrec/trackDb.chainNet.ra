@@ -16,3 +16,6 @@ priority 520.3
 chainMinScore  5000
 chainLinearGap  loose
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg19 override
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91

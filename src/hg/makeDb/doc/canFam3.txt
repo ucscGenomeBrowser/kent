@@ -659,3 +659,40 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 ##############################################################################
+# construct liftOver to canFam2 (DONE - 2012-11-27,29 - Hiram)
+    screen -S canFam2	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/canFam3/bed/blat.canFam2.2012-11-27
+    cd /hive/data/genomes/canFam3/bed/blat.canFam2.2012-11-27
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/canFam3/jkStuff/canFam3.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev canFam3 canFam2
+
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/canFam3/jkStuff/canFam3.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev canFam3 canFam2 > do.log 2>&1
+    #   real    1752m51.425s
+    # two jobs appear to be a problem, running manually on hgwdev in run.chain:
+./job.csh part025.lst/canFam2.2bit:chrUn: chainRaw/part025.lst/canFam2.2bit:chrUn:.chain &
+./job.csh part026.lst/canFam2.2bit:chrUn: chainRaw/part026.lst/canFam2.2bit:chrUn:.chain
+wait
+    #   real    54m24.882s
+    # the problem is that those axtChain operations use a lot of memory,
+    # for some reason on the kluster nodes, they just slow down and get
+    #   stuck at 2 Gb
+    # continuing:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/canFam3/jkStuff/canFam3.11.ooc \
+	-continue=net -dbHost=hgwdev -workhorse=hgwdev canFam3 canFam2 \
+        > net.log 2>&1
+    # missed the output in the net.log
+    #   real    117m45.220s
+
+    # verify this file exists:
+    og -L /gbdb/canFam3/liftOver/canFam3ToCanFam2.over.chain.gz
+# -rw-rw-r-- 1 583607 May  5 02:16 /gbdb/canFam3/liftOver/canFam3ToCanFam2.over.chain.gz
+
+    # and try out the conversion on genome-test from canFam3 to canFam2
+
+############################################################################
