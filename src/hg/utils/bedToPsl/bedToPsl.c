@@ -9,12 +9,12 @@
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"keepTarget", OPTION_BOOLEAN},
+    {"keepQuery", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 /* command line options */
-static boolean keepTarget = FALSE;
+static boolean keepQuery = FALSE;
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -29,7 +29,7 @@ errAbort("%s:\n"
     "If the BED has at least 12 columns, then a PSL with blocks is created.\n"
     "Otherwise single-exon PSLs are created.\n\n"
     "Options:\n"
-    "-keepTarget  -  instead of creating a fake target, create PSL with identical query and\n"
+    "-keepQuery  -  instead of creating a fake query, create PSL with identical query and\n"
     "                target specs. Useful if bed features are to be lifted with pslMap and one \n"
     "                wants to keep the source location in the lift result.\n" , msg);
 }
@@ -80,7 +80,7 @@ static struct psl *bedToPsl(struct bed *bed, struct hash *chromSizes)
 {
 int qSize = bedTotalBlockSize(bed);
 struct psl *psl;
-if (keepTarget)
+if (keepQuery)
     psl = pslNew(bed->chrom, hashIntVal(chromSizes, bed->chrom), bed->chromStart, bed->chromEnd,
                          bed->chrom, hashIntVal(chromSizes, bed->chrom), bed->chromStart, bed->chromEnd,
                          ((bed->strand[0] == '\0') ? "+" : bed->strand), (bed->blockCount == 0) ? 1 : bed->blockCount, 0);
@@ -132,8 +132,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("Too few arguments");
-if (optionExists("keepTarget"))
-    keepTarget = true;
+if (optionExists("keepQuery"))
+    keepQuery = true;
 cnvBedToPsl(argv[1], argv[2], argv[3]);
 return 0;
 }
