@@ -9,8 +9,11 @@ source `which qaConfig.csh`
 # 
 ###############################################
 
-set filePath=""
+set pathfile=""
 set excludeList=""
+set errdirs=0
+set errors=0
+set outfile=`date +%Y-%m-%d`
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
@@ -31,15 +34,6 @@ if ( $#argv != 1 ) then
 endif
 
 if ($argv[1] == "all") then
-  ## get all html-containing paths
-  # find /usr/local/apache/htdocs -name "*.html" > htmlfiles
-  # rm -f htmldirs
-  # foreach file ( `cat htmlfiles` )
-  #   dirname $file >> htmldirs
-  # end
-  # cat htmldirs | sort -u
-  # rm -f htmlfiles
-
   # use default list of paths
   set pathfile="/cluster/bin/scripts/staticpaths"
 else
@@ -57,12 +51,29 @@ if ( $status ) then
   exit 1
 endif
 
-foreach filePath (`cat $pathfile`)
-  echo "filePath: $filePath"
-  echo "excludeList: $excludeList"
-  checkStaticLinks.csh $filePath $excludeList
-  if ( $status ) then
-    echo "\n exclude file does not exist\n"
-    exit 1
-  endif
+foreach dir (`cat $pathfile`)
+  # echo "checking $dir"
+  checkStaticLinks.csh $dir $excludeList
 end
+
+# consolidate results
+set dir=""
+rm -f $outfile
+# foreach dir ( 0 goldenPath.help test ) 
+foreach dir (`cat $pathfile`)
+  set dir=`echo $dir | sed "s@/@.@g"`
+  if ( $dir == 0 )  then
+    set dir=htdocs
+  endif
+  tail -20 $dir.err | grep -q "errors in 0 files"
+  if ( $status ) then
+    cat $dir.err                                    >> $outfile
+    echo "\n ===================================\n" >> $outfile
+    @ errors = $errors + 1
+  endif
+  rm -f $dir.err
+  @ errdirs = $errdirs + 1
+end
+echo " checked $errdirs directories"                >> $outfile
+echo " found $errors with errors"                   >> $outfile
+mv $outfile /usr/local/apache/htdocs-genecats/qa/test-results/staticLinks
