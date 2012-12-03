@@ -311,7 +311,8 @@ static void addOneDescription(char *trackDbFile, struct trackDb *tdb)
 {
 /* html setting should always be set because we set it at load time */
 char *htmlName = trackDbSetting(tdb, "html");
-assert(htmlName != NULL);
+if (htmlName == NULL)
+    return;
 
 char *simpleName = hubConnectSkipHubPrefix(htmlName);
 char *url = trackHubRelativeUrl(trackDbFile, simpleName);
