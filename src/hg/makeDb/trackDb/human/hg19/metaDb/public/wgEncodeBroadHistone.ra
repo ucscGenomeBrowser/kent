@@ -15749,6 +15749,7 @@ geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
 md5sum f020973769ac85f2fc16afa68c8bbdd4,b984920aad29f2566b19010e3d6e8214
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15777,6 +15778,7 @@ geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
 md5sum fd2d0b75e8f0d70ef2207bbae551fd04,0c927727d915035b00998a0e10f5bc2b
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15805,6 +15807,7 @@ geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
 md5sum e46a09bf894435e5284429a9c68d1388
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg19
 project wgEncode
 setType exp
@@ -15832,6 +15835,7 @@ geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
 md5sum fef4357ea3ef319edca4faf2a0a39e83
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15859,6 +15863,7 @@ geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
 md5sum 14981de1a6b808393d88cf06083fd170
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15887,6 +15892,7 @@ geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
 md5sum 99f89f0d1082b9e4f4601618e3a80d9c
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg19
 project wgEncode
 setType exp
@@ -27914,6 +27920,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 md5sum b54acd646e027020fa9867c58af53400,4913368fcf37eafd3066610dcd34f2ca
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -27943,6 +27950,7 @@ grant Bernstein
 lab Broad
 labVersion Illumina_GA2e and Illumina_GA2x
 md5sum 4bf0b5a4855ccec331eaf0d0beb966eb,e0def25d583179c8be6f37ac534b5fdc
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -27971,6 +27979,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 md5sum ee28e5187702d8254bb46bb36b0cc3f6,cb5c9fcf871fc616be4640f54a5695a4
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -27999,6 +28008,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 md5sum 76567e5bf71510ae20ca234e75f82a4c
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 setType exp
@@ -28026,6 +28036,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 md5sum e2da5c4f157267d04db1875f91fd197a
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -28054,6 +28065,7 @@ grant Bernstein
 lab Broad
 labVersion Illumina_GA2e and Illumina_GA2x
 md5sum 05c2c3b4d856cdd02162f2a89064e875
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -28081,6 +28093,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 md5sum 9182fde7e0e1f65877171f8b33bf92ec
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -28109,6 +28122,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 md5sum 55f84ecd55e386ead08af89fa4f39115
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 setType exp
@@ -32626,6 +32640,7 @@ geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
 md5sum fc0222786ecc2349bbdfd9ed9fb304af,fb99fe5425a2c7ba2f497887cbf4c3aa
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -32654,6 +32669,7 @@ geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
 md5sum bb060e3e3cec69779ea046eab3e1ab3f,6ea1b750bf738e79fb19d4b45d7edda6
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -32682,6 +32698,7 @@ geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
 md5sum 1793a4b8f163c5f80d18f94371b446c0
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 setType exp
@@ -32709,6 +32726,7 @@ geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
 md5sum 90f3e5f57dd5bfd5939c042c313acd4e
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -32735,6 +32753,7 @@ geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
 md5sum 506cdfbe08e99890450786043d9cc4fa
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -32763,6 +32782,7 @@ geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
 md5sum face155572682cd9fc63731fee751845
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 setType exp
@@ -43138,6 +43158,7 @@ geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
 md5sum 8d8f9c2a8fbae12c6a50e32d0c47a577,75928c11b910256bc037cdfdf26d4568
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -43166,6 +43187,7 @@ geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
 md5sum 82e92d8ef7e66d4db6aa28cbff7478ce,cce669c9b082ba378a75fb44295d8408
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -43194,6 +43216,7 @@ geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
 md5sum 179ec52d52b8991a42b3383f3bef7519
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 setType exp
@@ -43221,6 +43244,7 @@ geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
 md5sum 77ba86c2966bf186c63286f59e350475
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -43248,6 +43272,7 @@ geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
 md5sum b90a59fbfb869ebe565e9d69a8b3bc73
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -43276,6 +43301,7 @@ geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
 md5sum d232decd317fceadd2df5a6021bbe908
+objStatus revoked - POLR2A antibody failed to validate
 origAssembly hg18
 project wgEncode
 setType exp
@@ -47627,4 +47653,4 @@ tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 treatment None
 view Signal
 
-# MAGIC: -1197632601
+# MAGIC: -1209122673
