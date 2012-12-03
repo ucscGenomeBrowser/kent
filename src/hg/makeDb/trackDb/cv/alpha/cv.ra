@@ -6121,6 +6121,7 @@ tier 3
 tissue brain
 vendorId CRL-1690
 vendorName ATCC
+protocol missing 
 #protocol Myers:T98G_Myers_protocol.pdf
 
 term TBEC
@@ -6278,23 +6279,24 @@ tissue breast
 vendorId HTB-133
 vendorName ATCC
 
-term TL010
-tag TL010
-type Cell Line
-description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a male with fragile X syndrome, described in Yu, et al. (1992), Am. J. Hum. Genet. 50:968-980).
-karyotype normal
-lab Stam
-lineage mesoderm
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-organism human
-protocol missing
-sex M
-termId BTO:0002062
-termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
-tier 3
-tissue blood
-vendorId TL010
-vendorName Dr. John Stamatoyannopoulos at UW
+#NOT USED IN HG19
+#term TL010
+#tag TL010
+#type Cell Line
+#description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a male with fragile X syndrome, described in Yu, et al. (1992), Am. J. Hum. Genet. 50:968-980).
+#karyotype normal
+#lab Stam
+#lineage mesoderm
+#orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+#organism human
+#protocol missing
+#sex M
+#termId BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+#tier 3
+#tissue blood
+#vendorId TL010
+#vendorName Dr. John Stamatoyannopoulos at UW
 
 term Treg_Wb78495824
 tag TREGWB78495824
@@ -6534,23 +6536,24 @@ tissue blood
 vendorId TIB-208
 vendorName ATCC
 
-term AtT-20
-tag ATT20
-type Cell Line
-age immortalized
-category cellLine
-color 189,0,157
-description Pituitary tumor LAF1
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
-organism mouse
-protocol missing
-sex M
-strain Unknown
-termId 7087
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
-tissue cortex
-vendorId CCL-89
-vendorName ATCC
+#Not used in mm9
+#term AtT-20
+#tag ATT20
+#type Cell Line
+#age immortalized
+#category cellLine
+#color 189,0,157
+#description Pituitary tumor LAF1
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
+#organism mouse
+#protocol missing
+#sex M
+#strain Unknown
+#termId 7087
+#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
+#tissue cortex
+#vendorId CCL-89
+#vendorName ATCC
 
 term Adrenal
 tag ADRENAL
@@ -6682,23 +6685,24 @@ tissue bone
 vendorId BoneMarrow
 vendorName LICR lab
 
-term C127
-tag C127
-type Cell Line
-age immortalized
-category cellLine
-color 0,158,115
-description mammary tumor fibroblast
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1616&Template=cellBiology
-organism mouse
-protocol missing
-sex F
-strain RIII
-termId 7035
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
-tissue mammary
-vendorId CRL-1616
-vendorName ATCC
+#NOT USED in mm9
+#term C127
+#tag C127
+#type Cell Line
+#age immortalized
+#category cellLine
+#color 0,158,115
+#description mammary tumor fibroblast
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1616&Template=cellBiology
+#organism mouse
+#protocol missing
+#sex F
+#strain RIII
+#termId 7035
+#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+#tissue mammary
+#vendorId CRL-1616
+#vendorName ATCC
 
 term C2C12
 tag C2C12
@@ -7398,6 +7402,7 @@ termId 174
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=174
 vendorId J185a
 vendorName Gilbert lab
+protocol missing 
 
 term Kidney
 tag KIDNEY
@@ -7634,41 +7639,43 @@ tissue blood
 vendorId mG/ER
 vendorName Dr. John Stamatoyannopoulos at UW
 
-term Myocyte
-tag MYOCYTE
-type Cell Line
-age ageUnknown
-category cellLine
-color 139,69,19
-description Myocyte
-orderUrl http://bmb.psu.edu/directory/rch8
-organism mouse
-sex U
-strain Unknown
-termId GO:0036194
-termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0036194
-tissue blood
-vendorName Hardison lab
-#Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#NOT USED in mm9
+#term Myocyte
+#tag MYOCYTE
+#type Cell Line
+#age ageUnknown
+#category cellLine
+#color 139,69,19
+#description Myocyte
+#orderUrl http://bmb.psu.edu/directory/rch8
+#organism mouse
+#sex U
+#strain Unknown
+#termId GO:0036194
+#termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0036194
+#tissue blood
+#vendorName Hardison lab
+#protocol missing 
 #protocol PSU(Hardison):Myocyte_Hardison_protocol.pdf
 
-term Muscle
-tag MUSCLE
-type Cell Line
-age ageUnknown
-category Tissue
-color 139,69,19
-description Muscle
-orderUrl http://bmb.psu.edu/directory/rch8
-organism mouse
-sex U
-strain Unknown
-termId 7054
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
-tissue blood
-vendorName Hardison lab
-#Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
+#NOT USED in mm9
+#term Muscle
+#tag MUSCLE
+#type Cell Line
+#age ageUnknown
+#category Tissue
+#color 139,69,19
+#description Muscle
+#orderUrl http://bmb.psu.edu/directory/rch8
+#organism mouse
+#sex U
+#strain Unknown
+#termId 7054
+#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+#tissue blood
+#vendorName Hardison lab
+#protocol missing
+##protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
 term NIH-3T3
 tag NIH3T3
@@ -11909,7 +11916,7 @@ targetClass HISase
 targetDescription SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation Human_-_SETDB1_(sc-66884)(Immunoprecipitation,Western_blot,ChIP-seq):human_SETDB1_SC66884_validation_Farnham.pdf
+validation Human_-_SETDB1_(sc-66884)(Immunoprecipitation,Western_blot,ChIP-seq):human_SETDB1_SC-66884_validation_Farnham.pdf 
 vendorId sc-66884
 vendorName Santa Cruz Biotechnology
 
