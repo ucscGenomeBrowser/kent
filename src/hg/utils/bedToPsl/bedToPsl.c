@@ -50,20 +50,28 @@ static void bedToPsl4(struct bed *bed, struct psl *psl)
 /* convert a 4-column BED to a psl with one block */
 {
 psl->blockCount++;
-psl->qStarts[0] = 0;
+if (keepQuery) {
+    psl->qStarts[0] = bed->chromStart;
+    }
+else
+    psl->qStarts[0] = 0;
 psl->tStarts[0] = bed->chromStart;
 psl->blockSizes[0] = bed->chromEnd - bed->chromStart;
 psl->blockCount++;
 }
 
 static void bedToPsl12(struct bed *bed, struct psl *psl)
-/* convert a 4-column BED to a psl */
+/* convert a 12-column BED to a psl */
 {
 int i, qNext = 0;
 for (i = 0; i < bed->blockCount; i++)
     {
-    psl->qStarts[i] = qNext;
     psl->tStarts[i] = bed->chromStarts[i] + bed->chromStart;
+    if (keepQuery)
+        psl->qStarts[i] = psl->tStarts[i];
+    else
+        psl->qStarts[i] = qNext;
+        
     psl->blockSizes[i] = bed->blockSizes[i];
     if (i > 0)
         {
