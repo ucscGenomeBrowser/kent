@@ -1,11 +1,11 @@
-# coding 35031, codingJunk 8955, nearCoding 3941, junk 4045, antisense 1082, noncoding 10112
-
 #!/bin/tcsh -efx
 # :vim nowrap
 # for emacs: -*- mode: sh; -*-
 # This describes how to make the UCSC genes on mm10, though
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
+
+# NOTE:  synBlastp has changed its parameters since this release!
 
 #
 # Prerequisites
@@ -1520,19 +1520,26 @@ cd $dir
 # Load blastTabs
 cd $dir/hgNearBlastp
 hgLoadBlastTab $xdb $blastTab run.$xdb.$tempDb/out/*.tab
-hgLoadBlastTab $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab
-hgLoadBlastTab $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
+hgLoadBlastTab $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab 
 hgLoadBlastTab $flyDb $blastTab run.$flyDb.$tempDb/recipBest.tab
 hgLoadBlastTab $wormDb $blastTab run.$wormDb.$tempDb/recipBest.tab
 hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-synBlastp.csh $ratDb $db
+# old number of unique query values: 60302
+# old number of unique target values 22241
+# new number of unique query values: 57026
+# new number of unique target values 21771
+
+synBlastp.csh $ratDb $db rgdGene2 knownGene
+#old number of unique query values: 11267
+# old number of unique target values 11104
+#new number of unique query values: 8399
+#new number of unique target values 8530
 
 # Clean up
 rm -r run.*/out
-
 
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr
 # is released, take down the old isPcr gfServer  

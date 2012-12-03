@@ -1,11 +1,9 @@
 # mm10 link info.
 
-# uncomment this once mm10 UCSC genes ships and the folks at ExonPrimer 
-# build their database
-# name exonPrimer
-# shortLabel ExonPrimer
-# tables kgXref
-# idSql select kgID from kgXref where kgID = '%s'
-# url http://ihg.helmholtz-muenchen.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm10&acc=%s
-# priority 10
+name exonPrimer
+shortLabel ExonPrimer
+tables kgXref
+idSql select kgID from kgXref where kgID = '%s'
+url http://ihg.helmholtz-muenchen.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm10&acc=%s
+priority 10
 
