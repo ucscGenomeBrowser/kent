@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Euarch Chain/Net
 longLabel Euarchontoglire Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aTShrew=Tree_shrew bBushbaby=Bushbaby bMouseLemur=Mouse_Lemur cTarsier=Tarsier dMarmoset=Marmoset eSquirrelMonkey=Squirrel_Monkey fBaboon=Baboon gChineseRhesus=Chinese_Rhesus hGibbon=Gibbon iOrangutan=Orangutan jGorilla=Gorilla kChimp=Chimp lHuman=Human
+subGroup2 species Species aTShrew=Tree_shrew bBushbaby=Bushbaby bMouseLemur=Mouse_Lemur cTarsier=Tarsier dMarmoset=Marmoset eSquirrelMonkey=Squirrel_Monkey fBaboon=Baboon gRhesus=Rhesus hGibbon=Gibbon iOrangutan=Orangutan jGorilla=Gorilla kChimp=Chimp lHuman=Human
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cPlaty=Platyrrhini dHaplo=Haplorrhini eStrep=Strepsirrhini fScan=Scandentia
 dragAndDrop subTracks
 visibility hide
@@ -85,7 +85,7 @@ html chainNet
 
         track chainRheMac3
         subTrack euarchontoglireChainNetViewchain off
-        subGroups view=chain species=gChineseRhesus clade=bCerco
+        subGroups view=chain species=gRhesus clade=bCerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain rheMac3
@@ -195,7 +195,7 @@ html chainNet
 
         track netRheMac3
         subTrack euarchontoglireChainNetViewnet on 
-        subGroups view=net species=gChineseRhesus clade=bCerco
+        subGroups view=net species=gRhesus clade=bCerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rheMac3 chainRheMac3
