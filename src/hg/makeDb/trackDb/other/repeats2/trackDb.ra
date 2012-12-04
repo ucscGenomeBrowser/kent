@@ -9,10 +9,53 @@ visibility hide
 html gap
 
 track kap1SummitCoverage
-shortLabel KAP1 coverage
+shortLabel KAP1 summit coverage
 longLabel Coverage of KAP1 MACS summits +- 10 bp
 group regulation
 visibility full
 color 30,30,0
-type bigWig 0 200
+type bigWig 0 130
 priority 50
+
+track kap1Summits
+shortLabel KAP1 summits
+longLabel KAP1 MACS summits +- 10 bp
+group regulation
+visibility dense
+color 30,30,0
+type psl xeno hg19
+otherDb hg19
+priority 52
+
+track liftOver
+shortLabel liftOver
+longLabel liftOver Chains from Hg19
+group compgen
+visibility hide
+color 30,30,0
+type chain hg19
+otherDb hg19
+priority 55
+
+track wgEncodeGencodeCompV7
+shortLabel Gencode 
+longLabel Gencode Comprehensive V7
+group genes
+visibility dense
+color 30,30,0
+type bed 12
+priority 55
+origAssembly hg19
+itemDetailsHtmlTable wgEncodeGencodeCompV7Html
+
+track knownGene
+shortLabel UCSC Genes 
+longLabel UCSC Known Genes
+group genes
+visibility dense
+color 30,30,0
+type bed 12
+priority 55
+origAssembly hg19
+itemDetailsHtmlTable knownGeneHtml
+
