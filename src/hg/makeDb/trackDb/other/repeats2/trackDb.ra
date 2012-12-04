@@ -15,13 +15,14 @@ group regulation
 visibility full
 color 30,30,0
 type bigWig 0 130
+autoScale on
 priority 50
 
 track kap1Summits
 shortLabel KAP1 summits
 longLabel KAP1 MACS summits +- 10 bp
 group regulation
-visibility dense
+visibility hide
 color 30,30,0
 type psl xeno hg19
 otherDb hg19
@@ -32,10 +33,29 @@ shortLabel liftOver
 longLabel liftOver Chains from Hg19
 group compgen
 visibility hide
-color 30,30,0
+color 0,30,30
 type chain hg19
 otherDb hg19
 priority 55
+
+track repMaskDb
+shortLabel RepeatMaskerDb
+longLabel RepeatMasker Database matches
+group genes
+visibility dense
+color 30,30,0
+type psl xeno hg19
+otherDb hg19
+priority 52
+
+track liftOverCoverage 
+shortLabel liftOver Coverage
+longLabel Coverage of liftOver-alignment from hg19
+group compgen
+visibility dense
+color 0,30,30
+type bigWig 0 3500
+priority 56
 
 track wgEncodeGencodeCompV7
 shortLabel Gencode 
@@ -48,7 +68,7 @@ priority 55
 origAssembly hg19
 itemDetailsHtmlTable wgEncodeGencodeCompV7Html
 
-track knownGene
+track myKnownGene
 shortLabel UCSC Genes 
 longLabel UCSC Known Genes
 group genes
@@ -57,5 +77,37 @@ color 30,30,0
 type bed 12
 priority 55
 origAssembly hg19
-itemDetailsHtmlTable knownGeneHtml
+itemDetailsHtmlTable myKnownGeneHtml
+
+track myWgEncodeRegDnaseClustered
+shortLabel Dnase Clusters 
+longLabel Encode Dnase Clusters
+group expr
+visibility hide
+color 30,30,0
+type bed 12
+priority 55
+origAssembly hg19
+itemDetailsHtmlTable myWgEncodeRegDnaseClusteredHtml
+
+track dnaseCoverage 
+shortLabel DNAse Clusters coverage
+longLabel Coverage of Encode DNAse clusters
+group expr
+visibility dense
+color 30,30,0
+type bigWig 0 300
+autoScale on
+priority 60
+
+track pwmEnsRel85
+shortLabel Persikov min 85%
+longLabel Persikov PWM matches, min rel energy 85%
+group expr
+visibility dense
+color 30,90,30
+type bed 8
+priority 65
+bedFilter on
+#itemDetailsHtmlTable myWgEncodeRegDnaseClusteredHtml
 
