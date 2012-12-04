@@ -560,14 +560,14 @@ html hg19primateChainNet
         type chain nomLeu1
         otherDb nomLeu1
 
-        track chainRheMac2
-    #replaces record chainRheMac2 in parent dir missing/extra release
+        track chainRheMac3
+    #replaces record chainRheMac3 in parent dir missing/extra release
         subTrack primateChainNetViewchain off
         subGroups view=chain species=eRhesus clade=bCerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain rheMac2
-        otherDb rheMac2
+        type chain rheMac3
+        otherDb rheMac3
 
         track chainPapHam1
         subTrack primateChainNetViewchain off
@@ -652,14 +652,14 @@ html hg19primateChainNet
         type netAlign nomLeu1 chainNomLeu1
         otherDb nomLeu1
 
-        track netRheMac2
-    #replaces record netRheMac2 in parent dir missing/extra release
+        track netRheMac3
+    #replaces record netRheMac3 in parent dir missing/extra release
         subTrack primateChainNetViewnet on 
         subGroups view=net species=eRhesus clade=bCerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign rheMac2 chainRheMac2
-        otherDb rheMac2
+        type netAlign rheMac3 chainRheMac3
+        otherDb rheMac3
 
         track netPapHam1
         subTrack primateChainNetViewnet off
