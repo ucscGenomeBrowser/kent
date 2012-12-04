@@ -1301,6 +1301,7 @@ fragLength 300
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 1
 setType exp
@@ -1589,6 +1590,7 @@ fragLength 300
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 1
 setType exp
@@ -1877,6 +1879,7 @@ fragLength 300
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 1
 setType exp
@@ -3392,6 +3395,7 @@ fragLength 300
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 2
 setType exp
@@ -3678,6 +3682,7 @@ fragLength 300
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 2
 setType exp
@@ -3966,6 +3971,7 @@ fragLength 300
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 2
 setType exp
@@ -5289,6 +5295,7 @@ expId 61
 fileName wgEncodeBroadChipSeqPeaksHuvecPol2b.broadPeak.gz
 grant Bernstein
 lab Broad
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 setType exp
 softwareVersion 080608
@@ -5520,6 +5527,7 @@ expId 53
 fileName wgEncodeBroadChipSeqPeaksK562Pol2b.broadPeak.gz
 grant Bernstein
 lab Broad
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 setType exp
 softwareVersion 080608
@@ -5751,6 +5759,7 @@ expId 73
 fileName wgEncodeBroadChipSeqPeaksNhekPol2b.broadPeak.gz
 grant Bernstein
 lab Broad
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 setType exp
 softwareVersion 080608
@@ -7180,6 +7189,7 @@ fileName wgEncodeBroadChipSeqRawDataRep1HuvecPol2b.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 1
 setType exp
@@ -7432,6 +7442,7 @@ fileName wgEncodeBroadChipSeqRawDataRep1K562Pol2b.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 1
 setType exp
@@ -7684,6 +7695,7 @@ fileName wgEncodeBroadChipSeqRawDataRep1NhekPol2b.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 1
 setType exp
@@ -9133,6 +9145,7 @@ fileName wgEncodeBroadChipSeqRawDataRep2HuvecPol2b.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 2
 setType exp
@@ -9383,6 +9396,7 @@ fileName wgEncodeBroadChipSeqRawDataRep2K562Pol2b.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 2
 setType exp
@@ -9635,6 +9649,7 @@ fileName wgEncodeBroadChipSeqRawDataRep2NhekPol2b.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 replicate 2
 setType exp
@@ -11025,6 +11040,7 @@ expId 61
 fileName wgEncodeBroadChipSeqSignalHuvecPol2b.wig.gz
 grant Bernstein
 lab Broad
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 setType exp
 subId 172
@@ -11265,6 +11281,7 @@ expId 53
 fileName wgEncodeBroadChipSeqSignalK562Pol2b.wig.gz
 grant Bernstein
 lab Broad
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 setType exp
 subId 160
@@ -11505,6 +11522,7 @@ expId 73
 fileName wgEncodeBroadChipSeqSignalNhekPol2b.wig.gz
 grant Bernstein
 lab Broad
+objStatus revoked - POLR2A antibody failed to validate
 project wgEncode
 setType exp
 subId 184
@@ -11711,4 +11729,4 @@ subId 579
 tableName wgEncodeBroadChipSeqSignalNhlfH4k20me1
 view Signal
 
-# MAGIC: -221530046
+# MAGIC: -1551013110

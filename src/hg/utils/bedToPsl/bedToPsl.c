@@ -141,7 +141,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("Too few arguments");
 if (optionExists("keepQuery"))
-    keepQuery = true;
+    keepQuery = TRUE;
 cnvBedToPsl(argv[1], argv[2], argv[3]);
 return 0;
 }
