@@ -76,4 +76,18 @@ foreach dir (`cat $pathfile`)
 end
 echo " checked $errdirs directories"                >> $outfile
 echo " found $errors with errors"                   >> $outfile
+
+# allow two levels of backup
+set genecats = "/usr/local/apache/htdocs-genecats/qa/test-results/staticLinks"
+
+if ( -e $genecats/$outfile ) then
+  if ( -e $genecats/$outfile.bak ) then
+    # echo "there's a bak file"
+    # echo "making a bak2 file"
+    mv $genecats/$outfile.bak $genecats/${outfile}.bak2
+  endif
+    # echo "making a bak file"
+    mv $genecats/$outfile $genecats/${outfile}.bak
+endif
+echo "moving file to genecats dir"
 mv $outfile /usr/local/apache/htdocs-genecats/qa/test-results/staticLinks
