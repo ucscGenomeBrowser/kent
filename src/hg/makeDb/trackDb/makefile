@@ -122,7 +122,8 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 \
 	sacCer1 sacCer2 sacCer3 \
 	sc1 \
 	h1n1 \
-	centromers1
+	centromers1 \
+	repeats2
 
 
 GSID_DBS = \

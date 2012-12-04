@@ -586,7 +586,7 @@ if (pick == NULL)
 if (pick == NULL)
     {
     pick = pickWeightedRandomFromList(store->markovChains->children);
-    warn("in predictNext() last resort pick of %s", pick->monomer->word);
+    verbose(2, "in predictNext() last resort pick of %s\n", pick->monomer->word);
     }
 return pick;
 }
@@ -748,7 +748,7 @@ while (lineFileNextReal(lf, &line))
 	}
     slReverse(&list);
     if (list == NULL)
-        errAbort("Line %d of %s has no alpha monomers.", lf->lineIx, lf->fileName);
+	errAbort("Line %d of %s has no alpha monomers.", lf->lineIx, lf->fileName);
 
     /* Create data structure and add read to list and hash */
     if (hashLookup(store->readHash, name))
@@ -761,6 +761,8 @@ while (lineFileNextReal(lf, &line))
     }
 slReverse(&readList);
 store->readList = readList;
+if (store->readList == NULL)
+    errAbort("%s contains no reads", lf->fileName);
 lineFileClose(&lf);
 connectReadsToMonomers(store);
 }
@@ -939,6 +941,7 @@ for (start = orphanStarts; start != NULL; start = start->next)
         continue;
 
     struct monomerType *newType = typeBefore(store, startType, 1);
+    verbose(2, "Trying to find end of type %s\n", newType->name);
     struct monomer *newMono = pickRandomFromType(newType);
     addReadOfTwo(store, newMono, startMono);
     verbose(2, "Pairing new %s with start %s\n", newMono->word, startMono->word);
@@ -955,6 +958,7 @@ for (end = orphanEnds; end != NULL; end = end->next)
         continue;
 
     struct monomerType *newType = typeAfter(store, endType, 1);
+    verbose(2, "Trying to find start of type %s\n", newType->name);
     struct monomer *newMono = pickRandomFromType(newType);
     addReadOfTwo(store, endMono, newMono);
     verbose(2, "Pairing end %s with new %s\n", endMono->word, newMono->word);
@@ -1067,8 +1071,13 @@ while (lineFileNextReal(lf, &line))
 	slAddHead(&type->list, ref);
 	hashAddUnique(store->typeHash, word, type);
 	}
+    if (type->list == NULL)
+        errAbort("Short line %d of %s.  Format should be:\ntype list-of-monomers-of-type\n",
+	    lf->lineIx, lf->fileName);
     }
 slReverse(&store->typeList);
+if (store->typeList == NULL)
+    errAbort("%s is empty", lf->fileName);
 lineFileClose(&lf);
 hashFree(&uniq);
 verbose(2, "Added %d types containing %d words from %s\n", 

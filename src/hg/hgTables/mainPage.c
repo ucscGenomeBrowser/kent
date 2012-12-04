@@ -626,7 +626,7 @@ hPrintf("<TABLE BORDER=0>\n");
     {
     hPrintf("<TR><TD>");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
-    if (strchr(curTable, '.') == NULL)  /* In same database */
+    if (isHubTrack(curTable) || (strchr(curTable, '.') == NULL))  /* In same database */
         {
         hti = getHti(database, curTable, conn);
         isPositional = htiIsPositional(hti);

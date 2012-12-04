@@ -43915,6 +43915,7 @@ lab CSHL
 labExpId LID9187
 localization nucleolus
 md5sum 117b6ad516aa9635af09df5759e4cf30,fd319c0884b9b23511923d23d9c52f69
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 replicate 3
@@ -43972,6 +43973,7 @@ labExpId LID9187,LID9188
 labVersion iIDR
 localization nucleolus
 md5sum 078ed6ada60b45231c5040f8966c3d25
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44000,6 +44002,7 @@ labExpId LID9187,LID9188
 labVersion iIDR
 localization nucleolus
 md5sum ce93d0a648d643269763f92cf5c09adb
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44027,6 +44030,7 @@ labExpId LID9187,LID9188
 labVersion iIDR
 localization nucleolus
 md5sum ee4f5fe73aceec1320500c4020ba6768
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44162,6 +44166,7 @@ labExpId LID9187,LID9188
 labVersion iIDR
 localization nucleolus
 md5sum 9f8e3cfc4b7f49576d62e0a01fe80dfe
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44190,6 +44195,7 @@ labProtocolId 025NLt,026NLt
 labVersion iIDR
 localization nucleolus
 md5sum 6217009f67a0ca975903a7b15c4f1768
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44218,6 +44224,7 @@ labExpId LID9187,LID9188
 labVersion iIDR
 localization nucleolus
 md5sum 02d2c8bcfa5a7f95c06a44d0756d8c65
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44245,6 +44252,7 @@ labExpId LID9187,LID9188
 labVersion iIDR
 localization nucleolus
 md5sum 48d7191a1b5922ab234272cbbf1acf43
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44272,6 +44280,7 @@ lab CSHL
 labExpId LID9187
 localization nucleolus
 md5sum 578797d0d5ae29c0f13544c01c5ea89f
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 replicate 3
@@ -44328,6 +44337,7 @@ lab CSHL
 labExpId LID9187
 localization nucleolus
 md5sum 6d9e6421bfa8e4a84b0b4f33d107494d
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 replicate 3
@@ -44497,6 +44507,7 @@ labExpId LID9187,LID9188
 labVersion iIDR
 localization nucleolus
 md5sum e1d68998d28cbffd054503e46718a065
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44525,6 +44536,7 @@ labProtocolId 025NLt,026NLt
 labVersion iIDR
 localization nucleolus
 md5sum 9b995a504e7959d5f6515a406dfd60da
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -44553,6 +44565,7 @@ labExpId LID9187,LID9188
 labVersion iIDR
 localization nucleolus
 md5sum 28155f833fad8ae833a12ef89ad3cace
+objStatus revoked - mapping has antisense artifacts
 project wgEncode
 readType 2x76D
 rnaExtract total
@@ -61925,4 +61938,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: 828706897
+# MAGIC: 959347095

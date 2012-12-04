@@ -39,19 +39,15 @@ longLabel Cow NumtS mitochondrial sequence
 html numtSeqBosTau6
 
     track numtS override
-    longLabel Cow NumtS
     html numtSeqBosTau6
    
     track numtSAssembled override
-    longLabel Cow NumtS assembled
     html numtSeqBosTau6
 
     track numtSMitochondrion override
-    longLabel Cow NumtS on mitochondrion
     html numtSeqBosTau6
 
     track  bamAllNumtSSorted override
-    longLabel Cow NumtS on mitochondrion SNPs
     html numtSeqBosTau6
 
 

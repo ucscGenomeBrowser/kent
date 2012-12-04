@@ -13203,7 +13203,7 @@ registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 gencodeRegisterTrackHandlers();
-registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
+registerTrackHandler("affyTxnPhase2b", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
 registerTrackHandlerOnFamily("pgSnp", pgSnpMethods);
 registerTrackHandlerOnFamily("pgSnpHgwdev", pgSnpMethods);

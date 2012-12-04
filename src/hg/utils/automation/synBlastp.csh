@@ -15,8 +15,8 @@
 # and pslMap to lift the genes to the target xx assembly.  Then hgMapToGene
 # will find which of those mapped ids have good overlap with xx.knownGene.
 # The final mapping is then created by doing an inner join between 
-# the traditional xxBlastTab and the mapping table produced above.
-# Then simply drop the old table and rename the new table.
+# the traditional xxBlastTab and the mapping table produced above
+# and deleting the appropriate records.
 #
 # We are starting with xxBlastTab tables already built in the usual way with
 # blastall/blastp, probably with doHgNearBlastp.pl script.
@@ -42,10 +42,17 @@ endif
 
 set db = "$1"
 set otherDb = "$2"
+set geneTable = "knownGene"
 set otherGeneTable = "knownGene"
 
 if ( "$3" != "" ) then
- set otherGeneTable = $3
+    if ( "$4" == "" ) then
+	 echo "error: if you specify geneTable, you need to specify otherGeneTable too, e.g."
+	 echo "synBlastp.csh hg18 rn4 knownGene rgdGene2"
+	 exit 1
+    endif
+ set geneTable = $3
+ set otherGeneTable = $4
 endif
 
 # check for required lift file in /gbdb/$db
@@ -58,7 +65,7 @@ if ( ! -e $lift ) then
 endif
 
 
-#check for required tables $db.xxBlastTab and db.knownGene and otherDb.$otherGeneTable
+#check for required tables $db.xxBlastTab and db.$geneTable and otherDb.$otherGeneTable
 
 set otherOrg = `echo "$otherDb" | sed 's/[0123456789]*//g'`
 
@@ -72,11 +79,11 @@ if ($result != "$xxBlastTab") then
  exit 1
 endif
 
-# db.knownGene exists?
-set sql = "show tables like 'knownGene'"
+# db.$geneTable exists?
+set sql = "show tables like '$geneTable'"
 set result = `hgsql $db -BN -e "$sql"`
-if ($result != "knownGene") then
- echo "error: table $db.knownGene not found."
+if ($result != "$geneTable") then
+ echo "error: table $db.$geneTable not found."
  exit 1
 endif
 
@@ -91,6 +98,7 @@ endif
 
 #debug
 echo "db=$db"
+echo "geneTable=$geneTable"
 echo "otherDb=$otherDb"
 echo "otherGeneTable=$otherGeneTable"
 #echo "lift=$lift"
@@ -116,7 +124,7 @@ hgsql $db -BN -e "drop table ${xxBlastTab}Temp if exists" >& /dev/null
 # --- filter $db.xxBlastTab based on pslMapped $db.kg hgMapToGene'd over to $otherDb.kg ---
 
 echo "genePredToFakePsl:"
-genePredToFakePsl $db knownGene $db.kg.psl $db.kg.cds
+genePredToFakePsl $db $geneTable $db.kg.psl $db.kg.cds
 
 echo "pslMap via $lift :"
 zcat $lift | pslMap -chainMapFile -swapMap $db.kg.psl stdin stdout \

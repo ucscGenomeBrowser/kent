@@ -532,6 +532,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002150
 expId 2150
 fileName wgEncodeUwAffyExonArrayGm12864SimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824872
 grant Stam
 lab UW
 labExpId DS12431
@@ -553,6 +554,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002151
 expId 2151
 fileName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824873
 grant Stam
 lab UW
 labExpId DS12436
@@ -574,6 +576,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002151
 expId 2151
 fileName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824874
 grant Stam
 lab UW
 labExpId DS12442
@@ -619,6 +622,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003048
 expId 3048
 fileName wgEncodeUwAffyExonArrayH7esDiffa14dRawDataRep1.CEL.gz
+geoSampleAccession GSM1033351
 grant Stam
 lab UW
 labExpId DS15446
@@ -641,6 +645,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003048
 expId 3048
 fileName wgEncodeUwAffyExonArrayH7esDiffa14dRawDataRep2.CEL.gz
+geoSampleAccession GSM1033350
 grant Stam
 lab UW
 labExpId RS16723
@@ -662,6 +667,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003048
 expId 3048
 fileName wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM1033351
 grant Stam
 lab UW
 labExpId DS15446
@@ -684,6 +690,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003048
 expId 3048
 fileName wgEncodeUwAffyExonArrayH7esDiffa14dSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM1033350
 grant Stam
 lab UW
 labExpId RS16723
@@ -707,6 +714,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003049
 expId 3049
 fileName wgEncodeUwAffyExonArrayH7esDiffa2dRawDataRep1.CEL.gz
+geoSampleAccession GSM1033353
 grant Stam
 lab UW
 labExpId DS15447
@@ -729,6 +737,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003049
 expId 3049
 fileName wgEncodeUwAffyExonArrayH7esDiffa2dRawDataRep2.CEL.gz
+geoSampleAccession GSM1033352
 grant Stam
 lab UW
 labExpId RS16720
@@ -750,6 +759,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003049
 expId 3049
 fileName wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM1033353
 grant Stam
 lab UW
 labExpId DS15447
@@ -772,6 +782,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003049
 expId 3049
 fileName wgEncodeUwAffyExonArrayH7esDiffa2dSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM1033352
 grant Stam
 lab UW
 labExpId RS16720
@@ -795,6 +806,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003050
 expId 3050
 fileName wgEncodeUwAffyExonArrayH7esDiffa5dRawDataRep1.CEL.gz
+geoSampleAccession GSM1033346
 grant Stam
 lab UW
 labExpId DS15444
@@ -817,6 +829,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003050
 expId 3050
 fileName wgEncodeUwAffyExonArrayH7esDiffa5dRawDataRep2.CEL.gz
+geoSampleAccession GSM1033347
 grant Stam
 lab UW
 labExpId RS16721
@@ -838,6 +851,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003050
 expId 3050
 fileName wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM1033346
 grant Stam
 lab UW
 labExpId DS15444
@@ -860,6 +874,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003050
 expId 3050
 fileName wgEncodeUwAffyExonArrayH7esDiffa5dSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM1033347
 grant Stam
 lab UW
 labExpId RS16721
@@ -883,6 +898,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003051
 expId 3051
 fileName wgEncodeUwAffyExonArrayH7esDiffa9dRawDataRep1.CEL.gz
+geoSampleAccession GSM1033348
 grant Stam
 lab UW
 labExpId DS15445
@@ -905,6 +921,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003051
 expId 3051
 fileName wgEncodeUwAffyExonArrayH7esDiffa9dRawDataRep2.CEL.gz
+geoSampleAccession GSM1033349
 grant Stam
 lab UW
 labExpId RS16722
@@ -926,6 +943,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003051
 expId 3051
 fileName wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM1033348
 grant Stam
 lab UW
 labExpId DS15445
@@ -948,6 +966,7 @@ dateUnrestricted 2013-04-27
 dccAccession wgEncodeEH003051
 expId 3051
 fileName wgEncodeUwAffyExonArrayH7esDiffa9dSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM1033349
 grant Stam
 lab UW
 labExpId RS16722
@@ -1104,6 +1123,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002152
 expId 2152
 fileName wgEncodeUwAffyExonArrayHahSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824862
 grant Stam
 lab UW
 labExpId RS17565
@@ -1125,6 +1145,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002152
 expId 2152
 fileName wgEncodeUwAffyExonArrayHahSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824863
 grant Stam
 lab UW
 labExpId RS17566
@@ -1230,6 +1251,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002153
 expId 2153
 fileName wgEncodeUwAffyExonArrayHbvpSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824859
 grant Stam
 lab UW
 labExpId RS18997
@@ -1251,6 +1273,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002154
 expId 2154
 fileName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824849
 grant Stam
 lab UW
 labExpId RS18998
@@ -1272,6 +1295,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002154
 expId 2154
 fileName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824850
 grant Stam
 lab UW
 labExpId RS18999
@@ -1737,6 +1761,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002155
 expId 2155
 fileName wgEncodeUwAffyExonArrayHffSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824864
 grant Stam
 lab UW
 labExpId RS17567
@@ -1758,6 +1783,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002155
 expId 2155
 fileName wgEncodeUwAffyExonArrayHffSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824865
 grant Stam
 lab UW
 labExpId RS17568
@@ -1779,6 +1805,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002156
 expId 2156
 fileName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824866
 grant Stam
 lab UW
 labExpId RS17569
@@ -1800,6 +1827,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002156
 expId 2156
 fileName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824867
 grant Stam
 lab UW
 labExpId RS17570
@@ -2041,6 +2069,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002157
 expId 2157
 fileName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824851
 grant Stam
 lab UW
 labExpId RS19000
@@ -2062,6 +2091,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002157
 expId 2157
 fileName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824852
 grant Stam
 lab UW
 labExpId RS19001
@@ -2423,6 +2453,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002158
 expId 2158
 fileName wgEncodeUwAffyExonArrayHpaecSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824860
 grant Stam
 lab UW
 labExpId RS19002
@@ -2817,6 +2848,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH000826
 expId 826
 fileName wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824861
 grant Stam
 lab UW
 labExpId RS17572
@@ -3560,6 +3592,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002159
 expId 2159
 fileName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824853
 grant Stam
 lab UW
 labExpId RS19003
@@ -3581,6 +3614,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002159
 expId 2159
 fileName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824854
 grant Stam
 lab UW
 labExpId RS19004
@@ -3759,6 +3793,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002160
 expId 2160
 fileName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824855
 grant Stam
 lab UW
 labExpId RS19005
@@ -3780,6 +3815,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002160
 expId 2160
 fileName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824856
 grant Stam
 lab UW
 labExpId RS19006
@@ -3847,6 +3883,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002161
 expId 2161
 fileName wgEncodeUwAffyExonArrayPrecSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824857
 grant Stam
 lab UW
 labExpId RS19007
@@ -3868,6 +3905,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002161
 expId 2161
 fileName wgEncodeUwAffyExonArrayPrecSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824858
 grant Stam
 lab UW
 labExpId RS19008
@@ -4023,6 +4061,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002162
 expId 2162
 fileName wgEncodeUwAffyExonArraySknmcSimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824868
 grant Stam
 lab UW
 labExpId RS17573
@@ -4044,6 +4083,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002162
 expId 2162
 fileName wgEncodeUwAffyExonArraySknmcSimpleSignalRep2.broadPeak.gz
+geoSampleAccession GSM824869
 grant Stam
 lab UW
 labExpId RS17574
@@ -4134,6 +4174,7 @@ dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002163
 expId 2163
 fileName wgEncodeUwAffyExonArrayWerirb1SimpleSignalRep1.broadPeak.gz
+geoSampleAccession GSM824870
 grant Stam
 lab UW
 labExpId RS17575
@@ -4230,4 +4271,4 @@ subId 3216
 tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 view SimpleSignal
 
-# MAGIC: -581337156
+# MAGIC: -378185426
