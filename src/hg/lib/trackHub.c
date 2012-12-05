@@ -474,8 +474,13 @@ static void polishOneTrack( struct trackHub *hub, struct trackDb *bt,
  * of the original name for html retrieval, make sure there aren't 
  * two tracks with the same name */
 {
-char *htmlName = trackDbSetting(bt, "html");
+char *polished = trackDbSetting(bt, "polished");
+if (polished != NULL)
+    return;
 
+trackDbAddSetting(bt, "polished", "polished");
+
+char *htmlName = trackDbSetting(bt, "html");
 /* if the user didn't specify an html variable, set it to be the original
  * track name */
 if (htmlName == NULL)
@@ -496,6 +501,8 @@ struct hash *nameHash = hashNew(5);
 
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
+    if (tdb->parent != NULL)
+	polishOneTrack(hub, tdb->parent, nameHash);
     next = tdb->next;
     polishOneTrack(hub, tdb, nameHash);
     if (tdb->subtracks != NULL)
