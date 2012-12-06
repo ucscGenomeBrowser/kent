@@ -169,7 +169,7 @@ karyotype normal
 lineage inner cell mass
 orderUrl https://ordering.wicell.org/index.php?option=com_oscommerce&Itemid=192
 organism human
-protocol ENCODE:missing
+protocol ENCODE:H1-hESC_Bernstein_protocol.pdf
 sex M
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL0000007&termName=early%20embryonic%20cell
