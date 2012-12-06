@@ -13,15 +13,17 @@ shortLabel KAP1 summit coverage
 longLabel Coverage of KAP1 MACS summits +- 10 bp
 group regulation
 visibility full
-color 30,30,0
+color 0,0,200
 type bigWig 0 130
+autoScale on
+maxHeightPixels 100:50:8
 priority 50
 
 track kap1Summits
 shortLabel KAP1 summits
 longLabel KAP1 MACS summits +- 10 bp
 group regulation
-visibility dense
+visibility hide
 color 30,30,0
 type psl xeno hg19
 otherDb hg19
@@ -30,15 +32,42 @@ priority 52
 track liftOver
 shortLabel liftOver
 longLabel liftOver Chains from Hg19
-group compgen
+group compGeno
 visibility hide
-color 30,30,0
+color 100,0,100
 type chain hg19
 otherDb hg19
 priority 55
 
+track repMaskDb
+shortLabel RepeatMaskerDb
+longLabel RepeatMasker Database matches
+group genes
+visibility dense
+color 30,30,0
+type psl xeno hg19
+otherDb hg19
+priority 52
+
+track getOrf
+shortLabel ORFs
+longLabel Open Reading Frames found by EMBOSS getorf
+group genes
+visibility hide
+color 100,0,0
+type bed 5
+
+track liftOverCoverage 
+shortLabel liftOver Coverage
+longLabel Coverage of liftOver-alignment from hg19
+group compGeno
+visibility dense
+color 100,0,100
+type bigWig 0 3500
+priority 56
+
 track wgEncodeGencodeCompV7
-shortLabel Gencode 
+shortLabel Gencode Genes 7
 longLabel Gencode Comprehensive V7
 group genes
 visibility dense
@@ -48,7 +77,7 @@ priority 55
 origAssembly hg19
 itemDetailsHtmlTable wgEncodeGencodeCompV7Html
 
-track knownGene
+track myKnownGene
 shortLabel UCSC Genes 
 longLabel UCSC Known Genes
 group genes
@@ -57,5 +86,128 @@ color 30,30,0
 type bed 12
 priority 55
 origAssembly hg19
-itemDetailsHtmlTable knownGeneHtml
+itemDetailsHtmlTable myKnownGeneHtml
 
+#track wgEncodeBroadHistoneGm12878H3k27acStdSig 
+#shortLabel H3K27ac Gm12878
+#longLabel H3K27ac Gm12878
+#group regulation
+#visibility full
+#color 30,30,0
+#type bigWig 0 300
+#autoScale on
+#priority 60
+
+track pwmEnsRel85
+shortLabel Persikov min 85%
+longLabel Persikov PWM matches, min rel energy 85%
+group regulation
+visibility hide
+color 30,90,30
+type bed 8
+priority 65
+bedFilter on
+#itemDetailsHtmlTable myWgEncodeRegDnaseClusteredHtml
+url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+
+track pwmEnsRel80
+shortLabel Persikov min 80%
+longLabel Persikov PWM matches, min rel energy 80%
+group regulation
+visibility hide
+color 30,90,30
+type bed 8
+priority 67
+bedFilter on
+url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+
+track pwmEns1E6
+shortLabel Persikov P<1E-6
+longLabel Persikov PWM matches, pVal < 1E-6
+group regulation
+visibility dense
+color 30,90,30
+type bed 8
+priority 68
+bedFilter on
+url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+
+track pwmEns1E5
+shortLabel Persikov P<1E-5
+longLabel Persikov PWM matches, pVal < 1E-5
+group regulation
+visibility dense
+color 30,90,30
+type bed 8
+priority 68
+bedFilter on
+url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+
+track pwmEns1E4
+shortLabel Persikov P<1E-4
+longLabel Persikov PWM matches, pVal < 1E-4
+group regulation
+visibility hide
+color 30,90,30
+type bed 8
+priority 68
+bedFilter on
+url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+
+track myWgEncodeRegDnaseClustered
+shortLabel Dnase Clusters 
+longLabel Encode Dnase Clusters
+group regulation
+visibility hide
+color 30,30,0
+type bed 12
+priority 75
+origAssembly hg19
+itemDetailsHtmlTable myWgEncodeRegDnaseClusteredHtml
+
+track dnaseCoverage 
+shortLabel DNAse Clusters coverage
+longLabel Coverage of Encode DNAse clusters
+group regulation
+visibility full
+color 30,30,0
+type bigWig 0 300
+maxHeightPixels 100:50:8
+autoScale on
+priority 78
+
+track repEncodeDnaseUw
+compositeTrack on
+shortLabel Dnase Peaks
+longLabel Encode Dnase Peaks
+group regulation
+visibility hide
+color 0,0,100
+type bigWig 0 1000
+priority 80
+
+include trackDb.dnase.ra
+
+track repEncodeBroadHistone
+compositeTrack on
+shortLabel Histone Marks
+longLabel Encode Histone Marks
+group regulation
+visibility hide
+color 0,0,100
+type bigWig 0 800
+priority 85
+
+include trackDb.histone.ra
+
+track repEncodeRegTfbsClust
+compositeTrack on
+shortLabel TFBS
+longLabel Transcription Factor Binding Sites from Encode/HABI
+group regulation
+visibility hide
+color 0,0,100
+type bigWig 0 100
+priority 90
+
+include trackDb.tf.ra
