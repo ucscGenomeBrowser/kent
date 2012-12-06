@@ -2143,7 +2143,7 @@ else
         // TODO: It would be great to make the two images smaller,
         //       but keeping both the same full size for now
         struct tempName gifTnSide;
-        trashDirFile(&gifTnSide, "hgt", "side", ".png");
+        trashDirFile(&gifTnSide, "hgtSide", "side", ".png");
         hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
 
         // Also add the side image
