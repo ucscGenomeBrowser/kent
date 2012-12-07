@@ -230,7 +230,6 @@ vcfCfgHaplotypeCenter(cart, tdb, name, parentLevel, vcff, NULL, NULL, 0, "mainFo
 vcfCfgHapClusterColor(cart, tdb, name, parentLevel);
 vcfCfgHapClusterTreeAngle(cart, tdb, name, parentLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, parentLevel);
-puts("<BR>");
 }
 
 static void vcfCfgMinQual(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
