@@ -29,6 +29,28 @@ type psl xeno hg19
 otherDb hg19
 priority 52
 
+track ZNF486SummitCoverage 
+shortLabel ZNF486 Coverage
+longLabel Coverage of ZNF486 MACS summits +- 10 bp
+group regulation
+visibility full
+color 0,100,0
+type bigWig 0 130
+autoScale on
+maxHeightPixels 100:50:8
+priority 50
+
+track H3K9m3SummitCoverage
+shortLabel H3K9m3 Coverage
+longLabel Coverage of H3K9m3 MACS summits +- 10 bp
+group regulation
+visibility full
+color 200,0,0
+type bigWig 0 130
+autoScale on
+maxHeightPixels 100:50:8
+priority 50
+
 track liftOver
 shortLabel liftOver
 longLabel liftOver Chains from Hg19
