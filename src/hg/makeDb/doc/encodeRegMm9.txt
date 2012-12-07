@@ -1,0 +1,15 @@
+
+############################################################################
+# Integrated Regulation TFBS from ENCODE June 2012 freeze
+############################################################################
+
+    mkdir /hive/data/genomes/mm9/bed/wgEncodeReg
+    mkdir -p tfbs/peaks
+    cd tfbs/peaks
+
+    set user = anonymous
+    set pwd = kate@soe.ucsc.edu
+
+    wget -r -nd -nv ftp://ftp.ebi.ac.uk/pub/databases/ensembl/encode/users/anshul/mouse/peaks_spp/idrOptimal/ >&! wget.out &
+
+
