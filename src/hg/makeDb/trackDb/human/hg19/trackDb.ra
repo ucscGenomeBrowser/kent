@@ -172,7 +172,7 @@ searchPriority 3.53
 
 track ucscRetroAli4
 shortLabel Retroposed Genes 4.0
-longLabel Retroposed Genes, Including Pseudogenes  [ucscRetroAli4]
+longLabel Retroposed GenesV4, Including Pseudogenes - Sept. 2012
 group genes
 type psl
 priority 37.14
