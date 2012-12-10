@@ -14,20 +14,19 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/mm10/bed/ucsc.13.1
+set dir = $genomes/hg19/bed/ucsc.14.1
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
 # Databases
-set db = mm10
-set Db = Mm10
-set oldDb = mm9
-set xdb = hg19
-set Xdb = Hg19
+set db = hg19
+set Db = hg19
+set oldDb = hg19
+set xdb = mm10
+set Xdb = Mm10
 set ydb = canFam3
 set zdb = rn4
-set spDb = sp120323 
-#set pbDb = proteins111004
+set spDb = sp121210
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer7
@@ -51,19 +50,17 @@ endif
 
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
-#set tempPrefix = "tmp"
-#set tmpSuffix = "Foo13"
-#set tempDb = ${tempPrefix}${tmpSuffix}
-#set bioCycTempDb = tmpBioCyc${tmpSuffix}
-set tempDb = mm10
-
+set tempPrefix = "tmp"
+set tmpSuffix = "Foo14"
+set tempDb = ${tempPrefix}${tmpSuffix}
+set bioCycTempDb = tmpBioCyc${tmpSuffix}
 
 # Table for SNPs
-#set snpTable = snp130
+set snpTable = snp137
 
 # Public version number
-set lastVer = 5
-set curVer = 6
+set lastVer = 6
+set curVer = 7
 
 # Database to rebuild visiGene text from.  Should include recent mouse and human
 # but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
@@ -71,7 +68,7 @@ set vgTextDbs = (mm8 mm9 hg18 hg19 $tempDb)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
-set xdbFa = $genomes/$xdb/bed/ucsc.13/ucscGenes.faa
+set xdbFa = $genomes/$xdb/bed/ucsc.13.1/ucscGenes.faa
 set ratFa = $genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
@@ -79,21 +76,19 @@ set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
 set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 
 # Other files needed
-set bioCycPathways = /hive/data/outside/bioCyc/120801/1.7/data/pathways.col
-set bioCycGenes = /hive/data/outside/bioCyc/120801/1.7/data/genes.col
+#set bioCycPathways = /hive/data/outside/bioCyc/120801/1.7/data/pathways.col
+#set bioCycGenes = /hive/data/outside/bioCyc/120801/1.7/data/genes.col
 set rfam = /hive/data/outside/Rfam/111130
 
-
 # Tracks
-set multiz = multiz60way
+set multiz = multiz46way
 
 # NCBI Taxon 10090 for mouse, 9606 for human
-set taxon = 10090
+set taxon = 9606
 
 # Previous gene set
-#set oldGeneDir = $genomes/hg19/bed/ucsc.12
-#set oldGeneBed = $oldGeneDir/ucscGenes.bed
-set oldGeneBed = /dev/null
+set oldGeneDir = $genomes/hg19/bed/ucsc.13
+set oldGeneBed = $oldGeneDir/ucscGenes.bed
 
 # Machines
 set dbHost = hgwdev
@@ -104,7 +99,6 @@ set cpuFarm = swarm
 set kent = ~/kent
 
 # Create initial dir
-#set scriptDir = `pwd`
 mkdir -p $dir
 cd $dir
 
@@ -113,7 +107,6 @@ txGenbankData $db
 # creates the files:
 #	mgcStatus.tab  mrna.psl  refPep.fa  refSeq.psl
 #	mrna.fa        mrna.ra   refSeq.fa  refSeq.ra
-
 
 # process RA Files
 txReadRa mrna.ra refSeq.ra .
@@ -129,8 +122,7 @@ hgsql -N $db -e 'select distinct name,sizePolyA from mrnaOrientInfo' | \
 #	sizePolyA.miss  sizePolyA.tab
 
 # Get CCDS for human (or else just an empty file)
-if ($db =~ hg* && \
-  `hgsql -N $db -e "show tables;" | grep -E -c "ccdsGene|chromInfo"` == 2) then
+if ( `hgsql -N $db -e "show tables;" | grep -E -c "ccdsGene|chromInfo"` == 2) then
     hgsql -N $db -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ccdsGene" | genePredToBed > ccds.bed
     hgsql -N $db \
 	-e "select mrnaAcc,ccds from ccdsInfo where srcDb='N'" > refToCcds.tab
@@ -138,8 +130,6 @@ else
     echo -n "" > ccds.bed
     echo -n "" > refToCcds.tab
 endif
-
-
 
 # Get tRNA for human (or else just an empty file)
 if ($db =~ hg* && \
@@ -157,9 +147,6 @@ endif
 netFilter -syn $xdbNetDir/${db}.${xdb}.net.gz > ${db}.${xdb}.syn.net
 netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 
-
-#if  # didn't do thie
-
 # Get the Rfams that overlap with blocks that are syntenic to $Xdb, and filter out
 # any duplicate Rfam blocks.  In some cases, where there are two related Rfam models,
 # the same genomic region can get two distinct hits.  For our purposes, we only
@@ -168,15 +155,7 @@ netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 cat ${rfam}/${db}/Rfam.bed |sort -k1,1 -k2,2n > rfam.sorted.bed
 bedRemoveOverlap rfam.sorted.bed rfam.distinctHits.bed
 bedIntersect -aHitAny rfam.distinctHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
-
-
 bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
-#else
-touch rfam.syntenic.psl
-touch  rfam.syntenic.bed
-#endif # didn't do thie
-e
-
 
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna 
@@ -184,6 +163,7 @@ pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
 bedSplitOnChrom ccds.bed ccds
 
+#stopped here
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
 	  echo creating empty refSeq/$c.psl
