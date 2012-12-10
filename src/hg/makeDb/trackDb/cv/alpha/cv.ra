@@ -8316,6 +8316,7 @@ type Antibody
 label BATF (sc-100974)
 antibodyDescription Mouse monoclonal. Raised against recombinant B-ATF of human origin. Antibody Target: BATF
 lab Myers
+lots D0808
 orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
 target BATF
 targetClass TFSS
@@ -8387,7 +8388,7 @@ targetClass TFSS
 targetDescription This gene encodes a transcriptional repressor that interacts with several members of the BCL2 family of proteins. Overexpression of this protein induces apoptosis, which can be suppressed by co-expression of BCL2 proteins (RefSeq).
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
-validation Human_-_BCLAF1(Immunoblot):human_BCLAF1_SC101388_validation_Myers.pdf
+validation Human_-_BCLAF1(sc-101388)(Immunoblot,Western_blot):human_BCLAF1_sc-101388_validation_Myers.pdf
 vendorId sc-101388
 vendorName Santa Cruz Biotechnology
 
