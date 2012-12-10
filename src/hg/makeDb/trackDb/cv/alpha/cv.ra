@@ -8430,6 +8430,7 @@ type Antibody
 label BHLHE40 (NB100-1800)
 antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412). Antibody Target: BHLHE40
 lab Snyder
+lots A1
 orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
 target BHLHE40
 targetClass TFSS
@@ -8494,6 +8495,7 @@ type Antibody
 label BRG1 (sc-17796)
 antibodyDescription Mouse monoclonal. Brg-1 (G-7) is raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: SMARCA4
 lab Snyder
+lots H1104
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 target SMARCA4
 targetClass ChromRem
@@ -8588,7 +8590,7 @@ term CBP_(sc-369)
 tag CBPSC369
 type Antibody
 label CBP (sc-369)
-antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CREBBP
+antibodyDescription Rabbit polyclonal A/G affinity purified, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CREBB369P
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
 target CREBBP
@@ -8668,7 +8670,7 @@ term CDK9_(ab75898)
 tag CDK9AB75898
 type Antibody
 label CDK9 (ab75898)
-antibodyDescription Rabbit polyclonal, immunogen= multiple synthetic peptides corresponding to C-terminal and N-terminal domains of the protein coded by the human gene cdk9 (PITALRE). Antibody Target: CDK9
+antibodyDescription Rabbit polyclonal A/G affinity purified, immunogen= multiple synthetic peptides corresponding to C-terminal and N-terminal domains of the protein coded by the human gene cdk9 (PITALRE). Antibody Target: CDK9
 lab Struhl
 orderUrl http://www.abcam.com/Cdk9-antibody-ab6544.html
 target CDK9
