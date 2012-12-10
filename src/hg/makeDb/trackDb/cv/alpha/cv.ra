@@ -8306,7 +8306,7 @@ targetClass ChromRem
 targetDescription BAF170 (SMARCC2, Brg1-Associated Factor, 170 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
-validation Human_-_BAF170(Immunoprecipitation,IP-MassSpec):human_BAF170_validation_Snyder.pdf
+validation Human_-_BAF170(sc-10757)(Immunoprecipitation,IP-MassSpec):human_BAF170_sc-10757_validation_Snyder.pdf
 vendorId sc-10757
 vendorName Santa Cruz Biotechnology
 
