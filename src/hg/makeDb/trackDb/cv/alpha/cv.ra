@@ -169,7 +169,7 @@ karyotype normal
 lineage inner cell mass
 orderUrl https://ordering.wicell.org/index.php?option=com_oscommerce&Itemid=192
 organism human
-protocol ENCODE:missing
+protocol ENCODE:H1-hESC_Bernstein_protocol.pdf
 sex M
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL0000007&termName=early%20embryonic%20cell
@@ -8306,7 +8306,7 @@ targetClass ChromRem
 targetDescription BAF170 (SMARCC2, Brg1-Associated Factor, 170 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
-validation Human_-_BAF170(Immunoprecipitation,IP-MassSpec):human_BAF170_validation_Snyder.pdf
+validation Human_-_BAF170(sc-10757)(Immunoprecipitation,IP-MassSpec):human_BAF170_sc-10757_validation_Snyder.pdf
 vendorId sc-10757
 vendorName Santa Cruz Biotechnology
 
@@ -8316,6 +8316,7 @@ type Antibody
 label BATF (sc-100974)
 antibodyDescription Mouse monoclonal. Raised against recombinant B-ATF of human origin. Antibody Target: BATF
 lab Myers
+lots D0808
 orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
 target BATF
 targetClass TFSS
@@ -8387,7 +8388,7 @@ targetClass TFSS
 targetDescription This gene encodes a transcriptional repressor that interacts with several members of the BCL2 family of proteins. Overexpression of this protein induces apoptosis, which can be suppressed by co-expression of BCL2 proteins (RefSeq).
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
-validation Human_-_BCLAF1(Immunoblot):human_BCLAF1_SC101388_validation_Myers.pdf
+validation Human_-_BCLAF1(sc-101388)(Immunoblot,Western_blot):human_BCLAF1_sc-101388_validation_Myers.pdf
 vendorId sc-101388
 vendorName Santa Cruz Biotechnology
 
@@ -8429,6 +8430,7 @@ type Antibody
 label BHLHE40 (NB100-1800)
 antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412). Antibody Target: BHLHE40
 lab Snyder
+lots A1
 orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
 target BHLHE40
 targetClass TFSS
@@ -8493,6 +8495,7 @@ type Antibody
 label BRG1 (sc-17796)
 antibodyDescription Mouse monoclonal. Brg-1 (G-7) is raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: SMARCA4
 lab Snyder
+lots H1104
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 target SMARCA4
 targetClass ChromRem
@@ -8587,7 +8590,7 @@ term CBP_(sc-369)
 tag CBPSC369
 type Antibody
 label CBP (sc-369)
-antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CREBBP
+antibodyDescription Rabbit polyclonal A/G affinity purified, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CREBB369P
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
 target CREBBP
@@ -8667,7 +8670,7 @@ term CDK9_(ab75898)
 tag CDK9AB75898
 type Antibody
 label CDK9 (ab75898)
-antibodyDescription Rabbit polyclonal, immunogen= multiple synthetic peptides corresponding to C-terminal and N-terminal domains of the protein coded by the human gene cdk9 (PITALRE). Antibody Target: CDK9
+antibodyDescription Rabbit polyclonal A/G affinity purified, immunogen= multiple synthetic peptides corresponding to C-terminal and N-terminal domains of the protein coded by the human gene cdk9 (PITALRE). Antibody Target: CDK9
 lab Struhl
 orderUrl http://www.abcam.com/Cdk9-antibody-ab6544.html
 target CDK9
