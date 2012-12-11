@@ -92,7 +92,7 @@ set oldGeneBed = $oldGeneDir/ucscGenes.bed
 
 # Machines
 set dbHost = hgwdev
-set ramFarm = encodek
+set ramFarm = memk
 set cpuFarm = swarm
 
 # Code base
@@ -163,7 +163,6 @@ pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
 bedSplitOnChrom ccds.bed ccds
 
-#stopped here
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
 	  echo creating empty refSeq/$c.psl
@@ -191,6 +190,7 @@ end
 # falls primarily in these regions, and, include the regions themselves
 # as special genes.  Takes 40 seconds
 txAbFragFind $db antibodyAccs
+# Found 28575 descriptions that match
 pslCat mrna/*.psl -nohead | fgrep -w -f antibodyAccs > antibody.psl
 clusterPsl -prefix=ab.ab.antibody. antibody.psl antibody.cluster
 if ($db =~ mm*) then
@@ -227,9 +227,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	touch est/$c.bed
     endif
 end
-
-#  seven minutes to this point
-
 
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
@@ -350,20 +347,18 @@ foreach f (*.txg)
 end
 cd ..
 
-
-
-# Do txOrtho parasol run on iServer (high RAM) cluster
+# Do txOrtho parasol run on high RAM cluster
 ssh $ramFarm "cd $dir/txOrtho; gensub2 toDoList single template jobList"
 ssh $ramFarm "cd $dir/txOrtho; para make jobList"
 ssh $ramFarm "cd $dir/txOrtho; para time > run.time"
 cat txOrtho/run.time
 
-# Completed: 46 of 46 jobs
-# CPU time in finished jobs:       1473s      24.55m     0.41h    0.02d  0.000 y
-# IO & Wait Time:                  1751s      29.18m     0.49h    0.02d  0.000 y
-# Average job time:                  70s       1.17m     0.02h    0.00d
-# Longest finished job:             152s       2.53m     0.04h    0.00d
-# Submission to last job:       5254726s   87578.77m  1459.65h   60.82d
+# Completed: 72 of 72 jobs
+# CPU time in finished jobs:       3271s      54.51m     0.91h    0.04d  0.000 y
+# IO & Wait Time:                  1013s      16.89m     0.28h    0.01d  0.000 y
+# Average job time:                  60s       0.99m     0.02h    0.00d
+# Longest finished job:             334s       5.57m     0.09h    0.00d
+# Submission to last job:           344s       5.73m     0.10h    0.00d
 
 # Filter out some duplicate edges. These are legitimate from txOrtho's point
 # of view, since they represent two different mouse edges both supporting
@@ -392,13 +387,10 @@ cd ..
 cd $dir
 rm -r $xdb/chains $xdb/nets
 
-
 # Get exonophy. Takes about 4 seconds.
 hgsql -N $db -e "select chrom, txStart, txEnd, name, "1", strand from exoniphy order by chrom, txStart;" \
     > exoniphy.bed
 bedToTxEdges exoniphy.bed exoniphy.edges
-
-
 
 # Add evidence from ests, orthologous other species transcripts, and exoniphy
 # Takes 36 seconds.
@@ -414,7 +406,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     endif
 end
 
-
 #
 # special testing suggestion: uncomment below
 # compareModifiedFileSizes.csh $oldGeneDir .
@@ -423,8 +414,6 @@ end
 # checkRandomLinesExist.py -s $testingDir/chr22.graph.bounds.old \
 #  -d $testingDir/chr22.graph.bounds.new
 #
-
-
 
 # Do  txWalk  - takes 32 seconds (mostly loading the mrnaSize.tab again and
 # again...)
@@ -440,7 +429,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	    -singleExonFactor=$sef
 end
 
-
 # Make a file that lists the various categories of alt-splicing we see.
 # Do this by making and analysing splicing graphs of just the transcripts
 # that have passed our process so far.  The txgAnalyze program occassionally
@@ -450,17 +438,14 @@ cat txWalk/*.bed > txWalk.bed
 txBedToGraph txWalk.bed txWalk txWalk.txg
 txgAnalyze txWalk.txg $genomes/$db/$db.2bit stdout | sort | uniq > altSplice.bed
 
-
-
 # Get txWalk transcript sequences.  This'll take about an hour
-#  twoBitToFa $genomes/$db/$db.2bit -bed=txWalk/$c.bed stdout >> txWalk.fa
-    # sequenceForBed -db=$db -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
-rm -f txWalk.fa
-twoBitToFa $genomes/$db/$db.2bit -bed=txWalk.bed txWalk.fa
+time twoBitToFa $genomes/$db/$db.2bit -bed=txWalk.bed txWalk.fa
+# 743.588u 533.478s 22:14.77 95.6%   
 rm -rf txFaSplit
 mkdir -p txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
 
+#STOPPED HERE 
 
 #
 # A good time for testing.  Uncomment the lines (not all at once) to 
