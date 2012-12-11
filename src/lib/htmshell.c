@@ -486,6 +486,8 @@ if (printDocType)
     }
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n%s<TITLE>%s</TITLE>\n", head, title);
+if (endsWith(title,"Login - UCSC Genome Browser")) 
+    fprintf(f,"\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");
 fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 if (htmlStyle != NULL)
     fputs(htmlStyle, f);

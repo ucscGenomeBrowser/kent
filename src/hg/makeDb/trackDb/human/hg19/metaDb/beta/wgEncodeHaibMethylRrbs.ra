@@ -5680,6 +5680,7 @@ dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001349
 expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2HaibRawDataRep1.fastq.gz
+geoSampleAccession GSM1048457
 grant Myers
 lab HudsonAlpha
 labExpId SL715
@@ -5703,6 +5704,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001349
 expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2HaibRawDataRep2.fastq.gz
+geoSampleAccession GSM1048457
 grant Myers
 lab HudsonAlpha
 labExpId SL714
@@ -5726,6 +5728,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH001349
 expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2HaibSitesRep1.bed.gz
+geoSampleAccession GSM1048457
 grant Myers
 lab HudsonAlpha
 labExpId SL715
@@ -5749,6 +5752,7 @@ dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH001349
 expId 1349
 fileName wgEncodeHaibMethylRrbsHepg2HaibSitesRep2.bed.gz
+geoSampleAccession GSM1048457
 grant Myers
 lab HudsonAlpha
 labExpId SL714
@@ -10924,6 +10928,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001408
 expId 1408
 fileName wgEncodeHaibMethylRrbsPanc1UwRawDataRep1.fastq.gz
+geoSampleAccession GSM1048458
 grant Myers
 lab HudsonAlpha
 labExpId SL861
@@ -10947,6 +10952,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001408
 expId 1408
 fileName wgEncodeHaibMethylRrbsPanc1UwRawDataRep2.fastq.gz
+geoSampleAccession GSM1048458
 grant Myers
 lab HudsonAlpha
 labExpId SL4743
@@ -10969,6 +10975,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001408
 expId 1408
 fileName wgEncodeHaibMethylRrbsPanc1UwSitesRep1.bed.gz
+geoSampleAccession GSM1048458
 grant Myers
 lab HudsonAlpha
 labExpId SL861
@@ -10992,6 +10999,7 @@ dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001408
 expId 1408
 fileName wgEncodeHaibMethylRrbsPanc1UwSitesRep2.bed.gz
+geoSampleAccession GSM1048458
 grant Myers
 lab HudsonAlpha
 labExpId SL4743
@@ -12609,4 +12617,4 @@ tableName wgEncodeHaibMethylRrbsUch1DukeSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 582307290
+# MAGIC: 1553543250
