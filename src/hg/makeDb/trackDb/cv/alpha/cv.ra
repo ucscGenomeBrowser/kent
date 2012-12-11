@@ -8909,7 +8909,7 @@ term CREB1_(9198)
 tag CREB19198
 type Antibody
 label CREB1 (9198)
-antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Ser133 of human CREB. Antibody Target: CREB1
+antibodyDescription Rabbit monoclonal A/G affinity purified antibody produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Ser133 of human CREB. Antibody Target: CREB1
 lab Struhl
 orderUrl http://www.cellsignal.com/pdf/9198.pdf
 target CREB1
@@ -8957,7 +8957,7 @@ term CTCF_(2899)
 tag CTCF2899
 type Antibody
 label CTCF (2899)
-antibodyDescription Rabbit polyclonal, detects endogenous levels of total CTCF protein and doesn't cross-react with BORIS. Antibody Target: CTCF
+antibodyDescription Rabbit polyclonal A/G affinity purified, detects endogenous levels of total CTCF protein and doesn't cross-react with BORIS. Antibody Target: CTCF
 lab Stam
 lots 1
 orderUrl http://www.cellsignal.com/products/2899.html
@@ -9039,8 +9039,9 @@ term CycT1_(sc-10750)
 tag CYCT1SC10750
 type Antibody
 label CycT1 (sc-10750)
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 261-505 mapping to an internal region of cyclin T1 (CycT1) of human origin. Antibody Target: CCNT1
+antibodyDescription Rabbit polyclonal A/G affinity purified, epitope corresponding to amino acids 261-505 mapping to an internal region of cyclin T1 (CycT1) of human origin. Antibody Target: CCNT1
 lab Struhl
+lots H0807
 orderUrl http://www.scbt.com/datasheet-10750-cyclin-t1-h-245-antibody.html
 target CCNT1
 targetDescription Cyclin T1 is a cyclin that forms heterodimers with the cyclin dependent kinase CDK9. CDK9 is responsible for phosphorylating Ser2 of the heptad repeat of the C-terminal domain of the large subunit of RNA polymerase II, and negative elongation factors NELF and DSIF. Cyclin T1 makes contacts with RNAPII and nascent mRNA and as such recruits CDK9 to facilitate release of stalled RNAPII and productive elongation.
@@ -9070,7 +9071,7 @@ term E2F4
 tag E2F4
 type Antibody
 label E2F4 (sc-866)
-antibodyDescription Rabbit polyclonal. Antibody Target: E2F4
+antibodyDescription Rabbit polyclonal affinity purified. Antibody Target: E2F4
 lab Farnham, Snyder
 orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
 target E2F4
@@ -9112,7 +9113,7 @@ targetClass TFSS
 targetDescription Early B-cell factor 1. Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity).
 targetId GeneCard:EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation Human_-_EBF1_(sc-137065)(Immunoprecipitation-Western_blot,IP-MassSpec):human_EBF1_SC-137065_validation_Myers.pdf
+validation Human_-_EBF1_(sc-137065)(Immunoprecipitation-Western_blot):human_EBF1_SC-137065_validation_Myers.pdf
 vendorId sc-137065
 vendorName Santa Cruz Biotechnology
 
