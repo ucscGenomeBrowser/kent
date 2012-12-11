@@ -8637,7 +8637,7 @@ term CBX8
 tag CBX8
 type Antibody
 label CBX8 (A300-882A)
-antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated Antibody Target: CBX8
+antibodyDescription Rabbit polyclonal antigen affinity purified, Unconjugated Antibody Target: CBX8
 lab Bernstein
 lots A300-882A-1
 orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
@@ -8769,7 +8769,7 @@ type Antibody
 label CELF1 (05-621)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Antibody Target: CELF1
 lab Tenenbaum
-orderUrl http://www.millipore.com/catalogue/item/05-621
+orderUrl hhttp://www.millipore.com/catalogue/item/05-621
 target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 targetId GeneCard:CELF1
@@ -8798,7 +8798,7 @@ term CHD1_(NB100-60411)
 tag CHD1NB10060411
 type Antibody
 label CHD1 (NB100-60411)
-antibodyDescription Rabbit polyclonal, The epitope recognized by this antibody maps to a region between residue 1660 and 1710 of human chromodomain helicase DNA binding protein 1 using the numbering given in entry NP_001261.2 (GeneID 1105). Antibody Target: CHD1
+antibodyDescription Rabbit polyclonal affinity purified, The epitope recognized by this antibody maps to a region between residue 1660 and 1710 of human chromodomain helicase DNA binding protein 1 using the numbering given in entry NP_001261.2 (GeneID 1105). Antibody Target: CHD1
 lab Snyder
 lots A1
 orderUrl http://www.novusbio.com/CHD1-Antibody_NB100-60411.html
@@ -8862,7 +8862,7 @@ term COREST_(ab24166)
 tag CORESTAB24166
 type Antibody
 label RCOR1&#47;COREST (ab24166)
-antibodyDescription Rabbit polyclonal synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST. Note: This antibody has since been discontinued. Full product information is attached as part of validation document. Antibody Target: RCOR1
+antibodyDescription Rabbit polyclonal affinity purified, synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST. Note: This antibody has since been discontinued. Full product information is attached as part of validation document. Antibody Target: RCOR1
 lab Snyder
 lots 834865
 orderUrl http://www.abcam.com/CoREST-antibody-ChIP-Grade-ab24166.html
@@ -8894,7 +8894,7 @@ term CREB1_(06-863)
 tag CREB106863
 type Antibody
 label CREB1 (06-863)
-antibodyDescription Rabbit polyclonal, immunogen= KLH-conjugated, synthetic peptide (CSGAENQ QSGDAAVTEAENQQ) corresponding to a.a. 5-24 of human CREB. The immunizing sequence is identical in pig, shares 19 of 20 residues with mouse and bovine and 18 of 20 residues with rat. Antibody Target: CREB1
+antibodyDescription Rabbit polyclonal A/G affinity purified, immunogen= KLH-conjugated, synthetic peptide (CSGAENQ QSGDAAVTEAENQQ) corresponding to a.a. 5-24 of human CREB. The immunizing sequence is identical in pig, shares 19 of 20 residues with mouse and bovine and 18 of 20 residues with rat. Antibody Target: CREB1
 lab Struhl
 orderUrl http://www.millipore.com/catalogue/item/06-863
 target CREB1
@@ -9613,7 +9613,7 @@ target FLI1
 targetDescription Fli1 (Friend leukemia virus integration 1) is a member of a family of genes identified on the basis of their homology to the v-Ets oncogene isolated from the E26 erythoblastosis virus.
 targetId GeneCard:FLI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
-validation Mouse_-_FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
+validation Mouse_-_FLI1_(sc-356)(Western_blot):mouse_FLI1_sc-356_validation_Hardison.pdf
 vendorId sc-356
 vendorName Santa Cruz Biotechnology
 
