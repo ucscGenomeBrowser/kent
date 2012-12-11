@@ -8306,7 +8306,7 @@ targetClass ChromRem
 targetDescription BAF170 (SMARCC2, Brg1-Associated Factor, 170 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
-validation Human_-_BAF170(Immunoprecipitation,IP-MassSpec):human_BAF170_validation_Snyder.pdf
+validation Human_-_BAF170(sc-10757)(Immunoprecipitation,IP-MassSpec):human_BAF170_sc-10757_validation_Snyder.pdf
 vendorId sc-10757
 vendorName Santa Cruz Biotechnology
 
@@ -8316,6 +8316,7 @@ type Antibody
 label BATF (sc-100974)
 antibodyDescription Mouse monoclonal. Raised against recombinant B-ATF of human origin. Antibody Target: BATF
 lab Myers
+lots D0808
 orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
 target BATF
 targetClass TFSS
@@ -8387,7 +8388,7 @@ targetClass TFSS
 targetDescription This gene encodes a transcriptional repressor that interacts with several members of the BCL2 family of proteins. Overexpression of this protein induces apoptosis, which can be suppressed by co-expression of BCL2 proteins (RefSeq).
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
-validation Human_-_BCLAF1(Immunoblot):human_BCLAF1_SC101388_validation_Myers.pdf
+validation Human_-_BCLAF1(sc-101388)(Immunoblot,Western_blot):human_BCLAF1_sc-101388_validation_Myers.pdf
 vendorId sc-101388
 vendorName Santa Cruz Biotechnology
 
@@ -8403,7 +8404,7 @@ targetClass Pol3F
 targetDescription 'B double-prime 1', subunit of RNA polymerase III transcription initiation factor IIIB
 targetId GeneCard:BDP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BDP1
-validation Human_-_BDP1(2663)(IP-MassSpec,Co-occupancy):human_BDP1_2663_validation_Struhl.pdf
+validation Human_-_BDP1(2663)(IP-MassSpec,Correlation):human_BDP1_2663_validation_Struhl.pdf
 vendorId 2663
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
@@ -8429,6 +8430,7 @@ type Antibody
 label BHLHE40 (NB100-1800)
 antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412). Antibody Target: BHLHE40
 lab Snyder
+lots A1
 orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
 target BHLHE40
 targetClass TFSS
@@ -8467,7 +8469,7 @@ targetClass Pol3F
 targetDescription 'B-related factor 1', subunit of RNA polymerase III transcription initiation factor IIIB
 targetId GeneCard:BRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF1
-validation Human_-_BRF1(128)(IP-MassSpec,Co-occupancy):human_BRF1_128_validation_Struhl.pdf
+validation Human_-_BRF1(128)(IP-MassSpec,Correlation):human_BRF1_128_validation_Struhl.pdf
 vendorId 128
 vendorName Dr. Robert J. White at Beatson Institute for Cancer Research
 
@@ -8493,6 +8495,7 @@ type Antibody
 label BRG1 (sc-17796)
 antibodyDescription Mouse monoclonal. Brg-1 (G-7) is raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: SMARCA4
 lab Snyder
+lots H1104
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 target SMARCA4
 targetClass ChromRem
@@ -8587,7 +8590,7 @@ term CBP_(sc-369)
 tag CBPSC369
 type Antibody
 label CBP (sc-369)
-antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CREBBP
+antibodyDescription Rabbit polyclonal A/G affinity purified, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CREBB369P
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
 target CREBBP
@@ -8634,7 +8637,7 @@ term CBX8
 tag CBX8
 type Antibody
 label CBX8 (A300-882A)
-antibodyDescription Rabbit polyclonal Antigen Affinity Purified, Unconjugated Antibody Target: CBX8
+antibodyDescription Rabbit polyclonal antigen affinity purified, Unconjugated Antibody Target: CBX8
 lab Bernstein
 lots A300-882A-1
 orderUrl http://www.bethyl.com/product/A300-882A/CBX8_Antibody?referrer=search_default
@@ -8667,7 +8670,7 @@ term CDK9_(ab75898)
 tag CDK9AB75898
 type Antibody
 label CDK9 (ab75898)
-antibodyDescription Rabbit polyclonal, immunogen= multiple synthetic peptides corresponding to C-terminal and N-terminal domains of the protein coded by the human gene cdk9 (PITALRE). Antibody Target: CDK9
+antibodyDescription Rabbit polyclonal A/G affinity purified, immunogen= multiple synthetic peptides corresponding to C-terminal and N-terminal domains of the protein coded by the human gene cdk9 (PITALRE). Antibody Target: CDK9
 lab Struhl
 orderUrl http://www.abcam.com/Cdk9-antibody-ab6544.html
 target CDK9
@@ -8748,7 +8751,7 @@ term CEBPZ
 tag CEBPZ
 type Antibody
 label CEBPZ (SAB2100398)
-antibodyDescription Rabbit polyclonal, immunogen sequence= KDNASLKQLRWEAERDDWLHNRDAKSIIKKKKHFKKKRIKTTQKTKKQRK. Antibody Target: CEBPZ
+antibodyDescription Rabbit polyclonal affinity purified, immunogen sequence= KDNASLKQLRWEAERDDWLHNRDAKSIIKKKKHFKKKRIKTTQKTKKQRK. Antibody Target: CEBPZ
 lab Snyder
 lots QC8343
 orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?lang=en&N4=SAB2100398
@@ -8766,7 +8769,7 @@ type Antibody
 label CELF1 (05-621)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Antibody Target: CELF1
 lab Tenenbaum
-orderUrl http://www.millipore.com/
+orderUrl hhttp://www.millipore.com/catalogue/item/05-621
 target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 targetId GeneCard:CELF1
@@ -8795,7 +8798,7 @@ term CHD1_(NB100-60411)
 tag CHD1NB10060411
 type Antibody
 label CHD1 (NB100-60411)
-antibodyDescription Rabbit polyclonal, The epitope recognized by this antibody maps to a region between residue 1660 and 1710 of human chromodomain helicase DNA binding protein 1 using the numbering given in entry NP_001261.2 (GeneID 1105). Antibody Target: CHD1
+antibodyDescription Rabbit polyclonal affinity purified, The epitope recognized by this antibody maps to a region between residue 1660 and 1710 of human chromodomain helicase DNA binding protein 1 using the numbering given in entry NP_001261.2 (GeneID 1105). Antibody Target: CHD1
 lab Snyder
 lots A1
 orderUrl http://www.novusbio.com/CHD1-Antibody_NB100-60411.html
@@ -8859,7 +8862,7 @@ term COREST_(ab24166)
 tag CORESTAB24166
 type Antibody
 label RCOR1&#47;COREST (ab24166)
-antibodyDescription Rabbit polyclonal synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST. Note: This antibody has since been discontinued. Full product information is attached as part of validation document. Antibody Target: RCOR1
+antibodyDescription Rabbit polyclonal affinity purified, synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST. Note: This antibody has since been discontinued. Full product information is attached as part of validation document. Antibody Target: RCOR1
 lab Snyder
 lots 834865
 orderUrl http://www.abcam.com/CoREST-antibody-ChIP-Grade-ab24166.html
@@ -8891,7 +8894,7 @@ term CREB1_(06-863)
 tag CREB106863
 type Antibody
 label CREB1 (06-863)
-antibodyDescription Rabbit polyclonal, immunogen= KLH-conjugated, synthetic peptide (CSGAENQ QSGDAAVTEAENQQ) corresponding to a.a. 5-24 of human CREB. The immunizing sequence is identical in pig, shares 19 of 20 residues with mouse and bovine and 18 of 20 residues with rat. Antibody Target: CREB1
+antibodyDescription Rabbit polyclonal A/G affinity purified, immunogen= KLH-conjugated, synthetic peptide (CSGAENQ QSGDAAVTEAENQQ) corresponding to a.a. 5-24 of human CREB. The immunizing sequence is identical in pig, shares 19 of 20 residues with mouse and bovine and 18 of 20 residues with rat. Antibody Target: CREB1
 lab Struhl
 orderUrl http://www.millipore.com/catalogue/item/06-863
 target CREB1
@@ -9109,7 +9112,7 @@ targetClass TFSS
 targetDescription Early B-cell factor 1. Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity).
 targetId GeneCard:EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation Human_-_EBF1_(sc-137065)(Immunoprecipitation-Western_blot,MassSpec):human_EBF1_SC-137065_validation_Myers.pdf
+validation Human_-_EBF1_(sc-137065)(Immunoprecipitation-Western_blot,IP-MassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 vendorId sc-137065
 vendorName Santa Cruz Biotechnology
 
@@ -9529,7 +9532,7 @@ targetClass TFSS
 targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. Estrogen and its receptors are essential for sexual development and reproductive function, but also play a role in other tissues such as bone. Estrogen receptors are also involved in pathological processes including breast cancer, endometrial cancer, and osteoporosis. Alternative splicing results in several transcript variants, which differ in their 5-prime UTRs and use different promoters. (provided by RefSeq)
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
-validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,MassSpec):human_ERalpha_a_validation_Myers.pdf
+validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,IP-MassSpec):human_ERalpha_a_validation_Myers.pdf
 vendorId sc-543
 vendorName Santa Cruz Biotechnology
 
@@ -9578,7 +9581,7 @@ targetClass TFSS
 targetDescription ETS transcriptions factors, such as ETS1, regulate numerous genes and are involved in stem cell development, cell senescence and death, and tumorigenesis
 targetId GeneCard:ETS1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ETS1
-validation Human_-_ETS1(Immunoprecipitation-Western_blot,MassSpec):human_ETS1_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_ETS1(Immunoprecipitation-Western_blot,IP-MassSpec):human_ETS1_validation_Myers.pdf Mouse_-_:missing
 vendorId sc-350
 vendorName Santa Cruz Biotechnology
 
@@ -9610,7 +9613,7 @@ target FLI1
 targetDescription Fli1 (Friend leukemia virus integration 1) is a member of a family of genes identified on the basis of their homology to the v-Ets oncogene isolated from the E26 erythoblastosis virus.
 targetId GeneCard:FLI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
-validation Mouse_-_FLI1_(sc-356)(Western_blot,RNA-seq):mouse_FLI1_sc-356_validation_Hardison.pdf
+validation Mouse_-_FLI1_(sc-356)(Western_blot):mouse_FLI1_sc-356_validation_Hardison.pdf
 vendorId sc-356
 vendorName Santa Cruz Biotechnology
 
@@ -9672,7 +9675,7 @@ target FOXA1
 targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq).
 targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation Human_-_FOXA1(Immunoprecipitation-Western_blot,MassSpec):human_FOXA1_SC-6553_validation_Myers.pdf
+validation Human_-_FOXA1(Immunoprecipitation-Western_blot,IP-MassSpec):human_FOXA1_SC-6553_validation_Myers.pdf
 vendorId sc-6553
 vendorName Santa Cruz Biotechnology
 
@@ -9688,7 +9691,7 @@ target FOXA1
 targetDescription This gene encodes a member of the forkhead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver. (provided by RefSeq)
 targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation Human_-_FOXA1_(sc-101058)(Immunoprecipitation-Western_blot,MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
+validation Human_-_FOXA1_(sc-101058)(Immunoprecipitation-Western_blot,IP-MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
 vendorId sc-101058
 vendorName Santa Cruz Biotechnology
 
@@ -9752,7 +9755,7 @@ target GABPA
 targetDescription The transcription factor GA-binding protein (GABP) is composed of two subunits, alpha and beta. Alpha binds to a specific DNA sequence.
 targetId GeneCard:GABPA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
-validation Human_-_GABP(Immunoprecipitation-Western_blot,MassSpec):human_GABP_validation_Myers.pdf
+validation Human_-_GABP(Immunoprecipitation-Western_blot,IP-MassSpec):human_GABP_validation_Myers.pdf
 vendorId sc-28312
 vendorName Santa Cruz Biotechnology
 
@@ -9830,7 +9833,7 @@ targetClass TFSS
 targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation Human_-_GATA2_(sc-267)(Immunoprecipitation-Western_blot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
+validation Human_-_GATA2_(sc-267)(Immunoprecipitation-Western_blot,IP-MassSpec):human_GATA2_SC-267_validation_Myers.pdf
 vendorId sc-267
 vendorName Santa Cruz Biotechnology
 
@@ -10471,7 +10474,7 @@ target HDAC2
 targetDescription This gene product belongs to the histone deacetylase family. Histone deacetylases act via the formation of large multiprotein complexes, and are responsible for the deacetylation of lysine residues at the N-terminal regions of core histones (H2A, H2B, H3 and H4). This protein forms transcriptional repressor complexes by associating with many different proteins, including YY1, a mammalian zinc-finger transcription factor. (provided by RefSeq)
 targetId GeneCard:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation Human_-_HDAC2_(sc-6296)(Immunoprecipitation-Western_blot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
+validation Human_-_HDAC2_(sc-6296)(Immunoprecipitation-Western_blot,IP-MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
 vendorId sc-6296
 vendorName Santa Cruz Biotechnology
 
@@ -10569,7 +10572,7 @@ targetClass TFSS
 targetDescription The protein encoded by this gene is a nuclear transcription factor which binds DNA as a homodimer. The encoded protein controls the expression of several genes, including hepatocyte nuclear factor 1 alpha, a transcription factor which regulates the expression of several hepatic genes (RefSeq).
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
-validation Human_-_HNF4A_(sc-8987)(Immunoprecipitation-Western_blot,MassSpec):human_HNF4a_SC-8987_validation_Myers.pdf
+validation Human_-_HNF4A_(sc-8987)(Immunoprecipitation-Western_blot,IP-MassSpec):human_HNF4a_SC-8987_validation_Myers.pdf
 vendorId sc-8987
 vendorName Santa Cruz Biotechnology
 
@@ -10586,7 +10589,7 @@ targetClass TFSS
 targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene
 targetId GeneCard:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
-validation Human_-_HNF4G_(sc-6558)(ChIP-seq,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
+validation Human_-_HNF4G_(sc-6558)(ChIP-seq,IP-MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 vendorId sc-6558
 vendorName Santa Cruz Biotechnology
 
@@ -10729,7 +10732,7 @@ targetClass TFSS
 targetDescription The protein encoded by this gene belongs to the IRF (interferon regulatory factor) family. It functions as a lymphocyte specific transcription factor and negatively regulates TLR signaling by selectively competing with IRF5. A chromosomal translocation involving this gene and the IgH locus, t(6;14)(p25;q32), may be a cause of multiple myeloma (RefSeq).
 targetId GeneCard:IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation Human_-_IRF4_(sc-6059)(Immunoprecipitation-Western_blot,MassSpec):human_IRF4_SC-6059_validation_Myers.pdf
+validation Human_-_IRF4_(sc-6059)(Immunoprecipitation-Western_blot,IP-MassSpec):human_IRF4_SC-6059_validation_Myers.pdf
 vendorId sc-6059
 vendorName Santa Cruz Biotechnology
 
@@ -10840,7 +10843,7 @@ target LEF1
 targetDescription This gene encodes a transcription factor belonging to a family of proteins that share homology with the high mobility group protein-1. The proteins encoded by this gene can bind to a functionally important site in the T-cell receptor-alpha enhancer, thereby conferring maximal enhancer activity (RefSeq).
 targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
-validation Human_-_LEF1_(sc-8592)(Immunoprecipitation-Western_blot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
+validation Human_-_LEF1_(sc-8592)(Immunoprecipitation-Western_blot,IP-MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
 vendorId sc-8592
 vendorName Santa Cruz Biotechnology
 
@@ -11434,7 +11437,7 @@ targetClass TFSS
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation Human_-_PAX5-C20(Immunoprecipitation-Western_blot,MassSpec):human_PAX5-C20_validation_Myers.pdf
+validation Human_-_PAX5-C20(Immunoprecipitation-Western_blot,IP-MassSpec):human_PAX5-C20_validation_Myers.pdf
 vendorId sc-1974
 vendorName Santa Cruz Biotechnology
 
@@ -11450,7 +11453,7 @@ targetClass TFSS
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation Human_-_PAX5-N19(Immunoprecipitation-Western_blot,MassSpec):human_PAX5-N19_validation_Myers.pdf
+validation Human_-_PAX5-N19(Immunoprecipitation-Western_blot,IP-MassSpec):human_PAX5-N19_validation_Myers.pdf
 vendorId sc-1975
 vendorName Santa Cruz Biotechnology
 
@@ -11546,7 +11549,7 @@ target PITX1
 targetDescription This gene encodes a member of the RIEG/PITX homeobox family, which is in the bicoid class of homeodomain proteins. Members of this family are involved in organ development and left-right asymmetry. This protein acts as a transcriptional regulator involved in basal and hormone-regulated activity of prolactin. (provided by RefSeq)
 targetId GeneCard:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
-validation Human_-_PITX1_(sc-81979)(Immunoprecipitation-Western_blot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
+validation Human_-_PITX1_(sc-81979)(Immunoprecipitation-Western_blot,IP-MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
 vendorId sc-81979
 vendorName Santa Cruz Biotechnology
 
@@ -11628,7 +11631,7 @@ targetClass Pol2
 targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes.
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Human_-_Pol2-4H8(ChIP-seq,MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_Pol2-4H8(ab5408)(Western_blot):mouse_Pol2-4H8_ab5408_validation_Hardison.pdf
+validation Human_-_Pol2-4H8(ChIP-seq,IP-MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_Pol2-4H8(ab5408)(Western_blot):mouse_Pol2-4H8_ab5408_validation_Hardison.pdf
 vendorId ab5408
 vendorName abcam
 
@@ -11692,7 +11695,7 @@ targetClass TFSS
 targetDescription Transcription factor that specifically binds to the octamer motif (5'-ATTTGCAT-3'). Regulates transcription in a number of tissues in addition to activating immunoglobulin gene expression. Modulates transcription transactivation by NR3C1, AR and PGR. Isoform 5 activates the U2 small nuclear RNA (snRNA) promoter.
 targetId GeneCard:POU2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
-validation Human_-_POU2F2(Immunoprecipitation-Western_blot,MassSpec):human_POU2F2_validation_Myers.pdf
+validation Human_-_POU2F2(Immunoprecipitation-Western_blot,IP-MassSpec):human_POU2F2_validation_Myers.pdf
 vendorId sc-233
 vendorName Santa Cruz Biotechnology
 
@@ -11724,7 +11727,7 @@ targetClass TFSS
 targetDescription PU.1 (H-135)
 targetId GeneCard:SPI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
-validation Human_-_PU1(Immunoprecipitation-Western_blot,MassSpec):human_PU1_validation_Myers.pdf
+validation Human_-_PU1(Immunoprecipitation-Western_blot,IP-MassSpec):human_PU1_validation_Myers.pdf
 vendorId sc-22805
 vendorName Santa Cruz Biotechnology
 
@@ -11868,7 +11871,7 @@ targetClass TFSS
 targetDescription Retinoid X receptors (RXRs) and retinoic acid receptors (RARs), are nuclear receptors that mediate the biological effects of retinoids by their involvement in retinoic acid-mediated gene activation. These receptors exert their action by binding, as homodimers or heterodimers, to specific sequences in the promoters of target genes and regulating their transcription. The protein encoded by this gene is a member of the steroid and thyroid hormone receptor superfamily of transcriptional regulators.
 targetId GeneCard:RXRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
-validation Human_-_RXRA(Immunoprecipitation-Western_blot,MassSpec):human_RXRA_validation_Myers.pdf
+validation Human_-_RXRA(Immunoprecipitation-Western_blot,IP-MassSpec):human_RXRA_validation_Myers.pdf
 vendorId sc-553
 vendorName Santa Cruz Biotechnology
 
@@ -11949,7 +11952,7 @@ targetClass HISase
 targetDescription Co-repressor interacting with HDAC1, N-coR, SMRT, and MeCP2
 targetId GeneCard:SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Human_-_Sin3Ak-20(Immunoprecipitation-Western_blot,MassSpec):human_Sin3Ak-20_validation_Myers.pdf
+validation Human_-_Sin3Ak-20(Immunoprecipitation-Western_blot,IP-MassSpec):human_Sin3Ak-20_validation_Myers.pdf
 vendorId sc-994
 vendorName Santa Cruz Biotechnology
 
@@ -11998,7 +12001,7 @@ targetClass TFSS
 targetDescription The protein encoded by this gene is a homeodomain-containing transcription factor that appears to function in the regulation of organogenesis. This gene is located downstream of the dystrophia myotonica-protein kinase gene. Mutations in this geneare a cause of branchiootorenal syndrome type 2.
 targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
-validation Human_-_SIX5(ChIP-seq,MassSpec):human_SIX5_validation_Myers.pdf
+validation Human_-_SIX5(ChIP-seq,IP-MassSpec):human_SIX5_validation_Myers.pdf
 vendorId sc-55706
 vendorName Santa Cruz Biotechnology
 
@@ -12044,7 +12047,7 @@ targetClass TFSS
 targetDescription SP1 is a transcription factor that binds to GC box promoters elements and selectively activates mRNA synthesis from genes that contain functional recognition sites. It can interact with G/C-rich motifs from the serotonin receptor promoter.
 targetId GeneCard:SP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
-validation Human_-_SP1(Immunoprecipitation-Western_blot,MassSpec):human_SP1_validation_Myers.pdf
+validation Human_-_SP1(Immunoprecipitation-Western_blot,IP-MassSpec):human_SP1_validation_Myers.pdf
 vendorId sc-17824
 vendorName Santa Cruz Biotechnology
 
@@ -12142,7 +12145,7 @@ targetClass TFSS
 targetDescription Serum response transcription factor
 targetId GeneCard:SRF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SRF
-validation Human_-_SRF(Immunoprecipitation-Western_blot,MassSpec):human_SRF_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_SRF(Immunoprecipitation-Western_blot,IP-MassSpec):human_SRF_validation_Myers.pdf Mouse_-_:missing
 vendorId sc-335
 vendorName Santa Cruz Biotechnology
 
@@ -12272,7 +12275,7 @@ targetClass TFNS
 targetDescription TAF1 RNA polymerase II, TATA box binding protein (TBP)-associated factor, 250kDa. Also designated TAF250.
 targetId GeneCard:TAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF1
-validation Human_-_TAF1(ChIP-seq,MassSpec):human_TAF1_validation_Myers.pdf
+validation Human_-_TAF1(ChIP-seq,IP-MassSpec):human_TAF1_validation_Myers.pdf
 vendorId sc-735
 vendorName Santa Cruz Biotechnology
 
@@ -12289,7 +12292,7 @@ targetClass TFNS
 targetDescription The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5. The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors. This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators. The protein is required for transcription by promoters targeted by RNA polymerase II (RefSeq).
 targetId GeneCard:TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
-validation Human_-_TAF7_(sc-101167)(Immunoprecipitation-Western_blot,MassSpec):human_TAF7_SC-101167_validation_Myers.pdf
+validation Human_-_TAF7_(sc-101167)(Immunoprecipitation-Western_blot,IP-MassSpec):human_TAF7_SC-101167_validation_Myers.pdf
 vendorId sc-101167
 vendorName Santa Cruz Biotechnology
 
@@ -12385,7 +12388,7 @@ targetClass TFSS
 targetDescription The protein encoded by this gene is a member of the basic helix-loop-helix (bHLH) E-protein family that recognizes the consensus binding site (E-box) CANNTG. This encoded protein is expressed in many tissues, among them skeletal muscle, thymus, B- and T-cells, and may participate in regulating lineage-specific gene expression through the formation of heterodimers with other bHLH E-proteins. Several alternatively spliced transcript variants of this gene have been described, but the full-length nature of some of these variants has not been determined.
 targetId GeneCard:TCF12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
-validation Human_-_TCF12(Immunoprecipitation-Western_blot,MassSpec):human_TCF12_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_TCF12(Immunoprecipitation-Western_blot,IP-MassSpec):human_TCF12_validation_Myers.pdf Mouse_-_:missing
 vendorId sc-357
 vendorName Santa Cruz Biotechnology
 
@@ -12567,7 +12570,7 @@ target TRIM37
 targetDescription This gene encodes a member of the tripartite motif (TRIM) family, whose members are involved in diverse cellular functions such as developmental patterning and oncogenesis. The TRIM motif includes zinc-binding domains, a RING finger region, a B-box motif and a coiled-coil domain. The RING finger and B-box domains chelate zinc and might be involved in protein-protein and/or protein-nucleic acid interactions. The gene mutations are associated with mulibrey (muscle-liver-brain-eye) nanism, an autosomal recessive disorder that involves several tissues of mesodermal origin. Alternatively spliced transcript variants encoding the same protein have been identified. (provided by RefSeq)
 targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
-validation Human_-_TRIM37_(sc-49548)(ChIP-seq,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
+validation Human_-_TRIM37_(sc-49548)(ChIP-seq,IP-MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 vendorId sc-49548
 vendorName Santa Cruz Biotechnology
 
@@ -12616,7 +12619,7 @@ targetClass TFSS
 targetDescription The ubiquitously expressed cellular upstream stimulatory factor (USF) consists of USF-1 and USF-2 polypeptides which independently exhibit site-specific DNA binding and are members of the c-Myc-related family of regulatory factors containing helix-loop-helix domains. USF also contains a leucine repeat that is required for efficient DNA binding. USF was originally identified as an up- stream stimulatory factor that binds the core sequence CACGTG in the adeno- virus late promoter. These findings, together with the demonstration of coop- erative interaction between USF and the initiator-binding protein, TFII-I, raises the possibility of a more general involvement of USF in transcriptional regula- tion. While expression of both USF-1 and USF-2 species is ubiquitous, different ratios of USF homo- and heterodimers are found in different cell types.
 targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation Human_-_USF1_SC-229(Immunoprecipitation-Western_blot,MassSpec):human_USF1_SC-229_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_USF1_SC-229(Immunoprecipitation-Western_blot,IP-MassSpec):human_USF1_SC-229_validation_Myers.pdf Mouse_-_:missing
 vendorId sc-229
 vendorName Santa Cruz Biotechnology
 
@@ -12633,7 +12636,7 @@ targetClass TFSS
 targetDescription This gene encodes a member of the basic helix-loop-helix leucine zipper family, and can function as a cellular transcription factor. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs. This gene has been linked to familial combined hyperlipidemia (FCHL). Two transcript variants encoding distinct isoforms have been identified for this gene. (provided by RefSeq).
 targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation Human_-_USF1_SC-8983(Immunoprecipitation-Western_blot,MassSpec):human_USF1_SC-8983_validation_Myers.pdf
+validation Human_-_USF1_SC-8983(Immunoprecipitation-Western_blot,IP-MassSpec):human_USF1_SC-8983_validation_Myers.pdf
 vendorId sc-8983
 vendorName Santa Cruz Biotechnology
 
@@ -12731,7 +12734,7 @@ targetClass TFSS
 targetDescription YY1 is a ubiquitously distributed transcription factor belonging to the GLI-Kruppel class of zinc finger proteins. The protein is involved in repressing and activating a diverse number of promoters. YY1 may direct histone deacetylases and histone acetyltransferases to a promoter in order to activate or repress the promoter, thus implicating histone modification in the function of YY1
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation Human_-_YY1_(sc-281)(Immunoprecipitation-Western_blot,MassSpec):human_YY1_SC-281_validation_Myers.pdf
+validation Human_-_YY1_(sc-281)(Immunoprecipitation-Western_blot,IP-MassSpec):human_YY1_SC-281_validation_Myers.pdf
 vendorId sc-281
 vendorName Santa Cruz Biotechnology
 
@@ -12764,7 +12767,7 @@ targetClass TFSS
 targetDescription Plays a key role in the instruction of early lymphoid progenitors to develop into B lineage by repressing T-cell instructive Notch signals (By similarity).
 targetId GeneCard:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
-validation Human_-_ZBTB7A_SC-34508(Immunoprecipitation-Western_blot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
+validation Human_-_ZBTB7A_SC-34508(Immunoprecipitation-Western_blot,IP-MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
 vendorId sc-34508
 vendorName Santa Cruz Biotechnology
 

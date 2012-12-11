@@ -2,10 +2,9 @@
 source `which qaConfig.csh`
 
 ###############################################
-#  05-12-04  Robert Kuhn
+#  05-12-2004  Robert Kuhn
 # 
 #  checks all the static links in htdocs tree.
-#  needs a way to re-check bad links. 
 # 
 ###############################################
 
@@ -52,7 +51,7 @@ if ( $status ) then
 endif
 
 foreach dir (`cat $pathfile`)
-  # echo "checking $dir"
+  echo "checking $dir"
   checkStaticLinks.csh $dir $excludeList
 end
 
@@ -81,13 +80,13 @@ echo " found $errors with errors"                   >> $outfile
 set genecats = "/usr/local/apache/htdocs-genecats/qa/test-results/staticLinks"
 
 if ( -e $genecats/$outfile ) then
-  if ( -e $genecats/$outfile.bak ) then
+  if ( -e $genecats/${outfile}.bak ) then
     # echo "there's a bak file"
     # echo "making a bak2 file"
-    mv $genecats/$outfile.bak $genecats/${outfile}.bak2
+    mv $genecats/${outfile}.bak $genecats/${outfile}.bak2
   endif
     # echo "making a bak file"
     mv $genecats/$outfile $genecats/${outfile}.bak
 endif
-echo "moving file to genecats dir"
+# echo "moving file to genecats dir"
 mv $outfile /usr/local/apache/htdocs-genecats/qa/test-results/staticLinks
