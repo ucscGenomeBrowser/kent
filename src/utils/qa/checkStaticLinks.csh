@@ -60,7 +60,7 @@ foreach excl ( $exclude )
   set origlist=`echo $origlist | sed "s/ /\n/g" | egrep -wv $excl`
 end
 
-# echo $origlist
+# echo origlist $origlist
 
 # set up outfile for all the files in the dir
 set i=0
@@ -101,7 +101,7 @@ foreach file ( $origlist )
         # set url=http://www.genome.washington.edu/UWGC
 
         # grab 3 lines from html page and trim down to </A> tag
-        set link=`htmlCheck getHtml $xfile | egrep -qi -A 4 "$url" \
+        set link=`htmlCheck getHtml $xfile | egrep -A 4 "$url" \
           | sed -n "1,/<\/A>/p"`
         set link=`echo $link \
           | awk -F'</A>' '{print $1}' \
