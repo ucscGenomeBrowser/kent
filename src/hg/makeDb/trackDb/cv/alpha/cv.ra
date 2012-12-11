@@ -8751,7 +8751,7 @@ term CEBPZ
 tag CEBPZ
 type Antibody
 label CEBPZ (SAB2100398)
-antibodyDescription Rabbit polyclonal, immunogen sequence= KDNASLKQLRWEAERDDWLHNRDAKSIIKKKKHFKKKRIKTTQKTKKQRK. Antibody Target: CEBPZ
+antibodyDescription Rabbit polyclonal affinity purified, immunogen sequence= KDNASLKQLRWEAERDDWLHNRDAKSIIKKKKHFKKKRIKTTQKTKKQRK. Antibody Target: CEBPZ
 lab Snyder
 lots QC8343
 orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?lang=en&N4=SAB2100398
@@ -8769,7 +8769,7 @@ type Antibody
 label CELF1 (05-621)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Antibody Target: CELF1
 lab Tenenbaum
-orderUrl http://www.millipore.com/
+orderUrl http://www.millipore.com/catalogue/item/05-621
 target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 targetId GeneCard:CELF1
