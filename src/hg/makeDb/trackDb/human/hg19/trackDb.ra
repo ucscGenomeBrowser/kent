@@ -170,6 +170,59 @@ xrefTable kgXref, ucscRetroInfo2
 xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
+track ucscRetroAli4
+shortLabel Retroposed Genes 4.0
+longLabel Retroposed GenesV4, Including Pseudogenes - Sept. 2012
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo4
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds4
+baseColorUseSequence extFile ucscRetroSeq4 ucscRetroExtFile4
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes - 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo4
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo4.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes - 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes - 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo4
+xrefQuery select ucscRetroInfo4.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene4
+searchTable ucscRetroAli4
+searchDescription Retroposed GenesV4, Including Pseudogenes - 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo4
+xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
 track illuminaProbes override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
