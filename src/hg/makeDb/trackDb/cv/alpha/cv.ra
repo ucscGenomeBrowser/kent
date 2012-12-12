@@ -10439,7 +10439,7 @@ term HDAC1_(SC-6298)
 tag HDAC1SC6298
 type Antibody
 label HDAC1 (sc-6298)
-antibodyDescription Goat polyclonal IgG, 200 micrograms/ml, epitope mapping at the C-terminus of HDAC1 of human origin. Antibody Target: HDAC1
+antibodyDescription Goat polyclonal IgG affinity purified, 200 micrograms/ml, epitope mapping at the C-terminus of HDAC1 of human origin. Antibody Target: HDAC1
 lab Bernstein
 lots H0509
 orderUrl http://www.scbt.com/datasheet-6298-hdac1-c-19-antibody.html
@@ -10447,7 +10447,7 @@ target HDAC1
 targetDescription Histone deacetylase 1 (HDAC1) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC1 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC1 include RPD3L1, HD1, GON-10, and DKFZp686H12203.
 targetId GeneCard:HDAC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
-validation Human_-_HDAC1_(sc-6298)(ChIP-String,ChIP-seq):human_HDAC1_validation_Bernstein.pdf
+validation Human_-_HDAC1_(sc-6298)(Western_blot,ChIP-seq):human_HDAC1_sc-6298_validation_Bernstein.pdf
 vendorId sc-6298
 vendorName Santa Cruz Biotechnology
 
@@ -10463,7 +10463,7 @@ target HDAC2
 targetDescription Histone deacetylase 2 (HDAC2) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC2 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC2 include HD2, RPD3, and YAF1.
 targetId GeneCard:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation Human_-_HDAC2_(A300-705A)(ChIP-String,ChIP-seq):human_HDAC2_validation_Bernstein.pdf
+validation Human_-_HDAC2_(A300-705A)(Western_blot,ChIP-seq):human_HDAC2_validation_Bernstein.pdf
 vendorId A300-705A
 vendorName Bethyl Laboratories
 
@@ -10520,8 +10520,9 @@ term HMGN1_(ab51212)
 tag HMGN1AB51212
 type Antibody
 label HMGN1 (ab5212)
-antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14. Antibody Target: HMGN1
+antibodyDescription Rabbit polyclonal A/G affinity purified, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14. Antibody Target: HMGN1
 lab Struhl
+lots 128175
 orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
 target HMGN1
 targetDescription HMGN1 is one of four members of the high mobility group nucleosome binding proteins. HMGN1 is ubiquitously expressed and has been implicated in promoting transcription.
@@ -10535,7 +10536,7 @@ term HMGN3
 tag HMGN3
 type Antibody
 label HMGN3 (NB100-61076)
-antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry. Antibody Target: HMGN3
+antibodyDescription Rabbit polyclonal A/G affinity purified. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry. Antibody Target: HMGN3
 lab Struhl
 lots 1
 orderUrl http://www.novusbio.com/HMGN3-Antibody_NB100-61076.html
@@ -10594,7 +10595,7 @@ targetClass TFSS
 targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene
 targetId GeneCard:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
-validation Human_-_HNF4G_(sc-6558)(ChIP-seq,IP-MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
+validation Human_-_HNF4G_(sc-6558)(Western_blot,IP-MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 vendorId sc-6558
 vendorName Santa Cruz Biotechnology
 
