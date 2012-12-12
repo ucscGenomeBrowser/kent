@@ -5,8 +5,8 @@
 # NOTE: the next person to build this should set a variable DB, and then
 # use $DBDATE instead of substituting $DBDATE with whatever the next data is!
 
-DBDATE=121210
-DB=sp$DBDATE
+set DBDATE=121210
+set DB=sp$DBDATE
 
 # Set up working directory
 mkdir -p /hive/data/outside/uniProt/$DBDATE/build
@@ -14,14 +14,15 @@ mkdir -p /hive/data/outside/uniProt/$DBDATE/build
 # Download uniProt. This will take about 12 hours
 cd /hive/data/outside/uniProt/$DBDATE/build
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
-#  460,569,170  292K/s   in 24m 27s
+# 473,685,422  462K/s   in 13m 48s
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
-# 8,377,086,168  172K/s   in 11h 2m
+# 12,088,824,987  342K/s   in 11h 28m
 wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
-#  6,672,072    173K/s   in 32s
+# 6,932,064   1.01M/s   in 10s
 
 # Turn flat file into relational tab-separated files.
-zcat *.dat.gz | spToDb stdin ../tabFiles
+time zcat *.dat.gz | spToDb stdin ../tabFiles
+# real    32m21.930s
 
 # Create the database.  
 hgsql mysql <<end
@@ -32,10 +33,14 @@ end
 hgsql sp$DBDATE < ~/kent/src/hg/protein/spToDb/spDb.sql
 
 # Load up the data from tab files.  This takes about an hour.
+set s=`date +%s`
 cd /hive/data/outside/uniProt/$DBDATE/tabFiles
 foreach i (*.txt)
     hgsqlimport --local sp$DBDATE $i
 end
+set e=`date +%s`
+expr $e - $s
+# 7252
 
 # Add varsplice info 
 zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp$DBDATE stdin .
