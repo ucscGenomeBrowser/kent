@@ -60,7 +60,7 @@ foreach excl ( $exclude )
   set origlist=`echo $origlist | sed "s/ /\n/g" | egrep -wv $excl`
 end
 
-# echo $origlist
+# echo origlist $origlist
 
 # set up outfile for all the files in the dir
 set i=0
@@ -101,7 +101,7 @@ foreach file ( $origlist )
         # set url=http://www.genome.washington.edu/UWGC
 
         # grab 3 lines from html page and trim down to </A> tag
-        set link=`htmlCheck getHtml $xfile | egrep -qi -A 4 "$url" \
+        set link=`htmlCheck getHtml $xfile | egrep -A 4 "$url" \
           | sed -n "1,/<\/A>/p"`
         set link=`echo $link \
           | awk -F'</A>' '{print $1}' \
@@ -117,7 +117,11 @@ foreach file ( $origlist )
         echo $file                                >> outfile$file
         echo $baseUrl/$filePath/$file             >> outfile$file
         cat err$file                              >> outfile$file
-        echo " found $j errors in $file"          >> outfile$file
+        if ( $j == 1 ) then
+          echo " found $j error in $file"          >> outfile$file
+        else
+          echo " found $j errors in $file"          >> outfile$file
+        endif
         echo "---------------------------"        >> outfile$file
         echo                                      >> outfile$file
         cat outfile$file                       >> outfile
@@ -131,9 +135,22 @@ foreach file ( $origlist )
 end
 
 echo "\n directory = htdocs/$filePath"         >> outfile
-echo " checked $i files"                       >> outfile
+if (  $i == 1 ) then
+  echo " checked $i file"                       >> outfile
+else
+  echo " checked $i files"                       >> outfile
+endif
+
 # note:  if you change the line below the wrapper script will break
-echo " found errors in $errs files\n"          >> outfile
+if ( $errs == 0 ) then
+  echo " found no files with errors\n"          >> outfile
+endif
+if ( $errs == 1 ) then
+  echo " found errors in $errs file\n"          >> outfile
+else
+  echo " found errors in $errs files\n"          >> outfile
+endif
+
 echo                                           >> outfile
 
 # cat outfile

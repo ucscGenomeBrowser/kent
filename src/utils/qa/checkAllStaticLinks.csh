@@ -64,10 +64,10 @@ foreach dir (`cat $pathfile`)
   if ( $dir == 0 )  then
     set dir=htdocs
   endif
-  tail -20 $dir.err | grep -q "errors in 0 files"
+  tail -20 $dir.err | grep -q "found no files with errors"
   if ( $status ) then
     cat $dir.err                                    >> $outfile
-    echo "\n ===================================\n" >> $outfile
+    echo "==========================================\n" >> $outfile
     @ errors = $errors + 1
   endif
   rm -f $dir.err
