@@ -176,7 +176,7 @@ group genes
 type psl
 priority 37.14
 color 20,0,250
-visibility pack
+visibility hide
 ucscRetroInfo ucscRetroInfo4
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds4
