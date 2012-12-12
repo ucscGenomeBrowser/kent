@@ -20155,4 +20155,20 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     ### track handler for this version of gencode:
     registerTrackHandlerOnFamily("wgEncodeGencodeV14", gencodeGeneMethods);
 
+#########################################################################
+# ExonJunction Primers (working - 2012-12-12 - Chin)
+    # Download
+    # http://www.weizmann.ac.il/complex/compphys/software/Amit/primers/human/track_human.BED
+    # to /hive/data/outside/Weizmann/exonJunctionPrimers
+    cd /hive/data/outside/Weizmann/exonJunctionPrimers
+    mkdir -p /hive/data/genomes/hg19/bed/exonJunctionPrimers
+XXXX 2012-12-12 Stopped here, waiting for correct BED file
+    cat track_human.BED | grep -v track \
+     > /hive/data/genomes/hg19/bed/exonJunctionPrimers/exonJunctionPrimers_hg19.bed
+    # Use the exonJunctionPrimers.sql created for mm10
+    cd /hive/data/genomes/hg19/bed/exonJunctionPrimers
+    hgLoadBed -bedDetail -tab -sqlTable=$HOME/kent/src/hg/lib/exonJunctionPrimers.sql \
+      hg19 exonJunctionPrimers exonJunctionPrimers_hg19.bed
+
+
 ############################################################################

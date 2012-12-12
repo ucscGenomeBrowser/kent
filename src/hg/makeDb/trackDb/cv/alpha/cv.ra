@@ -9799,12 +9799,13 @@ type Antibody
 label GATA1 (sc-266)
 antibodyDescription Rat monoclonal raised against bacterially expressed murine GATA-1. Antibody Target: GATA1
 lab Snyder
+lots B2510
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
 target GATA1
 targetDescription GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes.
 targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
-validation Human_-_GATA1_(sc-266)(Immunoprecipitation,Motif_Enrichment):human_GATA_validation_Snyder.pdf Mouse_-_GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf Mouse_-_GATA1_(sc-266)(Immunoprecipitation,Motif_Enrichment):mouse_GATA1_validation_Snyder.pdf
+validation Human_-_GATA1_(sc-266)(Immunoprecipitation,Motif_Enrichment):human_GATA_validation_Snyder.pdf Mouse_-_GATA1(sc-266)(Immunoprecipitation):mouse_GATA1-SC266_validation_Snyder.pdf Mouse_-_GATA1_(sc-266)(Immunoprecipitation,Motif_Enrichment):mouse_GATA1_validation_Snyder.pdf
 vendorId sc-266
 vendorName Santa Cruz Biotechnology
 
@@ -9864,7 +9865,7 @@ type Antibody
 label GATA3 (sc-268)
 antibodyDescription Mouse monoclonal IgG raised against human recombinant GATA-3. Antibody Target: GATA3
 lab Farnham
-lots A2610
+lots G0910
 orderUrl http://www.scbt.com/datasheet-268-gata-3-hg3-31-antibody.html
 target GATA3
 targetDescription This gene encodes a protein which belongs to the GATA family of transcription factors. The protein contains two GATA-type zinc fingers and is a n important regulator of T-cell development and plays an important role in endothelial cell biology. Defects in this gene are the cause of hypoparathyroidism with sensorineural deafness and renal dysplasia (provided by RefSeq).
@@ -9878,7 +9879,7 @@ term GATA3_(SC-269)
 tag GATA3SC269
 type Antibody
 label GATA3 (sc-269)
-antibodyDescription Mouse monoclonal IgG raised against human recombinant GATA-3 (amino acids 1-264). Antibody Target: GATA3
+antibodyDescription Mouse monoclonal IgG affnity purified, raised against human recombinant GATA-3 (amino acids 1-264). Antibody Target: GATA3
 lab Farnham
 lots A1404
 orderUrl http://www.scbt.com/datasheet-269-gata-3-hg3-35-antibody.html
@@ -9927,14 +9928,14 @@ term GRp20
 tag GRP20
 type Antibody
 label GRp20 (sc-1002)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: GRp20
+antibodyDescription Rabbit polyclonal IgG affinity purified. Antibody Target: GRp20
 lab Snyder
 orderUrl http://www.scbt.com/datasheet-1002-gr-p-20-antibody.html
 target GRp20
 targetDescription Epitope mapping at the C-terminus of GR alpha of human origin
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
-validation Human_-_GRp20_(sc-1002)(Western_blot,IP-MassSpec):human_GRP20_validation_Snyder.pdf
+validation Human_-_GRp20_(sc-1002)(Western_blot,IP-MassSpec):human_GRP20_sc-1002__validation_Snyder.pdf
 vendorId sc-1002
 vendorName Santa Cruz Biotechnology
 
@@ -9942,7 +9943,7 @@ term GTF2B
 tag GTF2B
 type Antibody
 label GTF2B (sc-225)
-antibodyDescription Rabbit polyclonal. Raised against an epitope mapping to C-terminus of human TFIIB. Recommended for detection of TFIIB p33 of mouse, rabbit and human origin. Antibody Target: GTF2B
+antibodyDescription Rabbit polyclonal A/G affinity purified. Raised against an epitope mapping to C-terminus of human TFIIB. Recommended for detection of TFIIB p33 of mouse, rabbit and human origin. Antibody Target: GTF2B
 lab Struhl
 lots J1905
 orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
@@ -9975,7 +9976,7 @@ term H2A.Z
 tag H2AZ
 type Antibody
 label H2AZ (07-594)
-antibodyDescription Rabbit polyclonal antibody raised against a peptide corresponding to the C-terminus of H2A.Z. Antibody Target: H2AFZ
+antibodyDescription Rabbit polyclonal antibody A/G affinity purified, raised against a peptide corresponding to the C-terminus of H2A.Z. Antibody Target: H2AFZ
 lab Bernstein
 lots DAM1540736
 orderUrl http://www.millipore.com/catalogue/item/07-594
@@ -10006,7 +10007,7 @@ term H3K4me1
 tag H3K04ME1
 type Antibody
 label H3K4me1 (ab8895)
-antibodyDescription Rabbit polyclonal. Antibody Target: H3K4me1
+antibodyDescription Rabbit polyclonal affinity purified. Antibody Target: H3K4me1
 lab Bernstein, Ren, Hardison
 lots 383111 720417
 orderUrl http://www.abcam.com/index.html?datasheet=8895
@@ -10014,7 +10015,7 @@ target H3K4me1
 targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and downstream of transcription starts.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot,Western_blot):mouse_H3K4me1_ab8895_validation_Ren.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot):mouse_H3K4me1_ab8895_validation_Hardison.pdf
+validation Human_-_H3K4me1(ab8895)(Dot_blot):human_H3K4me1_ab8895_validation_Bernstein.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot,Western_blot):mouse_H3K4me1_ab8895_validation_Ren.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot):mouse_H3K4me1_ab8895_validation_Hardison.pdf
 vendorId ab8895
 vendorName abcam
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
@@ -10023,7 +10024,7 @@ term H3K4me1_(pAb-037-050)
 tag H3K04ME1b
 type Antibody
 label H3K4me1 (pAb-037-050)
-antibodyDescription Rabbit polyclonal antibody raised against histone H3 containing the monomethylated lysine 4 (H3K4me1), using a KLH-conjugated synthetic peptide. Antibody Target: H3K4me1
+antibodyDescription Rabbit polyclonal affinity purified antibody raised against histone H3 containing the monomethylated lysine 4 (H3K4me1), using a KLH-conjugated synthetic peptide. Antibody Target: H3K4me1
 lab Farnham
 lots A399-002341P
 orderUrl http://www.diagenode.com/en/catalog/antibodies-3/histone-h3-and-modified-h3-27/product/h3k4me1-polyclonal-antibody-37
@@ -10120,9 +10121,9 @@ term H3K9ac
 tag H3K09AC
 type Antibody
 label H3K9ac (ab4441)
-antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
+antibodyDescription Rabbit polyclonal A/G affinity purified. Antibody Target: H3K9ac
 lab Bernstein
-lots 455103
+lots 455103 550799
 orderUrl http://www.abcam.com/index.html?datasheet=4441
 target H3K9ac
 targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
@@ -10199,9 +10200,9 @@ term H3K9me3
 tag H3K09ME3
 type Antibody
 label H3K9me3 (ab8898)
-antibodyDescription Rabbit polyclonal, ChIP grade. Antibody Target: H3K9me3
+antibodyDescription Rabbit polyclonal affinity purified, ChIP grade. Antibody Target: H3K9me3
 lab Farnham, Ren, Hardison, Bernstein
-lots 19208002
+lots 484088 699671 943257
 orderUrl http://www.abcam.com/index.html?datasheet=8898
 target H3K9me3
 targetDescription Histone H3 (tri methyl K9). Is associated with repressive heterochromatic state (silenced chromatin). NOTE CONTRAST to H3K9me1 which is associated with active and accessible regions.
@@ -10313,13 +10314,13 @@ type Antibody
 label H3K36me3 (ab9050)
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K36me3
 lab Bernstein, Ren, Hardison
-lots 136353 707946
+lots 136353 707946 499302 947454 826245
 orderUrl http://www.abcam.com/index.html?datasheet=9050
 target H3K36me3
 targetDescription Specific for histone H3 tri methylated at lysine 36, weakly reacts with H3K36me2. Marks regions of RNAPII elongation, including coding and non-coding transcripts.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):mouse_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot):mouse_H3K36me3_ab9050_validation_Hardison.pdf
+validation Human_-_H3K36me3(ab9050)(Dot_blot):human_H3K36me3_ab9050_validation_Bernstein.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):mouse_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot):mouse_H3K36me3_ab9050_validation_Hardison.pdf
 vendorId ab9050
 vendorName abcam
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
@@ -10394,13 +10395,13 @@ type Antibody
 label H4K20me1 (ab9051)
 antibodyDescription Rabbit polyclonal. Antibody Target: H4K20me1
 lab Bernstein
-lots 104513
+lots 104513 519198
 orderUrl http://www.abcam.com/index.html?datasheet=9051
 target H4K20me1
 targetDescription Histone H4 (mono-methyl K20). Is associated with active and accessible regions. In mammals, PR-Set7 specifically catalyzes H4K20 monomethylation. NOTE CONTRAST to H3K20me3 which is associated with heterochromatin and DNA repair.
 targetId GeneCard:HIST2H4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H4A
-validation Human_-_H4K20me1(Dot_blot):human_H4K20me1_validation_Bernstein.pdf
+validation Human_-_H4K20me1(ab9051)(Dot_blot):human_H4K20me1_ab9051_validation_Bernstein.pdf
 vendorId ab9051
 vendorName abcam
 
@@ -10438,7 +10439,7 @@ term HDAC1_(SC-6298)
 tag HDAC1SC6298
 type Antibody
 label HDAC1 (sc-6298)
-antibodyDescription Goat polyclonal IgG, 200 micrograms/ml, epitope mapping at the C-terminus of HDAC1 of human origin. Antibody Target: HDAC1
+antibodyDescription Goat polyclonal IgG affinity purified, 200 micrograms/ml, epitope mapping at the C-terminus of HDAC1 of human origin. Antibody Target: HDAC1
 lab Bernstein
 lots H0509
 orderUrl http://www.scbt.com/datasheet-6298-hdac1-c-19-antibody.html
@@ -10446,7 +10447,7 @@ target HDAC1
 targetDescription Histone deacetylase 1 (HDAC1) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC1 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC1 include RPD3L1, HD1, GON-10, and DKFZp686H12203.
 targetId GeneCard:HDAC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
-validation Human_-_HDAC1_(sc-6298)(ChIP-String,ChIP-seq):human_HDAC1_validation_Bernstein.pdf
+validation Human_-_HDAC1_(sc-6298)(Western_blot,ChIP-seq):human_HDAC1_sc-6298_validation_Bernstein.pdf
 vendorId sc-6298
 vendorName Santa Cruz Biotechnology
 
@@ -10462,7 +10463,7 @@ target HDAC2
 targetDescription Histone deacetylase 2 (HDAC2) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC2 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC2 include HD2, RPD3, and YAF1.
 targetId GeneCard:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation Human_-_HDAC2_(A300-705A)(ChIP-String,ChIP-seq):human_HDAC2_validation_Bernstein.pdf
+validation Human_-_HDAC2_(A300-705A)(Western_blot,ChIP-seq):human_HDAC2_validation_Bernstein.pdf
 vendorId A300-705A
 vendorName Bethyl Laboratories
 
@@ -10519,8 +10520,9 @@ term HMGN1_(ab51212)
 tag HMGN1AB51212
 type Antibody
 label HMGN1 (ab5212)
-antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14. Antibody Target: HMGN1
+antibodyDescription Rabbit polyclonal A/G affinity purified, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14. Antibody Target: HMGN1
 lab Struhl
+lots 128175
 orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
 target HMGN1
 targetDescription HMGN1 is one of four members of the high mobility group nucleosome binding proteins. HMGN1 is ubiquitously expressed and has been implicated in promoting transcription.
@@ -10534,7 +10536,7 @@ term HMGN3
 tag HMGN3
 type Antibody
 label HMGN3 (NB100-61076)
-antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry. Antibody Target: HMGN3
+antibodyDescription Rabbit polyclonal A/G affinity purified. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry. Antibody Target: HMGN3
 lab Struhl
 lots 1
 orderUrl http://www.novusbio.com/HMGN3-Antibody_NB100-61076.html
@@ -10593,7 +10595,7 @@ targetClass TFSS
 targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene
 targetId GeneCard:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
-validation Human_-_HNF4G_(sc-6558)(ChIP-seq,IP-MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
+validation Human_-_HNF4G_(sc-6558)(Western_blot,IP-MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 vendorId sc-6558
 vendorName Santa Cruz Biotechnology
 
