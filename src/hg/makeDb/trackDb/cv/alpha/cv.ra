@@ -10121,9 +10121,9 @@ term H3K9ac
 tag H3K09AC
 type Antibody
 label H3K9ac (ab4441)
-antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
+antibodyDescription Rabbit polyclonal A/G affinity purified. Antibody Target: H3K9ac
 lab Bernstein
-lots 455103
+lots 455103 550799
 orderUrl http://www.abcam.com/index.html?datasheet=4441
 target H3K9ac
 targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
@@ -10200,9 +10200,9 @@ term H3K9me3
 tag H3K09ME3
 type Antibody
 label H3K9me3 (ab8898)
-antibodyDescription Rabbit polyclonal, ChIP grade. Antibody Target: H3K9me3
+antibodyDescription Rabbit polyclonal affinity purified, ChIP grade. Antibody Target: H3K9me3
 lab Farnham, Ren, Hardison, Bernstein
-lots 19208002
+lots 484088 699671 943257
 orderUrl http://www.abcam.com/index.html?datasheet=8898
 target H3K9me3
 targetDescription Histone H3 (tri methyl K9). Is associated with repressive heterochromatic state (silenced chromatin). NOTE CONTRAST to H3K9me1 which is associated with active and accessible regions.
@@ -10395,13 +10395,13 @@ type Antibody
 label H4K20me1 (ab9051)
 antibodyDescription Rabbit polyclonal. Antibody Target: H4K20me1
 lab Bernstein
-lots 104513
+lots 104513 519198
 orderUrl http://www.abcam.com/index.html?datasheet=9051
 target H4K20me1
 targetDescription Histone H4 (mono-methyl K20). Is associated with active and accessible regions. In mammals, PR-Set7 specifically catalyzes H4K20 monomethylation. NOTE CONTRAST to H3K20me3 which is associated with heterochromatin and DNA repair.
 targetId GeneCard:HIST2H4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H4A
-validation Human_-_H4K20me1(Dot_blot):human_H4K20me1_validation_Bernstein.pdf
+validation Human_-_H4K20me1(ab9051)(Dot_blot):human_H4K20me1_ab9051_validation_Bernstein.pdf
 vendorId ab9051
 vendorName abcam
 
