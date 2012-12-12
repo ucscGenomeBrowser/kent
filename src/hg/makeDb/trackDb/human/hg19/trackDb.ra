@@ -124,7 +124,6 @@ type psl
 priority 37.14
 color 20,0,250
 visibility pack
-nextItemButton on
 ucscRetroInfo ucscRetroInfo2
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds2
@@ -178,7 +177,6 @@ type psl
 priority 37.14
 color 20,0,250
 visibility pack
-nextItemButton on
 ucscRetroInfo ucscRetroInfo4
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds4
