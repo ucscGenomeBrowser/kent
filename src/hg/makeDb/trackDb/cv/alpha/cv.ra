@@ -9461,7 +9461,7 @@ type Antibody
 label ELAVL1 (sc-5261; 07-1735)
 antibodyDescription Mouse monoclonal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin. Antibody Target: ELAVL1
 lab Tenenbaum
-lots 1) B2508
+lots B2508
 orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html ; http://www.millipore.com/catalogue/item/07-1735
 target ELAVL1
 targetDescription (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
@@ -9492,7 +9492,7 @@ term ELK1_(1277-1)
 tag ELK112771
 type Antibody
 label ELK1 (1277-1)
-antibodyDescription Rabbit polyclonal, a synthetic peptide corresponding to residues in C-terminus of human ELK-1 was used as immunogen. The antibody does not cross-react with other ETS family members. Antibody Target: ELK1
+antibodyDescription Rabbit polyclonal affinity purified, a synthetic peptide corresponding to residues in C-terminus of human ELK-1 was used as immunogen. The antibody does not cross-react with other ETS family members. Antibody Target: ELK1
 lab Snyder
 lots YG030402C
 orderUrl http://www.epitomics.com/products/product_info/194
@@ -9508,8 +9508,9 @@ term ELK4
 tag ELK4
 type Antibody
 label ELK4 (sc-13030)
-antibodyDescription Rabbit polyclonal IgG. Antibody Target: ELK4
+antibodyDescription Rabbit polyclonal IgG affinity purified. Antibody Target: ELK4
 lab Farnham
+lots E0603
 orderUrl http://datasheets.scbt.com/sc-13030.pdf
 target ELK4
 targetClass TFSS
@@ -9543,6 +9544,7 @@ type Antibody
 label ESRRA (sc-66882)
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. Antibody Target: ESRRA
 lab Snyder
+lots A0809
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 target ESRRA
 targetClass TFSS
@@ -9557,7 +9559,7 @@ term ESET_(166621)
 tag ESET166621
 type Antibody
 label ESET&#47;SETDB1 (sc-166621)
-antibodyDescription Mouse monoclonal IgG2b, specific for an epitope mapping between amino acids 1195-1228 near the C-terminus of human ESET. Antibody Target: SETDB1
+antibodyDescription Mouse monoclonal IgG2b affinity purified, specific for an epitope mapping between amino acids 1195-1228 near the C-terminus of human ESET. Antibody Target: SETDB1
 lab Bernstein
 lots H2009
 orderUrl http://www.scbt.com/datasheet-166621-eset-a-1-antibody.html
@@ -9590,7 +9592,7 @@ term EZH2_(39875)
 tag EZH239875
 type Antibody
 label EZH2 (39875)
-antibodyDescription Mouse monoclonal raised against a recombinant protein corresponding to amino acids 353-451 of human EZH2. Antibody Target: EZH2
+antibodyDescription Mouse monoclonal A/G affinity purified raised against a recombinant protein corresponding to amino acids 353-451 of human EZH2. Antibody Target: EZH2
 lab Bernstein
 lots 27210001
 orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
@@ -9598,7 +9600,7 @@ target EZH2
 targetDescription EZH2 (Enhancer of Zeste homolog 2, also designated Enx1 and SETDB1) is a human homolog of the Drosophila Polycomb-group protein Enhancer of Zeste protein. It contains a SET domain that catalyzes the methylation of histone H3 at lysine 27 (Histone H3 Lys27 monomethylated, dimethylated and trimethylated). Polycomb-group proteins repress gene expression by binding to chromatin and locally altering chromatin structure. EZH2, BMI-1 and Suz12 are present in the PRC2 and PRC3 protein complexes that function as mediators of epigenetic transcriptional silencing. EZH2 associates with the embryonic ectoderm development protein, the VAV1 oncoprotein, and the X-linked nuclear protein. EZH2 may play a role in the hematopoietic and central nervous systems. Deregulation of EZH2 is linked to a variety of cancers.
 targetId GeneCard:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
-validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf
+validation Human_-_EZH2_(39875)(Western_blot,ChIP-seq):human_EZH2_validation_Bernstein.pdf
 vendorId 39875
 vendorName Active Motif
 
@@ -9671,6 +9673,7 @@ type Antibody
 label FOXA1 (sc-6553)
 antibodyDescription Goat polyclonal IgG, epitope mapping at the C-terminus of FOXA1 of human origin. Antibody Target: FOXA1
 lab Myers
+lots H1209
 orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
 target FOXA1
 targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq).
@@ -9724,7 +9727,7 @@ target FOXM1
 targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq, Jul 2011)
 targetId GeneCard:FOXM1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXM1
-validation Human_-_FOXM1_(sc-502)(Western_blot,ChIP-seq):human_FOXM1_sc-502_validation_Myers.pdf
+validation Human_-_FOXM1_(sc-502)(Western_blot,IP-MassSpec):human_FOXM1_sc-502_validation_Myers.pdf
 vendorId sc-502
 vendorName Santa Cruz Biotechnology
 
