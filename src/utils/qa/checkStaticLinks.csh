@@ -15,7 +15,7 @@ set url=""
 set exclude=""
 set excludeList=""
 set baseUrl="http://hgwbeta.cse.ucsc.edu"
-set errs=""
+set errs=0
 
 if ( $#argv < 1 || $#argv > 2 ) then
   # wrong number of command-line args
@@ -82,6 +82,7 @@ foreach file ( $origlist )
       | grep -v "service not known" \
       | grep -v "than directories in" \
       | grep -v "Connection refused" \
+      | grep -v "Non-numeric port" \
       | egrep "."  > tmp
     rm -f tmp0
 
@@ -134,21 +135,22 @@ foreach file ( $origlist )
   @ i = $i + 1
 end
 
-echo "\n directory = htdocs/$filePath"         >> outfile
+echo "\n directory = htdocs/$filePath"          >> outfile
 if (  $i == 1 ) then
   echo " checked $i file"                       >> outfile
 else
-  echo " checked $i files"                       >> outfile
+  echo " checked $i files"                      >> outfile
 endif
 
 # note:  if you change the line below the wrapper script will break
 if ( $errs == 0 ) then
-  echo " found no files with errors\n"          >> outfile
-endif
-if ( $errs == 1 ) then
-  echo " found errors in $errs file\n"          >> outfile
+  echo " found no files with errors\n"         >> outfile
 else
-  echo " found errors in $errs files\n"          >> outfile
+  if ( $errs == 1 ) then
+    echo " found errors in $errs file\n"       >> outfile
+  else
+    echo " found errors in $errs files\n"      >> outfile
+  endif
 endif
 
 echo                                           >> outfile
