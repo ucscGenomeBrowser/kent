@@ -10976,7 +10976,7 @@ term Med1_(sc-8998)
 tag MED1SC8998
 type Antibody
 label MED1 (sc-8998)
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 502-756 of TRAP220 of mouse origin. Antibody Target: MED1
+antibodyDescription Rabbit polyclonal A/G affinity purified, epitope corresponding to amino acids 502-756 of TRAP220 of mouse origin. Antibody Target: MED1
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-8998-trap220-m-255-antibody.html
 target MED1
@@ -10991,7 +10991,7 @@ term Med26_(sc-48776)
 tag MED26SC48776
 type Antibody
 label MED26 (sc-48776)
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 373-600 mapping at the C-terminus of CRSP70 of human origin. Antibody Target: MED26
+antibodyDescription Rabbit polyclonal A/G affinity purified, epitope corresponding to amino acids 373-600 mapping at the C-terminus of CRSP70 of human origin. Antibody Target: MED26
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-48776-crsp70-h-228-antibody.html
 target MED26
@@ -11055,9 +11055,9 @@ term Mxi1_(AF4185)
 tag MXI1
 type Antibody
 label MXI1 (AF4185)
-antibodyDescription Goat polyclonal IgG raised against E. coli-derived rhMxi1. Antibody Target: MXI1
+antibodyDescription Goat polyclonal IgG affinity purified, raised against E. coli-derived rhMxi1. Antibody Target: MXI1
 lab Snyder
-lots ZIJ01
+lots ZIJ0107031
 orderUrl http://www.rndsystems.com/pdf/AF4185.pdf
 target MXI1
 targetClass TFSS
@@ -11151,7 +11151,7 @@ term NELFe
 tag NELFE
 type Antibody
 label NELF-E (sc-32912)
-antibodyDescription Rabbit polyclonal NELF-E (RDBP). Antibody Target: RDBP
+antibodyDescription Rabbit polyclonal A/G affinity purified NELF-E (RDBP). Antibody Target: RDBP
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-32912-nelf-e-h-140-antibody.html
 target RDBP 
@@ -11232,8 +11232,9 @@ term NFKB
 tag NFKB
 type Antibody
 label NFKB (sc-372)
-antibodyDescription Rabbit polyclonal IgG. Epitope mapping at the C-terminus of NFKB p65 of human origin. Antibody Target: RELA
+antibodyDescription Rabbit polyclonal IgG affinity purified. Epitope mapping at the C-terminus of NFKB p65 of human origin. Antibody Target: RELA
 lab Snyder
+lots A2298
 orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 target RELA 
 targetClass TFSS
@@ -11280,8 +11281,9 @@ term Nrf1
 tag NRF1
 type Antibody
 label NRF1 (ab55744)
-antibodyDescription Mouse monoclonal, Immunogen corresponding to amino acids 201-286 of Human NRF1. Antibody Target: NRF1
+antibodyDescription Mouse monoclonal A/G affinity purified, Immunogen corresponding to amino acids 201-286 of Human NRF1. Antibody Target: NRF1
 lab Snyder
+lots GR27905
 orderUrl http://www.abcam.com/NRF1-antibody-ab55744.html
 target NRF1
 targetClass TFSS
@@ -11328,7 +11330,7 @@ term NR2F2_(SC-271940)
 tag NR2F2SC271940
 type Antibody
 label NR2F2 (sc-271940)
-antibodyDescription Mouse monoclonal IgG, specific for an epitope mapping between amino acids 13-44 at the N-terminus of NR2F2 of human origin. Antibody Target: NR2F2
+antibodyDescription Mouse monoclonal IgG affinity purified, specific for an epitope mapping between amino acids 13-44 at the N-terminus of NR2F2 of human origin. Antibody Target: NR2F2
 lab Myers
 lots I1410
 orderUrl http://www.scbt.com/datasheet-271940-arp-1-e-11-antibody.html
@@ -11344,7 +11346,7 @@ term NSD2_(ab75359)
 tag NSD2AB75359
 type Antibody
 label NSD2 (ab75359)
-antibodyDescription Mouse monoclonal, raised against a fusion protein, corresponding to amino acids 1-647 of Human GST-WHSC1/NSD2. Antibody Target: WHSC1
+antibodyDescription Mouse monoclonal affinity purified, raised against a fusion protein, corresponding to amino acids 1-647 of Human GST-WHSC1/NSD2. Antibody Target: WHSC1
 lab Bernstein
 lots GR47579-1
 orderUrl http://www.abcam.com/WHSC1NSD2-antibody-29D1-ab75359.html
@@ -11427,6 +11429,7 @@ type Antibody
 label PABPC1 (04-1467)
 antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Antibody Target: PABPC1
 lab Tenenbaum
+lots JBC1363217
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 target PABPC1
 targetDescription Poly(A) binding protein, cytoplasmic 1 (Homo sapiens).
@@ -11443,6 +11446,7 @@ type Antibody
 label PAX5 (sc-1974)
 antibodyDescription Goat polyclonal IgG, 200 micrograms/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Antibody Target: PAX5
 lab Myers
+lot E1409
 orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 target PAX5
 targetClass TFSS
@@ -11452,6 +11456,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation Human_-_PAX5-C20(Immunoprecipitation-Western_blot,IP-MassSpec):human_PAX5-C20_validation_Myers.pdf
 vendorId sc-1974
 vendorName Santa Cruz Biotechnology
+# Note validation document has typo, sc-1794, sc-1974 correct.
 
 term PAX5-N19
 tag PAX5b
@@ -11459,6 +11464,7 @@ type Antibody
 label PAX5 (sc-1975)
 antibodyDescription Goat polyclonal IgG epitope mapping at the N-terminus of Pax-5 of human origin. Antibody Target: PAX5
 lab Myers
+lots I070
 orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 target PAX5
 targetClass TFSS
@@ -11468,6 +11474,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation Human_-_PAX5-N19(Immunoprecipitation-Western_blot,IP-MassSpec):human_PAX5-N19_validation_Myers.pdf
 vendorId sc-1975
 vendorName Santa Cruz Biotechnology
+# Note validation document has typo, sc-1795, sc-1975 correct.
 
 term PAX5_(N-15)
 tag PAX5c
@@ -11475,6 +11482,7 @@ type Antibody
 label PAX5 (ab12000)
 antibodyDescription Rabbit polyclonal antibody; epitope is a synthetic peptide: MDLEKNYPTPRTSRT, corresponding to amino acids 1-15 of Human PAX5, cross-reacts with human and mouse PAX5. Antibody Target: PAX5
 lab Hardison
+lots 853694
 orderUrl http://www.abcam.com/PAX5-antibody-ab12000.html
 target PAX5
 targetClass TFSS
