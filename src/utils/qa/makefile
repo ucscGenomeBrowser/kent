@@ -120,6 +120,7 @@ install:
 	cp -p --remove-destination runCheckHgFindSpec      ${SCRIPTS}
 	cp -p --remove-destination runJoiner.csh           ${SCRIPTS}
 	cp -p --remove-destination sessionStats.csh        ${SCRIPTS}
+	cp -p --remove-destination showLastGit.csh         ${SCRIPTS}
 	cp -p --remove-destination showProcesslist.csh     ${SCRIPTS}
 	cp -p --remove-destination staticpaths             ${SCRIPTS}
 	cp -p --remove-destination syncAday.csh            ${SCRIPTS}

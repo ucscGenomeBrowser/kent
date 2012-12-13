@@ -41,7 +41,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/encodeExp.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
-    estPair.o exoFish.o expData.o expRecord.o exprBed.o \
+    estPair.o exoFish.o exonJunctionPrimers.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o fileUi.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBase2004Xref.o \
     flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbWarn.o gbMiscDiff.o gbProtAnn.o gcPercent.o gbSeq.o \
