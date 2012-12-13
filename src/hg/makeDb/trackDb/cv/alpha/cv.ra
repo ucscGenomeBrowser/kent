@@ -11499,6 +11499,7 @@ type Antibody
 label PBX3 (sc-891)
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: PBX3
 lab Myers
+lots H0307
 orderUrl http://www.scbt.com/product.php?datasheet=891
 target PBX3
 targetClass TFSS
@@ -11553,7 +11554,7 @@ target PHF8
 targetDescription PHF8 (PHD finger protein 8) is a member of the jumonji family of proteins and contains a jumonji C (JmjC) domain. The JmjC proteins are predicted to be metalloenzymes that play a role a chromatin remodeling and histone demethylation. PHF8 also bears a PHD (plant homeodomain)- type zinc-finger, a domain also found to be involved in chromatin remodeling and transcriptional regulation. Truncating mutations in PHF8 are associated with X-linked mental retardation and cleft lip/cleft palate. PHF8 is also known as ZNF422 and KIAA1111.
 targetId GeneCard:PHF8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PHF8
-validation Human_-_PHF8_(A301-772A)(ChIP-String,ChIP-seq):human_PHF8_validation_Bernstein.pdf
+validation Human_-_PHF8_(A301-772A)(Western_blot,ChIP-seq):human_PHF8_validation_Bernstein.pdf
 vendorId A301-772A
 vendorName Bethyl Laboratories
 
@@ -11584,7 +11585,7 @@ target KDM5B
 targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
 targetId GeneCard:KDM5B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
-validation Human_-_PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
+validation Human_-_PLU1(Western_blot,ChIP-seq):human_PLU1_validation_Bernstein.pdf
 vendorId PLU-1
 vendorName Dr. Yang Shi at Harvard 
 
@@ -11610,7 +11611,7 @@ type Antibody
 label POL2 (MMS-126R)
 antibodyDescription Mouse monoclonal, clone 8WG16. Antibody Target: POLR2A
 lab Farnham, Iyer, Snyder
-lots 14861301  14922701
+lots 14861301  14922701 E11BF0034
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 target POLR2A
 targetClass Pol2
@@ -11645,13 +11646,14 @@ type Antibody
 label Pol2-4H8 (ab5408)
 antibodyDescription Mouse monoclonal to RNA polymerase II CTD repeat YSPTSPS antibody (4H8) - ChIP Grade. Antibody Target: POLR2A
 lab Myers,Hardison
+lots 648628 647708 722997 962594
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
 target POLR2A
 targetClass Pol2
 targetDescription This gene encodes the largest subunit of RNA polymerase II, the polymerase responsible for synthesizing messenger RNA in eukaryotes.
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Human_-_Pol2-4H8(ChIP-seq,IP-MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_Pol2-4H8(ab5408)(Western_blot):mouse_Pol2-4H8_ab5408_validation_Hardison.pdf
+validation Human_-_Pol2-4H8(Western_blot,IP-MassSpec):human_Pol2-4H8_validation_Myers.pdf Mouse_-_Pol2-4H8(ab5408)(Western_blot):mouse_Pol2-4H8_ab5408_validation_Hardison.pdf
 vendorId ab5408
 vendorName abcam
 
@@ -11659,8 +11661,9 @@ term Pol2(phosphoS2)
 tag POL2S2
 type Antibody
 label POL2 (phospho S2) (ab5095)
-antibodyDescription Rabbit polyclonal against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2. Antibody Target: POLR2A
+antibodyDescription Rabbit polyclonal affinity purified against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2. Antibody Target: POLR2A
 lab Snyder
+lots GR32890-1
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-phospho-S2-antibody-ChIP-Grade-ab5095.html
 target POLR2A
 targetClass Pol2
@@ -11677,6 +11680,7 @@ type Antibody
 label POL III(sc-21754)
 antibodyDescription Mouse monoclonal IgG1. Antibody Target: POLR3G
 lab Snyder
+lots D4104
 orderUrl http://www.scbt.com/product.php?datasheet=21754
 target POLR3G
 targetDescription RNA Polymerase III
@@ -11709,6 +11713,7 @@ type Antibody
 label POU2F2 (sc-233)
 antibodyDescription Rabbit polyclonal. Oct-2(C-20) is an affinity purified antibody raised against a peptide mapping at the C-terminus of Oct-2 of human origin. Antibody Target: POU2F2
 lab Myers
+lots C2609
 orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 target POU2F2
 targetClass TFSS
@@ -11741,6 +11746,7 @@ type Antibody
 label PU.1 (sc-22805)
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: SPI1
 lab Myers
+lots G1009
 orderUrl http://www.scbt.com/product.php?datasheet=22805
 target SPI1
 targetClass TFSS
@@ -11755,9 +11761,9 @@ term Rad21
 tag RAD21
 type Antibody
 label RAD21 (ab992)
-antibodyDescription Rabbit polyclonal. Antibody Target: RAD21
+antibodyDescription Rabbit polyclonal affinity purified. Antibody Target: RAD21
 lab Snyder
-lots 940739 891751
+lots 940739 891751 734371
 orderUrl http://www.abcam.com/index.html?datasheet=992
 target RAD21
 targetClass DNARep
@@ -11780,7 +11786,7 @@ target RBBP5
 targetDescription Retinoblastoma binding protein 5 (RbBP5) is a subunit of a human Set1-like histone methyltransferase (HMT) complex. The Set-1 like complexes are responsible for mono-, di-, and tri-methylation of histone H3 K4. RbBP5 associates with a multitude of proteins in a number of Set1-like complexes which include various combinations of MLL, MLL2, MLL3, MLL4, ASH2L,WDR5, hDPY-30, hSwd2, CXXC1, HCF1, Menin, PTIP, PA1, NCOA6, and UTX. RbBP5 is also one of many proteins that bind the Retinoblastoma tumor suppressor protein, pRb. Alternate names for RbBP5 are RBQ3 and SWD1.
 targetId GeneCard:RBBP5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
-validation Human_-_RBBP5_(A300-109A)(ChIP-String,ChIP-seq):human_RBBP5_validation_Bernstein.pdf
+validation Human_-_RBBP5_(A300-109A)(Western_blot,ChIP-seq):human_RBBP5_validation_Bernstein.pdf
 vendorId A300-109A
 vendorName Bethyl Laboratories
 
@@ -11837,13 +11843,14 @@ type Antibody
 label RFX5 (200-401-194)
 antibodyDescription Rabbit polyclonal against RFX5 peptide corresponding to a region at amino acids 320 to 494 of the human protein conjugated to Keyhole Limpet Hemocyanin. Antibody Target: RFX5
 lab Snyder
+lots 14562
 orderUrl http://rockland-inc.com/store/Transcription-Factor-Antibodies-200-401-194-O4L_9248.aspx
 target RFX5
 targetClass TFSS
 targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters
 targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
-validation Human_-_RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_validation_Snyder.pdf
+validation Human_-_RFX5_(200-401-194)(Western_blot,Motif_Enrichment):human_RFX5_validation_Snyder.pdf
 vendorId 200-401-194
 vendorName Rockland Immunochemicals
 
@@ -11885,6 +11892,7 @@ type Antibody
 label RXRA (sc-553)
 antibodyDescription Rabbit polyclonal. RXRa(D-20) is an affinity purified antibody raised against a peptide mapping at the N-terminus of RXRalpha of human origin. Antibody Target: RXRA
 lab Myers
+lots C1811
 orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
 target RXRA
 targetClass TFSS
@@ -11907,7 +11915,7 @@ target SAP30
 targetDescription SAP30, also known asSin3A-associated protein, 30kDa, is part of the SIN3 corepressor complex, that also includes SIN3, SAP18,HDAC1,HDAC2,RbAp46andRbAp48. SAP30 is involved in the functional recruitment of the Sin3-histone deacetylase complex to a specific subset of N-CoR corepressor complexes.
 targetId GeneCard:SAP30
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SAP30
-validation Human_-_SAP30_(39731)(ChIP-String,ChIP-seq):human_SAP30_validation_Bernstein.pdf
+validation Human_-_SAP30_(39731)(Western_blot,ChIP-seq):human_SAP30_validation_Bernstein.pdf
 vendorId 39731
 vendorName Active Motif
 
@@ -11915,8 +11923,9 @@ term SETDB1
 tag SETDB1
 type Antibody
 label SETDB1 (11231-1-AP)
-antibodyDescription Rabbit polyclonal. Antibody Target: SETDB1
+antibodyDescription Rabbit polyclonal affinity purified. Antibody Target: SETDB1
 lab Farnham
+lots 2
 orderUrl http://www.ptglab.com/Products/SETDB1-Antibody-11231-1-AP.htm
 target SETDB1
 targetClass HISase
