@@ -169,7 +169,7 @@ karyotype normal
 lineage inner cell mass
 orderUrl https://ordering.wicell.org/index.php?option=com_oscommerce&Itemid=192
 organism human
-protocol ENCODE:missing
+protocol ENCODE:H1-hESC_Bernstein_protocol.pdf
 sex M
 termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL0000007&termName=early%20embryonic%20cell
@@ -6121,6 +6121,7 @@ tier 3
 tissue brain
 vendorId CRL-1690
 vendorName ATCC
+protocol missing 
 #protocol Myers:T98G_Myers_protocol.pdf
 
 term TBEC
@@ -6278,23 +6279,24 @@ tissue breast
 vendorId HTB-133
 vendorName ATCC
 
-term TL010
-tag TL010
-type Cell Line
-description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a male with fragile X syndrome, described in Yu, et al. (1992), Am. J. Hum. Genet. 50:968-980).
-karyotype normal
-lab Stam
-lineage mesoderm
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-organism human
-protocol missing
-sex M
-termId BTO:0002062
-termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
-tier 3
-tissue blood
-vendorId TL010
-vendorName Dr. John Stamatoyannopoulos at UW
+#NOT USED IN HG19
+#term TL010
+#tag TL010
+#type Cell Line
+#description EBV-transformed lymphoblastoid cell line (LCL) was derived from peripheral blood donated by a male with fragile X syndrome, described in Yu, et al. (1992), Am. J. Hum. Genet. 50:968-980).
+#karyotype normal
+#lab Stam
+#lineage mesoderm
+#orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+#organism human
+#protocol missing
+#sex M
+#termId BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+#tier 3
+#tissue blood
+#vendorId TL010
+#vendorName Dr. John Stamatoyannopoulos at UW
 
 term Treg_Wb78495824
 tag TREGWB78495824
@@ -6534,23 +6536,24 @@ tissue blood
 vendorId TIB-208
 vendorName ATCC
 
-term AtT-20
-tag ATT20
-type Cell Line
-age immortalized
-category cellLine
-color 189,0,157
-description Pituitary tumor LAF1
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
-organism mouse
-protocol missing
-sex M
-strain Unknown
-termId 7087
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
-tissue cortex
-vendorId CCL-89
-vendorName ATCC
+#Not used in mm9
+#term AtT-20
+#tag ATT20
+#type Cell Line
+#age immortalized
+#category cellLine
+#color 189,0,157
+#description Pituitary tumor LAF1
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-89
+#organism mouse
+#protocol missing
+#sex M
+#strain Unknown
+#termId 7087
+#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
+#tissue cortex
+#vendorId CCL-89
+#vendorName ATCC
 
 term Adrenal
 tag ADRENAL
@@ -6682,23 +6685,24 @@ tissue bone
 vendorId BoneMarrow
 vendorName LICR lab
 
-term C127
-tag C127
-type Cell Line
-age immortalized
-category cellLine
-color 0,158,115
-description mammary tumor fibroblast
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1616&Template=cellBiology
-organism mouse
-protocol missing
-sex F
-strain RIII
-termId 7035
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
-tissue mammary
-vendorId CRL-1616
-vendorName ATCC
+#NOT USED in mm9
+#term C127
+#tag C127
+#type Cell Line
+#age immortalized
+#category cellLine
+#color 0,158,115
+#description mammary tumor fibroblast
+#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1616&Template=cellBiology
+#organism mouse
+#protocol missing
+#sex F
+#strain RIII
+#termId 7035
+#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+#tissue mammary
+#vendorId CRL-1616
+#vendorName ATCC
 
 term C2C12
 tag C2C12
@@ -7398,6 +7402,7 @@ termId 174
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=174
 vendorId J185a
 vendorName Gilbert lab
+protocol missing 
 
 term Kidney
 tag KIDNEY
@@ -7634,41 +7639,43 @@ tissue blood
 vendorId mG/ER
 vendorName Dr. John Stamatoyannopoulos at UW
 
-term Myocyte
-tag MYOCYTE
-type Cell Line
-age ageUnknown
-category cellLine
-color 139,69,19
-description Myocyte
-orderUrl http://bmb.psu.edu/directory/rch8
-organism mouse
-sex U
-strain Unknown
-termId GO:0036194
-termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0036194
-tissue blood
-vendorName Hardison lab
-#Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#NOT USED in mm9
+#term Myocyte
+#tag MYOCYTE
+#type Cell Line
+#age ageUnknown
+#category cellLine
+#color 139,69,19
+#description Myocyte
+#orderUrl http://bmb.psu.edu/directory/rch8
+#organism mouse
+#sex U
+#strain Unknown
+#termId GO:0036194
+#termUrl http://www.informatics.jax.org/searches/GO.cgi?id=GO:0036194
+#tissue blood
+#vendorName Hardison lab
+#protocol missing 
 #protocol PSU(Hardison):Myocyte_Hardison_protocol.pdf
 
-term Muscle
-tag MUSCLE
-type Cell Line
-age ageUnknown
-category Tissue
-color 139,69,19
-description Muscle
-orderUrl http://bmb.psu.edu/directory/rch8
-organism mouse
-sex U
-strain Unknown
-termId 7054
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
-tissue blood
-vendorName Hardison lab
-#Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
+#NOT USED in mm9
+#term Muscle
+#tag MUSCLE
+#type Cell Line
+#age ageUnknown
+#category Tissue
+#color 139,69,19
+#description Muscle
+#orderUrl http://bmb.psu.edu/directory/rch8
+#organism mouse
+#sex U
+#strain Unknown
+#termId 7054
+#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+#tissue blood
+#vendorName Hardison lab
+#protocol missing
+##protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
 term NIH-3T3
 tag NIH3T3
@@ -10000,7 +10007,7 @@ target H3K4me1
 targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and downstream of transcription starts.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot,Western_blot):mouse_H3K4me1_ab8895_validation_Ren.pdf Mouse_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Hardison.pdf
+validation Human_-_H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot,Western_blot):mouse_H3K4me1_ab8895_validation_Ren.pdf Mouse_-_H3K4me1(ab8895)(Dot_blot):mouse_H3K4me1_ab8895_validation_Hardison.pdf
 vendorId ab8895
 vendorName abcam
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
@@ -10065,7 +10072,7 @@ target H3K4me3
 targetDescription Histone H3 (tri methyl K4). Marks promoters that are active or poised to be activated.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf Mouse_-_H3K4me3_(ab8580)(Dot_blot):human_H3K4me3_Abcam_validation_Hardison.pdf Mouse_-_H3K4me3_(07-473)(Dot_blot):human_H3K4me3_Millipore_validation_Hardison.pdf
+validation Human_-_H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf Mouse_-_H3K4me3_(ab8580)(Dot_blot):mouse_H3K4me3_ab8580_validation_Hardison.pdf Mouse_-_H3K4me3_(07-473)(Dot_blot):mouse_H3K4me3_07-473_validation_Hardison.pdf
 vendorId ab8580; 07-473
 vendorName 1)abcam; 2)Millipore
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
@@ -10193,7 +10200,7 @@ target H3K9me3
 targetDescription Histone H3 (tri methyl K9). Is associated with repressive heterochromatic state (silenced chromatin). NOTE CONTRAST to H3K9me1 which is associated with active and accessible regions.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Human_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):human_H3K9me3_ab8898_validation_Ren.pdf Mouse_-_H3K9me3_(ab8898)(Dot_blot):human_H3K9me3_validation_Hardison.pdf
+validation Human_-_H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf Mouse_-_H3K9me3_(ab8898)(Dot_blot,Western_blot):mouse_H3K9me3_ab8898_validation_Ren.pdf Mouse_-_H3K9me3_(ab8898)(Dot_blot):mouse_H3K9me3_ab8898_validation_Hardison.pdf
 vendorId ab8898
 vendorName abcam
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
@@ -10305,7 +10312,7 @@ target H3K36me3
 targetDescription Specific for histone H3 tri methylated at lysine 36, weakly reacts with H3K36me2. Marks regions of RNAPII elongation, including coding and non-coding transcripts.
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):mouse_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot):human_H3K36me3_validation_Hardison.pdf
+validation Human_-_H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot,Western_blot):mouse_H3K36me3_ab9050_validation_Ren.pdf Mouse_-_H3K36me3_(ab9050)(Dot_blot):mouse_H3K36me3_ab9050_validation_Hardison.pdf
 vendorId ab9050
 vendorName abcam
 #Note the human dot-blot validations for Histone 3 are acceptable for mouse validation.
