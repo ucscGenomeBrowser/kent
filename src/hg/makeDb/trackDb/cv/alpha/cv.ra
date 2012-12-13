@@ -10603,7 +10603,7 @@ term HP1gamma_(ab10480)
 tag HP1GAMMAAB10480
 type Antibody
 label HP1gamma (ab10480)
-antibodyDescription Rabbit polyclonal to a synthetic peptide conjugated to KLH, derived from within residues 1 - 100 of Mouse HP1 gamma Antibody Target: CBX3
+antibodyDescription Rabbit polyclonal affinity purified to a synthetic peptide conjugated to KLH, derived from within residues 1 - 100 of Mouse HP1 gamma Antibody Target: CBX3
 lab Bernstein
 lots GR22075-1
 orderUrl http://www.abcam.com/HP1-gamma-antibody-ab10480.html
@@ -10652,6 +10652,7 @@ type Antibody
 label IGF2BP1 (07-104)
 antibodyDescription Rabbit polyclonal affinity purified recognizes IGF2 mRNA-binding protein 3 at the C-terminus Antibody Target: IGF2BP1
 lab Tenenbaum
+lots NRG1665149
 orderUrl http://www.millipore.com/catalogue/item/07-104
 target IGF2BP1
 targetDescription Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
@@ -10683,13 +10684,14 @@ type Antibody
 label INI1 (sc-16189)
 antibodyDescription Goat polyclonal. Ini1 (C-20) is an affinity purified antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: SMARCB1
 lab Snyder
+lots C052
 orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
 target SMARCB1
 targetClass ChromRem
 targetDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
 targetId GeneCard:SMARCB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCB1
-validation Human_-_INI1(Immunoprecipitation,IP-MassSpec):human_INI1_validation_Snyder.pdf
+validation Human_-_INI1(sc-16189)(Immunoprecipitation,IP-MassSpec):human_INI1_validation_Snyder.pdf
 vendorId sc-16189
 vendorName Santa Cruz Biotechnology
 
@@ -10748,7 +10750,7 @@ type Antibody
 label IRF9 (sc-496)
 antibodyDescription Rabbit polyclonal, epitope mapping at the C-terminus of IRF9 of human origin. Antibody Target: IRF9
 lab Myers
-lots A1111
+lots A1111 K1302
 orderUrl http://www.scbt.com/datasheet-496-isgf-3gamma-p48-c-20-antibody.html
 target IRF9
 targetDescription Transcription regulatory factor that mediates signaling by type I IFNs (IFN-alpha and IFN-beta). Following type I IFN binding to cell surface receptors, Jak kinases (TYK2 and JAK1) are activated, leading to tyrosine phosphorylation of STAT1 and STAT2. The phosphorylated STATs dimerize, associate with IRF9/ISGF3G to form a complex termed ISGF3 transcription factor, that enters the nucleus. ISGF3 binds to the IFN stimulated response element (ISRE) to activate the transcription of interferon stimulated genes, which drive the cell in an antiviral state (provided by RefSeq)
@@ -10770,7 +10772,7 @@ target KDM5A
 targetDescription Histone demethylase that specifically demethylates
 targetId GeneCard:KDM5A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5A
-validation Human_-_JARID1A_(ab26049)(ChIP-String,ChIP-seq):human_JARID1A_validation_Bernstein.pdf
+validation Human_-_JARID1A_(ab26049)(Western_blot,ChIP-seq):human_JARID1A_validation_Bernstein.pdf
 vendorId ab26049
 vendorName abcam
 
@@ -10813,6 +10815,7 @@ type Antibody
 label KAP1 (ab10483)
 antibodyDescription Rabbit polyclonal. Immunogen was a synthetic peptide, which represented a portion of human tripartite motif-containing 28 (KAP1) encoded within exon 1. Antibody Target: TRIM28
 lab Farnham
+lots 193224
 orderUrl http://www.abcam.com/index.html?datasheet=10483
 target KAP1
 targetClass HISase
@@ -10827,7 +10830,7 @@ term KAT3A_(ab2832)
 tag KAT3AAB2832
 type Antibody
 label KAT3A (ab2832)
-antibodyDescription Rabbit polyclonal to a synthetic peptide, ATSSPATSQTGPGIC, corresponding to amino acids 162-176 in the nuclear factor binding domain of Human KAT3A / CBP. Antibody Target: CREBBP
+antibodyDescription Rabbit polyclonal affinity purified to a synthetic peptide, ATSSPATSQTGPGIC, corresponding to amino acids 162-176 in the nuclear factor binding domain of Human KAT3A / CBP. Antibody Target: CREBBP
 lab Bernstein
 orderUrl http://www.abcam.com/KAT3A--CBP-antibody-ChIP-Grade-ab2832.html
 target CREBBP
@@ -10844,6 +10847,7 @@ type Antibody
 label LEF1 (sc-8592)
 antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin. Antibody Target: LEF1
 lab Myers
+lots C2409
 orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
 target LEF1
 targetDescription This gene encodes a transcription factor belonging to a family of proteins that share homology with the high mobility group protein-1. The proteins encoded by this gene can bind to a functionally important site in the T-cell receptor-alpha enhancer, thereby conferring maximal enhancer activity (RefSeq).
@@ -10891,6 +10895,7 @@ type Antibody
 label MAFK (ab50322)
 antibodyDescription Rabbit polyclonal. Raised against synthetic peptide: TTNPKPNKALKVKKEA conjugated to KLH by a C-terminal Cysteine residue linker, corresponding to amino acids 2-17 of Human MAFK. Antibody Target: MAFK
 lab Snyder
+lots 904274
 orderUrl http://www.abcam.com/MAFK-antibody-ab50322.html
 target MAFK
 targetClass TFSS
@@ -10907,6 +10912,7 @@ type Antibody
 label MAFK (sc-477)
 antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin. Antibody Target: MAFK
 lab Snyder
+lots K1709
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 target MAFK
 targetClass TFSS
@@ -10921,7 +10927,7 @@ term Max
 tag MAX
 type Antibody
 label MAX (sc-197)
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin. Antibody Target: MAX
+antibodyDescription Rabbit polyclonal IgG affinty purified, epitope mapping at the C-terminus of Max of human origin. Antibody Target: MAX
 lab Myers, Snyder
 lots J0809
 orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
@@ -10930,7 +10936,7 @@ targetClass TFSS
 targetDescription The protein encoded by this gene is a member of the basic helix-loop-helix leucine zipper (bHLHZ) family of transcription factors. It is able to form homodimers and heterodimers with other family members, which include Mad, Mxi1 and Myc. Myc is an oncoprotein implicated in cell proliferation, differentiation and apoptosis. The homodimers and heterodimers compete for a common DNA target site (the E box) and rearrangement among these dimer forms provides a complex system of transcriptional regulation. Multiple alternatively spliced transcript variants have been described for this gene but the full-length nature for some of them is unknown (RefSeq).
 targetId GeneCard:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation Human_-_MAX(Immunoprecipitation,Motif_Enrichment):human_Max_validation_Myers.pdf Mouse_-_MAX(Immunoprecipitation,Motif_Enrichment):mouse_Max_validation_Snyder.pdf
+validation Human_-_MAX(sc-197)(Immunoprecipitation,Motif_Enrichment):human_Max_sc-197_validation_Snyder.pdf Mouse_-_MAX(sc-197)(Immunoprecipitation,Motif_Enrichment):mouse_Max_sc-197_validation_Snyder.pdf
 vendorId sc-197
 vendorName Santa Cruz Biotechnology
 
@@ -10938,7 +10944,7 @@ term MAZ_(ab85725)
 tag MAZAB85725
 type Antibody
 label MAZ (ab85725)
-antibodyDescription Rabbit polyclonal, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, GenBank BAA33064.1. Antibody Target: MAZ
+antibodyDescription Rabbit polyclonal affinity purified, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, GenBank BAA33064.1. Antibody Target: MAZ
 lab Snyder
 lots GR41711-2
 orderUrl http://www.abcam.com/MAZ-antibody-ab85725.html
@@ -10956,7 +10962,7 @@ type Antibody
 label MBD4 (sc-271530)
 antibodyDescription Mouse monoclonal IgG, specific for an epitope mapping between a.a. 515-555 within an internal region of MBD4 of mouse origin. Antibody Target: MBD4
 lab Myers
-lots A1111
+lots A1111 H1210
 orderUrl http://www.scbt.com/datasheet-271530-mbd4-d-6-antibody.html
 target MBD4
 targetDescription MBD4 may function to mediate the biological consequences of the methylation signal. In addition, MBD4 has protein sequence similarity to bacterial DNA repair enzymes and thus may have some function in DNA repair. Further, MBD4 gene mutations are detected in tumors with primary microsatellite-instability (MSI), a form of genomic instability associated with defective DNA mismatch repair, and MBD4 gene meets 4 of 5 criteria of a bona fide MIS target gene. (provided by RefSeq)
@@ -11008,7 +11014,7 @@ targetClass TFSS
 targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscme-specific, growth factor-induced, and stress-induced genes.
 targetId GeneCard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
-validation Human_-_MEF2A(Immunoblot):human_MEF2A_validation_Myers.pdf
+validation Human_-_MEF2A(Immunoblot,Western_blot):human_MEF2A_validation_Myers.pdf
 vendorId sc-313
 vendorName Santa Cruz Biotechnology
 
