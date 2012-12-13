@@ -11975,6 +11975,7 @@ type Antibody
 label SIN3AK20 (sc-994)
 antibodyDescription Rabbit polyclonal, Sin3A (k-20). Antibody Target: SIN3AK20
 lab Myers
+lots F1005
 orderUrl http://www.scbt.com/product.php?datasheet=994
 target SIN3AK20
 targetClass HISase
@@ -12005,7 +12006,7 @@ term SIRT6_(ab62739)
 tag SIRT6AB62739
 type Antibody
 label SIRT6 (ab62739)
-antibodyDescription Rabbit polyclonal, raised against a synthetic peptide: GLPEIFDPPEELERK conjugated to KLH by a Cysteine residue linker, corresponding to N terminal amino acids 19-33 of Human SIRT6
+antibodyDescription Rabbit polyclonal affinity purified, raised against a synthetic peptide: GLPEIFDPPEELERK conjugated to KLH by a Cysteine residue linker, corresponding to N terminal amino acids 19-33 of Human SIRT6
 lab Bernstein
 lots GR24519-2
 orderUrl http://www.abcam.com/SIRT6-antibody-ab62739.html
@@ -12024,13 +12025,14 @@ type Antibody
 label SIX5 (sc-55706)
 antibodyDescription Goat polyclonal IgG. Six5 (K-20) Epitope mapping near the C-terminus of Six5 of human origin. Antibody Target: SIX5
 lab Myers
+lots B1408
 orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
 target SIX5
 targetClass TFSS
 targetDescription The protein encoded by this gene is a homeodomain-containing transcription factor that appears to function in the regulation of organogenesis. This gene is located downstream of the dystrophia myotonica-protein kinase gene. Mutations in this geneare a cause of branchiootorenal syndrome type 2.
 targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
-validation Human_-_SIX5(ChIP-seq,IP-MassSpec):human_SIX5_validation_Myers.pdf
+validation Human_-_SIX5(Western_blot,IP-MassSpec):human_SIX5_validation_Myers.pdf
 vendorId sc-55706
 vendorName Santa Cruz Biotechnology
 
@@ -12040,6 +12042,7 @@ type Antibody
 label SLBP (06-1376)
 antibodyDescription Rabbit polyclonal. Antibody Target: SLBP
 lab Tenenbaum
+lots NRG1691091
 orderUrl http://www.millipore.com/catalogue/item/06-1376
 target SLBP
 targetDescription Stem-loop binding protein (Homo sapiens)
@@ -12053,8 +12056,9 @@ term SMC3_(ab9263)
 tag SMC3
 type Antibody
 label SMC3 (ab9263)
-antibodyDescription Rabbit polyclonal raised against synthetic peptide representing a portion within the last 100 amino acids of the human Structural Maintenance of Chromosomes-3 conjugated to KLH. Antibody Target: SMC3
+antibodyDescription Rabbit polyclonal affinity purified raised against synthetic peptide representing a portion within the last 100 amino acids of the human Structural Maintenance of Chromosomes-3 conjugated to KLH. Antibody Target: SMC3
 lab Snyder
+lots 963667
 orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
 target SMC3
 targetDescription Involved in chromosome cohesion during cell cycle and in DNA repair. Central component of cohesin complex. The cohesin complex is required for the cohesion of sister chromatids after DNA replication.
@@ -12070,6 +12074,7 @@ type Antibody
 label SP1 (sc-17824)
 antibodyDescription Mouse monoclonal. Sp1(E-3) is raised against amino acids 121-345 mapping near the N-terminus of Sp1 of human origin. Antibody Target: SP1
 lab Myers
+lots K1907
 orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
 target SP1
 targetClass TFSS
@@ -12133,8 +12138,9 @@ term SREBP1
 tag SREBP1
 type Antibody
 label SREBP1 (sc-8984)
-antibodyDescription Rabbit polyclonal. Antibody Target: SREBP1
+antibodyDescription Rabbit polyclonal affinity purified. Antibody Target: SREBP1
 lab Snyder
+lots 10211
 orderUrl http://www.scbt.com/product.php?datasheet=8984
 target SREBP1
 targetClass TFSS
@@ -12149,8 +12155,9 @@ term SREBP2
 tag SREBP2
 type Antibody
 label SREBP2 (10007663)
-antibodyDescription Rabbit polyclonal. Antibody Target: SREBP2
+antibodyDescription Rabbit polyclonal affinity purified. Antibody Target: SREBP2
 lab Snyder
+lots 0424883-1
 orderUrl http://www.caymanchem.com/app/template/Product.vm/catalog/10007663
 target SREBP2
 targetClass TFSS
@@ -12182,9 +12189,9 @@ term STAT1
 tag STAT1
 type Antibody
 label STAT1 (sc-345)
-antibodyDescription Rabbit polyclonal to STAT1 (alpha) p-91 (C-24). Antibody Target: STAT1
+antibodyDescription Rabbit polyclonal affinity purified to STAT1 (alpha) p-91 (C-24). Antibody Target: STAT1
 lab Snyder
-lots G2406 K2106
+lots G2406 K2106 D2908
 orderUrl http://www.scbt.com/product.php?datasheet=345
 target STAT1
 targetClass TFSS
@@ -12199,8 +12206,9 @@ term STAT2
 tag STAT2
 type Antibody
 label STAT2 (sc-476X)
-antibodyDescription Rabbit polyclonal. Antibody Target: STAT2
+antibodyDescription Rabbit polyclonal affinity purified. Antibody Target: STAT2
 lab Snyder
+lots B1908
 orderUrl http://www.scbt.com/product.php?datasheet=476
 target STAT2
 targetClass TFSS
@@ -12215,8 +12223,9 @@ term STAT3
 tag STAT3
 type Antibody
 label STAT3 (sc-482)
-antibodyDescription Rabbit polyclonal. Epitope mapping at the C-terminus of Stat3 of mouse origin. Antibody Target: STAT3
+antibodyDescription Rabbit polyclonal affinity purified. Epitope mapping at the C-terminus of Stat3 of mouse origin. Antibody Target: STAT3
 lab Snyder
+lots B0111
 orderUrl http://www.scbt.com/datasheet-482-stat3-c-20-antibody.html
 target STAT3
 targetClass TFSS
@@ -12242,12 +12251,13 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
 validation Human_-_STAT5A_(sc-74442)(Western_blot,IP-MassSpec):human_STAT5A_SC-74442_validation_Myers.pdf
 vendorId sc-74442
 vendorName Santa Cruz Biotechnology
+# Note: typo of sc-77742 in validation document, actually sc-74442
 
 term SUZ12_(05-1317)
 tag SUZ12051317
 type Antibody
 label SUZ12 (05-1317)
-antibodyDescription Mouse monoclonal recombinant protein corresponding to human SUZ12. Antibody Target: SUZ12
+antibodyDescription Mouse monoclonal A/G affinity purified recombinant protein corresponding to human SUZ12. Antibody Target: SUZ12
 lab Bernstein
 lots NRG1665726
 orderUrl http://www.millipore.com/catalogue/item/05-1317&open&cid=BIOS-A-BIOC-2538-1102-RC
@@ -12256,7 +12266,7 @@ targetClass HISase
 targetDescription SUZ12 is a polycomb group (PcG) protein. PcG proteins act by forming multiprotein complexes, which are required to maintain the transcriptionally repressive state of homeotic genes throughout development. PcG proteins are not required to initiate repression, but to maintain it during later stages of development. They probably act via the methylation of histones, rendering chromatin heritably changed in its expressibility. This protein is component of the PRC2 complex, which methylates Lys-9 and Lys-27 residues of histone H3.
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
-validation Human_-_SUZ12_(05-1317)(ChIP-String,ChIP-seq):human_SUZ12_validation_Bernstein.pdf
+validation Human_-_SUZ12_(05-1317)(Western_blot,ChIP-seq):human_SUZ12_validation_Bernstein.pdf
 vendorId 05-1317
 vendorName Millipore
 
@@ -12264,7 +12274,7 @@ term SUZ12
 tag SUZ12
 type Antibody
 label SUZ12 (SUZ12)
-antibodyDescription Rabbit polyclonal. Antibody Target: SUZ12
+antibodyDescription Rabbit polyclonal A/G affinity purified. Antibody Target: SUZ12
 lab Farnham
 orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205
 target SUZ12
@@ -12282,6 +12292,7 @@ type Antibody
 label T7Tag (AB3790)
 antibodyDescription Rabbit polyclonal affinity purified Anti-t7 Epitope tag, T7 (MASMTGGQQMG) from Millipore. Antibody Target: T7Tag
 lab Tenenbaum
+lots NOV_69522
 orderUrl http://www.millipore.com/catalogue/item/ab3790
 target T7Tag
 targetDescription T7 (MASMTGGQQMG)
@@ -12297,7 +12308,7 @@ type Antibody
 label TAF1 (sc-735)
 antibodyDescription Mouse monoclonal (p250). Antibody Target: TAF1
 lab Myers, Wold
-lots K0905 F2706
+lots K0905 F2706 G2909
 orderUrl http://www.scbt.com/product.php?datasheet=735
 target TAF1
 targetClass TFNS
