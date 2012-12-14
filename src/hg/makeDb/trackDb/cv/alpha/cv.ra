@@ -9618,7 +9618,7 @@ target FLI1
 targetDescription Fli1 (Friend leukemia virus integration 1) is a member of a family of genes identified on the basis of their homology to the v-Ets oncogene isolated from the E26 erythoblastosis virus.
 targetId GeneCard:FLI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FLI1
-validation Mouse_-_FLI1_(sc-356)(Western_blot):mouse_FLI1_sc-356_validation_Hardison.pdf
+validation Mouse_-_FLI1_(sc-356)(Western_blot,Correlation):mouse_FLI1_sc-356_validation_Hardison.pdf
 vendorId sc-356
 vendorName Santa Cruz Biotechnology
 
