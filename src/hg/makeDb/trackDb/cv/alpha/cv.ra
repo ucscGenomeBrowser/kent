@@ -9081,7 +9081,7 @@ targetClass TFSS
 targetDescription mapping at the C-terminus of E2F4 of human origin
 targetId GeneCard:E2F4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F4
-validation Human_-_E2F4(Immunoprecipitation-Western_blot,ChIP-seq):human_E2F4_validation_Farnham.pdf Mouse_-_E2F4_(Immunoprecipitation,ChIP-seq):mouse_E2F4_validation_Snyder.pdf
+validation Human_-_E2F4(sc-866)(Immunoprecipitation-Western_blot,ChIP-seq):human_E2F4_validation_Farnham.pdf Mouse_-_E2F4_(sc-866)(Immunoprecipitation,ChIP-seq):mouse_E2F4_validation_Snyder.pdf
 vendorId sc-866
 vendorName Santa Cruz Biotechnology
 
@@ -9098,7 +9098,7 @@ targetClass TFSS
 targetDescription This gene encodes a member of the E2F transcription factor protein family. E2F family members play a crucial role in control of the cell cycle and of the action of tumor suppressor proteins. They are also a target of the transforming proteins of small DNA tumor viruses. Many E2F proteins contain several evolutionarily conserved domains: a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. The encoded protein of this gene is atypical because it lacks the transactivation and tumor suppressor protein association domains. It contains a modular suppression domain and is an inhibitor of E2F-dependent transcription. The protein is part of a multimeric protein complex that contains a histone methyltransferase and the transcription factors Mga and Max. Multiple transcript variants have been reported for this gene, but it has not been clearly demonstrated that they encode valid isoforms (RefSeq).
 targetId GeneCard:E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
-validation Human_-_E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf Human_-_E2F6_(Myers)(Western_blot,IP-MassSpec):human_E2F6_validation_Myers.pdf
+validation Human_-_E2F6(sc-22823)(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf Human_-_E2F6_(sc-22823)(Western_blot,IP-MassSpec):human_E2F6_validation_Myers.pdf
 vendorId sc-22823
 vendorName Santa Cruz Biotechnology
 
@@ -9453,7 +9453,7 @@ target EGR1
 targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factors belonging to the Egr C2H2-type zinc-finger protein family and containing three C2H2-type zinc fingers. As immediate early proteins, Egr transcription factors are rapidly induced by diverse extracellular stimuli. Egr proteins are subject to tight differential control through diverse mechanisms at several levels of regulation including transcriptional, translational and post-translational (including glyco- sylation, phosphorylation and redox) mechanisms and protein-protein inter- action. Egr-1 binds to the DNA sequence 5'-CGCCCCCGC-3' (EGR-site), there- by activating transcription of target genes whose products are required for mitogenisis and differentiation. Egr-2 binds specific DNA sites located in the promoter region of HoxA4. Egr-2 defects cause congenital hypomyelination neuropathy (also designated Charcot-Marie-tooth disease) and Dejerine- Sottas neuropathology (also designated hereditary motor and sensory neuro- pathy III. Egr-3 is involved in muscle spindle development and is expressed in T cells 20 minutes following activation. EGR-4 binds to the EGR consensus motif GCGTGGGCG, functions as a transcriptional repressor, and displays autoregulatory activities, downregulating its on gene promoter in a dose dependent manner.
 targetId GeneCard:EGR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1
-validation Human_-_Egr-1(Immunoblot):human_Egr-1_588_validation_Myers.pdf
+validation Human_-_Egr-1(sc-110)(Immunoblot):human_Egr-1_588_validation_Myers.pdf
 vendorId sc-110
 vendorName Santa Cruz Biotechnology
 
