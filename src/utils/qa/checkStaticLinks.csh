@@ -80,7 +80,6 @@ foreach file ( $origlist )
       | grep -v "doesn't exist" \
       | grep -v "Cancelling" \
       | grep -v "service not known" \
-      | grep -v "than directories in" \
       | grep -v "Connection refused" \
       | grep -v "Non-numeric port" \
       | egrep "."  > tmp
