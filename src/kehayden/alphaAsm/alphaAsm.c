@@ -707,7 +707,7 @@ for (i=0, ref = list; ref != NULL; ref = ref->next, ++i)
         return i;
     }
 errAbort("Monomer %s not on list\n", monomer->word);
-return -1;   // ugly
+return -1;
 }
 
 struct monomerRef *findNeighborhoodFromReads(struct monomer *center)
@@ -719,7 +719,6 @@ struct monomerRef *before = NULL, *after = NULL;
 /* Loop through reads hoping to find a case where center is flanked by two monomers in
  * same read.   As a fallback, keep track of a monomer before and a monomer after in
  * any read. */
-uglyf("findNeighborhood of %s from %d reads\n", center->word, slCount(center->readList));
 for (readRef = center->readList; readRef != NULL; readRef = readRef->next)
     {
     struct alphaRead *read = readRef->val;
@@ -727,7 +726,6 @@ for (readRef = center->readList; readRef != NULL; readRef = readRef->next)
     int centerIx = monomerRefIx(read->list, center);
     if (readSize >= 3 && centerIx > 0 && centerIx < readSize-1)
 	 {
-         uglyf("  Whoopie found central for %s\n", center->word);
 	 before = slElementFromIx(read->list, centerIx-1);
 	 after = slElementFromIx(read->list, centerIx+1);
 	 break;
@@ -735,19 +733,13 @@ for (readRef = center->readList; readRef != NULL; readRef = readRef->next)
     else if (readSize >= 2)
          {
 	 if (centerIx == 0)
-	     {
 	     after = slElementFromIx(read->list, centerIx+1);
-	     uglyf("  read %s, centerIx %d, after %p\n", center->word, centerIx, after);
-	     }
 	 else
-	     {
 	     before = slElementFromIx(read->list, centerIx-1);
-	     uglyf("  read %s, centerIx %d, before %p\n", center->word, centerIx, before);
-	     }
 	 }
     }
-uglyf("before %p, center %p, after %p\n", before, center, after);
-/* Make up list. */
+
+/* Make up list from end to start. */
 struct monomerRef *retList = NULL, *monoRef;
 if (after)
     {
@@ -764,7 +756,6 @@ if (before)
     monoRef->val = before->val;
     slAddHead(&retList, monoRef);
     }
-uglyf("%d in retList\n", slCount(retList));
 return retList;
 }
 
@@ -772,7 +763,7 @@ void subInMissing(struct alphaStore *store, struct dlList *ll)
 /* Go figure out missing monomers in ll, and attempt to substitute them in somewhere they would fit. */
 {
 struct slRef *unusedList = listUnusedMonomers(store, ll);
-uglyf("%d monomers, %d unused\n", slCount(store->monomerList), slCount(unusedList));
+verbose(2, "%d monomers, %d unused\n", slCount(store->monomerList), slCount(unusedList));
 struct slRef *unusedRef;
 for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
     {
