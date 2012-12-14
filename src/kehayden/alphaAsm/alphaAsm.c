@@ -719,6 +719,7 @@ struct monomerRef *before = NULL, *after = NULL;
 /* Loop through reads hoping to find a case where center is flanked by two monomers in
  * same read.   As a fallback, keep track of a monomer before and a monomer after in
  * any read. */
+uglyf("findNeighborhood of %s from %d reads\n", center->word, slCount(center->readList));
 for (readRef = center->readList; readRef != NULL; readRef = readRef->next)
     {
     struct alphaRead *read = readRef->val;
@@ -726,7 +727,7 @@ for (readRef = center->readList; readRef != NULL; readRef = readRef->next)
     int centerIx = monomerRefIx(read->list, center);
     if (readSize >= 3 && centerIx > 0 && centerIx < readSize-1)
 	 {
-         uglyf("Whoopie found central for %s\n", center->word);
+         uglyf("  Whoopie found central for %s\n", center->word);
 	 before = slElementFromIx(read->list, centerIx-1);
 	 after = slElementFromIx(read->list, centerIx+1);
 	 break;
@@ -736,12 +737,12 @@ for (readRef = center->readList; readRef != NULL; readRef = readRef->next)
 	 if (centerIx == 0)
 	     {
 	     after = slElementFromIx(read->list, centerIx+1);
-	     uglyf("read %s, centerIx %d, after %p\n", center->word, centerIx, after);
+	     uglyf("  read %s, centerIx %d, after %p\n", center->word, centerIx, after);
 	     }
 	 else
 	     {
 	     before = slElementFromIx(read->list, centerIx-1);
-	     uglyf("read %s, centerIx %d, before %p\n", center->word, centerIx, before);
+	     uglyf("  read %s, centerIx %d, before %p\n", center->word, centerIx, before);
 	     }
 	 }
     }
@@ -1221,6 +1222,33 @@ for (i=0, type = store->typeList; i<store->typeCount; ++i, type = type->next)
     types[i] = type;
 }
 
+void crossCheckMonomerOrderAndReads(struct alphaStore *store, char *orderedPrefix, char *readFile, char *typeFile)
+/* Make sure all monomer that begin with ordered prefix are present in monomer order file. */
+{
+/* Make hash of all monomers that have type info. */
+struct hash *orderHash = hashNew(0);
+struct monomerType *type;
+for (type = store->typeList; type != NULL; type = type->next)
+     {
+     struct monomerRef *ref;
+     for (ref = type->list; ref != NULL; ref = ref->next)
+         hashAdd(orderHash, ref->val->word, ref->val);
+     }
+
+/* Go through all monomers and make sure ones with correct prefix are in list. */
+struct monomer *mon;
+for (mon = store->monomerList; mon != NULL; mon = mon->next)
+    {
+    char *word = mon->word;
+    if (startsWith(orderedPrefix, word) && !hashLookup(orderHash, word))
+        {
+	errAbort("%s is in %s but not %s", word, readFile, typeFile);
+	}
+    }
+hashFree(&orderHash);
+}
+
+
 void monomerListNormalise(struct monomer *list, int totalCount, int outputSize)
 /* Set outTarget field in all of list to be normalized to outputSize */
 {
@@ -1359,6 +1387,7 @@ void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
 struct alphaStore *store = alphaStoreNew(maxChainSize);
 alphaReadListFromFile(readsFile, store);
 alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
+crossCheckMonomerOrderAndReads(store, "m", readsFile, monomerOrderFile);
 fillInTypes(store);
 integrateOrphans(store);
 makeMarkovChains(store);
