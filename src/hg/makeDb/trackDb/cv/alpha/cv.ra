@@ -8526,8 +8526,9 @@ term c-Fos
 tag CFOS
 type Antibody
 label c-Fos (sc-7202)
-antibodyDescription Rabbit polyclonal to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin. Antibody Target: FOS
+antibodyDescription Rabbit polyclonal affinity purified to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin. Antibody Target: FOS
 lab Snyder
+lots K0810
 orderUrl http://www.scbt.com/product.php?datasheet=7202
 target FOS
 targetClass TFSS
@@ -8544,6 +8545,7 @@ type Antibody
 label c-Jun (sc-1694)
 antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin. Antibody Target: JUN
 lab Snyder
+lots C2206
 orderUrl http://www.scbt.com/product.php?datasheet=1694
 target JUN
 targetClass TFSS
@@ -8573,7 +8575,7 @@ term c-Myc
 tag CMYC
 type Antibody
 label c-Myc (sc-764)
-antibodyDescription Rabbit polyclonal to amino acids 1-262 of c-Myc human origin. Antibody Target: MYC
+antibodyDescription Rabbit polyclonal affinity purified to amino acids 1-262 of c-Myc human origin. Antibody Target: MYC
 lab Crawford, Snyder
 lots H0107
 orderUrl http://www.scbt.com/product.php?datasheet=764
@@ -10635,7 +10637,7 @@ term hSpt5_(sc-28678)
 tag HSPT5SC28678
 type Antibody
 label hSpt5 (sc-28678)
-antibodyDescription Rabbit polyclonal. SPT5 Antibody (H-300) epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: SUPT5H 
+antibodyDescription Rabbit polyclonal A/G affinity purified. SPT5 Antibody (H-300) epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: SUPT5H 
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
 target SUPT5H
@@ -11364,13 +11366,14 @@ type Antibody
 label P300&#47;EP300 (sc-585)
 antibodyDescription Rabbit polyclonal. Antibody Target: EP300
 lab Myers, Ren
+lots D0411 E2209
 orderUrl http://www.scbt.com/product.php?datasheet=585
 target EP300
 targetClass HISase
 targetDescription EP300(c-20)
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
-validation Human_-_P300(sc-585)(Western_blot):human_P300_SC-585_validation_Myers.pdf Mouse_-_P300(SC-585)(Western_blot):mouse_P300_SC-585_validation_Ren.pdf
+validation Human_-_P300(sc-585)(Western_blot):human_P300_SC-585_validation_Myers.pdf Mouse_-_P300(SC-585)(Western_blot,ChIP-seq):mouse_P300_SC-585_validation_Ren.pdf
 vendorId sc-585
 vendorName Santa Cruz Biotechnology
 
@@ -12340,8 +12343,9 @@ term TAL1_(SC-12984)
 tag TAL1
 type Antibody
 label TAL1 (sc-12984)
-antibodyDescription Goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin. Antibody Target: TAL1
+antibodyDescription Goat polyclonal antibody affinity purified; epitope mapping at the C-terminus of TAL1 of human origin. Antibody Target: TAL1
 lab Hardison, Snyder
+lots J2209
 orderUrl http://www.scbt.com/datasheet-12984-tal1-c-21-antibody.html
 target TAL1
 targetClass TFSS
@@ -12371,7 +12375,7 @@ vendorName abcam
 term TBLR1_(NB600-270)
 tag TBLR1NB600270
 type Antibody
-antibodyDescription Rabbit polyclonal, immunogen: A synthetic peptide that maps to a region between residues 100 and 150 of human TBL1-related Protein 1 using the numbering given in SwissProt entry Q9BZK7. Antibody Target: TBL1XR1
+antibodyDescription Rabbit polyclonal affinity purified, immunogen: A synthetic peptide that maps to a region between residues 100 and 150 of human TBL1-related Protein 1 using the numbering given in SwissProt entry Q9BZK7. Antibody Target: TBL1XR1
 lab Snyder
 lots 1
 orderUrl http://www.novusbio.com/TBLR1-Antibody_NB600-270.html
@@ -12387,7 +12391,7 @@ term TBP
 tag TBP
 type Antibody
 label TBP (ab62126)
-antibodyDescription Mouse monoclonal. Immunogen is synthetic peptide conjugated to KLH derived from within residues 1 - 100 of HumanTATA binding protein TBP. Antibody Target: TBP
+antibodyDescription Mouse monoclonal affinity purified. Immunogen is synthetic peptide conjugated to KLH derived from within residues 1 - 100 of HumanTATA binding protein TBP. Antibody Target: TBP
 lab Snyder
 orderUrl http://www.abcam.com/TATA-binding-protein-TBP-antibody-mAbcam-62126-Nuclear-Loading-Control-and-ChIP-Grade-ab62126.html
 target TBP
@@ -12403,7 +12407,7 @@ term TBP_(sc-273)
 tag TBPSC273
 type Antibody
 label TBP (sc-273)
-antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin. Antibody Target: TBP
+antibodyDescription Rabbit polyclonal A/G affinity purified, raised against full length TFIID of human origin. Antibody Target: TBP
 lab Struhl
 orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
 target TBP
@@ -12422,6 +12426,7 @@ type Antibody
 label TCF12 (sc-357)
 antibodyDescription Rabbit polyclonal IgG HEB (A-20) Epitope mapping within the C-terminus of HEB of human origin. Antibody Target: TCF12
 lab Myers
+lots F2305
 orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 target TCF12
 targetClass TFSS
@@ -12438,7 +12443,7 @@ type Antibody
 label TCF3 (sc-349)
 antibodyDescription Rabbit polyclonal. E2A.E12(V-18) is an affinity purified antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Antibody Target: TCF3
 lab Myers
-lots A1111
+lots A1111 D2611
 orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
 target TCF3
 targetDescription Heterodimers between TCF3 and tissue-specific basic helix-loop-helix (bHLH) proteins play major roles in determining tissue-specific cell fate during embryogenesis, like muscle or early B-cell differentiation. Dimers bind DNA on E-box motifs: 5'-CANNTG-3'. Binds to the kappa-E2 site in the kappa immunoglobulin gene enhancer.
@@ -12471,8 +12476,9 @@ term TCF7L2
 tag TCF7L2
 type Antibody
 label TCF7L2 (2569)
-antibodyDescription Rabbit monoclonal. Antibody Target: TCF7L2
+antibodyDescription Rabbit monoclonal affinity purified. Antibody Target: TCF7L2
 lab Farnham
+lots 2
 orderUrl http://www.cellsignal.com/products/2569.html
 target TCF7L2
 targetClass TFSS
@@ -12487,9 +12493,9 @@ term TCF7L2_C9B9_(2565)
 tag TCF7L2C9B92565
 type Antibody
 label TCF7L2 C9B9 (2565)
-antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic peptide corresponding to residues surrounding Glu81 of human TCF7L2. Antibody Target: TCF7L2
+antibodyDescription Rabbit monoclonal antibody affinity purified is produced by immunizing animals with a synthetic peptide corresponding to residues surrounding Glu81 of human TCF7L2. Antibody Target: TCF7L2
 lab Farnham
-lots 2
+lots 3
 orderUrl http://www.cellsignal.com/products/2565.html
 target TCF7L2
 targetClass TFSS
@@ -12561,7 +12567,7 @@ target TP53
 targetDescription This gene encodes tumor protein p53, which responds to diverse cellular stresses to regulate target genes that induce cell cycle arrest, apoptosis, senescence, DNA repair, or changes in metabolism. p53 protein is expressed at low level in normal cells and at a high level in a variety of transformed cell lines, where it's believed to contribute to transformation and malignancy. p53 is a DNA-binding protein containing transcription activation, DNA-binding, and oligomerization domains. It is postulated to bind to a p53-binding site and activate expression of downstream genes that inhibit growth and/or invasion, and thus function as a tumor suppressor. Mutants of p53 that frequently occur in a number of different human cancers fail to bind the consensus DNA binding site, and hence cause the loss of tumor suppressor activity. Alterations of this gene occur not only as somatic mutations in human malignancies, but also as germline mutations in some cancer-prone families with Li-Fraumeni syndrome. Multiple p53 variants due to alternative promoters and multiple alternative splicing have been found. These variants encode distinct isoforms, which can regulate p53 transcriptional activity. (provided by RefSeq)
 targetId GeneCard:TP53
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53
-validation Human_-_TP53_(sc-126)(Western_blot,ChIP-seq):human_TP53_sc-126_validation_Myers.pdf
+validation Human_-_TP53_(sc-126)(Western_blot,IP-MassSpec):human_TP53_sc-126_validation_Myers.pdf
 vendorId sc-126
 vendorName Santa Cruz Biotechnology
 
@@ -12569,7 +12575,7 @@ term TR4
 tag TR4
 type Antibody
 label TR4
-antibodyDescription Rabbit polyclonal Anti-TR4. Antibody Target: NR2C2
+antibodyDescription Rabbit polyclonal affinity purified Anti-TR4. Antibody Target: NR2C2
 lab Farnham
 orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname=engel
 target NR2C2
@@ -12594,7 +12600,7 @@ targetClass HISase
 targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors. The protein localizes to the nucleus and is thought to associate with specific chromatin regions. The protein is a member of the tripartite motif family. This tripartite motif includes three zinc-binding domains, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
 targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
-validation Human_-_TRIM28_(sc-81411)(Western_blot,ChIP-seq):human_TRIM28_sc-81411_validation_Myers.pdf
+validation Human_-_TRIM28_(sc-81411)(Western_blot,IP-MassSpec):human_TRIM28_sc-81411_validation_Myers.pdf
 vendorId sc-81411
 vendorName Santa Cruz Biotechnology
 
@@ -12610,7 +12616,7 @@ target TRIM37
 targetDescription This gene encodes a member of the tripartite motif (TRIM) family, whose members are involved in diverse cellular functions such as developmental patterning and oncogenesis. The TRIM motif includes zinc-binding domains, a RING finger region, a B-box motif and a coiled-coil domain. The RING finger and B-box domains chelate zinc and might be involved in protein-protein and/or protein-nucleic acid interactions. The gene mutations are associated with mulibrey (muscle-liver-brain-eye) nanism, an autosomal recessive disorder that involves several tissues of mesodermal origin. Alternatively spliced transcript variants encoding the same protein have been identified. (provided by RefSeq)
 targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
-validation Human_-_TRIM37_(sc-49548)(ChIP-seq,IP-MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
+validation Human_-_TRIM37_(sc-49548)(Western_blot,IP-MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 vendorId sc-49548
 vendorName Santa Cruz Biotechnology
 
@@ -12653,6 +12659,7 @@ type Antibody
 label USF1 (sc-229)
 antibodyDescription Rabbit polyclonal, USF-1 (C-20). Antibody Target: USF1
 lab Myers
+lots A2109
 orderUrl http://www.scbt.com/product.php?datasheet=229
 target USF1
 targetClass TFSS
@@ -12684,8 +12691,9 @@ term USF2
 tag USF2
 type Antibody
 label USF2 (ab60931)
-antibodyDescription Mouse monoclonal. Immunogen corresponds to amino acids 1-101 of Human USF2. Antibody Target: USF2
+antibodyDescription Mouse monoclonal A/G affinity purified. Immunogen corresponds to amino acids 1-101 of Human USF2. Antibody Target: USF2
 lab Snyder
+lots 424648
 orderUrl http://www.abcam.com/USF2-antibody-ab60931.html
 target USF2
 targetClass TFSS
@@ -12717,7 +12725,7 @@ term WHIP
 tag WHIP
 type Antibody
 label WHIP (ab4731)
-antibodyDescription Rabbit polyclonal. Immunogen: (Synthetic peptide) SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WRNIP1
+antibodyDescription Rabbit polyclonal affinity purified. Immunogen: (Synthetic peptide) SRESYDAPPTPSGAC conjugated to KLH, corresponding to amino acids 107-120 of Human WHIP. Antibody Target: WRNIP1
 lab Snyder
 orderUrl http://www.abcam.com/WHIP-antibody-ab4731.html
 target WRNIP1
@@ -12749,9 +12757,9 @@ term YY1
 tag YY1
 type Antibody
 label YY1 (sc-1703)
-antibodyDescription Rabbit polyclonal. Antibody Target: YY1
+antibodyDescription Rabbit polyclonal affinity purified. Antibody Target: YY1
 lab Farnham, Myers
-lots B1710
+lots B1710 J1909
 orderUrl http://www.scbt.com/product.php?datasheet=1703
 target YY1
 targetClass TFSS
@@ -12768,6 +12776,7 @@ type Antibody
 label YY1 (sc-281)
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of YY1 of human origin. Antibody Target: YY1
 lab Myers
+lots B1010 F2810
 orderUrl http://www.scbt.com/product.php?datasheet=281
 target YY1
 targetClass TFSS
@@ -12784,6 +12793,7 @@ type Antibody
 label ZBTB33 (sc-23871)
 antibodyDescription Mouse monoclonal IgG1. Kaiso (6F8) was raised against amino acids 1-504 representing full length Kaiso of human origin. Antibody Target: ZBTB33
 lab Myers
+lots 10308
 orderUrl http://www.scbt.com/datasheet-23871-kaiso-6f8-antibody.html
 target ZBTB33
 targetClass TFSS
@@ -12814,7 +12824,7 @@ vendorName Santa Cruz Biotechnology
 term ZC3H11A_(NB100-74650)
 tag ZC3H11ANB10074650
 type Antibody
-antibodyDescription Rabbit polyclonal antibody. The immunogen recognized by this antibody maps to a region between residue 250 and 300 of human zinc finger CCCH-type containing 11A.
+antibodyDescription Rabbit polyclonal antibody affinity purified. The immunogen recognized by this antibody maps to a region between residue 250 and 300 of human zinc finger CCCH-type containing 11A.
 lab Snyder
 lots A1
 orderUrl http://www.novusbio.com/ZC3H11A-Antibody_NB100-74650.html
@@ -12847,7 +12857,7 @@ term ZKSCAN1_(HPA006672)
 tag ZKSCAN1HPA006672
 type Antibody
 label ZKSCAN1 (HPA006672)
-antibodyDescription Rabbit polyclonal, Immunogen: Zinc finger with KRAB and SCAN domain-containing protein 1 recombinant protein epitope signature tag (PrEST). Antibody Target: ZKSCAN1
+antibodyDescription Rabbit polyclonal affinity purified, Immunogen: Zinc finger with KRAB and SCAN domain-containing protein 1 recombinant protein epitope signature tag (PrEST). Antibody Target: ZKSCAN1
 lab Snyder
 lots A44630
 orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?D7=0&N5=SEARCH_CONCAT_PNO%7CBRAND_KEY&N4=HPA006672%7CSIGMA&N25=0&QS=ON&F=SPEC
@@ -12863,8 +12873,9 @@ term Znf143_(16618-1-AP)
 tag ZNF143
 type Antibody
 label ZNF143 (16618-1-AP)
-antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein. Antibody Target: ZNF143
+antibodyDescription Rabbit polyclonal affinity purified against human ZNF143 (amino acids 283-626)-6his fusion protein. Antibody Target: ZNF143
 lab Snyder
+lots 8059
 orderUrl http://www.ptglab.com/Products/ZNF143-Antibody-16618-1-AP.htm
 target ZNF143
 targetClass TFSS
@@ -12879,7 +12890,7 @@ term ZNF-MIZD-CP1_(ab65767)
 tag ZNFMIZDCP1AB65767
 type Antibody
 label ZMIZ1 (ab65767)
-antibodyDescription Rabbit polyclonal against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1. Antibody Target: ZMIZ1
+antibodyDescription Rabbit polyclonal affinity purified against synthetic peptide conjugated to KLH derived from within residues 200 - 300 of Human Zinc finger MIZ domain-containing protein 1. Antibody Target: ZMIZ1
 lab Snyder
 lots GR30927-1
 orderUrl http://www.abcam.com/Zinc-finger-MIZ-domain-containing-protein-1-antibody-ab65767.html
@@ -12895,7 +12906,7 @@ term ZNF217
 tag ZNF217
 type Antibody
 label ZNF217 (ZNF217)
-antibodyDescription Rabbit polyclonal antibody raised against a recombinant ZNF217 protein corresponding to the 1562-2207 nucleotides from a human ZNF217 cDNA. Antibody Target: ZNF217
+antibodyDescription Rabbit polyclonal antibody affinity purified raised against a recombinant ZNF217 protein corresponding to the 1562-2207 nucleotides from a human ZNF217 cDNA. Antibody Target: ZNF217
 lab Farnham
 orderUrl http://stemcellcenter.berkeley.edu/PIs/yaswen.html
 target ZNF217
@@ -12912,6 +12923,7 @@ type Antibody
 label ZNF263 (H00010127-A01)
 antibodyDescription Mouse polyclonal. Antibody Target: ZNF263
 lab Farnham
+lots 08212
 orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01.html
 target ZNF263
 targetClass TFSS
@@ -12943,7 +12955,7 @@ term ZNF274_(M01)
 tag ZNF274M01
 type Antibody
 label ZNF274 (H00010782-M01)
-antibodyDescription Mouse monoclonal antibody raised against a partial recombinant ZNF274 (corresponding to amino acids 420-531 of the human ZNF274 protein). Antibody Target: ZNF274
+antibodyDescription Mouse monoclonal affinity purified antibody raised against a partial recombinant ZNF274 (corresponding to amino acids 420-531 of the human ZNF274 protein). Antibody Target: ZNF274
 lab Farnham
 lots 08064-4C12
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-M01
@@ -12960,7 +12972,7 @@ term ZNF384_(HPA004051)
 tag ZNF384HPA004051
 type Antibody
 label ZNF384 (HPA004051)
-antibodyDescription Rabbit polyclonal generated using the immunogen: Zinc finger protein 384 recombinant protein epitope signature tag (PrEST)
+antibodyDescription Rabbit polyclonal affinity purified generated using the immunogen: Zinc finger protein 384 recombinant protein epitope signature tag (PrEST)
 lab Snyder
 lots A57874
 orderUrl http://www.sigmaaldrich.com/catalog/product/SIGMA/HPA004051?lang=en&region=US
