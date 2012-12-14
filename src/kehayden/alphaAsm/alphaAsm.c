@@ -663,12 +663,141 @@ verbose(2, "totUseZeroCount = %d\n", totUseZeroCount);
 return ll;
 }
 
+
+struct slRef *listUnusedMonomers(struct alphaStore *store, struct dlList *ll)
+/* Return list of references to monomers that are in store but not on ll. */
+{
+struct slRef *refList = NULL, *ref;
+struct hash *usedHash = hashNew(0);
+struct dlNode *node;
+/* Make hash of used monomers. */
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    struct monomer *monomer = node->val;
+    hashAdd(usedHash, monomer->word, monomer);
+    }
+
+/* Stream through all monomers looking for ones not used and adding to list. */
+struct monomer *monomer;
+for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
+    {
+    if (isEmpty(monomer->word))
+        continue;
+    if (!hashLookup(usedHash, monomer->word))
+	{
+	AllocVar(ref);
+	ref->val = monomer;
+	slAddHead(&refList, ref);
+	}
+    }
+hashFree(&usedHash);
+slReverse(&refList);
+return refList;
+}
+
+
+int monomerRefIx(struct monomerRef *list, struct monomer *monomer)
+/* Return index of monomer in list. */
+{
+int i;
+struct monomerRef *ref;
+for (i=0, ref = list; ref != NULL; ref = ref->next, ++i)
+    {
+    if (ref->val == monomer)
+        return i;
+    }
+errAbort("Monomer %s not on list\n", monomer->word);
+return -1;   // ugly
+}
+
+struct monomerRef *findNeighborhoodFromReads(struct monomer *center)
+/* Find if possible one monomer to either side of center */
+{
+struct slRef *readRef;
+struct monomerRef *before = NULL, *after = NULL;
+
+/* Loop through reads hoping to find a case where center is flanked by two monomers in
+ * same read.   As a fallback, keep track of a monomer before and a monomer after in
+ * any read. */
+for (readRef = center->readList; readRef != NULL; readRef = readRef->next)
+    {
+    struct alphaRead *read = readRef->val;
+    int readSize = slCount(read->list);
+    int centerIx = monomerRefIx(read->list, center);
+    if (readSize >= 3 && centerIx > 0 && centerIx < readSize-1)
+	 {
+         uglyf("Whoopie found central for %s\n", center->word);
+	 before = slElementFromIx(read->list, centerIx-1);
+	 after = slElementFromIx(read->list, centerIx+1);
+	 break;
+	 }
+    else if (readSize >= 2)
+         {
+	 if (centerIx == 0)
+	     {
+	     after = slElementFromIx(read->list, centerIx+1);
+	     uglyf("read %s, centerIx %d, after %p\n", center->word, centerIx, after);
+	     }
+	 else
+	     {
+	     before = slElementFromIx(read->list, centerIx-1);
+	     uglyf("read %s, centerIx %d, before %p\n", center->word, centerIx, before);
+	     }
+	 }
+    }
+uglyf("before %p, center %p, after %p\n", before, center, after);
+/* Make up list. */
+struct monomerRef *retList = NULL, *monoRef;
+if (after)
+    {
+    AllocVar(monoRef);
+    monoRef->val = after->val;
+    slAddHead(&retList, monoRef);
+    }
+AllocVar(monoRef);
+monoRef->val = center;
+slAddHead(&retList, monoRef);
+if (before)
+    {
+    AllocVar(monoRef);
+    monoRef->val = before->val;
+    slAddHead(&retList, monoRef);
+    }
+uglyf("%d in retList\n", slCount(retList));
+return retList;
+}
+
+void subInMissing(struct alphaStore *store, struct dlList *ll)
+/* Go figure out missing monomers in ll, and attempt to substitute them in somewhere they would fit. */
+{
+struct slRef *unusedList = listUnusedMonomers(store, ll);
+uglyf("%d monomers, %d unused\n", slCount(store->monomerList), slCount(unusedList));
+struct slRef *unusedRef;
+for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
+    {
+    struct monomer *unused = unusedRef->val;
+    struct monomerRef *neighborhood = findNeighborhoodFromReads(unused);
+    uglyf("%s(%d):", unused->word, slCount(neighborhood));
+        {
+	struct monomerRef *monomerRef;
+	for (monomerRef = neighborhood; monomerRef != NULL; monomerRef = monomerRef->next)
+	    {
+	    struct monomer *monomer = monomerRef->val;
+	    uglyf(" %s", monomer->word);
+	    }
+	uglyf("\n");
+	}
+    slFreeList(&neighborhood);
+    }
+}
+
 static void wordTreeGenerateFile(struct alphaStore *store, int maxSize, struct wordTree *firstWord, 
 	int maxOutputWords, char *fileName)
 /* Create file containing words base on tree probabilities.  The wordTreeGenerateList does
  * most of work. */
 {
 struct dlList *ll = wordTreeGenerateList(store, maxSize, firstWord, maxOutputWords);
+subInMissing(store, ll);
 FILE *f = mustOpen(fileName, "w");
 struct dlNode *node;
 for (node = ll->head; !dlEnd(node); node = node->next)
@@ -887,7 +1016,7 @@ hashAddSaveName(store->readHash, name, read, &read->name);
 
 /* Add read to the monomers. */
 refAdd(&a->readList, read);
-refAdd(&a->readList, read);
+refAdd(&b->readList, read);
 
 a->useCount += 1;
 b->useCount += 1;
