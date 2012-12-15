@@ -1,7 +1,6 @@
 /* annoStreamBigBed -- subclass of annoStreamer for bigBed file or URL */
 
 #include "annoStreamBigBed.h"
-#include "annoGratorQuery.h"
 #include "bigBed.h"
 #include "localmem.h"
 #include "sqlNum.h"
@@ -25,7 +24,7 @@ static void asbbSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionSt
 {
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
 struct annoStreamBigBed *self = (struct annoStreamBigBed *)vSelf;
-self->intervalList = NULL;
+self->nextInterval = self->intervalList = NULL;
 lmCleanup(&(self->intervalQueryLm));
 }
 
