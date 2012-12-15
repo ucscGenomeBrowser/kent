@@ -1,4 +1,4 @@
-/* annoStreamBigBed -- subclass of annoStreamer for database tables */
+/* annoStreamBigBed -- subclass of annoStreamer for bigBed file or URL */
 
 #ifndef ANNOSTREAMBIGBED_H
 #define ANNOSTREAMBIGBED_H
