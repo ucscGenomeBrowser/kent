@@ -6,7 +6,7 @@
 #include "annoStreamDb.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
-#include "annoGrateWig.h"
+#include "annoGrateWigDb.h"
 #include "annoFormatTab.h"
 #include "dystring.h"
 #include "pgSnp.h"
@@ -26,6 +26,7 @@ static const char *snpConsDbToTabOutLong = "snpConsDbToTabOutLong";
 static const char *vcfEx1 = "vcfEx1";
 static const char *vcfEx2 = "vcfEx2";
 static const char *bigBedToTabOut = "bigBedToTabOut";
+static const char *snpBigWigToTabOut = "snpBigWigToTabOut";
 
 void usage()
 /* explain usage and exit */
@@ -44,9 +45,10 @@ errAbort(
     "    %s\n"
     "    %s\n"
     "    %s\n"
+    "    %s\n"
     , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong,
     snpConsDbToTabOutShort, snpConsDbToTabOutLong,
-    vcfEx1, vcfEx2, bigBedToTabOut
+    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut
     );
 }
 
@@ -99,7 +101,12 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     {
     struct annoGrator *grator = NULL;
     if (grInfo->type == arWig)
-	grator = annoGrateWigDbNew(grInfo->db, grInfo->tableFileUrl, BIGNUM);
+	{
+	if (grInfo->db == NULL)
+	    grator = annoGrateBigWigNew(grInfo->tableFileUrl);
+	else
+	    grator = annoGrateWigDbNew(grInfo->db, grInfo->tableFileUrl, BIGNUM);
+	}
     else
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
@@ -139,7 +146,8 @@ if (!doAllTests)
 	sameString(argv[2], snpConsDbToTabOutLong) ||
 	sameString(argv[2], vcfEx1) ||
 	sameString(argv[2], vcfEx2) ||
-	sameString(argv[2], bigBedToTabOut))
+	sameString(argv[2], bigBedToTabOut) ||
+	sameString(argv[2], snpBigWigToTabOut))
 	test = cloneString(argv[2]);
     else
 	{
@@ -251,6 +259,16 @@ if (doAllTests || sameString(test, bigBedToTabOut))
 			   "http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb",
 				       arWords, NULL };
     dbToTabOut(&bigBedInfo, tbf, "stdout", "chr21", 34716800, 34733700, FALSE);
+    }
+
+if (doAllTests || sameString(test, snpBigWigToTabOut))
+    {
+    struct streamerInfo snp135Info = { NULL, db, "snp135", arWords, asParseFile("../snp132Ext.as") };
+    struct streamerInfo bigWigInfo = { NULL, NULL,
+			   "http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw",
+				       arWig, NULL };
+    snp135Info.next = &bigWigInfo;
+    dbToTabOut(&snp135Info, tbf, "stdout", "chr21", 34716800, 34733700, FALSE);
     }
 
 return 0;
