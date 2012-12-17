@@ -11449,7 +11449,7 @@ type Antibody
 label PAX5 (sc-1974)
 antibodyDescription Goat polyclonal IgG, 200 micrograms/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Antibody Target: PAX5
 lab Myers
-lot E1409
+lots E1409
 orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 target PAX5
 targetClass TFSS
