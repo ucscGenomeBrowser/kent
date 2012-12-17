@@ -4774,6 +4774,38 @@ tissue liver
 vendorId 1104; 602; 1442
 vendorName NICHD
 
+term Liver_STL011
+tag LIVSTL011
+type Cell Line
+description Primary liver tissue of a standard liver procurement from a 36 year old caucasian male.
+karyotype normal
+lab Snyder
+orderUrl missing
+organism human
+sex M 
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
+tier 3
+tissue liver
+vendorId STL011
+vendorName Snyder lab
+
+term Liver_STL004
+tag LIVSTL004
+type Cell Line
+description Primary liver tissue from the right portion of a standard liver procurement from a 6 year old female.
+karyotype normal
+lab Snyder
+orderUrl missing
+organism human
+sex F
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
+tier 3
+tissue liver
+vendorId STL004
+vendorName Snyder lab
+
 term LNCaP
 tag LNCAP
 type Cell Line
@@ -7348,6 +7380,22 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 tissue heart
 vendorId Heart; Heart
 vendorName 1)LICR lab; 2)CSHL lab
+
+#term Heart_STL0
+#tag HeartSTL 
+#type Cell Line
+#description Primary liver tissue of a standard liver procurement from a 36 year old caucasian male.
+#karyotype normal
+#lab Snyder
+#orderUrl missing
+#organism human
+#sex M 
+#termId BTO:0000759
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
+#tier 3
+#tissue heart
+#vendorId STL011
+#vendorName Snyder lab
 
 term HeadlessEmbryo
 tag HLEMBRYO
