@@ -2,7 +2,6 @@
 #include "hash.h"
 #include "linefile.h"
 #include "sqlNum.h"
-#include "localmem.h"
 #include "zlibFace.h"
 #include "cirTree.h"
 #include "bPlusTree.h"

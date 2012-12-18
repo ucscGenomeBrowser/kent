@@ -3,7 +3,6 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "localmem.h"
 #include "bits.h"
 #include "sig.h"
 #include "udc.h"
