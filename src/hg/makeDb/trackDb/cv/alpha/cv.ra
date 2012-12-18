@@ -5139,7 +5139,7 @@ description Malignant Hepatic Rhabdoid tumor line
 karyotype cancer
 lab Crawford
 lineage missing
-orderUrl missing
+orderUrl https://genome.ucsc.edu/ENCODE/protocols/cell/human/MRTTTC549_Crawford_protocol.pdf
 organism human
 protocol Crawford:MRTTTC549_Crawford_protocol.pdf
 sex M
