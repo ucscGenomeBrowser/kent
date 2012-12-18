@@ -7,6 +7,9 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#ifndef LOCALMEM_H
+#define LOCALMEM_H
+
 struct lm *lmInit(int blockSize);
 /* Create a local memory pool. Parameters are:
  *      blockSize - how much system memory to allocate at a time.  Can
@@ -45,3 +48,5 @@ void *lmCloneMem(struct lm *lm, void *pt, size_t size);
 #define lmAllocArray(lm, pt, size) (pt = lmAlloc(lm, sizeof(*pt) * (size)))
 /* Shortcut to allocating an array in local mem and
  * assigning pointer to it. */
+
+#endif//ndef LOCALMEM_H
