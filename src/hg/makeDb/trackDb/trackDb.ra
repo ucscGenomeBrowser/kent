@@ -1430,7 +1430,7 @@ shortLabel Common SNPs(135)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 135) Found in >= 1% of Samples
 group varRep
 priority 99.0911
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp135Seq

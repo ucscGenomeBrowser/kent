@@ -1,9 +1,7 @@
-/* annoGrateWig -- subclass of annoGrator for wiggle data */
+/* annoGrateWig -- subclass of annoGrator for bigWig or wiggle data */
 
 #include "annoGrateWig.h"
-#include "annoStreamWig.h"
-#include "sqlNum.h"
-#include "wiggle.h"
+#include "annoStreamBigWig.h"
 
 static void tidyUp(const struct annoRow *rowIn, struct annoRow **pOutList,
 		   uint primaryStart, uint primaryEnd)
@@ -54,7 +52,7 @@ while (end > start)
     }
 }
 
-static struct annoRow *agwdIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
+static struct annoRow *agwIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
 				     boolean *retRJFilterFailed)
 /* Return wig annoRows that overlap primaryRow position, with NANs weeded out. */
 {
@@ -69,11 +67,21 @@ annoRowFreeList(&rowsIn, self->mySource);
 return rowOutList;
 }
 
-struct annoGrator *annoGrateWigDbNew(char *db, char *table, int maxOutput)
-/* Create an annoGrator subclass for wiggle data from db.table (and the file it points to). */
+struct annoGrator *annoGrateWigNew(struct annoStreamer *wigSource)
+/* Create an annoGrator subclass for source with rowType == arWig. */
 {
-struct annoStreamer *wigSource = annoStreamWigDbNew(db, table, maxOutput);
+if (wigSource->rowType != arWig)
+    errAbort("annoGrateWigNew: expected source->rowType arWig (%d), got %d",
+	     arWig, wigSource->rowType);
 struct annoGrator *self = annoGratorNew(wigSource);
-self->integrate = agwdIntegrate;
+self->streamer.rowType = arWig;
+self->integrate = agwIntegrate;
 return self;
+}
+
+struct annoGrator *annoGrateBigWigNew(char *fileOrUrl)
+/* Create an annoGrator subclass for bigWig file or URL. */
+{
+struct annoStreamer *bigWigSource = annoStreamBigWigNew(fileOrUrl);
+return annoGrateWigNew(bigWigSource);
 }

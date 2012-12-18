@@ -621,23 +621,45 @@ identifier encodePseudogeneUcsc dependency
 
 identifier refGeneRetro dependency
 "Link refGene to ucscRetroInfo"
-    $ucscRetroDb.refGene.name dupeOk
-    $ucscRetroDb.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
+    hg18,hg19,mm9,mm10.refGene.name dupeOk
+    hg18,hg19.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
+    hg19.ucscRetroInfo2.refSeq minCheck=0.96 exclude=noRefSeq
+    hg19.ucscRetroInfo4.refSeq minCheck=0.96 exclude=noRefSeq
+    mm9,mm10.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
+    mm10.ucscRetroInfo2.refSeq minCheck=0.96 exclude=noRefSeq
 
 identifier knownGeneRetro dependency
 "Link knownGene to ucscRetroInfo"
-    $ucscRetroDb.knownGene.name dupeOk chopAfter=.
-    $ucscRetroDb.ucscRetroInfo1.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    hg18,hg19,mm9,mm10.knownGene.name dupeOk chopAfter=.
+    hg18.ucscRetroInfo1.kgName minCheck=0.95 exclude=noKg chopAfter=.
+    hg19.ucscRetroInfo1.kgName minCheck=0.87 exclude=noKg chopAfter=.
+    hg19.ucscRetroInfo2.kgName minCheck=0.87 exclude=noKg chopAfter=.
+    hg19.ucscRetroInfo4.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    mm9,mm10.ucscRetroInfo1.kgName minCheck=0.94 exclude=noKg chopAfter=.
+    mm10.ucscRetroInfo2.kgName minCheck=0.96 exclude=noKg chopAfter=.
 
-identifier ucscRetroInfo dependency
+identifier ucscRetroInfo4 dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    $ucscRetroDb.ucscRetroInfo1.name unique
-    $ucscRetroDb.ucscRetroAli1.qName 
+    hg19.ucscRetroInfo4.name unique
+    hg19.ucscRetroAli4.qName 
+    hg19.ucscRetroExpressed.name
 
-identifier ucscRetroOrtho dependency
+identifier ucscRetroOrtho[1,2,4] dependency
 "Link together Ucsc Retrogenes and ucsc retro orthlogy"
-    $ucscRetroDb.ucscRetroAli1.qName dupeOk
-    $ucscRetroDb.ucscRetroOrtho1.name
+    hg19.ucscRetroAli[].qName dupeOk
+    hg19.ucscRetroOrtho[].name
+
+identifier ucscRetroExtFileId[1,2,4]
+"External file ID for parent sequences for UCSC Retrogenes"
+    hg19.ucscRetroExtFile[].id
+    hg19.ucscRetroSeq[].extFile
+
+identifier ucscRetroSeq4
+"Sequences for GenBank sequences used as retrogene parents"
+    hg19.ucscRetroSeq4.acc unique 
+    hg19.ucscRetroCds4.id
+    hg19.ucscRetroAli4.qName chopAfter=-
+    hg19.ucscRetroInfo4.name chopAfter=-
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
@@ -1013,6 +1035,86 @@ identifier wgEncodeGencodeAnnotationRemarkV12
     hg19.wgEncodeGencodeAttrsV12.transcriptId minCheck=0.10 
 
 # end Gencode V12
+
+# begin Gencode V14
+
+# gencode genepreds with no associations
+# wgEncodeGencodePolyaV14
+# wgEncodeGencode2wayConsPseudoV14
+
+# gencode genepreds with joining through wgEncodeGencodeAttrsV14
+identifier wgEncodeGencodeBasicAttrsV14
+"Link together Gencode Basic Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV14.transcriptId
+    hg19.wgEncodeGencodeBasicV14.name
+
+identifier wgEncodeGencodeCompAttrsV14
+"Link together Gencode Comprehensive Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV14.transcriptId
+    hg19.wgEncodeGencodeCompV14.name
+
+identifier wgEncodeGencodePseudoGeneAttrsV14
+"Link together Gencode PseudoGene Table with Attributes table"
+    hg19.wgEncodeGencodeAttrsV14.transcriptId
+    hg19.wgEncodeGencodePseudoGeneV14.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsV14)
+identifier wgEncodeGencodeExonSupportV14
+"Link together Gencode Exon Support table with Attributes table"
+    hg19.wgEncodeGencodeExonSupportV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.98202
+
+identifier wgEncodeGencodeGeneSourceV14
+"Link together Gencode Gene Source table with Attributes table"
+    hg19.wgEncodeGencodeGeneSourceV14.geneId
+    hg19.wgEncodeGencodeAttrsV14.geneId
+
+identifier wgEncodeGencodePdbV14
+"Link together Gencode Pdb table with Attributes table"
+    hg19.wgEncodeGencodePdbV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.02
+
+identifier wgEncodeGencodePubMedV14
+"Link together Gencode Pubmed table with Attributes table"
+    hg19.wgEncodeGencodePubMedV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId  minCheck=0.635488
+
+identifier wgEncodeGencodeRefSeqV14
+"Link together Gencode RefSeq table with Attributes table"
+    hg19.wgEncodeGencodeRefSeqV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.185827
+
+identifier wgEncodeGencodeTagV14
+"Link together Gencode Tag table with Attributes table"
+    hg19.wgEncodeGencodeTagV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.373378
+
+identifier wgEncodeGencodeTranscriptSourceV14
+"Link together Gencode Transcript Source table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptSourceV14.transcriptId
+    hg19.wgEncodeGencodeAttrsV14.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportV14
+"Link together Gencode Transcript Support table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptSupportV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeTranscriptionSupportLevelV14
+"Link together Gencode Transcription Support Level table with Attributes table"
+    hg19.wgEncodeGencodeTranscriptionSupportLevelV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtV14
+"Link together Gencode UniProt Support table with Attributes table"
+    hg19.wgEncodeGencodeUniProtV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.358209
+
+identifier wgEncodeGencodeAnnotationRemarkV14
+"Link together Gencode Annotation Remark table with Attributes table"
+    hg19.wgEncodeGencodeAnnotationRemarkV14.transcriptId dupeOk
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.10 
+
+# end Gencode V14
 
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"

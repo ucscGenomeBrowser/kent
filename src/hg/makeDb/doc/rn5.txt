@@ -1184,7 +1184,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.rn5.swap lastz.rn5
 
 #########################################################################
-# lastz chicken galGal4 (WORKING - 2012-11-29 - Hiram)
+# lastz chicken galGal4 (DONE - 2012-11-29,12-04 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S rn5GalGal4
     mkdir /hive/data/genomes/rn5/bed/lastzGalGal4.2012-11-29
@@ -1224,10 +1224,9 @@ TMPDIR=/scratch/tmp
         `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-XXX - running - Thu Nov 29 15:11:25 PST 2012
-    #	real    1225m37.742s
+    #	Elapsed time: 1483m27s
     cat fb.rn5.chainGalGal4Link.txt
-    #	93392251 bases of 2572853723 (3.630%) in intersection
+    #	97465937 bases of 2572853723 (3.788%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/rn5/bed
     ln -s lastzGalGal4.2012-11-29 lastz.galGal4
@@ -1239,9 +1238,9 @@ XXX - running - Thu Nov 29 15:11:25 PST 2012
 	/hive/data/genomes/rn5/bed/lastzGalGal4.2012-11-29/DEF \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #	real    10m0.139s
-    cat  fb.galGal4.chainRn5Link.txt
-    #	74638274 bases of 935922386 (7.975%) in intersection
+    #	real    11m49.505s
+    cat fb.galGal4.chainRn5Link.txt
+    #	81184849 bases of 1032854810 (7.860%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/galGal4/bed
@@ -1288,8 +1287,8 @@ TMPDIR=/scratch/tmp
         `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-XXX - running - Thu Nov 29 15:24:09 PST 2012
-    #	real    1792m40.071s
+    #	real    3213m53.797s
+XXX - chaining failed, running last two for chr1 and chr3 Tue Dec  4 09:18:43 PST 2012
 
     cat fb.rn5.chainMonDom5Link.txt
     #	254245903 bases of 2652783500 (9.584%) in intersection
@@ -1313,7 +1312,7 @@ XXX - running - Thu Nov 29 15:24:09 PST 2012
     ln -s blastz.rn5.swap lastz.rn5
 
 #########################################################################
-# LASTZ cow bosTau7 (WORKING - 2012-11-29 - Hiram)
+# LASTZ cow bosTau7 (DONE - 2012-11-29,12-03 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S rn5BosTau7
     mkdir /hive/data/genomes/rn5/bed/lastzBosTau7.2012-11-29
@@ -1349,10 +1348,9 @@ TMPDIR=/scratch/tmp
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Thu Nov 29 15:35:17 PST 2012
-    #	real    1151m20.445s
+    #   Elapsed time: 2921m25s
     cat fb.rn5.chainBosTau7Link.txt
-    #	696498363 bases of 2652783500 (26.255%) in intersection
+    #   690036664 bases of 2572853723 (26.820%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/rn5/bed
     ln -s lastzBosTau7.2012-11-29 lastz.bosTau7
@@ -1364,15 +1362,15 @@ XXX - running - Thu Nov 29 15:35:17 PST 2012
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    77m58.759s
+    #   real    64m20.430s
     cat fb.bosTau7.chainRn5Link.txt
-    #	711923052 bases of 2804673174 (25.383%) in intersection
+    #	687933878 bases of 2804673174 (24.528%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.rn5.swap lastz.rn5
 
 ##############################################################################
-# LASTZ dog canFam3 (WORKING - 2012-11-29 - Hiram)
+# LASTZ dog canFam3 (DONE - 2012-11-29,12-04 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S rn5CanFam3
     mkdir /hive/data/genomes/rn5/bed/lastzCanFam3.2012-11-29
@@ -1408,10 +1406,10 @@ TMPDIR=/scratch/tmp
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Thu Nov 29 15:49:30 PST 2012
-    #	real    1883m21.850s
+    #	real    5963m50.439s
+    # there was a hung-up job that prolonged this time
     cat fb.rn5.chainCanFam3Link.txt
-    #	773114990 bases of 2652783500 (29.144%) in intersection
+    #	768049485 bases of 2572853723 (29.852%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/rn5/bed
     ln -s lastzCanFam3.2012-11-29 lastz.canFam3
@@ -1423,15 +1421,15 @@ XXX - running - Thu Nov 29 15:49:30 PST 2012
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	Elapsed time: 63m22s
+    #	Elapsed time: 67m13s
     cat fb.canFam3.chainRn5Link.txt
-    #	756678903 bases of 2392715236 (31.624%) in intersectio
+    #	734454555 bases of 2392715236 (30.695%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/canFam3/bed
     ln -s blastz.rn5.swap lastz.rn5
 
 ##############################################################################
-# LASTZ panda ailMel1 (WORKING - 2012-11-29 - Hiram)
+# LASTZ panda ailMel1 (DONE - 2012-11-29,12-04 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S rn5AilMel1
     mkdir /hive/data/genomes/rn5/bed/lastzAilMel1.2012-11-29
@@ -1467,10 +1465,9 @@ TMPDIR=/scratch/tmp
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Thu Nov 29 15:55:50 PST 2012
-    #	real    1914m15.921s
+    #	Elapsed time: 2389m42s
     cat fb.rn5.chainAilMel1Link.txt
-    #	821806974 bases of 2652783500 (30.979%) in intersection
+    #	818618644 bases of 2572853723 (31.818%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/rn5/bed
     ln -s lastzAilMel1.2012-11-29 lastz.ailMel1
@@ -1482,15 +1479,15 @@ XXX - running - Thu Nov 29 15:55:50 PST 2012
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	Elapsed time: 65m50s
+    #	Elapsed time: 72m40.305s
     cat fb.ailMel1.chainRn5Link.txt
-    #	798482731 bases of 2245312831 (35.562%) in intersection
+    #	776437110 bases of 2245312831 (34.580%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/ailMel1/bed
     ln -s blastz.rn5.swap lastz.rn5
 
 ##############################################################################
-# LASTZ Chimp PanTro4 (WORKING - 2012-11-29 - Hiram)
+# LASTZ Chimp PanTro4 (DONE - 2012-11-29,12-04 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S rn5PanTro4
     mkdir /hive/data/genomes/rn5/bed/lastzPanTro4.2012-11-29
@@ -1524,10 +1521,9 @@ TMPDIR=/scratch/tmp
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Thu Nov 29 16:03:00 PST 2012
-    #	real    682m53.046s
+    #	real    3194m24.511s
     cat fb.rn5.chainPanTro4Link.txt
-    #	919836299 bases of 2652783500 (34.674%) in intersection
+    #	916343862 bases of 2572853723 (35.616%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/rn5/bed
     ln -s lastzPanTro4.2012-11-29 lastz.panTro4
@@ -1539,15 +1535,15 @@ XXX - running - Thu Nov 29 16:03:00 PST 2012
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    73m23.855s
+    #	real    85m28.505s
     cat fb.panTro4.chainRn5Link.txt
-    #	926540065 bases of 2902338967 (31.924%) in intersection
+    #	901495233 bases of 2902338967 (31.061%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/panTro4/bed
     ln -s blastz.rn5.swap lastz.rn5
 
 ##############################################################################
-# LASTZ guinea pig cavPor3 (WORKING - 2012-11-29 - Hiram)
+# LASTZ guinea pig cavPor3 (DONE - 2012-11-29,12-04 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S rn5CavPor3
     mkdir /hive/data/genomes/rn5/bed/lastzCavPor3.2012-11-29
@@ -1583,10 +1579,9 @@ TMPDIR=/scratch/tmp
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Thu Nov 29 16:07:15 PST 2012
-    #	real    1523m35.729s
+    #	real    2935m17.649s
     cat fb.rn5.chainCavPor3Link.txt
-    #	754642254 bases of 2652783500 (28.447%) in intersection
+    #	749383689 bases of 2572853723 (29.127%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/rn5/bed
     ln -s lastzCavPor3.2012-11-29 lastz.cavPor3
@@ -1598,9 +1593,9 @@ XXX - running - Thu Nov 29 16:07:15 PST 2012
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    80m23.870s
+    #	real    82m22.205s
     cat fb.cavPor3.chainRn5Link.txt
-    #	775452752 bases of 2663369733 (29.115%) in intersection
+    #	750114059 bases of 2663369733 (28.164%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/cavPor3/bed
     ln -s blastz.rn5.swap lastz.rn5

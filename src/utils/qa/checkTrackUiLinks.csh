@@ -10,6 +10,8 @@ source `which qaConfig.csh`
 #
 ################################
 
+onintr cleanup
+
 set tableinput=""
 set tables=""
 set machine="hgwbeta"
@@ -88,15 +90,16 @@ if ("all" == $tableinput) then
      | grep -v tableName`
   set target="$baseUrl/cgi-bin/hgGateway?hgsid=$hgsid&db=$db"
   # check description page if doing all of an assembly
-  htmlCheck checkLinks "$target" >& error
-  if ( `wc -w error | awk '{print $1}'` != 0 ) then
+  htmlCheck checkLinks "$target" >& error$$
+  if ( `wc -w error$$ | awk '{print $1}'` != 0 ) then
     echo
     echo "description.html page:"
     echo "======================"
-    cat error
+    cat error$$
     @ errorCount = $errorCount + 1
   endif
-  rm -f error
+  @ totalCount = $totalCount + 1
+  rm -f error$$
 endif
 
 foreach table ($tables)
@@ -107,41 +110,45 @@ foreach table ($tables)
     continue
   endif
   set target="$baseUrl/cgi-bin/hgTrackUi?hgsid=$hgsid&db=$db&g=$table"
-  htmlCheck checkLinks "$target" >& error
+  htmlCheck checkLinks "$target" >& error$$
   # trap internal same-page anchors and discard
-  cat error | egrep -v "doesn't exist" > error2
-  mv error2 error
+  cat error$$ | egrep -v "doesn't exist" > error2$$
+  mv error2$$ error$$
   # slow it down if hitting the RR
   if ( "true" == $rr ) then
     sleep 2
   endif
-  if ( `wc -w error | awk '{print $1}'` != 0 ) then
-    if ( `cat error` != "403 from http://hgwbeta.cse.ucsc.edu/cgi-bin/" ) then
+  if ( `wc -w error$$ | awk '{print $1}'` != 0 ) then
+    if ( `cat error$$` != "403 from http://hgwbeta.cse.ucsc.edu/cgi-bin/" ) then
       echo
       echo $table
       echo "============="
-      cat error
+      cat error$$
       @ errorCount = $errorCount + 1
     endif
   endif
   @ totalCount = $totalCount + 1
-  rm -f error
+  rm -f error$$
 end
 echo
 echo "Summary"
 echo "======="
 if ( $totalCount == 1 ) then
-  echo $totalCount "table checked"
+  echo $totalCount "page checked"
 else
-  echo $totalCount "tables checked"
+  echo $totalCount "pages checked"
 endif
 if ( $errorCount > 0) then
   if ( $errorCount == 1) then
-    echo $errorCount "table with error(s) found"
+    echo $errorCount "page with error(s) found"
   else
-    echo $errorCount "tables with errors found"
+    echo $errorCount "pages with errors found"
   endif
 else
   echo "No errors found!"
 endif
 echo
+
+cleanup:
+rm -f error$$
+rm -f error2$$

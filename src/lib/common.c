@@ -3372,6 +3372,14 @@ time_t now = clock1();
 return (test < now);
 }
 
+boolean dateIsOlderBy(const char *date,const char*format, time_t seconds)
+// Is this string date older than now by this many seconds?
+{
+time_t test = dateToSeconds(date,format);
+time_t now = clock1();
+return (test + seconds < now);
+}
+
 static int daysOfMonth(struct tm *tp)
 /* Returns the days of the month given the year */
 {

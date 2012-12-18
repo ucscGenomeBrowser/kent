@@ -1,13 +1,13 @@
 pslMap - map PSLs alignments to new targets using alignments of
 the old target to the new target.  Given inPsl and mapPsl, where
 the target of inPsl is the query of mapPsl, create a new PSL
-with the query of inPsl aligned to the target of mapPsl.  If
-inPsl is a protein to nucleotide alignment and mapPsl is a
+with the query of inPsl aligned to all the targets of mapPsl.
+If inPsl is a protein to nucleotide alignment and mapPsl is a
 nucleotide to nucleotide alignment, the resulting alignment is
 nucleotide to nucleotide alignment of a hypothetical mRNA that
 would code for the protein.  This is useful as it gives base
 alignments of spliced codons.  A chain file may be used instead
-mapPsl
+mapPsl.
 
 usage:
    pslMap [options] inPsl mapFile outPsl

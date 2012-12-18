@@ -28,7 +28,7 @@ else
 fi
 
 # make sure this is a valid database name
-if ! hgsql -Ne "show databases" | grep -qw $db
+if ! mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -Ne "show databases" | grep -qw $db
 then
   echo -e "\nERROR: database $db not found.\n" >&2
   exit 1

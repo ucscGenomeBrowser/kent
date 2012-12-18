@@ -4,7 +4,7 @@ group genes
 priority 34.1
 shortLabel GENCODE
 longLabel GENCODE Gene Annotation 
-wgEncode 1
+# doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 track wgEncodeTfBindingSuper
 superTrack on

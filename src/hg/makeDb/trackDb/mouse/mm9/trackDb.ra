@@ -76,7 +76,6 @@ type psl
 priority 37.5
 color 20,0,250
 visibility hide
-nextItemButton on
 ucscRetroInfo ucscRetroInfo1
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds

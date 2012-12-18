@@ -1,0 +1,184 @@
+#!/bin/tcsh -efx
+
+# uses the following binaries: pbHgnc spToSpXref2
+
+# This file describes how the proteome database was
+# built.  See also the uniProt database doc, which needs
+# to be built first.
+
+set kent = ~/kent
+set date = 121210
+set spdate = 121210
+set db = proteins$date
+set spdb = sp$spdate
+
+hgsqladmin create $db
+
+cd /hive/data/inside/proteins
+mkdir -p $date
+cd $date
+mkdir build
+
+# Get HGNC data
+
+wget -O hgnc.tab "http://www.genenames.org/cgi-bin/hgnc_downloads.cgi?title=HGNC+output+data&col=gd_hgnc_id&col=gd_app_sym&col=gd_app_name&col=gd_status&col=gd_locus_type&col=gd_locus_group&col=gd_prev_sym&col=gd_prev_name&col=gd_aliases&col=gd_name_aliases&col=gd_pub_chrom_map&col=gd_date2app_or_res&col=gd_date_mod&col=gd_date_sym_change&col=gd_date_name_change&col=gd_pub_acc_ids&col=gd_enz_ids&col=gd_pub_eg_id&col=gd_pub_ensembl_id&col=gd_mgd_id&col=gd_other_ids&col=gd_other_ids_list&col=gd_pubmed_ids&col=gd_pub_refseq_ids&col=gd_gene_fam_name&col=gd_gene_fam_pagename&col=gd_record_type&col=gd_primary_ids&col=gd_secondary_ids&col=gd_ccds_ids&col=gd_vega_ids&col=gd_lsdb_links&col=md_gdb_id&col=md_eg_id&col=md_mim_id&col=md_refseq_id&col=md_prot_id&col=md_ensembl_id&col=md_ucsc_id&col=md_mgd_id&col=md_rgd_id&status=Approved&status=Entry+Withdrawn&status_opt=1&where=&order_by=gd_app_sym_sort&format=text&limit=&submit=submit&.cgifields=&.cgifields=chr&.cgifields=status&.cgifields=hgnc_dbtag"
+
+hgsql $db < $kent/src/hg/lib/hgnc.sql
+hgsql $db -e 'load data local infile "hgnc.tab" into table hgnc ignore 1 lines'
+ 
+pbHgnc $date
+hgsql $db < $kent/src/hg/lib/hgncXref.sql
+hgsql $db -e 'load data local infile "hgncXref.tab" into table hgncXref'
+
+#########################################################
+# CREATE REACTOME TABLES 
+
+# we're up to 42 now.  Got these from RM #7458
+mkdir -p /hive/data/outside/reactome/reactome42
+cd /hive/data/outside/reactome/reactome42
+
+unzip reactome-ucsc_v42.zip
+rm -rf __MACOSX/ reactome-ucsc_v42.zip
+tail -n +7 ucsc_entity42 > ucsc_entity42.tab
+tail -n +5 ucsc_events42 > ucsc_events42.tab
+
+hgLoadSqlTab $db spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events42.tab
+hgLoadSqlTab $db spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity42.tab
+
+cd ..
+rm current reactome
+ln -s /hive/data/outside/reactome/reactome42 current
+ln -s /hive/data/outside/reactome/reactome42 reactome
+
+# BUILD spXref2 and spXref3 tables.
+cd /hive/data/inside/proteins/$date/build
+
+# Create a bioentry table to use as an internal replacement for accession.
+# Takes a minute
+hgsql $spdb -e "create table bioentryID (acc char(16) NOT NULL, bioentryID int not null auto_increment, primary key (bioentryID), unique (acc))"
+hgsql $spdb -e "insert into bioentryID (acc) select acc from $spdb.info order by acc"
+
+# get records with HUGL symbol and descriptions
+hgsql $spdb -N -e "select d.acc, d.val, taxon, id.bioentryID, 2-isCurated, des.val,hx.symbol, hx.description from displayId d, info i, accToTaxon t, bioentryID id, description des, $db.hgncXref hx where  d.acc=t.acc and d.acc=i.acc and d.acc=id.acc and d.acc = id.acc and d.acc=des.acc and hx.uniProt=d.acc " >spXref3a.tab
+
+# get records with HUGL symbol and descriptions for variant splice proteins
+hgsql $spdb -N -e "select v.varAcc, v.varAcc, taxon, id.bioentryID, 2-isCurated, des.val,hx.symbol, hx.description from varAcc v, displayId d, info i, accToTaxon t, bioentryID id, description des, $db.hgncXref hx where v.parAcc=d.acc and d.acc=t.acc and d.acc=i.acc and d.acc=id.acc and d.acc = id.acc and d.acc=des.acc and hx.uniProt=d.acc " >spXref3av.tab
+
+# get all records and set HUGO symbol and description to "" 
+
+hgsql $spdb -N -e 'select d.acc, d.val, taxon, id.bioentryID, 2-isCurated, des.val,"", "" from displayId d, info i, accToTaxon t, bioentryID id, description des where  d.acc=t.acc and d.acc=i.acc and d.acc=id.acc and d.acc = id.acc and d.acc=des.acc ' >spXref3b.tab
+
+# get all records and set HUGO symbol and description to "" for variant splice proteins 
+
+hgsql $spdb -N -e 'select v.varAcc, v.varAcc, taxon, id.bioentryID, 2-isCurated, des.val,"", "" from varAcc v, displayId d, info i, accToTaxon t, bioentryID id, description des where v.parAcc=d.acc and  d.acc=t.acc and d.acc=i.acc and d.acc=id.acc and d.acc = id.acc and d.acc=des.acc ' >spXref3bv.tab
+
+# Clean up temp table.
+hgsql $spdb -e "drop table bioentryID"
+
+# collect all data from the resulting 4 files.
+
+cat spXref3a.tab  spXref3b.tab  spXref3av.tab spXref3bv.tab >spXref3.tab
+
+# load into the spXref3 table
+hgLoadSqlTab $db spXref3 $kent/src/hg/lib/spXref3.sql spXref3.tab
+
+# load the same data into a second temp table
+hgLoadSqlTab $db spXref3B $kent/src/hg/lib/spXref3.sql spXref3.tab
+
+# remove records that have empty HUGO symbol, yet other records 
+# of the same accession does have non-empty HUGO symbols.
+hgsql $db -e 'delete spXref3 from spXref3, spXref3B where spXref3.accession=spXref3B.accession and spXref3.hugoSymbol="" and spXref3B.hugoSymbol!=""'
+
+# Drop temp table
+hgsql $db -e "drop table spXref3B"
+
+#	Build spSecondaryID table
+cd /hive/data/inside/proteins/$date
+hgsql -e "select displayId.val, displayId.acc, otherAcc.val from displayId, \
+        otherAcc where otherAcc.acc = displayId.acc;" $spdb \
+	| sed -e "1d" > spSecondaryID.tab
+
+hgLoadSqlTab $db spSecondaryID $kent/src/hg/lib/spSecondaryID.sql ./spSecondaryID.tab
+
+#stopped here
+#	Build pfamXref and pfamDesc tables
+# First get pfam info into /hive/data/outside/pfam/current/Pfam-A.full.gz somehow.
+# Did it this time with
+#   wget --timestamping ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam-A.full.gz
+cd    /hive/data/outside/pfam/current/
+
+gunzip -c Pfam-A.full.gz | pfamXref $db stdin pfamADesc.tab pfamAXref.tab >pfamXref.log
+
+hgLoadSqlTab $db pfamDesc $kent/src/hg/lib/pfamDesc.sql pfamADesc.tab
+
+
+hgLoadSqlTab $db pfamXref $kent/src/hg/lib/pfamXref.sql pfamAXref.tab
+
+#	Build the pdbSP table, new process using extDbRef data from spXXXXXX
+
+cd /hive/data/inside/proteins/$date
+
+hgsql $spdb -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb where x.acc=d.acc and extDb.val="PDB" and x.extDb=extDb.id'|sort -u >pdbSP.tab
+
+hgLoadSqlTab $db pdbSP $kent/src/hg/lib/pdbSP.sql pdbSP.tab
+
+#	Build the spDisease table
+cd /hive/data/inside/proteins/$date
+
+hgsql -N -e \
+'select comment.acc, displayId.val, commentVal.val from comment, commentVal, commentType ct, displayId where comment.commentType=ct.id and ct.val="DISEASE" and commentVal.id=comment.commentVal and displayId.acc=comment.acc;' \
+$spdb > spDisease.tab
+wc  spDisease.tab
+#   4909  289325 2100354 spDisease.tab
+
+hgLoadSqlTab $db spDisease $kent/src/hg/lib/spDisease.sql spDisease.tab
+
+# create swInterPro table
+
+cd /hive/data/inside/proteins/$date/build
+# Fetch interpro file, last time like so:
+wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz"
+gunzip protein2ipr.dat.gz
+# rearrange col position to match the old format
+awk '{print $1,$4,$5,$6,$2,$3}' protein2ipr.dat > interProXref.tab
+
+hgLoadSqlTab $db  interProXref $kent/src/hg/lib/interProXref.sql ./interProXref.tab
+
+hgsql $db  -N -e 'select accession, interProId from interProXref;'|sort -u >swInterPro.tab
+hgLoadSqlTab $db  swInterPro $kent/src/hg/lib/swInterPro.sql ./swInterPro.tab
+
+cd /hive/data/inside/proteins/$date
+mkdir alias
+cd alias
+
+# this is very funky, but I'm leaving it in for the moment (braney)
+hgsql $db -N -e 'select accession, accession,  "uAcc", "2006-01-15" from spXref3' >j1.tmp
+hgsql $db -N -e 'select accession, accession2, "u2Ac", "2006-01-15" from spSecondaryID' >j2.tmp
+hgsql $db -N -e 'select accession, displayID,  "uDis", "2006-01-15" from spXref3' >j3.tmp
+hgsql proteins040515 -N -e 'select accession, displayID,  "oDis", "2004-05-15" from spXref3' >j4.tmp
+
+cat j1.tmp j2.tmp j3.tmp j4.tmp >uniProtAlias.tab
+rm j1.tmp j2.tmp j3.tmp j4.tmp
+
+hgLoadSqlTab $db uniProtAlias $kent/src/hg/lib/uniProtAlias.sql ./uniProtAlias.tab
+hgsql $db -e 'create index alias on uniProtAlias(alias)'
+
+hgsql proteins111004 -N -e 'select * from spOldNew' >spOldNew.tab
+hgLoadSqlTab $db spOldNew $kent/src/hg/lib/spOldNew.sql ./spOldNew.tab
+
+hgsql $db -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
+hgsql $db -e 'create index newDisplayId on spOldNew(newDisplayId)'
+
+# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
+cd /hive/data/inside/proteins/$date
+
+hgsql $db  -N -e 'select accession,accession from spXref3' >j1
+cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
+cat j1 |grep -v "-" >>j3
+cat j2 j3 |sort -u >spVariant.tab
+rm j1 j2 j3
+
+
+hgLoadSqlTab $db  spVariant $kent/src/hg/lib/spVariant.sql ./spVariant.tab
+hgsql $db  -e 'create index parent on spVariant(parent)'
+

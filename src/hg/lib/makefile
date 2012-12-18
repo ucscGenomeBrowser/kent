@@ -3,7 +3,7 @@ XINC = -I$(MYSQLINC)
 
 O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
-    altGraphX.o ancientRref.o annoGratorGpVar.o  annoGrateWig.o annoStreamDb.o annoStreamWig.o \
+    altGraphX.o ancientRref.o annoGratorGpVar.o annoGrateWigDb.o annoStreamDb.o annoStreamWig.o \
     api.o atomDb.o  axtInfo.o \
     axtLib.o bactigPos.o hgBam.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed8Attrs.o bed12Source.o \
@@ -41,7 +41,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/encodeExp.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
-    estPair.o exoFish.o expData.o expRecord.o exprBed.o \
+    estPair.o exoFish.o exonJunctionPrimers.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o fileUi.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBase2004Xref.o \
     flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbWarn.o gbMiscDiff.o gbProtAnn.o gcPercent.o gbSeq.o \
