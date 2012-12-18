@@ -91,7 +91,7 @@ int len = row->end - row->start;
 struct dyString *dy = dyStringNew(10*len);
 int i;
 for (i = 0;  i < len;  i++)
-    dyStringPrintf(dy, "%f,", vector[i]);
+    dyStringPrintf(dy, "%g,", vector[i]);
 char **words;
 AllocArray(words, 1);
 words[0] = dyStringCannibalize(&dy);

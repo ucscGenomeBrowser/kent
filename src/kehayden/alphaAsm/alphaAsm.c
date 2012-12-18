@@ -8,6 +8,7 @@
 #include "options.h"
 #include "dystring.h"
 #include "dlist.h"
+#include "obscure.h"
 
 /* Global vars - all of which can be set by command line options. */
 int pseudoCount = 1;
@@ -663,12 +664,309 @@ verbose(2, "totUseZeroCount = %d\n", totUseZeroCount);
 return ll;
 }
 
+
+struct slRef *listUnusedMonomers(struct alphaStore *store, struct dlList *ll)
+/* Return list of references to monomers that are in store but not on ll. */
+{
+struct slRef *refList = NULL, *ref;
+struct hash *usedHash = hashNew(0);
+struct dlNode *node;
+/* Make hash of used monomers. */
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    struct monomer *monomer = node->val;
+    hashAdd(usedHash, monomer->word, monomer);
+    }
+
+/* Stream through all monomers looking for ones not used and adding to list. */
+struct monomer *monomer;
+for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
+    {
+    if (isEmpty(monomer->word))
+        continue;
+    if (!hashLookup(usedHash, monomer->word))
+	{
+	AllocVar(ref);
+	ref->val = monomer;
+	slAddHead(&refList, ref);
+	}
+    }
+hashFree(&usedHash);
+slReverse(&refList);
+return refList;
+}
+
+
+int monomerRefIx(struct monomerRef *list, struct monomer *monomer)
+/* Return index of monomer in list. */
+{
+int i;
+struct monomerRef *ref;
+for (i=0, ref = list; ref != NULL; ref = ref->next, ++i)
+    {
+    if (ref->val == monomer)
+        return i;
+    }
+errAbort("Monomer %s not on list\n", monomer->word);
+return -1;
+}
+
+struct monomerRef *findNeighborhoodFromReads(struct monomer *center)
+/* Find if possible one monomer to either side of center */
+{
+struct slRef *readRef;
+struct monomerRef *before = NULL, *after = NULL;
+
+/* Loop through reads hoping to find a case where center is flanked by two monomers in
+ * same read.   As a fallback, keep track of a monomer before and a monomer after in
+ * any read. */
+for (readRef = center->readList; readRef != NULL; readRef = readRef->next)
+    {
+    struct alphaRead *read = readRef->val;
+    int readSize = slCount(read->list);
+    int centerIx = monomerRefIx(read->list, center);
+    if (readSize >= 3 && centerIx > 0 && centerIx < readSize-1)
+	 {
+	 before = slElementFromIx(read->list, centerIx-1);
+	 after = slElementFromIx(read->list, centerIx+1);
+	 break;
+	 }
+    else if (readSize >= 2)
+         {
+	 if (centerIx == 0)
+	     after = slElementFromIx(read->list, centerIx+1);
+	 else
+	     before = slElementFromIx(read->list, centerIx-1);
+	 }
+    }
+
+/* Make up list from end to start. */
+struct monomerRef *retList = NULL, *monoRef;
+if (after)
+    {
+    AllocVar(monoRef);
+    monoRef->val = after->val;
+    slAddHead(&retList, monoRef);
+    }
+AllocVar(monoRef);
+monoRef->val = center;
+slAddHead(&retList, monoRef);
+if (before)
+    {
+    AllocVar(monoRef);
+    monoRef->val = before->val;
+    slAddHead(&retList, monoRef);
+    }
+return retList;
+}
+
+struct dlNode *matchExceptCenter(struct dlNode *node, struct monomerRef *neighborhood, struct monomer *center)
+/* Return center node if node matches neighborhood except for center. */
+{
+struct dlNode *centerNode = NULL;
+struct monomerRef *neighbor;
+struct dlNode *n;
+for (n = node, neighbor=neighborhood; ; n = n->next, neighbor = neighbor->next)
+    {
+    if (neighbor == NULL)
+        break;
+    if (dlEnd(n))
+        return NULL;
+    if (neighbor->val == center)
+        centerNode = n;
+    else if (n->val != neighbor->val)
+        return NULL;
+    }
+return centerNode;
+}
+
+void printMonomerRefList(struct monomerRef *refList, FILE *f)
+/* Print out a line to file with the list of monomers. */
+{
+struct monomerRef *ref;
+for (ref = refList; ref != NULL; ref = ref->next)
+    fprintf(f, "%s ", ref->val->word);
+fprintf(f, "\n");
+}
+
+struct slRef *refsToPossibleCenters(struct monomer *center, struct monomerRef *neighborhood, struct dlList *ll)
+/* Return a list of dlNodes where neighborhood, but not center matches. */
+{
+struct slRef *list = NULL;
+struct dlNode *node;
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    struct dlNode *centerNode = matchExceptCenter(node, neighborhood, center);
+    if (centerNode != NULL)
+	refAdd(&list, centerNode);
+    }
+return list;
+}
+
+void mostCommonMonomerWord(struct slRef *refList, char **retWord, int *retCount)
+/* Given refs to dlNodes containing monomers, find word associated with most common monomer. */
+{
+/* Make up a hash that contains counts of all monomers. */
+struct hash *countHash = hashNew(0);
+struct slRef *ref;
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct dlNode *node = ref->val;
+    struct monomer *monomer = node->val;
+    hashIncInt(countHash, monomer->word);
+    }
+
+/* Iterate through hash finding max value. */
+char *maxWord = NULL;
+int maxCount = 0;
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(countHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    int count = ptToInt(hel->val);
+    if (count > maxCount)
+        {
+	maxCount = count;
+	maxWord = hel->name;
+	}
+    }
+*retWord = maxWord;
+*retCount = maxCount;
+hashFree(&countHash);
+}
+
+boolean subCommonCenter(struct alphaStore *store,
+    struct monomer *center, struct monomerRef *neighborhood, struct dlList *ll)
+/* Scan list for places where have all items in neighborhood (except for center) matching. 
+ * Substitute in center at one of these places chosen at random and return TRUE if possible. */
+{
+struct slRef *centerRefList = refsToPossibleCenters(center, neighborhood, ll);
+verbose(3, "sub %s in neighborhood: ", center->word);
+if (verboseLevel() >= 3)
+    printMonomerRefList(neighborhood, stderr);
+verbose(3, "Got %d possible centers\n", slCount(centerRefList));
+
+if (centerRefList == NULL)
+    return FALSE;
+int commonCount = 0;
+char *commonWord = NULL;
+mostCommonMonomerWord(centerRefList, &commonWord, &commonCount);
+struct monomer *commonMonomer = hashFindVal(store->monomerHash, commonWord);
+verbose(3, "Commonest word to displace with %s is %s which occurs %d times in context and %d overall\n", center->word, commonWord, commonCount, commonMonomer->outCount);
+if (commonMonomer->outCount < 2)
+    {
+    verbose(2, "Want to substitute %s for %s, but %s only occurs %d time.\n", 
+	center->word, commonWord, commonWord, commonMonomer->outCount);
+    return FALSE;
+    }
+
+/* Select a random one of the most commonly occuring possible centers. */
+int targetIx = rand() % commonCount;
+struct slRef *ref;
+int currentIx = 0;
+for (ref = centerRefList; ref != NULL; ref = ref->next)
+    {
+    struct dlNode *node = ref->val;
+    struct monomer *monomer = node->val;
+    if (sameString(monomer->word, commonWord))
+         {
+	 if (currentIx == targetIx)
+	     {
+	     verbose(2, "Substituting %s for %s in context of %d\n", center->word, commonWord, slCount(neighborhood));
+	     struct monomer *oldCenter = node->val;
+	     if (oldCenter->type != center->type)
+		 verbose(2, "Type mismatch subbig %s vs %s\n", oldCenter->word, center->word);
+	     node->val = center;
+	     return TRUE;
+	     }
+	 ++currentIx;
+	 }
+    }
+internalErr();	// Should not get here.
+return FALSE;	
+}
+
+boolean subCenterInNeighborhood(struct alphaStore *store, 
+    struct monomer *center, struct monomerRef *neighborhood, struct dlList *ll)
+/* Scan ll for cases where neighborhood around center matches.  Replace one of these 
+ * cases with center. */
+{
+assert(slCount(neighborhood) == 3);	// Simplifies things and is true for now.
+if (subCommonCenter(store, center, neighborhood, ll))
+   return TRUE;
+if (subCommonCenter(store, center, neighborhood->next, ll))
+   return TRUE;
+struct monomerRef *third = neighborhood->next->next;
+neighborhood->next->next = NULL;
+boolean ok = subCommonCenter(store, center, neighborhood, ll);
+neighborhood->next->next = third;
+return ok;
+}
+
+struct monomer *mostCommonInType(struct monomerType *type)
+/* Return most common monomer of given type */
+{
+struct monomerRef *ref;
+int commonCount = 0;
+struct monomer *common = NULL;
+for (ref = type->list; ref != NULL; ref = ref->next)
+    {
+    struct monomer *monomer = ref->val;
+    if (monomer->outCount > commonCount)
+        {
+	commonCount = monomer->outCount;
+	common = monomer;
+	}
+    }
+return common;
+}
+
+void subIntoFirstMostCommonOfType(struct alphaStore *store, struct monomer *unused, 
+    struct dlList *ll)
+/* Substitute unused for first occurence of most common monomer of same type. */
+{
+struct monomer *common = mostCommonInType(unused->type);
+struct dlNode *node;
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    struct monomer *monomer = node->val;
+    if (monomer == common)
+        {
+	verbose(2, "Subbing %s for %s of type %s\n", unused->word, monomer->word, 
+	    unused->type->name);
+	node->val = unused;
+	break;
+	}
+    }
+}
+
+void subInMissing(struct alphaStore *store, struct dlList *ll)
+/* Go figure out missing monomers in ll, and attempt to substitute them in somewhere they would fit. */
+{
+struct slRef *unusedList = listUnusedMonomers(store, ll);
+verbose(2, "%d monomers, %d unused\n", slCount(store->monomerList), slCount(unusedList));
+struct slRef *unusedRef;
+for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
+    {
+    struct monomer *unused = unusedRef->val;
+    struct monomerRef *neighborhood = findNeighborhoodFromReads(unused);
+    if (!subCenterInNeighborhood(store, unused, neighborhood, ll))
+	{
+	verbose(2, "Couldn't substitute in %s with context, falling back to type logic", 
+	    unused->word);
+        subIntoFirstMostCommonOfType(store, unused, ll);
+	}
+    slFreeList(&neighborhood);
+    }
+}
+
 static void wordTreeGenerateFile(struct alphaStore *store, int maxSize, struct wordTree *firstWord, 
 	int maxOutputWords, char *fileName)
 /* Create file containing words base on tree probabilities.  The wordTreeGenerateList does
  * most of work. */
 {
 struct dlList *ll = wordTreeGenerateList(store, maxSize, firstWord, maxOutputWords);
+subInMissing(store, ll);
 FILE *f = mustOpen(fileName, "w");
 struct dlNode *node;
 for (node = ll->head; !dlEnd(node); node = node->next)
@@ -887,7 +1185,7 @@ hashAddSaveName(store->readHash, name, read, &read->name);
 
 /* Add read to the monomers. */
 refAdd(&a->readList, read);
-refAdd(&a->readList, read);
+refAdd(&b->readList, read);
 
 a->useCount += 1;
 b->useCount += 1;
@@ -1092,6 +1390,33 @@ for (i=0, type = store->typeList; i<store->typeCount; ++i, type = type->next)
     types[i] = type;
 }
 
+void crossCheckMonomerOrderAndReads(struct alphaStore *store, char *orderedPrefix, char *readFile, char *typeFile)
+/* Make sure all monomer that begin with ordered prefix are present in monomer order file. */
+{
+/* Make hash of all monomers that have type info. */
+struct hash *orderHash = hashNew(0);
+struct monomerType *type;
+for (type = store->typeList; type != NULL; type = type->next)
+     {
+     struct monomerRef *ref;
+     for (ref = type->list; ref != NULL; ref = ref->next)
+         hashAdd(orderHash, ref->val->word, ref->val);
+     }
+
+/* Go through all monomers and make sure ones with correct prefix are in list. */
+struct monomer *mon;
+for (mon = store->monomerList; mon != NULL; mon = mon->next)
+    {
+    char *word = mon->word;
+    if (startsWith(orderedPrefix, word) && !hashLookup(orderHash, word))
+        {
+	errAbort("%s is in %s but not %s", word, readFile, typeFile);
+	}
+    }
+hashFree(&orderHash);
+}
+
+
 void monomerListNormalise(struct monomer *list, int totalCount, int outputSize)
 /* Set outTarget field in all of list to be normalized to outputSize */
 {
@@ -1230,6 +1555,7 @@ void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
 struct alphaStore *store = alphaStoreNew(maxChainSize);
 alphaReadListFromFile(readsFile, store);
 alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
+crossCheckMonomerOrderAndReads(store, "m", readsFile, monomerOrderFile);
 fillInTypes(store);
 integrateOrphans(store);
 makeMarkovChains(store);

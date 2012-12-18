@@ -148,6 +148,17 @@ if (gotWarning)
 return tHub;
 }
 
+static boolean
+hubTimeToCheck(struct hubConnectStatus *hub, char *notOkStatus)
+/* check to see if enough time has passed to re-check a hub that
+ * has an error status.  Default time to wait is 30 minutes, but this
+ * is configurable with the hub.timeToCheck conf variable */
+{
+char *checkTimeString = cfgOptionDefault(hgHubConnectTimeToCheck, "1800");
+time_t checkTime = sqlUnsigned(checkTimeString);
+return dateIsOlderBy(notOkStatus, "%F %T", checkTime);
+}
+
 /* Given a hub ID return associated status. Returns NULL if no such hub.  If hub
  * exists but has problems will return with errorMessage field filled in. */
 struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id)
@@ -155,7 +166,7 @@ struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int i
 struct hubConnectStatus *hub = NULL;
 char query[1024];
 safef(query, sizeof(query), 
-    "select hubUrl,status, errorMessage from %s where id=%d", getHubStatusTableName(), id);
+    "select hubUrl,status, errorMessage,lastNotOkTime from %s where id=%d", getHubStatusTableName(), id);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row != NULL)
@@ -166,15 +177,15 @@ if (row != NULL)
     hub->status = sqlUnsigned(row[1]);
     hub->errorMessage = cloneString(row[2]);
 
-    if (isEmpty(row[2]))
+    if (isEmpty(row[2]) || hubTimeToCheck(hub, row[3]))
 	{
 	char *errorMessage = NULL;
 	hub->trackHub = fetchHub( hub->hubUrl, &errorMessage);
-	if (errorMessage != NULL)
+	hub->errorMessage = cloneString(errorMessage);
+	hubUpdateStatus( hub->errorMessage, hub);
+	if (!isEmpty(hub->errorMessage))
 	    {
-	    hub->errorMessage = cloneString(errorMessage);
 	    warn("%s", hub->errorMessage);
-	    hubUpdateStatus( hub->errorMessage, hub);
 	    }
 	}
     }
