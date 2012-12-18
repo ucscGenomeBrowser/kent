@@ -792,8 +792,6 @@ fprintf(f, "\n");
 struct slRef *refsToPossibleCenters(struct monomer *center, struct monomerRef *neighborhood, struct dlList *ll)
 /* Return a list of dlNodes where neighborhood, but not center matches. */
 {
-uglyf("refsToPossibleCenters ll(%d) neighborhood: ", dlCount(ll));
-printMonomerRefList(neighborhood, uglyOut);
 struct slRef *list = NULL;
 struct dlNode *node;
 for (node = ll->head; !dlEnd(node); node = node->next)
@@ -843,9 +841,10 @@ boolean subCommonCenter(struct alphaStore *store,
  * Substitute in center at one of these places chosen at random and return TRUE if possible. */
 {
 struct slRef *centerRefList = refsToPossibleCenters(center, neighborhood, ll);
-uglyf("sub %s in neighborhood: ", center->word);
-printMonomerRefList(neighborhood, uglyOut);
-uglyf("Got %d possible centers\n", slCount(centerRefList));
+verbose(3, "sub %s in neighborhood: ", center->word);
+if (verboseLevel() >= 3)
+    printMonomerRefList(neighborhood, stderr);
+verbose(3, "Got %d possible centers\n", slCount(centerRefList));
 
 if (centerRefList == NULL)
     return FALSE;
@@ -853,10 +852,11 @@ int commonCount = 0;
 char *commonWord = NULL;
 mostCommonMonomerWord(centerRefList, &commonWord, &commonCount);
 struct monomer *commonMonomer = hashFindVal(store->monomerHash, commonWord);
-uglyf("Commonest word to displace with %s is %s which occurs %d times in context and %d overall\n", center->word, commonWord, commonCount, commonMonomer->outCount);
+verbose(3, "Commonest word to displace with %s is %s which occurs %d times in context and %d overall\n", center->word, commonWord, commonCount, commonMonomer->outCount);
 if (commonMonomer->outCount < 2)
     {
-    uglyf("Want to substitute %s for %s, but %s only occurs %d time.\n", center->word, commonWord, commonWord, commonMonomer->outCount);
+    verbose(2, "Want to substitute %s for %s, but %s only occurs %d time.\n", 
+	center->word, commonWord, commonWord, commonMonomer->outCount);
     return FALSE;
     }
 
@@ -872,38 +872,71 @@ for (ref = centerRefList; ref != NULL; ref = ref->next)
          {
 	 if (currentIx == targetIx)
 	     {
-	     uglyf("Substituting %s for %s in context of %d\n", center->word, commonWord, slCount(neighborhood));
+	     verbose(2, "Substituting %s for %s in context of %d\n", center->word, commonWord, slCount(neighborhood));
 	     struct monomer *oldCenter = node->val;
 	     if (oldCenter->type != center->type)
-	         {
-		 uglyAbort("Type mismatch subbig %s vs %s\n", oldCenter->word, center->word);
-		 }
+		 verbose(2, "Type mismatch subbig %s vs %s\n", oldCenter->word, center->word);
 	     node->val = center;
 	     return TRUE;
 	     }
 	 ++currentIx;
 	 }
     }
-assert(FALSE);
+internalErr();	// Should not get here.
 return FALSE;	
 }
 
-void subCenterInNeighborhood(struct alphaStore *store, 
+boolean subCenterInNeighborhood(struct alphaStore *store, 
     struct monomer *center, struct monomerRef *neighborhood, struct dlList *ll)
-/* Scan ll for cases where neighborhood around center matches.  Replace one of these cases with center. */
+/* Scan ll for cases where neighborhood around center matches.  Replace one of these 
+ * cases with center. */
 {
 assert(slCount(neighborhood) == 3);	// Simplifies things and is true for now.
 if (subCommonCenter(store, center, neighborhood, ll))
-   return;
+   return TRUE;
 if (subCommonCenter(store, center, neighborhood->next, ll))
-   return;
+   return TRUE;
 struct monomerRef *third = neighborhood->next->next;
 neighborhood->next->next = NULL;
 boolean ok = subCommonCenter(store, center, neighborhood, ll);
 neighborhood->next->next = third;
-if (!ok)
+return ok;
+}
+
+struct monomer *mostCommonInType(struct monomerType *type)
+/* Return most common monomer of given type */
+{
+struct monomerRef *ref;
+int commonCount = 0;
+struct monomer *common = NULL;
+for (ref = type->list; ref != NULL; ref = ref->next)
     {
-    warn("Couldn't substitute in %s", center->word);
+    struct monomer *monomer = ref->val;
+    if (monomer->outCount > commonCount)
+        {
+	commonCount = monomer->outCount;
+	common = monomer;
+	}
+    }
+return common;
+}
+
+void subIntoFirstMostCommonOfType(struct alphaStore *store, struct monomer *unused, 
+    struct dlList *ll)
+/* Substitute unused for first occurence of most common monomer of same type. */
+{
+struct monomer *common = mostCommonInType(unused->type);
+struct dlNode *node;
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    struct monomer *monomer = node->val;
+    if (monomer == common)
+        {
+	verbose(2, "Subbing %s for %s of type %s\n", unused->word, monomer->word, 
+	    unused->type->name);
+	node->val = unused;
+	break;
+	}
     }
 }
 
@@ -917,7 +950,12 @@ for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
     {
     struct monomer *unused = unusedRef->val;
     struct monomerRef *neighborhood = findNeighborhoodFromReads(unused);
-    subCenterInNeighborhood(store, unused, neighborhood, ll);
+    if (!subCenterInNeighborhood(store, unused, neighborhood, ll))
+	{
+	verbose(2, "Couldn't substitute in %s with context, falling back to type logic", 
+	    unused->word);
+        subIntoFirstMostCommonOfType(store, unused, ll);
+	}
     slFreeList(&neighborhood);
     }
 }
