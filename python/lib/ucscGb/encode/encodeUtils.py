@@ -1,3 +1,7 @@
+# IMPORTANT: This is code that you should not use for ENCODE 3.
+# Its contents are specific to the ENCODE 2 pipeline.
+# If you need this functionality put it in a new class.
+
 import os, hashlib, subprocess
 
 class DataType(object):
@@ -144,9 +148,3 @@ def hashFile(filename, hasher=hashlib.md5(), blocksize=65536):
     out = subprocess.check_output(['md5sum', filename])
     md5 = out.split('  ')[0]
     return md5
-    # afile = open(filename, 'rb')
-    # buf = afile.read(blocksize)
-    # while len(buf) > 0:
-        # hasher.update(buf)
-        # buf = afile.read(blocksize)
-    # return hasher.hexdigest()

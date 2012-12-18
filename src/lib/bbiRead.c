@@ -5,7 +5,6 @@
 #include "linefile.h"
 #include "hash.h"
 #include "obscure.h"
-#include "localmem.h"
 #include "zlibFace.h"
 #include "bPlusTree.h"
 #include "hmmstats.h"

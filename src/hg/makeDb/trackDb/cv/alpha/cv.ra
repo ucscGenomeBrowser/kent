@@ -4780,7 +4780,7 @@ type Cell Line
 description Primary liver tissue of a standard liver procurement from a 36 year old caucasian male.
 karyotype normal
 lab Snyder
-orderUrl missing
+orderUrl http://snyderlab.stanford.edu/
 organism human
 sex M 
 termId BTO:0000759
@@ -4796,7 +4796,7 @@ type Cell Line
 description Primary liver tissue from the right portion of a standard liver procurement from a 6 year old female.
 karyotype normal
 lab Snyder
-orderUrl missing
+orderUrl http://snyderlab.stanford.edu/
 organism human
 sex F
 termId BTO:0000759
@@ -5139,7 +5139,7 @@ description Malignant Hepatic Rhabdoid tumor line
 karyotype cancer
 lab Crawford
 lineage missing
-orderUrl missing
+orderUrl https://genome.ucsc.edu/ENCODE/protocols/cell/human/MRTTTC549_Crawford_protocol.pdf
 organism human
 protocol Crawford:MRTTTC549_Crawford_protocol.pdf
 sex M
@@ -7381,21 +7381,21 @@ tissue heart
 vendorId Heart; Heart
 vendorName 1)LICR lab; 2)CSHL lab
 
-#term Heart_STL0
-#tag HeartSTL 
-#type Cell Line
-#description Primary liver tissue of a standard liver procurement from a 36 year old caucasian male.
-#karyotype normal
-#lab Snyder
-#orderUrl missing
-#organism human
-#sex M 
-#termId BTO:0000759
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
-#tier 3
-#tissue heart
-#vendorId STL011
-#vendorName Snyder lab
+term Heart_STL003
+tag HeartSTL003 
+type Cell Line
+description Standard procurement of heart tissue from a 34 year old caucasian male.
+karyotype normal
+lab Snyder
+orderUrl http://snyderlab.stanford.edu/
+organism human
+sex M 
+termId BTO:0000562
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000562
+tier 3
+tissue heart
+vendorId STL003
+vendorName Snyder lab
 
 term HeadlessEmbryo
 tag HLEMBRYO
@@ -8819,7 +8819,7 @@ type Antibody
 label CELF1 (05-621)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Antibody Target: CELF1
 lab Tenenbaum
-orderUrl hhttp://www.millipore.com/catalogue/item/05-621
+orderUrl http://www.millipore.com/catalogue/item/05-621
 target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 targetId GeneCard:CELF1
@@ -9163,7 +9163,7 @@ targetClass TFSS
 targetDescription Early B-cell factor 1. Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity).
 targetId GeneCard:EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation Human_-_EBF1_(sc-137065)(Immunoprecipitation-Western_blot):human_EBF1_SC-137065_validation_Myers.pdf
+validation Human_-_EBF1_(sc-137065)(Immunoprecipitation-Western_blot,IP-MassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 vendorId sc-137065
 vendorName Santa Cruz Biotechnology
 
@@ -11064,7 +11064,7 @@ targetClass TFSS
 targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscme-specific, growth factor-induced, and stress-induced genes.
 targetId GeneCard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
-validation Human_-_MEF2A(Immunoblot,Western_blot):human_MEF2A_validation_Myers.pdf
+validation Human_-_MEF2A(Immunoblot):human_MEF2A_validation_Myers.pdf
 vendorId sc-313
 vendorName Santa Cruz Biotechnology
 

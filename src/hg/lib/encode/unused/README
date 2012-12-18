@@ -1,0 +1,30 @@
+The following files are in here because they were .c files that were not in the makefile.
+
+encodeErge5race.c
+encodeErgeBinding.c
+encodeErgeDNAseI.c
+encodeErgeExpProm.c
+encodeErgeInVitroFoot.c
+encodeErgeMethProm.c
+encodeErgeStableTransf.c
+encodeErgeSummary.c
+encodeErgeTransTransf.c
+encodePrimateAlleles.c
+
+The following files are in here because they are .sql files with no .as or .c.  What could they be used for?
+
+encodeBuPromCerebrum.sql
+encodeBuPromColon.sql
+encodeBuPromHeart.sql
+encodeBuPromKidney.sql
+encodeBuPromLiver.sql
+encodeBuPromLung.sql
+encodeBuPromSkMuscle.sql
+encodeBuPromSpleen.sql
+encodeBuPromStomach.sql
+encodeBuPromTestis.sql
+
+The following files are in here because we are no longer accepting or displaying the type.
+
+shortFrags.as
+shortFrags.sql
