@@ -8819,7 +8819,7 @@ type Antibody
 label CELF1 (05-621)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Antibody Target: CELF1
 lab Tenenbaum
-orderUrl hhttp://www.millipore.com/catalogue/item/05-621
+orderUrl http://www.millipore.com/catalogue/item/05-621
 target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 targetId GeneCard:CELF1
