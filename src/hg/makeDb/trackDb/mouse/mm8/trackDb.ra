@@ -293,7 +293,6 @@ longLabel Retroposed Genes, Including Pseudogenes newest run [retroMrnaInfo]
 group jkX
 priority 13
 visibility pack
-nextItemButton on 
 spectrum on
 type bed 12 .
 
