@@ -9,6 +9,7 @@
 #include "dystring.h"
 #include "dlist.h"
 #include "obscure.h"
+#include "errabort.h"
 
 /* Global vars - all of which can be set by command line options. */
 int pseudoCount = 1;
@@ -40,6 +41,7 @@ errAbort(
   "                observed.  Default %d\n"
   "   -seed=N - Initialize random number with this seed for consistent results, otherwise\n"
   "             it will generate different results each time it's run.\n"
+  "   -unsubbed=fileName - Write output before substitution of missing monomers to file\n"
   , maxChainSize, outSize, pseudoCount
   );
 }
@@ -51,8 +53,9 @@ static struct optionSpec options[] = {
    {"afterChain", OPTION_STRING},
    {"fullOnly", OPTION_BOOLEAN},
    {"outSize", OPTION_INT},
-   {"seed", OPTION_INT},
    {"pseudoCount", OPTION_INT},
+   {"seed", OPTION_INT},
+   {"unsubbed", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -891,16 +894,22 @@ boolean subCenterInNeighborhood(struct alphaStore *store,
 /* Scan ll for cases where neighborhood around center matches.  Replace one of these 
  * cases with center. */
 {
-assert(slCount(neighborhood) == 3);	// Simplifies things and is true for now.
+int size = slCount(neighborhood);
+assert(size == 3 || size == 2);
 if (subCommonCenter(store, center, neighborhood, ll))
    return TRUE;
-if (subCommonCenter(store, center, neighborhood->next, ll))
-   return TRUE;
-struct monomerRef *third = neighborhood->next->next;
-neighborhood->next->next = NULL;
-boolean ok = subCommonCenter(store, center, neighborhood, ll);
-neighborhood->next->next = third;
-return ok;
+if (size == 3)
+    {
+    if (subCommonCenter(store, center, neighborhood->next, ll))
+       return TRUE;
+    struct monomerRef *third = neighborhood->next->next;
+    neighborhood->next->next = NULL;
+    boolean ok = subCommonCenter(store, center, neighborhood, ll);
+    neighborhood->next->next = third;
+    return ok;
+    }
+else
+    return FALSE;
 }
 
 struct monomer *mostCommonInType(struct monomerType *type)
@@ -952,7 +961,7 @@ for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
     struct monomerRef *neighborhood = findNeighborhoodFromReads(unused);
     if (!subCenterInNeighborhood(store, unused, neighborhood, ll))
 	{
-	verbose(2, "Couldn't substitute in %s with context, falling back to type logic", 
+	verbose(2, "Couldn't substitute in %s with context, falling back to type logic\n", 
 	    unused->word);
         subIntoFirstMostCommonOfType(store, unused, ll);
 	}
@@ -960,13 +969,9 @@ for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
     }
 }
 
-static void wordTreeGenerateFile(struct alphaStore *store, int maxSize, struct wordTree *firstWord, 
-	int maxOutputWords, char *fileName)
-/* Create file containing words base on tree probabilities.  The wordTreeGenerateList does
- * most of work. */
+static void writeMonomerList(char *fileName, struct dlList *ll)
+/* Write out monomer list to file. */
 {
-struct dlList *ll = wordTreeGenerateList(store, maxSize, firstWord, maxOutputWords);
-subInMissing(store, ll);
 FILE *f = mustOpen(fileName, "w");
 struct dlNode *node;
 for (node = ll->head; !dlEnd(node); node = node->next)
@@ -975,6 +980,19 @@ for (node = ll->head; !dlEnd(node); node = node->next)
     fprintf(f, "%s\n", monomer->word);
     }
 carefulClose(&f);
+}
+
+static void wordTreeGenerateFile(struct alphaStore *store, int maxSize, struct wordTree *firstWord, 
+	int maxOutputWords, char *fileName)
+/* Create file containing words base on tree probabilities.  The wordTreeGenerateList does
+ * most of work. */
+{
+struct dlList *ll = wordTreeGenerateList(store, maxSize, firstWord, maxOutputWords);
+char *unsubbedFile = optionVal("unsubbed", NULL);
+if (unsubbedFile)
+    writeMonomerList(unsubbedFile, ll);
+subInMissing(store, ll);
+writeMonomerList(fileName, ll);
 dlListFree(&ll);
 }
 
