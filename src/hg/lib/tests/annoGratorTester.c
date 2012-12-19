@@ -4,6 +4,7 @@
 #include "annoGratorGpVar.h"
 #include "annoStreamBigBed.h"
 #include "annoStreamDb.h"
+#include "annoStreamTab.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
 #include "annoGrateWigDb.h"
@@ -64,7 +65,7 @@ struct streamerInfo
 /* Enough info to create a streamer or grator that gets data from sql, file or URL. */
     {
     struct streamerInfo *next;
-    char *db;			// If non-NULL, then we are using this SQL database
+    char *sqlDb;		// If non-NULL, then we are using this SQL database
     char *tableFileUrl;		// If db is non-NULL, table name; else file or URL
     enum annoRowType type;	// Data type (wig or words?)
     struct asObject *asObj;	// not used if type is arWig
@@ -75,10 +76,10 @@ struct annoStreamer *streamerFromInfo(struct streamerInfo *info)
 {
 struct annoStreamer *streamer = NULL;
 if (info->type == arWig)
-    streamer = annoStreamWigDbNew(info->db, info->tableFileUrl, BIGNUM);
-else if (info->db != NULL)
-    streamer = annoStreamDbNew(info->db, info->tableFileUrl, info->asObj);
-else if (info->type == arVcf)
+    streamer = annoStreamWigDbNew(info->sqlDb, info->tableFileUrl, BIGNUM);
+else if (info->sqlDb != NULL)
+    streamer = annoStreamDbNew(info->sqlDb, info->tableFileUrl, info->asObj);
+else if (info->type == arVcf) //#*** arVcf is bogus -- use autoSql comparison
     {
     boolean looksLikeTabix = endsWith(info->tableFileUrl, ".gz");
     streamer = annoStreamVcfNew(info->tableFileUrl, looksLikeTabix, BIGNUM);
@@ -88,7 +89,9 @@ else if (endsWith(info->tableFileUrl, ".bb"))
     streamer = annoStreamBigBedNew(info->tableFileUrl, BIGNUM);
     }
 else
-    errAbort("Make a generic file streamer for %s!", info->tableFileUrl);
+    {
+    streamer = annoStreamTabNew(info->tableFileUrl, info->asObj);
+    }
 return streamer;
 }
 
@@ -107,15 +110,16 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     struct annoGrator *grator = NULL;
     if (grInfo->type == arWig)
 	{
-	if (grInfo->db == NULL)
+	if (grInfo->sqlDb == NULL)
 	    grator = annoGrateBigWigNew(grInfo->tableFileUrl);
 	else
-	    grator = annoGrateWigDbNew(grInfo->db, grInfo->tableFileUrl, BIGNUM);
+	    grator = annoGrateWigDbNew(grInfo->sqlDb, grInfo->tableFileUrl, BIGNUM);
 	}
     else
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
 	if (doGpFx && gratorList == NULL) //#*** doGpFx should not be applied to all grators!
+	    // #*** again, the real solution here is autoSql recognition
 	    grator = annoGratorGpVarNew(src, FALSE);
 	else
 	    grator = annoGratorNew(src);
@@ -137,7 +141,11 @@ struct annoGrator *gratorList = NULL;
 sourcesFromInfoList(infoList, doGpFx, &primary, &gratorList);
 struct annoFormatter *tabOut = annoFormatTabNew(outFile);
 //#*** If we're using db==NULL as a flag, we still need to get assembly name in there.... take from 2bit filename???
-char *assemblyName = primaryInfo->db ? primaryInfo->db : "hardcoded, Doh!";
+char *assemblyName = primaryInfo->sqlDb;
+if (assemblyName == NULL && primaryInfo->next != NULL)
+    assemblyName = primaryInfo->next->sqlDb;
+if (assemblyName == NULL)
+    assemblyName = "[annoGratorTester needs better way of determining assemblyName!]";
 struct annoGratorQuery *query = annoGratorQueryNew(assemblyName, NULL, tbf,
 						   primary, gratorList, tabOut);
 annoGratorQuerySetRegion(query, chrom, start, end);
@@ -292,8 +300,8 @@ if (doAllTests || sameString(test, snpBigWigToTabOut))
 
 if (doAllTests || sameString(test, vepOut))
     {
-    struct streamerInfo vepSamplePgSnp = { NULL, db, "test.vepSample", arWords,
-					   asParseFile("../pgSnp.as") };
+    struct streamerInfo vepSamplePgSnp = { NULL, NULL, "input/annoGrator/vepSample.pgSnp.tab",
+					   arWords, asParseFile("../pgSnp.as") };
     struct streamerInfo kgInfo = { NULL, db, "ensGene", arWords,
 				   asParseFile("../genePredExt.as") };
     struct streamerInfo snpInfo = { NULL, db, "snp135", arWords, asParseFile("../snp132Ext.as") };
@@ -313,7 +321,11 @@ if (doAllTests || sameString(test, vepOut))
 
     struct annoFormatter *vepOut = annoFormatVepNew("stdout", &config);
     //#*** If we're using db==NULL as a flag, we still need to get assembly name in there.... take from 2bit filename???
-    char *assemblyName = primaryInfo->db ? primaryInfo->db : "hardcoded, Doh!";
+    char *assemblyName = primaryInfo->sqlDb;
+    if (assemblyName == NULL && primaryInfo->next != NULL)
+	assemblyName = primaryInfo->next->sqlDb;
+    if (assemblyName == NULL)
+	assemblyName = "[annoGratorTester needs better way of determining assemblyName!]";
     struct annoGratorQuery *query = annoGratorQueryNew(assemblyName, NULL, tbf,
 						       primary, gratorList, vepOut);
     annoGratorQuerySetRegion(query, "chr1", 876900, 886920);
