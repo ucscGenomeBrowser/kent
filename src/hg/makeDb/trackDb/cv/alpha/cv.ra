@@ -3040,7 +3040,7 @@ description embryonic kidney, cells contain Adenovirus 5 DNA (PMID: 11967234)
 lineage mesoderm
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
 organism human
-protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf Snyder:HEK293b_Snyder_protocol.pdf
+protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf
 sex U
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
