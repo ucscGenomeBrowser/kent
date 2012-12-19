@@ -4,7 +4,6 @@
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
-#include "localmem.h"
 #include "obscure.h"
 #include "dystring.h"
 #include "rangeTree.h"

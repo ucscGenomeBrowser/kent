@@ -9021,8 +9021,14 @@ TMPDIR=/scratch/tmp
     # Add exonJunctionPrimers.o to src/hg/lib/makefile and add it to git
 
     cd /hive/data/genomes/mm10/bed/exonJunctionPrimers
-    hgLoadBed -bedDetail -tab -sqlTable=$HOME/kent/src/hg/lib/exonJunctionPrimers.sql \  
+    hgLoadBed -bedDetail -tab -renameSqlTable \
+      -sqlTable=$HOME/kent/src/hg/lib/bedDetail.sql \
       mm10 exonJunctionPrimers exonJunctionPrimers_mm10.bed
-
+    # Reading exonJunctionPrimers_mm10.bed
+    # Read 448450 elements of size 14 from exonJunctionPrimers_mm10.bed
+    # Sorted
+    # Creating table definition for exonJunctionPrimers
+    # Saving bed.tab
+    # Loading mm10
 
 #########################################################################
