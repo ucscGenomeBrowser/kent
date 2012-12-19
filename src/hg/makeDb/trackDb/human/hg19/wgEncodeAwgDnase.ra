@@ -128,8 +128,8 @@ wgEncode 1
         track wgEncodeAwgDnaseDukeHelas3ifna4hUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel HeLa-S3 IFNa DNase
-        longLabel HeLa-S3 (IFNa4h) DNaseI HS Uniform Peaks from ENCODE/Analysis
+        shortLabel HeLaS3(IFN) DNase
+        longLabel HeLa-S3 (IFNa) DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=HeLa-S3-IFNa
 
         track wgEncodeAwgDnaseDukeHepatocytesUniPk
@@ -184,14 +184,14 @@ wgEncode 1
         track wgEncodeAwgDnaseDukeIshikawaestradiolUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel Ishikawa(Estr) DNase
+        shortLabel Ishika(Estr) DNase
         longLabel Ishikawa (Estradiol) DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=Ishikawa-Estr
 
         track wgEncodeAwgDnaseDukeIshikawatamoxifenUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel Ishikawa(Tamox) DNase
+        shortLabel Ishika(Tam) DNase
         longLabel Ishikawa (Tamoxifen) DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=Ishikawa-Tamox
 
@@ -205,7 +205,7 @@ wgEncode 1
         track wgEncodeAwgDnaseDukeMcf7hypoxiaUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel MCF-7(Hypox) DNase
+        shortLabel MCF7(Hypox) DNase
         longLabel MCF-7 (Hypoxia) DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=MCF-7-Hypox
 
@@ -303,7 +303,7 @@ wgEncode 1
         track wgEncodeAwgDnaseDukeUrotheliaut189UniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel Urothelia(UT189) DNase
+        shortLabel Urothel(UT) DNase
         longLabel Urothelia (UT189) DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=Urothelia-UT189
 
@@ -380,7 +380,7 @@ wgEncode 1
         track wgEncodeAwgDnaseUwCd34mobilizedUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel CD34+_Mobilized DNase
+        shortLabel CD34+_Mobil DNase
         longLabel CD34+_Mobilized DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=CD34_Mobilized
 
@@ -555,28 +555,28 @@ wgEncode 1
         track wgEncodeAwgDnaseUwHmvecdbladUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel HMVEC-dBl-Ad
+        shortLabel HMVEC-dBl-A
         longLabel HMVEC-dBl-Ad DNaseI HS Uniform Peaks from ENCODE/Analysis
-        subGroups tier=a30 cellType=HMVEC-dBl-Neo
+        subGroups tier=a30 cellType=HMVEC-dBl-Ad
 
         track wgEncodeAwgDnaseUwHmvecdblneoUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel HMVEC-dBl-Neo DNase
+        shortLabel HMVEC-dBl-N DNase
         longLabel HMVEC-dBl-Neo DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=HMVEC-dBl-Neo
 
         track wgEncodeAwgDnaseUwHmvecdlyadUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel HMVEC-dLy-Ad DNase
+        shortLabel HMVEC-dLy-A DNase
         longLabel HMVEC-dLy-Ad DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=HMVEC-dLy-Ad
 
         track wgEncodeAwgDnaseUwHmvecdlyneoUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel HMVEC-dLy-Neo DNase
+        shortLabel HMVEC-dLy-N DNase
         longLabel HMVEC-dLy-Neo DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=HMVEC-dLy-Neo
 
@@ -681,7 +681,7 @@ wgEncode 1
         track wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel Monocytes-CD14+ DNase
+        shortLabel Mcytes-CD14+ DNase
         longLabel Monocytes-CD14+ DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a25 cellType=a25Monocytes-CD14
 
@@ -800,7 +800,7 @@ wgEncode 1
         track wgEncodeAwgDnaseUwWi38tamoxifentamoxifenUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniPk
-        shortLabel WI-38(Tamox) DNase
+        shortLabel WI-38(Tamo) DNase
         longLabel WI-38 (Tamoxifen) DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=WI-38-Tamox
 
