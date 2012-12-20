@@ -190,3 +190,6 @@ include wgEncodeSunyRipSeq.ra
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
 include wgEncodeMapability.ra
 
+# Analysis tracks
+include wgEncodeAwgDnase.ra
+
