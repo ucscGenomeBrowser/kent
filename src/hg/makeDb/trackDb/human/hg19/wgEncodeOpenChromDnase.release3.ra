@@ -22,7 +22,7 @@ priority 2
 type bed 3
 wgEncode 1
 html wgEncodeOpenChromDnase.release3
-dataVersion Through the ENCODE July 2012 Freeze
+dataVersion ENCODE July 2012 Freeze
 
     track wgEncodeOpenChromDnaseViewPeaks
     view Peaks

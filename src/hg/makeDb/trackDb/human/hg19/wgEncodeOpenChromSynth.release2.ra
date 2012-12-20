@@ -13,7 +13,7 @@ sortOrder cellType=+ treatment=+
 fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
-priority 1
+priority 6
 type bed 9 +
 wgEncode 1
 #noInherit on
@@ -33,6 +33,7 @@ ocCode:OC_Code=+\
 2&#58;_DNase_(all),\ 
 3&#58;_FAIRE_(all),\ 
 4&#58;_ChIP_(all) 
+dataVersion ENCODE Mar 2012 Freeze
 html wgEncodeOpenChromSynth.release2
 
     track wgEncodeOpenChromSynthK562Pk
