@@ -374,7 +374,7 @@ while (lineFileNext(lf, &line, NULL))
 
     ++lineCount;
     if ((wibSizeLimit > 0) && (wibSize >= wibSizeLimit))
-        errAbort("wibSizeLimit of %lld has been exceeded; you must use bedGraph's for files with more data points", wibSizeLimit);
+        errAbort("data size limit of %lld data values has been exceeded; you must use bigWig files for large datasets<BR><A HREF=\"/goldenPath/help/bigWig.html\">(bigWig help)</A>", wibSizeLimit);
 
     line = skipLeadingSpaces(line);
     /*	ignore blank or comment lines	*/

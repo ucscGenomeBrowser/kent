@@ -19,6 +19,9 @@
 #define hubStatusTableConfVariable    "hub.statusTableName"
 /* the name of the hg.conf variable to use something other than the default */
 
+#define hgHubConnectTimeToCheck "hub.timeToCheck"
+/* the number of seconds to wait before checking the hub again */
+
 #define hgHubDataText      "hubUrl"
 /* name of cgi variable containing new hub name */
 

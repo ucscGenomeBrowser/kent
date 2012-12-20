@@ -19,7 +19,8 @@ def filesize(val):
         return str(val) + 'B'
 
 
-def printTrackRefLine():
+def printTrackRefLine(args):
+    print 'Total expIds: ' + str(args.totalsubmitted) + '/' + str(args.totalexps) + ' out of tracks: ' + str(args.submittedtracks) + '/' + str(args.totaltracks)
     print 'Track'.ljust(25) + 'GEO Status'.ljust(12) + '# Files'.ljust(10) + 'Data Type'.ljust(16) + 'Releases'
         
 def trackLine(args, t):
@@ -31,13 +32,21 @@ def trackLine(args, t):
         
         for exp in t.alphaMetaDb.experiments.iterkeys():
             submitted = 0
+            samples = 0
             for stanza in t.alphaMetaDb.experiments[exp]:
-                if 'geoSampleAccession' in stanza:
-                    submitted = 1
-                    break
-            if submitted == 1:
+                if 'objStatus' in stanza:
+                    continue
+                if 'Aln' not in stanza['metaObject']:
+                    if 'geoSampleAccession' in stanza:
+                        submitted += 1
+                    samples += 1
+            if (not args.pessimistic and submitted > 0) or (submitted == samples and submitted != 0):
                 sub += 1
-            tot += 1
+                args.totalsubmitted += 1
+            if samples > 0:
+                tot += 1
+                args.totalexps += 1
+                
         
         #for stanza in t.alphaMetaDb.filter2(lambda s: s['objType'] != 'composite').itervalues():
         #    if 'geoSampleAccession' in stanza:
@@ -68,15 +77,18 @@ def trackLine(args, t):
         if t.alphaMetaDb.dataType != None:
             datatype = t.alphaMetaDb.dataType.name
             if t.alphaMetaDb.dataType.type == 'MicroArray':
-                    datatype = styles.style(datatype.ljust(16), 'yellow')
+                datatype = styles.style(datatype.ljust(16), 'yellow')
+                args.totaltracks += 1
             elif t.alphaMetaDb.dataType.valid:
                 datatype = styles.style(datatype.ljust(16), 'green')
+                args.totaltracks += 1
             else:
                 if t.alphaMetaDb.dataType.shouldSubmit:
                     datatype = styles.style(datatype.ljust(16), 'red')
                 else:
                     datatype = styles.style(datatype.ljust(16), 'blue')
                     #subtext = ''
+                    args.totalexps -= tot
                     wantSubmit = 0
         if datatype == '' and len(t.alphaMetaDb.experiments) == 0:
             datatype = styles.style('no expIds'.ljust(16), 'red')
@@ -119,13 +131,14 @@ def trackLine(args, t):
                 releases += styles.style(str(release.index), 'green')
             else:
                 releases += styles.style(str(release.index), 'red')
-                
+
         if 'geoSeriesAccession' in t.alphaMetaDb.compositeStanza:
+            args.submittedtracks += 1
             return nametext + styles.style(t.alphaMetaDb.compositeStanza['geoSeriesAccession'].ljust(12), 'green') + subtext + datatype + releases + ' ' + geouptodate
         else:
             return nametext + styles.style('Unsubmitted'.ljust(12), 'blue') + subtext + datatype + releases
     except KeyError as e:
-        return styles.style(nametext, 'red') + styles.style('Error     ', 'red')
+        return styles.style(nametext, 'red') + styles.style('Error ' + str(e), 'red')
         
 def expIdLine(args, expId, t):
     
@@ -151,6 +164,10 @@ def expIdLine(args, expId, t):
         
 def displayAll(args, tracks):
     
+    args.totalsubmitted = 0
+    args.totalexps = 0
+    args.totaltracks = 0
+    args.submittedtracks = 0
     display = dict()
     for t in tracks.itervalues():
         display[t.name] = trackLine(args, t)
@@ -158,9 +175,39 @@ def displayAll(args, tracks):
     keys = display.keys()
     keys.sort()
     
-    printTrackRefLine()
+    nongeo = list()
+    marray = list()
+    unsub = list()
+    subm = list()
+    err = list()
+    
+    printTrackRefLine(args)
     for k in keys:
-        print display[k]
+        try:
+            if not tracks[k].alphaMetaDb.dataType.shouldSubmit:
+                nongeo.append(display[k])
+            elif tracks[k].alphaMetaDb.dataType.type == 'MicroArray':
+                marray.append(display[k])
+            elif tracks[k].alphaMetaDb.dataType.valid:
+                if 'geoSeriesAccession' in tracks[k].alphaMetaDb.compositeStanza:
+                    subm.append(display[k])
+                else:
+                    unsub.append(display[k])
+            else:
+                err.append(display[k])
+        except AttributeError as e:
+            err.append(display[k])
+            
+    for i in unsub:
+        print i
+    for i in subm:
+        print i
+    for i in marray:
+        print i
+    for i in nongeo:
+        print i
+    for i in err:
+        print i
         
 def displayTrack(args, t, expIds=None):
     print trackLine(args, t)
@@ -178,7 +225,7 @@ def main():
     parser = argparse.ArgumentParser(description = 'Provides information about tracks and their state in relation to GEO')
     #parser.add_argument('-u', '--unsubmitted', action='store_true', default=False, help='Do not list samples that have already been submitted')
     #parser.add_argument('-m', '--missing', action='store_true', default=False, help='List only missing files')
-    #parser.add_argument('-s', '--size', action='store_true', default=False, help='Show file sizes')
+    parser.add_argument('-p', '--pessimistic', action='store_true', default=False, help='Only count completed samples')
     parser.add_argument('-g', '--geo', action='store_true', default=False, help='Shows additional information crawled from the GEO submission page. WARNING: this takes significantly longer, so if used without a composite, this could take a few minutes')
     parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
     parser.add_argument('database', help='The database, typically hg19 or mm9')
