@@ -1220,12 +1220,14 @@ hFreeConn(&conn);
 return list;
 }
 
-char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
+char *hTryExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId, boolean abortOnError)
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
  * Abort if the id is not in the table or if the file
  * fails size check.  Please freeMem the result when you
- * are done with it. (requires conn passed in) */
+ * are done with it. (requires conn passed in) 
+ * If abortOnError is true, will abort, otherwise returns NULL
+ */
 {
 char query[256];
 struct sqlResult *sr;
@@ -1238,22 +1240,39 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
-    errAbort("Database inconsistency table '%s.%s' no ext file with id %u",
-             sqlGetDatabase(conn), extFileTable, extFileId);
+    if (abortOnError)
+	errAbort("Database inconsistency table '%s.%s' no ext file with id %u",
+		 sqlGetDatabase(conn), extFileTable, extFileId);
+    else 
+	return NULL;
     }
+
 path = cloneString(row[0]);
 dbSize = sqlLongLong(row[1]);
 diskSize = fileSize(path);
+sqlFreeResult(&sr);
+
 if (dbSize != diskSize)
     {
-    errAbort("External file %s cannot be opened or has wrong size.  "
-             "Old size %lld, new size %lld, error %s",
-             path, dbSize, diskSize, strerror(errno));
+    if (abortOnError)
+	errAbort("External file %s cannot be opened or has wrong size.  "
+		 "Old size %lld, new size %lld, error %s",
+		 path, dbSize, diskSize, strerror(errno));
+    else 
+	freez(&path);
     }
-sqlFreeResult(&sr);
 return path;
 }
 
+char *hMayExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
+{
+return hTryExtFileNameC(conn, extFileTable, extFileId, FALSE);
+}
+
+char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
+{
+return hTryExtFileNameC(conn, extFileTable, extFileId, TRUE);
+}
 
 char *hExtFileName(char *db, char *extFileTable, unsigned extFileId)
 /* Get external file name from table and ID.  Typically
@@ -1307,9 +1326,14 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
 
 /* Open file and put it on list. */
     {
+    char *path;
+    path = hMayExtFileNameC(conn, extTable, extId);
+    if (path == NULL)
+	return NULL;
+
     struct largeSeqFile *lsf;
     AllocVar(lsf);
-    lsf->path = hExtFileNameC(conn, extTable, extId);
+    lsf->path = path;
     lsf->extTable = cloneString(extTable);
     lsf->db = cloneString(db);
     lsf->id = extId;
@@ -1387,8 +1411,12 @@ hFreeConn(&conn);
 char *extDb = dbTblParse(db, extFileTbl, &extFileTbl, dbBuf, sizeof(dbBuf));
 conn = hAllocConn(extDb);
 struct largeSeqFile *lsf = largeFileHandle(conn, extId, extFileTbl);
-char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 hFreeConn(&conn);
+
+if (lsf == NULL)
+    return NULL;
+
+char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 return faSeqFromMemText(buf, isDna);
 }
 
@@ -1486,6 +1514,9 @@ else if (querySeqInfo(conn, acc, "seq", "extFile", retId, &extId, &size, &offset
 else
     return NULL;
 struct largeSeqFile *lsf = largeFileHandle(conn, extId, extTable);
+if (lsf == NULL)
+    return NULL;
+
 char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 return buf;
 }
