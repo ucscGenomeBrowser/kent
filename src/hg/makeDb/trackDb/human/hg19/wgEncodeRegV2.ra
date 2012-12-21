@@ -42,8 +42,7 @@ canPack On
     longLabel AWG Uniform Digital DNaseI Hypersensitivity Clusters from ENCODE
     type bed 5 .
     superTrack wgEncodeRegV2 dense
-    # TODO: V2 Inputs
-    inputTrackTable wgEncodeRegDnaseClusteredInputs
+    inputTrackTable wgEncodeRegDnaseClusteredInputsV2
     #inputTracksSubgroupDisplay cellType treatment rep
     inputTableFieldDisplay cellType treatment lab 
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
