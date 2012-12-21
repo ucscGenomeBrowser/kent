@@ -24,7 +24,7 @@ priority 0
 type bed 3
 wgEncode 1
 html wgEncodeOpenChromChip.release2
-dataVersion through the ENCODE Jan 2011 Freeze
+dataVersion ENCODE July 2011 Freeze
 
     track wgEncodeOpenChromChipViewPeaks
     shortLabel Peaks

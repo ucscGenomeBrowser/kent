@@ -16220,6 +16220,18 @@ labPi Birney
 labPiFull Ewan Birney
 organism human
 
+term AWG
+tag AWG
+type lab
+label Analysis Working Group
+description ENCODE Analysis Working Group
+grantPi Birney
+labInst EBI
+labPi Birney
+labPiFull Ewan Birney
+organism human 
+
+
 # Grant information
 # term is the last name of the PI
 # grantInst Is the full name of the institution

@@ -73,8 +73,13 @@ foreach dir (`cat $pathfile`)
   rm -f $dir.err
   @ errdirs = $errdirs + 1
 end
-echo " checked $errdirs directories"                >> $outfile
-echo " found $errors with errors"                   >> $outfile
+
+if ( $errdirs == 1 ) then
+  echo " checked $errdirs directory"                  >> $outfile
+else
+  echo " checked $errdirs directories"                >> $outfile
+endif
+  echo " found $errors with errors"                   >> $outfile
 
 # allow two levels of backup
 set genecats = "/usr/local/apache/htdocs-genecats/qa/test-results/staticLinks"
