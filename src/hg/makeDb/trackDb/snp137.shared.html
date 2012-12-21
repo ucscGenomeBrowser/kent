@@ -2,10 +2,7 @@ The remainder of this page is identical on the following tracks:
 <UL>
   <LI>Common SNPs(137) - SNPs with >= 1% minor allele frequency (MAF), mapping 
      only once to reference assembly.</LI>
-  <LI>Flagged SNPs(137) - SNPs < 1% minor allele frequency (MAF) (or unknown), 
-     mapping only once to reference assembly, 
-     flagged in dbSnp as "clinically associated" 
-     -- <em>not necessarily a risk allele!</em></LI>
+<!-- #if (db==hg19) #insert file="human/hg19/snp137FlaggedMention.html" -->
   <LI>Mult. SNPs(137) - SNPs mapping in more than one place on reference assembly.</LI>
   <LI>All SNPs(137) - all SNPs from dbSNP mapping to reference assembly.</LI>
 
@@ -58,10 +55,10 @@ display according to several attributes:
         <LI><B>By Cluster</B> - cluster has at least 2 submissions, with at least one submission assayed with a non-computational method</LI>
         <LI><B>By Submitter</B> - at least one submitter SNP in cluster was validated by independent assay</LI>
         <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in at least 2 chromosomes</LI>
-        <LI><B>By HapMap</B> - submitted by <A HREF="http://hapmap.ncbi.nlm.nih.gov/" 
-	    target="_blank">HapMap</A> project (human only)</LI>
-        <LI><B>By 1000Genomes</B> - submitted by <A HREF="http://www.1000genomes.org/"
-	    target="_blank">1000Genomes</A> project (human only)</LI>
+        <LI><B>By HapMap</B> (human only) - submitted by <A HREF="http://hapmap.ncbi.nlm.nih.gov/" 
+	    target="_blank">HapMap</A> project</LI>
+        <LI><B>By 1000Genomes</B> (human only) - submitted by <A HREF="http://www.1000genomes.org/"
+	    target="_blank">1000Genomes</A> project</LI>
         <LI><B>Unknown</B> - no validation has been reported for this variant</LI>
       </UL>
     </LI>
@@ -262,7 +259,7 @@ display according to several attributes:
          (see <A HREF="ftp://ftp.ncbi.nlm.nih.gov/snp/specs/dbSNP_BitField_v5.pdf"
                target="_blank">dbSNP_BitField_v5.pdf</A> for details)
       <UL>
-        <LI><B>Clinically Associated</B> - SNP is in OMIM/OMIA and/or at 
+        <LI><B>Clinically Associated</B> (human only) - SNP is in OMIM and/or at 
 	    least one submitter is a Locus-Specific Database.  This does
 	    not necessarily imply that the variant causes any disease,
 	    only that it has been observed in clinical studies.</LI>
@@ -393,7 +390,8 @@ The database dump files were downloaded from
 <A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/"
 TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
 <EM>organism</EM>_<EM>tax_id</EM>/database/
-(e.g., for Human, <EM>organism</EM>_<EM>tax_id</EM> = human_9606).
+(for human, <EM>organism</EM>_<EM>tax_id</EM> = human_9606;
+for mouse, <EM>organism</EM>_<EM>tax_id</EM> = mouse_10090).
 The fasta files were downloaded from 
 <A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/"
 TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
