@@ -3,7 +3,7 @@ XINC = -I$(MYSQLINC)
 
 O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
-    altGraphX.o ancientRref.o annoGratorGpVar.o  annoGrateWig.o annoStreamDb.o annoStreamWig.o \
+    altGraphX.o ancientRref.o annoGratorGpVar.o annoGrateWigDb.o annoStreamDb.o annoStreamWig.o \
     api.o atomDb.o  axtInfo.o \
     axtLib.o bactigPos.o hgBam.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed8Attrs.o bed12Source.o \

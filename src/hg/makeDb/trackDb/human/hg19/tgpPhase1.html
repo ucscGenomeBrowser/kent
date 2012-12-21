@@ -1,18 +1,18 @@
 <H2>Description</H2>
 <P>
-This track shows 38.2M single nucleotide variants (SNVs),
-3.9M short insertion/deletion variants (indels),
-and ~14,000 large deletions (also called structural variants, SVs)
+This track shows ~38,200,000 single nucleotide variants (SNVs),
+~3,900,000 short insertion/deletion variants (indels),
+and ~14,000 large deletions (also called structural variants, or SVs)
 discovered by the
-<A HREF="http://1000genomes.org/" TARGET=_BLANK>1000 Genomes Project</A>
+<A HREF="http://www.1000genomes.org/" TARGET=_BLANK>1000 Genomes Project</A>
 through its
 Phase 1 sequencing of 1,092 genomes from 14 populations in Africa, Europe,
 East Asia and the Americas.</P>
 <P>
-The variant genotypes have been phased by the 1000 Genomes Project,
-i.e. the two alleles of each diploid genotype have been assigned to two
+The variant genotypes have been phased by the 1000 Genomes Project
+(i.e., the two alleles of each diploid genotype have been assigned to two
 <A HREF="http://en.wikipedia.org/wiki/Haplotype" TARGET=_BLANK>haplotypes</A>,
-one inherited from each parent.
+one inherited from each parent).
 This extra information enables a clustering of independent haplotypes
 by local similarity for display.
 </P>
@@ -22,7 +22,7 @@ by local similarity for display.
 <!-- An image with arrows & numbers sure would help here! and on the controls page -->
 <!-- Also, this will apply to any VCF track w/phased genotypes, so probably should -->
 <!-- be moved into an include file. -->
-In &quot;dense&quot; mode a vertical line is drawn at the position of each
+In &quot;dense&quot; mode, a vertical line is drawn at the position of each
 variant.
 In &quot;pack&quot; mode, since these variants have been phased, the
 display shows a clustering of haplotypes in the viewed range, sorted
@@ -37,11 +37,11 @@ haplotypes fall in the same pixel row and pixels are averaged across haplotypes.
 <P>
 Each variant is a vertical bar with black representing the reference allele
 and white (invisible) representing the non-reference allele(s).
-Tick marks are drawn at the top and bottom of each variant's vertical bar,
-to make the bar more visible when most alleles are reference.
+Tick marks are drawn at the top and bottom of each variant's vertical bar
+to make the bar more visible when most alleles are reference alleles.
 The vertical bar for the central variant used in clustering is outlined in purple.
 In order to avoid long compute times, the range of alleles used in clustering
-may be limited; alleles used in clustering have purple tickmarks at the
+may be limited; alleles used in clustering have purple tick marks at the
 top and bottom.</P>
 <P>
 The clustering tree is displayed to the left of the main image.
@@ -53,12 +53,11 @@ variants used in clustering.
 
 <H2>Methods</H2>
 <P>
-Single-nucleotide variants (SNVs), short insertions/deletions (indels), and
-larger deletions (referred to as structural variants, SVs) were called from
-alignments of 1,092 individuals' low-coverage genomes and high-coverage exomes.
+Single-nucleotide variants, short insertions/deletions, and larger deletions were called
+from alignments of 1,092 individuals' low-coverage genomes and high-coverage exomes.
 For each type of variant, the results of multiple variant-calling methods 
 were merged and filtered in order to provide high-confidence variant calls.
-For more details, see
+For more details, see:
 <UL>
 <LI><A HREF="http://www.1000genomes.org/analysis"
     TARGET=_BLANK>1000 Genomes Project - Analysis overview</A></LI>
@@ -68,32 +67,35 @@ For more details, see
 <LI>the final Phase 1 integrated call set (adding chromosome Y and the mitochondrion)
     <A HREF="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/README_phase1_integrated_call_set_20120621"
     TARGET=_BLANK>README file</A></LI>
-<LI>supplemental materials of the Phase 1 publication (1000 Genomes Consortium, 2012).</LI>
+<LI>supplemental materials of the Phase 1 publication (1000 Genomes Consortium, 2012)</LI>
 </UL>
 </P>
 
 <H2>Credits</H2>
 <P>
 Thanks to the
-<A HREF="http://1000genomes.org/" TARGET=_BLANK>1000 Genomes Project</A>
+<A HREF="http://www.1000genomes.org/" TARGET=_BLANK>1000 Genomes Project</A>
 for making these data available in advance of publication.
 </P>
 
 <H2>References</H2>
-<P>
-<em>Phase 1 of the 1000 Genomes Project:</em><BR/>
+
+<p>
+<em>1000 Genomes Pilot Project:</em><BR/>
 1000 Genomes Project Consortium.
-An integrated map of genetic variation from 1,092 human genomes.
-<A HREF="http://www.nature.com/nature/journal/v491/n7422/full/nature11632.html"
-TARGET=_BLANK><em>Nature</em> 2012 Nov 01;491(7422):56-65.</A></P>
+<a href="http://www.nature.com/nature/journal/v467/n7319/full/nature09534.html" target="_blank">
+A map of human genome variation from population-scale sequencing</a>.
+<em>Nature</em>. 2010 Oct 28;467(7319):1061-73.
+</p>
 
 <P>
-<em>Pilot Phase of the 1000 Genomes Project:</em><BR/>
-1000 Genomes Project Consortium.
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/20981092"
-TARGET=_BLANK>A map of human genome variation from population-scale sequencing</A>.
-<A HREF="http://www.nature.com/nature/journal/v467/n7319/full/nature09534.html"
-TARGET=_BLANK><em>Nature</em> 2010 Oct 28;467(7319):1061-73.</A></P>
+<em>Phase 1 of the 1000 Genomes Project:</em><BR/>
+1000 Genomes Project Consortium, Abecasis GR, Auton A, Brooks LD, DePristo MA, Durbin RM, Handsaker
+RE, Kang HM, Marth GT, McVean GA.
+<a href="http://www.nature.com/nature/journal/v491/n7422/full/nature11632.html" target="_blank">
+An integrated map of genetic variation from 1,092 human genomes</a>.
+<em>Nature</em>. 2012 Nov 1;491(7422):56-65.
+</p>
 
 <P>
 <A HREF="http://www.1000genomes.org/faq"

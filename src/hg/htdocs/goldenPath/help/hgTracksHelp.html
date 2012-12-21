@@ -15,7 +15,7 @@
 
 <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/help.topbar.html"--></TD></TR>
 
-<!--Content Tables----------------------------------------------------->  
+<!-- Content Tables =================================================== -->  
 <TR><TD ROWSPAN=2 VALIGN="top"></TD></TR>
 <TR><TD>	
   	<!--outer table is for border purposes-->
@@ -135,7 +135,7 @@ position, cytoband, strand, data source, and encoded protein, mRNA, genomic sequ
 and alignment, as appropriate to the nature of the track.
 <P>
 A blue navigation bar at the top of the browser provides links to several other tools 
-and data sources. For instance, the DNA link
+and data sources. For instance, under the &quot;View&quot; menu, the &quot;DNA&quot; link
 enables the user to view the raw genomic DNA sequence for the coordinate range 
 displayed in the browser window. This DNA can encode track features via elaborate 
 text formatting options. Other links tie the Genome Browser to the BLAT 
@@ -206,9 +206,10 @@ To open the Genome Browser window:
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top"><B>1.</B></TD><TD>
 	Select the clade, genome and assembly that you wish to display from 
-	the corresponding pull-down menus. To access older assembly versions 
-	that are no longer available from the menu, look in the Genome 
-	Browser <A HREF="http://genome-archive.cse.ucsc.edu/"
+	the corresponding pull-down menus. Assemblies are typically named by the first
+        three characters of an organism's genus and species names. To access
+        older assembly versions that are no longer available from the menu,
+        look in the Genome Browser <A HREF="http://genome-archive.cse.ucsc.edu/"
 	TARGET=_blank>archives</A>.
 	</TD></TR>
 
@@ -874,8 +875,8 @@ To locate a nucleotide or protein within a genome using BLAT:
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top"><B>1.</B></TD><TD>
 	Open the <A HREF="../../cgi-bin/hgBlat?command=start" 
-	TARGET=_blank>BLAT Search Genome page</A> by clicking the BLAT link on the top 
-	blue menu bar of any of the Genome Browser pages.</TD></TR> 
+	TARGET=_blank>BLAT Search Genome page</A> by clicking on the &quot;Tools&quot;
+        pulldown in the top blue menu bar of the Genome Browser.</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top"><B>2.</B></TD><TD>
 	Select the genome, assembly, query type, output sort order, and output
@@ -1095,8 +1096,8 @@ four months after the last access, unless deleted.
 <A HREF="/goldenPath/help/hgSessionHelp.html#CTs">User-generated tracks</A>
 can be saved within sessions.</P>
 
-<P>This tool may be accessed via the <B>Sessions</B> link in the top blue 
-navigation bar in any assembly. To ensure privacy and security, you 
+<P>This tool may be accessed by clicking the &quot;My Data&quot; pulldown in the top blue 
+navigation bar in any assembly and then selecting <B>Sessions</B>. To ensure privacy and security, you 
    	must <a href="../../cgi-bin/hgSession" target="_blank">create an account</a> and/or <a 
    	href="../../cgi-bin/hgSession" target="_blank">log in</a> to use the 	
    	Session tool. Individual sessions 
@@ -1180,7 +1181,7 @@ Neuro-Oncology
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/gensat/" TARGET=_blank>Gene 
 Expression Nervous System Atlas</A> (GENSAT) database
 <LI><em>Xenopus laevis in situ</em> images from the 
-<A HREF="http://www.nibb.ac.jp/en/index.php" TARGET=_blank>National Institute 
+<A HREF="http://www.nibb.ac.jp/en/" TARGET=_blank>National Institute 
 for Basic Biology</A> (NIBB) XDB project
 </UL></P>
 
@@ -1278,10 +1279,10 @@ The DNA display configuration feature can be useful to highlight features within
 genomic sequence, point out overlaps between two types of features (for example, known
 genes vs. gene predictions), or mask out unwanted features. 
 <P><B>Using the DNA text formatting feature</B><BR>
-To access the feature, click on the DNA link on the top blue menu
-bar on the Genome Browser page, or select the &quot;Get DNA...&quot; option 
-from the Genome Browser's <A HREF="#RIGHT_CLICK_NAV">right-click</A> menu.
-The Get DNA in Window page that appears contains 
+To access the feature, click on the &quot;View&quot; pulldown on the top blue menu
+bar on the Genome Browser page and select &quot;DNA&quot;, or select the &quot;Get DNA...&quot; option 
+from the Genome Browser's <A HREF="#RIGHT_CLICK_NAV">right-click</A> menu depending on context.
+&quot;The Get DNA in Window&quot; page that appears contains 
 sections for configuring the retrieval and output format. 
 <P>
 To display extra bases upstream of the 5' end of your sequence or downstream
@@ -1336,12 +1337,11 @@ of the original assembly are aligned to the new assembly while preserving their
 order and orientation. In general, it is easier to achieve successful 
 conversions with shorter sequences. 
 <P>
-When coordinate conversion is available for an assembly, a Convert link
-is displayed in the top menu bar on the Genome Browser tracks page. Click this
-link to convert the currently-displayed coordinate range. You will be presented
+When coordinate conversion is available for an assembly, click on the
+&quot;View&quot; pulldown on the top blue menu bar on the Genome Browser page and
+select the &quot;In Other Genomes (Convert)&quot; link. You will be presented
 with a list of the genome/assembly conversion options 
-available for the
-current assembly. Select the genome and assembly to which you'd like to convert
+available for the current assembly. Select the genome and assembly to which you'd like to convert
 the coordinates, then click the Submit button. If the conversion is successful,
 the browser will return a list of regions in the new assembly, along with
 the percent of bases and span covered by that region. Click on a region to 
@@ -1357,10 +1357,9 @@ web-based and command line forms, and supports forward/reverse conversions
 as well as conversions between species.
 
 <P><B>Web-based coordinate lifting</B><BR>
-To access the graphical version of the liftOver tool, click the Utilities link
-in the left-hand sidebar on the Genome Browser home page, then select the
-<a class="change" href="http://genome.ucsc.edu/cgi-bin/hgLiftOver">Batch Coordinate Conversion 
-</a> (liftOver) link.
+To access the graphical version of the liftOver tool, click on &quot;Tools&quot;
+pulldown in the top blue menu bar of the Genome Browser, then select
+<a class="change" href="http://genome.ucsc.edu/cgi-bin/hgLiftOver">LiftOver</a> from the menu.
 <P>
 To convert one or more coordinate ranges using the default conversion settings: 
 <OL>

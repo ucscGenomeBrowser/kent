@@ -120,6 +120,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002971
 expId 2971
 fileName wgEncodeFsuRepliChipEpisc5MRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450280
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R1
@@ -146,6 +147,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002971
 expId 2971
 fileName wgEncodeFsuRepliChipEpisc5MRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450280
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R2
@@ -226,6 +228,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002972
 expId 2972
 fileName wgEncodeFsuRepliChipEpisc7FRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450281
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R1
@@ -252,6 +255,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002972
 expId 2972
 fileName wgEncodeFsuRepliChipEpisc7FRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450281
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R2
@@ -332,6 +336,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002963
 expId 2963
 fileName wgEncodeFsuRepliChipEs46cMDifff6dRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450283
 grant Gilbert
 lab FSU-m
 labExpId NP-46C_R1
@@ -385,6 +390,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002964
 expId 2964
 fileName wgEncodeFsuRepliChipEs46cMRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450272
 grant Gilbert
 lab FSU-m
 labExpId ES-46C_R1
@@ -438,6 +444,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002965
 expId 2965
 fileName wgEncodeFsuRepliChipEsd3MDiffe3dRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450279
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R1
@@ -464,6 +471,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002965
 expId 2965
 fileName wgEncodeFsuRepliChipEsd3MDiffe3dRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450279
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R2
@@ -544,6 +552,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002966
 expId 2966
 fileName wgEncodeFsuRepliChipEsd3MDiffe6dRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450282
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R1
@@ -570,6 +579,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002966
 expId 2966
 fileName wgEncodeFsuRepliChipEsd3MDiffe6dRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450282
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R2
@@ -650,6 +660,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002967
 expId 2967
 fileName wgEncodeFsuRepliChipEsd3MDiffe9dRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450285
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R1
@@ -676,6 +687,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002967
 expId 2967
 fileName wgEncodeFsuRepliChipEsd3MDiffe9dRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450285
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R2
@@ -756,6 +768,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002976
 expId 2976
 fileName wgEncodeFsuRepliChipEsd3MDiffg3dRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450278
 grant Gilbert
 lab FSU-m
 md5sum b54df7e0def58ca6d62894e5a2a15598
@@ -781,6 +794,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002976
 expId 2976
 fileName wgEncodeFsuRepliChipEsd3MDiffg3dRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450278
 grant Gilbert
 lab FSU-m
 md5sum c0fd3aaba1828c240fed0ff396f3e0f8
@@ -856,6 +870,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002968
 expId 2968
 fileName wgEncodeFsuRepliChipEsd3MRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450273
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R1
@@ -882,6 +897,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002968
 expId 2968
 fileName wgEncodeFsuRepliChipEsd3MRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450273
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R2
@@ -962,6 +978,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002977
 expId 2977
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450286
 grant Gilbert
 lab FSU-m
 md5sum bbd62edb1b3f98d0ba4b13a99c564947
@@ -987,6 +1004,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002977
 expId 2977
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxmRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450286
 grant Gilbert
 lab FSU-m
 md5sum e44b0532654089da8b6ab433a235099c
@@ -1062,6 +1080,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002978
 expId 2978
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450287
 grant Gilbert
 lab FSU-m
 md5sum fe252d16cf2770cba1f806dfe8709fb6
@@ -1087,6 +1106,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002978
 expId 2978
 fileName wgEncodeFsuRepliChipEsem5sUDiffhsoxpRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450287
 grant Gilbert
 lab FSU-m
 md5sum 3a6a343df97aeed696b2e641563bdb79
@@ -1162,6 +1182,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002969
 expId 2969
 fileName wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450284
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R1
@@ -1188,6 +1209,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002969
 expId 2969
 fileName wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450284
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R2
@@ -1268,6 +1290,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002970
 expId 2970
 fileName wgEncodeFsuRepliChipEstt2MRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450274
 grant Gilbert
 lab FSU-m
 labExpId ES-TT2_R1
@@ -1294,6 +1317,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002970
 expId 2970
 fileName wgEncodeFsuRepliChipEstt2MRawDataRep2.pair.tar.gz
+geoSampleAccession GSM450274
 grant Gilbert
 lab FSU-m
 labExpId ES-TT2_R2
@@ -1373,6 +1397,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002979
 expId 2979
 fileName wgEncodeFsuRepliChipJ185aURawDataRep1.pair.tar.gz
+geoSampleAccession GSM450293
 grant Gilbert
 lab FSU-m
 md5sum 7107f28f511b2be6fc987aed26b5c7de
@@ -1398,6 +1423,7 @@ dateUnrestricted 2013-03-18
 dccAccession wgEncodeEM002979
 expId 2979
 fileName wgEncodeFsuRepliChipJ185aURawDataRep2.pair.tar.gz
+geoSampleAccession GSM450293
 grant Gilbert
 lab FSU-m
 md5sum 748ea760f7a41b7ee28cfff10832724e
@@ -1577,6 +1603,7 @@ dateUnrestricted 2012-12-30
 dccAccession wgEncodeEM002974
 expId 2974
 fileName wgEncodeFsuRepliChipMefMRawDataRep1.pair.tar.gz
+geoSampleAccession GSM450292
 grant Gilbert
 lab FSU-m
 labExpId MEF_R1
@@ -1721,4 +1748,4 @@ tableName wgEncodeFsuRepliChipMelMWaveSignalRep2
 treatment None
 view WaveSignal
 
-# MAGIC: 1772228380
+# MAGIC: 237266956

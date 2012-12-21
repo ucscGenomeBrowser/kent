@@ -1654,8 +1654,10 @@ for (i = 0;  i < menuSize;  i++)
     {
     if (i > 0 && (i % tableColumns) == 0)
 	printf("</TR><TR>");
-    printf("<TD><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=\"%s\" %s> %s</TD>\n", name, values[i],
-	   (slNameInList(checked, values[i]) ? "CHECKED" : ""), menu[i]);
+    printf("<TD><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=\"%s\" %s></TD>"
+	   "<TD>%s</TD>\n",
+	   name, values[i], (slNameInList(checked, values[i]) ? "CHECKED" : ""),
+	   menu[i]);
     }
 if ((i % tableColumns) != 0)
     while ((i++ % tableColumns) != 0)

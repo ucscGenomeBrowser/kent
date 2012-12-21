@@ -403,17 +403,20 @@ struct wordInfoRef *ref;
 for (ref = type->list; ref != NULL; ref = ref->next)
     total += ref->val->outTarget;
 
-/* Loop through list returning selection corresponding to random threshold. */
-int threshold = rand() % total; 
-int binStart = 0;
-for (ref = type->list; ref != NULL; ref = ref->next)
+if (total > 0)
     {
-    struct wordInfo *info = ref->val;
-    int size = info->outTarget;
-    int binEnd = binStart + size;
-    if (threshold < binEnd)
-	return info;
-    binStart = binEnd;
+    /* Loop through list returning selection corresponding to random threshold. */
+    int threshold = rand() % total; 
+    int binStart = 0;
+    for (ref = type->list; ref != NULL; ref = ref->next)
+	{
+	struct wordInfo *info = ref->val;
+	int size = info->outTarget;
+	int binEnd = binStart + size;
+	if (threshold < binEnd)
+	    return info;
+	binStart = binEnd;
+	}
     }
 
 verbose(2, "Fell off end in pickRandomFromType\n");
@@ -829,6 +832,7 @@ if (optionExists("afterChain"))
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+warn("Program obsolete - try using alphaAsm instead");
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();

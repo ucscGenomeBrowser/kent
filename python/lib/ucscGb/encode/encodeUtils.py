@@ -1,4 +1,8 @@
-import os, hashlib
+# IMPORTANT: This is code that you should not use for ENCODE 3.
+# Its contents are specific to the ENCODE 2 pipeline.
+# If you need this functionality put it in a new class.
+
+import os, hashlib, subprocess
 
 class DataType(object):
 
@@ -31,13 +35,12 @@ dataTypes = {
     'FaireSeq': DataType(       'FaireSeq',         'genomic DNA',  'OTHER',                                            'genomic',          'other',                                        'HighThroughput'),
     'MethylSeq': DataType(      'MethylSeq',        'genomic DNA',  'MRE-Seq',                                          'genomic',          'Restriction Digest',                           'HighThroughput'),
     'MethylRrbs': DataType(     'MethylRrbs',       'genomic DNA',  'Bisulfite-Seq',                                    'genomic',          'Reduced Representation',                       'HighThroughput'),
-    'Orchid': DataType(         'Orchid',           'genomic DNA',  'OTHER',                                            'genomic',          'other',                                        'HighThroughput'),
-    'Proteogenomics': DataType( 'Proteogenomics',   'protein',      'mass spectrometry-based proteogenomic mapping',    'protein',          'chromatographically fractionated peptides',    'HighThroughput'),
     'RnaPet': DataType(         'RnaPet',           'RNA',          'OTHER',                                            'transcriptomic',   'other',                                        'HighThroughput'),
     'RnaSeq': DataType(         'RnaSeq',           'RNA',          'RNA-Seq',                                          'transcriptomic',   'cDNA',                                         'HighThroughput'),
-    
+    '5C': DataType(             '5C',               'genomic DNA',  'OTHER',                                            'genomic',          'other',                                        'HighThroughput'),
     #need this
     'RepliSeq': DataType(       'RepliSeq', 'genomic DNA', 'OTHER', 'genomic', 'ChIP', 'HighThroughput'),
+    'RepliChip': DataType(      'RepliChip', 'genomic DNA', 'ChIP-Seq', 'genomic', 'ChIP', 'HighThroughput'),
     
     #doublecheck
     'ChiaPet': DataType(        'ChiaPet',          'genomic DNA',  'ChIP-Seq followed by ligation',                    'genomic',          'other',                                      'HighThroughput'),
@@ -45,8 +48,9 @@ dataTypes = {
     'RipSeq': DataType(         'RipSeq',           'RNA',          'OTHER',                                          'transcriptomic',   'RNA binding protein antibody',                 'HighThroughput'),
     #for ripseq, ask geo about new 'ripseq'
     
+    'MethylWgbs': DataType(       'MethylWgbs', 'genomic DNA', 'Bisulfite-Seq', 'genomic', 'other', 'HighThroughput'),
+    
     #not geo stuff
-    '5C': DataType('5C', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
     'Bip': DataType('Bip', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
     'Gencode': DataType('Gencode', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
     'Mapability': DataType('Mapability', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
@@ -54,6 +58,8 @@ dataTypes = {
     'Switchgear': DataType('Switchgear', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
     'TfbsValid': DataType('TfbsValid', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
     'Cluster': DataType('Cluster', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'Orchid': DataType('Orchid', 'REPLACE',  'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'Proteogenomics': DataType( 'Proteogenomics',   'REPLACE',      'REPLACE',    'REPLACE',          'REPLACE',    'NotGeo'),
     
     #array
     'AffyExonArray': DataType(  'AffyExonArray',    'mRNA',         'RNA-Microarray',                                   'transcriptomic',   'polyA',                                        'MicroArray'),
@@ -94,6 +100,23 @@ def defaultCvPath():
     
 def downloadsPath(database, composite):
     return '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/'
+
+def readFilesList(filename):
+    if os.path.isfile(filename):
+        files = dict()
+        f = open(filename, 'r')
+        for line in f:
+            key, val = map(str.strip, line.split('\t', 1))
+            files[key] = val.split('; ')
+        return files
+    else:
+        return None
+        
+def writeFilesList(filename, filesList):
+    f = open(filename, 'w')
+    for k in filesList: 
+        f.write(k + '\t' + '; '.join(filesList[k]) + '\n')
+    f.close()
     
 def readMd5sums(filename):
     '''Reads an md5sum.txt file and returns a dictionary of filename: md5'''
@@ -106,12 +129,22 @@ def readMd5sums(filename):
         return md5sums
     else:
         return None
+        
+def writeMd5sums(filename, file, md5sum):
+    md5file = readMd5sums(filename)
+    if md5file != None and file in md5file:
+        md5file[file] = md5sum
+        f = open(filename, 'w')
+        for key in md5file.iterkeys():
+            f.write(key + ' ' + md5file[key] + '\n')
+        f.close()
+    else:
+        f = open(filename, 'a')
+        f.write(file + ' ' + md5sum + '\n')
+        f.close()
 
 def hashFile(filename, hasher=hashlib.md5(), blocksize=65536):
     '''MD5's the file, and returns the number'''
-    afile = open(filename, 'rb')
-    buf = afile.read(blocksize)
-    while len(buf) > 0:
-        hasher.update(buf)
-        buf = afile.read(blocksize)
-    return hasher.hexdigest()
+    out = subprocess.check_output(['md5sum', filename])
+    md5 = out.split('  ')[0]
+    return md5

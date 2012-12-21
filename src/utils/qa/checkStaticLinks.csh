@@ -2,7 +2,7 @@
 source `which qaConfig.csh`
 
 ###############################################
-#  05-10-04
+#  05-10-2004
 # 
 #  checks the links in all the files in a directory
 #  Robert Kuhn
@@ -10,94 +10,155 @@ source `which qaConfig.csh`
 ###############################################
 
 set filePath=""
-set yymmdd="today"
+set out=""
+set url=""
 set exclude=""
-set file=""
-set currDir=$cwd
+set excludeList=""
+set baseUrl="http://hgwbeta.cse.ucsc.edu"
+set errs=0
 
-if ( $#argv < 1 || $#argv > 3 ) then
+if ( $#argv < 1 || $#argv > 2 ) then
   # wrong number of command-line args
   echo
-  echo "  checks the links in all the files in a directory on the RR."
-  echo "    (uses directory on hgwbeta to get list)."
+  echo "  checks the links in all the static pages in a directory."
+  echo "  operates on pages on hgwbeta"
+  echo "  writes a file called dir.dir.err"
   echo
-  echo "    usage:  pathIn/htdocs [yymmdd] [excludeList]"
+  echo "    usage:  pathInHtdocs [excludeList]"
   echo '      where:'
-  echo '        pathIn/htdocs: (zero for root) '
-  echo '        yymmdd: any dateString for output files. defaults to "today"'
-  echo "        excludeList: filename or list of files not to check. "
+  echo '        pathInHtdocs = path in htdocs (0 for htdocs root)'
+  echo "        excludeList = filename for list of files not to check"
   echo
   exit
 endif
 
-# strip trailing backslash"
 if ($argv[1] == 0) then
-  set filePath=""
+  # filePath is already htdocs root level
 else
-  set filePath=`echo $argv[1] | sed -e 's/\/$//'`
+  # strip trailing backslash"
+  set filePath=`echo $argv[1] | sed 's@/$@@'`
 endif
 
-if ( $#argv > 1 ) then
-  set yymmdd=$argv[2]
-endif
-
-if ( $#argv == 3 ) then
-  set exclude=$argv[3]
-  file $exclude | grep -q "ASCII text"
+if ( $#argv == 2 ) then
+  set excludeList=$argv[2]
+  file $excludeList | grep -q "ASCII text"
   if ( $status ) then
-    echo "\nexclude file does not exist\n"
+    echo "\nexclude file $excludeList does not exist\n"
     exit 1
-  else
-    set exclude=`cat $exclude`
   endif
+  set exclude=`cat $excludeList`
 endif
 
 # get list of active files from beta
-# and strip off the pathnames from list leaving only filenames
+# and strip off the pathname from list leaving only filenames
 
 set origlist=`ssh hgwbeta 'ls /usr/local/apache/htdocs/'${filePath}'/*html' \
-      | sed -e "s/.*\///g"`
+      | sed "s/.*\///g"`
 
-# echo "exclude = $exclude"
 # strip out any files in exclude list
 foreach excl ( $exclude )
-  set origlist=`echo $origlist |  sed -e "s/ /\n/g" | egrep -v $excl`
+  set origlist=`echo $origlist | sed "s/ /\n/g" | egrep -wv $excl`
 end
 
-echo $origlist | sed -e "s/ /\n/g" > ${currDir}/filelist
+# echo origlist $origlist
 
-# echo "yymmdd = $yymmdd"
-# echo "filepath = $filePath"
-# echo $exclude
+# set up outfile for all the files in the dir
+set i=0
+rm -f outfile
+echo "\nfiles checked in htdocs/${filePath}" >> outfile
+echo $origlist | sed "s/ /\n/g"              >> outfile
+echo                                         >> outfile
 
-echo "files in htdocs/${filePath}"
-cat filelist
+foreach file ( $origlist )
+  rm -f tmp0
+  htmlCheck checkLinks $baseUrl/$filePath/$file  >>& tmp0
+  if ( -e tmp0 ) then
+    # there were errors
+    # clean out things we don't care about
+    rm -f tmp
+    cat tmp0 | grep -v "403" \
+      | grep -v "doesn't exist" \
+      | grep -v "Cancelling" \
+      | grep -v "service not known" \
+      | grep -v "Connection refused" \
+      | grep -v "Non-numeric port" \
+      | egrep "."  > tmp
+    rm -f tmp0
 
-echo
+    if ( `wc -l tmp | awk '{print $1}'` > 0 ) then
+      # there were errors worth looking at
+      # get the link names for any broken urls
+      @ errs = $errs + 1                    # counts files with errors
+      set j=1
+      set errors=`wc -l tmp | awk '{print $1}'`  # counts errs in file
+      rm -f outfile$file
+      echo                                           >> err$file
+      while ( $j <= $errors )
+        set errLine=`sed -n "${j}p" tmp`
+        set url=`sed -n "${j}p" tmp | awk '{print $NF}'`
+        set xfile=$baseUrl/$filePath/$file
+        # set xfile=http://genome.ucsc.edu/goldenPath/credits.html
+        # set url=http://www.genome.washington.edu/UWGC
 
-foreach file (`cat ${currDir}/filelist`)
-  echo $file
-  LinkCheck $argv[1] $file $yymmdd
+        # grab 3 lines from html page and trim down to </A> tag
+        set link=`htmlCheck getHtml $xfile | egrep -A 4 "$url" \
+          | sed -n "1,/<\/A>/p"`
+        set link=`echo $link \
+          | awk -F'</A>' '{print $1}' \
+          | awk -F'>' '{print $NF}'`
+
+        echo "link  = $link"                         >> err$file
+        echo "error = $errLine"                      >> err$file
+        echo                                         >> err$file
+        @ j = $j + 1
+      end
+      @ j = $j - 1
+      if ( $j > 0 ) then
+        echo $file                                >> outfile$file
+        echo $baseUrl/$filePath/$file             >> outfile$file
+        cat err$file                              >> outfile$file
+        if ( $j == 1 ) then
+          echo " found $j error in $file"          >> outfile$file
+        else
+          echo " found $j errors in $file"          >> outfile$file
+        endif
+        echo "---------------------------"        >> outfile$file
+        echo                                      >> outfile$file
+        cat outfile$file                       >> outfile
+      endif
+      rm -f err$file
+    endif
+    rm -f tmp
+    rm -f outfile$file
+  endif
+  @ i = $i + 1
 end
 
-rm -f linkCheck.all.$yymmdd
-set outfile="linkCheck.all.$yymmdd"
+echo "\n directory = htdocs/$filePath"          >> outfile
+if (  $i == 1 ) then
+  echo " checked $i file"                       >> outfile
+else
+  echo " checked $i files"                      >> outfile
+endif
 
-echo >> $outfile
-echo "========  reporting only on files with errors   ========" >> $outfile
-echo "========================================================" >> $outfile
-echo >> $outfile
-dumpEmpty.csh .
-foreach file (`ls -1 *.$yymmdd.errors`)
-  # recover directory structure from dir.dir.dir.yymmdd.error files
-  #   and strip out filename from any file with errors
-  set filename=`echo $file | sed -e "s/\./\//g" | sed -e "s/\/$yymmdd\/errors/\.html/"`
-  echo >> $outfile
-  cat $file >> $outfile
-  echo >> $outfile
-  echo "========================================================" >> $outfile
-  echo >> $outfile
-# rm $file ??
-end
+# note:  if you change the line below the wrapper script will break
+if ( $errs == 0 ) then
+  echo " found no files with errors\n"         >> outfile
+else
+  if ( $errs == 1 ) then
+    echo " found errors in $errs file\n"       >> outfile
+  else
+    echo " found errors in $errs files\n"      >> outfile
+  endif
+endif
 
-rm -f filelist
+echo                                           >> outfile
+
+# cat outfile
+if ( $filePath == "" ) then
+  set out=htdocs.err
+else
+  set out=`echo $filePath | sed s@/@.@g`.err
+endif
+mv outfile $out
+

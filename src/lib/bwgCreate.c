@@ -4,7 +4,6 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "localmem.h"
 #include "errabort.h"
 #include "sqlNum.h"
 #include "sig.h"

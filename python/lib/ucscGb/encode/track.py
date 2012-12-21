@@ -60,9 +60,9 @@ class TrackFile(object):
         self._metaObj = metaObj
         
         self._extension = self._name
-        self._extension.replace('.gz', '').replace('.tgz', '')
+        self._extension = self._extension.replace('.gz', '').replace('.tgz', '')
         if '.' in self._extension:
-            self._extension = self._extension.rsplit('.')[1]
+            self._extension = self._extension.rsplit('.', 1)[1]
         else:
             self._extension = None
     
@@ -333,7 +333,8 @@ class CompositeTrack(object):
             return self._alphaMetaDb
         except AttributeError:
             if not os.path.isfile(self._alphaMdbPath):
-                raise KeyError(self._alphaMdbPath + ' does not exist')
+                return None
+                #raise KeyError(self._alphaMdbPath + ' does not exist')
             self._alphaMetaDb = mdb.MdbFile(self._alphaMdbPath)
             return self._alphaMetaDb
         
@@ -344,7 +345,8 @@ class CompositeTrack(object):
             return self._betaMetaDb
         except AttributeError:
             if not os.path.isfile(self._betaMdbPath):
-                raise KeyError(self._betaMdbPath + ' does not exist')
+                return None
+                #raise KeyError(self._betaMdbPath + ' does not exist')
             self._betaMetaDb = mdb.MdbFile(self._betaMdbPath)
             return self._betaMetaDb
         
@@ -355,7 +357,8 @@ class CompositeTrack(object):
             return self._publicMetaDb
         except AttributeError:
             if not os.path.isfile(self._publicMdbPath):
-                raise KeyError(self._publicMdbPath + ' does not exist')
+                return None
+                #raise KeyError(self._publicMdbPath + ' does not exist')
             self._publicMetaDb = mdb.MdbFile(self._publicMdbPath)
             return self._publicMetaDb
         
@@ -408,7 +411,7 @@ class CompositeTrack(object):
             return None
 
 
-    def __init__(self, database, compositeName, trackPath=None, mdbCompositeName=None):
+    def __init__(self, database, compositeName, trackPath=None, mdbCompositeName=None, downloadsDirectory=None):
         
         if mdbCompositeName == None:
             mdbCompositeName = compositeName
@@ -434,19 +437,22 @@ class CompositeTrack(object):
         self._alphaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/'
         self._betaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/beta/'
         self._publicMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/public/'
-        self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
+        if downloadsDirectory != None:
+            if not downloadsDirectory.endswith('/'):
+                downloadsDirectory = downloadsDirectory + '/'
+            self._downloadsDirectory = downloadsDirectory + database + '/' + compositeName + '/'
+        else:
+            self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
         self._httpDownloadsPath = '/usr/local/apache/htdocs-hgdownload/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
         self._rrHttpDir = '/usr/local/apache/htdocs/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
         self._notesDirectory = os.path.expanduser("~/kent/src/hg/makeDb/doc/encodeDcc%s" % database.capitalize()) + '/'
         self._url = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + compositeName
         self._database = database
         self._name = compositeName        
-        self._md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/md5sum.txt'
-        self._trackDbPath = self.currentTrackDb
+        self._md5path = self._downloadsDirectory + 'md5sum.txt'
+        self._trackDbPath = None
         if self._trackDbPath == None:
             self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra' 
-        if not os.path.isfile(self._trackDbPath):
-            raise KeyError(self._trackDbPath + ' does not exist')
         
 
 class TrackCollection(dict):
@@ -485,6 +491,5 @@ class TrackCollection(dict):
         for file in os.listdir(metaDb):
             if os.path.isfile(metaDb + file) and file.endswith('.ra'):
                 trackname = file.replace('.ra', '') 
-                if os.path.isfile(self._trackPath + self._organism + '/' + self._database + '/' + file):
-                    self[trackname] = CompositeTrack(self._database, trackname, self._trackPath)
+                self[trackname] = CompositeTrack(self._database, trackname, self._trackPath)
                 

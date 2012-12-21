@@ -696,7 +696,8 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	    type = "TEXT";
 	if (varName == NULL)
 	    {
-	    if (!sameWord(type, "SUBMIT") && !sameWord(type, "CLEAR")
+	    if (!htmlTagAttributeVal(page, tag, "ONCHANGE", NULL)
+	        && !sameWord(type, "SUBMIT") && !sameWord(type, "CLEAR")
 	    	&& !sameWord(type, "BUTTON") && !sameWord(type, "RESET")
 		&& !sameWord(type, "IMAGE"))
 		tagWarn(page, tag, "Missing NAME attribute");

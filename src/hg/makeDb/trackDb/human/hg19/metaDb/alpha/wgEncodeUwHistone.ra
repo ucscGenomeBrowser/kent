@@ -922,7 +922,7 @@ geoSampleAccession GSM1010914
 grant Stam
 lab UW
 labExpId DS21482
-md5sum a26043466a91479090137c208316cad0
+md5sum 5e7c6a9bb3b2f404d34035f591b1ebcf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -949,7 +949,7 @@ geoSampleAccession GSM1010914
 grant Stam
 lab UW
 labExpId DS21481
-md5sum 2c93347479ac8cd0d1c441a5444c4a74
+md5sum 2cce231834a5b408badbeef59a078351
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1119,7 +1119,7 @@ geoSampleAccession GSM1010912
 grant Stam
 lab UW
 labExpId DS21479
-md5sum 539780c5e3177cf4866232afc384ca51
+md5sum 75d2181a203c5575bff49d47c668dae0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1260,7 +1260,7 @@ geoSampleAccession GSM1010913
 grant Stam
 lab UW
 labExpId DS21480
-md5sum 3af3e9a2f688cb0b6ae1cb620ab77ddf
+md5sum 3e78b6345773e980f41eebdc0252cc22
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7160,7 +7160,7 @@ geoSampleAccession GSM945296
 grant Stam
 lab UW
 labExpId DS18900
-md5sum b6e56eaba6eec1c0f76a40aff2a4f533
+md5sum bf49e4e5f4dfec85f123c58ddc78f50e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7525,7 +7525,7 @@ geoSampleAccession GSM945295
 grant Stam
 lab UW
 labExpId DS20810
-md5sum 34fb8c55620dc98b9f50f9da8617447d
+md5sum 4887f8ee43089eeb79c79c80d3632789
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7780,7 +7780,7 @@ geoSampleAccession GSM945220
 grant Stam
 lab UW
 labExpId DS18912
-md5sum 3084ba9846d3600b11117420909b740a
+md5sum 6d5e7699d212d28b29be833968d19252
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7922,7 +7922,7 @@ geoSampleAccession GSM945221
 grant Stam
 lab UW
 labExpId DS18910
-md5sum 0b18765122ccfb13aea5af02b1b98900
+md5sum 6a33071a8e40f1fb4d9c3a7739f243d8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10083,7 +10083,7 @@ geoSampleAccession GSM945190
 grant Stam
 lab UW
 labExpId DS14706
-md5sum 51103638a7e7c7c3a0e97dcbd3ee33c8
+md5sum 783b70fba0e20a1b4971f4c4b5258568
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10110,7 +10110,7 @@ geoSampleAccession GSM945190
 grant Stam
 lab UW
 labExpId DS14705
-md5sum b78171df610a8226a7a471bb6a5be7eb
+md5sum 8124fb74d9de1c259ff6d3e1e3867151
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -34729,4 +34729,3 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 1788154614

@@ -266,8 +266,8 @@ printf("</tr>\n");
 
 printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
 char accBuf[64];
-prTdExtIdAnchor(getBaseAcc(transAttrs->transcriptId, accBuf, sizeof(accBuf)), apprisGeneUrl);
-prTdExtIdAnchor(getBaseAcc(transAttrs->geneId, accBuf, sizeof(accBuf)), apprisTranscriptUrl);
+prTdExtIdAnchor(getBaseAcc(transAttrs->transcriptId, accBuf, sizeof(accBuf)), apprisTranscriptUrl);
+prTdExtIdAnchor(getBaseAcc(transAttrs->geneId, accBuf, sizeof(accBuf)), apprisGeneUrl);
 printf("</tr>\n");
 
 // FIXME: add sequence here??

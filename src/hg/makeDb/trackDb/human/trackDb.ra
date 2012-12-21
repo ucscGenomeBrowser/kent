@@ -1170,21 +1170,22 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v10
+release beta,public
 
-track dgvBeta
-shortLabel DGV Beta
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del) -- Beta Site
+track dgv
+shortLabel DGV
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
 priority 144.8
 visibility hide
-color 0,100,0
 itemRgb on
 type bed 9 +
 noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report:
 url http://dgvbeta.tcag.ca/dgv/app/variant?id=$$&ref=$D
-dataVersion beta
+dataVersion beta (Nov. 14, 2012)
+release alpha
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -1802,373 +1803,239 @@ viewLimits 0:150
 type wig 0 4396.07
 wigColorBy affyTransfrags
 
-track affyTxnPhase2
+track affyTxnPhase2b
+release alpha
 shortLabel Affy Txn Phase2
 longLabel Affymetrix Transcriptome Project Phase 2
-compositeTrack on smart
+compositeTrack on
+#compositeTrack on smart
 visibility hide
-viewLimits 0:150
-autoScale Off
 group expression
 priority 0
-maxHeightPixels 100:30:10
-canPack off
-centerLabelsDense on
-type wig 0 1000
-
-track A375CytosolicPolyAPlusTxn
-shortLabel A375 Txn
-longLabel A375 Cytosolic polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
+type bed 3
+subGroup1 view Views frag=Transfrags tome=Transcriptome
+subGroup2 cell Cell_Line A375=A375 FHS=FHs738Lu HEPG2P=HepG2+ HEPG2m=HepG2- \
+                         JURKAT=Jurkat NCCIT=NCCIT PC3=PC3 SKNAS=SK-N-AS U87=U87
+subGroup3 loc Localization CYTO=Cytosolic NUC=Nuclear
+dimensions dimensionY=loc dimensionX=cell
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 5251.55
-viewLimits 0:272
-parent affyTxnPhase2
-noInherit on
-wigColorBy A375CytosolicPolyAPlusTnFg
-
-track A375CytosolicPolyAPlusTnFg
-shortLabel A375 TnFg
-longLabel A375 Cytosolic polyA+, Affy Transfrags
-group expression
 centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+sortOrder cell=+ loc=+ view=+
+html affyTxnPhase2 
 
-track FHs738LuCytosolicPolyAPlusTxn
-shortLabel FHs738Lu Txn
-longLabel FHs738Lu Cytosolic polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 5451.35
-viewLimits 0:287
-parent affyTxnPhase2
-noInherit on
-wigColorBy FHs738LuCytosolicPolyAPlusTnFg
+    track affyTxnPhase2Tome
+    release alpha
+    shortLabel Transcriptome
+    view tome
+    visibility dense
+    parent affyTxnPhase2b
+    viewUi on
+    type wig 0 1000
+    viewLimits 0:150
+    autoScale Off
+    maxHeightPixels 100:30:10
+    canPack off
+    graphTypeDefault Bar
+    gridDefault OFF
+    color 175,150,128
+    altColor 255,128,0
 
-track FHs738LuCytosolicPolyAPlusTnFg
-shortLabel FHs738Lu TnFg
-longLabel FHs738Lu Cytosolic polyA+, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track A375CytosolicPolyAPlusTxn
+        release alpha
+	shortLabel A375 Txn
+	longLabel A375 Cytosolic polyA+, Affy Transcriptome
+	type wig 0 5251.55
+	viewLimits 0:272
+	wigColorBy A375CytosolicPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+        subGroups view=tome cell=A375 loc=CYTO
 
-track HepG2CytosolicPolyAPlusTxn
-shortLabel HepG2+ Cyto Txn
-longLabel HepG2 Cytosolic polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 6183.74
-viewLimits 0:282
-parent affyTxnPhase2
-noInherit on
-wigColorBy HepG2CytosolicPolyAPlusTnFg
+	track FHs738LuCytosolicPolyAPlusTxn
+        release alpha
+	shortLabel FHs738Lu Txn
+	longLabel FHs738Lu Cytosolic polyA+, Affy Transcriptome
+	type wig 0 5451.35
+	viewLimits 0:287
+	wigColorBy FHs738LuCytosolicPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+        subGroups view=tome cell=FHS loc=CYTO
 
-track HepG2CytosolicPolyAPlusTnFg
-shortLabel HepG2+ Cyto TnFg
-longLabel HepG2 Cytosolic polyA+, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track HepG2CytosolicPolyAPlusTxn
+        release alpha
+	shortLabel HepG2+ Cyto Txn
+	longLabel HepG2 Cytosolic polyA+, Affy Transcriptome
+	type wig 0 6183.74
+	viewLimits 0:282
+	wigColorBy HepG2CytosolicPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+        subGroups view=tome cell=HEPG2P loc=CYTO
 
-track HepG2NuclearPolyAPlusTxn
-shortLabel HepG2+ Nuc Txn
-longLabel HepG2 Nuclear polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 4206.84
-viewLimits 0:214
-parent affyTxnPhase2
-noInherit on
-wigColorBy HepG2NuclearPolyAPlusTnFg
+	track HepG2NuclearPolyAPlusTxn
+        release alpha
+	shortLabel HepG2+ Nuc Txn
+	longLabel HepG2 Nuclear polyA+, Affy Transcriptome
+	type wig 0 4206.84
+	viewLimits 0:214
+	wigColorBy HepG2NuclearPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+        subGroups view=tome cell=HEPG2P loc=NUC
 
-track HepG2NuclearPolyAPlusTnFg
-shortLabel HepG2+ Nuc TnFg
-longLabel HepG2 Nuclear polyA+, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track HepG2CytosolicPolyAMinusTxn
+        release alpha
+	shortLabel HepG2- Cyto Txn
+	longLabel HepG2 Cytosolic polyA-, Affy Transcriptome
+	type wig 0 3571.88
+	viewLimits 0:85
+	wigColorBy HepG2CytosolicPolyAMinusTnFg
+	parent affyTxnPhase2Tome
+        subGroups view=tome cell=HEPG2m loc=CYTO
 
-track HepG2CytosolicPolyAMinusTxn
-shortLabel HepG2- Cyto Txn
-longLabel HepG2 Cytosolic polyA-, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 3571.88
-viewLimits 0:85
-parent affyTxnPhase2
-noInherit on
-wigColorBy HepG2CytosolicPolyAMinusTnFg
+	track HepG2NuclearPolyAMinusTxn
+        release alpha
+	shortLabel HepG2- Nuc Txn
+	longLabel HepG2 Nuclear polyA-, Affy Transcriptome
+	type wig 0 2656.57
+	viewLimits 0:94
+	wigColorBy HepG2NuclearPolyAMinusTnFg
+	parent affyTxnPhase2Tome
+	subGroups view=tome cell=HEPG2m loc=NUC
 
-track HepG2CytosolicPolyAMinusTnFg
-shortLabel HepG2- Cyto TnFg
-longLabel HepG2 Cytosolic polyA-, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track JurkatCytosolicPolyAPlusTxn
+        release alpha
+	shortLabel Jurkat Txn
+	longLabel Jurkat Cytosolic polyA+, Affy Transcriptome
+	type wig 0 5203.76
+	viewLimits 0:253
+	wigColorBy JurkatCytosolicPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+	subGroups view=tome cell=JURKAT loc=CYTO
 
-track HepG2NuclearPolyAMinusTxn
-shortLabel HepG2- Nuc Txn
-longLabel HepG2 Nuclear polyA-, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 2656.57
-viewLimits 0:94
-parent affyTxnPhase2
-noInherit on
-wigColorBy HepG2NuclearPolyAMinusTnFg
+	track NCCITCytosolicPolyAPlusTxn
+        release alpha
+	shortLabel NCCIT Txn
+	longLabel NCCIT Cytosolic polyA+, Affy Transcriptome
+	type wig 0 6320.77
+	viewLimits 0:308
+	wigColorBy NCCITCytosolicPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+	subGroups view=tome cell=NCCIT loc=CYTO
 
-track HepG2NuclearPolyAMinusTnFg
-shortLabel HepG2- Nuc TnFg
-longLabel HepG2 Nuclear polyA-, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track PC3CytosolicPolyAPlusTxn
+        release alpha
+	shortLabel PC3 Txn
+	longLabel PC3 Cytosolic polyA+, Affy Transcriptome
+	type wig 0 2993.96
+	viewLimits 0:198
+	wigColorBy PC3CytosolicPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+	subGroups view=tome cell=PC3 loc=CYTO
 
-track JurkatCytosolicPolyAPlusTxn
-shortLabel Jurkat Txn
-longLabel Jurkat Cytosolic polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 5203.76
-viewLimits 0:253
-parent affyTxnPhase2
-noInherit on
-wigColorBy JurkatCytosolicPolyAPlusTnFg
+	track SKNASCytosolicPolyAPlusTxn
+        release alpha
+	shortLabel SK-N-AS Txn
+	longLabel SK-N-AS Cytosolic polyA+, Affy Transcriptome
+	type wig 0 4395.02
+	viewLimits 0:224
+	wigColorBy SKNASCytosolicPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+	subGroups view=tome cell=SKNAS loc=CYTO
 
-track JurkatCytosolicPolyAPlusTnFg
-shortLabel Jurkat TnFg
-longLabel Jurkat Cytosolic polyA+, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track U87CytosolicPolyAPlusTxn
+        release alpha
+	shortLabel U87 Txn
+	longLabel U87 Cytosolic polyA+, Affy Transcriptome
+	type wig 0 5939.33
+	viewLimits 0:221
+	wigColorBy U87CytosolicPolyAPlusTnFg
+	parent affyTxnPhase2Tome
+	subGroups view=tome cell=U87 loc=CYTO
 
-track NCCITCytosolicPolyAPlusTxn
-shortLabel NCCIT Txn
-longLabel NCCIT Cytosolic polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 6320.77
-viewLimits 0:308
-parent affyTxnPhase2
-noInherit on
-wigColorBy NCCITCytosolicPolyAPlusTnFg
+    track affyTxnPhase2Frag
+    release alpha
+    shortLabel Transfrags
+    view frag
+    visibility pack
+    parent affyTxnPhase2b
+    type bed 4 +
+    color 35,35,175
+    altColor 160,160,188
 
-track NCCITCytosolicPolyAPlusTnFg
-shortLabel NCCIT TnFg
-longLabel NCCIT Cytosolic polyA+, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track A375CytosolicPolyAPlusTnFg
+        release alpha
+	shortLabel A375 TnFg
+	longLabel A375 Cytosolic polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+        subGroups view=frag cell=A375 loc=CYTO
 
-track PC3CytosolicPolyAPlusTxn
-shortLabel PC3 Txn
-longLabel PC3 Cytosolic polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 2993.96
-viewLimits 0:198
-parent affyTxnPhase2
-noInherit on
-wigColorBy PC3CytosolicPolyAPlusTnFg
+	track FHs738LuCytosolicPolyAPlusTnFg
+        release alpha
+	shortLabel FHs738Lu TnFg
+	longLabel FHs738Lu Cytosolic polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+        subGroups view=frag cell=FHS loc=CYTO
 
-track PC3CytosolicPolyAPlusTnFg
-shortLabel PC3 TnFg
-longLabel PC3 Cytosolic polyA+, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track HepG2CytosolicPolyAPlusTnFg
+        release alpha
+	shortLabel HepG2+ Cyto TnFg
+	longLabel HepG2 Cytosolic polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+        subGroups view=frag cell=HEPG2P loc=CYTO
 
-track SKNASCytosolicPolyAPlusTxn
-shortLabel SK-N-AS Txn
-longLabel SK-N-AS Cytosolic polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 4395.02
-viewLimits 0:224
-parent affyTxnPhase2
-noInherit on
-wigColorBy SKNASCytosolicPolyAPlusTnFg
+	track HepG2NuclearPolyAPlusTnFg
+        release alpha
+	shortLabel HepG2+ Nuc TnFg
+	longLabel HepG2 Nuclear polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+        subGroups view=frag cell=HEPG2P loc=NUC
 
-track SKNASCytosolicPolyAPlusTnFg
-shortLabel SK-N-AS TnFg
-longLabel SK-N-AS Cytosolic polyA+, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track HepG2CytosolicPolyAMinusTnFg
+        release alpha
+	shortLabel HepG2- Cyto TnFg
+	longLabel HepG2 Cytosolic polyA-, Affy Transfrags
+	parent affyTxnPhase2Frag
+        subGroups view=frag cell=HEPG2m loc=CYTO
 
+	track HepG2NuclearPolyAMinusTnFg
+        release alpha
+	shortLabel HepG2- Nuc TnFg
+	longLabel HepG2 Nuclear polyA-, Affy Transfrags
+	parent affyTxnPhase2Frag
+	subGroups view=frag cell=HEPG2m loc=NUC
 
-track U87CytosolicPolyAPlusTxn
-shortLabel U87 Txn
-longLabel U87 Cytosolic polyA+, Affy Transcriptome
-group expression
-centerLabelsDense on
-priority 0
-autoScale Off
-color 175,150,128
-altColor 255,128,0
-maxHeightPixels 128:36:16
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type wig 0 5939.33
-viewLimits 0:221
-parent affyTxnPhase2
-noInherit on
-wigColorBy U87CytosolicPolyAPlusTnFg
+	track JurkatCytosolicPolyAPlusTnFg
+        release alpha
+	shortLabel Jurkat TnFg
+	longLabel Jurkat Cytosolic polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+	subGroups view=frag cell=JURKAT loc=CYTO
 
-track U87CytosolicPolyAPlusTnFg
-shortLabel U87 TnFg
-longLabel U87 Cytosolic polyA+, Affy Transfrags
-group expression
-centerLabelsDense on
-priority 0
-visibility pack
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 4 +
-parent affyTxnPhase2
-noInherit on
+	track NCCITCytosolicPolyAPlusTnFg
+        release alpha
+	shortLabel NCCIT TnFg
+	longLabel NCCIT Cytosolic polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+	subGroups view=frag cell=NCCIT loc=CYTO
+
+	track PC3CytosolicPolyAPlusTnFg
+        release alpha
+	shortLabel PC3 TnFg
+	longLabel PC3 Cytosolic polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+	subGroups view=frag cell=PC3 loc=CYTO
+
+	track SKNASCytosolicPolyAPlusTnFg
+        release alpha
+	shortLabel SK-N-AS TnFg
+	longLabel SK-N-AS Cytosolic polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+	subGroups view=frag cell=SKNAS loc=CYTO
+
+	track U87CytosolicPolyAPlusTnFg
+        release alpha
+	shortLabel U87 TnFg
+	longLabel U87 Cytosolic polyA+, Affy Transfrags
+	parent affyTxnPhase2Frag
+	subGroups view=frag cell=U87 loc=CYTO
 
 track affyU133Plus2
 shortLabel Affy U133Plus2
@@ -3011,7 +2878,7 @@ searchMethod exact
 searchType bed
 searchPriority 10
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex COSM*
+termRegex COSM[0-9]+
 
 searchTable wgRnaOld
 searchMethod fuzzy
@@ -4160,34 +4027,34 @@ html numtSeq
 searchTable numtSMitochondrionChrPlacement
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 searchTable numtSMitochondrion
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 searchTable numtS
 searchMethod exact
 searchType bed 
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
-    
+termRegex HSA_NumtS_.*
+
 searchTable numtSAssembled
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex HSA_NumtS_.*
 
 include decode.rmap.ra
 
@@ -4209,3 +4076,9 @@ searchPriority 50
 xrefTable geneReviewsRefGene
 xrefQuery select geneSymbol,diseaseName from %s where diseaseName like '%%%s%%'
 searchBoth on
+
+searchTable dgv
+searchType bed
+searchPriority 50
+termRegex [en]ss?v[0-9]+
+release alpha

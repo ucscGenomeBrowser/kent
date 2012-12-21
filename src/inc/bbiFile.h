@@ -5,6 +5,7 @@
 
 #include "cirTree.h"
 #include "linefile.h"
+#include "localmem.h"
 
 /* bigWig/bigBed file structure:
  *     fixedWidthHeader

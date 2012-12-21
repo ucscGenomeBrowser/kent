@@ -437,3 +437,23 @@ nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;
     #   test it with some sequence
 
 ############################################################################
+# construct liftOver to nomLeu2 (DONE - 2012-11-14 - Hiram)
+    screen -S nomLeu2	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/nomLeu1/bed/blat.nomLeu2.2012-11-14
+    cd /hive/data/genomes/nomLeu1/bed/blat.nomLeu2.2012-11-14
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/nomLeu1/jkStuff/nomLeu1.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev nomLeu1 nomLeu2
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/nomLeu1/jkStuff/nomLeu1.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev nomLeu1 nomLeu2 > do.log 2>&1
+    #	real    277m26.138s
+
+    # verify this file exists:
+    #	/gbdb/nomLeu1/liftOver/nomLeu1ToNomLeu2.over.chain.gz
+    # and try out the conversion on genome-test from nomLeu1 to nomLeu2
+
+############################################################################

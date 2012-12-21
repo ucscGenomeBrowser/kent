@@ -75,6 +75,8 @@ HG_HGWIGGLE_APP = hgWiggle
 
 HG_LOAD_APPLIST = hgGcPercent
 
+BLAT_APPLIST = blat gfClient gfServer
+
 userApps: topLibs hgLib
 	@for P in ${UTILS_APPLIST}; do \
 	    ( cd utils/$${P} && echo utils/$${P} && ${MAKE} ) ; \

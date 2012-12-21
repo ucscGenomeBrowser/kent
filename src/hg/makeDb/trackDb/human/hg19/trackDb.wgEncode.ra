@@ -12,6 +12,7 @@ include wgEncodeGencodeV13.ra alpha
 include wgEncodeGencodeV7.release3.ra
 include wgEncodeGencodeV10.release3.ra
 include wgEncodeGencodeV12.release3.ra
+include wgEncodeGencodeV14.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.release2.ra
@@ -88,9 +89,6 @@ include wgEncodeUwDnase.release6.ra
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.release4.ra
 
-#AWG DnaseI HS (wrangler: Kate)
-include wgEncodeAwgDnase.ra
-
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
 
@@ -134,7 +132,7 @@ include wgEncodeHaibMethyl450.ra
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
 include wgEncodeHaibMethylRrbs.release3.ra
 #HAIB Bisulfite test track
-include wgEncodeHaibMethylWgbs.ra alpha
+#include wgEncodeHaibMethylWgbs.ra alpha
 
 
 
@@ -170,8 +168,8 @@ include wgEncodeHaibTfbs.release3.ra
 include wgEncodeSydhTfbs.release3.ra
 
 # U Chicago TFBS (wrangler: Venkat)
-include wgEncodeUchicagoTfbs.ra
-# include wgEncodeUchicagoTfbs.release2.ra alpha,beta
+include wgEncodeUchicagoTfbs.ra beta,public
+include wgEncodeUchicagoTfbs.release2.ra alpha
 
 # U Mass Weng TFBS Valid
 include wgEncodeUmassWengTfbsValid.ra alpha
@@ -196,3 +194,7 @@ include wgEncodeSunyRipSeq.ra
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
 include wgEncodeMapability.ra
 
+# Analysis tracks
+
+#AWG DnaseI HS (wrangler: Kate)
+include wgEncodeAwgDnase.ra alpha

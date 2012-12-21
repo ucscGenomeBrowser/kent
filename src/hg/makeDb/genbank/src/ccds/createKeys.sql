@@ -38,6 +38,7 @@ ALTER TABLE Interpreters ADD INDEX (organization_uid);
 ALTER TABLE Locations_GroupVersions ADD INDEX (group_version_uid), ADD INDEX (location_uid);
 ALTER TABLE Programs ADD INDEX (organization_uid);
 ALTER TABLE CcdsStatistics ADD INDEX (statistics_type_uid);
+ALTER TABLE CcdsStatistics ADD INDEX (build_uid);
 ALTER TABLE Builds ADD INDEX (prev_build_uid);
 ALTER TABLE BuildQualityTests ADD INDEX (build_uid);
 ALTER TABLE BuildQualityTests ADD INDEX (acc_rejection_uid);

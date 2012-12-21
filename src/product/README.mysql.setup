@@ -83,15 +83,19 @@ with password: "access"
 
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, \
-        CREATE TEMPORARY TABLES \
+    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT \
 	on ${DB}.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
 done
-# Note that for mysql 5.0 this works,
-# but mysql 5.1 and 5.5 require the INSERT privilege as well.
-# Mysql 5.6.3 and later do not need additional priveleges.
 
+Now create a database to hold temporary tables.
+
+    mysql -u root -p${SQL_PASSWORD} -e "create database hgTemp"
+
+    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, \
+        CREATE TEMPORARY TABLES \
+	on hgTemp.* TO \
+	readonly@localhost IDENTIFIED BY 'access';" mysql
 
 A third MySQL user can be created with read-write access to only
 the hgcentral database.  For example, a user: "readwrite"

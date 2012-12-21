@@ -76,7 +76,6 @@ type psl
 priority 37.5
 color 20,0,250
 visibility hide
-nextItemButton on
 ucscRetroInfo ucscRetroInfo1
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds
@@ -1045,25 +1044,25 @@ html numtSeqMm9
 searchTable numtSMitochondrion
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex Mms_NumtS_.*
 
 searchTable numtS
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex Mms_NumtS_.*
 
 searchTable numtSAssembled
 searchMethod exact
 searchType bed
-#shortCircuit 1
+semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
-termiRegex HSA_NumtS_*
+termRegex Mms_NumtS_.*
 
 

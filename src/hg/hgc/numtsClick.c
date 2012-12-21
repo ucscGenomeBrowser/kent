@@ -47,17 +47,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 if (sameString("hg18", database))
 {
-  if (sameString("numtS", table))
-      {
-      safef(query, sizeof(query),
-          "select  chrom, chromStart, chromEnd, name, score, strand "
-          "from numtSMitochondrionChrPlacement where ( "
-          "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
-          " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
-      itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
-      clickMsg = openMsgM;
-      }
-    else if (sameString("numtSAssembled", table))
+  if (sameString("numtS", table) || sameString("numtSAssembled", table))
       {
       safef(query, sizeof(query),
           "select  chrom, chromStart, chromEnd, name, score, strand "

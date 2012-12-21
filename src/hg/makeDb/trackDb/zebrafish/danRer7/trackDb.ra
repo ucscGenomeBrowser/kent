@@ -362,7 +362,7 @@ noInherit on
 group regulation
 type bed 3
 html UMassChIP-Seq
-visibility full
+visibility hide
 
     track UMassInput
     parent UMassChIP-SeqComposite
