@@ -13,7 +13,6 @@ sortOrder cellType=+ treatment=+
 fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
-priority 6
 type bed 9 +
 wgEncode 1
 #noInherit on
@@ -35,6 +34,8 @@ ocCode:OC_Code=+\
 4&#58;_ChIP_(all) 
 dataVersion ENCODE Mar 2012 Freeze
 html wgEncodeOpenChromSynth.release2
+# Use priority 3 for 'Integrated' tracks from labs.  Using .6 here as in ENCODE Reg track DNase.
+priority 3.6
 
     track wgEncodeOpenChromSynthK562Pk
     parent wgEncodeOpenChromSynth

@@ -2,6 +2,8 @@
 
 # Uniform peaks from ENCODE Analysis Working Group (produced by Bob Thurman at UW Stam Lab using their HotSpot pipeline)
 
+# Analysis tracks set to priority 2.* so they appear just after ENCODE Regulation track in browser image.  Use same relative priority as there (e.g. DNAse is .6)
+
 track wgEncodeAwgDnaseUniPk
 compositeTrack on
 superTrack wgEncodeDNAseSuper dense
@@ -15,13 +17,13 @@ dragAndDrop subTracks
 sortOrder tier=+ cellType=+
 fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession fileSize=Size 
 controlledVocabulary encode/cv.ra cellType=cell
-priority 1
 type narrowPeak
 visibility dense
 signalFilter 0
 signalFilterLimits 0:20000
 minGrayLevel 3
 minScore 0
+priority 2.6
 dataVersion ENCODE Jan 2011 Freeze (Sept 2012 Analysis Pubs)
 wgEncode 1
 

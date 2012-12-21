@@ -18,7 +18,6 @@ controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 noInherit on
 configurable on
 useScore 0
-priority 2
 type bed 3
 wgEncode 1
 html wgEncodeOpenChromDnase.release3

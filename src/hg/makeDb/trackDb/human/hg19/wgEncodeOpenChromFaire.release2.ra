@@ -18,7 +18,6 @@ noInherit on
 configurable on
 useScore 0
 html wgEncodeOpenChromFaire.release2
-priority 5
 type bed 3
 wgEncode 1
 dataVersion ENCODE July 2012 Freeze

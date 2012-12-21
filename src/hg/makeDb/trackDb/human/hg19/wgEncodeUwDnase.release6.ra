@@ -64,7 +64,6 @@ dragAndDrop subTracks
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 html wgEncodeUwDnase.release6
-priority 3
 type bed 3 +
 dataVersion ENCODE July 2012 Freeze
 wgEncode 1
