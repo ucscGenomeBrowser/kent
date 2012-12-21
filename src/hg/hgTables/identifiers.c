@@ -60,7 +60,7 @@ if (retAliasField != NULL)
     *retAliasField = aliasField;
 }
 
-static struct slName *getExamples(struct sqlConnection *conn,
+static struct slName *getExamples(char *db, struct sqlConnection *conn,
 				  char *table, char *field, int count)
 /* Return a list of several example values of table.field. */
 {
@@ -69,7 +69,12 @@ if (isBamTable(table))
     assert(sameString(field, "qName"));
     return randomBamIds(table, conn, count);
     }
-if (isVcfTable(table))
+else if (isBigBed(db, table, curTrack, ctLookupName))
+    {
+    assert(sameString(field, "name"));
+    return randomBigBedIds(table, conn, count);
+    }
+else if (isVcfTable(table))
     {
     assert(sameString(field, "id"));
     return randomVcfIds(table, conn, count);
@@ -84,7 +89,7 @@ else
     }
 }
 
-static void explainIdentifiers(struct sqlConnection *conn, char *idField)
+static void explainIdentifiers(char *db, struct sqlConnection *conn, char *idField)
 /* Tell the user what field(s) they may paste/upload values for, and give
  * some examples. */
 {
@@ -114,7 +119,8 @@ if (!isCustomTrack(curTable))
     {
     struct slName *exampleList = NULL, *ex;
     hPrintf("Some example values:<BR>\n");
-    exampleList = getExamples(conn, curTable, idField, 3);
+    exampleList = getExamples(db, conn, curTable, idField,
+			      aliasField != NULL ? 3 : 5);
     for (ex = exampleList;  ex != NULL;  ex = ex->next)
 	{
 	char *tmp = htmlEncode(ex->name);
@@ -145,7 +151,7 @@ if (!isCustomTrack(curTable))
 		  "where %s != %s limit 100000",
 		  tmpTable, aliasField, xrefTable, aliasField, xrefIdField);
 	sqlUpdate(conn, query);
-	exampleList = getExamples(conn, tmpTable, aliasField, 3);
+	exampleList = getExamples(db, conn, tmpTable, aliasField, 3);
 	for (ex = exampleList;  ex != NULL;  ex = ex->next)
 	    hPrintf("<TT>%s</TT><BR>\n", ex->name);
 	}
@@ -177,7 +183,7 @@ hPrintf("<FORM ACTION=\"%s\" METHOD=%s>\n", getScriptName(),
 cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.\n");
 if (sqlDatabaseExists("hgTemp"))
-    explainIdentifiers(alternateConn, idField);
+    explainIdentifiers(actualDb, alternateConn, idField);
 else
     warn("No hgTemp database found for temporary tables.<br>Please src/product/README.mysql.setup for more information.");
 hPrintf("<BR>\n");
@@ -210,7 +216,7 @@ cartSaveSession(cart);
 hPrintf("Please enter the name of a file from your computer that contains a ");
 hPrintf("space, tab, or ");
 hPrintf("line separated list of the items you want to include.\n");
-explainIdentifiers(conn, idField);
+explainIdentifiers(database, conn, idField);
 hPrintf("<BR>\n");
 hPrintf("<INPUT TYPE=FILE NAME=\"%s\"> ", hgtaPastedIdentifiers);
 hPrintf("<BR>\n");
