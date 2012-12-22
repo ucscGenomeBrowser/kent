@@ -777,6 +777,9 @@ struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
 void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
 
+struct slName *randomBigBedIds(char *table, struct sqlConnection *conn, int count);
+/* Return some arbitrary IDs from a bigBed file. */
+
 void showSchemaBigBed(char *table, struct trackDb *tdb);
 /* Show schema on bigBed. */
 

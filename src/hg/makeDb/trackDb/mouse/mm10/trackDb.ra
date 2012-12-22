@@ -62,3 +62,13 @@ useScore 1
 itemRgb on
  url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
 urlLabel Primer Pair Detail:
+
+track snp137Common override
+snpSeqFile /gbdb/mm10/snp/snp137.fa
+
+track snp137Mult override
+snpSeqFile /gbdb/mm10/snp/snp137.fa
+
+track snp137 override
+snpSeqFile /gbdb/mm10/snp/snp137.fa
+
