@@ -11,7 +11,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester 
 
-test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest
+test: binTest hdbTest genePredTest pslReaderTest customTrackTest
 	rm -r output
 	echo tested all
 
