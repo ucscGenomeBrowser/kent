@@ -52,13 +52,6 @@ include altSeqComposite1.ra
 
 include mm10Strains1Composite.ra
 
-track exonJunctionPrimers
-shortLabel ExonJunction Primers
-longLabel Mouse (mm10) Exon Junction Primer Pairs
-group genes
-type bed 12 +
-visibility hide
-useScore 1 
-itemRgb on
- url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
+track exonJunctionPrimers override
+url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
 urlLabel Primer Pair Detail:

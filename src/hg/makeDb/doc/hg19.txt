@@ -20194,26 +20194,10 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     hgLoadBed -bedDetail -tab -renameSqlTable \
       -sqlTable=$HOME/kent/src/hg/lib/bedDetail.sql \
       hg19 exonJunctionPrimers exonJunctionPrimers_hg19.bed
-# some errors:
-Reading exonJunctionPrimers_hg19.bed
-Read 548676 elements of size 14 from exonJunctionPrimers_hg19.bed
-Sorted
-Creating table definition for exonJunctionPrimers
-Saving bed.tab
-Loading hg19
-Level Code Message
-Warning 1265 Data truncated for column 'name' at row 422269
-Warning 1265 Data truncated for column 'name' at row 422281
-Warning 1265 Data truncated for column 'name' at row 422293
-Warning 1265 Data truncated for column 'name' at row 422305
-Warning 1265 Data truncated for column 'name' at row 422317
-Warning 1265 Data truncated for column 'name' at row 422329
-Warning 1265 Data truncated for column 'name' at row 422341
-Warning 1265 Data truncated for column 'name' at row 422353
-Warning 1265 Data truncated for column 'name' at row 422365
-Warning 1265 Data truncated for column 'name' at row 422377
-
-load of exonJunctionPrimers did not go as planned: 548676 record(s), 0 row(s) skipped, 12 warning(s) loading bed.tab
-
+    # Read 548676 elements of size 14 from exonJunctionPrimers_hg19.bed
+    # Sorted
+    # Creating table definition for exonJunctionPrimers
+    # Saving bed.tab
+    # Loading hg19
 
 ############################################################################
