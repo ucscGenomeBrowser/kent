@@ -260,10 +260,10 @@ while (pt != NULL)
 return len;
 }
 
-static struct bigBedInterval *getTenElements(struct bbiFile *bbi, 
-    struct bbiChromInfo *chromList, struct lm *lm)
-// get up to ten sample rows from the first chrom listed in the bigBed.
-// will return less than ten if there are less than ten on the first chrom.
+static struct bigBedInterval *getNElements(struct bbiFile *bbi, struct bbiChromInfo *chromList,
+					   struct lm *lm, int n)
+// get up to n sample rows from the first chrom listed in the bigBed.
+// will return less than n if there are less than n on the first chrom.
 {
 struct bigBedInterval *ivList = NULL;
 // start out requesting only 10k bp so we don't hang if the bigBed is huge
@@ -273,7 +273,7 @@ int currentLen = 10000;
 int startAddr = 2 * chromList->size / 3;
 int endAddr;
 
-while ((slCountAtMost(ivList,10)) < 10)
+while ((slCountAtMost(ivList, n)) < n)
     {
     endAddr = startAddr + currentLen;
 
@@ -289,8 +289,8 @@ while ((slCountAtMost(ivList,10)) < 10)
     if (startAddr < 0)
 	startAddr = 0;
 
-    // ask for ten items
-    ivList = bigBedIntervalQuery(bbi, chromList->name, startAddr, endAddr, 10, lm);
+    // ask for n items
+    ivList = bigBedIntervalQuery(bbi, chromList->name, startAddr, endAddr, n, lm);
     currentLen *= 2;
 
     if ((startAddr == 0) && (endAddr == chromList->size))
@@ -298,6 +298,39 @@ while ((slCountAtMost(ivList,10)) < 10)
     }
 
 return  ivList;
+}
+
+struct slName *randomBigBedIds(char *table, struct sqlConnection *conn, int count)
+/* Return some arbitrary IDs from a bigBed file. */
+{
+/* Figure out bigBed file name and open it.  Get contents for first chromosome as an example. */
+struct slName *idList = NULL;
+char *fileName = bigBedFileName(table, conn);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiChromInfo *chromList = bbiChromList(bbi);
+struct lm *lm = lmInit(0);
+int orderedCount = count * 4;
+if (orderedCount < 100)
+    orderedCount = 100;
+struct bigBedInterval *iv, *ivList = getNElements(bbi, chromList, lm, orderedCount);
+shuffleList(&ivList, 1);
+// Make a list of item names from intervals.
+int outCount = 0;
+for (iv = ivList;  iv != NULL && outCount < count;  iv = iv->next)
+    {
+    char *row[bbi->fieldCount];
+    char startBuf[16], endBuf[16];
+    bigBedIntervalToRow(iv, chromList->name, startBuf, endBuf, row, bbi->fieldCount);
+    if (idList == NULL || differentString(row[3], idList->name))
+	{
+	slAddHead(&idList, slNameNew(row[3]));
+	outCount++;
+	}
+    }
+lmCleanup(&lm);
+bbiFileClose(&bbi);
+freeMem(fileName);
+return idList;
 }
 
 void showSchemaBigBed(char *table, struct trackDb *tdb)
@@ -309,7 +342,7 @@ char *fileName = bigBedFileName(table, conn);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *ivList = getTenElements(bbi, chromList, lm);
+struct bigBedInterval *ivList = getNElements(bbi, chromList, lm, 10);
 
 /* Get description of columns, making it up from BED records if need be. */
 struct asObject *as = bigBedAsOrDefault(bbi);

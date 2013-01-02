@@ -353,6 +353,8 @@ struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
     char *fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, region->chrom);
+    if (fileName == NULL)
+	continue;
     addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash, &maxOut);
     freeMem(fileName);
     if (maxOut <= 0)
@@ -376,18 +378,22 @@ struct lineFile *lf = lineFileTabixMayOpen(fileName, TRUE);
 if (lf == NULL)
     noWarnAbort();
 int orderedCount = count * 4;
-if (orderedCount < 10000)
-    orderedCount = 10000;
+if (orderedCount < 100)
+    orderedCount = 100;
 struct slName *idList = NULL;
 char *words[4];
 int i;
 for (i = 0;  i < orderedCount && lineFileChop(lf, words); i++)
-    slAddHead(&idList, slNameNew(words[2]));
+    {
+    // compress runs of identical ID, in case most are placeholder
+    if (i == 0 || !sameString(words[2], idList->name))
+	slAddHead(&idList, slNameNew(words[2]));
+    }
 lineFileClose(&lf);
 /* Shuffle list and trim it to count if necessary. */
 shuffleList(&idList, 1);
 struct slName *sl;
-for (sl = idList, i = 0; sl != NULL; i++, sl = sl->next, i++)
+for (sl = idList, i = 0; sl != NULL; sl = sl->next, i++)
     {
     if (i+1 >= count)
 	{

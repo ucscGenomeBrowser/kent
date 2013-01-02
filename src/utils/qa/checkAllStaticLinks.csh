@@ -13,6 +13,7 @@ set excludeList=""
 set errdirs=0
 set errors=0
 set outfile=`date +%Y-%m-%d`
+set genecats = "/usr/local/apache/htdocs-genecats/qa/test-results/staticLinks"
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
@@ -25,8 +26,10 @@ if ( $#argv != 1 ) then
   echo "  checks all the static links in htdocs tree."
   echo "  uses directory on beta."
   echo "  excludes files listed in /cluster/bin/scripts/linkCheckExclude"
+  echo "  writes local file named yyyy-mm-dd"
+  echo "     then moves it to htdocs-genecats/qa/test-results/staticLinks"
   echo
-  echo '    usage: <fileOfPaths | all>'
+  echo "    usage: `basename $0` <fileOfPaths | all>"
   echo '       "all" uses /cluster/bin/scripts/staticpaths'
   echo
   exit
@@ -82,7 +85,6 @@ endif
   echo " found $errors with errors"                   >> $outfile
 
 # allow two levels of backup
-set genecats = "/usr/local/apache/htdocs-genecats/qa/test-results/staticLinks"
 
 if ( -e $genecats/$outfile ) then
   if ( -e $genecats/${outfile}.bak ) then
@@ -94,4 +96,4 @@ if ( -e $genecats/$outfile ) then
     mv $genecats/$outfile $genecats/${outfile}.bak
 endif
 # echo "moving file to genecats dir"
-mv $outfile /usr/local/apache/htdocs-genecats/qa/test-results/staticLinks
+mv $outfile $genecats
