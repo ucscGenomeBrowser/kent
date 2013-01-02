@@ -19509,6 +19509,32 @@ time ~/kent/src/hg/utils/automation/loadCosmic.pl hg19 ftp://ftp.sanger.ac.uk/pu
 # Loading hg19
 
 ############################################################################
+# UPDATE COSMIC TRACK - v62 (DONE - 2012-12-18 - Hiram)
+    # take a look at:
+    # ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/
+    # to see what the new version file name is, then:
+
+
+time ~/kent/src/hg/utils/automation/loadCosmic.pl -dryRun hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v62_291112.csv.gz
+#       New length: 536287
+#       Old length: 220318
+#       Percent bed overlap with previous version: 100.00%
+#       Number of deleted IDs: 77
+#       Number of added IDs: 316046
+
+#       real    0m23.191s
+
+    # that created files in: /hive/data/genomes/hg19/bed/cosmic/v62/
+
+    # then:
+    cd /hive/data/genomes/hg19/bed/cosmic/v62/
+    time ~/kent/src/hg/utils/automation/loadCosmic.pl hg19 \
+ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v62_291112.csv.gz \
+        > do.log 2>&1
+    #   real    0m19.404s
+    #   Read 536287 elements of size 4 from cosmic.bed
+
+############################################################################
 # lastz Medium Ground Finch geoFor1 (DONE - 2012-07-29 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S hg19
@@ -20162,13 +20188,32 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     # to /hive/data/outside/Weizmann/exonJunctionPrimers
     cd /hive/data/outside/Weizmann/exonJunctionPrimers
     mkdir -p /hive/data/genomes/hg19/bed/exonJunctionPrimers
-XXXX 2012-12-12 Stopped here, waiting for correct BED file
     cat track_human.BED | grep -v track \
      > /hive/data/genomes/hg19/bed/exonJunctionPrimers/exonJunctionPrimers_hg19.bed
-    # Use the exonJunctionPrimers.sql created for mm10
     cd /hive/data/genomes/hg19/bed/exonJunctionPrimers
-    hgLoadBed -bedDetail -tab -sqlTable=$HOME/kent/src/hg/lib/exonJunctionPrimers.sql \
+    hgLoadBed -bedDetail -tab -renameSqlTable \
+      -sqlTable=$HOME/kent/src/hg/lib/bedDetail.sql \
       hg19 exonJunctionPrimers exonJunctionPrimers_hg19.bed
+# some errors:
+Reading exonJunctionPrimers_hg19.bed
+Read 548676 elements of size 14 from exonJunctionPrimers_hg19.bed
+Sorted
+Creating table definition for exonJunctionPrimers
+Saving bed.tab
+Loading hg19
+Level Code Message
+Warning 1265 Data truncated for column 'name' at row 422269
+Warning 1265 Data truncated for column 'name' at row 422281
+Warning 1265 Data truncated for column 'name' at row 422293
+Warning 1265 Data truncated for column 'name' at row 422305
+Warning 1265 Data truncated for column 'name' at row 422317
+Warning 1265 Data truncated for column 'name' at row 422329
+Warning 1265 Data truncated for column 'name' at row 422341
+Warning 1265 Data truncated for column 'name' at row 422353
+Warning 1265 Data truncated for column 'name' at row 422365
+Warning 1265 Data truncated for column 'name' at row 422377
+
+load of exonJunctionPrimers did not go as planned: 548676 record(s), 0 row(s) skipped, 12 warning(s) loading bed.tab
 
 
 ############################################################################

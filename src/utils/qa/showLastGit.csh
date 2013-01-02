@@ -1,7 +1,7 @@
 #!/bin/tcsh
 
 ################################
-#  
+#
 #  01-17-2012
 #  Robert Kuhn
 #
@@ -13,13 +13,13 @@
 if ( $#argv != 1 ) then
   echo
   echo "  shows the diff for the last git checkin for a file"
-  echo "     usage: gitFindLast.csh filename"
+  echo "     usage: showLastGit.csh filename"
   echo
   exit
 else
   set file=$argv[1]
 endif
 
-set hash=`git log -1 $file | grep commit | awk '{print $2}'`
+set hash=`git log -1 $file | head -1 | awk '{print $2}'`
 git show $hash $file
 

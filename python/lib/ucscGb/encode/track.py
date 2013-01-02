@@ -450,11 +450,9 @@ class CompositeTrack(object):
         self._database = database
         self._name = compositeName        
         self._md5path = self._downloadsDirectory + 'md5sum.txt'
-        self._trackDbPath = None #self.currentTrackDb
+        self._trackDbPath = None
         if self._trackDbPath == None:
             self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra' 
-        #if not os.path.isfile(self._trackDbPath):
-        #    raise KeyError(self._trackDbPath + ' does not exist')
         
 
 class TrackCollection(dict):
@@ -493,10 +491,5 @@ class TrackCollection(dict):
         for file in os.listdir(metaDb):
             if os.path.isfile(metaDb + file) and file.endswith('.ra'):
                 trackname = file.replace('.ra', '') 
-                if 1: #os.path.isfile(self._trackPath + self._organism + '/' + self._database + '/' + file):
-                    self[trackname] = CompositeTrack(self._database, trackname, self._trackPath)
-                #else:
-                    #print file + ': ' + self._trackPath + self._organism + '/' + self._database + '/' + file + ' does not exist'
-            #else:
-                #print file + ': WTF'
+                self[trackname] = CompositeTrack(self._database, trackname, self._trackPath)
                 
