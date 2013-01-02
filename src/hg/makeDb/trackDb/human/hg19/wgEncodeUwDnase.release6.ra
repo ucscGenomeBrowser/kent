@@ -3587,7 +3587,7 @@ wgEncode 1
     view zRSig
     visibility full
     parent wgEncodeUwDnase
-    viewLimits 1:10
+    viewLimits 1:100
     minLimit 1
     maxLimit 127303.00
     autoScale off
