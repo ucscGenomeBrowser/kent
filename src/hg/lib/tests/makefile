@@ -11,7 +11,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester 
 
-test: binTest hdbTest genePredTest pslReaderTest customTrackTest
+test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest
 	rm -r output
 	echo tested all
 
@@ -24,8 +24,8 @@ loaders:
 
 spDbTest: spDbTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/spDbTest spDbTest.o ${MYLIBS} $L
-	${BIN_DIR}/spDbTest sp070202 Q9FFH7 > output/spDbTest
-	${BIN_DIR}/spDbTest sp070202 P29312 >> output/spDbTest
+	${BIN_DIR}/spDbTest sp121210 Q9FFH7 > output/spDbTest
+	${BIN_DIR}/spDbTest sp121210 P29312 >> output/spDbTest
 	diff expected/spDbTest output/spDbTest
 
 hdbTest: hdbTest.o ${MYLIBS} mkdirs
