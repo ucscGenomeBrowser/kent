@@ -8239,13 +8239,16 @@ see doc/builds.txt for specific details.
 
 ############################################################################
 # JAX/MGI TRACKS (DONE 6/22/11 angie)
+# last mm9 MGI tracks update (working 2012-10-23 - Chin)
+# in /hive/data/genomes/mm9/bed/jax/2012_10
+#
 # Previously done 9/20/10 in /hive/data/genomes/mm9/bed/jax/2010_09 (pushed)
 # Previously done 8/20/09 in /hive/data/genomes/mm9/bed/jax/2009_08 (pushed)
 # Previously done 6/11/09 in /hive/data/genomes/mm9/bed/jax/2009_06 (pushed)
 # Previously done 4/24/09 in /hive/data/genomes/mm9/bed/jax/2009_04 (not pushed)
 # Previously done 9/24/08 in /cluster/data/mm9/bed/jax/2008_09
-    mkdir -p /hive/data/genomes/mm9/bed/jax/2011_06
-    cd /hive/data/genomes/mm9/bed/jax/2011_06
+    mkdir -p /hive/data/genomes/mm9/bed/jax/2012_10
+    cd /hive/data/genomes/mm9/bed/jax/2012_10
     wget --timestamping ftp://ftp.informatics.jax.org/pub/gbrowse/\*
     wget --timestamping ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
     # Oops, June 2011 has a file that ends in "gff" not ".gff":
@@ -8269,6 +8272,29 @@ see doc/builds.txt for specific details.
     # -- bed12Source -- add type from filename
     # -- names like NM_011283_Rp1h<tm1Jnz>, XM_129721_Slc9a2<tm1Ges>
     # -- Info: name, mgiID, source {"Gene trapped", ...}
+
+    cd /hive/data/genomes/mm9/bed/jax/2012_10
+    # 2012_10 Note: Need to modify source and feature fields --
+    # MGI_GTDNA: "Gene Trap" to "MGI_DNA_GTRAP", "Gene" to "genetrap_DNA".
+    # MGI_GTRNA: "Gene Trap" to "MGI_RNA_GTRAP"
+    cat MGI_GTDNA.gff | awk 'BEGIN {FS = "\t"; RS = "\n"} {print $2}' | sort -u
+    # Gene Trap
+    cat MGI_GTDNA.gff | awk 'BEGIN {FS = "\t"; RS = "\n"} {print $3}' | sort -u
+    # Gene
+    cat MGI_GTRNA.gff | awk 'BEGIN {FS = "\t"; RS = "\n"} {print $2}' | sort -u
+    # Gene Trap
+    cat MGI_GTRNA.gff | awk 'BEGIN {FS = "\t"; RS = "\n" } {print $3}' | sort -u
+    # exon
+    cat MGI_GTDNA.gff | sed -e 's/Gene Trap/MGI_DNA_GTRAP/' \
+        -e 's/Gene/genetrap_DNA/' > MGI_GTDNA_GBrowse.gff
+    cat MGI_GTRNA.gff | sed -e 's/Gene Trap/MGI_RNA_GTRAP/' \         
+        > MGI_GTRNA_GBrowse.gff
+
+XXXX 2012-11-13 stop here due to error from following
+Can't modify single ref constructor in scalar assignment at -e line 3, near ""25,25,112";"
+Execution of -e aborted due to compilation errors.
+Reading stdin
+
     rm -f jaxGeneTrap.bed jaxAlleleInfo.tab fixJaxAllele.sql
     foreach f (MGI_GT[DR]NA_GBrowse.gff)
       echo $f:t:r | sed -e 's/MGI_//; s/_GBrowse//'
