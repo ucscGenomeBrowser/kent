@@ -56,7 +56,6 @@ if (measureTiming)
     fprintf(stdout, "<span class='timing'>Overall total time: %ld millis<br /></span>\n",
             clock1000() - enteredMainTime);
     }
-fprintf(stderr, "CGI_TIME: hgTracks: Overall total time: %ld millis\n",
-        clock1000() - enteredMainTime);
+cgiExitTime("hgTracks", enteredMainTime);
 return 0;
 }

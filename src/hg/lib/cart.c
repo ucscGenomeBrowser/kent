@@ -2476,3 +2476,11 @@ if  (containerVisChanged && !hasViews)
 anythingChanged = (anythingChanged || (clensed > 0));
 return anythingChanged;
 }
+
+void cgiExitTime(char *cgiName, long enteredMainTime)
+/* single stderr print out called at end of CGI binaries to record run
+ * time in apache error_log */
+{
+fprintf(stderr, "CGI_TIME: %s: Overall total time: %ld millis\n",
+        cgiName, clock1000() - enteredMainTime);
+}

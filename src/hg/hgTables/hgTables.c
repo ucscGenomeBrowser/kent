@@ -2006,7 +2006,6 @@ cgiSpoof(&argc, argv);
 hgTables();
 
 textOutClose(&compressPipeline);
-fprintf(stderr, "CGI_TIME: hgTables: Overall total time: %ld millis\n",
-        clock1000() - enteredMainTime);
+cgiExitTime("hgTables", enteredMainTime);
 return 0;
 }
