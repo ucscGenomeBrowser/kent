@@ -50,9 +50,13 @@ if (hIsGsidServer())
 else
     cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
+    measureTime("Time to write and close cart");
+if (measureTiming)
     {
     fprintf(stdout, "<span class='timing'>Overall total time: %ld millis<br /></span>\n",
             clock1000() - enteredMainTime);
     }
+fprintf(stderr, "CGI_TIME: hgTracks: Overall total time: %ld millis\n",
+        clock1000() - enteredMainTime);
 return 0;
 }
