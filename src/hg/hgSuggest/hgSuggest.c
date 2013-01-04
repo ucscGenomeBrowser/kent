@@ -16,6 +16,7 @@ exit(-1);
 
 int main(int argc, char *argv[])
 {
+long enteredMainTime = clock1000();
 char *prefix = sqlEscapeString(cgiOptionalString("prefix"));
 char *database = sqlEscapeString(cgiOptionalString("db"));
 int exact = cgiOptionalInt("exact", 0);
@@ -84,5 +85,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 dyStringPrintf(str, "\n]\n");
 puts(dyStringContents(str));
+cgiExitTime("hgSuggest", enteredMainTime);
 return 0;
 }

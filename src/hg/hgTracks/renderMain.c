@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
 {
 if(argc == 1)
     {
+    long enteredMainTime = clock1000();
     // CGI call
 
     // htmlPushEarlyHandlers(); XXXX do I need to do this?
@@ -143,6 +144,7 @@ if(argc == 1)
         // XXXX support track filtering? - if(cartVarExists(cart, "hgt.trackNameFilter"))
         }
     doMiddle(cart);
+    cgiExitTime("hgRenderTracks", enteredMainTime);
     }
 else
     {

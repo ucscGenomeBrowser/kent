@@ -3179,8 +3179,10 @@ char *excludeVars[] = { "submit", "Submit", "g", NULL, "ajax", NULL,};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
+cgiExitTime("hgTrackUi", enteredMainTime);
 return 0;
 }

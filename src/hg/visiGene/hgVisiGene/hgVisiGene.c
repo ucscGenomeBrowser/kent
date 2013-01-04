@@ -884,6 +884,7 @@ char *excludeVars[] = {"Submit", "submit", NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 uglyTime(NULL);
 cgiSpoof(&argc, argv);
 oldCart = hashNew(0);
@@ -898,5 +899,6 @@ else
     {
     cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldCart);
     }
+cgiExitTime("hgVisiGene", enteredMainTime);
 return 0;
 }

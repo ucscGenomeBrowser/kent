@@ -551,5 +551,9 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 /* When composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
 
+void cgiExitTime(char *cgiName, long enteredMainTime);
+/* single stderr print out called at end of CGI binaries to record run
+ * time in apache error_log */
+
 #endif /* CART_H */
 
