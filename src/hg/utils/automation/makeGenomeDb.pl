@@ -102,7 +102,7 @@ ncbiGenomeId nnnnn
 
 ncbiAssemblyId nnnnn
   - A numeric NCBI identifier for the assembly. To determine this, do an
-    NCBI Assembly query at http://www.ncbi.nlm.nih.gov/genome/assembly/,
+    NCBI Assembly query at http://www.ncbi.nlm.nih.gov/assembly/,
     using the scientific name \"Xxxxxx yyyyyy\" and choose a project ID that 
     match the assembly name.
 
@@ -1018,8 +1018,8 @@ sub makeDescription {
 <B>NCBI Genome information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET="_blank">
 NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
 <B>NCBI Assembly information:</B>
-<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId" TARGET="_blank">
-NCBI genome/assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
+<A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId" TARGET="_blank">
+NCBI assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
 
 <B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A>
 </P>
@@ -1124,7 +1124,7 @@ Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
 TARGET=_blank>assembly documentation.</A><BR>
 NCBI also provides
-<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
+<A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
 TARGET="_blank">specific information about this assembly.</A>
 </P>
 <P>
@@ -1226,7 +1226,7 @@ Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
 TARGET=_blank>assembly documentation.</A><BR>
 NCBI also provides
-<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId"
+<A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
 TARGET="_blank">specific information about this assembly.</A>
 </P>
 <P>
