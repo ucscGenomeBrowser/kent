@@ -3735,7 +3735,7 @@ release beta,public
 track coriellDelDup
 shortLabel Coriell Del Dup
 longLabel Coriell Cell Line Deletions and Duplications
-group varRep
+group phenDis
 priority 111
 visibility hide
 type bed 9 +
