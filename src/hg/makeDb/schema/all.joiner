@@ -3882,7 +3882,7 @@ tablesIgnored $gbd
     blatFr1
     chromInfo
     contamination
-    cpgIsland%
+    cpgIslandExt
     ctgPos
     ctgPos2
     cytoBand
