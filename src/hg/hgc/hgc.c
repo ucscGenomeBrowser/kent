@@ -23885,15 +23885,30 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    r = bedDetailLoadWithGaps(row, bedPart+2);
-    bedPrintPos((struct bed*)r, bedPart, tdb);
-    if (r->id != NULL)
+    if (sameString("exonJunctionPrimers", table))
         {
-        printf("<B>ID:</B> %s <BR>\n", r->id);
-        printCustomUrl(tdb, r->id, TRUE);
+        char *url;
+        url = tdb->url;
+        r = bedDetailLoadWithGaps(row, bedPart+4);
+        bedPrintPos((struct bed*)r, bedPart, tdb);
+        if ((r->id != NULL) && (r->description != NULL) && (url != NULL))
+            {
+            printf("<B>%s: </B>", r->description);
+            printf("<A HREF=\"%s%s\" target=_blank>%s</A><BR>",url, r->id, r->id);
+            }
+        } 
+    else 
+        {
+        r = bedDetailLoadWithGaps(row, bedPart+2);
+        bedPrintPos((struct bed*)r, bedPart, tdb);
+        if (r->id != NULL)
+            {
+            printf("<B>ID:</B> %s <BR>\n", r->id);
+            printCustomUrl(tdb, r->id, TRUE);
+            } 
+        if (r->description != NULL)
+            printf("%s <BR>\n", r->description);
         }
-    if (r->description != NULL)
-        printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
 /* do not print this for custom tracks, they do this later */
@@ -24016,6 +24031,13 @@ while ((row = sqlNextRow(sr)) != NULL)
      printf("<BR>");
      sqlFreeResult(&sr);
 } /* end of prGRShortRefGene */
+
+void doQPCRPrimers(struct trackDb *tdb, char *itemName)
+/* Put up page for QPCRPrimers. */
+{
+genericHeader(tdb, itemName);
+doBedDetail(tdb, NULL, itemName);
+} /* end of doQPCRPrimers */
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -25233,6 +25255,11 @@ else if (sameString("geneReviews", table))
     {
     doGeneReviews(tdb, item);
     }
+else if (startsWith("exonJunctionPrimers", table))
+    {
+    doQPCRPrimers(tdb, item);
+    }
+
 else if (tdb != NULL)
     {
     genericClickHandler(tdb, item, NULL);
