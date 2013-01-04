@@ -37,6 +37,7 @@ codonToPos: returns genomic position for given exon; parameters: exon, table and
 
 int main(int argc, char *argv[])
 {
+long enteredMainTime = clock1000();
 struct dyString *output = newDyString(10000);
 
 cgiSpoof(&argc, argv);
@@ -219,5 +220,6 @@ else
     }
 
 apiOut(dyStringContents(output), jsonp);
+cgiExitTime("hgApi", enteredMainTime);
 return 0;
 }

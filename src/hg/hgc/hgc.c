@@ -25301,7 +25301,6 @@ long enteredMainTime = clock1000();
 pushCarefulMemHandler(LIMIT_2or6GB);
 cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
-fprintf(stderr, "CGI_TIME: hgc: Overall total time: %ld millis\n",
-        clock1000() - enteredMainTime);
+cgiExitTime("hgc", enteredMainTime);
 return 0;
 }

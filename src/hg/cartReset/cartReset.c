@@ -26,6 +26,7 @@ printf("You will be automatically redirected to the gateway page in 2 seconds,\n
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 struct dyString *headText = newDyString(512);
 char *destination = cgiUsualString("destination", defaultDestination);
 
@@ -36,5 +37,6 @@ dyStringPrintf(headText,
 	       ,destination);
 htmShellWithHead("Reset Cart", headText->string, doMiddle, NULL);
 dyStringFree(&headText);
+cgiExitTime("cartReset", enteredMainTime);
 return 0;
 }

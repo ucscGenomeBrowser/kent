@@ -679,11 +679,13 @@ char *excludeVars[] = {"Submit", "submit", NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
 oldVars = hashNew(10);
 cartEmptyShell(cartMain, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgGene", enteredMainTime);
 return 0;
 }

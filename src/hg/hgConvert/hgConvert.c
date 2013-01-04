@@ -341,9 +341,11 @@ char *excludeVars[] = { "submit", HGLFT_DO_CONVERT, NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgConvert", enteredMainTime);
 return 0;
 }
 

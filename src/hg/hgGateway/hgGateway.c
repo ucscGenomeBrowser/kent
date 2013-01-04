@@ -337,6 +337,7 @@ char *excludeVars[] = {NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
@@ -344,5 +345,6 @@ if(cgiIsOnWeb())
     checkForGeoMirrorRedirect();
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgGateway", enteredMainTime);
 return 0;
 }

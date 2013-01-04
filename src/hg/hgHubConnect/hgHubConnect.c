@@ -526,9 +526,11 @@ char *excludeVars[] = {"Submit", "submit", "hc_one_url",
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgHubConnect", enteredMainTime);
 return 0;
 }
 

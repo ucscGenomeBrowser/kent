@@ -835,8 +835,7 @@ if (orgChange)
     }
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
-fprintf(stderr, "CGI_TIME: hgBlat: Overall total time: %ld millis\n",
-        clock1000() - enteredMainTime);
+cgiExitTime("hgBlat", enteredMainTime);
 return 0;
 }
 
