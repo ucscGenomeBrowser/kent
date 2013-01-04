@@ -3132,6 +3132,6 @@ searchPriority 12.9888
 padding 250
 
 track exonJunctionPrimers override
-url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
-urlLabel Primer Pair Detail:
+url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?
+urlLabel Click here for primer details:
 

@@ -3252,9 +3252,7 @@ longLabel $Organism ($db) Whole Transcriptome qPCR Primers
 group genes
 type bed 12 +
 visibility hide
-useScore 1
+noScoreFilter on
 itemRgb on
-url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
-urlLabel Primer Pair Detail:
 html qpcrPrimers
 
