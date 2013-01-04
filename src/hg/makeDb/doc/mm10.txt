@@ -9005,6 +9005,7 @@ TMPDIR=/scratch/tmp
 
 #########################################################################
 # ExonJunction Primers (DONE - 2012-12-10 - Chin
+# The track name is changed to "qPCR Primers"
     # Download
     # http://www.weizmann.ac.il/complex/compphys/software/Amit/primers/mouse/track_mouse.BED
     # to /hive/data/outside/Weizmann/exonJunctionPrimers
