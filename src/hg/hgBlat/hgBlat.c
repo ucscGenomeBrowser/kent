@@ -823,6 +823,7 @@ char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
@@ -834,6 +835,8 @@ if (orgChange)
     }
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+fprintf(stderr, "CGI_TIME: hgBlat: Overall total time: %ld millis\n",
+        clock1000() - enteredMainTime);
 return 0;
 }
 

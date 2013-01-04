@@ -25297,8 +25297,11 @@ char *excludeVars[] = {"hgSeq.revComp", "bool.hcg.dna.rc", "Submit", "submit", "
 
 int main(int argc, char *argv[])
 {
+long enteredMainTime = clock1000();
 pushCarefulMemHandler(LIMIT_2or6GB);
 cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
+fprintf(stderr, "CGI_TIME: hgc: Overall total time: %ld millis\n",
+        clock1000() - enteredMainTime);
 return 0;
 }
