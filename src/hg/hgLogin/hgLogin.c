@@ -1330,6 +1330,7 @@ errAbort(
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
 htmlSetStyleSheet("/style/userAccounts.css");
@@ -1338,5 +1339,6 @@ htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");
 oldCart = hashNew(10);
 cartHtmlShell("Login - UCSC Genome Browser", doMiddle, hUserCookie(), excludeVars, oldCart);
+cgiExitTime("hgLogin", enteredMainTime);
 return 0;
 }
