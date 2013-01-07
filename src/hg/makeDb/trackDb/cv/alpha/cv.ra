@@ -14185,7 +14185,7 @@ term serum_stimulated_media
 tag SERUMSTIM
 type treatment
 label serum-stimulated media
-description Grown with normal serum levels (10%), then switched back to normal serum levels (10% FBS) for 3 hours.
+description Grown with normal serum levels (10%), then switched to media that contains no FBS for 36 hours, then switched back to normal serum levels (10% FBS) for 3 hours.
 
 term Taxol_500nM_24hr
 tag TAX24H
