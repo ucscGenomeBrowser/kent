@@ -6,7 +6,7 @@ two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
 PHAST package</A>, for all seven species.
 The multiple alignments were generated using multiz and
-other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/"
+other tools in the UCSC/<A HREF="http://www.bx.psu.edu/miller_lab/"
 TARGET=_blank>Penn State Bioinformatics</A>
 comparative genomics alignment pipeline.
 Conserved elements identified by phastCons are also displayed in
@@ -51,7 +51,7 @@ level (see <EM>Gap Annotation</EM>, below). </P>
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
 <TR ALIGN=left><TD>Lamprey</TD><TD>Petromyzon marinus</TD><TD>Sep. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=petMar2" TARGET=_blank>WUGSC/petMar2</A></TD><TD>reference species</TD></TR>
-<TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>Oct. 2005</TD><TD><A HREF="../cgi-bin/hgGateway?db=oryLat2" TARGET=_blank>NIG/UT/oryLat2</A>Net</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>Oct. 2005</TD><TD><A HREF="../cgi-bin/hgGateway?db=oryLat2" TARGET=_blank>NIG/UT/oryLat2</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Chicken</TD><TD>Gallus gallus</TD><TD>Nov. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=galGal4" TARGET=_blank>IGSC/galGal4</A></TD><TD>Net</TD></TR>
 <TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>Nov. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=hg19" TARGET=_blank>GRCh37/hg19</A></TD><TD>Net</TD></TR>
 <TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>Dec. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=mm10" TARGET=_blank>GRCm38/mm10</A></TD><TD>Net</TD></TR>
@@ -250,7 +250,7 @@ This same tree model was used in the phyloP calculations, however their
 background frequencies were modfied to maintain reversibility.
 The resulting tree model for
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/petMar2/phyloP7way/petMar2.7way.phyloP7way.mod"
-TARGET=_blank>all species.</A>
+TARGET=_blank>all species</A>.
 </P>
 <h3> PhastCons Conservation </h3>
 <P>
@@ -280,7 +280,9 @@ target-coverage=0.3, rho=0.3.</P>
 <P>
 The phyloP program supports several different methods for computing
 p-values of conservation or acceleration, for individual nucleotides or
-larger elements (http://compgen.bscb.cornell.edu/phast).  Here it was used
+larger elements
+(<a href="http://compgen.bscb.cornell.edu/phast/" target="_blank">http://compgen.bscb.cornell.edu/phast/</a>).
+Here it was used
 to produce separate scores at each base (--wig-scores option), considering
 all branches of the phylogeny rather than a particular subtree or lineage
 (i.e., the --subtree option was not used).  The scores were computed by
@@ -306,7 +308,7 @@ details page or in the browser when the track's display mode is set to
 <P> This track was created using the following programs:
 <UL>
 <LI> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb
-Miller of the <A HREF="http://bio.cse.psu.edu/"
+Miller of the <A HREF="http://www.bx.psu.edu/miller_lab/"
 TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
 <LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
@@ -325,64 +327,67 @@ display), and Brian Raney (gap annotation and codon framing) at UCSC
 consensus in the vertebrate phylogeny community as of March 2007.
 </P>
 
-<H2>References</H2>
+<h2>References</h2>
 
-<H3>Phylo-HMMs, phastCons, and phyloP:</H3>
-<P>
-Pollard KS, Hubisz MJ, Siepel A.
-<A HREF="http://genome.cshlp.org/content/early/2009/10/26/gr.097857.109.abstract"
-TARGET=_blank>Detection of non-neutral substitution rates on
-mammalian phylogenies.</A> <EM>Genome Res</EM>. 2009 Oct 26. [Epub ahead of print]
-</P>
+<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
 
-<P>
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="http://genome.cshlp.org/content/early/2009/10/26/gr.097857.109.abstract" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+</p>
+
+<p>
 Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
-Clawson H, Spieth J, Hillier LW, Richards S, <EM>et al.</EM>
-<A HREF="http://www.genome.org/cgi/doi/10.1101/gr.3715005"
-TARGET=_blank>Evolutionarily conserved elements in vertebrate, insect, worm,
-and yeast genomes</A>.
-<EM>Genome Res</EM>. 2005 Aug;15(8):1034-50.
-</P>
+Clawson H, Spieth J, Hillier LW, Richards S, <em>et al</em>.
+<a href="http://genome.cshlp.org/content/15/8/1034" target="_blank">
+Evolutionarily conserved elements in vertebrate, insect, worm, and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+</p>
 
-<H3>Chain/Net:</H3>
-<P>
+<h3>Chain/Net:</h3>
+
+<p>
 Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
-<A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1"
-TARGET=_blank>Evolution's cauldron:
-duplication, deletion, and rearrangement in the mouse and human genomes</A>.
-<EM>Proc Natl Acad Sci U S A</EM>. 2003 Sep 30;100(20):11484-9.
-</P>
+<a href="http://www.pnas.org/content/100/20/11484.abstract" target="_blank">
+Evolution's cauldron: duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+</p>
 
-<H3>Multiz:</H3>
-<P>
+<h3>Multiz:</h3>
+
+<p>
 Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
-Baertsch R, Rosenbloom K, Clawson H, Green ED, <EM>et al.</EM>
-<A HREF="http://www.genome.org/cgi/content/abstract/14/4/708"
-TARGET=_blank>Aligning multiple genomic sequences with the threaded blockset aligner</A>.
-<EM>Genome Res</EM>. 2004 Apr;14(4):708-15.
-</P>
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al</em>.
+<a href="http://genome.cshlp.org/content/14/4/708.abstract" target="_blank">
+Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+</p>
 
-<H3>Blastz:</H3>
-<P>
+<h3>Blastz:</h3>
+
+<p>
 Chiaromonte F, Yap VB, Miller W.
-<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract"
-TARGET=_blank>Scoring pairwise genomic sequence alignments</A>.
-<EM>Pac Symp Biocomput</EM>. 2002;:115-26.
-</P>
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">
+Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002;:115-26.
+</p>
 
-<P>
+<p>
 Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
 Haussler D, Miller W.
-<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103"
-TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
-<EM>Genome Res</EM>. 2003 Jan;13(1):103-7.
-</P>
+<a href="http://genome.cshlp.org/content/13/1/103.abstract" target="_blank">
+Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+</p>
 
-<H3>Phylogenetic Tree:</H3>
-<P>
+<h3>Phylogenetic Tree:</h3>
+
+<p>
 Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
 Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
-<A HREF="http://www.sciencemag.org/cgi/content/abstract/294/5550/2348"
-TARGET=_blank>Resolution of the early placental mammal radiation using Bayesian phylogenetics</A>.
-<EM>Science</EM>. 2001 Dec 14;294(5550):2348-51.
-</P>
+<a href="http://www.sciencemag.org/content/294/5550/2348.abstract" target="_blank">
+Resolution of the early placental mammal radiation using Bayesian phylogenetics</a>.
+<em>Science</em>. 2001 Dec 14;294(5550):2348-51.
+</p>
