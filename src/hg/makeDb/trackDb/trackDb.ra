@@ -3256,3 +3256,7 @@ noScoreFilter on
 itemRgb on
 html qpcrPrimers
 
+searchTable exonJunctionPrimers
+searchMethod exact
+searchType bed
+
