@@ -17,10 +17,12 @@ dragAndDrop subTracks
 sortOrder tier=+ cellType=+
 fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession fileSize=Size 
 controlledVocabulary encode/cv.ra cellType=cell
-type bed 3
+type bed 6 +
 visibility dense
-signalFilter 0
-signalFilterLimits 0:20000
+signalFilter 0.0:20000.0
+signalFilterLimits 0.0:20000.0
+signalValueFilterByRange on
+spectrum on
 minGrayLevel 3
 minScore 0
 priority 2.6
