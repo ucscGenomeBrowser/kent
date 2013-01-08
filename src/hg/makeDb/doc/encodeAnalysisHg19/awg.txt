@@ -24,13 +24,13 @@
     cd /hive/data/genomes/hg19/bed
     mkdir -p wgEncodeAwgDnase
 
-    # Track composite will be wgEncodeAwgDnaseUniPk (may change later to wgEncodeAwgDnase if
+    # Track composite will be wgEncodeAwgDnaseUniform
     # peaks are relegated to a view. 
 
     # get track description, trackDb, and files from EBI site that hosts analysis hub
     wget http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformDnase.html
     wget http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformDnase.txt
-    cp uniformDnase.html ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeAwgDnaseUniPk.html
+    cp uniformDnase.html ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeAwgDnaseUniform.html
     sed -n 's/bigDataUrl /wget /p' uniformDnase.txt > wget.csh
 
     mkdir bb narrowPeak
@@ -53,7 +53,7 @@ chr1    10180   10330   .       0       .       26.000000       -1      -1      
     cd narrowPeak
 cat > ../loadDnase.csh << 'EOF'
     set b = wgEncodeAwgDnase
-    set v = ${b}UniPk
+    set v = ${b}Uniform
     set t = ../$b.ra
     set m = ../$b.metaDb.ra
     rm -f $t $m
@@ -114,12 +114,14 @@ csh ../loadDnase.csh >&! ../loadDnase.out &
     # edit to remove orphan stanzas
     # note -- could have used above to get CV cell type as well (I did this manually)
 
+    mkdir downloads
+
     # set up file downloads in expected locale
     set dir = /hive/groups/encode/dcc/pipeline/downloads/hg19
 
     # must use name of composite
-    mkdir -p $dir/wgEncodeAwgDnaseUniPk
-    cd $dir/wgEncodeAwgDnaseUniPk
+    mkdir -p $dir/wgEncodeAwgDnaseUniform
+    cd $dir/wgEncodeAwgDnaseUniform
 
     # setup downloads area in ENCODE 2 standard fashion (as on encodewiki 'Data Wrangler HOWTO')
     mkdir release1
@@ -130,19 +132,26 @@ csh ../loadDnase.csh >&! ../loadDnase.out &
 cat  << 'EOF' > link.csh
     foreach f (*.gz)
         echo $f
-        ln $f /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeAwgDnaseUniPk/releaseLatest
+        ln $f /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeAwgDnaseUniform/releaseLatest
     end
 'EOF'
     csh link.csh
-    cd $dir/wgEncodeAwgDnaseUniPk/releaseLatest
+    cd $dir/wgEncodeAwgDnaseUniform/releaseLatest
+
 
     # add files.txt
     encodeMkFilesList hg19 
 
     # add README
-    sed 's/wgEncodeUwDnase/wgEncodeAwgDnaseUniPk/' $dir/wgEncodeUwDnase/README.txt > $dir/wgEncodeAwgDnaseUniPk
-    cp $dir/wgEncodeUwDnase/README.txt $dir/wgEncodeAwgDnaseUniPk/releaseLatest
+    sed 's/wgEncodeUwDnase/wgEncodeAwgDnaseUniform/' $dir/wgEncodeUwDnase/README.txt > $dir/wgEncodeAwgDnaseUniform
+    cp $dir/wgEncodeUwDnase/README.txt $dir/wgEncodeAwgDnaseUniform/releaseLatest
+
+    # get file list for pushQ
+    cd ~/kent/src/hg/makeDb/doc/encodeAnalysisHg19
+    /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgDnaseUniform 1
+
     
+
 
 
 

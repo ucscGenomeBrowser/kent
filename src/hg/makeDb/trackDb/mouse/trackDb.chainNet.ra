@@ -383,6 +383,9 @@ priority 640.3
 track chainNetTetNig1 override
 priority 640.3
 
+track chainNetPetMar2 override
+priority 650.3
+
 track chainNetPetMar1 override
 priority 650.3
 
