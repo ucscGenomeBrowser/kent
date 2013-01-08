@@ -1687,28 +1687,13 @@ priority 103.29
         type bed 5 .
         priority 23
 
-track snp137Common
-shortLabel Common SNPs(137)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Found in >= 1% of Samples
-group varRep
-priority 99.0901
-visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp137Seq
-snpExceptionDesc snp137ExceptionDesc
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
+track snp137Common override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-codingAnnotations snp137CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp137CodingDbSnp dbSNP
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)
@@ -1732,50 +1717,21 @@ codingAnnotations snp137CodingDbSnp,
 # Need to request new tag
 #codingAnnoLabel_snp137CodingDbSnp dbSNP
 
-track snp137Mult
-shortLabel Mult. SNPs(137)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 137) That Map to Multiple Genomic Loci
-group varRep
-priority 99.0903
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp137Seq
-snpExceptionDesc snp137ExceptionDesc
-defaultGeneTracks knownGene
-defaultMaxWeight 3
-maxWindowToDraw 10000000
-type bed 6 +
+track snp137Mult override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-codingAnnotations snp137CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp137CodingDbSnp dbSNP
 
-track snp137
-shortLabel All SNPs(137)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 137)
-group varRep
-priority 99.0904
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
+track snp137 override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-codingAnnotations snp137CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp137CodingDbSnp dbSNP
 
 track snp135Common override
 snpSeqFile /gbdb/hg19/snp/snp135.fa
@@ -3175,14 +3131,7 @@ termRegex rs[0-9]+
 searchPriority 12.9888
 padding 250
 
-track exonJunctionPrimers
-shortLabel ExonJunction Primers
-longLabel Human (hg19) Exon Junction Primer Pairs
-group genes
-type bed 12 +
-visibility hide
-useScore 1
-itemRgb on
- url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
-urlLabel Primer Pair Detail:
+track exonJunctionPrimers override
+url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?
+urlLabel Click here for primer details:
 

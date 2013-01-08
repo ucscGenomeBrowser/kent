@@ -1334,9 +1334,11 @@ cartRemove(cart, CT_CUSTOM_TEXT_VAR);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgCustom", enteredMainTime);
 return 0;
 }

@@ -2,52 +2,89 @@
 <P>
 The Coriell Cell Line Deletion and Duplication track shows
 genotyping of chromosomal aberration and inherited disorder samples
-from an NIGMS study  
-(http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000269.v1.p1 ,
-dbGaP Study Accession: phs000269.v1.p1).
+from an NIGMS study <A HREF = 
+"http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000269.v1.p1" 
+TARGET = _BLANK>
+dbGaP Study Accession: phs000269.v1.p1.</A>
 </P>
 
-<p>
+<P>
 716 samples derived from 697 individuals 
 from the Chromosomal Aberrations and Inherited Disorders collections of the 
-NIGMS Human Genetic Cell Repository were genotyped and analyzed for CNV 
-determination by the Microarray Center at the Coriell Institute for Medical 
+NIGMS Human Genetic Cell Repository were genotyped and analyzed for CNVs 
+by the Microarray Center at the Coriell Institute for Medical 
 Research. 
-</p>
+</P>
 
 <p>
-Karyotyping was performed on all cell cultures in the Repository with 
-reported chromosome abnormalities. The samples chosen for genotyping in 
-this study were intended to represent a diverse set of copy number variants, 
-but the selection was also weighted to over-sample commonly manifested types 
-of aberrations. When available, the ISCN description of the sample based 
-on G-banding and FISH analysis is included in the phenotypic data. 
-Karyotypes for these cells can be viewed in the online Repository 
-catalog (http://ccr.coriell.org/Sections/Collections/NIGMS/?SsId=8).
+Karyotyping was performed on all cell cultures in the Repository with
+reported chromosome abnormalities. The samples chosen for genotyping in
+this study are intended to represent a diverse set of copy-number variants,
+but the selection was also weighted to over-sample commonly manifested types
+of aberrations. When available, the ISCN description of the sample, based
+on G-banding and FISH analysis, is included in the phenotypic data.
+Karyotypes for these cells can be viewed in the 
+<A HREF ="http://ccr.coriell.org/Sections/Collections/NIGMS/?SsId=8"
+TARGET = _BLANK>online Repository catalog</A>
 </P>
 
 <P>
-Some field definitions from within an item description:
-<UL><LI><B>CN State:</B> ...</LI>
-<LI><B>Type: </B> ...</LI></UL>
+Field definitions for an item description:
+<UL>
+<LI><B>CN State:</B> Copy Number of the imbalance.  Note that a
+  copy number of 2 is colored neutral (black), but all such items
+  occur on the sex chromosomes, so this should not be interpreted
+  as normal, as it would be on an autosome.</LI>
+<LI><B>Cell Type: </B>Type of cell culture; one of the following: 
+  B Lymphocyte, Fibroblast, Amniotic fluid-derived cell line or 
+  Chorionic villus-derived cell line.</LI>
+<LI><B>Description (Diagnosis): </B> May be a medical diagnosis,
+  such as "albinism" or a chromosomal phenotype, such as 
+  "translocation."</LI>
+<LI><B>ISCN nomenclature: </B> A description of the chromosomal
+  karyotype, in formal ISCN nomenclature.  </LI>
+</UL>
+
 <P>
-The track displays CNVs labeled with type as <B>Gain</B> in black  [this
-should be blue - to conform to convention in OMIM, ISCA and DECIPHER], and
-those with type <B>Loss</B> in light gray[this should be red]. The 
-score field also corresponds
-to the type: all <B>Gain</B> CNVs have a score of 1000, and <B>Loss</B>
-CNVs have a score of 0.
+CN State item coloring:
+<UL>
+<LI style="color: #ff0000;">CN State 0 == score 0</li>
+<LI style="color: #aa4400;">CN State 1 == score 100</li>
+<LI style="color: #000000;">CN State 2 == score 200</li>
+<LI style="color: #0044aa;">CN State 3 == score 300</li>
+<LI style="color: #0000ff;">CN State 4 == score 400</li>
+</UL>
+
+Use the score filter limits on the configuration page
+to select out the different CN State items.
 </P>
+
 <H2>Methods</H2>
 <P>A description of how the data were created</P>
+[maybe omit this section. the description above covers
+it pretty well.]
+
 <H2>Credits</H2>
 <P>
-We thank Dorit Berlin and Zhenya Tang at the NIGMS Human Genetic Cell Repository
-and CHD GENES Biorepository at the 
-<A HREF="http://www.coriell.org/" TARGET=_blank>Coriell Institute for Medical Research</A>
-for these data.
+We thank Dorit Berlin and Zhenya Tang at the NIGMS Human Genetic Cell 
+Repository and CHD GENES Biorepository at the 
+<A HREF="http://www.coriell.org/" TARGET=_blank>Coriell Institute for Medical 
+Research</A> for these data.
 </P>
+
 <H2>References</H2>
 <P>
-http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000269.v1.p1
+<A HREF = 
+"http://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000269.v1.p1"
+TARGET = _BLANK>
+Genotyping NIGMS Chromosomal Aberration and Inherited Disorder Samples</A> 
+(NCBI dbGaP).
+
+<BR>
+<A HREF = 
+"http://ccr.coriell.org/Sections/Collections/NIGMS/InheritedDisorders.aspx?PgId=54&coll=GM"
+TARGET=_BLANK>Heritable Diseases and Normal Variants</A> 
+(Coriell).
+</A>
+
 </p>

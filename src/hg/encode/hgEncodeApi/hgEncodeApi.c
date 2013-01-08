@@ -136,6 +136,7 @@ sqlDisconnect(&connExp);
 int main(int argc, char *argv[])
 /* Process command line */
 {
+long enteredMainTime = clock1000();
 struct dyString *output = newDyString(10000);
 
 cgiSpoof(&argc, argv);
@@ -159,5 +160,6 @@ else
     }
 
 apiOut(dyStringContents(output), jsonp);
+cgiExitTime("hgEncodeApi", enteredMainTime);
 return 0;
 }

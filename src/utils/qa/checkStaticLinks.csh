@@ -9,6 +9,8 @@ source `which qaConfig.csh`
 # 
 ###############################################
 
+onintr cleanup
+
 set filePath=""
 set out=""
 set url=""
@@ -22,11 +24,12 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  checks the links in all the static pages in a directory."
   echo "  operates on pages on hgwbeta"
-  echo "  writes a file called dir.dir.err"
+  echo "  writes a file called path.In.Docs.err"
   echo
   echo "    usage:  pathInHtdocs [excludeList]"
   echo '      where:'
-  echo '        pathInHtdocs = path in htdocs (0 for htdocs root)'
+  echo '        pathInHtdocs = htdocs directory path (use 0 for htdocs itself)'
+  echo '            e.g., goldenPath, goldenPath/help, FAQ'
   echo "        excludeList = filename for list of files not to check"
   echo
   exit
@@ -64,101 +67,107 @@ end
 
 # set up outfile for all the files in the dir
 set i=0
-rm -f outfile
-echo "\nfiles checked in htdocs/${filePath}" >> outfile
-echo $origlist | sed "s/ /\n/g"              >> outfile
-echo                                         >> outfile
+rm -f outfile$$
+echo "\nfiles checked in htdocs/${filePath}" >> outfile$$
+echo $origlist | sed "s/ /\n/g"              >> outfile$$
+echo                                         >> outfile$$
 
 foreach file ( $origlist )
-  rm -f tmp0
-  htmlCheck checkLinks $baseUrl/$filePath/$file  >>& tmp0
-  if ( -e tmp0 ) then
+  rm -f tmp000
+  htmlCheck checkLinks $baseUrl/$filePath/$file  >>& tmp000
+
+  if ( -e tmp000 ) then
     # there were errors
     # clean out things we don't care about
-    rm -f tmp
-    cat tmp0 | grep -v "403" \
+    rm -f tmp011
+    cat tmp000 | grep -v "403" \
       | grep -v "doesn't exist" \
       | grep -v "Cancelling" \
       | grep -v "service not known" \
       | grep -v "Connection refused" \
       | grep -v "Non-numeric port" \
-      | egrep "."  > tmp
-    rm -f tmp0
+      | egrep "."  > tmp011
+    rm -f tmp000
 
-    if ( `wc -l tmp | awk '{print $1}'` > 0 ) then
+    if ( `wc -l tmp011 | awk '{print $1}'` > 0 ) then
       # there were errors worth looking at
       # get the link names for any broken urls
       @ errs = $errs + 1                    # counts files with errors
       set j=1
-      set errors=`wc -l tmp | awk '{print $1}'`  # counts errs in file
-      rm -f outfile$file
-      echo                                           >> err$file
+      set errors=`wc -l tmp011 | awk '{print $1}'`  # counts errs in file
+      rm -f outfile${file}$$
+      echo                                           >> err${file}$$
       while ( $j <= $errors )
-        set errLine=`sed -n "${j}p" tmp`
-        set url=`sed -n "${j}p" tmp | awk '{print $NF}'`
+        set errLine=`sed -n "${j}p" tmp011`
+        set url=`sed -n "${j}p" tmp011 | awk '{print $NF}'`
         set xfile=$baseUrl/$filePath/$file
         # set xfile=http://genome.ucsc.edu/goldenPath/credits.html
         # set url=http://www.genome.washington.edu/UWGC
-
         # grab 3 lines from html page and trim down to </A> tag
         set link=`htmlCheck getHtml $xfile | egrep -A 4 "$url" \
           | sed -n "1,/<\/A>/p"`
-        set link=`echo $link \
+        set link=`echo "$link" \
           | awk -F'</A>' '{print $1}' \
           | awk -F'>' '{print $NF}'`
 
-        echo "link  = $link"                         >> err$file
-        echo "error = $errLine"                      >> err$file
-        echo                                         >> err$file
+        echo "link  = $link"                         >> err${file}$$
+        echo "error = $errLine"                      >> err${file}$$
+        echo                                         >> err${file}$$
         @ j = $j + 1
       end
       @ j = $j - 1
       if ( $j > 0 ) then
-        echo $file                                >> outfile$file
-        echo $baseUrl/$filePath/$file             >> outfile$file
-        cat err$file                              >> outfile$file
+        echo $file                                >> outfile${file}$$
+        echo $baseUrl/$filePath/$file             >> outfile${file}$$
+        cat err${file}$$                          >> outfile${file}$$
         if ( $j == 1 ) then
-          echo " found $j error in $file"          >> outfile$file
+          echo " found $j error in $file"         >> outfile${file}$$
         else
-          echo " found $j errors in $file"          >> outfile$file
+          echo " found $j errors in $file"        >> outfile${file}$$
         endif
-        echo "---------------------------"        >> outfile$file
-        echo                                      >> outfile$file
-        cat outfile$file                       >> outfile
+        echo "---------------------------"        >> outfile${file}$$
+        echo                                      >> outfile${file}$$
+        cat outfile${file}$$                 >> outfile$$
       endif
-      rm -f err$file
+      rm -f err${file}$$
     endif
-    rm -f tmp
-    rm -f outfile$file
+    rm -f tmp011
+    rm -f outfile${file}$$
   endif
   @ i = $i + 1
 end
 
-echo "\n directory = htdocs/$filePath"          >> outfile
+echo "\n directory = htdocs/$filePath"       >> outfile$$
 if (  $i == 1 ) then
-  echo " checked $i file"                       >> outfile
+  echo " checked $i file"                    >> outfile$$
 else
-  echo " checked $i files"                      >> outfile
+  echo " checked $i files"                   >> outfile$$
 endif
 
 # note:  if you change the line below the wrapper script will break
 if ( $errs == 0 ) then
-  echo " found no files with errors\n"         >> outfile
+  echo " found no files with errors\n"       >> outfile$$
 else
   if ( $errs == 1 ) then
-    echo " found errors in $errs file\n"       >> outfile
+    echo " found errors in $errs file\n"     >> outfile$$
   else
-    echo " found errors in $errs files\n"      >> outfile
+    echo " found errors in $errs files\n"    >> outfile$$
   endif
 endif
 
-echo                                           >> outfile
+echo                                         >> outfile$$
 
-# cat outfile
+# cat outfile$$
 if ( $filePath == "" ) then
   set out=htdocs.err
 else
   set out=`echo $filePath | sed s@/@.@g`.err
 endif
-mv outfile $out
+mv outfile$$ $out
 
+cleanup:
+rm -f tmp000
+rm -f tmp011
+rm -f err${file}$$
+rm -f outfile${file}$$
+rm -f outfile$$

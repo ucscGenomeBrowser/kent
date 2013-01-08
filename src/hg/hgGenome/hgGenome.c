@@ -567,6 +567,7 @@ char *excludeVars[] = {"Submit", "submit", NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 // htmlSetStyle(htmlStyleUndecoratedLink);
@@ -575,5 +576,6 @@ if (argc != 1)
 oldVars = hashNew(12);
 cart = cartForSession(hUserCookie(), excludeVars, oldVars);
 dispatchLocation();
+cgiExitTime("hgGenome", enteredMainTime);
 return 0;
 }

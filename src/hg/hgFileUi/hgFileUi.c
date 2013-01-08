@@ -171,7 +171,9 @@ char *excludeVars[] = { "submit", "Submit", "g", "clearCache", "ajax", NULL,};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
+cgiExitTime("hgFileUi", enteredMainTime);
 return 0;
 }

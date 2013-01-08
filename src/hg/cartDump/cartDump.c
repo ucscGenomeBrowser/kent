@@ -110,8 +110,10 @@ char *excludeVars[] = { "submit", "Submit", "noDisplay", MATCH_VAR, NULL };
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
 cartHtmlShell("Cart Dump", doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("cartDump", enteredMainTime);
 return 0;
 }
