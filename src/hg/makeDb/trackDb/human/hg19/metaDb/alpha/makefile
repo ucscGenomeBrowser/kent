@@ -1,7 +1,7 @@
 
 LIST=\
 wgEncodeAffyRnaChip.ra \
-wgEncodeAwgDnase.ra \
+wgEncodeAwgDnaseUniform.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBroadHmm.ra \
 wgEncodeBuOrchid.ra \
