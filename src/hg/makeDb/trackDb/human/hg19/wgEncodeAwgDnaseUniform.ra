@@ -17,7 +17,7 @@ dragAndDrop subTracks
 sortOrder tier=+ cellType=+
 fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession fileSize=Size 
 controlledVocabulary encode/cv.ra cellType=cell
-type narrowPeak
+type bed 3
 visibility dense
 signalFilter 0
 signalFilterLimits 0:20000
@@ -897,7 +897,7 @@ wgEncode 1
 
         track wgEncodeAwgDnaseUwdukeNhekUniPk
         type narrowPeak
-        parent wgEncodeAwgDnaseUniform off
+        parent wgEncodeAwgDnaseUniform on
         shortLabel NHEK DNase
         longLabel NHEK DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=NHEK
