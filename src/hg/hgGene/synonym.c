@@ -353,13 +353,11 @@ if (protAcc != NULL)
     {
     kgProteinID = cloneString("");
     if (hTableExists(sqlGetDatabase(conn), "knownGene")
-        && (isNotEmpty(cartOptionalString(cart, hggChrom)) &&
-	      differentWord(cartOptionalString(cart, hggChrom),"none")))
+        && (isNotEmpty(curGeneChrom) &&
+	      differentWord(curGeneChrom,"none")))
     	{
-    	safef(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%s and txEnd=%s", 
-	        id, cartOptionalString(cart, hggChrom), 
-    	        cartOptionalString(cart, hggStart), 
-		cartOptionalString(cart, hggEnd));
+    	safef(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%d and txEnd=%d", 
+	        id, curGeneChrom, curGeneStart, curGeneEnd);
     	kgProteinID = sqlGetField(database, "knownGene", "proteinID", condStr);
     	}
 
