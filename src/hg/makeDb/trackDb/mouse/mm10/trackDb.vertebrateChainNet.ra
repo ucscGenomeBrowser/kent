@@ -190,9 +190,9 @@ html vertebrateChainNet
 # changes to perMar[12] here need to also correspond to
 # the same tags in ../../trackDb.chainNet.ra 
 
-include chain.petMar1.ra beta,public
+# include chain.petMar1.ra beta,public
 
-include chain.petMar2.ra alpha
+include chain.petMar2.ra
 
     track vertebrateChainNetViewnet
     shortLabel Nets
@@ -363,6 +363,6 @@ include chain.petMar2.ra alpha
 # changes to perMar[12] here need to also correspond to
 # the same tags in ../../trackDb.chainNet.ra 
 
-include net.petMar1.ra beta,public
+# include net.petMar1.ra beta,public
 
-include net.petMar2.ra alpha
+include net.petMar2.ra
