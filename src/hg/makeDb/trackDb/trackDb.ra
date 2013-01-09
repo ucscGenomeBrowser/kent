@@ -3250,7 +3250,7 @@ track exonJunctionPrimers
 shortLabel qPCR Primers
 longLabel $Organism ($db) Whole Transcriptome qPCR Primers
 group genes
-type bed 12 +
+type bedDetail 14
 visibility hide
 noScoreFilter on
 itemRgb on
