@@ -163,7 +163,7 @@ wgEncode 1
         longLabel HTR8svn DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=HTR8svn
 
-        track wgEncodeAwgDnaseDukeHuh7.5UniPk
+        track wgEncodeAwgDnaseDukeHuh75UniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniform off
         shortLabel Huh7.5 DNase

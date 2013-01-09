@@ -279,17 +279,17 @@ tableName wgEncodeAwgDnaseDukeHtr8svnUniPk
 treatment None
 view Peaks
 
-metaObject wgEncodeAwgDnaseDukeHuh7.5UniPk
+metaObject wgEncodeAwgDnaseDukeHuh75UniPk
 objType table
 cell Huh-7.5
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-fileName wgEncodeAwgDnaseDukeHuh7.5UniPk.narrowPeak.gz
+fileName wgEncodeAwgDnaseDukeHuh75UniPk.narrowPeak.gz
 lab Duke
 md5sum dfa669bd0e223900707e0621201e105f
 project wgEncode
-tableName wgEncodeAwgDnaseDukeHuh7.5UniPk
+tableName wgEncodeAwgDnaseDukeHuh75UniPk
 treatment None
 view Peaks
 
@@ -1851,4 +1851,4 @@ tableName wgEncodeAwgDnaseUwdukeTh1UniPk
 treatment None
 view Peaks
 
-# MAGIC: 1939493904
+# MAGIC: -723438272

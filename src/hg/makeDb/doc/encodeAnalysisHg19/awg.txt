@@ -22,7 +22,7 @@
 # without any replicate or lab merging.
 
     cd /hive/data/genomes/hg19/bed
-    mkdir -p wgEncodeAwgDnase
+    mkdir -p wgEncodeAwgDnaseUniform
 
     # Track composite will be wgEncodeAwgDnaseUniform
     # peaks are relegated to a view. 
@@ -92,31 +92,46 @@ cat > ../loadDnase.csh << 'EOF'
 
 csh ../loadDnase.csh >&! ../loadDnase.out &
 
+    # NOTE: error loading wgEncodeAwgDnaseDukeHuh7.5UniPk due to presence of '.'
+    # I didn't catch this till much later...  renaming to *Huh75*
+    hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 wgEncodeAwgDnaseDukeHuh75UniPk wgEncodeAwgDnaseDukeHuh7.5UniPk.narrowPeak
+    # Reading wgEncodeAwgDnaseDukeHuh7.5UniPk.narrowPeak
+    # Read 182986 elements of size 10 from wgEncodeAwgDnaseDukeHuh7.5UniPk.narrowPeak
+    # Sorted
+    # Creating table definition for wgEncodeAwgDnaseDukeHuh75UniPk
+    # Saving bed.tab
+    # Loading hg19
+
     set trackDb = ~/kent/src/hg/makeDb/trackDb/human/hg19
-    cp wgEncodeAwgDnase.ra $trackDb
+    cp wgEncodeAwgDnaseUniform.ra $trackDb
     # merge in composite settings from analysis hub, edit labels for length, treatment
     # note: raToTab and google spreadsheet greatly help with 17-char shortLabel adjustment
     # We could use a tabToRa too...
 
-    cp wgEncodeAwgDnase.metaDb.ra $trackDb/metaDb/alpha/wgEncodeAwgDnase.ra
+    cp wgEncodeAwgDnase.metaDb.ra $trackDb/metaDb/alpha/wgEncodeAwgDnaseUniform.ra
     pushd $trackDb/human/hg19/metaDb/alpha
     # add composite settings (as in ENCODE UW Dnase track)
     # edit cells, treatments to match CV.  
-    mdbUpdate hg19 -test wgEncodeAwgDnase.ra
+    mdbUpdate hg19 -test wgEncodeAwgDnaseUniform.ra
 
     popd
     # obtain lab and DCC accession from metaDb
     rm -f accession.metaDb.ra
     mdbPrint hg19 -vars="lab=UW replicate=1 dataType=DnaseSeq view=Peaks" | egrep 'metaObject|objType|lab |cell|treatment|dccAccession|dataVersion|^$' | sed -e 's/wgEncodeUwDnase/wgEncodeAwgDnaseUw/' -e 's/PkRep1/UniPk/' > accession.metaDb.ra
     mdbPrint hg19 -vars="lab=Duke dataType=DnaseSeq view=Peaks" | egrep 'metaObject|objType|lab |cell|treatment|dccAccession|dataVersion|^$' | sed -e 's/wgEncodeOpenChromDnase/wgEncodeAwgDnaseDuke/' -e 's/Pk/UniPk/' >> accession.metaDb.ra
-    raMerge accession.metaDb.ra $trackDb/metaDb/alpha/wgEncodeAwgDnase.ra > metaDb.new.ra
-    mv metaDb.new.ra $trackDb/metaDb/alpha/wgEncodeAwgDnase.new.ra
-    # edit to remove orphan stanzas
+    raMerge accession.metaDb.ra $trackDb/metaDb/alpha/wgEncodeAwgDnaseUniform.ra > metaDb.new.ra
+    mv metaDb.new.ra $trackDb/metaDb/alpha/wgEncodeAwgDnaseUniform.new.ra
     # note -- could have used above to get CV cell type as well (I did this manually)
 
-    mkdir downloads
+    # edit to remove orphan stanzas, create wgEncodeAwgDnaseUniform.ra
+
+    # load and print with magic number
+    pushd $trackDb; make; popd
+    mdbPrint hg19 -vars="composite=wgEncodeAwgDnaseUniform" > wgEncodeAwgDnaseUniform.ra
+    # check in to source control
 
     # set up file downloads in expected locale
+    mkdir downloads
     set dir = /hive/groups/encode/dcc/pipeline/downloads/hg19
 
     # must use name of composite
@@ -128,7 +143,7 @@ csh ../loadDnase.csh >&! ../loadDnase.out &
     ln -s release1 beta
     ln -s release1 releaseLatest
 
-    cd /hive/genomes/hg19/bed/wgEncodeAwgDnase/narrowPeaks
+    cd /hive/genomes/hg19/bed/wgEncodeAwgDnaseUniform/narrowPeaks
 cat  << 'EOF' > link.csh
     foreach f (*.gz)
         echo $f
@@ -137,7 +152,6 @@ cat  << 'EOF' > link.csh
 'EOF'
     csh link.csh
     cd $dir/wgEncodeAwgDnaseUniform/releaseLatest
-
 
     # add files.txt
     encodeMkFilesList hg19 
