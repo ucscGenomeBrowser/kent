@@ -3733,8 +3733,8 @@ noScoreFilter .
 release beta,public
 
 track coriellDelDup
-shortLabel Coriell Del Dup
-longLabel Coriell Cell Line Deletions and Duplications
+shortLabel Coriell CNVs
+longLabel Coriell Cell Line Copy Number Variants
 group phenDis
 priority 111
 visibility hide

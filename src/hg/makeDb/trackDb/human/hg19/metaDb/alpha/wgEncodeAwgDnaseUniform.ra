@@ -1,3 +1,8 @@
+metaObject wgEncodeAwgDnaseUniform
+objType composite
+composite wgEncodeAwgDnaseUniform
+expVars lab, dataType, cell, treatment
+
 metaObject wgEncodeAwgDnaseDuke8988tUniPk
 objType table
 cell 8988T
@@ -586,11 +591,6 @@ project wgEncode
 tableName wgEncodeAwgDnaseDukeUrotheliaut189UniPk
 treatment UT189
 view Peaks
-
-metaObject wgEncodeAwgDnaseUniform
-objType composite
-composite wgEncodeAwgDnaseUniform
-expVars lab, dataType, cell, treatment
 
 metaObject wgEncodeAwgDnaseUwAg04449UniPk
 objType table
