@@ -2999,6 +2999,11 @@ identifier bgiGeneId external=BGI
 
 # Other Identifiers
 
+identifier mm10Patch1ExtFileId
+"External file ID for mm10 patch1 sequences"
+    mm10.extMm10Patch1.id
+    mm10.seqMm10Patch1.extFile
+
 identifier hg19Patch10ExtFileId
 "External file ID for hg19 patch10 sequences"
     hg19.extHg19Patch10.id
@@ -4057,10 +4062,14 @@ tablesIgnored hg19
     uMassBrainHistone%
 
 tablesIgnored mm9
-	allMm9RS_BW
-	bamMmsNumtSSorted
+    allMm9RS_BW
+    bamMmsNumtSSorted
     crgMapability%
     rest
+
+tablesIgnored mm10
+    altSeqLiftOverPslP1
+    altSeqPatchesP1
 
 tablesIgnored $ce
     chr%_wabaCbr
