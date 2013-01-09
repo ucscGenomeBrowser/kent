@@ -1350,13 +1350,13 @@ html hg19vertChainNet
         type chain oryLat2
         otherDb oryLat2
 
-        track chainPetMar1
+        track chainPetMar2
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=nLamprey clade=fHyper
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain petMar1
-        otherDb petMar1
+        type chain petMar2
+        otherDb petMar2
 
     track vertebrateChainNetViewnet
     shortLabel Nets
@@ -1476,13 +1476,13 @@ html hg19vertChainNet
         type netAlign oryLat2 chainOryLat2
         otherDb oryLat2
 
-        track netPetMar1
+        track netPetMar2
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=nLamprey clade=fHyper
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign petMar1 chainPetMar1
-        otherDb petMar1
+        type netAlign petMar2 chainPetMar2
+        otherDb petMar2
 
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
@@ -2325,9 +2325,9 @@ dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
 include altSeqComposite5.ra alpha
 
-include altSeqComposite9.ra alpha,beta,public
+include altSeqComposite9.ra public
 
-include altSeqComposite10.ra alpha
+include altSeqComposite10.ra alpha,beta
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1

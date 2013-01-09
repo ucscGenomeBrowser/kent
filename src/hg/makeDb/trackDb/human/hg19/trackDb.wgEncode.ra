@@ -192,5 +192,7 @@ include wgEncodeSunyRipSeq.ra
 include wgEncodeMapability.ra
 
 # Analysis tracks
-include wgEncodeAwgDnase.ra
+
+# Uniform DNase (wrangler: kate)
+include wgEncodeAwgDnaseUniform.ra alpha
 

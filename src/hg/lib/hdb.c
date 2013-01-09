@@ -1223,10 +1223,10 @@ return list;
 char *hTryExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId, boolean abortOnError)
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
- * Abort if the id is not in the table or if the file
- * fails size check.  Please freeMem the result when you
- * are done with it. (requires conn passed in) 
- * If abortOnError is true, will abort, otherwise returns NULL
+ * If abortOnError is true, abort if the id is not in the table or if the file
+ * fails size check, otherwise return NULL if either of those checks fail.   
+ * Please freeMem the result when you are done with it. 
+ * (requires conn passed in) 
  */
 {
 char query[256];
@@ -1244,7 +1244,10 @@ if ((row = sqlNextRow(sr)) == NULL)
 	errAbort("Database inconsistency table '%s.%s' no ext file with id %u",
 		 sqlGetDatabase(conn), extFileTable, extFileId);
     else 
+	{
+	sqlFreeResult(&sr);
 	return NULL;
+	}
     }
 
 path = cloneString(row[0]);

@@ -164,7 +164,7 @@ endif
 
 MKDIR=mkdir -p
 ifeq (${STRIP},)
-   STRIP=strip
+   STRIP=echo
 endif
 CVS=cvs
 GIT=git

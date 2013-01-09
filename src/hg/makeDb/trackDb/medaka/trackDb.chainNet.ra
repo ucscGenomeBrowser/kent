@@ -79,7 +79,6 @@ track chainNetPetMar2 override
 priority 650.3
 
 track chainNetPetMar1 override
-release beta,public
 priority 650.3
 chainMinScore 3000
 chainLinearGap medium
