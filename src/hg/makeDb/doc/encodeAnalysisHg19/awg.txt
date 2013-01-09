@@ -166,6 +166,9 @@ cat  << 'EOF' > link.csh
     cd ~/kent/src/hg/makeDb/doc/encodeAnalysisHg19
     /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgDnaseUniform 1 > wgEncodeAwgDnaseUniform.release1.notes
 
+    # QA preview
+    encodeQaInit hg19 wgEncodeAwgDnaseUniform 1 9850 -t 
+
 
 
     
