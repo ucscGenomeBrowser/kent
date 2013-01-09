@@ -671,6 +671,10 @@ else
     hFreeConn(&spConn);
     hFreeConn(&conn);
     }
+/* load the cart with the position info we got from the gene name */
+char buffer[1024];
+safef(buffer, sizeof buffer,  "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEnd);
+cartSetString(cart, "position", cloneString(buffer));
 cartRemovePrefix(cart, hggDoPrefix);
 }
 

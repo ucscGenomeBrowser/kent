@@ -248,6 +248,17 @@ dyStringFree(&thisSelection);
 dyStringFree(&lastSelection);
 }
 
+static int sortCompositeFirst(const void *va, const void *vb)
+/* Promote composite object type to head of mdb object list */
+{
+const struct mdbObj *a = *((struct mdbObj **)va);
+const struct mdbObj *b = *((struct mdbObj **)vb);
+if (mdbObjIsComposite((struct mdbObj *)a))
+    return -1;
+else if (mdbObjIsComposite((struct mdbObj *)b))
+    return 1;
+return 0;
+}
 
 int main(int argc, char *argv[])
 // Process command line.
@@ -491,7 +502,13 @@ else
                 mdbObjPrintOrderedToStream(stdout,&queryResults,order, sep, header);
                 }
             else
+                {
+                // Default operation here
+                if (optionExists("composite") && !mdbObjIsComposite(queryResults))
+                    /* Pull composite metaObject to head of list for readability */
+                    slSort(&queryResults, &sortCompositeFirst);
                 mdbObjPrint(queryResults,raStyle);
+                }
             }
         mdbObjsFree(&queryResults);
         }
