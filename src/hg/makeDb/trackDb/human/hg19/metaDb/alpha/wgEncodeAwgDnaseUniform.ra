@@ -587,15 +587,10 @@ tableName wgEncodeAwgDnaseDukeUrotheliaut189UniPk
 treatment UT189
 view Peaks
 
-metaObject wgEncodeAwgDnaseUniPk
-objType composite
-composite wgEncodeAwgDnaseUniform
-expVars lab, dataType, cell, treatment
-
 metaObject wgEncodeAwgDnaseUniform
 objType composite
 composite wgEncodeAwgDnaseUniform
-expVars lab,cell,treatment
+expVars lab, dataType, cell, treatment
 
 metaObject wgEncodeAwgDnaseUwAg04449UniPk
 objType table
@@ -1856,4 +1851,4 @@ tableName wgEncodeAwgDnaseUwdukeTh1UniPk
 treatment None
 view Peaks
 
-# MAGIC: -2080672157
+# MAGIC: -2029417181
