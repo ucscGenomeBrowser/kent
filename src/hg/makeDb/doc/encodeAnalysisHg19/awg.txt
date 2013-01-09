@@ -52,7 +52,7 @@ chr1    10180   10330   .       0       .       26.000000       -1      -1      
 
     cd narrowPeak
 cat > ../loadDnase.csh << 'EOF'
-    set b = wgEncodeAwgDnase
+    set b = wgEncodeAwgDnaseUniform
     set v = ${b}Uniform
     set t = ../$b.ra
     set m = ../$b.metaDb.ra
@@ -90,6 +90,7 @@ cat > ../loadDnase.csh << 'EOF'
     end
 'EOF'
 
+
 csh ../loadDnase.csh >&! ../loadDnase.out &
 
     # NOTE: error loading wgEncodeAwgDnaseDukeHuh7.5UniPk due to presence of '.'
@@ -123,6 +124,7 @@ csh ../loadDnase.csh >&! ../loadDnase.out &
     mv metaDb.new.ra $trackDb/metaDb/alpha/wgEncodeAwgDnaseUniform.new.ra
     # note -- could have used above to get CV cell type as well (I did this manually)
 
+    # Add object for composite (copy from UW DNase)
     # edit to remove orphan stanzas, create wgEncodeAwgDnaseUniform.ra
 
     # load and print with magic number
