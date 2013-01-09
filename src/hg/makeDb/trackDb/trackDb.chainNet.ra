@@ -2372,7 +2372,7 @@ html chainNet
 
 include chainNetPetMar2.ra
 
-# include chainNetPetMar1.ra
+include chainNetPetMar1.ra
 
 track chainNetBraFlo2
 compositeTrack on
