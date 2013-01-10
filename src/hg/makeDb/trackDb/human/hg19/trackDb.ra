@@ -2325,7 +2325,7 @@ dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
 include altSeqComposite5.ra alpha
 
-include altSeqComposite9.ra public
+include altSeqComposite9.ra alpha,public
 
 include altSeqComposite10.ra alpha,beta
 
