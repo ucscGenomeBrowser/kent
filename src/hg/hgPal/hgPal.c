@@ -54,7 +54,9 @@ cartHtmlEnd();
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
+cgiExitTime("hgPal", enteredMainTime);
 return 0;
 }

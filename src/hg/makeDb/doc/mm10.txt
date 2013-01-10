@@ -9005,6 +9005,7 @@ TMPDIR=/scratch/tmp
 
 #########################################################################
 # ExonJunction Primers (DONE - 2012-12-10 - Chin
+# The track name is changed to "qPCR Primers"
     # Download
     # http://www.weizmann.ac.il/complex/compphys/software/Amit/primers/mouse/track_mouse.BED
     # to /hive/data/outside/Weizmann/exonJunctionPrimers
@@ -9030,5 +9031,218 @@ TMPDIR=/scratch/tmp
     # Creating table definition for exonJunctionPrimers
     # Saving bed.tab
     # Loading mm10
+
+#########################################################################
+# DBSNP B137 / SNP137 (DONE 12/20/12 angie)
+# Redmine #7043
+
+    mkdir -p /hive/data/outside/dbSNP/137/mouse
+    cd /hive/data/outside/dbSNP/137/mouse
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (mouse_10090 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
+    # -- use the first num for build and the second num_num for buildAssembly.
+    # jkStuff/liftContigs.lft maps NCBI contig names to chroms; use that for liftUp.
+    #
+    # Some trial and error was required to get the config.ra just right --
+    # the b* filenames don't include buildAssembly!
+    # patch contigs needed to be filtered out:
+    cat > config.ra <<EOF
+db mm10
+orgDir mouse_10090
+build 137
+buildAssembly 
+liftUp /hive/data/genomes/mm10/jkStuff/liftContigs.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+    # Script ended with feedback about needing refAssemblyLabel because dbSNP
+    # mapped to more than one assembly; add the label that clearly corresponds to
+    # mm10, GRCm38, to config.ra and try again:
+    cat > config.ra <<EOF
+db mm10
+orgDir mouse_10090
+build 137
+buildAssembly 
+liftUp /hive/data/outside/dbSNP/137/mouse/suggested.lft
+refAssemblyLabel GRCm38
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl -continue=loadDbSnp \
+      config.ra >>& do.log & tail -f do.log
+    # Script ended with feedback about unrecognized NT_* contigs from dbSNP.
+    # Inspect the script-generated suggested.lft for liftUp; it's usually right.
+    # For contigs that are labeled as part of GRCm38 but not liftable to mm10,
+    # listed in script-generated cantLiftUpSeqNames.txt, do some entrez
+    # nucleotide searches for contig IDs and convince yourself that they're all
+    # for alt assembly sequences that we don't include in mm10 (e.g. patches,
+    # other strains).  Then tell the script to filter out those contigs:
+    cut -f 2 cantLiftUpSeqNames.txt > ignoreAltAssemblyContigs.txt
+    cat > config.ra <<EOF
+db mm10
+orgDir mouse_10090
+build 137
+buildAssembly 
+liftUp /hive/data/outside/dbSNP/137/mouse/suggested.lft
+refAssemblyLabel GRCm38
+ignoreDbSnpContigsFile /hive/data/outside/dbSNP/137/mouse/ignoreAltAssemblyContigs.txt
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl -continue=loadDbSnp \
+      config.ra >>& do.log & tail -f do.log
+# ...
+#MultipleAlignments      1667342 This variant aligns in more than one location.
+#ObservedMismatch        4561144 UCSC reference allele does not match any observed allele from dbSNP.
+#
+# *** All done!
+    # That is an unusually high count of ObservedMismatch... follow up with dbSNP.
+
+
+#############################################################################
+# FILTER SNP137 (DONE 12/21/12 angie)
+    # Redmine #7043
+    # Make several tracks that are filtered subsets of snp137:
+    # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp137Mult
+    # Second, siphon off the common variants -> snp137Common
+    # Third, take the (uniquely mapped, not known to be common) variants
+    # w/dbSNP's "clinically-assoc" flag -> snp137Flagged
+    cd /hive/data/outside/dbSNP/137/mouse
+    zcat snp137.bed.gz \
+    | perl -we \
+      '$minTotal2N = 10; \
+       ($multCount, $comCount, $flagCount, $miscCount) = (0,0,0,0); \
+       open($mult, "| gzip -c > snp137Mult.bed.gz") || die; \
+       open($common,    "| gzip -c > snp137Common.bed.gz") || die; \
+       open($flagged,   "| gzip -c > snp137Flagged.bed.gz") || die; \
+       open($misc,      "| gzip -c > snp137Misc.bed.gz") || die; \
+       while (<>) { \
+         @w = split("\t"); \
+         if ($w[16] > 1 || $w[17] =~ /MultipleAlignments/) { \
+           print $mult $_; \
+           $multCount++; \
+         } else { \
+           my ($alleleFreqCount, $nStr, $freqStr) = ($w[20], $w[22], $w[23]); \
+           my @alNs = split(",", $nStr);      die unless scalar(@alNs) == $alleleFreqCount; \
+           my @freqs = split(",", $freqStr);  die unless scalar(@freqs) == $alleleFreqCount; \
+           my ($total2N, $maxAlleleFreq) = (0, 0); \
+           for (my $i = 0;  $i < $alleleFreqCount;  $i++) { \
+             $total2N += $alNs[$i]; \
+             $maxAlleleFreq = $freqs[$i] if ($freqs[$i] > $maxAlleleFreq); \
+           } \
+           if ($alleleFreqCount >= 2 && $total2N >= $minTotal2N && $maxAlleleFreq <= 0.99) { \
+             print $common $_; \
+             $comCount++; \
+           } elsif($w[24] =~ /clinically-assoc/)  { \
+             print $flagged $_; \
+             $flagCount++; \
+           } else { \
+             print $misc $_; \
+             $miscCount++; \
+           } \
+         } \
+       } \
+       close($mult);  close($common); close($flagged);  close($misc); \
+       print "snp137Mult:    $multCount\nsnp137Common:  $comCount\nsnp137Flagged: $flagCount\n" . \
+             "leftover:      $miscCount\n";'
+#snp137Mult:    1671771
+#snp137Common:  2709532
+#snp137Flagged: 0
+#leftover:      66537658
+    # It's expected for snp137Flagged to be empty because that's for human SNPs.
+
+    # Load tables
+    foreach subset (Mult Common)
+      hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+        mm10 snp137$subset -sqlTable=snp137.sql snp137$subset.bed.gz
+    end
+
+
+############################################################################
+# DBSNP CODING ANNOTATIONS (137) (DONE 12/21/12 angie)
+    # Redmine #7043
+    cd /hive/data/outside/dbSNP/137/mouse
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
+    # For anything except an insertion (0 bases between flanks),
+    # we need to add 1 to the end coord.  For an insertion, we need
+    # to add 1 to the start coord.  Make a hash of the insertion IDs,
+    # then look up each ID in ncbiFuncAnnotations.txt to tell which
+    # transform to apply.
+    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+    zcat ncbiFuncAnnotations.txt.gz \
+    | perl -we 'open($IDS, "zcat ncbiFuncInsertions.ctg.bed.gz |") || die "ids: $!"; \
+              while (<$IDS>) { chomp; $ids{$_} = 1; } \
+              close($IDS); \
+              %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 43=>1, 44=>1, 45=>1); \
+              while (<>) { \
+                chomp;  @w = split("\t"); # id, ctg, start, end, ... \
+                next unless $coding{$w[5]}; \
+                $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
+                if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
+                  $w[2]++; # 2-base insertions: increment start coord \
+                } else { \
+                  $w[3]++; # increment end coord to get half-open \
+                } \
+                print join("\t", @w) . "\n"; \
+              }' \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiCodingAnnotations.txt
+    wc -l ncbiCodingAnnotations.txt
+#1884989 ncbiCodingAnnotations.txt
+
+    # How many & what kinds of function types?
+    cut -f 6 ncbiCodingAnnotations.txt \
+    | sort -n | uniq -c
+# 371388 3   (coding-synon)
+#1301099 8   (cds-reference -- ignored)
+#   3465 41  (nonsense)
+# 199148 42  (missense)
+#    319 43  (stop-loss)
+#   7422 44  (frameshift)
+#   2148 45  (cds-indel)
+    # In b137, the functional annotations include non-coding (frame = NULL),
+    # which we'll exclude here because this is supposed to be just coding stuff...
+    # probably need to update how we show dbSNP's func annos anyway, e.g.
+    # it is a shame that we toss out codon number and transcript offset.
+    # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+    perl -e  'while (<>) { chomp; \
+                my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
+                next if ($fxn == 8 && ($frm eq "NULL" && $aa eq "NULL" && $codon eq "NULL")); \
+                if (defined $lastRs && \
+                    ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s || \
+                     $lastTx ne $txId || $lastFrm ne $frm)) { \
+                  if (defined $refRow) { \
+                    $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
+                    $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
+                  } \
+                  $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                        "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+                  $lineOut =~ s@NULL@n/a@g; \
+                  print $lineOut; \
+                  $refRow = undef;  @rows = ();  ($count, $fxns, $nts, $codons, $aas) = (); \
+                } \
+                ($lastRs, $lastCtg, $lastS, $lastE, $lastTx, $lastFrm) = \
+                    ($rsId, $ctg, $s, $e, $txId, $frm); \
+                $count++; \
+                if ($fxn == 8) { \
+                  $refRow = [$fxn, $nt, $aa, $codon]; \
+                } else { \
+                 $fxns .= "$fxn,";  $nts .= "$nt,";  $aas .= "$aa,";  $codons .= "$codon,"; \
+                } \
+              } \
+              if (defined $refRow) { \
+                $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
+                $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
+              } \
+              $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                    "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+              $lineOut =~ s@NULL@n/a@g; \
+              print $lineOut;' \
+      ncbiCodingAnnotations.txt \
+    | liftUp snp137CodingDbSnp.bed /hive/data/outside/dbSNP/137/mouse/suggested.lft warn stdin
+
+    hgLoadBed mm10 snp137CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
+      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
+      snp137CodingDbSnp.bed
+#Read 552120 elements of size 11 from snp137CodingDbSnp.bed
+
 
 #########################################################################

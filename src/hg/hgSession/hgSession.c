@@ -1284,9 +1284,11 @@ cartCheckout(&cart);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 hgSession();
+cgiExitTime("hgSession", enteredMainTime);
 return 0;
 }
 

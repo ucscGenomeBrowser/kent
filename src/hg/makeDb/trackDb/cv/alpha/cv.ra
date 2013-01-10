@@ -3040,7 +3040,7 @@ description embryonic kidney, cells contain Adenovirus 5 DNA (PMID: 11967234)
 lineage mesoderm
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
 organism human
-protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf Snyder:HEK293b_Snyder_protocol.pdf
+protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf
 sex U
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
@@ -13913,12 +13913,12 @@ description 3 day differentiation of ES-D3 cells with conditioned medium MEDII t
 term diffProtH_Sox17+
 tag DIFFHSOXP
 type treatment
-description Differentionat of ES-GscgfpSox17huCD25 towards endoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescnece activated cell sorting (FACS). (Gilbert)
+description Differentiation of ES-GscgfpSox17huCD25 towards endoderm cells after treatment with serum-free medium, SFO3, containing activin (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17+ by fluorescence activated cell sorting (FACS). (Gilbert)
 
 term diffProtH_Sox17-
 tag DIFFHSOXM
 type treatment
-description Differentionat of ES-GscgfpSox17huCD25 towards mesoderm cells after treatment with serum-free medium, SFO3, containg activing (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17- by fluorescnece activated cell sorting (FACS). (Gilbert)
+description Differentiation of ES-GscgfpSox17huCD25 towards mesoderm cells after treatment with serum-free medium, SFO3, containing activin (10 ng/ml). After 6 days, cells were collected for Gsc+Sox17- by fluorescence activated cell sorting (FACS). (Gilbert)
 
 term DMSO_0.02pct
 tag DM002P1H
@@ -14185,7 +14185,7 @@ term serum_stimulated_media
 tag SERUMSTIM
 type treatment
 label serum-stimulated media
-description Grown with normal serum levels (10%), then switched back to normal serum levels (10% FBS) for 3 hours.
+description Grown with normal serum levels (10%), then switched to media that contains no FBS for 36 hours, then switched back to normal serum levels (10% FBS) for 3 hours.
 
 term Taxol_500nM_24hr
 tag TAX24H
@@ -16219,6 +16219,18 @@ labInst Stanford
 labPi Birney
 labPiFull Ewan Birney
 organism human
+
+term AWG
+tag AWG
+type lab
+label Analysis Working Group
+description ENCODE Analysis Working Group
+grantPi Birney
+labInst EBI
+labPi Birney
+labPiFull Ewan Birney
+organism human 
+
 
 # Grant information
 # term is the last name of the PI

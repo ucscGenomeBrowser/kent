@@ -1881,7 +1881,8 @@ lineFileClose(&lf);
 /* SNP132: 30M items, max ID 121909398 */
 /* SNP134: 62M items, max ID 179363897 */
 /* SNP135: 55M items, max ID 193919341 (wastefulness factor: 193919341 / 55449139 = 3.497247) */
-#define MAX_SNPID 200 * 1024 * 1024
+/* mouse 137: 74M items, max ID 266257353 (266257353 / 74781097 = 3.5605 */
+#define MAX_SNPID 300 * 1024 * 1024
 struct coords
     {
     struct coords *next;

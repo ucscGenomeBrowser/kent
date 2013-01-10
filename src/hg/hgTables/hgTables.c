@@ -1998,6 +1998,7 @@ cartCheckout(&cart);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 cgiSpoof(&argc, argv);
@@ -2005,5 +2006,6 @@ cgiSpoof(&argc, argv);
 hgTables();
 
 textOutClose(&compressPipeline);
+cgiExitTime("hgTables", enteredMainTime);
 return 0;
 }

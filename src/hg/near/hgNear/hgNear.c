@@ -2000,11 +2000,13 @@ errAbort(
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 // pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldVars = hashNew(10);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgNear", enteredMainTime);
 return 0;
 }

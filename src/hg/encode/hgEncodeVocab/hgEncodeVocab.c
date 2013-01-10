@@ -891,6 +891,7 @@ else if (totalPrinted > 1)
 int main(int argc, char *argv[])
 /* Process command line */
 {
+long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 termOpt = cgiOptionalString(CV_TERM);
 tagOpt = cgiOptionalString(CV_TAG);
@@ -908,6 +909,7 @@ if (bgColor)
     htmlSetBgColor(strtol(bgColor, 0, 16));
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmShell("ENCODE Controlled Vocabulary", doMiddle, "get");
+cgiExitTime("hgEncodeVocab", enteredMainTime);
 return 0;
 }
 

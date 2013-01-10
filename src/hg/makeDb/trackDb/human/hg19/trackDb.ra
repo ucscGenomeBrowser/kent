@@ -1350,13 +1350,13 @@ html hg19vertChainNet
         type chain oryLat2
         otherDb oryLat2
 
-        track chainPetMar1
+        track chainPetMar2
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=nLamprey clade=fHyper
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain petMar1
-        otherDb petMar1
+        type chain petMar2
+        otherDb petMar2
 
     track vertebrateChainNetViewnet
     shortLabel Nets
@@ -1476,13 +1476,13 @@ html hg19vertChainNet
         type netAlign oryLat2 chainOryLat2
         otherDb oryLat2
 
-        track netPetMar1
+        track netPetMar2
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=nLamprey clade=fHyper
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign petMar1 chainPetMar1
-        otherDb petMar1
+        type netAlign petMar2 chainPetMar2
+        otherDb petMar2
 
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
@@ -1687,28 +1687,13 @@ priority 103.29
         type bed 5 .
         priority 23
 
-track snp137Common
-shortLabel Common SNPs(137)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Found in >= 1% of Samples
-group varRep
-priority 99.0901
-visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp137Seq
-snpExceptionDesc snp137ExceptionDesc
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
+track snp137Common override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-codingAnnotations snp137CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp137CodingDbSnp dbSNP
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)
@@ -1732,50 +1717,21 @@ codingAnnotations snp137CodingDbSnp,
 # Need to request new tag
 #codingAnnoLabel_snp137CodingDbSnp dbSNP
 
-track snp137Mult
-shortLabel Mult. SNPs(137)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 137) That Map to Multiple Genomic Loci
-group varRep
-priority 99.0903
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp137Seq
-snpExceptionDesc snp137ExceptionDesc
-defaultGeneTracks knownGene
-defaultMaxWeight 3
-maxWindowToDraw 10000000
-type bed 6 +
+track snp137Mult override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-codingAnnotations snp137CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp137CodingDbSnp dbSNP
 
-track snp137
-shortLabel All SNPs(137)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 137)
-group varRep
-priority 99.0904
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
+track snp137 override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
 chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-codingAnnotations snp137CodingDbSnp,
-# Need to request new tag
-#codingAnnoLabel_snp137CodingDbSnp dbSNP
 
 track snp135Common override
 snpSeqFile /gbdb/hg19/snp/snp135.fa
@@ -2369,9 +2325,9 @@ dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
 include altSeqComposite5.ra alpha
 
-include altSeqComposite9.ra alpha,beta,public
+include altSeqComposite9.ra alpha
 
-include altSeqComposite10.ra alpha
+include altSeqComposite10.ra alpha,beta,public
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
@@ -3175,14 +3131,7 @@ termRegex rs[0-9]+
 searchPriority 12.9888
 padding 250
 
-track exonJunctionPrimers
-shortLabel ExonJunction Primers
-longLabel Human (hg19) Exon Junction Primer Pairs
-group genes
-type bed 12 +
-visibility hide
-useScore 1
-itemRgb on
- url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
-urlLabel Primer Pair Detail:
+track exonJunctionPrimers override
+url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
+urlLabel Click here for primer details:
 

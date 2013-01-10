@@ -1,0 +1,1854 @@
+metaObject wgEncodeAwgDnaseUniform
+objType composite
+composite wgEncodeAwgDnaseUniform
+expVars lab, dataType, cell, treatment
+
+metaObject wgEncodeAwgDnaseDuke8988tUniPk
+objType table
+cell 8988T
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001103
+fileName wgEncodeAwgDnaseDuke8988tUniPk.narrowPeak.gz
+lab Duke
+md5sum 80fadeb7a14a72add38203910d937f50
+project wgEncode
+tableName wgEncodeAwgDnaseDuke8988tUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeAosmcUniPk
+objType table
+cell AoSMC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeAosmcUniPk.narrowPeak.gz
+lab Duke
+md5sum 957b3477d43cef1c6abd41182b053418
+project wgEncode
+tableName wgEncodeAwgDnaseDukeAosmcUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeChorionUniPk
+objType table
+cell Chorion
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000595
+fileName wgEncodeAwgDnaseDukeChorionUniPk.narrowPeak.gz
+lab Duke
+md5sum f0ce90b72c1cfaceda456e0dfd10db1e
+project wgEncode
+tableName wgEncodeAwgDnaseDukeChorionUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeCllUniPk
+objType table
+cell CLL
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001104
+fileName wgEncodeAwgDnaseDukeCllUniPk.narrowPeak.gz
+lab Duke
+md5sum fe463a299af6fbefa38beeba59426767
+project wgEncode
+tableName wgEncodeAwgDnaseDukeCllUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeFibroblUniPk
+objType table
+cell Fibrobl
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000583
+fileName wgEncodeAwgDnaseDukeFibroblUniPk.narrowPeak.gz
+lab Duke
+md5sum 4bf374cbbbda675e686c51de627a3d05
+project wgEncode
+tableName wgEncodeAwgDnaseDukeFibroblUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeFibropUniPk
+objType table
+cell FibroP
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000605
+fileName wgEncodeAwgDnaseDukeFibropUniPk.narrowPeak.gz
+lab Duke
+md5sum 905497fc0eaa1631b19af0e91599bb89
+project wgEncode
+tableName wgEncodeAwgDnaseDukeFibropUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeGlioblaUniPk
+objType table
+cell Gliobla
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001100
+fileName wgEncodeAwgDnaseDukeGlioblaUniPk.narrowPeak.gz
+lab Duke
+md5sum 0c070d7cc4ce55c9c83f12a1b5ec9b64
+project wgEncode
+tableName wgEncodeAwgDnaseDukeGlioblaUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeGm12891UniPk
+objType table
+cell GM12891
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000564
+fileName wgEncodeAwgDnaseDukeGm12891UniPk.narrowPeak.gz
+lab Duke
+md5sum f6cf92827ae4e69961d08ab07d010edc
+project wgEncode
+tableName wgEncodeAwgDnaseDukeGm12891UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeGm12892UniPk
+objType table
+cell GM12892
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000565
+fileName wgEncodeAwgDnaseDukeGm12892UniPk.narrowPeak.gz
+lab Duke
+md5sum d347eff706311217233c439c581e1642
+project wgEncode
+tableName wgEncodeAwgDnaseDukeGm12892UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeGm18507UniPk
+objType table
+cell GM18507
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000581
+fileName wgEncodeAwgDnaseDukeGm18507UniPk.narrowPeak.gz
+lab Duke
+md5sum 13cce93dee693c2c9b930fa2f6bd6cc2
+project wgEncode
+tableName wgEncodeAwgDnaseDukeGm18507UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeGm19238UniPk
+objType table
+cell GM19238
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000566
+fileName wgEncodeAwgDnaseDukeGm19238UniPk.narrowPeak.gz
+lab Duke
+md5sum 24bcdf6f88f554df78fb099da682971a
+project wgEncode
+tableName wgEncodeAwgDnaseDukeGm19238UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeGm19239UniPk
+objType table
+cell GM19239
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000567
+fileName wgEncodeAwgDnaseDukeGm19239UniPk.narrowPeak.gz
+lab Duke
+md5sum 853d20093fd6a8c12ca7040b3c54396c
+project wgEncode
+tableName wgEncodeAwgDnaseDukeGm19239UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeGm19240UniPk
+objType table
+cell GM19240
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000568
+fileName wgEncodeAwgDnaseDukeGm19240UniPk.narrowPeak.gz
+lab Duke
+md5sum aa9c2333a4d70371c61f6050c865059b
+project wgEncode
+tableName wgEncodeAwgDnaseDukeGm19240UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeH9esUniPk
+objType table
+cell H9ES
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000594
+fileName wgEncodeAwgDnaseDukeH9esUniPk.narrowPeak.gz
+lab Duke
+md5sum 57496684868d18669104970571154922
+project wgEncode
+tableName wgEncodeAwgDnaseDukeH9esUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeHelas3ifna4hUniPk
+objType table
+cell HeLa-S3
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeHelas3ifna4hUniPk.narrowPeak.gz
+lab Duke
+md5sum 5b0220dd8af4853e5f409aa8a403d615
+project wgEncode
+tableName wgEncodeAwgDnaseDukeHelas3ifna4hUniPk
+treatment IFNa4h
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeHepatocytesUniPk
+objType table
+cell Hepatocytes
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001107
+fileName wgEncodeAwgDnaseDukeHepatocytesUniPk.narrowPeak.gz
+lab Duke
+md5sum b4cb800422ae3ffc12365f4f7690d084
+project wgEncode
+tableName wgEncodeAwgDnaseDukeHepatocytesUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeHpde6e6e7UniPk
+objType table
+cell HPDE6-E6E7
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001106
+fileName wgEncodeAwgDnaseDukeHpde6e6e7UniPk.narrowPeak.gz
+lab Duke
+md5sum d7bd4d612aea00a1fa02de3f8f4c9c37
+project wgEncode
+tableName wgEncodeAwgDnaseDukeHpde6e6e7UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeHsmmembUniPk
+objType table
+cell HSMM_emb
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH002550
+fileName wgEncodeAwgDnaseDukeHsmmembUniPk.narrowPeak.gz
+lab Duke
+md5sum 036294be6cf5f4dfc6d33e8ac5c22ccd
+project wgEncode
+tableName wgEncodeAwgDnaseDukeHsmmembUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeHtr8svnUniPk
+objType table
+cell HTR8svn
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeHtr8svnUniPk.narrowPeak.gz
+md5sum 05da44baa43442b9e5e73bbd90a60726
+project wgEncode
+tableName wgEncodeAwgDnaseDukeHtr8svnUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeHuh75UniPk
+objType table
+cell Huh-7.5
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeHuh75UniPk.narrowPeak.gz
+lab Duke
+md5sum dfa669bd0e223900707e0621201e105f
+project wgEncode
+tableName wgEncodeAwgDnaseDukeHuh75UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeHuh7UniPk
+objType table
+cell Huh-7
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001111
+fileName wgEncodeAwgDnaseDukeHuh7UniPk.narrowPeak.gz
+lab Duke
+md5sum 9fa8a3ec3d34faf9cbb80e5a2608d9fd
+project wgEncode
+tableName wgEncodeAwgDnaseDukeHuh7UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeIpsUniPk
+objType table
+cell iPS
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001110
+fileName wgEncodeAwgDnaseDukeIpsUniPk.narrowPeak.gz
+lab Duke
+md5sum a234d0f6a1a57ce7369a81c15f68b81a
+project wgEncode
+tableName wgEncodeAwgDnaseDukeIpsUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeIshikawaestradiolUniPk
+objType table
+cell Ishikawa
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH002551
+fileName wgEncodeAwgDnaseDukeIshikawaestradiolUniPk.narrowPeak.gz
+lab Duke
+md5sum 0ac62813e6883ded3e3fc9ff986ba7fa
+project wgEncode
+tableName wgEncodeAwgDnaseDukeIshikawaestradiolUniPk
+treatment Estradiol_100nM_1hr
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeIshikawatamoxifenUniPk
+objType table
+cell Ishikawa
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH002552
+fileName wgEncodeAwgDnaseDukeIshikawatamoxifenUniPk.narrowPeak.gz
+lab Duke
+md5sum 717a304e08ea75564072baca324082ba
+project wgEncode
+tableName wgEncodeAwgDnaseDukeIshikawatamoxifenUniPk
+treatment 4OHTAM_100nM_30m
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeLncapandrogenUniPk
+objType table
+cell LNCaP
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeLncapandrogenUniPk.narrowPeak.gz
+lab Duke
+md5sum 872f4cbbc25cb90c13f55878fc9f3a15
+project wgEncode
+tableName wgEncodeAwgDnaseDukeLncapandrogenUniPk
+treatment androgen
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeMcf7hypoxiaUniPk
+objType table
+cell MCF-7
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeMcf7hypoxiaUniPk.narrowPeak.gz
+lab Duke
+md5sum ff7340e67054cec5e1a9419cb3018906
+project wgEncode
+tableName wgEncodeAwgDnaseDukeMcf7hypoxiaUniPk
+treatment Hypoxia_LacAcid
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeMedulloUniPk
+objType table
+cell Medullo
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000574
+fileName wgEncodeAwgDnaseDukeMedulloUniPk.narrowPeak.gz
+lab Duke
+md5sum 0747f5189a356ef93a77857949c3f7d5
+project wgEncode
+tableName wgEncodeAwgDnaseDukeMedulloUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeMelanoUniPk
+objType table
+cell Melano
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000602
+fileName wgEncodeAwgDnaseDukeMelanoUniPk.narrowPeak.gz
+lab Duke
+md5sum b328dd6d4b5354496e83e26e6be282bf
+project wgEncode
+tableName wgEncodeAwgDnaseDukeMelanoUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeMyometrUniPk
+objType table
+cell Myometr
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000603
+fileName wgEncodeAwgDnaseDukeMyometrUniPk.narrowPeak.gz
+lab Duke
+md5sum 9f4fe9509a6d34777a5d65d03fdb6c0d
+project wgEncode
+tableName wgEncodeAwgDnaseDukeMyometrUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeOsteoblUniPk
+objType table
+cell Osteobl
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001098
+fileName wgEncodeAwgDnaseDukeOsteoblUniPk.narrowPeak.gz
+lab Duke
+md5sum 6884a070f66a9765b270da13727e4736
+project wgEncode
+tableName wgEncodeAwgDnaseDukeOsteoblUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukePanisletdUniPk
+objType table
+cell PanIsletD
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukePanisletdUniPk.narrowPeak.gz
+lab Duke
+md5sum b2d601e69a486099b4408fab69bc0e20
+project wgEncode
+tableName wgEncodeAwgDnaseDukePanisletdUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukePanisletsUniPk
+objType table
+cell PanIslets
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000575
+fileName wgEncodeAwgDnaseDukePanisletsUniPk.narrowPeak.gz
+lab Duke
+md5sum 6dcd7b2d276a39175bcca5b8796cc080
+project wgEncode
+tableName wgEncodeAwgDnaseDukePanisletsUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukePhteUniPk
+objType table
+cell pHTE
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001099
+fileName wgEncodeAwgDnaseDukePhteUniPk.narrowPeak.gz
+lab Duke
+md5sum f7a60569bad28b3ffe55034a344b653e
+project wgEncode
+tableName wgEncodeAwgDnaseDukePhteUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeProgfibUniPk
+objType table
+cell ProgFib
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000576
+fileName wgEncodeAwgDnaseDukeProgfibUniPk.narrowPeak.gz
+lab Duke
+md5sum f9d797abb162e6f48b3c8848c7edba50
+project wgEncode
+tableName wgEncodeAwgDnaseDukeProgfibUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeRwpe1UniPk
+objType table
+cell RWPE1
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH002553
+fileName wgEncodeAwgDnaseDukeRwpe1UniPk.narrowPeak.gz
+lab Duke
+md5sum b081f717cdcfcb5f6c335297ffd81c20
+project wgEncode
+tableName wgEncodeAwgDnaseDukeRwpe1UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeStellateUniPk
+objType table
+cell Stellate
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001108
+fileName wgEncodeAwgDnaseDukeStellateUniPk.narrowPeak.gz
+lab Duke
+md5sum 7f02bb1ba57e7719aecda00ca2698947
+project wgEncode
+tableName wgEncodeAwgDnaseDukeStellateUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeT47dUniPk
+objType table
+cell T-47D
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001109
+fileName wgEncodeAwgDnaseDukeT47dUniPk.narrowPeak.gz
+lab Duke
+md5sum b560fe86c721af043bf20477c7e108a9
+project wgEncode
+tableName wgEncodeAwgDnaseDukeT47dUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeTh0UniPk
+objType table
+cell Adult_CD4_Th0
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeTh0UniPk.narrowPeak.gz
+lab UW
+md5sum aaf26eebf07e54662c44fd676ecdd111
+project wgEncode
+tableName wgEncodeAwgDnaseDukeTh0UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeUrotheliaUniPk
+objType table
+cell Urothelia
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeUrotheliaUniPk.narrowPeak.gz
+lab Duke
+md5sum 0913f7091409c9255fbe35c81525d8f6
+project wgEncode
+tableName wgEncodeAwgDnaseDukeUrotheliaUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseDukeUrotheliaut189UniPk
+objType table
+cell Urothelia
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseDukeUrotheliaut189UniPk.narrowPeak.gz
+lab Duke
+md5sum 30a9c8f2ff80cbd272d775590c39d6d7
+project wgEncode
+tableName wgEncodeAwgDnaseDukeUrotheliaut189UniPk
+treatment UT189
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwAg04449UniPk
+objType table
+cell AG04449
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000505
+fileName wgEncodeAwgDnaseUwAg04449UniPk.narrowPeak.gz
+lab UW
+md5sum ede0cb7737afb203a0e1dbe2d9cc6904
+project wgEncode
+tableName wgEncodeAwgDnaseUwAg04449UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwAg04450UniPk
+objType table
+cell AG04450
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000506
+fileName wgEncodeAwgDnaseUwAg04450UniPk.narrowPeak.gz
+lab UW
+md5sum 77e748f35cde7f8c2e82607df02168b0
+project wgEncode
+tableName wgEncodeAwgDnaseUwAg04450UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwAg09309UniPk
+objType table
+cell AG09309
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000507
+fileName wgEncodeAwgDnaseUwAg09309UniPk.narrowPeak.gz
+lab UW
+md5sum 27bf453ed5a7c8eca772ca4a2850fa0f
+project wgEncode
+tableName wgEncodeAwgDnaseUwAg09309UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwAg09319UniPk
+objType table
+cell AG09319
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000508
+fileName wgEncodeAwgDnaseUwAg09319UniPk.narrowPeak.gz
+lab UW
+md5sum a94efaf4eee6bad1ef76aa21e712d01b
+project wgEncode
+tableName wgEncodeAwgDnaseUwAg09319UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwAg10803UniPk
+objType table
+cell AG10803
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000509
+fileName wgEncodeAwgDnaseUwAg10803UniPk.narrowPeak.gz
+lab UW
+md5sum 0edeaa37c834194fdec8b44a546c1541
+project wgEncode
+tableName wgEncodeAwgDnaseUwAg10803UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwAoafUniPk
+objType table
+cell AoAF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001161
+fileName wgEncodeAwgDnaseUwAoafUniPk.narrowPeak.gz
+lab UW
+md5sum f556b6787a41e53de0aa0d02e624bb71
+project wgEncode
+tableName wgEncodeAwgDnaseUwAoafUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwBe2cUniPk
+objType table
+cell BE2_C
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001181
+fileName wgEncodeAwgDnaseUwBe2cUniPk.narrowPeak.gz
+lab UW
+md5sum 03ec343105e16a0e783773b7b18d66ee
+project wgEncode
+tableName wgEncodeAwgDnaseUwBe2cUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwBjUniPk
+objType table
+cell BJ
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000487
+fileName wgEncodeAwgDnaseUwBjUniPk.narrowPeak.gz
+lab UW
+md5sum 5acc2faf44b3c3786980c46308025463
+project wgEncode
+tableName wgEncodeAwgDnaseUwBjUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwCaco2UniPk
+objType table
+cell Caco-2
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000486
+fileName wgEncodeAwgDnaseUwCaco2UniPk.narrowPeak.gz
+lab UW
+md5sum 9b2583a027e18568a723c55c02ec28a0
+project wgEncode
+tableName wgEncodeAwgDnaseUwCaco2UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwCd20UniPk
+objType table
+cell CD20+
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001884
+fileName wgEncodeAwgDnaseUwCd20UniPk.narrowPeak.gz
+lab UW
+md5sum d7548a5ab2366787b24bdc72adc620bf
+project wgEncode
+tableName wgEncodeAwgDnaseUwCd20UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwCd34mobilizedUniPk
+objType table
+cell CD34+_Mobilized
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001885
+fileName wgEncodeAwgDnaseUwCd34mobilizedUniPk.narrowPeak.gz
+lab UW
+md5sum 96780bc6cfacdd9bdbf6cafc4c18cb7a
+project wgEncode
+tableName wgEncodeAwgDnaseUwCd34mobilizedUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwCmkUniPk
+objType table
+cell CMK
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000510
+fileName wgEncodeAwgDnaseUwCmkUniPk.narrowPeak.gz
+lab UW
+md5sum f393c655919a38ee367bc2c55cb1abf1
+project wgEncode
+tableName wgEncodeAwgDnaseUwCmkUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwGm06990UniPk
+objType table
+cell GM06990
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000481
+fileName wgEncodeAwgDnaseUwGm06990UniPk.narrowPeak.gz
+lab UW
+md5sum 42da751c05b58ba330e37c291b09ea1b
+project wgEncode
+tableName wgEncodeAwgDnaseUwGm06990UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwGm12864UniPk
+objType table
+cell GM12864
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001182
+fileName wgEncodeAwgDnaseUwGm12864UniPk.narrowPeak.gz
+lab UW
+md5sum fedfdd75def0eb3a4ce03cf465f68146
+project wgEncode
+tableName wgEncodeAwgDnaseUwGm12864UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwGm12865UniPk
+objType table
+cell GM12865
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000520
+fileName wgEncodeAwgDnaseUwGm12865UniPk.narrowPeak.gz
+lab UW
+md5sum 6e62c83368d283a284c7d16cbca1ffc5
+project wgEncode
+tableName wgEncodeAwgDnaseUwGm12865UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwH7hescUniPk
+objType table
+cell H7-hESC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000511
+fileName wgEncodeAwgDnaseUwH7hescUniPk.narrowPeak.gz
+lab UW
+md5sum 55b21c7aaa2a5267d42aad323ffa337c
+project wgEncode
+tableName wgEncodeAwgDnaseUwH7hescUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHacUniPk
+objType table
+cell HAc
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001192
+fileName wgEncodeAwgDnaseUwHacUniPk.narrowPeak.gz
+lab UW
+md5sum d313c9568587d0ca8ca43846c126d457
+project wgEncode
+tableName wgEncodeAwgDnaseUwHacUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHaepicUniPk
+objType table
+cell HAEpiC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000512
+fileName wgEncodeAwgDnaseUwHaepicUniPk.narrowPeak.gz
+lab UW
+md5sum a93becc7925a4cde8759da59d0f061f8
+project wgEncode
+tableName wgEncodeAwgDnaseUwHaepicUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHahUniPk
+objType table
+cell HA-h
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001191
+fileName wgEncodeAwgDnaseUwHahUniPk.narrowPeak.gz
+lab UW
+md5sum 497e377aef730971c3611b59ce68ab27
+project wgEncode
+tableName wgEncodeAwgDnaseUwHahUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHaspUniPk
+objType table
+cell HA-sp
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001183
+fileName wgEncodeAwgDnaseUwHaspUniPk.narrowPeak.gz
+lab UW
+md5sum c628435218cbe9a977c05ad5b8d7ac6d
+project wgEncode
+tableName wgEncodeAwgDnaseUwHaspUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHbmecUniPk
+objType table
+cell HBMEC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001178
+fileName wgEncodeAwgDnaseUwHbmecUniPk.narrowPeak.gz
+lab UW
+md5sum 3e490f9dcaee15a088a504c9a4f49532
+project wgEncode
+tableName wgEncodeAwgDnaseUwHbmecUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHcfUniPk
+objType table
+cell HCF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000513
+fileName wgEncodeAwgDnaseUwHcfUniPk.narrowPeak.gz
+lab UW
+md5sum c8b3a848b682d6370bfbbabd8ee3435b
+project wgEncode
+tableName wgEncodeAwgDnaseUwHcfUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHcfaaUniPk
+objType table
+cell HCFaa
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001164
+fileName wgEncodeAwgDnaseUwHcfaaUniPk.narrowPeak.gz
+lab UW
+md5sum f291b92dddbcad199621f366cce54b66
+project wgEncode
+tableName wgEncodeAwgDnaseUwHcfaaUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHcmUniPk
+objType table
+cell HCM
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000519
+fileName wgEncodeAwgDnaseUwHcmUniPk.narrowPeak.gz
+lab UW
+md5sum 33bafe1dec86a0145e064ff159e8bd94
+project wgEncode
+tableName wgEncodeAwgDnaseUwHcmUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHconfUniPk
+objType table
+cell HConF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001165
+fileName wgEncodeAwgDnaseUwHconfUniPk.narrowPeak.gz
+lab UW
+md5sum ff1efef5fe6dc83e6d38b938f5c0a3b9
+project wgEncode
+tableName wgEncodeAwgDnaseUwHconfUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHcpepicUniPk
+objType table
+cell HCPEpiC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000514
+fileName wgEncodeAwgDnaseUwHcpepicUniPk.narrowPeak.gz
+lab UW
+md5sum 0091a96444ddce2dfceeff2326340ff8
+project wgEncode
+tableName wgEncodeAwgDnaseUwHcpepicUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHct116UniPk
+objType table
+cell HCT-116
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001162
+fileName wgEncodeAwgDnaseUwHct116UniPk.narrowPeak.gz
+lab UW
+md5sum d1ed21723c6f7f736c047458727d805c
+project wgEncode
+tableName wgEncodeAwgDnaseUwHct116UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHeepicUniPk
+objType table
+cell HEEpiC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000515
+fileName wgEncodeAwgDnaseUwHeepicUniPk.narrowPeak.gz
+lab UW
+md5sum 7977cba9ba94e0deebb649c78d35689a
+project wgEncode
+tableName wgEncodeAwgDnaseUwHeepicUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHffUniPk
+objType table
+cell HFF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001193
+fileName wgEncodeAwgDnaseUwHffUniPk.narrowPeak.gz
+lab UW
+md5sum 57d3c71de0327a54e603516d7680b637
+project wgEncode
+tableName wgEncodeAwgDnaseUwHffUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHffmycUniPk
+objType table
+cell HFF-Myc
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001194
+fileName wgEncodeAwgDnaseUwHffmycUniPk.narrowPeak.gz
+lab UW
+md5sum 44cdd5e09f9b2a0619ab7087e65b14c1
+project wgEncode
+tableName wgEncodeAwgDnaseUwHffmycUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHgfUniPk
+objType table
+cell HGF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000504
+fileName wgEncodeAwgDnaseUwHgfUniPk.narrowPeak.gz
+lab UW
+md5sum 76dbece5b19a1da96fc4d4904a5c18ac
+project wgEncode
+tableName wgEncodeAwgDnaseUwHgfUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHipepicUniPk
+objType table
+cell HIPEpiC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001184
+fileName wgEncodeAwgDnaseUwHipepicUniPk.narrowPeak.gz
+lab UW
+md5sum 65034ee71305c64ead415414c6792055
+project wgEncode
+tableName wgEncodeAwgDnaseUwHipepicUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHl60UniPk
+objType table
+cell HL-60
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000489
+fileName wgEncodeAwgDnaseUwHl60UniPk.narrowPeak.gz
+lab UW
+md5sum 7fb1976441f6f9d37aad98251214f044
+project wgEncode
+tableName wgEncodeAwgDnaseUwHl60UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmfUniPk
+objType table
+cell HMF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001166
+fileName wgEncodeAwgDnaseUwHmfUniPk.narrowPeak.gz
+lab UW
+md5sum 6058357e943c3e4c0b313614493c0633
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmfUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmvecdadUniPk
+objType table
+cell HMVEC-dAd
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001889
+fileName wgEncodeAwgDnaseUwHmvecdadUniPk.narrowPeak.gz
+lab UW
+md5sum ceb5bc2aaf536165491fe5f360b08467
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmvecdadUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmvecdbladUniPk
+objType table
+cell HMVEC-dBl-Ad
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001168
+fileName wgEncodeAwgDnaseUwHmvecdbladUniPk.narrowPeak.gz
+lab UW
+md5sum f6761362784b42cf490a17c56506d4ef
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmvecdbladUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmvecdblneoUniPk
+objType table
+cell HMVEC-dBl-Neo
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001169
+fileName wgEncodeAwgDnaseUwHmvecdblneoUniPk.narrowPeak.gz
+lab UW
+md5sum 77fbd7c9c2a0cfc35fd6c84464a97dec
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmvecdblneoUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmvecdlyadUniPk
+objType table
+cell HMVEC-dLy-Ad
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001170
+fileName wgEncodeAwgDnaseUwHmvecdlyadUniPk.narrowPeak.gz
+lab UW
+md5sum 40de3123fad2b7b78a00d9132341f71d
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmvecdlyadUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmvecdlyneoUniPk
+objType table
+cell HMVEC-dLy-Neo
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001171
+fileName wgEncodeAwgDnaseUwHmvecdlyneoUniPk.narrowPeak.gz
+lab UW
+md5sum c5700aa9b47a153e5f3f95c83817e2fd
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmvecdlyneoUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmvecdneoUniPk
+objType table
+cell HMVEC-dNeo
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001172
+fileName wgEncodeAwgDnaseUwHmvecdneoUniPk.narrowPeak.gz
+lab UW
+md5sum d6b5ec8ffaa2bf0b48cae408bfaf9e56
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmvecdneoUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmveclblUniPk
+objType table
+cell HMVEC-LBl
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001163
+fileName wgEncodeAwgDnaseUwHmveclblUniPk.narrowPeak.gz
+lab UW
+md5sum dab91a5394fad48b4734283dd81b5f75
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmveclblUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHmvecllyUniPk
+objType table
+cell HMVEC-LLy
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001167
+fileName wgEncodeAwgDnaseUwHmvecllyUniPk.narrowPeak.gz
+lab UW
+md5sum f03829e4c5e48f3474653eca2bbac5b2
+project wgEncode
+tableName wgEncodeAwgDnaseUwHmvecllyUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHnpcepicUniPk
+objType table
+cell HNPCEpiC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000516
+fileName wgEncodeAwgDnaseUwHnpcepicUniPk.narrowPeak.gz
+lab UW
+md5sum ffb379becc5ff1c5d18c748166fd3aeb
+project wgEncode
+tableName wgEncodeAwgDnaseUwHnpcepicUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHpaecUniPk
+objType table
+cell HPAEC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001886
+fileName wgEncodeAwgDnaseUwHpaecUniPk.narrowPeak.gz
+lab UW
+md5sum 3f10996c8d9d58de0947da6d683db1b7
+project wgEncode
+tableName wgEncodeAwgDnaseUwHpaecUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHpafUniPk
+objType table
+cell HPAF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001173
+fileName wgEncodeAwgDnaseUwHpafUniPk.narrowPeak.gz
+lab UW
+md5sum e26d1ca8b401bef4b7c2df16f3a7753d
+project wgEncode
+tableName wgEncodeAwgDnaseUwHpafUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHpdlfUniPk
+objType table
+cell HPdLF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001175
+fileName wgEncodeAwgDnaseUwHpdlfUniPk.narrowPeak.gz
+lab UW
+md5sum dec6c035df42de6a4b7530e53226536f
+project wgEncode
+tableName wgEncodeAwgDnaseUwHpdlfUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHpfUniPk
+objType table
+cell HPF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001174
+fileName wgEncodeAwgDnaseUwHpfUniPk.narrowPeak.gz
+lab UW
+md5sum 07e2df1ec0269d0bd7d6847d3d65daf0
+project wgEncode
+tableName wgEncodeAwgDnaseUwHpfUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHrcepicUniPk
+objType table
+cell HRCEpiC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000493
+fileName wgEncodeAwgDnaseUwHrcepicUniPk.narrowPeak.gz
+lab UW
+md5sum 9665b07c5fb744857103441aac3e9f94
+project wgEncode
+tableName wgEncodeAwgDnaseUwHrcepicUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHreUniPk
+objType table
+cell HRE
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000494
+fileName wgEncodeAwgDnaseUwHreUniPk.narrowPeak.gz
+lab UW
+md5sum 20ca155eeff65a400af7729e1ce9fcad
+project wgEncode
+tableName wgEncodeAwgDnaseUwHreUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHrgecUniPk
+objType table
+cell HRGEC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001195
+fileName wgEncodeAwgDnaseUwHrgecUniPk.narrowPeak.gz
+lab UW
+md5sum 5ae7221cb3901b25645268bf7b7fe3b1
+project wgEncode
+tableName wgEncodeAwgDnaseUwHrgecUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHrpepicUniPk
+objType table
+cell HRPEpiC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000517
+fileName wgEncodeAwgDnaseUwHrpepicUniPk.narrowPeak.gz
+lab UW
+md5sum f8fa6c39fbd89994f62dd4d66817d58f
+project wgEncode
+tableName wgEncodeAwgDnaseUwHrpepicUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwHvmfUniPk
+objType table
+cell HVMF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001176
+fileName wgEncodeAwgDnaseUwHvmfUniPk.narrowPeak.gz
+lab UW
+md5sum 6b9f0dc8efd0b1d51901f949079bf969
+project wgEncode
+tableName wgEncodeAwgDnaseUwHvmfUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwJurkatUniPk
+objType table
+cell Jurkat
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000497
+fileName wgEncodeAwgDnaseUwJurkatUniPk.narrowPeak.gz
+lab UW
+md5sum 3d0848b916eeb883872bf593a9bdd56f
+project wgEncode
+tableName wgEncodeAwgDnaseUwJurkatUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk
+objType table
+cell Monocytes-CD14+_RO01746
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk.narrowPeak.gz
+lab UW
+md5sum 152a89256f8fc12487f5c059b31f3a2d
+project wgEncode
+tableName wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwNb4UniPk
+objType table
+cell NB4
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000498
+fileName wgEncodeAwgDnaseUwNb4UniPk.narrowPeak.gz
+lab UW
+md5sum 73929dc101adb03c2df9cb390ab83374
+project wgEncode
+tableName wgEncodeAwgDnaseUwNb4UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwNhaUniPk
+objType table
+cell NH-A
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001179
+fileName wgEncodeAwgDnaseUwNhaUniPk.narrowPeak.gz
+lab UW
+md5sum f2d0725be30db4b2dcb7ab7a3991001c
+project wgEncode
+tableName wgEncodeAwgDnaseUwNhaUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwNhdfadUniPk
+objType table
+cell NHDF-Ad
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001177
+fileName wgEncodeAwgDnaseUwNhdfadUniPk.narrowPeak.gz
+lab UW
+md5sum 085491c80e51fa1c6d4085f34c19ce0c
+project wgEncode
+tableName wgEncodeAwgDnaseUwNhdfadUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwNhdfneoUniPk
+objType table
+cell NHDF-neo
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000518
+fileName wgEncodeAwgDnaseUwNhdfneoUniPk.narrowPeak.gz
+lab UW
+md5sum d575366a515cff747c175d7f30b4eb9f
+project wgEncode
+tableName wgEncodeAwgDnaseUwNhdfneoUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwNhlfUniPk
+objType table
+cell NHLF
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000521
+fileName wgEncodeAwgDnaseUwNhlfUniPk.narrowPeak.gz
+lab UW
+md5sum 2e8c951563510b7570efad330797e360
+project wgEncode
+tableName wgEncodeAwgDnaseUwNhlfUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwNt2d1UniPk
+objType table
+cell NT2-D1
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001887
+fileName wgEncodeAwgDnaseUwNt2d1UniPk.narrowPeak.gz
+lab UW
+md5sum 3e4fbb6e5ba8ec99bf8090e9fb24b11d
+project wgEncode
+tableName wgEncodeAwgDnaseUwNt2d1UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwPanc1UniPk
+objType table
+cell PANC-1
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000500
+fileName wgEncodeAwgDnaseUwPanc1UniPk.narrowPeak.gz
+lab UW
+md5sum a75087c55ea0d8c6cfc3fb59be16ef71
+project wgEncode
+tableName wgEncodeAwgDnaseUwPanc1UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwPrecUniPk
+objType table
+cell PrEC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001888
+fileName wgEncodeAwgDnaseUwPrecUniPk.narrowPeak.gz
+lab UW
+md5sum b4a1bb6818000c680e8017695430457a
+project wgEncode
+tableName wgEncodeAwgDnaseUwPrecUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwRptecUniPk
+objType table
+cell RPTEC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001188
+fileName wgEncodeAwgDnaseUwRptecUniPk.narrowPeak.gz
+lab UW
+md5sum e747243706038551c9ba7bbb8bd83f68
+project wgEncode
+tableName wgEncodeAwgDnaseUwRptecUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwSaecUniPk
+objType table
+cell SAEC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000501
+fileName wgEncodeAwgDnaseUwSaecUniPk.narrowPeak.gz
+lab UW
+md5sum 45cd33bdc2f03ebf8341608fed552a1f
+project wgEncode
+tableName wgEncodeAwgDnaseUwSaecUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwSkmcUniPk
+objType table
+cell SKMC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000490
+fileName wgEncodeAwgDnaseUwSkmcUniPk.narrowPeak.gz
+lab UW
+md5sum fbb574410d9d267f1a1f2873badb176e
+project wgEncode
+tableName wgEncodeAwgDnaseUwSkmcUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwSknmcUniPk
+objType table
+cell SK-N-MC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001189
+fileName wgEncodeAwgDnaseUwSknmcUniPk.narrowPeak.gz
+lab UW
+md5sum 234a67adcb9ef3f441ee3ad36b2f7314
+project wgEncode
+tableName wgEncodeAwgDnaseUwSknmcUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwSknshraUniPk
+objType table
+cell SK-N-SH_RA
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000485
+fileName wgEncodeAwgDnaseUwSknshraUniPk.narrowPeak.gz
+lab UW
+md5sum 4119a16e3f4c4ea5cf13860c74ec84e8
+project wgEncode
+tableName wgEncodeAwgDnaseUwSknshraUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwTh2UniPk
+objType table
+cell Th2
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000491
+fileName wgEncodeAwgDnaseUwTh2UniPk.narrowPeak.gz
+lab UW
+md5sum f6563519d3a1a198aa910cab00a1d6f6
+project wgEncode
+tableName wgEncodeAwgDnaseUwTh2UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwWerirb1UniPk
+objType table
+cell WERI-Rb-1
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001190
+fileName wgEncodeAwgDnaseUwWerirb1UniPk.narrowPeak.gz
+lab UW
+md5sum 6425ceeb5d9fbb7a46f40a0bbd066c86
+project wgEncode
+tableName wgEncodeAwgDnaseUwWerirb1UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwWi38UniPk
+objType table
+cell WI-38
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001197
+fileName wgEncodeAwgDnaseUwWi38UniPk.narrowPeak.gz
+lab UW
+md5sum 433dbfb677e99ea4f0d600b17054e3d2
+project wgEncode
+tableName wgEncodeAwgDnaseUwWi38UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwWi38tamoxifentamoxifenUniPk
+objType table
+cell WI-38
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwWi38tamoxifentamoxifenUniPk.narrowPeak.gz
+lab UW
+md5sum 8d6fb542a475d5d5ac7fa21bbf6e0f21
+project wgEncode
+tableName wgEncodeAwgDnaseUwWi38tamoxifentamoxifenUniPk
+treatment 4OHTAM_20nM_72hr
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeA549UniPk
+objType table
+cell A549
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeA549UniPk.narrowPeak.gz
+lab AWG
+md5sum 1dc4a498888350152ed20bdbaa23ecb0
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeA549UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeGm12878UniPk
+objType table
+cell GM12878
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeGm12878UniPk.narrowPeak.gz
+lab AWG
+md5sum f2c65bf3d2cb1f7ca27e45acce9c09b4
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeGm12878UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeH1hescUniPk
+objType table
+cell H1-hESC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeH1hescUniPk.narrowPeak.gz
+lab AWG
+md5sum cd4ea6d97b3a78d2a71ec090abd120d0
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeH1hescUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeHelas3UniPk
+objType table
+cell HeLa-S3
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeHelas3UniPk.narrowPeak.gz
+lab AWG
+md5sum 84d5ef5be5d85fd200462789c1f82194
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeHelas3UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeHepg2UniPk
+objType table
+cell HepG2
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeHepg2UniPk.narrowPeak.gz
+lab AWG
+md5sum ba01b8af603a247e0d8e63095bd89f24
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeHepg2UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeHmecUniPk
+objType table
+cell HMEC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeHmecUniPk.narrowPeak.gz
+lab AWG
+md5sum c4446ab4e51f8ccd54536bf70b55e887
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeHmecUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeHsmmUniPk
+objType table
+cell HSMM
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeHsmmUniPk.narrowPeak.gz
+lab AWG
+md5sum 2f0742bd8705dd6666c685b38aa365ab
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeHsmmUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeHsmmtubeUniPk
+objType table
+cell HSMMtube
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeHsmmtubeUniPk.narrowPeak.gz
+lab AWG
+md5sum 8e6d88d7cd8617b106eb42606f138853
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeHsmmtubeUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeHuvecUniPk
+objType table
+cell HUVEC
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeHuvecUniPk.narrowPeak.gz
+lab AWG
+md5sum 2541ecb5be1ab31a85d38cff44af7065
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeHuvecUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeK562UniPk
+objType table
+cell K562
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeK562UniPk.narrowPeak.gz
+lab AWG
+md5sum 647727adfa3cb4dadb3d335cc76e6302
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeK562UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeLncapUniPk
+objType table
+cell LNCaP
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeLncapUniPk.narrowPeak.gz
+lab AWG
+md5sum b643eaa63ed5a59e76a2bf3f812980c6
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeLncapUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeMcf7UniPk
+objType table
+cell MCF-7
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeMcf7UniPk.narrowPeak.gz
+lab AWG
+md5sum 3e7d35f5c4b36cbb5cbe4eb4e060fd6a
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeMcf7UniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeNhekUniPk
+objType table
+cell NHEK
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeNhekUniPk.narrowPeak.gz
+lab AWG
+md5sum 1391a45ee72dbfd61fcaaccfc96b2921
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeNhekUniPk
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgDnaseUwdukeTh1UniPk
+objType table
+cell Th1
+composite wgEncodeAwgDnaseUniform
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseUwdukeTh1UniPk.narrowPeak.gz
+lab AWG
+md5sum e975123b8e5f39b1c819e70861d7903d
+project wgEncode
+tableName wgEncodeAwgDnaseUwdukeTh1UniPk
+treatment None
+view Peaks
+
+# MAGIC: -2029417181
