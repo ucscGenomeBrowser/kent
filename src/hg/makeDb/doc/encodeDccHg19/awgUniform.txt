@@ -163,8 +163,11 @@ cat  << 'EOF' > link.csh
     cp $dir/wgEncodeUwDnase/README.txt $dir/wgEncodeAwgDnaseUniform/releaseLatest
 
     # get file list for pushQ
-    cd ~/kent/src/hg/makeDb/doc/encodeAnalysisHg19
+    cd ~/kent/src/hg/makeDb/doc/encodeDccHg19
     /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgDnaseUniform 1 > wgEncodeAwgDnaseUniform.release1.notes
+
+    # QA preview
+    encodeQaInit hg19 wgEncodeAwgDnaseUniform 1 9850 -t 
 
 
 

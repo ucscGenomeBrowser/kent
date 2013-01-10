@@ -66,7 +66,7 @@ static struct trackHubGenome *trackHubGenomeReadRa(char *url, struct hash *hash)
 /* Read in a genome.ra format url and return it as a list of trackHubGenomes. 
  * Also add it to hash, which is keyed by genome. */
 {
-struct lineFile *lf = udcWrapShortLineFile(url, NULL, 16*1024*1024);
+struct lineFile *lf = udcWrapShortLineFile(url, NULL, 64*1024*1024);
 struct trackHubGenome *list = NULL, *el;
 
 struct hash *ra;
@@ -326,7 +326,7 @@ struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGen
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
  * types.  Do a few other quick checks to catch errors early. */
 {
-struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 16*1024*1024);
+struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 64*1024*1024);
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
 lineFileClose(&lf);
 

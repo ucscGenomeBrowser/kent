@@ -2325,9 +2325,9 @@ dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
 include altSeqComposite5.ra alpha
 
-include altSeqComposite9.ra alpha,beta,public
+include altSeqComposite9.ra alpha
 
-include altSeqComposite10.ra alpha
+include altSeqComposite10.ra alpha,beta,public
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
@@ -3132,6 +3132,6 @@ searchPriority 12.9888
 padding 250
 
 track exonJunctionPrimers override
-url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?
+url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
