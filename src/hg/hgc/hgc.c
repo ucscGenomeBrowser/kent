@@ -24874,6 +24874,7 @@ else if (sameWord(table, "transRegCodeProbe"))
                         "transRegCodeCondition", "growthCondition");
     }
 else if (sameWord(table, "wgEncodeRegDnaseClustered")
+     ||  sameWord(table, "wgEncodeRegDnaseClusteredV2")
      ||  sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
     {
     doPeakClusters(tdb, item);
