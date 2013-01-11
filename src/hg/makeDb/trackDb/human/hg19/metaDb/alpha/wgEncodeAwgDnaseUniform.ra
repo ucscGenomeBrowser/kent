@@ -278,6 +278,7 @@ composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseDukeHtr8svnUniPk.narrowPeak.gz
+lab Duke
 md5sum 05da44baa43442b9e5e73bbd90a60726
 project wgEncode
 tableName wgEncodeAwgDnaseDukeHtr8svnUniPk
