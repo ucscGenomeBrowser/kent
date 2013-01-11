@@ -20,11 +20,8 @@ include wgEncodeUncBsuProt.release2.ra
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProtGenc.ra
 
-# Integrated Regulation (wrangler: kent)
-include wgEncodeReg.release3.ra
-
-# Integrated Regulation from AWG uniform processing (Jan 2011 data) (wrangler: kate)
-include wgEncodeRegV2.ra
+# Integrated Regulation (wrangler: kate)
+include wgEncodeReg.release4.ra
 
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
