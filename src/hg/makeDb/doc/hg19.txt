@@ -19984,3 +19984,7 @@ cat $HOME/kent/src/hg/lib/coriellDelDup.as >> tableDescriptions.entry.sql
     hgsql hg19 < tableDescriptions.entry.sql
 
 ############################################################################
+# ENCODE Regulation track -- make doc has been moved to encodeRegHg19.txt
+
+############################################################################
+
