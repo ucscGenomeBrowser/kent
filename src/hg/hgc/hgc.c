@@ -9459,7 +9459,7 @@ sqlFreeResult(&sr);
 printf("<B>Patient View: </B>\n");
 printf("More details on patient %s at ", itemName);
 printf("<A HREF=\"%s%s\" target=_blank>",
-       "https://decipher.sanger.ac.uk/application/patient/", itemName);
+       "https://decipher.sanger.ac.uk/patient/", itemName);
 printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */
