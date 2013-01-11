@@ -24,12 +24,13 @@ cell AoSMC
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000601
 fileName wgEncodeAwgDnaseDukeAosmcUniPk.narrowPeak.gz
 lab Duke
 md5sum 957b3477d43cef1c6abd41182b053418
 project wgEncode
 tableName wgEncodeAwgDnaseDukeAosmcUniPk
-treatment None
+treatment serum_free_media
 view Peaks
 
 metaObject wgEncodeAwgDnaseDukeChorionUniPk
@@ -218,6 +219,7 @@ cell HeLa-S3
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000577
 fileName wgEncodeAwgDnaseDukeHelas3ifna4hUniPk.narrowPeak.gz
 lab Duke
 md5sum 5b0220dd8af4853e5f409aa8a403d615
@@ -277,6 +279,7 @@ cell HTR8svn
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001105
 fileName wgEncodeAwgDnaseDukeHtr8svnUniPk.narrowPeak.gz
 lab Duke
 md5sum 05da44baa43442b9e5e73bbd90a60726
@@ -291,6 +294,7 @@ cell Huh-7.5
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001112
 fileName wgEncodeAwgDnaseDukeHuh75UniPk.narrowPeak.gz
 lab Duke
 md5sum dfa669bd0e223900707e0621201e105f
@@ -365,6 +369,7 @@ cell LNCaP
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001096
 fileName wgEncodeAwgDnaseDukeLncapandrogenUniPk.narrowPeak.gz
 lab Duke
 md5sum 872f4cbbc25cb90c13f55878fc9f3a15
@@ -379,6 +384,7 @@ cell MCF-7
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001745
 fileName wgEncodeAwgDnaseDukeMcf7hypoxiaUniPk.narrowPeak.gz
 lab Duke
 md5sum ff7340e67054cec5e1a9419cb3018906
@@ -453,6 +459,7 @@ cell PanIsletD
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001102
 fileName wgEncodeAwgDnaseDukePanisletdUniPk.narrowPeak.gz
 lab Duke
 md5sum b2d601e69a486099b4408fab69bc0e20
@@ -557,6 +564,7 @@ cell Adult_CD4_Th0
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH002562
 fileName wgEncodeAwgDnaseDukeTh0UniPk.narrowPeak.gz
 lab UW
 md5sum aaf26eebf07e54662c44fd676ecdd111
@@ -571,6 +579,7 @@ cell Urothelia
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001113
 fileName wgEncodeAwgDnaseDukeUrotheliaUniPk.narrowPeak.gz
 lab Duke
 md5sum 0913f7091409c9255fbe35c81525d8f6
@@ -585,6 +594,7 @@ cell Urothelia
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001114
 fileName wgEncodeAwgDnaseDukeUrotheliaut189UniPk.narrowPeak.gz
 lab Duke
 md5sum 30a9c8f2ff80cbd272d775590c39d6d7
@@ -1648,6 +1658,7 @@ cell WI-38
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001198
 fileName wgEncodeAwgDnaseUwWi38tamoxifentamoxifenUniPk.narrowPeak.gz
 lab UW
 md5sum 8d6fb542a475d5d5ac7fa21bbf6e0f21
@@ -1852,4 +1863,4 @@ tableName wgEncodeAwgDnaseUwdukeTh1UniPk
 treatment None
 view Peaks
 
-# MAGIC: -2029407518
+# MAGIC: 2093096348
