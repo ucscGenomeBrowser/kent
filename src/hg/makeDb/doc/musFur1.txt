@@ -38,12 +38,19 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Must
 
     # verify the size of the sequence here:
     faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
-# 885534757 bases (238182824 N's 647351933 real 647351933 upper 0 lower)
-#       in 25005 sequences in 1 files
-# Total size: mean 35414.3 sd 103881.7 min 61 (gi|308127011|gb|GL501025.1|)
-#       max 4695893 (gi|308151637|gb|GL476399.1|) median 8270
-# %0.00 masked total, %0.00 masked real
 
+# 2410863155 bases (132851443 N's 2278011712 real 2278011712 upper 0 lower) in 7782 sequences in 1 files
+# Total size: mean 309799.9 sd 1997002.0 min 1000 (gi|334565269|gb|AEYP01117479.1|) max 52375790 (gi|334708367|gb|GL896898.1|) median 1448
+
+zcat unplaced.scaf.agp.gz | awk '{print $1}' | sed -e 's/GL[0-9][0-9]*//; s/AEYP[0-9][0-9]*//' | sort | uniq
+#
+.1
+
+zcat unplaced.scaf.agp.gz | sed -e 's/\.1//' > ../../../ucsc.agp
+
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+        | sed -e "s/^>.*GL8/>GL8/; s/^>.*AEYP0/>AEYP0/; s/\.1. Mustela.*//" \
+            > ucsc.fa
 
     # strip the names down to something reasonable, they can all be:
     # >GL[0-9]
@@ -71,40 +78,40 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Must
     cp -p Alligator_Mississippiensis.jpg /usr/local/apache/htdocs/images
 
 ##########################################################################
-# Initial makeGenomeDb.pl (DONE - 2012-10-12 - Hiram)
+# Initial makeGenomeDb.pl (WORKING - 2013-01-10 - Pauline)
     # obtain a template for this from the source tree:
     # kent/src/hg/utils/automation/configFiles/
     # and check it back into the source tree when completed here:
-    cd /hive/data/genomes/geoFor1
+    cd /hive/data/genomes/musFur1
     cat << '_EOF_' > musFur1.config.ra
 # Config parameters for makeGenomeDb.pl:
 db musFur1
 clade vertebrate
-genomeCladePriority 130
-scientificName Petromyzon marinus
-commonName Lamprey
-assemblyDate Sep. 2010
-assemblyLabel GSC Washington University School of Medicine
-assemblyShortLabel WUGSC 7.0
-orderKey 4799
-mitoAcc NC_001626
+genomeCladePriority 16
+scientificName Mustela putorius furo 
+commonName Ferret 
+assemblyDate Apr. 2011
+assemblyLabel Ferret Genome Sequencing Consortium
+assemblyShortLabel MusPutFur1.0
+orderKey 2430 
+mitoAcc none
 fastaFiles /hive/data/genomes/musFur1/genbank/ucsc.fa.gz
 agpFiles /hive/data/genomes/musFur1/genbank/ucsc.agp.gz
 # qualFiles none
-dbDbSpeciesDir lamprey
+dbDbSpeciesDir ferret
 photoCreditURL http://epa.gov/greatlakes/images/index.htm
 photoCreditName Photo courtesy of U.S. Environmental Protection Agency
-ncbiGenomeId 287
-ncbiAssemblyId 171978
-ncbiAssemblyName Petromyzon_Marinus-7.0
-ncbiBioProject 12880
-genBankAccessionID GCA_000148955.1
-taxId 7757
+ncbiGenomeId 3295
+ncbiAssemblyId 286418
+ncbiAssemblyName MusPutFur1.0 
+ncbiBioProject 59869
+genBankAccessionID GCA_000215625.1
+taxId 9669
 '_EOF_'
     # << happy emacs
 
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
-        -stop=agp musFur1.config.ra > agp.log 2>&1
+        -stop=agp musFur1.config.ra >>& agp.log
     #   real    1m6.334s
     # verify OK:
     tail -1 agp.log
