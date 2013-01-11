@@ -720,41 +720,19 @@ printf(
 "<P>BLAT on DNA is designed to\n"
 "quickly find sequences of 95%% and greater similarity of length 25 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
-"perfect sequence matches of 25 bases, and sometimes find them down to %d bases.\n"
+"perfect sequence matches of 20 bases.\n"
 "BLAT on proteins finds sequences of 80%% and greater similarity of length 20 amino\n"
 "acids or more.  In practice DNA BLAT works well on primates, and protein\n"
-"blat on land vertebrates.",
-   minMatchShown
+"blat on land vertebrates."
 );
-if (hIsGsidServer())
-{
+
+
 printf("%s",
 "\n</P><P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
-"in memory.  The index consists of all non-overlapping 11-mers except for\n"
-"those heavily involved in repeats.  The index takes up a bit less than\n"
-"a gigabyte of RAM.  The genome itself is not kept in memory, allowing\n"
-"BLAT to deliver high performance on a reasonably priced Linux box.\n"
-"The index is used to find areas of probable homology, which are then\n"
-"loaded into memory for a detailed alignment. Protein BLAT works in a similar\n"
-"manner, except with 4-mers rather than 11-mers.  The protein index takes a little\n"
-"more than 2 gigabytes.</P>\n"
-"<P>BLAT was written by <A HREF=\"mailto:kent@soe.ucsc.edu\">Jim Kent</A>.\n"
-"Sources and executables to run batch jobs on your own server are available free\n"
-"for academic, personal, and non-profit purposes.  Non-exclusive commercial\n"
-"licenses are also available. See the \n"
-"<A HREF=\"http://www.kentinformatics.com\" TARGET=_blank>Kent Informatics</A>\n"
-"website for details.</P>\n"
-"\n"
-"<P>For more information on the graphical version of BLAT, click the Help \n"
-"button on the top menu bar. </P> \n");
-}
-else
-{
-printf("%s",
-"\n</P><P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
-"in memory.  The index consists of all non-overlapping 11-mers except for\n"
-"those heavily involved in repeats.  The index takes up a bit less than\n"
-"a gigabyte of RAM.  The genome itself is not kept in memory, allowing\n"
+"in memory.  The index consists of all overlapping 11-mers stepping by 5 except for\n"
+"those heavily involved in repeats.  The index takes up about\n"
+"2 gigabytes of RAM.  RAM can be further reduced to less than 1 GB by increasing step size to 11.\n"
+"The genome itself is not kept in memory, allowing\n"
 "BLAT to deliver high performance on a reasonably priced Linux box.\n"
 "The index is used to find areas of probable homology, which are then\n"
 "loaded into memory for a detailed alignment. Protein BLAT works in a similar\n"
@@ -769,9 +747,13 @@ printf("%s",
 "website for details.</P>\n"
 "\n"
 "<P>For more information on the graphical version of BLAT, click the Help \n"
-"button on the top menu bar or see the Genome Browser \n"
-"<A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
-}
+"button on the top menu bar");
+
+if (hIsGsidServer())
+    printf(". </P> \n");
+else
+    printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
+
 }
 
 void doMiddle(struct cart *theCart)
@@ -823,6 +805,7 @@ char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
@@ -834,6 +817,7 @@ if (orgChange)
     }
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgBlat", enteredMainTime);
 return 0;
 }
 

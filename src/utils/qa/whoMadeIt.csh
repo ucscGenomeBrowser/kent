@@ -10,6 +10,8 @@ source `which qaConfig.csh`
 #
 ################################
 
+onintr cleanup
+
 set program=""
 set location=""
 set size=""
@@ -32,8 +34,9 @@ if ( $#argv != 1 ) then
   echo "  gets info about who wrote the lines in a program."
   echo "  expects your source tree in your ~/kent directory."
   echo "  will work on a directory name."
+  echo "  writes some files in your kent directory, then removes them."
   echo
-  echo "    usage:  program"
+  echo "    usage:  `basename $0` program"
   echo
   exit
 else
@@ -63,7 +66,7 @@ if ( `file $location | awk '{print $NF}'` == "directory" ) then
   set location="$full"
 endif
 
-rm -f grandTotFile
+rm -f grandTotFile$$
 foreach file ( $location )
   echo $file
   git blame $file | awk -F'(' '{print $2}' \
@@ -72,38 +75,38 @@ foreach file ( $location )
   set size=`cat xxOutFilexx | awk '{total+=$1} END {print total}'`
 
   set i=$aliases
-  mv xxOutFilexx tmp$i
+  mv xxOutFilexx tmp001$i
 
   while ( $i > 0 )
     # sum and substitute to get one name per person
-    set first=`cat tmp$i | egrep "$alias[$i]" | awk '{print $1}'`
-    set secon=`cat tmp$i | egrep "$names[$i]" | awk '{print $1}'`
+    set first=`cat tmp001$i | egrep "$alias[$i]" | awk '{print $1}'`
+    set secon=`cat tmp001$i | egrep "$names[$i]" | awk '{print $1}'`
     set sum=`echo $first $secon | awk '{print $1+$2}'`
 
     if ( $sum > $first ) then
-      cat tmp$i | grep -v "${first} $alias[$i]" \
+      cat tmp001$i | grep -v "${first} $alias[$i]" \
         | sed "/$names[$i]/ s/$secon/$sum/" \
-        | sort -k1,1 -nr > temp
+        | sort -k1,1 -nr > temp$$
     else
-      cat tmp$i | sed "s/$alias[$i]/$names[$i]/" > temp
+      cat tmp001$i | sed "s/$alias[$i]/$names[$i]/" > temp$$
     endif
 
-    rm -f tmp$i
+    rm -f tmp001$i
     @ i = $i - 1
-    mv temp tmp$i
+    mv temp$$ tmp001$i
   end
-  # last tmp$i is tmp0
+  # last tmp001$i is tmp0010
 
-  cat tmp0 | awk '{print $1, $2, $3}' | sed "s/ /_/" \
+  cat tmp0010 | awk '{print $1, $2, $3}' | sed "s/ /_/" \
     | awk -F"_" '{printf("%7s %-10s\n", $1, $2 )}'
-  if ( `wc -l tmp0 | awk '{print $1}'` > 1 ) then
+  if ( `wc -l tmp0010 | awk '{print $1}'` > 1 ) then
     echo "-----" "-----" | awk '{printf("%7s %-10s\n", $1, $2)}'
     echo $size   "total" | awk '{printf("%7s %-10s\n", $1, $2)}'
   endif
 
   if ( $isDir == 1 ) then
-    cat tmp0 >> grandTotFile
-    rm -f tmp0
+    cat tmp0010 >> grandTotFile$$
+    rm -f tmp0010
   endif
   echo
 end
@@ -116,26 +119,33 @@ else
   exit
 endif
 
-if ( -e grandTotFile ) then
+if ( -e grandTotFile$$ ) then
   # get list of names
-  set nameList=`cat grandTotFile | awk '{print $2"_"$3}' | sort -u`
+  set nameList=`cat grandTotFile$$ | awk '{print $2"_"$3}' | sort -u`
   # echo nameList $nameList
-  rm -f finFile
+  rm -f finFile$$
   foreach person ( $nameList )
     set name=`echo $person | sed "s/_/ /"`
-    cat grandTotFile | grep "$name" \
-      | awk '{total+=$1} END {print total, $2, $3}' >> finFile
+    cat grandTotFile$$ | grep "$name" \
+      | awk '{total+=$1} END {print total, $2, $3}' >> finFile$$
   end
   set totsize=`cat finFile | grep -v "Not Committed" \
     | awk '{total+=$1} END {print total, $2, $3}'`
-  cat finFile | grep -v "Not Committed" | sort -nr \
+  cat finFile$$ | grep -v "Not Committed" | sort -nr \
     | awk '{print $1, $2, $3}' | sed "s/ /_/" \
     | awk -F"_" '{printf("%7s %-10s\n", $1, $2 )}'
   echo "-----" "-----"  | awk '{printf("%7s %-10s\n", $1, $2)}'
   echo $totsize         | awk '{printf("%7s\n", $1)}'
 endif
 
-rm -f grandTotFile
-rm -f finFile
+rm -f grandTotFile$$
+rm -f finFile$$
 echo
 exit
+
+cleanup:
+rm -f temp$$
+rm -f xxOutFilexx
+rm -f tmp001$i
+rm -f tmp0010
+rm -f finFile$$

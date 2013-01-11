@@ -1,6 +1,6 @@
 input: Q9FFH7
 primary accession: P15455
-SwissProt id: 12S1_ARATH
+SwissProt id: CRU4_ARATH
 acc from id: P15455
 organelle: (null)
 isCurated: 1
@@ -8,60 +8,99 @@ aaSize: 472
 molWeight: 52595
 createDate: 1990-04-01
 seqDate: 2002-06-20
-annDate: 2006-10-31
-description: 12S seed storage protein CRA1 precursor [Contains: 12S seed storage protein CRA1 alpha chain (12S seed storage protein CRA1 acidic chain); 12S seed storage protein CRA1 beta chain (12S seed storage protein CRA1 basic chain)].
+annDate: 2012-11-28
+description: RecName: Full=12S seed storage protein CRU4; AltName: Full=Cruciferin 4;          Short=AtCRU4; AltName: Full=Cruciferin A1; AltName: Full=Legumin-type globulin storage protein CRU4; Contains:   RecName: Full=12S seed storage protein CRU4 alpha chain;   AltName: Full=12S seed storage protein CRU4 acidic chain; Contains:   RecName: Full=12S seed storage protein CRU4 beta chain;   AltName: Full=12S seed storage protein CRU4 basic chain; Flags: Precursor;
 taxon: 3702
 first scientific name: Arabidopsis thaliana
 first common name: Mouse-ear cress
 taxon from sci: 3702
 taxon from common: 3702
 all scientific names: Arabidopsis thaliana,
-gene(s): CRA1, At5g44120, MLN1.4,
- any CRA1: P15455,
- Mouse-ear cress CRA1: P15455,
- any At5g44120: P15455, Q56Z11, Q3E711,
- Mouse-ear cress At5g44120: P15455, Q56Z11, Q3E711,
- any MLN1.4: P15455,
- Mouse-ear cress MLN1.4: P15455,
-keyword(s): Alternative splicing, Seed storage protein, Signal, Storage protein,
-Mouse-ear cress Alternative splicing (314): P15455 P48347 P48348 Q06402...
-all Alternative splicing (10492): P15455 P48347 P48348 P92177...
-all Seed storage protein (284): Q9XHP0 P19084 P13744 P15455...
-all Signal (142755): Q4U9M9 P15711 Q43495 P18646...
-all Storage protein (351): Q9XHP0 P19084 P13744 P15455...
+gene(s): CRU4, CRA1, At5g44120, MLN1.4,
+ any CRU4: P15455, P33522, P15455-2,
+ Mouse-ear cress CRU4: P15455, P15455-2,
+ any CRA1: P15455, F4K8S2, P15455-2,
+ Mouse-ear cress CRA1: P15455, F4K8S2, P15455-2,
+ any At5g44120: P15455, F4K8S2, F4K8S2, P15455-2,
+ Mouse-ear cress At5g44120: P15455, F4K8S2, F4K8S2, P15455-2,
+ any MLN1.4: P15455, P15455-2,
+ Mouse-ear cress MLN1.4: P15455, P15455-2,
+keyword(s): Alternative splicing, Complete proteome, Direct protein sequencing, , Disulfide bond, Phosphoprotein, Reference proteome, , Seed storage protein, Signal, Storage protein, Ubl conjugation, , Vacuole,
+Mouse-ear cress Alternative splicing (2229): P48347 Q9S9Z8 P42643 P42644...
+all Alternative splicing (20031): P48347 Q9S9Z8 P42643 P42644...
+all Complete proteome (9997281): Q6GZX4 Q6GZX3 Q197F8 Q197F7...
+all Direct protein sequencing (29970): P13744 P21215 P80438 Q8GBW6...
+all  (7015236): Q6GZX4 Q6GZX3 Q6GZX1 Q6GZW6...
+all Disulfide bond (424182): Q6GZN7 Q43495 Q9XHP0 P19084...
+all Phosphoprotein (320191): P42643 P42644 P46077 P42645...
+all Reference proteome (2539659): Q6GZX4 Q6GZX3 Q197F8 Q197F7...
+all  (7015236): Q6GZX4 Q6GZX3 Q6GZX1 Q6GZW6...
+all Seed storage protein (424): Q9XHP0 P19084 P13744 O23878...
+all Signal (651179): Q6GZX2 Q197F5 Q91G85 Q6GZV7...
+all Storage protein (527): Q9XHP0 P19084 P13744 O23878...
+all Ubl conjugation (5185): P30443 P01892 P04439 P13746...
+all  (7015236): Q6GZX4 Q6GZX3 Q6GZX1 Q6GZW6...
+all Vacuole (1856): Q39649 P17718 Q9M3D6 Q9C8G9...
 All comments:
- This is a seed storage protein.
+ Seed storage protein.
  Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
-  Event=Alternative splicing; Named isoforms=1;   Comment=A number of isoforms are produced. According to EST   sequences; Name=1;   IsoId=P15455-1; Sequence=Displayed;
- Belongs to the 11S seed storage protein (globulins) family.
-SIMILARITY comments:
+ Protein storage vacuole (Probable).
+  Event=Alternative splicing; Named isoforms=2; Name=1;   IsoId=P15455-1; Sequence=Displayed; Name=2;   IsoId=P15455-2; Sequence=VSP_026066;   Note=No experimental confirmation available;
+ Accumulates in seeds 8 days after anthesis.
+ Detected in siliques at nucleotide level from 6 days post anthesis (dpa) to 17 dpa. First observed in siliques at protein level 15 dpa and accumulates progressively as native isoforms or proteolytic fragments during the last week of seed maturation/desiccation. Present in dry seeds, essentially in cotyledons and hypocotyls, but disappears during their germination (at protein level).
+ Ubiquitinated.
+ Phosphorylated in seeds on some Tyr residues in response to abscisic acid (ABA).
+ Proteolytically processed during seed maturation at a conserved Asn-Gly peptide bond by an asparaginyl endopeptidase to produce two mature polypeptides referred to as alpha and beta subunits that are joined together by a disulfide bond.
  Belongs to the 11S seed storage protein (globulins) family.
 FUNCTION comments:
- This is a seed storage protein.
+ Seed storage protein.
+SUBCELLULAR LOCATION comments:
+ Protein storage vacuole (Probable).
+SIMILARITY comments:
+ Belongs to the 11S seed storage protein (globulins) family.
+DEVELOPMENTAL STAGE comments:
+ Detected in siliques at nucleotide level from 6 days post anthesis (dpa) to 17 dpa. First observed in siliques at protein level 15 dpa and accumulates progressively as native isoforms or proteolytic fragments during the last week of seed maturation/desiccation. Present in dry seeds, essentially in cotyledons and hypocotyls, but disappears during their germination (at protein level).
+TISSUE SPECIFICITY comments:
+ Accumulates in seeds 8 days after anthesis.
 SUBUNIT comments:
  Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
 ALTERNATIVE PRODUCTS comments:
-  Event=Alternative splicing; Named isoforms=1;   Comment=A number of isoforms are produced. According to EST   sequences; Name=1;   IsoId=P15455-1; Sequence=Displayed;
-GenBank/EMBL: M37247, X14312, AB005239, AY070730, Z17590,
+  Event=Alternative splicing; Named isoforms=2; Name=1;   IsoId=P15455-1; Sequence=Displayed; Name=2;   IsoId=P15455-2; Sequence=VSP_026066;   Note=No experimental confirmation available;
+PTM comments:
+ Ubiquitinated.
+ Phosphorylated in seeds on some Tyr residues in response to abscisic acid (ABA).
+ Proteolytically processed during seed maturation at a conserved Asn-Gly peptide bond by an asparaginyl endopeptidase to produce two mature polypeptides referred to as alpha and beta subunits that are joined together by a disulfide bond.
+GenBank/EMBL: M37247, X14312, AB005239, CP002688, CP002688, AY070730, BT029491, AK221158, Z17590,
 acc from M37247: P15455
 PDB:
 All features:
-SIGNAL	0	24	Potential
-CHAIN	24	282	12S seed storage protein CRA1 alpha chain (By similarity)
-CHAIN	282	472	12S seed storage protein CRA1 beta chain (By similarity)
+SIGNAL	0	24	By similarity
+CHAIN	24	282	12S seed storage protein CRU4 alpha chain (By similarity)
+CHAIN	282	472	12S seed storage protein CRU4 beta chain (By similarity)
+MOD_RES	51	52	Phosphoserine (By similarity)
+MOD_RES	76	77	Phosphotyrosine (By similarity)
+MOD_RES	95	96	Phosphoserine (By similarity)
+MOD_RES	114	115	Phosphothreonine
+MOD_RES	311	312	Phosphotyrosine
+MOD_RES	313	314	Phosphoserine
+MOD_RES	407	408	Phosphothreonine (By similarity)
+MOD_RES	432	433	Phosphothreonine (By similarity)
+MOD_RES	449	450	Phosphothreonine (By similarity)
+DISULFID	35	69	By similarity
 DISULFID	111	289	Interchain (between alpha and beta chains) (Potential)
-CONFLICT	166	167	E -> Q (in Ref. 1)
-CONFLICT	355	356	V -> E (in Ref. 1)
+VAR_SEQ	0	104	Missing (in isoform 2)
+CONFLICT	166	167	E -> Q (in Ref. 1; AAA32777/CAA32493)
+CONFLICT	355	356	V -> E (in Ref. 1; AAA32777/CAA32493)
 CONFLICT class features:
-CONFLICT	166	167	E -> Q (in Ref. 1)
-CONFLICT	355	356	V -> E (in Ref. 1)
-V -> E (in Ref. 1) type features:
-CONFLICT	355	356	V -> E (in Ref. 1)
+CONFLICT	166	167	E -> Q (in Ref. 1; AAA32777/CAA32493)
+CONFLICT	355	356	V -> E (in Ref. 1; AAA32777/CAA32493)
+V -> E (in Ref. 1; AAA32777/CAA32493) type features:
+CONFLICT	355	356	V -> E (in Ref. 1; AAA32777/CAA32493)
 same class & type features:
-CONFLICT	355	356	V -> E (in Ref. 1)
-class loop: 11->CONFLICT->11
-type loop: 55->V -> E (in Ref. 1)->55
-title: Molecular cloning, genome organization, expression and evolution of 12S seed storage protein genes of Arabidopsis thaliana.
+CONFLICT	355	356	V -> E (in Ref. 1; AAA32777/CAA32493)
+class loop: 23->CONFLICT->23
+type loop: 76047->V -> E (in Ref. 1; AAA32777/CAA32493)->76047
+title: Molecular cloning, genomic organization, expression and evolution of 12S seed storage protein.
 authors: Pang P.P.,  Pruitt R.E.,  Meyerowitz E.M., 
 location: Plant Mol. Biol. 11:805-820(1988).
 pubMed: 
@@ -69,16 +108,52 @@ title: Structural analysis of Arabidopsis thaliana chromosome 5. I. Sequence fea
 authors: Sato S.,  Kotani H.,  Nakamura Y.,  Kaneko T.,  Asamizu E.,  Fukami M.,  Miyajima N.,  Tabata S., 
 location: DNA Res. 4:215-230(1997).
 pubMed: 9330910
+title: 
+authors:
+location: Submitted (APR-2011) to the EMBL/GenBank/DDBJ databases.
+pubMed: 
 title: Empirical analysis of transcriptional activity in the Arabidopsis genome.
 authors: Yamada K.,  Lim J.,  Dale J.M.,  Chen H.,  Shinn P.,  Palm C.J.,  Southwick A.M.,  Wu H.C.,  Kim C.J.,  Nguyen M.,  Pham P.K.,  Cheuk R.F.,  Karlin-Newmann G.,  Liu S.X.,  Lam B.,  Sakano H.,  Wu T.,  Yu G.,  Miranda M.,  Quach H.L.,  Tripp M.,  Chang C.H.,  Lee J.M.,  Toriumi M.J.,  Chan M.M.,  Tang C.C.,  Onodera C.S.,  Deng J.M.,  Akiyama K.,  Ansari Y.,  Arakawa T.,  Banh J.,  Banno F.,  Bowser L.,  Brooks S.Y.,  Carninci P.,  Chao Q.,  Choy N.,  Enju A.,  Goldsmith A.D.,  Gurjal M.,  Hansen N.F.,  Hayashizaki Y.,  Johnson-Hopson C.,  Hsuan V.W.,  Iida K.,  Karnes M.,  Khan S.,  Koesema E.,  Ishida J.,  Jiang P.X.,  Jones T.,  Kawai J.,  Kamiya A.,  Meyers C.,  Nakajima M.,  Narusaka M.,  Seki M.,  Sakurai T.,  Satou M.,  Tamse R.,  Vaysberg M.,  Wallender E.K.,  Wong C.,  Yamamura Y.,  Yuan S.,  Shinozaki K.,  Davis R.W.,  Theologis A.,  Ecker J.R., 
 location: Science 302:842-846(2003).
 pubMed: 14593172
+title: Complete sequence of Acidovorax avenae subsp. citrulli AAC00-1.
+authors: Copeland A.,  Lucas S.,  Lapidus A.,  Barry K.,  Detter J.C.,  Glavina del Rio T.,  Dalin E.,  Tice H.,  Pitluck S.,  Kiss H.,  Brettin T.,  Bruce D.,  Han C.,  Tapia R.,  Gilna P.,  Schmutz J.,  Larimer F.,  Land M.,  Hauser L.,  Kyrpides N.,  Kim E.,  Stahl D.,  Richardson P., 
+location: Submitted (DEC-2006) to the EMBL/GenBank/DDBJ databases.
+pubMed: 
+title: Storage protein accumulation in the absence of the vacuolar processing enzyme family of cysteine proteases.
+authors: Gruis D.,  Schulze J.,  Jung R., 
+location: Plant Cell 16:270-290(2004).
+pubMed: 14688293
+title: Large-scale analysis of RIKEN Arabidopsis full-length (RAFL) cDNAs.
+authors: Totoki Y.,  Seki M.,  Ishida J.,  Nakajima M.,  Enju A.,  Kamiya A.,  Narusaka M.,  Shin-i T.,  Nakagawa M.,  Sakamoto N.,  Oishi K.,  Kohara Y.,  Kobayashi M.,  Toyoda A.,  Sakaki Y.,  Sakurai T.,  Iida K.,  Akiyama K.,  Satou M.,  Toyoda T.,  Konagaya A.,  Carninci P.,  Kawai J.,  Hayashizaki Y.,  Shinozaki K., 
+location: Submitted (MAR-2005) to the EMBL/GenBank/DDBJ databases.
+pubMed: 
 title: An inventory of 1152 expressed sequence tags obtained by partial sequencing of cDNAs from Arabidopsis thaliana.
 authors: Hoefte H.,  Desprez T.,  Amselem J.,  Chiapello H.,  Rouze P.,  Caboche M.,  Moisan A.,  Jourjon M.-F.,  Charpenteau J.-L.,  Berthomieu P.,  Guerrier D.,  Giraudat J.,  Quigley F.,  Thomas F.,  Yu D.-Y.,  Mache R.,  Raynal M.,  Cooke R.,  Grellet F.,  Delseny M.,  Parmentier Y.,  de Marcillac G.,  Gigot C.,  Fleck J.,  Philipps G.,  Axelos M.,  Bardet C.,  Tremousaygue D.,  Lescure B., 
 location: Plant J. 4:1051-1061(1993).
 pubMed: 8281187
+title: Redundant proteolytic mechanisms process seed storage proteins in the absence of seed-type members of the vacuolar processing enzyme family of cysteine proteases.
+authors: Gruis D.F.,  Selinger D.A.,  Curran J.M.,  Jung R., 
+location: Plant Cell 14:2863-2882(2002).
+pubMed: 12417707
+title: Phosphorylation of the 12 S globulin cruciferin in wild-type and abi1-1 mutant Arabidopsis thaliana (thale cress) seeds.
+authors: Wan L.,  Ross A.R.,  Yang J.,  Hegedus D.D.,  Kermode A.R., 
+location: Biochem. J. 404:247-256(2007).
+pubMed: 17313365
+title: Systematic studies of 12S seed storage protein accumulation and degradation patterns during Arabidopsis seed maturation and early seedling germination stages.
+authors: Li Q.,  Wang B.-C.,  Xu Y.,  Zhu Y.-X., 
+location: J. Biochem. Mol. Biol. 40:373-381(2007).
+pubMed: 17562289
+title: Protein tyrosine kinases and protein tyrosine phosphatases are involved in abscisic acid-dependent processes in Arabidopsis seeds and suspension cells.
+authors: Ghelis T.,  Bolbach G.,  Clodic G.,  Habricot Y.,  Miginiac E.,  Sotta B.,  Jeannette E., 
+location: Plant Physiol. 148:1668-1680(2008).
+pubMed: 18768909
+title: Tandem affinity purification and mass spectrometric analysis of ubiquitylated proteins in Arabidopsis.
+authors: Saracco S.A.,  Hansson M.,  Scalf M.,  Walker J.M.,  Smith L.M.,  Vierstra R.D., 
+location: Plant J. 59:344-358(2009).
+pubMed: 19292762
 other accs associated with last reference:
-	  (67): P15455 P15456 P15458 P15459 P15460 P28297...
+	  (65): Q9FJH6 Q56YU0 Q9LE06 Q96514 Q9MAH0 Q5GM68...
 input: P29312
 primary accession: P63103
 SwissProt id: 1433Z_BOVIN
@@ -89,8 +164,8 @@ aaSize: 245
 molWeight: 27745
 createDate: 2004-09-13
 seqDate: 2004-09-13
-annDate: 2007-01-23
-description: 14-3-3 protein zeta/delta (Protein kinase C inhibitor protein 1) (KCIP-1) (Factor activating exoenzyme S) (FAS).
+annDate: 2012-11-28
+description: RecName: Full=14-3-3 protein zeta/delta; AltName: Full=Factor activating exoenzyme S;          Short=FAS; AltName: Full=Protein kinase C inhibitor protein 1;          Short=KCIP-1;
 taxon: 9913
 first scientific name: Bos taurus
 first common name: Bovine
@@ -98,56 +173,67 @@ taxon from sci: 9913
 taxon from common: 9913
 all scientific names: Bos taurus,
 gene(s): YWHAZ,
- any YWHAZ: P63103, Q5ZKC9, P63104, P63101, Q5R651, P63102, P29361, Q91896, Q6P4Z5, Q00P21, Q3KRV6, Q8BWN0, Q3UA58, Q803M8,
+ any YWHAZ: P63103, Q5ZKC9, P63104, P63101, Q5R651, P63102, P29361, Q91896, Q6P4Z5, B0AZS6, B7Z2E6, D0PNI1, E5RGE1, E5RIR4, E7ESK7, E7EVZ2, E7EX24, E7EX29, E9PD24, H0YB80, A8D084, B4USL3, D3JWT2, F1PBL1, F1S9F0, F2Z558, F6XVN3, F6XVP3, F6XW91, F7BS95, F7EFF6, G1L0F5, G1PWK9, G1QSL7, G1QSM0, G3RS45, G3SV87, G3UIS5, H0XYF5, H2E6Z8, H9CJU6, J9PAA1, Q00P21, Q3KRV6, D3YW45, D3YXF4, D3YXN6, H0VW15, I3N206, Q3UA58, Q8BWN0, F1NPX9, G1KI39, G1NI29, G8JLT6, H1A0V9, H2ZVW0, Q6PGS3, Q803M8, Q8AVW5,
  Bovine YWHAZ: P63103,
-keyword(s): 3D-structure, Acetylation, Direct protein sequencing, Phosphorylation,
-Bovine 3D-structure (228): P63103 Q7SIH1 P07107 P20004...
-all 3D-structure (10588): P13744 Q8GBW6 P31946 P93343...
-all Acetylation (4403): P68250 Q5ZLQ6 P31946 Q4R572...
-all Direct protein sequencing (20983): P13744 P21215 P80438 Q8GBW6...
-all Phosphorylation (23635): P68250 Q5ZLQ6 P31946 Q4R572...
+keyword(s): 3D-structure, Acetylation, Complete proteome, Cytoplasm, , Direct protein sequencing, Phosphoprotein, Reference proteome,
+Bovine 3D-structure (315): P63103 Q0VCA8 Q7SIH1 P07107...
+all 3D-structure (28958): P13744 Q8GBW6 Q6ZKC0 P31946...
+all Acetylation (38216): P68250 Q5ZLQ6 P31946 Q4R572...
+all Complete proteome (9997281): Q6GZX4 Q6GZX3 Q197F8 Q197F7...
+all Cytoplasm (1327702): P41932 Q20655 Q7XTE8 Q6ZKC0...
+all  (7015236): Q6GZX4 Q6GZX3 Q6GZX1 Q6GZW6...
+all Direct protein sequencing (29970): P13744 P21215 P80438 Q8GBW6...
+all Phosphoprotein (320191): P42643 P42644 P46077 P42645...
+all Reference proteome (2539659): Q6GZX4 Q6GZX3 Q197F8 Q197F7...
 All comments:
- Adapter protein implicated in the regulation of a large spectrum of both general and specialized signaling pathway. Binds to a large number of partners, usually by recognition of a phosphoserine or phosphothreonine motif. Binding generally results in the modulation of the activity of the binding partner. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
- Homodimer. Interacts with BSPRY, MLLT7/FOXO4, PCTK1 and SSH1. Binds to the C-terminal part of WEE1 (By similarity).
- Cytoplasm. Melanosome (By similarity).
- Isoform delta differs from isoform zeta in being phosphorylated (By similarity).
- Belongs to the 14-3-3 family.
-SUBCELLULAR LOCATION comments:
- Cytoplasm. Melanosome (By similarity).
-SIMILARITY comments:
+ Adapter protein implicated in the regulation of a large spectrum of both general and specialized signaling pathways. Binds to a large number of partners, usually by recognition of a phosphoserine or phosphothreonine motif. Binding generally results in the modulation of the activity of the binding partner. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
+ Homodimer. Heterodimerizes with YWHAE (By similarity). Homo- and hetero-dimerization is inhibited by phosphorylation on Ser-58 (By similarity). Interacts with FOXO4, NOXA1, SSH1 ARHGEF2, CDK16 and BSPRY. Interacts with WEE1 (C-terminal). Interacts with MLF1 (phosphorylated form); the interaction retains it in the cytoplasm. Interacts with BAX; the interaction occurs in the cytoplasm. Under stress conditions, MAPK8-mediated phosphorylation releases BAX to mitochondria. Interacts with TP53; the interaction enhances p53 transcriptional activity. The Ser-58 phosphorylated form inhibits this interaction and p53 transcriptional activity. Interacts with ABL1 (phosphorylated form); the interaction retains ABL1 in the cytoplasm. Interacts with PKA-phosphorylated AANAT; the interaction modulates AANAT enzymatic activity by increasing affinity for arylalkylamines and acetyl-CoA and protecting the enzyme from dephosphorylation and proteasomal degradation. It may also prevent thiol-dependent inactivation (By similarity). Interacts with AKT1; the interaction phosphorylates YWHAZ and modulates dimerization (By similarity). Interacts with GAB2. Interacts with BCL2L11, SAMSN1 and TLK2 (By similarity). Interacts with phosphorylated RAF1; the interaction is inhibited when YWHAZ is phosphorylated on Thr-232. Interacts with Thr-phosphorylated ITGB2.
+ Cytoplasm. Melanosome. Note=Located to stage I to stage IV melanosomes (By similarity).
+ The delta, brain-specific form differs from the zeta form in being phosphorylated (By similarity). Phosphorylation on Ser-184 by MAPK8; promotes dissociation of BAX and translocation of BAX to mitochondria. Phosphorylation on Ser-58 by PKA; disrupts homodimerization and heterodimerization with YHAE and TP53. This phosphorylation appears to be activated by sphingosine. Phosphorylation on Thr-232; inhibits binding of RAF1 (By similarity).
  Belongs to the 14-3-3 family.
 FUNCTION comments:
- Adapter protein implicated in the regulation of a large spectrum of both general and specialized signaling pathway. Binds to a large number of partners, usually by recognition of a phosphoserine or phosphothreonine motif. Binding generally results in the modulation of the activity of the binding partner. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
+ Adapter protein implicated in the regulation of a large spectrum of both general and specialized signaling pathways. Binds to a large number of partners, usually by recognition of a phosphoserine or phosphothreonine motif. Binding generally results in the modulation of the activity of the binding partner. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
+SUBCELLULAR LOCATION comments:
+ Cytoplasm. Melanosome. Note=Located to stage I to stage IV melanosomes (By similarity).
+SIMILARITY comments:
+ Belongs to the 14-3-3 family.
 SUBUNIT comments:
- Homodimer. Interacts with BSPRY, MLLT7/FOXO4, PCTK1 and SSH1. Binds to the C-terminal part of WEE1 (By similarity).
+ Homodimer. Heterodimerizes with YWHAE (By similarity). Homo- and hetero-dimerization is inhibited by phosphorylation on Ser-58 (By similarity). Interacts with FOXO4, NOXA1, SSH1 ARHGEF2, CDK16 and BSPRY. Interacts with WEE1 (C-terminal). Interacts with MLF1 (phosphorylated form); the interaction retains it in the cytoplasm. Interacts with BAX; the interaction occurs in the cytoplasm. Under stress conditions, MAPK8-mediated phosphorylation releases BAX to mitochondria. Interacts with TP53; the interaction enhances p53 transcriptional activity. The Ser-58 phosphorylated form inhibits this interaction and p53 transcriptional activity. Interacts with ABL1 (phosphorylated form); the interaction retains ABL1 in the cytoplasm. Interacts with PKA-phosphorylated AANAT; the interaction modulates AANAT enzymatic activity by increasing affinity for arylalkylamines and acetyl-CoA and protecting the enzyme from dephosphorylation and proteasomal degradation. It may also prevent thiol-dependent inactivation (By similarity). Interacts with AKT1; the interaction phosphorylates YWHAZ and modulates dimerization (By similarity). Interacts with GAB2. Interacts with BCL2L11, SAMSN1 and TLK2 (By similarity). Interacts with phosphorylated RAF1; the interaction is inhibited when YWHAZ is phosphorylated on Thr-232. Interacts with Thr-phosphorylated ITGB2.
 PTM comments:
- Isoform delta differs from isoform zeta in being phosphorylated (By similarity).
+ The delta, brain-specific form differs from the zeta form in being phosphorylated (By similarity). Phosphorylation on Ser-184 by MAPK8; promotes dissociation of BAX and translocation of BAX to mitochondria. Phosphorylation on Ser-58 by PKA; disrupts homodimerization and heterodimerization with YHAE and TP53. This phosphorylation appears to be activated by sphingosine. Phosphorylation on Thr-232; inhibits binding of RAF1 (By similarity).
 GenBank/EMBL: L07955, BC102382,
 acc from L07955: P63103
-PDB: 1A37, 1A38, 1A4O,
+PDB: 1A37, 1A38, 1A4O, 2V7D,
 All features:
 CHAIN	0	245	14-3-3 protein zeta/delta
+SITE	55	56	Interaction with phosphoserine on interacting protein
+SITE	126	127	Interaction with phosphoserine on interacting protein
 MOD_RES	0	1	N-acetylmethionine (By similarity)
+MOD_RES	2	3	N6-acetyllysine (By similarity)
+MOD_RES	48	49	N6-acetyllysine (By similarity)
+MOD_RES	67	68	N6-acetyllysine (By similarity)
+MOD_RES	114	115	N6-acetyllysine (By similarity)
+MOD_RES	119	120	N6-acetyllysine (By similarity)
 MOD_RES	183	184	Phosphoserine (By similarity)
-CONFLICT	24	25	C -> A (in Ref. 1)
-HELIX	2	14	n/a
-TURN	14	17	n/a
+MOD_RES	206	207	Phosphoserine (By similarity)
+MOD_RES	209	210	Phosphoserine (By similarity)
+MOD_RES	231	232	Phosphothreonine; by CK1 (By similarity)
+CONFLICT	24	25	C -> A (in Ref. 1; AA sequence)
+HELIX	2	15	n/a
 HELIX	18	30	n/a
 TURN	30	33	n/a
-HELIX	37	66	n/a
-HELIX	73	104	n/a
-TURN	104	105	n/a
-HELIX	105	108	n/a
-HELIX	111	131	n/a
-HELIX	135	157	n/a
-TURN	157	159	n/a
-TURN	161	163	n/a
-TURN	164	166	n/a
-HELIX	166	179	n/a
-TURN	179	182	n/a
+HELIX	37	67	n/a
+HELIX	73	103	n/a
+TURN	103	107	n/a
+HELIX	111	115	n/a
+HELIX	116	131	n/a
+HELIX	136	156	n/a
+TURN	156	159	n/a
+HELIX	164	180	n/a
 HELIX	184	201	n/a
-HELIX	211	225	n/a
-TURN	225	227	n/a
+TURN	201	205	n/a
+TURN	207	210	n/a
+HELIX	210	226	n/a
 title: Activation of protein kinase C by the 14-3-3 proteins homologous with Exo1 protein that stimulates calcium-dependent exocytosis.
 authors: Isobe T.,  Hiyane Y.,  Ichimura T.,  Okuyama T.,  Takahashi N.,  Nakajo S.,  Nakaya K., 
 location: FEBS Lett. 308:121-124(1992).
@@ -168,5 +254,13 @@ title: Crystal structure of the zeta isoform of the 14-3-3 protein.
 authors: Liu D.,  Blenkowska J.,  Petosa C.,  Collier R.J.,  Fu H.,  Liddington R., 
 location: Nature 376:191-194(1995).
 pubMed: 7603574
+title: 14-3-3zeta binds a phosphorylated Raf peptide and an unphosphorylated peptide via its conserved amphipathic groove.
+authors: Petosa C.,  Masters S.C.,  Bankston L.A.,  Pohl J.,  Wang B.,  Fu H.,  Liddington R.C., 
+location: J. Biol. Chem. 273:16305-16310(1998).
+pubMed: 9632691
+title: Beta2 integrin phosphorylation on Thr758 acts as a molecular switch to regulate 14-3-3 and filamin binding.
+authors: Takala H.,  Nurminen E.,  Nurmi S.M.,  Aatonen M.,  Strandin T.,  Takatalo M.,  Kiema T.,  Gahmberg C.G.,  Ylaenne J.,  Fagerholm S.C., 
+location: Blood 112:1853-1862(2008).
+pubMed: 18550856
 other accs associated with last reference:
 	  (1): P63103

@@ -139,18 +139,29 @@ liftUp FFFFF
 
 3. Required when ContigInfo (after filtering by refAssemblyLabel if specified)
    contains sequences that are not in UCSC's assembly (liftUp if specified,
-   or chrom.sizes.
+   or chrom.sizes.  These are typically alternate assembly sequences included
+   in the assembly release that we chose not to include in our db, or patch
+   sequences released after we created our db.
+   Use either ignoreDbSnpContigsFile or ignoreDbSnpContigs:
+
+ignoreDbSnpContigsFile FILENAME
+  - File with one word per line, listing dbSNP contigs that cannot be liftUp'd
+    to UCSC sequences.  Before using all contig IDs in script-generated
+    file cantLiftUpSeqNames.txt, do some Entrez searches to verify that those
+    contig IDs are generally for alt assemblies or patches.
 
 ignoreDbSnpContigs REGEX
+  - Deprecated -- this is a holdover from early days when alt assembly contigs
+    had distinct ID ranges.  Nowadays the IDs are interspersed.
   - Regular expression of dbSNP contigs that cannot be liftUp'd to UCSC
     sequences, e.g. if we got one version of randoms from Baylor but NCBI
     got another.  The regular expression is interpreted by egrep -vw.
-    If ContigInfo's ${groupLabelCol}th (group_label) column includes a label that
-    covers all such contigs *and* does not cover any contigs that we need
+    If ContigInfo's ${groupLabelCol}th (group_label) column includes a label
+    that covers all such contigs *and* does not cover any contigs that we need
     to keep, it is better to omit that label from refAssemblyLabel (above).
     *** This script assumes that these contig accessions are not numeric and
     *** distinct enough to never match other columns' values.
-    *** If this is not the case you'll need to edit this script.
+    *** If this is not the case, use ignoreDbSnpContigsFile
 
 " if ($detailed);
   print STDERR "\n";
@@ -170,7 +181,7 @@ use vars qw/
 # Required config parameters:
 my ($db, $build, $buildAssembly, $orgDir);
 # Conditionally required config parameters:
-my ($refAssemblyLabel, $liftUp, $ignoreDbSnpContigs);
+my ($refAssemblyLabel, $liftUp, $ignoreDbSnpContigsFile, $ignoreDbSnpContigs);
 # Optional config param:
 my ($snpBase);
 # Other globals:
@@ -267,7 +278,12 @@ sub checkConfig {
   # required later on in some cases.
   $refAssemblyLabel = &optionalVar('refAssemblyLabel', $config);
   $liftUp = &optionalVar('liftUp', $config);
+  $ignoreDbSnpContigsFile = &optionalVar('ignoreDbSnpContigsFile', $config);
   $ignoreDbSnpContigs = &optionalVar('ignoreDbSnpContigs', $config);
+  if ($ignoreDbSnpContigs && $ignoreDbSnpContigsFile) {
+    die "Error: Only one of {ignoreDbSnpContigs, ignoreDbSnpContigsFile} can be " .
+        "passed in. Put all contig names to be ignored in ignoreDbSnpsContigsFile.";
+  }
   # Optional var:
   $snpBase = &optionalVar('snpBase', $config);
   # Make sure no unrecognized variables were given.
@@ -578,7 +594,7 @@ sub checkSequenceNames {
 *** They are listed in $runDir/dbSnpContigsNotInUcsc.txt
 $ContigInfoLiftUp
 *** You must account for those in $CONFIG, in the liftUp file
-*** and/or the ignoreDbSnpContigs regex.
+*** and/or ignoreDbSnpContigsFile or the ignoreDbSnpContigs regex.
 *** Then run again with -continue=loadDbSnp .
 ";
   }
@@ -593,7 +609,12 @@ sub loadDbSnp {
   my @rejectLabels = &checkAssemblySpec();
   # Prepare grep -v statements to exclude assembly labels or contigs if specified:
   my $grepOutLabels = @rejectLabels ? "| egrep -vw '(" . join('|', @rejectLabels) . ")' " : "";
-  my $grepOutContigs = $ignoreDbSnpContigs ? "| egrep -vw '$ignoreDbSnpContigs'" : "";
+  my $grepOutContigs = "";
+  if ($ignoreDbSnpContigsFile) {
+    $grepOutContigs = "| grep -vwFf '$ignoreDbSnpContigsFile'";
+  } elsif ($ignoreDbSnpContigs) {
+    $grepOutContigs = "| egrep -vw '$ignoreDbSnpContigs'";
+  }
   my $runDir = "$buildDir/$commonName";
 
   &checkSequenceNames($runDir, $grepOutLabels, $grepOutContigs);

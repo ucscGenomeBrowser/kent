@@ -23889,10 +23889,11 @@ if ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed*)r, bedPart, tdb);
     if (r->id != NULL)
         {
-        printf("<B>ID:</B> %s <BR>\n", r->id);
+        if (!sameString("exonJunctionPrimers", table))
+            printf("<B>ID:</B> %s <BR>\n", r->id);
         printCustomUrl(tdb, r->id, TRUE);
-        }
-    if (r->description != NULL)
+        } 
+    if ((r->description != NULL) && (!sameString("exonJunctionPrimers", table)))
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
@@ -24016,6 +24017,13 @@ while ((row = sqlNextRow(sr)) != NULL)
      printf("<BR>");
      sqlFreeResult(&sr);
 } /* end of prGRShortRefGene */
+
+void doQPCRPrimers(struct trackDb *tdb, char *itemName)
+/* Put up page for QPCRPrimers. */
+{
+genericHeader(tdb, itemName);
+doBedDetail(tdb, NULL, itemName);
+} /* end of doQPCRPrimers */
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -25233,6 +25241,11 @@ else if (sameString("geneReviews", table))
     {
     doGeneReviews(tdb, item);
     }
+else if (startsWith("exonJunctionPrimers", table))
+    {
+    doQPCRPrimers(tdb, item);
+    }
+
 else if (tdb != NULL)
     {
     genericClickHandler(tdb, item, NULL);
@@ -25270,8 +25283,10 @@ char *excludeVars[] = {"hgSeq.revComp", "bool.hcg.dna.rc", "Submit", "submit", "
 
 int main(int argc, char *argv[])
 {
+long enteredMainTime = clock1000();
 pushCarefulMemHandler(LIMIT_2or6GB);
 cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
+cgiExitTime("hgc", enteredMainTime);
 return 0;
 }

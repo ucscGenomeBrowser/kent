@@ -671,6 +671,10 @@ else
     hFreeConn(&spConn);
     hFreeConn(&conn);
     }
+/* load the cart with the position info we got from the gene name */
+char buffer[1024];
+safef(buffer, sizeof buffer,  "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEnd);
+cartSetString(cart, "position", cloneString(buffer));
 cartRemovePrefix(cart, hggDoPrefix);
 }
 
@@ -679,11 +683,13 @@ char *excludeVars[] = {"Submit", "submit", NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
 oldVars = hashNew(10);
 cartEmptyShell(cartMain, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgGene", enteredMainTime);
 return 0;
 }

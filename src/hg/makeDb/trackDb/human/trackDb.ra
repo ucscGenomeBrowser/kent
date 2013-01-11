@@ -3733,12 +3733,23 @@ noScoreFilter .
 release beta,public
 
 track coriellDelDup
-shortLabel Coriell Del Dup
+shortLabel Coriell CNVs
+longLabel Coriell Cell Line Copy Number Variants
+group phenDis
+priority 111
+visibility hide
+type bed 9 +
+itemRgb on
+exonArrows off
+scoreFilterByRange on
+
+track coriellAndy
+shortLabel Andy's Coriell
 longLabel Coriell Cell Line Deletions and Duplications
 spectrum on
 origAssembly hg18
 group varRep
-priority 111
+priority 112
 visibility hide
 type bedDetail 7
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"

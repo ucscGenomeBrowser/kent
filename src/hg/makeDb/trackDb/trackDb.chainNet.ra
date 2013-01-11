@@ -2370,9 +2370,9 @@ html chainNet
 # the same tags in mouse/mm10/trackDb.vertebrateChainNet.ra
 # and the chainNetPetMar1 override in medaka/trackDb.chainNet.ra
 
-include chainNetPetMar2.ra alpha
+include chainNetPetMar2.ra
 
-include chainNetPetMar1.ra beta,public
+include chainNetPetMar1.ra
 
 track chainNetBraFlo2
 compositeTrack on

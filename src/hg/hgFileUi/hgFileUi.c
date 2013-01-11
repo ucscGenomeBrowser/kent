@@ -122,8 +122,6 @@ if (tdb->html != NULL && tdb->html[0] != 0)
         html = replaceChars(tdb->html, "2>Credits", "2></H2><A NAME='TRACK_CREDITS'></A>\n<H2>Credits</H2>");
         }
     puts(html);
-
-    puts(tdb->html);
     printf("</td><td nowrap>");
     cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);
@@ -171,7 +169,9 @@ char *excludeVars[] = { "submit", "Submit", "g", "clearCache", "ajax", NULL,};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
+cgiExitTime("hgFileUi", enteredMainTime);
 return 0;
 }
