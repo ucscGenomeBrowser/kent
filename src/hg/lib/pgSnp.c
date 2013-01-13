@@ -748,14 +748,15 @@ for (i = 0;  i < rec->infoCount;  i++)
 	    for (j = 0;  j < rec->infoElements[i].count && j < alDescCount-1;  j++)
 		{
 		if (rec->infoElements[i].missingData[j])
-		    continue;
-		int ac = rec->infoElements[i].values[j].datInt;
-		alCounts[1+j] = ac;
-		if (gotTotalCount)
-		    alCounts[0] -= ac;
+		    alCounts[1+j] = -1;
+		else
+		    {
+		    int ac = rec->infoElements[i].values[j].datInt;
+		    alCounts[1+j] = ac;
+		    if (gotTotalCount)
+			alCounts[0] -= ac;
+		    }
 		}
-	    while (j++ < alDescCount-1)
-		alCounts[1+j] = -1;
 	    if (gotTotalCount)
 		dyStringPrintf(dy, "%d", alCounts[0]);
 	    else
@@ -769,7 +770,11 @@ for (i = 0;  i < rec->infoCount;  i++)
 	break;
 	}
 if (gotTotalCount && !gotAltCounts)
+    {
     dyStringPrintf(dy, "%d", alCounts[0]);
+    for (i = 1;  i < alDescCount;  i++)
+	dyStringAppend(dy, ",-1");
+    }
 else if (!gotTotalCount && !gotAltCounts && rec->file->genotypeCount > 0)
     {
     vcfParseGenotypes(rec);

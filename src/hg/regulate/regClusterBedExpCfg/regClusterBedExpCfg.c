@@ -6,12 +6,14 @@
 #include "obscure.h"
 #include "sqlNum.h"
 #include "hmmstats.h"
+#include "errabort.h"
 
 
 boolean encodeList = FALSE;
 boolean tabList = FALSE;
 char *cellLetter = NULL;
 int scoreCol = 7;
+boolean noLetter = FALSE;
 
 struct hash *cellLetterHash;
 
@@ -35,6 +37,7 @@ errAbort(
   "        and the antibody and cell tags in the metadata are used\n"
   "   -scoreCol=N - The column (starting with 1) with score.  5 for bed, 7 for narrowPeak\n"
   "        default %d\n"
+  "   -noLetter - just list cell types found in the inpuFileList that lack a code in the cellLetter file\n"
   , scoreCol
   );
 }
@@ -44,6 +47,7 @@ static struct optionSpec options[] = {
    {"tabList", OPTION_BOOLEAN},
    {"cellLetter", OPTION_STRING},
    {"scoreCol", OPTION_INT},
+   {"noLetter", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -54,7 +58,12 @@ if (cellLetterHash != NULL)
     {
     char *val = hashFindVal(cellLetterHash, cell);
     if (val == NULL)
-        errAbort("cell %s isn't in %s", cell, cellLetter);
+        {
+        if (noLetter)
+            uglyf("cell %s isn't in %s\n", cell, cellLetter);
+        else
+            errAbort("cell %s isn't in %s\n", cell, cellLetter);
+        }
     return val;
     }
 else
@@ -299,6 +308,7 @@ encodeList = optionExists("encodeList");
 tabList = optionExists("tabList");
 cellLetter = optionVal("cellLetter", cellLetter);
 scoreCol = optionInt("scoreCol", scoreCol);
+noLetter = optionExists("noLetter");
 regClusterBedExpCfg(argv[1], argv[2]);
 return 0;
 }
