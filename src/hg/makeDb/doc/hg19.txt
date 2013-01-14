@@ -19945,6 +19945,9 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     # Saving bed.tab
     # Loading hg19
 
+    # rename the table to qPcrPrimers  (2013-01-14)
+    hgsql -ne "RENAME TABLE exonJunctionPrimers TO qPcrPrimers" hg19
+
 ############################################################################
 # coriellDelDup track (DONE - 2013-01-03 - Hiram)
     # data came in via email, files deposited to RedMine issue 6530

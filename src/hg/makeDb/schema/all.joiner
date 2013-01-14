@@ -3918,6 +3918,7 @@ tablesIgnored $gbd
     miRNA
     nestedRepeats
     nestedRepeatsRM327
+    qPcrPrimers
     quality
     qualityBw
     rnaCluster

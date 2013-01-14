@@ -23893,11 +23893,11 @@ if ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed*)r, bedPart, tdb);
     if (r->id != NULL)
         {
-        if (!sameString("exonJunctionPrimers", table))
+        if (!sameString("qPcrPrimers", table))
             printf("<B>ID:</B> %s <BR>\n", r->id);
         printCustomUrl(tdb, r->id, TRUE);
         } 
-    if ((r->description != NULL) && (!sameString("exonJunctionPrimers", table)))
+    if ((r->description != NULL) && (!sameString("qPcrPrimers", table)))
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
@@ -25246,7 +25246,7 @@ else if (sameString("geneReviews", table))
     {
     doGeneReviews(tdb, item);
     }
-else if (startsWith("exonJunctionPrimers", table))
+else if (startsWith("qPcrPrimers", table))
     {
     doQPCRPrimers(tdb, item);
     }
