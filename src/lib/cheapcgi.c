@@ -645,7 +645,6 @@ popAbortHandler();
 return ok;
 }
 
-
 static boolean dumpStackOnSignal = FALSE;  // should a stack dump be generated?
 
 static void catchSignal(int sigNum)
@@ -654,6 +653,13 @@ static void catchSignal(int sigNum)
 char *sig = NULL;
 switch (sigNum)
     {
+    case SIGTERM:  // after timing out for not producing any stdout or stderr output for too long,
+		   //  apache gives you 3 seconds to clean up and exit or it then sends SIGKILL.
+      sig = "SIGTERM";
+      break;
+    case SIGHUP:   // apache sends this when it is doing a graceful restart or a log rotate.
+      sig = "SIGHUP";
+      break;
     case SIGABRT:
       sig = "SIGABRT";
       break;
@@ -668,9 +674,16 @@ switch (sigNum)
       break;
     }
     logCgiToStderr();
+
+    // apache closes STDERR on the CGI before it sends the SIGTERM and SIGKILL signals
+    //  which means that stderr output after that point will not be visible in error_log.
     fprintf(stderr, "Received signal %s\n", sig);
     if (dumpStackOnSignal)
         dumpStack("Stack for signal %s\n", sig);
+
+if (sigNum == SIGTERM || sigNum == SIGHUP) 
+    exit(1);   // so that atexit cleanup get called
+
 raise(SIGKILL);
 }
 
@@ -680,6 +693,9 @@ void initSigHandlers(boolean dumpStack)
 {
 if (cgiIsOnWeb())
     {
+    // SIGKILL is not trappable or ignorable
+    signal(SIGTERM, catchSignal);
+    signal(SIGHUP, catchSignal);
     signal(SIGABRT, catchSignal);
     signal(SIGSEGV, catchSignal);
     signal(SIGFPE, catchSignal);

@@ -2889,7 +2889,7 @@ identifier snpName135
     $gbd.snp135Seq.acc minCheck=.98
     $gbd.snp135CodingDbSnp.name minCheck=.90
     $hg.snp135OrthoPt3Pa2Rm2.name
-    # gwasCatalog SNPs were mapped to hg19 using snp132.  Move this down to snp137
+    # gwasCatalog SNPs were mapped to hg19 using snp137.  Move this down to snp138
     # and update trackDb settings if we remap to new dbSNP version:
     hg19.gwasCatalog.name minCheck=0.99
 
@@ -2902,7 +2902,8 @@ identifier snpName137
     $gbd.snp137Seq.acc minCheck=.98
     $gbd.snp137CodingDbSnp.name minCheck=.90
     $hg.snp137OrthoPt3Pa2Rm2.name
-    # When hg19 gwasCatalog is regenerated w/snp137, move the line down here.
+    $hg19.gwasCatalog.name minCheck=0.99
+    # When hg19 gwasCatalog is regenerated w/snp138, move the line down here.
 
 # Other NCBI Identifiers
 

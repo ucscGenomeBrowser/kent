@@ -16019,10 +16019,14 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
 genericHeader(tdb, id);
 printCustomUrl(tdb, id, FALSE);
 
-safef(query, sizeof(query), "select * from %s where name = '%s'", tdb->table, id);
+safef(query, sizeof(query), "select * from %s where name = '%s' "
+      "and chrom = '%s' and chromStart = %d and chromEnd = %d",
+      tdb->table, id, seqName, start, end);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -24844,6 +24848,7 @@ else if (sameWord(table, "transRegCodeProbe"))
                         "transRegCodeCondition", "growthCondition");
     }
 else if (sameWord(table, "wgEncodeRegDnaseClustered")
+     ||  sameWord(table, "wgEncodeRegDnaseClusteredV2")
      ||  sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
     {
     doPeakClusters(tdb, item);

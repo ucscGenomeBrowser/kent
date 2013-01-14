@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "jksql.h"
+#include "cv.h"
 
 
 void usage()
@@ -16,12 +17,15 @@ errAbort(
   "usage:\n"
   "   regClusterAttachMetadataToTableOfTables database partial.table output.table\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -antibodyTarget - substitute target (from cv.ra) for antibody\n"
   );
 }
 
+boolean antibodyTarget = FALSE;
+
 static struct optionSpec options[] = {
-   {NULL, 0},
+   {"antibodyTarget", OPTION_BOOLEAN},
+   {NULL, 0}
 };
 
 boolean getMetaFromMetaDb(struct sqlConnection *conn,
@@ -29,10 +33,20 @@ boolean getMetaFromMetaDb(struct sqlConnection *conn,
 /* Look in metadata for object and return cell, antibody and treatment from it. */
 {
 char query[256];
+struct hash *cvTerm = NULL;
+
 safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='cell'", obj);
 *retCell = sqlQuickString(conn, query);
 safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='antibody'", obj);
 *retAntibody = sqlQuickString(conn, query);
+if (antibodyTarget)
+    {
+    cvTerm = (struct hash *)cvOneTermHash(CV_TERM_ANTIBODY, *retAntibody);
+    if (cvTerm)
+        {
+        *retAntibody = hashOptionalVal(cvTerm, CV_TARGET, *retAntibody);
+        }
+    }
 safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='treatment'", obj);
 *retTreatment = sqlQuickString(conn, query);
 safef(query, sizeof(query), "select val from metaDb where obj='%s' and var='lab'", obj);
@@ -158,7 +172,10 @@ while (lineFileRow(lf, row))
     char *obj = row[6];
     char *cell = NULL, *antibody=NULL, *treatment=NULL, *lab = NULL;
     if (!getMetaFromMetaDb(conn, obj, &cell, &antibody, &treatment, &lab))
+        {
+        verbose(3, "Can't get metadata for %s from metaDb, parsing filename\n", obj); 
         getMetaFromObjName(obj, &cell, &antibody, &treatment, &lab);
+        }
 
     /* Write out first fields unchanged, and append our new fields. */
     int i;
@@ -168,7 +185,7 @@ while (lineFileRow(lf, row))
     fprintf(f, "%s\t", naForNull(antibody));
     if (treatment == NULL)
         treatment = "None";
-    fprintf(f, "%s\n", treatment);
+    fprintf(f, "%s\t", treatment);
     fprintf(f, "%s\n", naForNull(lab));
     }
 
@@ -184,6 +201,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+antibodyTarget = optionExists("antibodyTarget");
 regClusterAttachMetadataToTableOfTables(argv[1], argv[2], argv[3]);
 return 0;
 }
