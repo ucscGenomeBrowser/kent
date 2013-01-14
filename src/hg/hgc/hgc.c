@@ -5234,31 +5234,6 @@ if (row != NULL)
     }
 }
 
-void printStanSource(char *acc, char *type)
-/* Print out a link (Human/Mouse/Rat only) to Stanford's SOURCE web resource.
-   Types known are: est,mrna,unigene,locusLink. */
-{
-if (startsWith("Human", organism) || startsWith("Mouse", organism) ||
-    startsWith("Rat", organism))
-    {
-    char *stanSourceLink = "http://smd.stanford.edu/cgi-bin/source/sourceResult?";
-    if(sameWord(type, "est"))
-	{
-	printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
-	printf("<A HREF=\"%soption=Number&criteria=%s&choice=cDNA\" TARGET=_blank>[Clone Info]</A><BR>\n",stanSourceLink,acc);
-	}
-    else if(sameWord(type,"unigene"))
-	{
-	printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=CLUSTER&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
-	printf("<A HREF=\"%soption=CLUSTER&criteria=%s&choice=cDNA\" TARGET=_blank>[Clone Info]</A><BR>\n",stanSourceLink,acc);
-	}
-    else if(sameWord(type,"mrna"))
-	printf("<B>Stanford SOURCE:</B> <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
-    else if(sameWord(type,"locusLink"))
-	printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
-    }
-}
-
 void printGeneCards(char *geneName)
 /* Print out a link to GeneCards (Human only). */
 {
@@ -5504,7 +5479,6 @@ if (row != NULL)
                 }
             }
         }
-    printStanSource(acc, type);
     if (isEst && hTableExists(database, "estOrientInfo") && (psl != NULL))
         {
         int estOrient = getEstTranscriptionDir(conn2, psl);
@@ -10481,7 +10455,6 @@ if (rl->locusLinkId != 0)
            rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
     }
-printStanSource(rl->mrnaAcc, "mrna");
 
 htmlHorizontalLine();
 
@@ -10909,7 +10882,6 @@ if (startsWith("hg", database))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
-printStanSource(rl->mrnaAcc, "mrna");
 prGRShortRefGene(rl->name);
 
 }
@@ -10988,7 +10960,6 @@ if (rl->locusLinkId != 0)
 	sqlFreeResult(&sr);
 	}
     }
-printStanSource(rl->mrnaAcc, "mrna");
 }
 
 void doKnownGene(struct trackDb *tdb, char *rnaName)
@@ -16048,10 +16019,14 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
 genericHeader(tdb, id);
 printCustomUrl(tdb, id, FALSE);
 
-safef(query, sizeof(query), "select * from %s where name = '%s'", tdb->table, id);
+safef(query, sizeof(query), "select * from %s where name = '%s' "
+      "and chrom = '%s' and chromStart = %d and chromEnd = %d",
+      tdb->table, id, seqName, start, end);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -19434,7 +19409,6 @@ for(sg=sgList; sg != NULL; sg = sg->next)
     {
     char buff[256];
     sprintf(buff,"Hs.%d",sg->uni);
-    printStanSource(buff, "unigene");
     }
 featureCount= slCount(sgList);
 printf("<basefont size=-1>\n");
@@ -23889,11 +23863,11 @@ if ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed*)r, bedPart, tdb);
     if (r->id != NULL)
         {
-        if (!sameString("exonJunctionPrimers", table))
+        if (!sameString("qPcrPrimers", table))
             printf("<B>ID:</B> %s <BR>\n", r->id);
         printCustomUrl(tdb, r->id, TRUE);
         } 
-    if ((r->description != NULL) && (!sameString("exonJunctionPrimers", table)))
+    if ((r->description != NULL) && (!sameString("qPcrPrimers", table)))
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
@@ -25242,7 +25216,7 @@ else if (sameString("geneReviews", table))
     {
     doGeneReviews(tdb, item);
     }
-else if (startsWith("exonJunctionPrimers", table))
+else if (startsWith("qPcrPrimers", table))
     {
     doQPCRPrimers(tdb, item);
     }
