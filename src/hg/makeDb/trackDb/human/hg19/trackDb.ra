@@ -59,8 +59,8 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track gwasCatalog override
-snpTable snp135
-snpVersion 135
+snpTable snp137
+snpVersion 137
 
 track ucscRetroAli1
 release alpha
