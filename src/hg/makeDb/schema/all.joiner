@@ -2902,7 +2902,7 @@ identifier snpName137
     $gbd.snp137Seq.acc minCheck=.98
     $gbd.snp137CodingDbSnp.name minCheck=.90
     $hg.snp137OrthoPt3Pa2Rm2.name
-    $hg19.gwasCatalog.name minCheck=0.99
+    hg19.gwasCatalog.name minCheck=0.99
     # When hg19 gwasCatalog is regenerated w/snp138, move the line down here.
 
 # Other NCBI Identifiers
