@@ -187,7 +187,7 @@ wgEncode 1
         track wgEncodeAwgDnaseDukeIshikawaestradiolUniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniform off
-        shortLabel Ishika(Estr) DNase
+        shortLabel Ishika(Est) DNase
         longLabel Ishikawa (Estradiol) DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=Ishikawa-Estr
 
@@ -684,7 +684,7 @@ wgEncode 1
         track wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk
         type narrowPeak
         parent wgEncodeAwgDnaseUniform on
-        shortLabel Mcytes-CD14+ DNase
+        shortLabel Mcyte-CD14+ DNase
         longLabel Monocytes-CD14+ DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a25 cellType=a25Monocytes-CD14
 
