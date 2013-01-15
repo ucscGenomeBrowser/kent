@@ -24,7 +24,7 @@ html mm10Strains1
     parent mm10Strains1
     shortLabel Alignment
     longLabel Alternate mouse strains, lift over alignments
-    visibility pack
+    visibility dense
     type psl
     indelDoubleInsert on
     indelQueryInsert on
