@@ -9,3 +9,4 @@ foo
 core
 core.*
 *.pyc
+tags

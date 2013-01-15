@@ -3246,7 +3246,7 @@ html numtSeq2012
     showDiffBasesMaxZoom 100
     maxWindowToDraw 1000000
 
-track exonJunctionPrimers
+track qPcrPrimers
 shortLabel qPCR Primers
 longLabel $Organism ($db) Whole Transcriptome qPCR Primers
 group genes
@@ -3254,9 +3254,9 @@ type bedDetail 14
 visibility hide
 noScoreFilter on
 itemRgb on
-html qpcrPrimers
+html qPcrPrimers
 
-searchTable exonJunctionPrimers
+searchTable qPcrPrimers
 searchMethod exact
 searchType bed
 

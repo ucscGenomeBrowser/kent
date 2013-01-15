@@ -59,8 +59,8 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track gwasCatalog override
-snpTable snp135
-snpVersion 135
+snpTable snp137
+snpVersion 137
 
 track ucscRetroAli1
 release alpha
@@ -3131,7 +3131,7 @@ termRegex rs[0-9]+
 searchPriority 12.9888
 padding 250
 
-track exonJunctionPrimers override
+track qPcrPrimers override
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 

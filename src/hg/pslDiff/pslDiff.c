@@ -10,11 +10,13 @@ static struct optionSpec optionSpecs[] =
 {
     {"details", OPTION_STRING},
     {"setNames", OPTION_BOOLEAN},
+    {"sameLocus", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 boolean gHaveSetNames = FALSE;  /* set names in args */
 boolean gNumAligns = FALSE;     /* compare by number of alignments */
+boolean gSameLocus = FALSE;     /* just check to see if range overlaps */
 
 void usage(char *msg, ...)
 /* usage msg and exit */
@@ -32,6 +34,7 @@ errAbort("\n%s",
          "    found in a psl file.  If this is not specified, the set names are the\n"
          "    base names of the psl files\n"
          "   -details=file - write details of psls that differ to this file\n"
+	 "   -sameLocus - just check to see if alignments overlap\n"
          "\n"
          "The program matches psls in sets by exon structure.  The output\n"
          "list the that are not the same in all sets.  A psl is identified\n"
@@ -77,9 +80,17 @@ boolean pslSame(struct psl *psl1, struct psl *psl2)
 int iBlk;
 if ((psl1 == NULL) || (psl2 == NULL))
     return FALSE;
-if (psl1->blockCount != psl2->blockCount)
-    return FALSE;
 if (!sameString(psl1->strand, psl2->strand))
+    return FALSE;
+if (gSameLocus)
+    {
+    if (positiveRangeIntersection(psl1->tStart, psl1->tEnd, 
+				  psl2->tStart, psl2->tEnd))
+	return TRUE;
+    return FALSE;
+    }
+
+if (psl1->blockCount != psl2->blockCount)
     return FALSE;
 for(iBlk = 0; iBlk < psl1->blockCount; iBlk++)
     {
@@ -232,6 +243,7 @@ int main(int argc, char *argv[])
 {
 char *detailsFile;
 optionInit(&argc, argv, optionSpecs);
+gSameLocus = optionExists("sameLocus");
 gHaveSetNames = optionExists("setNames");
 if (((gHaveSetNames) && (argc < 5))
     || ((!gHaveSetNames) && (argc < 3)))
