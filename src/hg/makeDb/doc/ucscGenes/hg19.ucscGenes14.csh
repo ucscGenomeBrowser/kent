@@ -445,7 +445,6 @@ rm -rf txFaSplit
 mkdir -p txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
 
-#STOPPED HERE 
 
 #
 # A good time for testing.  Uncomment the lines (not all at once) to 
@@ -466,11 +465,10 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 hgsql -N $spDb -e \
   "select p.acc, p.val from protein p, accToTaxon x where x.taxon=$taxon and p.acc=x.acc" \
   | awk '{print ">" $1;print $2}' >uniProt.fa
-hgsql -N $spDb -e "select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=$taxon and i.acc=x.acc" > uniCurated.tab
+faSize uniProt.fa
+# 54766916 bases (43127082 N's 11639834 real 11639834 upper 0 lower) in 148175 sequences in 1 files
 
-#TODO: remove these odd comments
-# echo "continuing after first kki job"
-# echo "preparing $cpuFarm job"
+hgsql -N $spDb -e "select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=$taxon and i.acc=x.acc" > uniCurated.tab
 
 mkdir -p blat/rna/raw
 echo '#LOOP' > blat/rna/template
@@ -479,13 +477,14 @@ echo '#ENDLOOP' >> blat/rna/template
  
 cat << '_EOF_' > blat/rna/runTxBlats
 #!/bin/csh -ef
-set ooc = /scratch/data/$2/$2.11.ooc
+set ooc = /scratch/data/$2/11.ooc
 set target = ../../txFaSplit/$1
 set out1 = raw/mrna_$3.psl
 set out2 = raw/ref_$3.psl
 set tmpDir = /scratch/tmp/$2/ucscGenes/rna
 set workDir = $tmpDir/$3
 mkdir -p $tmpDir
+rm -rf $workDir
 mkdir $workDir
 blat -ooc=$ooc -minIdentity=95 $target ../../mrna.fa $workDir/mrna_$3.psl
 blat -ooc=$ooc -minIdentity=97 $target ../../refSeq.fa $workDir/ref_$3.psl
@@ -504,13 +503,13 @@ ssh $cpuFarm "cd $dir/blat/rna; gensub2 toDoList single template jobList"
 ssh $cpuFarm "cd $dir/blat/rna; para make jobList"
 
 ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
+cat blat/rna/run.time
 # Completed: 197 of 197 jobs
-# CPU time in finished jobs:      25076s     417.94m     6.97h    0.29d  0.001 y
-# IO & Wait Time:                  9292s     154.86m     2.58h    0.11d  0.000 y
-# Average job time:                 174s       2.91m     0.05h    0.00d
-# Longest finished job:             483s       8.05m     0.13h    0.01d
-# Submission to last job:          1884s      31.40m     0.52h    0.02d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+# CPU time in finished jobs:      57880s     964.67m    16.08h    0.67d  0.002 y
+# IO & Wait Time:                  4086s      68.10m     1.14h    0.05d  0.000 y
+# Average job time:                 315s       5.24m     0.09h    0.00d
+# Longest finished job:            2983s      49.72m     0.83h    0.03d
+# Submission to last job:          2988s      49.80m     0.83h    0.03d
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
 cd $dir
@@ -521,13 +520,14 @@ echo '#ENDLOOP' >> blat/protein/template
 
 cat << '_EOF_' > blat/protein/runTxBlats
 #!/bin/csh -ef
-set ooc = /scratch/data/$2/$2.11.ooc
+set ooc = /scratch/data/$2/11.ooc
 set target = ../../txFaSplit/$1
 set out1 = uni_$3.psl
 set out2 = ref_$3.psl
 set tmpDir = /scratch/tmp/$2/ucscGenes/prot
 set workDir = $tmpDir/$3
 mkdir -p $tmpDir
+rm -rf $workDir
 mkdir $workDir
 blat -t=dnax -q=prot -minIdentity=90 $target ../../uniProt.fa $workDir/$out1
 blat -t=dnax -q=prot -minIdentity=90 $target ../../refPep.fa $workDir/$out2
@@ -547,14 +547,13 @@ ssh $cpuFarm "cd $dir/blat/protein; gensub2 toDoList single template jobList"
 
 ssh $cpuFarm "cd $dir/blat/protein; para make jobList"
 ssh $cpuFarm "cd $dir/blat/protein; para time > run.time"
-
 cat blat/protein/run.time
 # Completed: 197 of 197 jobs
-# CPU time in finished jobs:      19711s     328.51m     5.48h    0.23d  0.001 y
-# IO & Wait Time:                 11799s     196.66m     3.28h    0.14d  0.000 y
-# Average job time:                 160s       2.67m     0.04h    0.00d
-# Longest finished job:             531s       8.85m     0.15h    0.01d
-# Submission to last job:           871s      14.52m     0.24h    0.01d
+# CPU time in finished jobs:      36425s     607.09m    10.12h    0.42d  0.001 y
+# IO & Wait Time:                  2897s      48.28m     0.80h    0.03d  0.000 y
+# Average job time:                 200s       3.33m     0.06h    0.00d
+# Longest finished job:             652s      10.87m     0.18h    0.01d
+# Submission to last job:           659s      10.98m     0.18h    0.01d
 
 # Sort and select best alignments. Remove raw files for space. Takes  a couple
 # of hours. Use pslReps not pslCdnaFilter because need -noIntrons flag,
@@ -573,8 +572,6 @@ pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
 rm -r protein/raw
 
-# use this if(0) statement to control section of script to run
-#	Look for the BRACKET word to find the corresponding endif and exit
 cd $dir
 
 # Get parts of multiple alignments corresponding to transcripts.
@@ -588,6 +585,8 @@ foreach c (`cut -f1 $genomes/$db/chrom.sizes`)
 	   | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
     endif
 end
+
+#stopped here
 
 
 cd $dir

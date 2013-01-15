@@ -52,8 +52,8 @@ include altSeqComposite1.ra
 
 include mm10Strains1Composite.ra
 
-track exonJunctionPrimers override
-url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?
+track qPcrPrimers override
+url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
 track snp137Common override

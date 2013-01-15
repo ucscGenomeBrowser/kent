@@ -1,6 +1,7 @@
 /* bedGraphToBigWig - Convert a bedGraph program to bigWig.. */
 #include "common.h"
 #include "obscure.h"
+#include "memalloc.h"
 #include "linefile.h"
 #include "localmem.h"
 #include "hash.h"
@@ -19,6 +20,8 @@
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
 static boolean doCompress = FALSE;
+static int maxGigs = 100;   // Maximum number of gigs to allocate in one block.  
+			    // Undocumented on purpose.
 
 
 void usage()
@@ -48,6 +51,7 @@ static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
    {"unc", OPTION_BOOLEAN},
+   {"maxGigs", OPTION_INT},
    {NULL, 0},
 };
 
@@ -549,6 +553,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+maxGigs = optionInt("maxGigs", maxGigs);
+setMaxAlloc(maxGigs*1000000000L);  
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 doCompress = !optionExists("unc");

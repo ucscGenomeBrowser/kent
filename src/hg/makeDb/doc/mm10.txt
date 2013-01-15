@@ -9032,6 +9032,9 @@ TMPDIR=/scratch/tmp
     # Saving bed.tab
     # Loading mm10
 
+    # rename the table to qPcrPrimers  (2013-01-14)
+    hgsql -ne "RENAME TABLE exonJunctionPrimers TO qPcrPrimers" mm10
+
 #########################################################################
 # DBSNP B137 / SNP137 (DONE 12/20/12 angie)
 # Redmine #7043

@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (60 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-subGroup2 clade Clade glire=Glire euarchontoglire=Euarchontoglire placental=Placental all=All_species
+subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
 dragAndDrop subTracks
 dimensions dimensionX=clade
 visibility full
@@ -32,9 +32,9 @@ priority 103.29
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault mm10
-        speciesGroups Glire Euarchontoglire Placental_Mammal Vertebrate
-        sGroup_Glire rn5 dipOrd1 hetGla2 cavPor3 speTri2 oryCun2 ochPri2
-        sGroup_Euarchontoglire hg19 panTro4 gorGor3 ponAbe2 nomLeu2 rheMac3 papHam1 calJac3 saiBol1 tarSyr1 micMur1 otoGar3 tupBel1
+        speciesGroups Glires Euarchontoglires Placental_Mammal Vertebrate
+        sGroup_Glires rn5 dipOrd1 hetGla2 cavPor3 speTri2 oryCun2 ochPri2
+        sGroup_Euarchontoglires hg19 panTro4 gorGor3 ponAbe2 nomLeu2 rheMac3 papHam1 calJac3 saiBol1 tarSyr1 micMur1 otoGar3 tupBel1
         sGroup_Placental_Mammal susScr3 vicPac1 turTru2 oviAri1 bosTau7 felCat5 canFam3 ailMel1 equCab2 myoLuc2 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 triMan1 dasNov3 choHof1
         sGroup_Vertebrate monDom5 sarHar1 macEug2 ornAna1 melGal1 galGal4 taeGut1 melUnd1 anoCar2 chrPic1 xenTro3 latCha1 tetNig2 fr3 oreNil2 gasAcu1 oryLat2 gadMor1 danRer7 petMar1
         speciesDefaultOff panTro4 gorGor3 ponAbe2 papHam1 rheMac3 nomLeu2 calJac3 saiBol1 tarSyr1 otoGar3 equCab2 micMur1 dipOrd1 hetGla2 cavPor3 speTri2 ochPri2 eriEur1 felCat5 pteVam1 myoLuc2 ailMel1 turTru2 bosTau7 oviAri1 vicPac1 susScr3 choHof1 echTel1 triMan1 dasNov3 macEug2 sarHar1 melUnd1 taeGut1 melGal1 anoCar2 chrPic1 xenTro3 latCha1 gadMor1 proCap1 tetNig2 oreNil2 fr3 gasAcu1 oryLat2 petMar1
@@ -51,11 +51,11 @@ priority 103.29
     viewLimits -20.0:7.532
     viewLimitsMax -20:7.532
 
-        track phyloP60wayGlire
+        track phyloP60wayGlires
         subTrack cons60wayViewphyloP off
-        subGroups view=phyloP clade=glire
-        shortLabel Glire Cons
-        longLabel Glire Basewise Conservation by PhyloP
+        subGroups view=phyloP clade=glires
+        shortLabel Glires Cons
+        longLabel Glires Basewise Conservation by PhyloP
         noInherit on
         configurable on
         type wig -4.346 1.165
@@ -70,9 +70,9 @@ priority 103.29
 
         track phyloP60wayEuarchontoGlires
         subTrack cons60wayViewphyloP off
-        subGroups view=phyloP clade=euarchontoglire
+        subGroups view=phyloP clade=euarchontoglires
         shortLabel Euarch Cons
-        longLabel Euarchontoglire Basewise Conservation by PhyloP
+        longLabel Euarchontoglires Basewise Conservation by PhyloP
         noInherit on
         configurable on
         type wig -12.704 1.753
@@ -126,11 +126,11 @@ priority 103.29
     visibility hide
     subTrack cons60way
 
-        track phastCons60wayGlire
+        track phastCons60wayGlires
         subTrack cons60wayViewphastcons off
-        subGroups view=phastcons clade=glire
-        shortLabel Glire Cons
-        longLabel Glire Conservation by PhastCons
+        subGroups view=phastcons clade=glires
+        shortLabel Glires Cons
+        longLabel Glires Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -144,9 +144,9 @@ priority 103.29
 
         track phastCons60wayEuarchontoGlires
         subTrack cons60wayViewphastcons off
-        subGroups view=phastcons clade=euarchontoglire
+        subGroups view=phastcons clade=euarchontoglires
         shortLabel Euarch Cons
-        longLabel Euarchontoglire Conservation by PhastCons
+        longLabel Euarchontoglires Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -197,11 +197,11 @@ priority 103.29
     visibility hide
     subTrack cons60way
 
-        track phastConsElements60wayGlire
+        track phastConsElements60wayGlires
         subTrack cons60wayViewelements off
-        subGroups view=elements clade=glire
-        shortLabel Glire El
-        longLabel Glire Conserved Elements
+        subGroups view=elements clade=glires
+        shortLabel Glires El
+        longLabel Glires Conserved Elements
         noInherit on
         type bed 5 .
         color 170,50,100
@@ -209,9 +209,9 @@ priority 103.29
 
         track phastConsElements60wayEuarchontoGlires
         subTrack cons60wayViewelements off
-        subGroups view=elements clade=euarchontoglire
+        subGroups view=elements clade=euarchontoglires
         shortLabel Euarch El
-        longLabel Euarchontoglire Conserved Elements
+        longLabel Euarchontoglires Conserved Elements
         noInherit on
         type bed 5 .
         color 150,40,80

@@ -1,7 +1,12 @@
+metaObject wgEncodeAwgDnaseUniform
+objType composite
+composite wgEncodeAwgDnaseUniform
+expVars lab, dataType, cell, treatment
+
 metaObject wgEncodeAwgDnaseDuke8988tUniPk
 objType table
 cell 8988T
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001103
@@ -16,21 +21,22 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeAosmcUniPk
 objType table
 cell AoSMC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000601
 fileName wgEncodeAwgDnaseDukeAosmcUniPk.narrowPeak.gz
 lab Duke
 md5sum 957b3477d43cef1c6abd41182b053418
 project wgEncode
 tableName wgEncodeAwgDnaseDukeAosmcUniPk
-treatment None
+treatment serum_free_media
 view Peaks
 
 metaObject wgEncodeAwgDnaseDukeChorionUniPk
 objType table
 cell Chorion
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000595
@@ -45,7 +51,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeCllUniPk
 objType table
 cell CLL
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001104
@@ -60,7 +66,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeFibroblUniPk
 objType table
 cell Fibrobl
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000583
@@ -75,7 +81,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeFibropUniPk
 objType table
 cell FibroP
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000605
@@ -90,7 +96,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeGlioblaUniPk
 objType table
 cell Gliobla
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001100
@@ -105,7 +111,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeGm12891UniPk
 objType table
 cell GM12891
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000564
@@ -120,7 +126,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeGm12892UniPk
 objType table
 cell GM12892
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000565
@@ -135,7 +141,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeGm18507UniPk
 objType table
 cell GM18507
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000581
@@ -150,7 +156,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeGm19238UniPk
 objType table
 cell GM19238
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000566
@@ -165,7 +171,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeGm19239UniPk
 objType table
 cell GM19239
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000567
@@ -180,7 +186,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeGm19240UniPk
 objType table
 cell GM19240
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000568
@@ -195,7 +201,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeH9esUniPk
 objType table
 cell H9ES
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000594
@@ -210,9 +216,10 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeHelas3ifna4hUniPk
 objType table
 cell HeLa-S3
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH000577
 fileName wgEncodeAwgDnaseDukeHelas3ifna4hUniPk.narrowPeak.gz
 lab Duke
 md5sum 5b0220dd8af4853e5f409aa8a403d615
@@ -224,7 +231,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeHepatocytesUniPk
 objType table
 cell Hepatocytes
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001107
@@ -239,7 +246,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeHpde6e6e7UniPk
 objType table
 cell HPDE6-E6E7
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001106
@@ -254,7 +261,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeHsmmembUniPk
 objType table
 cell HSMM_emb
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH002550
@@ -269,34 +276,37 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeHtr8svnUniPk
 objType table
 cell HTR8svn
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001105
 fileName wgEncodeAwgDnaseDukeHtr8svnUniPk.narrowPeak.gz
+lab Duke
 md5sum 05da44baa43442b9e5e73bbd90a60726
 project wgEncode
 tableName wgEncodeAwgDnaseDukeHtr8svnUniPk
 treatment None
 view Peaks
 
-metaObject wgEncodeAwgDnaseDukeHuh7.5UniPk
+metaObject wgEncodeAwgDnaseDukeHuh75UniPk
 objType table
 cell Huh-7.5
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-fileName wgEncodeAwgDnaseDukeHuh7.5UniPk.narrowPeak.gz
+dccAccession wgEncodeEH001112
+fileName wgEncodeAwgDnaseDukeHuh75UniPk.narrowPeak.gz
 lab Duke
 md5sum dfa669bd0e223900707e0621201e105f
 project wgEncode
-tableName wgEncodeAwgDnaseDukeHuh7.5UniPk
+tableName wgEncodeAwgDnaseDukeHuh75UniPk
 treatment None
 view Peaks
 
 metaObject wgEncodeAwgDnaseDukeHuh7UniPk
 objType table
 cell Huh-7
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001111
@@ -311,7 +321,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeIpsUniPk
 objType table
 cell iPS
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001110
@@ -326,7 +336,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeIshikawaestradiolUniPk
 objType table
 cell Ishikawa
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH002551
@@ -341,7 +351,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeIshikawatamoxifenUniPk
 objType table
 cell Ishikawa
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH002552
@@ -356,9 +366,10 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeLncapandrogenUniPk
 objType table
 cell LNCaP
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001096
 fileName wgEncodeAwgDnaseDukeLncapandrogenUniPk.narrowPeak.gz
 lab Duke
 md5sum 872f4cbbc25cb90c13f55878fc9f3a15
@@ -370,9 +381,10 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeMcf7hypoxiaUniPk
 objType table
 cell MCF-7
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001745
 fileName wgEncodeAwgDnaseDukeMcf7hypoxiaUniPk.narrowPeak.gz
 lab Duke
 md5sum ff7340e67054cec5e1a9419cb3018906
@@ -384,7 +396,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeMedulloUniPk
 objType table
 cell Medullo
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000574
@@ -399,7 +411,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeMelanoUniPk
 objType table
 cell Melano
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000602
@@ -414,7 +426,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeMyometrUniPk
 objType table
 cell Myometr
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000603
@@ -429,7 +441,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeOsteoblUniPk
 objType table
 cell Osteobl
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001098
@@ -444,9 +456,10 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukePanisletdUniPk
 objType table
 cell PanIsletD
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001102
 fileName wgEncodeAwgDnaseDukePanisletdUniPk.narrowPeak.gz
 lab Duke
 md5sum b2d601e69a486099b4408fab69bc0e20
@@ -458,7 +471,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukePanisletsUniPk
 objType table
 cell PanIslets
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000575
@@ -473,7 +486,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukePhteUniPk
 objType table
 cell pHTE
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001099
@@ -488,7 +501,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeProgfibUniPk
 objType table
 cell ProgFib
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000576
@@ -503,7 +516,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeRwpe1UniPk
 objType table
 cell RWPE1
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH002553
@@ -518,7 +531,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeStellateUniPk
 objType table
 cell Stellate
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001108
@@ -533,7 +546,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeT47dUniPk
 objType table
 cell T-47D
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001109
@@ -548,9 +561,10 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeTh0UniPk
 objType table
 cell Adult_CD4_Th0
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH002562
 fileName wgEncodeAwgDnaseDukeTh0UniPk.narrowPeak.gz
 lab UW
 md5sum aaf26eebf07e54662c44fd676ecdd111
@@ -562,9 +576,10 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeUrotheliaUniPk
 objType table
 cell Urothelia
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001113
 fileName wgEncodeAwgDnaseDukeUrotheliaUniPk.narrowPeak.gz
 lab Duke
 md5sum 0913f7091409c9255fbe35c81525d8f6
@@ -576,9 +591,10 @@ view Peaks
 metaObject wgEncodeAwgDnaseDukeUrotheliaut189UniPk
 objType table
 cell Urothelia
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001114
 fileName wgEncodeAwgDnaseDukeUrotheliaut189UniPk.narrowPeak.gz
 lab Duke
 md5sum 30a9c8f2ff80cbd272d775590c39d6d7
@@ -587,15 +603,10 @@ tableName wgEncodeAwgDnaseDukeUrotheliaut189UniPk
 treatment UT189
 view Peaks
 
-metaObject wgEncodeAwgDnaseUniPk
-objType composite
-composite wgEncodeAwgDnaseUniPk
-expVars lab, dataType, cell, treatment
-
 metaObject wgEncodeAwgDnaseUwAg04449UniPk
 objType table
 cell AG04449
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000505
@@ -610,7 +621,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwAg04450UniPk
 objType table
 cell AG04450
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000506
@@ -625,7 +636,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwAg09309UniPk
 objType table
 cell AG09309
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000507
@@ -640,7 +651,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwAg09319UniPk
 objType table
 cell AG09319
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000508
@@ -655,7 +666,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwAg10803UniPk
 objType table
 cell AG10803
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000509
@@ -670,7 +681,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwAoafUniPk
 objType table
 cell AoAF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001161
@@ -685,7 +696,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwBe2cUniPk
 objType table
 cell BE2_C
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001181
@@ -700,7 +711,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwBjUniPk
 objType table
 cell BJ
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000487
@@ -715,7 +726,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwCaco2UniPk
 objType table
 cell Caco-2
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000486
@@ -730,7 +741,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwCd20UniPk
 objType table
 cell CD20+
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001884
@@ -745,7 +756,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwCd34mobilizedUniPk
 objType table
 cell CD34+_Mobilized
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001885
@@ -760,7 +771,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwCmkUniPk
 objType table
 cell CMK
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000510
@@ -775,7 +786,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwGm06990UniPk
 objType table
 cell GM06990
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000481
@@ -790,7 +801,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwGm12864UniPk
 objType table
 cell GM12864
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001182
@@ -805,7 +816,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwGm12865UniPk
 objType table
 cell GM12865
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000520
@@ -820,7 +831,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwH7hescUniPk
 objType table
 cell H7-hESC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000511
@@ -835,7 +846,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHacUniPk
 objType table
 cell HAc
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001192
@@ -850,7 +861,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHaepicUniPk
 objType table
 cell HAEpiC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000512
@@ -865,7 +876,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHahUniPk
 objType table
 cell HA-h
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001191
@@ -880,7 +891,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHaspUniPk
 objType table
 cell HA-sp
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001183
@@ -895,7 +906,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHbmecUniPk
 objType table
 cell HBMEC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001178
@@ -910,7 +921,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHcfUniPk
 objType table
 cell HCF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000513
@@ -925,7 +936,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHcfaaUniPk
 objType table
 cell HCFaa
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001164
@@ -940,7 +951,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHcmUniPk
 objType table
 cell HCM
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000519
@@ -955,7 +966,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHconfUniPk
 objType table
 cell HConF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001165
@@ -970,7 +981,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHcpepicUniPk
 objType table
 cell HCPEpiC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000514
@@ -985,7 +996,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHct116UniPk
 objType table
 cell HCT-116
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001162
@@ -1000,7 +1011,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHeepicUniPk
 objType table
 cell HEEpiC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000515
@@ -1015,7 +1026,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHffUniPk
 objType table
 cell HFF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001193
@@ -1030,7 +1041,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHffmycUniPk
 objType table
 cell HFF-Myc
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001194
@@ -1045,7 +1056,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHgfUniPk
 objType table
 cell HGF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000504
@@ -1060,7 +1071,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHipepicUniPk
 objType table
 cell HIPEpiC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001184
@@ -1075,7 +1086,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHl60UniPk
 objType table
 cell HL-60
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000489
@@ -1090,7 +1101,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmfUniPk
 objType table
 cell HMF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001166
@@ -1105,7 +1116,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmvecdadUniPk
 objType table
 cell HMVEC-dAd
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001889
@@ -1120,7 +1131,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmvecdbladUniPk
 objType table
 cell HMVEC-dBl-Ad
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001168
@@ -1135,7 +1146,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmvecdblneoUniPk
 objType table
 cell HMVEC-dBl-Neo
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001169
@@ -1150,7 +1161,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmvecdlyadUniPk
 objType table
 cell HMVEC-dLy-Ad
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001170
@@ -1165,7 +1176,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmvecdlyneoUniPk
 objType table
 cell HMVEC-dLy-Neo
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001171
@@ -1180,7 +1191,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmvecdneoUniPk
 objType table
 cell HMVEC-dNeo
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001172
@@ -1195,7 +1206,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmveclblUniPk
 objType table
 cell HMVEC-LBl
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001163
@@ -1210,7 +1221,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHmvecllyUniPk
 objType table
 cell HMVEC-LLy
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001167
@@ -1225,7 +1236,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHnpcepicUniPk
 objType table
 cell HNPCEpiC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000516
@@ -1240,7 +1251,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHpaecUniPk
 objType table
 cell HPAEC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001886
@@ -1255,7 +1266,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHpafUniPk
 objType table
 cell HPAF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001173
@@ -1270,7 +1281,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHpdlfUniPk
 objType table
 cell HPdLF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001175
@@ -1285,7 +1296,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHpfUniPk
 objType table
 cell HPF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001174
@@ -1300,7 +1311,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHrcepicUniPk
 objType table
 cell HRCEpiC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000493
@@ -1315,7 +1326,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHreUniPk
 objType table
 cell HRE
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000494
@@ -1330,7 +1341,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHrgecUniPk
 objType table
 cell HRGEC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001195
@@ -1345,7 +1356,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHrpepicUniPk
 objType table
 cell HRPEpiC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000517
@@ -1360,7 +1371,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwHvmfUniPk
 objType table
 cell HVMF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001176
@@ -1375,7 +1386,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwJurkatUniPk
 objType table
 cell Jurkat
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000497
@@ -1390,7 +1401,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk
 objType table
 cell Monocytes-CD14+_RO01746
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk.narrowPeak.gz
@@ -1404,7 +1415,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwNb4UniPk
 objType table
 cell NB4
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000498
@@ -1419,7 +1430,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwNhaUniPk
 objType table
 cell NH-A
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001179
@@ -1434,7 +1445,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwNhdfadUniPk
 objType table
 cell NHDF-Ad
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001177
@@ -1449,7 +1460,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwNhdfneoUniPk
 objType table
 cell NHDF-neo
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000518
@@ -1464,7 +1475,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwNhlfUniPk
 objType table
 cell NHLF
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000521
@@ -1479,7 +1490,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwNt2d1UniPk
 objType table
 cell NT2-D1
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001887
@@ -1494,7 +1505,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwPanc1UniPk
 objType table
 cell PANC-1
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000500
@@ -1509,7 +1520,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwPrecUniPk
 objType table
 cell PrEC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001888
@@ -1524,7 +1535,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwRptecUniPk
 objType table
 cell RPTEC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001188
@@ -1539,7 +1550,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwSaecUniPk
 objType table
 cell SAEC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000501
@@ -1554,7 +1565,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwSkmcUniPk
 objType table
 cell SKMC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000490
@@ -1569,7 +1580,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwSknmcUniPk
 objType table
 cell SK-N-MC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001189
@@ -1584,7 +1595,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwSknshraUniPk
 objType table
 cell SK-N-SH_RA
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000485
@@ -1599,7 +1610,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwTh2UniPk
 objType table
 cell Th2
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH000491
@@ -1614,7 +1625,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwWerirb1UniPk
 objType table
 cell WERI-Rb-1
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001190
@@ -1629,7 +1640,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwWi38UniPk
 objType table
 cell WI-38
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dccAccession wgEncodeEH001197
@@ -1644,9 +1655,10 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwWi38tamoxifentamoxifenUniPk
 objType table
 cell WI-38
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001198
 fileName wgEncodeAwgDnaseUwWi38tamoxifentamoxifenUniPk.narrowPeak.gz
 lab UW
 md5sum 8d6fb542a475d5d5ac7fa21bbf6e0f21
@@ -1658,7 +1670,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeA549UniPk
 objType table
 cell A549
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeA549UniPk.narrowPeak.gz
@@ -1672,7 +1684,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeGm12878UniPk
 objType table
 cell GM12878
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeGm12878UniPk.narrowPeak.gz
@@ -1686,7 +1698,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeH1hescUniPk
 objType table
 cell H1-hESC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeH1hescUniPk.narrowPeak.gz
@@ -1700,7 +1712,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeHelas3UniPk
 objType table
 cell HeLa-S3
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeHelas3UniPk.narrowPeak.gz
@@ -1714,7 +1726,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeHepg2UniPk
 objType table
 cell HepG2
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeHepg2UniPk.narrowPeak.gz
@@ -1728,7 +1740,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeHmecUniPk
 objType table
 cell HMEC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeHmecUniPk.narrowPeak.gz
@@ -1742,7 +1754,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeHsmmUniPk
 objType table
 cell HSMM
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeHsmmUniPk.narrowPeak.gz
@@ -1756,7 +1768,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeHsmmtubeUniPk
 objType table
 cell HSMMtube
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeHsmmtubeUniPk.narrowPeak.gz
@@ -1770,7 +1782,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeHuvecUniPk
 objType table
 cell HUVEC
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeHuvecUniPk.narrowPeak.gz
@@ -1784,7 +1796,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeK562UniPk
 objType table
 cell K562
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeK562UniPk.narrowPeak.gz
@@ -1798,7 +1810,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeLncapUniPk
 objType table
 cell LNCaP
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeLncapUniPk.narrowPeak.gz
@@ -1812,7 +1824,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeMcf7UniPk
 objType table
 cell MCF-7
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeMcf7UniPk.narrowPeak.gz
@@ -1826,7 +1838,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeNhekUniPk
 objType table
 cell NHEK
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeNhekUniPk.narrowPeak.gz
@@ -1840,7 +1852,7 @@ view Peaks
 metaObject wgEncodeAwgDnaseUwdukeTh1UniPk
 objType table
 cell Th1
-composite wgEncodeAwgDnaseUniPk
+composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseUwdukeTh1UniPk.narrowPeak.gz
@@ -1851,4 +1863,4 @@ tableName wgEncodeAwgDnaseUwdukeTh1UniPk
 treatment None
 view Peaks
 
-# MAGIC: 1939493904
+# MAGIC: 2093096348
