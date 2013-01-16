@@ -13,6 +13,9 @@ html gold
 track gap override
 html gap
 
+track rmsk override
+priority 10
+
 track assemblyFrags
 shortLabel Contigs
 longLabel Contig fragments used in the assembly
@@ -50,9 +53,10 @@ type bed 12
 
 include altSeqComposite1.ra
 
-include mm10Strains1Composite.ra
+include mm10Strains1SuperTrack.ra
 
 track qPcrPrimers override
+group regulation
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/mouse/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
