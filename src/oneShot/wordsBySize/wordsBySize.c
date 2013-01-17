@@ -6,7 +6,7 @@
 #include <errno.h>
 #include <ctype.h>
 
-/** Some utility code.  In a larger program would be part of a library **/
+/** Some utility code.  In a larger program this would be part of a library module **/
 
 void die()
 /* Abort program. */
@@ -111,7 +111,7 @@ return clone;
 }
 
 
-/** Structures and routines for a hash table.  In a larger program would be in a hash module. **/
+/** Stuff for a hash table. In a larger program this would be in a separate hash module. **/
 
 struct keyVal
 /* An string key associated with a generic value. */
