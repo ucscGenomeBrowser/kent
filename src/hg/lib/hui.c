@@ -3978,8 +3978,10 @@ char buffer[SMALLBUF];
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
 #define LARGE_COMPOSITE_CUTOFF 30
-if (subCount > LARGE_COMPOSITE_CUTOFF)
+if (subCount > LARGE_COMPOSITE_CUTOFF && membersForAll->dimensions != NULL)
     {
+    // ignore displaySubtracks setting for large composites with a matrix as
+    // matrix effectively shows all
     safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
     displaySubs = cartUsualString(cart, buffer,"some"); // track specific defaults to only selected
     }

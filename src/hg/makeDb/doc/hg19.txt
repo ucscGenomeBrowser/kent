@@ -8996,264 +8996,6 @@ TMPDIR=/scratch/tmp
          "hg19", "kgTargetAli", "", "", \
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
-#######################################################################
-# ENCODE Regulation track  (In progress March 2010, very rough instructions
-# as am still defining how to build track...)
-
-      # make root dir and link in our bad.bed file for filtering out
-      # blacklisted and multiple mapping regions.
-      mkdir -p /cluster/data/hg19/bed/wgEncodeReg
-      cd /cluster/data/hg19/bed/wgEncodeReg
-      ln -s /hive/users/kent/regulate/companion/mapping/bad.bed badRegions.bed
-
-      # Create the DNAse peak clusters subtrack.
-      # Get all of the narrowPeak format files for the wgEncodeUwDnaseSeq
-      # linked into directory /hive/users/kent/regulate/dnase/peaks
-      mkdir dnase
-      cd dnase
-      mkdir peaks
-      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwDnase/*.narrowPeak.gz peaks
-
-      # Process these into clusters in a bed file and load clusters into
-      # table.
-      /bin/ls -1 peaks/*.narrowPeak.gz > peak.lst
-      regClusterMakeTableOfTables uw02 peak.lst peak.table
-      regCluster peak.table /dev/null peak.bed
-      awk '$4 > 1 && $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
-      hgLoadBed hg19 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
-
-      # Make wgEncodeRegDnaseClusteredInput table.  Start with mdbQuery, and
-      # then do some massaging since not completely in sync with file list.
-      mdbQuery out=tab "select obj,cell,treatment,replicate,lab,dateUnrestricted from hg19 where obj like 'wgEncodeUwDnase%' and view='Peaks'" | sed 's/n\/a/None/' > inputMdb.tab
-      cut -f 1 peak.table | sed 's/\.narrowPeak\.gz//' | sed 's/peaks\///' > inputs.lst
-      weedLines inputs.lst inputMdb.tab wgEncodeRegDnaseClusteredInputs.tab -invert 
-      hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputDnase.sql \
-	  wgEncodeRegDnaseClusteredInputs.tab
-
-      # Make transcription factor binding site clusters.  Start with Anshul's
-      # nice uniform peak calls, downloaded from 
-      #   ftp://ftp-private.ebi.ac.uk/byDataType/peaks/jan2011/spp/optimal
-      # using the user name and password in the ENCODE wiki at:
-      #    http://genomewiki.ucsc.edu/EncodeDCC/index.php/Locations_of_ENCODE_Data
-      # Put all of the ones that actually are based on two replicates into
-      #    /cluster/data/hg19/bed/wgEncodeReg/tfbs/peaks
-      # Once that is done do a little work towards making the cluster input.
-      cd /cluster/data/hg19/bed/wgEncodeReg/tfbs
-      /bin/ls peaks/*.narrowPeak.gz > peak.lst
-      regClusterMakeTableOfTables ans01 peak.lst partial.table
-
-      # Unfortunately at this point only about 90% of the peak files actually
-      # have metaDb data associated with them in metaDb, so run C program that
-      # takes it from metaDb if possible, otherwise tries to get it from file
-      # names.
-      regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table
-
-      # One more complication - there are often several cases where there is
-      # more than one data set on the same cell+treatment+antibody combination. 
-      # For good reasons hgBedToBedExps only wants one.
-      # This next bit filters them out based on a picks file that was hand
-      # created - picksFromDupes.  This was based on the criteria that
-      # the Broad CTCF were used,  and that Snyd was used in preference
-      # to OpenChromatin, which in turn was used in preference over Haib.
-      # The rational for this is the Broad CTCF set has been in use for a 
-      # while with no complaints,  and when examing the Pol2 signals, which
-      # were with CTCF the main component of the Dupes, the Haib were the
-      # weakest and the Snyd the strongest.  
-      cp ~/src/hg/regulate/wgEncodeReg/picksFromDupes.tab .
-      wgEncodeRegTfbsDedupeHelp withDupes.table picksFromDupes.tab peak.table
-
-      # Make three column file: fileName, cell+treatment, antibody
-      awk -F '\t' '{printf ( "%s\t%s\t%s\n", $1, ($10 == "None" ? $8 : $8 "+" $10), $9 ) ; }' peak.table > fileCellAb.tab
-
-
-      # Create config file out for clustering job, using a table assigning
-      # cell lines+treatments to single letter codes edited by hand.  In
-      # the future may be able to automate this by having fixed upper case codes for
-      # tier1&2 cell lines, and then just use first letter lower case codes
-      # for rest. That is the pattern cellLetter2.tab follows anyway.
-      cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter2.tab .
-      regClusterBedExpCfg -tabList fileCellAb.tab cluster.cfg -cellLetter=cellLetter2.tab
-
-      # Do the actual clustering 
-      hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps
-
-      # Load database (reloaded 3/26/2012 to fix a relatively rare bug)
-      hgLoadBed hg19 wgEncodeRegTfbsClustered peak.bed
-      hgLoadSqlTab hg19 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
-
-      # Create inputTrackTable - six columns: <table> <source> <factor> <cell> <treatment> <lab>
-      awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $7, ($10 == "None" ? $8 : $8 "+" $10), $9, $8, $10, $11);}' peak.table | sed 's/AlnRep/PkRep/'> wgEncodeRegTfbsClusteredInputs.tab
-      hgLoadSqlTab hg19 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable4.sql wgEncodeRegTfbsClusteredInputs.tab
-
-
-      # Handle the RNA seq, starting by pooling it and filtering out multiple
-      # mapping and blacklisted regions.
-      mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/txn/pooled
-      cd /hive/data/genomes/hg19/bed/wgEncodeReg/txn/pooled
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHct116R2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqMcf7R2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
-      bigWigMerge -adjust=-1 \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig \
-	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
-      # Now have to normalize.  This takes two passes.  The first just creates
-      # a tab-separated file with normalization values. A batch file is made
-      # by running awk on the tab file, and this batch file executes the
-      # second half, transforming the bedGraphs to normalized values. The
-      # normalization standardizes all files as if the total signal integrated to 10
-      # billion over the genome.
-      rm -f ../norm.tab
-      foreach i (*SigPooled.bedGraph)
-	  echo processing $i
-	  echo -n $i " " >> ../norm.tab
-	  awk '{sum += $4*($3-$2);} END {print 10000000000/sum}' $i >> ../norm.tab
-      end
-
-      awk '{printf("colTransform 4 %s 0 %g ../normalized/%s\n", $1, $2, $1);}' ../norm.tab > ../norm.csh
-      chmod a+x ../norm.csh
-      mkdir ../normalized
-      ../norm.csh
-
-      # Make bigWigs
-      cd ../normalized
-      foreach i (*.bedGraph)
-	  echo processing $i
-          bedGraphToBigWig $i /cluster/data/hg19/chrom.sizes $i:r.bw
-      end
-      
-      # Link into /gbdb
-      ln -s `pwd`/*.bw /gbdb/hg19/bbi
-
-      # Tell database about it
-      foreach i (*.bw)
-          hgBbiDbLink hg19 $i:r /gbdb/hg19/bbi/$i
-      end
-
-      # Clean up
-      cd /hive/data/genomes/hg19/bed/wgEncodeReg/txn
-      rm pooled/*.bedGraph normalized/*.bedGraph
-
-      # Make metadata: (forgive the long line)
-      # JK TODO - add Hepg2 and Helas3 from here on down
-
-      mdbQuery out=ra "select * from hg19 where \
-	  obj='wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2' or \
-	  obj='wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2' or \
-	  obj='wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2' or \
-	  obj='wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2' or \
-	  obj='wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2' or \
-	  obj='wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2' or \
-	  obj='wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2' or \
-	  obj='wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2' or \
-	  obj='wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2'" \
-      | sed 's/SigRep1V2/SigPooled/g' | sed 's/wgEncodeCal/wgEncodeRegTxnCal/' \
-      | grep -v ^replicate > mdb.ra 
-
-      # Now patch mdb.ra into ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeReg.ra
-
-
-
-      # At this point actually are done with this track, except for
-      # all the trackDb work on the overlayed histone mod tracks.
-      # The rest is for some coloring stuff that is not yet actually used.
-
-
-      # Do work to figure out how to color cells.  This is based on
-      # hierarchical clustering of wgEncodeUwAffyAllExon. 
-      mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/cellColors
-      cd /hive/data/genomes/hg19/bed/wgEncodeReg
-
-      # Start with some alas time consuming data cleanup to get rid of
-      # overlaps - losing about 10% of the data in the process which is
-      # totally ok.
-      mkdir allExon
-      cd allExon
-      mkdir inLinks noOverlap onlyCommon
-      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeUwAffyExonArray/*.gz inLinks
-      cd inLinks
-      foreach i (*.gz)
-          bedRemoveOverlap $i ../noOverlap/$i:r
-      end
-      cd ..
-      
-      # Now make up a file of regions present in all inputs for further data
-      # cleanup
-      bedCommonRegions noOverlap/*.* > commonExons.bed
-      cd noOverlap
-      foreach i (*.broadPeak)
-	  echo processing $i
-          bedRestrictToPositions $i ../commonExons.bed ../onlyCommon/$i
-      end
-      rm -r noOverlap
-
-      # Now pool replicates where possible
-      mdbQuery "select fileName,cell,replicate from hg19 where composite='wgEncodeUwAffyExonArray' and view='SimpleSignal'" -out=ra \
-         | sed 's/\.gz//g' > replicate.ra
-      encodeMergeReplicatesBatch replicate.ra onlyCommon merge.sh merged.ra merged
-      mkdir merged
-      chmod a+x merge.sh
-      merge.sh
-
-      # Resort merged output - somehow gets slightly messed by
-      # encodeMergeReplicates.
-      cd merged
-      foreach i (*.broadPeak)
-          echo sorting $i
-          sort -k 1,1 -k 2,2n $i > tmp
-	  mv tmp $i
-      end
-
-      # Make file that converts fileName to cell
-      raToTab merged.ra -cols=fileName,cell stdout \
-         | sed 's/wgEncode/merged\/wgEncode/' > fileToCell.tab
-
-      # Now build the tree. Took 2.5 minutes
-      ls -1 merged/*.broadPeak > clusterInput.lst
-      regClusterTreeCells rename=fileToCell.tab clusterInput.lst cluster.tree cluster.distances
-
-
 
 
 ########################################################################
@@ -19596,7 +19338,8 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/geoFor1/bed
     ln -s blastz.hg19.swap lastz.hg19
 
-#########################################################################
+
+#######################################################################
 # DENISOVA HIGH-COVERAGE VARIANTS #8886 (DONE 9/6/12 angie)
     mkdir /hive/data/genomes/hg19/bed/denisova
     cd /hive/data/genomes/hg19/bed/denisova
@@ -20202,6 +19945,9 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     # Saving bed.tab
     # Loading hg19
 
+    # rename the table to qPcrPrimers  (2013-01-14)
+    hgsql -ne "RENAME TABLE exonJunctionPrimers TO qPcrPrimers" hg19
+
 ############################################################################
 # coriellDelDup track (DONE - 2013-01-03 - Hiram)
     # data came in via email, files deposited to RedMine issue 6530
@@ -20239,5 +19985,78 @@ printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t%s\t%d\t%s\t%s\t%s\n", $2,$3,$4,$1,$5*100
 cat $HOME/kent/src/hg/lib/coriellDelDup.as >> tableDescriptions.entry.sql
 /bin/echo -e "', '');" >> tableDescriptions.entry.sql
     hgsql hg19 < tableDescriptions.entry.sql
+
+############################################################################
+# ENCODE Regulation track -- make doc has been moved to encodeRegHg19.txt
+
+############################################################################
+# affyCytoScan track (DONE - 2013-01-15 - kuhn )
+
+# for affyCytoScanHD chipset
+# aamp left no record of what he did.
+# This reconstructs it, as best I can figure
+# followed by what I did to finish it up.
+
+cd /hive/data/genomes/hg19/bed
+mkdir affyCytoScan
+cd affyCytoScan
+
+# files from Carl Dowds at affy:
+# CytoScanHD_ProbeList_CN.zip
+# CytoScanHD_ProbeList_SNP.zip
+
+# It looks like the files were catenated into a file called both.bed
+# Columns were added to get to coloring field
+#   score=1000, strand=+ thickStart=chromStart thickEnd=chromEnd
+#   reserved=<colors>
+# Colors are 204 for blue (C- probes) and 3368499 for green (S- probes)
+
+# Then he loaded into db, picking up a bin column.
+# File bed.tab has one color for each source file, but some
+#   probes are in both sets
+
+commTrio.csh CytoScanHD_ProbeList_CN.bed CytoScanHD_ProbeList_SNP.bed rm
+# 1953247 CytoScanHD_ProbeList_CN.bed.Only
+#   53144 CytoScanHD_ProbeList_SNP.bed.Only
+#  743304 CytoScanHD_ProbeList_CN.bed.CytoScanHD_ProbeList_SNP.bed.Only  #
+#  both sets
+
+#   (SNP-file probes are all named "S-")
+#   (CN -file probes are named "C-" and "S-", but the S- are all in the SNP
+#   file, too)
+
+###### kuhn hereafter
+# The SNP probes in the CN file are redundant, so I dropped them
+#   by making everything one color, then uniq the whole file.
+
+hgsql -N -e "SELECT * FROM affyCytoScan" hg19 > hg19.affyCytoScan
+cat hg19.affyCytoScan | sed 's/204$/3368499/' > hg19.cytoScan.oneColor
+cat hg19.cytoScan.oneColor | sort -u > hg19.cytoScan.oneColor.uniq
+
+wc -l *oneColor*
+# 3492997 hg19.cytoScan.oneColor
+# 2749693 hg19.cytoScan.oneColor.uniq
+
+# Lost exactly the number of probes that were "S-" type,
+#   but were colored the same as the others in the "C-" file.
+#       743304  < # of dupes
+
+# remove bin for loading
+# (don't know if this is necessary, maybe it'd load with bin in place)
+cat hg19.cytoScan.oneColor.uniq | awk '{print $2, $3, $4, $5, $6, $7, $8, $9,
+$10}' \
+   > hg19.cytoScan.oneColor.noBin
+# load
+hgLoadBed -type=bed9 hg19 affyCytoScanNew hg19.cytoScan.oneColor.noBin
+
+# Set colors per Carl Dowds:
+mysql> UPDATE affyCytoScanNew SET reserved = 3308830 WHERE name LIKE "C-%";
+mysql> UPDATE affyCytoScanNew SET reserved = 8913032 WHERE name LIKE "S-%";
+
+# Checked new track in Browser by making temporary block for it in trackDb.ra
+# Moved into place:
+
+mysql> RENAME TABLE affyCytoScan    TO affyCytoScanAndy;
+mysql> RENAME TABLE affyCytoScanNew TO affyCytoScan;
 
 ############################################################################

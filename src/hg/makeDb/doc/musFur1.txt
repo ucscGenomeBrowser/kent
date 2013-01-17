@@ -1,0 +1,1827 @@
+# for emacs: -*- mode: sh; -*-
+
+#	DATE:	03-Apr-2011
+#	ORGANISM:	Mustela putorius furo
+#	TAXID:	9669
+#	ASSEMBLY LONG NAME:	MusPutFur1.0
+#	ASSEMBLY SHORT NAME:	MusPutFur1.0
+#	ASSEMBLY SUBMITTER:	Ferret Genome Sequencing Consortium
+#	ASSEMBLY TYPE:	Haploid
+#	NUMBER OF ASSEMBLY-UNITS:	1
+#	Assembly Accession:	GCA_000215625.1
+
+
+
+#       http://www.ncbi.nlm.nih.gov/genome/3295
+#       http://www.ncbi.nlm.nih.gov/assembly/286418/
+#       http://www.ncbi.nlm.nih.gov/bioproject/59869
+
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEYP01
+#       Genome Coverage : 162x
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9669
+
+#	rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mustela_putorius/MusPutFur1.0/
+
+#for pauline to clean up (notes):
+#sed -e 's/petMar2/musFur1/g; s/PetMar2/MusFur1/g' petMar2.txt > musFur1.txt
+
+##########################################################################
+# Download sequence (WORKING - 2013-01-10 - Pauline)
+    mkdir /hive/data/genomes/musFur1
+    cd /hive/data/genomes/musFur1
+    mkdir genbank
+    cd genbank
+    time rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mustela_putorius/MusPutFur1.0/ ./
+    #   real    3m8.737s
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+
+# 2410863155 bases (132851443 N's 2278011712 real 2278011712 upper 0 lower) in 7782 sequences in 1 files
+# Total size: mean 309799.9 sd 1997002.0 min 1000 (gi|334565269|gb|AEYP01117479.1|) max 52375790 (gi|334708367|gb|GL896898.1|) median 1448
+
+zcat unplaced.scaf.agp.gz | awk '{print $1}' | sed -e 's/GL[0-9][0-9]*//; s/AEYP[0-9][0-9]*//' | sort | uniq
+#
+.1
+
+zcat unplaced.scaf.agp.gz | sed -e 's/\.1//' > ../../../ucsc.agp
+
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+        | sed -e "s/^>.*GL8/>GL8/; s/^>.*AEYP0/>AEYP0/; s/\.1. Mustela.*//" \
+            > ucsc.fa
+
+    # strip the names down to something reasonable, they can all be:
+    # >GL[0-9]
+    # since they are all .1 versions:
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+        | sed -e "s/^>.*GL/>GL/; s/.1. Petromyzon.*//" \
+        | gzip -c > ucsc.fa.gz
+    zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+        | sed -e "s/^\(GL[0-9]*\).1/\1/;" | gzip -c > ucsc.agp.gz
+    time checkAgpAndFa  ucsc.agp.gz ucsc.fa.gz 2>&1 | tail -2
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+    #   real    0m12.951s
+
+    mkdir /hive/data/genomes/musFur1/photograph
+    cd /hive/data/genomes/musFur1/photograph
+    wget --timestamping \
+        http://www.nasa.gov/centers/kennedy/images/content/91159main_93pc780.jpg
+
+    convert -geometry "220x300" 91159main_93pc780.jpg \
+        Alligator_Mississippiensis.jpg
+    # check this .jpg file into the source tree kent/src/hg/htdocs/images/
+    git commit -m "gator photo from NASA Kennedy" Alligator_Mississippiensis.jpg
+    # and copy to /usr/local/apache/htdocs/images
+    cp -p Alligator_Mississippiensis.jpg /usr/local/apache/htdocs/images
+
+##########################################################################
+# Initial makeGenomeDb.pl (WORKING - 2013-01-10 - Pauline)
+    # obtain a template for this from the source tree:
+    # kent/src/hg/utils/automation/configFiles/
+    # and check it back into the source tree when completed here:
+    cd /hive/data/genomes/musFur1
+    cat << '_EOF_' > musFur1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db musFur1
+clade vertebrate
+genomeCladePriority 16
+scientificName Mustela putorius furo 
+commonName Ferret 
+assemblyDate Apr. 2011
+assemblyLabel Ferret Genome Sequencing Consortium
+assemblyShortLabel MusPutFur1.0
+orderKey 2430 
+mitoAcc none
+fastaFiles /hive/data/genomes/musFur1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/musFur1/genbank/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir ferret
+photoCreditURL http://epa.gov/greatlakes/images/index.htm
+photoCreditName Photo courtesy of U.S. Environmental Protection Agency
+ncbiGenomeId 3295
+ncbiAssemblyId 286418
+ncbiAssemblyName MusPutFur1.0 
+ncbiBioProject 59869
+genBankAccessionID GCA_000215625.1
+taxId 9669
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp musFur1.config.ra >>& agp.log
+    #   real    1m6.334s
+    # verify OK:
+    tail -1 agp.log
+    #   *** All done!  (through the 'agp' step)
+
+    # finish it off
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+        -dbHost=hgwdev musFur1.config.ra > db.log 2>&1
+    #   real    5m25.795s
+
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/musFur1.unmasked.2bit /gbdb/musFur1/musFur1.2bit
+    #	browser should function now, add the files from the trackDb
+    #   hierarchy here to the source tree
+
+##########################################################################
+# running repeat masker (DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/musFur1/bed/repeatMasker
+    cd /hive/data/genomes/musFur1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek musFur1 > do.log 2>&1 &
+    #   real    116m3.942s
+
+    cat faSize.rmsk.txt
+# 885550958 bases (238182824 N's 647368134 real 558171034 upper 89197100 lower)
+#       in 25006 sequences in 1 files
+# Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+#       max 4695893 (GL476399) median 8272
+# %10.07 masked total, %13.78 masked real
+
+    egrep -i "versi|relea" do.log
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+# CC   RELEASE 20110920;
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+
+    featureBits -countGaps musFur1 rmsk
+    #   89259257 bases of 885550958 (10.080%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/musFur1/bed/simpleRepeat
+    cd /hive/data/genomes/musFur1/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	musFur1 > do.log 2>&1 &
+    #   real    53m17.048s
+
+    cat fb.simpleRepeat
+    #   72167005 bases of 647368134 (11.148%) in intersection
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/musFur1/bed/gap
+    cd /hive/data/genomes/musFur1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../musFur1.unmasked.2bit > findMotif.txt 2>&1
+    #   real    0m12.841s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits musFur1 -not gap -bed=notGap.bed
+    #   647368134 bases of 647368134 (100.000%) in intersection
+    #   real    0m7.993s
+
+    # can see now if allGaps.bed actually is all the gaps:
+    hgsql -N -e "select size from gap;" musFur1 | ave stdin | grep total
+# total 238182824.000000
+    ave -col=5 allGaps.bed | grep total
+# total 238182824.000000
+    # same count, no new gaps
+
+    # check if any non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" musFur1 | sort | uniq -c
+    #  48808 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-10-12 - Hiram)
+    mkdir /hive/data/genomes/musFur1/bed/windowMasker
+    cd /hive/data/genomes/musFur1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev musFur1 > do.log 2>&1 &
+    #   real    84m58.718s
+
+    # Masking statistics
+    cat faSize.musFur1.wmsk.txt
+    #   885550958 bases (238182824 N's 647368134 real 379325983
+    #   upper 268042151 lower) in 25006 sequences in 1 files
+    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+    #   max 4695893 (GL476399) median 8272
+    #   %30.27 masked total, %41.40 masked real
+
+    cat faSize.musFur1.wmsk.sdust.txt
+    #   885550958 bases (238182824 N's 647368134 real 372789139
+    #   upper 274578995 lower) in 25006 sequences in 1 files
+    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+    #   max 4695893 (GL476399) median 8272
+    #   %31.01 masked total, %42.41 masked real
+
+    cat faSize.musFur1.cleanWMSdust.txt
+    #   885550958 bases (238182824 N's 647368134 real 372789139
+    #   upper 274578995 lower) in 25006 sequences in 1 files
+    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+    #   max 4695893 (GL476399) median 8272
+    #   %31.01 masked total, %42.41 masked real
+
+    cat fb.musFur1.windowmaskerSdust.clean.txt
+    #   274578995 bases of 885550958 (31.007%) in intersection
+
+    # how much does this window masker and repeat masker overlap:
+    # can be done after rmsk is done.  The script will often
+    #   fail on this command in the doLoad.csh if RM is not yet
+    #   complete and these are running at the same time:
+    featureBits -countGaps musFur1 rmsk windowmaskerSdust
+    #   32967187 bases of 1065292181 (3.095%) in intersection
+
+    # if the script did fail on that command, finish it:
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-continue=cleanup -dbHost=hgwdev musFur1 > cleanup.log 2>&1 &
+    #   real    0m35.452s
+
+##########################################################################
+# add simpleRepeats to WindowMasker result (DONE - 2012-10-15 - Hiram)
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/musFur1
+    twoBitMask -add bed/windowMasker/musFur1.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed musFur1.2bit
+
+    #	you can safely ignore the warning about fields >= 13
+    twoBitToFa musFur1.2bit stdout | faSize stdin > faSize.musFur1.2bit.txt
+    cat faSize.musFur1.2bit.txt
+    #   885550958 bases (238182824 N's 647368134 real 372434798
+    #   upper 274933336 lower) in 25006 sequences in 1 files
+    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
+    #   max 4695893 (GL476399) median 8272
+    #   %31.05 masked total, %42.47 masked real
+
+    rm /gbdb/musFur1/musFur1.2bit
+    ln -s `pwd`/musFur1.2bit /gbdb/musFur1/musFur1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2012-10-15 - Hiram)
+    mkdir /hive/data/genomes/musFur1/bed/cpgIslands
+    cd /hive/data/genomes/musFur1/bed/cpgIslands
+    time doCpgIslands.pl musFur1 > do.log 2>&1
+    #   real    27m18.237s
+
+    cat fb.musFur1.cpgIslandExt.txt
+    #   39998562 bases of 647368134 (6.179%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2012-10-15 - Hiram)
+    mkdir /hive/data/genomes/musFur1/bed/genscan
+    cd /hive/data/genomes/musFur1/bed/genscan
+    time doGenscan.pl musFur1 > do.log 2>&1
+    #   real    33m41.740s
+
+    cat fb.musFur1.genscan.txt
+    #   25257909 bases of 647368134 (3.902%) in intersection
+    cat fb.musFur1.genscanSubopt.txt
+    #   23439935 bases of 647368134 (3.621%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-10-16 - Hiram)
+    # Use -repMatch=400, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 885550958 / 2897316137 \) \* 1024
+    #   ( 885550958 / 2897316137 ) * 1024 = 312.980751
+
+    # round up to 350 (petMar1 was 200)
+
+    cd /hive/data/genomes/musFur1
+    time blat musFur1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/musFur1.11.ooc -repMatch=350
+    #   Wrote 15692 overused 11-mers to jkStuff/musFur1.11.ooc
+    #   real    1m58.096s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" musFur1 | sort | uniq -c
+    #   48808 yes
+#    cd /hive/data/genomes/musFur1/jkStuff
+#    gapToLift musFur1 musFur1.nonBridged.lift -bedFile=musFur1.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' musFur1.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-10-16 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Petromyzon marinus      1072    120732  0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add musFur1 just before petMar1
+# musFur1 (Petromyzon marinus - Lamprey)
+musFur1.serverGenome = /hive/data/genomes/musFur1/musFur1.2bit
+musFur1.clusterGenome = /hive/data/genomes/musFur1/musFur1.2bit
+musFur1.ooc = /hive/data/genomes/musFur1/jkStuff/musFur1.11.ooc
+musFur1.lift = no
+musFur1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+musFur1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+musFur1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+musFur1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+musFur1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+musFur1.refseq.mrna.native.load = yes
+musFur1.refseq.mrna.xeno.load = yes
+musFur1.genbank.mrna.xeno.load = no
+musFur1.genbank.est.native.load = yes
+musFur1.downloadDir = musFur1
+musFur1.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding musFur1 Lamprey redmine 9153" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S musFur1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial musFur1 &
+    #   var/build/logs/2012.10.16-09:06:37.musFur1.initalign.log
+    #   real    555m47.178s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad musFur1 &
+    #   real    28m17.094s
+    #   var/dbload/hgwdev/logs/2012.10.17-10:24:04.dbload.log
+
+    # check the end of that dbload.log to see if it was successful
+    #   hgwdev 2012.10.17-10:52:21 dbload: finish
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-05-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add musFur1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added musFur1." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position as recommended from Jeramiah Smith
+#       (DONE - 2012-10-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="GL476334:480870-830419" where name="musFur1";' \
+	hgcentraltest
+
+############################################################################
+# downloads and pushQ entry (DONE - 2012-10-23 - Hiram)
+    # after adding musFur1 to the all.joiner file and verifying that
+    #   joinerCheck is clean, can construct the downloads:
+    cd /hive/data/genomes/musFur1
+    time makeDownloads.pl -workhorse=hgwdev musFur1
+    #   real    5m51.143s
+
+    mkdir /hive/data/genomes/musFur1/pushQ
+    cd /hive/data/genomes/musFur1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl musFur1 2> stderr.txt > musFur1.sql
+    #   real    3m38.916s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/musFur1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/musFur1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/musFur1/bbi/quality.bw
+# WARNING: musFur1 does not have seq
+# WARNING: musFur1 does not have extFile
+# WARNING: musFur1 does not have estOrientInfo
+
+    scp -p musFur1.sql hgwbeta:/tmp/
+    ssh hgwbeta "hgsql qapushq < /tmp/musFur1.sql"
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2012-10-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("musFur1", "blat4b", "17838", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("musFur1", "blat4b", "17839", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+#  lastz braFlo2 Lancelet (DONE - 2012-10-19,22 - Hiram)
+    screen -S musFur1	# use a screen to control this multi-day job
+    mkdir /cluster/data/musFur1/bed/lastzBraFlo2.2012-10-19
+    cd /cluster/data/musFur1/bed/lastzBraFlo2.2012-10-19
+
+    cat << '_EOF_' > DEF
+# Lamprey vs. Lancelet
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Lamprey musFur1
+SEQ1_DIR=/hive/data/genomes/musFur1/musFur1.2bit
+SEQ1_LEN=/hive/data/genomes/musFur1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# TARGET: Lancelet braFlo2
+# largest chunk big enough for largest scaffold
+#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
+SEQ2_DIR=/hive/data/genomes/braFlo2/braFlo2.2bit
+SEQ2_LEN=/hive/data/genomes/braFlo2/chrom.sizes
+SEQ2_CHUNK=12000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/musFur1/bed/lastzBraFlo2.2012-10-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ?_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -smallClusterHub=encodek > do.log 2>&1 &
+    #   real    781m50.666s
+    cat fb.musFur1.chainBraFlo2Link.txt
+    #  19549078 bases of 647368134 (3.020%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/musFur1/bed
+    ln -s lastzBraFlo2.2012-10-19 lastz.braFlo2
+
+    #	and for the swap
+    mkdir /hive/data/genomes/braFlo2/bed/blastz.musFur1.swap
+    cd /hive/data/genomes/braFlo2/bed/blastz.musFur1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/musFur1/bed/lastzBraFlo2.2012-10-19/DEF \
+	-workhorse=hgwdev -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=swarm -smallClusterHub=encodek > swap.log 2>&1 &
+
+    #   real    15m22.099s
+    cat  fb.braFlo2.chainMusFur1Link.txt
+    #	15668603 bases of 480418582 (3.261%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/braFlo2/bed
+    ln -s blastz.musFur1.swap lastz.musFur1
+
+############################################################################
+# lastz swap Mouse mm10 (DONE - 2012-10-22 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/mm10/bed/lastzMusFur1.2012-10-19
+    cat fb.mm10.chainMusFur1Link.txt
+    #   28262565 bases of 2652783500 (1.065%) in intersection
+
+    #	and for this swap
+    mkdir /hive/data/genomes/musFur1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/musFur1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzMusFur1.2012-10-19/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    7m2.754s
+    cat  fb.musFur1.chainHg19Link.txt
+    #	20923095 bases of 647368134 (3.232%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/musFur1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+############################################################################
+# lastz swap Human hg19 (DONE - 2012-10-17 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzMusFur1.2012-10-17
+    cat fb.hg19.chainMusFur1Link.txt
+    #   30305028 bases of 2897316137 (1.046%) in intersection
+
+    #	and this swap
+    mkdir /hive/data/genomes/musFur1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/musFur1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzMusFur1.2012-10-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    15m22.099s
+    cat  fb.musFur1.chainHg19Link.txt
+    #	21515660 bases of 647368134 (3.324%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/musFur1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# lastz Opossum monDom5 (DONE - 2012-10-24 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/monDom5/bed/lastzMusFur1.2012-10-23
+    cat fb.monDom5.chainMusFur1Link.txt
+    #	25404425 bases of 3501660299 (0.725%) in intersection
+
+    #	and this swap
+    mkdir /cluster/data/musFur1/bed/blastz.monDom5.swap
+    cd /cluster/data/musFur1/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/monDom5/bed/lastzMusFur1.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #	real    11m54.144s
+    cat fb.musFur1.chainMonDom5Link.txt
+    #	16944977 bases of 647368134 (2.618%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/musFur1/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+############################################################################
+# lastz Medaka oryLat2 (DONE - 2012-10-24 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/oryLat2/bed/lastzMusFur1.2012-10-23
+    cat fb.oryLat2.chainMusFur1Link.txt
+    #	42137127 bases of 700386597 (6.016%) in intersection
+
+    #	And, for this swap:
+    mkdir /cluster/data/musFur1/bed/blastz.oryLat2.swap
+    cd /cluster/data/musFur1/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/hive/data/genomes/oryLat2/bed/lastzMusFur1.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=encodek -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    8m42.333s
+    cat fb.musFur1.chainOryLat2Link.txt
+    #	31889826 bases of 647368134 (4.926%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/musFur1/bed
+    ln -s blastz.oryLat2.swap lastz.oryLat2
+
+#########################################################################
+# lastz Lamprey musFur1 (DONE - 2012-10-29 - Hiram)
+    # the original alignment
+    cd /cluster/data/galGal4/bed/lastzMusFur1.2012-10-23
+    cat fb.galGal4.chainMusFur1Link.txt
+    #	18440677 bases of 1032854810 (1.785%) in intersection
+
+    #	and this swap
+    mkdir /cluster/data/musFur1/bed/blastz.galGal4.swap
+    cd /cluster/data/musFur1/bed/blastz.galGal4.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal4/bed/lastzMusFur1.2012-10-23/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=swarm -verbose=2 > swap.log 2>&1 &
+    #	real    6m41.091s
+    cat fb.musFur1.chainGalGal4Link.txt
+    #	18576173 bases of 647368134 (2.869%) in intersection
+
+############################################################################
+## 9-Way Multiz (DONE - 2011-10-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way
+    cd /hive/data/genomes/musFur1/bed/multiz7way
+
+    # working on: musFur1 braFlo2 oryLat2 galGal4 monDom5 mm10 hg19
+
+    #	All distances remain as specified in the 65way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but \
+        petMar1,oryLat2,galGal4,monDom5,mm10,hg19 \
+	$HOME/kent/src/hg/utils/phyloTrees/65way.nh \
+        | sed -e "s/petMar1/musFur1/;" > 6way.nh
+    # this comes out as:
+(((((hg19:0.148845,mm10:0.356483):0.278985,monDom5:0.340786):0.181168,
+galGal4:0.337395):0.461354,oryLat2:0.915559):0.526688,musFur1:0.526688);
+    # adding braFlo2 and rearrange to get musFur1 at the top
+
+((musFur1:0.526688,(oryLat2:0.915559,
+(galGal4:0.337395,((hg19:0.148845,mm10:0.356483):0.278985,
+monDom5:0.340786):0.181168):0.461354):0.526688):0.4,braFlo2:2.1);
+
+    # save that in musFur1.7way.nh
+    echo '((musFur1:0.526688,(oryLat2:0.915559,(galGal4:0.337395,((hg19:0.148845,mm10:0.356483):0.278985,monDom5:0.340786):0.181168):0.461354):0.526688):0.4,braFlo2:2.1);' > musFur1.7way.nh
+
+    # convert to common names
+    /cluster/bin/phast/tree_doctor --rename \
+"musFur1->Lamprey; monDom5->Opossum; hg19->Human; mm10->Mouse; oryLat2->Medaka; galGal4->Chicken; braFlo2->Lancelet" \
+musFur1.7way.nh > musFur1.commonNames.7way.nh
+
+# ((Lamprey:0.526688,(Medaka:0.915559,(Chicken:0.337395
+# ((Human:0.148845,Mouse:0.356483):0.278985,
+# Opossum:0.340786):0.181168):0.461354):0.526688):0.400000,Lancelet:2.100000);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/musFur1_7way.png
+
+    #	Use this output to create the table below
+    /cluster/bin/phast/all_dists musFur1.7way.nh | grep -i petMar \
+        | sort -k3n | sed -e "s/musFur1\t//"
+galGal4 1.852125
+oryLat2 1.968935
+monDom5 2.036684
+hg19    2.123728
+mm10    2.331366
+braFlo2 3.026688
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#                         featureBits chainLink measures
+#                                   chainMusFur1Link         chain linearGap
+#    distance                    on musFur1  on other     minScore
+#  1  1.852 - chicken galGal4   (%  2.87) (%  1.79)       5000     loose
+#  2  1.969 - medaka oryLat2    (%  4.93) (%  6.02)       5000     loose
+#  3  2.037 - opossum monDom5   (%  2.62) (%  0.73)       5000     loose
+#  4  2.124 - human hg19        (%  3.32) (%  1.05)       5000     loose
+#  5  2.331 - mouse mm10        (%  3.23) (%  1.07)       5000     loose
+#  6  3.027 - lancelet braFlo2  (%  3.26) (%  3.02)       5000     loose
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	musFur1.7way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way/mafSplit
+    cd /hive/data/genomes/musFur1/bed/multiz7way/mafSplit
+    for D in `sed -e "s/musFur1 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=9 /dev/null . ../../../lastz.${D}/axtChain/musFur1.${D}.maf.gz"
+    mafSplit -byTarget -useHashedName=9 /dev/null . \
+	../../../lastz.${D}/mafNet/musFur1.${D}.net.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 3072
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 512 maf.list
+
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way/splitRun
+    cd /hive/data/genomes/musFur1/bed/multiz7way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = musFur1
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/musFur1/bed/multiz7way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/musFur1/bed/multiz7way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/musFur1/bed/multiz7way/splitRun/run
+    # the tac reverses the list to get the small jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    para -ram=8g create jobList
+# Completed: 512 of 512 jobs
+# CPU time in finished jobs:       2394s      39.89m     0.66h    0.03d  0.000 y
+# IO & Wait Time:                  1504s      25.07m     0.42h    0.02d  0.000 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              28s       0.47m     0.01h    0.00d
+# Submission to last job:           180s       3.00m     0.05h    0.00d
+
+    # assemble into a single maf file
+    cd /hive/data/genomes/musFur1/bed/multiz7way
+    head -1 splitRun/maf/001.maf > multiz7way.maf
+    for F in splitRun/maf/*.maf
+do
+    egrep -v "^#" ${F}
+done >> multiz7way.maf
+    tail -1 splitRun/maf/001.maf >> multiz7way.maf
+
+# -rw-rw-r-- 1 318952823 Oct 31 09:52 multiz7way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/musFur1/bed/multiz7way
+    mkdir /gbdb/musFur1/multiz7way
+    ln -s `pwd`/multiz7way.maf /gbdb/musFur1/multiz7way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf musFur1 multiz7way
+    #	Indexing and tabulating /gbdb/musFur1/multiz7way/multiz7way.maf
+    #	Loaded 657947 mafs in 1 files from /gbdb/musFur1/multiz7way
+    #	real    0m13.264s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 musFur1 multiz7waySummary \
+	/gbdb/musFur1/multiz7way/multiz7way.maf
+    #   Created 10750 summary blocks from 87098 components and 657947 mafs
+    #   from /gbdb/musFur1/multiz7way/multiz7way.maf
+    #   real    0m9.484s
+
+    wc -l multiz7way*.tab
+    #   657947 multiz7way.tab
+    #   10750 multiz7waySummary.tab
+    #   668697 total
+
+    rm multiz7way*.tab
+
+#######################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2012-10-31 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir -p /hive/data/genomes/musFur1/bed/multiz7way/anno/mafSplit
+    cd /hive/data/genomes/musFur1/bed/multiz7way/anno/mafSplit
+
+    time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz7way.maf
+    #   real    2m49.680s
+    find . -type f | wc
+    #   11879   11879  225697
+
+    cd /hive/data/genomes/musFur1/bed/multiz7way/anno
+    # check for N.bed files everywhere:
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+        cd /hive/data/genomes/${DB}
+        echo twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+        cd /hive/data/genomes/musFur1/bed/multiz7way/anno
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/musFur1/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S musFur1      # use a screen to control this longish job
+    ssh swarm
+    cd /hive/data/genomes/musFur1/bed/multiz7way/anno
+    mkdir result
+    find ./mafSplit -type d | sed -e 's#./mafSplit##' | while read D
+do
+    echo mkdir -p result${D}
+    mkdir -p result${D}
+done
+
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/musFur1/musFur1.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 11879 of 11879 jobs
+# CPU time in finished jobs:       1254s      20.90m     0.35h    0.01d  0.000 y
+# IO & Wait Time:                 30487s     508.11m     8.47h    0.35d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:           222s       3.70m     0.06h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/0/0/GL486032.maf > musFur1.7way.maf
+    find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> musFur1.7way.maf
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/0/0/GL486032.maf >> musFur1.7way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> musFur1.7way.maf
+    ls -og
+# -rw-rw-r--  1 601617382 Oct 31 11:38 musFur1.7way.maf
+# -rw-rw-r--  1 6488856099 Aug  3 09:02 musFur1.7way.maf
+    du -hsc musFur1.7way.maf
+    #   574M    musFur1.7way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/musFur1/multiz7way/multiz7way.maf   # remove previous results
+
+    ln -s `pwd`/musFur1.7way.maf /gbdb/musFur1/multiz7way/multiz7way.maf
+
+    # Load into database
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/musFur1/multiz7way \
+        musFur1 multiz7way
+    #   Loaded 737312 mafs in 1 files from /gbdb/musFur1/multiz7way
+    #   real    1m18.999s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 musFur1 multiz7waySummary \
+        /gbdb/musFur1/multiz7way/multiz7way.maf
+    #   Created 10750 summary blocks from 87098 components and 737312 mafs
+    #   from /gbdb/musFur1/multiz7way/multiz7way.maf
+    #   real    0m5.948s
+
+    ls -og multiz7way*.tab
+# -rw-rw-r--  1   33913083 Oct 31 11:40 multiz7way.tab
+# -rw-rw-r--  1     509732 Oct 31 11:41 multiz7waySummary.tab
+
+    rm multiz7way*.tab
+
+######################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2012-10-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way/frames
+    cd /hive/data/genomes/musFur1/bed/multiz7way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "xenoRefGene" ) then
+           echo -n "${table}: "
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+           echo -n "${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg19 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    ./showGenes.csh
+# musFur1: xenoRefGene: 106711, Mrnas: 121803
+# oryLat2: ensGene: 25397, refGene: 603, xenoRefGene: 210346, Mrnas: 668558
+# galGal4: refGene: 5675, xenoRefGene: 193694, Mrnas: 636120
+# hg19: ensGene: 191891, knownGene: 80922, mgcGenes: 31383, refGene: 43766, xenoRefGene: 151207, Mrnas: 10668295
+# mm10: ensGene: 90956, knownGene: 59121, mgcGenes: 26768, refGene: 30818, xenoRefGene: 148264, Mrnas: 5217291
+# monDom5: ensGene: 35113, refGene: 479, xenoRefGene: 242075, Mrnas: 2429
+# braFlo2: xenoRefGene: 107859, Mrnas: 334902
+
+    # from that summary, use these gene sets:
+    # xenoRefGene - musFur1 galGal4 braFlo2
+    # ensGene - oryLat2 monDom5
+    # knownGene - hg19 mm10
+
+    mkdir genes
+    #   1. knownGene: hg19 mm10
+    for DB in hg19 mm10
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+done
+    #   2. ensGene:
+    for DB in oryLat2 monDom5
+do
+    hgsql -N -e "select * from ensGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   3. xenoRefGene:
+    for DB in musFur1 galGal4 braFlo2
+do
+    hgsql -N -e "select * from xenoRefGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/braFlo2.gp.gz: 7302
+# genes/galGal4.gp.gz: 13103
+# genes/hg19.gp.gz: 20718
+# genes/mm10.gp.gz: 20985
+# genes/monDom5.gp.gz: 19188
+# genes/oryLat2.gp.gz: 19576
+# genes/musFur1.gp.gz: 7045
+
+    time (cat ../anno/musFur1.7way.maf \
+	| nice -n +19 genePredToMafFrames musFur1 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz7wayFrames.bed.gz)
+    #   real    1m26.514s
+
+    # verify there are frames on everything, should be 7 species:
+    zcat multiz7wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
+#       43049 braFlo2
+#       108007 galGal4
+#       155710 hg19
+#       144138 mm10
+#       122037 monDom5
+#       142739 oryLat2
+#       51144 musFur1
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/musFur1/bed/multiz7way/frames
+    time hgLoadMafFrames musFur1 multiz7wayFrames multiz7wayFrames.bed.gz
+    #   real    0m6.618s
+    time featureBits -countGaps musFur1 multiz7wayFrames
+    #   13842090 bases of 885550958 (1.563%) in intersection
+    #   real    0m12.118s
+
+    #   enable the trackDb entries:
+# frames multiz7wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from the 7-way (DONE - 2012-11-01 - Hiram)
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way/4d
+    cd /hive/data/genomes/musFur1/bed/multiz7way/4d
+
+    # the annotated maf is:
+    ../anno/musFur1.7way.maf
+
+    # using xenoRefGene for musFur1, only transcribed genes
+    hgsql -N -e "select * from xenoRefGene where cdsEnd > cdsStart" musFur1 \
+        | cut -f2- > xenoRefGene.gp
+
+    genePredSingleCover xenoRefGene.gp stdout | sort > xenoRefGeneNR.gp
+    wc -l *.gp
+    #   102617 xenoRefGene.gp
+    #   7445 xenoRefGeneNR.gp
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=2 -byTarget -useFullSequenceName \
+        /dev/null . ../../anno/musFur1.7way.maf
+    #   real    0m48.328s
+    find . -type f | wc -l
+    #   11879
+    ssh swarm
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way/4d/run
+    cd /hive/data/genomes/musFur1/bed/multiz7way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/musFur1/bed/multiz7way"
+set c = $1:r
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /scratch/tmp
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/xenoRefGeneNR.gp | sed -e "s/\t$c\t/\tmusFur1.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f $c.gp $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check
+    para time
+# Completed: 11800 of 11879 jobs
+# Crashed: 79 jobs
+# CPU time in finished jobs:        426s       7.10m     0.12h    0.00d  0.000 y
+# IO & Wait Time:                 30153s     502.55m     8.38h    0.35d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:          1054s      17.57m     0.29h    0.01d
+
+    # not all of them work perfectly.  I checked one of the failures,
+    #   the SS file had no contents beyond the header
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/musFur1/bed/multiz7way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # size 1 is also an empty file:
+    find ./mfa -type f -size 1c | xargs rm -f
+
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/?/?/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #   >musFur1
+    #   >oryLat2
+    #   >galGal4
+    #   >hg19
+    #   >mm10
+    #   >monDom5
+    #   >braFlo2
+
+    # tree_commas.nh looks like:
+    cat ../tree-commas.nh
+    #   ((musFur1,(oryLat2,(galGal4,((hg19,mm10),monDom5)))),braFlo2)
+
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ../tree-commas.nh 4d.all.mfa
+    #   real    0m24.321s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE:
+# ((musFur1:0.655566,(oryLat2:0.576383,(galGal4:0.435419,((hg19:0.178124,mm10:0.268035):0.164842,monDom5:0.353663):0.132512):0.298109):0.126991):0.337451,braFlo2:0.337451);
+
+    cat ../species.list | tr '[ ]' '[\n]' > all.list
+
+
+    grep TREE all.mod | sed -e 's/TREE: //' > all.nh
+    /cluster/bin/phast/all_dists all.nh |grep musFur1 | sort -k3n \
+        | sed -e "s/musFur1.//; s/^/    #  /"
+    #  braFlo2  1.330468
+    #  oryLat2  1.358940
+    #  galGal4  1.516085
+    #  hg19     1.556144
+    #  monDom5  1.566841
+    #  mm10     1.646055
+
+    # those are much shorter branch lengths than from the 65way.nh:
+    /cluster/bin/phast/all_dists ../musFur1.7way.nh | grep musFur1 \
+        | sort -k3n | sed -e "s/musFur1.//; s/^/
+    #  galGal4  1.852125
+    #  oryLat2  1.968935
+    #  monDom5  2.036684
+    #  hg19     2.123728
+    #  mm10     2.331366
+    #  braFlo2  3.026688
+
+#########################################################################
+# phastCons 7-way (DONE - 2012-11-01 - Hiram)
+    # split 7way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh swarm
+    mkdir -p /hive/data/genomes/musFur1/bed/multiz7way/cons/SS
+    cd /hive/data/genomes/musFur1/bed/multiz7way/cons/SS
+    mkdir result done
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set d = $1
+set c = $2
+set doneDir = done/$d
+set MAF = /hive/data/genomes/musFur1/bed/multiz7way/anno/result/$d/$c.maf
+set WINDOWS = /hive/data/genomes/musFur1/bed/multiz7way/cons/SS/result/$d/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $3 ) then
+    exit 0
+endif
+if ( -s $3.running ) then
+    exit 0
+endif
+
+/bin/mkdir -p $doneDir
+/bin/date >> $3.running
+
+/bin/rm -fr $WINDOWS
+/bin/mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+/bin/date >> $3
+/bin/rm -f $3.running
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSS.csh
+
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check ... etc
+# Completed: 11879 of 11879 jobs
+# CPU time in finished jobs:        443s       7.39m     0.12h    0.01d  0.000 y
+# IO & Wait Time:                 36422s     607.03m    10.12h    0.42d  0.001 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:               9s       0.15m     0.00h    0.00d
+# Submission to last job:           253s       4.22m     0.07h    0.00d
+
+    # not all of them produce results
+    #	 there isn't much aligned in these MAF files
+    find ./result -type f | wc -l
+    #	 8387
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh swarm
+    mkdir -p /hive/data/genomes/musFur1/bed/multiz7way/cons/run.cons
+    cd /hive/data/genomes/musFur1/bed/multiz7way/cons/run.cons
+
+    #	This is setup for multiple runs based on subsets, but only running
+    #   the 'all' subset here.
+    #   It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  Running:
+    #	all and vertebrates
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set d = $2
+set f = $3
+set len = $4
+set cov = $5
+set rho = $6
+set grp = $cwd:t
+set cons = /hive/data/genomes/musFur1/bed/multiz7way/cons
+set tmp = $cons/tmp/$d
+mkdir -p $tmp
+set ssSrc = $cons/SS/result
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/$d/$f $tmp
+else
+  ln -s $ssSrc/$d/$f $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+else
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+endif
+popd > /dev/null
+mkdir -p pp/$d bed/$d
+sleep 4
+touch pp/$d bed/$d
+rm -f pp/$d/$c.pp
+rm -f bed/$d/$c.bed
+mv $tmp/$c.pp pp/$d
+mv $tmp/$c.bed bed/$d
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(dir1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(root1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
+    wc -l ss.list
+    #	8387 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/musFur1/bed/multiz7way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ...
+    para push
+# Completed: 8387 of 8387 jobs
+# CPU time in finished jobs:        905s      15.08m     0.25h    0.01d  0.000 y
+# IO & Wait Time:                 57593s     959.89m    16.00h    0.67d  0.002 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              15s       0.25m     0.00h    0.00d
+# Submission to last job:           402s       6.70m     0.11h    0.00d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/musFur1/bed/multiz7way/cons/all
+    cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/?/${C} 2> /dev/null | while read D
+    do
+        echo ${D}/${C}*.bed 1>&2
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+    #   -rw-rw-r--  1 6942093 Nov  1 13:36 tmpMostConserved.bed
+    #   -rw-rw-r--  1 7108958 Nov  1 13:38 mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/musFur1/bed/multiz7way/cons/all
+    time nice -n +19 hgLoadBed musFur1 phastConsElements7way mostConserved.bed
+    #   Read 218943 elements of size 5 from mostConserved.bed
+    #   real    0m2.562s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits musFur1 -enrichment xenoRefGene:cds phastConsElements7way
+    #   xenoRefGene:cds 0.974%, phastConsElements7way 5.213%, both 0.871%,
+    #   cover 89.38%, enrich 17.14x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/musFur1/bed/multiz7way/cons/all
+    mkdir downloads
+
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons7way.wigFix.gz)
+    #   real    8m1.819s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/musFur1/chrom.sizes \
+	    phastCons7way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+    # pid=23614: VmPeak:      566932 kB
+    #   real    4m3.146s
+
+    bigWigInfo phastCons7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 121,612,330
+# primaryIndexSize: 3,862,312
+# zoomLevels: 10
+# chromCount: 8387
+# basesCovered: 48,766,790
+# mean: 0.651921
+# min: 0.000000
+# max: 1.000000
+# std: 0.368502
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons7way.wigFix.gz \
+	| wigEncode stdin phastCons7way.wig phastCons7way.wib)
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    0m17.095s
+
+    du -hsc *.wi?
+    #   47M     phastCons7way.wib
+    #   12M     phastCons7way.wig
+    #   58M     total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons7way.wib /gbdb/musFur1/multiz7way/phastCons7way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/musFur1/multiz7way \
+	musFur1 phastCons7way phastCons7way.wig
+    #   real    0m3.043s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh musFur1 phastCons7way
+# db.table          min max mean       count sumData      stdDev  viewLimits
+musFur1.phastCons7way 0 1 0.651921 48766790 3.17921e+07 0.368502 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=musFur1 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons7way > histogram.data 2>&1
+    #	real    3m26.324s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Lamprey musFur1 Histogram phastCons7way track"
+set xlabel " phastCons7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#########################################################################
+# phyloP for 7-way (DONE - 2012-11-01 - Hiram)
+    # run phyloP with score=LRT
+    ssh swarm
+    mkdir /cluster/data/musFur1/bed/multiz7way/consPhyloP
+    cd /cluster/data/musFur1/bed/multiz7way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.590
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.590 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.205000 0.295000 0.295000 0.205000
+
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set d = $f:h
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set grp = $cwd:t
+set cons = /hive/data/genomes/musFur1/bed/multiz7way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/musFur1/bed/multiz7way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$file1.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	8387 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way/consPhyloP/all
+    cd /hive/data/genomes/musFur1/bed/multiz7way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise.  Either run on one of the small
+    #	klusters or use the -ram=8g on the para create
+    para -ram=8g create jobList
+    para try ... check ... push ... etc ...
+    para time > run.time
+# Completed: 8387 of 8387 jobs
+# CPU time in finished jobs:       1969s      32.82m     0.55h    0.02d  0.000 y
+# IO & Wait Time:                 64734s    1078.89m    17.98h    0.75d  0.002 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              15s       0.25m     0.00h    0.00d
+# Submission to last job:           571s       9.52m     0.16h    0.01d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP7way.wigFix.gz) &
+    #   real    3m41.174s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/musFur1/chrom.sizes \
+	phyloP7way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=28731: VmPeak:      566916 kB
+    #   real    0m45.403s
+
+
+    bigWigInfo phyloP7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 87,257,681
+# primaryIndexSize: 3,862,312
+# zoomLevels: 10
+# chromCount: 8387
+# basesCovered: 48,766,790
+# mean: 0.463019
+# min: -1.587000
+# max: 2.410000
+# std: 0.735417
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP7way.wigFix.gz \
+	| wigEncode stdin phyloP7way.wig phyloP7way.wib) &
+    #   Converted stdin, upper limit 2.41, lower limit -1.59
+    #   real    0m17.659s
+
+    du -hsc *.wi?
+    #   47M     phyloP7way.wib
+    #   12M     phyloP7way.wig
+    #   58M     total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP7way.wib /gbdb/musFur1/multiz7way/phyloP7way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/musFur1/multiz7way musFur1 \
+	phyloP7way phyloP7way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh musFur1 phyloP7way
+# db.table      min max mean count sumData
+# musFur1.phyloP7way  -1.587 2.41 0.463019 48766790 2.25799e+07
+#       stdDev viewLimits
+#       0.735417 viewLimits=-1.587:2.41
+
+    #	that range is: 1.587+2.41 = 3.997 for hBinSize=0.003997
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.003997 -hBinCount=1000 -hMinVal=-1.588 -verbose=2 \
+	    -db=musFur1 phyloP7way > histogram.data 2>&1
+    #   real    0m55.916s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000122
+# median 0.000394
+# Q3 0.000879
+# average 0.001035
+# min 0.000000
+# max 0.019782
+# count 966
+# total 1.000001
+# standard deviation 0.002140
+
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Lamprey musFur1 Histogram phyloP7way track"
+set xlabel " phyloP7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# construct download files for 7-way (DONE - 2012-11-07 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/multiz7way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/phastCons7way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/phyloP7way
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way/downloads
+    cd /hive/data/genomes/musFur1/bed/multiz7way/downloads
+    mkdir multiz7way phastCons7way phyloP7way
+    cd multiz7way
+    time cp -p ../../anno/musFur1.7way.maf .
+    #   real    0m23.447s
+    time gzip *.maf
+    #   real    1m35.589s
+
+    ln -s ../../musFur1.7way.nh .
+    ln -s ../../musFur1.commonNames.7way.nh ./musFur1.7way.commonNames.nh
+    time md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    1m55.317s
+    ln -s `pwd`/* \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/multiz7way
+
+    du -hsc *.maf.gz ../../anno/musFur1.7way.maf
+    #   140M    musFur1.7way.maf.gz
+    #   574M    ../../anno/musFur1.7way.maf
+    #   714M    total
+
+    #####################################################################
+    cd /hive/data/genomes/musFur1/bed/multiz7way/downloads/phastCons7way
+    mkdir birds vertebrate musFur1.7way.phastCons
+
+    ln -s ../../cons/all/downloads/phastCons7way.wigFix.gz \
+        ./musFur1.phastCons7way.wigFix.gz
+    ln -s ../../cons/all/phastCons7way.bw ./musFur1.phastCons7way.bw
+    ln -s ../../cons/all/all.mod ./musFur1.phastCons7way.mod
+    time md5sum *.gz *.mod *.bw > md5sum.txt &
+    #   real    0m12.119s
+    ln -s `pwd`/* `pwd`/README.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/phastCons7way
+    # obtain the README.txt from geoFor1/phastCons7way and update for this
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/README.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/phastCons7way
+
+    #####################################################################
+    cd /hive/data/genomes/musFur1/bed/multiz7way/downloads/phyloP7way
+
+    ln -s ../../consPhyloP/all/downloads/phyloP7way.wigFix.gz \
+        ./musFur1.phyloP7way.wigFix.gz
+    time md5sum *.gz > md5sum.txt &
+    #   real    1m56.253s
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/phyloP7way
+
+    ln -s ../../consPhyloP/run.phyloP/all.mod musFur1.phyloP7way.mod
+
+    ln -s ../../consPhyloP/all/phyloP7way.bw musFur1.phyloP7way.bw
+
+    time md5sum *.mod *.bw *.gz > md5sum.txt &
+    #   real    0m5.607s
+
+    # obtain the README.txt from geoFor1/phyloP7way and update for this
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/phyloP7way
+
+    ###########################################################################
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/musFur1/bed/multiz7way/downloads/multiz7way
+    # bash script
+#!/bin/sh
+export geneTbl="xenoRefGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits musFur1 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags musFur1 multiz7way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/musFur1/bed/multiz7way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    #   real    0m36.527s
+
+    md5sum upstream*.gz >> md5sum.txt
+
+    # some other symlinks were already made above
+    # obtain the README.txt from geoFor1/multiz7way and update for this
+    #   situation
+    ln -s `pwd`/upstream*.gz README.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/musFur1/multiz7way
+
+#############################################################################
+# hgPal downloads (DONE - Hiram - 2012-11-07)
+#   FASTA from 7-way for xenoRefGene
+
+    ssh hgwdev
+    screen -S musFur1HgPal
+    mkdir /hive/data/genomes/musFur1/bed/multiz7way/pal
+    cd /hive/data/genomes/musFur1/bed/multiz7way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # there are too many scaffolds to allow all the results to end up
+    #   in one directory.  The procedure here will distribute the results
+    #   into ten different directories.  This isn't an actual kluster
+    #   run because the mafGene command needs database access.
+
+    # count the scaffolds
+    wc -l ../../../chrom.sizes
+    #   25006 ../../../chrom.sizes
+    # divide by 10 indicates 2501 files per directory, this script
+    # constructs the file names divided into ten directories:
+export dirCount=0
+export count=0
+for C in `sort -k2n ../../../chrom.sizes | cut -f1`
+do
+    echo "${dirCount}/${C}"
+    count=`echo $count | awk '{print $1+1}'`
+    if [ $count -gt 2501 ]; then
+        dirCount=`echo $dirCount | awk '{print $1+1}'`
+        count=0;
+    fi
+done  > file.list
+
+    # constructing a job list
+    cat << '_EOF_' > template
+#LOOP
+./runOne.csh $(root1) exonNuc/$(path1).fa.gz exonAA/$(path1).fa.gz
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > runOne.csh
+#!/bin/csh -efx
+
+set chrom = $1
+set resultNuc = $2
+set resultAA = $3
+set mz=multiz7way
+set gp=xenoRefGene
+set db=musFur1
+mkdir -p $resultNuc:h
+mkdir -p $resultAA:h
+
+mafGene -chrom=$chrom -exons -noTrans $db $mz $gp order.list stdout | gzip -c > ${resultNuc}
+mafGene -chrom=$chrom -exons $db $mz $gp order.list stdout | gzip -c > ${resultAA}
+'_EOF_'
+    chmod +x runOne.csh
+
+    gensub2 file.list single template jobList
+
+    # run 30 of the jobs at a time on hgwdev:
+    cat << '_EOF_' > run30.sh
+#!/bin/sh
+
+export NL=-1
+cat jobList | while read L
+do
+    NL=`echo $NL | awk '{print $1+1}'`
+    if [ "${NL}" -lt 30 ]; then
+        echo "${L} &"
+        ${L} &
+    else
+        NL=0
+        wait
+        echo "${L} &"
+        ${L} &
+    fi
+done
+
+wait
+'_EOF_'
+
+    chmod +x run30.sh
+    ./run30.sh
+
+    export mz=multiz7way
+    export gp=xenoRefGene
+    export db=musFur1
+    time (find ./exonAA -type f | xargs zcat | gzip -c > $gp.$mz.exonAA.fa.gz)
+    time (find ./exonNuc -type f | xargs zcat | gzip -c > $gp.$mz.exonNuc.fa.gz)
+    #   about 15 minutes to run those two commands in series, 8 minutes each
+    #   in parallel
+
+    # check how many genes are used:
+    zcat xenoRefGene.multiz7way.exonAA.fa.gz | grep musFur1 \
+        | sed -e "s/_musFur1.*//" | sort | uniq -c | sort -rn | wc -l
+    #   70544
+    zcat xenoRefGene.multiz7way.exonNuc.fa.gz | grep musFur1 \
+        | sed -e "s/_musFur1.*//" | sort | uniq -c | sort -rn | wc -l
+    #   70545
+
+    # no longer need these files since they have all been packaged up
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz7way
+    export gp=xenoRefGene
+    export db=musFur1
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz
+    md5sum *.fa.gz >> $pd/md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+#############################################################################

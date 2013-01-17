@@ -1,0 +1,248 @@
+# ENCODE Integrated Regulation Track (wrangler Kate)
+
+track wgEncodeRegV2
+superTrack on show
+shortLabel ENCODE Reg V2
+longLabel Integrated Regulation from ENCODE V2 (Jan 2011 Freeze, Integrated Analysis)
+wgEncode 1
+group regulation
+priority 1
+canPack On
+
+    track wgEncodeRegTfbsClusteredV3
+    shortLabel Txn Factor ChIP V2
+    longLabel Transcription Factor ChIP-seq from ENCODE (June 2012)
+    type factorSource
+    superTrack wgEncodeRegV2 dense
+    sourceTable wgEncodeRegTfbsCellsV3
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    inputTableFieldDisplay cellType factor treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    # inputTracksSubgroupDisplay cellType factor treatment
+    visibility dense
+    useScore 1
+    priority 1.7
+
+    track tfbsFimoJaspar
+    shortLabel Jaspar Motifs
+    longLabel TF Motifs from Jaspar 2009 mapped by FIMO
+    type bed 6
+    group regulation
+    priority 1.8
+
+    track tfbsFimoTransfac
+    shortLabel Transfac Motifs
+    longLabel TF Motifs from Transfac mapped by FIMO
+    type bed 6
+    group regulation
+    priority 1.9
+
+    track wgEncodeRegDnaseClusteredV2
+    shortLabel Unif DNase Clusters
+    longLabel AWG Uniform Digital DNaseI Hypersensitivity Clusters from ENCODE
+    type bed 5 .
+    superTrack wgEncodeRegV2 dense
+    inputTrackTable wgEncodeRegDnaseClusteredInputsV2
+    #inputTracksSubgroupDisplay cellType treatment rep
+    inputTableFieldDisplay cellType treatment lab 
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    priority 1.6
+
+    track wgEncodeRegTxnV2
+    container multiWig
+    noInherit on
+    type bigWig 0 65500
+    superTrack wgEncodeRegV2 hide
+    shortLabel Transcription
+    longLabel Transcription Levels Assayed by RNA-seq on 10 Cell Lines (V2) from ENCODE
+    visibility full
+    maxHeightPixels 100:30:11
+    showSubtrackColorOnUi on
+    aggregate transparentOverlay
+    transformFunc LOG
+    viewLimits 0:8
+    priority 1.2
+    dragAndDrop subTracks
+    allButtonPair on
+
+        track wgEncodeRegTxnCshlLongRnaSeqGm12878CellPapRawSigPooled
+        shortLabel GM12878
+        longLabel Transcription of GM12878 cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 1
+        color 255,128,128
+
+        track wgEncodeRegTxnCshlLongRnaSeqH1hescCellPapRawSigPooled
+        shortLabel H1-hESC
+        longLabel Transcription of H1-hESC cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 2
+        color 255,212,128
+
+        track wgEncodeRegTxnCshlLongRnaSeqHelas3CellPapRawSigPooled
+        shortLabel HeLa-S3
+        longLabel Transcription of HeLa-S3 cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 3
+        color 227,255,128
+
+        track wgEncodeRegTxnCshlLongRnaSeqHepg2CellPapRawSigPooled
+        shortLabel HepG2
+        longLabel Transcription of HepG2 cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 4
+        color 168,255,64
+
+        track wgEncodeRegTxnCshlLongRnaSeqHmecCellPapRawSigPooled
+        shortLabel HMEC
+        longLabel Transcription of HMEC cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 5
+        color 64,255,128
+
+        track wgEncodeRegTxnCshlLongRnaSeqHsmmCellPapRawSigPooled
+        shortLabel HSMM
+        longLabel Transcription of HSMM cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 6
+        color 128,255,242
+
+        track wgEncodeRegTxnCshlLongRnaSeqHuvecCellPapRawSigPooled
+        shortLabel HUVEC
+        longLabel Transcription of HUVEC cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 7
+        color 128,199,255
+
+        track wgEncodeRegTxnCshlLongRnaSeqK562CellPapRawSigPooled
+        shortLabel K562
+        longLabel Transcription of K562 cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 8
+        color 149,128,255
+
+        track wgEncodeRegTxnCshlLongRnaSeqNhekCellPapRawSigPooled
+        shortLabel NHEK
+        longLabel Transcription of NHEK cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 9
+        color 227,128,255
+
+        track wgEncodeRegTxnCshlLongRnaSeqNhlfCellPapRawSigPooled
+        shortLabel NHLF
+        longLabel Transcription of NHLF cells from ENCODE
+        parent wgEncodeRegTxnV2
+        type bigWig 0 65535
+        priority 10
+        color 255,128,212
+
+    track wgEncodeRegShortRnaV2
+    container multiWig
+    noInherit on
+    type bigWig 0 65500
+    superTrack wgEncodeRegV2 hide
+    shortLabel Short RNA
+    longLabel Short RNA Assayed by RNA-seq on 10 Cell Lines from ENCODE
+    visibility full
+    maxHeightPixels 100:30:11
+    showSubtrackColorOnUi on
+    aggregate transparentOverlay
+    transformFunc LOG
+    viewLimits 0:8
+    priority 1.1
+    dragAndDrop subTracks
+    allButtonPair on
+
+        track wgEncodeRegTxnCshlShortRnaSeqGm12878CellTotalRawSigPooled
+        shortLabel GM12878
+        longLabel Short RNA in GM12878 cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 1
+        color 255,128,128
+
+        track wgEncodeRegTxnCshlShortRnaSeqH1hescCellTotalRawSigPooled
+        shortLabel H1-hESC
+        longLabel Short RNA in H1-hESC cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 2
+        color 255,212,128
+
+        track wgEncodeRegTxnCshlShortRnaSeqHelas3CellTotalRawSigPooled
+        shortLabel HeLa-S3
+        longLabel Short RNA in HeLa-S3 cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 3
+        color 227,255,128
+
+        track wgEncodeRegTxnCshlShortRnaSeqHepg2CellTotalRawSigPooled
+        shortLabel HepG2
+        longLabel Short RNA in HepG2 cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 4
+        color 168,255,64
+
+        track wgEncodeRegTxnCshlShortRnaSeqHmecCellTotalRawSigPooled
+        shortLabel HMEC
+        longLabel Short RNA in HMEC cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 5
+        color 64,255,128
+
+        track wgEncodeRegTxnCshlShortRnaSeqHsmmCellTotalRawSigPooled
+        shortLabel HSMM
+        longLabel Short RNA in HSMM cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 6
+        color 128,255,242
+
+        track wgEncodeRegTxnCshlShortRnaSeqHuvecCellTotalRawSigPooled
+        shortLabel HUVEC
+        longLabel Short RNA in HUVEC cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 7
+        color 128,199,255
+
+        track wgEncodeRegTxnCshlShortRnaSeqK562CellTotalRawSigPooled
+        shortLabel K562
+        longLabel Short RNA in K562 cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 8
+        color 149,128,255
+
+        track wgEncodeRegTxnCshlShortRnaSeqNhekCellTotalRawSigPooled
+        shortLabel NHEK
+        longLabel Short RNA in NHEK cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 9
+        color 227,128,255
+
+        track wgEncodeRegTxnCshlShortRnaSeqNhlfCellTotalRawSigPooled
+        shortLabel NHLF
+        longLabel Short RNA in NHLF cells from ENCODE
+        parent wgEncodeRegShortRnaV2
+        type bigWig 0 65535
+        priority 10
+        color 255,128,212
+

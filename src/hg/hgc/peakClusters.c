@@ -253,7 +253,7 @@ dyStringPrintf(query, "select tableName");
 struct slName *field;
 for (field = fieldList; field != NULL; field = field->next)
     dyStringPrintf(query, ",%s", field->name);
-dyStringPrintf(query, " from %s", inputTrackTable);
+dyStringPrintf(query, " from %s order by cellType, treatment, lab", inputTrackTable);
 
 int displayNo = 0;
 int fieldCount = slCount(fieldList);
