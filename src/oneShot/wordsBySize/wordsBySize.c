@@ -249,7 +249,7 @@ return strlen(a->string) - strlen(b->string);
 
 void wordsBySize(char *fileName)
 /* Open file, read through it keeping track of each unique word,
- * and then print out words with longest word first. */
+ * and then print out words with longest word last. */
 {
 /* Stream through input file building up a hash and a list of all unique words. */
 FILE *f = mustOpen(fileName, "r");
