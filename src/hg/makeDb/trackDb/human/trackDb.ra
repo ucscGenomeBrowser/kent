@@ -4068,3 +4068,10 @@ searchType bed
 searchPriority 50
 termRegex [en]ss?v[0-9]+
 release alpha
+
+searchTable coriellDelDup
+searchMethod exact
+searchType bed
+searchPriority 50
+termRegex GM[0-9]+
+
