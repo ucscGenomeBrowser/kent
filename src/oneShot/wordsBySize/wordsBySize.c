@@ -255,8 +255,7 @@ void wordsBySize(char *fileName)
 FILE *f = mustOpen(fileName, "r");
 struct hash *hash = hashNew();
 struct word *wordList = NULL;
-//char wordBuffer[128];
-char wordBuffer[12];
+char wordBuffer[128];
 while (nextWord(f, wordBuffer, sizeof(wordBuffer)))
     {
     struct word *word = hashFind(hash, wordBuffer);
