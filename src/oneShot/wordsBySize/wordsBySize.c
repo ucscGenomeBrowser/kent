@@ -9,7 +9,7 @@
 /** Some utility code.  In a larger program this would be part of a library module **/
 
 void die()
-/* Abort program. */
+/* Abort program with exit code that indicates it failed. */
 {
 exit(-1);
 }
@@ -31,7 +31,7 @@ int nextWord(FILE *f, char *buf, int bufSize)
 /* Read next space-delimited word from file and put it into a fixed size buffer.
  * Check and complain about words that would be too big for buffer. 
  * Returns size of word, or 0 at end of file. Punctuation marks are
- * returned as single character strings*/
+ * returned as single character strings. */
 {
 int maxStringSize = bufSize-1;   /* Leave room for terminating zero. */
 
@@ -74,8 +74,8 @@ for (;;)
         }
     buf[size++] = c;
 
-    /* Get next character from file.  If it's not alphanumeric then push it back for
-     * next call to this routine and break. */
+    /* Get next character from file.  If it's not alphanumeric (or EOF or error) then push it 
+     * back for next call to this routine and break. */
     c = getc(f);
     if (!isalnum(c))
        {
@@ -150,7 +150,7 @@ return result;
 }
 
 struct hash *hashNew()
-/* Create a new hash function. */
+/* Create a new hash table. */
 {
 struct hash *hash = needMem(sizeof(struct hash));
 hash->size = 1024-1;	/* Nearly a prime number, which helps a bit. */
@@ -255,7 +255,8 @@ void wordsBySize(char *fileName)
 FILE *f = mustOpen(fileName, "r");
 struct hash *hash = hashNew();
 struct word *wordList = NULL;
-char wordBuffer[128];
+//char wordBuffer[128];
+char wordBuffer[12];
 while (nextWord(f, wordBuffer, sizeof(wordBuffer)))
     {
     struct word *word = hashFind(hash, wordBuffer);
@@ -270,7 +271,7 @@ while (nextWord(f, wordBuffer, sizeof(wordBuffer)))
     }
 fclose(f);
 
-/* Sort file and output results to standard output. */
+/* Sort list and output results to standard output. */
 wordList = sortWordList(wordList, wordCompareSize);
 struct word *word;
 for (word = wordList; word != NULL; word = word->next)
