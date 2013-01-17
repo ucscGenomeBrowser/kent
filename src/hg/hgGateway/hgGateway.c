@@ -301,8 +301,9 @@ if (thisNodeStr)
         // get location of redirect node
         if (thisNode != node)
             {
+	    char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
             char query[1056];
-            safef(query, sizeof query, "select domain from gbNode where node = %d", node);
+            safef(query, sizeof query, "select domain from gbNode%s where node = %d", geoSuffix, node);
             char *newDomain = sqlQuickString(centralConn, query);
             fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
             char *oldDomain = cgiServerName();

@@ -210,6 +210,48 @@ searchPriority 2.4
 xrefTable wgEncodeGencodeAttrsV14
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
+# searchs for pseudogene
+searchName wgEncodeGencodePseudoGeneV14
+searchTable wgEncodeGencodePseudoGeneV14
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9.]+
+searchPriority 2.2
+
+searchName wgEncodeGencodePseudoGeneGeneSymV14
+searchTable wgEncodeGencodePseudoGeneV14
+searchMethod exact
+searchType genePred
+searchPriority 2.4
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodePseudoGeneGeneV14
+searchTable wgEncodeGencodePseudoGeneV14
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV14
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodePseudoGeneHavanaTranscriptV14
+searchTable wgEncodeGencodePseudoGeneV14
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMT[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV14
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodePseudoGeneHavanaGeneV14
+searchTable wgEncodeGencodePseudoGeneV14
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMG[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV14
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
 # searchs for 2-way consensus
 searchName wgEncodeGencode2wayConsPseudoV14
 searchTable wgEncodeGencode2wayConsPseudoV14
