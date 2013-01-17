@@ -11,6 +11,7 @@
 #include "liftOver.h"
 #include "wikiLink.h"
 #include "web.h"
+#include "geoMirror.h"
 #include "hgTracks.h"
 
 /* list of links to display in a menu */
