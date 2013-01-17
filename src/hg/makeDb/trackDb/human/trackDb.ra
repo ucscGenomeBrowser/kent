@@ -1804,7 +1804,6 @@ type wig 0 4396.07
 wigColorBy affyTransfrags
 
 track affyTxnPhase2b
-release alpha
 shortLabel Affy Txn Phase2
 longLabel Affymetrix Transcriptome Project Phase 2
 compositeTrack on
@@ -1824,7 +1823,6 @@ sortOrder cell=+ loc=+ view=+
 html affyTxnPhase2 
 
     track affyTxnPhase2Tome
-    release alpha
     shortLabel Transcriptome
     view tome
     visibility dense
@@ -1841,7 +1839,6 @@ html affyTxnPhase2
     altColor 255,128,0
 
 	track A375CytosolicPolyAPlusTxn
-        release alpha
 	shortLabel A375 Txn
 	longLabel A375 Cytosolic polyA+, Affy Transcriptome
 	type wig 0 5251.55
@@ -1851,7 +1848,6 @@ html affyTxnPhase2
         subGroups view=tome cell=A375 loc=CYTO
 
 	track FHs738LuCytosolicPolyAPlusTxn
-        release alpha
 	shortLabel FHs738Lu Txn
 	longLabel FHs738Lu Cytosolic polyA+, Affy Transcriptome
 	type wig 0 5451.35
@@ -1861,7 +1857,6 @@ html affyTxnPhase2
         subGroups view=tome cell=FHS loc=CYTO
 
 	track HepG2CytosolicPolyAPlusTxn
-        release alpha
 	shortLabel HepG2+ Cyto Txn
 	longLabel HepG2 Cytosolic polyA+, Affy Transcriptome
 	type wig 0 6183.74
@@ -1871,7 +1866,6 @@ html affyTxnPhase2
         subGroups view=tome cell=HEPG2P loc=CYTO
 
 	track HepG2NuclearPolyAPlusTxn
-        release alpha
 	shortLabel HepG2+ Nuc Txn
 	longLabel HepG2 Nuclear polyA+, Affy Transcriptome
 	type wig 0 4206.84
@@ -1881,7 +1875,6 @@ html affyTxnPhase2
         subGroups view=tome cell=HEPG2P loc=NUC
 
 	track HepG2CytosolicPolyAMinusTxn
-        release alpha
 	shortLabel HepG2- Cyto Txn
 	longLabel HepG2 Cytosolic polyA-, Affy Transcriptome
 	type wig 0 3571.88
@@ -1891,7 +1884,6 @@ html affyTxnPhase2
         subGroups view=tome cell=HEPG2m loc=CYTO
 
 	track HepG2NuclearPolyAMinusTxn
-        release alpha
 	shortLabel HepG2- Nuc Txn
 	longLabel HepG2 Nuclear polyA-, Affy Transcriptome
 	type wig 0 2656.57
@@ -1901,7 +1893,6 @@ html affyTxnPhase2
 	subGroups view=tome cell=HEPG2m loc=NUC
 
 	track JurkatCytosolicPolyAPlusTxn
-        release alpha
 	shortLabel Jurkat Txn
 	longLabel Jurkat Cytosolic polyA+, Affy Transcriptome
 	type wig 0 5203.76
@@ -1911,7 +1902,6 @@ html affyTxnPhase2
 	subGroups view=tome cell=JURKAT loc=CYTO
 
 	track NCCITCytosolicPolyAPlusTxn
-        release alpha
 	shortLabel NCCIT Txn
 	longLabel NCCIT Cytosolic polyA+, Affy Transcriptome
 	type wig 0 6320.77
@@ -1921,7 +1911,6 @@ html affyTxnPhase2
 	subGroups view=tome cell=NCCIT loc=CYTO
 
 	track PC3CytosolicPolyAPlusTxn
-        release alpha
 	shortLabel PC3 Txn
 	longLabel PC3 Cytosolic polyA+, Affy Transcriptome
 	type wig 0 2993.96
@@ -1931,7 +1920,6 @@ html affyTxnPhase2
 	subGroups view=tome cell=PC3 loc=CYTO
 
 	track SKNASCytosolicPolyAPlusTxn
-        release alpha
 	shortLabel SK-N-AS Txn
 	longLabel SK-N-AS Cytosolic polyA+, Affy Transcriptome
 	type wig 0 4395.02
@@ -1941,7 +1929,6 @@ html affyTxnPhase2
 	subGroups view=tome cell=SKNAS loc=CYTO
 
 	track U87CytosolicPolyAPlusTxn
-        release alpha
 	shortLabel U87 Txn
 	longLabel U87 Cytosolic polyA+, Affy Transcriptome
 	type wig 0 5939.33
@@ -1951,7 +1938,6 @@ html affyTxnPhase2
 	subGroups view=tome cell=U87 loc=CYTO
 
     track affyTxnPhase2Frag
-    release alpha
     shortLabel Transfrags
     view frag
     visibility pack
@@ -1961,77 +1947,66 @@ html affyTxnPhase2
     altColor 160,160,188
 
 	track A375CytosolicPolyAPlusTnFg
-        release alpha
 	shortLabel A375 TnFg
 	longLabel A375 Cytosolic polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
         subGroups view=frag cell=A375 loc=CYTO
 
 	track FHs738LuCytosolicPolyAPlusTnFg
-        release alpha
 	shortLabel FHs738Lu TnFg
 	longLabel FHs738Lu Cytosolic polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
         subGroups view=frag cell=FHS loc=CYTO
 
 	track HepG2CytosolicPolyAPlusTnFg
-        release alpha
 	shortLabel HepG2+ Cyto TnFg
 	longLabel HepG2 Cytosolic polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
         subGroups view=frag cell=HEPG2P loc=CYTO
 
 	track HepG2NuclearPolyAPlusTnFg
-        release alpha
 	shortLabel HepG2+ Nuc TnFg
 	longLabel HepG2 Nuclear polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
         subGroups view=frag cell=HEPG2P loc=NUC
 
 	track HepG2CytosolicPolyAMinusTnFg
-        release alpha
 	shortLabel HepG2- Cyto TnFg
 	longLabel HepG2 Cytosolic polyA-, Affy Transfrags
 	parent affyTxnPhase2Frag
         subGroups view=frag cell=HEPG2m loc=CYTO
 
 	track HepG2NuclearPolyAMinusTnFg
-        release alpha
 	shortLabel HepG2- Nuc TnFg
 	longLabel HepG2 Nuclear polyA-, Affy Transfrags
 	parent affyTxnPhase2Frag
 	subGroups view=frag cell=HEPG2m loc=NUC
 
 	track JurkatCytosolicPolyAPlusTnFg
-        release alpha
 	shortLabel Jurkat TnFg
 	longLabel Jurkat Cytosolic polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
 	subGroups view=frag cell=JURKAT loc=CYTO
 
 	track NCCITCytosolicPolyAPlusTnFg
-        release alpha
 	shortLabel NCCIT TnFg
 	longLabel NCCIT Cytosolic polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
 	subGroups view=frag cell=NCCIT loc=CYTO
 
 	track PC3CytosolicPolyAPlusTnFg
-        release alpha
 	shortLabel PC3 TnFg
 	longLabel PC3 Cytosolic polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
 	subGroups view=frag cell=PC3 loc=CYTO
 
 	track SKNASCytosolicPolyAPlusTnFg
-        release alpha
 	shortLabel SK-N-AS TnFg
 	longLabel SK-N-AS Cytosolic polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
 	subGroups view=frag cell=SKNAS loc=CYTO
 
 	track U87CytosolicPolyAPlusTnFg
-        release alpha
 	shortLabel U87 TnFg
 	longLabel U87 Cytosolic polyA+, Affy Transfrags
 	parent affyTxnPhase2Frag
