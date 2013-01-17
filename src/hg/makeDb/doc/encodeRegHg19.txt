@@ -264,7 +264,8 @@
     # Create the DNAse peak clusters track using AWG uniformly processed peaks (Jan 2011 freeze, Sep 2012 analysis pubs).  
     # See doc/encodeDccHg19/awgUniform.txt
     # There are 125 cell type+treatments  represented -- UW, Duke, and Uw+Duke for 14 cell types
-
+    # Previous track had 74
+ 
     cd /hive/data/genomes/hg19/bed/wgEncodeReg
     mkdir -p dnaseAwg
     cd dnaseAwg
@@ -307,6 +308,38 @@
     mdbQuery out=tab "select obj,cell,treatment,lab,dccAccession from hg19 where obj like 'wgEncodeAwgDnase%UniPk' and view='Peaks'" > wgEncodeRegDnaseClusteredInputsV2.tab
 
     hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputsV2 ~/kent/src/hg/lib/clusterInputAwgDnase.sql wgEncodeRegDnaseClusteredInputsV2.tab
+
+    # Set up downloads
+    cd $dir
+    mkdir downloads
+    gzip -c wgEncodeRegDnaseClusteredV2.bed > downloads/wgEncodeRegDnaseClusteredV2.bed.gz
+    gzip -c wgEncodeRegDnaseClusteredInputsV2.tab > downloads/wgEncodeRegDnaseClusteredInputsV2.tab.gz
+
+    # use (existing) ENCODE DCC downloads dir
+    set dload = /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeRegDnaseClustered
+    cd $dload
+
+    # call existing stuff release1 (use ENCODE-style downloads scheme)
+    mkdir release1
+    ln wgEncodeRegDnaseClustered.bed.gz wgEncodeRegDnaseClusteredInputs.tab.gz release1
+    cp README.txt md5sum.txt files.txt release1 
+
+    # new release dir
+    mkdir release2
+    ln -s release2 beta
+    ln -s release2 releaseLatest
+    cd $dir/downloads
+    ln wgEncodeRegDnaseClusteredV2.bed.gz wgEncodeRegDnaseClusteredInputsV2.tab.gz $dload
+    cd $dload
+    ln wgEncodeRegDnaseClusteredV2.bed.gz wgEncodeRegDnaseClusteredInputsV2.tab.gz releaseLatest
+    # include older files as well
+    ln wgEncodeRegDnaseClustered.bed.gz wgEncodeRegDnaseClusteredInputs.tab.gz releaseLatest
+    cp README.txt releaseLatest
+    cd releaseLatest
+    md5sum *.gz > md5sum.txt
+    # vim README.txt
+    cp README.txt md5sum.txt ..
+
 
 
 #########################################################################
@@ -531,7 +564,6 @@ chr1    10180   10330   .       0       .       26.000000       -1      -1      
 # 7 datasets
     # Tamoxifen -> Tam10030 (Duke) or 40HAM20nM72hr (UW), Estradiol -> Est10nm30m, Ifna4h, Andro, Hypox
     # TODO: Edit to rename
-
 
     # generate a normalization factor to
     # convert signalValue to score (0-1000).  Also note score field; narrowPeak is 7 (default)
