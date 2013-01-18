@@ -213,7 +213,7 @@ maxChromName customTracks
 maxHeightPixels *
 maxItems *
 maxLimit *
-maxScore broadPeak
+maxScore broadPeak narrowPeak
 maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR genepred
 maxWindowToQuery bigWig bed bedlogR
 metadata *
@@ -292,7 +292,7 @@ scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
 scoreFilterByRange bed peptideMapping bigBed
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
 scoreFilterMax bed bedlogR peptideMapping bigBed
-scoreMax bed bedlogR interaction peptideMapping bigBed
+scoreMax bed bedlogR interaction peptideMapping bigBed narrowPeak
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping
 searchMethod bed
 searchType bed
