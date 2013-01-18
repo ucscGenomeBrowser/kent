@@ -1,0 +1,43 @@
+echo '******'
+echo A549
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='A549' and view='Peaks'"
+echo '******'
+echo GM12878
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='GM12878' and view='Peaks'"
+echo '******'
+echo H1-hESC
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='H1-hESC' and view='Peaks'"
+echo '******'
+echo Hela
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='HeLa-S3' and view='Peaks'"
+echo '******'
+echo Hepg2
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='HepG2' and view='Peaks'"
+echo '******'
+echo HMEC
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='HMEC' and view='Peaks'"
+echo '******'
+echo HSMM
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='HSMM' and view='Peaks'"
+echo '******'
+echo HSMMtube
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='HSMMtube' and view='Peaks'"
+echo '******'
+echo HUVEC
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='HUVEC' and view='Peaks'"
+echo '******'
+echo K562
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='K562' and view='Peaks'"
+echo '******'
+echo LNCaP
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='LNCaP' and view='Peaks'"
+echo '******'
+echo NHEK
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='NHEK' and view='Peaks'"
+echo '******'
+echo Th1
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='Th1' and view='Peaks'"
+echo '******'
+echo Monocytes
+mdbQuery "select lab, dataVersion, metaObject, dccAccession from hg19 where dataType='DnaseSeq' and  cell='Monocytes-CD14+_RO01746' and view='Peaks'"
+echo '******'

@@ -3989,6 +3989,7 @@ tablesIgnored hg19
     altSeqPatchesP10
     bacEndPairsBad
     bamAllNumtSSorted
+    coriellDelDup
     lincRNAsCTAdipose
     lincRNAsCTAdrenal
     lincRNAsCTBrain

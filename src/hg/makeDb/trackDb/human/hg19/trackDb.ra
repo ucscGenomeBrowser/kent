@@ -2655,14 +2655,6 @@ type bed 3 .
     type bed 6 +
     priority 5
 
-    track affyCytoScanAndy
-    parent genotypeArrays
-    shortLabel Affy CytoScan Andy
-    longLabel Affymetrix Cytoscan CNV and SNP -- Andy's
-    itemRgb on
-    type bed 9 .
-    priority 5.9
-
     track affyCytoScan
     parent genotypeArrays
     shortLabel Affy CytoScan
