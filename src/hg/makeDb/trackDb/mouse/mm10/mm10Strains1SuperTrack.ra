@@ -11,7 +11,7 @@ html mm10Strains1
     track mm10Haplotypes
     parent mm10Strains1
     color 190,32,32
-    shortLabel Alt. strains
+    shortLabel Alternate strains
     longLabel Alternate mouse strains, mapped to their corresponding reference genome location
     visibility pack
     type bedDetail 8
