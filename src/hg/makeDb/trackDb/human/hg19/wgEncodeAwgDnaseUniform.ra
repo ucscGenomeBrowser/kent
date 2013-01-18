@@ -76,7 +76,6 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform off
         shortLabel GM12891 DNase
         longLabel GM12891 DNaseI HS Uniform Peaks from ENCODE/Analysis
-        color 153,38,0
         subGroups tier=a30 cellType=GM12891
 
         track wgEncodeAwgDnaseDukeGm12892UniPk
@@ -329,6 +328,7 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform on
         shortLabel CD20+ DNase
         longLabel CD20+ B cell DNaseI HS Uniform Peaks from ENCODE/Analysis
+        color 80,80,80
         subGroups tier=a25 cellType=a25CD20
 
         track wgEncodeAwgDnaseUwCd34mobilizedUniPk
@@ -593,6 +593,7 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform on
         shortLabel Mcyte-CD14+ DNase
         longLabel Monocytes-CD14+ DNaseI HS Uniform Peaks from ENCODE/Analysis
+        color 80,80,80
         subGroups tier=a25 cellType=a25Monocytes-CD14
 
         track wgEncodeAwgDnaseUwNb4UniPk
@@ -701,6 +702,7 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform on
         shortLabel A549 DNase
         longLabel A549 DNaseI HS Uniform Peaks from ENCODE/Analysis
+        color 80,80,80
         subGroups tier=a25 cellType=a25A549
 
         track wgEncodeAwgDnaseUwdukeGm12878UniPk
@@ -773,6 +775,7 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform on
         shortLabel MCF-7 DNase
         longLabel MCF-7 DNaseI HS Uniform Peaks from ENCODE/Analysis
+        color 80,80,80
         subGroups tier=a25 cellType=a25MCF-7
 
         track wgEncodeAwgDnaseUwdukeNhekUniPk
