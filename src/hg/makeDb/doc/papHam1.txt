@@ -351,4 +351,19 @@ close (FH);
     scp -p papHam1.sql hgwbeta:/tmp
     ssh hgwbeta "hgsql qapushq < /tmp/papHam1.sql"
 
+#############################################################################
+# LIFTOVER TO papAnu2 (DONE - 2013-01-16 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/papHam1
+    ln -s jkStuff/papHam1.11.ooc 11.ooc
+    screen
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         papHam1 papAnu2 > doLiftOverToPapHam1.log 2>&1 &
+    # real    1062m56.689s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/papHam1/liftOver/
+    md5sum papAHam1ToPapAnu2.over.chain.gz >> md5sum.txt
+    popd
+
 ############################################################################

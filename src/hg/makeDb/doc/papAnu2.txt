@@ -630,5 +630,19 @@ papAnu2.genbank.est.native.load = yes
     ssh hgwbeta "hgsql qapushq < /tmp/papAnu2.pushQ.sql"
     #   in that pushQ entry walk through each track entry and see if the table
     #   sizes will set properly
+#############################################################################
+# LIFTOVER TO papHam1 (DONE - 2013-01-16 - Chin)
+    sh hgwdev
+    cd /hive/data/genomes/papAnu2
+    ln -s jkStuff/papAnu2.11.ooc 11.ooc
+    screen
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         papAnu2 papHam1 > doLiftOverToPapHam1.log 2>&1 &
+    # real  2563m6.343s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/papAnu2/liftOver/
+    md5sum papAnu2ToPapHam1.over.chain.gz >> md5sum.txt
+    popd
 
 #########################################################################
