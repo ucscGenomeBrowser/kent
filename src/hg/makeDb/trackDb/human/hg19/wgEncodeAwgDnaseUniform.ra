@@ -41,7 +41,8 @@ subGroup2 cellType Cell_Line \
 allButtonPair on
 dragAndDrop subTracks
 sortOrder tier=+ cellType=+
-fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession fileSize=Size 
+#fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession fileSize=Size 
+fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size 
 controlledVocabulary encode/cv.ra cellType=cell
 type narrowPeak
 # need deprecated canPack setting here (until CGI 278 release)
