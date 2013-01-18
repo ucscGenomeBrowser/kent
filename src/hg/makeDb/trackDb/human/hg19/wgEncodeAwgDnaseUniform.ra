@@ -11,7 +11,33 @@ group regulation
 shortLabel Uniform DNaseI HS
 longLabel DNaseI Hypersensitivity Uniform Peaks from ENCODE/Analysis
 subGroup1 tier Tier a10=1 a20=2 a25=2* a30=3
-subGroup2 cellType Cell_Line a10GM12878=GM12878 a10H1-hESC=H1-hESC a10K562=K562 a20HeLa-S3=HeLa-S3 a20HepG2=HepG2 a20HUVEC=HUVEC a25MCF-7=MCF-7 a25Monocytes-CD14=Monocytes_CD14+ a25A549=A549 a25CD20=B_cells_CD20+ HeLa-S3-IFNa=HeLa-S3(<i>IFNa</i>) a8988T=8988T AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AoAF=AoAF AoSMC=AoSMC BE2_C=BE2_C BJ=BJ Caco-2=Caco-2 CD34_Mobilized=CD34+_Mobilized Chorion=Chorion CLL=CLL CMK=CMK Fibrobl=Fibrobl FibroP=FibroP Gliobla=Gliobla GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7-hESC=H7-hESC H9ES=H9ES HAc=HAc HAEpiC=HAEpiC HA-h=HA-h HA-sp=HA-sp HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HConF=HConF HCPEpiC=HCPEpiC HCT-116=HCT-116 HEEpiC=HEEpiC Hepatocytes=Hepatocytes HFF=HFF HFF-Myc=HFF-Myc HGF=HGF HIPEpiC=HIPEpiC HL-60=HL-60 HMEC=HMEC HMF=HMF HMVEC-dAd=HMVEC-dAd HMVEC-dBl-Ad=HMVEC-dBl-Ad HMVEC-dBl-Neo=HMVEC-dBl-Neo HMVEC-dLy-Ad=HMVEC-dLy-Ad HMVEC-dLy-Neo=HMVEC-dLy-Neo HMVEC-dNeo=HMVEC-dNeo HMVEC-LBl=HMVEC-LBl HMVEC-LLy=HMVEC-LLy HNPCEpiC=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPDE6-E6E7=HPDE6-E6E7 HPdLF=HPdLF HPF=HPF HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC HRPEpiC=HRPEpiC HSMM=HSMM HSMM_emb=HSMM_emb HSMMtube=HSMMtube HTR8svn=HTR8svn Huh-7=Huh-7 Huh-75=Huh-7.5 HVMF=HVMF IPS=iPS Ishikawa=Ishikawa Ishikawa-Estr=Ishikawa(<i>Estr</i>) Ishikawa-Tamox=Ishikawa(<i>Tamox</i>) Jurkat=Jurkat LNCaP=LNCaP LNCaP-Andr=LNCaP(<i>Andr</i>) MCF-7-Hypox=MCF-7(<i>Hypox</i>) Medullo=Medullo Melano=Melano Myometr=Myometr NB4=NB4 NH-A=NH-A NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2-D1=NT2-D1 Osteobl=Osteobl PANC-1=PANC-1 PanIsletD=PanIsletD PanIslets=PanIslets PHTE=pHTE PrEC=PrEC ProgFib=ProgFib RPTEC=RPTEC RWPE1=RWPE1 SAEC=SAEC SKMC=SKMC SK-N-MC=SK-N-MC SK-N-SH_RA=SK-N-SH_RA Stellate=Stellate T-47D=T-47D Th0=Th0 Th1=Th1 Th2=Th2 Urothelia=Urothelia Urothelia-UT189=Urothelia(<i>UT189</i>) WERI-Rb-1=WERI-Rb-1 WI-38=WI-38 WI-38-Tamox=WI-38(<i>Tamox</i>)
+subGroup2 cellType Cell_Line \
+        a10GM12878=GM12878 a10H1-hESC=H1-hESC a10K562=K562 a20HeLa-S3=HeLa-S3 a20HepG2=HepG2 \
+        a20HUVEC=HUVEC a25MCF-7=MCF-7 a25Monocytes-CD14=Monocytes_CD14+ a25A549=A549 \
+        a25CD20=B_cells_CD20+ HeLa-S3-IFNa=HeLa-S3(<i>IFNa</i>) a8988T=8988T AG04449=AG04449 \
+        AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AoAF=AoAF AoSMC=AoSMC \
+        BE2_C=BE2_C BJ=BJ Caco-2=Caco-2 CD34_Mobilized=CD34+_Mobilized Chorion=Chorion CLL=CLL \
+        CMK=CMK Fibrobl=Fibrobl FibroP=FibroP Gliobla=Gliobla GM06990=GM06990 GM12864=GM12864 \
+        GM12865=GM12865 GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 \
+        GM19239=GM19239 GM19240=GM19240 H7-hESC=H7-hESC H9ES=H9ES HAc=HAc HAEpiC=HAEpiC HA-h=HA-h \
+        HA-sp=HA-sp HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HConF=HConF HCPEpiC=HCPEpiC \ 
+        HCT-116=HCT-116 HEEpiC=HEEpiC Hepatocytes=Hepatocytes HFF=HFF HFF-Myc=HFF-Myc HGF=HGF \
+        HIPEpiC=HIPEpiC HL-60=HL-60 HMEC=HMEC HMF=HMF HMVEC-dAd=HMVEC-dAd \
+        HMVEC-dBl-Ad=HMVEC-dBl-Ad HMVEC-dBl-Neo=HMVEC-dBl-Neo \
+        HMVEC-dLy-Ad=HMVEC-dLy-Ad HMVEC-dLy-Neo=HMVEC-dLy-Neo HMVEC-dNeo=HMVEC-dNeo \
+        HMVEC-LBl=HMVEC-LBl HMVEC-LLy=HMVEC-LLy HNPCEpiC=HNPCEpiC HPAEC=HPAEC HPAF=HPAF \
+        HPDE6-E6E7=HPDE6-E6E7 HPdLF=HPdLF HPF=HPF HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC \
+        HRPEpiC=HRPEpiC HSMM=HSMM HSMM_emb=HSMM_emb HSMMtube=HSMMtube HTR8svn=HTR8svn \
+        Huh-7=Huh-7 Huh-75=Huh-7.5 HVMF=HVMF IPS=iPS Ishikawa=Ishikawa \
+        Ishikawa-Estr=Ishikawa(<i>Estr</i>) Ishikawa-Tamox=Ishikawa(<i>Tamox</i>) \
+        Jurkat=Jurkat LNCaP=LNCaP LNCaP-Andr=LNCaP(<i>Andr</i>) MCF-7-Hypox=MCF-7(<i>Hypox</i>) \
+        Medullo=Medullo Melano=Melano Myometr=Myometr NB4=NB4 NH-A=NH-A NHDF-Ad=NHDF-Ad \
+        NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2-D1=NT2-D1 Osteobl=Osteobl PANC-1=PANC-1 \
+        PanIsletD=PanIsletD PanIslets=PanIslets PHTE=pHTE PrEC=PrEC ProgFib=ProgFib RPTEC=RPTEC \
+        RWPE1=RWPE1 SAEC=SAEC SKMC=SKMC SK-N-MC=SK-N-MC SK-N-SH_RA=SK-N-SH_RA Stellate=Stellate \
+        T-47D=T-47D Th0=Th0 Th1=Th1 Th2=Th2 Urothelia=Urothelia \
+        Urothelia-UT189=Urothelia(<i>UT189</i>) WERI-Rb-1=WERI-Rb-1 WI-38=WI-38 \
+        WI-38-Tamox=WI-38(<i>Tamox</i>)
 allButtonPair on
 dragAndDrop subTracks
 sortOrder tier=+ cellType=+
