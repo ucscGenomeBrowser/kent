@@ -3578,6 +3578,10 @@ identifier geneReviewsRefGeneId
     hg18,hg19.kgXref.geneSymbol dupeOk
     hg18,hg19.geneReviewsRefGene.geneSymbol minCheck=0.85
 
+identifier mouseStrains
+"chrom names in the mouse alternate strains"
+    mm10.chromInfo.chrom
+    mm10.altSeqLiftOverPslStrains1.tName
 
 # Dependencies not already captured in identifiers
 
@@ -4070,6 +4074,7 @@ tablesIgnored mm9
     rest
 
 tablesIgnored mm10
+    mm10Haplotypes
     altSeqLiftOverPslP1
     altSeqPatchesP1
 
