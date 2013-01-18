@@ -24,8 +24,9 @@ visibility dense
 signalFilter 0.0:20000.0
 signalFilterLimits 0.0:20000.0
 spectrum on
-minGrayLevel 3
-minScore 0
+scoreMin 50
+scoreMax 150
+#minGrayLevel 4
 priority 2.6
 dataVersion ENCODE Jan 2011 Freeze (Sept 2012 Analysis Pubs)
 wgEncode 1
