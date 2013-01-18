@@ -21,7 +21,7 @@
 #include "googleAnalytics.h"
 #include "jsHelper.h"
 #endif /* GBROWSE */
-#include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
+#include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browser
 /* phoneHome business */
 #include <utime.h>
 #include <htmlPage.h>
@@ -223,17 +223,6 @@ if (withLogo)
 char *menuStr = menuBar(theCart);
 if(menuStr)
     {
-    // NOTE: this jsInclude may be gratuitous (menuBar does it already).
-    jsIncludeFile("jquery.js", NULL);
-    if (geoMirrorEnabled())
-        {
-        // notify client to provide Geo mirror functionality (e.g. in nav bar)
-        printf("<script type='text/javascript'>var GB_geoMirror = %d;</script>\n", 
-                sqlUnsigned(geoMirrorNode()));
-        /* TODO: consider dumping hgcentral.gbNode table here as well so UI
-                can share w/ browser GEO mirror redirect code
-                */
-        }
     puts(menuStr);
     }
 
@@ -1381,6 +1370,16 @@ freez(&menuStr);
 menuStr = dyStringCannibalize(&dy);
 if(!loginSystemEnabled())
     stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
+
+if(scriptName)
+    {  // Provide optional official mirror servers menu items
+    char *geoMenu = geoMirrorMenu();
+    char *pattern = "<!-- OPTIONAL_MIRROR_MENU -->";
+    char *newMenuStr = replaceChars(menuStr, pattern, geoMenu);
+    freez(&menuStr);
+    menuStr = newMenuStr;
+    }
+
 
 if(scriptName)
     {

@@ -3131,6 +3131,14 @@ termRegex rs[0-9]+
 searchPriority 12.9888
 padding 250
 
+searchTable affyCytoScan
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [S|s|C|c]-[0-9][A-Za-z]+
+searchPriority 50
+padding 250
+
 track qPcrPrimers override
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:

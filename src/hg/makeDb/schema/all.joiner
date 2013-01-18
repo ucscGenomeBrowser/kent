@@ -3981,6 +3981,7 @@ tablesIgnored hg18
     numtSMitochondrionChrPlacement
 
 tablesIgnored hg19
+    affyCytoScan
     affyExonProbe%
     allHg19RS_BW
     altSeqHaplotypes
@@ -3992,6 +3993,7 @@ tablesIgnored hg19
     altSeqPatchesP10
     bacEndPairsBad
     bamAllNumtSSorted
+    coriellDelDup
     lincRNAsCTAdipose
     lincRNAsCTAdrenal
     lincRNAsCTBrain

@@ -9034,6 +9034,8 @@ TMPDIR=/scratch/tmp
 
     # rename the table to qPcrPrimers  (2013-01-14)
     hgsql -ne "RENAME TABLE exonJunctionPrimers TO qPcrPrimers" mm10
+    # NULL descrition column
+    hgsql mm10 -ne "UPDATE qPcrPrimers SET description = NULL;"
 
 #########################################################################
 # DBSNP B137 / SNP137 (DONE 12/20/12 angie)

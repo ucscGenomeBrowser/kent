@@ -23867,7 +23867,7 @@ if ((row = sqlNextRow(sr)) != NULL)
             printf("<B>ID:</B> %s <BR>\n", r->id);
         printCustomUrl(tdb, r->id, TRUE);
         } 
-    if ((r->description != NULL) && (!sameString("qPcrPrimers", table)))
+    if  (isNotEmpty(r->description))
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);

@@ -18,11 +18,12 @@ sortOrder tier=+ cellType=+
 fileSortOrder cell=Cell_Line treatment=Treatment dccAccession=UCSC_Accession fileSize=Size 
 controlledVocabulary encode/cv.ra cellType=cell
 type narrowPeak
-# need deprecated canPack setting here (somethings wrong elsewhere, this shouldn't be needed)
+# need deprecated canPack setting here (until CGI 278 release)
 canPack on
 visibility dense
-signalFilter 0
-signalFilterLimits 0:20000
+signalFilter 0.0:20000.0
+signalFilterLimits 0.0:20000.0
+spectrum on
 minGrayLevel 3
 minScore 0
 priority 2.6
@@ -75,7 +76,6 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform off
         shortLabel GM12891 DNase
         longLabel GM12891 DNaseI HS Uniform Peaks from ENCODE/Analysis
-        color 153,38,0
         subGroups tier=a30 cellType=GM12891
 
         track wgEncodeAwgDnaseDukeGm12892UniPk
@@ -144,7 +144,7 @@ wgEncode 1
         longLabel HTR8svn DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=HTR8svn
 
-        track wgEncodeAwgDnaseDukeHuh7.5UniPk
+        track wgEncodeAwgDnaseDukeHuh75UniPk
         parent wgEncodeAwgDnaseUniform off
         shortLabel Huh7.5 DNase
         longLabel Huh7.5 DNaseI HS Uniform Peaks from ENCODE/Analysis
@@ -164,7 +164,7 @@ wgEncode 1
 
         track wgEncodeAwgDnaseDukeIshikawaestradiolUniPk
         parent wgEncodeAwgDnaseUniform off
-        shortLabel Ishika(Estr) DNase
+        shortLabel Ishika(Est) DNase
         longLabel Ishikawa (Estradiol) DNaseI HS Uniform Peaks from ENCODE/Analysis
         subGroups tier=a30 cellType=Ishikawa-Estr
 
@@ -328,6 +328,7 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform on
         shortLabel CD20+ DNase
         longLabel CD20+ B cell DNaseI HS Uniform Peaks from ENCODE/Analysis
+        color 80,80,80
         subGroups tier=a25 cellType=a25CD20
 
         track wgEncodeAwgDnaseUwCd34mobilizedUniPk
@@ -590,8 +591,9 @@ wgEncode 1
 
         track wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk
         parent wgEncodeAwgDnaseUniform on
-        shortLabel Mcytes-CD14+ DNase
+        shortLabel Mcyte-CD14+ DNase
         longLabel Monocytes-CD14+ DNaseI HS Uniform Peaks from ENCODE/Analysis
+        color 80,80,80
         subGroups tier=a25 cellType=a25Monocytes-CD14
 
         track wgEncodeAwgDnaseUwNb4UniPk
@@ -700,6 +702,7 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform on
         shortLabel A549 DNase
         longLabel A549 DNaseI HS Uniform Peaks from ENCODE/Analysis
+        color 80,80,80
         subGroups tier=a25 cellType=a25A549
 
         track wgEncodeAwgDnaseUwdukeGm12878UniPk
@@ -772,6 +775,7 @@ wgEncode 1
         parent wgEncodeAwgDnaseUniform on
         shortLabel MCF-7 DNase
         longLabel MCF-7 DNaseI HS Uniform Peaks from ENCODE/Analysis
+        color 80,80,80
         subGroups tier=a25 cellType=a25MCF-7
 
         track wgEncodeAwgDnaseUwdukeNhekUniPk

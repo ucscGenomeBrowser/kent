@@ -12,7 +12,7 @@ source `which qaConfig.csh`
 
 set db=""
 set dbTrunc=""
-set metatables="dbDb blatServers defaultDb gdbPdb genomeClade liftOverChain"
+set metatables="dbDb blatServers defaultDb genomeClade liftOverChain"
 
 if ( $#argv < 1 || $#argv > 3 ) then
   # no command line args
@@ -163,15 +163,6 @@ hgsql $host1 -Ne 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
    $centdb1 > $metatable.$db.$out1 
 hgsql $host2 -Ne 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
    $centdb2 > $metatable.$db.$out2 
-
-
-# check gdbPdb
-set metatable="gdbPdb"
-
-hgsql $host1 -Ne 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb1 \
-  > $metatable.$db.$out1 
-hgsql $host2 -Ne 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb2 \
-  > $metatable.$db.$out2 
 
 
 # check liftOverChain
