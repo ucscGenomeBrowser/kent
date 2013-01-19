@@ -1869,7 +1869,7 @@ cell Th1
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-dccAccession wgEncodeEH000483 
+dccAccession wgEncodeEH000483, wgEncodeEH002563 
 fileName wgEncodeAwgDnaseUwdukeTh1UniPk.narrowPeak.gz
 lab AWG
 md5sum e975123b8e5f39b1c819e70861d7903d
