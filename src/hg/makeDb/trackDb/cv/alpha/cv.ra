@@ -16682,7 +16682,7 @@ optionalVars label,deprecated
 priority 312
 requiredVars term,tag,type,description
 searchable wildList
-validate regex: ^wgEncodeE[H,M][0-9]*$
+validate regex: ^\(wgEncodeE[H,M][0-9]*, *\)*wgEncodeE[H,M][0-9]*$
 
 term dccInternalNotes
 tag DCCINTERNALNOTES
