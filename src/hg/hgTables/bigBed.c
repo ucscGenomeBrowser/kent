@@ -184,6 +184,11 @@ int i;
 for (bb = bbList, i=0; bb != NULL; bb = bb->next, ++i)
     hashAddInt(fieldHash, bb->name, i);
 
+// If bigBed has name column, look up pasted/uploaded identifiers if any:
+struct hash *idHash = NULL;
+if (slCount(bbList) >= 4)
+    idHash = identifierHash(db, table);
+
 /* Create an array of column indexes corresponding to the selected field list. */
 int *columnArray;
 AllocArray(columnArray, fieldCount);
@@ -227,6 +232,8 @@ for (region = regionList; region != NULL; region = region->next)
 	bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
 	if (asFilterOnRow(filter, row))
 	    {
+	    if ((idHash != NULL) && (hashLookup(idHash, row[3]) == NULL))
+		continue;
 	    int i;
 	    fprintf(f, "%s", row[columnArray[0]]);
 	    for (i=1; i<fieldCount; ++i)
