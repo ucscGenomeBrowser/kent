@@ -1163,7 +1163,7 @@ type Cell Line
 description embryonic stem cell (hESC), BG02, treatment: H9 conditioned medium
 karyotype normal
 lineage inner cell mass
-orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
+orderUrl http://stemcells.nih.gov/staticresources/research/protocols/BresaGen_hESC_manual_2.1.pdf
 organism human
 protocol Myers:BG02ES_and_H9ES_Myers_protocols.pdf
 sex M
@@ -1181,7 +1181,7 @@ childOf BG02ES
 description embryonic stem cell (hESC), BG02, embryoid body-derived
 karyotype normal
 lineage inner cell mass
-orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
+orderUrl http://stemcells.nih.gov/staticresources/research/protocols/BresaGen_hESC_manual_2.1.pdf
 organism human
 protocol Myers:BG02ES_and_H9ES_Myers_protocols.pdf
 sex M
