@@ -5,6 +5,22 @@
 #include "hgConfig.h"
 #include "internet.h"
 
+/* geographic server (mirror) support
+
+   Customize 'Mirrors' drop-down menu based on current server.  If the server
+   is a UCSC-sponsored site (USA/Ca or European), show this in drop-down menu
+   with a checkmark, and allow user to change server.  Based on design notes here:
+        http://genomewiki.ucsc.edu/genecats/index.php/Euronode
+
+   NOTE: Uses hgcentral.gbNode table
+   to populate menu items and locate redirects.  This implementation uses the
+   spec from above wiki page:
+        browser.node=1 -> US server (genome.ucsc.edu)
+        browser.node=2 -> Europe server (genome-euro.ucsc.edu)
+
+*/
+
+
 boolean geoMirrorEnabled()
 {
 // return TRUE if this site has geographic mirroring turned on
@@ -17,6 +33,7 @@ char *geoMirrorNode()
 return cfgOption("browser.node");
 }
 
+
 int defaultNode(struct sqlConnection *centralConn, char *ipStr)
 // return default node for given IP
 {
@@ -25,10 +42,15 @@ bits32 ip = 0;
 int defaultNode = 1;
 internetDottedQuadToIp(ipStr, &ip);
 
+char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
+
 // We (sort-of) assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient;
 // we do accomodate a range that is completely contained in another (to accomodate the hgroaming entry for testing);
 // this is accomplished by "<= ipEnd" in the sql query.
-safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart and %u <= ipEnd order by ipStart desc limit 1", ip, ip);
+
+safef(query, sizeof query, 
+    "select ipStart, ipEnd, node from geoIpNode%s where %u >= ipStart and %u <= ipEnd order by ipStart desc limit 1"
+    , geoSuffix, ip, ip);
 char **row;
 struct sqlResult *sr = sqlGetResult(centralConn, query);
 
@@ -44,4 +66,53 @@ if ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 return defaultNode;
+}
+ 
+
+char *geoMirrorMenu()
+/* Create customized geoMirror menu string for substitution of  into 
+ * <!-- OPTIONAL_MIRROR_MENU --> in htdocs/inc/globalNavBar.inc 
+ * Reads hgcentral geo tables and hg.conf settings. 
+ * Free the returned string when done. */
+{
+struct dyString *dy = dyStringNew(0);  // by default replacment is just an empty string.
+if (geoMirrorEnabled())
+    {
+    dyStringAppend(dy, "<li id=\"geoMirrorMenu\" class=\"noHighlight\"><hr></li>\n");
+    // Geo mirror functionality (e.g. in nav bar)
+    char *myNode = geoMirrorNode();
+    /* hgcentral.gbNode table so UI can share w/ browser GEO mirror redirect code */
+    char **row = NULL;
+    struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
+    // get the gbNode table
+    char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
+    char query[256];
+    safef(query, sizeof query, "SELECT node, domain, shortLabel from gbNode%s order by node", geoSuffix);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    // TODO someday handle if location has https urls
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *node = row[0];
+	char *domain = row[1];
+	char *shortLabel = row[2];
+        dyStringPrintf(dy, "<li id=\"server%s\"", node);
+        if (sameString(node, myNode))
+            dyStringAppend(dy, " class=\"noHighlight\"");
+        dyStringAppend(dy, ">\n");
+        dyStringAppend(dy, "<img alt=\"X\" width=\"16\" height=\"16\" style=\"float:left;");
+        if (!sameString(node, myNode))
+            dyStringAppend(dy, "visibility:hidden;");
+        dyStringAppend(dy, "\" src=\"../images/greenChecksm.png\">\n");
+        if (!sameString(node, myNode))
+            dyStringPrintf(dy, "<a href=\"http://%s/cgi-bin/hgGateway?redirect=manual\">", domain);
+        dyStringPrintf(dy, "Use %s", shortLabel);
+        if (!sameString(node, myNode))
+            dyStringAppend(dy, "</a>");
+        dyStringAppend(dy, "</li>\n");
+
+	}
+    sqlFreeResult(&sr);
+    hDisconnectCentral(&conn);
+    }
+return dyStringCannibalize(&dy);
 }

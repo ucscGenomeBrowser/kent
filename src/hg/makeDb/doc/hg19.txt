@@ -19947,6 +19947,8 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
 
     # rename the table to qPcrPrimers  (2013-01-14)
     hgsql -ne "RENAME TABLE exonJunctionPrimers TO qPcrPrimers" hg19
+    # NULL descrition column
+    hgsql hg19 -ne "UPDATE qPcrPrimers SET description = NULL;"
 
 ############################################################################
 # coriellDelDup track (DONE - 2013-01-03 - Hiram)

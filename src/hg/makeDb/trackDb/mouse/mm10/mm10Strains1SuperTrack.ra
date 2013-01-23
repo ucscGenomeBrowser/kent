@@ -11,7 +11,7 @@ html mm10Strains1
     track mm10Haplotypes
     parent mm10Strains1
     color 190,32,32
-    shortLabel Alt. strains
+    shortLabel Alternate strains
     longLabel Alternate mouse strains, mapped to their corresponding reference genome location
     visibility pack
     type bedDetail 8
@@ -23,7 +23,7 @@ html mm10Strains1
     track altSeqLiftOverPslStrains1
     parent mm10Strains1
     shortLabel Alignment
-    longLabel Alternate mouse strains, lift over alignments
+    longLabel Alternate mouse strains, alignments to reference genome
     visibility dense
     type psl
     indelDoubleInsert on

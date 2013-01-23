@@ -14,4 +14,10 @@ char *geoMirrorNode();
 int defaultNode(struct sqlConnection *centralConn, char *ipStr);
 // return default node for given IP
 
+char *geoMirrorMenu();
+/* Create customized geoMirror menu string for substitution of  into 
+ * <!-- OPTIONAL_MIRROR_MENU --> in htdocs/inc/globalNavBar.inc 
+ * Reads hgcentral geo tables and hg.conf settings. 
+ * Free the returned string when done. */
+
 #endif /* GEOMIRROR_H */

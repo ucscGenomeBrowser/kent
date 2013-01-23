@@ -1,43 +1,78 @@
 <h2>Description</h2>
 <p>
-The ENCODE Analysis Working Group (AWG) has performed uniform processing on datasets produced by multiple data production groups in the ENCODE Consortium.  This track represents a uniform set of open chromatin elements (DNaseI hypersensitive sites) in 125 <a target=_BLANK href="http://encodeproject.org/ENCODE/cellTypes.html">ENCODE cell types</a>, based on DNase-seq data produced by the "Open Chromatin" (Duke/UNC/UT-A)</a> and University of Washington (UW) ENCODE</a> groups from the project inception in 2007 through the ENCODE January 2011 data freeze. The AWG uniform datasets are used in downstream analysis pipelines by members of the ENCODE Consortium and are one of the primary sources of data referenced in the 2012 ENCODE integrative analysis paper (ENCODE Project Consortium 2012).  More information about the ENCODE integrative analysis is 
-<a target=_blank href="http://encodeproject.org/ENCODE/analysis.html">here</a>.
+The ENCODE Analysis Working Group (AWG) has performed uniform processing on datasets produced by
+multiple data production groups in the ENCODE Consortium. This track represents a uniform set of
+open chromatin elements (DNaseI hypersensitive sites) in 125
+<a target=_BLANK href="http://encodeproject.org/ENCODE/cellTypes.html">ENCODE cell types</a>,
+based on DNase-seq data produced by the &quot;Open Chromatin&quot; (Duke/UNC/UT-A)</a> and University of
+Washington (UW) ENCODE</a> groups from the project inception in 2007 through the ENCODE January
+2011 data freeze. The AWG uniform datasets are used in downstream analysis pipelines by members of
+the ENCODE Consortium and are one of the primary sources of data referenced in the 2012 ENCODE
+integrative analysis paper (ENCODE Project Consortium 2012). More information about the ENCODE
+integrative analysis is <a target=_blank href="http://encodeproject.org/ENCODE/analysis.html">here</a>.
 </p>
 <p>
-The primary and lab-processed data (along with methods descriptions, credits and references) on which this track is based are available in the following ENCODE tracks:
+The primary and lab-processed data (along with methods descriptions, credits and references) on
+which this track is based are available in the following ENCODE tracks:
 <ul>
 <li>
-<a target=_blank href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">ENCODE Duke DNaseI HS track</a>
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">ENCODE Duke DNaseI HS track</a>
 </li>
 <li>
-<a target=_blank href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS track</a>
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS track</a>
 </li>
 </ul>
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-The display for this track shows site location and signal value as grayscale-colored items where higher signal values correspond to darker-colored blocks.
-The display can be filtered to higher valued items, using the 'Minimum signal' configuration item.</p>
+The display for this track shows site location and signal value as grayscale-colored items where
+higher signal values correspond to darker-colored blocks. The display can be filtered to higher
+valued items, using the 'Minimum signal' configuration item.</p>
 <p>
 This track is a composite annotation track containing multiple subtracks, one for each cell type.
-The display mode and filtering of each subtrack can be individually controlled.
-By default, a small subset of the 125 subtracks are visible.  Click the 'all' radiobutton to list all subtracks on the configuration page.
-Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks. For more detail, see
+The display mode and filtering of each subtrack can be individually controlled. 
+For more information about track configuration, see
 <a target=_blank href="http://genome.ucsc.edu/goldenPath/help/multiView.html">Configuring Multi-View Tracks</a>.</p>
+<p>
+Metadata for a particular subtrack can be found by clicking the down arrow in
+the list of subtracks. The UCSC Accession listed in the metadata can be used with the File Search tool to
+retrieve primary data files underlying datasets of interest. 
+</p>
+<p>
+In the subtrack selection list, the ENCODE tier (priority) is listed for each cell type. 
+Tier 1 and Tier 2 represent categories with cell types designated for intensive study by 
+the ENCODE investigators.
+After the January 2011 data freeze, an additional set of cell types were promoted from 
+Tier 3 to Tier 2 to broaden the list of intensively studied cell types.
+These cell types are listed as <em>Tier 2*</em> in the subtrack list here (and are 
+described as 'newly promoted to tier 2: not in 2011 analysis' on the
+<a target=_blank href="/ENCODE/cellTypes.html">ENCODE Common Cell Types</a> page).</p>
 
 <h2>Methods</h2>
 <p>
-The DNase-seq aligned sequence reads (BAM files) from the primary data tracks listed above were processed using the UW HotSpot pipeline (as described in the UW DnaseI HS track description above).  First, "hotspots" (i.e. broad, variable-sized regions of generalized chromatin accessibility) were identified using a relaxed threshold. Then more stringent "narrowPeaks" (FDR 1% peaks) were generated by first thresholding hotspots (using random simulation) at FDR 1%, and then (essentially) locating local maxima of the tag density (150 bp window, sliding every 20 bp) within the hotspots. FDR 1% peaks were set to a fixed width of 150 bp.</p>
+The DNase-seq aligned sequence reads (BAM files) from the primary data tracks listed above were
+processed using the UW HotSpot pipeline (as described in the UW DnaseI HS track description above).
+First, &quot;hotspots&quot; (i.e. broad, variable-sized regions of generalized chromatin accessibility) were
+identified using a relaxed threshold. Then more stringent &quot;narrowPeaks&quot; (False Discovery Rate 1% peaks)
+were generated by first thresholding hotspots (using random simulation) at FDR 1%, and then (essentially)
+locating local maxima of the tag density (150 bp window, sliding every 20 bp) within the hotspots.
+FDR 1% peaks were set to a fixed width of 150 bp.</p>
 <p>
-The Duke DNase primary data were pre-processed to reduce variability by combining all replicates for a given cell-type and subsampling at a level of 30 million tags.  For the UW data, the The UW replicate 1 calls from the primary UW DNaseI HS data track were used. 
-For the 14 cell types where both groups have data, a collapsed set of FDR 1% peaks were generated by taking a non-overlapping selection of the calls from both centers and giving preference to the peak with the higher z-score when calls overlapped. A collapsed set of hotspots on these cell types was generated by merging the calls from both centers (taking the union interval of overlapping intervals).
+The Duke DNase primary data were pre-processed to reduce variability by combining all replicates for
+a given cell-type and subsampling at a level of 30 million tags. For the UW data, the replicate 1
+calls from the primary UW DNaseI HS data track were used. For the 14 cell types where both groups
+have data, a collapsed set of FDR 1% peaks were generated by taking a non-overlapping selection of
+the calls from both centers and giving preference to the peak with the higher z-score when calls
+overlapped. A collapsed set of hotspots on these cell types was generated by merging the calls from
+both centers (taking the union interval of overlapping intervals).
 </p>
 
 <h2>Credits</h2>
 <p>
-The processed data for this track were generated by the University of Washington ENCODE group on behalf of the ENCODE Analysis Working Group.
-Credits for the primary data underlying this track are included in track description pages listed in the Description section above.  
+The processed data for this track were generated by the University of Washington ENCODE group on
+behalf of the ENCODE Analysis Working Group. Credits for the primary data underlying this track are
+included in track description pages listed in the Description section above.  
 </p>
 <p>
 Contact: 
@@ -57,12 +92,17 @@ An integrated encyclopedia of DNA elements in the human genome</a>.
 </p>
 
 <p>
-See also the references in the related tracks listed in the Description section.
+See also the references in the related
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">ENCODE Duke DNaseI HS</a>
+and
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS</a>
+tracks.
 </p>
 
 <h2> Data Release Policy </h2>
 <p>While primary ENCODE data is subject to a restriction period as described in the 
-<a HREF="http://genome.ucsc.edu/ENCODE/terms.html" TARGET=_BLANK>
+<a HREF="../ENCODE/terms.html" TARGET=_BLANK>
 ENCODE data release policy</A>, 
-this restriction does not apply to the integrative analysis results.  The data in this track are freely available.
+this restriction does not apply to the integrative analysis results.  
+The data in this track are freely available.
 </p>

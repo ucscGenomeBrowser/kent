@@ -109,6 +109,7 @@ $baseNameTbl{mkSeqBaseKey("genbank", "mrna", "native")} = "mrna";
 $baseNameTbl{mkSeqBaseKey("genbank", "mrna", "xeno")}   = "xenoMrna";
 $baseNameTbl{mkSeqBaseKey("genbank", "est", "native")}  = "est";
 $baseNameTbl{mkSeqBaseKey("refseq", "mrna", "native")}  = "refMrna";
+$baseNameTbl{mkSeqBaseKey("refseq", "mrna", "xeno")}  = "xenoRefMrna";
 
 # get path to a sequence download file.
 sub getSeqFaPath($$$$) {
@@ -236,6 +237,9 @@ sub maybeMakeSeqFaFiles($$) {
         $needUpdated = 1;
     }
     if (maybeMakeSeqFa($justCheck, $db, "genbank", "est", "native")) {
+        $needUpdated = 1;
+    }
+    if (maybeMakeSeqFa($justCheck, $db, "refseq", "mrna", "xeno")) {
         $needUpdated = 1;
     }
     $mrnaFaDirty = 0;
