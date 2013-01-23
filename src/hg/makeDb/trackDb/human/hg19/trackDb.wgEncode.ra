@@ -194,4 +194,4 @@ include wgEncodeMapability.ra
 # Analysis tracks
 
 # Uniform DNase (wrangler: kate)
-include wgEncodeAwgDnaseUniform.ra alpha,beta
+include wgEncodeAwgDnaseUniform.ra

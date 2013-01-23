@@ -1,0 +1,38 @@
+track mm10Strains1
+superTrack on
+shortLabel Alternate strains
+longLabel Alternate mouse strain sequences
+visibility hide
+group varRep
+priority 180
+chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chrX
+html mm10Strains1
+
+    track mm10Haplotypes
+    parent mm10Strains1
+    color 190,32,32
+    shortLabel Alternate strains
+    longLabel Alternate mouse strains, mapped to their corresponding reference genome location
+    visibility pack
+    type bedDetail 8
+    noScoreFilter .
+    urlLabel NCBI Nucleotide:
+    url http://www.ncbi.nlm.nih.gov/nuccore/$$
+    html mm10Strains1
+
+    track altSeqLiftOverPslStrains1
+    parent mm10Strains1
+    shortLabel Alignment
+    longLabel Alternate mouse strains, alignments to reference genome
+    visibility dense
+    type psl
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsMaxZoom 10000.0
+    showCdsAllScales .
+    baseColorDefault itemBases
+    pslSequence no
+    baseColorUseSequence extFile seqMm10Strains1 extMm10Strains1
+    html mm10Strains1

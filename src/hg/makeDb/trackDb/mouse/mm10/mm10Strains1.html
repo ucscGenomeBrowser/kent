@@ -1,0 +1,95 @@
+<h2>Description</h2>
+
+<p>
+This track shows alternate mouse strain sequences indicated by the
+<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/mouse/index.shtml"
+target="_blank">GRC</a> (Genome Reference Consortium) mapped to the
+GRCm38 (mm10) reference sequence in an effort to provide the best possible
+reference assembly for the mouse genome.  The GRC does this by generating
+multiple representations, alternate loci, for regions that are too complex
+to be represented by a single path.  This allows users who are interested in a
+specific locus to get an improved representation without affecting users who
+need chromosome coordinate stability.
+</p>
+
+<h3>Alignment</h3>
+
+<p>
+The <em>Alignment</em> track is the PSL representation of the <em>lastz</em>
+chained alignments of the alternate strain sequences to their mapped
+location on the reference sequence.  This PSL representation allows the
+side-by-side alignment to be viewed.  It was created from the <em>lastz</em>
+chained alignments using the <em>chainToPsl</em> kent source utility.
+This track follows the display conventions for
+<a href="/goldenPath/help/hgTracksHelp.html#PSLDisplay" target="_blank">
+PSL alignment tracks</a>. Alignments are displayed in <b>black</b> and,
+depending on the track configuration settings, may be interspersed with
+vertical <font color="#F88017"><b>orange</b></font> lines.
+</p>
+
+<h3><font color="#FF0000">Alternate strains</font></h3>
+
+<p>
+Items in the <font color="#FF0000"><em>Alt. strains</em></font> track indicate
+where the alternate mouse strain sequences map to the reference genome
+location.  Clicking on an item in this track will display the detail page
+for that item, including a link to the nucleotide sequence at NCBI/Genbank
+for the alternate mouse strain.  Data points in this track are always
+displayed in <font color="#FF0000"><b>red</b></font>.
+</p>
+<p>
+The locations of the <font color="#FF0000"><em>Alternate strains</em></font>
+were established by NCBI and specified in the
+<em>alt_scaffold_placement.txt</em> files at, for example, strain NOD_ShiLtJ:<br>
+<A HREF="ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38.p1/NOD_ShiLtJ/alt_scaffolds/alt_scaffold_placement.txt"
+TARGET=_blank>GRCm38.p1/NOD_ShiLtJ/alt_scaffolds/alt_scaffold_placement.txt</A>.
+Note that each alternate strain has a unique directory at
+<A HREF="ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38.p1/"
+TARGET=_blank>Mus_musculus/GRCm38.p1/</A>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Lastz (previously known as blastz) was developed at
+<a href="http://www.bx.psu.edu/miller_lab/" target="_blank">Pennsylvania State University</a> by
+Minmei Hou, Scott Schwartz, Zheng Zhang, and Webb Miller with advice from Ross Hardison.
+</p>
+
+<p>
+The axtChain program was developed at the University of California Santa Cruz
+by Jim Kent with advice from Webb Miller and David Haussler.
+</p>
+
+<p>
+The browser display and database storage of the chains and nets were created
+by Robert Baertsch and Jim Kent.
+</p>
+
+<p>
+The chainNet, netSyntenic, and netClass programs were developed at the
+University of California Santa Cruz by Jim Kent.
+</p>
+
+<h2>References</h2>
+
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">
+Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+</p>
+
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="http://www.pnas.org/content/100/20/11484.abstract" target="_blank">
+Evolution's cauldron: Duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC, Haussler D, Miller W.
+<a href="http://genome.cshlp.org/content/13/1/103.abstract" target="_blank">
+Human-Mouse Alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+</p>

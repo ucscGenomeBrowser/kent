@@ -3578,6 +3578,10 @@ identifier geneReviewsRefGeneId
     hg18,hg19.kgXref.geneSymbol dupeOk
     hg18,hg19.geneReviewsRefGene.geneSymbol minCheck=0.85
 
+identifier mouseStrains
+"chrom names in the mouse alternate strains"
+    mm10.chromInfo.chrom
+    mm10.altSeqLiftOverPslStrains1.tName
 
 # Dependencies not already captured in identifiers
 
@@ -3977,6 +3981,7 @@ tablesIgnored hg18
     numtSMitochondrionChrPlacement
 
 tablesIgnored hg19
+    affyCytoScan
     affyExonProbe%
     allHg19RS_BW
     altSeqHaplotypes
@@ -3988,6 +3993,7 @@ tablesIgnored hg19
     altSeqPatchesP10
     bacEndPairsBad
     bamAllNumtSSorted
+    coriellDelDup
     lincRNAsCTAdipose
     lincRNAsCTAdrenal
     lincRNAsCTBrain
@@ -4068,6 +4074,7 @@ tablesIgnored mm9
     rest
 
 tablesIgnored mm10
+    mm10Haplotypes
     altSeqLiftOverPslP1
     altSeqPatchesP1
 

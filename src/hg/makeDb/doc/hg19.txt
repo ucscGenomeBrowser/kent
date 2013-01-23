@@ -19947,6 +19947,8 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
 
     # rename the table to qPcrPrimers  (2013-01-14)
     hgsql -ne "RENAME TABLE exonJunctionPrimers TO qPcrPrimers" hg19
+    # NULL descrition column
+    hgsql hg19 -ne "UPDATE qPcrPrimers SET description = NULL;"
 
 ############################################################################
 # coriellDelDup track (DONE - 2013-01-03 - Hiram)
@@ -19990,4 +19992,73 @@ cat $HOME/kent/src/hg/lib/coriellDelDup.as >> tableDescriptions.entry.sql
 # ENCODE Regulation track -- make doc has been moved to encodeRegHg19.txt
 
 ############################################################################
+# affyCytoScan track (DONE - 2013-01-15 - kuhn )
 
+# for affyCytoScanHD chipset
+# aamp left no record of what he did.
+# This reconstructs it, as best I can figure
+# followed by what I did to finish it up.
+
+cd /hive/data/genomes/hg19/bed
+mkdir affyCytoScan
+cd affyCytoScan
+
+# files from Carl Dowds at affy:
+# CytoScanHD_ProbeList_CN.zip
+# CytoScanHD_ProbeList_SNP.zip
+
+# It looks like the files were catenated into a file called both.bed
+# Columns were added to get to coloring field
+#   score=1000, strand=+ thickStart=chromStart thickEnd=chromEnd
+#   reserved=<colors>
+# Colors are 204 for blue (C- probes) and 3368499 for green (S- probes)
+
+# Then he loaded into db, picking up a bin column.
+# File bed.tab has one color for each source file, but some
+#   probes are in both sets
+
+commTrio.csh CytoScanHD_ProbeList_CN.bed CytoScanHD_ProbeList_SNP.bed rm
+# 1953247 CytoScanHD_ProbeList_CN.bed.Only
+#   53144 CytoScanHD_ProbeList_SNP.bed.Only
+#  743304 CytoScanHD_ProbeList_CN.bed.CytoScanHD_ProbeList_SNP.bed.Only  #
+#  both sets
+
+#   (SNP-file probes are all named "S-")
+#   (CN -file probes are named "C-" and "S-", but the S- are all in the SNP
+#   file, too)
+
+###### kuhn hereafter
+# The SNP probes in the CN file are redundant, so I dropped them
+#   by making everything one color, then uniq the whole file.
+
+hgsql -N -e "SELECT * FROM affyCytoScan" hg19 > hg19.affyCytoScan
+cat hg19.affyCytoScan | sed 's/204$/3368499/' > hg19.cytoScan.oneColor
+cat hg19.cytoScan.oneColor | sort -u > hg19.cytoScan.oneColor.uniq
+
+wc -l *oneColor*
+# 3492997 hg19.cytoScan.oneColor
+# 2749693 hg19.cytoScan.oneColor.uniq
+
+# Lost exactly the number of probes that were "S-" type,
+#   but were colored the same as the others in the "C-" file.
+#       743304  < # of dupes
+
+# remove bin for loading
+# (don't know if this is necessary, maybe it'd load with bin in place)
+cat hg19.cytoScan.oneColor.uniq | awk '{print $2, $3, $4, $5, $6, $7, $8, $9,
+$10}' \
+   > hg19.cytoScan.oneColor.noBin
+# load
+hgLoadBed -type=bed9 hg19 affyCytoScanNew hg19.cytoScan.oneColor.noBin
+
+# Set colors per Carl Dowds:
+mysql> UPDATE affyCytoScanNew SET reserved = 3308830 WHERE name LIKE "C-%";
+mysql> UPDATE affyCytoScanNew SET reserved = 8913032 WHERE name LIKE "S-%";
+
+# Checked new track in Browser by making temporary block for it in trackDb.ra
+# Moved into place:
+
+mysql> RENAME TABLE affyCytoScan    TO affyCytoScanAndy;
+mysql> RENAME TABLE affyCytoScanNew TO affyCytoScan;
+
+############################################################################

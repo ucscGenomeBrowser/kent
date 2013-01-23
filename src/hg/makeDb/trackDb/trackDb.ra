@@ -3249,12 +3249,11 @@ html numtSeq2012
 track qPcrPrimers
 shortLabel qPCR Primers
 longLabel $Organism ($db) Whole Transcriptome qPCR Primers
-group genes
+group expression
 type bedDetail 14
 visibility hide
 noScoreFilter on
 itemRgb on
-html qPcrPrimers
 
 searchTable qPcrPrimers
 searchMethod exact
