@@ -15,7 +15,7 @@ canPack On
     type bigWig 0 65500
     superTrack wgEncodeReg hide
     shortLabel Transcription
-    longLabel Transcription Levels Assayed by RNA-seq on 7 Cell Lines from ENCODE
+    longLabel Transcription Levels Assayed by RNA-seq on 9 Cell Lines from ENCODE
     visibility full
     maxHeightPixels 100:30:11
     showSubtrackColorOnUi on
@@ -26,10 +26,9 @@ canPack On
     dragAndDrop subTracks
     allButtonPair on
 
-
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
-	shortLabel Gm12878
-	longLabel Transcription of Gm12878 cells from ENCODE
+	shortLabel GM12878
+	longLabel Transcription of GM12878 cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 1
@@ -43,6 +42,22 @@ canPack On
         type bigWig 0 65535
 	priority 2
 	color 255,212,128
+
+	track wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
+	shortLabel HeLa-S3
+	longLabel Transcription of HeLa-S3 cells from ENCODE
+	parent wgEncodeRegTxn
+        type bigWig 0 65535
+	priority 3
+	color 227,255,128
+
+	track wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
+	shortLabel HepG2
+	longLabel Transcription of HepG2 cells from ENCODE
+	parent wgEncodeRegTxn
+        type bigWig 0 65535
+	priority 4
+	color 128,255,149
 
 	track wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
 	shortLabel HSMM
