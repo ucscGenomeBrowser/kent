@@ -1674,7 +1674,6 @@ cell A549
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH001095, wgEncodeEH001180
 fileName wgEncodeAwgDnaseUwdukeA549UniPk.narrowPeak.gz
 lab AWG
 md5sum 1dc4a498888350152ed20bdbaa23ecb0
@@ -1689,7 +1688,6 @@ cell GM12878
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000492, wgEncodeEH000534
 fileName wgEncodeAwgDnaseUwdukeGm12878UniPk.narrowPeak.gz
 lab AWG
 md5sum f2c65bf3d2cb1f7ca27e45acce9c09b4
@@ -1704,7 +1702,6 @@ cell H1-hESC
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000496, wgEncodeEH000556
 fileName wgEncodeAwgDnaseUwdukeH1hescUniPk.narrowPeak.gz
 lab AWG
 md5sum cd4ea6d97b3a78d2a71ec090abd120d0
@@ -1719,7 +1716,6 @@ cell HeLa-S3
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000495, wgEncodeEH000540
 fileName wgEncodeAwgDnaseUwdukeHelas3UniPk.narrowPeak.gz
 lab AWG
 md5sum 84d5ef5be5d85fd200462789c1f82194
@@ -1734,7 +1730,6 @@ cell HepG2
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000482, wgEncodeEH000537
 fileName wgEncodeAwgDnaseUwdukeHepg2UniPk.narrowPeak.gz
 lab AWG
 md5sum ba01b8af603a247e0d8e63095bd89f24
@@ -1749,7 +1744,6 @@ cell HMEC
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000503, wgEncodeEH001101
 fileName wgEncodeAwgDnaseUwdukeHmecUniPk.narrowPeak.gz
 lab AWG
 md5sum c4446ab4e51f8ccd54536bf70b55e887
@@ -1764,7 +1758,6 @@ cell HSMM
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000584, wgEncodeEH001185
 fileName wgEncodeAwgDnaseUwdukeHsmmUniPk.narrowPeak.gz
 lab AWG
 md5sum 2f0742bd8705dd6666c685b38aa365ab
@@ -1779,7 +1772,6 @@ cell HSMMtube
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000585, wgEncodeEH001186
 fileName wgEncodeAwgDnaseUwdukeHsmmtubeUniPk.narrowPeak.gz
 lab AWG
 md5sum 8e6d88d7cd8617b106eb42606f138853
@@ -1794,7 +1786,6 @@ cell HUVEC
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000488, wgEncodeEH000548
 fileName wgEncodeAwgDnaseUwdukeHuvecUniPk.narrowPeak.gz
 lab AWG
 md5sum 2541ecb5be1ab31a85d38cff44af7065
@@ -1809,7 +1800,6 @@ cell K562
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000530, wgEncodeEH000484
 fileName wgEncodeAwgDnaseUwdukeK562UniPk.narrowPeak.gz
 lab AWG
 md5sum 647727adfa3cb4dadb3d335cc76e6302
@@ -1824,7 +1814,6 @@ cell LNCaP
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH001096, wgEncodeEH001187
 fileName wgEncodeAwgDnaseUwdukeLncapUniPk.narrowPeak.gz
 lab AWG
 md5sum b643eaa63ed5a59e76a2bf3f812980c6
@@ -1839,7 +1828,6 @@ cell MCF-7
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH001095, wgEncodeEH001180
 fileName wgEncodeAwgDnaseUwdukeMcf7UniPk.narrowPeak.gz
 lab AWG
 md5sum 3e7d35f5c4b36cbb5cbe4eb4e060fd6a
@@ -1854,7 +1842,6 @@ cell NHEK
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000499, wgEncodeEH000553
 fileName wgEncodeAwgDnaseUwdukeNhekUniPk.narrowPeak.gz
 lab AWG
 md5sum 1391a45ee72dbfd61fcaaccfc96b2921
@@ -1869,7 +1856,6 @@ cell Th1
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
-#dccAccession wgEncodeEH000483, wgEncodeEH002563
 fileName wgEncodeAwgDnaseUwdukeTh1UniPk.narrowPeak.gz
 lab AWG
 md5sum e975123b8e5f39b1c819e70861d7903d
@@ -1878,4 +1864,4 @@ tableName wgEncodeAwgDnaseUwdukeTh1UniPk
 treatment None
 view Peaks
 
-# MAGIC: -712578997
+# MAGIC: 1906050092
