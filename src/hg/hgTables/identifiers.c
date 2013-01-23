@@ -297,9 +297,14 @@ sqlFreeResult(&sr);
 
 static struct hash *getAllPossibleIds(struct sqlConnection *conn,
 				      struct lm *lm, char *idField, char *extraWhere)
-/* Make a hash of all identifiers in curTable (and alias tables if specified)
+/* If curTable is a custom track or bigFile, return NULL.  Otherwise,
+ * make a hash of all identifiers in curTable (and alias tables if specified)
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
+if (isCustomTrack(curTable) || isBamTable(curTable) || isVcfTable(curTable) ||
+    isBigBed(database, curTable, curTrack, ctLookupName))
+    return NULL;
+
 struct hash *matchHash = hashNew(20);
 struct slName *tableList;
 char *xrefTable = NULL, *xrefIdField = NULL, *aliasField = NULL;
@@ -308,11 +313,7 @@ struct sqlConnection *alternateConn = conn;
 if (sameWord(curTable, WIKI_TRACK_TABLE))
     alternateConn = wikiConnect();
 
-if (isCustomTrack(curTable) || isBamTable(curTable) || isVcfTable(curTable))
-    /* Currently we don't check whether these are valid CT item
-     * names or not.  matchHash is empty for CTs. */
-    tableList = NULL;
-else if (sameWord(curTable, WIKI_TRACK_TABLE))
+if (sameWord(curTable, WIKI_TRACK_TABLE))
     tableList = slNameNew(WIKI_TRACK_TABLE);
 else if (strchr(curTable, '.'))
     tableList = slNameNew(curTable);
@@ -412,10 +413,8 @@ if (isNotEmpty(idText))
     for (term = allTerms;  term != NULL;  term = term->next)
 	{
 	struct slName *matchList = NULL, *match;
-	if (isCustomTrack(curTable) || isBamTable(curTable) || isVcfTable(curTable))
+	if (matchHash == NULL)
 	    {
-	    /* Currently we don't check whether these are valid CT item
-	     * names or not.  matchHash is empty for CTs. */
 	    matchList = slNameNew(term->name);
 	    }
 	else
