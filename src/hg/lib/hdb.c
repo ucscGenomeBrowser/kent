@@ -3661,6 +3661,13 @@ if (level == 0)
 return NULL;
 }
 
+struct trackDb *findSubtrackByName(struct trackDb *ancestorTdb, char *track)
+/* Given a tdb for a composite, return the subtrack tdb for track or NULL. */
+{
+// start at level 1 instead of 0, to avoid getting ancestor of track back again.
+return rFindTrack(1, ancestorTdb, track);
+}
+
 #ifdef DEBUG
 static void dumpFlagStatus(struct trackDb *tdbList, char *tableName, char *label)
 /* Look for tdbList for track matching tableName.  Print out info on it starting with label. */
