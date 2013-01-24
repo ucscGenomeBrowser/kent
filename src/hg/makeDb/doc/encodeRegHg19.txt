@@ -307,7 +307,8 @@
     # Make wgEncodeRegDnaseClusteredInputV2 table.
     mdbQuery out=tab "select obj,cell,treatment,lab,dccAccession from hg19 where obj like 'wgEncodeAwgDnase%UniPk' and view='Peaks'" > wgEncodeRegDnaseClusteredInputsV2.tab
 
-    hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputsV2 ~/kent/src/hg/lib/clusterInputAwgDnase.sql wgEncodeRegDnaseClusteredInputsV2.tab
+    hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredInputsV2 \
+        ~/kent/src/hg/lib/clusterInputAwgDnase.sql wgEncodeRegDnaseClusteredInputsV2.tab
 
     # Set up downloads
     cd $dir
@@ -340,6 +341,16 @@
     # vim README.txt
     cp README.txt md5sum.txt ..
 
+    # add minimal metaObject to metaDb to associate new table with (pseudo-)composite 
+    # wgEncodeRegDnaseClustered -- this allows hgTrackUi to locate downloads
+    cat > wgEncodeRegDnaseClustered.ra << 'EOF'
+metaObject wgEncodeRegDnaseClusteredV2
+objType table
+composite wgEncodeRegDnaseClustered
+fileName wgEncodeRegDnaseClusteredV2.bed.gz
+tableName wgEncodeRegDnaseClusteredV2
+project wgEncode
+'EOF'
 
 
 #########################################################################
