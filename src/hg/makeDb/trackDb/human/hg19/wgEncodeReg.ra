@@ -15,7 +15,7 @@ canPack On
     type bigWig 0 65500
     superTrack wgEncodeReg hide
     shortLabel Transcription
-    longLabel Transcription Levels Assayed by RNA-seq on 7 Cell Lines from ENCODE
+    longLabel Transcription Levels Assayed by RNA-seq on 9 Cell Lines from ENCODE
     visibility full
     maxHeightPixels 100:30:11
     showSubtrackColorOnUi on
@@ -26,10 +26,9 @@ canPack On
     dragAndDrop subTracks
     allButtonPair on
 
-
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
-	shortLabel Gm12878
-	longLabel Transcription of Gm12878 cells from ENCODE
+	shortLabel GM12878
+	longLabel Transcription of GM12878 cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 1
@@ -43,6 +42,22 @@ canPack On
         type bigWig 0 65535
 	priority 2
 	color 255,212,128
+
+	track wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
+	shortLabel HeLa-S3
+	longLabel Transcription of HeLa-S3 cells from ENCODE
+	parent wgEncodeRegTxn
+        type bigWig 0 65535
+	priority 3
+	color 227,255,128
+
+	track wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
+	shortLabel HepG2
+	longLabel Transcription of HepG2 cells from ENCODE
+	parent wgEncodeRegTxn
+        type bigWig 0 65535
+	priority 4
+	color 128,255,149
 
 	track wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
 	shortLabel HSMM
@@ -302,6 +317,7 @@ canPack On
 
 
     track wgEncodeRegDnaseClustered
+    release beta, public
     shortLabel DNase Clusters
     longLabel Digital DNaseI Hypersensitivity Clusters from ENCODE
     type bed 5 .
@@ -316,7 +332,38 @@ canPack On
     scoreFilterLimits 100:1000
     priority 1.6
 
-    track wgEncodeRegTfbsClustered
+    track wgEncodeRegDnaseClustered
+    release alpha
+    shortLabel DNase Clusters V1
+    longLabel Digital DNaseI Hypersensitivity Clusters in 74 cell types (2 reps) from ENCODE
+    type bed 5 .
+    superTrack wgEncodeReg hide
+    inputTrackTable wgEncodeRegDnaseClusteredInputs
+    #inputTracksSubgroupDisplay cellType treatment rep
+    inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    priority 1.6
+
+    track wgEncodeRegDnaseClusteredV2
+    release alpha
+    shortLabel DNase Clusters
+    longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE
+    type bed 5 .
+    superTrack wgEncodeReg dense
+    inputTrackTable wgEncodeRegDnaseClusteredInputsV2
+    inputTableFieldDisplay cellType treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    priority 1.6
+
+    track wgEncodeRegTfbsClusteredV2
     shortLabel Txn Factor ChIP
     longLabel Transcription Factor ChIP-seq from ENCODE
     type factorSource
@@ -329,4 +376,5 @@ canPack On
     visibility dense
     useScore 1
     priority 1.7
+    html wgEncodeRegTfbsClustered.release2
 
