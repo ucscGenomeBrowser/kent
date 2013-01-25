@@ -106,6 +106,7 @@ verboseTime(2,"After makeActiveImage");
 
 int main(int argc, char *argv[])
 {
+setUdcCacheDir(); /* early is helpful for hgTracks */
 if(argc == 1)
     {
     long enteredMainTime = clock1000();
