@@ -565,10 +565,12 @@ ss = gf->sources;
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
+    /* tolerate paths in fileName but do not save in ss->fileName since client cannot use it */
+    char *fileNameOnly = getFileNameOnly(fileName);
     if (nibIsFile(fileName))
 	{
 	nibSize = gfAddTilesInNib(gf, fileName, offset, stepSize);
-	ss->fileName = fileName;
+	ss->fileName = fileNameOnly;
 	ss->start = offset;
 	offset += nibSize;
 	ss->end = offset;
@@ -583,7 +585,7 @@ for (i=0; i<fileCount; ++i)
 	    {
 	    struct dnaSeq *seq = twoBitReadSeqFragLower(tbf, index->name, 0,0);
 	    gfAddSeq(gf, seq, offset);
-	    safef(nameBuf, sizeof(nameBuf), "%s:%s", fileName, index->name);
+	    safef(nameBuf, sizeof(nameBuf), "%s:%s", fileNameOnly, index->name);
 	    ss->fileName = cloneString(nameBuf);
 	    ss->start = offset;
 	    offset += seq->size;
@@ -692,6 +694,8 @@ static void transIndexBothStrands(struct dnaSeq *seq,
 int isRc, frame;
 struct trans3 *t3;
 struct gfSeqSource *ss;
+/* tolerate paths in fileName but do not save in ss->fileName since client cannot use it */
+char *fileNameOnly = getFileNameOnly(fileName);
 for (isRc=0; isRc <= 1; ++isRc)
     {
     if (isRc)
@@ -704,7 +708,7 @@ for (isRc=0; isRc <= 1; ++isRc)
 	struct genoFind *gf = transGf[isRc][frame];
 	ss = gf->sources + sourceIx;
 	gfAddSeq(gf, t3->trans[frame], offset[isRc][frame]);
-	ss->fileName = cloneString(fileName);
+	ss->fileName = cloneString(fileNameOnly);
 	ss->start = offset[isRc][frame];
 	offset[isRc][frame] += t3->trans[frame]->size;
 	ss->end = offset[isRc][frame];
