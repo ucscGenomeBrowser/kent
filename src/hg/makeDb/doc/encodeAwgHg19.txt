@@ -9,7 +9,7 @@
 # Wiki pages for AWG: 
 
 #############################################################################
-# Uniform DNase peaks (2012-07-26 started, 2012-12-06 in progress kate)
+# Uniform DNase peaks (2013-1-23 DONE kate)
 #
 # Note - this work started in conjunction with update of ENCODE Regulation super-track
 # as it is needed for the DNase Clusters track.
@@ -25,7 +25,6 @@
     mkdir -p wgEncodeAwgDnaseUniform
 
     # Track composite will be wgEncodeAwgDnaseUniform
-    # peaks are relegated to a view. 
 
     # get track description, trackDb, and files from EBI site that hosts analysis hub
     wget http://www.ebi.ac.uk/~swilder/ENCODE/awgHub/hg19/uniformDnase.html
@@ -167,19 +166,57 @@ cat  << 'EOF' > link.csh
     cd ~/kent/src/hg/makeDb/doc/encodeDccHg19
     /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgDnaseUniform 1 > wgEncodeAwgDnaseUniform.release1.notes
 
-    # QA preview
+    # QA preview (vs. redmine issue)
     encodeQaInit hg19 wgEncodeAwgDnaseUniform 1 9850 -t 
+
+
+#############################################################################
+# Uniform TFBS (2013-1-24 IN PROGRESS kate)
+#
+# This track is based on data from the March 2012 ENCODE data freeze, processed by
+# Anshul Kundaje's pipeline (https://sites.google.com/site/anshulkundaje/projects/idr).
+# This round of uniform processing has a slightly more relaxed threshold (2% FDR vs 1% based on
+# input Anshul received from users than used for the Jan 2011 data freeze (Analysis pubs and
+# and UCSC Txn Factor ChIP-seq V2).  And there are more data sets (708 vs. 495)
+#
+# Based on Anshul's recommendations, using 'optimal' SPP peaks, with black list filtering
+# (as in previous track).
+
+    cd /hive/data/genomes/hg19/bed
+    mkdir -p wgEncodeAwgTfbsUniform
+    cd wgEncodeAwgTfbsUniform
+
+    mkdir ebi; cd ebi
+    # set user = encode-box-01
+    # set pwd = enc*deDOWN
+    wget -r -nd -np --ftp-user=$user --ftp-password=$pwd ftp://ftp-private.ebi.ac.uk/byDataType/peaks/june2012/spp/optimal
+    # using the user name and password in the ENCODE wiki at:
+    # http://encodewiki.ucsc.edu/EncodeDCC/index.php/Notes_on_using_the_Aspera_client_(and_EBI_ftp)
+    # These are also available at:
+    # http://www.ebi.ac.uk/~anshul/public/encodeRawData/peaks_spp/mar2012/distinct/idrOptimalBlackListFilt
+
+    # NOTE: quality metrics are available here:
+    # https://docs.google.com/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc#gid=7
+    # -> Check with Anshul for list of data sets to exclude from clustering based on quality.
+    # For now, use all.
+    # sample filename:
+    #   spp.idrOptimal.bf.wgEncodeSydhTfbsHct116Pol2UcdAlnRep0.bam_VS_wgEncodeSydhTfbsHct116InputUcdAlnRep1.bam.narrowPeak.gz
+
+    ls -l filelist.txt
+    # 708 filelist.txt
+    cd ..
+
+    # extract UCSC object name from peaks file name
+    ls ebi/*.narrowPeak.gz > peak.lst
+    regClusterMakeTableOfTables ans02 peak.lst partial.table -verbose=3 >&! regTable.out &
+
+    # attach metadata
+    regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
+
 
 
 
     
-
-
-
-
-
-
-
-
+    
 
 
