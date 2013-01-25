@@ -71,13 +71,15 @@
 			Blat is an alignment tool like BLAST, but it is structured differently.  On 
 			DNA, Blat works by keeping an index of an entire genome in memory. 
 			Thus, the target database of BLAT is not a set of GenBank sequences, but
-                        instead an index derived from the assembly of the entire genome. The index
-                        -- which uses less than a gigabyte of RAM -- consists of all non-overlapping
-                        11-mers except for those heavily 
-			involved in repeats. This smaller size means that Blat is far more easily 
-			<A HREF="../admin/mirror.html">mirrored</A>.  Blat of DNA 
-			is designed to quickly find sequences of 95% and greater similarity of length 
-			40 bases or more. It may miss more divergent or short sequence alignments. 
+                        instead an index derived from the assembly of the entire genome. By default,
+                        the index consists of all non-overlapping 11-mers except for those heavily
+                        involved in repeats, and it uses less than a gigabyte of RAM. This smaller
+                        size means that Blat is far more easily <a href="../admin/mirror.html">mirrored</a>
+                        than BLAST. Blat of DNA is designed to quickly find sequences of 95% and
+                        greater similarity of length 40 bases or more. It may miss more divergent or
+                        shorter sequence alignments. (The default settings and expected behavior of
+                        standalone Blat are slightly different from those on the
+                        <a href="../cgi-bin/hgBlat">graphical version of Blat</a>.)
 			<P>
 			On proteins, Blat uses 4-mers rather than 11-mers, finding protein sequences 
 			of 80% and greater similarity to the query of length 20+ amino acids. The
