@@ -239,14 +239,14 @@ if (positiveRangeIntersection(pred->txStart, pred->cdsStart,
 	allele->variant->chromStart, allele->variant->chromEnd))
     {
     // we're in 5' UTR ( or UTR intron )
-    errAbort("don't support variants in 5' UTR");
+    //errAbort("don't support variants in 5' UTR");
     }
 
 if (positiveRangeIntersection(pred->txStart, pred->cdsStart,
 	allele->variant->chromStart, allele->variant->chromEnd))
     {
     // we're in 3' UTR
-    errAbort("don't support variants in 3' UTR");
+    //errAbort("don't support variants in 3' UTR");
     }
 
 return NULL;
