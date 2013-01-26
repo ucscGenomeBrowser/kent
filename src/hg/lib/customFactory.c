@@ -2904,6 +2904,11 @@ if (dbTrack)
      * if we want to make the warning visible, have to extend behavior of customTrack.c */
     }
 
+setUdcCacheDir();  // Need to set udc cache dir here because this whole cust trk parse routine 
+                   // gets called very early in CGI life by cart.c when processing saved-sessions. 
+                   // It is not specific to just hgCustom and hgTracks since any CGI that uses the cart 
+                   // may need this.
+
 int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
 
 struct lineFile *lf = customLineFile(text, isFile);
