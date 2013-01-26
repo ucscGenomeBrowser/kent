@@ -1049,9 +1049,6 @@ char *chopPrefix(char *s);
 char *chopPrefixAt(char *s, char c);
 /* Like chopPrefix, but can chop on any character, not just '.' */
 
-char *getFileNameOnly(char *path);
-/* Returns pointer to file name part of path beyond last slash / in the path.  Do not free. */
-
 FILE *mustOpen(char *fileName, char *mode);
 /* Open a file - or squawk and die. */
 

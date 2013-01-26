@@ -528,14 +528,6 @@ else
     }
 logInfo("indexing complete");
 
-/* Strip path off of file names since they are of no use to clients that are on other machines */
-int i;
-for (i=0; i<fileCount; ++i)
-    {
-    seqFiles[i] = getFileNameOnly(seqFiles[i]);
-    }
-
-
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = netAcceptingSocket(port, 100);
 if (socketHandle < 0)

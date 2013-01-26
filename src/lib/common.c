@@ -2646,16 +2646,6 @@ char *chopPrefix(char *s)
 return chopPrefixAt(s, '.');
 }
 
-char *getFileNameOnly(char *path)
-/* Returns pointer to file name part of path beyond last slash / in the path.  Do not free. */
-{
-char *fileNameOnly = strrchr(path, '/');
-if (fileNameOnly)
-    ++fileNameOnly;
-else
-    fileNameOnly = path;
-return fileNameOnly;
-}
 
 
 boolean carefulCloseWarn(FILE **pFile)
