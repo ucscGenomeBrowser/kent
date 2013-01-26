@@ -83,15 +83,15 @@ commands are:
 		via a cron job or similar mechanism.
 The background and company commands are optional.  The webBlat.cfg file must
 have at least one valid gfServer or gfServerTrans line, and a tempDir line.
-.  Here is a webBlat.cfg file that you
+Here is a webBlat.cfg file that you
 might find at a typical installation:
 
 company Awesome Research Amalgamated
 background /images/dnaPaper.jpg
-gfServer bigRamMachine 17778 /data/genomes/2bit/hg16.2bit Human Genome
-gfServer bigRamMachine 17779 /data/genomes/2bit/hg16.2bit Human Genome
-gfServer mouseServer 17780 /data/genomes/2bit/mm4.2bit Mouse Genome
-gfServer mouseServer 17781 /data/genomes/2bit/mm4.2bit Mouse Genome
+gfServerTrans bigRamMachine 17778 /data/genomes/2bit Human Genome
+gfServer bigRamMachine 17779 /data/genomes/2bit Human Genome
+gfServerTrans mouseServer 17780 /data/genomes/2bit Mouse Genome
+gfServer mouseServer 17781 /data/genomes/2bit Mouse Genome
 tempDir ../tmp
 
 PUTTING WEBBLAT WHERE THE WEB SERVER CAN EXECUTE IT
