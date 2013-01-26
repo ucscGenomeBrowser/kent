@@ -116,6 +116,17 @@ errAbort(
   "               Default is %d\n"
   "   -canStop If set then a quit message will actually take down the\n"
   "            server\n"
+  "Note about file(s) specified in the start command:\n"
+  "    The path(s) specified here are sent back exactly as-is\n"
+  "    to clients such as gfClient, hgBlat, webBlat.\n"
+  "    It is intended that relative paths are used.\n"
+  "    Absolute paths starting with '/' tend not to work\n"
+  "    unless the client is on the same machine as the server.\n"
+  "    For use with hgBlat and webBlat, cd to the directory where the file is\n"
+  "    and use the plain file name with no slashes.\n"
+  "      hgBlat will append the path(s) given to dbDb.nibPath.\n"
+  "     webBlat will append the path(s) given to path specified in webBlat.cfg.\n"
+  "    gfClient will append the path(s) given to the seqDir path specified.\n"
   ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize
   );
 
