@@ -3959,6 +3959,7 @@ tablesIgnored $gbd
     jaxQtl
     jaxQtlAsIs
     jaxQtlPadded
+    ucscGenePfam
     uwNucOccA375
     uwNucOccDennis
     uwNucOccMec
