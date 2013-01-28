@@ -332,6 +332,38 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     }
 }
 
+static void writeHaplotypePslLocus(struct cDnaAlign *refAln, FILE *outFh, int haplotypeGroupId)
+/* write one haplotype group */
+{
+fprintf(outFh, "%d\t", haplotypeGroupId);
+pslTabOut(refAln->psl, outFh);
+struct cDnaAlignRef *hapAln;
+for (hapAln = refAln->hapAlns; hapAln != NULL; hapAln = hapAln->next)
+    {
+    fprintf(outFh, "%d\t", haplotypeGroupId);
+    pslTabOut(hapAln->ref->psl, outFh);
+    }
+}
+
+void cDnaQueryWriteHaplotypePslLoci(struct cDnaQuery *cdna, FILE *outFh)
+/* For all each alignment of the cDNA that is in a haplotype set, write
+ *     haplotypeSetId<tab>pslRecord
+ * Where haplotypeSetId is a number assigned to group the cDNA's haplotype
+ * alignments.  It is unique across a give run of this program.  Note that
+ * there isn't a haplotype to haplotype mapping, relationships that are
+ * not part of the reference genome are not found. */
+{
+static int nextHaplotypeGroupId = 1;
+struct cDnaAlign *aln;
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    assert(!((aln->hapAlns != NULL) && (aln->hapRefAln != NULL)));
+    // check for reference alignments with paired haplotype alignments
+    if ((!aln->drop) && (aln->hapRefAln == NULL) && (aln->hapAlns != NULL))
+        writeHaplotypePslLocus(aln, outFh, nextHaplotypeGroupId++);
+    }
+}
+
 void cDnaAlignPslOut(struct psl *psl, int alnId, FILE *fh)
 /* output a PSL to a tab file.  If alnId is non-negative and
  * aldId out mode is set, append it to qName */

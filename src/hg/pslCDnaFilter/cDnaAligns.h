@@ -99,6 +99,14 @@ void cDnaQueryWriteDrop(struct cDnaQuery *cdna, FILE *outFh);
 void cDnaQueryWriteWeird(struct cDnaQuery *cdna, FILE *outFh);
 /* write the current set of psls that are flagged as weird overlap */
 
+void cDnaQueryWriteHaplotypePslLoci(struct cDnaQuery *cdna, FILE *outFh);
+/* For all each alignment of the cDNA that is in a haplotype set, write
+ *     haplotypeSetId<tab>pslRecord
+ * Where haplotypeSetId is a number assigned to group the cDNA's haplotype
+ * alignments.  It is unique across a give run of this program.  Note that
+ * there isn't a haplotype to haplotype mapping, relationships that are
+ * not part of the reference genome are not found. */
+
 INLINE int cDnaQuerySize(struct cDnaQuery *cdna)
 /* get the size of a cDNA sequence */
 {

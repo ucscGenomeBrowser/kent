@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
 PSLFILT = ${BINDIR}/pslCDnaFilter
-DIFF = diff -u --exclude CVS -r
+DIFF = diff -u --exclude='.nfs*' -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	repMatchTest minAlnSizeTest nonRepSizeTest nonRepMismatchTest \
@@ -72,16 +72,16 @@ ignoreNsLocalBestTest:
 
 # resting of haplotype region handling and globalNearBest
 hapGlobalTest:
-	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-globalNearBest=0.005 -hapRegions=input/hapMappings.psl'
+	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-globalNearBest=0.005 -hapRegions=input/hapMappings.psl -hapLociAlns=output/$@/hapLoci.id-psl'
 
 # resting of haplotype region handling and localNearBest
 hapLocalTest:
-	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl'
+	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl -hapLociAlns=output/$@/hapLoci.id-psl'
 
 # haplotype test using xeno alignments; was bug with comparing with wrong
 # refChrom
 hapLocalXenoTest:
-	${MAKE} doFilter name=$@ inPsl=xenoHap.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl'
+	${MAKE} doFilter name=$@ inPsl=xenoHap.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl -hapLociAlns=output/$@/hapLoci.id-psl'
 
 
 # filter weird overlapping
