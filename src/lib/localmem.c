@@ -74,6 +74,37 @@ void lmCleanup(struct lm **pLm)
     *pLm = NULL;
 }
 
+int lmFlushZ(struct lm *lm)
+// Zero's and makes available most recent block of pool, abandoning older blocks
+// USE WITH CAUTION: All previous pointers into lm will be invalid
+{
+slFreeList(&(lm->blocks->next));  // free any extra blocks
+struct lmBlock *mb = lm->blocks;
+mb->free = (char *)(mb+1);
+size_t fullSize = (mb->end - mb->free);
+memset(mb->free,0,fullSize);
+return fullSize;
+}
+
+size_t lmAvailable(struct lm *lm)
+// Returns currently available memory in pool
+{
+struct lmBlock *mb = lm->blocks;
+return (mb->end - mb->free);
+}
+
+size_t lmSize(struct lm *lm)
+// Returns current size of pool, even for memory already allocated
+{
+size_t fullSize = 0;
+
+struct lmBlock *mb = lm->blocks;
+for (;mb != NULL;mb = mb->next)
+    fullSize += (mb->end - (char *)(mb+1));
+
+return fullSize;
+}
+
 void *lmAlloc(struct lm *lm, size_t size)
 /* Allocate memory from local pool. */
 {
@@ -89,12 +120,24 @@ if (mb->free > mb->end)
 return ret;
 }
 
-void *lmCloneMem(struct lm *lm, void *pt, size_t size)
-/* Return a local mem copy of memory block. */
+void *lmAllocMoreMem(struct lm *lm, void *pt, size_t oldSize, size_t newSize)
+/* Adjust memory size on a block, possibly relocating it.  If block is grown,
+ * new memory is zeroed. */
 {
-void *d = lmAlloc(lm, size);
-memcpy(d, pt, size);
-return d;
+struct lmBlock *mb = lm->blocks;
+// rare case that pointer is to last lm alloc, but still try.
+// Note this is the one place where the pointer gets reused and it is known to be in this lm
+// Since lm allocs are never freed, this means the pointer CAN be reused (by lmCloneMem)
+if ((char *)pt + oldSize == mb->free
+&&  (char *)pt + newSize <= mb->end)
+    {
+    if (newSize > oldSize) // only move the free pointer on more mem
+        mb->free = pt + newSize;
+    return pt;
+    }
+void *new = lmAlloc(lm, newSize);
+memcpy(new, pt, oldSize);
+return new;
 }
 
 char *lmCloneStringZ(struct lm *lm, char *string, int size)
@@ -102,21 +145,8 @@ char *lmCloneStringZ(struct lm *lm, char *string, int size)
 {
 if (string == NULL)
     return NULL;
-else
-    {
-    char *s = lmAlloc(lm, size+1);
-    memcpy(s, string, size);
-    return s;
-    }
-}
-
-char *lmCloneString(struct lm *lm, char *string)
-/* Return local mem copy of string. */
-{
-if (string == NULL)
-    return NULL;
-else
-    return lmCloneStringZ(lm, string, strlen(string));
+else                                                   // in rare cases, this returns the same mem
+    return lmAllocMoreMem(lm, string, size, size + 1); // but lm allocs are never freed so it works
 }
 
 char *lmCloneFirstWord(struct lm *lm, char *line)
