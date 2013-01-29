@@ -69,7 +69,7 @@ errAbort(
   "gfServer v %s - Make a server to quickly find where DNA occurs in genome.\n"
   "To set up a server:\n"
   "   gfServer start host port file(s)\n"
-  "   Where the files are in .nib or .2bit format\n"
+  "   Where the files are .nib or .2bit format files specified relative to the current directory.\n"
   "To remove a server:\n"
   "   gfServer stop host port\n"
   "To query a server with DNA sequence:\n"
@@ -116,21 +116,23 @@ errAbort(
   "               Default is %d\n"
   "   -canStop If set then a quit message will actually take down the\n"
   "            server\n"
-  "Note about file(s) specified in the start command:\n"
-  "    The path(s) specified here are sent back exactly as-is\n"
-  "    to clients such as gfClient, hgBlat, webBlat.\n"
-  "    It is intended that relative paths are used.\n"
-  "    Absolute paths starting with '/' tend not to work\n"
-  "    unless the client is on the same machine as the server.\n"
-  "    For use with hgBlat and webBlat, cd to the directory where the file is\n"
-  "    and use the plain file name with no slashes.\n"
-  "      hgBlat will append the path(s) given to dbDb.nibPath.\n"
-  "     webBlat will append the path(s) given to path specified in webBlat.cfg.\n"
-  "    gfClient will append the path(s) given to the seqDir path specified.\n"
   ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize
   );
 
 }
+/*
+  Note about file(s) specified in the start command:
+      The path(s) specified here are sent back exactly as-is
+      to clients such as gfClient, hgBlat, webBlat.
+      It is intended that relative paths are used.
+      Absolute paths starting with '/' tend not to work
+      unless the client is on the same machine as the server.
+      For use with hgBlat and webBlat, cd to the directory where the file is
+      and use the plain file name with no slashes.
+        hgBlat will append the path(s) given to dbDb.nibPath.
+       webBlat will append the path(s) given to path specified in webBlat.cfg.
+      gfClient will append the path(s) given to the seqDir path specified.
+*/
 
 void genoFindDirect(char *probeName, int fileCount, char *seqFiles[])
 /* Don't set up server - just directly look for matches. */
