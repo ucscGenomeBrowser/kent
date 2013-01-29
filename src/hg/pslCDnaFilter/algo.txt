@@ -22,25 +22,26 @@ alignments for a given cDNA sequence.
        minCoverage = 1.0 - qSize / 250.0
     and minCoverage is bounded between 0.25 and 0.9.
 
-  o Keep only best overlapping alignment. This is the one with
-    the highest score. However, don't dropping weird overlaps.
-    Weird alignments are sets of alignments for a given query
-    that overlap, however the same query bases align to
-    different target bases.  These will be included in the
-    output unless dropped by another filter criteria.  These are
-    often caused by tandem repeats.  A small fraction of
-    differently aligned bases are allowed to handle different
-    block boundaries.
+  o Keep only best overlapping alignment if request This is the one with
+    the highest score.
 
   o Filter by minSpan.
 
-  o Filter sets of weirdly overlapping alignments, keeping only the best scoring from
-    a set of overlaps.
+  o Filter sets of weirdly overlapping alignments, keeping only the best
+    scoring from a set of overlaps.
 
   o Filter by either global or local near best in genome.
-    See notes below for handling of haplotype pseudochromsomes.
+    See notes below for handling of haplotype pseudo-chromsomes.
 
   o Filter by maxAligns
+
+  o Look for weird overlaps that might be left after above filters.  Either
+    dropping or keep the weird overlaps as requested.  Weird alignments are
+    sets of alignments for a given query that overlap, however the same query
+    bases align to different target bases.  These will be included in the
+    output unless dropped by another filter criteria.  These are often caused
+    by tandem repeats.  A small fraction of differently aligned bases are
+    allowed to handle different block boundaries.
 
 Filtering of haplotype regions:
 

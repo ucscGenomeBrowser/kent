@@ -8,7 +8,8 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	noDropCntBugTest minSpan100Test minSpan10Test localBestTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
 	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest \
-	weirdOverlappedFilterTest noIgnoreIntronsTest ignoreIntronsTest \
+	weirdOverlappedFilterTest weirdOverlapMultAlnTest weirdOverlapMultAlnMinCoverTest \
+	noIgnoreIntronsTest ignoreIntronsTest \
 	uniqueMappedTest uniqueMappedHapTest blackListTest \
 	decayMinCoverTest inconsistentQSizeTest
 
@@ -88,6 +89,20 @@ hapLocalXenoTest:
 weirdOverlappedFilterTest:
 	${MAKE} doFilterSave name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
 	    filtArgs='-filterWeirdOverlapped'
+
+# Multiple indentical overlapping alignments create by mapping proteins
+# via mRNAs, along with a couple of weird alignments.  This results in
+# all alignments being kept.  The weird overlap was moved until later
+# so that -bestOverlap and other filters still work.
+weirdOverlapMultAlnTest:
+	${MAKE} doFilterSave name=$@ inPsl=weirdOverlapMultAln.psl \
+	    filtArgs='-bestOverlap'
+
+# This test also drops lower quality weird overlaps before weird overlap test
+# done.
+weirdOverlapMultAlnMinCoverTest:
+	${MAKE} doFilterSave name=$@ inPsl=weirdOverlapMultAln.psl \
+	    filtArgs='-bestOverlap -minCover=1.0'
 
 # -ignoreIntrons tests, carefully crafted from same alignment so that one with
 # faked intron scores slighly lower without intron bonus
