@@ -1,7 +1,11 @@
 <h2>Description</h2>
 
 <p>
-This track shows Pfam domains found in transcripts located in the UCSC Genes track.  
+Most proteins are composed of one or more conserved functional regions called domains.
+This track shows the high quality, manually curated 
+<a href="http://pfam.sanger.ac.uk/" target="_blank">
+Pfam-A </a>
+domains found in transcripts located in the UCSC Genes track.  
 
 <h2>Display Conventions and Configuration</h2>
 <P>
@@ -12,8 +16,10 @@ tracks</A>.
 <h2>Methods</h2>
 <p>
 The sequences from the knownGenePep table 
-(see UCSC Gene detail page)
-are submitted to the set of Pfam HMMs 
+(see 
+<a HREF="hgTrackUi?g=knownGene">
+UCSC Gene detail page</a>)
+are submitted to the set of Pfam-A HMMs 
 which annotate regions within the predicted peptide that are recognizable 
 as Pfam protein domains.
 These regions are then mapped to the transcripts themselves using the pslMap utility.
