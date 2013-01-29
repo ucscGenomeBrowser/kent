@@ -21,7 +21,8 @@ include wgEncodeUncBsuProt.release2.ra
 include wgEncodeUncBsuProtGenc.ra
 
 # Integrated Regulation (wrangler: kate)
-include wgEncodeReg.release4.ra
+# NOTE: the supertrack versioning is being retired
+include wgEncodeReg.ra
 
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra

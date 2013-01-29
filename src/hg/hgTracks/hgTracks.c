@@ -5573,7 +5573,6 @@ if (hIsGisaidServer())
     validateGisaidUser(cart);
     }
 
-setUdcCacheDir();
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);

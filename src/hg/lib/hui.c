@@ -3936,7 +3936,7 @@ if (metadataForTable(db,trackDb,NULL) != NULL)
     if (date != NULL)
         date = strSwapChar(date, ' ', 0);   // Truncate time (not expected, but just in case)
 
-    if (excludePast && !isEmpty(date) && dateIsOld(date,"%F"))
+    if (excludePast && !isEmpty(date) && dateIsOld(date, MDB_ENCODE_DATE_FORMAT))
         freez(&date);
     }
 return date;
@@ -4397,7 +4397,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         char *dateDisplay = encodeRestrictionDate(db,subtrack,FALSE); // includes dates in the past
         if (dateDisplay)
             {
-            if (dateIsOld(dateDisplay,"%F"))
+            if (dateIsOld(dateDisplay, MDB_ENCODE_DATE_FORMAT))
                 printf("</TD>\n<TD align='center' nowrap style='color: #BBBBBB;'>&nbsp;%s&nbsp;",
                        dateDisplay);
             else

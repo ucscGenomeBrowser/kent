@@ -40,6 +40,7 @@ organization = (hIsGisaidServer() ? "GISAID" : organization);
  * somehow can't be moved effectively into doMiddle. */
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
+setUdcCacheDir();   /* should be set before cart for hgTracks */
 char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link
 if (link)                                                                  // wrapped in html
     htmlSetStyle(link);

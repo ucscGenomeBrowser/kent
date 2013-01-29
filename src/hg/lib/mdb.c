@@ -3145,6 +3145,15 @@ return mdbObjContains(mdb, MDB_VAR_PROJECT, MDB_VAL_ENCODE_PROJECT);
 //        && mdbObjContains(mdbObj, MDB_VAR_ENCODE_SUBID,NULL));
 }
 
+boolean mdbObjEncodeIsUnrestricted(struct mdbObj *mdb)
+// Return true if this object is still within data restriction time period 
+{
+    char *dateUnrestricted = mdbObjFindValue(mdb, MDB_VAR_ENCODE_DATE_UNRESTRICTED);
+    if (dateUnrestricted == NULL)
+        return TRUE;
+    return (dateIsOld(dateUnrestricted, MDB_ENCODE_DATE_FORMAT));
+}
+
 boolean mdbObjInComposite(struct mdbObj *mdb, char *composite)
 // Return true if metaDb object is in specified composite.
 // If composite is NULL, always return true

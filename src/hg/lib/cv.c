@@ -169,6 +169,7 @@ else
         root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
     safef(filePath, sizeof(filePath), "%s/encode/%s", root,CV_FILE_NAME);
     }
+verbose(3, "CV file: %s\n", filePath);
 if (!fileExists(filePath))
     errAbort("Error: can't locate %s; %s doesn't exist\n", CV_FILE_NAME, filePath);
 return filePath;
@@ -539,7 +540,7 @@ if (startsWithWord(CV_VALIDATE_CV,validationRule))
     }
 else if (startsWithWord(CV_VALIDATE_DATE,validationRule))
     {
-    if (dateToSeconds((char *)val,"%F") == 0)
+    if (dateToSeconds((char *)val, MDB_ENCODE_DATE_FORMAT) == 0)
         {
         if (reason != NULL)
             safef(reason,len,"INVALID date: %s = %s",(char *)term,(char *)val);

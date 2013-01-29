@@ -759,7 +759,7 @@ compositeTrack on
 shortLabel Placental Chain/Net
 longLabel Non-primate Placental Mammal Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aTree_Shrew=Tree_Shrew bMouse=Mouse cRat=Rat dKangaroo=Kangaroo_Rat eGuinea=Guinea_Pig fSquirrel=Squirrel gRabbit=Rabbit hPika=Pika iAlpaca=Alpaca jDolphin=Dolphin kSheep=Sheep lCow=Cow mPig=Pig nHorse=Horse oCat=Cat pDog=Dog qPanda=Panda rMicrobat=Microbat sMegabat=Megabat tHedgehog=Hedgehog uShrew=Shrew vElephant=Elephant wRock_Hyrax=Rock_Hyrax xTenrec=Tenrec yArmadillo=Armadillo zSloth=Sloth 
+subGroup2 species Species aTree_Shrew=Tree_Shrew bMouse=Mouse cRat=Rat dKangaroo=Kangaroo_Rat eGuinea=Guinea_Pig fSquirrel=Squirrel gRabbit=Rabbit hPika=Pika iAlpaca=Alpaca jDolphin=Dolphin kSheep=Sheep lCow=Cow mPig=Pig nHorse=Horse oWhite_Rhinoceros=White_Rhinoceros pCat=Cat qDog=Dog rPanda=Panda sMicrobat=Microbat tMegabat=Megabat uHedgehog=Hedgehog vShrew=Shrew wElephant=Elephant xRock_Hyrax=Rock_Hyrax yTenrec=Tenrec zArmadillo=Armadillo aaSloth=Sloth
 subGroup3 clade Clade aEuarch=Euarchontoglires bLaura=Laurasiatheria cAfro=Afrotheria dXenar=Xenarthra
 dragAndDrop subTracks
 visibility hide
@@ -793,6 +793,15 @@ html hg19mammalChainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain equCab2
         otherDb equCab2
+
+        track chainCerSim1
+    #replaces record chainCerSim1 in parent dir missing/extra priority
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=oWhite_Rhinoceros clade=bLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain cerSim1
+        otherDb cerSim1
 
         track chainTupBel1
     #replaces record chainTupBel1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
@@ -829,7 +838,7 @@ html hg19mammalChainNet
 
         track chainChoHof1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=zSloth clade=dXenar
+        subGroups view=chain species=aaSloth clade=dXenar
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain choHof1
@@ -837,7 +846,7 @@ html hg19mammalChainNet
 
         track chainPteVam1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=sMegabat clade=bLaura
+        subGroups view=chain species=tMegabat clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain pteVam1
@@ -845,7 +854,7 @@ html hg19mammalChainNet
 
         track chainLoxAfr3
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=vElephant clade=cAfro
+        subGroups view=chain species=wElephant clade=cAfro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain loxAfr3
@@ -854,7 +863,7 @@ html hg19mammalChainNet
         track chainFelCat4
     #replaces record chainFelCat4 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=oCat clade=bLaura
+        subGroups view=chain species=pCat clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain felCat4
@@ -865,7 +874,7 @@ include chainCanFam3.ra alpha
 
         track chainDasNov2
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=yArmadillo clade=dXenar
+        subGroups view=chain species=zArmadillo clade=dXenar
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain dasNov2
@@ -881,7 +890,7 @@ include chainCanFam3.ra alpha
 
         track chainMyoLuc1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=rMicrobat clade=bLaura
+        subGroups view=chain species=sMicrobat clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain myoLuc1
@@ -905,7 +914,7 @@ include chainCanFam3.ra alpha
 
         track chainProCap1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=wRock_Hyrax clade=cAfro
+        subGroups view=chain species=xRock_Hyrax clade=cAfro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain proCap1
@@ -930,7 +939,7 @@ include chainCanFam3.ra alpha
         track chainEriEur1
     #replaces record chainEriEur1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=tHedgehog clade=bLaura
+        subGroups view=chain species=uHedgehog clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain eriEur1
@@ -939,7 +948,7 @@ include chainCanFam3.ra alpha
         track chainEchTel1
     #replaces record chainEchTel1 in parent dir missing/extra priority
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=xTenrec clade=cAfro
+        subGroups view=chain species=yTenrec clade=cAfro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain echTel1
@@ -964,7 +973,7 @@ include chainCanFam3.ra alpha
         track chainSorAra1
     #replaces record chainSorAra1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=uShrew clade=bLaura
+        subGroups view=chain species=vShrew clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain sorAra1
@@ -972,7 +981,7 @@ include chainCanFam3.ra alpha
 
         track chainAilMel1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=qPanda clade=bLaura
+        subGroups view=chain species=rPanda clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain ailMel1
@@ -1009,6 +1018,15 @@ include chainCanFam3.ra alpha
         type netAlign equCab2 chainEquCab2
         otherDb equCab2
 
+        track netCerSim1
+    #replaces record netCerSim1 in parent dir missing/extra priority
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=oWhite_Rhinoceros clade=bLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign cerSim1 chainCerSim1
+        otherDb cerSim1
+
         track netTupBel1
     #replaces record netTupBel1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
@@ -1044,7 +1062,7 @@ include chainCanFam3.ra alpha
 
         track netChoHof1
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=zSloth clade=dXenar
+        subGroups view=net species=aaSloth clade=dXenar
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign choHof1 chainChoHof1
@@ -1052,7 +1070,7 @@ include chainCanFam3.ra alpha
 
         track netPteVam1
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=sMegabat clade=bLaura
+        subGroups view=net species=tMegabat clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign pteVam1 chainPteVam1
@@ -1060,7 +1078,7 @@ include chainCanFam3.ra alpha
 
         track netLoxAfr3
         subTrack placentalChainNetViewnet on 
-        subGroups view=net species=vElephant clade=cAfro
+        subGroups view=net species=wElephant clade=cAfro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loxAfr3 chainLoxAfr3
@@ -1069,7 +1087,7 @@ include chainCanFam3.ra alpha
         track netFelCat4
     #replaces record netFelCat4 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=oCat clade=bLaura
+        subGroups view=net species=pCat clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign felCat4 chainFelCat4
@@ -1080,7 +1098,7 @@ include netCanFam3.ra alpha
 
         track netDasNov2
         subTrack placentalChainNetViewnet on 
-        subGroups view=net species=yArmadillo clade=dXenar
+        subGroups view=net species=zArmadillo clade=dXenar
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dasNov2 chainDasNov2
@@ -1096,7 +1114,7 @@ include netCanFam3.ra alpha
 
         track netMyoLuc1
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=rMicrobat clade=bLaura
+        subGroups view=net species=sMicrobat clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign myoLuc1 chainMyoLuc1
@@ -1120,7 +1138,7 @@ include netCanFam3.ra alpha
 
         track netProCap1
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=wRock_Hyrax clade=cAfro
+        subGroups view=net species=xRock_Hyrax clade=cAfro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign proCap1 chainProCap1
@@ -1145,7 +1163,7 @@ include netCanFam3.ra alpha
         track netEriEur1
     #replaces record netEriEur1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=tHedgehog clade=bLaura
+        subGroups view=net species=uHedgehog clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign eriEur1 chainEriEur1
@@ -1154,7 +1172,7 @@ include netCanFam3.ra alpha
         track netEchTel1
     #replaces record netEchTel1 in parent dir missing/extra priority
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=xTenrec clade=cAfro
+        subGroups view=net species=yTenrec clade=cAfro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign echTel1 chainEchTel1
@@ -1179,7 +1197,7 @@ include netCanFam3.ra alpha
         track netSorAra1
     #replaces record netSorAra1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=uShrew clade=bLaura
+        subGroups view=net species=vShrew clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign sorAra1 chainSorAra1
@@ -1187,7 +1205,7 @@ include netCanFam3.ra alpha
 
         track netAilMel1
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=qPanda clade=bLaura
+        subGroups view=net species=rPanda clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ailMel1 chainAilMel1

@@ -18,6 +18,12 @@
         browser.node=1 -> US server (genome.ucsc.edu)
         browser.node=2 -> Europe server (genome-euro.ucsc.edu)
 
+
+   For Testing, use browser.geoSuffix: e.g.
+        browser.geoSuffix=Test
+   will cause it to use in hgcentral the tables  gbNodeTest and geoIpNodeTest instead.
+   See the genomewiki link above for more documentation on testing.
+
 */
 
 
@@ -46,7 +52,10 @@ char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
 
 // We (sort-of) assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient;
 // we do accomodate a range that is completely contained in another (to accomodate the hgroaming entry for testing);
-// this is accomplished by "<= ipEnd" in the sql query.
+// this is accomplished by "<= ipEnd" in the sql query. 
+// TODO The hgroaming thing is probably obsolete and testing is done with browser.geoSuffix= instead.
+// If so, we may wish to remove the loop below since that was added by Larry and reformulate
+// it as it was originally done by Galt.  However it does not seem to affect performance so we can leave it for now.
 
 safef(query, sizeof query, 
     "select ipStart, ipEnd, node from geoIpNode%s where %u >= ipStart and %u <= ipEnd order by ipStart desc limit 1"

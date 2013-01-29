@@ -48,6 +48,7 @@ static struct optionSpec optionSpecs[] = {
 #define ONLY_CDSSTART_ZERO "%s.%s has %d records where cdsStart is 0 but not cdsEnd.\n"
 #define SPLIT_WRONG_CHROM "%s.%s has %d records with chrom inconsistent with table name.\n"
 #define BAD_CHROM "%s.%s has %d records with chrom not described in chromInfo.\n"
+#define BLOCKS_MISSING "%s.%s has %d records with missing block information.\n"
 #define BLOCKSTART_NOT_START "%s.%s has %d records with blockStart[0] != start.\n"
 #define BLOCKSTART_LT_START "%s.%s has %d records with blockStart[i] < start.\n"
 #define BLOCKEND_LT_BLOCKSTART "%s.%s has %d records with blockEnd[i] < blockStart[i].\n"
@@ -317,10 +318,15 @@ boolean checkBlocks(struct bed *bedList, char *table, struct hTableInfo *hti)
 {
 boolean gotError = FALSE;
 struct bed *bed = NULL;
-int bSNotStart=0, bSLTStart=0, bELTBS=0, bENotEnd=0, bEGTEnd=0;
+int bMissing = 0, bSNotStart=0, bSLTStart=0, bELTBS=0, bENotEnd=0, bEGTEnd=0;
 int bNotAscend=0, bOverlap=0;
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
+    if (bed->blockCount == 0 || bed->chromStarts == NULL || bed->blockSizes == NULL)
+	{
+	bMissing++;
+	continue;
+	}
     int i=0, lastStart=0, lastEnd=0;
     if (bed->chromStarts[0] != 0)
 	{
@@ -395,6 +401,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	bENotEnd++;
 	}
     }
+gotError |= reportErrors(BLOCKS_MISSING, table, bMissing);
 gotError |= reportErrors(BLOCKSTART_NOT_START, table, bSNotStart);
 gotError |= reportErrors(BLOCKSTART_LT_START, table, bSLTStart);
 gotError |= reportErrors(BLOCKEND_LT_BLOCKSTART, table, bELTBS);
