@@ -69,7 +69,7 @@ HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
 
 
 HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred \
-	hubCheck overlapSelect makeTableList
+	hubCheck overlapSelect makeTableList pslMap
 
 HG_HGWIGGLE_APP = hgWiggle
 
