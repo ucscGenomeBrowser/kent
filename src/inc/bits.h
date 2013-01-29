@@ -26,16 +26,13 @@ void bitFree(Bits **pB);
 /* Free bits. */
 
 Bits *lmBitAlloc(struct lm *lm,int bitCount);
-// Allocate bits.  Optionally supply local memory.
+// Allocate bits.  Must supply local memory.
 
 Bits *lmBitRealloc(struct lm *lm, Bits *b, int bitCount, int newBitCount);
-// Resize a bit array.  If b is null, allocate a new array.  Optionally use local memory.
+// Resize a bit array.  If b is null, allocate a new array.  Must supply local memory.
 
 Bits *lmBitClone(struct lm *lm, Bits* orig, int bitCount);
-// Clone bits.  Optionally use local memory.
-
-void lmBitFree(struct lm *lm, Bits **pB);
-// Free bits.  If allocated from local memory, this does nothing.
+// Clone bits.  Must supply local memory.
 
 void bitSetOne(Bits *b, int bitIx);
 /* Set a single bit. */
