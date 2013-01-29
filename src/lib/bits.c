@@ -77,6 +77,36 @@ void bitFree(Bits **pB)
 freez(pB);
 }
 
+Bits *lmBitAlloc(struct lm *lm,int bitCount)
+// Allocate bits.  Optionally supply local memory.
+{
+int byteCount = ((bitCount+7)>>3);
+return lmAlloc(lm,byteCount);
+}
+
+Bits *lmBitRealloc(struct lm *lm,Bits *b, int bitCount, int newBitCount)
+// Resize a bit array.  If b is null, allocate a new array.  Optionally use local memory.
+{
+int byteCount = ((bitCount+7)>>3);
+int newByteCount = ((newBitCount+7)>>3);
+return lmAllocMoreMem(lm, b ,byteCount, newByteCount);
+}
+
+Bits *lmBitClone(struct lm *lm,Bits* orig, int bitCount)
+// Clone bits.  Optionally use local memory.
+{
+int byteCount = ((bitCount+7)>>3);
+Bits* bits = lmAlloc(lm,byteCount);
+memcpy(bits, orig, byteCount);
+return bits;
+}
+
+void lmBitFree(struct lm *lm,Bits **pB)
+// Free bits.  If allocated from local memory, this does nothing.
+{
+*pB = NULL;  // Just zero pointer
+}
+
 void bitSetOne(Bits *b, int bitIx)
 /* Set a single bit. */
 {
@@ -231,6 +261,19 @@ while (--byteCount >= 0)
     }
 }
 
+int bitAndCount(Bits *a, Bits *b, int bitCount)
+// Without altering 2 bitmaps, count the AND bits.
+{
+int byteCount = ((bitCount+7)>>3);
+int count = 0;
+if (!inittedBitsInByte)
+    bitsInByteInit();
+while (--byteCount >= 0)
+    count += bitsInByte[(*a++ & *b++)];
+
+return count;
+}
+
 void bitOr(Bits *a, Bits *b, int bitCount)
 /* Or two bitmaps.  Put result in a. */
 {
@@ -242,6 +285,19 @@ while (--byteCount >= 0)
     }
 }
 
+int bitOrCount(Bits *a, Bits *b, int bitCount)
+// Without altering 2 bitmaps, count the OR'd bits.
+{
+int byteCount = ((bitCount+7)>>3);
+int count = 0;
+if (!inittedBitsInByte)
+    bitsInByteInit();
+while (--byteCount >= 0)
+    count += bitsInByte[(*a++ | *b++)];
+
+return count;
+}
+
 void bitXor(Bits *a, Bits *b, int bitCount)
 {
 int byteCount = ((bitCount+7)>>3);
@@ -250,6 +306,19 @@ while (--byteCount >= 0)
     *a = (*a ^ *b++);
     a++;
     }
+}
+
+int bitXorCount(Bits *a, Bits *b, int bitCount)
+// Without altering 2 bitmaps, count the XOR'd bits.
+{
+int byteCount = ((bitCount+7)>>3);
+int count = 0;
+if (!inittedBitsInByte)
+    bitsInByteInit();
+while (--byteCount >= 0)
+    count += bitsInByte[(*a++ ^ *b++)];
+
+return count;
 }
 
 void bitNot(Bits *a, int bitCount)

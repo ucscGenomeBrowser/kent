@@ -6,6 +6,8 @@
 #ifndef BITS_H
 #define BITS_H
 
+#include "localmem.h"
+
 typedef unsigned char Bits;
 
 #define bitToByteSize(bitSize) ((bitSize+7)/8)
@@ -22,6 +24,18 @@ Bits *bitClone(Bits* orig, int bitCount);
 
 void bitFree(Bits **pB);
 /* Free bits. */
+
+Bits *lmBitAlloc(struct lm *lm,int bitCount);
+// Allocate bits.  Optionally supply local memory.
+
+Bits *lmBitRealloc(struct lm *lm, Bits *b, int bitCount, int newBitCount);
+// Resize a bit array.  If b is null, allocate a new array.  Optionally use local memory.
+
+Bits *lmBitClone(struct lm *lm, Bits* orig, int bitCount);
+// Clone bits.  Optionally use local memory.
+
+void lmBitFree(struct lm *lm, Bits **pB);
+// Free bits.  If allocated from local memory, this does nothing.
 
 void bitSetOne(Bits *b, int bitIx);
 /* Set a single bit. */
@@ -53,11 +67,20 @@ void bitClearRange(Bits *b, int startIx, int bitCount);
 void bitAnd(Bits *a, Bits *b, int bitCount);
 /* And two bitmaps.  Put result in a. */
 
+int bitAndCount(Bits *a, Bits *b, int bitCount);
+// Without altering 2 bitmaps, count the AND bits.
+
 void bitOr(Bits *a, Bits *b, int bitCount);
 /* Or two bitmaps.  Put result in a. */
 
+int bitOrCount(Bits *a, Bits *b, int bitCount);
+// Without altering 2 bitmaps, count the OR'd bits.
+
 void bitXor(Bits *a, Bits *b, int bitCount);
 /* Xor two bitmaps.  Put result in a. */
+
+int bitXorCount(Bits *a, Bits *b, int bitCount);
+// Without altering 2 bitmaps, count the XOR'd bits.
 
 void bitNot(Bits *a, int bitCount);
 /* Flip all bits in a. */

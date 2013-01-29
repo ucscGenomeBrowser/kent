@@ -284,9 +284,12 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             int end = codStart - 1;
             cStart = gene->chromStart + gene->chromStarts[i-1] + gene->blockSizes[i-1] - (end - st);
             cEnd = gene->chromStart + gene->chromStarts[i-1] + gene->blockSizes[i-1];
-            struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
-            dyStringPrintf(seq, "%s", s->dna);
-            //freeDnaSeq(&s);
+            if (cStart < cEnd)
+                {
+                struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
+                dyStringPrintf(seq, "%s", s->dna);
+                //freeDnaSeq(&s);
+                }
             }
         else if (!posStrand && rv->cdEnd >= (codStart + gene->blockSizes[i]))
             {
@@ -294,11 +297,14 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             int end = rv->cdEnd;
             cEnd = gene->chromStart + gene->chromStarts[i-1] + gene->blockSizes[i-1];
             cStart = gene->chromStart + gene->chromStarts[i-1] + gene->blockSizes[i-1] - (end - st);
-//error here?
-            struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
-            dyStringPrintf(seq, "%s", s->dna);
-//printf("TESTING got seq=%s<br>\n", s->dna);
-            //freeDnaSeq(&s);
+            if (cStart < cEnd)
+                {
+                struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
+                dyStringPrintf(seq, "%s", s->dna);
+                //error here?
+                //printf("TESTING got seq=%s<br>\n", s->dna);
+                //freeDnaSeq(&s);
+                }
             }
         /* get sequence needed from this exon */
         int st = rv->cdStart;
