@@ -913,7 +913,11 @@ chainOne $(path1)
     mkdir /gbdb/susScr2/NumtS
     ln -s `pwd`/pig_NumtS_seqs.sorted.bam{,.bai} /gbdb/susScr2/NumtS/
     hgBbiDbLink susScr2 bamAllNumtSSorted /gbdb/susScr2/NumtS/pig_NumtS_seqs.sorted.bam
-    # setup trackDb for susScr2
+    # setup trackDb for susScr2 and search rules
     cp /hive/data/outside/NumtS/2012/updatePig/pig_details.htm \
        $HOME/kent/src/hg/makeDb/trackDb/pig/susScr2/numtSeqSusScr2.html 
+    # edit numtSeqSusScr2.html to fit UCSC standard
+    # check html in to git
+
 #############################################################################
+
