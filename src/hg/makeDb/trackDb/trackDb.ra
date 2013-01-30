@@ -3170,7 +3170,6 @@ searchDescription tRNAscan-SE tRNA Name
 searchPriority 63
 
 track ucscGenePfam
-release alpha
 shortLabel Pfam in UCSC Gene
 longLabel Pfam Domains in UCSC Genes
 group genes

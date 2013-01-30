@@ -34,9 +34,11 @@ void *lmAlloc(struct lm *lm, size_t size);
 
 void *lmAllocMoreMem(struct lm *lm, void *pt, size_t oldSize, size_t newSize);
 /* Adjust memory size on a block, possibly relocating it.  If block is grown,
- * new memory is zeroed. NOTE: in RARE cases, same pointer may be returned, but
- * since lm allocs are never freed, the same pointer can be used by lmCloneMem */
-#define lmCloneMem(lm, pt, size) lmAllocMoreMem(lm, pt, size, size)
+ * new memory is zeroed. NOTE: in RARE cases, same pointer may be returned. */
+
+void *lmCloneMem(struct lm *lm, void *pt, size_t size);
+/* Return a local mem copy of memory block. */
+
 
 char*lmCloneStringZ(struct lm *lm, char *string, int size);
 /* Return local mem copy of string of given size, adding null terminator. */
