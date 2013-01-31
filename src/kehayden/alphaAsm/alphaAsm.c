@@ -73,6 +73,7 @@ struct monomer
     int outCount;		/* Number of times have output word so far. */
     struct monomerType *type;	/* The type of the monomer. */
     struct slRef *readList;	/* List of references to reads this is in. */
+    int subbedOutCount;		/* Output count after substitution. */
     };
 
 struct monomerRef
@@ -855,11 +856,14 @@ int commonCount = 0;
 char *commonWord = NULL;
 mostCommonMonomerWord(centerRefList, &commonWord, &commonCount);
 struct monomer *commonMonomer = hashFindVal(store->monomerHash, commonWord);
-verbose(3, "Commonest word to displace with %s is %s which occurs %d times in context and %d overall\n", center->word, commonWord, commonCount, commonMonomer->outCount);
-if (commonMonomer->outCount < 2)
+verbose(3, "Commonest word to displace with %s is %s which occurs %d times in context and %d overall\n", center->word, commonWord, commonCount, commonMonomer->subbedOutCount);
+uglyf("Commonest word to displace with %s is %s which occurs %d times in context and %d overall\n", center->word, commonWord, commonCount, commonMonomer->subbedOutCount);
+if (commonMonomer->subbedOutCount < 2)
     {
     verbose(2, "Want to substitute %s for %s, but %s only occurs %d time.\n", 
-	center->word, commonWord, commonWord, commonMonomer->outCount);
+	center->word, commonWord, commonWord, commonMonomer->subbedOutCount);
+    uglyf("Want to substitute %s for %s, but %s only occurs %d time.\n", 
+	center->word, commonWord, commonWord, commonMonomer->subbedOutCount);
     return FALSE;
     }
 
@@ -880,6 +884,8 @@ for (ref = centerRefList; ref != NULL; ref = ref->next)
 	     if (oldCenter->type != center->type)
 		 verbose(2, "Type mismatch subbig %s vs %s\n", oldCenter->word, center->word);
 	     node->val = center;
+	     oldCenter->subbedOutCount -= 1;
+	     center->subbedOutCount += 1;
 	     return TRUE;
 	     }
 	 ++currentIx;
@@ -921,20 +927,25 @@ struct monomer *common = NULL;
 for (ref = type->list; ref != NULL; ref = ref->next)
     {
     struct monomer *monomer = ref->val;
-    if (monomer->outCount > commonCount)
+    if (monomer->subbedOutCount > commonCount)
         {
-	commonCount = monomer->outCount;
+	commonCount = monomer->subbedOutCount;
 	common = monomer;
 	}
     }
 return common;
 }
 
-void subIntoFirstMostCommonOfType(struct alphaStore *store, struct monomer *unused, 
+boolean subIntoFirstMostCommonOfType(struct alphaStore *store, struct monomer *unused, 
     struct dlList *ll)
 /* Substitute unused for first occurence of most common monomer of same type. */
 {
 struct monomer *common = mostCommonInType(unused->type);
+if (common->subbedOutCount < 2)
+    {
+    uglyf("Trying to sub in %s, but there's no monomers of type %s that are used more than once.\n", unused->word, unused->type->name);
+    return FALSE;
+    }
 struct dlNode *node;
 for (node = ll->head; !dlEnd(node); node = node->next)
     {
@@ -943,17 +954,46 @@ for (node = ll->head; !dlEnd(node); node = node->next)
         {
 	verbose(2, "Subbing %s for %s of type %s\n", unused->word, monomer->word, 
 	    unused->type->name);
+	uglyf("Subbing %s for %s (used %d times) of type %s\n", unused->word, monomer->word, monomer->subbedOutCount, unused->type->name);
 	node->val = unused;
+	unused->subbedOutCount += 1;
+	monomer->subbedOutCount -= 1;
 	break;
 	}
     }
+return TRUE;
+}
+
+void setInitialSubbedOutCount(struct alphaStore *store, struct dlList *ll)
+/* Set subbedOutCount based on how many times monomers occur in list. */
+{
+struct dlNode *node;
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    struct monomer *monomer = node->val;
+    monomer->subbedOutCount += 1;
+    }
+#ifdef PARANOID
+/* As a check see if subbedOutCount agrees with outCount. */
+int mismatchCount = 0;
+struct monomer *monomer;
+for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
+    {
+    uglyf("%s %d %d\n", monomer->word, monomer->outCount, monomer->subbedOutCount);
+    if (monomer->outCount != monomer->subbedOutCount)
+        ++mismatchCount;
+    }
+uglyf("mismatch count = %d\n", mismatchCount);
+#endif /* PARANOID */
 }
 
 void subInMissing(struct alphaStore *store, struct dlList *ll)
 /* Go figure out missing monomers in ll, and attempt to substitute them in somewhere they would fit. */
 {
+setInitialSubbedOutCount(store, ll);
 struct slRef *unusedList = listUnusedMonomers(store, ll);
 verbose(2, "%d monomers, %d unused\n", slCount(store->monomerList), slCount(unusedList));
+uglyf("%d monomers, %d unused\n", slCount(store->monomerList), slCount(unusedList));
 struct slRef *unusedRef;
 for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
     {
@@ -961,6 +1001,7 @@ for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
     struct monomerRef *neighborhood = findNeighborhoodFromReads(unused);
     if (!subCenterInNeighborhood(store, unused, neighborhood, ll))
 	{
+	uglyf("Couldn't substitute in %s with context, falling back to type logic\n", unused->word);
 	verbose(2, "Couldn't substitute in %s with context, falling back to type logic\n", 
 	    unused->word);
         subIntoFirstMostCommonOfType(store, unused, ll);
