@@ -869,8 +869,8 @@ html hg19mammalChainNet
         type chain felCat4
         otherDb felCat4
 
-include chainCanFam2.ra beta,public
-include chainCanFam3.ra alpha
+# include chainCanFam2.ra
+include chainCanFam3.ra
 
         track chainDasNov2
         subTrack placentalChainNetViewchain off
@@ -1093,8 +1093,8 @@ include chainCanFam3.ra alpha
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
-include netCanFam2.ra beta,public
-include netCanFam3.ra alpha
+# include netCanFam2.ra
+include netCanFam3.ra
 
         track netDasNov2
         subTrack placentalChainNetViewnet on 
