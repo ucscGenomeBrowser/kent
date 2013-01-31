@@ -16,10 +16,10 @@ The primary and lab-processed data (along with methods descriptions, credits and
 which this track is based are available in the following ENCODE tracks:
 <ul>
 <li>
-<a target=_blank href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">ENCODE Duke DNaseI HS track</a>
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">ENCODE Duke DNaseI HS track</a>
 </li>
 <li>
-<a target=_blank href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS track</a>
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS track</a>
 </li>
 </ul>
 </p>
@@ -31,11 +31,23 @@ higher signal values correspond to darker-colored blocks. The display can be fil
 valued items, using the 'Minimum signal' configuration item.</p>
 <p>
 This track is a composite annotation track containing multiple subtracks, one for each cell type.
-The display mode and filtering of each subtrack can be individually controlled. By default, a small
-subset of the 125 subtracks are visible.  Click the &quot;all&quot; radiobutton to list all subtracks on the
-configuration page. Metadata for a particular subtrack can be found by clicking the down arrow in
-the list of subtracks. For more detail, see
+The display mode and filtering of each subtrack can be individually controlled. 
+For more information about track configuration, see
 <a target=_blank href="http://genome.ucsc.edu/goldenPath/help/multiView.html">Configuring Multi-View Tracks</a>.</p>
+<p>
+Metadata for a particular subtrack can be found by clicking the down arrow in
+the list of subtracks. The UCSC Accession listed in the metadata can be used with the File Search tool to
+retrieve primary data files underlying datasets of interest. 
+</p>
+<p>
+In the subtrack selection list, the ENCODE tier (priority) is listed for each cell type. 
+Tier 1 and Tier 2 represent categories with cell types designated for intensive study by 
+the ENCODE investigators.
+After the January 2011 data freeze, an additional set of cell types were promoted from 
+Tier 3 to Tier 2 to broaden the list of intensively studied cell types.
+These cell types are listed as <em>Tier 2*</em> in the subtrack list here (and are 
+described as 'newly promoted to tier 2: not in 2011 analysis' on the
+<a target=_blank href="/ENCODE/cellTypes.html">ENCODE Common Cell Types</a> page).</p>
 
 <h2>Methods</h2>
 <p>
@@ -78,18 +90,25 @@ CB, Frietze S, Harrow J <em>et al</em>.
 An integrated encyclopedia of DNA elements in the human genome</a>.
 <em>Nature</em>. 2012 Sep 6;489(7414):57-74.
 </p>
-
+<p>
+Thurman RE, Rynes E, Humbert R, Vierstra J, Maurano MT, Haugen E, Sheffield NC, Stergachis AB, Wang
+H, Vernot B <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22955617" target="_blank">
+The accessible chromatin landscape of the human genome</a>.
+<em>Nature</em>. 2012 Sep 6;489(7414):75-82.
+</p>
 <p>
 See also the references in the related
-<a target=_blank href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">ENCODE Duke DNaseI HS</a>
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">ENCODE Duke DNaseI HS</a>
 and
-<a target=_blank href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS</a>
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS</a>
 tracks.
 </p>
 
 <h2> Data Release Policy </h2>
 <p>While primary ENCODE data is subject to a restriction period as described in the 
-<a HREF="http://genome.ucsc.edu/ENCODE/terms.html" TARGET=_BLANK>
+<a HREF="../ENCODE/terms.html" TARGET=_BLANK>
 ENCODE data release policy</A>, 
-this restriction does not apply to the integrative analysis results.  The data in this track are freely available.
+this restriction does not apply to the integrative analysis results.  
+The data in this track are freely available.
 </p>

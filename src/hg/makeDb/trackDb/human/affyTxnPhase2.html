@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>
 This track displays transcriptome data from tiling GeneChips produced
-by <A HREF="http://www.affymetrix.com"
+by <A HREF="http://www.affymetrix.com/estore/"
 TARGET=_blank>Affymetrix</A>. For the ten chromosomes 6, 7, 13, 14,
 19, 20, 21, 22, X, and Y, more than 74 million probes were tiled every
 5 bp in non-repeat-masked areas and hybridized to mRNA from 11
@@ -50,7 +50,7 @@ intensity (using both PM and MM intensities) of each array was
 scaled to a target value of 44.
 <LI>The expression level was estimated for each mapped probe position by 
   <UL>
-  <LI>collecting all the probe pairs that fell within a window of &#177
+  <LI>collecting all the probe pairs that fell within a window of &#177;
   30 bp
   <LI>calculating all non-redundant pairwise averages of PM - MM
   values of all probe pairs in the window
@@ -58,23 +58,24 @@ scaled to a target value of 44.
   </UL>
 <LI>The resulting signal value is the Hodges-Lehmann estimator
 associated with the Wilcoxon signed-rank statistic of the PM - MM
-values that lie within &#177 30 bp of the sliding window centered at
+values that lie within &#177; 30 bp of the sliding window centered at
 every genomic coordinate.
 </OL></P>
 
 <H2>Credits</H2>
 <P>
 Data generation and analysis was performed by the transcriptome group at 
-Affymetrix:
-Bekiranov, S., Brubaker, S., Cheng, J., Dike, S., Drenkow, J., Ghosh, S., 
-Gingeras, T., Helt, G., Kampa, D., Kapranov, P., Long, J., Madhavan, G., 
-Manak, J., Patel, S., Piccolboni, A., Sementchenko, V. and Tammana, H.</P>
+Affymetrix: Bekiranov S, Brubaker S, Cheng J, Dike S, Drenkow J, Ghosh S, Gingeras T, Helt G, Kampa D,
+Kapranov P, Long J, Madhavan G, Manak J, Patel S, Piccolboni A, Sementchenko V, and Tammana H.</P>
 
-<P>Questions or comments about this annotation? Email <a href='mailto:sugnet@soe.ucsc.edu'>Chuck Sugnet</a>.
+<P>UCSC annotation performed by Chuck Sugnet.
 
 <H2>References</H2>
-<P>
-Cheng <em>et al</em>. 
-<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15790807"
-TARGET=_blank>Transcriptional Maps of 10 Human Chromosomes at 5-Nucleotide 
-Resolution</A>. <em>Science</em> <B>308</B>(5725), 1149-54 (2005).</P>
+
+<p>
+Cheng J, Kapranov P, Drenkow J, Dike S, Brubaker S, Patel S, Long J, Stern D, Tammana H, Helt G
+<em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/15790807" target="_blank">
+Transcriptional maps of 10 human chromosomes at 5-nucleotide resolution</a>.
+<em>Science</em>. 2005 May 20;308(5725):1149-54.
+</p>

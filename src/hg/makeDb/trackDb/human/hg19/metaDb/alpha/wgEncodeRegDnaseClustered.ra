@@ -34,4 +34,11 @@ project wgEncode
 subId 2095
 tableName wgEncodeRegDnaseClusteredInputs
 
-# MAGIC: 1606898813
+metaObject wgEncodeRegDnaseClusteredV2
+objType table
+composite wgEncodeRegDnaseClustered
+fileName wgEncodeRegDnaseClusteredV2.bed.gz
+project wgEncode
+tableName wgEncodeRegDnaseClusteredV2
+
+# MAGIC: 1743288666

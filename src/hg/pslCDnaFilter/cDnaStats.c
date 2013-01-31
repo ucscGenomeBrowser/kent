@@ -57,7 +57,6 @@ verbStats(level, "drop maxRepMatch", &stats->maxRepMatchDropCnts, FALSE);
 verbStats(level, "drop min size", &stats->minQSizeDropCnts, FALSE);
 verbStats(level, "drop minIdent", &stats->minIdDropCnts, FALSE);
 verbStats(level, "drop minCover", &stats->minCoverDropCnts, FALSE);
-verbStats(level, "drop weird", &stats->weirdDropCnts, FALSE);
 verbStats(level, "drop overlap", &stats->overlapDropCnts, FALSE);
 verbStats(level, "drop minSpan", &stats->minSpanDropCnts, FALSE);
 verbStats(level, "drop localBest", &stats->localBestDropCnts, FALSE);
@@ -65,6 +64,7 @@ verbStats(level, "drop globalBest", &stats->globalBestDropCnts, FALSE);
 verbStats(level, "drop maxAligns", &stats->maxAlignsDropCnts, FALSE);
 verbStats(level, "drop nonUnique", &stats->nonUniqueMap, FALSE);
 verbStats(level, "drop blackList", &stats->blackListCnts, FALSE);
+verbStats(level, "drop weird", &stats->weirdDropCnts, FALSE);
 verbStats(level, "kept weird", &stats->weirdKeptCnts, FALSE);
 verbStats(level, "kept", &stats->keptCnts, TRUE);
 }

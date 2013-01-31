@@ -1,6 +1,6 @@
                    	seqs	aligns
              total:	31	473
-        weird over:	5	17
+        weird over:	1	2
    drop globalBest:	29	396
     drop nonUnique:	16	62
         kept weird:	1	1

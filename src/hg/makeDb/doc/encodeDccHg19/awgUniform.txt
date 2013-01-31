@@ -155,8 +155,9 @@ cat  << 'EOF' > link.csh
     csh link.csh
     cd $dir/wgEncodeAwgDnaseUniform/releaseLatest
 
-    # add files.txt
+    # add files.txt, md5sum.txt
     encodeMkFilesList hg19 
+    ln md5sum.txt releaseLatest
 
     # add README
     sed 's/wgEncodeUwDnase/wgEncodeAwgDnaseUniform/' $dir/wgEncodeUwDnase/README.txt > $dir/wgEncodeAwgDnaseUniform

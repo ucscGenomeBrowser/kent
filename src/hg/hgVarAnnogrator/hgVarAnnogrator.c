@@ -35,7 +35,7 @@
 #include "annoStreamDb.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
-#include "annoGrateWig.h"
+#include "annoGrateWigDb.h"
 #include "annoGratorGpVar.h"
 #include "annoFormatTab.h"
 
@@ -1751,8 +1751,8 @@ struct asObject *asObjectFromFields(char *name, struct sqlFieldInfo *fieldList)
 struct dyString *dy = dyStringCreate("table %s\n"
 				     "\"Column names grabbed from mysql\"\n"
 				     "    (\n", name);
-struct sqlFieldInfo *field = sameString("bin", fieldList->field) ? fieldList->next : fieldList;
-for (;  field != NULL;  field = field->next)
+struct sqlFieldInfo *field;
+for (field = fieldList;  field != NULL;  field = field->next)
     {
     char *sqlType = field->type;
     // hg19.wgEncodeOpenChromSynthGm12878Pk.pValue has sql type "float unsigned",
@@ -1843,7 +1843,7 @@ return (gotChromStart && gotChromEnd && gotAlleleCount && gotAlleleFreq);
 }
 
 boolean looksLikeGenePred(struct asObject *asObj)
-/* Return TRUE if this has characteristic column names of pgSnp. */
+/* Return TRUE if this has characteristic column names of genePred. */
 //#*** Replace me with a general autoSql comparator!!
 {
 boolean gotTxStart = FALSE, gotTxEnd = FALSE, gotCdsStart = FALSE, gotExonStarts = FALSE;
@@ -1863,18 +1863,18 @@ return (gotTxStart && gotTxEnd && gotCdsStart && gotExonStarts);
 }
 
 
-struct annoGrator *gratorFromSource(char *db, char *table, struct trackDb *tdb,
+struct annoGrator *gratorFromSource(char *db, struct sourceConfig *src, struct trackDb *tdb,
 				    struct annoStreamer *primary)
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator. */
 {
 struct annoGrator *grator = NULL;
-char *dataDb = db, *dbTable = table;
-if (isCustomTrack(table))
+char *dataDb = db, *dbTable = src->selTable;
+if (isCustomTrack(src->selTable))
     {
     dataDb = CUSTOM_TRASH;
     dbTable = trackDbSetting(tdb, "dbTableName");
     if (dbTable == NULL)
-	errAbort("Can't find dbTableName for custom track %s", table);
+	errAbort("Can't find dbTableName for custom track %s", src->selTable);
     }
 if (startsWith("wig", tdb->type))
     grator = annoGrateWigDbNew(dataDb, dbTable, maxOutRows);
@@ -1886,6 +1886,8 @@ else
     else
 	grator = annoGratorNew(streamer);
     }
+if (sameString(src->selIntersect, "mustOverlap"))
+    grator->haveRJIncludeFilter = TRUE;
 return grator;
 }
 
@@ -1911,11 +1913,19 @@ struct annoGrator *gratorList = NULL;
 struct sourceConfig *src;
 for (src = queryConfig->sources;  src != NULL;  src = src->next)
     {
-    struct trackDb *tdb = tdbForTrack(db, src->selTrack, &fullTrackList);
+    struct trackDb *ancestorTdb = tdbForTrack(db, src->selTrack, &fullTrackList);
+    struct trackDb *tdb = ancestorTdb;
+    if (!sameString(tdb->table, src->selTable))
+	{
+	tdb = findSubtrackByName(ancestorTdb, src->selTable);
+	if (tdb == NULL)
+	    errAbort("Unable to find table '%s' in trackDb for track '%s' or its subtracks",
+		     src->selTable, src->selTrack);
+	}
     if (src->isPrimary)
 	primary = streamerFromSource(db, src->selTable, tdb);
     else
-	slAddHead(&gratorList, gratorFromSource(db, src->selTable, tdb, primary));
+	slAddHead(&gratorList, gratorFromSource(db, src, tdb, primary));
     }
 slReverse(&gratorList);
 struct annoFormatter *formatter = formatterFromOutput(queryConfig);

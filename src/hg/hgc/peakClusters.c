@@ -249,11 +249,15 @@ if (vocab)
 /* Make the SQL query to get the table and all other fields we want to show
  * from inputTrackTable. */
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select tableName");
+struct dyString *fields = dyStringNew(0);
+dyStringPrintf(query, "select tableName ");
 struct slName *field;
 for (field = fieldList; field != NULL; field = field->next)
-    dyStringPrintf(query, ",%s", field->name);
-dyStringPrintf(query, " from %s order by cellType, treatment, lab", inputTrackTable);
+    dyStringPrintf(fields, ",%s", field->name);
+dyStringPrintf(query, "%s from %s", fields->string, inputTrackTable);
+if (fieldList != NULL)
+    // skip leading comma
+    dyStringPrintf(query, " order by %s", fields->string+1);
 
 int displayNo = 0;
 int fieldCount = slCount(fieldList);
@@ -275,6 +279,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 freez(&vocabFile);
 dyStringFree(&query);
+dyStringFree(&fields);
 }
 
 static void printPeakClusterInputs(struct sqlConnection *conn,

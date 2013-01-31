@@ -239,7 +239,7 @@ struct lineFile *lf;
 int lineSize, wordCount;
 char *line, *words[32];
 char origLine[256];
-char seqId[32];
+char seqId[128];
 char *s;
 int begin, end, left;
 char leftString[18];

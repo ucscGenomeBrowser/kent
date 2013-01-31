@@ -133,7 +133,7 @@ slReverse(&rowList);
 // If no rows overlapped primary, and there is a right-join, !isExclude (i.e. isInclude) filter,
 // then we need to set retRJFilterFailed because the condition was not met to include
 // the primary item.
-if (rowList == NULL && rjFailHard && self->haveRJIncludeFilter)
+if (rowList == NULL && self->haveRJIncludeFilter)
     *retRJFilterFailed = TRUE;
 return rowList;
 }

@@ -901,10 +901,23 @@ chainOne $(path1)
     hgLoadBed susScr2  numtSAssembled  susScr2NumtSAssembled.bed
     hgLoadBed susScr2 numtS susScr2NumtS.bed
     hgLoadBed susScr2 numtSMitochondrion susScr2NumtSMitochondrion.bed
+
+    # get new bam and html file from data provider (dated 2012-12-05)
+    # put them in /hive/data/outside/NumtS/2012/updatePig first
+    # then, copied over to /hive/data/genomes/susScr2/bed/NumtS
+    cd /hive/data/outside/NumtS/2012/updatePig
+    cp pig_NumtS_seqs*.* /hive/data/genomes/susScr2/bed/NumtS
+
+
     # Make /gbdb/ links and load bam
     mkdir /gbdb/susScr2/NumtS
-    ln -s `pwd`/SusScrofa-2_NumtS_seqs.sorted.bam{,.bai} /gbdb/susScr2/NumtS/
-    hgBbiDbLink susScr2 bamAllNumtSSorted /gbdb/susScr2/NumtS/SusScrofa-2_NumtS_seqs.sorted.bam
-    # setup trackDb for susScr2
+    ln -s `pwd`/pig_NumtS_seqs.sorted.bam{,.bai} /gbdb/susScr2/NumtS/
+    hgBbiDbLink susScr2 bamAllNumtSSorted /gbdb/susScr2/NumtS/pig_NumtS_seqs.sorted.bam
+    # setup trackDb for susScr2 and search rules
+    cp /hive/data/outside/NumtS/2012/updatePig/pig_details.htm \
+       $HOME/kent/src/hg/makeDb/trackDb/pig/susScr2/numtSeqSusScr2.html 
+    # edit numtSeqSusScr2.html to fit UCSC standard
+    # check html in to git
 
 #############################################################################
+

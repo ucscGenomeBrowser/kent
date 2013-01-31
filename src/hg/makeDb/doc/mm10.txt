@@ -9004,36 +9004,30 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################
-# ExonJunction Primers (DONE - 2012-12-10 - Chin
+# QPCR PRIMERS (DONE - 2012-12-10 - Chin)
 # The track name is changed to "qPCR Primers"
+# Reload table with new track_mouse.BED (2013-01-28)
     # Download
-    # http://www.weizmann.ac.il/complex/compphys/software/Amit/primers/mouse/track_mouse.BED
-    # to /hive/data/outside/Weizmann/exonJunctionPrimers
-    cd /hive/data/outside/Weizmann/exonJunctionPrimers
-    mkdir -p /hive/data/genomes/mm10/bed/exonJunctionPrimers
+    mkdir /hive/data/outside/Weizmann/qPcrPrimers
+    cd /hive/data/outside/Weizmann/qPcrPrimers
+    wget http://www.weizmann.ac.il/complex/compphys/software/Amit/primers/mouse/track_mouse.BED
+    mkdir -p /hive/data/genomes/mm10/bed/qPcrPrimers
     cat track_mouse.BED | grep -v track \
-     > /hive/data/genomes/mm10/bed/exonJunctionPrimers/exonJunctionPrimers_mm10.bed
-    # Prepare the detail sql
-    cd $HOME/kent/src/hg/lib
-    autoSql exonJunctionPrimers.as exonJunctionPrimers
-    mv exonJunctionPrimers.h ../inc/
-    # commit ../inc/exonJunctionPrimers.h, exonJunctionPrimers.c,
-    # exonJunctionPrimers.as and exonJunctionPrimers.sql to git. 
-    # Add exonJunctionPrimers.o to src/hg/lib/makefile and add it to git
+     > /hive/data/genomes/mm10/bed/qPcrPrimers/qPcrPrimers_mm10.bed
 
-    cd /hive/data/genomes/mm10/bed/exonJunctionPrimers
+    cd /hive/data/genomes/mm10/bed/qPcrPrimers
     hgLoadBed -bedDetail -tab -renameSqlTable \
       -sqlTable=$HOME/kent/src/hg/lib/bedDetail.sql \
-      mm10 exonJunctionPrimers exonJunctionPrimers_mm10.bed
-    # Reading exonJunctionPrimers_mm10.bed
-    # Read 448450 elements of size 14 from exonJunctionPrimers_mm10.bed
+      mm10 qPcrPrimers qPcrPrimers_mm10.bed
+    # Reading qPcrPrimers_mm10.bed
+    # Read 518230 elements of size 14 from qPcrPrimers_mm10.bed
     # Sorted
-    # Creating table definition for exonJunctionPrimers
+    # Creating table definition for qPcrPrimers
     # Saving bed.tab
     # Loading mm10
 
-    # rename the table to qPcrPrimers  (2013-01-14)
-    hgsql -ne "RENAME TABLE exonJunctionPrimers TO qPcrPrimers" mm10
+    # NULL descrition column
+    hgsql mm10 -ne "UPDATE qPcrPrimers SET description = NULL;"
 
 #########################################################################
 # DBSNP B137 / SNP137 (DONE 12/20/12 angie)

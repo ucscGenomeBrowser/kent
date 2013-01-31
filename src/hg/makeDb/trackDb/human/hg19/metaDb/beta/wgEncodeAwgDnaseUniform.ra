@@ -1404,6 +1404,7 @@ cell Monocytes-CD14+_RO01746
 composite wgEncodeAwgDnaseUniform
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
+dccAccession wgEncodeEH001196
 fileName wgEncodeAwgDnaseUwMonocytescd14ro01746UniPk.narrowPeak.gz
 lab UW
 md5sum 152a89256f8fc12487f5c059b31f3a2d
@@ -1863,4 +1864,4 @@ tableName wgEncodeAwgDnaseUwdukeTh1UniPk
 treatment None
 view Peaks
 
-# MAGIC: 2093096348
+# MAGIC: 1906050092
