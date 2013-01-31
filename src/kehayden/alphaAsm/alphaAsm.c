@@ -938,6 +938,11 @@ boolean subIntoFirstMostCommonOfType(struct alphaStore *store, struct monomer *u
 /* Substitute unused for first occurence of most common monomer of same type. */
 {
 struct monomer *common = mostCommonInType(unused->type);
+if (common == NULL)
+    {
+    verbose(2, "No monomers of type %s used at all!\n", unused->type->name);
+    return FALSE;
+    }
 if (common->subbedOutCount < 2)
     {
     verbose(2, "Trying to sub in %s, but there's no monomers of type %s that are used more than once.\n", 
@@ -1641,7 +1646,7 @@ maxChainSize = optionInt("size", maxChainSize);
 outSize = optionInt("outSize", outSize);
 fullOnly = optionExists("fullOnly");
 pseudoCount = optionInt("pseudoCount", pseudoCount);
-int seed = optionInt("seed", (int)time(0));
+int seed = optionInt("seed", 0);
 srand(seed);
 alphaAsm(argv[1], argv[2], argv[3]);
 return 0;
