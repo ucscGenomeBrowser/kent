@@ -1913,15 +1913,10 @@ struct annoGrator *gratorList = NULL;
 struct sourceConfig *src;
 for (src = queryConfig->sources;  src != NULL;  src = src->next)
     {
-    struct trackDb *ancestorTdb = tdbForTrack(db, src->selTrack, &fullTrackList);
-    struct trackDb *tdb = ancestorTdb;
-    if (!sameString(tdb->table, src->selTable))
-	{
-	tdb = findSubtrackByName(ancestorTdb, src->selTable);
-	if (tdb == NULL)
-	    errAbort("Unable to find table '%s' in trackDb for track '%s' or its subtracks",
-		     src->selTable, src->selTrack);
-	}
+    struct trackDb *tdb = tdbForTrack(db, src->selTable, &fullTrackList);
+    if (tdb == NULL)
+	errAbort("Unable to find table '%s' in trackDb for track '%s' or its subtracks",
+		 src->selTable, src->selTrack);
     if (src->isPrimary)
 	primary = streamerFromSource(db, src->selTable, tdb);
     else
