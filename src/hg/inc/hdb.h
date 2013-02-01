@@ -480,15 +480,11 @@ struct trackDb *hTrackDb(char *db);
 struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList);
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
- * subtrack then inheritance will be handled, and the composite trackDb will
- * be returned.  (Unless a subtrack has "noInherit on"...)
- * This will die if the current database does not have
+ * subtrack then inheritance will be handled.  (Unless a subtrack has
+ * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found.
  * MAY pass in prepopulated trackDb list, or may receive the trackDb list as an inout. */
 #define hTrackDbForTrack(db,track) tdbForTrack(db,track,NULL)
-
-struct trackDb *findSubtrackByName(struct trackDb *ancestorTdb, char *track);
-/* Given a tdb for a composite, return the subtrack tdb for track or NULL. */
 
 struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track);
 /* Load trackDb object for a track. If need be grab its ancestors too.
