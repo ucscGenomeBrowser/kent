@@ -98,7 +98,6 @@ if (geoMirrorEnabled())
     char query[256];
     safef(query, sizeof query, "SELECT node, domain, shortLabel from gbNode%s order by node", geoSuffix);
     struct sqlResult *sr = sqlGetResult(conn, query);
-    // TODO someday handle if location has https urls
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	char *node = row[0];
@@ -111,7 +110,7 @@ if (geoMirrorEnabled())
         dyStringAppend(dy, "<img alt=\"X\" width=\"16\" height=\"16\" style=\"float:left;");
         if (!sameString(node, myNode))
             dyStringAppend(dy, "visibility:hidden;");
-        dyStringAppend(dy, "\" src=\"../images/greenChecksm.png\">\n");
+        dyStringAppend(dy, "\" src=\"../images/greenChecksmCtr.png\">\n");
         if (!sameString(node, myNode))
             dyStringPrintf(dy, "<a href=\"http://%s/cgi-bin/hgGateway?redirect=manual\">", domain);
         dyStringPrintf(dy, "Use %s", shortLabel);

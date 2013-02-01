@@ -19,14 +19,30 @@ struct lm *lmInit(int blockSize);
 void lmCleanup(struct lm **pLm);
 /* Clean up a local memory pool. */
 
+int lmFlushZ(struct lm *lm);
+// Zero's and makes available most recent block of pool, abandoning older blocks
+// USE WITH CAUTION: All previous pointers into lm will be invalid
+
+size_t lmAvailable(struct lm *lm);
+// Returns currently available memory in pool
+
+size_t lmSize(struct lm *lm);
+// Returns current size of pool, even for memory already allocated
+
 void *lmAlloc(struct lm *lm, size_t size);
 /* Allocate memory from local pool. */
 
-char *lmCloneString(struct lm *lm, char *string);
-/* Return local mem copy of string. */
+void *lmAllocMoreMem(struct lm *lm, void *pt, size_t oldSize, size_t newSize);
+/* Adjust memory size on a block, possibly relocating it.  If block is grown,
+ * new memory is zeroed. NOTE: in RARE cases, same pointer may be returned. */
+
+void *lmCloneMem(struct lm *lm, void *pt, size_t size);
+/* Return a local mem copy of memory block. */
+
 
 char*lmCloneStringZ(struct lm *lm, char *string, int size);
 /* Return local mem copy of string of given size, adding null terminator. */
+#define lmCloneString(lm, string) lmCloneStringZ(lm, string, strlen(string))
 
 char *lmCloneFirstWord(struct lm *lm, char *line);
 /* Clone first word in line */
@@ -37,9 +53,6 @@ char *lmCloneSomeWord(struct lm *lm, char *line, int wordIx);
 
 struct slName *lmSlName(struct lm *lm, char *name);
 /* Return slName in memory. */
-
-void *lmCloneMem(struct lm *lm, void *pt, size_t size);
-/* Return a local mem copy of memory block. */
 
 #define lmAllocVar(lm, pt) (pt = lmAlloc(lm, sizeof(*pt)));
 /* Shortcut to allocating a single variable in local mem and

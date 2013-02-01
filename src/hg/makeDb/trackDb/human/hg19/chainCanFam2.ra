@@ -1,6 +1,6 @@
         track chainCanFam2
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=pDog clade=bLaura
+        subGroups view=chain species=qDog clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain canFam2

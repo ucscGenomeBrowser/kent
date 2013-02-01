@@ -3170,9 +3170,8 @@ searchDescription tRNAscan-SE tRNA Name
 searchPriority 63
 
 track ucscGenePfam
-release alpha
 shortLabel Pfam in UCSC Gene
-longLabel Pfam domains in UCSC Genes
+longLabel Pfam Domains in UCSC Genes
 group genes
 type bed 12
 priority 37.14
@@ -3256,6 +3255,10 @@ noScoreFilter on
 itemRgb on
 
 searchTable qPcrPrimers
+searchMethod exact
+searchType bed
+
+searchTable ucscGenePfam
 searchMethod exact
 searchType bed
 

@@ -78,18 +78,25 @@ if (sameString("hg18", database))
       clickMsg = openMsg1;
       }
 } else {
-  if (sameString("numtS", table) || sameString("numtSAssembled", table))
-     {
-     safef(query, sizeof(query),
-         "select  chrom, chromStart, chromEnd, name, score, strand "
-         "from numtSMitochondrion where name = '%s'  ", itemName);
-     clickMsg = openMsgM;
+    if (sameString("numtS", table) || sameString("numtSAssembled", table))
+    {
+      if (sameString("hg19", database) || sameString("mm9", database))
+      {  
+          safef(query, sizeof(query),
+              "select  chrom, chromStart, chromEnd, name, score, strand "
+              "from numtSMitochondrion where name = '%s'  ", itemName);
+      } else {
+          safef(query, sizeof(query),
+              "select  chrom, chromStart, chromEnd, name, score, strand "
+            "from numtSMitochondrion where name = '%s'  ", itemNameTrimmed);
+      }  
+        clickMsg = openMsgM;
      }
   else if (sameString("numtSMitochondrion", table))
      {
       safef(query, sizeof(query),
           "select  chrom, chromStart, chromEnd, name, score, strand "
-          "from numtS where name = '%s'", itemName);
+          "from numtS where name like '%s%%'", itemName);
       clickMsg = openMsg1;
      }
 }
