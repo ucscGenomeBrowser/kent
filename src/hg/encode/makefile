@@ -10,7 +10,8 @@ DIRS = \
 	encodeMkChangeNotes \
 	paraMd5sum \
 	encodeStatus \
-        hgEncodeApi
+        hgEncodeApi \
+        encodeCvTerm
 
 # broken
 	#ldGencodeIntron \
