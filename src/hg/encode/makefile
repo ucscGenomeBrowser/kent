@@ -3,14 +3,15 @@
 # List of directories to build
 
 DIRS = \
-	hgEncodeDataVersions \
-	mkEncodeFrameset \
-	hgEncodeVocab \
-	validateFiles \
+	encodeCvTerm \
 	encodeMkChangeNotes \
-	paraMd5sum \
 	encodeStatus \
-        hgEncodeApi
+	hgEncodeApi \
+	hgEncodeDataVersions \
+	hgEncodeVocab \
+	mkEncodeFrameset \
+	paraMd5sum \
+	validateFiles
 
 # broken
 	#ldGencodeIntron \

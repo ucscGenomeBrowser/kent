@@ -784,7 +784,7 @@ cat > getHistones.csh << 'EOF'
 
     # find dupes in target-based table (already done for antibody-based)
 
-    # 91 cell types, 201 antibodies (176 targets), 28 treatments, 9 labs
+    # 91 cell types, 201 antibodies (177 targets), 28 treatments, 9 labs
 
     # limit to single cell/factor/treatment (remove cross-lab duplication).
     # Consider pooling instead ??  Or picking based on quality metrics ?
