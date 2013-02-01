@@ -51,7 +51,7 @@ chr1    10180   10330   .       0       .       26.000000       -1      -1      
 
     cd narrowPeak
 cat > ../loadDnase.csh << 'EOF'
-    set b = wgEncodeAwgDnaseUniform
+    set b = wgEncodeAwgDnase
     set v = ${b}Uniform
     set t = ../$b.ra
     set m = ../$b.metaDb.ra
@@ -206,17 +206,244 @@ cat  << 'EOF' > link.csh
     # 708 filelist.txt
     cd ..
 
-    # extract UCSC object name from peaks file name
+    # extract UCSC object names (experiment and control) from peaks file name
     ls ebi/*.narrowPeak.gz > peak.lst
     regClusterMakeTableOfTables ans02 peak.lst partial.table -verbose=3 >&! regTable.out &
 
-    # attach metadata
-    regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
+    # attach metadata, by antibody and by target
+    #regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
+    #regClusterAttachMetadataToTableOfTables -antibodyTarget hg19 partial.fixed.table \
+        #withDupes.target.table -verbose=3
+
+    # 91 cell types, 201 antibodies (177 targets), 28 treatments, 9 labs
+    ######################
+
+    # unzip and rename to UCSC style : wgEncodeAwgTfbs<lab><cell><antibody>[<treatment>]UniPk.narrowPeak
+    # load table
+    # zip and md5sum
+    # create trackDb and metaDb entries
+    # save cellType and antibody targets for subGroups at the end
+
+cat > nameTable.csh << 'EOF'
+    # create table name for an experiment object
+    set base = $1
+    set exp = $2
+    set vars = `echo $exp | \
+        sed -e 's/Control.*AlnRep1//' -e 's/StdAlnRep1//' -e 's/AlnRep1//' -e 's/wgEncode//' \
+            -e 's/Tfbs//' -e 's/BroadHistone/Broad/' -e 's/OpenChromChip/Uta/'`
+    set table = ${base}${vars}UniPk
+    echo $table
+'EOF'
+
+cat > loadOne.csh << 'EOF'
+    # load table
+    set infile = $1
+    set exp = $2
+    set outdir = $3
+    set base = $4
+
+    set vars = `echo $exp | \
+        sed -e 's/Control.*AlnRep1//' -e 's/StdAlnRep1//' -e 's/AlnRep1//' -e 's/wgEncode//' \
+            -e 's/Tfbs//' -e 's/BroadHistone/Broad/' -e 's/OpenChromChip/Uta/'`
+
+    set table = ${base}${vars}UniPk
+    hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable \
+                -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable \
+                -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $table $infile
+    # return value 
+'EOF'
+
+cat > makeTag.csh << 'EOF'
+    echo $1 | perl -wpe 's/[^a-z0-9]+//ig; s/(.*)/\U$1/'
+'EOF'
+
+cat > trackOne.csh << 'EOF'
+    #create track
+
+    set exp = $1
+    set composite = $2
+    set base = $3
+    set cellFile = $4
+    set factorFile = $5
+
+    # get essential metadata
+    set meta = `mdbPrint hg19 -obj=$exp | \
+                    raToTab stdin -cols=lab,cell,antibody,treatment stdout`
+    if ($status != 0) then
+        echo "ERROR: $exp"
+        continue
+    endif
+
+    set lab = $meta[1]
+    set cell = $meta[2]
+    set tier = `encodeCvTerm cell $cell tier`
+
+    # color subtracks with tier 1 and 2 cells
+    if ($tier != "3") then
+        set color = `encodeCvTerm cell $cell color`
+        if ($status != 0) then
+            unset color
+        endif
+    endif
+    set cellTag = `csh makeTag.csh $cell`
+
+    set antibody = $meta[3]
+    set factor = `encodeCvTerm antibody $antibody target`
+    if ($#meta == 4) then
+        set treatment = $meta[4]
+    endif
+    echo "$exp $lab $cell $tier $antibody $treatment"
+
+    set factorTag = `csh makeTag.csh $factor`
+    echo "$factorTag=$factor" >> $factorFile
+
+    if ($tier != "3") then
+        set cellTag = "a${tier}${cellTag}"
+        echo "$cellTag=$cell&nbsp;(Tier_${tier})" >> $cellFile
+    else
+        echo "$cellTag=$cell" >> $cellFile
+    endif
+
+    set table = `csh nameTable.csh $base $exp`
+    set trackDb = ${composite}.ra
+    echo "    track $table" >> $trackDb
+
+    # first cut at default tracks on
+    if ($tier != "3" && \
+        ($factor == "CTCF" || $factor == "JUN" || $factor == "E2F4" || $factor == "MYC" )) then
+        echo "    parent $composite" >> $trackDb
+    else
+        echo "    parent $composite off" >> $trackDb
+    endif
+
+    if ($factor != $antibody) then
+        set antibodyLabel = " ($antibody)"
+    else
+        set antibodyLabel = ""
+    endif
+    if ($?treatment && $treatment != "None") then
+        set treatmentLabel = " ($treatment)"
+    else
+        set treatmentLabel = ""
+    endif
+
+    echo "    shortLabel ${cell}${treatmentLabel} $factor" >> $trackDb
+    echo "    longLabel $cell${treatmentLabel} ${factor}${antibodyLabel} TFBS Uniform Peaks from ENCODE/Analysis" >> $trackDb
+    echo "    subGroups tier=a${tier}0 cellType=$cellTag factor=$factorTag" >> $trackDb
+    if ($?color) then
+        echo "    color $color" >> $trackDb
+    endif
+    echo "" >> $trackDb
+'EOF'
+
+cat > metaOne.csh << 'EOF'
+    # create metadata
+    #echo "    metaObject $table" >> $m
+    #echo "    objType table" >> $m
+    #echo "    cell $cell" >> $m
+    #echo "    antibody $antibody" >> $m
+    #echo "    controlId $control" >> $m
+    #echo "    lab $lab" >> $m
+    #echo "    treatment None" >> $m
+    #echo "    composite $b" >> $m
+    #echo "    dataType ChipSeq" >> $m
+    #echo "    dataVersion ENCODE Mar 2012 Freeze" >> $m
+    #echo "    dccAccession X" >> $m
+    #echo "    project wgEncode" >> $m
+    #echo "    tableName $table" >> $m
+    #echo "    fileName $f.gz" >> $m
+    #echo "    md5sum $md5sum" >> $m
+    #echo "    view Peaks" >> $m
+    #echo "" >> $m
+'EOF'
+
+cat > zipOne.csh << 'EOF'
+    # rename and gzip
+    #set outfile = $outdir/${table}.narrowPeak
+    # copy file, load, and gzip for downloads
+    #echo cp -p $infile $outfile
+    #gzip $f
+    #set md5sum = `md5sum $f.gz | awk '{print $1}'`
+'EOF'
 
 
+cat > loadTfbs.csh << 'EOF'
+    # parse filename and metaObjects for experiment and control from output
+    # of regClusterMakeTableOfTables
+    set fileList = $1
+    set base = wgEncodeAwgTfbs
+    set composite = ${base}Uniform
+    set m = ${composite}.metaDb.ra
+
+    set outdir = narrowPeak
+    mkdir -p $outdir
+
+    foreach x (`sed 's/\t/|/g' $fileList`)
+        set obj = `echo $x | awk -F\| '{print $1, $7, $8}'`
+        set infile = $obj[1]
+        set exp = $obj[2]
+        set ctrl = $obj[3]
+
+        echo "Track $exp"
+        #csh loadOne.csh $infile $exp $outdir $base
+        csh trackOne.csh $exp $composite $base cells.txt factors.txt
+
+        #exit
+
+    end
+'EOF'
+
+#ERROR: wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep1
+# Seems there is only a Rep3 for this prefix.  There exist Rep1 and Rep2 for a different protocol
+#V0416101 ( vs Pcr2x).  And the two protocols have different dccAccessions...  We will
+# consider the Rep3 was used as it was later data and Anshul's filename has Pcr2x 
+# (and try to verify with Anshul).
+# -> handle this one manually
 
 
-    
-    
+    end
+'EOF'
+
+    csh loadTfbs.csh partial.table >&! loadTfbs.out &
+
+    sort factors.txt | uniq | sed 's/$/ \\/' > factors.uniq.txt
+    sort cells.txt | uniq | sed 's/$/ \\/' > cells.uniq.txt
+
+# insert above as subGroups in trackDb
+
+###############################################
+# Master list of 2.9M DNase sites from Analysis   (in progress kate)
+# (Chromatin landscape Nature paper, Sep 6 2012)
+# Filename is in Supplementary data PDF, p. 49, 
+#       Supplementary Methods section 1.2, "DHS Master List and its annotation"
+
+    cd /hive/data/genomes/hg19/bed
+    set track = wgEncodeAwgDnaseMaster
+    cd $track
+
+    mkdir ebi; cd ebi
+
+    wget ftp://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/byDataType/openchrom/jan2011/combined_peaks/multi-tissue.master.ntypes.simple.hg19.bed
+
+    wc -l *
+    # 2890742 multi-tissue.master.ntypes.simple.hg19.bed
+
+    head -3 *
+    chr1    10120   10270   MCV-37  39.232800
+    chr1    10440   10590   MCV-4   36.369500
+    chr1    16140   16290   MCV-5   18.768900
+
+    # Minimum value 4.215660
+    # Maximum value 5445.000000
+
+    # reformat to narrowPeak
+    cd ..
+    set file = wgEncodeAwgDnaseMaster.narrowPeak
+    awk -v OFS="\t" '{print $1, $2, $3, $4, 0, ".", $5, -1, -1, -1}' ebi/*.simple*.bed > $file
+
+    # Name field has count of cell types having DHS overlapping the master site
+    hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $track $file
+    Read 2890742 elements of size 10 from wgEncodeAwgDnaseMaster.narrowPeak
+
 
 
