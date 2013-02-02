@@ -8,10 +8,14 @@ source `which qaConfig.csh`
 #
 ####################
 
+onintr cleanup
+
 set ip=""
 set chopIDs=""
 set worst=""
 set mode=""
+set bottleHost="rrnfs1"
+# host is specified in /usr/local/apache/cgi-bin/hg.conf (as bottleneck.host)
 
 if ($#argv < 1 || $#argv > 2 ) then
   echo
@@ -38,32 +42,25 @@ if ($#argv == 2 ) then
   endif
 endif
 
-if ( "$HOST" != "hgwdev" ) then
- echo "\n error: you must run this script on dev!\n"
- exit 1
-endif
-
 echo
 if ($ip == "all") then
-  rm -f ipFile
-  /usr/local/bin/bottleneck -host=genome-bottle list | egrep "current"
-  /usr/local/bin/bottleneck -host=genome-bottle list | grep -w -v "0" \
-     | grep -v "current" | sort -nr -k5 > ipFile
-  set allIPs=`cat ipFile | awk '{print $1}'`
-  set worst=`echo $allIPs | awk '{print $1}'`
-  cat ipFile
+  bottleneck -host=$bottleHost list | egrep "current"
+  bottleneck -host=$bottleHost list | grep -w -v "0" \
+     | grep -v "current" | sort -nr -k5 > ipFile$$
+  set allIPs=`cat ipFile$$ | awk '{print $1}'`
+  cat ipFile$$
   echo
-
   # get locations (strip off sessionID)
   set chopIPs=`echo $allIPs | sed "s/ /\n/"g \
     | awk -F"." '{print $(NF-3)"."$(NF-2)"."$(NF-1)"."$NF}'`
-  foreach ip (`echo $chopIPs`)
-    set orgName=`ipw $ip | grep OrgName | sed -e "s/OrgName: //"` > /dev/null
-    set current=`grep -w $ip ipFile | awk '{print $5}'`
-    echo "$ip\t\t$current\t  $orgName"
+  set worst=`echo $chopIPs | awk '{print $1}'`
+  foreach address ( $chopIPs )
+    set orgName=`whois $address | grep OrgName | sed -e "s/OrgName: //"` > /dev/null
+    set current=`grep -w $address ipFile$$ | awk '{print $5}'`
+    echo "$address\t\t$current\t  $orgName"
   end
 else
-  /usr/local/bin/bottleneck -host=genome-bottle list | egrep -w "$ip|current"
+  /usr/local/bin/bottleneck -host=$bottleHost list | egrep -w "$ip|current"
 endif
 echo 
 
@@ -85,12 +82,15 @@ echo "  If current is over 10,000 they get a message.  If it's"
 echo "  over 15,000 they get cut off with a ruder message."
 echo
 
-echo
-echo "the longest delay is from:"
-
-if ($worst != "") then
-  ipw $worst | head -10
+if ($ip == "all") then
+  echo
+  echo "partial whois info for IP with longest delay:"
+  echo
+  if ($worst != "") then
+    whois $worst | head -15
+  endif
 endif
 
-rm -f ipFile
+cleanup:
+rm -f ipFile$$
 exit
