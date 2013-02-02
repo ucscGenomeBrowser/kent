@@ -60,7 +60,7 @@ if ($ip == "all") then
     echo "$address\t\t$current\t  $orgName"
   end
 else
-  /usr/local/bin/bottleneck -host=$bottleHost list | egrep -w "$ip|current"
+  bottleneck -host=$bottleHost list | egrep -w "$ip|current"
 endif
 echo 
 
