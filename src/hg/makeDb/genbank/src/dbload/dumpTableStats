@@ -44,5 +44,6 @@ sqlQuery("show databases", "$outdir/databases.tsv");
 foreach my $db (@databases) {
     if (!inList($db, @skipDbs)) {
         sqlQuery("show table status", "$outdir/$db.tbls", $db);
+	sleep(10);
     }
 }
