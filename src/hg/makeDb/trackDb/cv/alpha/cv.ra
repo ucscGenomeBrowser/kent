@@ -8446,7 +8446,7 @@ type Antibody
 label BDP1 (2663)
 antibodyDescription Rabbit polyclonal - Antiserum 2663 was raised by immunizing rabbits with synthetic peptide CSDRYRIYKAQKLRE (human Bdp1 residues 139?153) coupled to KLH. Antibody Target: BDP1
 lab Struhl
-orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/
 target BDP1
 targetClass Pol3F
 targetDescription 'B double-prime 1', subunit of RNA polymerase III transcription initiation factor IIIB
@@ -8511,7 +8511,7 @@ type Antibody
 label BRF1 (128)
 antibodyDescription Rabbit polyclonal - Anti-BRF antibody 128 was raised by immunising rabbits with synthetic peptide KISSKINYSVLRGLS (human BRF residues 533-547) coupled to keyhole limpet haemocyanin. Antibody Target: BRF1
 lab Struhl
-orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/
 target BRF1
 targetClass Pol3F
 targetDescription 'B-related factor 1', subunit of RNA polymerase III transcription initiation factor IIIB
@@ -8527,7 +8527,7 @@ type Antibody
 label BRF2 (4295)
 antibodyDescription Rabbit polyclonal raised by immunizing rabbits with keyhole limpet hemocyanin coupled to synthetic peptides VSRSQQRGLRRVRDLC and SDSEIEQYLRTPQEVR, corresponding to human Brf2 residues 66-80 and 385-400, respectively. Antibody Target: BRF2
 lab Struhl
-orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/
 target BRF2
 targetClass Pol3F
 targetDescription Brf2 is a component of an alternate form of the RNA Polymerase III transcription factor TFIIIB.
@@ -11911,7 +11911,7 @@ type Antibody
 label RPC155 (1900)
 antibodyDescription Rabbit polyclonal - Antiserum 1900 was raised by immunizing rabbits with synthetic peptide PKRPLTFDTNEFHIPLVT (residues 1374?1391 of the RPC155 subunit of human pol III) coupled to KLH. Antibody Target: RPC155
 lab Struhl
-orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/
 target RPC155
 targetClass Pol3F
 targetDescription polymerase (RNA) III (DNA directed) polypeptide A, 155kDa
@@ -12576,7 +12576,7 @@ type Antibody
 label TFIIIC-110 (4286)
 antibodyDescription Rabbit polyclonal. Antiserum 4286 was raised by immunizing rabbits with synthetic peptide RPGFSPTSHRLLPTP (human TFIIIC110 residues 897 to 911) coupled to keyhole limpet hemocyanin. Antibody Target: GTF3C2
 lab Struhl
-orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
+orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/
 target GTF3C2
 targetClass Pol3F
 targetDescription TFIIIC-110 is a subunit of the RNA Polymerase III transcription factor TFIIIC. 
