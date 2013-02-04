@@ -3117,38 +3117,6 @@ urlLabel SIB link:
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg19&species=H.+sapiens&tromer=$$
 
-searchTable snp137Common
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9885
-padding 250
-
-searchTable snp137Flagged
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9886
-padding 250
-
-searchTable snp137Mult
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9887
-padding 250
-
-searchTable snp137
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9888
-padding 250
-
 searchTable affyCytoScan
 searchMethod exact
 searchType bed
