@@ -3,8 +3,9 @@ setenv TODAY 2013-01-22             # v278 final
 setenv LASTWEEK 2012-12-18          # v277 final          # v276 final
 setenv REVIEWDAY 2013-01-29         # v279 preview
 setenv LASTREVIEWDAY  2013-01-08    # v278 preview
-setenv REVIEW2DAY 2013-01-15        # v278 preview2
-setenv LASTREVIEW2DAY 2012-12-11    # v277 preview2
+setenv REVIEW2DAY 2013-02-05        # v279 preview2
+setenv LASTREVIEW2DAY 2013-01-15    # v278 preview2
+
 
 
 setenv BUILDHOME /cluster/bin/build
