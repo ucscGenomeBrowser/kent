@@ -1023,7 +1023,7 @@ for (af = filterList;  af != NULL;  af = af->next)
 return NULL;
 }
 
-struct annoStreamer *streamerFromSource(char *database, char *table, struct trackDb *tdb);
+struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb, char *chrom);
 //#*** Move it up here?  Or move out to a lib!!
 
 void makeFilterSection(struct dyString *dy, struct sourceConfig *src)
@@ -1036,7 +1036,7 @@ dyStringPrintf(dy, "<div name='filter' class='sourceFilter'>\n");
 dyStringPrintf(dy, "<script>activeFilterList['%s'] = [ ", src->name);
 struct dyString *availDy = dyStringCreate("availableFilterList['%s'] = [ ", src->name);
 boolean gotActive = FALSE, gotAvail = FALSE;
-struct annoStreamer *streamer = streamerFromSource(database, src->selTable, tdb);
+struct annoStreamer *streamer = streamerFromSource(database, src->selTable, tdb, NULL);
 struct annoFilter *af, *afList = streamer->getFilters(streamer);
 for (af = afList;  af != NULL;  af = af->next)
     {
@@ -1788,7 +1788,7 @@ else
     return asObjectFromFields(dbTable, fieldList);
 }
 
-struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb)
+struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb, char *chrom)
 /* Figure out the source and type of data and make an annoStreamer. */
 {
 struct annoStreamer *streamer = NULL;
@@ -1811,8 +1811,12 @@ if (startsWith("wig", tdb->type))
     streamer = annoStreamWigDbNew(dataDb, dbTable, maxOutRows);
 else if (sameString("vcfTabix", tdb->type))
     {
-    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-    streamer = annoStreamVcfNew(bigDataUrl, TRUE, maxOutRows);
+    if (chrom == NULL)
+	chrom = hDefaultChrom(db);
+    struct sqlConnection *conn = hAllocConn(db);
+    char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
+    hFreeConn(&conn);
+    streamer = annoStreamVcfNew(fileOrUrl, TRUE, maxOutRows);
     }
 else
     {
@@ -1864,7 +1868,7 @@ return (gotTxStart && gotTxEnd && gotCdsStart && gotExonStarts);
 
 
 struct annoGrator *gratorFromSource(char *db, struct sourceConfig *src, struct trackDb *tdb,
-				    struct annoStreamer *primary)
+				    char *chrom, struct annoStreamer *primary)
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator. */
 {
 struct annoGrator *grator = NULL;
@@ -1880,7 +1884,7 @@ if (startsWith("wig", tdb->type))
     grator = annoGrateWigDbNew(dataDb, dbTable, maxOutRows);
 else
     {
-    struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb);
+    struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
     if (looksLikePgSnp(primary->asObj) && looksLikeGenePred(streamer->asObj))
 	grator = annoGratorGpVarNew(streamer);
     else
@@ -1911,6 +1915,13 @@ initGroupsTracksTables();
 struct annoStreamer *primary = NULL;
 struct annoGrator *gratorList = NULL;
 struct sourceConfig *src;
+char *chrom = NULL;
+uint start = 0, end = 0;
+if (sameString(regionType, hgvaRegionTypeRange))
+    {
+    if (! parsePosition(position, &chrom, &start, &end))
+	errAbort("Expected position to be chrom:start-end but got '%s'", position);
+    }
 for (src = queryConfig->sources;  src != NULL;  src = src->next)
     {
     struct trackDb *tdb = tdbForTrack(db, src->selTable, &fullTrackList);
@@ -1918,9 +1929,9 @@ for (src = queryConfig->sources;  src != NULL;  src = src->next)
 	errAbort("Unable to find table '%s' in trackDb for track '%s' or its subtracks",
 		 src->selTable, src->selTrack);
     if (src->isPrimary)
-	primary = streamerFromSource(db, src->selTable, tdb);
+	primary = streamerFromSource(db, src->selTable, tdb, chrom);
     else
-	slAddHead(&gratorList, gratorFromSource(db, src, tdb, primary));
+	slAddHead(&gratorList, gratorFromSource(db, src, tdb, chrom, primary));
     }
 slReverse(&gratorList);
 struct annoFormatter *formatter = formatterFromOutput(queryConfig);
@@ -1930,13 +1941,7 @@ safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
 struct twoBitFile *tbf = twoBitOpen(twoBitPath);
 struct annoGratorQuery *agq = annoGratorQueryNew(db, NULL, tbf, primary, gratorList, formatter);
 if (sameString(regionType, hgvaRegionTypeRange))
-    {
-    char *chrom;
-    uint start, end;
-    if (! parsePosition(position, &chrom, &start, &end))
-	errAbort("Expected position to be chrom:start-end but got '%s'", position);
     annoGratorQuerySetRegion(agq, chrom, start, end);
-    }
 annoGratorQueryExecute(agq);
 annoGratorQueryFree(&agq);
 }
