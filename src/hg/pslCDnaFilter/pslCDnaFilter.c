@@ -393,8 +393,6 @@ if (hapRegions != NULL)
     hapRegionsLinkHaps(hapRegions, cdna);
 else
     hapRegionsBuildHapSets(cdna);
-if (gFilterWeirdOverlapped)
-    overlapFilterWeirdFilter(cdna);
 if (gLocalNearBest >= 0.0)
     localNearBestFilter(cdna, gLocalNearBest, gMinLocalBestCnt);
 if (gGlobalNearBest >= 0.0)
@@ -403,6 +401,10 @@ if (gMaxAligns >= 0)
     maxAlignFilter(cdna);
 if (gUniqueMapped)
     uniqueMappedFilter(cdna);
+// this is last so weird overlaps can be discarded by above tests first
+overlapFilterFlagWeird(cdna);
+if (gFilterWeirdOverlapped)
+    overlapFilterWeirdFilter(cdna);
 }
 
 static void filterQuery(struct cDnaQuery *cdna, struct hapRegions *hapRegions,
@@ -411,7 +413,6 @@ static void filterQuery(struct cDnaQuery *cdna, struct hapRegions *hapRegions,
 {
 /* setup */
 invalidPslFind(cdna);
-overlapFilterFlagWeird(cdna);
 
 filterNonComparative(cdna);
 filterComparative(cdna, hapRegions);

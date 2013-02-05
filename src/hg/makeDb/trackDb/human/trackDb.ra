@@ -174,7 +174,7 @@ track gwasCatalog
 shortLabel GWAS Catalog
 longLabel NHGRI Catalog of Published Genome-Wide Association Studies
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 group phenDis
 visibility hide
 priority 51
@@ -241,15 +241,15 @@ type genePred
 track hgIkmc
 shortLabel IKMC Genes Mapped
 longLabel International Knockout Mouse Consortium Genes Mapped to Human Genome
-group genes 
+group genes
 priority 64.1
 visibility hide
 type bed 12
 noScoreFilter .
 itemRgb on
-urlLabel KOMP Data Coordination Center: 
+urlLabel KOMP Data Coordination Center:
 url http://www.knockoutmouse.org/search?criteria=$$
-mgiUrlLabel MGI Report: 
+mgiUrlLabel MGI Report:
 mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 
 track acembly
@@ -410,10 +410,10 @@ group expression
 subGroup1 view Views RawSignal=Raw_Signal Alignments=Alignments
 subGroup2 tissueType Tissue_Type BT474=BT474 HME=HME MB435=MB435 MCF7=MCF7 T47D=T47D adipose=Adipose brain=Brain breast=Breast colon=Colon heart=Heart liver=Liver lymphNode=LymphNode skelMuscle=SkelMuscle testes=Testes
 sortOrder view=+ tissueType=+
-dimensions dimensionY=tissueType 
+dimensions dimensionY=tissueType
 priority 0
 dragAndDrop subTracks
-configurable on 
+configurable on
 visibility hide
 noInherit on
 type bed 12
@@ -436,7 +436,7 @@ type bed 12
         shortLabel RNA-seq Brain Sig
         longLabel Burge Lab RNA-seq 32mer Reads from Brain, Raw Signal
         subGroups view=RawSignal tissueType=brain
-    
+
         track burgeRnaSeqGemMapperAlignLiverAllRawSignal
         parent burgeRnaSeqGemMapperAlignViewRawSignal off
         shortLabel RNA-seq Liver Sig
@@ -1820,7 +1820,7 @@ dimensions dimensionY=loc dimensionX=cell
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 centerLabelsDense on
 sortOrder cell=+ loc=+ view=+
-html affyTxnPhase2 
+html affyTxnPhase2
 
     track affyTxnPhase2Tome
     shortLabel Transcriptome
@@ -3481,10 +3481,10 @@ group regulation
 subGroup1 view Views COV=Raw_Signal CG=CpG_score
 subGroup2 sampleType Sample_Type Brain=Brain
 subGroup3 assayType Assay_Type MRE1=MRE-seq MRE2=MRE-seq MRE3=MRE-seq MeDIP1=MeDIP-seq MeDIP2=MeDIP-seq H3K4me3=H3K4me3_ChIP-seq RNA1=RNA-seq RNA2=RNA-seq_(SMART)
-dimensions 
+dimensions
 sortOrder assayType=+ view=+
 #dimensions dimensionX=sampleType dimensionY=assayType
-dividers assayType 
+dividers assayType
 #hierachy view COV=2 CG=3
 dragAndDrop subTracks
 priority 1999
@@ -3599,7 +3599,7 @@ type bed 3
         altColor 200,100,0
         autoScale on
         priority 10
-  
+
 track cpgIslandExt override
 priority 0
 
@@ -3717,6 +3717,8 @@ type bed 9 +
 itemRgb on
 exonArrows off
 scoreFilterByRange on
+url http://ccr.coriell.org/Sections/Search/Search.aspx?q=$$
+urlLabel Coriell details:
 
 track coriellAndy
 shortLabel Andy's Coriell
@@ -3776,7 +3778,7 @@ type bed 3
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
-    urlLabel ISCA details: 
+    urlLabel ISCA details:
 
 	track iscaCuratedPathogenic
 	parent iscaViewDetail off
@@ -4028,7 +4030,7 @@ termRegex HSA_NumtS_.*
 
 searchTable numtS
 searchMethod exact
-searchType bed 
+searchType bed
 semiShortCircuit 1
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'

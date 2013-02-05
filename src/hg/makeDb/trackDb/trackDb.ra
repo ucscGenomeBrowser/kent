@@ -2714,6 +2714,38 @@ termRegex rs[0-9]+
 searchPriority 12.9894
 padding 250
 
+searchTable snp137Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9885
+padding 250
+
+searchTable snp137Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9886
+padding 250
+
+searchTable snp137Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9887
+padding 250
+
+searchTable snp137
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9888
+padding 250
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
@@ -3170,7 +3202,6 @@ searchDescription tRNAscan-SE tRNA Name
 searchPriority 63
 
 track ucscGenePfam
-release alpha
 shortLabel Pfam in UCSC Gene
 longLabel Pfam Domains in UCSC Genes
 group genes

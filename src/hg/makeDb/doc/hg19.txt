@@ -8411,9 +8411,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 12/10/12 angie)
+# NHGRI GWAS CATALOG (DONE 2/4/13 angie)
 # NOTE: This assumes that the corresponding section in hg18.txt has just been run.
 #       It depends on the noCoords.tab file in the corresponding hg18 build directory.
+# 2013 updates: 2/4
 # 2012 updates: 12/10, 10/4, 8/1, 6/4, 4/4, 2/21 (remove extra whitespace, translate non-ASCII to html), 2/6
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
@@ -8434,46 +8435,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,1.5,1.6,1.7,1.8,1.9,1.10,1.11 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalogPlus.bed
-    # Look for cases of the risk allele being a strong majority allele, since MLQ #8842
-    # reported a case of incorrect risk allele; that was due to manual entry error at
-    # NHGRI.  If there are few cases of risk allele being in the majority, we can pass
-    # on to NHGRI.
-    set strongMajority = 0.75
-    perl -wne ' \
-      chomp;  @w = split("\t"); \
-      my ($strand, $riskAllele, $alCt, $als, $freqs) = ($w[22], $w[14], $w[25], $w[26], $w[28]); \
-      $riskAllele =~ s/^rs\d+-//; \
-      next if ($riskAllele !~ /^[ACGT]$/ || $alCt != 2); # just bi-allelics -- others too flaky. \
-      my %cmpl = ("A" => "T", "C" => "G", "G" => "C", "T" => "A"); \
-      my @alFreqs = split(",", $freqs); \
-      my @als = split(",", $als); \
-      my ($maxFreq, $maxFreqIx) = ($alFreqs[0], 0); \
-      my $gotRiskAl = ($als[0] eq $riskAllele) ? 1 : 0; \
-      my $riskAlCmpl = $cmpl{$riskAllele}; \
-      my $gotRiskAlCmpl = ($als[0] eq $riskAlCmpl) ? 1 : 0; \
-      for (my $i = 1;  $i < $alCt;  $i++) { \
-        if ($als[$i] eq $riskAllele) { $gotRiskAl = 1; } \
-        if ($als[$i] eq $riskAlCmpl) { $gotRiskAlCmpl = 1; } \
-        if ($alFreqs[$i] > $maxFreq) { \
-          $maxFreq = $alFreqs[$i]; \
-          $maxFreqIx = $i; \
-        } \
-      } \
-      if ($maxFreq > '$strongMajority' && ($gotRiskAl != $gotRiskAlCmpl)) { \
-        my $majorAl = $als[$maxFreqIx]; \
-        if ($majorAl eq $riskAllele || $majorAl eq $riskAlCmpl) { \
-          print join("\t", $w[0], $w[1], $w[2], $w[3], $strand, $riskAllele, $maxFreq) . "\n"; \
-        } \
-      }' gwasCatalogPlus.bed \
-      > majorRiskAls.txt
-    wc -l majorRiskAls.txt
-#821 majorRiskAls.txt
-    # Too many to go through manually.  Also, when there's a protective minor allele,
-    # due to NHGRI's flipping it is reported as riskful major allele.  Oh well.
     cut -f 1-22 gwasCatalogPlus.bed \
     | hgLoadBed hg19 gwasCatalog stdin \
         -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Read 11725 elements of size 22 from stdin
+#Read 12194 elements of size 22 from stdin
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
     # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
@@ -8486,7 +8451,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt
-#1238 ambigStrand.txt
+#1249 ambigStrand.txt
 
 
 ######################################################################## 
@@ -20060,3 +20025,63 @@ mysql> RENAME TABLE affyCytoScan    TO affyCytoScanAndy;
 mysql> RENAME TABLE affyCytoScanNew TO affyCytoScan;
 
 ############################################################################
+# Chimp Lastz run (DONE 1/29/13 angie)
+    mkdir /hive/data/genomes/hg19/bed/lastzPanTro4.2013-01-25
+    cd /hive/data/genomes/hg19/bed/lastzPanTro4.2013-01-25
+    cat << '_EOF_' > DEF
+# human vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PanTro4
+SEQ2_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ2_LEN=/hive/data/genomes/panTro4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanTro4.2013-01-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    screen # use screen to manage this long-running job
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -syntenicNet >& do.log & tail -f do.log
+
+    cat fb.hg19.chainPanTro4Link.txt
+#2760526412 bases of 2897316137 (95.279%) in intersection
+
+    # filter with doRecipBest.pl
+    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 panTro4 >& rbest.log & tail -f rbest.log
+
+    # running the swap
+    mkdir /hive/data/genomes/panTro4/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro4/bed/blastz.hg19.swap
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzPanTro4.2013-01-25/DEF \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet >& swap.log & tail -f swap.log
+    cat fb.panTro4.chainHg19Link.txt
+#2773561724 bases of 2902338967 (95.563%) in intersection
+
+##############################################################################

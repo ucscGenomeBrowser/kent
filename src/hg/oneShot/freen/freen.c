@@ -63,7 +63,6 @@ for (i=0; i<28; ++i)
    struct rgbColor *c = &saturatedRainbowTable[i];
    printf("   {%d,%d,%d},\n", lighten(c->r), lighten(c->g), lighten(c->b));
    }
-      
 }
 
 int main(int argc, char *argv[])

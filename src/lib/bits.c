@@ -78,33 +78,30 @@ freez(pB);
 }
 
 Bits *lmBitAlloc(struct lm *lm,int bitCount)
-// Allocate bits.  Optionally supply local memory.
+// Allocate bits.  Must supply local memory.
 {
+assert(lm != NULL);
 int byteCount = ((bitCount+7)>>3);
 return lmAlloc(lm,byteCount);
 }
 
 Bits *lmBitRealloc(struct lm *lm,Bits *b, int bitCount, int newBitCount)
-// Resize a bit array.  If b is null, allocate a new array.  Optionally use local memory.
+// Resize a bit array.  If b is null, allocate a new array.  Must supply local memory.
 {
+assert(lm != NULL);
 int byteCount = ((bitCount+7)>>3);
 int newByteCount = ((newBitCount+7)>>3);
 return lmAllocMoreMem(lm, b ,byteCount, newByteCount);
 }
 
 Bits *lmBitClone(struct lm *lm,Bits* orig, int bitCount)
-// Clone bits.  Optionally use local memory.
+// Clone bits.  Must supply local memory.
 {
+assert(lm != NULL);
 int byteCount = ((bitCount+7)>>3);
 Bits* bits = lmAlloc(lm,byteCount);
 memcpy(bits, orig, byteCount);
 return bits;
-}
-
-void lmBitFree(struct lm *lm,Bits **pB)
-// Free bits.  If allocated from local memory, this does nothing.
-{
-*pB = NULL;  // Just zero pointer
 }
 
 void bitSetOne(Bits *b, int bitIx)

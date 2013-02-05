@@ -1,9 +1,24 @@
 // hgVarAnnogrator functions: ajax updating plus building a query representation from page el's
 
+// jslint settings and list of globals for jslint to ignore:
+/*jslint
+  browse: true,  devel: true,
+  onevar: false,  plusplus: false,  regexp: false,  white: false */
+/*global
+  $: false,
+  activeFilterList: false, availableFilterList: false,
+  loadingImage: false,
+  setCartVar: false, setCartVars: false, warn: false, catchErrorOrDispatch: false */
+
+// Tell jslint and browser to use strict mode for this file:
+"use strict";
+
+var hgvaRequestData = "";
+
 function hgvaChangeRegion()
 {
     var newVal = $('select[name="hgva_regionType"]').val();
-    if (newVal == 'range') {
+    if (newVal === 'range') {
 	$('#positionContainer').show().focus();
     } else {
 	$('#positionContainer').hide();
@@ -51,14 +66,15 @@ function hgvaAddFilter(parentId)
 function hgvaOptionHtml(value, label, selected)
 {
     var newHtml = "<option value='" + value + "'";
-    if (selected === value)
+    if (selected === value) {
 	newHtml += " selected";
+    }
     newHtml += ">" + label + "</option>\n";
     return newHtml;
 }
 
 var hgvaUpdateCartOnChange =
-    "onchange='setCartVar(\"querySpec\", JSON.stringify(hgvaBuildQuerySpec()));'"
+    "onchange='setCartVar(\"querySpec\", JSON.stringify(hgvaBuildQuerySpec()));'";
 
 function hgvaStringFilterInputs(filterSpec)
 {
@@ -114,7 +130,7 @@ function hgvaFilterFromSpec(filterSpec)
     var newHtml = "<div name='" + filterSpec.label + "'>";
     newHtml += filterSpec.label + "&nbsp;&nbsp;";
     //#*** It's awful to use numeric values here... should have C translate enum <--> string
-    if (filterSpec.type == 2 || filterSpec.type == 10 || filterSpec.type == 11) {
+    if (filterSpec.type === 2 || filterSpec.type === 10 || filterSpec.type === 11) {
 	newHtml += hgvaStringFilterInputs(filterSpec);
     } else {
 	newHtml += hgvaNumericFilterInputs(filterSpec);
@@ -164,7 +180,7 @@ function hgvaFilterOpChange(singleFilterDiv)
 function hgvaMakeActiveFilters()
 {
     var filtersForSource =
-	function(i, el) {
+	function(eachIx, el) {
 	    var i, newHtml = "";
 	    var filterList = activeFilterList[el.id + "Contents"];
 	    if (! filterList) {
@@ -180,7 +196,7 @@ function hgvaMakeActiveFilters()
 
 function makeHashAddFx(hashObject)
 {
-    return function(i, el) { hashObject[el.name] = el.value; };
+    return function(eachIx, el) { hashObject[el.name] = el.value; };
 }
 
 function hgvaDescribeFilterDivs(filterDivs, settings)
@@ -219,7 +235,7 @@ function hgvaDescribeOutput()
 function hgvaBuildQuerySpec()
 {
     var sources = [];
-    var pushFunc = function(i, source) { sources.push(hgvaDescribeSource(source)); };
+    var pushFunc = function(eachIx, source) { sources.push(hgvaDescribeSource(source)); };
     $('#sourceContainer').children().not(':hidden').each(pushFunc);
     var output = hgvaDescribeOutput();
     var topLevel = { "sources": sources, "output": output };
@@ -246,6 +262,40 @@ function hgvaUpdateCart()
     // setCartVars returns error when this is called by synchronous ajax...
     var ignoreError = function(){};
     setCartVars(names, values, ignoreError, false);
+}
+
+// This will be set in the first .each call to hgvaUpdateOrder from hgvaSourceSortUpdates,
+// and used by subsequent calls.
+var hgvaPrimaryTrackLabel;
+
+function hgvaUpdateOptionText(eachIx, optionEl)
+{
+    var matches = optionEl.text.match(/(Keep( all)?)( .*)(items.*items)/);
+    if (!matches) {
+	console.log("No match for option text: '" + optionEl.text + "'");
+    } else if (matches[3] !== hgvaPrimaryTrackLabel) {
+	optionEl.text = matches[1] + ' ' + hgvaPrimaryTrackLabel + ' ' + matches[4];
+    }
+}
+
+function hgvaUpdateOrder(eachIx, sourceEl)
+{
+    var source = $(sourceEl);
+    var isPrimary = source.find('[name="isPrimary"]');
+    var intersectSel = source.find('[name="intersectSel"]');
+    var trackSel = source.find('[name="trackSel"]');
+    if (eachIx === 0) {
+	isPrimary.val('1');
+	intersectSel.hide();
+	hgvaPrimaryTrackLabel = trackSel.find(":selected").text();
+    } else {
+	isPrimary.val('0');
+	var options = intersectSel.find('option');
+	options.each(hgvaUpdateOptionText);
+	// IE8 superimposes intersectSel and filter div unless I invoke .height() here. why???:
+	intersectSel.height();
+	intersectSel.show();
+    }
 }
 
 function hgvaUpdatePage(responseJson)
@@ -275,7 +325,7 @@ function hgvaUpdatePage(responseJson)
 	    // call hgvaUpdateOrder to update intersectSel option labels.
 	    var grandparent = $(update.id).parents().first();
 	    var firstActiveSource = $('#sourceContainer').children().not(':hidden').first();
-	    if (firstActiveSource[0].id == grandparent[0].id) {
+	    if (firstActiveSource[0].id === grandparent[0].id) {
 		$('#sourceContainer').children().not(':hidden').each(hgvaUpdateOrder);
 	    }
 	}
@@ -294,7 +344,7 @@ function hgvaErrorHandler(request, textStatus)
 {
     var str;
     var tryAgain = true;
-    if(textStatus && textStatus.length && textStatus != "error") {
+    if(textStatus && textStatus.length && textStatus !== "error") {
         str = "Encountered network error : '" + textStatus + "'.";
     } else {
         if(request.responseText) {
@@ -304,16 +354,18 @@ function hgvaErrorHandler(request, textStatus)
 		str = "Our software aborted due to an error. " +
 		      "We apologize for the inconvenience. " +
 		      "Please copy and paste this into an email to " +
-		      "genome-www@soe.ucsc.edu so we can debug:<BR>\n" + this.data;
+		      "genome-www@soe.ucsc.edu so we can debug:<BR>\n" +
+		      hgvaRequestData;
 	    } else {
 		str = "Encountered error: '" + request.responseText + "'";
 	    }
         } else {
-            str = "Encountered a network error."
+            str = "Encountered a network error.";
         }
     }
-    if(tryAgain)
+    if(tryAgain) {
         str += " Please try again. If the problem persists, please check your network connection.";
+    }
     warn(str);
     loadingImage.abort();
 }
@@ -324,12 +376,13 @@ function hgvaAjax(command, async)
 	async = true;
     }
     hgvaExpandCommand(command);
+    hgvaRequestData = 'updatePage=' + JSON.stringify(command);
     $.ajax({
         type: "POST",
 	async: async,
         dataType: "JSON",
         url: "hgVarAnnogrator",
-	data: 'updatePage=' + JSON.stringify(command),
+	data: hgvaRequestData,
         trueSuccess: hgvaUpdatePage,
         success: catchErrorOrDispatch,
         error: hgvaErrorHandler,
@@ -345,7 +398,7 @@ function hgvaLookupPosition(async)
 function hgvaLookupPositionIfNecessary()
 {
     var regionType = $('#mainForm #hgva_regionType').val();
-    if (regionType == "range") {
+    if (regionType === "range") {
 	var position = $('#mainForm input[name="position"]').val();
 	if (!position.match(/^[\w_]+:[\d,]+-[\d,]+$/)) {
 	    hgvaLookupPosition(false);
@@ -360,42 +413,8 @@ function hgvaExecuteQuery()
     var command = {'action': 'execute'};
     hgvaExpandCommand(command);
     $('#mainForm').append("<INPUT TYPE=HIDDEN NAME='executeQuery' VALUE='" +
-			  JSON.stringify(command) + "'>);");
+			  JSON.stringify(command) + "'>");
     $('#mainForm').submit();
-}
-
-// This will be set in the first .each call to hgvaUpdateOrder from hgvaSourceSortUpdates,
-// and used by subsequent calls.
-var hgvaPrimaryTrackLabel;
-
-function hgvaUpdateOptionText(i, optionEl)
-{
-    var matches = optionEl.text.match(/(Keep( all)?)( .*)(items.*items)/);
-    if (!matches) {
-	console.log("No match for option text: '" + optionEl.text + "'");
-    } else if (matches[3] != hgvaPrimaryTrackLabel) {
-	optionEl.text = matches[1] + ' ' + hgvaPrimaryTrackLabel + ' ' + matches[4];
-    }
-}
-
-function hgvaUpdateOrder(i, sourceEl)
-{
-    var source = $(sourceEl);
-    var isPrimary = source.find('[name="isPrimary"]');
-    var intersectSel = source.find('[name="intersectSel"]');
-    var trackSel = source.find('[name="trackSel"]');
-    if (i === 0) {
-	isPrimary.val('1');
-	intersectSel.hide();
-	hgvaPrimaryTrackLabel = trackSel.find(":selected").text();
-    } else {
-	isPrimary.val('0');
-	var options = intersectSel.find('option');
-	options.each(hgvaUpdateOptionText);
-	// IE8 superimposes intersectSel and filter div unless I invoke .height() here. why???:
-	intersectSel.height();
-	intersectSel.show();
-    }
 }
 
 function hgvaSourceSortUpdate(event, ui)
@@ -425,7 +444,7 @@ function hgvaEventHandler(event)
 	hgvaAddFilter(parentId);
     } else if (target.name === "newFilterSel") {
 	hgvaCompleteFilter(target, parentId);
-    } else if (target.name == "opSel") {
+    } else if (target.name === "opSel") {
 	hgvaFilterOpChange($(target).parent());
     } else {
 	hgvaEventAjax(target, parentId);
@@ -464,7 +483,7 @@ $(document).ready(function()
 	    update: hgvaSourceSortUpdate
 	    });
     // Initialize filters already configured by the user:
-    hgvaMakeActiveFilters()
+    hgvaMakeActiveFilters();
     // Hide 'Select More Data' button if we have run out of extra sources to offer.
     var hiddenSources = $("div.hideableSection").filter("[id^=source]").filter(':hidden');
     if (hiddenSources.length === 0) {

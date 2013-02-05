@@ -85,5 +85,27 @@ html numtSeqSusScr2
     track  bamAllNumtSSorted override
     html numtSeqSusScr2
 
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex SS_NumtS_.*
 
-### add search rules here
+searchTable numtS
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex SS_NumtS_.*
+
+searchTable numtSAssembled
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex SS_NumtS_.*
+

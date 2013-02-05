@@ -127,7 +127,6 @@ void *lmAllocMoreMem(struct lm *lm, void *pt, size_t oldSize, size_t newSize)
 struct lmBlock *mb = lm->blocks;
 // rare case that pointer is to last lm alloc, but still try.
 // Note this is the one place where the pointer gets reused and it is known to be in this lm
-// Since lm allocs are never freed, this means the pointer CAN be reused (by lmCloneMem)
 if ((char *)pt + oldSize == mb->free
 &&  (char *)pt + newSize <= mb->end)
     {
@@ -140,13 +139,25 @@ memcpy(new, pt, oldSize);
 return new;
 }
 
+void *lmCloneMem(struct lm *lm, void *pt, size_t size)
+/* Return a local mem copy of memory block. */
+{
+void *d = lmAlloc(lm, size);
+memcpy(d, pt, size);
+return d;
+}
+
 char *lmCloneStringZ(struct lm *lm, char *string, int size)
 /* Return local mem copy of string. */
 {
 if (string == NULL)
     return NULL;
-else                                                   // in rare cases, this returns the same mem
-    return lmAllocMoreMem(lm, string, size, size + 1); // but lm allocs are never freed so it works
+else
+    {
+    char *s = lmAlloc(lm, size+1);
+    memcpy(s, string, size);
+    return s;
+    }
 }
 
 char *lmCloneFirstWord(struct lm *lm, char *line)
