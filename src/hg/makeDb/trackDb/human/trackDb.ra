@@ -3481,7 +3481,7 @@ group regulation
 subGroup1 view Views COV=Raw_Signal CG=CpG_score
 subGroup2 sampleType Sample_Type Brain=Brain
 subGroup3 assayType Assay_Type MRE1=MRE-seq MRE2=MRE-seq MRE3=MRE-seq MeDIP1=MeDIP-seq MeDIP2=MeDIP-seq H3K4me3=H3K4me3_ChIP-seq RNA1=RNA-seq RNA2=RNA-seq_(SMART)
-dimensions
+dimensions 
 sortOrder assayType=+ view=+
 #dimensions dimensionX=sampleType dimensionY=assayType
 dividers assayType

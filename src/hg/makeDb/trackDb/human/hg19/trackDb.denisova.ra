@@ -15,6 +15,7 @@ shortLabel Mod Hum Variants
 longLabel Variant Calls from 11 Modern Human Genome Sequences
 type vcfTabix
 visibility hide
+maxWindowToDraw 10000000
 group denisova
 priority 11
 
