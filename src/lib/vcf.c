@@ -429,17 +429,6 @@ assert(vcff->reusePool == NULL); // don't duplicate this
 vcff->reusePool = lmInit(initialSize);
 }
 
-void vcfFileAbandonReusePool(struct vcfFile *vcff)
-// Abandons all previously allocated data from the reuse pool and reverts to
-// common pool. The vcf->records set will also be abandoned as pointers are invalid.
-// USE WITH CAUTION.  All previously allocated pointers from this pool are now invalid.
-{
-assert(vcff->reusePool != NULL); // don't duplicate this
-//printf("Reuse pool %ld of %ld unused\n",lmAvailable(vcff->reusePool),lmSize(vcff->reusePool));
-lmCleanup(&vcff->reusePool);
-vcff->records = NULL;
-}
-
 void vcfFileFlushRecords(struct vcfFile *vcff)
 // Abandons all previously read vcff->records and flushes the reuse pool (if it exists).
 // USE WITH CAUTION.  All previously allocated record pointers are now invalid.
@@ -831,14 +820,16 @@ return dif;
 
 int vcfTabixBatchRead(struct vcfFile *vcff, char *chrom, int start, int end,
                       int maxErr, int maxRecords)
-// Reads a batch of records from an opened and indexed VCF file, returning number
-// of records in batch.  Seeks to the start position and parses all lines in range,
-// adding them to vcff->records.  Note: vcff->records will continue to be sorted,
-// even if batches are loaded out of order.  If maxErr >= zero, then continue to
-// parse until there are maxErr+1 errors.  A maxErr less than zero does not stop
-// and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence
+// Reads a batch of records from an opened and indexed VCF file, adding them to
+// vcff->records and returning the count of new records added in this batch.
+// Note: vcff->records will continue to be sorted, even if batches are loaded
+// out of order.  Additionally, resulting vcff->records will contain no duplicates
+// so returned count refects only the new records added, as opposed to all records
+// in range.  If maxErr >= zero, then continue to parse until there are maxErr+1
+// errors.  A maxErr less than zero does not stop and reports all errors.  Set
+// maxErr to VCF_IGNORE_ERRS for silence.
 {
-int count = 0;
+int oldCount = slCount(vcff->records);
 
 if (lineFileSetTabixRegion(vcff->lf, chrom, start, end))
     {
@@ -846,22 +837,18 @@ if (lineFileSetTabixRegion(vcff->lf, chrom, start, end))
     if (records)
         {
         struct vcfRecord *lastRec = vcff->records;
-        count = slCount(records);
         if (lastRec == NULL)
             vcff->records = records;
         else
             {
-            for (; lastRec->next != NULL; lastRec = lastRec->next)
-                ;
-            lastRec->next = records;
-            // Do we need to sort?
-            if (vcfRecordCmp(&lastRec,&records) > 0)
-                slSort(&(vcff->records), vcfRecordCmp);
+            // Considered just asserting the batches were in order, but a problem may
+            // result when non-overlapping location windows pick up the same long variant.
+            slSortMergeUniq(&(vcff->records), records, vcfRecordCmp, NULL);
             }
         }
     }
 
-return count;
+return slCount(vcff->records) - oldCount;
 }
 
 void vcfFileFree(struct vcfFile **pVcff)
@@ -878,7 +865,7 @@ if (vcff->maxErr == VCF_IGNORE_ERRS && vcff->errCnt > 0)
 freez(&(vcff->headerString));
 hashFree(&(vcff->pool));
 if (vcff->reusePool)
-    vcfFileAbandonReusePool(vcff);
+    lmCleanup(&vcff->reusePool);
 hashFree(&(vcff->byName));
 lineFileClose(&(vcff->lf));
 freez(pVcff);
@@ -1109,16 +1096,25 @@ static struct variantBits *vcfOneRecordToVariantBits(struct vcfFile *vcff,struct
 // parse genotypes if needed
 if (record->genotypes == NULL)
     vcfParseGenotypes(record);
-struct vcfGenotype *gt = &(record->genotypes[0]);
-assert(vcff->genotypeCount > 0 && gt != NULL);
+assert(vcff->genotypeCount > 0);
+int ix = 0;
 
 // allocate vBits struct
 struct variantBits *vBits;
 struct lm *lm = vcfFileLm(vcff);
 lmAllocVar(lm,vBits);
-vBits->genotypeSlots = vcff->genotypeCount;
-vBits->haplotypeSlots = (gt->isHaploid || homozygousOnly ? 1 : 2);
-vBits->record = record;
+vBits->genotypeSlots  = vcff->genotypeCount;
+vBits->record         = record;
+vBits->haplotypeSlots = 2;  // assume diploid, but then check for complete haploid
+if (homozygousOnly)
+    vBits->haplotypeSlots = 1;
+else
+    { // spin through all the subjects to see if any are non-haploid
+    for (ix = 0; ix < vcff->genotypeCount && record->genotypes[ix].isHaploid;ix++)
+        ;
+    if (ix == vcff->genotypeCount)
+        vBits->haplotypeSlots = 1;
+    }
 
 // allocate bits
 assert(record->alleleCount < 4);
@@ -1129,10 +1125,9 @@ vBits->bits = bits;
 
 
 // walk through genotypes and set the bit
-int ix = 0;
-for ( ; ix < vcff->genotypeCount;ix++)
+for (ix = 0; ix < vcff->genotypeCount;ix++)
     {
-    gt = &(record->genotypes[ix]);
+    struct vcfGenotype *gt = gt = &(record->genotypes[ix]);
 
     boolean homozygous = (gt->isHaploid || gt->hapIxA == gt->hapIxB);
 
@@ -1178,7 +1173,8 @@ if (record->genotypes == NULL)
 int ix = 0;
 for ( ; ix < vcff->genotypeCount;ix++)
     {
-    if (record->genotypes[ix].isPhased == FALSE)
+    if (record->genotypes[ix].isPhased == FALSE
+    && record->genotypes[ix].isHaploid == FALSE)
         bitSetOne(bits,ix);
     }
 return bits;
@@ -1315,8 +1311,12 @@ for (; genoIx < vBitsList->genotypeSlots; genoIx++)
             hBits->haploidIx = haploIx;
             struct vcfRecord *record = vBitsList->record; // any will do
             struct vcfGenotype *gt = &(record->genotypes[genoIx]);
-            if (vBitsList->haplotypeSlots == 1)
+            if (gt->isHaploid || vBitsList->haplotypeSlots == 1)
+                { // chrX will have haplotypeSlots==2 but be haploid for this subject.
+                  // Meanwhile if vBits were for homozygous only,  haplotypeSlots==1
+                //assert(haploIx == 0);
                 hBits->ids = lmCloneString(lm,gt->id);
+                }
             else
                 {
                 int sz = strlen(gt->id) + 3;
@@ -1444,7 +1444,7 @@ else
 return collapsed;
 }
 
-unsigned char vcfHaploBitsToVariantIx(struct haploBits *hBits,int bitIx)
+unsigned char vcfHaploBitsToVariantAlleleIx(struct haploBits *hBits,int bitIx)
 // Given a hBits struct and bitIx, what is the actual variant allele ix
 // to use when accessing the vcfRecord?  NOTE: here 0 is reference allele
 {
@@ -1531,9 +1531,3 @@ match->bitsOn = bitCountRange(match->bits, 0, bitCount);
 
 return (struct slList *)match;
 }
-
-
-
-
-
-

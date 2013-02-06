@@ -206,23 +206,20 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
 
 int vcfTabixBatchRead(struct vcfFile *vcff, char *chrom, int start, int end,
                       int maxErr, int maxRecords);
-// Reads a batch of records from an opened and indexed VCF file, returning number
-// of records in batch.  Seeks to the start position and parses all lines in range,
-// adding them to vcff->records.  Note: vcff->records will continue to be sorted,
-// even if batches are loaded out of order.  If maxErr >= zero, then continue to
-// parse until there are maxErr+1 errors.  A maxErr less than zero does not stop
-// and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence.
+// Reads a batch of records from an opened and indexed VCF file, adding them to
+// vcff->records and returning the count of new records added in this batch.
+// Note: vcff->records will continue to be sorted, even if batches are loaded
+// out of order.  Additionally, resulting vcff->records will contain no duplicates
+// so returned count refects only the new records added, as opposed to all records
+// in range.  If maxErr >= zero, then continue to parse until there are maxErr+1
+// errors.  A maxErr less than zero does not stop and reports all errors.  Set
+// maxErr to VCF_IGNORE_ERRS for silence.
 
 void vcfFileMakeReusePool(struct vcfFile *vcff, int initialSize);
 // Creates a separate memory pool for records.  Establishing this pool allows
 // using vcfFileFlushRecords to abandon previously read records and free
 // the associated memory. Very useful when reading an entire file in batches.
 #define vcfFileLm(vcff) ((vcff)->reusePool ? (vcff)->reusePool : (vcff)->pool->lm)
-
-void vcfFileAbandonReusePool(struct vcfFile *vcff);
-// Abandons all previously allocated data from the reuse pool and reverts to
-// common pool. The vcf->records set will also be abandoned as pointers are invalid.
-// USE WITH CAUTION.  All previously allocated pointers from this pool are now invalid.
 
 void vcfFileFlushRecords(struct vcfFile *vcff);
 // Abandons all previously read vcff->records and flushes the reuse pool (if it exists).
@@ -371,7 +368,7 @@ INLINE struct variantBits *vcfHaploBitIxToVariantBits(struct haploBits *hBits, i
 return slElementFromIx(vBitsList,vcfRecordIxFromBitIx(hBits,bitIx));
 }
 
-unsigned char vcfHaploBitsToVariantIx(struct haploBits *hBits,int bitIx);
+unsigned char vcfHaploBitsToVariantAlleleIx(struct haploBits *hBits,int bitIx);
 // Given a hBits struct and bitIx, what is the actual variant allele ix
 // to use when accessing the vcfRecord?
 
