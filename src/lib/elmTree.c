@@ -33,30 +33,30 @@ return node;
 // NOTE the root of the tree always has NULL content.
 #define treePlant(lm,tree) treeNewNode(lm,tree,NULL)
 
-inline void treeSproutLeaf(struct elmNode *parent,struct elmNode *leaf)
-// Adds a leaf to a node.  Note that the leaf may itself have children.
+inline void treeSprout(struct elmNode *parent,struct elmNode *node)
+// Adds a leaf or branch node to an existing tree node.
 {
-leaf->parent = parent;
-leaf->sibling = parent->firstChild;
-parent->firstChild = leaf;
-parent->selfAndDescendants += leaf->selfAndDescendants;
+node->parent = parent;
+node->sibling = parent->firstChild;
+parent->firstChild = node;
+parent->selfAndDescendants += node->selfAndDescendants;
 }
 
-struct elmNode *treeClipLeaf(struct elmNode *leaf)
-// Clips leaf and return parent
+struct elmNode *treeClip(struct elmNode *node)
+// Clips leaf or branch node from a tree returning the node's former parent
 {
-assert(leaf->parent != NULL);
-struct elmNode *parent = leaf->parent;
-leaf->parent = NULL;
+assert(node->parent != NULL);
+struct elmNode *parent = node->parent;
+node->parent = NULL;
 
-// leaf may not be first child, so find leaf in children 
+// node may not be first child, so find node in children 
 struct elmNode *child = parent->firstChild; 
 struct elmNode *prevChild = NULL;
 struct elmNode *nextChild = NULL;
 for (; child != NULL; prevChild = child, child = nextChild)
     {
     nextChild = child->sibling;
-    if (child == leaf)
+    if (child == node)
         {
         child->sibling = NULL;
         if (prevChild != NULL)
@@ -66,16 +66,17 @@ for (; child != NULL; prevChild = child, child = nextChild)
         break;
         }
     }
-parent->selfAndDescendants -= leaf->selfAndDescendants;
+parent->selfAndDescendants -= node->selfAndDescendants;
 return parent;
 }
 
 
-inline void treeInsertBranchBefore(struct elmNode *branch,struct elmNode *node)
+inline void treeBranchBefore(struct elmNode *branch,struct elmNode *node)
+// Adds a new 'branch' node just before the current 'node'
 {
-struct elmNode *parent = treeClipLeaf(node);
-treeSproutLeaf(parent,branch);
-treeSproutLeaf(branch,node);
+struct elmNode *parent = treeClip(node);
+treeSprout(parent,branch);
+treeSprout(branch,node);
 }
 
 enum elmNodeOverlap rTreeBranchFindMaxWeight(struct elmNode *branch, struct slList *element, 
@@ -128,9 +129,7 @@ if (bestResult != enoEqual && bestResult != enoSuperset)  // Could do better
         int weight = bestWeight;  // will not recurse if new weight is less than best
         //int result = neighborCmp(branch->content,element,&weight,extra);
         int result = rTreeBranchFindMaxWeight(branch,element,neighborCmp,&weight,extra);
-
-        if (result == enoEqual || result == enoSuperset  // best that we can do
-        ||  bestWeight <  weight)                         // better than last branch
+        if (bestWeight <  weight)                         // better than last branch
         // NOTE: preferring larger of 2 equal branches does not help.
         //|| (bestWeight == weight                         // prefer largest branch
         //   &&  branch->selfAndDescendants > bestBranch->selfAndDescendants))
@@ -162,13 +161,13 @@ if (collection == NULL)
     return NULL;
 
 // Begin tree
-struct elmNode *tree = NULL;
-struct elmNode *root = treePlant(lm,&tree);
+struct elmNode *treeNodeList = NULL;
+struct elmNode *root = treePlant(lm,&treeNodeList);
 
 // Add first element:
 struct slList *element = collection;
-struct elmNode *newNode = treeNewNode(lm,&tree,element);
-treeSproutLeaf(root,newNode);
+struct elmNode *newNode = treeNewNode(lm,&treeNodeList,element);
+treeSprout(root,newNode);
 element = element->next;
 
 // for each additional element, walks current tree level by level, choosing the best branch and
@@ -191,35 +190,35 @@ for ( ;element != NULL; element = element->next)
             }
         else if (result == enoExcluding)              // New leaf
             {
-            newNode = treeNewNode(lm,&tree,element);
-            treeSproutLeaf(curNode->parent,newNode);  // shares nothing
+            newNode = treeNewNode(lm,&treeNodeList,element);
+            treeSprout(curNode->parent,newNode);  // shares nothing
             }
         else if (result == enoSubset)                 // on to children or new leaf
             {
             if (curNode->firstChild != NULL) 
                 continue;                             // Only case where we continue!
-            newNode = treeNewNode(lm,&tree,element);
-            treeSproutLeaf(curNode,newNode);          // shares all of curNode
+            newNode = treeNewNode(lm,&treeNodeList,element);
+            treeSprout(curNode,newNode);          // shares all of curNode
             }
         else if (result == enoSuperset)               // New branch with old node as child
             {
-            newNode = treeNewNode(lm,&tree,element);
-            treeInsertBranchBefore(newNode,curNode);
+            newBranch = treeNewNode(lm,&treeNodeList,element);
+            treeBranchBefore(newBranch,curNode);
             }
         else if (result == enoMixed)                  // New branch with both nodes as children
             {
             struct slList *matching = neighborJoin(curNode->content,element,extra);
-            newBranch = treeNewNode(lm,&tree,matching);
-            treeInsertBranchBefore(newBranch,curNode);
-            newNode   = treeNewNode(lm,&tree,element);
-            treeSproutLeaf(newBranch,newNode);
+            newBranch = treeNewNode(lm,&treeNodeList,matching);
+            treeBranchBefore(newBranch,curNode);
+            newNode   = treeNewNode(lm,&treeNodeList,element);
+            treeSprout(newBranch,newNode);
             }
         break; // done, move on to next element
         }
     }
-slReverse(&tree);
-assert(elmNodeIsRoot(tree));
-return tree;
+slReverse(&treeNodeList);
+assert(elmNodeIsRoot(treeNodeList) && root == treeNodeList);
+return root;
 }
 
 boolean rElmTreeClimb(const struct elmNode *node, struct slList *parent, void *extra,
