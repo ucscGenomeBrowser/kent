@@ -1,8 +1,10 @@
-/* VCF: Variant Call Format, version 4.0 / 4.1
- * http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-40
- * http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41
- * The vcfFile object borrows many memory handling and error reporting tricks from MarkD's
- * gff3File; any local deficiencies are not to reflect poorly on Mark's fine work! :) */
+/* vcfBits.c/.h: Variant Call Format, analysis by bit maps.
+ * The routines found here are dependent upon vcf.c/.h for accessing vcf records.
+ * They allow analysis of a set of vcf records by bit maps with one bit map per variant
+ * location and where each haplotype covered by the vcf record is represented by a single
+ * bit (or pair of bits). Additional analysis can be performed by creating haplotype based
+ * bit maps from variant bit maps.  There is one haplotype bit map for each haplotype
+ * (subject chromosome) with one (or two) bits for each variant location in the set of records. */
 
 #ifndef vcfBits_h
 #define vcfBits_h
