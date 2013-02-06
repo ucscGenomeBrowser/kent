@@ -74,18 +74,6 @@ void lmCleanup(struct lm **pLm)
     *pLm = NULL;
 }
 
-int lmFlushZ(struct lm *lm)
-// Zero's and makes available most recent block of pool, abandoning older blocks
-// USE WITH CAUTION: All previous pointers into lm will be invalid
-{
-slFreeList(&(lm->blocks->next));  // free any extra blocks
-struct lmBlock *mb = lm->blocks;
-mb->free = (char *)(mb+1);
-size_t fullSize = (mb->end - mb->free);
-memset(mb->free,0,fullSize);
-return fullSize;
-}
-
 size_t lmAvailable(struct lm *lm)
 // Returns currently available memory in pool
 {
