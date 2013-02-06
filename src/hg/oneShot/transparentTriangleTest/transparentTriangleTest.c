@@ -8,7 +8,7 @@
 #include "rainbow.h"
 #include "hvGfx.h"
 
-int imageWidth = 400, imageHeight = 120;
+int imageWidth = 900, imageHeight = 100;
 
 struct rgbColor lightRainbowAtPos(double pos);
 /* Given pos, a number between 0 and 1, return a lightish rainbow rgbColor
@@ -100,6 +100,50 @@ while (--count >= 0)
     }
 }
 
+double floatPicMinComponent(struct floatPic *pic)
+/* Return minimum r, g, or b componenent in pic. */
+{
+long totalSize = pic->width * pic->height * 3;
+float curMin = 1.0;
+float *p = pic->image;
+while (--totalSize >= 0)
+    {
+    float comp = *p++;
+    if (comp < curMin)
+         curMin = comp;
+    }
+return curMin;
+}
+
+double floatPicMinValue(struct floatPic *pic)
+/* Return number between 0 and 1 where 0 is darkest, 1 is lightest */
+{
+float rScale = 0.3, gScale = 0.5, bScale = 0.2;
+long totalSize = pic->width * pic->height;
+float curMin = 1.0;
+float *p = pic->image;
+while (--totalSize >= 0)
+    {
+    float curVal = rScale * p[0] + gScale * p[1] + bScale * p[2];
+    p += 3;
+    if (curVal < curMin)
+         curMin = curVal;
+    }
+return curMin;
+}
+
+void floatPicNormalize(struct floatPic *pic, double normFactor)
+/* Adjust darkness while trying to keep same colors. */
+{
+long totalSize = pic->width * pic->height*3;
+float *p = pic->image;
+while (--totalSize >= 0)
+    {
+    *p = powf(*p, normFactor);
+    p += 1;
+    }
+}
+
 void floatPicToPng(struct floatPic *pic, char *fileName)
 /* Write out picture to PNG of given file name. */
 {
@@ -165,7 +209,7 @@ for (i=0; i<count; ++i)
     }
 }
 
-void transparentTriangleTest(char *countString, char *outFile)
+void transparentTriangleTest(char *countString, char *outFile, char *desiredString)
 /* transparentTriangleTest - Test out a normalized transparency idea using transparent triangles. */
 {
 int triangleCount = sqlUnsigned(countString);
@@ -173,16 +217,28 @@ if (triangleCount < 2)
   errAbort("Triangle count must be at least 2."); 
 struct floatPic *pic = floatPicNew(imageWidth, imageHeight);
 floatPicSet(pic, 1.0, 1.0, 1.0);
+uglyTime("Allocate and set picture to white");
 drawTriangles(pic, triangleCount, 0, 0, imageWidth, imageHeight);
+uglyTime("Draw triangles");
+double desiredVal = sqlDouble(desiredString);
+double currentVal = floatPicMinComponent(pic);
+if (currentVal > 0)
+    {
+    double normFactor = log(desiredVal)/log(currentVal);
+    floatPicNormalize(pic, normFactor);
+    }
+uglyTime("Normalize");
 floatPicToPng(pic, outFile);
+uglyTime("Convert to PNG");
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-transparentTriangleTest(argv[1], argv[2]);
+uglyTime(NULL);
+transparentTriangleTest(argv[1], argv[2], argv[3]);
 return 0;
 }
