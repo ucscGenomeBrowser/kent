@@ -41,7 +41,7 @@ O = aliType.o annoColumn.o annoFilter.o annoFormatter.o annoFormatTab.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o textOut.o tokenizer.o trix.o twoBit.o \
-    udc.o vcf.o vGfx.o vPng.o verbose.o \
+    udc.o vcf.o vcfBits.o vGfx.o vPng.o verbose.o \
     wildcmp.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o zlibFace.o
 
