@@ -19,7 +19,14 @@ char *chrom = cartString(cart, "c");
 /* Open BigWig file and get interval list. */
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+int ivStart = start, ivEnd = end;
+if (start == end)
+    {
+    // item is an insertion; expand the search range from 0 bases to 2 so we catch it:
+    ivStart = max(0, start-1);
+    ivEnd++;
+    }
+struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
 /* Get bedSize if it's not already defined. */
 if (bedSize == 0)
