@@ -869,7 +869,6 @@ html hg19mammalChainNet
         type chain felCat4
         otherDb felCat4
 
-# include chainCanFam2.ra
 include chainCanFam3.ra
 
         track chainDasNov2
@@ -1093,7 +1092,6 @@ include chainCanFam3.ra
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
-# include netCanFam2.ra
 include netCanFam3.ra
 
         track netDasNov2
