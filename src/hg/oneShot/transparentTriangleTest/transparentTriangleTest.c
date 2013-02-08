@@ -8,7 +8,8 @@
 #include "rainbow.h"
 #include "hvGfx.h"
 
-int imageWidth = 900, imageHeight = 100;
+int clWidth = 800, clHeight = 100;
+int clCount = 10;
 
 struct rgbColor lightRainbowAtPos(double pos);
 /* Given pos, a number between 0 and 1, return a lightish rainbow rgbColor
@@ -20,14 +21,19 @@ void usage()
 errAbort(
   "transparentTriangleTest - Test out a normalized transparency idea using transparent triangles.\n"
   "usage:\n"
-  "   transparentTriangleTest triangleCount output\n"
+  "   transparentTriangleTest triangleCount output normalization\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -width=N\n"
+  "   -height=N\n"
+  "   -count=N\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"width", OPTION_INT},
+   {"height", OPTION_INT},
+   {"count", OPTION_INT},
    {NULL, 0},
 };
 
@@ -132,7 +138,7 @@ while (--totalSize >= 0)
 return curMin;
 }
 
-void floatPicNormalize(struct floatPic *pic, double normFactor)
+void floatPicNormalize(struct floatPic *pic, float normFactor)
 /* Adjust darkness while trying to keep same colors. */
 {
 long totalSize = pic->width * pic->height*3;
@@ -144,11 +150,9 @@ while (--totalSize >= 0)
     }
 }
 
-void floatPicToPng(struct floatPic *pic, char *fileName)
-/* Write out picture to PNG of given file name. */
+void floatPicIntoHvg(struct floatPic *pic, int xOff, int yOff, struct hvGfx *hvg)
+/* Copy float pic into hvg at given offset. */
 {
-uglyf("floatPicToPng(%dx%d lines=%p %s)\n", pic->width, pic->height, pic->lines, fileName);
-struct hvGfx *hvg  = hvGfxOpenPng(pic->width, pic->height, fileName, FALSE);
 int width = pic->width, height = pic->height;
 Color *lineBuf;
 AllocArray(lineBuf, width);
@@ -166,9 +170,9 @@ for (y=0; y<height; ++y)
 	*cp++ = MAKECOLOR_32(red, green, blue);
 	fp += 3;
 	}
-    hvGfxVerticalSmear(hvg, 0, y, width, 1, lineBuf, TRUE);
+    hvGfxVerticalSmear(hvg, xOff, y + yOff, width, 1, lineBuf, TRUE);
     }
-hvGfxClose(&hvg);
+freez(&lineBuf);
 }
 
 void drawAlignedTriangle(struct floatPic *pic,  struct rgbColor *rgb, int xOff, int yOff, 
@@ -209,36 +213,49 @@ for (i=0; i<count; ++i)
     }
 }
 
-void transparentTriangleTest(char *countString, char *outFile, char *desiredString)
+void transparentTriangleTest(char *countString, char *outFile)
 /* transparentTriangleTest - Test out a normalized transparency idea using transparent triangles. */
 {
 int triangleCount = sqlUnsigned(countString);
 if (triangleCount < 2)
   errAbort("Triangle count must be at least 2."); 
-struct floatPic *pic = floatPicNew(imageWidth, imageHeight);
-floatPicSet(pic, 1.0, 1.0, 1.0);
-uglyTime("Allocate and set picture to white");
-drawTriangles(pic, triangleCount, 0, 0, imageWidth, imageHeight);
-uglyTime("Draw triangles");
-double desiredVal = sqlDouble(desiredString);
-double currentVal = floatPicMinComponent(pic);
-if (currentVal > 0)
+struct hvGfx *hvg  = hvGfxOpenPng(clWidth, clHeight*clCount, outFile, FALSE);
+struct floatPic *pic = floatPicNew(clWidth, clHeight);
+uglyTime("Allocate picture");
+int i;
+for (i=0; i<clCount; ++i)
     {
-    double normFactor = log(desiredVal)/log(currentVal);
-    floatPicNormalize(pic, normFactor);
+    double desiredVal = 0.1*i + 0.01;
+    int yOff = i*clHeight;
+    floatPicSet(pic, 1.0, 1.0, 1.0);
+    uglyTime("set picture to white");
+    drawTriangles(pic, triangleCount, 0, 0, clWidth, clHeight);
+    uglyTime("Draw triangles");
+    double currentVal = floatPicMinComponent(pic);
+    uglyTime("Figure minComponent %g", currentVal);
+    if (currentVal > 0)
+	{
+	double normFactor = log(desiredVal)/log(currentVal);
+	floatPicNormalize(pic, normFactor);
+	}
+    uglyTime("Normalize");
+    floatPicIntoHvg(pic, 0, yOff, hvg);
+    uglyTime("Convert to hvg");
     }
-uglyTime("Normalize");
-floatPicToPng(pic, outFile);
-uglyTime("Convert to PNG");
+hvGfxClose(&hvg);
+uglyTime("Save as PNG");
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 3)
     usage();
+clWidth = optionInt("width", clWidth);
+clHeight = optionInt("height", clHeight);
+clCount = optionInt("count", clCount);
 uglyTime(NULL);
-transparentTriangleTest(argv[1], argv[2], argv[3]);
+transparentTriangleTest(argv[1], argv[2]);
 return 0;
 }
