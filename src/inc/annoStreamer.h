@@ -25,7 +25,8 @@ struct annoStreamer
 
     // Public methods
     struct asObject *(*getAutoSqlObject)(struct annoStreamer *self);
-    /* Get autoSql representation (do not modify or free!) */
+    void (*setAutoSqlObject)(struct annoStreamer *self, struct asObject *asObj);
+    /* Get and set autoSql representation (do not modify or free!) */
 
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
     /* Set genomic region for query (should be called only by annoGratorQuerySetRegion) */
@@ -69,6 +70,9 @@ struct annoStreamer
 
 struct asObject *annoStreamerGetAutoSqlObject(struct annoStreamer *self);
 /* Return parsed autoSql definition of this streamer's data type. */
+
+void annoStreamerSetAutoSqlObject(struct annoStreamer *self, struct asObject *asObj);
+/* Use new asObj and update internal state derived from asObj. */
 
 void annoStreamerSetRegion(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
 /* Set genomic region for query; if chrom is NULL, position is genome.
