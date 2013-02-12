@@ -19,10 +19,6 @@ struct lm *lmInit(int blockSize);
 void lmCleanup(struct lm **pLm);
 /* Clean up a local memory pool. */
 
-int lmFlushZ(struct lm *lm);
-// Zero's and makes available most recent block of pool, abandoning older blocks
-// USE WITH CAUTION: All previous pointers into lm will be invalid
-
 size_t lmAvailable(struct lm *lm);
 // Returns currently available memory in pool
 

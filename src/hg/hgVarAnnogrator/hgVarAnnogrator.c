@@ -309,7 +309,7 @@ void printRegionListHtml(char *db)
  * Return the selected region type. */
 {
 printf("<SELECT ID='"hgvaRegionType"' NAME='"hgvaRegionType"' "
-       "onchange=\"hgvaChangeRegion();\">\n");
+       "onchange=\"hgva.changeRegion();\">\n");
 struct sqlConnection *conn = hAllocConn(db);
 boolean doEncode = sqlTableExists(conn, "encodeRegions");
 hFreeConn(&conn);
@@ -339,7 +339,7 @@ char *makePositionInput()
 /* Return HTML for the position input. */
 {
 struct dyString *dy = dyStringCreate("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\""
-				     " onchange=\"hgvaLookupPosition();\">",
+				     " onchange=\"hgva.lookupPosition();\">",
 				     hgvaRange, 26, addCommasToPos(NULL, position));
 return dyStringCannibalize(&dy);
 }
@@ -375,11 +375,11 @@ puts(makePositionInput());
 printf("</span>\n");
 topLabelSpansEnd();
 puts("<div style='padding-top: 5px; padding-bottom: 5px'>");
-hOnClickButton("document.customTrackForm.submit();return false;",
+hOnClickButton("document.customTrackForm.submit(); return false;",
 	       gotCustomTracks() ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 hPrintf(" ");
 if (hubConnectTableExists())
-    hOnClickButton("document.trackHubForm.submit();return false;", "track hubs");
+    hOnClickButton("document.trackHubForm.submit(); return false;", "track hubs");
 nbSpaces(3);
 hPrintf("To reset <B>all</B> user cart settings (including custom tracks), \n"
 	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
@@ -1135,7 +1135,7 @@ void printAddDataSection()
 webNewSectionLite(FALSE , "addData", TRUE, "");
 cgiMakeButtonWithOnClick("addData", "Select More Data",
 			 "select a new track to integrate with Variants",
-			 "hgvaShowNextHiddenSource();");
+			 "hgva.showNextHiddenSource();");
 }
 
 void makeOutputFormatDropDown(char *selectName, char *selected)
@@ -1169,7 +1169,7 @@ void printSubmitSection()
 webNewSectionLite(FALSE, "submitSection", TRUE, "Get Results");
 cgiMakeButtonWithOnClick("startQuery", "Go!",
 			 "get the results of your query",
-			 "hgvaExecuteQuery();");
+			 "hgva.executeQuery();");
 printf("&nbsp;<img id='loadingImg' src='../images/loading.gif' />\n");
 printf("<span id='loadingMsg'></span>\n");
 puts("<div class='warn-note' style='border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;'>");

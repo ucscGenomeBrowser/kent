@@ -869,7 +869,6 @@ html hg19mammalChainNet
         type chain felCat4
         otherDb felCat4
 
-# include chainCanFam2.ra
 include chainCanFam3.ra
 
         track chainDasNov2
@@ -1093,7 +1092,6 @@ include chainCanFam3.ra
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
-# include netCanFam2.ra
 include netCanFam3.ra
 
         track netDasNov2
@@ -2068,6 +2066,7 @@ type vcfTabix
 group varRep
 priority 99.1
 visibility hide
+maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 track tgpPhase1Accessibility
