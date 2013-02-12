@@ -281,6 +281,7 @@ spectrum on
 #color 
 minGrayLevel 4 
 dataVersion ENCODE March 2012 Freeze
+nextItemButton on
 wgEncode 1 
 
     track wgEncodeAwgTfbsBroadDnd41CtcfUniPk
