@@ -1170,7 +1170,7 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v10
-release beta,public
+release public
 
 track dgv
 shortLabel DGV
@@ -1185,7 +1185,7 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://dgvbeta.tcag.ca/dgv/app/variant?id=$$&ref=$D
 dataVersion beta (Nov. 14, 2012)
-release alpha
+release alpha,beta
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -4069,7 +4069,7 @@ searchTable dgv
 searchType bed
 searchPriority 50
 termRegex [en]ss?v[0-9]+
-release alpha
+release alpha,beta
 
 searchTable coriellDelDup
 searchMethod exact
