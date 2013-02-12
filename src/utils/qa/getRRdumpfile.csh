@@ -33,7 +33,7 @@ endif
 
 if ( $#argv == 2 ) then
   set machine=$argv[2]
-  echo $machine | egrep -q "hgwdev|hgwbeta|rr|hgnfs1" 
+  echo $machine | egrep -q "hgwdev|hgwbeta|rr|hgnfs1|rrnfs1" 
   if ( $status ) then
     echo
     echo "  $machine not a valid machine" 
