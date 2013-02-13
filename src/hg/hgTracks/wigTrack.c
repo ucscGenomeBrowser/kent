@@ -1128,7 +1128,8 @@ void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
                     MgFont *font, Color color, enum trackVisibility vis,
                     struct preDrawContainer *preDrawList, int preDrawZero,
                     int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
-/* Draw once we've figured out predraw... */
+/* Draw once we've figured out predraw (numerical values to graph) we draw it here.
+ * This code is shared by wig, bigWig, and bedGraph drawers. */
 {
 enum wiggleYLineMarkEnum yLineOnOff;
 double yLineMark;
@@ -1623,7 +1624,10 @@ if (containerType != NULL && sameString(containerType, "multiWig"))
 
 char *aggregate = wigFetchAggregateValWithCart(cart, tdb);
 if (aggregate != NULL)
+    {
     wigCart->overlay = wigIsOverlayTypeAggregate(aggregate);
+    wigCart->transparent = sameString(WIG_AGGREGATE_TRANSPARENT, aggregate);
+    }
 return wigCart;
 }
 
