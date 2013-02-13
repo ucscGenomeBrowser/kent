@@ -1886,12 +1886,14 @@ else
     {
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
     if (looksLikePgSnp(primary->asObj) && looksLikeGenePred(streamer->asObj))
-	grator = annoGratorGpVarNew(streamer);
+	grator = annoGratorGpVarNew(streamer, FALSE);
     else
 	grator = annoGratorNew(streamer);
     }
 if (sameString(src->selIntersect, "mustOverlap"))
-    grator->haveRJIncludeFilter = TRUE;
+    grator->setOverlapRule(grator, agoMustOverlap);
+else if (sameString(src->selIntersect, "mustNotOverlap"))
+    grator->setOverlapRule(grator, agoMustNotOverlap);
 return grator;
 }
 
