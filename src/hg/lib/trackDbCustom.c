@@ -584,11 +584,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         continue;
     wordCt = chopLine(cloneString(setting), words);
     assert(differentString("on", words[0])); // already weeded out "superTrack on"
-    tdb->parent = hashFindVal(superHash, words[0]);
+    char *parentName = maybeSkipHubPrefix(words[0]);
+    tdb->parent = hashFindVal(superHash, parentName);
     if (tdb->parent)
         {
         tdbMarkAsSuperTrackChild(tdb);
-        tdb->parentName = cloneString(words[0]);
+        tdb->parentName = cloneString(parentName);
         if (wordCt > 1)
             tdb->visibility = max(0, hTvFromStringNoAbort(words[1]));
         }

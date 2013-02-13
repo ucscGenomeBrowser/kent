@@ -51,7 +51,7 @@ set devString="hgcentraltest"
 set betaString="-h $sqlbeta hgcentralbeta"
 set rrString="-h $sqlrr hgcentral" 
 
-foreach table ( blatServers clade dbDb dbDbArch defaultDb gdbPdb genomeClade \
+foreach table ( blatServers clade dbDb dbDbArch defaultDb genomeClade \
   liftOverChain namedSessionDb targetDb )
   hgsql  $devString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwdev.$table
   hgsql $betaString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwbeta.$table

@@ -49,7 +49,6 @@ return sizes;
 static void bedToPsl4(struct bed *bed, struct psl *psl)
 /* convert a 4-column BED to a psl with one block */
 {
-psl->blockCount++;
 if (keepQuery) {
     psl->qStarts[0] = bed->chromStart;
     }

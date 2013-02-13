@@ -168,6 +168,9 @@ __attribute__((format(printf, 2, 3)))
 static void vcfFileErr(struct vcfFile *vcff, char *format, ...)
 /* Send error message to errabort stack's warn handler and abort */
 {
+vcff->errCnt++;
+if (vcff->maxErr == VCF_IGNORE_ERRS)
+    return;
 va_list args;
 va_start(args, format);
 char formatPlus[1024];
@@ -177,7 +180,6 @@ else
     strcpy(formatPlus, format);
 vaWarn(formatPlus, args);
 va_end(args);
-vcff->errCnt++;
 if (vcfFileStopDueToErrors(vcff))
     errAbort("VCF: %d parser errors, quitting", vcff->errCnt);
 }
@@ -185,33 +187,33 @@ if (vcfFileStopDueToErrors(vcff))
 static void *vcfFileAlloc(struct vcfFile *vcff, size_t size)
 /* Use vcff's local mem to allocate memory. */
 {
-return lmAlloc(vcff->pool->lm, size);
+return lmAlloc( vcfFileLm(vcff), size);
 }
 
-static char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
+inline char *vcfFileCloneStrZ(struct vcfFile *vcff, char *str, size_t size)
 /* Use vcff's local mem to allocate memory for a string and copy it. */
 {
-return lmCloneStringZ(vcff->pool->lm, str, size);
+return lmCloneStringZ( vcfFileLm(vcff), str, size);
 }
 
-static char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
+inline char *vcfFileCloneStr(struct vcfFile *vcff, char *str)
 /* Use vcff's local mem to allocate memory for a string and copy it. */
 {
 return vcfFileCloneStrZ(vcff, str, strlen(str));
 }
 
-static char *vcfFileCloneSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
+inline char *vcfFileCloneSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
 /* Allocate memory for and copy a substring of line. */
 {
 return vcfFileCloneStrZ(vcff, line+substr.rm_so, (substr.rm_eo - substr.rm_so));
 }
 
-#define vcfFileCloneVar(var) lmCloneMem(vcff->pool->lm, var, sizeof(var));
+#define vcfFileCloneVar(vcff, var) lmCloneMem( vcfFileLm(vcff), var, sizeof(var))
 
 char *vcfFilePooledStr(struct vcfFile *vcff, char *str)
 /* Allocate memory for a string from vcff's shared string pool. */
 {
-return hashStoreName(vcff->pool, str);
+return hashStoreName(vcff->pool, str);  // Always stored in main pool, not reuse pool
 }
 
 static enum vcfInfoType vcfInfoTypeFromSubstr(struct vcfFile *vcff, char *line, regmatch_t substr)
@@ -414,13 +416,39 @@ static struct vcfFile *vcfFileNew()
 struct vcfFile *vcff = NULL;
 AllocVar(vcff);
 vcff->pool = hashNew(0);
+vcff->reusePool = NULL;  // Must explicitly request a separate record pool
 return vcff;
+}
+
+void vcfFileMakeReusePool(struct vcfFile *vcff, int initialSize)
+// Creates a separate memory pool for records.  Establishing this pool allows
+// using vcfFileFlushRecords to abandon previously read records and free
+// the associated memory. Very useful when reading an entire file in batches.
+{
+assert(vcff->reusePool == NULL); // don't duplicate this
+vcff->reusePool = lmInit(initialSize);
+}
+
+void vcfFileFlushRecords(struct vcfFile *vcff)
+// Abandons all previously read vcff->records and flushes the reuse pool (if it exists).
+// USE WITH CAUTION.  All previously allocated record pointers are now invalid.
+{
+if (vcff->reusePool != NULL)
+    {
+    size_t poolSize = lmSize(vcff->reusePool);
+    //if (poolSize > (48 * 1024 * 1024))
+    //    printf("\nReuse pool %ld of %ld unused\n",lmAvailable(vcff->reusePool),poolSize);
+    lmCleanup(&vcff->reusePool);
+    vcff->reusePool = lmInit(poolSize);
+    }
+vcff->records = NULL;
 }
 
 static struct vcfFile *vcfFileHeaderFromLineFile(struct lineFile *lf, int maxErr)
 /* Parse a VCF file into a vcfFile object.  If maxErr not zero, then
  * continue to parse until this number of error have been reached.  A maxErr
- * less than zero does not stop and reports all errors. */
+ * less than zero does not stop and reports all errors.
+ * Set maxErr to VCF_IGNORE_ERRS for silence */
 {
 initVcfSpecInfoDefs();
 initVcfSpecGtFormatDefs();
@@ -706,23 +734,26 @@ if (rec->alleleCount > 1)
 return chromStartOrig;
 }
 
-static void vcfParseData(struct vcfFile *vcff, int maxRecords)
-/* Given a vcfFile into which the header has been parsed, and whose lineFile is positioned
- * at the beginning of a data row, parse and store all data rows from lineFile. */
+static struct vcfRecord *vcfParseData(struct vcfFile *vcff, int maxRecords)
+// Given a vcfFile into which the header has been parsed, and whose
+// lineFile is positioned at the beginning of a data row, parse and
+// return all data rows from lineFile.
 {
 if (vcff == NULL)
-    return;
+    return NULL;
 int recCount = 0;
+struct vcfRecord *records = NULL;
 struct vcfRecord *record;
 while ((record = vcfNextRecord(vcff)) != NULL)
     {
     if (maxRecords >= 0 && recCount >= maxRecords)
-	break;
-    slAddHead(&(vcff->records), record);
+        break;
+    slAddHead(&records, record);
     recCount++;
     }
-slReverse(&(vcff->records));
-lineFileClose(&(vcff->lf));
+slReverse(&records);
+
+return records;
 }
 
 struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, boolean parseAll)
@@ -730,7 +761,7 @@ struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, bool
  * If parseAll, then read in all lines, parse and store in
  * vcff->records; if maxErr >= zero, then continue to parse until
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
- * and reports all errors. */
+ * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence */
 {
 struct lineFile *lf = NULL;
 if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
@@ -740,7 +771,10 @@ else
     lf = lineFileMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
 if (parseAll)
-    vcfParseData(vcff, maxRecords);
+    {
+    vcff->records = vcfParseData(vcff, maxRecords);
+    lineFileClose(&(vcff->lf)); // Not sure why it is closed.  Angie?
+    }
 return vcff;
 }
 
@@ -751,7 +785,7 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
  * seek to the position range and parse all lines in range into
  * vcff->records.  If maxErr >= zero, then continue to parse until
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
- * and reports all errors. */
+ * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence */
 {
 struct lineFile *lf = lineFileTabixMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
@@ -760,9 +794,61 @@ if (vcff == NULL)
 if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
-	vcfParseData(vcff, maxRecords);
+        {
+        vcff->records = vcfParseData(vcff, maxRecords);
+        lineFileClose(&(vcff->lf)); // Not sure why it is closed.  Angie?
+        }
     }
 return vcff;
+}
+
+int vcfRecordCmp(const void *va, const void *vb)
+/* Compare to sort based on position. */
+{
+const struct vcfRecord *a = *((struct vcfRecord **)va);
+const struct vcfRecord *b = *((struct vcfRecord **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+if (dif == 0)
+    dif = a->chromEnd - b->chromEnd; // shortest first
+if (dif == 0)
+    dif = strcmp(a->name, b->name);  // finally by name
+return dif;
+}
+
+int vcfTabixBatchRead(struct vcfFile *vcff, char *chrom, int start, int end,
+                      int maxErr, int maxRecords)
+// Reads a batch of records from an opened and indexed VCF file, adding them to
+// vcff->records and returning the count of new records added in this batch.
+// Note: vcff->records will continue to be sorted, even if batches are loaded
+// out of order.  Additionally, resulting vcff->records will contain no duplicates
+// so returned count refects only the new records added, as opposed to all records
+// in range.  If maxErr >= zero, then continue to parse until there are maxErr+1
+// errors.  A maxErr less than zero does not stop and reports all errors.  Set
+// maxErr to VCF_IGNORE_ERRS for silence.
+{
+int oldCount = slCount(vcff->records);
+
+if (lineFileSetTabixRegion(vcff->lf, chrom, start, end))
+    {
+    struct vcfRecord *records = vcfParseData(vcff, maxRecords);
+    if (records)
+        {
+        struct vcfRecord *lastRec = vcff->records;
+        if (lastRec == NULL)
+            vcff->records = records;
+        else
+            {
+            // Considered just asserting the batches were in order, but a problem may
+            // result when non-overlapping location windows pick up the same long variant.
+            slSortMergeUniq(&(vcff->records), records, vcfRecordCmp, NULL);
+            }
+        }
+    }
+
+return slCount(vcff->records) - oldCount;
 }
 
 void vcfFileFree(struct vcfFile **pVcff)
@@ -771,8 +857,15 @@ void vcfFileFree(struct vcfFile **pVcff)
 if (pVcff == NULL || *pVcff == NULL)
     return;
 struct vcfFile *vcff = *pVcff;
+if (vcff->maxErr == VCF_IGNORE_ERRS && vcff->errCnt > 0)
+    {
+    vcff->maxErr++; // Never completely silent!  Go ahead and report how many errs were detected
+    vcfFileErr(vcff,"Closing with %d errors.",vcff->errCnt);
+    }
 freez(&(vcff->headerString));
 hashFree(&(vcff->pool));
+if (vcff->reusePool)
+    lmCleanup(&vcff->reusePool);
 hashFree(&(vcff->byName));
 lineFileClose(&(vcff->lf));
 freez(pVcff);
@@ -788,10 +881,10 @@ if (vcff->byName == NULL)
     struct vcfRecord *rec;
     for (rec = vcff->records;  rec != NULL;  rec = rec->next)
 	{
-	if (sameString (rec->name, variantId))
+	if (sameString(rec->name, variantId))
 	    {
 	    // Make shallow copy of rec so we can alter ->next:
-	    struct vcfRecord *newRec = vcfFileCloneVar(rec);
+	    struct vcfRecord *newRec = vcfFileCloneVar(vcff,rec);
 	    slAddHead(&varList, newRec);
 	    }
 	hashAdd(vcff->byName, rec->name, rec);
@@ -806,7 +899,7 @@ else
 	if (sameString(hel->name, variantId))
 	    {
 	    struct vcfRecord *rec = hel->val;
-	    struct vcfRecord *newRec = vcfFileCloneVar(rec);
+	    struct vcfRecord *newRec = vcfFileCloneVar(vcff,rec);
 	    slAddHead(&varList, newRec);
 	    }
 	hel = hel->next;
@@ -988,4 +1081,3 @@ struct asObject *vcfAsObj()
 {
 return asParseText(vcfDataLineAutoSqlString);
 }
-

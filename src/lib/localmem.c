@@ -74,6 +74,25 @@ void lmCleanup(struct lm **pLm)
     *pLm = NULL;
 }
 
+size_t lmAvailable(struct lm *lm)
+// Returns currently available memory in pool
+{
+struct lmBlock *mb = lm->blocks;
+return (mb->end - mb->free);
+}
+
+size_t lmSize(struct lm *lm)
+// Returns current size of pool, even for memory already allocated
+{
+size_t fullSize = 0;
+
+struct lmBlock *mb = lm->blocks;
+for (;mb != NULL;mb = mb->next)
+    fullSize += (mb->end - (char *)(mb+1));
+
+return fullSize;
+}
+
 void *lmAlloc(struct lm *lm, size_t size)
 /* Allocate memory from local pool. */
 {
@@ -87,6 +106,25 @@ mb->free += ((size+lm->allignAdd)&lm->allignMask);
 if (mb->free > mb->end)
     mb->free = mb->end;
 return ret;
+}
+
+void *lmAllocMoreMem(struct lm *lm, void *pt, size_t oldSize, size_t newSize)
+/* Adjust memory size on a block, possibly relocating it.  If block is grown,
+ * new memory is zeroed. */
+{
+struct lmBlock *mb = lm->blocks;
+// rare case that pointer is to last lm alloc, but still try.
+// Note this is the one place where the pointer gets reused and it is known to be in this lm
+if ((char *)pt + oldSize == mb->free
+&&  (char *)pt + newSize <= mb->end)
+    {
+    if (newSize > oldSize) // only move the free pointer on more mem
+        mb->free = pt + newSize;
+    return pt;
+    }
+void *new = lmAlloc(lm, newSize);
+memcpy(new, pt, oldSize);
+return new;
 }
 
 void *lmCloneMem(struct lm *lm, void *pt, size_t size)
@@ -108,15 +146,6 @@ else
     memcpy(s, string, size);
     return s;
     }
-}
-
-char *lmCloneString(struct lm *lm, char *string)
-/* Return local mem copy of string. */
-{
-if (string == NULL)
-    return NULL;
-else
-    return lmCloneStringZ(lm, string, strlen(string));
 }
 
 char *lmCloneFirstWord(struct lm *lm, char *line)

@@ -1,14 +1,15 @@
 include ../../../inc/common.mk
 
 PSLFILT = ${BINDIR}/pslCDnaFilter
-DIFF = diff -u --exclude CVS -r
+DIFF = diff -u --exclude='.nfs*' -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	repMatchTest minAlnSizeTest nonRepSizeTest nonRepMismatchTest \
 	noDropCntBugTest minSpan100Test minSpan10Test localBestTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
 	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest \
-	weirdOverlappedFilterTest noIgnoreIntronsTest ignoreIntronsTest \
+	weirdOverlappedFilterTest weirdOverlapMultAlnTest weirdOverlapMultAlnMinCoverTest \
+	noIgnoreIntronsTest ignoreIntronsTest \
 	uniqueMappedTest uniqueMappedHapTest blackListTest \
 	decayMinCoverTest inconsistentQSizeTest
 
@@ -72,22 +73,36 @@ ignoreNsLocalBestTest:
 
 # resting of haplotype region handling and globalNearBest
 hapGlobalTest:
-	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-globalNearBest=0.005 -hapRegions=input/hapMappings.psl'
+	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-globalNearBest=0.005 -hapRegions=input/hapMappings.psl -hapLociAlns=output/$@/hapLoci.id-psl'
 
 # resting of haplotype region handling and localNearBest
 hapLocalTest:
-	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl'
+	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl -hapLociAlns=output/$@/hapLoci.id-psl'
 
 # haplotype test using xeno alignments; was bug with comparing with wrong
 # refChrom
 hapLocalXenoTest:
-	${MAKE} doFilter name=$@ inPsl=xenoHap.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl'
+	${MAKE} doFilter name=$@ inPsl=xenoHap.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl -hapLociAlns=output/$@/hapLoci.id-psl'
 
 
 # filter weird overlapping
 weirdOverlappedFilterTest:
 	${MAKE} doFilterSave name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
 	    filtArgs='-filterWeirdOverlapped'
+
+# Multiple indentical overlapping alignments create by mapping proteins
+# via mRNAs, along with a couple of weird alignments.  This results in
+# all alignments being kept.  The weird overlap was moved until later
+# so that -bestOverlap and other filters still work.
+weirdOverlapMultAlnTest:
+	${MAKE} doFilterSave name=$@ inPsl=weirdOverlapMultAln.psl \
+	    filtArgs='-bestOverlap'
+
+# This test also drops lower quality weird overlaps before weird overlap test
+# done.
+weirdOverlapMultAlnMinCoverTest:
+	${MAKE} doFilterSave name=$@ inPsl=weirdOverlapMultAln.psl \
+	    filtArgs='-bestOverlap -minCover=1.0'
 
 # -ignoreIntrons tests, carefully crafted from same alignment so that one with
 # faked intron scores slighly lower without intron bonus

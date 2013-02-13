@@ -104,9 +104,12 @@ while (!self->eof &&
 struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
 				    boolean *retRJFilterFailed)
 /* Given a single row from the primary source, get all overlapping rows from internal
- * source, and produce joined output rows.  If retRJFilterFailed is non-NULL and any
- * overlapping row has a rightJoin filter failure (see annoFilter.h),
- * set retRJFilterFailed and stop. */
+ * source, and produce joined output rows.
+ * If retRJFilterFailed is non-NULL:
+ * - any overlapping row has a rightJoin filter failure (see annoFilter.h), or
+ * - overlap rule is agoMustOverlap and no rows overlap, or
+ * - overlap rule is agoMustNotOverlap and any overlapping row is found,
+ * then set retRJFilterFailed and stop. */
 {
 struct annoRow *rowList = NULL;
 agCheckPrimarySorting(self, primaryRow);
@@ -133,7 +136,9 @@ slReverse(&rowList);
 // If no rows overlapped primary, and there is a right-join, !isExclude (i.e. isInclude) filter,
 // then we need to set retRJFilterFailed because the condition was not met to include
 // the primary item.
-if (rowList == NULL && rjFailHard && self->haveRJIncludeFilter)
+if (retRJFilterFailed &&
+    ((rowList == NULL && (self->haveRJIncludeFilter || self->overlapRule == agoMustOverlap)) ||
+     (rowList != NULL && self->overlapRule == agoMustNotOverlap)))
     *retRJFilterFailed = TRUE;
 return rowList;
 }
@@ -201,22 +206,47 @@ self->streamer.query = query;
 self->mySource->setQuery((struct annoStreamer *)(self->mySource), query);
 }
 
-struct annoGrator *annoGratorNew(struct annoStreamer *mySource)
-/* Make a new integrator of columns from mySource with (positions of) rows passed to integrate().
- * mySource becomes property of the new annoGrator. */
+static void agSetAutoSqlObject(struct annoStreamer *sSelf, struct asObject *asObj)
+/* Use new asObj and update internal state derived from asObj. */
 {
-struct annoGrator *self;
-AllocVar(self);
+struct annoGrator *gSelf = (struct annoGrator *)sSelf;
+annoStreamerSetAutoSqlObject(sSelf, asObj);
+gSelf->haveRJIncludeFilter = filtersHaveRJInclude(sSelf->filters);
+}
+
+void agSetOverlapRule(struct annoGrator *self, enum annoGratorOverlap rule)
+/* Tell annoGrator how to handle overlap of its rows with primary row. */
+{
+self->overlapRule = rule;
+}
+
+void annoGratorInit(struct annoGrator *self, struct annoStreamer *mySource)
+/* Initialize an integrator of columns from mySource with (positions of)
+ * rows passed to integrate().
+ * mySource becomes property of the annoGrator. */
+{
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, mySource->getAutoSqlObject(mySource));
 streamer->rowType = mySource->rowType;
+streamer->setAutoSqlObject = agSetAutoSqlObject;
 streamer->setFilters = agSetFilters;
 streamer->setRegion = annoGratorSetRegion;
 streamer->setQuery = annoGratorSetQuery;
 streamer->nextRow = noNextRow;
 streamer->close = annoGratorClose;
 self->integrate = annoGratorIntegrate;
+self->setOverlapRule = agSetOverlapRule;
+self->overlapRule = agoNoConstraint;
 self->mySource = mySource;
 self->haveRJIncludeFilter = filtersHaveRJInclude(streamer->filters);
+}
+
+struct annoGrator *annoGratorNew(struct annoStreamer *mySource)
+/* Make a new integrator of columns from mySource with (positions of) rows passed to integrate().
+ * mySource becomes property of the new annoGrator. */
+{
+struct annoGrator *self;
+AllocVar(self);
+annoGratorInit(self, mySource);
 return self;
 }

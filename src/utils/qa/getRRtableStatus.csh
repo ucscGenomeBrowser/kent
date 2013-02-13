@@ -11,6 +11,7 @@ source `which qaConfig.csh`
 
 set db=""
 set machine="hgnfs1"
+set machine="rrnfs1"
 set table=""
 set field=""
 set dumpfile=""

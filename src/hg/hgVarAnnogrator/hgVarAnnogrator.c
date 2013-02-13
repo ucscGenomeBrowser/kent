@@ -35,7 +35,7 @@
 #include "annoStreamDb.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
-#include "annoGrateWig.h"
+#include "annoGrateWigDb.h"
 #include "annoGratorGpVar.h"
 #include "annoFormatTab.h"
 
@@ -309,7 +309,7 @@ void printRegionListHtml(char *db)
  * Return the selected region type. */
 {
 printf("<SELECT ID='"hgvaRegionType"' NAME='"hgvaRegionType"' "
-       "onchange=\"hgvaChangeRegion();\">\n");
+       "onchange=\"hgva.changeRegion();\">\n");
 struct sqlConnection *conn = hAllocConn(db);
 boolean doEncode = sqlTableExists(conn, "encodeRegions");
 hFreeConn(&conn);
@@ -339,7 +339,7 @@ char *makePositionInput()
 /* Return HTML for the position input. */
 {
 struct dyString *dy = dyStringCreate("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\""
-				     " onchange=\"hgvaLookupPosition();\">",
+				     " onchange=\"hgva.lookupPosition();\">",
 				     hgvaRange, 26, addCommasToPos(NULL, position));
 return dyStringCannibalize(&dy);
 }
@@ -375,11 +375,11 @@ puts(makePositionInput());
 printf("</span>\n");
 topLabelSpansEnd();
 puts("<div style='padding-top: 5px; padding-bottom: 5px'>");
-hOnClickButton("document.customTrackForm.submit();return false;",
+hOnClickButton("document.customTrackForm.submit(); return false;",
 	       gotCustomTracks() ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 hPrintf(" ");
 if (hubConnectTableExists())
-    hOnClickButton("document.trackHubForm.submit();return false;", "track hubs");
+    hOnClickButton("document.trackHubForm.submit(); return false;", "track hubs");
 nbSpaces(3);
 hPrintf("To reset <B>all</B> user cart settings (including custom tracks), \n"
 	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
@@ -1023,7 +1023,7 @@ for (af = filterList;  af != NULL;  af = af->next)
 return NULL;
 }
 
-struct annoStreamer *streamerFromSource(char *database, char *table, struct trackDb *tdb);
+struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb, char *chrom);
 //#*** Move it up here?  Or move out to a lib!!
 
 void makeFilterSection(struct dyString *dy, struct sourceConfig *src)
@@ -1036,7 +1036,7 @@ dyStringPrintf(dy, "<div name='filter' class='sourceFilter'>\n");
 dyStringPrintf(dy, "<script>activeFilterList['%s'] = [ ", src->name);
 struct dyString *availDy = dyStringCreate("availableFilterList['%s'] = [ ", src->name);
 boolean gotActive = FALSE, gotAvail = FALSE;
-struct annoStreamer *streamer = streamerFromSource(database, src->selTable, tdb);
+struct annoStreamer *streamer = streamerFromSource(database, src->selTable, tdb, NULL);
 struct annoFilter *af, *afList = streamer->getFilters(streamer);
 for (af = afList;  af != NULL;  af = af->next)
     {
@@ -1135,7 +1135,7 @@ void printAddDataSection()
 webNewSectionLite(FALSE , "addData", TRUE, "");
 cgiMakeButtonWithOnClick("addData", "Select More Data",
 			 "select a new track to integrate with Variants",
-			 "hgvaShowNextHiddenSource();");
+			 "hgva.showNextHiddenSource();");
 }
 
 void makeOutputFormatDropDown(char *selectName, char *selected)
@@ -1169,7 +1169,7 @@ void printSubmitSection()
 webNewSectionLite(FALSE, "submitSection", TRUE, "Get Results");
 cgiMakeButtonWithOnClick("startQuery", "Go!",
 			 "get the results of your query",
-			 "hgvaExecuteQuery();");
+			 "hgva.executeQuery();");
 printf("&nbsp;<img id='loadingImg' src='../images/loading.gif' />\n");
 printf("<span id='loadingMsg'></span>\n");
 puts("<div class='warn-note' style='border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;'>");
@@ -1751,8 +1751,8 @@ struct asObject *asObjectFromFields(char *name, struct sqlFieldInfo *fieldList)
 struct dyString *dy = dyStringCreate("table %s\n"
 				     "\"Column names grabbed from mysql\"\n"
 				     "    (\n", name);
-struct sqlFieldInfo *field = sameString("bin", fieldList->field) ? fieldList->next : fieldList;
-for (;  field != NULL;  field = field->next)
+struct sqlFieldInfo *field;
+for (field = fieldList;  field != NULL;  field = field->next)
     {
     char *sqlType = field->type;
     // hg19.wgEncodeOpenChromSynthGm12878Pk.pValue has sql type "float unsigned",
@@ -1788,7 +1788,7 @@ else
     return asObjectFromFields(dbTable, fieldList);
 }
 
-struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb)
+struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb, char *chrom)
 /* Figure out the source and type of data and make an annoStreamer. */
 {
 struct annoStreamer *streamer = NULL;
@@ -1811,8 +1811,12 @@ if (startsWith("wig", tdb->type))
     streamer = annoStreamWigDbNew(dataDb, dbTable, maxOutRows);
 else if (sameString("vcfTabix", tdb->type))
     {
-    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-    streamer = annoStreamVcfNew(bigDataUrl, TRUE, maxOutRows);
+    if (chrom == NULL)
+	chrom = hDefaultChrom(db);
+    struct sqlConnection *conn = hAllocConn(db);
+    char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
+    hFreeConn(&conn);
+    streamer = annoStreamVcfNew(fileOrUrl, TRUE, maxOutRows);
     }
 else
     {
@@ -1843,7 +1847,7 @@ return (gotChromStart && gotChromEnd && gotAlleleCount && gotAlleleFreq);
 }
 
 boolean looksLikeGenePred(struct asObject *asObj)
-/* Return TRUE if this has characteristic column names of pgSnp. */
+/* Return TRUE if this has characteristic column names of genePred. */
 //#*** Replace me with a general autoSql comparator!!
 {
 boolean gotTxStart = FALSE, gotTxEnd = FALSE, gotCdsStart = FALSE, gotExonStarts = FALSE;
@@ -1863,29 +1867,33 @@ return (gotTxStart && gotTxEnd && gotCdsStart && gotExonStarts);
 }
 
 
-struct annoGrator *gratorFromSource(char *db, char *table, struct trackDb *tdb,
-				    struct annoStreamer *primary)
+struct annoGrator *gratorFromSource(char *db, struct sourceConfig *src, struct trackDb *tdb,
+				    char *chrom, struct annoStreamer *primary)
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator. */
 {
 struct annoGrator *grator = NULL;
-char *dataDb = db, *dbTable = table;
-if (isCustomTrack(table))
+char *dataDb = db, *dbTable = src->selTable;
+if (isCustomTrack(src->selTable))
     {
     dataDb = CUSTOM_TRASH;
     dbTable = trackDbSetting(tdb, "dbTableName");
     if (dbTable == NULL)
-	errAbort("Can't find dbTableName for custom track %s", table);
+	errAbort("Can't find dbTableName for custom track %s", src->selTable);
     }
 if (startsWith("wig", tdb->type))
     grator = annoGrateWigDbNew(dataDb, dbTable, maxOutRows);
 else
     {
-    struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb);
+    struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
     if (looksLikePgSnp(primary->asObj) && looksLikeGenePred(streamer->asObj))
-	grator = annoGratorGpVarNew(streamer);
+	grator = annoGratorGpVarNew(streamer, FALSE);
     else
 	grator = annoGratorNew(streamer);
     }
+if (sameString(src->selIntersect, "mustOverlap"))
+    grator->setOverlapRule(grator, agoMustOverlap);
+else if (sameString(src->selIntersect, "mustNotOverlap"))
+    grator->setOverlapRule(grator, agoMustNotOverlap);
 return grator;
 }
 
@@ -1909,13 +1917,23 @@ initGroupsTracksTables();
 struct annoStreamer *primary = NULL;
 struct annoGrator *gratorList = NULL;
 struct sourceConfig *src;
+char *chrom = NULL;
+uint start = 0, end = 0;
+if (sameString(regionType, hgvaRegionTypeRange))
+    {
+    if (! parsePosition(position, &chrom, &start, &end))
+	errAbort("Expected position to be chrom:start-end but got '%s'", position);
+    }
 for (src = queryConfig->sources;  src != NULL;  src = src->next)
     {
-    struct trackDb *tdb = tdbForTrack(db, src->selTrack, &fullTrackList);
+    struct trackDb *tdb = tdbForTrack(db, src->selTable, &fullTrackList);
+    if (tdb == NULL)
+	errAbort("Unable to find table '%s' in trackDb for track '%s' or its subtracks",
+		 src->selTable, src->selTrack);
     if (src->isPrimary)
-	primary = streamerFromSource(db, src->selTable, tdb);
+	primary = streamerFromSource(db, src->selTable, tdb, chrom);
     else
-	slAddHead(&gratorList, gratorFromSource(db, src->selTable, tdb, primary));
+	slAddHead(&gratorList, gratorFromSource(db, src, tdb, chrom, primary));
     }
 slReverse(&gratorList);
 struct annoFormatter *formatter = formatterFromOutput(queryConfig);
@@ -1925,13 +1943,7 @@ safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
 struct twoBitFile *tbf = twoBitOpen(twoBitPath);
 struct annoGratorQuery *agq = annoGratorQueryNew(db, NULL, tbf, primary, gratorList, formatter);
 if (sameString(regionType, hgvaRegionTypeRange))
-    {
-    char *chrom;
-    uint start, end;
-    if (! parsePosition(position, &chrom, &start, &end))
-	errAbort("Expected position to be chrom:start-end but got '%s'", position);
     annoGratorQuerySetRegion(agq, chrom, start, end);
-    }
 annoGratorQueryExecute(agq);
 annoGratorQueryFree(&agq);
 }

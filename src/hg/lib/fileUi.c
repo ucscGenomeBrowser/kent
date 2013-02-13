@@ -591,7 +591,7 @@ if (sortOrder != NULL)
 return filterableBits;
 }
 
-static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
+static void filesDownloadsPreamble(char *db, struct trackDb *tdb, boolean isUnrestricted)
 // Replacement for preamble.html which should expose parent dir, files.txt and supplemental, but
 // not have any specialized notes per composite.  Specialized notes belong in track description.
 {
@@ -602,11 +602,12 @@ if (hIsBetaHost())
     server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think
     subDir = "/beta";                        // it's downloads server is "hgdownload.cse.ucsc.edu"
     }
-
-cgiDown(0.9);
-puts("<B>Data is <A HREF='../ENCODE/terms.html' TARGET='_BLANK'>RESTRICTED FROM USE</a>");
-puts("in publication  until the restriction date noted for the given data file.</B>");
-
+if (!isUnrestricted)
+    {
+    cgiDown(0.9);
+    puts("<B>Data is <A HREF='../ENCODE/terms.html' TARGET='_BLANK'>RESTRICTED FROM USE</a>");
+    puts("in publication  until the restriction date noted for the given data file.</B>");
+}
 cgiDown(0.7);
 puts("Additional resources:");
 printf("<BR>&#149;&nbsp;<B><A HREF='http://%s/goldenPath/%s/%s/%s%s/files.txt' "
@@ -782,7 +783,7 @@ for (;oneFile!= NULL;oneFile=oneFile->next)
                                " align='left'":" align='center'");
                 if (sameString("dateUnrestricted",sortOrder->column[ix])
                 &&  field
-                &&  dateIsOld(field,"%F"))
+                &&  dateIsOld(field, MDB_ENCODE_DATE_FORMAT))
                     printf("<TD%s nowrap style='color: #BBBBBB;'%s>%s</td>",align,class,field);
                 else
                     {
@@ -851,10 +852,13 @@ return filesCount;
 
 
 static int filesFindInDir(char *db, struct mdbObj **pmdbFiles, struct fileDb **pFileList,
-                          char *fileType, int limit,boolean *exceededLimit)
+                      char *fileType, int limit, boolean *exceededLimit, boolean *isUnrestricted)
 // Prints list of files in downloads directories matching mdb search terms. Returns count
 {
 int fileCount = 0;
+if (isUnrestricted != NULL)
+    *isUnrestricted = TRUE;
+
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
 struct mdbObj *mdbFiles = NULL; // Will caontain a list of mdbs for the found files
@@ -877,6 +881,10 @@ while (mdbList && (limit == 0 || fileCount < limit))
         mdbObjsFree(&mdbFile);
         continue;
         }
+
+    // Are any files still restricted access under ENCODE data policy ?
+    if (isUnrestricted != NULL && *isUnrestricted)
+        *isUnrestricted = mdbObjEncodeIsUnrestricted(mdbFile);
 
     struct slName *fileSet = slNameListFromComma(fileName);
     struct slName *md5Set = NULL;
@@ -1035,7 +1043,8 @@ if (timeIt)
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL; // Will contain found files
 
-int fileCount = filesFindInDir(db, &mdbList, &fileList, NULL, 0, NULL);
+boolean isUnrestricted;
+int fileCount = filesFindInDir(db, &mdbList, &fileList, NULL, 0, NULL, &isUnrestricted);
 if (timeIt)
     uglyTime("Found %d files in dir",fileCount);
 assert(fileCount == slCount(fileList));
@@ -1056,7 +1065,7 @@ jsIncludeFile("hui.js",NULL);
 jsIncludeFile("ajax.js",NULL);
 
 // standard preamble
-filesDownloadsPreamble(db,tdb);
+filesDownloadsPreamble(db,tdb, isUnrestricted);
 
 // remove these now to get them out of the way
 mdbObjRemoveVars(mdbList,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " "
@@ -1129,7 +1138,8 @@ mdbObjsSortOnVars(&mdbList, MDB_VAR_COMPOSITE);
 struct fileDb *fileList = NULL; // Will contain found files
 int filesExpected = slCount(mdbList);
 boolean exceededLimit = FALSE;
-int fileCount = filesFindInDir(db, &mdbList, &fileList, fileType, FOUND_FILE_LIMIT, &exceededLimit);
+int fileCount = filesFindInDir(db, &mdbList, &fileList, fileType, FOUND_FILE_LIMIT, 
+                                &exceededLimit, NULL);
 if (timeIt)
     uglyTime("Found %d files in dir",fileCount);
 assert(fileCount == slCount(fileList));

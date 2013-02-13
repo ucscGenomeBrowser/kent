@@ -30,6 +30,7 @@ errAbort(
 "              separate lines and objects as a stanzas (-byVar prints pseudo-RA).\n"
 "    -line      Print each obj and all var=val pairs on a single line.\n"
 "    -count      Just print count of objects, variables and values selected.\n"
+"    -cv        Specify CV file path (e.g. from sandbox)"
 "    -validate    Validate mdb objects against cv.ra. (Incompatible with -byVars, -ra, -line.)\n"
 "    -validateFull like validate but considers vars not defined in cv as invalid.\n"
 "    -experimentify      Groups objs into experiments defined in encodeExp table.\n"
@@ -68,6 +69,7 @@ static struct optionSpec optionSpecs[] = {
                                  //  (replaces vars="composite=wgEncodeBroadHistone")
     {"count",    OPTION_BOOLEAN},// returns only counts of objects, vars and vals
     {"counts",   OPTION_BOOLEAN},// sames as count
+    {"cv",   OPTION_STRING},// specify CV file path
     {"all",      OPTION_BOOLEAN},// query entire table
     {"byVar",    OPTION_BOOLEAN},// With -all prints from var perspective
     {"specialHelp",OPTION_BOOLEAN},// Certain very specialized features are described
@@ -282,16 +284,23 @@ if (argc < 2)
     usage();
     }
 
-char *db        = argv[1];
-char *table     = optionVal("table",NULL);
-char *order     = optionVal("order",NULL);
-char *orVars    = NULL;
+char *db = argv[1];
+char *table = optionVal("table",NULL);
+char *order = optionVal("order",NULL);
+char *orVars = NULL;
+
+char *cv  = optionVal("cv",NULL);
+if (cv != NULL)
+    cvFileDeclare(cv);
+
 boolean raStyle = TRUE;
 if (optionExists("line") && !optionExists("ra"))
     raStyle = FALSE;
+
 boolean justCounts = (optionExists("count") || optionExists("counts"));
-boolean byVar      = optionExists("byVar");
-boolean validate   = (optionExists("validate") || optionExists("validateFull"));
+boolean byVar = optionExists("byVar");
+boolean validate = (optionExists("validate") || optionExists("validateFull"));
+
 char *encodeExp = NULL;
 if (optionExists("experimentify"))
     {

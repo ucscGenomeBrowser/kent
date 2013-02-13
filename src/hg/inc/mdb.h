@@ -129,6 +129,8 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 #define MDB_VAR_ENCODE_SUBID    "subId"
 #define MDB_VAR_ENCODE_EDVS     "expVars"
 #define MDB_VAR_ENCODE_EXP_ID   "expId"
+#define MDB_VAR_ENCODE_DATE_UNRESTRICTED   "dateUnrestricted"
+#define MDB_ENCODE_DATE_FORMAT      "%F"
 #define MDB_VAL_ENCODE_EDV_NONE "None"
 
 
@@ -477,6 +479,9 @@ struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,ch
 
 boolean mdbObjIsEncode(struct mdbObj *mdbObj);
 // Returns TRUE if MDB object is an ENCODE object (project=wgEncode)
+
+boolean mdbObjEncodeIsUnrestricted(struct mdbObj *mdb);
+// Return true if this object is still within data restriction time period 
 
 boolean mdbObjInComposite(struct mdbObj *mdb, char *composite);
 // Returns TRUE if metaDb object is in specified composite.

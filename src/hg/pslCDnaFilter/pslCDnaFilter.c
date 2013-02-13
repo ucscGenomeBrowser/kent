@@ -61,6 +61,7 @@ static struct optionSpec optionSpecs[] =
     {"alignStats", OPTION_STRING},
     {"hapRefMapped", OPTION_STRING},
     {"hapRefCDnaAlns", OPTION_STRING},
+    {"hapLociAlns", OPTION_STRING},
     {"alnIdQNameMode", OPTION_BOOLEAN},
     {"uniqueMapped", OPTION_BOOLEAN},
     {"decayMinCover", OPTION_BOOLEAN},
@@ -92,6 +93,7 @@ static char *gHapRefMapped = NULL;    /* PSLs of haplotype to reference chromoso
                                        * mappings */
 static char *gHapRefCDnaAlns = NULL;  /* PSLs of haplotype cDNA to reference
                                        * cDNA alignments */
+static char *gHapLociAlns = NULL;     /* loci id + PSLs indicating haplotype groups */
 static boolean gUniqueMapped = FALSE; /* keep only cDNAs that are uniquely
                                        * aligned after filtering */
 static boolean gDecayMinCover = FALSE; /* use decay model for minCoverage */
@@ -104,6 +106,7 @@ struct outFiles
     FILE *weirdOverFh;         /* weird overlap psls, or NULL */
     FILE *hapRefMappedFh;      /* hap to ref cDNA alignment mappings */
     FILE *hapRefCDnaAlnsFh;    /* cDNA to cDNA alignments. */
+    FILE *hapLociAlnsFh;       /* loci groupings for haplotypes */
 };
 
 static boolean validPsl(struct psl *psl)
@@ -390,8 +393,6 @@ if (hapRegions != NULL)
     hapRegionsLinkHaps(hapRegions, cdna);
 else
     hapRegionsBuildHapSets(cdna);
-if (gFilterWeirdOverlapped)
-    overlapFilterWeirdFilter(cdna);
 if (gLocalNearBest >= 0.0)
     localNearBestFilter(cdna, gLocalNearBest, gMinLocalBestCnt);
 if (gGlobalNearBest >= 0.0)
@@ -400,6 +401,10 @@ if (gMaxAligns >= 0)
     maxAlignFilter(cdna);
 if (gUniqueMapped)
     uniqueMappedFilter(cdna);
+// this is last so weird overlaps can be discarded by above tests first
+overlapFilterFlagWeird(cdna);
+if (gFilterWeirdOverlapped)
+    overlapFilterWeirdFilter(cdna);
 }
 
 static void filterQuery(struct cDnaQuery *cdna, struct hapRegions *hapRegions,
@@ -408,7 +413,6 @@ static void filterQuery(struct cDnaQuery *cdna, struct hapRegions *hapRegions,
 {
 /* setup */
 invalidPslFind(cdna);
-overlapFilterFlagWeird(cdna);
 
 filterNonComparative(cdna);
 filterComparative(cdna, hapRegions);
@@ -418,6 +422,8 @@ if (outFiles->dropFh != NULL)
     cDnaQueryWriteDrop(cdna, outFiles->dropFh);
 if (outFiles->weirdOverFh != NULL)
     cDnaQueryWriteWeird(cdna, outFiles->weirdOverFh);
+if (outFiles->hapLociAlnsFh != NULL)
+    cDnaQueryWriteHaplotypePslLoci(cdna, outFiles->hapLociAlnsFh);
 }
 
 static void pslCDnaFilter(char *inPsl, char *outPsl)
@@ -434,6 +440,8 @@ if (gHapRefMapped != NULL)
     outFiles.hapRefMappedFh = mustOpen(gHapRefMapped, "w");
 if (gHapRefCDnaAlns != NULL)
     outFiles.hapRefCDnaAlnsFh = mustOpen(gHapRefCDnaAlns, "w");
+if (gHapLociAlns != NULL)
+    outFiles.hapLociAlnsFh = mustOpen(gHapLociAlns, "w");
 struct hapRegions *hapRegions = (gHapRegions == NULL) ? NULL
     : hapRegionsNew(gHapRegions, outFiles.hapRefMappedFh, outFiles.hapRefCDnaAlnsFh);
 struct cDnaReader *reader = cDnaReaderNew(inPsl, gCDnaOpts, gPolyASizes, hapRegions);
@@ -443,6 +451,7 @@ while (cDnaReaderNext(reader))
 
 carefulClose(&outFiles.hapRefMappedFh);
 carefulClose(&outFiles.hapRefCDnaAlnsFh);
+carefulClose(&outFiles.hapLociAlnsFh);
 carefulClose(&outFiles.dropFh);
 carefulClose(&outFiles.weirdOverFh);
 carefulClose(&outFiles.passFh);
@@ -497,6 +506,7 @@ gWeirdOverlappped = optionVal("weirdOverlapped", NULL);
 gFilterWeirdOverlapped = optionExists("filterWeirdOverlapped");
 gHapRefMapped = optionVal("hapRefMapped", NULL);
 gHapRefCDnaAlns = optionVal("hapRefCDnaAlns", NULL);
+gHapLociAlns = optionVal("hapLociAlns", NULL);
 if (optionExists("noValidate"))
     gValidate = FALSE;
 cDnaAlignsAlnIdQNameMode = optionExists("alnIdQNameMode");

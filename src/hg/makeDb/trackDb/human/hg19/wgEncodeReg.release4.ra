@@ -1,4 +1,4 @@
-# ENCODE Integrated Regulation Track (wranger Jim)
+# ENCODE Integrated Regulation Track (wrangler kate)
 
 track wgEncodeReg
 superTrack on show
@@ -33,7 +33,6 @@ canPack On
         type bigWig 0 65535
 	priority 1
 	color 255,128,128
-
 
 	track wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled
 	shortLabel H1-hESC
@@ -317,6 +316,7 @@ canPack On
 
 
     track wgEncodeRegDnaseClustered
+    release beta, public
     shortLabel DNase Clusters
     longLabel Digital DNaseI Hypersensitivity Clusters from ENCODE
     type bed 5 .
@@ -331,10 +331,26 @@ canPack On
     scoreFilterLimits 100:1000
     priority 1.6
 
+    track wgEncodeRegDnaseClustered
+    release alpha
+    shortLabel DNase Clusters V1
+    longLabel Digital DNaseI Hypersensitivity Clusters from ENCODE (V1)
+    type bed 5 .
+    superTrack wgEncodeReg dense
+    inputTrackTable wgEncodeRegDnaseClusteredInputs
+    #inputTracksSubgroupDisplay cellType treatment rep
+    inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    priority 1.6
+
     track wgEncodeRegDnaseClusteredV2
     release alpha
-    shortLabel DNase Clusters V2
-    longLabel Digital DNaseI Hypersensitivity Clusters from ENCODE Uniform Peaks
+    shortLabel DNase Clusters
+    longLabel Digital DNaseI Hypersensitivity Clusters from ENCODE V2 (from Uniform Peaks)
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputsV2
@@ -345,8 +361,6 @@ canPack On
     scoreFilter 100
     scoreFilterLimits 100:1000
     priority 1.6
-    html wgEncodeRegDnaseClustered.release2
-
 
     track wgEncodeRegTfbsClusteredV2
     shortLabel Txn Factor ChIP

@@ -448,7 +448,7 @@ shortLabel Publications
 longLabel Publications: Sequences in scientific articles
 group map
 priority 12
-visibility hide
+visibility dense
 color 0,0,0
 type bed 4
 compositeTrack on
@@ -2714,6 +2714,38 @@ termRegex rs[0-9]+
 searchPriority 12.9894
 padding 250
 
+searchTable snp137Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9885
+padding 250
+
+searchTable snp137Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9886
+padding 250
+
+searchTable snp137Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9887
+padding 250
+
+searchTable snp137
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9888
+padding 250
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
@@ -3170,9 +3202,8 @@ searchDescription tRNAscan-SE tRNA Name
 searchPriority 63
 
 track ucscGenePfam
-release alpha
 shortLabel Pfam in UCSC Gene
-longLabel Pfam domains in UCSC Genes
+longLabel Pfam Domains in UCSC Genes
 group genes
 type bed 12
 priority 37.14
@@ -3249,14 +3280,17 @@ html numtSeq2012
 track qPcrPrimers
 shortLabel qPCR Primers
 longLabel $Organism ($db) Whole Transcriptome qPCR Primers
-group genes
+group expression
 type bedDetail 14
 visibility hide
 noScoreFilter on
 itemRgb on
-html qPcrPrimers
 
 searchTable qPcrPrimers
+searchMethod exact
+searchType bed
+
+searchTable ucscGenePfam
 searchMethod exact
 searchType bed
 

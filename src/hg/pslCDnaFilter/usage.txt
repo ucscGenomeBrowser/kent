@@ -121,6 +121,13 @@ Options:
    -hapRefCDnaAlns=psl - output PSLs of haplotype cDNA to reference cDNA
     alignments (for debugging purposes).
 
+   -hapLociAlns=outfile - output grouping of final alignments create by
+    haplotype mapping process.  Each row will start with an integer haplotype
+    group id number follow by a PSL record.  All rows with the same id are
+    alignments of the a given cDNA that were determined to be haplotypes of
+    the same locus.  Alignments that are not part of a haplotype locus are not
+    included.
+
    -alnIdQNameMode - add internal assigned alignment numbers to cDNA names
     on output.  Useful for debugging, as they are include in the verbose
     tracing as [#1], etc.  Will make a mess of normal production usage.

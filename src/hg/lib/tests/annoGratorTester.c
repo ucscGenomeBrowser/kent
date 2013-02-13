@@ -9,6 +9,7 @@
 #include "annoGrateWigDb.h"
 #include "annoFormatTab.h"
 #include "dystring.h"
+#include "memalloc.h"
 #include "pgSnp.h"
 #include "udc.h"
 #include "vcf.h"
@@ -111,7 +112,7 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
 	if (doGpFx)
-	    grator = annoGratorGpVarNew(src);
+	    grator = annoGratorGpVarNew(src, FALSE);
 	else
 	    grator = annoGratorNew(src);
 	}
@@ -133,6 +134,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2 || argc > 3)
     usage();
+pushCarefulMemHandler(LIMIT_2or6GB);
 char *db = argv[1];
 char *test = NULL;
 boolean doAllTests = (argc == 2);

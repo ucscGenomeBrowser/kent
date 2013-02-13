@@ -5,7 +5,7 @@ species and measurements of evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
 PHAST package</A>, for
-all species (vertebrate) and two subsets (euarchontoglire and placental mammal).
+all species (vertebrate) and two subsets (Euarchontoglires and placental mammal).
 The multiple alignments were generated using multiz and
 other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
 TARGET=_blank>Penn State Bioinformatics</A>
@@ -15,26 +15,26 @@ this track.
 </P>
 <P>
 The species are divided into three different groups.
-The euarchontoglires subset (10 species plus mouse),
+The Euarchontoglires subset (10 species plus mouse),
 the placental mammal subset (19 species plus mouse),
 and all 30 vertebrate species together.
 These three measurements produce the same results in 
-regions where only euarchontoglires appear in the alignment. 
-For other regions, the non-euarchontoglires species can either 
+regions where only Euarchontoglires appear in the alignment. 
+For other regions, the non-Euarchontoglires species can either 
 boost the scores (if conserved) or decrease them (if non-conserved).
 The placental mammal conservation helps to identify sequences that are under 
 different evolutionary pressures in mammals and non-mammal vertebrates.
 </P>
 <P>
 <UL>
-<LI> Euarchontoglire subset: mouse(mm9), rat(rn4), Guinea Pig(cavPor2),
+<LI> Euarchontoglires subset: mouse(mm9), rat(rn4), Guinea Pig(cavPor2),
 Rabbit(oryCun1), Human(hg18), Chimp(panTro2), Orangutan(ponAbe2),
 Rhesus(rheMac2), Marmoset(calJac1), Bushbaby(otoGar1), Tree Shrew(tupBel1)
-<LI> Placental mammal subset: the euarchontoglires above plus:
+<LI> Placental mammal subset: the Euarchontoglires above plus:
 Shrew(sorAra1), Hedgehog(eriEur1), Dog(canFam2), Cat(felCat3),
 Horse(equCab1), Cow(bosTau3), Armadillo(dasNov1), Elephant(loxAfr1),
 Tenrec(echTel1)
-<LI> Vertebrates: the placentals and euarchontoglires above plus:
+<LI> Vertebrates: the placentals and Euarchontoglires above plus:
 Opossum(monDom4), Platypus(ornAna1), Chicken(galGal3), Lizard(anoCar1),
 Frog(xenTro2), Tetraodon(tetNig1), Fugu(fr2), Stickleback(gasAcu1),
 Medaka(oryLat1), Zebrafish(danRer5)
@@ -69,13 +69,13 @@ and 1.
 <P>
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data, and both were run with the same parameters for each
-species set (vertebrates, placental mammals, and euarchontoglires).
-Thus, in regions in which only euarchontoglires appear in the alignment, all three
+species set (vertebrates, placental mammals, and Euarchontoglires).
+Thus, in regions in which only Euarchontoglires appear in the alignment, all three
 sets of scores will be the same, but in regions in which additional species
 are available, the mammalian and/or vertebrate scores may differ from the
-euarchontoglire scores.  The alternative
+Euarchontoglires scores.  The alternative
 plots help to identify sequences that are under different evolutionary
-pressures in, say, euarchontoglires and non-euarchontoglires, or mammals and non-mammals.
+pressures in, say, Euarchontoglires and non-Euarchontoglires, or mammals and non-mammals.
 </P>
 
 <P>
@@ -405,12 +405,12 @@ which was filtered to select single-coverage long transcripts. The
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/placental.mod" 
 TARGET=_blank>placental mammal tree model</A> and the
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/euarchontoglires.mod" 
-TARGET=_blank>euarchontoglire tree model</A> were extracted from the vertebrate model.
+TARGET=_blank>Euarchontoglires tree model</A> were extracted from the vertebrate model.
 The phastCons parameters were
 tuned to produce 5% conserved elements in the genome for the vertebrate
 conservation measurement.  This parameter set (expected-length=45, 
 target-coverage=.3, rho=.31) was then used to generate the placental
-mammal and euarchontoglire conservation scoring.</P>
+mammal and Euarchontoglires conservation scoring.</P>
 <P>
 The phastCons program computes conservation scores based on a phylo-HMM, a
 type of probabilistic model that describes both the process of DNA

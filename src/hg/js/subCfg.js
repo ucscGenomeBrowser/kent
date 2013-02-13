@@ -125,9 +125,6 @@ var subCfg = { // subtrack config module.
     viewCfgFind: function (viewTag)
     { // returns the cfg container for a given view
         var viewCfg = normed($('tr#tr_cfg_'+viewTag));
-        if (viewCfg == undefined) {
-            warn('DEBUG: Could not find viewCfg for '+viewTag);
-        }
         return viewCfg;
     },
 

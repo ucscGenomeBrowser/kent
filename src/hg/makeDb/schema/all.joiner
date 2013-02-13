@@ -3578,6 +3578,10 @@ identifier geneReviewsRefGeneId
     hg18,hg19.kgXref.geneSymbol dupeOk
     hg18,hg19.geneReviewsRefGene.geneSymbol minCheck=0.85
 
+identifier mouseStrains
+"chrom names in the mouse alternate strains"
+    mm10.chromInfo.chrom
+    mm10.altSeqLiftOverPslStrains1.tName
 
 # Dependencies not already captured in identifiers
 
@@ -3955,6 +3959,7 @@ tablesIgnored $gbd
     jaxQtl
     jaxQtlAsIs
     jaxQtlPadded
+    ucscGenePfam
     uwNucOccA375
     uwNucOccDennis
     uwNucOccMec
@@ -3977,6 +3982,7 @@ tablesIgnored hg18
     numtSMitochondrionChrPlacement
 
 tablesIgnored hg19
+    affyCytoScan
     affyExonProbe%
     allHg19RS_BW
     altSeqHaplotypes
@@ -3988,6 +3994,7 @@ tablesIgnored hg19
     altSeqPatchesP10
     bacEndPairsBad
     bamAllNumtSSorted
+    coriellDelDup
     lincRNAsCTAdipose
     lincRNAsCTAdrenal
     lincRNAsCTBrain
@@ -4060,6 +4067,70 @@ tablesIgnored hg19
     hinv70NonCoding
     hinv70PseudoGene
     uMassBrainHistone%
+    dhcBamDenisova
+    dhcHumDerDenAncAllFixed
+    dhcHumDerDenAncAllFixedDbSnp
+    dhcHumDerDenAncAllHighFreq
+    dhcHumDerDenAncCcdsFrameshiftCodingFixed
+    dhcHumDerDenAncCcdsFrameshiftCodingFixedDbSnp
+    dhcHumDerDenAncCcdsFrameshiftCodingHighFreq
+    dhcHumDerDenAncCcdsInFrameNonsynFixed
+    dhcHumDerDenAncCcdsNonsynFixed
+    dhcHumDerDenAncCcdsNonsynFixedDbSnp
+    dhcHumDerDenAncCcdsNonsynHighFreq
+    dhcHumDerDenAncCcdsSpliceFixed
+    dhcHumDerDenAncCcdsSpliceFixedDbSnp
+    dhcHumDerDenAncCcdsSpliceHighFreq
+    dhcHumDerDenAncCcdsSynFixed
+    dhcHumDerDenAncCcdsSynFixedDbSnp
+    dhcHumDerDenAncCcdsSynHighFreq
+    dhcHumDerDenAncCcdsUtr3Fixed
+    dhcHumDerDenAncCcdsUtr3FixedDbSnp
+    dhcHumDerDenAncCcdsUtr3HighFreq
+    dhcHumDerDenAncCcdsUtr5Fixed
+    dhcHumDerDenAncCcdsUtr5FixedDbSnp
+    dhcHumDerDenAncCcdsUtr5HighFreq
+    dhcHumDerDenAncFrameshiftCodingFixed
+    dhcHumDerDenAncFrameshiftCodingFixedDbSnp
+    dhcHumDerDenAncFrameshiftCodingHighFreq
+    dhcHumDerDenAncInFrameNonsynFixed
+    dhcHumDerDenAncNonsynFixed
+    dhcHumDerDenAncNonsynFixedDbSnp
+    dhcHumDerDenAncNonsynHighFreq
+    dhcHumDerDenAncRegFixed
+    dhcHumDerDenAncRegFixedDbSnp
+    dhcHumDerDenAncRegHighFreq
+    dhcHumDerDenAncRegMotifFixed
+    dhcHumDerDenAncRegMotifFixedDbSnp
+    dhcHumDerDenAncRegMotifHighFreq
+    dhcHumDerDenAncRegMotifHighInfoFixed
+    dhcHumDerDenAncRegMotifHighInfoFixedDbSnp
+    dhcHumDerDenAncRegMotifHighInfoHighFreq
+    dhcHumDerDenAncSpliceFixed
+    dhcHumDerDenAncSpliceFixedDbSnp
+    dhcHumDerDenAncSpliceHighFreq
+    dhcHumDerDenAncSynFixed
+    dhcHumDerDenAncSynFixedDbSnp
+    dhcHumDerDenAncSynHighFreq
+    dhcHumDerDenAncUtr3Fixed
+    dhcHumDerDenAncUtr3FixedDbSnp
+    dhcHumDerDenAncUtr3HighFreq
+    dhcHumDerDenAncUtr5Fixed
+    dhcHumDerDenAncUtr5FixedDbSnp
+    dhcHumDerDenAncUtr5HighFreq
+    dhcVcfDenisovaPinky
+    dhcVcfDNK02
+    dhcVcfHGDP00456
+    dhcVcfHGDP00521
+    dhcVcfHGDP00542
+    dhcVcfHGDP00665
+    dhcVcfHGDP00778
+    dhcVcfHGDP00927
+    dhcVcfHGDP00998
+    dhcVcfHGDP01029
+    dhcVcfHGDP01284
+    dhcVcfHGDP01307
+
 
 tablesIgnored mm9
     allMm9RS_BW
@@ -4068,6 +4139,7 @@ tablesIgnored mm9
     rest
 
 tablesIgnored mm10
+    mm10Haplotypes
     altSeqLiftOverPslP1
     altSeqPatchesP1
 

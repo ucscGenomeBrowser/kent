@@ -1,6 +1,6 @@
         track netCanFam3
         subTrack placentalChainNetViewnet on 
-        subGroups view=net species=pDog clade=bLaura
+        subGroups view=net species=qDog clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFam3 chainCanFam3
