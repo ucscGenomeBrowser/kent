@@ -38,7 +38,7 @@ while (lineFileNext(lf, &line, NULL))
 	    wordCount, lf->lineIx, lf->fileName);
     fprintf(f, "%s", words[0]);	/* First word - readId - not reversed. */
     int i;
-    for (i=wordCount-1; i>1; --i)
+    for (i=wordCount-1; i>=1; --i)
         fprintf(f, "\t%s", words[i]);
     fprintf(f, "\n");
     }
