@@ -193,17 +193,17 @@ static boolean timeMoreRecentThanTable(int time, struct sqlConnection *conn,
 {
 if (! sqlTableExists(conn, table))
     return FALSE;
-int tableUpdateTime = sqlTableUpdateTime(conn, table);
+long tableUpdateTime = sqlTableUpdateTime(conn, table);
 return (time > tableUpdateTime);
 }
 
-static boolean timeMoreRecentThanFile(int time, char *fileName)
+static boolean timeMoreRecentThanFile(long time, char *fileName)
 /* Return TRUE if the given UNIX time is more recent than the time that
  * fileName was last modified. */
 {
 if (! fileExists(fileName))
     return FALSE;
-int fileUpdateTime = fileModTime(fileName);
+long fileUpdateTime = fileModTime(fileName);
 return (time > fileUpdateTime);
 }
 
@@ -214,7 +214,7 @@ struct targetDb *targetDbMaybeLoad(struct sqlConnection *conn, char **row)
 {
 struct targetDb target;
 targetDbStaticLoad(row, &target);
-int time = sqlDateToUnixTime(target.time);
+long time = sqlDateToUnixTime(target.time);
 if (timeMoreRecentThanTable(time, conn, target.pslTable) &&
     (isEmpty(target.seqTable) ||
      timeMoreRecentThanTable(time, conn, target.seqTable)) &&
