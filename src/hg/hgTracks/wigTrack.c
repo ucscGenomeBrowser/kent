@@ -1000,6 +1000,28 @@ for (x1 = 0; x1 < width; ++x1)
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 }	/*	graphPreDraw()	*/
 
+static void graphAllInContainer(struct preDrawContainer *preDrawList, int preDrawZero, int width,
+    struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
+    double graphUpperLimit, double graphLowerLimit, double graphRange,
+    enum trackVisibility vis, struct wigCartOptions *wigCart)
+/* Draw the graphs for all tracks in container. */
+{
+double epsilon = graphRange / tg->lineHeight;
+struct preDrawElement *preDraw = preDrawList->preDraw;
+Color *colorArray = makeColorArray(preDraw, width, preDrawZero, wigCart, tg, hvg);
+struct preDrawContainer *preContainer;
+for(preContainer = preDrawList; preContainer; preContainer = preContainer->next)
+    {
+    struct preDrawElement *preDraw = preContainer->preDraw;
+    graphPreDraw(preDraw, preDrawZero, width,
+	tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
+	epsilon, colorArray, vis, wigCart);
+    }
+
+freez(&colorArray);
+}
+
+
 void drawZeroLine(enum trackVisibility vis,
     enum wiggleGridOptEnum horizontalGrid,
     double graphUpperLimit, double graphLowerLimit,
@@ -1142,7 +1164,6 @@ double graphUpperLimit=0;	/*	scaling choice will set these	*/
 double graphLowerLimit=0;	/*	scaling choice will set these	*/
 double graphRange=0;		/*	scaling choice will set these	*/
 double epsilon;			/*	range of data in one pixel	*/
-Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
 
 yLineOnOff = wigCart->yLineOnOff;
@@ -1212,18 +1233,8 @@ else
     graphRange = graphUpperLimit - graphLowerLimit;
     }
 
-epsilon = graphRange / tg->lineHeight;
-struct preDrawElement *preDraw = preDrawList->preDraw;
-colorArray = makeColorArray(preDraw, width, preDrawZero, wigCart, tg, hvg);
-
-/* now draw all the containers */
-for(preContainer = preDrawList; preContainer; preContainer = preContainer->next)
-    {
-    struct preDrawElement *preDraw = preContainer->preDraw;
-    graphPreDraw(preDraw, preDrawZero, width,
-	tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
-	epsilon, colorArray, vis, wigCart);
-    }
+graphAllInContainer(preDrawList, preDrawZero, width, tg, hvg, xOff, yOff, 
+    graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart);
 
 drawZeroLine(vis, wigCart->horizontalGrid,
     graphUpperLimit, graphLowerLimit,
@@ -1236,7 +1247,6 @@ drawArbitraryYLine(vis, wigCart->yLineOnOff,
 
 wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 
-freez(&colorArray);
 if (retGraphUpperLimit != NULL)
     *retGraphUpperLimit = graphUpperLimit;
 if (retGraphLowerLimit != NULL)
