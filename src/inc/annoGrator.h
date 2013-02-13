@@ -11,6 +11,14 @@
 
 #include "annoStreamer.h"
 
+enum annoGratorOverlap
+/* How integrate() method handles overlap (or non-overlap) of internal rows with primary row */
+    {
+    agoNoConstraint,	// Default: overlap with primary row doesn't matter
+    agoMustOverlap,	// integrate() sets RJFilterFail if no internal rows overlap primary
+    agoMustNotOverlap   // integrate() sets RJFilterFail if any internal rows overlap primary
+    };
+
 struct annoGrator
 /* annoStreamer that can integrate an internal annoStreamer's data
  * with data from a primary source. */
@@ -22,6 +30,9 @@ struct annoGrator
 				 boolean *retRJFilterFailed);
     /* Integrate internal source's data with single row of primary source's data */
 
+    void (*setOverlapRule)(struct annoGrator *self, enum annoGratorOverlap rule);
+    /* Tell annoGrator how to handle overlap of its rows with primary row. */
+
     // Private members -- callers are on the honor system to access these using only methods above.
     struct annoStreamer *mySource;	// internal source
     struct annoRow *qHead;		// head of FIFO queue of rows from internal source
@@ -29,8 +40,8 @@ struct annoGrator
     char *prevPChrom;			// for detection of unsorted input from primary
     uint prevPStart;			// for detection of unsorted input from primary
     boolean eof;			// stop asking internal source for rows when it's done
-    boolean haveRJIncludeFilter;	// TRUE if some filter has !isExclude && rightJoin;
-					// if TRUE and there are no overlapping rows, then RJ fail
+    boolean haveRJIncludeFilter;	// TRUE if some filter has !isExclude && rightJoin
+    enum annoGratorOverlap overlapRule;	// constraint (if any) on overlap of internal & primary
     };
 
 #endif//ndef ANNOGRATOR_H
@@ -40,9 +51,17 @@ struct annoGrator
 struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
 				    boolean *retRJFilterFailed);
 /* Given a single row from the primary source, get all overlapping rows from internal
- * source, and produce joined output rows.  If retRJFilterFailed is non-NULL and any
- * overlapping row has a rightJoin filter failure (see annoFilter.h),
- * set retRJFilterFailed and stop. */
+ * source, and produce joined output rows.
+ * If retRJFilterFailed is non-NULL:
+ * - any overlapping row has a rightJoin filter failure (see annoFilter.h), or
+ * - overlap rule is agoMustOverlap and no rows overlap, or
+ * - overlap rule is agoMustNotOverlap and any overlapping row is found,
+ * then set retRJFilterFailed and stop. */
+
+void annoGratorInit(struct annoGrator *self, struct annoStreamer *mySource);
+/* Initialize an integrator of columns from mySource with (positions of)
+ * rows passed to integrate().
+ * mySource becomes property of the annoGrator. */
 
 struct annoGrator *annoGratorNew(struct annoStreamer *mySource);
 /* Make a new integrator of columns from mySource with (positions of) rows passed to integrate().

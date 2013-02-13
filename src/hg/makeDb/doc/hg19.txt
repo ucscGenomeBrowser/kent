@@ -8969,36 +8969,32 @@ TMPDIR=/scratch/tmp
 # Old DGV format is obsolete; see the following section.
 
 #######################################################################
-# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 11/16/12 angie)
+# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 2/11/13 angie)
     # DGV has changed their data format, and for the time being the data are
     # served by a beta web site, http://dgvbeta.tcag.ca/ ; in time that will
     # replace their current site.
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg19/bed/dgv/$today
     cd /hive/data/genomes/hg19/bed/dgv/$today
-    wget http://dgvbeta.tcag.ca/ dgv/docs/GRCh37_hg19_2012-11-14.txt
+    wget http://dgvbeta.tcag.ca/dgv/docs/GRCh37_hg19_2012-11-23.txt
     head -1 GRCh37_hg19*.txt
 #variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergeid mergedorsample  frequency       samplesize      cohortdescription       genes
     # It's more complicated than Gain/Loss/Complex or Inversion now (+ stray commas):
     cut -f 5,6 GRCh37_hg19*.txt | sort | uniq -c | head -100
-#  21336 CNV     ""
+#  20105 CNV
+#   1297 CNV     ""
 #  26687 CNV     CNV
-#   2974 CNV     Complex
-#      5 CNV     ,Complex
+#   2980 CNV     Complex
 # 185262 CNV     Deletion
 #  17032 CNV     Duplication
-# 122460 CNV     Gain
-#      9 CNV     Gain,
+# 122635 CNV     Gain
 #   4120 CNV     Gain+Loss
-#    202 CNV     Gain,Loss
-#  27110 CNV     Insertion
-#     10 CNV     Insertion,
-# 447480 CNV     Loss
-#     42 CNV     Loss,
-#    292 OTHER   ""
-#     16 OTHER   ,Inversion
+#  27120 CNV     Insertion
+# 447672 CNV     Loss
+#    277 OTHER
+#     31 OTHER   ""
 #     42 OTHER   Complex
-#   2461 OTHER   Inversion
+#   2477 OTHER   Inversion
 #    202 OTHER   Tandem duplication
 #      1 varianttype     variantsubtype
     # shuffle fields into bed9+ w/itemRgb
@@ -9047,7 +9043,7 @@ TMPDIR=/scratch/tmp
         > dgv.bed
     hgLoadBed hg19 dgv dgv.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -renameSqlTable -tab
-#Read 857742 elements of size 15 from dgv.bed
+#Read 857939 elements of size 15 from dgv.bed
 
 
 #######################################################################

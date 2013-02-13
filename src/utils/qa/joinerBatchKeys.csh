@@ -69,7 +69,7 @@ endif
 ####################################################
 # if you had to kill this script, and you now need to 
 # pick-n-choose your databases, then add them here:
-#set thisRun='droAna1 droAna2 droEre1 droGri1 droMoj1 droMoj2 droPer1 droSec1 droSim1 droVir1 droVir2 droYak1 droYak2 fr1 galGal2 galGal3 monDom1 monDom4 panTro1 panTro2 rheMac1 rheMac2 sacCer1 sc1 strPur1 tetNig1 xenTro1 xenTro2'
+#set thisRun='ailMel1 anoCar1 anoCar2 anoGam1 apiMel1 apiMel2 apiMel3 aplCal1 bosTau1 bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 bosTauMd3 braFlo1 braFlo2 caeJap1 caePb1 caePb2 caeRem2 caeRem3 calJac1 calJac3 canFam1 canFam2 canFam3 cavPor2 cavPor3 cb1 cb3 ce10 ce2 ce4 ce6 cerSim1 choHof1 chrPic1 ci1 ci2 danRer1 danRer2 danRer3 danRer4 danRer5 danRer6 danRer7 dasNov1 dasNov2 dasNov3 dipOrd1 dm1 dm2 dm3 dp2 dp3 dp4 droAna1 droAna2 droAna3 droEre1 droEre2 droGri1 droGri2 droMoj1 droMoj2 droMoj3 droPer1 droSec1 droSim1 droVir1 droVir2 droVir3 droWil1 droYak1 droYak2 echTel1 equCab1 equCab2 eriEur1 felCat3 felCat4 felCat5 fr1 fr2 fr3 gadMor1 galGal2 galGal3 galGal4 gasAcu1 geoFor1 gorGor1 gorGor3 hetGla1 hetGla2 latCha1 loxAfr1 loxAfr2 loxAfr3 macEug1 macEug2 melGal1 melUnd1 micMur1 monDom1 monDom2 monDom4 monDom5 myoLuc1 myoLuc2 nomLeu1 nomLeu2 ochPri2 oreNil1 oreNil2 ornAna1 oryCun1 oryCun2 oryLat1 oryLat2 otoGar1 otoGar3 oviAri1 panTro1 panTro2 panTro3 panTro4 papAnu2 papHam1 petMar1 petMar2 ponAbe2 priPac1 proCap1 pteVam1 rheMac1 rheMac2 rheMac3 sacCer1 sacCer2 sacCer3 saiBol1 sarHar1 sorAra1 speTri1 speTri2 strPur1 strPur2 susScr2 susScr3 taeGut1 tarSyr1 tetNig1 tetNig2 triCas1 triCas2 triMan1 tupBel1 turTru1 turTru2 vicPac1 xenTro1 xenTro2 xenTro3'
 ####################################################
 
 # now do it

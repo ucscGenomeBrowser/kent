@@ -8961,7 +8961,7 @@ type Antibody
 label CREB1 (9198)
 antibodyDescription Rabbit monoclonal A/G affinity purified antibody produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Ser133 of human CREB. Antibody Target: CREB1
 lab Struhl
-orderUrl http://www.cellsignal.com/pdf/9198.pdf
+orderUrl http://www.cellsignal.com/products/9198.html
 target CREB1
 targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in neurite outgrowth and neuronal differentiation.
 targetId GeneCard:CREB1

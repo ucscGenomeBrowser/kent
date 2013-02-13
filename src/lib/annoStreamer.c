@@ -11,6 +11,17 @@ struct asObject *annoStreamerGetAutoSqlObject(struct annoStreamer *self)
 return self->asObj;
 }
 
+void annoStreamerSetAutoSqlObject(struct annoStreamer *self, struct asObject *asObj)
+/* Use new asObj and update internal state derived from asObj. */
+{
+annoFilterFreeList(&(self->filters));
+annoColumnFreeList(&(self->columns));
+self->asObj = asObj;
+self->filters = annoFiltersFromAsObject(asObj);
+self->columns = annoColumnsFromAsObject(asObj);
+self->numCols = slCount(asObj->columnList);
+}
+
 void annoStreamerSetRegion(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd)
 /* Set genomic region for query; if chrom is NULL, position is genome.
  * Many subclasses should make their own setRegion method that calls this and
@@ -76,6 +87,7 @@ void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj)
  * and probably setRegion and setQuery; and then initialize their private data. */
 {
 self->getAutoSqlObject = annoStreamerGetAutoSqlObject;
+self->setAutoSqlObject = annoStreamerSetAutoSqlObject;
 self->setRegion = annoStreamerSetRegion;
 self->getHeader = annoStreamerGetHeader;
 self->getFilters = annoStreamerGetFilters;
@@ -84,10 +96,7 @@ self->getColumns = annoStreamerGetColumns;
 self->setColumns = annoStreamerSetColumns;
 self->setQuery = annoStreamerSetQuery;
 self->positionIsGenome = TRUE;
-self->asObj = asObj;
-self->filters = annoFiltersFromAsObject(asObj);
-self->columns = annoColumnsFromAsObject(asObj);
-self->numCols = slCount(asObj->columnList);
+self->setAutoSqlObject(self, asObj);
 }
 
 void annoStreamerFree(struct annoStreamer **pSelf)

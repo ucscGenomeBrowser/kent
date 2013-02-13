@@ -94,7 +94,7 @@ for (block = blockList; block != NULL; )
 		}
 
 	    /* If we're actually in range then copy it into a new  element and add to list. */
-	    if (chr == chromId && rangeIntersection(s, e, start, end) > 0)
+	    if (chr == chromId && s < end && e > start)
 		{
 		++itemCount;
 		if (maxItems > 0 && itemCount > maxItems)
