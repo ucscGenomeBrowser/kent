@@ -233,6 +233,22 @@ else
 webPrintLinkCellEnd();
 }
 
+static void queryInputTrackTable(struct dyString *query, char *inputTrackTable,
+                                struct slName *fieldList)
+/* Construct query in dyString to return contents of inputTrackTable ordered appropriately */
+{
+struct dyString *fields = dyStringNew(0);
+struct slName *field;
+dyStringPrintf(query, "select tableName ");
+for (field = fieldList; field != NULL; field = field->next)
+    dyStringPrintf(fields, ",%s", field->name);
+dyStringPrintf(query, "%s from %s", fields->string, inputTrackTable);
+if (fieldList != NULL)
+    // skip leading comma
+    dyStringPrintf(query, " order by %s", fields->string+1);
+dyStringFree(&fields);
+}
+
 static void printPeakClusterTableHits(struct bed *cluster, struct sqlConnection *conn,
 	char *inputTrackTable, struct slName *fieldList, char *vocab)
 /* Put out a lines in an html table that shows assayed sources that have hits in this
@@ -249,15 +265,7 @@ if (vocab)
 /* Make the SQL query to get the table and all other fields we want to show
  * from inputTrackTable. */
 struct dyString *query = dyStringNew(0);
-struct dyString *fields = dyStringNew(0);
-dyStringPrintf(query, "select tableName ");
-struct slName *field;
-for (field = fieldList; field != NULL; field = field->next)
-    dyStringPrintf(fields, ",%s", field->name);
-dyStringPrintf(query, "%s from %s", fields->string, inputTrackTable);
-if (fieldList != NULL)
-    // skip leading comma
-    dyStringPrintf(query, " order by %s", fields->string+1);
+queryInputTrackTable(query, inputTrackTable, fieldList);
 
 int displayNo = 0;
 int fieldCount = slCount(fieldList);
@@ -279,7 +287,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 freez(&vocabFile);
 dyStringFree(&query);
-dyStringFree(&fields);
 }
 
 static void printPeakClusterInputs(struct sqlConnection *conn,
@@ -297,11 +304,7 @@ if (vocab)
 /* Make the SQL query to get the table and all other fields we want to show
  * from inputTrackTable. */
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select tableName");
-struct slName *field;
-for (field = fieldList; field != NULL; field = field->next)
-    dyStringPrintf(query, ",%s", field->name);
-dyStringPrintf(query, " from %s", inputTrackTable);
+queryInputTrackTable(query, inputTrackTable, fieldList);
 
 int displayNo = 0;
 int fieldCount = slCount(fieldList);

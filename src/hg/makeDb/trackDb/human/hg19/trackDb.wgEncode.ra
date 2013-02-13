@@ -194,5 +194,6 @@ include wgEncodeMapability.ra
 
 # Analysis tracks
 
-# Uniform DNase (wrangler: kate)
+# AWG DNase & TFBS (wrangler: kate)
 include wgEncodeAwgDnaseUniform.ra
+include wgEncodeAwgTfbsUniform.ra

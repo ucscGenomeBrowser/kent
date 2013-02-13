@@ -3,9 +3,10 @@
 
 #include "annoGrator.h"
 
-
-struct annoGrator *annoGratorGpVarNew(struct annoStreamer *mySource);
-/* Make a new integrator of columns from mySource with (positions of) rows passed to integrate().
+struct annoGrator *annoGratorGpVarNew(struct annoStreamer *mySource, boolean cdsOnly);
+/* Make a subclass of annoGrator that combines genePreds from mySource with
+ * pgSnp rows from primary source to predict functional effects of variants
+ * on genes.  If cdsOnly is true, return only rows with effects on coding seq.
  * mySource becomes property of the new annoGrator. */
 
 #endif /* ANNOGRATORGPVAR_H*/

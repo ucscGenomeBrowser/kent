@@ -38,7 +38,7 @@
 #include "pgSnp.h"
 #include "memgfx.h"
 
-#define SMALLBUF 128
+#define SMALLBUF 256
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
 #define CLEAR_BUTTON_LABEL      "clear"

@@ -21403,37 +21403,33 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # Old DGV format is obsolete; see the following section.
 
 #######################################################################
-# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 11/16/12 angie)
+# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 2/11/13 angie)
     # DGV has changed their data format, and for the time being the data are
     # served by a beta web site, http://dgvbeta.tcag.ca/ ; in time that will
     # replace their current site.
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg18/bed/dgv/$today
     cd /hive/data/genomes/hg18/bed/dgv/$today
-    wget http://dgvbeta.tcag.ca/dgv/docs/NCBI36_hg18_2012-11-14.txt
+    wget http://dgvbeta.tcag.ca/dgv/docs/NCBI36_hg18_2012-11-23.txt
     head -1 NCBI36_hg18*.txt
 #variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergeid mergedorsample  frequency       samplesize      cohortdescription       genes
     # It's more complicated than Gain/Loss/Complex or Inversion now (+ stray commas):
     cut -f 5,6 NCBI36_hg18*.txt | sort | uniq -c | head -100
-#  21393 CNV     ""
-#      5 CNV     ,Complex
+#  20156 CNV
+#   1304 CNV     ""
 #  27098 CNV     CNV
-#   2982 CNV     Complex
+#   2988 CNV     Complex
 # 187319 CNV     Deletion
 #  17673 CNV     Duplication
-# 123261 CNV     Gain
+# 123436 CNV     Gain
 #   4170 CNV     Gain+Loss
-#      9 CNV     Gain,
-#    202 CNV     Gain,Loss
-#  27372 CNV     Insertion
-#     10 CNV     Insertion,
-# 479591 CNV     Loss
-#     43 CNV     Loss,
-#    295 OTHER   ""
-#     16 OTHER   ,Inversion
+#  27382 CNV     Insertion
+# 479784 CNV     Loss
+#    280 OTHER
+#     31 OTHER   ""
 #     44 OTHER   Complex
-#   2503 OTHER   Inversion
-#    663 OTHER   Tandem duplication 
+#   2519 OTHER   Inversion
+#    663 OTHER   Tandem duplication
 #     1 varianttype     variantsubtype
     # shuffle fields into bed9+ w/itemRgb
     set purple = "200,0,200"
@@ -21481,7 +21477,7 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
         > dgv.bed
     hgLoadBed hg18 dgv dgv.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -renameSqlTable -tab
-#Read 894649 elements of size 15 from dgv.bed
+#Read 894847 elements of size 15 from dgv.bed
 
 
 ############################################################################
@@ -29839,7 +29835,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 12/10/12 angie)
+# NHGRI GWAS CATALOG (DONE 2/4/13 angie)
+# 2013 updates: 2/4
 # 2012 updates: 12/10, 10/4, 8/1, 6/4, 4/4, 2/21 (remove extra whitespace, translate non-ASCII to html), 2/6
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10, 4/1/10, 3/1/10
@@ -29946,7 +29943,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Read 10390 elements of size 22 from gwasCatalog.bed
+#Read 10796 elements of size 22 from gwasCatalog.bed
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29960,7 +29957,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#678 ambigStrand.txt
+#689 ambigStrand.txt
 
 
 #############################################################################

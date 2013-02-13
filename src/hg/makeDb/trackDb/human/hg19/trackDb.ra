@@ -869,8 +869,7 @@ html hg19mammalChainNet
         type chain felCat4
         otherDb felCat4
 
-include chainCanFam2.ra beta,public
-include chainCanFam3.ra alpha
+include chainCanFam3.ra
 
         track chainDasNov2
         subTrack placentalChainNetViewchain off
@@ -1093,8 +1092,7 @@ include chainCanFam3.ra alpha
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
-include netCanFam2.ra beta,public
-include netCanFam3.ra alpha
+include netCanFam3.ra
 
         track netDasNov2
         subTrack placentalChainNetViewnet on 
@@ -2068,6 +2066,7 @@ type vcfTabix
 group varRep
 priority 99.1
 visibility hide
+maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 track tgpPhase1Accessibility
@@ -3116,38 +3115,6 @@ urlLabel SIB link:
 
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg19&species=H.+sapiens&tromer=$$
-
-searchTable snp137Common
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9885
-padding 250
-
-searchTable snp137Flagged
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9886
-padding 250
-
-searchTable snp137Mult
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9887
-padding 250
-
-searchTable snp137
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9888
-padding 250
 
 searchTable affyCytoScan
 searchMethod exact

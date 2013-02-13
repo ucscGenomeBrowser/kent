@@ -67,7 +67,7 @@ if (isMafTable(database, curTrack, curTable))
     hPrintf("You are about to download a VERY large dataset to Galaxy. "
             "For most usage scenarios it is not necessary as Galaxy already "
             "stores alignments locally. Click here ("
-            "<A HREF=\"http://wiki.galaxyproject.org/Main/MAF%20Analysis\" TARGET=_blank>http://wiki.galaxyproject.org/Main/MAF%20Analysis</A>"
+            "<A HREF=\"http://wiki.galaxyproject.org/Main/MAF%%20Analysis\" TARGET=_blank>http://wiki.galaxyproject.org/Main/MAF%%20Analysis</A>"
             ") for more information on how to analyze multiple alignments "
             "through Galaxy.\n<BR><BR>");
     }

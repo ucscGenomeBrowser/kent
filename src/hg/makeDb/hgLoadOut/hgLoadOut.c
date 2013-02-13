@@ -212,18 +212,35 @@ while (lineFileNext(lf, &line, &lineSize))
     r.strand[0]  = (words[8][0] == '+' ? '+' : '-');
     r.repName = words[9];
     r.repClass = words[10];
-    s = strchr(r.repClass, '/');
-    if (s == NULL)
-        r.repFamily = r.repClass;
+    char *repClassTest = cloneString(r.repClass);
+    stripChar(repClassTest, '(');
+    stripChar(repClassTest, ')');
+    int nonDigitCount = countLeadingNondigits(repClassTest);
+    int wordOffset = 0;
+    // this repClass is only digits, (or only (digits) with surrounding parens)
+    //   this is the sign of an empty field here
+    // due to custom library in use that has no class/family indication
+    if (0 == nonDigitCount)
+        {
+        wordOffset = 1;
+        r.repClass = cloneString("Unspecified");
+        r.repFamily = cloneString("Unspecified");
+        }
     else
-       {
-       *s++ = 0;
-       r.repFamily = s;
-       }
-    r.repStart = parenSignInt(words[11], lf);
-    r.repEnd = atoi(words[12]);
-    r.repLeft = parenSignInt(words[13], lf);
-    r.id[0] = ((wordCount > 14) ? words[14][0] : ' ');
+        {
+        s = strchr(r.repClass, '/');
+        if (s == NULL)
+            r.repFamily = r.repClass;
+        else
+           {
+           *s++ = 0;
+           r.repFamily = s;
+           }
+        }
+    r.repStart = parenSignInt(words[11-wordOffset], lf);
+    r.repEnd = atoi(words[12-wordOffset]);
+    r.repLeft = parenSignInt(words[13-wordOffset], lf);
+    r.id[0] = ((wordCount > (14-wordOffset)) ? words[14-wordOffset][0] : ' ');
     if (checkRepeat(&r, lf))
         {
 	FILE *f = getFileForChrom(r.genoName);

@@ -6,10 +6,12 @@ MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceGraph.a 
 
 % : %.c
-	${CC} ${COPT} -I../inc -I../../inc  -I../../../inc  -o ${BINDIR}/$@ ${addsuffix .c,$@} -Wall ${MYLIBS} ${L}
+	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} \
+            -o ${BINDIR}/$@ ${addsuffix .c,$@} ${MYLIBS} ${L}
 
 %Test: %Test.c 
-	${CC} ${COPT} -gp  -I../../inc -I../../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
+	${CC} ${COPT} -gp ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} \
+            -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
 
 
 O =  sequenceForBed  altAnalysis \

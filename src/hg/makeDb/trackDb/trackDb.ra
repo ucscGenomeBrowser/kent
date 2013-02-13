@@ -448,7 +448,7 @@ shortLabel Publications
 longLabel Publications: Sequences in scientific articles
 group map
 priority 12
-visibility hide
+visibility dense
 color 0,0,0
 type bed 4
 compositeTrack on
@@ -2712,6 +2712,38 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9894
+padding 250
+
+searchTable snp137Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9885
+padding 250
+
+searchTable snp137Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9886
+padding 250
+
+searchTable snp137Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9887
+padding 250
+
+searchTable snp137
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9888
 padding 250
 
 searchTable ensGene
