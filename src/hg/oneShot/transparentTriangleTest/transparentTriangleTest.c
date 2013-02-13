@@ -9,7 +9,7 @@
 #include "hvGfx.h"
 
 int clWidth = 800, clHeight = 100;
-int clCount = 10;
+int clLineCount = 10;
 
 struct rgbColor lightRainbowAtPos(double pos);
 /* Given pos, a number between 0 and 1, return a lightish rainbow rgbColor
@@ -21,11 +21,11 @@ void usage()
 errAbort(
   "transparentTriangleTest - Test out a normalized transparency idea using transparent triangles.\n"
   "usage:\n"
-  "   transparentTriangleTest triangleCount output normalization\n"
+  "   transparentTriangleTest triangleCount output maxNorm\n"
   "options:\n"
-  "   -width=N\n"
-  "   -height=N\n"
-  "   -count=N\n"
+  "   -width=N - width of image in pixels\n"
+  "   -height=N - height of a single row of triangles in pixels\n"
+  "   -lineCount=N - number of triangle rows\n"
   );
 }
 
@@ -206,26 +206,33 @@ int i;
 double col = 0, dCol = (1.0/count);
 for (i=0; i<count; ++i)
     {
-    struct rgbColor rgb = lightRainbowAtPos(col);
+    struct rgbColor rgb = veryLightRainbowAtPos(col);
     drawAlignedTriangle(pic, &rgb, x, yOff, oneWidth, h);
     col += dCol;
     x += dx;
     }
 }
 
-void transparentTriangleTest(char *countString, char *outFile)
+void transparentTriangleTest(char *countString, char *outFile, char *maxNormString)
 /* transparentTriangleTest - Test out a normalized transparency idea using transparent triangles. */
 {
+double maxNorm = sqlDouble(maxNormString);
+if (maxNorm < 0.0 || maxNorm > 1.0)
+    errAbort("maxNorm parameter must be between 0 and 1");
 int triangleCount = sqlUnsigned(countString);
 if (triangleCount < 2)
   errAbort("Triangle count must be at least 2."); 
-struct hvGfx *hvg  = hvGfxOpenPng(clWidth, clHeight*clCount, outFile, FALSE);
+struct hvGfx *hvg  = hvGfxOpenPng(clWidth, clHeight*(clLineCount+1), outFile, FALSE);
 struct floatPic *pic = floatPicNew(clWidth, clHeight);
 uglyTime("Allocate picture");
 int i;
-for (i=0; i<clCount; ++i)
+double minNorm = 0.001;
+double dNorm = 0.0;
+if (clLineCount > 1)
+    dNorm = (maxNorm - minNorm)/(clLineCount-1);
+for (i=0; i<=clLineCount; ++i)
     {
-    double desiredVal = 0.1*i + 0.01;
+    double desiredVal = maxNorm - i*dNorm;
     int yOff = i*clHeight;
     floatPicSet(pic, 1.0, 1.0, 1.0);
     uglyTime("set picture to white");
@@ -233,12 +240,12 @@ for (i=0; i<clCount; ++i)
     uglyTime("Draw triangles");
     double currentVal = floatPicMinComponent(pic);
     uglyTime("Figure minComponent %g", currentVal);
-    if (currentVal > 0)
+    if (currentVal > 0 && i != clLineCount) /* Don't do it on last line or if impossible. */
 	{
 	double normFactor = log(desiredVal)/log(currentVal);
 	floatPicNormalize(pic, normFactor);
+	uglyTime("Normalize to %g", desiredVal);
 	}
-    uglyTime("Normalize");
     floatPicIntoHvg(pic, 0, yOff, hvg);
     uglyTime("Convert to hvg");
     }
@@ -250,12 +257,12 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 clWidth = optionInt("width", clWidth);
 clHeight = optionInt("height", clHeight);
-clCount = optionInt("count", clCount);
+clLineCount = optionInt("lineCount", clLineCount);
 uglyTime(NULL);
-transparentTriangleTest(argv[1], argv[2]);
+transparentTriangleTest(argv[1], argv[2], argv[3]);
 return 0;
 }
