@@ -13,63 +13,23 @@
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen input\n");
+         "usage:  freen val desiredVal\n");
 }
 
-struct rgbColor saturatedRainbowTable[28] = {
-/* This table was built by hand for the default Autodesk Animator palette. */
-    {255, 0, 64},
-    {255, 0, 0},
-    {255, 64, 0},
-    {255, 128, 0},
-    {255, 164, 0},
-    {255, 210, 0},
-    {255, 255, 0},
-    {210, 255, 0},
-    {164, 255, 0},
-    {128, 255, 0},
-    {0, 255, 0},
-    {0, 255, 128},
-    {0, 255, 164},
-    {0, 255, 210},
-    {0, 255, 255},
-    {0, 210, 255},
-    {0, 164, 255},
-    {0, 128, 255},
-    {0, 64, 255},
-    {0, 0, 255},
-    {64, 0, 255},
-    {128, 0, 255},
-    {164, 0, 255},
-    {210, 0, 255},
-    {255, 0, 255},
-    {255, 0, 210},
-    {255, 0, 164},
-    {255, 0, 128},
-    };
-
-int lighten(int col)
-/* Return shade blended with 50% parts 255. */
-{
-return round(col * 0.5 + 255 * 0.5);
-}
-
-void freen(char *input)
+void freen(char *input, char *desiredOutput)
 /* Test some hair-brained thing. */
 {
-int i;
-for (i=0; i<28; ++i)
-   {
-   struct rgbColor *c = &saturatedRainbowTable[i];
-   printf("   {%d,%d,%d},\n", lighten(c->r), lighten(c->g), lighten(c->b));
-   }
+double a = atof(input);
+double desired = atof(desiredOutput);
+double exponent = log(desired)/log(a);
+printf("a = %g, desired = %g, a^%g = %g\n", a, desired, exponent, pow(a, exponent));
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 2)
+if (argc != 3)
     usage();
-freen(argv[1]);
+freen(argv[1], argv[2]);
 return 0;
 }
