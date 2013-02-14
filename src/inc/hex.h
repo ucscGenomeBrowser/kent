@@ -11,5 +11,13 @@ void byteToHex(unsigned char n, char *hex);
 char *byteToHexString(unsigned char n);
 /* convert byte to hexidecimal string. 0 <= n <= 255. */
 
+/* Reverse Functions */
+
+char hexToNibble(char n);
+/* convert hexidecimal character to nibble. 0-9a-f. */
+
+unsigned char hexToByte(char *hex);
+/* convert byte to hexidecimal characters. 0 <= n <= 255. */
+
 #endif /* HEX_H */
 
