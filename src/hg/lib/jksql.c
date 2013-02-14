@@ -2171,7 +2171,7 @@ while ((c = *wild++) != 0)
 return retVal;
 }
 
-int sqlDateToUnixTime(char *sqlDate)
+long sqlDateToUnixTime(char *sqlDate)
 /* Convert a SQL date such as "2003-12-09 11:18:43" to clock time
  * (seconds since midnight 1/1/1970 in UNIX). */
 {
