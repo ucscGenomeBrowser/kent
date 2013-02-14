@@ -11,3 +11,7 @@ knownToEnsembl yes
 haplotypeLift /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift
 # Ensembl 62 has new sequence names for some of the random bits
 liftUp /hive/data/genomes/hg19/jkStuff/ens.68.lft
+# Ensembl 70 using different mitochondria sequence, lift MT to chrM
+# required.
+liftMtOver /hive/data/genomes/hg19/jkStuff/ens.70.Mt.overChain
+
