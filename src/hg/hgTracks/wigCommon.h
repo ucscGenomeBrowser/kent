@@ -29,6 +29,7 @@ struct wigCartOptions
     boolean bedGraph;	/*	is this a bedGraph track ?	*/
     boolean isMultiWig;	/*      If true it's a multi-wig. */
     boolean overlay;	/*      Overlay multiple wigs on top of each other? */
+    boolean transparent;  /* Doing transparency? */
     };
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);

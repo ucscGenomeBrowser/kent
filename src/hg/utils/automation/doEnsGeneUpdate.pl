@@ -123,6 +123,10 @@ liftUp <path/to/ensGene.lft>
   - after everything else is done, lift the final gene pred via this
   - lift file.  Comes in handy if Ensembl chrom names are simply
   - different than UCSC chrom names.  For example in bushbaby, otoGar1
+liftMtOver <path/to/ensGene.Mt.overChain>
+  - before exit process step, lift the gene pred in chrM  via this lift over 
+  - file if Ensembl is using chrM sequence different from the sequence 
+  - used by UCSC. For example in turkey, melGal1.
 
 Assumptions:
 1. $HgAutomate::clusterData/\$db/\$db.2bit contains RepeatMasked sequence for
@@ -152,7 +156,7 @@ my ($ensVersion);
 my ($db);
 # Conditionally required config parameters:
 my ($liftRandoms, $nameTranslation, $geneScaffolds, $knownToEnsembl,
-    $skipInvalid, $haplotypeLift, $liftUp);
+    $skipInvalid, $haplotypeLift, $liftUp, $liftMtOver);
 # Other globals:
 my ($topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
@@ -429,6 +433,20 @@ gzip ensemblGeneScaffolds.$db.bed $db.allGenes.gp liftAcross.err.out
 _EOF_
       );
   }
+  if (defined $liftMtOver) {
+      $bossScript->add(<<_EOF_
+cp $db.allGenes.gp.gz $db.allGenes.beforeLiftMtOver.gp.gz
+zcat $db.allGenes.gp.gz  > all.gp
+zcat $db.allGenes.gp.gz | grep chrM > chrM.gp
+liftOver -genePred chrM.gp $liftMtOver chrMLifted.gp noMap.chrM
+cat all.gp | grep -v chrM > allLifted.gp
+cat chrMLifted.gp >> allLifted.gp
+gzip allLifted.gp
+mv allLifted.gp.gz $db.allGenes.gp.gz
+rm *.gp
+_EOF_
+      );
+    }
   if (defined $liftUp) {
       $bossScript->add(<<_EOF_
 mv $db.allGenes.gp.gz $db.allGenes.beforeLiftUp.gp.gz
@@ -639,6 +657,7 @@ sub parseConfig {
   $skipInvalid = &optionalVar('skipInvalid', \%config);
   $haplotypeLift = &optionalVar('haplotypeLift', \%config);
   $liftUp = &optionalVar('liftUp', \%config);
+  $liftMtOver = &optionalVar('liftMtOver', \%config);
   #	verify they actually do say yes
   if (defined $liftRandoms && $liftRandoms !~ m/^yes$/i) {
 	undef $liftRandoms;
@@ -664,6 +683,12 @@ sub parseConfig {
 	die "$liftUp can not be found.\n";
     }
   }
+  if (defined $liftMtOver) {
+    if (! -s $liftMtOver) {
+        print STDERR "ERROR: config file specifies a liftMtOver file:\n";
+        die "$liftMtOver can not be found.\n";
+    }
+  } 
 
   # Make sure no unrecognized variables were given.
   my @stragglers = sort keys %config;

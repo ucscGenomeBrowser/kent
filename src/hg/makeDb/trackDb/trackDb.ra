@@ -448,7 +448,7 @@ shortLabel Publications
 longLabel Publications: Sequences in scientific articles
 group map
 priority 12
-visibility hide
+visibility dense
 color 0,0,0
 type bed 4
 compositeTrack on
