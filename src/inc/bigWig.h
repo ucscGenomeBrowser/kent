@@ -38,6 +38,11 @@ void bigWigFileCreate(
 /* Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format. */
 
+void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
+	int blockSize, int itemsPerSlot, boolean doCompress, char *fileName);
+/* Create a bigWig file out of a sorted sectionList.  A lower level routine
+ * than the one above. */
+
 struct bbiFile *bigWigFileOpen(char *fileName);
 /* Open up big wig file.   Free this up with bbiFileClose */
 

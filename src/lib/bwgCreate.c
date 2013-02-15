@@ -796,7 +796,7 @@ slReverse(&outList);
 return outList;
 }
 
-static void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
+void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
 	int blockSize, int itemsPerSlot, boolean doCompress, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
