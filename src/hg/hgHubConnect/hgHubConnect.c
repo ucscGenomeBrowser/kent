@@ -504,7 +504,7 @@ hgHubConnectUnlisted(hubList, publicHash);
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");
-cgiMakeButton("Submit", "Load Selected Hubs");
+cgiMakeButton("Submit", "Use Selected Hubs");
 
 char *emailAddress = cfgOptionDefault("hub.emailAddress","genome@soe.ucsc.edu");
 printf("<span class=\"small\">"
