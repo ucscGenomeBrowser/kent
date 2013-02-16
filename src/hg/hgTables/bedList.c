@@ -527,7 +527,7 @@ boolean doGetBedOrCt(struct sqlConnection *conn, boolean doCt,
                      boolean doCtFile, boolean redirectToGb)
 /* Actually output bed or custom track. Return TRUE unless no results. */
 {
-char *db = sqlGetDatabase(conn);
+char *db = cloneString(database);
 char *table = curTable;
 struct hTableInfo *hti = getHti(db, table, conn);
 struct featureBits *fbList = NULL, *fbPtr;

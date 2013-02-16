@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 measureTime(NULL);
+setUdcCacheDir();
 browserName = hBrowserName();
 organization = "UCSC";
 

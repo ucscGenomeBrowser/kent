@@ -694,7 +694,7 @@ if (featDna && end > start)
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A>  (%s/%s)<BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
-	   chrom, start, end, strand, tbl, database, hGenome(database));
+	   chrom, start, end, strand, tbl, trackHubRemoveHubName(database), trackHubRemoveHubName(hGenome(database)));
     }
 }
 
@@ -2888,6 +2888,8 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
 static void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
+if (trackHubDatabase(database))
+    return;
 metadataForTable(database,tdb,NULL);
 const char *version = metadataFindValue(tdb,"dataVersion");
 if(version == NULL)
@@ -3777,10 +3779,12 @@ char *dupe, *type, *words[16], *headerItem;
 int wordCount;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+struct sqlConnection *conn = NULL;
 char *imagePath = trackDbSetting(tdb, ITEM_IMAGE_PATH);
 char *container = trackDbSetting(tdb, "container");
 
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
 if (itemForUrl == NULL)
     itemForUrl = item;
 dupe = cloneString(tdb->type);
@@ -24018,9 +24022,8 @@ getDbAndGenome(cart, &database, &genome, NULL);
 organism = hOrganism(database);
 scientificName = hScientificName(database);
 
-setUdcCacheDir();
 
-dbIsFound = sqlDatabaseExists(database);
+dbIsFound = trackHubDatabase(database) || sqlDatabaseExists(database);
 
 if (dbIsFound)
     seqName = hgOfficialChromName(database, cartString(cart, "c"));
@@ -25261,6 +25264,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 pushCarefulMemHandler(LIMIT_2or6GB);
 cgiSpoof(&argc,argv);
+setUdcCacheDir();
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgc", enteredMainTime);
 return 0;
