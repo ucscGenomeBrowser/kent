@@ -13,7 +13,7 @@ genomic alterations that involve segments of DNA that are larger than
 <H2>Display Conventions</H2>
 <P>
 Color is used to indicate the type of variation.  
-<BR>Note that the color scheme changed in March, 2011.
+<BR>Please note that variants now link to DGV's new browser as of February 2013.
 <UL>
  <LI><B><span style="color:#C000C0;">inversions</span></B> and
      <B><span style="color:#C000C0;">inversion breakpoints</span></B> are purple.  
@@ -37,7 +37,32 @@ Color is used to indicate the type of variation.
    change relative to the reference.
  </LI>
 </UL>
-
+</P>
+<P>
+Variants are displayed with accession numbers with the following
+<A HREF="http://dgvbeta.tcag.ca/dgv/data-model/entd.html#Variant"
+TARGET=_BLANK>DGV nomenclature</A>. When possible, DGV uses accessions
+from <A HREF="http://www.ncbi.nlm.nih.gov/dbvar/" TARGET=_BLANK>dbVar</A>
+at NCBI or <A HREF="http://www.ebi.ac.uk/dgva/" TARGET=_BLANK>DGVa</A> at EBI,
+peer archives of structural variation. These accessions begin with either &quot;essv&quot;,
+&quot;esv&quot;, &quot;nssv&quot;, or &quot;nsv&quot;, followed by a number.
+Variant submissions processed by EBI begin with &quot;e&quot;
+and those processed by NCBI begin with &quot;n&quot;.
+</P>
+<P>
+Accessions with ssv are for variant calls on a particular sample, and if they
+are copy number variants, they generally indicate whether the change is a gain
+or loss. Accessions with sv are for regions asserted by submitters to contain
+structural variants, and often span ssv elements for both losses and gains.
+dbVar and DGVa do not record numbers of losses and gains encompassed within
+sv regions.
+</P>
+<P>
+DGV merges clusters of variants that share at least 70% reciprocal
+overlap in size/location, and provides an sv-like record with an accession that
+begins with &quot;dgv_&quot;. For most sv and dgv variants, DGV displays the total number
+of gains and/or losses at the bottom of their variant detail page. Since each ssv variant
+is for one sample, its total is 1.
 </P>
 
 <H2>Methods</H2>
