@@ -20,6 +20,7 @@
 #include "suggest.h"
 #include "search.h"
 #include "geoMirror.h"
+#include "trackHub.h"
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
