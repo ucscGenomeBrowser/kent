@@ -1,9 +1,10 @@
 # required db variable
-db felCat5 
-# we need to translate geneScaffold coordinates
+db felCat5
+# do we need to translate geneScaffold coordinates
 geneScaffolds yes
 # ignore genes that do not properly convert to a gene pred, and contig
 #	names that are not in the UCSC assembly
+liftUp /hive/data/genomes/sarHar1/jkStuff/ensToUcsc.lift
 skipInvalid yes
 # ignore the two genes that have invalid structures from Ensembl:
 # 5705: ENSFCAT00000006929 no exonFrame on CDS exon 16
