@@ -12,6 +12,136 @@
 #include "wigCommon.h"
 #include "hui.h"
 
+struct floatPic
+/* A picture that stores RGB values in floating point. */
+    {
+    float **lines;   /* points to start of each line of image */
+    float *image;
+    int width;	/* Width in pixels. */
+    int height; /* Heigh in pixels. */
+    };
+
+struct floatPic *floatPicNew(int width, int height)
+/* Return a new floatPic. */
+{
+long lineSize = 3L * width;
+long imageSize = lineSize * height;
+struct floatPic *pic = needMem(sizeof(struct floatPic));
+pic->width = width;
+pic->height = height;
+pic->image = needHugeMem(imageSize * sizeof(float));
+
+/* Create and initialize line start array */
+AllocArray(pic->lines, height);
+int i = height;
+float *line = pic->image;
+float **lines = pic->lines;
+while (--i >= 0)
+    {
+    *lines++ = line;
+    line += lineSize;
+    }
+return pic;
+}
+
+void floatPicFree(struct floatPic **pPic)
+/* Free up resources associated with floatPic. */
+{
+struct floatPic *pic = *pPic;
+if (pic != NULL)
+    {
+    freeMem(pic->lines);
+    freeMem(pic->image);
+    freez(pPic);
+    }
+}
+
+void floatPicSet(struct floatPic *pic, float r, float g, float b)
+/* Set full image to a single color */
+{
+long totalSize = pic->width * pic->height;
+float *p = pic->image;
+while (--totalSize >= 0)
+    {
+    *p++ = r;
+    *p++ = g;
+    *p++ = b;
+    }
+}
+
+void vLineViaFloat(void *image, int x, int y, int height, Color color)
+/* A vertical line drawer that works via floatPic. */
+{
+struct floatPic *pic = image;
+
+/* First do some clipping */
+if (x < 0 || x > pic->width)
+    return;
+if (y < 0)
+    {
+    height += y;
+    y = 0;
+    }
+int yEnd = y + height;
+if (yEnd > pic->height)
+    {
+    yEnd = pic->height;
+    height = yEnd - y;
+    }
+if (height <= 0)
+    return;
+
+int hOffset = x*3;
+const float scaleColor = 1/255.9;
+
+float r = COLOR_32_RED(color) * scaleColor;
+float g = COLOR_32_GREEN(color) * scaleColor;
+float b = COLOR_32_BLUE(color) * scaleColor;
+while (--height >= 0)
+    {
+    float *p = pic->lines[y++] + hOffset;
+    p[0] *= r;
+    p[1] *= g;
+    p[2] *= b;
+    }
+}
+
+struct wigGraphOutput *wigGraphOutputTransparent(struct floatPic *image)
+/* Get appropriate wigGraphOutput for non-transparent rendering */
+{
+struct wigGraphOutput *wgo;
+AllocVar(wgo);
+wgo->image = image;
+wgo->vLine = vLineViaFloat;
+return wgo;
+}
+
+void floatPicIntoHvg(struct floatPic *pic, int xOff, int yOff, struct hvGfx *hvg)
+/* Copy float pic into hvg at given offset. */
+{
+int width = pic->width, height = pic->height;
+Color *lineBuf;
+AllocArray(lineBuf, width);
+int y;
+for (y=0; y<height; ++y)
+    {
+    float *fp = pic->lines[y];
+    Color *cp = lineBuf;
+    int i = width;
+    while (--i >= 0)
+        {
+	int red = fp[0]*255.9;
+	int green = fp[1]*255.9;
+	int blue = fp[2]*255.9;
+	*cp++ = MAKECOLOR_32(red, green, blue);
+	fp += 3;
+	}
+    hvGfxVerticalSmear(hvg, xOff, y + yOff, width, 1, lineBuf, TRUE);
+    }
+freez(&lineBuf);
+}
+
+
 static void minMaxVals(struct slRef *refList, double *retMin, double *retMax,
      enum wiggleAlwaysZeroEnum alwaysZero)
 /* Figure out min/max of everything in list.  The refList contains pointers to
@@ -22,21 +152,18 @@ double max = -BIGDOUBLE, min = BIGDOUBLE;
 struct slRef *ref;
 for (ref = refList; ref != NULL; ref = ref->next)
     {
-    struct preDrawContainer *pre;
-    for (pre = ref->val; pre != NULL; pre = pre->next)
+    struct preDrawContainer *pre = ref->val;
+    struct preDrawElement *p = pre->preDraw + pre->preDrawZero;
+    int width = pre->width;
+    int i;
+    for (i=0; i<width; ++i)
 	{
-	struct preDrawElement *p = pre->preDraw + pre->preDrawZero;
-	int width = pre->width;
-	int i;
-	for (i=0; i<width; ++i)
+	if (p->count)
 	    {
-	    if (p->count)
-		{
-		if (min > p->min) min = p->min;
-		if (max < p->max) max = p->max;
-		}
-	    ++p;
+	    if (min > p->min) min = p->min;
+	    if (max < p->max) max = p->max;
 	    }
+	++p;
 	}
     }
 if (alwaysZero == wiggleAlwaysZeroOn)
@@ -112,6 +239,19 @@ if (wigCart->autoScale)
 	}
     }
 
+/* Deal with tranparency possibly */
+struct wigGraphOutput *wgo;
+struct floatPic *floatPic = NULL;
+if (wigCart->transparent)
+    {
+    int height = tg->lineHeight;
+    floatPic = floatPicNew(width, height);
+    floatPicSet(floatPic, 1, 1, 1);
+    wgo = wigGraphOutputTransparent(floatPic);
+    }
+else
+    wgo = wigGraphOutputSolid(xOff, yOff, hvg);
+
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
@@ -120,20 +260,25 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    {
 	    if (subtrack->networkErrMsg)
 	       errMsgShown = TRUE;
+	    subtrack->wigGraphOutput = wgo;
 	    int height = subtrack->totalHeight(subtrack, vis);
 	    hvGfxSetClip(hvg, xOff, y, width, height);
-	    if (sameString(WIG_AGGREGATE_TRANSPARENT, aggregate))
-		hvGfxSetWriteMode(hvg, MG_WRITE_MODE_MULTIPLY);
 	    if (overlay)
 		subtrack->lineHeight = tg->lineHeight;
 	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
 	    if (!overlay)
 		y += height + 1;
-	    hvGfxSetWriteMode(hvg, MG_WRITE_MODE_NORMAL);
 	    hvGfxUnclip(hvg);
 	    }
 	}
     }
+
+if (wigCart->transparent)
+   {
+   floatPicIntoHvg(floatPic, xOff, yOff, hvg);
+   floatPicFree(&floatPic);
+   }
+
 char *url = trackUrl(tg->track, chromName);
 mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, tg->track, NULL,
 	      url, TRUE, NULL);
