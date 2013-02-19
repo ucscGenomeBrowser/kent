@@ -1,8 +1,9 @@
 # required db variable
 db mm10
+#skipInvalid yes
 # optional nameTranslation, the sed command that will transform
 #	Ensemble names to UCSC names.  With quotes just to make sure.
-nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+nameTranslation "/MG[0-9][0-9]*_PATCH/d; s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/i"
 # optionally update the knownToEnsembl table after ensGene updated
 knownToEnsembl yes
 # Ensembl 68 does not meta data like chr5_JH584299_random as ucsc, 
