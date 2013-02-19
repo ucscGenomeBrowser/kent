@@ -37,6 +37,7 @@
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "memgfx.h"
+#include "trackHub.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -143,7 +144,7 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s" \
                       "&hgta_table=%s&hgta_doSchema=describe+table+schema\" " \
                       "TARGET=ucscSchema%s>%s</A>"
-if (hTableOrSplitExists(db, tdb->table))
+if (!trackHubDatabase(db) && hTableOrSplitExists(db, tdb->table))
     {
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
@@ -287,10 +288,10 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb)
 // Show downlaods, schema and metadata links where appropriate
 {
-boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
+boolean schemaLink = (!tdbIsDownloadsOnly(tdb) && !trackHubDatabase(db)
                   && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
-boolean metadataLink = (!tdbIsComposite(tdb)
+boolean metadataLink = (!tdbIsComposite(tdb) && !trackHubDatabase(db)
                   && metadataForTable(db, tdb, NULL) != NULL);
 boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL && !tdbIsSuperTrack(tdb));
 int links = 0;
@@ -7740,6 +7741,8 @@ void printUpdateTime(char *database, struct trackDb *tdb,
     struct customTrack *ct)
 /* display table update time */
 {
+if (trackHubDatabase(database))
+    return;
 /* have not decided what to do for a composite container */
 if (tdbIsComposite(tdb))
     return;
@@ -7917,7 +7920,7 @@ else if (tdbIsBam(tdb))
     asObj = bamAsObj();
 else if (tdbIsVcf(tdb))
     asObj = vcfAsObj();
-if (startsWithWord("makeItems", tdb->type))
+else if (startsWithWord("makeItems", tdb->type))
     asObj = makeItemsItemAsObj();
 else if (sameWord("bedDetail", tdb->type))
     asObj = bedDetailAsObj();

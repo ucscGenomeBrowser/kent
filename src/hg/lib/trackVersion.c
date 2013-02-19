@@ -8,6 +8,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "trackVersion.h"
+#include "trackHub.h"
 
 
 void trackVersionStaticLoad(char **row, struct trackVersion *ret)
@@ -250,7 +251,7 @@ fputc(lastSep,f);
 struct trackVersion *getTrackVersion(char *database, char *track)
 // Get most recent trackVersion for given track in given database
 {
-boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+boolean trackVersionExists = !trackHubDatabase(database) && hTableExists("hgFixed", "trackVersion");
 struct trackVersion *trackVersion = NULL;
 if (trackVersionExists)
     {

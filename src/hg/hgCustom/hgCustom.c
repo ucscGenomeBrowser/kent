@@ -21,6 +21,7 @@
 #include "net.h"
 #include "jsHelper.h"
 #include <signal.h>
+#include "trackHub.h"
 
 static long loadTime = 0;
 
@@ -215,7 +216,7 @@ if (!isUpdateForm)
     if (! stringIn(database, hFreezeFromDb(database)))
 	{
 	puts("&nbsp;&nbsp;&nbsp;");
-	printf("[%s]", database);
+	printf("[%s]", trackHubRemoveHubName(database));
 	}
     puts("</TD></TR></TABLE>\n");
     }
@@ -1100,7 +1101,6 @@ measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 initialDb = cloneString(cartString(cart, "db"));
 getDbAndGenome(cart, &database, &organism, oldVars);
 
-setUdcCacheDir();
 customFactoryEnableExtraChecking(TRUE);
 
 #if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
@@ -1338,6 +1338,7 @@ long enteredMainTime = clock1000();
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgCustom", enteredMainTime);
 return 0;

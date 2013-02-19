@@ -116,7 +116,7 @@ void hubDisconnect(struct cart *cart, char *url);
 /* drop the information about this url from the hubStatus table, and 
  * the cart variable the references this hub */
 
-void hubCheckForNew(char *database, struct cart *cart);
+void hubCheckForNew( struct cart *cart);
 /* see if the user just typed in a new hub url, add to cart and hubStatus */
 
 struct trackHub *trackHubFromId(unsigned hubId);
@@ -133,4 +133,11 @@ struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database,
     struct trackHub **pHubList);
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
+
+struct hubConnectStatus *hubConnectLoadHubs(struct cart *cart);
+/* load the track data hubs.  Set a static global to remember them */
+
+struct hubConnectStatus *hubConnectGetHubs();
+/* return the static global to the track data hubs */
+
 #endif /* HUBCONNECT_H */

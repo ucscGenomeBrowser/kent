@@ -40,6 +40,9 @@ void udcFileClose(struct udcFile **pFile);
 bits64 udcRead(struct udcFile *file, void *buf, bits64 size);
 /* Read a block from file.  Return amount actually read. */
 
+#define udcReadOne(file, var) udcRead(file, &(var), sizeof(var))
+/* Read one variable from file or die. */
+
 void udcMustRead(struct udcFile *file, void *buf, bits64 size);
 /* Read a block from file.  Abort if any problem, including EOF before size is read. */
 
@@ -82,6 +85,9 @@ struct lineFile *udcWrapShortLineFile(char *url, char *cacheDir, size_t maxSize)
 
 void udcSeek(struct udcFile *file, bits64 offset);
 /* Seek to a particular (absolute) position in file. */
+
+void udcSeekCur(struct udcFile *file, bits64 offset);
+/* Seek to a particular (from current) position in file. */
 
 bits64 udcTell(struct udcFile *file);
 /* Return current file position. */
@@ -134,6 +140,10 @@ void udcSetCacheTimeout(int timeout);
 
 time_t udcUpdateTime(struct udcFile *udc);
 /* return udc->updateTime */
+
+boolean udcFastReadString(struct udcFile *f, char buf[256]);
+/* Read a string into buffer, which must be long enough
+ * to hold it.  String is in 'writeString' format. */
 
 #ifdef PROGRESS_METER
 off_t remoteFileSize(char *url);
