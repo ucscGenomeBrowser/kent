@@ -205,4 +205,6 @@ int twoBitSeqSizeNoNs(struct twoBitFile *tbf, char *seqName);
 /* return the length of the sequence, not counting N's */
 
 struct twoBitFile *twoBitOpenExt(char *fileName, boolean useUdc);
+/* Open file, read in header and index.  
+ * Squawk and die if there is a problem. */
 #endif /* TWOBIT_H */
