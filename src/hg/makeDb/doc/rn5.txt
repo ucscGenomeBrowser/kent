@@ -1288,7 +1288,15 @@ TMPDIR=/scratch/tmp
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
     #	real    3213m53.797s
-XXX - chaining failed, running last two for chr1 and chr3 Tue Dec  4 09:18:43 PST 2012
+    #   chaining failed, running last two for chr1 and chr3
+    ./chain.csh rn5.2bit:chr1: chain/rn5.2bit:chr1:.chain &
+    ./chain.csh rn5.2bit:chr3: chain/rn5.2bit:chr3:.chain
+    #   real    269m41.974s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=chainMerge `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > chainMerge.log 2>&1 &
+XXX - running - Tue Dec  4 14:05:34 PST 2012
 
     cat fb.rn5.chainMonDom5Link.txt
     #	254245903 bases of 2652783500 (9.584%) in intersection

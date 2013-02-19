@@ -17,5 +17,8 @@ install::
 	rm -f ${SCRIPTS}/countRmsk
 	cp -p ./countRmsk.pl ${SCRIPTS}/countRmsk
 
+compile:: $O
+	${CC} ${COPT} ${CFLAGS} -o hgLoadOut $O ${MYLIBS} $L
+
 clean::
 	rm -f ${O} hgLoadOut
