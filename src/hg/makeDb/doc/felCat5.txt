@@ -736,10 +736,8 @@ cat ../chrom.sizes | while read L
 do
 ucName=`echo "${L}" | awk '{print $1}'`
 ucSize=`echo "${L}" | awk '{print $2}'`
-ensName=`echo $L | sed -e 's/^chr[0-9A-Za-z]*_//; s/_random//; s/^chr//;
-s/^\([GA][LA][CZ0-9]*\)/\1.1/;' | awk '{print $1}'`
-ensSize=`echo $L | sed -e 's/^chr[0-9A-Za-z]*_//; s/_random//; s/^chr//;
-s/^\([JA][HA][CZ0-9]*\)/\1.1/;' | awk '{print $2}'`
+ensName=`echo $L | sed -e 's/^chrM/MT/; s/^chr[0-9A-Za-z]*_//; s/_random//; s/^chr//; s/^\([JA][HA][CZ0-9]*\)/\1.1/;' | awk '{print $1}'`
+ensSize=`echo $L | awk '{print $2}'`
 echo -e "0\t$ensName\t$ensSize\t$ucName\t$ucSize"
 done > ensToUcsc.lift
 ############################################################################
