@@ -16,6 +16,7 @@
 #include "search.h"
 #include "hubConnect.h"
 #include "fileUi.h"
+#include "trackHub.h"
 
 static void themeDropDown(struct cart* cart)
 /* Create drop down for UI themes. 
@@ -476,10 +477,10 @@ char *freeze = hFreezeFromDb(database);
 char buf[128];
 if (stringIn(database, freeze))
     safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s",
-	  organization, browserName, organism, freeze);
+	  organization, browserName, trackHubRemoveHubName(organism), freeze);
 else
     safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s (%s)",
-	  organization, browserName, organism, freeze, database);
+	  organization, browserName, trackHubRemoveHubName(organism), freeze, trackHubRemoveHubName(database));
 webNewSection(buf);
 hPrintf("Tracks: ");
 if (isSearchTracksSupported(database,cart))

@@ -31,6 +31,8 @@
 #include "pipeline.h"
 #include "hgConfig.h"
 #include "trix.h"
+#include "trackHub.h"
+#include "udc.h"
 
 
 extern struct cart *cart;
@@ -3172,11 +3174,21 @@ if (strstrNoCase(organism, "zoo"))
 else
     webNewSection("%s Genome Browser &ndash; %s assembly"
 		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
-		  organism, database,
+		  trackHubRemoveHubName(organism), 
+		  trackHubRemoveHubName(database),
 		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 if (htmlPath != NULL && fileExists(htmlPath))
     readInGulp(htmlPath, &htmlString, &htmlStrLength);
+else if (   startsWith("http://" , htmlPath) ||
+	    startsWith("https://", htmlPath) ||
+	    startsWith("ftp://"  , htmlPath))
+    {
+    struct lineFile *lf = udcWrapShortLineFile(htmlPath, NULL, 256*1024);
+    htmlString =  lineFileReadAll(lf);
+    htmlStrLength = strlen(htmlString);
+    lineFileClose(&lf);
+    }
 
 if (htmlStrLength > 0)
     {
@@ -3186,7 +3198,7 @@ if (htmlStrLength > 0)
     }
 else
     {
-    printf("<H2>%s</H2>\n", organism);
+    printf("<H2>%s</H2>\n", trackHubRemoveHubName(organism));
     if (htmlPath == NULL || htmlPath[0] == 0)
 	printf("\n<!-- No dbDb.htmlPath for %s -->\n", database);
     else

@@ -441,6 +441,21 @@ return TRUE;
 
 /********* Non-protocol-specific bits **********/
 
+boolean udcFastReadString(struct udcFile *f, char buf[256])
+/* Read a string into buffer, which must be long enough
+ * to hold it.  String is in 'writeString' format. */
+{
+UBYTE bLen;
+int len;
+if (!udcReadOne(f, bLen))
+    return FALSE;
+if ((len = bLen)> 0)
+    udcMustRead(f, buf, len);
+buf[len] = 0;
+return TRUE;
+}
+
+void msbFirstWriteBits64(FILE *f, bits64 x);
 
 static char *fileNameInCacheDir(struct udcFile *file, char *fileName)
 /* Return the name of a file in the cache dir, from the cache root directory on down.
@@ -1434,6 +1449,13 @@ struct lineFile *udcWrapShortLineFile(char *url, char *cacheDir, size_t maxSize)
 if (maxSize == 0) maxSize = 64 * 1024 * 1024;
 char *buf = udcFileReadAll(url, cacheDir, maxSize, NULL);
 return lineFileOnString(url, TRUE, buf);
+}
+
+void udcSeekCur(struct udcFile *file, bits64 offset)
+/* Seek to a particular position in file. */
+{
+file->offset += offset;
+mustLseek(file->fdSparse, offset, SEEK_CUR);
 }
 
 void udcSeek(struct udcFile *file, bits64 offset)

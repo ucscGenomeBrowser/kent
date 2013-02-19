@@ -37,6 +37,7 @@
 #include "hgFind.h"
 #endif /* GBROWSE */
 #include "hui.h"
+#include "trackHub.h"
 
 
 #ifdef LOWELAB
@@ -70,6 +71,10 @@ static struct chromInfo *lookupChromInfo(char *db, char *chrom)
 /* Query db.chromInfo for the first entry matching chrom. */
 {
 struct chromInfo *ci = NULL;
+
+if (trackHubDatabase(db) && ((ci = trackHubChromInfo(db, chrom)) != NULL))
+    return ci;
+
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -282,6 +287,12 @@ if (dbsChecked)
 else
     dbsChecked = newHash(0);
 
+if (trackHubDatabase(database))
+    {
+    hashAddInt(dbsChecked, database, TRUE);
+    return TRUE;
+    }
+
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
@@ -316,6 +327,12 @@ if (dbsChecked)
 else
     dbsChecked = newHash(0);
 
+if (trackHubDatabase(database))
+    {
+    hashAddInt(dbsChecked, database, TRUE);
+    return TRUE;
+    }
+
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
@@ -335,6 +352,11 @@ char *hDefaultDbForGenome(char *genome)
  * return - The default database name for this Genome
  * Free the returned database name. */
 {
+char *dbName;
+
+if ((dbName = trackHubGenomeNameToDb(genome)) != NULL)
+    return dbName;
+
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
 char **row;
@@ -382,9 +404,12 @@ return result;
 char *hDefaultGenomeForClade(char *clade)
 /* Return highest relative priority genome for clade. */
 {
+char *genome = NULL;
+if ((genome = trackHubCladeToGenome(clade)) != NULL) 
+    return genome;
+
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
-char *genome = NULL;
 /* Get the top-priority genome *with an active database* so if genomeClade
  * gets pushed from hgwdev to hgwbeta/RR with genomes whose dbs haven't been
  * pushed yet, they'll be ignored. */
@@ -457,6 +482,9 @@ char *hDefaultChrom(char *db)
 /* Return some sequence named in chromInfo from the given db, or NULL if db
  * has no chromInfo. */
 {
+if (trackHubDatabase(db))
+    return trackHubDefaultChrom(db);
+
 static struct hash *hash = NULL;
 struct hashEl *hel = NULL;
 
@@ -476,6 +504,8 @@ return hel->val;
 int hChromCount(char *db)
 /* Return the number of chromosomes (scaffolds etc.) in the given db. */
 {
+if (trackHubDatabase(db))
+    return trackHubChromCount(db);
 struct sqlConnection *conn = hAllocConn(db);
 int count = sqlQuickNum(conn, "select count(*) from chromInfo");
 hFreeConn(&conn);
@@ -973,17 +1003,24 @@ if (!fileExists(retNibName))
     }
 }
 
-static struct dnaSeq *fetchTwoBitSeq(char *fileName, char *seqName, int start, int end)
+
+static struct dnaSeq *fetchTwoBitSeqExt(char *fileName, char *seqName, int start, int end, boolean useUdc)
 /* fetch a sequence from a 2bit, caching open of the file */
 {
 static struct twoBitFile *tbf = NULL;  // cache of open file
 if ((tbf == NULL) || !sameString(fileName, tbf->fileName))
     {
     twoBitClose(&tbf);
-    tbf = twoBitOpen(fileName);
+    tbf = twoBitOpenExt(fileName, useUdc);
     }
 struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqName, start, end);
 return seq;
+}
+
+static struct dnaSeq *fetchTwoBitSeq(char *fileName, char *seqName, int start, int end)
+/* fetch a sequence from a 2bit, caching open of the file */
+{
+return fetchTwoBitSeqExt(fileName, seqName, start, end, FALSE);
 }
 
 struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
@@ -1013,6 +1050,11 @@ struct dnaSeq *hChromSeqMixed(char *db, char *chrom, int start, int end)
 {
 char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(db, chrom, fileName);
+if(trackHubDatabase(db))
+    {
+    struct dnaSeq *seq = fetchTwoBitSeqExt(fileName, chrom, start, end, TRUE);
+    return seq;
+    }
 return hFetchSeqMixed(fileName, chrom, start, end);
 }
 
@@ -1031,6 +1073,13 @@ struct dnaSeq *hChromSeq(char *db, char *chrom, int start, int end)
 {
 char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(db, chrom, fileName);
+if(trackHubDatabase(db))
+    {
+    struct dnaSeq *seq = fetchTwoBitSeqExt(fileName, chrom, start, end, TRUE);
+    tolowers(seq->dna);
+    return seq;
+    }
+
 return hFetchSeq(fileName, chrom, start, end);
 }
 
@@ -1111,7 +1160,7 @@ boolean hChromBand(char *db, char *chrom, int pos, char retBand[HDB_MAX_BAND_STR
 /* Return text string that says what band pos is on.
  * Return FALSE if not on any band, or table missing. */
 {
-if (!hTableExists(db, "cytoBand"))
+if (trackHubDatabase(db) || !hTableExists(db, "cytoBand"))
     return FALSE;
 else
     {
@@ -1204,6 +1253,8 @@ return hDnaFromSeq(db, chromName, 0, size, dnaLower);
 struct slName *hAllChromNames(char *db)
 /* Get list of all chromosome names in database. */
 {
+if (trackHubDatabase(db))
+    return trackHubAllChromNames(db);
 struct slName *list = NULL;
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
@@ -2115,6 +2166,11 @@ static char *hFreezeDbConversion(char *database, char *freeze)
  * for parameter that is unknown and it will be returned
  * as a result.  This result can be freeMem'd when done. */
 {
+if ((database != NULL) && trackHubDatabase(database))
+    {
+    return trackHubAssemblyField(database, "description");
+    }
+
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
@@ -2216,7 +2272,16 @@ char *hDbDbOptionalField(char *database, char *field)
 /* Wrapper for hArchiveOrCentralDbDbOptionalField to
  * look up in the regular central database. */
 {
-return hArchiveOrCentralDbDbOptionalField(database, field, FALSE);
+if (trackHubDatabase(database))
+    {
+    if (sameString(field, "genome"))
+	field = "organism";
+    return trackHubAssemblyField(database, field);
+    }
+
+char *res = hArchiveOrCentralDbDbOptionalField(database, field, FALSE);
+
+return res;
 }
 
 char *hDbDbField(char *database, char *field)
@@ -2340,11 +2405,14 @@ char *hClade(char *genome)
 /* If central database has clade tables, return the clade for the
  * given genome; otherwise return NULL. */
 {
+char *clade;
+if ((clade = trackHubAssemblyClade(genome)) != NULL)
+    return clade;
+
 struct sqlConnection *conn = hConnectCentral();
 if (hGotCladeConn(conn))
     {
     char query[512];
-    char *clade;
     safef(query, sizeof(query),
 	  "select clade from genomeClade where genome = '%s'", genome);
     clade = sqlQuickString(conn, query);
@@ -2368,6 +2436,9 @@ else
 struct dbDb *hDbDb(char *database)
 /* Return dbDb entry for a database */
 {
+if (trackHubDatabase(database))
+    return trackHubDbDbFromAssemblyDb(database);
+
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
@@ -3460,6 +3531,9 @@ static struct trackDb *loadTrackDb(char *db, char *where)
 /* Load each trackDb table.  Will put supertracks in parent field of given tracks but
  * these are still in track list. */
 {
+if (trackHubDatabase(db))
+    return NULL;
+
 struct trackDb *tdbList = NULL;
 struct slName *tableList = hTrackDbList(), *one;
 boolean foundOne = FALSE;
@@ -4005,7 +4079,9 @@ static struct hash *makeTrackSettingsHash(char *db)
 {
 struct hash *hash = hashNew(0);
 struct slName *trackTable, *trackTableList = hTrackDbList();
-struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn =NULL;
+if (!trackHubDatabase(db))
+    conn = hAllocConn(db);
 for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->next)
     {
     if (hTableExists(db, trackTable->name))
@@ -4113,6 +4189,8 @@ struct sqlConnection *conn = hConnectCentral(); // after hClade, since it access
 struct sqlResult *sr = NULL;
 char **row;
 struct dbDb *dbList = NULL, *db;
+
+dbList = trackHubGetDbDbs(theClade);
 
 /* Scan through dbDb table, loading into list */
 if (theClade != NULL)
@@ -4752,8 +4830,11 @@ static struct grp* loadGrps(char *db, char *confName, char *defaultTbl)
  * in hg.conf with confName. If not there, use defaultTbl.  If the table
  * doesn't exist, return NULL */
 {
-char query[128];
+if (trackHubDatabase(db))
+    return trackHubLoadGroups(db);
+
 struct grp *grps = NULL;
+char query[128];
 char *tbl = cfgOption(confName);
 struct slName *tables = NULL, *table;
 

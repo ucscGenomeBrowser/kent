@@ -8,6 +8,13 @@
 #include "twoBit.h"
 #include "annoGratorQuery.h"
 
+struct annoGratorGpVar
+{
+    struct annoGrator grator;	// external annoGrator/annoStreamer interface
+    boolean cdsOnly;		// if TRUE, restrict output to CDS effects
+};
+
+
 static char *annoGpVarDataLineAutoSqlString =
 "table genePredWithSO"
 "\"genePred with Sequence Ontology annotation\""
@@ -100,25 +107,30 @@ while (count < needWords)
 	words[count++] = "";
 }
 
-static struct annoRow *aggvEffectToRow( struct annoGrator *self,
+static struct annoRow *aggvEffectToRow( struct annoGratorGpVar *self,
     struct gpFx *effect, struct annoRow *rowIn)
-// covert a single gpFx record to an augmented genePred annoRow
+// convert a single gpFx record to an augmented genePred annoRow;
+// if cdsOnly and gpFx is not in CDS, return NULL;
 {
+if (self->cdsOnly && !gpFxIsCodingChange(effect))
+    return NULL;
 char **wordsOut;
 char **wordsIn = (char **)rowIn->data;
+struct annoGrator *gSelf = &(self->grator);
+struct annoStreamer *sSelf = &(gSelf->streamer);
 
-assert(self->streamer.numCols > self->mySource->numCols);
-AllocArray(wordsOut, self->streamer.numCols);
+assert(sSelf->numCols > gSelf->mySource->numCols);
+AllocArray(wordsOut, sSelf->numCols);
 
 // copy the genePred fields over
-memcpy(wordsOut, wordsIn, sizeof(char *) * self->mySource->numCols);
+memcpy(wordsOut, wordsIn, sizeof(char *) * gSelf->mySource->numCols);
 
 // stringify the gpFx structure 
-int count = self->mySource->numCols;
+int count = gSelf->mySource->numCols;
 aggvStringifyGpFx(&wordsOut[count], effect);
 
 return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, 
-    rowIn->rightJoinFail, wordsOut, self->streamer.numCols);
+    rowIn->rightJoinFail, wordsOut, sSelf->numCols);
 }
 
 /* Get the sequence associated with a particular bed concatenated together. */
@@ -168,34 +180,43 @@ return dnaSeq;
 }
 
 
-static struct annoRow *aggvGenRows( struct annoGrator *self,
+static struct annoRow *aggvGenRows( struct annoGratorGpVar *self,
     struct variant *variant, struct genePred *pred, struct annoRow *inRow)
 // put out annoRows for all the gpFx that arise from variant and pred
 {
+struct annoGrator *gSelf = &(self->grator);
+struct annoStreamer *sSelf = &(gSelf->streamer);
 // FIXME:  accessing query's tbf is probably bad
-struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, 
-    self->streamer.query->tbf);
+struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->query->tbf);
 struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
     {
     struct annoRow *row = aggvEffectToRow(self, effects, inRow);
-    slAddHead(&rows, row);
+    if (row != NULL)
+	slAddHead(&rows, row);
     }
 slReverse(&rows);
 
 return rows;
 }
 
-struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *self, 
+struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *gSelf,
 	struct annoRow *primaryRow, boolean *retRJFilterFailed)
 // integrate a pgSnp and a genePred, generate as many rows as
 // needed to capture all the changes
 {
-struct annoRow *rows = annoGratorIntegrate(self, primaryRow, retRJFilterFailed);
+struct annoGratorGpVar *self = (struct annoGratorGpVar *)gSelf;
+struct annoRow *rows = annoGratorIntegrate(gSelf, primaryRow, retRJFilterFailed);
 
-if ((rows == NULL) || (retRJFilterFailed && *retRJFilterFailed))
+if (rows == NULL)
+    {
+    if (self->cdsOnly && retRJFilterFailed)
+	*retRJFilterFailed = TRUE;
+    return NULL;
+    }
+if (retRJFilterFailed && *retRJFilterFailed)
     return NULL;
 
 char **primaryWords = primaryRow->data;
@@ -215,29 +236,36 @@ for(; rows; rows = rows->next)
     inWords[9] = saveExonEnds;
 
     struct annoRow *outRow = aggvGenRows(self, variant, gp, rows);
-    slAddHead(&outRows, outRow);
+    if (outRow != NULL)
+	{
+	slReverse(&outRow);
+	outRows = slCat(outRow, outRows);
+	}
     }
-
+slReverse(&outRows);
+if (self->cdsOnly && outRows == NULL && retRJFilterFailed != NULL)
+    *retRJFilterFailed = TRUE;
 return outRows;
 }
 
-/* Given a single row from the primary source, get all overlapping rows from internal
- * source, and produce joined output rows.  If retRJFilterFailed is non-NULL and any
- * overlapping row has a rightJoin filter failure (see annoFilter.h),
- * set retRJFilterFailed and stop. */
 
-struct annoGrator *annoGratorGpVarNew(struct annoStreamer *mySource)
-// make a subclass of annoGrator that knows about genePreds and pgSnp
+struct annoGrator *annoGratorGpVarNew(struct annoStreamer *mySource, boolean cdsOnly)
+/* Make a subclass of annoGrator that combines genePreds from mySource with
+ * pgSnp rows from primary source to predict functional effects of variants
+ * on genes.  If cdsOnly is true, return only rows with effects on coding seq.
+ * mySource becomes property of the new annoGrator. */
 {
-struct annoGrator *self = annoGratorNew(mySource);
+struct annoGratorGpVar *self;
+AllocVar(self);
+struct annoGrator *gSelf = &(self->grator);
+annoGratorInit(gSelf, mySource);
+struct annoStreamer *sSelf = &(gSelf->streamer);
+// We add columns beyond what comes from mySource, so update our public-facing asObject:
+sSelf->setAutoSqlObject(sSelf, annoGpVarAsObj());
 
 // integrate by adding gpFx fields
-self->integrate = annoGratorGpVarIntegrate;
+gSelf->integrate = annoGratorGpVarIntegrate;
+self->cdsOnly = cdsOnly;
 
-// TODO: overriding these should be a single function call
-self->streamer.asObj =  annoGpVarAsObj();
-self->streamer.numCols = slCount(self->streamer.asObj->columnList);
-self->streamer.columns = annoColumnsFromAsObject(self->streamer.asObj);
-
-return self;
+return gSelf;
 }

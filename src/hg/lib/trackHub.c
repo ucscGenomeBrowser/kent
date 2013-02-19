@@ -30,6 +30,15 @@
 #include "bigWig.h"
 #include "bigBed.h"
 #include "hdb.h"
+#include "chromInfo.h"
+#include "grp.h"
+#include "twoBit.h"
+#include "dbDb.h"
+
+static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
+static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
+static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
+struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 
 static boolean hasProtocol(char *urlOrPath)
 /* Return TRUE if it looks like it has http://, ftp:// etc. */
@@ -62,19 +71,343 @@ errAbort("Genome stanza should have exactly two lines, one with 'genome' and one
          "Bad stanza format ending line %d of %s", lf->lineIx, lf->fileName);
 }
 
-static struct trackHubGenome *trackHubGenomeReadRa(char *url, struct hash *hash)
+char *trackHubCladeToGenome(char *clade) 
+/* given a track hub clade(hub name) return the default genome */
+{
+if (hubCladeHash == NULL)
+    return FALSE;
+struct hashEl *hel = hashLookup(hubCladeHash, clade);
+if (hel == NULL)
+    return FALSE;
+struct trackHub *trackHub = hel->val;
+struct trackHubGenome *hubGenome = trackHub->genomeList;
+for(; hubGenome; hubGenome=hubGenome->next)
+    if (hubGenome->twoBitPath != NULL)
+	return hubGenome->organism ;
+return NULL;
+}
+
+boolean trackHubDatabase(char *database)
+/* is this an assembly from an Assembly Data hub? */
+{
+if (hubAssemblyHash == NULL)
+    return FALSE;
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+if (hel == NULL)
+    return FALSE;
+return TRUE;
+}
+
+char *trackHubAssemblyField(char *database, char *field)
+/* get data field from a assembly data hub */
+{
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+if (hel == NULL)
+    return NULL;
+
+struct trackHubGenome *genome = hel->val;
+char *ret = hashFindVal(genome->settingsHash, field);
+
+return cloneString(ret);
+}
+
+static struct dbDb *makeDbDbFromAssemblyGenome(struct trackHubGenome *hubGenome)
+{
+struct dbDb *db;
+
+AllocVar(db);
+db->genome = cloneString(hubGenome->organism);
+db->organism = cloneString(hubGenome->organism);
+db->name = cloneString(hubGenome->name);
+db->active = TRUE;
+db->description = cloneString(hubGenome->description);
+
+return db;
+}
+
+struct dbDb *trackHubDbDbFromAssemblyDb(char *database)
+/* return a dbDb structure for just this database */
+{
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+if (hel == NULL)
+    return NULL;
+
+struct trackHubGenome *genome = hel->val;
+return makeDbDbFromAssemblyGenome(genome);
+}
+
+struct slPair *trackHubGetHubLabels()
+/* get a list of labels describing the loaded assembly data hubs */
+{
+if (globalAssemblyHubList == NULL)
+    return NULL;
+
+struct slPair *clade, *cladeList = NULL;
+
+struct trackHub *trackHub = globalAssemblyHubList;
+
+for(;trackHub; trackHub = trackHub->next)
+    {
+    AllocVar(clade);
+    slAddHead(&cladeList, clade);
+
+    clade->name = cloneString(trackHub->name);
+    clade->val = cloneString(trackHub->shortLabel);
+    }
+return cladeList;
+}
+
+struct dbDb *trackHubGetDbDbs(char *clade)
+/* get a list of dbDb structures for all the tracks in this clade/hub */
+{
+struct dbDb *db, *dbList = NULL;
+
+if (globalAssemblyHubList != NULL)
+    {
+    struct trackHub *trackHub = globalAssemblyHubList;
+
+    for(;trackHub; trackHub = trackHub->next)
+	{
+	if ((clade != NULL) && differentString(clade, trackHub->name))
+	    continue;
+
+	struct trackHubGenome *hubGenome = trackHub->genomeList;
+	for(; hubGenome; hubGenome = hubGenome->next)
+	    {
+	    if (hubGenome->twoBitPath != NULL)
+		{
+		db = makeDbDbFromAssemblyGenome(hubGenome);
+		slAddHead(&dbList, db);
+		}
+	    }
+	}
+    }
+
+return dbList;
+}
+
+int trackHubChromCount(char *database)
+/* return number of chromosomes in a assembly data hub */
+{
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+if (hel == NULL)
+    return 0;
+
+struct trackHubGenome *genome = hel->val;
+struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
+
+return slCount(chromList);
+}
+
+struct slName *trackHubAllChromNames(char *database)
+/* return a list of all the chrom names in this assembly hub database */
+{
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+if (hel == NULL)
+    return 0;
+
+struct trackHubGenome *genome = hel->val;
+struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
+
+return chromList;
+}
+
+char *trackHubDefaultChrom(char *database)
+/* return the default chromosome for this track hub assembly */
+{
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+if (hel == NULL)
+    return NULL;
+
+struct trackHubGenome *genome = hel->val;
+struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
+
+return chromList->name;
+}
+
+struct chromInfo *trackHubChromInfo(char *database, char *chrom)
+/* return a chromInfo structure for just this chrom in this database */
+{
+if (hubAssemblyHash == NULL)
+    return NULL;
+
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+
+if (hel == NULL)
+    return NULL;
+
+struct trackHubGenome *genome = hel->val;
+struct chromInfo *ci;
+
+AllocVar(ci);
+ci->chrom = cloneString(chrom);
+ci->fileName = genome->twoBitPath;
+ci->size = twoBitSeqSize(genome->tbf, chrom);
+
+return ci;
+}
+
+struct chromInfo *trackHubAllChromInfo(char *db)
+/* return a chromInfo structure for all the chroms in this database */
+{
+struct hashEl *hel = hashLookup(hubAssemblyHash, db);
+
+if (hel == NULL)
+    return NULL;
+
+struct trackHubGenome *genome = hel->val;
+struct chromInfo *ci, *ciList = NULL;
+struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
+
+for(; chromList; chromList = chromList->next)
+    {
+    AllocVar(ci);
+    ci->chrom = cloneString(chromList->name);
+    ci->fileName = genome->twoBitPath;
+    ci->size = twoBitSeqSize(genome->tbf, chromList->name);
+    slAddHead(&ciList, ci);
+    }
+return ciList;
+}
+
+static char *getRequiredGrpSetting(struct hash *hash, char *name, struct lineFile *lf)
+/* grab a group setting out of the group hash.  errAbort if not found */
+{
+char *str;
+if ((str = hashFindVal(hash, name)) == NULL) 
+    errAbort("missing required setting '%s' for group on line %d in file %s\n",
+	name, lf->lineIx, lf->fileName);
+return str;
+}
+
+static struct grp *readGroupRa(char *groupFileName)
+/* read in the ra file that describes the groups in an assembly hub */
+{
+if (groupFileName == NULL)
+    return NULL;
+struct hash *ra;
+struct grp *list = NULL;
+struct lineFile *lf = udcWrapShortLineFile(groupFileName, NULL, 16*1024*1024);
+while ((ra = raNextRecord(lf)) != NULL)
+    {
+    struct grp *grp;
+    AllocVar(grp);
+    slAddHead(&list, grp);
+
+    grp->name = cloneString(getRequiredGrpSetting(ra, "name", lf));
+    grp->label = cloneString(getRequiredGrpSetting(ra, "label", lf));
+    grp->priority = atof(getRequiredGrpSetting(ra, "priority", lf));
+    grp->defaultIsClosed = sqlUnsigned(getRequiredGrpSetting(ra,"defaultIsClosed",lf));
+    hashFree(&ra);
+    }
+if (list)
+    slReverse(&list);
+lineFileClose(&lf);
+
+return list;
+}
+
+struct grp *trackHubLoadGroups(char *database)
+/* load the grp structures for this track hub database */
+{
+if (hubAssemblyHash == NULL)
+    return NULL;
+
+struct hashEl *hel = hashLookup(hubAssemblyHash, database);
+
+if (hel == NULL)
+    return NULL;
+
+struct trackHubGenome *genome = hel->val;
+struct grp *list = readGroupRa(genome->groups);
+return list;
+}
+
+char *trackHubGenomeNameToDb(char *genome)
+/* return assembly name given a genome name if one exists, otherwise NULL */
+{
+struct hashEl *hel;
+if ((hubOrgHash != NULL) && (hel = hashLookup(hubOrgHash, genome)) != NULL)
+    {
+    struct trackHub *hub = hel->val;
+    struct trackHubGenome *genomeList = hub->genomeList;
+
+    for(; genomeList; genomeList=genomeList->next)
+	if ((genomeList->organism != NULL ) && 
+	    sameString(genomeList->organism, genome))
+	    return genomeList->name;
+    }
+return NULL;
+}
+
+char *trackHubAssemblyClade(char *genome)
+/* return the clade/hub_name that contains this genome */
+{
+struct hashEl *hel;
+if ((hubOrgHash != NULL) && (hel = hashLookup(hubOrgHash, genome)) != NULL)
+    {
+    struct trackHub *hub = hel->val;
+
+    return cloneString(hub->name);
+    }
+return NULL;
+}
+
+static void addAssembly(char *name, struct trackHubGenome *genome, struct trackHub *hub)
+{
+struct hashEl *hel;
+
+
+if (hubCladeHash == NULL)
+    hubCladeHash = newHash(5);
+if ((hel = hashLookup(hubCladeHash, hub->name)) == NULL)
+    {
+    hashAdd(hubCladeHash, hub->name, hub);
+    slAddHead(&globalAssemblyHubList, hub);
+    }
+
+if (hubOrgHash == NULL)
+    hubOrgHash = newHash(5);
+if ((hel = hashLookup(hubOrgHash, genome->organism)) == NULL)
+    {
+    hashAdd(hubOrgHash, genome->organism, hub);
+    }
+
+if (hubAssemblyHash == NULL)
+    hubAssemblyHash = newHash(5);
+if ((hel = hashLookup(hubAssemblyHash, genome->name)) == NULL)
+    hashAdd(hubAssemblyHash, genome->name, genome);
+}
+
+static char *addHubName(char *base, char *hubName)
+{
+if (base == NULL)
+    return NULL;
+
+char buffer[4096];
+
+safef(buffer, sizeof(buffer), "%s_%s", hubName, base);
+
+return cloneString(buffer);
+}
+
+static struct trackHubGenome *trackHubGenomeReadRa(char *url, struct trackHub *hub)
 /* Read in a genome.ra format url and return it as a list of trackHubGenomes. 
  * Also add it to hash, which is keyed by genome. */
 {
 struct lineFile *lf = udcWrapShortLineFile(url, NULL, 64*1024*1024);
 struct trackHubGenome *list = NULL, *el;
+struct hash *hash = hub->genomeHash;
 
 struct hash *ra;
 while ((ra = raNextRecord(lf)) != NULL)
     {
-    if (ra->elCount != 2)
-	badGenomeStanza(lf);
-    char *genome = hashFindVal(ra, "genome");
+    char *twoBitPath = hashFindVal(ra, "twoBitPath");
+    char *genome;
+    if (twoBitPath != NULL)
+	genome = addHubName(hashFindVal(ra, "genome"), hub->name);
+    else
+	genome = hashFindVal(ra, "genome");
     if (genome == NULL)
         badGenomeStanza(lf);
     if (hashLookup(hash, genome) != NULL)
@@ -86,9 +419,26 @@ while ((ra = raNextRecord(lf)) != NULL)
     AllocVar(el);
     el->name = cloneString(genome);
     el->trackDbFile = trackHubRelativeUrl(url, trackDb);
+    el->trackHub = hub;
     hashAdd(hash, el->name, el);
     slAddHead(&list, el);
-    hashFree(&ra);
+    char *groups = hashFindVal(ra, "groups");
+    if (twoBitPath != NULL)
+	{
+	//printf("reading genome %s twoBitPath %s\n", genome, el->twoBitPath);
+	el->description  = hashFindVal(ra, "description");
+	el->organism  = addHubName(hashFindVal(ra, "organism"), hub->name);
+	hashReplace(ra, "organism", el->organism);
+	el->defaultPos  = hashFindVal(ra, "defaultPos");
+	el->twoBitPath = trackHubRelativeUrl(url, twoBitPath);
+	el->tbf = twoBitOpenExt(el->twoBitPath, TRUE);
+	hashReplace(ra, "htmlPath",trackHubRelativeUrl(url, hashFindVal(ra, "htmlPath")));
+	if (groups != NULL)
+	    el->groups = trackHubRelativeUrl(url, groups);
+	addAssembly(genome, el, hub);
+	}
+    el->settingsHash = ra;
+    hashAdd(ra, "hubName", hub->shortLabel);
     }
 
 /* Clean up and go home. */
@@ -141,7 +491,7 @@ lineFileClose(&lf);
 char *genomesUrl = trackHubRelativeUrl(hub->url, hub->genomesFile);
 
 hub->genomeHash = hashNew(8);
-hub->genomeList = trackHubGenomeReadRa(genomesUrl, hub->genomeHash);
+hub->genomeList = trackHubGenomeReadRa(genomesUrl, hub);
 freez(&genomesUrl);
 
 return hub;
@@ -339,7 +689,8 @@ validateTracks(hub, genome, tdbList);
 
 trackDbAddTableField(tdbList);
 trackHubAddNamePrefix(hub->name, tdbList);
-trackHubAddGroupName(hub->name, tdbList);
+if (genome->twoBitPath == NULL)
+    trackHubAddGroupName(hub->name, tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     trackDbFieldsFromSettings(tdb);
@@ -386,6 +737,14 @@ void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList)
 char namePrefix[PATH_LEN];
 safef(namePrefix, sizeof(namePrefix), "%s_", hubName);
 trackDbListAddNamePrefix(tdbList, namePrefix);
+}
+
+char *trackHubRemoveHubName(char *name)
+/* remove the hub_#_ prefix from a hub name */
+{
+if ((name == NULL) || !startsWith("hub_", name))
+    return name;
+return strchr(&name[4], '_') + 1;
 }
 
 void trackHubAddGroupName(char *hubName, struct trackDb *tdbList)
@@ -448,7 +807,7 @@ if (relativeUrl != NULL)
 return retVal;
 }
 
-static void fixName(char *name)
+void trackHubFixName(char *name)
 /* change all characters other than alphanumeric, dash, and underbar
  * to underbar */
 {
@@ -486,7 +845,7 @@ char *htmlName = trackDbSetting(bt, "html");
 if (htmlName == NULL)
     trackDbAddSetting(bt, "html", bt->track);
 
-fixName(bt->track);
+trackHubFixName(bt->track);
 
 if (hashLookup(hash, bt->track) != NULL)
     errAbort("more than one track called %s in hub %s\n", bt->track, hub->url);
@@ -581,4 +940,3 @@ trackHubClose(&hub);
 
 return retVal;
 }
-

@@ -23,6 +23,8 @@
 #include "hgMaf.h"
 #include "hui.h"
 #include "geoMirror.h"
+#include "hubConnect.h"
+#include "trackHub.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -607,6 +609,9 @@ loadCgiOverHash(cart, oldVars);
 
 // I think this is the place to justify old and new values
 cartJustify(cart, oldVars);
+
+/* wire up the assembly hubs so we can operate without sql */
+hubConnectLoadHubs(cart);
 
 #ifndef GBROWSE
 /* If some CGI other than hgSession been passed hgSession loading instructions,
@@ -1474,7 +1479,7 @@ void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args)
  * from cart. */
 {
 pushWarnHandler(htmlVaWarn);
-webStartWrapper(cart, db, format, args, FALSE, FALSE);
+webStartWrapper(cart, trackHubRemoveHubName(db), format, args, FALSE, FALSE);
 inWeb = TRUE;
 }
 
@@ -1591,13 +1596,13 @@ if(pos != NULL && oldVars != NULL)
     }
 *extra = 0;
 if (pos == NULL && org != NULL)
-    safef(titlePlus,sizeof(titlePlus), "%s%s - %s",org, extra, title );
+    safef(titlePlus,sizeof(titlePlus), "%s%s - %s",trackHubRemoveHubName(org), extra, title );
 else if (pos != NULL && org == NULL)
     safef(titlePlus,sizeof(titlePlus), "%s - %s",pos, title );
 else if (pos == NULL && org == NULL)
     safef(titlePlus,sizeof(titlePlus), "%s", title );
 else
-    safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",org, extra,pos, title );
+    safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",trackHubRemoveHubName(org), extra,pos, title );
 popWarnHandler();
 setThemeFromCart(cart);
 htmStartWithHead(stdout, head, titlePlus);

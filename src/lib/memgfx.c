@@ -47,8 +47,8 @@ return new;
 
 void _mgPutDotMultiply(struct memGfx *mg, int x, int y,Color color)
 {
-Color src = *_mgPixAdr(mg,x,y);
-*_mgPixAdr(mg,x,y) = multiply(src, color);
+Color *pt = _mgPixAdr(mg,x,y);
+*pt = multiply(*pt, color);
 }
 
 
@@ -571,8 +571,19 @@ if (y >= mg->clipMinY && y < mg->clipMaxY)
     if (w > 0)
         {
 	Color *pt = _mgPixAdr(mg,x1,y);
-	while (--w >= 0)
-	    *pt++ = color;
+	if (mg->writeMode == MG_WRITE_MODE_MULTIPLY)
+	    {
+	    while (--w >= 0)
+		{
+		*pt = multiply(*pt, color);
+		pt += 1;
+		}
+	    }
+	else
+	    {
+	    while (--w >= 0)
+		*pt++ = color;
+	    }
 	}
     }
 }

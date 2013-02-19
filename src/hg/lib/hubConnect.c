@@ -124,14 +124,18 @@ if (hub != NULL)
 return FALSE;
 }
 
-static struct trackHub *fetchHub(char *url, char **errorMessage)
+static struct trackHub *fetchHub(struct hubConnectStatus *hubStatus, char **errorMessage)
 {
 struct errCatch *errCatch = errCatchNew();
 struct trackHub *tHub = NULL;
 boolean gotWarning = FALSE;
+char *url = hubStatus->hubUrl;
+
+char hubName[64];
+safef(hubName, sizeof(hubName), "hub_%d", hubStatus->id);
 
 if (errCatchStart(errCatch))
-    tHub = trackHubOpen(url, "1"); // open hub.. it'll get renamed later
+    tHub = trackHubOpen(url, cloneString(hubName)); // open hub
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
@@ -180,7 +184,7 @@ if (row != NULL)
     if (isEmpty(row[2]) || hubTimeToCheck(hub, row[3]))
 	{
 	char *errorMessage = NULL;
-	hub->trackHub = fetchHub( hub->hubUrl, &errorMessage);
+	hub->trackHub = fetchHub( hub, &errorMessage);
 	hub->errorMessage = cloneString(errorMessage);
 	hubUpdateStatus( hub->errorMessage, hub);
 	if (!isEmpty(hub->errorMessage))
@@ -375,16 +379,18 @@ struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
 trackHubPolishTrackNames(hub, tdbList);
+char *fixTrackName = cloneString(trackName);
+trackHubFixName(fixTrackName);
 rAddTrackListToHash(trackHash, tdbList, NULL, FALSE);
 if (pTdbList != NULL)
     *pTdbList = slCat(*pTdbList, tdbList);
-struct trackDb *tdb = hashFindVal(trackHash, trackName);
+struct trackDb *tdb = hashFindVal(trackHash, fixTrackName);
 if (tdb == NULL) 
     // superTracks aren't in the hash... look in tdbList
-    tdb = findSuperTrack(tdbList, trackName);
+    tdb = findSuperTrack(tdbList, fixTrackName);
 
 if (tdb == NULL) 
-    errAbort("Can't find track %s in %s", trackName, hub->url);
+    errAbort("Can't find track %s in %s", fixTrackName, hub->url);
 
 /* Add html for track and parents. */
 /* Note: this does NOT add the HTML for supertrack kids */
@@ -466,7 +472,7 @@ hDisconnectCentral(&conn);
 return id;
 }
 
-static void getAndSetHubStatus(char *database, struct cart *cart, char *url, 
+static void getAndSetHubStatus( struct cart *cart, char *url, 
     boolean set)
 /* make sure url is in hubStatus table, fetch the hub to get latest
  * labels and db information.
@@ -495,7 +501,7 @@ hub->id = id;
 hub->hubUrl = cloneString(url);
 
 /* new fetch the contents of the hub to fill in the status table */
-struct trackHub *tHub = fetchHub( url, &errorMessage);
+struct trackHub *tHub = fetchHub( hub, &errorMessage);
 if (tHub != NULL)
     hub->trackHub = tHub;
 
@@ -524,7 +530,7 @@ int id = 0;
 if ((id = getHubId(url, errorMessage)) > 0)
     return id;
 
-getAndSetHubStatus(database, cart, url, FALSE);
+getAndSetHubStatus( cart, url, FALSE);
 
 if ((id = getHubId(url, errorMessage)) == 0)
     errAbort("inserted new hubUrl %s, but cannot find it", url);
@@ -532,7 +538,7 @@ if ((id = getHubId(url, errorMessage)) == 0)
 return id;
 }
 
-void hubCheckForNew(char *database, struct cart *cart)
+void hubCheckForNew( struct cart *cart)
 /* see if the user just typed in a new hub url, return id if so */
 {
 char *url = cartOptionalString(cart, hgHubDataText);
@@ -540,8 +546,7 @@ char *url = cartOptionalString(cart, hgHubDataText);
 if (url != NULL)
     {
     trimSpaces(url);
-    getAndSetHubStatus(database, cart, url, TRUE);
-    cartRemove(cart, hgHubDataText);
+    getAndSetHubStatus( cart, url, TRUE);
     }
 }
 
@@ -647,10 +652,6 @@ struct trackHub *trackHub = hub->trackHub;
 
 if (trackHub != NULL)
     {
-    char hubName[64];
-    safef(hubName, sizeof(hubName), "hub_%d", hub->id);
-    trackHub->name = cloneString(hubName);
-
     struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
     if (hubGenome != NULL)
 	{
@@ -664,4 +665,23 @@ if (trackHub != NULL)
 	}
     }
 return tdbList;
+}
+
+static struct hubConnectStatus *globalHubList;
+
+struct hubConnectStatus *hubConnectGetHubs()
+/* return the static global to the track data hubs */
+{
+return globalHubList;
+}
+
+struct hubConnectStatus * hubConnectLoadHubs(struct cart *cart)
+/* load the track data hubs.  Set a static global to remember them */
+{
+hubCheckForNew( cart);
+cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
+globalHubList = hubList;
+
+return hubList;
 }
