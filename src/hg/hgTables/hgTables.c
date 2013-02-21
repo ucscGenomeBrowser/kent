@@ -748,8 +748,7 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(db);
 struct hTableInfo *hti = maybeGetHti(db, table, conn);
-if (!trackHubDatabase(database))
-    hFreeConn(&conn);
+hFreeConn(&conn);
 return hti;
 }
 
@@ -1464,8 +1463,7 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     if (!trackHubDatabase(database))
 	conn = hAllocConn(db);
     fieldList = bigBedGetFields(table, conn);
-    if (!trackHubDatabase(database))
-	hFreeConn(&conn);
+    hFreeConn(&conn);
     }
 else if (isBamTable(table))
     fieldList = bamGetFields(table);

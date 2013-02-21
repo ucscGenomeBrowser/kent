@@ -186,8 +186,7 @@ for (in = inList; in != NULL; in = in->next)
 	    }
 	}
     joinerPairFreeList(&jpList);
-    if (!trackHubDatabase(database))
-	hFreeConn(&conn);
+    hFreeConn(&conn);
     }
 slSort(&outList, dbTableCmp);
 
@@ -343,8 +342,7 @@ else
 showTableFieldsOnList(db, rootTable, asObj, fieldList, showItemRgb, withGetButton);
 
 freez(&table);
-if (!trackHubDatabase(database))
-    hFreeConn(&conn);
+hFreeConn(&conn);
 }
 
 static void showBedTableFields(char *db, char *table, int fieldCount, boolean withGetButton)
