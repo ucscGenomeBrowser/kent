@@ -131,7 +131,7 @@ char *trackHubGenomeNameToDb(char *genome);
 struct dbDb *trackHubGetDbDbs();
 /* Get a list of dbDb structures for all the tracks in this clade/hub. */
 
-struct slPair *trackHubGetHubLabels();
+struct slPair *trackHubGetCladeLabels();
 /* Get a list of labels describing the loaded assembly data hubs. */
 
 char *trackHubAssemblyClade(char *genome);

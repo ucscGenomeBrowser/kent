@@ -508,7 +508,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 
-struct slPair *names = trackHubGetHubLabels();
+struct slPair *names = trackHubGetCladeLabels();
 
 for(; names; names = names->next)
     {
