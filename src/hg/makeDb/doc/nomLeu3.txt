@@ -1,0 +1,545 @@
+# for emacs: -*- mode: sh; -*-
+
+#       DATE:	29-Jun-2011
+#       ORGANISM:	Nomascus leucogenys
+#       TAXID:	61853
+#       ASSEMBLY LONG NAME:	Nleu1.1
+#       ASSEMBLY SHORT NAME:	Nleu1.1
+#       ASSEMBLY SUBMITTER:	Gibbon Genome Sequencing Consortium
+#       ASSEMBLY TYPE:	Haploid
+#       NUMBER OF ASSEMBLY-UNITS:	2
+#       ASSEMBLY ACCESSION:	GCA_000146795.2
+#       ##Below is a 2 column list with assembly-unit id and name.
+#       ##The Primary Assembly unit is listed first.
+#       GCA_000146805.1	Primary Assembly
+#       GCA_000231795.1	non-nuclear
+
+#       FTP-RELEASE DATE: 28-Oct-2011
+
+#       http://www.ncbi.nlm.nih.gov/genome/480
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/313108/
+#       http://www.ncbi.nlm.nih.gov/bioproject/13975
+#       chrMt scaffolds included in the download directory
+
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ADFV01
+#       Genome Coverage : 5.6x in Q20 bases
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=61853
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.1/
+
+##########################################################################
+# Download sequence (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3
+    cd /hive/data/genomes/nomLeu3
+    mkdir genbank
+    cd genbank
+    time rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.1/ ./
+    #   real    real    22m54.139s
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+        non-nuclear/unlocalized_scaffolds/FASTA/chrMT.unlocalized.scaf.fa.gz
+    #   2936052603 bases (179443556 N's 2756609047 real 2756609047 upper 0
+    #   lower) in 17976 sequences in 2 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (gi|350542783|gb|ADFV01197901.1|)
+    #   max 74231199 (gi|306404713|gb|GL397261.1|) median 4849
+
+##########################################################################
+# fixup names for UCSC standards (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/ucsc
+    cd /hive/data/genomes/nomLeu3/ucsc
+
+    ########################  Unplaced scaffolds
+    # verify we don't have any .acc numbers different from .1
+    zcat \
+    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| cut -f1 | egrep "^GL|^ADFV" \
+	| sed -e 's/^GL[0-9][0-9]*//; s/^ADFV[0-9][0-9]*//' | sort | uniq -c
+    #   377832 .1
+
+    # this is like the unplaced.pl script in other assemblies except it
+    #	does not add chrUn_ to the names since they are all just scaffolds
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, "|gzip -c > unplaced.agp.gz") or die "can not write to unplaced.agp.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, "|gzip -c > unplaced.fa.gz") or die "can not write to unplaced.fa.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\|.*//;
+        $line =~ s/\.1//;    
+        printf UC ">$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+    time ./unplaced.pl
+    #   real    13m19.283s
+
+genbank/non-nuclear/unlocalized_scaffolds/FASTA
+    ########################  Unlocalized scaffolds
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+open (FH, "<../genbank/non-nuclear/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read non-nuclear/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "../genbank/non-nuclear/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "../genbank/non-nuclear/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fa.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, "|sed -e 's/chrMT/chrM/g;' | gzip -c >chr${chrN}_random.agp.gz") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            chomp $line;
+            my (@a) = split('\t', $line);
+            my $acc = $a[0];
+            my $accNo1 = $acc;
+            $accNo1 =~ s/.1$//;
+            die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC "%s", $ucscName;
+            for (my $i = 1; $i < scalar(@a); ++$i) {
+                printf UC "\t%s", $a[$i];
+            }
+            printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, "|sed -e 's/chrMT/chrM/g' | gzip -c >chr${chrN}_random.fa.gz") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            chomp $line;
+            my $acc = $line;
+            $acc =~ s/.*gb\|//;
+            $acc =~ s/\|.*//;
+            my $accNo1 = $acc;
+            $accNo1 =~ s/.1$//;
+            die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC ">$ucscName\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x unlocalized.pl
+    time ./unlocalized.pl
+    mv chrMT_random.fa.gz chrM_random.fa.gz
+    mv chrMT_random.agp.gz chrM_random.agp.gz
+    # verify nothing lost from original:
+    time faSize *.fa.gz
+    #   2936052603 bases (179443556 N's 2756609047 real 2756609047 upper 0
+    #   lower) in 17976 sequences in 2 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+
+    # make sure none of the names got to be over 31 characers long:
+    zcat *.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($0)}' \
+        | sort -rn | uniq -c | head
+    #       8 24
+    #   10004 12
+    #  367828 8
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2012-04-13 - Hiram)
+    cd /hive/data/genomes/nomLeu3
+    # mitoAcc - chrMt sequence is included in the download files
+    cat << '_EOF_' > nomLeu3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db nomLeu3
+clade mammal
+genomeCladePriority 13
+scientificName Nomascus leucogenys
+commonName Gibbon
+assemblyDate Jun. 2011
+assemblyLabel Gibbon Genome Sequencing Consortium Nleu1.1 (NCBI project 13975, GCA_000146795.2, WGS ADFV01)
+assemblyShortLabel GGSC Nleu1.1
+ncbiAssemblyName Nleu1.1
+ncbiAssemblyId 313108
+orderKey 329
+mitoAcc none
+fastaFiles /hive/data/genomes/nomLeu3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/nomLeu3/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir gibbon
+taxId 61853
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp nomLeu3.config.ra > agp.log 2>&1
+    #   real    2m4.625s
+    # verify OK:
+    tail -1 agp.log
+    #   *** All done!  (through the 'agp' step)
+
+    # finish it off
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+        -dbHost=hgwdev nomLeu3.config.ra > db.log 2>&1
+    #   real    21m42.920s
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/nomLeu3.unmasked.2bit /gbdb/nomLeu3/nomLeu3.2bit
+    #	browser should function now
+
+#########################################################################
+# running repeat masker (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/bed/repeatMasker
+    cd /hive/data/genomes/nomLeu3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek nomLeu3 > do.log 2>&1 &
+    #   real    1161m52.449s
+
+    cat faSize.rmsk.txt
+    #   2936052603 bases (179443556 N's 2756609047 real 1339535283 upper
+    #   1417073764 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %48.26 masked total, %51.41 masked real
+
+    egrep -i "versi|relea" do.log
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+# CC   RELEASE 20110920; 
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+
+    time featureBits -countGaps nomLeu3 rmsk
+    #   1418576934 bases of 2936052603 (48.316%) in intersection
+    #   real    0m40.362s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/bed/simpleRepeat
+    cd /hive/data/genomes/nomLeu3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	nomLeu3 > do.log 2>&1 &
+    #   real    19m41.095s
+    XXX 1 failed job, which is all on chrM, a known failure for TRF:
+    # ./TrfRun.csh /hive/data/genomes/nomLeu3/TrfPart/000/000.lst.bed
+    # make empty result exist:
+    touch /hive/data/genomes/nomLeu3/TrfPart/000/000.lst.bed
+# Completed: 74 of 75 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      16153s     269.21m     4.49h    0.19d  0.001 y
+# IO & Wait Time:                   198s       3.30m     0.06h    0.00d  0.000 y
+# Average job time:                 221s       3.68m     0.06h    0.00d
+# Longest finished job:            2158s      35.97m     0.60h    0.02d
+# Submission to last job:          2906s      48.43m     0.81h    0.03d
+
+    # continuing:
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	-continue=filter nomLeu3 > filter.log 2>&1 &
+    #   real    0m53.367s
+
+    cat fb.simpleRepeat 
+    #   122433828 bases of 2756609047 (4.441%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/nomLeu3
+    twoBitMask nomLeu3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed nomLeu3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa nomLeu3.2bit stdout | faSize stdin > faSize.nomLeu3.2bit.txt
+    cat faSize.nomLeu3.2bit.txt
+    #   2936052603 bases (179443556 N's 2756609047 real 1338486944 upper
+    #   1418122103 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %48.30 masked total, %51.44 masked real
+
+    rm /gbdb/nomLeu3/nomLeu3.2bit
+    ln -s `pwd`/nomLeu3.2bit /gbdb/nomLeu3/nomLeu3.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/bed/gap
+    cd /hive/data/genomes/nomLeu3/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../nomLeu3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m23.121s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits nomLeu3 -not gap -bed=notGap.bed
+    #   2756609047 bases of 2756609047 (100.000%) in intersection
+    #   real    0m25.158s
+
+    time featureBits nomLeu3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   0 bases of 2756609047 (0.000%) in intersection
+    #   real    15m56.963s
+
+    # no new gaps, nothing to do here
+
+    # are there non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" nomLeu3 | sort | uniq -c
+    #   179932 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/bed/windowMasker
+    cd /hive/data/genomes/nomLeu3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev nomLeu3 > do.log 2>&1 &
+    #   real    196m2.385s
+
+    # Masking statistics
+    twoBitToFa nomLeu3.wmsk.2bit stdout | faSize stdin
+    #   2936052603 bases (179443556 N's 2756609047 real 1711898047 upper
+    #   1044711000 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %35.58 masked total, %37.90 masked real
+
+    twoBitToFa nomLeu3.wmsk.sdust.2bit stdout | faSize stdin
+    #   2936052603 bases (179443556 N's 2756609047 real 1697032515 upper
+    #   1059576532 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %36.09 masked total, %38.44 masked real
+
+    hgLoadBed nomLeu3 windowmaskerSdust windowmasker.sdust.bed.gz
+    #   Read 15229701 elements of size 3 from windowmasker.sdust.bed.gz
+
+    featureBits -countGaps nomLeu3 windowmaskerSdust
+    #   1185785055 bases of 2808525991 (42.221%) in intersection
+
+    #	eliminate the gaps from the masking
+    time featureBits nomLeu3 -not gap -bed=notGap.bed
+    #   2756609047 bases of 2756609047 (100.000%) in intersection
+    #   real    0m22.205s
+
+    time nice -n +19 featureBits nomLeu3 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   1059576532 bases of 2756609047 (38.438%) in intersection
+    #   real    11m9.332s
+
+    #	reload track to get it clean
+    hgLoadBed nomLeu3 windowmaskerSdust cleanWMask.bed.gz
+    #   Read 15242903 elements of size 4 from cleanWMask.bed.gz
+    featureBits -countGaps nomLeu3 windowmaskerSdust
+    #   1059576532 bases of 2936052603 (36.088%) in intersection
+    #   real    1m38.313s
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../nomLeu3.unmasked.2bit stdin \
+	    -type=.bed nomLeu3.cleanWMSdust.2bit
+    twoBitToFa nomLeu3.cleanWMSdust.2bit stdout | faSize stdin \
+        > nomLeu3.cleanWMSdust.faSize.txt
+    cat nomLeu3.cleanWMSdust.faSize.txt
+    #   2936052603 bases (179443556 N's 2756609047 real 1697032515 upper
+    #   1059576532 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %36.09 masked total, %38.44 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps nomLeu3 rmsk windowmaskerSdust
+    #   837096446 bases of 2936052603 (28.511%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-04-13 - Hiram)
+    #	since rmsk masks so very little of the genome, use the clean WM mask
+    #	on the genome sequence
+#    cd /hive/data/genomes/nomLeu3
+#    twoBitMask -add bed/windowMasker/nomLeu3.cleanWMSdust.2bit \
+#	bed/simpleRepeat/trfMask.bed nomLeu3.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+#    twoBitToFa nomLeu3.2bit stdout | faSize stdin > faSize.nomLeu3.txt
+#    cat faSize.nomLeu3.txt
+    #   927696114 bases (111611440 N's 816084674 real 607935500 upper
+    #   208149174 lower) in 5678 sequences in 1 files
+    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+    #   %22.44 masked total, %25.51 masked real
+
+    #	create symlink to gbdb
+#    rm /gbdb/nomLeu3/nomLeu3.2bit
+#    ln -s `pwd`/nomLeu3.2bit /gbdb/nomLeu3/nomLeu3.2bit
+
+########################################################################
+# cpgIslands - (DONE - 2011-04-23 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/bed/cpgIslands
+    cd /hive/data/genomes/nomLeu3/bed/cpgIslands
+    time doCpgIslands.pl nomLeu3 > do.log 2>&1
+    #   Elapsed time: 61m44s
+
+    cat fb.nomLeu3.cpgIslandExt.txt
+    #   17731794 bases of 2756609047 (0.643%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2011-04-26 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/bed/genscan
+    cd /hive/data/genomes/nomLeu3/bed/genscan
+    time doGenscan.pl nomLeu3 > do.log 2>&1
+    #   Elapsed time: 66m40s
+
+    cat fb.nomLeu3.genscan.txt
+    #   49800461 bases of 2756609047 (1.807%) in intersection
+    cat fb.nomLeu3.genscanSubopt.txt
+    #   52057790 bases of 2756609047 (1.888%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-05-07 - Hiram)
+    # Use -repMatch=900, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2756609047 / 2897316137 \) \* 1024
+    #	( 2756609047 / 2897316137 ) * 1024 = 974.269818
+
+    # round up to 1000 (nomLeu1 was 900)
+
+    cd /hive/data/genomes/nomLeu3
+    time blat nomLeu3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/nomLeu3.11.ooc -repMatch=1000
+    #   Wrote 30203 overused 11-mers to jkStuff/nomLeu3.11.ooc
+    #   real    1m47.770s
+    #	nomLeu1 was: # Wrote 36558 overused 11-mers to jkStuff/nomLeu1.11.ooc
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" nomLeu3 | sort | uniq -c
+    #   179932 yes
+#    cd /hive/data/genomes/nomLeu3/jkStuff
+#    gapToLift nomLeu3 nomLeu3.nonBridged.lift -bedFile=nomLeu3.nonBridged.bed
+    # largest non-bridged contig:
+#    awk '{print $3-$2,$0}' nomLeu3.nonBridged.bed | sort -nr | head
+    #   123773608 chrX  95534   123869142       chrX.01
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-07 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Heterocephalus glaber	45	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add nomLeu3 just after ce2
+# nomLeu3 (Gibbon)
+nomLeu3.serverGenome = /hive/data/genomes/nomLeu3/nomLeu3.2bit
+nomLeu3.clusterGenome = /hive/data/genomes/nomLeu3/nomLeu3.2bit
+nomLeu3.ooc = /hive/data/genomes/nomLeu3/jkStuff/nomLeu3.11.ooc
+nomLeu3.lift = no
+nomLeu3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+nomLeu3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+nomLeu3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+nomLeu3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+nomLeu3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+nomLeu3.refseq.mrna.native.load = no
+nomLeu3.refseq.mrna.xeno.load = yes
+nomLeu3.genbank.mrna.native.load = no
+nomLeu3.genbank.mrna.xeno.load = yes
+nomLeu3.genbank.est.native.load = no
+nomLeu3.downloadDir = nomLeu3
+nomLeu3.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding nomLeu3 Gibbon" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S nomLeu3           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial nomLeu3 &
+    #	 var/build/logs/2012.05.07-10:21:12.nomLeu3.initalign.log
+    #   real    2135m50.446s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad nomLeu3 &
+    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
+    #   real    80m50.729s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add nomLeu3 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added nomLeu3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="GL397298:23130040-23137416" where name="nomLeu3";' \
+	hgcentraltest
+
+############################################################################
+# pushQ entry (DONE - 2012-07-24 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/pushQ
+    cd /hive/data/genomes/nomLeu3/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl nomLeu3 2> stderr.txt | grep -v transMap > nomLeu3.sql
+    #   real    3m52.913s
+
+    scp -p nomLeu3.sql hgwbeta:/tmp
+    ssh hgwbeta "hgsql qapushq < /tmp/nomLeu3.sql"
+
+############################################################################
