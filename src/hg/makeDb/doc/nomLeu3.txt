@@ -1,23 +1,22 @@
 # for emacs: -*- mode: sh; -*-
 
-#       DATE:	29-Jun-2011
+#       DATE:	20-Feb-2013
 #       ORGANISM:	Nomascus leucogenys
 #       TAXID:	61853
-#       ASSEMBLY LONG NAME:	Nleu1.1
-#       ASSEMBLY SHORT NAME:	Nleu1.1
+#       ASSEMBLY LONG NAME:	Nleu_3.0
+#       ASSEMBLY SHORT NAME:	Nleu_3.0
 #       ASSEMBLY SUBMITTER:	Gibbon Genome Sequencing Consortium
 #       ASSEMBLY TYPE:	Haploid
 #       NUMBER OF ASSEMBLY-UNITS:	2
-#       ASSEMBLY ACCESSION:	GCA_000146795.2
-#       ##Below is a 2 column list with assembly-unit id and name.
-#       ##The Primary Assembly unit is listed first.
-#       GCA_000146805.1	Primary Assembly
-#       GCA_000231795.1	non-nuclear
-
-#       FTP-RELEASE DATE: 28-Oct-2011
+#	ASSEMBLY ACCESSION:	GCA_000146795.3
+#	##Below is a 2 column list with assembly-unit id and name.
+#	##The Primary Assembly unit is listed first.
+#	GCA_000146805.2	Primary Assembly
+#	GCA_000231795.1	non-nuclear
+#       FTP-RELEASE DATE: 28-Dec-2012
 
 #       http://www.ncbi.nlm.nih.gov/genome/480
-#       http://www.ncbi.nlm.nih.gov/genome/assembly/313108/
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/GCF_000146795.2
 #       http://www.ncbi.nlm.nih.gov/bioproject/13975
 #       chrMt scaffolds included in the download directory
 
@@ -26,26 +25,26 @@
 
 #       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=61853
 
-# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.1/
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu_3.0/
 
 ##########################################################################
-# Download sequence (DONE - 2012-04-13 - Hiram)
+# Download sequence (DONE - 2012-04-13 - Pauline)
     mkdir /hive/data/genomes/nomLeu3
     cd /hive/data/genomes/nomLeu3
     mkdir genbank
     cd genbank
     time rsync -a -P \
-rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.1/ ./
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu_3.0/ ./
     #   real    real    22m54.139s
 
     # verify the size of the sequence here:
     faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
         non-nuclear/unlocalized_scaffolds/FASTA/chrMT.unlocalized.scaf.fa.gz
-    #   2936052603 bases (179443556 N's 2756609047 real 2756609047 upper 0
-    #   lower) in 17976 sequences in 2 files
-    #   Total size: mean 163331.8 sd 2015356.2
+    #   114532628 bases (13698051 N's 100834577 real 100834577 upper 0 
+    #   lower) in 15575 sequences in 2 files
+    #   Total size: mean 7353.6 sd 41713.7
     #   min 782 (gi|350542783|gb|ADFV01197901.1|)
-    #   max 74231199 (gi|306404713|gb|GL397261.1|) median 4849
+    #   max 2866069 (gi|306404542|gb|GL397432.1|) median 4542
 
 ##########################################################################
 # fixup names for UCSC standards (DONE - 2012-04-13 - Hiram)
