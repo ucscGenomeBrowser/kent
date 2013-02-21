@@ -75,7 +75,7 @@ struct trackHubGenome *genomes = thub->genomeList;
 struct dyString *dy = newDyString(100);
 
 for(; genomes; genomes = genomes->next)
-    dyStringPrintf(dy,"%s,", trackHubRemoveHubName(genomes->name));
+    dyStringPrintf(dy,"%s,", trackHubSkipHubName(genomes->name));
 ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
 }
 

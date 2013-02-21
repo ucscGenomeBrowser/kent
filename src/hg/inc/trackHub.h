@@ -144,8 +144,8 @@ void trackHubFixName(char *name);
 struct grp *trackHubLoadGroups(char *database);
 /* load the grp structures for this track hub database */
 
-char *trackHubRemoveHubName(char *name);
-/* remove the hub_#_ prefix from a hub name */
+char *trackHubSkipHubName(char *name);
+/* skip the hub_#_ prefix in a hub name */
 
 struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 /* return a dbDb structure for just this database */

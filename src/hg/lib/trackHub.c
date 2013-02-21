@@ -739,8 +739,8 @@ safef(namePrefix, sizeof(namePrefix), "%s_", hubName);
 trackDbListAddNamePrefix(tdbList, namePrefix);
 }
 
-char *trackHubRemoveHubName(char *name)
-/* remove the hub_#_ prefix from a hub name */
+char *trackHubSkipHubName(char *name)
+/* skip the hub_#_ prefix in a hub name */
 {
 if ((name == NULL) || !startsWith("hub_", name))
     return name;

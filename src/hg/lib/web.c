@@ -548,7 +548,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 	(!doCheck || hDbExists(cur->name)))
         {
         hashAdd(hash, cur->genome, cur);
-        orgList[numGenomes] = trackHubRemoveHubName(cur->genome);
+        orgList[numGenomes] = trackHubSkipHubName(cur->genome);
         values[numGenomes] = cur->genome;
         numGenomes++;
 	if (numGenomes >= ArraySize(orgList))
