@@ -116,6 +116,20 @@ wgo->vLine = vLineViaFloat;
 return wgo;
 }
 
+static void reverseLineOfColors(Color *line, int length)
+/* Reverse order of colors in line. */
+{
+long halfLen = (length>>1);
+Color *end = line+length;
+char c;
+while (--halfLen >= 0)
+    {
+    c = *line;
+    *line++ = *--end;
+    *end = c;
+    }
+}
+
 void floatPicIntoHvg(struct floatPic *pic, int xOff, int yOff, struct hvGfx *hvg)
 /* Copy float pic into hvg at given offset. */
 {
@@ -136,6 +150,8 @@ for (y=0; y<height; ++y)
 	*cp++ = MAKECOLOR_32(red, green, blue);
 	fp += 3;
 	}
+    if (hvg->rc)
+        reverseLineOfColors(lineBuf, width);
     hvGfxVerticalSmear(hvg, xOff, y + yOff, width, 1, lineBuf, TRUE);
     }
 freez(&lineBuf);
