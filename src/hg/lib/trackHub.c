@@ -198,13 +198,13 @@ struct trackHubGenome *genome = hel->val;
 struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
 
 int num = slCount(chromList);
-slListFree(&chromList);
+slFreeList(&chromList);
 return  num;
 }
 
 struct slName *trackHubAllChromNames(char *database)
 /* Return a list of all the chrom names in this assembly hub database. */
-/* Free with slListFree. */
+/* Free with slFreeList. */
 {
 struct hashEl *hel = hashLookup(hubAssemblyHash, database);
 if (hel == NULL)
@@ -227,7 +227,7 @@ struct trackHubGenome *genome = hel->val;
 struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
 
 char *defaultName = cloneString( chromList->name);
-slListFree(&chromList);
+slFreeList(&chromList);
 
 return defaultName;
 }
@@ -274,7 +274,7 @@ for(; chromList; chromList = chromList->next)
     ci->size = twoBitSeqSize(genome->tbf, chromList->name);
     slAddHead(&ciList, ci);
     }
-slListFree(&chromList);
+slFreeList(&chromList);
 return ciList;
 }
 
