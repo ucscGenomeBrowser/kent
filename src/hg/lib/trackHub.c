@@ -101,6 +101,8 @@ return TRUE;
 char *trackHubAssemblyField(char *database, char *field)
 /* Get data field from a assembly data hub. */
 {
+if (hubAssemblyHash == NULL)
+    errAbort("requesting hub assembly field with no hubs loaded");
 struct hashEl *hel = hashLookup(hubAssemblyHash, database);
 if (hel == NULL)
     return NULL;
@@ -129,6 +131,8 @@ return db;
 struct dbDb *trackHubDbDbFromAssemblyDb(char *database)
 /* Return a dbDb structure for just this database. */
 {
+if (hubAssemblyHash == NULL)
+    errAbort("requesting hub assembly dbDb with no hubs loaded");
 struct hashEl *hel = hashLookup(hubAssemblyHash, database);
 if (hel == NULL)
     return NULL;
