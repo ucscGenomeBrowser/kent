@@ -3174,8 +3174,8 @@ if (strstrNoCase(organism, "zoo"))
 else
     webNewSection("%s Genome Browser &ndash; %s assembly"
 		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
-		  trackHubRemoveHubName(organism), 
-		  trackHubRemoveHubName(database),
+		  trackHubSkipHubName(organism), 
+		  trackHubSkipHubName(database),
 		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 if (htmlPath != NULL && fileExists(htmlPath))
@@ -3198,7 +3198,7 @@ if (htmlStrLength > 0)
     }
 else
     {
-    printf("<H2>%s</H2>\n", trackHubRemoveHubName(organism));
+    printf("<H2>%s</H2>\n", trackHubSkipHubName(organism));
     if (htmlPath == NULL || htmlPath[0] == 0)
 	printf("\n<!-- No dbDb.htmlPath for %s -->\n", database);
     else

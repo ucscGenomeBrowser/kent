@@ -2274,6 +2274,10 @@ char *hDbDbOptionalField(char *database, char *field)
 {
 if (trackHubDatabase(database))
     {
+    // In dbDb the genome field is the name of the organism, but
+    // genome is the name of the assembly in track hubs.
+    // Since we're called from dbDb aware code, we map a request
+    // for the field "genome" to "organism"
     if (sameString(field, "genome"))
 	field = "organism";
     return trackHubAssemblyField(database, field);

@@ -271,7 +271,7 @@ else
 	else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
-    cartWebStart(theCart, db, "%s %s%s Gateway\n", trackHubRemoveHubName(organism), buffer, hBrowserName());
+    cartWebStart(theCart, db, "%s %s%s Gateway\n", trackHubSkipHubName(organism), buffer, hBrowserName());
     htmlDoEscape();
     }
 hgGateway();

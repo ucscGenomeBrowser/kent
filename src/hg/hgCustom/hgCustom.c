@@ -216,7 +216,7 @@ if (!isUpdateForm)
     if (! stringIn(database, hFreezeFromDb(database)))
 	{
 	puts("&nbsp;&nbsp;&nbsp;");
-	printf("[%s]", trackHubRemoveHubName(database));
+	printf("[%s]", trackHubSkipHubName(database));
 	}
     puts("</TD></TR></TABLE>\n");
     }

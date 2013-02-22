@@ -1764,12 +1764,12 @@ if (baseShowPos||baseShowAsm)
     if (freezeName == NULL)
 	freezeName = "Unknown";
     if (baseShowPos&&baseShowAsm)
-	safef(txt,sizeof(txt),"%s %s   %s (%s bp)",trackHubRemoveHubName(organism),
+	safef(txt,sizeof(txt),"%s %s   %s (%s bp)",trackHubSkipHubName(organism),
 		freezeName, addCommasToPos(database, position), numBuf);
     else if (baseShowPos)
 	safef(txt,sizeof(txt),"%s (%s bp)",addCommasToPos(database, position),numBuf);
     else
-	safef(txt,sizeof(txt),"%s %s",trackHubRemoveHubName(organism),freezeName);
+	safef(txt,sizeof(txt),"%s %s",trackHubSkipHubName(organism),freezeName);
     hvGfxTextCentered(hvg, insideX, y, insideWidth, showPosHeight,MG_BLACK, font, txt);
     *rulerClickHeight += showPosHeight;
     freez(&freezeName);
@@ -1797,7 +1797,7 @@ if (baseShowScaleBar)
         int fHeight = vgGetFontPixelHeight(hvg->vg, font);
         hvGfxText(hvg, scaleBarEndX + 10,
                   y + (scaleBarTotalHeight - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0),
-                  MG_BLACK, font, trackHubRemoveHubName(database));
+                  MG_BLACK, font, trackHubSkipHubName(database));
         }
     y += scaleBarTotalHeight;
     }
@@ -4531,7 +4531,7 @@ if (!hideControls)
 			organization, browserName, organism, freezeName);
 	    else
 		hPrintf("%s %s on %s %s Assembly (%s)",
-			organization, browserName, trackHubRemoveHubName(organism), freezeName, trackHubRemoveHubName(database));
+			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
 	    }
         }
     hPrintf("</B></span><BR>\n");
@@ -5483,7 +5483,7 @@ if (stringIn(database, freeze))
 		   hOrganism(database), freeze);
 else
     dyStringPrintf(title, "%s %s (%s) Browser Sequences",
-		   trackHubRemoveHubName(hOrganism(database)), freeze, trackHubRemoveHubName(database));
+		   trackHubSkipHubName(hOrganism(database)), freeze, trackHubSkipHubName(database));
 webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, FALSE, FALSE);
 printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
 cartSaveSession(cart);
