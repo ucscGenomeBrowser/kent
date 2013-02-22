@@ -3,7 +3,7 @@ include trackDb.chainNet.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
-longLabel Chromosome Bands Based On ISCN Lengths (for Ideogram)
+longLabel Chromosome Bands Based on Microscopy (for Ideogram)
 group map
 priority .1
 visibility dense
@@ -12,7 +12,7 @@ type bed 4 +
 
 track cytoBand
 shortLabel Chromosome Band
-longLabel Chromosome Bands Based On ISCN Lengths
+longLabel Chromosome Bands Based On Microscopy
 group map
 priority 1
 visibility hide
