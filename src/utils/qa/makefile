@@ -101,6 +101,7 @@ install:
 	cp -p --remove-destination pbTables                ${SCRIPTS}
 	cp -p --remove-destination knownGene.csh           ${SCRIPTS}
 	cp -p --remove-destination linkCheckExclude        ${SCRIPTS}
+	cp -p --remove-destination makeCytoBandIdeo.csh    ${SCRIPTS}
 	cp -p --remove-destination makeFilledBlockBed.csh  ${SCRIPTS}
 	cp -p --remove-destination makeTouchCommands.csh   ${SCRIPTS}
 	cp -p --remove-destination makeUniProtFile.csh     ${SCRIPTS}
