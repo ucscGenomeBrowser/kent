@@ -2017,7 +2017,7 @@ identifier knownXref
 "Swissprot IDs"
     $kgDb.kgXref.spID  dupeOk
     proteome.spXref2.accession
-    proteome.hgnc.uniProt
+    proteome.hgncXref.uniProt
 
 identifier tRNAName
 "tRNA track name"
