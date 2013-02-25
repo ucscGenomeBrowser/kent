@@ -484,7 +484,7 @@ noInherit on
     track pubsMarkerBand
     shortLabel Bands
     longLabel Cytogenetic bands in Publications
-    parent pubs off
+    parent pubs on
     visibility hide
     priority 3
     type bed 5
@@ -500,7 +500,7 @@ noInherit on
     track pubsMarkerGene
     shortLabel Genes
     longLabel Gene symbols in Publications
-    parent pubs off
+    parent pubs on
     priority 3
     visibility hide
     type bed 5
