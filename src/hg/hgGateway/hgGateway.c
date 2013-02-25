@@ -20,6 +20,7 @@
 #include "suggest.h"
 #include "search.h"
 #include "geoMirror.h"
+#include "trackHub.h"
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -35,7 +36,9 @@ char *position = cloneString(cartUsualString(cart, "position", defaultPosition))
 boolean gotClade = hGotClade();
 char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
 char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
-boolean supportsSuggest = assemblySupportsGeneSuggest(db);
+boolean supportsSuggest = FALSE;
+if (!trackHubDatabase(db))
+    supportsSuggest = assemblySupportsGeneSuggest(db);
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
@@ -268,7 +271,7 @@ else
 	else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
-    cartWebStart(theCart, db, "%s %s%s Gateway\n", organism, buffer, hBrowserName());
+    cartWebStart(theCart, db, "%s %s%s Gateway\n", trackHubSkipHubName(organism), buffer, hBrowserName());
     htmlDoEscape();
     }
 hgGateway();
@@ -341,6 +344,8 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+
+setUdcCacheDir();
 
 if(cgiIsOnWeb())
     checkForGeoMirrorRedirect();

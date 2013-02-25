@@ -3294,3 +3294,11 @@ searchTable ucscGenePfam
 searchMethod exact
 searchType bed
 
+track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Ideogram for Orientation
+group map
+priority .1
+visibility dense
+type bed 4 +
+

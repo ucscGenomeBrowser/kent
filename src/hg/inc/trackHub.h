@@ -18,6 +18,7 @@
 #ifndef TRACKHUB_H
 #define TRACKHUB_H
 
+
 struct trackHub 
 /* A track hub. */
     {
@@ -40,8 +41,16 @@ struct trackHubGenome
 /* A genome serviced within a track hub. */
     {
     struct trackHubGenome *next;
-    char *name;	/* Something like hg18 or mm9 - a UCSC assembly database name. */
+    char *name;	/* Something like hg18 or mm9, a UCSC assembly database name. */
     char *trackDbFile;	/* The base trackDb.ra file. */
+    struct hash *settingsHash;	/* Settings from hub.ra file. */
+    char *twoBitPath;  /* URL to twoBit.  If not null, this is an assmebly hub*/
+    struct twoBitFile *tbf;  /* open handle to two bit file */
+    char *groups;	     /* URL to group.txt file */
+    char *defaultPos;        /* default position */
+    char *organism;          /* organism name, like Human */
+    char *description;       /* description, also called freeze name */
+    struct trackHub *trackHub; /* associated track hub */
     };
 
 void trackHubClose(struct trackHub **pHub);
@@ -82,7 +91,7 @@ void trackHubGenomeFree(struct trackHubGenome **pGenome);
 /* Free up genome info. */
 
 void trackHubGenomeFreeList(struct trackHubGenome **pList);
-/* Free a list of dynamically allocated trackHubGenome's */
+/* Free a list of dynamically allocated trackHubGenome's. */
 
 int trackHubCheck(char *hubUrl, struct dyString *errors, boolean checkTracks);
 /* trackHubCheck - Check a track data hub for integrity. Put errors in dyString.
@@ -90,6 +99,55 @@ int trackHubCheck(char *hubUrl, struct dyString *errors, boolean checkTracks);
  *      return 0 if hub has no errors, 1 otherwise */
 
 void trackHubPolishTrackNames(struct trackHub *hub, struct trackDb *tdbList);
-/* remove all the special characters from trackHub track names */
+/* Remove all the special characters from trackHub track names. */
+
+char *trackHubCladeToGenome(char *clade);
+/* Given a track hub clade(hub name) return the default genome. */
+
+boolean trackHubDatabase(char *database);
+/* Is this an assembly from an Assembly Data hub? */
+
+char *trackHubDefaultChrom(char *database);
+/* Return the default chromosome for this track hub assembly. */
+
+char *trackHubAssemblyField(char *database, char *field);
+/* Get data field from a assembly data hub. */
+
+int trackHubChromCount(char *database);
+/* Return number of chromosomes in a assembly data hub. */
+
+struct slName *trackHubAllChromNames(char *database);
+/* Return a list of all the chrom names in this assembly hub database. */
+
+struct chromInfo *trackHubAllChromInfo(char *database);
+/* Return a chromInfo structure for all the chroms in this database. */
+
+struct chromInfo *trackHubChromInfo(char *database, char *chrom);
+/* Return a chromInfo structure for just this chrom in this database. */
+
+char *trackHubGenomeNameToDb(char *genome);
+/* Return assembly name given a genome name if one exists, otherwise NULL. */
+
+struct dbDb *trackHubGetDbDbs();
+/* Get a list of dbDb structures for all the tracks in this clade/hub. */
+
+struct slPair *trackHubGetCladeLabels();
+/* Get a list of labels describing the loaded assembly data hubs. */
+
+char *trackHubAssemblyClade(char *genome);
+/* Return the clade/hub_name that contains this genome. */
+
+void trackHubFixName(char *name);
+/* Change all characters other than alphanumeric, dash, and underbar
+ * to underbar. */
+
+struct grp *trackHubLoadGroups(char *database);
+/* Load the grp structures for this track hub database. */
+
+char *trackHubSkipHubName(char *name);
+/* Skip the hub_#_ prefix in a hub name. */
+
+struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
+/* Return a dbDb structure for just this database. */
 #endif /* TRACKHUB_H */
 

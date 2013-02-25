@@ -8,8 +8,100 @@
 #include "obscure.h"
 #include "bPlusTree.h"
 #include "twoBit.h"
+#include "udc.h"
 #include <limits.h>
 
+/* following are the wrap functions for the UDC and stdio functoins
+ * that read twoBit files.   All of these are to get around the C compiler
+ * complaining about the automatic cast of a void * to FILE * or 
+ * struct udcFile *.
+ */
+/* first the UDC wrappers */
+static void udcSeekCurWrap(void *file, bits64 offset)
+{
+udcSeekCur((struct udcFile *)file, offset);
+}
+
+static void udcSeekWrap(void *file, bits64 offset)
+{
+udcSeek((struct udcFile *)file, offset);
+}
+
+static void udcMustReadWrap(void *file, void *buf, size_t size)
+{
+udcMustRead((struct udcFile *)file, buf, size);
+}
+
+static inline void udcFileCloseWrap(void *pFile)
+{
+udcFileClose((struct udcFile **)pFile);
+}
+
+inline bits32 udcReadBits32Wrap(void *f, boolean isSwapped)
+{
+return udcReadBits32((struct udcFile *)f, isSwapped);
+}
+
+inline boolean udcFastReadStringWrap(void *f, char buf[256])
+{
+return udcFastReadString((struct udcFile *)f, buf);
+}
+
+/* now the stdio wrappers */
+static void seekCurWrap(void *file, bits64 offset)
+{
+fseek((FILE *)file, offset, SEEK_CUR);
+}
+
+static void seekWrap(void *file, bits64 offset)
+{
+fseek((FILE *)file, offset, SEEK_SET);
+}
+
+static void mustReadWrap(void *file, void *buf, size_t size)
+{
+mustRead((FILE *)file, buf, size);
+}
+
+inline void fileCloseWrap(void *pFile)
+{
+carefulClose((FILE **)pFile);
+}
+
+inline bits32 readBits32Wrap(void *f, boolean isSwapped)
+{
+return readBits32((FILE *)f, isSwapped);
+}
+
+inline boolean fastReadStringWrap(void *f, char buf[256])
+{
+return fastReadString((FILE *)f, buf);
+}
+
+static void setFileFuncs( struct twoBitFile *tbf, boolean useUdc)
+/* choose the proper function pointers depending on whether
+ * this open twoBit is using stdio or UDC
+ */
+{
+if (useUdc)
+    {
+    tbf->ourSeekCur = udcSeekCurWrap;
+    tbf->ourSeek = udcSeekWrap;
+    tbf->ourReadBits32 = udcReadBits32Wrap;
+    tbf->ourFastReadString = udcFastReadStringWrap;
+    tbf->ourClose = udcFileCloseWrap;
+    tbf->ourMustRead = udcMustReadWrap;
+    }
+else
+    {
+    tbf->ourSeekCur = seekCurWrap;
+    tbf->ourSeek = seekWrap;
+    tbf->ourReadBits32 = readBits32Wrap;
+    tbf->ourFastReadString = fastReadStringWrap;
+    tbf->ourClose = fileCloseWrap;
+    tbf->ourMustRead = mustReadWrap;
+    }
+}
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -267,7 +359,7 @@ struct twoBitFile *tbf = *pTbf;
 if (tbf != NULL)
     {
     freez(&tbf->fileName);
-    carefulClose(&tbf->f);
+    (*tbf->ourClose)(&tbf->f);
     hashFree(&tbf->hash);
     /* The indexList is allocated out of the hash's memory pool. */
     bptFileClose(&tbf->bpt);
@@ -275,14 +367,14 @@ if (tbf != NULL)
     }
 }
 
-boolean twoBitSigRead(FILE *f, boolean *isSwapped)
+boolean twoBitSigRead(struct twoBitFile *tbf, boolean *isSwapped)
 /* read twoBit signature, return FALSE if not good 
  * set isSwapped to TRUE if twoBit file is byte swapped */
 {
 bits32 sig;
 
 *isSwapped = FALSE;
-mustReadOne(f, sig);
+(*tbf->ourMustRead)(tbf->f, &sig, sizeof(sig));
 if (sig == twoBitSwapSig)
     *isSwapped = TRUE;
 else if (sig != twoBitSig)
@@ -291,55 +383,73 @@ else if (sig != twoBitSig)
 return TRUE;
 }
 
-static struct twoBitFile *twoBitOpenReadHeader(char *fileName)
+static struct twoBitFile *getTbfAndOpen(char *fileName, boolean useUdc)
+{
+struct twoBitFile *tbf;
+
+AllocVar(tbf);
+setFileFuncs(tbf, useUdc);
+
+if (useUdc)
+    tbf->f = udcFileOpen(fileName, NULL);
+else
+    tbf->f = mustOpen(fileName, "rb");
+
+return tbf;
+}
+
+static struct twoBitFile *twoBitOpenReadHeader(char *fileName, boolean useUdc)
 /* Open file, read in header but not index.  
  * Squawk and die if there is a problem. */
 {
 struct twoBitFile *tbf;
 boolean isSwapped = FALSE;
-FILE *f = mustOpen(fileName, "rb");
+
+tbf = getTbfAndOpen(fileName, useUdc);
 
 /* Allocate header verify signature, and read in
  * the constant-length bits. */
-AllocVar(tbf);
 
-if (!twoBitSigRead(f, &isSwapped))
+if (!twoBitSigRead(tbf, &isSwapped))
     errAbort("%s doesn't have a valid twoBitSig", fileName);
 
 tbf->isSwapped = isSwapped;
 tbf->fileName = cloneString(fileName);
-tbf->f = f;
-tbf->version = readBits32(f, isSwapped);
+tbf->version = (*tbf->ourReadBits32)(tbf->f, isSwapped);
 if (tbf->version != 0)
     {
     errAbort("Can only handle version 0 of this file. This is version %d",
     	(int)tbf->version);
     }
-tbf->seqCount = readBits32(f, isSwapped);
-tbf->reserved = readBits32(f, isSwapped);
+tbf->seqCount = (*tbf->ourReadBits32)(tbf->f, isSwapped);
+tbf->reserved = (*tbf->ourReadBits32)(tbf->f, isSwapped);
 return tbf;
 }
+
 
 struct twoBitFile *twoBitOpen(char *fileName)
 /* Open file, read in header and index.  
  * Squawk and die if there is a problem. */
 {
-struct twoBitFile *tbf = twoBitOpenReadHeader(fileName);
+boolean useUdc = FALSE;
+if (hasProtocol(fileName))
+    useUdc = TRUE;
+struct twoBitFile *tbf = twoBitOpenReadHeader(fileName, useUdc);
 struct twoBitIndex *index;
 boolean isSwapped = tbf->isSwapped;
 int i;
 struct hash *hash;
-FILE *f = tbf->f;
+void *f = tbf->f;
 
 /* Read in index. */
 hash = tbf->hash = hashNew(digitsBaseTwo(tbf->seqCount));
 for (i=0; i<tbf->seqCount; ++i)
     {
     char name[256];
-    if (!fastReadString(f, name))
+    if (!(*tbf->ourFastReadString)(f, name))
         errAbort("%s is truncated", fileName);
     lmAllocVar(hash->lm, index);
-    index->offset = readBits32(f, isSwapped);
+    index->offset = (*tbf->ourReadBits32)(f, isSwapped);
     hashAddSaveName(hash, name, index, &index->name);
     slAddHead(&tbf->indexList, index);
     }
@@ -352,7 +462,7 @@ struct twoBitFile *twoBitOpenExternalBptIndex(char *twoBitName, char *bptName)
  * bpt index.   Beware if you use this the indexList field will be NULL
  * as will the hash. */
 {
-struct twoBitFile *tbf = twoBitOpenReadHeader(twoBitName);
+struct twoBitFile *tbf = twoBitOpenReadHeader(twoBitName, FALSE);
 tbf->bpt = bptFileOpen(bptName);
 if (tbf->seqCount != tbf->bpt->itemCount)
     errAbort("%s and %s don't have same number of sequences!", twoBitName, bptName);
@@ -395,23 +505,23 @@ if (tbf->bpt)
     bits32 offset;
     if (!bptFileFind(tbf->bpt, name, strlen(name), &offset, sizeof(offset)))
 	 errAbort("%s is not in %s", name, tbf->bpt->fileName);
-    fseek(tbf->f, offset, SEEK_SET);
+    (*tbf->ourSeek)(tbf->f, offset);
     }
 else
     {
     struct twoBitIndex *index = hashFindVal(tbf->hash, name);
     if (index == NULL)
 	 errAbort("%s is not in %s", name, tbf->fileName);
-    fseek(tbf->f, index->offset, SEEK_SET);
+    (*tbf->ourSeek)(tbf->f, index->offset);
     }
 }
 
-static void readBlockCoords(FILE *f, boolean isSwapped, bits32 *retBlockCount,
+static void readBlockCoords(struct twoBitFile *tbf, boolean isSwapped, bits32 *retBlockCount,
 			    bits32 **retBlockStarts, bits32 **retBlockSizes)
 /* Read in blockCount, starts and sizes from file. (Same structure used for
  * both blocks of N's and masked blocks.) */
 {
-bits32 blkCount = readBits32(f, isSwapped);
+bits32 blkCount = (*tbf->ourReadBits32)(tbf->f, isSwapped);
 *retBlockCount = blkCount;
 if (blkCount == 0)
     {
@@ -423,8 +533,8 @@ else
     bits32 *nStarts, *nSizes;
     AllocArray(nStarts, blkCount);
     AllocArray(nSizes, blkCount);
-    mustRead(f, nStarts, sizeof(nStarts[0]) * blkCount);
-    mustRead(f, nSizes, sizeof(nSizes[0]) * blkCount);
+    (*tbf->ourMustRead)(tbf->f, nStarts, sizeof(nStarts[0]) * blkCount);
+    (*tbf->ourMustRead)(tbf->f, nSizes, sizeof(nSizes[0]) * blkCount);
     if (isSwapped)
 	{
 	int i;
@@ -447,29 +557,29 @@ boolean isSwapped = tbf->isSwapped;
 struct twoBit *twoBit;
 AllocVar(twoBit);
 twoBit->name = cloneString(name);
-FILE *f = tbf->f;
+void *f = tbf->f;
 
 /* Find offset in index and seek to it */
 twoBitSeekTo(tbf, name);
 
 /* Read in seqSize. */
-twoBit->size = readBits32(f, isSwapped);
+twoBit->size = (*tbf->ourReadBits32)(f, isSwapped);
 
 /* Read in blocks of N. */
-readBlockCoords(f, isSwapped, &(twoBit->nBlockCount),
+readBlockCoords(tbf, isSwapped, &(twoBit->nBlockCount),
 		&(twoBit->nStarts), &(twoBit->nSizes));
 
 /* Read in masked blocks. */
-readBlockCoords(f, isSwapped, &(twoBit->maskBlockCount),
+readBlockCoords(tbf, isSwapped, &(twoBit->maskBlockCount),
 		&(twoBit->maskStarts), &(twoBit->maskSizes));
 
 /* Reserved word. */
-twoBit->reserved = readBits32(f, isSwapped);
+twoBit->reserved = (*tbf->ourReadBits32)(f, isSwapped);
 
 /* Read in data. */
 packByteCount = packedSize(twoBit->size);
 twoBit->data = needLargeMem(packByteCount);
-mustRead(f, twoBit->data, packByteCount);
+(*tbf->ourMustRead)(f, twoBit->data, packByteCount);
 
 return twoBit;
 }
@@ -491,7 +601,6 @@ twoBitClose(&tbf);
 slReverse(&twoBitList);
 return twoBitList;
 }
-
 
 void twoBitFree(struct twoBit **pTwoBit)
 /* Free up a two bit structure. */
@@ -535,7 +644,7 @@ bits32 nBlockCount, maskBlockCount;
 bits32 *nStarts = NULL, *nSizes = NULL;
 bits32 *maskStarts = NULL, *maskSizes = NULL;
 boolean isSwapped = tbf->isSwapped;
-FILE *f = tbf->f;
+void *f = tbf->f;
 int i;
 int packByteCount, packedStart, packedEnd, remainder, midStart, midEnd;
 int outSize;
@@ -547,7 +656,7 @@ dnaUtilOpen();
 twoBitSeekTo(tbf, name);
 
 /* Read in seqSize. */
-seqSize = readBits32(f, isSwapped);
+seqSize = (*tbf->ourReadBits32)(f, isSwapped);
 if (fragEnd == 0)
     fragEnd = seqSize;
 if (fragEnd > seqSize)
@@ -557,13 +666,13 @@ if (outSize < 1)
     errAbort("twoBitReadSeqFrag in %s start (%d) >= end (%d)", name, fragStart, fragEnd);
 
 /* Read in blocks of N. */
-readBlockCoords(f, isSwapped, &nBlockCount, &nStarts, &nSizes);
+readBlockCoords(tbf, isSwapped, &nBlockCount, &nStarts, &nSizes);
 
 /* Read in masked blocks. */
-readBlockCoords(f, isSwapped, &maskBlockCount, &maskStarts, &maskSizes);
+readBlockCoords(tbf, isSwapped, &maskBlockCount, &maskStarts, &maskSizes);
 
 /* Skip over reserved word. */
-readBits32(f, isSwapped);
+(*tbf->ourReadBits32)(f, isSwapped);
 
 /* Allocate dnaSeq, and fill in zero tag at end of sequence. */
 AllocVar(seq);
@@ -585,8 +694,8 @@ packedStart = (fragStart>>2);
 packedEnd = ((fragEnd+3)>>2);
 packByteCount = packedEnd - packedStart;
 packed = packedAlloc = needLargeMem(packByteCount);
-fseek(f, packedStart, SEEK_CUR);
-mustRead(f, packed, packByteCount);
+(*tbf->ourSeekCur)(f, packedStart);
+(*tbf->ourMustRead)(f, packed, packByteCount);
 
 /* Handle case where everything is in one packed byte */
 if (packByteCount == 1)
@@ -717,7 +826,7 @@ int twoBitSeqSize(struct twoBitFile *tbf, char *name)
 /* Return size of sequence in two bit file in bases. */
 {
 twoBitSeekTo(tbf, name);
-return readBits32(tbf->f, tbf->isSwapped);
+return (*tbf->ourReadBits32)(tbf->f, tbf->isSwapped);
 }
 
 long long twoBitTotalSize(struct twoBitFile *tbf)
@@ -727,8 +836,8 @@ struct twoBitIndex *index;
 long long totalSize = 0;
 for (index = tbf->indexList; index != NULL; index = index->next)
     {
-    fseek(tbf->f, index->offset, SEEK_SET);
-    totalSize += readBits32(tbf->f, tbf->isSwapped);
+    (*tbf->ourSeek)(tbf->f, index->offset);
+    totalSize += (*tbf->ourReadBits32)(tbf->f, tbf->isSwapped);
     }
 return totalSize;
 }
@@ -785,11 +894,14 @@ return list;
 boolean twoBitIsFile(char *fileName)
 /* Return TRUE if file is in .2bit format. */
 {
-FILE *f = mustOpen(fileName, "rb");
+boolean useUdc = FALSE;
+if (hasProtocol(fileName))
+    useUdc = TRUE;
+struct twoBitFile *tbf = getTbfAndOpen(fileName, useUdc);
 boolean isSwapped;
-boolean isTwoBit = twoBitSigRead(f, &isSwapped);
+boolean isTwoBit = twoBitSigRead(tbf, &isSwapped);
 
-fclose(f);
+(*tbf->ourClose)(&tbf->f);
 
 return isTwoBit;
 }
@@ -1018,10 +1130,10 @@ int nBlockCount;
 
 twoBitSeekTo(tbf, seqName);
 
-readBits32(tbf->f, tbf->isSwapped);
+(*tbf->ourReadBits32)(tbf->f, tbf->isSwapped);
 
 /* Read in blocks of N. */
-nBlockCount = readBits32(tbf->f, tbf->isSwapped);
+nBlockCount = (*tbf->ourReadBits32)(tbf->f, tbf->isSwapped);
 
 if (nBlockCount > 0)
     {
@@ -1030,8 +1142,8 @@ if (nBlockCount > 0)
 
     AllocArray(nStarts, nBlockCount);
     AllocArray(nSizes, nBlockCount);
-    mustRead(tbf->f, nStarts, sizeof(nStarts[0]) * nBlockCount);
-    mustRead(tbf->f, nSizes, sizeof(nSizes[0]) * nBlockCount);
+    (*tbf->ourMustRead)(tbf->f, nStarts, sizeof(nStarts[0]) * nBlockCount);
+    (*tbf->ourMustRead)(tbf->f, nSizes, sizeof(nSizes[0]) * nBlockCount);
     if (tbf->isSwapped)
 	{
 	for (i=0; i<nBlockCount; ++i)
@@ -1059,10 +1171,10 @@ int size;
 
 twoBitSeekTo(tbf, seqName);
 
-size = readBits32(tbf->f, tbf->isSwapped);
+size = (*tbf->ourReadBits32)(tbf->f, tbf->isSwapped);
 
 /* Read in blocks of N. */
-nBlockCount = readBits32(tbf->f, tbf->isSwapped);
+nBlockCount = (*tbf->ourReadBits32)(tbf->f, tbf->isSwapped);
 
 if (nBlockCount > 0)
     {
@@ -1072,8 +1184,8 @@ if (nBlockCount > 0)
 
     AllocArray(nStarts, nBlockCount);
     AllocArray(nSizes, nBlockCount);
-    mustRead(tbf->f, nStarts, sizeof(nStarts[0]) * nBlockCount);
-    mustRead(tbf->f, nSizes, sizeof(nSizes[0]) * nBlockCount);
+    (*tbf->ourMustRead)(tbf->f, nStarts, sizeof(nStarts[0]) * nBlockCount);
+    (*tbf->ourMustRead)(tbf->f, nSizes, sizeof(nSizes[0]) * nBlockCount);
     if (tbf->isSwapped)
 	{
 	for (i=0; i<nBlockCount; ++i)

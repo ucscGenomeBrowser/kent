@@ -1764,12 +1764,12 @@ if (baseShowPos||baseShowAsm)
     if (freezeName == NULL)
 	freezeName = "Unknown";
     if (baseShowPos&&baseShowAsm)
-	safef(txt,sizeof(txt),"%s %s   %s (%s bp)",organism,
+	safef(txt,sizeof(txt),"%s %s   %s (%s bp)",trackHubSkipHubName(organism),
 		freezeName, addCommasToPos(database, position), numBuf);
     else if (baseShowPos)
 	safef(txt,sizeof(txt),"%s (%s bp)",addCommasToPos(database, position),numBuf);
     else
-	safef(txt,sizeof(txt),"%s %s",organism,freezeName);
+	safef(txt,sizeof(txt),"%s %s",trackHubSkipHubName(organism),freezeName);
     hvGfxTextCentered(hvg, insideX, y, insideWidth, showPosHeight,MG_BLACK, font, txt);
     *rulerClickHeight += showPosHeight;
     freez(&freezeName);
@@ -1797,7 +1797,7 @@ if (baseShowScaleBar)
         int fHeight = vgGetFontPixelHeight(hvg->vg, font);
         hvGfxText(hvg, scaleBarEndX + 10,
                   y + (scaleBarTotalHeight - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0),
-                  MG_BLACK, font, database);
+                  MG_BLACK, font, trackHubSkipHubName(database));
         }
     y += scaleBarTotalHeight;
     }
@@ -3417,7 +3417,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 /* Load up stuff from data hubs and append to lists. */
 {
-struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
+struct hubConnectStatus *hub, *hubList =  hubConnectGetHubs();
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
     if (isEmpty(hub->errorMessage))
@@ -4531,7 +4531,7 @@ if (!hideControls)
 			organization, browserName, organism, freezeName);
 	    else
 		hPrintf("%s %s on %s %s Assembly (%s)",
-			organization, browserName, organism, freezeName, database);
+			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
 	    }
         }
     hPrintf("</B></span><BR>\n");
@@ -4623,9 +4623,12 @@ if (!hideControls)
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
 	hWrites(" ");
 	hButton("hgt.jump", "go");
-	jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
-	if(assemblySupportsGeneSuggest(database))
-	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
+	if (!trackHubDatabase(database))
+	    {
+	    jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
+	    if(assemblySupportsGeneSuggest(database))
+		hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
+	    }
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
                     "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
@@ -5480,7 +5483,7 @@ if (stringIn(database, freeze))
 		   hOrganism(database), freeze);
 else
     dyStringPrintf(title, "%s %s (%s) Browser Sequences",
-		   hOrganism(database), freeze, database);
+		   trackHubSkipHubName(hOrganism(database)), freeze, trackHubSkipHubName(database));
 webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, FALSE, FALSE);
 printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
 cartSaveSession(cart);
@@ -5534,7 +5537,7 @@ cgiVarExcludeExcept(except);
 
 static void addDataHubs(struct cart *cart)
 {
-hubCheckForNew(database, cart);
+hubCheckForNew(cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 }
 
@@ -5559,6 +5562,13 @@ if (measureTiming)
 state = cgiUrlString();
 printf("State: %s\n", state->string);
 #endif
+
+/* check for new data/assembly hub */
+if (cartVarExists(cart, hgHubDataText))
+    {
+    addDataHubs(cart);
+    }
+
 getDbAndGenome(cart, &database, &organism, oldVars);
 
 protDbName = hPdbFromGdb(database);
@@ -5628,12 +5638,6 @@ if(!trackImgOnly)
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
-    }
-
-/* check for new data hub */
-if (cartVarExists(cart, hgHubDataText))
-    {
-    addDataHubs(cart);
     }
 
 if (cartVarExists(cart, "chromInfoPage"))

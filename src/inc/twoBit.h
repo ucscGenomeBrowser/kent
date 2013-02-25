@@ -34,7 +34,7 @@ struct twoBitFile
     {
     struct twoBitFile *next;
     char *fileName;	/* Name of this file, for error reporting. */
-    FILE *f;		/* Open file. */
+    void *f;            /* Open file. */
     boolean isSwapped;	/* Is byte-swapping needed. */
     bits32 version;	/* Version of .2bit file */
     bits32 seqCount;	/* Number of sequences. */
@@ -42,6 +42,16 @@ struct twoBitFile
     struct twoBitIndex *indexList;	/* List of sequence. */
     struct hash *hash;	/* Hash of sequences. */
     struct bptFile *bpt;	/* Alternative index. */
+
+    /* the routines we use to access the twoBit.
+     * These may be UDC routines, or stdio
+     */
+    void (*ourSeek)(void *file, bits64 offset);
+    void (*ourSeekCur)(void *file, bits64 offset);
+    bits32 (*ourReadBits32)(void *f, boolean isSwapped);
+    void (*ourClose)(void *pFile);
+    boolean (*ourFastReadString)(void *f, char buf[256]);
+    void (*ourMustRead)(void *file, void *buf, size_t size);
     };
 
 struct twoBitSpec

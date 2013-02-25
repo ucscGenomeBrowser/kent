@@ -148,6 +148,15 @@ else
     }
 }
 
+char *lmCloneString(struct lm *lm, char *string)
+/* Return local mem copy of string. */
+{
+if (string == NULL)
+    return NULL;
+else
+    return lmCloneStringZ(lm, string, strlen(string));
+}
+
 char *lmCloneFirstWord(struct lm *lm, char *line)
 /* Clone first word in line */
 {
