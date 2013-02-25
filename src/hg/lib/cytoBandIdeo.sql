@@ -5,12 +5,12 @@
 
 #Describes the positions of cytogenetic bands with a chromosome
 CREATE TABLE cytoBandIdeo (
-    chrom varchar(255) not null,	# Human chromosome number
-    chromStart int unsigned not null,	# Start position in genoSeq
-    chromEnd int unsigned not null,	# End position in genoSeq
+    chrom varchar(255) not null,	# Chromosome number
+    chromStart int unsigned not null,	# Start position of band
+    chromEnd int unsigned not null,	# End position of band
     name varchar(255) not null,	# Name of cytogenetic band
     gieStain varchar(255) not null,	# Giemsa stain results
               #Indices
-    PRIMARY KEY(chrom(12),chromStart),
-    UNIQUE(chrom(12),chromEnd)
+    PRIMARY KEY(chrom(25),chromStart),
+    UNIQUE(chrom(25),chromEnd)
 );
