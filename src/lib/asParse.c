@@ -463,6 +463,18 @@ if (asObj!= NULL)
 return asCol;
 }
 
+int asColumnFindIx(struct asColumn *list, char *name)
+/* Return index of first element of asColumn list that matches name.
+ * Return -1 if not found. */
+{
+struct asColumn *ac;
+int ix = 0;
+for (ac = list; ac != NULL; ac = ac->next, ix++)
+    if (sameString(name, ac->name))
+        return ix;
+return -1;
+}
+
 boolean asCompareObjs(char *name1, struct asObject *as1, char *name2, struct asObject *as2, int numColumnsToCheck,
  int *retNumColumnsSame, boolean abortOnDifference)
 /* Compare as-objects as1 and as2 making sure several important fields show they are the same name and type.
