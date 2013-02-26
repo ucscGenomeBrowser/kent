@@ -14,7 +14,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bigBedNamedItems - Extract item(s) of given name(s) from bigBed\n"
+  "bigBedNamedItems - Extract item of given name from bigBed\n"
   "usage:\n"
   "   bigBedNamedItems file.bb name output.bed\n"
   "options:\n"
@@ -39,12 +39,13 @@ if (bbi->nameBpt == NULL)
     }
 }
 
-struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, char *name)
-/* Return (possibly empty) list of items of given name in bigBed */
+boolean bigBedNameQuery(struct bbiFile *bbi, char *name, FILE *f)
+/* Write item matching name to file.  Return TRUE if anything written.  */
 {
 bigBedAttachNameIndex(bbi);
 boolean isSwapped = bbi->isSwapped;
 struct offsetSize {bits64 offset; bits64 size;} block;
+boolean didWrite = FALSE;
 if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
     {
     if (bbi->isSwapped)
@@ -52,8 +53,6 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
 	block.offset = byteSwap64(block.offset);
 	block.size = byteSwap64(block.size);
 	}
-    uglyf("Whoohoo, found matching block at offset %lld\n", block.offset);
-
 
     /* Read in raw data */
     udcSeek(bbi->udc, block.offset);
@@ -72,40 +71,48 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
     else
         data = rawData;
 
-    /* Read chromosome index, start, end */
-    int chromIx = memReadBits32(&data, isSwapped);
-    int firstItemStart = memReadBits32(&data, isSwapped);   // Start of first item, not useful
-    int firstItemEnd = memReadBits32(&data, isSwapped);	    // End of first item, not useful
+    /* Set up for "memRead" routines to more or less treat memory block like file */
+    char *blockPt = data, *blockEnd = data + block.size;
+    struct dyString *dy = dyStringNew(32); // Keep bits outside of chrom/start/end here
 
-    uglyf("Got chromIx %d, start %d, end %d\n", chromIx, firstItemStart, firstItemEnd);
-    char nameBuf[bbi->chromBpt->keySize+1];
-    bptStringKeyAtPos(bbi->chromBpt, chromIx, nameBuf, sizeof(nameBuf));
-    uglyf("Chrom is %s\n", nameBuf);
+
+    /* Read next record into local variables. */
+    while (blockPt < blockEnd)
+	{
+	bits32 chromIx = memReadBits32(&blockPt, isSwapped);
+	bits32 s = memReadBits32(&blockPt, isSwapped);
+	bits32 e = memReadBits32(&blockPt, isSwapped);
+	int c;
+	dyStringClear(dy);
+	while ((c = *blockPt++) >= 0)
+	    {
+	    if (c == 0)
+		break;
+	    dyStringAppendC(dy, c);
+	    }
+	if (startsWithWordByDelimiter(name, '\t', dy->string))
+	    {
+	    char chromName[bbi->chromBpt->keySize+1];
+	    bptStringKeyAtPos(bbi->chromBpt, chromIx, chromName, sizeof(chromName));
+	    fprintf(f, "%s\t%u\t%u\t%s\n", chromName, s, e, dy->string);
+	    didWrite = TRUE;
+	    }
+	}
 
     /* Clean up temporary buffers. */
-    freez(&rawData);
+    dyStringFree(&dy);
     freez(&uncompressedData);
-    data = NULL;
+    freez(&rawData);
     }
-return NULL;
+return didWrite;
 }
 
 void bigBedNamedItems(char *bigBedFile, char *name, char *outFile)
 /* bigBedNamedItems - Extract item(s) of given name(s) from bigBed. */
 {
 struct bbiFile *bbi = bigBedFileOpen(bigBedFile);
-struct bigBedInterval *interval, *intervalList = bigBedNameQuery(bbi, name);
 FILE *f = mustOpen(outFile, "w");
-char *chromName = "uglyFoo";
-for (interval = intervalList; interval != NULL; interval = interval->next)
-    {
-    fprintf(f, "%s\t%u\t%u", chromName, interval->start, interval->end);
-    char *rest = interval->rest;
-    if (rest != NULL)
-	fprintf(f, "\t%s\n", rest);
-    else
-	fprintf(f, "\n");
-    }
+bigBedNameQuery(bbi, name, f);
 carefulClose(&f);
 }
 
