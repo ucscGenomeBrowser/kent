@@ -5,6 +5,16 @@
 # http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AERX01
 #
 
+# DATE:   31-Jan-2011
+# ORGANISM:       Oreochromis niloticus
+# TAXID:  8128
+# ASSEMBLY LONG NAME:     Orenil1.0
+# ASSEMBLY SHORT NAME:    Orenil1.0
+# ASSEMBLY SUBMITTER:     Broad Institute of MIT and Harvard
+# ASSEMBLY TYPE:  Haploid
+# NUMBER OF ASSEMBLY-UNITS:       1
+# Assembly Accession:     GCA_000188235.1
+
 #############################################################################
 # Download sequence from NCBI  (DONE - 2011-04-20 - Hiram)
 mkdir -p /hive/data/genomes/oreNil1/genbank

@@ -1004,23 +1004,17 @@ if (!fileExists(retNibName))
 }
 
 
-static struct dnaSeq *fetchTwoBitSeqExt(char *fileName, char *seqName, int start, int end, boolean useUdc)
+static struct dnaSeq *fetchTwoBitSeq(char *fileName, char *seqName, int start, int end)
 /* fetch a sequence from a 2bit, caching open of the file */
 {
 static struct twoBitFile *tbf = NULL;  // cache of open file
 if ((tbf == NULL) || !sameString(fileName, tbf->fileName))
     {
     twoBitClose(&tbf);
-    tbf = twoBitOpenExt(fileName, useUdc);
+    tbf = twoBitOpen(fileName);
     }
 struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqName, start, end);
 return seq;
-}
-
-static struct dnaSeq *fetchTwoBitSeq(char *fileName, char *seqName, int start, int end)
-/* fetch a sequence from a 2bit, caching open of the file */
-{
-return fetchTwoBitSeqExt(fileName, seqName, start, end, FALSE);
 }
 
 struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
@@ -1050,11 +1044,6 @@ struct dnaSeq *hChromSeqMixed(char *db, char *chrom, int start, int end)
 {
 char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(db, chrom, fileName);
-if(trackHubDatabase(db))
-    {
-    struct dnaSeq *seq = fetchTwoBitSeqExt(fileName, chrom, start, end, TRUE);
-    return seq;
-    }
 return hFetchSeqMixed(fileName, chrom, start, end);
 }
 
@@ -1073,12 +1062,6 @@ struct dnaSeq *hChromSeq(char *db, char *chrom, int start, int end)
 {
 char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(db, chrom, fileName);
-if(trackHubDatabase(db))
-    {
-    struct dnaSeq *seq = fetchTwoBitSeqExt(fileName, chrom, start, end, TRUE);
-    tolowers(seq->dna);
-    return seq;
-    }
 
 return hFetchSeq(fileName, chrom, start, end);
 }
@@ -2274,6 +2257,10 @@ char *hDbDbOptionalField(char *database, char *field)
 {
 if (trackHubDatabase(database))
     {
+    // In dbDb the genome field is the name of the organism, but
+    // genome is the name of the assembly in track hubs.
+    // Since we're called from dbDb aware code, we map a request
+    // for the field "genome" to "organism"
     if (sameString(field, "genome"))
 	field = "organism";
     return trackHubAssemblyField(database, field);

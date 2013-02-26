@@ -91,7 +91,7 @@ void trackHubGenomeFree(struct trackHubGenome **pGenome);
 /* Free up genome info. */
 
 void trackHubGenomeFreeList(struct trackHubGenome **pList);
-/* Free a list of dynamically allocated trackHubGenome's */
+/* Free a list of dynamically allocated trackHubGenome's. */
 
 int trackHubCheck(char *hubUrl, struct dyString *errors, boolean checkTracks);
 /* trackHubCheck - Check a track data hub for integrity. Put errors in dyString.
@@ -99,55 +99,55 @@ int trackHubCheck(char *hubUrl, struct dyString *errors, boolean checkTracks);
  *      return 0 if hub has no errors, 1 otherwise */
 
 void trackHubPolishTrackNames(struct trackHub *hub, struct trackDb *tdbList);
-/* remove all the special characters from trackHub track names */
+/* Remove all the special characters from trackHub track names. */
 
 char *trackHubCladeToGenome(char *clade);
-/* given a track hub clade(hub name) return the default genome */
+/* Given a track hub clade(hub name) return the default genome. */
 
 boolean trackHubDatabase(char *database);
-/* is this an assembly from an Assembly Data hub? */
+/* Is this an assembly from an Assembly Data hub? */
 
 char *trackHubDefaultChrom(char *database);
-/* return the default chromosome for this track hub assembly */
+/* Return the default chromosome for this track hub assembly. */
 
 char *trackHubAssemblyField(char *database, char *field);
-/* get data field from a assembly data hub */
+/* Get data field from a assembly data hub. */
 
 int trackHubChromCount(char *database);
-/* return number of chromosomes in a assembly data hub */
+/* Return number of chromosomes in a assembly data hub. */
 
 struct slName *trackHubAllChromNames(char *database);
-/* return a list of all the chrom names in this assembly hub database */
+/* Return a list of all the chrom names in this assembly hub database. */
 
 struct chromInfo *trackHubAllChromInfo(char *database);
-/* return a chromInfo structure for all the chroms in this database */
+/* Return a chromInfo structure for all the chroms in this database. */
 
 struct chromInfo *trackHubChromInfo(char *database, char *chrom);
-/* return a chromInfo structure for just this chrom in this database */
+/* Return a chromInfo structure for just this chrom in this database. */
 
 char *trackHubGenomeNameToDb(char *genome);
-/* return assembly name given a genome name if one exists, otherwise NULL */
+/* Return assembly name given a genome name if one exists, otherwise NULL. */
 
 struct dbDb *trackHubGetDbDbs();
-/* get a list of dbDb structures for all the tracks in this clade/hub */
+/* Get a list of dbDb structures for all the tracks in this clade/hub. */
 
-struct slPair *trackHubGetHubLabels();
-/* get a list of labels describing the loaded assembly data hubs */
+struct slPair *trackHubGetCladeLabels();
+/* Get a list of labels describing the loaded assembly data hubs. */
 
 char *trackHubAssemblyClade(char *genome);
-/* return the clade/hub_name that contains this genome */
+/* Return the clade/hub_name that contains this genome. */
 
 void trackHubFixName(char *name);
-/* change all characters other than alphanumeric, dash, and underbar
- * to underbar */
+/* Change all characters other than alphanumeric, dash, and underbar
+ * to underbar. */
 
 struct grp *trackHubLoadGroups(char *database);
-/* load the grp structures for this track hub database */
+/* Load the grp structures for this track hub database. */
 
-char *trackHubRemoveHubName(char *name);
-/* remove the hub_#_ prefix from a hub name */
+char *trackHubSkipHubName(char *name);
+/* Skip the hub_#_ prefix in a hub name. */
 
 struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
-/* return a dbDb structure for just this database */
+/* Return a dbDb structure for just this database. */
 #endif /* TRACKHUB_H */
 

@@ -19,7 +19,8 @@ errAbort(
   "options:\n"
   "   -noMask       - Ignore lower-case masking in fa file.\n"
   "   -stripVersion - Strip off version number after . for genbank accessions.\n"
-  "   -ignoreDups   - only convert first sequence if there are duplicates\n"
+  "   -ignoreDups   - only convert first sequence if there are duplicate sequence\n"
+  "                 - names.  Use 'twoBitDup' to find duplicate sequences."
   );
 }
 

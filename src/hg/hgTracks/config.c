@@ -477,10 +477,10 @@ char *freeze = hFreezeFromDb(database);
 char buf[128];
 if (stringIn(database, freeze))
     safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s",
-	  organization, browserName, trackHubRemoveHubName(organism), freeze);
+	  organization, browserName, trackHubSkipHubName(organism), freeze);
 else
     safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s (%s)",
-	  organization, browserName, trackHubRemoveHubName(organism), freeze, trackHubRemoveHubName(database));
+	  organization, browserName, trackHubSkipHubName(organism), freeze, trackHubSkipHubName(database));
 webNewSection(buf);
 hPrintf("Tracks: ");
 if (isSearchTracksSupported(database,cart))
