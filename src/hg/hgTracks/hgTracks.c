@@ -58,6 +58,7 @@
 #include "errCatch.h"
 #include "iupac.h"
 #include "botDelay.h"
+#include "chromInfo.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -1764,12 +1765,12 @@ if (baseShowPos||baseShowAsm)
     if (freezeName == NULL)
 	freezeName = "Unknown";
     if (baseShowPos&&baseShowAsm)
-	safef(txt,sizeof(txt),"%s %s   %s (%s bp)",organism,
+	safef(txt,sizeof(txt),"%s %s   %s (%s bp)",trackHubSkipHubName(organism),
 		freezeName, addCommasToPos(database, position), numBuf);
     else if (baseShowPos)
 	safef(txt,sizeof(txt),"%s (%s bp)",addCommasToPos(database, position),numBuf);
     else
-	safef(txt,sizeof(txt),"%s %s",organism,freezeName);
+	safef(txt,sizeof(txt),"%s %s",trackHubSkipHubName(organism),freezeName);
     hvGfxTextCentered(hvg, insideX, y, insideWidth, showPosHeight,MG_BLACK, font, txt);
     *rulerClickHeight += showPosHeight;
     freez(&freezeName);
@@ -1797,7 +1798,7 @@ if (baseShowScaleBar)
         int fHeight = vgGetFontPixelHeight(hvg->vg, font);
         hvGfxText(hvg, scaleBarEndX + 10,
                   y + (scaleBarTotalHeight - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0),
-                  MG_BLACK, font, database);
+                  MG_BLACK, font, trackHubSkipHubName(database));
         }
     y += scaleBarTotalHeight;
     }
@@ -3417,7 +3418,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 /* Load up stuff from data hubs and append to lists. */
 {
-struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
+struct hubConnectStatus *hub, *hubList =  hubConnectGetHubs();
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
     if (isEmpty(hub->errorMessage))
@@ -4531,7 +4532,7 @@ if (!hideControls)
 			organization, browserName, organism, freezeName);
 	    else
 		hPrintf("%s %s on %s %s Assembly (%s)",
-			organization, browserName, organism, freezeName, database);
+			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
 	    }
         }
     hPrintf("</B></span><BR>\n");
@@ -4623,9 +4624,12 @@ if (!hideControls)
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
 	hWrites(" ");
 	hButton("hgt.jump", "go");
-	jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
-	if(assemblySupportsGeneSuggest(database))
-	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
+	if (!trackHubDatabase(database))
+	    {
+	    jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
+	    if(assemblySupportsGeneSuggest(database))
+		hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
+	    }
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
                     "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
@@ -5379,9 +5383,96 @@ chromInfoTotalRow(slCount(chromList), total);
 slFreeList(&chromList);
 }
 
+static int  chromInfoCmpSize(const void *va, const void *vb)
+/* Compare to sort based on chrom size */
+{
+const struct chromInfo *a = *((struct chromInfo **)va);
+const struct chromInfo *b = *((struct chromInfo **)vb);
+
+return b->size - a->size;
+}
+
+void chromInfoRowsNonChromTrackHub(int limit)
+/* Make table rows of non-chromosomal chromInfo name & size */
+/* leaks chromInfo list */
+{
+struct chromInfo *chromInfo = trackHubAllChromInfo(database);
+slSort(&chromInfo, chromInfoCmpSize);
+int seqCount = slCount(chromInfo);
+long long total = 0;
+char msg1[512], msg2[512];
+boolean truncating;
+int count = limit;
+
+truncating = (limit > 0) && (seqCount > limit);
+
+for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
+    {
+    unsigned size = chromInfo->size;
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+           hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+           chromInfo->chrom,chromInfo->chrom);
+    cgiTableFieldEnd();
+    cgiTableFieldStartAlignRight();
+    printLongWithCommas(stdout, size);
+    puts("&nbsp;&nbsp;");
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    total += size;
+    }
+if (!truncating)
+    {
+    chromInfoTotalRow(seqCount, total);
+    }
+else
+    {
+    safef(msg1, sizeof(msg1), "Limit reached");
+    safef(msg2, sizeof(msg2), "%d rows displayed", limit);
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts(msg1);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    puts(msg2);
+    cgiTableFieldEnd();
+    for(;limit-- && (chromInfo != NULL); chromInfo = chromInfo->next)
+	total += chromInfo->size;
+
+    unsigned scafCount = seqCount;
+    unsigned totalSize = total;
+    cgiTableRowEnd();
+    safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
+    safef(msg2, sizeof(msg2), "total size:");
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts(msg1);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    puts(msg2);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    printLongWithCommas(stdout, scafCount);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printLongWithCommas(stdout, totalSize);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    }
+}
+
 void chromInfoRowsNonChrom(int limit)
 /* Make table rows of non-chromosomal chromInfo name & size, sorted by size. */
 {
+if (trackHubDatabase(database))
+    {
+    chromInfoRowsNonChromTrackHub(limit);
+    return;
+    }
+
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -5480,7 +5571,7 @@ if (stringIn(database, freeze))
 		   hOrganism(database), freeze);
 else
     dyStringPrintf(title, "%s %s (%s) Browser Sequences",
-		   hOrganism(database), freeze, database);
+		   trackHubSkipHubName(hOrganism(database)), freeze, trackHubSkipHubName(database));
 webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, FALSE, FALSE);
 printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
 cartSaveSession(cart);
@@ -5534,7 +5625,7 @@ cgiVarExcludeExcept(except);
 
 static void addDataHubs(struct cart *cart)
 {
-hubCheckForNew(database, cart);
+hubCheckForNew(cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 }
 
@@ -5559,6 +5650,13 @@ if (measureTiming)
 state = cgiUrlString();
 printf("State: %s\n", state->string);
 #endif
+
+/* check for new data/assembly hub */
+if (cartVarExists(cart, hgHubDataText))
+    {
+    addDataHubs(cart);
+    }
+
 getDbAndGenome(cart, &database, &organism, oldVars);
 
 protDbName = hPdbFromGdb(database);
@@ -5628,12 +5726,6 @@ if(!trackImgOnly)
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
-    }
-
-/* check for new data hub */
-if (cartVarExists(cart, hgHubDataText))
-    {
-    addDataHubs(cart);
     }
 
 if (cartVarExists(cart, "chromInfoPage"))

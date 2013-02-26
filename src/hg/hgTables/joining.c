@@ -13,6 +13,7 @@
 #include "joiner.h"
 #include "hdb.h"
 #include "hgTables.h"
+#include "trackHub.h"
 
 
 
@@ -293,7 +294,9 @@ static void makeBigBedOrderedCommaFieldList(struct joinerDtf *dtfList,
 /* Make comma-separated field list in same order as fields are in
  * big bed. */
 {
-struct sqlConnection *conn = hAllocConn(dtfList->database);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConn(dtfList->database);
 struct slName *fieldList = bigBedGetFields(dtfList->table, conn);
 makeOrderedCommaFieldList(fieldList, dtfList, dy);
 slFreeList(&fieldList);
@@ -1009,7 +1012,10 @@ if (hasIdentifiers || hasRegions)
 
 if (! doJoin)
     {
-    struct sqlConnection *conn = hAllocConn(dtfList->database);
+    struct sqlConnection *conn = NULL;
+
+    if (!trackHubDatabase(database))
+	conn = hAllocConn(dtfList->database);
     struct dyString *dy = dyStringNew(0);
     
     if (isBigBed(database, dtfList->table, NULL, ctLookupName))

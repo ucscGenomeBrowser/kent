@@ -3728,7 +3728,7 @@ html wgEncodeUwHistone.release5
     view zRSig
     visibility full
     parent wgEncodeUwHistone
-    viewLimits 1:10
+    viewLimits 1:100
     minLimit -1
     maxLimit 16000.0
     autoScale off

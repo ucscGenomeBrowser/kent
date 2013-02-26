@@ -31,6 +31,7 @@
 #include "hubConnect.h"
 #include "hgConfig.h"
 #include "udc.h"
+#include "chromInfo.h"
 #if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
@@ -323,8 +324,13 @@ for (hubStatus = hubList; hubStatus != NULL; hubStatus = hubStatus->next)
 	    if (tdbList != NULL)
 		{
 		list = slCat(list, tdbList);
-		struct grp *grp = grpFromHub(hubStatus);
-		slAddHead(pHubGroups, grp);
+		// we don't add the hub group if the database
+		// is a assembly hub since they have their own groups
+		if (!trackHubDatabase(database))
+		    {
+		    struct grp *grp = grpFromHub(hubStatus);
+		    slAddHead(pHubGroups, grp);
+		    }
 		}
 	    }
 	
@@ -363,8 +369,8 @@ if (dif == 0)
 return dif;
 }
 
-struct region *getRegionsFullGenome()
-/* Get a region list that covers all of each chromosome. */
+static struct region *getRegionsFullGenomeLocal()
+/* get all the chrom ranges for a local database */
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -385,6 +391,34 @@ slSort(&regionList, regionCmp);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return regionList;
+}
+
+static struct region *getRegionsFullGenomeHub()
+/* get all the chrom ranges for a hub database */
+{
+struct chromInfo *ci = trackHubAllChromInfo(database);
+struct region *region, *regionList = NULL;
+
+AllocVar(region);
+for(; ci; ci = ci->next)
+    {
+    AllocVar(region);
+    region->chrom = cloneString(ci->chrom);
+    region->end = ci->size;
+    region->fullChrom = TRUE;
+    region->name = NULL;		/* unused for full chrom */
+    slAddHead(&regionList, region);
+    }
+slSort(&regionList, regionCmp);
+return regionList;
+}
+
+struct region *getRegionsFullGenome()
+/* Get a region list that covers all of each chromosome. */
+{
+if (trackHubDatabase(database))
+    return getRegionsFullGenomeHub();
+return getRegionsFullGenomeLocal();
 }
 
 struct region *getEncodeRegions()
@@ -709,7 +743,10 @@ return hti;
 struct hTableInfo *maybeGetHtiOnDb(char *db, char *table)
 /* Return primary table info, but don't abort if table not there. */
 {
-struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn = NULL;
+
+if (!trackHubDatabase(database))
+    conn = hAllocConn(db);
 struct hTableInfo *hti = maybeGetHti(db, table, conn);
 hFreeConn(&conn);
 return hti;
@@ -905,7 +942,7 @@ struct hash *groupsInTrackList = newHash(0);
 struct hash *groupsInDatabase = newHash(0);
 struct trackDb *track;
 
-/* Stream throught track list building up hash of active groups. */
+/* Stream through track list building up hash of active groups. */
 for (track = trackList; track != NULL; track = track->next)
     {
     if (!hashLookup(groupsInTrackList,track->grp))
@@ -928,7 +965,7 @@ for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll)
 /* if we have custom tracks, we want to add the track hubs
  * after that group */
 struct grp *addAfter = NULL;
-if (sameString(groupList->name, "user"))
+if ((groupList != NULL) && sameString(groupList->name, "user"))
     addAfter = groupList;
 
 /* Add in groups from hubs. */
@@ -1419,11 +1456,12 @@ struct slName *fullTableFields(char *db, char *table)
 /* Return list of fields in db.table.field format. */
 {
 char dtBuf[256];
-struct sqlConnection *conn;
+struct sqlConnection *conn=NULL;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
 if (isBigBed(database, table, curTrack, ctLookupName))
     {
-    conn = hAllocConn(db);
+    if (!trackHubDatabase(database))
+	conn = hAllocConn(db);
     fieldList = bigBedGetFields(table, conn);
     hFreeConn(&conn);
     }
@@ -1757,7 +1795,9 @@ void dispatch()
  * By default head to the main page. */
 {
 struct hashEl *varList;
-struct sqlConnection *conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 pushWarnHandler(earlyAbortHandler);
 /* only allows view table schema function for CGB or GSID servers for the time being */
 if (hIsCgbServer() || hIsGsidServer())
@@ -1932,7 +1972,7 @@ void initGroupsTracksTables()
  * containing all tracks and all tables. Set global variables that correspond
  * to the group, track, and table specified in the cart. */
 {
-struct hubConnectStatus *hubList = hubConnectStatusListFromCart(cart);
+struct hubConnectStatus *hubList = hubConnectGetHubs();
 struct grp *hubGrpList = NULL;
 fullTrackList = getFullTrackList(hubList, &hubGrpList);
 fullTrackHash = hashTrackList(fullTrackList);
@@ -1962,6 +2002,7 @@ void hgTables()
 {
 char *clade = NULL;
 
+setUdcCacheDir();
 oldVars = hashNew(10);
 
 /* Sometimes we output HTML and sometimes plain text; let each outputter
@@ -1973,7 +2014,6 @@ allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
 freezeName = hFreezeFromDb(database);
 
-setUdcCacheDir();
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);

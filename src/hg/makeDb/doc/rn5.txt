@@ -1288,7 +1288,15 @@ TMPDIR=/scratch/tmp
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
     #	real    3213m53.797s
-XXX - chaining failed, running last two for chr1 and chr3 Tue Dec  4 09:18:43 PST 2012
+    #   chaining failed, running last two for chr1 and chr3
+    ./chain.csh rn5.2bit:chr1: chain/rn5.2bit:chr1:.chain &
+    ./chain.csh rn5.2bit:chr3: chain/rn5.2bit:chr3:.chain
+    #   real    269m41.974s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=chainMerge `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > chainMerge.log 2>&1 &
+XXX - running - Tue Dec  4 14:05:34 PST 2012
 
     cat fb.rn5.chainMonDom5Link.txt
     #	254245903 bases of 2652783500 (9.584%) in intersection
@@ -1599,5 +1607,18 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/cavPor3/bed
     ln -s blastz.rn5.swap lastz.rn5
+
+#########################################################################
+# construct lift file Ensembl names to UCSC names (DONE 2013-02-19 Chin)
+    cd /hive/data/genomes/rn5/jkStuff
+
+cat ../chrom.sizes | while read L
+do
+ucName=`echo "${L}" | awk '{print $1}'`
+ucSize=`echo "${L}" | awk '{print $2}'`
+ensName=`echo $L  | sed -e 's/^chrM/MT/; s/^chr[0-9A-Za-z]*_//; s/_random//; s/^chr//; s/^\([JA][HA][B-Z0-9]*\)/\1.1/;' | awk '{print $1}'`
+ensSize=`echo $L | awk '{print $2}'`
+echo -e "0\t$ensName\t$ensSize\t$ucName\t$ucSize"
+done > ensToUcsc.lift
 
 ##############################################################################

@@ -1443,4 +1443,6 @@ char *dateAddTo(char *date,char *format,int addYears,int addMonths,int addDays);
 /* Add years,months,days to a formatted date and returns the new date as a cloned string
 *  format is a strptime/strftime format: %F = yyyy-mm-dd */
 
+boolean hasProtocol(char *urlOrPath);
+/* Return TRUE if it looks like it has http://, ftp:// etc. */
 #endif /* COMMON_H */

@@ -18,6 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 #include "hubConnect.h"
+#include "trackHub.h"
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -408,12 +409,15 @@ for (name = nameList; name != NULL; name = name->next)
 	hPrintf(">%s\n", name->name);
     }
 hPrintf("</SELECT>\n");
-char *restrictDate = encodeRestrictionDateDisplay(database,selTdb);
-if (restrictDate)
+if (!trackHubDatabase(database))
     {
-    hPrintf("<A HREF=\'%s\' TARGET=BLANK>restricted until:</A>&nbsp;%s",
-                ENCODE_DATA_RELEASE_POLICY, restrictDate);
-    freeMem(restrictDate);
+    char *restrictDate = encodeRestrictionDateDisplay(database,selTdb);
+    if (restrictDate)
+	{
+	hPrintf("<A HREF=\'%s\' TARGET=BLANK>restricted until:</A>&nbsp;%s",
+		    ENCODE_DATA_RELEASE_POLICY, restrictDate);
+	freeMem(restrictDate);
+	}
     }
 return selTable;
 }
@@ -670,7 +674,10 @@ char *regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
 char *range = cartUsualString(cart, hgtaRange, "");
 if (isPositional)
     {
-    boolean doEncode = sqlTableExists(conn, "encodeRegions");
+    boolean doEncode = FALSE; 
+
+    if (!trackHubDatabase(database))
+	doEncode = sqlTableExists(conn, "encodeRegions");
 
     hPrintf("<TR><TD><B>region:</B>\n");
 

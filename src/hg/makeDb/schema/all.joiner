@@ -2015,9 +2015,9 @@ identifier rgdGene2IsoformCluster
 # known relationship for both KG2 and KG3, but doesn't work across dbs.
 identifier knownXref
 "Swissprot IDs"
-    $kgDb.kgXref.spID  dupeOk
+    $hg.kgXref.spID  dupeOk
     proteome.spXref2.accession
-    proteome.hgnc.uniProt
+    proteome.hgncXref.uniProt
 
 identifier tRNAName
 "tRNA track name"

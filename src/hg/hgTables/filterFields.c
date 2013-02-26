@@ -24,6 +24,7 @@
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "samAlignment.h"
+#include "trackHub.h"
 
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
@@ -157,7 +158,9 @@ struct hash *inHash = newHash(8);
 /* Build up list of tables we link to in outList. */
 for (in = inList; in != NULL; in = in->next)
     {
-    struct sqlConnection *conn = hAllocConn(in->db);
+    struct sqlConnection *conn = NULL;
+    if (!trackHubDatabase(database))
+	conn = hAllocConn(in->db);
     struct joinerPair *jpList, *jp;
 
     /* Keep track of tables in inList. */
@@ -316,7 +319,9 @@ static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
 /* Put up a little html table with a check box, name, and hopefully
  * a description for each field in SQL rootTable. */
 {
-struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConn(db);
 char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 struct asObject *asObj = asForTable(conn, rootTable);
@@ -909,7 +914,9 @@ hPrintf("</TABLE>\n");
 static void filterControlsForTableDb(char *db, char *rootTable)
 /* Put up filter controls for a single database table. */
 {
-struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn =  NULL;
+if (!trackHubDatabase(db))
+    conn = hAllocConn(db);
 char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 boolean isSmallWig = isWiggle(db, table);

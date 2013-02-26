@@ -1670,6 +1670,7 @@ var rightClick = {
     hitFinish: function (menuItemClicked, menuObject, cmd, args)
     {   // dispatcher for context menu hits
         var id = rightClick.selectedMenuItem.id;
+        var url = null;
         if(menuObject.shown) {
             // warn("Spinning: menu is still shown");
             setTimeout(function() { rightClick.hitFinish(menuItemClicked, menuObject, cmd); }, 10);
@@ -1706,11 +1707,12 @@ var rightClick = {
                 if(chrom == null || chromStart == null || chromEnd == null) {
                     warn("couldn't parse out genomic coordinates");
                 } else {
-                    if(cmd == 'getDna')
-                    {
-                        if(window.open("../cgi-bin/hgc?g=getDna&i=mixed&c=" +
-                                        chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd
-                                      ) == null) {
+                    if(cmd == 'getDna') {
+                        // NOTE: this should be shared with URL generation for getDna blue bar menu
+                        url = "../cgi-bin/hgc?g=getDna&i=mixed&c=" + chrom;
+                        url += "&l=" + (chromStart - 1) + "&r=" + chromEnd;
+                        url += "&db=" + getDb() + "&hgsid=" + getHgsid();
+                        if (window.open(url) === null) {
                             rightClick.windowOpenFailedMsg();
                         }
                     } else {

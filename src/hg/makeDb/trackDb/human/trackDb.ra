@@ -1162,22 +1162,6 @@ longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In
 group varRep
 priority 144.8
 visibility hide
-color 0,100,0
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-urlLabel DGV Browser and Report:
-url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
-dataVersion v10
-release public
-
-track dgv
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-priority 144.8
-visibility hide
 itemRgb on
 type bed 9 +
 noScoreFilter .
@@ -1185,7 +1169,6 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://dgvbeta.tcag.ca/dgv/app/variant?id=$$&ref=$D
 dataVersion beta (Nov. 23, 2012)
-release alpha,beta
 
 track covMask1kGPilotLowCov
 compositeTrack on
@@ -2845,7 +2828,7 @@ visibility hide
 color 200, 0, 0
 type bed 4
 hgsid on
-url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
+url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 
 searchName cosmicId
 searchTable cosmic
@@ -4069,7 +4052,6 @@ searchTable dgv
 searchType bed
 searchPriority 50
 termRegex (dgv_|[en]ss?v)[0-9]+
-release alpha,beta
 
 searchTable coriellDelDup
 searchMethod exact

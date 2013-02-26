@@ -51,9 +51,7 @@ if (bamIsRc(bam))
     printf("<em>Note: although the read was mapped to the reverse strand of the genome, "
 	   "the sequence and CIGAR in BAM are relative to the forward strand.</em><BR>\n");
 puts("<BR>");
-char nibName[HDB_MAX_PATH_STRING];
-hNibForChrom(database, seqName, nibName);
-struct dnaSeq *genoSeq = hFetchSeq(nibName, seqName, tStart, tEnd);
+struct dnaSeq *genoSeq = hChromSeq(database, seqName, tStart, tEnd);
 char *qSeq = bamGetQuerySequence(bam, FALSE);
 if (isNotEmpty(qSeq) && !sameString(qSeq, "*"))
     {
