@@ -2172,7 +2172,7 @@ var rightClick = {
                                         };
                                     }
                                 }
-                                o[rightClick.makeImgTag("dnaIcon.png")+" KATE Get DNA for "+title] = {
+                                o[rightClick.makeImgTag("dnaIcon.png")+" Get DNA for "+title] = {
                                     onclick: function(menuItemClicked, menuObject) {
                                         rightClick.hit(menuItemClicked, menuObject, "getDna");
                                         return true; }
