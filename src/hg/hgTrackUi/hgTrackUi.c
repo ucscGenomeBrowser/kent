@@ -292,7 +292,8 @@ for (fi = fiList;  fi != NULL;  fi = fi->next)
 errAbort("Didn't find definition of func field in %s", tdb->table);
 }
 
-static void snp125PrintFilterControlSection(struct trackDb *tdb, int version)
+static void snp125PrintFilterControlSection(struct trackDb *tdb, int version,
+					    boolean molTypeHasMito)
 /* Print a collapsible section of filtering controls on SNP properties, first numeric
  * and then enum/set. */
 {
@@ -371,8 +372,11 @@ if (version < 137)
     }
 else
     snp137PrintFunctionFilterControls(tdb);
+int molTypeArraySize = snp125MolTypeArraySize;
+if (! molTypeHasMito)
+    molTypeArraySize--;
 snp125PrintFilterControls(tdb->track, "Molecule Type", "molType", snp125MolTypeLabels,
-			  snp125MolTypeDataName, snp125MolTypeArraySize);
+			  snp125MolTypeDataName, molTypeArraySize);
 if (version >= 132)
     {
     int excArraySize = snp132ExceptionArraySize;
@@ -465,7 +469,7 @@ if (isNotEmpty(cgiOptionalString(buttonVar)))
     }
 }
 
-void snp125PrintColorControlSection(struct trackDb *tdb, int version)
+void snp125PrintColorControlSection(struct trackDb *tdb, int version, boolean molTypeHasMito)
 /* Print a collapsible section of color controls: user selects an attribute to color by,
  * and then a color for each possible value of the selected attribute. */
 {
@@ -523,7 +527,7 @@ if (version > 127 && colorSourceCart == snp125ColorSourceLocType)
     colorSourceCart = SNP125_DEFAULT_COLOR_SOURCE;
 switch (colorSourceCart)
     {
-    int funcArraySize, excArraySize;
+    int funcArraySize, excArraySize, molTypeArraySize;
     case snp125ColorSourceLocType:
                 snp125PrintColorSpec(tdb->track, "locType", snp125LocTypeOldColorVars, TRUE,
                                      snp125LocTypeLabels, snp125LocTypeDefault,
@@ -543,9 +547,11 @@ switch (colorSourceCart)
                                      snp125FuncLabels, snp125FuncDefault, funcArraySize);
                 break;
     case snp125ColorSourceMolType:
+		molTypeArraySize = snp125MolTypeArraySize;
+		if (! molTypeHasMito)
+		    molTypeArraySize--;
                 snp125PrintColorSpec(tdb->track, "molType", snp125MolTypeOldColorVars, TRUE,
-                                     snp125MolTypeLabels, snp125MolTypeDefault,
-                                     snp125MolTypeArraySize);
+				     snp125MolTypeLabels, snp125MolTypeDefault, molTypeArraySize);
                 break;
     case snp125ColorSourceExceptions:
 		excArraySize = snp132ExceptionArraySize;
@@ -569,6 +575,23 @@ switch (colorSourceCart)
                 errAbort("Unrecognized value of enum snp125ColorSource (%d)", colorSourceCart);
     }
 jsEndCollapsibleSection();
+}
+
+boolean snp125CheckMolTypeForMito(struct trackDb *tdb)
+/* Can't use version to determine whether the molType enum includes "mito" --
+ * check SQL column def. */
+{
+boolean gotMito = FALSE;
+struct sqlConnection *conn = hAllocConn(database);
+char **enumVals = sqlGetEnumDef(conn, tdb->table, "molType");
+while (*enumVals != NULL && !gotMito)
+    {
+    if (sameString(*enumVals, "mito"))
+	gotMito = TRUE;
+    enumVals++;
+    }
+hFreeConn(&conn);
+return gotMito;
 }
 
 void snp125Ui(struct trackDb *tdb)
@@ -601,11 +624,13 @@ puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
 
 snp125OfferGeneTracksForFunction(tdb);
 
+boolean molTypeHasMito = snp125CheckMolTypeForMito(tdb);
+
 puts("<TR><TD colspan=2><BR></TD></TR>");
-snp125PrintFilterControlSection(tdb, version);
+snp125PrintFilterControlSection(tdb, version, molTypeHasMito);
 puts("<TR><TD colspan=2><BR></TD></TR>");
 
-snp125PrintColorControlSection(tdb, version);
+snp125PrintColorControlSection(tdb, version, molTypeHasMito);
 // End wrapper table for collapsible sections:
 puts("</TABLE>");
 }
