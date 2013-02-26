@@ -48,6 +48,7 @@ struct bbiFile *bbi = bigBedFileOpen(fileName);
 printf("version: %d\n", bbi->version);
 printf("isCompressed: %s\n", (bbi->uncompressBufSize > 0 ? "yes" : "no"));
 printf("isSwapped: %d\n", bbi->isSwapped);
+printf("hasNameIndex: %s\n", (bbi->nameIndexOffset != 0 ? "yes" : "no"));
 printLabelAndLongNumber("itemCount", bigBedItemCount(bbi));
 printLabelAndLongNumber("primaryDataSize", bbi->unzoomedIndexOffset - bbi->unzoomedDataOffset);
 if (bbi->levelList != NULL)

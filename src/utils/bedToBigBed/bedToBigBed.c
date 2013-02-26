@@ -11,12 +11,14 @@
 #include "rangeTree.h"
 #include "zlibFace.h"
 #include "sqlNum.h"
+#include "bPlusTree.h"
 #include "bigBed.h"
 
 char *version = "2.3";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
+boolean doNameIndex = FALSE;
 int bedN = 0;   /* number of standard bed fields */
 int bedP = 0;   /* number of bed plus fields */
 char *as = NULL;
@@ -53,6 +55,7 @@ errAbort(
   "   -unc - If set, do not use compression.\n"
   "   -tab - If set, expect fields to be tab separated, normally\n"
   "           expects white space separator.\n"
+  "   -nameIndex - If set, make an index of the name field\n"
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -64,13 +67,46 @@ static struct optionSpec options[] = {
    {"as", OPTION_STRING},
    {"unc", OPTION_BOOLEAN},
    {"tab", OPTION_BOOLEAN},
+   {"nameIndex", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-void writeBlocks(struct bbiChromUsage *usageList, struct lineFile *lf, struct asObject *as, 
+struct bbNamedFileChunk 
+/* A name associated with an offset into a possibly large file. */
+    {
+    char *name;
+    bits64 offset;
+    bits64 size;
+    };
+
+int bbNamedFileChunkCmpByName(const void *va, const void *vb)
+/* Compare two named offset object to facilitate qsorting by name. */
+{
+const struct bbNamedFileChunk *a = va, *b = vb;
+return strcmp(a->name, b->name);
+}
+
+static int maxBedNameSize;
+
+void bbNamedFileChunkKey(const void *va, char *keyBuf)
+/* Copy name to keyBuf for bPlusTree maker */
+{
+const struct bbNamedFileChunk *item = va;
+strncpy(keyBuf,item->name, maxBedNameSize);
+}
+
+void *bbNamedFileChunkVal(const void *va)
+/* Return pointer to val for bPlusTree maker. */
+{
+const struct bbNamedFileChunk *item = va;
+return (void *)&item->offset;
+}
+
+static void writeBlocks(struct bbiChromUsage *usageList, struct lineFile *lf, struct asObject *as, 
 	int itemsPerSlot, struct bbiBoundsArray *bounds, 
 	int sectionCount, boolean doCompress, FILE *f, 
-	int resTryCount, int resScales[], int resSizes[],
+	int resTryCount, int resScales[], int resSizes[], 
+	struct bbNamedFileChunk *namedChunks, int bedCount,
 	bits16 *retFieldCount, bits32 *retMaxBlockSize)
 /* Read through lf, writing it in f.  Save starting points of blocks (every itemsPerSlot)
  * to boundsArray */
@@ -80,7 +116,7 @@ struct bbiChromUsage *usage = usageList;
 char *line, *row[256];  // limit of 256 columns is arbitrary, but useful to catch pathological input
 int fieldCount = 0, lastField = 0;
 int itemIx = 0, sectionIx = 0;
-bits64 blockOffset = 0;
+bits64 blockStartOffset = 0, blockEndOffset = 0;
 int startPos = 0, endPos = 0;
 bits32 chromId = 0;
 boolean allocedAs = FALSE;
@@ -96,6 +132,10 @@ bits32 start = 0, end = 0;
 char *chrom = NULL;
 struct bed *bed;
 AllocVar(bed);
+
+/* Help keep track of which beds are in current chunk so as to write out
+ * namedChunks. */
+int sectionStartIx = 0, sectionEndIx = 0;
 
 for (;;)
     {
@@ -144,6 +184,9 @@ for (;;)
 	    if (fieldCount != bedN + bedP)
 		errAbort("fieldCount input (%d) did not match the specification (%s)\n"
 		    , fieldCount, optionVal("type", ""));
+
+	    if (namedChunks != NULL && fieldCount < 4)
+	        errAbort("No name field in bed, can't index.");
 	    }
 
 	/* Chop up line and make sure the word count is right. */
@@ -199,9 +242,23 @@ for (;;)
 	    mustWrite(f, stream->string, stream->stringSize);
 	dyStringClear(stream);
 
+	/* Save block offset and size for all named chunks in this section. */
+	if (namedChunks != NULL)
+	    {
+	    blockEndOffset = ftell(f);
+	    int i;
+	    for (i=sectionStartIx; i<sectionEndIx; ++i)
+	        {
+		struct bbNamedFileChunk *chunk = namedChunks + i;
+		chunk->offset = blockStartOffset;
+		chunk->size = blockEndOffset - blockStartOffset;
+		}
+	    sectionStartIx = sectionEndIx;
+	    }
+
 	/* Save info on existing block. */
 	struct bbiBoundsArray *b = &bounds[sectionIx];
-	b->offset = blockOffset;
+	b->offset = blockStartOffset;
 	b->range.chromIx = chromId;
 	b->range.start = startPos;
 	b->range.end = endPos;
@@ -226,7 +283,7 @@ for (;;)
     /* At start of block we save a lot of info. */
     if (itemIx == 0)
         {
-	blockOffset = ftell(f);
+	blockStartOffset = ftell(f);
 	startPos = start;
 	endPos = end;
 	}
@@ -235,6 +292,13 @@ for (;;)
 	if (endPos < end)
 	    endPos = end;
 	/* No need to update startPos since list is sorted. */
+	}
+
+    /* Save name into namedOffset if need be. */
+    if (namedChunks != NULL)
+        {
+	namedChunks[sectionEndIx].name = cloneString(bed->name);
+	sectionEndIx += 1;
 	}
 
     /* Write out data. */
@@ -443,6 +507,7 @@ void bbFileCreate(
 	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
 	char *asFileName, /* If non-null points to a .as file that describes fields. */
 	boolean doCompress, /* If TRUE then compress data. */
+	boolean doNameIndex, /* If TRUE then index names as well. */
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
@@ -469,7 +534,8 @@ int minDiff = 0;
 double aveSpan = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
-struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSpan, &bedCount);
+int maxNameSize = 0;
+struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSpan, &bedCount, &maxNameSize);
 verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSpan);
 
@@ -533,8 +599,11 @@ AllocArray(boundsArray, blockCount);
 lineFileRewind(lf);
 bits16 fieldCount=0;
 bits32 maxBlockSize = 0;
+struct bbNamedFileChunk *namedChunks = NULL;
+if (doNameIndex)
+    AllocArray(namedChunks, bedCount);
 writeBlocks(usageList, lf, as, itemsPerSlot, boundsArray, blockCount, doCompress,
-	f, resTryCount, resScales, resSizes, &fieldCount, &maxBlockSize);
+	f, resTryCount, resScales, resSizes, namedChunks, bedCount, &fieldCount, &maxBlockSize);
 verboseTime(1, "pass2 - checking and writing primary data (%lld records, %d fields)", 
 	(long long)bedCount, fieldCount);
 
@@ -610,6 +679,19 @@ if (aveSpan > 0)
 	}
     }
 
+/* Write out name index if need be. */
+bits64 nameIndexOffset = 0;
+if (doNameIndex)
+    {
+    qsort(namedChunks, bedCount, sizeof(namedChunks[0]),  bbNamedFileChunkCmpByName);
+    nameIndexOffset = ftell(f);
+    maxBedNameSize = maxNameSize;
+    bptFileBulkIndexToOpenFile(namedChunks, sizeof(namedChunks[0]), bedCount,
+        blockSize, bbNamedFileChunkKey, maxNameSize, bbNamedFileChunkVal, 
+	sizeof(bits64) + sizeof(bits64), f);
+    verboseTime(1, "Sorting and writing name index");
+    }
+
 /* Figure out buffer size needed for uncompression if need be. */
 if (doCompress)
     {
@@ -639,11 +721,11 @@ writeOne(f, definedFieldCount);
 writeOne(f, asOffset);
 writeOne(f, totalSummaryOffset);
 writeOne(f, uncompressBufSize);
-int i;
-for (i=0; i<2; ++i)
-    writeOne(f, reserved32);
+writeOne(f, nameIndexOffset);
+assert(ftell(f) == 64);
 
 /* Write summary headers with data. */
+int i;
 verbose(2, "Writing %d levels of zoom\n", zoomLevels);
 for (i=0; i<zoomLevels; ++i)
     {
@@ -683,7 +765,7 @@ void bedToBigBed(char *inName, char *chromSizes, char *outName)
 /* bedToBigBed - Convert bed file to bigBed.. */
 {
 bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, as, 
-	doCompress, outName);
+	doCompress, doNameIndex, outName);
 }
 
 int main(int argc, char *argv[])
@@ -694,6 +776,7 @@ blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 as = optionVal("as", as);
 doCompress = !optionExists("unc");
+doNameIndex = optionExists("nameIndex");
 tabSep = optionExists("tab");
 if (argc != 4)
     usage();

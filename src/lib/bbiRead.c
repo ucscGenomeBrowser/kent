@@ -114,9 +114,10 @@ bbi->definedFieldCount = udcReadBits16(udc, isSwapped);
 bbi->asOffset = udcReadBits64(udc, isSwapped);
 bbi->totalSummaryOffset = udcReadBits64(udc, isSwapped);
 bbi->uncompressBufSize = udcReadBits32(udc, isSwapped);
+bbi->nameIndexOffset = udcReadBits64(udc, isSwapped);
 
 /* Skip over reserved area. */
-udcSeek(udc, 64);
+udcSeek(udc, 64);	// Absolute seek over fixed size 64 bit header
 
 /* Read zoom headers. */
 int i;

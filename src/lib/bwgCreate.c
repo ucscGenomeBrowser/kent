@@ -902,8 +902,8 @@ totalSummaryOffsetPos = ftell(f);
 writeOne(f, totalSummaryOffset);
 uncompressBufSizePos = ftell(f);
 writeOne(f, uncompressBufSize);
-for (i=0; i<2; ++i)
-    writeOne(f, reserved32);
+writeOne(f, reserved64);  /* nameIndexOffset */
+assert(ftell(f) == 64);
 
 /* Write summary headers */
 for (i=0; i<summaryCount; ++i)

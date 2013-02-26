@@ -367,7 +367,7 @@ int minDiff = 0, i;
 double aveSize = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
-struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSize, &bedCount);
+struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSize, &bedCount, NULL);
 verboseTime(2, "pass1");
 verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
 
@@ -514,8 +514,7 @@ writeOne(f, reserved16);	// definedFieldCount
 writeOne(f, reserved64);	// autoSqlOffset
 writeOne(f, totalSummaryOffset);
 writeOne(f, uncompressBufSize);
-for (i=0; i<2; ++i)
-    writeOne(f, reserved32);
+writeOne(f, reserved64);	// nameIndexOffset
 assert(ftell(f) == 64);
 
 /* Write summary headers with data. */

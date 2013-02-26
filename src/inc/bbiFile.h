@@ -20,7 +20,7 @@
  *         autoSqlOffset        8 bytes (for bigWig 0) (0 if no autoSql information)
  *         totalSummaryOffset   8 bytes (0 in earlier versions of file lacking totalSummary)
  *         uncompressBufSize    4 bytes (Size of uncompression buffer.  0 if uncompressed.)
- *         reserved             8 bytes (0 for now)
+ *         nameIndexOffset      8 bytes (Offset to name index, 0 if no such index)
  *     zoomHeaders		there are zoomLevels number of these
  *         reductionLevel	4 bytes
  *	   reserved		4 bytes
@@ -51,6 +51,7 @@
  *                 sumData      4 bytes float
  *                 sumSquares   4 bytes float
  *         zoom index        	cirTree index
+ *     name index [optional]    bPlusTree index
  *     magic# 		4 bytes - same as magic number at start of header
  */
 
@@ -106,8 +107,10 @@ struct bbiFile
     bits64 asOffset;		/* Offset to embedded null-terminated AutoSQL file. */
     bits64 totalSummaryOffset;	/* Offset to total summary information if any.  (On older files have to calculate) */
     bits32 uncompressBufSize;	/* Size of uncompression buffer, 0 if uncompressed */
+    bits64 nameIndexOffset;	/* Start of name index or zero if none. */
     struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
     struct bbiZoomLevel *levelList;	/* List of zoom levels. */
+    struct bptFile *nameBpt;	/* Index of names, may be NULL */
     };
 
 
@@ -327,9 +330,9 @@ void bbiChromUsageFree(struct bbiChromUsage **pUsage);
 void bbiChromUsageFreeList(struct bbiChromUsage **pList);
 /* free a list of bbiChromUsage structures */
 
-struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
-	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize, bits64 *retBedCount);
-/* Go through bed file and collect chromosomes and statistics. Free with bbiChromUsageFreeList */
+struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
+	int *retMinDiff, double *retAveSize, bits64 *retBedCount, int *retMaxNameSize);
+/* Go through bed file and collect chromosomes and statistics. */
 
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot);
 /* Count up number of sections needed for data. */

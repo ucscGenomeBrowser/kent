@@ -132,29 +132,38 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
-	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize, bits64 *retBedCount)
+struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
+	int *retMinDiff, double *retAveSize, bits64 *retBedCount, int *retMaxNameSize)
 /* Go through bed file and collect chromosomes and statistics. */
 {
-char *row[3];
+char *row[4];
+int maxRowSize = (retMaxNameSize != NULL ? 4 : 3);
 struct hash *uniqHash = hashNew(0);
 struct bbiChromUsage *usage = NULL, *usageList = NULL;
 int lastStart = -1;
 bits32 id = 0;
 bits64 totalBases = 0, bedCount = 0;
 int minDiff = BIGNUM;
+int maxNameSize = 0;
 
 lineFileRemoveInitialCustomTrackLines(lf);
 
 for (;;)
     {
-    int rowSize = lineFileChopNext(lf, row, ArraySize(row));
+    int rowSize = lineFileChopNext(lf, row, maxRowSize);
     if (rowSize == 0)
         break;
-    lineFileExpectWords(lf, 3, rowSize);
+    lineFileExpectAtLeast(lf, maxRowSize, rowSize);
     char *chrom = row[0];
     int start = lineFileNeedNum(lf, row, 1);
     int end = lineFileNeedNum(lf, row, 2);
+    if (rowSize > 3)
+        {
+	char *name = row[3];
+	int nameSize = strlen(name);
+	if (nameSize > maxNameSize)
+	    maxNameSize = nameSize;
+	}
     if (start > end)
         {
 	    errAbort("end (%d) before start (%d) line %d of %s",
@@ -201,6 +210,8 @@ slReverse(&usageList);
 *retMinDiff = minDiff;
 *retAveSize = (double)totalBases/bedCount;
 *retBedCount = bedCount;
+if (retMaxNameSize != NULL)
+    *retMaxNameSize = maxNameSize;
 freeHash(&uniqHash);
 return usageList;
 }
