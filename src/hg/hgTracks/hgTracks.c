@@ -58,6 +58,7 @@
 #include "errCatch.h"
 #include "iupac.h"
 #include "botDelay.h"
+#include "chromInfo.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -5382,9 +5383,96 @@ chromInfoTotalRow(slCount(chromList), total);
 slFreeList(&chromList);
 }
 
+static int  chromInfoCmpSize(const void *va, const void *vb)
+/* Compare to sort based on chrom size */
+{
+const struct chromInfo *a = *((struct chromInfo **)va);
+const struct chromInfo *b = *((struct chromInfo **)vb);
+
+return b->size - a->size;
+}
+
+void chromInfoRowsNonChromTrackHub(int limit)
+/* Make table rows of non-chromosomal chromInfo name & size */
+/* leaks chromInfo list */
+{
+struct chromInfo *chromInfo = trackHubAllChromInfo(database);
+slSort(&chromInfo, chromInfoCmpSize);
+int seqCount = slCount(chromInfo);
+long long total = 0;
+char msg1[512], msg2[512];
+boolean truncating;
+int count = limit;
+
+truncating = (limit > 0) && (seqCount > limit);
+
+for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
+    {
+    unsigned size = chromInfo->size;
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+           hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+           chromInfo->chrom,chromInfo->chrom);
+    cgiTableFieldEnd();
+    cgiTableFieldStartAlignRight();
+    printLongWithCommas(stdout, size);
+    puts("&nbsp;&nbsp;");
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    total += size;
+    }
+if (!truncating)
+    {
+    chromInfoTotalRow(seqCount, total);
+    }
+else
+    {
+    safef(msg1, sizeof(msg1), "Limit reached");
+    safef(msg2, sizeof(msg2), "%d rows displayed", limit);
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts(msg1);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    puts(msg2);
+    cgiTableFieldEnd();
+    for(;limit-- && (chromInfo != NULL); chromInfo = chromInfo->next)
+	total += chromInfo->size;
+
+    unsigned scafCount = seqCount;
+    unsigned totalSize = total;
+    cgiTableRowEnd();
+    safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
+    safef(msg2, sizeof(msg2), "total size:");
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts(msg1);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    puts(msg2);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    printLongWithCommas(stdout, scafCount);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printLongWithCommas(stdout, totalSize);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    }
+}
+
 void chromInfoRowsNonChrom(int limit)
 /* Make table rows of non-chromosomal chromInfo name & size, sorted by size. */
 {
+if (trackHubDatabase(database))
+    {
+    chromInfoRowsNonChromTrackHub(limit);
+    return;
+    }
+
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;

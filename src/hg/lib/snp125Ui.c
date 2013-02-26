@@ -77,27 +77,31 @@ char *snp132ColorSourceLabels[] = {
 int snp132ColorSourceArraySize   = ArraySize(snp132ColorSourceLabels);
 
 /****** MolType related controls *******/
-/* Types: unknown, genomic, cDNA */
+/* Types: unknown, genomic, cDNA, [rarely] mito */
 
 char *snp125MolTypeLabels[] = {
     "Unknown",
     "Genomic",
     "cDNA",
+    "Mito"
 };
 char *snp125MolTypeOldColorVars[] = {
     "snp125MolTypeUnknown",
     "snp125MolTypeGenomic",
     "snp125MolTypecDNA",
+    "snp125MolTypeMito",
 };
 char *snp125MolTypeDataName[] = {
     "unknown",
     "genomic",
     "cDNA",
+    "mito"
 };
 char *snp125MolTypeDefault[] = {
     "red",
     "black",
     "blue",
+    "green"
 };
 static char *snp125MolTypeOldIncludeVars[] = {
     "snp125MolTypeUnknownInclude",
