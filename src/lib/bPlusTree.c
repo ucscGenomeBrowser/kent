@@ -162,7 +162,7 @@ else
     }
 }
 
-void rTraverse(struct bptFile *bpt, bits64 blockStart, void *context, 
+static void rTraverse(struct bptFile *bpt, bits64 blockStart, void *context, 
     void (*callback)(void *context, void *key, int keySize, void *val, int valSize) )
 /* Recursively go across tree, calling callback at leaves. */
 {
@@ -201,6 +201,73 @@ else
     for (i=0; i<childCount; ++i)
 	rTraverse(bpt, fileOffsets[i], context, callback);
     }
+}
+
+static bits64 bptDataStart(struct bptFile *bpt)
+/* Return offset of first bit of data (as opposed to index) in file.  In hind sight I wish
+ * this were stored in the header, but fortunately it's not that hard to compute. */
+{
+bits64 offset = bpt->rootOffset;
+for (;;)
+    {
+    /* Seek to block start */
+    udcSeek(bpt->udc, offset);
+
+    /* Read block header,  break if we are leaf. */
+    UBYTE isLeaf;
+    UBYTE reserved;
+    bits16 childCount;
+    udcMustReadOne(bpt->udc, isLeaf);
+    if (isLeaf)
+         break;
+    udcMustReadOne(bpt->udc, reserved);
+    boolean isSwapped = bpt->isSwapped;
+    childCount = udcReadBits16(bpt->udc, isSwapped);
+
+    /* Read and discard first key. */
+    char keyBuf[bpt->keySize];
+    udcMustRead(bpt->udc, keyBuf, bpt->keySize);
+
+    /* Get file offset of sub-block. */
+    offset = udcReadBits64(bpt->udc, isSwapped);
+    }
+return offset;
+}
+
+static bits64 bptDataOffset(struct bptFile *bpt, bits64 itemPos)
+/* Return position of file of data corresponding to given itemPos.  For first piece of
+ * data pass in 0. */
+{
+if (itemPos >= bpt->itemCount)
+    errAbort("Item index %lld greater than item count %lld in %s", 
+	itemPos, bpt->itemCount, bpt->fileName);
+bits64 blockPos = itemPos/bpt->blockSize;
+bits32 insidePos = itemPos - blockPos*bpt->blockSize;
+int blockHeaderSize = 4;
+bits64 itemByteSize = bpt->valSize + bpt->keySize;
+bits64 blockByteSize = bpt->blockSize * itemByteSize + blockHeaderSize;
+bits64 blockOffset = blockByteSize*blockPos + bptDataStart(bpt);
+bits64 itemOffset = blockOffset + blockHeaderSize + itemByteSize * insidePos;
+return itemOffset;
+}
+
+void bptKeyAtPos(struct bptFile *bpt, bits64 itemPos, void *result)
+/* Fill in result with the key at given itemPos.  For first piece of data itemPos is 0 
+ * Result must be at least bpt->keySize.  If result is a string it won't be zero terminated
+ * by this routine.  Use bptStringKeyAtPos instead. */
+{
+bits64 offset = bptDataOffset(bpt, itemPos);
+udcSeek(bpt->udc, offset);
+udcMustRead(bpt->udc, result, bpt->keySize);
+}
+
+void bptStringKeyAtPos(struct bptFile *bpt, bits64 itemPos, char *result, int maxResultSize)
+/* Fill in result with the key at given itemPos.  The maxResultSize should be 1+bpt->keySize
+ * to accommodate zero termination of string. */
+{
+assert(maxResultSize > bpt->keySize);
+bptKeyAtPos(bpt, itemPos, result);
+result[bpt->keySize] = 0;
 }
 
 boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize)

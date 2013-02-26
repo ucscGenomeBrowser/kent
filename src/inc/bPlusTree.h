@@ -89,6 +89,15 @@ void bptFileTraverse(struct bptFile *bpt, void *context,
 /* Traverse bPlusTree on file, calling supplied callback function at each
  * leaf item. */
 
+void bptKeyAtPos(struct bptFile *bpt, bits64 itemPos, void *result);
+/* Fill in result with the key at given itemPos.  For first piece of data itemPos is 0 
+ * and for last piece is bpt->itemCount - 1.  Result must be at least bpt->keySize.  
+ * If result is a string it won't be zero terminated
+ * by this routine.  Use bptStringKeyAtPos instead. */
+
+void bptStringKeyAtPos(struct bptFile *bpt, bits64 itemPos, char *result, int maxResultSize);
+/* Fill in result with the key at given itemPos.  The maxResultSize should be 1+bpt->keySize
+ * to accommodate zero termination of string. */
 
 void bptFileCreate(
 	void *itemArray, 	/* Sorted array of things to index. */
