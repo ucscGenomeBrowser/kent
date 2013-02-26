@@ -40,12 +40,6 @@ static struct hash *hubAssemblyHash; // mapping of assembly name to genome struc
 static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 
-static boolean hasProtocol(char *urlOrPath)
-/* Return TRUE if it looks like it has http://, ftp:// etc. */
-{
-return stringIn("://", urlOrPath) != NULL;
-}
-
 char *trackHubRelativeUrl(char *hubUrl, char *path)
 /* Return full path (in URL form if it's a remote hub) given
  * path possibly relative to hubUrl. Do a freeMem of result
@@ -199,7 +193,7 @@ if (hel == NULL)
     return 0;
 
 struct trackHubGenome *genome = hel->val;
-struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
+struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
 int num = slCount(chromList);
 slFreeList(&chromList);
@@ -215,7 +209,7 @@ if (hel == NULL)
     return 0;
 
 struct trackHubGenome *genome = hel->val;
-struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
+struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
 return chromList;
 }
@@ -228,7 +222,7 @@ if (hel == NULL)
     return NULL;
 
 struct trackHubGenome *genome = hel->val;
-struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
+struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
 char *defaultName = cloneString( chromList->name);
 slFreeList(&chromList);
@@ -268,7 +262,7 @@ if (hel == NULL)
 
 struct trackHubGenome *genome = hel->val;
 struct chromInfo *ci, *ciList = NULL;
-struct slName *chromList = twoBitSeqNamesExt(genome->twoBitPath, TRUE);
+struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
 for(; chromList; chromList = chromList->next)
     {
@@ -444,7 +438,7 @@ while ((ra = raNextRecord(lf)) != NULL)
 	hashReplace(ra, "organism", el->organism);
 	el->defaultPos  = hashFindVal(ra, "defaultPos");
 	el->twoBitPath = trackHubRelativeUrl(url, twoBitPath);
-	el->tbf = twoBitOpenExt(el->twoBitPath, TRUE);
+	el->tbf = twoBitOpen(el->twoBitPath);
 	hashReplace(ra, "htmlPath",trackHubRelativeUrl(url, hashFindVal(ra, "htmlPath")));
 	if (groups != NULL)
 	    el->groups = trackHubRelativeUrl(url, groups);
