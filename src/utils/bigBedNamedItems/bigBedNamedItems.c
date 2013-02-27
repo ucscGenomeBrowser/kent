@@ -53,7 +53,6 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
 	block.offset = byteSwap64(block.offset);
 	block.size = byteSwap64(block.size);
 	}
-    uglyf("found block at %llu size %llu\n", block.offset, block.size);
 
     /* Read in raw data */
     udcSeek(bbi->udc, block.offset);
@@ -94,7 +93,6 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
 		break;
 	    dyStringAppendC(dy, c);
 	    }
-	uglyf("?%s\n", dy->string);
 	if (startsWithWordByDelimiter(name, '\t', dy->string))
 	    {
 	    char chromName[bbi->chromBpt->keySize+1];
