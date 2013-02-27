@@ -465,7 +465,7 @@ noInherit on
     longLabel Sequences in Articles: PubmedCentral and Elsevier
     parent pubs on
     type bed 12 .
-    visibility pack
+    visibility dense
     priority 2
     configurable off
     configureByPopup off
