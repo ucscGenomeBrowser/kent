@@ -620,6 +620,9 @@ void refAdd(struct slRef **pRefList, void *val);
 void refAddUnique(struct slRef **pRefList, void *val);
 /* Add reference to list if not already on list. */
 
+void slRefFreeListAndVals(struct slRef **pList);
+/* Free up (with simple freeMem()) each val on list, and the list itself as well. */
+
 struct slRef *refListFromSlList(void *list);
 /* Make a reference list that mirrors a singly-linked list. */
 
