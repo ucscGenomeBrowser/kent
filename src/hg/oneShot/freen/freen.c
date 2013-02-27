@@ -5,10 +5,7 @@
 #include "hash.h"
 #include "options.h"
 #include "ra.h"
-#include "jksql.h"
-#include "trackDb.h"
-#include "hui.h"
-#include "rainbow.h"
+#include "basicBed.h"
 
 void usage()
 {
@@ -19,10 +16,16 @@ errAbort("freen - test some hairbrained thing.\n"
 void freen(char *input, char *desiredOutput)
 /* Test some hair-brained thing. */
 {
-double a = atof(input);
-double desired = atof(desiredOutput);
-double exponent = log(desired)/log(a);
-printf("a = %g, desired = %g, a^%g = %g\n", a, desired, exponent, pow(a, exponent));
+struct lineFile *lf = lineFileOpen(input, TRUE);
+char *row[12];
+struct bed *bed;
+AllocVar(bed);
+while (lineFileNextRow(lf, row, ArraySize(row)))
+    {
+    printf("%d %s\n", lf->lineIx, row[3]);
+    // bed = bedLoad12(row);
+    loadAndValidateBed(row, 12, 12, lf, bed, NULL, FALSE);
+    }
 }
 
 int main(int argc, char *argv[])
