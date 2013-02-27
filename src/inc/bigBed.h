@@ -13,13 +13,16 @@
 #endif
 
 struct bigBedInterval
-/* A partially parsed out bed record plus some extra fields. */
+/* A partially parsed out bed record plus some extra fields.  Use this directly
+ * or convert it to an array of characters with bigBedIntervalToRow. */
     {
     struct bigBedInterval *next;	/* Next in list. */
     bits32 start, end;		/* Range inside chromosome - half open zero based. */
     char *rest;			/* Rest of line. May be NULL*/
     bits32 chromId;             /* ID of chromosome.  */
     };
+
+/*** Routines to open & close bigBed files, and to do chromosome range queries on them. ***/
 
 struct bbiFile *bigBedFileOpen(char *fileName);
 /* Open up big bed file.   Free this up with bbiFileClose. */
@@ -50,6 +53,32 @@ boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 star
 	int summarySize, struct bbiSummaryElement *summary);
 /* Get extended summary information for summarySize evenely spaced elements into
  * the summary array. */
+
+/*** Some routines for accessing bigBed items via name. ***/
+
+struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, char *name, struct lm *lm);
+/* Return list of intervals matching file. These intervals will be allocated out of lm. */
+
+int bigBedIntervalToRowLookupChrom(struct bigBedInterval *interval, 
+    struct bigBedInterval *prevInterval, struct bbiFile *bbi,
+    char *chromBuf, int chromBufSize, char *startBuf, char *endBuf, char **row, int rowSize);
+/* Convert bigBedInterval to array of chars equivalend to what you'd get by parsing the
+ * bed file.  If you already know what chromosome the interval is on use the simpler
+ * bigBedIntervalToRow.  This one will look up the chromosome based on the chromId field
+ * of the interval,  which is relatively time consuming.  To avoid doing this unnecessarily
+ * pass in a non-NULL prevInterval,  and if the chromId is the same on prevInterval as this,
+ * it will avoid the lookup.  The chromBufSize should be at greater or equal to 
+ * bbi->chromBpt->keySize+1.  The startBuf and endBuf are used to hold the ascii representation of
+ * start and end, and should be 16 bytes.  Note that the interval->rest string will have zeroes 
+ * inserted as a side effect.  Returns number of fields in row.  */
+
+void bigBedIntervalListToBedFile(struct bbiFile *bbi, struct bigBedInterval *intervalList, FILE *f);
+/* Write out big bed interval list to bed file, looking up chromosome. */
+
+void bigBedAttachNameIndex(struct bbiFile *bbi);
+/* Attach name index part of bbiFile to bbi.  Not normally needed to call directly. */
+
+/** Routines to access other data from a bigBed file. */
 
 bits64 bigBedItemCount(struct bbiFile *bbi);
 /* Return total items in file. */
