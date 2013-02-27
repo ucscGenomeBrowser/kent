@@ -493,7 +493,7 @@ noInherit on
     shortLabel SNPs
     longLabel SNPs in Publications
     parent pubs on
-    visibility hide
+    visibility dense
     priority 3
     type bed 5
 
