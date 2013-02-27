@@ -39,25 +39,70 @@ if (bbi->nameBpt == NULL)
     }
 }
 
+struct offsetSize 
+/* Simple file offset and file size. */
+    {
+    bits64 offset; 
+    bits64 size;
+    };
+
+int cmpOffsetSizeRef(const void *va, const void *vb)
+/* Compare to sort slRef pointing to offsetSize.  Sort is kind of hokey,
+ * but guarantees all items that are the same will be next to each other
+ * at least, which is all we care about. */
+{
+const struct slRef *a = *((struct slRef **)va);
+const struct slRef *b = *((struct slRef **)vb);
+return memcmp(a->val, b->val, sizeof(struct offsetSize));
+}
+
+struct fileOffsetSize *bigBedChunksMatchingName(struct bbiFile *bbi, char *name)
+/* Get list of file chunks that match name.  Can slFreeList this when done. */
+{
+bigBedAttachNameIndex(bbi);
+struct slRef *blockList = bptFileFindMultiple(bbi->nameBpt, name, strlen(name), sizeof(struct offsetSize));
+slSort(&blockList, cmpOffsetSizeRef);
+
+struct fileOffsetSize *fosList = NULL, *fos;
+struct offsetSize lastOffsetSize = {0,0};
+struct slRef *blockRef;
+for (blockRef = blockList; blockRef != NULL; blockRef = blockRef->next)
+    {
+    if (memcmp(&lastOffsetSize, blockRef->val, sizeof(lastOffsetSize)) != 0)
+        {
+	memcpy(&lastOffsetSize, blockRef->val, sizeof(lastOffsetSize));
+	AllocVar(fos);
+	if (bbi->isSwapped)
+	    {
+	    fos->offset = byteSwap64(lastOffsetSize.offset);
+	    fos->size = byteSwap64(lastOffsetSize.size);
+	    }
+	else
+	    {
+	    fos->offset = lastOffsetSize.offset;
+	    fos->size = lastOffsetSize.size;
+	    }
+	slAddHead(&fosList, fos);
+	}
+    }
+slRefFreeListAndVals(&blockList);
+slReverse(&fosList);
+return fosList;
+}
+
 boolean bigBedNameQuery(struct bbiFile *bbi, char *name, FILE *f)
 /* Write item matching name to file.  Return TRUE if anything written.  */
 {
 bigBedAttachNameIndex(bbi);
 boolean isSwapped = bbi->isSwapped;
-struct offsetSize {bits64 offset; bits64 size;} block;
+struct fileOffsetSize *fos, *fosList = bigBedChunksMatchingName(bbi, name);
 boolean didWrite = FALSE;
-if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
+for (fos = fosList; fos != NULL; fos = fos->next)
     {
-    if (bbi->isSwapped)
-	{
-	block.offset = byteSwap64(block.offset);
-	block.size = byteSwap64(block.size);
-	}
-
     /* Read in raw data */
-    udcSeek(bbi->udc, block.offset);
-    char *rawData = needLargeMem(block.size);
-    udcRead(bbi->udc, rawData, block.size);
+    udcSeek(bbi->udc, fos->offset);
+    char *rawData = needLargeMem(fos->size);
+    udcRead(bbi->udc, rawData, fos->size);
 
     /* Optionally uncompress data, and set data pointer to uncompressed version. */
     char *uncompressedData = NULL;
@@ -66,12 +111,12 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
     if (bbi->uncompressBufSize > 0)
 	{
 	data = uncompressedData = needLargeMem(bbi->uncompressBufSize);
-	dataSize = zUncompress(rawData, block.size, uncompressedData, bbi->uncompressBufSize);
+	dataSize = zUncompress(rawData, fos->size, uncompressedData, bbi->uncompressBufSize);
 	}
     else
 	{
         data = rawData;
-	dataSize = block.size;
+	dataSize = fos->size;
 	}
 
     /* Set up for "memRead" routines to more or less treat memory block like file */
@@ -107,6 +152,7 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
     freez(&uncompressedData);
     freez(&rawData);
     }
+slFreeList(&fosList);
 return didWrite;
 }
 
