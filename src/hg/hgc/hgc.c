@@ -4050,7 +4050,8 @@ if (dbIsFound)
     char rootName[256];
     char parsedChrom[32];
     hParseTableName(database, tbl, rootName, parsedChrom);
-    hti = hFindTableInfo(database, seqName, rootName);
+    if (!trackHubDatabase(database))
+	hti = hFindTableInfo(database, seqName, rootName);
     }
 char *thisOrg = hOrganism(database);
 cartWebStart(cart, database, "Get DNA in Window (%s/%s)", database, thisOrg);
@@ -4631,7 +4632,8 @@ else
      * or bigBed if it is in the database but has only one column called 'fileName';
      * in which case, just get DNA as if no table were given. */
     hParseTableName(database, tbl, rootName, parsedChrom);
-    hti = hFindTableInfo(database, seqName, rootName);
+    if (!trackHubDatabase(database))
+	hti = hFindTableInfo(database, seqName, rootName);
     if (hti == NULL || hti->startField[0] == 0)
 	{
 	itemCount = 1;

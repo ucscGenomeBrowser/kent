@@ -446,7 +446,7 @@ url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 track pubs
 shortLabel Publications
 longLabel Publications: Sequences in scientific articles
-group map
+group pub
 priority 12
 visibility dense
 color 0,0,0
@@ -493,7 +493,7 @@ noInherit on
     shortLabel SNPs
     longLabel SNPs in Publications
     parent pubs on
-    visibility hide
+    visibility dense
     priority 3
     type bed 5
 
