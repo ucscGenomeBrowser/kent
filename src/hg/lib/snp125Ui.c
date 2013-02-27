@@ -107,6 +107,7 @@ static char *snp125MolTypeOldIncludeVars[] = {
     "snp125MolTypeUnknownInclude",
     "snp125MolTypeGenomicInclude",
     "snp125MolTypecDNAInclude",
+    "snp125MolTypeMitoInclude",
 };
 
 int snp125MolTypeArraySize   = ArraySize(snp125MolTypeLabels);
