@@ -48,3 +48,43 @@ type bed 5 .
 track nscanGene override
 informant Horse N-SCAN uses human (hg18) as the informant.
 
+track numtSeq2012 override
+longLabel Horse NumtS mitochondrial sequence
+html numtSeqEquCap2
+
+    track numtS override
+    html numtSeqEquCap2
+
+    track numtSAssembled override
+    html numtSeqEquCap2
+
+    track numtSMitochondrion override
+    html numtSeqEquCap2
+
+    track  bamAllNumtSSorted override
+    html numtSeqEquCap2
+
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex ECA_NumtS_.*
+
+searchTable numtS
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex ECA_NumtS_.*
+
+searchTable numtSAssembled
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex ECA_NumtS_.*
+
