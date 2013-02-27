@@ -53,6 +53,7 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
 	block.offset = byteSwap64(block.offset);
 	block.size = byteSwap64(block.size);
 	}
+    uglyf("found block at %llu size %llu\n", block.offset, block.size);
 
     /* Read in raw data */
     udcSeek(bbi->udc, block.offset);
@@ -62,17 +63,20 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
     /* Optionally uncompress data, and set data pointer to uncompressed version. */
     char *uncompressedData = NULL;
     char *data = NULL;
+    int dataSize = 0;
     if (bbi->uncompressBufSize > 0)
 	{
 	data = uncompressedData = needLargeMem(bbi->uncompressBufSize);
-	size_t uncSize = zUncompress(rawData, block.size, uncompressedData, bbi->uncompressBufSize);
-	assert(uncSize <= bbi->uncompressBufSize);
+	dataSize = zUncompress(rawData, block.size, uncompressedData, bbi->uncompressBufSize);
 	}
     else
+	{
         data = rawData;
+	dataSize = block.size;
+	}
 
     /* Set up for "memRead" routines to more or less treat memory block like file */
-    char *blockPt = data, *blockEnd = data + block.size;
+    char *blockPt = data, *blockEnd = data + dataSize;
     struct dyString *dy = dyStringNew(32); // Keep bits outside of chrom/start/end here
 
 
@@ -90,6 +94,7 @@ if (bptFileFind(bbi->nameBpt, name, strlen(name), &block, sizeof(block)))
 		break;
 	    dyStringAppendC(dy, c);
 	    }
+	uglyf("?%s\n", dy->string);
 	if (startsWithWordByDelimiter(name, '\t', dy->string))
 	    {
 	    char chromName[bbi->chromBpt->keySize+1];
