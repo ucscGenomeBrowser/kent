@@ -162,6 +162,65 @@ else
     }
 }
 
+static void rFindMulti(struct bptFile *bpt, bits64 blockStart, void *key, struct slRef **pList)
+/* Find values corresponding to key and add them to pList */
+{
+/* Seek to start of block. */
+udcSeek(bpt->udc, blockStart);
+
+/* Read block header. */
+UBYTE isLeaf;
+UBYTE reserved;
+bits16 i, childCount;
+udcMustReadOne(bpt->udc, isLeaf);
+udcMustReadOne(bpt->udc, reserved);
+boolean isSwapped = bpt->isSwapped;
+childCount = udcReadBits16(bpt->udc, isSwapped);
+
+int keySize = bpt->keySize;
+UBYTE keyBuf[keySize];   /* Place to put a key, buffered on stack. */
+UBYTE valBuf[bpt->valSize];   /* Place to put a value, buffered on stack. */
+
+if (isLeaf)
+    {
+    for (i=0; i<childCount; ++i)
+        {
+	udcMustRead(bpt->udc, keyBuf, keySize);
+	udcMustRead(bpt->udc, valBuf, bpt->valSize);
+	if (memcmp(key, keyBuf, keySize) == 0)
+	    {
+	    void *val = cloneMem(valBuf, bpt->valSize);
+	    refAdd(pList, val);
+	    }
+	}
+    }
+else
+    {
+    /* Read first key and first file offset. */
+    udcMustRead(bpt->udc, keyBuf, keySize);
+    bits64 lastFileOffset = udcReadBits64(bpt->udc, isSwapped);
+    bits64 fileOffset = lastFileOffset;
+    int lastCmp = memcmp(key, keyBuf, keySize);
+
+    /* Loop through remainder. */
+    for (i=1; i<childCount; ++i)
+	{
+	udcMustRead(bpt->udc, keyBuf, keySize);
+	fileOffset = udcReadBits64(bpt->udc, isSwapped);
+	int cmp = memcmp(key, keyBuf, keySize);
+	if (lastCmp >= 0 && cmp <= 0)
+	    rFindMulti(bpt, lastFileOffset, key, pList);
+	if (cmp < 0)
+	    return;
+	lastCmp = cmp;
+	lastFileOffset = fileOffset;
+	}
+    /* If made it all the way to end, do last one too. */
+    rFindMulti(bpt, fileOffset, key, pList);
+    }
+}
+
+
 static void rTraverse(struct bptFile *bpt, bits64 blockStart, void *context, 
     void (*callback)(void *context, void *key, int keySize, void *val, int valSize) )
 /* Recursively go across tree, calling callback at leaves. */
@@ -270,13 +329,10 @@ bptKeyAtPos(bpt, itemPos, result);
 result[bpt->keySize] = 0;
 }
 
-boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize)
-/* Find value associated with key.  Return TRUE if it's found. 
-*  Parameters:
-*     bpt - file handle returned by bptFileOpen
-*     key - pointer to key string, which needs to be bpt->keySize long
-*     val - pointer to where to put retrieved value
-*/
+static boolean bptFileFindMaybeMulti(struct bptFile *bpt, void *key, int keySize, int valSize,
+    boolean multi, void *singleVal, struct slRef **multiVal)
+/* Do either a single or multiple find depending in multi parameter.  Only one of singleVal
+ * or multiVal should be non-NULL, depending on the same parameter. */
 {
 /* Check key size vs. file key size, and act appropriately.  If need be copy key to a local
  * buffer and zero-extend it. */
@@ -295,8 +351,34 @@ if (valSize != bpt->valSize)
     errAbort("Value size mismatch between bptFileFind (valSize=%d) and %s (valSize=%d)",
     	valSize, bpt->fileName, bpt->valSize);
 
-/* Call recursive finder. */
-return rFind(bpt, bpt->rootOffset, key, val);
+if (multi)
+    {
+    rFindMulti(bpt, bpt->rootOffset, key, multiVal);
+    return *multiVal != NULL;
+    }
+else
+    return rFind(bpt, bpt->rootOffset, key, singleVal);
+}
+
+boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize)
+/* Find value associated with key.  Return TRUE if it's found. 
+*  Parameters:
+*     bpt - file handle returned by bptFileOpen
+*     key - pointer to key string, which needs to be bpt->keySize long
+*     val - pointer to where to put retrieved value
+*/
+{
+return bptFileFindMaybeMulti(bpt, key, keySize, valSize, FALSE, val, NULL);
+}
+
+struct slRef *bptFileFindMultiple(struct bptFile *bpt, void *key, int keySize, int valSize)
+/* Find all values associated with key.  Store this in ->val item of returned list. 
+ * Do a slRefFreeListAndVals() on list when done. */
+{
+struct slRef *list = NULL;
+bptFileFindMaybeMulti(bpt, key, keySize, valSize, TRUE, NULL, &list);
+slReverse(&list);
+return list;
 }
 
 void bptFileTraverse(struct bptFile *bpt, void *context,

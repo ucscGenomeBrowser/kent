@@ -76,13 +76,17 @@ void bptFileDetach(struct bptFile **pBpt);
 
 boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize);
 /* Find value associated with key.  Return TRUE if it's found. 
-*  Parameters:
-*     bpt - file handle returned by bptFileOpen
-*     key - pointer to key string
-*     keySize - size of key.  Normally just strlen(key)
-*     val - pointer to where to put retrieved value
-*     valSize - size of memory buffer that will hold val.  Should match bpt->valSize.
-*/
+ *  Parameters:
+ *     bpt - file handle returned by bptFileOpen
+ *     key - pointer to key string
+ *     keySize - size of key.  Normally just strlen(key)
+ *     val - pointer to where to put retrieved value
+ *     valSize - size of memory buffer that will hold val.  Should match bpt->valSize.
+ */
+
+struct slRef *bptFileFindMultiple(struct bptFile *bpt, void *key, int keySize, int valSize);
+/* Find all values associated with key.  Store this in ->val item of returned list. 
+ * Do a slRefFreeListAndVals() on list when done. */
 
 void bptFileTraverse(struct bptFile *bpt, void *context,
     void (*callback)(void *context, void *key, int keySize, void *val, int valSize) );
