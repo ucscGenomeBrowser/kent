@@ -945,7 +945,7 @@ CREATE TABLE ucscToEnsembl (
     ln -s blastz.canFam3.swap lastz.canFam3
 
 ############################################################################
-# NUMTS TRACK (working 2012-10-31 - Chin)
+# NUMTS TRACK (working 2013-02-05 - Chin)
 
 # copy and unzip
 # http://193.204.182.50/files/tracks.zip and 
@@ -954,7 +954,7 @@ CREATE TABLE ucscToEnsembl (
 
     mkdir /hive/data/genomes/bosTau6/bed/NumtS
     cd /hive/data/genomes/bosTau6/bed/NumtS
-    cp /hive/data/outside/NumtS/2012/tracks/Bos_taurus_6/* .
+    cp /hive/data/outside/NumtS/2012/tracks/bosTau6/* .
     cat Tracks_nuclear_NumtS_BosTau6 | grep -v "^track" > bosTau6NumtS.bed
     cat tracks_NumtS_BT6_assembled | grep -v "^track" > bosTau6NumtSAssembled.bed
     cat Tracks_mit_NumtS_BosTau6 | grep -v "^track" >  bosTau6NumtSMitochondrion.bed

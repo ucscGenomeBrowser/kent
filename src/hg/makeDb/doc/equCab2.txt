@@ -2553,4 +2553,29 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -verbose=2 > chainMerge.log 2>&1 &
 XXX - running - Mon Nov  5 10:39:45 PST 2012
 
+############################################################################
+# NUMTS TRACK (working 2013-02-05 - Chin)
+
+# copy and unzip
+# http://193.204.182.50/files/tracks.zip and
+# http://193.204.182.50/files/other%20NumtS%20tracks.zip
+# to /hive/data/outside/NumtS/2012/tracks
+
+    mkdir /hive/data/genomes/equCab2/bed/NumtS
+    cd /hive/data/genomes/equCab2/bed/NumtS
+    cp /hive/data/outside/NumtS/2012/tracks/equCab2/* .
+    cat tracks_nuclear_NumtS_ECA | grep -v "^track" > equCab2NumtS.bed
+    cat tracks_numtS_assembled_ECA | grep -v "^track" > equCab2NumtSAssembled.bed
+    cat tracks_mit_NumtS_ECA | grep -v "^track" >  equCab2NumtSMitochondrion.bed
+
+    # load the 3 bed files to equCab2
+    hgLoadBed equCab2  numtSAssembled  equCab2NumtSAssembled.bed
+    hgLoadBed equCab2 numtS equCab2NumtS.bed
+    hgLoadBed equCab2 numtSMitochondrion equCab2NumtSMitochondrion.bed
+    # Make /gbdb/ links and load bam
+    mkdir /gbdb/equCab2/NumtS
+    ln -s `pwd`/EQ-2_NumtS_seqs.sorted.bam{,.bai} /gbdb/equCab2/NumtS/
+    hgBbiDbLink equCab2 bamAllNumtSSorted /gbdb/equCab2/NumtS/EQ-2_NumtS_seqs.sorted.bam
+    # setup trackDb for equCab2
+
 ##############################################################################
