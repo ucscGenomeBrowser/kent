@@ -18,17 +18,7 @@ struct bigBedInterval
     struct bigBedInterval *next;	/* Next in list. */
     bits32 start, end;		/* Range inside chromosome - half open zero based. */
     char *rest;			/* Rest of line. May be NULL*/
-    };
-
-struct ppBed
-/* A partially parsed out bed record plus some extra fields. */
-    {
-    struct ppBed *next;	/* Next in list. */
-    char *chrom;		/* Chromosome name (not allocated here) */
-    bits32 start, end;		/* Range inside chromosome - half open zero based. */
-    char *rest;			/* The rest of the bed. */
-    bits64 fileOffset;		/* File offset. */
-    bits32 chromId;		/* Chromosome ID. */
+    bits32 chromId;             /* ID of chromosome.  */
     };
 
 struct bbiFile *bigBedFileOpen(char *fileName);

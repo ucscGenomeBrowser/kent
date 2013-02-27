@@ -105,6 +105,7 @@ for (block = blockList; block != NULL; )
 		el->end = e;
 		if (dy->stringSize > 0)
 		    el->rest = lmCloneString(lm, dy->string);
+		el->chromId = chromId;
 		slAddHead(&list, el);
 		}
 	    }
