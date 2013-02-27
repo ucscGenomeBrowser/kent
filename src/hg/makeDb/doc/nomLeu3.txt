@@ -28,7 +28,7 @@
 # rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu_3.0/
 
 ##########################################################################
-# Download sequence (DONE - 2012-04-13 - Pauline)
+# Download sequence (DONE - 2013-02-21 - Pauline)
     mkdir /hive/data/genomes/nomLeu3
     cd /hive/data/genomes/nomLeu3
     mkdir genbank
@@ -490,26 +490,33 @@ taxId 61853
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2012-04-13 - Hiram)
+#	(DONE - 2013-02-25 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/gap
     cd /hive/data/genomes/nomLeu3/bed/gap
+
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../nomLeu3.unmasked.2bit > findMotif.txt 2>&1
-    #	real    0m23.121s
+    #   real	1m2.760s
+
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits nomLeu3 -not gap -bed=notGap.bed
-    #   2756609047 bases of 2756609047 (100.000%) in intersection
-    #   real    0m25.158s
+    #2914144341 bases of 2914144341 (100.000%) in intersection
+    #real	0m18.719s
 
     time featureBits nomLeu3 allGaps.bed notGap.bed -bed=new.gaps.bed
-    #   0 bases of 2756609047 (0.000%) in intersection
-    #   real    15m56.963s
+    #(nomLeu3)
+    #157535294 bases of 2914144341 (5.406%) in intersection
+    #real	9m31.800s
 
-    # no new gaps, nothing to do here
+    #not zero! and not a low number? Investigating...
 
     # are there non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" nomLeu3 | sort | uniq -c
     #   179932 yes
+
+    #(nomLeu3)
+    #     92 no
+    #  12113 yes
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2012-04-13 - Hiram)
