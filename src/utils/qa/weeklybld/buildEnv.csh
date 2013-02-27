@@ -11,6 +11,7 @@ setenv LASTREVIEW2DAY 2013-02-05    # v279 preview2
 setenv BUILDHOME /cluster/bin/build
 setenv WEEKLYBLD ${BUILDHOME}/build-kent/src/utils/qa/weeklybld
 setenv BOX32 titan
+setenv REPLYTO ann@soe.ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
 setenv CVSROOT /projects/compbio/cvsroot
