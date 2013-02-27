@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db nomLeu3
+clade mammal
+genomeCladePriority 13
+scientificName Nomascus leucogenys
+commonName Gibbon
+assemblyDate Oct. 2012
+assemblyLabel Gibbon Genome Sequencing Consortium 
+assemblyShortLabel Nleu_3.0
+orderKey 328
+mitoAcc none
+fastaFiles /hive/data/genomes/nomLeu3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/nomLeu3/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir gibbon
+photoCreditURL http://www.genome.gov/pressDisplay.cfm?photoID=74
+photoCreditName Jim Zuckerman, Gibbon Conservation Center
+ncbiGenomeId 480
+ncbiAssemblyId 506498
+ncbiAssemblyName Nleu_3.0
+ncbiBioProject 13975
+genBankAccessionID GCA_000146795.2
+taxId 61853
