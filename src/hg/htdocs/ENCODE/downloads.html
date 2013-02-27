@@ -19,6 +19,7 @@
         .ltBlue { background-color: #D9E4F8; }
         .buttonLink { width:100px; }
         .right { position:absolute; right:50px; }
+        .undecoratedLink { text-decoration: none; }
     </style>
 
     <body>
@@ -34,12 +35,14 @@
                   <P>
                     This page contains links to directories containing raw and processed
                     data for ENCODE data released as part of the ENCODE production phase
-                    (September 2007 - December 2012). Formats are described on the UCSC Browser
+                    (September 2007 - December 2012). Formats are described on the 
                     <A HREF="/FAQ/FAQformat.html" TARGET=_blank>File Format FAQ</A>.
                     For bulk download, retrieval by
                     <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/" TARGET=_blank>FTP</A>
-                    is recommended. All files here are covered by the
+                    is recommended. 
+                    Production data files are covered by the
                     <A HREF="/ENCODE/terms.html" TARGET=_BLANK>ENCODE data release policy</A>.  
+                    Links in the blue sections below show descriptions of the data as tracks in the UCSC Browser.
                   </P>
                   <P>
                     The ENCODE Analysis Working Group (AWG) is a cross-consortium effort to 
@@ -48,9 +51,8 @@
                     2007 through January 2011 were published in a series of coordinated
                     <A HREF="/ENCODE/pubs.html" TARGET=_BLANK>publications</A>.
                     Results files from the uniform processing reported in these publications are
-                    hosted by the ENCODE Analysis Hub for browser
-                    and <A HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt">visualization</A>
-                    and <A HREF="#analysisHub">download</A>.
+                    hosted by the ENCODE Analysis Hub for <A HREF="#analysisHub">download</A> and 
+                    <A TARGET=_BLANK HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt">visualization in the UCSC Browser</A>.
                     Visit the ENCODE
                     <A HREF="/ENCODE/analysis.html" Target=_BLANK>Integrative Analysis</A> and
                     <A HREF="/ENCODE/qualityMetrics.html" TARGET=_BLANK>Quality Metrics</A>
@@ -75,13 +77,13 @@
                </TR>
                <TR>
                  <td class="ltBlue hd2" colspan=2> Uniform Peaks for
-                      <A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformDnase&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                      <A class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformDnase&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                       target=_blank>DNase</A>,
-                      <A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformFaire&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                      <A class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformFaire&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                       target=_blank>FAIRE</A>,
-                      <A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformHistone&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                      <A class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformHistone&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                       target=_blank>Histone</A>, and
-                      <A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformTfbs&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                      <A class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformTfbs&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                       target=_blank>TFBS</A>
                </TR>
                <TR>
@@ -111,13 +113,13 @@
                </TR>
                <TR>
                  <td class="ltBlue hd2" colspan=2> Uniform Signals for
-                      <A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformDnase&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                      <A class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformDnase&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                       target=_blank>DNase</A>,
-                      <A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformFaire&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                      <A class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformFaire&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                       target=_blank>FAIRE</A>,
-                      <A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformHistone&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                      <A class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformHistone&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                       target=_blank>Histone</A>, and
-                      <A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformTfbs&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                      <A class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformTfbs&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                       target=_blank>TFBS</A>
                </TR>
                <TR>
@@ -126,7 +128,7 @@
                  <TD>Signals for DNase-seq, FAIRE, Histone, and TFBS</TD>
                </TR>
                <TR>
-                 <td class="ltBlue hd2" colspan=2><A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformRNA&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                 <td class="ltBlue hd2" colspan=2><A class="euro undecoratedLink" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_uniformRNA&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                                                      target=_blank>RNA-seq</A>
                </TR>
                <TR>
@@ -145,7 +147,7 @@
                  <TD>Short RNA-seq Contigs</TD>
                </TR>
                <TR>
-                 <td class="ltBlue hd2" colspan=2><A style="text-decoration:none" class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_genomeSegmentation&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
+                 <td class="ltBlue hd2" colspan=2><A class="euro undecoratedLink" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=hub_4607_genomeSegmentation&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt"
                                                      target=_blank>Other</A>
                </TR>
                <TR>
