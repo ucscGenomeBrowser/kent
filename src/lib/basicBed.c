@@ -1348,13 +1348,9 @@ void loadAndValidateBed(char *row[], int wordCount, int fieldCount, struct lineF
 {
 int count;
 int *blockSizes = NULL;
-int tempBlockSizes[1024];
 int *chromStarts;
-int tempChromStarts[1024];
 int *expIds;
-int tempExpIds[1024];
 float *expScores;
-float tempExpScores[1024];
 
 bed->chrom = row[0];  // note this value is not cloned for speed, callers may need to clone it.
 
@@ -1442,13 +1438,18 @@ if (wordCount > 8)
 	}
     }
 
+int tempArraySize = 1;	// How big arrays are below
 if (wordCount > 9)
     {
     lineFileAllInts(lf, row, 9, &bed->blockCount, FALSE, 4, "integer", FALSE);
     if (!(bed->blockCount >= 1))
 	lineFileAbort(lf, "Expecting blockCount (%d) to be 1 or more.", bed->blockCount);
-    
+    tempArraySize = bed->blockCount;
     }
+int tempBlockSizes[tempArraySize];
+int tempChromStarts[tempArraySize];
+int tempExpIds[tempArraySize];
+float tempExpScores[tempArraySize];
 if (wordCount > 10)
     {
     if (isCt)
@@ -1459,7 +1460,7 @@ if (wordCount > 10)
 	}
     else
 	{
-        count = lineFileAllIntsArray(lf, row, 10, tempBlockSizes, sizeof tempBlockSizes, TRUE, 4, "integer", TRUE);
+        count = lineFileAllIntsArray(lf, row, 10, tempBlockSizes, tempArraySize, TRUE, 4, "integer", TRUE);
 	blockSizes = tempBlockSizes;
 	}
     if (count != bed->blockCount)
@@ -1482,7 +1483,7 @@ if (wordCount > 11)
 	}
     else
 	{
-        count = lineFileAllIntsArray(lf, row, 11, tempChromStarts, sizeof tempChromStarts, TRUE, 4, "integer", TRUE);
+        count = lineFileAllIntsArray(lf, row, 11, tempChromStarts, tempArraySize, TRUE, 4, "integer", TRUE);
 	chromStarts = tempChromStarts;
 	}
     if (count != bed->blockCount)
@@ -1539,7 +1540,7 @@ if (wordCount > 12)
 	}
     else
 	{
-        count = lineFileAllIntsArray(lf, row, 13, tempExpIds, sizeof tempExpIds, TRUE, 4, "integer", TRUE);
+        count = lineFileAllIntsArray(lf, row, 13, tempExpIds, tempArraySize, TRUE, 4, "integer", TRUE);
 	expIds = tempExpIds;
 	}
     if (count != bed->expCount)
@@ -1553,7 +1554,7 @@ if (wordCount > 12)
 	    }
 	else
 	    {
-	    count = sqlFloatArray(row[14], tempExpScores, sizeof tempExpScores);
+	    count = sqlFloatArray(row[14], tempExpScores, tempArraySize);
 	    expScores = tempExpScores;
 	    }
 	if (count != bed->expCount)
