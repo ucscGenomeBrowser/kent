@@ -90,13 +90,13 @@ slReverse(&fosList);
 return fosList;
 }
 
-boolean bigBedNameQuery(struct bbiFile *bbi, char *name, FILE *f)
-/* Write item matching name to file.  Return TRUE if anything written.  */
+struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, char *name, struct lm *lm)
+/* Return list of intervals matching file. These intervals will be allocated out of lm. */
 {
 bigBedAttachNameIndex(bbi);
 boolean isSwapped = bbi->isSwapped;
 struct fileOffsetSize *fos, *fosList = bigBedChunksMatchingName(bbi, name);
-boolean didWrite = FALSE;
+struct bigBedInterval *interval, *intervalList = NULL;
 for (fos = fosList; fos != NULL; fos = fos->next)
     {
     /* Read in raw data */
@@ -140,10 +140,12 @@ for (fos = fosList; fos != NULL; fos = fos->next)
 	    }
 	if (startsWithWordByDelimiter(name, '\t', dy->string))
 	    {
-	    char chromName[bbi->chromBpt->keySize+1];
-	    bptStringKeyAtPos(bbi->chromBpt, chromIx, chromName, sizeof(chromName));
-	    fprintf(f, "%s\t%u\t%u\t%s\n", chromName, s, e, dy->string);
-	    didWrite = TRUE;
+	    lmAllocVar(lm, interval);
+	    interval->start = s;
+	    interval->end = e;
+	    interval->rest = cloneString(dy->string);
+	    interval->chromId = chromIx;
+	    slAddHead(&intervalList, interval);
 	    }
 	}
 
@@ -153,7 +155,25 @@ for (fos = fosList; fos != NULL; fos = fos->next)
     freez(&rawData);
     }
 slFreeList(&fosList);
-return didWrite;
+slReverse(&intervalList);
+return intervalList;
+}
+
+void bigBedIntervalListToBedFile(struct bbiFile *bbi, struct bigBedInterval *intervalList, FILE *f)
+/* Write out big bed interval list to bed file,  looking up chromosome mostly */
+{
+char chromName[bbi->chromBpt->keySize+1];
+int chromId = -1;
+struct bigBedInterval *interval;
+for (interval = intervalList; interval != NULL; interval = interval->next)
+    {
+    if (interval->chromId != chromId)
+        {
+	chromId = interval->chromId;
+	bptStringKeyAtPos(bbi->chromBpt, chromId, chromName, sizeof(chromName));
+	}
+    fprintf(f, "%s\t%u\t%u\t%s\n", chromName, interval->start, interval->end, interval->rest);
+    }
 }
 
 void bigBedNamedItems(char *bigBedFile, char *name, char *outFile)
@@ -161,7 +181,9 @@ void bigBedNamedItems(char *bigBedFile, char *name, char *outFile)
 {
 struct bbiFile *bbi = bigBedFileOpen(bigBedFile);
 FILE *f = mustOpen(outFile, "w");
-bigBedNameQuery(bbi, name, f);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *intervalList = bigBedNameQuery(bbi, name, lm);
+bigBedIntervalListToBedFile(bbi, intervalList, f);
 carefulClose(&f);
 }
 
