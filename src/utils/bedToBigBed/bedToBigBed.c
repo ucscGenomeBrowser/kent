@@ -613,7 +613,7 @@ cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), blockCount,
     blockSize, 1, NULL, bbiBoundsArrayFetchKey, bbiBoundsArrayFetchOffset, 
     indexOffset, f);
 freez(&boundsArray);
-verboseTime(1, "index write");
+verboseTime(2, "index write");
 
 /* Declare arrays and vars that track the zoom levels we actually output. */
 bits32 zoomAmounts[bbiMaxZoomLevels];
