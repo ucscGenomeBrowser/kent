@@ -405,10 +405,10 @@ return rTraverse(bpt, bpt->rootOffset, context, callback);
  *  01 02 03 04   05 06 07 08  09 10 11 12   13 14 15 16   17 18 19 20   21 22 23 24  25 26 27
  */
 
-static int xToY(int x, unsigned y)
+static long xToY(int x, unsigned y)
 /* Return x to the Y power, with y usually small. */
 {
-int i, val = 1;
+long i, val = 1;
 for (i=0; i<y; ++i)
     val *= x;
 return val;
@@ -428,7 +428,7 @@ return levels;
 
 
 static bits32 writeIndexLevel(bits16 blockSize, 
-	void *itemArray, int itemSize, int itemCount, 
+	void *itemArray, int itemSize, long itemCount, 
 	bits32 indexOffset, int level, 
 	void (*fetchKey)(const void *va, char *keyBuf), bits32 keySize, bits32 valSize,
 	FILE *f)
@@ -437,39 +437,42 @@ static bits32 writeIndexLevel(bits16 blockSize,
 char *items = itemArray;
 
 /* Calculate number of nodes to write at this level. */
-int slotSizePer = xToY(blockSize, level);   // Number of items per slot in node
-int nodeSizePer = slotSizePer * blockSize;  // Number of items per node
-int nodeCount = (itemCount + nodeSizePer - 1)/nodeSizePer;	
+long slotSizePer = xToY(blockSize, level);   // Number of items per slot in node
+long nodeSizePer = slotSizePer * blockSize;  // Number of items per node
+long nodeCount = (itemCount + nodeSizePer - 1)/nodeSizePer;	
+
 
 /* Calculate sizes and offsets. */
-int bytesInIndexBlock = (bptBlockHeaderSize + blockSize * (keySize+sizeof(bits64)));
-int bytesInLeafBlock = (bptBlockHeaderSize + blockSize * (keySize+valSize));
+long bytesInIndexBlock = (bptBlockHeaderSize + blockSize * (keySize+sizeof(bits64)));
+long bytesInLeafBlock = (bptBlockHeaderSize + blockSize * (keySize+valSize));
 bits64 bytesInNextLevelBlock = (level == 1 ? bytesInLeafBlock : bytesInIndexBlock);
 bits64 levelSize = nodeCount * bytesInIndexBlock;
 bits64 endLevel = indexOffset + levelSize;
 bits64 nextChild = endLevel;
 
+
 UBYTE isLeaf = FALSE;
 UBYTE reserved = 0;
 
-int i,j;
+long i,j;
 char keyBuf[keySize+1];
 keyBuf[keySize] = 0;
 for (i=0; i<itemCount; i += nodeSizePer)
     {
     /* Calculate size of this block */
-    bits16 countOne = (itemCount - i + slotSizePer - 1)/slotSizePer;
+    long countOne = (itemCount - i + slotSizePer - 1)/slotSizePer;
     if (countOne > blockSize)
         countOne = blockSize;
+    bits16 shortCountOne = countOne;
 
     /* Write block header. */
     writeOne(f, isLeaf);
     writeOne(f, reserved);
-    writeOne(f, countOne);
+    writeOne(f, shortCountOne);
 
     /* Write out the slots that are used one by one, and do sanity check. */
     int slotsUsed = 0;
-    int endIx = i + nodeSizePer;
+    long endIx = i + nodeSizePer;
     if (endIx > itemCount)
         endIx = itemCount;
     for (j=i; j<endIx; j += slotSizePer)
@@ -482,7 +485,7 @@ for (i=0; i<itemCount; i += nodeSizePer)
 	nextChild += bytesInNextLevelBlock;
 	++slotsUsed;
 	}
-    assert(slotsUsed == countOne);
+    assert(slotsUsed == shortCountOne);
 
     /* Write out empty slots as all zero. */
     int slotSize = keySize + sizeof(bits64);
