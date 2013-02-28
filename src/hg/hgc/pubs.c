@@ -21,6 +21,8 @@ static int pubsDebug = 0;
 bool pubsHasSupp = TRUE; 
 // global var for printArticleInfo to indicate if article is elsevier
 bool pubsIsElsevier = FALSE; 
+// the article source is used to modify other parts of the page
+static char* articleSource;
 
 // internal section types in mysql table
 static char *pubsSecNames[] ={
@@ -125,6 +127,11 @@ static void web2StartDivC (char *class)               { web2StartC(class, "div")
 static void web2EndDiv(char *comment) 
 {
 printf("</div> <!-- %s -->\n", comment);
+}
+
+static void web2Img(char *url, char *alt, int width, int hspace, int vspace) 
+{
+printf("<img src=\"%s\" alt=\"%s\" width=\"%d\" hspace=\"%d\" vspace=\"%d\">\n", url, alt, width, hspace, vspace);
 }
 
 static void web2PrintHeaderCell(char *label, int width)
@@ -269,13 +276,13 @@ char *secLabels[] ={
       "Introduction", "Methods",
       "Results", "Discussion",
       "Conclusions", "Acknowledgements",
-      "References", "Not determined" };
+      "References", "Undetermined section (e.g. for a brief communication)" };
 
 int labelCount = sizeof(secLabels)/sizeof(char *);
 
 int i;
 printf("<P>\n");
-printf("<B>Sections of article shown:</B><BR>\n");
+printf("<B>Sections of article searched:</B><BR>\n");
 printf("<FORM ACTION=\"hgc?%s&o=%s&t=%s&g=%s&i=%s\" METHOD=\"get\">\n",
     cartSidUrlString(cart), cgiString("o"), cgiString("t"), cgiString("g"), cgiString("i"));
 
@@ -376,7 +383,7 @@ static char *printArticleInfo(struct sqlConnection *conn, char *item, char *pubs
 {
 char query[512];
 
-safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid FROM %s WHERE articleId='%s'", pubsArticleTable, item);
+safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid, source FROM %s WHERE articleId='%s'", pubsArticleTable, item);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -396,6 +403,7 @@ char *authors  = row[3];
 char *cit      = row[4];
 char *abstract = row[5];
 char *pmid     = row[6];
+articleSource = row[7];
 
 url = mangleUrl(url);
 if (strlen(abstract)==0) 
@@ -564,7 +572,7 @@ static bool printSeqSection(char *articleId, char *title, bool showDesc, struct 
 // get data from mysql
 char query[4096];
 safef(query, sizeof(query), 
-"SELECT fileDesc, snippet, locations, articleId, fileId, seqId, sequence "
+"SELECT fileDesc, snippet, locations, articleId, fileId, seqId, sequence, fileUrl "
 "FROM %s WHERE articleId='%s';", pubsSequenceTable, articleId);
 if (pubsDebug)
     puts(query);
@@ -594,6 +602,7 @@ if (!fasta)
 
 // output rows
 char **row;
+char *fileUrl = NULL; // we might need this after the loop for yif articles
 bool foundSkippedRows = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -604,6 +613,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *fileId   = row[4];
     char *seqId    = row[5];
     char *seq      = row[6];
+    fileUrl  = row[7];
 
     // annotation (=sequence) ID is a 64 bit int with 10 digits for 
     // article, 3 digits for file, 5 for annotation
@@ -668,6 +678,14 @@ if (!fasta)
     web2EndTable();
 
 web2EndSection();
+/* Yale Image finder files contain links to the image itself */
+if (stringIn("yif", articleSource) && (fileUrl!=NULL) && isClickedSection) {
+    char* imgTitle = "Sequences were found in text obtained with optical character recognition from this figure:\n";
+    web2StartSection("section", "%s", imgTitle);
+    web2Img(fileUrl, "Image from YIF", 600, 10, 10); 
+    web2EndSection();
+}
+
 sqlFreeResult(&sr);
 return foundSkippedRows;
 }
@@ -687,9 +705,18 @@ if (clickedSeqs)
 else 
     skippedRows=1;
 
-if (skippedRows)
-    printSeqSection(articleId, "Other Sequences in this article", \
+if (skippedRows) 
+    {
+    // the section title should change if the data comes from the yale image finder = a figure
+    char* docType = "article";
+    if (stringIn("yif", articleSource))
+        docType = "figure";
+    char title[1024];
+    safef(title, sizeof(title), "Other Sequences in this %s", docType);
+
+    printSeqSection(articleId, title, \
         fileDesc, conn, clickedSeqs, 0, fasta, pslTable, articleTable);
+    }
 freeHash(&clickedSeqs);
 }
 
