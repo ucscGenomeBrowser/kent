@@ -3,7 +3,7 @@ source `which qaConfig.csh`
 
 ################################
 #  
-#  10-10-06
+#  10-10-2006
 #  Robert Kuhn
 #
 #  gets update times from all machines in realTime
@@ -13,15 +13,24 @@ source `which qaConfig.csh`
 set tablelist=""
 set tables=""
 set db=""
+set verbosity="0"
+set dot=( '.' '.' '.' '.' )
 set ver=""
 set subver=""
 set update=""
 
-if ( $#argv != 2 ) then
+if ( $#argv < 2 || $#argv > 3 ) then
   echo
   echo "  gets update times from all machines in real time for tables in list." 
   echo
-  echo "    usage:  database tablelist (will accept single table)"
+  echo "    usage:  database table/list [verbose]"
+  echo
+  echo " output:"
+  echo " . hgwdev"
+  echo " . hgwbeta"
+  echo
+  echo " . hgw8"
+  echo " . genome-euro"
   echo
   exit
 else
@@ -29,6 +38,19 @@ else
   set tablelist=$argv[2]
 endif
 # cat $tablelist
+
+
+if ( $#argv == 3 ) then
+  if ( $argv[3] == "verbose" ) then
+    set verbosity=1
+    set dot=( 'dev ' 'beta' 'rr  ' 'euro' )
+  else
+    echo
+    echo 'sorry. third argument must be "verbose"'
+    $0
+    exit
+  endif
+endif
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
@@ -47,8 +69,8 @@ foreach table ($tables)
   echo
   echo $table
   echo "============="
-
-  foreach machine ( hgwdev hgwbeta hgw8 )
+  set i=1
+  foreach machine ( hgwdev hgwbeta hgw8 genome-euro )
     if ( "hgw8" == $machine ) then
       echo  # space out results
     endif
@@ -62,18 +84,20 @@ foreach table ($tables)
       set update=`getTableStatus.csh $db $machine | sed '1,2d' \
         | grep -w ^$table | awk '{print $14, $15}'`
       if ( $status ) then
-        echo "."
+        echo "$dot[$i]"
+        @ i = $i + 1
         continue
       endif
     else
       set update=`getTableStatus.csh $db $machine | sed '1,2d' \
         | grep -w ^$table | awk '{print $13, $14}'`
       if ( $status ) then
-        echo "."
+        echo "$dot[$i]"
         continue
       endif
     endif
-    echo "."$update
+    echo "$dot[$i] "$update
+    @ i = $i + 1
   end
 end
 echo
