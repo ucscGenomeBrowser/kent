@@ -209,7 +209,11 @@ else
 	fileOffset = udcReadBits64(bpt->udc, isSwapped);
 	int cmp = memcmp(key, keyBuf, keySize);
 	if (lastCmp >= 0 && cmp <= 0)
+	    {
+	    bits64 curPos = udcTell(bpt->udc);
 	    rFindMulti(bpt, lastFileOffset, key, pList);
+	    udcSeek(bpt->udc, curPos);
+	    }
 	if (cmp < 0)
 	    return;
 	lastCmp = cmp;
