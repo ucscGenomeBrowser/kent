@@ -231,13 +231,16 @@ const struct slRef *b = *((struct slRef **)vb);
 return memcmp(a->val, b->val, sizeof(struct offsetSize));
 }
 
-static struct fileOffsetSize *bigBedChunksMatchingName(struct bbiFile *bbi, char *name)
-/* Get list of file chunks that match name.  Can slFreeList this when done. */
+static struct fileOffsetSize *fosFromRedundantBlockList(struct slRef **pBlockList, 
+    boolean isSwapped)
+/* Convert from list of references to offsetSize format to list of fileOffsetSize
+ * format, while removing redundancy.   Sorts *pBlockList as a side effect. */
 {
-bigBedAttachNameIndex(bbi);
-struct slRef *blockList = bptFileFindMultiple(bbi->nameBpt, name, strlen(name), sizeof(struct offsetSize));
-slSort(&blockList, cmpOffsetSizeRef);
+/* Sort input so it it easy to uniquify. */
+slSort(pBlockList, cmpOffsetSizeRef);
+struct slRef *blockList = *pBlockList;
 
+/* Make new fileOffsetSize for each unique offsetSize. */
 struct fileOffsetSize *fosList = NULL, *fos;
 struct offsetSize lastOffsetSize = {0,0};
 struct slRef *blockRef;
@@ -247,7 +250,7 @@ for (blockRef = blockList; blockRef != NULL; blockRef = blockRef->next)
         {
 	memcpy(&lastOffsetSize, blockRef->val, sizeof(lastOffsetSize));
 	AllocVar(fos);
-	if (bbi->isSwapped)
+	if (isSwapped)
 	    {
 	    fos->offset = byteSwap64(lastOffsetSize.offset);
 	    fos->size = byteSwap64(lastOffsetSize.size);
@@ -260,18 +263,83 @@ for (blockRef = blockList; blockRef != NULL; blockRef = blockRef->next)
 	slAddHead(&fosList, fos);
 	}
     }
-slRefFreeListAndVals(&blockList);
 slReverse(&fosList);
 return fosList;
 }
 
-struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, char *name, struct lm *lm)
-/* Return list of intervals matching file. These intervals will be allocated out of lm. */
+
+static struct fileOffsetSize *bigBedChunksMatchingName(struct bbiFile *bbi, char *name)
+/* Get list of file chunks that match name.  Can slFreeList this when done. */
 {
-bigBedAttachNameIndex(bbi);
-boolean isSwapped = bbi->isSwapped;
-struct fileOffsetSize *fos, *fosList = bigBedChunksMatchingName(bbi, name);
+struct slRef *blockList = bptFileFindMultiple(bbi->nameBpt, 
+	name, strlen(name), sizeof(struct offsetSize));
+struct fileOffsetSize *fosList = fosFromRedundantBlockList(&blockList, bbi->isSwapped);
+slRefFreeListAndVals(&blockList);
+return fosList;
+}
+
+static struct fileOffsetSize *bigBedChunksMatchingNames(struct bbiFile *bbi, 
+	char **names, int nameCount)
+/* Get list of file chunks that match any of the names.  Can slFreeList this when done. */
+{
+/* Go through all names and make a blockList that includes all blocks with any hit to any name.  
+ * Many of these blocks will occur multiple times. */
+struct slRef *blockList = NULL;
+int nameIx;
+for (nameIx = 0; nameIx < nameCount; ++nameIx)
+    {
+    char *name = names[nameIx];
+    struct slRef *oneList = bptFileFindMultiple(bbi->nameBpt, 
+	    name, strlen(name), sizeof(struct offsetSize));
+    blockList = slCat(oneList, blockList);
+    }
+
+/* Create nonredundant list of blocks. */
+struct fileOffsetSize *fosList = fosFromRedundantBlockList(&blockList, bbi->isSwapped);
+
+/* Clean up and resturn result. */
+slRefFreeListAndVals(&blockList);
+return fosList;
+}
+
+typedef boolean (*BbFirstWordMatch)(char *line, void *target);
+/* A function that returns TRUE if first word in tab-separated line matches target. */
+
+
+static boolean bbFirstWordMatchesName(char *line, void *target)
+/* Return true if first word of line is same as target, which is just a string. */
+{
+char *name = target;
+return startsWithWordByDelimiter(name, '\t', line);
+}
+
+static boolean bbFirstWordIsInHash(char *line, void *target)
+/* Return true if first word of line is same as target, which is just a string. */
+{
+/* Isolate out first word. */
+int firstWordSize;
+char *tab = strchr(line, '\t');
+if (tab == NULL)
+    firstWordSize = strlen(line);
+else
+    firstWordSize = tab - line;
+char firstWord[firstWordSize+1];
+memcpy(firstWord, line, firstWordSize);
+firstWord[firstWordSize] = 0;
+
+/* Return boolean value that reflects whether we found it in hash */
+struct hash *hash = target;
+return hashLookup(hash, firstWord) != NULL;
+}
+
+static struct bigBedInterval *bigBedIntervalsMatchingName(struct bbiFile *bbi, 
+    struct fileOffsetSize *fosList, BbFirstWordMatch matcher, void *target, struct lm *lm)
+/* Return list of intervals inside of sectors of bbiFile defined by fosList where the name 
+ * matches target somehow. */
+{
 struct bigBedInterval *interval, *intervalList = NULL;
+struct fileOffsetSize *fos;
+boolean isSwapped = bbi->isSwapped;
 for (fos = fosList; fos != NULL; fos = fos->next)
     {
     /* Read in raw data */
@@ -313,7 +381,7 @@ for (fos = fosList; fos != NULL; fos = fos->next)
 		break;
 	    dyStringAppendC(dy, c);
 	    }
-	if (startsWithWordByDelimiter(name, '\t', dy->string))
+	if ((*matcher)(dy->string, target))
 	    {
 	    lmAllocVar(lm, interval);
 	    interval->start = s;
@@ -329,8 +397,43 @@ for (fos = fosList; fos != NULL; fos = fos->next)
     freez(&uncompressedData);
     freez(&rawData);
     }
-slFreeList(&fosList);
 slReverse(&intervalList);
+return intervalList;
+}
+
+struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, char *name, struct lm *lm)
+/* Return list of intervals matching file. These intervals will be allocated out of lm. */
+{
+bigBedAttachNameIndex(bbi);
+struct fileOffsetSize *fosList = bigBedChunksMatchingName(bbi, name);
+struct bigBedInterval *intervalList = bigBedIntervalsMatchingName(bbi, fosList, 
+    bbFirstWordMatchesName, name, lm);
+slFreeList(&fosList);
+return intervalList;
+}
+
+struct bigBedInterval *bigBedMultiNameQuery(struct bbiFile *bbi, char **names, 
+    int nameCount, struct lm *lm)
+/* Fetch all records matching any of the names. Return list is allocated out of lm. */
+{
+/* Set up name index and get list of chunks that match any of our names. */
+bigBedAttachNameIndex(bbi);
+struct fileOffsetSize *fosList = bigBedChunksMatchingNames(bbi, names, nameCount);
+
+/* Create hash of all names. */
+struct hash *hash = newHash(0);
+int nameIx;
+for (nameIx=0; nameIx < nameCount; ++nameIx)
+    hashAdd(hash, names[nameIx], NULL);
+
+
+/* Get intervals where name matches hash target. */
+struct bigBedInterval *intervalList = bigBedIntervalsMatchingName(bbi, fosList, 
+    bbFirstWordIsInHash, hash, lm);
+
+/* Clean up and return results. */
+slFreeList(&fosList);
+hashFree(&hash);
 return intervalList;
 }
 

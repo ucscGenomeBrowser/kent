@@ -59,6 +59,10 @@ boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 star
 struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, char *name, struct lm *lm);
 /* Return list of intervals matching file. These intervals will be allocated out of lm. */
 
+struct bigBedInterval *bigBedMultiNameQuery(struct bbiFile *bbi, char **names, 
+    int nameCount, struct lm *lm);
+/* Fetch all records matching any of the names. Return list is allocated out of lm. */
+
 int bigBedIntervalToRowLookupChrom(struct bigBedInterval *interval, 
     struct bigBedInterval *prevInterval, struct bbiFile *bbi,
     char *chromBuf, int chromBufSize, char *startBuf, char *endBuf, char **row, int rowSize);
