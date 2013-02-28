@@ -34,6 +34,7 @@
 #include "grp.h"
 #include "twoBit.h"
 #include "dbDb.h"
+#include "net.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct

@@ -64,7 +64,7 @@ non-nuclear/unlocalized_scaffolds/FASTA/chrMT.unlocalized.scaf.fa.gz
     cd /hive/data/genomes/nomLeu3/ucsc
 
     ########################  Assembled Chromosomes
-    cat << '_EOF_' > toUcsc.pl
+    cat << '_EOF_' > ucscCompositeAgp.pl
 #!/bin/env perl
 
 use strict;
@@ -85,7 +85,7 @@ close (FH);
 foreach my $acc (keys %accToChr) {
     my $chrN =  $accToChr{$acc};
     print "$acc $accToChr{$acc}\n";
-    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.agp.gz|") or die "can not read chr${chrN}.agp.gz";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or die "can not read chr${chrN}.comp.agp.gz";
     open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
     while (my $line = <FH>) {
         if ($line =~ m/^#/) {
@@ -109,10 +109,10 @@ foreach my $acc (keys %accToChr) {
     close (FH);
     close (UC);
 }
-'_EOF_'
+
     # << happy emacs
-    chmod +x toUcsc.pl
-    time ./toUcsc.pl
+    chmod +x ucscCompositeAgp.pl
+    time ./ucscCompositeAgp.pl
 # 48.327u 9.322s 0:47.74 120.7%	0+0k 0+0io 0pf+0w
     time gzip *.fa *.agp
 # 744.838u 3.232s 12:37.06 98.8%	0+0k 0+0io 0pf+0w
@@ -398,28 +398,29 @@ taxId 61853
 
     # verify sequence and agp are OK
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
-        -stop=agp nomLeu3.config.ra >& agp.log
+        -stop=dbDb nomLeu3.config.ra >& dbDb.log
+    #first run failed, ran again from part way through
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -continue=agp nomLeu3.config.ra >& agp.log
     #   real    2m4.625s
     #
     # verify OK:
     tail -1 agp.log
     #   *** All done!  (through the 'agp' step)
 
-    # finish it off
-    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
-        -dbHost=hgwdev nomLeu3.config.ra >& db.log
-    #   real    21m42.920s
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/nomLeu3.unmasked.2bit /gbdb/nomLeu3/nomLeu3.2bit
     #	browser should function now
 
 #########################################################################
-# running repeat masker (DONE - 2012-04-13 - Hiram)
+# running repeat masker (IN PROGRESS- 2013-02-27 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/repeatMasker
     cd /hive/data/genomes/nomLeu3/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-	-smallClusterHub=encodek nomLeu3 > do.log 2>&1 &
+	-smallClusterHub=encodek nomLeu3 >& do.log
+XXX 2/27/13 4:49pm
     #   real    1161m52.449s
 
     cat faSize.rmsk.txt
@@ -443,12 +444,13 @@ taxId 61853
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (DONE - 2012-04-13 - Hiram)
+# running simple repeat (IN PROGRESS- 2013-02-27 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/simpleRepeat
     cd /hive/data/genomes/nomLeu3/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
-	nomLeu3 > do.log 2>&1 &
+	nomLeu3 >& do.log
+XXX 2/27/13 4:49pm
     #   real    19m41.095s
     XXX 1 failed job, which is all on chrM, a known failure for TRF:
     # ./TrfRun.csh /hive/data/genomes/nomLeu3/TrfPart/000/000.lst.bed
@@ -462,6 +464,7 @@ taxId 61853
 # Longest finished job:            2158s      35.97m     0.60h    0.02d
 # Submission to last job:          2906s      48.43m     0.81h    0.03d
 
+XXX when done try this part
     # continuing:
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
@@ -519,11 +522,12 @@ taxId 61853
     #  12113 yes
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2012-04-13 - Hiram)
+## WINDOWMASKER (IN PROGRESS- 2013-02-27 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/windowMasker
     cd /hive/data/genomes/nomLeu3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
-	-dbHost=hgwdev nomLeu3 > do.log 2>&1 &
+	-dbHost=hgwdev nomLeu3 >& do.log
+XXX 2/27/13 4:49pm
     #   real    196m2.385s
 
     # Masking statistics
