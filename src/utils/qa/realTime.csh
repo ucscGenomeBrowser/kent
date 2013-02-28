@@ -15,8 +15,6 @@ set tables=""
 set db=""
 set verbosity="0"
 set dot=( '.' '.' '.' '.' )
-set ver=""
-set subver=""
 set update=""
 
 if ( $#argv < 2 || $#argv > 3 ) then
@@ -74,27 +72,12 @@ foreach table ($tables)
     if ( "hgw8" == $machine ) then
       echo  # space out results
     endif
-    # find out version of mysql running 
-    # (v 5 has different signature for TABLE STATUS output)
-    # (so does ver 4.1.*)
-    set ver=`getVersion.csh $machine 1` >& /dev/null
-    set subver=`getVersion.csh $machine 2`
-    if ( 4 == $ver && 1 == $subver || 5 == $ver ) then
-      # newer mysql versions use different fields
-      set update=`getTableStatus.csh $db $machine | sed '1,2d' \
-        | grep -w ^$table | awk '{print $14, $15}'`
-      if ( $status ) then
-        echo "$dot[$i]"
-        @ i = $i + 1
-        continue
-      endif
-    else
-      set update=`getTableStatus.csh $db $machine | sed '1,2d' \
-        | grep -w ^$table | awk '{print $13, $14}'`
-      if ( $status ) then
-        echo "$dot[$i]"
-        continue
-      endif
+    set update=`getTableStatus.csh $db $machine | sed '1,2d' \
+      | grep -w ^$table | awk '{print $14, $15}'`
+    if ( $status ) then
+      echo "$dot[$i]"
+      @ i = $i + 1
+      continue
     endif
     echo "$dot[$i] "$update
     @ i = $i + 1
