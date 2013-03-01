@@ -22,7 +22,7 @@ if ($#argv < 1 || $#argv > 3) then
  exit 1
 endif
 
-set allMachines=" hgwdev hgwbeta hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 rr RR"
+set allMachines=" hgwdev hgwbeta hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 rr RR genome-euro"
 
 set mach1 = $argv[1]
 echo $allMachines | grep -w "$mach1" > /dev/null
