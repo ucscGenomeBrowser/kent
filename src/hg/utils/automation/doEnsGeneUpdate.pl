@@ -436,13 +436,10 @@ _EOF_
   if (defined $liftMtOver) {
       $bossScript->add(<<_EOF_
 cp $db.allGenes.gp.gz $db.allGenes.beforeLiftMtOver.gp.gz
-zcat $db.allGenes.gp.gz  > all.gp
-zcat $db.allGenes.gp.gz | grep chrM > chrM.gp
-liftOver -genePred chrM.gp $liftMtOver chrMLifted.gp noMap.chrM
-cat all.gp | grep -v chrM > allLifted.gp
-cat chrMLifted.gp >> allLifted.gp
-gzip allLifted.gp
-mv allLifted.gp.gz $db.allGenes.gp.gz
+zcat $db.allGenes.gp.gz > all.gp
+grep chrM all.gp | liftOver -genePred stdin $liftMtOver chrMLifted.gp noMap.chrM
+grep -v chrM all.gp | cat - chrMLifted.gp > allLifted.gp
+gzip -c allLifted.gp > $db.all.genes.gp.gz
 rm *.gp
 _EOF_
       );
