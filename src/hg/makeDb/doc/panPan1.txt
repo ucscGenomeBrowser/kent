@@ -187,12 +187,16 @@ taxId 9597
     time makeGenomeDb.pl -stop=agp panPan1.config.ra > agp.log 2>&1 
     #	real    3m59.377s
     # check the end of agp.log to verify it is OK
+    tail -1 agp.log
+    #  *** All done!  (through the 'agp' step)
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
 	-continue=db panPan1.config.ra > db.log 2>&1 
-    #	real    20m48.719s
+    XXXX 2013-02-28 4:00 PM
+    #	real    39m18.720s
 
-    cd /cluster/data/panPan1/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/bonobo/panPan1
-    # Then copy these files to your ~/kent/src/hg/makeDb/trackDb/bonobo/panPan1
+   tail  db.log
+
+   # Then copy these files to your ~/kent/src/hg/makeDb/trackDb/bonobo/panPan1
    #  - cd ~/kent/src/hg/makeDb/trackDb
    #  - edit makefile to add panPan1 to DBS.
    #  - git add bonobo/panPan1/*.{ra,html}
@@ -201,6 +205,9 @@ taxId 9597
    #  - git pull; git push
    #  - Run make update DBS=panPan1 and make alpha when done.
    #  - (optional) Clean up /cluster/data/panPan1/TemporaryTrackDbCheckout
+
+    ln -s `pwd`/panPan1.unmasked.2bit /gbdb/panPan1/panPan1.2bit
+    #   browser should function now
 
 
 #############################################################################
