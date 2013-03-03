@@ -19,11 +19,14 @@ struct gencodeQuery
     int nextFieldCol;                       // next available column in result row
     int supportLevelCol;                    // support level column if joined for highlighting, or -1 
     int transcriptTypeCol;                  // transcript type column if joined for highlighting, or -1 
+    int transcriptSourceCol;                // transcript source column if joined for method highlighting, or -1 
     filterBy_t *supportLevelHighlight;      // choices for support level highlighting if not NULL
     filterBy_t *transcriptTypeHighlight;    // choices for transcript type highlighting if not NULL
+    filterBy_t *transcriptMethodHighlight;  // choices for transcript method highlighting if not NULL
     boolean joinAttrs;                      // join the wgEncodeGencodeAttrs table
     boolean joinTransSrc;                   // join the wgEncodeGencodeTranscriptSource table
     boolean joinSupportLevel;               // join the wgEncodeGencodeTranscriptionSupportLevel table
+    boolean joinTranscriptSource;            // join the wgEncodeGencodeTranscriptSource table
 };
 
 static struct gencodeQuery *gencodeQueryNew(void)
@@ -98,20 +101,22 @@ static void filterByMethodChoiceQuery(char *choice, struct gencodeQuery *gencode
 {
 /*
  * example sources and categories:
- *    havana_ig_gene                manual & manual only
- *    ensembl_havana_transcript     manual & automatic
- *    havana                        manual & manual only
- *    ensembl                       automatic & automatic only
- *    mt_genbank_import             automatic & automatic only
+ *    havana_ig_gene                manual, manual only
+ *    ensembl_havana_transcript     manual, automatic & manual and automatic
+ *    havana                        manual, manual only
+ *    ensembl                       automatic, automatic only
+ *    mt_genbank_import             automatic, automatic only
  */
 if (sameString(choice, "manual"))
     dyStringAppend(gencodeQuery->where, "(transSrc.source like \"%havana%\")");
 else if (sameString(choice, "automatic"))
-    dyStringAppend(gencodeQuery->where, "((transSrc.source like \"%ensembl%\") or (transSrc.source not like \"%ensembl%\"))");
+    dyStringAppend(gencodeQuery->where, "((transSrc.source like \"%ensembl%\") or (transSrc.source not like \"%havana%\"))");
 else if (sameString(choice, "manual_only"))
     dyStringAppend(gencodeQuery->where, "((transSrc.source like \"%havana%\") and (transSrc.source not like \"%ensembl%\"))");
 else if (sameString(choice, "automatic_only"))
     dyStringAppend(gencodeQuery->where, "(transSrc.source not like \"%havana%\")");
+else if (sameString(choice, "manual_and_automatic"))
+    dyStringAppend(gencodeQuery->where, "((transSrc.source like \"%havana%\") and (transSrc.source like \"%ensembl%\"))");
 else
     errAbort("BUG: filterByMethodChoiceQuery missing choice: \"%s\"", choice);
 }
@@ -221,6 +226,17 @@ gencodeQuery->transcriptTypeHighlight = highlightBy;
 gencodeQuery->joinAttrs = TRUE;
 }
 
+
+static void highlightByTranscriptMethodQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
+/* generate SQL where clause for obtaining transcript type for highlighting */
+{
+gencodeQuery->joinTransSrc = TRUE;
+dyStringAppend(gencodeQuery->fields, ", transSrc.source");
+gencodeQuery->transcriptSourceCol = gencodeQuery->nextFieldCol++;
+gencodeQuery->transcriptMethodHighlight = highlightBy;
+gencodeQuery->joinAttrs = TRUE;
+}
+
 static void gencodeHighlightByQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
 /* Handle a highlight by category.  highlightBy object will be saved in gencodeQuery */
 {
@@ -228,6 +244,8 @@ if (sameString(highlightBy->column, "supportLevel"))
     highlightBySupportLevelQuery(tg, highlightBy, gencodeQuery);
 else if (sameString(highlightBy->column, "attrs.transcriptType"))
     highlightByTranscriptTypeQuery(tg, highlightBy, gencodeQuery);
+else if (sameString(highlightBy->column, "transcriptMethod"))
+    highlightByTranscriptMethodQuery(tg, highlightBy, gencodeQuery);
 else
     errAbort("BUG: gencodeHighlightByQuery unknown highlight column: \"%s\"", highlightBy->column);
 }
@@ -265,6 +283,54 @@ else
     return slNameInList(gencodeQuery->transcriptTypeHighlight->slChoices, row[gencodeQuery->transcriptTypeCol]);
 }
 
+static bool highlightByTranscriptMethodMatch(char *choice, char *transSource)
+/* check if the transcript source matches the specified choice */
+{
+if (sameString(choice, "manual"))
+    {
+    if (containsStringNoCase(transSource, "havana"))
+        return TRUE;
+    }
+else if (sameString(choice, "automatic"))
+    {
+    if (containsStringNoCase(transSource, "ensembl") || !containsStringNoCase(transSource, "havana"))
+        return TRUE;
+    }
+else if (sameString(choice, "manual_only"))
+    {
+    if (containsStringNoCase(transSource, "havana") && !containsStringNoCase(transSource, "ensembl"))
+        return TRUE;
+    }
+else if (sameString(choice, "automatic_only"))
+    {
+    if (!containsStringNoCase(transSource, "havana"))
+        return TRUE;
+    }
+else if (sameString(choice, "manual_and_automatic"))
+    {
+    if (containsStringNoCase(transSource, "havana") && containsStringNoCase(transSource, "ensembl"))
+        return TRUE;
+    }
+else
+    errAbort("BUG: highlightByTranscriptMethodMatch missing choice: \"%s\"", choice);
+return FALSE;
+}
+
+static bool highlightByTranscriptMethodSelected(char **row, struct gencodeQuery *gencodeQuery)
+/* is the transcript type associated with this transcript selected? */
+{
+if (gencodeQuery->transcriptMethodHighlight != NULL)
+    {
+    struct slName *choice;
+    for (choice = gencodeQuery->transcriptMethodHighlight->slChoices; choice != NULL; choice = choice->next)
+        {
+        if (highlightByTranscriptMethodMatch(choice->name, row[gencodeQuery->transcriptSourceCol]))
+            return TRUE;
+        }
+    }
+return FALSE;
+}
+
 static unsigned getHighlightColor(struct track *tg)
 /* get the highlightColor from trackDb, or a default if not found */
 {
@@ -280,7 +346,8 @@ static void highlightByGetColor(char **row, struct gencodeQuery *gencodeQuery, u
 /* compute the highlight color based on a extra fields returned in a row, setting
  * the linkedFeatures field */
 {
-if (highlightBySupportLevelSelected(row, gencodeQuery) || highlightByTranscriptTypeSelected(row, gencodeQuery))
+if (highlightBySupportLevelSelected(row, gencodeQuery) || highlightByTranscriptTypeSelected(row, gencodeQuery)
+    || highlightByTranscriptMethodSelected(row, gencodeQuery))
     {
     lf->highlightColor = highlightColor;
     lf->highlightMode = highlightBackground;
