@@ -2858,7 +2858,7 @@ identifier snpName131
 "dbSNP version 131 rs* identifiers"
     $gbd.snp131.name dupeOk
     $gbd.snp131Exceptions.name minCheck=.999
-    $gbd.snp131Seq.acc minCheck=.98
+    $gbd.snp131Seq.acc minCheck=.93
     $gbd.snp131CodingDbSnp.name minCheck=.90
     $hg.snp131OrthoPt2Pa2Rm2.name
     hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
