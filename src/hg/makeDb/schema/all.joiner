@@ -2590,7 +2590,7 @@ set notEnsemblTranscriptId !felCat3,!ce10,!cerSim1,!petMar2,!braFlo2
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $ensGeneDb,$notEnsemblTranscriptId.ensGene.name chopAfter=.
+    $ensGeneDb,$notEnsemblTranscriptId.ensGene.name chopAfter=. dupeOk
     $gbd,$notEnsemblTranscriptId.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     $ensGeneDb,$notEnsemblTranscriptId.ensGtp.transcript chopAfter=. minCheck=0.94
     $ensGeneDb,$notEnsemblTranscriptId.ensPep.name chopAfter=. minCheck=0.93
