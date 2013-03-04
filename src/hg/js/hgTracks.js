@@ -3084,7 +3084,7 @@ $(document).ready(function()
 
     // Drag select in chromIdeogram
     if($('img#chrom').length == 1) {
-        if($('area.cytoBand').length > 1) {
+        if($('area.cytoBand').length >= 1) {
             $('img#chrom').chromDrag();
         }
     }
