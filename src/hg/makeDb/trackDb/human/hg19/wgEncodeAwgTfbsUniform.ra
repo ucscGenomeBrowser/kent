@@ -5,7 +5,7 @@ superTrack wgEncodeTfBindingSuper dense
 group regulation
 priority 2.7
 shortLabel Uniform TFBS
-longLabel Transcription Factor ChIP-seq Uniform Peaks from ENCODE/Analysis
+longLabel Transcription Factor ChIP-seq Uniform Peaks from ENCODE/Analysis <IMG style='vertical-align:middle' width=100 src="/images/un-chewing-gum1.jpg">
 subGroup1 tier Tier a10=1 a20=2 a25=2* a30=3 
 subGroup2 cellType Cell_Line \
     a1GM12878=GM12878&nbsp;(Tier_1) \
@@ -268,7 +268,7 @@ dragAndDrop subTracks
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder tier=+ cellType=+ factor=+
 #fileSortOrder cell=Cell_Line Antibody dccAccession=UCSC_Accession fileSize=Size  
-controlledVocabulary encode/cv.ra cellType=cell
+controlledVocabulary encode/cv.ra cellType=cell factor=target
 type narrowPeak 
 # need deprecated canPack setting here (until CGI 278 release) 
 canPack on 
