@@ -8878,6 +8878,35 @@ urlLabel NCBI Nucleotide:
     hgsql mm10 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
 
 ##########################################################################
+# CYTOBANDIDEO update -  (DONE - 2013-02-27 - kuhn)
+# adding rows for chroms with no cytology
+# this is just for navigation/orientation on those chroms
+
+    set db=mm10
+    set sql=~/kent/src/hg/lib/cytoBandIdeo.sql
+    # make backup of existing table
+    hgsql -e "CREATE TABLE cytoBandIdeoCopy SELECT * FROM cytoBandIdeo" $db
+    # dump existing table
+    hgsql -N -e "SELECT * FROM cytoBandIdeo" $db > $db.cytoBandIdeo
+
+    # find chroms already covered
+    hgsql -N -e 'SELECT chrom FROM cytoBandIdeo' $db \
+       | sort -u > $db.coveredNames
+    # make cytoBand records for chroms not already covered
+    hgsql -N -e 'SELECT chrom, size FROM chromInfo' $db \
+      | grep -wvf $db.coveredNames \
+      | awk '{print $1"\t0\t"$2"\t\tgneg"}' > $db.cytoBandNew
+    # check
+    wc -l $db.*
+    # combine and sort
+    cat $db.cytoBandNew $db.cytoBandIdeo > $db.cytoBandIdeoFull
+    bedSort $db.cytoBandIdeoFull $db.cytoBandIdeoFull
+    # replace exsting table
+    hgsql -e "DROP TABLE cytoBandIdeo" $db
+    hgLoadSqlTab $db cytoBandIdeo $sql $db.cytoBandIdeoFull
+    # check and then drop copy
+
+##########################################################################
 # lastz Lamprey petMar2 (DONE - 2012-10-17 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S petMar2
