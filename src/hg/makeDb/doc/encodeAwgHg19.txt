@@ -113,6 +113,7 @@ csh ../loadDnase.csh >&! ../loadDnase.out &
     # add composite settings (as in ENCODE UW Dnase track)
     # edit cells, treatments to match CV.  
     mdbUpdate hg19 -test wgEncodeAwgDnaseUniform.ra
+    mdbUpdate hg19 wgEncodeAwgDnaseUniform.ra
 
     popd
     # obtain lab and DCC accession from metaDb
@@ -316,11 +317,6 @@ cat > trackOne.csh << 'EOF'
         echo "    parent $composite off" >> $trackDb
     endif
 
-    if ($factor != $antibody) then
-        set antibodyLabel = " ($antibody)"
-    else
-        set antibodyLabel = ""
-    endif
     if ($?treatment && $treatment != "None") then
         set treatmentLabel = " ($treatment)"
     else
@@ -328,8 +324,8 @@ cat > trackOne.csh << 'EOF'
     endif
 
     echo "    shortLabel ${cell}${treatmentLabel} $factor" >> $trackDb
-    echo "    longLabel $cell${treatmentLabel} ${factor}${antibodyLabel} TFBS Uniform Peaks from ENCODE/Analysis" >> $trackDb
-    echo "    subGroups tier=a${tier}0 cellType=$cellTag factor=$factorTag" >> $trackDb
+    echo "    longLabel $cell${treatmentLabel} TFBS Uniform Peaks of ${antibody} from ENCODE/${lab}+Analysis" >> $trackDb
+    echo "    subGroups tier=a${tier}0 cellType=$cellTag factor=$factorTag lab=$lab">> $trackDb
     if ($?color) then
         echo "    color $color" >> $trackDb
     endif
@@ -337,24 +333,67 @@ cat > trackOne.csh << 'EOF'
 'EOF'
 
 cat > metaOne.csh << 'EOF'
-    # create metadata
-    #echo "    metaObject $table" >> $m
-    #echo "    objType table" >> $m
-    #echo "    cell $cell" >> $m
-    #echo "    antibody $antibody" >> $m
-    #echo "    controlId $control" >> $m
-    #echo "    lab $lab" >> $m
-    #echo "    treatment None" >> $m
-    #echo "    composite $b" >> $m
-    #echo "    dataType ChipSeq" >> $m
-    #echo "    dataVersion ENCODE Mar 2012 Freeze" >> $m
-    #echo "    dccAccession X" >> $m
-    #echo "    project wgEncode" >> $m
-    #echo "    tableName $table" >> $m
-    #echo "    fileName $f.gz" >> $m
-    #echo "    md5sum $md5sum" >> $m
-    #echo "    view Peaks" >> $m
-    #echo "" >> $m
+    # create metadata file
+
+    set exp = $1
+    set composite = $2
+    set base = $3
+    set table = `csh nameTable.csh $base $exp`
+    set metaDb = ${composite}.metaDb.ra
+
+    # get essential metadata
+    set meta = `mdbPrint hg19 -obj=$exp | \
+                    raToTab stdin -cols=lab,cell,antibody,treatment stdout`
+    if ($status != 0) then
+        echo "ERROR: $exp"
+        continue
+    endif
+
+    set lab = $meta[1]
+    set cell = $meta[2]
+    set antibody = $meta[3]
+    set factor = `encodeCvTerm antibody $antibody target`
+    if ($#meta == 4) then
+        set treatment = $meta[4]
+    else
+        set treatment = None
+    endif
+
+    # now the control info (very inconsistent)
+    set meta = `mdbPrint hg19 -obj=$exp | \
+                    raToTab stdin -cols=controlId,control stdout`
+    if ($status != 0) then
+        echo "ERROR: $exp"
+        continue
+    endif
+
+    set controlId = $meta[1]
+    # the 'control' term is used In SYDH, but not HAIB
+    if ($#meta == 2) then
+        set control = $meta[2]
+    else
+        set control = "n/a"
+    endif
+
+    echo "$table :  $exp $lab $cell $antibody $treatment $controlId $control"
+    echo "metaObject $table" >> $metaDb
+    echo "objType table" >> $metaDb
+    echo "cell $cell" >> $metaDb
+    echo "antibody $antibody" >> $metaDb
+    echo "control $control" >> $metaDb
+    echo "controlId $controlId" >> $metaDb
+    echo "lab $lab" >> $metaDb
+    echo "treatment $treatment" >> $metaDb
+    echo "composite $composite" >> $metaDb
+    echo "dataType ChipSeq" >> $metaDb
+    echo "dataVersion ENCODE Mar 2012 Freeze" >> $metaDb
+    #echo "dccAccession X" >> $metaDb
+    echo "project wgEncode" >> $metaDb
+    echo "tableName $table" >> $metaDb
+    echo "fileName $table.narrowPeak.gz" >> $metaDb
+    #echo "md5sum $md5sum" >> $metaDb
+    echo "view Peaks" >> $metaDb
+    echo "" >> $metaDb
 'EOF'
 
 cat > zipOne.csh << 'EOF'
@@ -373,22 +412,22 @@ cat > loadTfbs.csh << 'EOF'
     set fileList = $1
     set base = wgEncodeAwgTfbs
     set composite = ${base}Uniform
-    set m = ${composite}.metaDb.ra
 
     set outdir = narrowPeak
     mkdir -p $outdir
 
+    @ ct = 1
     foreach x (`sed 's/\t/|/g' $fileList`)
         set obj = `echo $x | awk -F\| '{print $1, $7, $8}'`
         set infile = $obj[1]
         set exp = $obj[2]
         set ctrl = $obj[3]
 
-        echo "Track $exp"
-        #csh loadOne.csh $infile $exp $outdir $base
-        csh trackOne.csh $exp $composite $base cells.txt factors.txt
-
-        #exit
+        echo "${ct} Track $exp composite=$composite base=$base infile=$infile ctrl=$ctrl"
+        @ ct++
+        # csh loadOne.csh $infile $exp $outdir $base
+        csh trackOne.csh $exp $composite $base cells.txt factors.txt 
+        # csh metaOne.csh $exp $composite $base
 
     end
 'EOF'
@@ -400,16 +439,39 @@ cat > loadTfbs.csh << 'EOF'
 # (and try to verify with Anshul).
 # -> handle this one manually
 
-
-    end
-'EOF'
-
     csh loadTfbs.csh partial.table >&! loadTfbs.out &
 
     sort factors.txt | uniq | sed 's/$/ \\/' > factors.uniq.txt
     sort cells.txt | uniq | sed 's/$/ \\/' > cells.uniq.txt
+    # insert above as subGroups in trackDb
 
-# insert above as subGroups in trackDb
+    gre track wgEncodeAwgTfbsUniform.ra
+    grep metaObject wgEncodeAwgTfbsUniform.metaDb.ra | wc -l
+    # 707
+    wc -l partial.table
+    # 708
+    grep metaObject *.metaDb.ra | grep -v Uchi | wc -l
+    # 694
+    # NOTE:  lost one here -- need to investigate.  And remove UChicago from metadata.
+
+    set trackDb = ~/kent/src/hg/makeDb/trackDb
+    cp wgEncodeAwgTfbsUniform.ra human/hg19/$trackDb
+    # add composite settings (as in ENCODE SYDH TFBS track)
+    # merge in composite settings from analysis hub, edit labels for length, treatment
+    # note: raToTab and google spreadsheet greatly help with 17-char shortLabel adjustment
+    # We could use a tabToRa too...
+
+    mdbUpdate hg19 wgEncodeAwgTfbsUniform.ra
+    # INVALID cv lookup: control = 'n/a' not found. in obj: wgEncodeAwgTfbsUtaK562CtcfUniPk
+    # 274 of these 
+    # INVALID cv lookup: antibody = 'Pol2(b)' DEPRECATED. in obj: wgEncodeAwgTfbsBroadHelas3Pol2bUniPk
+    # 4 of these
+    pushd $trackDb/human/hg19/metaDb/alpha
+    mdbPrint hg19 -vars="composite=wgEncodeAwgTfbsUniform" > wgEncodeAwgTfbsUniform.ra
+    git add wgEncodeAwgTfbsUniform.ra  # commit
+
+
+
 
 ###############################################
 # Master list of 2.9M DNase sites from Analysis   (in progress kate)
