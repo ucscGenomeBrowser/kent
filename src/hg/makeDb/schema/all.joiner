@@ -2590,7 +2590,7 @@ set notEnsemblTranscriptId !felCat3,!ce10,!cerSim1,!petMar2,!braFlo2
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $ensGeneDb,$notEnsemblTranscriptId.ensGene.name chopAfter=.
+    $ensGeneDb,$notEnsemblTranscriptId.ensGene.name chopAfter=. dupeOk
     $gbd,$notEnsemblTranscriptId.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     $ensGeneDb,$notEnsemblTranscriptId.ensGtp.transcript chopAfter=. minCheck=0.94
     $ensGeneDb,$notEnsemblTranscriptId.ensPep.name chopAfter=. minCheck=0.93
@@ -2858,7 +2858,7 @@ identifier snpName131
 "dbSNP version 131 rs* identifiers"
     $gbd.snp131.name dupeOk
     $gbd.snp131Exceptions.name minCheck=.999
-    $gbd.snp131Seq.acc minCheck=.98
+    $gbd.snp131Seq.acc minCheck=.93
     $gbd.snp131CodingDbSnp.name minCheck=.90
     $hg.snp131OrthoPt2Pa2Rm2.name
     hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
