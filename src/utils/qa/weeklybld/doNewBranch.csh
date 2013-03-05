@@ -164,7 +164,7 @@ if ( -e GitReports.ok ) then
     foreach victim ( $victims )
 		git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base --pretty=oneline > /dev/null
 		if ($? == 0) then
-			./summaryEmail.sh ${victim} | mail -s "Code summaries are due for ${victim}" ${victim}
+			./summaryEmail.sh ${victim} | mail -s "Code summaries are due for ${victim}" ${victim} -- -f $REPLYTO
 		endif
     end
 else

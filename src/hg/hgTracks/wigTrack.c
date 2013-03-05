@@ -17,6 +17,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 #include "imageV2.h"
+#include "memgfx.h"
 
 
 struct wigItem
@@ -789,8 +790,40 @@ if (colorTrack != NULL)
 return colorArray;
 }
 
-void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
-    struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
+void vLineViaHvg(void *image, int x, int y, int height, Color color)
+/* A vertical line drawer that works via hvGfx system. */
+{
+hvGfxBox(image, x, y, 1, height, color);
+}
+
+Color somewhatLighterColor32(Color color)
+/* Get a somewhat lighter shade of a color - 1/3 of the way towards white. 
+ * Specialized here to bypass image parameter requirement.*/
+{
+#ifndef COLOR32
+#error COLOR32 must be defined these days, transparency depends on it.
+#endif /* COLOR32 */
+struct rgbColor rgbColor =  mgColorIxToRgb(NULL, color);
+rgbColor.r = (2*rgbColor.r+255)/3;
+rgbColor.g = (2*rgbColor.g+255)/3;
+rgbColor.b = (2*rgbColor.b+255)/3;
+return MAKECOLOR_32(rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+struct wigGraphOutput *wigGraphOutputSolid(int xOff, int yOff, struct hvGfx *image)
+/* Get appropriate wigGraphOutput for non-transparent rendering */
+{
+struct wigGraphOutput *wgo;
+AllocVar(wgo);
+wgo->image = image;
+wgo->vLine = vLineViaHvg;
+wgo->xOff = xOff;
+wgo->yOff = yOff;
+return wgo;
+}
+
+static void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
+    struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
     struct wigCartOptions *wigCart)
@@ -821,11 +854,10 @@ for (x1 = 0; x1 < width; ++x1)
     Color drawColor = colorArray[x1];
     if (drawColor != oldDrawColor)
         {
-	mediumColor = somewhatLighterColor(hvg, drawColor);
-	lightColor = somewhatLighterColor(hvg, mediumColor);
+	mediumColor = somewhatLighterColor32(drawColor);
+	lightColor = somewhatLighterColor32(mediumColor);
 	oldDrawColor = drawColor;
         }
-
 
     /*	count is non-zero meaning valid data exists here	*/
     if (p->count)
@@ -879,10 +911,10 @@ for (x1 = 0; x1 < width; ++x1)
 			    zeroPos -= 1;
 		        if (((zeroPos-yOff)+darkHeight) == 0)
 			    darkHeight += 1;	  // top pixel special case
-			hvGfxBox(hvg, x,zeroPos,1, darkHeight, drawColor);
-                        hvGfxBox(hvg, x, zeroPos+darkHeight, 1, mediumHeight-darkHeight,
+			vLine(image, x,zeroPos, darkHeight, drawColor);
+                        vLine(image, x, zeroPos+darkHeight, mediumHeight-darkHeight,
 				mediumColor);
-                        hvGfxBox(hvg, x, zeroPos+mediumHeight,1, lightHeight-mediumHeight,
+                        vLine(image, x, zeroPos+mediumHeight, lightHeight-mediumHeight,
 				lightColor);
 			}
 		    else
@@ -926,9 +958,9 @@ for (x1 = 0; x1 < width; ++x1)
 
                         /* Draw, making sure not to overwrite pixels since
                          * would mess up transparent drawing. */
-                        hvGfxBox(hvg,x,darkTop,1, darkHeight, drawColor);
-			hvGfxBox(hvg, x, mediumTop, 1, mediumHeight-darkHeight, mediumColor);
-			hvGfxBox(hvg,x,lightTop,1,lightHeight-mediumHeight, lightColor);
+                        vLine(image,x,darkTop, darkHeight, drawColor);
+			vLine(image, x, mediumTop, mediumHeight-darkHeight, mediumColor);
+			vLine(image,x,lightTop,lightHeight-mediumHeight, lightColor);
 			}
 		    }
 		else
@@ -948,7 +980,7 @@ for (x1 = 0; x1 < width; ++x1)
 		    // make sure it draws something
 		    if ((boxTop+boxHeight) == 0)
 			boxHeight += 1;
-		    hvGfxBox(hvg,x, yOff+boxTop, 1, boxHeight, drawColor);
+		    vLine(image,x, yOff+boxTop, boxHeight, drawColor);
 		    }
 		}
 	    else
@@ -959,7 +991,7 @@ for (x1 = 0; x1 < width; ++x1)
 		    int scaledMax = scaleHeightToPixels(doTransform(p->max, transformFunc));
 		    double mean = p->sumData/p->count;
 		    int boxHeight = max(1,scaledMin - scaledMax);
-		    hvGfxBox(hvg, x, scaledMax, 1, boxHeight, lightColor);
+		    vLine(image, x, scaledMax, boxHeight, lightColor);
 		    int scaledMean = scaleHeightToPixels(dataValue);
 		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
 		    if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
@@ -967,20 +999,20 @@ for (x1 = 0; x1 < width; ++x1)
 			int scaledPlus = scaleHeightToPixels(doTransform(mean+std, transformFunc));
 			int scaledMinus = scaleHeightToPixels(doTransform(mean-std, transformFunc));
 			int boxHeight = max(1,scaledMinus - scaledPlus);
-			hvGfxBox(hvg, x, scaledPlus, 1, boxHeight, mediumColor);
+			vLine(image, x, scaledPlus, boxHeight, mediumColor);
 			}
-		    hvGfxBox(hvg, x, scaledMean, 1, 1, drawColor);
+		    vLine(image, x, scaledMean, 1, drawColor);
 		    }
 		else
 		    {
 		    int yPointGraph = scaleHeightToPixels(dataValue) - 1;
-		    hvGfxBox(hvg, x, yPointGraph, 1, 3, drawColor);
+		    vLine(image, x, yPointGraph, 3, drawColor);
 		    }
 		}
 	    if (dataValue > graphUpperLimit)
-		hvGfxBox(hvg, x, yOff, 1, 2, clipColor);
+		vLine(image, x, yOff, 2, clipColor);
 	    else if (dataValue < graphLowerLimit)
-		hvGfxBox(hvg, x, yOff + h - 1, 1, 2, clipColor);
+		vLine(image, x, yOff + h - 1, 2, clipColor);
 #undef scaleHeightToPixels	/* No longer use this symbol */
             }   /*	vis == tvFull || vis == tvPack */
         else if (vis == tvDense || vis == tvSquish)
@@ -994,29 +1026,26 @@ for (x1 = 0; x1 < width; ++x1)
 
 	    drawColor =
 		tg->colorShades[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
-	    hvGfxBox(hvg, x, yOff, 1, tg->lineHeight, drawColor);
+	    vLine(image, x, yOff, tg->lineHeight, drawColor);
             }   /*	vis == tvDense || vis == tvSquish	*/
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 }	/*	graphPreDraw()	*/
 
-static void graphAllInContainer(struct preDrawContainer *preDrawList, int preDrawZero, int width,
-    struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
-    double graphUpperLimit, double graphLowerLimit, double graphRange,
-    enum trackVisibility vis, struct wigCartOptions *wigCart)
+static void graphPreDrawContainer(struct preDrawContainer *preDrawContainer, 
+    int preDrawZero, int width, struct track *tg, struct hvGfx *hvg, 
+    int xOff, int yOff, double graphUpperLimit, double graphLowerLimit, 
+    double graphRange, enum trackVisibility vis, struct wigCartOptions *wigCart)
 /* Draw the graphs for all tracks in container. */
 {
 double epsilon = graphRange / tg->lineHeight;
-struct preDrawElement *preDraw = preDrawList->preDraw;
+struct preDrawElement *preDraw = preDrawContainer->preDraw;
 Color *colorArray = makeColorArray(preDraw, width, preDrawZero, wigCart, tg, hvg);
-struct preDrawContainer *preContainer;
-for(preContainer = preDrawList; preContainer; preContainer = preContainer->next)
-    {
-    struct preDrawElement *preDraw = preContainer->preDraw;
-    graphPreDraw(preDraw, preDrawZero, width,
-	tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
+struct wigGraphOutput *wgo = tg->wigGraphOutput;
+graphPreDraw(preDraw, preDrawZero, width,
+	tg, wgo->image, wgo->vLine, wgo->xOff, wgo->yOff, 
+	graphUpperLimit, graphLowerLimit, graphRange,
 	epsilon, colorArray, vis, wigCart);
-    }
 
 freez(&colorArray);
 }
@@ -1145,14 +1174,22 @@ if (minimalSpan > usingDataSpan)
 return usingDataSpan;
 }
 
+void wigTrackSetGraphOutputDefault(struct track *tg, int xOff, int yOff, struct hvGfx *hvg)
+/* Set up to draw on hvg if no other destination set already */
+{
+if (tg->wigGraphOutput == NULL)
+    tg->wigGraphOutput = wigGraphOutputSolid(xOff, yOff, hvg);
+}
+
 void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
                     struct hvGfx *hvg, int xOff, int yOff, int width,
                     MgFont *font, Color color, enum trackVisibility vis,
-                    struct preDrawContainer *preDrawList, int preDrawZero,
+                    struct preDrawContainer *preContainer, int preDrawZero,
                     int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
 /* Draw once we've figured out predraw (numerical values to graph) we draw it here.
  * This code is shared by wig, bigWig, and bedGraph drawers. */
 {
+wigTrackSetGraphOutputDefault(tg, xOff, yOff, hvg);
 enum wiggleYLineMarkEnum yLineOnOff;
 double yLineMark;
 
@@ -1174,48 +1211,28 @@ yLineMark = wigCart->yLineMark;
  *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
 
-struct preDrawContainer *preContainer;
+struct preDrawElement *preDraw = preContainer->preDraw;
+double thisOverallUpperLimit;
+double thisOverallLowerLimit;
+double thisGraphUpperLimit;
+double thisGraphLowerLimit;
 
-/* loop through all the preDraw containers */
-for(preContainer = preDrawList; preContainer; preContainer = preContainer->next)
-    {
-    struct preDrawElement *preDraw = preContainer->preDraw;
-    double thisOverallUpperLimit;
-    double thisOverallLowerLimit;
-    double thisGraphUpperLimit;
-    double thisGraphLowerLimit;
+preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction,
+	wigCart->transformFunc);
+preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
+overallRange = preDrawLimits(preDraw, preDrawZero, width,
+    &thisOverallUpperLimit, &thisOverallLowerLimit);
+graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
+    wigCart->autoScale,
+    &thisOverallUpperLimit, &thisOverallLowerLimit,
+    &thisGraphUpperLimit, &thisGraphLowerLimit,
+    &overallRange, &epsilon, tg->lineHeight,
+    wigCart->maxY, wigCart->minY, wigCart->alwaysZero);
 
-    preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction,
-	    wigCart->transformFunc);
-    preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
-    overallRange = preDrawLimits(preDraw, preDrawZero, width,
-	&thisOverallUpperLimit, &thisOverallLowerLimit);
-    graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
-	wigCart->autoScale,
-	&thisOverallUpperLimit, &thisOverallLowerLimit,
-	&thisGraphUpperLimit, &thisGraphLowerLimit,
-	&overallRange, &epsilon, tg->lineHeight,
-	wigCart->maxY, wigCart->minY, wigCart->alwaysZero);
-
-    if (preContainer == preDrawList) // first time through
-	{
-	overallUpperLimit = thisOverallUpperLimit;
-	overallLowerLimit = thisOverallLowerLimit;
-	graphUpperLimit = thisGraphUpperLimit;
-	graphLowerLimit = thisGraphLowerLimit;
-	}
-    else
-	{
-	if (overallUpperLimit < thisOverallUpperLimit)
-	    overallUpperLimit = thisOverallUpperLimit;
-	if (overallLowerLimit > thisOverallLowerLimit)
-	    overallLowerLimit = thisOverallLowerLimit;
-	if (graphUpperLimit < thisGraphUpperLimit)
-	    graphUpperLimit = thisGraphUpperLimit;
-	if (graphLowerLimit > thisGraphLowerLimit)
-	    graphLowerLimit = thisGraphLowerLimit;
-	}
-    }
+overallUpperLimit = thisOverallUpperLimit;
+overallLowerLimit = thisOverallLowerLimit;
+graphUpperLimit = thisGraphUpperLimit;
+graphLowerLimit = thisGraphLowerLimit;
 
 overallRange = overallUpperLimit - overallLowerLimit;
 
@@ -1233,7 +1250,7 @@ else
     graphRange = graphUpperLimit - graphLowerLimit;
     }
 
-graphAllInContainer(preDrawList, preDrawZero, width, tg, hvg, xOff, yOff, 
+graphPreDrawContainer(preContainer, preDrawZero, width, tg, hvg, xOff, yOff, 
     graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart);
 
 drawZeroLine(vis, wigCart->horizontalGrid,

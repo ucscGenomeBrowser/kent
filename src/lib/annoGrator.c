@@ -168,7 +168,7 @@ static void agReset(struct annoGrator *self)
 freez(&self->prevPChrom);
 self->prevPStart = 0;
 self->eof = FALSE;
-annoRowFreeList(&(self->qHead), (struct annoStreamer *)self);
+annoRowFreeList(&(self->qHead), self->mySource);
 self->qTail = NULL;
 }
 

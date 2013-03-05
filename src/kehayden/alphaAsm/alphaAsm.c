@@ -248,7 +248,7 @@ wt->useCount += 1;
 for (node = chain->head; !dlEnd(node); node = node->next)
     {
     struct monomer *monomer = node->val;
-    verbose(2, "  adding %s\n", monomer->word);
+    verbose(4, "  adding %s\n", monomer->word);
     wt = wordTreeAddFollowing(wt, monomer);
     }
 }
@@ -369,15 +369,15 @@ struct wordTree *picked = NULL;
 
 /* Debug output. */
     {
-    verbose(2, "   pickWeightedRandomFromList(");
+    verbose(4, "   pickWeightedRandomFromList(");
     struct wordTree *wt;
     for (wt = list; wt != NULL; wt = wt->next)
         {
 	if (wt != list)
-	    verbose(2, " ");
-	verbose(2, "%s:%d", wt->monomer->word, wt->outTarget);
+	    verbose(4, " ");
+	verbose(4, "%s:%d", wt->monomer->word, wt->outTarget);
 	}
-    verbose(2, ") total %d\n", wordTreeSumOutTargets(list));
+    verbose(4, ") total %d\n", wordTreeSumOutTargets(list));
     }
 
 /* Figure out total number of outputs left, and a random number between 0 and that total. */
@@ -385,7 +385,7 @@ int total = wordTreeSumOutTargets(list);
 if (total > 0)
     {
     int threshold = rand() % total; 
-    verbose(2, "      threshold %d\n", threshold);
+    verbose(4, "      threshold %d\n", threshold);
 
     /* Loop through list returning selection corresponding to random threshold. */
     int binStart = 0;
@@ -394,11 +394,11 @@ if (total > 0)
 	{
 	int size = wt->outTarget;
 	int binEnd = binStart + size;
-	verbose(2, "      %s size %d, binEnd %d\n", wt->monomer->word, size, binEnd);
+	verbose(4, "      %s size %d, binEnd %d\n", wt->monomer->word, size, binEnd);
 	if (threshold < binEnd)
 	    {
 	    picked = wt;
-	    verbose(2, "      picked %s\n", wt->monomer->word);
+	    verbose(4, "      picked %s\n", wt->monomer->word);
 	    break;
 	    }
 	binStart = binEnd;
@@ -434,7 +434,7 @@ if (total > 0)
 	}
     }
 
-verbose(2, "Backup plan for %s in pickRandomFromType\n", type->name);
+verbose(3, "Backup plan for %s in pickRandomFromType\n", type->name);
 
 /* Try again based on use counts. */
 total = 0;
@@ -464,13 +464,15 @@ struct wordTree *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNo
  * have statistics for what comes next given the words in list, then it returns
  * NULL. */
 {
-verbose(2, "  predictNextFromAllPredecessors(%s, %s)\n", wordTreeString(wt), dlListFragWords(list));
+if (verboseLevel() >= 4)
+    verbose(4, "  predictNextFromAllPredecessors(%s, %s)\n", wordTreeString(wt), dlListFragWords(list));
 struct dlNode *node;
 for (node = list; !dlEnd(node); node = node->next)
     {
     struct monomer *monomer = node->val;
     wt = wordTreeFindInList(wt->children, monomer);
-    verbose(2, "   wordTreeFindInList(%s) = %p %s\n", monomer->word, wt, wordTreeString(wt));
+    if (verboseLevel() >= 4)
+	verbose(4, "   wordTreeFindInList(%s) = %p %s\n", monomer->word, wt, wordTreeString(wt));
     if (wt == NULL || wt->children == NULL)
         break;
     }
@@ -486,7 +488,8 @@ struct wordTree *predictFromWordTree(struct wordTree *wt, struct dlNode *recent)
  * progressively less previous words. */
 {
 struct dlNode *node;
-verbose(2, " predictNextFromWordTree(%s)\n", wordTreeString(wt));
+if (verboseLevel() >= 4)
+    verbose(4, " predictNextFromWordTree(%s)\n", wordTreeString(wt));
 
 for (node = recent; !dlEnd(node); node = node->next)
     {
@@ -546,13 +549,13 @@ struct wordTree *predictFromPreviousTypes(struct alphaStore *store, struct dlLis
 int maxToLookBack = 3;
     { /* Debugging block */
     struct dlNode *node = nodesFromTail(past, maxToLookBack);
-    verbose(3, "predictFromPreviousTypes(");
+    verbose(4, "predictFromPreviousTypes(");
     for (; !dlEnd(node); node = node->next)
         {
 	struct monomer *monomer = node->val;
-	verbose(3, "%s, ", monomer->word);
+	verbose(4, "%s, ", monomer->word);
 	}
-    verbose(3, ")\n");
+    verbose(4, ")\n");
     }
 int pastDepth;
 struct dlNode *node;
@@ -560,7 +563,7 @@ for (pastDepth = 1, node = past->tail; pastDepth <= maxToLookBack; ++pastDepth)
     {
     if (dlStart(node))
 	{
-	verbose(2, "predictFromPreviousTypes with empty past\n");
+	verbose(3, "predictFromPreviousTypes with empty past\n");
 	return NULL;
 	}
     struct monomer *monomer = node->val;
@@ -570,13 +573,13 @@ for (pastDepth = 1, node = past->tail; pastDepth <= maxToLookBack; ++pastDepth)
 	struct monomerType *curType = typeAfter(store, prevType, pastDepth);
 	struct monomer *curInfo = pickRandomFromType(curType);
 	struct wordTree *curTree = wordTreeFindInList(store->markovChains->children, curInfo);
-	verbose(3, "predictFromPreviousType pastDepth %d, curInfo %s, curTree %p %s\n", 
+	verbose(4, "predictFromPreviousType pastDepth %d, curInfo %s, curTree %p %s\n", 
 	    pastDepth, curInfo->word, curTree, curTree->monomer->word);
 	return curTree;
 	}
     node = node->prev;
     }
-verbose(2, "predictFromPreviousTypes past all unknown types\n");
+verbose(3, "predictFromPreviousTypes past all unknown types\n");
 return NULL;
 }
 
@@ -591,7 +594,7 @@ if (pick == NULL)
 if (pick == NULL)
     {
     pick = pickWeightedRandomFromList(store->markovChains->children);
-    verbose(2, "in predictNext() last resort pick of %s\n", pick->monomer->word);
+    verbose(3, "in predictNext() last resort pick of %s\n", pick->monomer->word);
     }
 return pick;
 }
@@ -654,7 +657,6 @@ for (;;)
     if (picked == NULL)
          break;
 
-
     /* Add word from whatever level we fetched back to our output chain. */
     struct monomer *monomer = picked->monomer;
     node->val = monomer;
@@ -664,7 +666,7 @@ for (;;)
     monomer->outTarget -= 1;
     monomer->outCount += 1;
     }
-verbose(2, "totUseZeroCount = %d\n", totUseZeroCount);
+verbose(3, "totUseZeroCount = %d\n", totUseZeroCount);
 return ll;
 }
 
@@ -845,10 +847,10 @@ boolean subCommonCenter(struct alphaStore *store,
  * Substitute in center at one of these places chosen at random and return TRUE if possible. */
 {
 struct slRef *centerRefList = refsToPossibleCenters(center, neighborhood, ll);
-verbose(3, "sub %s in neighborhood: ", center->word);
+verbose(4, "sub %s in neighborhood: ", center->word);
 if (verboseLevel() >= 3)
     printMonomerRefList(neighborhood, stderr);
-verbose(3, "Got %d possible centers\n", slCount(centerRefList));
+verbose(4, "Got %d possible centers\n", slCount(centerRefList));
 
 if (centerRefList == NULL)
     return FALSE;
@@ -856,10 +858,10 @@ int commonCount = 0;
 char *commonWord = NULL;
 mostCommonMonomerWord(centerRefList, &commonWord, &commonCount);
 struct monomer *commonMonomer = hashFindVal(store->monomerHash, commonWord);
-verbose(3, "Commonest word to displace with %s is %s which occurs %d times in context and %d overall\n", center->word, commonWord, commonCount, commonMonomer->subbedOutCount);
+verbose(4, "Commonest word to displace with %s is %s which occurs %d times in context and %d overall\n", center->word, commonWord, commonCount, commonMonomer->subbedOutCount);
 if (commonMonomer->subbedOutCount < 2)
     {
-    verbose(2, "Want to substitute %s for %s, but %s only occurs %d time.\n", 
+    verbose(3, "Want to substitute %s for %s, but %s only occurs %d time.\n", 
 	center->word, commonWord, commonWord, commonMonomer->subbedOutCount);
     return FALSE;
     }
@@ -876,10 +878,10 @@ for (ref = centerRefList; ref != NULL; ref = ref->next)
          {
 	 if (currentIx == targetIx)
 	     {
-	     verbose(2, "Substituting %s for %s in context of %d\n", center->word, commonWord, slCount(neighborhood));
+	     verbose(3, "Substituting %s for %s in context of %d\n", center->word, commonWord, slCount(neighborhood));
 	     struct monomer *oldCenter = node->val;
 	     if (oldCenter->type != center->type)
-		 verbose(2, "Type mismatch subbig %s vs %s\n", oldCenter->word, center->word);
+		 verbose(3, "Type mismatch subbig %s vs %s\n", oldCenter->word, center->word);
 	     node->val = center;
 	     oldCenter->subbedOutCount -= 1;
 	     center->subbedOutCount += 1;
@@ -940,12 +942,12 @@ boolean subIntoFirstMostCommonOfType(struct alphaStore *store, struct monomer *u
 struct monomer *common = mostCommonInType(unused->type);
 if (common == NULL)
     {
-    verbose(2, "No monomers of type %s used at all!\n", unused->type->name);
+    verbose(3, "No monomers of type %s used at all!\n", unused->type->name);
     return FALSE;
     }
 if (common->subbedOutCount < 2)
     {
-    verbose(2, "Trying to sub in %s, but there's no monomers of type %s that are used more than once.\n", 
+    verbose(3, "Trying to sub in %s, but there's no monomers of type %s that are used more than once.\n", 
 	unused->word, unused->type->name);
     return FALSE;
     }
@@ -955,7 +957,7 @@ for (node = ll->head; !dlEnd(node); node = node->next)
     struct monomer *monomer = node->val;
     if (monomer == common)
         {
-	verbose(2, "Subbing %s for %s of type %s\n", unused->word, monomer->word, unused->type->name);
+	verbose(3, "Subbing %s for %s of type %s\n", unused->word, monomer->word, unused->type->name);
 	node->val = unused;
 	unused->subbedOutCount += 1;
 	monomer->subbedOutCount -= 1;
@@ -993,7 +995,7 @@ void subInMissing(struct alphaStore *store, struct dlList *ll)
 {
 setInitialSubbedOutCount(store, ll);
 struct slRef *unusedList = listUnusedMonomers(store, ll);
-verbose(2, "%d monomers, %d unused\n", slCount(store->monomerList), slCount(unusedList));
+verbose(3, "%d monomers, %d unused\n", slCount(store->monomerList), slCount(unusedList));
 struct slRef *unusedRef;
 for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
     {
@@ -1001,7 +1003,7 @@ for (unusedRef = unusedList; unusedRef != NULL; unusedRef = unusedRef->next)
     struct monomerRef *neighborhood = findNeighborhoodFromReads(unused);
     if (!subCenterInNeighborhood(store, unused, neighborhood, ll))
 	{
-	verbose(2, "Couldn't substitute in %s with context, falling back to type logic\n", 
+	verbose(3, "Couldn't substitute in %s with context, falling back to type logic\n", 
 	    unused->word);
         subIntoFirstMostCommonOfType(store, unused, ll);
 	}
@@ -1028,11 +1030,14 @@ static void wordTreeGenerateFile(struct alphaStore *store, int maxSize, struct w
  * most of work. */
 {
 struct dlList *ll = wordTreeGenerateList(store, maxSize, firstWord, maxOutputWords);
+verbose(2, "Generated initial output list\n");
 char *unsubbedFile = optionVal("unsubbed", NULL);
 if (unsubbedFile)
     writeMonomerList(unsubbedFile, ll);
 subInMissing(store, ll);
+verbose(2, "Substituted in missing rare monomers\n");
 writeMonomerList(fileName, ll);
+verbose(2, "Wrote primary output\n");
 dlListFree(&ll);
 }
 
@@ -1163,7 +1168,7 @@ for (read = readList; read != NULL; read = read->next)
 	    orphan->monomer = monomer;
 	    slAddHead(&orphanList, orphan);
 	    hashAdd(orphanHash, word, orphan);
-	    verbose(2, "Adding orphan start %s\n", word);
+	    verbose(3, "Adding orphan start %s\n", word);
 	    }
 	}
     }
@@ -1206,7 +1211,7 @@ for (read = readList; read != NULL; read = read->next)
 	    orphan->monomer = monomer;
 	    slAddHead(&orphanList, orphan);
 	    hashAdd(orphanHash, monomer->word, orphan);
-	    verbose(2, "Adding orphan end %s\n", monomer->word);
+	    verbose(3, "Adding orphan end %s\n", monomer->word);
 	    }
 	}
     }
@@ -1256,7 +1261,7 @@ void integrateOrphans(struct alphaStore *store)
 {
 struct alphaOrphan *orphanStarts = findOrphanStarts(store->readList, store);
 struct alphaOrphan *orphanEnds = findOrphanEnds(store->readList, store);
-verbose(2, "orphanStarts has %d items, orphanEnds %d\n", 
+verbose(3, "orphanStarts has %d items, orphanEnds %d\n", 
     slCount(orphanStarts), slCount(orphanEnds));
 
 /* First look for the excellent situation where you can pair up orphans with each 
@@ -1280,7 +1285,7 @@ for (start = orphanStarts; start != NULL; start = start->next)
 		end->paired = TRUE;
 		start->paired = TRUE;
 		addReadOfTwo(store, end->monomer, start->monomer);
-		verbose(2, "Pairing %s with %s\n", end->monomer->word, start->monomer->word);
+		verbose(3, "Pairing %s with %s\n", end->monomer->word, start->monomer->word);
 		}
 	    }
 	}
@@ -1297,10 +1302,10 @@ for (start = orphanStarts; start != NULL; start = start->next)
         continue;
 
     struct monomerType *newType = typeBefore(store, startType, 1);
-    verbose(2, "Trying to find end of type %s\n", newType->name);
+    verbose(3, "Trying to find end of type %s\n", newType->name);
     struct monomer *newMono = pickRandomFromType(newType);
     addReadOfTwo(store, newMono, startMono);
-    verbose(2, "Pairing new %s with start %s\n", newMono->word, startMono->word);
+    verbose(3, "Pairing new %s with start %s\n", newMono->word, startMono->word);
     }
 
 /* Ok, now have to just manufacture other side of orphan ends out of thin air. */
@@ -1314,10 +1319,10 @@ for (end = orphanEnds; end != NULL; end = end->next)
         continue;
 
     struct monomerType *newType = typeAfter(store, endType, 1);
-    verbose(2, "Trying to find start of type %s\n", newType->name);
+    verbose(3, "Trying to find start of type %s\n", newType->name);
     struct monomer *newMono = pickRandomFromType(newType);
     addReadOfTwo(store, endMono, newMono);
-    verbose(2, "Pairing end %s with new %s\n", endMono->word, newMono->word);
+    verbose(3, "Pairing end %s with new %s\n", endMono->word, newMono->word);
     }
 }
 
@@ -1436,7 +1441,7 @@ if (store->typeList == NULL)
     errAbort("%s is empty", lf->fileName);
 lineFileClose(&lf);
 hashFree(&uniq);
-verbose(2, "Added %d types containing %d words from %s\n", 
+verbose(3, "Added %d types containing %d words from %s\n", 
     slCount(store->typeList), store->typeHash->elCount, fileName);
 
 /* Create type array */
@@ -1501,7 +1506,7 @@ struct monomerType *fillInTypeFromReads(struct monomer *monomer, struct alphaSto
  * it just uses info from first read.  Fortunately the data, at least on Y, shows a lot of
  * consistency, so it's probably not actually worth a more sophisticated algorithm that would
  * instead take the most popular choice rather than the first one. */
-verbose(2, "fillInTypeFromReads on %s from %d reads\n", monomer->word, slCount(monomer->readList));
+verbose(3, "fillInTypeFromReads on %s from %d reads\n", monomer->word, slCount(monomer->readList));
 struct monomerType *bestType = NULL;
 int bestPos = 0;
 boolean bestIsAfter = FALSE;
@@ -1511,13 +1516,13 @@ for (readRef = monomer->readList; readRef != NULL; readRef = readRef->next)
     struct alphaRead *read = readRef->val;
     struct monomerRef *ref;
 	{
-	verbose(2, "  read %s (%d els):", read->name, slCount(read->list));
+	verbose(3, "  read %s (%d els):", read->name, slCount(read->list));
 	for (ref = read->list; ref != NULL; ref = ref->next)
 	    {
 	    struct monomer *m = ref->val;
-	    verbose(2, " %s", m->word);
+	    verbose(3, " %s", m->word);
 	    }
-	verbose(2, "\n");
+	verbose(3, "\n");
 	}
     struct monomerType *beforeType = NULL;
     int beforePos = 0;
@@ -1582,6 +1587,8 @@ if (bestType != NULL)
     else
 	chosenType = typeAfter(store, bestType, bestPos);
     }
+verbose(3, "chosenType for %s is %s\n", monomer->word, 
+    (bestType == NULL ? "(null)" : chosenType->name));
 return chosenType;
 }
 
@@ -1599,8 +1606,7 @@ for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
     {
     if (monomer->type == NULL)
 	{
-	struct monomerType *type = monomer->type = fillInTypeFromReads(monomer, store);
-	verbose(2, "Got %p %s\n", type, (type != NULL ? type->name : "n/a"));
+	monomer->type = fillInTypeFromReads(monomer, store);
 	}
     }
 }
@@ -1613,12 +1619,16 @@ void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
 struct alphaStore *store = alphaStoreNew(maxChainSize);
 alphaReadListFromFile(readsFile, store);
 alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
+verbose(2, "Loaded input reads and monomer order\n");
 crossCheckMonomerOrderAndReads(store, "m", readsFile, monomerOrderFile);
 fillInTypes(store);
 integrateOrphans(store);
+verbose(2, "Filled in missing types and integrated orphan ends\n");
 makeMarkovChains(store);
+verbose(2, "Made Markov Chains\n");
 struct wordTree *wt = store->markovChains;
 alphaStoreNormalize(store, outSize);
+verbose(2, "Normalized Markov Chains\n");
 
 if (optionExists("chain"))
     {
