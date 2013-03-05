@@ -9,6 +9,7 @@
 #include "bPlusTree.h"
 #include "twoBit.h"
 #include "udc.h"
+#include "net.h"
 #include <limits.h>
 
 /* following are the wrap functions for the UDC and stdio functoins

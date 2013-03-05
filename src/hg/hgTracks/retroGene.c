@@ -295,10 +295,12 @@ registerTrackHandler("ucscRetroInfo", retroGeneMethods);
 registerTrackHandler("ucscRetroInfo1", retroGeneMethods);
 registerTrackHandler("ucscRetroInfo2", retroGeneMethods);
 registerTrackHandler("ucscRetroInfo3", retroGeneMethods);
+registerTrackHandler("ucscRetroInfo4", retroGeneMethods);
 //registerTrackHandler("retroCdsAli", retroAliMethods);
 //registerTrackHandler("retroCdsAli3", retroAliMethods);
 registerTrackHandler("ucscRetroAli", retroAliMethods);
 registerTrackHandler("ucscRetroAli1", retroAliMethods);
 registerTrackHandler("ucscRetroAli2", retroAliMethods);
 registerTrackHandler("ucscRetroAli3", retroAliMethods);
+registerTrackHandler("ucscRetroAli4", retroAliMethods);
 }

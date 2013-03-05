@@ -4594,7 +4594,7 @@ tag IPS
 type Cell Line
 description induced pluripotent stem cell derived from skin fibroblast
 lineage induced pluripotent stem cell derived from skin fibroblast
-orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
+orderUrl http://intra.ninds.nih.gov/
 organism human
 protocol Crawford:iPS_Crawford_protocol.pdf
 sex B

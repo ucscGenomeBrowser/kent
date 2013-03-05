@@ -465,7 +465,7 @@ noInherit on
     longLabel Sequences in Articles: PubmedCentral and Elsevier
     parent pubs on
     type bed 12 .
-    visibility pack
+    visibility dense
     priority 2
     configurable off
     configureByPopup off
@@ -484,7 +484,7 @@ noInherit on
     track pubsMarkerBand
     shortLabel Bands
     longLabel Cytogenetic bands in Publications
-    parent pubs on
+    parent pubs off
     visibility hide
     priority 3
     type bed 5
@@ -500,7 +500,7 @@ noInherit on
     track pubsMarkerGene
     shortLabel Genes
     longLabel Gene symbols in Publications
-    parent pubs on
+    parent pubs off
     priority 3
     visibility hide
     type bed 5

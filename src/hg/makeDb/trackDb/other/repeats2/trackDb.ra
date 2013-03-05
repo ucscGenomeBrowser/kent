@@ -75,7 +75,7 @@ track getOrf
 shortLabel ORFs
 longLabel Open Reading Frames found by EMBOSS getorf
 group genes
-visibility hide
+visibility pack
 color 100,0,0
 type bed 5
 

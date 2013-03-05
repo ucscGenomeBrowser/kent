@@ -28,7 +28,7 @@
 # rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu_3.0/
 
 ##########################################################################
-# Download sequence (DONE - 2012-04-13 - Pauline)
+# Download sequence (DONE - 2013-02-21 - Pauline)
     mkdir /hive/data/genomes/nomLeu3
     cd /hive/data/genomes/nomLeu3
     mkdir genbank
@@ -46,10 +46,82 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Noma
     #   min 782 (gi|350542783|gb|ADFV01197901.1|)
     #   max 2866069 (gi|306404542|gb|GL397432.1|) median 4542
 
+# and all together: (adding this for more complex assembly structure)
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz \
+Primary_Assembly/unlocalized_scaffolds/FASTA/*.fa.gz \
+Primary_Assembly/unplaced_scaffolds/FASTA/*.fa.gz \
+non-nuclear/unlocalized_scaffolds/FASTA/chrMT.unlocalized.scaf.fa.gz
+
+    #   2962077449 bases (205468402 N's 2756609047 real 2756609047 upper 0 lower) 
+    #   in 17492 sequences in 54 files
+    #   Total size: mean 169339.0 sd 4348402.5 
+    #   min 782 (gi|350542783|gb|ADFV01197901.1|) 
+    #   max 163208435 (gi|429122739|gb|CM001648.1|) median 4779
+
 ##########################################################################
-# fixup names for UCSC standards (DONE - 2012-04-13 - Hiram)
+# fixup names for UCSC standards (DONE - 2013-02-22 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/ucsc
     cd /hive/data/genomes/nomLeu3/ucsc
+
+    ########################  Assembled Chromosomes
+    cat << '_EOF_' > ucscCompositeAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or die "can not read chr${chrN}.comp.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+
+    # << happy emacs
+    chmod +x ucscCompositeAgp.pl
+    time ./ucscCompositeAgp.pl
+# 48.327u 9.322s 0:47.74 120.7%	0+0k 0+0io 0pf+0w
+    time gzip *.fa *.agp
+# 744.838u 3.232s 12:37.06 98.8%	0+0k 0+0io 0pf+0w
+    faSize chr*.fa.gz
+
+#   2795260045 bases (183586894 N's 2611673151 real 2611673151 upper 0 lower) 
+#   in 26 sequences in 26 files
+#   Total size: mean 107510001.7 sd 35029172.5 
+#   min 28733288 (chr24) max 163208435 (chr2) median 110690730
 
     ########################  Unplaced scaffolds
     # verify we don't have any .acc numbers different from .1
@@ -57,10 +129,12 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Noma
     ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
 	| cut -f1 | egrep "^GL|^ADFV" \
 	| sed -e 's/^GL[0-9][0-9]*//; s/^ADFV[0-9][0-9]*//' | sort | uniq -c
-    #   377832 .1
+    #   33196 .1
+    #   375 .2
 
-    # this is like the unplaced.pl script in other assemblies except it
-    #	does not add chrUn_ to the names since they are all just scaffolds
+#   Found .1s and .2s so will need to modify the script below to rename both
+#   types of item.
+
 
     cat << '_EOF_' > unplaced.pl
 #!/bin/env perl
@@ -71,27 +145,26 @@ use warnings;
 my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
 my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
 open (FH, "zcat $agpFile|") or die "can not read $agpFile";
-open (UC, "|gzip -c > unplaced.agp.gz") or die "can not write to unplaced.agp.gz";
+open (UC, ">unplaced.agp") or die "can not write to unplaced.agp";
 while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
-        printf UC "%s", $line;
+        $line =~ s/\./_/;
+        printf UC "chrUn_%s", $line;
     }
 }
 close (FH);
 close (UC);
 
 open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
-open (UC, "|gzip -c > unplaced.fa.gz") or die "can not write to unplaced.fa.gz";
+open (UC, ">unplaced.fa") or die "can not write to unplaced.fa";
 while (my $line = <FH>) {
     if ($line =~ m/^>/) {
         chomp $line;
         $line =~ s/.*gb\|//;
-        $line =~ s/\|.*//;
-        $line =~ s/\.1//;    
-        printf UC ">$line\n";
+        $line =~ s/\.1\|.*//;
+        printf UC ">chrUn_$line\n";
     } else {
         print UC $line;
     }
@@ -102,11 +175,20 @@ close (UC);
     # << happy emacs
     chmod +x unplaced.pl
     time ./unplaced.pl
-    #   real    13m19.283s
+#2.422u 0.470s 0:02.61 110.7%	0+0k 0+0io 0pf+0w
 
-genbank/non-nuclear/unlocalized_scaffolds/FASTA
+    # make sure none of the names got to be over 31 characers long:
+    grep -v "^#" unplaced.agp | cut -f1 | awk '{print length($1)}' | sort -rn | head -1
+    gzip *.fa *.agp
+    # not much in that sequence:
+    faSize unplaced.fa.gz
+#   114515358 bases (13698051 N's 100817307 real 100817307 upper 0 lower) 
+#   in 15567 sequences in 1 files
+#   Total size: mean 7356.3 sd 41724.2 
+#   min 2496 (chrUn_ADFV01161919) max 2866069 (chrUn_GL397432) median 4543
+
     ########################  Unlocalized scaffolds
-    cat << '_EOF_' > unlocalized.pl
+    cat << '_EOF_' > unlocalizedCHRM.pl
 #!/bin/env perl
 
 use strict;
@@ -177,13 +259,98 @@ foreach my $chrN (keys %chrNames) {
     close (UC);
 }
 '_EOF_'
+
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+open (FH, "<../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fa.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, ">chr${chrN}_random.agp") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            chomp $line;
+            my (@a) = split('\t', $line);
+            my $acc = $a[0];
+            my $accNo1 = $acc;
+            $accNo1 =~ s/\./_/;
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC "%s", $ucscName;
+            for (my $i = 1; $i < scalar(@a); ++$i) {
+                printf UC "\t%s", $a[$i];
+            }
+            printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, ">chr${chrN}_random.fa") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            chomp $line;
+            my $acc = $line;
+            $acc =~ s/.*gb\|//;
+            $acc =~ s/\|.*//;
+            my $accNo1 = $acc;
+            $accNo1 =~ s/\./_/;
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC ">$ucscName\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+
+
     # << happy emacs
+    chmod +x unlocalizedCHRM.pl
+    time ./unlocalizedCHRM.pl
+
     chmod +x unlocalized.pl
     time ./unlocalized.pl
+
     mv chrMT_random.fa.gz chrM_random.fa.gz
     mv chrMT_random.agp.gz chrM_random.agp.gz
+
+    gzip *.fa *.agp
+
     # verify nothing lost from original:
     time faSize *.fa.gz
+
+    #  2962077449 bases (205468402 N's 2756609047 real 2756609047 upper 0 lower) 
+    #  in 17492 sequences in 54 files
+    #  Total size: mean 169339.0 sd 4348402.5 
+    #  min 782 (chrM_ADFV01197901_random) max 163208435 (chr2) median 4779
+
     #   2936052603 bases (179443556 N's 2756609047 real 2756609047 upper 0
     #   lower) in 17976 sequences in 2 files
     #   Total size: mean 163331.8 sd 2015356.2
@@ -192,59 +359,68 @@ foreach my $chrN (keys %chrNames) {
     # make sure none of the names got to be over 31 characers long:
     zcat *.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($0)}' \
         | sort -rn | uniq -c | head
-    #       8 24
-    #   10004 12
-    #  367828 8
 
 ##########################################################################
-# Initial makeGenomeDb.pl (DONE - 2012-04-13 - Hiram)
+# Initial makeGenomeDb.pl (DONE - 2013-02-22 - Pauline)
     cd /hive/data/genomes/nomLeu3
     # mitoAcc - chrMt sequence is included in the download files
-    cat << '_EOF_' > nomLeu3.config.ra
+
+    cp ../nomLeu2/nomLeu2.config.ra .
+    mv nomLeu2.config.ra nomLeu3.config.ra 
+
+
 # Config parameters for makeGenomeDb.pl:
 db nomLeu3
 clade mammal
 genomeCladePriority 13
 scientificName Nomascus leucogenys
 commonName Gibbon
-assemblyDate Jun. 2011
-assemblyLabel Gibbon Genome Sequencing Consortium Nleu1.1 (NCBI project 13975, GCA_000146795.2, WGS ADFV01)
-assemblyShortLabel GGSC Nleu1.1
-ncbiAssemblyName Nleu1.1
-ncbiAssemblyId 313108
-orderKey 329
+assemblyDate Oct. 2012
+assemblyLabel Gibbon Genome Sequencing Consortium 
+assemblyShortLabel Nleu_3.0
+orderKey 328
 mitoAcc none
 fastaFiles /hive/data/genomes/nomLeu3/ucsc/*.fa.gz
 agpFiles /hive/data/genomes/nomLeu3/ucsc/*.agp.gz
 # qualFiles none
 dbDbSpeciesDir gibbon
+photoCreditURL http://www.genome.gov/pressDisplay.cfm?photoID=74
+photoCreditName Jim Zuckerman, Gibbon Conservation Center
+ncbiGenomeId 480
+ncbiAssemblyId 506498 
+ncbiAssemblyName Nleu_3.0
+ncbiBioProject 13975
+genBankAccessionID GCA_000146795.2
 taxId 61853
-'_EOF_'
+
+
     # << happy emacs
 
     # verify sequence and agp are OK
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
-        -stop=agp nomLeu3.config.ra > agp.log 2>&1
+        -stop=dbDb nomLeu3.config.ra >& dbDb.log
+    #first run failed, ran again from part way through
+
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -continue=agp nomLeu3.config.ra >& agp.log
     #   real    2m4.625s
+    #
     # verify OK:
     tail -1 agp.log
     #   *** All done!  (through the 'agp' step)
 
-    # finish it off
-    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
-        -dbHost=hgwdev nomLeu3.config.ra > db.log 2>&1
-    #   real    21m42.920s
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/nomLeu3.unmasked.2bit /gbdb/nomLeu3/nomLeu3.2bit
     #	browser should function now
 
 #########################################################################
-# running repeat masker (DONE - 2012-04-13 - Hiram)
+# running repeat masker (IN PROGRESS- 2013-02-27 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/repeatMasker
     cd /hive/data/genomes/nomLeu3/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-	-smallClusterHub=encodek nomLeu3 > do.log 2>&1 &
+	-smallClusterHub=encodek nomLeu3 >& do.log
+XXX 2/27/13 4:49pm
     #   real    1161m52.449s
 
     cat faSize.rmsk.txt
@@ -268,12 +444,13 @@ taxId 61853
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (DONE - 2012-04-13 - Hiram)
+# running simple repeat (IN PROGRESS- 2013-02-27 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/simpleRepeat
     cd /hive/data/genomes/nomLeu3/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
-	nomLeu3 > do.log 2>&1 &
+	nomLeu3 >& do.log
+XXX 2/27/13 4:49pm
     #   real    19m41.095s
     XXX 1 failed job, which is all on chrM, a known failure for TRF:
     # ./TrfRun.csh /hive/data/genomes/nomLeu3/TrfPart/000/000.lst.bed
@@ -287,6 +464,7 @@ taxId 61853
 # Longest finished job:            2158s      35.97m     0.60h    0.02d
 # Submission to last job:          2906s      48.43m     0.81h    0.03d
 
+XXX when done try this part
     # continuing:
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
@@ -315,33 +493,41 @@ taxId 61853
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2012-04-13 - Hiram)
+#	(DONE - 2013-02-25 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/gap
     cd /hive/data/genomes/nomLeu3/bed/gap
+
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../nomLeu3.unmasked.2bit > findMotif.txt 2>&1
-    #	real    0m23.121s
+    #   real	1m2.760s
+
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits nomLeu3 -not gap -bed=notGap.bed
-    #   2756609047 bases of 2756609047 (100.000%) in intersection
-    #   real    0m25.158s
+    #2914144341 bases of 2914144341 (100.000%) in intersection
+    #real	0m18.719s
 
     time featureBits nomLeu3 allGaps.bed notGap.bed -bed=new.gaps.bed
-    #   0 bases of 2756609047 (0.000%) in intersection
-    #   real    15m56.963s
+    #(nomLeu3)
+    #157535294 bases of 2914144341 (5.406%) in intersection
+    #real	9m31.800s
 
-    # no new gaps, nothing to do here
+    #not zero! and not a low number? Investigating...
 
     # are there non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" nomLeu3 | sort | uniq -c
     #   179932 yes
 
+    #(nomLeu3)
+    #     92 no
+    #  12113 yes
+
 ##########################################################################
-## WINDOWMASKER (DONE - 2012-04-13 - Hiram)
+## WINDOWMASKER (IN PROGRESS- 2013-02-27 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/windowMasker
     cd /hive/data/genomes/nomLeu3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
-	-dbHost=hgwdev nomLeu3 > do.log 2>&1 &
+	-dbHost=hgwdev nomLeu3 >& do.log
+XXX 2/27/13 4:49pm
     #   real    196m2.385s
 
     # Masking statistics

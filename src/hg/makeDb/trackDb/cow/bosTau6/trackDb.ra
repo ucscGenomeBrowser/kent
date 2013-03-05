@@ -50,4 +50,27 @@ html numtSeqBosTau6
     track  bamAllNumtSSorted override
     html numtSeqBosTau6
 
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex BT_NumtS_.*
+
+searchTable numtS
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex BT_NumtS_.*
+
+searchTable numtSAssembled
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+searchPriority 15
+query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
+termRegex BT_NumtS_.*
 
