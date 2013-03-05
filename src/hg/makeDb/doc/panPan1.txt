@@ -155,7 +155,7 @@ close (UC);
 
 
 #############################################################################
-#   Initial browser build (DONE - 2013-02-27 - Chin)
+#   Initial browser build (DONE - 2013-02-28 - Chin)
     cd /hive/data/genomes/panPan1
     cat << '_EOF_' > panPan1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -191,7 +191,6 @@ taxId 9597
     #  *** All done!  (through the 'agp' step)
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
 	-continue=db panPan1.config.ra > db.log 2>&1 
-    XXXX 2013-02-28 4:00 PM
     #	real    39m18.720s
 
    tail  db.log
@@ -211,42 +210,44 @@ taxId 9597
 
 
 #############################################################################
-# running repeat masker (working - 2013-02-27 - Chin)
+# running repeat masker (DONE - 2013-03-04 - Chin)
     mkdir /hive/data/genomes/panPan1/bed/repeatMasker
     cd /hive/data/genomes/panPan1/bed/repeatMasker
-XXXX 2013-02-27 4:05 PM
+    screen -S panPan1-repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek panPan1 > do.log 2>&1 &
-    #	real    250m27.510s
+    # real    652m25.160s
+
     cat faSize.rmsk.txt
-    #	2860591921 bases (676999153 N's 2183592768 real 1981827417 upper
-    #	201765351 lower) in 22819 sequences in 1 files
-    #	Total size: mean 125360.1 sd 395781.0 min 1000 (AFYH01291818)
-    #	max 10736886 (JH126562) median 5475
-    #	%7.05 masked total, %9.24 masked real
+    # 2869190071 bases (143284465 N's 2725905606 real 1359856043 upper 
+    # 1366049563 lower) in 10867 sequences in 1 files
+    # Total size: mean 264027.8 sd 2063129.2 min 217 (AJFE01120895) 
+    # max 101998900 (JH650633) median 1258
+    # %47.61 masked total, %50.11 masked real
 
     grep -i versi do.log
-# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
-#    April 26 2011 (open-3-3-0) version of RepeatMasker
+    # RepeatMasker version open-4.0.0
+    #    January 10 2013 (open-4-0-0) version of RepeatMasker
 
     featureBits -countGaps panPan1 rmsk
-    #	201917583 bases of 2860591921 (7.059%) in intersection
+    #   366823722 bases of 2869190071 (47.638%) in intersection
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (working - 2012-07-26 - Chin)
+# running simple repeat (DONE - 2013-02-28 - Chin)
     mkdir /hive/data/genomes/panPan1/bed/simpleRepeat
     cd /hive/data/genomes/panPan1/bed/simpleRepeat
+    screen -S panPan1-simpleRepeatr
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	panPan1 > do.log 2>&1 &
-    #   real    27m0.573s
+    #   real    23m47.212s
 
     cat fb.simpleRepeat
-    #   23621674 bases of 1041286029 (2.269%) in intersection
+    #   53605194 bases of 2725953003 (1.966%) in intersection
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
@@ -2819,3 +2820,31 @@ wait
     ln -s `pwd`/md5sum.txt $pd/
 
 #############################################################################
+# TODO: cytoBandIdeo
+
+Hiram, Chin, Pauline,
+
+When you build new assemblies, you should include a build of the
+cytoBandIdeo table, so we get an ideogram for navigation/orientation
+above the main graphic.
+
+I checked in a script that does this for assemblies that do not have a formal
+cytogenetic mapping (most do not).  makeCytoBandIdeo.csh  If you have
+/cluster/bin/scripts in your path, it should just work.
+
+thanks,
+
+            --b0b 
+Good Evening Bob:
+
+Thanks for the script, you will want to add -ef to your scripts:
+#!/bin/tcsh -ef
+
+so they will exit on errors and not use garbage
+from user's .tcshrc scripts.  Otherwise they can run
+wild and destroy stuff.
+
+--Hiram 
+
+#############################################################################
+
