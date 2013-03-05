@@ -36,7 +36,7 @@
  *     extendedHeader
  *         extensionSize       2 size of extended header in bytes - currently 64
  *         extraIndexCount     2 number of extra fields we will be indexing
- *         extraIndexOffset    8 Offset to list of non-chrom/start/end indexes
+ *         extraIndexListOffset 8 Offset to list of non-chrom/start/end indexes
  *         reserved            48 All zeroes for now
  *     extraIndexList - one of these for each extraIndex 
  *         type                2 Type of index.  Always 0 for bPlusTree now
@@ -117,12 +117,19 @@ struct bbiFile
     bits16 fieldCount;		/* Number of columns in bed version. */
     bits16 definedFieldCount;   /* Number of columns using bed standard definitions. */
     bits64 asOffset;		/* Offset to embedded null-terminated AutoSQL file. */
-    bits64 totalSummaryOffset;	/* Offset to total summary information if any.  (On older files have to calculate) */
+    bits64 totalSummaryOffset;	/* Offset to total summary information if any.  
+				   (On older files have to calculate) */
     bits32 uncompressBufSize;	/* Size of uncompression buffer, 0 if uncompressed */
-    bits64 nameIndexOffset;	/* Start of name index or zero if none. */
+    bits64 extensionOffset;	/* Start of header extension block or 0 if none. */
     struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
     struct bbiZoomLevel *levelList;	/* List of zoom levels. */
-    struct bptFile *nameBpt;	/* Index of names, may be NULL */
+
+    /* Fields based on extension block. */
+    bits16 extensionSize;   /* Size of extension block */
+    bits16 extraIndexCount; /* Number of extra indexes (on fields other than chrom,start,end */ 
+    bits64 extraIndexListOffset;    /* Offset to list of extra indexes */
+
+    struct bptFile *nameBpt;	/* Index of names, may be NULL */ // uglyf - remove
     };
 
 
@@ -350,6 +357,18 @@ void bbiChromUsageFree(struct bbiChromUsage **pUsage);
 void bbiChromUsageFreeList(struct bbiChromUsage **pList);
 /* free a list of bbiChromUsage structures */
 
+struct bbExIndexMaker
+/* A helper structure to make indexes beyond primary one */
+    {
+    bits16 indexCount;          /* Number of extra indexes. */
+        /* Kind of wish next four fields,  all of which are arrays indexed
+         * by the same thing,  were a single array of a structure instead. */
+    bits16 *indexFields;        /* array of field ids, one for each extra index. */
+    int *maxFieldSize;          /* array of maximum sizes seen for this field. */
+    struct bbNamedFileChunk **chunkArrayArray; /* where we keep name/start/size triples */
+    bits64 *fileOffsets;        /* array of file offsets where indexes starts. */
+    int recordCount;            /* number of records in file. */
+    };
 
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
 	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount);

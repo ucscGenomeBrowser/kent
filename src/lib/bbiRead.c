@@ -114,10 +114,7 @@ bbi->definedFieldCount = udcReadBits16(udc, isSwapped);
 bbi->asOffset = udcReadBits64(udc, isSwapped);
 bbi->totalSummaryOffset = udcReadBits64(udc, isSwapped);
 bbi->uncompressBufSize = udcReadBits32(udc, isSwapped);
-bbi->nameIndexOffset = udcReadBits64(udc, isSwapped);
-
-/* Skip over reserved area. */
-udcSeek(udc, 64);	// Absolute seek over fixed size 64 bit header
+bbi->extensionOffset = udcReadBits64(udc, isSwapped);
 
 /* Read zoom headers. */
 int i;
@@ -133,6 +130,15 @@ for (i=0; i<bbi->zoomLevels; ++i)
     }
 slReverse(&levelList);
 bbi->levelList = levelList;
+
+/* Deal with header extension if any. */
+if (bbi->extensionOffset != 0)
+    {
+    udcSeek(udc, bbi->extensionOffset);
+    bbi->extensionSize = udcReadBits16(udc, isSwapped);
+    bbi->extraIndexCount = udcReadBits16(udc, isSwapped);
+    bbi->extraIndexListOffset = udcReadBits64(udc, isSwapped);
+    }
 
 /* Attach B+ tree of chromosome names and ids. */
 udcSeek(udc, bbi->chromTreeOffset);

@@ -102,5 +102,11 @@ struct asObject *bigBedFileAsObjOrDefault(char *fileName);
 boolean bigBedFileCheckSigs(char *fileName);
 /* check file signatures at beginning and end of file */
 
+struct bptFile *bigBedOpenExtraIndex(struct bbiFile *bbi, char *fieldName);
+/* Return index associated with fieldName.  Aborts if no such index. */
+
+struct slName *bigBedListExtraIndexes(struct bbiFile *bbi);
+/* Return list of names of extra indexes beyond primary chrom:start-end one" */
+
 #endif /* BIGBED_H */
 

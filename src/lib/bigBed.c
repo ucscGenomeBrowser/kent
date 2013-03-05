@@ -205,6 +205,7 @@ return bbiSummaryArray(bbi, chrom, start, end, bigBedCoverageIntervals,
 void bigBedAttachNameIndex(struct bbiFile *bbi)
 /* Attach name index part of bbiFile to bbi */
 {
+#ifdef OLD
 if (bbi->nameBpt == NULL)
     {
     if (bbi->nameIndexOffset == 0)
@@ -212,6 +213,8 @@ if (bbi->nameBpt == NULL)
     udcSeek(bbi->udc, bbi->nameIndexOffset);
     bbi->nameBpt = bptFileAttach(bbi->fileName, bbi->udc);
     }
+#endif /* OLD */
+uglyAbort("bigBedAttachNameIndex() - no can do");
 }
 
 struct offsetSize 
@@ -518,3 +521,69 @@ bits64 bigBedItemCount(struct bbiFile *bbi)
 udcSeek(bbi->udc, bbi->unzoomedDataOffset);
 return udcReadBits64(bbi->udc, bbi->isSwapped);
 }
+
+struct slName *bigBedListExtraIndexes(struct bbiFile *bbi)
+/* Return list of names of extra indexes beyond primary chrom:start-end one" */
+{
+struct udcFile *udc = bbi->udc;
+boolean isSwapped = bbi->isSwapped;
+
+/* See if we have any extra indexes, and if so seek to there. */
+bits64 offset = bbi->extraIndexListOffset;
+if (offset == 0)
+   return NULL;
+udcSeek(udc, offset);
+
+/* Construct list of field that are being indexed.  List is list of 
+ * field numbers within asObj. */
+int i;
+struct slInt *intList = NULL, *intEl;
+for (i=0; i<bbi->extraIndexCount; ++i)
+    {
+    bits16 type,fieldCount;
+    type = udcReadBits16(udc, isSwapped);
+    fieldCount = udcReadBits16(udc, isSwapped);
+    udcSeekCur(udc, 12);    // skip over reserved bits
+    if (fieldCount == 1)
+        {
+	bits16 fieldId = udcReadBits16(udc, isSwapped);
+	udcSeekCur(udc, 2);    // skip over reserved bits
+	intEl = slIntNew(fieldId);
+	slAddHead(&intList, intEl);
+	}
+    else
+        {
+	warn("Not yet understanding indexes on multiple fields at once.");
+	internalErr();
+	}
+    }
+
+/* Now have to make an asObject to find out name that corresponds to this field. */
+struct asObject *as = bigBedAsOrDefault(bbi);
+
+/* Make list of field names out of list of field numbers */
+struct slName *nameList = NULL;
+for (intEl = intList; intEl != NULL; intEl = intEl->next)
+    {
+    struct asColumn *col = slElementFromIx(as->columnList, intEl->val);
+    if (col == NULL)
+	{
+        warn("Inconsistent bigBed file %s", bbi->fileName);
+	internalErr();
+	}
+    slNameAddHead(&nameList, col->name);
+    }
+
+asObjectFree(&as);
+return nameList;
+}
+
+struct bptFile *bigBedOpenExtraIndex(struct bbiFile *bbi, char *fieldName)
+/* Return index associated with fieldName.  Aborts if no such index. */
+{
+uglyAbort("Coming soon.");
+return NULL;
+}
+
+
+
