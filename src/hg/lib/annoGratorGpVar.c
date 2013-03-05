@@ -15,36 +15,52 @@ struct annoGratorGpVar
 };
 
 
-static char *annoGpVarDataLineAutoSqlString =
+static char *aggvAutoSqlStringStart =
 "table genePredWithSO"
 "\"genePred with Sequence Ontology annotation\""
-"("
-"string  name;               \"Name of gene\""
-"string  chrom;              \"Reference sequence chromosome or scaffold\""
-"char[1] strand;             \"+ or - for strand\""
-"uint    txStart;            \"Transcription start position\""
-"uint    txEnd;              \"Transcription end position\""
-"uint    cdsStart;           \"Coding region start\""
-"uint    cdsEnd;             \"Coding region end\""
-"uint    exonCount;          \"Number of exons\""
-"uint[exonCount] exonStarts; \"Exon start positions\""
-"uint[exonCount] exonEnds;   \"Exon end positions\""
-"string  proteinID;          \"UniProt display ID for Known Genes,  UniProt accession or RefSeq protein ID for UCSC Genes\" "
-"string  alignID;            \"Unique identifier for each (known gene, alignment position) pair\""
+"(";
+
+static char *aggvAutoSqlStringEnd =
+"string  allele;             \"Allele used to predict functional effect\""
+"string  transcript;         \"ID of affected transcript\""
 "uint    soNumber;           \"Sequence Ontology Number \" "
-"uint    soOther0;           \"Ancillary detail 0\""
-"uint    soOther1;           \"Ancillary detail 1\""
-"uint    soOther2;           \"Ancillary detail 2\""
-"uint    soOther3;           \"Ancillary detail 3\""
-"uint    soOther4;           \"Ancillary detail 4\""
-"uint    soOther5;           \"Ancillary detail 5\""
-"uint    soOther6;           \"Ancillary detail 6\""
+"string  soOther0;           \"Ancillary detail 0\""
+"string  soOther1;           \"Ancillary detail 1\""
+"string  soOther2;           \"Ancillary detail 2\""
+"string  soOther3;           \"Ancillary detail 3\""
+"string  soOther4;           \"Ancillary detail 4\""
+"string  soOther5;           \"Ancillary detail 5\""
+"string  soOther6;           \"Ancillary detail 6\""
+"string  soOther7;           \"Ancillary detail 7\""
 ")";
 
-struct asObject *annoGpVarAsObj()
-// Return asObject describing fields of genePred (at the moment, knownGene)
+struct asObject *annoGpVarAsObj(struct asObject *sourceAsObj)
+// Return asObject describing fields of internal source plus the fields we add here.
 {
-return asParseText(annoGpVarDataLineAutoSqlString);
+struct dyString *gpPlusGpFx = dyStringCreate(aggvAutoSqlStringStart);
+// Translate each column back into autoSql text for combining with new output fields:
+struct asColumn *col;
+for (col = sourceAsObj->columnList;  col != NULL;  col = col->next)
+    {
+    if (col->isArray || col->isList)
+	{
+	if (col->fixedSize)
+	    dyStringPrintf(gpPlusGpFx, "%s[%d]\t%s;\t\"%s\"",
+			   col->lowType->name, col->fixedSize, col->name, col->comment);
+	else if (col->linkedSizeName)
+	    dyStringPrintf(gpPlusGpFx, "%s[%s]\t%s;\t\"%s\"",
+			   col->lowType->name, col->linkedSizeName, col->name, col->comment);
+	else
+	    errAbort("Neither col->fixedSize nor col->linkedSizeName given for column '%s'",
+		     col->name);
+	}
+    else
+	dyStringPrintf(gpPlusGpFx, "%s\t%s;\t\"%s\"", col->lowType->name, col->name, col->comment);
+    }
+dyStringAppend(gpPlusGpFx, aggvAutoSqlStringEnd);
+struct asObject *asObj = asParseText(gpPlusGpFx->string);
+dyStringFree(&gpPlusGpFx);
+return asObj;
 }
 
 static char *blankIfNull(char *input)
@@ -68,43 +84,99 @@ static void aggvStringifyGpFx(char **words, struct gpFx *effect)
 {
 int count = 0;
 
+words[count++] = cloneString(effect->allele);
+words[count++] = cloneString(blankIfNull(effect->so.transcript));
 words[count++] = uintToString(effect->so.soNumber);
 
 switch(effect->so.soNumber)
     {
     case intron_variant:
-	words[count++] = cloneString(effect->so.sub.intron.transcript);
 	words[count++] = uintToString(effect->so.sub.intron.intronNumber);
 	break;
 
     case inframe_deletion:
+    case inframe_insertion:
     case frameshift_variant:
     case synonymous_variant:
-    case non_synonymous_variant:
-	words[count++] = cloneString(effect->so.sub.codingChange.transcript);
+    case missense_variant:
+    case stop_gained:
 	words[count++] = uintToString(effect->so.sub.codingChange.exonNumber);
 	words[count++] = uintToString(effect->so.sub.codingChange.cDnaPosition);
 	words[count++] = uintToString(effect->so.sub.codingChange.cdsPosition);
 	words[count++] = uintToString(effect->so.sub.codingChange.pepPosition);
-	words[count++] = cloneString(effect->so.sub.codingChange.aaChanges);
-	words[count++] = cloneString(effect->so.sub.codingChange.codonChanges);
+	words[count++] = strUpper(cloneString(blankIfNull(effect->so.sub.codingChange.aaOld)));
+	words[count++] = strUpper(cloneString(blankIfNull(effect->so.sub.codingChange.aaNew)));
+	words[count++] = strUpper(cloneString(blankIfNull(effect->so.sub.codingChange.codonOld)));
+	words[count++] = strUpper(cloneString(blankIfNull(effect->so.sub.codingChange.codonNew)));
 	break;
 
     default:
 	// write out ancillary information
-	words[count++] = blankIfNull(effect->so.sub.generic.soOther0);
-	words[count++] = blankIfNull(effect->so.sub.generic.soOther1);
-	words[count++] = blankIfNull(effect->so.sub.generic.soOther2);
-	words[count++] = blankIfNull(effect->so.sub.generic.soOther3);
-	words[count++] = blankIfNull(effect->so.sub.generic.soOther4);
-	words[count++] = blankIfNull(effect->so.sub.generic.soOther5);
-	words[count++] = blankIfNull(effect->so.sub.generic.soOther6);
+	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther0));
+	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther1));
+	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther2));
+	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther3));
+	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther4));
+	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther5));
+	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther6));
+	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther7));
 	break;
     };
 
 int needWords = sizeof(effect->so.sub.generic) / sizeof(char *) + 1;
 while (count < needWords)
-	words[count++] = "";
+    words[count++] = cloneString("");
+}
+
+struct gpFx *annoGratorGpVarGpFxFromRow(struct annoStreamer *sSelf, struct annoRow *row)
+// Turn the string array representation back into a real gpFx.
+// I know this is inefficient and am thinking about a better way.
+{
+if (row == NULL)
+    return NULL;
+struct gpFx *effect;
+AllocVar(effect);
+struct annoGrator *gSelf = (struct annoGrator *)sSelf;
+// get gpFx words which follow internal source's words:
+char **words = (char **)(row->data);
+int count = gSelf->mySource->numCols;
+effect->allele = cloneString(words[count++]);
+effect->so.transcript = cloneString(words[count++]);
+effect->so.soNumber = atol(words[count++]);
+switch(effect->so.soNumber)
+    {
+    case intron_variant:
+	effect->so.sub.intron.intronNumber = atol(words[count++]);
+	break;
+
+    case inframe_deletion:
+    case inframe_insertion:
+    case frameshift_variant:
+    case synonymous_variant:
+    case missense_variant:
+    case stop_gained:
+	effect->so.sub.codingChange.exonNumber = atol(words[count++]);
+	effect->so.sub.codingChange.cDnaPosition = atol(words[count++]);
+	effect->so.sub.codingChange.cdsPosition = atol(words[count++]);
+	effect->so.sub.codingChange.pepPosition = atol(words[count++]);
+	effect->so.sub.codingChange.aaOld = cloneString(words[count++]);
+	effect->so.sub.codingChange.aaNew = cloneString(words[count++]);
+	effect->so.sub.codingChange.codonOld = cloneString(words[count++]);
+	effect->so.sub.codingChange.codonNew = cloneString(words[count++]);
+	break;
+
+    default:
+	effect->so.sub.generic.soOther0 = cloneString(words[count++]);
+	effect->so.sub.generic.soOther1 = cloneString(words[count++]);
+	effect->so.sub.generic.soOther2 = cloneString(words[count++]);
+	effect->so.sub.generic.soOther3 = cloneString(words[count++]);
+	effect->so.sub.generic.soOther4 = cloneString(words[count++]);
+	effect->so.sub.generic.soOther5 = cloneString(words[count++]);
+	effect->so.sub.generic.soOther6 = cloneString(words[count++]);
+	effect->so.sub.generic.soOther7 = cloneString(words[count++]);
+	break;
+    }
+return effect;
 }
 
 static struct annoRow *aggvEffectToRow( struct annoGratorGpVar *self,
@@ -208,7 +280,15 @@ struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *gSelf,
 // needed to capture all the changes
 {
 struct annoGratorGpVar *self = (struct annoGratorGpVar *)gSelf;
+// Temporarily tweak primaryRow's start and end to find upstream/downstream overlap:
+int pStart = primaryRow->start, pEnd = primaryRow->end;
+primaryRow->start -= GPRANGE;
+if (primaryRow->start < 0)
+    primaryRow->start = 0;
+primaryRow->end += GPRANGE;
 struct annoRow *rows = annoGratorIntegrate(gSelf, primaryRow, retRJFilterFailed);
+primaryRow->start = pStart;
+primaryRow->end = pEnd;
 
 if (rows == NULL)
     {
@@ -261,7 +341,7 @@ struct annoGrator *gSelf = &(self->grator);
 annoGratorInit(gSelf, mySource);
 struct annoStreamer *sSelf = &(gSelf->streamer);
 // We add columns beyond what comes from mySource, so update our public-facing asObject:
-sSelf->setAutoSqlObject(sSelf, annoGpVarAsObj());
+sSelf->setAutoSqlObject(sSelf, annoGpVarAsObj(mySource->asObj));
 
 // integrate by adding gpFx fields
 gSelf->integrate = annoGratorGpVarIntegrate;
