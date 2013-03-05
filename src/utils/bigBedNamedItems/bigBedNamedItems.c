@@ -39,18 +39,19 @@ struct bbiFile *bbi = bigBedFileOpen(bigBedFile);
 FILE *f = mustOpen(outFile, "w");
 struct lm *lm = lmInit(0);
 struct bigBedInterval *intervalList;
-struct bptFile *bpt = bigBedOpenExtraIndex(bbi, field);
+int fieldIx;
+struct bptFile *bpt = bigBedOpenExtraIndex(bbi, field, &fieldIx);
 if (optionExists("nameFile"))
     {
     int wordCount = 0;
     char **words;
     char *buf;
     readAllWords(name, &words, &wordCount, &buf);
-    intervalList = bigBedMultiNameQuery(bbi, bpt, words, wordCount, lm);
+    intervalList = bigBedMultiNameQuery(bbi, bpt, fieldIx, words, wordCount, lm);
     }
 else
     {
-    intervalList = bigBedNameQuery(bbi, bpt, name, lm);
+    intervalList = bigBedNameQuery(bbi, bpt, fieldIx, name, lm);
     }
 bigBedIntervalListToBedFile(bbi, intervalList, f);
 carefulClose(&f);

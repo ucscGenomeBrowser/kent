@@ -129,11 +129,6 @@ struct bbiFile
     bits16 extensionSize;   /* Size of extension block */
     bits16 extraIndexCount; /* Number of extra indexes (on fields other than chrom,start,end */ 
     bits64 extraIndexListOffset;    /* Offset to list of extra indexes */
-
-    struct bptFile *uglyOldNameBpt;	/* Index of names, may be NULL */ // uglyf - remove
-
-    /* Some fields that should not be accessed directly as they may not have good values. */
-    struct asObject *cachedAs;	/* Cached parsed version.  Use bigBedAsOrDefault() to get this. */
     };
 
 

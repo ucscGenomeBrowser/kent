@@ -57,12 +57,13 @@ boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 star
 /*** Some routines for accessing bigBed items via name. ***/
 
 struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, struct bptFile *index,
-    char *name, struct lm *lm);
+    int fieldIx, char *name, struct lm *lm);
 /* Return list of intervals matching file. These intervals will be allocated out of lm. */
 
 struct bigBedInterval *bigBedMultiNameQuery(struct bbiFile *bbi, struct bptFile *index,
-    char **names, int nameCount, struct lm *lm);
-/* Fetch all records matching any of the names. Return list is allocated out of lm. */
+    int fieldIx, char **names, int nameCount, struct lm *lm);
+/* Fetch all records matching any of the names. Using given index on given field.
+ * Return list is allocated out of lm. */
 
 int bigBedIntervalToRowLookupChrom(struct bigBedInterval *interval, 
     struct bigBedInterval *prevInterval, struct bbiFile *bbi,
@@ -100,8 +101,9 @@ struct asObject *bigBedFileAsObjOrDefault(char *fileName);
 boolean bigBedFileCheckSigs(char *fileName);
 /* check file signatures at beginning and end of file */
 
-struct bptFile *bigBedOpenExtraIndex(struct bbiFile *bbi, char *fieldName);
-/* Return index associated with fieldName.  Aborts if no such index. */
+struct bptFile *bigBedOpenExtraIndex(struct bbiFile *bbi, char *fieldName, int *retFieldIx);
+/* Return index associated with fieldName.  Aborts if no such index.  Optionally return
+ * index in a row of this field. */
 
 struct slName *bigBedListExtraIndexes(struct bbiFile *bbi);
 /* Return list of names of extra indexes beyond primary chrom:start-end one" */

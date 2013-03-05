@@ -202,21 +202,6 @@ return bbiSummaryArray(bbi, chrom, start, end, bigBedCoverageIntervals,
 	summaryType, summarySize, summaryValues);
 }
 
-#ifdef OLD
-void bigBedAttachNameIndex(struct bbiFile *bbi)
-/* Attach name index part of bbiFile to bbi */
-{
-if (bbi->nameBpt == NULL)
-    {
-    if (bbi->nameIndexOffset == 0)
-	errAbort("%s has no name index", bbi->fileName);
-    udcSeek(bbi->udc, bbi->nameIndexOffset);
-    bbi->nameBpt = bptFileAttach(bbi->fileName, bbi->udc);
-    }
-uglyAbort("bigBedAttachNameIndex() - no can do");
-}
-#endif /* OLD */
-
 struct offsetSize 
 /* Simple file offset and file size. */
     {
@@ -306,38 +291,59 @@ slRefFreeListAndVals(&blockList);
 return fosList;
 }
 
-typedef boolean (*BbFirstWordMatch)(char *line, void *target);
+typedef boolean (*BbFirstWordMatch)(char *line, int fieldIx, void *target);
 /* A function that returns TRUE if first word in tab-separated line matches target. */
 
+static void extractField(char *line, int fieldIx, char **retField, int *retFieldSize)
+/* Go through tab separated line and figure out start and size of given field. */
+{
+int i;
+fieldIx -= 3;	/* Skip over chrom/start/end, which are not in line. */
+for (i=0; i<fieldIx; ++i)
+    {
+    line = strchr(line, '\t');
+    if (line == NULL)
+        {
+	warn("Not enough fields in extractField of %s", line);
+	internalErr();
+	}
+    line += 1;
+    }
+char *end = strchr(line, '\t');
+if (end == NULL)
+    end = line + strlen(line);
+*retField = line;
+*retFieldSize = end - line;
+}
 
-static boolean bbFirstWordMatchesName(char *line, void *target)
+static boolean bbWordMatchesName(char *line, int fieldIx, void *target)
 /* Return true if first word of line is same as target, which is just a string. */
 {
 char *name = target;
-return startsWithWordByDelimiter(name, '\t', line);
+int fieldSize;
+char *field;
+extractField(line, fieldIx, &field, &fieldSize);
+return strlen(name) == fieldSize && memcmp(name, field, fieldSize) == 0;
 }
 
-static boolean bbFirstWordIsInHash(char *line, void *target)
+static boolean bbWordIsInHash(char *line, int fieldIx, void *target)
 /* Return true if first word of line is same as target, which is just a string. */
 {
-/* Isolate out first word. */
-int firstWordSize;
-char *tab = strchr(line, '\t');
-if (tab == NULL)
-    firstWordSize = strlen(line);
-else
-    firstWordSize = tab - line;
-char firstWord[firstWordSize+1];
-memcpy(firstWord, line, firstWordSize);
-firstWord[firstWordSize] = 0;
+int fieldSize;
+char *field;
+extractField(line, fieldIx, &field, &fieldSize);
+char fieldString[fieldSize+1];
+memcpy(fieldString, field, fieldSize);
+fieldString[fieldSize] = 0;
 
 /* Return boolean value that reflects whether we found it in hash */
 struct hash *hash = target;
-return hashLookup(hash, firstWord) != NULL;
+return hashLookup(hash, fieldString) != NULL;
 }
 
 static struct bigBedInterval *bigBedIntervalsMatchingName(struct bbiFile *bbi, 
-    struct fileOffsetSize *fosList, BbFirstWordMatch matcher, void *target, struct lm *lm)
+    struct fileOffsetSize *fosList, BbFirstWordMatch matcher, int fieldIx, 
+    void *target, struct lm *lm)
 /* Return list of intervals inside of sectors of bbiFile defined by fosList where the name 
  * matches target somehow. */
 {
@@ -385,7 +391,7 @@ for (fos = fosList; fos != NULL; fos = fos->next)
 		break;
 	    dyStringAppendC(dy, c);
 	    }
-	if ((*matcher)(dy->string, target))
+	if ((*matcher)(dy->string, fieldIx, target))
 	    {
 	    lmAllocVar(lm, interval);
 	    interval->start = s;
@@ -408,19 +414,20 @@ return intervalList;
 
 
 struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, struct bptFile *index,
-    char *name, struct lm *lm)
+    int fieldIx, char *name, struct lm *lm)
 /* Return list of intervals matching file. These intervals will be allocated out of lm. */
 {
 struct fileOffsetSize *fosList = bigBedChunksMatchingName(bbi, index, name);
 struct bigBedInterval *intervalList = bigBedIntervalsMatchingName(bbi, fosList, 
-    bbFirstWordMatchesName, name, lm);
+    bbWordMatchesName, fieldIx, name, lm);
 slFreeList(&fosList);
 return intervalList;
 }
 
 struct bigBedInterval *bigBedMultiNameQuery(struct bbiFile *bbi, struct bptFile *index,
-    char **names, int nameCount, struct lm *lm)
-/* Fetch all records matching any of the names. Return list is allocated out of lm. */
+    int fieldIx, char **names, int nameCount, struct lm *lm)
+/* Fetch all records matching any of the names. Using given index on given field.
+ * Return list is allocated out of lm. */
 {
 /* Set up name index and get list of chunks that match any of our names. */
 struct fileOffsetSize *fosList = bigBedChunksMatchingNames(bbi, index, names, nameCount);
@@ -434,7 +441,7 @@ for (nameIx=0; nameIx < nameCount; ++nameIx)
 
 /* Get intervals where name matches hash target. */
 struct bigBedInterval *intervalList = bigBedIntervalsMatchingName(bbi, fosList, 
-    bbFirstWordIsInHash, hash, lm);
+    bbWordIsInHash, fieldIx, hash, lm);
 
 /* Clean up and return results. */
 slFreeList(&fosList);
@@ -487,13 +494,10 @@ return udcReadStringAndZero(f);
 struct asObject *bigBedAs(struct bbiFile *bbi)
 /* Get autoSql object definition if any associated with file. */
 {
-struct asObject *as = bbi->cachedAs;
-if (as != NULL)
-    return as;
 if (bbi->asOffset == 0)
     return NULL;
 char *asText = bigBedAutoSqlText(bbi);
-bbi->cachedAs = as = asParseText(asText);
+struct asObject *as = asParseText(asText);
 freeMem(asText);
 return as;
 }
@@ -501,12 +505,9 @@ return as;
 struct asObject *bigBedAsOrDefault(struct bbiFile *bbi)
 // Get asObject associated with bigBed - if none exists in file make it up from field counts.
 {
-struct asObject *as = bbi->cachedAs;
-if (as != NULL)
-    return as;
-as = bigBedAs(bbi);
+struct asObject *as = bigBedAs(bbi);
 if (as == NULL)
-    bbi->cachedAs = as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
+    as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
 return as;
 }
 
@@ -583,11 +584,13 @@ for (intEl = intList; intEl != NULL; intEl = intEl->next)
     slNameAddHead(&nameList, col->name);
     }
 
+asObjectFree(&as);
 return nameList;
 }
 
-struct bptFile *bigBedOpenExtraIndex(struct bbiFile *bbi, char *fieldName)
-/* Return index associated with fieldName.  Aborts if no such index. */
+struct bptFile *bigBedOpenExtraIndex(struct bbiFile *bbi, char *fieldName, int *retFieldIx)
+/* Return index associated with fieldName.  Aborts if no such index.  Optionally return
+ * index in a row of this field. */
 {
 struct udcFile *udc = bbi->udc;
 boolean isSwapped = bbi->isSwapped;
@@ -596,6 +599,9 @@ struct asColumn *col = asColumnFind(as, fieldName);
 if (col == NULL)
     errAbort("No field %s in %s", fieldName, bbi->fileName);
 int colIx = slIxFromElement(as->columnList, col);
+if (retFieldIx != NULL)
+   *retFieldIx = colIx;
+asObjectFree(&as);
 
 /* See if we have any extra indexes, and if so seek to there. */
 bits64 offset = bbi->extraIndexListOffset;
