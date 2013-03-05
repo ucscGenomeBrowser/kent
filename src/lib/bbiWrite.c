@@ -132,19 +132,46 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
-	int *retMinDiff, double *retAveSize, bits64 *retBedCount, int *retMaxNameSize)
-/* Go through bed file and collect chromosomes and statistics. */
+int bbExIndexMakerMaxIndexField(struct bbExIndexMaker *eim)
+/* Return the maximum field we have to index. */
 {
-char *row[4];
-int maxRowSize = (retMaxNameSize != NULL ? 4 : 3);
+int maxIx = 0;
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    {
+    int ix = eim->indexFields[i];
+    if (ix > maxIx)
+        maxIx = ix;
+    }
+return maxIx;
+}
+
+void bbExIndexMakerUpdateMaxFieldSize(struct bbExIndexMaker *eim, char **row)
+/* Fold in information about row into bbExIndexMaker into eim->maxFieldSize */
+{
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    {
+    int rowIx = eim->indexFields[i];
+    int size = strlen(row[rowIx]);
+    if (size > eim->maxFieldSize[i])
+        eim->maxFieldSize[i] = size;
+    }
+}
+
+struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount)
+/* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
+ * collect max field sizes there too. */
+{
+int maxRowSize = (eim == NULL ? 3 : bbExIndexMakerMaxIndexField(eim) + 1);
+char *row[maxRowSize];
 struct hash *uniqHash = hashNew(0);
 struct bbiChromUsage *usage = NULL, *usageList = NULL;
 int lastStart = -1;
 bits32 id = 0;
 bits64 totalBases = 0, bedCount = 0;
 int minDiff = BIGNUM;
-int maxNameSize = 0;
 
 lineFileRemoveInitialCustomTrackLines(lf);
 
@@ -157,13 +184,8 @@ for (;;)
     char *chrom = row[0];
     int start = lineFileNeedNum(lf, row, 1);
     int end = lineFileNeedNum(lf, row, 2);
-    if (rowSize > 3)
-        {
-	char *name = row[3];
-	int nameSize = strlen(name);
-	if (nameSize > maxNameSize)
-	    maxNameSize = nameSize;
-	}
+    if (eim != NULL)
+	bbExIndexMakerUpdateMaxFieldSize(eim, row);
     if (start > end)
         {
 	    errAbort("end (%d) before start (%d) line %d of %s",
@@ -210,8 +232,6 @@ slReverse(&usageList);
 *retMinDiff = minDiff;
 *retAveSize = (double)totalBases/bedCount;
 *retBedCount = bedCount;
-if (retMaxNameSize != NULL)
-    *retMaxNameSize = maxNameSize;
 freeHash(&uniqHash);
 return usageList;
 }

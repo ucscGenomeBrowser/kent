@@ -20,7 +20,7 @@
  *         autoSqlOffset        8 bytes (for bigWig 0) (0 if no autoSql information)
  *         totalSummaryOffset   8 bytes (0 in earlier versions of file lacking totalSummary)
  *         uncompressBufSize    4 bytes (Size of uncompression buffer.  0 if uncompressed.)
- *         nameIndexOffset      8 bytes (Offset to name index, 0 if no such index)
+ *         extensionOffset      8 bytes (Offset to header extension 0 if no such extension)
  *     zoomHeaders		there are zoomLevels number of these
  *         reductionLevel	4 bytes
  *	   reserved		4 bytes
@@ -33,6 +33,18 @@
  *         maxVal              8 bytes float (for bigBed maximum depth of coverage)
  *         sumData             8 bytes float (for bigBed sum of coverage)
  *         sumSquared          8 bytes float (for bigBed sum of coverage squared)
+ *     extendedHeader
+ *         extensionSize       2 size of extended header in bytes - currently 64
+ *         extraIndexCount     2 number of extra fields we will be indexing
+ *         extraIndexOffset    8 Offset to list of non-chrom/start/end indexes
+ *         reserved            48 All zeroes for now
+ *     extraIndexList - one of these for each extraIndex 
+ *         type                2 Type of index.  Always 0 for bPlusTree now
+ *         fieldCount          2 Number of fields used in this index.  Always 1 for now
+ *         reserved            12 All zeroes for now
+ *         fieldList - one of these for each field being used in _this_ index
+ *            fieldId          2 index of field within record
+ *            reserved         2 All zeroes for now
  *     chromosome b+ tree       bPlusTree index
  *     full data
  *         sectionCount		8 bytes (item count for bigBeds)
@@ -51,7 +63,7 @@
  *                 sumData      4 bytes float
  *                 sumSquares   4 bytes float
  *         zoom index        	cirTree index
- *     name index [optional]    bPlusTree index
+ *     extraIndexes [optional]  bPlusTreeIndex for each extra field that is indexed
  *     magic# 		4 bytes - same as magic number at start of header
  */
 
@@ -338,9 +350,11 @@ void bbiChromUsageFree(struct bbiChromUsage **pUsage);
 void bbiChromUsageFreeList(struct bbiChromUsage **pList);
 /* free a list of bbiChromUsage structures */
 
+
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
-	int *retMinDiff, double *retAveSize, bits64 *retBedCount, int *retMaxNameSize);
-/* Go through bed file and collect chromosomes and statistics. */
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount);
+/* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
+ * collect max field sizes there too. */
 
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot);
 /* Count up number of sections needed for data. */

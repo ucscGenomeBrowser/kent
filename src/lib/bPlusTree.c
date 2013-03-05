@@ -163,7 +163,8 @@ else
 }
 
 static void rFindMulti(struct bptFile *bpt, bits64 blockStart, void *key, struct slRef **pList)
-/* Find values corresponding to key and add them to pList */
+/* Find values corresponding to key and add them to pList.  You'll need to 
+ * Do a slRefFreeListAndVals() on the list when done. */
 {
 /* Seek to start of block. */
 udcSeek(bpt->udc, blockStart);

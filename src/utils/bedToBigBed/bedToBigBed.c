@@ -14,14 +14,14 @@
 #include "bPlusTree.h"
 #include "bigBed.h"
 
-char *version = "2.3";
+char *version = "2.4";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
-boolean doNameIndex = FALSE;
+char *extraIndex = NULL;
 int bedN = 0;   /* number of standard bed fields */
 int bedP = 0;   /* number of bed plus fields */
-char *as = NULL;
+char *asText = NULL;
 static boolean doCompress = FALSE;
 static boolean tabSep = FALSE;
 
@@ -55,7 +55,8 @@ errAbort(
   "   -unc - If set, do not use compression.\n"
   "   -tab - If set, expect fields to be tab separated, normally\n"
   "           expects white space separator.\n"
-  "   -nameIndex - If set, make an index of the name field\n"
+  "   -extraIndex=fieldList - If set, make an index on each field in a comma separated list\n"
+  "           extraIndex=name and extraIndex=name,id are commonly used.\n"
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -67,7 +68,7 @@ static struct optionSpec options[] = {
    {"as", OPTION_STRING},
    {"unc", OPTION_BOOLEAN},
    {"tab", OPTION_BOOLEAN},
-   {"nameIndex", OPTION_BOOLEAN},
+   {"extraIndex", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -102,24 +103,52 @@ const struct bbNamedFileChunk *item = va;
 return (void *)&item->offset;
 }
 
+void bbExIndexMakerAddKeysFromRow(struct bbExIndexMaker *eim, char **row, int recordIx)
+/* Save the keys that are being indexed by row in eim. */
+{
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    {
+    int rowIx = eim->indexFields[i];
+    eim->chunkArrayArray[i][recordIx].name = cloneString(row[rowIx]);
+    }
+}
+
+void bbExIndexMakerAddOffsetSize(struct bbExIndexMaker *eim, bits64 offset, bits64 size,
+    long startIx, long endIx)
+/* Update offset and size fields of all file chunks between startIx and endIx */
+{
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    {
+    struct bbNamedFileChunk *chunks = eim->chunkArrayArray[i];
+    long j;
+    for (j = startIx; j < endIx; ++j)
+        {
+	struct bbNamedFileChunk *chunk = chunks + j;
+	chunk->offset = offset;
+	chunk->size = size;
+	}
+    }
+}
+
 static void writeBlocks(struct bbiChromUsage *usageList, struct lineFile *lf, struct asObject *as, 
 	int itemsPerSlot, struct bbiBoundsArray *bounds, 
 	int sectionCount, boolean doCompress, FILE *f, 
 	int resTryCount, int resScales[], int resSizes[], 
-	struct bbNamedFileChunk *namedChunks, int bedCount,
-	bits16 *retFieldCount, bits32 *retMaxBlockSize)
+	struct bbExIndexMaker *eim,  int bedCount,
+	bits16 fieldCount, bits32 *retMaxBlockSize)
 /* Read through lf, writing it in f.  Save starting points of blocks (every itemsPerSlot)
  * to boundsArray */
 {
 int maxBlockSize = 0;
 struct bbiChromUsage *usage = usageList;
-char *line, *row[256];  // limit of 256 columns is arbitrary, but useful to catch pathological input
-int fieldCount = 0, lastField = 0;
+char *line, *row[fieldCount+1];
+int lastField = fieldCount-1;
 int itemIx = 0, sectionIx = 0;
 bits64 blockStartOffset = 0, blockEndOffset = 0;
 int startPos = 0, endPos = 0;
 bits32 chromId = 0;
-boolean allocedAs = FALSE;
 struct dyString *stream = dyStringNew(0);
 
 /* Will keep track of some things that help us determine how much to reduce. */
@@ -134,61 +163,16 @@ struct bed *bed;
 AllocVar(bed);
 
 /* Help keep track of which beds are in current chunk so as to write out
- * namedChunks. */
-int sectionStartIx = 0, sectionEndIx = 0;
+ * namedChunks to eim if need be. */
+long sectionStartIx = 0, sectionEndIx = 0;
 
 for (;;)
     {
+    // ugly - code for bedN/bedP and as used to go here.
+
     /* Get next line of input if any. */
     if (lineFileNextReal(lf, &line))
 	{
-	/* First time through figure out the field count and if not set, the bedN. */
-	if (fieldCount == 0)
-	    {
-	    if (as == NULL)
-		{
-		if (tabSep)
-		    fieldCount = chopByChar(line, '\t', NULL, 256); // Do not use chopString, see GOTCHA
-		else
-		    fieldCount = chopByWhite(line, NULL, 0);
-		if (bedN == 0)
-		    bedN = fieldCount;
-		if (bedN > 15)
-		    {
-		    bedN = 15;
-		    bedP = fieldCount - bedN;
-		    }
-		char *asText = bedAsDef(bedN, fieldCount);
-		as = asParseText(asText);
-		allocedAs = TRUE;
-		freeMem(asText);
-		}
-	    else
-		{
-		fieldCount = slCount(as->columnList);
-		// if the .as is specified, the -type must be also so that the number of standard BED columns is known. bedN will be >0.
-		asCompareObjAgainstStandardBed(as, bedN, TRUE); // abort if bedN columns are not standard
-		}
-	    if (fieldCount > ArraySize(row))
-		errAbort("Too many fields [%d], current maximum fields limit is %lu", fieldCount, (unsigned long)ArraySize(row));
-	    lastField = fieldCount - 1;
-	    *retFieldCount = fieldCount;
-
-	    if (bedP == -1)  // user did not specify how many plus columns there are.
-		{
-		bedP = fieldCount - bedN;
-		if (bedP < 1)
-		    errAbort("fieldCount input (%d) did not match the specification (%s)\n"
-			, fieldCount, optionVal("type", ""));
-		}
-	    if (fieldCount != bedN + bedP)
-		errAbort("fieldCount input (%d) did not match the specification (%s)\n"
-		    , fieldCount, optionVal("type", ""));
-
-	    if (namedChunks != NULL && fieldCount < 4)
-	        errAbort("No name field in bed, can't index.");
-	    }
-
 	/* Chop up line and make sure the word count is right. */
 	int wordCount;
 	if (tabSep)
@@ -243,8 +227,11 @@ for (;;)
 	dyStringClear(stream);
 
 	/* Save block offset and size for all named chunks in this section. */
-	if (namedChunks != NULL)
+	if (eim != NULL)
 	    {
+	    bbExIndexMakerAddOffsetSize(eim, blockStartOffset, blockEndOffset-blockStartOffset,
+		sectionStartIx, sectionEndIx);
+#ifdef OLD
 	    blockEndOffset = ftell(f);
 	    int i;
 	    for (i=sectionStartIx; i<sectionEndIx; ++i)
@@ -253,6 +240,7 @@ for (;;)
 		chunk->offset = blockStartOffset;
 		chunk->size = blockEndOffset - blockStartOffset;
 		}
+#endif /* OLD */
 	    sectionStartIx = sectionEndIx;
 	    }
 
@@ -295,9 +283,9 @@ for (;;)
 	}
 
     /* Save name into namedOffset if need be. */
-    if (namedChunks != NULL)
-        {
-	namedChunks[sectionEndIx].name = cloneString(bed->name);
+    if (eim != NULL)
+	{
+	bbExIndexMakerAddKeysFromRow(eim, row, sectionEndIx);
 	sectionEndIx += 1;
 	}
 
@@ -341,8 +329,6 @@ for (;;)
     }
 assert(sectionIx == sectionCount);
 freez(&bed);
-if (allocedAs)
-    asObjectFreeList(&as);
 *retMaxBlockSize = maxBlockSize;
 }
 
@@ -499,15 +485,80 @@ slReverse(&twiceReducedList);
 return twiceReducedList;
 }
 
+struct bbExIndexMaker *bbExIndexMakerNew(struct slName *extraIndexList, struct asObject *as)
+/* Return an index maker corresponding to extraIndexList. Checks that all fields
+ * mentioned are in autoSql definition, and for now that they are all text fields. */
+{
+/* Fill in scalar fields and return quickly if no extra indexes. */
+struct bbExIndexMaker *eim;
+AllocVar(eim);
+eim->indexCount = slCount(extraIndexList);
+if (eim->indexCount == 0)
+     return eim;	// Not much to do in this case
+
+/* Allocate arrays according field count. */
+AllocArray(eim->indexFields, eim->indexCount);
+AllocArray(eim->maxFieldSize, eim->indexCount);
+AllocArray(eim->chunkArrayArray, eim->indexCount);
+AllocArray(eim->fileOffsets, eim->indexCount);
+
+/* Loop through each field checking that it is indeed something we can index
+ * and if so saving information about it */
+int indexIx = 0;
+struct slName *name;
+for (name = extraIndexList; name != NULL; name = name->next)
+    {
+    struct asColumn *col = asColumnFind(as, name->name);
+    if (col == NULL)
+        errAbort("extraIndex field %s not a standard bed field or found in 'as' file.",
+	    col->name);
+    if (!sameString(col->lowType->name, "string"))
+        errAbort("Sorry for now can only index string fields.");
+    eim->indexFields[indexIx] = slIxFromElement(as->columnList, col);
+    ++indexIx;
+    }
+return eim;
+}
+
+void bbExIndexMakerAllocChunkArrays(struct bbExIndexMaker *eim, int recordCount)
+/* Allocate the big part of the extra index maker - the part that holds which
+ * chunk is used for each record. */
+{
+eim->recordCount = recordCount;
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    AllocArray(eim->chunkArrayArray[i], recordCount);
+}
+
+void bbExIndexMakerFree(struct bbExIndexMaker **pEim)
+/* Free up memory associated with bbExIndexMaker */
+{
+struct bbExIndexMaker *eim = *pEim;
+if (eim != NULL)
+    {
+    if (eim->chunkArrayArray != NULL)
+	{
+	int i;
+	for (i=0; i<eim->indexCount; ++i)
+	    freeMem(eim->chunkArrayArray[i]);
+	}
+    freeMem(eim->indexFields);
+    freeMem(eim->maxFieldSize);
+    freeMem(eim->chunkArrayArray);
+    freeMem(eim->fileOffsets);
+    freez(pEim);
+    }
+}
 
 void bbFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
 	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
 	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
-	char *asFileName, /* If non-null points to a .as file that describes fields. */
+	char *asText,	  /* Field definitions in a string */
+	struct asObject *as,  /* Field definitions parsed out */
 	boolean doCompress, /* If TRUE then compress data. */
-	boolean doNameIndex, /* If TRUE then index names as well. */
+	struct slName *extraIndexList,	/* List of extra indexes to add */
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
@@ -515,15 +566,12 @@ void bbFileCreate(
 verboseTimeInit();
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 
-/* Load up as object if defined in file. */
-struct asObject *as = NULL;
-if (asFileName != NULL)
-    {
-    /* Parse it and do sanity check. */
-    as = asParseFile(asFileName);
-    if (as->next != NULL)
-        errAbort("Can only handle .as files containing a single object.");
-    }
+bits16 fieldCount = slCount(as->columnList);
+bits16 extraIndexCount = slCount(extraIndexList);
+
+struct bbExIndexMaker *eim = NULL;
+if (extraIndexList != NULL)
+    eim = bbExIndexMakerNew(extraIndexList, as);
 
 /* Load in chromosome sizes. */
 struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
@@ -534,8 +582,8 @@ int minDiff = 0;
 double aveSpan = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
-int maxNameSize = 0;
-struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, &minDiff, &aveSpan, &bedCount, &maxNameSize);
+struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, eim, 
+    &minDiff, &aveSpan, &bedCount);
 verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSpan);
 
@@ -544,24 +592,32 @@ FILE *f = mustOpen(outName, "wb");
 bbiWriteDummyHeader(f);
 bbiWriteDummyZooms(f);
 
-/* Write out asFile if any */
-bits64 asOffset = 0;
-if (asFileName != NULL)
-    {
-    int colCount = slCount(as->columnList);
-    asOffset = ftell(f);
-    FILE *asFile = mustOpen(asFileName, "r");
-    copyOpenFile(asFile, f);
-    fputc(0, f);
-    carefulClose(&asFile);
-    verbose(2, "%s has %d columns\n", asFileName, colCount);
-    }
+/* Write out autoSql string */
+bits64 asOffset = ftell(f);
+mustWrite(f, asText, strlen(asText) + 1);
+verbose(2, "as definition has %d columns\n", fieldCount);
 
 /* Write out dummy total summary. */
 struct bbiSummaryElement totalSum;
 ZeroVar(&totalSum);
 bits64 totalSummaryOffset = ftell(f);
 bbiSummaryElementWrite(f, &totalSum);
+
+/* Write out dummy header extension */
+bits64 extHeaderOffset = ftell(f);
+bits16 extHeaderSize = 64;
+repeatCharOut(f, 0, extHeaderSize);
+
+/* Write out extra index stuff if need be. */
+bits64 extraIndexListOffset = 0;
+bits64 extraIndexListEndOffset = 0;
+if (extraIndexList != NULL)
+    {
+    extraIndexListOffset = ftell(f);
+    int extraIndexSize = 16 + 4*1;   // Fixed record size 16, plus 1 times field size of 4 
+    repeatCharOut(f, 0, extraIndexSize*extraIndexCount);
+    extraIndexListEndOffset = ftell(f);
+    }
 
 /* Write out chromosome/size database. */
 bits64 chromTreeOffset = ftell(f);
@@ -597,13 +653,11 @@ bits32 blockCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
 struct bbiBoundsArray *boundsArray;
 AllocArray(boundsArray, blockCount);
 lineFileRewind(lf);
-bits16 fieldCount=0;
 bits32 maxBlockSize = 0;
-struct bbNamedFileChunk *namedChunks = NULL;
-if (doNameIndex)
-    AllocArray(namedChunks, bedCount);
+if (eim)
+    bbExIndexMakerAllocChunkArrays(eim, bedCount);
 writeBlocks(usageList, lf, as, itemsPerSlot, boundsArray, blockCount, doCompress,
-	f, resTryCount, resScales, resSizes, namedChunks, bedCount, &fieldCount, &maxBlockSize);
+	f, resTryCount, resScales, resSizes, eim, bedCount, fieldCount, &maxBlockSize);
 verboseTime(1, "pass2 - checking and writing primary data (%lld records, %d fields)", 
 	(long long)bedCount, fieldCount);
 
@@ -680,6 +734,7 @@ if (aveSpan > 0)
     }
 
 /* Write out name index if need be. */
+#ifdef SOON
 bits64 nameIndexOffset = 0;
 if (doNameIndex)
     {
@@ -690,6 +745,22 @@ if (doNameIndex)
         blockSize, bbNamedFileChunkKey, maxNameSize, bbNamedFileChunkVal, 
 	sizeof(bits64) + sizeof(bits64), f);
     verboseTime(1, "Sorting and writing name index");
+    }
+#endif /* SOON */
+if (eim)
+    {
+    warn("Oh dear, really don't know how to do this yet.");
+    int i;
+    for (i=0; i<eim->indexCount; ++i)
+        {
+	eim->fileOffsets[i] = ftell(f);
+	maxBedNameSize = eim->maxFieldSize[i];
+	assert(sizeof(struct bbNamedFileChunk) == sizeof(eim->chunkArrayArray[i][0]));
+	bptFileBulkIndexToOpenFile(eim->chunkArrayArray[i], sizeof(eim->chunkArrayArray[i][0]), 
+	    bedCount, blockSize, bbNamedFileChunkKey, maxBedNameSize, bbNamedFileChunkVal, 
+	    sizeof(bits64) + sizeof(bits64), f);
+	verboseTime(1, "Sorting and writing extra index %d", i);
+	}
     }
 
 /* Figure out buffer size needed for uncompression if need be. */
@@ -721,7 +792,7 @@ writeOne(f, definedFieldCount);
 writeOne(f, asOffset);
 writeOne(f, totalSummaryOffset);
 writeOne(f, uncompressBufSize);
-writeOne(f, nameIndexOffset);
+writeOne(f, extHeaderOffset);
 assert(ftell(f) == 64);
 
 /* Write summary headers with data. */
@@ -748,6 +819,36 @@ for (i=zoomLevels; i<bbiMaxZoomLevels; ++i)
 fseek(f, totalSummaryOffset, SEEK_SET);
 bbiSummaryElementWrite(f, &totalSum);
 
+/* Write extended header */
+fseek(f, extHeaderOffset, SEEK_SET);
+writeOne(f, extHeaderSize);
+writeOne(f, extraIndexCount);
+writeOne(f, extraIndexListOffset);
+repeatCharOut(f, 0, 52);    // reserved
+assert(ftell(f) - extHeaderOffset == extHeaderSize);
+
+/* Write extra index offsets if need be. */
+if (extraIndexCount != 0)
+    {
+    fseek(f, extraIndexListOffset, SEEK_SET);
+    int i;
+    for (i=0; i<extraIndexCount; ++i)
+        {
+	// Write out fixed part of index info
+	bits16 type = 0;    // bPlusTree type
+	bits16 indexFieldCount = 1;
+	writeOne(f, type);
+	writeOne(f, indexFieldCount);
+	repeatCharOut(f, 0, 12);  // reserved
+
+	// Write out field list - easy this time because for now always only one field.
+	bits16 fieldId = eim->indexFields[i];
+	writeOne(f, fieldId);
+	repeatCharOut(f, 0, 2); // reserved
+	}
+    assert(ftell(f) == extraIndexListEndOffset);
+    }
+
 /* Write end signature. */
 fseek(f, 0L, SEEK_END);
 writeOne(f, sig);
@@ -764,8 +865,11 @@ asObjectFreeList(&as);
 void bedToBigBed(char *inName, char *chromSizes, char *outName)
 /* bedToBigBed - Convert bed file to bigBed.. */
 {
-bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, as, 
-	doCompress, doNameIndex, outName);
+struct slName *extraIndexList = slNameListFromString(extraIndex, ',');
+struct asObject *as = asParseText(asText);
+asCompareObjAgainstStandardBed(as, bedN, TRUE); // abort if bedN columns are not standard
+bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, asText, as, 
+	doCompress, extraIndexList, outName);
 }
 
 int main(int argc, char *argv[])
@@ -774,9 +878,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
-as = optionVal("as", as);
+asText = optionVal("as", asText);
 doCompress = !optionExists("unc");
-doNameIndex = optionExists("nameIndex");
+extraIndex = optionVal("extraIndex", NULL);
 tabSep = optionExists("tab");
 if (argc != 4)
     usage();
@@ -790,8 +894,6 @@ if (optionExists("type"))
 	*plus++ = 0;
 	if (isdigit(*plus))
 	    bedP = sqlUnsigned(plus);
-	else
-	    bedP = -1;
 	}
     if (!startsWith("bed", btype))
 	errAbort("type must begin with \"bed\"");
@@ -804,11 +906,45 @@ if (optionExists("type"))
     }
 else
     {
-    if (as)
-	errAbort("If you specify the .as file, you must specify the -type as well so that the number of standard BED columns is known.");
+    if (asText)
+	errAbort("If you specify the .as file, you must specify the -type as well so that\n"
+	         "the number of standard BED columns is known.");
     }
 
-bedToBigBed(argv[1], argv[2], argv[3]);
+/* If the haven't set bedN and bedP from the type var in the command line, then we sniff it
+ * out from file. */
+char *bedFileName = argv[1];
+if (bedN == 0)
+    {
+    /* Just read in single line and count fields. */
+    struct lineFile *lf = lineFileOpen(bedFileName, TRUE);
+    char *line;
+    if (!lineFileNextReal(lf, &line))
+        errAbort("%s is empty", lf->fileName);
+    int fieldCount;
+    if (tabSep)
+	fieldCount = chopByChar(line, '\t', NULL, 0); // Do not use chopString, see GOTCHA
+    else
+	fieldCount = chopByWhite(line, NULL, 0);
+    if (fieldCount > 256)
+        errAbort("Too many columns in %s, you sure it's a bed file?", lf->fileName);
+    lineFileClose(&lf);
+
+    /* Set up so that it looks like we are straight up bed for that many fields,
+     * or if more than or maximum defined fields, then for bed15+ */
+    bedN = fieldCount;
+    if (bedN > bedKnownFields)
+        {
+	bedP = bedN - bedKnownFields;
+	bedN = bedKnownFields;
+	}
+    }
+   
+/* Make sure that fields are defined, from bed spec if nowhere else. */
+if (asText == NULL)
+    asText = bedAsDef(bedN,  bedN + bedP);
+
+bedToBigBed(bedFileName, argv[2], argv[3]);
 optionFree();
 if (verboseLevel() > 1)
     printVmPeak();
