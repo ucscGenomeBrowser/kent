@@ -132,11 +132,40 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, 
-	struct hash *chromSizesHash, int *retMinDiff, double *retAveSize, bits64 *retBedCount)
-/* Go through bed file and collect chromosomes and statistics. */
+int bbExIndexMakerMaxIndexField(struct bbExIndexMaker *eim)
+/* Return the maximum field we have to index. */
 {
-char *row[3];
+int maxIx = 0;
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    {
+    int ix = eim->indexFields[i];
+    if (ix > maxIx)
+        maxIx = ix;
+    }
+return maxIx;
+}
+
+void bbExIndexMakerUpdateMaxFieldSize(struct bbExIndexMaker *eim, char **row)
+/* Fold in information about row into bbExIndexMaker into eim->maxFieldSize */
+{
+int i;
+for (i=0; i<eim->indexCount; ++i)
+    {
+    int rowIx = eim->indexFields[i];
+    int size = strlen(row[rowIx]);
+    if (size > eim->maxFieldSize[i])
+        eim->maxFieldSize[i] = size;
+    }
+}
+
+struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount)
+/* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
+ * collect max field sizes there too. */
+{
+int maxRowSize = (eim == NULL ? 3 : bbExIndexMakerMaxIndexField(eim) + 1);
+char *row[maxRowSize];
 struct hash *uniqHash = hashNew(0);
 struct bbiChromUsage *usage = NULL, *usageList = NULL;
 int lastStart = -1;
@@ -148,13 +177,15 @@ lineFileRemoveInitialCustomTrackLines(lf);
 
 for (;;)
     {
-    int rowSize = lineFileChopNext(lf, row, ArraySize(row));
+    int rowSize = lineFileChopNext(lf, row, maxRowSize);
     if (rowSize == 0)
         break;
-    lineFileExpectWords(lf, 3, rowSize);
+    lineFileExpectAtLeast(lf, maxRowSize, rowSize);
     char *chrom = row[0];
     int start = lineFileNeedNum(lf, row, 1);
     int end = lineFileNeedNum(lf, row, 2);
+    if (eim != NULL)
+	bbExIndexMakerUpdateMaxFieldSize(eim, row);
     if (start > end)
         {
 	    errAbort("end (%d) before start (%d) line %d of %s",

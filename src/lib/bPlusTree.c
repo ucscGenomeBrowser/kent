@@ -162,7 +162,71 @@ else
     }
 }
 
-void rTraverse(struct bptFile *bpt, bits64 blockStart, void *context, 
+static void rFindMulti(struct bptFile *bpt, bits64 blockStart, void *key, struct slRef **pList)
+/* Find values corresponding to key and add them to pList.  You'll need to 
+ * Do a slRefFreeListAndVals() on the list when done. */
+{
+/* Seek to start of block. */
+udcSeek(bpt->udc, blockStart);
+
+/* Read block header. */
+UBYTE isLeaf;
+UBYTE reserved;
+bits16 i, childCount;
+udcMustReadOne(bpt->udc, isLeaf);
+udcMustReadOne(bpt->udc, reserved);
+boolean isSwapped = bpt->isSwapped;
+childCount = udcReadBits16(bpt->udc, isSwapped);
+
+int keySize = bpt->keySize;
+UBYTE keyBuf[keySize];   /* Place to put a key, buffered on stack. */
+UBYTE valBuf[bpt->valSize];   /* Place to put a value, buffered on stack. */
+
+if (isLeaf)
+    {
+    for (i=0; i<childCount; ++i)
+        {
+	udcMustRead(bpt->udc, keyBuf, keySize);
+	udcMustRead(bpt->udc, valBuf, bpt->valSize);
+	if (memcmp(key, keyBuf, keySize) == 0)
+	    {
+	    void *val = cloneMem(valBuf, bpt->valSize);
+	    refAdd(pList, val);
+	    }
+	}
+    }
+else
+    {
+    /* Read first key and first file offset. */
+    udcMustRead(bpt->udc, keyBuf, keySize);
+    bits64 lastFileOffset = udcReadBits64(bpt->udc, isSwapped);
+    bits64 fileOffset = lastFileOffset;
+    int lastCmp = memcmp(key, keyBuf, keySize);
+
+    /* Loop through remainder. */
+    for (i=1; i<childCount; ++i)
+	{
+	udcMustRead(bpt->udc, keyBuf, keySize);
+	fileOffset = udcReadBits64(bpt->udc, isSwapped);
+	int cmp = memcmp(key, keyBuf, keySize);
+	if (lastCmp >= 0 && cmp <= 0)
+	    {
+	    bits64 curPos = udcTell(bpt->udc);
+	    rFindMulti(bpt, lastFileOffset, key, pList);
+	    udcSeek(bpt->udc, curPos);
+	    }
+	if (cmp < 0)
+	    return;
+	lastCmp = cmp;
+	lastFileOffset = fileOffset;
+	}
+    /* If made it all the way to end, do last one too. */
+    rFindMulti(bpt, fileOffset, key, pList);
+    }
+}
+
+
+static void rTraverse(struct bptFile *bpt, bits64 blockStart, void *context, 
     void (*callback)(void *context, void *key, int keySize, void *val, int valSize) )
 /* Recursively go across tree, calling callback at leaves. */
 {
@@ -203,13 +267,77 @@ else
     }
 }
 
-boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize)
-/* Find value associated with key.  Return TRUE if it's found. 
-*  Parameters:
-*     bpt - file handle returned by bptFileOpen
-*     key - pointer to key string, which needs to be bpt->keySize long
-*     val - pointer to where to put retrieved value
-*/
+static bits64 bptDataStart(struct bptFile *bpt)
+/* Return offset of first bit of data (as opposed to index) in file.  In hind sight I wish
+ * this were stored in the header, but fortunately it's not that hard to compute. */
+{
+bits64 offset = bpt->rootOffset;
+for (;;)
+    {
+    /* Seek to block start */
+    udcSeek(bpt->udc, offset);
+
+    /* Read block header,  break if we are leaf. */
+    UBYTE isLeaf;
+    UBYTE reserved;
+    bits16 childCount;
+    udcMustReadOne(bpt->udc, isLeaf);
+    if (isLeaf)
+         break;
+    udcMustReadOne(bpt->udc, reserved);
+    boolean isSwapped = bpt->isSwapped;
+    childCount = udcReadBits16(bpt->udc, isSwapped);
+
+    /* Read and discard first key. */
+    char keyBuf[bpt->keySize];
+    udcMustRead(bpt->udc, keyBuf, bpt->keySize);
+
+    /* Get file offset of sub-block. */
+    offset = udcReadBits64(bpt->udc, isSwapped);
+    }
+return offset;
+}
+
+static bits64 bptDataOffset(struct bptFile *bpt, bits64 itemPos)
+/* Return position of file of data corresponding to given itemPos.  For first piece of
+ * data pass in 0. */
+{
+if (itemPos >= bpt->itemCount)
+    errAbort("Item index %lld greater than item count %lld in %s", 
+	itemPos, bpt->itemCount, bpt->fileName);
+bits64 blockPos = itemPos/bpt->blockSize;
+bits32 insidePos = itemPos - blockPos*bpt->blockSize;
+int blockHeaderSize = 4;
+bits64 itemByteSize = bpt->valSize + bpt->keySize;
+bits64 blockByteSize = bpt->blockSize * itemByteSize + blockHeaderSize;
+bits64 blockOffset = blockByteSize*blockPos + bptDataStart(bpt);
+bits64 itemOffset = blockOffset + blockHeaderSize + itemByteSize * insidePos;
+return itemOffset;
+}
+
+void bptKeyAtPos(struct bptFile *bpt, bits64 itemPos, void *result)
+/* Fill in result with the key at given itemPos.  For first piece of data itemPos is 0 
+ * Result must be at least bpt->keySize.  If result is a string it won't be zero terminated
+ * by this routine.  Use bptStringKeyAtPos instead. */
+{
+bits64 offset = bptDataOffset(bpt, itemPos);
+udcSeek(bpt->udc, offset);
+udcMustRead(bpt->udc, result, bpt->keySize);
+}
+
+void bptStringKeyAtPos(struct bptFile *bpt, bits64 itemPos, char *result, int maxResultSize)
+/* Fill in result with the key at given itemPos.  The maxResultSize should be 1+bpt->keySize
+ * to accommodate zero termination of string. */
+{
+assert(maxResultSize > bpt->keySize);
+bptKeyAtPos(bpt, itemPos, result);
+result[bpt->keySize] = 0;
+}
+
+static boolean bptFileFindMaybeMulti(struct bptFile *bpt, void *key, int keySize, int valSize,
+    boolean multi, void *singleVal, struct slRef **multiVal)
+/* Do either a single or multiple find depending in multi parameter.  Only one of singleVal
+ * or multiVal should be non-NULL, depending on the same parameter. */
 {
 /* Check key size vs. file key size, and act appropriately.  If need be copy key to a local
  * buffer and zero-extend it. */
@@ -228,8 +356,34 @@ if (valSize != bpt->valSize)
     errAbort("Value size mismatch between bptFileFind (valSize=%d) and %s (valSize=%d)",
     	valSize, bpt->fileName, bpt->valSize);
 
-/* Call recursive finder. */
-return rFind(bpt, bpt->rootOffset, key, val);
+if (multi)
+    {
+    rFindMulti(bpt, bpt->rootOffset, key, multiVal);
+    return *multiVal != NULL;
+    }
+else
+    return rFind(bpt, bpt->rootOffset, key, singleVal);
+}
+
+boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize)
+/* Find value associated with key.  Return TRUE if it's found. 
+*  Parameters:
+*     bpt - file handle returned by bptFileOpen
+*     key - pointer to key string, which needs to be bpt->keySize long
+*     val - pointer to where to put retrieved value
+*/
+{
+return bptFileFindMaybeMulti(bpt, key, keySize, valSize, FALSE, val, NULL);
+}
+
+struct slRef *bptFileFindMultiple(struct bptFile *bpt, void *key, int keySize, int valSize)
+/* Find all values associated with key.  Store this in ->val item of returned list. 
+ * Do a slRefFreeListAndVals() on list when done. */
+{
+struct slRef *list = NULL;
+bptFileFindMaybeMulti(bpt, key, keySize, valSize, TRUE, NULL, &list);
+slReverse(&list);
+return list;
 }
 
 void bptFileTraverse(struct bptFile *bpt, void *context,
@@ -252,10 +406,10 @@ return rTraverse(bpt, bpt->rootOffset, context, callback);
  *  01 02 03 04   05 06 07 08  09 10 11 12   13 14 15 16   17 18 19 20   21 22 23 24  25 26 27
  */
 
-static int xToY(int x, unsigned y)
+static long xToY(int x, unsigned y)
 /* Return x to the Y power, with y usually small. */
 {
-int i, val = 1;
+long i, val = 1;
 for (i=0; i<y; ++i)
     val *= x;
 return val;
@@ -275,7 +429,7 @@ return levels;
 
 
 static bits32 writeIndexLevel(bits16 blockSize, 
-	void *itemArray, int itemSize, int itemCount, 
+	void *itemArray, int itemSize, long itemCount, 
 	bits32 indexOffset, int level, 
 	void (*fetchKey)(const void *va, char *keyBuf), bits32 keySize, bits32 valSize,
 	FILE *f)
@@ -284,39 +438,42 @@ static bits32 writeIndexLevel(bits16 blockSize,
 char *items = itemArray;
 
 /* Calculate number of nodes to write at this level. */
-int slotSizePer = xToY(blockSize, level);   // Number of items per slot in node
-int nodeSizePer = slotSizePer * blockSize;  // Number of items per node
-int nodeCount = (itemCount + nodeSizePer - 1)/nodeSizePer;	
+long slotSizePer = xToY(blockSize, level);   // Number of items per slot in node
+long nodeSizePer = slotSizePer * blockSize;  // Number of items per node
+long nodeCount = (itemCount + nodeSizePer - 1)/nodeSizePer;	
+
 
 /* Calculate sizes and offsets. */
-int bytesInIndexBlock = (bptBlockHeaderSize + blockSize * (keySize+sizeof(bits64)));
-int bytesInLeafBlock = (bptBlockHeaderSize + blockSize * (keySize+valSize));
+long bytesInIndexBlock = (bptBlockHeaderSize + blockSize * (keySize+sizeof(bits64)));
+long bytesInLeafBlock = (bptBlockHeaderSize + blockSize * (keySize+valSize));
 bits64 bytesInNextLevelBlock = (level == 1 ? bytesInLeafBlock : bytesInIndexBlock);
 bits64 levelSize = nodeCount * bytesInIndexBlock;
 bits64 endLevel = indexOffset + levelSize;
 bits64 nextChild = endLevel;
 
+
 UBYTE isLeaf = FALSE;
 UBYTE reserved = 0;
 
-int i,j;
+long i,j;
 char keyBuf[keySize+1];
 keyBuf[keySize] = 0;
 for (i=0; i<itemCount; i += nodeSizePer)
     {
     /* Calculate size of this block */
-    bits16 countOne = (itemCount - i + slotSizePer - 1)/slotSizePer;
+    long countOne = (itemCount - i + slotSizePer - 1)/slotSizePer;
     if (countOne > blockSize)
         countOne = blockSize;
+    bits16 shortCountOne = countOne;
 
     /* Write block header. */
     writeOne(f, isLeaf);
     writeOne(f, reserved);
-    writeOne(f, countOne);
+    writeOne(f, shortCountOne);
 
     /* Write out the slots that are used one by one, and do sanity check. */
     int slotsUsed = 0;
-    int endIx = i + nodeSizePer;
+    long endIx = i + nodeSizePer;
     if (endIx > itemCount)
         endIx = itemCount;
     for (j=i; j<endIx; j += slotSizePer)
@@ -329,7 +486,7 @@ for (i=0; i<itemCount; i += nodeSizePer)
 	nextChild += bytesInNextLevelBlock;
 	++slotsUsed;
 	}
-    assert(slotsUsed == countOne);
+    assert(slotsUsed == shortCountOne);
 
     /* Write out empty slots as all zero. */
     int slotSize = keySize + sizeof(bits64);
