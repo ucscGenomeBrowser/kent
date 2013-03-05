@@ -156,6 +156,7 @@ struct track
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
     struct preDrawContainer *preDrawContainer;  /* Numbers to graph in wig, one per pixel */
     struct preDrawContainer *(*loadPreDraw)(struct track *tg, int seqStart, int seqEnd, int width);
+    struct wigGraphOutput *wigGraphOutput;  /* Where to draw wig - different for transparency */
     /* Do bits that load the predraw buffer.  Called to set preDrawContainer */
 
     struct bbiFile *bbiFile;	/* Associated bbiFile for bigWig or bigBed. */

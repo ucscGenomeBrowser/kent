@@ -23,11 +23,42 @@
 
 #	rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mustela_putorius/MusPutFur1.0/
 
-#for pauline to clean up (notes):
-#sed -e 's/petMar2/musFur1/g; s/PetMar2/MusFur1/g' petMar2.txt > musFur1.txt
-
 ##########################################################################
-# Download sequence (WORKING - 2013-01-10 - Pauline)
+# Download sequence (DONE - 2013-01-10 - Pauline)
+    # XXX NOTE: There were duplicate contigs in this assembly.  To remove the
+    # duplicates, the correspondingly Ensembl release was fetched:
+    mkdir -p /hive/data/genomes/musFur1/ensembl
+    cd /hive/data/genomes/musFur1/ensembl
+    wget -r --cut-dirs=5 \
+"ftp://ftp.ensembl.org/pub/release-70/fasta/mustela_putorius_furo/dna/"
+    # run an faCount on the toplevel sequence:
+    faCount Mustela_putorius_furo.MusPutFur1.0.70.dna.toplevel.fa.gz \
+         > toplevel.faCount.txt
+    # generate a chrom.sizes file from that:
+    egrep -v "^#seq|^total" toplevel.faCount.txt | cut -f1,2 | sort -k2nr \
+       | sed -e "s/\.1//" > ensembl.chrom.sizes
+    # then from the previous attempt at the UCSC build of this sequence:
+    twoBitInfo ../musFur1.unmasked.2bit stdout | sort -k2nr > musFur1.chrom.sizes
+    # then, finding the dups by comparing those two chrom.sizes listings
+    # to look for items with only one entry on the lists, which would be
+    # the extra one in the duplicate contig assembly:
+    egrepStr=`awk '{printf "|%s|%s", $1, $3}' musFur1.twoBitDup.txt | sed -e 's/^.//'`
+    egrep -h "$egrepStr" ensembl.chrom.sizes musFur1.chrom.sizes | cut -f1 \
+       | sort | uniq -c | awk '$1 < 2' \
+          | awk '{print $2}' > remove.duplicate.list
+    # now, to remove the duplicates:
+    cd /hive/data/genomes/musFur1/genbank
+    faSomeRecords -exclude ucsc.fa remove.duplicate.list ucsc.noDup.fa
+    egrepStr=`cat remove.duplicate.list | xargs echo | sed -e 's/ /|/g'`
+    egrep -v "$egrepStr" ucsc.agp > ucsc.noDup.agp
+
+    # using these settings in the musFur1.config.ra file:
+fastaFiles /hive/data/genomes/musFur1/genbank/ucsc.noDup.fa
+agpFiles /hive/data/genomes/musFur1/genbank/ucsc.noDup.agp
+
+    ########################################################################
+    #  the following was the original setup for this build that included the
+    # duplicates:
     mkdir /hive/data/genomes/musFur1
     cd /hive/data/genomes/musFur1
     mkdir genbank
@@ -78,7 +109,17 @@ zcat unplaced.scaf.agp.gz | sed -e 's/\.1//' > ../../../ucsc.agp
     cp -p Alligator_Mississippiensis.jpg /usr/local/apache/htdocs/images
 
 ##########################################################################
-# Initial makeGenomeDb.pl (WORKING - 2013-01-10 - Pauline)
+# Fetch photograph (DONE - 2013-03-05 - Hiram)
+    # using the photo indicated on the NCBI genome project page:
+    mkdir /hive/data/genomes/musFur1/photo
+    cd /hive/data/genomes/musFur1/photo
+    wget --timestamping \
+         http://upload.wikimedia.org/wikipedia/commons/3/32/Ferret_2008.png
+    convert -geometry "300x300" Ferret_2008.png Mustela_putorius_furo.png
+    # checkin this file Mustela_putorius_furo.png to the source tree
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2013-01-10,03-05 - Pauline, Hiram)
     # obtain a template for this from the source tree:
     # kent/src/hg/utils/automation/configFiles/
     # and check it back into the source tree when completed here:
@@ -88,28 +129,27 @@ zcat unplaced.scaf.agp.gz | sed -e 's/\.1//' > ../../../ucsc.agp
 db musFur1
 clade vertebrate
 genomeCladePriority 16
-scientificName Mustela putorius furo 
-commonName Ferret 
+scientificName Mustela putorius furo
+commonName Ferret
 assemblyDate Apr. 2011
 assemblyLabel Ferret Genome Sequencing Consortium
 assemblyShortLabel MusPutFur1.0
-orderKey 2430 
+orderKey 2430
 mitoAcc none
-fastaFiles /hive/data/genomes/musFur1/genbank/ucsc.fa.gz
-agpFiles /hive/data/genomes/musFur1/genbank/ucsc.agp.gz
+fastaFiles /hive/data/genomes/musFur1/genbank/ucsc.noDup.fa
+agpFiles /hive/data/genomes/musFur1/genbank/ucsc.noDup.agp
 # qualFiles none
 dbDbSpeciesDir ferret
-photoCreditURL http://epa.gov/greatlakes/images/index.htm
-photoCreditName Photo courtesy of U.S. Environmental Protection Agency
+photoCreditURL http://commons.wikimedia.org/wiki/File:Ferret_2008.png
+photoCreditName Alfredo Gutiérrez and Wikimedia Commons
 ncbiGenomeId 3295
 ncbiAssemblyId 286418
-ncbiAssemblyName MusPutFur1.0 
+ncbiAssemblyName MusPutFur1.0
 ncbiBioProject 59869
 genBankAccessionID GCA_000215625.1
 taxId 9669
 '_EOF_'
     # << happy emacs
-
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
         -stop=agp musFur1.config.ra >>& agp.log
     #   real    1m6.334s
@@ -120,20 +160,28 @@ taxId 9669
     # finish it off
     time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
         -dbHost=hgwdev musFur1.config.ra > db.log 2>&1
-    #   real    5m25.795s
+    #   real    17m58.217s
+    # XXX failed in the trackDb/html setup due to missing image:
+    #   htdocs/images/Mustela_putorius_furo.{jpg|png|gif}
 
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/musFur1.unmasked.2bit /gbdb/musFur1/musFur1.2bit
     #	browser should function now, add the files from the trackDb
     #   hierarchy here to the source tree
 
+    #   after checking in the photograph and getting it into
+    #   /usr/local/apache/htdocs/images:
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
+        -continue=trackDb -forceDescription -dbHost=hgwdev musFur1.config.ra
+
 ##########################################################################
-# running repeat masker (DONE - 2012-10-12 - Hiram)
+# running repeat masker (WORKING - 2013-03-05 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/repeatMasker
     cd /hive/data/genomes/musFur1/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek musFur1 > do.log 2>&1 &
+XXX - running - Tue Mar  5 10:13:56 PST 2013
     #   real    116m3.942s
 
     cat faSize.rmsk.txt
@@ -156,12 +204,13 @@ taxId 9669
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (DONE - 2012-10-12 - Hiram)
+# running simple repeat (WORKING - 2013-03-05 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/simpleRepeat
     cd /hive/data/genomes/musFur1/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	musFur1 > do.log 2>&1 &
+XXX - running - Tue Mar  5 10:15:04 PST 2013
     #   real    53m17.048s
 
     cat fb.simpleRepeat
@@ -169,7 +218,7 @@ taxId 9669
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2012-10-12 - Hiram)
+#	(DONE - 2013-03-05 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/gap
     cd /hive/data/genomes/musFur1/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
@@ -177,26 +226,27 @@ taxId 9669
     #   real    0m12.841s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits musFur1 -not gap -bed=notGap.bed
-    #   647368134 bases of 647368134 (100.000%) in intersection
-    #   real    0m7.993s
+    #   2277906570 bases of 2277906570 (100.000%) in intersection
+    #   real    0m13.015s
 
     # can see now if allGaps.bed actually is all the gaps:
     hgsql -N -e "select size from gap;" musFur1 | ave stdin | grep total
-# total 238182824.000000
+# total 132851443.000000
     ave -col=5 allGaps.bed | grep total
-# total 238182824.000000
+# total 132851443.000000
     # same count, no new gaps
 
     # check if any non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" musFur1 | sort | uniq -c
-    #  48808 yes
+    #  109700 yes
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2012-10-12 - Hiram)
+## WINDOWMASKER (WORKING - 2013-03-05 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/windowMasker
     cd /hive/data/genomes/musFur1/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev musFur1 > do.log 2>&1 &
+XXX - running - Tue Mar  5 10:19:42 PST 2013
     #   real    84m58.718s
 
     # Masking statistics

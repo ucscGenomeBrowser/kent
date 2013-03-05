@@ -154,7 +154,7 @@ for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
     if (!isFirst || i > 0)
 	fputc('\t', f);
     if (words != NULL)
-	fputs(words[i], f);
+	fputs((words[i] ? words[i] : ""), f);
     }
 if (freeWhenDone)
     {

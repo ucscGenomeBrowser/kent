@@ -9,8 +9,8 @@ visibility hide
 html gap
 
 track kap1SummitCoverage
-shortLabel KAP1 summit coverage
-longLabel Coverage of KAP1 MACS summits +- 10 bp
+shortLabel Morris summit coverage
+longLabel Coverage of Morris MACS summits +- 10 bp
 group regulation
 visibility full
 color 0,0,200
@@ -20,8 +20,8 @@ maxHeightPixels 100:50:8
 priority 50
 
 track kap1Summits
-shortLabel KAP1 summits
-longLabel KAP1 MACS summits +- 10 bp
+shortLabel Morris summits
+longLabel Morris MACS summits +- 10 bp
 group regulation
 visibility hide
 color 30,30,0
@@ -30,8 +30,8 @@ otherDb hg19
 priority 52
 
 track ZNF486SummitCoverage 
-shortLabel ZNF486 Coverage
-longLabel Coverage of ZNF486 MACS summits +- 10 bp
+shortLabel Boris Coverage
+longLabel Coverage of Boris MACS summits +- 10 bp
 group regulation
 visibility full
 color 0,100,0
