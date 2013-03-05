@@ -10,6 +10,8 @@
 #include "obscure.h"
 #include "zlibFace.h"
 
+char *field = "name";
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -19,12 +21,14 @@ errAbort(
   "   bigBedNamedItems file.bb name output.bed\n"
   "options:\n"
   "   -nameFile - if set, treat name parameter as file full of space delimited names\n"
+  "   -field=fieldName - use index on field name, default is \"name\"\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"nameFile", OPTION_BOOLEAN},
+   {"field", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -35,17 +39,18 @@ struct bbiFile *bbi = bigBedFileOpen(bigBedFile);
 FILE *f = mustOpen(outFile, "w");
 struct lm *lm = lmInit(0);
 struct bigBedInterval *intervalList;
+struct bptFile *bpt = bigBedOpenExtraIndex(bbi, field);
 if (optionExists("nameFile"))
     {
     int wordCount = 0;
     char **words;
     char *buf;
     readAllWords(name, &words, &wordCount, &buf);
-    intervalList = bigBedMultiNameQuery(bbi, words, wordCount, lm);
+    intervalList = bigBedMultiNameQuery(bbi, bpt, words, wordCount, lm);
     }
 else
     {
-    intervalList = bigBedNameQuery(bbi, name, lm);
+    intervalList = bigBedNameQuery(bbi, bpt, name, lm);
     }
 bigBedIntervalListToBedFile(bbi, intervalList, f);
 carefulClose(&f);
@@ -57,6 +62,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+field = optionVal("field", field);
 bigBedNamedItems(argv[1], argv[2], argv[3]);
 return 0;
 }

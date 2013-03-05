@@ -56,11 +56,12 @@ boolean bigBedSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 star
 
 /*** Some routines for accessing bigBed items via name. ***/
 
-struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, char *name, struct lm *lm);
+struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, struct bptFile *index,
+    char *name, struct lm *lm);
 /* Return list of intervals matching file. These intervals will be allocated out of lm. */
 
-struct bigBedInterval *bigBedMultiNameQuery(struct bbiFile *bbi, char **names, 
-    int nameCount, struct lm *lm);
+struct bigBedInterval *bigBedMultiNameQuery(struct bbiFile *bbi, struct bptFile *index,
+    char **names, int nameCount, struct lm *lm);
 /* Fetch all records matching any of the names. Return list is allocated out of lm. */
 
 int bigBedIntervalToRowLookupChrom(struct bigBedInterval *interval, 
@@ -78,9 +79,6 @@ int bigBedIntervalToRowLookupChrom(struct bigBedInterval *interval,
 
 void bigBedIntervalListToBedFile(struct bbiFile *bbi, struct bigBedInterval *intervalList, FILE *f);
 /* Write out big bed interval list to bed file, looking up chromosome. */
-
-void bigBedAttachNameIndex(struct bbiFile *bbi);
-/* Attach name index part of bbiFile to bbi.  Not normally needed to call directly. */
 
 /** Routines to access other data from a bigBed file. */
 

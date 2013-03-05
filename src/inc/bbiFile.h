@@ -41,7 +41,8 @@
  *     extraIndexList - one of these for each extraIndex 
  *         type                2 Type of index.  Always 0 for bPlusTree now
  *         fieldCount          2 Number of fields used in this index.  Always 1 for now
- *         reserved            12 All zeroes for now
+ *         indexOffset         8 offset for this index in file
+ *         reserved            4 All zeroes for now
  *         fieldList - one of these for each field being used in _this_ index
  *            fieldId          2 index of field within record
  *            reserved         2 All zeroes for now
@@ -129,7 +130,10 @@ struct bbiFile
     bits16 extraIndexCount; /* Number of extra indexes (on fields other than chrom,start,end */ 
     bits64 extraIndexListOffset;    /* Offset to list of extra indexes */
 
-    struct bptFile *nameBpt;	/* Index of names, may be NULL */ // uglyf - remove
+    struct bptFile *uglyOldNameBpt;	/* Index of names, may be NULL */ // uglyf - remove
+
+    /* Some fields that should not be accessed directly as they may not have good values. */
+    struct asObject *cachedAs;	/* Cached parsed version.  Use bigBedAsOrDefault() to get this. */
     };
 
 

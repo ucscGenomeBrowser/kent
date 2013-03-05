@@ -16,11 +16,13 @@
 
 char *version = "2.4";
 
+/* Things set directly or indirectly by command lne in main() routine. */
 int blockSize = 256;
 int itemsPerSlot = 512;
 char *extraIndex = NULL;
 int bedN = 0;   /* number of standard bed fields */
 int bedP = 0;   /* number of bed plus fields */
+char *asFile = NULL;
 char *asText = NULL;
 static boolean doCompress = FALSE;
 static boolean tabSep = FALSE;
@@ -146,7 +148,7 @@ struct bbiChromUsage *usage = usageList;
 char *line, *row[fieldCount+1];
 int lastField = fieldCount-1;
 int itemIx = 0, sectionIx = 0;
-bits64 blockStartOffset = 0, blockEndOffset = 0;
+bits64 blockStartOffset = 0;
 int startPos = 0, endPos = 0;
 bits32 chromId = 0;
 struct dyString *stream = dyStringNew(0);
@@ -229,18 +231,9 @@ for (;;)
 	/* Save block offset and size for all named chunks in this section. */
 	if (eim != NULL)
 	    {
+	    bits64 blockEndOffset = ftell(f);
 	    bbExIndexMakerAddOffsetSize(eim, blockStartOffset, blockEndOffset-blockStartOffset,
 		sectionStartIx, sectionEndIx);
-#ifdef OLD
-	    blockEndOffset = ftell(f);
-	    int i;
-	    for (i=sectionStartIx; i<sectionEndIx; ++i)
-	        {
-		struct bbNamedFileChunk *chunk = namedChunks + i;
-		chunk->offset = blockStartOffset;
-		chunk->size = blockEndOffset - blockStartOffset;
-		}
-#endif /* OLD */
 	    sectionStartIx = sectionEndIx;
 	    }
 
@@ -733,23 +726,9 @@ if (aveSpan > 0)
 	}
     }
 
-/* Write out name index if need be. */
-#ifdef SOON
-bits64 nameIndexOffset = 0;
-if (doNameIndex)
-    {
-    qsort(namedChunks, bedCount, sizeof(namedChunks[0]),  bbNamedFileChunkCmpByName);
-    nameIndexOffset = ftell(f);
-    maxBedNameSize = maxNameSize;
-    bptFileBulkIndexToOpenFile(namedChunks, sizeof(namedChunks[0]), bedCount,
-        blockSize, bbNamedFileChunkKey, maxNameSize, bbNamedFileChunkVal, 
-	sizeof(bits64) + sizeof(bits64), f);
-    verboseTime(1, "Sorting and writing name index");
-    }
-#endif /* SOON */
+/* Write out extra indexes if need be. */
 if (eim)
     {
-    warn("Oh dear, really don't know how to do this yet.");
     int i;
     for (i=0; i<eim->indexCount; ++i)
         {
@@ -839,7 +818,8 @@ if (extraIndexCount != 0)
 	bits16 indexFieldCount = 1;
 	writeOne(f, type);
 	writeOne(f, indexFieldCount);
-	repeatCharOut(f, 0, 12);  // reserved
+	writeOne(f, eim->fileOffsets[i]);
+	repeatCharOut(f, 0, 4);  // reserved
 
 	// Write out field list - easy this time because for now always only one field.
 	bits16 fieldId = eim->indexFields[i];
@@ -878,7 +858,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
-asText = optionVal("as", asText);
+asFile = optionVal("as", asFile);
 doCompress = !optionExists("unc");
 extraIndex = optionVal("extraIndex", NULL);
 tabSep = optionExists("tab");
@@ -941,7 +921,9 @@ if (bedN == 0)
     }
    
 /* Make sure that fields are defined, from bed spec if nowhere else. */
-if (asText == NULL)
+if (asFile)
+    readInGulp(asFile, &asText, NULL);
+else
     asText = bedAsDef(bedN,  bedN + bedP);
 
 bedToBigBed(bedFileName, argv[2], argv[3]);

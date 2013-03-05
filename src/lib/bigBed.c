@@ -202,10 +202,10 @@ return bbiSummaryArray(bbi, chrom, start, end, bigBedCoverageIntervals,
 	summaryType, summarySize, summaryValues);
 }
 
+#ifdef OLD
 void bigBedAttachNameIndex(struct bbiFile *bbi)
 /* Attach name index part of bbiFile to bbi */
 {
-#ifdef OLD
 if (bbi->nameBpt == NULL)
     {
     if (bbi->nameIndexOffset == 0)
@@ -213,9 +213,9 @@ if (bbi->nameBpt == NULL)
     udcSeek(bbi->udc, bbi->nameIndexOffset);
     bbi->nameBpt = bptFileAttach(bbi->fileName, bbi->udc);
     }
-#endif /* OLD */
 uglyAbort("bigBedAttachNameIndex() - no can do");
 }
+#endif /* OLD */
 
 struct offsetSize 
 /* Simple file offset and file size. */
@@ -271,10 +271,11 @@ return fosList;
 }
 
 
-static struct fileOffsetSize *bigBedChunksMatchingName(struct bbiFile *bbi, char *name)
+static struct fileOffsetSize *bigBedChunksMatchingName(struct bbiFile *bbi, 
+    struct bptFile *index, char *name)
 /* Get list of file chunks that match name.  Can slFreeList this when done. */
 {
-struct slRef *blockList = bptFileFindMultiple(bbi->nameBpt, 
+struct slRef *blockList = bptFileFindMultiple(index, 
 	name, strlen(name), sizeof(struct offsetSize));
 struct fileOffsetSize *fosList = fosFromRedundantBlockList(&blockList, bbi->isSwapped);
 slRefFreeListAndVals(&blockList);
@@ -282,7 +283,7 @@ return fosList;
 }
 
 static struct fileOffsetSize *bigBedChunksMatchingNames(struct bbiFile *bbi, 
-	char **names, int nameCount)
+	struct bptFile *index, char **names, int nameCount)
 /* Get list of file chunks that match any of the names.  Can slFreeList this when done. */
 {
 /* Go through all names and make a blockList that includes all blocks with any hit to any name.  
@@ -292,7 +293,7 @@ int nameIx;
 for (nameIx = 0; nameIx < nameCount; ++nameIx)
     {
     char *name = names[nameIx];
-    struct slRef *oneList = bptFileFindMultiple(bbi->nameBpt, 
+    struct slRef *oneList = bptFileFindMultiple(index, 
 	    name, strlen(name), sizeof(struct offsetSize));
     blockList = slCat(oneList, blockList);
     }
@@ -404,24 +405,25 @@ slReverse(&intervalList);
 return intervalList;
 }
 
-struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, char *name, struct lm *lm)
+
+
+struct bigBedInterval *bigBedNameQuery(struct bbiFile *bbi, struct bptFile *index,
+    char *name, struct lm *lm)
 /* Return list of intervals matching file. These intervals will be allocated out of lm. */
 {
-bigBedAttachNameIndex(bbi);
-struct fileOffsetSize *fosList = bigBedChunksMatchingName(bbi, name);
+struct fileOffsetSize *fosList = bigBedChunksMatchingName(bbi, index, name);
 struct bigBedInterval *intervalList = bigBedIntervalsMatchingName(bbi, fosList, 
     bbFirstWordMatchesName, name, lm);
 slFreeList(&fosList);
 return intervalList;
 }
 
-struct bigBedInterval *bigBedMultiNameQuery(struct bbiFile *bbi, char **names, 
-    int nameCount, struct lm *lm)
+struct bigBedInterval *bigBedMultiNameQuery(struct bbiFile *bbi, struct bptFile *index,
+    char **names, int nameCount, struct lm *lm)
 /* Fetch all records matching any of the names. Return list is allocated out of lm. */
 {
 /* Set up name index and get list of chunks that match any of our names. */
-bigBedAttachNameIndex(bbi);
-struct fileOffsetSize *fosList = bigBedChunksMatchingNames(bbi, names, nameCount);
+struct fileOffsetSize *fosList = bigBedChunksMatchingNames(bbi, index, names, nameCount);
 
 /* Create hash of all names. */
 struct hash *hash = newHash(0);
@@ -485,10 +487,13 @@ return udcReadStringAndZero(f);
 struct asObject *bigBedAs(struct bbiFile *bbi)
 /* Get autoSql object definition if any associated with file. */
 {
+struct asObject *as = bbi->cachedAs;
+if (as != NULL)
+    return as;
 if (bbi->asOffset == 0)
     return NULL;
 char *asText = bigBedAutoSqlText(bbi);
-struct asObject *as = asParseText(asText);
+bbi->cachedAs = as = asParseText(asText);
 freeMem(asText);
 return as;
 }
@@ -496,9 +501,12 @@ return as;
 struct asObject *bigBedAsOrDefault(struct bbiFile *bbi)
 // Get asObject associated with bigBed - if none exists in file make it up from field counts.
 {
-struct asObject *as = bigBedAs(bbi);
+struct asObject *as = bbi->cachedAs;
+if (as != NULL)
+    return as;
+as = bigBedAs(bbi);
 if (as == NULL)
-    as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
+    bbi->cachedAs = as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
 return as;
 }
 
@@ -543,7 +551,8 @@ for (i=0; i<bbi->extraIndexCount; ++i)
     bits16 type,fieldCount;
     type = udcReadBits16(udc, isSwapped);
     fieldCount = udcReadBits16(udc, isSwapped);
-    udcSeekCur(udc, 12);    // skip over reserved bits
+    udcSeekCur(udc, sizeof(bits64));  // skip over fileOffset
+    udcSeekCur(udc, 4);    // skip over reserved bits
     if (fieldCount == 1)
         {
 	bits16 fieldId = udcReadBits16(udc, isSwapped);
@@ -574,14 +583,59 @@ for (intEl = intList; intEl != NULL; intEl = intEl->next)
     slNameAddHead(&nameList, col->name);
     }
 
-asObjectFree(&as);
 return nameList;
 }
 
 struct bptFile *bigBedOpenExtraIndex(struct bbiFile *bbi, char *fieldName)
 /* Return index associated with fieldName.  Aborts if no such index. */
 {
-uglyAbort("Coming soon.");
+struct udcFile *udc = bbi->udc;
+boolean isSwapped = bbi->isSwapped;
+struct asObject *as = bigBedAsOrDefault(bbi);
+struct asColumn *col = asColumnFind(as, fieldName);
+if (col == NULL)
+    errAbort("No field %s in %s", fieldName, bbi->fileName);
+int colIx = slIxFromElement(as->columnList, col);
+
+/* See if we have any extra indexes, and if so seek to there. */
+bits64 offset = bbi->extraIndexListOffset;
+if (offset == 0)
+   errAbort("%s has no indexes", bbi->fileName);
+udcSeek(udc, offset);
+
+/* Go through each extra index and see if it's a match */
+int i;
+for (i=0; i<bbi->extraIndexCount; ++i)
+    {
+    bits16 type = udcReadBits16(udc, isSwapped);
+    bits16 fieldCount = udcReadBits16(udc, isSwapped);
+    bits64 fileOffset = udcReadBits64(udc, isSwapped);
+    udcSeekCur(udc, 4);    // skip over reserved bits
+
+    if (type != 0)
+        {
+	warn("Don't understand type %d", type);
+	internalErr();
+	}
+    if (fieldCount == 1)
+        {
+	bits16 fieldId = udcReadBits16(udc, isSwapped);
+	udcSeekCur(udc, 2);    // skip over reserved bits
+	if (fieldId == colIx)
+	    {
+	    udcSeek(udc, fileOffset);
+	    struct bptFile *bpt = bptFileAttach(bbi->fileName, udc);
+	    return bpt;
+	    }
+	}
+    else
+        {
+	warn("Not yet understanding indexes on multiple fields at once.");
+	internalErr();
+	}
+    }
+
+errAbort("%s is not indexed in %s", fieldName, bbi->fileName);
 return NULL;
 }
 
