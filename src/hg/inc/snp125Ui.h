@@ -74,7 +74,7 @@ extern char *snp132ColorSourceLabels[];
 extern int snp132ColorSourceArraySize;
 
 /****** MolType related controls *******/
-/* unknown, genomic, cDNA */
+/* unknown, genomic, cDNA, [rarely] mito */
 
 extern char *snp125MolTypeLabels[];
 extern char *snp125MolTypeOldColorVars[];

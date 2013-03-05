@@ -1479,7 +1479,7 @@ void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args)
  * from cart. */
 {
 pushWarnHandler(htmlVaWarn);
-webStartWrapper(cart, trackHubRemoveHubName(db), format, args, FALSE, FALSE);
+webStartWrapper(cart, trackHubSkipHubName(db), format, args, FALSE, FALSE);
 inWeb = TRUE;
 }
 
@@ -1596,13 +1596,13 @@ if(pos != NULL && oldVars != NULL)
     }
 *extra = 0;
 if (pos == NULL && org != NULL)
-    safef(titlePlus,sizeof(titlePlus), "%s%s - %s",trackHubRemoveHubName(org), extra, title );
+    safef(titlePlus,sizeof(titlePlus), "%s%s - %s",trackHubSkipHubName(org), extra, title );
 else if (pos != NULL && org == NULL)
     safef(titlePlus,sizeof(titlePlus), "%s - %s",pos, title );
 else if (pos == NULL && org == NULL)
     safef(titlePlus,sizeof(titlePlus), "%s", title );
 else
-    safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",trackHubRemoveHubName(org), extra,pos, title );
+    safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",trackHubSkipHubName(org), extra,pos, title );
 popWarnHandler();
 setThemeFromCart(cart);
 htmStartWithHead(stdout, head, titlePlus);

@@ -2636,4 +2636,9 @@ int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
   return qCount;
 } /* netHttpMultipleQueries */
 
+boolean hasProtocol(char *urlOrPath)
+/* Return TRUE if it looks like it has http://, ftp:// etc. */
+{
+return stringIn("://", urlOrPath) != NULL;
+}
 

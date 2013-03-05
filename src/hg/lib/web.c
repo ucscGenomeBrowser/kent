@@ -508,7 +508,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 
-struct slPair *names = trackHubGetHubLabels();
+struct slPair *names = trackHubGetCladeLabels();
 
 for(; names; names = names->next)
     {
@@ -548,7 +548,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 	(!doCheck || hDbExists(cur->name)))
         {
         hashAdd(hash, cur->genome, cur);
-        orgList[numGenomes] = trackHubRemoveHubName(cur->genome);
+        orgList[numGenomes] = trackHubSkipHubName(cur->genome);
         values[numGenomes] = cur->genome;
         numGenomes++;
 	if (numGenomes >= ArraySize(orgList))

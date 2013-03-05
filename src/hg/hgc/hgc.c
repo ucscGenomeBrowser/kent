@@ -694,7 +694,7 @@ if (featDna && end > start)
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A>  (%s/%s)<BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
-	   chrom, start, end, strand, tbl, trackHubRemoveHubName(database), trackHubRemoveHubName(hGenome(database)));
+	   chrom, start, end, strand, tbl, trackHubSkipHubName(database), trackHubSkipHubName(hGenome(database)));
     }
 }
 
@@ -4050,7 +4050,8 @@ if (dbIsFound)
     char rootName[256];
     char parsedChrom[32];
     hParseTableName(database, tbl, rootName, parsedChrom);
-    hti = hFindTableInfo(database, seqName, rootName);
+    if (!trackHubDatabase(database))
+	hti = hFindTableInfo(database, seqName, rootName);
     }
 char *thisOrg = hOrganism(database);
 cartWebStart(cart, database, "Get DNA in Window (%s/%s)", database, thisOrg);
@@ -4631,7 +4632,8 @@ else
      * or bigBed if it is in the database but has only one column called 'fileName';
      * in which case, just get DNA as if no table were given. */
     hParseTableName(database, tbl, rootName, parsedChrom);
-    hti = hFindTableInfo(database, seqName, rootName);
+    if (!trackHubDatabase(database))
+	hti = hFindTableInfo(database, seqName, rootName);
     if (hti == NULL || hti->startField[0] == 0)
 	{
 	itemCount = 1;
@@ -9276,13 +9278,11 @@ if (row != NULL)
 	chromosome = "M";    
 
     chp = strstr(itemName, "COSM")+strlen("COSM");
-    printf("<B>COSMIC ID:</B> %s", chp);
-
-    printf(" (click <A HREF=\"%s&id=%s\" TARGET=_BLANK>here</A> for more details at COSMIC site)\n", url, chp);
+    printf("<B>COSMIC ID:</B> <A HREF=\"%s%s\" TARGET=_BLANK>%s</A> (details at COSMIC site)", url, chp, chp);
 
     // Embed URL to COSMIC site per COSMICT request.
     printf("<BR><B>Source:</B> ");
-    printf("<A HREF=\"http://www.sanger.ac.uk/cosmic/\" TARGET=_BLANK>%s</A>\n", source);
+    printf("<A HREF=\"http://cancdr.sanger.ac.uk/cancergenome/projects/cosmic/\" TARGET=_BLANK>%s</A>\n", source);
 
     printf("<BR><B>Gene Name:</B> %s\n", gene_name);
     printf("<BR><B>Accession Number:</B> %s\n", accession_number);

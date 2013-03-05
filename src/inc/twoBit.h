@@ -118,9 +118,6 @@ struct dnaSeq *twoBitLoadAll(char *spec);
  *  or
  *     seqName:start-end */
 
-struct slName *twoBitSeqNamesExt(char *fileName, boolean useUdc);
-/* Get list of all sequences in twoBit file. */
-
 struct slName *twoBitSeqNames(char *fileName);
 /* Get list of all sequences in twoBit file. */
 
@@ -204,7 +201,4 @@ void twoBitOutNBeds(struct twoBitFile *tbf, char *seqName, FILE *outF);
 int twoBitSeqSizeNoNs(struct twoBitFile *tbf, char *seqName);
 /* return the length of the sequence, not counting N's */
 
-struct twoBitFile *twoBitOpenExt(char *fileName, boolean useUdc);
-/* Open file, read in header and index.  
- * Squawk and die if there is a problem. */
 #endif /* TWOBIT_H */

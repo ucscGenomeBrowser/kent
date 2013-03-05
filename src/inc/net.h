@@ -248,5 +248,7 @@ boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
 boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries, boolean newer, boolean progress);
 /* Open multiple parallel connections to URL to speed downloading */
 
+boolean hasProtocol(char *urlOrPath);
+/* Return TRUE if it looks like it has http://, ftp:// etc. */
 #endif /* NET_H */
 

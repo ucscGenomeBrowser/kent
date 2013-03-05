@@ -2828,7 +2828,7 @@ visibility hide
 color 200, 0, 0
 type bed 4
 hgsid on
-url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
+url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 
 searchName cosmicId
 searchTable cosmic

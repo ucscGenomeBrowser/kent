@@ -300,8 +300,7 @@ if (!trackHubDatabase(database))
 struct slName *fieldList = bigBedGetFields(dtfList->table, conn);
 makeOrderedCommaFieldList(fieldList, dtfList, dy);
 slFreeList(&fieldList);
-if (!trackHubDatabase(database))
-    hFreeConn(&conn);
+hFreeConn(&conn);
 }
 
 static void makeBamOrderedCommaFieldList(struct joinerDtf *dtfList,
@@ -1030,8 +1029,7 @@ if (! doJoin)
     else
 	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);
     doTabOutTable(dtfList->database, dtfList->table, f, conn, dy->string);
-    if (!trackHubDatabase(database))
-	hFreeConn(&conn);
+    hFreeConn(&conn);
     }
 else
     {

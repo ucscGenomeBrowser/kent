@@ -526,7 +526,7 @@ printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",
         sqlQuickNum(conn, scoreSql) );
 printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
 printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2), pg->exonCover);
-printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d + %d\n", pg->intronCount, pg->oldIntronCount);
+printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d + %d\n", pg->intronCount, pg->alignGapCount);
 printf("<TR><TH>Conserved Splice Sites<TD>%d</TR>\n",  pg->conservedSpliceSites);
 printf("<TR><TH>Parent Splice Sites<TD>%d</TR>\n",  pg->parentSpliceCount);
 psl = getAlignments(conn, alignTbl, mi->pg->name);
@@ -586,8 +586,8 @@ printf("<TR><TH>score function<TD>1:xon %d %4.1f conSS %d 2: ax %4.1f 3: pA %4.1
                 pg->coverage, pg->qEnd, pg->qSize , pg->qSize,
                 wt[8]*((pg->coverage/100.0)*(1.0-coverFactor)*300.0),
                 wt[9]*(pg->tReps*10), 
-                pg->oldIntronCount,
-                wt[10]*pg->oldIntronCount);
+                pg->alignGapCount,
+                wt[10]*pg->alignGapCount);
 printf("<TR><TH>score function<TD>%4.1f+ %4.1f+ %4.1f+ %4.1f+ %4.1f - %4.1f - %4.1f+ %4.1f - %4.1f - %4.1f</td></TR>\n",
                 wt[1]*(log(pg->exonCover+1)/log(2))*200 , 
                 wt[2]*(((log(pg->axtScore>0?pg->axtScore:1)/log(2))*170)-1000),
@@ -598,7 +598,7 @@ printf("<TR><TH>score function<TD>%4.1f+ %4.1f+ %4.1f+ %4.1f+ %4.1f - %4.1f - %4
                 (float)wt[7]*(maxOverlap*300),
                 wt[8]*((pg->coverage/100.0)*(1.0-coverFactor)*300.0),
                 wt[9]*(pg->tReps*10), 
-                wt[10]*pg->oldIntronCount);
+                wt[10]*pg->alignGapCount);
 if (pg->kaku > 0 && pg->kaku < 1000000)
     printf("<TR><TH>KA/KU mutation rate in non-syn sites vs utr with repect to parent gene<TD>%4.2f</TR>\n",  pg->kaku);
 #endif

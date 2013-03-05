@@ -30,9 +30,9 @@ echo "Your bona fide build-meister"
 echo ""
 echo "- - - - - - - - - - - - - - - -"
 echo "Here is the log of all your changes for this build obtained by running the following command:"
-echo "    git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base"
+echo "    git log --stat --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base"
 echo ""
-git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base
+git log --stat --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base
 if [ $? -ne 0 ]; then
   echo No changes were found for ${victim}
 fi

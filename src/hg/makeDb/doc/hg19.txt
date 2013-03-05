@@ -2072,6 +2072,35 @@ close (FH);
     echo 3095693983-3095677412 | bc -q
     #	16571
 
+##########################################################################
+# CYTOBANDIDEO update -  (DONE - 2013-02-27 - kuhn)
+# adding rows for chroms with no cytology
+# this is just for navigation/orientation on those chroms
+
+    set db=hg19
+    set sql=~/kent/src/hg/lib/cytoBandIdeo.sql
+    # make backup of existing table
+    hgsql -e "CREATE TABLE cytoBandIdeoCopy SELECT * FROM cytoBandIdeo" $db
+    # dump existing table
+    hgsql -N -e "SELECT * FROM cytoBandIdeo" $db > $db.cytoBandIdeo
+
+    # find chroms already covered
+    hgsql -N -e 'SELECT chrom FROM cytoBandIdeo' $db \
+       | sort -u > $db.coveredNames
+    # make cytoBand records for chroms not already covered
+    hgsql -N -e 'SELECT chrom, size FROM chromInfo' $db \
+      | grep -wvf $db.coveredNames \
+      | awk '{print $1"\t0\t"$2"\t\tgneg"}' > $db.cytoBandNew
+    # check
+    wc -l $db.*
+    # combine and sort
+    cat $db.cytoBandNew $db.cytoBandIdeo > $db.cytoBandIdeoFull
+    bedSort $db.cytoBandIdeoFull $db.cytoBandIdeoFull
+    # replace exsting table
+    hgsql -e "DROP TABLE cytoBandIdeo" $db
+    hgLoadSqlTab $db cytoBandIdeo $sql $db.cytoBandIdeoFull
+    # check and then drop copy
+
 ##############################################################################
 # UCSC to Ensembl chr name mapping (DONE - 2009-05-08 - Hiram)
     #	new names as of Ensembl version 57, see below
@@ -19236,6 +19265,34 @@ ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutE
         > do.log 2>&1
     #   real    0m19.404s
     #   Read 536287 elements of size 4 from cosmic.bed
+
+############################################################################
+# UPDATE COSMIC TRACK - v63 (DONE - 2013-02-19 - Hiram)
+    # take a look at:
+    # ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/
+    # to see what the new version file name is, then:
+
+    cd /hive/data/genomes/hg19/bed/cosmic
+
+time ~/kent/src/hg/utils/automation/loadCosmic.pl -dryRun hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v63_300113.csv.gz
+#       New length: 616299
+#       Old length: 536287
+#       Percent bed overlap with previous version: 100.00%
+#       Number of deleted IDs: 643
+#       Number of added IDs: 80655
+
+#       real    0m32.084s
+
+    # that created files in: /hive/data/genomes/hg19/bed/cosmic/v63/
+
+    # then:
+    cd /hive/data/genomes/hg19/bed/cosmic/v63/
+    time ~/kent/src/hg/utils/automation/loadCosmic.pl hg19 \
+ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v63_300113.csv.gz \
+        > do.log 2>&1
+    #   real    0m24.619s
+
+    #   Read 616299 elements of size 4 from cosmic.bed
 
 ############################################################################
 # lastz Medium Ground Finch geoFor1 (DONE - 2012-07-29 - Hiram)

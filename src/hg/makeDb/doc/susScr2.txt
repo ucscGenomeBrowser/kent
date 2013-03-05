@@ -883,7 +883,7 @@ chainOne $(path1)
     #	real    28m35.606s
 
 ############################################################################
-# NUMTS TRACK (working 2012-11-01 - Chin)
+# NUMTS TRACK (DONE 2012-11-01 - Chin)
 
 # copy and unzip
 # http://193.204.182.50/files/tracks.zip and 

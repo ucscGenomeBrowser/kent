@@ -3486,4 +3486,3 @@ if (strptime(date,format, &tp))
     }
 return cloneString(newDate);  // newDate is never freed!
 }
-

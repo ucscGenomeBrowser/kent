@@ -36,7 +36,11 @@ endif
 
 set url1="http://"
 # set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMysqlVersion=1"
-set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMetaData=1&hgta_metaVersion=1"
+if ( $machine == genome-euro ) then
+  set url2=".ucsc.edu/cgi-bin/hgTables?hgta_doMetaData=1&hgta_metaVersion=1"
+else
+  set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMetaData=1&hgta_metaVersion=1"
+endif
 set url="$url1$machine$url2"
 set version=`wget -q -O /dev/stdout "$url"`
 set version=`echo $version | awk -F" " '{print $2}'`

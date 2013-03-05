@@ -1,64 +1,53 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-  <HEAD>
-    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-    <META name="description" content="ENCODE Project at UCSC - ">
-    <META name="keywords" content="ENCODE, project, ENCODE project, genome, genome browser, human genome, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, NHGRI, NISC">
-    <TITLE>ENCODE Project at UCSC: Data Release Policy</TITLE>
-    <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title></title>
+        <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+        <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+    </head>
 
     <style type="text/css">
-        .hd0 { font-size: 120%; text-align: left; font-weight:bold; text-indent:.6em; height:2em;  }
-        .hd1 { font-size: 115%; text-align: left; font-weight:bold; text-indent:.18em; height:1.5em; }
-        .hd2 { font-size: 100%; text-align: left; font-weight:bold; text-indent:.1em; }
-        .virtual { height: 2.1em; }
-        .contentTbl { border: 1px solid #888888; background-color: #fffee8; width: 100%; }
-        .content { background-color: #fffee8; padding:0em .9em 1.2em; margin: 0; }
-        .itemTbl { border: 1px solid #000088; background-color: #FFFEE8; }
-        .ltBlue { background-color: #D9E4F8; }
-        .buttonLink { width:100px; }
-        .right { position:absolute; right:0px; }
+      .hd2 { font-size: 100%; text-align: left; font-weight:bold; text-indent:.1em; }
+      .itemTbl { border: 1px solid #000088; }
+      .ltBlue { background-color: #D9E4F8; }
+      .buttonLink { width:100px; }
+      .right { position:absolute; right:50px; }
     </style>
-  </HEAD>
-
-  <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
-  <A NAME="TOP"></A>
-
-    <!-- Header Images and links -->
-    <div class='hd0'>
-        <A HREF="http://www.genome.gov/10005107" TARGET=_BLANK><IMG SRC="../images/ENCODE_scaleup_logo.png" height=50 ALT="ENCODE Project at NHGRI"></A>
-        &nbsp;
-        <A HREF="/encode/"><IMG SRC="../images/encodeDcc.jpg" ALT="ENCODE Data Coordination Center at UCSC"></A>
-        <div class='virtual'><!--#include virtual="../inc/encode.topbar.html"--></div>
-    <div>
-
-    <!-- Content table -->
-    <TABLE class='contentTbl' BORDER="0" CELLSPACING="0" CELLPADDING="0">
-        <TR>
-            <TD class='ltBlue hd1'>&nbsp; Mouse ENCODE Downloads</TD></TR>
-        <TR><TD class='content'>
+    
+    <body>
+      <!--#include virtual="/inc/encodeProject.topbar.html"-->
+      
+      <div class="encodeHeader">
+        <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+        <span class="txt">Mouse Downloads</span>
+      </div>
+      <div class="wrapper">
+        <div class="bar"><h4 class="title">Overview</h4></div>
+          <div class="content">
             <P>This page contains links to directories containing raw and processed
             data for mouse ENCODE data produced as part of the ENCODE production phase
             (September 2007-present). Formats are described on the UCSC Browser
             <A HREF="/FAQ/FAQformat.html" TARGET=_blank>File Format FAQ</A>. For bulk download, retrieval by
             <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/" TARGET=_blank>FTP</A>
             is recommended. All files here are covered by the
-            <A HREF="/ENCODE/terms.html" TARGET=_BLANK>ENCODE data release policy</A>.</P>
+            <A HREF="/ENCODE/terms.html" TARGET=_BLANK>ENCODE data release policy</A>.
+            </P>
+          </div><!--end content-->
+      </div><!--end wrapper-->
 
-            Preview of unreleased data for download is available from the
-            <A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/mm9/encodeDCC/" TARGET=_blank>Test download server</A>
-            and by
-            <A HREF="ftp://encodeftp.cse.ucsc.edu/pipeline/mm9/" TARGET=_blank>FTP</A>.
-            Preview data is made available with the warning that it has not yet been reviewed by UCSC for
-            correctness and is subject to change at any time.</P>
+       <div class="wrapper">
+         <div class="bar"><h4 class="title"><a
+              href="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/"
+              title="Click to see files directory for mouse (mm9)">Mouse Genome Build NCBI37/mm9</A>
+             <input type='button' class='buttonLink right' value='File search' onclick="window.location='../cgi-bin/hgFileSearch?db=mm9';"
+                  title='Search for downloadable files ...'></h4>
+         </div>
+         <div class="content">
+           <p>
 
-            <!-- Item tables -->
-            <div style='position:relative; width:36.8em; height:1.8em;'>
-            <A NAME="mm9"><A class='hd1' HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/encodeDCC/" TARGET=_BLANK>Mouse Genome Build NCBI37/mm9</A></A>
-            <input type='button' class='buttonLink right' value='File search' onclick="window.location='../cgi-bin/hgFileSearch?db=mm9';" title='Search for downloadable files ...'>
-            </div>
             <TABLE class='itemTbl' BORDER=1 CELLSPACING=0>
-
                 <TR>
                     <td class='ltBlue hd2' colspan=2>Bidirectional Promoters</td>
                 </TR>
@@ -161,9 +150,10 @@
                     <TD>Mapability or Uniqueness of Reference Genome from ENCODE</TD>
                 </TR>     
             </TABLE>
-        </TD></TR>
-    </TABLE>
-
-  </BODY>
+           </p>
+         </div><!--end content-->
+       </div><!--end wrapper-->
+</BODY>
 </HTML>
+
 

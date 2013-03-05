@@ -9,6 +9,7 @@
 #include "bPlusTree.h"
 #include "twoBit.h"
 #include "udc.h"
+#include "net.h"
 #include <limits.h>
 
 /* following are the wrap functions for the UDC and stdio functoins
@@ -427,10 +428,13 @@ return tbf;
 }
 
 
-struct twoBitFile *twoBitOpenExt(char *fileName, boolean useUdc)
+struct twoBitFile *twoBitOpen(char *fileName)
 /* Open file, read in header and index.  
  * Squawk and die if there is a problem. */
 {
+boolean useUdc = FALSE;
+if (hasProtocol(fileName))
+    useUdc = TRUE;
 struct twoBitFile *tbf = twoBitOpenReadHeader(fileName, useUdc);
 struct twoBitIndex *index;
 boolean isSwapped = tbf->isSwapped;
@@ -452,13 +456,6 @@ for (i=0; i<tbf->seqCount; ++i)
     }
 slReverse(&tbf->indexList);
 return tbf;
-}
-
-struct twoBitFile *twoBitOpen(char *fileName)
-/* Open stdio file, read in header and index.  
- * Squawk and die if there is a problem. */
-{
-return twoBitOpenExt(fileName, FALSE);
 }
 
 struct twoBitFile *twoBitOpenExternalBptIndex(char *twoBitName, char *bptName)
@@ -588,10 +585,10 @@ twoBit->data = needLargeMem(packByteCount);
 return twoBit;
 }
 
-struct twoBit *twoBitFromFileExt(char *fileName, boolean useUdc)
+struct twoBit *twoBitFromFile(char *fileName)
 /* Get twoBit list of all sequences in twoBit file. */
 {
-struct twoBitFile *tbf = twoBitOpenExt(fileName, useUdc);
+struct twoBitFile *tbf = twoBitOpen(fileName);
 struct twoBitIndex *index;
 struct twoBit *twoBitList = NULL;
 
@@ -604,12 +601,6 @@ for (index = tbf->indexList; index != NULL; index = index->next)
 twoBitClose(&tbf);
 slReverse(&twoBitList);
 return twoBitList;
-}
-
-struct twoBit *twoBitFromFile(char *fileName)
-/* Get twoBit list of all sequences in twoBit file. */
-{
-return twoBitFromFileExt(fileName, FALSE);
 }
 
 void twoBitFree(struct twoBit **pTwoBit)
@@ -852,7 +843,7 @@ for (index = tbf->indexList; index != NULL; index = index->next)
 return totalSize;
 }
 
-struct dnaSeq *twoBitLoadAllExt(char *spec, boolean useUdc)
+struct dnaSeq *twoBitLoadAll(char *spec)
 /* Return list of all sequences matching spec, which is in
  * the form:
  *
@@ -864,7 +855,7 @@ struct dnaSeq *twoBitLoadAllExt(char *spec, boolean useUdc)
  *     seqName:start-end */
 {
 struct twoBitSpec *tbs = twoBitSpecNew(spec);
-struct twoBitFile *tbf = twoBitOpenExt(tbs->fileName, useUdc);
+struct twoBitFile *tbf = twoBitOpen(tbs->fileName);
 struct dnaSeq *list = NULL;
 if (tbs->seqs != NULL)
     {
@@ -885,15 +876,10 @@ twoBitSpecFree(&tbs);
 return list;
 }
 
-struct dnaSeq *twoBitLoadAll(char *spec)
-{
-return twoBitLoadAllExt(spec, FALSE);
-}
-
-struct slName *twoBitSeqNamesExt(char *fileName, boolean useUdc)
+struct slName *twoBitSeqNames(char *fileName)
 /* Get list of all sequences in twoBit file. */
 {
-struct twoBitFile *tbf = twoBitOpenExt(fileName, useUdc);
+struct twoBitFile *tbf = twoBitOpen(fileName);
 struct twoBitIndex *index;
 struct slName *name, *list = NULL;
 for (index = tbf->indexList; index != NULL; index = index->next)
@@ -906,15 +892,12 @@ slReverse(&list);
 return list;
 }
 
-struct slName *twoBitSeqNames(char *fileName)
-/* Get list of all sequences in twoBit file. */
-{
-return twoBitSeqNamesExt(fileName, FALSE);
-}
-
-boolean twoBitIsFileExt(char *fileName, boolean useUdc)
+boolean twoBitIsFile(char *fileName)
 /* Return TRUE if file is in .2bit format. */
 {
+boolean useUdc = FALSE;
+if (hasProtocol(fileName))
+    useUdc = TRUE;
 struct twoBitFile *tbf = getTbfAndOpen(fileName, useUdc);
 boolean isSwapped;
 boolean isTwoBit = twoBitSigRead(tbf, &isSwapped);
@@ -922,12 +905,6 @@ boolean isTwoBit = twoBitSigRead(tbf, &isSwapped);
 (*tbf->ourClose)(&tbf->f);
 
 return isTwoBit;
-}
-
-boolean twoBitIsFile(char *fileName)
-/* Return TRUE if file is in .2bit format. */
-{
-return twoBitIsFileExt(fileName, FALSE);
 }
 
 boolean twoBitParseRange(char *rangeSpec, char **retFile, 
