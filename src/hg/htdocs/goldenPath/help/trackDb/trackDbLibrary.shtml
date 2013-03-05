@@ -4340,7 +4340,7 @@ for each cell associated with the particular TF binding location.</P>
     the same type for its children.  If the user subsequently makes a subtrack
     setting, it will override the inherited setting for that one
     subtrack.<BR><BR>
-    An anomaly within the inheritance scheme is the "<code>visiblity</code>" (display mode) 
+    An anomaly within the inheritance scheme is the "<code>visibility</code>" (display mode) 
     setting.  Unlike other settings, visibility is cumulatively restrictive from the
     supertrack level.  That is, if the parent has a visibility of  "<code>dense</code>" and the 
     child's visibility is
