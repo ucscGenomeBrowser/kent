@@ -13,26 +13,27 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen val desiredVal\n");
 }
 
-void freen(char *input, char *desiredOutput)
+struct thisAndThat
+   {
+   struct thisAndThat *next;
+   char *this;
+   int that;
+   boolean and;
+   };
+
+
+void freen(char *input)
 /* Test some hair-brained thing. */
 {
-struct lineFile *lf = lineFileOpen(input, TRUE);
-char *row[12];
-struct bed *bed;
-AllocVar(bed);
-while (lineFileNextRow(lf, row, ArraySize(row)))
-    {
-    printf("%d %s\n", lf->lineIx, row[3]);
-    // bed = bedLoad12(row);
-    loadAndValidateBed(row, 12, 12, lf, bed, NULL, FALSE);
-    }
+struct thisAndThat tat = {.this = "Hello", .and=FALSE};
+printf(".next=%p .this = %s, that = %d, and = %d\n", tat.next, tat.this, tat.that, tat.and);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+if (argc != 2)
     usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 return 0;
 }
