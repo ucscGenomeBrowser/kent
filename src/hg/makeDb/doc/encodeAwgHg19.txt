@@ -221,8 +221,8 @@ cat  << 'EOF' > link.csh
 
     # unzip and rename to UCSC style : wgEncodeAwgTfbs<lab><cell><antibody>[<treatment>]UniPk.narrowPeak
     # load table
-    # zip and md5sum
     # create trackDb and metaDb entries
+    # zip and md5sum
     # save cellType and antibody targets for subGroups at the end
 
 cat > nameTable.csh << 'EOF'
@@ -242,12 +242,8 @@ cat > loadOne.csh << 'EOF'
     set exp = $2
     set outdir = $3
     set base = $4
+    set table = `csh nameTable.csh $base $exp`
 
-    set vars = `echo $exp | \
-        sed -e 's/Control.*AlnRep1//' -e 's/StdAlnRep1//' -e 's/AlnRep1//' -e 's/wgEncode//' \
-            -e 's/Tfbs//' -e 's/BroadHistone/Broad/' -e 's/OpenChromChip/Uta/'`
-
-    set table = ${base}${vars}UniPk
     hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable \
                 -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable \
                 -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $table $infile
@@ -366,11 +362,19 @@ cat > metaOne.csh << 'EOF'
         echo "ERROR: $exp"
         continue
     endif
-
     set controlId = $meta[1]
+
     # the 'control' term is used In SYDH, but not HAIB
     if ($#meta == 2) then
         set control = $meta[2]
+    endif
+
+    # finally, the DCC accession
+    set accession = "X"
+    set meta = `mdbPrint hg19 -obj=$exp | \
+                    raToTab stdin -cols=dccAccession stdout`
+    if ($status == 0) then
+        set accession = $meta
     endif
 
     echo "$table :  $exp $lab $cell $antibody $treatment $controlId"
@@ -388,22 +392,22 @@ cat > metaOne.csh << 'EOF'
     echo "composite $composite" >> $metaDb
     echo "dataType ChipSeq" >> $metaDb
     echo "dataVersion ENCODE Mar 2012 Freeze" >> $metaDb
-    #echo "dccAccession X" >> $metaDb
+    echo "dccAccession $accession" >> $metaDb
     echo "project wgEncode" >> $metaDb
     echo "tableName $table" >> $metaDb
     echo "fileName $table.narrowPeak.gz" >> $metaDb
-    #echo "md5sum $md5sum" >> $metaDb
     echo "view Peaks" >> $metaDb
     echo "" >> $metaDb
 'EOF'
 
-cat > zipOne.csh << 'EOF'
-    # rename and gzip
-    #set outfile = $outdir/${table}.narrowPeak
-    # copy file, load, and gzip for downloads
-    #echo cp -p $infile $outfile
-    #gzip $f
-    #set md5sum = `md5sum $f.gz | awk '{print $1}'`
+cat > renameOne.csh << 'EOF'
+    # rename files based on generated table names
+    set exp = $1
+    set base = $2
+    set infile = $3
+    set outdir = $4
+    set table = `csh nameTable.csh $base $exp`
+    cp -p $infile $outdir/$table.narrowPeak.gz
 'EOF'
 
 
@@ -414,7 +418,8 @@ cat > loadTfbs.csh << 'EOF'
     set base = wgEncodeAwgTfbs
     set composite = ${base}Uniform
 
-    set outdir = narrowPeak
+    set outdir = downloads
+    rm -f $outdir
     mkdir -p $outdir
 
     @ ct = 1
@@ -427,9 +432,9 @@ cat > loadTfbs.csh << 'EOF'
         echo "${ct} Track $exp composite=$composite base=$base infile=$infile ctrl=$ctrl"
         @ ct++
         # csh loadOne.csh $infile $exp $outdir $base
-        #csh trackOne.csh $exp $composite $base cells.txt factors.txt 
-        csh metaOne.csh $exp $composite $base
-
+        # csh trackOne.csh $exp $composite $base cells.txt factors.txt 
+        # csh metaOne.csh $exp $composite $base
+        csh renameOne.csh $exp $base $infile $outdir
     end
 'EOF'
 
