@@ -20137,4 +20137,72 @@ TMPDIR=/scratch/tmp
     cat fb.panTro4.chainHg19Link.txt
 #2773561724 bases of 2902338967 (95.563%) in intersection
 
+
+#############################################################################
+# LASTZ Gibbon NomLeu3 (DONE - Wed Mar  6 12:20:39 PST 2013 - Pauline)
+
+    mkdir /hive/data/genomes/hg19/bed/lastzNomLeu3.2013-03-06
+    cd /hive/data/genomes/hg19/bed/lastzNomLeu3.2013-03-06
+
+    cat << '_EOF_' > DEF
+# human vs gibbon
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Gibbon nomLeu3
+SEQ2_DIR=/hive/data/genomes/nomLeu3/nomLeu3.2bit
+SEQ2_LEN=/hive/data/genomes/nomLeu3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg19/bed/lastzNomLeu3.2013-03-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #   establish a screen to control this job
+    screen -S lastz
+
+XXX Wed Mar  6 12:28:53 PST 2013
+    /usr/bin/time -p nice doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        >& do.log &
+    #   real    724m15s
+    cat fb.hg19.chainNomLeu3Link.txt
+    #   2543943556 bases of 2897316137 (87.803%) in intersection
+
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzNomLeu3.2013-03-06 lastz.nomLeu3
+
+    #   running the swap - DONE - 2013-03-06
+    mkdir /hive/data/genomes/nomLeu3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/nomLeu3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzNomLeu3.2013-03-06/DEF \
+        -swap -syntenicNet \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > swap.log 2>&1 &
+    #   real     69m27s
+    cat fb.nomLeu3.chainHg19Link.txt
+    #   2480558770 bases of 2756591777 (89.986%) in intersection
+
+
 ##############################################################################
