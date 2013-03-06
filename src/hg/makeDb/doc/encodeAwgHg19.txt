@@ -371,16 +371,17 @@ cat > metaOne.csh << 'EOF'
     # the 'control' term is used In SYDH, but not HAIB
     if ($#meta == 2) then
         set control = $meta[2]
-    else
-        set control = "n/a"
     endif
 
-    echo "$table :  $exp $lab $cell $antibody $treatment $controlId $control"
+    echo "$table :  $exp $lab $cell $antibody $treatment $controlId"
     echo "metaObject $table" >> $metaDb
     echo "objType table" >> $metaDb
     echo "cell $cell" >> $metaDb
+    echo "target $factor" >> $metaDb
     echo "antibody $antibody" >> $metaDb
-    echo "control $control" >> $metaDb
+    if ($?control) then
+        echo "control $control" >> $metaDb
+    endif
     echo "controlId $controlId" >> $metaDb
     echo "lab $lab" >> $metaDb
     echo "treatment $treatment" >> $metaDb
@@ -426,8 +427,8 @@ cat > loadTfbs.csh << 'EOF'
         echo "${ct} Track $exp composite=$composite base=$base infile=$infile ctrl=$ctrl"
         @ ct++
         # csh loadOne.csh $infile $exp $outdir $base
-        csh trackOne.csh $exp $composite $base cells.txt factors.txt 
-        # csh metaOne.csh $exp $composite $base
+        #csh trackOne.csh $exp $composite $base cells.txt factors.txt 
+        csh metaOne.csh $exp $composite $base
 
     end
 'EOF'
@@ -445,7 +446,7 @@ cat > loadTfbs.csh << 'EOF'
     sort cells.txt | uniq | sed 's/$/ \\/' > cells.uniq.txt
     # insert above as subGroups in trackDb
 
-    gre track wgEncodeAwgTfbsUniform.ra
+    grep track wgEncodeAwgTfbsUniform.ra
     grep metaObject wgEncodeAwgTfbsUniform.metaDb.ra | wc -l
     # 707
     wc -l partial.table
@@ -461,15 +462,26 @@ cat > loadTfbs.csh << 'EOF'
     # note: raToTab and google spreadsheet greatly help with 17-char shortLabel adjustment
     # We could use a tabToRa too...
 
-    mdbUpdate hg19 wgEncodeAwgTfbsUniform.ra
     # INVALID cv lookup: control = 'n/a' not found. in obj: wgEncodeAwgTfbsUtaK562CtcfUniPk
     # 274 of these 
     # INVALID cv lookup: antibody = 'Pol2(b)' DEPRECATED. in obj: wgEncodeAwgTfbsBroadHelas3Pol2bUniPk
     # 4 of these
     pushd $trackDb/human/hg19/metaDb/alpha
-    mdbPrint hg19 -vars="composite=wgEncodeAwgTfbsUniform" > wgEncodeAwgTfbsUniform.ra
+    mdbUpdate -delete hg19 -composite=wgEncodeAwgTfbsUniform.ra
+    mdbUpdate hg19 wgEncodeAwgTfbsUniform.ra
+    # 707 (note -- need to remove UChicago)
+    mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.ra
     git add wgEncodeAwgTfbsUniform.ra  # commit
 
+    # grab track description from previous version on the Analysis hub
+    # - edit for conformance to browser style
+    # - update with new counts for cell types, etc.
+    # - have Anshul review
+    mkdir html
+    cd html
+    wget -nd -np http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html
+    cp uniformTfbs.html ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeAwgTfbsUniform.html
+    cd ..
 
 
 
