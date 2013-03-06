@@ -175,46 +175,61 @@ taxId 9669
         -continue=trackDb -forceDescription -dbHost=hgwdev musFur1.config.ra
 
 ##########################################################################
-# running repeat masker (WORKING - 2013-03-05 - Hiram)
+# running repeat masker (DONE - 2013-03-05 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/repeatMasker
     cd /hive/data/genomes/musFur1/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek musFur1 > do.log 2>&1 &
-XXX - running - Tue Mar  5 10:13:56 PST 2013
-    #   real    116m3.942s
+    #   real    843m37.578s
 
     cat faSize.rmsk.txt
-# 885550958 bases (238182824 N's 647368134 real 558171034 upper 89197100 lower)
-#       in 25006 sequences in 1 files
-# Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-#       max 4695893 (GL476399) median 8272
-# %10.07 masked total, %13.78 masked real
+    #   2410758013 bases (132851443 N's 2277906570 real 1390898176 upper
+    #   887008394 lower) in 7741 sequences in 1 files
+    #   Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
+    #      max 52375790 (GL896898) median 1445
+    #   %36.79 masked total, %38.94 masked real
 
     egrep -i "versi|relea" do.log
-#    April 26 2011 (open-3-3-0) version of RepeatMasker
-# CC   RELEASE 20110920;
-# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+    #    January 10 2013 (open-4-0-0) version of RepeatMasker
+    #       CC   RELEASE 20120418;
 
     featureBits -countGaps musFur1 rmsk
-    #   89259257 bases of 885550958 (10.080%) in intersection
+    #   887930078 bases of 2410758013 (36.832%) in intersection
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (WORKING - 2013-03-05 - Hiram)
+# running simple repeat (DONE - 2013-03-05 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/simpleRepeat
     cd /hive/data/genomes/musFur1/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	musFur1 > do.log 2>&1 &
-XXX - running - Tue Mar  5 10:15:04 PST 2013
-    #   real    53m17.048s
+    #   real    9m42.005s
 
     cat fb.simpleRepeat
-    #   72167005 bases of 647368134 (11.148%) in intersection
+    #   25005240 bases of 2277906570 (1.098%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/musFur1
+    twoBitMask musFur1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed musFur1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa musFur1.2bit stdout | faSize stdin > faSize.musFur1.2bit.txt
+    cat faSize.musFur1.2bit.txt
+
+    #   2410758013 bases (132851443 N's 2277906570 real 1389998131 upper
+    #   887908439 lower) in 7741 sequences in 1 files
+    #   Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
+    #   max 52375790 (GL896898) median 1445
+    #   %36.83 masked total, %38.98 masked real
+
+    rm /gbdb/musFur1/musFur1.2bit
+    ln -s `pwd`/musFur1.2bit /gbdb/musFur1/musFur1.2bit
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
@@ -241,85 +256,67 @@ XXX - running - Tue Mar  5 10:15:04 PST 2013
     #  109700 yes
 
 ##########################################################################
-## WINDOWMASKER (WORKING - 2013-03-05 - Hiram)
+## WINDOWMASKER (DONE - 2013-03-05 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/windowMasker
     cd /hive/data/genomes/musFur1/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev musFur1 > do.log 2>&1 &
-XXX - running - Tue Mar  5 10:19:42 PST 2013
-    #   real    84m58.718s
+    #   real    185m5.285s
 
     # Masking statistics
     cat faSize.musFur1.wmsk.txt
-    #   885550958 bases (238182824 N's 647368134 real 379325983
-    #   upper 268042151 lower) in 25006 sequences in 1 files
-    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-    #   max 4695893 (GL476399) median 8272
-    #   %30.27 masked total, %41.40 masked real
+    # 2410758013 bases (132851443 N's 2277906570 real 1575810421 upper
+    #   702096149 lower) in 7741 sequences in 1 files
+    # Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
+    #   max 52375790 (GL896898) median 1445
+    # %29.12 masked total, %30.82 masked real
 
     cat faSize.musFur1.wmsk.sdust.txt
-    #   885550958 bases (238182824 N's 647368134 real 372789139
-    #   upper 274578995 lower) in 25006 sequences in 1 files
-    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-    #   max 4695893 (GL476399) median 8272
-    #   %31.01 masked total, %42.41 masked real
+    #   2410758013 bases (132851443 N's 2277906570 real 1563711507 upper
+    #   714195063 lower) in 7741 sequences in 1 files
+    #   Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
+    #      max 52375790 (GL896898) median 1445
+    #   %29.63 masked total, %31.35 masked real
 
     cat faSize.musFur1.cleanWMSdust.txt
-    #   885550958 bases (238182824 N's 647368134 real 372789139
-    #   upper 274578995 lower) in 25006 sequences in 1 files
-    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-    #   max 4695893 (GL476399) median 8272
-    #   %31.01 masked total, %42.41 masked real
+    #   2410758013 bases (132851443 N's 2277906570 real 1563711507 upper
+    #   714195063 lower) in 7741 sequences in 1 files
+    #   Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
+    #   max 52375790 (GL896898) median 1445
+    #   %29.63 masked total, %31.35 masked real
 
     cat fb.musFur1.windowmaskerSdust.clean.txt
-    #   274578995 bases of 885550958 (31.007%) in intersection
+    #   714195063 bases of 2410758013 (29.625%) in intersection
 
     # how much does this window masker and repeat masker overlap:
     # can be done after rmsk is done.  The script will often
     #   fail on this command in the doLoad.csh if RM is not yet
     #   complete and these are running at the same time:
     featureBits -countGaps musFur1 rmsk windowmaskerSdust
-    #   32967187 bases of 1065292181 (3.095%) in intersection
+    #   453442864 bases of 2410758013 (18.809%) in intersection
 
     # if the script did fail on that command, finish it:
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-continue=cleanup -dbHost=hgwdev musFur1 > cleanup.log 2>&1 &
-    #   real    0m35.452s
+    #   real    1m43.905s
 
 ##########################################################################
-# add simpleRepeats to WindowMasker result (DONE - 2012-10-15 - Hiram)
-    # add to rmsk after it is done:
-    cd /hive/data/genomes/musFur1
-    twoBitMask -add bed/windowMasker/musFur1.cleanWMSdust.2bit \
-	bed/simpleRepeat/trfMask.bed musFur1.2bit
-
-    #	you can safely ignore the warning about fields >= 13
-    twoBitToFa musFur1.2bit stdout | faSize stdin > faSize.musFur1.2bit.txt
-    cat faSize.musFur1.2bit.txt
-    #   885550958 bases (238182824 N's 647368134 real 372434798
-    #   upper 274933336 lower) in 25006 sequences in 1 files
-    #   Total size: mean 35413.5 sd 103879.7 min 61 (GL501025)
-    #   max 4695893 (GL476399) median 8272
-    #   %31.05 masked total, %42.47 masked real
-
-    rm /gbdb/musFur1/musFur1.2bit
-    ln -s `pwd`/musFur1.2bit /gbdb/musFur1/musFur1.2bit
-
-##########################################################################
-# cpgIslands - (DONE - 2012-10-15 - Hiram)
+# cpgIslands - (DONE - 2013-03-06 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/cpgIslands
     cd /hive/data/genomes/musFur1/bed/cpgIslands
     time doCpgIslands.pl musFur1 > do.log 2>&1
+XXX - running - Wed Mar  6 09:23:10 PST 2013
     #   real    27m18.237s
 
     cat fb.musFur1.cpgIslandExt.txt
     #   39998562 bases of 647368134 (6.179%) in intersection
 
 #########################################################################
-# genscan - (DONE - 2012-10-15 - Hiram)
+# genscan - (DONE - 2013-03-06 - Hiram)
     mkdir /hive/data/genomes/musFur1/bed/genscan
     cd /hive/data/genomes/musFur1/bed/genscan
     time doGenscan.pl musFur1 > do.log 2>&1
+XXX - running - Wed Mar  6 09:23:10 PST 2013
     #   real    33m41.740s
 
     cat fb.musFur1.genscan.txt
@@ -328,29 +325,25 @@ XXX - running - Tue Mar  5 10:19:42 PST 2013
     #   23439935 bases of 647368134 (3.621%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-10-16 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-03-06 - Hiram)
     # Use -repMatch=400, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 885550958 / 2897316137 \) \* 1024
-    #   ( 885550958 / 2897316137 ) * 1024 = 312.980751
+    calc \( 2277906570 / 2897316137 \) \* 1024
+    #   ( 2277906570 / 2897316137 ) * 1024 = 805.081744
 
-    # round up to 350 (petMar1 was 200)
+    # round up to 350
 
     cd /hive/data/genomes/musFur1
     time blat musFur1.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=jkStuff/musFur1.11.ooc -repMatch=350
-    #   Wrote 15692 overused 11-mers to jkStuff/musFur1.11.ooc
-    #   real    1m58.096s
+    #   Wrote 152295 overused 11-mers to jkStuff/musFur1.11.ooc
+    #   real    0m59.156s
 
     # there are no non-bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" musFur1 | sort | uniq -c
-    #   48808 yes
-#    cd /hive/data/genomes/musFur1/jkStuff
-#    gapToLift musFur1 musFur1.nonBridged.lift -bedFile=musFur1.nonBridged.bed
-    # largest non-bridged contig:
-#    awk '{print $3-$2,$0}' musFur1.nonBridged.bed | sort -nr | head
-    #   123773608 chrX  95534   123869142       chrX.01
+    #   109700 yes
+    # find other make doc where gapToLift is used to make nonBridged.bed file
 
 #########################################################################
 # AUTO UPDATE GENBANK (DONE - 2012-10-16 - Hiram)
@@ -358,7 +351,8 @@ XXX - running - Tue Mar  5 10:19:42 PST 2013
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Petromyzon marinus      1072    120732  0
+# Mustela putorius        9       0       0
+# Mustela putorius furo   122937  4210    0
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
     ssh hgwdev
