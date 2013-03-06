@@ -114,9 +114,7 @@ bbi->definedFieldCount = udcReadBits16(udc, isSwapped);
 bbi->asOffset = udcReadBits64(udc, isSwapped);
 bbi->totalSummaryOffset = udcReadBits64(udc, isSwapped);
 bbi->uncompressBufSize = udcReadBits32(udc, isSwapped);
-
-/* Skip over reserved area. */
-udcSeek(udc, 64);
+bbi->extensionOffset = udcReadBits64(udc, isSwapped);
 
 /* Read zoom headers. */
 int i;
@@ -132,6 +130,15 @@ for (i=0; i<bbi->zoomLevels; ++i)
     }
 slReverse(&levelList);
 bbi->levelList = levelList;
+
+/* Deal with header extension if any. */
+if (bbi->extensionOffset != 0)
+    {
+    udcSeek(udc, bbi->extensionOffset);
+    bbi->extensionSize = udcReadBits16(udc, isSwapped);
+    bbi->extraIndexCount = udcReadBits16(udc, isSwapped);
+    bbi->extraIndexListOffset = udcReadBits64(udc, isSwapped);
+    }
 
 /* Attach B+ tree of chromosome names and ids. */
 udcSeek(udc, bbi->chromTreeOffset);
@@ -760,3 +767,17 @@ time_t bbiUpdateTime(struct bbiFile *bbi)
 struct udcFile *udc = bbi->udc;
 return udcUpdateTime(udc);
 }
+
+char *bbiCachedChromLookup(struct bbiFile *bbi, int chromId, int lastChromId,
+    char *chromBuf, int chromBufSize)
+/* Return chromosome name corresponding to chromId.  Because this is a bit expensive,
+ * if you are doing this repeatedly pass in the chromId used in the previous call to
+ * this in lastChromId,  which will save it from doing the lookup again on the same
+ * chromosome.  Pass in -1 to lastChromId if this is the first time or if you can't be
+ * bothered.  The chromBufSize should be at greater or equal to bbi->keySize+1.  */
+{
+if (chromId != lastChromId)
+    bptStringKeyAtPos(bbi->chromBpt, chromId, chromBuf, chromBufSize);
+return chromBuf;
+}
+

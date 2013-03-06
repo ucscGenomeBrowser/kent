@@ -5,10 +5,7 @@
 #include "hash.h"
 #include "options.h"
 #include "ra.h"
-#include "jksql.h"
-#include "trackDb.h"
-#include "hui.h"
-#include "rainbow.h"
+#include "basicBed.h"
 
 void usage()
 {
@@ -16,20 +13,27 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen val desiredVal\n");
 }
 
-void freen(char *input, char *desiredOutput)
+struct thisAndThat
+   {
+   struct thisAndThat *next;
+   char *this;
+   int that;
+   boolean and;
+   };
+
+
+void freen(char *input)
 /* Test some hair-brained thing. */
 {
-double a = atof(input);
-double desired = atof(desiredOutput);
-double exponent = log(desired)/log(a);
-printf("a = %g, desired = %g, a^%g = %g\n", a, desired, exponent, pow(a, exponent));
+struct thisAndThat tat = {.this = "Hello", .and=FALSE};
+printf(".next=%p .this = %s, that = %d, and = %d\n", tat.next, tat.this, tat.that, tat.and);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+if (argc != 2)
     usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 return 0;
 }

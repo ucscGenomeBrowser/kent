@@ -43,7 +43,7 @@ AllocVar(newAllele);
 newVariant->alleles = newAllele;
 newAllele->variant = newVariant;
 newAllele->length = allele->length - delRear - delFront;
-assert(newAllele->length > 0);
+assert(newAllele->length >= 0);
 newAllele->sequence = cloneString(&allele->sequence[delFront]);
 newAllele->sequence[newAllele->length] = 0;   // cut off delRear part
 
@@ -103,7 +103,12 @@ for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
 
     // this check probably not right, could be different per allele
     int alleleStringLength = strlen(thisAlleleString);
-    if (alleleStringLength != alleleLength)
+    if (sameString(thisAlleleString, "-") && alleleLength == 0)
+	{
+	alleleStringLength = 0;
+	thisAlleleString[0] = '\0';
+	}
+    else if (alleleStringLength != alleleLength)
 	{
 	if ( alleleStringLength < alleleLength)
 	    {

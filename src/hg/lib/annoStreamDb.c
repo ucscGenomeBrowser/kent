@@ -114,18 +114,6 @@ hFreeConn(&(self->conn));
 annoStreamerFree(pVSelf);
 }
 
-static int asColumnFindIx(struct asColumn *list, char *string)
-/* Return index of first element of asColumn list that matches string.
- * Return -1 if not found. */
-{
-struct asColumn *ac;
-int ix = 0;
-for (ac = list; ac != NULL; ac = ac->next, ix++)
-    if (sameString(string, ac->name))
-        return ix;
-return -1;
-}
-
 static boolean asHasFields(struct annoStreamDb *self, char *chromField, char *startField,
 			   char *endField)
 /* If autoSql def has all three columns, remember their names and column indexes and
