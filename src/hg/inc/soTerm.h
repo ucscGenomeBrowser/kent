@@ -1,19 +1,22 @@
-/* soterm.h --- Sequence Ontology terms and supporting data structures */
+/* soTerm.h --- Sequence Ontology terms and supporting data structures */
+
+// would be nice to more closely match Ensembl's subset of SO:
+// http://uswest.ensembl.org/info/docs/variation/predicted_data.html#consequences
 
 #ifndef SOTERM_H
 #define SOTERM_H
 
-enum 	// the various variant effects
+enum soTerm	// the various variant effects
     {
     regulatory_region_variant=1566,
     stop_retained_variant=1567,
     splice_acceptor_variant=1574,
     splice_donor_variant=1575,
-    Complex_transcript_variant=1577,
+    complex_transcript_variant=1577,
     stop_lost=1578,
     coding_sequence_variant=1580,
     initiator_codon_variant=1582,
-    missense=1583,
+    missense_variant=1583,
     stop_gained=1587,
     frameshift_variant=1589,
     nc_transcript_variant=1619,
@@ -27,35 +30,36 @@ enum 	// the various variant effects
     splice_region_variant=1630,
     upstream_gene_variant=1631,
     downstream_gene_variant=1632,
-    inframe_deletion=1651,
-    inframe_insertion=1652,
     TF_binding_site_variant=1782,
     non_coding_exon_variant=1792,
-    non_synonymous_variant=1818,
+    protein_altering_variant=1818,
     synonymous_variant=1819,
-    } soTerm;
+    inframe_insertion=1821,
+    inframe_deletion=1822,
+    };
 
 struct soCall  // a single variant effect call
     {
     struct soCall *next;
-    uint    soNumber;           // Sequence Ontology Number
+    char *transcript;		// ID of feature affected by this call
+    uint    soNumber;           // Sequence Ontology Number of effect
     union
 	{
 	struct codingChange     // (non)synonymous variant, deletions in CDS
 	    {
-	    char *transcript;
 	    uint exonNumber;
 
 	    // the next three should have a length specified too
-	    uint cDnaPosition;
-	    uint cdsPosition;
-	    uint pepPosition;
-	    char *aaChanges;
-	    char *codonChanges;
+	    uint cDnaPosition;		// offset of variant in transcript cDNA
+	    uint cdsPosition;		// offset of variant from transcript's cds start
+	    uint pepPosition;		// offset of variant in translated product
+	    char *aaOld;		// peptides, before change by variant (starting at pepPos)
+	    char *aaNew;		// peptides, changed by variant
+	    char *codonOld;		// codons, before change by variant (starting at cdsPos)
+	    char *codonNew;		// codons, changed by variant
 	    } codingChange;
 	struct     // intron_variant
 	    {
-	    char *transcript;
 	    uint intronNumber;
 	    } intron;
 	struct    // a generic variant
@@ -67,8 +71,12 @@ struct soCall  // a single variant effect call
 	    char    *soOther4;           // Ancillary detail 4
 	    char    *soOther5;           // Ancillary detail 5
 	    char    *soOther6;           // Ancillary detail 6
+	    char    *soOther7;           // Ancillary detail 7
 	    } generic;
 	} sub;
     };
+
+char *soTermToString(enum soTerm termNumber);
+/* Translate termNumber to its string equivalent.  Do not modify or free result. */
 
 #endif /* SOTERM_H */

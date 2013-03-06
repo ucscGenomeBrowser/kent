@@ -9,4 +9,8 @@ struct annoGrator *annoGratorGpVarNew(struct annoStreamer *mySource, boolean cds
  * on genes.  If cdsOnly is true, return only rows with effects on coding seq.
  * mySource becomes property of the new annoGrator. */
 
+struct gpFx *annoGratorGpVarGpFxFromRow(struct annoStreamer *gpVar, struct annoRow *row);
+// Turn the string array representation back into a real gpFx.
+// I know this is inefficient and am thinking about a better way.
+
 #endif /* ANNOGRATORGPVAR_H*/
