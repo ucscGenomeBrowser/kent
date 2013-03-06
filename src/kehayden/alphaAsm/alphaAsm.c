@@ -16,6 +16,7 @@ int pseudoCount = 1;
 int maxChainSize = 3;
 int initialOutSize = 10000;
 int maxOutSize;
+int maxToMiss = 0;
 boolean fullOnly = FALSE;
 
 void usage()
@@ -39,12 +40,13 @@ errAbort(
   "   -afterChain=fileName - Write out word chain after faux generation to file for debugging\n"
   "   -initialOutSize=N - Output this many words. Default %d\n"
   "   -maxOutSize=N - Expand output up to this many words if not all monomers output initially\n"
+  "   -maxToMiss=N - How many monomers may be missing from output. Default %d \n"
   "   -pseudoCount=N - Add this number to observed quantities - helps compensate for what's not\n"
   "                observed.  Default %d\n"
   "   -seed=N - Initialize random number with this seed for consistent results, otherwise\n"
   "             it will generate different results each time it's run.\n"
   "   -unsubbed=fileName - Write output before substitution of missing monomers to file\n"
-  , maxChainSize, initialOutSize, pseudoCount
+  , maxChainSize, initialOutSize, maxToMiss, pseudoCount
   );
 }
 
@@ -55,7 +57,8 @@ static struct optionSpec options[] = {
    {"afterChain", OPTION_STRING},
    {"fullOnly", OPTION_BOOLEAN},
    {"initialOutSize", OPTION_INT},
-   {"maxOUtSize", OPTION_INT},
+   {"maxOutSize", OPTION_INT},
+   {"maxToMiss", OPTION_INT},
    {"pseudoCount", OPTION_INT},
    {"seed", OPTION_INT},
    {"unsubbed", OPTION_STRING},
@@ -1616,10 +1619,10 @@ for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
     }
 }
 
-void alphaAsmOneSize(struct alphaStore *store, int outSize, char *outFile)
+struct dlList *alphaAsmOneSize(struct alphaStore *store, int outSize)
 /* alphaAsm - assemble alpha repeat regions such as centromeres from reads that have
  * been parsed into various repeat monomer variants.  Cycles of these variants tend to
- * form higher order repeats. */
+ * form higher order repeats. Returns list of outSize monomers. */
 {
 struct wordTree *wt = store->markovChains;
 alphaStoreNormalize(store, outSize);
@@ -1633,15 +1636,40 @@ if (optionExists("chain"))
 
 struct dlList *ll = wordTreeMakeList(store, store->maxChainSize, 
     pickWeightedRandomFromList(wt->children), outSize);
-writeMonomerList(outFile, ll);
-verbose(2, "Wrote primary output\n");
-dlListFree(&ll);
 
 if (optionExists("afterChain"))
     {
     char *fileName = optionVal("afterChain", NULL);
     wordTreeWrite(wt, store->maxChainSize, fileName);
     }
+
+return ll;
+}
+
+int countMissingMonomers(struct dlList *ll, struct monomer *monomerList)
+/* Set the outCounts in monomer list to match how often they occur in ll.
+ * Return number of monomers that do not occur at all in ll. */
+{
+/* Zero out output counts. */
+struct monomer *monomer;
+for (monomer = monomerList; monomer != NULL; monomer = monomer->next)
+    monomer->outCount = 0;
+
+/* Increase output count each time a monomer is used. */
+struct dlNode *node;
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    monomer = node->val;
+    monomer->outCount += 1;
+    }
+
+/* Count up unused. */
+int missing = 0;
+for (monomer = monomerList; monomer != NULL; monomer = monomer->next)
+    if (monomer->outCount == 0)
+        missing += 1;
+
+return missing;
 }
 
 void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
@@ -1669,7 +1697,35 @@ verbose(2, "Filled in missing types and integrated orphan ends\n");
 makeMarkovChains(store);
 verbose(2, "Made Markov Chains\n");
 
-alphaAsmOneSize(store, initialOutSize, outFile);
+/* Loop gradually increasing size of output we make until get to maxOutSize or until
+ * we generate output that includes all input monomers. */
+struct dlList *ll;
+int outSize = initialOutSize;
+while (outSize <= maxOutSize)
+    {
+    ll = alphaAsmOneSize(store, outSize);
+    assert(outSize == dlCount(ll));
+    int missing = countMissingMonomers(ll, store->monomerList);
+    if (missing <= maxToMiss)
+        break;
+    if (outSize == maxOutSize)
+	{
+	errAbort("Could not include all monomers. Missing %d.\n"
+	         "consider increasing maxOutSize (now %d) or increasing maxToMiss (now %d)",
+	         missing, maxOutSize, maxToMiss);
+        break;
+	}
+    dlListFree(&ll);
+    outSize *= 1.1;	/* Grow by 10% */
+    if (outSize > maxOutSize)
+        outSize = maxOutSize;
+    verbose(1, "%d missing. Trying again with outSize=%d (initialOutSize %d, maxOutSize %d)\n",
+	missing, outSize, initialOutSize, maxOutSize);
+    }
+    
+writeMonomerList(outFile, ll);
+verbose(2, "Wrote primary output\n");
+dlListFree(&ll);
 }
 
 
@@ -1685,6 +1741,7 @@ maxOutSize = optionInt("maxOutSize", initialOutSize);  // Defaults to same as in
 if (maxOutSize < initialOutSize)
     errAbort("maxOutSize (%d) needs to be bigger than initialOutSize (%d)\n", 
 	maxOutSize, initialOutSize);
+maxToMiss = optionInt("maxToMiss", maxToMiss);
 fullOnly = optionExists("fullOnly");
 pseudoCount = optionInt("pseudoCount", pseudoCount);
 int seed = optionInt("seed", 0);
