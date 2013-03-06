@@ -1666,7 +1666,7 @@ for (node = ll->head; !dlEnd(node); node = node->next)
 /* Count up unused. */
 int missing = 0;
 for (monomer = monomerList; monomer != NULL; monomer = monomer->next)
-    if (monomer->outCount == 0)
+    if (monomer->outCount == 0 && !sameString(monomer->word, ""))
         missing += 1;
 
 return missing;
