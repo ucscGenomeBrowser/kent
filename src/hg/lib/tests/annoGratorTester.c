@@ -8,6 +8,7 @@
 #include "annoStreamWig.h"
 #include "annoGrateWigDb.h"
 #include "annoFormatTab.h"
+#include "annoFormatVep.h"
 #include "dystring.h"
 #include "memalloc.h"
 #include "pgSnp.h"
@@ -28,6 +29,7 @@ static const char *vcfEx1 = "vcfEx1";
 static const char *vcfEx2 = "vcfEx2";
 static const char *bigBedToTabOut = "bigBedToTabOut";
 static const char *snpBigWigToTabOut = "snpBigWigToTabOut";
+static const char *vepOut = "vepOut";
 
 void usage()
 /* explain usage and exit */
@@ -47,9 +49,10 @@ errAbort(
     "    %s\n"
     "    %s\n"
     "    %s\n"
+    "    %s\n"
     , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong,
     snpConsDbToTabOutShort, snpConsDbToTabOutLong,
-    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut
+    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut, vepOut
     );
 }
 
@@ -89,10 +92,11 @@ else
 return streamer;
 }
 
-void dbToTabOut(struct streamerInfo *infoList, struct twoBitFile *tbf, char *outFile,
-		char *chrom, uint start, uint end, bool doGpFx)
-/* Get data from one or more database tables and print all fields to tab-sep output. */
+void sourcesFromInfoList(struct streamerInfo *infoList, bool doGpFx,
+			 struct annoStreamer **retPrimary, struct annoGrator **retGrators)
+/* Translate streamerInfo parameters into primary source and list of secondary sources. */
 {
+assert(infoList && retPrimary && retGrators);
 struct streamerInfo *primaryInfo = infoList;
 struct streamerInfo *gratorInfoList = infoList->next;
 struct annoStreamer *primary = streamerFromInfo(primaryInfo);
@@ -111,7 +115,7 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     else
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
-	if (doGpFx)
+	if (doGpFx && gratorList == NULL) //#*** doGpFx should not be applied to all grators!
 	    grator = annoGratorGpVarNew(src, FALSE);
 	else
 	    grator = annoGratorNew(src);
@@ -119,6 +123,18 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     slAddHead(&gratorList, grator);
     }
 slReverse(&gratorList);
+*retPrimary = primary;
+*retGrators = gratorList;
+}
+
+void dbToTabOut(struct streamerInfo *infoList, struct twoBitFile *tbf, char *outFile,
+		char *chrom, uint start, uint end, bool doGpFx)
+/* Get data from one or more database tables and print all fields to tab-sep output. */
+{
+struct streamerInfo *primaryInfo = infoList;
+struct annoStreamer *primary = NULL;
+struct annoGrator *gratorList = NULL;
+sourcesFromInfoList(infoList, doGpFx, &primary, &gratorList);
 struct annoFormatter *tabOut = annoFormatTabNew(outFile);
 //#*** If we're using db==NULL as a flag, we still need to get assembly name in there.... take from 2bit filename???
 char *assemblyName = primaryInfo->db ? primaryInfo->db : "hardcoded, Doh!";
@@ -149,7 +165,8 @@ if (!doAllTests)
 	sameString(argv[2], vcfEx1) ||
 	sameString(argv[2], vcfEx2) ||
 	sameString(argv[2], bigBedToTabOut) ||
-	sameString(argv[2], snpBigWigToTabOut))
+	sameString(argv[2], snpBigWigToTabOut) ||
+	sameString(argv[2], vepOut))
 	test = cloneString(argv[2]);
     else
 	{
@@ -271,6 +288,39 @@ if (doAllTests || sameString(test, snpBigWigToTabOut))
 				       arWig, NULL };
     snp135Info.next = &bigWigInfo;
     dbToTabOut(&snp135Info, tbf, "stdout", "chr21", 34716800, 34733700, FALSE);
+    }
+
+if (doAllTests || sameString(test, vepOut))
+    {
+    struct streamerInfo vepSamplePgSnp = { NULL, db, "test.vepSample", arWords,
+					   asParseFile("../pgSnp.as") };
+    struct streamerInfo kgInfo = { NULL, db, "ensGene", arWords,
+				   asParseFile("../genePredExt.as") };
+    struct streamerInfo snpInfo = { NULL, db, "snp135", arWords, asParseFile("../snp132Ext.as") };
+    vepSamplePgSnp.next = &kgInfo;
+    kgInfo.next = &snpInfo;
+    // Instead of dbToTabOut, we need to make a VEP config data structure and
+    // use it to create an annoFormatVep.
+    struct streamerInfo *primaryInfo = &vepSamplePgSnp;
+    struct annoStreamer *primary = NULL;
+    struct annoGrator *gratorList = NULL;
+    sourcesFromInfoList(primaryInfo, TRUE, &primary, &gratorList);
+    struct annoFormatVepConfig config = { primary,
+					  (struct annoStreamer *)gratorList,        // gpVar source
+					  ((struct annoStreamer *)gratorList)->next,// dbSNP source
+					  NULL				// no extra columns for now
+					};
+
+    struct annoFormatter *vepOut = annoFormatVepNew("stdout", &config);
+    //#*** If we're using db==NULL as a flag, we still need to get assembly name in there.... take from 2bit filename???
+    char *assemblyName = primaryInfo->db ? primaryInfo->db : "hardcoded, Doh!";
+    struct annoGratorQuery *query = annoGratorQueryNew(assemblyName, NULL, tbf,
+						       primary, gratorList, vepOut);
+    annoGratorQuerySetRegion(query, "chr1", 876900, 886920);
+    annoGratorQueryExecute(query);
+    annoGratorQuerySetRegion(query, "chr5", 135530, 145535);
+    annoGratorQueryExecute(query);
+    annoGratorQueryFree(&query);
     }
 
 return 0;

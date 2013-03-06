@@ -74,14 +74,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct bbNamedFileChunk 
-/* A name associated with an offset into a possibly large file. */
-    {
-    char *name;
-    bits64 offset;
-    bits64 size;
-    };
-
 int bbNamedFileChunkCmpByName(const void *va, const void *vb)
 /* Compare two named offset object to facilitate qsorting by name. */
 {
@@ -170,8 +162,6 @@ long sectionStartIx = 0, sectionEndIx = 0;
 
 for (;;)
     {
-    // ugly - code for bedN/bedP and as used to go here.
-
     /* Get next line of input if any. */
     if (lineFileNextReal(lf, &line))
 	{

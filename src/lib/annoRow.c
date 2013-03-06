@@ -102,4 +102,5 @@ for (row = *pList;  row != NULL;  row = nextRow)
     nextRow = row->next;
     annoRowFree(&row, source);
     }
+*pList = NULL;
 }

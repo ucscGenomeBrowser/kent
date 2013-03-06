@@ -356,8 +356,17 @@ void bbiChromUsageFree(struct bbiChromUsage **pUsage);
 void bbiChromUsageFreeList(struct bbiChromUsage **pList);
 /* free a list of bbiChromUsage structures */
 
+struct bbNamedFileChunk 
+/* A name associated with an offset into a possibly large file.  Used for extra
+ * indexes in bigBed files. */
+    {
+    char *name;	    /* Name of chunk. */
+    bits64 offset;  /* Start in file. */
+    bits64 size;    /* Size in file. */
+    };
+
 struct bbExIndexMaker
-/* A helper structure to make indexes beyond primary one */
+/* A helper structure to make indexes beyond primary one.  Just used for bigBeds */
     {
     bits16 indexCount;          /* Number of extra indexes. */
         /* Kind of wish next four fields,  all of which are arrays indexed

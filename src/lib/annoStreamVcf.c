@@ -14,8 +14,6 @@ struct annoStreamVcf
     int numCols;			// Number of columns in autoSql def of VCF.
     int numFileCols;			// Number of columns in VCF file.
     boolean isTabix;			// True if we are accessing compressed VCF via tabix index
-//#*** we need a way to pass the VCF header to the VCF formatter.
-//#*** streamer getHeader method??
 };
 
 
