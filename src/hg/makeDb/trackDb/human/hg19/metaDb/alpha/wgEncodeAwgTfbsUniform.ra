@@ -7,6 +7,7 @@ control std
 controlId wgEncodeEH002434
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002402
 fileName wgEncodeAwgTfbsBroadDnd41CtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -24,6 +25,7 @@ control std
 controlId wgEncodeEH002434
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003080
 fileName wgEncodeAwgTfbsBroadDnd41Ezh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -41,6 +43,7 @@ control std
 controlId wgEncodeEH000037
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000029
 fileName wgEncodeAwgTfbsBroadGm12878CtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -58,6 +61,7 @@ control std
 controlId wgEncodeEH000037
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002411
 fileName wgEncodeAwgTfbsBroadGm12878Ezh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -75,6 +79,7 @@ control std
 controlId wgEncodeEH000088
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002095
 fileName wgEncodeAwgTfbsBroadH1hescChd1a301218aUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -92,6 +97,7 @@ control std
 controlId wgEncodeEH000088
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000085
 fileName wgEncodeAwgTfbsBroadH1hescCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -109,6 +115,7 @@ control std
 controlId wgEncodeEH000088
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003082
 fileName wgEncodeAwgTfbsBroadH1hescEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -126,6 +133,7 @@ control std
 controlId wgEncodeEH000088
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002096
 fileName wgEncodeAwgTfbsBroadH1hescJarid1aab26049UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -143,6 +151,7 @@ control std
 controlId wgEncodeEH000088
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002087
 fileName wgEncodeAwgTfbsBroadH1hescRbbp5a300109aUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -160,6 +169,7 @@ control std
 controlId wgEncodeEH001013
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001012
 fileName wgEncodeAwgTfbsBroadHelas3CtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -177,6 +187,7 @@ control std
 controlId wgEncodeEH001013
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003086
 fileName wgEncodeAwgTfbsBroadHelas3Ezh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -194,6 +205,7 @@ control std
 controlId wgEncodeEH001013
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001021
 fileName wgEncodeAwgTfbsBroadHelas3Pol2bUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -211,6 +223,7 @@ control std
 controlId wgEncodeEH000084
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000080
 fileName wgEncodeAwgTfbsBroadHepg2CtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -228,6 +241,7 @@ control std
 controlId wgEncodeEH000084
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002416
 fileName wgEncodeAwgTfbsBroadHepg2Ezh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -245,6 +259,7 @@ control std
 controlId wgEncodeEH000093
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000075
 fileName wgEncodeAwgTfbsBroadHmecCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -262,6 +277,7 @@ control std
 controlId wgEncodeEH000093
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002412
 fileName wgEncodeAwgTfbsBroadHmecEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -279,6 +295,7 @@ control std
 controlId wgEncodeEH000119
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000110
 fileName wgEncodeAwgTfbsBroadHsmmCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -296,6 +313,7 @@ control std
 controlId wgEncodeEH000119
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002415
 fileName wgEncodeAwgTfbsBroadHsmmEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -313,6 +331,7 @@ control std
 controlId wgEncodeEH001001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001000
 fileName wgEncodeAwgTfbsBroadHsmmtCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -330,6 +349,7 @@ control std
 controlId wgEncodeEH001001
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003083
 fileName wgEncodeAwgTfbsBroadHsmmtEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -347,6 +367,7 @@ control std
 controlId wgEncodeEH000060
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000054
 fileName wgEncodeAwgTfbsBroadHuvecCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -364,6 +385,7 @@ control std
 controlId wgEncodeEH000060
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003084
 fileName wgEncodeAwgTfbsBroadHuvecEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -381,6 +403,7 @@ control std
 controlId wgEncodeEH000060
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000061
 fileName wgEncodeAwgTfbsBroadHuvecPol2bUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -398,6 +421,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002088
 fileName wgEncodeAwgTfbsBroadK562Chd1a301218aUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -415,6 +439,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000042
 fileName wgEncodeAwgTfbsBroadK562CtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -432,6 +457,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002089
 fileName wgEncodeAwgTfbsBroadK562Ezh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -449,6 +475,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002090
 fileName wgEncodeAwgTfbsBroadK562Hdac1sc6298UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -466,6 +493,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002091
 fileName wgEncodeAwgTfbsBroadK562Hdac2a300705aUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -483,6 +511,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003093
 fileName wgEncodeAwgTfbsBroadK562Hdac6a301341aUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -500,6 +529,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002086
 fileName wgEncodeAwgTfbsBroadK562P300UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -517,6 +547,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002092
 fileName wgEncodeAwgTfbsBroadK562Phf8a301772aUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -534,6 +565,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002085
 fileName wgEncodeAwgTfbsBroadK562Plu1UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -551,6 +583,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000053
 fileName wgEncodeAwgTfbsBroadK562Pol2bUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -568,6 +601,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002093
 fileName wgEncodeAwgTfbsBroadK562Rbbp5a300109aUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -585,6 +619,7 @@ control std
 controlId wgEncodeEH000052
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002094
 fileName wgEncodeAwgTfbsBroadK562Sap3039731UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -602,6 +637,7 @@ control std
 controlId wgEncodeEH001027
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001026
 fileName wgEncodeAwgTfbsBroadNhaCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -619,6 +655,7 @@ control std
 controlId wgEncodeEH001027
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002425
 fileName wgEncodeAwgTfbsBroadNhaEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -636,6 +673,7 @@ control std
 controlId wgEncodeEH001055
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001048
 fileName wgEncodeAwgTfbsBroadNhdfadCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -653,6 +691,7 @@ control std
 controlId wgEncodeEH001055
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002438
 fileName wgEncodeAwgTfbsBroadNhdfadEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -670,6 +709,7 @@ control std
 controlId wgEncodeEH000072
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000063
 fileName wgEncodeAwgTfbsBroadNhekCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -687,6 +727,7 @@ control std
 controlId wgEncodeEH000072
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002418
 fileName wgEncodeAwgTfbsBroadNhekEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -704,6 +745,7 @@ control std
 controlId wgEncodeEH000072
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000073
 fileName wgEncodeAwgTfbsBroadNhekPol2bUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -721,6 +763,7 @@ control std
 controlId wgEncodeEH000105
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000120
 fileName wgEncodeAwgTfbsBroadNhlfCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -738,6 +781,7 @@ control std
 controlId wgEncodeEH000105
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002422
 fileName wgEncodeAwgTfbsBroadNhlfEzh239875UniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -755,6 +799,7 @@ control std
 controlId wgEncodeEH001056
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001041
 fileName wgEncodeAwgTfbsBroadOsteoblCtcfUniPk.narrowPeak.gz
 lab Broad
 project wgEncode
@@ -771,6 +816,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002288
 fileName wgEncodeAwgTfbsHaibA549Atf3V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -787,6 +833,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002303
 fileName wgEncodeAwgTfbsHaibA549Bcl3V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -803,6 +850,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1668
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002323
 fileName wgEncodeAwgTfbsHaibA549Creb1sc240V0416102Dex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -819,6 +867,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL474
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001507
 fileName wgEncodeAwgTfbsHaibA549Ctcfsc5916Pcr1xDex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -835,6 +884,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL475
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001508
 fileName wgEncodeAwgTfbsHaibA549Ctcfsc5916Pcr1xEtoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -851,6 +901,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002289
 fileName wgEncodeAwgTfbsHaibA549Elf1V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -867,6 +918,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002290
 fileName wgEncodeAwgTfbsHaibA549Ets1V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -883,6 +935,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002310
 fileName wgEncodeAwgTfbsHaibA549Fosl2V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -899,6 +952,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2665
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002293
 fileName wgEncodeAwgTfbsHaibA549Foxa1V0416102Dex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -915,6 +969,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002294
 fileName wgEncodeAwgTfbsHaibA549GabpV0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -931,6 +986,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001490
 fileName wgEncodeAwgTfbsHaibA549GrPcr1xDex500pmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -947,6 +1003,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001491
 fileName wgEncodeAwgTfbsHaibA549GrPcr1xDex50nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -963,6 +1020,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001492
 fileName wgEncodeAwgTfbsHaibA549GrPcr1xDex5nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -979,6 +1037,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL247
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001555
 fileName wgEncodeAwgTfbsHaibA549GrPcr2xDex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -995,6 +1054,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002311
 fileName wgEncodeAwgTfbsHaibA549NrsfV0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1011,6 +1071,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002292
 fileName wgEncodeAwgTfbsHaibA549P300V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1027,6 +1088,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL335
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001494
 fileName wgEncodeAwgTfbsHaibA549Pol2Pcr2xDex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1043,6 +1105,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL307
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001493
 fileName wgEncodeAwgTfbsHaibA549Pol2Pcr2xEtoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1059,6 +1122,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002342
 fileName wgEncodeAwgTfbsHaibA549Sin3ak20V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1075,6 +1139,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002341
 fileName wgEncodeAwgTfbsHaibA549Six5V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1091,6 +1156,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002275
 fileName wgEncodeAwgTfbsHaibA549Taf1V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1107,6 +1173,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002312
 fileName wgEncodeAwgTfbsHaibA549Tcf12V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1123,6 +1190,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL474
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001509
 fileName wgEncodeAwgTfbsHaibA549Usf1Pcr1xDex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1139,6 +1207,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL475
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001539
 fileName wgEncodeAwgTfbsHaibA549Usf1Pcr1xEtoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1155,6 +1224,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002291
 fileName wgEncodeAwgTfbsHaibA549Usf1V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1171,6 +1241,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002282
 fileName wgEncodeAwgTfbsHaibA549Yy1cV0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1187,6 +1258,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6021
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002295
 fileName wgEncodeAwgTfbsHaibA549Zbtb33V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1203,6 +1275,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1882
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002300
 fileName wgEncodeAwgTfbsHaibEcc1CtcfcV0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1219,6 +1292,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1034
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002313
 fileName wgEncodeAwgTfbsHaibEcc1EraaV0416102Bpa1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1235,6 +1309,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1034
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001536
 fileName wgEncodeAwgTfbsHaibEcc1EralphaaV0416102Est10nm1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1251,6 +1326,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1034
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001575
 fileName wgEncodeAwgTfbsHaibEcc1EralphaaV0416102Gen1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1267,6 +1343,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1882
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001586
 fileName wgEncodeAwgTfbsHaibEcc1Foxa1sc6553V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1283,6 +1360,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1035
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001540
 fileName wgEncodeAwgTfbsHaibEcc1GrV0416102Dex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1299,6 +1377,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1882
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001572
 fileName wgEncodeAwgTfbsHaibEcc1Pol2V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1315,6 +1394,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002306
 fileName wgEncodeAwgTfbsHaibGm12878Atf2sc81188V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1331,6 +1411,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1613
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001562
 fileName wgEncodeAwgTfbsHaibGm12878Atf3Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1347,6 +1428,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001479
 fileName wgEncodeAwgTfbsHaibGm12878BatfPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1363,6 +1445,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001486
 fileName wgEncodeAwgTfbsHaibGm12878Bcl11aPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1379,6 +1462,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1613
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001658
 fileName wgEncodeAwgTfbsHaibGm12878Bcl3V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1395,6 +1479,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1395
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001563
 fileName wgEncodeAwgTfbsHaibGm12878Bclaf101388V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1411,6 +1496,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003212
 fileName wgEncodeAwgTfbsHaibGm12878Cebpbsc150V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1427,6 +1513,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001480
 fileName wgEncodeAwgTfbsHaibGm12878Ebf1sc137065Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1443,6 +1530,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1613
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001617
 fileName wgEncodeAwgTfbsHaibGm12878Elf1sc631V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1459,6 +1547,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1613
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001564
 fileName wgEncodeAwgTfbsHaibGm12878Ets1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1475,6 +1564,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002529
 fileName wgEncodeAwgTfbsHaibGm12878Foxm1sc502V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1491,6 +1581,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL217
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001462
 fileName wgEncodeAwgTfbsHaibGm12878GabpPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1507,6 +1598,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001484
 fileName wgEncodeAwgTfbsHaibGm12878Irf4sc6059Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1523,6 +1615,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1613
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001565
 fileName wgEncodeAwgTfbsHaibGm12878Mef2aPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1539,6 +1632,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1613
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001648
 fileName wgEncodeAwgTfbsHaibGm12878Mef2csc13268V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1555,6 +1649,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002329
 fileName wgEncodeAwgTfbsHaibGm12878Mta3sc81325V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1571,6 +1666,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002307
 fileName wgEncodeAwgTfbsHaibGm12878Nfatc1sc17834V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1587,6 +1683,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002343
 fileName wgEncodeAwgTfbsHaibGm12878Nficsc81335V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1603,6 +1700,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1394
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002314
 fileName wgEncodeAwgTfbsHaibGm12878NrsfPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1619,6 +1717,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001487
 fileName wgEncodeAwgTfbsHaibGm12878P300Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1635,6 +1734,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL678
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001489
 fileName wgEncodeAwgTfbsHaibGm12878Pax5c20Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1651,6 +1751,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL678
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001495
 fileName wgEncodeAwgTfbsHaibGm12878Pax5n19Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1667,6 +1768,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001477
 fileName wgEncodeAwgTfbsHaibGm12878Pbx3Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1683,6 +1785,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002308
 fileName wgEncodeAwgTfbsHaibGm12878Pmlsc71910V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1699,6 +1802,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001517
 fileName wgEncodeAwgTfbsHaibGm12878Pol24h8Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1715,6 +1819,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL217
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001463
 fileName wgEncodeAwgTfbsHaibGm12878Pol2Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1731,6 +1836,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001475
 fileName wgEncodeAwgTfbsHaibGm12878Pou2f2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1747,6 +1853,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001476
 fileName wgEncodeAwgTfbsHaibGm12878Pu1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1763,6 +1870,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1613
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001640
 fileName wgEncodeAwgTfbsHaibGm12878Rad21V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1779,6 +1887,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002330
 fileName wgEncodeAwgTfbsHaibGm12878Runx3sc101553V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1795,6 +1904,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1394
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001541
 fileName wgEncodeAwgTfbsHaibGm12878RxraPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1811,6 +1921,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1394
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001542
 fileName wgEncodeAwgTfbsHaibGm12878Six5Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1827,6 +1938,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001496
 fileName wgEncodeAwgTfbsHaibGm12878Sp1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1843,6 +1955,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL217
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001464
 fileName wgEncodeAwgTfbsHaibGm12878SrfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1859,6 +1972,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6022
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002321
 fileName wgEncodeAwgTfbsHaibGm12878Stat5asc74442V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1875,6 +1989,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001478
 fileName wgEncodeAwgTfbsHaibGm12878Taf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1891,6 +2006,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001485
 fileName wgEncodeAwgTfbsHaibGm12878Tcf12Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1907,6 +2023,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1394
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002315
 fileName wgEncodeAwgTfbsHaibGm12878Tcf3Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1923,6 +2040,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL217
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001468
 fileName wgEncodeAwgTfbsHaibGm12878Usf1Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1939,6 +2057,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1394
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001657
 fileName wgEncodeAwgTfbsHaibGm12878Yy1sc281Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1955,6 +2074,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001488
 fileName wgEncodeAwgTfbsHaibGm12878Zbtb33Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1971,6 +2091,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1394
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001645
 fileName wgEncodeAwgTfbsHaibGm12878Zeb1sc25388V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -1987,6 +2108,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001545
 fileName wgEncodeAwgTfbsHaibGm12891Pax5c20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2003,6 +2125,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001523
 fileName wgEncodeAwgTfbsHaibGm12891Pol24h8Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2019,6 +2142,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001522
 fileName wgEncodeAwgTfbsHaibGm12891Pol2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2035,6 +2159,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001520
 fileName wgEncodeAwgTfbsHaibGm12891Pou2f2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2051,6 +2176,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001521
 fileName wgEncodeAwgTfbsHaibGm12891Pu1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2067,6 +2193,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001524
 fileName wgEncodeAwgTfbsHaibGm12891Taf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2083,6 +2210,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001573
 fileName wgEncodeAwgTfbsHaibGm12891Yy1sc281V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2099,6 +2227,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1783
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001546
 fileName wgEncodeAwgTfbsHaibGm12892Pax5c20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2115,6 +2244,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001512
 fileName wgEncodeAwgTfbsHaibGm12892Pol24h8V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2131,6 +2261,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001511
 fileName wgEncodeAwgTfbsHaibGm12892Pol2V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2147,6 +2278,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001513
 fileName wgEncodeAwgTfbsHaibGm12892Taf1V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2163,6 +2295,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1783
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001609
 fileName wgEncodeAwgTfbsHaibGm12892Yy1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2179,6 +2312,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6018
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002316
 fileName wgEncodeAwgTfbsHaibH1hescAtf2sc81188V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2195,6 +2329,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001566
 fileName wgEncodeAwgTfbsHaibH1hescAtf3V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2211,6 +2346,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001527
 fileName wgEncodeAwgTfbsHaibH1hescBcl11aPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2227,6 +2363,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001649
 fileName wgEncodeAwgTfbsHaibH1hescCtcfsc5916V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2243,6 +2380,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001538
 fileName wgEncodeAwgTfbsHaibH1hescEgr1V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2259,6 +2397,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001660
 fileName wgEncodeAwgTfbsHaibH1hescFosl1sc183V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2275,6 +2414,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001534
 fileName wgEncodeAwgTfbsHaibH1hescGabpPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2291,6 +2431,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001659
 fileName wgEncodeAwgTfbsHaibH1hescHdac2sc6296V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2307,6 +2448,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001579
 fileName wgEncodeAwgTfbsHaibH1hescJundV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2323,6 +2465,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001635
 fileName wgEncodeAwgTfbsHaibH1hescNanogsc33759V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2339,6 +2482,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001498
 fileName wgEncodeAwgTfbsHaibH1hescNrsfV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2355,6 +2499,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001574
 fileName wgEncodeAwgTfbsHaibH1hescP300V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2371,6 +2516,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001514
 fileName wgEncodeAwgTfbsHaibH1hescPol24h8V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2387,6 +2533,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001499
 fileName wgEncodeAwgTfbsHaibH1hescPol2V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2403,6 +2550,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001636
 fileName wgEncodeAwgTfbsHaibH1hescPou5f1sc9081V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2419,6 +2567,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001593
 fileName wgEncodeAwgTfbsHaibH1hescRad21V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2435,6 +2584,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001560
 fileName wgEncodeAwgTfbsHaibH1hescRxraV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2451,6 +2601,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001530
 fileName wgEncodeAwgTfbsHaibH1hescSin3ak20Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2467,6 +2618,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001528
 fileName wgEncodeAwgTfbsHaibH1hescSix5Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2483,6 +2635,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001529
 fileName wgEncodeAwgTfbsHaibH1hescSp1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2499,6 +2652,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6018
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002302
 fileName wgEncodeAwgTfbsHaibH1hescSp2V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2515,6 +2669,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6018
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002317
 fileName wgEncodeAwgTfbsHaibH1hescSp4v20V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2531,6 +2686,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001533
 fileName wgEncodeAwgTfbsHaibH1hescSrfPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2547,6 +2703,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001500
 fileName wgEncodeAwgTfbsHaibH1hescTaf1V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2563,6 +2720,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001610
 fileName wgEncodeAwgTfbsHaibH1hescTaf7sc101167V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2579,6 +2737,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001531
 fileName wgEncodeAwgTfbsHaibH1hescTcf12Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2595,6 +2754,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6018
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003214
 fileName wgEncodeAwgTfbsHaibH1hescTead4sc101184V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2611,6 +2771,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001532
 fileName wgEncodeAwgTfbsHaibH1hescUsf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2627,6 +2788,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1398
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001567
 fileName wgEncodeAwgTfbsHaibH1hescYy1sc281V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2643,6 +2805,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3457
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001627
 fileName wgEncodeAwgTfbsHaibHct116Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2659,6 +2822,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3457
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001671
 fileName wgEncodeAwgTfbsHaibHct116Yy1sc281V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2675,6 +2839,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3457
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001672
 fileName wgEncodeAwgTfbsHaibHct116Zbtb33V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2691,6 +2856,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL592
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001504
 fileName wgEncodeAwgTfbsHaibHelas3GabpPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2707,6 +2873,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL592
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001629
 fileName wgEncodeAwgTfbsHaibHelas3NrsfPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2723,6 +2890,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL592
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001474
 fileName wgEncodeAwgTfbsHaibHelas3Pol2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2739,6 +2907,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL592
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001505
 fileName wgEncodeAwgTfbsHaibHelas3Taf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2755,6 +2924,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001568
 fileName wgEncodeAwgTfbsHaibHepg2Atf3V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2771,6 +2941,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001515
 fileName wgEncodeAwgTfbsHaibHepg2Bhlhe40V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2787,6 +2958,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3976
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002304
 fileName wgEncodeAwgTfbsHaibHepg2Cebpbsc150V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2803,6 +2975,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3976
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002305
 fileName wgEncodeAwgTfbsHaibHepg2Cebpdsc636V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2819,6 +2992,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001516
 fileName wgEncodeAwgTfbsHaibHepg2Ctcfsc5916V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2835,6 +3009,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001641
 fileName wgEncodeAwgTfbsHaibHepg2Elf1sc631V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2851,6 +3026,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001501
 fileName wgEncodeAwgTfbsHaibHepg2Fosl2V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2867,6 +3043,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1400
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001630
 fileName wgEncodeAwgTfbsHaibHepg2Foxa1sc101058V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2883,6 +3060,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1400
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001594
 fileName wgEncodeAwgTfbsHaibHepg2Foxa1sc6553V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2899,6 +3077,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001650
 fileName wgEncodeAwgTfbsHaibHepg2Foxa2sc6554V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2915,6 +3094,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL294
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001548
 fileName wgEncodeAwgTfbsHaibHepg2GabpPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2931,6 +3111,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001618
 fileName wgEncodeAwgTfbsHaibHepg2Hdac2sc6296V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2947,6 +3128,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1400
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001595
 fileName wgEncodeAwgTfbsHaibHepg2Hnf4asc8987V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2963,6 +3145,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001651
 fileName wgEncodeAwgTfbsHaibHepg2Hnf4gsc6558V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2979,6 +3162,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001470
 fileName wgEncodeAwgTfbsHaibHepg2JundPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -2995,6 +3179,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6019
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002318
 fileName wgEncodeAwgTfbsHaibHepg2Mbd4sc271530V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3011,6 +3196,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6019
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002344
 fileName wgEncodeAwgTfbsHaibHepg2Mybl2sc81192V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3027,6 +3213,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6019
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002319
 fileName wgEncodeAwgTfbsHaibHepg2Nficsc81335V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3043,6 +3230,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL294
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001549
 fileName wgEncodeAwgTfbsHaibHepg2NrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3059,6 +3247,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3976
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002263
 fileName wgEncodeAwgTfbsHaibHepg2NrsfV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3075,6 +3264,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001612
 fileName wgEncodeAwgTfbsHaibHepg2P300V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3091,6 +3281,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002278
 fileName wgEncodeAwgTfbsHaibHepg2Pol24h8V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3107,6 +3298,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL294
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001550
 fileName wgEncodeAwgTfbsHaibHepg2Pol2Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3123,6 +3315,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001608
 fileName wgEncodeAwgTfbsHaibHepg2Rad21V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3139,6 +3332,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001506
 fileName wgEncodeAwgTfbsHaibHepg2RxraPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3155,6 +3349,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001471
 fileName wgEncodeAwgTfbsHaibHepg2Sin3ak20Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3171,6 +3366,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1400
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001561
 fileName wgEncodeAwgTfbsHaibHepg2Sp1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3187,6 +3383,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6019
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002264
 fileName wgEncodeAwgTfbsHaibHepg2Sp2V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3203,6 +3400,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001611
 fileName wgEncodeAwgTfbsHaibHepg2SrfV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3219,6 +3417,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL294
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001551
 fileName wgEncodeAwgTfbsHaibHepg2Taf1Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3235,6 +3434,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1400
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001544
 fileName wgEncodeAwgTfbsHaibHepg2Tcf12Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3251,6 +3451,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6019
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002345
 fileName wgEncodeAwgTfbsHaibHepg2Tead4sc101184V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3267,6 +3468,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001472
 fileName wgEncodeAwgTfbsHaibHepg2Usf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3283,6 +3485,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1781
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001661
 fileName wgEncodeAwgTfbsHaibHepg2Yy1sc281V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3299,6 +3502,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001503
 fileName wgEncodeAwgTfbsHaibHepg2Zbtb33Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3315,6 +3519,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3976
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002296
 fileName wgEncodeAwgTfbsHaibHepg2Zbtb7aV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3331,6 +3536,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1106
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002298
 fileName wgEncodeAwgTfbsHaibHuvecPol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3347,6 +3553,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1106
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002297
 fileName wgEncodeAwgTfbsHaibHuvecPol2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3363,6 +3570,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001662
 fileName wgEncodeAwgTfbsHaibK562Atf3V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3379,6 +3587,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001570
 fileName wgEncodeAwgTfbsHaibK562Bcl3Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3395,6 +3604,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001571
 fileName wgEncodeAwgTfbsHaibK562Bclaf101388Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3411,6 +3621,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6023
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002383
 fileName wgEncodeAwgTfbsHaibK562Cbx3sc101004V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3427,6 +3638,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6023
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002346
 fileName wgEncodeAwgTfbsHaibK562Cebpbsc150V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3443,6 +3655,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1397
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002279
 fileName wgEncodeAwgTfbsHaibK562CtcfcPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3459,6 +3672,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001652
 fileName wgEncodeAwgTfbsHaibK562Ctcflsc98982V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3475,6 +3689,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1396
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001598
 fileName wgEncodeAwgTfbsHaibK562E2f6V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3491,6 +3706,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001646
 fileName wgEncodeAwgTfbsHaibK562Egr1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3507,6 +3723,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1396
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001619
 fileName wgEncodeAwgTfbsHaibK562Elf1sc631V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3523,6 +3740,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001580
 fileName wgEncodeAwgTfbsHaibK562Ets1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3539,6 +3757,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001637
 fileName wgEncodeAwgTfbsHaibK562Fosl1sc183V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3555,6 +3774,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001604
 fileName wgEncodeAwgTfbsHaibK562GabpV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3571,6 +3791,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001576
 fileName wgEncodeAwgTfbsHaibK562Gata2sc267Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3587,6 +3808,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1396
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001622
 fileName wgEncodeAwgTfbsHaibK562Hdac2sc6296V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3603,6 +3825,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1396
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001605
 fileName wgEncodeAwgTfbsHaibK562MaxV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3619,6 +3842,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001663
 fileName wgEncodeAwgTfbsHaibK562Mef2aV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3635,6 +3859,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6023
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002382
 fileName wgEncodeAwgTfbsHaibK562Nr2f2sc271940V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3651,6 +3876,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001638
 fileName wgEncodeAwgTfbsHaibK562NrsfV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3667,6 +3893,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6023
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002320
 fileName wgEncodeAwgTfbsHaibK562Pmlsc71910V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3683,6 +3910,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001581
 fileName wgEncodeAwgTfbsHaibK562Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3699,6 +3927,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001633
 fileName wgEncodeAwgTfbsHaibK562Pol2V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3715,6 +3944,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL518
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001482
 fileName wgEncodeAwgTfbsHaibK562Pu1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3731,6 +3961,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1396
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001585
 fileName wgEncodeAwgTfbsHaibK562Rad21V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3747,6 +3978,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001607
 fileName wgEncodeAwgTfbsHaibK562Sin3ak20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3763,6 +3995,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL518
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001483
 fileName wgEncodeAwgTfbsHaibK562Six5Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3779,6 +4012,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001578
 fileName wgEncodeAwgTfbsHaibK562Sp1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3795,6 +4029,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1396
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001653
 fileName wgEncodeAwgTfbsHaibK562Sp2sc643V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3811,6 +4046,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001600
 fileName wgEncodeAwgTfbsHaibK562SrfV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3827,6 +4063,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6023
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002347
 fileName wgEncodeAwgTfbsHaibK562Stat5asc74442V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3843,6 +4080,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001582
 fileName wgEncodeAwgTfbsHaibK562Taf1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3859,6 +4097,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001654
 fileName wgEncodeAwgTfbsHaibK562Taf7sc101167V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3875,6 +4114,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6023
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002333
 fileName wgEncodeAwgTfbsHaibK562Tead4sc101184V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3891,6 +4131,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001655
 fileName wgEncodeAwgTfbsHaibK562Thap1sc98174V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3907,6 +4148,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL6023
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003210
 fileName wgEncodeAwgTfbsHaibK562Trim28sc81411V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3923,6 +4165,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001583
 fileName wgEncodeAwgTfbsHaibK562Usf1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3939,6 +4182,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001584
 fileName wgEncodeAwgTfbsHaibK562Yy1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3955,6 +4199,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1396
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001623
 fileName wgEncodeAwgTfbsHaibK562Yy1V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3971,6 +4216,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001569
 fileName wgEncodeAwgTfbsHaibK562Zbtb33Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -3987,6 +4233,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001620
 fileName wgEncodeAwgTfbsHaibK562Zbtb7asc34508V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4003,6 +4250,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL117
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001552
 fileName wgEncodeAwgTfbsHaibPanc1NrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4019,6 +4267,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2340
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002265
 fileName wgEncodeAwgTfbsHaibPanc1Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4035,6 +4284,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2340
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002266
 fileName wgEncodeAwgTfbsHaibPanc1Sin3ak20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4051,6 +4301,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL16
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001460
 fileName wgEncodeAwgTfbsHaibPfsk1Foxp2Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4067,6 +4318,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL150
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001553
 fileName wgEncodeAwgTfbsHaibPfsk1NrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4083,6 +4335,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2339
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002272
 fileName wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4099,6 +4352,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2339
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002268
 fileName wgEncodeAwgTfbsHaibPfsk1Sin3ak20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4115,6 +4369,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2339
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002309
 fileName wgEncodeAwgTfbsHaibPfsk1Taf1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4131,6 +4386,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL102
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001461
 fileName wgEncodeAwgTfbsHaibSknmcFoxp2Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4147,6 +4403,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1714
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002281
 fileName wgEncodeAwgTfbsHaibSknmcPol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4163,6 +4420,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL108
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001547
 fileName wgEncodeAwgTfbsHaibSknshNrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4179,6 +4437,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3774
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002269
 fileName wgEncodeAwgTfbsHaibSknshNrsfV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4195,6 +4454,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3774
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002270
 fileName wgEncodeAwgTfbsHaibSknshPol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4211,6 +4471,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL3775
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002271
 fileName wgEncodeAwgTfbsHaibSknshSin3ak20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4227,6 +4488,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2134
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002301
 fileName wgEncodeAwgTfbsHaibSknshTaf1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4243,6 +4505,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2905
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001613
 fileName wgEncodeAwgTfbsHaibSknshraCtcfV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4259,6 +4522,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2905
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001616
 fileName wgEncodeAwgTfbsHaibSknshraP300V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4275,6 +4539,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2905
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001614
 fileName wgEncodeAwgTfbsHaibSknshraRad21V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4291,6 +4556,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2905
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001621
 fileName wgEncodeAwgTfbsHaibSknshraUsf1sc8983V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4307,6 +4573,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2905
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001615
 fileName wgEncodeAwgTfbsHaibSknshraYy1sc281V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4323,6 +4590,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1881
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001656
 fileName wgEncodeAwgTfbsHaibT47dCtcfsc5916V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4339,6 +4607,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002299
 fileName wgEncodeAwgTfbsHaibT47dEraaV0416102Bpa1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4355,6 +4624,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1216
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001556
 fileName wgEncodeAwgTfbsHaibT47dEralphaaPcr2xGen1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4371,6 +4641,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1216
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001577
 fileName wgEncodeAwgTfbsHaibT47dEralphaaV0416102Est10nm1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4387,6 +4658,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1881
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001588
 fileName wgEncodeAwgTfbsHaibT47dFoxa1sc6553V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4403,6 +4675,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1881
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001639
 fileName wgEncodeAwgTfbsHaibT47dGata3sc268V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4419,6 +4692,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL1881
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001602
 fileName wgEncodeAwgTfbsHaibT47dP300V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4435,6 +4709,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL103
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001554
 fileName wgEncodeAwgTfbsHaibU87NrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4451,6 +4726,7 @@ composite wgEncodeAwgTfbsUniform
 controlId SL2338
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001674
 fileName wgEncodeAwgTfbsHaibU87Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
@@ -4468,6 +4744,7 @@ control IgG-rab
 controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002817
 fileName wgEncodeAwgTfbsSydhA549Bhlhe40IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4485,6 +4762,7 @@ control IgG-rab
 controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002818
 fileName wgEncodeAwgTfbsSydhA549CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4502,6 +4780,7 @@ control IgG-rab
 controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002820
 fileName wgEncodeAwgTfbsSydhA549MaxIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4519,6 +4798,7 @@ control IgG-rab
 controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002821
 fileName wgEncodeAwgTfbsSydhA549Pol2s2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4536,6 +4816,7 @@ control IgG-rab
 controlId wgEncodeEH002819
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002822
 fileName wgEncodeAwgTfbsSydhA549Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4553,6 +4834,7 @@ control UCDavis
 controlId wgEncodeEH002870
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002866
 fileName wgEncodeAwgTfbsSydhGm08714Znf274UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -4570,6 +4852,7 @@ control IgG-rab
 controlId wgEncodeEH000770
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000734
 fileName wgEncodeAwgTfbsSydhGm10847NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4587,6 +4870,7 @@ control IgG-mus
 controlId wgEncodeEH000728
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000705
 fileName wgEncodeAwgTfbsSydhGm10847Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4604,6 +4888,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002025
 fileName wgEncodeAwgTfbsSydhGm12878Bhlhe40cIggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4621,6 +4906,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001830
 fileName wgEncodeAwgTfbsSydhGm12878Brca1a300IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4638,6 +4924,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000622
 fileName wgEncodeAwgTfbsSydhGm12878CfosUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -4655,6 +4942,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002823
 fileName wgEncodeAwgTfbsSydhGm12878Chd1a301218aIggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4672,6 +4960,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001831
 fileName wgEncodeAwgTfbsSydhGm12878Chd2ab68301IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4689,6 +4978,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002841
 fileName wgEncodeAwgTfbsSydhGm12878Corestsc30189IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4706,6 +4996,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001851
 fileName wgEncodeAwgTfbsSydhGm12878Ctcfsc15914c20UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4723,6 +5014,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002867
 fileName wgEncodeAwgTfbsSydhGm12878E2f4IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4740,6 +5032,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001832
 fileName wgEncodeAwgTfbsSydhGm12878Ebf1sc137065UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4757,6 +5050,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002851
 fileName wgEncodeAwgTfbsSydhGm12878Elk112771IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4774,6 +5068,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001874
 fileName wgEncodeAwgTfbsSydhGm12878Gcn5UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -4791,6 +5086,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002811
 fileName wgEncodeAwgTfbsSydhGm12878Ikzf1iknuclaUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -4808,6 +5104,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001809
 fileName wgEncodeAwgTfbsSydhGm12878Irf3IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4825,6 +5122,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000639
 fileName wgEncodeAwgTfbsSydhGm12878JundUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -4842,6 +5140,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002806
 fileName wgEncodeAwgTfbsSydhGm12878MaxIggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4859,6 +5158,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002852
 fileName wgEncodeAwgTfbsSydhGm12878Mazab85725IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4876,6 +5176,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002026
 fileName wgEncodeAwgTfbsSydhGm12878Mxi1IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4893,6 +5194,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001808
 fileName wgEncodeAwgTfbsSydhGm12878Nfe2sc22827UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4910,6 +5212,7 @@ control IgG-rab
 controlId wgEncodeEH002034
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000690
 fileName wgEncodeAwgTfbsSydhGm12878NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4927,6 +5230,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002064
 fileName wgEncodeAwgTfbsSydhGm12878NfyaIggmusUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -4944,6 +5248,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002065
 fileName wgEncodeAwgTfbsSydhGm12878NfybIggmusUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -4961,6 +5266,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001846
 fileName wgEncodeAwgTfbsSydhGm12878Nrf1IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4978,6 +5284,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002824
 fileName wgEncodeAwgTfbsSydhGm12878P300IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -4995,6 +5302,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002037
 fileName wgEncodeAwgTfbsSydhGm12878P300bUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5012,6 +5320,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000708
 fileName wgEncodeAwgTfbsSydhGm12878Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5029,6 +5338,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000626
 fileName wgEncodeAwgTfbsSydhGm12878Pol2UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -5046,6 +5356,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001858
 fileName wgEncodeAwgTfbsSydhGm12878Pol2s2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5063,6 +5374,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000645
 fileName wgEncodeAwgTfbsSydhGm12878Pol3UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -5080,6 +5392,7 @@ control IgG-rab
 controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000749
 fileName wgEncodeAwgTfbsSydhGm12878Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5097,6 +5410,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001810
 fileName wgEncodeAwgTfbsSydhGm12878Rfx5200401194IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5114,6 +5428,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002868
 fileName wgEncodeAwgTfbsSydhGm12878Sin3anb6001263IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5131,6 +5446,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001833
 fileName wgEncodeAwgTfbsSydhGm12878Smc3ab9263IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5148,6 +5464,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001873
 fileName wgEncodeAwgTfbsSydhGm12878Spt20UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -5165,6 +5482,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001852
 fileName wgEncodeAwgTfbsSydhGm12878Stat1UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5182,6 +5500,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001811
 fileName wgEncodeAwgTfbsSydhGm12878Stat3IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5199,6 +5518,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002853
 fileName wgEncodeAwgTfbsSydhGm12878Tblr1ab24550IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5216,6 +5536,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001798
 fileName wgEncodeAwgTfbsSydhGm12878TbpIggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5233,6 +5554,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000697
 fileName wgEncodeAwgTfbsSydhGm12878Tr4UniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -5250,6 +5572,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001812
 fileName wgEncodeAwgTfbsSydhGm12878Usf2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5267,6 +5590,7 @@ control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001787
 fileName wgEncodeAwgTfbsSydhGm12878WhipIggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5284,6 +5608,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000695
 fileName wgEncodeAwgTfbsSydhGm12878Yy1UniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -5301,6 +5626,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001853
 fileName wgEncodeAwgTfbsSydhGm12878Znf143166181apUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5318,6 +5644,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001756
 fileName wgEncodeAwgTfbsSydhGm12878Znf274UniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -5335,6 +5662,7 @@ control std
 controlId wgEncodeEH000625
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000698
 fileName wgEncodeAwgTfbsSydhGm12878Zzz3UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -5352,6 +5680,7 @@ control IgG-rab
 controlId wgEncodeEH000772
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000735
 fileName wgEncodeAwgTfbsSydhGm12891NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5369,6 +5698,7 @@ control IgG-mus
 controlId wgEncodeEH000709
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000710
 fileName wgEncodeAwgTfbsSydhGm12891Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5386,6 +5716,7 @@ control IgG-rab
 controlId wgEncodeEH000773
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000712
 fileName wgEncodeAwgTfbsSydhGm12892NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5403,6 +5734,7 @@ control IgG-mus
 controlId wgEncodeEH000711
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000729
 fileName wgEncodeAwgTfbsSydhGm12892Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5420,6 +5752,7 @@ control IgG-rab
 controlId wgEncodeEH000774
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000736
 fileName wgEncodeAwgTfbsSydhGm15510NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5437,6 +5770,7 @@ control IgG-mus
 controlId wgEncodeEH000713
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000714
 fileName wgEncodeAwgTfbsSydhGm15510Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5454,6 +5788,7 @@ control IgG-rab
 controlId wgEncodeEH000775
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000715
 fileName wgEncodeAwgTfbsSydhGm18505NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5471,6 +5806,7 @@ control IgG-mus
 controlId wgEncodeEH000730
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000731
 fileName wgEncodeAwgTfbsSydhGm18505Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5488,6 +5824,7 @@ control IgG-rab
 controlId wgEncodeEH000776
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000716
 fileName wgEncodeAwgTfbsSydhGm18526NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5505,6 +5842,7 @@ control IgG-mus
 controlId wgEncodeEH000732
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000733
 fileName wgEncodeAwgTfbsSydhGm18526Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5522,6 +5860,7 @@ control IgG-rab
 controlId wgEncodeEH000777
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000738
 fileName wgEncodeAwgTfbsSydhGm18951NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5539,6 +5878,7 @@ control IgG-mus
 controlId wgEncodeEH000737
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000739
 fileName wgEncodeAwgTfbsSydhGm18951Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5556,6 +5896,7 @@ control IgG-rab
 controlId wgEncodeEH000778
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000717
 fileName wgEncodeAwgTfbsSydhGm19099NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5573,6 +5914,7 @@ control IgG-mus
 controlId wgEncodeEH000740
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000741
 fileName wgEncodeAwgTfbsSydhGm19099Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5590,6 +5932,7 @@ control IgG-rab
 controlId wgEncodeEH000779
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000718
 fileName wgEncodeAwgTfbsSydhGm19193NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5607,6 +5950,7 @@ control IgG-mus
 controlId wgEncodeEH000742
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000743
 fileName wgEncodeAwgTfbsSydhGm19193Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5624,6 +5968,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002842
 fileName wgEncodeAwgTfbsSydhH1hescBach1sc14700IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5641,6 +5986,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002801
 fileName wgEncodeAwgTfbsSydhH1hescBrca1IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5658,6 +6004,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002825
 fileName wgEncodeAwgTfbsSydhH1hescCebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5675,6 +6022,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002826
 fileName wgEncodeAwgTfbsSydhH1hescChd1a301218aIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5692,6 +6040,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002827
 fileName wgEncodeAwgTfbsSydhH1hescChd2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5709,6 +6058,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001854
 fileName wgEncodeAwgTfbsSydhH1hescCjunIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5726,6 +6076,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002795
 fileName wgEncodeAwgTfbsSydhH1hescCmycIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5743,6 +6094,7 @@ control UCDavis
 controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001767
 fileName wgEncodeAwgTfbsSydhH1hescCtbp2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -5760,6 +6112,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002843
 fileName wgEncodeAwgTfbsSydhH1hescGtf2f1IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5777,6 +6130,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002023
 fileName wgEncodeAwgTfbsSydhH1hescJundIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5794,6 +6148,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002828
 fileName wgEncodeAwgTfbsSydhH1hescMafkIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5811,6 +6166,7 @@ control UCDavis
 controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001757
 fileName wgEncodeAwgTfbsSydhH1hescMaxUcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -5828,6 +6184,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002829
 fileName wgEncodeAwgTfbsSydhH1hescMxi1IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5845,6 +6202,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001847
 fileName wgEncodeAwgTfbsSydhH1hescNrf1IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5862,6 +6220,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001836
 fileName wgEncodeAwgTfbsSydhH1hescRad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5879,6 +6238,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001835
 fileName wgEncodeAwgTfbsSydhH1hescRfx5200401194IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5896,6 +6256,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002854
 fileName wgEncodeAwgTfbsSydhH1hescSin3anb6001263IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5913,6 +6274,7 @@ control UCDavis
 controlId wgEncodeEH001751
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001752
 fileName wgEncodeAwgTfbsSydhH1hescSuz12UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -5930,6 +6292,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001848
 fileName wgEncodeAwgTfbsSydhH1hescTbpIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5947,6 +6310,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001837
 fileName wgEncodeAwgTfbsSydhH1hescUsf2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5964,6 +6328,7 @@ control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002802
 fileName wgEncodeAwgTfbsSydhH1hescZnf143IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -5981,6 +6346,7 @@ control UCDavis
 controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000651
 fileName wgEncodeAwgTfbsSydhHct116Pol2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -5998,6 +6364,7 @@ control UCDavis
 controlId wgEncodeEH000627
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000629
 fileName wgEncodeAwgTfbsSydhHct116Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6015,6 +6382,7 @@ control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001773
 fileName wgEncodeAwgTfbsSydhHek293Elk4UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6032,6 +6400,7 @@ control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001779
 fileName wgEncodeAwgTfbsSydhHek293Kap1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6049,6 +6418,7 @@ control std
 controlId wgEncodeEH000631
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000632
 fileName wgEncodeAwgTfbsSydhHek293Pol2UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -6066,6 +6436,7 @@ control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002022
 fileName wgEncodeAwgTfbsSydhHek293Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6083,6 +6454,7 @@ control UCDavis
 controlId wgEncodeEH001784
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001781
 fileName wgEncodeAwgTfbsSydhHek293tZnf263UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6100,6 +6472,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000685
 fileName wgEncodeAwgTfbsSydhHelas3Ap2alphaUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6117,6 +6490,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000686
 fileName wgEncodeAwgTfbsSydhHelas3Ap2gammaUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6134,6 +6508,7 @@ control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000720
 fileName wgEncodeAwgTfbsSydhHelas3Baf155IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6151,6 +6526,7 @@ control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000721
 fileName wgEncodeAwgTfbsSydhHelas3Baf170IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6168,6 +6544,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000763
 fileName wgEncodeAwgTfbsSydhHelas3Bdp1UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -6185,6 +6562,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001814
 fileName wgEncodeAwgTfbsSydhHelas3Brca1a300IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6202,6 +6580,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000764
 fileName wgEncodeAwgTfbsSydhHelas3Brf1UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -6219,6 +6598,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000765
 fileName wgEncodeAwgTfbsSydhHelas3Brf2UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -6236,6 +6616,7 @@ control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000781
 fileName wgEncodeAwgTfbsSydhHelas3Brg1IggmusUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -6253,6 +6634,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001815
 fileName wgEncodeAwgTfbsSydhHelas3CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6270,6 +6652,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000647
 fileName wgEncodeAwgTfbsSydhHelas3CfosUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -6287,6 +6670,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002027
 fileName wgEncodeAwgTfbsSydhHelas3Chd2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6304,6 +6688,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000746
 fileName wgEncodeAwgTfbsSydhHelas3CjunIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6321,6 +6706,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000648
 fileName wgEncodeAwgTfbsSydhHelas3CmycUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -6338,6 +6724,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002844
 fileName wgEncodeAwgTfbsSydhHelas3Corestsc30189IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6355,6 +6742,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000699
 fileName wgEncodeAwgTfbsSydhHelas3E2f1UniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6372,6 +6760,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000689
 fileName wgEncodeAwgTfbsSydhHelas3E2f4UniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6389,6 +6778,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000692
 fileName wgEncodeAwgTfbsSydhHelas3E2f6UniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6406,6 +6796,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002864
 fileName wgEncodeAwgTfbsSydhHelas3Elk112771IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6423,6 +6814,7 @@ control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001753
 fileName wgEncodeAwgTfbsSydhHelas3Elk4UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6440,6 +6832,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001849
 fileName wgEncodeAwgTfbsSydhHelas3Gcn5UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6457,6 +6850,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001816
 fileName wgEncodeAwgTfbsSydhHelas3Gtf2f1ab28179IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6474,6 +6868,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000688
 fileName wgEncodeAwgTfbsSydhHelas3Hae2f1UniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6491,6 +6886,7 @@ control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000722
 fileName wgEncodeAwgTfbsSydhHelas3Ini1IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6508,6 +6904,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001788
 fileName wgEncodeAwgTfbsSydhHelas3Irf3IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6525,6 +6922,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000745
 fileName wgEncodeAwgTfbsSydhHelas3JundIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6542,6 +6940,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002856
 fileName wgEncodeAwgTfbsSydhHelas3MafkIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6559,6 +6958,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002830
 fileName wgEncodeAwgTfbsSydhHelas3MaxIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6576,6 +6976,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002855
 fileName wgEncodeAwgTfbsSydhHelas3Mazab85725IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6593,6 +6994,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001826
 fileName wgEncodeAwgTfbsSydhHelas3Mxi1af4185IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6610,6 +7012,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002066
 fileName wgEncodeAwgTfbsSydhHelas3NfyaIggrabUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -6627,6 +7030,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002067
 fileName wgEncodeAwgTfbsSydhHelas3NfybIggrabUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -6644,6 +7048,7 @@ control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000723
 fileName wgEncodeAwgTfbsSydhHelas3Nrf1IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6661,6 +7066,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001820
 fileName wgEncodeAwgTfbsSydhHelas3P300sc584sc584IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6678,6 +7084,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000613
 fileName wgEncodeAwgTfbsSydhHelas3Pol2UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -6695,6 +7102,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001838
 fileName wgEncodeAwgTfbsSydhHelas3Pol2s2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6712,6 +7120,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001817
 fileName wgEncodeAwgTfbsSydhHelas3Prdm19115IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6729,6 +7138,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001789
 fileName wgEncodeAwgTfbsSydhHelas3Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6746,6 +7156,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001818
 fileName wgEncodeAwgTfbsSydhHelas3Rfx5200401194IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6763,6 +7174,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000766
 fileName wgEncodeAwgTfbsSydhHelas3Rpc155UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -6780,6 +7192,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001839
 fileName wgEncodeAwgTfbsSydhHelas3Smc3ab9263IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6797,6 +7210,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001855
 fileName wgEncodeAwgTfbsSydhHelas3Spt20UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6814,6 +7228,7 @@ control std
 controlId wgEncodeEH000611
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000614
 fileName wgEncodeAwgTfbsSydhHelas3Stat1Ifng30UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -6831,6 +7246,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001799
 fileName wgEncodeAwgTfbsSydhHelas3Stat3IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6848,6 +7264,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001790
 fileName wgEncodeAwgTfbsSydhHelas3TbpIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6865,6 +7282,7 @@ control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002069
 fileName wgEncodeAwgTfbsSydhHelas3Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6882,6 +7300,7 @@ control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002813
 fileName wgEncodeAwgTfbsSydhHelas3Tcf7l2c9b92565UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6899,6 +7318,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000747
 fileName wgEncodeAwgTfbsSydhHelas3Tf3c110UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -6916,6 +7336,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000687
 fileName wgEncodeAwgTfbsSydhHelas3Tr4UniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -6933,6 +7354,7 @@ control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001819
 fileName wgEncodeAwgTfbsSydhHelas3Usf2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6950,6 +7372,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002857
 fileName wgEncodeAwgTfbsSydhHelas3Zkscan1hpa006672IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6967,6 +7390,7 @@ control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002028
 fileName wgEncodeAwgTfbsSydhHelas3Znf143IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -6984,6 +7408,7 @@ control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001763
 fileName wgEncodeAwgTfbsSydhHelas3Znf274UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -7001,6 +7426,7 @@ control std
 controlId wgEncodeEH000612
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001872
 fileName wgEncodeAwgTfbsSydhHelas3Zzz3UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -7018,6 +7444,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002858
 fileName wgEncodeAwgTfbsSydhHepg2Arid3anb100279IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7035,6 +7462,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002032
 fileName wgEncodeAwgTfbsSydhHepg2Bhlhe40cIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7052,6 +7480,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001859
 fileName wgEncodeAwgTfbsSydhHepg2Brca1a300IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7069,6 +7498,7 @@ control std
 controlId wgEncodeEH000755
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000750
 fileName wgEncodeAwgTfbsSydhHepg2CebpbForsklnUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7086,6 +7516,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001829
 fileName wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7103,6 +7534,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002859
 fileName wgEncodeAwgTfbsSydhHepg2CebpzIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7120,6 +7552,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001840
 fileName wgEncodeAwgTfbsSydhHepg2Chd2ab68301IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7137,6 +7570,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001794
 fileName wgEncodeAwgTfbsSydhHepg2CjunIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7154,6 +7588,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002845
 fileName wgEncodeAwgTfbsSydhHepg2Corestsc30189IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7171,6 +7606,7 @@ control std
 controlId wgEncodeEH000755
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000751
 fileName wgEncodeAwgTfbsSydhHepg2ErraForsklnUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7188,6 +7624,7 @@ control std
 controlId wgEncodeEH000755
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000752
 fileName wgEncodeAwgTfbsSydhHepg2Grp20ForsklnUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7205,6 +7642,7 @@ control std
 controlId wgEncodeEH000755
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000753
 fileName wgEncodeAwgTfbsSydhHepg2Hnf4aForsklnUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7222,6 +7660,7 @@ control std
 controlId wgEncodeEH000755
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000754
 fileName wgEncodeAwgTfbsSydhHepg2Hsf1ForsklnUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7239,6 +7678,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001800
 fileName wgEncodeAwgTfbsSydhHepg2Irf3IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7256,6 +7696,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001801
 fileName wgEncodeAwgTfbsSydhHepg2JundIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7273,6 +7714,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001841
 fileName wgEncodeAwgTfbsSydhHepg2Maffm8194IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7290,6 +7732,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001842
 fileName wgEncodeAwgTfbsSydhHepg2Mafkab50322IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7307,6 +7750,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001850
 fileName wgEncodeAwgTfbsSydhHepg2Mafksc477IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7324,6 +7768,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002796
 fileName wgEncodeAwgTfbsSydhHepg2MaxIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7341,6 +7786,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002860
 fileName wgEncodeAwgTfbsSydhHepg2Mazab85725IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7358,6 +7804,7 @@ control std
 controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002029
 fileName wgEncodeAwgTfbsSydhHepg2Mxi1UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7375,6 +7822,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001802
 fileName wgEncodeAwgTfbsSydhHepg2Nrf1IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7392,6 +7840,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001862
 fileName wgEncodeAwgTfbsSydhHepg2P300sc582IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7409,6 +7858,7 @@ control std
 controlId wgEncodeEH000755
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000757
 fileName wgEncodeAwgTfbsSydhHepg2Pgc1aForsklnUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7426,6 +7876,7 @@ control std
 controlId wgEncodeEH000755
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000758
 fileName wgEncodeAwgTfbsSydhHepg2Pol2ForsklnUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7443,6 +7894,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001792
 fileName wgEncodeAwgTfbsSydhHepg2Pol2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7460,6 +7912,7 @@ control std
 controlId wgEncodeEH000640
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000641
 fileName wgEncodeAwgTfbsSydhHepg2Pol2PravastUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -7477,6 +7930,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001860
 fileName wgEncodeAwgTfbsSydhHepg2Pol2s2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7494,6 +7948,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001803
 fileName wgEncodeAwgTfbsSydhHepg2Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7511,6 +7966,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001843
 fileName wgEncodeAwgTfbsSydhHepg2Rfx5200401194IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7528,6 +7984,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001861
 fileName wgEncodeAwgTfbsSydhHepg2Smc3ab9263IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7545,6 +8002,7 @@ control std
 controlId wgEncodeEH000756
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000759
 fileName wgEncodeAwgTfbsSydhHepg2Srebp1InslnUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7562,6 +8020,7 @@ control std
 controlId wgEncodeEH000640
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000642
 fileName wgEncodeAwgTfbsSydhHepg2Srebp1PravastUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -7579,6 +8038,7 @@ control std
 controlId wgEncodeEH000640
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000643
 fileName wgEncodeAwgTfbsSydhHepg2Srebp2PravastUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -7596,6 +8056,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001793
 fileName wgEncodeAwgTfbsSydhHepg2TbpIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7613,6 +8074,7 @@ control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001780
 fileName wgEncodeAwgTfbsSydhHepg2Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -7630,6 +8092,7 @@ control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000675
 fileName wgEncodeAwgTfbsSydhHepg2Tr4UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -7647,6 +8110,7 @@ control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001804
 fileName wgEncodeAwgTfbsSydhHepg2Usf2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7664,6 +8128,7 @@ control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001755
 fileName wgEncodeAwgTfbsSydhHepg2Znf274UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -7681,6 +8146,7 @@ control UCDavis
 controlId wgEncodeEH001759
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001774
 fileName wgEncodeAwgTfbsSydhHuvecCfosUcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -7698,6 +8164,7 @@ control std
 controlId wgEncodeEH000780
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000719
 fileName wgEncodeAwgTfbsSydhHuvecCjunUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7715,6 +8182,7 @@ control UCDavis
 controlId wgEncodeEH001759
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001758
 fileName wgEncodeAwgTfbsSydhHuvecGata2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -7732,6 +8200,7 @@ control std
 controlId wgEncodeEH000780
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000768
 fileName wgEncodeAwgTfbsSydhHuvecMaxUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7749,6 +8218,7 @@ control std
 controlId wgEncodeEH000780
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000702
 fileName wgEncodeAwgTfbsSydhHuvecPol2UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7766,6 +8236,7 @@ control IgG-rab
 controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002807
 fileName wgEncodeAwgTfbsSydhImr90CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7783,6 +8254,7 @@ control IgG-rab
 controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002831
 fileName wgEncodeAwgTfbsSydhImr90CtcfbIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7800,6 +8272,7 @@ control IgG-rab
 controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002832
 fileName wgEncodeAwgTfbsSydhImr90MafkIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7817,6 +8290,7 @@ control IgG-rab
 controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002809
 fileName wgEncodeAwgTfbsSydhImr90Pol2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7834,6 +8308,7 @@ control IgG-rab
 controlId wgEncodeEH002808
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002810
 fileName wgEncodeAwgTfbsSydhImr90Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7851,6 +8326,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002861
 fileName wgEncodeAwgTfbsSydhK562Arid3asc8821IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7868,6 +8344,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002865
 fileName wgEncodeAwgTfbsSydhK562Atf106325UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -7885,6 +8362,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000700
 fileName wgEncodeAwgTfbsSydhK562Atf3UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -7902,6 +8380,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002846
 fileName wgEncodeAwgTfbsSydhK562Bach1sc14700IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7919,6 +8398,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000678
 fileName wgEncodeAwgTfbsSydhK562Bdp1UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -7936,6 +8416,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001857
 fileName wgEncodeAwgTfbsSydhK562Bhlhe40nb100IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -7953,6 +8434,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000679
 fileName wgEncodeAwgTfbsSydhK562Brf1UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -7970,6 +8452,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000767
 fileName wgEncodeAwgTfbsSydhK562Brf2UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -7987,6 +8470,7 @@ control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000724
 fileName wgEncodeAwgTfbsSydhK562Brg1IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8004,6 +8488,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001864
 fileName wgEncodeAwgTfbsSydhK562Ccnt2UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -8021,6 +8506,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001821
 fileName wgEncodeAwgTfbsSydhK562CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8038,6 +8524,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000619
 fileName wgEncodeAwgTfbsSydhK562CfosUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8055,6 +8542,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001822
 fileName wgEncodeAwgTfbsSydhK562Chd2ab68301IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8072,6 +8560,7 @@ control std
 controlId wgEncodeEH000655
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002805
 fileName wgEncodeAwgTfbsSydhK562CjunIfna30UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8089,6 +8578,7 @@ control std
 controlId wgEncodeEH000656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000667
 fileName wgEncodeAwgTfbsSydhK562CjunIfna6hUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8106,6 +8596,7 @@ control std
 controlId wgEncodeEH000657
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000673
 fileName wgEncodeAwgTfbsSydhK562CjunIfng30UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8123,6 +8614,7 @@ control std
 controlId wgEncodeEH000658
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000668
 fileName wgEncodeAwgTfbsSydhK562CjunIfng6hUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8140,6 +8632,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000620
 fileName wgEncodeAwgTfbsSydhK562CjunUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8157,6 +8650,7 @@ control std
 controlId wgEncodeEH000655
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000659
 fileName wgEncodeAwgTfbsSydhK562CmycIfna30UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8174,6 +8668,7 @@ control std
 controlId wgEncodeEH000656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000669
 fileName wgEncodeAwgTfbsSydhK562CmycIfna6hUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8191,6 +8686,7 @@ control std
 controlId wgEncodeEH000657
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001867
 fileName wgEncodeAwgTfbsSydhK562CmycIfng30UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8208,6 +8704,7 @@ control std
 controlId wgEncodeEH000658
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000670
 fileName wgEncodeAwgTfbsSydhK562CmycIfng6hUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8225,6 +8722,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002800
 fileName wgEncodeAwgTfbsSydhK562CmycIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8242,6 +8740,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000621
 fileName wgEncodeAwgTfbsSydhK562CmycUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8259,6 +8758,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002847
 fileName wgEncodeAwgTfbsSydhK562Corestab24166IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8276,6 +8776,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002814
 fileName wgEncodeAwgTfbsSydhK562Corestsc30189IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8293,6 +8794,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002797
 fileName wgEncodeAwgTfbsSydhK562CtcfbIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8310,6 +8812,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000671
 fileName wgEncodeAwgTfbsSydhK562E2f4UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -8327,6 +8830,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000676
 fileName wgEncodeAwgTfbsSydhK562E2f6UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -8344,6 +8848,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003356
 fileName wgEncodeAwgTfbsSydhK562Elk112771IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8361,6 +8866,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000638
 fileName wgEncodeAwgTfbsSydhK562Gata1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -8378,6 +8884,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000683
 fileName wgEncodeAwgTfbsSydhK562Gata2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -8395,6 +8902,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000703
 fileName wgEncodeAwgTfbsSydhK562Gtf2bUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -8412,6 +8920,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001823
 fileName wgEncodeAwgTfbsSydhK562Gtf2f1ab28179IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8429,6 +8938,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001863
 fileName wgEncodeAwgTfbsSydhK562Hmgn3UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -8446,6 +8956,7 @@ control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000725
 fileName wgEncodeAwgTfbsSydhK562Ini1IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8463,6 +8974,7 @@ control std
 controlId wgEncodeEH000655
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001865
 fileName wgEncodeAwgTfbsSydhK562Irf1Ifna30UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8480,6 +8992,7 @@ control std
 controlId wgEncodeEH000656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002798
 fileName wgEncodeAwgTfbsSydhK562Irf1Ifna6hUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8497,6 +9010,7 @@ control std
 controlId wgEncodeEH000657
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002799
 fileName wgEncodeAwgTfbsSydhK562Irf1Ifng30UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8514,6 +9028,7 @@ control std
 controlId wgEncodeEH000658
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001866
 fileName wgEncodeAwgTfbsSydhK562Irf1Ifng6hUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8531,6 +9046,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002164
 fileName wgEncodeAwgTfbsSydhK562JundIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8548,6 +9064,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001764
 fileName wgEncodeAwgTfbsSydhK562Kap1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -8565,6 +9082,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002804
 fileName wgEncodeAwgTfbsSydhK562MaffIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8582,6 +9100,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001844
 fileName wgEncodeAwgTfbsSydhK562Mafkab50322IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8599,6 +9118,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002869
 fileName wgEncodeAwgTfbsSydhK562MaxIggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8616,6 +9136,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002862
 fileName wgEncodeAwgTfbsSydhK562Mazab85725IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8633,6 +9154,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001827
 fileName wgEncodeAwgTfbsSydhK562Mxi1af4185IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8650,6 +9172,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000701
 fileName wgEncodeAwgTfbsSydhK562NelfeUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -8667,6 +9190,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000624
 fileName wgEncodeAwgTfbsSydhK562Nfe2UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8684,6 +9208,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002021
 fileName wgEncodeAwgTfbsSydhK562NfyaUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8701,6 +9226,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002024
 fileName wgEncodeAwgTfbsSydhK562NfybUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8718,6 +9244,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001796
 fileName wgEncodeAwgTfbsSydhK562Nrf1IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8735,6 +9262,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002834
 fileName wgEncodeAwgTfbsSydhK562P300IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8752,6 +9280,7 @@ control std
 controlId wgEncodeEH000655
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000660
 fileName wgEncodeAwgTfbsSydhK562Pol2Ifna30UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8769,6 +9298,7 @@ control std
 controlId wgEncodeEH000656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000661
 fileName wgEncodeAwgTfbsSydhK562Pol2Ifna6hUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8786,6 +9316,7 @@ control std
 controlId wgEncodeEH000657
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000704
 fileName wgEncodeAwgTfbsSydhK562Pol2Ifng30UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8803,6 +9334,7 @@ control std
 controlId wgEncodeEH000658
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000662
 fileName wgEncodeAwgTfbsSydhK562Pol2Ifng6hUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8820,6 +9352,7 @@ control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000727
 fileName wgEncodeAwgTfbsSydhK562Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8837,6 +9370,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000616
 fileName wgEncodeAwgTfbsSydhK562Pol2UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8854,6 +9388,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002833
 fileName wgEncodeAwgTfbsSydhK562Pol2s2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8871,6 +9406,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001805
 fileName wgEncodeAwgTfbsSydhK562Pol2s2UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8888,6 +9424,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000694
 fileName wgEncodeAwgTfbsSydhK562Pol3UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8905,6 +9442,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000649
 fileName wgEncodeAwgTfbsSydhK562Rad21UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -8922,6 +9460,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002033
 fileName wgEncodeAwgTfbsSydhK562Rfx5IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -8939,6 +9478,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000680
 fileName wgEncodeAwgTfbsSydhK562Rpc155UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -8956,6 +9496,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000769
 fileName wgEncodeAwgTfbsSydhK562Setdb1MnasedUcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -8973,6 +9514,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000677
 fileName wgEncodeAwgTfbsSydhK562Setdb1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -8990,6 +9532,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000681
 fileName wgEncodeAwgTfbsSydhK562Sirt6UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9007,6 +9550,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001845
 fileName wgEncodeAwgTfbsSydhK562Smc3ab9263IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9024,6 +9568,7 @@ control std
 controlId wgEncodeEH000655
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000663
 fileName wgEncodeAwgTfbsSydhK562Stat1Ifna30UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -9041,6 +9586,7 @@ control std
 controlId wgEncodeEH000656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000664
 fileName wgEncodeAwgTfbsSydhK562Stat1Ifna6hUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -9058,6 +9604,7 @@ control std
 controlId wgEncodeEH000657
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000760
 fileName wgEncodeAwgTfbsSydhK562Stat1Ifng30UniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9075,6 +9622,7 @@ control std
 controlId wgEncodeEH000658
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000761
 fileName wgEncodeAwgTfbsSydhK562Stat1Ifng6hUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9092,6 +9640,7 @@ control std
 controlId wgEncodeEH000655
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000665
 fileName wgEncodeAwgTfbsSydhK562Stat2Ifna30UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -9109,6 +9658,7 @@ control std
 controlId wgEncodeEH000656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000666
 fileName wgEncodeAwgTfbsSydhK562Stat2Ifna6hUniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -9126,6 +9676,7 @@ control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001824
 fileName wgEncodeAwgTfbsSydhK562Tal1sc12984IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9143,6 +9694,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002849
 fileName wgEncodeAwgTfbsSydhK562Tblr1ab24550IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9160,6 +9712,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002848
 fileName wgEncodeAwgTfbsSydhK562Tblr1nb600270IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9177,6 +9730,7 @@ control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001825
 fileName wgEncodeAwgTfbsSydhK562TbpIggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9194,6 +9748,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000748
 fileName wgEncodeAwgTfbsSydhK562Tf3c110UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9211,6 +9766,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000682
 fileName wgEncodeAwgTfbsSydhK562Tr4UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9228,6 +9784,7 @@ control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002863
 fileName wgEncodeAwgTfbsSydhK562Ubfsc13125IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9245,6 +9802,7 @@ control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002850
 fileName wgEncodeAwgTfbsSydhK562Ubtfsab1404509IggmusUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9262,6 +9820,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001797
 fileName wgEncodeAwgTfbsSydhK562Usf2IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9279,6 +9838,7 @@ control std
 controlId wgEncodeEH000615
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000650
 fileName wgEncodeAwgTfbsSydhK562Xrcc4UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -9296,6 +9856,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000684
 fileName wgEncodeAwgTfbsSydhK562Yy1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9313,6 +9874,7 @@ control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002030
 fileName wgEncodeAwgTfbsSydhK562Znf143IggrabUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9330,6 +9892,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000630
 fileName wgEncodeAwgTfbsSydhK562Znf263UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9347,6 +9910,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000696
 fileName wgEncodeAwgTfbsSydhK562Znf274UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9364,6 +9928,7 @@ control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002068
 fileName wgEncodeAwgTfbsSydhK562Znf274m01UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9381,6 +9946,7 @@ control Harvard_Control
 controlId wgEncodeEH002871
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002815
 fileName wgEncodeAwgTfbsSydhMcf10aesCfosEtoh01HvdUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9398,6 +9964,7 @@ control Harvard_Control
 controlId wgEncodeEH002871
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002837
 fileName wgEncodeAwgTfbsSydhMcf10aesCfosTam112hHvdUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9415,6 +9982,7 @@ control Harvard_Control
 controlId wgEncodeEH002871
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002838
 fileName wgEncodeAwgTfbsSydhMcf10aesCfosTam14hHvdUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9432,6 +10000,7 @@ control Harvard_Control
 controlId wgEncodeEH002871
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002839
 fileName wgEncodeAwgTfbsSydhMcf10aesCfosTamHvdUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9449,6 +10018,7 @@ control Harvard_Control
 controlId wgEncodeEH002871
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002816
 fileName wgEncodeAwgTfbsSydhMcf10aesCmycEtoh01HvdUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9466,6 +10036,7 @@ control Harvard_Control
 controlId wgEncodeEH002871
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002840
 fileName wgEncodeAwgTfbsSydhMcf10aesCmycTam14hHvdUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9483,6 +10054,7 @@ control Harvard_Control
 controlId wgEncodeEH002871
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002835
 fileName wgEncodeAwgTfbsSydhMcf10aesE2f4TamHvdUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9500,6 +10072,7 @@ control std
 controlId wgEncodeEH001782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001771
 fileName wgEncodeAwgTfbsSydhMcf10aesPol2Etoh01UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9517,6 +10090,7 @@ control std
 controlId wgEncodeEH001782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001768
 fileName wgEncodeAwgTfbsSydhMcf10aesPol2TamUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9534,6 +10108,7 @@ control std
 controlId wgEncodeEH001782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001772
 fileName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01UniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9551,6 +10126,7 @@ control std
 controlId wgEncodeEH001870
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001871
 fileName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01bUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9568,6 +10144,7 @@ control std
 controlId wgEncodeEH001869
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001868
 fileName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01cUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9585,6 +10162,7 @@ control Harvard_Control
 controlId wgEncodeEH002871
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002836
 fileName wgEncodeAwgTfbsSydhMcf10aesStat3Tam112hHvdUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9602,6 +10180,7 @@ control std
 controlId wgEncodeEH001782
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001769
 fileName wgEncodeAwgTfbsSydhMcf10aesStat3TamUniPk.narrowPeak.gz
 lab Harvard
 project wgEncode
@@ -9619,6 +10198,7 @@ control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002035
 fileName wgEncodeAwgTfbsSydhMcf7Gata3UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9636,6 +10216,7 @@ control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002812
 fileName wgEncodeAwgTfbsSydhMcf7Gata3sc269UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9653,6 +10234,7 @@ control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000693
 fileName wgEncodeAwgTfbsSydhMcf7Hae2f1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9670,6 +10252,7 @@ control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002072
 fileName wgEncodeAwgTfbsSydhMcf7Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9687,6 +10270,7 @@ control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002036
 fileName wgEncodeAwgTfbsSydhMcf7Znf217UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9704,6 +10288,7 @@ control std
 controlId wgEncodeEH000617
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001807
 fileName wgEncodeAwgTfbsSydhNb4CmycUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9721,6 +10306,7 @@ control std
 controlId wgEncodeEH000617
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001806
 fileName wgEncodeAwgTfbsSydhNb4MaxUniPk.narrowPeak.gz
 lab Stanford
 project wgEncode
@@ -9738,6 +10324,7 @@ control std
 controlId wgEncodeEH000617
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000618
 fileName wgEncodeAwgTfbsSydhNb4Pol2UniPk.narrowPeak.gz
 lab Yale
 project wgEncode
@@ -9755,6 +10342,7 @@ control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000652
 fileName wgEncodeAwgTfbsSydhNt2d1Suz12UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9772,6 +10360,7 @@ control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000653
 fileName wgEncodeAwgTfbsSydhNt2d1Yy1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9789,6 +10378,7 @@ control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001775
 fileName wgEncodeAwgTfbsSydhNt2d1Znf274UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9806,6 +10396,7 @@ control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002071
 fileName wgEncodeAwgTfbsSydhPanc1Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9823,6 +10414,7 @@ control UCDavis
 controlId wgEncodeEH001778
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001765
 fileName wgEncodeAwgTfbsSydhPbdeGata1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9840,6 +10432,7 @@ control UCDavis
 controlId wgEncodeEH001778
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001766
 fileName wgEncodeAwgTfbsSydhPbdePol2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9857,6 +10450,7 @@ control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001785
 fileName wgEncodeAwgTfbsSydhPbdefetalGata1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9874,6 +10468,7 @@ control UCDavis
 controlId wgEncodeEH001760
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001761
 fileName wgEncodeAwgTfbsSydhRajiPol2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9891,6 +10486,7 @@ control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001770
 fileName wgEncodeAwgTfbsSydhShsy5yGata2UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9908,6 +10504,7 @@ control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002031
 fileName wgEncodeAwgTfbsSydhShsy5yGata3sc269sc269UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9925,6 +10522,7 @@ control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001776
 fileName wgEncodeAwgTfbsSydhU2osKap1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -9942,6 +10540,7 @@ control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001762
 fileName wgEncodeAwgTfbsSydhU2osSetdb1UcdUniPk.narrowPeak.gz
 lab USC
 project wgEncode
@@ -10179,6 +10778,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002078
 fileName wgEncodeAwgTfbsUtaA549CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10195,6 +10795,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002079
 fileName wgEncodeAwgTfbsUtaA549Pol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10211,6 +10812,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH001128
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001127
 fileName wgEncodeAwgTfbsUtaFibroblCtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10227,6 +10829,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001135
 fileName wgEncodeAwgTfbsUtaGlioblaCtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10243,6 +10846,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001136
 fileName wgEncodeAwgTfbsUtaGlioblaPol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10259,6 +10863,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000547
 fileName wgEncodeAwgTfbsUtaGm12878CmycUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10275,6 +10880,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000532
 fileName wgEncodeAwgTfbsUtaGm12878CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10291,6 +10897,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000592
 fileName wgEncodeAwgTfbsUtaGm12878Pol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10307,6 +10914,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000569
 fileName wgEncodeAwgTfbsUtaGm12891CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10323,6 +10931,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000562
 fileName wgEncodeAwgTfbsUtaGm12892CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10339,6 +10948,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000570
 fileName wgEncodeAwgTfbsUtaGm19238CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10355,6 +10965,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000571
 fileName wgEncodeAwgTfbsUtaGm19239CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10371,6 +10982,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000572
 fileName wgEncodeAwgTfbsUtaGm19240CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10387,6 +10999,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000596
 fileName wgEncodeAwgTfbsUtaH1hescCmycUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10403,6 +11016,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000560
 fileName wgEncodeAwgTfbsUtaH1hescCtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10419,6 +11033,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000563
 fileName wgEncodeAwgTfbsUtaH1hescPol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10435,6 +11050,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000542
 fileName wgEncodeAwgTfbsUtaHelas3CmycUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10451,6 +11067,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000541
 fileName wgEncodeAwgTfbsUtaHelas3CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10467,6 +11084,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000597
 fileName wgEncodeAwgTfbsUtaHelas3Pol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10483,6 +11101,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000545
 fileName wgEncodeAwgTfbsUtaHepg2CmycUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10499,6 +11118,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000543
 fileName wgEncodeAwgTfbsUtaHepg2CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10515,6 +11135,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000554
 fileName wgEncodeAwgTfbsUtaHepg2Pol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10531,6 +11152,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000561
 fileName wgEncodeAwgTfbsUtaHuvecCmycUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10547,6 +11169,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000551
 fileName wgEncodeAwgTfbsUtaHuvecCtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10563,6 +11186,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000552
 fileName wgEncodeAwgTfbsUtaHuvecPol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10579,6 +11203,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000536
 fileName wgEncodeAwgTfbsUtaK562CmycUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10595,6 +11220,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000535
 fileName wgEncodeAwgTfbsUtaK562CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10611,6 +11237,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000555
 fileName wgEncodeAwgTfbsUtaK562Pol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10627,6 +11254,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001134
 fileName wgEncodeAwgTfbsUtaMcf7CmycEstroUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10643,6 +11271,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003436
 fileName wgEncodeAwgTfbsUtaMcf7CmycSerumstimUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10659,6 +11288,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003439
 fileName wgEncodeAwgTfbsUtaMcf7CmycSerumstvdUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10675,6 +11305,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001133
 fileName wgEncodeAwgTfbsUtaMcf7CmycVehUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10691,6 +11322,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001131
 fileName wgEncodeAwgTfbsUtaMcf7CtcfEstroUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10707,6 +11339,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003434
 fileName wgEncodeAwgTfbsUtaMcf7CtcfSerumstimUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10723,6 +11356,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003437
 fileName wgEncodeAwgTfbsUtaMcf7CtcfSerumstvdUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10739,6 +11373,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000598
 fileName wgEncodeAwgTfbsUtaMcf7CtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10755,6 +11390,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001132
 fileName wgEncodeAwgTfbsUtaMcf7CtcfVehUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10771,6 +11407,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003435
 fileName wgEncodeAwgTfbsUtaMcf7Pol2SerumstimUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10787,6 +11424,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH003438
 fileName wgEncodeAwgTfbsUtaMcf7Pol2SerumstvdUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10803,6 +11441,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001130
 fileName wgEncodeAwgTfbsUtaMcf7Pol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10819,6 +11458,7 @@ composite wgEncodeAwgTfbsUniform
 controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000559
 fileName wgEncodeAwgTfbsUtaNhekCtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10835,6 +11475,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000600
 fileName wgEncodeAwgTfbsUtaProgfibCtcfUniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10851,6 +11492,7 @@ composite wgEncodeAwgTfbsUniform
 controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000606
 fileName wgEncodeAwgTfbsUtaProgfibPol2UniPk.narrowPeak.gz
 lab UT-A
 project wgEncode
@@ -10868,6 +11510,7 @@ control std
 controlId wgEncodeEH001904
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001890
 fileName wgEncodeAwgTfbsUwA549CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -10885,6 +11528,7 @@ control std
 controlId wgEncodeEH000928
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000975
 fileName wgEncodeAwgTfbsUwAg04449CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -10902,6 +11546,7 @@ control std
 controlId wgEncodeEH000930
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000976
 fileName wgEncodeAwgTfbsUwAg04450CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -10919,6 +11564,7 @@ control std
 controlId wgEncodeEH000932
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000977
 fileName wgEncodeAwgTfbsUwAg09309CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -10936,6 +11582,7 @@ control std
 controlId wgEncodeEH000934
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000978
 fileName wgEncodeAwgTfbsUwAg09319CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -10953,6 +11600,7 @@ control std
 controlId wgEncodeEH000936
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000979
 fileName wgEncodeAwgTfbsUwAg10803CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -10970,6 +11618,7 @@ control std
 controlId wgEncodeEH000938
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000980
 fileName wgEncodeAwgTfbsUwAoafCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -10987,6 +11636,7 @@ control std
 controlId wgEncodeEH001892
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001891
 fileName wgEncodeAwgTfbsUwBe2cCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11004,6 +11654,7 @@ control std
 controlId wgEncodeEH000453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000403
 fileName wgEncodeAwgTfbsUwBjCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11021,6 +11672,7 @@ control std
 controlId wgEncodeEH000454
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000404
 fileName wgEncodeAwgTfbsUwCaco2CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11038,6 +11690,7 @@ control std
 controlId wgEncodeEH000455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000392
 fileName wgEncodeAwgTfbsUwGm06990CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11055,6 +11708,7 @@ control std
 controlId wgEncodeEH000456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000393
 fileName wgEncodeAwgTfbsUwGm12801CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11072,6 +11726,7 @@ control std
 controlId wgEncodeEH000457
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000447
 fileName wgEncodeAwgTfbsUwGm12864CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11089,6 +11744,7 @@ control std
 controlId wgEncodeEH000458
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000448
 fileName wgEncodeAwgTfbsUwGm12865CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11106,6 +11762,7 @@ control std
 controlId wgEncodeEH000459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000449
 fileName wgEncodeAwgTfbsUwGm12872CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11123,6 +11780,7 @@ control std
 controlId wgEncodeEH000460
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000450
 fileName wgEncodeAwgTfbsUwGm12873CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11140,6 +11798,7 @@ control std
 controlId wgEncodeEH000461
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000451
 fileName wgEncodeAwgTfbsUwGm12874CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11157,6 +11816,7 @@ control std
 controlId wgEncodeEH000462
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000452
 fileName wgEncodeAwgTfbsUwGm12875CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11174,6 +11834,7 @@ control std
 controlId wgEncodeEH000463
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000394
 fileName wgEncodeAwgTfbsUwGm12878CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11191,6 +11852,7 @@ control std
 controlId wgEncodeEH002165
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001893
 fileName wgEncodeAwgTfbsUwHacCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11208,6 +11870,7 @@ control std
 controlId wgEncodeEH000974
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000989
 fileName wgEncodeAwgTfbsUwHaspCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11225,6 +11888,7 @@ control std
 controlId wgEncodeEH000940
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000981
 fileName wgEncodeAwgTfbsUwHbmecCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11242,6 +11906,7 @@ control std
 controlId wgEncodeEH000944
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000982
 fileName wgEncodeAwgTfbsUwHcfaaCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11259,6 +11924,7 @@ control std
 controlId wgEncodeEH000946
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001894
 fileName wgEncodeAwgTfbsUwHcmCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11276,6 +11942,7 @@ control std
 controlId wgEncodeEH000948
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000983
 fileName wgEncodeAwgTfbsUwHcpeCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11293,6 +11960,7 @@ control std
 controlId wgEncodeEH000950
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002055
 fileName wgEncodeAwgTfbsUwHct116CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11310,6 +11978,7 @@ control std
 controlId wgEncodeEH000952
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000984
 fileName wgEncodeAwgTfbsUwHeeCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11327,6 +11996,7 @@ control std
 controlId wgEncodeEH000464
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000396
 fileName wgEncodeAwgTfbsUwHek293CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11344,6 +12014,7 @@ control std
 controlId wgEncodeEH000469
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000398
 fileName wgEncodeAwgTfbsUwHelas3CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11361,6 +12032,7 @@ control std
 controlId wgEncodeEH000470
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000401
 fileName wgEncodeAwgTfbsUwHepg2CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11378,6 +12050,7 @@ control std
 controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002547
 fileName wgEncodeAwgTfbsUwHffCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11395,6 +12068,7 @@ control std
 controlId wgEncodeEH001896
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001895
 fileName wgEncodeAwgTfbsUwHffmycCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11412,6 +12086,7 @@ control std
 controlId wgEncodeEH000465
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000397
 fileName wgEncodeAwgTfbsUwHl60CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11429,6 +12104,7 @@ control std
 controlId wgEncodeEH000466
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000419
 fileName wgEncodeAwgTfbsUwHmecCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11446,6 +12122,7 @@ control std
 controlId wgEncodeEH000956
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000985
 fileName wgEncodeAwgTfbsUwHmfCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11463,6 +12140,7 @@ control std
 controlId wgEncodeEH000958
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000986
 fileName wgEncodeAwgTfbsUwHpafCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11480,6 +12158,7 @@ control std
 controlId wgEncodeEH000960
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000987
 fileName wgEncodeAwgTfbsUwHpfCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11497,6 +12176,7 @@ control std
 controlId wgEncodeEH000467
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000405
 fileName wgEncodeAwgTfbsUwHreCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11514,6 +12194,7 @@ control std
 controlId wgEncodeEH000962
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000988
 fileName wgEncodeAwgTfbsUwHrpeCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11531,6 +12212,7 @@ control std
 controlId wgEncodeEH000468
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000410
 fileName wgEncodeAwgTfbsUwHuvecCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11548,6 +12230,7 @@ control std
 controlId wgEncodeEH000964
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002056
 fileName wgEncodeAwgTfbsUwHvmfCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11565,6 +12248,7 @@ control std
 controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000399
 fileName wgEncodeAwgTfbsUwK562CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11582,6 +12266,7 @@ control std
 controlId wgEncodeEH000968
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002057
 fileName wgEncodeAwgTfbsUwMcf7CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11599,6 +12284,7 @@ control std
 controlId wgEncodeEH000970
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001898
 fileName wgEncodeAwgTfbsUwNb4CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11616,6 +12302,7 @@ control std
 controlId wgEncodeEH000972
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002058
 fileName wgEncodeAwgTfbsUwNhdfneoCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11633,6 +12320,7 @@ control std
 controlId wgEncodeEH000472
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000406
 fileName wgEncodeAwgTfbsUwNhekCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11650,6 +12338,7 @@ control std
 controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002548
 fileName wgEncodeAwgTfbsUwNhlfCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11667,6 +12356,7 @@ control std
 controlId wgEncodeEH002045
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002059
 fileName wgEncodeAwgTfbsUwRptecCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11684,6 +12374,7 @@ control std
 controlId wgEncodeEH000473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000437
 fileName wgEncodeAwgTfbsUwSaecCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11701,6 +12392,7 @@ control std
 controlId wgEncodeEH000474
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000439
 fileName wgEncodeAwgTfbsUwSknshraCtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11718,6 +12410,7 @@ control std
 controlId wgEncodeEH000475
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH000402
 fileName wgEncodeAwgTfbsUwWerirb1CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11735,6 +12428,7 @@ control std
 controlId wgEncodeEH001903
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001902
 fileName wgEncodeAwgTfbsUwWi38CtcfUniPk.narrowPeak.gz
 lab UW
 project wgEncode
@@ -11743,4 +12437,4 @@ target CTCF
 treatment None
 view Peaks
 
-# MAGIC: 252674357
+# MAGIC: -708373999
