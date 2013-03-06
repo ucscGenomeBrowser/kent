@@ -14,7 +14,8 @@
 /* Global vars - all of which can be set by command line options. */
 int pseudoCount = 1;
 int maxChainSize = 3;
-int outSize = 10000;
+int initialOutSize = 10000;
+int maxOutSize;
 boolean fullOnly = FALSE;
 
 void usage()
@@ -36,13 +37,14 @@ errAbort(
   "   -fullOnly - Only output chains of size above\n"
   "   -chain=fileName - Write out word chain to file\n"
   "   -afterChain=fileName - Write out word chain after faux generation to file for debugging\n"
-  "   -outSize=N - Output this many words. Default %d\n"
+  "   -initialOutSize=N - Output this many words. Default %d\n"
+  "   -maxOutSize=N - Expand output up to this many words if not all monomers output initially\n"
   "   -pseudoCount=N - Add this number to observed quantities - helps compensate for what's not\n"
   "                observed.  Default %d\n"
   "   -seed=N - Initialize random number with this seed for consistent results, otherwise\n"
   "             it will generate different results each time it's run.\n"
   "   -unsubbed=fileName - Write output before substitution of missing monomers to file\n"
-  , maxChainSize, outSize, pseudoCount
+  , maxChainSize, initialOutSize, pseudoCount
   );
 }
 
@@ -52,7 +54,8 @@ static struct optionSpec options[] = {
    {"chain", OPTION_STRING},
    {"afterChain", OPTION_STRING},
    {"fullOnly", OPTION_BOOLEAN},
-   {"outSize", OPTION_INT},
+   {"initialOutSize", OPTION_INT},
+   {"maxOUtSize", OPTION_INT},
    {"pseudoCount", OPTION_INT},
    {"seed", OPTION_INT},
    {"unsubbed", OPTION_STRING},
@@ -285,6 +288,7 @@ if (pseudoCount > 0)
     wordTreeAddPseudoCount(wt, pseudoCount);
 wt->normVal = normVal;
 wt->outTarget = outTarget;
+wt->outCount = 0;
 int childrenTotalUses = wordTreeSumUseCounts(wt->children);
 struct wordTree *child;
 for (child = wt->children; child != NULL; child = child->next)
@@ -1024,10 +1028,10 @@ for (node = ll->head; !dlEnd(node); node = node->next)
 carefulClose(&f);
 }
 
-static void wordTreeGenerateFile(struct alphaStore *store, int maxSize, struct wordTree *firstWord, 
-	int maxOutputWords, char *fileName)
-/* Create file containing words base on tree probabilities.  The wordTreeGenerateList does
- * most of work. */
+static struct dlList *wordTreeMakeList(struct alphaStore *store, int maxSize, 
+    struct wordTree *firstWord, int maxOutputWords)
+/* Create word list base on tree probabilities, and then substituting in unused
+ * monomers if possible. */
 {
 struct dlList *ll = wordTreeGenerateList(store, maxSize, firstWord, maxOutputWords);
 verbose(2, "Generated initial output list\n");
@@ -1036,9 +1040,7 @@ if (unsubbedFile)
     writeMonomerList(unsubbedFile, ll);
 subInMissing(store, ll);
 verbose(2, "Substituted in missing rare monomers\n");
-writeMonomerList(fileName, ll);
-verbose(2, "Wrote primary output\n");
-dlListFree(&ll);
+return ll;
 }
 
 
@@ -1486,7 +1488,10 @@ void monomerListNormalise(struct monomer *list, int totalCount, int outputSize)
 struct monomer *monomer;
 double scale = outputSize/totalCount;
 for (monomer = list; monomer != NULL; monomer = monomer->next)
+    {
+    monomer->outCount = 0;
     monomer->outTarget = round(scale * monomer->useCount);
+    }
 }
 
 void alphaStoreNormalize(struct alphaStore *store, int outputSize)
@@ -1611,21 +1616,11 @@ for (monomer = store->monomerList; monomer != NULL; monomer = monomer->next)
     }
 }
 
-void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
+void alphaAsmOneSize(struct alphaStore *store, int outSize, char *outFile)
 /* alphaAsm - assemble alpha repeat regions such as centromeres from reads that have
  * been parsed into various repeat monomer variants.  Cycles of these variants tend to
  * form higher order repeats. */
 {
-struct alphaStore *store = alphaStoreNew(maxChainSize);
-alphaReadListFromFile(readsFile, store);
-alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
-verbose(2, "Loaded input reads and monomer order\n");
-crossCheckMonomerOrderAndReads(store, "m", readsFile, monomerOrderFile);
-fillInTypes(store);
-integrateOrphans(store);
-verbose(2, "Filled in missing types and integrated orphan ends\n");
-makeMarkovChains(store);
-verbose(2, "Made Markov Chains\n");
 struct wordTree *wt = store->markovChains;
 alphaStoreNormalize(store, outSize);
 verbose(2, "Normalized Markov Chains\n");
@@ -1636,8 +1631,11 @@ if (optionExists("chain"))
     wordTreeWrite(wt, store->maxChainSize, fileName);
     }
 
-wordTreeGenerateFile(store, store->maxChainSize, 
-    pickWeightedRandomFromList(wt->children), outSize, outFile);
+struct dlList *ll = wordTreeMakeList(store, store->maxChainSize, 
+    pickWeightedRandomFromList(wt->children), outSize);
+writeMonomerList(outFile, ll);
+verbose(2, "Wrote primary output\n");
+dlListFree(&ll);
 
 if (optionExists("afterChain"))
     {
@@ -1646,6 +1644,35 @@ if (optionExists("afterChain"))
     }
 }
 
+void alphaAsm(char *readsFile, char *monomerOrderFile, char *outFile)
+/* alphaAsm - assemble alpha repeat regions such as centromeres from reads that have
+ * been parsed into various repeat monomer variants.  Cycles of these variants tend to
+ * form higher order repeats. */
+{
+/* This routine reads in the input,  and then calls a routine that produces the
+ * output for a given size.  If not all monomers are included in the output, then it
+ * will try to find the minimum output size needed to include all monomers. */
+
+/* Read in inputs, and put in "store" */
+struct alphaStore *store = alphaStoreNew(maxChainSize);
+alphaReadListFromFile(readsFile, store);
+alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
+verbose(2, "Loaded input reads and monomer order\n");
+
+/* Do some cross checking and filling out a bit for missing data. */
+crossCheckMonomerOrderAndReads(store, "m", readsFile, monomerOrderFile);
+fillInTypes(store);
+integrateOrphans(store);
+verbose(2, "Filled in missing types and integrated orphan ends\n");
+
+/* Make the main markov chains out of the reads. */
+makeMarkovChains(store);
+verbose(2, "Made Markov Chains\n");
+
+alphaAsmOneSize(store, initialOutSize, outFile);
+}
+
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -1653,7 +1680,11 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 maxChainSize = optionInt("size", maxChainSize);
-outSize = optionInt("outSize", outSize);
+initialOutSize = optionInt("initialOutSize", initialOutSize);
+maxOutSize = optionInt("maxOutSize", initialOutSize);  // Defaults to same as initialOutSize
+if (maxOutSize < initialOutSize)
+    errAbort("maxOutSize (%d) needs to be bigger than initialOutSize (%d)\n", 
+	maxOutSize, initialOutSize);
 fullOnly = optionExists("fullOnly");
 pseudoCount = optionInt("pseudoCount", pseudoCount);
 int seed = optionInt("seed", 0);
