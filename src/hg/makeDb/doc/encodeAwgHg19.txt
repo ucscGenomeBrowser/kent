@@ -485,9 +485,41 @@ cat > loadTfbs.csh << 'EOF'
     mkdir html
     cd html
     wget -nd -np http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html
+    wget -nd -np http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/trackDb.txt
     cp uniformTfbs.html ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeAwgTfbsUniform.html
     cd ..
 
+    # fix up labels
+    # short (<=17)
+    hgsql hg19 -e 'select shortLabel from trackDb_kate where tableName like "wgEncodeAwgTfbs%" and length(shortLabel) > 17' > badShorts.txt
+    # use <cell>+<treatment> <factor>
+    # to distinguish same experiment diff labs, add single char lab id:
+    # h=HudsonAlpha, s=Stanford, t=UTexas-Austin, w=UWashington, c=USC, v=Harvard, y=Yale, b=Broad
+    # Add '2, e.g. 'h2, if 2 experiments from same lab (e.g. different control or antibody)
+    hgsql hg19 -e 'select longLabel from trackDb_kate where tableName like "wgEncodeAwgTfbs%" and length(longLabel) > 80' > badLongs.txt
+    # Shorten by abbreviating treatments, and excise 'from' 
+
+    # set up file downloads in expected locale
+    set dir = /hive/groups/encode/dcc/pipeline/downloads/hg19
+
+    # must use name of composite
+    mkdir -p $dir/wgEncodeAwgTfbsUniform
+    cd $dir/wgEncodeAwgTfbsUniform
+
+    # setup downloads area in ENCODE 2 standard fashion (as on encodewiki 'Data Wrangler HOWTO')
+    mkdir release1
+    ln -s release1 beta
+    ln -s release1 releaseLatest
+
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwgTfbsUniform/downloads
+cat  << 'EOF' > link.csh
+    foreach f (*.gz)
+        echo $f
+        ln $f /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeAwgTfbsUniform/releaseLatest
+    end
+'EOF'
+    csh link.csh
+    cd $dir/wgEncodeAwgTfbsUniform/releaseLatest
 
 
 ###############################################
