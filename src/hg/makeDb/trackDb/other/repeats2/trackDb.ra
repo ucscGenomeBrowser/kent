@@ -207,6 +207,7 @@ visibility hide
 color 0,0,100
 type bigWig 0 1000
 priority 80
+allButtonPair on
 
 include trackDb.dnase.ra
 
@@ -219,6 +220,7 @@ visibility hide
 color 0,0,100
 type bigWig 0 800
 priority 85
+allButtonPair on
 
 include trackDb.histone.ra
 
@@ -231,5 +233,6 @@ visibility hide
 color 0,0,100
 type bigWig 0 100
 priority 90
+allButtonPair on
 
 include trackDb.tf.ra
