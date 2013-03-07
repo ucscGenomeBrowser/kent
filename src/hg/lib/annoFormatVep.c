@@ -255,7 +255,7 @@ for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
     if (i > 0)
 	fputc(',', self->f);
     char **words = row->data;
-    fprintf(self->f, words[extraItem->rowIx]);
+    fputs(words[extraItem->rowIx], self->f);
     }
 }
 

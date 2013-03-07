@@ -228,8 +228,7 @@ end
 
 # Lift up (leave the RepeatMasker header in place because we'll liftUp
 # again later):
-liftUp -type=.out stdout \$inLft error *.out \\
-  > tmpOut__out
+liftUp -type=.out stdout \$inLft error *.fa.out > tmpOut__out
 
 set nonomatch
 set alignFiles = ( *.align )
