@@ -115,6 +115,7 @@ static char *latChaNames[] = {"Latimeria chalumnae", NULL};
 static char *geoForNames[] = {"Geospiza fortis", NULL};
 static char *melUndNames[] = {"Melopsittacus undulatus", NULL};
 static char *micMurNames[] = {"Microcebus murinus", NULL};
+static char *musFurNames[] = {"Mustela putorius furo", "Mustela putorius", NULL};
 static char *ochPriNames[] = {"Ochotona princeps", NULL};
 static char *oreNilNames[] = {"Oreochromis niloticus", NULL};
 static char *proCapNames[] = {"Procavia capensis", NULL};
@@ -217,6 +218,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"geoFor", geoForNames},
     {"melUnd", melUndNames},
     {"micMur", micMurNames},
+    {"musFur", musFurNames},
     {"ochPri", ochPriNames},
     {"oreNil", oreNilNames},
     {"proCap", proCapNames},
