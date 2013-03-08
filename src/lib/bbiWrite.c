@@ -236,6 +236,35 @@ freeHash(&uniqHash);
 return usageList;
 }
 
+int bbiCalcResScalesAndSizes(int aveSize, 
+    int resScales[bbiMaxZoomLevels], int resSizes[bbiMaxZoomLevels])
+/* Fill in resScales with amount to zoom at each level, and zero out resSizes based
+ * on average span. Returns the number of zoom levels we actually will use. */
+{
+int resTryCount = bbiMaxZoomLevels, resTry;
+int resIncrement = bbiResIncrement;
+int minZoom = 10;
+int res = aveSize;
+if (res < minZoom)
+    res = minZoom;
+for (resTry = 0; resTry < resTryCount; ++resTry)
+    {
+    resSizes[resTry] = 0;
+    resScales[resTry] = res;
+    // if aveSize is large, then the initial value of res is large, and we
+    // and we cannot do all 10 levels without overflowing res* integers and other related variables.
+    if (res > 1000000000) 
+	{
+	resTryCount = resTry + 1;  
+	verbose(2, "resTryCount reduced from 10 to %d\n", resTryCount);
+	break;
+	}
+    res *= resIncrement;
+    }
+return resTryCount;
+}
+
+
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot)
 /* Count up number of sections needed for data. */
 {

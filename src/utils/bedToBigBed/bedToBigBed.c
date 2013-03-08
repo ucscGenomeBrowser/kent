@@ -533,6 +533,7 @@ if (eim != NULL)
     }
 }
 
+
 void bbFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
@@ -562,13 +563,13 @@ verbose(2, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, 
 
 /* Do first pass, mostly just scanning file and counting hits per chromosome. */
 int minDiff = 0;
-double aveSpan = 0;
+double aveSize = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, eim, 
-    &minDiff, &aveSpan, &bedCount);
+    &minDiff, &aveSize, &bedCount);
 verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
-verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSpan);
+verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSize);
 
 /* Open output file and write dummy header. */
 FILE *f = mustOpen(outName, "wb");
@@ -607,27 +608,8 @@ bits64 chromTreeOffset = ftell(f);
 bbiWriteChromInfo(usageList, blockSize, f);
 
 /* Set up to keep track of possible initial reduction levels. */
-int resTryCount = 10, resTry;
-int resIncrement = 4;
-int resScales[resTryCount], resSizes[resTryCount];
-int minZoom = 10;
-int res = aveSpan;
-if (res < minZoom)
-    res = minZoom;
-for (resTry = 0; resTry < resTryCount; ++resTry)
-    {
-    resSizes[resTry] = 0;
-    resScales[resTry] = res;
-    // if aveSpan is large, then the initial value of res is large,
-    //  and we cannot do all 10 levels without overflowing res* integers and other related variables.
-    if (res > 1000000000) 
-	{
-	resTryCount = resTry + 1;  
-	verbose(2, "resTryCount reduced from 10 to %d\n", resTryCount);
-	break;
-	}
-    res *= resIncrement;
-    }
+int resScales[bbiMaxZoomLevels], resSizes[bbiMaxZoomLevels];
+int resTryCount = bbiCalcResScalesAndSizes(aveSize, resScales, resSizes);
 
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
@@ -659,13 +641,15 @@ bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 int zoomLevels = 0;
 
 /* Write out first zoomed section while storing in memory next zoom level. */
-if (aveSpan > 0)
+/* This is just a block to make some variables more local. */
     {
+    assert(resTryCount > 0);
     bits64 dataSize = indexOffset - dataOffset;
     int maxReducedSize = dataSize/2;
     int initialReduction = 0, initialReducedCount = 0;
 
     /* Figure out initialReduction for zoom. */
+    int resTry;
     for (resTry = 0; resTry < resTryCount; ++resTry)
 	{
 	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
@@ -682,14 +666,23 @@ if (aveSpan > 0)
     	initialReduction, initialReducedCount);
     verbose(2, "dataSize %llu, reducedSize %llu, resScales[0] = %d\n", dataSize, (bits64)(initialReducedCount*sizeof(struct bbiSummaryOnDisk)), resScales[0]);
 
-    if (initialReduction > 0)
+    /* Force there to always be at least one zoom.  It may waste a little space on small
+     * files, but it makes files more uniform, and avoids special case code for calculating
+     * overall file summary. */
+    if (initialReduction == 0)
+        {
+	initialReduction = resScales[0];
+	initialReducedCount = resSizes[0];
+	}
+
+    /* This is just a block to make some variables more local. */
         {
 	struct lm *lm = lmInit(0);
-	int zoomIncrement = 4;
+	int zoomIncrement = bbiResIncrement;
 	lineFileRewind(lf);
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
 		fieldCount, lf, initialReduction, initialReducedCount, 
-		resIncrement, blockSize, itemsPerSlot, doCompress, lm, 
+		zoomIncrement, blockSize, itemsPerSlot, doCompress, lm, 
 		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
 	verboseTime(1, "pass3 - writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;

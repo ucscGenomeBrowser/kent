@@ -370,7 +370,8 @@ bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, NULL, 
     &minDiff, &aveSize, &bedCount);
 verboseTime(2, "pass1");
-verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
+verbose(2, "%d chroms in %s, minDiff=%d, aveSize=%g, bedCount=%lld\n", 
+    slCount(usageList), inName, minDiff, aveSize, bedCount);
 
 /* Write out dummy header, zoom offsets. */
 FILE *f = mustOpen(outName, "wb");
@@ -388,21 +389,8 @@ bits64 chromTreeOffset = ftell(f);
 bbiWriteChromInfo(usageList, blockSize, f);
 
 /* Set up to keep track of possible initial reduction levels. */
-int resTryCount = 10, resTry;
-int resIncrement = 4;
-int resScales[resTryCount], resSizes[resTryCount];
-int res = minDiff * 2;
-if (res > 0)
-    {
-    for (resTry = 0; resTry < resTryCount; ++resTry)
-	{
-	resSizes[resTry] = 0;
-	resScales[resTry] = res;
-	res *= resIncrement;
-	}
-    }
-else
-    resTryCount = 0;
+int resScales[bbiMaxZoomLevels], resSizes[bbiMaxZoomLevels];
+int resTryCount = bbiCalcResScalesAndSizes(aveSize, resScales, resSizes);
 
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
@@ -430,13 +418,15 @@ bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 int zoomLevels = 0;
 
 /* Write out first zoomed section while storing in memory next zoom level. */
-if (minDiff > 0)
+/* This is just a block to make some variables more local. */
     {
+    assert(resTryCount > 0);
     bits64 dataSize = indexOffset - dataOffset;
     int maxReducedSize = dataSize/2;
     int initialReduction = 0, initialReducedCount = 0;
 
     /* Figure out initialReduction for zoom. */
+    int resTry;
     for (resTry = 0; resTry < resTryCount; ++resTry)
 	{
 	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
@@ -452,14 +442,22 @@ if (minDiff > 0)
     verbose(2, "initialReduction %d, initialReducedCount = %d\n", 
     	initialReduction, initialReducedCount);
 
-    if (initialReduction > 0)
+    /* Force there to always be at least one zoom.  It may waste a little space on small
+     * files, but it makes files more uniform, and avoids special case code for calculating
+     * overall file summary. */
+    if (initialReduction == 0)
+        {
+	initialReduction = resScales[0];
+	initialReducedCount = resSizes[0];
+	}
+    /* This is just a block to make some variables more local. */
         {
 	struct lm *lm = lmInit(0);
-	int zoomIncrement = 4;
+	int zoomIncrement = bbiResIncrement;
 	lineFileRewind(lf);
 	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
 		lf, initialReduction, initialReducedCount,
-		resIncrement, blockSize, itemsPerSlot, doCompress, lm, 
+		zoomIncrement, blockSize, itemsPerSlot, doCompress, lm, 
 		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
 	verboseTime(2, "writeReducedOnceReturnReducedTwice");
 	zoomAmounts[0] = initialReduction;

@@ -383,6 +383,14 @@ struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash 
 /* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
  * collect max field sizes there too. */
 
+#define bbiMaxZoomLevels 10	/* Max number of zoom levels */
+#define bbiResIncrement 4	/* Amount to reduce at each zoom level */
+
+int bbiCalcResScalesAndSizes(int aveSize, 
+    int resScales[bbiMaxZoomLevels], int resSizes[bbiMaxZoomLevels]);
+/* Fill in resScales with amount to zoom at each level, and zero out resSizes based
+ * on average span. Returns the number of zoom levels we actually will use. */
+
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot);
 /* Count up number of sections needed for data. */
 
