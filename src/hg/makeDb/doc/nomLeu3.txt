@@ -687,24 +687,25 @@ nomLeu3.perChromTables = no
     make etc-update
 
 #########################################################################
-# set default position to RHO gene displays  (DONE - 2012-07-24 - Hiram)
+# set default position to RHO gene displays  (DONE - 2013-03-08 -Pauline)
     hgsql -e \
-'update dbDb set defaultPos="GL397298:23130040-23137416" where name="nomLeu3";' \
+'update dbDb set defaultPos="chr21:52,409,568-52,414,485" where name="nomLeu3";' \
 	hgcentraltest
 
 ############################################################################
-# downloads and pushQ entry (DONE - 2012-10-23 - Hiram)
+# downloads and pushQ entry (DONE - 2013-03-08 - Pauline)
     # after adding nomLeu3 to the all.joiner file and verifying that
-    #   joinerCheck is clean, can construct the downloads:
+    #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
+    #   to make sure there are no errors), can construct the downloads:
     cd /hive/data/genomes/nomLeu3
-    time makeDownloads.pl -workhorse=hgwdev nomLeu3
-    #   real    5m51.143s
+    /usr/bin/time -p makeDownloads.pl -workhorse=hgwdev nomLeu3
+    #   real 1400.59
 
     mkdir /hive/data/genomes/nomLeu3/pushQ
     cd /hive/data/genomes/nomLeu3/pushQ
     # Mark says don't let the transMap track get there
     time makePushQSql.pl nomLeu3 2> stderr.txt > nomLeu3.sql
-    #   real    3m38.916s
+    #  real	2m55.404s 
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/nomLeu3/wib/gc5Base.wib
@@ -719,7 +720,7 @@ nomLeu3.perChromTables = no
 
 
 ############################################################################
-# construct liftOver to nomLeu3 (DONE - 2013-03-06 - Hiram)
+# construct liftOver to nomLeu3 (DONE - 2013-03-07 - Pauline)
     screen -S lift	# manage this longish running job in a screen
     mkdir /hive/data/genomes/nomLeu2/bed/blat.nomLeu3.2013-03-06
     cd /hive/data/genomes/nomLeu2/bed/blat.nomLeu3.2013-03-06
@@ -729,7 +730,6 @@ nomLeu3.perChromTables = no
 	-debug -dbHost=hgwdev -workhorse=hgwdev nomLeu2 nomLeu3
     #   real    0m1.838s
     # if that is OK, then run it:
-XXX Wed Mar  6 12:17:30 PST 2013
     /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
 	-dbHost=hgwdev -workhorse=hgwdev nomLeu2 nomLeu3 >& do.log 
