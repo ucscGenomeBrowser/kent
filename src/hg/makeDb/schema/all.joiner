@@ -2725,7 +2725,7 @@ identifier cgapAlias
     $gbd.cgapAlias.alias dupeOk
     $gbd,!hg16,!hg18,!hg19,!mm9,!mm10.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19,mm9,mm10.kgXref.geneSymbol minCheck=0.85
+    hg18,hg19,mm9,mm10.kgXref.geneSymbol minCheck=0.84
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
