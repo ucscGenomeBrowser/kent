@@ -628,24 +628,27 @@ XXX these steps already done? (seems like not? - nomLeu3.cleanWMSdust.faSize.txt
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Heterocephalus glaber	45	0	0
+#Nomascus leucogenys     18      1       0
+
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add nomLeu3 just after ce2
+
 # nomLeu3 (Gibbon)
 nomLeu3.serverGenome = /hive/data/genomes/nomLeu3/nomLeu3.2bit
 nomLeu3.clusterGenome = /hive/data/genomes/nomLeu3/nomLeu3.2bit
-nomLeu3.ooc = /hive/data/genomes/nomLeu3/jkStuff/nomLeu3.11.ooc
-nomLeu3.lift = no
-nomLeu3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-nomLeu3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-nomLeu3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-nomLeu3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-nomLeu3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-nomLeu3.refseq.mrna.native.load = no
+nomLeu3.ooc = /hive/data/genomes/nomLeu3/nomLeu3.11.ooc
+nomLeu3.lift = /hive/data/genomes/nomLeu3/jkStuff/nomLeu3.nonBridged.lift
+nomLeu3.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+nomLeu3.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+nomLeu3.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+nomLeu3.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+nomLeu3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+nomLeu3.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+nomLeu3.refseq.mrna.native.load  = no
 nomLeu3.refseq.mrna.xeno.load = yes
 nomLeu3.genbank.mrna.native.load = no
 nomLeu3.genbank.mrna.xeno.load = yes
@@ -654,14 +657,16 @@ nomLeu3.downloadDir = nomLeu3
 nomLeu3.perChromTables = no
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding nomLeu3 Gibbon" etc/genbank.conf
+    git commit -m "adding nomLeu3 Gibbon refs #9812" etc/genbank.conf
     git push
     make etc-update
 
     ssh hgwdev			# used to do this on "genbank" machine
     screen -S nomLeu3           # long running job managed in screen
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbAlignStep -initial nomLeu3 &
+XXX Wed Mar  6 11:40:42 PST 2013
+    /usr/bin/time -p nice ./bin/gbAlignStep -initial nomLeu3 &
+    #  logFile: var/build/logs/2013.03.06-11:36:35.nomLeu3.initalign.log
     #	 var/build/logs/2012.05.07-10:21:12.nomLeu3.initalign.log
     #   real    2135m50.446s
 
@@ -688,14 +693,50 @@ nomLeu3.perChromTables = no
 	hgcentraltest
 
 ############################################################################
-# pushQ entry (DONE - 2012-07-24 - Hiram)
+# downloads and pushQ entry (DONE - 2012-10-23 - Hiram)
+    # after adding nomLeu3 to the all.joiner file and verifying that
+    #   joinerCheck is clean, can construct the downloads:
+    cd /hive/data/genomes/nomLeu3
+    time makeDownloads.pl -workhorse=hgwdev nomLeu3
+    #   real    5m51.143s
+
     mkdir /hive/data/genomes/nomLeu3/pushQ
     cd /hive/data/genomes/nomLeu3/pushQ
     # Mark says don't let the transMap track get there
-    time makePushQSql.pl nomLeu3 2> stderr.txt | grep -v transMap > nomLeu3.sql
-    #   real    3m52.913s
+    time makePushQSql.pl nomLeu3 2> stderr.txt > nomLeu3.sql
+    #   real    3m38.916s
 
-    scp -p nomLeu3.sql hgwbeta:/tmp
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/nomLeu3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/nomLeu3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/nomLeu3/bbi/quality.bw
+# WARNING: nomLeu3 does not have seq
+# WARNING: nomLeu3 does not have extFile
+# WARNING: nomLeu3 does not have estOrientInfo
+
+    scp -p nomLeu3.sql hgwbeta:/tmp/
     ssh hgwbeta "hgsql qapushq < /tmp/nomLeu3.sql"
+
+
+############################################################################
+# construct liftOver to nomLeu3 (DONE - 2013-03-06 - Hiram)
+    screen -S lift	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/nomLeu2/bed/blat.nomLeu3.2013-03-06
+    cd /hive/data/genomes/nomLeu2/bed/blat.nomLeu3.2013-03-06
+    # check it with -debug first to see if it is going to work:
+    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev nomLeu2 nomLeu3
+    #   real    0m1.838s
+    # if that is OK, then run it:
+XXX Wed Mar  6 12:17:30 PST 2013
+    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev nomLeu2 nomLeu3 >& do.log 
+    #	real    277m26.138s
+
+    # verify this file exists:
+    #	/gbdb/nomLeu2/liftOver/nomLeu2.over.chain.gz
+    # and try out the conversion on genome-test from nomLeu2 to nomLeu3
 
 ############################################################################
