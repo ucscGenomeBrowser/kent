@@ -3922,6 +3922,10 @@ tablesIgnored $gbd
     miRNA
     nestedRepeats
     nestedRepeatsRM327
+    numtSAssembled
+    numtS
+    numtSMitochondrion
+    numtSMitochondrionChrPlacement
     qPcrPrimers
     quality
     qualityBw
@@ -3975,12 +3979,6 @@ tablesIgnored $kgDb
     pbResAvgStd
     pbStamp
     pep%Dist
-
-tablesIgnored hg18
-    numtSAssembled
-    numtS
-    numtSMitochondrion
-    numtSMitochondrionChrPlacement
 
 tablesIgnored hg19
     affyCytoScan
