@@ -664,25 +664,25 @@ nomLeu3.perChromTables = no
     ssh hgwdev			# used to do this on "genbank" machine
     screen -S nomLeu3           # long running job managed in screen
     cd /cluster/data/genbank
-XXX Wed Mar  6 11:40:42 PST 2013
-    /usr/bin/time -p nice ./bin/gbAlignStep -initial nomLeu3 &
-    #  logFile: var/build/logs/2013.03.06-11:36:35.nomLeu3.initalign.log
-    #	 var/build/logs/2012.05.07-10:21:12.nomLeu3.initalign.log
-    #   real    2135m50.446s
+/usr/bin/time -p nice ./bin/gbAlignStep -initial nomLeu3 &
+#  logFile: var/build/logs/2013.03.06-11:36:35.nomLeu3.initalign.log
+#	 var/build/logs/2012.05.07-10:21:12.nomLeu3.initalign.log
+#   real    2135m50.446s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad nomLeu3 &
-    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
-    #   real    80m50.729s
 
-    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    /usr/bin/time -p nice ./bin/gbDbLoadStep -drop -initialLoad nomLeu3 &
+    #   logFile: var/dbload/hgwdev/logs/2013.03.08-09:52:00.dbload.log
+   #   real 2453.76
+
+    # enable daily alignment and update of hgwdev (DONE - 2013-03-08 - Pauline)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add nomLeu3 to:
     vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added nomLeu3." etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added nomLeu3. refs #9812" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
