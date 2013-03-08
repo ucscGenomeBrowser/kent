@@ -1824,7 +1824,7 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     dm1.bdgpToRefSeq.value minCheck=0.91
-    $dm,!dm1.flyBaseToRefSeq.value minCheck=0.96
+    $dm,!dm1.flyBaseToRefSeq.value minCheck=0.94
     $mm.mrnaRefseq.mrna minCheck=0.03
     $mm.dupSpMrna.mrnaID minCheck=0.60
     $mm,!mm8,!mm9,!mm10.dupSpMrna.dupMrnaID minCheck=0.20
