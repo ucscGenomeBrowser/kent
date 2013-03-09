@@ -14,7 +14,7 @@
 #include "bPlusTree.h"
 #include "bigBed.h"
 
-char *version = "2.4";
+char *version = "2.5";
 
 /* Things set directly or indirectly by command lne in main() routine. */
 int blockSize = 256;
@@ -337,7 +337,7 @@ while (lineFileNextReal(lf, &line))
 return tree;
 }
 
-static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
+static struct bbiSummary *bedWriteReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
 	int fieldCount, struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
 	int zoomIncrement, int blockSize, int itemsPerSlot, boolean doCompress,
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
@@ -638,76 +638,13 @@ verboseTime(2, "index write");
 bits32 zoomAmounts[bbiMaxZoomLevels];
 bits64 zoomDataOffsets[bbiMaxZoomLevels];
 bits64 zoomIndexOffsets[bbiMaxZoomLevels];
-int zoomLevels = 0;
 
-/* Write out first zoomed section while storing in memory next zoom level. */
-/* This is just a block to make some variables more local. */
-    {
-    assert(resTryCount > 0);
-    bits64 dataSize = indexOffset - dataOffset;
-    int maxReducedSize = dataSize/2;
-    int initialReduction = 0, initialReducedCount = 0;
-
-    /* Figure out initialReduction for zoom. */
-    int resTry;
-    for (resTry = 0; resTry < resTryCount; ++resTry)
-	{
-	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
-	if (doCompress)
-	    reducedSize /= 2;	// Estimate!
-	if (reducedSize <= maxReducedSize)
-	    {
-	    initialReduction = resScales[resTry];
-	    initialReducedCount = resSizes[resTry];
-	    break;
-	    }
-	}
-    verbose(2, "initialReduction %d, initialReducedCount = %d\n", 
-    	initialReduction, initialReducedCount);
-    verbose(2, "dataSize %llu, reducedSize %llu, resScales[0] = %d\n", dataSize, (bits64)(initialReducedCount*sizeof(struct bbiSummaryOnDisk)), resScales[0]);
-
-    /* Force there to always be at least one zoom.  It may waste a little space on small
-     * files, but it makes files more uniform, and avoids special case code for calculating
-     * overall file summary. */
-    if (initialReduction == 0)
-        {
-	initialReduction = resScales[0];
-	initialReducedCount = resSizes[0];
-	}
-
-    /* This is just a block to make some variables more local. */
-        {
-	struct lm *lm = lmInit(0);
-	int zoomIncrement = bbiResIncrement;
-	lineFileRewind(lf);
-	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
-		fieldCount, lf, initialReduction, initialReducedCount, 
-		zoomIncrement, blockSize, itemsPerSlot, doCompress, lm, 
-		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
-	verboseTime(1, "pass3 - writeReducedOnceReturnReducedTwice");
-	zoomAmounts[0] = initialReduction;
-	zoomLevels = 1;
-
-	int zoomCount = initialReducedCount;
-	int reduction = initialReduction * zoomIncrement;
-	while (zoomLevels < bbiMaxZoomLevels)
-	    {
-	    int rezoomCount = slCount(rezoomedList);
-	    if (rezoomCount >= zoomCount)
-	        break;
-	    zoomCount = rezoomCount;
-	    zoomDataOffsets[zoomLevels] = ftell(f);
-	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
-	    	blockSize, itemsPerSlot, doCompress, f);
-	    zoomAmounts[zoomLevels] = reduction;
-	    ++zoomLevels;
-	    reduction *= zoomIncrement;
-	    rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction, lm);
-	    }
-	lmCleanup(&lm);
-	verboseTime(1, "further reductions");
-	}
-    }
+/* Call monster zoom maker library function that bedGraphToBigWig also uses. */
+int zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
+    bedWriteReducedOnceReturnReducedTwice, fieldCount,
+    doCompress, indexOffset - dataOffset, 
+    usageList, resTryCount, resScales, resSizes, 
+    zoomAmounts, zoomDataOffsets, zoomIndexOffsets, &totalSum);
 
 /* Write out extra indexes if need be. */
 if (eim)

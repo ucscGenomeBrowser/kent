@@ -280,7 +280,7 @@ boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 e
 struct bbiSummaryElement bbiTotalSummary(struct bbiFile *bbi);
 /* Return summary of entire file! */
 
-/****** Write side of things - implemented in bbiWrite.c ********/
+/****** Write side of things - implemented in bbiWrite.c.  Few people need this. ********/
 
 struct bbiBoundsArray
 /* Minimum info needed for r-tree indexer - where a section lives on disk and the
@@ -326,8 +326,6 @@ void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum,
 struct bbiSummary *bbiSummarySimpleReduce(struct bbiSummary *list, int reduction, struct lm *lm);
 /* Do a simple reduction - where among other things the reduction level is an integral
  * multiple of the previous reduction level, and the list is sorted. Allocate result out of lm. */
-
-#define bbiMaxZoomLevels 10	/* Maximum zoom levels produced by writers. */
 
 void bbiWriteDummyHeader(FILE *f);
 /* Write out all-zero header, just to reserve space for it. */
@@ -390,6 +388,35 @@ int bbiCalcResScalesAndSizes(int aveSize,
     int resScales[bbiMaxZoomLevels], int resSizes[bbiMaxZoomLevels]);
 /* Fill in resScales with amount to zoom at each level, and zero out resSizes based
  * on average span. Returns the number of zoom levels we actually will use. */
+
+typedef struct bbiSummary *bbiWriteReducedOnceReturnReducedTwice(
+	struct bbiChromUsage *usageList, int fieldCount,
+	struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
+	int zoomIncrement, int blockSize, int itemsPerSlot, boolean doCompress,
+	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
+	struct bbiSummaryElement *totalSum);
+/* Typedef for a function that writes out data reduced by factor of initial reduction, and
+ * also returns an array of bbiSummaries for the next reduction level. */
+
+int bbiWriteZoomLevels(
+    struct lineFile *lf,    /* Input file. */
+    FILE *f,		    /* Output. */
+    int blockSize,	    /* Size of index block */
+    int itemsPerSlot,	    /* Number of data points bundled at lowest level. */
+    bbiWriteReducedOnceReturnReducedTwice writeReducedOnceReturnReducedTwice,   /* callback */
+    int fieldCount,	    /* Number of fields in bed (4 for bedGraph) */
+    boolean doCompress,	    /* Do we compress.  Answer really should be yes! */
+    bits64 dataSize,	    /* Size of data on disk (after compression if any). */
+    struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
+    int resTryCount, int resScales[], int resSizes[],   /* How much to zoom at each level */
+    bits32 zoomAmounts[bbiMaxZoomLevels],      /* Fills in amount zoomed at each level. */
+    bits64 zoomDataOffsets[bbiMaxZoomLevels],  /* Fills in where data starts for each zoom level. */
+    bits64 zoomIndexOffsets[bbiMaxZoomLevels], /* Fills in where index starts for each level. */
+    struct bbiSummaryElement *totalSum);
+/* Write out all the zoom levels and return the number of levels written.  Writes 
+ * actual zoom amount and the offsets of the zoomed data and index in the last three
+ * parameters.  Sorry for all the parameters - it was this or duplicate a big chunk of
+ * code between bedToBigBed and bedGraphToBigWig. */
 
 int bbiCountSectionsNeeded(struct bbiChromUsage *usageList, int itemsPerSlot);
 /* Count up number of sections needed for data. */
