@@ -2,4 +2,6 @@
 db rn5
 liftUp /hive/data/genomes/rn5/jkStuff/ensToUcsc.lift
 # optionally update the knownToEnsembl table after ensGene updated
-knownToEnsembl yes
+#rn5 does not have knownGene nor rgdGene2, so the following
+# will not work. See redmine #10358 for more details
+#knownToEnsembl yes

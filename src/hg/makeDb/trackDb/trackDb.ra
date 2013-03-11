@@ -3244,7 +3244,7 @@ html numtSeq2012
 
     track numtSMitochondrion
     parent numtSeq2012
-    shortLabel NumtS on mitochondrion
+    shortLabel NumtS on chrM
     longLabel $Organism NumtS on mitochondrion
     useScore 1
     color 0,60,120
