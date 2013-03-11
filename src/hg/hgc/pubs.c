@@ -190,6 +190,21 @@ char *newUrl = replaceChars(longUrl, "article", "svapps");
 return newUrl;
 }
 
+static void printPositionAndSize(int start, int end, bool showSize)
+{
+printf("<B>Position:</B>&nbsp;"
+           "<A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d\">",
+                  hgTracksPathAndSettings(), database, seqName, start+1, end);
+char startBuf[64], endBuf[64];
+sprintLongWithCommas(startBuf, start + 1);
+sprintLongWithCommas(endBuf, end);
+printf("%s:%s-%s</A><BR>\n", seqName, startBuf, endBuf);
+long size = end - start;
+sprintLongWithCommas(startBuf, size);
+if (showSize)
+    printf("<B>Genomic Size:</B>&nbsp;%s<BR>\n", startBuf);
+}
+
 static void printFilterLink(char *pslTrack, char *articleId, char *articleTable)
 /* print a link to hgTracks with an additional cgi param to activate the single article filter */
 {
@@ -208,6 +223,8 @@ static void printFilterLink(char *pslTrack, char *articleId, char *articleTable)
 
     printf("Show these sequence matches individually on genome browser</A> (activates track \""
         "Individual matches for article\")</P>");
+
+    printPositionAndSize(start, end, 1);
     printf(
         "      </div> <!-- class: subsection --> \n");
     hFreeConn(&conn);
@@ -481,7 +498,13 @@ web2StartTableC("stdTbl centeredStdTbl");
 web2StartTheadC("stdTblHead");
 if (showDesc)
     web2PrintHeaderCell("Article file", 10);
-web2PrintHeaderCell("One row per sequence, with flanking text, sequence in bold", 60);
+
+// yif sequences have no flanking text at M. Krauthammer's request
+if (stringIn("yif", articleSource))
+    web2PrintHeaderCell("Matching sequences", 60);
+else
+    web2PrintHeaderCell("One row per sequence, with flanking text, sequence in bold", 60);
+
 if (pubsDebug)
     web2PrintHeaderCell("Identifiers", 30);
 
@@ -558,7 +581,17 @@ for (el = locs; el != NULL; el = el->next)
     }
 }
 
-
+void removeFlank (char *snippet) 
+/* keep only the parts inside <b> to </b> of a string, modifies the string in place */
+{
+char* startPtr = stringIn("<B>", snippet);
+char* endPtr   = stringIn("</B>", snippet);
+if (startPtr!=0 && endPtr!=0 && startPtr<endPtr) {
+    char* buf = stringBetween("<B>", "</B>", snippet);
+    memcpy(snippet, buf, strlen(buf)+1);
+    freeMem(buf);
+    }
+}
 
 
 static bool printSeqSection(char *articleId, char *title, bool showDesc, struct sqlConnection *conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta, char *pslTable, char *articleTable)
@@ -594,15 +627,19 @@ title, cartSidUrlString(cart), cgiString("o"), cgiString("t"), cgiString("g"), c
 web2StartSection("pubsSection", "%s", fullTitle);
 
 // print filtering link at start of table & table headers
-if (isClickedSection)
+if (isClickedSection) {
     printFilterLink(pslTable, articleId, articleTable);
+    }
 
 if (!fasta) 
     printSeqHeaders(showDesc, isClickedSection);
 
 // output rows
 char **row;
-char *fileUrl = NULL; // we might need this after the loop for yif articles
+
+// the URL of the file from the clicked sequences, for YIF
+char *clickedFileUrl = NULL; 
+
 bool foundSkippedRows = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -613,17 +650,30 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *fileId   = row[4];
     char *seqId    = row[5];
     char *seq      = row[6];
-    fileUrl  = row[7];
+    char *fileUrl  = row[7];
 
     // annotation (=sequence) ID is a 64 bit int with 10 digits for 
     // article, 3 digits for file, 5 for annotation
     char annotId[100];
+    
+    // some debugging help
     safef(annotId, 100, "%010d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
     if (pubsDebug)
         printf("%s", annotId);
 
     // only display this sequence if we're in the right section
     if (clickedSeqs!=NULL && ((hashLookup(clickedSeqs, annotId)!=NULL) != isClickedSection)) {
+        foundSkippedRows = TRUE;
+        continue;
+    }
+    // if we're in the clicked section and the current sequence is one that matched here
+    // then keep the current URL, as we might need it afterwards
+    else
+        clickedFileUrl = cloneString(fileUrl);
+
+    // suppress non-matches if the sequences come from YIF as figures can 
+    // contain tons of non-matching sequences
+    if (stringIn("yif", articleSource) && isEmpty(locString)) {
         foundSkippedRows = TRUE;
         continue;
     }
@@ -635,11 +685,17 @@ while ((row = sqlNextRow(sr)) != NULL)
         web2StartRow();
 
         // column 1: type of file (main or supp)
-        if (showDesc)
-            web2PrintCellS("word-break:break-all", fileDesc);
+        if (showDesc) 
+            {
+            char linkStr[4096];
+            safef(linkStr, sizeof(linkStr), "<a href=\"%s\">%s</a>", fileUrl, fileDesc);
+            web2PrintCellS("word-break:break-all", linkStr);
+            }
         
         // column 2: snippet
         web2StartCellS("word-break:break-all");
+        if (stringIn("yif", articleSource))
+            removeFlank(snippet);
         printAddWbr(snippet, 40);
         web2EndCell();
 
@@ -679,12 +735,13 @@ if (!fasta)
 
 web2EndSection();
 /* Yale Image finder files contain links to the image itself */
-if (stringIn("yif", articleSource) && (fileUrl!=NULL) && isClickedSection) {
-    char* imgTitle = "Sequences were found in text obtained with optical character recognition from this figure:\n";
+if (stringIn("yif", articleSource) && (clickedFileUrl!=NULL) && isClickedSection) {
+    char* imgTitle = "<A href=\"http://krauthammerlab.med.yale.edu/imagefinder/\">Yale Image Finder</a>: figure where sequences were found";
     web2StartSection("section", "%s", imgTitle);
-    web2Img(fileUrl, "Image from YIF", 600, 10, 10); 
+    web2Img(clickedFileUrl, "Image from YIF", 600, 10, 10); 
     web2EndSection();
 }
+freeMem(clickedFileUrl);
 
 sqlFreeResult(&sr);
 return foundSkippedRows;
@@ -700,7 +757,7 @@ struct hash *clickedSeqs = getSeqIdHash(conn, trackTable, articleId, item, seqNa
 
 bool skippedRows;
 if (clickedSeqs) 
-    skippedRows = printSeqSection(articleId, "Sequences used to construct this feature", \
+    skippedRows = printSeqSection(articleId, "Sequences matching here", \
         fileDesc, conn, clickedSeqs, 1, fasta, pslTable, articleTable);
 else 
     skippedRows=1;
@@ -760,21 +817,6 @@ else
     safef(headerTitle, sizeof(headerTitle), "%s", item);
 
 genericHeader(tdb, headerTitle);
-}
-
-static void printPositionAndSize(int start, int end, bool showSize)
-{
-printf("<B>Position:</B>&nbsp;"
-           "<A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d\">",
-                  hgTracksPathAndSettings(), database, seqName, start+1, end);
-char startBuf[64], endBuf[64];
-sprintLongWithCommas(startBuf, start + 1);
-sprintLongWithCommas(endBuf, end);
-printf("%s:%s-%s</A><BR>\n", seqName, startBuf, endBuf);
-long size = end - start;
-sprintLongWithCommas(startBuf, size);
-if (showSize)
-    printf("<B>Genomic Size:</B>&nbsp;%s<BR>\n", startBuf);
 }
 
 static bioSeq *getSeq(struct sqlConnection *conn, char *table, char *id)
@@ -895,7 +937,6 @@ else
         }
     else
         {
-        printPositionAndSize(start, end, 1);
         pubsSequenceTable = trackDbRequiredSetting(tdb, "pubsSequenceTable");
         char *articleId = printArticleInfo(conn, item, articleTable);
         if (articleId!=NULL) 
