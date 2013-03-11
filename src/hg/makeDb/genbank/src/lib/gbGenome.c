@@ -33,6 +33,7 @@ static char *frNames[] = {"Takifugu rubripes", NULL};
 static char *dmNames[] = {"Drosophila melanogaster", "Drosophila sp.", NULL};
 static char *dpNames[] = {"Drosophila pseudoobscura", NULL};
 static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
+static char *panPanNames[] = {"Pan paniscus", NULL};
 static char *panTroNames[] = {"Pan troglodytes", "Pan troglodytes troglodytes", 
                               "Pan troglodytes verus", NULL};
 static char *gorGorNames[] = {"Gorilla gorilla", "Gorilla gorilla gorilla", "Gorilla gorilla uellensis", "Gorilla gorilla diehli", "Gorilla gorilla graueri", "Gorilla berengi", NULL};
@@ -115,6 +116,7 @@ static char *latChaNames[] = {"Latimeria chalumnae", NULL};
 static char *geoForNames[] = {"Geospiza fortis", NULL};
 static char *melUndNames[] = {"Melopsittacus undulatus", NULL};
 static char *micMurNames[] = {"Microcebus murinus", NULL};
+static char *musFurNames[] = {"Mustela putorius furo", "Mustela putorius", NULL};
 static char *ochPriNames[] = {"Ochotona princeps", NULL};
 static char *oreNilNames[] = {"Oreochromis niloticus", NULL};
 static char *proCapNames[] = {"Procavia capensis", NULL};
@@ -140,6 +142,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"dm", dmNames},
     {"dp", dpNames},
     {"sacCer", sacCerNames},
+    {"panPan", panPanNames},
     {"panTro", panTroNames},
     {"gorGor", gorGorNames},
     {"papAnu", papAnuNames},
@@ -217,6 +220,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"geoFor", geoForNames},
     {"melUnd", melUndNames},
     {"micMur", micMurNames},
+    {"musFur", musFurNames},
     {"ochPri", ochPriNames},
     {"oreNil", oreNilNames},
     {"proCap", proCapNames},

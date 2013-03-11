@@ -16,6 +16,8 @@ monDom	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Metath
 # Platypus Ornithorhynchus anatinus
 ornAna	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Prototheria; Monotremata; Ornithorhynchidae; Ornithorhynchus
 
+# Rock pigeon - Columba livia
+colLiv	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Columbiformes; Columbidae; Columba
 
 # Turkey Meleagris gallopavo
 melGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Meleagridinae; Meleagris
@@ -31,6 +33,9 @@ geoFor  Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arc
 
 # budgerigar Melopsittacus undulatus
 melUnd	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Melopsittacus
+
+# Puerto Rican parrot - Amazona vittata
+emaVit	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Amazona
 
 # Australian Saltwater crocodile Crocodylus porosus
 croPor	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Crocodylidae; Crocodylinae; Crocodylus

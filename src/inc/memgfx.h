@@ -34,6 +34,9 @@ typedef unsigned int Color;
 #define MG_GRAY    0x808080ff
 
 #define MAKECOLOR_32(r,g,b) (((unsigned int)0xff) | ((unsigned int)b<<8) | ((unsigned int)g << 16) | ((unsigned int)r << 24))
+#define COLOR_32_RED(c) (((c)>>24)&0xff)
+#define COLOR_32_GREEN(c) (((c)>>16)&0xff)
+#define COLOR_32_BLUE(c) (((c)>>8)&0xff)
 
 #else
 
@@ -48,6 +51,9 @@ typedef unsigned int Color;
 #define MG_GRAY    0xff808080
 
 #define MAKECOLOR_32(r,g,b) (((unsigned int)0xff<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
+#define COLOR_32_RED(c) ((c)&0xff)
+#define COLOR_32_GREEN(c) (((c)>>8)&0xff)
+#define COLOR_32_BLUE(c) (((c)>>16)&0xff)
 #endif
 
 #else /* 8-bit color */
@@ -385,5 +391,8 @@ struct rgbColor mgRgbTransformHsv(struct rgbColor in, double h, double s, double
  * Returns the transformed rgb value 
  * Use H=0, S=V=1 for identity transformation
  */
+
+struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx);
+/* Return rgb value at color index. */
 
 #endif /* MEMGFX_H */

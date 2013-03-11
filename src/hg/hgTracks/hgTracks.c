@@ -5118,6 +5118,7 @@ trashDirFile(&psTn, "hgt", "hgt", ".eps");
 if(!trackImgOnly)
     {
     printMenuBar();
+    printf("<div style=\"margin: 10px\">\n");
     printf("<H1>PDF Output</H1>\n");
     printf("PDF images can be printed with Acrobat Reader "
            "and edited by many drawing programs such as Adobe "
@@ -5130,21 +5131,37 @@ if (strlen(ideoPsTn.forCgi))
     ideoPdfFile = convertEpsToPdf(ideoPsTn.forCgi);
 if (pdfFile != NULL)
     {
-    printf("<UL>\n");
-    printf("<LI><A TARGET=_blank HREF=\"%s\">"
-       "Download the current browser graphic</A> in PDF.\n", pdfFile);
+    printf("<UL style=\"margin-top:5px;\">\n");
+    printf("<LI>Download <A TARGET=_blank HREF=\"%s\">"
+       "the current browser graphic in PDF</A>\n", pdfFile);
     if (ideoPdfFile != NULL)
-        printf("<LI><A TARGET=_blank HREF=\"%s\">"
-               "Download the current chromosome ideogram</A> in PDF.\n", ideoPdfFile);
+        printf("<LI>Download <A TARGET=_blank HREF=\"%s\">"
+               "the current chromosome ideogram in PDF</A>\n", ideoPdfFile);
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
     // postscript
-    printf("<P><SMALL>\n");
-    printf("We still provide postscript files: <A HREF=\"%s\">browser graphic</A> ", psTn.forCgi);
+    printf("EPS (Postscript) images are a variant of PDF and easier to import into some "
+            "drawing programs.\n");
+    printf("<UL style=\"margin-top: 5px;\">\n");
+    printf("<LI>Download <A HREF=\"%s\">the current browser graphic in EPS</A>", psTn.forCgi);
     if (strlen(ideoPsTn.forCgi))
-        printf("and <A HREF=\"%s\">ideogram</A>", ideoPsTn.forCgi);
-    printf("</SMALL></P>\n");
+        printf("<LI>Download <A HREF=\"%s\">the current chromosome ideogram in EPS</A>", ideoPsTn.forCgi);
+    printf("</UL>\n");
+
+    // see redmine #1077
+    printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");
+    printf("<UL style=\"margin-top:0px\">\n");
+    printf("<LI>Add assembly name and chromosome range to the image on the\n"
+        "<A HREF=\"hgTrackUi?g=ruler\">configuration page of the base position track</A>.\n");
+    printf("<LI>If using the UCSC Genes track, consider showing only one transcript per gene by turning off splice variants on the track configuration page.\n");
+    printf("<LI>Increase the font size and remove the light blue vertical guidelines in the \n"
+        "<A HREF=\"hgTracks?hgTracksConfigPage=configure\">image configuration menu</A>.");
+    printf("<LI>In the image configuration menu, change the size of the image,\n"
+            "to make it look more square.\n");
+    printf("</UL>\n");
+    printf("</div>\n");
+
 
     }
 else

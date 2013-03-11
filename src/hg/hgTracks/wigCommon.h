@@ -36,10 +36,10 @@ struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb,
 /* Create a wigCartOptions from cart contents and tdb. */
 
 struct preDrawContainer
-/* A list of preDraws */
+/* A preDraw array with a little bit of extra info */
     {
-    struct preDrawContainer *next;
-    struct preDrawElement *preDraw;
+    struct preDrawContainer *nextPlaceholder;   /* Refactoring code so not in list really. */
+    struct preDrawElement *preDraw;     /* Array of values. */
     int preDrawSize;		/* Size of preDraw */
     int preDrawZero;		/* Offset from start of predraw array to data requested.  We
                                  * get more because of smoothing */
@@ -68,6 +68,20 @@ struct bedGraphItem
     double graphLowerLimit;	/* filled in by DrawItems	*/
     };
 
+typedef void (*WigVerticalLineVirtual)(void *image, int x, int y, int height, Color color);
+/* Draw a vertical line somewhere, maybe a regular image, maybe a transparent one. */
+
+struct wigGraphOutput
+/* Info on where to draw a wig - may be pretty indirect in transparent case. */
+   {
+   WigVerticalLineVirtual vLine;
+   void *image;	    /* Some type in reality that goes with vLine. */
+   int xOff, yOff;  /* Where to offset output within image. */
+   };
+
+struct wigGraphOutput *wigGraphOutputSolid(int xOff, int yOff, struct hvGfx *image);
+/* Get appropriate wigGraphOutput for non-transparent rendering */
+
 /*	source to these routines is in wigTrack.c	*/
 
 struct preDrawContainer *initPreDrawContainer(int width);
@@ -93,13 +107,6 @@ double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     double *overallRange, double *epsilon, int lineHeight,
     double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero);
 /*	if autoScaling, scan preDraw array and determine limits */
-
-void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
-    struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
-    double graphUpperLimit, double graphLowerLimit, double graphRange,
-    double epsilon, Color *colorArray, enum trackVisibility vis,
-    struct wigCartOptions *wigCart);
-/*	graph the preDraw array */
 
 void drawZeroLine(enum trackVisibility vis,
     enum wiggleGridOptEnum horizontalGrid,

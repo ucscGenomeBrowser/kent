@@ -59,7 +59,7 @@ if [ "${WC}" -gt 1 ]; then
 "ftp://ftp.sanger.ac.uk/pub/\n"`comm -13 prev.release.list release.list`"/" 
 
 
-    FN=`cat release.diff |grep decipher-|sed -e 's/decipher-/\tdecipher-/'|cut -f 2 | tail -1`
+    FN=`cat release.diff |grep decipher-| grep txt | sed -e 's/decipher-/\tdecipher-/'|cut -f 2 | tail -1`
 
 
     today=`date +%F`

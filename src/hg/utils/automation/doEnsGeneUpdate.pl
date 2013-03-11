@@ -439,7 +439,7 @@ cp $db.allGenes.gp.gz $db.allGenes.beforeLiftMtOver.gp.gz
 zcat $db.allGenes.gp.gz > all.gp
 grep chrM all.gp | liftOver -genePred stdin $liftMtOver chrMLifted.gp noMap.chrM
 grep -v chrM all.gp | cat - chrMLifted.gp > allLifted.gp
-gzip -c allLifted.gp > $db.all.genes.gp.gz
+gzip -c allLifted.gp > $db.allGenes.gp.gz
 rm *.gp
 _EOF_
       );

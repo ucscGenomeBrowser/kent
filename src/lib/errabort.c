@@ -295,18 +295,30 @@ return ptav->errAbortInProgress;
 static struct perThreadAbortVars *getThreadVars()
 /* Return a pointer to the perThreadAbortVars for the current pthread. */
 {
+pthread_t pid = pthread_self(); //  can be a pointer or a number
+// Don't safef, theoretically that could abort.
+char pidStr[64];
+snprintf(pidStr, sizeof(pidStr), "%lld",  ptrToLL(pid));
+pidStr[ArraySize(pidStr)-1] = '\0';
+
+static char pidInUse[64] = "";  // use a string since there is no known unused value for pthread_t variable
+if (sameString(pidStr, pidInUse)) // avoid deadlock on self
+    {  // this only happens when it has aborted already due to out of memory
+       // which should be a rare occurrence.
+    char *errMsg = "errAbort re-entered due to out-of-memory condition. Exiting.";
+    write(STDERR_FILENO, errMsg, strlen(errMsg)); 
+    exit(1);
+    }
+
 static pthread_mutex_t ptavMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_lock( &ptavMutex );
+snprintf(pidInUse, sizeof(pidInUse), "%lld",  ptrToLL(pid));
+pidInUse[ArraySize(pidInUse)-1] = '\0';
+
 static struct hash *perThreadVars = NULL;
-pthread_t pid = pthread_self(); //  can be a pointer or a number
-// A true integer has function would be nicer, but this will do.  
-// Don't safef, theoretically that could abort.
-char key[64];
-snprintf(key, sizeof(key), "%lld",  ptrToLL(pid));
-key[ArraySize(key)-1] = '\0';
 if (perThreadVars == NULL)
     perThreadVars = hashNew(0);
-struct hashEl *hel = hashLookup(perThreadVars, key);
+struct hashEl *hel = hashLookup(perThreadVars, pidStr);
 if (hel == NULL)
     {
     // if it is the first time, initialization the perThreadAbortVars
@@ -318,8 +330,9 @@ if (hel == NULL)
     ptav->warnArray[0] = defaultVaWarn;
     ptav->abortIx = 0;
     ptav->abortArray[0] = defaultAbort;
-    hel = hashAdd(perThreadVars, key, ptav);
+    hel = hashAdd(perThreadVars, pidStr, ptav);
     }
+pidInUse[0] = '\0';
 pthread_mutex_unlock( &ptavMutex );
 return (struct perThreadAbortVars *)(hel->val);
 }

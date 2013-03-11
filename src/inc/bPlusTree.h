@@ -76,19 +76,32 @@ void bptFileDetach(struct bptFile **pBpt);
 
 boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize);
 /* Find value associated with key.  Return TRUE if it's found. 
-*  Parameters:
-*     bpt - file handle returned by bptFileOpen
-*     key - pointer to key string
-*     keySize - size of key.  Normally just strlen(key)
-*     val - pointer to where to put retrieved value
-*     valSize - size of memory buffer that will hold val.  Should match bpt->valSize.
-*/
+ *  Parameters:
+ *     bpt - file handle returned by bptFileOpen
+ *     key - pointer to key string
+ *     keySize - size of key.  Normally just strlen(key)
+ *     val - pointer to where to put retrieved value
+ *     valSize - size of memory buffer that will hold val.  Should match bpt->valSize.
+ */
+
+struct slRef *bptFileFindMultiple(struct bptFile *bpt, void *key, int keySize, int valSize);
+/* Find all values associated with key.  Store this in ->val item of returned list. 
+ * Do a slRefFreeListAndVals() on list when done. */
 
 void bptFileTraverse(struct bptFile *bpt, void *context,
     void (*callback)(void *context, void *key, int keySize, void *val, int valSize) );
 /* Traverse bPlusTree on file, calling supplied callback function at each
  * leaf item. */
 
+void bptKeyAtPos(struct bptFile *bpt, bits64 itemPos, void *result);
+/* Fill in result with the key at given itemPos.  For first piece of data itemPos is 0 
+ * and for last piece is bpt->itemCount - 1.  Result must be at least bpt->keySize.  
+ * If result is a string it won't be zero terminated
+ * by this routine.  Use bptStringKeyAtPos instead. */
+
+void bptStringKeyAtPos(struct bptFile *bpt, bits64 itemPos, char *result, int maxResultSize);
+/* Fill in result with the key at given itemPos.  The maxResultSize should be 1+bpt->keySize
+ * to accommodate zero termination of string. */
 
 void bptFileCreate(
 	void *itemArray, 	/* Sorted array of things to index. */

@@ -742,7 +742,7 @@ wigFetchMinMaxYWithCart(theCart,tdb,name,min,max,tDbMin,tDbMax,0,NULL);
 char *wigFetchAggregateValWithCart(struct cart *cart, struct trackDb *tdb)
 /* Return aggregate value for track. */
 {
-return cartOrTdbString(cart, tdb, "aggregate", WIG_AGGREGATE_TRANSPARENT);
+return cartOrTdbString(cart, tdb, "aggregate", WIG_AGGREGATE_NONE);
 }
 
 boolean wigIsOverlayTypeAggregate(char *aggregate)

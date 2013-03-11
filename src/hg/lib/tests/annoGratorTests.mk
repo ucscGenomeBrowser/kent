@@ -9,7 +9,7 @@ OUT_DIR = output/annoGrator
 DB=hg19
 
 test: pgSnpDbToTabOut pgSnpKgDbToTabOutShort pgSnpKgDbToGpFx snpConsDbToTabOutShort vcfEx1 vcfEx2 \
-      bigBedToTabOut snpBigWigToTabOut
+      bigBedToTabOut snpBigWigToTabOut vepOut
 
 pgSnpDbToTabOut: mkout
 	${TESTER} ${DB} $@ > ${OUT_DIR}/$@.txt
@@ -41,6 +41,11 @@ bigBedToTabOut: mkout
 
 snpBigWigToTabOut: mkout
 	${TESTER} ${DB} $@ > ${OUT_DIR}/$@.txt
+	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
+
+vepOut: mkout
+	hgLoadSqlTab test vepSample ../pgSnp.sql input/annoGrator/vepSample.pgSnp.tab
+	${TESTER} ${DB} $@ | grep -v 'Output produced at' > ${OUT_DIR}/$@.txt
 	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
 
 mkout:

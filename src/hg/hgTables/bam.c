@@ -19,6 +19,7 @@
 #include "bbiFile.h"
 #include "bigBed.h"
 #include "hubConnect.h"
+#include "trackHub.h"
 #include "hgTables.h"
 #include "asFilter.h"
 #include "xmlEscape.h"
@@ -332,7 +333,9 @@ return randomIdList;
 void showSchemaBam(char *table, struct trackDb *tdb)
 /* Show schema on bam. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConn(database);
 char *fileName = bamFileName(table, conn, NULL);
 
 struct asObject *as = bamAsObj();
