@@ -11,6 +11,7 @@
 #include "spaceSaver.h"
 #include "portable.h"
 #include "bed.h"
+#include "basicBed.h"
 #include "psl.h"
 #include "web.h"
 #include "hdb.h"
@@ -12088,9 +12089,50 @@ return matchStr;
 struct pubsExtra 
 /* additional info needed for publication blat linked features: author+year and title */
 {
-    char* label;
-    char* mouseOver;
+    char *label; // usually author+year
+    char *mouseOver; // usually title of article
+    // color depends on cart settings, either based on topic, impact or year
+    // support to ways to color: either by shade (year, impact) or directly with rgb values
+    int shade;  // year or impact are shades which we can't resolve to rgb easily
+    struct rgbColor *color; 
 };
+
+/* assignment of pubs classes to colors */
+static struct hash* pubsClassColors = NULL;
+
+static void pubsParseClassColors() 
+/* parse class colors from hgFixed.pubsClassColors into the hash pubsClassColors */
+{
+if (pubsClassColors!=NULL)
+    return;
+
+pubsClassColors = hashNew(0);
+struct sqlConnection *conn = hAllocConn(database);
+if (!sqlTableExists(conn, "hgFixed.pubsClassColors")) 
+    {
+    //fprintf(stderr, "simpleTracks.c: table hgFixed.pubsClassColors does not exist\n");
+    return;
+    }
+char *query = "SELECT class, rgbColor FROM hgFixed.pubsClassColors";
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = NULL;
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *class = row[0];
+    char *colStr = row[1];
+    // copied from genePredItemClassColor - is there no function for this?
+    char *rgbVals[5];
+    chopString(colStr, ",", rgbVals, sizeof(rgbVals));
+    struct rgbColor *rgb;
+    AllocVar(rgb);
+    rgb->r = (sqlUnsigned(rgbVals[0]));
+    rgb->g = (sqlUnsigned(rgbVals[1]));
+    rgb->b = (sqlUnsigned(rgbVals[2]));
+    //printf("Adding hash: %s -> %d,%d,%d", class, rgb->r, rgb->g, rgb->b);
+    hashAdd(pubsClassColors, cloneString(class), rgb);
+    }
+sqlFreeResult(&sr);
+}
 
 static char* pubsFeatureLabel(char* author, char* year) 
 /* create label <author><year> given authors and year strings */
@@ -12106,22 +12148,42 @@ authorYear  = catTwoStrings(author, year);
 return authorYear;
 }
 
-static struct pubsExtra *pubsMakeExtra(char* articleTable, struct sqlConnection* conn, 
-    struct linkedFeatures* lf)
+static struct pubsExtra *pubsMakeExtra(struct track* tg, char* articleTable, 
+    struct sqlConnection* conn, struct linkedFeatures* lf)
+/* bad solution: a function that is called before the extra field is 
+ * accessed and that fills it from a sql query. Will need to redo this like gencode, 
+ * drawing from atom, variome and bedLoadN or bedDetails */
 {
 char query[LARGEBUF];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 struct pubsExtra *extra = NULL;
 
-safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
-    articleTable, lf->name);
+/* support two different storage places for article data: either the bed table directly 
+ * includes the title + author of the article or we have to look it up from the articles 
+ * table. Having a copy of the title in the bed table is faster */
+bool newFormat = false;
+if (sqlColumnExists(conn, tg->table, "title")) 
+    {
+    safef(query, sizeof(query), "SELECT firstAuthor, year, title, impact, classes FROM %s "
+    "WHERE chrom = '%s' and chromStart = '%d' and name='%s'", tg->table, chromName, lf->start, lf->name);
+    newFormat = true;
+    }
+else 
+    {
+    safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
+        articleTable, lf->name);
+    newFormat = false;
+    }
+
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
-{
+    {
     char* firstAuthor = row[0];
     char* year    = row[1];
     char* title   = row[2];
+    char* impact  = NULL;
+    char* classes = NULL;
 
     extra = needMem(sizeof(struct pubsExtra));
     extra->label = pubsFeatureLabel(firstAuthor, year);
@@ -12129,7 +12191,41 @@ if ((row = sqlNextRow(sr)) != NULL)
         extra->mouseOver = extra->label;
     else
         extra->mouseOver = cloneString(title);
-}
+    extra->color  = NULL;
+    extra->shade  = -1;
+
+    if (newFormat) 
+        {
+        impact  = row[3];
+        classes = row[4];
+        if (!isEmpty(impact)) 
+            {
+            char *colorBy = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsColorBy");
+            if (strcmp(colorBy,"impact")==0) 
+                {
+                char impInt = atoi(impact);
+                extra->shade = impInt/25;
+                }
+            if (strcmp(colorBy,"year")==0) 
+                {
+                int relYear = (atoi(year)-1990); 
+                extra->shade = min(relYear/3, 10);
+                //extra->color = shadesOfGray[yearShade];
+                }
+            if (strcmp(colorBy,"topic")==0) 
+                {
+                char *class;
+                while ((class=cloneNextWordByDelimiter(&classes, ','))!=NULL)
+                    {
+                    struct rgbColor *col = (struct rgbColor*) hashFindVal(pubsClassColors, class);
+                    extra->color = col;
+                    }
+                }
+
+            }
+        }
+    }
+
 
 sqlFreeResult(&sr);
 return extra;
@@ -12145,7 +12241,7 @@ if (lf->extra != NULL)
     return;
 
 struct sqlConnection *conn = hAllocConn(database);
-struct pubsExtra* extra = pubsMakeExtra(articleTable, conn, lf);
+struct pubsExtra* extra = pubsMakeExtra(tg, articleTable, conn, lf);
 lf->extra = extra;
 hFreeConn(&conn);
 }
@@ -12153,6 +12249,7 @@ hFreeConn(&conn);
 static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
+pubsParseClassColors();
 struct sqlConnection *conn = hAllocConn(database);
 char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsKeywords");
 char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsYear");
@@ -12232,6 +12329,26 @@ if (articleId!=NULL)
     tdbSetCartVisibility(tg->tdb, cart, hCarefulTrackOpenVis(database, tg->track));
     tg->visibility=tvPack;
 }
+}
+
+Color pubsItemColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* get color from extra field */
+{
+//pubsParseClassColors();
+struct linkedFeatures *lf = item;
+pubsAddExtra(tg, lf);
+
+struct pubsExtra* extra = lf->extra;
+if (extra==NULL || (extra->color==NULL && extra->shade==-1))
+    return MG_BLACK;
+
+if (extra->shade != -1)
+    return shadesOfBlue[extra->shade];
+else
+    {
+    //printf("got item color %d", extra->color->r);
+    return hvGfxFindRgb(hvg, extra->color);
+    }
 }
 
 char *pubsItemName(struct track *tg, void *item)
@@ -12388,6 +12505,7 @@ static void pubsBlatMethods(struct track *tg)
 //bedMethods(tg);
 tg->loadItems = pubsLoadKeywordYearItems;
 tg->itemName  = pubsItemName;
+tg->itemColor = pubsItemColor;
 tg->mapItem   = pubsMapItem;
 }
 

@@ -1997,14 +1997,16 @@ puts("&nbsp;<B>position</B>");
 void pubsUi(struct trackDb *tdb)
 /* UI for pubs match track */
 {
-#define NUM_YEARS 30  // similar to google scholar, which goes back to 20 years
+#define NUM_YEARS 15  // similar to google scholar, which goes back to 20 years
 
 #define PUBS_KEYWORDS_TAG "pubsKeywords"
 #define PUBS_YEAR_TAG     "pubsYear"
+#define PUBS_COLORBY_TAG    "pubsColorBy"
 
 // get current set filters from cart
 char *keywords   = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_KEYWORDS_TAG, "");
 char *yearFilter = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_YEAR_TAG, "anytime");
+char *colorBy    = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_COLORBY_TAG, "topic");
 
 // print keyword input box
 puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
@@ -2036,6 +2038,14 @@ puts("</P><P>\n");
 printf("<B>Show articles published </B>");
 safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_YEAR_TAG);
 cgiDropDownWithTextValsAndExtra(cgiVar, text, values, NUM_YEARS + 1, yearFilter, NULL);
+
+// print dropdown box with "since <year>" lines
+puts("</P><P>\n");
+printf("<B>Color sequence matches by </B>");
+char *colorText[3] = {"topic", "impact of journal", "year"};
+char *colorVals[3] = {"topic", "impact", "year"};
+safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_COLORBY_TAG);
+cgiDropDownWithTextValsAndExtra(cgiVar, colorText, colorVals, 3, colorBy, NULL);
 puts("</P>\n");
 }
 
