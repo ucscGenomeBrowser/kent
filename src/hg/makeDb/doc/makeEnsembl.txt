@@ -2510,6 +2510,9 @@ knownToEnsembl yes
  *** All done!  (through the 'makeDoc' step)
  *** Steps were performed in /hive/data/genomes/rn4/bed/ensGene.68
 
+    # redmine Bug #10358 rebuild rn4.knownToEnsembl using rgdGene2 instead of
+    # knowGene.(2013-03-08 Chin)
+    hgMapToGene rn4 ensGene rgdGene2 knownToEnsembl
 ############################################################################
 #  sacCer3 - S. cerevisiae - Ensembl Genes version 68  (DONE - 2012-08-29 -
 #  chinhli)

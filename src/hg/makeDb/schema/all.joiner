@@ -1810,7 +1810,7 @@ identifier refSeqId typeOf=mrnaAccession
     $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb,!hg16,!hg17,!hg18,!mm7,!mm8,!mm9,!mm10.knownToRefSeq.value minCheck=0.98
     hg18,mm7,mm8,mm9,mm10.knownToRefSeq.value minCheck=0.96
-    hg16,hg17.knownToRefSeq.value minCheck=0.94
+    hg16,hg17.knownToRefSeq.value minCheck=0.93
     $kgDb.refSeqKg.refseq minCheck=0.60
     $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.35
     $gbd,!rn3.mrnaRefseq.refseq minCheck=0.25
@@ -1823,8 +1823,8 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refMrna.name
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
-    dm1.bdgpToRefSeq.value minCheck=0.94
-    $dm,!dm1.flyBaseToRefSeq.value minCheck=0.96
+    dm1.bdgpToRefSeq.value minCheck=0.91
+    $dm,!dm1.flyBaseToRefSeq.value minCheck=0.94
     $mm.mrnaRefseq.mrna minCheck=0.03
     $mm.dupSpMrna.mrnaID minCheck=0.60
     $mm,!mm8,!mm9,!mm10.dupSpMrna.dupMrnaID minCheck=0.20
@@ -2725,7 +2725,7 @@ identifier cgapAlias
     $gbd.cgapAlias.alias dupeOk
     $gbd,!hg16,!hg18,!hg19,!mm9,!mm10.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19,mm9,mm10.kgXref.geneSymbol minCheck=0.85
+    hg18,hg19,mm9,mm10.kgXref.geneSymbol minCheck=0.84
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 

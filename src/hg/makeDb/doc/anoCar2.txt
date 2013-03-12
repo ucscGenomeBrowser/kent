@@ -73,7 +73,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "chrUn_%s", $line;
     }
 }
@@ -172,7 +172,7 @@ taxId 28377
     #	real    23m18.960s
 
     #	real    198m33.953s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	66211508 bases of 2752505800 (2.405%) in intersection
 
     cd /hive/data/genomes/anoCar2
@@ -303,7 +303,7 @@ chrM    15783   15784   chrM.3
     # to decide which "native" mrna or ests you want to specify in genbank.conf
     # this appears that anoCar2 has plenty of native est's
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add anoCar2 before anoCar1 and commit to GIT
@@ -374,7 +374,7 @@ anoCar2.perChromTables = no
     cd /hive/data/genomes/anoCar2/pushQ
     makePushQSql.pl anoCar2 > anoCar2.sql 2> stderr.out
     # some errors are legitimate and OK:
-     head stderr.out 
+     head stderr.out
 # WARNING: hgwdev does not have /gbdb/anoCar2/wib/gc5Base.wib
 # WARNING: hgwdev does not have /gbdb/anoCar2/wib/quality.wib
 # WARNING: hgwdev does not have /gbdb/anoCar2/bbi/quality.bw
@@ -435,7 +435,7 @@ CREATE TABLE ucscToEnsembl (
 # lastz alignment with Human/hg19 (DONE - 2004-04-19 - Hiram)
     #	the original alignment
     cd /hive/data/genomes/hg19/bed/lastzAnoCar2.2011-04-19
-    cat fb.hg19.chainAnoCar2Link.txt 
+    cat fb.hg19.chainAnoCar2Link.txt
     #	102917023 bases of 2897316137 (3.552%) in intersection
 
     #	running the swap
@@ -447,7 +447,7 @@ CREATE TABLE ucscToEnsembl (
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-syntenicNet -swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    20m45.683s
-    cat fb.anoCar2.chainHg19Link.txt 
+    cat fb.anoCar2.chainHg19Link.txt
     #	88296392 bases of 1701353770 (5.190%) in intersection
 
 ############################################################################
@@ -532,7 +532,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
 	-qRepeats=windowmaskerSdust > do.log 2>&1 &
     #	real    598m18.622s
-    cat fb.anoCar2.chainXenTro2Link.txt 
+    cat fb.anoCar2.chainXenTro2Link.txt
     #	85962319 bases of 1701353770 (5.053%) in intersection
 
     #	running the swap - DONE - 2011-04-26
@@ -545,14 +545,14 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -swap -qRepeats=windowmaskerSdust \
 	-tRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    29m36.856s
-    cat fb.xenTro2.chainAnoCar2Link.txt 
+    cat fb.xenTro2.chainAnoCar2Link.txt
     #	91934327 bases of 1359412157 (6.763%) in intersection
 
 ##############################################################################
 # lastz Mouse Mm9 (DONE - 2011-04-26 - Hiram)
     # original alignment
     cd /hive/data/genomes/mm9/bed/lastzAnoCar2.2011-04-19
-    cat fb.mm9.chainAnoCar2Link.txt 
+    cat fb.mm9.chainAnoCar2Link.txt
     #	88067954 bases of 2620346127 (3.361%) in intersection
 
     #	running the swap - DONE - 2011-04-19
@@ -564,7 +564,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-syntenicNet -swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    14m28.747s
-    cat fb.anoCar2.chainMm9Link.txt 
+    cat fb.anoCar2.chainMm9Link.txt
     #	84738440 bases of 1701353770 (4.981%) in intersection
 
 ##############################################################################
@@ -581,7 +581,7 @@ TMPDIR=/scratch/tmp
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  anoCar2.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
     rm temp.fa less1meg.lst
 
     cd blastDb
@@ -606,9 +606,9 @@ TMPDIR=/scratch/tmp
    mkdir -p kgfa
    split -l 313 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
    done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -646,20 +646,20 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/anoCar2/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
-    exit 
-    
+    exit
+
     ssh swarm
     cd /cluster/data/anoCar2/bed/tblastn.hg18KG
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -716,13 +716,13 @@ chainOne $(path1)
     pslCheck blastHg18KG.psl
 # checked: 47362 failed: 0 errors: 0
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/anoCar2/bed/tblastn.hg18KG
     hgLoadPsl anoCar2 blastHg18KG.psl
 
     # check coverage
-    featureBits anoCar2 blastHg18KG 
+    featureBits anoCar2 blastHg18KG
 # 21485462 bases of 1701353770 (1.263%) in intersection
 
     featureBits anoCar2 blastHg18KG ensGene  -enrichment
@@ -734,7 +734,7 @@ chainOne $(path1)
 # lastz Chicken GalGal3 (DONE - 2011-04-26 - Hiram)
     # original alignment
     cd /hive/data/genomes/galGal3/bed/lastzAnoCar2.2011-04-25
-    cat fb.galGal3.chainAnoCar2Link.txt 
+    cat fb.galGal3.chainAnoCar2Link.txt
     #	113851392 bases of 1042591351 (10.920%) in intersection
 
     #	running the swap - DONE - 2011-04-26
@@ -747,7 +747,7 @@ chainOne $(path1)
 	-syntenicNet -swap -qRepeats=windowmaskerSdust \
 	-tRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    11m8.229s
-    cat fb.anoCar2.chainGalGal3Link.txt 
+    cat fb.anoCar2.chainGalGal3Link.txt
     #	116069635 bases of 1701353770 (6.822%) in intersection
 
 ##############################################################################
@@ -788,7 +788,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
 	-qRepeats=windowmaskerSdust > do.log 2>&1 &
     #	real    277m57.896s
-    cat fb.anoCar2.chainGasAcu1Link.txt 
+    cat fb.anoCar2.chainGasAcu1Link.txt
     #	53478872 bases of 1701353770 (3.143%) in intersection
 
     ## and running the swap
@@ -801,7 +801,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
 	-swap -qRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    15m28.724s
-    cat fb.gasAcu1.chainAnoCar2Link.txt 
+    cat fb.gasAcu1.chainAnoCar2Link.txt
     #	55990919 bases of 446627861 (12.536%) in intersection
 
 #######################################################################
@@ -841,7 +841,7 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
 	-bigClusterHub=swarm -tRepeats=windowmaskerSdust > do.log 2>&1 &
     #	real    632m47.014s
-    cat fb.anoCar2.chainOrnAna1Link.txt 
+    cat fb.anoCar2.chainOrnAna1Link.txt
     #	77594222 bases of 1701353770 (4.561%) in intersection
 
     ## running the swap
@@ -853,7 +853,7 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=encodek \
 	-swap -bigClusterHub=swarm -tRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    40m51.778s
-    cat fb.ornAna1.chainAnoCar2Link.txt 
+    cat fb.ornAna1.chainAnoCar2Link.txt
     #	75402821 bases of 1842236818 (4.093%) in intersection
 
 #######################################################################
@@ -1261,7 +1261,7 @@ set infile = $r/anno/result/$2
 set outfile = $3
 cd /scratch/tmp
 # 'clean' maf
-perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
 awk -v C=$c '$2 == C {print}' $r/4d/ensGeneNR.gp | sed -e "s/\t$c\t/\tanoCar2.$c\t/" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
@@ -1334,7 +1334,7 @@ rm -f $c.gp $c.maf $c.ss
 #########################################################################
 # phastCons 7-way (DONE - 2011-05-17 - Hiram)
 
-    # split 7way mafs into 10M chunks and generate sufficient statistics 
+    # split 7way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh encodek
     mkdir -p /hive/data/genomes/anoCar2/bed/multiz7way/cons/SS
@@ -1411,7 +1411,7 @@ mkSS.csh $(root1) {check out line+ done/$(root1)}
     #	there are going to be only one phastCons run using
     #	this same script.  It triggers off of the current working directory
     #	$cwd:t which is the "grp" in this script.  It is:
-    #	all 
+    #	all
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
@@ -1492,7 +1492,7 @@ rm -fr $tmp
     #	Loaded 773199 elements of size 5
     #	real    0m4.937s
 
-    # on human we often try for 5% overall cov, and 70% CDS cov 
+    # on human we often try for 5% overall cov, and 70% CDS cov
     featureBits anoCar2 -enrichment ensGene:cds phastConsElements7way
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     #	ensGene:cds 1.608%, phastConsElements7way 6.427%, both 1.252%,
@@ -1590,7 +1590,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 #############################################################################
 # phyloP for 7-way (DONE - 2011-05-17 - Hiram)
-    # run phyloP with score=LRT 
+    # run phyloP with score=LRT
     ssh encodek
     mkdir /cluster/data/anoCar2/bed/multiz7way/consPhyloP
     cd /cluster/data/anoCar2/bed/multiz7way/consPhyloP
@@ -1688,7 +1688,7 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
     # pid=1977: VmPeak:      2291148 kB
     #	real    2m47.897s
 
-    bigWigInfo phyloP7way.bw 
+    bigWigInfo phyloP7way.bw
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
@@ -2035,5 +2035,56 @@ TMPDIR=/scratch/tmp
 
     cd /hive/data/genomes/xenTro3/bed
     ln -s blastz.anoCar2.swap lastz.anoCar2
+
+##########################################################################
+# quality track (DONE - 2013-03-08 - Hiram)
+    mkdir /hive/data/genomes/anoCar2/bed/quality
+    cd /hive/data/genomes/anoCar2/bed/quality
+
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/wgs/wgs.AAWZ.?.qscore.gz ./
+    zcat wgs.AAWZ.?.qscore.gz | sed -e "s/^>gb./>/; s/. Phrap.*//" \
+         | qaToQac stdin AAWZ.qac
+    # no scores for chrM, eliminate it from the AGP to avoid an error:
+    grep -v chrM ../../anoCar2.agp \
+       | qacAgpLift stdin AAWZ.qac anoCar2.qac
+    qacToWig -fixed anoCar2.qac stdout | gzip -c > anoCar2.qual.wigVarStep.gz
+    time wigToBigWig anoCar2.qual.wigVarStep.gz ../../chrom.sizes \
+        anoCar2.quality.bw
+    #   real    11m56.566s
+    rm -f /gbdb/anoCar2/bbi/quality.bw
+    ln -s `pwd`/anoCar2.quality.bw /gbdb/anoCar2/bbi/quality.bw
+    hgsql anoCar2 -e 'drop table if exists qualityBw;
+        create table qualityBw (fileName varchar(255) not null);
+            insert into qualityBw values ("/gbdb/anoCar2/bbi/quality.bw")'
+
+    # verify min,max for trackDb settings:
+    zcat anoCar2.qual.wigVarStep.gz | grep -v fixedStep | ave stdin
+# needLargeMemResize: trying to allocate 17179869184 bytes (limit: 17179869184)
+    #  too much for ave to compute quartiles:
+    zcat anoCar2.qual.wigVarStep.gz | grep -v fixedStep | ave -noQuartiles stdin
+# average 46.885359
+# min 0.000000
+# max 50.000000
+# count 1799126364
+# total 84352685417.000000
+# standard deviation 11.713057
+    # or, much easier:
+    bigWigInfo anoCar2.quality.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 146,560,096
+# primaryIndexSize: 56,527,360
+# zoomLevels: 10
+# chromCount: 6456
+# basesCovered: 1,799,126,364
+# mean: 46.885359
+# min: 0.000000
+# max: 50.000000
+# std: 11.713057
+
+    # set override in lizard/anoCar2/trackDb.ra
+track quality override
+type wig 0 50
 
 ##########################################################################
