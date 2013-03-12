@@ -7,6 +7,7 @@
 # Tree shrew Tupaia belangeri
 tupBel	Eutheria; Euarchontoglires; Scandentia; Tupaiidae; Tupaia
 
+
 # Rabbit Oryctolagus cuniculus
 oryCun	Eutheria; Euarchontoglires; Glires; Lagomorpha; Leporidae; Oryctolagus
 
@@ -37,6 +38,7 @@ mm	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae
 # Rat Rattus norvegicus
 rn	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Rattus
 
+
 # Horse Equus caballus
 equCab	Eutheria; Laurasiatheria; Perissodactyla; Equidae; Equus
 
@@ -53,7 +55,7 @@ orcOrc	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Delphinid
 vicPac	Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Vicugna
 
 # Bactrian camel - Camelus ferus
-camFer1 Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Camelus
+camFer Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Camelus
 
 # Cow - Bos taurus
 bosTau	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos
@@ -64,14 +66,17 @@ oviAri	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; C
 # domestic goat - Capra hircus
 capHir	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Caprinae; Capra
 
-# Pig Sus scrofa
+# Pig - Sus scrofa
 susScr	Eutheria; Laurasiatheria; Cetartiodactyla; Suina; Suidae; Sus
 
-# Megabat Pteropus vampyrus
+# Megabat - Pteropus vampyrus
 pteVam	Eutheria; Laurasiatheria; Chiroptera; Megachiroptera; Pteropodidae; Pteropodinae; Pteropus
 
-# Microbat Myotis lucifugus
+# Microbat - Myotis lucifugus
 myoLuc	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Myotis
+
+# big brown bat - Eptesicus fuscus
+eptFus	Eutheria; Laurasiatheria; Chiroptera; Microchiroptera; Vespertilionidae; Eptesicus
 
 # Cat Felis catus
 felCat	Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis
@@ -94,6 +99,9 @@ eriEur	Eutheria; Laurasiatheria; Insectivora; Erinaceidae; Erinaceinae; Erinaceu
 # Shrew - Sorex araneus
 sorAra	Eutheria; Laurasiatheria; Insectivora; Soricidae; Soricinae; Sorex
 
+# Star-nosed mole - Condylura cristata
+conCri	Eutheria; Laurasiatheria; Insectivora; Talpidae; Condylura
+
 # Sloth - Choloepus hoffmanni
 choHof	Eutheria; Xenarthra; Megalonychidae; Choloepus
 
@@ -105,6 +113,9 @@ chrAsi	Eutheria; Afrotheria; Chrysochloridae; Chrysochlorinae; Chrysochloris
 
 # Rock Hyrax - Procavia capensis
 proCap	Eutheria; Afrotheria; Hyracoidea; Procaviidae; Procavia
+
+# Cape elephant shrew - Elephantulus edwardii
+eleEdw	Eutheria; Afrotheria; Macroscelidea; Macroscelididae; Elephantulus
 
 # Tenrec - Echinops telfairi
 echTel	Eutheria; Afrotheria; Tenrecidae; Tenrecinae; Echinops
