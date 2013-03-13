@@ -89,6 +89,7 @@ struct fieldLabel fieldDescriptions[] = {
    {"antibody", "targetDescription", "Short description of antibody target."},
    {"antibody", "targetUrl", "Web page associated with antibody target."},
    {"antibody", "targetId", "Identifier for target, prefixed with source of ID, usually GeneCards"},
+   {"antibody", "targetClass", "Classification of the biological function of the target gene"},
    {"antibodyTarget", "target", "Molecular target of antibody."},
    {"antibodyTarget", "targetDescription", "Short description of antibody target."},
    {"antibodyTarget", "externalUrl", "Web page associated with antibody target."},
