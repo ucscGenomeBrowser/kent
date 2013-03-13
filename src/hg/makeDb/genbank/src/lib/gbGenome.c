@@ -33,6 +33,7 @@ static char *frNames[] = {"Takifugu rubripes", NULL};
 static char *dmNames[] = {"Drosophila melanogaster", "Drosophila sp.", NULL};
 static char *dpNames[] = {"Drosophila pseudoobscura", NULL};
 static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
+static char *panPanNames[] = {"Pan paniscus", NULL};
 static char *panTroNames[] = {"Pan troglodytes", "Pan troglodytes troglodytes", 
                               "Pan troglodytes verus", NULL};
 static char *gorGorNames[] = {"Gorilla gorilla", "Gorilla gorilla gorilla", "Gorilla gorilla uellensis", "Gorilla gorilla diehli", "Gorilla gorilla graueri", "Gorilla berengi", NULL};
@@ -141,6 +142,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"dm", dmNames},
     {"dp", dpNames},
     {"sacCer", sacCerNames},
+    {"panPan", panPanNames},
     {"panTro", panTroNames},
     {"gorGor", gorGorNames},
     {"papAnu", papAnuNames},

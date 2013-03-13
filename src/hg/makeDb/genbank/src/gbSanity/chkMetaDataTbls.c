@@ -167,7 +167,7 @@ if (md->inRefLink)
 md->inRefLink = TRUE;
 safef(md->rlName, sizeof(md->rlName), "%s", row[iRow++]);
 product = row[iRow++];
-safef(md->rlProtAcc, sizeof(md->rlProtAcc), row[iRow++]);
+safef(md->rlProtAcc, sizeof(md->rlProtAcc), "%s", row[iRow++]);
 
 /* check if ids are valid (zero is allowed, so just parse) */
 strToUnsigned(row[iRow++], md->acc, "refLink.geneName", NULL);
