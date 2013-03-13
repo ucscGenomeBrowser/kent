@@ -291,8 +291,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 	 /* Figure out name of table and the term within that table. */
 	 char *table = var->name;
 	 char *term = var->val;
-	 if (sameString(table, "antibody")) 
-	     table = "ab";
+	 if (sameString(table, "antibody")) // Deal with antibody special case
+	    {
+	    if (sameString(term, "Control") || sameString(term, "Input") 
+	    || sameString(term, "RevXlinkChromatin") || sameString(term, "ripInput"))
+		{
+		table = "control";
+		}
+	    else
+		table = "ab";
+	    }
 
 	 /* If it looks like we have a valid table and term, store result in
 	  * optCol array we'll output soon. */
