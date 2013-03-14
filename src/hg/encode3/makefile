@@ -3,24 +3,16 @@
 # List of directories to build
 
 DIRS = \
-	encodeCvTerm \
-	encodeMkChangeNotes \
-	encodeStatus \
-	hgEncodeApi \
-	hgEncodeDataVersions \
-	hgEncodeVocab \
-	mkEncodeFrameset \
-	paraMd5sum
-
-# broken
-	#ldGencodeIntron \
-	#regionAgp \
+	validateManifest \
+	validateFiles
 
 # List of pipeline dirs
 PIPELINE_DIRS = \
-        encodeLoad \
-        encodeValidate \
-	../utils/automation
+
+# much of this file is leftover from encode2
+#        encodeLoad \
+#        encodeValidate \
+#	../utils/automation
 
 USE_DIRS = $(DIRS)
 
@@ -49,4 +41,4 @@ prod:
 	done
 
 clean::
-	echo nothing to clean in hg/encode/
+	echo nothing to clean in hg/encode3/

@@ -14,7 +14,7 @@
 #include "bPlusTree.h"
 #include "bigBed.h"
 
-char *version = "2.4";
+char *version = "2.5";
 
 /* Things set directly or indirectly by command lne in main() routine. */
 int blockSize = 256;
@@ -337,7 +337,7 @@ while (lineFileNextReal(lf, &line))
 return tree;
 }
 
-static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
+static struct bbiSummary *bedWriteReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
 	int fieldCount, struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
 	int zoomIncrement, int blockSize, int itemsPerSlot, boolean doCompress,
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
@@ -533,6 +533,7 @@ if (eim != NULL)
     }
 }
 
+
 void bbFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
@@ -562,13 +563,13 @@ verbose(2, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, 
 
 /* Do first pass, mostly just scanning file and counting hits per chromosome. */
 int minDiff = 0;
-double aveSpan = 0;
+double aveSize = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, eim, 
-    &minDiff, &aveSpan, &bedCount);
+    &minDiff, &aveSize, &bedCount);
 verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
-verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSpan);
+verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSize);
 
 /* Open output file and write dummy header. */
 FILE *f = mustOpen(outName, "wb");
@@ -607,27 +608,8 @@ bits64 chromTreeOffset = ftell(f);
 bbiWriteChromInfo(usageList, blockSize, f);
 
 /* Set up to keep track of possible initial reduction levels. */
-int resTryCount = 10, resTry;
-int resIncrement = 4;
-int resScales[resTryCount], resSizes[resTryCount];
-int minZoom = 10;
-int res = aveSpan;
-if (res < minZoom)
-    res = minZoom;
-for (resTry = 0; resTry < resTryCount; ++resTry)
-    {
-    resSizes[resTry] = 0;
-    resScales[resTry] = res;
-    // if aveSpan is large, then the initial value of res is large,
-    //  and we cannot do all 10 levels without overflowing res* integers and other related variables.
-    if (res > 1000000000) 
-	{
-	resTryCount = resTry + 1;  
-	verbose(2, "resTryCount reduced from 10 to %d\n", resTryCount);
-	break;
-	}
-    res *= resIncrement;
-    }
+int resScales[bbiMaxZoomLevels], resSizes[bbiMaxZoomLevels];
+int resTryCount = bbiCalcResScalesAndSizes(aveSize, resScales, resSizes);
 
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
@@ -656,65 +638,13 @@ verboseTime(2, "index write");
 bits32 zoomAmounts[bbiMaxZoomLevels];
 bits64 zoomDataOffsets[bbiMaxZoomLevels];
 bits64 zoomIndexOffsets[bbiMaxZoomLevels];
-int zoomLevels = 0;
 
-/* Write out first zoomed section while storing in memory next zoom level. */
-if (aveSpan > 0)
-    {
-    bits64 dataSize = indexOffset - dataOffset;
-    int maxReducedSize = dataSize/2;
-    int initialReduction = 0, initialReducedCount = 0;
-
-    /* Figure out initialReduction for zoom. */
-    for (resTry = 0; resTry < resTryCount; ++resTry)
-	{
-	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
-	if (doCompress)
-	    reducedSize /= 2;	// Estimate!
-	if (reducedSize <= maxReducedSize)
-	    {
-	    initialReduction = resScales[resTry];
-	    initialReducedCount = resSizes[resTry];
-	    break;
-	    }
-	}
-    verbose(2, "initialReduction %d, initialReducedCount = %d\n", 
-    	initialReduction, initialReducedCount);
-    verbose(2, "dataSize %llu, reducedSize %llu, resScales[0] = %d\n", dataSize, (bits64)(initialReducedCount*sizeof(struct bbiSummaryOnDisk)), resScales[0]);
-
-    if (initialReduction > 0)
-        {
-	struct lm *lm = lmInit(0);
-	int zoomIncrement = 4;
-	lineFileRewind(lf);
-	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
-		fieldCount, lf, initialReduction, initialReducedCount, 
-		resIncrement, blockSize, itemsPerSlot, doCompress, lm, 
-		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
-	verboseTime(1, "pass3 - writeReducedOnceReturnReducedTwice");
-	zoomAmounts[0] = initialReduction;
-	zoomLevels = 1;
-
-	int zoomCount = initialReducedCount;
-	int reduction = initialReduction * zoomIncrement;
-	while (zoomLevels < bbiMaxZoomLevels)
-	    {
-	    int rezoomCount = slCount(rezoomedList);
-	    if (rezoomCount >= zoomCount)
-	        break;
-	    zoomCount = rezoomCount;
-	    zoomDataOffsets[zoomLevels] = ftell(f);
-	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
-	    	blockSize, itemsPerSlot, doCompress, f);
-	    zoomAmounts[zoomLevels] = reduction;
-	    ++zoomLevels;
-	    reduction *= zoomIncrement;
-	    rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction, lm);
-	    }
-	lmCleanup(&lm);
-	verboseTime(1, "further reductions");
-	}
-    }
+/* Call monster zoom maker library function that bedGraphToBigWig also uses. */
+int zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
+    bedWriteReducedOnceReturnReducedTwice, fieldCount,
+    doCompress, indexOffset - dataOffset, 
+    usageList, resTryCount, resScales, resSizes, 
+    zoomAmounts, zoomDataOffsets, zoomIndexOffsets, &totalSum);
 
 /* Write out extra indexes if need be. */
 if (eim)

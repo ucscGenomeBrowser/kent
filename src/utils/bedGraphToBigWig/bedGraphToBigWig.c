@@ -215,8 +215,8 @@ assert(sectionIx == sectionCount);
 *retMaxSectionSize = maxSectionSize;
 }
 
-static struct bbiSummary *writeReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
-	struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
+static struct bbiSummary *bedGraphWriteReducedOnceReturnReducedTwice(struct bbiChromUsage *usageList, 
+	int fieldCount, struct lineFile *lf, bits32 initialReduction, bits32 initialReductionCount, 
 	int zoomIncrement, int blockSize, int itemsPerSlot, boolean doCompress,
 	struct lm *lm, FILE *f, bits64 *retDataStart, bits64 *retIndexStart,
 	struct bbiSummaryElement *totalSum)
@@ -370,7 +370,8 @@ bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, NULL, 
     &minDiff, &aveSize, &bedCount);
 verboseTime(2, "pass1");
-verbose(2, "%d chroms in %s\n", slCount(usageList), inName);
+verbose(2, "%d chroms in %s, minDiff=%d, aveSize=%g, bedCount=%lld\n", 
+    slCount(usageList), inName, minDiff, aveSize, bedCount);
 
 /* Write out dummy header, zoom offsets. */
 FILE *f = mustOpen(outName, "wb");
@@ -388,21 +389,8 @@ bits64 chromTreeOffset = ftell(f);
 bbiWriteChromInfo(usageList, blockSize, f);
 
 /* Set up to keep track of possible initial reduction levels. */
-int resTryCount = 10, resTry;
-int resIncrement = 4;
-int resScales[resTryCount], resSizes[resTryCount];
-int res = minDiff * 2;
-if (res > 0)
-    {
-    for (resTry = 0; resTry < resTryCount; ++resTry)
-	{
-	resSizes[resTry] = 0;
-	resScales[resTry] = res;
-	res *= resIncrement;
-	}
-    }
-else
-    resTryCount = 0;
+int resScales[bbiMaxZoomLevels], resSizes[bbiMaxZoomLevels];
+int resTryCount = bbiCalcResScalesAndSizes(aveSize, resScales, resSizes);
 
 /* Write out primary full resolution data in sections, collect stats to use for reductions. */
 bits64 dataOffset = ftell(f);
@@ -427,65 +415,14 @@ verboseTime(2, "index write");
 bits32 zoomAmounts[bbiMaxZoomLevels];
 bits64 zoomDataOffsets[bbiMaxZoomLevels];
 bits64 zoomIndexOffsets[bbiMaxZoomLevels];
-int zoomLevels = 0;
 
-/* Write out first zoomed section while storing in memory next zoom level. */
-if (minDiff > 0)
-    {
-    bits64 dataSize = indexOffset - dataOffset;
-    int maxReducedSize = dataSize/2;
-    int initialReduction = 0, initialReducedCount = 0;
+/* Call monster zoom maker library function that bedToBigBed also uses. */
+int zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
+    bedGraphWriteReducedOnceReturnReducedTwice, 4,
+    doCompress, indexOffset - dataOffset, 
+    usageList, resTryCount, resScales, resSizes, 
+    zoomAmounts, zoomDataOffsets, zoomIndexOffsets, &totalSum);
 
-    /* Figure out initialReduction for zoom. */
-    for (resTry = 0; resTry < resTryCount; ++resTry)
-	{
-	bits64 reducedSize = resSizes[resTry] * sizeof(struct bbiSummaryOnDisk);
-	if (doCompress)
-	    reducedSize /= 2;	// Estimate!
-	if (reducedSize <= maxReducedSize)
-	    {
-	    initialReduction = resScales[resTry];
-	    initialReducedCount = resSizes[resTry];
-	    break;
-	    }
-	}
-    verbose(2, "initialReduction %d, initialReducedCount = %d\n", 
-    	initialReduction, initialReducedCount);
-
-    if (initialReduction > 0)
-        {
-	struct lm *lm = lmInit(0);
-	int zoomIncrement = 4;
-	lineFileRewind(lf);
-	struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, 
-		lf, initialReduction, initialReducedCount,
-		resIncrement, blockSize, itemsPerSlot, doCompress, lm, 
-		f, &zoomDataOffsets[0], &zoomIndexOffsets[0], &totalSum);
-	verboseTime(2, "writeReducedOnceReturnReducedTwice");
-	zoomAmounts[0] = initialReduction;
-	zoomLevels = 1;
-
-	int zoomCount = initialReducedCount;
-	int reduction = initialReduction * zoomIncrement;
-	while (zoomLevels < bbiMaxZoomLevels)
-	    {
-	    int rezoomCount = slCount(rezoomedList);
-	    if (rezoomCount >= zoomCount)
-	        break;
-	    zoomCount = rezoomCount;
-	    zoomDataOffsets[zoomLevels] = ftell(f);
-	    zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList, 
-	    	blockSize, itemsPerSlot, doCompress, f);
-	    zoomAmounts[zoomLevels] = reduction;
-	    ++zoomLevels;
-	    reduction *= zoomIncrement;
-	    rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction, lm);
-	    }
-	lmCleanup(&lm);
-	verboseTime(2, "further reductions");
-	}
-
-    }
 
 /* Figure out buffer size needed for uncompression if need be. */
 if (doCompress)
