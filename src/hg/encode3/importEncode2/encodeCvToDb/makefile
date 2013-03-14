@@ -4,10 +4,10 @@ L += -lm
 MYLIBDIR = ../../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-A = testCvToSql
-O = testCvToSql.o
+A = encodeCvToDb
+O = encodeCvToDb.o
 
-testCvToSql: ${O} ${MYLIBS}
+encodeCvToDb: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 #       ${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
