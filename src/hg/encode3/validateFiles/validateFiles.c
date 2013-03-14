@@ -16,7 +16,7 @@
 #include "asParse.h"
 #include "bigBed.h"
 
-char *version = "4.5";
+char *version = "4.6";
 
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
@@ -71,7 +71,7 @@ void usage()
   "       csfasta      : Colorspace fasta (implies -colorSpace)\n"
   "       csqual       : Colorspace quality (see link below)\n"
   "                      See http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm\n"
-  "       BAM          : Binary Alignment/Map\n"
+  "       bam          : Binary Alignment/Map\n"
   "                      See http://samtools.sourceforge.net/SAM1.pdf\n"
   "       bigWig       : Big Wig\n"
   "                      See http://genome.ucsc.edu/goldenPath/help/bigWig.html\n"
@@ -1784,6 +1784,10 @@ else if ( (chromInfo=optionVal("chromInfo", NULL)) != NULL)
     }
 verbose(2,"[%s %3d] type=%s\n", __func__, __LINE__, type);
 
+if (sameString("BAM", type))
+    reportErrAbort("Type error. Please specify BAM spelled in lower-case as -type=bam.");
+    
+
 if (startsWith("bed", type) && isdigit(type[3]))
     type = "bedN";
 
@@ -1805,7 +1809,7 @@ hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
 hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
 hashAdd(funcs, "bedGraph",       &validateBedGraph);
 #ifdef USE_BAM
-hashAdd(funcs, "BAM",            &validateBAM);
+hashAdd(funcs, "bam",            &validateBAM);
 #endif
 hashAdd(funcs, "bigWig",         &validateBigWig);
 
