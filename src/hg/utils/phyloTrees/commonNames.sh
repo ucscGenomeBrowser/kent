@@ -4,7 +4,7 @@ if [ $# -ne 1 ]; then
     echo "usage: ./commonNames.sh <Nway.nh>"
     echo "Renames the names from UCSC database names to common names."
     echo "This depends upon the exact UCSC database names present in the"
-    echo ".nh file.  Last updated to work with the 57way.nh file."
+    echo ".nh file.  Last updated to work with the 96way.nh file."
     exit 255
 fi
 
@@ -15,6 +15,7 @@ export F=$1
 "hg19 -> Human ;
 panTro3 -> Chimp ;
 panTro4 -> Chimp ;
+panPan1 -> Bonobo ;
 gorGor3 -> Gorilla ;
 ponAbe2 -> Orangutan ;
 rheMac2 -> Rhesus ;
@@ -28,6 +29,7 @@ tarSyr1 -> Tarsier ;
 micMur1 -> Mouse_lemur ;
 otoGar1 -> Bushbaby ;
 otoGar3 -> Bushbaby ;
+tupChi1 -> Chinese_tree_shrew ;
 tupBel1 -> TreeShrew ;
 criGri1 -> Chinese_hamster ;
 mm9 -> Mouse ;
@@ -69,6 +71,7 @@ ailMel1 -> Panda ;
 myoDav1 -> David_s_Myotis ;
 myoLuc1 -> Microbat ;
 myoLuc2 -> Microbat ;
+pteAle1 -> Black_Flying_fox ;
 pteVam1 -> Megabat ;
 eptFus1 -> Big_brown_bat ;
 odoRosDiv1 -> Pacific_walrus ;
@@ -94,6 +97,7 @@ sarHar1 -> Tasmanian_devil ;
 monDom5 -> Opossum ;
 ornAna1 -> Platypus ;
 colLiv1 -> Rock_pigeon ;
+pseHum1 -> Tibetan_ground_jay ;
 geoFor1 -> Medium_ground_finch ;
 ficAlb1 -> Collared_flycatcher ;
 amaVit1 -> Puerto_Rican_parrot ;
@@ -109,9 +113,11 @@ allMis1 -> Alligator ;
 croPor1 -> Crocodile ;
 latCha1 -> Coelacanth ;
 anoCar2 -> Lizard ;
+pelSin1 -> Soft_shell_Turtle ;
 chrPic1 -> Painted_turtle ;
 xenTro3 -> X_tropicalis ;
 xenTro4 -> X_tropicalis ;
+xenTro7 -> X_tropicalis ;
 lepOcu1 -> Spotted_Gar ;
 tetNig1 -> Tetraodon ;
 tetNig2 -> Tetraodon ;
