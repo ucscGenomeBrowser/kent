@@ -10,12 +10,12 @@
 #include "mdb.h"
 
 /* Databases and tables we'll be using. Might move to command line options someday. */
-char *cvDb = "kentDjangoTest";
+char *cvDb = "encode2Meta";
 char *expDb = "hgFixed";
-char *metaDb = "hg19";
+char *metaDbs[] = {"hg19", "mm9"};
 char *expTable = "encodeExp";
 char *metaTable = "metaDb";
-char *cvDbPrefix = "cvDb_";  /* Prefix to our tables in cvDb database. */
+char *cvDbPrefix = "";  /* Prefix to our tables in cvDb database. */
 
 void usage()
 /* Explain usage and exit. */
@@ -23,7 +23,7 @@ void usage()
 errAbort(
   "encodeExpToCvDb - Convert encode experiments table to a table more suitable for cvDb\n"
   "usage:\n"
-  "   encodeExpToCvDb exp.tab exp.django exp.sql\n"
+  "   encodeExpToCvDb exp.tab series.tab results.tab django.py\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -58,8 +58,8 @@ char *expOptionalFields[] =
 /* Optional later fields in experiment table, and also tables in cvDb. 
  * The order of this array is the same as the order of the fields in experiment table. */
     {
-    "ab",
     "age",
+    "antibody",
     "attic",
     "category",
     "control",
@@ -120,14 +120,21 @@ else
     }
 }
 
-struct mdbObj *getMdbList(char *database)
+struct mdbObj *getMdbList(char *databases[], int databaseCount)
 /* Get list of metaDb objects for database. */
 {
-/* Grab list of all metaDb obj. */
-struct sqlConnection *conn = sqlConnect(database);
-struct mdbObj *mdbList = mdbObjsQueryAll(conn, metaTable);
-verbose(2, "%d objects in %s.%s\n", slCount(mdbList), database, metaTable);
-sqlDisconnect(&conn);
+struct mdbObj *mdbList = NULL;
+int i;
+for (i=0; i<databaseCount; ++i)
+    {
+    /* Grab list of all metaDb obj. */
+    char *database = databases[i];
+    struct sqlConnection *conn = sqlConnect(database);
+    struct mdbObj *oneList = mdbObjsQueryAll(conn, metaTable);
+    verbose(2, "%d objects in %s.%s\n", slCount(mdbList), database, metaTable);
+    mdbList = slCat(mdbList, oneList);
+    sqlDisconnect(&conn);
+    }
 return mdbList;
 }
 
@@ -221,7 +228,13 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	else if (sameString(var, "objType"))
 	    objType = val;
 	else if (sameString(var, "fileName"))
+	    {
 	    fileName = val;
+	    /* Do surgery on file name, cutting off second comma separated index file. */
+	    char *comma = strchr(fileName, ',');
+	    if (comma != NULL)
+	        *comma = 0;
+	    }
 	else if (sameString(var, "md5sum"))
 	    md5sum = val;
 	else if (sameString(var, "tableName"))
@@ -235,19 +248,27 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	else if (sameString(var, "dateUnrestricted"))
 	    dateUnrestricted = val;
 	}
-    if (experiment != NULL)
+    if (objType != NULL && sameString(objType, "file"))
 	{
-	fprintf(f, "%d\t", ++id);
-	fprintf(f, "%s\t", emptyForNull(experiment));
-	fprintf(f, "%s\t", emptyForNull(replicate));
-	fprintf(f, "%s\t", emptyForNull(view));
-	fprintf(f, "%s\t", emptyForNull(objType));
-	fprintf(f, "%s\t", emptyForNull(fileName));
-	fprintf(f, "%s\t", emptyForNull(md5sum));
-	fprintf(f, "%s\t", emptyForNull(tableName));
-	fprintf(f, "%s\t", emptyForNull(dateSubmitted));
-	fprintf(f, "%s\t", emptyForNull(dateResubmitted));
-	fprintf(f, "%s\n", emptyForNull(dateUnrestricted));
+	if (experiment != NULL)
+	    {
+	    fprintf(f, "%d\t", ++id);
+	    fprintf(f, "%s\t", emptyForNull(experiment));
+	    fprintf(f, "%s\t", emptyForNull(replicate));
+	    fprintf(f, "%s\t", emptyForNull(view));
+	    fprintf(f, "%s\t", emptyForNull(objType));
+	    fprintf(f, "%s\t", emptyForNull(fileName));
+	    fprintf(f, "%s\t", emptyForNull(md5sum));
+	    fprintf(f, "%s\t", emptyForNull(tableName));
+	    fprintf(f, "%s\t", emptyForNull(dateSubmitted));
+	    fprintf(f, "%s\t", emptyForNull(dateResubmitted));
+	    fprintf(f, "%s\n", emptyForNull(dateUnrestricted));
+	    }
+	else
+	    {
+	    if (!startsWith("wgEncodeUmassWengTfbsValid", mdb->obj))	// These validation files not associated with encode experiment
+		warn("No experiment for %s", mdb->obj);
+	    }
 	}
     }
 carefulClose(&f);
@@ -257,11 +278,12 @@ void encodeExpToTab(char *outExp, char *outSeries, char *outResults)
 /* encodeExpToCvDb - Convert encode experiments table to a table more suitable for cvDb. */
 {
 struct hash *optHash = optionalFieldsHash();
-struct mdbObj *mdbList = getMdbList(metaDb);
+struct mdbObj *mdbList = getMdbList(metaDbs, ArraySize(metaDbs));
 struct hash *mdbHash = mdbHashKeyedByExpId(mdbList);
 struct hash *seriesHash = hashNew(0);
 struct series *seriesList = NULL;
-verbose(1, "read %d mdb objects from %s.%s\n", mdbHash->elCount, metaDb, metaTable);
+verbose(1, "read %d mdb objects from %s in %d databases\n", mdbHash->elCount, metaTable, 
+    (int)ArraySize(metaDbs));
 struct sqlConnection *expDbConn = sqlConnect(expDb);
 struct sqlConnection *cvDbConn = sqlConnect(cvDb);
 char query[256];
@@ -298,8 +320,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		table = "control";
 		}
-	    else
-		table = "ab";
 	    }
 
 	 /* If it looks like we have a valid table and term, store result in
@@ -374,7 +394,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	 * here needs to follow order in expRequiredFields. */
 	fprintf(f, "%u", ee->ix);
 	fprintf(f, "\t%s", ee->updateTime);
-	fprintf(f, "\t%s", composite);
+	fprintf(f, "\t%s", naForNull(composite));
 	fprintf(f, "\t%s", ee->accession);
 	fprintf(f, "\t%d", lookupId(cvDbConn, "organism", ee->organism));
 	fprintf(f, "\t%d", lookupId(cvDbConn, "lab", ee->lab));
