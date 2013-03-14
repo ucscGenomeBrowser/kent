@@ -2045,7 +2045,7 @@ identifier rdmrGene
 identifier gadId
 "GAD Gene ID"
     $hg.kgXref.geneSymbol dupeOk
-    $hg.gad.name minCheck=0.95
+    $hg.gad.name minCheck=0.94
 
 identifier gadAllId
 "GAD Gene Symbol in raw input"
