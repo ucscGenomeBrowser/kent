@@ -1,4 +1,4 @@
-/* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
+/* encodeCvToDb - Make a relational database version of cv.ra. */
 
 /* Currently this is implemented in three main steps:
  *    1) Read in cv.ra into a list of stanzaTypes.
@@ -16,17 +16,17 @@
 #include "obscure.h"
 #include "ra.h"
 
-char *tablePrefix = "cvDb_"; /* prefix to give to table names from command line*/
+char *tablePrefix = ""; /* prefix to give to table names. */
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "testCvToSql - Test out some ideas for making relational database version of cv.ra\n"
+  "encodeCvToDb - Make a relational database version of cv.ra\n"
   "usage:\n"
-  "   testCvToSql cv.ra out.stats out.atree out.as out.sql out.django outTabDir\n"
+  "   encodeCvToDb cv.ra out.stats out.atree out.as out.sql out.django outTabDir\n"
   "options:\n"
-  "   -tablePrefix=cvDb_ - Some prefix to prepend to all table names\n"
+  "   -tablePrefix=cvDb_ - Some prefix to prepend to all table names - for benefit of Django\n"
   );
 }
 
@@ -918,10 +918,10 @@ if (field != NULL)
 }
 
 
-void testCvToSql(char *inCvRa, 
+void encodeCvToDb(char *inCvRa, 
 	 char *outStats, char *outTree, char *outAs, char *outSql, 
 	 char *outDjango, char *outDir)
-/* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
+/* encodeCvToDb - Make a relational database version of cv.ra. */
 {
 /* Read input into type list and hash */
 struct hash *typeHash;   /* stanzaType valued, keyed by type->name */
@@ -962,6 +962,6 @@ optionInit(&argc, argv, options);
 if (argc != 8)
     usage();
 tablePrefix = optionVal("tablePrefix", tablePrefix);
-testCvToSql(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
+encodeCvToDb(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
 return 0;
 }
