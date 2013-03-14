@@ -72,7 +72,8 @@ UTIL_DIRS = \
 	dbTrash \
 	estOrient \
 	embossToPsl \
-	encode/validateFiles \
+	encode3/validateFiles \
+	encode3/validateManifest \
 	fakeFinContigs \
 	fakeOut \
 	featureBits \
