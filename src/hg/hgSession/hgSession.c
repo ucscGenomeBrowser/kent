@@ -650,6 +650,9 @@ if (sqlTableExists(conn, namedSessionTable))
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
 
+    /* Prevent modification of custom tracks just saved to namedSessionDb: */
+    cartCopyCustomTracks(cart, cartUsualString(cart, "db", hDefaultDb()));
+
     if (useCount > INITIAL_USE_COUNT)
 	dyStringPrintf(dyMessage,
 	  "Overwrote the contents of session <B>%s</B> "

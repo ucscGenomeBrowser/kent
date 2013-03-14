@@ -3299,8 +3299,8 @@ identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
     # Using dupeOk here because there are some case-sensitive allele name diffs (ugh)
     $mm.jaxAllelePheno.allele dupeOk
-    $mm.jaxAlleleInfo.name minCheck=0.9
-    $mm.jaxAllele.name minCheck=0.9
+    $mm.jaxAlleleInfo.name minCheck=0.89
+    $mm.jaxAllele.name minCheck=0.89
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
