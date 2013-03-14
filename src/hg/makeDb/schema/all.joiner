@@ -938,7 +938,7 @@ identifier wgEncodeGencodeTranscriptSourceV11
 identifier wgEncodeGencodeTranscriptSupportV11
 "Link together Gencode Transcript Support table with Attributes table"
     hg19.wgEncodeGencodeTranscriptSupportV11.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV11.transcriptId minCheck=0.30
+    hg19.wgEncodeGencodeAttrsV11.transcriptId minCheck=0.29
 
 identifier wgEncodeGencodeTranscriptionSupportLevelV11
 "Link together Gencode Transcription Support Level table with Attributes table"
