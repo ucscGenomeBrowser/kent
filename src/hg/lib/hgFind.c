@@ -2861,7 +2861,7 @@ char *canonicalRangeExp =
 		     "^([[:alnum:]._\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([-0-9,]+)"
-		     "[[:space:]]*-[[:space:]]*"
+		     "[[:space:]]*[-_][[:space:]]*"
 		     "([0-9,]+)$";
 char *gbrowserRangeExp = 
 		     "^([[:alnum:]._\\-]+)"

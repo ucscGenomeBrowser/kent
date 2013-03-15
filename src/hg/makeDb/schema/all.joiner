@@ -938,7 +938,7 @@ identifier wgEncodeGencodeTranscriptSourceV11
 identifier wgEncodeGencodeTranscriptSupportV11
 "Link together Gencode Transcript Support table with Attributes table"
     hg19.wgEncodeGencodeTranscriptSupportV11.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV11.transcriptId minCheck=0.30
+    hg19.wgEncodeGencodeAttrsV11.transcriptId minCheck=0.29
 
 identifier wgEncodeGencodeTranscriptionSupportLevelV11
 "Link together Gencode Transcription Support Level table with Attributes table"
@@ -1018,7 +1018,7 @@ identifier wgEncodeGencodeTranscriptSourceV12
 identifier wgEncodeGencodeTranscriptSupportV12
 "Link together Gencode Transcript Support table with Attributes table"
     hg19.wgEncodeGencodeTranscriptSupportV12.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV12.transcriptId minCheck=0.30
+    hg19.wgEncodeGencodeAttrsV12.transcriptId minCheck=0.29
 
 identifier wgEncodeGencodeTranscriptionSupportLevelV12
 "Link together Gencode Transcription Support Level table with Attributes table"
@@ -1083,7 +1083,7 @@ identifier wgEncodeGencodePubMedV14
 identifier wgEncodeGencodeRefSeqV14
 "Link together Gencode RefSeq table with Attributes table"
     hg19.wgEncodeGencodeRefSeqV14.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.185827
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.18
 
 identifier wgEncodeGencodeTagV14
 "Link together Gencode Tag table with Attributes table"
@@ -2045,7 +2045,7 @@ identifier rdmrGene
 identifier gadId
 "GAD Gene ID"
     $hg.kgXref.geneSymbol dupeOk
-    $hg.gad.name minCheck=0.95
+    $hg.gad.name minCheck=0.94
 
 identifier gadAllId
 "GAD Gene Symbol in raw input"
@@ -3299,8 +3299,8 @@ identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
     # Using dupeOk here because there are some case-sensitive allele name diffs (ugh)
     $mm.jaxAllelePheno.allele dupeOk
-    $mm.jaxAlleleInfo.name minCheck=0.9
-    $mm.jaxAllele.name minCheck=0.9
+    $mm.jaxAlleleInfo.name minCheck=0.89
+    $mm.jaxAllele.name minCheck=0.89
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"

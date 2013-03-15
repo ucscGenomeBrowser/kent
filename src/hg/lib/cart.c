@@ -240,13 +240,11 @@ dyStringFree(&dy);
 }
 
 #ifndef GBROWSE
-static void cartCopyCustomTracks(struct cart *cart, struct hash *oldVars)
+void cartCopyCustomTracks(struct cart *cart, char *db)
 /* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple loaders of the same session.  */
+ * to prevent clashes by multiple uses of the same session.  */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
-char *db=NULL, *ignored;
-getDbAndGenome(cart, &db, &ignored, oldVars);
 
 for (el = elList; el != NULL; el = el->next)
     {
@@ -409,6 +407,14 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
+INLINE char *getDb(struct cart *cart, struct hash *oldVars)
+/* Quick wrapper around getDbGenomeClade for when we only want db. */
+{
+char *db=NULL, *ignoreOrg, *ignoreClade;
+getDbGenomeClade(cart, &db, &ignoreOrg, &ignoreClade, oldVars);
+return db;
+}
+
 #ifndef GBROWSE
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
@@ -454,7 +460,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	 * command that sent us here): */
 	loadCgiOverHash(cart, oldVars);
 #ifndef GBROWSE
-	cartCopyCustomTracks(cart, oldVars);
+	cartCopyCustomTracks(cart, getDb(cart, oldVars));
 #endif /* GBROWSE */
 	if (isNotEmpty(actionVar))
 	    cartRemove(cart, actionVar);
@@ -514,7 +520,7 @@ if (oldVars)
  * command that sent us here): */
 loadCgiOverHash(cart, oldVars);
 #ifndef GBROWSE
-cartCopyCustomTracks(cart, oldVars);
+cartCopyCustomTracks(cart, getDb(cart, oldVars));
 #endif /* GBROWSE */
 
 if (isNotEmpty(actionVar))
