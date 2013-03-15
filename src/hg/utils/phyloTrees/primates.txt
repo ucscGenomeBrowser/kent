@@ -9,6 +9,9 @@ hg	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Homo
 # chimp - pan troglodytes
 panTro	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Pan
 
+# bonobo - Pan paniscus
+panPan	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Pan
+
 # gorilla - gorilla gorilla gorilla
 gorGor	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Gorilla
 
