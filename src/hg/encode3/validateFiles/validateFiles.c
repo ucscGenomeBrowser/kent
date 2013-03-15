@@ -1798,8 +1798,8 @@ if (startsWith("bigBed", type) && isdigit(type[6]))
     }
 
 // Setup the function hash keyed by type
-hashAdd(funcs, "tagAlign",       &validateTagAlign);
-hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
+hashAdd(funcs, "tagAlign",       &validateTagAlign);        // superseded by BAM
+hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);  // superseded by BAM
 hashAdd(funcs, "fasta",          &validateFasta);
 hashAdd(funcs, "fastq",          &validateFastq);
 hashAdd(funcs, "csfasta",        &validateCsfasta);
