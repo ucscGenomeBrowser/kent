@@ -176,12 +176,205 @@ for(rec = recs; rec; rec = rec->next)
 return hash;
 }
 
+
+char *getGenome(char *fileName)
+/* Get genome, e.g. hg19 */
+{  // TODO this could use some more development
+// but start with something very simple for now
+// such as assuming that the genome is found 
+// as the prefix in the fileName path.
+// Maybe in future can pull this from the hub.txt?
+char *slash = strchr(fileName, '/');
+if (!slash)
+    errAbort("Expected to find genome in file_name prefix.");
+char genome[256] = "";
+safencat(genome, sizeof genome, fileName, slash - fileName);
+return cloneString(genome);
+}
+
+char *getChromInfo(char *fileName)
+/* Get path to chromInfo file for fileName */
+{  // TODO this could use some more development
+// but start with something very simple for now
+// such as assuming that the chomInfo file has 
+// a standard location under the assembly name path.
+// Maybe in future can pull this from the hub.txt?
+char *genome = getGenome(fileName);
+char chromInfo[256];
+safef(chromInfo, sizeof chromInfo, "%s/%s_chromInfo.txt", genome, genome);
+return cloneString(chromInfo);
+}
+
+char *getTwoBit(char *fileName)
+/* Get path to twoBit file for fileName */
+{  // TODO this could use some more development
+// but start with something very simple for now
+// such as assuming that the twoBit file has 
+// a standard location under the assembly name path.
+// Maybe in future can pull this from the hub.txt?
+char *genome = getGenome(fileName);
+char twoBit[256];
+safef(twoBit, sizeof twoBit, "%s/%s.2bit", genome, genome);
+return cloneString(twoBit);
+}
+
+
+boolean runCmdLine(char *cmdLine)
+/* Run command line */
+{
+// TODO this should be substantially more complex
+//   with exec with timeout, might want to just translate
+//   some of the exec with wait code from the old ENCODE2 pipeline
+//   Maybe the default timeout should be 8 hours.
+//   I am sure that is more than generous enough for validating a single big file.
+int retCode = system(cmdLine); 
+uglyf("DEBUG: retCode=%d\n", retCode); // DEBUG REMOVE
+sleep(1); // give stupid gzip broken pipe errors a chance to happen and print out to stderr
+return (retCode == 0);
+}
+
+boolean validateBam(char *fileName)
+/* Validate BAM file */
+{
+char *twoBit = getTwoBit(fileName);
+char *chromInfo = getChromInfo(fileName);
+char cmdLine[1024];
+int mismatches = 7;  // TODO this is totally arbitrary right now
+
+// TODO might want to have a way to run validator on BAM even if the twoBit is not available.
+boolean quicky = TRUE;  // TODO DEBUG QUICK-run by removing -genome and mismatches and stuff.
+if (quicky)
+    {
+    // TODO could add a simple existence check for the corresponding .bam.bai since without -genome=, 
+    //  vf will not even open the bam index.
+    safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -chromInfo=%s %s", chromInfo, fileName);
+    }
+else
+    safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", mismatches, chromInfo, twoBit, fileName);
+uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
+return runCmdLine(cmdLine);
+}
+
+boolean validateBedRnaElements(char *fileName)
+/* Validate bedRnaElements file */
+{
+// TODO the current example manifest.txt is wrong because this should be bigBed-based (not bed-based)
+//  so that we need to  change this into bigBed with a particular bedRnaElements.as ?
+char *asFile = "bedRnaElements.as";  // TODO this probably has to change
+char *chromInfo = getChromInfo(fileName);
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "validateFiles -type=bed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
+return runCmdLine(cmdLine);
+}
+
+boolean validateBigBed(char *fileName)
+/* Validate bigBed file */
+{
+char *asFile = "modPepMap-std.as";  // TODO this wrong but how do we know what to put here?
+char *chromInfo = getChromInfo(fileName);
+char cmdLine[1024];
+// TODO probably need to do more work to define what the right type= and .as is
+//  going to be, and how to get it.
+// The following line is nothing but pure hack taken from the first example found in the manifest,
+//  and probably will fail miserably on other lines of the manifest, as this approach is too simple to work still
+safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed12+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
+// TODO actually run the validator
+return runCmdLine(cmdLine);
+}
+
+boolean validateBigWig(char *fileName)
+/* Validate bigWig file */
+{
+char *chromInfo = getChromInfo(fileName);
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigWig -chromInfo=%s %s", chromInfo, fileName);
+uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
+return runCmdLine(cmdLine);
+}
+
+boolean validateFastq(char *fileName)
+/* Validate fastq file */
+{
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "validateFiles -type=fastq %s", fileName);
+uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
+return runCmdLine(cmdLine);
+}
+
+boolean validateGtf(char *fileName)
+/* Validate gtf file */
+{
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "GTF: I have no idea what the commandline(s) should be. %s", fileName);
+uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
+// TODO actually run the validator
+return FALSE;
+}
+
+boolean validateNarrowPeak(char *fileName)
+/* Validate narrowPeak file */
+{
+// TODO the current example manifest.txt is wrong because this should be bigBed-based (not bed-based)
+//  so that we can either make vf understand some new bigBed narrowPeak, or else we need to 
+//  change this narrowPeak into nothing more than bigBed with a particular narrowPeak.as ?
+char *chromInfo = getChromInfo(fileName);
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "validateFiles -type=narrowPeak -chromInfo=%s %s", chromInfo, fileName);
+uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
+return runCmdLine(cmdLine);
+}
+
+
+boolean validateFile(char *fileName, char *format)
+/* call validateFiles for the file and format */
+{
+boolean result = FALSE;
+if (endsWith(fileName, ".tgz"))  // TODO how to handle .tgz tar'd fasta files.
+    { // will encode3 really even need to support these at all?
+      // and if it does, would we have vf support tar archive natively,
+      // or have vm (this program) unpack it and call vf for each file found inside?
+    warn(".tgz format not currently supported by validateManifest");
+    return FALSE;
+    }
+
+// Call the handler based on format
+if (sameString(format,"bam"))
+    result = validateBam(fileName);
+else if (startsWith(format,"bedRnaElements"))
+    result = validateBedRnaElements(fileName);
+else if (startsWith(format,"bigBed"))
+    result = validateBigBed(fileName);
+else if (startsWith(format,"bigWig"))
+    result = validateBigWig(fileName);
+else if (startsWith(format,"fastq"))
+    result = validateFastq(fileName);
+else if (startsWith(format,"gtf"))
+    result = validateGtf(fileName);
+else if (startsWith(format,"narrowPeak"))
+    result = validateNarrowPeak(fileName);
+else
+    {
+    warn("Unknown format: %s", format);
+    result = FALSE;
+    }
+return result;
+}
+
+
+
 void validateManifest(char *workingDir)
 /* Validate the manifest.txt input file creating validate.txt output */
 {
 
 chdir(workingDir);
 uglyf("workingDir=%s\n", workingDir);
+
+boolean quickMd5sum = TRUE;
+char *fakeMd5sum = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+if (quickMd5sum)
+    uglyf("DEBUG: because md5sum calculations are slow for big files, for testing purposes big files will be assigned md5sum=%s\n", fakeMd5sum);
 
 if (!fileExists("manifest.txt"))
     usage();
@@ -211,15 +404,20 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
 
 
 int m_file_name_i = -1;
+int m_format_i = -1;
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
     {
     if (sameString(manifestFields->words[i], "file_name"))
 	m_file_name_i = i;
+    if (sameString(manifestFields->words[i], "format"))
+	m_format_i = i;
     }
 if (m_file_name_i == -1)
     errAbort("field file_name not found in manifest.txt");
+if (m_format_i == -1)
+    errAbort("field format not found in manifest.txt");
 
 // check if the fieldnames in old validated appear in the same order in manifest.txt
 //  although this is currently a minor limitation, it could be removed 
@@ -330,6 +528,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     		vFileSize = sqlLongLong(vRec->words[v_size_i]);  // TODO maybe use my special functions from the validator
 		if (vFileSize != mFileSize) dataMatches = FALSE;
 		}
+	    // check that the record correctly matches the actual file timestamp.
 	    if (dataMatches)
 		{
 		vFileTime = sqlLongLong(vRec->words[v_modified_i]);  // There is no sqlLong function, but there should be!
@@ -341,7 +540,11 @@ for(rec = manifestRecs; rec; rec = rec->next)
 		vMd5Hex   = vRec->words[v_md5_sum_i];
 		vValidKey = vRec->words[v_valid_key_i];
 		char *checkValidKey = calcValidKey(vMd5Hex, vFileSize);
-		if (!sameString(vValidKey,checkValidKey)) 
+		if (sameString(vValidKey,"ERROR")) 
+		    {
+		    dataMatches = FALSE;
+		    }
+		else if (!sameString(vValidKey,checkValidKey)) 
 		    {
 		    warn("invalid key %s in old validated.txt",vValidKey);  // TODO add line# or filename etc?
 		    dataMatches = FALSE;
@@ -359,20 +562,17 @@ for(rec = manifestRecs; rec; rec = rec->next)
     else
 	{
 	// get md5_sum
-    	//char *mMd5Hex = mMd5HexForFile(mFileName);   // DEBUG RESTORE
+    	//char *mMd5Hex = mMd5HexForFile(mFileName);   // DEBUG RESTORE  // TODO
 	// DEBUG REMOVE -- hack for speed for development.
-	if (mFileSize > 100 * 1024 * 1024)
-	    mMd5Hex = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	if (quickMd5sum && mFileSize > 100 * 1024 * 1024)
+	    mMd5Hex = fakeMd5sum;  // "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     	else
 	    mMd5Hex = md5HexForFile(mFileName);
 
 	mValidKey = calcValidKey(mMd5Hex, mFileSize);
 
-
-	boolean fileIsValid = FALSE;
-	// TODO At this point it should call the validator on the file type.
-	// DEBUG fake it for now!
-	fileIsValid = TRUE;
+	char *mFormat = rec->words[m_format_i];
+	boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
 
 	if (!fileIsValid)
 	    mValidKey = "ERROR";
