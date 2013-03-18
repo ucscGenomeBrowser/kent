@@ -231,8 +231,14 @@ static void parseMdiffLoc(char *tag, char *val, struct gbMiscDiff *mdiff)
 /* either a single number, start..end, or 2903^2904 for inbetween,
  * start/end can have partial modifiers <start..>end.  Can have a complement()
  * and order().  Don't handle order(), just drop by setting start/end to -1.
+ * Don't handle join(), just drop by setting start/end to -1.
  */
 if (startsWith("order(", val))
+    {
+    mdiff->mrnaStart = mdiff->mrnaEnd = -1;
+    return;
+    }
+if (startsWith("join(", val))
     {
     mdiff->mrnaStart = mdiff->mrnaEnd = -1;
     return;
