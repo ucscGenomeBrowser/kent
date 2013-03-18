@@ -16,7 +16,7 @@
 #include "asParse.h"
 #include "bigBed.h"
 
-char *version = "4.5";
+char *version = "4.6";
 
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
@@ -48,7 +48,6 @@ int matchFirst=0;
 int mmCheckOneInN;
 boolean doReport;
 double bamPercent = 0.0;
-boolean showBadAlign;
 char *as = NULL;
 boolean tab = FALSE;
 boolean bigBed = FALSE;
@@ -72,7 +71,7 @@ void usage()
   "       csfasta      : Colorspace fasta (implies -colorSpace)\n"
   "       csqual       : Colorspace quality (see link below)\n"
   "                      See http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm\n"
-  "       BAM          : Binary Alignment/Map\n"
+  "       bam          : Binary Alignment/Map\n"
   "                      See http://samtools.sourceforge.net/SAM1.pdf\n"
   "       bigWig       : Big Wig\n"
   "                      See http://genome.ucsc.edu/goldenPath/help/bigWig.html\n"
@@ -117,7 +116,6 @@ void usage()
   "   -allowOther                  Allow chromosomes that aren't native in BAM's\n"
   "   -allowBadLength              Allow chromosomes that have the wrong length in BAM\n"
   "   -complementMinus             Complement the query sequence on the minus strand (for testing BAM)\n"
-  "   -showBadAlign                Show non-compliant alignments\n"
   "   -bamPercent=N.N              Percentage of BAM alignments that must be compliant\n"
   "   -privateData                 Private data so empty sequence is tolerated\n"
   "\n"
@@ -143,7 +141,6 @@ static struct optionSpec options[] = {
     {"allowBadLength", OPTION_BOOLEAN},
     {"complementMinus", OPTION_BOOLEAN},
     {"bamPercent", OPTION_FLOAT},
-    {"showBadAlign", OPTION_BOOLEAN},
     {"doReport", OPTION_BOOLEAN},
     {"as", OPTION_STRING},
     {"tab", OPTION_BOOLEAN},
@@ -1429,40 +1426,37 @@ for (i = start; (strand == '-') ? i >= 0 : i < strlen(seq); i += incr)
 
 if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality)))
     {
-    if (showBadAlign)
-        {
-        assert(checkLength < 10000);
-        char match[10000];
+    assert(checkLength < 10000);
+    char match[10000];
 
-        for(i = 0; i < strlen(seq); i++)
-            {
-            if ((dna[i] == '-') || (tolower(seq[i]) == dna[i]))
-                match[i] = ' ';
-            else
-                match[i] = 'x';
-            }
-        match[i] = 0;
+    for(i = 0; i < strlen(seq); i++)
+	{
+	if ((dna[i] == '-') || (tolower(seq[i]) == dna[i]))
+	    match[i] = ' ';
+	else
+	    match[i] = 'x';
+	}
+    match[i] = 0;
 
-        if (mm > mismatches)
-            {
-            reportWarn("Error [file=%s, line=%d]: "
-	    "too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
-                file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
-            }
+    if (mm > mismatches)
+	{
+	reportWarn("Error [file=%s, line=%d]: "
+	"too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
+	    file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
+	}
 
-        if ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
-            {
-            char squal[10000];
-            for (i = 0; i < checkLength; i++)
-                squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
+    if ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
+	{
+	char squal[10000];
+	for (i = 0; i < checkLength; i++)
+	    squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
 
-            reportWarn("Error [file=%s, line=%d]: "
-                       "total quality at mismatches too high (found %d, maximum is %d) "
-                       "(%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
-                       file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart,
-                       seq, match, dna, squal);
-            }        
-        }
+	reportWarn("Error [file=%s, line=%d]: "
+		   "total quality at mismatches too high (found %d, maximum is %d) "
+		   "(%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+		   file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart,
+		   seq, match, dna, squal);
+	}        
     return FALSE;
     }
 return TRUE;
@@ -1540,10 +1534,8 @@ else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos,
             strand, query, queryQuals, cigarPacked, core->n_cigar))
     {
     char *cigar = bamGetCigar(bam);
-    if (showBadAlign)
-        reportWarn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n"
-	    , bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
-
+    reportWarn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n"
+	, bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
     ++(*errs);
     }
     
@@ -1771,7 +1763,6 @@ allowOther     = optionExists("allowOther");
 allowBadLength = optionExists("allowBadLength");
 complementMinus = optionExists("complementMinus");
 bamPercent     = optionFloat("bamPercent", bamPercent);
-showBadAlign   = optionExists("showBadAlign");
 doReport       = optionExists("doReport");
 as = optionVal("as", as);
 tab           = optionExists("tab");
@@ -1793,6 +1784,10 @@ else if ( (chromInfo=optionVal("chromInfo", NULL)) != NULL)
     }
 verbose(2,"[%s %3d] type=%s\n", __func__, __LINE__, type);
 
+if (sameString("BAM", type))
+    reportErrAbort("Type error. Please specify BAM spelled in lower-case as -type=bam.");
+    
+
 if (startsWith("bed", type) && isdigit(type[3]))
     type = "bedN";
 
@@ -1803,8 +1798,8 @@ if (startsWith("bigBed", type) && isdigit(type[6]))
     }
 
 // Setup the function hash keyed by type
-hashAdd(funcs, "tagAlign",       &validateTagAlign);
-hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
+hashAdd(funcs, "tagAlign",       &validateTagAlign);        // superseded by BAM
+hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);  // superseded by BAM
 hashAdd(funcs, "fasta",          &validateFasta);
 hashAdd(funcs, "fastq",          &validateFastq);
 hashAdd(funcs, "csfasta",        &validateCsfasta);
@@ -1814,7 +1809,7 @@ hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
 hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
 hashAdd(funcs, "bedGraph",       &validateBedGraph);
 #ifdef USE_BAM
-hashAdd(funcs, "BAM",            &validateBAM);
+hashAdd(funcs, "bam",            &validateBAM);
 #endif
 hashAdd(funcs, "bigWig",         &validateBigWig);
 
