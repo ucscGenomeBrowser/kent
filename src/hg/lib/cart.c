@@ -240,13 +240,11 @@ dyStringFree(&dy);
 }
 
 #ifndef GBROWSE
-static void cartCopyCustomTracks(struct cart *cart, struct hash *oldVars)
+void cartCopyCustomTracks(struct cart *cart, char *db)
 /* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple loaders of the same session.  */
+ * to prevent clashes by multiple uses of the same session.  */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
-char *db=NULL, *ignored;
-getDbAndGenome(cart, &db, &ignored, oldVars);
 
 for (el = elList; el != NULL; el = el->next)
     {
@@ -409,8 +407,16 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
+INLINE char *getDb(struct cart *cart, struct hash *oldVars)
+/* Quick wrapper around getDbGenomeClade for when we only want db. */
+{
+char *db=NULL, *ignoreOrg, *ignoreClade;
+getDbGenomeClade(cart, &db, &ignoreOrg, &ignoreClade, oldVars);
+return db;
+}
+
 #ifndef GBROWSE
-void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+boolean cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
 			 struct hash *oldVars, char *actionVar)
 /* If permitted, load the contents of the given user's session, and then
@@ -418,6 +424,7 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
  * If non-NULL, oldVars will contain values overloaded when reloading CGI.
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
  * CGI action variable that sent us here. */
+/* Return TRUE if a session was loaded. */
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -425,6 +432,7 @@ char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
 char query[512];
+boolean loadedSession = FALSE;
 
 if (isEmpty(sessionOwner))
     errAbort("Please go back and enter a wiki user name for this session.");
@@ -453,12 +461,10 @@ if ((row = sqlNextRow(sr)) != NULL)
 	/* Overload settings explicitly passed in via CGI (except for the
 	 * command that sent us here): */
 	loadCgiOverHash(cart, oldVars);
-#ifndef GBROWSE
-	cartCopyCustomTracks(cart, oldVars);
-#endif /* GBROWSE */
 	if (isNotEmpty(actionVar))
 	    cartRemove(cart, actionVar);
 	hDisconnectCentral(&conn2);
+	loadedSession = TRUE;
 	}
     else
 	errAbort("Sharing has not been enabled for user %s's session %s.",
@@ -469,6 +475,8 @@ else
 	     sessionName, sessionOwner);
 sqlFreeResult(&sr);
 freeMem(encSessionName);
+
+return loadedSession;
 }
 #endif /* GBROWSE */
 
@@ -513,9 +521,6 @@ if (oldVars)
 /* Overload settings explicitly passed in via CGI (except for the
  * command that sent us here): */
 loadCgiOverHash(cart, oldVars);
-#ifndef GBROWSE
-cartCopyCustomTracks(cart, oldVars);
-#endif /* GBROWSE */
 
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
@@ -610,13 +615,11 @@ loadCgiOverHash(cart, oldVars);
 // I think this is the place to justify old and new values
 cartJustify(cart, oldVars);
 
-/* wire up the assembly hubs so we can operate without sql */
-hubConnectLoadHubs(cart);
-
 #ifndef GBROWSE
 /* If some CGI other than hgSession been passed hgSession loading instructions,
  * apply those to cart before we do anything else.  (If this is hgSession,
  * let it handle the settings so it can display feedback to the user.) */
+boolean sessionLoaded = FALSE;
 if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
     {
     if (cartVarExists(cart, hgsDoOtherUser))
@@ -624,7 +627,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	char *otherUser = cartString(cart, hgsOtherUserName);
 	char *sessionName = cartString(cart, hgsOtherUserSessionName);
 	struct sqlConnection *conn2 = hConnectCentral();
-	cartLoadUserSession(conn2, otherUser, sessionName, cart,
+	sessionLoaded = cartLoadUserSession(conn2, otherUser, sessionName, cart,
 			    oldVars, hgsDoOtherUser);
 	hDisconnectCentral(&conn2);
 	cartTrace(cart, "after cartLUS", conn);
@@ -633,11 +636,22 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	{
 	char *url = cartString(cart, hgsLoadUrlName);
 	struct lineFile *lf = netLineFileOpen(url);
+	sessionLoaded = TRUE;
 	cartLoadSettings(lf, cart, oldVars, hgsDoLoadUrl);
 	lineFileClose(&lf);
 	cartTrace(cart, "after cartLS", conn);
 	}
     }
+#endif /* GBROWSE */
+
+/* wire up the assembly hubs so we can operate without sql */
+hubConnectLoadHubs(cart);
+
+#ifndef GBROWSE
+// if we loaded a session, we want to copy the custom tracks so 
+// we don't change them in the session
+if (sessionLoaded)
+    cartCopyCustomTracks(cart, getDb(cart, oldVars));
 #endif /* GBROWSE */
 
 if (exclude != NULL)
