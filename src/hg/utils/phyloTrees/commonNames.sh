@@ -77,7 +77,7 @@ eptFus1 -> Big_brown_bat ;
 odoRosDiv1 -> Pacific_walrus ;
 eriEur1 -> Hedgehog ;
 eriEur2 -> Hedgehog ;
-conCri1 -> Star-nosed_mole ;
+conCri1 -> Star_nosed_mole ;
 sorAra1 -> Shrew ;
 sorAra2 -> Shrew ;
 loxAfr3 -> Elephant ;
@@ -136,4 +136,4 @@ danRer7 -> Zebrafish ;
 gadMor1 -> Atlantic_cod ;
 petMar1 -> Lamprey ;
 petMar2 -> Lamprey ;" \
-	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/David_s/David's/;"
+	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/David_s/David's/; s/Star_nosed/Star-nosed/;"
