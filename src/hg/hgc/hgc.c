@@ -9276,8 +9276,8 @@ if (row != NULL)
     printf("<B>COSMIC ID:</B> <A HREF=\"%s%s\" TARGET=_BLANK>%s</A> (details at COSMIC site)", url, chp, chp);
 
     // Embed URL to COSMIC site per COSMICT request.
-    printf("<BR><B>Source:</B> ");
-    printf("<A HREF=\"http://cancdr.sanger.ac.uk/cancergenome/projects/cosmic/\" TARGET=_BLANK>%s</A>\n", source);
+    // printf("<BR><B>Source:</B> ");
+    // printf("<A HREF=\"http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/\" TARGET=_BLANK>%s</A>\n", source);
 
     printf("<BR><B>Gene Name:</B> %s\n", gene_name);
     printf("<BR><B>Accession Number:</B> %s\n", accession_number);
@@ -9322,7 +9322,7 @@ if (row != NULL)
         mut_freq                = row2[ii];ii++;
 
         if (multipleTumorSites) printf("<BR>");
-        printf("<BR><B>%sTumour Site:</B> %s\n",        indentString, tumour_site);
+        printf("<BR><B>%sTumor Site:</B> %s\n",         indentString, tumour_site);
         printf("<BR><B>%sMutated Samples:</B> %s\n",    indentString, mutated_samples);
         printf("<BR><B>%sExamined Samples:</B> %s\n",   indentString, examined_samples);
         printf("<BR><B>%sMutation Frequency:</B> %s\n", indentString, mut_freq);
