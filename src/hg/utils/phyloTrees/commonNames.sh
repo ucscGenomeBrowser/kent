@@ -41,7 +41,7 @@ dipOrd1 -> Kangaroo_rat ;
 micOch1 -> Prairie_vole ;
 hetGla1 -> Mole_rat ;
 hetGla2 -> Mole_rat ;
-cavPor3 -> Guinea_Pig ;
+cavPor3 -> Guinea_pig ;
 jacJac1 -> Lesser_Egyptian_jerboa ;
 speTri1 -> Squirrel ;
 speTri2 -> Squirrel ;
