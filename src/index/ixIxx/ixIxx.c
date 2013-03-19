@@ -1,5 +1,6 @@
 /* ixIxx - Create indices for simple line-oriented file of format 
  * <symbol> <free text>. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

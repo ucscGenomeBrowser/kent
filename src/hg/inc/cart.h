@@ -436,7 +436,7 @@ void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 			 char *encSessionName);
 /* Increment namedSessionDb.useCount and update lastUse for this session. */
 
-void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+boolean cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
 			 struct hash *oldVars, char *actionVar);
 /* If permitted, load the contents of the given user's session, and then
@@ -444,6 +444,7 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
  * If non-NULL, oldVars will contain values overloaded when reloading CGI.
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
  * CGI action variable that sent us here. */
+/* Return TRUE if a session was loaded. */
 
 void cartLoadSettings(struct lineFile *lf, struct cart *cart,
 		      struct hash *oldVars, char *actionVar);

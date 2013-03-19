@@ -1,5 +1,5 @@
-# Describes where an antibody is thought to bind
 class AbTarget(models.Model):
+""" Describes where an antibody is thought to bind. """
     term = models.CharField("term", primaryKey=True, max_length=255)
 	# A relatively short label, no more than a few words
     deprecated = models.CharField("deprecated", max_length=255, blank=True)
@@ -14,8 +14,8 @@ class AbTarget(models.Model):
     def __unicode__(self):
         return self.term
 
-# Information on an antibody including where to get it and what it targets
 class Ab(models.Model):
+""" Information on an antibody including where to get it and what it targets."""
     term = models.CharField("term", max_length=255)
 	# A relatively short label, no more than a few words
     tag = models.CharField("tag", max_length=255)
