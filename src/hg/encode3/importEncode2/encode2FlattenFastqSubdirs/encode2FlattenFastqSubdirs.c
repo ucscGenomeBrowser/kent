@@ -68,6 +68,7 @@ rListDir(rootDir, &fiList);
 slReverse(&fiList);
 
 /* Make sure anything that isn't a subdir is a fastq. */
+boolean gotDir = FALSE;
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
     if (!fi->isDir) 
@@ -75,7 +76,10 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 	if (!endsWith(fi->name, ".fastq"))
 	    errAbort("Non-fastq %s in encode2FlattenFastqSubdir, aborting.", fi->name);
 	}
+    gotDir = TRUE;
     }
+if (!gotDir)
+    return;
 
 /* Move fastqs to root dir. */
 for (fi = fiList; fi != NULL; fi = fi->next)
