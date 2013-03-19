@@ -20,18 +20,18 @@ set size=""
 set names=( 'Ann Zweig' 'Brian Raney' 'Brooke Rhead' 'Jim Kent' 'Andy Pohl'\
   'Larry Meyer' 'Mark Diekhans' 'Kate Rosenbloom' 'Hiram Clawson' 'Tim Dreszer' \
   'Galt Barber' 'Belinda Giardine' 'Angie Hinrichs' 'Robert Baertsch' \
-  'Donna Karolchik' )
+  'Donna Karolchik' 'Fan Hsu')
 set alias=( ann braney rhead kent aamp \
   larrym markd kate hiram tdreszer  \
   galt giardine angie baertsch \
-  donnak )
+  donnak fanhsu)
 # set names=( 'Jim Kent' )
 # set alias=( kent )
 set aliases=`echo $alias | wc -w`
 
 if ( $#argv != 1 ) then
   echo
-  echo "  gets info about who wrote the lines in a program."
+  echo "  gets info about who wrote how many lines in a program."
   echo "  expects your source tree in your ~/kent directory."
   echo "  will work on a directory name."
   echo "  writes some files in your kent directory, then removes them."
