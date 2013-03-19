@@ -6,8 +6,8 @@
 #include "jksql.h"
 #include "dystring.h"
 
-char *database = "kentDjangoTest2";
-char *tablePrefix = "cvDb_";
+char *database = "encode2Meta";
+char *tablePrefix = "";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,7 +15,7 @@ void usage()
 errAbort(
   "encode2ExpDumpFlat - Dump the experiment table in a semi-flat way from a relationalized Encode2 metadatabase.\n"
   "usage:\n"
-  "   encode2ExpDumpFlat output.tab\n"
+  "   encode2ExpDumpFlat output.tab view.sql flatTable.sql\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -39,7 +39,7 @@ char *starFields[] = {
 "lab",
 "dataType",
 "cellType",
-"ab",
+"antibody",
 "age",
 "attic",
 "category",
@@ -71,7 +71,7 @@ struct starTableInfo
     char *tableName;	/* Includes prefix. */
     char *fieldName;	/* No prefix. */
     int maxId;		/* Maximum of ID field. */
-    char **tagsForIds;  /* Given ID, this is corresponding tag. */
+    char **termsForIds;  /* Given ID, this is corresponding term. */
     };
 
 struct starTableInfo *starTableInfoNew(struct sqlConnection *conn, char *name)
@@ -86,22 +86,85 @@ sti->fieldName = cloneString(name);
 char query[256];
 safef(query, sizeof(query), "select max(id) from %s", sti->tableName);
 sti->maxId = sqlQuickNum(conn, query);
-uglyf("%s maxId %d\n", sti->tableName, sti->maxId);
-AllocArray(sti->tagsForIds, sti->maxId+1);
-safef(query, sizeof(query), "select id,tag from %s", sti->tableName);
+verbose(2, "%s maxId %d\n", sti->tableName, sti->maxId);
+AllocArray(sti->termsForIds, sti->maxId+1);
+safef(query, sizeof(query), "select id,term from %s", sti->tableName);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     unsigned id = sqlUnsigned(row[0]);
-    char *tag = row[1];
-    sti->tagsForIds[id] = cloneString(tag);
+    char *term = row[1];
+    sti->termsForIds[id] = cloneString(term);
     }
 sqlFreeResult(&sr);
 return sti;
 }
 
-void encode2ExpDumpFlat(char *outFile)
+void makeViewSql(char *outFile)
+/* Write out monster view creation statement to outfile. */
+{
+FILE *f = mustOpen(outFile, "w");
+fprintf(f, "create view experimentTerms as\n");
+fprintf(f, "select ");
+int i;
+for (i=0; i<ArraySize(flatFields); ++i)
+    {
+    char *field = flatFields[i];
+    fprintf(f, "  %s.%s as %s,\n", "experiment", field, field);
+    }
+for (i=0; i<ArraySize(starFields); ++i)
+    {
+    char *field = starFields[i];
+    fprintf(f, "  %s.term as %s", field, field);
+    if (i != ArraySize(starFields)-1)
+        fprintf(f, ",");
+    fprintf(f, "\n");
+    }
+fprintf(f, "from experiment");
+for (i=0; i<ArraySize(starFields); ++i)
+    {
+    char *field = starFields[i];
+    fprintf(f, ",\n  %s",  field);
+    }
+fprintf(f, "\n");
+fprintf(f, "where ");
+for (i=0; i<ArraySize(starFields); ++i)
+    {
+    char *field = starFields[i];
+    fprintf(f, "  %s.%s = %s.id", "experiment", field, field);
+    if (i != ArraySize(starFields)-1)
+        fprintf(f, " and ");
+    fprintf(f, "\n");
+    }
+
+carefulClose(&f);
+}
+
+void makeFlatTableSql(char *fileName)
+/* Write out SQL creation statement for flat table. */
+{
+FILE *f = mustOpen(fileName, "w");
+fprintf(f, "create table expFlat (\n");
+fprintf(f, "    id integer NOT NULL PRIMARY KEY,\n");
+fprintf(f, "    updateTime varchar(40) NOT NULL,\n");
+fprintf(f, "    series varchar(50) NOT NULL,\n");
+fprintf(f, "    accession varchar(16) NOT NULL,\n");
+fprintf(f, "    version integer NOT NULL,\n");
+int i;
+for (i=0; i<ArraySize(starFields); ++i)
+    {
+    char *field = starFields[i];
+    fprintf(f, "    %s varchar(32) NOT NULL", field);
+    if (i != ArraySize(starFields)-1)
+        fprintf(f, ",");
+    fprintf(f, "\n");
+    }
+fprintf(f, ");\n");
+carefulClose(&f);
+}
+
+void encode2ExpDumpFlat(char *outFile, char *viewSql, char *flatTable)
 /* encode2ExpDumpFlat - Dump the experiment table in a semi-flat way from a relationalized Encode2 metadatabase.. */
 {
 FILE *f = mustOpen(outFile, "w");
@@ -147,24 +210,26 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (id == 0)
 	    fputs("n/a", f);
 	else
-	    fputs(stiArray[i]->tagsForIds[id], f);
+	    fputs(stiArray[i]->termsForIds[id], f);
 	}
     fputc('\n', f);
     }
 
 
 sqlFreeResult(&sr);
-
 sqlDisconnect(&conn);
 carefulClose(&f);
+
+makeViewSql(viewSql);
+makeFlatTableSql(flatTable);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 4)
     usage();
-encode2ExpDumpFlat(argv[1]);
+encode2ExpDumpFlat(argv[1], argv[2], argv[3]);
 return 0;
 }

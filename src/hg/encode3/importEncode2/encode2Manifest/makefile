@@ -1,15 +1,15 @@
 include ../../../../inc/common.mk
 
-L += -lm
+L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = testCvToSql
-O = testCvToSql.o
+A = encode2Manifest
+O = encode2Manifest.o
 
-testCvToSql: ${O} ${MYLIBS}
+encode2Manifest: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-#       ${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 compile:: ${O}
 	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
