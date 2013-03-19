@@ -9,6 +9,9 @@
 #include "portable.h"
 #include "obscure.h"
 
+char *dataDir = "/scratch/kent/encValData";
+char *tempDir = "/tmp";
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -17,12 +20,14 @@ errAbort(
   "usage:\n"
   "   encode2CopyManifest sourceDir sourceManifest destDir destManifest\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -dataDir=/path/to/encode/asFilesAndChromSizesEtc\n"
+  "   -tmpDir=/tmp\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"dataDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -93,43 +98,15 @@ if (!hashLookup(hash, dir))
     }
 }
 
-void removeDirectoryAndFilesInIt(char *dir)
-/* A deliberately stunted version of "rm -r" at the command line.  This will
- * do a listing of files in a directory and remove each.  It will fail if any of
- * the files inside of the directory is actually itself a directory.  */
-{
-uglyf("removeDirectoryAndFilesInIt(%s)\n", dir);
-#ifdef SOON
-/* Get contents of directory and check to make sure no subdirs. */
-struct fileInfo *fi, *fiList = listDirX(dir, "*", TRUE);
-for (fi = fiList; fi != NULL; fi = fi->next)
-    if (fi->isDir)
-       errAbort("%s contains subdirs, aborting removeDirectoryAndFilesInIt", dir);
-
-/* Delete contents. */
-for (fi = fiList; fi != NULL; fi = fi->next)
-    {
-    if (remove(fi->name) < 0)
-        errnoAbort("Can't remove %s", fi->name);
-    }
-slFreeList(&fiList);
-
-
-/* Delete dir itself. */
-if (rmdir(dir) < 0)
-    errnoAbort("Can't rmdir %s", dir);
-#endif /* SOON */
-}
-
 void systemCommand(char *s)
 /* Do system() command on s,  and check error status, aborting with message if
  * any problem. */
 {
-verbose(1, "systemCommand(%s)\n", s);
-#ifdef SOON
+verbose(1, "cmd> %s\n", s);
 int err = system(s);
-if (err < 0)
+if (err != 0)
     errAbort("err %d\nCouldn't %s", err, s);
+#ifdef SOON
 #endif /* SOON */
 }
 
@@ -138,15 +115,32 @@ void untgzIntoDir(char *tgzFile, char *dir)
  *    cd dir
  *    tar -zx tgzFile */
 {
-uglyf("Attempting untgzIntoDir(%s, %s)\n", tgzFile, dir);
 char *origDir = cloneString(getCurrentDir());
 struct dyString *command = dyStringNew(0);
 setCurrentDir(dir);
 dyStringPrintf(command, "tar -zxf %s", tgzFile);
-uglyf("command: %s\n", command->string);
 systemCommand(command->string);
 dyStringFree(&command);
 freez(&origDir);
+}
+
+void doGzippedBedToBigBed(char *bedFile, char *asType, char *bedType, char *bigBed)
+/* Convert some bed file to an as file. */
+{
+struct dyString *cmd = dyStringNew(0);
+char *tempName = rTempName(tempDir, "b2bb", ".bed");
+if (tempName == NULL)
+    errAbort("Can't find tempName");
+dyStringPrintf(cmd, "zcat %s | sort -k1,1 -k2,2n > %s", bedFile, tempName);
+systemCommand(cmd->string);
+dyStringClear(cmd);
+dyStringPrintf(cmd, "bedToBigBed -type=%s -as=%s/as/%s.as %s %s/hg19/chrom.sizes %s",
+    bedType, dataDir, asType, tempName, dataDir, bigBed);
+systemCommand(cmd->string);
+dyStringClear(cmd);
+dyStringPrintf(cmd, "rm %s", tempName);
+systemCommand(cmd->string);
+dyStringFree(&cmd);
 }
 
 
@@ -186,9 +180,22 @@ mi->format = oldFormat;
 mi->fileName = oldFileName;
 }
 
+void doCopyFile(char *sourcePath, char *destPath)
+/* Issue system command to copy file. */
+{
+struct dyString *cmd = dyStringNew(0);
+dyStringPrintf(cmd, "cp -a %s %s", sourcePath, destPath);
+systemCommand(cmd->string);
+dyStringFree(&cmd);
+}
 
-void processManifestItem(struct manifestInfo *mi, char *sourcePath, 
-    char *destPath, struct hash *dirHash, char *destRootDir, FILE *f)
+#ifdef OLD
+    processManifestItem(mi, sourceDir, destDir, destDirHash, f);
+         sourcePath, destPath, destDirHash, destDir, f);
+#endif /* OLD */
+
+void processManifestItem(struct manifestInfo *mi, char *sourceRoot, 
+    char *destRoot, struct hash *dirHash, FILE *f)
 /* Process a line from the manifest.  Source path is the full path to the source file.
  * destPath is where to put the destination in the straightforward case where the destination
  * is just a single file.  In the more complex case dirHash and destDir are helpful.
@@ -203,23 +210,43 @@ void processManifestItem(struct manifestInfo *mi, char *sourcePath,
  * o - Files that are tgz's of multiple fastqs are split into individual fastq.gz's inside
  *     a directory named after the archive. */
 {
-uglyf("processManifestItem(%p, %s, %s, %p, %s, %p)\n", mi, sourcePath, destPath, dirHash, destRootDir, f);
-if (endsWith(sourcePath, ".fastq.tgz"))
+/* Make up bunches of components for file names. */
+char *fileName = mi->fileName;
+char sourcePath[PATH_LEN];
+safef(sourcePath, sizeof(sourcePath), "%s/%s", sourceRoot, fileName);
+char destPath[PATH_LEN];
+char destDir[PATH_LEN], destFileName[FILENAME_LEN], destExtension[FILEEXT_LEN];
+safef(destPath, sizeof(destPath), "%s/%s", destRoot, fileName);
+splitPath(destPath, destDir, destFileName, destExtension);
+
+verbose(1, "# %s\t%s\n", fileName, mi->format);
+if (endsWith(fileName, ".fastq.tgz"))
     {
     char outDir[PATH_LEN];
     safef(outDir, sizeof(outDir), "%s.dir", destPath);
-    verbose(1, "Unpacking %s into %s\n", sourcePath, outDir);
+    verbose(2, "Unpacking %s into %s\n", sourcePath, outDir);
     makeDir(outDir);
     untgzIntoDir(sourcePath, outDir);
     gzipFastqs(outDir, mi, f);
     }
+else if (endsWith(fileName, ".narrowPeak.gz"))
+    {
+    char outFileName[FILENAME_LEN];
+    safef(outFileName, sizeof(outFileName), "%s%s", destFileName, ".bigBed");
+    char outPath[PATH_LEN];
+    safef(outPath, sizeof(outPath), "%s%s%s", destDir, destFileName, ".bigBed");
+    doGzippedBedToBigBed(sourcePath, "narrowPeak", "bed6+4", outPath);
+    mi->fileName = cloneString(outFileName);
+    manifestInfoTabOut(mi, f);
+    }
 else
     {
-    verbose(1, "copyFile(%s,%s)\n", sourcePath, destPath);
-    copyFile(sourcePath, destPath);
+    verbose(2, "copyFile(%s,%s)\n", sourcePath, destPath);
+    doCopyFile(sourcePath, destPath);
     manifestInfoTabOut(mi, f);
     }
 }
+
 
 void encode2CopyManifest(char *sourceDir, char *sourceManifest, char *destDir, char *destManifest)
 /* encode2CopyManifest - Copy files in encode2 manifest and in case of tar'd files rezip them 
@@ -244,10 +271,11 @@ for (mi = fileList; mi != NULL; mi = mi->next)
     char destSubDir[PATH_LEN];
     safef(destSubDir, sizeof(destSubDir), "%s/%s", destDir, localDir);
     makeDirOnlyOnce(destSubDir, destDirHash);
+
     char destPath[PATH_LEN];
     safef(destPath, sizeof(destPath), "%s/%s", destDir, mi->fileName);
 
-    processManifestItem(mi, sourcePath, destPath, destDirHash, destDir, f);
+    processManifestItem(mi, sourceDir, destDir, destDirHash, f);
 
 #ifdef OLD
     /* If md5sum available check it. */
@@ -260,7 +288,7 @@ for (mi = fileList; mi != NULL; mi = mi->next)
 	    warn("md5sum mismatch on %s, %s in metaDb vs %s in file", sourcePath, mi->md5sum, md5sum);
 	    fprintf(f, "md5sum mismatch on %s, %s in metaDb vs %s in file\n", sourcePath, mi->md5sum, md5sum);
 	    ++mismatch;
-	    verbose(1, "%d md5sum matches, %d mismatches\n", match, mismatch);
+	    verbose(2, "%d md5sum matches, %d mismatches\n", match, mismatch);
 	    }
 	else 
 	    ++match;
@@ -274,6 +302,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+dataDir = optionVal("dataDir", dataDir);
 if (argc != 5)
     usage();
 encode2CopyManifest(argv[1], argv[2], argv[3], argv[4]);
