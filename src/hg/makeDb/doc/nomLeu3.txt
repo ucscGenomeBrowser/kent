@@ -623,7 +623,7 @@ XXX these steps already done? (seems like not? - nomLeu3.cleanWMSdust.faSize.txt
     #   106279408 chrX  34971740        141251148       chrX.01
 
 #########################################################################
-# AUTO UPDATE GENBANK (DONE - 2012-05-07 - Hiram)
+# AUTO UPDATE GENBANK (DONE - 2013-03-08 - Pauline)
     # examine the file:
     /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
@@ -740,3 +740,13 @@ nomLeu3.perChromTables = no
     # and try out the conversion on genome-test from nomLeu2 to nomLeu3
 
 ############################################################################
+ #  BLATSERVERS ENTRY (DONE - 2013-03-12 - Pauline)
+ #	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+ 
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("nomLeu3", "blat4c", "17840", "1", "0"); \
+ 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+ 	VALUES ("nomLeu3", "blat4c", "17841", "0", "1");' \
+ 	    hgcentraltest
+     #	test it with some sequence
