@@ -41,6 +41,10 @@ if ( $#argv == 2 ) then
   set mach=$argv[2]
 endif
 
+if ( $mach == euronode ) then
+  set mach="genome-euro"
+endif
+
 checkMachineName.csh $mach
 if ( $status ) then
   exit 1
