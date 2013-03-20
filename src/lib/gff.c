@@ -246,7 +246,7 @@ if (gl->group == NULL)
     if (gl->geneId != NULL)
         addGroup(gff, gl, gl->geneId);
     else
-        warn("No gene_id or transcript_id line %d of %s", lineIx, fileName);
+        verbose(2, "No gene_id or transcript_id line %d of %s", lineIx, fileName);
     }
 }
 
