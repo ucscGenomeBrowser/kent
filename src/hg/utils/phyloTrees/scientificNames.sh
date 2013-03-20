@@ -41,6 +41,7 @@ s/orcOrc1/Orcinus_orca/;
 s/oryAfe1/Orycteropus_afer/;
 s/oviAri3/Ovis_aries/;
 s/panPan1/Pan_paniscus/;
+s/cheMyd1/Chelonia_mydas/;
 s/pelSin1/Pelodiscus_sinensis/;
 s/pseHum1/Pseudopodoces_humilis/;
 s/pteAle1/Pteropus_alecto/;
