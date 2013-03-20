@@ -58,6 +58,9 @@ allMis	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # Lizard Anolis carolinensis
 anoCar	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Iguania; Iguanidae; Polychrotinae; Anolis
 
+# green seaturtle - Chelonia mydas
+cheMyd	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Chelonioidea; Cheloniidae; Chelonia
+
 # Soft-shell Turtle - Pelodiscus sinensis
 pelSin	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Trionychoidea; Trionychidae; Pelodiscus
 
