@@ -131,7 +131,7 @@ while (--halfLen >= 0)
 }
 
 void floatPicIntoHvg(struct floatPic *pic, int xOff, int yOff, struct hvGfx *hvg)
-/* Copy float pic into hvg at given offset. */
+/* Copy float pic into hvg image at given offset. */
 {
 int width = pic->width, height = pic->height;
 Color *lineBuf;
