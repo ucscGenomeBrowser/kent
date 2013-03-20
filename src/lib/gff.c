@@ -411,6 +411,71 @@ group->start = start;
 group->end = end;
 }
 
+#ifdef UNUSED
+static boolean allSameSeq(struct gffGroup *group)
+/* Return TRUE if all lines of group are for same chrom */
+{
+if (group->lineList == NULL || group->lineList->next == NULL)
+    return TRUE;
+char *seq = group->lineList->seq;
+struct gffLine *line;
+for (line = group->lineList->next; line != NULL; line = line->next)
+    if (!sameString(line->seq, seq))
+        return FALSE;
+return TRUE;
+}
+#endif /* UNUSED */
+
+static struct gffGroup *breakGroupBySeq(struct gffGroup *group)
+/* Break up a group that has multiple sequences.  Assumes lineList is sorted. */
+{
+char *curSeq = group->lineList->seq;
+struct gffLine *line, *next;
+struct gffGroup *brokenList = NULL;
+for (line = group->lineList; line != NULL; line = next)
+    {
+    next = line->next;
+    if (next != NULL && !sameString(next->seq, curSeq))
+        {
+	curSeq = next->seq;
+	struct gffGroup *newGroup;
+	AllocVar(newGroup);
+	newGroup->name = group->name;
+	newGroup->seq = curSeq;
+	newGroup->source = group->source;
+	line->next = NULL;
+	newGroup->lineList = next;
+	slAddHead(&brokenList, group);
+	group = newGroup;
+	}
+    }
+slAddHead(&brokenList, group);
+slReverse(&brokenList);
+return brokenList;
+}
+
+static struct gffGroup *breakMultiSeqGroups(struct gffGroup *oldList)
+/* Break up any groups that span multiple chromosomes into one per group.
+ * Return reworked list. */
+{
+struct gffGroup *newList = NULL, *group, *next;
+
+for (group = oldList; group != NULL; group = next)
+    {
+    next = group->next;
+    struct gffGroup *groupList = breakGroupBySeq(group);
+    struct gffGroup *newGroup, *newNext;
+    for (newGroup = groupList; newGroup != NULL; newGroup = newNext)
+	{
+	newNext = newGroup->next;
+	slAddHead(&newList, newGroup);
+	}
+    }
+slReverse(&newList);
+return newList;
+}
+
+
 void gffGroupLines(struct gffFile *gff)
 /* Group lines of gff file together, in process mofing
  * gff->lineList to gffGroup->lineList. */
@@ -440,12 +505,15 @@ for (line = gff->lineList; line != NULL; line = nextLine)
 slReverse(&ungroupedLines);
 gff->lineList = ungroupedLines;
 
-/* Restore order of grouped lines and fill in start and end. */
+/* Restore order of grouped lines. */
 for (group = gff->groupList; group != NULL; group = group->next)
-    {
     slSort(&group->lineList, gffLineCmp);
+
+/* Look for groups that traverse multiple chromosomes.  Break them apart. */
+gff->groupList = breakMultiSeqGroups(gff->groupList);
+
+for (group = gff->groupList; group != NULL; group = group->next)
     getGroupBoundaries(group);
-    }
 }
 
 void gffOutput(struct gffLine *el, FILE *f, char sep, char lastSep) 
