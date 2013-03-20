@@ -34,24 +34,38 @@ struct dyString *dy = dyStringNew(strlen(in));
 dyStringAppendN(dy, in, tagStart - in);
 dyStringAppend(dy, tag);
 dyStringAppendC(dy, ' ');
-if (newVal[0] != '"');
-    dyStringAppendC(dy, '"');
 dyStringPrintf(dy, "%s", newVal);
-if (newVal[0] != '"');
-    dyStringAppendC(dy, '"');
 dyStringAppend(dy, valEnd);
 return dyStringCannibalize(&dy);
+}
+
+char *subForSmaller(char *string, char *oldWay, char *newWay)
+/* Return copy of string with first if any oldWay substituted with newWay. */
+{
+int oldSize = strlen(oldWay);
+int newSize = strlen(newWay);
+assert(oldSize >= newSize);
+char *s = stringIn(oldWay, string);
+if (s != NULL)
+    {
+    memcpy(s, newWay, newSize);
+    if (oldSize != newSize)
+        strcpy(s+newSize, s+oldSize);
+    }
+return string;
 }
 
 void encode2GffDoctor(char *inFile, char *outFile)
 /* encode2GffDoctor - Fix up gff/gtf files from encode phase 2 a bit.. */
 {
-char *transcriptTag = "transcript_id";
+char *transcriptTag = "transcript_id ";
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 char *row[9];
 FILE *f = mustOpen(outFile, "w");
 while (lineFileRowTab(lf, row))
     {
+    if (sameString(row[0], "chrMT"))
+        row[0] = "chrM";
     if (sameString(row[1], "Cufflinks"))
         {
 	/* Abbreviate really long transcript IDs. */
@@ -63,7 +77,6 @@ while (lineFileRowTab(lf, row))
 	    int maxSize = 200;
 	    if (strlen(id) > maxSize)
 	        {
-		warn("Abbreviating %s", id);
 		id[maxSize-4] = 0;
 		char *e = strrchr(id, ',');
 		if (e != NULL)
@@ -74,10 +87,21 @@ while (lineFileRowTab(lf, row))
 		    *e++ = '"';
 		    *e = 0;
 		    }
-		warn("Reduced to %s", id);
 		row[8] = replaceFieldInGffGroup(row[8], transcriptTag, id);
 		}
 	    freez(&trans);
+	    }
+	else
+	    {
+	    /* No transcript tag?  If it's one of the ones with gene_ids and transcript_ids
+	     * instead of "gene_id" and "transcript_id" try to fix it by turning gene_ids to
+	     * gene_id.  */
+	    char *geneId = stringBetween("gene_id ", ";", row[8]);
+	    if (geneId == NULL)
+		{
+		row[8] = subForSmaller(row[8], "gene_ids", "gene_id");
+		}
+	    freez(&geneId);
 	    }
 	}
     int i;
