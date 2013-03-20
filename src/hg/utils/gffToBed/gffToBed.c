@@ -15,8 +15,6 @@ errAbort(
   "Works with a wide range of gff files, but it's such a loose spec, likely not all.\n"
   "usage:\n"
   "   gffToBed in.gff out.bed\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
