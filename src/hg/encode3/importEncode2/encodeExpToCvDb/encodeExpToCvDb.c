@@ -236,7 +236,12 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	        *comma = 0;
 	    }
 	else if (sameString(var, "md5sum"))
+	    {
 	    md5sum = val;
+	    char *comma = strchr(fileName, ',');
+	    if (comma != NULL)
+	        *comma = 0;
+	    }
 	else if (sameString(var, "tableName"))
 	    tableName = val;
 	else if (sameString(var, "view"))
@@ -248,7 +253,7 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	else if (sameString(var, "dateUnrestricted"))
 	    dateUnrestricted = val;
 	}
-    if (objType != NULL && sameString(objType, "file"))
+    if (objType != NULL && !sameString(objType, "composite"))
 	{
 	if (experiment != NULL)
 	    {

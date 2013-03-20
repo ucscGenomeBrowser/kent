@@ -158,6 +158,7 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
     char *dataType = NULL;
     char *objType = NULL;
     char *antibody = NULL;
+    char *md5sum = NULL;
     struct mdbVar *v;
     for (v = mdb->vars; v != NULL; v = v->next)
          {
@@ -176,6 +177,8 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	     objType = val;
 	 else if (sameString("antibody", var))
 	     antibody = val;
+	 else if (sameString("md5sum", var))
+	     md5sum = val;
 	 }
 
     /* If we have the fields we need,  fake the rest if need be and output. */
@@ -188,12 +191,23 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	    if (comma != NULL) 
 		*comma = 0;
 
+	    if (composite == NULL)
+	        errAbort("No composite for %s %s", dccAccession, fileName);
+
+	    if (md5sum != NULL)
+		{
+		char *comma = strchr(md5sum, ',');
+		if (comma != NULL) 
+		    *comma = 0;
+		}
+
 	    /* Output each field. */ 
-	    fprintf(f, "%s/%s\t", genome, fileName);
+	    fprintf(f, "%s/%s/%s\t", genome, composite, fileName);
 	    fprintf(f, "%s\t", guessFormatFromFileName(fileName));
 	    fprintf(f, "%s\t", dccAccession);
 	    fprintf(f, "%s\t", naForNull(replicate));
-	    fprintf(f, "%s\n", guessEnrichedIn(composite, dataType, antibody));
+	    fprintf(f, "%s\t", guessEnrichedIn(composite, dataType, antibody));
+	    fprintf(f, "%s\n", naForNull(md5sum));
 	    }
 	}
     }
@@ -206,7 +220,7 @@ struct rbTree *expsByIx = makeExpContainer();
 verbose(1, "%d experiments\n", expsByIx->n);
 FILE *f = mustOpen(outFile, "w");
 int i;
-fputs("#file_name\tformat\texperiment\treplicate\tenriched_in\n", f);
+fputs("#file_name\tformat\texperiment\treplicate\tenriched_in\tmd5sum\n", f);
 for (i=0; i<ArraySize(metaDbs); ++i)
    {
    addGenomeToManifest(metaDbs[i], expsByIx, f);

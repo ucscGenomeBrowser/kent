@@ -9,5 +9,10 @@ O = freen.o
 hello: freen.o
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/freen $O $(MYLIBS) $L
 
+testGlob:
+	cd fooDir
+	cd fooDir; echo f*.*
+
 clean::
 	rm -f ${O}
+
