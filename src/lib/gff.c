@@ -108,11 +108,11 @@ return nameBuf->string;
 static boolean isGtfGroup(char *group)
 /* Return TRUE if group field looks like GTF */
 {
-if (strstr(group, "gene_id") == NULL)
+if (findWordByDelimiter(group, ' ', "gene_id") == NULL)
     return FALSE;
 if (countChars(group, '"') >= 2)
     return TRUE;
-if (strstr(group, "transcript_id") != NULL)
+if (findWordByDelimiter(group, ' ', "transcript_id") != NULL)
     return TRUE;
 return FALSE;
 }
@@ -138,7 +138,28 @@ if (!parseQuotedString(in, out, retNext))
     errAbort("Line %d of %s\n", lineIx, fileName);
 }
 
-static void parseGtfEnd(char *s, struct gffFile *gff, struct gffLine *gl, 
+void addGroup(struct gffFile *gff, struct gffLine *gl, char *group)
+/* Add group to gff if it's not there already, and attach it to gl. */
+{
+struct gffGroup *gg;
+struct hashEl *hel;
+if ((hel = hashLookup(gff->groupHash, group)) == NULL)
+   {
+   AllocVar(gg);
+   hel = hashAdd(gff->groupHash, group, gg);
+   gg->name = hel->name;
+   gg->seq = gl->seq;
+   gg->source = gl->source;
+   slAddHead(&gff->groupList, gg);
+   }
+else
+   {
+   gg = hel->val;
+   }
+gl->group = gg->name;
+}
+
+static void parseGff2End(char *s, struct gffFile *gff, struct gffLine *gl, 
     char *fileName, int lineIx)
 /* Read the semi-colon separated end bits of a GTF line into gl and
  * hashes. */
@@ -199,21 +220,7 @@ for (;;)
        }
    else if (sameString("transcript_id", type) && (gl->group == NULL))
        {
-       struct gffGroup *gg;
-       if ((hel = hashLookup(gff->groupHash, val)) == NULL)
-	   {
-	   AllocVar(gg);
-           hel = hashAdd(gff->groupHash, val, gg);
-	   gg->name = hel->name;
-	   gg->seq = gl->seq;
-	   gg->source = gl->source;
-	   slAddHead(&gff->groupList, gg);
-	   }
-	else
-	   {
-	   gg = hel->val;
-	   }
-       gl->group = gg->name;
+       addGroup(gff, gl, val);
        }
    else if (sameString("exon_id", type))
        gl->exonId = gffFileGetStr(gff, val);
@@ -236,7 +243,9 @@ for (;;)
    }
 if (gl->group == NULL)
     {
-    if (gl->geneId == NULL)
+    if (gl->geneId != NULL)
+        addGroup(gff, gl, gl->geneId);
+    else
         warn("No gene_id or transcript_id line %d of %s", lineIx, fileName);
     }
 }
@@ -280,6 +289,9 @@ if ((hel = hashLookup(gff->featureHash, words[2])) == NULL)
     el->name = hel->name;
     slAddHead(&gff->featureList, el);
     }
+struct gffFeature *feature = hel->val;
+feature->count += 1;
+
 gl->feature = hel->name;
 
 if (!isdigit(words[3][0]) || !isdigit(words[4][0]))
@@ -292,29 +304,39 @@ gl->frame = words[7][0];
 
 if (wordCount >= 9)
     {
+    char *groupField = words[8];
     if (!gff->typeKnown)
 	{
 	gff->typeKnown = TRUE;
-	gff->isGtf = isGtfGroup(words[8]);
+	gff->isGtf = isGtfGroup(groupField);
 	}
     if (gff->isGtf)
 	{
-	parseGtfEnd(words[8], gff, gl, fileName, lineIx);
+	parseGff2End(groupField, gff, gl, fileName, lineIx);
 	}
     else
 	{
-	char *tnName = gffTnName(gl->seq, trimSpaces(words[8]));
-	if ((hel = hashLookup(gff->groupHash, tnName)) == NULL)
+	if (strchr(groupField, ';'))
 	    {
-	    struct gffGroup *group;
-	    AllocVar(group);
-	    hel = hashAdd(gff->groupHash, tnName, group);
-	    group->name = hel->name;
-	    group->seq = gl->seq;
-	    group->source = gl->source;
-	    slAddHead(&gff->groupList, group);
+	    char *dupeGroup = cloneString(groupField);
+	    parseGff2End(dupeGroup, gff, gl, fileName, lineIx);
+	    freeMem(dupeGroup);
 	    }
-	gl->group = hel->name;
+	else
+	    {
+	    char *tnName = gffTnName(gl->seq, trimSpaces(words[8]));
+	    if ((hel = hashLookup(gff->groupHash, tnName)) == NULL)
+		{
+		struct gffGroup *group;
+		AllocVar(group);
+		hel = hashAdd(gff->groupHash, tnName, group);
+		group->name = hel->name;
+		group->seq = gl->seq;
+		group->source = gl->source;
+		slAddHead(&gff->groupList, group);
+		}
+	    gl->group = hel->name;
+	    }
 	}
     }
 slAddHead(&gff->lineList, gl);
