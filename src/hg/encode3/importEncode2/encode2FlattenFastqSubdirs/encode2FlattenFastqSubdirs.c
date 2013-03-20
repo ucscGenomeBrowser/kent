@@ -58,6 +58,30 @@ if (err != 0)
     errnoAbort("Couldn't rename %s to %s", oldPath, newPath);
 }
 
+boolean isFastq(char *fileName)
+/* Do very quick look at file to see if it's a fastq. */
+{
+/* Just check first line begins with '@' and last with '+' - not a complete
+ * validation here, just a quick reality check. */
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+boolean result = FALSE;
+if (lineFileNext(lf, &line, NULL))
+    {
+    if (line[0] == '@')
+        {
+	if (lineFileNext(lf, &line, NULL))
+	    {
+	    if (lineFileNext(lf, &line, NULL))
+	        if (line[0] == '+')
+		    result = TRUE;
+	    }
+	}
+    }
+lineFileClose(&lf);
+return result;
+}
+
 void encode2FlattenFastqSubdirs(char *rootDir)
 /* encode2FlattenFastqSubdirs - Look at directory.  Move all files in subdirs to root dir and 
  * destroy subdirs.  Complain and die if any of non-dir files are anything but fastq. */
@@ -73,7 +97,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     {
     if (!fi->isDir) 
         {
-	if (!endsWith(fi->name, ".fastq"))
+	if (!endsWith(fi->name, ".fastq") && !isFastq(fi->name))
 	    errAbort("Non-fastq %s in encode2FlattenFastqSubdir, aborting.", fi->name);
 	}
     gotDir = TRUE;
