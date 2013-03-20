@@ -129,7 +129,11 @@ boolean justCopySuffix(char *fileName)
 /* Return TRUE if fileName has a suffix that indicates we just copy it rather than
  * transform it. */
 {
-static char *copySuffixes[] = {".fastq.gz", ".bigWig", ".bigBed", ".fasta.gz", ".bam", ".spikeins"};
+static char *copySuffixes[] = {".fastq.gz", ".bigWig", ".bigBed", ".fasta.gz", ".bam", ".spikeins",
+    ".pdf.gz", ".pdf", ".pair.tar.gz", ".tar.gz", ".tab.gz", ".csfasta.gz", ".csfastq.gz",
+    ".csqual.gz", "Validation.tgz", ".doc.tgz", ".matrix.gz", "PrimerPeaks.peaks.gz",
+    ".matrix.tgz", ".CEL.gz", ".spikeins.CL.bam.gz", ".document.tgz"
+    };
 int i;
 for (i=0; i<ArraySize(copySuffixes); ++i)
     if (endsWith(fileName, copySuffixes[i]))
@@ -157,7 +161,42 @@ fprintf(f, "\tmv %s %s\n", tempBigBed, bigBedName);
 slNameAddHead(pTargetList, bigBedName);
 }
 
-void processManifestItem(struct manifestInfo *mi, char *sourceRoot, 
+void doGzippedGffToBigBed(char *sourcePath, char *destPath, 
+    char *assembly, char *destDir, char *destFileName, 
+    struct slName **pTargetList, FILE *f)
+/* Do both copy and conversion to bigBed.  Also do some doctoring. */
+{
+/* First handle the straight up copy. */
+fprintf(f, "%s: %s\n", destPath, sourcePath);
+fprintf(f, "\tln -s %s %s\n", sourcePath, destPath);
+slNameAddHead(pTargetList, destPath);
+
+/* Now convert to big bed. */
+char *tempNameRoot = "gff2bb";
+char bigBedName[PATH_LEN];
+safef(bigBedName, sizeof(bigBedName), "%s%s%s", destDir, destFileName, ".bigBed");
+char tempBigBed[PATH_LEN];
+safef(tempBigBed, sizeof(tempBigBed), "%s.tmp", bigBedName);
+char *fixedGff = cloneString(rTempName(tempDir, tempNameRoot, ".gff"));
+char *tempBed = cloneString(rTempName(tempDir, tempNameRoot, ".bed"));
+char *sortedTempBed = cloneString(rTempName(tempDir, tempNameRoot, ".sorted"));
+char *clippedTempBed = cloneString(rTempName(tempDir, tempNameRoot, ".clipped"));
+fprintf(f, "%s: %s\n", bigBedName, sourcePath);
+fprintf(f, "\tencode2GffDoctor %s %s\n", sourcePath, fixedGff);
+fprintf(f, "\tgffToBed %s %s\n", fixedGff, tempBed);
+fprintf(f, "\trm %s\n", fixedGff);
+fprintf(f, "\tsort -k1,1 -k2,2n %s > %s\n", tempBed, sortedTempBed);
+fprintf(f, "\trm %s\n", tempBed);
+fprintf(f, "\tbedClip %s %s/%s/chrom.sizes %s\n", sortedTempBed, dataDir, assembly, clippedTempBed);
+fprintf(f, "\trm %s\n", sortedTempBed);
+fprintf(f, "\tbedToBigBed %s %s/%s/chrom.sizes %s\n", 
+    clippedTempBed, dataDir, assembly, tempBigBed);
+fprintf(f, "\trm %s\n", clippedTempBed);
+fprintf(f, "\tmv %s %s\n", tempBigBed, bigBedName);
+slNameAddHead(pTargetList, bigBedName);
+}
+
+void processManifestItem(int itemNo, struct manifestInfo *mi, char *sourceRoot, 
     char *destRoot, struct slName **pTargetList, FILE *f)
 /* Process a line from the manifest.  Write section of make file needed to transform/copy it.
  * record name of this target file in pTargetList. 
@@ -216,6 +255,31 @@ else if (endsWith(fileName, ".bedRnaElements.gz"))
     doGzippedBedToBigBed(sourcePath, assembly, "bedRnaElements", "bed6+3", 
 	destDir, destFileName, pTargetList, f);
     }
+else if (endsWith(fileName, ".bedLogR.gz"))
+    {
+    doGzippedBedToBigBed(sourcePath, assembly, "bedLogR", "bed9+1", 
+	destDir, destFileName, pTargetList, f);
+    }
+else if (endsWith(fileName, "bedRrbs.gz"))
+    {
+    doGzippedBedToBigBed(sourcePath, assembly, "bedRrbs", "bed9+2", 
+	destDir, destFileName, pTargetList, f);
+    }
+else if (endsWith(fileName, ".peptideMapping.gz"))
+    {
+    doGzippedBedToBigBed(sourcePath, assembly, "peptideMapping", "bed9+1", 
+	destDir, destFileName, pTargetList, f);
+    }
+else if (endsWith(fileName, ".shortFrags.gz"))
+    {
+    doGzippedBedToBigBed(sourcePath, assembly, NULL, "bed6+21", 
+	destDir, destFileName, pTargetList, f);
+    }
+else if (endsWith(fileName, ".bedClusters.gz") || endsWith(fileName, ".bedCluster.gz"))
+    {
+    doGzippedBedToBigBed(sourcePath, assembly, NULL, NULL, 
+	destDir, destFileName, pTargetList, f);
+    }
 else if (endsWith(fileName, ".bed.gz") || endsWith(fileName, ".bed9.gz"))
     {
     chopSuffix(destFileName);	// remove .bed
@@ -229,8 +293,7 @@ else if (endsWith(fileName, ".gp.gz"))
     }
 else if (endsWith(fileName, ".gtf.gz") || endsWith(fileName, ".gff.gz"))
     {
-    doGzippedSomethingToBigBed(sourcePath, assembly, destDir, destFileName, 
-	"gffToBed", "gff2bb", pTargetList, f);
+    doGzippedGffToBigBed(sourcePath, destPath, assembly, destDir, destFileName, pTargetList, f);
     }
 else if (justCopySuffix(fileName))
     {
@@ -240,7 +303,8 @@ else if (justCopySuffix(fileName))
     }
 else
     {
-    errAbort("Don't know what to do with %s in %s line %d", fileName, __FILE__, __LINE__);
+    errAbort("Don't know what to do with item %d %s in %s line %d", 
+             itemNo, fileName, __FILE__, __LINE__);
     }
 }
 
@@ -250,7 +314,7 @@ void encode2MakeEncode3(char *sourceDir, char *sourceManifest, char *destDir, ch
  * independently. */
 {
 struct manifestInfo *fileList = manifestInfoLoadAll(sourceManifest);
-verbose(1, "Loaded information on %d files from %s\n", slCount(fileList), sourceManifest);
+verbose(2, "Loaded information on %d files from %s\n", slCount(fileList), sourceManifest);
 verboseTimeInit();
 FILE *f = mustOpen(outMake, "w");
 struct manifestInfo *mi;
@@ -262,6 +326,7 @@ fprintf(f, "startHere:  all\n\techo all done\n\n");
 
 /* Write out each file target, and save also list of all targets. */
 struct slName *targetList = NULL;
+int itemNo = 0;
 for (mi = fileList; mi != NULL; mi = mi->next)
     {
     /* Make path to source file. */
@@ -278,7 +343,7 @@ for (mi = fileList; mi != NULL; mi = mi->next)
     char destPath[PATH_LEN];
     safef(destPath, sizeof(destPath), "%s/%s", destDir, mi->fileName);
 
-    processManifestItem(mi, sourceDir, destDir, &targetList, f);
+    processManifestItem(++itemNo, mi, sourceDir, destDir, &targetList, f);
 
 #ifdef OLD
     /* If md5sum available check it. */
