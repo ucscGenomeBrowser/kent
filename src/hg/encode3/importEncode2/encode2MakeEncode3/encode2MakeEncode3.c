@@ -1,5 +1,5 @@
-/* encode2CopyManifest - Copy files in encode2 manifest and in case of tar'd files rezip them 
- * independently. */
+/* encode2MakeEncode3 - Create a makefile that will reformat and copy encode2 files into
+ * a parallel directory of encode3 files. */
 
 #include "common.h"
 #include "linefile.h"
@@ -16,9 +16,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "encode2CopyManifest - Copy files in encode2 manifest and in case of tar'd files rezip them independently.\n"
-  "usage:\n"
-  "   encode2CopyManifest sourceDir sourceManifest destDir destManifest\n"
+  "encode2MakeEncode3 - Create a makefile that will reformat and copy encode2 files into\n"
+  "a parallel direcgtory of encode3 files.\n"
+  "   encode2MakeEncode3 sourceDir sourceManifest destDir out.make\n"
   "options:\n"
   "   -dataDir=/path/to/encode/asFilesAndChromSizesEtc\n"
   "   -tmpDir=/tmp\n"
@@ -98,115 +98,72 @@ if (!hashLookup(hash, dir))
     }
 }
 
-void systemCommand(char *s)
-/* Do system() command on s,  and check error status, aborting with message if
- * any problem. */
+
+void doGzippedBedToBigBed(char *bedFile, char *assembly,
+    char *asType, char *bedType, 
+    char *destDir, char *destFileName,
+    struct slName **pTargetList, FILE *f)
+/* Convert some bed file to a a bigBed file possibly using an as file. */
 {
-verbose(1, "cmd> %s\n", s);
-int err = system(s);
-if (err != 0)
-    errAbort("err %d\nCouldn't %s", err, s);
-#ifdef SOON
-#endif /* SOON */
+char outFileName[FILENAME_LEN];
+safef(outFileName, sizeof(outFileName), "%s%s", destFileName, ".bigBed");
+char outPath[PATH_LEN];
+safef(outPath, sizeof(outPath), "%s%s%s", destDir, destFileName, ".bigBed");
+fprintf(f, "%s: %s\n", outPath, bedFile);
+char *tempBed = rTempName(tempDir, "b2bb", ".bed");
+char tempBigBed[PATH_LEN];
+safef(tempBigBed, sizeof(tempBigBed), "%s.tmp", outPath);
+fprintf(f, "\tzcat %s | sort -k1,1 -k2,2n > %s\n", bedFile, tempBed);
+fprintf(f, "\tbedToBigBed ");
+if (bedType != NULL)
+     fprintf(f, " -type=%s", bedType);
+if (asType != NULL)
+     fprintf(f, " -as=%s/as/%s.as", dataDir, asType);
+fprintf(f, " %s %s/%s/chrom.sizes %s\n", tempBed, dataDir, assembly, tempBigBed);
+fprintf(f, "\tmv %s %s\n", tempBigBed, outPath);
+fprintf(f, "\trm %s\n", tempBed);
+slNameAddHead(pTargetList, outPath);
 }
 
-void untgzIntoDir(char *tgzFile, char *dir)
-/* Will do the equivalent of
- *    cd dir
- *    tar -zx tgzFile */
+boolean justCopySuffix(char *fileName)
+/* Return TRUE if fileName has a suffix that indicates we just copy it rather than
+ * transform it. */
 {
-char *origDir = cloneString(getCurrentDir());
-struct dyString *command = dyStringNew(0);
-setCurrentDir(dir);
-dyStringPrintf(command, "tar -zxf %s", tgzFile);
-systemCommand(command->string);
-dyStringFree(&command);
-freez(&origDir);
+static char *copySuffixes[] = {".fastq.gz", ".bigWig", ".bigBed", ".fasta.gz", ".bam", ".spikeins"};
+int i;
+for (i=0; i<ArraySize(copySuffixes); ++i)
+    if (endsWith(fileName, copySuffixes[i]))
+        return TRUE;
+return FALSE;
 }
 
-void doGzippedBedToBigBed(char *bedFile, char *asType, char *bedType, char *bigBed)
-/* Convert some bed file to an as file. */
+void doGzippedSomethingToBigBed(char *sourcePath, char *assembly, char *destDir, char *destFileName,
+    char *bedConverter, char *tempNameRoot, struct slName **pTargetList, FILE *f)
+/* Convert something that has a bed-converter program to bigBed. */
 {
-struct dyString *cmd = dyStringNew(0);
-char *tempName = rTempName(tempDir, "b2bb", ".bed");
-if (tempName == NULL)
-    errAbort("Can't find tempName");
-dyStringPrintf(cmd, "zcat %s | sort -k1,1 -k2,2n > %s", bedFile, tempName);
-systemCommand(cmd->string);
-dyStringClear(cmd);
-dyStringPrintf(cmd, "bedToBigBed -type=%s -as=%s/as/%s.as %s %s/hg19/chrom.sizes %s",
-    bedType, dataDir, asType, tempName, dataDir, bigBed);
-systemCommand(cmd->string);
-dyStringClear(cmd);
-dyStringPrintf(cmd, "rm %s", tempName);
-systemCommand(cmd->string);
-dyStringFree(&cmd);
+char bigBedName[PATH_LEN];
+safef(bigBedName, sizeof(bigBedName), "%s%s%s", destDir, destFileName, ".bigBed");
+char tempBigBed[PATH_LEN];
+safef(tempBigBed, sizeof(tempBigBed), "%s.tmp", bigBedName);
+char *tempBed = cloneString(rTempName(tempDir, tempNameRoot, ".bed"));
+char *sortedTempBed = cloneString(rTempName(tempDir, tempNameRoot, ".sorted"));
+fprintf(f, "%s: %s\n", bigBedName, sourcePath);
+fprintf(f, "\t%s %s %s\n", bedConverter, sourcePath, tempBed);
+fprintf(f, "\tsort -k1,1 -k2,2n %s > %s\n", tempBed, sortedTempBed);
+fprintf(f, "\tbedToBigBed %s %s/%s/chrom.sizes %s\n", sortedTempBed, dataDir, assembly, tempBigBed);
+fprintf(f, "\trm %s\n", tempBed);
+fprintf(f, "\trm %s\n", sortedTempBed);
+fprintf(f, "\tmv %s %s\n", tempBigBed, bigBedName);
+slNameAddHead(pTargetList, bigBedName);
 }
-
-
-void gzipFastqs(char *dir, struct manifestInfo *mi, FILE *f)
-/* Check that all files in dir have fastq suffix, and gzip them. */
-{
-/* Get file list and check all are .fastq. */
-struct fileInfo *fi, *fiList = listDirX(dir, "*", FALSE);
-for (fi = fiList; fi != NULL; fi = fi->next)
-    if (!endsWith(fi->name, ".fastq") && !endsWith(fi->name, ".fastq.gz"))
-        errAbort("%s is not fastq inside %s", fi->name, dir);
-
-/* Do system calls for gzip. */
-struct dyString *cmd = dyStringNew(0);
-for (fi = fiList; fi != NULL; fi = fi->next)
-    {
-    if (!endsWith(fi->name, ".gz"))
-	{
-	dyStringPrintf(cmd, "gzip %s/%s", dir, fi->name);
-	systemCommand(cmd->string);
-	}
-    }
-
-/* Write out revised manifest. */
-char *oldFileName = mi->fileName;
-char *oldFormat = mi->format;
-mi->format = "fastq";
-for (fi = fiList; fi != NULL; fi = fi->next)
-    {
-    char *suffix = (endsWith(fi->name, ".gz") ? "" : ".gz");
-    char name[PATH_LEN];
-    safef(name, sizeof(name), "%s.dir/%s%s", oldFileName, fi->name, suffix);
-    mi->fileName = name;
-    manifestInfoTabOut(mi, f);
-    }
-mi->format = oldFormat;
-mi->fileName = oldFileName;
-}
-
-void doCopyFile(char *sourcePath, char *destPath)
-/* Issue system command to copy file. */
-{
-struct dyString *cmd = dyStringNew(0);
-dyStringPrintf(cmd, "cp -a %s %s", sourcePath, destPath);
-systemCommand(cmd->string);
-dyStringFree(&cmd);
-}
-
-#ifdef OLD
-    processManifestItem(mi, sourceDir, destDir, destDirHash, f);
-         sourcePath, destPath, destDirHash, destDir, f);
-#endif /* OLD */
 
 void processManifestItem(struct manifestInfo *mi, char *sourceRoot, 
-    char *destRoot, struct hash *dirHash, FILE *f)
-/* Process a line from the manifest.  Source path is the full path to the source file.
- * destPath is where to put the destination in the straightforward case where the destination
- * is just a single file.  In the more complex case dirHash and destDir are helpful.
- * The dirHash contains directories that are already known to exist, and helps keep the
- * program from making the same directory repeatedly.  The destRootDir parameter 
- * contains the top level destination dir.  The destPath is the same as destRootDir + mi->fileName
- * and typically mi->fileName will include a / or two.  Finally the f parameter is where
- * the program writes the revised manifest file,  after whatever transformation occurred in
- * the processing step.
- *    What occurs inside the function is:
- * o - Most files are just copied.  Optionally an md5-sum might be checked.
+    char *destRoot, struct slName **pTargetList, FILE *f)
+/* Process a line from the manifest.  Write section of make file needed to transform/copy it.
+ * record name of this target file in pTargetList. 
+ * The transformations are:
+ * o - Many files are just copied.  
+ * o - Files that are bed variants are turned into bigBed variants
  * o - Files that are tgz's of multiple fastqs are split into individual fastq.gz's inside
  *     a directory named after the archive. */
 {
@@ -219,46 +176,92 @@ char destDir[PATH_LEN], destFileName[FILENAME_LEN], destExtension[FILEEXT_LEN];
 safef(destPath, sizeof(destPath), "%s/%s", destRoot, fileName);
 splitPath(destPath, destDir, destFileName, destExtension);
 
-verbose(1, "# %s\t%s\n", fileName, mi->format);
+/* Figure out whether we are on assembly hg19, mm9, or something we don't understand */
+char *assembly = NULL;
+if (startsWith("hg19/", fileName))
+    assembly = "hg19";
+else if (startsWith("mm9/", fileName))
+    assembly = "mm9";
+else
+    errAbort("Don't recognize assembly for %s", fileName);
+
+verbose(2, "processing %s\t%s\n", fileName, mi->format);
 if (endsWith(fileName, ".fastq.tgz"))
     {
     char outDir[PATH_LEN];
     safef(outDir, sizeof(outDir), "%s.dir", destPath);
     verbose(2, "Unpacking %s into %s\n", sourcePath, outDir);
-    makeDir(outDir);
-    untgzIntoDir(sourcePath, outDir);
-    gzipFastqs(outDir, mi, f);
+    fprintf(f, "%s: %s\n", outDir, sourcePath);
+    char tmpDir[PATH_LEN];
+    safef(tmpDir, sizeof(tmpDir), "%s.tmp", destPath);
+    fprintf(f, "\tmkdir %s\n", tmpDir);
+    fprintf(f, "\tcd %s; tar -zxf %s\n", tmpDir, sourcePath);
+    fprintf(f, "\tencode2FlattenFastqSubdirs %s\n", tmpDir);
+    fprintf(f, "\tcd %s; gzip *\n", tmpDir);
+    fprintf(f, "\tmv %s %s\n", tmpDir, outDir);
+    slNameAddHead(pTargetList, outDir);
     }
 else if (endsWith(fileName, ".narrowPeak.gz"))
     {
-    char outFileName[FILENAME_LEN];
-    safef(outFileName, sizeof(outFileName), "%s%s", destFileName, ".bigBed");
-    char outPath[PATH_LEN];
-    safef(outPath, sizeof(outPath), "%s%s%s", destDir, destFileName, ".bigBed");
-    doGzippedBedToBigBed(sourcePath, "narrowPeak", "bed6+4", outPath);
-    mi->fileName = cloneString(outFileName);
-    manifestInfoTabOut(mi, f);
+    doGzippedBedToBigBed(sourcePath, assembly, "narrowPeak", "bed6+4", 
+	destDir, destFileName, pTargetList, f);
+    }
+else if (endsWith(fileName, ".broadPeak.gz"))
+    {
+    doGzippedBedToBigBed(sourcePath, assembly, "broadPeak", "bed6+3", 
+	destDir, destFileName, pTargetList, f);
+    }
+else if (endsWith(fileName, ".bedRnaElements.gz"))
+    {
+    doGzippedBedToBigBed(sourcePath, assembly, "bedRnaElements", "bed6+3", 
+	destDir, destFileName, pTargetList, f);
+    }
+else if (endsWith(fileName, ".bed.gz") || endsWith(fileName, ".bed9.gz"))
+    {
+    chopSuffix(destFileName);	// remove .bed
+    doGzippedBedToBigBed(sourcePath, assembly, NULL, NULL, 
+	destDir, destFileName, pTargetList, f);
+    }
+else if (endsWith(fileName, ".gp.gz"))
+    {
+    doGzippedSomethingToBigBed(sourcePath, assembly, destDir, destFileName, 
+	"genePredToBed", "gp2bb", pTargetList, f);
+    }
+else if (endsWith(fileName, ".gtf.gz") || endsWith(fileName, ".gff.gz"))
+    {
+    doGzippedSomethingToBigBed(sourcePath, assembly, destDir, destFileName, 
+	"gffToBed", "gff2bb", pTargetList, f);
+    }
+else if (justCopySuffix(fileName))
+    {
+    fprintf(f, "%s: %s\n", destPath, sourcePath);
+    fprintf(f, "\tln -s %s %s\n", sourcePath, destPath);
+    slNameAddHead(pTargetList, destPath);
     }
 else
     {
-    verbose(2, "copyFile(%s,%s)\n", sourcePath, destPath);
-    doCopyFile(sourcePath, destPath);
-    manifestInfoTabOut(mi, f);
+    errAbort("Don't know what to do with %s in %s line %d", fileName, __FILE__, __LINE__);
     }
 }
 
 
-void encode2CopyManifest(char *sourceDir, char *sourceManifest, char *destDir, char *destManifest)
-/* encode2CopyManifest - Copy files in encode2 manifest and in case of tar'd files rezip them 
+void encode2MakeEncode3(char *sourceDir, char *sourceManifest, char *destDir, char *outMake)
+/* encode2MakeEncode3 - Copy files in encode2 manifest and in case of tar'd files rezip them 
  * independently. */
 {
 struct manifestInfo *fileList = manifestInfoLoadAll(sourceManifest);
 verbose(1, "Loaded information on %d files from %s\n", slCount(fileList), sourceManifest);
 verboseTimeInit();
-FILE *f = mustOpen(destManifest, "w");
+FILE *f = mustOpen(outMake, "w");
 struct manifestInfo *mi;
 struct hash *destDirHash = hashNew(0);
 makeDirOnlyOnce(destDir, destDirHash);
+
+/* Print first dependency in makefile - the one that causes all files to be made. */
+fprintf(f, "startHere:  all\n\techo all done\n\n");
+
+/* Write out each file target, and save also list of all targets. */
+struct slName *targetList = NULL;
 for (mi = fileList; mi != NULL; mi = mi->next)
     {
     /* Make path to source file. */
@@ -275,7 +278,7 @@ for (mi = fileList; mi != NULL; mi = mi->next)
     char destPath[PATH_LEN];
     safef(destPath, sizeof(destPath), "%s/%s", destDir, mi->fileName);
 
-    processManifestItem(mi, sourceDir, destDir, destDirHash, f);
+    processManifestItem(mi, sourceDir, destDir, &targetList, f);
 
 #ifdef OLD
     /* If md5sum available check it. */
@@ -295,6 +298,14 @@ for (mi = fileList; mi != NULL; mi = mi->next)
 	}
 #endif /* OLD */
     }
+
+slReverse(&targetList);
+fprintf(f, "all:");
+struct slName *target;
+for (target = targetList; target != NULL; target = target->next)
+    fprintf(f, " %s", target->name);
+fprintf(f, "\n");
+
 carefulClose(&f);
 }
 
@@ -305,6 +316,6 @@ optionInit(&argc, argv, options);
 dataDir = optionVal("dataDir", dataDir);
 if (argc != 5)
     usage();
-encode2CopyManifest(argv[1], argv[2], argv[3], argv[4]);
+encode2MakeEncode3(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

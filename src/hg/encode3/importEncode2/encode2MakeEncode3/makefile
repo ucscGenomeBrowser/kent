@@ -4,10 +4,10 @@ L += -lm
 MYLIBDIR = ../../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-A = encode2CopyManifest
-O = encode2CopyManifest.o
+A = encode2MakeEncode3
+O = encode2MakeEncode3.o
 
-encode2CopyManifest: ${O} ${MYLIBS}
+encode2MakeEncode3: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
