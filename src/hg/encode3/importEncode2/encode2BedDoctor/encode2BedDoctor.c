@@ -51,17 +51,54 @@ return anyFix;
 void encode2BedDoctor(char *inBed, char *outBed)
 /* encode2BedDoctor - Selectively fix up encode2 bed files.. */
 {
-struct bed *bed, *bedList = NULL;
-int fieldCount;
-boolean itemRgb;
-bedLoadAllReturnFieldCountAndRgb(inBed, &bedList, &fieldCount, &itemRgb);
+struct bed *bed;
+int fieldCount = 0;
+boolean itemRgb = FALSE;
+char *row[256];
+struct lineFile *lf = lineFileOpen(inBed, TRUE);
+char *line;
 int fixCount = 0;
 FILE *f = mustOpen(outBed, "w");
-for (bed = bedList; bed != NULL; bed = bed->next)
+
+int trackCount = 0;
+boolean firstTime = TRUE;
+while (lineFileNextReal(lf, &line))
     {
+    /* Chop line into words, and check first word for a browser or track line which we ignore */
+    int wordCount = chopLine(line, row);
+    if (wordCount >= ArraySize(row))
+        errAbort("Too many words (at least %d) in line %d of %s", 
+	    wordCount, lf->lineIx, lf->fileName);	
+    if (sameString("track", row[0]))
+	 {
+	 ++trackCount;
+	 if (trackCount > 1)
+	    errAbort("Multiple track lines in %s, not a single bed?", inBed);
+         continue;   // is a custom track with non-bed stuff
+	 }
+    if (sameString("browser", row[0]))
+         continue;   // is a custom track with non-bed stuff
+
+    /* On first line set field count and whether it has an itemRgb column. */
+    if (firstTime)
+        {
+	fieldCount = wordCount;
+	if (fieldCount < 3)
+	    errAbort("Bed %s does not have enough fields", lf->fileName);
+	itemRgb =  (strchr(row[8], ',') != NULL);
+	firstTime = FALSE;
+	}
+    else
+        {
+	if (wordCount != fieldCount)
+	    errAbort("%d fields in first line, %d line %d of %s",  fieldCount, wordCount,
+		lf->lineIx, lf->fileName);
+	}
+    bed = bedLoadN(row, fieldCount);
     if (fieldCount >= 12)
 	if (bedFixBlocks(bed))
 	    ++fixCount;
+    bedOutFlexible(bed, fieldCount, f, '\t', '\n', itemRgb);
     }
 carefulClose(&f);
 verbose(1, "Fixed %d items in %s\n", fixCount, inBed);
