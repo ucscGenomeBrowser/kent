@@ -103,6 +103,10 @@ boolean needsBedDoctor(char *fileName)
 {
 if (startsWith("wgEncodeGisRnaPet", fileName))
     return TRUE;
+else if (startsWith("wgEncodeCshlLongRnaSeq", fileName))
+    return TRUE;
+else if (startsWith("wgEncodeRikenCage", fileName))
+    return TRUE;
 else
     return FALSE;
 }
@@ -127,10 +131,14 @@ fprintf(f, "\tzcat %s | grep -v '^track' | sort -k1,1 -k2,2n > %s\n", bedFile, s
 /* Figure out if it's one we need to doctor up, and if so emit that code */
 char *doctoredBed = NULL;
 char *bigBedSource = NULL;
-if (asType == NULL && needsBedDoctor(destFileName))
+if (needsBedDoctor(destFileName))
     {
     doctoredBed = cloneString(rTempName(tempDir, "b2bb", ".doctored.bed"));
-    fprintf(f, "\tencode2BedDoctor %s %s\n", sortedBed, doctoredBed);
+    if (asType == NULL)
+	fprintf(f, "\tencode2BedDoctor %s %s\n", sortedBed, doctoredBed);
+    else
+        fprintf(f, "\tencode2BedPlusDoctor %s %s/as/%s.as %s\n", sortedBed, 
+	    dataDir, asType, doctoredBed);
     fprintf(f, "\trm %s\n", sortedBed);
     bigBedSource = doctoredBed;
     }
