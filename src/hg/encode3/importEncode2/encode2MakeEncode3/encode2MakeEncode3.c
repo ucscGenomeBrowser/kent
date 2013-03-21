@@ -98,6 +98,14 @@ if (!hashLookup(hash, dir))
     }
 }
 
+boolean needsBedDoctor(char *fileName)
+/* Returns TRUE if we should run encode2BedDoctor on file. */
+{
+if (startsWith("wgEncodeGisRnaPet", fileName))
+    return TRUE;
+else
+    return FALSE;
+}
 
 void doGzippedBedToBigBed(char *bedFile, char *assembly,
     char *asType, char *bedType, 
@@ -105,23 +113,45 @@ void doGzippedBedToBigBed(char *bedFile, char *assembly,
     struct slName **pTargetList, FILE *f)
 /* Convert some bed file to a a bigBed file possibly using an as file. */
 {
+/* Figure out name of bigBed file we will output and write it as a make target. */
 char outFileName[FILENAME_LEN];
 safef(outFileName, sizeof(outFileName), "%s%s", destFileName, ".bigBed");
 char outPath[PATH_LEN];
 safef(outPath, sizeof(outPath), "%s%s%s", destDir, destFileName, ".bigBed");
 fprintf(f, "%s: %s\n", outPath, bedFile);
-char *tempBed = rTempName(tempDir, "b2bb", ".bed");
+
+/* Unpack gzipped bed and sort it. */
+char *sortedBed = cloneString(rTempName(tempDir, "b2bb", ".sorted.bed"));
+fprintf(f, "\tzcat %s | grep -v '^track' | sort -k1,1 -k2,2n > %s\n", bedFile, sortedBed);
+
+/* Figure out if it's one we need to doctor up, and if so emit that code */
+char *doctoredBed = NULL;
+char *bigBedSource = NULL;
+if (asType == NULL && needsBedDoctor(destFileName))
+    {
+    doctoredBed = cloneString(rTempName(tempDir, "b2bb", ".doctored.bed"));
+    fprintf(f, "\tencode2BedDoctor %s %s\n", sortedBed, doctoredBed);
+    fprintf(f, "\trm %s\n", sortedBed);
+    bigBedSource = doctoredBed;
+    }
+else
+    {
+    bigBedSource = sortedBed;
+    }
+
+/* Write bigBed, initially to a temp name, and then moving it to real name if all went well. */
 char tempBigBed[PATH_LEN];
 safef(tempBigBed, sizeof(tempBigBed), "%s.tmp", outPath);
-fprintf(f, "\tzcat %s | sort -k1,1 -k2,2n > %s\n", bedFile, tempBed);
 fprintf(f, "\tbedToBigBed ");
 if (bedType != NULL)
      fprintf(f, " -type=%s", bedType);
 if (asType != NULL)
      fprintf(f, " -as=%s/as/%s.as", dataDir, asType);
-fprintf(f, " %s %s/%s/chrom.sizes %s\n", tempBed, dataDir, assembly, tempBigBed);
+fprintf(f, " %s %s/%s/chrom.sizes %s\n", bigBedSource, dataDir, assembly, tempBigBed);
 fprintf(f, "\tmv %s %s\n", tempBigBed, outPath);
-fprintf(f, "\trm %s\n", tempBed);
+fprintf(f, "\trm %s\n", bigBedSource);
+
+/* Add to target list and go home. */
 slNameAddHead(pTargetList, outPath);
 }
 
@@ -215,6 +245,13 @@ char destDir[PATH_LEN], destFileName[FILENAME_LEN], destExtension[FILEEXT_LEN];
 safef(destPath, sizeof(destPath), "%s/%s", destRoot, fileName);
 splitPath(destPath, destDir, destFileName, destExtension);
 
+/* See if source file exists.  If not warn and skip. */
+if (!fileExists(sourcePath))
+    {
+    warn("%s doesn't exist", sourcePath);
+    return;
+    }
+
 /* Figure out whether we are on assembly hg19, mm9, or something we don't understand */
 char *assembly = NULL;
 if (startsWith("hg19/", fileName))
@@ -282,9 +319,22 @@ else if (endsWith(fileName, ".bedClusters.gz") || endsWith(fileName, ".bedCluste
     }
 else if (endsWith(fileName, ".bed.gz") || endsWith(fileName, ".bed9.gz"))
     {
-    chopSuffix(destFileName);	// remove .bed
-    doGzippedBedToBigBed(sourcePath, assembly, NULL, NULL, 
-	destDir, destFileName, pTargetList, f);
+    if (stringIn("wgEncodeHaibMethylRrbs/", fileName))
+	{
+	doGzippedBedToBigBed(sourcePath, assembly, "bedRrbs", "bed9+2", 
+	    destDir, destFileName, pTargetList, f);
+	}
+    else if (stringIn("wgEncodeOpenChromSynth/", fileName))
+        {
+	doGzippedBedToBigBed(sourcePath, assembly, "openChromCombinedPeaks", "bed9+12", 
+	    destDir, destFileName, pTargetList, f);
+	}
+    else
+	{
+	chopSuffix(destFileName);	// remove .bed
+	doGzippedBedToBigBed(sourcePath, assembly, NULL, NULL, 
+	    destDir, destFileName, pTargetList, f);
+	}
     }
 else if (endsWith(fileName, ".gp.gz"))
     {
@@ -344,24 +394,6 @@ for (mi = fileList; mi != NULL; mi = mi->next)
     safef(destPath, sizeof(destPath), "%s/%s", destDir, mi->fileName);
 
     processManifestItem(++itemNo, mi, sourceDir, destDir, &targetList, f);
-
-#ifdef OLD
-    /* If md5sum available check it. */
-    if (!sameString(mi->md5sum, "n/a"))
-        {
-	char *md5sum = md5HexForFile(sourcePath);
-	verboseTime(1, "md5Summed %s (%lld bytes)", mi->fileName, (long long)fileSize(sourcePath));
-	if (!sameString(md5sum, mi->md5sum))
-	    {
-	    warn("md5sum mismatch on %s, %s in metaDb vs %s in file", sourcePath, mi->md5sum, md5sum);
-	    fprintf(f, "md5sum mismatch on %s, %s in metaDb vs %s in file\n", sourcePath, mi->md5sum, md5sum);
-	    ++mismatch;
-	    verbose(2, "%d md5sum matches, %d mismatches\n", match, mismatch);
-	    }
-	else 
-	    ++match;
-	}
-#endif /* OLD */
     }
 
 slReverse(&targetList);
