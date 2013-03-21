@@ -94,6 +94,12 @@ while (lineFileNextReal(lf, &line))
 	    errAbort("%d fields in first line, %d line %d of %s",  fieldCount, wordCount,
 		lf->lineIx, lf->fileName);
 	}
+    if (fieldCount >= 5)
+        {
+	char *score = row[4];
+	char *dot = strchr(score, '.');
+	if (dot) *dot = 0;  /* Chop off floating point. */
+	}
     bed = bedLoadN(row, fieldCount);
     if (fieldCount >= 12)
 	if (bedFixBlocks(bed))
