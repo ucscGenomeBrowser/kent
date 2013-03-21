@@ -8,6 +8,7 @@
 #include "trackDb.h"
 #include "web.h"
 #include "hash.h"
+#include "net.h"
 #include "obscure.h"
 #include "common.h"
 #include "string.h"
@@ -23,6 +24,8 @@ bool pubsHasSupp = TRUE;
 bool pubsIsElsevier = FALSE; 
 // the article source is used to modify other parts of the page
 static char* articleSource;
+// we need the external article PMC Id for yif links
+static char* extId = NULL;
 
 // internal section types in mysql table
 static char *pubsSecNames[] ={
@@ -129,9 +132,14 @@ static void web2EndDiv(char *comment)
 printf("</div> <!-- %s -->\n", comment);
 }
 
-static void web2Img(char *url, char *alt, int width, int hspace, int vspace) 
+//static void web2Img(char *url, char *alt, int width, int hspace, int vspace) 
+//{
+//printf("<img src=\"%s\" alt=\"%s\" width=\"%d\" hspace=\"%d\" vspace=\"%d\">\n", url, alt, width, hspace, vspace);
+//}
+
+static void web2ImgLink(char *url, char *imgUrl, char *alt, int width, int hspace, int vspace) 
 {
-printf("<img src=\"%s\" alt=\"%s\" width=\"%d\" hspace=\"%d\" vspace=\"%d\">\n", url, alt, width, hspace, vspace);
+printf("<a href=\"%s\"><img src=\"%s\" alt=\"%s\" width=\"%d\" hspace=\"%d\" vspace=\"%d\"></a>\n", url, imgUrl, alt, width, hspace, vspace);
 }
 
 static void web2PrintHeaderCell(char *label, int width)
@@ -266,7 +274,8 @@ char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
 sqlUpdate(conn, "SET SESSION group_concat_max_len = 100000");
 
-safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, pmid, "  
+safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, "  
+    "pmid, extId, "
     "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
     "WHERE markerId='%s' AND section in (%s) "
@@ -363,7 +372,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *authors   = row[3];
     char *citation  = row[4];
     char *pmid      = row[5];
-    char *snippets  = row[6];
+    char *snippets  = row[7];
     url = mangleUrl(url);
     printf("<A HREF=\"%s\">%s</A> ", url, title);
     printf("<SMALL>%s</SMALL>; ", authors);
@@ -400,7 +409,8 @@ static char *printArticleInfo(struct sqlConnection *conn, char *item, char *pubs
 {
 char query[512];
 
-safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid, source FROM %s WHERE articleId='%s'", pubsArticleTable, item);
+safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid, "
+    "source, extId FROM %s WHERE articleId='%s'", pubsArticleTable, item);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -420,7 +430,8 @@ char *authors  = row[3];
 char *cit      = row[4];
 char *abstract = row[5];
 char *pmid     = row[6];
-articleSource = row[7];
+articleSource  = row[7];
+extId          = row[8];
 
 url = mangleUrl(url);
 if (strlen(abstract)==0) 
@@ -594,6 +605,40 @@ if (startPtr!=0 && endPtr!=0 && startPtr<endPtr) {
 }
 
 
+static void printYifSection(char *clickedFileUrl)
+/* print section with the image on yif and a link to it */
+{
+
+// parse out yif file Id from yif url to generate link to yif page
+struct netParsedUrl npu;
+netParseUrl(clickedFileUrl, &npu);
+struct hash *params = NULL;
+struct cgiVar* paramList = NULL;
+char *paramStr = strchr(npu.file, '?');
+cgiParseInput(paramStr, &params, &paramList);
+struct cgiVar *var = hashFindVal(params, "file");
+char *figId = NULL;
+if (var!=NULL && var->val!=NULL)
+    figId = var->val;
+
+char yifPageUrl[4096];
+if (figId) 
+    {
+    safef(yifPageUrl, sizeof(yifPageUrl), "http://krauthammerlab.med.yale.edu/imagefinder/Figure.external?sp=S%s%%2F%s", extId, figId);
+    }
+
+if (!yifPageUrl)
+    return;
+
+web2StartSection("section", 
+    "<A href=\"%s\">Yale Image Finder</a>: figure where sequences were found", 
+    yifPageUrl);
+
+web2ImgLink(yifPageUrl, clickedFileUrl, "Image from YIF", 600, 10, 10); 
+
+web2EndSection();
+}
+
 static bool printSeqSection(char *articleId, char *title, bool showDesc, struct sqlConnection *conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta, char *pslTable, char *articleTable)
 /* print a section with a table of sequences, show only sequences with IDs in hash,
  * There are two sections, respective sequences are shown depending on isClickedSection and clickedSeqs 
@@ -735,12 +780,9 @@ if (!fasta)
 
 web2EndSection();
 /* Yale Image finder files contain links to the image itself */
-if (stringIn("yif", articleSource) && (clickedFileUrl!=NULL) && isClickedSection) {
-    char* imgTitle = "<A href=\"http://krauthammerlab.med.yale.edu/imagefinder/\">Yale Image Finder</a>: figure where sequences were found";
-    web2StartSection("section", "%s", imgTitle);
-    web2Img(clickedFileUrl, "Image from YIF", 600, 10, 10); 
-    web2EndSection();
-}
+if (stringIn("yif", articleSource) && (clickedFileUrl!=NULL) && isClickedSection) 
+    printYifSection(clickedFileUrl);
+
 freeMem(clickedFileUrl);
 
 sqlFreeResult(&sr);
