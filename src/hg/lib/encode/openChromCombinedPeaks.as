@@ -10,7 +10,7 @@ table openChromCombinedPeaks
     uint thickStart;   "Start of where display should be thick (start codon)"
     uint thickEnd;     "End of where display should be thick (stop codon)"
     uint color;        "RGB color value for peak"
-	float pValue;      "Fisher's Combined P-Value (-log 10)"
+    float pValue;      "Fisher's Combined P-Value (-log 10)"
     float dnaseSignal; "DNaseI HS Signal"
     float dnasePvalue; "DNaseI HS P-Value (-log 10)"
     float faireSignal; "FAIRE Signal"
