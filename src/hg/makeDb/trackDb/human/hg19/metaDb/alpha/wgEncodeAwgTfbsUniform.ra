@@ -1609,6 +1609,23 @@ target EBF1
 treatment None
 view Peaks
 
+metaObject wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk
+objType table
+antibody Egr-1
+cell GM12878
+composite wgEncodeAwgTfbsUniform
+controlId SL218
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH002328
+fileName wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk.narrowPeak.gz
+lab HudsonAlpha
+project wgEncode
+tableName wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk
+target EGR1
+treatment None
+view Peaks
+
 metaObject wgEncodeAwgTfbsHaibGm12878Elf1sc631V0416101UniPk
 objType table
 antibody ELF1_(SC-631)
@@ -13131,4 +13148,4 @@ target CTCF
 treatment None
 view Peaks
 
-# MAGIC: -110219729
+# MAGIC: 1863259001
