@@ -377,7 +377,7 @@ scientificName Nomascus leucogenys
 commonName Gibbon
 assemblyDate Oct. 2012
 assemblyLabel Gibbon Genome Sequencing Consortium 
-assemblyShortLabel Nleu_3.0
+assemblyShortLabel GGSC Nleu3.0
 orderKey 328
 mitoAcc none
 fastaFiles /hive/data/genomes/nomLeu3/ucsc/*.fa.gz
@@ -750,3 +750,11 @@ nomLeu3.perChromTables = no
  	VALUES ("nomLeu3", "blat4c", "17841", "0", "1");' \
  	    hgcentraltest
      #	test it with some sequence
+
+############################################################################
+# reset dbDb description to be like the previous nomLeu
+#       (DONE - 2013-03-21 - Hiram)
+    hgsql hgcentraltest -e 'update dbDb set description = "Oct. 2012 (GGSC Nleu3.0/nomLeu3)"" where name = "nomLeu3";' \
+          | hgsql -h genome-testdb hgcentraltest
+
+############################################################################
