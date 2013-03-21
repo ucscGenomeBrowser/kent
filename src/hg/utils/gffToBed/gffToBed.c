@@ -65,6 +65,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
         gp = genePredFromGroupedGff(gff, group, group->name, exonFeature, FALSE, FALSE);
     if (gp != NULL)
 	{
+	assert(gp->txStart == gp->exonStarts[0]);
 	struct bed *bed = bedFromGenePred(gp);
 	bedTabOutN(bed, 12, f);
 	bedFree(&bed);
