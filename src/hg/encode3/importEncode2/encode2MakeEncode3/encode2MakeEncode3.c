@@ -107,6 +107,8 @@ else if (startsWith("wgEncodeCshlLongRnaSeq", fileName))
     return TRUE;
 else if (startsWith("wgEncodeRikenCage", fileName))
     return TRUE;
+else if (startsWith("wgEncodeUwRepliSeq", fileName))
+    return TRUE;
 else
     return FALSE;
 }

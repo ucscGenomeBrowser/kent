@@ -100,6 +100,18 @@ while (lineFileNextReal(lf, &line))
 	char *dot = strchr(score, '.');
 	if (dot) *dot = 0;  /* Chop off floating point. */
 	}
+    if (fieldCount >= 6)
+        {
+	char *thickStart = row[6];
+	if (sameString(thickStart, "."))
+	    row[6] = row[1];	    /* Set it to same as chromStart */
+	}
+    if (fieldCount >= 7)
+        {
+	char *thickEnd = row[7];
+	if (sameString(thickEnd, "."))
+	    row[7] = row[2];	    /* Set it to same as chromEnd */
+	}
     bed = bedLoadN(row, fieldCount);
     if (fieldCount >= 12)
 	if (bedFixBlocks(bed))
