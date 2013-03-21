@@ -622,45 +622,41 @@ identifier encodePseudogeneUcsc dependency
 
 identifier refGeneRetro dependency
 "Link refGene to ucscRetroInfo"
-    hg18,hg19,mm9,mm10.refGene.name dupeOk
-    hg18,hg19.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
-    hg19.ucscRetroInfo2.refSeq minCheck=0.96 exclude=noRefSeq
+    hg19,mm9,mm10.refGene.name dupeOk
     hg19.ucscRetroInfo4.refSeq minCheck=0.96 exclude=noRefSeq
-    mm9,mm10.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
+    hg19.ucscRetroInfo5.refSeq minCheck=0.96 exclude=noRefSeq
+    mm9.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
     mm10.ucscRetroInfo2.refSeq minCheck=0.96 exclude=noRefSeq
 
 identifier knownGeneRetro dependency
 "Link knownGene to ucscRetroInfo"
-    hg18,hg19,mm9,mm10.knownGene.name dupeOk chopAfter=.
-    hg18.ucscRetroInfo1.kgName minCheck=0.95 exclude=noKg chopAfter=.
-    hg19.ucscRetroInfo1.kgName minCheck=0.87 exclude=noKg chopAfter=.
-    hg19.ucscRetroInfo2.kgName minCheck=0.87 exclude=noKg chopAfter=.
+    hg19,mm9,mm10.knownGene.name dupeOk chopAfter=.
     hg19.ucscRetroInfo4.kgName minCheck=0.96 exclude=noKg chopAfter=.
-    mm9,mm10.ucscRetroInfo1.kgName minCheck=0.94 exclude=noKg chopAfter=.
+    hg19.ucscRetroInfo5.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    mm9.ucscRetroInfo1.kgName minCheck=0.94 exclude=noKg chopAfter=.
     mm10.ucscRetroInfo2.kgName minCheck=0.96 exclude=noKg chopAfter=.
 
-identifier ucscRetroInfo4 dependency
+identifier ucscRetroInfo[4,5] dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    hg19.ucscRetroInfo4.name unique
-    hg19.ucscRetroAli4.qName 
-    hg19.ucscRetroExpressed.name
+    hg19.ucscRetroInfo[].name unique
+    hg19.ucscRetroAli[].qName 
 
-identifier ucscRetroOrtho[1,2,4] dependency
+identifier ucscRetroOrtho[4,5] dependency
 "Link together Ucsc Retrogenes and ucsc retro orthlogy"
     hg19.ucscRetroAli[].qName dupeOk
     hg19.ucscRetroOrtho[].name
 
-identifier ucscRetroExtFileId[1,2,4]
+identifier ucscRetroExtFileId[4,5]
 "External file ID for parent sequences for UCSC Retrogenes"
     hg19.ucscRetroExtFile[].id
     hg19.ucscRetroSeq[].extFile
 
-identifier ucscRetroSeq4
+identifier ucscRetroSeq[4,5]
 "Sequences for GenBank sequences used as retrogene parents"
-    hg19.ucscRetroSeq4.acc unique 
-    hg19.ucscRetroCds4.id
-    hg19.ucscRetroAli4.qName chopAfter=-
-    hg19.ucscRetroInfo4.name chopAfter=-
+    hg19.ucscRetroSeq[].acc unique 
+    hg19.ucscRetroCds[].id
+    hg19.ucscRetroAli[].qName chopAfter=-
+    hg19.ucscRetroInfo[].name chopAfter=-
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
@@ -1812,7 +1808,7 @@ identifier refSeqId typeOf=mrnaAccession
     hg18,mm7,mm8,mm9,mm10.knownToRefSeq.value minCheck=0.96
     hg16,hg17.knownToRefSeq.value minCheck=0.93
     $kgDb.refSeqKg.refseq minCheck=0.60
-    $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.35
+    $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.32
     $gbd,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn3.mrnaRefseq.refseq minCheck=0.03
     $gbd,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
@@ -1954,7 +1950,7 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.oldId minCheck=0.5 exclude=
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
     $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
-    hg19.kg5ToKg6.newId exclude=
+    $kgDb.kg5ToKg6.newId exclude=
     $kgDb.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name

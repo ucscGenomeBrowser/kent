@@ -1,0 +1,133 @@
+# Gene:  chr22_1  -  16087777  16078188  (108bp),  2 elements
+chr22	SGP2	CDS	16078188	16078258	.	-	2	gene_id "chr22_1"; transcript_id "chr22_1.1";
+chr22	SGP2	CDS	16087741	16087777	.	-	0	gene_id "chr22_1"; transcript_id "chr22_1.1";
+chr22	SGP2	start_codon	16087775	16087777	.	-	0	gene_id "chr22_1"; transcript_id "chr22_1.1";
+# Gene:  chr22_2  +  16093885  16094022  (138bp),  1 element
+chr22	SGP2	CDS	16093885	16094019	.	+	0	gene_id "chr22_2"; transcript_id "chr22_2.1";
+chr22	SGP2	start_codon	16093885	16093887	.	+	0	gene_id "chr22_2"; transcript_id "chr22_2.1";
+chr22	SGP2	stop_codon	16094020	16094022	.	+	0	gene_id "chr22_2"; transcript_id "chr22_2.1";
+# Gene:  chr22_3  +  16122720  16123768  (903bp),  2 elements
+chr22	SGP2	CDS	16122720	16123137	.	+	0	gene_id "chr22_3"; transcript_id "chr22_3.1";
+chr22	SGP2	CDS	16123284	16123765	.	+	2	gene_id "chr22_3"; transcript_id "chr22_3.1";
+chr22	SGP2	start_codon	16122720	16122722	.	+	0	gene_id "chr22_3"; transcript_id "chr22_3.1";
+chr22	SGP2	stop_codon	16123766	16123768	.	+	0	gene_id "chr22_3"; transcript_id "chr22_3.1";
+# Gene:  chr22_4  -  16140360  16124833  (189bp),  2 elements
+chr22	SGP2	CDS	16124836	16124973	.	-	0	gene_id "chr22_4"; transcript_id "chr22_4.1";
+chr22	SGP2	CDS	16140313	16140360	.	-	0	gene_id "chr22_4"; transcript_id "chr22_4.1";
+chr22	SGP2	start_codon	16140358	16140360	.	-	0	gene_id "chr22_4"; transcript_id "chr22_4.1";
+chr22	SGP2	stop_codon	16124833	16124835	.	-	0	gene_id "chr22_4"; transcript_id "chr22_4.1";
+# Gene:  chr22_5  -  16151371  16151105  (267bp),  1 element
+chr22	SGP2	CDS	16151108	16151371	.	-	0	gene_id "chr22_5"; transcript_id "chr22_5.1";
+chr22	SGP2	start_codon	16151369	16151371	.	-	0	gene_id "chr22_5"; transcript_id "chr22_5.1";
+chr22	SGP2	stop_codon	16151105	16151107	.	-	0	gene_id "chr22_5"; transcript_id "chr22_5.1";
+# Gene:  chr22_6  +  16157904  16172124  (360bp),  3 elements
+chr22	SGP2	CDS	16157904	16157942	.	+	0	gene_id "chr22_6"; transcript_id "chr22_6.1";
+chr22	SGP2	CDS	16171460	16171607	.	+	0	gene_id "chr22_6"; transcript_id "chr22_6.1";
+chr22	SGP2	CDS	16171952	16172121	.	+	2	gene_id "chr22_6"; transcript_id "chr22_6.1";
+chr22	SGP2	start_codon	16157904	16157906	.	+	0	gene_id "chr22_6"; transcript_id "chr22_6.1";
+chr22	SGP2	stop_codon	16172122	16172124	.	+	0	gene_id "chr22_6"; transcript_id "chr22_6.1";
+# Gene:  chr22_7  -  16287816  16255352  (2619bp),  7 elements
+chr22	SGP2	CDS	16255355	16256666	.	-	1	gene_id "chr22_7"; transcript_id "chr22_7.1";
+chr22	SGP2	CDS	16266929	16267135	.	-	1	gene_id "chr22_7"; transcript_id "chr22_7.1";
+chr22	SGP2	CDS	16277748	16277885	.	-	1	gene_id "chr22_7"; transcript_id "chr22_7.1";
+chr22	SGP2	CDS	16279195	16279301	.	-	0	gene_id "chr22_7"; transcript_id "chr22_7.1";
+chr22	SGP2	CDS	16282145	16282318	.	-	0	gene_id "chr22_7"; transcript_id "chr22_7.1";
+chr22	SGP2	CDS	16282478	16282592	.	-	1	gene_id "chr22_7"; transcript_id "chr22_7.1";
+chr22	SGP2	CDS	16287254	16287816	.	-	0	gene_id "chr22_7"; transcript_id "chr22_7.1";
+chr22	SGP2	start_codon	16287814	16287816	.	-	0	gene_id "chr22_7"; transcript_id "chr22_7.1";
+chr22	SGP2	stop_codon	16255352	16255354	.	-	0	gene_id "chr22_7"; transcript_id "chr22_7.1";
+# Gene:  chr22_8  +  16310896  16356568  (1560bp),  14 elements
+chr22	SGP2	CDS	16310896	16310982	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16339307	16339403	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16340519	16340583	.	+	2	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16341042	16341111	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16341260	16341405	.	+	2	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16345914	16345986	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16349431	16349564	.	+	2	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16350550	16350633	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16352063	16352401	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16352869	16353008	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16353303	16353425	.	+	1	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16353894	16353977	.	+	1	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16355254	16355363	.	+	1	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	CDS	16356561	16356565	.	+	2	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	start_codon	16310896	16310898	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+chr22	SGP2	stop_codon	16356566	16356568	.	+	0	gene_id "chr22_8"; transcript_id "chr22_8.1";
+# Gene:  chr22_9  +  16364868  16366178  (1248bp),  2 elements
+chr22	SGP2	CDS	16364868	16365241	.	+	0	gene_id "chr22_9"; transcript_id "chr22_9.1";
+chr22	SGP2	CDS	16365305	16366175	.	+	1	gene_id "chr22_9"; transcript_id "chr22_9.1";
+chr22	SGP2	start_codon	16364868	16364870	.	+	0	gene_id "chr22_9"; transcript_id "chr22_9.1";
+chr22	SGP2	stop_codon	16366176	16366178	.	+	0	gene_id "chr22_9"; transcript_id "chr22_9.1";
+# Gene:  chr22_10  -  16397022  16389482  (159bp),  2 elements
+chr22	SGP2	CDS	16389485	16389602	.	-	1	gene_id "chr22_10"; transcript_id "chr22_10.1";
+chr22	SGP2	CDS	16396985	16397022	.	-	0	gene_id "chr22_10"; transcript_id "chr22_10.1";
+chr22	SGP2	start_codon	16397020	16397022	.	-	0	gene_id "chr22_10"; transcript_id "chr22_10.1";
+chr22	SGP2	stop_codon	16389482	16389484	.	-	0	gene_id "chr22_10"; transcript_id "chr22_10.1";
+# Gene:  chr22_11  +  16404700  16405879  (129bp),  2 elements
+chr22	SGP2	CDS	16404700	16404789	.	+	0	gene_id "chr22_11"; transcript_id "chr22_11.1";
+chr22	SGP2	CDS	16405841	16405876	.	+	0	gene_id "chr22_11"; transcript_id "chr22_11.1";
+chr22	SGP2	start_codon	16404700	16404702	.	+	0	gene_id "chr22_11"; transcript_id "chr22_11.1";
+chr22	SGP2	stop_codon	16405877	16405879	.	+	0	gene_id "chr22_11"; transcript_id "chr22_11.1";
+# Gene:  chr22_12  +  16413687  16415951  (1533bp),  4 elements
+chr22	SGP2	CDS	16413687	16414563	.	+	0	gene_id "chr22_12"; transcript_id "chr22_12.1";
+chr22	SGP2	CDS	16415098	16415311	.	+	2	gene_id "chr22_12"; transcript_id "chr22_12.1";
+chr22	SGP2	CDS	16415397	16415650	.	+	1	gene_id "chr22_12"; transcript_id "chr22_12.1";
+chr22	SGP2	CDS	16415764	16415948	.	+	2	gene_id "chr22_12"; transcript_id "chr22_12.1";
+chr22	SGP2	start_codon	16413687	16413689	.	+	0	gene_id "chr22_12"; transcript_id "chr22_12.1";
+chr22	SGP2	stop_codon	16415949	16415951	.	+	0	gene_id "chr22_12"; transcript_id "chr22_12.1";
+# Gene:  chr22_13  +  16423224  16424723  (471bp),  3 elements
+chr22	SGP2	CDS	16423224	16423263	.	+	0	gene_id "chr22_13"; transcript_id "chr22_13.1";
+chr22	SGP2	CDS	16424064	16424282	.	+	2	gene_id "chr22_13"; transcript_id "chr22_13.1";
+chr22	SGP2	CDS	16424512	16424720	.	+	2	gene_id "chr22_13"; transcript_id "chr22_13.1";
+chr22	SGP2	start_codon	16423224	16423226	.	+	0	gene_id "chr22_13"; transcript_id "chr22_13.1";
+chr22	SGP2	stop_codon	16424721	16424723	.	+	0	gene_id "chr22_13"; transcript_id "chr22_13.1";
+# Gene:  chr22_14  +  16426337  16426963  (627bp),  1 element
+chr22	SGP2	CDS	16426337	16426960	.	+	0	gene_id "chr22_14"; transcript_id "chr22_14.1";
+chr22	SGP2	start_codon	16426337	16426339	.	+	0	gene_id "chr22_14"; transcript_id "chr22_14.1";
+chr22	SGP2	stop_codon	16426961	16426963	.	+	0	gene_id "chr22_14"; transcript_id "chr22_14.1";
+# Gene:  chr22_15  -  16447698  16433318  (222bp),  3 elements
+chr22	SGP2	CDS	16433321	16433327	.	-	1	gene_id "chr22_15"; transcript_id "chr22_15.1";
+chr22	SGP2	CDS	16436352	16436526	.	-	2	gene_id "chr22_15"; transcript_id "chr22_15.1";
+chr22	SGP2	CDS	16447662	16447698	.	-	0	gene_id "chr22_15"; transcript_id "chr22_15.1";
+chr22	SGP2	start_codon	16447696	16447698	.	-	0	gene_id "chr22_15"; transcript_id "chr22_15.1";
+chr22	SGP2	stop_codon	16433318	16433320	.	-	0	gene_id "chr22_15"; transcript_id "chr22_15.1";
+# Gene:  chr22_16  -  16449804  16448824  (981bp),  1 element
+chr22	SGP2	CDS	16448827	16449804	.	-	0	gene_id "chr22_16"; transcript_id "chr22_16.1";
+chr22	SGP2	start_codon	16449802	16449804	.	-	0	gene_id "chr22_16"; transcript_id "chr22_16.1";
+chr22	SGP2	stop_codon	16448824	16448826	.	-	0	gene_id "chr22_16"; transcript_id "chr22_16.1";
+# Gene:  chr22_17  +  16633017  16652137  (1710bp),  5 elements
+chr22	SGP2	CDS	16633017	16633022	.	+	0	gene_id "chr22_17"; transcript_id "chr22_17.1";
+chr22	SGP2	CDS	16634897	16635065	.	+	0	gene_id "chr22_17"; transcript_id "chr22_17.1";
+chr22	SGP2	CDS	16650274	16650837	.	+	2	gene_id "chr22_17"; transcript_id "chr22_17.1";
+chr22	SGP2	CDS	16651042	16651353	.	+	2	gene_id "chr22_17"; transcript_id "chr22_17.1";
+chr22	SGP2	CDS	16651479	16652134	.	+	2	gene_id "chr22_17"; transcript_id "chr22_17.1";
+chr22	SGP2	start_codon	16633017	16633019	.	+	0	gene_id "chr22_17"; transcript_id "chr22_17.1";
+chr22	SGP2	stop_codon	16652135	16652137	.	+	0	gene_id "chr22_17"; transcript_id "chr22_17.1";
+# Gene:  chr22_18  +  16868397  16886146  (663bp),  5 elements
+chr22	SGP2	CDS	16868397	16868565	.	+	0	gene_id "chr22_18"; transcript_id "chr22_18.1";
+chr22	SGP2	CDS	16870862	16870946	.	+	2	gene_id "chr22_18"; transcript_id "chr22_18.1";
+chr22	SGP2	CDS	16871096	16871221	.	+	1	gene_id "chr22_18"; transcript_id "chr22_18.1";
+chr22	SGP2	CDS	16871367	16871559	.	+	1	gene_id "chr22_18"; transcript_id "chr22_18.1";
+chr22	SGP2	CDS	16886057	16886143	.	+	0	gene_id "chr22_18"; transcript_id "chr22_18.1";
+chr22	SGP2	start_codon	16868397	16868399	.	+	0	gene_id "chr22_18"; transcript_id "chr22_18.1";
+chr22	SGP2	stop_codon	16886144	16886146	.	+	0	gene_id "chr22_18"; transcript_id "chr22_18.1";
+# Gene:  chr22_19  +  16906349  16906579  (231bp),  1 element
+chr22	SGP2	CDS	16906349	16906576	.	+	0	gene_id "chr22_19"; transcript_id "chr22_19.1";
+chr22	SGP2	start_codon	16906349	16906351	.	+	0	gene_id "chr22_19"; transcript_id "chr22_19.1";
+chr22	SGP2	stop_codon	16906577	16906579	.	+	0	gene_id "chr22_19"; transcript_id "chr22_19.1";
+# Gene:  chr22_20  -  16940801  16909687  (681bp),  5 elements
+chr22	SGP2	CDS	16909690	16909902	.	-	0	gene_id "chr22_20"; transcript_id "chr22_20.1";
+chr22	SGP2	CDS	16914066	16914202	.	-	2	gene_id "chr22_20"; transcript_id "chr22_20.1";
+chr22	SGP2	CDS	16915096	16915204	.	-	0	gene_id "chr22_20"; transcript_id "chr22_20.1";
+chr22	SGP2	CDS	16919034	16919122	.	-	2	gene_id "chr22_20"; transcript_id "chr22_20.1";
+chr22	SGP2	CDS	16940672	16940801	.	-	0	gene_id "chr22_20"; transcript_id "chr22_20.1";
+chr22	SGP2	start_codon	16940799	16940801	.	-	0	gene_id "chr22_20"; transcript_id "chr22_20.1";
+chr22	SGP2	stop_codon	16909687	16909689	.	-	0	gene_id "chr22_20"; transcript_id "chr22_20.1";
+# Gene:  chr22_21  +  16967926  16990372  (699bp),  5 elements
+chr22	SGP2	CDS	16967926	16968307	.	+	0	gene_id "chr22_21"; transcript_id "chr22_21.1";
+chr22	SGP2	CDS	16984195	16984279	.	+	2	gene_id "chr22_21"; transcript_id "chr22_21.1";
+chr22	SGP2	CDS	16988532	16988592	.	+	1	gene_id "chr22_21"; transcript_id "chr22_21.1";
+chr22	SGP2	CDS	16989052	16989132	.	+	0	gene_id "chr22_21"; transcript_id "chr22_21.1";
+chr22	SGP2	CDS	16990283	16990369	.	+	0	gene_id "chr22_21"; transcript_id "chr22_21.1";
+chr22	SGP2	start_codon	16967926	16967928	.	+	0	gene_id "chr22_21"; transcript_id "chr22_21.1";
+chr22	SGP2	stop_codon	16990370	16990372	.	+	0	gene_id "chr22_21"; transcript_id "chr22_21.1";

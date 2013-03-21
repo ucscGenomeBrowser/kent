@@ -1,5 +1,5 @@
 #!/bin/tcsh -efx
-encodeExpToCvDb experiment.tab series.tab result.tab both.django 
-hgLoadSqlTab kentDjangoTest cvDb_experiment experiment.sql experiment.tab
-hgLoadSqlTab kentDjangoTest cvDb_series series.sql series.tab
-hgLoadSqlTab kentDjangoTest cvDb_result result.sql result.tab
+encodeExpToCvDb experiment.tab series.tab result.tab django.py 
+hgLoadSqlTab encode2Meta experiment experiment.sql experiment.tab
+hgLoadSqlTab encode2Meta series series.sql series.tab
+hgLoadSqlTab encode2Meta result result.sql result.tab
