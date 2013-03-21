@@ -67,6 +67,10 @@ while (lineFileRowTab(lf, row))
     if (sameString(row[0], "chrMT"))
         row[0] = "chrM";
 
+    /* Just skip transcript line - they cause trouble later and aren't needed. */
+    if (sameString(row[2], "transcript"))
+        continue;
+
     /* Abbreviate really long transcript IDs and gene IDs. */
     char *tagsToShorten[] = {"transcript_id ", "gene_id ", "gene_ids ", "transcript_ids "};
     int i;
