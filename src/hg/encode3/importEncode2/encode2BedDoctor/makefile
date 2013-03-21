@@ -14,5 +14,10 @@ encode2BedDoctor: ${O} ${MYLIBS}
 compile:: ${O}
 	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
 
+test:
+	encode2BedDoctor test.bed fixed.bed
+	cmp fixed.bed expected.bed
+
 clean::
 	rm -f ${A}${EXE} ${O}
+
