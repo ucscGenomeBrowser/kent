@@ -777,19 +777,39 @@ int i;
 /* should we count on start/stop codon annotation in GFFs? */
 boolean useStartStops = isGtf || haveStartStopCodons(gff);
 
+int geneStart = 0, geneEnd = 0;
+
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
+    boolean exonishLine = FALSE;
     if (ignoreGxfLine(gl, isGtf))
         continue;
     if (isExon(gl->feature, isGtf, exonSelectWord))
+	{
+	exonishLine = TRUE;
 	++exonCount;
+	}
     if (isCds(gl->feature))
         {
+	exonishLine = TRUE;
 	if (gl->start < cdsStart)
             cdsStart = gl->start;
 	if (gl->end > cdsEnd)
             cdsEnd = gl->end;
+	}
+    if (exonishLine)
+        {
+	if (geneStart == geneEnd)  // Not initialized yet
+	     {
+	     geneStart = gl->start;
+	     geneEnd = gl->end;
+	     }
+	else
+	     {
+	     geneStart = min(gl->start, geneStart);
+	     geneEnd = max(gl->end, geneEnd);
+	     }
 	}
     if (sameWord(gl->feature, "start_codon"))
         haveStartCodon = TRUE;
@@ -831,8 +851,8 @@ AllocVar(gp);
 gp->name = cloneString(name);
 gp->chrom = cloneString(group->seq);
 gp->strand[0] = group->strand;
-gp->txStart = group->start;
-gp->txEnd = group->end;
+gp->txStart = geneStart;
+gp->txEnd = geneEnd;
 if (cdsStart < cdsEnd)
     {
     gp->cdsStart = cdsStart;
