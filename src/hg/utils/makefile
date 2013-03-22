@@ -30,6 +30,7 @@ DIRS = \
 	twoBitMask \
 	gff3ToGenePred \
 	gff3ToPsl \
+	gffToBed \
 	gtfToGenePred \
 	automation \
 	refreshNamedSessionCustomTracks \
