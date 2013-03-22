@@ -18,7 +18,7 @@ void usage()
 errAbort(
   "encode2Manifest - Create a encode3 manifest file for encode2 files\n"
   "usage:\n"
-  "   encode2Manifest manifest.tab\n"
+  "   encode2Manifest manifest.tab rootFileDir\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -59,6 +59,8 @@ return list;
 }
 
 int unknownFormatCount = 0;
+int missingFileCount = 0;
+int foundFileCount = 0;
 
 boolean isHistoneModAntibody(char *antibody)
 /* Returns TRUE if it looks something like H3K4Me3 */
@@ -137,12 +139,14 @@ if (suffix != NULL)
         result = "gtf";
     else if (sameString(suffix, "narrowPeak"))
         result = "narrowPeak";
+    else
+        ++unknownFormatCount;
     }
 freeMem(name);
 return result;
 }
 
-void addGenomeToManifest(char *genome, struct rbTree *expsByIx, FILE *f)
+void addGenomeToManifest(char *genome, char *fileRootDir, struct rbTree *expsByIx, FILE *f)
 /* Get metaDb table for genome and write out relevant bits of it to f */
 {
 struct mdbObj *mdbList = getMdbList(genome);
@@ -159,6 +163,7 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
     char *objType = NULL;
     char *antibody = NULL;
     char *md5sum = NULL;
+    char *view = NULL;
     struct mdbVar *v;
     for (v = mdb->vars; v != NULL; v = v->next)
          {
@@ -179,6 +184,8 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	     antibody = val;
 	 else if (sameString("md5sum", var))
 	     md5sum = val;
+	 else if (sameString("view", var))
+	     view = val;
 	 }
 
     /* If we have the fields we need,  fake the rest if need be and output. */
@@ -201,30 +208,47 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 		    *comma = 0;
 		}
 
+	    /* Check file size (which also checks if file exists */
+	    char path[PATH_LEN];
+	    safef(path, sizeof(path), "%s/%s/%s/%s", fileRootDir, genome, composite, fileName);
+	    off_t size = fileSize(path);
+	    if (size == -1)
+	        {
+		verbose(2, "%s doesn't exist\n", path);
+		++missingFileCount;
+		continue;
+		}
+	    ++foundFileCount;
+	
 	    /* Output each field. */ 
 	    fprintf(f, "%s/%s/%s\t", genome, composite, fileName);
 	    fprintf(f, "%s\t", guessFormatFromFileName(fileName));
+	    fprintf(f, "%s\t", naForNull(view));
 	    fprintf(f, "%s\t", dccAccession);
 	    fprintf(f, "%s\t", naForNull(replicate));
 	    fprintf(f, "%s\t", guessEnrichedIn(composite, dataType, antibody));
-	    fprintf(f, "%s\n", naForNull(md5sum));
+	    fprintf(f, "%s\t", naForNull(md5sum));
+	    fprintf(f, "%lld\n", (long long)size);
 	    }
 	}
     }
 }
 
-void encode2Manifest(char *outFile)
+void encode2Manifest(char *outFile, char *fileRootDir)
 /* encode2Manifest - Create a encode3 manifest file for encode2 files. */
 {
 struct rbTree *expsByIx = makeExpContainer();
 verbose(1, "%d experiments\n", expsByIx->n);
 FILE *f = mustOpen(outFile, "w");
 int i;
-fputs("#file_name\tformat\texperiment\treplicate\tenriched_in\tmd5sum\n", f);
+fputs("#file_name\tformat\toutput_type\texperiment\treplicate\tenriched_in\tmd5sum\tsize\n", f);
 for (i=0; i<ArraySize(metaDbs); ++i)
    {
-   addGenomeToManifest(metaDbs[i], expsByIx, f);
+   addGenomeToManifest(metaDbs[i], fileRootDir, expsByIx, f);
    }
+verbose(1, "%d files in metaDb not found in %s,  run with verbose=2 to see list\n", 
+    missingFileCount, fileRootDir);
+verbose(1, "%d total files including %d of unknown format\n", foundFileCount, unknownFormatCount);
 carefulClose(&f);
 }
 
@@ -232,8 +256,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 3)
     usage();
-encode2Manifest(argv[1]);
+encode2Manifest(argv[1], argv[2]);
 return 0;
 }

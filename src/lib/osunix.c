@@ -639,3 +639,15 @@ else
     }
 return TRUE;
 }
+
+boolean isRegularFile(char *fileName)
+/* Return TRUE if fileName is a regular file. */
+{
+struct stat st;
+
+if (stat(fileName, &st) < 0)
+    return FALSE;
+if (S_ISREG(st.st_mode))
+    return TRUE;
+return FALSE;
+}
