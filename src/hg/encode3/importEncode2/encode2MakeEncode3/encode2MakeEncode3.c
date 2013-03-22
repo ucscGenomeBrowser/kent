@@ -8,6 +8,7 @@
 #include "md5.h"
 #include "portable.h"
 #include "obscure.h"
+#include "sqlNum.h"
 
 char *dataDir = "/scratch/kent/encValData";
 char *tempDir = "/tmp";
@@ -31,7 +32,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-#define MANIFESTINFO_NUM_COLS 6
+#define MANIFESTINFO_NUM_COLS 8
 
 struct manifestInfo
 /* Information on one file */
@@ -39,10 +40,12 @@ struct manifestInfo
     struct manifestInfo *next;  /* Next in singly linked list. */
     char *fileName;	/* Name of file with directory relative to manifest */
     char *format;	/* bam fastq etc */
+    char *outputType;   /* aka view - alignment, transfrags, etc. */
     char *experiment;	/* wgEncodeXXXX */
     char *replicate;	/* 1 2 both n/a */
     char *enrichedIn;	/* promoter exon etc. */
     char *md5sum;	/* Hash of file contents or n/a */
+    long long size;	/* File size. */
     };
 
 struct manifestInfo *manifestInfoLoad(char **row)
@@ -54,10 +57,12 @@ struct manifestInfo *ret;
 AllocVar(ret);
 ret->fileName = cloneString(row[0]);
 ret->format = cloneString(row[1]);
-ret->experiment = cloneString(row[2]);
-ret->replicate = cloneString(row[3]);
-ret->enrichedIn = cloneString(row[4]);
-ret->md5sum = cloneString(row[5]);
+ret->outputType = cloneString(row[2]);
+ret->experiment = cloneString(row[3]);
+ret->replicate = cloneString(row[4]);
+ret->enrichedIn = cloneString(row[5]);
+ret->md5sum = cloneString(row[6]);
+ret->size = sqlLongLong(row[7]);
 return ret;
 }
 
@@ -66,10 +71,12 @@ void manifestInfoTabOut(struct manifestInfo *mi, FILE *f)
 {
 fprintf(f, "%s\t", mi->fileName);
 fprintf(f, "%s\t", mi->format);
+fprintf(f, "%s\t", mi->outputType);
 fprintf(f, "%s\t", mi->experiment);
 fprintf(f, "%s\t", mi->replicate);
 fprintf(f, "%s\t", mi->enrichedIn);
-fprintf(f, "%s\n", mi->md5sum);
+fprintf(f, "%s\t", mi->md5sum);
+fprintf(f, "%lld\t", mi->size);
 }
 
 struct manifestInfo *manifestInfoLoadAll(char *fileName)
