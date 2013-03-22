@@ -148,5 +148,7 @@ boolean maybeTouchFile(char *fileName);
 /* If file exists, set its access and mod times to now.  If it doesn't exist, create it.
  * Return FALSE if we have a problem doing so. */
 
+boolean isRegularFile(char *fileName);
+/* Return TRUE if fileName is a regular file. */
 #endif /* PORTABLE_H */
 

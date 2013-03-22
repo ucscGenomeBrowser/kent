@@ -113,6 +113,7 @@ allMis1 -> Alligator ;
 croPor1 -> Crocodile ;
 latCha1 -> Coelacanth ;
 anoCar2 -> Lizard ;
+cheMyd1 -> Green_sea_turtle ;
 pelSin1 -> Soft_shell_turtle ;
 chrPic1 -> Painted_turtle ;
 xenTro3 -> Frog_X_tropicalis ;

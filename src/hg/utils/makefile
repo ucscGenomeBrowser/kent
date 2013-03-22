@@ -6,8 +6,10 @@ include ../../inc/common.mk
 
 
 SCRIPT_FILES = \
+	dbNsfpToBed.pl \
 	dumpDb.pl \
-	mergeOverlapBed4.pl
+	mergeOverlapBed4.pl \
+	mergeSortedBed3Plus.pl
 
 # List of directories to build
 USE_DIRS = $(DIRS)

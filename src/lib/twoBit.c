@@ -10,6 +10,7 @@
 #include "twoBit.h"
 #include "udc.h"
 #include "net.h"
+#include "portable.h"
 #include <limits.h>
 
 /* following are the wrap functions for the UDC and stdio functoins
@@ -898,6 +899,9 @@ boolean twoBitIsFile(char *fileName)
 boolean useUdc = FALSE;
 if (hasProtocol(fileName))
     useUdc = TRUE;
+else if (!isRegularFile(fileName))
+    return FALSE;
+
 struct twoBitFile *tbf = getTbfAndOpen(fileName, useUdc);
 boolean isSwapped;
 boolean isTwoBit = twoBitSigRead(tbf, &isSwapped);
