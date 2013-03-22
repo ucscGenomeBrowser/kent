@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "encode3/encode2Manifest.h"
+#include "portable.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -27,7 +28,16 @@ void unpackDir(struct encode2Manifest *mi, char *rootDir, FILE *f)
 {
 char dirPath[PATH_LEN];
 safef(dirPath, sizeof(dirPath), "%s/%s", rootDir, mi->fileName);
-uglyf("Theoretically unpacking %s\n", dirPath);
+struct fileInfo *fi, *fiList = listDirX(dirPath, "*", FALSE);
+char *saveFileName = mi->fileName;
+for (fi = fiList; fi != NULL; fi = fi->next)
+    {
+    char fileName[PATH_LEN];
+    safef(fileName, sizeof(fileName), "%s/%s", saveFileName, fi->name);
+    mi->fileName = fileName;
+    encode2ManifestTabOut(mi, f);
+    }
+mi->fileName = saveFileName;
 }
 
 void encode2FastqSubdirsInManifest(char *inputManifest, char *rootDir, char *outputManifest)
@@ -35,7 +45,6 @@ void encode2FastqSubdirsInManifest(char *inputManifest, char *rootDir, char *out
 {
 struct encode2Manifest *mi, *miList= encode2ManifestLoadAll(inputManifest);
 FILE *f = mustOpen(outputManifest, "w");
-uglyf("Loaded %d items from %s\n", slCount(miList), inputManifest);
 for (mi = miList; mi != NULL; mi = mi->next)
     {
     if (endsWith(mi->fileName, ".tgz.dir"))
