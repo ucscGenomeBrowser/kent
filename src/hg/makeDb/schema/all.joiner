@@ -2593,8 +2593,8 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $ensGeneDb,$notEnsemblTranscriptId.ensPep.name chopAfter=. minCheck=0.93
     $gbd,$notEnsemblTranscriptId.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd,$notEnsemblTranscriptId.ensInfo.name minCheck=0.9
-    $ensGeneDb,$notEnsemblTranscriptId.ensemblToGeneName.name minCheck=0.97
-    $ensGeneDb,$notEnsemblTranscriptId.ensemblSource.name minCheck=0.97
+    $ensGeneDb,$notEnsemblTranscriptId.ensemblToGeneName.name minCheck=0.96
+    $ensGeneDb,$notEnsemblTranscriptId.ensemblSource.name minCheck=0.96
     $kgDb.knownToEnsembl.value chopAfter=.
     $kgDb.rgdGene2ToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
