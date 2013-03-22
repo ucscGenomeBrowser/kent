@@ -75,9 +75,21 @@ while (lineFileNextReal(lf, &line))
 		    if (++floatFixCount > 1)
 			errAbort("Simple logic can only handle one float round per line");
 		    double d = sqlDouble(val);
+		    if (d > BIGNUM)
+		       d = BIGNUM;
 		    char fixBuf[16];
 		    safef(fixBuf, sizeof(fixBuf), "%lld", (long long)round(d));
 		    val = row[i] = fixBuf;
+		    }
+		else
+		    {
+		    long long ll = atoll(val);
+		    if (ll > BIGNUM)
+		        {
+			char fixBuf[16];
+			safef(fixBuf, sizeof(fixBuf), "%d",BIGNUM);
+			val = row[i] = fixBuf;
+			}
 		    }
 		}
 	    else if (asTypesIsFloating(type))
