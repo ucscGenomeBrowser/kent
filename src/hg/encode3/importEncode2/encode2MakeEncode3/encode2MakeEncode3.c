@@ -31,7 +31,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-#define FILEINFO_NUM_COLS 6
+#define MANIFESTINFO_NUM_COLS 6
 
 struct manifestInfo
 /* Information on one file */
@@ -76,7 +76,7 @@ struct manifestInfo *manifestInfoLoadAll(char *fileName)
 /* Load all manifestInfos from file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[FILEINFO_NUM_COLS];
+char *row[MANIFESTINFO_NUM_COLS];
 struct manifestInfo *list = NULL, *fi;
 while (lineFileRow(lf, row))
    {
@@ -299,6 +299,7 @@ void processManifestItem(int itemNo, struct manifestInfo *mi, char *sourceRoot,
  * o - Files that are tgz's of multiple fastqs are split into individual fastq.gz's inside
  *     a directory named after the archive. */
 {
+fprintf(manF, "# from %s:\n", mi->fileName);
 /* Make up bunches of components for file names. */
 char *fileName = mi->fileName;
 char sourcePath[PATH_LEN];
@@ -339,6 +340,14 @@ if (endsWith(fileName, ".fastq.tgz"))
     fprintf(f, "\tcd %s; gzip -4 *\n", tmpDir);
     fprintf(f, "\tmv %s %s\n", tmpDir, outDir);
     slNameAddHead(pTargetList, outDir);
+
+    /* Write out revised manifest info */
+    char localFileName[PATH_LEN+4];	// a little extra for .dir
+    safef(localFileName, PATH_LEN, "%s", mi->fileName);
+    chopSuffix(localFileName);
+    strcat(localFileName, ".dir");
+    mi->fileName = localFileName;
+    manifestInfoTabOut(mi, manF);
     }
 else if (endsWith(fileName, ".narrowPeak.gz"))
     {
