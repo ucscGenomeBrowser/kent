@@ -42,16 +42,19 @@ return dyStringCannibalize(&dy);
 char *subForSmaller(char *string, char *oldWay, char *newWay)
 /* Return copy of string with first if any oldWay substituted with newWay. */
 {
+int stringSize = strlen(string);
 int oldSize = strlen(oldWay);
 int newSize = strlen(newWay);
 assert(oldSize >= newSize);
 char *s = stringIn(oldWay, string);
+int remainingSize = strlen(s);
 if (s != NULL)
     {
     memcpy(s, newWay, newSize);
     if (oldSize != newSize)
-        strcpy(s+newSize, s+oldSize);
+	memcpy(s+newSize, s+oldSize, remainingSize - oldSize + 1);
     }
+assert(strlen(string) == stringSize + newSize - oldSize);
 return string;
 }
 
@@ -61,15 +64,12 @@ void encode2GffDoctor(char *inFile, char *outFile)
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 char *row[9];
 FILE *f = mustOpen(outFile, "w");
+int shortenCount = 0;
 while (lineFileRowTab(lf, row))
     {
     /* Fix mitochondria sequence name. */
     if (sameString(row[0], "chrMT"))
         row[0] = "chrM";
-
-    /* Just skip transcript line - they cause trouble later and aren't needed. */
-    if (sameString(row[2], "transcript"))
-        continue;
 
     /* Abbreviate really long transcript IDs and gene IDs. */
     char *tagsToShorten[] = {"transcript_id ", "gene_id ", "gene_ids ", "transcript_ids "};
@@ -96,6 +96,7 @@ while (lineFileRowTab(lf, row))
 		    *e = 0;
 		    }
 		row[8] = replaceFieldInGffGroup(row[8], tag, id);
+		++shortenCount;
 		}
 	    freez(&val);
 	    }
@@ -119,6 +120,7 @@ while (lineFileRowTab(lf, row))
         fprintf(f, "\t%s", row[i]);
     fprintf(f, "\n");
     }
+verbose(1, "shortened %d tags\n", shortenCount);
 }
 
 int main(int argc, char *argv[])
