@@ -322,7 +322,7 @@ cat > trackOne.csh << 'EOF'
     endif
 
     echo "    shortLabel ${cell}${treatmentLabel} $factor" >> $trackDb
-    echo "    longLabel $cell${treatmentLabel} TFBS Uniform Peaks of ${antibody} from ENCODE/${lab}+Analysis" >> $trackDb
+    echo "    longLabel $cell${treatmentLabel} TFBS Uniform Peaks of ${antibody} from ENCODE/${lab}/Analysis" >> $trackDb
     echo "    subGroups tier=a${tier}0 cellType=$cellTag factor=$factorTag lab=$lab">> $trackDb
     if ($?color) then
         echo "    color $color" >> $trackDb
