@@ -11165,6 +11165,11 @@ target SETDB1
 treatment None
 view Peaks
 
+metaObject wgEncodeAwgTfbsUniform
+objType composite
+composite wgEncodeAwgTfbsUniform
+expVars lab, dataType, cell, antibody, treatment
+
 metaObject wgEncodeAwgTfbsUtaA549CtcfUniPk
 objType table
 antibody CTCF
@@ -12927,4 +12932,4 @@ target CTCF
 treatment None
 view Peaks
 
-# MAGIC: 684000174
+# MAGIC: -1539552377
