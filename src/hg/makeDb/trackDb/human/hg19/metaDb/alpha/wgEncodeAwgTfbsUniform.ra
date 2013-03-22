@@ -1,3 +1,8 @@
+metaObject wgEncodeAwgDnaseUniform
+objType composite
+composite wgEncodeAwgDnaseUniform
+expVars lab, dataType, cell, antibody, treatment
+
 metaObject wgEncodeAwgTfbsBroadDnd41CtcfUniPk
 objType table
 antibody CTCF
