@@ -1,8 +1,3 @@
-metaObject wgEncodeAwgDnaseUniform
-objType composite
-composite wgEncodeAwgDnaseUniform
-expVars lab, dataType, cell, antibody, treatment
-
 metaObject wgEncodeAwgTfbsBroadDnd41CtcfUniPk
 objType table
 antibody CTCF
@@ -12932,4 +12927,4 @@ target CTCF
 treatment None
 view Peaks
 
-# MAGIC: 1863259001
+# MAGIC: 684000174
