@@ -841,6 +841,13 @@ wgEncode 1
     subGroups tier=a10 cellType=a1GM12878 factor=EBF1 lab=HudsonAlpha
     color 153,38,0
 
+    track wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk
+    parent wgEncodeAwgTfbsUniform off
+    shortLabel GM12878 EGR1
+    longLabel GM12878 TFBS Uniform Peaks of Egr-1 from ENCODE/HudsonAlpha+Analysis
+    subGroups tier=a10 cellType=a1GM12878 factor=EGR1 lab=HudsonAlpha
+    color 153,38,0
+
     track wgEncodeAwgTfbsHaibGm12878Elf1sc631V0416101UniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 ELF1
