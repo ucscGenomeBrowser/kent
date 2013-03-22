@@ -20206,3 +20206,71 @@ XXX Wed Mar  6 12:28:53 PST 2013
 
 
 ##############################################################################
+# DBNSFP (DONE 3/22/13 angie)
+    # The database of non-synonymous functional predictions (dbNSFP) contains
+    # precomputed scores from a wide variety of tools on all non-synon variants
+    # of all genomic positions in the CDS of Gencode transcripts.  Pick out
+    # some interesting subsets of its 52 columns and translate into bigBed and
+    # bigWig files that can be joined with users' variants by the Variant
+    # Annotation Integrator (#6152).
+    screen -S dbNSFP -t dbNSFP
+    mkdir /hive/users/angie/dbNSFP2.0
+    cd /hive/users/angie/dbNSFP2.0
+    wget http://dbnsfp.houstonbioinformatics.org/dbNSFPzip/dbNSFP2.0.zip
+    unzip dbNSFP2.0.zip
+
+    # Run a perl script that digests the 52-column input files into several independent
+    # bed3+ files:
+    ~/kent/src/hg/utils/dbNsfpToBed.pl dbNSFP*_variant.chr*
+    # There are a bunch of mild warnings like this:
+#FYI: >3 rows (5) for {chr1, 1221327, ENST00000379110}; removing less-informative duplicates.
+    # The script has a workaround and follow-up error check, but it would be
+    # good to report the cases to dbNSFP (see script for details).
+
+    wc -l *.bed
+#    2466469 dbNsfpGerpNr.bed
+#   22275488 dbNsfpGerpRs.bed
+#     231348 dbNsfpInterPro.bed
+#   24810552 dbNsfpLrt.bed
+#   28654727 dbNsfpMutationAssessor.bed
+#   26188935 dbNsfpMutationTaster.bed
+#   27629124 dbNsfpPolyPhen2.bed
+#   31826285 dbNsfpSeqChange.bed
+#   28302771 dbNsfpSift.bed
+#     474262 dbNsfpUniProt.bed
+
+    # Are all subsets present on all chroms?
+    foreach f (*.bed)
+      echo $f
+      cut -f 1 $f | uniq -c > $f:r.chromHist
+    end
+    wc -l *.chromHist
+#  24 dbNsfpGerpNr.chromHist
+#  24 dbNsfpGerpRs.chromHist
+#  24 dbNsfpInterPro.chromHist
+#  24 dbNsfpLrt.chromHist
+#  24 dbNsfpMutationAssessor.chromHist
+#  24 dbNsfpMutationTaster.chromHist
+#  24 dbNsfpPolyPhen2.chromHist
+#  24 dbNsfpSeqChange.chromHist
+#  23 dbNsfpSift.chromHist
+#  24 dbNsfpUniProt.chromHist
+    # -- nope, dbNsfpSift has no chrY.  SIFT limitation??
+
+    # Convert Gerp scores to bigWig
+    bedGraphToBigWig dbNsfpGerpNr.bed /hive/data/genomes/hg19/chrom.sizes dbNsfpGerpNr.bw
+    bedGraphToBigWig dbNsfpGerpRs.bed /hive/data/genomes/hg19/chrom.sizes dbNsfpGerpRs.bw
+
+    # Convert remaining files to bigBed
+    foreach f (dbNsfp[^G]*.bed)
+      set track = $f:r
+      echo $track
+      set autoSql = ~/kent/src/hg/lib/$track.as
+      bedToBigBed -type=bed3+ -as=$autoSql -tab \
+        $f /hive/data/genomes/hg19/chrom.sizes $track.bb
+    end
+
+    # Clean up: remove large files that can be re-unzipped or regenerated:
+    rm -f search_db* dbNS*_variant.chr* dbNs*.bed
+
+##############################################################################

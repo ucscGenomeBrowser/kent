@@ -8,6 +8,7 @@
 #include "md5.h"
 #include "hex.h"
 #include "sqlNum.h"
+#include "encode3/encode3Valid.h"
 
 char *version = "1.0";
 char *workingDir = ".";
@@ -142,25 +143,6 @@ return fieldCount;
 
 }
 
-
-char *calcValidKey(char *md5Hex, long long fileSize)
-/* calculate validation key to prevent faking */
-{
-if (strlen(md5Hex) != 32)
-    errAbort("Invalid md5Hex string: %s\n", md5Hex);
-long long sum = 0;
-sum += fileSize;
-while (*md5Hex)
-    {
-    unsigned char n = hexToByte(md5Hex);
-    sum += n;
-    md5Hex += 2;
-    }
-int vNum = sum % 10000;
-char buf[256];
-safef(buf, sizeof buf, "V%d", vNum);
-return cloneString(buf);
-}
 
 struct hash *makeFileNameHash(struct slRecord *recs, int fileNameIndex)
 /* make a hash of all records by fileName */
@@ -539,7 +521,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
 		{
 		vMd5Hex   = vRec->words[v_md5_sum_i];
 		vValidKey = vRec->words[v_valid_key_i];
-		char *checkValidKey = calcValidKey(vMd5Hex, vFileSize);
+		char *checkValidKey = encode3CalcValidationKey(vMd5Hex, vFileSize);
 		if (sameString(vValidKey,"ERROR")) 
 		    {
 		    dataMatches = FALSE;
@@ -569,7 +551,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     	else
 	    mMd5Hex = md5HexForFile(mFileName);
 
-	mValidKey = calcValidKey(mMd5Hex, mFileSize);
+	mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
 
 	char *mFormat = rec->words[m_format_i];
 	boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.

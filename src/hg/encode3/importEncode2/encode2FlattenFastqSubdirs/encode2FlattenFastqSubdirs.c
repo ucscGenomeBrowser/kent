@@ -6,6 +6,7 @@
 #include "hash.h"
 #include "options.h"
 #include "portable.h"
+#include "errCatch.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -78,7 +79,13 @@ if (lineFileNext(lf, &line, NULL))
 	    }
 	}
     }
-lineFileClose(&lf);
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    lineFileClose(&lf);	// This throws!
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    warn("lineFileClose warning: %s", errCatch->message->string);
+errCatchFree(&errCatch);
 return result;
 }
 
