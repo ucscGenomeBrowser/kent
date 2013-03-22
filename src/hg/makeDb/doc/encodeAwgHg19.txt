@@ -186,6 +186,7 @@ cat  << 'EOF' > link.csh
     cd /hive/data/genomes/hg19/bed
     mkdir -p wgEncodeAwgTfbsUniform
     cd wgEncodeAwgTfbsUniform
+    set build = `pwd`
 
     mkdir ebi; cd ebi
     # set user = encode-box-01
@@ -215,6 +216,7 @@ cat  << 'EOF' > link.csh
     #regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
     #regClusterAttachMetadataToTableOfTables -antibodyTarget hg19 partial.fixed.table \
         #withDupes.target.table -verbose=3
+    # NOTE: partial.fixed.table corrected HAIB GM12878 Egr-1 to Rep3, but lacks controls
 
     # 91 cell types, 201 antibodies (177 targets), 28 treatments, 9 labs
     ######################
@@ -231,7 +233,7 @@ cat > nameTable.csh << 'EOF'
     set exp = $2
     set vars = `echo $exp | \
         sed -e 's/Control.*AlnRep1//' -e 's/StdAlnRep1//' -e 's/AlnRep1//' -e 's/wgEncode//' \
-            -e 's/Tfbs//' -e 's/BroadHistone/Broad/' -e 's/OpenChromChip/Uta/'`
+            -e 's/AlnRep3//' -e 's/Tfbs//' -e 's/BroadHistone/Broad/' -e 's/OpenChromChip/Uta/'`
     set table = ${base}${vars}UniPk
     echo $table
 'EOF'
@@ -320,7 +322,7 @@ cat > trackOne.csh << 'EOF'
     endif
 
     echo "    shortLabel ${cell}${treatmentLabel} $factor" >> $trackDb
-    echo "    longLabel $cell${treatmentLabel} TFBS Uniform Peaks of ${antibody} from ENCODE/${lab}+Analysis" >> $trackDb
+    echo "    longLabel $cell${treatmentLabel} TFBS Uniform Peaks of ${antibody} from ENCODE/${lab}/Analysis" >> $trackDb
     echo "    subGroups tier=a${tier}0 cellType=$cellTag factor=$factorTag lab=$lab">> $trackDb
     if ($?color) then
         echo "    color $color" >> $trackDb
@@ -419,7 +421,6 @@ cat > loadTfbs.csh << 'EOF'
     set composite = ${base}Uniform
 
     set outdir = downloads
-    rm -f $outdir
     mkdir -p $outdir
 
     @ ct = 1
@@ -459,6 +460,8 @@ cat > loadTfbs.csh << 'EOF'
     grep metaObject *.metaDb.ra | grep -v Uchi | wc -l
     # 694
     # NOTE:  lost one here -- need to investigate.  And remove UChicago from metadata.
+    # The lost file (from below): wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk 
+    # It is a single replicate, Rep3 (?!), so couldn't be located in metadata as Rep1
 
     set trackDb = ~/kent/src/hg/makeDb/trackDb
     cp wgEncodeAwgTfbsUniform.ra human/hg19/$trackDb
@@ -481,7 +484,7 @@ cat > loadTfbs.csh << 'EOF'
     # grab track description from previous version on the Analysis hub
     # - edit for conformance to browser style
     # - update with new counts for cell types, etc.
-    # - have Anshul review
+    # - have Anshul update (done)
     mkdir html
     cd html
     wget -nd -np http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hg19/uniformTfbs.html
@@ -520,6 +523,42 @@ cat  << 'EOF' > link.csh
 'EOF'
     csh link.csh
     cd $dir/wgEncodeAwgTfbsUniform/releaseLatest
+
+    # add files.txt, md5sum.txt
+    encodeMkFilesList hg19 -md5 
+    # wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk.narrowPeak.gz is an orphaned file, there is no matching met adata
+
+    # add in missing dataset
+    cd $build
+    grep Gm12878Egr1 partial.table > haibFix.table  
+    # edit to change to Rep3
+    csh loadTfbs.csh haibFix.table >&! loadHaib.out
+    cp wgEncodeAwgTfbsUniform.metaDb.ra haibFix.metaDb.ra
+    # edit out all but new entry
+    mdbUpdate hg19 haibFix.metaDb.ra
+    mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.metaDb.new.ra
+    diff wgEncodeAwgTfbsUniform.metaDb.new.ra $trackDb/human/hg19/metaDb/alpha
+    # just the HAIB fix
+    pushd $trackDb/human/hg19/metaDb/alpha
+    mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.ra
+    cd $dir/wgEncodeAwgTfbsUniform/releaseLatest
+    encodeMkFilesList hg19 -md5 
+
+    # add composite to metaDb (use wgEncodeAwgDnaseUniform as example)
+
+    # fix up main downloads dir to look like releaseLates
+
+    # add README
+    sed 's/wgEncodeHaibTfbs/wgEncodeAwgTfbsUniform/' $dir/wgEncodeHaibTfbs/README.txt > $dir/wgEncodeAwgTfbsUniform/README.txt
+    # edit
+    cp $dir/wgEncodeTfbsUniform/README.txt $dir/wgEncodeAwgTfbsUniform/releaseLatest
+
+    # get file list for pushQ
+    cd ~/kent/src/hg/makeDb/doc/encodeDccHg19
+    /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgTfbsUniform 1 > wgEncodeAwgTfbsUniform.release1.notes
+
+    # QA preview (vs. redmine issue)
+    encodeQaInit hg19 wgEncodeAwgTfbsUniform 1 10042 -t 
 
 
 ###############################################

@@ -1,0 +1,544 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>ENCODE Resources and Frequently Asked Questions</title>
+    <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+    <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+  </head>
+
+  <body>
+    <!--#include virtual="/inc/encodeProject.topbar.html"-->
+
+    <div class="encodeHeader">
+      <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+      <span class="txt">ENCODE Resources and Frequently Asked Questions</span>
+    </div>
+    <div class="wrapper">
+      <div class="bar"><h4 class="title">Helpful ENCODE Resources:</h4></div>
+      <div class="content">
+        
+        <!--Content Resources Section Links-->
+        <UL>
+          <p>
+            <LI><a href="/ENCODE/usageResources.html" TARGET=_blank>Tutorials and User's Guide</a> 
+            <LI><a href="/ENCODE/search.html" TARGET=_blank>Track and File Search</a>
+            <LI><strong>Human:  </strong><a href="/ENCODE/dataMatrix/encodeDataMatrixHuman.html" TARGET=_blank>Experiment Matrix</a>,
+              <a href="/ENCODE/dataSummary.html" title="formerly Data Summary" TARGET=_blank>Experiment List</a>,
+              <a href="/ENCODE/downloads.html" TARGET=_blank>Downloads</a> and
+              <a href="/ENCODE/cellTypes.html" TARGET=_blank>Cell Types</a> 
+            <LI><strong>Mouse:  </strong><a href="/ENCODE/dataMatrix/encodeDataMatrixMouse.html" TARGET=_blank>Experiment Matrix</a>,
+              <a href="/ENCODE/dataSummaryMouse.html"title="formerly Data Summary" TARGET=_blank>Experiment List</a>,
+              <a href="/ENCODE/downloadsMouse.html" TARGET=_blank>Downloads</a> and
+              <a href="/ENCODE/cellTypesMouse.html" TARGET=_blank>Cell Types</a>
+            <LI><a href="/ENCODE/antibodies.html" TARGET=_blank>ENCODE Antibodies</a> and
+              <a href="/ENCODE/otherTerms.html" TARGET=_blank>ENCODE Registered Experiment Variables</a>
+            <LI><a href="/FAQ/FAQformat.html#ENCODE" TARGET=_blank>File Formats</a> and
+              <a href="/ENCODE/dataStandards.html" TARGET=_blank>Data Standards</a> and
+              <a href="/ENCODE/softwareTools.html" TARGET=_blank>Software Tools</a>
+            <LI> <a href="/ENCODE/pubs.html" TARGET=_blank>Publications</a>  and
+              <a href="http://www.nature.com/encode/" TARGET=_blank>Nature ENCODE Explorer</a> and
+              <a href="https://main.g2.bx.psu.edu/" TARGET=_blank>Galaxy Biomedical Tools</a> 
+            <LI><a href="http://genome.ucsc.edu/FAQ/" TARGET=_blank>UCSC Genome Browser FAQ Page</a> and
+              <a href="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en" TARGET=_blank>Searchable Google Groups Mailing List</A>  
+              <p>
+        </UL>
+
+        <!--- Content Resources Section Search Forms -->
+        <FORM name="googleForm0" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm0.q.value=document.googleForm0.qq.value+'   site:genome.ucsc.edu/ENCODE/';">
+          Search the entire ENCODE website: &nbsp;
+          <input type="hidden" name="q" value="">
+          <input type="hidden" name="num" value="10">
+          <input type="hidden" name="filter" value="0">
+          <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+          <input TYPE="submit" VALUE="Submit">
+        </FORM>
+        <P>
+          <FORM name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/';">
+            Search the entire UCSC Genome Browser website: &nbsp;
+            <input type="hidden" name="q" value="">
+            <input type="hidden" name="num" value="10">
+            <input type="hidden" name="filter" value="0">
+            <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+            <input TYPE="submit" VALUE="Submit">
+          </FORM>
+        <P>
+          <FORM name="googleForm2" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:lists.soe.ucsc.edu/pipermail/genome';">
+            Search the UCSC Genome mailing list archives: &nbsp;        
+            <input type="hidden" name="q" value="">
+            <input type="hidden" name="num" value="10">        
+            <input type="hidden" name="filter" value="0">
+            <INPUT TYPE=text name=qq size=30 maxlength=255 value="ENCODE">
+            <input TYPE="submit" VALUE="Submit">        
+          </FORM>
+        <P>
+      </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content FAQ Question Index section------------------------------------------------------>
+    <div class="wrapper">
+      <A NAME="FAQ"></A>
+      <div class="bar"><h4 class="title">ENCODE Frequently Asked Questions:</h4></div>
+      <div class="content">
+        <!--Content FAQ Question items-->
+        <p>
+          <LI><A HREF="#release0">How do I display ENCODE data from GEO in the genome browser?</A>
+          <LI><A HREF="#release1">Which cell types are used by ENCODE?</A>
+          <LI><A HREF="#release2">Where can I find the ENCODE growth protocol for a specific cell type?</A>
+          <LI><A HREF="#release3">Has transcription factor xxx been mapped by ENCODE?</A>
+          <LI><A HREF="#release4">How do I find overlaps between my own ChIP-seq regions and available ENCODE transcription factors?</A>
+          <LI><A HREF="#release5">What is the difference between a file xxx and the related file xxxV2?</A>
+          <LI><A HREF="#release6">How do I extract information about an ENCODE experiment from the filename?</A>
+          <LI><A HREF="#release7">How do I learn more about different ENCODE file formats?</A>
+          <LI><A HREF="#release8">What is the definition of &quot;score&quot; in ENCODE tables?</A>
+          <LI><A HREF="#release9">How do I download ENCODE histone data in BED format?</A> 
+          <LI><A HREF="#release10">What does the Name column represent for DNase clustered BED files?</A>
+          <LI><A HREF="#release11">How do I find the meaning of a column of a BED file?</A>
+          <LI><A HREF="#release12">Is there a service providing ENCODE data on a hard drive?</A>
+          <LI><A HREF="#release13">Where can I find ENCODE papers?</A>
+          <LI><A HREF="#release14">Can I convert WIG files into a variableStep format to use with SitePro?</A>
+          <LI><A HREF="#release15">What does xxx mean in a file in hgdownload/encodeDCC/hg19/wgEncode*?</A>
+          <LI><A HREF="#release16">Which cell protocols were used in my track of interest?</A>
+        </p>
+        <p>
+          <A HREF="/ENCODE/contacts.html"TARGET=_blank>Questions and feedback welcome</A>.
+        </p>
+      </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--START FAQ Content Tables------------------------------------------------------->
+    <A NAME="release0"></A>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">GEO DATA</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            How do I display ENCODE data from GEO in the genome browser?
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            Please avoid loading GEO data as a custom track! Rather since nearly all ENCODE data at GEO
+            are already hosted as tracks on the UCSC browser load the existing corresponding track.
+          </P>
+          <P>
+            Take note of the GEO sample accession (GSM) number and enter it into the Track Search tool
+            accessible from the left side of the ENCODE portal page by clicking <a href="/ENCODE/search.html" TARGET=_blank>Search</a>, for example
+            <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hgt_tSearch=1&tsCurTab=simpleTab&tsSimple=GSM999240" TARGET=blank>GSM999240</a>.
+            Or use the Advanced Track Search page and select &quot;GEO sample accession&quot; from the pull down menu displaying
+            &quot;Cell, tissue or DNA sample&quot.  Click the box next to your track resulting from the
+            search and the &quot;View in Browser&quot; button.
+          </P>
+          <P>
+            If you have data that is not already in the browser we recommend converting your BED files to
+            <a href="../../goldenPath/help/bigBed.html" TARGET=_blank>bigBed format</a>.
+            You could download our source tools for converting from BED to bigBed (as described in the previous link)
+            or use the tools at the <a href="http://galaxyproject.org/" TARGET=_blank>Galaxy</a> website. For questions regarding
+            Galaxy you will have to contact them directly.
+        </div><!--end content-->
+    </div><!--end wrapper-->
+    
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release1"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE CELL TYPES</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            Which cell types are used by ENCODE? 
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            On the left side of the <a href="/ENCODE/" TARGET=_blank>ENCODE portal page</a>
+            under <b><em>Human</em></b> and <b><em>Mouse</em></b> are links to the cell types used in all ENCODE experiments.
+        </div><!--end content-->
+    </div><!--end wrapper-->
+    
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release2"></A>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE PROTOCOLS</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            Where can I find the ENCODE growth protocol for a specific cell type? For example RCC 7860?
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            To find a specific protocol, for example for human RCC 7860 cells, from the ENCODE portal navigate 
+            to the <a href="/ENCODE/cellTypes.html" TARGET=_blank>Human Cell Types</a> page. Under the "Documents"
+            column for RCC 7860, click the link to connect to see the growth protocol named after the lab that
+            provided the document, in this case &quot;Crawford&quot;.
+          <P>
+            Another path to ENCODE protocols is from the link <a href="/ENCODE/protocols" TARGET=blank>http://genome.ucsc.edu/ENCODE/protocols/</a>.
+            Navigate to the cell protocols and then human directories to find the link to the
+            same RCC 7860 protocol file as linked on the above <a href="/ENCODE/cellTypes.html" TARGET=_blank>Human Cell Types</a> page.
+          <P>
+            If you have further questions about a protocol contact the lab that registered the protocol.
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->    
+    <A NAME="release3"></A>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">TRANSCRIPTION FACTORS</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            Has transcription factor xxx been mapped by ENCODE? 
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            A quick way to view the list of transcription factors mapped by ENCODE is to view the ChIP-seq
+            matrix for either <a href="http://genome.ucsc.edu/ENCODE/dataMatrix/encodeChipMatrixHuman.html" TARGET=_blank>human</a> 
+            or <a href="http://genome.ucsc.edu/ENCODE/dataMatrix/encodeChipMatrixMouse.html" TARGET=_blank>mouse</a>.
+            Targets are listed horizontally across the top, indicating available mapped transcription factor data.
+            Clicking on the green highlighted boxes will bring you to experiment data specific to the
+            corresponding cell type and target.
+          <P>
+            Another option is to use the <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hgt_tSearch=1&tsCurTab=advancedTab"
+                                            TARGET=blank>Track Search</a> or <a href="http://genome.ucsc.edu/cgi-bin/hgFileSearch" TARGET=blank>FileSearch</a>
+            tools and to search the &quot;Antibody or target protein&quot; field to see if the desired transcription factor is listed.
+        </div><!--end content-->                                                                                                                                                                          </div><!--end wrapper-->                                                                                                                                                                                                                                                         
+    <!--Content Tables------------------------------------------------------->      
+    <A NAME="release4"></A>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">MAPPING A CUSTOM TRACK TO TRANSCRIPTION FACTORS</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            How do I find overlaps between my own ChIP-seq regions and available ENCODE transcription factors?
+          <P>                                                                                                                                                                                                 <B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+            By using the <a href="http://genome.ucsc.edu/cgi-bin/hgTables" TARGET=_blank>Table Browser tool</a>
+            you can add your ChIP-seq information as a custom track and then use the &quot;intersection&quot; 
+            feature to intersect the Txn Factor ChIP track table listed under the Regulation group with your
+            custom track. Note, your custom track should contain ChIP-seq regions in BED format, for more information
+            visit our <a href="http://genome.ucsc.edu/goldenPath/help/customTrack.html" TARGET=_blank>custom tracks</a> page.
+          <P>
+            If you are unfamiliar with the Table Browser, please refer to our
+            <a href="http://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html" TARGET=_blank>help page</a> and the
+            section on <a href="http://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html#Intersection" TARGET=_blank>intersecting data</a>.
+        </div><!--end content-->                                                                                                                                                                          </div><!--end wrapper-->                                                                                                                                                                                                                                                         
+    <!--Content Tables------------------------------------------------------->      
+    <A NAME="release5"></A>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">FILES NAMED xxxV2</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            What is the difference between a file xxx and the related file xxxV2?  Why is the xxx file not displayed in the browser?
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            For files named similar to xxxV2, often the &quot;V2&quot; refers to a second version that revokes earlier  versions
+            that are therefore not displayed in the browser.  Revoked files are still available for download, but they  will
+            be indicated as &quot;replaced &quot; or &quot;revoked&quot; in the related metadata file named &quot;files.txt&quot;
+            present in the corresponding download directory.
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release6"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE METADATA AND FILENAMES</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            How do I extract information about an ENCODE experiment from the filename?
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            Do not try it!  While ENCODE filenames have some metadata embedded, they can not be relied upon to be unique.
+            Rather use the file's metadata, for example in &quot;files.txt&quot;, or access metadata in the following places:
+            <ol>By opening the mentioned related &quot;files.txt&quot; metadata file located in each track's corresponding download directory.
+              <br/>By clicking the blue down-arrow next to each subtrack listed on a track's Track Settings page.
+              <br/>By using <a href="/ENCODE/search.html" TARGET=_blank>Track Search or File Search</a> to filter files by metadata.
+              <br/>By using the <a href="http://genome.ucsc.edu/cgi-bin/hgTables" TARGET=_blank>Table Browser tool</a>
+              and setting &quot;Group&quot; to &quot;All Tables&quot; and selecting the &quot;metaDb&quot; table. By clicking
+              the &quot;describe table schema&quot; button you can learn more about the metaDb table.
+              <br/>By using the <a href="http://genome.ucsc.edu/goldenPath/help/mysql.html" TARGET=_blank>public MySQl database</a>
+              to query the metaDb table for each database.
+            </ol>    
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release7"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE FILE FORMATS</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            How do I learn more about different ENCODE file formats? For example what is the difference
+            between a file.bed and a file.bed9 in the ENCODE methylation data? 
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            By clicking the <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#ENCODE"
+                               TARGET=_blank>File Formats</a>
+            link from the ENCODE portal page you can reach a list of various file formats used in ENCODE.
+            Every ENCODE file has metadata included under a &quot;files.txt&quot; file in the related downloads page.
+            From the <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/">ENCODE methylation's download page</a>,
+            in the <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/files.txt">files.txt</a> 
+            file, a line after the specific bed9 file in question, wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9,
+            reads 'objstatus=replaced'. This metadata indicates this bed9 file was preliminary data that has
+            since been replaced. A similar note in the automatically displayed README file states:
+            &quot;WARNING - Revoked and replaced data files may be present in this directory.&quot;
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release8"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE SCORE DEFINITION</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            What is the definition of &quot;score&quot; in ENCODE tables? 
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            The score (between 0-1000) is what determines how darkly an item is
+            displayed in the browser (with 1000 being black).
+            The darkness of an item's box is proportional to the maximum signal strength observed in
+            any cell line.
+          <P>
+            To find out exactly how score has been calculated, contact the lab that created the data
+            determining signal strength. There are often several links to authors' labs in the credits
+            section for each track at the bottom of a track's description page. 
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release9"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE DATA IN BED FORMAT</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            How do I download ENCODE histone data in BED format? From the Table Browser I
+            can select to download the file in BED format, but I am limited to just a few
+            thousand lines. When I looked in the ENCODE Downloads directory I could only find
+            the path to a bigWig file, for example wgEncodeBroadHistoneGm12878H3k27acStdSig
+            for human build hg19.
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            The ENCODE BED files you are looking to download are the 'peak calls', which are
+            in the extended broadPeak or narrowPeak formats, described
+            <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#ENCODE">here</a>. For example,
+            within the database mentioned (H3K27ac histone mark in GM12878 cells) there is a BED
+            representation in the file: &quot;wgEncodeBroadHistoneGm12878H3k27acStdPk.broadPeak.gz&quot;.
+            Using the <a href="http://www.genome.ucsc.edu/ENCODE/search.html">File Search</a> tool you
+            can use the setting &quot;Data Format: Peaks Broad&quot; to narrow your results
+            to only these types of files.</p>    
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release10"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE BED FILE FORMAT</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            What does the name column represent for DNase clustered BED files? 
+            I downloaded the ENCODE BED file wgEncodeRegDnaseClustered.bed from the DNase
+            footprinting assay. However, I am having trouble understanding the 4th column in
+            this file. Usually this column, as I understand from the file format FAQ page,
+            is assigned to name.
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            For the DNase cluster BED files, the name field represents the number of items
+            in the cluster. To find out more information about each cluster, you can click
+            on the item in the browser image and it will take you to a details page that
+            will list all of the items in the cluster and the cell lines.
+            <a href="http://genome.ucsc.edu/cgi-bin/hgc?db=hg19&amp;c=chr21&amp;o=33032260&amp;t=33033430&amp;g=wgEncodeRegDnaseClustered&amp;i=58">Here</a>
+            is an example details page for a DNase item on chromosome 21. There are 58
+            items in this cluster and you can see the name value is 58.
+          </P>
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release11"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE ChIP-seq BED FILES</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            How do I find the meaning of a column of a BED file?
+            I have downloaded ENCODE Chip-Seq BED files that have the following format:</p>
+          
+          <p>chr21 9825311 9827738 . 1000 . 4.51792 256.60845 261.34671 1809</p>
+          
+          <p>What is the meaning of the information from the forth field forward?
+          </P>
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            ENCODE has a number of <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#ENCODE">ENCODE-specific formats</a>.
+            ENCODE ChIP-seq files are typically stored in the ENCODE
+            <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format12">narrowPeak</a> format. 
+            This format extends BED6 to include fields for signalValue, two
+            measurements of statistical significance (pValue and qValue), and the offset of
+            a single base 'point source' peak within the region. The dots are used for name
+            and strand which are not applicable.
+          </P>
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release12"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">DOWNLOAD ALL ENCODE DATA</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            Is there a service providing ENCODE data on a hard drive? What is the total
+            data volume? We have been trying FTP, but it takes too much bandwidth and
+            time.
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            The total volume of ENCODE data is greater than 31 TB. Unfortunately, it is not
+            possible for you to obtain a disk copy, however we are working on a
+            <a href="http://rgrossman.com/2013/03/20/a-tool-for-keeping-big-data-in-sync/">protocol</a>
+            which should help our users get much faster download rates. It is on our list of
+            things to do, so we will not be able to give you a time estimate as to when this
+            tool will be available.
+          </P>
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release13"></A>
+    <!--outer table is for border purposes-->        
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE PAPERS</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            Where can I find ENCODE papers?
+            I would like a list of the principal ENCODE Papers, can you send a link to a
+            list of a core 30 papers detailing ENCODE's results?
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            On the left side of the <a href="/ENCODE/">ENCODE portal page</a> you will find
+            a link to titled Publications that will provide access to lists of
+            ENCODE-funded Publications and Publications from non-ENCODE Authors.
+          </P>
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release14"></A>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">CONVERTING WIG FILES TO VARIABLESTEP</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            Can I convert WIG files into a variableStep format to use with SitePro?
+            I am trying to use a tool called SitePro within Cistrome. This tool uses WIG
+            and BED files to compute score profiles on the BED regions. I have downloaded,
+            through Cistrome/Galaxy, the ENCODE WIG files which have BED-like
+            structure:
+          </P>
+          <P>
+            chr1 3002700 3002800 0.17
+          </P>
+          <P>
+            However, this WIG file's BED-like structure is not accepted by SitePro. Is there a
+            way to format the WIG files as variablestep and not BED-like?
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            There is not a way to convert formats using the Genome Browser
+            directly, but you could convert formats using a script. There is an example
+            script in our genomewiki,
+            <a href="http://genomewiki.ucsc.edu/index.php/Wiggle_BED_to_variableStep_format_conversion">here</a>.
+          </P>
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release15"></A>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">UNIQUE ENCODE DATA DETAILS</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            What does xxx mean in a file in hgdownload/encodeDCC/hg19/wgEncode*?
+            For example downloadable files in the wgEncodeCaltechRnaSeq/ directory 
+            have a gene_id  format like gene_id &quot;GM12878-rep1.1045777&quot;
+            where the first part is the cell type.
+            Would you know what does the last number 1045777 means?
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            On the top of the page for each of the download directories you are
+            visiting there is a README.txt file that is automatically displaying.
+            A link is provided that will bring you to a user interface enabling
+            filtering files by cell type and other parameters, as well as including
+            additional information such as release status, restriction dates, track
+            description, methods, and metadata that can answer such questions.
+          </P>
+          <P>
+            For example in the displaying README.txt file at the top of the page in the
+            <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/">Caltech RNA-seq directory</a>
+            you can find the following written link:
+            &quot;http://genome.ucsc.edu/cgi-bin/hgFileUi?db=hg19&g=wgEncodeCaltechRnaSeq&quot;
+          </P>
+          <P>
+            By navigating to the above
+            <a href="http://genome.ucsc.edu/cgi-bin/hgFileUi?db=hg19&g=wgEncodeCaltechRnaSeq">Caltech RNA-seq Downloadable Files</a>
+            page, you can scroll to the bottom (or click the &quot;Description&quot; button on the top
+            right corner) and read the Track Description's Methods section. In the &quot;Data Processing and
+            Analysis&quot; section there is information explaining how the numbers in gene_id,
+            &quot;GM12878-rep1.####&quot; represent de novo identifiers output by Cufflinks software.
+            At the very bottom of the page is a &quot;Credits&quot; section where contacts
+            are listed. You should send remaining process specific questions about the data
+            you are investigating to the appropriate contact listed.
+          </P>
+        </div><!--end content-->
+    </div><!--end wrapper-->
+
+    <!--Content Tables------------------------------------------------------->
+    <A NAME="release16"></A>
+    <!--outer table is for border purposes-->
+    <div class="wrapper">
+      <TD ALIGN="right"><A HREF="#FAQ"><IMG SRC="../../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+        <div class="bar"><h4 class="title">ENCODE PROTOCOLS</h4></div>
+        <div class="content">
+          <P>
+            <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+            Which cell protocols were used in my track of interest? Did the Open Chromatin
+            ENCODE tracks use standard ENCODE cell protocols?
+          <P>
+            <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+            Standard growth protocols were used for all ENCODE experiments, including the
+            Open Chromatin ENCODE tracks. A directory of all ENCODE protocols is available here:
+            <a href="/ENCODE/protocols" TARGET=blank>http://genome.ucsc.edu/ENCODE/protocols/<a>.
+        </div><!--end content-->      
+    </div><!--end wrapper-->
+
+    <!--END FAQ Content Tables------------------------------------------------------->
+  </body>
+</html>
