@@ -94,19 +94,19 @@ while (lineFileNextReal(lf, &line))
 	    errAbort("%d fields in first line, %d line %d of %s",  fieldCount, wordCount,
 		lf->lineIx, lf->fileName);
 	}
-    if (fieldCount >= 5)
+    if (fieldCount > 4)
         {
 	char *score = row[4];
 	char *dot = strchr(score, '.');
 	if (dot) *dot = 0;  /* Chop off floating point. */
 	}
-    if (fieldCount >= 6)
+    if (fieldCount > 6)
         {
 	char *thickStart = row[6];
 	if (sameString(thickStart, "."))
 	    row[6] = row[1];	    /* Set it to same as chromStart */
 	}
-    if (fieldCount >= 7)
+    if (fieldCount > 7)
         {
 	char *thickEnd = row[7];
 	if (sameString(thickEnd, "."))
