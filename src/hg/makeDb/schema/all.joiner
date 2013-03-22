@@ -32,7 +32,7 @@ set dm dm1,dm2,dm3
 set dp dp2,dp3
 set droEre droEre1
 set droMoj droMoj1,droMoj2
-set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1,droPer1,droSec1,droWil1
+set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1,droPer1,droSec1
 set droVir droVir1,droVir2
 set droYak droYak1,droYak2
 set echTel echTel1
@@ -56,7 +56,7 @@ set melInc melInc1
 set melHap melHap1
 set melUnd melUnd1
 set micMur micMur1
-set mm mm6,mm7,mm8,mm9,mm10
+set mm mm7,mm8,mm9,mm10
 set monDom monDom1,monDom4,monDom5
 set musFur musFur1
 set myoLuc myoLuc1,myoLuc2
@@ -1950,7 +1950,7 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.oldId minCheck=0.5 exclude=
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
     $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
-    hg19.kg5ToKg6.newId exclude=
+    $kgDb.kg5ToKg6.newId exclude=
     $kgDb.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
