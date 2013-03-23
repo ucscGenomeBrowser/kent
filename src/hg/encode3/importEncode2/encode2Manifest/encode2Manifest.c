@@ -2,9 +2,11 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "intValTree.h"
 #include "options.h"
+#include "portable.h"
+#include "intValTree.h"
 #include "encode/encodeExp.h"
+#include "encode3/encode3Valid.h"
 #include "mdb.h"
 
 char *expDb = "hgFixed";
@@ -219,7 +221,11 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 		continue;
 		}
 	    ++foundFileCount;
-	
+	    time_t updateTime = fileModTime(path); 
+	    char *validationKey = "n/a";
+	    if (md5sum != NULL)
+	        validationKey = encode3CalcValidationKey(md5sum, size);
+
 	    /* Output each field. */ 
 	    fprintf(f, "%s/%s/%s\t", genome, composite, fileName);
 	    fprintf(f, "%s\t", guessFormatFromFileName(fileName));
@@ -228,7 +234,10 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	    fprintf(f, "%s\t", naForNull(replicate));
 	    fprintf(f, "%s\t", guessEnrichedIn(composite, dataType, antibody));
 	    fprintf(f, "%s\t", naForNull(md5sum));
-	    fprintf(f, "%lld\n", (long long)size);
+	    fprintf(f, "%lld\t", (long long)size);
+	    fprintf(f, "%ld\t", (long)updateTime);
+	    fprintf(f, "%s\n", validationKey);
+
 	    }
 	}
     }
@@ -241,7 +250,8 @@ struct rbTree *expsByIx = makeExpContainer();
 verbose(1, "%d experiments\n", expsByIx->n);
 FILE *f = mustOpen(outFile, "w");
 int i;
-fputs("#file_name\tformat\toutput_type\texperiment\treplicate\tenriched_in\tmd5sum\tsize\n", f);
+fputs("#file_name\tformat\toutput_type\texperiment\treplicate\tenriched_in", f);
+fputs("\tmd5_sum\tsize\tmodified\tvalid_key\n", f);
 for (i=0; i<ArraySize(metaDbs); ++i)
    {
    addGenomeToManifest(metaDbs[i], fileRootDir, expsByIx, f);
