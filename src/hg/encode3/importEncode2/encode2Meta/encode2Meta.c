@@ -144,7 +144,7 @@ metaNodeAddVarVals(node, exp->expVars);
 return node;
 }
 
-void metaTreeWrite(int level, struct metaNode *node, FILE *f)
+void metaTreeWrite(int level, struct metaNode *node, struct hash *suppress, FILE *f)
 /* Write out self and children to file recursively. */
 {
 int indent = level*4;
@@ -153,13 +153,16 @@ fprintf(f, "meta %s\n", node->name);
 struct mdbVar *v;
 for (v = node->vars; v != NULL; v = v->next)
     {
-    spaceOut(f, indent);
-    fprintf(f, "%s %s\n", v->var, v->val);
+    if (!hashLookup(suppress, v->var))
+	{
+	spaceOut(f, indent);
+	fprintf(f, "%s %s\n", v->var, v->val);
+	}
     }
 fprintf(f, "\n");
 struct metaNode *child;
 for (child = node->children; child != NULL; child = child->next)
-    metaTreeWrite(level+1, child, f);
+    metaTreeWrite(level+1, child, suppress, f);
 }
 
 boolean mdbVarRemove(struct mdbVar **pList, char *var)
@@ -260,6 +263,18 @@ for (var = varList; var != NULL; var = var->next)
 	hoistOne(node, var->name, val);
 	}
     }
+}
+
+struct hash *makeSuppress()
+/* Make a hash full of fields to suppress. */
+{
+struct hash *suppress = hashNew(4);
+hashAdd(suppress, "objType", NULL);
+hashAdd(suppress, "subId", NULL);
+hashAdd(suppress, "md5sum", NULL);
+hashAdd(suppress, "tableName", NULL);
+hashAdd(suppress, "dccAccession", NULL);
+return suppress;
 }
 
 
@@ -373,7 +388,7 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 	    }
 	}
 
-    char *fileName = NULL, *dccAccession = NULL, *composite = NULL, *view = NULL;
+    char *fileName = NULL, *dccAccession = NULL;
     for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	{
 	struct mdbVar *v;
@@ -384,10 +399,6 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 		fileName = val;
 	    else if (sameString("dccAccession", var))
 		dccAccession = val;
-	    else if (sameString("composite", var))
-		composite = val;
-	    else if (sameString("view", var))
-		view = val;
 	    }
 	if (fileName != NULL && dccAccession != NULL)
 	    {
@@ -407,13 +418,15 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 	}
     }
 
+struct hash *suppress = makeSuppress();
+
 FILE *ugly = mustOpen("ugly.tree", "w");
-metaTreeWrite(0, metaTree, ugly);
+metaTreeWrite(0, metaTree, suppress, ugly);
 carefulClose(&ugly);
 
 metaTreeHoist(metaTree);
 FILE *f = mustOpen(outFile, "w");
-metaTreeWrite(0, metaTree, f);
+metaTreeWrite(0, metaTree, suppress, f);
 carefulClose(&f);
 }
 
