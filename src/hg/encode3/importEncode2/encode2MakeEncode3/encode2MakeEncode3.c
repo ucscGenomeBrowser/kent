@@ -9,6 +9,7 @@
 #include "portable.h"
 #include "obscure.h"
 #include "sqlNum.h"
+#include "encode3/encode2Manifest.h"
 
 char *dataDir = "/scratch/kent/encValData";
 char *tempDir = "/tmp";
@@ -31,68 +32,6 @@ static struct optionSpec options[] = {
    {"dataDir", OPTION_STRING},
    {NULL, 0},
 };
-
-#define MANIFESTINFO_NUM_COLS 8
-
-struct manifestInfo
-/* Information on one file */
-    {
-    struct manifestInfo *next;  /* Next in singly linked list. */
-    char *fileName;	/* Name of file with directory relative to manifest */
-    char *format;	/* bam fastq etc */
-    char *outputType;   /* aka view - alignment, transfrags, etc. */
-    char *experiment;	/* wgEncodeXXXX */
-    char *replicate;	/* 1 2 both n/a */
-    char *enrichedIn;	/* promoter exon etc. */
-    char *md5sum;	/* Hash of file contents or n/a */
-    long long size;	/* File size. */
-    };
-
-struct manifestInfo *manifestInfoLoad(char **row)
-/* Load a manifestInfo from row fetched with select * from manifestInfo
- * from database.  Dispose of this with manifestInfoFree(). */
-{
-struct manifestInfo *ret;
-
-AllocVar(ret);
-ret->fileName = cloneString(row[0]);
-ret->format = cloneString(row[1]);
-ret->outputType = cloneString(row[2]);
-ret->experiment = cloneString(row[3]);
-ret->replicate = cloneString(row[4]);
-ret->enrichedIn = cloneString(row[5]);
-ret->md5sum = cloneString(row[6]);
-ret->size = sqlLongLong(row[7]);
-return ret;
-}
-
-void manifestInfoTabOut(struct manifestInfo *mi, FILE *f)
-/* Write tab-separated version of manifestInfo to f */
-{
-fprintf(f, "%s\t", mi->fileName);
-fprintf(f, "%s\t", mi->format);
-fprintf(f, "%s\t", mi->outputType);
-fprintf(f, "%s\t", mi->experiment);
-fprintf(f, "%s\t", mi->replicate);
-fprintf(f, "%s\t", mi->enrichedIn);
-fprintf(f, "%s\t", mi->md5sum);
-fprintf(f, "%lld\t", mi->size);
-}
-
-struct manifestInfo *manifestInfoLoadAll(char *fileName)
-/* Load all manifestInfos from file. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[MANIFESTINFO_NUM_COLS];
-struct manifestInfo *list = NULL, *fi;
-while (lineFileRow(lf, row))
-   {
-   fi = manifestInfoLoad(row);
-   slAddHead(&list, fi);
-   }
-slReverse(&list);
-return list;
-}
 
 void makeDirOnlyOnce(char *dir, struct hash *hash)
 /* Check if dir is already in hash.  If so we're done.  If not make dir and add it to hash. */
@@ -132,7 +71,7 @@ else
     return FALSE;
 }
 
-void doGzippedBedToBigBed(struct manifestInfo *mi, char *bedFile, char *assembly,
+void doGzippedBedToBigBed(struct encode2Manifest *mi, char *bedFile, char *assembly,
     char *asType, char *bedType, 
     char *destDir, char *destFileName,
     struct slName **pTargetList, FILE *f, FILE *manF)
@@ -200,7 +139,7 @@ safef(localFileName, PATH_LEN, "%s", mi->fileName);
 chopSuffix(localFileName);
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-manifestInfoTabOut(mi, manF);
+encode2ManifestTabOut(mi, manF);
 }
 
 boolean justCopySuffix(char *fileName)
@@ -219,7 +158,7 @@ for (i=0; i<ArraySize(copySuffixes); ++i)
 return FALSE;
 }
 
-void doGzippedSomethingToBigBed(struct manifestInfo *mi, char *sourcePath, char *assembly, 
+void doGzippedSomethingToBigBed(struct encode2Manifest *mi, char *sourcePath, char *assembly, 
     char *destDir, char *destFileName,
     char *bedConverter, char *tempNameRoot, struct slName **pTargetList, FILE *f, FILE *manF)
 /* Convert something that has a bed-converter program to bigBed. */
@@ -249,10 +188,10 @@ safef(localFileName, PATH_LEN, "%s", mi->fileName);
 chopSuffix(localFileName);
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-manifestInfoTabOut(mi, manF);
+encode2ManifestTabOut(mi, manF);
 }
 
-void doGzippedGffToBigBed(struct manifestInfo *mi, char *sourcePath, char *destPath, 
+void doGzippedGffToBigBed(struct encode2Manifest *mi, char *sourcePath, char *destPath, 
     char *assembly, char *destDir, char *destFileName, 
     struct slName **pTargetList, FILE *f, FILE *manF)
 /* Do both copy and conversion to bigBed.  Also do some doctoring. */
@@ -261,7 +200,7 @@ void doGzippedGffToBigBed(struct manifestInfo *mi, char *sourcePath, char *destP
 fprintf(f, "%s: %s\n", destPath, sourcePath);
 fprintf(f, "\tln -s %s %s\n", sourcePath, destPath);
 slNameAddHead(pTargetList, destPath);
-manifestInfoTabOut(mi, manF);
+encode2ManifestTabOut(mi, manF);
 
 /* Now convert to big bed. */
 char *tempNameRoot = "gff2bb";
@@ -293,10 +232,10 @@ safef(localFileName, PATH_LEN, "%s", mi->fileName);
 chopSuffix(localFileName);
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-manifestInfoTabOut(mi, manF);
+encode2ManifestTabOut(mi, manF);
 }
 
-void processManifestItem(int itemNo, struct manifestInfo *mi, char *sourceRoot, 
+void processManifestItem(int itemNo, struct encode2Manifest *mi, char *sourceRoot, 
     char *destRoot, struct slName **pTargetList, FILE *f, FILE *manF)
 /* Process a line from the manifest.  Write section of make file needed to transform/copy it.
  * record name of this target file in pTargetList. 
@@ -351,10 +290,9 @@ if (endsWith(fileName, ".fastq.tgz"))
     /* Write out revised manifest info */
     char localFileName[PATH_LEN+4];	// a little extra for .dir
     safef(localFileName, PATH_LEN, "%s", mi->fileName);
-    chopSuffix(localFileName);
     strcat(localFileName, ".dir");
     mi->fileName = localFileName;
-    manifestInfoTabOut(mi, manF);
+    encode2ManifestTabOut(mi, manF);
     }
 else if (endsWith(fileName, ".narrowPeak.gz"))
     {
@@ -430,7 +368,7 @@ else if (justCopySuffix(fileName))
     fprintf(f, "%s: %s\n", destPath, sourcePath);
     fprintf(f, "\tln -s %s %s\n", sourcePath, destPath);
     slNameAddHead(pTargetList, destPath);
-    manifestInfoTabOut(mi, manF);
+    encode2ManifestTabOut(mi, manF);
     }
 else
     {
@@ -445,12 +383,12 @@ void encode2MakeEncode3(char *sourceDir, char *sourceManifest, char *destDir, ch
 /* encode2MakeEncode3 - Copy files in encode2 manifest and in case of tar'd files rezip them 
  * independently. */
 {
-struct manifestInfo *fileList = manifestInfoLoadAll(sourceManifest);
+struct encode2Manifest *fileList = encode2ManifestLoadAll(sourceManifest);
 verbose(2, "Loaded information on %d files from %s\n", slCount(fileList), sourceManifest);
 verboseTimeInit();
 FILE *f = mustOpen(outMake, "w");
 FILE *manF = mustOpen(outManifest, "w");
-struct manifestInfo *mi;
+struct encode2Manifest *mi;
 struct hash *destDirHash = hashNew(0);
 makeDirOnlyOnce(destDir, destDirHash);
 
