@@ -20214,8 +20214,8 @@ XXX Wed Mar  6 12:28:53 PST 2013
     # bigWig files that can be joined with users' variants by the Variant
     # Annotation Integrator (#6152).
     screen -S dbNSFP -t dbNSFP
-    mkdir /hive/users/angie/dbNSFP2.0
-    cd /hive/users/angie/dbNSFP2.0
+    mkdir /hive/data/genomes/hg19/bed/dbNSFP2.0
+    cd /hive/data/genomes/hg19/bed/dbNSFP2.0
     wget http://dbnsfp.houstonbioinformatics.org/dbNSFPzip/dbNSFP2.0.zip
     unzip dbNSFP2.0.zip
 
