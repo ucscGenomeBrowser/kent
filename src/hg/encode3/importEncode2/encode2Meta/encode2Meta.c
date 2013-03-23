@@ -21,7 +21,7 @@ void usage()
 errAbort(
   "encode2Meta - Create meta files.\n"
   "usage:\n"
-  "   encode2Meta metadata.tab outFile\n"
+  "   encode2Meta metadata.tab meta.txt fileMeta.txt\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -144,25 +144,40 @@ metaNodeAddVarVals(node, exp->expVars);
 return node;
 }
 
-void metaTreeWrite(int level, struct metaNode *node, struct hash *suppress, FILE *f)
+void metaTreeWrite(int level, int minLevel, int maxLevel, boolean isFile,
+    char *parent, struct metaNode *node, struct hash *suppress, FILE *f)
 /* Write out self and children to file recursively. */
 {
-int indent = level*4;
-spaceOut(f, indent);
-fprintf(f, "meta %s\n", node->name);
-struct mdbVar *v;
-for (v = node->vars; v != NULL; v = v->next)
+if (node->vars == NULL && node->children == NULL)
+    return;
+if (level >= minLevel && level < maxLevel)
     {
-    if (!hashLookup(suppress, v->var))
-	{
-	spaceOut(f, indent);
-	fprintf(f, "%s %s\n", v->var, v->val);
+    int indent = (level-minLevel)*4;
+    spaceOut(f, indent);
+    if (isFile)
+        {
+	char *fileName = mdbVarLookup(node->vars, "fileName");
+	if (fileName == NULL)
+	    return;
+	fprintf(f, "file %s\n", fileName);
+	fprintf(f, "meta %s\n", parent);
 	}
+    else
+	fprintf(f, "meta %s\n", node->name);
+    struct mdbVar *v;
+    for (v = node->vars; v != NULL; v = v->next)
+	{
+	if (!hashLookup(suppress, v->var))
+	    {
+	    spaceOut(f, indent);
+	    fprintf(f, "%s %s\n", v->var, v->val);
+	    }
+	}
+    fprintf(f, "\n");
     }
-fprintf(f, "\n");
 struct metaNode *child;
 for (child = node->children; child != NULL; child = child->next)
-    metaTreeWrite(level+1, child, suppress, f);
+    metaTreeWrite(level+1, minLevel, maxLevel, isFile, node->name, child, suppress, f);
 }
 
 boolean mdbVarRemove(struct mdbVar **pList, char *var)
@@ -241,7 +256,37 @@ for (node = nodeList; node != NULL; node = node->next)
 return val;
 }
 
-void metaTreeHoist(struct metaNode *node)
+char *allSameValWithDataMostWithData(char *var, struct metaNode *nodeList, double minProportion)
+/* Return variable if all nodes that have it have it set to same value, and
+ * most (at least minProportion) have it. */
+{
+char *val = NULL;
+struct metaNode *node;
+int nodeCount = 0, dataCount = 0;
+for (node = nodeList; node != NULL; node = node->next)
+    {
+    ++nodeCount;
+    char *oneVal = mdbVarLookup(node->vars, var);
+    if (oneVal != NULL)
+	{
+	++dataCount;
+	if (val == NULL)
+	    val = oneVal;
+	else
+	    {
+	    if (!sameString(oneVal, val))
+		return NULL;
+	    }
+	}
+    }
+int minDataNeeded = round(nodeCount * minProportion);
+if (dataCount < minDataNeeded)
+    return NULL;
+return val;
+}
+
+
+void metaTreeHoist(struct metaNode *node, struct hash *closeEnoughTags)
 /* Move variables that are the same in all children up to parent. */
 {
 /* Do depth first recursion, but get early return if we're a leaf. */
@@ -249,7 +294,7 @@ struct metaNode *child;
 if (node->children == NULL)
     return;
 for (child = node->children; child != NULL; child = child->next)
-    metaTreeHoist(child);
+    metaTreeHoist(child, closeEnoughTags);
 
 /* Build up list of variables used in any child. */
 struct slName *var, *varList = varsInAnyNode(node->children);
@@ -257,12 +302,36 @@ struct slName *var, *varList = varsInAnyNode(node->children);
 /* Go through list and figure out ones that are same in all children. */
 for (var = varList; var != NULL; var = var->next)
     {
-    char *val = allSameVal(var->name, node->children);
+    char *val;
+    double *closeEnough = hashFindVal(closeEnoughTags, var->name);
+    if (closeEnough)
+        val = allSameValWithDataMostWithData(var->name, node->children, *closeEnough);
+    else
+	val = allSameVal(var->name, node->children);
     if (val != NULL)
         {
 	hoistOne(node, var->name, val);
 	}
     }
+}
+
+double *cloneDouble(double x)
+/* Return clone of double in dynamic memory */
+{
+return CloneVar(&x);
+}
+
+struct hash *makeCloseEnoughTags()
+/* Make double pointer valued hash keyed by tags that only need to be
+ * present in most children to be hoisted. */
+{
+struct hash *closeEnoughTags = hashNew(5);
+hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "lab", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "grant", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "geoSampleAccession", cloneDouble(0.7));
+return closeEnoughTags;
 }
 
 struct hash *makeSuppress()
@@ -271,14 +340,35 @@ struct hash *makeSuppress()
 struct hash *suppress = hashNew(4);
 hashAdd(suppress, "objType", NULL);
 hashAdd(suppress, "subId", NULL);
-hashAdd(suppress, "md5sum", NULL);
 hashAdd(suppress, "tableName", NULL);
 hashAdd(suppress, "dccAccession", NULL);
+hashAdd(suppress, "project", NULL);
+hashAdd(suppress, "expId", NULL);
+hashAdd(suppress, "sex", NULL);       // This should be implied in cellType
+hashAdd(suppress, "fileName", NULL);  // We take care of this another way
+hashAdd(suppress, "view", NULL);      // This is in maniest
+hashAdd(suppress, "replicate", NULL); // This is in manifest
+hashAdd(suppress, "md5sum", NULL);    // Also in manifest
 return suppress;
 }
 
+boolean originalData(char *symbol)
+/* Return TRUE if it's not just a repackaging. */
+{
+return (symbol != NULL && !startsWith("wgEncodeAwg", symbol) && !startsWith("wgEncodeReg", symbol));
+}
 
-void encode2Meta(char *manifestIn, char *outFile)
+void metaTreeReverseChildrenSortTags(struct metaNode *node)
+/* Reverse child list recursively and sort tags list. */
+{
+slSort(&node->vars, mdbVarCmp);
+slReverse(&node->children);
+struct metaNode *child;
+for (child = node->children; child !=NULL; child = child->next)
+    metaTreeReverseChildrenSortTags(child);
+}
+
+void encode2Meta(char *manifestIn, char *outMetaRa, char *outFileRa)
 /* encode2Meta - Create meta files.. */
 {
 /* Create a three level meta.ra format file based on hgFixed.encodeExp
@@ -342,8 +432,7 @@ for (i=0; i<ArraySize(metaDbs); ++i)
     for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
         {
 	char *composite = mdbVarLookup(mdb->vars, "composite");
-	if (composite != NULL && !sameString(composite, "wgEncodeAwgTfbsUniform") 
-	    && !sameString(composite, "wgEncodeAwgDnaseUniform") && !startsWith("wgEncodeReg", composite))
+	if (originalData(composite))
 	    {
 	    char *dccAccession = mdbVarLookup(mdb->vars, "dccAccession");
 	    if (dccAccession != NULL)
@@ -391,12 +480,19 @@ for (i=0; i<ArraySize(metaDbs); ++i)
     char *fileName = NULL, *dccAccession = NULL;
     for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	{
+	if (!originalData(mdb->obj))
+	    continue;
 	struct mdbVar *v;
 	for (v = mdb->vars; v != NULL; v = v->next)
 	    {
 	    char *var = v->var, *val = v->val;
 	    if (sameString("fileName", var))
+		{
 		fileName = val;
+		char *comma = strchr(fileName, ',');
+		if (comma != NULL)
+		     *comma = 0;	/* Cut off comma separated list. */
+		}
 	    else if (sameString("dccAccession", var))
 		dccAccession = val;
 	    }
@@ -419,14 +515,20 @@ for (i=0; i<ArraySize(metaDbs); ++i)
     }
 
 struct hash *suppress = makeSuppress();
+struct hash *closeEnoughTags = makeCloseEnoughTags();
 
+metaTreeReverseChildrenSortTags(metaTree);
 FILE *ugly = mustOpen("ugly.tree", "w");
-metaTreeWrite(0, metaTree, suppress, ugly);
+metaTreeWrite(0, 0, BIGNUM, FALSE, NULL, metaTree, suppress, ugly);
 carefulClose(&ugly);
 
-metaTreeHoist(metaTree);
-FILE *f = mustOpen(outFile, "w");
-metaTreeWrite(0, metaTree, suppress, f);
+metaTreeHoist(metaTree, closeEnoughTags);
+FILE *f = mustOpen(outMetaRa, "w");
+metaTreeWrite(0, 0, 3, FALSE, NULL, metaTree, suppress, f);
+carefulClose(&f);
+
+f = mustOpen(outFileRa, "w");
+metaTreeWrite(0, 3, BIGNUM, TRUE, NULL, metaTree, suppress, f);
 carefulClose(&f);
 }
 
@@ -434,8 +536,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-encode2Meta(argv[1], argv[2]);
+encode2Meta(argv[1], argv[2], argv[3]);
 return 0;
 }
