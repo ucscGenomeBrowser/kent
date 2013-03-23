@@ -131,8 +131,8 @@ sqlDisconnect(&conn);
 return list;
 }
 
-struct metaNode *addExpToNode(struct encodeExp *exp, struct metaNode *parent)
-/* Wrap a metaNode arount exp,  add it to parent, and return it. */
+struct metaNode *wrapNodeAroundExp(struct encodeExp *exp)
+/* Wrap a metaNode around exp,  and return it. */
 {
 struct metaNode *node = metaNodeNew(exp->accession);
 metaNodeAddVar(node, "organism", exp->organism);
@@ -330,6 +330,7 @@ hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "lab", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "grant", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "control", cloneDouble(0.9));
 hashAdd(closeEnoughTags, "geoSampleAccession", cloneDouble(0.7));
 return closeEnoughTags;
 }
@@ -338,12 +339,14 @@ struct hash *makeSuppress()
 /* Make a hash full of fields to suppress. */
 {
 struct hash *suppress = hashNew(4);
-hashAdd(suppress, "objType", NULL);
-hashAdd(suppress, "subId", NULL);
-hashAdd(suppress, "tableName", NULL);
-hashAdd(suppress, "dccAccession", NULL);
-hashAdd(suppress, "project", NULL);
-hashAdd(suppress, "expId", NULL);
+hashAdd(suppress, "objType", NULL);   // Inherent in hierarchy or ignored
+hashAdd(suppress, "subId", NULL);     // Submission ID not worth carrying forward
+hashAdd(suppress, "tableName", NULL);	// We aren't interested in tables, just files
+hashAdd(suppress, "dccAccession", NULL);  // Redundant with meta object name
+hashAdd(suppress, "project", NULL);   // Always wgEncode
+hashAdd(suppress, "expId", NULL);     // Redundant with dccAccession
+hashAdd(suppress, "composite", NULL); // Inherent in hierarchy now
+hashAdd(suppress, "cell", NULL);      // Completely redundant with cellType - I checked
 hashAdd(suppress, "sex", NULL);       // This should be implied in cellType
 hashAdd(suppress, "fileName", NULL);  // We take care of this another way
 hashAdd(suppress, "view", NULL);      // This is in maniest
@@ -358,14 +361,22 @@ boolean originalData(char *symbol)
 return (symbol != NULL && !startsWith("wgEncodeAwg", symbol) && !startsWith("wgEncodeReg", symbol));
 }
 
-void metaTreeReverseChildrenSortTags(struct metaNode *node)
+int metaNodeCmp(const void *va, const void *vb)
+// Compare metaNode to sort on var name, case-insensitive.
+{
+const struct metaNode *a = *((struct metaNode **)va);
+const struct metaNode *b = *((struct metaNode **)vb);
+return strcasecmp(a->name, b->name);
+}
+
+void metaTreeSortChildrenSortTags(struct metaNode *node)
 /* Reverse child list recursively and sort tags list. */
 {
 slSort(&node->vars, mdbVarCmp);
-slReverse(&node->children);
+slSort(&node->children,  metaNodeCmp);
 struct metaNode *child;
 for (child = node->children; child !=NULL; child = child->next)
-    metaTreeReverseChildrenSortTags(child);
+    metaTreeSortChildrenSortTags(child);
 }
 
 void encode2Meta(char *manifestIn, char *outMetaRa, char *outFileRa)
@@ -420,7 +431,7 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 	}
 
     /* Make up one more for experiments with no composite. */
-    char *noCompositeName = "noComposite";
+    char *noCompositeName = "wgEncodeZz";
     struct metaNode *noCompositeNode = metaNodeNew(noCompositeName);
     slAddHead(&metaTree->children, noCompositeNode);
     noCompositeNode->parent = metaTree;
@@ -469,7 +480,7 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 		    {
 		    compositeNode = noCompositeNode;
 		    }
-		struct metaNode *expNode = addExpToNode(exp, compositeNode);
+		struct metaNode *expNode = wrapNodeAroundExp(exp);
 		hashAdd(expHash, expNode->name, expNode);
 		slAddHead(&compositeNode->children, expNode);
 		expNode->parent = compositeNode;
@@ -517,12 +528,13 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 struct hash *suppress = makeSuppress();
 struct hash *closeEnoughTags = makeCloseEnoughTags();
 
-metaTreeReverseChildrenSortTags(metaTree);
+metaTreeSortChildrenSortTags(metaTree);
 FILE *ugly = mustOpen("ugly.tree", "w");
 metaTreeWrite(0, 0, BIGNUM, FALSE, NULL, metaTree, suppress, ugly);
 carefulClose(&ugly);
 
 metaTreeHoist(metaTree, closeEnoughTags);
+metaTreeSortChildrenSortTags(metaTree);
 FILE *f = mustOpen(outMetaRa, "w");
 metaTreeWrite(0, 0, 3, FALSE, NULL, metaTree, suppress, f);
 carefulClose(&f);
