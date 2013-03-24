@@ -449,14 +449,17 @@ slReverse(&list);
 return list;
 }
 
-void bedLoadAllReturnFieldCount(char *fileName, struct bed **retList, int *retFieldCount)
+void bedLoadAllReturnFieldCountAndRgb(char *fileName, struct bed **retList, int *retFieldCount, 
+    boolean *retRgb)
 /* Load bed of unknown size and return number of fields as well as list of bed items.
- * Ensures that all lines in bed file have same field count. */
+ * Ensures that all lines in bed file have same field count.  Also returns whether 
+ * column 9 is being used as RGB or not. */
 {
 struct bed *list = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *row[bedKnownFields];
 int fieldCount = 0;
+boolean isRgb = FALSE;
 
 while (lineFileNextReal(lf, &line))
     {
@@ -465,7 +468,10 @@ while (lineFileNextReal(lf, &line))
 	errAbort("file %s doesn't appear to be in bed format. At least 4 fields required, got %d", 
 		fileName, numFields);
     if (fieldCount == 0)
+	{
         fieldCount = numFields;
+	isRgb =  (strchr(row[8], ',') != NULL);
+	}
     else
         if (fieldCount != numFields)
 	    errAbort("Inconsistent number of fields in file. %d on line %d of %s, %d previously.",
@@ -476,12 +482,20 @@ lineFileClose(&lf);
 slReverse(&list);
 *retList = list;
 *retFieldCount = fieldCount;
+if (retRgb != NULL)
+   *retRgb = isRgb;
 }
 
-static void bedOutputN_Opt(struct bed *el, int wordCount, FILE *f,
+void bedLoadAllReturnFieldCount(char *fileName, struct bed **retList, int *retFieldCount)
+/* Load bed of unknown size and return number of fields as well as list of bed items.
+ * Ensures that all lines in bed file have same field count. */
+{
+bedLoadAllReturnFieldCountAndRgb(fileName, retList, retFieldCount, NULL);
+}
+
+void bedOutFlexible(struct bed *el, int wordCount, FILE *f,
 	char sep, char lastSep, boolean useItemRgb)
-/* Write a bed of wordCount fields, optionally interpreting field nine
-	as R,G,B values. */
+/* Write a bed of wordCount fields, optionally interpreting field nine as R,G,B values. */
 {
 int i;
 if (sep == ',') fputc('"',f);
@@ -619,14 +633,14 @@ fputc(lastSep,f);
 void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep)
 /* Write a bed of wordCount fields. */
 {
-bedOutputN_Opt(el, wordCount, f, sep, lastSep, FALSE);
+bedOutFlexible(el, wordCount, f, sep, lastSep, FALSE);
 }
 
 void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
 	char sep, char lastSep)
 /* Write a bed of wordCount fields, interpret column 9 as RGB. */
 {
-bedOutputN_Opt(el, wordCount, f, sep, lastSep, TRUE);
+bedOutFlexible(el, wordCount, f, sep, lastSep, TRUE);
 }
 
 

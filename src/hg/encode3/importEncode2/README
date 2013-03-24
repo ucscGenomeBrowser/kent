@@ -1,0 +1,17 @@
+This contains a variety of programs used to reformat ENCODE2 metadata into formats hopefully 
+easier to digest for ENCODE3.   The ENCODE2 data is stored in the hgFixed.encodeExp
+and the genomic databases (hg19, mm9) metaDb tables,  and the cv.ra file.
+This set of programs and scripts converts it into the encode2Meta database with a schema
+described in encode2Meta.as.
+
+The programs involved are:
+
+1) encodeCvToDb - reads cv.ra and turns it into a directory of tab-separated files
+   that you can turn into a SQL database.  Also produces Django models which we are
+   no longer using, and .as files for documentation.  A script "tryIt" in the directory
+   layers a process to split up antibody table on top of this.  Result needs to be
+   loaded into MySQL in "kentDjangoTest2" database before you go to next step.
+2) encodeExpToCvDb - reads in metaDb tables and the kentDjangoTest2 database,  produces
+   experiment, series, and results tables to add to that database.
+3) encode2ExpDumpFlat - produceds flattened output of experiment table, where numerical id's in
+   vocab tables are replaced with tags.

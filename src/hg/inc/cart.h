@@ -551,7 +551,7 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 /* When composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
 
-void cartCopyCustomTracks(struct cart *cart, char *db);
+void cartCopyCustomTracks(struct cart *cart);
 /* If cart contains any live custom tracks, save off a new copy of them,
  * to prevent clashes by multiple uses of the same session.  */
 

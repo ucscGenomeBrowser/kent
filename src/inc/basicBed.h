@@ -170,12 +170,22 @@ void bedLoadAllReturnFieldCount(char *fileName, struct bed **retList, int *retFi
 /* Load bed of unknown size and return number of fields as well as list of bed items.
  * Ensures that all lines in bed file have same field count. */
 
+void bedLoadAllReturnFieldCountAndRgb(char *fileName, struct bed **retList, int *retFieldCount, 
+    boolean *retRgb);
+/* Load bed of unknown size and return number of fields as well as list of bed items.
+ * Ensures that all lines in bed file have same field count.  Also returns whether 
+ * column 9 is being used as RGB or not. */
+
 void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 /* Write a bed of wordCount fields. */
 
 void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
 	char sep, char lastSep);
 /* Write a bed of wordCount fields, interpret column 9 as RGB. */
+
+void bedOutFlexible(struct bed *el, int wordCount, FILE *f,
+	char sep, char lastSep, boolean useItemRgb);
+/* Write a bed of wordCount fields, optionally interpreting field nine as R,G,B values. */
 
 #define bedTabOutNitemRgb(el,wordCount, f) bedOutputNitemRgb(el,wordCount,f,'\t','\n')
 /* Print out bed as a line in a tab-separated file. Interpret

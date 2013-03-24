@@ -32,7 +32,7 @@ set dm dm1,dm2,dm3
 set dp dp2,dp3
 set droEre droEre1
 set droMoj droMoj1,droMoj2
-set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1,droPer1,droSec1,droWil1
+set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1,droPer1,droSec1
 set droVir droVir1,droVir2
 set droYak droYak1,droYak2
 set echTel echTel1
@@ -56,7 +56,7 @@ set melInc melInc1
 set melHap melHap1
 set melUnd melUnd1
 set micMur micMur1
-set mm mm6,mm7,mm8,mm9,mm10
+set mm mm7,mm8,mm9,mm10
 set monDom monDom1,monDom4,monDom5
 set musFur musFur1
 set myoLuc myoLuc1,myoLuc2
@@ -105,7 +105,7 @@ set wgs $ailMel,$aplCal,$bosTau,$bruMal,$calJac,$canFam,$cavPor,$choHof,$chrPic,
 set xrg $ailMel,$anoCar,$aplCal,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$canFam,$cb,$ce,$cerSim,$choHof,$chrPic,$ci,danRer6,danRer7,$dasNov,$dipOrd,$dp,$droMult,$droYak,$echTel,$eriEur,$felCat,$gadMor,$galGal,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nomLeu,$ochPri,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rn,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$turTru,$vicPac
 
 # Ensembl gene track lists constructed from update procedure
-set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,eriEur1,equCab2,felCat3,fr2,fr3,galGal3,gasAcu1,gorGor3,hg19,latCha1,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,musFur1,myoLuc2,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,ponAbe2,proCap1,pteVam1,rheMac2,rn4,sacCer3,sarHar1,sorAra1,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,xenTro3
+set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,eriEur1,equCab2,felCat3,fr2,fr3,galGal3,gasAcu1,gorGor3,hg19,latCha1,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,musFur1,myoLuc2,nomLeu1,ochPri2,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,panTro2,panTro4,ponAbe2,proCap1,pteVam1,rheMac2,rn4,rn5,sacCer3,sarHar1,sorAra1,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,xenTro3
 
 set ensGeneWgs choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
 
@@ -622,45 +622,41 @@ identifier encodePseudogeneUcsc dependency
 
 identifier refGeneRetro dependency
 "Link refGene to ucscRetroInfo"
-    hg18,hg19,mm9,mm10.refGene.name dupeOk
-    hg18,hg19.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
-    hg19.ucscRetroInfo2.refSeq minCheck=0.96 exclude=noRefSeq
+    hg19,mm9,mm10.refGene.name dupeOk
     hg19.ucscRetroInfo4.refSeq minCheck=0.96 exclude=noRefSeq
-    mm9,mm10.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
+    hg19.ucscRetroInfo5.refSeq minCheck=0.96 exclude=noRefSeq
+    mm9.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
     mm10.ucscRetroInfo2.refSeq minCheck=0.96 exclude=noRefSeq
 
 identifier knownGeneRetro dependency
 "Link knownGene to ucscRetroInfo"
-    hg18,hg19,mm9,mm10.knownGene.name dupeOk chopAfter=.
-    hg18.ucscRetroInfo1.kgName minCheck=0.95 exclude=noKg chopAfter=.
-    hg19.ucscRetroInfo1.kgName minCheck=0.87 exclude=noKg chopAfter=.
-    hg19.ucscRetroInfo2.kgName minCheck=0.87 exclude=noKg chopAfter=.
+    hg19,mm9,mm10.knownGene.name dupeOk chopAfter=.
     hg19.ucscRetroInfo4.kgName minCheck=0.96 exclude=noKg chopAfter=.
-    mm9,mm10.ucscRetroInfo1.kgName minCheck=0.94 exclude=noKg chopAfter=.
+    hg19.ucscRetroInfo5.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    mm9.ucscRetroInfo1.kgName minCheck=0.94 exclude=noKg chopAfter=.
     mm10.ucscRetroInfo2.kgName minCheck=0.96 exclude=noKg chopAfter=.
 
-identifier ucscRetroInfo4 dependency
+identifier ucscRetroInfo[4,5] dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    hg19.ucscRetroInfo4.name unique
-    hg19.ucscRetroAli4.qName 
-    hg19.ucscRetroExpressed.name
+    hg19.ucscRetroInfo[].name unique
+    hg19.ucscRetroAli[].qName 
 
-identifier ucscRetroOrtho[1,2,4] dependency
+identifier ucscRetroOrtho[4,5] dependency
 "Link together Ucsc Retrogenes and ucsc retro orthlogy"
     hg19.ucscRetroAli[].qName dupeOk
     hg19.ucscRetroOrtho[].name
 
-identifier ucscRetroExtFileId[1,2,4]
+identifier ucscRetroExtFileId[4,5]
 "External file ID for parent sequences for UCSC Retrogenes"
     hg19.ucscRetroExtFile[].id
     hg19.ucscRetroSeq[].extFile
 
-identifier ucscRetroSeq4
+identifier ucscRetroSeq[4,5]
 "Sequences for GenBank sequences used as retrogene parents"
-    hg19.ucscRetroSeq4.acc unique 
-    hg19.ucscRetroCds4.id
-    hg19.ucscRetroAli4.qName chopAfter=-
-    hg19.ucscRetroInfo4.name chopAfter=-
+    hg19.ucscRetroSeq[].acc unique 
+    hg19.ucscRetroCds[].id
+    hg19.ucscRetroAli[].qName chopAfter=-
+    hg19.ucscRetroInfo[].name chopAfter=-
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"
@@ -1812,7 +1808,7 @@ identifier refSeqId typeOf=mrnaAccession
     hg18,mm7,mm8,mm9,mm10.knownToRefSeq.value minCheck=0.96
     hg16,hg17.knownToRefSeq.value minCheck=0.93
     $kgDb.refSeqKg.refseq minCheck=0.60
-    $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.35
+    $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.32
     $gbd,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn3.mrnaRefseq.refseq minCheck=0.03
     $gbd,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
@@ -1954,7 +1950,7 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.oldId minCheck=0.5 exclude=
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
     $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
-    hg19.kg5ToKg6.newId exclude=
+    $kgDb.kg5ToKg6.newId exclude=
     $kgDb.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
@@ -2597,8 +2593,8 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $ensGeneDb,$notEnsemblTranscriptId.ensPep.name chopAfter=. minCheck=0.93
     $gbd,$notEnsemblTranscriptId.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd,$notEnsemblTranscriptId.ensInfo.name minCheck=0.9
-    $ensGeneDb,$notEnsemblTranscriptId.ensemblToGeneName.name minCheck=0.97
-    $ensGeneDb,$notEnsemblTranscriptId.ensemblSource.name minCheck=0.97
+    $ensGeneDb,$notEnsemblTranscriptId.ensemblToGeneName.name minCheck=0.96
+    $ensGeneDb,$notEnsemblTranscriptId.ensemblSource.name minCheck=0.96
     $kgDb.knownToEnsembl.value chopAfter=.
     $kgDb.rgdGene2ToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
