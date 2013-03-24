@@ -651,7 +651,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringFree(&dy);
 
     /* Prevent modification of custom tracks just saved to namedSessionDb: */
-    cartCopyCustomTracks(cart, cartUsualString(cart, "db", hDefaultDb()));
+    cartCopyCustomTracks(cart);
 
     if (useCount > INITIAL_USE_COUNT)
 	dyStringPrintf(dyMessage,
