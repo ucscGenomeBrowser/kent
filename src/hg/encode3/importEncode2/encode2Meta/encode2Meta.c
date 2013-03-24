@@ -21,7 +21,7 @@ void usage()
 errAbort(
   "encode2Meta - Create meta files.\n"
   "usage:\n"
-  "   encode2Meta metadata.tab meta.txt fileMeta.txt\n"
+  "   encode2Meta metadata.tab meta.txt\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -148,22 +148,20 @@ void metaTreeWrite(int level, int minLevel, int maxLevel, boolean isFile,
     char *parent, struct metaNode *node, struct hash *suppress, FILE *f)
 /* Write out self and children to file recursively. */
 {
+#ifdef OLD
 if (node->vars == NULL && node->children == NULL)
     return;
+#endif 
 if (level >= minLevel && level < maxLevel)
     {
-    int indent = (level-minLevel)*4;
+    int indent = (level-minLevel)*3;
     spaceOut(f, indent);
-    if (isFile)
-        {
-	char *fileName = mdbVarLookup(node->vars, "fileName");
-	if (fileName == NULL)
-	    return;
-	fprintf(f, "file %s\n", fileName);
-	fprintf(f, "meta %s\n", parent);
+    fprintf(f, "meta %s\n", node->name);
+    if (parent != NULL)
+	{
+	spaceOut(f, indent);
+	fprintf(f, "parent %s\n", parent);
 	}
-    else
-	fprintf(f, "meta %s\n", node->name);
     struct mdbVar *v;
     for (v = node->vars; v != NULL; v = v->next)
 	{
@@ -352,7 +350,6 @@ hashAdd(suppress, "expId", NULL);     // Redundant with dccAccession
 hashAdd(suppress, "composite", NULL); // Inherent in hierarchy now
 hashAdd(suppress, "cell", NULL);      // Completely redundant with cellType - I checked
 hashAdd(suppress, "sex", NULL);       // This should be implied in cellType
-hashAdd(suppress, "fileName", NULL);  // We take care of this another way
 hashAdd(suppress, "view", NULL);      // This is in maniest
 hashAdd(suppress, "replicate", NULL); // This is in manifest
 hashAdd(suppress, "md5sum", NULL);    // Also in manifest
@@ -383,7 +380,7 @@ for (child = node->children; child !=NULL; child = child->next)
     metaTreeSortChildrenSortTags(child);
 }
 
-void encode2Meta(char *manifestIn, char *outMetaRa, char *outFileRa)
+void encode2Meta(char *manifestIn, char *outMetaRa)
 /* encode2Meta - Create meta files.. */
 {
 /* Create a three level meta.ra format file based on hgFixed.encodeExp
@@ -399,7 +396,7 @@ verbose(1, "%d files in %s\n", miHash->elCount, manifestIn);
 
 /* Load up encodeExp info. */
 struct sqlConnection *expConn = sqlConnect(expDb);
-struct encodeExp *exp, *expList = encodeExpLoadByQuery(expConn, "select * from encodeExp");
+struct encodeExp *expList = encodeExpLoadByQuery(expConn, "select * from encodeExp");
 sqlDisconnect(&expConn);
 verbose(1, "%d experiments in encodeExp\n", slCount(expList));
 
@@ -465,9 +462,9 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 		}
 	    }
 	}
-
     /* Now get info on all experiments in this organism. */
     struct hash *expHash = hashNew(0);
+    struct encodeExp *exp;
     for (exp = expList; exp != NULL; exp = exp->next)
         {
 	if (sameString(exp->organism, organisms[i]))
@@ -495,7 +492,8 @@ for (i=0; i<ArraySize(metaDbs); ++i)
     char *fileName = NULL, *dccAccession = NULL;
     for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	{
-	if (!originalData(mdb->obj))
+	char *objType = mdbVarLookup(mdb->vars, "objType");
+	if (objType != NULL && sameString(objType, "composite"))
 	    continue;
 	struct mdbVar *v;
 	for (v = mdb->vars; v != NULL; v = v->next)
@@ -527,6 +525,8 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 		}
 	    }
 	}
+#ifdef SOON
+#endif /* SOON */
     }
 
 struct hash *suppress = makeSuppress();
@@ -542,25 +542,21 @@ metaTreeSortChildrenSortTags(metaTree);
 FILE *f = mustOpen(outMetaRa, "w");
 struct metaNode *node;
 for (node = metaTree->children; node != NULL; node = node->next)
-    metaTreeWrite(0, 0, 2, FALSE, NULL, node, suppress, f);
+    metaTreeWrite(0, 0, BIGNUM, FALSE, NULL, node, suppress, f);
 carefulClose(&f);
 
 /* Write warning about tags in highest parent. */
 struct mdbVar *v;
 for (v = metaTree->vars; v != NULL; v = v->next)
     verbose(1, "Omitting universal %s %s\n", v->var, v->val);
-
-f = mustOpen(outFileRa, "w");
-metaTreeWrite(0, 3, BIGNUM, TRUE, NULL, metaTree, suppress, f);
-carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 3)
     usage();
-encode2Meta(argv[1], argv[2], argv[3]);
+encode2Meta(argv[1], argv[2]);
 return 0;
 }
