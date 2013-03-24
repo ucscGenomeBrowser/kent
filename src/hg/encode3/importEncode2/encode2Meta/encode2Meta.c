@@ -14,6 +14,8 @@ char *metaTable = "metaDb";
 char *expDb = "hgFixed";
 char *expTable = "encodeExp";
 
+/* Command line variables */
+boolean withParent = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,12 +25,13 @@ errAbort(
   "usage:\n"
   "   encode2Meta metadata.tab meta.txt\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -withParent - if set put a parent tag in each stanza in addition to indentation\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"withParent", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -157,7 +160,7 @@ if (level >= minLevel && level < maxLevel)
     int indent = (level-minLevel)*3;
     spaceOut(f, indent);
     fprintf(f, "meta %s\n", node->name);
-    if (parent != NULL)
+    if (withParent && parent != NULL)
 	{
 	spaceOut(f, indent);
 	fprintf(f, "parent %s\n", parent);
@@ -489,12 +492,18 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 	    }
 	}
 
-    char *fileName = NULL, *dccAccession = NULL;
     for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	{
+	char *fileName = NULL, *dccAccession = NULL;
 	char *objType = mdbVarLookup(mdb->vars, "objType");
 	if (objType != NULL && sameString(objType, "composite"))
 	    continue;
+	dccAccession = mdbVarLookup(mdb->vars, "dccAccession");
+	if (dccAccession == NULL)
+	    continue;
+	char *composite = hashFindVal(expToComposite,  dccAccession);
+	if (composite == NULL)
+	    errAbort("Can't find composite for %s", mdb->obj);
 	struct mdbVar *v;
 	for (v = mdb->vars; v != NULL; v = v->next)
 	    {
@@ -506,24 +515,26 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 		char *comma = strchr(fileName, ',');
 		if (comma != NULL)
 		     *comma = 0;	/* Cut off comma separated list. */
-		safef(path, sizeof(path), "%s/%s", db, fileName);  /* Add database path */
+		safef(path, sizeof(path), "%s/%s/%s", db, 
+		    composite, fileName);  /* Add database path */
 		fileName = val = v->val = cloneString(path);
 		}
-	    else if (sameString("dccAccession", var))
-		dccAccession = val;
 	    }
-	if (fileName != NULL && dccAccession != NULL)
+	if (fileName != NULL)
 	    {
-	    struct metaNode *expNode = hashFindVal(expHash, dccAccession);
-	    if (expNode != NULL)
-	        {
-		struct metaNode *fileNode = metaNodeNew(mdb->obj);
-		slAddHead(&expNode->children, fileNode);
-		fileNode->parent = expNode;
-		struct mdbVar *v;
-		for (v=mdb->vars; v != NULL; v = v->next)
+	    if (hashLookup(miHash, fileName))
+		{
+		struct metaNode *expNode = hashFindVal(expHash, dccAccession);
+		if (expNode != NULL)
 		    {
-		    metaNodeAddVar(fileNode, v->var, v->val);
+		    struct metaNode *fileNode = metaNodeNew(mdb->obj);
+		    slAddHead(&expNode->children, fileNode);
+		    fileNode->parent = expNode;
+		    struct mdbVar *v;
+		    for (v=mdb->vars; v != NULL; v = v->next)
+			{
+			metaNodeAddVar(fileNode, v->var, v->val);
+			}
 		    }
 		}
 	    }
@@ -560,6 +571,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+withParent = optionExists("withParent");
 encode2Meta(argv[1], argv[2]);
 return 0;
 }
