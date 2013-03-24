@@ -328,8 +328,12 @@ struct hash *makeCloseEnoughTags()
 struct hash *closeEnoughTags = hashNew(5);
 hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "lab", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "age", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "grant", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "dateSubmitted", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "dateUnrestricted", cloneDouble(0.8));
+hashAdd(closeEnoughTags, "softwareVersion", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "control", cloneDouble(0.9));
 hashAdd(closeEnoughTags, "geoSampleAccession", cloneDouble(0.7));
 return closeEnoughTags;
@@ -536,8 +540,15 @@ carefulClose(&ugly);
 metaTreeHoist(metaTree, closeEnoughTags);
 metaTreeSortChildrenSortTags(metaTree);
 FILE *f = mustOpen(outMetaRa, "w");
-metaTreeWrite(0, 0, 3, FALSE, NULL, metaTree, suppress, f);
+struct metaNode *node;
+for (node = metaTree->children; node != NULL; node = node->next)
+    metaTreeWrite(0, 0, 2, FALSE, NULL, node, suppress, f);
 carefulClose(&f);
+
+/* Write warning about tags in highest parent. */
+struct mdbVar *v;
+for (v = metaTree->vars; v != NULL; v = v->next)
+    verbose(1, "Omitting universal %s %s\n", v->var, v->val);
 
 f = mustOpen(outFileRa, "w");
 metaTreeWrite(0, 3, BIGNUM, TRUE, NULL, metaTree, suppress, f);
