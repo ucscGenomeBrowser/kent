@@ -502,9 +502,12 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 	    if (sameString("fileName", var))
 		{
 		fileName = val;
+		char path[PATH_LEN];
 		char *comma = strchr(fileName, ',');
 		if (comma != NULL)
 		     *comma = 0;	/* Cut off comma separated list. */
+		safef(path, sizeof(path), "%s/%s", db, fileName);  /* Add database path */
+		fileName = val = v->val = cloneString(path);
 		}
 	    else if (sameString("dccAccession", var))
 		dccAccession = val;
