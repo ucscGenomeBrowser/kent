@@ -4,8 +4,10 @@
 #include "localmem.h"
 #include "hash.h"
 #include "options.h"
+#include "jksql.h"
 #include "ra.h"
 #include "basicBed.h"
+#include "mdb.h"
 
 void usage()
 {
@@ -14,65 +16,20 @@ errAbort("freen - test some hairbrained thing.\n"
 }
 
 
-char *fields[] = {
-//id
-//updateTime
-//series
-//accession
-"organism",
-"lab",
-"dataType",
-"cellType",
-#ifdef SOON
-"ab",
-"age",
-"attic",
-"category",
-"control",
-"fragSize",
-"grantee",
-"insertLength",
-"localization",
-"mapAlgorithm",
-"objStatus",
-"phase",
-"platform",
-"promoter",
-"protocol",
-"readType",
-"region",
-"restrictionEnzyme",
-"rnaExtract",
-"seqPlatform",
-"sex",
-"strain",
-"tissueSourceType",
-"treatment",
-#endif /* SOON */
-};
-
 void freen(char *input)
 /* Test some hair-brained thing. */
 {
-/* Make huge sql query */
-printf("select e.id,updateTime,series,accession,version");
-int i;
-for (i=0; i<ArraySize(fields); ++i)
-    printf(",cvDb_%s.tag %s", fields[i], fields[i]);
-printf("\n");
-printf("from cvDb_experiment e");
-for (i=0; i<ArraySize(fields); ++i)
-    printf(",cvDb_%s", fields[i]);
-printf("\n");
-printf("where ");
-for (i=0; i<ArraySize(fields); ++i)
-    {
-    if (i != 0)
-        printf(" and ");
-    printf("cvDb_%s.id = e.%s\n", fields[i], fields[i]);
-    }
-printf("\n");
-printf("limit 10\n");
+struct sqlConnection *conn = sqlConnect("hg19");
+struct mdb *mdb = mdbLoadByQuery(conn, "select * from metaDb order by binary obj,var");
+printf("Got %d mdb\n", slCount(mdb));
+
+mdb = mdbLoadByQuery(conn, "select obj,var,val from metaDb");
+printf("Got %d mdb\n", slCount(mdb));
+
+struct mdbObj *list = mdbObjsQueryAll(conn, "metaDb");
+printf("Got %d mdbObjs\n", slCount(list));
+
+sqlDisconnect(&conn);
 }
 
 int main(int argc, char *argv[])

@@ -40,7 +40,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/wgEncodeGencodeUniProt.o \
     encode/wgEncodeGencodePolyAFeature.o encode/wgEncodeGencodeAnnotationRemark.o \
     encode/encodeExp.o \
-    encode3/encode3Valid.o \
+    encode3/encode2Manifest.o encode3/encode3Valid.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
