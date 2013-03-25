@@ -98,7 +98,7 @@ type association knownToKeggEntrez
 queryFull select name,value from knownToKeggEntrez
 queryOne select value,keggEntrez from knownToKeggEntrez where name = '%s'
 invQueryOne select name from knownToKeggEntrez where value = '%s'
-itemUrl http://www.genome.jp/dbget-bin/show_pathway?%s
+itemUrl http://www.genome.jp/kegg-bin/show_pathway?%s
 search prefix
 
 name HInv
