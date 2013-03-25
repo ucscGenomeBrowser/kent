@@ -2,15 +2,17 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "intValTree.h"
 #include "options.h"
+#include "portable.h"
+#include "jksql.h"
 #include "encode/encodeExp.h"
+#include "encode3/encode3Valid.h"
 #include "mdb.h"
 
-char *expDb = "hgFixed";
 char *metaDbs[] = {"hg19", "mm9"};
-char *expTable = "encodeExp";
 char *metaTable = "metaDb";
+char *expDb = "hgFixed";
+char *expTable = "encodeExp";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,26 +30,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-
-struct rbTree *makeExpContainer()
-/* Create rbTree container of expression objects keyed by ix */
-{
-struct rbTree *container = intValTreeNew();
-struct sqlConnection *expDbConn = sqlConnect(expDb);
-char query[256];
-safef(query, sizeof(query), "select * from %s", expTable);
-struct sqlResult *sr = sqlGetResult(expDbConn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    /* Read in database structure. */
-    struct encodeExp *ee = encodeExpLoad(row);
-    intValTreeAdd(container, ee->ix, ee);
-    }
-sqlFreeResult(&sr);
-sqlDisconnect(&expDbConn);
-return container;
-}
 
 struct mdbObj *getMdbList(char *database)
 /* Get list of metaDb objects for a database. */
@@ -146,10 +128,10 @@ freeMem(name);
 return result;
 }
 
-void addGenomeToManifest(char *genome, char *fileRootDir, struct rbTree *expsByIx, FILE *f)
+void addGenomeToManifest(char *genome, struct mdbObj *mdbList,
+    char *fileRootDir, FILE *f)
 /* Get metaDb table for genome and write out relevant bits of it to f */
 {
-struct mdbObj *mdbList = getMdbList(genome);
 verbose(1, "processing %s\n", genome);
 struct mdbObj *mdb;
 for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
@@ -219,7 +201,11 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 		continue;
 		}
 	    ++foundFileCount;
-	
+	    time_t updateTime = fileModTime(path); 
+	    char *validationKey = "n/a";
+	    if (md5sum != NULL)
+	        validationKey = encode3CalcValidationKey(md5sum, size);
+
 	    /* Output each field. */ 
 	    fprintf(f, "%s/%s/%s\t", genome, composite, fileName);
 	    fprintf(f, "%s\t", guessFormatFromFileName(fileName));
@@ -228,7 +214,9 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	    fprintf(f, "%s\t", naForNull(replicate));
 	    fprintf(f, "%s\t", guessEnrichedIn(composite, dataType, antibody));
 	    fprintf(f, "%s\t", naForNull(md5sum));
-	    fprintf(f, "%lld\n", (long long)size);
+	    fprintf(f, "%lld\t", (long long)size);
+	    fprintf(f, "%ld\t", (long)updateTime);
+	    fprintf(f, "%s\n", validationKey);
 	    }
 	}
     }
@@ -237,14 +225,31 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 void encode2Manifest(char *outFile, char *fileRootDir)
 /* encode2Manifest - Create a encode3 manifest file for encode2 files. */
 {
-struct rbTree *expsByIx = makeExpContainer();
-verbose(1, "%d experiments\n", expsByIx->n);
-FILE *f = mustOpen(outFile, "w");
+/* Load up encodeExp info. */
+struct sqlConnection *expConn = sqlConnect(expDb);
+char query[256];
+safef(query, sizeof(query), "select * from %s", expTable);
+struct encodeExp *expList = encodeExpLoadByQuery(expConn, query);
+sqlDisconnect(&expConn);
+verbose(1, "%d experiments in encodeExp\n", slCount(expList));
+
 int i;
-fputs("#file_name\tformat\toutput_type\texperiment\treplicate\tenriched_in\tmd5sum\tsize\n", f);
+struct mdbObj *mdbLists[ArraySize(metaDbs)];
+for (i=0; i<ArraySize(metaDbs); ++i)
+    {
+    char *db = metaDbs[i];
+    mdbLists[i] = getMdbList(db);
+    verbose(1, "%d meta objects in %s\n", slCount(mdbLists[i]), db);
+    }
+
+/* Open output and write header */
+FILE *f = mustOpen(outFile, "w");
+fputs("#file_name\tformat\toutput_type\texperiment\treplicate\tenriched_in", f);
+fputs("\tmd5_sum\tsize\tmodified\tvalid_key\n", f);
+
 for (i=0; i<ArraySize(metaDbs); ++i)
    {
-   addGenomeToManifest(metaDbs[i], fileRootDir, expsByIx, f);
+   addGenomeToManifest(metaDbs[i], mdbLists[i], fileRootDir, f);
    }
 verbose(1, "%d files in metaDb not found in %s,  run with verbose=2 to see list\n", 
     missingFileCount, fileRootDir);
