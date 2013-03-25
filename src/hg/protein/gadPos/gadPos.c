@@ -34,7 +34,7 @@ boolean found;
 if (argc != 3) usage();
 gdb   = argv[1];
    
-outputFile = fopen(argv[2], "w");
+outputFile = mustOpen(argv[2], "w");
 
 conn  = hAllocConn(gdb);
 conn2 = hAllocConn(gdb);
