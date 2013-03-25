@@ -436,7 +436,7 @@ void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 			 char *encSessionName);
 /* Increment namedSessionDb.useCount and update lastUse for this session. */
 
-boolean cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
 			 struct hash *oldVars, char *actionVar);
 /* If permitted, load the contents of the given user's session, and then
@@ -444,7 +444,6 @@ boolean cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
  * If non-NULL, oldVars will contain values overloaded when reloading CGI.
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
  * CGI action variable that sent us here. */
-/* Return TRUE if a session was loaded. */
 
 void cartLoadSettings(struct lineFile *lf, struct cart *cart,
 		      struct hash *oldVars, char *actionVar);
@@ -552,7 +551,7 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 /* When composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
 
-void cartCopyCustomTracks(struct cart *cart, char *db);
+void cartCopyCustomTracks(struct cart *cart);
 /* If cart contains any live custom tracks, save off a new copy of them,
  * to prevent clashes by multiple uses of the same session.  */
 
