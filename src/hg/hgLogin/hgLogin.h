@@ -11,7 +11,8 @@
 #define CFG_LOGIN_MAIL_SIGNATURE "login.mailSignature"
 #define CFG_LOGIN_MAIL_RETURN_ADDR "login.mailReturnAddr"
 #define CFG_CENTRAL_DOMAIN "central.domain"
-
+#define CFG_COOKIIENAME_USERNAME  "wiki.userNameCookie"
+#define CFG_COOKIIENAME_USERID  "wiki.loggedInCookie"
 #endif /* hgLogin_H */
 
 

@@ -38,6 +38,26 @@ char brwAddr[256];
 char signature[256];
 char returnAddr[256];
 /* ---- Global helper functions ---- */
+char *cookieNameForUserName()
+/* Return the cookie name used for logged in user name like 'wikidb_mw1_UserName' */
+{
+if isEmpty(cfgOption(CFG_COOKIIENAME_USERNAME))
+    return cloneString("NULL_cookieNameUserName");
+else
+    return cloneString(cfgOption(CFG_COOKIIENAME_USERNAME));
+}
+
+char *cookieNameForUserID()
+/* Return the cookie name used for logged in user ID like 'wikidb_mw1_UserID' */
+{
+if isEmpty(cfgOption(CFG_COOKIIENAME_USERID))
+    return cloneString("NULL_cookieNameUserID");
+else
+    return cloneString(cfgOption(CFG_COOKIIENAME_USERID));
+}
+
+
+
 char *browserName()
 /* Return the browser name like 'UCSC Genome Browser' */
 {
@@ -1175,15 +1195,17 @@ hPrintf(
     "\n");
 /* Set cookies */
 char *domainName=getCookieDomainName();
+char *userNameCookie=cookieNameForUserName();
+char *userIDCookie=cookieNameForUserID();
 hPrintf("<script language=\"JavaScript\">"
     " document.write(\"Login successful, setting cookies now...\");"
     "</script>\n"
     "<script language=\"JavaScript\">"
-    "document.cookie = \"wikidb_mw1_UserName=%s; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
+    "document.cookie = \"%s=%s; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
     "\n"
-    "document.cookie = \"wikidb_mw1_UserID=%d; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
+    "document.cookie = \"%s=%d; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
     " </script>"
-    "\n", userName, domainName, userID, domainName);
+    "\n", userNameCookie, userName, domainName, userIDCookie, userID, domainName);
 cartRemove(cart,"hgLogin_userName");
 returnToURL(150);
 }
@@ -1265,11 +1287,13 @@ hPrintf(
     "<span style='color:red;'></span>"
     "\n");
 char *domainName=getCookieDomainName();
+char *userNameCookie=cookieNameForUserName();
+char *userIDCookie=cookieNameForUserID();
 hPrintf("<script language=\"JavaScript\">"
-    "document.cookie = \"wikidb_mw1_UserName=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
+    "document.cookie = \"%s=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
     "\n"
-    "document.cookie = \"wikidb_mw1_UserID=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
-    "</script>\n", domainName, domainName);
+    "document.cookie = \"%s=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
+    "</script>\n", userNameCookie, domainName, userIDCookie, domainName);
 /* return to "returnto" URL */
 returnToURL(150);
 }
