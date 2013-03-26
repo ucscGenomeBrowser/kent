@@ -8,9 +8,9 @@ CREATE TABLE gadAll (
 	chromosome	varchar(20),  #	Chromosome
 	band		varchar(20),  #	Chr-Band
 	geneSymbol	varchar(40),  #	Gene
-	chromStart	int(10),      #	DNA Start
-	chromEnd	int(10),      # DNA End
-	pValue		varchar(20),  #	P Value
+	chromStart	int unsigned, #	DNA Start
+	chromEnd	int unsigned, # DNA End
+	pValue		varchar(255), #	P Value
 	reference 	varchar(255), #	Reference
 	pubMed		varchar(40),  #	Pubmed ID
 	alleleAuthDes	varchar(255), #	Allele Author Discription
@@ -26,14 +26,14 @@ CREATE TABLE gadAll (
 	narrowPhen	varchar(255), #	Narrow Phenotype
 	molePhenotype	varchar(255), #	Mole. Phenotype
 	journal		varchar(255), #	Journal
-	title		varchar(255), #	Title
-	rsId		varchar(20),  #	rs Number
+	title		blob,         #	Title
+	rsId		varchar(255), #	rs Number
 	omimId		varchar(20),  #	OMIM ID
-	gadQ		varchar(255), #	GAD/CDC
-	gadCdc		varchar(255), #	GAD/CDC
+	gadQ		varchar(255), #	GAD/CDC (unpopulated as of 2013)
+	gadCdc		varchar(255), #	GAD/CDC (unpopulated as of 2013)
 	year		varchar(10),  #	Year
 	conclusion	blob, 	      #	Conclusion
-	studyInfo	varchar(255), #	Study Info
+	studyInfo	blob,         #	Study Info
 	envFactor	varchar(255), #	Env. Factor
 	giGeneA		varchar(255), #	GI Gene A
 	giAlleleGeneA	varchar(255), #	GI Allele of Gene A
