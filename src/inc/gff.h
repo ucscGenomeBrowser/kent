@@ -58,7 +58,6 @@ struct gffFeature
     {
     struct gffFeature *next; /* Next in list. */
     char *name;	  /* Name, not allocated here. */
-    int count;	  /* Number of times this feature is used. */
     };
 
 struct gffSeqName
