@@ -121,7 +121,7 @@ static void reverseLineOfColors(Color *line, int length)
 {
 long halfLen = (length>>1);
 Color *end = line+length;
-char c;
+Color c;
 while (--halfLen >= 0)
     {
     c = *line;
@@ -283,7 +283,10 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		subtrack->lineHeight = tg->lineHeight;
 	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
 	    if (!overlay)
+		{
 		y += height + 1;
+		wgo->yOff = y;
+		}
 	    hvGfxUnclip(hvg);
 	    }
 	}
