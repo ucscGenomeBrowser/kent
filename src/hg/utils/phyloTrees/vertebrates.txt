@@ -76,9 +76,6 @@ latCha	Euteleostomi; Sarcopterygii; Coelacanthimorpha; Coelacanthiformes; Coelac
 # Atlantic cod - Gadus morhua
 gadMor	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Paracanthopterygii; Gadiformes; Gadidae; Gadus
 
-# spotted Gar Lepisosteus oculatus
-lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Semionotiformes; Lepisosteidae; Lepisosteus
-
 # three-spined stickleback Gasterosteus aculeatus
 gasAcu	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Gasterosteiformes/Syngnathiformes group; Gasterosteiformes; Gasterosteidae; Gasterosteus
 
@@ -110,7 +107,7 @@ fr	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomor
 lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Semionotiformes; Lepisosteidae; Lepisosteus
 
 # spotted green pufferfish Tetraodon nigroviridis
-tetNig	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon
+tetNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon
 
 # zebrafish Danio rerio
 danRer	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Otocephala; Ostariophysi; Otophysi; Cypriniphysi; Cypriniformes; Cyprinoidea; Cyprinidae; Danio

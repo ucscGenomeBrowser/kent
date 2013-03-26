@@ -139,7 +139,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 set transMapDb anoCar1,anoCar2,bosTau4,calJac1,calJac3,canFam2,cavPor3,choHof1,danRer5,danRer6,equCab2,felCat3,fr2,fr3,galGal3,gasAcu1,hg18,hg19,mm9,mm10,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,xenTro3,loxAfr3,papAnu2,papHam1,micMur1,echTel1,speTri2,saiBol1,gadMor1,melUnd1,eriEur1,proCap1,pteVam1,sorAra1,tarSyr1,tupBel1,ochPri2,oreNil2,turTru2,vicPac1,panTro4
 
 # Define ucscRetro databases
-set ucscRetroDb hg18,hg19,mm9,mm10
+set ucscRetroDb hg19,mm9,mm10
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
@@ -622,7 +622,7 @@ identifier encodePseudogeneUcsc dependency
 
 identifier refGeneRetro dependency
 "Link refGene to ucscRetroInfo"
-    hg19,mm9,mm10.refGene.name dupeOk
+    $ucscRetroDb.refGene.name dupeOk
     hg19.ucscRetroInfo4.refSeq minCheck=0.96 exclude=noRefSeq
     hg19.ucscRetroInfo5.refSeq minCheck=0.96 exclude=noRefSeq
     mm9.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
@@ -630,33 +630,54 @@ identifier refGeneRetro dependency
 
 identifier knownGeneRetro dependency
 "Link knownGene to ucscRetroInfo"
-    hg19,mm9,mm10.knownGene.name dupeOk chopAfter=.
+    $ucscRetroDb.knownGene.name dupeOk chopAfter=.
     hg19.ucscRetroInfo4.kgName minCheck=0.96 exclude=noKg chopAfter=.
     hg19.ucscRetroInfo5.kgName minCheck=0.96 exclude=noKg chopAfter=.
     mm9.ucscRetroInfo1.kgName minCheck=0.94 exclude=noKg chopAfter=.
     mm10.ucscRetroInfo2.kgName minCheck=0.96 exclude=noKg chopAfter=.
 
-identifier ucscRetroInfo[4,5] dependency
+identifier ucscRetroInfo[1,2,4,5] dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
-    hg19.ucscRetroInfo[].name unique
-    hg19.ucscRetroAli[].qName 
+    $ucscRetroDb.ucscRetroInfo[].name unique
+    $ucscRetroDb.ucscRetroAli[].qName 
 
-identifier ucscRetroOrtho[4,5] dependency
+identifier ucscRetroOrtho[1,2,4,5] dependency
 "Link together Ucsc Retrogenes and ucsc retro orthlogy"
-    hg19.ucscRetroAli[].qName dupeOk
-    hg19.ucscRetroOrtho[].name
+    $ucscRetroDb.ucscRetroAli[].qName dupeOk
+    $ucscRetroDb.ucscRetroOrtho[].name
 
-identifier ucscRetroExtFileId[4,5]
+identifier ucscRetroExtFileId[1,2,4,5]
 "External file ID for parent sequences for UCSC Retrogenes"
-    hg19.ucscRetroExtFile[].id
-    hg19.ucscRetroSeq[].extFile
+    $ucscRetroDb.ucscRetroExtFile[].id
+    $ucscRetroDb.ucscRetroSeq[].extFile
 
-identifier ucscRetroSeq[4,5]
-"Sequences for GenBank sequences used as retrogene parents"
-    hg19.ucscRetroSeq[].acc unique 
-    hg19.ucscRetroCds[].id
-    hg19.ucscRetroAli[].qName chopAfter=-
-    hg19.ucscRetroInfo[].name chopAfter=-
+identifier ucscRetroSeq4
+"Sequences for GenBank sequences used as retrogene parents for version 4"
+    hg19.ucscRetroSeq4.acc unique 
+    hg19.ucscRetroCds4.id
+    hg19.ucscRetroAli4.qName chopAfter=-
+    hg19.ucscRetroInfo4.name chopAfter=-
+
+identifier ucscRetroSeq5
+"Sequences for GenBank sequences used as retrogene parents for version 5"
+    hg19.ucscRetroSeq5.acc unique 
+    hg19.ucscRetroCds5.id
+    hg19.ucscRetroAli5.qName chopAfter=-
+    hg19.ucscRetroInfo5.name chopAfter=-
+
+identifier ucscRetroSeq1
+"Sequences for GenBank sequences used as retrogene parents for version 1"
+    mm9.ucscRetroSeq1.acc unique 
+    mm9.ucscRetroCds1.id
+    mm9.ucscRetroAli1.qName chopAfter=-
+    mm9.ucscRetroInfo1.name chopAfter=-
+
+identifier ucscRetroSeq2
+"Sequences for GenBank sequences used as retrogene parents for version 2"
+    mm10.ucscRetroSeq2.acc unique 
+    mm10.ucscRetroCds2.id
+    mm10.ucscRetroAli2.qName chopAfter=-
+    mm10.ucscRetroInfo2.name chopAfter=-
 
 identifier encodePseudogeneUcsc2 dependency
 "Link together Ucsc Pseudogenes and class"

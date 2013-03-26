@@ -12,8 +12,7 @@ source `which qaConfig.csh`
 
 set tablelist=""
 set db=""
-set verbosity=0
-set dot=( '.' '.' '.' '.' '.')
+set dot=( '. ' '. ' '. ' '. ' '. ')
 set first=""
 set second=""
 set third=""
@@ -46,7 +45,6 @@ endif
 
 if ( $#argv == 3 ) then
   if ( $argv[3] == "verbose" ) then
-    set verbosity=1
     set dot=( 'dev  ' 'beta ' 'pub  ' 'rr   ' 'euro ' )
   else
     echo
@@ -71,45 +69,31 @@ foreach table ($tables)
 
   set first=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
     | awk '{print $14, $15}'`
-  if ( $status ) then
-    echo "$dot[1]"
-    continue
-  endif
+  echo "$dot[1]"$first
 
   set second=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
     | awk '{print $14, $15}'`
-  if ( $status ) then
-    echo "$dot[2]"
-    continue
-  endif
+  echo "$dot[2]"$second
 
   if ( "$table" == "trackDb" ) then
     set third=`hgsql -h $sqlbeta -N -e 'SHOW TABLE STATUS LIKE "'trackDb_public'"' $db \
       | awk '{print $14, $15}'`
-    if ( $status ) then
-      echo "$dot[3]"
-      continue
-    endif
+    echo "$dot[3]"$third  "(trackDb_public)"
   endif
+  echo
 
   set fourth=`getRRtableStatus.csh $db $table Update_time`
   if ( $status ) then
     set fourth=""
   endif
+  echo "$dot[4]"$fourth
 
   set fifth=`getTableStatus.csh $db genome-euro | sed '1,2d' \
       | grep -w ^$table | awk '{print $14, $15}'`
   if ( $status ) then
-    set fifth="."
+    set fifth=""
   endif
-
-  echo "$dot[1]"$first
-  echo "$dot[2]"$second
-  if ( "$table" == "trackDb" ) then
-    echo "$dot[3]"$third "(trackDb_public)"
-  endif
-  echo
-  echo "$dot[4]"$fourth
   echo "$dot[5]"$fifth
+
 end
 echo

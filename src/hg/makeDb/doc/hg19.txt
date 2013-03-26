@@ -20274,3 +20274,50 @@ XXX Wed Mar  6 12:28:53 PST 2013
     rm -f search_db* dbNS*_variant.chr* dbNs*.bed
 
 ##############################################################################
+# GAD UPDATE (DONE 3/25/13 angie)
+    mkdir /hive/data/genomes/hg19/bed/gad
+    set today = `date +%Y_%m_%d`
+    mkdir /hive/data/genomes/hg19/bed/gad/$today
+    cd /hive/data/genomes/hg19/bed/gad/$today
+
+    # Download requires a simple registration process: enter name and email on
+    #   http://geneticassociationdb.nih.gov/cgi-bin/download.cgi
+    # and then you will receive an automated email with a download link.
+    wget <downloadUrlFromEmail>
+    unzip -j all.zip
+
+    # Examine the 43 column labels of all.txt:
+    tail -n +3 all.txt | head -1 \
+    | perl -wne 'chomp; @w = split("\t"); \
+                 $i = 1; foreach $w (@w) { print "$i\t$w[$i-1]\n"; $i++; }'
+
+    # hg/lib/gadAll.sql has 45 columns -- apparently two have been dropped
+    # from the latest all.txt.  Insert empty strings for those two.
+    # NOTE: the first run of this generated a bunch of 'uninitialized value'
+    # warnings; there were two stray linebreaks that I manually edited out.
+    tail -n +4 all.txt \
+    | perl -wne 's/\r//g; @w = split(/\t/, $_, -1); \
+                 next if ($w[6] eq "" || $w[9] eq "" || $w[10] eq ""); \
+                 $w[9] =~ s/,//g;  $w[10] =~ s/,//g; \
+                 print join("\t", @w[0..29], "", "", @w[30..$#w]);' \
+    | hgLoadSqlTab hg19 gadAll ~/kent/src/hg/lib/gadAll.sql stdin
+
+    # Coords given in gadAll are a little wacky, so we ignore them.
+    # Use Fan's program to associate geneSymbols with genomic coords from
+    # preferred sources (first knownCanonical, then refGene, then kgAlias;
+    # *** NOTE FOR NEXT TIME: gadPos now also looks in a couple Gencode V14
+    #     tables if they exist.  If they don't anymore, you should look for
+    #     suitable replacements if there are a lot of unfound IDs. ***)
+    gadPos hg19 stdout | sort -k1,1 -k2n,2n -k4,4 -u > gad.tab
+#Found in knownCanonical: 7758
+#Found in refGene: 10
+#Found in kgAlias: 193
+#Found in Gencode: 178
+#Not found: 94
+
+    # use -nobin option to ensure display order is according to genomic position
+    # -- table is very small so performance is fine
+    hgLoadBed -nobin hg19 gad gad.tab
+#Read 9156 elements of size 4 from gad.tab
+
+##############################################################################
