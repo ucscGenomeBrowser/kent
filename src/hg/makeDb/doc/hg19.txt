@@ -3059,6 +3059,16 @@ TMPDIR=/scratch/tmp
     time doRecipBest.pl -buildDir=`pwd` hg19 micMur1 > rbest.log 2>&1
     #	about 4h30m
 
+    # and for the swap (DONE - 2013-03-26 - Hiram)
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzMicMur1.2009-05-14/DEF \
+        -noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
+        > swap.log 2>&1 &
+    #   Elapsed time: 186m47s
+    cat fb.micMur1.chainHg19Link.txt
+    #   1318212266 bases of 1852394361 (71.163%) in intersection
+
 #########################################################################
 # LASTZ Baboon PapHam1 (DONE - 2009-05-20,22 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
