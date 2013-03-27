@@ -7,6 +7,8 @@
 #include "common.h"
 #include "md5.h"
 #include "hex.h"
+#include "linefile.h"
+#include "hash.h"
 
 
 #define GET_UINT32(n,b,i)					\
@@ -259,6 +261,18 @@ char *md5HexForFile(char * fileName)
 unsigned char md5[16];       /* Keep the md5 checksum here. */
 md5ForFile(fileName,md5);
 return md5ToHex(md5);
+}
+
+struct hash *md5FileHash(char *fileName)
+/* Read md5sum file and return a hash keyed by file names with md5sum values. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+struct hash *hash = hashNew(0);
+while (lineFileRow(lf, row))
+    hashAdd(hash, row[1], cloneString(row[0]));
+lineFileClose(&lf);
+return hash;
 }
 
 #ifdef TEST

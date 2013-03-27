@@ -658,7 +658,7 @@ if (elCount >= stream->allocCount)
 void bbiOutputOneSummaryFurtherReduce(struct bbiSummary *sum, 
 	struct bbiSummary **pTwiceReducedList, 
 	int doubleReductionSize, struct bbiBoundsArray **pBoundsPt, 
-	struct bbiBoundsArray *boundsEnd, bits32 chromSize, struct lm *lm, 
+	struct bbiBoundsArray *boundsEnd, struct lm *lm, 
 	struct bbiSumOutStream *stream)
 /* Write out sum to file, keeping track of minimal info on it in *pBoundsPt, and also adding
  * it to second level summary. */

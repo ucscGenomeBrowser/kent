@@ -137,4 +137,4 @@ danRer7 -> Zebrafish ;
 gadMor1 -> Atlantic_cod ;
 petMar1 -> Lamprey ;
 petMar2 -> Lamprey ;" \
-	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/David_s/David's/; s/Star_nosed/Star-nosed/;"
+	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/David_s/David's/; s/Star_nosed/Star-nosed/; s/00*)/)/g; s/00*,/,/g"

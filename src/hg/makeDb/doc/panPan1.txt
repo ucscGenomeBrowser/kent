@@ -141,6 +141,18 @@ close (UC);
     # Valid Fasta file entry
     # All AGP and FASTA entries agree - both files are valid
 
+    # N50
+    cd /hive/data/genomes/panPan1/ucsc
+    mkdir N50
+    zcat ucsc.fa.gz | faCount stdin | awk ' /^(JH|AJFE)/ {print $1, $2}' > N50/chrom.sizes 
+    n50.pl N50/chrom.sizes
+#       reading: N50/chrom.sizes
+#       contig count: 10866, total size: 2869173508, one half size: 1434586754
+# cumulative    N50 count       contig  contig size
+1431997266      72      JH650583        10154712
+1434586754 one half size
+1442122158      73      JH650317        10124892
+
 
     # Photo
     mkdir /hive/data/genomes/panPan1/photograph
@@ -251,72 +263,139 @@ taxId 9597
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(working - 2012-07-26 - Chin)
+#	(DONE - 2012-07-26 - Chin)
     mkdir /hive/data/genomes/panPan1/bed/gap
     cd /hive/data/genomes/panPan1/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../panPan1.unmasked.2bit > findMotif.txt 2>&1
-    #   real    0m9.384s
+    #   real    1m10.093s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits panPan1 -not gap -bed=notGap.bed
-    #   1041286029 bases of 1041286029 (100.000%) in intersection
-    #   real    0m7.332s
+    # 2725953003 bases of 2725953003 (100.000%) in intersection
+    # real    0m18.538s
 
     # can see now if allGaps.bed actually is all the gaps:
     hgsql -N -e "select size from gap;" panPan1 | ave stdin | grep total
-# total 24006152.000000
+    # total 143237068.000000
     ave -col=5 allGaps.bed | grep total
-# total 24006152.000000
+    # total 143284465.000000
     # the rest is unnecessary, they are all marked
 
     time featureBits panPan1 allGaps.bed notGap.bed -bed=new.gaps.bed
-    #   0 bases of 1041286029 (0.000%) in intersection
-    #   real    10m13.458s
-    # no new gaps, nothing to do here
+    # 47397 bases of 2725953003 (0.002%) in intersection
+    # real    7m37.214s
+    # Some new gaps, what next?a Do as panTro3 did. 
+ 
 
     # check if any non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" panPan1 | sort | uniq -c
-    #  68589 yes
+    #  110367 yes
+
+    #   what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" panPan1 | sort -n | tail -1
+    #   6370
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" panPan1 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits panPan1 other.bed
+    #   47397 bases of 2725953003 (0.002%) in intersection
+    #   verify chrom names are OK for index length
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+        -noLoad panPan1 otherGap other.bed
+    # Read 45714 elements of size 8 from other.bed
+    #   adding this many:
+    wc -l bed.tab
+    #   45714
+    #   starting with this many
+    hgsql -e "select count(*) from gap;" panPan1
+    #   110367
+    hgsql panPan1 -e 'load data local infile "bed.tab" into table gap;'
+    #   result count:
+    hgsql -e "select count(*) from gap;" panPan1
+    #   156081 == 110367 + 45714
 
 ##########################################################################
-## WINDOWMASKER (working - 2012-07-26 - Chin)
+## WINDOWMASKER (DONE 2012-03-06 - Chin)
     mkdir /hive/data/genomes/panPan1/bed/windowMasker
     cd /hive/data/genomes/panPan1/bed/windowMasker
+    screen -S panPan1.WindowMasher
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
-	-dbHost=hgwdev panPan1 > do.log 2>&1 &
-    #   real    56m40.276s
+        -dbHost=hgwdev panPan1 > do.log 2>&1 &
+    #   real    221m23.346s
 
     # Masking statistics
-     cat faSize.panPan1.wmsk.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 840644896 upper
-    #           200641133 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %18.83 masked total, %19.27 masked real
+    twoBitToFa panPan1.wmsk.2bit stdout | faSize stdin
+    # 2869190071 bases (143284465 N's 2725905606 real 1745977560 upper 
+    # 979928046 lower) in 10867 sequences in 1 files
+    # Total size: mean 264027.8 sd 2063129.2 
+    # min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
+    # %34.15 masked total, %35.95 masked real
 
-    cat faSize.panPan1.wmsk.sdust.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833616540 upper
-    #           207669489 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.49 masked total, %19.94 masked real
+    twoBitToFa panPan1.wmsk.sdust.2bit stdout | faSize stdin
+    # 2869190071 bases (143284465 N's 2725905606 real 1730577119 upper 
+    # 995328487 lower) in 10867 sequences in 1 files
+    # Total size: mean 264027.8 sd 2063129.2 
+    # min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
+    # %34.69 masked total, %36.51 masked real
 
-    cat faSize.panPan1.cleanWMSdust.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833616540 upper
-    #           207669489 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.49 masked total, %19.94 masked real
+    hgLoadBed panPan1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #   Read 15488428 elements of size 3 from windowmasker.sdust.bed.gz
 
-    cat fb.panPan1.windowmaskerSdust.clean.txt
-    #   207669489 bases of 1065292181 (19.494%) in intersection
+    featureBits -countGaps panPan1 windowmaskerSdust
+    #   1138597860 bases of 2869190071 (39.684%) in intersection
+
+    #   eliminate the gaps from the masking
+    time featureBits panPan1 -not gap -bed=notGap.bed
+    #   2725905606 bases of 2725905606 (100.000%) in intersection
+    #   real    0m17.431s
+
+    time nice -n +19 featureBits panPan1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   995328487 bases of 2725905606 (36.514%) in intersection
+    #   real    6m35.223s
+
+    #   reload track to get it clean
+    hgLoadBed panPan1 windowmaskerSdust cleanWMask.bed.gz
+    #   Read 15570438 elements of size 4 from cleanWMask.bed.gz
+    featureBits -countGaps panPan1 windowmaskerSdust
+    #   995328487 bases of 2869190071 (34.690%) in intersection
+    zcat cleanWMask.bed.gz \
+        | twoBitMask ../../panPan1.unmasked.2bit stdin \
+            -type=.bed panPan1.cleanWMSdust.2bit
+    twoBitToFa panPan1.cleanWMSdust.2bit stdout | faSize stdin \
+        > panPan1.cleanWMSdust.faSize.txt
+    #   2869190071 bases (143284465 N's 2725905606 real 1730577119 upper 
+    #   995328487 lower) in 10867 sequences in 1 files
+    #   Total size: mean 264027.8 sd 2063129.2 
+    #   min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
+    #   %34.69 masked total, %36.51 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps panPan1 rmsk windowmaskerSdust
-    #   32967187 bases of 1065292181 (3.095%) in intersection
+    #   837096446 bases of 2936052603 (28.511%) in intersection
 
 ##########################################################################
-# add simpleRepeats to WindowMasker result (working - 2012-07-26 - Chin)
+# add simpleRepeats to WindowMasker result (DONE 2013-03-07 - Chin)
+# Note: WindowMasker have 15,570,438 rows far greater than
+#       repeatMaskers's 4, 952,570
     # add to rmsk after it is done:
     cd /hive/data/genomes/panPan1
     twoBitMask -add bed/windowMasker/panPan1.cleanWMSdust.2bit \
@@ -325,38 +404,66 @@ taxId 9597
 
     twoBitToFa panPan1.2bit stdout | faSize stdin > faSize.panPan1.2bit.txt
     cat faSize.panPan1.2bit.txt
-    #   1065292181 bases (24006152 N's 1041286029 real 833083628 upper
-    #           208202401 lower) in 27239 sequences in 1 files
-    #   Total size: mean 39109.1 sd 545732.4 min 131 (JH767125)
-    #           max 30495534 (JH739887) median 598
-    #   %19.54 masked total, %19.99 masked real
+    #   2869190071 bases (143284465 N's 2725905606 real 1730225460 upper 
+    #   995680146 lower) in 10867 sequences in 1 files
+    #   Total size: mean 264027.8 sd 2063129.2 min 217 (AJFE01120895) 
+    #         max 101998900 (JH650633) median 1258
+    #   %34.70 masked total, %36.53 masked real
 
     rm /gbdb/panPan1/panPan1.2bit
     ln -s `pwd`/panPan1.2bit /gbdb/panPan1/panPan1.2bit
 
 ##########################################################################
-# cpgIslands - (working - 2012-07-26 - Chin)
+# cpgIslands - (DONE - 2013-03-07 - Chin)
     mkdir /hive/data/genomes/panPan1/bed/cpgIslands
     cd /hive/data/genomes/panPan1/bed/cpgIslands
+    screen -S panPan1-cpg
     time doCpgIslands.pl panPan1 > do.log 2>&1
-    #   real    17m6.876s
+    #   real    31m57.438s
 
     cat fb.panPan1.cpgIslandExt.txt
-    #   5087816 bases of 1041286029 (0.489%) in intersection
+    #   16113070 bases of 2725905606 (0.591%) in intersection
 
 #########################################################################
-# genscan - (working - 2012-07-26 - Chin)
+# genscan - (working - 2013-03-07 - Chin)
     mkdir /hive/data/genomes/panPan1/bed/genscan
     cd /hive/data/genomes/panPan1/bed/genscan
+    screen -S panPan1-genScan
     time doGenscan.pl panPan1 > do.log 2>&1
-    #   real    31m32.788s
-# Completed: 27239 of 27239 jobs
-# CPU time in finished jobs:         28s       0.47m     0.01h    0.00d  0.000 y
-# IO & Wait Time:                 96830s    1613.83m    26.90h    1.12d  0.003 y
-# Average job time:                   4s       0.06m     0.00h    0.00d
-# Longest finished job:              16s       0.27m     0.00h    0.00d
-# Submission to last job:           154s       2.57m     0.04h    0.00d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+    #   real    5167m59.680s
+
+    time doGenscan.pl -continue genscan panPan1 > genscan.log 2>&1
+    #   5133m5.650s
+    # Completed: 10866 of 10867 jobs
+    # Crashed: 1 jobs
+    # CPU time in finished jobs: 54543s     909.05m    15.15h    0.63d  0.002 y
+    # IO & Wait Time:            40808s     680.13m    11.34h    0.47d  0.001 y
+    # Average job time:                 9s       0.15m     0.00h    0.00d
+    # Longest finished job:            6123s     102.05m     1.70h    0.07d
+    # Submission to last job:        394319s    6571.98m   109.53h    4.56d
+
+    # Every contig runs ok except JH650633 which is one with max 101998900 bases
+    # re-run it on hgwdev
+./runGsBig.csh JH650633 002 {check out exists gtf/002/JH650633.gtf} {check out exists pep/002/JH650633.pep} {check out exists subopt/002/JH650633.bed}
+
+    ssh hgwdev
+    screen -S JH650633-genscan 
+    cd /hive/data/genomes/panPan1/bed/genscan
+XXXX 2013-03-18 12:05 PM change window to 2000000
+    /cluster/bin/x86_64/gsBig hardMaskedFa/002/JH650633.fa \ 
+    gtf/002/JH650633.gtf pep/002/JH650633.pep subopt/002/JH650633.bed \
+    -exe=/scratch/data/genscan/genscan \
+    -par=/scratch/data/genscan/HumanIso.smat \  
+    -tmp=/tmp -window=2000000 \
+    > JH650633.gsBig.log 2>&1
+
+/cluster/bin/x86_64/gsBig $seqFile $resultGtf -trans=$resultPep -subopt=$resultSubopt -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/tmp -window=2400000
+
+./runGsBig.csh JH650633 002 {check out exists gtf/002/JH650633.gtf} {check out exists pep/002/JH650633.pep} {check out exists subopt/002/JH650633.bed}
+     
+
+
+
 
     cat fb.panPan1.genscan.txt
     #   18118133 bases of 1041286029 (1.740%) in intersection
@@ -364,93 +471,94 @@ taxId 9597
     #   22582067 bases of 1041286029 (2.169%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (working - 2012-07-26 - Chin)
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-03-08 - Chin)
     # Use -repMatch=400, based on size -- for human we use 1024
-    # use the "real" number from the faSize measurement,
+    # use the "real" number (2725889043) from the faSize measurement
+    # reported above as numerator. 
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 1041286029 / 2897316137 \) \* 1024
-    #   ( 1041286029 / 2897316137 ) * 1024 = 368.022281
+    calc \( 2725889043 / 2897316137 \) \* 1024
+    #   ( 2725889043 / 2897316137 ) * 1024 = 963.412430
 
-    # round up to 400 (melUnd1 was also 400)
+    #   use -repMatch=950 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+
 
     cd /hive/data/genomes/panPan1
+    screen -S panPan1_blat
     time blat panPan1.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/panPan1.11.ooc -repMatch=400
-    #   Wrote 14450 overused 11-mers to jkStuff/panPan1.11.ooc
-    #   real    0m32.689s
-    #   melUnd1 was: Wrote 14287 overused 11-mers to jkStuff/melUnd1.11.ooc
+      -makeOoc=jkStuff/panPan1.11.ooc -repMatch=950
+    #  Wrote 31225 overused 11-mers to jkStuff/panPan1.11.ooc
+    #  real    1m15.356s
 
     # there are no non-bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" panPan1 | sort | uniq -c
-    #   68589 yes
-#    cd /hive/data/genomes/panPan1/jkStuff
-#    gapToLift panPan1 panPan1.nonBridged.lift -bedFile=panPan1.nonBridged.bed
-    # largest non-bridged contig:
-#    awk '{print $3-$2,$0}' panPan1.nonBridged.bed | sort -nr | head
-    #   123773608 chrX  95534   123869142       chrX.01
+    #   156081 yes
 
 #########################################################################
-# AUTO UPDATE GENBANK (working - 2012-07-26 - Chin)
+# AUTO UPDATE GENBANK (DONE - 2013-03-18 - Chin)
     # examine the file:
-    /cluster/data/genbank/data/organism.lst
+    /cluster/data/genbank/data/organism.lst 
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
-# Geospiza fortis	1	0	0
-    # to decide which "native" mrna or ests you want to specify in genbank.conf
+# Pan paniscus    425     0       0
+    # to decide which "native" mrna or ests you want to specify in
+    # genbank.conf
 
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # edit etc/genbank.conf to add panPan1 just after ce2
-# panPan1 (Medium Ground Finch - Darwin finch)
+    # edit etc/genbank.conf to add:
+# panPan1 (bonobo)
 panPan1.serverGenome = /hive/data/genomes/panPan1/panPan1.2bit
 panPan1.clusterGenome = /hive/data/genomes/panPan1/panPan1.2bit
 panPan1.ooc = /hive/data/genomes/panPan1/jkStuff/panPan1.11.ooc
 panPan1.lift = no
+panPan1.perChromTables = no
 panPan1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 panPan1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
 panPan1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 panPan1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 panPan1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-panPan1.refseq.mrna.native.load = no
-panPan1.refseq.mrna.xeno.load = yes
-panPan1.genbank.mrna.xeno.load = no
-panPan1.genbank.est.native.load = no
+panPan1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
 panPan1.downloadDir = panPan1
-panPan1.perChromTables = no
+panPan1.refseq.mrna.native.load  = no
+panPan1.refseq.mrna.xeno.load  = yes
+panPan1.genbank.mrna.xeno.load = yes
+panPan1.genbank.est.native.load = no
 
     # end of section added to etc/genbank.conf
-    git commit -m "adding panPan1 medium ground finch" etc/genbank.conf
+    git commit -m "adding panPan1 bonobo" etc/genbank.conf
     git push
     make etc-update
 
     git pull
     # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "adding definition for geoForNames" src/lib/gbGenome.c
+    git commit -m "adding definition for panPanNames Pan paniscus" \
+        src/lib/gbGenome.c
     git push
     make install-server
 
-    ssh hgwdev			# used to do this on "genbank" machine
+    ssh hgwdev                  # used to do this on "genbank" machine
     screen -S panPan1           # long running job managed in screen
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbAlignStep -initial panPan1 &
-    #   var/build/logs/2012.07.26-22:50:11.panPan1.initalign.log
-    #   real    175m22.294s
+    #   logFile: var/build/logs/2013.03.15-10:56:31.panPan1.initalign.log
+    #   real    835m9.466s
+
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad panPan1 &
-    #   real    9m57.487s
-    #   var/dbload/hgwdev/logs/2012.07.27-14:05:35.dbload.log
+    #   logFile: var/dbload/hgwdev/logs/2013.03.18-13:10:19.dbload.log
+    #   real    74m22.846s
 
-    # check the end of that dbload.log to see if it was successful
-    #   hgwdev 2012.07.27-14:15:33 dbload: finish
-
-    # enable daily alignment and update of hgwdev (working - 2012-05-09 - Chin)
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 -
+    # Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add panPan1 to:
-    vi etc/align.dbs etc/hgwdev.dbs
+    vi etc/align.dbs 
+    vi etc/hgwdev.dbs
     git commit -m "Added panPan1." etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update

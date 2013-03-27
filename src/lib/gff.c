@@ -108,11 +108,11 @@ return nameBuf->string;
 static boolean isGtfGroup(char *group)
 /* Return TRUE if group field looks like GTF */
 {
-if (findWordByDelimiter(group, ' ', "gene_id") == NULL)
+if (strstr(group, "gene_id") == NULL)
     return FALSE;
 if (countChars(group, '"') >= 2)
     return TRUE;
-if (findWordByDelimiter(group, ' ', "transcript_id") != NULL)
+if (strstr(group, "transcript_id") != NULL)
     return TRUE;
 return FALSE;
 }
@@ -138,28 +138,7 @@ if (!parseQuotedString(in, out, retNext))
     errAbort("Line %d of %s\n", lineIx, fileName);
 }
 
-void addGroup(struct gffFile *gff, struct gffLine *gl, char *group)
-/* Add group to gff if it's not there already, and attach it to gl. */
-{
-struct gffGroup *gg;
-struct hashEl *hel;
-if ((hel = hashLookup(gff->groupHash, group)) == NULL)
-   {
-   AllocVar(gg);
-   hel = hashAdd(gff->groupHash, group, gg);
-   gg->name = hel->name;
-   gg->seq = gl->seq;
-   gg->source = gl->source;
-   slAddHead(&gff->groupList, gg);
-   }
-else
-   {
-   gg = hel->val;
-   }
-gl->group = gg->name;
-}
-
-static void parseGff2End(char *s, struct gffFile *gff, struct gffLine *gl, 
+static void parseGtfEnd(char *s, struct gffFile *gff, struct gffLine *gl, 
     char *fileName, int lineIx)
 /* Read the semi-colon separated end bits of a GTF line into gl and
  * hashes. */
@@ -220,7 +199,21 @@ for (;;)
        }
    else if (sameString("transcript_id", type) && (gl->group == NULL))
        {
-       addGroup(gff, gl, val);
+       struct gffGroup *gg;
+       if ((hel = hashLookup(gff->groupHash, val)) == NULL)
+	   {
+	   AllocVar(gg);
+           hel = hashAdd(gff->groupHash, val, gg);
+	   gg->name = hel->name;
+	   gg->seq = gl->seq;
+	   gg->source = gl->source;
+	   slAddHead(&gff->groupList, gg);
+	   }
+	else
+	   {
+	   gg = hel->val;
+	   }
+       gl->group = gg->name;
        }
    else if (sameString("exon_id", type))
        gl->exonId = gffFileGetStr(gff, val);
@@ -243,10 +236,8 @@ for (;;)
    }
 if (gl->group == NULL)
     {
-    if (gl->geneId != NULL)
-        addGroup(gff, gl, gl->geneId);
-    else
-        verbose(2, "No gene_id or transcript_id line %d of %s", lineIx, fileName);
+    if (gl->geneId == NULL)
+        warn("No gene_id or transcript_id line %d of %s", lineIx, fileName);
     }
 }
 
@@ -289,9 +280,6 @@ if ((hel = hashLookup(gff->featureHash, words[2])) == NULL)
     el->name = hel->name;
     slAddHead(&gff->featureList, el);
     }
-struct gffFeature *feature = hel->val;
-feature->count += 1;
-
 gl->feature = hel->name;
 
 if (!isdigit(words[3][0]) || !isdigit(words[4][0]))
@@ -304,39 +292,29 @@ gl->frame = words[7][0];
 
 if (wordCount >= 9)
     {
-    char *groupField = words[8];
     if (!gff->typeKnown)
 	{
 	gff->typeKnown = TRUE;
-	gff->isGtf = isGtfGroup(groupField);
+	gff->isGtf = isGtfGroup(words[8]);
 	}
     if (gff->isGtf)
 	{
-	parseGff2End(groupField, gff, gl, fileName, lineIx);
+	parseGtfEnd(words[8], gff, gl, fileName, lineIx);
 	}
     else
 	{
-	if (strchr(groupField, ';'))
+	char *tnName = gffTnName(gl->seq, trimSpaces(words[8]));
+	if ((hel = hashLookup(gff->groupHash, tnName)) == NULL)
 	    {
-	    char *dupeGroup = cloneString(groupField);
-	    parseGff2End(dupeGroup, gff, gl, fileName, lineIx);
-	    freeMem(dupeGroup);
+	    struct gffGroup *group;
+	    AllocVar(group);
+	    hel = hashAdd(gff->groupHash, tnName, group);
+	    group->name = hel->name;
+	    group->seq = gl->seq;
+	    group->source = gl->source;
+	    slAddHead(&gff->groupList, group);
 	    }
-	else
-	    {
-	    char *tnName = gffTnName(gl->seq, trimSpaces(words[8]));
-	    if ((hel = hashLookup(gff->groupHash, tnName)) == NULL)
-		{
-		struct gffGroup *group;
-		AllocVar(group);
-		hel = hashAdd(gff->groupHash, tnName, group);
-		group->name = hel->name;
-		group->seq = gl->seq;
-		group->source = gl->source;
-		slAddHead(&gff->groupList, group);
-		}
-	    gl->group = hel->name;
-	    }
+	gl->group = hel->name;
 	}
     }
 slAddHead(&gff->lineList, gl);
@@ -411,71 +389,6 @@ group->start = start;
 group->end = end;
 }
 
-#ifdef UNUSED
-static boolean allSameSeq(struct gffGroup *group)
-/* Return TRUE if all lines of group are for same chrom */
-{
-if (group->lineList == NULL || group->lineList->next == NULL)
-    return TRUE;
-char *seq = group->lineList->seq;
-struct gffLine *line;
-for (line = group->lineList->next; line != NULL; line = line->next)
-    if (!sameString(line->seq, seq))
-        return FALSE;
-return TRUE;
-}
-#endif /* UNUSED */
-
-static struct gffGroup *breakGroupBySeq(struct gffGroup *group)
-/* Break up a group that has multiple sequences.  Assumes lineList is sorted. */
-{
-char *curSeq = group->lineList->seq;
-struct gffLine *line, *next;
-struct gffGroup *brokenList = NULL;
-for (line = group->lineList; line != NULL; line = next)
-    {
-    next = line->next;
-    if (next != NULL && !sameString(next->seq, curSeq))
-        {
-	curSeq = next->seq;
-	struct gffGroup *newGroup;
-	AllocVar(newGroup);
-	newGroup->name = group->name;
-	newGroup->seq = curSeq;
-	newGroup->source = group->source;
-	line->next = NULL;
-	newGroup->lineList = next;
-	slAddHead(&brokenList, group);
-	group = newGroup;
-	}
-    }
-slAddHead(&brokenList, group);
-slReverse(&brokenList);
-return brokenList;
-}
-
-static struct gffGroup *breakMultiSeqGroups(struct gffGroup *oldList)
-/* Break up any groups that span multiple chromosomes into one per group.
- * Return reworked list. */
-{
-struct gffGroup *newList = NULL, *group, *next;
-
-for (group = oldList; group != NULL; group = next)
-    {
-    next = group->next;
-    struct gffGroup *groupList = breakGroupBySeq(group);
-    struct gffGroup *newGroup, *newNext;
-    for (newGroup = groupList; newGroup != NULL; newGroup = newNext)
-	{
-	newNext = newGroup->next;
-	slAddHead(&newList, newGroup);
-	}
-    }
-slReverse(&newList);
-return newList;
-}
-
-
 void gffGroupLines(struct gffFile *gff)
 /* Group lines of gff file together, in process mofing
  * gff->lineList to gffGroup->lineList. */
@@ -505,15 +418,12 @@ for (line = gff->lineList; line != NULL; line = nextLine)
 slReverse(&ungroupedLines);
 gff->lineList = ungroupedLines;
 
-/* Restore order of grouped lines. */
+/* Restore order of grouped lines and fill in start and end. */
 for (group = gff->groupList; group != NULL; group = group->next)
+    {
     slSort(&group->lineList, gffLineCmp);
-
-/* Look for groups that traverse multiple chromosomes.  Break them apart. */
-gff->groupList = breakMultiSeqGroups(gff->groupList);
-
-for (group = gff->groupList; group != NULL; group = group->next)
     getGroupBoundaries(group);
+    }
 }
 
 void gffOutput(struct gffLine *el, FILE *f, char sep, char lastSep) 
