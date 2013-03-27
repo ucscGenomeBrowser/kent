@@ -1,8 +1,8 @@
-include ../../../inc/common.mk
+include ../../inc/common.mk
 
 L += -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkweb.a
 
 A = metaFlatten
 O = metaFlatten.o
