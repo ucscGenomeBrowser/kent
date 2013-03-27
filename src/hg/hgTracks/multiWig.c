@@ -69,6 +69,12 @@ while (--totalSize >= 0)
     }
 }
 
+// The value below is useful when scaling between floating point 0-1 representation
+// and 0-255 fit-in-a-byte representation.  If you use 256, then a valid 1.0 wraps
+// to an invalid 256 value in the byte.   If you use 255 then even 0.999999 maps
+// to 254, which is a waste of space.
+#define FLOAT_FOR_BIGGEST_BYTE  255.9
+
 void vLineViaFloat(void *image, int x, int y, int height, Color color)
 /* A vertical line drawer that works via floatPic. */
 {
@@ -92,7 +98,7 @@ if (height <= 0)
     return;
 
 int hOffset = x*3;
-const float scaleColor = 1/255.9;
+const float scaleColor = 1/FLOAT_FOR_BIGGEST_BYTE;
 
 float r = COLOR_32_RED(color) * scaleColor;
 float g = COLOR_32_GREEN(color) * scaleColor;
@@ -144,9 +150,9 @@ for (y=0; y<height; ++y)
     int i = width;
     while (--i >= 0)
         {
-	int red = fp[0]*255.9;
-	int green = fp[1]*255.9;
-	int blue = fp[2]*255.9;
+	int red = fp[0]*FLOAT_FOR_BIGGEST_BYTE;
+	int green = fp[1]*FLOAT_FOR_BIGGEST_BYTE;
+	int blue = fp[2]*FLOAT_FOR_BIGGEST_BYTE;
 	*cp++ = MAKECOLOR_32(red, green, blue);
 	fp += 3;
 	}
