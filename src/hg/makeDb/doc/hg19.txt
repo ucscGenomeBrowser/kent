@@ -20149,7 +20149,7 @@ TMPDIR=/scratch/tmp
 
 
 #############################################################################
-# LASTZ Gibbon NomLeu3 (DONE - Wed Mar  6 12:20:39 PST 2013 - Pauline)
+# LASTZ Gibbon NomLeu3 (DONE - Tue Mar 26 18:52:03 PDT 2013 - Pauline)
 
     mkdir /hive/data/genomes/hg19/bed/lastzNomLeu3.2013-03-06
     cd /hive/data/genomes/hg19/bed/lastzNomLeu3.2013-03-06
@@ -20195,12 +20195,12 @@ TMPDIR=/scratch/tmp
         >& do.log &
     #   real    724m15s
     cat fb.hg19.chainNomLeu3Link.txt
-    #   2543943556 bases of 2897316137 (87.803%) in intersection
+    #   2542790081 bases of 2897316137 (87.764%) in intersection
 
     cd /hive/data/genomes/hg19/bed
     ln -s lastzNomLeu3.2013-03-06 lastz.nomLeu3
 
-    #   running the swap - DONE - 2013-03-06
+    #   running the swap - DONE - 2013-03-26
     mkdir /hive/data/genomes/nomLeu3/bed/blastz.hg19.swap
     cd /hive/data/genomes/nomLeu3/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -20209,10 +20209,9 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         > swap.log 2>&1 &
-    #   real     69m27s
+    #   real   138m48s  
     cat fb.nomLeu3.chainHg19Link.txt
-    #   2480558770 bases of 2756591777 (89.986%) in intersection
-
+    #   2479386532 bases of 2756609047 (89.943%) in intersection
 
 ##############################################################################
 # DBNSFP (DONE 3/22/13 angie)
