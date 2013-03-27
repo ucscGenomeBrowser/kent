@@ -14,20 +14,24 @@ char *metaTable = "metaDb";
 char *expDb = "hgFixed";
 char *expTable = "encodeExp";
 
+/* Command line variables. */
+char *fileRootDir = NULL;   /* If set we look at files a bit. */
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "encode2Manifest - Create a encode3 manifest file for encode2 files\n"
   "usage:\n"
-  "   encode2Manifest manifest.tab rootFileDir\n"
+  "   encode2Manifest manifest.tab\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -checkExists=/root/dir/for/encode/downloads\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"checkExists", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -41,6 +45,7 @@ return list;
 }
 
 int unknownFormatCount = 0;
+int totalFileCount = 0;
 int missingFileCount = 0;
 int foundFileCount = 0;
 
@@ -123,13 +128,14 @@ if (suffix != NULL)
         result = "narrowPeak";
     else
         ++unknownFormatCount;
+    ++totalFileCount;
     }
 freeMem(name);
 return result;
 }
 
 void addGenomeToManifest(char *genome, struct mdbObj *mdbList,
-    char *fileRootDir, FILE *f)
+    char *rootDir, FILE *f)
 /* Get metaDb table for genome and write out relevant bits of it to f */
 {
 verbose(1, "processing %s\n", genome);
@@ -191,20 +197,25 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 		}
 
 	    /* Check file size (which also checks if file exists */
-	    char path[PATH_LEN];
-	    safef(path, sizeof(path), "%s/%s/%s/%s", fileRootDir, genome, composite, fileName);
-	    off_t size = fileSize(path);
-	    if (size == -1)
-	        {
-		verbose(2, "%s doesn't exist\n", path);
-		++missingFileCount;
-		continue;
-		}
-	    ++foundFileCount;
-	    time_t updateTime = fileModTime(path); 
 	    char *validationKey = "n/a";
-	    if (md5sum != NULL)
-	        validationKey = encode3CalcValidationKey(md5sum, size);
+	    off_t size = 0;
+	    time_t updateTime = 0;
+	    if (rootDir)
+		{
+		char path[PATH_LEN];
+		safef(path, sizeof(path), "%s/%s/%s/%s", rootDir, genome, composite, fileName);
+		size = fileSize(path);
+		if (size == -1)
+		    {
+		    verbose(2, "%s doesn't exist\n", path);
+		    ++missingFileCount;
+		    continue;
+		    }
+		++foundFileCount;
+		updateTime = fileModTime(path); 
+		if (md5sum != NULL)
+		    validationKey = encode3CalcValidationKey(md5sum, size);
+		}
 
 	    /* Output each field. */ 
 	    fprintf(f, "%s/%s/%s\t", genome, composite, fileName);
@@ -212,17 +223,21 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	    fprintf(f, "%s\t", naForNull(view));
 	    fprintf(f, "%s\t", dccAccession);
 	    fprintf(f, "%s\t", naForNull(replicate));
-	    fprintf(f, "%s\t", guessEnrichedIn(composite, dataType, antibody));
-	    fprintf(f, "%s\t", naForNull(md5sum));
-	    fprintf(f, "%lld\t", (long long)size);
-	    fprintf(f, "%ld\t", (long)updateTime);
-	    fprintf(f, "%s\n", validationKey);
+	    fprintf(f, "%s", guessEnrichedIn(composite, dataType, antibody));
+	    if (rootDir)
+		{
+		fprintf(f, "\t%s", naForNull(md5sum));
+		fprintf(f, "\t%lld", (long long)size);
+		fprintf(f, "\t%ld", (long)updateTime);
+		fprintf(f, "\t%s", validationKey);
+		}
+	    fprintf(f, "\n");
 	    }
 	}
     }
 }
 
-void encode2Manifest(char *outFile, char *fileRootDir)
+void encode2Manifest(char *outFile)
 /* encode2Manifest - Create a encode3 manifest file for encode2 files. */
 {
 /* Load up encodeExp info. */
@@ -245,15 +260,21 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 /* Open output and write header */
 FILE *f = mustOpen(outFile, "w");
 fputs("#file_name\tformat\toutput_type\texperiment\treplicate\tenriched_in", f);
-fputs("\tmd5_sum\tsize\tmodified\tvalid_key\n", f);
+if (fileRootDir)
+    fputs("\tmd5_sum\tsize\tmodified\tvalid_key\n", f);
+else
+    fputs("\n", f);
 
 for (i=0; i<ArraySize(metaDbs); ++i)
    {
    addGenomeToManifest(metaDbs[i], mdbLists[i], fileRootDir, f);
    }
-verbose(1, "%d files in metaDb not found in %s,  run with verbose=2 to see list\n", 
-    missingFileCount, fileRootDir);
-verbose(1, "%d total files including %d of unknown format\n", foundFileCount, unknownFormatCount);
+verbose(1, "%d total files including %d of unknown format\n", totalFileCount, unknownFormatCount);
+if (fileRootDir)
+    {
+    verbose(1, "%d files in metaDb not found in %s,  run with verbose=2 to see list\n", 
+	missingFileCount, fileRootDir);
+    }
 carefulClose(&f);
 }
 
@@ -261,8 +282,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 2)
     usage();
-encode2Manifest(argv[1], argv[2]);
+fileRootDir = optionVal("checkExists", fileRootDir);
+encode2Manifest(argv[1]);
 return 0;
 }
