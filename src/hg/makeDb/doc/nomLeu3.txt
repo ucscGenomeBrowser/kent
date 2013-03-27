@@ -509,7 +509,7 @@ taxId 61853
     # 180376 yes
 
 ##########################################################################
-## WINDOWMASKER (IN PROGRESS- 2013-02-27 - Pauline)
+## WINDOWMASKER (DONE- 2013-03-27 - Pauline)
     mkdir /hive/data/genomes/nomLeu3/bed/windowMasker
     cd /hive/data/genomes/nomLeu3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
@@ -530,7 +530,6 @@ taxId 61853
     #   (chrM_ADFV01197901_random) max 163208435 (chr2) median 4779
     #   %35.77 masked total, %38.44 masked real
 
-XXX step is already done?    
     hgLoadBed nomLeu3 windowmaskerSdust windowmasker.sdust.bed.gz
     #   Read 15229701 elements of size 3 from windowmasker.sdust.bed.gz
 
@@ -542,13 +541,11 @@ XXX step is already done?
     #   2756609047 bases of 2756609047 (100.000%) in intersection
     #   real	0m20.812s
 
-XXX step is already done?    
     time nice -n +19 featureBits nomLeu3 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
     #   1059576532 bases of 2756609047 (38.438%) in intersection
     #   real    11m9.332s
 
-XXX these steps already done? (seems like not? - nomLeu3.cleanWMSdust.faSize.txt doesn't exist?
     #	reload track to get it clean
     hgLoadBed nomLeu3 windowmaskerSdust cleanWMask.bed.gz
     #   Read 15242903 elements of size 4 from cleanWMask.bed.gz
@@ -561,15 +558,15 @@ XXX these steps already done? (seems like not? - nomLeu3.cleanWMSdust.faSize.txt
     twoBitToFa nomLeu3.cleanWMSdust.2bit stdout | faSize stdin \
         > nomLeu3.cleanWMSdust.faSize.txt
     cat nomLeu3.cleanWMSdust.faSize.txt
-    #   2936052603 bases (179443556 N's 2756609047 real 1697032515 upper
-    #   1059576532 lower) in 17976 sequences in 1 files
-    #   Total size: mean 163331.8 sd 2015356.2
-    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
-    #   %36.09 masked total, %38.44 masked real
+    #   2962077449 bases (205468402 N's 2756609047 real 1697032536 upper
+    #   1059576511 lower) in 17492 sequences in 1 files
+    #   Total size: mean 169339.0 sd 4348402.5 min 782
+    #   (chrM_ADFV01197901_random) max 163208435 (chr2) median 4779
+    #   %35.77 masked total, %38.44 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps nomLeu3 rmsk windowmaskerSdust
-    #   837096446 bases of 2936052603 (28.511%) in intersection
+    #   833347944 bases of 2962077449 (28.134%) in intersection
 
 ########################################################################
 # cpgIslands - (DONE - 2013-03-05 - Pauline)
