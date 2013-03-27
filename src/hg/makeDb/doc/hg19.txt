@@ -20167,7 +20167,7 @@ BLASTZ_Y=15000
 BLASTZ_T=2
 
 # TARGET: Human hg19
-SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
@@ -20187,7 +20187,6 @@ TMPDIR=/scratch/tmp
     #   establish a screen to control this job
     screen -S lastz
 
-XXX Wed Mar  6 12:28:53 PST 2013
     /usr/bin/time -p nice doBlastzChainNet.pl -verbose=2 \
         `pwd`/DEF \
         -syntenicNet \
