@@ -280,6 +280,8 @@ if ((hel = hashLookup(gff->featureHash, words[2])) == NULL)
     el->name = hel->name;
     slAddHead(&gff->featureList, el);
     }
+struct gffFeature *feature = hel->val;
+feature->count += 1;
 gl->feature = hel->name;
 
 if (!isdigit(words[3][0]) || !isdigit(words[4][0]))
