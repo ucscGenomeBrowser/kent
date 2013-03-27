@@ -20,11 +20,16 @@ fixed::	${A} tinyFixed smallFixed mediumFixed largeFixed hugeFixed
 allThree::	all bold fixed
 
 $A: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/${A}${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 compile:	${O} ${MYLIBS}
 	${CC} ${COPT} -o ${A}${EXE} $O ${MYLIBS} $L
+
+install:: compile
+	rm -f ${DESTDIR}${BINDIR}/${A}${EXE}
+	cp -p ${A}${EXE} ${DESTDIR}${BINDIR}/${A}${EXE}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 mgTinyFont.c:	${O}
 	bdfToGem -verbose=2 -name="Tiny" 75dpi/helvR08-L1.bdf mgTinyFont.c
