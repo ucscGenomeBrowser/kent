@@ -4,12 +4,37 @@
 set -beEu -o pipefail
 
 usage() {
-   echo "usage: mkConfigRa.sh </hive/data/genomes/<db> <vertebrate/mammal> \"<common name>\" <dbDbSpeciesDir>" 1>&2
+   echo "usage: mkConfigRa.sh /hive/data/genomes/<db> \\
+  <genomeClade> \\
+  <genomeCladePriority> \\
+  <commonName> <dbDbDir> \\
+  <genomeId> \\
+  <bioprojectId> \\
+  <assemblyId> \\
+  <mitoAcc> \\
+  <orderKey> \\
+  <photoCreditURL> \\
+\"<photoCreditName>\" > <db>.config.ra" 1>&2
+   echo "" 1>&2
    echo "expecting to find the ./genbank/ASSEMBLY_INFO file at that directory path" 1>&2
    echo "and no <db>.config.ra file there." 1>&2
-   echo "<vertebrate/mammal> - vertebrate or mammal for genomeClade" 1>&2
-   echo "<common name> -  the species common name" 1>&2
-   echo "<dbDbSpeciesDir> - the trackDb sub-directory name" 1>&2
+   echo 'example:
+export genomeClade="vertebrate"
+export genomeCladePriority="60"
+export commonName="Parrot"
+export dbDbDir="birds"
+export genomeId="15170"
+export bioprojectId="171587"
+export assemblyId="529068"
+export mitoAcc="none"
+export orderKey="4310"
+export photoCreditURL="http://www.fws.gov/caribbean/ES/Parrot-Gallery.html"
+export photoCreditName="Tom MacKenzie, U.S. Fish and Wildlife Service"
+
+$HOME/kent/src/hg/utils/automation/mkConfigRa.sh /hive/data/genomes/amaVit1 \
+    ${genomeClade} ${genomeCladePriority} ${commonName} ${dbDbDir} \
+        ${genomeId} ${bioprojectId} ${assemblyId} ${mitoAcc} ${orderKey} \
+        ${photoCreditURL} "${photoCreditName}" > amaVit1.config.ra' 1>&2
    exit 255
 }
 
