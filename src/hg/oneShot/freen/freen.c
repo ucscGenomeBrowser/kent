@@ -5,38 +5,30 @@
 #include "hash.h"
 #include "options.h"
 #include "jksql.h"
-#include "ra.h"
-#include "basicBed.h"
-#include "mdb.h"
+#include "meta.h"
 
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen val desiredVal\n");
+         "usage:  freen input output\n");
 }
 
 
-void freen(char *input)
+void freen(char *input, char *output)
 /* Test some hair-brained thing. */
 {
-struct sqlConnection *conn = sqlConnect("hg19");
-struct mdb *mdb = mdbLoadByQuery(conn, "select * from metaDb order by binary obj,var");
-printf("Got %d mdb\n", slCount(mdb));
-
-mdb = mdbLoadByQuery(conn, "select obj,var,val from metaDb");
-printf("Got %d mdb\n", slCount(mdb));
-
-struct mdbObj *list = mdbObjsQueryAll(conn, "metaDb");
-printf("Got %d mdbObjs\n", slCount(list));
-
-sqlDisconnect(&conn);
+uglyTime(NULL);
+struct meta *metaList = metaLoadAll(input, "meta", "parent", FALSE, FALSE);
+uglyTime("Got %d metas\n", slCount(metaList));
+metaWriteAll(metaList, output, 3, FALSE);
+uglyTime("Wrote %s\n", output);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 2)
+if (argc != 3)
     usage();
-freen(argv[1]);
+freen(argv[1], argv[2]);
 return 0;
 }
