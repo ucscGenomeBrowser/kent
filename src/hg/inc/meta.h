@@ -12,6 +12,9 @@
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
  */
 
+#ifndef META_H
+#define META_H
+
 struct metaTagVal
 /* A tag/value pair. */
     {
@@ -19,6 +22,12 @@ struct metaTagVal
     char *tag;	/* Tag name. */
     char *val;	/* Tag value. */
     };
+
+struct metaTagVal *metaTagValNew(char *tag, char *val);
+/* Create new meta tag/val */
+
+int metaTagValCmp(const void *va, const void *vb);
+/* Compare to sort based on tag name . */
 
 struct meta
 /* A node in the metadata tree */
@@ -47,12 +56,21 @@ void metaWriteAll(struct meta *metaList, char *fileName, int indent, boolean wit
 /* Write out metadata, including children, optionally adding meta tag.   By convention
  * for out meta.txt/meta.ra files, indent is 3, withParent is FALSE. */
 
-char *metaLocalTagVal(struct meta *meta, char *name);
+char *metaLocalTagVal(struct meta *meta, char *tag);
 /* Return value of tag found in this node, not going up to parents. */
 
-char *metaTagVal(struct meta *meta, char *name);
+char *metaTagVal(struct meta *meta, char *tag);
 /* Return value of tag found in this node or if its not there in parents.
  * Returns NULL if tag not found. */
 
+void metaAddTag(struct meta *meta, char *tag, char *val);
+/* Return value of tag found in this node, not going up to parents. */
+
+void metaSortTags(struct meta *meta);
+/* Do canonical sort so that the first tag stays first but the
+ * rest are alphabetical. */
+
 struct hash *metaHash(struct meta *forest);
 /* Return hash of meta at all levels of heirarchy keyed by forest. */
+
+#endif /* META_H */

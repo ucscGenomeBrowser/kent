@@ -19,6 +19,31 @@
 #include "meta.h"
 #include "ra.h"
 
+struct metaTagVal *metaTagValNew(char *tag, char *val)
+/* Create new meta tag/val */
+{
+struct metaTagVal *mtv;
+AllocVar(mtv);
+mtv->tag = cloneString(tag);
+mtv->val = cloneString(val);
+return mtv;
+}
+
+int metaTagValCmp(const void *va, const void *vb)
+/* Compare to sort based on tag name . */
+{
+const struct metaTagVal *a = *((struct metaTagVal **)va);
+const struct metaTagVal *b = *((struct metaTagVal **)vb);
+return strcmp(a->tag, b->tag);
+}
+
+void metaSortTags(struct meta *meta)
+/* Do canonical sort so that the first tag stays first but the
+ * rest are alphabetical. */
+{
+slSort(&meta->tagList->next, metaTagValCmp);
+}
+
 int countLeadingSpacesDetabbing(char *s, int tabStop)
 /* Count up leading chars including those implied by tab. Set tabStop to 8
  * for usual UNIX results. */
@@ -272,6 +297,25 @@ for (m = meta; m != NULL; m = m->parent)
        return val;
     }
 return NULL;
+}
+
+void metaAddTag(struct meta *meta, char *tag, char *val)
+/* Add tag to meta, replacing existing tag if any */
+{
+/* First loop through to replace an existing tag. */
+struct metaTagVal *mtv;
+for (mtv = meta->tagList; mtv != NULL; mtv = mtv->next)
+    {
+    if (sameString(mtv->tag, tag))
+       {
+       freeMem(mtv->val);
+       mtv->val = cloneString(val);
+       return;
+       }
+    }
+/* If didn't make it then add new tag (at end) */
+mtv = metaTagValNew(tag, val);
+slAddTail(&meta->tagList, mtv);
 }
 
 static void rHashMetaList(struct hash *hash, struct meta *list)
