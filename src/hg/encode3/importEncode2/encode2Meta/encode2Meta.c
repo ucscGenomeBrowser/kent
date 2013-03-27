@@ -311,7 +311,8 @@ for (var = varList; var != NULL; var = var->next)
 	val = allSameVal(var->name, node->children);
     if (val != NULL)
         {
-	hoistOne(node, var->name, val);
+	if (!sameString(var->name, "fileName"))
+	    hoistOne(node, var->name, val);
 	}
     }
 }

@@ -101,7 +101,7 @@ void bbExIndexMakerAddKeysFromRow(struct bbExIndexMaker *eim, char **row, int re
 /* Save the keys that are being indexed by row in eim. */
 {
 int i;
-for (i=0; i<eim->indexCount; ++i)
+for (i=0; i < eim->indexCount; ++i)
     {
     int rowIx = eim->indexFields[i];
     eim->chunkArrayArray[i][recordIx].name = cloneString(row[rowIx]);
@@ -113,7 +113,7 @@ void bbExIndexMakerAddOffsetSize(struct bbExIndexMaker *eim, bits64 offset, bits
 /* Update offset and size fields of all file chunks between startIx and endIx */
 {
 int i;
-for (i=0; i<eim->indexCount; ++i)
+for (i=0; i < eim->indexCount; ++i)
     {
     struct bbNamedFileChunk *chunks = eim->chunkArrayArray[i];
     long j;
@@ -399,7 +399,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	if (sum != NULL && sum->end <= start)
 	    {
 	    bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		&boundsPt, boundsEnd, usage->size, lm, stream);
+		&boundsPt, boundsEnd, lm, stream);
 	    sum = NULL;
 	    }
 	/* If don't have a summary we're working on now, make one. */
@@ -428,7 +428,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	    sum->sumData += val * overlap;
 	    sum->sumSquares += val*val * overlap;
 	    bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		    &boundsPt, boundsEnd, usage->size, lm, stream);
+		    &boundsPt, boundsEnd, lm, stream);
 	    size -= overlap;
 
 	    /* Move summary to next part. */
@@ -450,7 +450,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
     if (sum != NULL)
 	{
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-	    &boundsPt, boundsEnd, usage->size, lm, stream);
+	    &boundsPt, boundsEnd, lm, stream);
 	}
     rangeTreeFree(&rangeTree);
     }
@@ -509,7 +509,7 @@ void bbExIndexMakerAllocChunkArrays(struct bbExIndexMaker *eim, int recordCount)
 {
 eim->recordCount = recordCount;
 int i;
-for (i=0; i<eim->indexCount; ++i)
+for (i=0; i < eim->indexCount; ++i)
     AllocArray(eim->chunkArrayArray[i], recordCount);
 }
 
@@ -522,7 +522,7 @@ if (eim != NULL)
     if (eim->chunkArrayArray != NULL)
 	{
 	int i;
-	for (i=0; i<eim->indexCount; ++i)
+	for (i=0; i < eim->indexCount; ++i)
 	    freeMem(eim->chunkArrayArray[i]);
 	}
     freeMem(eim->indexFields);
@@ -650,7 +650,7 @@ int zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
 if (eim)
     {
     int i;
-    for (i=0; i<eim->indexCount; ++i)
+    for (i=0; i < eim->indexCount; ++i)
         {
 	eim->fileOffsets[i] = ftell(f);
 	maxBedNameSize = eim->maxFieldSize[i];

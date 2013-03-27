@@ -67,7 +67,7 @@ do
 done | tail -1 | while read treeDocString
 do
     /cluster/bin/phast/tree_doctor -r "${treeDocString}" ${F}
-done
+done | sed -e "s/00*)/)/g; s/00*,/,/g"
 
 # petMar2 -> Lamprey ;" \
 #	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/David_s/David's/;"

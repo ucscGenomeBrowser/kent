@@ -1,0 +1,38 @@
+meta wgEncodeAffyRnaChipHuman
+assembly hg19
+dataType RnaChip
+expVars lab,dataType,cell,localization,rnaExtract
+grant Gingeras
+lab Affy
+organism human
+origAssembly hg18
+updateTime 2011-04-20 12:55:24
+
+   meta wgEncodeEH000002
+   cellType GM12878
+   dataVersion ENCODE Nov 2008 Freeze
+   dateSubmitted 2008-11-21
+   dateUnrestricted 2009-08-21
+   localization cytosol
+   rnaExtract longPolyA
+
+      meta wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya.broadPeak.gz
+
+      meta wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya.broadPeak.gz
+
+   meta wgEncodeEH000003
+   cellType GM12878
+   dataVersion ENCODE Nov 2008 Freeze
+   dateSubmitted 2008-11-21
+   dateUnrestricted 2009-08-21
+   localization nucleus
+   rnaExtract longNonPolyA
+
+      meta wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
+
+      meta wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
+

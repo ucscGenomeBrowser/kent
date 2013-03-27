@@ -1,0 +1,28 @@
+
+meta aMeta
+name Allen Day
+
+    meta aMetaWork
+    phone 800 555-1212
+
+    meta aMetaPlay
+    phone 999 323-1121
+    parent aMeta
+
+meta bMeta
+name Boris Bee
+car old red beater
+
+    meta bMetaHere
+    mood soft
+    location porch
+
+    meta bThere
+    mood harsh
+    location war zone
+
+        meta bThereSpring
+        weather hot
+
+        meta bThereNothing
+
