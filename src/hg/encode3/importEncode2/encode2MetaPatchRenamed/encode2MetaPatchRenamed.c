@@ -39,13 +39,10 @@ char *line;
 while (lineFileNextReal(lf, &line))
     {
     AllocVar(patch);
-    char *source = patch->source = cloneString(nextWord(&line));
+    patch->source = cloneString(nextWord(&line));
     char *dest;
     while ((dest = nextWord(&line)) != NULL)
-        {
-	if (!sameString(source, dest))
-	    slNameAddTail(&patch->destList, cloneString(dest));
-	}
+	slNameAddTail(&patch->destList, cloneString(dest));
     if (patch->destList != NULL)
         slAddHead(&list, patch);
     }
@@ -125,7 +122,7 @@ for (patch =  patchList; patch != NULL; patch = patch->next)
     struct meta *meta = metaFindFirstMatch(metaList, "fileName", patch->source);
     if (meta == NULL)
 	{
-        warn("Can't find %s in %s\n", patch->source, inputMeta);
+        verbose(2, "Can't find %s in %s", patch->source, inputMeta);
 	continue;
 	}
     struct meta *parent = meta->parent;
