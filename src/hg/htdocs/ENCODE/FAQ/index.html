@@ -39,6 +39,9 @@
             <LI> <a href="/ENCODE/pubs.html" TARGET=_blank>Publications</a>  and
               <a href="http://www.nature.com/encode/" TARGET=_blank>Nature ENCODE Explorer</a> and
               <a href="https://main.g2.bx.psu.edu/" TARGET=_blank>Galaxy Biomedical Tools</a> 
+            <LI><a href="http://encodeproject.org/ENCODE/" TARGET=_blank>ENCODE Project Portal (encodeproject.org)</a> 
+            <LI><a href="http://genome.gov/10005107" TARGET=_blank>ENCODE Project at NHGRI (genome.gov)</a>
+            <LI><a href="http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html" TARGET=_blank>ENCODE Data at GEO</a>
             <LI><a href="http://genome.ucsc.edu/FAQ/" TARGET=_blank>UCSC Genome Browser FAQ Page</a> and
               <a href="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en" TARGET=_blank>Searchable Google Groups Mailing List</A>  
               <p>
@@ -200,7 +203,7 @@
             corresponding cell type and target.
           <P>
             Another option is to use the <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hgt_tSearch=1&tsCurTab=advancedTab"
-                                            TARGET=blank>Track Search</a> or <a href="http://genome.ucsc.edu/cgi-bin/hgFileSearch" TARGET=blank>FileSearch</a>
+                                            TARGET=blank>Track Search</a> or <a href="http://genome.ucsc.edu/cgi-bin/hgFileSearch" TARGET=blank>File Search</a>
             tools and to search the &quot;Antibody or target protein&quot; field to see if the desired transcription factor is listed.
         </div><!--end content-->                                                                                                                                                                          </div><!--end wrapper-->                                                                                                                                                                                                                                                         
     <!--Content Tables------------------------------------------------------->      
@@ -255,7 +258,7 @@
             How do I extract information about an ENCODE experiment from the filename?
           <P>
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-            Do not try it!  While ENCODE filenames have some metadata embedded, they can not be relied upon to be unique.
+            This is not recommended.  While ENCODE filenames have some metadata embedded, the information there is not complete no easily extracted.
             Rather use the file's metadata, for example in &quot;files.txt&quot;, or access metadata in the following places:
             <ol>By opening the mentioned related &quot;files.txt&quot; metadata file located in each track's corresponding download directory.
               <br/>By clicking the blue down-arrow next to each subtrack listed on a track's Track Settings page.
@@ -286,7 +289,7 @@
                                TARGET=_blank>File Formats</a>
             link from the ENCODE portal page you can reach a list of various file formats used in ENCODE.
             Every ENCODE file has metadata included under a &quot;files.txt&quot; file in the related downloads page.
-            From the <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/">ENCODE methylation's download page</a>,
+            For example, from the <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/">HudsonAlpha DNA methylation download page</a>,
             in the <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/files.txt">files.txt</a> 
             file, a line after the specific bed9 file in question, wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9,
             reads 'objstatus=replaced'. This metadata indicates this bed9 file was preliminary data that has
@@ -307,13 +310,13 @@
             What is the definition of &quot;score&quot; in ENCODE tables? 
           <P>
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-            The score (between 0-1000) is what determines how darkly an item is
+            The score (between 0-1000) determines how darkly an item is
             displayed in the browser (with 1000 being black).
             The darkness of an item's box is proportional to the maximum signal strength observed in
             any cell line.
           <P>
-            To find out exactly how score has been calculated, contact the lab that created the data
-            determining signal strength. There are often several links to authors' labs in the credits
+            To find out exactly how score has been calculated for a specific track, contact the lab that created the data.
+            There are often several links to authors' labs in the credits
             section for each track at the bottom of a track's description page. 
         </div><!--end content-->
     </div><!--end wrapper-->
@@ -386,7 +389,7 @@
           
           <p>chr21 9825311 9827738 . 1000 . 4.51792 256.60845 261.34671 1809</p>
           
-          <p>What is the meaning of the information from the forth field forward?
+          <p>What is the meaning of the information from the fourth field forward?
           </P>
           <P>
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
@@ -439,9 +442,11 @@
             list of a core 30 papers detailing ENCODE's results?
           <P>
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-            On the left side of the <a href="/ENCODE/">ENCODE portal page</a> you will find
-            a link to titled Publications that will provide access to lists of
-            ENCODE-funded Publications and Publications from non-ENCODE Authors.
+            References to the ENCODE analysis publications of September 2012 can be found here:
+            <a href="/ENCODE/analysis.html#tools" target=_blank>ENCODE Analysis Package Publications</a>.
+            There is also a comprehensive set of ENCODE-related publications listed on the <a href="/ENCODE/pubs.html">
+            Publications page</a> linked
+            on the left side of the <a href="/ENCODE/">ENCODE portal page</a>.
           </P>
         </div><!--end content-->
     </div><!--end wrapper-->
@@ -494,7 +499,7 @@
           <P>
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
             On the top of the page for each of the download directories you are
-            visiting there is a README.txt file that is automatically displaying.
+            visiting there is a README.txt file that is automatically displayed.
             A link is provided that will bring you to a user interface enabling
             filtering files by cell type and other parameters, as well as including
             additional information such as release status, restriction dates, track
@@ -514,7 +519,7 @@
             Analysis&quot; section there is information explaining how the numbers in gene_id,
             &quot;GM12878-rep1.####&quot; represent de novo identifiers output by Cufflinks software.
             At the very bottom of the page is a &quot;Credits&quot; section where contacts
-            are listed. You should send remaining process specific questions about the data
+            are listed. You should send remaining process-specific questions about the data
             you are investigating to the appropriate contact listed.
           </P>
         </div><!--end content-->
