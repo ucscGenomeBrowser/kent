@@ -96,6 +96,7 @@ for (meta = *pList; meta != NULL; meta = meta->next)
 return NULL;
 }
 
+#ifdef UNUSED
 struct metaTagVal *metaTagValListClone(struct metaTagVal *oldList)
 /* Make a list that is a clone of the current list, but in it's own memory. */
 {
@@ -104,6 +105,21 @@ for (mtv = oldList; mtv != NULL; mtv  = mtv->next)
     {
     clone = metaTagValNew(mtv->tag, mtv->val);
     slAddHead(&newList, clone);
+    }
+slReverse(&newList);
+return newList;
+}
+#endif /* UNUSED */
+
+struct metaTagVal *metaTagValListRemove(struct metaTagVal *oldList, char *tag)
+/* Return list that has tag removed. */
+{
+struct metaTagVal *newList = NULL, *mtv, *next;
+for (mtv = oldList; mtv != NULL; mtv = next)
+    {
+    next = mtv->next;
+    if (!sameString(mtv->tag, tag))
+        slAddHead(&newList, mtv);
     }
 slReverse(&newList);
 return newList;
@@ -127,29 +143,37 @@ for (patch =  patchList; patch != NULL; patch = patch->next)
 	}
     struct meta *parent = meta->parent;
     assert(parent != NULL);
-    struct meta **oldSpot = metaRemove(&metaList, meta);
-    struct slName *dest;
-    int destId = 0;
     boolean multiPatch = (slCount(patch->destList) > 1);
-    for (dest = patch->destList; dest != NULL; dest = dest->next)
+    if (multiPatch)
         {
-	/* Make up new object name if patching in more than one new thing. */
-	char metaObjName[PATH_LEN];
-	if (multiPatch)
+	struct meta **oldSpot = &meta->children;
+	struct slName *dest;
+	int destId = 0;
+	for (dest = patch->destList; dest != NULL; dest = dest->next)
+	    {
+	    /* Make up new object name if patching in more than one new thing. */
+	    char metaObjName[PATH_LEN];
 	    safef(metaObjName, sizeof(metaObjName), "%sSub%d", meta->name, ++destId);
-	else
-	    safef(metaObjName, sizeof(metaObjName), "%s", meta->name);
 
-	/* Create an object very similar but distinct from the one we removed. */
-	struct meta *dupe = CloneVar(meta);
-	dupe->tagList = metaTagValListClone(dupe->tagList);
-	metaAddTag(dupe, "fileName", dest->name);
-	dupe->name = dupe->tagList->val = cloneString(metaObjName);
+	    /* Create subobject. */
+	    struct meta *sub;
+	    AllocVar(sub);
+	    sub->tagList = metaTagValNew("meta", metaObjName);
+	    sub->name = sub->tagList->val;
+	    sub->tagList->next = metaTagValNew("fileName", dest->name);
 
-	/* And reintegrate into tree. */
-	dupe->next = *oldSpot;
-	*oldSpot = dupe;
-	oldSpot = &dupe->next;
+	    /* And integrate into tree. */
+	    sub->parent = meta;
+	    sub->next = *oldSpot;
+	    *oldSpot = sub;
+	    oldSpot = &sub->next;
+	    }
+	/* Remove fileName element from parent. */
+	meta->tagList = metaTagValListRemove(meta->tagList, "fileName"); 
+	}
+    else
+        {
+	metaAddTag(meta, "fileName", patch->destList->name);
 	}
     }
 metaWriteAll(metaList, outputMeta, 3, FALSE);
