@@ -7,7 +7,7 @@ priority 2.7
 shortLabel Uniform TFBS
 longLabel Transcription Factor ChIP-seq Uniform Peaks from ENCODE/Analysis
 subGroup1 tier Tier a10=1 a20=2 a25=2* a30=3 
-subGroup4 lab Lab Broad=Broad Harvard=Harvard HudsonAlpha=HudsonAlpha Stanford=Stanford USC=USC UT-A=UT-A UW=UW Yale=Yale
+subGroup4 lab Lab Broad=Broad Harvard=Harvard HudsonAlpha=HudsonAlpha Stanford=Stanford UChicago=UChicago USC=USC UT-A=UT-A UW=UW Yale=Yale
 subGroup2 cellType Cell_Line \
     a10GM12878=GM12878&nbsp;(Tier_1) \
     a10H1HESC=H1-hESC&nbsp;(Tier_1) \
@@ -159,6 +159,7 @@ subGroup3 factor Factor \
     HDAC1=HDAC1 \
     HDAC2=HDAC2 \
     HDAC6=HDAC6 \
+    HDAC8=HDAC8 \
     HMGN3=HMGN3 \
     HNF4A=HNF4A \
     HNF4G=HNF4G \
@@ -168,6 +169,7 @@ subGroup3 factor Factor \
     IRF3=IRF3 \
     IRF4=IRF4 \
     JUN=JUN \
+    JUNB=JUNB \
     JUND=JUND \
     KAP1=KAP1 \
     KAT2A=KAT2A \
@@ -271,13 +273,9 @@ sortOrder tier=+ cellType=+ factor=+ lab=+
 fileSortOrder cell=Cell_Line Antibody dccAccession=UCSC_Accession fileSize=Size  
 controlledVocabulary encode/cv.ra cellType=cell factor=target lab=lab
 type narrowPeak 
-# need deprecated canPack setting here (until CGI 278 release) 
-#canPack on 
 visibility dense 
-#signalFilter 0.0:20000.0 
-#signalFilterLimits 0.0:20000.0 
-#spectrum on 
-#minGrayLevel 4 
+scoreFilter 0
+scoreFilterLimits 0:1000
 dataVersion ENCODE March 2012 Freeze
 wgEncode 1 
 
@@ -3836,7 +3834,7 @@ wgEncode 1
 
     track wgEncodeAwgTfbsSydhK562CfosUniPk
     parent wgEncodeAwgTfbsUniform on
-    shortLabel K562 FOS
+    shortLabel K562 FOS y
     longLabel K562 TFBS Uniform Peaks of c-Fos from ENCODE/Yale/Analysis
     subGroups tier=a10 cellType=a10K562 factor=FOS lab=Yale
     color 46,0,184
@@ -4039,7 +4037,7 @@ wgEncode 1
 
     track wgEncodeAwgTfbsSydhK562JundIggrabUniPk
     parent wgEncodeAwgTfbsUniform off
-    shortLabel K562 JUND
+    shortLabel K562 JUND s
     longLabel K562 TFBS Uniform Peaks of JunD from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10K562 factor=JUND lab=Stanford
     color 46,0,184
@@ -4590,6 +4588,41 @@ wgEncode 1
     shortLabel U2OS SETDB1
     longLabel U2OS TFBS Uniform Peaks of SETDB1 from ENCODE/USC/Analysis
     subGroups tier=a30 cellType=U2OS factor=SETDB1 lab=USC
+
+    track wgEncodeAwgTfbsUchicagoK562Ehdac8UniPk
+    parent wgEncodeAwgTfbsUniform off
+    shortLabel K562 HDAC8
+    longLabel K562 TFBS Uniform Peaks of eGFP-HDAC8 from ENCODE/UChicago/Analysis
+    subGroups tier=a10 cellType=a10K562 factor=HDAC8 lab=UChicago
+    color 46,0,184
+
+    track wgEncodeAwgTfbsUchicagoK562EjundUniPk
+    parent wgEncodeAwgTfbsUniform off
+    shortLabel K562 JUND i
+    longLabel K562 TFBS Uniform Peaks of eGFP-JunD from ENCODE/UChicago/Analysis
+    subGroups tier=a10 cellType=a10K562 factor=JUND lab=UChicago
+    color 46,0,184
+
+    track wgEncodeAwgTfbsUchicagoK562EjunbUniPk
+    parent wgEncodeAwgTfbsUniform off
+    shortLabel K562 JUNB
+    longLabel K562 TFBS Uniform Peaks of eGFP-JunB from ENCODE/UChicago/Analysis
+    subGroups tier=a10 cellType=a10K562 factor=JUNB lab=UChicago
+    color 46,0,184
+
+    track wgEncodeAwgTfbsUchicagoK562Egata2UniPk
+    parent wgEncodeAwgTfbsUniform off
+    shortLabel K562 GATA2 i
+    longLabel K562 TFBS Uniform Peaks of eGFP-GATA2 from ENCODE/UChicago/Analysis
+    subGroups tier=a10 cellType=a10K562 factor=GATA2 lab=UChicago
+    color 46,0,184
+
+    track wgEncodeAwgTfbsUchicagoK562EfosUniPk
+    parent wgEncodeAwgTfbsUniform off
+    shortLabel K562 FOS i
+    longLabel K562 TFBS Uniform Peaks of eGFP-FOS from ENCODE/UChicago/Analysis
+    subGroups tier=a10 cellType=a10K562 factor=FOS lab=UChicago
+    color 46,0,184
 
     track wgEncodeAwgTfbsUwA549CtcfUniPk
     parent wgEncodeAwgTfbsUniform off
