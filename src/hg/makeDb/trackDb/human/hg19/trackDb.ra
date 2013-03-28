@@ -605,6 +605,7 @@ html hg19primateChainNet
         otherDb ponAbe2
 
         track chainNomLeu1
+        release public
         subTrack primateChainNetViewchain off
         subGroups view=chain species=dGibbon clade=aHom
         shortLabel $o_Organism Chain
@@ -707,6 +708,7 @@ html hg19primateChainNet
         otherDb ponAbe2
 
         track netNomLeu1
+        release public
         subTrack primateChainNetViewnet off
         subGroups view=net species=dGibbon clade=aHom
         shortLabel $o_Organism Net

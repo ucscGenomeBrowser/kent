@@ -187,6 +187,7 @@ cat  << 'EOF' > link.csh
     mkdir -p wgEncodeAwgTfbsUniform
     cd wgEncodeAwgTfbsUniform
     set build = `pwd`
+    mkdir logs
 
     mkdir ebi; cd ebi
     # set user = encode-box-01
@@ -210,12 +211,12 @@ cat  << 'EOF' > link.csh
 
     # extract UCSC object names (experiment and control) from peaks file name
     ls ebi/*.narrowPeak.gz > peak.lst
-    regClusterMakeTableOfTables ans02 peak.lst partial.table -verbose=3 >&! regTable.out &
+    regClusterMakeTableOfTables ans02 peak.lst partial.table -verbose=3 >&! logs/regTable.out &
 
     # attach metadata, by antibody and by target
-    #regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
-    #regClusterAttachMetadataToTableOfTables -antibodyTarget hg19 partial.fixed.table \
-        #withDupes.target.table -verbose=3
+    regClusterAttachMetadataToTableOfTables hg19 partial.table withDupes.table -verbose=3
+    regClusterAttachMetadataToTableOfTables -antibodyTarget hg19 partial.fixed.table \
+        withDupes.target.table -verbose=3
     # NOTE: partial.fixed.table corrected HAIB GM12878 Egr-1 to Rep3, but lacks controls
 
     # 91 cell types, 201 antibodies (177 targets), 28 treatments, 9 labs
@@ -256,6 +257,15 @@ cat > makeTag.csh << 'EOF'
     echo $1 | perl -wpe 's/[^a-z0-9]+//ig; s/(.*)/\U$1/'
 'EOF'
 
+cat > targetToFactor.csh << 'EOF'
+    set factor = $1
+    if ($factor =~ eGFP-*) then
+        echo $factor | sed 's/^eGFP-//'
+    else
+        echo $factor
+    endif
+'EOF'
+
 cat > trackOne.csh << 'EOF'
     #create track
 
@@ -288,10 +298,16 @@ cat > trackOne.csh << 'EOF'
 
     set antibody = $meta[3]
     set factor = `encodeCvTerm antibody $antibody target`
+
+    # special handling of UChicago GFP tagged targets -- strip prefix to get factor
+    set factor = `csh targetToFactor.csh $factor`
+
     if ($#meta == 4) then
         set treatment = $meta[4]
+    else
+        set treatment = "None"
     endif
-    echo "$exp $lab $cell $tier $antibody $treatment"
+    echo -n "$exp $lab $cell $tier $antibody $factor $treatment"
 
     set factorTag = `csh makeTag.csh $factor`
     echo "$factorTag=$factor" >> $factorFile
@@ -351,6 +367,10 @@ cat > metaOne.csh << 'EOF'
     set cell = $meta[2]
     set antibody = $meta[3]
     set factor = `encodeCvTerm antibody $antibody target`
+
+    # special handling of UChicago GFP tagged targets -- strip prefix to get factor
+    set factor = `csh targetToFactor.csh $factor`
+
     if ($#meta == 4) then
         set treatment = $meta[4]
     else
@@ -435,7 +455,7 @@ cat > loadTfbs.csh << 'EOF'
         # csh loadOne.csh $infile $exp $outdir $base
         # csh trackOne.csh $exp $composite $base cells.txt factors.txt 
         # csh metaOne.csh $exp $composite $base
-        csh renameOne.csh $exp $base $infile $outdir
+        #csh renameOne.csh $exp $base $infile $outdir
     end
 'EOF'
 
@@ -446,7 +466,7 @@ cat > loadTfbs.csh << 'EOF'
 # (and try to verify with Anshul).
 # -> handle this one manually
 
-    csh loadTfbs.csh partial.table >&! loadTfbs.out &
+    csh loadTfbs.csh partial.table >&! logs/loadTfbs.out &
 
     sort factors.txt | uniq | sed 's/$/ \\/' > factors.uniq.txt
     sort cells.txt | uniq | sed 's/$/ \\/' > cells.uniq.txt
@@ -497,7 +517,7 @@ cat > loadTfbs.csh << 'EOF'
     hgsql hg19 -e 'select shortLabel from trackDb_kate where tableName like "wgEncodeAwgTfbs%" and length(shortLabel) > 17' > badShorts.txt
     # use <cell>+<treatment> <factor>
     # to distinguish same experiment diff labs, add single char lab id:
-    # h=HudsonAlpha, s=Stanford, t=UTexas-Austin, w=UWashington, c=USC, v=Harvard, y=Yale, b=Broad
+    # h=HudsonAlpha, s=Stanford, t=UTexas-Austin, w=UWashington, c=USC, v=Harvard, y=Yale, b=Broad, i=UChicago (Illinois?)
     # Add '2, e.g. 'h2, if 2 experiments from same lab (e.g. different control or antibody)
     hgsql hg19 -e 'select longLabel from trackDb_kate where tableName like "wgEncodeAwgTfbs%" and length(longLabel) > 80' > badLongs.txt
     # Shorten by abbreviating treatments, and excise 'from' 
@@ -532,7 +552,7 @@ cat  << 'EOF' > link.csh
     cd $build
     grep Gm12878Egr1 partial.table > haibFix.table  
     # edit to change to Rep3
-    csh loadTfbs.csh haibFix.table >&! loadHaib.out
+    csh loadTfbs.csh haibFix.table >&! logs/loadHaib.out
     cp wgEncodeAwgTfbsUniform.metaDb.ra haibFix.metaDb.ra
     # edit out all but new entry
     mdbUpdate hg19 haibFix.metaDb.ra
@@ -560,6 +580,39 @@ cat  << 'EOF' > link.csh
 
     # QA preview (vs. redmine issue)
     encodeQaInit hg19 wgEncodeAwgTfbsUniform 1 10042 -t 
+
+    # Add quality scores from Anshul's manual curation :
+    # https://docs.google.com/spreadsheet/ccc?key=0Am6FxqAtrFDwdHdRcHNQUy03SjBoSVMxdUNyZV9Rdnc#gid=9 
+    # add metadata term 'quality'=['good','caution'] for integrated metric [1,0]
+    # drop failed datasets (quality == -1)
+    # add passing U Chicago (total 5)
+
+    cd $build
+    mkdir quality
+    cd quality
+    # download .csv from google spreadsheet above to 
+    wc -l tfbsQualityReport.csv
+    # 712
+
+    # rescue good Chicago datasets
+    grep Chicago tfbsQualityReport.csv | awk -F',' '$2 != -1 {print $3}'
+    #wgEncodeUchicagoTfbsK562Ehdac8ControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EjundControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EjunbControlAlnRep0
+    #wgEncodeUchicagoTfbsK562Egata2ControlAlnRep0
+    #wgEncodeUchicagoTfbsK562EfosControlAlnRep0
+
+    grep Uchicago partial.table > chicago.table
+    # edit out all but good datasets, listed above -> chicago.good.table
+
+    csh loadTfbs.csh chicago.good.table >&! logs/loadTfbs.chicago.out &
+
+    # update trackDb: add stanzas, uniquify short labels, add 1 new lab, 2 new factors to subgroups
+        # tweak cell type tags for tiers>3
+    # update metaDb
+
+    # TODO: Histogram of score distributions (may want to normalize to >1std)
+    # Ref JK suggestion during code review 3/26/12
 
 
 ###############################################

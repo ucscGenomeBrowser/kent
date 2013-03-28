@@ -11165,6 +11165,96 @@ target SETDB1
 treatment None
 view Peaks
 
+metaObject wgEncodeAwgTfbsUchicagoK562EfosUniPk
+objType table
+antibody eGFP-FOS
+cell K562
+composite wgEncodeAwgTfbsUniform
+control Control_eGFP-FOS
+controlId K562/Input/Control_eGFP-FOS
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001207
+fileName wgEncodeAwgTfbsUchicagoK562EfosUniPk.narrowPeak.gz
+lab UChicago
+project wgEncode
+tableName wgEncodeAwgTfbsUchicagoK562EfosUniPk
+target FOS
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgTfbsUchicagoK562Egata2UniPk
+objType table
+antibody eGFP-GATA2
+cell K562
+composite wgEncodeAwgTfbsUniform
+control Control_eGFP-GATA2
+controlId K562/Input/Control_eGFP-GATA2
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001208
+fileName wgEncodeAwgTfbsUchicagoK562Egata2UniPk.narrowPeak.gz
+lab UChicago
+project wgEncode
+tableName wgEncodeAwgTfbsUchicagoK562Egata2UniPk
+target GATA2
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgTfbsUchicagoK562Ehdac8UniPk
+objType table
+antibody eGFP-HDAC8
+cell K562
+composite wgEncodeAwgTfbsUniform
+control Control_eGFP-HDAC8
+controlId K562/Input/Control_eGFP-HDAC8
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001209
+fileName wgEncodeAwgTfbsUchicagoK562Ehdac8UniPk.narrowPeak.gz
+lab UChicago
+project wgEncode
+tableName wgEncodeAwgTfbsUchicagoK562Ehdac8UniPk
+target HDAC8
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgTfbsUchicagoK562EjunbUniPk
+objType table
+antibody eGFP-JunB
+cell K562
+composite wgEncodeAwgTfbsUniform
+control Control_eGFP-JunB
+controlId K562/Input/Control_eGFP-JunB
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001210
+fileName wgEncodeAwgTfbsUchicagoK562EjunbUniPk.narrowPeak.gz
+lab UChicago
+project wgEncode
+tableName wgEncodeAwgTfbsUchicagoK562EjunbUniPk
+target JUNB
+treatment None
+view Peaks
+
+metaObject wgEncodeAwgTfbsUchicagoK562EjundUniPk
+objType table
+antibody eGFP-JunD
+cell K562
+composite wgEncodeAwgTfbsUniform
+control Control_eGFP-JunD
+controlId K562/Input/Control_eGFP-JunD
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dccAccession wgEncodeEH001211
+fileName wgEncodeAwgTfbsUchicagoK562EjundUniPk.narrowPeak.gz
+lab UChicago
+project wgEncode
+tableName wgEncodeAwgTfbsUchicagoK562EjundUniPk
+target JUND
+treatment None
+view Peaks
+
 metaObject wgEncodeAwgTfbsUniform
 objType composite
 composite wgEncodeAwgTfbsUniform
@@ -12932,4 +13022,4 @@ target CTCF
 treatment None
 view Peaks
 
-# MAGIC: -1539552377
+# MAGIC: 258951181

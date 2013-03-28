@@ -284,34 +284,30 @@ XXX - waiting to see what WM does
     ln -s `pwd`/amaVit1.2bit /gbdb/amaVit1/amaVit1.2bit
 
 ##########################################################################
-# cpgIslands - (WORKING - 2013-03-06 - Hiram)
+# cpgIslands - (DONE - 2013-03-27 - Hiram)
     mkdir /hive/data/genomes/amaVit1/bed/cpgIslands
     cd /hive/data/genomes/amaVit1/bed/cpgIslands
     time doCpgIslands.pl amaVit1 > do.log 2>&1
-XXX - running - Wed Mar 27 15:06:14 PDT 2013
-    #   real    38m33.141s
+    #   real    160m9.498s
 
     cat fb.amaVit1.cpgIslandExt.txt
-    #   40222518 bases of 2277906570 (1.766%) in intersection
+    #   8721452 bases of 1128255752 (0.773%) in intersection
 
 #########################################################################
-# genscan - (WORKING - 2013-03-06 - Hiram)
+# genscan - (DONE - 2013-03-28 - Hiram)
     mkdir /hive/data/genomes/amaVit1/bed/genscan
     cd /hive/data/genomes/amaVit1/bed/genscan
     time doGenscan.pl amaVit1 > do.log 2>&1
-XXX - running - Wed Mar 27 15:06:51 PDT 2013
-    #   real    33m41.740s
-    # one job failed, changed the -window size to 2000000 to get
-    #   it to complete
-    ./runLastOne.csh GL896906 000 gtf/000/GL896906.gtf \
-         pep/000/GL896906.pep subopt/000/GL896906.bed
-    time doGenscan.pl -continue=makeBed amaVit1 > bed.log 2>&1
-    #   real    4m33.037s
+    # load step broken due to gtfToGenePred binary problems, fixed and
+    # finished the load script manually, then continue:
+
+    time doGenscan.pl -continue=cleanup amaVit1 > cleanup.log 2>&1
+    #   real    3m24.993s
 
     cat fb.amaVit1.genscan.txt
-    #   25257909 bases of 647368134 (3.902%) in intersection
+    #   23027089 bases of 1128255752 (2.041%) in intersection
     cat fb.amaVit1.genscanSubopt.txt
-    #   23439935 bases of 647368134 (3.621%) in intersection
+    #   23060300 bases of 1128255752 (2.044%) in intersection
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-03-27 - Hiram)

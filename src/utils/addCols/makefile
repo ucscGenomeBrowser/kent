@@ -1,10 +1,18 @@
 include ../../inc/common.mk
 
+L +=
+MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
-O = addCols.o 
+O = addCols.o
+A = addCols
 
-addCols: $O
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/addCols $O ../../lib/$(MACHTYPE)/jkweb.a ${L}
+addCols: ${O}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile:: ${O} ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 clean::
-	rm -f ${O}
+	rm -f ${O} ${A}${EXE}
