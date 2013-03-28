@@ -44,6 +44,7 @@ if (bestFeature == NULL)
     return "exon";
 else
     {
+    verbose(2, "bestFeature is %s with %d count\n", bestFeature->name, bestFeature->count);
     return bestFeature->name;
     }
 }

@@ -10,5 +10,5 @@ test:
 	cd metaReformat && ${MAKE} test
 
 clean:
-	rm meta*/*.o
+	rm -f meta*/*.o
 

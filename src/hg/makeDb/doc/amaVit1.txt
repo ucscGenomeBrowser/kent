@@ -1,0 +1,513 @@
+# for emacs: -*- mode: sh; -*-
+
+#       DATE:   22-Jan-2013
+#       ORGANISM:       Amazona vittata
+#       TAXID:  241585
+#       ASSEMBLY LONG NAME:     AV1
+#       ASSEMBLY SHORT NAME:    AV1
+#       ASSEMBLY SUBMITTER:     Puerto Rican Parrot Genome Project
+#       ASSEMBLY TYPE:  Haploid
+#       NUMBER OF ASSEMBLY-UNITS:       1
+#       ASSEMBLY ACCESSION:     GCA_000332375.1
+#       FTP-RELEASE DATE: 07-Feb-2013
+
+#       Available at NCBI 2013-02-07
+#       http://www.ncbi.nlm.nih.gov/bioproject/171587
+#       http://www.ncbi.nlm.nih.gov/genome/15170
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AOCU01
+#       http://www.ncbi.nlm.nih.gov/assembly/529068/
+
+#       24X WGS 1,175 Mb 295,391 contigs 182,974 scaffolds N50 19,239
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=241585
+
+#       rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Amazona_vittata/AV1/
+
+##########################################################################
+# Download sequence (DONE - 2013-02-26 - Hiram)
+
+    mkdir -p /hive/data/genomes/amaVit1/genbank
+    cd /hive/data/genomes/amaVit1/genbank
+
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Amazona_vittata/AV1/ ./
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 1175404042 bases (47148290 N's 1128255752 real 1128255752 upper 0 lower) in 182974 sequences in 1 files
+# Total size: mean 6423.9 sd 11509.9 min 201 (gi|442875222|gb|AOCU01226611.1|) max 206462 (gi|443354616|gb|KB285691.1|) median 2065
+
+    # prototyping a new script that can manage any assembly that has just
+    # these unplaced scaffolds:
+    $HOME/kent/src/hg/utils/automation/unplacedScaffolds.pl amaVit1
+    #   constructs ucsc hierarchy:
+    ls -og ../ucsc
+# -rw-rw-r-- 1  19792148 Mar 25 13:46 amaVit1.ucsc.agp
+# -rw-rw-r-- 1 346868275 Mar 25 13:51 amaVit1.ucsc.fa.gz
+# -rw-rw-r-- 1       209 Mar 25 18:48 checkAgp.result.txt
+
+    # fetch photograph, same as from NCBI genome page:
+    mkdir /hive/data/genomes/amaVit1/photo
+    cd /hive/data/genomes/amaVit1/photo
+    wget --timestamping \
+      http://upload.wikimedia.org/wikipedia/commons/9/98/Puerto_Rican_parrot.jpg
+
+    convert -geometry "400x300" Puerto_Rican_parrot.jpg Amazona_vittata.jpg
+# -rw-rw-r-- 1  83471 Mar  7 14:53 Amazona_vittata.jpg
+
+    # check this .jpg file into the source tree kent/src/hg/htdocs/images/
+    git commit -m "photo for amaVit1 browser, Tom MacKenzie, U.S. Fish and Wildlife Service www.fws.gov/caribbean/ES/Parrot-Gallery.html refs #10144" \
+        Amazona_vittata.jpg
+
+    # and copy to /usr/local/apache/htdocs/images
+    cp -p Amazona_vittata.jpg /usr/local/apache/htdocs/images
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2013-03-26 - Hiram)
+    # prototyping a new template creation system:
+    cd /hive/data/genomes/amaVit1
+
+export genomeClade="vertebrate"
+export genomeCladePriority="60"
+export commonName="Parrot"
+export dbDbDir="birds"
+export genomeId="15170"
+export bioprojectId="171587"
+export assemblyId="529068"
+export mitoAcc="none"
+export orderKey="4310"
+export photoCreditURL="http://www.fws.gov/caribbean/ES/Parrot-Gallery.html"
+export photoCreditName="Tom MacKenzie, U.S. Fish and Wildlife Service"
+
+$HOME/kent/src/hg/utils/automation/mkConfigRa.sh /hive/data/genomes/amaVit1 \
+    ${genomeClade} ${genomeCladePriority} ${commonName} ${dbDbDir} \
+        ${genomeId} ${bioprojectId} ${assemblyId} ${mitoAcc} ${orderKey} \
+        ${photoCreditURL} "${photoCreditName}" > amaVit1.config.ra
+
+    # constructs this file:
+# Config parameters for makeGenomeDb.pl:
+db      amaVit1
+clade   vertebrate
+genomeCladePriority     60
+orderKey        4310
+commonName      Parrot
+dbDbSpeciesDir  birds
+scientificName  Amazona vittata
+assemblyDate    Jan. 2013
+assemblyLabel   Puerto Rican Parrot Genome Project AV1
+assemblyShortLabel      AV1
+fastaFiles      /hive/data/genomes/amaVit1/ucsc/*.fa.gz
+agpFiles        /hive/data/genomes/amaVit1/ucsc/*.agp
+mitoAcc none
+# qualFiles none
+photoCreditURL  http://www.fws.gov/caribbean/ES/Parrot-Gallery.html
+photoCreditName Tom MacKenzie, U.S. Fish and Wildlife Service
+ncbiGenomeId    15170
+ncbiAssemblyName        AV1
+genBankAccessionID      GCA_000332375.1
+ncbiAssemblyId  529068
+ncbiBioProject  171587
+taxId   241585
+
+    # seq and agp steps were done without logs for testing, then continuing:
+    # << happy emacs
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -continue=db amaVit1.config.ra > db.log 2>&1
+
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/amaVit1.unmasked.2bit /gbdb/amaVit1/amaVit1.2bit
+    #	browser should function now, add the files from the trackDb
+    #   hierarchy here to the source tree
+
+    #   after checking in the photograph and getting it into
+    #   /usr/local/apache/htdocs/images:
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
+        -continue=trackDb -forceDescription -dbHost=hgwdev amaVit1.config.ra
+
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 182974, total size: 1175404042, one half size: 587702021
+# cumulative    N50 count       contig  contig size
+587688024       16504   KB240690        19240
+587702021 one half size
+587707263       16505   KB265067        19239
+
+##########################################################################
+# running repeat masker (DONE - 2013-03-27 - Hiram)
+    mkdir /hive/data/genomes/amaVit1/bed/repeatMasker
+    cd /hive/data/genomes/amaVit1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek amaVit1 > do.log 2>&1 &
+    #   real    163m13.049s
+
+    cat faSize.rmsk.txt
+# 1175404042 bases (47148290 N's 1128255752 real 1068522265 upper
+#       59733487 lower) in 182974 sequences in 1 files
+# Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+#       max 206462 (KB285691) median 2065
+# %5.08 masked total, %5.29 masked real
+
+    egrep -i "versi|relea" do.log
+#    January 10 2013 (open-4-0-0) version of RepeatMasker
+# CC   RELEASE 20120418;
+
+    featureBits -countGaps amaVit1 rmsk
+    #   887930078 bases of 2410758013 (36.832%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2013-03-05 - Hiram)
+    mkdir /hive/data/genomes/amaVit1/bed/simpleRepeat
+    cd /hive/data/genomes/amaVit1/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	amaVit1 > do.log 2>&1 &
+    #   real    85m49.548s
+
+    cat fb.simpleRepeat
+    #   7849266 bases of 1128255752 (0.696%) in intersection
+
+XXX - waiting to see what WM does
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/amaVit1
+    twoBitMask amaVit1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed amaVit1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa amaVit1.2bit stdout | faSize stdin > faSize.amaVit1.2bit.txt
+    cat faSize.amaVit1.2bit.txt
+
+    #   2410758013 bases (132851443 N's 2277906570 real 1389998131 upper
+    #   887908439 lower) in 7741 sequences in 1 files
+    #   Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
+    #   max 52375790 (GL896898) median 1445
+    #   %36.83 masked total, %38.98 masked real
+
+    rm /gbdb/amaVit1/amaVit1.2bit
+    ln -s `pwd`/amaVit1.2bit /gbdb/amaVit1/amaVit1.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2013-03-27 - Hiram)
+    mkdir /hive/data/genomes/amaVit1/bed/gap
+    cd /hive/data/genomes/amaVit1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../amaVit1.unmasked.2bit > findMotif.txt 2>&1
+    #   real    0m12.841s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits amaVit1 -not gap -bed=notGap.bed
+    #   1128255752 bases of 1128255752 (100.000%) in intersection
+    #   real    1m2.648s
+
+    # can see now if allGaps.bed actually is all the gaps:
+    hgsql -N -e "select size from gap;" amaVit1 | ave stdin | grep total
+# total 47148290.000000
+    ave -col=5 allGaps.bed | grep total
+# total 47148290.000000
+    # same count, no new gaps
+
+    # check if any non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" amaVit1 | sort | uniq -c
+    #  112417 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2013-03-27 - Hiram)
+    mkdir /hive/data/genomes/amaVit1/bed/windowMasker
+    cd /hive/data/genomes/amaVit1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev amaVit1 > do.log 2>&1 &
+    #   real    234m56.918s
+
+    # Masking statistics
+    cat faSize.amaVit1.wmsk.txt
+    #   1175404042 bases (47148290 N's 1128255752 real 926668264 upper
+    #           201587488 lower) in 182974 sequences in 1 files
+    #   Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+    #           max 206462 (KB285691) median 2065
+    #   %17.15 masked total, %17.87 masked real
+
+    cat faSize.amaVit1.wmsk.sdust.txt
+    #   1175404042 bases (47148290 N's 1128255752 real 921480969 upper
+    #           206774783 lower) in 182974 sequences in 1 files
+    #   Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+    #           max 206462 (KB285691) median 2065
+    #   %17.59 masked total, %18.33 masked real
+
+    cat faSize.amaVit1.cleanWMSdust.txt
+    #   1175404042 bases (47148290 N's 1128255752 real 921480969
+    #           upper 206774783 lower) in 182974 sequences in 1 files
+    #   Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+    #           max 206462 (KB285691) median 2065
+    #   %17.59 masked total, %18.33 masked real
+
+
+    cat fb.amaVit1.windowmaskerSdust.clean.txt
+    #   206774783 bases of 1175404042 (17.592%) in intersection
+
+
+    # how much does this window masker and repeat masker overlap:
+    # can be done after rmsk is done.  The script will often
+    #   fail on this command in the doLoad.csh if RM is not yet
+    #   complete and these are running at the same time:
+    featureBits -countGaps amaVit1 rmsk windowmaskerSdust
+    #   453442864 bases of 2410758013 (18.809%) in intersection
+
+    cat fb.amaVit1.rmsk.windowmaskerSdust.txt
+    #   41747742 bases of 1175404042 (3.552%) in intersection
+
+    # if the script did fail on that command, finish it:
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-continue=cleanup -dbHost=hgwdev amaVit1 > cleanup.log 2>&1 &
+    #   real    1m43.905s
+
+##########################################################################
+# use WindowMasker and TRF for final masked genome (DONE - 2013-03-27 - Hiram)
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/amaVit1
+    twoBitMask bed/windowMasker/amaVit1.cleanWMSdust.2bit \
+	-add bed/simpleRepeat/trfMask.bed amaVit1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa amaVit1.2bit stdout | faSize stdin > faSize.amaVit1.2bit.txt
+    cat faSize.amaVit1.2bit.txt
+
+    #   1175404042 bases (47148290 N's 1128255752 real 921150785 upper
+    #           207104967 lower) in 182974 sequences in 1 files
+    #   Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+    #           max 206462 (KB285691) median 2065
+    #   %17.62 masked total, %18.36 masked real
+
+    rm /gbdb/amaVit1/amaVit1.2bit
+    ln -s `pwd`/amaVit1.2bit /gbdb/amaVit1/amaVit1.2bit
+
+##########################################################################
+# cpgIslands - (WORKING - 2013-03-06 - Hiram)
+    mkdir /hive/data/genomes/amaVit1/bed/cpgIslands
+    cd /hive/data/genomes/amaVit1/bed/cpgIslands
+    time doCpgIslands.pl amaVit1 > do.log 2>&1
+XXX - running - Wed Mar 27 15:06:14 PDT 2013
+    #   real    38m33.141s
+
+    cat fb.amaVit1.cpgIslandExt.txt
+    #   40222518 bases of 2277906570 (1.766%) in intersection
+
+#########################################################################
+# genscan - (WORKING - 2013-03-06 - Hiram)
+    mkdir /hive/data/genomes/amaVit1/bed/genscan
+    cd /hive/data/genomes/amaVit1/bed/genscan
+    time doGenscan.pl amaVit1 > do.log 2>&1
+XXX - running - Wed Mar 27 15:06:51 PDT 2013
+    #   real    33m41.740s
+    # one job failed, changed the -window size to 2000000 to get
+    #   it to complete
+    ./runLastOne.csh GL896906 000 gtf/000/GL896906.gtf \
+         pep/000/GL896906.pep subopt/000/GL896906.bed
+    time doGenscan.pl -continue=makeBed amaVit1 > bed.log 2>&1
+    #   real    4m33.037s
+
+    cat fb.amaVit1.genscan.txt
+    #   25257909 bases of 647368134 (3.902%) in intersection
+    cat fb.amaVit1.genscanSubopt.txt
+    #   23439935 bases of 647368134 (3.621%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-03-27 - Hiram)
+    cd /hive/data/genomes/amaVit1
+
+    # Use -repMatch=450, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1175404042 / 2897316137 \) \* 1024
+    #   ( 1175404042 / 2897316137 ) * 1024 = 415.423683
+
+    # round up to 450
+
+    cd /hive/data/genomes/amaVit1
+    time blat amaVit1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/amaVit1.11.ooc -repMatch=450
+    #   Wrote 9104 overused 11-mers to jkStuff/amaVit1.11.ooc
+    #   real    0m26.387s
+
+    # there are no non-bridged gaps, no lift file needed for genbank
+    hgsql -N -e "select bridge from gap;" amaVit1 | sort | uniq -c
+    #   112417 yes
+    # find other make doc where gapToLift is used to make nonBridged.bed file
+
+#########################################################################
+# AUTO UPDATE GENBANK (TBD - 2013-03-06 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Mustela putorius        9       0       0
+# Mustela putorius furo   122937  4210    0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add amaVit1 just before petMar1
+# amaVit1 (Ferret, Mustela putorius furo, taxId 9669)
+amaVit1.serverGenome = /hive/data/genomes/amaVit1/amaVit1.2bit
+amaVit1.clusterGenome = /hive/data/genomes/amaVit1/amaVit1.2bit
+amaVit1.ooc = /hive/data/genomes/amaVit1/jkStuff/amaVit1.11.ooc
+amaVit1.lift = no
+amaVit1.perChromTables = no
+amaVit1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+amaVit1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+amaVit1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+amaVit1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+amaVit1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+amaVit1.refseq.mrna.native.load = yes
+amaVit1.refseq.mrna.xeno.load = yes
+amaVit1.genbank.mrna.xeno.load = no
+amaVit1.genbank.est.native.load = yes
+amaVit1.downloadDir = amaVit1
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding amaVit1 ferret redmine 6352" etc/genbank.conf
+    git push
+    make etc-update
+
+    git pull
+    # Edit src/lib/gbGenome.c to add new species.
+#  musFurNames[] = {"Mustela putorius furo", "Mustela putorius", NULL};
+
+    git commit -m "adding definition for musFurNames redmine 6352" \
+        src/lib/gbGenome.c
+    git push
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S amaVit1           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial amaVit1 &
+    #   var/build/logs/2013.03.06-09:49:44.amaVit1.initalign.log
+    #   real    325m17.355s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad amaVit1 &
+    #   real    28m17.094s
+    #   var/dbload/hgwdev/logs/2013.03.06-15:15:56.dbload.log
+    #   real    31m56.575s
+
+    # check the end of that dbload.log to see if it was successful
+    #   hgwdev 2013.03.06-15:47:47 dbload: finish
+
+    # enable daily alignment and update of hgwdev (TBD - 2013-03-06 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add amaVit1 to:
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added amaVit1/ferret to the daily build" \
+        etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# construct ucscToEnsembl chrom name translation (2013-03-06 - Hiram)
+    mkdir /hive/data/genomes/amaVit1/bed/ucscToEnsembl
+    cd /hive/data/genomes/amaVit1/bed/ucscToEnsembl
+
+    # all the Ensembl names are the same as UCSC with the addition of .1
+    cat ../../chrom.sizes | cut -f1 | sed -e 's/^\(.*\)/\1\t\1.1/' \
+        | sort > ucscToEnsembl.tab
+
+    # find length of ucsc names for key length in SQL below:
+    awk '{print length($1)}' ucscToEnsembl.tab | sort -u
+    #  12
+    #   8
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(12))
+);
+'_EOF_'
+
+    hgsql amaVit1 < ucscToEnsembl.sql
+    hgsql amaVit1 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+############################################################################
+#  Ensembl Genes version 70  (TBD - 2013-03-06 - Hiram)
+     cd /hive/data/genomes/amaVit1
+     cat << '_EOF_' > amaVit1.ensGene.ra
+# required db variable
+db amaVit1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to protect in perl:
+nameTranslation 's/^MT/chrM/; s/\.1//'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=70 -stop=process \
+        amaVit1.ensGene.ra > ensGene.process.log 2>&1
+    # log indicates OK:
+    #   genePredCheck -db=amaVit1 amaVit1.allGenes.gp.gz
+    #   checked: 23963 failed: 0
+    doEnsGeneUpdate.pl -ensVersion=70 -continue=load \
+        amaVit1.ensGene.ra > ensGeneV70.load.log 2>&1
+
+    featureBits amaVit1 ensGene
+    # 52850166 bases of 2277906570 (2.320%) in intersection
+
+#########################################################################
+# set default position as recommended from Jeramiah Smith
+#       (TBD - 2012-10-23 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="GL476334:480870-830419" where name="amaVit1";' \
+	hgcentraltest
+
+############################################################################
+# downloads and pushQ entry (TBD - 2012-03-06 - Hiram)
+    # after adding amaVit1 to the all.joiner file and verifying that
+    #   joinerCheck is clean, can construct the downloads:
+    cd /hive/data/genomes/amaVit1
+    time makeDownloads.pl -workhorse=hgwdev amaVit1
+XXX - running - Thu Mar  7 10:02:01 PST 2013
+    #   real    21m55.107s
+
+    mkdir /hive/data/genomes/amaVit1/pushQ
+    cd /hive/data/genomes/amaVit1/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl amaVit1 2> stderr.txt > amaVit1.sql
+    #   real    3m38.916s
+    # will have to verify this one after loading on hgwbeta:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#   ucscToEnsembl
+    # the script should be fixed to place this in Ensembl Genes track
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/amaVit1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/amaVit1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/amaVit1/bbi/quality.bw
+# WARNING: amaVit1 does not have seq
+# WARNING: amaVit1 does not have extFile
+
+    scp -p amaVit1.sql hgwbeta:/tmp/
+    ssh hgwbeta "hgsql qapushq < /tmp/amaVit1.sql"
+
+##########################################################################
+#  BLATSERVERS ENTRY (TBD - 2012-10-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("amaVit1", "blat4b", "17838", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("amaVit1", "blat4b", "17839", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+

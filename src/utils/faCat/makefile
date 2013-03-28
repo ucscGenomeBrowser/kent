@@ -5,13 +5,14 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = faCat.o
+A = faCat
 
 faCat: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faCat $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/faCat${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-test:
-	(cd tests && ${MAKE} test)
+compile:: ${O} ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 clean::
-	(cd tests && ${MAKE} clean)
+	rm -f $O ${A}${EXE}
