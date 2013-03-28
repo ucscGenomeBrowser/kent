@@ -713,21 +713,24 @@ identifier wgEncodeGencodeClassesV3
     hg18.wgEncodeGencodeManualV3.name unique
     hg18.wgEncodeGencodePolyaV3.name unique
 
-identifier wgEncodeGencodeClassesV4
-"Link together Gencode gene model (Known) and class for May 2010 Data Version"
-    hg19.wgEncodeGencodeClassesV4.name
-    hg19.wgEncodeGencodeAutoV4.name unique
-    hg19.wgEncodeGencodeManualV4.name unique
-    hg19.wgEncodeGencodePolyaV4.name unique
-    hg19.wgEncodeGencode2wayConsPseudoV4.name unique
+# Mark D thought GENCODE V4 was too old to fix joinerCheck errors
+# Per discussion with Ann, commenting out GENCODE V4 sections
 
-identifier wgEncodeGencodeYalePseudoV4
-"Link together Gencode gene model and possible pseudogenes for May 2010 Data Version"
-    hg19.wgEncodeGencodeYalePseudoV4.transcript
-    hg19.wgEncodeGencodeAutoV4.name unique
-    hg19.wgEncodeGencodeManualV4.name unique
-    hg19.wgEncodeGencodePolyaV4.name unique
-    panTro2.wgEncodeNhgriBip.name unique
+#identifier wgEncodeGencodeClassesV4
+#"Link together Gencode gene model (Known) and class for May 2010 Data Version"
+#    hg19.wgEncodeGencodeClassesV4.name
+#    hg19.wgEncodeGencodeAutoV4.name unique
+#    hg19.wgEncodeGencodeManualV4.name unique
+#    hg19.wgEncodeGencodePolyaV4.name unique
+#    hg19.wgEncodeGencode2wayConsPseudoV4.name unique
+
+#identifier wgEncodeGencodeYalePseudoV4
+#"Link together Gencode gene model and possible pseudogenes for May 2010 Data Version"
+#    hg19.wgEncodeGencodeYalePseudoV4.transcript
+#    hg19.wgEncodeGencodeAutoV4.name unique
+#    hg19.wgEncodeGencodeManualV4.name unique
+#    hg19.wgEncodeGencodePolyaV4.name unique
+#    panTro2.wgEncodeNhgriBip.name unique
 
 # begin Gencode V7
 
@@ -1799,7 +1802,7 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     mm10.mrnaRefseq.mrna minCheck=0.30
     hg17.mrnaRefseq.mrna minCheck=0.80
     $rn.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!mm7,!mm8,!mm9,!mm10,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
+    $gbd,!hg17,!hg18,!hg19,!mm7,!mm8,!mm9,!mm10,!rn4.spMrna.mrnaID minCheck=0.98
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
