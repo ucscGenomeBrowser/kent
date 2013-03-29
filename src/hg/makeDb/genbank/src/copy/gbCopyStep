@@ -41,7 +41,7 @@ sub getBuildTimeFile($$$$) {
     
     my $remBuildFile = "$buildRoot/var/build/build.time";
 
-    my $cmd = "$rsyncCommand " . getRSyncPortOpt($rsyncPort) . " $buildServer:$remBuildFile "
+    my $cmd = "$rsyncCommand " . " $buildServer:$remBuildFile "
         . " $buildTimeTmp";
     my $stat = runProgNoAbort($cmd);
     if ($stat != 0) {
@@ -89,7 +89,7 @@ sub rsyncBuildFiles($$$$$@) {
     # dereference symlinks. so can't use --archive
     # FIXME: add when have newer rsync: --log-format='%b %l %n%L'
     my $baseCmd = "$rsyncCommand --copy-links --recursive --perms "
-        . "--group --times " . getRSyncPortOpt($rsyncPort);
+        . "--group --times ";
     if ($gbCommon::verbose) {
         $baseCmd .= " -v";
     }
@@ -123,7 +123,6 @@ sub rsyncBuildFiles($$$$$@) {
         $cmd = $baseCmd .
             " --include='/*/$db/' --exclude='/*/*'"
             . " $buildServer:$buildRoot/data/aligned/ data/aligned";
-	sleep(120);
         runProg($cmd);
     }
 }
@@ -137,7 +136,7 @@ sub rsyncCcdsImportTimeFile($$$$) {
     
     my $remCcdsImportTime = "$buildServer:$buildRoot/$ccdsImportTime";
 
-    my $cmd = "$rsyncCommand " . getRSyncPortOpt($rsyncPort) . " $remCcdsImportTime"
+    my $cmd = "$rsyncCommand " . " $remCcdsImportTime"
         . " $ccdsImportTime";
     my $stat = runProgNoAbort($cmd);
     if ($stat != 0) {
