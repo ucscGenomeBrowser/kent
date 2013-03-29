@@ -639,6 +639,50 @@ cat  << 'EOF' > link.csh
 
     # TODO: Add 5 chicago and remove 10 baddies links from downloads dir (and releaseLatest)
 
+    # add quality metric from Anshul's spreadsheet
+    cd quality
+cat > getQuality.pl << 'EOF'
+    while (<>) {
+        ($id, $qual, $obj, $junk) = split(",");
+        if ($qual eq "0") {
+            $qual = "caution";
+        } else if ($qual eq "1") {
+            $qual = "good";
+        } else {
+            next;
+        }
+        $obj =~ s/Rep0/Rep1/;
+        print "$obj.$qual\n";
+    }
+'EOF'
+
+perl getQuality.pl < tfbsQualityReport.csv > quality.lst
+wc -l quality.lst
+# 690
+
+cat > addQuality.csh << 'EOF'
+    set qualList = $1
+    foreach q (`cat $qualList`)
+    set obj = $q:r
+    set qual = $q:e
+    set obj = `csh ../nameTable.csh wgEncodeAwgTfbs $obj`
+    echo "metaObject $obj"
+    echo "quality $qual"
+    echo ""
+    end
+'EOF'
+
+csh addQuality.csh quality.lst < quality.ra
+mdbUpdate hg19 quality.ra
+#Affected 689 row(s) in hg19.metaDb_kate
+# ugh, lost 1
+
+mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.ra
+
+# hand-tweak 3 HudsonAlpha that have problematic V02, etc. in filenames
+#wgEncodeAwgTfbsHaibK562CtcfcPcr1xUniPk - peak count matches: wgEncodeHaibTfbsK562CtcfcPcr1xAlnRep0V2 (quality 1)
+#wgEncodeAwgTfbsHaibU87NrsfPcr2xUniPk - peak count matches:wgEncodeHaibTfbsU87NrsfPcr2xAlnRep0V2 (quality 1)
+#wgEncodeAwgTfbsHaibU87Pol24h8V0416101UniPk - peak count matches: wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep0V2  (quality 1)
 
 
 ###############################################

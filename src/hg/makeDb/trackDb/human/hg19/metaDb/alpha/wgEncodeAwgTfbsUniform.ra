@@ -1,3 +1,8 @@
+metaObject wgEncodeAwgTfbsUniform
+objType composite
+composite wgEncodeAwgTfbsUniform
+expVars lab, dataType, cell, antibody, treatment
+
 metaObject wgEncodeAwgTfbsBroadDnd41CtcfUniPk
 objType table
 antibody CTCF
@@ -12,6 +17,7 @@ fileName wgEncodeAwgTfbsBroadDnd41CtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum daef2b5d3bb5674335869d7449d51d35
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadDnd41CtcfUniPk
 target CTCF
 treatment None
@@ -31,6 +37,7 @@ fileName wgEncodeAwgTfbsBroadDnd41Ezh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum f5516095e64270b8f9e1f0ca0eeb3f60
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadDnd41Ezh239875UniPk
 target EZH2
 treatment None
@@ -50,6 +57,7 @@ fileName wgEncodeAwgTfbsBroadGm12878CtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 551c0c8e731c707fde30b0e5d4e5280e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadGm12878CtcfUniPk
 target CTCF
 treatment None
@@ -69,6 +77,7 @@ fileName wgEncodeAwgTfbsBroadGm12878Ezh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum f9f42352e08dfc1da553e652cb49e16e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadGm12878Ezh239875UniPk
 target EZH2
 treatment None
@@ -88,6 +97,7 @@ fileName wgEncodeAwgTfbsBroadH1hescChd1a301218aUniPk.narrowPeak.gz
 lab Broad
 md5sum 9d21c52c30c3eb142a44d425066fac64
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadH1hescChd1a301218aUniPk
 target CHD1
 treatment None
@@ -107,6 +117,7 @@ fileName wgEncodeAwgTfbsBroadH1hescCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum e91d11e56078dc9e3e430e385dadff12
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadH1hescCtcfUniPk
 target CTCF
 treatment None
@@ -126,6 +137,7 @@ fileName wgEncodeAwgTfbsBroadH1hescEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum 3e50529784665e37cb0ba703ebed31b0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadH1hescEzh239875UniPk
 target EZH2
 treatment None
@@ -145,6 +157,7 @@ fileName wgEncodeAwgTfbsBroadH1hescJarid1aab26049UniPk.narrowPeak.gz
 lab Broad
 md5sum ab7b98e90b4963e1b2a8bc7ff289e7ed
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadH1hescJarid1aab26049UniPk
 target KDM5A
 treatment None
@@ -164,6 +177,7 @@ fileName wgEncodeAwgTfbsBroadH1hescRbbp5a300109aUniPk.narrowPeak.gz
 lab Broad
 md5sum 7c7ba71ee068ec55b76273c6d5c65349
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadH1hescRbbp5a300109aUniPk
 target RBBP5
 treatment None
@@ -183,6 +197,7 @@ fileName wgEncodeAwgTfbsBroadHelas3CtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum b258463b91914f47cd4d8584c23b3fbc
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHelas3CtcfUniPk
 target CTCF
 treatment None
@@ -202,6 +217,7 @@ fileName wgEncodeAwgTfbsBroadHelas3Ezh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum 6a4f5e6dd3f79f20985caabee849e2d3
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadHelas3Ezh239875UniPk
 target EZH2
 treatment None
@@ -221,6 +237,7 @@ fileName wgEncodeAwgTfbsBroadHelas3Pol2bUniPk.narrowPeak.gz
 lab Broad
 md5sum 7a7da6f3cf3f6dd7f9b30060489455b0
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadHelas3Pol2bUniPk
 target POLR2A
 treatment None
@@ -240,6 +257,7 @@ fileName wgEncodeAwgTfbsBroadHepg2CtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 46493faad7d2f351912edeb5f24007ef
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHepg2CtcfUniPk
 target CTCF
 treatment None
@@ -259,6 +277,7 @@ fileName wgEncodeAwgTfbsBroadHepg2Ezh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum a53616697ea58ba8f8364cc8ce4d6e26
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadHepg2Ezh239875UniPk
 target EZH2
 treatment None
@@ -278,6 +297,7 @@ fileName wgEncodeAwgTfbsBroadHmecCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 099eb73e87666b8dfb8294d3124c4a33
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHmecCtcfUniPk
 target CTCF
 treatment None
@@ -297,6 +317,7 @@ fileName wgEncodeAwgTfbsBroadHmecEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum 383d104f43306001b9e9621478bfa4ee
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHmecEzh239875UniPk
 target EZH2
 treatment None
@@ -316,6 +337,7 @@ fileName wgEncodeAwgTfbsBroadHsmmCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 637cd35a75746c7fdeb69bde47fd6525
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHsmmCtcfUniPk
 target CTCF
 treatment None
@@ -335,6 +357,7 @@ fileName wgEncodeAwgTfbsBroadHsmmEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum 9d792ec5834c990533a60b8bf91bba3a
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadHsmmEzh239875UniPk
 target EZH2
 treatment None
@@ -354,6 +377,7 @@ fileName wgEncodeAwgTfbsBroadHsmmtCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum c5276bf128b923fdd6fa36e37360865a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHsmmtCtcfUniPk
 target CTCF
 treatment None
@@ -373,6 +397,7 @@ fileName wgEncodeAwgTfbsBroadHsmmtEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum 46f0b313506935f9c28869c51ccd2700
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHsmmtEzh239875UniPk
 target EZH2
 treatment None
@@ -392,6 +417,7 @@ fileName wgEncodeAwgTfbsBroadHuvecCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 015a09619bc13e665396dd8c97612a4d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHuvecCtcfUniPk
 target CTCF
 treatment None
@@ -411,6 +437,7 @@ fileName wgEncodeAwgTfbsBroadHuvecEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum ccab62d70a616388bc6399a176bd9475
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadHuvecEzh239875UniPk
 target EZH2
 treatment None
@@ -430,6 +457,7 @@ fileName wgEncodeAwgTfbsBroadHuvecPol2bUniPk.narrowPeak.gz
 lab Broad
 md5sum d5fdf5b42b76c3b24c10120a5650fa7d
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadHuvecPol2bUniPk
 target POLR2A
 treatment None
@@ -449,6 +477,7 @@ fileName wgEncodeAwgTfbsBroadK562Chd1a301218aUniPk.narrowPeak.gz
 lab Broad
 md5sum 4fa04265f8d90e4b0c18ec1d5ae9e412
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Chd1a301218aUniPk
 target CHD1
 treatment None
@@ -468,6 +497,7 @@ fileName wgEncodeAwgTfbsBroadK562CtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 73295002863992794359d046795c7d81
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562CtcfUniPk
 target CTCF
 treatment None
@@ -487,6 +517,7 @@ fileName wgEncodeAwgTfbsBroadK562Ezh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum 3b12692512e0bc352435c1db93e7bbba
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadK562Ezh239875UniPk
 target EZH2
 treatment None
@@ -506,6 +537,7 @@ fileName wgEncodeAwgTfbsBroadK562Hdac1sc6298UniPk.narrowPeak.gz
 lab Broad
 md5sum 1795871a5144cc91b0ae39e7db0c6be9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Hdac1sc6298UniPk
 target HDAC1
 treatment None
@@ -525,6 +557,7 @@ fileName wgEncodeAwgTfbsBroadK562Hdac2a300705aUniPk.narrowPeak.gz
 lab Broad
 md5sum 0cac164f5b1e3a3ffe1b1085bf0e858a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Hdac2a300705aUniPk
 target HDAC2
 treatment None
@@ -544,6 +577,7 @@ fileName wgEncodeAwgTfbsBroadK562Hdac6a301341aUniPk.narrowPeak.gz
 lab Broad
 md5sum 88094e0129d229673fac36caa52195f3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Hdac6a301341aUniPk
 target HDAC6
 treatment None
@@ -563,6 +597,7 @@ fileName wgEncodeAwgTfbsBroadK562P300UniPk.narrowPeak.gz
 lab Broad
 md5sum 45b332b495b4d861c930be29239e144a
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadK562P300UniPk
 target EP300
 treatment None
@@ -582,6 +617,7 @@ fileName wgEncodeAwgTfbsBroadK562Phf8a301772aUniPk.narrowPeak.gz
 lab Broad
 md5sum 6681900ce939cedfd48a7189b719129c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Phf8a301772aUniPk
 target PHF8
 treatment None
@@ -601,6 +637,7 @@ fileName wgEncodeAwgTfbsBroadK562Plu1UniPk.narrowPeak.gz
 lab Broad
 md5sum 3da4bc4d5689685c478d04d27614162b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Plu1UniPk
 target KDM5B
 treatment None
@@ -620,6 +657,7 @@ fileName wgEncodeAwgTfbsBroadK562Pol2bUniPk.narrowPeak.gz
 lab Broad
 md5sum 20e0e4bd9f4a3fbffa929acdfb97f811
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Pol2bUniPk
 target POLR2A
 treatment None
@@ -639,6 +677,7 @@ fileName wgEncodeAwgTfbsBroadK562Rbbp5a300109aUniPk.narrowPeak.gz
 lab Broad
 md5sum 4cd785c2bf455fa6a3fb7a7a118f1625
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Rbbp5a300109aUniPk
 target RBBP5
 treatment None
@@ -658,6 +697,7 @@ fileName wgEncodeAwgTfbsBroadK562Sap3039731UniPk.narrowPeak.gz
 lab Broad
 md5sum 4164ada88e914fc895cf6a6909cf4ca5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadK562Sap3039731UniPk
 target SAP30
 treatment None
@@ -677,6 +717,7 @@ fileName wgEncodeAwgTfbsBroadNhaCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum ab21d78ccc96719fbf3d1fd949f5354e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadNhaCtcfUniPk
 target CTCF
 treatment None
@@ -696,6 +737,7 @@ fileName wgEncodeAwgTfbsBroadNhaEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum b2cc669eeca0b26f79b6889254131758
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadNhaEzh239875UniPk
 target EZH2
 treatment None
@@ -715,6 +757,7 @@ fileName wgEncodeAwgTfbsBroadNhdfadCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum c3f9cca00c03e4cd3b248bed784f8765
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadNhdfadCtcfUniPk
 target CTCF
 treatment None
@@ -734,6 +777,7 @@ fileName wgEncodeAwgTfbsBroadNhdfadEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum b0e43d4292af5434ed0cfa0cb582e39b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadNhdfadEzh239875UniPk
 target EZH2
 treatment None
@@ -753,6 +797,7 @@ fileName wgEncodeAwgTfbsBroadNhekCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 1fb7f5b6f27b046188d86a019be34886
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadNhekCtcfUniPk
 target CTCF
 treatment None
@@ -772,6 +817,7 @@ fileName wgEncodeAwgTfbsBroadNhekEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum fda33b729ceeee6e27e664b81a660a26
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadNhekEzh239875UniPk
 target EZH2
 treatment None
@@ -791,6 +837,7 @@ fileName wgEncodeAwgTfbsBroadNhekPol2bUniPk.narrowPeak.gz
 lab Broad
 md5sum f50cdb08c8239663579bd9713c1b05d6
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsBroadNhekPol2bUniPk
 target POLR2A
 treatment None
@@ -810,6 +857,7 @@ fileName wgEncodeAwgTfbsBroadNhlfCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 129bd272be52aa6f9e196b930b472553
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadNhlfCtcfUniPk
 target CTCF
 treatment None
@@ -829,6 +877,7 @@ fileName wgEncodeAwgTfbsBroadNhlfEzh239875UniPk.narrowPeak.gz
 lab Broad
 md5sum ba618d67e524842ba76bd940ea38a872
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadNhlfEzh239875UniPk
 target EZH2
 treatment None
@@ -848,6 +897,7 @@ fileName wgEncodeAwgTfbsBroadOsteoblCtcfUniPk.narrowPeak.gz
 lab Broad
 md5sum 00f9fcc5d35375de19ab8a1c2586d1c1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsBroadOsteoblCtcfUniPk
 target CTCF
 treatment None
@@ -866,6 +916,7 @@ fileName wgEncodeAwgTfbsHaibA549Atf3V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 50a899b44722150ff1f9d4b4f1ed5e9d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Atf3V0422111Etoh02UniPk
 target ATF3
 treatment EtOH_0.02pct
@@ -884,6 +935,7 @@ fileName wgEncodeAwgTfbsHaibA549Bcl3V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 29f2d57a8468a1b11ac705b0280d258c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Bcl3V0422111Etoh02UniPk
 target BCL3
 treatment EtOH_0.02pct
@@ -902,6 +954,7 @@ fileName wgEncodeAwgTfbsHaibA549Creb1sc240V0416102Dex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b8e62c3a926cc69bf628da5c5dd9d5a3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Creb1sc240V0416102Dex100nmUniPk
 target CREB1
 treatment DEX_100nM
@@ -920,6 +973,7 @@ fileName wgEncodeAwgTfbsHaibA549Ctcfsc5916Pcr1xDex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum db06aea83314dca02726f6d2f3690e6a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Ctcfsc5916Pcr1xDex100nmUniPk
 target CTCF
 treatment DEX_100nM
@@ -938,6 +992,7 @@ fileName wgEncodeAwgTfbsHaibA549Ctcfsc5916Pcr1xEtoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 076393a8196ef16068bad5c2ffc99b6c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Ctcfsc5916Pcr1xEtoh02UniPk
 target CTCF
 treatment EtOH_0.02pct
@@ -956,6 +1011,7 @@ fileName wgEncodeAwgTfbsHaibA549Elf1V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8aff6df380881f20bfcb99f5ddd884ee
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Elf1V0422111Etoh02UniPk
 target ELF1
 treatment EtOH_0.02pct
@@ -974,6 +1030,7 @@ fileName wgEncodeAwgTfbsHaibA549Ets1V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum d16ec30437fb759b91e5141f4c6a16ff
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Ets1V0422111Etoh02UniPk
 target ETS1
 treatment EtOH_0.02pct
@@ -992,6 +1049,7 @@ fileName wgEncodeAwgTfbsHaibA549Fosl2V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum eb3d83b1398d71fcce57daca9e990e8f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Fosl2V0422111Etoh02UniPk
 target FOSL2
 treatment EtOH_0.02pct
@@ -1010,6 +1068,7 @@ fileName wgEncodeAwgTfbsHaibA549Foxa1V0416102Dex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ec2fa6b7e7d5a58b50785940fe890ab7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Foxa1V0416102Dex100nmUniPk
 target FOXA1
 treatment DEX_100nM
@@ -1028,6 +1087,7 @@ fileName wgEncodeAwgTfbsHaibA549GabpV0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ee4acf0eb329b3cb72897f2a475c0703
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549GabpV0422111Etoh02UniPk
 target GABPA
 treatment EtOH_0.02pct
@@ -1046,6 +1106,7 @@ fileName wgEncodeAwgTfbsHaibA549GrPcr1xDex500pmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 18cd5b2f28b12c555491c35e0c82bd79
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549GrPcr1xDex500pmUniPk
 target NR3C1
 treatment DEX_500pM
@@ -1064,6 +1125,7 @@ fileName wgEncodeAwgTfbsHaibA549GrPcr1xDex50nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 1cc4c7e644ee6c2dedbeec172eff799b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549GrPcr1xDex50nmUniPk
 target NR3C1
 treatment DEX_50nM
@@ -1082,6 +1144,7 @@ fileName wgEncodeAwgTfbsHaibA549GrPcr1xDex5nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 842fc04ed4c89a57ab1ac0344d210773
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549GrPcr1xDex5nmUniPk
 target NR3C1
 treatment DEX_5nM
@@ -1100,6 +1163,7 @@ fileName wgEncodeAwgTfbsHaibA549GrPcr2xDex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum f175d606a7eb29455707aa0b9f85b974
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549GrPcr2xDex100nmUniPk
 target NR3C1
 treatment DEX_100nM
@@ -1118,6 +1182,7 @@ fileName wgEncodeAwgTfbsHaibA549NrsfV0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e2908b7533725f831a294866d3f3acef
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549NrsfV0422111Etoh02UniPk
 target REST
 treatment EtOH_0.02pct
@@ -1136,6 +1201,7 @@ fileName wgEncodeAwgTfbsHaibA549P300V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b765d4c650a121272463c3727d21fdfc
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549P300V0422111Etoh02UniPk
 target EP300
 treatment EtOH_0.02pct
@@ -1154,6 +1220,7 @@ fileName wgEncodeAwgTfbsHaibA549Pol2Pcr2xDex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e60cf0495e945a79d5c3c224a8463124
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Pol2Pcr2xDex100nmUniPk
 target POLR2A
 treatment DEX_100nM
@@ -1172,6 +1239,7 @@ fileName wgEncodeAwgTfbsHaibA549Pol2Pcr2xEtoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 43e2a94011d9fa14d4419e2768dde597
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Pol2Pcr2xEtoh02UniPk
 target POLR2A
 treatment EtOH_0.02pct
@@ -1190,6 +1258,7 @@ fileName wgEncodeAwgTfbsHaibA549Sin3ak20V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 078b5a46bee3f0bc2ba51a01c5ec5601
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Sin3ak20V0422111Etoh02UniPk
 target SIN3AK20
 treatment EtOH_0.02pct
@@ -1208,6 +1277,7 @@ fileName wgEncodeAwgTfbsHaibA549Six5V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6d7ccf51226c01225540a99e520b84ff
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Six5V0422111Etoh02UniPk
 target SIX5
 treatment EtOH_0.02pct
@@ -1226,6 +1296,7 @@ fileName wgEncodeAwgTfbsHaibA549Taf1V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 71c8508a6712add6b13bd2e7079efc0a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Taf1V0422111Etoh02UniPk
 target TAF1
 treatment EtOH_0.02pct
@@ -1244,6 +1315,7 @@ fileName wgEncodeAwgTfbsHaibA549Tcf12V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2efe0dcf4ea9fe82f73bb227c9404508
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Tcf12V0422111Etoh02UniPk
 target TCF12
 treatment EtOH_0.02pct
@@ -1262,6 +1334,7 @@ fileName wgEncodeAwgTfbsHaibA549Usf1Pcr1xDex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4cd0b8cdcb098a167393bc9997f457cb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Usf1Pcr1xDex100nmUniPk
 target USF1
 treatment DEX_100nM
@@ -1280,6 +1353,7 @@ fileName wgEncodeAwgTfbsHaibA549Usf1Pcr1xEtoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c83cb3884ed015c0691cbcc1a4883798
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Usf1Pcr1xEtoh02UniPk
 target USF1
 treatment EtOH_0.02pct
@@ -1298,6 +1372,7 @@ fileName wgEncodeAwgTfbsHaibA549Usf1V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 80708d8fda4d19e8ad7dc67f7f73f1fa
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Usf1V0422111Etoh02UniPk
 target USF1
 treatment EtOH_0.02pct
@@ -1316,6 +1391,7 @@ fileName wgEncodeAwgTfbsHaibA549Yy1cV0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8e6329a19be2fe434ef7fe48cd2e396b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Yy1cV0422111Etoh02UniPk
 target YY1
 treatment EtOH_0.02pct
@@ -1334,6 +1410,7 @@ fileName wgEncodeAwgTfbsHaibA549Zbtb33V0422111Etoh02UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e3aa724814fffa5fbaa71ebb800056cb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibA549Zbtb33V0422111Etoh02UniPk
 target ZBTB33
 treatment EtOH_0.02pct
@@ -1352,6 +1429,7 @@ fileName wgEncodeAwgTfbsHaibEcc1CtcfcV0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 34c127b3b93c1bfa6095af6973b0de83
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibEcc1CtcfcV0416102Dm002p1hUniPk
 target CTCF
 treatment DMSO_0.02pct
@@ -1370,6 +1448,7 @@ fileName wgEncodeAwgTfbsHaibEcc1EraaV0416102Bpa1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c11774b6f42da0e0572c0ca1d2be71b5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibEcc1EraaV0416102Bpa1hUniPk
 target ESR1
 treatment BPA_100nM
@@ -1388,6 +1467,7 @@ fileName wgEncodeAwgTfbsHaibEcc1EralphaaV0416102Est10nm1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 77d588dfc85bef08a4b55b70933a0742
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibEcc1EralphaaV0416102Est10nm1hUniPk
 target ESR1
 treatment Estradiol_10nM
@@ -1406,6 +1486,7 @@ fileName wgEncodeAwgTfbsHaibEcc1EralphaaV0416102Gen1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum cf15517e9a46d08c55c514b165321313
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibEcc1EralphaaV0416102Gen1hUniPk
 target ESR1
 treatment Genistein_100nM
@@ -1424,6 +1505,7 @@ fileName wgEncodeAwgTfbsHaibEcc1Foxa1sc6553V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 1e0291edefbf3e2566d43cf87456d68b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibEcc1Foxa1sc6553V0416102Dm002p1hUniPk
 target FOXA1
 treatment DMSO_0.02pct
@@ -1442,6 +1524,7 @@ fileName wgEncodeAwgTfbsHaibEcc1GrV0416102Dex100nmUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 375f8f018b00539327cc56e8a719e527
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibEcc1GrV0416102Dex100nmUniPk
 target NR3C1
 treatment DEX_100nM
@@ -1460,6 +1543,7 @@ fileName wgEncodeAwgTfbsHaibEcc1Pol2V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c2cc87797c4ea5330aeae6acfa381ebf
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibEcc1Pol2V0416102Dm002p1hUniPk
 target POLR2A
 treatment DMSO_0.02pct
@@ -1478,6 +1562,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Atf2sc81188V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6732f115c53c788f99695afd88a1a996
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Atf2sc81188V0422111UniPk
 target ATF2
 treatment None
@@ -1496,6 +1581,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Atf3Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum dd3cec7b4d0779748bcbe8fc11ea9bf8
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsHaibGm12878Atf3Pcr1xUniPk
 target ATF3
 treatment None
@@ -1514,6 +1600,7 @@ fileName wgEncodeAwgTfbsHaibGm12878BatfPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6d90b400bd27176eca480c2a825f844f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878BatfPcr1xUniPk
 target BATF
 treatment None
@@ -1532,6 +1619,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Bcl11aPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7e9bc20e9941cf23f9d3c73f4f8fa1dd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Bcl11aPcr1xUniPk
 target BCL11A
 treatment None
@@ -1550,6 +1638,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Bcl3V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6da15987047b74a166d182013c14c5f1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Bcl3V0416101UniPk
 target BCL3
 treatment None
@@ -1568,6 +1657,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Bclaf101388V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a20646d2069280061cb7c54621786df9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Bclaf101388V0416101UniPk
 target BCLAF1
 treatment None
@@ -1586,6 +1676,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Cebpbsc150V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 37dd7064bd6c51381816fdd9aa6113c1
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsHaibGm12878Cebpbsc150V0422111UniPk
 target CEBPB
 treatment None
@@ -1604,6 +1695,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Ebf1sc137065Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 1e098be4524b0bb229f0ad2a62d64de9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Ebf1sc137065Pcr1xUniPk
 target EBF1
 treatment None
@@ -1621,6 +1713,7 @@ dccAccession wgEncodeEH002328
 fileName wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Egr1Pcr2xUniPk
 target EGR1
 treatment None
@@ -1639,6 +1732,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Elf1sc631V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2e80422fdf227151d03c0dee0b81f503
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Elf1sc631V0416101UniPk
 target ELF1
 treatment None
@@ -1657,6 +1751,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Ets1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e8d0a005e2d8ba706097766963545165
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Ets1Pcr1xUniPk
 target ETS1
 treatment None
@@ -1675,6 +1770,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Foxm1sc502V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6d1ea093699c518af6cb5229dfbf47fa
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Foxm1sc502V0422111UniPk
 target FOXM1
 treatment None
@@ -1693,6 +1789,7 @@ fileName wgEncodeAwgTfbsHaibGm12878GabpPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7c55496b921e1797e774dea92913872b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878GabpPcr2xUniPk
 target GABPA
 treatment None
@@ -1711,6 +1808,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Irf4sc6059Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8dcfc628006f141a96b8078cc578affa
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Irf4sc6059Pcr1xUniPk
 target IRF4
 treatment None
@@ -1729,6 +1827,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Mef2aPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum d0edbd3398a1a6cd0007c345985ef9d0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Mef2aPcr1xUniPk
 target MEF2A
 treatment None
@@ -1747,6 +1846,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Mef2csc13268V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ded137ddecbc2ee5dbaecf0da0ab9eac
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Mef2csc13268V0416101UniPk
 target MEF2C
 treatment None
@@ -1765,6 +1865,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Mta3sc81325V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum f7e07be1e450269bcc2a3cd3c1c0afc7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Mta3sc81325V0422111UniPk
 target MTA3
 treatment None
@@ -1783,6 +1884,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Nfatc1sc17834V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0caa9e1e7e90787e14bc31956de782ab
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Nfatc1sc17834V0422111UniPk
 target NFATC1
 treatment None
@@ -1801,6 +1903,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Nficsc81335V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 3a3ad22b280c3b07242d04824daeea29
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Nficsc81335V0422111UniPk
 target NFIC
 treatment None
@@ -1819,6 +1922,7 @@ fileName wgEncodeAwgTfbsHaibGm12878NrsfPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 46975ef76dec9270462a7221e379b5e3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878NrsfPcr1xUniPk
 target REST
 treatment None
@@ -1837,6 +1941,7 @@ fileName wgEncodeAwgTfbsHaibGm12878P300Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ab1c9b182ab544651d502b1587e067c4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878P300Pcr1xUniPk
 target EP300
 treatment None
@@ -1855,6 +1960,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Pax5c20Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 5631a74d830df15027627d5bedb9cd91
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Pax5c20Pcr1xUniPk
 target PAX5
 treatment None
@@ -1873,6 +1979,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Pax5n19Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4edd86d133ca84dc48d9caef2aefae4c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Pax5n19Pcr1xUniPk
 target PAX5
 treatment None
@@ -1891,6 +1998,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Pbx3Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 60d2675abb047fb1db49484acd1f1b0c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Pbx3Pcr1xUniPk
 target PBX3
 treatment None
@@ -1909,6 +2017,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Pmlsc71910V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e17cc833014d4afb8eb90b88255f584a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Pmlsc71910V0422111UniPk
 target PML
 treatment None
@@ -1927,6 +2036,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Pol24h8Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8c674ec2d97a44f75022f1c849659fa9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Pol24h8Pcr1xUniPk
 target POLR2A
 treatment None
@@ -1945,6 +2055,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Pol2Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0b4e88b012feea3089209b92981ec635
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Pol2Pcr2xUniPk
 target POLR2A
 treatment None
@@ -1963,6 +2074,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Pou2f2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4b261924882e3126a1bef51205967eb7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Pou2f2Pcr1xUniPk
 target POU2F2
 treatment None
@@ -1981,6 +2093,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Pu1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 51a4800aab7e3b7c6d7228d10bf9994a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Pu1Pcr1xUniPk
 target SPI1
 treatment None
@@ -1999,6 +2112,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Rad21V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b2a7a80b7b924e5a44b281eca52b7881
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Rad21V0416101UniPk
 target RAD21
 treatment None
@@ -2017,6 +2131,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Runx3sc101553V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum def0d24972b45e21f7341b1a105a7a67
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Runx3sc101553V0422111UniPk
 target RUNX3
 treatment None
@@ -2035,6 +2150,7 @@ fileName wgEncodeAwgTfbsHaibGm12878RxraPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 5a31c356e275584fa5caa48f5896ad31
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878RxraPcr1xUniPk
 target RXRA
 treatment None
@@ -2053,6 +2169,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Six5Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 985c2d4c7d033bdfd8eba429e8bc4dcd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Six5Pcr1xUniPk
 target SIX5
 treatment None
@@ -2071,6 +2188,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Sp1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a99b810d570c8eb877357297721be00c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Sp1Pcr1xUniPk
 target SP1
 treatment None
@@ -2089,6 +2207,7 @@ fileName wgEncodeAwgTfbsHaibGm12878SrfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8b97d9c0a3f56c6d5d686228932cf7ba
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsHaibGm12878SrfPcr2xUniPk
 target SRF
 treatment None
@@ -2107,6 +2226,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Stat5asc74442V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0758280324cbbe68ad8506e9aac0e19d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Stat5asc74442V0422111UniPk
 target STAT5A
 treatment None
@@ -2125,6 +2245,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Taf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7778e9f833a732c2428cada1975f6604
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Taf1Pcr1xUniPk
 target TAF1
 treatment None
@@ -2143,6 +2264,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Tcf12Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2d611f19b912345e6637ad07c0151e0e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Tcf12Pcr1xUniPk
 target TCF12
 treatment None
@@ -2161,6 +2283,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Tcf3Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 839baee61af1e7b1ae34592f7a27695a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Tcf3Pcr1xUniPk
 target TCF3
 treatment None
@@ -2179,6 +2302,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Usf1Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2678c52d330d5d5bda7ab2512ea43086
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Usf1Pcr2xUniPk
 target USF1
 treatment None
@@ -2197,6 +2321,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Yy1sc281Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7940de52b26666de0b0abf1ee5512c3d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Yy1sc281Pcr1xUniPk
 target YY1
 treatment None
@@ -2215,6 +2340,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Zbtb33Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b89909bb0e9ea2e4280778ab1958ee1e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Zbtb33Pcr1xUniPk
 target ZBTB33
 treatment None
@@ -2233,6 +2359,7 @@ fileName wgEncodeAwgTfbsHaibGm12878Zeb1sc25388V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4907df7ed33515695473b1705a08038d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12878Zeb1sc25388V0416102UniPk
 target ZEB1
 treatment None
@@ -2251,6 +2378,7 @@ fileName wgEncodeAwgTfbsHaibGm12891Pax5c20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4da48627fa221db72c1adbfe5345f0b6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12891Pax5c20V0416101UniPk
 target PAX5
 treatment None
@@ -2269,6 +2397,7 @@ fileName wgEncodeAwgTfbsHaibGm12891Pol24h8Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 838b1171fd7bf105b7ac453cdbdb151e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12891Pol24h8Pcr1xUniPk
 target POLR2A
 treatment None
@@ -2287,6 +2416,7 @@ fileName wgEncodeAwgTfbsHaibGm12891Pol2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 773fe11e38e05ca058f88d6c43fa1adb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12891Pol2Pcr1xUniPk
 target POLR2A
 treatment None
@@ -2305,6 +2435,7 @@ fileName wgEncodeAwgTfbsHaibGm12891Pou2f2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum fb47c6c8f13c63efc91912cae7c387b8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12891Pou2f2Pcr1xUniPk
 target POU2F2
 treatment None
@@ -2323,6 +2454,7 @@ fileName wgEncodeAwgTfbsHaibGm12891Pu1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b57e9df6ee5905ea5333ad292e0b6deb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12891Pu1Pcr1xUniPk
 target SPI1
 treatment None
@@ -2341,6 +2473,7 @@ fileName wgEncodeAwgTfbsHaibGm12891Taf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b83755d0ffa1e010be385799f50f8a3b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12891Taf1Pcr1xUniPk
 target TAF1
 treatment None
@@ -2359,6 +2492,7 @@ fileName wgEncodeAwgTfbsHaibGm12891Yy1sc281V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 359adc3f18add2a568d528f174258043
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12891Yy1sc281V0416101UniPk
 target YY1
 treatment None
@@ -2377,6 +2511,7 @@ fileName wgEncodeAwgTfbsHaibGm12892Pax5c20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a7062ad86bc5dc7458673d8340230973
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12892Pax5c20V0416101UniPk
 target PAX5
 treatment None
@@ -2395,6 +2530,7 @@ fileName wgEncodeAwgTfbsHaibGm12892Pol24h8V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8ae32c319e9c67f5f638646870fb92e6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12892Pol24h8V0416102UniPk
 target POLR2A
 treatment None
@@ -2413,6 +2549,7 @@ fileName wgEncodeAwgTfbsHaibGm12892Pol2V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 64972edf0e42c9f2eb482bf054244c82
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12892Pol2V0416102UniPk
 target POLR2A
 treatment None
@@ -2431,6 +2568,7 @@ fileName wgEncodeAwgTfbsHaibGm12892Taf1V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 3a19da6aa974fe0aa637912bfb8dcfde
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12892Taf1V0416102UniPk
 target TAF1
 treatment None
@@ -2449,6 +2587,7 @@ fileName wgEncodeAwgTfbsHaibGm12892Yy1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum bfbc0d7cc10ae8663feeef51b8e39709
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibGm12892Yy1V0416101UniPk
 target YY1
 treatment None
@@ -2467,6 +2606,7 @@ fileName wgEncodeAwgTfbsHaibH1hescAtf2sc81188V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 29ed82a64abe41a4f2cd29547723e01f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescAtf2sc81188V0422111UniPk
 target ATF2
 treatment None
@@ -2485,6 +2625,7 @@ fileName wgEncodeAwgTfbsHaibH1hescAtf3V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 91305555fd9e30b871ae15def8d6729a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescAtf3V0416102UniPk
 target ATF3
 treatment None
@@ -2503,6 +2644,7 @@ fileName wgEncodeAwgTfbsHaibH1hescBcl11aPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 54f240c0101411e36b27126f1658abba
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescBcl11aPcr1xUniPk
 target BCL11A
 treatment None
@@ -2521,6 +2663,7 @@ fileName wgEncodeAwgTfbsHaibH1hescCtcfsc5916V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8adf1e323df9c8d4b783b1ad2ee4e04b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescCtcfsc5916V0416102UniPk
 target CTCF
 treatment None
@@ -2539,6 +2682,7 @@ fileName wgEncodeAwgTfbsHaibH1hescEgr1V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum dd501ee2bc75520f42a8ddda5674bba4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescEgr1V0416102UniPk
 target EGR1
 treatment None
@@ -2557,6 +2701,7 @@ fileName wgEncodeAwgTfbsHaibH1hescFosl1sc183V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 589f57d9f5a239a0940c3484454909f1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescFosl1sc183V0416102UniPk
 target FOSL1
 treatment None
@@ -2575,6 +2720,7 @@ fileName wgEncodeAwgTfbsHaibH1hescGabpPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 63be8524c12dd32a002dabbbcf932ecb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescGabpPcr1xUniPk
 target GABPA
 treatment None
@@ -2593,6 +2739,7 @@ fileName wgEncodeAwgTfbsHaibH1hescHdac2sc6296V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ed2ee6c9c6aaa606f7f92af9bd9a6f2d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescHdac2sc6296V0416102UniPk
 target HDAC2
 treatment None
@@ -2611,6 +2758,7 @@ fileName wgEncodeAwgTfbsHaibH1hescJundV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b54278f5bd13208b48c792d4fd80a26d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescJundV0416102UniPk
 target JUND
 treatment None
@@ -2629,6 +2777,7 @@ fileName wgEncodeAwgTfbsHaibH1hescNanogsc33759V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 16d8c43d2f4f9449b36a99b3498aa996
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescNanogsc33759V0416102UniPk
 target NANOG
 treatment None
@@ -2647,6 +2796,7 @@ fileName wgEncodeAwgTfbsHaibH1hescNrsfV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 937aea937c5fadded86e5cc54ba024a7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescNrsfV0416102UniPk
 target REST
 treatment None
@@ -2665,6 +2815,7 @@ fileName wgEncodeAwgTfbsHaibH1hescP300V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 548a79f6bb1ff3b0d97148816aeefea6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescP300V0416102UniPk
 target EP300
 treatment None
@@ -2683,6 +2834,7 @@ fileName wgEncodeAwgTfbsHaibH1hescPol24h8V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8ee503bd4c9c0ae54808fa3d0e5058fa
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescPol24h8V0416102UniPk
 target POLR2A
 treatment None
@@ -2701,6 +2853,7 @@ fileName wgEncodeAwgTfbsHaibH1hescPol2V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a1cff48c17a1b4de12668cafd22bc37e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescPol2V0416102UniPk
 target POLR2A
 treatment None
@@ -2719,6 +2872,7 @@ fileName wgEncodeAwgTfbsHaibH1hescPou5f1sc9081V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7ca2d6c1818309e0b9e25a4403facc10
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescPou5f1sc9081V0416102UniPk
 target POU5F1
 treatment None
@@ -2737,6 +2891,7 @@ fileName wgEncodeAwgTfbsHaibH1hescRad21V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8197ed5098960a83e6fe727265317f47
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescRad21V0416102UniPk
 target RAD21
 treatment None
@@ -2755,6 +2910,7 @@ fileName wgEncodeAwgTfbsHaibH1hescRxraV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a7f4b5e9e05b894bc5624540ea7e6e60
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsHaibH1hescRxraV0416102UniPk
 target RXRA
 treatment None
@@ -2773,6 +2929,7 @@ fileName wgEncodeAwgTfbsHaibH1hescSin3ak20Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 9501e18c2f2e82ca9113fc29ae102a22
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescSin3ak20Pcr1xUniPk
 target SIN3AK20
 treatment None
@@ -2791,6 +2948,7 @@ fileName wgEncodeAwgTfbsHaibH1hescSix5Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4a009a44020156b3ccd195a7c9e33a3e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescSix5Pcr1xUniPk
 target SIX5
 treatment None
@@ -2809,6 +2967,7 @@ fileName wgEncodeAwgTfbsHaibH1hescSp1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum abf1c45595550dda565c8383a4c73904
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescSp1Pcr1xUniPk
 target SP1
 treatment None
@@ -2827,6 +2986,7 @@ fileName wgEncodeAwgTfbsHaibH1hescSp2V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0f1278717c5433e6ddfd79f5ef8f2e4a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescSp2V0422111UniPk
 target SP2
 treatment None
@@ -2845,6 +3005,7 @@ fileName wgEncodeAwgTfbsHaibH1hescSp4v20V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c1d7ce038fe9ec35854d586f06149b97
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescSp4v20V0422111UniPk
 target SP4
 treatment None
@@ -2863,6 +3024,7 @@ fileName wgEncodeAwgTfbsHaibH1hescSrfPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e158be45d4fcdbd108d06923244ab708
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescSrfPcr1xUniPk
 target SRF
 treatment None
@@ -2881,6 +3043,7 @@ fileName wgEncodeAwgTfbsHaibH1hescTaf1V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8a91c481adcb109374239d449d2de67c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescTaf1V0416102UniPk
 target TAF1
 treatment None
@@ -2899,6 +3062,7 @@ fileName wgEncodeAwgTfbsHaibH1hescTaf7sc101167V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum eba49572556af72478126b82be1cf106
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescTaf7sc101167V0416102UniPk
 target TAF7
 treatment None
@@ -2917,6 +3081,7 @@ fileName wgEncodeAwgTfbsHaibH1hescTcf12Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8c3702dd6947c72dbc4ad5bba61fd4a3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescTcf12Pcr1xUniPk
 target TCF12
 treatment None
@@ -2935,6 +3100,7 @@ fileName wgEncodeAwgTfbsHaibH1hescTead4sc101184V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4666698c5b06b5acc18c87dde564b73d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescTead4sc101184V0422111UniPk
 target TEAD4
 treatment None
@@ -2953,6 +3119,7 @@ fileName wgEncodeAwgTfbsHaibH1hescUsf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7146fcdf6afc407aa505858b82c8af37
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescUsf1Pcr1xUniPk
 target USF1
 treatment None
@@ -2971,6 +3138,7 @@ fileName wgEncodeAwgTfbsHaibH1hescYy1sc281V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c32a0b09dd4e3371172b0da1e3922727
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibH1hescYy1sc281V0416102UniPk
 target YY1
 treatment None
@@ -2989,6 +3157,7 @@ fileName wgEncodeAwgTfbsHaibHct116Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a1353412b68ca0a1575ceffdd710cc6b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHct116Pol24h8V0416101UniPk
 target POLR2A
 treatment None
@@ -3007,6 +3176,7 @@ fileName wgEncodeAwgTfbsHaibHct116Yy1sc281V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c96101ea865b84de74b18d903ba724cd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHct116Yy1sc281V0416101UniPk
 target YY1
 treatment None
@@ -3025,6 +3195,7 @@ fileName wgEncodeAwgTfbsHaibHct116Zbtb33V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum aa0602de5169ac377dbf9a15134b640d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHct116Zbtb33V0416101UniPk
 target ZBTB33
 treatment None
@@ -3043,6 +3214,7 @@ fileName wgEncodeAwgTfbsHaibHelas3GabpPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0ebe8f9d7e9a613314096cefa5113b12
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHelas3GabpPcr1xUniPk
 target GABPA
 treatment None
@@ -3061,6 +3233,7 @@ fileName wgEncodeAwgTfbsHaibHelas3NrsfPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 34959bd9f9aeb4f6d9bde93edec4aa8f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHelas3NrsfPcr1xUniPk
 target REST
 treatment None
@@ -3079,6 +3252,7 @@ fileName wgEncodeAwgTfbsHaibHelas3Pol2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum d2fa0fbfc9ed5c25d3d2c3f833f797c0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHelas3Pol2Pcr1xUniPk
 target POLR2A
 treatment None
@@ -3097,6 +3271,7 @@ fileName wgEncodeAwgTfbsHaibHelas3Taf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e17752b5d14fa5a1fa44ac329d6a2deb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHelas3Taf1Pcr1xUniPk
 target TAF1
 treatment None
@@ -3115,6 +3290,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Atf3V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6f1a3716a80a8ce4580085547be9977c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Atf3V0416101UniPk
 target ATF3
 treatment None
@@ -3133,6 +3309,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Bhlhe40V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6a3d0490915af7432decf5310e26d744
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Bhlhe40V0416101UniPk
 target BHLHE40
 treatment None
@@ -3151,6 +3328,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Cebpbsc150V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7fd1f30df8d3fc96a09720e4c07a7f05
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Cebpbsc150V0416101UniPk
 target CEBPB
 treatment None
@@ -3169,6 +3347,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Cebpdsc636V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum d6a9191865f3f99f86653586edf005e7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Cebpdsc636V0416101UniPk
 target CEBPD
 treatment None
@@ -3187,6 +3366,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Ctcfsc5916V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b53d77fe1d666ca4f9f4263d8ade7f57
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Ctcfsc5916V0416101UniPk
 target CTCF
 treatment None
@@ -3205,6 +3385,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Elf1sc631V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 9847f4568b896163de6fec52a1ef7196
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Elf1sc631V0416101UniPk
 target ELF1
 treatment None
@@ -3223,6 +3404,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Fosl2V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8cd908a868eb6712a9b29860ea06a97c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Fosl2V0416101UniPk
 target FOSL2
 treatment None
@@ -3241,6 +3423,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Foxa1sc101058V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b7d659ac2005c2325edb4abe5cd0a40b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Foxa1sc101058V0416101UniPk
 target FOXA1
 treatment None
@@ -3259,6 +3442,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Foxa1sc6553V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2a559f7551fac4631eca726a79310e32
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Foxa1sc6553V0416101UniPk
 target FOXA1
 treatment None
@@ -3277,6 +3461,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Foxa2sc6554V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2603e86dc3d21fa05743cb9cf80b705f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Foxa2sc6554V0416101UniPk
 target FOXA2
 treatment None
@@ -3295,6 +3480,7 @@ fileName wgEncodeAwgTfbsHaibHepg2GabpPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum be01af16fc1dbb25adb488f43da24ffe
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2GabpPcr2xUniPk
 target GABPA
 treatment None
@@ -3313,6 +3499,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Hdac2sc6296V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 264c174bbe0396e4331458319e8da463
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Hdac2sc6296V0416101UniPk
 target HDAC2
 treatment None
@@ -3331,6 +3518,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Hnf4asc8987V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e8659a809fee1ccdfe8b4822cc806da4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Hnf4asc8987V0416101UniPk
 target HNF4A
 treatment None
@@ -3349,6 +3537,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Hnf4gsc6558V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 5c959543c1ef5575cb15542926ca7894
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Hnf4gsc6558V0416101UniPk
 target HNF4G
 treatment None
@@ -3367,6 +3556,7 @@ fileName wgEncodeAwgTfbsHaibHepg2JundPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 81e06a166bf38f50812f75d12d68a936
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2JundPcr1xUniPk
 target JUND
 treatment None
@@ -3385,6 +3575,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Mbd4sc271530V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 5121e35a73172ddbb148e29872a7fd24
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsHaibHepg2Mbd4sc271530V0422111UniPk
 target MBD4
 treatment None
@@ -3403,6 +3594,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Mybl2sc81192V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b78cbbbd41abd730dde7dba595ebf918
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Mybl2sc81192V0422111UniPk
 target MYBL2
 treatment None
@@ -3421,6 +3613,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Nficsc81335V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 45e1f58203631d39e07b140bfe98bcbd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Nficsc81335V0422111UniPk
 target NFIC
 treatment None
@@ -3439,6 +3632,7 @@ fileName wgEncodeAwgTfbsHaibHepg2NrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6917bc87ded53e32821fc9aa30040e30
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2NrsfPcr2xUniPk
 target REST
 treatment None
@@ -3457,6 +3651,7 @@ fileName wgEncodeAwgTfbsHaibHepg2NrsfV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 00e36fb2761c1728ede799340c0ebacd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2NrsfV0416101UniPk
 target REST
 treatment None
@@ -3475,6 +3670,7 @@ fileName wgEncodeAwgTfbsHaibHepg2P300V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 97b2da1cd417ee814f0138cee16e1fff
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2P300V0416101UniPk
 target EP300
 treatment None
@@ -3493,6 +3689,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Pol24h8V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 5098f92f3344f7c5b8af3e055451cdc0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Pol24h8V0416102UniPk
 target POLR2A
 treatment None
@@ -3511,6 +3708,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Pol2Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8193f12fec8e2d6fbedec6e82b073ac3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Pol2Pcr2xUniPk
 target POLR2A
 treatment None
@@ -3529,6 +3727,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Rad21V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ad2af5e6f693323085dc50bc95173743
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Rad21V0416101UniPk
 target RAD21
 treatment None
@@ -3547,6 +3746,7 @@ fileName wgEncodeAwgTfbsHaibHepg2RxraPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ffb66708f31e202f88da60b572f3dd4c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2RxraPcr1xUniPk
 target RXRA
 treatment None
@@ -3565,6 +3765,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Sin3ak20Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ce3470b718c742600fd62dfd1c8df9da
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Sin3ak20Pcr1xUniPk
 target SIN3AK20
 treatment None
@@ -3583,6 +3784,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Sp1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a49f6c9cd5ad4a605d24393b4694991e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Sp1Pcr1xUniPk
 target SP1
 treatment None
@@ -3601,6 +3803,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Sp2V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 24c4089d11b8dc0a09f3622d9144d3ee
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsHaibHepg2Sp2V0422111UniPk
 target SP2
 treatment None
@@ -3619,6 +3822,7 @@ fileName wgEncodeAwgTfbsHaibHepg2SrfV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 57d92d9e5cb44c8164be90c9aac144ef
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2SrfV0416101UniPk
 target SRF
 treatment None
@@ -3637,6 +3841,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Taf1Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4cb65f303892182404581949e2cbf58b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Taf1Pcr2xUniPk
 target TAF1
 treatment None
@@ -3655,6 +3860,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Tcf12Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b97debf6e68cd7b34438ddfc476bbfa0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Tcf12Pcr1xUniPk
 target TCF12
 treatment None
@@ -3673,6 +3879,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Tead4sc101184V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum ae65e5ac6f8324e6f55bef99e81bcb78
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Tead4sc101184V0422111UniPk
 target TEAD4
 treatment None
@@ -3691,6 +3898,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Usf1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 15fa5a031b32cf2fb04427288946510f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Usf1Pcr1xUniPk
 target USF1
 treatment None
@@ -3709,6 +3917,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Yy1sc281V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum aee6413b4c024a583086cb540089bfda
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Yy1sc281V0416101UniPk
 target YY1
 treatment None
@@ -3727,6 +3936,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Zbtb33Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0852acc2969a7508a26bfd5b478d7820
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Zbtb33Pcr1xUniPk
 target ZBTB33
 treatment None
@@ -3745,6 +3955,7 @@ fileName wgEncodeAwgTfbsHaibHepg2Zbtb7aV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 166118ae2a897bea9b498d782756e357
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHepg2Zbtb7aV0416101UniPk
 target ZBTB7A
 treatment None
@@ -3763,6 +3974,7 @@ fileName wgEncodeAwgTfbsHaibHuvecPol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0f390f1001cac6ccd3c69b24cce66f16
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHuvecPol24h8V0416101UniPk
 target POLR2A
 treatment None
@@ -3781,6 +3993,7 @@ fileName wgEncodeAwgTfbsHaibHuvecPol2Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 9dc72eae9aa649660f0c47c1da797ff7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibHuvecPol2Pcr1xUniPk
 target POLR2A
 treatment None
@@ -3799,6 +4012,7 @@ fileName wgEncodeAwgTfbsHaibK562Atf3V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 89998f16b47b1d77bd400c809682acd3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Atf3V0416101UniPk
 target ATF3
 treatment None
@@ -3817,6 +4031,7 @@ fileName wgEncodeAwgTfbsHaibK562Bcl3Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c654560eafe065f3616fedcf55673e54
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Bcl3Pcr1xUniPk
 target BCL3
 treatment None
@@ -3835,6 +4050,7 @@ fileName wgEncodeAwgTfbsHaibK562Bclaf101388Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6d9a5e40479d939fd30efa041fd1d2d4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Bclaf101388Pcr1xUniPk
 target BCLAF1
 treatment None
@@ -3853,6 +4069,7 @@ fileName wgEncodeAwgTfbsHaibK562Cbx3sc101004V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2b41718348fc6ec8edec9033a041e113
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Cbx3sc101004V0422111UniPk
 target CBX3
 treatment None
@@ -3871,6 +4088,7 @@ fileName wgEncodeAwgTfbsHaibK562Cebpbsc150V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2be1d6d3bb1f0e76c1637544acbbaff1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Cebpbsc150V0422111UniPk
 target CEBPB
 treatment None
@@ -3889,6 +4107,7 @@ fileName wgEncodeAwgTfbsHaibK562CtcfcPcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e76e4806457a2a229b8528f6de6b7169
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562CtcfcPcr1xUniPk
 target CTCF
 treatment None
@@ -3907,6 +4126,7 @@ fileName wgEncodeAwgTfbsHaibK562Ctcflsc98982V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 56bd0e0b27aaca70c9e61dd92abbfe89
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Ctcflsc98982V0416101UniPk
 target CTCFL
 treatment None
@@ -3925,6 +4145,7 @@ fileName wgEncodeAwgTfbsHaibK562E2f6V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum f37341ebb50f7cc01306d65c93027f77
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562E2f6V0416102UniPk
 target E2F6
 treatment None
@@ -3943,6 +4164,7 @@ fileName wgEncodeAwgTfbsHaibK562Egr1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 37b0a86a8013718834a6fe162283049e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Egr1V0416101UniPk
 target EGR1
 treatment None
@@ -3961,6 +4183,7 @@ fileName wgEncodeAwgTfbsHaibK562Elf1sc631V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 05398f75d963630aed5c326a2e907a23
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Elf1sc631V0416102UniPk
 target ELF1
 treatment None
@@ -3979,6 +4202,7 @@ fileName wgEncodeAwgTfbsHaibK562Ets1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 9fe2f57361a3096be46f460a75b9dd21
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Ets1V0416101UniPk
 target ETS1
 treatment None
@@ -3997,6 +4221,7 @@ fileName wgEncodeAwgTfbsHaibK562Fosl1sc183V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6863a5c1248c3e033c4f1fda62efa508
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Fosl1sc183V0416101UniPk
 target FOSL1
 treatment None
@@ -4015,6 +4240,7 @@ fileName wgEncodeAwgTfbsHaibK562GabpV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum d8aef2251fc4a691e21cd53b6c56a3c2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562GabpV0416101UniPk
 target GABPA
 treatment None
@@ -4033,6 +4259,7 @@ fileName wgEncodeAwgTfbsHaibK562Gata2sc267Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 052af5747c947e35ba16795f7ba432d9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Gata2sc267Pcr1xUniPk
 target GATA2
 treatment None
@@ -4051,6 +4278,7 @@ fileName wgEncodeAwgTfbsHaibK562Hdac2sc6296V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c8947a300e2172c924e05282d6860f26
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Hdac2sc6296V0416102UniPk
 target HDAC2
 treatment None
@@ -4069,6 +4297,7 @@ fileName wgEncodeAwgTfbsHaibK562MaxV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b16bf5a8dc3571592ba92efda9b765c5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562MaxV0416102UniPk
 target MAX
 treatment None
@@ -4087,6 +4316,7 @@ fileName wgEncodeAwgTfbsHaibK562Mef2aV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum c7e494d17e0562b121abf4fb5412b178
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Mef2aV0416101UniPk
 target MEF2A
 treatment None
@@ -4105,6 +4335,7 @@ fileName wgEncodeAwgTfbsHaibK562Nr2f2sc271940V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 4b742ebd8853efb1895649b0b67f4c53
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Nr2f2sc271940V0422111UniPk
 target NR2F2
 treatment None
@@ -4123,6 +4354,7 @@ fileName wgEncodeAwgTfbsHaibK562NrsfV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 3ba504706ec497640a6cbf664a071527
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562NrsfV0416102UniPk
 target REST
 treatment None
@@ -4141,6 +4373,7 @@ fileName wgEncodeAwgTfbsHaibK562Pmlsc71910V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum d3988017f15277be9c0c003321066279
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Pmlsc71910V0422111UniPk
 target PML
 treatment None
@@ -4159,6 +4392,7 @@ fileName wgEncodeAwgTfbsHaibK562Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 33b104281b1447c2b4123554e139ffbd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Pol24h8V0416101UniPk
 target POLR2A
 treatment None
@@ -4177,6 +4411,7 @@ fileName wgEncodeAwgTfbsHaibK562Pol2V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 8ddbaead1e05ac81f9a5aebba078b1ea
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Pol2V0416101UniPk
 target POLR2A
 treatment None
@@ -4195,6 +4430,7 @@ fileName wgEncodeAwgTfbsHaibK562Pu1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 147b4f8b9733fc8f34651476c2158034
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Pu1Pcr1xUniPk
 target SPI1
 treatment None
@@ -4213,6 +4449,7 @@ fileName wgEncodeAwgTfbsHaibK562Rad21V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 64da6ba92ed9e7c58990b618ddb1abc5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Rad21V0416102UniPk
 target RAD21
 treatment None
@@ -4231,6 +4468,7 @@ fileName wgEncodeAwgTfbsHaibK562Sin3ak20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 13a3577ead5be18ff4efbbfd14c0c9ba
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Sin3ak20V0416101UniPk
 target SIN3AK20
 treatment None
@@ -4249,6 +4487,7 @@ fileName wgEncodeAwgTfbsHaibK562Six5Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 07ef7c6f36486d5dbf15421e8f650b0c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Six5Pcr1xUniPk
 target SIX5
 treatment None
@@ -4267,6 +4506,7 @@ fileName wgEncodeAwgTfbsHaibK562Sp1Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b9a70b2d4ec19978a3b38de4b628219c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Sp1Pcr1xUniPk
 target SP1
 treatment None
@@ -4285,6 +4525,7 @@ fileName wgEncodeAwgTfbsHaibK562Sp2sc643V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum dbe4ff1a7082996d99ce885084e52668
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Sp2sc643V0416102UniPk
 target SP2
 treatment None
@@ -4303,6 +4544,7 @@ fileName wgEncodeAwgTfbsHaibK562SrfV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 80be88000dfcecb807fc9cc1678bcd4f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562SrfV0416101UniPk
 target SRF
 treatment None
@@ -4321,6 +4563,7 @@ fileName wgEncodeAwgTfbsHaibK562Stat5asc74442V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0066b4f03bacf22b22bb143032a36269
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Stat5asc74442V0422111UniPk
 target STAT5A
 treatment None
@@ -4339,6 +4582,7 @@ fileName wgEncodeAwgTfbsHaibK562Taf1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 9bcde7f3803a05927d5611c1b287b072
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Taf1V0416101UniPk
 target TAF1
 treatment None
@@ -4357,6 +4601,7 @@ fileName wgEncodeAwgTfbsHaibK562Taf7sc101167V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 5991d0789633a8f42502823edc7c7d9f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Taf7sc101167V0416101UniPk
 target TAF7
 treatment None
@@ -4375,6 +4620,7 @@ fileName wgEncodeAwgTfbsHaibK562Tead4sc101184V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum fcf98d4727c99acb135ecd1f387de923
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Tead4sc101184V0422111UniPk
 target TEAD4
 treatment None
@@ -4393,6 +4639,7 @@ fileName wgEncodeAwgTfbsHaibK562Thap1sc98174V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 2c16968683b9ce33401294e8fbf88d0a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Thap1sc98174V0416101UniPk
 target THAP1
 treatment None
@@ -4411,6 +4658,7 @@ fileName wgEncodeAwgTfbsHaibK562Trim28sc81411V0422111UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum db9fcb39cc99110e8b47c65019770045
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Trim28sc81411V0422111UniPk
 target TRIM28
 treatment None
@@ -4429,6 +4677,7 @@ fileName wgEncodeAwgTfbsHaibK562Usf1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 51e7dda609b6b50c34904340627c53fb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Usf1V0416101UniPk
 target USF1
 treatment None
@@ -4447,6 +4696,7 @@ fileName wgEncodeAwgTfbsHaibK562Yy1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 66e2bb4f83d5ffb9a872306e34bf6e2e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Yy1V0416101UniPk
 target YY1
 treatment None
@@ -4465,6 +4715,7 @@ fileName wgEncodeAwgTfbsHaibK562Yy1V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 80051cd501efc8476203df83f58895d9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Yy1V0416102UniPk
 target YY1
 treatment None
@@ -4483,6 +4734,7 @@ fileName wgEncodeAwgTfbsHaibK562Zbtb33Pcr1xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 305e475d0e5a46077fe72acff72a2c98
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Zbtb33Pcr1xUniPk
 target ZBTB33
 treatment None
@@ -4501,6 +4753,7 @@ fileName wgEncodeAwgTfbsHaibK562Zbtb7asc34508V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 1a1cadcf1fc34f3cdc100c27bb0ce3f2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibK562Zbtb7asc34508V0416101UniPk
 target ZBTB7A
 treatment None
@@ -4519,6 +4772,7 @@ fileName wgEncodeAwgTfbsHaibPanc1NrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e54cef0d745fca703f433075576f2480
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibPanc1NrsfPcr2xUniPk
 target REST
 treatment None
@@ -4537,6 +4791,7 @@ fileName wgEncodeAwgTfbsHaibPanc1Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum be26ec8ee56d32804202fb0042c64a9d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibPanc1Pol24h8V0416101UniPk
 target POLR2A
 treatment None
@@ -4555,6 +4810,7 @@ fileName wgEncodeAwgTfbsHaibPanc1Sin3ak20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum fa2f5b9b8a65740c2df9ba39965d068e
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsHaibPanc1Sin3ak20V0416101UniPk
 target SIN3AK20
 treatment None
@@ -4573,6 +4829,7 @@ fileName wgEncodeAwgTfbsHaibPfsk1Foxp2Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum bd6321c69d805362cb6d668b1265cf35
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibPfsk1Foxp2Pcr2xUniPk
 target FOXP2
 treatment None
@@ -4591,6 +4848,7 @@ fileName wgEncodeAwgTfbsHaibPfsk1NrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a82cd59a6bcd4c0c348cbc9d2d0ccf56
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibPfsk1NrsfPcr2xUniPk
 target REST
 treatment None
@@ -4609,6 +4867,7 @@ fileName wgEncodeAwgTfbsHaibPfsk1Sin3ak20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0466763fcb6cb651b058a497b3dcbb29
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibPfsk1Sin3ak20V0416101UniPk
 target SIN3AK20
 treatment None
@@ -4627,6 +4886,7 @@ fileName wgEncodeAwgTfbsHaibPfsk1Taf1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a56e7a18195deca7ed27590e03aaab51
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibPfsk1Taf1V0416101UniPk
 target TAF1
 treatment None
@@ -4645,6 +4905,7 @@ fileName wgEncodeAwgTfbsHaibSknmcFoxp2Pcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 69984fe063dbc3ffda3c8883c6d9a60d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknmcFoxp2Pcr2xUniPk
 target FOXP2
 treatment None
@@ -4663,6 +4924,7 @@ fileName wgEncodeAwgTfbsHaibSknmcPol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 9184f9da1a16c4c8807b71c4ea23f447
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknmcPol24h8V0416101UniPk
 target POLR2A
 treatment None
@@ -4681,6 +4943,7 @@ fileName wgEncodeAwgTfbsHaibSknshNrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7f7409511339ee3fa80541bf1f194ed3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshNrsfPcr2xUniPk
 target REST
 treatment None
@@ -4699,6 +4962,7 @@ fileName wgEncodeAwgTfbsHaibSknshNrsfV0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 26a43ea57d816f49ddf4cf9f81af7c05
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshNrsfV0416101UniPk
 target REST
 treatment None
@@ -4717,6 +4981,7 @@ fileName wgEncodeAwgTfbsHaibSknshPol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0865138868d6ddd7b3217789e783ba8d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshPol24h8V0416101UniPk
 target POLR2A
 treatment None
@@ -4735,6 +5000,7 @@ fileName wgEncodeAwgTfbsHaibSknshSin3ak20V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum e8f57efeca2c00d6f262e1fe1ab94423
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshSin3ak20V0416101UniPk
 target SIN3AK20
 treatment None
@@ -4753,6 +5019,7 @@ fileName wgEncodeAwgTfbsHaibSknshTaf1V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 011b8386ab42a6f76901cd90a860c142
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshTaf1V0416101UniPk
 target TAF1
 treatment None
@@ -4771,6 +5038,7 @@ fileName wgEncodeAwgTfbsHaibSknshraCtcfV0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 61ead0c768e7f3071c551595eede95f4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshraCtcfV0416102UniPk
 target CTCF
 treatment None
@@ -4789,6 +5057,7 @@ fileName wgEncodeAwgTfbsHaibSknshraP300V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 6eb0495d954ed81acdc1b4ca212a0076
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshraP300V0416102UniPk
 target EP300
 treatment None
@@ -4807,6 +5076,7 @@ fileName wgEncodeAwgTfbsHaibSknshraRad21V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 735f2c1616d5f3459c1ee573ba3f6f95
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshraRad21V0416102UniPk
 target RAD21
 treatment None
@@ -4825,6 +5095,7 @@ fileName wgEncodeAwgTfbsHaibSknshraUsf1sc8983V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 246f74a2bb9e65233443f7cecfc83257
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshraUsf1sc8983V0416102UniPk
 target USF1
 treatment None
@@ -4843,6 +5114,7 @@ fileName wgEncodeAwgTfbsHaibSknshraYy1sc281V0416102UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum f22d308dce12c323f36bb8bf7b3b902b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibSknshraYy1sc281V0416102UniPk
 target YY1
 treatment None
@@ -4861,6 +5133,7 @@ fileName wgEncodeAwgTfbsHaibT47dCtcfsc5916V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 365324ba4ed801f251c55c668329290f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibT47dCtcfsc5916V0416102Dm002p1hUniPk
 target CTCF
 treatment DMSO_0.02pct
@@ -4879,6 +5152,7 @@ fileName wgEncodeAwgTfbsHaibT47dEraaV0416102Bpa1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 7c420b8108140d8882dfce3335bc993e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibT47dEraaV0416102Bpa1hUniPk
 target ESR1
 treatment BPA_100nM
@@ -4897,6 +5171,7 @@ fileName wgEncodeAwgTfbsHaibT47dEralphaaPcr2xGen1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0c49a11a0324f8101ea7ee75b2635854
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibT47dEralphaaPcr2xGen1hUniPk
 target ESR1
 treatment Genistein_100nM
@@ -4915,6 +5190,7 @@ fileName wgEncodeAwgTfbsHaibT47dEralphaaV0416102Est10nm1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 55484aed61b34d7f87fedb97fb6bbbdd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibT47dEralphaaV0416102Est10nm1hUniPk
 target ESR1
 treatment Estradiol_10nM
@@ -4933,6 +5209,7 @@ fileName wgEncodeAwgTfbsHaibT47dFoxa1sc6553V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 0c7264b1ee5714141a6c1ac98e1799ed
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibT47dFoxa1sc6553V0416102Dm002p1hUniPk
 target FOXA1
 treatment DMSO_0.02pct
@@ -4951,6 +5228,7 @@ fileName wgEncodeAwgTfbsHaibT47dGata3sc268V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 9110c89871ab0c1f0a6d223ba0d6619b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibT47dGata3sc268V0416102Dm002p1hUniPk
 target GATA3
 treatment DMSO_0.02pct
@@ -4969,6 +5247,7 @@ fileName wgEncodeAwgTfbsHaibT47dP300V0416102Dm002p1hUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum a35c4195f34203c2019fe074e60fe519
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibT47dP300V0416102Dm002p1hUniPk
 target EP300
 treatment DMSO_0.02pct
@@ -4987,6 +5266,7 @@ fileName wgEncodeAwgTfbsHaibU87NrsfPcr2xUniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum b03f4c2bbfccd9af18ddbaa555de3091
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibU87NrsfPcr2xUniPk
 target REST
 treatment None
@@ -5005,6 +5285,7 @@ fileName wgEncodeAwgTfbsHaibU87Pol24h8V0416101UniPk.narrowPeak.gz
 lab HudsonAlpha
 md5sum 23c5c099854391c3a746fbce8b593c29
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsHaibU87Pol24h8V0416101UniPk
 target POLR2A
 treatment None
@@ -5024,6 +5305,7 @@ fileName wgEncodeAwgTfbsSydhA549Bhlhe40IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 6f8551ef427bb74b7b0dc4b4a4ab2415
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhA549Bhlhe40IggrabUniPk
 target BHLHE40
 treatment None
@@ -5043,6 +5325,7 @@ fileName wgEncodeAwgTfbsSydhA549CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 140fe239e8dc57dcb6d087ede958894b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhA549CebpbIggrabUniPk
 target CEBPB
 treatment None
@@ -5062,6 +5345,7 @@ fileName wgEncodeAwgTfbsSydhA549MaxIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 5de2efb2294209369b913a029c467278
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhA549MaxIggrabUniPk
 target MAX
 treatment None
@@ -5081,6 +5365,7 @@ fileName wgEncodeAwgTfbsSydhA549Pol2s2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 28e5b12430516188977198ceca9372db
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhA549Pol2s2IggrabUniPk
 target POLR2A
 treatment None
@@ -5100,6 +5385,7 @@ fileName wgEncodeAwgTfbsSydhA549Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 018788e7ce2490fa463a9d76080e3235
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhA549Rad21IggrabUniPk
 target RAD21
 treatment None
@@ -5119,6 +5405,7 @@ fileName wgEncodeAwgTfbsSydhGm08714Znf274UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 6aa5d807b884a44b84ec61c36d09f1d2
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm08714Znf274UcdUniPk
 target ZNF274
 treatment None
@@ -5138,6 +5425,7 @@ fileName wgEncodeAwgTfbsSydhGm10847NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 55ec2f61f13e5023383dac3910fc41cd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm10847NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -5157,6 +5445,7 @@ fileName wgEncodeAwgTfbsSydhGm10847Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum ac875c181c606d5c4509b145ca2011ad
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm10847Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -5176,6 +5465,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Bhlhe40cIggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 70f14ea1cf15a8e80aebf7a184d0a4b1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Bhlhe40cIggmusUniPk
 target BHLHE40
 treatment None
@@ -5195,6 +5485,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Brca1a300IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 4ee966de93efebe37edef62f42814bf4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Brca1a300IggmusUniPk
 target BRCA1
 treatment None
@@ -5214,6 +5505,7 @@ fileName wgEncodeAwgTfbsSydhGm12878CfosUniPk.narrowPeak.gz
 lab Yale
 md5sum 2714cd7880aba0d0b58b33cadcc22cf1
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878CfosUniPk
 target FOS
 treatment None
@@ -5233,6 +5525,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Chd1a301218aIggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum bbb0d50bd2f0cbed182528cf399451ea
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Chd1a301218aIggmusUniPk
 target CHD1
 treatment None
@@ -5252,6 +5545,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Chd2ab68301IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 58d46554db30851dfcb4422a2b1a4128
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Chd2ab68301IggmusUniPk
 target CHD2
 treatment None
@@ -5271,6 +5565,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Corestsc30189IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum b1bf4259ce45ecc6cb64ee82e9364209
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Corestsc30189IggmusUniPk
 target RCOR1
 treatment None
@@ -5290,6 +5585,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Ctcfsc15914c20UniPk.narrowPeak.gz
 lab Stanford
 md5sum 959fa247e0d5be752f2dd9ffafb596e5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Ctcfsc15914c20UniPk
 target CTCF
 treatment None
@@ -5309,6 +5605,7 @@ fileName wgEncodeAwgTfbsSydhGm12878E2f4IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 58eee94af7e6136336e1ff1d2c096f43
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878E2f4IggmusUniPk
 target E2F4
 treatment None
@@ -5328,6 +5625,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Ebf1sc137065UniPk.narrowPeak.gz
 lab Stanford
 md5sum 429272c848dfd893d96a75e51226405f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Ebf1sc137065UniPk
 target EBF1
 treatment None
@@ -5347,6 +5645,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Elk112771IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum ffd375b51cc3fe5ab38a159f00d9c999
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Elk112771IggmusUniPk
 target ELK1
 treatment None
@@ -5366,6 +5665,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Ikzf1iknuclaUniPk.narrowPeak.gz
 lab USC
 md5sum c3194b38df588c8a8666c8ef5314edd0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Ikzf1iknuclaUniPk
 target IKZF1
 treatment None
@@ -5385,6 +5685,7 @@ fileName wgEncodeAwgTfbsSydhGm12878JundUniPk.narrowPeak.gz
 lab Yale
 md5sum f79d50c4dd3abed98f1fd8f6ad39217b
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878JundUniPk
 target JUND
 treatment None
@@ -5404,6 +5705,7 @@ fileName wgEncodeAwgTfbsSydhGm12878MaxIggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum d64c92246e4b36d51e145050dc33c2d2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878MaxIggmusUniPk
 target MAX
 treatment None
@@ -5423,6 +5725,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Mazab85725IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 4215b3b7a297d76e7ff965e33ed14df0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Mazab85725IggmusUniPk
 target MAZ
 treatment None
@@ -5442,6 +5745,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Mxi1IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 2738350b40fda5f2a4e94577d602dfbf
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Mxi1IggmusUniPk
 target MXI1
 treatment None
@@ -5461,6 +5765,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Nfe2sc22827UniPk.narrowPeak.gz
 lab Stanford
 md5sum 5545ad9868f4222cd5a16a8b9e4046d2
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Nfe2sc22827UniPk
 target NFE2
 treatment None
@@ -5480,6 +5785,7 @@ fileName wgEncodeAwgTfbsSydhGm12878NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum fae3541f0952121929b97f3d3ac88418
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -5499,6 +5805,7 @@ fileName wgEncodeAwgTfbsSydhGm12878NfyaIggmusUniPk.narrowPeak.gz
 lab Harvard
 md5sum 687099baa2e61f329167223c6ab8c51a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878NfyaIggmusUniPk
 target NFYA
 treatment None
@@ -5518,6 +5825,7 @@ fileName wgEncodeAwgTfbsSydhGm12878NfybIggmusUniPk.narrowPeak.gz
 lab Harvard
 md5sum 28a2dbbdd750a384e9f34392ceac6d85
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878NfybIggmusUniPk
 target NFYB
 treatment None
@@ -5537,6 +5845,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Nrf1IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum f258762a735f38b399cad625f7d23e7b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Nrf1IggmusUniPk
 target NRF1
 treatment None
@@ -5556,6 +5865,7 @@ fileName wgEncodeAwgTfbsSydhGm12878P300IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 12b15e40715b98b3f7b8aadb75f9258e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878P300IggmusUniPk
 target EP300
 treatment None
@@ -5575,6 +5885,7 @@ fileName wgEncodeAwgTfbsSydhGm12878P300bUniPk.narrowPeak.gz
 lab Stanford
 md5sum 3de40fa88e02ac57b2c3d7af84c155a6
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878P300bUniPk
 target EP300
 treatment None
@@ -5594,6 +5905,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 0cd94397c09135aa96497a2579cb4910
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -5613,6 +5925,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Pol2UniPk.narrowPeak.gz
 lab Yale
 md5sum 10aa9b54a96fe7d4eecd417bd475a6cd
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Pol2UniPk
 target POLR2A
 treatment None
@@ -5632,6 +5945,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Pol2s2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum b727cae5638777f5b4f2f0027b1773a2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Pol2s2IggmusUniPk
 target POLR2A
 treatment None
@@ -5651,6 +5965,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Pol3UniPk.narrowPeak.gz
 lab Yale
 md5sum c36fe38ccdc931abaabd79ea066b9b84
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Pol3UniPk
 target POLR3G
 treatment None
@@ -5670,6 +5985,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1f6e1bfc161c5f77556f7da0294b2e02
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Rad21IggrabUniPk
 target RAD21
 treatment None
@@ -5689,6 +6005,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Rfx5200401194IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 6a503ef861a2c89038ad036ab23c71be
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Rfx5200401194IggmusUniPk
 target RFX5
 treatment None
@@ -5708,6 +6025,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Sin3anb6001263IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 63fd3e2dabd9fdcc7ca2ea4c4b156976
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Sin3anb6001263IggmusUniPk
 target SIN3A
 treatment None
@@ -5727,6 +6045,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Smc3ab9263IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 216de487ee5c34a1adfb6957236c699d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Smc3ab9263IggmusUniPk
 target SMC3
 treatment None
@@ -5746,6 +6065,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Stat1UniPk.narrowPeak.gz
 lab Stanford
 md5sum ded5941665a1ea4b318f9cfc02963d78
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Stat1UniPk
 target STAT1
 treatment None
@@ -5765,6 +6085,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Stat3IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 0b6faed0f4cbfd38e1f9aaf19d274625
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Stat3IggmusUniPk
 target STAT3
 treatment None
@@ -5784,6 +6105,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Tblr1ab24550IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1f2533ecc5374a68022232262e413777
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Tblr1ab24550IggmusUniPk
 target TBL1XR1
 treatment None
@@ -5803,6 +6125,7 @@ fileName wgEncodeAwgTfbsSydhGm12878TbpIggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7444fa79687610c6581f723d45574888
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878TbpIggmusUniPk
 target TBP
 treatment None
@@ -5822,6 +6145,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Tr4UniPk.narrowPeak.gz
 lab USC
 md5sum 95193cb874ff57915cb0184d4398474a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Tr4UniPk
 target NR2C2
 treatment None
@@ -5841,6 +6165,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Usf2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum eeb9fad4e2f8cd808d8ca362fe132864
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Usf2IggmusUniPk
 target USF2
 treatment None
@@ -5860,6 +6185,7 @@ fileName wgEncodeAwgTfbsSydhGm12878WhipIggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7687f541e19498127ef3b86b3d007cc2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878WhipIggmusUniPk
 target WRNIP1
 treatment None
@@ -5879,6 +6205,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Yy1UniPk.narrowPeak.gz
 lab USC
 md5sum 3ad2b8ac0cabcafc5fcb6be1f20c2884
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Yy1UniPk
 target YY1
 treatment None
@@ -5898,6 +6225,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Znf143166181apUniPk.narrowPeak.gz
 lab Stanford
 md5sum cd77b768768f49d387d02b684717493b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12878Znf143166181apUniPk
 target ZNF143
 treatment None
@@ -5917,6 +6245,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Znf274UniPk.narrowPeak.gz
 lab USC
 md5sum ef5a9ec2c021046bc913853ea95ce901
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Znf274UniPk
 target ZNF274
 treatment None
@@ -5936,6 +6265,7 @@ fileName wgEncodeAwgTfbsSydhGm12878Zzz3UniPk.narrowPeak.gz
 lab Harvard
 md5sum 895af225dd80dd09ac4884e73bea38be
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhGm12878Zzz3UniPk
 target ZZZ3
 treatment None
@@ -5955,6 +6285,7 @@ fileName wgEncodeAwgTfbsSydhGm12891NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 9471d2503952acdd179f9a8a8b27fe46
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12891NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -5974,6 +6305,7 @@ fileName wgEncodeAwgTfbsSydhGm12891Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum eb4a0f28a98fad16c882d7a2ca58d029
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12891Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -5993,6 +6325,7 @@ fileName wgEncodeAwgTfbsSydhGm12892NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum cd72d9e0438cfb8de61de70428e3dc0b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12892NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -6012,6 +6345,7 @@ fileName wgEncodeAwgTfbsSydhGm12892Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum b8565576d1b9794e7bdd762e7a5ae0a2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm12892Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -6031,6 +6365,7 @@ fileName wgEncodeAwgTfbsSydhGm15510NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 3ca1c4c7bb8d84413eabf03ad5283eb1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm15510NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -6050,6 +6385,7 @@ fileName wgEncodeAwgTfbsSydhGm15510Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1447c56c0b9ba00ccbbe342205989100
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm15510Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -6069,6 +6405,7 @@ fileName wgEncodeAwgTfbsSydhGm18505NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum f016aeff65078b1623b8ee325c4fab8e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm18505NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -6088,6 +6425,7 @@ fileName wgEncodeAwgTfbsSydhGm18505Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum e3c9d75cebc3a63f0590ded7a14f8dbb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm18505Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -6107,6 +6445,7 @@ fileName wgEncodeAwgTfbsSydhGm18526NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum bef5417351de8435c0cc943180678c9d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm18526NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -6126,6 +6465,7 @@ fileName wgEncodeAwgTfbsSydhGm18526Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum ac6b75197102e60c456c670d7063b69e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm18526Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -6145,6 +6485,7 @@ fileName wgEncodeAwgTfbsSydhGm18951NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7aa263b485c8ee2735539f5a6cf1358b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm18951NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -6164,6 +6505,7 @@ fileName wgEncodeAwgTfbsSydhGm18951Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum b0a345a9b97b87b33dab194de6594ebe
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm18951Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -6183,6 +6525,7 @@ fileName wgEncodeAwgTfbsSydhGm19099NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 4dfb6eb03b7ef50a4dd301ddc63c1ce4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm19099NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -6202,6 +6545,7 @@ fileName wgEncodeAwgTfbsSydhGm19099Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 0f4ad4a40fba37a1f79d8e1be62914e8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm19099Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -6221,6 +6565,7 @@ fileName wgEncodeAwgTfbsSydhGm19193NfkbTnfaIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 6e43f6acc5663bf706a937a012ca2ce7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm19193NfkbTnfaIggrabUniPk
 target RELA
 treatment TNFa
@@ -6240,6 +6585,7 @@ fileName wgEncodeAwgTfbsSydhGm19193Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 14d065bfab502d615e126b8ae1208c5b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhGm19193Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -6259,6 +6605,7 @@ fileName wgEncodeAwgTfbsSydhH1hescBach1sc14700IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 67ee44b87162374651e0f101c017e90d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescBach1sc14700IggrabUniPk
 target BACH1
 treatment None
@@ -6278,6 +6625,7 @@ fileName wgEncodeAwgTfbsSydhH1hescBrca1IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum ee8e4677b3e2b2b29cbc81f4450ab8eb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescBrca1IggrabUniPk
 target BRCA1
 treatment None
@@ -6297,6 +6645,7 @@ fileName wgEncodeAwgTfbsSydhH1hescCebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum d8d65f24844cbf0b219efaf5ce4c86ba
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescCebpbIggrabUniPk
 target CEBPB
 treatment None
@@ -6316,6 +6665,7 @@ fileName wgEncodeAwgTfbsSydhH1hescChd1a301218aIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 99890b36fc19ff4736b5560866290948
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhH1hescChd1a301218aIggrabUniPk
 target CHD1
 treatment None
@@ -6335,6 +6685,7 @@ fileName wgEncodeAwgTfbsSydhH1hescChd2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum d782f5f35968207e8390552f517a0e97
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescChd2IggrabUniPk
 target CHD2
 treatment None
@@ -6354,6 +6705,7 @@ fileName wgEncodeAwgTfbsSydhH1hescCjunIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum afbc82650409f9b009098c0176e085b5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescCjunIggrabUniPk
 target JUN
 treatment None
@@ -6373,6 +6725,7 @@ fileName wgEncodeAwgTfbsSydhH1hescCmycIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum e0cc096136517dfaba5e2615ffae7768
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescCmycIggrabUniPk
 target MYC
 treatment None
@@ -6392,6 +6745,7 @@ fileName wgEncodeAwgTfbsSydhH1hescCtbp2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 98cb24a572660f6a93c8294d834de3a5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescCtbp2UcdUniPk
 target CTBP2
 treatment None
@@ -6411,6 +6765,7 @@ fileName wgEncodeAwgTfbsSydhH1hescGtf2f1IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 90664443b40c754ce6a744935b924af6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescGtf2f1IggrabUniPk
 target GTF2F1
 treatment None
@@ -6430,6 +6785,7 @@ fileName wgEncodeAwgTfbsSydhH1hescJundIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum b5ed0851ce695bd3a5652c1eb8b060eb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescJundIggrabUniPk
 target JUND
 treatment None
@@ -6449,6 +6805,7 @@ fileName wgEncodeAwgTfbsSydhH1hescMafkIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 07290c17d5afe52c15ec50a8d7b08e98
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescMafkIggrabUniPk
 target MAFK
 treatment None
@@ -6468,6 +6825,7 @@ fileName wgEncodeAwgTfbsSydhH1hescMaxUcdUniPk.narrowPeak.gz
 lab USC
 md5sum d5c5cd1190c114303790cd675d858401
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescMaxUcdUniPk
 target MAX
 treatment None
@@ -6487,6 +6845,7 @@ fileName wgEncodeAwgTfbsSydhH1hescMxi1IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 77745c0ff5ffee4ba75c6f356162710c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescMxi1IggrabUniPk
 target MXI1
 treatment None
@@ -6506,6 +6865,7 @@ fileName wgEncodeAwgTfbsSydhH1hescNrf1IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 81af2340067ddc6ca6bd0658a5000ec0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescNrf1IggrabUniPk
 target NRF1
 treatment None
@@ -6525,6 +6885,7 @@ fileName wgEncodeAwgTfbsSydhH1hescRad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 25d614a80f9b9e1d3a6524130cbc3861
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescRad21IggrabUniPk
 target RAD21
 treatment None
@@ -6544,6 +6905,7 @@ fileName wgEncodeAwgTfbsSydhH1hescRfx5200401194IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 6bb13e089bb7ab729956a49bd3cc7d61
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescRfx5200401194IggrabUniPk
 target RFX5
 treatment None
@@ -6563,6 +6925,7 @@ fileName wgEncodeAwgTfbsSydhH1hescSin3anb6001263IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 2f87bc4bb8544cd84607f58be183c7bf
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescSin3anb6001263IggrabUniPk
 target SIN3A
 treatment None
@@ -6582,6 +6945,7 @@ fileName wgEncodeAwgTfbsSydhH1hescSuz12UcdUniPk.narrowPeak.gz
 lab USC
 md5sum d247ed087bc90f162dd78c85912805f0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescSuz12UcdUniPk
 target SUZ12
 treatment None
@@ -6601,6 +6965,7 @@ fileName wgEncodeAwgTfbsSydhH1hescTbpIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum b523ed0cef365456d5b65345f171bae3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescTbpIggrabUniPk
 target TBP
 treatment None
@@ -6620,6 +6985,7 @@ fileName wgEncodeAwgTfbsSydhH1hescUsf2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 6d644915a740c6cf5dc2db96bac90d49
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescUsf2IggrabUniPk
 target USF2
 treatment None
@@ -6639,6 +7005,7 @@ fileName wgEncodeAwgTfbsSydhH1hescZnf143IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum dfaf2540b1497fb3658c3d46dd0e0dca
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhH1hescZnf143IggrabUniPk
 target ZNF143
 treatment None
@@ -6658,6 +7025,7 @@ fileName wgEncodeAwgTfbsSydhHct116Pol2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 4f23b5f2d86e739a6409fa776a7327c6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHct116Pol2UcdUniPk
 target POLR2A
 treatment None
@@ -6677,6 +7045,7 @@ fileName wgEncodeAwgTfbsSydhHct116Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 48a4a2ec5f1a405b84ab0f739db2c08a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHct116Tcf7l2UcdUniPk
 target TCF7L2
 treatment None
@@ -6696,6 +7065,7 @@ fileName wgEncodeAwgTfbsSydhHek293Elk4UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 353728fd832833fd5cd53dfee5b7b574
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHek293Elk4UcdUniPk
 target ELK4
 treatment None
@@ -6715,6 +7085,7 @@ fileName wgEncodeAwgTfbsSydhHek293Kap1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 46e1e362a6ec85092c8b74030545f0d8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHek293Kap1UcdUniPk
 target KAP1
 treatment None
@@ -6734,6 +7105,7 @@ fileName wgEncodeAwgTfbsSydhHek293Pol2UniPk.narrowPeak.gz
 lab Yale
 md5sum 1a4e86a3a2ef0a66483b00102ad9b0f4
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHek293Pol2UniPk
 target POLR2A
 treatment None
@@ -6753,6 +7125,7 @@ fileName wgEncodeAwgTfbsSydhHek293Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 7559d951de3e6db6d6d31087277734d6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHek293Tcf7l2UcdUniPk
 target TCF7L2
 treatment None
@@ -6772,6 +7145,7 @@ fileName wgEncodeAwgTfbsSydhHek293tZnf263UcdUniPk.narrowPeak.gz
 lab USC
 md5sum afa4a6579e3f68d44c2ff562bcd5d5fa
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHek293tZnf263UcdUniPk
 target ZNF263
 treatment None
@@ -6791,6 +7165,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Ap2alphaUniPk.narrowPeak.gz
 lab USC
 md5sum fe6433178e0f6ff63a106387c4a131a2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Ap2alphaUniPk
 target TFAP2A
 treatment None
@@ -6810,6 +7185,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Ap2gammaUniPk.narrowPeak.gz
 lab USC
 md5sum 13eb71cf375bcd409141631d14f3e5cd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Ap2gammaUniPk
 target TFAP2C
 treatment None
@@ -6829,6 +7205,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Baf155IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7a99f483ebf93e24be37123772ba97ac
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Baf155IggmusUniPk
 target SMARCC1
 treatment None
@@ -6848,6 +7225,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Baf170IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum ef18ce626cca33a65b18e556c6486910
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Baf170IggmusUniPk
 target SMARCC2
 treatment None
@@ -6867,6 +7245,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Bdp1UniPk.narrowPeak.gz
 lab Harvard
 md5sum 65aa75b0c409430f6659443e535eae27
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Bdp1UniPk
 target BDP1
 treatment None
@@ -6886,6 +7265,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Brca1a300IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 6e2284bf966ca2ebf62af6e1a70d50cc
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Brca1a300IggrabUniPk
 target BRCA1
 treatment None
@@ -6905,6 +7285,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Brf1UniPk.narrowPeak.gz
 lab Harvard
 md5sum 8a21b07ab22ceefcf7ce55677057ffc3
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Brf1UniPk
 target BRF1
 treatment None
@@ -6924,6 +7305,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Brf2UniPk.narrowPeak.gz
 lab Harvard
 md5sum e6f3994065309043c16ed62db1253bdc
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Brf2UniPk
 target BRF2
 treatment None
@@ -6943,6 +7325,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Brg1IggmusUniPk.narrowPeak.gz
 lab Yale
 md5sum e25d2f3c24c596f5ec769ed5d621aa07
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Brg1IggmusUniPk
 target SMARCA4
 treatment None
@@ -6962,6 +7345,7 @@ fileName wgEncodeAwgTfbsSydhHelas3CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 2b71a07a134f49b8423111429a491715
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3CebpbIggrabUniPk
 target CEBPB
 treatment None
@@ -6981,6 +7365,7 @@ fileName wgEncodeAwgTfbsSydhHelas3CfosUniPk.narrowPeak.gz
 lab Yale
 md5sum 03595fb735b2b38b4ccb202c931317db
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3CfosUniPk
 target FOS
 treatment None
@@ -7000,6 +7385,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Chd2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum a3d87c22430c0443db0b65998bf54b09
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Chd2IggrabUniPk
 target CHD2
 treatment None
@@ -7019,6 +7405,7 @@ fileName wgEncodeAwgTfbsSydhHelas3CjunIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 98ae48546905c48b2d885dbdcd9eae1f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3CjunIggrabUniPk
 target JUN
 treatment None
@@ -7038,6 +7425,7 @@ fileName wgEncodeAwgTfbsSydhHelas3CmycUniPk.narrowPeak.gz
 lab Yale
 md5sum 3f4ad34f75fd33b09dcfe673d2c68a4b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3CmycUniPk
 target MYC
 treatment None
@@ -7057,6 +7445,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Corestsc30189IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 5557188b15c7cbaa2ac12b1422f04212
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Corestsc30189IggrabUniPk
 target RCOR1
 treatment None
@@ -7076,6 +7465,7 @@ fileName wgEncodeAwgTfbsSydhHelas3E2f1UniPk.narrowPeak.gz
 lab USC
 md5sum 93cf3e10f02c5a87cacee0e42592773c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3E2f1UniPk
 target E2F1
 treatment None
@@ -7095,6 +7485,7 @@ fileName wgEncodeAwgTfbsSydhHelas3E2f4UniPk.narrowPeak.gz
 lab USC
 md5sum 81d3ffcdf518c4362c91333ab3f1d16f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3E2f4UniPk
 target E2F4
 treatment None
@@ -7114,6 +7505,7 @@ fileName wgEncodeAwgTfbsSydhHelas3E2f6UniPk.narrowPeak.gz
 lab USC
 md5sum 42431063ec474adf174e1e39f5c8fa12
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3E2f6UniPk
 target E2F6
 treatment None
@@ -7133,6 +7525,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Elk112771IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 838e7749ef7b59d6b7fbd78870b061d3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Elk112771IggrabUniPk
 target ELK1
 treatment None
@@ -7152,6 +7545,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Elk4UcdUniPk.narrowPeak.gz
 lab USC
 md5sum bf64b5f69afecbef0c6868f71b1effb7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Elk4UcdUniPk
 target ELK4
 treatment None
@@ -7171,6 +7565,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Gtf2f1ab28179IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 9066a6e372b4564d0b3b4cf2144036af
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Gtf2f1ab28179IggrabUniPk
 target GTF2F1
 treatment None
@@ -7190,6 +7585,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Hae2f1UniPk.narrowPeak.gz
 lab USC
 md5sum 478ff3362d34ca26622ba037dbcf7083
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Hae2f1UniPk
 target HA-E2F1
 treatment None
@@ -7209,6 +7605,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Ini1IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 3b384a1ea65c51afe9b4161b39306c86
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Ini1IggmusUniPk
 target SMARCB1
 treatment None
@@ -7228,6 +7625,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Irf3IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum a7f272d145a367f4c29ec07ab4d51bc6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Irf3IggrabUniPk
 target IRF3
 treatment None
@@ -7247,6 +7645,7 @@ fileName wgEncodeAwgTfbsSydhHelas3JundIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum e3aa59e5bc4d2534e1878458b9b01f41
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3JundIggrabUniPk
 target JUND
 treatment None
@@ -7266,6 +7665,7 @@ fileName wgEncodeAwgTfbsSydhHelas3MafkIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 17019b117fe3c0009f25c5fc12e472b3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3MafkIggrabUniPk
 target MAFK
 treatment None
@@ -7285,6 +7685,7 @@ fileName wgEncodeAwgTfbsSydhHelas3MaxIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum e8f3a4ffd7dcc7fcc6cea08731c15ace
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3MaxIggrabUniPk
 target MAX
 treatment None
@@ -7304,6 +7705,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Mazab85725IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 2e74c642a209733b9898bebbed72a5d0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Mazab85725IggrabUniPk
 target MAZ
 treatment None
@@ -7323,6 +7725,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Mxi1af4185IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 76abe25d7a6531be6f68a748b5d3bd73
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Mxi1af4185IggrabUniPk
 target MXI1
 treatment None
@@ -7342,6 +7745,7 @@ fileName wgEncodeAwgTfbsSydhHelas3NfyaIggrabUniPk.narrowPeak.gz
 lab Harvard
 md5sum 42f7016ee5e74beddc47cc6dc5ced0b2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3NfyaIggrabUniPk
 target NFYA
 treatment None
@@ -7361,6 +7765,7 @@ fileName wgEncodeAwgTfbsSydhHelas3NfybIggrabUniPk.narrowPeak.gz
 lab Harvard
 md5sum dddf7fab69ed1efef0f10c9fc3348d60
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3NfybIggrabUniPk
 target NFYB
 treatment None
@@ -7380,6 +7785,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Nrf1IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 07c1b80763890653029b7cf81910b46b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Nrf1IggmusUniPk
 target NRF1
 treatment None
@@ -7399,6 +7805,7 @@ fileName wgEncodeAwgTfbsSydhHelas3P300sc584sc584IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 4498b4f7691299efa94726cae2e6f32d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3P300sc584sc584IggrabUniPk
 target EP300
 treatment None
@@ -7418,6 +7825,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Pol2UniPk.narrowPeak.gz
 lab Yale
 md5sum ddb8577ca9d705e138bc9e4b13d90ad7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Pol2UniPk
 target POLR2A
 treatment None
@@ -7437,6 +7845,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Pol2s2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 0ec3a251b6eb09ae3fd9b174a7f002ad
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Pol2s2IggrabUniPk
 target POLR2A
 treatment None
@@ -7456,6 +7865,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Prdm19115IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 49279764918f07563a17db033ddedb5b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Prdm19115IggrabUniPk
 target PRDM1
 treatment None
@@ -7475,6 +7885,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1178ac8fa6705d8dbc41d5e036d28cd9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Rad21IggrabUniPk
 target RAD21
 treatment None
@@ -7494,6 +7905,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Rfx5200401194IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1f3b827eca926a70476e64ef08f971d3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Rfx5200401194IggrabUniPk
 target RFX5
 treatment None
@@ -7513,6 +7925,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Rpc155UniPk.narrowPeak.gz
 lab Harvard
 md5sum 8a6312a951137ff9122daabef7bd1521
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Rpc155UniPk
 target RPC155
 treatment None
@@ -7532,6 +7945,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Smc3ab9263IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum d92212116654d546fd4703a1978ffe0f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Smc3ab9263IggrabUniPk
 target SMC3
 treatment None
@@ -7551,6 +7965,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Spt20UniPk.narrowPeak.gz
 lab Stanford
 md5sum b355d2f27b2dfbe60c202b2d9d294ba2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Spt20UniPk
 target FAM48A
 treatment None
@@ -7570,6 +7985,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Stat1Ifng30UniPk.narrowPeak.gz
 lab Yale
 md5sum 701fdf59cd895e62fd2596bf4690b045
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Stat1Ifng30UniPk
 target STAT1
 treatment IFNg30
@@ -7589,6 +8005,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Stat3IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 9d161579c563135aa5e51e7deca75a65
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Stat3IggrabUniPk
 target STAT3
 treatment None
@@ -7608,6 +8025,7 @@ fileName wgEncodeAwgTfbsSydhHelas3TbpIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 05bdef1580de332903238871b523925a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3TbpIggrabUniPk
 target TBP
 treatment None
@@ -7627,6 +8045,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 38400f0a362cc2d1c6b1577093741c15
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Tcf7l2UcdUniPk
 target TCF7L2
 treatment None
@@ -7646,6 +8065,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Tcf7l2c9b92565UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 2d73e2420373e2607576ecd464105b58
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Tcf7l2c9b92565UcdUniPk
 target TCF7L2
 treatment None
@@ -7665,6 +8085,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Tf3c110UniPk.narrowPeak.gz
 lab Harvard
 md5sum 52281b24ffc79d66ee7cc7f1643cd9d5
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Tf3c110UniPk
 target GTF3C2
 treatment None
@@ -7684,6 +8105,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Tr4UniPk.narrowPeak.gz
 lab USC
 md5sum 3d67066c2edcbda5cb6d201cb5c71ad5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Tr4UniPk
 target NR2C2
 treatment None
@@ -7703,6 +8125,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Usf2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum f2f783bd7993b17755f67a6fce0b6576
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Usf2IggmusUniPk
 target USF2
 treatment None
@@ -7722,6 +8145,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Zkscan1hpa006672IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1ce5a8219168f5f47c93be20c9363532
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Zkscan1hpa006672IggrabUniPk
 target ZKSCAN1
 treatment None
@@ -7741,6 +8165,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Znf143IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7c83c9263b748b29dfed66bc197e913e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHelas3Znf143IggrabUniPk
 target ZNF143
 treatment None
@@ -7760,6 +8185,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Znf274UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 94f8f052652fc8c1bbfbddf5767121c0
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Znf274UcdUniPk
 target ZNF274
 treatment None
@@ -7779,6 +8205,7 @@ fileName wgEncodeAwgTfbsSydhHelas3Zzz3UniPk.narrowPeak.gz
 lab Harvard
 md5sum 93eee45f208b7a254f0660b9dde2a50a
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHelas3Zzz3UniPk
 target ZZZ3
 treatment None
@@ -7798,6 +8225,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Arid3anb100279IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum a6151ca84716622f41bcb66678b1a57e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Arid3anb100279IggrabUniPk
 target ARID3A
 treatment None
@@ -7817,6 +8245,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Bhlhe40cIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum c60157a463037f461e4ac4957fa8f980
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Bhlhe40cIggrabUniPk
 target BHLHE40
 treatment None
@@ -7836,6 +8265,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Brca1a300IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 19cb06a7af6906d992bdeb839a412965
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2Brca1a300IggrabUniPk
 target BRCA1
 treatment None
@@ -7855,27 +8285,29 @@ fileName wgEncodeAwgTfbsSydhHepg2CebpbForsklnUniPk.narrowPeak.gz
 lab Stanford
 md5sum 73d0875db45c3a04c8e78ef9b636a414
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2CebpbForsklnUniPk
 target CEBPB
 treatment forskolin
 view Peaks
 
-metaObject wgEncodeAwgTfbsSydhHepg2CebpzIggrabUniPk
+metaObject wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk
 objType table
-antibody CEBPZ
+antibody CEBPB
 cell HepG2
 composite wgEncodeAwgTfbsUniform
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH002859
-fileName wgEncodeAwgTfbsSydhHepg2CebpzIggrabUniPk.narrowPeak.gz
+dccAccession wgEncodeEH001829
+fileName wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
-md5sum b5ea51333a1c1ed59cdefc9825b34703
+md5sum a553894bd04f6ae4148ec1b3fbb39d1e
 project wgEncode
-tableName wgEncodeAwgTfbsSydhHepg2CebpzIggrabUniPk
-target CEBPZ
+quality good
+tableName wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk
+target CEBPB
 treatment None
 view Peaks
 
@@ -7893,6 +8325,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Chd2ab68301IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 3b12c3812dc0f52b715773944b33aab8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Chd2ab68301IggrabUniPk
 target CHD2
 treatment None
@@ -7912,6 +8345,7 @@ fileName wgEncodeAwgTfbsSydhHepg2CjunIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 8eec84a813e2ebfd292266eb126e6ef7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2CjunIggrabUniPk
 target JUN
 treatment None
@@ -7931,6 +8365,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Corestsc30189IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7d0da190b34efab1890b6880ca5cec1d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Corestsc30189IggrabUniPk
 target RCOR1
 treatment None
@@ -7950,6 +8385,7 @@ fileName wgEncodeAwgTfbsSydhHepg2ErraForsklnUniPk.narrowPeak.gz
 lab Stanford
 md5sum 0733bdfe5884b6a559482c420a7fca41
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2ErraForsklnUniPk
 target ESRRA
 treatment forskolin
@@ -7969,6 +8405,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Grp20ForsklnUniPk.narrowPeak.gz
 lab Stanford
 md5sum bc91c09917defd571cd1479db616cc94
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2Grp20ForsklnUniPk
 target GRp20
 treatment forskolin
@@ -7988,6 +8425,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Hnf4aForsklnUniPk.narrowPeak.gz
 lab Stanford
 md5sum 0b828fae7623a61fad3ed1c5672e94ec
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Hnf4aForsklnUniPk
 target HNF4A
 treatment forskolin
@@ -8007,6 +8445,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Hsf1ForsklnUniPk.narrowPeak.gz
 lab Stanford
 md5sum e39d0c002c237d09a2551961ffd06ce0
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2Hsf1ForsklnUniPk
 target HSF1
 treatment forskolin
@@ -8026,6 +8465,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Irf3IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 834df719c33090620e41bfa345735a0d
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2Irf3IggrabUniPk
 target IRF3
 treatment None
@@ -8045,6 +8485,7 @@ fileName wgEncodeAwgTfbsSydhHepg2JundIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1d8173b7c2935bbcf996f1b2cd36b669
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2JundIggrabUniPk
 target JUND
 treatment None
@@ -8064,6 +8505,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Maffm8194IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 8b92469e13df703193eecddd460a245f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Maffm8194IggrabUniPk
 target MAFF
 treatment None
@@ -8083,6 +8525,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Mafkab50322IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 6b730cef1e60f6cd7bf46c6aa31c7d55
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Mafkab50322IggrabUniPk
 target MAFK
 treatment None
@@ -8102,6 +8545,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Mafksc477IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 2e925f6477b2638541b39df14777fc6b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Mafksc477IggrabUniPk
 target MAFK
 treatment None
@@ -8121,6 +8565,7 @@ fileName wgEncodeAwgTfbsSydhHepg2MaxIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 25ae326be4a1810a97856a0802f0a27d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2MaxIggrabUniPk
 target MAX
 treatment None
@@ -8140,6 +8585,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Mazab85725IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 71a05c0e13e6c8ad448a0440001d7878
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Mazab85725IggrabUniPk
 target MAZ
 treatment None
@@ -8159,6 +8605,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Mxi1UniPk.narrowPeak.gz
 lab Stanford
 md5sum d156674c5d221ca9a4f22c31dd52c64d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Mxi1UniPk
 target MXI1
 treatment None
@@ -8178,6 +8625,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Nrf1IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum ed5d333ec5d54789a4727221f6945a92
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2Nrf1IggrabUniPk
 target NRF1
 treatment None
@@ -8197,6 +8645,7 @@ fileName wgEncodeAwgTfbsSydhHepg2P300sc582IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum b55be43210b3a1cc487f59055f12b02d
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2P300sc582IggrabUniPk
 target EP300
 treatment None
@@ -8216,6 +8665,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Pgc1aForsklnUniPk.narrowPeak.gz
 lab Stanford
 md5sum f2b5311ec392808f0875154b88147ffb
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2Pgc1aForsklnUniPk
 target PPARGC1A
 treatment forskolin
@@ -8235,6 +8685,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Pol2ForsklnUniPk.narrowPeak.gz
 lab Stanford
 md5sum e89abaa5c0c3269ab0fedeadd8945651
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Pol2ForsklnUniPk
 target POLR2A
 treatment forskolin
@@ -8254,6 +8705,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Pol2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1ab19530e4bd9706364f739cb8d61196
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Pol2IggrabUniPk
 target POLR2A
 treatment None
@@ -8273,6 +8725,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Pol2s2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum e460e025a92304fe4f306893771083e8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Pol2s2IggrabUniPk
 target POLR2A
 treatment None
@@ -8292,6 +8745,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum af5ad25ba5c10d30b9023f7b0371efea
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Rad21IggrabUniPk
 target RAD21
 treatment None
@@ -8311,6 +8765,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Rfx5200401194IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum bf3a92fb17eec8820d8baabddbae855f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Rfx5200401194IggrabUniPk
 target RFX5
 treatment None
@@ -8330,6 +8785,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Smc3ab9263IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum f8b9241c8f3bc717f303bac83c963271
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Smc3ab9263IggrabUniPk
 target SMC3
 treatment None
@@ -8349,6 +8805,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Srebp1InslnUniPk.narrowPeak.gz
 lab Stanford
 md5sum e6baa2e289aff5cd2a83c817811e8e02
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Srebp1InslnUniPk
 target SREBP1
 treatment insulin
@@ -8368,6 +8825,7 @@ fileName wgEncodeAwgTfbsSydhHepg2TbpIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 859aff7ee476ce93041e4100aef7c661
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2TbpIggrabUniPk
 target TBP
 treatment None
@@ -8387,6 +8845,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum bc49d5ad732a6bfaae00f2c7431d4928
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2Tcf7l2UcdUniPk
 target TCF7L2
 treatment None
@@ -8406,6 +8865,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Tr4UcdUniPk.narrowPeak.gz
 lab USC
 md5sum fef3e558a0b4fab01ac85b066bd874a9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Tr4UcdUniPk
 target NR2C2
 treatment None
@@ -8425,6 +8885,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Usf2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum d6da3515d4b682a3bb5bb37a6d74ed43
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHepg2Usf2IggrabUniPk
 target USF2
 treatment None
@@ -8444,6 +8905,7 @@ fileName wgEncodeAwgTfbsSydhHepg2Znf274UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 34f71ffbde90341351d3a12116122a35
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhHepg2Znf274UcdUniPk
 target ZNF274
 treatment None
@@ -8463,6 +8925,7 @@ fileName wgEncodeAwgTfbsSydhHuvecCfosUcdUniPk.narrowPeak.gz
 lab USC
 md5sum c39dbdcf3d2f53fbc54ca2cb836080cc
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHuvecCfosUcdUniPk
 target FOS
 treatment None
@@ -8482,6 +8945,7 @@ fileName wgEncodeAwgTfbsSydhHuvecCjunUniPk.narrowPeak.gz
 lab Stanford
 md5sum bb91b10afbd7ca629c3b1c7d54a1b116
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHuvecCjunUniPk
 target JUN
 treatment None
@@ -8501,6 +8965,7 @@ fileName wgEncodeAwgTfbsSydhHuvecGata2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 2a09bcc6eaa834e61629a9fab7845569
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHuvecGata2UcdUniPk
 target GATA2
 treatment None
@@ -8520,6 +8985,7 @@ fileName wgEncodeAwgTfbsSydhHuvecMaxUniPk.narrowPeak.gz
 lab Stanford
 md5sum e05521377ba82d852c88974dd928b172
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHuvecMaxUniPk
 target MAX
 treatment None
@@ -8539,6 +9005,7 @@ fileName wgEncodeAwgTfbsSydhHuvecPol2UniPk.narrowPeak.gz
 lab Stanford
 md5sum a1190cf9405acf594070c3277fa2289c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhHuvecPol2UniPk
 target POLR2A
 treatment None
@@ -8558,6 +9025,7 @@ fileName wgEncodeAwgTfbsSydhImr90CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 8948ff8076e51a1be010b4e966cddaf4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhImr90CebpbIggrabUniPk
 target CEBPB
 treatment None
@@ -8577,6 +9045,7 @@ fileName wgEncodeAwgTfbsSydhImr90CtcfbIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum b18edf84844075e72be7ea4a4c5e07d1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhImr90CtcfbIggrabUniPk
 target CTCF
 treatment None
@@ -8596,6 +9065,7 @@ fileName wgEncodeAwgTfbsSydhImr90MafkIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 847dd083391a20974f9ab56b7a2742e1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhImr90MafkIggrabUniPk
 target MAFK
 treatment None
@@ -8615,6 +9085,7 @@ fileName wgEncodeAwgTfbsSydhImr90Pol2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum b81a1ea319822984ccb18b364d68ffe3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhImr90Pol2IggrabUniPk
 target POLR2A
 treatment None
@@ -8634,6 +9105,7 @@ fileName wgEncodeAwgTfbsSydhImr90Rad21IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 295133121f0244a7891bdd31e5601c7b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhImr90Rad21IggrabUniPk
 target RAD21
 treatment None
@@ -8653,6 +9125,7 @@ fileName wgEncodeAwgTfbsSydhK562Arid3asc8821IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 3806125c644f6a3973c708d1a072d1b4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Arid3asc8821IggrabUniPk
 target ARID3A
 treatment None
@@ -8672,6 +9145,7 @@ fileName wgEncodeAwgTfbsSydhK562Atf106325UniPk.narrowPeak.gz
 lab Harvard
 md5sum b1fd97a8310b7058f281fd3543ea1879
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Atf106325UniPk
 target ATF1
 treatment None
@@ -8691,6 +9165,7 @@ fileName wgEncodeAwgTfbsSydhK562Atf3UniPk.narrowPeak.gz
 lab Harvard
 md5sum b9edee3f28dc652312c52344a5d7a238
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Atf3UniPk
 target ATF3
 treatment None
@@ -8710,6 +9185,7 @@ fileName wgEncodeAwgTfbsSydhK562Bach1sc14700IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum e4f689f314b46c6e4410ae4ba9b4053c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Bach1sc14700IggrabUniPk
 target BACH1
 treatment None
@@ -8729,6 +9205,7 @@ fileName wgEncodeAwgTfbsSydhK562Bdp1UniPk.narrowPeak.gz
 lab Harvard
 md5sum c56b32b11696c6779150286db3f66697
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Bdp1UniPk
 target BDP1
 treatment None
@@ -8748,6 +9225,7 @@ fileName wgEncodeAwgTfbsSydhK562Bhlhe40nb100IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 07e401d35647f16f11c4b8e41864b040
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Bhlhe40nb100IggrabUniPk
 target BHLHE40
 treatment None
@@ -8767,6 +9245,7 @@ fileName wgEncodeAwgTfbsSydhK562Brf1UniPk.narrowPeak.gz
 lab Harvard
 md5sum 5f059bff2c48558e90b0bf2424dc6917
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Brf1UniPk
 target BRF1
 treatment None
@@ -8786,6 +9265,7 @@ fileName wgEncodeAwgTfbsSydhK562Brf2UniPk.narrowPeak.gz
 lab Harvard
 md5sum a4d578ee2aee29902644ee98c912335c
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Brf2UniPk
 target BRF2
 treatment None
@@ -8805,6 +9285,7 @@ fileName wgEncodeAwgTfbsSydhK562Brg1IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 20b941f1378a98f2a3fd239e0a37d1aa
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Brg1IggmusUniPk
 target SMARCA4
 treatment None
@@ -8824,6 +9305,7 @@ fileName wgEncodeAwgTfbsSydhK562Ccnt2UniPk.narrowPeak.gz
 lab Harvard
 md5sum c1c18ce691168082b9e92e9f5930d279
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Ccnt2UniPk
 target CCNT2
 treatment None
@@ -8843,6 +9325,7 @@ fileName wgEncodeAwgTfbsSydhK562CebpbIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 128e574fb762df0afd330208c98156e1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CebpbIggrabUniPk
 target CEBPB
 treatment None
@@ -8862,6 +9345,7 @@ fileName wgEncodeAwgTfbsSydhK562CfosUniPk.narrowPeak.gz
 lab Yale
 md5sum 5c5f8d182c90f5134780f9e7ffc19bad
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CfosUniPk
 target FOS
 treatment None
@@ -8881,6 +9365,7 @@ fileName wgEncodeAwgTfbsSydhK562Chd2ab68301IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 677ddd34ff60ba5193b79263f2cca9e0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Chd2ab68301IggrabUniPk
 target CHD2
 treatment None
@@ -8900,6 +9385,7 @@ fileName wgEncodeAwgTfbsSydhK562CjunIfna30UniPk.narrowPeak.gz
 lab Stanford
 md5sum 4ed5c9549d9a227b8a846d3fb7e7ffac
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CjunIfna30UniPk
 target JUN
 treatment IFNa30
@@ -8919,6 +9405,7 @@ fileName wgEncodeAwgTfbsSydhK562CjunIfna6hUniPk.narrowPeak.gz
 lab Yale
 md5sum be9068ba3021088629266f8508992fe5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CjunIfna6hUniPk
 target JUN
 treatment IFNa6h
@@ -8938,6 +9425,7 @@ fileName wgEncodeAwgTfbsSydhK562CjunIfng30UniPk.narrowPeak.gz
 lab Yale
 md5sum 0607605b42f5d8f116405be520a98916
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CjunIfng30UniPk
 target JUN
 treatment IFNg30
@@ -8957,6 +9445,7 @@ fileName wgEncodeAwgTfbsSydhK562CjunIfng6hUniPk.narrowPeak.gz
 lab Yale
 md5sum fadc2031d33878aa8b647293054d5850
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CjunIfng6hUniPk
 target JUN
 treatment IFNg6h
@@ -8976,6 +9465,7 @@ fileName wgEncodeAwgTfbsSydhK562CjunUniPk.narrowPeak.gz
 lab Yale
 md5sum 1978a5312dfe99c47f8cd4a0e018c066
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CjunUniPk
 target JUN
 treatment None
@@ -8995,6 +9485,7 @@ fileName wgEncodeAwgTfbsSydhK562CmycIfna30UniPk.narrowPeak.gz
 lab Yale
 md5sum 1778059047f0462e9161772e09802ec2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CmycIfna30UniPk
 target MYC
 treatment IFNa30
@@ -9014,6 +9505,7 @@ fileName wgEncodeAwgTfbsSydhK562CmycIfna6hUniPk.narrowPeak.gz
 lab Yale
 md5sum 04f42fbfa4cf4afb939ccf9b942c0ea8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CmycIfna6hUniPk
 target MYC
 treatment IFNa6h
@@ -9033,6 +9525,7 @@ fileName wgEncodeAwgTfbsSydhK562CmycIfng30UniPk.narrowPeak.gz
 lab Stanford
 md5sum 05d7d6cd5a9a0b2001af61a333f54958
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CmycIfng30UniPk
 target MYC
 treatment IFNg30
@@ -9052,6 +9545,7 @@ fileName wgEncodeAwgTfbsSydhK562CmycIfng6hUniPk.narrowPeak.gz
 lab Yale
 md5sum 296c350a9dd99e044af001d938ae954b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CmycIfng6hUniPk
 target MYC
 treatment IFNg6h
@@ -9071,6 +9565,7 @@ fileName wgEncodeAwgTfbsSydhK562CmycIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1d3a6a49072d2ed900a16d155d735550
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CmycIggrabUniPk
 target MYC
 treatment None
@@ -9090,6 +9585,7 @@ fileName wgEncodeAwgTfbsSydhK562CmycUniPk.narrowPeak.gz
 lab Yale
 md5sum 7055cb5c4b48ae45acb3924f072ae3c6
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562CmycUniPk
 target MYC
 treatment None
@@ -9109,6 +9605,7 @@ fileName wgEncodeAwgTfbsSydhK562Corestab24166IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 8b8562274fd44aef5d47092569f31c26
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Corestab24166IggrabUniPk
 target RCOR1
 treatment None
@@ -9128,6 +9625,7 @@ fileName wgEncodeAwgTfbsSydhK562Corestsc30189IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 82bd8a40f69f35437f968dc9e25b5cd0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Corestsc30189IggrabUniPk
 target RCOR1
 treatment None
@@ -9147,6 +9645,7 @@ fileName wgEncodeAwgTfbsSydhK562CtcfbIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 9b7c0dbd11f2432dccb5c21598b9ad9d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562CtcfbIggrabUniPk
 target CTCF
 treatment None
@@ -9166,6 +9665,7 @@ fileName wgEncodeAwgTfbsSydhK562E2f4UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 008626821d8ae878b9be8686527ddf5f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562E2f4UcdUniPk
 target E2F4
 treatment None
@@ -9185,6 +9685,7 @@ fileName wgEncodeAwgTfbsSydhK562E2f6UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 84d64c579935881120a58a6ee7733fcc
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562E2f6UcdUniPk
 target E2F6
 treatment None
@@ -9204,6 +9705,7 @@ fileName wgEncodeAwgTfbsSydhK562Elk112771IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum ff218baeb974cd5e5da73049e089fa37
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Elk112771IggrabUniPk
 target ELK1
 treatment None
@@ -9223,6 +9725,7 @@ fileName wgEncodeAwgTfbsSydhK562Gata1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum efe43c7a3225016d3e89dd290fe7da47
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Gata1UcdUniPk
 target GATA1
 treatment None
@@ -9242,6 +9745,7 @@ fileName wgEncodeAwgTfbsSydhK562Gata2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 7d3ceb3d5f3ff40452c0c2aff2d3c0e9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Gata2UcdUniPk
 target GATA2
 treatment None
@@ -9261,6 +9765,7 @@ fileName wgEncodeAwgTfbsSydhK562Gtf2bUniPk.narrowPeak.gz
 lab Harvard
 md5sum a8c60a088dfcf29b4dfc18766d8a0200
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Gtf2bUniPk
 target GTF2B
 treatment None
@@ -9280,6 +9785,7 @@ fileName wgEncodeAwgTfbsSydhK562Gtf2f1ab28179IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum c98d14427010983f971e6cb50b3ea0a8
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Gtf2f1ab28179IggrabUniPk
 target GTF2F1
 treatment None
@@ -9299,6 +9805,7 @@ fileName wgEncodeAwgTfbsSydhK562Hmgn3UniPk.narrowPeak.gz
 lab Harvard
 md5sum 9128e0b9fa59f50d777bfd7ea528997c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Hmgn3UniPk
 target HMGN3
 treatment None
@@ -9318,6 +9825,7 @@ fileName wgEncodeAwgTfbsSydhK562Ini1IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7f88e32a168c47e96de9b3c9e7280e47
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Ini1IggmusUniPk
 target SMARCB1
 treatment None
@@ -9337,6 +9845,7 @@ fileName wgEncodeAwgTfbsSydhK562Irf1Ifna30UniPk.narrowPeak.gz
 lab Stanford
 md5sum ffc59aacd2a8d3b24ab77c52532dfee8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Irf1Ifna30UniPk
 target IRF1
 treatment IFNa30
@@ -9356,6 +9865,7 @@ fileName wgEncodeAwgTfbsSydhK562Irf1Ifna6hUniPk.narrowPeak.gz
 lab Stanford
 md5sum f4368713970583d17b6eb8c0de514f22
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Irf1Ifna6hUniPk
 target IRF1
 treatment IFNa6h
@@ -9375,6 +9885,7 @@ fileName wgEncodeAwgTfbsSydhK562Irf1Ifng30UniPk.narrowPeak.gz
 lab Stanford
 md5sum 76666e38ca451b79b9572fbf30793682
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Irf1Ifng30UniPk
 target IRF1
 treatment IFNg30
@@ -9394,6 +9905,7 @@ fileName wgEncodeAwgTfbsSydhK562Irf1Ifng6hUniPk.narrowPeak.gz
 lab Stanford
 md5sum e361fe07e215193bb8ba437eb6c77418
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Irf1Ifng6hUniPk
 target IRF1
 treatment IFNg6h
@@ -9413,6 +9925,7 @@ fileName wgEncodeAwgTfbsSydhK562JundIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum cbb959953a79618b15c2e71825a9b0e3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562JundIggrabUniPk
 target JUND
 treatment None
@@ -9432,6 +9945,7 @@ fileName wgEncodeAwgTfbsSydhK562Kap1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum aa3b3804cedafaee7237f97ba59e8fab
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Kap1UcdUniPk
 target KAP1
 treatment None
@@ -9451,6 +9965,7 @@ fileName wgEncodeAwgTfbsSydhK562MaffIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum b24d7bf3cb9f936b9194c97bfdd874b6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562MaffIggrabUniPk
 target MAFF
 treatment None
@@ -9470,6 +9985,7 @@ fileName wgEncodeAwgTfbsSydhK562Mafkab50322IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum adebbd60d0977a0b4cdb672794f7c8fa
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Mafkab50322IggrabUniPk
 target MAFK
 treatment None
@@ -9489,6 +10005,7 @@ fileName wgEncodeAwgTfbsSydhK562MaxIggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 336cd3dd68bba0990d14e365b499f405
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562MaxIggrabUniPk
 target MAX
 treatment None
@@ -9508,6 +10025,7 @@ fileName wgEncodeAwgTfbsSydhK562Mazab85725IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum fdb9b9c628dca50372f824752beb3197
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Mazab85725IggrabUniPk
 target MAZ
 treatment None
@@ -9527,6 +10045,7 @@ fileName wgEncodeAwgTfbsSydhK562Mxi1af4185IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 96ff861bee5de60f37b0597dd893b3d9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Mxi1af4185IggrabUniPk
 target MXI1
 treatment None
@@ -9546,6 +10065,7 @@ fileName wgEncodeAwgTfbsSydhK562NelfeUniPk.narrowPeak.gz
 lab Harvard
 md5sum a4b21e1fb936e6f441a21832a1a6d2a8
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562NelfeUniPk
 target RDBP
 treatment None
@@ -9565,6 +10085,7 @@ fileName wgEncodeAwgTfbsSydhK562Nfe2UniPk.narrowPeak.gz
 lab Yale
 md5sum acfc92b8fbbdff836570a4d091341dd0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Nfe2UniPk
 target NFE2
 treatment None
@@ -9584,6 +10105,7 @@ fileName wgEncodeAwgTfbsSydhK562NfyaUniPk.narrowPeak.gz
 lab Stanford
 md5sum cdbe1c41713d850740d9417be695b453
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562NfyaUniPk
 target NFYA
 treatment None
@@ -9603,6 +10125,7 @@ fileName wgEncodeAwgTfbsSydhK562NfybUniPk.narrowPeak.gz
 lab Stanford
 md5sum 22c1c9de7fa4aafeec255348550f60ce
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562NfybUniPk
 target NFYB
 treatment None
@@ -9622,6 +10145,7 @@ fileName wgEncodeAwgTfbsSydhK562Nrf1IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 66fdef68b6500a998a91d973ca026574
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Nrf1IggrabUniPk
 target NRF1
 treatment None
@@ -9641,6 +10165,7 @@ fileName wgEncodeAwgTfbsSydhK562P300IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum c249cd881bcbe766b8b6434841ef83fe
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562P300IggrabUniPk
 target EP300
 treatment None
@@ -9660,6 +10185,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol2Ifna30UniPk.narrowPeak.gz
 lab Yale
 md5sum 18ac489b288e97d2379c3edfd1389a69
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Pol2Ifna30UniPk
 target POLR2A
 treatment IFNa30
@@ -9679,6 +10205,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol2Ifna6hUniPk.narrowPeak.gz
 lab Yale
 md5sum 21de0e2442ce03798762891548c22000
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Pol2Ifna6hUniPk
 target POLR2A
 treatment IFNa6h
@@ -9698,6 +10225,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol2Ifng30UniPk.narrowPeak.gz
 lab Stanford
 md5sum a3519afd76c8c0b420d725f9cc29e797
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Pol2Ifng30UniPk
 target POLR2A
 treatment IFNg30
@@ -9717,6 +10245,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol2Ifng6hUniPk.narrowPeak.gz
 lab Yale
 md5sum ebbd45c24ba080fbbbbdf654bb0ddb50
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Pol2Ifng6hUniPk
 target POLR2A
 treatment IFNg6h
@@ -9736,6 +10265,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol2IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7e787962db9afca8866a27b5b5c454cd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Pol2IggmusUniPk
 target POLR2A
 treatment None
@@ -9755,6 +10285,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol2UniPk.narrowPeak.gz
 lab Yale
 md5sum a7afcd90b36af6488e30757a4b41d3e1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Pol2UniPk
 target POLR2A
 treatment None
@@ -9774,6 +10305,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol2s2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum bd99afae8066a349554740274dce7bf2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Pol2s2IggrabUniPk
 target POLR2A
 treatment None
@@ -9793,6 +10325,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol2s2UniPk.narrowPeak.gz
 lab Stanford
 md5sum e7b40ce549a37e57187847bc662bf2c6
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Pol2s2UniPk
 target POLR2A
 treatment None
@@ -9812,6 +10345,7 @@ fileName wgEncodeAwgTfbsSydhK562Pol3UniPk.narrowPeak.gz
 lab Stanford
 md5sum d7c9ca6221fbc6980efc2664fcab0a8d
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Pol3UniPk
 target POLR3G
 treatment None
@@ -9831,6 +10365,7 @@ fileName wgEncodeAwgTfbsSydhK562Rad21UniPk.narrowPeak.gz
 lab Yale
 md5sum d13411c1913f4c9275d04e9ed95c948a
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Rad21UniPk
 target RAD21
 treatment None
@@ -9850,6 +10385,7 @@ fileName wgEncodeAwgTfbsSydhK562Rfx5IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 109e9156d979ca5cb479568f4227234a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Rfx5IggrabUniPk
 target RFX5
 treatment None
@@ -9869,6 +10405,7 @@ fileName wgEncodeAwgTfbsSydhK562Rpc155UniPk.narrowPeak.gz
 lab Harvard
 md5sum 1d718d50457e64defc29e6666f0dfcd6
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Rpc155UniPk
 target RPC155
 treatment None
@@ -9888,6 +10425,7 @@ fileName wgEncodeAwgTfbsSydhK562Setdb1MnasedUcdUniPk.narrowPeak.gz
 lab USC
 md5sum 03e78f814a26f060d0cae6b5ae076811
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Setdb1MnasedUcdUniPk
 target SETDB1
 treatment MNaseD
@@ -9907,6 +10445,7 @@ fileName wgEncodeAwgTfbsSydhK562Setdb1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum b0a00de1fb82af25b0246f81960e58dd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Setdb1UcdUniPk
 target SETDB1
 treatment None
@@ -9926,6 +10465,7 @@ fileName wgEncodeAwgTfbsSydhK562Sirt6UniPk.narrowPeak.gz
 lab Harvard
 md5sum ff45d8b1f0dd0ac944ede5d4b3d8d5cc
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Sirt6UniPk
 target SIRT6
 treatment None
@@ -9945,6 +10485,7 @@ fileName wgEncodeAwgTfbsSydhK562Smc3ab9263IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 1892cde66b8145a475ada2e1abaef46a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Smc3ab9263IggrabUniPk
 target SMC3
 treatment None
@@ -9964,6 +10505,7 @@ fileName wgEncodeAwgTfbsSydhK562Stat1Ifna30UniPk.narrowPeak.gz
 lab Yale
 md5sum 6a1d741ba19cb216b52409a6722f60b2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Stat1Ifna30UniPk
 target STAT1
 treatment IFNa30
@@ -9983,6 +10525,7 @@ fileName wgEncodeAwgTfbsSydhK562Stat1Ifna6hUniPk.narrowPeak.gz
 lab Yale
 md5sum b494cf25225be97c2de7c71051a32fcf
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Stat1Ifna6hUniPk
 target STAT1
 treatment IFNa6h
@@ -10002,6 +10545,7 @@ fileName wgEncodeAwgTfbsSydhK562Stat1Ifng30UniPk.narrowPeak.gz
 lab Stanford
 md5sum fb3e808478d1bd605a999d20b7383c5a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Stat1Ifng30UniPk
 target STAT1
 treatment IFNg30
@@ -10021,6 +10565,7 @@ fileName wgEncodeAwgTfbsSydhK562Stat1Ifng6hUniPk.narrowPeak.gz
 lab Stanford
 md5sum 5f8257e84c4cf78da1f0b59a6315103f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Stat1Ifng6hUniPk
 target STAT1
 treatment IFNg6h
@@ -10040,6 +10585,7 @@ fileName wgEncodeAwgTfbsSydhK562Stat2Ifna30UniPk.narrowPeak.gz
 lab Yale
 md5sum 71305fb48a39b3b46aa33fc1b0d3d4a9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Stat2Ifna30UniPk
 target STAT2
 treatment IFNa30
@@ -10059,6 +10605,7 @@ fileName wgEncodeAwgTfbsSydhK562Stat2Ifna6hUniPk.narrowPeak.gz
 lab Yale
 md5sum 471a285bff62c78d48e97844f97b463c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Stat2Ifna6hUniPk
 target STAT2
 treatment IFNa6h
@@ -10078,6 +10625,7 @@ fileName wgEncodeAwgTfbsSydhK562Tal1sc12984IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 0e59e97c913fdbebe316d3f1862e9816
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Tal1sc12984IggmusUniPk
 target TAL1
 treatment None
@@ -10097,6 +10645,7 @@ fileName wgEncodeAwgTfbsSydhK562Tblr1ab24550IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 79f5270ac0f61613c36bab7009666c46
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Tblr1ab24550IggrabUniPk
 target TBL1XR1
 treatment None
@@ -10116,6 +10665,7 @@ fileName wgEncodeAwgTfbsSydhK562Tblr1nb600270IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 5b63b2fabb582f5e24099cc45c12ab5b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Tblr1nb600270IggrabUniPk
 target TBL1XR1
 treatment None
@@ -10135,6 +10685,7 @@ fileName wgEncodeAwgTfbsSydhK562TbpIggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 2eb1ddbefa8e3e31585b392e1cc6eec2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562TbpIggmusUniPk
 target TBP
 treatment None
@@ -10154,6 +10705,7 @@ fileName wgEncodeAwgTfbsSydhK562Tf3c110UniPk.narrowPeak.gz
 lab Harvard
 md5sum f4d548086e1effea2d38f52818cc83d9
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Tf3c110UniPk
 target GTF3C2
 treatment None
@@ -10173,6 +10725,7 @@ fileName wgEncodeAwgTfbsSydhK562Tr4UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 1877264f02e0130d5dace7a0aee0f4c4
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Tr4UcdUniPk
 target NR2C2
 treatment None
@@ -10192,6 +10745,7 @@ fileName wgEncodeAwgTfbsSydhK562Ubfsc13125IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 14a486716ed30a2abca91144b1b3a8c2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Ubfsc13125IggmusUniPk
 target UBTF
 treatment None
@@ -10211,6 +10765,7 @@ fileName wgEncodeAwgTfbsSydhK562Ubtfsab1404509IggmusUniPk.narrowPeak.gz
 lab Stanford
 md5sum 527574d46518b260b0b525760ca0223b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Ubtfsab1404509IggmusUniPk
 target UBTF
 treatment None
@@ -10230,6 +10785,7 @@ fileName wgEncodeAwgTfbsSydhK562Usf2IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 7a0ac9ddd186b461cc499e1a86454194
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Usf2IggrabUniPk
 target USF2
 treatment None
@@ -10249,6 +10805,7 @@ fileName wgEncodeAwgTfbsSydhK562Yy1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum a509ed11f6d755457f70e4eea2719f17
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhK562Yy1UcdUniPk
 target YY1
 treatment None
@@ -10268,6 +10825,7 @@ fileName wgEncodeAwgTfbsSydhK562Znf143IggrabUniPk.narrowPeak.gz
 lab Stanford
 md5sum 67b90ed47d8214e3bb76696e8f86e670
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Znf143IggrabUniPk
 target ZNF143
 treatment None
@@ -10287,6 +10845,7 @@ fileName wgEncodeAwgTfbsSydhK562Znf263UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 7326c67c0c5cb90bf062d7cf021402f3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Znf263UcdUniPk
 target ZNF263
 treatment None
@@ -10306,6 +10865,7 @@ fileName wgEncodeAwgTfbsSydhK562Znf274UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 67b8f9bc725eb5a45a0abacb111261d3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Znf274UcdUniPk
 target ZNF274
 treatment None
@@ -10325,6 +10885,7 @@ fileName wgEncodeAwgTfbsSydhK562Znf274m01UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 448c3b426f5507ebcfe1ff10e10b3aa9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhK562Znf274m01UcdUniPk
 target ZNF274
 treatment None
@@ -10344,6 +10905,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesCfosEtoh01HvdUniPk.narrowPeak.gz
 lab Harvard
 md5sum e15982569f8b40b27335a6d911a9768a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesCfosEtoh01HvdUniPk
 target FOS
 treatment EtOH_0.01pct
@@ -10363,6 +10925,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesCfosTam112hHvdUniPk.narrowPeak.gz
 lab Harvard
 md5sum 43cebcd8cc0de30c0858565f7cec0c0b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesCfosTam112hHvdUniPk
 target FOS
 treatment 4OHTAM_1uM_12hr
@@ -10382,6 +10945,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesCfosTam14hHvdUniPk.narrowPeak.gz
 lab Harvard
 md5sum e386a1fdc3ecd380092e5145f03a14d5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesCfosTam14hHvdUniPk
 target FOS
 treatment 4OHTAM_1uM_4hr
@@ -10401,6 +10965,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesCfosTamHvdUniPk.narrowPeak.gz
 lab Harvard
 md5sum 6a11de223de1a7341462fe5cd1f4b627
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesCfosTamHvdUniPk
 target FOS
 treatment 4OHTAM_1uM_36hr
@@ -10420,6 +10985,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesCmycEtoh01HvdUniPk.narrowPeak.gz
 lab Harvard
 md5sum db85285b82bd0ed72415b49d11f60333
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesCmycEtoh01HvdUniPk
 target MYC
 treatment EtOH_0.01pct
@@ -10439,6 +11005,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesCmycTam14hHvdUniPk.narrowPeak.gz
 lab Harvard
 md5sum a7c0238653b2ca03581f156b0b20a188
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesCmycTam14hHvdUniPk
 target MYC
 treatment 4OHTAM_1uM_4hr
@@ -10458,6 +11025,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesE2f4TamHvdUniPk.narrowPeak.gz
 lab Harvard
 md5sum 9a5c68132bc28260446c09ffc42af12c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesE2f4TamHvdUniPk
 target E2F4
 treatment 4OHTAM_1uM_36hr
@@ -10477,6 +11045,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesPol2Etoh01UniPk.narrowPeak.gz
 lab Harvard
 md5sum 04b176fc1d07da1cb57724d9f050b233
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesPol2Etoh01UniPk
 target POLR2A
 treatment EtOH_0.01pct
@@ -10496,6 +11065,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesPol2TamUniPk.narrowPeak.gz
 lab Harvard
 md5sum 24e92398f951dafa03d2835ab91bb5a6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesPol2TamUniPk
 target POLR2A
 treatment 4OHTAM_1uM_36hr
@@ -10515,6 +11085,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01UniPk.narrowPeak.gz
 lab Harvard
 md5sum 2eb7d7979ef51ea828bd28f721ade6d4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01UniPk
 target STAT3
 treatment EtOH_0.01pct
@@ -10534,6 +11105,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01bUniPk.narrowPeak.gz
 lab Harvard
 md5sum d904f1175fb97277af05dbd4c7aef371
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01bUniPk
 target STAT3
 treatment EtOH_0.01pct_4hr
@@ -10553,6 +11125,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01cUniPk.narrowPeak.gz
 lab Harvard
 md5sum a2d8f4dc3489a420a0636b1b20de2a83
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesStat3Etoh01cUniPk
 target STAT3
 treatment EtOH_0.01pct_12hr
@@ -10572,6 +11145,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesStat3Tam112hHvdUniPk.narrowPeak.gz
 lab Harvard
 md5sum b50f735675da2dc56e203bb0e47b8034
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesStat3Tam112hHvdUniPk
 target STAT3
 treatment 4OHTAM_1uM_12hr
@@ -10591,6 +11165,7 @@ fileName wgEncodeAwgTfbsSydhMcf10aesStat3TamUniPk.narrowPeak.gz
 lab Harvard
 md5sum b41b5d4b1fe132a55ecb2aeb0e00b83a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf10aesStat3TamUniPk
 target STAT3
 treatment 4OHTAM_1uM_36hr
@@ -10610,6 +11185,7 @@ fileName wgEncodeAwgTfbsSydhMcf7Gata3UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 6f0b04d21f67ae24ff9bd38208f10e51
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf7Gata3UcdUniPk
 target GATA3
 treatment None
@@ -10629,6 +11205,7 @@ fileName wgEncodeAwgTfbsSydhMcf7Gata3sc269UcdUniPk.narrowPeak.gz
 lab USC
 md5sum e99ee42bf7a64b3649255602a269a15e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf7Gata3sc269UcdUniPk
 target GATA3
 treatment None
@@ -10648,6 +11225,7 @@ fileName wgEncodeAwgTfbsSydhMcf7Hae2f1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum a057039dd54554b610ebf05b51ef7523
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf7Hae2f1UcdUniPk
 target HA-E2F1
 treatment None
@@ -10667,6 +11245,7 @@ fileName wgEncodeAwgTfbsSydhMcf7Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 47d26f7991c22039c9bdb3bcfa8becbf
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf7Tcf7l2UcdUniPk
 target TCF7L2
 treatment None
@@ -10686,6 +11265,7 @@ fileName wgEncodeAwgTfbsSydhMcf7Znf217UcdUniPk.narrowPeak.gz
 lab USC
 md5sum e55b00070161b06a0623b800dbc9a3c7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhMcf7Znf217UcdUniPk
 target ZNF217
 treatment None
@@ -10705,6 +11285,7 @@ fileName wgEncodeAwgTfbsSydhNb4CmycUniPk.narrowPeak.gz
 lab Stanford
 md5sum 9632444097a2d6a861641e6db0bc0404
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhNb4CmycUniPk
 target MYC
 treatment None
@@ -10724,6 +11305,7 @@ fileName wgEncodeAwgTfbsSydhNb4MaxUniPk.narrowPeak.gz
 lab Stanford
 md5sum 10611a39cc46ab92f4e48bb3cf1b598c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhNb4MaxUniPk
 target MAX
 treatment None
@@ -10743,6 +11325,7 @@ fileName wgEncodeAwgTfbsSydhNb4Pol2UniPk.narrowPeak.gz
 lab Yale
 md5sum 04cd6bd134a8525982d153826468cbdb
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhNb4Pol2UniPk
 target POLR2A
 treatment None
@@ -10762,6 +11345,7 @@ fileName wgEncodeAwgTfbsSydhNt2d1Suz12UcdUniPk.narrowPeak.gz
 lab USC
 md5sum bdeac9336c9409b6116cb21874b3e60a
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhNt2d1Suz12UcdUniPk
 target SUZ12
 treatment None
@@ -10781,6 +11365,7 @@ fileName wgEncodeAwgTfbsSydhNt2d1Yy1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum d3497f82d6ae32b9fb8978b110a2d763
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhNt2d1Yy1UcdUniPk
 target YY1
 treatment None
@@ -10800,6 +11385,7 @@ fileName wgEncodeAwgTfbsSydhNt2d1Znf274UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 11f0473a421c1649f794653e2cc0c41d
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhNt2d1Znf274UcdUniPk
 target ZNF274
 treatment None
@@ -10819,6 +11405,7 @@ fileName wgEncodeAwgTfbsSydhPanc1Tcf7l2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum e1fae2efabb196b1a6e6c8393ec1ee67
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhPanc1Tcf7l2UcdUniPk
 target TCF7L2
 treatment None
@@ -10838,6 +11425,7 @@ fileName wgEncodeAwgTfbsSydhPbdeGata1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 1fc581002d20b6c9b5e779eeb0acf49f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhPbdeGata1UcdUniPk
 target GATA1
 treatment None
@@ -10857,6 +11445,7 @@ fileName wgEncodeAwgTfbsSydhPbdePol2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 4fb02f2a8c634935e5e7b50ae0e805bb
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhPbdePol2UcdUniPk
 target POLR2A
 treatment None
@@ -10876,6 +11465,7 @@ fileName wgEncodeAwgTfbsSydhPbdefetalGata1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 30008f7ae9d7e290fe1a6d36f8fec033
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsSydhPbdefetalGata1UcdUniPk
 target GATA1
 treatment None
@@ -10895,6 +11485,7 @@ fileName wgEncodeAwgTfbsSydhRajiPol2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum f0eabcc2ced046b03c0e971140a8bce3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhRajiPol2UcdUniPk
 target POLR2A
 treatment None
@@ -10914,6 +11505,7 @@ fileName wgEncodeAwgTfbsSydhShsy5yGata2UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 9feeda4b8d0bab625d1884b8a79540e4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhShsy5yGata2UcdUniPk
 target GATA2
 treatment None
@@ -10933,6 +11525,7 @@ fileName wgEncodeAwgTfbsSydhShsy5yGata3sc269sc269UcdUniPk.narrowPeak.gz
 lab USC
 md5sum 0685ad6055c25cda53af1f26385cb4b7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhShsy5yGata3sc269sc269UcdUniPk
 target GATA3
 treatment None
@@ -10952,6 +11545,7 @@ fileName wgEncodeAwgTfbsSydhU2osKap1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum cbdc069349d25fa2f93939d682f8752e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhU2osKap1UcdUniPk
 target KAP1
 treatment None
@@ -10971,6 +11565,7 @@ fileName wgEncodeAwgTfbsSydhU2osSetdb1UcdUniPk.narrowPeak.gz
 lab USC
 md5sum dbe149f82e9ea64042e24af7a1929ac7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsSydhU2osSetdb1UcdUniPk
 target SETDB1
 treatment None
@@ -10989,6 +11584,7 @@ dccAccession wgEncodeEH001207
 fileName wgEncodeAwgTfbsUchicagoK562EfosUniPk.narrowPeak.gz
 lab UChicago
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUchicagoK562EfosUniPk
 target FOS
 treatment None
@@ -11007,6 +11603,7 @@ dccAccession wgEncodeEH001208
 fileName wgEncodeAwgTfbsUchicagoK562Egata2UniPk.narrowPeak.gz
 lab UChicago
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUchicagoK562Egata2UniPk
 target GATA2
 treatment None
@@ -11025,6 +11622,7 @@ dccAccession wgEncodeEH001209
 fileName wgEncodeAwgTfbsUchicagoK562Ehdac8UniPk.narrowPeak.gz
 lab UChicago
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsUchicagoK562Ehdac8UniPk
 target HDAC8
 treatment None
@@ -11043,6 +11641,7 @@ dccAccession wgEncodeEH001210
 fileName wgEncodeAwgTfbsUchicagoK562EjunbUniPk.narrowPeak.gz
 lab UChicago
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUchicagoK562EjunbUniPk
 target JUNB
 treatment None
@@ -11061,15 +11660,11 @@ dccAccession wgEncodeEH001211
 fileName wgEncodeAwgTfbsUchicagoK562EjundUniPk.narrowPeak.gz
 lab UChicago
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUchicagoK562EjundUniPk
 target JUND
 treatment None
 view Peaks
-
-metaObject wgEncodeAwgTfbsUniform
-objType composite
-composite wgEncodeAwgTfbsUniform
-expVars lab, dataType, cell, antibody, treatment
 
 metaObject wgEncodeAwgTfbsUtaA549CtcfUniPk
 objType table
@@ -11084,6 +11679,7 @@ fileName wgEncodeAwgTfbsUtaA549CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 27483a0ae0439541c3e36921b87ca2d3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaA549CtcfUniPk
 target CTCF
 treatment None
@@ -11102,6 +11698,7 @@ fileName wgEncodeAwgTfbsUtaA549Pol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum 075b263f0bf19ec68648e9b50f90ac0e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaA549Pol2UniPk
 target POLR2A
 treatment None
@@ -11120,6 +11717,7 @@ fileName wgEncodeAwgTfbsUtaFibroblCtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 1175a495ba5e633ded520fdcf2578b2f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaFibroblCtcfUniPk
 target CTCF
 treatment None
@@ -11138,6 +11736,7 @@ fileName wgEncodeAwgTfbsUtaGlioblaCtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 362908e93b1d3336a55a7a6159563a2e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGlioblaCtcfUniPk
 target CTCF
 treatment None
@@ -11156,6 +11755,7 @@ fileName wgEncodeAwgTfbsUtaGlioblaPol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum 95ded8af73f6830bf470bffd5e2044f4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGlioblaPol2UniPk
 target POLR2A
 treatment None
@@ -11174,6 +11774,7 @@ fileName wgEncodeAwgTfbsUtaGm12878CmycUniPk.narrowPeak.gz
 lab UT-A
 md5sum ac2423a3c94ad4b805cf9ae8abf5aa44
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsUtaGm12878CmycUniPk
 target MYC
 treatment None
@@ -11192,6 +11793,7 @@ fileName wgEncodeAwgTfbsUtaGm12878CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 20a40415c83cd1559475e5ade480f83f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGm12878CtcfUniPk
 target CTCF
 treatment None
@@ -11210,6 +11812,7 @@ fileName wgEncodeAwgTfbsUtaGm12878Pol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum 59db62a610702c4d37aedb68aaed42a9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGm12878Pol2UniPk
 target POLR2A
 treatment None
@@ -11228,6 +11831,7 @@ fileName wgEncodeAwgTfbsUtaGm12891CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 6378ae856127ce6e8a2ea79088d12684
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGm12891CtcfUniPk
 target CTCF
 treatment None
@@ -11246,6 +11850,7 @@ fileName wgEncodeAwgTfbsUtaGm12892CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 4952b8d17ca1a89314eb83744902f2f1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGm12892CtcfUniPk
 target CTCF
 treatment None
@@ -11264,6 +11869,7 @@ fileName wgEncodeAwgTfbsUtaGm19238CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum c9cf93a5d4649aaaed5834548f70000c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGm19238CtcfUniPk
 target CTCF
 treatment None
@@ -11282,6 +11888,7 @@ fileName wgEncodeAwgTfbsUtaGm19239CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum e82b66cf2af2b2746c765e042676a9b3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGm19239CtcfUniPk
 target CTCF
 treatment None
@@ -11300,6 +11907,7 @@ fileName wgEncodeAwgTfbsUtaGm19240CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum f134e1aff0f1796a55818bb9eb870e4f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaGm19240CtcfUniPk
 target CTCF
 treatment None
@@ -11318,6 +11926,7 @@ fileName wgEncodeAwgTfbsUtaH1hescCmycUniPk.narrowPeak.gz
 lab UT-A
 md5sum 4752e9a70f997109e9b94c08a29b4266
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsUtaH1hescCmycUniPk
 target MYC
 treatment None
@@ -11336,6 +11945,7 @@ fileName wgEncodeAwgTfbsUtaH1hescCtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 55c99f091413293269264e8c605244f8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaH1hescCtcfUniPk
 target CTCF
 treatment None
@@ -11354,6 +11964,7 @@ fileName wgEncodeAwgTfbsUtaH1hescPol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum de19cba0cc16ca82957a24d843223837
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaH1hescPol2UniPk
 target POLR2A
 treatment None
@@ -11372,6 +11983,7 @@ fileName wgEncodeAwgTfbsUtaHelas3CmycUniPk.narrowPeak.gz
 lab UT-A
 md5sum 06741adc6faaebdd55add51e836cd953
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaHelas3CmycUniPk
 target MYC
 treatment None
@@ -11390,6 +12002,7 @@ fileName wgEncodeAwgTfbsUtaHelas3CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 107d17822b1e8d400c31682ce57d6ad8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaHelas3CtcfUniPk
 target CTCF
 treatment None
@@ -11408,6 +12021,7 @@ fileName wgEncodeAwgTfbsUtaHelas3Pol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum a994ef66c8e5a0ffeed39ba827855c04
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaHelas3Pol2UniPk
 target POLR2A
 treatment None
@@ -11426,6 +12040,7 @@ fileName wgEncodeAwgTfbsUtaHepg2CmycUniPk.narrowPeak.gz
 lab UT-A
 md5sum 142139bb34bd1749bc1384dd5acb205c
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsUtaHepg2CmycUniPk
 target MYC
 treatment None
@@ -11444,6 +12059,7 @@ fileName wgEncodeAwgTfbsUtaHepg2CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 0e92a29d4bd517996dba3889dbf96294
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaHepg2CtcfUniPk
 target CTCF
 treatment None
@@ -11462,6 +12078,7 @@ fileName wgEncodeAwgTfbsUtaHepg2Pol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum 823943db22d834884b8c5c8ede8b87a3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaHepg2Pol2UniPk
 target POLR2A
 treatment None
@@ -11480,6 +12097,7 @@ fileName wgEncodeAwgTfbsUtaHuvecCmycUniPk.narrowPeak.gz
 lab UT-A
 md5sum b2977b3798ff3381af1ae59d23b0cf1b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaHuvecCmycUniPk
 target MYC
 treatment None
@@ -11498,6 +12116,7 @@ fileName wgEncodeAwgTfbsUtaHuvecCtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 9f89b551344f79857d08410019e7803a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaHuvecCtcfUniPk
 target CTCF
 treatment None
@@ -11516,6 +12135,7 @@ fileName wgEncodeAwgTfbsUtaHuvecPol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum cc8894375a487c6020c070f613f20920
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaHuvecPol2UniPk
 target POLR2A
 treatment None
@@ -11534,6 +12154,7 @@ fileName wgEncodeAwgTfbsUtaK562CmycUniPk.narrowPeak.gz
 lab UT-A
 md5sum e11bd4c3e9e8c386704fa4b0d5604d19
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaK562CmycUniPk
 target MYC
 treatment None
@@ -11552,6 +12173,7 @@ fileName wgEncodeAwgTfbsUtaK562CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 9f9af7c966d1dcfa979e9a822dfcbf23
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaK562CtcfUniPk
 target CTCF
 treatment None
@@ -11570,6 +12192,7 @@ fileName wgEncodeAwgTfbsUtaK562Pol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum baf9147feb77400ad58cb42c51f9b6c0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaK562Pol2UniPk
 target POLR2A
 treatment None
@@ -11588,6 +12211,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CmycEstroUniPk.narrowPeak.gz
 lab UT-A
 md5sum c8ade87ff2cb031176220f1a1e269574
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CmycEstroUniPk
 target MYC
 treatment estrogen
@@ -11606,6 +12230,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CmycSerumstimUniPk.narrowPeak.gz
 lab UT-A
 md5sum 3d539dd3602a4f900d40b6f697475e6c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CmycSerumstimUniPk
 target MYC
 treatment serum_stimulated_media
@@ -11624,6 +12249,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CmycSerumstvdUniPk.narrowPeak.gz
 lab UT-A
 md5sum 2f2d4c2d35983a3078368c6d4701dda5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CmycSerumstvdUniPk
 target MYC
 treatment serum_starved_media
@@ -11642,6 +12268,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CmycVehUniPk.narrowPeak.gz
 lab UT-A
 md5sum 4c4a66a7650d1d4d03eb4ff167445be6
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CmycVehUniPk
 target MYC
 treatment vehicle
@@ -11660,6 +12287,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CtcfEstroUniPk.narrowPeak.gz
 lab UT-A
 md5sum 75cb8e48f047b3c1ab3c97f756a7487f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CtcfEstroUniPk
 target CTCF
 treatment estrogen
@@ -11678,6 +12306,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CtcfSerumstimUniPk.narrowPeak.gz
 lab UT-A
 md5sum 2b9f854883027fa9df8432f4f861942e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CtcfSerumstimUniPk
 target CTCF
 treatment serum_stimulated_media
@@ -11696,6 +12325,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CtcfSerumstvdUniPk.narrowPeak.gz
 lab UT-A
 md5sum a4ae39f7e753facd02f13caba16d5b10
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CtcfSerumstvdUniPk
 target CTCF
 treatment serum_starved_media
@@ -11714,6 +12344,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 2c28a7d6a715355a6bdeca769737a903
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CtcfUniPk
 target CTCF
 treatment None
@@ -11732,6 +12363,7 @@ fileName wgEncodeAwgTfbsUtaMcf7CtcfVehUniPk.narrowPeak.gz
 lab UT-A
 md5sum 05c7514d1ee9d6b866482e402a492b49
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7CtcfVehUniPk
 target CTCF
 treatment vehicle
@@ -11750,6 +12382,7 @@ fileName wgEncodeAwgTfbsUtaMcf7Pol2SerumstimUniPk.narrowPeak.gz
 lab UT-A
 md5sum dd199ec950db1c566add5020fe5d7ab4
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7Pol2SerumstimUniPk
 target POLR2A
 treatment serum_stimulated_media
@@ -11768,6 +12401,7 @@ fileName wgEncodeAwgTfbsUtaMcf7Pol2SerumstvdUniPk.narrowPeak.gz
 lab UT-A
 md5sum f01c4e54247743281d8834e2c10b36ad
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7Pol2SerumstvdUniPk
 target POLR2A
 treatment serum_starved_media
@@ -11786,6 +12420,7 @@ fileName wgEncodeAwgTfbsUtaMcf7Pol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum 4204af3e96066281bf0664dc0d2692a0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaMcf7Pol2UniPk
 target POLR2A
 treatment None
@@ -11804,6 +12439,7 @@ fileName wgEncodeAwgTfbsUtaNhekCtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 620f3110de41b7d09622e1ec34013b03
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaNhekCtcfUniPk
 target CTCF
 treatment None
@@ -11822,6 +12458,7 @@ fileName wgEncodeAwgTfbsUtaProgfibCtcfUniPk.narrowPeak.gz
 lab UT-A
 md5sum 890f52b9eb43fd9cfc7a16ace00c9e0c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaProgfibCtcfUniPk
 target CTCF
 treatment None
@@ -11840,6 +12477,7 @@ fileName wgEncodeAwgTfbsUtaProgfibPol2UniPk.narrowPeak.gz
 lab UT-A
 md5sum 8357ee986f20cbfbbbe94d49e35f1abf
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUtaProgfibPol2UniPk
 target POLR2A
 treatment None
@@ -11859,6 +12497,7 @@ fileName wgEncodeAwgTfbsUwA549CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum bf4b4cdc233c0e39186cda682c944d0d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwA549CtcfUniPk
 target CTCF
 treatment None
@@ -11878,6 +12517,7 @@ fileName wgEncodeAwgTfbsUwAg04449CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum b00bb895fd9428edfb2822ac953aa125
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwAg04449CtcfUniPk
 target CTCF
 treatment None
@@ -11897,6 +12537,7 @@ fileName wgEncodeAwgTfbsUwAg04450CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 425fcf0eb9e0bcd4876b6b70b5606652
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwAg04450CtcfUniPk
 target CTCF
 treatment None
@@ -11916,6 +12557,7 @@ fileName wgEncodeAwgTfbsUwAg09309CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum bc79e9047a9eeed273259ca714333161
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwAg09309CtcfUniPk
 target CTCF
 treatment None
@@ -11935,6 +12577,7 @@ fileName wgEncodeAwgTfbsUwAg09319CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 03c529ab1557821b06c2f9bd64f99a69
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwAg09319CtcfUniPk
 target CTCF
 treatment None
@@ -11954,6 +12597,7 @@ fileName wgEncodeAwgTfbsUwAg10803CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum cf7963eab70d3931b3f528986006a07c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwAg10803CtcfUniPk
 target CTCF
 treatment None
@@ -11973,6 +12617,7 @@ fileName wgEncodeAwgTfbsUwAoafCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum ed1317c433dd15780ff3d895be9d4b9f
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwAoafCtcfUniPk
 target CTCF
 treatment None
@@ -11992,6 +12637,7 @@ fileName wgEncodeAwgTfbsUwBe2cCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 33806f90c1b4a0ea3b9ac003a38b3138
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwBe2cCtcfUniPk
 target CTCF
 treatment None
@@ -12011,6 +12657,7 @@ fileName wgEncodeAwgTfbsUwBjCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum e82a7ae3d66a8c4f2a4a395ad37ab4a0
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwBjCtcfUniPk
 target CTCF
 treatment None
@@ -12030,6 +12677,7 @@ fileName wgEncodeAwgTfbsUwCaco2CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum f9b408885d519cf38118e79ed8b788e3
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwCaco2CtcfUniPk
 target CTCF
 treatment None
@@ -12049,6 +12697,7 @@ fileName wgEncodeAwgTfbsUwGm06990CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum b07730d2517fc45655e51920a5c5af2e
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm06990CtcfUniPk
 target CTCF
 treatment None
@@ -12068,6 +12717,7 @@ fileName wgEncodeAwgTfbsUwGm12801CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 553064e2671af8e2f95b4bd0084cef8c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm12801CtcfUniPk
 target CTCF
 treatment None
@@ -12087,6 +12737,7 @@ fileName wgEncodeAwgTfbsUwGm12864CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum a9a38551921ba668c8174451de2e0325
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm12864CtcfUniPk
 target CTCF
 treatment None
@@ -12106,6 +12757,7 @@ fileName wgEncodeAwgTfbsUwGm12865CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 482a459922d2df8124433804a80d67d7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm12865CtcfUniPk
 target CTCF
 treatment None
@@ -12125,6 +12777,7 @@ fileName wgEncodeAwgTfbsUwGm12872CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum d6164f806eb8b09ee033e4933b553e78
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm12872CtcfUniPk
 target CTCF
 treatment None
@@ -12144,6 +12797,7 @@ fileName wgEncodeAwgTfbsUwGm12873CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 6b7b4728b9478f2deda777e72f4f49f9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm12873CtcfUniPk
 target CTCF
 treatment None
@@ -12163,6 +12817,7 @@ fileName wgEncodeAwgTfbsUwGm12874CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 0aeeda6c61d0979381e5b59e1cfb016b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm12874CtcfUniPk
 target CTCF
 treatment None
@@ -12182,6 +12837,7 @@ fileName wgEncodeAwgTfbsUwGm12875CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum c17e5e56ad877d8f8c727f65327572b9
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm12875CtcfUniPk
 target CTCF
 treatment None
@@ -12201,6 +12857,7 @@ fileName wgEncodeAwgTfbsUwGm12878CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 64d49a491d8ddbfc9017fc33703b87a1
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwGm12878CtcfUniPk
 target CTCF
 treatment None
@@ -12220,6 +12877,7 @@ fileName wgEncodeAwgTfbsUwHacCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum e247495bd8821e63bf049b6a9f0f91cf
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHacCtcfUniPk
 target CTCF
 treatment None
@@ -12239,6 +12897,7 @@ fileName wgEncodeAwgTfbsUwHaspCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 458e56b96abf4b18459d5d926f363f51
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHaspCtcfUniPk
 target CTCF
 treatment None
@@ -12258,6 +12917,7 @@ fileName wgEncodeAwgTfbsUwHbmecCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 1694ad6dcf5869683214851cff9ce496
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHbmecCtcfUniPk
 target CTCF
 treatment None
@@ -12277,6 +12937,7 @@ fileName wgEncodeAwgTfbsUwHcfaaCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 46064275aee19c2804529ac726eb8be2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHcfaaCtcfUniPk
 target CTCF
 treatment None
@@ -12296,6 +12957,7 @@ fileName wgEncodeAwgTfbsUwHcmCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 8dbfbd87777545a0a9766897980269e5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHcmCtcfUniPk
 target CTCF
 treatment None
@@ -12315,6 +12977,7 @@ fileName wgEncodeAwgTfbsUwHcpeCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 5c1f50f8dbae13ff3401db90b67d0882
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHcpeCtcfUniPk
 target CTCF
 treatment None
@@ -12334,6 +12997,7 @@ fileName wgEncodeAwgTfbsUwHct116CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum c5e80b9f8e6480389b2d538b0458e28d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHct116CtcfUniPk
 target CTCF
 treatment None
@@ -12353,6 +13017,7 @@ fileName wgEncodeAwgTfbsUwHeeCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 303e6d156cc48bf2a212470d0a1c4c46
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHeeCtcfUniPk
 target CTCF
 treatment None
@@ -12372,6 +13037,7 @@ fileName wgEncodeAwgTfbsUwHek293CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 74a173e4d608ba46f108f0a1ea5a7c60
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHek293CtcfUniPk
 target CTCF
 treatment None
@@ -12391,6 +13057,7 @@ fileName wgEncodeAwgTfbsUwHelas3CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum efc345688ca532042f5d18024dfda8da
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHelas3CtcfUniPk
 target CTCF
 treatment None
@@ -12410,6 +13077,7 @@ fileName wgEncodeAwgTfbsUwHepg2CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum e3ac746c6279ed488794b90f6a25bfc8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHepg2CtcfUniPk
 target CTCF
 treatment None
@@ -12429,6 +13097,7 @@ fileName wgEncodeAwgTfbsUwHffCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum c81f82a47685cfd382cb7594177991dd
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHffCtcfUniPk
 target CTCF
 treatment None
@@ -12448,6 +13117,7 @@ fileName wgEncodeAwgTfbsUwHffmycCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum abce3e8b9b72641c38c60f866f5e47f8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHffmycCtcfUniPk
 target CTCF
 treatment None
@@ -12467,6 +13137,7 @@ fileName wgEncodeAwgTfbsUwHl60CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 9405a41743cc05f1868805ae7e92794b
 project wgEncode
+quality caution
 tableName wgEncodeAwgTfbsUwHl60CtcfUniPk
 target CTCF
 treatment None
@@ -12486,6 +13157,7 @@ fileName wgEncodeAwgTfbsUwHmecCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum ed891c55d25bd928210f1ed912cc28b5
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHmecCtcfUniPk
 target CTCF
 treatment None
@@ -12505,6 +13177,7 @@ fileName wgEncodeAwgTfbsUwHmfCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum c48d4a040458e667e69569d262312323
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHmfCtcfUniPk
 target CTCF
 treatment None
@@ -12524,6 +13197,7 @@ fileName wgEncodeAwgTfbsUwHpafCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum bd9afa31fca57b06b02e694882dcb31a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHpafCtcfUniPk
 target CTCF
 treatment None
@@ -12543,6 +13217,7 @@ fileName wgEncodeAwgTfbsUwHpfCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum c40fb486a424b2a458242dc86af6ce2d
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHpfCtcfUniPk
 target CTCF
 treatment None
@@ -12562,6 +13237,7 @@ fileName wgEncodeAwgTfbsUwHreCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 2e1ab21c08222dc49369b0ee97ec7b36
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHreCtcfUniPk
 target CTCF
 treatment None
@@ -12581,6 +13257,7 @@ fileName wgEncodeAwgTfbsUwHrpeCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 4d35c2dd78de9f8418cb6a95a0372558
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHrpeCtcfUniPk
 target CTCF
 treatment None
@@ -12600,6 +13277,7 @@ fileName wgEncodeAwgTfbsUwHuvecCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 916e3df6f3e2411988b8a14eb92e10d8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHuvecCtcfUniPk
 target CTCF
 treatment None
@@ -12619,6 +13297,7 @@ fileName wgEncodeAwgTfbsUwHvmfCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 74cbf6ff1e9689790396074e0db1a1d8
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwHvmfCtcfUniPk
 target CTCF
 treatment None
@@ -12638,6 +13317,7 @@ fileName wgEncodeAwgTfbsUwK562CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 84fc9d8e7a62cf08f204d7b138160b57
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwK562CtcfUniPk
 target CTCF
 treatment None
@@ -12657,6 +13337,7 @@ fileName wgEncodeAwgTfbsUwMcf7CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 4728d5dbf2e5e0768487735d035df8a7
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwMcf7CtcfUniPk
 target CTCF
 treatment None
@@ -12676,6 +13357,7 @@ fileName wgEncodeAwgTfbsUwNb4CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 33bd85431f6945fef671a18b0892d328
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwNb4CtcfUniPk
 target CTCF
 treatment None
@@ -12695,6 +13377,7 @@ fileName wgEncodeAwgTfbsUwNhdfneoCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 4ddc202f2415d901a297afaea9ebab43
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwNhdfneoCtcfUniPk
 target CTCF
 treatment None
@@ -12714,6 +13397,7 @@ fileName wgEncodeAwgTfbsUwNhekCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum e3aac98b63593643763f1d6c03333665
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwNhekCtcfUniPk
 target CTCF
 treatment None
@@ -12733,6 +13417,7 @@ fileName wgEncodeAwgTfbsUwNhlfCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum c4f7202b7b09d609f1157835159ba5e2
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwNhlfCtcfUniPk
 target CTCF
 treatment None
@@ -12752,6 +13437,7 @@ fileName wgEncodeAwgTfbsUwRptecCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 20194bbb3385d9b86692bd3a28a31a4c
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwRptecCtcfUniPk
 target CTCF
 treatment None
@@ -12771,6 +13457,7 @@ fileName wgEncodeAwgTfbsUwSaecCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 2d71b171bc8ce1ee4b150e0b3b790606
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwSaecCtcfUniPk
 target CTCF
 treatment None
@@ -12790,6 +13477,7 @@ fileName wgEncodeAwgTfbsUwSknshraCtcfUniPk.narrowPeak.gz
 lab UW
 md5sum f9227bd8ecf2ad7ebc9ee305e6deb5ef
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwSknshraCtcfUniPk
 target CTCF
 treatment None
@@ -12809,6 +13497,7 @@ fileName wgEncodeAwgTfbsUwWerirb1CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum d4504b14dc445ad04f2f440c6510413a
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwWerirb1CtcfUniPk
 target CTCF
 treatment None
@@ -12828,9 +13517,10 @@ fileName wgEncodeAwgTfbsUwWi38CtcfUniPk.narrowPeak.gz
 lab UW
 md5sum 282a1fd3c49c81e919ec8efbd155c71b
 project wgEncode
+quality good
 tableName wgEncodeAwgTfbsUwWi38CtcfUniPk
 target CTCF
 treatment None
 view Peaks
 
-# MAGIC: -1338255174
+# MAGIC: 492287119
