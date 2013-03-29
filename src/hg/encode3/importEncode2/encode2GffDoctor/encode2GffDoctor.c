@@ -210,6 +210,79 @@ slReverse(&list);
 return list;
 }
 
+boolean gotStringInField(struct gffRow *list, int rowIx, char *string)
+/* Return TRUE if string matches any item in rowIx anywhere on list.  Match is case insensitive. */
+{
+struct gffRow *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameWord(el->row[rowIx], string))
+        return TRUE;
+return FALSE;
+}
+
+int fieldSubCount = 0;
+
+void subIntoField(struct gffRow *list, int rowIx, char *oldVal, char *newVal)
+/* Substitute newVal for oldVal whereever oldVal occurs in given field */
+{
+struct gffRow *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameWord(el->row[rowIx], oldVal))
+	{
+        el->row[rowIx] = newVal;
+	++fieldSubCount;
+	}
+}
+
+char *mostPopularValInField(struct gffRow *list, int rowIx)
+/* Return most popular value in list for given field. */
+{
+/* Create a little hash and list to track words. */
+struct word 
+    {
+    struct word *next;
+    char *word;
+    int count;
+    };
+struct word *wordList = NULL;
+struct hash *hash = hashNew(0);
+
+/* Loop through list counting occurences of words. */
+struct gffRow *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    char *val = el->row[rowIx];
+    struct word *word = hashFindVal(hash, val);
+    if (word == NULL)
+        {
+	AllocVar(word);
+	word->word = val;
+	hashAdd(hash, val, word);
+	slAddHead(&wordList, word);
+	}
+    word->count += 1;
+    }
+
+/* Figure out most common word. */
+char *bestVal = NULL;
+int bestCount = 0;
+struct word *word;
+for (word = wordList; word != NULL; word = word->next)
+    {
+    if (word->count > bestCount)
+        {
+	bestCount = word->count;
+	bestVal = word->word;
+	}
+    }
+
+/* Clean up and go home. */
+hashFree(&hash);
+slFreeList(&wordList);
+return bestVal;
+}
+
+
 void encode2GffDoctor(char *inFile, char *outFile)
 /* encode2GffDoctor - Fix up gff/gtf files from encode phase 2 a bit.. */
 {
@@ -222,6 +295,16 @@ if (!groupTagExists(list, transcriptTag))
        if (!replaceGroupTag(list, "gene_ids", transcriptTag))
            if (!replaceGroupTag(list, "gene_id", transcriptTag))
 	       errAbort("Can't find any %s or reasonable substitutes in %s", transcriptTag, inFile);
+    }
+
+/* See if it has any exons or CDS.  Otherwise turn most popular tag into exon. */
+if (!gotStringInField(list, 2, "exon") && !gotStringInField(list, 2, "cds"))
+    {
+    char *common = mostPopularValInField(list, 2);
+    verbose(1, "Doctor can't find 'exon', turning '%s' into 'exon'\n", common);
+    subIntoField(list, 2, common, "exon");
+#ifdef SOON
+#endif /* SOON */
     }
 
 FILE *f = mustOpen(outFile, "w");
@@ -278,8 +361,8 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "\n");
     }
 if (shortenCount != 0 || subbedTagCount != 0)
-    verbose(1, "Doctor shortened %d tags, substituted %d in %s\n", 
-	shortenCount, subbedTagCount, inFile );
+    verbose(1, "Doctor shortened %d tags, substituted %d, resourced %d exons in %s\n", 
+	shortenCount, subbedTagCount, fieldSubCount, inFile );
 }
 
 int main(int argc, char *argv[])
