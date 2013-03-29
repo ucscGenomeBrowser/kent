@@ -16,22 +16,27 @@ char *expTable = "encodeExp";
 
 /* Command line variables */
 boolean withParent = FALSE;
+boolean maniFields = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "encode2Meta - Create meta files.\n"
+  "encode2Meta - Create meta.txt file. This is a hierarchical .ra file with heirarchy defined\n"
+  "by indentation.  You might think of it as a meta tag tree.  It contains the contents of\n"
+  "the hg19 and mm9 metaDb tables and the hgFixed.encodeExp table.\n"
   "usage:\n"
-  "   encode2Meta metadata.tab meta.txt\n"
+  "   encode2Meta manifest.tab meta.txt\n"
   "options:\n"
   "   -withParent - if set put a parent tag in each stanza in addition to indentation\n"
+  "   -maniFields - includes some fileds normally suppressed because they are also in manifest\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"withParent", OPTION_BOOLEAN},
+   {"maniFields", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -151,10 +156,6 @@ void metaTreeWrite(int level, int minLevel, int maxLevel, boolean isFile,
     char *parent, struct metaNode *node, struct hash *suppress, FILE *f)
 /* Write out self and children to file recursively. */
 {
-#ifdef OLD
-if (node->vars == NULL && node->children == NULL)
-    return;
-#endif 
 if (level >= minLevel && level < maxLevel)
     {
     int indent = (level-minLevel)*3;
@@ -332,7 +333,6 @@ hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "lab", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "age", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "grant", cloneDouble(0.8));
-hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "dateSubmitted", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "dateUnrestricted", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "softwareVersion", cloneDouble(0.8));
@@ -348,15 +348,18 @@ struct hash *suppress = hashNew(4);
 hashAdd(suppress, "objType", NULL);   // Inherent in hierarchy or ignored
 hashAdd(suppress, "subId", NULL);     // Submission ID not worth carrying forward
 hashAdd(suppress, "tableName", NULL);	// We aren't interested in tables, just files
-hashAdd(suppress, "dccAccession", NULL);  // Redundant with meta object name
 hashAdd(suppress, "project", NULL);   // Always wgEncode
 hashAdd(suppress, "expId", NULL);     // Redundant with dccAccession
-hashAdd(suppress, "composite", NULL); // Inherent in hierarchy now
 hashAdd(suppress, "cell", NULL);      // Completely redundant with cellType - I checked
 hashAdd(suppress, "sex", NULL);       // This should be implied in cellType
-hashAdd(suppress, "view", NULL);      // This is in maniest
-hashAdd(suppress, "replicate", NULL); // This is in manifest
-hashAdd(suppress, "md5sum", NULL);    // Also in manifest
+if (!maniFields)
+    {
+    hashAdd(suppress, "dccAccession", NULL);  // Redundant with meta object name
+    hashAdd(suppress, "composite", NULL); // Inherent in hierarchy now
+    hashAdd(suppress, "view", NULL);      // This is in maniest
+    hashAdd(suppress, "replicate", NULL); // This is in manifest
+    hashAdd(suppress, "md5sum", NULL);    // Also in manifest
+    }
 return suppress;
 }
 
@@ -573,6 +576,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 withParent = optionExists("withParent");
+maniFields = optionExists("maniFields");
 encode2Meta(argv[1], argv[2]);
 return 0;
 }
