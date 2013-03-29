@@ -14,6 +14,9 @@
 include $(kentSrc)/inc/common.mk
 
 MYLIBS = $(kentSrc)/lib/$(MACHTYPE)/jkweb.a
+ifeq (${JKHGAPLIB},)
+  MYLIBS += $(kentSrc)/lib/$(MACHTYPE)/jkhgap.a $(MYSQLLIBS)
+endif
 
 O = ${A}.o
 objects = ${O} ${extraObjects} ${externObjects}
