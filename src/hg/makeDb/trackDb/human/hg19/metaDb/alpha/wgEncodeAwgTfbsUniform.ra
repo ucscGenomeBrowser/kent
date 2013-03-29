@@ -4596,24 +4596,6 @@ target REST
 treatment None
 view Peaks
 
-metaObject wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk
-objType table
-antibody Pol2-4H8
-cell PFSK-1
-composite wgEncodeAwgTfbsUniform
-controlId SL2339
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH002272
-fileName wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk.narrowPeak.gz
-lab HudsonAlpha
-md5sum 75127786e8ee65f98a649a745f4a33bc
-project wgEncode
-tableName wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk
-target POLR2A
-treatment None
-view Peaks
-
 metaObject wgEncodeAwgTfbsHaibPfsk1Sin3ak20V0416101UniPk
 objType table
 antibody Sin3Ak-20
@@ -5370,25 +5352,6 @@ target ELK1
 treatment None
 view Peaks
 
-metaObject wgEncodeAwgTfbsSydhGm12878Gcn5UniPk
-objType table
-antibody GCN5
-cell GM12878
-composite wgEncodeAwgTfbsUniform
-control std
-controlId wgEncodeEH000625
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH001874
-fileName wgEncodeAwgTfbsSydhGm12878Gcn5UniPk.narrowPeak.gz
-lab Harvard
-md5sum 780918b8a09c7404feb01673fe7a6dc1
-project wgEncode
-tableName wgEncodeAwgTfbsSydhGm12878Gcn5UniPk
-target KAT2A
-treatment None
-view Peaks
-
 metaObject wgEncodeAwgTfbsSydhGm12878Ikzf1iknuclaUniPk
 objType table
 antibody IKZF1_(IkN)_(UCLA)
@@ -5405,25 +5368,6 @@ md5sum c3194b38df588c8a8666c8ef5314edd0
 project wgEncode
 tableName wgEncodeAwgTfbsSydhGm12878Ikzf1iknuclaUniPk
 target IKZF1
-treatment None
-view Peaks
-
-metaObject wgEncodeAwgTfbsSydhGm12878Irf3IggmusUniPk
-objType table
-antibody IRF3
-cell GM12878
-composite wgEncodeAwgTfbsUniform
-control IgG-mus
-controlId wgEncodeEH000706
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH001809
-fileName wgEncodeAwgTfbsSydhGm12878Irf3IggmusUniPk.narrowPeak.gz
-lab Stanford
-md5sum 7de8bd8a9330c564873815bfb6aee624
-project wgEncode
-tableName wgEncodeAwgTfbsSydhGm12878Irf3IggmusUniPk
-target IRF3
 treatment None
 view Peaks
 
@@ -5785,25 +5729,6 @@ md5sum 216de487ee5c34a1adfb6957236c699d
 project wgEncode
 tableName wgEncodeAwgTfbsSydhGm12878Smc3ab9263IggmusUniPk
 target SMC3
-treatment None
-view Peaks
-
-metaObject wgEncodeAwgTfbsSydhGm12878Spt20UniPk
-objType table
-antibody SPT20
-cell GM12878
-composite wgEncodeAwgTfbsUniform
-control std
-controlId wgEncodeEH000625
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH001873
-fileName wgEncodeAwgTfbsSydhGm12878Spt20UniPk.narrowPeak.gz
-lab Harvard
-md5sum 9da6b832e544e1d0e5001cc06e3a0001
-project wgEncode
-tableName wgEncodeAwgTfbsSydhGm12878Spt20UniPk
-target FAM48A
 treatment None
 view Peaks
 
@@ -7232,25 +7157,6 @@ target ELK4
 treatment None
 view Peaks
 
-metaObject wgEncodeAwgTfbsSydhHelas3Gcn5UniPk
-objType table
-antibody GCN5
-cell HeLa-S3
-composite wgEncodeAwgTfbsUniform
-control std
-controlId wgEncodeEH000612
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH001849
-fileName wgEncodeAwgTfbsSydhHelas3Gcn5UniPk.narrowPeak.gz
-lab Stanford
-md5sum 6eed456def9c1fbc25727d0693e7651b
-project wgEncode
-tableName wgEncodeAwgTfbsSydhHelas3Gcn5UniPk
-target KAT2A
-treatment None
-view Peaks
-
 metaObject wgEncodeAwgTfbsSydhHelas3Gtf2f1ab28179IggrabUniPk
 objType table
 antibody GTF2F1_(AB28179)
@@ -7954,25 +7860,6 @@ target CEBPB
 treatment forskolin
 view Peaks
 
-metaObject wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk
-objType table
-antibody CEBPB
-cell HepG2
-composite wgEncodeAwgTfbsUniform
-control IgG-rab
-controlId wgEncodeEH001791
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH001829
-fileName wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk.narrowPeak.gz
-lab Stanford
-md5sum a553894bd04f6ae4148ec1b3fbb39d1e
-project wgEncode
-tableName wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk
-target CEBPB
-treatment None
-view Peaks
-
 metaObject wgEncodeAwgTfbsSydhHepg2CebpzIggrabUniPk
 objType table
 antibody CEBPZ
@@ -8372,25 +8259,6 @@ target POLR2A
 treatment None
 view Peaks
 
-metaObject wgEncodeAwgTfbsSydhHepg2Pol2PravastUniPk
-objType table
-antibody Pol2
-cell HepG2
-composite wgEncodeAwgTfbsUniform
-control std
-controlId wgEncodeEH000640
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH000641
-fileName wgEncodeAwgTfbsSydhHepg2Pol2PravastUniPk.narrowPeak.gz
-lab Yale
-md5sum fe874002d58bee8ba4a9c910a376adf6
-project wgEncode
-tableName wgEncodeAwgTfbsSydhHepg2Pol2PravastUniPk
-target POLR2A
-treatment pravastatin
-view Peaks
-
 metaObject wgEncodeAwgTfbsSydhHepg2Pol2s2IggrabUniPk
 objType table
 antibody Pol2(phosphoS2)
@@ -8484,44 +8352,6 @@ project wgEncode
 tableName wgEncodeAwgTfbsSydhHepg2Srebp1InslnUniPk
 target SREBP1
 treatment insulin
-view Peaks
-
-metaObject wgEncodeAwgTfbsSydhHepg2Srebp1PravastUniPk
-objType table
-antibody SREBP1
-cell HepG2
-composite wgEncodeAwgTfbsUniform
-control std
-controlId wgEncodeEH000640
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH000642
-fileName wgEncodeAwgTfbsSydhHepg2Srebp1PravastUniPk.narrowPeak.gz
-lab Yale
-md5sum 39c2f137209bb2fecda12cac45848cd4
-project wgEncode
-tableName wgEncodeAwgTfbsSydhHepg2Srebp1PravastUniPk
-target SREBP1
-treatment pravastatin
-view Peaks
-
-metaObject wgEncodeAwgTfbsSydhHepg2Srebp2PravastUniPk
-objType table
-antibody SREBP2
-cell HepG2
-composite wgEncodeAwgTfbsUniform
-control std
-controlId wgEncodeEH000640
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH000643
-fileName wgEncodeAwgTfbsSydhHepg2Srebp2PravastUniPk.narrowPeak.gz
-lab Yale
-md5sum 2556d3e3c6104b871962764cd6ce86ea
-project wgEncode
-tableName wgEncodeAwgTfbsSydhHepg2Srebp2PravastUniPk
-target SREBP2
-treatment pravastatin
 view Peaks
 
 metaObject wgEncodeAwgTfbsSydhHepg2TbpIggrabUniPk
@@ -10402,25 +10232,6 @@ md5sum 7a0ac9ddd186b461cc499e1a86454194
 project wgEncode
 tableName wgEncodeAwgTfbsSydhK562Usf2IggrabUniPk
 target USF2
-treatment None
-view Peaks
-
-metaObject wgEncodeAwgTfbsSydhK562Xrcc4UniPk
-objType table
-antibody XRCC4
-cell K562
-composite wgEncodeAwgTfbsUniform
-control std
-controlId wgEncodeEH000615
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dccAccession wgEncodeEH000650
-fileName wgEncodeAwgTfbsSydhK562Xrcc4UniPk.narrowPeak.gz
-lab Yale
-md5sum fa1a875c01b8e07961534a46d579bfb4
-project wgEncode
-tableName wgEncodeAwgTfbsSydhK562Xrcc4UniPk
-target XRCC4
 treatment None
 view Peaks
 
@@ -13022,4 +12833,4 @@ target CTCF
 treatment None
 view Peaks
 
-# MAGIC: 258951181
+# MAGIC: -1338255174

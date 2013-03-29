@@ -119,7 +119,6 @@ subGroup3 factor Factor \
     CCNT2=CCNT2 \
     CEBPB=CEBPB \
     CEBPD=CEBPD \
-    CEBPZ=CEBPZ \
     CHD1=CHD1 \
     CHD2=CHD2 \
     CREB1=CREB1 \
@@ -172,7 +171,6 @@ subGroup3 factor Factor \
     JUNB=JUNB \
     JUND=JUND \
     KAP1=KAP1 \
-    KAT2A=KAT2A \
     KDM5A=KDM5A \
     KDM5B=KDM5B \
     MAFF=MAFF \
@@ -232,7 +230,6 @@ subGroup3 factor Factor \
     SP4=SP4 \
     SPI1=SPI1 \
     SREBP1=SREBP1 \
-    SREBP2=SREBP2 \
     SRF=SRF \
     STAT1=STAT1 \
     STAT2=STAT2 \
@@ -256,7 +253,6 @@ subGroup3 factor Factor \
     USF1=USF1 \
     USF2=USF2 \
     WRNIP1=WRNIP1 \
-    XRCC4=XRCC4 \
     YY1=YY1 \
     ZBTB33=ZBTB33 \
     ZBTB7A=ZBTB7A \
@@ -1978,12 +1974,6 @@ wgEncode 1
     longLabel PFSK-1 TFBS Uniform Peaks of NRSF from ENCODE/HudsonAlpha/Analysis
     subGroups tier=a30 cellType=PFSK1 factor=REST lab=HudsonAlpha
 
-    track wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel PFSK-1 POLR2A
-    longLabel PFSK-1 TFBS Uniform Peaks of Pol2-4H8 from ENCODE/HudsonAlpha/Analysis
-    subGroups tier=a30 cellType=PFSK1 factor=POLR2A lab=HudsonAlpha
-
     track wgEncodeAwgTfbsHaibPfsk1Sin3ak20V0416101UniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel PFSK-1 SIN3AK20
@@ -2516,25 +2506,11 @@ wgEncode 1
     subGroups tier=a10 cellType=a10GM12878 factor=ELK1 lab=Stanford
     color 153,38,0
 
-    track wgEncodeAwgTfbsSydhGm12878Gcn5UniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel GM12878 KAT2A
-    longLabel GM12878 TFBS Uniform Peaks of GCN5 from ENCODE/Harvard/Analysis
-    subGroups tier=a10 cellType=a10GM12878 factor=KAT2A lab=Harvard
-    color 153,38,0
-
     track wgEncodeAwgTfbsSydhGm12878Ikzf1iknuclaUniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel GM12878 IKZF1
     longLabel GM12878 TFBS Uniform Peaks of IKZF1_(IkN)_(UCLA) from ENCODE/USC/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=IKZF1 lab=USC
-    color 153,38,0
-
-    track wgEncodeAwgTfbsSydhGm12878Irf3IggmusUniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel GM12878 IRF3
-    longLabel GM12878 TFBS Uniform Peaks of IRF3 from ENCODE/Stanford/Analysis
-    subGroups tier=a10 cellType=a10GM12878 factor=IRF3 lab=Stanford
     color 153,38,0
 
     track wgEncodeAwgTfbsSydhGm12878JundUniPk
@@ -2668,13 +2644,6 @@ wgEncode 1
     shortLabel GM12878 SMC3
     longLabel GM12878 TFBS Uniform Peaks of SMC3_(ab9263) from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10GM12878 factor=SMC3 lab=Stanford
-    color 153,38,0
-
-    track wgEncodeAwgTfbsSydhGm12878Spt20UniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel GM12878 FAM48A
-    longLabel GM12878 TFBS Uniform Peaks of SPT20 from ENCODE/Harvard/Analysis
-    subGroups tier=a10 cellType=a10GM12878 factor=FAM48A lab=Harvard
     color 153,38,0
 
     track wgEncodeAwgTfbsSydhGm12878Stat1UniPk
@@ -3179,13 +3148,6 @@ wgEncode 1
     subGroups tier=a20 cellType=a20HELAS3 factor=ELK4 lab=USC
     color 0,119,158
 
-    track wgEncodeAwgTfbsSydhHelas3Gcn5UniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel HeLa-S3 KAT2A
-    longLabel HeLa-S3 TFBS Uniform Peaks of GCN5 from ENCODE/Stanford/Analysis
-    subGroups tier=a20 cellType=a20HELAS3 factor=KAT2A lab=Stanford
-    color 0,119,158
-
     track wgEncodeAwgTfbsSydhHelas3Gtf2f1ab28179IggrabUniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel HeLa-S3 GTF2F1
@@ -3452,13 +3414,6 @@ wgEncode 1
     subGroups tier=a20 cellType=a20HEPG2 factor=CEBPB lab=Stanford
     color 189,0,157
 
-    track wgEncodeAwgTfbsSydhHepg2CebpzIggrabUniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel HepG2 CEBPZ
-    longLabel HepG2 TFBS Uniform Peaks of CEBPZ from ENCODE/Stanford/Analysis
-    subGroups tier=a20 cellType=a20HEPG2 factor=CEBPZ lab=Stanford
-    color 189,0,157
-
     track wgEncodeAwgTfbsSydhHepg2Chd2ab68301IggrabUniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel HepG2 CHD2
@@ -3599,13 +3554,6 @@ wgEncode 1
     subGroups tier=a20 cellType=a20HEPG2 factor=POLR2A lab=Stanford
     color 189,0,157
 
-    track wgEncodeAwgTfbsSydhHepg2Pol2PravastUniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel HepG2+prav POLR2A
-    longLabel HepG2 (pravastatin) TFBS Uniform Peaks of Pol2 from ENCODE/Yale/Analysis
-    subGroups tier=a20 cellType=a20HEPG2 factor=POLR2A lab=Yale
-    color 189,0,157
-
     track wgEncodeAwgTfbsSydhHepg2Pol2s2IggrabUniPk
     parent wgEncodeAwgTfbsUniform off
     shortLabel HepG2 POLR2A s2
@@ -3639,20 +3587,6 @@ wgEncode 1
     shortLabel HepG2+insl SREBP1
     longLabel HepG2 (insulin) TFBS Uniform Peaks of SREBP1 from ENCODE/Stanford/Analysis
     subGroups tier=a20 cellType=a20HEPG2 factor=SREBP1 lab=Stanford
-    color 189,0,157
-
-    track wgEncodeAwgTfbsSydhHepg2Srebp1PravastUniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel HepG2+prav SREBP1
-    longLabel HepG2 (pravastatin) TFBS Uniform Peaks of SREBP1 from ENCODE/Yale/Analysis
-    subGroups tier=a20 cellType=a20HEPG2 factor=SREBP1 lab=Yale
-    color 189,0,157
-
-    track wgEncodeAwgTfbsSydhHepg2Srebp2PravastUniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel HepG2+prav SREBP2
-    longLabel HepG2 (pravastatin) TFBS Uniform Peaks of SREBP2 from ENCODE/Yale/Analysis
-    subGroups tier=a20 cellType=a20HEPG2 factor=SREBP2 lab=Yale
     color 189,0,157
 
     track wgEncodeAwgTfbsSydhHepg2TbpIggrabUniPk
@@ -4341,13 +4275,6 @@ wgEncode 1
     shortLabel K562 USF2
     longLabel K562 TFBS Uniform Peaks of USF2 from ENCODE/Stanford/Analysis
     subGroups tier=a10 cellType=a10K562 factor=USF2 lab=Stanford
-    color 46,0,184
-
-    track wgEncodeAwgTfbsSydhK562Xrcc4UniPk
-    parent wgEncodeAwgTfbsUniform off
-    shortLabel K562 XRCC4
-    longLabel K562 TFBS Uniform Peaks of XRCC4 from ENCODE/Yale/Analysis
-    subGroups tier=a10 cellType=a10K562 factor=XRCC4 lab=Yale
     color 46,0,184
 
     track wgEncodeAwgTfbsSydhK562Yy1UcdUniPk
