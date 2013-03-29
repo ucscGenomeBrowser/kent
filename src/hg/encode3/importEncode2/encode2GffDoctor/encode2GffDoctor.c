@@ -22,6 +22,13 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+struct gffRow
+/* A row of data from a GFF file. */
+    {
+    struct gffRow *next;
+    char *row[9];
+    };
+
 char *replaceFieldInGffGroup(char *in, char *tag, char *newVal)
 /* Update value of tag */
 {
@@ -40,6 +47,7 @@ dyStringAppend(dy, valEnd);
 return dyStringCannibalize(&dy);
 }
 
+#ifdef UNUSED
 char *subForSmaller(char *string, char *oldWay, char *newWay)
 /* Return copy of string with first if any oldWay substituted with newWay. */
 {
@@ -92,24 +100,21 @@ if (result == NULL)
     errAbort("Could not find the expected %d '%c' chars in %s", n, c, line);
 return result;
 }
+#endif /* UNUSED */
 
-boolean groupTagExists(struct slName *lineList, char *tag)
+boolean groupTagExists(struct gffRow *list, char *tag)
 /* Return true if there are any match to tag in the list */
 {
-struct slName *lineEl;
-struct dyString *temp = dyStringNew(1024);
+struct gffRow *el;
 boolean exists = FALSE;
-for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
+for (el = list; el != NULL; el = el->next)
     {
-    char *line = lineEl->name;
-    if (isSharpCommentOrEmpty(line))
-        continue;
-
-    /* Find group field in tab-separated line and copy it to where we can modify it. */
-    char *lastField = mustFindNthChar(line, '\t', 8);
-    dyStringClear(temp);
-    dyStringAppend(temp, lastField);
-    char *group = temp->string;
+    /* Find group field and copy it to where we can modify it. */
+    char *lastField = el->row[8];
+    int lastFieldSize = strlen(lastField);
+    char temp[lastFieldSize+1];
+    safef(temp, sizeof(temp), "%s", lastField);
+    char *group = temp;
 
     /* Go through each word looking for a match. */
     char *word;
@@ -124,7 +129,6 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     if (exists)
         break;
     }
-dyStringFree(&temp);
 return exists;
 }
 
@@ -143,7 +147,9 @@ while ((s = stringIn(source, s)) != NULL)
 	memcpy(out+prefixSize, dest, destSize);
 	char *remainder = in + prefixSize + sourceSize;
 	int remainderSize = strlen(remainder);
-	assert(prefixSize+destSize+remainderSize< outSize);
+	int endPos = prefixSize + destSize + remainderSize;
+	assert(endPos < outSize);
+	out[endPos] = 0;
 	memcpy(out+prefixSize+destSize, remainder, remainderSize);
 	return TRUE;
 	}
@@ -153,83 +159,78 @@ return FALSE;
 
 int subbedTagCount;  // Records number of tag substitutions made.
 
-boolean replaceGroupTag(struct slName **pList, char *source, char *dest)
-/* If source exists in *pLine, replace it with dest and return TRUE. 
- * Replaces *pLine possibly */
+boolean replaceGroupTag(struct gffRow *list, char *source, char *dest)
+/* If source exists in *pLine, replace it with dest and return TRUE.  */
 {
-if (!groupTagExists(*pList, source))
+if (!groupTagExists(list, source))
     return FALSE;
-struct slName *lineEl, *next, *newList = NULL;
 int sourceSize = strlen(source);
 int destSize = strlen(dest);
 int sizeDiff = destSize - sourceSize;
-for (lineEl = *pList; lineEl != NULL; lineEl = next)
+struct gffRow *el;
+for (el = list; el != NULL; el = el->next)
     {
-    next = lineEl->next;
-    char *line = lineEl->name;
-    if (isSharpCommentOrEmpty(line))
-        continue;
+    /* Find group field and copy it to where we can modify it. */
+    char *lastField = el->row[8];
+    int lastFieldSize = strlen(lastField);
+    char temp[lastFieldSize+1];
+    safef(temp, sizeof(temp), "%s", lastField);
+    char *group = temp;
 
-    int lineSize = strlen(line);
-
-    /* Find group field in tab-separated line and copy it to where we can modify it. */
-    char *group = mustFindNthChar(line, '\t', 8);
+    /* Figure out how big the replaced version is going to be and make an array that size. */
     int groupSize = strlen(group);
     int outSize = groupSize + sizeDiff + 1;
     char subbedGroup[outSize];
+
     if (subWordIntoBuf(group, source, sourceSize, dest, destSize, subbedGroup, outSize))
         {
-#ifdef SOON
-#endif /* SOON */
-	int newLineSize = lineSize + sizeDiff;
-	struct slName *newEl = needMem(sizeof(struct slName) + newLineSize);
-	char *subbedLine = newEl->name;
-	int beforeGroupSize = group - line;
-	memcpy(subbedLine, line, beforeGroupSize);
-	strcpy(subbedLine+beforeGroupSize, subbedGroup);
-	slAddHead(&newList, newEl);
+	el->row[8] = cloneString(subbedGroup);
 	++subbedTagCount;
 	verbose(2, "Substituted %s for %s\n", dest, source);
 	}
-    else
-        {
-	slAddHead(&newList, lineEl);
-	}
     }
-slReverse(&newList);
-*pList = newList;
 return TRUE;
+}
+
+struct gffRow *readGff(char *fileName)
+/* Read GFF and return as rows. */
+{
+struct gffRow *el, *list = NULL;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    AllocVar(el);
+    char *dupe = cloneString(line);
+    int wordCount = chopTabs(dupe, el->row);
+    lineFileExpectWords(lf, ArraySize(el->row), wordCount);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+return list;
 }
 
 void encode2GffDoctor(char *inFile, char *outFile)
 /* encode2GffDoctor - Fix up gff/gtf files from encode phase 2 a bit.. */
 {
 /* Get list of lines and see if we need to add transcript_id somehow. */
-struct slName *lineEl, *lineList=readAllLines(inFile);
+struct gffRow *el, *list=readGff(inFile);
 char *transcriptTag = "transcript_id";
-if (!groupTagExists(lineList, transcriptTag))
+if (!groupTagExists(list, transcriptTag))
     {
-    if (!replaceGroupTag(&lineList, "gene_id", transcriptTag))
-       if (!replaceGroupTag(&lineList, "transcript_ids", transcriptTag))
-           if (!replaceGroupTag(&lineList, "gene_ids", transcriptTag))
+   if (!replaceGroupTag(list, "transcript_ids", transcriptTag))
+       if (!replaceGroupTag(list, "gene_ids", transcriptTag))
+           if (!replaceGroupTag(list, "gene_id", transcriptTag))
 	       errAbort("Can't find any %s or reasonable substitutes in %s", transcriptTag, inFile);
     }
 
-
-char *row[9];
 FILE *f = mustOpen(outFile, "w");
 int shortenCount = 0;
 int lineIx = 0;
-for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
+for (el = list; el != NULL; el = el->next)
     {
     ++lineIx;
-    char *line = lineEl->name;
-    if (isSharpCommentOrEmpty(line))
-        continue;
-
-    int wordCount = chopTabs(line, row);
-    if (wordCount != 9)
-        errAbort("Expecting 9 fields line %d of %s got %d", lineIx, inFile, wordCount);
+    char **row = el->row;
 
     /* Fix mitochondria sequence name. */
     if (sameString(row[0], "chrMT"))
@@ -249,7 +250,8 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 	    int maxSize = 200;
 	    if (strlen(id) > maxSize)
 		{
-		id[maxSize-4] = 0;
+		/* Looks like we have to abbreviate. Try to turn a comma near the end into ... */
+		id[maxSize-4] = 0;   // 4 to leave some room for ...
 		char *e = strrchr(id, ',');
 		if (e != NULL)
 		    {
@@ -259,6 +261,8 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 		    *e++ = '"';
 		    *e = 0;
 		    }
+
+		/* Do replacement and log it. */
 		row[8] = replaceFieldInGffGroup(row[8], tag, id);
 		++shortenCount;
 		verbose(2, "Shortened to %s\n", id);
