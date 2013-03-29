@@ -594,6 +594,7 @@ cat  << 'EOF' > link.csh
     wc -l tfbsQualityReport.csv
     # 712
 
+    ####
     # rescue good Chicago datasets
     grep Chicago tfbsQualityReport.csv | awk -F',' '$2 != -1 {print $3}'
     #wgEncodeUchicagoTfbsK562Ehdac8ControlAlnRep0
@@ -607,12 +608,37 @@ cat  << 'EOF' > link.csh
 
     csh loadTfbs.csh chicago.good.table >&! logs/loadTfbs.chicago.out &
 
+    ####
+    # remove failed datasets
+    awk -F',' '$2 == -1 {print $3}' tfbsQualityReport.csv | grep -v chicago > bad.table
+    #wgEncodeSydhTfbsGm12878Spt20StdAlnRep0
+    #wgEncodeSydhTfbsGm12878Gcn5StdAlnRep0
+    #wgEncodeHaibTfbsPfsk1Pol24h8V0416101AlnRep0
+    #wgEncodeHaibTfbsA549Sp1V0422111Etoh02AlnRep0
+        # NOTE: this one not in Anshul's file directory
+    #wgEncodeSydhTfbsHepg2CebpzIggrabAlnRep0
+    #wgEncodeSydhTfbsHelas3Gcn5StdAlnRep0
+    #wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep0
+    #wgEncodeSydhTfbsK562Xrcc4StdAlnRep0
+    #wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep0
+    #wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep0
+    #wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep0
+    # 11 total
+
     # update trackDb: add stanzas, uniquify short labels, add 1 new lab, 2 new factors to subgroups
         # tweak cell type tags for tiers>3
+    # update track description
     # update metaDb
+
+    # was 695.  Added 5, removed 10 -> -5. Should be 690.
+    # Read 691 metadata objects from hg19
+    # Yes! (includes composite object)
 
     # TODO: Histogram of score distributions (may want to normalize to >1std)
     # Ref JK suggestion during code review 3/26/12
+
+    # TODO: Add 5 chicago and remove 10 baddies links from downloads dir (and releaseLatest)
+
 
 
 ###############################################
