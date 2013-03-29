@@ -37,7 +37,7 @@ struct meta
     struct meta *parent;	/* Pointer to parent. */
     char *name;		    /* Same as val of meta tag. Not allocated here. */
     struct metaTagVal *tagList;	/* All tags, including the "meta" one. */
-    int indent;                 /* Indentation level. */
+    int indent;                 /* Indentation level - generally only set if read from file. */
     };
 
 struct meta *metaLoadAll(char *fileName, char *keyTag, char *parentTag,
