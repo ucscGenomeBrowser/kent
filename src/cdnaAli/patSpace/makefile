@@ -1,10 +1,3 @@
-include ../../inc/common.mk
-
-
-O =  patSpace.o
-
-${BINDIR}/patSpace: $(O)  
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/patSpace $O ../../lib/$(MACHTYPE)/jkweb.a ${L}
-
-clean::
-	rm -f ${O}
+kentSrc = ../..
+A = patSpace
+include $(kentSrc)/inc/userApp.mk
