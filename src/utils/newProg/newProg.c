@@ -7,7 +7,6 @@
 
 boolean jkhgap = FALSE;
 boolean cgi = FALSE;
-boolean cvs = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,16 +20,13 @@ errAbort(
   "\n"
   "Options:\n"
   "   -jkhgap - include jkhgap.a and mysql libraries as well as jkweb.a archives \n"
-  "   -cgi    - create shell of a CGI script for web\n"
-  "   -cvs    - also check source into CVS, 'progName' must include full\n"
-  "           - path in source repository starting with 'kent/'");
+  "   -cgi    - create shell of a CGI script for web");
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"jkhgap", OPTION_BOOLEAN},
    {"cgi", OPTION_BOOLEAN},
-   {"cvs", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -183,20 +179,20 @@ else
     myLibs = cloneString("MYLIBS =  ${MYLIBDIR}/jkweb.a");
     }
 
-fprintf(f, 
-"include %s/inc/common.mk\n"
-"\n"
-"%s\n"
-"MYLIBDIR = %s/lib/${MACHTYPE}\n"
-"%s\n"
-"\n"
-"A = %s\n"
-"O = %s.o\n"
-"\n"
-, upLevel, L, upLevel, myLibs, progName, progName);
-
 if (cgi)
     {
+    fprintf(f, 
+    "include %s/inc/common.mk\n"
+    "\n"
+    "%s\n"
+    "MYLIBDIR = %s/lib/${MACHTYPE}\n"
+    "%s\n"
+    "\n"
+    "A = %s\n"
+    "O = %s.o\n"
+    "\n"
+    , upLevel, L, upLevel, myLibs, progName, progName);
+
     fprintf(f, 
     "A = %s\n"
     "\n"
@@ -212,17 +208,10 @@ if (cgi)
 else
     {
     fprintf(f, 
-    "%s: ${O} ${MYLIBS}\n"
-    "\t${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L\n"
-    "\t${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}\n"
-    "\n"
-    "compile:: ${O}\n"
-    "\t${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L\n"
-    "\n"
-    "clean::\n"
-    "\trm -f ${A}${EXE} ${O}\n", progName);
+    "kentSrc = %s\n"
+    "A = %s\n"
+    "include $(kentSrc)/inc/userApp.mk\n", upLevel, progName);
     }
-
 
 fclose(f);
 }
@@ -233,19 +222,8 @@ void newProg(char *module, char *description)
 char fileName[512];
 char dirName[512];
 char fileOnly[128];
-char command[512];
 
-if (cvs)
-    {
-    char *homeDir = getenv("HOME");
-    if (homeDir == NULL)
-        errAbort("Can't find environment variable 'HOME'");
-    if (!startsWith("kent", module))
-        errAbort("Need to include full module name with cvs option, not just relative path");
-    safef(dirName, sizeof(dirName), "%s/kent%s", homeDir, module+strlen("kent"));
-    }
-else
-    safef(dirName, sizeof(dirName), "%s", module);
+safef(dirName, sizeof(dirName), "%s", module);
 makeDir(dirName);
 splitPath(dirName, NULL, fileOnly, NULL);
 safef(fileName, sizeof(fileName), "%s/%s.c", dirName, fileOnly);
@@ -254,23 +232,6 @@ makeC(fileOnly, description, fileName);
 /* makefile is now constructed properly with ../.. paths */
 setCurrentDir(dirName);
 makeMakefile(fileOnly, "makefile");
-
-if (cvs)
-    {
-    /* Set current directory.  Return FALSE if it fails. */
-    printf("Adding %s to CVS\n", module);
-    setCurrentDir("..");
-    safef(command, sizeof(command), "cvs add %s", fileOnly);
-    if (system(command) != 0)
-        errAbort("system call '%s' returned non-zero", command);
-    safef(command, sizeof(command), "cvs commit -m \"%s\" %s", description, fileOnly);
-    if (system(command) != 0)
-        errAbort("system call '%s' returned non-zero", command);
-    setCurrentDir(dirName);
-    safef(command, sizeof(command), "cvs add %s.c makefile", fileOnly);
-    if (system(command) != 0)
-        errAbort("system call '%s' returned non-zero", command);
-    }
 }
 
 int main(int argc, char *argv[])
@@ -281,7 +242,6 @@ int i;
 
 optionInit(&argc, argv, options);
 cgi = optionExists("cgi");
-cvs = optionExists("cvs");
 jkhgap = optionExists("jkhgap");
 if (argc < 3)
      usage();
