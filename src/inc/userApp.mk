@@ -14,8 +14,8 @@
 include $(kentSrc)/inc/common.mk
 
 MYLIBS = $(kentSrc)/lib/$(MACHTYPE)/jkweb.a
-ifeq (${JKHGAPLIB},)
-  MYLIBS = $(kentSrc)/lib/$(MACHTYPE)/jkhgap.a $(kentSrc)/lib/$(MACHTYPE)/jkweb.a $(MYSQLLIBS)
+ifeq ($(findstring src/hg/,$(CURDIR)),src/hg/)
+  MYLIBS = $(kentSrc)/lib/$(MACHTYPE)/jkhgap.a $(kentSrc)/lib/$(MACHTYPE)/jkweb.a $(MYSQLLIBS) -lm
 endif
 
 O = ${A}.o
