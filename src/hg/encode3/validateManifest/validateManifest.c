@@ -71,6 +71,7 @@ int fieldCount = 0;
 
 boolean firstTime = TRUE;
 lineFileSetUniqueMetaData(lf);  // this seems to be the only way to save the comments with linefile
+// - you could also use lineFileNext instead of lineFileNextReal
 
 while (lineFileNextReal(lf, &row))
     {
