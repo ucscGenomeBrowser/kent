@@ -37,7 +37,8 @@ if (emailSize > bdwMaxEmailSize)
 return emailSize;
 }
 
-boolean bdwCheckAccess(char *user, char *password, struct sqlConnection *conn)
+boolean bdwCheckAccess(struct sqlConnection *conn, char *user, char *password, 
+    unsigned char retSid[BDW_SHA_SIZE])
 /* Make sure user exists and password checks out. */
 {
 /* Make escaped version of email string since it may be raw user input. */
@@ -49,23 +50,27 @@ unsigned char access[BDW_SHA_SIZE];
 bdwMakeAccess(user, password, access);
 
 char query[256];
-safef(query, sizeof(query), "select access from bdwUser where email='%s'", user);
+safef(query, sizeof(query), "select access,sid from bdwUser where email='%s'", user);
 struct sqlResult *sr = sqlGetResult(conn, query);
 boolean gotMatch = FALSE;
 char **row;
 if ((row = sqlNextRow(sr)) != NULL)
     {
     if (memcmp(row[0], access, sizeof(access)) == 0)
+	{
+	memcpy(retSid, row[1], BDW_SHA_SIZE);
         gotMatch = TRUE;
+	}
     }
 sqlFreeResult(&sr);
 return gotMatch;
 }
 
-void bdwMustHaveAccess(char *user, char *password, struct sqlConnection *conn)
+void bdwMustHaveAccess(struct sqlConnection *conn, char *user, char *password,
+    unsigned char retSid[BDW_SHA_SIZE])
 /* Check user has access and abort with an error message if not. */
 {
-if (!bdwCheckAccess(user, password, conn))
+if (!bdwCheckAccess(conn, user, password, retSid))
     errAbort("User/password combination doesn't give access to database");
 }
 

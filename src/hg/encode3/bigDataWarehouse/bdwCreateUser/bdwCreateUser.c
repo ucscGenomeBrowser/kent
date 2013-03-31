@@ -5,8 +5,8 @@
 #include "options.h"
 #include "jksql.h"
 #include "dystring.h"
-#include "hex.h"
 #include "bdwLib.h"
+#include "hex.h"
 
 void usage()
 /* Explain usage and exit. */
