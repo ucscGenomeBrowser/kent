@@ -15,6 +15,8 @@
 #include "bigDataWarehouse.h"
 #include "bdwLib.h"
 
+char *licensePlatePrefix = "ENCFF";
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -24,12 +26,14 @@ errAbort(
   "   bdwSubmit validatedUrl user password\n"
   "Generally user is an email address\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -licensePlatePrefix=prefix (default %s)\n"
+  , licensePlatePrefix
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"licensePlatePrefix", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -314,6 +318,40 @@ struct netParsedUrl
    };
 #endif /* EXAMPLE */
 
+void makeLicensePlate(char *prefix, int ix, char *out, int outSize)
+/* Make a license-plate type string composed of prefix + funky coding of ix
+ * and put result in out. */
+{
+int maxIx = 10*10*10*26*26*26;
+if (ix > maxIx)
+    errAbort("ix exceeds max in makeLicensePlate.  ix %d, max %d\n", ix, maxIx);
+int prefixSize = strlen(prefix);
+int minSize = prefixSize + 6 + 1;
+if (outSize < minSize)
+    errAbort("outSize (%d) not big enough in makeLicensePlate", outSize);
+
+/* Copy in prefix. */
+strcpy(out, prefix);
+
+/* Generate the 123ABC part of license plate backwards. */
+char *s = out+minSize;
+int x = ix;
+*(--s) = 0;	// zero tag at end;
+int i;
+for (i=0; i<3; ++i)
+    {
+    int remainder = x%26;
+    *(--s) = 'A' + remainder;
+    x /= 26;
+    }
+for (i=0; i<3; ++i)
+    {
+    int remainder = x%10;
+    *(--s) = '0' + remainder;
+    x /= 10;
+    }
+}
+
 int makeNewEmptySubmissionRecord(struct sqlConnection *conn, char *submissionUrl, 
     char *userSid)
 /* Create a submission record around URL and return it's id. */
@@ -328,6 +366,46 @@ uglyf("query=%s\n", query->string);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 return sqlLastAutoId(conn);
+}
+
+int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned submissionId, char *submitFileName)
+/* Make a new, largely empty, record around file and submission info. */
+{
+struct dyString *query = dyStringNew(0);
+dyStringAppend(query, 
+    "insert bdwFile "
+    "(submissionId, submitFileName) ");
+dyStringPrintf(query, "VALUES(%u, '%s')",
+    submissionId, submitFileName);
+uglyf("query=%s\n", query->string);
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
+return sqlLastAutoId(conn);
+}
+
+void bdwDirForTime(time_t sinceEpoch, char dir[PATH_LEN])
+/* Return the output directory for a given time. */
+{
+/* Get current time parsed into struct tm */
+struct tm now;
+gmtime_r(&sinceEpoch, &now);
+
+/* make directory out of year/month/day */
+safef(dir, PATH_LEN, "%s%d/%d/%d", bdwRootDir, now.tm_year+1900, now.tm_mon+1, now.tm_mday);
+}
+
+#define maxPlateSize 16
+void fetchFdNoCheck(struct sqlConnection *conn, unsigned bdwFileId, int unixFd)
+/* Fetch a file from the remote place we have a connection to.  Do not check MD5sum. */
+{
+/* Figure out bdw file name, starting with license plate. */
+char licensePlate[maxPlateSize];
+makeLicensePlate(licensePlatePrefix, bdwFileId, licensePlate, sizeof(licensePlate));
+uglyf("fetchFdNoCheck: unixFd %d, bdwFileId %d, licensePlate %s\n", unixFd, bdwFileId, licensePlate);
+char uploadDir[PATH_LEN];
+time_t now = time(NULL);
+bdwDirForTime(now, uploadDir);
+uglyf("uploadDir is %s\n", uploadDir);
 }
 
 void bdwSubmit(char *submissionUrl, char *user, char *password)
@@ -356,9 +434,10 @@ uglyf("submissionId = %d\n", submissionId);
 /* Copy over manifest file */
 int fd = bdwOpenAndRecord(conn, submissionDir, submissionFile, submissionUrl);
 uglyf("Got fd=%d from bdwOpenAndRecord\n", fd);
+int fileId = makeNewEmptyFileRecord(conn, submissionId, submissionFile);
+uglyf("Got fileId = %d\n", fileId);
+fetchFdNoCheck(conn, fileId, fd);
 #ifdef SOON
-int fileId = makeNewEmptyFileRecord(conn, submissionId, submissionDir, submissionFile);
-bdwFetchFileNoCheck(conn, fileId);
 char fileNameOnServer[PATH_LEN];
 bdwFileNameOnServer(conn, fileId, fileNameOnServer);
 
@@ -403,6 +482,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+licensePlatePrefix = optionVal("licensePlatePrefix", licensePlatePrefix);
 if (argc != 4)
     usage();
 bdwSubmit(argv[1], argv[2], argv[3]);
