@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "bdwLib.h"
+#include "hex.h"
 #include "openssl/sha.h"
 
 char *bdwDatabase = "bigDataWarehouse";
@@ -44,6 +45,9 @@ int emailSize = bdwCheckEmailSize(user);
 char escapedEmail[2*emailSize+1];
 sqlEscapeString2(escapedEmail, user);
 
+unsigned char access[BDW_SHA_SIZE];
+bdwMakeAccess(user, password, access);
+
 char query[256];
 safef(query, sizeof(query), "select access from bdwUser where email='%s'", user);
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -51,13 +55,18 @@ boolean gotMatch = FALSE;
 char **row;
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    unsigned char access[BDW_SHA_SIZE];
-    bdwMakeAccess(user, password, access);
     if (memcmp(row[0], access, sizeof(access)) == 0)
         gotMatch = TRUE;
     }
 sqlFreeResult(&sr);
 return gotMatch;
+}
+
+void bdwMustHaveAccess(char *user, char *password, struct sqlConnection *conn)
+/* Check user has access and abort with an error message if not. */
+{
+if (!bdwCheckAccess(user, password, conn))
+    errAbort("User/password combination doesn't give access to database");
 }
 
 void bdwMakeSid(char *user, unsigned char sid[BDW_SHA_SIZE])
