@@ -125,152 +125,6 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
-void bdwHubStaticLoad(char **row, struct bdwHub *ret)
-/* Load a row from bdwHub table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-{
-
-ret->id = sqlUnsigned(row[0]);
-ret->url = row[1];
-ret->shortLabel = row[2];
-ret->longLabel = row[3];
-ret->lastOkTime = sqlLongLong(row[4]);
-ret->lastNotOkTime = sqlLongLong(row[5]);
-ret->firstAdded = sqlLongLong(row[6]);
-ret->errorMessage = row[7];
-}
-
-struct bdwHub *bdwHubLoad(char **row)
-/* Load a bdwHub from row fetched with select * from bdwHub
- * from database.  Dispose of this with bdwHubFree(). */
-{
-struct bdwHub *ret;
-
-AllocVar(ret);
-ret->id = sqlUnsigned(row[0]);
-ret->url = cloneString(row[1]);
-ret->shortLabel = cloneString(row[2]);
-ret->longLabel = cloneString(row[3]);
-ret->lastOkTime = sqlLongLong(row[4]);
-ret->lastNotOkTime = sqlLongLong(row[5]);
-ret->firstAdded = sqlLongLong(row[6]);
-ret->errorMessage = cloneString(row[7]);
-return ret;
-}
-
-struct bdwHub *bdwHubLoadAll(char *fileName) 
-/* Load all bdwHub from a whitespace-separated file.
- * Dispose of this with bdwHubFreeList(). */
-{
-struct bdwHub *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
-
-while (lineFileRow(lf, row))
-    {
-    el = bdwHubLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-struct bdwHub *bdwHubLoadAllByChar(char *fileName, char chopper) 
-/* Load all bdwHub from a chopper separated file.
- * Dispose of this with bdwHubFreeList(). */
-{
-struct bdwHub *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
-
-while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
-    {
-    el = bdwHubLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-struct bdwHub *bdwHubCommaIn(char **pS, struct bdwHub *ret)
-/* Create a bdwHub out of a comma separated string. 
- * This will fill in ret if non-null, otherwise will
- * return a new bdwHub */
-{
-char *s = *pS;
-
-if (ret == NULL)
-    AllocVar(ret);
-ret->id = sqlUnsignedComma(&s);
-ret->url = sqlStringComma(&s);
-ret->shortLabel = sqlStringComma(&s);
-ret->longLabel = sqlStringComma(&s);
-ret->lastOkTime = sqlLongLongComma(&s);
-ret->lastNotOkTime = sqlLongLongComma(&s);
-ret->firstAdded = sqlLongLongComma(&s);
-ret->errorMessage = sqlStringComma(&s);
-*pS = s;
-return ret;
-}
-
-void bdwHubFree(struct bdwHub **pEl)
-/* Free a single dynamically allocated bdwHub such as created
- * with bdwHubLoad(). */
-{
-struct bdwHub *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->url);
-freeMem(el->shortLabel);
-freeMem(el->longLabel);
-freeMem(el->errorMessage);
-freez(pEl);
-}
-
-void bdwHubFreeList(struct bdwHub **pList)
-/* Free a list of dynamically allocated bdwHub's */
-{
-struct bdwHub *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    bdwHubFree(&el);
-    }
-*pList = NULL;
-}
-
-void bdwHubOutput(struct bdwHub *el, FILE *f, char sep, char lastSep) 
-/* Print out bdwHub.  Separate fields with sep. Follow last field with lastSep. */
-{
-fprintf(f, "%u", el->id);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->url);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->shortLabel);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->longLabel);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%lld", el->lastOkTime);
-fputc(sep,f);
-fprintf(f, "%lld", el->lastNotOkTime);
-fputc(sep,f);
-fprintf(f, "%lld", el->firstAdded);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->errorMessage);
-if (sep == ',') fputc('"',f);
-fputc(lastSep,f);
-}
-
 void bdwHostStaticLoad(char **row, struct bdwHost *ret)
 /* Load a row from bdwHost table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -282,6 +136,8 @@ ret->lastOkTime = sqlLongLong(row[2]);
 ret->lastNotOkTime = sqlLongLong(row[3]);
 ret->firstAdded = sqlLongLong(row[4]);
 ret->errorMessage = row[5];
+ret->uploadCount = sqlLongLong(row[6]);
+ret->historyBits = sqlLongLong(row[7]);
 }
 
 struct bdwHost *bdwHostLoad(char **row)
@@ -297,6 +153,8 @@ ret->lastOkTime = sqlLongLong(row[2]);
 ret->lastNotOkTime = sqlLongLong(row[3]);
 ret->firstAdded = sqlLongLong(row[4]);
 ret->errorMessage = cloneString(row[5]);
+ret->uploadCount = sqlLongLong(row[6]);
+ret->historyBits = sqlLongLong(row[7]);
 return ret;
 }
 
@@ -306,7 +164,7 @@ struct bdwHost *bdwHostLoadAll(char *fileName)
 {
 struct bdwHost *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -324,7 +182,7 @@ struct bdwHost *bdwHostLoadAllByChar(char *fileName, char chopper)
 {
 struct bdwHost *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -351,6 +209,8 @@ ret->lastOkTime = sqlLongLongComma(&s);
 ret->lastNotOkTime = sqlLongLongComma(&s);
 ret->firstAdded = sqlLongLongComma(&s);
 ret->errorMessage = sqlStringComma(&s);
+ret->uploadCount = sqlLongLongComma(&s);
+ret->historyBits = sqlLongLongComma(&s);
 *pS = s;
 return ret;
 }
@@ -398,6 +258,335 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%lld", el->uploadCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->historyBits);
+fputc(lastSep,f);
+}
+
+void bdwSubmissionDirStaticLoad(char **row, struct bdwSubmissionDir *ret)
+/* Load a row from bdwSubmissionDir table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->url = row[1];
+ret->hostId = sqlUnsigned(row[2]);
+ret->lastOkTime = sqlLongLong(row[3]);
+ret->lastNotOkTime = sqlLongLong(row[4]);
+ret->firstAdded = sqlLongLong(row[5]);
+ret->errorMessage = row[6];
+ret->uploadAttempts = sqlLongLong(row[7]);
+ret->historyBits = sqlLongLong(row[8]);
+}
+
+struct bdwSubmissionDir *bdwSubmissionDirLoad(char **row)
+/* Load a bdwSubmissionDir from row fetched with select * from bdwSubmissionDir
+ * from database.  Dispose of this with bdwSubmissionDirFree(). */
+{
+struct bdwSubmissionDir *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->url = cloneString(row[1]);
+ret->hostId = sqlUnsigned(row[2]);
+ret->lastOkTime = sqlLongLong(row[3]);
+ret->lastNotOkTime = sqlLongLong(row[4]);
+ret->firstAdded = sqlLongLong(row[5]);
+ret->errorMessage = cloneString(row[6]);
+ret->uploadAttempts = sqlLongLong(row[7]);
+ret->historyBits = sqlLongLong(row[8]);
+return ret;
+}
+
+struct bdwSubmissionDir *bdwSubmissionDirLoadAll(char *fileName) 
+/* Load all bdwSubmissionDir from a whitespace-separated file.
+ * Dispose of this with bdwSubmissionDirFreeList(). */
+{
+struct bdwSubmissionDir *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileRow(lf, row))
+    {
+    el = bdwSubmissionDirLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct bdwSubmissionDir *bdwSubmissionDirLoadAllByChar(char *fileName, char chopper) 
+/* Load all bdwSubmissionDir from a chopper separated file.
+ * Dispose of this with bdwSubmissionDirFreeList(). */
+{
+struct bdwSubmissionDir *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = bdwSubmissionDirLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct bdwSubmissionDir *bdwSubmissionDirCommaIn(char **pS, struct bdwSubmissionDir *ret)
+/* Create a bdwSubmissionDir out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new bdwSubmissionDir */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->url = sqlStringComma(&s);
+ret->hostId = sqlUnsignedComma(&s);
+ret->lastOkTime = sqlLongLongComma(&s);
+ret->lastNotOkTime = sqlLongLongComma(&s);
+ret->firstAdded = sqlLongLongComma(&s);
+ret->errorMessage = sqlStringComma(&s);
+ret->uploadAttempts = sqlLongLongComma(&s);
+ret->historyBits = sqlLongLongComma(&s);
+*pS = s;
+return ret;
+}
+
+void bdwSubmissionDirFree(struct bdwSubmissionDir **pEl)
+/* Free a single dynamically allocated bdwSubmissionDir such as created
+ * with bdwSubmissionDirLoad(). */
+{
+struct bdwSubmissionDir *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->url);
+freeMem(el->errorMessage);
+freez(pEl);
+}
+
+void bdwSubmissionDirFreeList(struct bdwSubmissionDir **pList)
+/* Free a list of dynamically allocated bdwSubmissionDir's */
+{
+struct bdwSubmissionDir *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    bdwSubmissionDirFree(&el);
+    }
+*pList = NULL;
+}
+
+void bdwSubmissionDirOutput(struct bdwSubmissionDir *el, FILE *f, char sep, char lastSep) 
+/* Print out bdwSubmissionDir.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->url);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->hostId);
+fputc(sep,f);
+fprintf(f, "%lld", el->lastOkTime);
+fputc(sep,f);
+fprintf(f, "%lld", el->lastNotOkTime);
+fputc(sep,f);
+fprintf(f, "%lld", el->firstAdded);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->errorMessage);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%lld", el->uploadAttempts);
+fputc(sep,f);
+fprintf(f, "%lld", el->historyBits);
+fputc(lastSep,f);
+}
+
+void bdwFileStaticLoad(char **row, struct bdwFile *ret)
+/* Load a row from bdwFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+safecpy(ret->licensePlate, sizeof(ret->licensePlate), row[1]);
+ret->submissionId = sqlUnsigned(row[2]);
+ret->submitFileName = row[3];
+ret->bdwFileName = row[4];
+ret->startUploadTime = sqlLongLong(row[5]);
+ret->endUploadTime = sqlLongLong(row[6]);
+ret->updateTime = sqlLongLong(row[7]);
+ret->size = sqlLongLong(row[8]);
+safecpy(ret->md5, sizeof(ret->md5), row[9]);
+ret->tags = row[10];
+ret->errorMessage = row[11];
+ret->uploadAttempts = sqlLongLong(row[12]);
+ret->historyBits = sqlLongLong(row[13]);
+}
+
+struct bdwFile *bdwFileLoad(char **row)
+/* Load a bdwFile from row fetched with select * from bdwFile
+ * from database.  Dispose of this with bdwFileFree(). */
+{
+struct bdwFile *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+safecpy(ret->licensePlate, sizeof(ret->licensePlate), row[1]);
+ret->submissionId = sqlUnsigned(row[2]);
+ret->submitFileName = cloneString(row[3]);
+ret->bdwFileName = cloneString(row[4]);
+ret->startUploadTime = sqlLongLong(row[5]);
+ret->endUploadTime = sqlLongLong(row[6]);
+ret->updateTime = sqlLongLong(row[7]);
+ret->size = sqlLongLong(row[8]);
+safecpy(ret->md5, sizeof(ret->md5), row[9]);
+ret->tags = cloneString(row[10]);
+ret->errorMessage = cloneString(row[11]);
+ret->uploadAttempts = sqlLongLong(row[12]);
+ret->historyBits = sqlLongLong(row[13]);
+return ret;
+}
+
+struct bdwFile *bdwFileLoadAll(char *fileName) 
+/* Load all bdwFile from a whitespace-separated file.
+ * Dispose of this with bdwFileFreeList(). */
+{
+struct bdwFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[14];
+
+while (lineFileRow(lf, row))
+    {
+    el = bdwFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct bdwFile *bdwFileLoadAllByChar(char *fileName, char chopper) 
+/* Load all bdwFile from a chopper separated file.
+ * Dispose of this with bdwFileFreeList(). */
+{
+struct bdwFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[14];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = bdwFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct bdwFile *bdwFileCommaIn(char **pS, struct bdwFile *ret)
+/* Create a bdwFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new bdwFile */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->licensePlate, sizeof(ret->licensePlate));
+ret->submissionId = sqlUnsignedComma(&s);
+ret->submitFileName = sqlStringComma(&s);
+ret->bdwFileName = sqlStringComma(&s);
+ret->startUploadTime = sqlLongLongComma(&s);
+ret->endUploadTime = sqlLongLongComma(&s);
+ret->updateTime = sqlLongLongComma(&s);
+ret->size = sqlLongLongComma(&s);
+sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
+ret->tags = sqlStringComma(&s);
+ret->errorMessage = sqlStringComma(&s);
+ret->uploadAttempts = sqlLongLongComma(&s);
+ret->historyBits = sqlLongLongComma(&s);
+*pS = s;
+return ret;
+}
+
+void bdwFileFree(struct bdwFile **pEl)
+/* Free a single dynamically allocated bdwFile such as created
+ * with bdwFileLoad(). */
+{
+struct bdwFile *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->submitFileName);
+freeMem(el->bdwFileName);
+freeMem(el->tags);
+freeMem(el->errorMessage);
+freez(pEl);
+}
+
+void bdwFileFreeList(struct bdwFile **pList)
+/* Free a list of dynamically allocated bdwFile's */
+{
+struct bdwFile *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    bdwFileFree(&el);
+    }
+*pList = NULL;
+}
+
+void bdwFileOutput(struct bdwFile *el, FILE *f, char sep, char lastSep) 
+/* Print out bdwFile.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->licensePlate);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->submissionId);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->submitFileName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->bdwFileName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%lld", el->startUploadTime);
+fputc(sep,f);
+fprintf(f, "%lld", el->endUploadTime);
+fputc(sep,f);
+fprintf(f, "%lld", el->updateTime);
+fputc(sep,f);
+fprintf(f, "%lld", el->size);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->md5);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tags);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->errorMessage);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%lld", el->uploadAttempts);
+fputc(sep,f);
+fprintf(f, "%lld", el->historyBits);
 fputc(lastSep,f);
 }
 
@@ -407,11 +596,12 @@ void bdwSubmissionStaticLoad(char **row, struct bdwSubmission *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->startUploadTime = sqlLongLong(row[1]);
-ret->endUploadTime = sqlLongLong(row[2]);
-safecpy(ret->userSid, sizeof(ret->userSid), row[3]);
-ret->hubId = sqlUnsigned(row[4]);
-ret->errorMessage = row[5];
+ret->url = row[1];
+ret->startUploadTime = sqlLongLong(row[2]);
+ret->endUploadTime = sqlLongLong(row[3]);
+safecpy(ret->userSid, sizeof(ret->userSid), row[4]);
+ret->submitFileId = sqlUnsigned(row[5]);
+ret->errorMessage = row[6];
 }
 
 struct bdwSubmission *bdwSubmissionLoad(char **row)
@@ -422,11 +612,12 @@ struct bdwSubmission *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->startUploadTime = sqlLongLong(row[1]);
-ret->endUploadTime = sqlLongLong(row[2]);
-safecpy(ret->userSid, sizeof(ret->userSid), row[3]);
-ret->hubId = sqlUnsigned(row[4]);
-ret->errorMessage = cloneString(row[5]);
+ret->url = cloneString(row[1]);
+ret->startUploadTime = sqlLongLong(row[2]);
+ret->endUploadTime = sqlLongLong(row[3]);
+safecpy(ret->userSid, sizeof(ret->userSid), row[4]);
+ret->submitFileId = sqlUnsigned(row[5]);
+ret->errorMessage = cloneString(row[6]);
 return ret;
 }
 
@@ -436,7 +627,7 @@ struct bdwSubmission *bdwSubmissionLoadAll(char *fileName)
 {
 struct bdwSubmission *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -454,7 +645,7 @@ struct bdwSubmission *bdwSubmissionLoadAllByChar(char *fileName, char chopper)
 {
 struct bdwSubmission *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -476,10 +667,11 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
+ret->url = sqlStringComma(&s);
 ret->startUploadTime = sqlLongLongComma(&s);
 ret->endUploadTime = sqlLongLongComma(&s);
 sqlFixedStringComma(&s, ret->userSid, sizeof(ret->userSid));
-ret->hubId = sqlUnsignedComma(&s);
+ret->submitFileId = sqlUnsignedComma(&s);
 ret->errorMessage = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -492,6 +684,7 @@ void bdwSubmissionFree(struct bdwSubmission **pEl)
 struct bdwSubmission *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->url);
 freeMem(el->errorMessage);
 freez(pEl);
 }
@@ -514,6 +707,10 @@ void bdwSubmissionOutput(struct bdwSubmission *el, FILE *f, char sep, char lastS
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->url);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 fprintf(f, "%lld", el->startUploadTime);
 fputc(sep,f);
 fprintf(f, "%lld", el->endUploadTime);
@@ -522,7 +719,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->userSid);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->hubId);
+fprintf(f, "%u", el->submitFileId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
@@ -530,56 +727,40 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
-void bdwFileStaticLoad(char **row, struct bdwFile *ret)
-/* Load a row from bdwFile table into ret.  The contents of ret will
+void bdwSubmissionLogStaticLoad(char **row, struct bdwSubmissionLog *ret)
+/* Load a row from bdwSubmissionLog table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->submission = sqlUnsigned(row[1]);
-ret->hubFileName = row[2];
-ret->bdwName = row[3][0];
-ret->bdwFileName = row[4];
-ret->startUploadTime = sqlLongLong(row[5]);
-ret->endUploadTime = sqlLongLong(row[6]);
-ret->updateTime = sqlLongLong(row[7]);
-ret->size = sqlLongLong(row[8]);
-safecpy(ret->md5, sizeof(ret->md5), row[9]);
-ret->tags = row[10];
+ret->submissionId = sqlUnsigned(row[1]);
+ret->message = row[2];
 }
 
-struct bdwFile *bdwFileLoad(char **row)
-/* Load a bdwFile from row fetched with select * from bdwFile
- * from database.  Dispose of this with bdwFileFree(). */
+struct bdwSubmissionLog *bdwSubmissionLogLoad(char **row)
+/* Load a bdwSubmissionLog from row fetched with select * from bdwSubmissionLog
+ * from database.  Dispose of this with bdwSubmissionLogFree(). */
 {
-struct bdwFile *ret;
+struct bdwSubmissionLog *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->submission = sqlUnsigned(row[1]);
-ret->hubFileName = cloneString(row[2]);
-ret->bdwName = row[3][0];
-ret->bdwFileName = cloneString(row[4]);
-ret->startUploadTime = sqlLongLong(row[5]);
-ret->endUploadTime = sqlLongLong(row[6]);
-ret->updateTime = sqlLongLong(row[7]);
-ret->size = sqlLongLong(row[8]);
-safecpy(ret->md5, sizeof(ret->md5), row[9]);
-ret->tags = cloneString(row[10]);
+ret->submissionId = sqlUnsigned(row[1]);
+ret->message = cloneString(row[2]);
 return ret;
 }
 
-struct bdwFile *bdwFileLoadAll(char *fileName) 
-/* Load all bdwFile from a whitespace-separated file.
- * Dispose of this with bdwFileFreeList(). */
+struct bdwSubmissionLog *bdwSubmissionLogLoadAll(char *fileName) 
+/* Load all bdwSubmissionLog from a whitespace-separated file.
+ * Dispose of this with bdwSubmissionLogFreeList(). */
 {
-struct bdwFile *list = NULL, *el;
+struct bdwSubmissionLog *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[3];
 
 while (lineFileRow(lf, row))
     {
-    el = bdwFileLoad(row);
+    el = bdwSubmissionLogLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -587,17 +768,17 @@ slReverse(&list);
 return list;
 }
 
-struct bdwFile *bdwFileLoadAllByChar(char *fileName, char chopper) 
-/* Load all bdwFile from a chopper separated file.
- * Dispose of this with bdwFileFreeList(). */
+struct bdwSubmissionLog *bdwSubmissionLogLoadAllByChar(char *fileName, char chopper) 
+/* Load all bdwSubmissionLog from a chopper separated file.
+ * Dispose of this with bdwSubmissionLogFreeList(). */
 {
-struct bdwFile *list = NULL, *el;
+struct bdwSubmissionLog *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = bdwFileLoad(row);
+    el = bdwSubmissionLogLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -605,89 +786,55 @@ slReverse(&list);
 return list;
 }
 
-struct bdwFile *bdwFileCommaIn(char **pS, struct bdwFile *ret)
-/* Create a bdwFile out of a comma separated string. 
+struct bdwSubmissionLog *bdwSubmissionLogCommaIn(char **pS, struct bdwSubmissionLog *ret)
+/* Create a bdwSubmissionLog out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new bdwFile */
+ * return a new bdwSubmissionLog */
 {
 char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
-ret->submission = sqlUnsignedComma(&s);
-ret->hubFileName = sqlStringComma(&s);
-sqlFixedStringComma(&s, &(ret->bdwName), sizeof(ret->bdwName));
-ret->bdwFileName = sqlStringComma(&s);
-ret->startUploadTime = sqlLongLongComma(&s);
-ret->endUploadTime = sqlLongLongComma(&s);
-ret->updateTime = sqlLongLongComma(&s);
-ret->size = sqlLongLongComma(&s);
-sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
-ret->tags = sqlStringComma(&s);
+ret->submissionId = sqlUnsignedComma(&s);
+ret->message = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
 
-void bdwFileFree(struct bdwFile **pEl)
-/* Free a single dynamically allocated bdwFile such as created
- * with bdwFileLoad(). */
+void bdwSubmissionLogFree(struct bdwSubmissionLog **pEl)
+/* Free a single dynamically allocated bdwSubmissionLog such as created
+ * with bdwSubmissionLogLoad(). */
 {
-struct bdwFile *el;
+struct bdwSubmissionLog *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->hubFileName);
-freeMem(el->bdwFileName);
-freeMem(el->tags);
+freeMem(el->message);
 freez(pEl);
 }
 
-void bdwFileFreeList(struct bdwFile **pList)
-/* Free a list of dynamically allocated bdwFile's */
+void bdwSubmissionLogFreeList(struct bdwSubmissionLog **pList)
+/* Free a list of dynamically allocated bdwSubmissionLog's */
 {
-struct bdwFile *el, *next;
+struct bdwSubmissionLog *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    bdwFileFree(&el);
+    bdwSubmissionLogFree(&el);
     }
 *pList = NULL;
 }
 
-void bdwFileOutput(struct bdwFile *el, FILE *f, char sep, char lastSep) 
-/* Print out bdwFile.  Separate fields with sep. Follow last field with lastSep. */
+void bdwSubmissionLogOutput(struct bdwSubmissionLog *el, FILE *f, char sep, char lastSep) 
+/* Print out bdwSubmissionLog.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%u", el->submission);
+fprintf(f, "%u", el->submissionId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->hubFileName);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%c", el->bdwName);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->bdwFileName);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%lld", el->startUploadTime);
-fputc(sep,f);
-fprintf(f, "%lld", el->endUploadTime);
-fputc(sep,f);
-fprintf(f, "%lld", el->updateTime);
-fputc(sep,f);
-fprintf(f, "%lld", el->size);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->md5);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tags);
+fprintf(f, "%s", el->message);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -698,13 +845,14 @@ void bdwSubscribingProgramStaticLoad(char **row, struct bdwSubscribingProgram *r
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->filePattern = row[1];
-ret->hubPattern = row[2];
-ret->tagPattern = row[3];
-ret->onFileStartUpload = row[4];
-ret->onFileEndUpload = row[5];
-ret->onSubmissionStartUpload = row[6];
-ret->onSubmissionEndUpload = row[7];
+ret->runOrder = sqlDouble(row[1]);
+ret->filePattern = row[2];
+ret->hubPattern = row[3];
+ret->tagPattern = row[4];
+ret->onFileStartUpload = row[5];
+ret->onFileEndUpload = row[6];
+ret->onSubmissionStartUpload = row[7];
+ret->onSubmissionEndUpload = row[8];
 }
 
 struct bdwSubscribingProgram *bdwSubscribingProgramLoad(char **row)
@@ -715,13 +863,14 @@ struct bdwSubscribingProgram *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->filePattern = cloneString(row[1]);
-ret->hubPattern = cloneString(row[2]);
-ret->tagPattern = cloneString(row[3]);
-ret->onFileStartUpload = cloneString(row[4]);
-ret->onFileEndUpload = cloneString(row[5]);
-ret->onSubmissionStartUpload = cloneString(row[6]);
-ret->onSubmissionEndUpload = cloneString(row[7]);
+ret->runOrder = sqlDouble(row[1]);
+ret->filePattern = cloneString(row[2]);
+ret->hubPattern = cloneString(row[3]);
+ret->tagPattern = cloneString(row[4]);
+ret->onFileStartUpload = cloneString(row[5]);
+ret->onFileEndUpload = cloneString(row[6]);
+ret->onSubmissionStartUpload = cloneString(row[7]);
+ret->onSubmissionEndUpload = cloneString(row[8]);
 return ret;
 }
 
@@ -731,7 +880,7 @@ struct bdwSubscribingProgram *bdwSubscribingProgramLoadAll(char *fileName)
 {
 struct bdwSubscribingProgram *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -749,7 +898,7 @@ struct bdwSubscribingProgram *bdwSubscribingProgramLoadAllByChar(char *fileName,
 {
 struct bdwSubscribingProgram *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -771,6 +920,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
+ret->runOrder = sqlDoubleComma(&s);
 ret->filePattern = sqlStringComma(&s);
 ret->hubPattern = sqlStringComma(&s);
 ret->tagPattern = sqlStringComma(&s);
@@ -816,6 +966,8 @@ void bdwSubscribingProgramOutput(struct bdwSubscribingProgram *el, FILE *f, char
 /* Print out bdwSubscribingProgram.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%g", el->runOrder);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->filePattern);

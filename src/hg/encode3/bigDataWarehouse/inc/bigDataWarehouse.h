@@ -11,8 +11,8 @@ struct bdwUser
 /* Someone who submits files to or otherwise interacts with big data warehouse */
     {
     struct bdwUser *next;  /* Next in singly linked list. */
-    char sid[65];	/* sha512 generated unique user ID. */
-    char access[65];	/* access code */
+    char sid[65];	/* sha512 generated unique user ID */
+    char access[65];	/* access code - hashed from password and stuff */
     char *email;	/* Email handle, the main identifier. */
     };
 
@@ -57,75 +57,20 @@ void bdwUserOutput(struct bdwUser *el, FILE *f, char sep, char lastSep);
 #define bdwUserCommaOut(el,f) bdwUserOutput(el,f,',',',');
 /* Print out bdwUser as a comma separated list including final comma. */
 
-#define BDWHUB_NUM_COLS 8
-
-struct bdwHub
-/* An external data hub we have collected files from */
-    {
-    struct bdwHub *next;  /* Next in singly linked list. */
-    unsigned id;	/* Autoincremented hub id */
-    char *url;	/* Hub url - points to directory containing hub.txt file */
-    char *shortLabel;	/* Hub short label from hub.txt file */
-    char *longLabel;	/* Hub long label */
-    long long lastOkTime;	/* Last time hub was ok in seconds since 1970 */
-    long long lastNotOkTime;	/* Last time hub was not ok in seconds since 1970 */
-    long long firstAdded;	/* Time hub was first seen */
-    char *errorMessage;	/* If non-empty contains last error message from hub. If empty hub is ok */
-    };
-
-void bdwHubStaticLoad(char **row, struct bdwHub *ret);
-/* Load a row from bdwHub table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-
-struct bdwHub *bdwHubLoad(char **row);
-/* Load a bdwHub from row fetched with select * from bdwHub
- * from database.  Dispose of this with bdwHubFree(). */
-
-struct bdwHub *bdwHubLoadAll(char *fileName);
-/* Load all bdwHub from whitespace-separated file.
- * Dispose of this with bdwHubFreeList(). */
-
-struct bdwHub *bdwHubLoadAllByChar(char *fileName, char chopper);
-/* Load all bdwHub from chopper separated file.
- * Dispose of this with bdwHubFreeList(). */
-
-#define bdwHubLoadAllByTab(a) bdwHubLoadAllByChar(a, '\t');
-/* Load all bdwHub from tab separated file.
- * Dispose of this with bdwHubFreeList(). */
-
-struct bdwHub *bdwHubCommaIn(char **pS, struct bdwHub *ret);
-/* Create a bdwHub out of a comma separated string. 
- * This will fill in ret if non-null, otherwise will
- * return a new bdwHub */
-
-void bdwHubFree(struct bdwHub **pEl);
-/* Free a single dynamically allocated bdwHub such as created
- * with bdwHubLoad(). */
-
-void bdwHubFreeList(struct bdwHub **pList);
-/* Free a list of dynamically allocated bdwHub's */
-
-void bdwHubOutput(struct bdwHub *el, FILE *f, char sep, char lastSep);
-/* Print out bdwHub.  Separate fields with sep. Follow last field with lastSep. */
-
-#define bdwHubTabOut(el,f) bdwHubOutput(el,f,'\t','\n');
-/* Print out bdwHub as a line in a tab-separated file. */
-
-#define bdwHubCommaOut(el,f) bdwHubOutput(el,f,',',',');
-/* Print out bdwHub as a comma separated list including final comma. */
-
-#define BDWHOST_NUM_COLS 6
+#define BDWHOST_NUM_COLS 8
 
 struct bdwHost
-/* An external host we have collected files from */
+/* A web host we have collected files from - something like www.ncbi.nlm.gov or google.com */
     {
     struct bdwHost *next;  /* Next in singly linked list. */
     unsigned id;	/* Autoincremented host id */
     char *name;	/* Name (before DNS lookup) */
-    long long lastOkTime;	/* Last time hub was ok in seconds since 1970 */
-    long long lastNotOkTime;	/* Last time hub was not ok in seconds since 1970 */
+    long long lastOkTime;	/* Last time host was ok in seconds since 1970 */
+    long long lastNotOkTime;	/* Last time host was not ok in seconds since 1970 */
     long long firstAdded;	/* Time host was first seen */
     char *errorMessage;	/* If non-empty contains last error message from host. If empty host is ok */
+    long long uploadCount;	/* Number of times things have been uploaded from this host */
+    long long historyBits;	/* Upload history with most recent in least significant bit. 0 for connection failed, 1 for success */
     };
 
 void bdwHostStaticLoad(char **row, struct bdwHost *ret);
@@ -169,78 +114,84 @@ void bdwHostOutput(struct bdwHost *el, FILE *f, char sep, char lastSep);
 #define bdwHostCommaOut(el,f) bdwHostOutput(el,f,',',',');
 /* Print out bdwHost as a comma separated list including final comma. */
 
-#define BDWSUBMISSION_NUM_COLS 6
+#define BDWSUBMISSIONDIR_NUM_COLS 9
 
-struct bdwSubmission
-/* A data submission, typically containing many files. */
+struct bdwSubmissionDir
+/* An external data directory we have collected a submission from */
     {
-    struct bdwSubmission *next;  /* Next in singly linked list. */
-    unsigned id;	/* Autoincremented submission id */
-    long long startUploadTime;	/* Time at start of submission */
-    long long endUploadTime;	/* Time at end of upload - 0 if not finished */
-    char userSid[65];	/* Connects to user table sid field */
-    unsigned hubId;	/* Connect to hub table id field */
-    char *errorMessage;	/* If non-empty contains last error message from host. If empty host is ok */
+    struct bdwSubmissionDir *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincremented id */
+    char *url;	/* Web-mounted directory. Includes protocol, host, and final '/' */
+    unsigned hostId;	/* Id of host it's on */
+    long long lastOkTime;	/* Last time submission dir was ok in seconds since 1970 */
+    long long lastNotOkTime;	/* Last time submission dir was not ok in seconds since 1970 */
+    long long firstAdded;	/* Time submission dir was first seen */
+    char *errorMessage;	/* If non-empty contains last error message from dir. If empty dir is ok */
+    long long uploadAttempts;	/* Number of times uploads attempted fromt this submission directory */
+    long long historyBits;	/* Upload history with most recent in least significant bit. 0 for upload failed, 1 for success */
     };
 
-void bdwSubmissionStaticLoad(char **row, struct bdwSubmission *ret);
-/* Load a row from bdwSubmission table into ret.  The contents of ret will
+void bdwSubmissionDirStaticLoad(char **row, struct bdwSubmissionDir *ret);
+/* Load a row from bdwSubmissionDir table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct bdwSubmission *bdwSubmissionLoad(char **row);
-/* Load a bdwSubmission from row fetched with select * from bdwSubmission
- * from database.  Dispose of this with bdwSubmissionFree(). */
+struct bdwSubmissionDir *bdwSubmissionDirLoad(char **row);
+/* Load a bdwSubmissionDir from row fetched with select * from bdwSubmissionDir
+ * from database.  Dispose of this with bdwSubmissionDirFree(). */
 
-struct bdwSubmission *bdwSubmissionLoadAll(char *fileName);
-/* Load all bdwSubmission from whitespace-separated file.
- * Dispose of this with bdwSubmissionFreeList(). */
+struct bdwSubmissionDir *bdwSubmissionDirLoadAll(char *fileName);
+/* Load all bdwSubmissionDir from whitespace-separated file.
+ * Dispose of this with bdwSubmissionDirFreeList(). */
 
-struct bdwSubmission *bdwSubmissionLoadAllByChar(char *fileName, char chopper);
-/* Load all bdwSubmission from chopper separated file.
- * Dispose of this with bdwSubmissionFreeList(). */
+struct bdwSubmissionDir *bdwSubmissionDirLoadAllByChar(char *fileName, char chopper);
+/* Load all bdwSubmissionDir from chopper separated file.
+ * Dispose of this with bdwSubmissionDirFreeList(). */
 
-#define bdwSubmissionLoadAllByTab(a) bdwSubmissionLoadAllByChar(a, '\t');
-/* Load all bdwSubmission from tab separated file.
- * Dispose of this with bdwSubmissionFreeList(). */
+#define bdwSubmissionDirLoadAllByTab(a) bdwSubmissionDirLoadAllByChar(a, '\t');
+/* Load all bdwSubmissionDir from tab separated file.
+ * Dispose of this with bdwSubmissionDirFreeList(). */
 
-struct bdwSubmission *bdwSubmissionCommaIn(char **pS, struct bdwSubmission *ret);
-/* Create a bdwSubmission out of a comma separated string. 
+struct bdwSubmissionDir *bdwSubmissionDirCommaIn(char **pS, struct bdwSubmissionDir *ret);
+/* Create a bdwSubmissionDir out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new bdwSubmission */
+ * return a new bdwSubmissionDir */
 
-void bdwSubmissionFree(struct bdwSubmission **pEl);
-/* Free a single dynamically allocated bdwSubmission such as created
- * with bdwSubmissionLoad(). */
+void bdwSubmissionDirFree(struct bdwSubmissionDir **pEl);
+/* Free a single dynamically allocated bdwSubmissionDir such as created
+ * with bdwSubmissionDirLoad(). */
 
-void bdwSubmissionFreeList(struct bdwSubmission **pList);
-/* Free a list of dynamically allocated bdwSubmission's */
+void bdwSubmissionDirFreeList(struct bdwSubmissionDir **pList);
+/* Free a list of dynamically allocated bdwSubmissionDir's */
 
-void bdwSubmissionOutput(struct bdwSubmission *el, FILE *f, char sep, char lastSep);
-/* Print out bdwSubmission.  Separate fields with sep. Follow last field with lastSep. */
+void bdwSubmissionDirOutput(struct bdwSubmissionDir *el, FILE *f, char sep, char lastSep);
+/* Print out bdwSubmissionDir.  Separate fields with sep. Follow last field with lastSep. */
 
-#define bdwSubmissionTabOut(el,f) bdwSubmissionOutput(el,f,'\t','\n');
-/* Print out bdwSubmission as a line in a tab-separated file. */
+#define bdwSubmissionDirTabOut(el,f) bdwSubmissionDirOutput(el,f,'\t','\n');
+/* Print out bdwSubmissionDir as a line in a tab-separated file. */
 
-#define bdwSubmissionCommaOut(el,f) bdwSubmissionOutput(el,f,',',',');
-/* Print out bdwSubmission as a comma separated list including final comma. */
+#define bdwSubmissionDirCommaOut(el,f) bdwSubmissionDirOutput(el,f,',',',');
+/* Print out bdwSubmissionDir as a comma separated list including final comma. */
 
-#define BDWFILE_NUM_COLS 11
+#define BDWFILE_NUM_COLS 14
 
 struct bdwFile
 /* A file we are tracking that we intend to and maybe have uploaded */
     {
     struct bdwFile *next;  /* Next in singly linked list. */
-    unsigned id;	/* Autoincrementing host id */
-    unsigned submission;	/* Links to id in submission table */
-    char *hubFileName;	/* File name in hub */
-    char bdwName;	/* A abc123 looking license-platish thing */
-    char *bdwFileName;	/* File name in big data warehouse */
+    unsigned id;	/* Autoincrementing file id */
+    char licensePlate[17];	/* A abc123 looking license-platish thing */
+    unsigned submissionId;	/* Links to id in submission table */
+    char *submitFileName;	/* File name in submission relative to submission dir */
+    char *bdwFileName;	/* File name in big data warehouse relative to bdw root dir */
     long long startUploadTime;	/* Time when upload started - 0 if not started */
     long long endUploadTime;	/* Time when upload finished - 0 if not finished */
-    long long updateTime;	/* Update time (on hub it was downloaded from) */
+    long long updateTime;	/* Update time (on system it was uploaded from) */
     long long size;	/* File size */
     char md5[33];	/* md5 sum of file contents */
     char *tags;	/* CGI encoded name=val pairs from manifest */
+    char *errorMessage;	/* If non-empty contains last error message from upload. If empty upload is ok */
+    long long uploadAttempts;	/* Number of times file upload attempted */
+    long long historyBits;	/* Upload history with most recent in least significant bit. 0 for connection failed, 1 for success */
     };
 
 void bdwFileStaticLoad(char **row, struct bdwFile *ret);
@@ -284,13 +235,122 @@ void bdwFileOutput(struct bdwFile *el, FILE *f, char sep, char lastSep);
 #define bdwFileCommaOut(el,f) bdwFileOutput(el,f,',',',');
 /* Print out bdwFile as a comma separated list including final comma. */
 
-#define BDWSUBSCRIBINGPROGRAM_NUM_COLS 8
+#define BDWSUBMISSION_NUM_COLS 7
+
+struct bdwSubmission
+/* A data submission, typically containing many files.  Always associated with a submission dir. */
+    {
+    struct bdwSubmission *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincremented submission id */
+    char *url;	/* Url to validated.txt format file. We copy this file over and give it a fileId if we can. */
+    long long startUploadTime;	/* Time at start of submission */
+    long long endUploadTime;	/* Time at end of upload - 0 if not finished */
+    char userSid[65];	/* Connects to user table sid field */
+    unsigned submitFileId;	/* Points to validated.txt file for submission. */
+    char *errorMessage;	/* If non-empty contains last error message from submission. If empty submission is ok */
+    };
+
+void bdwSubmissionStaticLoad(char **row, struct bdwSubmission *ret);
+/* Load a row from bdwSubmission table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct bdwSubmission *bdwSubmissionLoad(char **row);
+/* Load a bdwSubmission from row fetched with select * from bdwSubmission
+ * from database.  Dispose of this with bdwSubmissionFree(). */
+
+struct bdwSubmission *bdwSubmissionLoadAll(char *fileName);
+/* Load all bdwSubmission from whitespace-separated file.
+ * Dispose of this with bdwSubmissionFreeList(). */
+
+struct bdwSubmission *bdwSubmissionLoadAllByChar(char *fileName, char chopper);
+/* Load all bdwSubmission from chopper separated file.
+ * Dispose of this with bdwSubmissionFreeList(). */
+
+#define bdwSubmissionLoadAllByTab(a) bdwSubmissionLoadAllByChar(a, '\t');
+/* Load all bdwSubmission from tab separated file.
+ * Dispose of this with bdwSubmissionFreeList(). */
+
+struct bdwSubmission *bdwSubmissionCommaIn(char **pS, struct bdwSubmission *ret);
+/* Create a bdwSubmission out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new bdwSubmission */
+
+void bdwSubmissionFree(struct bdwSubmission **pEl);
+/* Free a single dynamically allocated bdwSubmission such as created
+ * with bdwSubmissionLoad(). */
+
+void bdwSubmissionFreeList(struct bdwSubmission **pList);
+/* Free a list of dynamically allocated bdwSubmission's */
+
+void bdwSubmissionOutput(struct bdwSubmission *el, FILE *f, char sep, char lastSep);
+/* Print out bdwSubmission.  Separate fields with sep. Follow last field with lastSep. */
+
+#define bdwSubmissionTabOut(el,f) bdwSubmissionOutput(el,f,'\t','\n');
+/* Print out bdwSubmission as a line in a tab-separated file. */
+
+#define bdwSubmissionCommaOut(el,f) bdwSubmissionOutput(el,f,',',',');
+/* Print out bdwSubmission as a comma separated list including final comma. */
+
+#define BDWSUBMISSIONLOG_NUM_COLS 3
+
+struct bdwSubmissionLog
+/* Log of status messages received during submission process */
+    {
+    struct bdwSubmissionLog *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincremented id */
+    unsigned submissionId;	/* Id in submission table */
+    char *message;	/* Some message probably scraped out of stderr or something */
+    };
+
+void bdwSubmissionLogStaticLoad(char **row, struct bdwSubmissionLog *ret);
+/* Load a row from bdwSubmissionLog table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct bdwSubmissionLog *bdwSubmissionLogLoad(char **row);
+/* Load a bdwSubmissionLog from row fetched with select * from bdwSubmissionLog
+ * from database.  Dispose of this with bdwSubmissionLogFree(). */
+
+struct bdwSubmissionLog *bdwSubmissionLogLoadAll(char *fileName);
+/* Load all bdwSubmissionLog from whitespace-separated file.
+ * Dispose of this with bdwSubmissionLogFreeList(). */
+
+struct bdwSubmissionLog *bdwSubmissionLogLoadAllByChar(char *fileName, char chopper);
+/* Load all bdwSubmissionLog from chopper separated file.
+ * Dispose of this with bdwSubmissionLogFreeList(). */
+
+#define bdwSubmissionLogLoadAllByTab(a) bdwSubmissionLogLoadAllByChar(a, '\t');
+/* Load all bdwSubmissionLog from tab separated file.
+ * Dispose of this with bdwSubmissionLogFreeList(). */
+
+struct bdwSubmissionLog *bdwSubmissionLogCommaIn(char **pS, struct bdwSubmissionLog *ret);
+/* Create a bdwSubmissionLog out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new bdwSubmissionLog */
+
+void bdwSubmissionLogFree(struct bdwSubmissionLog **pEl);
+/* Free a single dynamically allocated bdwSubmissionLog such as created
+ * with bdwSubmissionLogLoad(). */
+
+void bdwSubmissionLogFreeList(struct bdwSubmissionLog **pList);
+/* Free a list of dynamically allocated bdwSubmissionLog's */
+
+void bdwSubmissionLogOutput(struct bdwSubmissionLog *el, FILE *f, char sep, char lastSep);
+/* Print out bdwSubmissionLog.  Separate fields with sep. Follow last field with lastSep. */
+
+#define bdwSubmissionLogTabOut(el,f) bdwSubmissionLogOutput(el,f,'\t','\n');
+/* Print out bdwSubmissionLog as a line in a tab-separated file. */
+
+#define bdwSubmissionLogCommaOut(el,f) bdwSubmissionLogOutput(el,f,',',',');
+/* Print out bdwSubmissionLog as a comma separated list including final comma. */
+
+#define BDWSUBSCRIBINGPROGRAM_NUM_COLS 9
 
 struct bdwSubscribingProgram
 /* A program that wants to be called when a file arrives or a submission finishes */
     {
     struct bdwSubscribingProgram *next;  /* Next in singly linked list. */
     unsigned id;	/* ID of daemon */
+    double runOrder;	/* Determines order programs run in. In case of tie lowest id wins. */
     char *filePattern;	/* A string with * and ? wildcards to match files we care about */
     char *hubPattern;	/* A string with * and ? wildcards to match hub URLs we care about */
     char *tagPattern;	/* A string of cgi encoded name=val pairs where vals have wildcards */
