@@ -343,8 +343,8 @@ void reverseStrings(char **a, int length);
 void swapBytes(char *a, char *b, int length);
 /* Swap buffers a and b. */
 
-/* Some things to manage simple lists - structures that begin
- * with a pointer to the next element in the list. */
+/******* Some things to manage simple lists - structures that begin ******
+ ******* with a pointer to the next element in the list.            ******/
 struct slList
     {
     struct slList *next;
@@ -448,6 +448,8 @@ void slFreeList(void *listPt);
  *    slFreeList(&list);
  */
 
+/******* slInt - an int on a list - the first of many singly linked list structures *******/
+
 struct slInt
 /* List of integers. */
     {
@@ -468,16 +470,7 @@ int slIntCmpRev(const void *va, const void *vb);
 struct slInt * slIntFind(struct slInt *list, int target);
 /* Find target in slInt list or return NULL */
 
-void doubleSort(int count, double *array);
-/* Sort an array of doubles. */
-
-double doubleMedian(int count, double *array);
-/* Return median value in array.  This will sort
- * the array as a side effect. */
-
-void doubleBoxWhiskerCalc(int count, double *array, double *retMin,
-	double *retQ1, double *retMedian, double *retQ3, double *retMax);
-/* Calculate what you need to draw a box and whiskers plot from an array of doubles. */
+/******* slDouble - a double on a list *******/
 
 struct slDouble
 /* List of double-precision numbers. */
@@ -496,16 +489,7 @@ int slDoubleCmp(const void *va, const void *vb);
 double slDoubleMedian(struct slDouble *list);
 /* Return median value on list. */
 
-void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin,
-	double *retQ1, double *retMedian, double *retQ3, double *retMax);
-/* Calculate what you need to draw a box and whiskers plot from a list of slDoubles. */
-
-void intSort(int count, int *array);
-/* Sort an array of ints. */
-
-int intMedian(int count, int *array);
-/* Return median value in array.  This will sort
- * the array as a side effect. */
+/******* slName - a zero terminated string on a list *******/
 
 struct slName
 /* List of names. The name array is allocated to accommodate full name
@@ -601,6 +585,8 @@ struct slName *slNameLoadReal(char *fileName);
 struct slName *slNameIntersection(struct slName *a, struct slName *b);
 /* return intersection of two slName lists.  */
 
+/******* slRef - a void pointer on a list *******/
+
 struct slRef
 /* Singly linked list of generic references. */
     {
@@ -625,6 +611,8 @@ void slRefFreeListAndVals(struct slRef **pList);
 
 struct slRef *refListFromSlList(void *list);
 /* Make a reference list that mirrors a singly-linked list. */
+
+/******* slPair - a name/value pair on list where value not always a string *******/
 
 struct slPair
 /* A name/value pair. */
@@ -706,9 +694,38 @@ int slPairAtoiCmp(const void *va, const void *vb);
 void slPairValAtoiSort(struct slPair **pList);
 // Sort slPair list on string values interpreted as integers.
 
+
+
+/******* Some old stuff maybe we could trim. *******/
+
 void gentleFree(void *pt);
 /* check pointer for NULL before freeing.
  * (Actually plain old freeMem does that these days.) */
+
+/******* Some math stuff *******/
+
+void doubleSort(int count, double *array);
+/* Sort an array of doubles. */
+
+double doubleMedian(int count, double *array);
+/* Return median value in array.  This will sort
+ * the array as a side effect. */
+
+void doubleBoxWhiskerCalc(int count, double *array, double *retMin,
+	double *retQ1, double *retMedian, double *retQ3, double *retMax);
+/* Calculate what you need to draw a box and whiskers plot from an array of doubles. */
+
+void slDoubleBoxWhiskerCalc(struct slDouble *list, double *retMin,
+	double *retQ1, double *retMedian, double *retQ3, double *retMax);
+/* Calculate what you need to draw a box and whiskers plot from a list of slDoubles. */
+
+int intMedian(int count, int *array);
+/* Return median value in array.  This will sort
+ * the array as a side effect. */
+
+void intSort(int count, int *array);
+/* Sort an array of ints. */
+
 
 /*******  Some stuff for processing strings. *******/
 
