@@ -11,6 +11,9 @@
 #include "sqlNum.h"
 #include "cheapcgi.h"
 #include "net.h"
+#include "md5.h"
+#include "portable.h"
+#include "obscure.h"
 #include "hex.h"
 #include "bigDataWarehouse.h"
 #include "bdwLib.h"
@@ -85,7 +88,6 @@ if (table != NULL)
     freez(pTable);
     }
 }
-
 
 struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id)
 /* Create a new row and add it to table.  Return row. */
@@ -165,22 +167,19 @@ int bdwOpenAndRecord(struct sqlConnection *conn,
  * submissionDir and submissionFile. Note submissionFile itself may have
  * further directory info. */
 {
-uglyf("bdwOpenAndRecord(%s %s %s)\n", submissionDir, submissionFile, url);
 /* Wrap netUrlOpen in errCatch and remember whether it works. */
 struct errCatch *errCatch = errCatchNew();
 int sd = -1;
 boolean success = TRUE;
 if (errCatchStart(errCatch))
     {
-    uglyf("in errCatchStart block\n");
-    sd = netUrlOpen(url);
-    uglyf("Net url open (%s) = %d\n", url, sd);
+    sd = netUrlMustOpenPastHeader(url);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     success = FALSE;
-    warn("Error: %s", errCatch->message->string);
+    warn("Error: %s", trimSpaces(errCatch->message->string));
     }
 
 /* Parse url into pieces */
@@ -190,17 +189,17 @@ netParseUrl(url, &npu);
 char urlDir[PATH_LEN], urlFileName[PATH_LEN], urlExtension[PATH_LEN];
 splitPath(npu.file, urlDir, urlFileName, urlExtension);
 
-/* Get or make pieces of database for submission. */
+/* Record success in host and submissionDir tables. */
 int hostId = bdwGetHost(conn, npu.host);
-uglyf("hostId = %d\n", hostId);
 recordIntoHistory(conn, hostId, "bdwHost", "name", npu.host, success);
 #ifdef SOON
 int submissionDirId = bdwGetSubmissionDir(conn, hostId, submissionDir);
 recordIntoHistory(conn, submissionDirId, "bdwSubmissionDir", "url", submissionDir, status);
 #endif /* SOON */
 
-/* Clean up and go home. */
 errCatchFree(&errCatch);
+if (!success)
+    noWarnAbort();
 return sd;
 }
 
@@ -293,8 +292,8 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
     bf->tags = cloneString(tags->string);
 
     /* Fake other fields. */
-    strcpy(bf->licensePlate, "fakeLicense");
-    bf->bdwFileName  = cloneString("fakeBdwFileName");
+    strcpy(bf->licensePlate, "");
+    bf->bdwFileName  = cloneString("");
     slAddHead(&bfList, bf);
     }
 slReverse(&bfList);
@@ -383,29 +382,43 @@ dyStringFree(&query);
 return sqlLastAutoId(conn);
 }
 
-void bdwDirForTime(time_t sinceEpoch, char dir[PATH_LEN])
+void bdwRelDirForTime(time_t sinceEpoch, char dir[PATH_LEN])
 /* Return the output directory for a given time. */
 {
 /* Get current time parsed into struct tm */
 struct tm now;
 gmtime_r(&sinceEpoch, &now);
 
-/* make directory out of year/month/day */
-safef(dir, PATH_LEN, "%s%d/%d/%d", bdwRootDir, now.tm_year+1900, now.tm_mon+1, now.tm_mday);
+/* make directory string out of year/month/day/ */
+safef(dir, PATH_LEN, "%d/%d/%d/", now.tm_year+1900, now.tm_mon+1, now.tm_mday);
 }
 
 #define maxPlateSize 16
-void fetchFdNoCheck(struct sqlConnection *conn, unsigned bdwFileId, int unixFd)
+
+void fetchFdNoCheck(struct sqlConnection *conn, unsigned bdwFileId, int unixFd, 
+    char licensePlate[maxPlateSize], char bdwFile[PATH_LEN])
 /* Fetch a file from the remote place we have a connection to.  Do not check MD5sum. */
 {
 /* Figure out bdw file name, starting with license plate. */
-char licensePlate[maxPlateSize];
-makeLicensePlate(licensePlatePrefix, bdwFileId, licensePlate, sizeof(licensePlate));
+makeLicensePlate(licensePlatePrefix, bdwFileId, licensePlate, maxPlateSize);
 uglyf("fetchFdNoCheck: unixFd %d, bdwFileId %d, licensePlate %s\n", unixFd, bdwFileId, licensePlate);
-char uploadDir[PATH_LEN];
+/* Figure out directory and make any components not already there. */
 time_t now = time(NULL);
-bdwDirForTime(now, uploadDir);
-uglyf("uploadDir is %s\n", uploadDir);
+char bdwDir[PATH_LEN];
+bdwRelDirForTime(now, bdwDir);
+char uploadDir[PATH_LEN];
+safef(uploadDir, sizeof(uploadDir), "%s%s", bdwRootDir, bdwDir);
+makeDirsOnPath(uploadDir);
+
+/* Figure out full file name */
+safef(bdwFile, PATH_LEN, "%s%s", bdwDir, licensePlate);
+char destPath[PATH_LEN];
+safef(destPath, sizeof(destPath), "%s%s", bdwRootDir, bdwFile);
+
+/* Copy to output file. */
+int destFd = mustOpenFd(destPath, O_CREAT|O_WRONLY);
+cpFile(unixFd, destFd);
+mustCloseFd(&destFd);
 }
 
 void bdwSubmit(char *submissionUrl, char *user, char *password)
@@ -431,51 +444,79 @@ bdwMustHaveAccess(conn, user, password, userSid);
 int submissionId = makeNewEmptySubmissionRecord(conn, submissionUrl, userSid);
 uglyf("submissionId = %d\n", submissionId);
 
-/* Copy over manifest file */
-int fd = bdwOpenAndRecord(conn, submissionDir, submissionFile, submissionUrl);
-uglyf("Got fd=%d from bdwOpenAndRecord\n", fd);
-int fileId = makeNewEmptyFileRecord(conn, submissionId, submissionFile);
-uglyf("Got fileId = %d\n", fileId);
-fetchFdNoCheck(conn, fileId, fd);
-#ifdef SOON
-char fileNameOnServer[PATH_LEN];
-bdwFileNameOnServer(conn, fileId, fileNameOnServer);
-
-/* About here is where we should wrap things in an errCatch so can put error message in 
- * the bdwSubmission.errorMessage field. */
-
-/* Fill in MD5sum and the like of submission file */
-unsigned char md5bin[16];
-md5ForFile(fileNameOnServer, md5bin);
-char md5[33];
-hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
-time_t updateTime = fileModTime(fileNameOnServer);
-off_t size = fileSize(fileNameOnServer);
-char query[256];
-safef(query, sizeof(query), 
-    "update bdwFile set updateTime = %lld, size=%lld, md5=0x%s where id=%u\n",
-    (long long)updateTime, (long long)size, md5, fileId);
-sqlUpdate(conn, query);
-
-/* Load up submission file as fielded table, make sure all required fields are there,
- * and calculate indexes of required fields. */
-char *requiredFields[] = {"file_name", "md5_sum", "size", "modified"};
-struct fieldedTable *table = fieldedTableFromTabFile(fileNameOnServer, 
-	requiredFields, ArraySize(requiredFields));
-int fileIx = stringArrayIx("file_name", table->fields, table->fieldCount);
-int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
-int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
-int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
-
-struct bdwFile *bfList = bdwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
-uglyf("Got %d files in bfList\n", slCount(bfList));
-struct bdwFile *bf;
-for (bf = bfList; bf != NULL; bf = bf->next)
+/* Start catching errors from here and writing them in submissionId */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    bdwFileTabOut(bf, uglyOut); 
-    }
-sqlDisconnect(&conn);
+    int fd = bdwOpenAndRecord(conn, submissionDir, submissionFile, submissionUrl);
+    uglyf("Got fd=%d from bdwOpenAndRecord\n", fd);
+
+    /* Copy over manifest file */
+    int fileId = makeNewEmptyFileRecord(conn, submissionId, submissionFile);
+    uglyf("Got fileId = %d\n", fileId);
+
+    /* Now make a file record around it. */
+    char bdwFile[PATH_LEN];
+    char licensePlate[maxPlateSize];
+    fetchFdNoCheck(conn, fileId, fd, licensePlate, bdwFile);
+
+    char fileNameOnServer[PATH_LEN];
+    safef(fileNameOnServer, sizeof(fileNameOnServer), "%s%s", bdwRootDir, bdwFile);
+    uglyf("fileNameOnServer is %s\n", fileNameOnServer);
+
+    /* Fill in MD5sum and the like of submission file */
+    unsigned char md5bin[16];
+    md5ForFile(fileNameOnServer, md5bin);
+    char md5[33];
+    hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
+    uglyf("md5 = %s\n", md5);
+    time_t updateTime = fileModTime(fileNameOnServer);
+    off_t size = fileSize(fileNameOnServer);
+    char query[256];
+    safef(query, sizeof(query), 
+	"update bdwFile set "
+	" updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', bdwFileName='%s'"
+	" where id=%u\n",
+	(long long)updateTime, (long long)size, md5, licensePlate, bdwFile, fileId);
+    sqlUpdate(conn, query);
+
+    /* Load up submission file as fielded table, make sure all required fields are there,
+     * and calculate indexes of required fields. */
+    char *requiredFields[] = {"file_name", "md5_sum", "size", "modified"};
+    struct fieldedTable *table = fieldedTableFromTabFile(fileNameOnServer, 
+	    requiredFields, ArraySize(requiredFields));
+    int fileIx = stringArrayIx("file_name", table->fields, table->fieldCount);
+    int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
+    int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
+    int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
+
+    struct bdwFile *bfList = bdwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
+    uglyf("Got %d files in bfList\n", slCount(bfList));
+#ifdef SOON
+    struct bdwFile *bf;
+    for (bf = bfList; bf != NULL; bf = bf->next)
+	{
+	bdwFileTabOut(bf, uglyOut); 
+	}
 #endif /* SOON */
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    char *trimmedError = trimSpaces(errCatch->message->string);
+    warn("%s", trimmedError);
+    char escapedErrorMessage[2*strlen(trimmedError)+1];
+    sqlEscapeString2(escapedErrorMessage, trimmedError);
+    uglyf("escapedErrorMessage: %s\n", escapedErrorMessage);
+    struct dyString *query = dyStringNew(0);
+    dyStringPrintf(query, "update bdwSubmission set errorMessage='%s' where id=%d", 
+	escapedErrorMessage, submissionId);
+    sqlUpdate(conn, query->string);
+    dyStringFree(&query);
+    noWarnAbort();
+    }
+
+sqlDisconnect(&conn);
 }
 
 int main(int argc, char *argv[])
