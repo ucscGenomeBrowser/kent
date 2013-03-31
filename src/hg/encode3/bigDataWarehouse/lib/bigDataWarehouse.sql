@@ -5,7 +5,7 @@
 
 #Someone who submits files to or otherwise interacts with big data warehouse
 CREATE TABLE bdwUser (
-    sid char(64) not null,	# sha512 generated unique user ID
+    sid char(64) not null,	# sha384 generated base64 encoded unique user ID
     access char(64) not null,	# access code - hashed from password and stuff
     email varchar(255) not null,	# Email handle, the main identifier.
               #Indices

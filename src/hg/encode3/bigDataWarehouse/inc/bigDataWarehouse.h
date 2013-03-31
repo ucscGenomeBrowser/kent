@@ -11,7 +11,7 @@ struct bdwUser
 /* Someone who submits files to or otherwise interacts with big data warehouse */
     {
     struct bdwUser *next;  /* Next in singly linked list. */
-    char sid[65];	/* sha512 generated unique user ID */
+    char sid[65];	/* sha384 generated base64 encoded unique user ID */
     char access[65];	/* access code - hashed from password and stuff */
     char *email;	/* Email handle, the main identifier. */
     };

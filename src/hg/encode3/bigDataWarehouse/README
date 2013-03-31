@@ -1,5 +1,5 @@
 Here lies code to implement the ENCODE Big Data Warehouse (BDW).  The BDW is designed to track 
-a moderate number (100,000's) of big (~1GB) files.  It consists of three parts:
+a moderate number (1,000,000's) of big (~1GB) files.  It consists of three parts:
 1) A Linux file system with a fairly large block size.
 2) A MySQL database with a relatively small number of tables tracking
     a) Users (by their email name)

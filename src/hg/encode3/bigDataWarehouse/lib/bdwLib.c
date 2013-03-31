@@ -5,10 +5,23 @@
 #include "bdwLib.h"
 #include "hex.h"
 #include "openssl/sha.h"
+#include "base64.h"
 
 char *bdwDatabase = "bigDataWarehouse";
+char *bdwRootDir = "/scratch/kent/bigDataWarehouse/";
 
-void bdwMakeAccess(char *user, char *password, unsigned char access[BDW_SHA_SIZE])
+static void makeShaBase64(unsigned char *inputBuf, int inputSize, char out[BDW_ACCESS_SIZE])
+/* Make zero terminated printable cryptographic hash out of in */
+{
+unsigned char shaBuf[48];
+SHA384(inputBuf, inputSize, shaBuf);
+char *base64 = base64Encode((char*)shaBuf, sizeof(shaBuf));
+memcpy(out, base64, BDW_ACCESS_SIZE);
+out[BDW_ACCESS_SIZE-1] = 0; 
+freeMem(base64);
+}
+
+void bdwMakeAccess(char *user, char *password, char access[BDW_ACCESS_SIZE])
 /* Convert user + password + salt to an access code */
 {
 /* Salt it well with stuff that is reproducible but hard to guess, and some
@@ -23,7 +36,7 @@ for (i=0; i<ArraySize(inputBuf); i += 2)
     }
 safef((char*)inputBuf, sizeof(inputBuf), "f186ed79bae%s8e364d73%s<*#$*(#)!DSDFOUIHLjksdf",
     user, password);
-SHA512(inputBuf, sizeof(inputBuf), access);
+makeShaBase64(inputBuf, sizeof(inputBuf), access);
 }
 
 #define bdwMaxEmailSize 128     /* Maximum size of an email handle */
@@ -38,7 +51,7 @@ return emailSize;
 }
 
 boolean bdwCheckAccess(struct sqlConnection *conn, char *user, char *password, 
-    unsigned char retSid[BDW_SHA_SIZE])
+    char retSid[BDW_ACCESS_SIZE])
 /* Make sure user exists and password checks out. */
 {
 /* Make escaped version of email string since it may be raw user input. */
@@ -46,7 +59,7 @@ int emailSize = bdwCheckEmailSize(user);
 char escapedEmail[2*emailSize+1];
 sqlEscapeString2(escapedEmail, user);
 
-unsigned char access[BDW_SHA_SIZE];
+char access[BDW_ACCESS_SIZE];
 bdwMakeAccess(user, password, access);
 
 char query[256];
@@ -58,7 +71,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     if (memcmp(row[0], access, sizeof(access)) == 0)
 	{
-	memcpy(retSid, row[1], BDW_SHA_SIZE);
+	memcpy(retSid, row[1], BDW_ACCESS_SIZE);
         gotMatch = TRUE;
 	}
     }
@@ -67,14 +80,14 @@ return gotMatch;
 }
 
 void bdwMustHaveAccess(struct sqlConnection *conn, char *user, char *password,
-    unsigned char retSid[BDW_SHA_SIZE])
+    char retSid[BDW_ACCESS_SIZE])
 /* Check user has access and abort with an error message if not. */
 {
 if (!bdwCheckAccess(conn, user, password, retSid))
     errAbort("User/password combination doesn't give access to database");
 }
 
-void bdwMakeSid(char *user, unsigned char sid[BDW_SHA_SIZE])
+void bdwMakeSid(char *user, char sid[BDW_ACCESS_SIZE])
 /* Convert users to sid */
 {
 /* Salt it well with stuff that is reproducible but hard to guess, and some
@@ -89,6 +102,6 @@ for (i=0; i<ArraySize(inputBuf); i += 2)
     }
 safef((char*)inputBuf, sizeof(inputBuf), 
 	"186ED79BAEXzeusdioIsdklnw88e86cd73%s<*#$*(#)!DSDFOUIHLjksdf", user);
-SHA512(inputBuf, sizeof(inputBuf), sid);
+makeShaBase64(inputBuf, sizeof(inputBuf), sid);
 }
 

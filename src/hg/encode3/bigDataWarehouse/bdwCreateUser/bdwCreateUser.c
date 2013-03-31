@@ -28,6 +28,8 @@ static struct optionSpec options[] = {
 void bdwCreateUser(char *email, char *password)
 /* bdwCreateUser - Create a new user from email/password combo.. */
 {
+verbose(2, "bdwCreateUser(user=%s, password=%s)\n", email, password);
+
 /* Make escaped version of email string since it may be raw user input. */
 int emailSize = bdwCheckEmailSize(email);
 char escapedEmail[2*emailSize+1];
@@ -41,23 +43,19 @@ if (sqlQuickNum(conn, query->string) > 0)
     errAbort("User %s already exists", email);
 
 /* Make up hash around our user name */
-unsigned char sid[BDW_SHA_SIZE];
-char hexedSid[2*ArraySize(sid)+1];
+char sid[BDW_ACCESS_SIZE];
 bdwMakeSid(email, sid);
-hexBinaryString(sid, sizeof(sid), hexedSid, sizeof(hexedSid));
+verbose(2, "sid=%s\n", sid);
 
 /* Make up hash around our password */
-unsigned char access[BDW_SHA_SIZE];
-char hexedAccess[2*ArraySize(access)+1];
-verbose(2, "bdwCreateUser(user=%s, password=%s)\n", email, password);
+char access[BDW_ACCESS_SIZE];
 bdwMakeAccess(email, password, access);
-hexBinaryString(access, sizeof(access), hexedAccess, sizeof(hexedAccess));
-verbose(2, "hexedAccess=%s\n", hexedAccess);
+verbose(2, "access=%s\n", access);
 
 /* Do database insert. */
 dyStringClear(query);
-dyStringPrintf(query, "insert into bdwUser (sid, access, email) values(0x%s, 0x%s, '%s')",
-    hexedSid, hexedAccess, escapedEmail);
+dyStringPrintf(query, "insert into bdwUser (sid, access, email) values('%s', '%s', '%s')",
+    sid, access, escapedEmail);
 sqlUpdate(conn, query->string);
 
 sqlDisconnect(&conn);

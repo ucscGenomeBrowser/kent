@@ -108,6 +108,51 @@ table->cursor = &fr->next;
 return fr;
 }
 
+int bdwGetHost(struct sqlConnection *conn, char *hostName)
+/* Look up host name in table and return associated ID.  If not found
+ * make up new table entry. */
+{
+/* If it's already in table, just return ID. */
+char query[512];
+safef(query, sizeof(query), "select id from bdwHost where name='%s'", hostName);
+int hostId = sqlQuickNum(conn, query);
+if (hostId > 0)
+    {
+    uglyf("whoot - found %s = %d\n", hostName, hostId);
+    return hostId;
+    }
+
+safef(query, sizeof(query), 
+   "insert bdwHost (name, lastOkTime, lastNotOkTime, firstAdded, errorMessage, uploadCount) "
+   "values('%s', 0, 0, %lld, '', 0)", 
+   hostName, (long long)time(NULL));
+sqlUpdate(conn, query);
+return sqlLastAutoId(conn);
+}
+
+void recordIntoHistory(struct sqlConnection *conn, unsigned id, char *table, char *field, 
+    char *val, boolean success)
+/* Record success/failure into uploadCount and historyBits fields of table.  Also
+ * update field with val.  TODO - errorMessage */
+{
+/* Get historyBits and fold status into it. */
+char quickResult[32];
+char query[256];
+safef(query, sizeof(query), "select historyBits from %s where id=%u", table, id);
+if (sqlQuickQuery(conn, query, quickResult, sizeof(quickResult)) == NULL)
+    internalErr();
+long long historyBits = sqlLongLong(quickResult);
+historyBits <<= 1;
+if (success)
+    historyBits |= 1;
+
+/* Update all the fields we care about. */
+safef(query, sizeof(query), 
+    "update %s set %s='%s', historyBits=%lld, uploadCount=uploadCount+1 where id=%u",
+    table, field, val, historyBits, id);
+sqlUpdate(conn, query);
+}
+
 int bdwOpenAndRecord(struct sqlConnection *conn, 
 	char *submissionDir, char *submissionFile, char *url)
 /* Return a low level read socket handle on URL if possible.  Consult and
@@ -116,15 +161,18 @@ int bdwOpenAndRecord(struct sqlConnection *conn,
  * submissionDir and submissionFile. Note submissionFile itself may have
  * further directory info. */
 {
+uglyf("bdwOpenAndRecord(%s %s %s)\n", submissionDir, submissionFile, url);
 /* Wrap netUrlOpen in errCatch and remember whether it works. */
 struct errCatch *errCatch = errCatchNew();
 int sd = -1;
+boolean success = TRUE;
 if (errCatchStart(errCatch))
     {
+    uglyf("in errCatchStart block\n");
     sd = netUrlOpen(url);
+    uglyf("Net url open (%s) = %d\n", url, sd);
     }
 errCatchEnd(errCatch);
-boolean success = TRUE;
 if (errCatch->gotError)
     {
     success = FALSE;
@@ -139,9 +187,10 @@ char urlDir[PATH_LEN], urlFileName[PATH_LEN], urlExtension[PATH_LEN];
 splitPath(npu.file, urlDir, urlFileName, urlExtension);
 
 /* Get or make pieces of database for submission. */
-#ifdef SOON
 int hostId = bdwGetHost(conn, npu.host);
-recordIntoHistory(conn, hostId, "bdwHost", "name", npu.host, status);
+uglyf("hostId = %d\n", hostId);
+recordIntoHistory(conn, hostId, "bdwHost", "name", npu.host, success);
+#ifdef SOON
 int submissionDirId = bdwGetSubmissionDir(conn, hostId, submissionDir);
 recordIntoHistory(conn, submissionDirId, "bdwSubmissionDir", "url", submissionDir, status);
 #endif /* SOON */
@@ -266,18 +315,15 @@ struct netParsedUrl
 #endif /* EXAMPLE */
 
 int makeNewEmptySubmissionRecord(struct sqlConnection *conn, char *submissionUrl, 
-    unsigned char *userSid)
+    char *userSid)
 /* Create a submission record around URL and return it's id. */
 {
-char hexedUserSid[2*BDW_SHA_SIZE+1];
-hexBinaryString(userSid, BDW_SHA_SIZE, hexedUserSid, sizeof(hexedUserSid));
-
 struct dyString *query = dyStringNew(0);
 dyStringAppend(query, 
     "insert bdwSubmission "
     "(url, startUploadTime, endUploadTime, userSid, submitFileId, errorMessage) ");
-dyStringPrintf(query, "VALUES('%s', %lld, %lld, 0x%s, 0, '')",
-    submissionUrl, (long long)time(NULL), (long long)0, hexedUserSid);
+dyStringPrintf(query, "VALUES('%s', %lld, %lld, '%s', 0, '')",
+    submissionUrl, (long long)time(NULL), (long long)0, userSid);
 uglyf("query=%s\n", query->string);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
@@ -300,16 +346,17 @@ uglyf("%s -> %s %s\n", submissionUrl, submissionDir, submissionFile);
 
 /* Make sure user has access. */
 struct sqlConnection *conn = sqlConnect(bdwDatabase);
-unsigned char userSid[BDW_SHA_SIZE];
+char userSid[BDW_ACCESS_SIZE];
 bdwMustHaveAccess(conn, user, password, userSid);
 
 /* Make a submission record. */
 int submissionId = makeNewEmptySubmissionRecord(conn, submissionUrl, userSid);
 uglyf("submissionId = %d\n", submissionId);
 
-#ifdef SOON
 /* Copy over manifest file */
 int fd = bdwOpenAndRecord(conn, submissionDir, submissionFile, submissionUrl);
+uglyf("Got fd=%d from bdwOpenAndRecord\n", fd);
+#ifdef SOON
 int fileId = makeNewEmptyFileRecord(conn, submissionId, submissionDir, submissionFile);
 bdwFetchFileNoCheck(conn, fileId);
 char fileNameOnServer[PATH_LEN];

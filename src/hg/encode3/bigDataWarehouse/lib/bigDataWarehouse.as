@@ -2,7 +2,7 @@
 table bdwUser
 "Someone who submits files to or otherwise interacts with big data warehouse"
     (
-    char[64] sid;       "sha512 generated unique user ID"
+    char[64] sid;       "sha384 generated base64 encoded unique user ID"
     char[64] access;    "access code - hashed from password and stuff"
     string email;       "Email handle, the main identifier."
     )
