@@ -170,20 +170,10 @@ historyBits <<= 1;
 if (success)
     historyBits |= 1;
 safef(query, sizeof(query), 
-    "update %s set historyBits=%lld, uploadAttempts=uploadAttempts+1 where id=%lld",
-    table, historyBits, (long long)id);
-sqlUpdate(conn, query);
-}
-
-void recordIntoHistoryAndSaveTableVal(struct sqlConnection *conn, unsigned id, 
-    char *table, char *field, 
-    char *val, boolean success)
-/* Record success/failure into uploadAttempts and historyBits fields of table.  Also
- * update field with val. */
-{
-recordIntoHistory(conn, id, table, success);
-char query[256];
-safef(query, sizeof(query), "update %s set %s='%s' where id=%u", table, field, val, id);
+    "update %s set historyBits=%lld, uploadAttempts=uploadAttempts+1, %s=%lld "
+    "where id=%lld",
+    table, historyBits, (success ? "lastOkTime" : "lastNotOkTime"), (long long)time(NULL),
+    (long long)id);
 sqlUpdate(conn, query);
 }
 
@@ -545,7 +535,7 @@ if (errCatchStart(errCatch))
     struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
     dyStringPrintf(dy, "update bdwFile set md5='%s',size=%lld,updateTime=%lld",
 	    md5, bf->size, bf->updateTime);
-    dyStringAppend(dy, ",uploadAttempts=uploadAttempts+1, tags='");
+    dyStringAppend(dy, ", tags='");
     dyStringAppend(dy, bf->tags);
     dyStringPrintf(dy, "' where id=%d", bf->id);
     sqlUpdate(conn, dy->string);
@@ -557,13 +547,36 @@ if (errCatch->gotError)
     {
     handleFileError(conn, bf->id, errCatch->message->string);
     }
-recordIntoHistory(conn, bf->id, "bdwFile", success);
 }
 
 long bdwGotFile(struct sqlConnection *conn, char *submissionDir, char *submitFileName, char *md5)
 /* See if we already got file.  Return fileId if we do,  otherwise -1 */
 {
-return -1;
+char query[PATH_LEN+512];
+safef(query, sizeof(query), "select id from bdwSubmissionDir where url='%s'", submissionDir);
+int submissionDirId = sqlQuickNum(conn, query);
+if (submissionDirId <= 0)
+    return -1;
+
+safef(query, sizeof(query), 
+    "select file.md5,file.id from bdwSubmission sub,bdwFile file "
+    "where file.submitFileName='%s' and file.submissionId = sub.id and sub.submissionDirId = %d "
+    "order by file.submissionId desc"
+    , submitFileName, submissionDirId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+long fileId = -1;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *dbMd5 = row[0];
+    if (sameWord(md5, dbMd5))
+        fileId = sqlLongLong(row[1]);
+    else
+        break;
+    }
+sqlFreeResult(&sr);
+
+return fileId;
 }
 
 void bdwSubmit(char *submissionUrl, char *user, char *password)

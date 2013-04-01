@@ -49,8 +49,6 @@ table bdwFile
     char[32] md5;               "md5 sum of file contents"
     lstring tags;               "CGI encoded name=val pairs from manifest"
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
-    bigint uploadAttempts;  "Number of times file upload attempted"
-    bigint historyBits; "Upload history with most recent in least significant bit. 0 for connection failed, 1 for success"
     )
 
 table bdwSubmission

@@ -172,7 +172,7 @@ void bdwSubmissionDirOutput(struct bdwSubmissionDir *el, FILE *f, char sep, char
 #define bdwSubmissionDirCommaOut(el,f) bdwSubmissionDirOutput(el,f,',',',');
 /* Print out bdwSubmissionDir as a comma separated list including final comma. */
 
-#define BDWFILE_NUM_COLS 14
+#define BDWFILE_NUM_COLS 12
 
 struct bdwFile
 /* A file we are tracking that we intend to and maybe have uploaded */
@@ -190,8 +190,6 @@ struct bdwFile
     char md5[33];	/* md5 sum of file contents */
     char *tags;	/* CGI encoded name=val pairs from manifest */
     char *errorMessage;	/* If non-empty contains last error message from upload. If empty upload is ok */
-    long long uploadAttempts;	/* Number of times file upload attempted */
-    long long historyBits;	/* Upload history with most recent in least significant bit. 0 for connection failed, 1 for success */
     };
 
 void bdwFileStaticLoad(char **row, struct bdwFile *ret);

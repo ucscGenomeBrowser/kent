@@ -55,8 +55,6 @@ CREATE TABLE bdwFile (
     md5 char(32) not null,	# md5 sum of file contents
     tags longblob not null,	# CGI encoded name=val pairs from manifest
     errorMessage longblob not null,	# If non-empty contains last error message from upload. If empty upload is ok
-    uploadAttempts bigint not null,	# Number of times file upload attempted
-    historyBits bigint not null,	# Upload history with most recent in least significant bit. 0 for connection failed, 1 for success
               #Indices
     PRIMARY KEY(id)
 );

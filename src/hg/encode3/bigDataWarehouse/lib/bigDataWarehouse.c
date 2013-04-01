@@ -427,8 +427,6 @@ ret->size = sqlLongLong(row[8]);
 safecpy(ret->md5, sizeof(ret->md5), row[9]);
 ret->tags = row[10];
 ret->errorMessage = row[11];
-ret->uploadAttempts = sqlLongLong(row[12]);
-ret->historyBits = sqlLongLong(row[13]);
 }
 
 struct bdwFile *bdwFileLoad(char **row)
@@ -450,8 +448,6 @@ ret->size = sqlLongLong(row[8]);
 safecpy(ret->md5, sizeof(ret->md5), row[9]);
 ret->tags = cloneString(row[10]);
 ret->errorMessage = cloneString(row[11]);
-ret->uploadAttempts = sqlLongLong(row[12]);
-ret->historyBits = sqlLongLong(row[13]);
 return ret;
 }
 
@@ -461,7 +457,7 @@ struct bdwFile *bdwFileLoadAll(char *fileName)
 {
 struct bdwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[12];
 
 while (lineFileRow(lf, row))
     {
@@ -479,7 +475,7 @@ struct bdwFile *bdwFileLoadAllByChar(char *fileName, char chopper)
 {
 struct bdwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[12];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -512,8 +508,6 @@ ret->size = sqlLongLongComma(&s);
 sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
 ret->tags = sqlStringComma(&s);
 ret->errorMessage = sqlStringComma(&s);
-ret->uploadAttempts = sqlLongLongComma(&s);
-ret->historyBits = sqlLongLongComma(&s);
 *pS = s;
 return ret;
 }
@@ -583,10 +577,6 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%lld", el->uploadAttempts);
-fputc(sep,f);
-fprintf(f, "%lld", el->historyBits);
 fputc(lastSep,f);
 }
 
