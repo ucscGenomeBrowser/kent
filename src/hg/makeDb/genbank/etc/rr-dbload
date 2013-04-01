@@ -16,7 +16,7 @@ databases=$(gbGetDatabases etc/rr.dbs)
 
 # workdir is a local dir
 # FIXME: tmp change during hgsqlrr transition
-if [ $(hostname) = "hgnfs1" ] ; then
+if [ $(hostname) = "rrnfs1" ] ; then
    workdir=/genbank/tmp/$(hostname)
 else
    workdir=/data/tmp/genbank

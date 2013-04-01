@@ -26,10 +26,19 @@ struct encode2Manifest *encode2ManifestLoad(char **row);
 /* Load a encode2Manifest from row fetched with select * from encode2Manifest
  * from database.  Dispose of this with encode2ManifestFree(). */
 
+struct encode2Manifest *encode2ManifestLoadAll(char *fileName);
+/* Load all encode2Manifests from file. */
+
+struct encode2Manifest *encode2ManifestShortLoadAll(char *fileName);
+/* Read a short (just first 6 columns) manifest file. */
+
 void encode2ManifestTabOut(struct encode2Manifest *mi, FILE *f);
 /* Write tab-separated version of encode2Manifest to f */
 
-struct encode2Manifest *encode2ManifestLoadAll(char *fileName);
-/* Load all encode2Manifests from file. */
+void encode2ManifestShortTabOut(struct encode2Manifest *mi, FILE *f);
+/* Write tab-separated version of encode2Manifest to f */
+
+void encode2ManifestPrintHeader(FILE *f);
+/* Write out header line. */
 
 #endif /* ENCODE2MANIFEST_H */

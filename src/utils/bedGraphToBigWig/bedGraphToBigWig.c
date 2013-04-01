@@ -251,7 +251,7 @@ for (;;)
     if (rowSize == 0 && sum != NULL)
 	{
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		&boundsPt, boundsEnd, usage->size, lm, stream);
+		&boundsPt, boundsEnd, lm, stream);
 	break;
 	}
 
@@ -285,7 +285,7 @@ for (;;)
         {
 	usage = usage->next;
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize,
-		&boundsPt, boundsEnd, usage->size, lm, stream);
+		&boundsPt, boundsEnd, lm, stream);
 	sum = NULL;
 	}
 
@@ -293,7 +293,7 @@ for (;;)
     else if (sum != NULL && sum->end <= start)
 	{
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		&boundsPt, boundsEnd, usage->size, lm, stream);
+		&boundsPt, boundsEnd, lm, stream);
 	sum = NULL;
 	}
 
@@ -323,7 +323,7 @@ for (;;)
 	sum->sumData += val * overlap;
 	sum->sumSquares += val*val * overlap;
 	bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
-		&boundsPt, boundsEnd, usage->size, lm, stream);
+		&boundsPt, boundsEnd, lm, stream);
 	size -= overlap;
 
 	/* Move summary to next part. */

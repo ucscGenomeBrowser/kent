@@ -3059,6 +3059,16 @@ TMPDIR=/scratch/tmp
     time doRecipBest.pl -buildDir=`pwd` hg19 micMur1 > rbest.log 2>&1
     #	about 4h30m
 
+    # and for the swap (DONE - 2013-03-26 - Hiram)
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzMicMur1.2009-05-14/DEF \
+        -noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
+        > swap.log 2>&1 &
+    #   Elapsed time: 186m47s
+    cat fb.micMur1.chainHg19Link.txt
+    #   1318212266 bases of 1852394361 (71.163%) in intersection
+
 #########################################################################
 # LASTZ Baboon PapHam1 (DONE - 2009-05-20,22 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzPapHam1.2009-05-20
@@ -20139,7 +20149,7 @@ TMPDIR=/scratch/tmp
 
 
 #############################################################################
-# LASTZ Gibbon NomLeu3 (DONE - Wed Mar  6 12:20:39 PST 2013 - Pauline)
+# LASTZ Gibbon NomLeu3 (DONE - Tue Mar 26 18:52:03 PDT 2013 - Pauline)
 
     mkdir /hive/data/genomes/hg19/bed/lastzNomLeu3.2013-03-06
     cd /hive/data/genomes/hg19/bed/lastzNomLeu3.2013-03-06
@@ -20157,7 +20167,7 @@ BLASTZ_Y=15000
 BLASTZ_T=2
 
 # TARGET: Human hg19
-SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
@@ -20177,7 +20187,6 @@ TMPDIR=/scratch/tmp
     #   establish a screen to control this job
     screen -S lastz
 
-XXX Wed Mar  6 12:28:53 PST 2013
     /usr/bin/time -p nice doBlastzChainNet.pl -verbose=2 \
         `pwd`/DEF \
         -syntenicNet \
@@ -20186,12 +20195,12 @@ XXX Wed Mar  6 12:28:53 PST 2013
         >& do.log &
     #   real    724m15s
     cat fb.hg19.chainNomLeu3Link.txt
-    #   2543943556 bases of 2897316137 (87.803%) in intersection
+    #   2542790081 bases of 2897316137 (87.764%) in intersection
 
     cd /hive/data/genomes/hg19/bed
     ln -s lastzNomLeu3.2013-03-06 lastz.nomLeu3
 
-    #   running the swap - DONE - 2013-03-06
+    #   running the swap - DONE - 2013-03-26
     mkdir /hive/data/genomes/nomLeu3/bed/blastz.hg19.swap
     cd /hive/data/genomes/nomLeu3/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -20200,10 +20209,9 @@ XXX Wed Mar  6 12:28:53 PST 2013
         -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         > swap.log 2>&1 &
-    #   real     69m27s
+    #   real   138m48s  
     cat fb.nomLeu3.chainHg19Link.txt
-    #   2480558770 bases of 2756591777 (89.986%) in intersection
-
+    #   2479386532 bases of 2756609047 (89.943%) in intersection
 
 ##############################################################################
 # DBNSFP (DONE 3/22/13 angie)
@@ -20272,5 +20280,52 @@ XXX Wed Mar  6 12:28:53 PST 2013
 
     # Clean up: remove large files that can be re-unzipped or regenerated:
     rm -f search_db* dbNS*_variant.chr* dbNs*.bed
+
+##############################################################################
+# GAD UPDATE (DONE 3/25/13 angie)
+    mkdir /hive/data/genomes/hg19/bed/gad
+    set today = `date +%Y_%m_%d`
+    mkdir /hive/data/genomes/hg19/bed/gad/$today
+    cd /hive/data/genomes/hg19/bed/gad/$today
+
+    # Download requires a simple registration process: enter name and email on
+    #   http://geneticassociationdb.nih.gov/cgi-bin/download.cgi
+    # and then you will receive an automated email with a download link.
+    wget <downloadUrlFromEmail>
+    unzip -j all.zip
+
+    # Examine the 43 column labels of all.txt:
+    tail -n +3 all.txt | head -1 \
+    | perl -wne 'chomp; @w = split("\t"); \
+                 $i = 1; foreach $w (@w) { print "$i\t$w[$i-1]\n"; $i++; }'
+
+    # hg/lib/gadAll.sql has 45 columns -- apparently two have been dropped
+    # from the latest all.txt.  Insert empty strings for those two.
+    # NOTE: the first run of this generated a bunch of 'uninitialized value'
+    # warnings; there were two stray linebreaks that I manually edited out.
+    tail -n +4 all.txt \
+    | perl -wne 's/\r//g; @w = split(/\t/, $_, -1); \
+                 next if ($w[6] eq "" || $w[9] eq "" || $w[10] eq ""); \
+                 $w[9] =~ s/,//g;  $w[10] =~ s/,//g; \
+                 print join("\t", @w[0..29], "", "", @w[30..$#w]);' \
+    | hgLoadSqlTab hg19 gadAll ~/kent/src/hg/lib/gadAll.sql stdin
+
+    # Coords given in gadAll are a little wacky, so we ignore them.
+    # Use Fan's program to associate geneSymbols with genomic coords from
+    # preferred sources (first knownCanonical, then refGene, then kgAlias;
+    # *** NOTE FOR NEXT TIME: gadPos now also looks in a couple Gencode V14
+    #     tables if they exist.  If they don't anymore, you should look for
+    #     suitable replacements if there are a lot of unfound IDs. ***)
+    gadPos hg19 stdout | sort -k1,1 -k2n,2n -k4,4 -u > gad.tab
+#Found in knownCanonical: 7758
+#Found in refGene: 10
+#Found in kgAlias: 193
+#Found in Gencode: 178
+#Not found: 94
+
+    # use -nobin option to ensure display order is according to genomic position
+    # -- table is very small so performance is fine
+    hgLoadBed -nobin hg19 gad gad.tab
+#Read 9156 elements of size 4 from gad.tab
 
 ##############################################################################

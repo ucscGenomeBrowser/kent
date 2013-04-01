@@ -131,4 +131,35 @@ Passed 16890026 of 25763098 of 25763098, 65.56%
 
 # Ask sys-admin to switch the database pointer go to point to go080130.
 ##########################################################################
+### UPDATE GO DATABASE (DONE 2013-03-26 braney)
+
+# UPDATE GO DATABASE
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /hive/data/outside/geneOntology/20130326
+cd  /hive/data/outside/geneOntology/20130326
+
+wget  "http://archive.geneontology.org/latest-termdb/go_daily-termdb-tables.tar.gz"
+
+hgsql mysql -e 'create database go130326'
+tar xvfz go_daily-termdb-tables.tar.gz
+
+cd go_daily-termdb-tables
+cat *.sql | hgsql go130326
+
+for i in *.txt
+do 
+    echo "load data local infile '$i' into table `basename $i .txt`" | hgsql go130326
+done
+
+# Please note the new place to get gene_association.goa_uniprot.gz
+wget --timestamping \
+ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gene_association.goa_uniprot.gz
+
+zcat gene_association.goa_uniprot.gz |hgGoAssociation go130326 goaPart stdin
+
+Passed 111236584 of 141075031 of 141075031, 78.85%
+
+# Ask sys-admin to switch the database pointer go to point to go130326
+##########################################################################
 

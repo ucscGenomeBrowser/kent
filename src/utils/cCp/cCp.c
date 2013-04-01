@@ -4,7 +4,7 @@
 #include "dystring.h"
 
 
-void cpFile(char *source, char *destHost, char *destFile)
+static void cCpFile(char *source, char *destHost, char *destFile)
 /* Execute scp command to copy source file to host. */
 {
 struct dyString *dy = newDyString(512);
@@ -48,14 +48,14 @@ secondSize = startHost + hostCount - secondHalf;
 if (firstSize > 0)
     {
     newHost = hosts[firstHalf];
-    cpFile(sourceFile, newHost, destFile);
+    cCpFile(sourceFile, newHost, destFile);
     if (firstSize > 1)
 	sshSelf(hostList, newHost, firstHalf+1, firstSize-1, destFile);
     }
 if (secondSize > 0)
     {
     newHost = hosts[secondHalf];
-    cpFile(sourceFile, newHost, destFile);
+    cCpFile(sourceFile, newHost, destFile);
     if (secondSize > 1)
 	sshSelf(hostList, newHost, secondHalf+1, secondSize-1, destFile);
     }
@@ -90,5 +90,6 @@ if (argc == 6)
     count = atoi(argv[5]);
     }
 cCp(argv[3], start, count, argv[1], argv[2]);
+return 0;
 }
 

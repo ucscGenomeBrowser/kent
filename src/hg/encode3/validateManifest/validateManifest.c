@@ -245,7 +245,7 @@ boolean validateBedRnaElements(char *fileName)
 char *asFile = "bedRnaElements.as";  // TODO this probably has to change
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
 uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
@@ -298,12 +298,21 @@ return FALSE;
 boolean validateNarrowPeak(char *fileName)
 /* Validate narrowPeak file */
 {
-// TODO the current example manifest.txt is wrong because this should be bigBed-based (not bed-based)
-//  so that we can either make vf understand some new bigBed narrowPeak, or else we need to 
-//  change this narrowPeak into nothing more than bigBed with a particular narrowPeak.as ?
+char *asFile = "narrowPeak.as";
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=narrowPeak -chromInfo=%s %s", chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
+return runCmdLine(cmdLine);
+}
+
+boolean validateBroadPeak(char *fileName)
+/* Validate broadPeak file */
+{
+char *asFile = "broadPeak.as";
+char *chromInfo = getChromInfo(fileName);
+char cmdLine[1024];
+safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
 uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
@@ -336,6 +345,8 @@ else if (startsWith(format,"gtf"))
     result = validateGtf(fileName);
 else if (startsWith(format,"narrowPeak"))
     result = validateNarrowPeak(fileName);
+else if (startsWith(format,"broadPeak"))
+    result = validateBroadPeak(fileName);
 else
     {
     warn("Unknown format: %s", format);

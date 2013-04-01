@@ -43,6 +43,17 @@ fprintf(f, "%lld\t", mi->modifiedTime);
 fprintf(f, "%s\n", mi->validKey);
 }
 
+void encode2ManifestShortTabOut(struct encode2Manifest *mi, FILE *f)
+/* Write tab-separated version of encode2Manifest to f */
+{
+fprintf(f, "%s\t", mi->fileName);
+fprintf(f, "%s\t", mi->format);
+fprintf(f, "%s\t", mi->outputType);
+fprintf(f, "%s\t", mi->experiment);
+fprintf(f, "%s\t", mi->replicate);
+fprintf(f, "%s\n", mi->enrichedIn);
+}
+
 struct encode2Manifest *encode2ManifestLoadAll(char *fileName)
 /* Load all encode2Manifests from file. */
 {
@@ -58,3 +69,31 @@ slReverse(&list);
 return list;
 }
 
+struct encode2Manifest *encode2ManifestShortLoadAll(char *fileName)
+/* Read a short (just first 6 columns) manifest file. */
+{
+struct encode2Manifest *miList = NULL, *mi;
+char *row[6];
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+while (lineFileRow(lf, row))
+    {
+    AllocVar(mi);
+    mi->fileName = cloneString(row[0]);
+    mi->format = cloneString(row[1]);
+    mi->outputType = cloneString(row[2]);
+    mi->experiment = cloneString(row[3]);
+    mi->replicate = cloneString(row[4]);
+    mi->enrichedIn = cloneString(row[5]);
+    slAddHead(&miList, mi);
+    }
+lineFileClose(&lf);
+slReverse(&miList);
+return miList;
+}
+
+void encode2ManifestPrintHeader(FILE *f)
+/* Write out header line. */
+{
+fputs("#file_name\tformat\toutput_type\texperiment\treplicate\tenriched_in", f);
+fputs("\tmd5_sum\tsize\tmodified\tvalid_key\n", f);
+}

@@ -16,7 +16,7 @@
    to populate menu items and locate redirects.  This implementation uses the
    spec from above wiki page:
         browser.node=1 -> US server (genome.ucsc.edu)
-        browser.node=2 -> Europe server (genome-euro.ucsc.edu)
+        browser.node=2 -> European server (genome-euro.ucsc.edu)
 
 
    For Testing, use browser.geoSuffix: e.g.
@@ -113,7 +113,7 @@ if (geoMirrorEnabled())
         dyStringAppend(dy, "\" src=\"../images/greenChecksmCtr.png\">\n");
         if (!sameString(node, myNode))
             dyStringPrintf(dy, "<a href=\"http://%s/cgi-bin/hgGateway?redirect=manual\">", domain);
-        dyStringPrintf(dy, "Use %s", shortLabel);
+        dyStringPrintf(dy, "%s", shortLabel);
         if (!sameString(node, myNode))
             dyStringAppend(dy, "</a>");
         dyStringAppend(dy, "</li>\n");
