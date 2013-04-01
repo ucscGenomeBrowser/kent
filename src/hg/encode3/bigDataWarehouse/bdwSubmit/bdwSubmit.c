@@ -114,6 +114,44 @@ table->cursor = &fr->next;
 return fr;
 }
 
+struct fieldedTable *fieldedTableFromTabFile(char *url, char *requiredFields[], int requiredCount)
+/* Read table, possible from remote url. */
+{
+struct lineFile *lf = lineFileOpen(url, TRUE);
+char *line;
+
+/* Get first line and turn it into field list. */
+if (!lineFileNext(lf, &line, NULL))
+   errAbort("%s is empty", url);
+if (line[0] != '#')
+   errAbort("%s must start with '#' and field names on first line", url);
+line = skipLeadingSpaces(line+1);
+int fieldCount = chopByChar(line, '\t', NULL, 0);
+char *fields[fieldCount];
+chopTabs(line, fields);
+
+/* Make sure that all required fields are present. */
+int i;
+for (i = 0; i < requiredCount; ++i)
+    {
+    char *required = requiredFields[i];
+    int ix = stringArrayIx(required, fields, fieldCount);
+    if (ix < 0)
+        errAbort("%s is missing required field '%s'", url, required);
+    }
+
+/* Create fieldedTable . */
+struct fieldedTable *table = fieldedTableNew(url, fields, fieldCount);
+while (lineFileRowTab(lf, fields))
+    {
+    fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
+    }
+
+/* Clean up and go home. */
+lineFileClose(&lf);
+return table;
+}
+
 int bdwGetHost(struct sqlConnection *conn, char *hostName)
 /* Look up host name in table and return associated ID.  If not found
  * make up new table entry. */
@@ -171,16 +209,15 @@ safef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
-int bdwOpenAndRecord(struct sqlConnection *conn, 
+int bdwOpenAndRecordInDir(struct sqlConnection *conn, 
 	char *submissionDir, char *submissionFile, char *url,
 	int *retHostId, int *retDirId)
 /* Return a low level read socket handle on URL if possible.  Consult and
- * possibly update the bdwHost and bdwDir tables so don't keep beating up
- * and timing out on same host or hub. The url should be made by combining
- * submissionDir and submissionFile. Note submissionFile itself may have
- * further directory info. */
+ * update the bdwHost and bdwDir tables to help log and troubleshoot remote
+ * problems. The url parameter should be just a concatenation of submissionDir and
+ * submissionFile. */
 {
-/* Wrap netUrlOpen in errCatch and remember whether it works. */
+/* Wrap routine to open network file in errCatch and remember whether it works. */
 struct errCatch *errCatch = errCatchNew();
 int sd = -1;
 boolean success = TRUE;
@@ -202,68 +239,23 @@ netParseUrl(url, &npu);
 char urlDir[PATH_LEN], urlFileName[PATH_LEN], urlExtension[PATH_LEN];
 splitPath(npu.file, urlDir, urlFileName, urlExtension);
 
-/* Record success in host and submissionDir tables. */
+/* Record success of open attempt in host and submissionDir tables. */
 int hostId = bdwGetHost(conn, npu.host);
 recordIntoHistory(conn, hostId, "bdwHost", success);
 int submissionDirId = bdwGetSubmissionDir(conn, hostId, submissionDir);
 recordIntoHistory(conn, submissionDirId, "bdwSubmissionDir", success);
 
+/* Finish up error processing, bailing out of further processing if there was an error. */
 errCatchFree(&errCatch);
 if (!success)
     noWarnAbort();
 
+/* Update optional return variables and return socket to read from. */
 if (retHostId != NULL)
     *retHostId = hostId;
 if (retDirId != NULL)
     *retDirId = submissionDirId;
 return sd;
-}
-
-void bdwCheckWorthAttempting(char *url)
-/* See if it's even worth attempting to connect with this URL.  We may know
- * host is down.... */
-{
-/* For now we do nothing, assume it's ok. */
-}
-    
-
-struct fieldedTable *fieldedTableFromTabFile(char *url, char *requiredFields[], int requiredCount)
-/* Read table, possible from remote url. */
-{
-struct lineFile *lf = lineFileOpen(url, TRUE);
-char *line;
-
-/* Get first line and turn it into field list. */
-if (!lineFileNext(lf, &line, NULL))
-   errAbort("%s is empty", url);
-if (line[0] != '#')
-   errAbort("%s must start with '#' and field names on first line", url);
-line = skipLeadingSpaces(line+1);
-int fieldCount = chopByChar(line, '\t', NULL, 0);
-char *fields[fieldCount];
-chopTabs(line, fields);
-
-/* Make sure that all required fields are present. */
-int i;
-for (i = 0; i < requiredCount; ++i)
-    {
-    char *required = requiredFields[i];
-    int ix = stringArrayIx(required, fields, fieldCount);
-    if (ix < 0)
-        errAbort("%s is missing required field '%s'", url, required);
-    }
-
-/* Create fieldedTable . */
-struct fieldedTable *table = fieldedTableNew(url, fields, fieldCount);
-while (lineFileRowTab(lf, fields))
-    {
-    fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
-    }
-
-
-/* Clean up and go home. */
-lineFileClose(&lf);
-return table;
 }
 
 void cgiEncodeIntoDy(char *var, char *val, struct dyString *dy)
@@ -317,33 +309,17 @@ dyStringFree(&tags);
 return bfList;
 }
 
-#ifdef EXAMPLE
-void netParseUrl(char *url, struct netParsedUrl *parsed);
-struct netParsedUrl
-/* A parsed URL. */
-   {
-   char protocol[16];	/* Protocol - http or ftp, etc. */
-   char user[128];	/* User name (optional)  */
-   char password[128];	/* Password  (optional)  */
-   char host[128];	/* Name of host computer - www.yahoo.com, etc. */
-   char port[16];       /* Port, usually 80 or 8080. */
-   char file[1024];	/* Remote file name/query string, starts with '/' */
-   ssize_t byteRangeStart; /* Start of byte range, use -1 for none */
-   ssize_t byteRangeEnd;   /* End of byte range use -1 for none */
-   };
-#endif /* EXAMPLE */
-
-void makeLicensePlate(char *prefix, int ix, char *out, int outSize)
+void encode3MakeLicensePlate(char *prefix, int ix, char *out, int outSize)
 /* Make a license-plate type string composed of prefix + funky coding of ix
  * and put result in out. */
 {
 int maxIx = 10*10*10*26*26*26;
 if (ix > maxIx)
-    errAbort("ix exceeds max in makeLicensePlate.  ix %d, max %d\n", ix, maxIx);
+    errAbort("ix exceeds max in encode3MakeLicensePlate.  ix %d, max %d\n", ix, maxIx);
 int prefixSize = strlen(prefix);
 int minSize = prefixSize + 6 + 1;
 if (outSize < minSize)
-    errAbort("outSize (%d) not big enough in makeLicensePlate", outSize);
+    errAbort("outSize (%d) not big enough in encode3MakeLicensePlate", outSize);
 
 /* Copy in prefix. */
 strcpy(out, prefix);
@@ -443,7 +419,7 @@ void fetchFdNoCheck(struct sqlConnection *conn, unsigned bdwFileId, int unixFd,
  * Do clean up file if there is an error part way through data transfer*/
 {
 /* Figure out bdw file name, starting with license plate. */
-makeLicensePlate(licensePlatePrefix, bdwFileId, licensePlate, maxPlateSize);
+encode3MakeLicensePlate(licensePlatePrefix, bdwFileId, licensePlate, maxPlateSize);
 /* Figure out directory and make any components not already there. */
 time_t now = time(NULL);
 char bdwDir[PATH_LEN];
@@ -466,7 +442,7 @@ void bdwFileFetch(struct sqlConnection *conn, struct bdwFile *bf, int fd,
 /* Fetch file and if successful update a bunch of the fields in bf with the result. */
 {
 bf->id = makeNewEmptyFileRecord(conn, submissionId, bf->submitFileName);
-makeLicensePlate(licensePlatePrefix, bf->id, bf->licensePlate, sizeof(bf->licensePlate));
+encode3MakeLicensePlate(licensePlatePrefix, bf->id, bf->licensePlate, sizeof(bf->licensePlate));
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
@@ -592,25 +568,27 @@ char query[256];
 if (errCatchStart(errCatch))
     {
     int hostId=0, submissionDirId = 0;
-    int fd = bdwOpenAndRecord(conn, submissionDir, submissionFile, submissionUrl, 
+    int fd = bdwOpenAndRecordInDir(conn, submissionDir, submissionFile, submissionUrl, 
 	&hostId, &submissionDirId);
 
-    /* Copy over manifest file */
+    /* Make empty record in db so as to reserve fileId */
     int fileId = makeNewEmptyFileRecord(conn, submissionId, submissionFile);
 
-    /* Now make a file record around it. */
+    /* Fetch file.  Record where you put it in licensePlate, bdwFile, and bdwPath*/
+    char licensePlate[maxPlateSize];
     char bdwFile[PATH_LEN];
     char bdwPath[PATH_LEN];
-    char licensePlate[maxPlateSize];
     fetchFdNoCheck(conn, fileId, fd, licensePlate, bdwFile, bdwPath);
 
-    /* Fill in MD5sum and the like of submission file */
+    /* Fill in md5, updateTime and size */
     unsigned char md5bin[16];
     md5ForFile(bdwPath, md5bin);
     char md5[33];
     hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
     time_t updateTime = fileModTime(bdwPath);
     off_t size = fileSize(bdwPath);
+
+    /* Update database with what we know so far of the submission file. */
     safef(query, sizeof(query), 
 	"update bdwFile set "
 	" updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', bdwFileName='%s'"
@@ -646,7 +624,10 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
-/* Go through attempting to load the files if we don't already have them. */
+/* If we made it here the validated submission file itself got transfered and parses out
+ * correctly.   */
+
+/* Go through list attempting to load the files if we don't already have them. */
 struct bdwFile *bf;
 for (bf = bfList; bf != NULL; bf = bf->next)
     {
@@ -657,7 +638,7 @@ for (bf = bfList; bf != NULL; bf = bf->next)
 	{
 	verbose(1, "Fetching %s\n", bf->submitFileName);
 	int hostId=0, submissionDirId = 0;
-	int fd = bdwOpenAndRecord(conn, submissionDir, bf->submitFileName, submissionUrl,
+	int fd = bdwOpenAndRecordInDir(conn, submissionDir, bf->submitFileName, submissionUrl,
 	    &hostId, &submissionDirId);
 	bdwFileFetch(conn, bf, fd, submissionUrl, submissionId);
 	close(fd);
