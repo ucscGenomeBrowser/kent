@@ -123,10 +123,7 @@ char query[512];
 safef(query, sizeof(query), "select id from bdwHost where name='%s'", hostName);
 int hostId = sqlQuickNum(conn, query);
 if (hostId > 0)
-    {
-    uglyf("whoot - found %s = %d\n", hostName, hostId);
     return hostId;
-    }
 
 safef(query, sizeof(query), 
    "insert bdwHost (name, lastOkTime, lastNotOkTime, firstAdded, errorMessage, uploadAttempts) "
@@ -144,10 +141,7 @@ char query[512];
 safef(query, sizeof(query), "select id from bdwSubmissionDir where url='%s'", submissionDir);
 int dirId = sqlQuickNum(conn, query);
 if (dirId > 0)
-    {
-    uglyf("wh0ot - found %s = %d\n", submissionDir, dirId);
     return dirId;
-    }
 
 safef(query, sizeof(query), 
    "insert bdwSubmissionDir (url, firstAdded, hostId) values('%s', %lld, %d)", 
@@ -212,10 +206,7 @@ splitPath(npu.file, urlDir, urlFileName, urlExtension);
 int hostId = bdwGetHost(conn, npu.host);
 recordIntoHistory(conn, hostId, "bdwHost", success);
 int submissionDirId = bdwGetSubmissionDir(conn, hostId, submissionDir);
-uglyf("submissionDirId=%d\n", submissionDirId);
 recordIntoHistory(conn, submissionDirId, "bdwSubmissionDir", success);
-#ifdef SOON
-#endif /* SOON */
 
 errCatchFree(&errCatch);
 if (!success)
@@ -386,7 +377,6 @@ dyStringAppend(query,
     "(url, startUploadTime, endUploadTime, userSid, submitFileId, errorMessage) ");
 dyStringPrintf(query, "VALUES('%s', %lld, %lld, '%s', 0, '')",
     submissionUrl, (long long)time(NULL), (long long)0, userSid);
-uglyf("query=%s\n", query->string);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 return sqlLastAutoId(conn);
@@ -401,7 +391,6 @@ dyStringAppend(query,
     "(submissionId, submitFileName) ");
 dyStringPrintf(query, "VALUES(%u, '%s')",
     submissionId, submitFileName);
-uglyf("query=%s\n", query->string);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 return sqlLastAutoId(conn);
@@ -425,7 +414,6 @@ char *trimmedError = trimSpaces(err);
 warn("%s", trimmedError);
 char escapedErrorMessage[2*strlen(trimmedError)+1];
 sqlEscapeString2(escapedErrorMessage, trimmedError);
-uglyf("escapedErrorMessage: %s\n", escapedErrorMessage);
 struct dyString *query = dyStringNew(0);
 dyStringPrintf(query, "update %s set errorMessage='%s' where id=%d", 
     table, escapedErrorMessage, id);
@@ -456,7 +444,6 @@ void fetchFdNoCheck(struct sqlConnection *conn, unsigned bdwFileId, int unixFd,
 {
 /* Figure out bdw file name, starting with license plate. */
 makeLicensePlate(licensePlatePrefix, bdwFileId, licensePlate, maxPlateSize);
-uglyf("fetchFdNoCheck: unixFd %d, bdwFileId %d, licensePlate %s\n", unixFd, bdwFileId, licensePlate);
 /* Figure out directory and make any components not already there. */
 time_t now = time(NULL);
 char bdwDir[PATH_LEN];
@@ -513,7 +500,6 @@ safef(query, sizeof(query),
        "  set licensePlate='%s', bdwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
        "  where id = %d"
        , bf->licensePlate, bdwFile, bf->startUploadTime, bf->endUploadTime, bf->id);
-uglyf("query: %s\n", query);
 sqlUpdate(conn, query);
 
 /* Wrap the validations in an error catcher that will save error to file table in database */
@@ -522,12 +508,10 @@ boolean success = FALSE;
 if (errCatchStart(errCatch))
     {
     /* Check MD5 sum here.  */
-    uglyf("bf->md5 = %s\n", bf->md5);
     unsigned char md5bin[16];
     md5ForFile(bdwPath, md5bin);
     char md5[33];
     hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
-    uglyf("    md5=%s\n", md5);
     if (!sameWord(md5, bf->md5))
         errAbort("%s corrupted in upload md5 %s != %s\n", bf->submitFileName, bf->md5, md5);
 
@@ -591,7 +575,6 @@ int submissionDirSize = submissionFile - submissionUrl;
 char submissionDir[submissionDirSize+1];
 memcpy(submissionDir, submissionUrl, submissionDirSize);
 submissionDir[submissionDirSize] = 0;  // Add trailing zero
-uglyf("%s -> %s %s\n", submissionUrl, submissionDir, submissionFile);
 
 /* Make sure user has access. */
 struct sqlConnection *conn = sqlConnect(bdwDatabase);
@@ -600,7 +583,6 @@ bdwMustHaveAccess(conn, user, password, userSid);
 
 /* Make a submission record. */
 int submissionId = makeNewEmptySubmissionRecord(conn, submissionUrl, userSid);
-uglyf("submissionId = %d\n", submissionId);
 
 /* Start catching errors from here and writing them in submissionId.  If we don't
  * throw we'll end up having a list of all files in the submission in bfList. */
@@ -612,25 +594,21 @@ if (errCatchStart(errCatch))
     int hostId=0, submissionDirId = 0;
     int fd = bdwOpenAndRecord(conn, submissionDir, submissionFile, submissionUrl, 
 	&hostId, &submissionDirId);
-    uglyf("Got fd=%d from bdwOpenAndRecord\n", fd);
 
     /* Copy over manifest file */
     int fileId = makeNewEmptyFileRecord(conn, submissionId, submissionFile);
-    uglyf("Got fileId = %d\n", fileId);
 
     /* Now make a file record around it. */
     char bdwFile[PATH_LEN];
     char bdwPath[PATH_LEN];
     char licensePlate[maxPlateSize];
     fetchFdNoCheck(conn, fileId, fd, licensePlate, bdwFile, bdwPath);
-    uglyf("bdwPath is %s\n", bdwPath);
 
     /* Fill in MD5sum and the like of submission file */
     unsigned char md5bin[16];
     md5ForFile(bdwPath, md5bin);
     char md5[33];
     hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
-    uglyf("md5 = %s\n", md5);
     time_t updateTime = fileModTime(bdwPath);
     off_t size = fileSize(bdwPath);
     safef(query, sizeof(query), 
@@ -652,7 +630,6 @@ if (errCatchStart(errCatch))
 
     /* Convert submission file to a bdwFile list with a lot of missing fields. */
     bfList = bdwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
-    uglyf("Got %d files in bfList\n", slCount(bfList));
 
     /* Save our progress so far to submission table. */
     safef(query, sizeof(query), 
@@ -673,18 +650,20 @@ errCatchFree(&errCatch);
 struct bdwFile *bf;
 for (bf = bfList; bf != NULL; bf = bf->next)
     {
-    uglyf("Processing %s\n", bf->submitFileName);
     int submissionUrlSize = strlen(submissionDir) + strlen(bf->submitFileName) + 1;
     char submissionUrl[submissionUrlSize];
     safef(submissionUrl, submissionUrlSize, "%s%s", submissionDir, bf->submitFileName);
     if (bdwGotFile(conn, submissionDir, bf->submitFileName, bf->md5)<0)
 	{
+	verbose(1, "Fetching %s\n", bf->submitFileName);
 	int hostId=0, submissionDirId = 0;
 	int fd = bdwOpenAndRecord(conn, submissionDir, bf->submitFileName, submissionUrl,
 	    &hostId, &submissionDirId);
 	bdwFileFetch(conn, bf, fd, submissionUrl, submissionId);
 	close(fd);
 	}
+    else
+	verbose(2, "Already got %s\n", bf->submitFileName);
     }
 
 /* If we made it here, update submission endUploadTime */
@@ -692,14 +671,6 @@ safef(query, sizeof(query),
 	"update bdwSubmission set endUploadTime=%lld where id=%d", 
 	(long long)time(NULL), submissionId);
 sqlUpdate(conn, query);
-
-#ifdef SOON
-    struct bdwFile *bf;
-    for (bf = bfList; bf != NULL; bf = bf->next)
-	{
-	bdwFileTabOut(bf, uglyOut); 
-	}
-#endif /* SOON */
 
 sqlDisconnect(&conn);
 }
