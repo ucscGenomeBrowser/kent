@@ -129,7 +129,7 @@ if (hostId > 0)
     }
 
 safef(query, sizeof(query), 
-   "insert bdwHost (name, lastOkTime, lastNotOkTime, firstAdded, errorMessage, uploadCount) "
+   "insert bdwHost (name, lastOkTime, lastNotOkTime, firstAdded, errorMessage, uploadAttempts) "
    "values('%s', 0, 0, %lld, '', 0)", 
    hostName, (long long)time(NULL));
 sqlUpdate(conn, query);
@@ -157,7 +157,7 @@ return sqlLastAutoId(conn);
 }
 
 void recordIntoHistory(struct sqlConnection *conn, unsigned id, char *table, boolean success)
-/* Record success/failure into uploadCount and historyBits fields of table.   */
+/* Record success/failure into uploadAttempts and historyBits fields of table.   */
 {
 /* Get historyBits and fold status into it. */
 char quickResult[32];
@@ -169,14 +169,16 @@ long long historyBits = sqlLongLong(quickResult);
 historyBits <<= 1;
 if (success)
     historyBits |= 1;
-safef(query, sizeof(query), "update %s set historyBits=%lld, uploadCount=uploadCount+1 wher id=%u",
-    table, historyBits, id);
+safef(query, sizeof(query), 
+    "update %s set historyBits=%lld, uploadAttempts=uploadAttempts+1 where id=%lld",
+    table, historyBits, (long long)id);
+sqlUpdate(conn, query);
 }
 
 void recordIntoHistoryAndSaveTableVal(struct sqlConnection *conn, unsigned id, 
     char *table, char *field, 
     char *val, boolean success)
-/* Record success/failure into uploadCount and historyBits fields of table.  Also
+/* Record success/failure into uploadAttempts and historyBits fields of table.  Also
  * update field with val. */
 {
 recordIntoHistory(conn, id, table, success);
@@ -668,6 +670,7 @@ for (bf = bfList; bf != NULL; bf = bf->next)
 	int fd = bdwOpenAndRecord(conn, submissionDir, bf->submitFileName, submissionUrl,
 	    &hostId, &submissionDirId);
 	bdwFileFetch(conn, bf, fd, submissionUrl, submissionId);
+	close(fd);
 	}
     }
 

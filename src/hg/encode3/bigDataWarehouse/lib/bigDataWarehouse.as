@@ -16,7 +16,7 @@ table bdwHost
     bigint lastNotOkTime;  "Last time host was not ok in seconds since 1970"
     bigint firstAdded;     "Time host was first seen"
     lstring errorMessage; "If non-empty contains last error message from host. If empty host is ok"
-    bigint uploadCount;  "Number of times things have been uploaded from this host"
+    bigint uploadAttempts;  "Number of times things have been uploaded from this host"
     bigint historyBits; "Upload history with most recent in least significant bit. 0 for connection failed, 1 for success"
     )
 

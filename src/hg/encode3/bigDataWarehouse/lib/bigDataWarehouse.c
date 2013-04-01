@@ -136,7 +136,7 @@ ret->lastOkTime = sqlLongLong(row[2]);
 ret->lastNotOkTime = sqlLongLong(row[3]);
 ret->firstAdded = sqlLongLong(row[4]);
 ret->errorMessage = row[5];
-ret->uploadCount = sqlLongLong(row[6]);
+ret->uploadAttempts = sqlLongLong(row[6]);
 ret->historyBits = sqlLongLong(row[7]);
 }
 
@@ -153,7 +153,7 @@ ret->lastOkTime = sqlLongLong(row[2]);
 ret->lastNotOkTime = sqlLongLong(row[3]);
 ret->firstAdded = sqlLongLong(row[4]);
 ret->errorMessage = cloneString(row[5]);
-ret->uploadCount = sqlLongLong(row[6]);
+ret->uploadAttempts = sqlLongLong(row[6]);
 ret->historyBits = sqlLongLong(row[7]);
 return ret;
 }
@@ -209,7 +209,7 @@ ret->lastOkTime = sqlLongLongComma(&s);
 ret->lastNotOkTime = sqlLongLongComma(&s);
 ret->firstAdded = sqlLongLongComma(&s);
 ret->errorMessage = sqlStringComma(&s);
-ret->uploadCount = sqlLongLongComma(&s);
+ret->uploadAttempts = sqlLongLongComma(&s);
 ret->historyBits = sqlLongLongComma(&s);
 *pS = s;
 return ret;
@@ -259,7 +259,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%lld", el->uploadCount);
+fprintf(f, "%lld", el->uploadAttempts);
 fputc(sep,f);
 fprintf(f, "%lld", el->historyBits);
 fputc(lastSep,f);

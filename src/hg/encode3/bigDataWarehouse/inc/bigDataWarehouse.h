@@ -69,7 +69,7 @@ struct bdwHost
     long long lastNotOkTime;	/* Last time host was not ok in seconds since 1970 */
     long long firstAdded;	/* Time host was first seen */
     char *errorMessage;	/* If non-empty contains last error message from host. If empty host is ok */
-    long long uploadCount;	/* Number of times things have been uploaded from this host */
+    long long uploadAttempts;	/* Number of times things have been uploaded from this host */
     long long historyBits;	/* Upload history with most recent in least significant bit. 0 for connection failed, 1 for success */
     };
 
