@@ -12,7 +12,7 @@ genePredToBed: ${O} ${MYLIBS}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 test:
-	genePredToBed test.genePred test.bed
+	${DESTDIR}${BINDIR}/genePredToBed test.genePred test.bed
 	diff expected.bed test.bed
 
 compile:: ${O}

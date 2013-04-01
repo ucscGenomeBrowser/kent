@@ -1,13 +1,4 @@
-include ../../inc/common.mk
-
+kentSrc = ../..
 XINC=-DGZ_FILENAMES=1
-
-O = gffgenes.o 
-
-${BINDIR}/gffgenes: ${O}
-	${CC} ${COPT} -o ${BINDIR}/gffgenes $O \
-		../../lib/${MACHTYPE}/jkweb.a ${L}
-	${STRIP} ${BINDIR}/gffgenes${EXE}
-
-clean:
-	rm -f ${O}
+A = gffgenes
+include $(kentSrc)/inc/userApp.mk
