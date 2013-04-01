@@ -1,19 +1,7 @@
-include ../../inc/common.mk
-
-L += -lm ${SOCKETLIB}
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS = ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = twoBitToFa
-O = twoBitToFa.o
-
-twoBitToFa: ${O}
-	@${MKDIR} "${DESTDIR}${BINDIR}"
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-clean::
-	rm -f ${O}
+include $(kentSrc)/inc/userApp.mk
+L += -lm ${SOCKETLIB}
 
 test:
 	rm -fr tests/output

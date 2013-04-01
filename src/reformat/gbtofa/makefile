@@ -1,10 +1,3 @@
-include ../../inc/common.mk
-
-
-O = gbtofa.o 
-
-gbtofa: $(O)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/gbtofa $O ../../lib/$(MACHTYPE)/jkweb.a ${L}
-
-clean::
-	rm -f ${O}
+kentSrc = ../..
+A = gbtofa
+include $(kentSrc)/inc/userApp.mk

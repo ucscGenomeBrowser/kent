@@ -1,14 +1,3 @@
-include ../../inc/common.mk
-
-
-O = indexfa.o 
-
-indexfa: $(O) lib
-	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a $L
-	mv ${AOUT} ${BINDIR}/indexfa
-
-lib:
-	cd ../../lib && ${MAKE}
-
-clean::
-	rm -f ${O}
+kentSrc = ../..
+A = indexfa
+include $(kentSrc)/inc/userApp.mk
