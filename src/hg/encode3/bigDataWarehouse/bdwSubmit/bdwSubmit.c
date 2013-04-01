@@ -136,6 +136,26 @@ sqlUpdate(conn, query);
 return sqlLastAutoId(conn);
 }
 
+int bdwGetSubmissionDir(struct sqlConnection *conn, int hostId, char *submissionDir)
+/* Get submissionDir from database, creating it if it doesn't already exist. */
+{
+/* If it's already in table, just return ID. */
+char query[512];
+safef(query, sizeof(query), "select id from bdwSubmissionDir where url='%s'", submissionDir);
+int dirId = sqlQuickNum(conn, query);
+if (dirId > 0)
+    {
+    uglyf("wh0ot - found %s = %d\n", submissionDir, dirId);
+    return dirId;
+    }
+
+safef(query, sizeof(query), 
+   "insert bdwSubmissionDir (url, firstAdded, hostId) values('%s', %lld, %d)", 
+   submissionDir, (long long)time(NULL), hostId);
+sqlUpdate(conn, query);
+return sqlLastAutoId(conn);
+}
+
 void recordIntoHistory(struct sqlConnection *conn, unsigned id, char *table, boolean success)
 /* Record success/failure into uploadCount and historyBits fields of table.   */
 {
@@ -166,7 +186,8 @@ sqlUpdate(conn, query);
 }
 
 int bdwOpenAndRecord(struct sqlConnection *conn, 
-	char *submissionDir, char *submissionFile, char *url)
+	char *submissionDir, char *submissionFile, char *url,
+	int *retHostId, int *retDirId)
 /* Return a low level read socket handle on URL if possible.  Consult and
  * possibly update the bdwHost and bdwDir tables so don't keep beating up
  * and timing out on same host or hub. The url should be made by combining
@@ -197,15 +218,21 @@ splitPath(npu.file, urlDir, urlFileName, urlExtension);
 
 /* Record success in host and submissionDir tables. */
 int hostId = bdwGetHost(conn, npu.host);
-recordIntoHistoryAndSaveTableVal(conn, hostId, "bdwHost", "name", npu.host, success);
-#ifdef SOON
+recordIntoHistory(conn, hostId, "bdwHost", success);
 int submissionDirId = bdwGetSubmissionDir(conn, hostId, submissionDir);
-recordIntoHistoryAndSaveTableVal(conn, submissionDirId, "bdwSubmissionDir", "url", submissionDir, status);
+uglyf("submissionDirId=%d\n", submissionDirId);
+recordIntoHistory(conn, submissionDirId, "bdwSubmissionDir", success);
+#ifdef SOON
 #endif /* SOON */
 
 errCatchFree(&errCatch);
 if (!success)
     noWarnAbort();
+
+if (retHostId != NULL)
+    *retHostId = hostId;
+if (retDirId != NULL)
+    *retDirId = submissionDirId;
 return sd;
 }
 
@@ -455,7 +482,7 @@ cpFile(unixFd, destFd);
 mustCloseFd(&destFd);
 }
 
-void bwdFileFetch(struct sqlConnection *conn, struct bdwFile *bf, int fd, 
+void bdwFileFetch(struct sqlConnection *conn, struct bdwFile *bf, int fd, 
 	char *submitFileName, unsigned submissionId)
 /* Fetch file and if successful update a bunch of the fields in bf with the result. */
 {
@@ -531,6 +558,11 @@ if (errCatch->gotError)
 recordIntoHistory(conn, bf->id, "bdwFile", success);
 }
 
+long bdwGotFile(struct sqlConnection *conn, char *submissionDir, char *submitFileName, char *md5)
+/* See if we already got file.  Return fileId if we do,  otherwise -1 */
+{
+return -1;
+}
 
 void bdwSubmit(char *submissionUrl, char *user, char *password)
 /* bdwSubmit - Submit URL with validated.txt to warehouse. */
@@ -559,9 +591,12 @@ uglyf("submissionId = %d\n", submissionId);
  * throw we'll end up having a list of all files in the submission in bfList. */
 struct bdwFile *bfList = NULL; 
 struct errCatch *errCatch = errCatchNew();
+char query[256];
 if (errCatchStart(errCatch))
     {
-    int fd = bdwOpenAndRecord(conn, submissionDir, submissionFile, submissionUrl);
+    int hostId=0, submissionDirId = 0;
+    int fd = bdwOpenAndRecord(conn, submissionDir, submissionFile, submissionUrl, 
+	&hostId, &submissionDirId);
     uglyf("Got fd=%d from bdwOpenAndRecord\n", fd);
 
     /* Copy over manifest file */
@@ -583,7 +618,6 @@ if (errCatchStart(errCatch))
     uglyf("md5 = %s\n", md5);
     time_t updateTime = fileModTime(bdwPath);
     off_t size = fileSize(bdwPath);
-    char query[256];
     safef(query, sizeof(query), 
 	"update bdwFile set "
 	" updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', bdwFileName='%s'"
@@ -605,6 +639,12 @@ if (errCatchStart(errCatch))
     bfList = bdwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
     uglyf("Got %d files in bfList\n", slCount(bfList));
 
+    /* Save our progress so far to submission table. */
+    safef(query, sizeof(query), 
+	"update bdwSubmission"
+	"  set submitFileId=%lld, submissionDirId=%lld, fileCount=%d where id=%d",  
+	    (long long)fileId, (long long)submissionDirId, slCount(bfList), submissionId);
+    sqlUpdate(conn, query);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -622,9 +662,20 @@ for (bf = bfList; bf != NULL; bf = bf->next)
     int submissionUrlSize = strlen(submissionDir) + strlen(bf->submitFileName) + 1;
     char submissionUrl[submissionUrlSize];
     safef(submissionUrl, submissionUrlSize, "%s%s", submissionDir, bf->submitFileName);
-    int fd = bdwOpenAndRecord(conn, submissionDir, bf->submitFileName, submissionUrl);
-    bwdFileFetch(conn, bf, fd, submissionUrl, submissionId);
+    if (bdwGotFile(conn, submissionDir, bf->submitFileName, bf->md5)<0)
+	{
+	int hostId=0, submissionDirId = 0;
+	int fd = bdwOpenAndRecord(conn, submissionDir, bf->submitFileName, submissionUrl,
+	    &hostId, &submissionDirId);
+	bdwFileFetch(conn, bf, fd, submissionUrl, submissionId);
+	}
     }
+
+/* If we made it here, update submission endUploadTime */
+safef(query, sizeof(query),
+	"update bdwSubmission set endUploadTime=%lld where id=%d", 
+	(long long)time(NULL), submissionId);
+sqlUpdate(conn, query);
 
 #ifdef SOON
     struct bdwFile *bf;

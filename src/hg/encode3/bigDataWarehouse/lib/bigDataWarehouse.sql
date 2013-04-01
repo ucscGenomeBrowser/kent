@@ -69,6 +69,8 @@ CREATE TABLE bdwSubmission (
     endUploadTime bigint not null,	# Time at end of upload - 0 if not finished
     userSid char(64) not null,	# Connects to user table sid field
     submitFileId int unsigned not null,	# Points to validated.txt file for submission.
+    submissionDirId int unsigned not null,	# Points to the submissionDir
+    fileCount int unsigned not null,	# Number of files that will be in submission if it were complete.
     errorMessage longblob not null,	# If non-empty contains last error message from submission. If empty submission is ok
               #Indices
     PRIMARY KEY(id)

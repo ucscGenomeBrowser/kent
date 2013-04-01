@@ -235,7 +235,7 @@ void bdwFileOutput(struct bdwFile *el, FILE *f, char sep, char lastSep);
 #define bdwFileCommaOut(el,f) bdwFileOutput(el,f,',',',');
 /* Print out bdwFile as a comma separated list including final comma. */
 
-#define BDWSUBMISSION_NUM_COLS 7
+#define BDWSUBMISSION_NUM_COLS 9
 
 struct bdwSubmission
 /* A data submission, typically containing many files.  Always associated with a submission dir. */
@@ -247,6 +247,8 @@ struct bdwSubmission
     long long endUploadTime;	/* Time at end of upload - 0 if not finished */
     char userSid[65];	/* Connects to user table sid field */
     unsigned submitFileId;	/* Points to validated.txt file for submission. */
+    unsigned submissionDirId;	/* Points to the submissionDir */
+    unsigned fileCount;	/* Number of files that will be in submission if it were complete. */
     char *errorMessage;	/* If non-empty contains last error message from submission. If empty submission is ok */
     };
 

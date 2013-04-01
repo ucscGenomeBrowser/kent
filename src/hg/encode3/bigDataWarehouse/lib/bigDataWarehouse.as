@@ -62,6 +62,8 @@ table bdwSubmission
     bigint endUploadTime;     "Time at end of upload - 0 if not finished"
     char[64] userSid;        "Connects to user table sid field"
     uint submitFileId;       "Points to validated.txt file for submission."
+    uint submissionDirId;    "Points to the submissionDir"
+    uint fileCount;          "Number of files that will be in submission if it were complete."
     lstring errorMessage; "If non-empty contains last error message from submission. If empty submission is ok"
     )
 

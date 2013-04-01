@@ -601,7 +601,9 @@ ret->startUploadTime = sqlLongLong(row[2]);
 ret->endUploadTime = sqlLongLong(row[3]);
 safecpy(ret->userSid, sizeof(ret->userSid), row[4]);
 ret->submitFileId = sqlUnsigned(row[5]);
-ret->errorMessage = row[6];
+ret->submissionDirId = sqlUnsigned(row[6]);
+ret->fileCount = sqlUnsigned(row[7]);
+ret->errorMessage = row[8];
 }
 
 struct bdwSubmission *bdwSubmissionLoad(char **row)
@@ -617,7 +619,9 @@ ret->startUploadTime = sqlLongLong(row[2]);
 ret->endUploadTime = sqlLongLong(row[3]);
 safecpy(ret->userSid, sizeof(ret->userSid), row[4]);
 ret->submitFileId = sqlUnsigned(row[5]);
-ret->errorMessage = cloneString(row[6]);
+ret->submissionDirId = sqlUnsigned(row[6]);
+ret->fileCount = sqlUnsigned(row[7]);
+ret->errorMessage = cloneString(row[8]);
 return ret;
 }
 
@@ -627,7 +631,7 @@ struct bdwSubmission *bdwSubmissionLoadAll(char *fileName)
 {
 struct bdwSubmission *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -645,7 +649,7 @@ struct bdwSubmission *bdwSubmissionLoadAllByChar(char *fileName, char chopper)
 {
 struct bdwSubmission *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -672,6 +676,8 @@ ret->startUploadTime = sqlLongLongComma(&s);
 ret->endUploadTime = sqlLongLongComma(&s);
 sqlFixedStringComma(&s, ret->userSid, sizeof(ret->userSid));
 ret->submitFileId = sqlUnsignedComma(&s);
+ret->submissionDirId = sqlUnsignedComma(&s);
+ret->fileCount = sqlUnsignedComma(&s);
 ret->errorMessage = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -720,6 +726,10 @@ fprintf(f, "%s", el->userSid);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->submitFileId);
+fputc(sep,f);
+fprintf(f, "%u", el->submissionDirId);
+fputc(sep,f);
+fprintf(f, "%u", el->fileCount);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
