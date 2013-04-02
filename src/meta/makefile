@@ -6,11 +6,15 @@ all:
 
 alpha: all
 
+compile:
+	cd metaFlatten && ${MAKE} compile
+	cd metaReformat && ${MAKE} compile
+
 test:
 	cd metaFlatten && ${MAKE} test
 	cd metaHoist && ${MAKE} test
 	cd metaReformat && ${MAKE} test
 
-clean:
-	rm -f meta*/*.o
-
+clean::
+	cd metaFlatten && ${MAKE} clean
+	cd metaReformat && ${MAKE} clean

@@ -1,10 +1,3 @@
-include ../../inc/common.mk
-
-
-O = jkUniq.o 
-
-jkUniq: $O
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/jkUniq $O ../../lib/$(MACHTYPE)/jkweb.a ${L}
-
-clean::
-	rm -f ${O}
+kentSrc = ../..
+A = jkUniq
+include $(kentSrc)/inc/userApp.mk
