@@ -7,21 +7,8 @@ include ../../../inc/common.mk
 USE_DIRS = $(DIRS)
 
 DIRS = \
-    encode2AddSumsAndSizes \
-    encode2AddTgzContentsToManifest \
-    encode2BedDoctor \
-    encode2BedPlusDoctor \
-    encode2CmpMd5 \
-    encode2ExpDumpFlat \
-    encode2FlattenFastqSubdirs \
-    encode2GffDoctor \
-    encode2MakeEncode3 \
-    encode2Manifest \
-    encode2Md5UpdateManifest \
-    encode2Meta \
-    encode2MetaPatchRenamed \
-    encodeCvToDb \
-    encodeExpToCvDb
+    edwCreateUser \
+    edwSubmit
 
 TEST_DIRS = \
 	encode2BedDoctor 

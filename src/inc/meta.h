@@ -37,7 +37,7 @@ struct meta
     struct meta *parent;	/* Pointer to parent. */
     char *name;		    /* Same as val of meta tag. Not allocated here. */
     struct metaTagVal *tagList;	/* All tags, including the "meta" one. */
-    int indent;                 /* Indentation level. */
+    int indent;                 /* Indentation level - generally only set if read from file. */
     };
 
 struct meta *metaLoadAll(char *fileName, char *keyTag, char *parentTag,
@@ -64,7 +64,7 @@ char *metaTagVal(struct meta *meta, char *tag);
  * Returns NULL if tag not found. */
 
 void metaAddTag(struct meta *meta, char *tag, char *val);
-/* Return value of tag found in this node, not going up to parents. */
+/* Add tag/val to meta. */
 
 void metaSortTags(struct meta *meta);
 /* Do canonical sort so that the first tag stays first but the

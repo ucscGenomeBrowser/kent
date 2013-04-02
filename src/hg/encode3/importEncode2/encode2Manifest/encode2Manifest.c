@@ -11,8 +11,6 @@
 
 char *metaDbs[] = {"hg19", "mm9"};
 char *metaTable = "metaDb";
-char *expDb = "hgFixed";
-char *expTable = "encodeExp";
 
 /* Command line variables. */
 char *fileRootDir = NULL;   /* If set we look at files a bit. */
@@ -21,7 +19,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "encode2Manifest - Create a encode3 manifest file for encode2 files\n"
+  "encode2Manifest - Create a encode3 manifest file for encode2 files by looking\n"
+  "at the metaDb tables in hg19 and mm9.\n"
   "usage:\n"
   "   encode2Manifest manifest.tab\n"
   "options:\n"
@@ -240,14 +239,6 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 void encode2Manifest(char *outFile)
 /* encode2Manifest - Create a encode3 manifest file for encode2 files. */
 {
-/* Load up encodeExp info. */
-struct sqlConnection *expConn = sqlConnect(expDb);
-char query[256];
-safef(query, sizeof(query), "select * from %s", expTable);
-struct encodeExp *expList = encodeExpLoadByQuery(expConn, query);
-sqlDisconnect(&expConn);
-verbose(1, "%d experiments in encodeExp\n", slCount(expList));
-
 int i;
 struct mdbObj *mdbLists[ArraySize(metaDbs)];
 for (i=0; i<ArraySize(metaDbs); ++i)
