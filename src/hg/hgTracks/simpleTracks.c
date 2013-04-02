@@ -12201,18 +12201,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         if (!isEmpty(impact)) 
             {
             char *colorBy = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsColorBy");
-            if (strcmp(colorBy,"impact")==0) 
-                {
-                char impInt = atoi(impact);
-                extra->shade = impInt/25;
-                }
-            if (strcmp(colorBy,"year")==0) 
-                {
-                int relYear = (atoi(year)-1990); 
-                extra->shade = min(relYear/3, 10);
-                //extra->color = shadesOfGray[yearShade];
-                }
-            if (strcmp(colorBy,"topic")==0) 
+            if ((colorBy==NULL) || strcmp(colorBy,"topic")==0) 
                 {
                 char *class;
                 while ((class=cloneNextWordByDelimiter(&classes, ','))!=NULL)
@@ -12221,7 +12210,20 @@ if ((row = sqlNextRow(sr)) != NULL)
                     extra->color = col;
                     }
                 }
-
+            else 
+                {
+                if (strcmp(colorBy,"impact")==0) 
+                    {
+                    char impInt = atoi(impact);
+                    extra->shade = impInt/25;
+                    }
+                if (strcmp(colorBy,"year")==0) 
+                    {
+                    int relYear = (atoi(year)-1990); 
+                    extra->shade = min(relYear/3, 10);
+                    //extra->color = shadesOfGray[yearShade];
+                    }
+                }
             }
         }
     }
@@ -12237,8 +12239,9 @@ static void pubsAddExtra(struct track* tg, struct linkedFeatures* lf)
 char *articleTable = trackDbSettingClosestToHome(tg->tdb, "pubsArticleTable");
 if(isEmpty(articleTable))
     return;
-if (lf->extra != NULL)
+if (lf->extra != NULL) {
     return;
+    }
 
 struct sqlConnection *conn = hAllocConn(database);
 struct pubsExtra* extra = pubsMakeExtra(tg, articleTable, conn, lf);
