@@ -13,7 +13,7 @@ O = aliType.o annoColumn.o annoFilter.o annoFormatter.o annoFormatTab.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o dnaMotif.o dnaseq.o \
     dnautil.o dtdParse.o dyOut.o dystring.o elmTree.o \
     emblParse.o errCatch.o errabort.o \
-    fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
+    fa.o ffAli.o ffScore.o fieldedTable.o filePath.o fixColor.o flydna.o fof.o \
     font/mgCourier10.o font/mgCourier12.o font/mgCourier14.o font/mgCourier18.o \
     font/mgCourier24.o font/mgCourier34.o font/mgCourier8.o font/mgHelvetica10.o \
     font/mgHelvetica12.o font/mgHelvetica14.o font/mgHelvetica18.o font/mgHelvetica24.o \
