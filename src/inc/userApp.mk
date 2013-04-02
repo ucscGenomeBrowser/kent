@@ -3,7 +3,7 @@
 #   the binary program file name is specified by the 'A' variable:
 #	kentSrc = ../..
 #	A = aveCols
-#	include $(kentSrc)/inc/userApp.mk
+#	include ${kentSrc}/inc/userApp.mk
 #
 # for more than one object file for the resulting 'A' program, use
 #       extraObjects = second.o third.o fourth.o etc.o
@@ -11,11 +11,14 @@
 # to use object files built elsewhere:
 #       externObjects = ../path/other.o
 #
-include $(kentSrc)/inc/common.mk
+# use other libraries BEFORE jkweb.a
+#     preMyLibs += path/to/lib/other.a
+#
+include ${kentSrc}/inc/common.mk
 
-MYLIBS = $(preMyLibs) $(kentSrc)/lib/$(MACHTYPE)/jkweb.a
-ifeq ($(findstring src/hg/,$(CURDIR)),src/hg/)
-  MYLIBS = $(preMyLibs) $(kentSrc)/lib/$(MACHTYPE)/jkhgap.a $(kentSrc)/lib/$(MACHTYPE)/jkweb.a $(MYSQLLIBS) -lm
+MYLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkweb.a
+ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
+  MYLIBS = ${preMyLibs} ${kentSrc}/lib/${MACHTYPE}/jkhgap.a ${kentSrc}/lib/${MACHTYPE}/jkweb.a ${MYSQLLIBS} -lm
 endif
 
 O = ${A}.o
@@ -25,7 +28,7 @@ all ${A}: ${O} ${extraObjects}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A} ${objects} ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-compile: ${O} ${extraObjects} ${MYLIBS}
+compile:: ${O} ${extraObjects} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} ${objects} ${MYLIBS} ${L}
 
 install:: compile
