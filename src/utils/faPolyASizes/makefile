@@ -1,15 +1,4 @@
-include ../../inc/common.mk
-
-
+kentSrc = ../..
+A = faPolyASizes
+include $(kentSrc)/inc/userApp.mk
 L += -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkweb.a
-
-O = faPolyASizes.o
-
-faPolyASizes: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/faPolyASizes${EXE} $O $(MYLIBS) $L
-	${STRIP} ${DESTDIR}${BINDIR}/faPolyASizes${EXE}
-
-clean::
-	rm -f ${O}
