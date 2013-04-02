@@ -15,6 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 #include "hex.h"
+#include "fieldedTable.h"
 #include "bigDataWarehouse.h"
 #include "bdwLib.h"
 
@@ -39,118 +40,6 @@ static struct optionSpec options[] = {
    {"licensePlatePrefix", OPTION_STRING},
    {NULL, 0},
 };
-
-struct fieldedRow
-/* An array of strings with a little extra info, can be hung on a list. */
-    {
-    struct fieldedRow *next;
-    char **row; // Array of strings
-    int id;	// In the file case this is the line of file row starts in
-    };
-
-struct fieldedTable
-/* A table with a name for each field. */
-    {
-    struct fieldedTable *next;
-    char *name;	    /* Often the file name */
-    struct lm *lm;  /* All allocations done out of this memory pool. */
-    int fieldCount; /* Number of fields. */
-    char **fields;  /* Names of fields. */
-    struct fieldedRow *rowList;  /* list of parsed out fields. */
-    struct fieldedRow **cursor;  /* Pointer to where we add next item to list. */
-    };
-
-struct fieldedTable *fieldedTableNew(char *name, char **fields, int fieldCount)
-/* Create a new empty fieldedTable with given name. */
-{
-struct fieldedTable *table;
-AllocVar(table);
-struct lm *lm = table->lm = lmInit(0);
-table->name = lmCloneString(lm, name);
-table->cursor = &table->rowList;
-table->fieldCount = fieldCount;
-int i;
-char **row = lmAllocArray(lm, table->fields, fieldCount);
-for (i=0; i<fieldCount; ++i)
-    {
-    row[i] = lmCloneString(lm, fields[i]);
-    }
-return table;
-}
-
-void fieldedTableFree(struct fieldedTable **pTable)
-/* Free up memory resources associated with table. */
-{
-struct fieldedTable *table = *pTable;
-if (table != NULL)
-    {
-    lmCleanup(&table->lm);
-    freez(pTable);
-    }
-}
-
-struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id)
-/* Create a new row and add it to table.  Return row. */
-{
-/* Make sure we got right number of fields. */
-if (table->fieldCount != rowSize)
-    errAbort("%s starts with %d fields, but at line %d has %d fields instead",
-	    table->name, table->fieldCount, id, rowSize);
-
-/* Allocate field from local memory and start filling it in. */
-struct lm *lm = table->lm;
-struct fieldedRow *fr;
-lmAllocVar(lm, fr);
-lmAllocArray(lm, fr->row, rowSize);
-fr->id = id;
-int i;
-for (i=0; i<rowSize; ++i)
-    fr->row[i] = lmCloneString(lm, row[i]);
-
-/* Add it to end of list using cursor to avoid slReverse hassles. */
-*(table->cursor) = fr;
-table->cursor = &fr->next;
-
-return fr;
-}
-
-struct fieldedTable *fieldedTableFromTabFile(char *url, char *requiredFields[], int requiredCount)
-/* Read table, possible from remote url. */
-{
-struct lineFile *lf = lineFileOpen(url, TRUE);
-char *line;
-
-/* Get first line and turn it into field list. */
-if (!lineFileNext(lf, &line, NULL))
-   errAbort("%s is empty", url);
-if (line[0] != '#')
-   errAbort("%s must start with '#' and field names on first line", url);
-line = skipLeadingSpaces(line+1);
-int fieldCount = chopByChar(line, '\t', NULL, 0);
-char *fields[fieldCount];
-chopTabs(line, fields);
-
-/* Make sure that all required fields are present. */
-int i;
-for (i = 0; i < requiredCount; ++i)
-    {
-    char *required = requiredFields[i];
-    int ix = stringArrayIx(required, fields, fieldCount);
-    if (ix < 0)
-        errAbort("%s is missing required field '%s'", url, required);
-    }
-
-/* Create fieldedTable . */
-struct fieldedTable *table = fieldedTableNew(url, fields, fieldCount);
-while (lineFileRowTab(lf, fields))
-    {
-    fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
-    }
-
-/* Clean up and go home. */
-lineFileClose(&lf);
-return table;
-}
 
 int bdwGetHost(struct sqlConnection *conn, char *hostName)
 /* Look up host name in table and return associated ID.  If not found
@@ -578,7 +467,9 @@ if (errCatchStart(errCatch))
     char licensePlate[maxPlateSize];
     char bdwFile[PATH_LEN];
     char bdwPath[PATH_LEN];
+    long long startUploadTime = time(NULL);
     fetchFdNoCheck(conn, fileId, fd, licensePlate, bdwFile, bdwPath);
+    long long endUploadTime = time(NULL);
 
     /* Fill in md5, updateTime and size */
     unsigned char md5bin[16];
@@ -591,9 +482,11 @@ if (errCatchStart(errCatch))
     /* Update database with what we know so far of the submission file. */
     safef(query, sizeof(query), 
 	"update bdwFile set "
-	" updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', bdwFileName='%s'"
+	" updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', bdwFileName='%s',"
+	" startUploadTime=%lld, endUploadTime=%lld"
 	" where id=%u\n",
-	(long long)updateTime, (long long)size, md5, licensePlate, bdwFile, fileId);
+	(long long)updateTime, (long long)size, md5, licensePlate, bdwFile, 
+	startUploadTime, endUploadTime, fileId);
     sqlUpdate(conn, query);
 
     /* Load up submission file as fielded table, make sure all required fields are there,
