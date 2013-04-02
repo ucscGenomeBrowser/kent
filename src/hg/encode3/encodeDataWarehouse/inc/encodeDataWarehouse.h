@@ -114,63 +114,63 @@ void edwHostOutput(struct edwHost *el, FILE *f, char sep, char lastSep);
 #define edwHostCommaOut(el,f) edwHostOutput(el,f,',',',');
 /* Print out edwHost as a comma separated list including final comma. */
 
-#define EDWSUBMISSIONDIR_NUM_COLS 9
+#define EDWSUBMITDIR_NUM_COLS 9
 
-struct edwSubmissionDir
-/* An external data directory we have collected a submission from */
+struct edwSubmitDir
+/* An external data directory we have collected a submit from */
     {
-    struct edwSubmissionDir *next;  /* Next in singly linked list. */
+    struct edwSubmitDir *next;  /* Next in singly linked list. */
     unsigned id;	/* Autoincremented id */
     char *url;	/* Web-mounted directory. Includes protocol, host, and final '/' */
     unsigned hostId;	/* Id of host it's on */
-    long long lastOkTime;	/* Last time submission dir was ok in seconds since 1970 */
-    long long lastNotOkTime;	/* Last time submission dir was not ok in seconds since 1970 */
-    long long firstAdded;	/* Time submission dir was first seen */
+    long long lastOkTime;	/* Last time submit dir was ok in seconds since 1970 */
+    long long lastNotOkTime;	/* Last time submit dir was not ok in seconds since 1970 */
+    long long firstAdded;	/* Time submit dir was first seen */
     char *errorMessage;	/* If non-empty contains last error message from dir. If empty dir is ok */
-    long long uploadAttempts;	/* Number of times uploads attempted fromt this submission directory */
+    long long uploadAttempts;	/* Number of times uploads attempted fromt this submit directory */
     long long historyBits;	/* Upload history with most recent in least significant bit. 0 for upload failed, 1 for success */
     };
 
-void edwSubmissionDirStaticLoad(char **row, struct edwSubmissionDir *ret);
-/* Load a row from edwSubmissionDir table into ret.  The contents of ret will
+void edwSubmitDirStaticLoad(char **row, struct edwSubmitDir *ret);
+/* Load a row from edwSubmitDir table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct edwSubmissionDir *edwSubmissionDirLoad(char **row);
-/* Load a edwSubmissionDir from row fetched with select * from edwSubmissionDir
- * from database.  Dispose of this with edwSubmissionDirFree(). */
+struct edwSubmitDir *edwSubmitDirLoad(char **row);
+/* Load a edwSubmitDir from row fetched with select * from edwSubmitDir
+ * from database.  Dispose of this with edwSubmitDirFree(). */
 
-struct edwSubmissionDir *edwSubmissionDirLoadAll(char *fileName);
-/* Load all edwSubmissionDir from whitespace-separated file.
- * Dispose of this with edwSubmissionDirFreeList(). */
+struct edwSubmitDir *edwSubmitDirLoadAll(char *fileName);
+/* Load all edwSubmitDir from whitespace-separated file.
+ * Dispose of this with edwSubmitDirFreeList(). */
 
-struct edwSubmissionDir *edwSubmissionDirLoadAllByChar(char *fileName, char chopper);
-/* Load all edwSubmissionDir from chopper separated file.
- * Dispose of this with edwSubmissionDirFreeList(). */
+struct edwSubmitDir *edwSubmitDirLoadAllByChar(char *fileName, char chopper);
+/* Load all edwSubmitDir from chopper separated file.
+ * Dispose of this with edwSubmitDirFreeList(). */
 
-#define edwSubmissionDirLoadAllByTab(a) edwSubmissionDirLoadAllByChar(a, '\t');
-/* Load all edwSubmissionDir from tab separated file.
- * Dispose of this with edwSubmissionDirFreeList(). */
+#define edwSubmitDirLoadAllByTab(a) edwSubmitDirLoadAllByChar(a, '\t');
+/* Load all edwSubmitDir from tab separated file.
+ * Dispose of this with edwSubmitDirFreeList(). */
 
-struct edwSubmissionDir *edwSubmissionDirCommaIn(char **pS, struct edwSubmissionDir *ret);
-/* Create a edwSubmissionDir out of a comma separated string. 
+struct edwSubmitDir *edwSubmitDirCommaIn(char **pS, struct edwSubmitDir *ret);
+/* Create a edwSubmitDir out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new edwSubmissionDir */
+ * return a new edwSubmitDir */
 
-void edwSubmissionDirFree(struct edwSubmissionDir **pEl);
-/* Free a single dynamically allocated edwSubmissionDir such as created
- * with edwSubmissionDirLoad(). */
+void edwSubmitDirFree(struct edwSubmitDir **pEl);
+/* Free a single dynamically allocated edwSubmitDir such as created
+ * with edwSubmitDirLoad(). */
 
-void edwSubmissionDirFreeList(struct edwSubmissionDir **pList);
-/* Free a list of dynamically allocated edwSubmissionDir's */
+void edwSubmitDirFreeList(struct edwSubmitDir **pList);
+/* Free a list of dynamically allocated edwSubmitDir's */
 
-void edwSubmissionDirOutput(struct edwSubmissionDir *el, FILE *f, char sep, char lastSep);
-/* Print out edwSubmissionDir.  Separate fields with sep. Follow last field with lastSep. */
+void edwSubmitDirOutput(struct edwSubmitDir *el, FILE *f, char sep, char lastSep);
+/* Print out edwSubmitDir.  Separate fields with sep. Follow last field with lastSep. */
 
-#define edwSubmissionDirTabOut(el,f) edwSubmissionDirOutput(el,f,'\t','\n');
-/* Print out edwSubmissionDir as a line in a tab-separated file. */
+#define edwSubmitDirTabOut(el,f) edwSubmitDirOutput(el,f,'\t','\n');
+/* Print out edwSubmitDir as a line in a tab-separated file. */
 
-#define edwSubmissionDirCommaOut(el,f) edwSubmissionDirOutput(el,f,',',',');
-/* Print out edwSubmissionDir as a comma separated list including final comma. */
+#define edwSubmitDirCommaOut(el,f) edwSubmitDirOutput(el,f,',',',');
+/* Print out edwSubmitDir as a comma separated list including final comma. */
 
 #define EDWFILE_NUM_COLS 12
 
@@ -180,8 +180,8 @@ struct edwFile
     struct edwFile *next;  /* Next in singly linked list. */
     unsigned id;	/* Autoincrementing file id */
     char licensePlate[17];	/* A abc123 looking license-platish thing */
-    unsigned submissionId;	/* Links to id in submission table */
-    char *submitFileName;	/* File name in submission relative to submission dir */
+    unsigned submitId;	/* Links to id in submit table */
+    char *submitFileName;	/* File name in submit relative to submit dir */
     char *edwFileName;	/* File name in big data warehouse relative to edw root dir */
     long long startUploadTime;	/* Time when upload started - 0 if not started */
     long long endUploadTime;	/* Time when upload finished - 0 if not finished */
@@ -233,120 +233,120 @@ void edwFileOutput(struct edwFile *el, FILE *f, char sep, char lastSep);
 #define edwFileCommaOut(el,f) edwFileOutput(el,f,',',',');
 /* Print out edwFile as a comma separated list including final comma. */
 
-#define EDWSUBMISSION_NUM_COLS 9
+#define EDWSUBMIT_NUM_COLS 9
 
-struct edwSubmission
-/* A data submission, typically containing many files.  Always associated with a submission dir. */
+struct edwSubmit
+/* A data submit, typically containing many files.  Always associated with a submit dir. */
     {
-    struct edwSubmission *next;  /* Next in singly linked list. */
-    unsigned id;	/* Autoincremented submission id */
+    struct edwSubmit *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincremented submit id */
     char *url;	/* Url to validated.txt format file. We copy this file over and give it a fileId if we can. */
-    long long startUploadTime;	/* Time at start of submission */
+    long long startUploadTime;	/* Time at start of submit */
     long long endUploadTime;	/* Time at end of upload - 0 if not finished */
     char userSid[65];	/* Connects to user table sid field */
-    unsigned submitFileId;	/* Points to validated.txt file for submission. */
-    unsigned submissionDirId;	/* Points to the submissionDir */
-    unsigned fileCount;	/* Number of files that will be in submission if it were complete. */
-    char *errorMessage;	/* If non-empty contains last error message from submission. If empty submission is ok */
+    unsigned submitFileId;	/* Points to validated.txt file for submit. */
+    unsigned submitDirId;	/* Points to the submitDir */
+    unsigned fileCount;	/* Number of files that will be in submit if it were complete. */
+    char *errorMessage;	/* If non-empty contains last error message from submit. If empty submit is ok */
     };
 
-void edwSubmissionStaticLoad(char **row, struct edwSubmission *ret);
-/* Load a row from edwSubmission table into ret.  The contents of ret will
+void edwSubmitStaticLoad(char **row, struct edwSubmit *ret);
+/* Load a row from edwSubmit table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct edwSubmission *edwSubmissionLoad(char **row);
-/* Load a edwSubmission from row fetched with select * from edwSubmission
- * from database.  Dispose of this with edwSubmissionFree(). */
+struct edwSubmit *edwSubmitLoad(char **row);
+/* Load a edwSubmit from row fetched with select * from edwSubmit
+ * from database.  Dispose of this with edwSubmitFree(). */
 
-struct edwSubmission *edwSubmissionLoadAll(char *fileName);
-/* Load all edwSubmission from whitespace-separated file.
- * Dispose of this with edwSubmissionFreeList(). */
+struct edwSubmit *edwSubmitLoadAll(char *fileName);
+/* Load all edwSubmit from whitespace-separated file.
+ * Dispose of this with edwSubmitFreeList(). */
 
-struct edwSubmission *edwSubmissionLoadAllByChar(char *fileName, char chopper);
-/* Load all edwSubmission from chopper separated file.
- * Dispose of this with edwSubmissionFreeList(). */
+struct edwSubmit *edwSubmitLoadAllByChar(char *fileName, char chopper);
+/* Load all edwSubmit from chopper separated file.
+ * Dispose of this with edwSubmitFreeList(). */
 
-#define edwSubmissionLoadAllByTab(a) edwSubmissionLoadAllByChar(a, '\t');
-/* Load all edwSubmission from tab separated file.
- * Dispose of this with edwSubmissionFreeList(). */
+#define edwSubmitLoadAllByTab(a) edwSubmitLoadAllByChar(a, '\t');
+/* Load all edwSubmit from tab separated file.
+ * Dispose of this with edwSubmitFreeList(). */
 
-struct edwSubmission *edwSubmissionCommaIn(char **pS, struct edwSubmission *ret);
-/* Create a edwSubmission out of a comma separated string. 
+struct edwSubmit *edwSubmitCommaIn(char **pS, struct edwSubmit *ret);
+/* Create a edwSubmit out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new edwSubmission */
+ * return a new edwSubmit */
 
-void edwSubmissionFree(struct edwSubmission **pEl);
-/* Free a single dynamically allocated edwSubmission such as created
- * with edwSubmissionLoad(). */
+void edwSubmitFree(struct edwSubmit **pEl);
+/* Free a single dynamically allocated edwSubmit such as created
+ * with edwSubmitLoad(). */
 
-void edwSubmissionFreeList(struct edwSubmission **pList);
-/* Free a list of dynamically allocated edwSubmission's */
+void edwSubmitFreeList(struct edwSubmit **pList);
+/* Free a list of dynamically allocated edwSubmit's */
 
-void edwSubmissionOutput(struct edwSubmission *el, FILE *f, char sep, char lastSep);
-/* Print out edwSubmission.  Separate fields with sep. Follow last field with lastSep. */
+void edwSubmitOutput(struct edwSubmit *el, FILE *f, char sep, char lastSep);
+/* Print out edwSubmit.  Separate fields with sep. Follow last field with lastSep. */
 
-#define edwSubmissionTabOut(el,f) edwSubmissionOutput(el,f,'\t','\n');
-/* Print out edwSubmission as a line in a tab-separated file. */
+#define edwSubmitTabOut(el,f) edwSubmitOutput(el,f,'\t','\n');
+/* Print out edwSubmit as a line in a tab-separated file. */
 
-#define edwSubmissionCommaOut(el,f) edwSubmissionOutput(el,f,',',',');
-/* Print out edwSubmission as a comma separated list including final comma. */
+#define edwSubmitCommaOut(el,f) edwSubmitOutput(el,f,',',',');
+/* Print out edwSubmit as a comma separated list including final comma. */
 
-#define EDWSUBMISSIONLOG_NUM_COLS 3
+#define EDWSUBMITLOG_NUM_COLS 3
 
-struct edwSubmissionLog
-/* Log of status messages received during submission process */
+struct edwSubmitLog
+/* Log of status messages received during submit process */
     {
-    struct edwSubmissionLog *next;  /* Next in singly linked list. */
+    struct edwSubmitLog *next;  /* Next in singly linked list. */
     unsigned id;	/* Autoincremented id */
-    unsigned submissionId;	/* Id in submission table */
+    unsigned submitId;	/* Id in submit table */
     char *message;	/* Some message probably scraped out of stderr or something */
     };
 
-void edwSubmissionLogStaticLoad(char **row, struct edwSubmissionLog *ret);
-/* Load a row from edwSubmissionLog table into ret.  The contents of ret will
+void edwSubmitLogStaticLoad(char **row, struct edwSubmitLog *ret);
+/* Load a row from edwSubmitLog table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct edwSubmissionLog *edwSubmissionLogLoad(char **row);
-/* Load a edwSubmissionLog from row fetched with select * from edwSubmissionLog
- * from database.  Dispose of this with edwSubmissionLogFree(). */
+struct edwSubmitLog *edwSubmitLogLoad(char **row);
+/* Load a edwSubmitLog from row fetched with select * from edwSubmitLog
+ * from database.  Dispose of this with edwSubmitLogFree(). */
 
-struct edwSubmissionLog *edwSubmissionLogLoadAll(char *fileName);
-/* Load all edwSubmissionLog from whitespace-separated file.
- * Dispose of this with edwSubmissionLogFreeList(). */
+struct edwSubmitLog *edwSubmitLogLoadAll(char *fileName);
+/* Load all edwSubmitLog from whitespace-separated file.
+ * Dispose of this with edwSubmitLogFreeList(). */
 
-struct edwSubmissionLog *edwSubmissionLogLoadAllByChar(char *fileName, char chopper);
-/* Load all edwSubmissionLog from chopper separated file.
- * Dispose of this with edwSubmissionLogFreeList(). */
+struct edwSubmitLog *edwSubmitLogLoadAllByChar(char *fileName, char chopper);
+/* Load all edwSubmitLog from chopper separated file.
+ * Dispose of this with edwSubmitLogFreeList(). */
 
-#define edwSubmissionLogLoadAllByTab(a) edwSubmissionLogLoadAllByChar(a, '\t');
-/* Load all edwSubmissionLog from tab separated file.
- * Dispose of this with edwSubmissionLogFreeList(). */
+#define edwSubmitLogLoadAllByTab(a) edwSubmitLogLoadAllByChar(a, '\t');
+/* Load all edwSubmitLog from tab separated file.
+ * Dispose of this with edwSubmitLogFreeList(). */
 
-struct edwSubmissionLog *edwSubmissionLogCommaIn(char **pS, struct edwSubmissionLog *ret);
-/* Create a edwSubmissionLog out of a comma separated string. 
+struct edwSubmitLog *edwSubmitLogCommaIn(char **pS, struct edwSubmitLog *ret);
+/* Create a edwSubmitLog out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new edwSubmissionLog */
+ * return a new edwSubmitLog */
 
-void edwSubmissionLogFree(struct edwSubmissionLog **pEl);
-/* Free a single dynamically allocated edwSubmissionLog such as created
- * with edwSubmissionLogLoad(). */
+void edwSubmitLogFree(struct edwSubmitLog **pEl);
+/* Free a single dynamically allocated edwSubmitLog such as created
+ * with edwSubmitLogLoad(). */
 
-void edwSubmissionLogFreeList(struct edwSubmissionLog **pList);
-/* Free a list of dynamically allocated edwSubmissionLog's */
+void edwSubmitLogFreeList(struct edwSubmitLog **pList);
+/* Free a list of dynamically allocated edwSubmitLog's */
 
-void edwSubmissionLogOutput(struct edwSubmissionLog *el, FILE *f, char sep, char lastSep);
-/* Print out edwSubmissionLog.  Separate fields with sep. Follow last field with lastSep. */
+void edwSubmitLogOutput(struct edwSubmitLog *el, FILE *f, char sep, char lastSep);
+/* Print out edwSubmitLog.  Separate fields with sep. Follow last field with lastSep. */
 
-#define edwSubmissionLogTabOut(el,f) edwSubmissionLogOutput(el,f,'\t','\n');
-/* Print out edwSubmissionLog as a line in a tab-separated file. */
+#define edwSubmitLogTabOut(el,f) edwSubmitLogOutput(el,f,'\t','\n');
+/* Print out edwSubmitLog as a line in a tab-separated file. */
 
-#define edwSubmissionLogCommaOut(el,f) edwSubmissionLogOutput(el,f,',',',');
-/* Print out edwSubmissionLog as a comma separated list including final comma. */
+#define edwSubmitLogCommaOut(el,f) edwSubmitLogOutput(el,f,',',',');
+/* Print out edwSubmitLog as a comma separated list including final comma. */
 
 #define EDWSUBSCRIBINGPROGRAM_NUM_COLS 9
 
 struct edwSubscribingProgram
-/* A program that wants to be called when a file arrives or a submission finishes */
+/* A program that wants to be called when a file arrives or a submit finishes */
     {
     struct edwSubscribingProgram *next;  /* Next in singly linked list. */
     unsigned id;	/* ID of daemon */
@@ -356,8 +356,8 @@ struct edwSubscribingProgram
     char *tagPattern;	/* A string of cgi encoded name=val pairs where vals have wildcards */
     char *onFileStartUpload;	/* A unix command string to run with a %u where file id goes */
     char *onFileEndUpload;	/* A unix command string to run with a %u where file id goes */
-    char *onSubmissionStartUpload;	/* A unix command string to run with %u where submission id goes */
-    char *onSubmissionEndUpload;	/* A unix command string to run with %u where submission id goes */
+    char *onSubmitStartUpload;	/* A unix command string to run with %u where submit id goes */
+    char *onSubmitEndUpload;	/* A unix command string to run with %u where submit id goes */
     };
 
 void edwSubscribingProgramStaticLoad(char **row, struct edwSubscribingProgram *ret);

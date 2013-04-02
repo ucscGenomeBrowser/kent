@@ -26,16 +26,16 @@ CREATE TABLE edwHost (
     PRIMARY KEY(id)
 );
 
-#An external data directory we have collected a submission from
-CREATE TABLE edwSubmissionDir (
+#An external data directory we have collected a submit from
+CREATE TABLE edwSubmitDir (
     id int unsigned auto_increment not null,	# Autoincremented id
     url longblob not null,	# Web-mounted directory. Includes protocol, host, and final '/'
     hostId int unsigned not null,	# Id of host it's on
-    lastOkTime bigint not null,	# Last time submission dir was ok in seconds since 1970
-    lastNotOkTime bigint not null,	# Last time submission dir was not ok in seconds since 1970
-    firstAdded bigint not null,	# Time submission dir was first seen
+    lastOkTime bigint not null,	# Last time submit dir was ok in seconds since 1970
+    lastNotOkTime bigint not null,	# Last time submit dir was not ok in seconds since 1970
+    firstAdded bigint not null,	# Time submit dir was first seen
     errorMessage longblob not null,	# If non-empty contains last error message from dir. If empty dir is ok
-    uploadAttempts bigint not null,	# Number of times uploads attempted fromt this submission directory
+    uploadAttempts bigint not null,	# Number of times uploads attempted fromt this submit directory
     historyBits bigint not null,	# Upload history with most recent in least significant bit. 0 for upload failed, 1 for success
               #Indices
     PRIMARY KEY(id)
@@ -45,8 +45,8 @@ CREATE TABLE edwSubmissionDir (
 CREATE TABLE edwFile (
     id int unsigned auto_increment not null,	# Autoincrementing file id
     licensePlate char(16) not null,	# A abc123 looking license-platish thing
-    submissionId int unsigned not null,	# Links to id in submission table
-    submitFileName longblob not null,	# File name in submission relative to submission dir
+    submitId int unsigned not null,	# Links to id in submit table
+    submitFileName longblob not null,	# File name in submit relative to submit dir
     edwFileName longblob not null,	# File name in big data warehouse relative to edw root dir
     startUploadTime bigint not null,	# Time when upload started - 0 if not started
     endUploadTime bigint not null,	# Time when upload finished - 0 if not finished
@@ -59,31 +59,31 @@ CREATE TABLE edwFile (
     PRIMARY KEY(id)
 );
 
-#A data submission, typically containing many files.  Always associated with a submission dir.
-CREATE TABLE edwSubmission (
-    id int unsigned auto_increment not null,	# Autoincremented submission id
+#A data submit, typically containing many files.  Always associated with a submit dir.
+CREATE TABLE edwSubmit (
+    id int unsigned auto_increment not null,	# Autoincremented submit id
     url longblob not null,	# Url to validated.txt format file. We copy this file over and give it a fileId if we can.
-    startUploadTime bigint not null,	# Time at start of submission
+    startUploadTime bigint not null,	# Time at start of submit
     endUploadTime bigint not null,	# Time at end of upload - 0 if not finished
     userSid char(64) not null,	# Connects to user table sid field
-    submitFileId int unsigned not null,	# Points to validated.txt file for submission.
-    submissionDirId int unsigned not null,	# Points to the submissionDir
-    fileCount int unsigned not null,	# Number of files that will be in submission if it were complete.
-    errorMessage longblob not null,	# If non-empty contains last error message from submission. If empty submission is ok
+    submitFileId int unsigned not null,	# Points to validated.txt file for submit.
+    submitDirId int unsigned not null,	# Points to the submitDir
+    fileCount int unsigned not null,	# Number of files that will be in submit if it were complete.
+    errorMessage longblob not null,	# If non-empty contains last error message from submit. If empty submit is ok
               #Indices
     PRIMARY KEY(id)
 );
 
-#Log of status messages received during submission process
-CREATE TABLE edwSubmissionLog (
+#Log of status messages received during submit process
+CREATE TABLE edwSubmitLog (
     id int unsigned auto_increment not null,	# Autoincremented id
-    submissionId int unsigned not null,	# Id in submission table
+    submitId int unsigned not null,	# Id in submit table
     message longblob not null,	# Some message probably scraped out of stderr or something
               #Indices
     PRIMARY KEY(id)
 );
 
-#A program that wants to be called when a file arrives or a submission finishes
+#A program that wants to be called when a file arrives or a submit finishes
 CREATE TABLE edwSubscribingProgram (
     id int unsigned auto_increment not null,	# ID of daemon
     runOrder double not null,	# Determines order programs run in. In case of tie lowest id wins.
@@ -92,8 +92,8 @@ CREATE TABLE edwSubscribingProgram (
     tagPattern varchar(255) not null,	# A string of cgi encoded name=val pairs where vals have wildcards
     onFileStartUpload varchar(255) not null,	# A unix command string to run with a %u where file id goes
     onFileEndUpload varchar(255) not null,	# A unix command string to run with a %u where file id goes
-    onSubmissionStartUpload varchar(255) not null,	# A unix command string to run with %u where submission id goes
-    onSubmissionEndUpload varchar(255) not null,	# A unix command string to run with %u where submission id goes
+    onSubmitStartUpload varchar(255) not null,	# A unix command string to run with %u where submit id goes
+    onSubmitEndUpload varchar(255) not null,	# A unix command string to run with %u where submit id goes
               #Indices
     PRIMARY KEY(id)
 );
