@@ -27,7 +27,7 @@ void usage()
 errAbort(
   "bdwSubmit - Submit URL with validated.txt to warehouse.\n"
   "usage:\n"
-  "   bdwSubmit validatedUrl user password\n"
+  "   bdwSubmit submitUrl user password\n"
   "Generally user is an email address\n"
   "options:\n"
   "   -licensePlatePrefix=prefix (default %s)\n"
@@ -302,7 +302,25 @@ writeErrToTableAndDie(conn, "bdwFile", fileId, err);
 
 #define maxPlateSize 16
 
-void fetchFdNoCheck(struct sqlConnection *conn, unsigned bdwFileId, int unixFd, 
+
+void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
+/* This will fetch remote data to a temporary file. It fills in tempFileName with the name. */
+{
+/* First find out temp dir and make it. */
+char tempDir[PATH_LEN];
+safef(tempDir, sizeof(tempDir), "%s%s/", bdwRootDir, "tmp");
+makeDirsOnPath(tempDir);
+
+/* Now make temp file name with XXXXXX name at end */
+safef(tempFileName, PATH_LEN, "%sbdwSubmitXXXXXX", tempDir);
+
+/* Get open file handle. */
+int localFd = mkstemp(tempFileName);
+cpFile(remoteFd, localFd);
+mustCloseFd(&localFd);
+}
+
+void fetchFdNoCheck(struct sqlConnection *conn, unsigned bdwFileId, int remoteFd, 
     char licensePlate[maxPlateSize], char bdwFile[PATH_LEN], char serverPath[PATH_LEN])
 /* Fetch a file from the remote place we have a connection to.  Do not check MD5sum. 
  * Do clean up file if there is an error part way through data transfer*/
@@ -317,13 +335,15 @@ char uploadDir[PATH_LEN];
 safef(uploadDir, sizeof(uploadDir), "%s%s", bdwRootDir, bdwDir);
 makeDirsOnPath(uploadDir);
 
-/* Figure out full file name */
+/* Figure out full file names */
 safef(bdwFile, PATH_LEN, "%s%s", bdwDir, licensePlate);
 safef(serverPath, PATH_LEN, "%s%s", bdwRootDir, bdwFile);
 
-int destFd = mustOpenFd(serverPath, O_CREAT|O_WRONLY);
-cpFile(unixFd, destFd);
-mustCloseFd(&destFd);
+/* Do remote copy to temp file - not to actual file because who knows,
+ * it might get truncated in transit. Then rename. */
+char tempName[PATH_LEN];
+fetchFdToTempFile(remoteFd, tempName);
+rename(tempName, serverPath);
 }
 
 void bdwFileFetch(struct sqlConnection *conn, struct bdwFile *bf, int fd, 
