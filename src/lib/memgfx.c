@@ -419,8 +419,8 @@ mgPutDot(img,x,y,MAKECOLOR_32(r,g,b));
 #define fraction(X) (((double)(X))-(double)(int)(X))
 #define invFraction(X) (1.0-fraction(X))
 
-void mgAliasLine( struct memGfx *mg, unsigned int x1, unsigned int y1,
-  unsigned int x2, unsigned int y2, Color color)
+void mgAliasLine( struct memGfx *mg, int x1, int y1,
+  int x2, int y2, Color color)
 /* Draw an antialiased line using the Wu algorithm. */
 {
 double dx = (double)x2 - (double)x1;
