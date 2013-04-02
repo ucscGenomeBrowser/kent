@@ -1,5 +1,5 @@
 
-table bdwUser
+table edwUser
 "Someone who submits files to or otherwise interacts with big data warehouse"
     (
     char[64] sid;       "sha384 generated base64 encoded unique user ID"
@@ -7,7 +7,7 @@ table bdwUser
     string email;       "Email handle, the main identifier."
     )
 
-table bdwHost
+table edwHost
 "A web host we have collected files from - something like www.ncbi.nlm.gov or google.com"
     (
     uint id;            "Autoincremented host id"
@@ -20,7 +20,7 @@ table bdwHost
     bigint historyBits; "Upload history with most recent in least significant bit. 0 for connection failed, 1 for success"
     )
 
-table bdwSubmissionDir
+table edwSubmissionDir
 "An external data directory we have collected a submission from"
     (
     uint id;            "Autoincremented id"
@@ -34,14 +34,14 @@ table bdwSubmissionDir
     bigint historyBits; "Upload history with most recent in least significant bit. 0 for upload failed, 1 for success"
     )
 
-table bdwFile
+table edwFile
 "A file we are tracking that we intend to and maybe have uploaded"
     (
     uint id;                    "Autoincrementing file id"
     char[16] licensePlate;      "A abc123 looking license-platish thing"
     uint submissionId;          "Links to id in submission table"
     lstring submitFileName;     "File name in submission relative to submission dir"
-    lstring bdwFileName;        "File name in big data warehouse relative to bdw root dir"
+    lstring edwFileName;        "File name in big data warehouse relative to edw root dir"
     bigint startUploadTime;     "Time when upload started - 0 if not started"
     bigint endUploadTime;       "Time when upload finished - 0 if not finished"
     bigint updateTime;          "Update time (on system it was uploaded from)"
@@ -51,7 +51,7 @@ table bdwFile
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
     )
 
-table bdwSubmission
+table edwSubmission
 "A data submission, typically containing many files.  Always associated with a submission dir."
     (
     uint id;                 "Autoincremented submission id"
@@ -65,7 +65,7 @@ table bdwSubmission
     lstring errorMessage; "If non-empty contains last error message from submission. If empty submission is ok"
     )
 
-table bdwSubmissionLog
+table edwSubmissionLog
 "Log of status messages received during submission process"
     (
     uint id;    "Autoincremented id"
@@ -73,7 +73,7 @@ table bdwSubmissionLog
     lstring message;    "Some message probably scraped out of stderr or something"
     )
 
-table bdwSubscribingProgram
+table edwSubscribingProgram
 "A program that wants to be called when a file arrives or a submission finishes"
     (
     uint id;             "ID of daemon"

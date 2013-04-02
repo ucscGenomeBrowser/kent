@@ -1,4 +1,4 @@
-/* bdwSubmit - Submit URL with validated.txt to warehouse.. */
+/* edwSubmit - Submit URL with validated.txt to warehouse.. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -16,8 +16,8 @@
 #include "obscure.h"
 #include "hex.h"
 #include "fieldedTable.h"
-#include "bigDataWarehouse.h"
-#include "bdwLib.h"
+#include "encodeDataWarehouse.h"
+#include "edwLib.h"
 
 char *licensePlatePrefix = "ENCFF";
 
@@ -25,9 +25,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bdwSubmit - Submit URL with validated.txt to warehouse.\n"
+  "edwSubmit - Submit URL with validated.txt to warehouse.\n"
   "usage:\n"
-  "   bdwSubmit submitUrl user password\n"
+  "   edwSubmit submitUrl user password\n"
   "Generally user is an email address\n"
   "options:\n"
   "   -licensePlatePrefix=prefix (default %s)\n"
@@ -41,37 +41,37 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-int bdwGetHost(struct sqlConnection *conn, char *hostName)
+int edwGetHost(struct sqlConnection *conn, char *hostName)
 /* Look up host name in table and return associated ID.  If not found
  * make up new table entry. */
 {
 /* If it's already in table, just return ID. */
 char query[512];
-safef(query, sizeof(query), "select id from bdwHost where name='%s'", hostName);
+safef(query, sizeof(query), "select id from edwHost where name='%s'", hostName);
 int hostId = sqlQuickNum(conn, query);
 if (hostId > 0)
     return hostId;
 
 safef(query, sizeof(query), 
-   "insert bdwHost (name, lastOkTime, lastNotOkTime, firstAdded, errorMessage, uploadAttempts) "
+   "insert edwHost (name, lastOkTime, lastNotOkTime, firstAdded, errorMessage, uploadAttempts) "
    "values('%s', 0, 0, %lld, '', 0)", 
    hostName, (long long)time(NULL));
 sqlUpdate(conn, query);
 return sqlLastAutoId(conn);
 }
 
-int bdwGetSubmissionDir(struct sqlConnection *conn, int hostId, char *submissionDir)
+int edwGetSubmissionDir(struct sqlConnection *conn, int hostId, char *submissionDir)
 /* Get submissionDir from database, creating it if it doesn't already exist. */
 {
 /* If it's already in table, just return ID. */
 char query[512];
-safef(query, sizeof(query), "select id from bdwSubmissionDir where url='%s'", submissionDir);
+safef(query, sizeof(query), "select id from edwSubmissionDir where url='%s'", submissionDir);
 int dirId = sqlQuickNum(conn, query);
 if (dirId > 0)
     return dirId;
 
 safef(query, sizeof(query), 
-   "insert bdwSubmissionDir (url, firstAdded, hostId) values('%s', %lld, %d)", 
+   "insert edwSubmissionDir (url, firstAdded, hostId) values('%s', %lld, %d)", 
    submissionDir, (long long)time(NULL), hostId);
 sqlUpdate(conn, query);
 return sqlLastAutoId(conn);
@@ -98,11 +98,11 @@ safef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
-int bdwOpenAndRecordInDir(struct sqlConnection *conn, 
+int edwOpenAndRecordInDir(struct sqlConnection *conn, 
 	char *submissionDir, char *submissionFile, char *url,
 	int *retHostId, int *retDirId)
 /* Return a low level read socket handle on URL if possible.  Consult and
- * update the bdwHost and bdwDir tables to help log and troubleshoot remote
+ * update the edwHost and edwDir tables to help log and troubleshoot remote
  * problems. The url parameter should be just a concatenation of submissionDir and
  * submissionFile. */
 {
@@ -129,10 +129,10 @@ char urlDir[PATH_LEN], urlFileName[PATH_LEN], urlExtension[PATH_LEN];
 splitPath(npu.file, urlDir, urlFileName, urlExtension);
 
 /* Record success of open attempt in host and submissionDir tables. */
-int hostId = bdwGetHost(conn, npu.host);
-recordIntoHistory(conn, hostId, "bdwHost", success);
-int submissionDirId = bdwGetSubmissionDir(conn, hostId, submissionDir);
-recordIntoHistory(conn, submissionDirId, "bdwSubmissionDir", success);
+int hostId = edwGetHost(conn, npu.host);
+recordIntoHistory(conn, hostId, "edwHost", success);
+int submissionDirId = edwGetSubmissionDir(conn, hostId, submissionDir);
+recordIntoHistory(conn, submissionDirId, "edwSubmissionDir", success);
 
 /* Finish up error processing, bailing out of further processing if there was an error. */
 errCatchFree(&errCatch);
@@ -160,11 +160,11 @@ freez(&s);
 }
 
 
-struct bdwFile *bdwFileFromFieldedTable(struct fieldedTable *table,
+struct edwFile *edwFileFromFieldedTable(struct fieldedTable *table,
     int fileIx, int md5Ix, int sizeIx, int modifiedIx)
-/* Turn parsed out table (still all just strings) into list of bdwFiles. */
+/* Turn parsed out table (still all just strings) into list of edwFiles. */
 {
-struct bdwFile *bf, *bfList = NULL;
+struct edwFile *bf, *bfList = NULL;
 struct fieldedRow *fr;
 struct dyString *tags = dyStringNew(0);
 for (fr = table->rowList; fr != NULL; fr = fr->next)
@@ -190,7 +190,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 
     /* Fake other fields. */
     strcpy(bf->licensePlate, "");
-    bf->bdwFileName  = cloneString("");
+    bf->edwFileName  = cloneString("");
     slAddHead(&bfList, bf);
     }
 slReverse(&bfList);
@@ -238,7 +238,7 @@ int makeNewEmptySubmissionRecord(struct sqlConnection *conn, char *submissionUrl
 {
 struct dyString *query = dyStringNew(0);
 dyStringAppend(query, 
-    "insert bdwSubmission "
+    "insert edwSubmission "
     "(url, startUploadTime, endUploadTime, userSid, submitFileId, errorMessage) ");
 dyStringPrintf(query, "VALUES('%s', %lld, %lld, '%s', 0, '')",
     submissionUrl, (long long)time(NULL), (long long)0, userSid);
@@ -252,7 +252,7 @@ int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned submissionId, ch
 {
 struct dyString *query = dyStringNew(0);
 dyStringAppend(query, 
-    "insert bdwFile "
+    "insert edwFile "
     "(submissionId, submitFileName) ");
 dyStringPrintf(query, "VALUES(%u, '%s')",
     submissionId, submitFileName);
@@ -261,7 +261,7 @@ dyStringFree(&query);
 return sqlLastAutoId(conn);
 }
 
-void bdwRelDirForTime(time_t sinceEpoch, char dir[PATH_LEN])
+void edwRelDirForTime(time_t sinceEpoch, char dir[PATH_LEN])
 /* Return the output directory for a given time. */
 {
 /* Get current time parsed into struct tm */
@@ -290,13 +290,13 @@ noWarnAbort();
 void handleSubmissionError(struct sqlConnection *conn, int submitId, char *err)
 /* Write out error to stderr and also save it in errorMessage field of submission table. */
 {
-writeErrToTableAndDie(conn, "bdwSubmission", submitId, err);
+writeErrToTableAndDie(conn, "edwSubmission", submitId, err);
 }
 
 void handleFileError(struct sqlConnection *conn, int fileId, char *err)
 /* Write out error to stderr and also save it in errorMessage field of file table. */
 {
-writeErrToTableAndDie(conn, "bdwFile", fileId, err);
+writeErrToTableAndDie(conn, "edwFile", fileId, err);
 }
 
 void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
@@ -304,11 +304,11 @@ void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
 {
 /* First find out temp dir and make it. */
 char tempDir[PATH_LEN];
-safef(tempDir, sizeof(tempDir), "%s%s/", bdwRootDir, "tmp");
+safef(tempDir, sizeof(tempDir), "%s%s/", edwRootDir, "tmp");
 makeDirsOnPath(tempDir);
 
 /* Now make temp file name with XXXXXX name at end */
-safef(tempFileName, PATH_LEN, "%sbdwSubmitXXXXXX", tempDir);
+safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", tempDir);
 
 /* Get open file handle. */
 int localFd = mkstemp(tempFileName);
@@ -319,33 +319,33 @@ mustCloseFd(&localFd);
 
 #define maxPlateSize 16
 
-void makePlateFileNameAndPath(int bdwFileId, char licensePlate[maxPlateSize],
-    char bdwFile[PATH_LEN], char serverPath[PATH_LEN])
+void makePlateFileNameAndPath(int edwFileId, char licensePlate[maxPlateSize],
+    char edwFile[PATH_LEN], char serverPath[PATH_LEN])
 /* Convert file id to local file name, and full file path. Make any directories needed
  * along serverPath. */
 {
-/* Figure out bdw file name, starting with license plate. */
-encode3MakeLicensePlate(licensePlatePrefix, bdwFileId, licensePlate, maxPlateSize);
+/* Figure out edw file name, starting with license plate. */
+encode3MakeLicensePlate(licensePlatePrefix, edwFileId, licensePlate, maxPlateSize);
 
 /* Figure out directory and make any components not already there. */
 time_t now = time(NULL);
-char bdwDir[PATH_LEN];
-bdwRelDirForTime(now, bdwDir);
+char edwDir[PATH_LEN];
+edwRelDirForTime(now, edwDir);
 char uploadDir[PATH_LEN];
-safef(uploadDir, sizeof(uploadDir), "%s%s", bdwRootDir, bdwDir);
+safef(uploadDir, sizeof(uploadDir), "%s%s", edwRootDir, edwDir);
 makeDirsOnPath(uploadDir);
 
 /* Figure out full file names */
-safef(bdwFile, PATH_LEN, "%s%s", bdwDir, licensePlate);
-safef(serverPath, PATH_LEN, "%s%s", bdwRootDir, bdwFile);
+safef(edwFile, PATH_LEN, "%s%s", edwDir, licensePlate);
+safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
 }
 
-void fetchFdNoCheck(unsigned bdwFileId, int remoteFd, 
-    char licensePlate[maxPlateSize], char bdwFile[PATH_LEN], char serverPath[PATH_LEN])
+void fetchFdNoCheck(unsigned edwFileId, int remoteFd, 
+    char licensePlate[maxPlateSize], char edwFile[PATH_LEN], char serverPath[PATH_LEN])
 /* Fetch a file from the remote place we have a connection to.  Do not check MD5sum. 
  * Do clean up file if there is an error part way through data transfer*/
 {
-makePlateFileNameAndPath(bdwFileId, licensePlate, bdwFile, serverPath);
+makePlateFileNameAndPath(edwFileId, licensePlate, edwFile, serverPath);
 
 /* Do remote copy to temp file - not to actual file because who knows,
  * it might get truncated in transit. Then rename. */
@@ -354,7 +354,7 @@ fetchFdToTempFile(remoteFd, tempName);
 rename(tempName, serverPath);
 }
 
-void bdwFileFetch(struct sqlConnection *conn, struct bdwFile *bf, int fd, 
+void edwFileFetch(struct sqlConnection *conn, struct edwFile *bf, int fd, 
 	char *submitFileName, unsigned submissionId)
 /* Fetch file and if successful update a bunch of the fields in bf with the result. */
 {
@@ -364,22 +364,22 @@ encode3MakeLicensePlate(licensePlatePrefix, bf->id, bf->licensePlate, sizeof(bf-
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
  * ones that are just truncated by downloading the rest,  but not now. */
-char bdwFile[PATH_LEN] = "", bdwPath[PATH_LEN];
+char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     bf->startUploadTime = time(NULL);
-    fetchFdNoCheck(bf->id, fd, bf->licensePlate, bdwFile, bdwPath);
+    fetchFdNoCheck(bf->id, fd, bf->licensePlate, edwFile, edwPath);
     bf->endUploadTime = time(NULL);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     /* Attempt to remove any partial file. */
-    if (bdwFile[0] != 0)
+    if (edwFile[0] != 0)
         {
 	char path[PATH_LEN];
-	safef(path, sizeof(path), "%s%s", bdwRootDir, bdwFile);
+	safef(path, sizeof(path), "%s%s", edwRootDir, edwFile);
 	remove(path);
 	}
     handleSubmissionError(conn, submissionId, errCatch->message->string);
@@ -389,10 +389,10 @@ errCatchFree(&errCatch);
 /* Now we got the file.  We'll go ahead and save the file name and stuff. */
 char query[256];
 safef(query, sizeof(query),
-       "update bdwFile"
-       "  set licensePlate='%s', bdwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
+       "update edwFile"
+       "  set licensePlate='%s', edwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
        "  where id = %d"
-       , bf->licensePlate, bdwFile, bf->startUploadTime, bf->endUploadTime, bf->id);
+       , bf->licensePlate, edwFile, bf->startUploadTime, bf->endUploadTime, bf->id);
 sqlUpdate(conn, query);
 
 /* Wrap the validations in an error catcher that will save error to file table in database */
@@ -402,15 +402,15 @@ if (errCatchStart(errCatch))
     {
     /* Check MD5 sum here.  */
     unsigned char md5bin[16];
-    md5ForFile(bdwPath, md5bin);
+    md5ForFile(edwPath, md5bin);
     char md5[33];
     hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
     if (!sameWord(md5, bf->md5))
         errAbort("%s corrupted in upload md5 %s != %s\n", bf->submitFileName, bf->md5, md5);
 
-    /* Finish updating a bunch more of bdwFile record. */
+    /* Finish updating a bunch more of edwFile record. */
     struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
-    dyStringPrintf(dy, "update bdwFile set md5='%s',size=%lld,updateTime=%lld",
+    dyStringPrintf(dy, "update edwFile set md5='%s',size=%lld,updateTime=%lld",
 	    md5, bf->size, bf->updateTime);
     dyStringAppend(dy, ", tags='");
     dyStringAppend(dy, bf->tags);
@@ -426,17 +426,17 @@ if (errCatch->gotError)
     }
 }
 
-long bdwGotFile(struct sqlConnection *conn, char *submissionDir, char *submitFileName, char *md5)
+long edwGotFile(struct sqlConnection *conn, char *submissionDir, char *submitFileName, char *md5)
 /* See if we already got file.  Return fileId if we do,  otherwise -1 */
 {
 char query[PATH_LEN+512];
-safef(query, sizeof(query), "select id from bdwSubmissionDir where url='%s'", submissionDir);
+safef(query, sizeof(query), "select id from edwSubmissionDir where url='%s'", submissionDir);
 int submissionDirId = sqlQuickNum(conn, query);
 if (submissionDirId <= 0)
     return -1;
 
 safef(query, sizeof(query), 
-    "select file.md5,file.id from bdwSubmission sub,bdwFile file "
+    "select file.md5,file.id from edwSubmission sub,edwFile file "
     "where file.submitFileName='%s' and file.submissionId = sub.id and sub.submissionDirId = %d "
     "order by file.submissionId desc"
     , submitFileName, submissionDirId);
@@ -461,14 +461,14 @@ int findFileGivenMd5AndSubmitDir(struct sqlConnection *conn, char *md5, int subm
 {
 char query[256];
 safef(query, sizeof(query), 
-    "select file.id from bdwSubmission sub,bdwFile file "
+    "select file.id from edwSubmission sub,edwFile file "
     "where file.md5 = '%s' and file.submissionId = sub.id and sub.submissionDirId = %d"
     , md5, submissionDirId);
 return sqlQuickNum(conn, query);
 }
 
-void bdwSubmit(char *submissionUrl, char *user, char *password)
-/* bdwSubmit - Submit URL with validated.txt to warehouse. */
+void edwSubmit(char *submissionUrl, char *user, char *password)
+/* edwSubmit - Submit URL with validated.txt to warehouse. */
 {
 /* Parse out url a little into submissionDir and submissionFile */
 char *lastSlash = strrchr(submissionUrl, '/');
@@ -481,16 +481,16 @@ memcpy(submissionDir, submissionUrl, submissionDirSize);
 submissionDir[submissionDirSize] = 0;  // Add trailing zero
 
 /* Make sure user has access. */
-struct sqlConnection *conn = sqlConnect(bdwDatabase);
-char userSid[BDW_ACCESS_SIZE];
-bdwMustHaveAccess(conn, user, password, userSid);
+struct sqlConnection *conn = sqlConnect(edwDatabase);
+char userSid[EDW_ACCESS_SIZE];
+edwMustHaveAccess(conn, user, password, userSid);
 
 /* Make a submission record. */
 int submissionId = makeNewEmptySubmissionRecord(conn, submissionUrl, userSid);
 
 /* Start catching errors from here and writing them in submissionId.  If we don't
  * throw we'll end up having a list of all files in the submission in bfList. */
-struct bdwFile *bfList = NULL; 
+struct edwFile *bfList = NULL; 
 struct errCatch *errCatch = errCatchNew();
 char query[256];
 if (errCatchStart(errCatch))
@@ -498,7 +498,7 @@ if (errCatchStart(errCatch))
     /* Open remote file.  This is most likely where we will fail. */
     int hostId=0, submissionDirId = 0;
     long long startUploadTime = time(NULL);
-    int remoteFd = bdwOpenAndRecordInDir(conn, submissionDir, submissionFile, submissionUrl, 
+    int remoteFd = edwOpenAndRecordInDir(conn, submissionDir, submissionFile, submissionUrl, 
 	&hostId, &submissionDirId);
 
     /* Copy to local temp file. */
@@ -518,9 +518,9 @@ if (errCatchStart(errCatch))
 	{
 	remove(tempSubmitFile);
 	char submitRelativePath[PATH_LEN];
-	safef(query, sizeof(query), "select bdwFileName from bdwFile where id=%d", fileId);
+	safef(query, sizeof(query), "select edwFileName from edwFile where id=%d", fileId);
 	sqlNeedQuickQuery(conn, query, submitRelativePath, sizeof(submitRelativePath));
-	safef(submitLocalPath, sizeof(submitLocalPath), "%s%s", bdwRootDir, submitRelativePath);
+	safef(submitLocalPath, sizeof(submitLocalPath), "%s%s", edwRootDir, submitRelativePath);
 	}
     else
         {
@@ -529,8 +529,8 @@ if (errCatchStart(errCatch))
 
 	/* Get license plate and file/path names that depend on it. */
 	char licensePlate[maxPlateSize];
-	char bdwFile[PATH_LEN];
-	makePlateFileNameAndPath(fileId, licensePlate, bdwFile, submitLocalPath);
+	char edwFile[PATH_LEN];
+	makePlateFileNameAndPath(fileId, licensePlate, edwFile, submitLocalPath);
 
 	/* Move file to final resting place and get update time and size from local file system.  */
 	rename(tempSubmitFile, submitLocalPath);
@@ -539,11 +539,11 @@ if (errCatchStart(errCatch))
 
 	/* Update file table which now should be complete. */
 	safef(query, sizeof(query), 
-	    "update bdwFile set "
-	    " updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', bdwFileName='%s',"
+	    "update edwFile set "
+	    " updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', edwFileName='%s',"
 	    " startUploadTime=%lld, endUploadTime=%lld"
 	    " where id=%u\n",
-	    (long long)updateTime, (long long)size, md5, licensePlate, bdwFile, 
+	    (long long)updateTime, (long long)size, md5, licensePlate, edwFile, 
 	    startUploadTime, endUploadTime, fileId);
 	sqlUpdate(conn, query);
 	}
@@ -558,12 +558,12 @@ if (errCatchStart(errCatch))
     int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
     int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
 
-    /* Convert submission file to a bdwFile list with a lot of missing fields. */
-    bfList = bdwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
+    /* Convert submission file to a edwFile list with a lot of missing fields. */
+    bfList = edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
 
     /* Save our progress so far to submission table. */
     safef(query, sizeof(query), 
-	"update bdwSubmission"
+	"update edwSubmission"
 	"  set submitFileId=%lld, submissionDirId=%lld, fileCount=%d where id=%d",  
 	    (long long)fileId, (long long)submissionDirId, slCount(bfList), submissionId);
     sqlUpdate(conn, query);
@@ -580,19 +580,19 @@ errCatchFree(&errCatch);
  * correctly.   */
 
 /* Go through list attempting to load the files if we don't already have them. */
-struct bdwFile *bf;
+struct edwFile *bf;
 for (bf = bfList; bf != NULL; bf = bf->next)
     {
     int submissionUrlSize = strlen(submissionDir) + strlen(bf->submitFileName) + 1;
     char submissionUrl[submissionUrlSize];
     safef(submissionUrl, submissionUrlSize, "%s%s", submissionDir, bf->submitFileName);
-    if (bdwGotFile(conn, submissionDir, bf->submitFileName, bf->md5)<0)
+    if (edwGotFile(conn, submissionDir, bf->submitFileName, bf->md5)<0)
 	{
 	verbose(1, "Fetching %s\n", bf->submitFileName);
 	int hostId=0, submissionDirId = 0;
-	int fd = bdwOpenAndRecordInDir(conn, submissionDir, bf->submitFileName, submissionUrl,
+	int fd = edwOpenAndRecordInDir(conn, submissionDir, bf->submitFileName, submissionUrl,
 	    &hostId, &submissionDirId);
-	bdwFileFetch(conn, bf, fd, submissionUrl, submissionId);
+	edwFileFetch(conn, bf, fd, submissionUrl, submissionId);
 	close(fd);
 	}
     else
@@ -601,7 +601,7 @@ for (bf = bfList; bf != NULL; bf = bf->next)
 
 /* If we made it here, update submission endUploadTime */
 safef(query, sizeof(query),
-	"update bdwSubmission set endUploadTime=%lld where id=%d", 
+	"update edwSubmission set endUploadTime=%lld where id=%d", 
 	(long long)time(NULL), submissionId);
 sqlUpdate(conn, query);
 
@@ -615,6 +615,6 @@ optionInit(&argc, argv, options);
 licensePlatePrefix = optionVal("licensePlatePrefix", licensePlatePrefix);
 if (argc != 4)
     usage();
-bdwSubmit(argv[1], argv[2], argv[3]);
+edwSubmit(argv[1], argv[2], argv[3]);
 return 0;
 }
