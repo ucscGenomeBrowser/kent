@@ -132,10 +132,13 @@ for (tag = tagList; tag != NULL; tag = tag->next)
     {
     if (!sameString(tag->name, keyTag))
 	{
-	char *val;
-	val = allSameVal(tag->name, meta->children);
-	if (val != NULL)
-	    hoistOne(meta, tag->name, val);
+	if (heavy == NULL || !sameString(tag->name, heavy))
+	    {
+	    char *val;
+	    val = allSameVal(tag->name, meta->children);
+	    if (val != NULL)
+		hoistOne(meta, tag->name, val);
+	    }
 	}
     }
 slFreeList(&tagList);
