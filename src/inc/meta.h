@@ -64,7 +64,7 @@ char *metaTagVal(struct meta *meta, char *tag);
  * Returns NULL if tag not found. */
 
 void metaAddTag(struct meta *meta, char *tag, char *val);
-/* Return value of tag found in this node, not going up to parents. */
+/* Add tag/val to meta. */
 
 void metaSortTags(struct meta *meta);
 /* Do canonical sort so that the first tag stays first but the
