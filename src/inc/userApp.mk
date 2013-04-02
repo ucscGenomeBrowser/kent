@@ -34,5 +34,5 @@ install:: compile
 	${STRIP} ${A}${EXE} ${DESTDIR}${BINDIR}/${A}${EXE}
 	rm -f ${O} ${A}${EXE}
 
-clean:
+clean::
 	rm -f ${O} ${extraObjects} ${A}${EXE}
