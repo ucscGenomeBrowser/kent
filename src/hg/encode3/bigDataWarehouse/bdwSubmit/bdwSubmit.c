@@ -299,10 +299,6 @@ void handleFileError(struct sqlConnection *conn, int fileId, char *err)
 writeErrToTableAndDie(conn, "bdwFile", fileId, err);
 }
 
-
-#define maxPlateSize 16
-
-
 void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
 /* This will fetch remote data to a temporary file. It fills in tempFileName with the name. */
 {
@@ -316,17 +312,21 @@ safef(tempFileName, PATH_LEN, "%sbdwSubmitXXXXXX", tempDir);
 
 /* Get open file handle. */
 int localFd = mkstemp(tempFileName);
+uglyf("tempFileName %s\n", tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
 }
 
-void fetchFdNoCheck(struct sqlConnection *conn, unsigned bdwFileId, int remoteFd, 
-    char licensePlate[maxPlateSize], char bdwFile[PATH_LEN], char serverPath[PATH_LEN])
-/* Fetch a file from the remote place we have a connection to.  Do not check MD5sum. 
- * Do clean up file if there is an error part way through data transfer*/
+#define maxPlateSize 16
+
+void makePlateFileNameAndPath(int bdwFileId, char licensePlate[maxPlateSize],
+    char bdwFile[PATH_LEN], char serverPath[PATH_LEN])
+/* Convert file id to local file name, and full file path. Make any directories needed
+ * along serverPath. */
 {
 /* Figure out bdw file name, starting with license plate. */
 encode3MakeLicensePlate(licensePlatePrefix, bdwFileId, licensePlate, maxPlateSize);
+
 /* Figure out directory and make any components not already there. */
 time_t now = time(NULL);
 char bdwDir[PATH_LEN];
@@ -338,6 +338,14 @@ makeDirsOnPath(uploadDir);
 /* Figure out full file names */
 safef(bdwFile, PATH_LEN, "%s%s", bdwDir, licensePlate);
 safef(serverPath, PATH_LEN, "%s%s", bdwRootDir, bdwFile);
+}
+
+void fetchFdNoCheck(unsigned bdwFileId, int remoteFd, 
+    char licensePlate[maxPlateSize], char bdwFile[PATH_LEN], char serverPath[PATH_LEN])
+/* Fetch a file from the remote place we have a connection to.  Do not check MD5sum. 
+ * Do clean up file if there is an error part way through data transfer*/
+{
+makePlateFileNameAndPath(bdwFileId, licensePlate, bdwFile, serverPath);
 
 /* Do remote copy to temp file - not to actual file because who knows,
  * it might get truncated in transit. Then rename. */
@@ -361,7 +369,7 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     bf->startUploadTime = time(NULL);
-    fetchFdNoCheck(conn, bf->id, fd, bf->licensePlate, bdwFile, bdwPath);
+    fetchFdNoCheck(bf->id, fd, bf->licensePlate, bdwFile, bdwPath);
     bf->endUploadTime = time(NULL);
     }
 errCatchEnd(errCatch);
@@ -448,6 +456,17 @@ sqlFreeResult(&sr);
 return fileId;
 }
 
+int findFileGivenMd5AndSubmitDir(struct sqlConnection *conn, char *md5, int submissionDirId)
+/* Given hexed md5 and a submissionDir see if we have a matching file. */
+{
+char query[256];
+safef(query, sizeof(query), 
+    "select file.id from bdwSubmission sub,bdwFile file "
+    "where file.md5 = '%s' and file.submissionId = sub.id and sub.submissionDirId = %d"
+    , md5, submissionDirId);
+return sqlQuickNum(conn, query);
+}
+
 void bdwSubmit(char *submissionUrl, char *user, char *password)
 /* bdwSubmit - Submit URL with validated.txt to warehouse. */
 {
@@ -476,43 +495,63 @@ struct errCatch *errCatch = errCatchNew();
 char query[256];
 if (errCatchStart(errCatch))
     {
+    /* Open remote file.  This is most likely where we will fail. */
     int hostId=0, submissionDirId = 0;
-    int fd = bdwOpenAndRecordInDir(conn, submissionDir, submissionFile, submissionUrl, 
+    long long startUploadTime = time(NULL);
+    int remoteFd = bdwOpenAndRecordInDir(conn, submissionDir, submissionFile, submissionUrl, 
 	&hostId, &submissionDirId);
 
-    /* Make empty record in db so as to reserve fileId */
-    int fileId = makeNewEmptyFileRecord(conn, submissionId, submissionFile);
-
-    /* Fetch file.  Record where you put it in licensePlate, bdwFile, and bdwPath*/
-    char licensePlate[maxPlateSize];
-    char bdwFile[PATH_LEN];
-    char bdwPath[PATH_LEN];
-    long long startUploadTime = time(NULL);
-    fetchFdNoCheck(conn, fileId, fd, licensePlate, bdwFile, bdwPath);
+    /* Copy to local temp file. */
+    char tempSubmitFile[PATH_LEN];
+    fetchFdToTempFile(remoteFd, tempSubmitFile);
+    mustCloseFd(&remoteFd);
     long long endUploadTime = time(NULL);
 
-    /* Fill in md5, updateTime and size */
-    unsigned char md5bin[16];
-    md5ForFile(bdwPath, md5bin);
-    char md5[33];
-    hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
-    time_t updateTime = fileModTime(bdwPath);
-    off_t size = fileSize(bdwPath);
+    /* Calculate MD5 sum, and see if we already have such a file. */
+    char *md5 = md5HexForFile(tempSubmitFile);
+    int fileId = findFileGivenMd5AndSubmitDir(conn, md5, submissionDirId);
+    uglyf("fileId for %s %s is %d\n", submissionFile, md5, fileId);
 
-    /* Update database with what we know so far of the submission file. */
-    safef(query, sizeof(query), 
-	"update bdwFile set "
-	" updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', bdwFileName='%s',"
-	" startUploadTime=%lld, endUploadTime=%lld"
-	" where id=%u\n",
-	(long long)updateTime, (long long)size, md5, licensePlate, bdwFile, 
-	startUploadTime, endUploadTime, fileId);
-    sqlUpdate(conn, query);
+    /* If we already have it, then delete temp file, otherwise put file in file table. */
+    char submitLocalPath[PATH_LEN];
+    if (fileId != 0)
+	{
+	remove(tempSubmitFile);
+	char submitRelativePath[PATH_LEN];
+	safef(query, sizeof(query), "select bdwFileName from bdwFile where id=%d", fileId);
+	sqlNeedQuickQuery(conn, query, submitRelativePath, sizeof(submitRelativePath));
+	safef(submitLocalPath, sizeof(submitLocalPath), "%s%s", bdwRootDir, submitRelativePath);
+	}
+    else
+        {
+	/* Make nearly empty record - reserves fileId */
+	fileId = makeNewEmptyFileRecord(conn, submissionId, submissionFile);
+
+	/* Get license plate and file/path names that depend on it. */
+	char licensePlate[maxPlateSize];
+	char bdwFile[PATH_LEN];
+	makePlateFileNameAndPath(fileId, licensePlate, bdwFile, submitLocalPath);
+
+	/* Move file to final resting place and get update time and size from local file system.  */
+	rename(tempSubmitFile, submitLocalPath);
+	time_t updateTime = fileModTime(submitLocalPath);
+	off_t size = fileSize(submitLocalPath);
+
+	/* Update file table which now should be complete. */
+	safef(query, sizeof(query), 
+	    "update bdwFile set "
+	    " updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', bdwFileName='%s',"
+	    " startUploadTime=%lld, endUploadTime=%lld"
+	    " where id=%u\n",
+	    (long long)updateTime, (long long)size, md5, licensePlate, bdwFile, 
+	    startUploadTime, endUploadTime, fileId);
+	sqlUpdate(conn, query);
+	}
 
     /* Load up submission file as fielded table, make sure all required fields are there,
      * and calculate indexes of required fields. */
     char *requiredFields[] = {"file_name", "md5_sum", "size", "modified"};
-    struct fieldedTable *table = fieldedTableFromTabFile(bdwPath, 
+    struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, 
 	    requiredFields, ArraySize(requiredFields));
     int fileIx = stringArrayIx("file_name", table->fields, table->fieldCount);
     int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
