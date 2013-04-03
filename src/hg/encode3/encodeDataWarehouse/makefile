@@ -8,6 +8,7 @@ USE_DIRS = $(DIRS)
 
 DIRS = \
     edwCreateUser \
+    edwResetPassword \
     edwSubmit
 
 TEST_DIRS = \
