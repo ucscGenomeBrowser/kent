@@ -1,17 +1,9 @@
-include ../../inc/common.mk
-HG_WARN = ${HG_WARN_ERR}
-
-L += 
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-
-O = gbGetEntries.o 
-
-gbGetEntries: $O ../../lib/$(MACHTYPE)/jkweb.a
-	${CC} -o ${BINDIR}/gbGetEntries $O $(MYLIBS) $L
+kentSrc = ../..
+A = gbGetEntries
+include $(kentSrc)/inc/userApp.mk
 
 test::
-	(cd tests && ${MAKE} test)
+	cd tests && ${MAKE} test
 
 clean::
-	(cd tests && ${MAKE} clean)
+	cd tests && ${MAKE} clean

@@ -7,16 +7,16 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 all: snpMaskSingle snpMaskAddInsertions snpMaskCutDeletions
 
 snpMaskSingle: snpMaskSingle.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/snpMaskSingle snpMaskSingle.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/snpMaskSingle${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/snpMaskSingle snpMaskSingle.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/snpMaskSingle${EXE}
 
 snpMaskAddInsertions: snpMaskAddInsertions.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/snpMaskAddInsertions snpMaskAddInsertions.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/snpMaskAddInsertions${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/snpMaskAddInsertions snpMaskAddInsertions.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/snpMaskAddInsertions${EXE}
 
 snpMaskCutDeletions: snpMaskCutDeletions.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/snpMaskCutDeletions snpMaskCutDeletions.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/snpMaskCutDeletions${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/snpMaskCutDeletions snpMaskCutDeletions.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/snpMaskCutDeletions${EXE}
 
 O = snpMapToExon.o snpMaskChrom.o snpMaskFlank.o \
     snpMaskFlankSubset.o snpMaskGenes.o \

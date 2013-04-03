@@ -2,6 +2,10 @@ kentSrc = ../..
 A = bedRemoveOverlap
 include $(kentSrc)/inc/userApp.mk
 
+clean::
+	rm -f empty.out one.out test4.out threeLast.out twoFirst.out \
+            twoSecond.out
+
 test:
 	bedRemoveOverlap empty.bed empty.out
 	diff empty.out empty.expected

@@ -1,22 +1,11 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = validateManifest
+include $(kentSrc)/inc/userApp.mk
 
-L += $(MYSQLLIBS) -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
-
-O = validateManifest.o
-
-validateManifest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/validateManifest $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/validateManifest${EXE}
-
-clean:
-	rm -f $O
-
-test: 	validateManifest
+test:
 	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1
 
-test2: 	validateManifest
+test2:
 	rm -f /hive/groups/encode/encode3/testSets/manifest1/validated.txt
 	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1
 

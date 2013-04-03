@@ -1,20 +1,11 @@
-include ../../../inc/common.mk
-
-L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
-
-
-O = hgLoadRnaFold.o
-
-hgLoadRnaFold: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadRnaFold $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/hgLoadRnaFold${EXE}
+kentSrc = ../../..
+A = hgLoadRnaFold
+include $(kentSrc)/inc/userApp.mk
 
 test:
 	hgLoadRnaFold -tab=output -noLoad hg16 test input
 	diff -x CVS -r expected output
-	rm -r output
+	rm -fr output
 
 clean::
-	rm -f ${O}
+	rm -fr output

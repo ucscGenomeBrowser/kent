@@ -58,7 +58,7 @@ for (val = col->values; val != NULL; val = val->next)
     if (val->next != NULL)
         dyStringAppend(dy, ", ");
     }
-dyStringPrintf(dy, ") ");
+dyStringPrintf(dy, ")");
 }
 
 struct dyString *asColumnToSqlType(struct asColumn *col)

@@ -1,19 +1,9 @@
-include ../../../inc/common.mk
-
-
-L += -lm ${SOCKETLIB}
-MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-
-O = checkAgpAndFa.o
-A = ${BINDIR}/checkAgpAndFa
-
-checkAgpAndFa: $O 
-	${CC} ${COPT} ${CFLAGS} -o $A $O $(MYLIBS) $L
-	${STRIP} $A${EXE}
+kentSrc = ../../..
+A = checkAgpAndFa
+include $(kentSrc)/inc/userApp.mk
 
 test:
 	./doTest.sh $A
 
-clean:
-	rm -rf *.o ./checkAgpAndFa tests/output
+clean::
+	rm -fr tests/output

@@ -1,21 +1,7 @@
-include ../../inc/common.mk
-
-L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = bedGeneParts
-O = bedGeneParts.o
-
-bedGeneParts: ${O} ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-compile:: ${O}
-	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
-
-clean::
-	rm -f ${A}${EXE} ${O}
+include $(kentSrc)/inc/userApp.mk
+L += -lm
 
 test:
 	bedGeneParts firstExon test.in firstExon.out
@@ -26,3 +12,6 @@ test:
 	diff promoter.expected promoter.out
 	bedGeneParts firstCodingSplice test.in firstCodingSplice.out
 	diff firstCodingSplice.expected firstCodingSplice.out
+
+clean::
+	rm -f firstExon.out introns.out promoter.out firstCodingSplice.out

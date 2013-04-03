@@ -37,6 +37,7 @@ errAbort("faCat - concatenate fa records and add gaps between each sequence.\n"
 static struct optionSpec options[] = {
     {"gapSize", OPTION_INT},
     {"maxOutputSize", OPTION_INT},
+    {"name", OPTION_STRING},
     {NULL, 0},
 };
 
