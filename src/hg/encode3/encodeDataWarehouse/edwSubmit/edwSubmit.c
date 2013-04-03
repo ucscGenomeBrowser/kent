@@ -163,18 +163,6 @@ if (retDirId != NULL)
 return sd;
 }
 
-void cgiEncodeIntoDy(char *var, char *val, struct dyString *dy)
-/* Add a CGI-encoded &var=val string to dy. */
-{
-if (dy->stringSize != 0)
-    dyStringAppendC(dy, '&');
-dyStringAppend(dy, var);
-dyStringAppendC(dy, '=');
-char *s = cgiEncode(val);
-dyStringAppend(dy, s);
-freez(&s);
-}
-
 
 struct edwFile *edwFileFromFieldedTable(struct fieldedTable *table,
     int fileIx, int md5Ix, int sizeIx, int modifiedIx)
@@ -352,9 +340,10 @@ safef(edwFile, PATH_LEN, "%s%s", edwDir, licensePlate);
 safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
 }
 
-void edwFileFetch(struct sqlConnection *conn, struct edwFile *bf, int fd, 
+int edwFileFetch(struct sqlConnection *conn, struct edwFile *bf, int fd, 
 	char *submitFileName, unsigned submitId, unsigned submitDirId)
-/* Fetch file and if successful update a bunch of the fields in bf with the result. */
+/* Fetch file and if successful update a bunch of the fields in bf with the result. 
+ * Returns fileId. */
 {
 bf->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, bf->submitFileName);
 // encode3MakeLicensePlate(licensePlatePrefix, bf->id, bf->licensePlate, sizeof(bf->licensePlate));
@@ -426,6 +415,7 @@ if (errCatch->gotError)
     {
     handleFileError(conn, bf->id, errCatch->message->string);
     }
+return bf->id;
 }
 
 long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5)
@@ -469,6 +459,109 @@ safef(query, sizeof(query),
     "where file.md5 = '%s' and file.submitId = sub.id and sub.submitDirId = %d"
     , md5, submitDirId);
 return sqlQuickNum(conn, query);
+}
+
+boolean allTagsWildMatch(char *tagPattern, struct hash *tagHash)
+/* Tag pattern is a cgi encoded list of tags with wild card values.  This routine returns TRUE
+ * if every tag in tagPattern is also in tagHash,  and the value in tagHash is wildcard
+ * compatible with tagPattern. */
+{
+uglyf("allTagsWildMatch(%s)\n", tagPattern);
+boolean match = TRUE;
+char *tagsString = cloneString(tagPattern);
+struct cgiVar *pattern, *patternList=NULL;
+struct hash *patternHash=NULL;
+
+cgiParseInputAbort(tagsString, &patternHash, &patternList);
+for (pattern = patternList; pattern != NULL; pattern = pattern->next)
+    {
+    uglyf("%s=%s\n", pattern->name, pattern->val);
+    struct cgiVar *cv = hashFindVal(tagHash, pattern->name);
+    char *val = cv->val;
+    uglyf("tagHash has %d elements, %s=%s\n", tagHash->elCount, pattern->name, val);
+    if (val == NULL)
+	{
+        match = FALSE;
+	break;
+	}
+    if (!wildMatch(pattern->val, val))
+        {
+	match = FALSE;
+	break;
+	}
+    }
+
+slFreeList(&patternList);
+hashFree(&patternHash);
+freez(&tagsString);
+return match;
+}
+
+
+void tellSubscribers(struct sqlConnection *conn, char *submitDir, char *submitFileName, unsigned id)
+/* Tell subscribers that match about file of given id */
+{
+char query[256];
+safef(query, sizeof(query), "select tags from edwFile where id=%u", id);
+char *tagsString = sqlQuickString(conn, query);
+uglyf("tagsString=%s\n", tagsString);
+struct hash *tagHash=NULL;
+struct cgiVar *tagList=NULL;
+if (!isEmpty(tagsString))
+    cgiParseInputAbort(tagsString, &tagHash, &tagList);
+
+    {
+    struct cgiVar *tag;
+    for (tag = tagList; tag != NULL; tag = tag->next)
+        uglyf("   %s=%s\n", tag->name, (char*)tag->val);
+    }
+
+char **row;
+struct sqlResult *sr = sqlGetResult(conn, "select * from edwSubscriber order by runOrder,id");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct edwSubscriber *subscriber = edwSubscriberLoad(row);
+    if (wildMatch(subscriber->filePattern, submitFileName)
+        && wildMatch(subscriber->dirPattern, submitDir))
+	{
+	/* Might have to check for tags match, which involves db load and a cgi vs. cgi compare */
+	boolean tagsOk = TRUE;
+	uglyf("subscriber->tagPattern = %s\n", subscriber->tagPattern);
+	if (!isEmpty(subscriber->tagPattern))
+	    {
+	    if (tagHash == NULL)  // if we're nonempty they better be too
+	        tagsOk = FALSE;
+	    else
+	        {
+		if (!allTagsWildMatch(subscriber->tagPattern, tagHash))
+		    tagsOk = FALSE;
+		}
+	    }
+	uglyf("tagsOk %d %s\n", tagsOk, submitFileName);
+	if (tagsOk)
+	    {
+	    int maxNumSize=16;	// more than enough digits base ten.
+	    int maxCommandSize = strlen(subscriber->onFileEndUpload) + maxNumSize + 1;
+	    char command[maxCommandSize];
+	    safef(command, sizeof(command), subscriber->onFileEndUpload, id);
+	    int err = system(command);
+	    if (err != 0)
+	        warn("err %d from system(%s)\n", err, command);
+	    }
+	}
+    edwSubscriberFree(&subscriber);
+    }
+
+    {
+    struct cgiVar *tag;
+    for (tag = tagList; tag != NULL; tag = tag->next)
+        uglyf("   %s=%s\n", tag->name, (char*)tag->val);
+    }
+
+sqlFreeResult(&sr);
+freez(&tagsString);
+slFreeList(&tagList);
+hashFree(&tagHash);
 }
 
 void edwSubmit(char *submitUrl, char *user, char *password)
@@ -594,11 +687,12 @@ for (bf = bfList; bf != NULL; bf = bf->next)
 	int hostId=0, submitDirId = 0;
 	int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
 	    &hostId, &submitDirId);
-	edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
+	int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
 	close(fd);
 	safef(query, sizeof(query), "update edwSubmit set newFiles=newFiles+1 where id=%d", 
 	    submitId);
 	sqlUpdate(conn, query);
+	tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
 	}
     else
 	{

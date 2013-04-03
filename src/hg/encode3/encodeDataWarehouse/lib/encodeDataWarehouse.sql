@@ -88,10 +88,8 @@ CREATE TABLE edwSubscriber (
     runOrder double not null,	# Determines order subscribers run in. In case of tie lowest id wins.
     filePattern varchar(255) not null,	# A string with * and ? wildcards to match files we care about
     dirPattern varchar(255) not null,	# A string with * and ? wildcards to match hub dir URLs we care about
-    onFileStartUpload varchar(255) not null,	# A unix command string to run with a %u where file id goes
+    tagPattern longblob not null,	# A cgi-encoded string of tag=wildcard pairs.
     onFileEndUpload varchar(255) not null,	# A unix command string to run with a %u where file id goes
-    onSubmitStartUpload varchar(255) not null,	# A unix command string to run with %u where submit id goes
-    onSubmitEndUpload varchar(255) not null,	# A unix command string to run with %u where submit id goes
               #Indices
     PRIMARY KEY(id)
 );

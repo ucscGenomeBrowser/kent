@@ -773,10 +773,8 @@ ret->name = row[1];
 ret->runOrder = sqlDouble(row[2]);
 ret->filePattern = row[3];
 ret->dirPattern = row[4];
-ret->onFileStartUpload = row[5];
+ret->tagPattern = row[5];
 ret->onFileEndUpload = row[6];
-ret->onSubmitStartUpload = row[7];
-ret->onSubmitEndUpload = row[8];
 }
 
 struct edwSubscriber *edwSubscriberLoad(char **row)
@@ -791,10 +789,8 @@ ret->name = cloneString(row[1]);
 ret->runOrder = sqlDouble(row[2]);
 ret->filePattern = cloneString(row[3]);
 ret->dirPattern = cloneString(row[4]);
-ret->onFileStartUpload = cloneString(row[5]);
+ret->tagPattern = cloneString(row[5]);
 ret->onFileEndUpload = cloneString(row[6]);
-ret->onSubmitStartUpload = cloneString(row[7]);
-ret->onSubmitEndUpload = cloneString(row[8]);
 return ret;
 }
 
@@ -804,7 +800,7 @@ struct edwSubscriber *edwSubscriberLoadAll(char *fileName)
 {
 struct edwSubscriber *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -822,7 +818,7 @@ struct edwSubscriber *edwSubscriberLoadAllByChar(char *fileName, char chopper)
 {
 struct edwSubscriber *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -848,10 +844,8 @@ ret->name = sqlStringComma(&s);
 ret->runOrder = sqlDoubleComma(&s);
 ret->filePattern = sqlStringComma(&s);
 ret->dirPattern = sqlStringComma(&s);
-ret->onFileStartUpload = sqlStringComma(&s);
+ret->tagPattern = sqlStringComma(&s);
 ret->onFileEndUpload = sqlStringComma(&s);
-ret->onSubmitStartUpload = sqlStringComma(&s);
-ret->onSubmitEndUpload = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -866,10 +860,8 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->name);
 freeMem(el->filePattern);
 freeMem(el->dirPattern);
-freeMem(el->onFileStartUpload);
+freeMem(el->tagPattern);
 freeMem(el->onFileEndUpload);
-freeMem(el->onSubmitStartUpload);
-freeMem(el->onSubmitEndUpload);
 freez(pEl);
 }
 
@@ -906,19 +898,11 @@ fprintf(f, "%s", el->dirPattern);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->onFileStartUpload);
+fprintf(f, "%s", el->tagPattern);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->onFileEndUpload);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->onSubmitStartUpload);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->onSubmitEndUpload);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

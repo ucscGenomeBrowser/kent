@@ -80,8 +80,7 @@ table edwSubscriber
     double runOrder;     "Determines order subscribers run in. In case of tie lowest id wins."
     string filePattern;  "A string with * and ? wildcards to match files we care about"
     string dirPattern;   "A string with * and ? wildcards to match hub dir URLs we care about"
-    string onFileStartUpload;       "A unix command string to run with a %u where file id goes"
-    string onFileEndUpload;         "A unix command string to run with a %u where file id goes"
-    string onSubmitStartUpload; "A unix command string to run with %u where submit id goes"
-    string onSubmitEndUpload;   "A unix command string to run with %u where submit id goes"
+    lstring tagPattern;  "A cgi-encoded string of tag=wildcard pairs."
+    string onFileEndUpload;     "A unix command string to run with a %u where file id goes"
     )
+

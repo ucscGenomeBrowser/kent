@@ -10,4 +10,4 @@ a moderate number (1,000,000's) of big (~1GB) files.  It consists of three parts
     f) Subscribers (jobs that get started when a file of a particular type arrives).
 3) A system to notify subscribers when a file has been recieved.
 
-Note the pipeline code is relatively separate.  The pipeline subscribes to the big data warehouse.
+Note the pipeline code is relatively separate.  The pipeline subscribes to the data warehouse.

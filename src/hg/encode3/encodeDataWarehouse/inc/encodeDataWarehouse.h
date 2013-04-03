@@ -298,7 +298,7 @@ void edwSubmitOutput(struct edwSubmit *el, FILE *f, char sep, char lastSep);
 #define edwSubmitCommaOut(el,f) edwSubmitOutput(el,f,',',',');
 /* Print out edwSubmit as a comma separated list including final comma. */
 
-#define EDWSUBSCRIBER_NUM_COLS 9
+#define EDWSUBSCRIBER_NUM_COLS 7
 
 struct edwSubscriber
 /* Subscribers can have programs that are called at various points during data submission */
@@ -309,10 +309,8 @@ struct edwSubscriber
     double runOrder;	/* Determines order subscribers run in. In case of tie lowest id wins. */
     char *filePattern;	/* A string with * and ? wildcards to match files we care about */
     char *dirPattern;	/* A string with * and ? wildcards to match hub dir URLs we care about */
-    char *onFileStartUpload;	/* A unix command string to run with a %u where file id goes */
+    char *tagPattern;	/* A cgi-encoded string of tag=wildcard pairs. */
     char *onFileEndUpload;	/* A unix command string to run with a %u where file id goes */
-    char *onSubmitStartUpload;	/* A unix command string to run with %u where submit id goes */
-    char *onSubmitEndUpload;	/* A unix command string to run with %u where submit id goes */
     };
 
 void edwSubscriberStaticLoad(char **row, struct edwSubscriber *ret);
