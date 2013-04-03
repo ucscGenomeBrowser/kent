@@ -25,11 +25,11 @@ O = ${A}.o
 objects = ${O} ${extraObjects} ${externObjects}
 
 all ${A}: ${O} ${extraObjects}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A} ${objects} ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A} ${objects} ${MYLIBS} ${L} -lm
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 compile:: ${O} ${extraObjects} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} ${objects} ${MYLIBS} ${L}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} ${objects} ${MYLIBS} ${L} -lm
 
 install:: compile
 	rm -f ${DESTDIR}${BINDIR}/${A}${EXE}
