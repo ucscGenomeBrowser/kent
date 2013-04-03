@@ -466,7 +466,6 @@ boolean allTagsWildMatch(char *tagPattern, struct hash *tagHash)
  * if every tag in tagPattern is also in tagHash,  and the value in tagHash is wildcard
  * compatible with tagPattern. */
 {
-uglyf("allTagsWildMatch(%s)\n", tagPattern);
 boolean match = TRUE;
 char *tagsString = cloneString(tagPattern);
 struct cgiVar *pattern, *patternList=NULL;
@@ -475,10 +474,8 @@ struct hash *patternHash=NULL;
 cgiParseInputAbort(tagsString, &patternHash, &patternList);
 for (pattern = patternList; pattern != NULL; pattern = pattern->next)
     {
-    uglyf("%s=%s\n", pattern->name, pattern->val);
     struct cgiVar *cv = hashFindVal(tagHash, pattern->name);
     char *val = cv->val;
-    uglyf("tagHash has %d elements, %s=%s\n", tagHash->elCount, pattern->name, val);
     if (val == NULL)
 	{
         match = FALSE;
@@ -504,17 +501,11 @@ void tellSubscribers(struct sqlConnection *conn, char *submitDir, char *submitFi
 char query[256];
 safef(query, sizeof(query), "select tags from edwFile where id=%u", id);
 char *tagsString = sqlQuickString(conn, query);
-uglyf("tagsString=%s\n", tagsString);
 struct hash *tagHash=NULL;
 struct cgiVar *tagList=NULL;
 if (!isEmpty(tagsString))
     cgiParseInputAbort(tagsString, &tagHash, &tagList);
 
-    {
-    struct cgiVar *tag;
-    for (tag = tagList; tag != NULL; tag = tag->next)
-        uglyf("   %s=%s\n", tag->name, (char*)tag->val);
-    }
 
 char **row;
 struct sqlResult *sr = sqlGetResult(conn, "select * from edwSubscriber order by runOrder,id");
@@ -526,7 +517,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	/* Might have to check for tags match, which involves db load and a cgi vs. cgi compare */
 	boolean tagsOk = TRUE;
-	uglyf("subscriber->tagPattern = %s\n", subscriber->tagPattern);
 	if (!isEmpty(subscriber->tagPattern))
 	    {
 	    if (tagHash == NULL)  // if we're nonempty they better be too
@@ -537,25 +527,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 		    tagsOk = FALSE;
 		}
 	    }
-	uglyf("tagsOk %d %s\n", tagsOk, submitFileName);
 	if (tagsOk)
 	    {
 	    int maxNumSize=16;	// more than enough digits base ten.
 	    int maxCommandSize = strlen(subscriber->onFileEndUpload) + maxNumSize + 1;
 	    char command[maxCommandSize];
 	    safef(command, sizeof(command), subscriber->onFileEndUpload, id);
+	    verbose(2, "system(%s)\n", command);
 	    int err = system(command);
 	    if (err != 0)
 	        warn("err %d from system(%s)\n", err, command);
 	    }
 	}
     edwSubscriberFree(&subscriber);
-    }
-
-    {
-    struct cgiVar *tag;
-    for (tag = tagList; tag != NULL; tag = tag->next)
-        uglyf("   %s=%s\n", tag->name, (char*)tag->val);
     }
 
 sqlFreeResult(&sr);
