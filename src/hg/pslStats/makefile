@@ -1,17 +1,9 @@
-include ../../inc/common.mk
+kentSrc = ../..
+A = pslStats
+include $(kentSrc)/inc/userApp.mk
 
-
-L += -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-
-O = pslStats.o
-
-pslStats: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslStats $O $(MYLIBS) $L
 test:
 	cd tests && ${MAKE} test
 
-clean:
-	rm -f $O 
+clean::
 	cd tests && ${MAKE} clean

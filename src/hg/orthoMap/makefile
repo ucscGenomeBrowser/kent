@@ -9,13 +9,13 @@ E = mgcFastaForBed agxToIntronBeds bedToFrames orthoMap orthoEvaluate orthoPickI
 
 O = orthoEval.o
 
-${BINDIR}/%: %.c $(O)
+${DESTDIR}${BINDIR}/%: %.c $(O)
 	$(CC) $(COPTS) -I../inc  -I../../inc  -o $@ $< $(O) $(MYLIBS) $L -lm -lz
 
 %Test: %Test.c 
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
-compile: $(E:%=${BINDIR}/%)
+compile: $(E:%=${DESTDIR}${BINDIR}/%)
 
 test: $(TESTS)
 

@@ -1,17 +1,8 @@
-include ../../inc/common.mk
+kentSrc = ../..
+A = autoDtd
+include $(kentSrc)/inc/userApp.mk
 
-L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
-
-O = autoDtd.o
-
-autoDtd: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/autoDtd $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/autoDtd${EXE}
-
-clean:
-	rm -f $O
+clean::
 	rm -f test/*/out.*
 
 test::

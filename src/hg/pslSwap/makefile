@@ -1,27 +1,11 @@
-include ../../inc/common.mk
-
-L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = pslSwap
-O = pslSwap.o
+include $(kentSrc)/inc/userApp.mk
 
-all: ${A}
-
-${A}: ${O}
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-compile:: ${O}
-	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
-
-test: compile
+test:
 	cd tests && ${MAKE} test
-	rm -f ${A}${EXE}
 
-clean:
-	rm -f pslSwap ${OBJS}
+clean::
 	cd tests && ${MAKE} clean
 
 savebak:

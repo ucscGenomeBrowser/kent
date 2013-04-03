@@ -1,18 +1,10 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = clusterPsl
+include $(kentSrc)/inc/userApp.mk
 
-L += -lm ${MYSQLLIBS} 
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
-O = clusterPsl.o
-
-clusterPsl: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/clusterPsl $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/clusterPsl${EXE}
-
-test:	clusterPsl
+test:
 	clusterPsl -verbose=0 input.psl output.cluster
 	diff expected.cluster output.cluster
 
-clean:
-	rm -f ${O}
+clean::
+	rm -f output.cluster
