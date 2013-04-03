@@ -6,8 +6,8 @@
 #test of enum and set symbolic columns
 CREATE TABLE symTest (
     id int not null,	# unique id
-    sex enum("male", "female")  not null,	# enumerated column
-    skills set("cProg", "javaProg", "pythonProg", "awkProg")  not null,	# set column
+    sex enum("male", "female") not null,	# enumerated column
+    skills set("cProg", "javaProg", "pythonProg", "awkProg") not null,	# set column
               #Indices
     PRIMARY KEY(id)
 );
