@@ -128,7 +128,7 @@
             How do I display ENCODE data from GEO in the genome browser?
           <P>
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-            Please avoid loading GEO data as a custom track! Rather since nearly all ENCODE data at GEO
+            Please avoid loading GEO data as a custom track! Rather, as nearly all ENCODE data at GEO
             are already hosted as tracks on the UCSC browser load the existing corresponding track.
           </P>
           <P>
@@ -265,14 +265,14 @@
             How do I extract information about an ENCODE experiment from the filename?
           <P>
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-            This is not recommended.  While ENCODE filenames have some metadata embedded, the information there is not complete no easily extracted.
-            Rather use the file's metadata, for example in &quot;files.txt&quot;, or access metadata in the following places:
-            <ol>By opening the mentioned related &quot;files.txt&quot; metadata file located in each track's corresponding download directory.
+            This is not recommended.  While ENCODE filenames have some metadata embedded, the information there is not complete nor easily extracted.
+            Rather, use the file's metadata, for example in &quot;files.txt&quot;, or access metadata in the following places:
+            <ol>By opening &quot;files.txt&quot; - the metadata file located in each track's corresponding download directory.
               <br/>By clicking the blue down-arrow next to each subtrack listed on a track's Track Settings page.
               <br/>By using <a href="/ENCODE/search.html" TARGET=_blank>Track Search or File Search</a> to filter files by metadata.
               <br/>By using the <a href="http://genome.ucsc.edu/cgi-bin/hgTables" TARGET=_blank>Table Browser tool</a>
-              and setting &quot;Group&quot; to &quot;All Tables&quot; and selecting the &quot;metaDb&quot; table. By clicking
-              the &quot;describe table schema&quot; button you can learn more about the metaDb table.
+              and setting &quot;Group&quot; to &quot;All Tables&quot; and selecting the &quot;metaDb&quot; table. Click
+              the &quot;describe table schema&quot; button to learn more about the metaDb table.
               <br/>By using the <a href="http://genome.ucsc.edu/goldenPath/help/mysql.html" TARGET=_blank>public MySQl database</a>
               to query the metaDb table for each database.
             </ol>    
@@ -376,7 +376,7 @@
             on the item in the browser image and it will take you to a details page that
             will list all of the items in the cluster and the cell lines.
             <a href="http://genome.ucsc.edu/cgi-bin/hgc?&org=Human&db=hg19&amp;c=chr21&amp;o=33032260&amp;t=33033430&amp;g=wgEncodeRegDnaseClustered&amp;i=58">Here</a>
-            is an example details page for a DNase item on chromosome 21. There are 58
+            is an example of a details page for a DNase item on chromosome 21. There are 58
             items in this cluster and you can see the name value is 58.
           </P>
         </div><!--end content-->
@@ -505,25 +505,26 @@
             Would you know what does the last number 1045777 means?
           <P>
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-            On the top of the page for each of the download directories you are
+            At the top of the page for each of the download directories you are
             visiting there is a README.txt file that is automatically displayed.
             A link is provided that will bring you to a user interface enabling
-            filtering files by cell type and other parameters, as well as including
+            filtering of files by cell type and other parameters, as well as including
             additional information such as release status, restriction dates, track
             description, methods, and metadata that can answer such questions.
           </P>
           <P>
-            For example in the displaying README.txt file at the top of the page in the
+            For example in the README.txt file displayed at the top of the page in the
             <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/">Caltech RNA-seq directory</a>
-            you can find the following written link:
+            you can find the following link:
             &quot;http://genome.ucsc.edu/cgi-bin/hgFileUi?db=hg19&g=wgEncodeCaltechRnaSeq&quot;
           </P>
           <P>
-            By navigating to the above
-            <a href="http://genome.ucsc.edu/cgi-bin/hgFileUi?&org=Human&db=hg19&g=wgEncodeCaltechRnaSeq">Caltech RNA-seq Downloadable Files</a>
-            page, you can scroll to the bottom (or click the &quot;Description&quot; button on the top
-            right corner) and read the Track Description's Methods section. In the &quot;Data Processing and
-            Analysis&quot; section there is information explaining how the numbers in gene_id,
+            By navigating to the page above,
+            <a href="http://genome.ucsc.edu/cgi-bin/hgFileUi?&org=Human&db=hg19&g=wgEncodeCaltechRnaSeq">Caltech RNA-seq Downloadable Files</a>, 
+            you can scroll to the bottom (or click the &quot;Description&quot; link in the top
+            right corner) and read the track description's &quot;Methods&quot; section. 
+            In the &quot;Data Processing and Analysis&quot; section there is information 
+            explaining how the numbers in gene_id,
             &quot;GM12878-rep1.####&quot; represent de novo identifiers output by Cufflinks software.
             At the very bottom of the page is a &quot;Credits&quot; section where contacts
             are listed. You should send remaining process-specific questions about the data
@@ -586,20 +587,20 @@
             <B><FONT COLOR="#006666">Response:</FONT></B><BR>
             The <a href="http://genome.ucsc.edu/FAQ/FAQformat.html">File Format FAQ</a> provides explanations
             about various file formats. Also a file's related Track Description page may include important information,
-            such as  <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?&org=Human&db=hg19&g=wgEncodeUwHistone">UW Histone</a>
-            Method's section, which describes how data were processed to produce peaks. Under the Credits section
+            such as  the <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?&org=Human&db=hg19&g=wgEncodeUwHistone">UW Histone</a>
+            &quot;Methods section&quot;, which describes how data were processed to produce peaks. In the &quot;Credits&quot; section
             there is also a lab contact. To request further information for UW Histone data, for example,
             you could contact the lab to learn more about the peak calling algorithm or other methods involved.
           </P>
           <P>
             When using the <a href="http://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</A> there is a &quot;describe table
-            schema&quot; button that gives similar information as located in the File Format FAQ, plus the related Track Description.
+            schema&quot; button that gives information similar to that located in the File Format FAQ, plus the related Track Description.
           </P>
           <P>
             For example with settings &quot;group: Regulation&quot;, &quot;track: UW Histone&quot;, and
             &quot;table: wgEncode...PkRep#&quot;, if you click the &quot;describe table schema&quot; button you will
             find definitions for signalValue and peak. Scrolling down you will find the related Track Description
-            for UW Histone with the explanation for peak calling under Methods and the laboratory contact under Credits.
+            for UW Histone with the explanation for peak calling under &quot;Methods&quot; and the laboratory contact under &quot;Credits&quot;.
 
         </div><!--end content-->
     </div><!--end wrapper-->
@@ -626,9 +627,9 @@
             By visiting various ENCODE tracks such as <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?&org=Human&db=hg19&g=wgEncodeHaibTfbs">HAIB TFBS</a>,
             <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?&org=Human&db=hg19&g=wgEncodeSydhTfbs">SYDH TFBS</a>, or
             <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?&org=Human&db=hg19&g=wgEncodeUwHistone">UW Histone</a>
-            you can learn more about the processes each lab used to generate peaks, and pick a method suitable to your data.
-            Since the UCSC Browser did not generate this data, questions about the data methods needs to be
-            directed to the corresponding lab. Under the Credits section you will find a contact for further
+            you can learn more about the processes each lab used to generate peaks, and pick a method suitable for your data.
+            Since these data were not generated by the UCSC Browser group, questions about the data methods need to be
+            directed to the corresponding lab. Under the &quot;Credits&quot; section you will find a contact for further
             questions left unanswered by reading the descriptions.
         </div><!--end content-->
     </div><!--end wrapper-->
