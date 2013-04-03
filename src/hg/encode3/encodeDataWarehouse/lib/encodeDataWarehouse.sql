@@ -5,11 +5,13 @@
 
 #Someone who submits files to or otherwise interacts with big data warehouse
 CREATE TABLE edwUser (
-    sid char(64) not null,	# sha384 generated base64 encoded unique user ID
-    access char(64) not null,	# access code - hashed from password and stuff
-    email varchar(255) not null,	# Email handle, the main identifier.
+    id int unsigned auto_increment not null,	# Autoincremented user ID
+    name varchar(255) not null,	# user name
+    sid char(64) not null,	# sha384 generated user ID - used to identify user in secure way if need be
+    access char(64) not null,	# access code - sha385'd from password and stuff
+    email varchar(255) not null,	# Email address - required
               #Indices
-    PRIMARY KEY(sid)
+    PRIMARY KEY(id)
 );
 
 #A web host we have collected files from - something like www.ncbi.nlm.gov or google.com
@@ -20,8 +22,9 @@ CREATE TABLE edwHost (
     lastNotOkTime bigint not null,	# Last time host was not ok in seconds since 1970
     firstAdded bigint not null,	# Time host was first seen
     errorMessage longblob not null,	# If non-empty contains last error message from host. If empty host is ok
-    uploadAttempts bigint not null,	# Number of times things have been uploaded from this host
-    historyBits bigint not null,	# Upload history with most recent in least significant bit. 0 for connection failed, 1 for success
+    openSuccesses bigint not null,	# Number of times files have been opened ok from this host
+    openFails bigint not null,	# Number of times files have failed to open from this host
+    historyBits bigint not null,	# Open history with most recent in least significant bit. 0 for connection failed, 1 for success
               #Indices
     PRIMARY KEY(id)
 );
@@ -35,8 +38,9 @@ CREATE TABLE edwSubmitDir (
     lastNotOkTime bigint not null,	# Last time submit dir was not ok in seconds since 1970
     firstAdded bigint not null,	# Time submit dir was first seen
     errorMessage longblob not null,	# If non-empty contains last error message from dir. If empty dir is ok
-    uploadAttempts bigint not null,	# Number of times uploads attempted fromt this submit directory
-    historyBits bigint not null,	# Upload history with most recent in least significant bit. 0 for upload failed, 1 for success
+    openSuccesses bigint not null,	# Number of times files have been opened ok from this dir
+    openFails bigint not null,	# Number of times files have failed to open from this dir
+    historyBits bigint not null,	# Open history with most recent in least significant bit. 0 for upload failed, 1 for success
               #Indices
     PRIMARY KEY(id)
 );
@@ -46,6 +50,7 @@ CREATE TABLE edwFile (
     id int unsigned auto_increment not null,	# Autoincrementing file id
     licensePlate char(16) not null,	# A abc123 looking license-platish thing
     submitId int unsigned not null,	# Links to id in submit table
+    submitDirId int unsigned not null,	# Links to id in submitDir table
     submitFileName longblob not null,	# File name in submit relative to submit dir
     edwFileName longblob not null,	# File name in big data warehouse relative to edw root dir
     startUploadTime bigint not null,	# Time when upload started - 0 if not started
@@ -65,31 +70,24 @@ CREATE TABLE edwSubmit (
     url longblob not null,	# Url to validated.txt format file. We copy this file over and give it a fileId if we can.
     startUploadTime bigint not null,	# Time at start of submit
     endUploadTime bigint not null,	# Time at end of upload - 0 if not finished
-    userSid char(64) not null,	# Connects to user table sid field
+    userId int unsigned not null,	# Connects to user table id field
     submitFileId int unsigned not null,	# Points to validated.txt file for submit.
     submitDirId int unsigned not null,	# Points to the submitDir
     fileCount int unsigned not null,	# Number of files that will be in submit if it were complete.
-    errorMessage longblob not null,	# If non-empty contains last error message from submit. If empty submit is ok
+    oldFiles int unsigned not null,	# Number of files in submission that were already in warehouse.
+    newFiles int unsigned not null,	# Number of files in submission that are newly uploaded.
+    errorMessage longblob not null,	# If non-empty contains last error message. If empty submit is ok
               #Indices
     PRIMARY KEY(id)
 );
 
-#Log of status messages received during submit process
-CREATE TABLE edwSubmitLog (
-    id int unsigned auto_increment not null,	# Autoincremented id
-    submitId int unsigned not null,	# Id in submit table
-    message longblob not null,	# Some message probably scraped out of stderr or something
-              #Indices
-    PRIMARY KEY(id)
-);
-
-#A program that wants to be called when a file arrives or a submit finishes
-CREATE TABLE edwSubscribingProgram (
-    id int unsigned auto_increment not null,	# ID of daemon
-    runOrder double not null,	# Determines order programs run in. In case of tie lowest id wins.
+#Subscribers can have programs that are called at various points during data submission
+CREATE TABLE edwSubscriber (
+    id int unsigned auto_increment not null,	# ID of subscriber
+    name varchar(255) not null,	# Name of subscriber
+    runOrder double not null,	# Determines order subscribers run in. In case of tie lowest id wins.
     filePattern varchar(255) not null,	# A string with * and ? wildcards to match files we care about
-    hubPattern varchar(255) not null,	# A string with * and ? wildcards to match hub URLs we care about
-    tagPattern varchar(255) not null,	# A string of cgi encoded name=val pairs where vals have wildcards
+    dirPattern varchar(255) not null,	# A string with * and ? wildcards to match hub dir URLs we care about
     onFileStartUpload varchar(255) not null,	# A unix command string to run with a %u where file id goes
     onFileEndUpload varchar(255) not null,	# A unix command string to run with a %u where file id goes
     onSubmitStartUpload varchar(255) not null,	# A unix command string to run with %u where submit id goes

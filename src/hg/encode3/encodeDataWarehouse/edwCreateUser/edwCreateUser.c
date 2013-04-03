@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "edwCreateUser - Create a new user from email/password combo.\n"
   "usage:\n"
-  "   edwCreateUser user password\n"
+  "   edwCreateUser user password email\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -25,22 +25,26 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void edwCreateUser(char *email, char *password)
+void edwCreateUser(char *user, char *password, char *email)
 /* edwCreateUser - Create a new user from email/password combo.. */
 {
-verbose(2, "edwCreateUser(user=%s, password=%s)\n", email, password);
+verbose(2, "edwCreateUser(user=%s, password=%s, email=%s)\n", user, password, email);
 
-/* Make escaped version of email string since it may be raw user input. */
-int emailSize = edwCheckEmailSize(email);
-char escapedEmail[2*emailSize+1];
-sqlEscapeString2(escapedEmail, email);
-
-/* Now make sure email is not already in user table. */
+/* Now make sure user is not already in user table. */
+char *escapedUser = sqlEscapeString(user);
 struct sqlConnection *conn = sqlConnect(edwDatabase);
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select count(*) from edwUser where email = '%s'", escapedEmail);
+dyStringPrintf(query, "select count(*) from edwUser where name = '%s'", escapedUser);
 if (sqlQuickNum(conn, query->string) > 0)
-    errAbort("User %s already exists", email);
+    errAbort("User %s already exists", user);
+
+/* Make sure that email not already there.  If so remind user of his name. */
+char *escapedEmail = sqlEscapeString(email);
+dyStringClear(query);
+dyStringPrintf(query, "select name from edwUser where email = '%s'", escapedEmail);
+char *oldUserName = sqlQuickString(conn, query->string);
+if (oldUserName)
+    errAbort("email %s is already associated with user %s", email, oldUserName);
 
 /* Make up hash around our user name */
 char sid[EDW_ACCESS_SIZE];
@@ -49,13 +53,14 @@ verbose(2, "sid=%s\n", sid);
 
 /* Make up hash around our password */
 char access[EDW_ACCESS_SIZE];
-edwMakeAccess(email, password, access);
+edwMakeAccess(password, access);
 verbose(2, "access=%s\n", access);
 
 /* Do database insert. */
 dyStringClear(query);
-dyStringPrintf(query, "insert into edwUser (sid, access, email) values('%s', '%s', '%s')",
-    sid, access, escapedEmail);
+dyStringPrintf(query, 
+    "insert into edwUser (name, sid, access, email) values('%s', '%s', '%s', '%s')",
+    escapedUser, sid, access, escapedEmail);
 sqlUpdate(conn, query->string);
 
 sqlDisconnect(&conn);
@@ -65,8 +70,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-edwCreateUser(argv[1], argv[2]);
+edwCreateUser(argv[1], argv[2], argv[3]);
 return 0;
 }

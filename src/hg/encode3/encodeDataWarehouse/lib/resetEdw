@@ -3,5 +3,5 @@
 hgsql mysql -e "drop database encodeDataWarehouse"
 hgsql mysql -e "create database encodeDataWarehouse"
 hgsql encodeDataWarehouse < encodeDataWarehouse.sql
-edwCreateUser kent@soe.ucsc.edu human
+edwCreateUser kent human kent@soe.ucsc.edu
 rm -rf /scratch/kent/encodeDataWarehouse

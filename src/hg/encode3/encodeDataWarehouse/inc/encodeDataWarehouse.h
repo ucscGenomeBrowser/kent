@@ -5,15 +5,17 @@
 #ifndef ENCODEDATAWAREHOUSE_H
 #define ENCODEDATAWAREHOUSE_H
 
-#define EDWUSER_NUM_COLS 3
+#define EDWUSER_NUM_COLS 5
 
 struct edwUser
 /* Someone who submits files to or otherwise interacts with big data warehouse */
     {
     struct edwUser *next;  /* Next in singly linked list. */
-    char sid[65];	/* sha384 generated base64 encoded unique user ID */
-    char access[65];	/* access code - hashed from password and stuff */
-    char *email;	/* Email handle, the main identifier. */
+    unsigned id;	/* Autoincremented user ID */
+    char *name;	/* user name */
+    char sid[65];	/* sha384 generated user ID - used to identify user in secure way if need be */
+    char access[65];	/* access code - sha385'd from password and stuff */
+    char *email;	/* Email address - required */
     };
 
 void edwUserStaticLoad(char **row, struct edwUser *ret);
@@ -57,7 +59,7 @@ void edwUserOutput(struct edwUser *el, FILE *f, char sep, char lastSep);
 #define edwUserCommaOut(el,f) edwUserOutput(el,f,',',',');
 /* Print out edwUser as a comma separated list including final comma. */
 
-#define EDWHOST_NUM_COLS 8
+#define EDWHOST_NUM_COLS 9
 
 struct edwHost
 /* A web host we have collected files from - something like www.ncbi.nlm.gov or google.com */
@@ -69,8 +71,9 @@ struct edwHost
     long long lastNotOkTime;	/* Last time host was not ok in seconds since 1970 */
     long long firstAdded;	/* Time host was first seen */
     char *errorMessage;	/* If non-empty contains last error message from host. If empty host is ok */
-    long long uploadAttempts;	/* Number of times things have been uploaded from this host */
-    long long historyBits;	/* Upload history with most recent in least significant bit. 0 for connection failed, 1 for success */
+    long long openSuccesses;	/* Number of times files have been opened ok from this host */
+    long long openFails;	/* Number of times files have failed to open from this host */
+    long long historyBits;	/* Open history with most recent in least significant bit. 0 for connection failed, 1 for success */
     };
 
 void edwHostStaticLoad(char **row, struct edwHost *ret);
@@ -114,7 +117,7 @@ void edwHostOutput(struct edwHost *el, FILE *f, char sep, char lastSep);
 #define edwHostCommaOut(el,f) edwHostOutput(el,f,',',',');
 /* Print out edwHost as a comma separated list including final comma. */
 
-#define EDWSUBMITDIR_NUM_COLS 9
+#define EDWSUBMITDIR_NUM_COLS 10
 
 struct edwSubmitDir
 /* An external data directory we have collected a submit from */
@@ -127,8 +130,9 @@ struct edwSubmitDir
     long long lastNotOkTime;	/* Last time submit dir was not ok in seconds since 1970 */
     long long firstAdded;	/* Time submit dir was first seen */
     char *errorMessage;	/* If non-empty contains last error message from dir. If empty dir is ok */
-    long long uploadAttempts;	/* Number of times uploads attempted fromt this submit directory */
-    long long historyBits;	/* Upload history with most recent in least significant bit. 0 for upload failed, 1 for success */
+    long long openSuccesses;	/* Number of times files have been opened ok from this dir */
+    long long openFails;	/* Number of times files have failed to open from this dir */
+    long long historyBits;	/* Open history with most recent in least significant bit. 0 for upload failed, 1 for success */
     };
 
 void edwSubmitDirStaticLoad(char **row, struct edwSubmitDir *ret);
@@ -172,7 +176,7 @@ void edwSubmitDirOutput(struct edwSubmitDir *el, FILE *f, char sep, char lastSep
 #define edwSubmitDirCommaOut(el,f) edwSubmitDirOutput(el,f,',',',');
 /* Print out edwSubmitDir as a comma separated list including final comma. */
 
-#define EDWFILE_NUM_COLS 12
+#define EDWFILE_NUM_COLS 13
 
 struct edwFile
 /* A file we are tracking that we intend to and maybe have uploaded */
@@ -181,6 +185,7 @@ struct edwFile
     unsigned id;	/* Autoincrementing file id */
     char licensePlate[17];	/* A abc123 looking license-platish thing */
     unsigned submitId;	/* Links to id in submit table */
+    unsigned submitDirId;	/* Links to id in submitDir table */
     char *submitFileName;	/* File name in submit relative to submit dir */
     char *edwFileName;	/* File name in big data warehouse relative to edw root dir */
     long long startUploadTime;	/* Time when upload started - 0 if not started */
@@ -233,7 +238,7 @@ void edwFileOutput(struct edwFile *el, FILE *f, char sep, char lastSep);
 #define edwFileCommaOut(el,f) edwFileOutput(el,f,',',',');
 /* Print out edwFile as a comma separated list including final comma. */
 
-#define EDWSUBMIT_NUM_COLS 9
+#define EDWSUBMIT_NUM_COLS 11
 
 struct edwSubmit
 /* A data submit, typically containing many files.  Always associated with a submit dir. */
@@ -243,11 +248,13 @@ struct edwSubmit
     char *url;	/* Url to validated.txt format file. We copy this file over and give it a fileId if we can. */
     long long startUploadTime;	/* Time at start of submit */
     long long endUploadTime;	/* Time at end of upload - 0 if not finished */
-    char userSid[65];	/* Connects to user table sid field */
+    unsigned userId;	/* Connects to user table id field */
     unsigned submitFileId;	/* Points to validated.txt file for submit. */
     unsigned submitDirId;	/* Points to the submitDir */
     unsigned fileCount;	/* Number of files that will be in submit if it were complete. */
-    char *errorMessage;	/* If non-empty contains last error message from submit. If empty submit is ok */
+    unsigned oldFiles;	/* Number of files in submission that were already in warehouse. */
+    unsigned newFiles;	/* Number of files in submission that are newly uploaded. */
+    char *errorMessage;	/* If non-empty contains last error message. If empty submit is ok */
     };
 
 void edwSubmitStaticLoad(char **row, struct edwSubmit *ret);
@@ -291,115 +298,63 @@ void edwSubmitOutput(struct edwSubmit *el, FILE *f, char sep, char lastSep);
 #define edwSubmitCommaOut(el,f) edwSubmitOutput(el,f,',',',');
 /* Print out edwSubmit as a comma separated list including final comma. */
 
-#define EDWSUBMITLOG_NUM_COLS 3
+#define EDWSUBSCRIBER_NUM_COLS 9
 
-struct edwSubmitLog
-/* Log of status messages received during submit process */
+struct edwSubscriber
+/* Subscribers can have programs that are called at various points during data submission */
     {
-    struct edwSubmitLog *next;  /* Next in singly linked list. */
-    unsigned id;	/* Autoincremented id */
-    unsigned submitId;	/* Id in submit table */
-    char *message;	/* Some message probably scraped out of stderr or something */
-    };
-
-void edwSubmitLogStaticLoad(char **row, struct edwSubmitLog *ret);
-/* Load a row from edwSubmitLog table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-
-struct edwSubmitLog *edwSubmitLogLoad(char **row);
-/* Load a edwSubmitLog from row fetched with select * from edwSubmitLog
- * from database.  Dispose of this with edwSubmitLogFree(). */
-
-struct edwSubmitLog *edwSubmitLogLoadAll(char *fileName);
-/* Load all edwSubmitLog from whitespace-separated file.
- * Dispose of this with edwSubmitLogFreeList(). */
-
-struct edwSubmitLog *edwSubmitLogLoadAllByChar(char *fileName, char chopper);
-/* Load all edwSubmitLog from chopper separated file.
- * Dispose of this with edwSubmitLogFreeList(). */
-
-#define edwSubmitLogLoadAllByTab(a) edwSubmitLogLoadAllByChar(a, '\t');
-/* Load all edwSubmitLog from tab separated file.
- * Dispose of this with edwSubmitLogFreeList(). */
-
-struct edwSubmitLog *edwSubmitLogCommaIn(char **pS, struct edwSubmitLog *ret);
-/* Create a edwSubmitLog out of a comma separated string. 
- * This will fill in ret if non-null, otherwise will
- * return a new edwSubmitLog */
-
-void edwSubmitLogFree(struct edwSubmitLog **pEl);
-/* Free a single dynamically allocated edwSubmitLog such as created
- * with edwSubmitLogLoad(). */
-
-void edwSubmitLogFreeList(struct edwSubmitLog **pList);
-/* Free a list of dynamically allocated edwSubmitLog's */
-
-void edwSubmitLogOutput(struct edwSubmitLog *el, FILE *f, char sep, char lastSep);
-/* Print out edwSubmitLog.  Separate fields with sep. Follow last field with lastSep. */
-
-#define edwSubmitLogTabOut(el,f) edwSubmitLogOutput(el,f,'\t','\n');
-/* Print out edwSubmitLog as a line in a tab-separated file. */
-
-#define edwSubmitLogCommaOut(el,f) edwSubmitLogOutput(el,f,',',',');
-/* Print out edwSubmitLog as a comma separated list including final comma. */
-
-#define EDWSUBSCRIBINGPROGRAM_NUM_COLS 9
-
-struct edwSubscribingProgram
-/* A program that wants to be called when a file arrives or a submit finishes */
-    {
-    struct edwSubscribingProgram *next;  /* Next in singly linked list. */
-    unsigned id;	/* ID of daemon */
-    double runOrder;	/* Determines order programs run in. In case of tie lowest id wins. */
+    struct edwSubscriber *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID of subscriber */
+    char *name;	/* Name of subscriber */
+    double runOrder;	/* Determines order subscribers run in. In case of tie lowest id wins. */
     char *filePattern;	/* A string with * and ? wildcards to match files we care about */
-    char *hubPattern;	/* A string with * and ? wildcards to match hub URLs we care about */
-    char *tagPattern;	/* A string of cgi encoded name=val pairs where vals have wildcards */
+    char *dirPattern;	/* A string with * and ? wildcards to match hub dir URLs we care about */
     char *onFileStartUpload;	/* A unix command string to run with a %u where file id goes */
     char *onFileEndUpload;	/* A unix command string to run with a %u where file id goes */
     char *onSubmitStartUpload;	/* A unix command string to run with %u where submit id goes */
     char *onSubmitEndUpload;	/* A unix command string to run with %u where submit id goes */
     };
 
-void edwSubscribingProgramStaticLoad(char **row, struct edwSubscribingProgram *ret);
-/* Load a row from edwSubscribingProgram table into ret.  The contents of ret will
+void edwSubscriberStaticLoad(char **row, struct edwSubscriber *ret);
+/* Load a row from edwSubscriber table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct edwSubscribingProgram *edwSubscribingProgramLoad(char **row);
-/* Load a edwSubscribingProgram from row fetched with select * from edwSubscribingProgram
- * from database.  Dispose of this with edwSubscribingProgramFree(). */
+struct edwSubscriber *edwSubscriberLoad(char **row);
+/* Load a edwSubscriber from row fetched with select * from edwSubscriber
+ * from database.  Dispose of this with edwSubscriberFree(). */
 
-struct edwSubscribingProgram *edwSubscribingProgramLoadAll(char *fileName);
-/* Load all edwSubscribingProgram from whitespace-separated file.
- * Dispose of this with edwSubscribingProgramFreeList(). */
+struct edwSubscriber *edwSubscriberLoadAll(char *fileName);
+/* Load all edwSubscriber from whitespace-separated file.
+ * Dispose of this with edwSubscriberFreeList(). */
 
-struct edwSubscribingProgram *edwSubscribingProgramLoadAllByChar(char *fileName, char chopper);
-/* Load all edwSubscribingProgram from chopper separated file.
- * Dispose of this with edwSubscribingProgramFreeList(). */
+struct edwSubscriber *edwSubscriberLoadAllByChar(char *fileName, char chopper);
+/* Load all edwSubscriber from chopper separated file.
+ * Dispose of this with edwSubscriberFreeList(). */
 
-#define edwSubscribingProgramLoadAllByTab(a) edwSubscribingProgramLoadAllByChar(a, '\t');
-/* Load all edwSubscribingProgram from tab separated file.
- * Dispose of this with edwSubscribingProgramFreeList(). */
+#define edwSubscriberLoadAllByTab(a) edwSubscriberLoadAllByChar(a, '\t');
+/* Load all edwSubscriber from tab separated file.
+ * Dispose of this with edwSubscriberFreeList(). */
 
-struct edwSubscribingProgram *edwSubscribingProgramCommaIn(char **pS, struct edwSubscribingProgram *ret);
-/* Create a edwSubscribingProgram out of a comma separated string. 
+struct edwSubscriber *edwSubscriberCommaIn(char **pS, struct edwSubscriber *ret);
+/* Create a edwSubscriber out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new edwSubscribingProgram */
+ * return a new edwSubscriber */
 
-void edwSubscribingProgramFree(struct edwSubscribingProgram **pEl);
-/* Free a single dynamically allocated edwSubscribingProgram such as created
- * with edwSubscribingProgramLoad(). */
+void edwSubscriberFree(struct edwSubscriber **pEl);
+/* Free a single dynamically allocated edwSubscriber such as created
+ * with edwSubscriberLoad(). */
 
-void edwSubscribingProgramFreeList(struct edwSubscribingProgram **pList);
-/* Free a list of dynamically allocated edwSubscribingProgram's */
+void edwSubscriberFreeList(struct edwSubscriber **pList);
+/* Free a list of dynamically allocated edwSubscriber's */
 
-void edwSubscribingProgramOutput(struct edwSubscribingProgram *el, FILE *f, char sep, char lastSep);
-/* Print out edwSubscribingProgram.  Separate fields with sep. Follow last field with lastSep. */
+void edwSubscriberOutput(struct edwSubscriber *el, FILE *f, char sep, char lastSep);
+/* Print out edwSubscriber.  Separate fields with sep. Follow last field with lastSep. */
 
-#define edwSubscribingProgramTabOut(el,f) edwSubscribingProgramOutput(el,f,'\t','\n');
-/* Print out edwSubscribingProgram as a line in a tab-separated file. */
+#define edwSubscriberTabOut(el,f) edwSubscriberOutput(el,f,'\t','\n');
+/* Print out edwSubscriber as a line in a tab-separated file. */
 
-#define edwSubscribingProgramCommaOut(el,f) edwSubscribingProgramOutput(el,f,',',',');
-/* Print out edwSubscribingProgram as a comma separated list including final comma. */
+#define edwSubscriberCommaOut(el,f) edwSubscriberOutput(el,f,',',',');
+/* Print out edwSubscriber as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
