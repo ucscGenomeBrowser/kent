@@ -13,3 +13,8 @@ clean::
 	@for D in ${SNP_DIRS} ; do \
 	    ( cd "$$D" && echo cleaning $$D && ${MAKE} clean ) ; \
 	done
+
+compile::
+	@for D in ${SNP_DIRS} ; do \
+	    ( cd "$$D" && echo compile $$D && ${MAKE} compile ) ; \
+	done

@@ -1,21 +1,10 @@
-include ../../inc/common.mk
-HG_WARN = ${HG_WARN_ERR}
-
-MYLIBDIR = ../../lib/${MACHTYPE}
-L += ${MYSQLLIBS} -lm
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = genePredHisto
-O = ${A}.o
+include $(kentSrc)/inc/userApp.mk
 
-${DESTDIR}${BINDIR}/${A}${EXE}: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-
-compile: ${DESTDIR}${BINDIR}/${A}${EXE}
-
-test: compile
-	(cd tests && ${MAKE} test)
-	rm -fr tests/output ${A}${EXE} ${A}.o
+test:
+	cd tests && ${MAKE} test
+	rm -fr tests/output
 
 clean::
-	rm -fr tests/output ${A}${EXE} ${A}.o
+	rm -fr tests/output

@@ -36,3 +36,11 @@ clean:
 	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
 	    fi ;\
 	done
+
+compile:
+	@for D in ${DIRS} x; do \
+	  if test "$$D" != "x" ; then \
+	    ( cd $$D && echo $$D && ${MAKE} compile ) ;\
+	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+	    fi ;\
+	done
