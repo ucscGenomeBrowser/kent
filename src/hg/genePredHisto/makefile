@@ -2,7 +2,7 @@ kentSrc = ../..
 A = genePredHisto
 include $(kentSrc)/inc/userApp.mk
 
-test:
+test:: compile
 	cd tests && ${MAKE} test
 	rm -fr tests/output
 
