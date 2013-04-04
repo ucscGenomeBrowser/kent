@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-ESTORIENT = ../estOrient
+ESTORIENT = estOrient
 DIFF = diff -u
 
 test: estFileTest
