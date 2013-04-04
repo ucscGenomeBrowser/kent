@@ -1,20 +1,9 @@
-include ../../inc/common.mk
-
-L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
-O = pslHisto.o
-
-${BINDIR}/pslHisto: $O ${MYLIBS}
-	@${MKDIR} ${BINDIR}
-	${CC} ${COPT} ${CFLAGS} -o $@ $O ${MYLIBS} ${MYSQLLIBS} $L
-
-pslHisto.o: pslHisto.c $H
+kentSrc = ../..
+A = pslHisto
+include $(kentSrc)/inc/userApp.mk
 
 test:
 	cd tests && ${MAKE} test
 
-clean:
-	rm -f $O $B pslHisto
+clean::
 	cd tests && ${MAKE} clean

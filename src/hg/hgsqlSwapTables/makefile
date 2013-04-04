@@ -1,18 +1,3 @@
-include ../../inc/common.mk
-
-L += $(MYSQLLIBS) -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = hgsqlSwapTables
-O = hgsqlSwapTables.o
-
-hgsqlSwapTables: ${O} ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-compile:: ${O}
-	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
-
-clean::
-	rm -f ${A}${EXE} ${O}
+include $(kentSrc)/inc/userApp.mk

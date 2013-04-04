@@ -1,17 +1,9 @@
-include ../../inc/common.mk
+kentSrc = ../..
+A = xmlToSql
+extraObjects = elStat.o rename.o tables.o
+include $(kentSrc)/inc/userApp.mk
 
-L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
-
-O = xmlToSql.o elStat.o rename.o tables.o
-
-xmlToSql: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/xmlToSql $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/xmlToSql${EXE}
-
-clean:
-	rm -f $O
+clean::
 	rm -rf test/*/out
 
 test::

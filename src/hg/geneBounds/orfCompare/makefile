@@ -1,18 +1,10 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = orfCompare
+include $(kentSrc)/inc/userApp.mk
 
-L += -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
-
-O = orfCompare.o
-
-orfCompare: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/orfCompare $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/orfCompare${EXE}
-
-test:	orfCompare
+test:
 	orfCompare inA.orf inB.orf > out.txt
 	diff expected.txt out.txt
 
-clean:
-	rm -f ${O}
+clean::
+	rm -f out.txt

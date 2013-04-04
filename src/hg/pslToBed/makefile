@@ -1,24 +1,9 @@
-include ../../inc/common.mk
+kentSrc = ../..
+A = pslToBed
+include $(kentSrc)/inc/userApp.mk
 
-
-L += $(MYSQLLIBS) -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-
-O = pslToBed.o 
-
-myown:pslToBed
-	mv pslToBed ${BINDIR}/
-
-pslToBed: $O
-	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
-
-
-test: pslToBed
+test:: compile
 	cd tests && ${MAKE} test
 
-lib:
-	cd ../../lib && ${MAKE}
-
 clean::
-	rm -f ${O}
+	cd tests && ${MAKE} clean
