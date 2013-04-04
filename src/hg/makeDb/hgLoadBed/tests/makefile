@@ -1,0 +1,3 @@
+
+test:
+	./RunTest.sh
