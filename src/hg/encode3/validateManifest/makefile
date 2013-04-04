@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = validateManifest
 include $(kentSrc)/inc/userApp.mk
 
-test:
+test::
 	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1
 
 test2:
