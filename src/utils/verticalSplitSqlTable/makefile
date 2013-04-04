@@ -6,7 +6,7 @@ L += -lm
 clean::
 	rm -fr tests/out
 
-test:
+test::
 	verticalSplitSqlTable -mergeOk tests/in/antibody.tab tests/in/antibody.as tests/in/antibody.split tests/out
 	diff tests/expected/cvDb_abTarget.as tests/out/cvDb_abTarget.as
 	diff tests/expected/cvDb_abTarget.tab tests/out/cvDb_abTarget.tab

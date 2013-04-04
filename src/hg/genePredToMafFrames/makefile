@@ -9,12 +9,5 @@ finishMafFrames.o: finishMafFrames.c finishMafFrames.h orgGenes.h frameIncr.h
 genePredToMafFrames.o: genePredToMafFrames.c orgGenes.h mkMafFrames.h splitMultiMappings.h finishMafFrames.h
 splitMultiMappings.o: splitMultiMappings.c splitMultiMappings.h orgGenes.h
 
-test:
-	cd tests && ${MAKE} test
-	rm -fr tests/output
-
 savebak:
 	savebak genePredToMafFrames  *.[ch] makefile tests/makefile tests/input
-
-clean::
-	rm -fr tests/output
