@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PSLTOBED = ../pslToBed
+PSLTOBED = pslToBed
 
 test:  doTest1 doTest2
 
