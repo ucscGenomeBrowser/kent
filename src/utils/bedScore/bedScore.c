@@ -16,7 +16,7 @@ errAbort(
   "   bedScore input.bed output.bed\n"
   "options:\n"
   "   -col=N      - Column to use as input value (default 5)\n"
-  "   -minScore=N - Minimum score to assign (default 100)\n"
+  "   -minScore=N - Minimum score to assign (default 0)\n"
   "   -method=\n"
   "             encode - ENCODE pipeline (UCSC) (default)\n"
   "             reg - Regulatory clusters (UCSC) \n"
@@ -26,7 +26,7 @@ errAbort(
 }
 
 /* Globals and defaults */
-int minScore = 100;
+int minScore = 0;
 int col = 5;
 char *method = "encode";
 
@@ -34,6 +34,7 @@ char *method = "encode";
 static struct optionSpec options[] = {
    {"col", OPTION_INT},
    {"method", OPTION_STRING},
+   {"minScore", OPTION_INT},
    {NULL, 0}
 };
 
@@ -75,6 +76,60 @@ void bflOut(struct bedFileLine *bfl, FILE *f)
     if (bfl->text)
         fputs(bfl->text, f);
     fputs("\n", f);
+}
+
+boolean lineIsData(char *line)
+/* Determine if line is blank or comment */
+{
+char *s = skipLeadingSpaces(line);
+char c = s[0];
+if (c != 0 && c != '#')
+    return TRUE;
+return FALSE;
+}
+
+struct bedFileLine *bflNew(char *line, int lineNum)
+/* Load a bedFileLine from a file line */
+{
+char *words[64]; 
+int wordCount;
+struct bedFileLine *bfl;
+static int bedSize = 0;
+
+AllocVar(bfl);
+if (!lineIsData(line))
+    {
+    bfl->text = cloneString(line);
+    // DEBUG
+    // bflOut(bfl, stdout);
+    // fflush(stdout);
+    return bfl;
+    }
+verbose(2, "%s\n", line);
+wordCount = chopByWhite(line, words, sizeof(words));
+if (bedSize == 0)
+    {
+    verbose(2, "wordcount=%d\n", wordCount);
+    if (wordCount < 5 || wordCount < col)
+        errAbort("Unexpected number of fields in BED file: %d", wordCount);
+    bedSize = wordCount;
+    }
+if (wordCount != bedSize)
+    errAbort("Unexpected number of fields in line #%d of BED %d file: %d", 
+                    lineNum, bedSize, wordCount);
+bfl->bed5 = (struct bed5 *)bedLoad5(words);
+bfl->inputVal = sqlDouble(words[col-1]);
+if (bedSize > 5)
+    {
+    // join (could be done quicker w/ custom code)
+    bfl->text = 
+        slNameListToString(
+            slNameListFromStringArray(&words[5], bedSize-5), '\t');
+    }
+// DEBUG
+// bflOut(bfl, stdout);
+// fflush(stdout);
+return bfl;
 }
 
 /* Scoring methods */
@@ -181,68 +236,21 @@ return 1000.0/highEnd;
 }
 #endif
 
-boolean lineIsData(char *line)
-/* Determine if line is blank or comment */
-{
-char *s = skipLeadingSpaces(line);
-char c = s[0];
-if (c != 0 && c != '#')
-    return TRUE;
-return FALSE;
-}
-
 void bedScore(char *inFile, char *outFile)
 /* bedScore - Add scores to a BED file. */
 {
 struct lineFile *in = lineFileOpen(inFile, TRUE);
 FILE *out = mustOpen(outFile, "w");
 char *line = NULL;
-char *words[64]; 
-int wordCount;
-int bedSize = 0;
 int lineNum = 0;
 struct bedFileLine *bfl, *bedFileLines = NULL;   // list of lines in BED file
 
 verbose(2, "Reading %s\n", in->fileName);
 while (lineFileNext(in, &line, NULL))
     {
-    lineNum++;
-
     // parse input file into a list of bedFileLines
-    AllocVar(bfl);
-    if (!lineIsData(line))
-        {
-        bfl->text = cloneString(line);
-        // DEBUG
-        // bflOut(bfl, stdout);
-        fflush(stdout);
-        slAddHead(&bedFileLines, bfl);
-        continue;
-        }
-    verbose(2, "%s\n", line);
-    wordCount = chopByWhite(line, words, sizeof(words));
-    if (bedSize == 0)
-        {
-        verbose(2, "wordcount=%d\n", wordCount);
-        if (wordCount < 5 || wordCount < col)
-            errAbort("Unexpected number of fields in BED file: %d", wordCount);
-        bedSize = wordCount;
-        }
-    if (wordCount != bedSize)
-        errAbort("Unexpected number of fields in line #%d of BED %d file: %d", 
-                        lineNum, bedSize, wordCount);
-    bfl->bed5 = (struct bed5 *)bedLoad5(words);
-    bfl->inputVal = sqlDouble(words[col-1]);
-    if (bedSize > 5)
-        {
-        // join (could be done quicker w/ custom code)
-        bfl->text = 
-            slNameListToString(
-                slNameListFromStringArray(&words[5], bedSize-5), '\t');
-        }
-    // DEBUG
-    // bflOut(bfl, stdout);
-    fflush(stdout);
+    lineNum++;
+    bfl = bflNew(line, lineNum);
     scorerAddInputValue(bfl->inputVal);
     slAddHead(&bedFileLines, bfl);
     }
