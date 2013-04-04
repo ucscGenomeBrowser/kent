@@ -6,7 +6,7 @@
 #include "options.h"
 #include "meta.h"
 
-int indent = 3;
+int indent = META_DEFAULT_INDENT;
 boolean withParent = FALSE;
 
 void usage()

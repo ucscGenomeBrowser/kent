@@ -6,7 +6,7 @@
 #include "meta.h"
 
 boolean withParent = FALSE;
-boolean indent = 3;
+boolean indent = META_DEFAULT_INDENT;
 
 void usage()
 /* Explain usage and exit. */

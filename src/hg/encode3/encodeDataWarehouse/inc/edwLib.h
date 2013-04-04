@@ -14,19 +14,17 @@
 extern char *edwDatabase;   /* Name of database we connect to. */
 extern char *edwRootDir;    /* Name of root directory for our files, including trailing '/' */
 
-void edwMakeAccess(char *user, char *password, char access[EDW_ACCESS_SIZE]);
-/* Convert user + password + salt to an access code */
+void edwMakeAccess(char *password, char access[EDW_ACCESS_SIZE]);
+/* Convert password + salt to an access code */
 
-boolean edwCheckAccess(struct sqlConnection *conn, char *user, char *password, 
-    char retSid[EDW_ACCESS_SIZE]);
-/* Make sure user exists and password checks out. */
+int edwCheckAccess(struct sqlConnection *conn, char *user, char *password);
+/* Make sure user exists and password checks out. Returns (non-zero) user ID on success*/
 
-void edwMustHaveAccess(struct sqlConnection *conn, char *user, char *password,
-    char retSid[EDW_ACCESS_SIZE]);
-/* Check user has access and abort with an error message if not. */
+int edwMustHaveAccess(struct sqlConnection *conn, char *user, char *password);
+/* Check user has access and abort with an error message if not. Returns user id. */
 
-int edwCheckEmailSize(char *email);
-/* Make sure email address not too long. Returns size or aborts if too long. */
+int edwCheckUserNameSize(char *user);
+/* Make sure user name not too long. Returns size or aborts if too long. */
 
 void edwMakeSid(char *user, char sid[EDW_ACCESS_SIZE]);
 /* Convert users to sid */

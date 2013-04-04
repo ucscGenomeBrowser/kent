@@ -2,9 +2,11 @@
 table edwUser
 "Someone who submits files to or otherwise interacts with big data warehouse"
     (
-    char[64] sid;       "sha384 generated base64 encoded unique user ID"
-    char[64] access;    "access code - hashed from password and stuff"
-    string email;       "Email handle, the main identifier."
+    uint id;            "Autoincremented user ID"
+    string name;        "user name"
+    char[64] sid;       "sha384 generated user ID - used to identify user in secure way if need be"
+    char[64] access;    "access code - sha385'd from password and stuff"
+    string email;       "Email address - required"
     )
 
 table edwHost
@@ -16,22 +18,24 @@ table edwHost
     bigint lastNotOkTime;  "Last time host was not ok in seconds since 1970"
     bigint firstAdded;     "Time host was first seen"
     lstring errorMessage; "If non-empty contains last error message from host. If empty host is ok"
-    bigint uploadAttempts;  "Number of times things have been uploaded from this host"
-    bigint historyBits; "Upload history with most recent in least significant bit. 0 for connection failed, 1 for success"
+    bigint openSuccesses;  "Number of times files have been opened ok from this host"
+    bigint openFails;      "Number of times files have failed to open from this host"
+    bigint historyBits; "Open history with most recent in least significant bit. 0 for connection failed, 1 for success"
     )
 
-table edwSubmissionDir
-"An external data directory we have collected a submission from"
+table edwSubmitDir
+"An external data directory we have collected a submit from"
     (
     uint id;            "Autoincremented id"
     lstring url;        "Web-mounted directory. Includes protocol, host, and final '/'"
     uint hostId;        "Id of host it's on"
-    bigint lastOkTime;   "Last time submission dir was ok in seconds since 1970"
-    bigint lastNotOkTime;  "Last time submission dir was not ok in seconds since 1970"
-    bigint firstAdded;     "Time submission dir was first seen"
+    bigint lastOkTime;   "Last time submit dir was ok in seconds since 1970"
+    bigint lastNotOkTime;  "Last time submit dir was not ok in seconds since 1970"
+    bigint firstAdded;     "Time submit dir was first seen"
     lstring errorMessage; "If non-empty contains last error message from dir. If empty dir is ok"
-    bigint uploadAttempts;  "Number of times uploads attempted fromt this submission directory"
-    bigint historyBits; "Upload history with most recent in least significant bit. 0 for upload failed, 1 for success"
+    bigint openSuccesses;  "Number of times files have been opened ok from this dir"
+    bigint openFails;      "Number of times files have failed to open from this dir"
+    bigint historyBits; "Open history with most recent in least significant bit. 0 for upload failed, 1 for success"
     )
 
 table edwFile
@@ -39,8 +43,9 @@ table edwFile
     (
     uint id;                    "Autoincrementing file id"
     char[16] licensePlate;      "A abc123 looking license-platish thing"
-    uint submissionId;          "Links to id in submission table"
-    lstring submitFileName;     "File name in submission relative to submission dir"
+    uint submitId;              "Links to id in submit table"
+    uint submitDirId;           "Links to id in submitDir table"
+    lstring submitFileName;     "File name in submit relative to submit dir"
     lstring edwFileName;        "File name in big data warehouse relative to edw root dir"
     bigint startUploadTime;     "Time when upload started - 0 if not started"
     bigint endUploadTime;       "Time when upload finished - 0 if not finished"
@@ -51,38 +56,31 @@ table edwFile
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
     )
 
-table edwSubmission
-"A data submission, typically containing many files.  Always associated with a submission dir."
+table edwSubmit
+"A data submit, typically containing many files.  Always associated with a submit dir."
     (
-    uint id;                 "Autoincremented submission id"
+    uint id;                 "Autoincremented submit id"
     lstring url;              "Url to validated.txt format file. We copy this file over and give it a fileId if we can." 
-    bigint startUploadTime;   "Time at start of submission"
+    bigint startUploadTime;   "Time at start of submit"
     bigint endUploadTime;     "Time at end of upload - 0 if not finished"
-    char[64] userSid;        "Connects to user table sid field"
-    uint submitFileId;       "Points to validated.txt file for submission."
-    uint submissionDirId;    "Points to the submissionDir"
-    uint fileCount;          "Number of files that will be in submission if it were complete."
-    lstring errorMessage; "If non-empty contains last error message from submission. If empty submission is ok"
+    uint userId;        "Connects to user table id field"
+    uint submitFileId;       "Points to validated.txt file for submit."
+    uint submitDirId;    "Points to the submitDir"
+    uint fileCount;          "Number of files that will be in submit if it were complete."
+    uint oldFiles;           "Number of files in submission that were already in warehouse."
+    uint newFiles;           "Number of files in submission that are newly uploaded."
+    lstring errorMessage; "If non-empty contains last error message. If empty submit is ok"
     )
 
-table edwSubmissionLog
-"Log of status messages received during submission process"
+table edwSubscriber
+"Subscribers can have programs that are called at various points during data submission"
     (
-    uint id;    "Autoincremented id"
-    uint submissionId;  "Id in submission table"
-    lstring message;    "Some message probably scraped out of stderr or something"
-    )
-
-table edwSubscribingProgram
-"A program that wants to be called when a file arrives or a submission finishes"
-    (
-    uint id;             "ID of daemon"
-    double runOrder;     "Determines order programs run in. In case of tie lowest id wins."
+    uint id;             "ID of subscriber"
+    string name;         "Name of subscriber"
+    double runOrder;     "Determines order subscribers run in. In case of tie lowest id wins."
     string filePattern;  "A string with * and ? wildcards to match files we care about"
-    string hubPattern;   "A string with * and ? wildcards to match hub URLs we care about"
-    string tagPattern;   "A string of cgi encoded name=val pairs where vals have wildcards"
-    string onFileStartUpload;       "A unix command string to run with a %u where file id goes"
-    string onFileEndUpload;         "A unix command string to run with a %u where file id goes"
-    string onSubmissionStartUpload; "A unix command string to run with %u where submission id goes"
-    string onSubmissionEndUpload;   "A unix command string to run with %u where submission id goes"
+    string dirPattern;   "A string with * and ? wildcards to match hub dir URLs we care about"
+    lstring tagPattern;  "A cgi-encoded string of tag=wildcard pairs."
+    string onFileEndUpload;     "A unix command string to run with a %u where file id goes"
     )
+
