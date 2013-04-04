@@ -1,11 +1,14 @@
-include ../../../../inc/common.mk
+include ../../../inc/common.mk
 
 PROG = ../bedScore
 
 test: encodeTest
 	echo tested all
 
+
+# ENCODE narrow peak
 encodeTest:
-	${PROG} input/encodeTest.bed output/encodeTest.bed
-	@diff output/encodeTest.bed  expected/
+	@${MKDIR} output
+	${PROG} -minScore=100 -col=7 input/encodeTfbsTest.bed output/encodeTfbsTest.bed
+	@diff -w output/encodeTfbsTest.bed expected/
 
