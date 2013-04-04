@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PROG = ${BINDIR}/aarToAxt
+PROG = ${DESTDIR}${BINDIR}/aarToAxt
 
 $(PROG): aarToAxt
 	rm -f $(PROG) 

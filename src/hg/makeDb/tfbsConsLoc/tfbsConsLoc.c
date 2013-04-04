@@ -284,7 +284,7 @@ void init_motif (struct MOTIF **motif, char *fileName, float cutoff,
     free (buf);
 }
 
-static void get_args (int argc, char **argv, int *output_mode, struct mafFile **file, char **id,
+void get_args (int argc, char **argv, int *output_mode, struct mafFile **file, char **id,
 		      struct MOTIF **motif, int *do_order, int *nrow, float *cutoff, int *misses_allowed)
 {
     int i;

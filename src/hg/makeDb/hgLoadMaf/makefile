@@ -12,12 +12,12 @@ B = hgLoadMafSummary
 both:	hgLoadMaf hgLoadMafSummary
 
 hgLoadMafSummary: ${BO} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${B} ${BO} ${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgLoadMafSummary${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${B} ${BO} ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/hgLoadMafSummary${EXE}
 
 hgLoadMaf: ${AO} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} ${AO} ${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgLoadMaf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A} ${AO} ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/hgLoadMaf${EXE}
 
 compile:	${AO} ${BO} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${A} ${AO} ${MYLIBS} $L

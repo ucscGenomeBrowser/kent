@@ -1,19 +1,6 @@
-include ../../../inc/common.mk
-
-L += -lm ${MYSQLLIBS}
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-SQL_FILES = ../../lib/encode/encodePeak.sql ../../lib/pgSnp.sql ../../lib/bedDetail.sql
-
-O = hgLoadBed.o
+kentSrc = ../../..
 A = hgLoadBed
-
-hgLoadBed: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgLoadBed${EXE}
-
-compile:	${O} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L
+include ${kentSrc}/inc/userApp.mk
 
 cgi:: compile
 	chmod a+rx $A${EXE}
@@ -68,16 +55,6 @@ install::  strip
 	    rm -f ${DESTDIR}${CGI_BIN}/loader/$$B ; \
 	    cp -p $$F ${DESTDIR}${CGI_BIN}/loader/$$B ; \
 	done
-
-debug:: $O
-	${CC} $O ${MYLIBS} ${L}
-	mv ${AOUT} $A${EXE}
-
-clean::
-	rm -f $O $A${EXE} tests/bed.tab
-
-test:
-	cd tests && ./RunTest.sh
 
 test_verbose:
 	cd tests && ./RunTest.sh -verbose
