@@ -8,6 +8,7 @@
 #include "portable.h"
 #include "encode3/encode2Manifest.h"
 #include "encode3/encode3Valid.h"
+#include "md5.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -24,20 +25,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-
-struct hash *hashMd5File(char *fileName)
-/* Read md5sum file and return a hash keyed by file names with md5sum values. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
-struct hash *hash = hashNew(0);
-while (lineFileRow(lf, row))
-    {
-    hashAdd(hash, row[1], cloneString(row[0]));
-    }
-lineFileClose(&lf);
-return hash;
-}
 
 void updateSumAndAll(struct encode2Manifest *mi, char *md5, char *rootDir)
 /* Update mi to reflect new md5.  Since this means file has changed we'll go
@@ -59,7 +46,7 @@ void encode2Md5UpdateManifest(char *md5File, char *rootDir, char *oldManifest, c
  * manifest.tab file. */
 {
 struct encode2Manifest *mi, *miList = encode2ManifestLoadAll(oldManifest);
-struct hash *md5Hash = hashMd5File(md5File);
+struct hash *md5Hash = md5FileHash(md5File);
 verbose(2, "Got %d items in miList, %d in md5Hash\n", slCount(miList), md5Hash->elCount);
 FILE *f = mustOpen(newManifest, "w");
 int updateCount = 0;

@@ -11,6 +11,10 @@ void byteToHex(unsigned char n, char *hex);
 char *byteToHexString(unsigned char n);
 /* convert byte to hexidecimal string. 0 <= n <= 255. */
 
+void hexBinaryString(unsigned char *in, int inSize, char *out, int outSize);
+/* Convert possibly long binary string to hex string.
+ * Out size needs to be at least 2x inSize+1 */
+
 /* Reverse Functions */
 
 char hexToNibble(char n);

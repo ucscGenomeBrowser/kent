@@ -36,7 +36,7 @@ check-beta:
 	# this will fail if we are not in a beta checkout:
 	git branch | egrep 'v[0-9]+_branch' > /dev/null	
 
-blatSuite: topLibs 
+blatSuite: topLibs hgLib
 	cd blat && ${MAKE}
 	cd gfClient && ${MAKE}
 	cd gfServer && ${MAKE}
@@ -166,6 +166,6 @@ utils-alpha: libs
 
 DIRS = ameme blat cdnaAli index reformat xenoAli \
        dnaDust protDust idbQuery scanIntrons tracks weblet \
-       aladdin getgene primeMate wormAli fuse
+       aladdin getgene primeMate wormAli fuse meta
 
 

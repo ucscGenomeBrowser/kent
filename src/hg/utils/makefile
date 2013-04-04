@@ -32,7 +32,6 @@ DIRS = \
 	twoBitMask \
 	gff3ToGenePred \
 	gff3ToPsl \
-	gffToBed \
 	gtfToGenePred \
 	automation \
 	refreshNamedSessionCustomTracks \
@@ -77,3 +76,7 @@ clean:: $(USE_DIRS:%=%.clean)
 %.clean:
 	(cd $* && ${MAKE} clean)
 
+compile:: $(USE_DIRS:%=%.compile)
+	- find . -name '*.o' -exec rm {} \;
+%.compile:
+	(cd $* && ${MAKE} compile)

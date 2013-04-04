@@ -86,6 +86,7 @@ for (block = blockList; block != NULL; )
 	    bits32 e = memReadBits32(&blockPt, isSwapped);
 	    int c;
 	    dyStringClear(dy);
+	    // TODO - can simplify this probably just to for (;;) {if ((c = *blockPt++) == 0) ...
 	    while ((c = *blockPt++) >= 0)
 		{
 		if (c == 0)
@@ -385,6 +386,7 @@ for (fos = fosList; fos != NULL; fos = fos->next)
 	bits32 e = memReadBits32(&blockPt, isSwapped);
 	int c;
 	dyStringClear(dy);
+	// TODO - can simplify this probably just to for (;;) {if ((c = *blockPt++) == 0) ...
 	while ((c = *blockPt++) >= 0)
 	    {
 	    if (c == 0)

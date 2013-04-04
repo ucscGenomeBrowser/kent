@@ -34,3 +34,8 @@ clean:: $(USE_DIRS:%=%.clean)
 
 %.clean::
 	( cd $* && echo $* && $(MAKE) clean )
+
+compile:: $(USE_DIRS:%=%.compile)
+
+%.compile::
+	( cd $* && echo $* && $(MAKE) compile )

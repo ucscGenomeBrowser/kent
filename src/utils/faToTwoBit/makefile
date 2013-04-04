@@ -1,24 +1,12 @@
-include ../../inc/common.mk
-
-L += -lm ${SOCKETLIB}
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS = ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = faToTwoBit
-O = faToTwoBit.o
-
-faToTwoBit: ${O} ${MYLIBS}
-	@${MKDIR} "${DESTDIR}${BINDIR}"
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-compile:: ${O} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
+include $(kentSrc)/inc/userApp.mk
+L += -lm ${SOCKETLIB}
 
 clean::
-	rm -f ${O} ${A}
+	rm -fr tests/output
 
-test:
+test::
 	${MKDIR} tests/output
 	faToTwoBit tests/input/noDna.fa tests/output/noDna.2bit 2> tests/output/noDna.out
 	diff tests/expected/noDna.out tests/output/noDna.out
@@ -33,4 +21,3 @@ test:
 	faToTwoBit -stripVersion tests/input/genbank.fa tests/output/genbank.2bit
 	twoBitToFa tests/output/genbank.2bit tests/output/genbank.strip.fa
 	diff tests/expected/genbank.fa tests/output/genbank.strip.fa
-#	rm -r tests/output

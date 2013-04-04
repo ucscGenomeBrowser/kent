@@ -1399,6 +1399,11 @@ while(TRUE)
 		return FALSE;
 		}
 	    }
+	else if (sameString(code, "404"))
+	    {
+	    warn("404 file not found on %s", url);
+	    return FALSE;
+	    }
 	else if (!sameString(code, "200"))
 	    {
 	    warn("Expected 200 %s: %s %s", url, code, line);
@@ -1617,6 +1622,29 @@ else
 	freeMem(newUrl); 
     return lf;
     }
+}
+
+int netUrlMustOpenPastHeader(char *url)
+/* Get socket descriptor for URL.  Process header, handling any forwarding and
+ * the like.  Do errAbort if there's a problem, which includes anything but a 200
+ * return from http after forwarding. */
+{
+int sd = netUrlOpen(url);
+if (sd < 0)
+    noWarnAbort();
+int newSd = 0;
+if (startsWith("http://",url) || startsWith("https://",url))
+    {  
+    char *newUrl = NULL;
+    if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+	noWarnAbort();
+    if (newUrl != NULL)
+	{
+	sd = newSd;
+	freeMem(newUrl); 
+	}
+    }
+return sd;
 }
 
 struct lineFile *netLineFileSilentOpen(char *url)

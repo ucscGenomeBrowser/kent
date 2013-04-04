@@ -19,8 +19,13 @@ void usage()
 {
 errAbort(
   "encode2MakeEncode3 - Create a makefile that will reformat and copy encode2 files into\n"
-  "a parallel direcgtory of encode3 files.\n"
-  "   encode2MakeEncode3 sourceDir sourceManifest destDir out.make destManifest\n"
+  "a parallel directory of encode3 files. Should be run in San Diego after encode2 files are\n"
+  "already transfered.  In addition to the makefile it creates all the destination subdirs\n"
+  "and a remap file that maps source files to destination files.\n"
+  "The usage is:\n"
+  "   encode2MakeEncode3 sourceDir sourceManifest destDir out.make destManifest remapNameFile\n"
+  "When the makefile is run it will transform most element type (GFF and Bed-variants) into\n"
+  "bigBed.  It also unpacks .fastq.tzg files into directories full of .fastq.gz\n"
   "options:\n"
   "   -dataDir=/path/to/encode/asFilesAndChromSizesEtc\n"
   "   -tmpDir=/tmp\n"
@@ -72,7 +77,7 @@ else
 }
 
 void doGzippedBedToBigBed(struct encode2Manifest *mi, char *bedFile, char *assembly,
-    char *asType, char *bedType, 
+    char *asType, char *bedType, char *midFix,
     char *destDir, char *destFileName,
     struct slName **pTargetList, FILE *f, FILE *manF)
 /* Convert some bed file to a a bigBed file possibly using an as file. */
@@ -136,10 +141,15 @@ slNameAddHead(pTargetList, outPath);
 /* Print out info about bigBed we made to new manifest files. */
 char localFileName[PATH_LEN+8];	// a little extra for .bigBed
 safef(localFileName, PATH_LEN, "%s", mi->fileName);
-chopSuffix(localFileName);
+chopSuffix(localFileName);  // Chop off .gz
+if (midFix != NULL) // If midfix, replace .narrowPeak etc with midFix.  Used to get rid of .bed
+     {
+     chopSuffix(localFileName);
+     strcat(localFileName, midFix);
+     }
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-encode2ManifestTabOut(mi, manF);
+encode2ManifestShortTabOut(mi, manF);
 }
 
 boolean justCopySuffix(char *fileName)
@@ -188,7 +198,7 @@ safef(localFileName, PATH_LEN, "%s", mi->fileName);
 chopSuffix(localFileName);
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-encode2ManifestTabOut(mi, manF);
+encode2ManifestShortTabOut(mi, manF);
 }
 
 void doGzippedGffToBigBed(struct encode2Manifest *mi, char *sourcePath, char *destPath, 
@@ -200,7 +210,7 @@ void doGzippedGffToBigBed(struct encode2Manifest *mi, char *sourcePath, char *de
 fprintf(f, "%s: %s\n", destPath, sourcePath);
 fprintf(f, "\tln -s %s %s\n", sourcePath, destPath);
 slNameAddHead(pTargetList, destPath);
-encode2ManifestTabOut(mi, manF);
+encode2ManifestShortTabOut(mi, manF);
 
 /* Now convert to big bed. */
 char *tempNameRoot = "gff2bb";
@@ -232,7 +242,7 @@ safef(localFileName, PATH_LEN, "%s", mi->fileName);
 chopSuffix(localFileName);
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-encode2ManifestTabOut(mi, manF);
+encode2ManifestShortTabOut(mi, manF);
 }
 
 void processManifestItem(int itemNo, struct encode2Manifest *mi, char *sourceRoot, 
@@ -292,65 +302,67 @@ if (endsWith(fileName, ".fastq.tgz"))
     safef(localFileName, PATH_LEN, "%s", mi->fileName);
     strcat(localFileName, ".dir");
     mi->fileName = localFileName;
-    encode2ManifestTabOut(mi, manF);
+    encode2ManifestShortTabOut(mi, manF);
     }
 else if (endsWith(fileName, ".narrowPeak.gz"))
     {
     doGzippedBedToBigBed(mi, sourcePath, assembly, "narrowPeak", "bed6+4", 
-	destDir, destFileName, pTargetList, f, manF);
+	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".broadPeak.gz"))
     {
     doGzippedBedToBigBed(mi, sourcePath, assembly, "broadPeak", "bed6+3", 
-	destDir, destFileName, pTargetList, f, manF);
+	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".bedRnaElements.gz"))
     {
     doGzippedBedToBigBed(mi, sourcePath, assembly, "bedRnaElements", "bed6+3", 
-	destDir, destFileName, pTargetList, f, manF);
+	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".bedLogR.gz"))
     {
     doGzippedBedToBigBed(mi, sourcePath, assembly, "bedLogR", "bed9+1", 
-	destDir, destFileName, pTargetList, f, manF);
+	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, "bedRrbs.gz"))
     {
     doGzippedBedToBigBed(mi, sourcePath, assembly, "bedRrbs", "bed9+2", 
-	destDir, destFileName, pTargetList, f, manF);
+	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".peptideMapping.gz"))
     {
     doGzippedBedToBigBed(mi, sourcePath, assembly, "peptideMapping", "bed6+4", 
-	destDir, destFileName, pTargetList, f, manF);
+	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".shortFrags.gz"))
     {
     doGzippedBedToBigBed(mi, sourcePath, assembly, "shortFrags", "bed6+21", 
-	destDir, destFileName, pTargetList, f, manF);
+	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".bedClusters.gz") || endsWith(fileName, ".bedCluster.gz"))
     {
     doGzippedBedToBigBed(mi, sourcePath, assembly, NULL, NULL, 
-	destDir, destFileName, pTargetList, f, manF);
+	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".bed.gz") || endsWith(fileName, ".bed9.gz"))
     {
     if (stringIn("wgEncodeHaibMethylRrbs/", fileName))
 	{
 	doGzippedBedToBigBed(mi, sourcePath, assembly, "bedRrbs", "bed9+2", 
-	    destDir, destFileName, pTargetList, f, manF);
+	    NULL, destDir, destFileName, pTargetList, f, manF);
 	}
     else if (stringIn("wgEncodeOpenChromSynth/", fileName))
         {
 	doGzippedBedToBigBed(mi, sourcePath, assembly, "openChromCombinedPeaks", "bed9+12", 
-	    destDir, destFileName, pTargetList, f, manF);
+	    NULL, destDir, destFileName, pTargetList, f, manF);
 	}
     else
 	{
-	chopSuffix(destFileName);	// remove .bed
+	char localName[PATH_LEN];
+	safef(localName, sizeof(localName), "%s", destFileName);
+	chopSuffix(localName);	// remove .bed
 	doGzippedBedToBigBed(mi, sourcePath, assembly, NULL, NULL, 
-	    destDir, destFileName, pTargetList, f, manF);
+	    "", destDir, localName, pTargetList, f, manF);
 	}
     }
 else if (endsWith(fileName, ".gp.gz"))
@@ -368,7 +380,7 @@ else if (justCopySuffix(fileName))
     fprintf(f, "%s: %s\n", destPath, sourcePath);
     fprintf(f, "\tln -s %s %s\n", sourcePath, destPath);
     slNameAddHead(pTargetList, destPath);
-    encode2ManifestTabOut(mi, manF);
+    encode2ManifestShortTabOut(mi, manF);
     }
 else
     {
@@ -379,16 +391,18 @@ else
 
 
 void encode2MakeEncode3(char *sourceDir, char *sourceManifest, char *destDir, char *outMake,
-    char *outManifest)
+    char *outManifest, char *outRename)
 /* encode2MakeEncode3 - Copy files in encode2 manifest and in case of tar'd files rezip them 
  * independently. */
 {
-struct encode2Manifest *fileList = encode2ManifestLoadAll(sourceManifest);
+struct encode2Manifest *fileList = encode2ManifestShortLoadAll(sourceManifest);
 verbose(2, "Loaded information on %d files from %s\n", slCount(fileList), sourceManifest);
 verboseTimeInit();
 FILE *f = mustOpen(outMake, "w");
 FILE *manF = mustOpen(outManifest, "w");
+FILE *renameF = mustOpen(outRename, "w");
 struct encode2Manifest *mi;
+int destDirPrefixSize = strlen(destDir)+1;  /* +1 for / */
 struct hash *destDirHash = hashNew(0);
 makeDirOnlyOnce(destDir, destDirHash);
 
@@ -400,6 +414,11 @@ struct slName *targetList = NULL;
 int itemNo = 0;
 for (mi = fileList; mi != NULL; mi = mi->next)
     {
+    char *origFileName = cloneString(mi->fileName);
+
+    /* Keep a list of what all it goes to. */
+    struct slName *oneTargetList = NULL;
+
     /* Make path to source file. */
     char sourcePath[PATH_LEN];
     safef(sourcePath, sizeof(sourcePath), "%s/%s", sourceDir, mi->fileName);
@@ -414,7 +433,25 @@ for (mi = fileList; mi != NULL; mi = mi->next)
     char destPath[PATH_LEN];
     safef(destPath, sizeof(destPath), "%s/%s", destDir, mi->fileName);
 
-    processManifestItem(++itemNo, mi, sourceDir, destDir, &targetList, f, manF);
+    processManifestItem(++itemNo, mi, sourceDir, destDir, &oneTargetList, f, manF);
+
+    /* Write out rename info. */
+    if (oneTargetList != NULL)
+	{
+	if (oneTargetList->next != NULL || !sameString(origFileName, oneTargetList->name + destDirPrefixSize))
+	    {
+	    fprintf(renameF, "%s", origFileName);
+	    struct slName *target;
+	    for (target = oneTargetList; target != NULL; target = target->next)
+		{
+		fprintf(renameF, " %s", target->name + destDirPrefixSize);
+		}
+	    fprintf(renameF, "\n");
+	    }
+	}
+
+    /* Save local target list to big one. */
+    targetList = slCat(oneTargetList, targetList);
     }
 
 slReverse(&targetList);
@@ -424,6 +461,7 @@ for (target = targetList; target != NULL; target = target->next)
     fprintf(f, " %s", target->name);
 fprintf(f, "\n");
 
+carefulClose(&renameF);
 carefulClose(&manF);
 carefulClose(&f);
 }
@@ -433,8 +471,8 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 dataDir = optionVal("dataDir", dataDir);
-if (argc != 6)
+if (argc != 7)
     usage();
-encode2MakeEncode3(argv[1], argv[2], argv[3], argv[4], argv[5]);
+encode2MakeEncode3(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }

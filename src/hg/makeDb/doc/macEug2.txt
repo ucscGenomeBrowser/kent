@@ -399,5 +399,45 @@ macEug2.genbank.est.native.loadDesc = yes
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 
+#########################################################################
+# genscan - (working - 2013-03-06 - Chin)
+    mkdir /hive/data/genomes/macEug2/bed/genscan
+    cd /hive/data/genomes/macEug2/bed/genscan
+XXXX 2013-03-06 2:35 PM
+    screen -S macEug2-genscan
+    time -p doGenscan.pl macEug2  > do.log 2>&1
+real 322126.50
+Checking job status 5277 minutes after launch
+277711 jobs in batch
+2 jobs (including everybody's) in Parasol queue or running.
+Checking finished jobs
+Can't open /hive/data/genomes/macEug2/bed/genscan/batch.1656.swarm.cse.ucsc.edu.tmp to write: Too many open files
+Command failed:
+ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' swarm nice /hive/data/genomes/macEug2/bed/genscan/doGenscan.csh
+
+
+
+
+XXXX 2013-03-11 9:55 wait for panPan1 to pass first!
+    time -p doGenscan.pl -continue genscan macEug2  > genscan.log 2>&1
+
+    #   real    31m32.788s
+# Completed: 27239 of 27239 jobs
+# CPU time in finished jobs:         28s       0.47m     0.01h    0.00d  0.000
+# y
+# IO & Wait Time:                 96830s    1613.83m    26.90h    1.12d  0.003
+# y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:           154s       2.57m     0.04h    0.00d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+
+
+    cat fb.macEug2.genscan.txt
+    #   49283434 bases of 2756609047 (1.788%) in intersection
+    cat fb.macEug2.genscanSubopt.txt
+    #   50711544 bases of 2756609047 (1.840%) in intersection
+
 
 #########################################################################

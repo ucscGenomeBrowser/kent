@@ -22,7 +22,7 @@ compile: ${blastXmlToPsl_objs} ${blastToPsl_objs}
 	${CC} ${COPT} -o blastToPsl${EXE} ${blastToPsl_objs} ${MYLIBS} $L
 
 test:: compile
-	(cd tests && ${MAKE} test)
+	cd tests && ${MAKE} test
 	rm -fr tests/output blastXmlToPsl${EXE} blastToPsl${EXE}
 
 clean::

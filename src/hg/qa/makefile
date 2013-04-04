@@ -11,7 +11,7 @@ progs = apacheMonitor checkCardinality countNib \
 all: ${progs}
 
 %: %.c ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o ${BINDIR}/$* $*.c ${MYLIBS} $L
+	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o ${DESTDIR}${BINDIR}/$* $*.c ${MYLIBS} $L
 
 clean::
 	rm -f apacheMonitor.o checkCardinality.o countNib.o \

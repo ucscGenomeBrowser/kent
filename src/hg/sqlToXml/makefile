@@ -1,17 +1,8 @@
-include ../../inc/common.mk
+kentSrc = ../..
+A = sqlToXml
+include $(kentSrc)/inc/userApp.mk
 
-L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
-O = sqlToXml.o
-
-sqlToXml: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/sqlToXml $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/sqlToXml${EXE}
-
-clean:
-	rm -f $O
+clean::
 	rm -f test/*/out.*
 
 test::

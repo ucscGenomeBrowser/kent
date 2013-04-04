@@ -1,0 +1,9 @@
+#!/bin/tcsh -efx
+# Destroy current encodeDataWarehouse and make a fresh one
+hgsql mysql -e "drop database encodeDataWarehouse"
+hgsql mysql -e "create database encodeDataWarehouse"
+hgsql encodeDataWarehouse < encodeDataWarehouse.sql
+edwCreateUser kent human kent@soe.ucsc.edu
+rm -rf /scratch/kent/encodeDataWarehouse
+edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
+edwAddSubscriber updateLastId 'echo %u > /scratch/kent/encodeDataWarehouse/tmp/lastId'

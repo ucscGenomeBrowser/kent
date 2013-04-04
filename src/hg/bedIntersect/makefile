@@ -1,19 +1,9 @@
-include ../../inc/common.mk
-
-
-L += -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-
-O = bedIntersect.o
-
-bedIntersect: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/bedIntersect $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/bedIntersect${EXE}
+kentSrc = ../..
+A = bedIntersect
+include $(kentSrc)/inc/userApp.mk
 
 test::
-	(cd tests && ${MAKE} test)
+	cd tests && ${MAKE} test
 
 clean::
-	rm -f ${O}
-	(cd tests && ${MAKE} clean)
+	cd tests && ${MAKE} clean

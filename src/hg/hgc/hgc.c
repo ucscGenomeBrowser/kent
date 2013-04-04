@@ -9143,7 +9143,7 @@ if (url != NULL && url[0] != 0)
 
     refPrinted = 0;
     safef(query, sizeof(query),
-          "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen",
+          "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s' and association = 'Y' and title != '' order by broadPhen",
        itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -10210,7 +10210,7 @@ if (url != NULL && url[0] != 0)
 	else
 	    {
             printf("<A HREF=\"%s%s\" >",
-	       "../cgi-bin/hgc?g=snp132&i=", dbSnpId);
+	       "../cgi-bin/hgc?g=snp137&i=", dbSnpId);
 	    }
         printf("%s</A></B>", dbSnpId);
 	}

@@ -1,18 +1,10 @@
-include ../../inc/common.mk
+kentSrc = ../..
+A = bedOrBlocks
+include $(kentSrc)/inc/userApp.mk
 
-L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-
-O = bedOrBlocks.o
-
-bedOrBlocks: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/bedOrBlocks $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/bedOrBlocks${EXE}
-
-test:
+test::
 	bedOrBlocks in.bed out.bed
 	diff expected.bed out.bed
 
-clean:
-	rm -f $O
+clean::
+	rm -f out.bed

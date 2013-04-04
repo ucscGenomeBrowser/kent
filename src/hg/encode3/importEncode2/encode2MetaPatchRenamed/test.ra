@@ -1,0 +1,121 @@
+meta wgEncodeAffyRnaChipHuman
+assembly hg19
+dataType RnaChip
+expVars lab,dataType,cell,localization,rnaExtract
+grant Gingeras
+lab Affy
+organism human
+origAssembly hg18
+updateTime 2011-04-20 12:55:24
+
+   meta wgEncodeEH000002
+   cellType GM12878
+   dataVersion ENCODE Nov 2008 Freeze
+   dateSubmitted 2008-11-21
+   dateUnrestricted 2009-08-21
+   localization cytosol
+   rnaExtract longPolyA
+
+      meta wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya.broadPeak.gz
+
+      meta wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya.broadPeak.gz
+
+   meta wgEncodeEH000003
+   cellType GM12878
+   dataVersion ENCODE Nov 2008 Freeze
+   dateSubmitted 2008-11-21
+   dateUnrestricted 2009-08-21
+   localization nucleus
+   rnaExtract longNonPolyA
+
+      meta wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
+
+      meta wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
+
+   meta wgEncodeEH000004
+   cellType K562
+   dataVersion ENCODE Nov 2008 Freeze
+   dateSubmitted 2008-11-21
+   dateUnrestricted 2009-08-21
+   localization polysome
+   rnaExtract longNonPolyA
+
+      meta wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya.broadPeak.gz
+
+      meta wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya.broadPeak.gz
+
+   meta wgEncodeEH000005
+   cellType K562
+   dataVersion ENCODE Nov 2008 Freeze
+   dateSubmitted 2008-11-22
+   dateUnrestricted 2009-08-22
+   localization cytosol
+   rnaExtract longNonPolyA
+
+      meta wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya.broadPeak.gz
+
+      meta wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya.broadPeak.gz
+
+   meta wgEncodeEH000006
+   cellType K562
+   dataVersion ENCODE Nov 2008 Freeze
+   dateSubmitted 2008-11-22
+   dateUnrestricted 2009-08-22
+   localization cytosol
+   rnaExtract longPolyA
+
+      meta wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya.broadPeak.gz
+
+      meta wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
+      fileName hg19/wgEncodeAffyRnaChip/wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya.broadPeak.gz
+
+meta wgEncodeHaibTfbsHuman
+assembly hg19
+dataType ChipSeq
+expVars lab,dataType,cell,antibody,treatment,protocol
+geoSeriesAccession GSE32465
+grant Myers
+lab HudsonAlpha
+organism human
+
+   meta wgEncodeEH001460
+   antibody FOXP2
+   cellType PFSK-1
+   controlId SL16
+   geoSampleAccession GSM803480
+   protocol PCR2x
+   setType exp
+   treatment None
+   updateTime 2011-05-17 14:28:43
+
+      meta wgEncodeHaibTfbsPfsk1Foxp2Pcr2xAlnRep1
+      dataVersion ENCODE Mar 2012 Freeze
+      dateSubmitted 2011-05-20
+      dateUnrestricted 2012-02-20
+      fileName hg19/wgEncodeHaibTfbs/wgEncodeHaibTfbsPfsk1Foxp2Pcr2xAlnRep1.bam
+      labExpId SL13
+
+      meta wgEncodeHaibTfbsPfsk1Foxp2Pcr2xAlnRep2
+      dataVersion ENCODE Mar 2012 Freeze
+      dateResubmitted 2011-04-18
+      dateSubmitted 2008-10-31
+      dateUnrestricted 2009-07-31
+      fileName hg19/wgEncodeHaibTfbs/wgEncodeHaibTfbsPfsk1Foxp2Pcr2xAlnRep2.bam
+      labExpId SL14
+
+      meta wgEncodeHaibTfbsPfsk1Foxp2Pcr2xPkRep1
+      dataVersion ENCODE Mar 2012 Freeze
+      dateSubmitted 2011-06-02
+      dateUnrestricted 2012-03-02
+      fileName hg19/wgEncodeHaibTfbs/wgEncodeHaibTfbsPfsk1Foxp2Pcr2xPkRep1.broadPeak.gz
+      labExpId SL13
+
