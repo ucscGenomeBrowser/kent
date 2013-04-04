@@ -3,4 +3,4 @@ test:
 	./RunTest.sh
 
 clean:
-	rm bed.tab
+	rm -f bed.tab
