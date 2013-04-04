@@ -6,3 +6,4 @@ hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 edwCreateUser kent human kent@soe.ucsc.edu
 rm -rf /scratch/kent/encodeDataWarehouse
 edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
+edwAddSubscriber updateLastId 'echo %u > /scratch/kent/encodeDataWarehouse/tmp/lastId'
