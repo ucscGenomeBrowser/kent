@@ -263,8 +263,9 @@ for (node = chain->head; !dlEnd(node); node = node->next)
     }
 }
 
-boolean gotMatchInTree(struct wordTree *wt, struct dlNode *nodeList, int chainSize)
-/* Return TRUE if find node list in tree*/
+int useCountInTree(struct wordTree *wt, struct dlNode *nodeList, int chainSize)
+/* Return number of times chainSize successive nodes from nodeList are found
+ * in wt,  0 if not found. */
 {
 int i;
 struct wordTree *subTree = wt;
@@ -277,7 +278,7 @@ for (i=0; i<chainSize; ++i)
         return FALSE;
     node = node->next;
     }
-return TRUE;
+return subTree->useCount;
 }
 
 
@@ -287,17 +288,20 @@ void findLongestSupportingMarkovChain(struct wordTree *wt, struct dlNode *node,
 {
 struct dlNode *start = node;
 int chainSize = 1;
+int readCount = 0;
 for (;;)
     {
-    if (!gotMatchInTree(wt, start, chainSize))
+    int useCount = useCountInTree(wt, start, chainSize);
+    if (useCount == 0)
         break;
+    readCount = useCount;
     chainSize += 1;
     start = start->prev;
     if (dlStart(start))
         break;
     }
 *retChainSize = chainSize;
-*retReadCount = 0;	// Not implemented.
+*retReadCount = readCount;
 }
 
 static void writeMonomerListAndBetweens(struct alphaStore *store, 
@@ -306,17 +310,21 @@ static void writeMonomerListAndBetweens(struct alphaStore *store,
 {
 FILE *f = mustOpen(fileName, "w");
 struct dlNode *node;
+struct wordTree *origTree = store->markovChainsNoOrphans;
 for (node = ll->head; !dlEnd(node); node = node->next)
     {
     struct monomer *monomer = node->val;
     if (betweens)
 	{
 	int chainSize = 0, readCount = 0;
-	findLongestSupportingMarkovChain(store->markovChainsNoOrphans, node, 
+	findLongestSupportingMarkovChain(origTree, node, 
 	    &chainSize, &readCount);
 	/* The -2 is for 1 extra for the empty tree root, and 1 extra to get
 	 * from chain-size to markov model terminology. */
-	fprintf(f, "<%d> ", chainSize-2); 
+	char between[24];
+	safef(between, sizeof(between), "<%d:%d:%d>", chainSize-2, 
+		readCount, useCountInTree(origTree, node, 1)); 
+	fprintf(f, "%-11s\t", between);
 	}
     fprintf(f, "%s\n", monomer->word);
     }
