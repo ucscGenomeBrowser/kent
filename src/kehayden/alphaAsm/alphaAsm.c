@@ -497,6 +497,7 @@ int total = 0;
 struct monomerRef *ref;
 for (ref = type->list; ref != NULL; ref = ref->next)
     total += ref->val->outTarget;
+verbose(3, "pickRandomFromType %s total of outTarget=%d\n", type->name, total);
 
 /* Loop through list returning selection corresponding to random threshold. */
 if (total > 0)
@@ -928,7 +929,7 @@ boolean subCommonCenter(struct alphaStore *store,
 {
 struct slRef *centerRefList = refsToPossibleCenters(center, neighborhood, ll);
 verbose(4, "sub %s in neighborhood: ", center->word);
-if (verboseLevel() >= 3)
+if (verboseLevel() >= 4)
     printMonomerRefList(neighborhood, stderr);
 verbose(4, "Got %d possible centers\n", slCount(centerRefList));
 
@@ -1563,7 +1564,7 @@ void monomerListNormalise(struct monomer *list, int totalCount, int outputSize)
 /* Set outTarget field in all of list to be normalized to outputSize */
 {
 struct monomer *monomer;
-double scale = outputSize/totalCount;
+double scale = (double)outputSize/totalCount;
 for (monomer = list; monomer != NULL; monomer = monomer->next)
     {
     monomer->outCount = 0;
