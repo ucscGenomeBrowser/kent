@@ -54,21 +54,21 @@ struct MOTIF
     struct MOTIF *next;	/* should be NULL */
 };
 
-static void add_to_matches (struct MATCH **matches, int col, 
+void add_to_matches (struct MATCH **matches, int col, 
 			    int seq, int *score, int nrow, struct mafAli *ali, int len, int dir, int do_order);
-static void get_args (int argc, char **argv, int *output_mode, struct mafFile **file, char **id,
-                      char **motif, int *do_order, int *nrow, float *cutoff, int *num_misses);
-static int get_max_score( int **submat, int length);    
-static int get_min_score( int **submat, int length);    
-static int get_pos (int start, int col, char strand, int size, char *text, int motif_len, int dir);
-static int get_score (int **submat, char seq_char, int col);
-static void get_matches (struct MATCH **matches, int dir,
+void get_args (int argc, char **argv, int *output_mode, struct mafFile **file, char **id,
+                      struct MOTIF **motif, int *do_order, int *nrow, float *cutoff, int *num_misses);
+int get_max_score( int **submat, int length);    
+int get_min_score( int **submat, int length);    
+int get_pos (int start, int col, char strand, int size, char *text, int motif_len, int dir);
+int get_score (int **submat, char seq_char, int col);
+void get_matches (struct MATCH **matches, int dir,
 			 struct mafAli *ali, int nrow, struct MOTIF *motif,
 			 int do_order, int num_misses);
-static void init_motif (struct MOTIF **motif, char *fileName, float cutoff, 
+void init_motif (struct MOTIF **motif, char *fileName, float cutoff, 
 			char *id);
-static int motif_hit (char *text, int col, struct MOTIF *cur_motif, int *score);
+int motif_hit (char *text, int col, struct MOTIF *cur_motif, int *score);
 void output_matches (struct MATCH *matches, char *strand, char *id, int nrow, struct MOTIF *motif);
-static void print_strand (const char *strand, int dir, int nrow);
+void print_strand (const char *strand, int dir, int nrow);
 
 #endif
