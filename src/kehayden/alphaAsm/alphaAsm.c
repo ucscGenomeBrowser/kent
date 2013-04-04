@@ -18,6 +18,7 @@ int initialOutSize = 10000;
 int maxOutSize;
 int maxToMiss = 0;
 boolean fullOnly = FALSE;
+boolean betweens = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -45,6 +46,7 @@ errAbort(
   "                observed.  Default %d\n"
   "   -seed=N - Initialize random number with this seed for consistent results, otherwise\n"
   "             it will generate different results each time it's run.\n"
+  "   -betweens - Add <m> lines in output that indicate level of markov model used join\n"
   "   -unsubbed=fileName - Write output before substitution of missing monomers to file\n"
   , maxChainSize, initialOutSize, maxToMiss, pseudoCount
   );
@@ -62,6 +64,7 @@ static struct optionSpec options[] = {
    {"pseudoCount", OPTION_INT},
    {"seed", OPTION_INT},
    {"unsubbed", OPTION_STRING},
+   {"betweens", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -113,6 +116,7 @@ struct alphaStore
     struct alphaRead *readList;	 /* List of all reads. */
     struct hash *readHash;	 /* Hash of all reads keyed by read ID. */
     struct wordTree *markovChains;   /* Tree of words that follow other words. */
+    struct wordTree *markovChainsNoOrphans; /* Markov tree before orphans are added. */
     int maxChainSize;		/* Maximum depth of tree. */
     struct monomerType *typeList;	/* List of all types. */
     struct hash *typeHash;	/* Hash with monomerType values, keyed by all words. */
@@ -258,6 +262,75 @@ for (node = chain->head; !dlEnd(node); node = node->next)
     wt = wordTreeAddFollowing(wt, monomer);
     }
 }
+
+int useCountInTree(struct wordTree *wt, struct dlNode *nodeList, int chainSize)
+/* Return number of times chainSize successive nodes from nodeList are found
+ * in wt,  0 if not found. */
+{
+int i;
+struct wordTree *subTree = wt;
+struct dlNode *node = nodeList;
+for (i=0; i<chainSize; ++i)
+    {
+    struct monomer *monomer = node->val;
+    subTree = wordTreeFindInList(subTree->children, monomer);
+    if (subTree == NULL)
+        return FALSE;
+    node = node->next;
+    }
+return subTree->useCount;
+}
+
+
+void findLongestSupportingMarkovChain(struct wordTree *wt, struct dlNode *node,
+    int *retChainSize, int *retReadCount)
+/* See if chain of words is in tree tree. */
+{
+struct dlNode *start = node;
+int chainSize = 1;
+int readCount = 0;
+for (;;)
+    {
+    int useCount = useCountInTree(wt, start, chainSize);
+    if (useCount == 0)
+        break;
+    readCount = useCount;
+    chainSize += 1;
+    start = start->prev;
+    if (dlStart(start))
+        break;
+    }
+*retChainSize = chainSize;
+*retReadCount = readCount;
+}
+
+static void writeMonomerListAndBetweens(struct alphaStore *store, 
+    char *fileName, struct dlList *ll)
+/* Write out monomer list to file. */
+{
+FILE *f = mustOpen(fileName, "w");
+struct dlNode *node;
+struct wordTree *origTree = store->markovChainsNoOrphans;
+for (node = ll->head; !dlEnd(node); node = node->next)
+    {
+    struct monomer *monomer = node->val;
+    if (betweens)
+	{
+	int chainSize = 0, readCount = 0;
+	findLongestSupportingMarkovChain(origTree, node, 
+	    &chainSize, &readCount);
+	/* The -2 is for 1 extra for the empty tree root, and 1 extra to get
+	 * from chain-size to markov model terminology. */
+	char between[24];
+	safef(between, sizeof(between), "<%d:%d:%d>", chainSize-2, 
+		readCount, useCountInTree(origTree, node, 1)); 
+	fprintf(f, "%-11s\t", between);
+	}
+    fprintf(f, "%s\n", monomer->word);
+    }
+carefulClose(&f);
+}
+
 
 int wordTreeAddPseudoCount(struct wordTree *wt, int pseudo)
 /* Add pseudo to all leaves of tree and propagate counts up to parents. */
@@ -424,6 +497,7 @@ int total = 0;
 struct monomerRef *ref;
 for (ref = type->list; ref != NULL; ref = ref->next)
     total += ref->val->outTarget;
+verbose(3, "pickRandomFromType %s total of outTarget=%d\n", type->name, total);
 
 /* Loop through list returning selection corresponding to random threshold. */
 if (total > 0)
@@ -855,7 +929,7 @@ boolean subCommonCenter(struct alphaStore *store,
 {
 struct slRef *centerRefList = refsToPossibleCenters(center, neighborhood, ll);
 verbose(4, "sub %s in neighborhood: ", center->word);
-if (verboseLevel() >= 3)
+if (verboseLevel() >= 4)
     printMonomerRefList(neighborhood, stderr);
 verbose(4, "Got %d possible centers\n", slCount(centerRefList));
 
@@ -1331,12 +1405,12 @@ for (end = orphanEnds; end != NULL; end = end->next)
     }
 }
 
-void makeMarkovChains(struct alphaStore *store)
-/* Return a alphaStore containing all words, and also all chains-of-words of length 
+struct wordTree *makeMarkovChains(struct alphaStore *store)
+/* Return wordTree containing all words, and also all chains-of-words of length 
  * chainSize seen in file.  */
 {
 /* We'll build up the tree starting with an empty root node. */
-struct wordTree *wt = store->markovChains = wordTreeNew(alphaStoreAddMonomer(store, ""));	
+struct wordTree *wt = wordTreeNew(alphaStoreAddMonomer(store, ""));	
 int chainSize = store->maxChainSize;
 
 /* Loop through each read. There's special cases at the beginning and end of read, and for 
@@ -1392,6 +1466,7 @@ for (read = store->readList; read != NULL; read = read->next)
     dlListFree(&chain);
     }
 wordTreeSort(wt);  // Make output of chain file prettier
+return wt;
 }
 
 void wordTreeWrite(struct wordTree *wt, int maxChainSize, char *fileName)
@@ -1489,7 +1564,7 @@ void monomerListNormalise(struct monomer *list, int totalCount, int outputSize)
 /* Set outTarget field in all of list to be normalized to outputSize */
 {
 struct monomer *monomer;
-double scale = outputSize/totalCount;
+double scale = (double)outputSize/totalCount;
 for (monomer = list; monomer != NULL; monomer = monomer->next)
     {
     monomer->outCount = 0;
@@ -1687,6 +1762,12 @@ alphaReadListFromFile(readsFile, store);
 alphaStoreLoadMonomerOrder(store, readsFile, monomerOrderFile);
 verbose(2, "Loaded input reads and monomer order\n");
 
+if (betweens)
+    {
+    store->markovChainsNoOrphans = makeMarkovChains(store);
+    verbose(2, "Made initial markov chains\n");
+    }
+
 /* Do some cross checking and filling out a bit for missing data. */
 crossCheckMonomerOrderAndReads(store, "m", readsFile, monomerOrderFile);
 fillInTypes(store);
@@ -1694,7 +1775,7 @@ integrateOrphans(store);
 verbose(2, "Filled in missing types and integrated orphan ends\n");
 
 /* Make the main markov chains out of the reads. */
-makeMarkovChains(store);
+store->markovChains = makeMarkovChains(store);
 verbose(2, "Made Markov Chains\n");
 
 /* Loop gradually increasing size of output we make until get to maxOutSize or until
@@ -1722,8 +1803,7 @@ while (outSize <= maxOutSize)
     verbose(1, "%d missing. Trying again with outSize=%d (initialOutSize %d, maxOutSize %d)\n",
 	missing, outSize, initialOutSize, maxOutSize);
     }
-    
-writeMonomerList(outFile, ll);
+writeMonomerListAndBetweens(store, outFile, ll);
 verbose(2, "Wrote primary output\n");
 dlListFree(&ll);
 }
@@ -1744,6 +1824,7 @@ if (maxOutSize < initialOutSize)
 maxToMiss = optionInt("maxToMiss", maxToMiss);
 fullOnly = optionExists("fullOnly");
 pseudoCount = optionInt("pseudoCount", pseudoCount);
+betweens = optionExists("betweens");
 int seed = optionInt("seed", 0);
 srand(seed);
 alphaAsm(argv[1], argv[2], argv[3]);

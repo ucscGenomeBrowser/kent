@@ -39,3 +39,8 @@ install:: compile
 
 clean::
 	rm -f ${O} ${extraObjects} ${A}${EXE}
+	@if test -d tests -a -s tests/makefile; then cd tests && ${MAKE} clean; fi
+
+test::
+	@if test -d tests -a -s tests/makefile; then (cd tests && ${MAKE} test); \
+	else echo "# no tests directory in $(CURDIR)"; fi

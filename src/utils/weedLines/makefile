@@ -3,7 +3,7 @@ A = weedLines
 include $(kentSrc)/inc/userApp.mk
 L += -lm
 
-test:
+test::
 	weedLines input.weed input.txt out.good -weeded=out.bad
 	diff expected.good out.good
 	diff expected.bad out.bad

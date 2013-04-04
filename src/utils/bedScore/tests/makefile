@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 PROG = ../bedScore
 
-test: encodeTest
+test:: encodeTest
 	echo tested all
 
 

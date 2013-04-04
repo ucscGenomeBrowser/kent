@@ -7,7 +7,7 @@
 
 boolean trimEmpty = FALSE;
 boolean withParent = FALSE;
-int indent = 3;
+int indent = META_DEFAULT_INDENT;
 char *keyTag="meta";
 char *heavy = NULL;
 char *parentTag = "parent";

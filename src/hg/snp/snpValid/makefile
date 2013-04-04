@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = snpValid
 include $(kentSrc)/inc/userApp.mk
 
-test:
+test::
 	${A} hg16 /cluster/data/hg16/bed/snp/build122/seq -chr=chr22 > hg16-chr22.log 
 
 test2:

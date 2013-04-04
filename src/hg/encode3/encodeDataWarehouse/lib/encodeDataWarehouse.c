@@ -14,9 +14,11 @@ void edwUserStaticLoad(char **row, struct edwUser *ret)
  * be replaced at the next call to this function. */
 {
 
-safecpy(ret->sid, sizeof(ret->sid), row[0]);
-safecpy(ret->access, sizeof(ret->access), row[1]);
-ret->email = row[2];
+ret->id = sqlUnsigned(row[0]);
+ret->name = row[1];
+safecpy(ret->sid, sizeof(ret->sid), row[2]);
+safecpy(ret->access, sizeof(ret->access), row[3]);
+ret->email = row[4];
 }
 
 struct edwUser *edwUserLoad(char **row)
@@ -26,9 +28,11 @@ struct edwUser *edwUserLoad(char **row)
 struct edwUser *ret;
 
 AllocVar(ret);
-safecpy(ret->sid, sizeof(ret->sid), row[0]);
-safecpy(ret->access, sizeof(ret->access), row[1]);
-ret->email = cloneString(row[2]);
+ret->id = sqlUnsigned(row[0]);
+ret->name = cloneString(row[1]);
+safecpy(ret->sid, sizeof(ret->sid), row[2]);
+safecpy(ret->access, sizeof(ret->access), row[3]);
+ret->email = cloneString(row[4]);
 return ret;
 }
 
@@ -38,7 +42,7 @@ struct edwUser *edwUserLoadAll(char *fileName)
 {
 struct edwUser *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -56,7 +60,7 @@ struct edwUser *edwUserLoadAllByChar(char *fileName, char chopper)
 {
 struct edwUser *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -77,6 +81,8 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->sid, sizeof(ret->sid));
 sqlFixedStringComma(&s, ret->access, sizeof(ret->access));
 ret->email = sqlStringComma(&s);
@@ -91,6 +97,7 @@ void edwUserFree(struct edwUser **pEl)
 struct edwUser *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->name);
 freeMem(el->email);
 freez(pEl);
 }
@@ -111,6 +118,12 @@ for (el = *pList; el != NULL; el = next)
 void edwUserOutput(struct edwUser *el, FILE *f, char sep, char lastSep) 
 /* Print out edwUser.  Separate fields with sep. Follow last field with lastSep. */
 {
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->sid);
 if (sep == ',') fputc('"',f);
@@ -136,8 +149,9 @@ ret->lastOkTime = sqlLongLong(row[2]);
 ret->lastNotOkTime = sqlLongLong(row[3]);
 ret->firstAdded = sqlLongLong(row[4]);
 ret->errorMessage = row[5];
-ret->uploadAttempts = sqlLongLong(row[6]);
-ret->historyBits = sqlLongLong(row[7]);
+ret->openSuccesses = sqlLongLong(row[6]);
+ret->openFails = sqlLongLong(row[7]);
+ret->historyBits = sqlLongLong(row[8]);
 }
 
 struct edwHost *edwHostLoad(char **row)
@@ -153,8 +167,9 @@ ret->lastOkTime = sqlLongLong(row[2]);
 ret->lastNotOkTime = sqlLongLong(row[3]);
 ret->firstAdded = sqlLongLong(row[4]);
 ret->errorMessage = cloneString(row[5]);
-ret->uploadAttempts = sqlLongLong(row[6]);
-ret->historyBits = sqlLongLong(row[7]);
+ret->openSuccesses = sqlLongLong(row[6]);
+ret->openFails = sqlLongLong(row[7]);
+ret->historyBits = sqlLongLong(row[8]);
 return ret;
 }
 
@@ -164,7 +179,7 @@ struct edwHost *edwHostLoadAll(char *fileName)
 {
 struct edwHost *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -182,7 +197,7 @@ struct edwHost *edwHostLoadAllByChar(char *fileName, char chopper)
 {
 struct edwHost *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -209,7 +224,8 @@ ret->lastOkTime = sqlLongLongComma(&s);
 ret->lastNotOkTime = sqlLongLongComma(&s);
 ret->firstAdded = sqlLongLongComma(&s);
 ret->errorMessage = sqlStringComma(&s);
-ret->uploadAttempts = sqlLongLongComma(&s);
+ret->openSuccesses = sqlLongLongComma(&s);
+ret->openFails = sqlLongLongComma(&s);
 ret->historyBits = sqlLongLongComma(&s);
 *pS = s;
 return ret;
@@ -259,14 +275,16 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%lld", el->uploadAttempts);
+fprintf(f, "%lld", el->openSuccesses);
+fputc(sep,f);
+fprintf(f, "%lld", el->openFails);
 fputc(sep,f);
 fprintf(f, "%lld", el->historyBits);
 fputc(lastSep,f);
 }
 
-void edwSubmissionDirStaticLoad(char **row, struct edwSubmissionDir *ret)
-/* Load a row from edwSubmissionDir table into ret.  The contents of ret will
+void edwSubmitDirStaticLoad(char **row, struct edwSubmitDir *ret)
+/* Load a row from edwSubmitDir table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -277,15 +295,16 @@ ret->lastOkTime = sqlLongLong(row[3]);
 ret->lastNotOkTime = sqlLongLong(row[4]);
 ret->firstAdded = sqlLongLong(row[5]);
 ret->errorMessage = row[6];
-ret->uploadAttempts = sqlLongLong(row[7]);
-ret->historyBits = sqlLongLong(row[8]);
+ret->openSuccesses = sqlLongLong(row[7]);
+ret->openFails = sqlLongLong(row[8]);
+ret->historyBits = sqlLongLong(row[9]);
 }
 
-struct edwSubmissionDir *edwSubmissionDirLoad(char **row)
-/* Load a edwSubmissionDir from row fetched with select * from edwSubmissionDir
- * from database.  Dispose of this with edwSubmissionDirFree(). */
+struct edwSubmitDir *edwSubmitDirLoad(char **row)
+/* Load a edwSubmitDir from row fetched with select * from edwSubmitDir
+ * from database.  Dispose of this with edwSubmitDirFree(). */
 {
-struct edwSubmissionDir *ret;
+struct edwSubmitDir *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
@@ -295,22 +314,23 @@ ret->lastOkTime = sqlLongLong(row[3]);
 ret->lastNotOkTime = sqlLongLong(row[4]);
 ret->firstAdded = sqlLongLong(row[5]);
 ret->errorMessage = cloneString(row[6]);
-ret->uploadAttempts = sqlLongLong(row[7]);
-ret->historyBits = sqlLongLong(row[8]);
+ret->openSuccesses = sqlLongLong(row[7]);
+ret->openFails = sqlLongLong(row[8]);
+ret->historyBits = sqlLongLong(row[9]);
 return ret;
 }
 
-struct edwSubmissionDir *edwSubmissionDirLoadAll(char *fileName) 
-/* Load all edwSubmissionDir from a whitespace-separated file.
- * Dispose of this with edwSubmissionDirFreeList(). */
+struct edwSubmitDir *edwSubmitDirLoadAll(char *fileName) 
+/* Load all edwSubmitDir from a whitespace-separated file.
+ * Dispose of this with edwSubmitDirFreeList(). */
 {
-struct edwSubmissionDir *list = NULL, *el;
+struct edwSubmitDir *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
-    el = edwSubmissionDirLoad(row);
+    el = edwSubmitDirLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -318,17 +338,17 @@ slReverse(&list);
 return list;
 }
 
-struct edwSubmissionDir *edwSubmissionDirLoadAllByChar(char *fileName, char chopper) 
-/* Load all edwSubmissionDir from a chopper separated file.
- * Dispose of this with edwSubmissionDirFreeList(). */
+struct edwSubmitDir *edwSubmitDirLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwSubmitDir from a chopper separated file.
+ * Dispose of this with edwSubmitDirFreeList(). */
 {
-struct edwSubmissionDir *list = NULL, *el;
+struct edwSubmitDir *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = edwSubmissionDirLoad(row);
+    el = edwSubmitDirLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -336,10 +356,10 @@ slReverse(&list);
 return list;
 }
 
-struct edwSubmissionDir *edwSubmissionDirCommaIn(char **pS, struct edwSubmissionDir *ret)
-/* Create a edwSubmissionDir out of a comma separated string. 
+struct edwSubmitDir *edwSubmitDirCommaIn(char **pS, struct edwSubmitDir *ret)
+/* Create a edwSubmitDir out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new edwSubmissionDir */
+ * return a new edwSubmitDir */
 {
 char *s = *pS;
 
@@ -352,17 +372,18 @@ ret->lastOkTime = sqlLongLongComma(&s);
 ret->lastNotOkTime = sqlLongLongComma(&s);
 ret->firstAdded = sqlLongLongComma(&s);
 ret->errorMessage = sqlStringComma(&s);
-ret->uploadAttempts = sqlLongLongComma(&s);
+ret->openSuccesses = sqlLongLongComma(&s);
+ret->openFails = sqlLongLongComma(&s);
 ret->historyBits = sqlLongLongComma(&s);
 *pS = s;
 return ret;
 }
 
-void edwSubmissionDirFree(struct edwSubmissionDir **pEl)
-/* Free a single dynamically allocated edwSubmissionDir such as created
- * with edwSubmissionDirLoad(). */
+void edwSubmitDirFree(struct edwSubmitDir **pEl)
+/* Free a single dynamically allocated edwSubmitDir such as created
+ * with edwSubmitDirLoad(). */
 {
-struct edwSubmissionDir *el;
+struct edwSubmitDir *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->url);
@@ -370,21 +391,21 @@ freeMem(el->errorMessage);
 freez(pEl);
 }
 
-void edwSubmissionDirFreeList(struct edwSubmissionDir **pList)
-/* Free a list of dynamically allocated edwSubmissionDir's */
+void edwSubmitDirFreeList(struct edwSubmitDir **pList)
+/* Free a list of dynamically allocated edwSubmitDir's */
 {
-struct edwSubmissionDir *el, *next;
+struct edwSubmitDir *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    edwSubmissionDirFree(&el);
+    edwSubmitDirFree(&el);
     }
 *pList = NULL;
 }
 
-void edwSubmissionDirOutput(struct edwSubmissionDir *el, FILE *f, char sep, char lastSep) 
-/* Print out edwSubmissionDir.  Separate fields with sep. Follow last field with lastSep. */
+void edwSubmitDirOutput(struct edwSubmitDir *el, FILE *f, char sep, char lastSep) 
+/* Print out edwSubmitDir.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
@@ -404,7 +425,9 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%lld", el->uploadAttempts);
+fprintf(f, "%lld", el->openSuccesses);
+fputc(sep,f);
+fprintf(f, "%lld", el->openFails);
 fputc(sep,f);
 fprintf(f, "%lld", el->historyBits);
 fputc(lastSep,f);
@@ -417,16 +440,17 @@ void edwFileStaticLoad(char **row, struct edwFile *ret)
 
 ret->id = sqlUnsigned(row[0]);
 safecpy(ret->licensePlate, sizeof(ret->licensePlate), row[1]);
-ret->submissionId = sqlUnsigned(row[2]);
-ret->submitFileName = row[3];
-ret->edwFileName = row[4];
-ret->startUploadTime = sqlLongLong(row[5]);
-ret->endUploadTime = sqlLongLong(row[6]);
-ret->updateTime = sqlLongLong(row[7]);
-ret->size = sqlLongLong(row[8]);
-safecpy(ret->md5, sizeof(ret->md5), row[9]);
-ret->tags = row[10];
-ret->errorMessage = row[11];
+ret->submitId = sqlUnsigned(row[2]);
+ret->submitDirId = sqlUnsigned(row[3]);
+ret->submitFileName = row[4];
+ret->edwFileName = row[5];
+ret->startUploadTime = sqlLongLong(row[6]);
+ret->endUploadTime = sqlLongLong(row[7]);
+ret->updateTime = sqlLongLong(row[8]);
+ret->size = sqlLongLong(row[9]);
+safecpy(ret->md5, sizeof(ret->md5), row[10]);
+ret->tags = row[11];
+ret->errorMessage = row[12];
 }
 
 struct edwFile *edwFileLoad(char **row)
@@ -438,16 +462,17 @@ struct edwFile *ret;
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
 safecpy(ret->licensePlate, sizeof(ret->licensePlate), row[1]);
-ret->submissionId = sqlUnsigned(row[2]);
-ret->submitFileName = cloneString(row[3]);
-ret->edwFileName = cloneString(row[4]);
-ret->startUploadTime = sqlLongLong(row[5]);
-ret->endUploadTime = sqlLongLong(row[6]);
-ret->updateTime = sqlLongLong(row[7]);
-ret->size = sqlLongLong(row[8]);
-safecpy(ret->md5, sizeof(ret->md5), row[9]);
-ret->tags = cloneString(row[10]);
-ret->errorMessage = cloneString(row[11]);
+ret->submitId = sqlUnsigned(row[2]);
+ret->submitDirId = sqlUnsigned(row[3]);
+ret->submitFileName = cloneString(row[4]);
+ret->edwFileName = cloneString(row[5]);
+ret->startUploadTime = sqlLongLong(row[6]);
+ret->endUploadTime = sqlLongLong(row[7]);
+ret->updateTime = sqlLongLong(row[8]);
+ret->size = sqlLongLong(row[9]);
+safecpy(ret->md5, sizeof(ret->md5), row[10]);
+ret->tags = cloneString(row[11]);
+ret->errorMessage = cloneString(row[12]);
 return ret;
 }
 
@@ -457,7 +482,7 @@ struct edwFile *edwFileLoadAll(char *fileName)
 {
 struct edwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[13];
 
 while (lineFileRow(lf, row))
     {
@@ -475,7 +500,7 @@ struct edwFile *edwFileLoadAllByChar(char *fileName, char chopper)
 {
 struct edwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[13];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -498,7 +523,8 @@ if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->licensePlate, sizeof(ret->licensePlate));
-ret->submissionId = sqlUnsignedComma(&s);
+ret->submitId = sqlUnsignedComma(&s);
+ret->submitDirId = sqlUnsignedComma(&s);
 ret->submitFileName = sqlStringComma(&s);
 ret->edwFileName = sqlStringComma(&s);
 ret->startUploadTime = sqlLongLongComma(&s);
@@ -548,7 +574,9 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->licensePlate);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->submissionId);
+fprintf(f, "%u", el->submitId);
+fputc(sep,f);
+fprintf(f, "%u", el->submitDirId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->submitFileName);
@@ -580,8 +608,8 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
-void edwSubmissionStaticLoad(char **row, struct edwSubmission *ret)
-/* Load a row from edwSubmission table into ret.  The contents of ret will
+void edwSubmitStaticLoad(char **row, struct edwSubmit *ret)
+/* Load a row from edwSubmit table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -589,43 +617,47 @@ ret->id = sqlUnsigned(row[0]);
 ret->url = row[1];
 ret->startUploadTime = sqlLongLong(row[2]);
 ret->endUploadTime = sqlLongLong(row[3]);
-safecpy(ret->userSid, sizeof(ret->userSid), row[4]);
+ret->userId = sqlUnsigned(row[4]);
 ret->submitFileId = sqlUnsigned(row[5]);
-ret->submissionDirId = sqlUnsigned(row[6]);
+ret->submitDirId = sqlUnsigned(row[6]);
 ret->fileCount = sqlUnsigned(row[7]);
-ret->errorMessage = row[8];
+ret->oldFiles = sqlUnsigned(row[8]);
+ret->newFiles = sqlUnsigned(row[9]);
+ret->errorMessage = row[10];
 }
 
-struct edwSubmission *edwSubmissionLoad(char **row)
-/* Load a edwSubmission from row fetched with select * from edwSubmission
- * from database.  Dispose of this with edwSubmissionFree(). */
+struct edwSubmit *edwSubmitLoad(char **row)
+/* Load a edwSubmit from row fetched with select * from edwSubmit
+ * from database.  Dispose of this with edwSubmitFree(). */
 {
-struct edwSubmission *ret;
+struct edwSubmit *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
 ret->url = cloneString(row[1]);
 ret->startUploadTime = sqlLongLong(row[2]);
 ret->endUploadTime = sqlLongLong(row[3]);
-safecpy(ret->userSid, sizeof(ret->userSid), row[4]);
+ret->userId = sqlUnsigned(row[4]);
 ret->submitFileId = sqlUnsigned(row[5]);
-ret->submissionDirId = sqlUnsigned(row[6]);
+ret->submitDirId = sqlUnsigned(row[6]);
 ret->fileCount = sqlUnsigned(row[7]);
-ret->errorMessage = cloneString(row[8]);
+ret->oldFiles = sqlUnsigned(row[8]);
+ret->newFiles = sqlUnsigned(row[9]);
+ret->errorMessage = cloneString(row[10]);
 return ret;
 }
 
-struct edwSubmission *edwSubmissionLoadAll(char *fileName) 
-/* Load all edwSubmission from a whitespace-separated file.
- * Dispose of this with edwSubmissionFreeList(). */
+struct edwSubmit *edwSubmitLoadAll(char *fileName) 
+/* Load all edwSubmit from a whitespace-separated file.
+ * Dispose of this with edwSubmitFreeList(). */
 {
-struct edwSubmission *list = NULL, *el;
+struct edwSubmit *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
-    el = edwSubmissionLoad(row);
+    el = edwSubmitLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -633,17 +665,17 @@ slReverse(&list);
 return list;
 }
 
-struct edwSubmission *edwSubmissionLoadAllByChar(char *fileName, char chopper) 
-/* Load all edwSubmission from a chopper separated file.
- * Dispose of this with edwSubmissionFreeList(). */
+struct edwSubmit *edwSubmitLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwSubmit from a chopper separated file.
+ * Dispose of this with edwSubmitFreeList(). */
 {
-struct edwSubmission *list = NULL, *el;
+struct edwSubmit *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = edwSubmissionLoad(row);
+    el = edwSubmitLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -651,10 +683,10 @@ slReverse(&list);
 return list;
 }
 
-struct edwSubmission *edwSubmissionCommaIn(char **pS, struct edwSubmission *ret)
-/* Create a edwSubmission out of a comma separated string. 
+struct edwSubmit *edwSubmitCommaIn(char **pS, struct edwSubmit *ret)
+/* Create a edwSubmit out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new edwSubmission */
+ * return a new edwSubmit */
 {
 char *s = *pS;
 
@@ -664,20 +696,22 @@ ret->id = sqlUnsignedComma(&s);
 ret->url = sqlStringComma(&s);
 ret->startUploadTime = sqlLongLongComma(&s);
 ret->endUploadTime = sqlLongLongComma(&s);
-sqlFixedStringComma(&s, ret->userSid, sizeof(ret->userSid));
+ret->userId = sqlUnsignedComma(&s);
 ret->submitFileId = sqlUnsignedComma(&s);
-ret->submissionDirId = sqlUnsignedComma(&s);
+ret->submitDirId = sqlUnsignedComma(&s);
 ret->fileCount = sqlUnsignedComma(&s);
+ret->oldFiles = sqlUnsignedComma(&s);
+ret->newFiles = sqlUnsignedComma(&s);
 ret->errorMessage = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
 
-void edwSubmissionFree(struct edwSubmission **pEl)
-/* Free a single dynamically allocated edwSubmission such as created
- * with edwSubmissionLoad(). */
+void edwSubmitFree(struct edwSubmit **pEl)
+/* Free a single dynamically allocated edwSubmit such as created
+ * with edwSubmitLoad(). */
 {
-struct edwSubmission *el;
+struct edwSubmit *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->url);
@@ -685,21 +719,21 @@ freeMem(el->errorMessage);
 freez(pEl);
 }
 
-void edwSubmissionFreeList(struct edwSubmission **pList)
-/* Free a list of dynamically allocated edwSubmission's */
+void edwSubmitFreeList(struct edwSubmit **pList)
+/* Free a list of dynamically allocated edwSubmit's */
 {
-struct edwSubmission *el, *next;
+struct edwSubmit *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    edwSubmissionFree(&el);
+    edwSubmitFree(&el);
     }
 *pList = NULL;
 }
 
-void edwSubmissionOutput(struct edwSubmission *el, FILE *f, char sep, char lastSep) 
-/* Print out edwSubmission.  Separate fields with sep. Follow last field with lastSep. */
+void edwSubmitOutput(struct edwSubmit *el, FILE *f, char sep, char lastSep) 
+/* Print out edwSubmit.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
@@ -711,15 +745,17 @@ fprintf(f, "%lld", el->startUploadTime);
 fputc(sep,f);
 fprintf(f, "%lld", el->endUploadTime);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->userSid);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->userId);
 fputc(sep,f);
 fprintf(f, "%u", el->submitFileId);
 fputc(sep,f);
-fprintf(f, "%u", el->submissionDirId);
+fprintf(f, "%u", el->submitDirId);
 fputc(sep,f);
 fprintf(f, "%u", el->fileCount);
+fputc(sep,f);
+fprintf(f, "%u", el->oldFiles);
+fputc(sep,f);
+fprintf(f, "%u", el->newFiles);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
@@ -727,164 +763,48 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
-void edwSubmissionLogStaticLoad(char **row, struct edwSubmissionLog *ret)
-/* Load a row from edwSubmissionLog table into ret.  The contents of ret will
+void edwSubscriberStaticLoad(char **row, struct edwSubscriber *ret)
+/* Load a row from edwSubscriber table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->submissionId = sqlUnsigned(row[1]);
-ret->message = row[2];
-}
-
-struct edwSubmissionLog *edwSubmissionLogLoad(char **row)
-/* Load a edwSubmissionLog from row fetched with select * from edwSubmissionLog
- * from database.  Dispose of this with edwSubmissionLogFree(). */
-{
-struct edwSubmissionLog *ret;
-
-AllocVar(ret);
-ret->id = sqlUnsigned(row[0]);
-ret->submissionId = sqlUnsigned(row[1]);
-ret->message = cloneString(row[2]);
-return ret;
-}
-
-struct edwSubmissionLog *edwSubmissionLogLoadAll(char *fileName) 
-/* Load all edwSubmissionLog from a whitespace-separated file.
- * Dispose of this with edwSubmissionLogFreeList(). */
-{
-struct edwSubmissionLog *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
-
-while (lineFileRow(lf, row))
-    {
-    el = edwSubmissionLogLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-struct edwSubmissionLog *edwSubmissionLogLoadAllByChar(char *fileName, char chopper) 
-/* Load all edwSubmissionLog from a chopper separated file.
- * Dispose of this with edwSubmissionLogFreeList(). */
-{
-struct edwSubmissionLog *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
-
-while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
-    {
-    el = edwSubmissionLogLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-struct edwSubmissionLog *edwSubmissionLogCommaIn(char **pS, struct edwSubmissionLog *ret)
-/* Create a edwSubmissionLog out of a comma separated string. 
- * This will fill in ret if non-null, otherwise will
- * return a new edwSubmissionLog */
-{
-char *s = *pS;
-
-if (ret == NULL)
-    AllocVar(ret);
-ret->id = sqlUnsignedComma(&s);
-ret->submissionId = sqlUnsignedComma(&s);
-ret->message = sqlStringComma(&s);
-*pS = s;
-return ret;
-}
-
-void edwSubmissionLogFree(struct edwSubmissionLog **pEl)
-/* Free a single dynamically allocated edwSubmissionLog such as created
- * with edwSubmissionLogLoad(). */
-{
-struct edwSubmissionLog *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->message);
-freez(pEl);
-}
-
-void edwSubmissionLogFreeList(struct edwSubmissionLog **pList)
-/* Free a list of dynamically allocated edwSubmissionLog's */
-{
-struct edwSubmissionLog *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    edwSubmissionLogFree(&el);
-    }
-*pList = NULL;
-}
-
-void edwSubmissionLogOutput(struct edwSubmissionLog *el, FILE *f, char sep, char lastSep) 
-/* Print out edwSubmissionLog.  Separate fields with sep. Follow last field with lastSep. */
-{
-fprintf(f, "%u", el->id);
-fputc(sep,f);
-fprintf(f, "%u", el->submissionId);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->message);
-if (sep == ',') fputc('"',f);
-fputc(lastSep,f);
-}
-
-void edwSubscribingProgramStaticLoad(char **row, struct edwSubscribingProgram *ret)
-/* Load a row from edwSubscribingProgram table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-{
-
-ret->id = sqlUnsigned(row[0]);
-ret->runOrder = sqlDouble(row[1]);
-ret->filePattern = row[2];
-ret->hubPattern = row[3];
-ret->tagPattern = row[4];
-ret->onFileStartUpload = row[5];
+ret->name = row[1];
+ret->runOrder = sqlDouble(row[2]);
+ret->filePattern = row[3];
+ret->dirPattern = row[4];
+ret->tagPattern = row[5];
 ret->onFileEndUpload = row[6];
-ret->onSubmissionStartUpload = row[7];
-ret->onSubmissionEndUpload = row[8];
 }
 
-struct edwSubscribingProgram *edwSubscribingProgramLoad(char **row)
-/* Load a edwSubscribingProgram from row fetched with select * from edwSubscribingProgram
- * from database.  Dispose of this with edwSubscribingProgramFree(). */
+struct edwSubscriber *edwSubscriberLoad(char **row)
+/* Load a edwSubscriber from row fetched with select * from edwSubscriber
+ * from database.  Dispose of this with edwSubscriberFree(). */
 {
-struct edwSubscribingProgram *ret;
+struct edwSubscriber *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->runOrder = sqlDouble(row[1]);
-ret->filePattern = cloneString(row[2]);
-ret->hubPattern = cloneString(row[3]);
-ret->tagPattern = cloneString(row[4]);
-ret->onFileStartUpload = cloneString(row[5]);
+ret->name = cloneString(row[1]);
+ret->runOrder = sqlDouble(row[2]);
+ret->filePattern = cloneString(row[3]);
+ret->dirPattern = cloneString(row[4]);
+ret->tagPattern = cloneString(row[5]);
 ret->onFileEndUpload = cloneString(row[6]);
-ret->onSubmissionStartUpload = cloneString(row[7]);
-ret->onSubmissionEndUpload = cloneString(row[8]);
 return ret;
 }
 
-struct edwSubscribingProgram *edwSubscribingProgramLoadAll(char *fileName) 
-/* Load all edwSubscribingProgram from a whitespace-separated file.
- * Dispose of this with edwSubscribingProgramFreeList(). */
+struct edwSubscriber *edwSubscriberLoadAll(char *fileName) 
+/* Load all edwSubscriber from a whitespace-separated file.
+ * Dispose of this with edwSubscriberFreeList(). */
 {
-struct edwSubscribingProgram *list = NULL, *el;
+struct edwSubscriber *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
-    el = edwSubscribingProgramLoad(row);
+    el = edwSubscriberLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -892,17 +812,17 @@ slReverse(&list);
 return list;
 }
 
-struct edwSubscribingProgram *edwSubscribingProgramLoadAllByChar(char *fileName, char chopper) 
-/* Load all edwSubscribingProgram from a chopper separated file.
- * Dispose of this with edwSubscribingProgramFreeList(). */
+struct edwSubscriber *edwSubscriberLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwSubscriber from a chopper separated file.
+ * Dispose of this with edwSubscriberFreeList(). */
 {
-struct edwSubscribingProgram *list = NULL, *el;
+struct edwSubscriber *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = edwSubscribingProgramLoad(row);
+    el = edwSubscriberLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -910,62 +830,62 @@ slReverse(&list);
 return list;
 }
 
-struct edwSubscribingProgram *edwSubscribingProgramCommaIn(char **pS, struct edwSubscribingProgram *ret)
-/* Create a edwSubscribingProgram out of a comma separated string. 
+struct edwSubscriber *edwSubscriberCommaIn(char **pS, struct edwSubscriber *ret)
+/* Create a edwSubscriber out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new edwSubscribingProgram */
+ * return a new edwSubscriber */
 {
 char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
 ret->runOrder = sqlDoubleComma(&s);
 ret->filePattern = sqlStringComma(&s);
-ret->hubPattern = sqlStringComma(&s);
+ret->dirPattern = sqlStringComma(&s);
 ret->tagPattern = sqlStringComma(&s);
-ret->onFileStartUpload = sqlStringComma(&s);
 ret->onFileEndUpload = sqlStringComma(&s);
-ret->onSubmissionStartUpload = sqlStringComma(&s);
-ret->onSubmissionEndUpload = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
 
-void edwSubscribingProgramFree(struct edwSubscribingProgram **pEl)
-/* Free a single dynamically allocated edwSubscribingProgram such as created
- * with edwSubscribingProgramLoad(). */
+void edwSubscriberFree(struct edwSubscriber **pEl)
+/* Free a single dynamically allocated edwSubscriber such as created
+ * with edwSubscriberLoad(). */
 {
-struct edwSubscribingProgram *el;
+struct edwSubscriber *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->name);
 freeMem(el->filePattern);
-freeMem(el->hubPattern);
+freeMem(el->dirPattern);
 freeMem(el->tagPattern);
-freeMem(el->onFileStartUpload);
 freeMem(el->onFileEndUpload);
-freeMem(el->onSubmissionStartUpload);
-freeMem(el->onSubmissionEndUpload);
 freez(pEl);
 }
 
-void edwSubscribingProgramFreeList(struct edwSubscribingProgram **pList)
-/* Free a list of dynamically allocated edwSubscribingProgram's */
+void edwSubscriberFreeList(struct edwSubscriber **pList)
+/* Free a list of dynamically allocated edwSubscriber's */
 {
-struct edwSubscribingProgram *el, *next;
+struct edwSubscriber *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    edwSubscribingProgramFree(&el);
+    edwSubscriberFree(&el);
     }
 *pList = NULL;
 }
 
-void edwSubscribingProgramOutput(struct edwSubscribingProgram *el, FILE *f, char sep, char lastSep) 
-/* Print out edwSubscribingProgram.  Separate fields with sep. Follow last field with lastSep. */
+void edwSubscriberOutput(struct edwSubscriber *el, FILE *f, char sep, char lastSep) 
+/* Print out edwSubscriber.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%g", el->runOrder);
 fputc(sep,f);
@@ -974,7 +894,7 @@ fprintf(f, "%s", el->filePattern);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->hubPattern);
+fprintf(f, "%s", el->dirPattern);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -982,19 +902,7 @@ fprintf(f, "%s", el->tagPattern);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->onFileStartUpload);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->onFileEndUpload);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->onSubmissionStartUpload);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->onSubmissionEndUpload);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
