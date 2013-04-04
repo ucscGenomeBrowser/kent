@@ -2,7 +2,7 @@ kentSrc = ../..
 A = embossToPsl
 include $(kentSrc)/inc/userApp.mk
 
-test::
+test:: compile
 	cd tests && ${MAKE} test
 
 clean::
