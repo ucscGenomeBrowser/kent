@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = checkAgpAndFa
 include $(kentSrc)/inc/userApp.mk
 
-test:
+test::
 	./doTest.sh $A
 
 clean::

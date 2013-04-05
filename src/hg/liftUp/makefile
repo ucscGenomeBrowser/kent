@@ -2,7 +2,7 @@ kentSrc = ../..
 A = liftUp
 include $(kentSrc)/inc/userApp.mk
 
-test: force
+test:: force
 	cd test && ${MAKE}
 
 force: 
