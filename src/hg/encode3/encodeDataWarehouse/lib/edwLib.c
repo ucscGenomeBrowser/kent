@@ -21,11 +21,11 @@ out[EDW_ACCESS_SIZE-1] = 0;
 freeMem(base64);
 }
 
-void edwMakeAccess(char *user, char *password, char access[EDW_ACCESS_SIZE])
-/* Convert user + password + salt to an access code */
+void edwMakeAccess(char *password, char access[EDW_ACCESS_SIZE])
+/* Convert password + salt to an access code */
 {
 /* Salt it well with stuff that is reproducible but hard to guess, and some
- * one time true random stuff. Sneak in password and user too. */
+ * one time true random stuff. Sneak in password too. */
 unsigned char inputBuf[512];
 memset(inputBuf, 0, sizeof(inputBuf));
 int i;
@@ -34,57 +34,57 @@ for (i=0; i<ArraySize(inputBuf); i += 2)
     inputBuf[i] = i ^ 0x3f;
     inputBuf[i+1] = -i*i;
     }
-safef((char*)inputBuf, sizeof(inputBuf), "f186ed79bae%s8e364d73%s<*#$*(#)!DSDFOUIHLjksdf",
-    user, password);
+safef((char*)inputBuf, sizeof(inputBuf), 
+    "f186ed79bae8MNKLKEDSP*O:OHe364d73%s<*#$*(#)!DSDFOUIHLjksdfOP:J>KEJWYGk",
+    password);
 makeShaBase64(inputBuf, sizeof(inputBuf), access);
 }
 
-#define edwMaxEmailSize 128     /* Maximum size of an email handle */
+#define edwMaxUserNameSize 128     /* Maximum size of an email handle */
 
-int edwCheckEmailSize(char *email)
-/* Make sure email address not too long. Returns size or aborts if too long. */
+int edwCheckUserNameSize(char *user)
+/* Make sure user name not too long. Returns size or aborts if too long. */
 {
-int emailSize = strlen(email);
-if (emailSize > edwMaxEmailSize)
-   errAbort("size of email address too long: %s", email);
-return emailSize;
+int size = strlen(user);
+if (size > edwMaxUserNameSize)
+   errAbort("size of user name too long: %s", user);
+return size;
 }
 
-boolean edwCheckAccess(struct sqlConnection *conn, char *user, char *password, 
-    char retSid[EDW_ACCESS_SIZE])
-/* Make sure user exists and password checks out. */
+int edwCheckAccess(struct sqlConnection *conn, char *user, char *password)
+/* Make sure user exists and password checks out. Returns (non-zero) user ID on success*/
 {
 /* Make escaped version of email string since it may be raw user input. */
-int emailSize = edwCheckEmailSize(user);
-char escapedEmail[2*emailSize+1];
-sqlEscapeString2(escapedEmail, user);
+int nameSize  = edwCheckUserNameSize(user);
+char escapedUser[2*nameSize+1];
+sqlEscapeString2(escapedUser, user);
 
 char access[EDW_ACCESS_SIZE];
-edwMakeAccess(user, password, access);
+edwMakeAccess(password, access);
 
 char query[256];
-safef(query, sizeof(query), "select access,sid from edwUser where email='%s'", user);
+safef(query, sizeof(query), "select access,id from edwUser where name='%s'", escapedUser);
 struct sqlResult *sr = sqlGetResult(conn, query);
-boolean gotMatch = FALSE;
+int userId = 0;
 char **row;
 if ((row = sqlNextRow(sr)) != NULL)
     {
     if (memcmp(row[0], access, sizeof(access)) == 0)
 	{
-	memcpy(retSid, row[1], EDW_ACCESS_SIZE);
-        gotMatch = TRUE;
+	userId = sqlUnsigned(row[1]);
 	}
     }
 sqlFreeResult(&sr);
-return gotMatch;
+return userId;
 }
 
-void edwMustHaveAccess(struct sqlConnection *conn, char *user, char *password,
-    char retSid[EDW_ACCESS_SIZE])
-/* Check user has access and abort with an error message if not. */
+int edwMustHaveAccess(struct sqlConnection *conn, char *user, char *password)
+/* Check user has access and abort with an error message if not. Returns user id. */
 {
-if (!edwCheckAccess(conn, user, password, retSid))
+int id = edwCheckAccess(conn, user, password);
+if (id == 0)
     errAbort("User/password combination doesn't give access to database");
+return id;
 }
 
 void edwMakeSid(char *user, char sid[EDW_ACCESS_SIZE])

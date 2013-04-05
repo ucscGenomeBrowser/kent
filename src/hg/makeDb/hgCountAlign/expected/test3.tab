@@ -1,4 +1,4 @@
-#chrom	chromStart	chromEnd	counts	AA	AC	AG	AT	CA	CC	CG	CT	GA	GC	GG	GT	TA	TC	TG	TT
+#chrom	chromStart	chromEnd	counts	AA	AC	AG	AT	CA	CC	CG	CT	GA	GC	GG	GT	TA	TC	TG	TT	value
 chr22	13005061	13005111	50	5	0	2	1	0	8	2	5	2	1	8	2	2	4	2	6
 chr22	13005150	13005200	50	4	1	3	1	0	13	1	3	4	1	6	1	1	3	0	8
 chr22	13005200	13005250	50	7	0	4	1	2	12	0	1	1	0	10	2	0	3	2	5

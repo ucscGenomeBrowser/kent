@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = clusterPsl
 include $(kentSrc)/inc/userApp.mk
 
-test:
+test::
 	clusterPsl -verbose=0 input.psl output.cluster
 	diff expected.cluster output.cluster
 

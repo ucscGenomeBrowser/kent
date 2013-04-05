@@ -6,7 +6,7 @@ L += -lm ${SOCKETLIB}
 clean::
 	rm -fr tests/output
 
-test:
+test::
 	${MKDIR} tests/output
 	faToTwoBit tests/input/noDna.fa tests/output/noDna.2bit 2> tests/output/noDna.out
 	diff tests/expected/noDna.out tests/output/noDna.out

@@ -36,7 +36,7 @@ check-beta:
 	# this will fail if we are not in a beta checkout:
 	git branch | egrep 'v[0-9]+_branch' > /dev/null	
 
-blatSuite: topLibs 
+blatSuite: topLibs hgLib
 	cd blat && ${MAKE}
 	cd gfClient && ${MAKE}
 	cd gfServer && ${MAKE}

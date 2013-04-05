@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = orfCompare
 include $(kentSrc)/inc/userApp.mk
 
-test:
+test::
 	orfCompare inA.orf inB.orf > out.txt
 	diff expected.txt out.txt
 

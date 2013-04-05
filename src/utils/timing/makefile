@@ -14,5 +14,5 @@ clean::
 	cd mktime && $(MAKE) clean
 	cd localtime && $(MAKE) clean
 
-test:
-	cd tests && ./runtest
+test::
+	@echo "# no tests directory in $(CURDIR)"

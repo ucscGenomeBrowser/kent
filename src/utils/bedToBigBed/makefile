@@ -6,7 +6,7 @@ L += -lm -lz ${SOCKETLIB}
 clean::
 	rm -fr tests/output
 
-test:
+test::
 	@rm -fr tests/output
 	@${MKDIR} tests/output
 	${A} -type=bed9 -as=itemRgb.as itemRgb.bed chrom.sizes tests/output/itemRgb.bb 2> /dev/null

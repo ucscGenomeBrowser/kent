@@ -29,6 +29,31 @@ mtv->val = cloneString(val);
 return mtv;
 }
 
+void metaTagValFree(struct metaTagVal **pMtv)
+/* Free up metaTagVal. */
+{
+struct metaTagVal *mtv = *pMtv;
+if (mtv != NULL)
+    {
+    freeMem(mtv->tag);
+    freeMem(mtv->val);
+    freez(pMtv);
+    }
+}
+
+void metaTagValFreeList(struct metaTagVal **pList)
+/* Free a list of dynamically allocated metaTagVal's */
+{
+struct metaTagVal *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    metaTagValFree(&el);
+    }
+*pList = NULL;
+}
+
 int metaTagValCmp(const void *va, const void *vb)
 /* Compare to sort based on tag name . */
 {
@@ -36,6 +61,43 @@ const struct metaTagVal *a = *((struct metaTagVal **)va);
 const struct metaTagVal *b = *((struct metaTagVal **)vb);
 return strcmp(a->tag, b->tag);
 }
+
+void metaFree(struct meta **pMeta)
+/* Free up memory associated with a meta. */
+{
+struct meta *meta = *pMeta;
+if (meta != NULL)
+    {
+    metaTagValFreeList(&meta->tagList);
+    freez(pMeta);
+    }
+}
+
+void metaFreeList(struct meta **pList)
+/* Free a list of dynamically allocated meta's. Use metaFreeForest to free children too. */
+{
+struct meta *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    metaFree(&el);
+    }
+*pList = NULL;
+}
+
+void metaFreeForest(struct meta **pForest)
+/* Free up all metas in forest and their children. */ 
+{
+struct meta *meta;
+for (meta = *pForest; meta != NULL; meta = meta->next)
+    {
+    if (meta->children)
+         metaFreeForest(&meta->children);
+    }
+metaFreeList(pForest);
+}
+
 
 void metaSortTags(struct meta *meta)
 /* Do canonical sort so that the first tag stays first but the
@@ -176,8 +238,8 @@ while ((meta = metaNextStanza(lf)) != NULL)
 	    {
 	    if (ignoreOtherStanzas)
 	        {
+		metaFree(&meta);
 		continue;
-		// TODO: We should really free memory here. 
 		}
 	    else
 	        errAbort("Stanza beginning with %s instead of %s line %d of %s",
