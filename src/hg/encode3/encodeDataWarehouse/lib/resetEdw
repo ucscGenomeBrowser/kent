@@ -9,3 +9,9 @@ edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink
 edwAddAssembly 10090 mm9 mm9 /gbdb/mm9/mm9.2bit -symLink
 edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
 edwAddSubscriber updateLastId 'echo %u > /scratch/kent/encodeDataWarehouse/tmp/lastId'
+hgsql encodeDataWarehouse -e "insert edwQaAgent (name,program) values('makeValidFile', 'edwMakeValidFile');"
+hgsql encodeDataWarehouse -e "insert edwQaAgent (name,program) values('makeEnrichments', 'edwMakeEnrichments');"
+edwAddQaEnrichTarget -symLink regulatory hg19 /hive/groups/encode/encode3/encValData/hg19/regions/regulatory.bed
+edwAddQaEnrichTarget exon hg19 /hive/groups/encode/encode3/encValData/hg19/regions/exon.bed
+edwAddQaEnrichTarget promoter hg19 /hive/groups/encode/encode3/encValData/hg19/regions/promoter.bed
+edwSubmit http://encodedcc.sdsc.edu/encode2/hub/5.test kent human

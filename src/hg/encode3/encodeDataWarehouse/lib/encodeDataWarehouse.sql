@@ -60,6 +60,8 @@ CREATE TABLE edwFile (
     md5 char(32) not null,	# md5 sum of file contents
     tags longblob not null,	# CGI encoded name=val pairs from manifest
     errorMessage longblob not null,	# If non-empty contains last error message from upload. If empty upload is ok
+    deprecated varchar(255) not null,	# If non-empty why you shouldn't user this file any more.
+    replacedBy varchar(255) not null,	# If non-empty license plate of file that replaces this one.
               #Indices
     PRIMARY KEY(id)
 );
@@ -106,18 +108,49 @@ CREATE TABLE edwAssembly (
     PRIMARY KEY(id)
 );
 
-#For files where we can do some sort of QA analysis, a little information about files here
-CREATE TABLE edwQaFile (
-    id int unsigned auto_increment not null,	# ID within QA subsystem
+#A file that has been uploaded, the format checked, and for which at least minimal metadata exists
+CREATE TABLE edwValidFile (
+    id int unsigned auto_increment not null,	# ID of validated file
+    licensePlate char(16) not null,	# A abc123 looking license-platish thing. Same as in edwFile table
     fileId int unsigned not null,	# Pointer to file in main file table
+    format varchar(255) not null,	# What format it's in from manifest
+    outputType varchar(255) not null,	# What output_type it is from manifest
+    experiment varchar(255) not null,	# What experiment it's in from manifest
+    replicate varchar(255) not null,	# What replicate it is from manifest
+    validKey varchar(255) not null,	# The valid_key tag from manifest
+    enrichedIn varchar(255) not null,	# The enriched_in tag from manifest
+    ucscDb varchar(255) not null,	# Something like hg19 or mm9
     itemCount bigint not null,	# # of items in file: reads for fastqs, lines for beds, bases w/data for wig.
     basesInItems bigint not null,	# # of bases in items
     samplePath varchar(255) not null,	# Path to a temporary sample file
     sampleCount bigint not null,	# # of items in sample if we are just subsampling as we do for reads.
     basesInSample bigint not null,	# # of bases in our sample
-    preferredAssembly int unsigned not null,	# A genome assembly we should map to
-    propInAsm double not null,	# The proportion of items that are on the assembly at all.
-    asmCoverage double not null,	# The proportion of assembly that is covered.
+    sampleCoverage double not null,	# Proportion of assembly covered by at least one item in sample
+    depth double not null,	# Estimated genome-equivalents covered by possibly overlapping data
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#A program plus parameters with a standard command line that gets run on new files
+CREATE TABLE edwQaAgent (
+    id int unsigned auto_increment not null,	# ID of this agent
+    name varchar(255) not null,	# Name of agent
+    program varchar(255) not null,	# Program command line name
+    options varchar(255) not null,	# Program command line options
+    deprecated varchar(255) not null,	# If non-empty why it isn't run any more.
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#Records a bit of information from each QA run we've done on files.
+CREATE TABLE edwQaRun (
+    id int unsigned auto_increment not null,	# ID of this run
+    agentId int unsigned not null,	# ID of agent that made this run
+    startFileId int unsigned not null,	# ID of file we started on.
+    endFileId int unsigned not null,	# One past last file we did QA on
+    startTime bigint not null,	# Start time in seconds since 1970
+    endTime bigint not null,	# Start time in seconds since 1970
+    stderr longblob not null,	# The output to stderr of the run
               #Indices
     PRIMARY KEY(id)
 );
@@ -125,8 +158,9 @@ CREATE TABLE edwQaFile (
 #A target for our enrichment analysis.
 CREATE TABLE edwQaEnrichTarget (
     id int unsigned auto_increment not null,	# ID of this enrichment target
-    targetName varchar(255) not null,	# Something like 'exon' or 'promoter'
-    targetFile int unsigned not null,	# A simple BED 3 format file that defines target. Bases covered are unique
+    assemblyId int unsigned not null,	# Which assembly this goes to
+    name varchar(255) not null,	# Something like 'exon' or 'promoter'
+    fileId int unsigned not null,	# A simple BED 3 format file that defines target. Bases covered are unique
     targetSize bigint not null,	# Total number of bases covered by target
               #Indices
     PRIMARY KEY(id)
@@ -135,13 +169,13 @@ CREATE TABLE edwQaEnrichTarget (
 #An enrichment analysis applied to file.
 CREATE TABLE edwQaEnrich (
     id int unsigned auto_increment not null,	# ID of this enrichment analysis
-    qaFileId int unsigned not null,	# File we are looking at skeptically
+    fileId int unsigned not null,	# File we are looking at skeptically
     qaEnrichTargetId int unsigned not null,	# Information about an target for this analysis
     targetBaseHits bigint not null,	# Number of hits to bases in target
     targetUniqHits bigint not null,	# Number of unique bases hit in target
     coverage double not null,	# Coverage of target - just targetUniqHits/targetSize
     enrichment double not null,	# Amount we hit target/amount we hit genome
-    uniqEnrich double not null,	# coverage/asmCoverage
+    uniqEnrich double not null,	# coverage/sampleCoverage
               #Indices
     PRIMARY KEY(id)
 );

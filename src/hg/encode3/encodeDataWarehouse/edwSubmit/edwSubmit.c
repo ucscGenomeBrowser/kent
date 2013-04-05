@@ -129,6 +129,8 @@ struct edwFile *edwFileFromFieldedTable(struct fieldedTable *table,
 struct edwFile *bf, *bfList = NULL;
 struct fieldedRow *fr;
 struct dyString *tags = dyStringNew(0);
+char *ucscDbTag = "ucsc_db";
+int ucscDbField = stringArrayIx(ucscDbTag, table->fields, table->fieldCount);
 for (fr = table->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
@@ -147,6 +149,24 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	    {
 	    cgiEncodeIntoDy(table->fields[i], row[i], tags);
 	    }
+	}
+    if (ucscDbField < 0)
+        {
+	/* Try to make this field up from file name */
+	char *slash = strchr(bf->submitFileName, '/');
+	if (slash == NULL)
+	    errAbort("Can't make up '%s' field from '%s'", ucscDbTag, bf->submitFileName);
+	int len = slash - bf->submitFileName;
+	char ucscDbVal[len+1];
+	memcpy(ucscDbVal, bf->submitFileName, len);
+	ucscDbVal[len] = 0;
+
+	/* Do a little check on it */
+	if (!sameString("mm9", ucscDbVal) && !sameString("hg19", ucscDbVal))
+	    errAbort("Unrecognized ucsc_db %s", ucscDbVal);
+
+	/* Add it to tags. */
+	cgiEncodeIntoDy(ucscDbTag, ucscDbVal, tags);
 	}
     bf->tags = cloneString(tags->string);
 
