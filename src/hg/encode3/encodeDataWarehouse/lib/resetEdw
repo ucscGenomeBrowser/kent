@@ -5,5 +5,7 @@ hgsql mysql -e "create database encodeDataWarehouse"
 hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 edwCreateUser kent human kent@soe.ucsc.edu
 rm -rf /scratch/kent/encodeDataWarehouse
+edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink
+edwAddAssembly 10090 mm9 mm9 /gbdb/mm9/mm9.2bit -symLink
 edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
 edwAddSubscriber updateLastId 'echo %u > /scratch/kent/encodeDataWarehouse/tmp/lastId'
