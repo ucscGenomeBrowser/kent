@@ -470,7 +470,8 @@ while (lineFileNextReal(lf, &line))
     if (fieldCount == 0)
 	{
         fieldCount = numFields;
-	isRgb =  (strchr(row[8], ',') != NULL);
+	if (fieldCount >= 9)
+	    isRgb =  (strchr(row[8], ',') != NULL);
 	}
     else
         if (fieldCount != numFields)
