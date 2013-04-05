@@ -7,6 +7,17 @@
 #include "basicBed.h"
 #include <values.h>
 
+/* Usage definitions and defaults */
+#define scoreEncode     "encode"
+#define scoreReg        "reg"
+#define scoreLod        "lod"
+#define scoreAsinh      "asinh"
+
+static char *method = scoreEncode;
+static int col = 5;
+static int minScore = 0;
+static int maxScore = 1000;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -15,20 +26,15 @@ errAbort(
   "usage:\n"
   "   bedScore input.bed output.bed\n"
   "options:\n"
-  "   -col=N      - Column to use as input value (default 5)\n"
-  "   -minScore=N - Minimum score to assign (default 0)\n"
+  "   -col=N      - Column to use as input value (default %d)\n"
+  "   -minScore=N - Minimum score to assign (default %d)\n"
   "   -method=\n"
   "             encode - ENCODE pipeline (UCSC) (default)\n"
   "             reg - Regulatory clusters (UCSC) \n"
   "             lod - Phastcons log odds (Adam Siepel, Cornell)\n"
-  "             asinh - ENCODE Uniform TFBS (Steve Wilder, ENCODE AWG/EBI)\n"
-  );
+  "             asinh - ENCODE Uniform TFBS (Steve Wilder, ENCODE AWG/EBI)\n",
+  col, minScore);
 }
-
-/* Globals and defaults */
-int minScore = 0;
-int col = 5;
-char *method = "encode";
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
@@ -38,10 +44,10 @@ static struct optionSpec options[] = {
    {NULL, 0}
 };
 
-
-/* Capture the BED in BED5ish fashion, but retain comments and empty lines
- * The data lines will be formatted tab-sep, so will lose original whitespace sep
- */
+/* Two structs to enable capturing the BED in BED5ish fashion, while retaining comments and 
+   empty lines. The data lines will be formatted tab-sep, so will lose original 
+   whitespace sepration
+*/
 
 struct bed5
 /* Browser extensible data with 5 fields (somehow not in basic bed!)*/
@@ -65,18 +71,7 @@ struct bedFileLine
     char *text;                 // comment, empty string, or bedPlus portion of data line
     };
 
-void bflOut(struct bedFileLine *bfl, FILE *f)
-/* Output a bed file line to opened file */
-{
-    if (bfl->bed5)
-        {
-        bedOutputN((struct bed *)bfl->bed5, 5, f, '\t', '\t');
-        verbose(3, "inputVal = %f\t", bfl->inputVal);
-        }
-    if (bfl->text)
-        fputs(bfl->text, f);
-    fputs("\n", f);
-}
+/* Functions to manage the bedFileLines */
 
 boolean lineIsData(char *line)
 /* Determine if line is blank or comment */
@@ -105,7 +100,7 @@ if (!lineIsData(line))
     // fflush(stdout);
     return bfl;
     }
-verbose(2, "%s\n", line);
+verbose(3, "%s\n", line);
 wordCount = chopByWhite(line, words, sizeof(words));
 if (bedSize == 0)
     {
@@ -132,42 +127,110 @@ if (bedSize > 5)
 return bfl;
 }
 
-/* Scoring methods */
-
-/* Globals for scorers.  Will clean this up later */
-static struct slDouble *inputVals = NULL;      // list of input values to transform
-static double maxVal = 0, minVal = MAXDOUBLE;
-
-void scorerAddInputValue(double inputVal)
-/* Add input value to list, gathering stats as needed by scoring method */
+boolean bflIsData(struct bedFileLine *bfl)
+/* Determine if this is a BED line, or just fluff (empty or comment) */
 {
-// TODO
-
-maxVal = max(inputVal, maxVal);
-minVal = min(inputVal, minVal);
-
-slAddHead(&inputVals, slDoubleNew(inputVal));
+return (bfl->bed5 != NULL);
 }
 
-void scorerWriteBedFile(struct bedFileLine *bfls, FILE *f)
-/* Output all lines in BED, with scores (re)calculated */
-// TODO
+void bflSetScore(struct bedFileLine *bfl, int score)
+/* Update score in BED */
 {
-struct bedFileLine *bfl;
-float a = (1000-minScore) / (maxVal - minVal);
-float b = 1000 - ((1000-minScore) * maxVal) / (maxVal - minVal);
-verbose(2, "min=%f, max=%f, a=%f, b=%f\n", minVal, maxVal, a, b);
-for (bfl = bfls; bfl != NULL; bfl = bfl->next)
-    {
+if (bflIsData(bfl))
+    bfl->bed5->score = score;
+}
+
+void bflOut(struct bedFileLine *bfl, FILE *f)
+/* Output a bed file line to opened file */
+{
     if (bfl->bed5)
         {
-        // encode method only as first cut
-        bfl->bed5->score = round((a * bfl->inputVal) + b);
-        verbose(2, "old score: %f, new score: %d\t", bfl->inputVal, bfl->bed5->score);
+        bedOutputN((struct bed *)bfl->bed5, 5, f, '\t', '\t');
+        verbose(3, "inputVal = %f\t", bfl->inputVal);
         }
-    bflOut(bfl, f);
-    }
+    if (bfl->text)
+        fputs(bfl->text, f);
+    fputs("\n", f);
 }
+
+/* Scoring methods */
+
+struct scorer
+/* Representation of scoring method and its local data */
+    {
+    char *name;         /* method identifer */
+    void *info;         /* intermediate values needed by scorer */
+    void *inputValues;  /* save input values if needed by scorer (e.g. to compute quartiles).
+                              This will be populated with input values  as BED is read */
+    void (*inputValue)(struct scorer *scorer, double val);  
+                        /* stash input value or otherwise process */
+    void (*summarize)(struct scorer *scorer);    /* prep for rescoring after seeing all input */
+    double (*outputValue)(struct scorer *scorer, double val);  /* rescore input value */
+    };
+
+/* encode method 
+
+   This method was used the ENCODE pipeline (hgLoadBed -fillInScore), applied to signalValue
+   of ENCODE datasets lacking browser scores.  It computes new score from the function:
+   y = ax+b, where
+        a is <score-range>/<input-range>
+    Author Larry Meyer.
+*/
+
+struct scoreEncodeInfo
+    {
+    double minVal, maxVal;
+    float a, b;    // y = ax+b
+    } scoreEncodeInfo = {MAXDOUBLE, 0, 0, 0};
+
+void scoreEncodeIn(struct scorer *scorer, double inputVal)
+/* Gather any info needed from each input value */
+{
+struct scoreEncodeInfo *info = scorer->info;
+verbose(3, "inputVal=%f, oldMin=%f, oldMax=%f\t", inputVal, info->minVal, info->maxVal);
+info->minVal = min(inputVal, info->minVal);
+info->maxVal = max(inputVal, info->maxVal);
+verbose(3, "min=%f, max=%f\n", info->minVal, info->maxVal);
+}
+
+void scoreEncodeSummarize(struct scorer *scorer)
+/* Compute temporary values needed after seeing all input values and before rescoring.
+   For this method, these are coefficients needed for scaling function, f(x) = ax + b.
+  */
+{
+struct scoreEncodeInfo *info = scorer->info;
+double min = info->minVal;
+double max = info->maxVal;
+info->a = (maxScore-minScore) / (max - min);
+info->b = maxScore - ((maxScore-minScore) * max) / (max - min);
+verbose(2, "min=%f, max=%f, a=%f, b=%f\n", min, max, info->a, info->b);
+}
+
+double scoreEncodeOut(struct scorer *scorer, double inputVal)
+{
+struct scoreEncodeInfo *info = scorer->info;
+return (round((info->a * inputVal) + info->b));
+}
+
+static struct scorer scorers[] = {
+    {scoreEncode, &scoreEncodeInfo, NULL, &scoreEncodeIn, &scoreEncodeSummarize, &scoreEncodeOut}
+};
+
+struct scorer *scorerNew(const char *method)
+/* Locate scorer by name from array of all */
+{
+int numScorers = sizeof(scorers)/sizeof(scorers[0]);
+int i = 0;
+for (i = 0; i < numScorers; i++)
+    if (sameString(method, scorers[i].name))
+        return &scorers[i];
+errAbort("scorer %s not found", method);
+return NULL;
+}
+
+#ifdef LOD_or_ASINH
+slAddHead(&inputVals, slDoubleNew(inputVal));
+#endif
 
 /*
  * Here are code snippets and comments describing all 4 scoring methods 
@@ -245,18 +308,38 @@ char *line = NULL;
 int lineNum = 0;
 struct bedFileLine *bfl, *bedFileLines = NULL;   // list of lines in BED file
 
-verbose(2, "Reading %s\n", in->fileName);
+verbose(2, "Reading %s into scorer: %s\n", in->fileName, method);
+struct scorer *scorer = scorerNew(method);
+
+// parse input file into a list of bedFileLines and let scorer have a look at each value
 while (lineFileNext(in, &line, NULL))
     {
-    // parse input file into a list of bedFileLines
     lineNum++;
     bfl = bflNew(line, lineNum);
-    scorerAddInputValue(bfl->inputVal);
+    if (bflIsData(bfl))
+        scorer->inputValue(scorer, bfl->inputVal);
     slAddHead(&bedFileLines, bfl);
     }
-// (re)score beds and write to output file
+verbose(2, "Found %d lines in BED file\n", lineNum);
 slReverse(&bedFileLines);
-scorerWriteBedFile(bedFileLines, out);
+
+// compute anything needed after all input values seen
+scorer->summarize(scorer);
+
+// (re)score beds and write to output file
+for (bfl = bedFileLines; bfl != NULL; bfl = bfl->next)
+    {
+    if (bflIsData(bfl))
+        {
+        // data line, so transform it
+        int score = scorer->outputValue(scorer, bfl->inputVal);
+        score = max(minScore, score);
+        score = min(maxScore, score);
+        bflSetScore(bfl, score);
+        verbose(3, "old score: %f, new score: %d\t", bfl->inputVal, score);
+        }
+    bflOut(bfl, out);
+    }
 carefulClose(&out);
 lineFileClose(&in);
 }
