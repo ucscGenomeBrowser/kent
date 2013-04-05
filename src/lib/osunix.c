@@ -651,3 +651,11 @@ if (S_ISREG(st.st_mode))
     return TRUE;
 return FALSE;
 }
+
+void makeSymLink(char *oldName, char *newName)
+/* Return a symbolic link from newName to oldName or die trying */
+{
+int err = symlink(oldName, newName);
+if (err < 0)
+     errnoAbort("Couldn't make symbolic link from %s to %s\n", oldName, newName);
+}
