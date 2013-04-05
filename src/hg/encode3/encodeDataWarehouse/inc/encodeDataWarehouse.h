@@ -354,6 +354,230 @@ void edwSubscriberOutput(struct edwSubscriber *el, FILE *f, char sep, char lastS
 #define edwSubscriberCommaOut(el,f) edwSubscriberOutput(el,f,',',',');
 /* Print out edwSubscriber as a comma separated list including final comma. */
 
+#define EDWASSEMBLY_NUM_COLS 6
+
+struct edwAssembly
+/* An assembly - includes reference to a two bit file, and a little name and summary info. */
+    {
+    struct edwAssembly *next;  /* Next in singly linked list. */
+    unsigned id;	/* Assembly ID */
+    unsigned taxon;	/* NCBI taxon number */
+    char *name;	/* Some human readable name to distinguish this from other collections of DNA */
+    char *ucscDb;	/* Which UCSC database (mm9?  hg19?) associated with it. */
+    unsigned twoBitId;	/* File ID of associated twoBit file */
+    long long baseCount;	/* Count of bases */
+    };
+
+void edwAssemblyStaticLoad(char **row, struct edwAssembly *ret);
+/* Load a row from edwAssembly table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwAssembly *edwAssemblyLoad(char **row);
+/* Load a edwAssembly from row fetched with select * from edwAssembly
+ * from database.  Dispose of this with edwAssemblyFree(). */
+
+struct edwAssembly *edwAssemblyLoadAll(char *fileName);
+/* Load all edwAssembly from whitespace-separated file.
+ * Dispose of this with edwAssemblyFreeList(). */
+
+struct edwAssembly *edwAssemblyLoadAllByChar(char *fileName, char chopper);
+/* Load all edwAssembly from chopper separated file.
+ * Dispose of this with edwAssemblyFreeList(). */
+
+#define edwAssemblyLoadAllByTab(a) edwAssemblyLoadAllByChar(a, '\t');
+/* Load all edwAssembly from tab separated file.
+ * Dispose of this with edwAssemblyFreeList(). */
+
+struct edwAssembly *edwAssemblyCommaIn(char **pS, struct edwAssembly *ret);
+/* Create a edwAssembly out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwAssembly */
+
+void edwAssemblyFree(struct edwAssembly **pEl);
+/* Free a single dynamically allocated edwAssembly such as created
+ * with edwAssemblyLoad(). */
+
+void edwAssemblyFreeList(struct edwAssembly **pList);
+/* Free a list of dynamically allocated edwAssembly's */
+
+void edwAssemblyOutput(struct edwAssembly *el, FILE *f, char sep, char lastSep);
+/* Print out edwAssembly.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwAssemblyTabOut(el,f) edwAssemblyOutput(el,f,'\t','\n');
+/* Print out edwAssembly as a line in a tab-separated file. */
+
+#define edwAssemblyCommaOut(el,f) edwAssemblyOutput(el,f,',',',');
+/* Print out edwAssembly as a comma separated list including final comma. */
+
+#define EDWQAFILE_NUM_COLS 10
+
+struct edwQaFile
+/* For files where we can do some sort of QA analysis, a little information about files here */
+    {
+    struct edwQaFile *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID within QA subsystem */
+    unsigned fileId;	/* Pointer to file in main file table */
+    long long itemCount;	/* # of items in file: reads for fastqs, lines for beds, bases w/data for wig. */
+    long long basesInItems;	/* # of bases in items */
+    char *samplePath;	/* Path to a temporary sample file */
+    long long sampleCount;	/* # of items in sample if we are just subsampling as we do for reads. */
+    long long basesInSample;	/* # of bases in our sample */
+    unsigned preferredAssembly;	/* A genome assembly we should map to */
+    double propInAsm;	/* The proportion of items that are on the assembly at all. */
+    double asmCoverage;	/* The proportion of assembly that is covered. */
+    };
+
+void edwQaFileStaticLoad(char **row, struct edwQaFile *ret);
+/* Load a row from edwQaFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaFile *edwQaFileLoad(char **row);
+/* Load a edwQaFile from row fetched with select * from edwQaFile
+ * from database.  Dispose of this with edwQaFileFree(). */
+
+struct edwQaFile *edwQaFileLoadAll(char *fileName);
+/* Load all edwQaFile from whitespace-separated file.
+ * Dispose of this with edwQaFileFreeList(). */
+
+struct edwQaFile *edwQaFileLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaFile from chopper separated file.
+ * Dispose of this with edwQaFileFreeList(). */
+
+#define edwQaFileLoadAllByTab(a) edwQaFileLoadAllByChar(a, '\t');
+/* Load all edwQaFile from tab separated file.
+ * Dispose of this with edwQaFileFreeList(). */
+
+struct edwQaFile *edwQaFileCommaIn(char **pS, struct edwQaFile *ret);
+/* Create a edwQaFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaFile */
+
+void edwQaFileFree(struct edwQaFile **pEl);
+/* Free a single dynamically allocated edwQaFile such as created
+ * with edwQaFileLoad(). */
+
+void edwQaFileFreeList(struct edwQaFile **pList);
+/* Free a list of dynamically allocated edwQaFile's */
+
+void edwQaFileOutput(struct edwQaFile *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaFile.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaFileTabOut(el,f) edwQaFileOutput(el,f,'\t','\n');
+/* Print out edwQaFile as a line in a tab-separated file. */
+
+#define edwQaFileCommaOut(el,f) edwQaFileOutput(el,f,',',',');
+/* Print out edwQaFile as a comma separated list including final comma. */
+
+#define EDWQAENRICHTARGET_NUM_COLS 4
+
+struct edwQaEnrichTarget
+/* A target for our enrichment analysis. */
+    {
+    struct edwQaEnrichTarget *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID of this enrichment target */
+    char *targetName;	/* Something like 'exon' or 'promoter' */
+    unsigned targetFile;	/* A simple BED 3 format file that defines target. Bases covered are unique */
+    long long targetSize;	/* Total number of bases covered by target */
+    };
+
+void edwQaEnrichTargetStaticLoad(char **row, struct edwQaEnrichTarget *ret);
+/* Load a row from edwQaEnrichTarget table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaEnrichTarget *edwQaEnrichTargetLoad(char **row);
+/* Load a edwQaEnrichTarget from row fetched with select * from edwQaEnrichTarget
+ * from database.  Dispose of this with edwQaEnrichTargetFree(). */
+
+struct edwQaEnrichTarget *edwQaEnrichTargetLoadAll(char *fileName);
+/* Load all edwQaEnrichTarget from whitespace-separated file.
+ * Dispose of this with edwQaEnrichTargetFreeList(). */
+
+struct edwQaEnrichTarget *edwQaEnrichTargetLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaEnrichTarget from chopper separated file.
+ * Dispose of this with edwQaEnrichTargetFreeList(). */
+
+#define edwQaEnrichTargetLoadAllByTab(a) edwQaEnrichTargetLoadAllByChar(a, '\t');
+/* Load all edwQaEnrichTarget from tab separated file.
+ * Dispose of this with edwQaEnrichTargetFreeList(). */
+
+struct edwQaEnrichTarget *edwQaEnrichTargetCommaIn(char **pS, struct edwQaEnrichTarget *ret);
+/* Create a edwQaEnrichTarget out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaEnrichTarget */
+
+void edwQaEnrichTargetFree(struct edwQaEnrichTarget **pEl);
+/* Free a single dynamically allocated edwQaEnrichTarget such as created
+ * with edwQaEnrichTargetLoad(). */
+
+void edwQaEnrichTargetFreeList(struct edwQaEnrichTarget **pList);
+/* Free a list of dynamically allocated edwQaEnrichTarget's */
+
+void edwQaEnrichTargetOutput(struct edwQaEnrichTarget *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaEnrichTarget.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaEnrichTargetTabOut(el,f) edwQaEnrichTargetOutput(el,f,'\t','\n');
+/* Print out edwQaEnrichTarget as a line in a tab-separated file. */
+
+#define edwQaEnrichTargetCommaOut(el,f) edwQaEnrichTargetOutput(el,f,',',',');
+/* Print out edwQaEnrichTarget as a comma separated list including final comma. */
+
+#define EDWQAENRICH_NUM_COLS 8
+
+struct edwQaEnrich
+/* An enrichment analysis applied to file. */
+    {
+    struct edwQaEnrich *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID of this enrichment analysis */
+    unsigned qaFileId;	/* File we are looking at skeptically */
+    unsigned qaEnrichTargetId;	/* Information about an target for this analysis */
+    long long targetBaseHits;	/* Number of hits to bases in target */
+    long long targetUniqHits;	/* Number of unique bases hit in target */
+    double coverage;	/* Coverage of target - just targetUniqHits/targetSize */
+    double enrichment;	/* Amount we hit target/amount we hit genome */
+    double uniqEnrich;	/* coverage/asmCoverage */
+    };
+
+void edwQaEnrichStaticLoad(char **row, struct edwQaEnrich *ret);
+/* Load a row from edwQaEnrich table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaEnrich *edwQaEnrichLoad(char **row);
+/* Load a edwQaEnrich from row fetched with select * from edwQaEnrich
+ * from database.  Dispose of this with edwQaEnrichFree(). */
+
+struct edwQaEnrich *edwQaEnrichLoadAll(char *fileName);
+/* Load all edwQaEnrich from whitespace-separated file.
+ * Dispose of this with edwQaEnrichFreeList(). */
+
+struct edwQaEnrich *edwQaEnrichLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaEnrich from chopper separated file.
+ * Dispose of this with edwQaEnrichFreeList(). */
+
+#define edwQaEnrichLoadAllByTab(a) edwQaEnrichLoadAllByChar(a, '\t');
+/* Load all edwQaEnrich from tab separated file.
+ * Dispose of this with edwQaEnrichFreeList(). */
+
+struct edwQaEnrich *edwQaEnrichCommaIn(char **pS, struct edwQaEnrich *ret);
+/* Create a edwQaEnrich out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaEnrich */
+
+void edwQaEnrichFree(struct edwQaEnrich **pEl);
+/* Free a single dynamically allocated edwQaEnrich such as created
+ * with edwQaEnrichLoad(). */
+
+void edwQaEnrichFreeList(struct edwQaEnrich **pList);
+/* Free a list of dynamically allocated edwQaEnrich's */
+
+void edwQaEnrichOutput(struct edwQaEnrich *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaEnrich.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaEnrichTabOut(el,f) edwQaEnrichOutput(el,f,'\t','\n');
+/* Print out edwQaEnrich as a line in a tab-separated file. */
+
+#define edwQaEnrichCommaOut(el,f) edwQaEnrichOutput(el,f,',',',');
+/* Print out edwQaEnrich as a comma separated list including final comma. */
+
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* ENCODEDATAWAREHOUSE_H */

@@ -84,3 +84,51 @@ table edwSubscriber
     string onFileEndUpload;     "A unix command string to run with a %u where file id goes"
     )
 
+table edwAssembly
+"An assembly - includes reference to a two bit file, and a little name and summary info."
+    (
+    uint id;    "Assembly ID"
+    uint taxon; "NCBI taxon number"
+    string name;  "Some human readable name to distinguish this from other collections of DNA"
+    string ucscDb;  "Which UCSC database (mm9?  hg19?) associated with it."
+    uint twoBitId;  "File ID of associated twoBit file"
+    bigInt baseCount;  "Count of bases"
+    )
+
+table edwQaFile
+"For files where we can do some sort of QA analysis, a little information about files here"
+    (
+    uint id;          "ID within QA subsystem"
+    uint fileId;      "Pointer to file in main file table"
+    bigint itemCount; "# of items in file: reads for fastqs, lines for beds, bases w/data for wig."
+    bigint basesInItems; "# of bases in items"
+    string samplePath;  "Path to a temporary sample file"
+    bigint sampleCount; "# of items in sample if we are just subsampling as we do for reads." 
+    bigint basesInSample; "# of bases in our sample"
+    uint preferredAssembly;  "A genome assembly we should map to"
+    double propInAsm;   "The proportion of items that are on the assembly at all."
+    double asmCoverage; "The proportion of assembly that is covered."
+    )
+
+table edwQaEnrichTarget
+"A target for our enrichment analysis."
+    (
+    uint id;    "ID of this enrichment target"
+    string targetName;  "Something like 'exon' or 'promoter'"
+    uint targetFile;    "A simple BED 3 format file that defines target. Bases covered are unique"
+    bigint targetSize;  "Total number of bases covered by target"
+    )
+
+table edwQaEnrich
+"An enrichment analysis applied to file."
+    (
+    uint id;    "ID of this enrichment analysis"
+    uint qaFileId;  "File we are looking at skeptically"
+    uint qaEnrichTargetId;  "Information about an target for this analysis"
+    bigInt targetBaseHits;  "Number of hits to bases in target"
+    bigInt targetUniqHits;  "Number of unique bases hit in target"
+    double coverage;    "Coverage of target - just targetUniqHits/targetSize"
+    double enrichment;  "Amount we hit target/amount we hit genome"
+    double uniqEnrich;  "coverage/asmCoverage"
+    )
+

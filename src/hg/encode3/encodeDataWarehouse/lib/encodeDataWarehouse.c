@@ -907,5 +907,533 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+void edwAssemblyStaticLoad(char **row, struct edwAssembly *ret)
+/* Load a row from edwAssembly table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->taxon = sqlUnsigned(row[1]);
+ret->name = row[2];
+ret->ucscDb = row[3];
+ret->twoBitId = sqlUnsigned(row[4]);
+ret->baseCount = sqlLongLong(row[5]);
+}
+
+struct edwAssembly *edwAssemblyLoad(char **row)
+/* Load a edwAssembly from row fetched with select * from edwAssembly
+ * from database.  Dispose of this with edwAssemblyFree(). */
+{
+struct edwAssembly *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->taxon = sqlUnsigned(row[1]);
+ret->name = cloneString(row[2]);
+ret->ucscDb = cloneString(row[3]);
+ret->twoBitId = sqlUnsigned(row[4]);
+ret->baseCount = sqlLongLong(row[5]);
+return ret;
+}
+
+struct edwAssembly *edwAssemblyLoadAll(char *fileName) 
+/* Load all edwAssembly from a whitespace-separated file.
+ * Dispose of this with edwAssemblyFreeList(). */
+{
+struct edwAssembly *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwAssemblyLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwAssembly *edwAssemblyLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwAssembly from a chopper separated file.
+ * Dispose of this with edwAssemblyFreeList(). */
+{
+struct edwAssembly *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwAssemblyLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwAssembly *edwAssemblyCommaIn(char **pS, struct edwAssembly *ret)
+/* Create a edwAssembly out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwAssembly */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->taxon = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->ucscDb = sqlStringComma(&s);
+ret->twoBitId = sqlUnsignedComma(&s);
+ret->baseCount = sqlLongLongComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwAssemblyFree(struct edwAssembly **pEl)
+/* Free a single dynamically allocated edwAssembly such as created
+ * with edwAssemblyLoad(). */
+{
+struct edwAssembly *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->name);
+freeMem(el->ucscDb);
+freez(pEl);
+}
+
+void edwAssemblyFreeList(struct edwAssembly **pList)
+/* Free a list of dynamically allocated edwAssembly's */
+{
+struct edwAssembly *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwAssemblyFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwAssemblyOutput(struct edwAssembly *el, FILE *f, char sep, char lastSep) 
+/* Print out edwAssembly.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->taxon);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->ucscDb);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->twoBitId);
+fputc(sep,f);
+fprintf(f, "%lld", el->baseCount);
+fputc(lastSep,f);
+}
+
+void edwQaFileStaticLoad(char **row, struct edwQaFile *ret)
+/* Load a row from edwQaFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->itemCount = sqlLongLong(row[2]);
+ret->basesInItems = sqlLongLong(row[3]);
+ret->samplePath = row[4];
+ret->sampleCount = sqlLongLong(row[5]);
+ret->basesInSample = sqlLongLong(row[6]);
+ret->preferredAssembly = sqlUnsigned(row[7]);
+ret->propInAsm = sqlDouble(row[8]);
+ret->asmCoverage = sqlDouble(row[9]);
+}
+
+struct edwQaFile *edwQaFileLoad(char **row)
+/* Load a edwQaFile from row fetched with select * from edwQaFile
+ * from database.  Dispose of this with edwQaFileFree(). */
+{
+struct edwQaFile *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->itemCount = sqlLongLong(row[2]);
+ret->basesInItems = sqlLongLong(row[3]);
+ret->samplePath = cloneString(row[4]);
+ret->sampleCount = sqlLongLong(row[5]);
+ret->basesInSample = sqlLongLong(row[6]);
+ret->preferredAssembly = sqlUnsigned(row[7]);
+ret->propInAsm = sqlDouble(row[8]);
+ret->asmCoverage = sqlDouble(row[9]);
+return ret;
+}
+
+struct edwQaFile *edwQaFileLoadAll(char *fileName) 
+/* Load all edwQaFile from a whitespace-separated file.
+ * Dispose of this with edwQaFileFreeList(). */
+{
+struct edwQaFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[10];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaFile *edwQaFileLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaFile from a chopper separated file.
+ * Dispose of this with edwQaFileFreeList(). */
+{
+struct edwQaFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[10];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaFile *edwQaFileCommaIn(char **pS, struct edwQaFile *ret)
+/* Create a edwQaFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaFile */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId = sqlUnsignedComma(&s);
+ret->itemCount = sqlLongLongComma(&s);
+ret->basesInItems = sqlLongLongComma(&s);
+ret->samplePath = sqlStringComma(&s);
+ret->sampleCount = sqlLongLongComma(&s);
+ret->basesInSample = sqlLongLongComma(&s);
+ret->preferredAssembly = sqlUnsignedComma(&s);
+ret->propInAsm = sqlDoubleComma(&s);
+ret->asmCoverage = sqlDoubleComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaFileFree(struct edwQaFile **pEl)
+/* Free a single dynamically allocated edwQaFile such as created
+ * with edwQaFileLoad(). */
+{
+struct edwQaFile *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->samplePath);
+freez(pEl);
+}
+
+void edwQaFileFreeList(struct edwQaFile **pList)
+/* Free a list of dynamically allocated edwQaFile's */
+{
+struct edwQaFile *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaFileFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaFileOutput(struct edwQaFile *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaFile.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+fprintf(f, "%lld", el->itemCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->basesInItems);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->samplePath);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%lld", el->sampleCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->basesInSample);
+fputc(sep,f);
+fprintf(f, "%u", el->preferredAssembly);
+fputc(sep,f);
+fprintf(f, "%g", el->propInAsm);
+fputc(sep,f);
+fprintf(f, "%g", el->asmCoverage);
+fputc(lastSep,f);
+}
+
+void edwQaEnrichTargetStaticLoad(char **row, struct edwQaEnrichTarget *ret)
+/* Load a row from edwQaEnrichTarget table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->targetName = row[1];
+ret->targetFile = sqlUnsigned(row[2]);
+ret->targetSize = sqlLongLong(row[3]);
+}
+
+struct edwQaEnrichTarget *edwQaEnrichTargetLoad(char **row)
+/* Load a edwQaEnrichTarget from row fetched with select * from edwQaEnrichTarget
+ * from database.  Dispose of this with edwQaEnrichTargetFree(). */
+{
+struct edwQaEnrichTarget *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->targetName = cloneString(row[1]);
+ret->targetFile = sqlUnsigned(row[2]);
+ret->targetSize = sqlLongLong(row[3]);
+return ret;
+}
+
+struct edwQaEnrichTarget *edwQaEnrichTargetLoadAll(char *fileName) 
+/* Load all edwQaEnrichTarget from a whitespace-separated file.
+ * Dispose of this with edwQaEnrichTargetFreeList(). */
+{
+struct edwQaEnrichTarget *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaEnrichTargetLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaEnrichTarget *edwQaEnrichTargetLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaEnrichTarget from a chopper separated file.
+ * Dispose of this with edwQaEnrichTargetFreeList(). */
+{
+struct edwQaEnrichTarget *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaEnrichTargetLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaEnrichTarget *edwQaEnrichTargetCommaIn(char **pS, struct edwQaEnrichTarget *ret)
+/* Create a edwQaEnrichTarget out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaEnrichTarget */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->targetName = sqlStringComma(&s);
+ret->targetFile = sqlUnsignedComma(&s);
+ret->targetSize = sqlLongLongComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaEnrichTargetFree(struct edwQaEnrichTarget **pEl)
+/* Free a single dynamically allocated edwQaEnrichTarget such as created
+ * with edwQaEnrichTargetLoad(). */
+{
+struct edwQaEnrichTarget *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->targetName);
+freez(pEl);
+}
+
+void edwQaEnrichTargetFreeList(struct edwQaEnrichTarget **pList)
+/* Free a list of dynamically allocated edwQaEnrichTarget's */
+{
+struct edwQaEnrichTarget *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaEnrichTargetFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaEnrichTargetOutput(struct edwQaEnrichTarget *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaEnrichTarget.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->targetFile);
+fputc(sep,f);
+fprintf(f, "%lld", el->targetSize);
+fputc(lastSep,f);
+}
+
+void edwQaEnrichStaticLoad(char **row, struct edwQaEnrich *ret)
+/* Load a row from edwQaEnrich table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->qaFileId = sqlUnsigned(row[1]);
+ret->qaEnrichTargetId = sqlUnsigned(row[2]);
+ret->targetBaseHits = sqlLongLong(row[3]);
+ret->targetUniqHits = sqlLongLong(row[4]);
+ret->coverage = sqlDouble(row[5]);
+ret->enrichment = sqlDouble(row[6]);
+ret->uniqEnrich = sqlDouble(row[7]);
+}
+
+struct edwQaEnrich *edwQaEnrichLoad(char **row)
+/* Load a edwQaEnrich from row fetched with select * from edwQaEnrich
+ * from database.  Dispose of this with edwQaEnrichFree(). */
+{
+struct edwQaEnrich *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->qaFileId = sqlUnsigned(row[1]);
+ret->qaEnrichTargetId = sqlUnsigned(row[2]);
+ret->targetBaseHits = sqlLongLong(row[3]);
+ret->targetUniqHits = sqlLongLong(row[4]);
+ret->coverage = sqlDouble(row[5]);
+ret->enrichment = sqlDouble(row[6]);
+ret->uniqEnrich = sqlDouble(row[7]);
+return ret;
+}
+
+struct edwQaEnrich *edwQaEnrichLoadAll(char *fileName) 
+/* Load all edwQaEnrich from a whitespace-separated file.
+ * Dispose of this with edwQaEnrichFreeList(). */
+{
+struct edwQaEnrich *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[8];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaEnrichLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaEnrich *edwQaEnrichLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaEnrich from a chopper separated file.
+ * Dispose of this with edwQaEnrichFreeList(). */
+{
+struct edwQaEnrich *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[8];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaEnrichLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaEnrich *edwQaEnrichCommaIn(char **pS, struct edwQaEnrich *ret)
+/* Create a edwQaEnrich out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaEnrich */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->qaFileId = sqlUnsignedComma(&s);
+ret->qaEnrichTargetId = sqlUnsignedComma(&s);
+ret->targetBaseHits = sqlLongLongComma(&s);
+ret->targetUniqHits = sqlLongLongComma(&s);
+ret->coverage = sqlDoubleComma(&s);
+ret->enrichment = sqlDoubleComma(&s);
+ret->uniqEnrich = sqlDoubleComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaEnrichFree(struct edwQaEnrich **pEl)
+/* Free a single dynamically allocated edwQaEnrich such as created
+ * with edwQaEnrichLoad(). */
+{
+struct edwQaEnrich *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void edwQaEnrichFreeList(struct edwQaEnrich **pList)
+/* Free a list of dynamically allocated edwQaEnrich's */
+{
+struct edwQaEnrich *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaEnrichFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaEnrichOutput(struct edwQaEnrich *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaEnrich.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->qaFileId);
+fputc(sep,f);
+fprintf(f, "%u", el->qaEnrichTargetId);
+fputc(sep,f);
+fprintf(f, "%lld", el->targetBaseHits);
+fputc(sep,f);
+fprintf(f, "%lld", el->targetUniqHits);
+fputc(sep,f);
+fprintf(f, "%g", el->coverage);
+fputc(sep,f);
+fprintf(f, "%g", el->enrichment);
+fputc(sep,f);
+fprintf(f, "%g", el->uniqEnrich);
+fputc(lastSep,f);
+}
+
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
