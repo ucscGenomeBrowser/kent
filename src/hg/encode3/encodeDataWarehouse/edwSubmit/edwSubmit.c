@@ -237,13 +237,8 @@ writeErrToTableAndDie(conn, "edwFile", fileId, err);
 void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
 /* This will fetch remote data to a temporary file. It fills in tempFileName with the name. */
 {
-/* First find out temp dir and make it. */
-char tempDir[PATH_LEN];
-safef(tempDir, sizeof(tempDir), "%s%s/", edwRootDir, "tmp");
-makeDirsOnPath(tempDir);
-
 /* Now make temp file name with XXXXXX name at end */
-safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", tempDir);
+safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 
 /* Get open file handle. */
 int localFd = mkstemp(tempFileName);
@@ -265,7 +260,7 @@ char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    edwMakePlateFileNameAndPath(bf->id, bf->licensePlate, edwFile, edwPath);
+    edwMakePlateFileNameAndPath(bf->id, submitFileName, bf->licensePlate, edwFile, edwPath);
     bf->startUploadTime = edwNow();
     char tempName[PATH_LEN];
     fetchFdToTempFile(fd, tempName);
@@ -487,7 +482,7 @@ if (errCatchStart(errCatch))
 	/* Get license plate and file/path names that depend on it. */
 	char licensePlate[edwMaxPlateSize];
 	char edwFile[PATH_LEN];
-	edwMakePlateFileNameAndPath(fileId, licensePlate, edwFile, submitLocalPath);
+	edwMakePlateFileNameAndPath(fileId, submitFile, licensePlate, edwFile, submitLocalPath);
 
 	/* Move file to final resting place and get update time and size from local file system.  */
 	rename(tempSubmitFile, submitLocalPath);
