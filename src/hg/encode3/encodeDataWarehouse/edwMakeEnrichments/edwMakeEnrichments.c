@@ -3,13 +3,15 @@
 
 #include "common.h"
 #include "linefile.h"
+#include "localmem.h"
 #include "hash.h"
+#include "basicBed.h"
 #include "options.h"
 #include "jksql.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "cheapcgi.h"
-#include "pipeline.h"
+#include "genomeRangeTree.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -27,52 +29,131 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void doFastqEnrichmentPipeline(struct edwFile *ef, char *fastqPath, struct edwValidFile *vf, 
-    char *enriched)
+struct bed3 *bed3LoadAll(char *fileName)
+/* Load three columns from file as bed3. */
 {
-char *samplePath = vf->samplePath;
-assert(samplePath != NULL);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+struct bed3 *list = NULL, *el;
+while (lineFileRow(lf, row))
+    {
+    AllocVar(el);
+    el->chrom = cloneString(row[0]);
+    el->chromStart = sqlUnsigned(row[1]);
+    el->chromEnd = sqlUnsigned(row[2]);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
 
-uglyf("Running super complex pipeline\n");
-uglyf("TODO: remove hardcoded scratch path\n");
-uglyf("Somehow should be running bwa with %s vs reads in %s\n", vf->ucscDb, samplePath);
+void bed3Free(struct bed3 **pBed)
+/* Free up bed3 */
+{
+struct bed3 *bed = *pBed;
+if (bed != NULL)
+    {
+    freeMem(bed->chrom);
+    freez(pBed);
+    }
+}
 
-/* Set up pipeline to run starting on from encMakeValidFile pass.  The pipeline will produce a 
- * sam file which we just write to output. Doing it in a pipe lets us avoid yet another
- * temp file, and helps bwa go a bit faster. */
-char genoFile[PATH_LEN];
-safef(genoFile, sizeof(genoFile), "/scratch/kent/encValData/%s/bwaData/%s.fa", 
-    vf->ucscDb, vf->ucscDb);
-char *cmd1[] = {"bwa", "aln", genoFile, samplePath, NULL,};
-char *cmd2[] = {"bwa", "samse", genoFile, "-", samplePath, NULL,};
-char **cmds[] = {cmd1, cmd2, NULL};
-struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, NULL);
-FILE *s = pipelineFile(pl);
+void bed3FreeList(struct bed3 **pList)
+/* Free a list of dynamically allocated bed3's */
+{
+struct bed3 *el, *next;
 
-/* Set up a temp file for sam output. */
-char samFileName[PATH_LEN];
-safef(samFileName, PATH_LEN, "%sedwSamXXXXXX", edwTempDir());
-int samFd = mkstemp(samFileName);
-FILE *d = fdopen(samFd, "w");
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    bed3Free(&el);
+    }
+*pList = NULL;
+}
 
-/* Copy pipeline output to sam temp file. */
-int c;
-while ((c = fgetc(s)) != EOF)
-     fputc(c, d);
-carefulClose(&d);
+struct genomeRangeTree *grtFromBed3List(struct bed3 *bedList)
+/* Make up a genomeRangeTree around bed file. */
+{
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+struct bed3 *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    genomeRangeTreeAdd(grt, bed->chrom, bed->chromStart, bed->chromEnd);
+return grt;
+}
 
-/* Wait for pipeline to end. */
-int err = pipelineWait(pl);
-uglyf("Past the wait err = %d\n", err);
-pipelineFree(&pl);
-uglyf("Past the free\n");
+struct genomeRangeTree *grtFromSimpleBed(char *fileName)
+/* Return genome range tree for simple (unblocked) bed */
+{
+struct bed3 *bedList = bed3LoadAll(fileName);
+struct genomeRangeTree *grt = grtFromBed3List(bedList);
+bed3FreeList(&bedList);
+return grt;
+}
 
-uglyf(">>>please check out sam files in %s\n", samFileName);
+long long bed3TotalSize(struct bed3 *bedList)
+/* Return sum of chromEnd-chromStart. */
+{
+long long sum = 0;
+struct bed3 *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    sum += bed->chromEnd - bed->chromStart;
+return sum;
+}
+
+void doEnrichmentsFromSampleBed(struct edwFile *ef, struct edwValidFile *vf, char *enriched,
+    struct edwQaEnrichTarget *targetList, struct genomeRangeTree *grtList)
+/* Figure out enrichments from sample bed file. */
+{
+char *sampleBed = vf->sampleBed;
+if (isEmpty(sampleBed))
+    {
+    warn("No sample bed for %s", ef->edwFileName);
+    return;
+    }
+struct bed3 *sample, *sampleList = bed3LoadAll(sampleBed);
+long long sampleCount = slCount(sampleList), sampleBases = bed3TotalSize(sampleList);
+verbose(1, "Got %lld items totalling %lld bases in %s\n", sampleCount, sampleBases, sampleBed);
+struct genomeRangeTree *sampleGrt = grtFromBed3List(sampleList);
+struct hashEl *chrom, *chromList = hashElListHash(sampleGrt->hash);
+struct edwQaEnrichTarget *target;
+struct genomeRangeTree *grt;
+for (target = targetList, grt=grtList; target != NULL; target = target->next, grt=grt->next)
+    {
+    long long uniqOverlapBases = 0;
+    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+        {
+	struct rbTree *sampleTree = chrom->val;
+	struct rbTree *targetTree = genomeRangeTreeFindRangeTree(grt, chrom->name);
+	if (targetTree != NULL)
+	    {
+	    struct range *range, *rangeList = rangeTreeList(sampleTree);
+	    /* Do unique base overlap counts (since using range tree) */
+	    for (range = rangeList; range != NULL; range = range->next)
+		{
+		int overlap = rangeTreeOverlapSize(targetTree, range->start, range->end);
+		uniqOverlapBases += overlap;
+		}
+	    }
+	}
+    long long overlapBases = 0;
+    for (sample = sampleList; sample != NULL; sample = sample->next)
+        {
+	int overlap = genomeRangeTreeOverlapSize(grt, 
+	    sample->chrom, sample->chromStart, sample->chromEnd);
+	overlapBases += overlap;
+	}
+    uglyf("%lld bases unique overlap, %lld bases totalOverlap  %s\n", 
+	uniqOverlapBases, overlapBases, target->name);
+    }
+genomeRangeTreeFree(&sampleGrt);
 }
 
 void doEnrichments(struct sqlConnection *conn, struct edwFile *ef, char *path,
-    char *format, char *enriched)
-/* Calculate enrichments on file. */
+    char *format, char *enriched, 
+    struct edwQaEnrichTarget *targetList, struct genomeRangeTree *grtList)
+/* Calculate enrichments on for all targets file. The targetList and the
+ * grtList are in the same order. */
 {
 char query[256];
 safef(query, sizeof(query), "select * from edwValidFile where fileId=%d", ef->id);
@@ -80,7 +161,7 @@ struct edwValidFile *vf = edwValidFileLoadByQuery(conn, query);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
 if (sameString(format, "fastq"))
-    doFastqEnrichmentPipeline(ef, path, vf, enriched);
+    doEnrichmentsFromSampleBed(ef, vf, enriched, targetList, grtList);
 else if (sameString(format, "bigWig"))
     verbose(2,"Got bigWig\n");
 else if (sameString(format, "bigBed"))
@@ -90,12 +171,25 @@ else if (sameString(format, "narrowPeak"))
 else if (sameString(format, "broadPeak"))
     verbose(2,"Got broadPeak.bigBed\n");
 else if (sameString(format, "bam"))
-    verbose(2,"Got bam\n");
+    doEnrichmentsFromSampleBed(ef, vf, enriched, targetList, grtList);
 else if (sameString(format, "unknown"))
     verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->edwFileName);
 else
     errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
 
+}
+
+
+char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
+/* Return full path (which eventually should be freeMem'd) for fileId */
+{
+char query[256];
+char fileName[PATH_LEN];
+safef(query, sizeof(query), "select edwFileName from edwFile where id=%lld", fileId);
+sqlNeedQuickQuery(conn, query, fileName, sizeof(fileName));
+char path[512];
+safef(path, sizeof(path), "%s%s", edwRootDir, fileName);
+return cloneString(path);
 }
 
 void edwMakeEnrichments(int startFileId, int endFileId)
@@ -111,6 +205,22 @@ safef(query, sizeof(query),
 struct edwFile *file, *fileList = edwFileLoadByQuery(conn, query);
 uglyf("doing %d files with id's between %d and %d\n", slCount(fileList), startFileId, endFileId);
 
+/* Get list of all targets. */
+struct edwQaEnrichTarget *target, *targetList = 
+    edwQaEnrichTargetLoadByQuery(conn, "select * from edwQaEnrichTarget");
+uglyf("Got %d targets.\n", slCount(targetList));
+
+/* Load range trees for all targets. */
+struct genomeRangeTree *grt, *grtList=NULL;
+for (target = targetList; target != NULL; target = target->next)
+    {
+    char *targetBed = edwPathForFileId(conn, target->fileId);
+    grt = grtFromSimpleBed(targetBed);
+    slAddHead(&grtList, grt);
+    freeMem(targetBed);
+    }
+slReverse(&grtList);
+
 for (file = fileList; file != NULL; file = file->next)
     {
     char path[PATH_LEN];
@@ -124,12 +234,11 @@ for (file = fileList; file != NULL; file = file->next)
 	char *enriched = hashFindVal(tags->hash, "enriched_in");
 	if (format != NULL && enriched != NULL)
 	    {
-	    doEnrichments(conn, file, path, format, enriched);
+	    doEnrichments(conn, file, path, format, enriched, targetList, grtList);
 	    }
 	cgiParsedVarsFree(&tags);
 	}
     }
-
 sqlDisconnect(&conn);
 }
 
