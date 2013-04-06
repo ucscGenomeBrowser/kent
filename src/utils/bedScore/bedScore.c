@@ -235,36 +235,6 @@ return (round((info->normFactor * inputVal) + info->normOffset));
    Author Jim Kent (in regClusterBedExpCfg.c and regClusterMakeTableOfTables)
 */
 
-#ifdef METHOD_reg
-double calcNormScoreFactor(char *fileName, int scoreCol)
-/* Figure out what to multiply things by to get a nice browser score (0-1000) */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[scoreCol+1];
-double sum = 0, sumSquares = 0;
-int n = 0;
-double minVal=0, maxVal=0;
-int fieldCount;
-while ((fieldCount = lineFileChop(lf, row)) != 0)
-    {
-    lineFileExpectAtLeast(lf, scoreCol+1, fieldCount);
-    double x = sqlDouble(row[scoreCol]);
-    if (n == 0)
-        minVal = maxVal = x;
-    if (x < minVal) minVal = x;
-    if (x > maxVal) maxVal = x;
-    sum += x;
-    sumSquares += x*x;
-    n += 1;
-}
-double std = calcStdFromSums(sum, sumSquares, n);
-double mean = sum/n;
-double highEnd = mean + std;
-if (highEnd > maxVal) highEnd = maxVal;
-return 1000.0/highEnd;
-}
-#endif
-
 struct scoreRegInfo
     {
     int count;
