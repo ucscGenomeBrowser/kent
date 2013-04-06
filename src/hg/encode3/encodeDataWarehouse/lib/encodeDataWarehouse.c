@@ -1515,8 +1515,9 @@ ret->basesInItems = sqlLongLong(row[11]);
 ret->samplePath = row[12];
 ret->sampleCount = sqlLongLong(row[13]);
 ret->basesInSample = sqlLongLong(row[14]);
-ret->sampleCoverage = sqlDouble(row[15]);
-ret->depth = sqlDouble(row[16]);
+ret->mapRatio = sqlDouble(row[15]);
+ret->sampleCoverage = sqlDouble(row[16]);
+ret->depth = sqlDouble(row[17]);
 }
 
 struct edwValidFile *edwValidFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1551,8 +1552,8 @@ void edwValidFileSaveToDb(struct sqlConnection *conn, struct edwValidFile *el, c
  * If worried about this use edwValidFileSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,'%s',%lld,%lld,%g,%g)", 
-	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->samplePath,  el->sampleCount,  el->basesInSample,  el->sampleCoverage,  el->depth);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,'%s',%lld,%lld,%g,%g,%g)", 
+	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->samplePath,  el->sampleCount,  el->basesInSample,  el->mapRatio,  el->sampleCoverage,  el->depth);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1578,8 +1579,8 @@ enrichedIn = sqlEscapeString(el->enrichedIn);
 ucscDb = sqlEscapeString(el->ucscDb);
 samplePath = sqlEscapeString(el->samplePath);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,'%s',%lld,%lld,%g,%g)", 
-	tableName,  el->id,  licensePlate,  el->fileId,  format,  outputType,  experiment,  replicate,  validKey,  enrichedIn,  ucscDb,  el->itemCount,  el->basesInItems,  samplePath,  el->sampleCount,  el->basesInSample,  el->sampleCoverage,  el->depth);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,'%s',%lld,%lld,%g,%g,%g)", 
+	tableName,  el->id,  licensePlate,  el->fileId,  format,  outputType,  experiment,  replicate,  validKey,  enrichedIn,  ucscDb,  el->itemCount,  el->basesInItems,  samplePath,  el->sampleCount,  el->basesInSample,  el->mapRatio,  el->sampleCoverage,  el->depth);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&licensePlate);
@@ -1615,8 +1616,9 @@ ret->basesInItems = sqlLongLong(row[11]);
 ret->samplePath = cloneString(row[12]);
 ret->sampleCount = sqlLongLong(row[13]);
 ret->basesInSample = sqlLongLong(row[14]);
-ret->sampleCoverage = sqlDouble(row[15]);
-ret->depth = sqlDouble(row[16]);
+ret->mapRatio = sqlDouble(row[15]);
+ret->sampleCoverage = sqlDouble(row[16]);
+ret->depth = sqlDouble(row[17]);
 return ret;
 }
 
@@ -1626,7 +1628,7 @@ struct edwValidFile *edwValidFileLoadAll(char *fileName)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[18];
 
 while (lineFileRow(lf, row))
     {
@@ -1644,7 +1646,7 @@ struct edwValidFile *edwValidFileLoadAllByChar(char *fileName, char chopper)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[18];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1680,6 +1682,7 @@ ret->basesInItems = sqlLongLongComma(&s);
 ret->samplePath = sqlStringComma(&s);
 ret->sampleCount = sqlLongLongComma(&s);
 ret->basesInSample = sqlLongLongComma(&s);
+ret->mapRatio = sqlDoubleComma(&s);
 ret->sampleCoverage = sqlDoubleComma(&s);
 ret->depth = sqlDoubleComma(&s);
 *pS = s;
@@ -1767,6 +1770,8 @@ fputc(sep,f);
 fprintf(f, "%lld", el->sampleCount);
 fputc(sep,f);
 fprintf(f, "%lld", el->basesInSample);
+fputc(sep,f);
+fprintf(f, "%g", el->mapRatio);
 fputc(sep,f);
 fprintf(f, "%g", el->sampleCoverage);
 fputc(sep,f);
