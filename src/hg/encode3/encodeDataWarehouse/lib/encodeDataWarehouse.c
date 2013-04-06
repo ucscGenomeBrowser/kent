@@ -1512,12 +1512,13 @@ ret->enrichedIn = row[8];
 ret->ucscDb = row[9];
 ret->itemCount = sqlLongLong(row[10]);
 ret->basesInItems = sqlLongLong(row[11]);
-ret->samplePath = row[12];
-ret->sampleCount = sqlLongLong(row[13]);
-ret->basesInSample = sqlLongLong(row[14]);
-ret->mapRatio = sqlDouble(row[15]);
-ret->sampleCoverage = sqlDouble(row[16]);
-ret->depth = sqlDouble(row[17]);
+ret->sampleCount = sqlLongLong(row[12]);
+ret->basesInSample = sqlLongLong(row[13]);
+ret->sampleBed = row[14];
+ret->gotMapRatio = sqlSigned(row[15]);
+ret->mapRatio = sqlDouble(row[16]);
+ret->sampleCoverage = sqlDouble(row[17]);
+ret->depth = sqlDouble(row[18]);
 }
 
 struct edwValidFile *edwValidFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1552,8 +1553,8 @@ void edwValidFileSaveToDb(struct sqlConnection *conn, struct edwValidFile *el, c
  * If worried about this use edwValidFileSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,'%s',%lld,%lld,%g,%g,%g)", 
-	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->samplePath,  el->sampleCount,  el->basesInSample,  el->mapRatio,  el->sampleCoverage,  el->depth);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%d,%g,%g,%g)", 
+	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->gotMapRatio,  el->mapRatio,  el->sampleCoverage,  el->depth);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1568,7 +1569,7 @@ void edwValidFileSaveToDbEscaped(struct sqlConnection *conn, struct edwValidFile
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *licensePlate, *format, *outputType, *experiment, *replicate, *validKey, *enrichedIn, *ucscDb, *samplePath;
+char  *licensePlate, *format, *outputType, *experiment, *replicate, *validKey, *enrichedIn, *ucscDb, *sampleBed;
 licensePlate = sqlEscapeString(el->licensePlate);
 format = sqlEscapeString(el->format);
 outputType = sqlEscapeString(el->outputType);
@@ -1577,10 +1578,10 @@ replicate = sqlEscapeString(el->replicate);
 validKey = sqlEscapeString(el->validKey);
 enrichedIn = sqlEscapeString(el->enrichedIn);
 ucscDb = sqlEscapeString(el->ucscDb);
-samplePath = sqlEscapeString(el->samplePath);
+sampleBed = sqlEscapeString(el->sampleBed);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,'%s',%lld,%lld,%g,%g,%g)", 
-	tableName,  el->id,  licensePlate,  el->fileId,  format,  outputType,  experiment,  replicate,  validKey,  enrichedIn,  ucscDb,  el->itemCount,  el->basesInItems,  samplePath,  el->sampleCount,  el->basesInSample,  el->mapRatio,  el->sampleCoverage,  el->depth);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%d,%g,%g,%g)", 
+	tableName,  el->id,  licensePlate,  el->fileId,  format,  outputType,  experiment,  replicate,  validKey,  enrichedIn,  ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  sampleBed,  el->gotMapRatio,  el->mapRatio,  el->sampleCoverage,  el->depth);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&licensePlate);
@@ -1591,7 +1592,7 @@ freez(&replicate);
 freez(&validKey);
 freez(&enrichedIn);
 freez(&ucscDb);
-freez(&samplePath);
+freez(&sampleBed);
 }
 
 struct edwValidFile *edwValidFileLoad(char **row)
@@ -1613,12 +1614,13 @@ ret->enrichedIn = cloneString(row[8]);
 ret->ucscDb = cloneString(row[9]);
 ret->itemCount = sqlLongLong(row[10]);
 ret->basesInItems = sqlLongLong(row[11]);
-ret->samplePath = cloneString(row[12]);
-ret->sampleCount = sqlLongLong(row[13]);
-ret->basesInSample = sqlLongLong(row[14]);
-ret->mapRatio = sqlDouble(row[15]);
-ret->sampleCoverage = sqlDouble(row[16]);
-ret->depth = sqlDouble(row[17]);
+ret->sampleCount = sqlLongLong(row[12]);
+ret->basesInSample = sqlLongLong(row[13]);
+ret->sampleBed = cloneString(row[14]);
+ret->gotMapRatio = sqlSigned(row[15]);
+ret->mapRatio = sqlDouble(row[16]);
+ret->sampleCoverage = sqlDouble(row[17]);
+ret->depth = sqlDouble(row[18]);
 return ret;
 }
 
@@ -1628,7 +1630,7 @@ struct edwValidFile *edwValidFileLoadAll(char *fileName)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[19];
 
 while (lineFileRow(lf, row))
     {
@@ -1646,7 +1648,7 @@ struct edwValidFile *edwValidFileLoadAllByChar(char *fileName, char chopper)
 {
 struct edwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[19];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1679,9 +1681,10 @@ ret->enrichedIn = sqlStringComma(&s);
 ret->ucscDb = sqlStringComma(&s);
 ret->itemCount = sqlLongLongComma(&s);
 ret->basesInItems = sqlLongLongComma(&s);
-ret->samplePath = sqlStringComma(&s);
 ret->sampleCount = sqlLongLongComma(&s);
 ret->basesInSample = sqlLongLongComma(&s);
+ret->sampleBed = sqlStringComma(&s);
+ret->gotMapRatio = sqlSignedComma(&s);
 ret->mapRatio = sqlDoubleComma(&s);
 ret->sampleCoverage = sqlDoubleComma(&s);
 ret->depth = sqlDoubleComma(&s);
@@ -1703,7 +1706,7 @@ freeMem(el->replicate);
 freeMem(el->validKey);
 freeMem(el->enrichedIn);
 freeMem(el->ucscDb);
-freeMem(el->samplePath);
+freeMem(el->sampleBed);
 freez(pEl);
 }
 
@@ -1763,13 +1766,15 @@ fprintf(f, "%lld", el->itemCount);
 fputc(sep,f);
 fprintf(f, "%lld", el->basesInItems);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->samplePath);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
 fprintf(f, "%lld", el->sampleCount);
 fputc(sep,f);
 fprintf(f, "%lld", el->basesInSample);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sampleBed);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->gotMapRatio);
 fputc(sep,f);
 fprintf(f, "%g", el->mapRatio);
 fputc(sep,f);

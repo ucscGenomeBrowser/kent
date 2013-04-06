@@ -122,9 +122,10 @@ CREATE TABLE edwValidFile (
     ucscDb varchar(255) not null,	# Something like hg19 or mm9
     itemCount bigint not null,	# # of items in file: reads for fastqs, lines for beds, bases w/data for wig.
     basesInItems bigint not null,	# # of bases in items
-    samplePath varchar(255) not null,	# Path to a temporary sample file
     sampleCount bigint not null,	# # of items in sample if we are just subsampling as we do for reads.
     basesInSample bigint not null,	# # of bases in our sample
+    sampleBed varchar(255) not null,	# Path to a temporary bed file holding sample items
+    gotMapRatio tinyint not null,	# If set next field and the two after are valid
     mapRatio double not null,	# Proportion of items that map to genome
     sampleCoverage double not null,	# Proportion of assembly covered by at least one item in sample
     depth double not null,	# Estimated genome-equivalents covered by possibly overlapping data

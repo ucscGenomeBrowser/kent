@@ -587,7 +587,7 @@ void edwAssemblyOutput(struct edwAssembly *el, FILE *f, char sep, char lastSep);
 #define edwAssemblyCommaOut(el,f) edwAssemblyOutput(el,f,',',',');
 /* Print out edwAssembly as a comma separated list including final comma. */
 
-#define EDWVALIDFILE_NUM_COLS 18
+#define EDWVALIDFILE_NUM_COLS 19
 
 struct edwValidFile
 /* A file that has been uploaded, the format checked, and for which at least minimal metadata exists */
@@ -605,9 +605,10 @@ struct edwValidFile
     char *ucscDb;	/* Something like hg19 or mm9 */
     long long itemCount;	/* # of items in file: reads for fastqs, lines for beds, bases w/data for wig. */
     long long basesInItems;	/* # of bases in items */
-    char *samplePath;	/* Path to a temporary sample file */
     long long sampleCount;	/* # of items in sample if we are just subsampling as we do for reads. */
     long long basesInSample;	/* # of bases in our sample */
+    char *sampleBed;	/* Path to a temporary bed file holding sample items */
+    signed char gotMapRatio;	/* If set next field and the two after are valid */
     double mapRatio;	/* Proportion of items that map to genome */
     double sampleCoverage;	/* Proportion of assembly covered by at least one item in sample */
     double depth;	/* Estimated genome-equivalents covered by possibly overlapping data */

@@ -113,9 +113,10 @@ table edwValidFile
 
     bigint itemCount; "# of items in file: reads for fastqs, lines for beds, bases w/data for wig."
     bigint basesInItems; "# of bases in items"
-    string samplePath;  "Path to a temporary sample file"
     bigint sampleCount; "# of items in sample if we are just subsampling as we do for reads." 
     bigint basesInSample; "# of bases in our sample"
+    string sampleBed;   "Path to a temporary bed file holding sample items"
+    byte gotMapRatio;   "If set next field and the two after are valid"
     double mapRatio;    "Proportion of items that map to genome"
     double sampleCoverage; "Proportion of assembly covered by at least one item in sample"
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
