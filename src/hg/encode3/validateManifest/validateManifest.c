@@ -69,67 +69,66 @@ int fieldCount = 0;
 
 ////verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, lf->fileName);
 
-boolean firstTime = TRUE;
-lineFileSetUniqueMetaData(lf);  // this seems to be the only way to save the comments with linefile
-// - you could also use lineFileNext instead of lineFileNextReal
+int fieldNameRowsCount = 0;
 
-while (lineFileNextReal(lf, &row))
+while (lineFileNext(lf, &row, NULL))
     {
-    if (firstTime)
-	{
-	firstTime = FALSE;
-	// grab fieldnames from metadata
-	char *metaLine = NULL;
-	struct hash *hash = lf->metaLines;
-	int i;
-	for (i=0; i<hash->size; ++i)
-	    {
-	    if (hash->table[i])
-		{
-		metaLine = cloneString(hash->table[i]->name);
-		break;
-		}
-	    }
-	if (!metaLine)
-	    errAbort("Expected 1st line to contain a comment line listing field names.");
-	//uglyf("%s\n", metaLine); // DEBUG REMOVE
-	++metaLine;  // skip over the leading # char
-	fieldCount = chopByChar(metaLine, '\t', NULL, 0);
-	AllocArray(fields,fieldCount);
-	fieldCount = chopByChar(metaLine, '\t', fields, fieldCount);
-	/* DEBUG
-	for (i=0; i<fieldCount; ++i)
-	    {
-	    uglyf("field #%d = [%s]\n", i, fields[i]); // DEBUG REMOVE
-	    }
-	*/
-	struct slRecord *meta = NULL;
-    	AllocVar(meta);
-    	meta->row = metaLine;
-	meta->words = fields;
-	if (pFields)
-	    *pFields = meta;	    
-	}
-
     //uglyf("%s\n", row); // DEBUG REMOVE
-
-    char *line = cloneString(row);
-
-    int n = 0;
-    AllocArray(words,fieldCount+1);
-    n = chopByChar(line, '\t', words, fieldCount+1);
-    if (n != fieldCount)
+    if (startsWith("#file_name", row))
 	{
-	errAbort("Error [file=%s, line=%d]: found %d columns, expected %d [%s]"
-	    , lf->fileName, lf->lineIx, n, fieldCount, row);
+	if ( fieldNameRowsCount == 0)
+	    {
+	    ++fieldNameRowsCount;
+	    // grab fieldnames from metadata
+	    char *metaLine = cloneString(row);
+	    //uglyf("%s\n", metaLine); // DEBUG REMOVE
+	    ++metaLine;  // skip over the leading # char
+	    fieldCount = chopByChar(metaLine, '\t', NULL, 0);
+	    AllocArray(fields,fieldCount);
+	    fieldCount = chopByChar(metaLine, '\t', fields, fieldCount);
+	    /* DEBUG
+	    for (i=0; i<fieldCount; ++i)
+		{
+		uglyf("field #%d = [%s]\n", i, fields[i]); // DEBUG REMOVE
+		}
+	    */
+	    struct slRecord *meta = NULL;
+	    AllocVar(meta);
+	    meta->row = metaLine;
+	    meta->words = fields;
+	    if (pFields)
+		*pFields = meta;	    
+	    }
+	else
+	    {
+	    errAbort("Found comment line listing field names more than once.");
+	    }
 	}
+    else if (startsWith("#",row))
+	{
+	// ignore other comment lines?
+	}
+    else
+	{
 
-    struct slRecord *rec = NULL;
-    AllocVar(rec);
-    rec->row = line;
-    rec->words = words;
+	char *line = cloneString(row);
 
-    slAddHead(&allRecs, rec);	
+	int n = 0;
+	AllocArray(words,fieldCount+1);
+	n = chopByChar(line, '\t', words, fieldCount+1);
+	if (n != fieldCount)
+	    {
+	    errAbort("Error [file=%s, line=%d]: found %d columns, expected %d [%s]"
+		, lf->fileName, lf->lineIx, n, fieldCount, row);
+	    }
+
+	struct slRecord *rec = NULL;
+	AllocVar(rec);
+	rec->row = line;
+	rec->words = words;
+
+	slAddHead(&allRecs, rec);	
+	}
 
     }
 
@@ -137,6 +136,8 @@ slReverse(&allRecs);
 if (pAllRecs)
     *pAllRecs = allRecs;	    
 
+if (fieldNameRowsCount == 0)
+    errAbort("Expected 1st line to contain a comment line listing field names.");
 
 lineFileClose(&lf);
 
