@@ -338,11 +338,12 @@ char *rTempName(char *dir, char *base, char *suffix)
 char *x;
 static char fileName[PATH_LEN];
 int i;
+char *lastSlash = (lastChar(dir) == '/' ? "" : "/");
 for (i=0;;++i)
     {
     x = semiUniqName(base);
-    safef(fileName, sizeof(fileName), "%s/%s%d%s",
-    	dir, x, i, suffix);
+    safef(fileName, sizeof(fileName), "%s%s%s%d%s",
+    	dir, lastSlash, x, i, suffix);
     if (!fileExists(fileName))
         break;
     }
