@@ -14,6 +14,7 @@
 char *edwDatabase = "encodeDataWarehouse";
 char *edwRootDir = "/scratch/kent/encodeDataWarehouse/";
 char *edwLicensePlatePrefix = "ENCFF";
+char *edwValDataDir = "/scratch/kent/encValData/";
 
 char *edwTempDir()
 /* Returns pointer to edwTempDir.  This is shared, so please don't modify. */

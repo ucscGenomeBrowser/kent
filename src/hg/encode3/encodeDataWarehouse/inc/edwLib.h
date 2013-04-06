@@ -17,6 +17,7 @@ long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileNam
 extern char *edwDatabase;   /* Name of database we connect to. */
 extern char *edwRootDir;    /* Name of root directory for our files, including trailing '/' */
 extern char *edwLicensePlatePrefix; /* License plates start with this - thanks Mike Cherry. */
+extern char *edwValDataDir; /* Data files we need for validation go here. */
 
 char *edwTempDir();
 /* Returns pointer to edwTempDir.  This is shared, so please don't modify. */
