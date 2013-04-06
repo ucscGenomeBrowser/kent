@@ -12091,6 +12091,7 @@ struct pubsExtra
 {
     char *label; // usually author+year
     char *mouseOver; // usually title of article
+    char *class; // class of article, usually a curated database
     // color depends on cart settings, either based on topic, impact or year
     // support to ways to color: either by shade (year, impact) or directly with rgb values
     int shade;  // year or impact are shades which we can't resolve to rgb easily
@@ -12110,17 +12111,17 @@ pubsClassColors = hashNew(0);
 struct sqlConnection *conn = hAllocConn(database);
 if (!sqlTableExists(conn, "hgFixed.pubsClassColors")) 
     {
-    //fprintf(stderr, "simpleTracks.c: table hgFixed.pubsClassColors does not exist\n");
     return;
     }
 char *query = "SELECT class, rgbColor FROM hgFixed.pubsClassColors";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
-if ((row = sqlNextRow(sr)) != NULL)
+while ((row = sqlNextRow(sr)) != NULL)
     {
     char *class = row[0];
     char *colStr = row[1];
     // copied from genePredItemClassColor - is there no function for this?
+    // convert comma sep rgb string to array
     char *rgbVals[5];
     chopString(colStr, ",", rgbVals, sizeof(rgbVals));
     struct rgbColor *rgb;
@@ -12185,6 +12186,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     char* impact  = NULL;
     char* classes = NULL;
 
+
     extra = needMem(sizeof(struct pubsExtra));
     extra->label = pubsFeatureLabel(firstAuthor, year);
     if (isEmpty(title))
@@ -12203,11 +12205,21 @@ if ((row = sqlNextRow(sr)) != NULL)
             char *colorBy = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsColorBy");
             if ((colorBy==NULL) || strcmp(colorBy,"topic")==0) 
                 {
-                char *class;
-                while ((class=cloneNextWordByDelimiter(&classes, ','))!=NULL)
+                char *classCopy = classes;
+                char* mainClass = cloneNextWordByDelimiter(&classes, ',');
+                classes = classCopy;
+                if (mainClass!=NULL)
                     {
-                    struct rgbColor *col = (struct rgbColor*) hashFindVal(pubsClassColors, class);
+                    struct rgbColor *col = (struct rgbColor*) hashFindVal(pubsClassColors, mainClass);
                     extra->color = col;
+                    // add class to mouseover text
+                    struct dyString *mo = dyStringNew(0);
+                    dyStringAppend(mo, extra->mouseOver);
+                    dyStringAppend(mo, " (categories: ");
+                    dyStringAppend(mo, classes);
+                    dyStringAppend(mo, ")");
+                    freeMem(extra->mouseOver);
+                    extra->mouseOver = dyStringContents(mo);
                     }
                 }
             else 
