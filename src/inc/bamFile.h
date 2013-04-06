@@ -145,4 +145,10 @@ struct bamChromInfo *bamChromList(samfile_t *fh);
 void bamChromInfoFreeList(struct bamChromInfo **pList);
 /* Free a list of dynamically allocated bamChromInfo's */
 
+void samToBed(char *samIn, char *bedOut);
+/* samToBed - Convert SAM file to a pretty simple minded bed file.. */
+
+void samToOpenBed(char *samIn, FILE *f);
+/* Like samToOpenBed, but the output is the already open file f. */
+
 #endif//ndef BAMFILE_H
