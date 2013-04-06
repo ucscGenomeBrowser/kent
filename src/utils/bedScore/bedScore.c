@@ -6,6 +6,7 @@
 #include "sqlNum.h"
 #include "basicBed.h"
 #include "hmmstats.h"
+#include "dystring.h"
 #include <values.h>
 
 /* Usage definitions and defaults */
@@ -18,6 +19,7 @@ static char *method = scoreEncode;
 static int col = 5;
 static int minScore = 0;
 static int maxScore = 1000;
+//static boolean uniform = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -26,14 +28,21 @@ errAbort(
   "bedScore - Add scores to a BED file or transform existing scores\n"
   "usage:\n"
   "   bedScore input.bed output.bed\n"
+  "       or\n"
+  "   bedScore input1.bed input2.bed ... outDir\n"
   "options:\n"
   "   -col=N      - Column to use as input value (default %d)\n"
-  "   -minScore=N - Minimum score to assign (default %d). Not supported for 'reg' method\n"
   "   -method=\n"
   "             encode - ENCODE pipeline (UCSC) (default)\n"
   "             reg - Regulatory clusters (UCSC) \n"
+  "   -minScore=N - Minimum score to assign (default %d). Not supported for 'reg' method\n"
+  //"   -uniform    - Calculate uniform normalization factor across all input files\n"
+  "note:\n"
+  "    If multiple files are specified, they must all be of same BED size\n.",
+  /*
   "             lod - Phastcons log odds (Adam Siepel, Cornell)\n"
   "             asinh - ENCODE Uniform TFBS (Steve Wilder, ENCODE AWG/EBI)\n",
+  */
   col, minScore);
 }
 
@@ -42,6 +51,7 @@ static struct optionSpec options[] = {
    {"col", OPTION_INT},
    {"method", OPTION_STRING},
    {"minScore", OPTION_INT},
+   //{"uniform", OPTION_BOOLEAN},
    {NULL, 0}
 };
 
@@ -105,7 +115,7 @@ verbose(3, "%s\n", line);
 wordCount = chopByWhite(line, words, sizeof(words));
 if (bedSize == 0)
     {
-    verbose(2, "wordcount=%d\n", wordCount);
+    verbose(2, "BED size is %d\n", wordCount);
     if (wordCount < 5 || wordCount < col)
         errAbort("Unexpected number of fields in BED file: %d", wordCount);
     bedSize = wordCount;
@@ -211,7 +221,7 @@ double min = info->minVal;
 double max = info->maxVal;
 info->normFactor = (maxScore-minScore) / (max - min);
 info->normOffset = maxScore - ((maxScore-minScore) * max) / (max - min);
-verbose(2, "min=%f, max=%f, normFactor=%f, normOffset=%f\n", 
+verbose(2, "  min=%f, max=%f, normFactor=%f, normOffset=%f\n", 
                 min, max, info->normFactor, info->normOffset);
 }
 
@@ -332,8 +342,7 @@ score = 370 if x <= Q1
             = 370 + 630 * (asinh(x) - asinh(Q1)) / (asinh(Q3) - asinh(Q1))   if Q1 < x < Q3
 #endif
 
-void bedScore(char *inFile, char *outFile)
-/* bedScore - Add scores to a BED file. */
+void bedScoreFile(char *inFile, char *outFile)
 {
 struct lineFile *in = lineFileOpen(inFile, TRUE);
 FILE *out = mustOpen(outFile, "w");
@@ -341,7 +350,7 @@ char *line = NULL;
 int lineNum = 0;
 struct bedFileLine *bfl, *bedFileLines = NULL;   // list of lines in BED file
 
-verbose(2, "Reading %s into scorer: %s\n", in->fileName, method);
+verbose(2, "Reading file '%s' into scorer '%s'\n", in->fileName, method);
 struct scorer *scorer = scorerNew(method);
 
 // parse input file into a list of bedFileLines and let scorer have a look at each value
@@ -377,15 +386,37 @@ carefulClose(&out);
 lineFileClose(&in);
 }
 
+void bedScore(int count, char *list[])
+/* bedScore - Add scores to BED files. 
+ *              If count == 2, file1 is input, file2 is output
+ *              If count > 2, fileN is output dir, others are input files
+ */
+{
+if (count == 2)
+    {
+    bedScoreFile(list[0], list[1]);
+    return;
+    }
+char *outDir = list[count-1];
+verbose(2, "Writing to output directory '%s'\n", outDir);
+int i;
+for (i = 0; i < count-1; i++)
+    {
+    struct dyString *dy = dyStringCreate("%s/%s", outDir, list[i]);
+    bedScoreFile(list[i], dyStringCannibalize(&dy));
+    }
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
-    usage("Wrong number of arguments");
+if (argc < 3)
+    usage("Too few arguments");
 col = optionInt("col", col);
 minScore = optionInt("minScore", minScore);
 method = optionVal("method", method);
-bedScore(argv[1], argv[2]);
+//uniform = optionExists("uniform");
+bedScore(argc-1, &argv[1]);
 return 0;
 }
