@@ -18,6 +18,9 @@ extern char *edwDatabase;   /* Name of database we connect to. */
 extern char *edwRootDir;    /* Name of root directory for our files, including trailing '/' */
 extern char *edwLicensePlatePrefix; /* License plates start with this - thanks Mike Cherry. */
 
+char *edwTempDir();
+/* Returns pointer to edwTempDir.  This is shared, so please don't modify. */
+
 long long edwNow();
 /* Return current time in seconds since Epoch. */
 
@@ -52,7 +55,7 @@ void edwMakeLicensePlate(char *prefix, int ix, char *out, int outSize);
 void edwDirForTime(time_t sinceEpoch, char dir[PATH_LEN]);
 /* Return the output directory for a given time. */
 
-void edwMakePlateFileNameAndPath(int edwFileId, char licensePlate[edwMaxPlateSize],
+void edwMakePlateFileNameAndPath(int edwFileId, char *submitFileName, char licensePlate[edwMaxPlateSize],
     char edwFile[PATH_LEN], char serverPath[PATH_LEN]);
 /* Convert file id to local file name, and full file path. Make any directories needed
  * along serverPath. */

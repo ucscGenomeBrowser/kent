@@ -15,6 +15,19 @@ char *edwDatabase = "encodeDataWarehouse";
 char *edwRootDir = "/scratch/kent/encodeDataWarehouse/";
 char *edwLicensePlatePrefix = "ENCFF";
 
+char *edwTempDir()
+/* Returns pointer to edwTempDir.  This is shared, so please don't modify. */
+{
+static char path[PATH_LEN];
+if (path[0] == 0)
+    {
+    safef(path, sizeof(path), "%s%s", edwRootDir, "tmp");
+    makeDirsOnPath(path);
+    strcat(path, "/");
+    }
+return path;
+}
+
 
 long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5)
 /* See if we already got file.  Return fileId if we do,  otherwise -1 */
@@ -228,11 +241,39 @@ gmtime_r(&sinceEpoch, &now);
 safef(dir, PATH_LEN, "%d/%d/%d/", now.tm_year+1900, now.tm_mon+1, now.tm_mday);
 }
 
-void edwMakePlateFileNameAndPath(int edwFileId, char licensePlate[edwMaxPlateSize],
-    char edwFile[PATH_LEN], char serverPath[PATH_LEN])
+char *lastMatchCharExcept(char *start, char *end, char match, char except)
+/* Return last char between start up to but not including end that is match.
+ * However if except occurs between end and this match, return NULL instead.
+ * Also return NULL if there is no match */
+{
+char *e = end;
+while (--e >= start)
+    {
+    char c = *e;
+    if (c == except)
+       return NULL;
+    if (c == match)
+       return e;
+    }
+return NULL;
+}
+
+void edwMakePlateFileNameAndPath(int edwFileId, char *submitFileName,
+    char licensePlate[edwMaxPlateSize], char edwFile[PATH_LEN], char serverPath[PATH_LEN])
 /* Convert file id to local file name, and full file path. Make any directories needed
  * along serverPath. */
 {
+/* Preserve suffix.  Give ourselves up to two suffixes. */
+int nameSize = strlen(submitFileName);
+char *suffix = lastMatchCharExcept(submitFileName, submitFileName + nameSize, '.', '/');
+if (suffix != NULL)
+    {
+    char *secondSuffix = lastMatchCharExcept(submitFileName, suffix, '.', '/');
+    if (secondSuffix != NULL)
+        suffix = secondSuffix;
+    }
+suffix = emptyForNull(suffix);
+
 /* Figure out edw file name, starting with license plate. */
 edwMakeLicensePlate(edwLicensePlatePrefix, edwFileId, licensePlate, edwMaxPlateSize);
 
@@ -244,7 +285,7 @@ safef(uploadDir, sizeof(uploadDir), "%s%s", edwRootDir, edwDir);
 makeDirsOnPath(uploadDir);
 
 /* Figure out full file names */
-safef(edwFile, PATH_LEN, "%s%s", edwDir, licensePlate);
+safef(edwFile, PATH_LEN, "%s%s%s", edwDir, licensePlate, suffix);
 safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
 }
 
@@ -359,7 +400,7 @@ fileId = sqlLastAutoId(conn);
 /* Create license plate and big data warehouse file/path name. */
 char licensePlate[edwMaxPlateSize];
 char edwFile[PATH_LEN], edwPath[PATH_LEN];
-edwMakePlateFileNameAndPath(fileId, licensePlate, edwFile, edwPath);
+edwMakePlateFileNameAndPath(fileId, localAbsolutePath, licensePlate, edwFile, edwPath);
 
 /* We're a little paranoid so md5 it */
 char *md5 = "";
