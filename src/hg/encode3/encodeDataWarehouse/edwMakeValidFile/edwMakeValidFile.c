@@ -12,6 +12,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 #include "bamFile.h"
+#include "portable.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -77,7 +78,8 @@ return TRUE;
 }
 
 void makeSampleOfFastq(char *source, FILE *f, int downStep, struct edwValidFile *vf)
-/* Sample every downStep items in source and write to dest. */
+/* Sample every downStep items in source and write to dest. Count how many fastq
+ * records and update vf fields with this. */
 {
 struct lineFile *lf = lineFileOpen(source, FALSE);
 boolean done = FALSE;
@@ -106,14 +108,74 @@ while (!done)
 lineFileClose(&lf);
 }
 
+void systemWithCheck(char *command)
+/* Do a system call and abort with error if there's a problem. */
+{
+int err = system(command);
+if (err != 0)
+    errAbort("error executing: %s", command);
+}
+
+void alignFastqMakeBed(struct edwFile *ef, char *fastqPath, struct edwValidFile *vf, FILE *bedF)
+/* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
+{
+/* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
+ * second time it was run in same app.  Resorting therefore to temp files. */
+char genoFile[PATH_LEN];
+safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
+    edwValDataDir, vf->ucscDb, vf->ucscDb);
+
+char cmd[3*PATH_LEN];
+char *saiName = cloneString(rTempName(edwTempDir(), "edwSample1", ".sai"));
+safef(cmd, sizeof(cmd), "bwa aln %s %s > %s", genoFile, fastqPath, saiName);
+systemWithCheck(cmd);
+
+char *samName = cloneString(rTempName(edwTempDir(), "ewdSample1", ".sam"));
+safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, fastqPath, samName);
+systemWithCheck(cmd);
+remove(saiName);
+
+/* Create bed and remove sam temp file */
+samToOpenBed(samName, bedF);
+remove(samName);
+}
+
+
+#define edwSampleReduction 50
+
+void makeValidFastq( struct sqlConnection *conn, char *path, struct edwFile *ef, 
+	struct edwAssembly *assembly, struct edwValidFile *vf)
+/* Fill out fields of vf.  Create sample subset. */
+{
+/* Make sample of fastq */
+char smallFastqName[PATH_LEN];
+safef(smallFastqName, PATH_LEN, "%sedwSampleFastqXXXXXX", edwTempDir());
+int smallFd = mkstemp(smallFastqName);
+FILE *smallF = fdopen(smallFd, "w");
+makeSampleOfFastq(path, smallF, edwSampleReduction, vf);
+carefulClose(&smallF);
+verbose(1, "Made sample fastq with %lld reads\n", vf->sampleCount);
+
+/* Align fastq and turn results into bed. */
+char sampleBedName[PATH_LEN];
+safef(sampleBedName, PATH_LEN, "%sedwSampleBedXXXXXX", edwTempDir());
+int bedFd = mkstemp(sampleBedName);
+FILE *bedF = fdopen(bedFd, "w");
+alignFastqMakeBed(ef, smallFastqName, vf, bedF);
+carefulClose(&bedF);
+
+remove(smallFastqName);
+
+vf->sampleBed = cloneString(sampleBedName);
+}
+
 #define TYPE_BAM  1
 #define TYPE_READ 2
 
-void makeSampleOfBam(char *inBamName, FILE *outBed, int downStep, struct edwValidFile *vf)
+void edwMakeSampleOfBam(char *inBamName, FILE *outBed, int downStep, 
+    struct edwAssembly *assembly, struct edwValidFile *vf)
 /* Sample every downStep items in inBam and write in simplified bed 5 fashion to outBed. */
 {
-/* Open and close with our C library just to fail quickly with decent error message if not BAM. */
-uglyf("makeSampleOfBam(inBamName=%s)\n", inBamName);
 samfile_t *sf = samopen(inBamName, "rb", NULL);
 bam_header_t *bamHeader = sf->header;
 
@@ -164,22 +226,9 @@ while (!done)
 	}
     }
 vf->mapRatio = (double)mappedCount/vf->itemCount;
+vf->depth = vf->basesInItems*vf->mapRatio/assembly->baseCount;
+vf->gotMapRatio = TRUE;
 samclose(sf);
-}
-
-#define edwSampleReduction 50
-
-void makeValidFastq( struct sqlConnection *conn, char *path, struct edwFile *eFile, 
-	struct edwAssembly *assembly, struct edwValidFile *vf)
-/* Fill out fields of vf.  Create sample subset. */
-{
-char sampleFileName[PATH_LEN];
-safef(sampleFileName, PATH_LEN, "%sedwSampleXXXXXX", edwTempDir());
-int sampleFd = mkstemp(sampleFileName);
-FILE *f = fdopen(sampleFd, "w");
-makeSampleOfFastq(path, f, edwSampleReduction, vf);
-carefulClose(&f);
-vf->samplePath = cloneString(sampleFileName);
 }
 
 void makeValidBigBed( struct sqlConnection *conn, char *path, struct edwFile *eFile, 
@@ -193,6 +242,7 @@ vf->basesInSample = vf->basesInItems = sum.sumData;
 vf->sampleCoverage = (double)sum.validCount/assembly->baseCount;
 vf->depth = (double)sum.sumData/assembly->baseCount;
 vf->mapRatio = 1.0;
+vf->gotMapRatio = TRUE;
 bigBedFileClose(&bbi);
 }
 
@@ -206,6 +256,7 @@ vf->sampleCount = vf->itemCount = vf->basesInSample = vf->basesInItems = sum.val
 vf->sampleCoverage = (double)sum.validCount/assembly->baseCount;
 vf->depth = (double)sum.sumData/assembly->baseCount;
 vf->mapRatio = 1.0;
+vf->gotMapRatio = TRUE;
 bigWigFileClose(&bbi);
 }
 
@@ -224,7 +275,7 @@ fprintf(f, "vf->enrichedIn = %s\n", vf->enrichedIn);
 fprintf(f, "vf->ucscDb = %s\n", vf->ucscDb);
 fprintf(f, "vf->itemCount = %lld\n", vf->itemCount);
 fprintf(f, "vf->basesInItems = %lld\n", vf->basesInItems);
-fprintf(f, "vf->samplePath = %s\n", vf->samplePath);
+fprintf(f, "vf->sampleBed = %s\n", vf->sampleBed);
 fprintf(f, "vf->sampleCount = %lld\n", vf->sampleCount);
 fprintf(f, "vf->basesInSample = %lld\n", vf->basesInSample);
 fprintf(f, "vf->sampleCoverage = %g\n", vf->sampleCoverage);
@@ -239,11 +290,9 @@ char sampleFileName[PATH_LEN];
 safef(sampleFileName, PATH_LEN, "%sedwBamSampleToBedXXXXXX", edwTempDir());
 int sampleFd = mkstemp(sampleFileName);
 FILE *f = fdopen(sampleFd, "w");
-makeSampleOfBam(path, f, edwSampleReduction, vf);
-uglyf("After makeSampleOfBam - sampleFileName %s\n", sampleFileName);
+edwMakeSampleOfBam(path, f, edwSampleReduction, assembly, vf);
 carefulClose(&f);
-vf->depth = vf->basesInItems*vf->mapRatio/assembly->baseCount;
-vf->samplePath = cloneString(sampleFileName);
+vf->sampleBed = cloneString(sampleFileName);
 }
 
 void makeValidFile(struct sqlConnection *conn, struct edwFile *eFile, struct cgiParsedVars *tags)
@@ -262,7 +311,7 @@ vf->replicate = hashFindVal(tags->hash, "replicate");
 vf->validKey = hashFindVal(tags->hash, "valid_key");
 vf->enrichedIn = hashFindVal(tags->hash, "enriched_in");
 vf->ucscDb = hashFindVal(tags->hash, "ucsc_db");
-vf->samplePath = "";
+vf->sampleBed = "";
 if (vf->format && vf->outputType && vf->experiment && vf->replicate && 
 	vf->validKey && vf->enrichedIn && vf->ucscDb)
     {
@@ -318,11 +367,10 @@ safef(query, sizeof(query),
     "select * from edwFile where id>=%d and id<=%d and md5 != '' and deprecated = ''", 
     startId, endId);
 struct edwFile *eFile, *eFileList = edwFileLoadByQuery(conn, query);
-uglyf("doing %d files with id's between %d and %d\n", slCount(eFileList), startId, endId);
 
 for (eFile = eFileList; eFile != NULL; eFile = eFile->next)
     {
-    uglyf("processing %s %s\n", eFile->licensePlate, eFile->submitFileName);
+    verbose(1, "processing %s %s\n", eFile->licensePlate, eFile->submitFileName);
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s%s", edwRootDir, eFile->edwFileName);
 
