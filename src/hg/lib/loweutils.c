@@ -75,17 +75,17 @@ void getGenomeClade(struct sqlConnection *conn, char *dbName, char *genome, char
     char query[512];
     struct sqlResult *srDb;
     char **rowDb;
-    char *centraldb = cfgOption("central.db");
+    struct sqlConnection *connCentral = hConnectCentral();
 
-    sprintf(query, "select count(*) from %s.genomeClade a, %s.dbDb b, %s.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
-            centraldb, centraldb, centraldb, dbName);
-    srDb = sqlGetResult(conn, query);
+    sprintf(query, "select count(*) from genomeClade a, dbDb b, clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
+            dbName);
+    srDb = sqlGetResult(connCentral, query);
     if ((rowDb = sqlNextRow(srDb)) != NULL)
     {
         sqlFreeResult(&srDb);
-        sprintf(query, "select a.genome, c.label from %s.genomeClade a, %s.dbDb b, %s.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
-                centraldb, centraldb, centraldb, dbName);
-        srDb = sqlGetResult(conn, query);
+        sprintf(query, "select a.genome, c.label from genomeClade a, dbDb b, clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'",
+                dbName);
+        srDb = sqlGetResult(connCentral, query);
         if ((rowDb = sqlNextRow(srDb)) != NULL)
         {
             strcpy(genome, rowDb[0]);
@@ -93,4 +93,5 @@ void getGenomeClade(struct sqlConnection *conn, char *dbName, char *genome, char
         }
     }
     sqlFreeResult(&srDb);
+    hDisconnectCentral(&connCentral);
 }
