@@ -12,6 +12,7 @@
 
 char *version = "1.0";
 char *workingDir = ".";
+char *encValData = "encValData";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +26,7 @@ errAbort(
     "   validateManifest\n"
     "\n"
     "   -dir=workingDir, defaults to the current directory.\n"
+    "   -encValData=encValDataDir, relative to workingDir, defaults to %s.\n"
     "\n"
     "   Input files in the working directory: \n"
     "     manifest.txt - current input manifest file\n"
@@ -33,12 +35,13 @@ errAbort(
     "   Output file in the working directory: \n"
     "     validate.txt - results of validated input\n"
     "\n"
-    , version
+    , version, encValData
     );
 }
 
 static struct optionSpec options[] = {
     {"dir", OPTION_STRING},
+    {"encValData", OPTION_STRING},
     {NULL, 0},
 };
 
@@ -69,67 +72,66 @@ int fieldCount = 0;
 
 ////verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, lf->fileName);
 
-boolean firstTime = TRUE;
-lineFileSetUniqueMetaData(lf);  // this seems to be the only way to save the comments with linefile
-// - you could also use lineFileNext instead of lineFileNextReal
+int fieldNameRowsCount = 0;
 
-while (lineFileNextReal(lf, &row))
+while (lineFileNext(lf, &row, NULL))
     {
-    if (firstTime)
-	{
-	firstTime = FALSE;
-	// grab fieldnames from metadata
-	char *metaLine = NULL;
-	struct hash *hash = lf->metaLines;
-	int i;
-	for (i=0; i<hash->size; ++i)
-	    {
-	    if (hash->table[i])
-		{
-		metaLine = cloneString(hash->table[i]->name);
-		break;
-		}
-	    }
-	if (!metaLine)
-	    errAbort("Expected 1st line to contain a comment line listing field names.");
-	//uglyf("%s\n", metaLine); // DEBUG REMOVE
-	++metaLine;  // skip over the leading # char
-	fieldCount = chopByChar(metaLine, '\t', NULL, 0);
-	AllocArray(fields,fieldCount);
-	fieldCount = chopByChar(metaLine, '\t', fields, fieldCount);
-	/* DEBUG
-	for (i=0; i<fieldCount; ++i)
-	    {
-	    uglyf("field #%d = [%s]\n", i, fields[i]); // DEBUG REMOVE
-	    }
-	*/
-	struct slRecord *meta = NULL;
-    	AllocVar(meta);
-    	meta->row = metaLine;
-	meta->words = fields;
-	if (pFields)
-	    *pFields = meta;	    
-	}
-
     //uglyf("%s\n", row); // DEBUG REMOVE
-
-    char *line = cloneString(row);
-
-    int n = 0;
-    AllocArray(words,fieldCount+1);
-    n = chopByChar(line, '\t', words, fieldCount+1);
-    if (n != fieldCount)
+    if (startsWith("#file_name", row))
 	{
-	errAbort("Error [file=%s, line=%d]: found %d columns, expected %d [%s]"
-	    , lf->fileName, lf->lineIx, n, fieldCount, row);
+	if ( fieldNameRowsCount == 0)
+	    {
+	    ++fieldNameRowsCount;
+	    // grab fieldnames from metadata
+	    char *metaLine = cloneString(row);
+	    //uglyf("%s\n", metaLine); // DEBUG REMOVE
+	    ++metaLine;  // skip over the leading # char
+	    fieldCount = chopByChar(metaLine, '\t', NULL, 0);
+	    AllocArray(fields,fieldCount);
+	    fieldCount = chopByChar(metaLine, '\t', fields, fieldCount);
+	    /* DEBUG
+	    for (i=0; i<fieldCount; ++i)
+		{
+		uglyf("field #%d = [%s]\n", i, fields[i]); // DEBUG REMOVE
+		}
+	    */
+	    struct slRecord *meta = NULL;
+	    AllocVar(meta);
+	    meta->row = metaLine;
+	    meta->words = fields;
+	    if (pFields)
+		*pFields = meta;	    
+	    }
+	else
+	    {
+	    errAbort("Found comment line listing field names more than once.");
+	    }
 	}
+    else if (startsWith("#",row))
+	{
+	// ignore other comment lines?
+	}
+    else
+	{
 
-    struct slRecord *rec = NULL;
-    AllocVar(rec);
-    rec->row = line;
-    rec->words = words;
+	char *line = cloneString(row);
 
-    slAddHead(&allRecs, rec);	
+	int n = 0;
+	AllocArray(words,fieldCount+1);
+	n = chopByChar(line, '\t', words, fieldCount+1);
+	if (n != fieldCount)
+	    {
+	    errAbort("Error [file=%s, line=%d]: found %d columns, expected %d [%s]"
+		, lf->fileName, lf->lineIx, n, fieldCount, row);
+	    }
+
+	struct slRecord *rec = NULL;
+	AllocVar(rec);
+	rec->row = line;
+	rec->words = words;
+
+	slAddHead(&allRecs, rec);	
+	}
 
     }
 
@@ -137,6 +139,8 @@ slReverse(&allRecs);
 if (pAllRecs)
     *pAllRecs = allRecs;	    
 
+if (fieldNameRowsCount == 0)
+    errAbort("Expected 1st line to contain a comment line listing field names.");
 
 lineFileClose(&lf);
 
@@ -159,6 +163,14 @@ for(rec = recs; rec; rec = rec->next)
 return hash;
 }
 
+
+char *getAs(char *asFileName)
+/* Get full .as path */
+{
+char asPath[256];
+safef(asPath, sizeof asPath, "%s/as/%s", encValData, asFileName);
+return cloneString(asPath);
+}
 
 char *getGenome(char *fileName)
 /* Get genome, e.g. hg19 */
@@ -184,7 +196,7 @@ char *getChromInfo(char *fileName)
 // Maybe in future can pull this from the hub.txt?
 char *genome = getGenome(fileName);
 char chromInfo[256];
-safef(chromInfo, sizeof chromInfo, "%s/%s_chromInfo.txt", genome, genome);
+safef(chromInfo, sizeof chromInfo, "%s/%s/chrom.sizes", encValData, genome);
 return cloneString(chromInfo);
 }
 
@@ -197,7 +209,7 @@ char *getTwoBit(char *fileName)
 // Maybe in future can pull this from the hub.txt?
 char *genome = getGenome(fileName);
 char twoBit[256];
-safef(twoBit, sizeof twoBit, "%s/%s.2bit", genome, genome);
+safef(twoBit, sizeof twoBit, "%s/%s/%s.2bit", encValData, genome, genome);
 return cloneString(twoBit);
 }
 
@@ -243,7 +255,7 @@ boolean validateBedRnaElements(char *fileName)
 {
 // TODO the current example manifest.txt is wrong because this should be bigBed-based (not bed-based)
 //  so that we need to  change this into bigBed with a particular bedRnaElements.as ?
-char *asFile = "bedRnaElements.as";  // TODO this probably has to change
+char *asFile = getAs("bedRnaElements.as");  // TODO this probably has to change
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
@@ -254,7 +266,7 @@ return runCmdLine(cmdLine);
 boolean validateBigBed(char *fileName)
 /* Validate bigBed file */
 {
-char *asFile = "modPepMap-std.as";  // TODO this wrong but how do we know what to put here?
+char *asFile = getAs("modPepMap-std.as");  // TODO this wrong but how do we know what to put here?
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 // TODO probably need to do more work to define what the right type= and .as is
@@ -299,7 +311,7 @@ return FALSE;
 boolean validateNarrowPeak(char *fileName)
 /* Validate narrowPeak file */
 {
-char *asFile = "narrowPeak.as";
+char *asFile = getAs("narrowPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
@@ -310,7 +322,7 @@ return runCmdLine(cmdLine);
 boolean validateBroadPeak(char *fileName)
 /* Validate broadPeak file */
 {
-char *asFile = "broadPeak.as";
+char *asFile = getAs("broadPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
@@ -607,6 +619,7 @@ if (argc!=1)
     usage();
 
 workingDir = optionVal("dir", workingDir);
+encValData = optionVal("encValData", encValData);
 
 validateManifest(workingDir);
 

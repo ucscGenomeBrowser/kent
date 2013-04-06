@@ -5,6 +5,7 @@
 #include "options.h"
 #include "sqlNum.h"
 #include "basicBed.h"
+#include "hmmstats.h"
 #include <values.h>
 
 /* Usage definitions and defaults */
@@ -27,7 +28,7 @@ errAbort(
   "   bedScore input.bed output.bed\n"
   "options:\n"
   "   -col=N      - Column to use as input value (default %d)\n"
-  "   -minScore=N - Minimum score to assign (default %d)\n"
+  "   -minScore=N - Minimum score to assign (default %d). Not supported for 'reg' method\n"
   "   -method=\n"
   "             encode - ENCODE pipeline (UCSC) (default)\n"
   "             reg - Regulatory clusters (UCSC) \n"
@@ -170,17 +171,24 @@ struct scorer
 
 /* encode method 
 
-   This method was used the ENCODE pipeline (hgLoadBed -fillInScore), applied to signalValue
-   of ENCODE datasets lacking browser scores.  It computes new score from the function:
-   y = ax+b, where
-        a is <score-range>/<input-range>
-    Author Larry Meyer.
+    This method was used the ENCODE pipeline (hgLoadBed -fillInScore), applied to signalValue
+    of ENCODE datasets lacking browser scores.  It computes new score from the function:
+    y = ax+b, where a is <score-range>/<input-range>.
+
+    Author Larry Meyer (in hgLoadBed):
+
+    float a = (1000-minScore) / (max - min);
+    float b = 1000 - ((1000-minScore) * max) / (max - min);
+    safef(query, sizeof(query),
+        "update %s set score = round((%f * %s) + %f)",
+            track, a, fillInScoreColumn, b);
 */
+
 
 struct scoreEncodeInfo
     {
     double minVal, maxVal;
-    float a, b;    // y = ax+b
+    double normFactor, normOffset;    // y = ax+b
     } scoreEncodeInfo = {MAXDOUBLE, 0, 0, 0};
 
 void scoreEncodeIn(struct scorer *scorer, double inputVal)
@@ -201,29 +209,92 @@ void scoreEncodeSummarize(struct scorer *scorer)
 struct scoreEncodeInfo *info = scorer->info;
 double min = info->minVal;
 double max = info->maxVal;
-info->a = (maxScore-minScore) / (max - min);
-info->b = maxScore - ((maxScore-minScore) * max) / (max - min);
-verbose(2, "min=%f, max=%f, a=%f, b=%f\n", min, max, info->a, info->b);
+info->normFactor = (maxScore-minScore) / (max - min);
+info->normOffset = maxScore - ((maxScore-minScore) * max) / (max - min);
+verbose(2, "min=%f, max=%f, normFactor=%f, normOffset=%f\n", 
+                min, max, info->normFactor, info->normOffset);
 }
 
 double scoreEncodeOut(struct scorer *scorer, double inputVal)
 {
 struct scoreEncodeInfo *info = scorer->info;
-return (round((info->a * inputVal) + info->b));
+return (round((info->normFactor * inputVal) + info->normOffset));
 }
 
+/* reg method 
+
+   This method is used by the hg/regulate suite to score TFBS peaks (in narrowPeak format)
+   based signalValue.  Input signal values are multiplied by a normalization factor 
+   calculated as the ratio of the maximum score value (1000) to the signal value 
+   at 1 standard deviation from the mean, with values exceeding 1000 capped at 1000. 
+   This has the effect of distributing scores up to mean + 1std across the score range, 
+   but assigning all above to the max score.
+
+   TODO: support for minScore != 0. And verify support for maxScore.
+
+   Author Jim Kent (in regClusterBedExpCfg.c and regClusterMakeTableOfTables)
+*/
+
+struct scoreRegInfo
+    {
+    int count;
+    double minVal, maxVal;
+    double sum, sumSquares;
+    double normFactor;
+    } scoreRegInfo = {0, MAXDOUBLE, 0, 0, 0, 0};
+
+void scoreRegIn(struct scorer *scorer, double inputVal)
+/* Gather any info needed from each input value */
+{
+struct scoreRegInfo *info = scorer->info;
+verbose(3, "inputVal=%f, oldMin=%f, oldMax=%f, oldSum=%f, oldSq = %f\t", 
+            inputVal, info->minVal, info->maxVal, info->sum, info->sumSquares);
+info->count++;
+info->minVal = min(inputVal, info->minVal);
+info->maxVal = max(inputVal, info->maxVal);
+info->sum += inputVal;
+info->sumSquares += (inputVal * inputVal);
+verbose(3, "min=%f, max=%f, sum=%f, squares=%f\n", 
+            info->minVal, info->maxVal, info->sum, info->sumSquares);
+}
+
+void scoreRegSummarize(struct scorer *scorer)
+/* Compute temporary values needed after seeing all input values and before rescoring.
+   For this method, this is the normalization factor, derived from mean and std.
+  */
+{
+struct scoreRegInfo *info = scorer->info;
+double std = calcStdFromSums(info->sum, info->sumSquares, info->count);
+double mean = info->sum/info->count;
+double highEnd = mean + std;
+if (highEnd > info->maxVal) highEnd = info->maxVal;     // needed ?
+info->normFactor = ((double)maxScore)/highEnd;
+verbose(2, "min=%f, max=%f, count=%d, std=%f, mean=%f, norm=%g\n", 
+            info->minVal, info->maxVal, info->count, std, mean, info->normFactor);
+}
+
+double scoreRegOut(struct scorer *scorer, double inputVal)
+/* Adjust scores and output file */
+{
+struct scoreRegInfo *info = scorer->info;
+return (info->normFactor * inputVal);
+}
+
+/* Scorer initialization */
+
 static struct scorer scorers[] = {
-    {scoreEncode, &scoreEncodeInfo, NULL, &scoreEncodeIn, &scoreEncodeSummarize, &scoreEncodeOut}
+    {scoreEncode, &scoreEncodeInfo, NULL, &scoreEncodeIn, &scoreEncodeSummarize, &scoreEncodeOut},
+    {scoreReg, &scoreRegInfo, NULL, &scoreRegIn, &scoreRegSummarize, &scoreRegOut},
+    {NULL, NULL, NULL, NULL, NULL, NULL}
 };
 
 struct scorer *scorerNew(const char *method)
 /* Locate scorer by name from array of all */
 {
-int numScorers = sizeof(scorers)/sizeof(scorers[0]);
-int i = 0;
-for (i = 0; i < numScorers; i++)
-    if (sameString(method, scorers[i].name))
-        return &scorers[i];
+struct scorer *pScorer;
+for (pScorer = scorers; pScorer->name; pScorer++) 
+    if (sameString(method, pScorer->name))
+        return pScorer;
 errAbort("scorer %s not found", method);
 return NULL;
 }
@@ -236,14 +307,6 @@ slAddHead(&inputVals, slDoubleNew(inputVal));
  * Here are code snippets and comments describing all 4 scoring methods 
  * (gleaned from various sources).  To be integrated (method=encode works as first case)
  */
-
-#ifdef METHOD_encode
-float a = (1000-minScore) / (max - min);
-float b = 1000 - ((1000-minScore) * max) / (max - min);
-safef(query, sizeof(query),
-    "update %s set score = round((%f * %s) + %f)",
-            track, a, fillInScoreColumn, b);
-#endif
 
 #ifdef METHOD_lod
 # calculate coefficients a and b.
@@ -267,36 +330,6 @@ For ENCODE, I set sensible minimum and maximum values, transforming the signal v
 score = 370 if x <= Q1
            = 1000 if x>=Q3
             = 370 + 630 * (asinh(x) - asinh(Q1)) / (asinh(Q3) - asinh(Q1))   if Q1 < x < Q3
-#endif
-
-#ifdef METHOD_reg
-double calcNormScoreFactor(char *fileName, int scoreCol)
-/* Figure out what to multiply things by to get a nice browser score (0-1000) */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[scoreCol+1];
-double sum = 0, sumSquares = 0;
-int n = 0;
-double minVal=0, maxVal=0;
-int fieldCount;
-while ((fieldCount = lineFileChop(lf, row)) != 0)
-    {
-    lineFileExpectAtLeast(lf, scoreCol+1, fieldCount);
-    double x = sqlDouble(row[scoreCol]);
-    if (n == 0)
-        minVal = maxVal = x;
-    if (x < minVal) minVal = x;
-    if (x > maxVal) maxVal = x;
-    sum += x;
-    sumSquares += x*x;
-    n += 1;
-
-double std = calcStdFromSums(sum, sumSquares, n);
-double mean = sum/n;
-double highEnd = mean + std;
-if (highEnd > maxVal) highEnd = maxVal;
-return 1000.0/highEnd;
-}
 #endif
 
 void bedScore(char *inFile, char *outFile)
@@ -336,7 +369,7 @@ for (bfl = bedFileLines; bfl != NULL; bfl = bfl->next)
         score = max(minScore, score);
         score = min(maxScore, score);
         bflSetScore(bfl, score);
-        verbose(3, "old score: %f, new score: %d\t", bfl->inputVal, score);
+        verbose(3, "old score: %f, new score: %d\n", bfl->inputVal, score);
         }
     bflOut(bfl, out);
     }
