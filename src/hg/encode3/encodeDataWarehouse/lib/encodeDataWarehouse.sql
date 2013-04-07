@@ -125,7 +125,6 @@ CREATE TABLE edwValidFile (
     sampleCount bigint not null,	# # of items in sample if we are just subsampling as we do for reads.
     basesInSample bigint not null,	# # of bases in our sample
     sampleBed varchar(255) not null,	# Path to a temporary bed file holding sample items
-    gotMapRatio tinyint not null,	# If set next field and the two after are valid
     mapRatio double not null,	# Proportion of items that map to genome
     sampleCoverage double not null,	# Proportion of assembly covered by at least one item in sample
     depth double not null,	# Estimated genome-equivalents covered by possibly overlapping data
