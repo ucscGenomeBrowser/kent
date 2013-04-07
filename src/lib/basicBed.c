@@ -1657,3 +1657,56 @@ if (as)
 
 }
 
+struct bed3 *bed3LoadAll(char *fileName)
+/* Load three columns from file as bed3. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+struct bed3 *list = NULL, *el;
+while (lineFileRow(lf, row))
+    {
+    AllocVar(el);
+    el->chrom = cloneString(row[0]);
+    el->chromStart = sqlUnsigned(row[1]);
+    el->chromEnd = sqlUnsigned(row[2]);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+void bed3Free(struct bed3 **pBed)
+/* Free up bed3 */
+{
+struct bed3 *bed = *pBed;
+if (bed != NULL)
+    {
+    freeMem(bed->chrom);
+    freez(pBed);
+    }
+}
+
+void bed3FreeList(struct bed3 **pList)
+/* Free a list of dynamically allocated bed3's */
+{
+struct bed3 *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    bed3Free(&el);
+    }
+*pList = NULL;
+}
+
+long long bed3TotalSize(struct bed3 *bedList)
+/* Return sum of chromEnd-chromStart. */
+{
+long long sum = 0;
+struct bed3 *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    sum += bed->chromEnd - bed->chromStart;
+return sum;
+}
+
