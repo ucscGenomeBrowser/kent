@@ -15,3 +15,7 @@ edwAddQaEnrichTarget -symLink regulatory hg19 /hive/groups/encode/encode3/encVal
 edwAddQaEnrichTarget exon hg19 /hive/groups/encode/encode3/encValData/hg19/regions/exon.bed
 edwAddQaEnrichTarget promoter hg19 /hive/groups/encode/encode3/encValData/hg19/regions/promoter.bed
 edwSubmit http://encodedcc.sdsc.edu/encode2/hub/5.test kent human
+hgsql encodeDataWarehouse -e 'create view files as select id,edwFileName,size,left(submitFileName,60) from edwFile where errorMessage="" and deprecated=""'
+hgsql encodeDataWarehouse -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.uniqEnrich,e.enrichment,left(f.submitFileName,60) submitFileName from edwQaEnrich e,edwValidFile v,edwFile f,edwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
+hgsql encodeDataWarehouse -e 'create view validFiles as select id,fileId file,format,outputType output,experiment,replicate rep,enrichedIn,ucscDb,itemCount,mapRatio,depth from edwValidFile'
+hgsql encodeDataWarehouse -e 'create view enrichments as select e.id id, e.fileId fileId,t.name target,v.enrichedIn, targetBaseHits,targetUniqHits,coverage,enrichment,uniqEnrich from edwQaEnrich e,edwQaEnrichTarget t,edwValidFile v where e.qaEnrichTargetId = t.id and e.fileId=v.fileId'
