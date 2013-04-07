@@ -29,49 +29,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct bed3 *bed3LoadAll(char *fileName)
-/* Load three columns from file as bed3. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
-struct bed3 *list = NULL, *el;
-while (lineFileRow(lf, row))
-    {
-    AllocVar(el);
-    el->chrom = cloneString(row[0]);
-    el->chromStart = sqlUnsigned(row[1]);
-    el->chromEnd = sqlUnsigned(row[2]);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-void bed3Free(struct bed3 **pBed)
-/* Free up bed3 */
-{
-struct bed3 *bed = *pBed;
-if (bed != NULL)
-    {
-    freeMem(bed->chrom);
-    freez(pBed);
-    }
-}
-
-void bed3FreeList(struct bed3 **pList)
-/* Free a list of dynamically allocated bed3's */
-{
-struct bed3 *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    bed3Free(&el);
-    }
-*pList = NULL;
-}
-
 struct genomeRangeTree *grtFromBed3List(struct bed3 *bedList)
 /* Make up a genomeRangeTree around bed file. */
 {
@@ -91,18 +48,10 @@ bed3FreeList(&bedList);
 return grt;
 }
 
-long long bed3TotalSize(struct bed3 *bedList)
-/* Return sum of chromEnd-chromStart. */
-{
-long long sum = 0;
-struct bed3 *bed;
-for (bed = bedList; bed != NULL; bed = bed->next)
-    sum += bed->chromEnd - bed->chromStart;
-return sum;
-}
-
-void doEnrichmentsFromSampleBed(struct edwFile *ef, struct edwValidFile *vf, char *enriched,
-    struct edwQaEnrichTarget *targetList, struct genomeRangeTree *grtList)
+void doEnrichmentsFromSampleBed(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, 
+    struct edwAssembly *assembly, struct edwQaEnrichTarget *targetList, 
+    struct genomeRangeTree *grtList)
 /* Figure out enrichments from sample bed file. */
 {
 char *sampleBed = vf->sampleBed;
@@ -143,14 +92,27 @@ for (target = targetList, grt=grtList; target != NULL; target = target->next, gr
 	    sample->chrom, sample->chromStart, sample->chromEnd);
 	overlapBases += overlap;
 	}
-    uglyf("%lld bases unique overlap, %lld bases totalOverlap  %s\n", 
-	uniqOverlapBases, overlapBases, target->name);
+
+    /* Fix up edwQaEnrich data structure */
+    struct edwQaEnrich *enrich;
+    AllocVar(enrich);
+    enrich->fileId = ef->id;
+    enrich->qaEnrichTargetId = target->id;
+    enrich->targetBaseHits = overlapBases;
+    enrich->targetUniqHits = uniqOverlapBases;
+    enrich->coverage = (double)uniqOverlapBases/target->targetSize;
+    double sampleSizeFactor = vf->itemCount /vf->sampleCount;
+    double sampleTargetDepth = (double)overlapBases/target->targetSize;
+    enrich->enrichment = sampleSizeFactor * sampleTargetDepth / vf->depth;
+    enrich->uniqEnrich = enrich->coverage / vf->sampleCoverage;
+
+    /* Save to database. */
+    edwQaEnrichSaveToDb(conn, enrich, "edwQaEnrich", 128);
     }
 genomeRangeTreeFree(&sampleGrt);
 }
 
 void doEnrichments(struct sqlConnection *conn, struct edwFile *ef, char *path,
-    char *format, char *enriched, 
     struct edwQaEnrichTarget *targetList, struct genomeRangeTree *grtList)
 /* Calculate enrichments on for all targets file. The targetList and the
  * grtList are in the same order. */
@@ -160,8 +122,15 @@ safef(query, sizeof(query), "select * from edwValidFile where fileId=%d", ef->id
 struct edwValidFile *vf = edwValidFileLoadByQuery(conn, query);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
+
+char *format = vf->format;
+char *ucscDb = vf->ucscDb;
+safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
+struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+if (assembly == NULL)
+    errAbort("Can't find assembly for %s", ucscDb);
 if (sameString(format, "fastq"))
-    doEnrichmentsFromSampleBed(ef, vf, enriched, targetList, grtList);
+    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList, grtList);
 else if (sameString(format, "bigWig"))
     verbose(2,"Got bigWig\n");
 else if (sameString(format, "bigBed"))
@@ -171,7 +140,7 @@ else if (sameString(format, "narrowPeak"))
 else if (sameString(format, "broadPeak"))
     verbose(2,"Got broadPeak.bigBed\n");
 else if (sameString(format, "bam"))
-    doEnrichmentsFromSampleBed(ef, vf, enriched, targetList, grtList);
+    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList, grtList);
 else if (sameString(format, "unknown"))
     verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->edwFileName);
 else
@@ -229,14 +198,7 @@ for (file = fileList; file != NULL; file = file->next)
 
     if (file->tags) // All ones we care about have tags
         {
-	struct cgiParsedVars *tags = cgiParsedVarsNew(file->tags);
-	char *format = hashFindVal(tags->hash, "format");
-	char *enriched = hashFindVal(tags->hash, "enriched_in");
-	if (format != NULL && enriched != NULL)
-	    {
-	    doEnrichments(conn, file, path, format, enriched, targetList, grtList);
-	    }
-	cgiParsedVarsFree(&tags);
+	doEnrichments(conn, file, path, targetList, grtList);
 	}
     }
 sqlDisconnect(&conn);
