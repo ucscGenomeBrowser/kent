@@ -220,6 +220,7 @@ vf->mapRatio = (double)hitCount/(hitCount+missCount);
 vf->depth = (double)totalBasesInHits/assembly->baseCount * (double)vf->itemCount/vf->sampleCount;
 long long basesHitBySample = genomeRangeTreeSumRanges(grt);
 vf->sampleCoverage = (double)basesHitBySample/assembly->baseCount;
+genomeRangeTreeFree(&grt);
 remove(samName);
 }
 
@@ -256,7 +257,7 @@ vf->sampleBed = cloneString(sampleBedName);
 #define TYPE_READ 2
 
 void edwMakeSampleOfBam(char *inBamName, FILE *outBed, int downStep, 
-    struct edwAssembly *assembly, struct edwValidFile *vf)
+    struct edwAssembly *assembly, struct genomeRangeTree *grt, struct edwValidFile *vf)
 /* Sample every downStep items in inBam and write in simplified bed 5 fashion to outBed. */
 {
 samfile_t *sf = samopen(inBamName, "rb", NULL);
@@ -304,6 +305,7 @@ while (!done)
 		   reverseIntRange(&start, &end, bamHeader->target_len[tid]);
 		   }
 	       fprintf(outBed, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
+	       genomeRangeTreeAdd(grt, chrom, start, end);
 	       }
 	   }
 	}
@@ -370,9 +372,13 @@ char sampleFileName[PATH_LEN];
 safef(sampleFileName, PATH_LEN, "%sedwBamSampleToBedXXXXXX", edwTempDir());
 int sampleFd = mkstemp(sampleFileName);
 FILE *f = fdopen(sampleFd, "w");
-edwMakeSampleOfBam(path, f, edwSampleReduction, assembly, vf);
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+edwMakeSampleOfBam(path, f, edwSampleReduction, assembly, grt, vf);
 carefulClose(&f);
 vf->sampleBed = cloneString(sampleFileName);
+long long basesHitBySample = genomeRangeTreeSumRanges(grt);
+genomeRangeTreeFree(&grt);
+vf->sampleCoverage = (double)basesHitBySample/assembly->baseCount;
 }
 
 void makeValidFile(struct sqlConnection *conn, struct edwFile *eFile, struct cgiParsedVars *tags)
