@@ -19,7 +19,8 @@ static char *method = scoreEncode;
 static int col = 5;
 static int minScore = 0;
 static int maxScore = 1000;
-//static boolean uniform = FALSE;
+static boolean uniform = FALSE;
+static struct scorer *scorer = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +37,7 @@ errAbort(
   "             encode - ENCODE pipeline (UCSC) (default)\n"
   "             reg - Regulatory clusters (UCSC) \n"
   "   -minScore=N - Minimum score to assign (default %d). Not supported for 'reg' method\n"
-  //"   -uniform    - Calculate uniform normalization factor across all input files\n"
+  "   -uniform    - Calculate uniform normalization factor across all input files\n"
   "note:\n"
   "    If multiple files are specified, they must all be of same BED size\n.",
   /*
@@ -51,7 +52,7 @@ static struct optionSpec options[] = {
    {"col", OPTION_INT},
    {"method", OPTION_STRING},
    {"minScore", OPTION_INT},
-   //{"uniform", OPTION_BOOLEAN},
+   {"uniform", OPTION_BOOLEAN},
    {NULL, 0}
 };
 
@@ -136,6 +137,16 @@ if (bedSize > 5)
 // bflOut(bfl, stdout);
 // fflush(stdout);
 return bfl;
+}
+
+void bflFree(struct bedFileLine **bfl)
+/* Free memory */
+{
+freeMem((*bfl)->text);
+freeMem((*bfl)->bed5->name);
+freeMem((*bfl)->bed5->chrom);
+/* more to free from bed5 ? */
+freez(bfl);
 }
 
 boolean bflIsData(struct bedFileLine *bfl)
@@ -343,6 +354,7 @@ score = 370 if x <= Q1
 #endif
 
 void bedScoreFile(char *inFile, char *outFile)
+/* Score a single file */
 {
 struct lineFile *in = lineFileOpen(inFile, TRUE);
 FILE *out = mustOpen(outFile, "w");
@@ -351,7 +363,6 @@ int lineNum = 0;
 struct bedFileLine *bfl, *bedFileLines = NULL;   // list of lines in BED file
 
 verbose(2, "Reading file '%s' into scorer '%s'\n", in->fileName, method);
-struct scorer *scorer = scorerNew(method);
 
 // parse input file into a list of bedFileLines and let scorer have a look at each value
 while (lineFileNext(in, &line, NULL))
@@ -386,6 +397,73 @@ carefulClose(&out);
 lineFileClose(&in);
 }
 
+void bedPreScoreFile(char *inFile)
+/* Read input values and stash values needed for the method */
+{
+struct lineFile *in = lineFileOpen(inFile, TRUE);
+char *line = NULL;
+int lineNum = 0;
+struct bedFileLine *bfl = NULL;
+
+// parse input file and let scorer have a look at each value
+while (lineFileNext(in, &line, NULL))
+    {
+    lineNum++;
+    bfl = bflNew(line, lineNum);
+    if (bflIsData(bfl))
+        scorer->inputValue(scorer, bfl->inputVal);
+    bflFree(&bfl);
+    }
+verbose(2, "Found %d lines in BED file\n", lineNum);
+lineFileClose(&in);
+}
+
+void bedScoreSummarizeAll()
+/* Compute normalize values after all input seen */
+{
+scorer->summarize(scorer);
+}
+
+void bedScoreUniformFile(char *inFile, char *outFile)
+/* Normalize scores and output */
+{
+struct lineFile *in = lineFileOpen(inFile, TRUE);
+FILE *out = mustOpen(outFile, "w");
+char *line = NULL;
+struct bedFileLine *bfl = NULL;
+int lineNum = 0;
+
+while (lineFileNext(in, &line, NULL))
+    {
+    lineNum++;
+    bfl = bflNew(line, lineNum);
+    if (bflIsData(bfl))
+        {
+        // data line, so transform it
+        int score = scorer->outputValue(scorer, bfl->inputVal);
+        score = max(minScore, score);
+        score = min(maxScore, score);
+        bflSetScore(bfl, score);
+        verbose(3, "old score: %f, new score: %d\n", bfl->inputVal, score);
+        }
+    bflOut(bfl, out);
+    }
+carefulClose(&out);
+lineFileClose(&in);
+}
+
+char *fileNameFromPath(char *path)
+/* Strip directories from path and return file name */
+{
+char name[FILENAME_LEN];
+char ext[FILEEXT_LEN];
+char buf[FILENAME_LEN + FILEEXT_LEN + 1];
+
+splitPath(path, NULL, name, ext);
+safef(buf, sizeof(buf), "%s%s", &name[0], &ext[0]);
+return (cloneString(buf));
+}
+
 void bedScore(int count, char *list[])
 /* bedScore - Add scores to BED files. 
  *              If count == 2, file1 is input, file2 is output
@@ -402,8 +480,27 @@ verbose(2, "Writing to output directory '%s'\n", outDir);
 int i;
 for (i = 0; i < count-1; i++)
     {
-    struct dyString *dy = dyStringCreate("%s/%s", outDir, list[i]);
-    bedScoreFile(list[i], dyStringCannibalize(&dy));
+    char *file = list[i];
+    if (uniform)
+        {
+        bedPreScoreFile(file);
+        }
+    else
+        {
+        struct dyString *dy = dyStringCreate("%s/%s", outDir, list[i]);
+        bedScoreFile(file, dyStringCannibalize(&dy));
+        }
+    }
+if (!uniform)
+    return;
+
+bedScoreSummarizeAll();
+for (i = 0; i < count-1; i++)
+    {
+    char *filePath = list[i];
+    char *fileName = fileNameFromPath(filePath);
+    struct dyString *dy = dyStringCreate("%s/%s", outDir, fileName);
+    bedScoreUniformFile(filePath, dyStringCannibalize(&dy));
     }
 }
 
@@ -415,8 +512,9 @@ if (argc < 3)
     usage("Too few arguments");
 col = optionInt("col", col);
 minScore = optionInt("minScore", minScore);
+uniform = optionExists("uniform");
 method = optionVal("method", method);
-//uniform = optionExists("uniform");
+scorer = scorerNew(method);
 bedScore(argc-1, &argv[1]);
 return 0;
 }
