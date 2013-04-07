@@ -143,9 +143,12 @@ void bflFree(struct bedFileLine **bfl)
 /* Free memory */
 {
 freeMem((*bfl)->text);
-freeMem((*bfl)->bed5->name);
-freeMem((*bfl)->bed5->chrom);
-/* more to free from bed5 ? */
+if ((*bfl)->bed5)
+    {
+    freeMem((*bfl)->bed5->name);
+    freeMem((*bfl)->bed5->chrom);
+    /* more to free from bed5 ? */
+    }
 freez(bfl);
 }
 
@@ -353,50 +356,6 @@ score = 370 if x <= Q1
             = 370 + 630 * (asinh(x) - asinh(Q1)) / (asinh(Q3) - asinh(Q1))   if Q1 < x < Q3
 #endif
 
-void bedScoreFile(char *inFile, char *outFile)
-/* Score a single file */
-{
-struct lineFile *in = lineFileOpen(inFile, TRUE);
-FILE *out = mustOpen(outFile, "w");
-char *line = NULL;
-int lineNum = 0;
-struct bedFileLine *bfl, *bedFileLines = NULL;   // list of lines in BED file
-
-verbose(2, "Reading file '%s' into scorer '%s'\n", in->fileName, method);
-
-// parse input file into a list of bedFileLines and let scorer have a look at each value
-while (lineFileNext(in, &line, NULL))
-    {
-    lineNum++;
-    bfl = bflNew(line, lineNum);
-    if (bflIsData(bfl))
-        scorer->inputValue(scorer, bfl->inputVal);
-    slAddHead(&bedFileLines, bfl);
-    }
-verbose(2, "Found %d lines in BED file\n", lineNum);
-slReverse(&bedFileLines);
-
-// compute anything needed after all input values seen
-scorer->summarize(scorer);
-
-// (re)score beds and write to output file
-for (bfl = bedFileLines; bfl != NULL; bfl = bfl->next)
-    {
-    if (bflIsData(bfl))
-        {
-        // data line, so transform it
-        int score = scorer->outputValue(scorer, bfl->inputVal);
-        score = max(minScore, score);
-        score = min(maxScore, score);
-        bflSetScore(bfl, score);
-        verbose(3, "old score: %f, new score: %d\n", bfl->inputVal, score);
-        }
-    bflOut(bfl, out);
-    }
-carefulClose(&out);
-lineFileClose(&in);
-}
-
 void bedPreScoreFile(char *inFile)
 /* Read input values and stash values needed for the method */
 {
@@ -418,13 +377,13 @@ verbose(2, "Found %d lines in BED file\n", lineNum);
 lineFileClose(&in);
 }
 
-void bedScoreSummarizeAll()
+void bedScoreSummarize()
 /* Compute normalize values after all input seen */
 {
 scorer->summarize(scorer);
 }
 
-void bedScoreUniformFile(char *inFile, char *outFile)
+void bedScoreFile(char *inFile, char *outFile)
 /* Normalize scores and output */
 {
 struct lineFile *in = lineFileOpen(inFile, TRUE);
@@ -472,35 +431,44 @@ void bedScore(int count, char *list[])
 {
 if (count == 2)
     {
-    bedScoreFile(list[0], list[1]);
+    // single file
+    char *inFile = list[0];
+    char *outFile = list[1];
+    bedPreScoreFile(inFile);
+    bedScoreSummarize();
+    bedScoreFile(inFile, outFile);
     return;
     }
+
+// multiple files
 char *outDir = list[count-1];
 verbose(2, "Writing to output directory '%s'\n", outDir);
 int i;
 for (i = 0; i < count-1; i++)
     {
-    char *file = list[i];
+    char *inFile = list[i];
     if (uniform)
         {
-        bedPreScoreFile(file);
+        bedPreScoreFile(inFile);
         }
     else
         {
         struct dyString *dy = dyStringCreate("%s/%s", outDir, list[i]);
-        bedScoreFile(file, dyStringCannibalize(&dy));
+        bedPreScoreFile(inFile);
+        bedScoreSummarize();
+        bedScoreFile(inFile, dyStringCannibalize(&dy));
         }
     }
 if (!uniform)
     return;
 
-bedScoreSummarizeAll();
+bedScoreSummarize();
 for (i = 0; i < count-1; i++)
     {
     char *filePath = list[i];
     char *fileName = fileNameFromPath(filePath);
     struct dyString *dy = dyStringCreate("%s/%s", outDir, fileName);
-    bedScoreUniformFile(filePath, dyStringCannibalize(&dy));
+    bedScoreFile(filePath, dyStringCannibalize(&dy));
     }
 }
 
