@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 PROG = ../bedScore
 
-test: regTest miniTest encodeSmallTest encodeTest
+test: regTest miniTest encodeSmallTest encodeTest uniformTest
 	echo tested all
 
 miniTest:
