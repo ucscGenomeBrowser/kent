@@ -1,5 +1,6 @@
 /* edwMakeEnrichments - Scan through database and make a makefile to calc. enrichments and 
- * store in database.. */
+ * store in database.  Note to compare with featureBits enrichments use -countGaps 
+ * in featureBits */
 
 #include "common.h"
 #include "linefile.h"
@@ -8,17 +9,20 @@
 #include "basicBed.h"
 #include "options.h"
 #include "jksql.h"
+#include "cheapcgi.h"
+#include "localmem.h"
+#include "bbiFile.h"
+#include "bigBed.h"
+#include "genomeRangeTree.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
-#include "cheapcgi.h"
-#include "genomeRangeTree.h"
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "edwMakeEnrichments - Scan through database and make a makefile to calc. enrichments and \n"
-  "store in database.\n"
+  "store in database. Enrichments similar to 'featureBits -countGaps' enrichments.\n"
   "usage:\n"
   "   edwMakeEnrichments startFileId endFileId\n"
   );
@@ -28,6 +32,18 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
+
+char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
+/* Return full path (which eventually should be freeMem'd) for fileId */
+{
+char query[256];
+char fileName[PATH_LEN];
+safef(query, sizeof(query), "select edwFileName from edwFile where id=%lld", fileId);
+sqlNeedQuickQuery(conn, query, fileName, sizeof(fileName));
+char path[512];
+safef(path, sizeof(path), "%s%s", edwRootDir, fileName);
+return cloneString(path);
+}
 
 struct genomeRangeTree *grtFromBed3List(struct bed3 *bedList)
 /* Make up a genomeRangeTree around bed file. */
@@ -48,10 +64,53 @@ bed3FreeList(&bedList);
 return grt;
 }
 
+struct target
+/* Information about a target */
+    {
+    struct target *next;
+    struct edwQaEnrichTarget *target;
+    struct genomeRangeTree *grt;
+    long long overlapBases;
+    long long uniqOverlapBases;
+    };
+
+struct target *targetNew(struct edwQaEnrichTarget *et, struct genomeRangeTree *grt)
+/* Make a little local target object */
+{
+struct target *target;
+AllocVar(target);
+target->target = et;
+target->grt = grt;
+return target;
+}
+
+struct edwQaEnrich *enrichFromOverlaps(struct edwFile *ef, struct edwValidFile *vf,
+	struct edwAssembly *assembly, struct target *target, 
+	long long overlapBases, long long uniqOverlapBases)
+/* Build up enrichment structure based on overlaps between file and target */
+{
+struct edwQaEnrich *enrich;
+AllocVar(enrich);
+long long targetSize = target->target->targetSize;
+enrich->fileId = ef->id;
+enrich->qaEnrichTargetId = target->target->id;
+enrich->targetBaseHits = overlapBases;
+enrich->targetUniqHits = uniqOverlapBases;
+enrich->coverage = (double)uniqOverlapBases/targetSize;
+double sampleSizeFactor = (double)vf->itemCount /vf->sampleCount;
+double sampleTargetDepth = (double)overlapBases/targetSize;
+enrich->enrichment = sampleSizeFactor * sampleTargetDepth / vf->depth;
+enrich->uniqEnrich = enrich->coverage / vf->sampleCoverage;
+verbose(2, "%s size %lld (%0.3f%%), %s (%0.3f%%), overlap %lld (%0.3f%%)\n", 
+    target->target->name, targetSize, 100.0*targetSize/assembly->baseCount, 
+    ef->edwFileName, 100.0*vf->sampleCoverage, 
+    uniqOverlapBases, 100.0*uniqOverlapBases/assembly->baseCount);
+return enrich;
+}
+
 void doEnrichmentsFromSampleBed(struct sqlConnection *conn, 
     struct edwFile *ef, struct edwValidFile *vf, 
-    struct edwAssembly *assembly, struct edwQaEnrichTarget *targetList, 
-    struct genomeRangeTree *grtList)
+    struct edwAssembly *assembly, struct target *targetList)
 /* Figure out enrichments from sample bed file. */
 {
 char *sampleBed = vf->sampleBed;
@@ -60,15 +119,17 @@ if (isEmpty(sampleBed))
     warn("No sample bed for %s", ef->edwFileName);
     return;
     }
+
+/* Load sample bed, make a range tree to track unique coverage, and get list of all chroms .*/
 struct bed3 *sample, *sampleList = bed3LoadAll(sampleBed);
-long long sampleCount = slCount(sampleList), sampleBases = bed3TotalSize(sampleList);
-verbose(1, "Got %lld items totalling %lld bases in %s\n", sampleCount, sampleBases, sampleBed);
 struct genomeRangeTree *sampleGrt = grtFromBed3List(sampleList);
 struct hashEl *chrom, *chromList = hashElListHash(sampleGrt->hash);
-struct edwQaEnrichTarget *target;
-struct genomeRangeTree *grt;
-for (target = targetList, grt=grtList; target != NULL; target = target->next, grt=grt->next)
+
+/* Iterate through each target - and in lockstep each associated grt to calculate unique overlap */
+struct target *target;
+for (target = targetList; target != NULL; target = target->next)
     {
+    struct genomeRangeTree *grt = target->grt;
     long long uniqOverlapBases = 0;
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
         {
@@ -77,14 +138,17 @@ for (target = targetList, grt=grtList; target != NULL; target = target->next, gr
 	if (targetTree != NULL)
 	    {
 	    struct range *range, *rangeList = rangeTreeList(sampleTree);
-	    /* Do unique base overlap counts (since using range tree) */
 	    for (range = rangeList; range != NULL; range = range->next)
 		{
+		/* Do unique base overlap counts (since using range trees both sides) */
 		int overlap = rangeTreeOverlapSize(targetTree, range->start, range->end);
 		uniqOverlapBases += overlap;
 		}
 	    }
 	}
+
+    /* Figure out how much we overlap allowing same bases in genome
+     * to part of more than one overlap. */ 
     long long overlapBases = 0;
     for (sample = sampleList; sample != NULL; sample = sample->next)
         {
@@ -93,27 +157,81 @@ for (target = targetList, grt=grtList; target != NULL; target = target->next, gr
 	overlapBases += overlap;
 	}
 
-    /* Fix up edwQaEnrich data structure */
-    struct edwQaEnrich *enrich;
-    AllocVar(enrich);
-    enrich->fileId = ef->id;
-    enrich->qaEnrichTargetId = target->id;
-    enrich->targetBaseHits = overlapBases;
-    enrich->targetUniqHits = uniqOverlapBases;
-    enrich->coverage = (double)uniqOverlapBases/target->targetSize;
-    double sampleSizeFactor = vf->itemCount /vf->sampleCount;
-    double sampleTargetDepth = (double)overlapBases/target->targetSize;
-    enrich->enrichment = sampleSizeFactor * sampleTargetDepth / vf->depth;
-    enrich->uniqEnrich = enrich->coverage / vf->sampleCoverage;
-
     /* Save to database. */
+    struct edwQaEnrich *enrich = enrichFromOverlaps(ef, vf, assembly,
+	target, overlapBases, uniqOverlapBases);
     edwQaEnrichSaveToDb(conn, enrich, "edwQaEnrich", 128);
+    edwQaEnrichFree(&enrich);
     }
 genomeRangeTreeFree(&sampleGrt);
 }
 
-void doEnrichments(struct sqlConnection *conn, struct edwFile *ef, char *path,
-    struct edwQaEnrichTarget *targetList, struct genomeRangeTree *grtList)
+void doEnrichmentsFromBigBed(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, 
+    struct edwAssembly *assembly, struct target *targetList)
+/* Figure out enrichments from a bigBed file. */
+{
+/* Get path to bigBed, open it, and read all chromosomes. */
+char *bigBedPath = edwPathForFileId(conn, ef->id);
+struct bbiFile *bbi = bigBedFileOpen(bigBedPath);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+
+/* Do a pretty complex loop that just aims to set target->overlapBases and ->uniqOverlapBases
+ * for all targets.  This is complicated by just wanting to keep one chromosome worth of
+ * bigBed data in memory. */
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    /* Get list of intervals in bigBed for this chromosome, and feed it to a rangeTree. */
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *ivList = bigBedIntervalQuery(bbi, chrom->name, 0, chrom->size, 0, lm);
+    struct bigBedInterval *iv;
+    struct rbTree *bbTree = rangeTreeNew();
+    for (iv = ivList; iv != NULL; iv = iv->next)
+	 rangeTreeAdd(bbTree, iv->start, iv->end);
+    struct range *bbRange, *bbRangeList = rangeTreeList(bbTree);
+
+    /* Loop through all targets adding overlaps from ivList and unique overlaps from bbRangeList */
+    struct target *target;
+    for (target = targetList; target != NULL; target = target->next)
+        {
+	struct genomeRangeTree *grt = target->grt;
+	struct rbTree *targetTree = genomeRangeTreeFindRangeTree(grt, chrom->name);
+	if (targetTree != NULL)
+	    {
+	    struct bigBedInterval *iv;
+	    for (iv = ivList; iv != NULL; iv = iv->next)
+		{
+		int overlap = rangeTreeOverlapSize(targetTree, iv->start, iv->end);
+		target->overlapBases += overlap;
+		}
+	    for (bbRange = bbRangeList; bbRange != NULL; bbRange = bbRange->next)
+		{
+		int overlap = rangeTreeOverlapSize(targetTree, bbRange->start, bbRange->end);
+		target->uniqOverlapBases += overlap;
+		}
+	    }
+	}
+    rangeTreeFree(&bbTree);
+    lmCleanup(&lm);
+    }
+
+/* Now loop through targets and save enrichment info to database */
+struct target *target;
+for (target = targetList; target != NULL; target = target->next)
+    {
+    struct edwQaEnrich *enrich = enrichFromOverlaps(ef, vf, assembly, target, 
+	target->overlapBases, target->uniqOverlapBases);
+    edwQaEnrichSaveToDb(conn, enrich, "edwQaEnrich", 128);
+    edwQaEnrichFree(&enrich);
+    }
+
+bbiChromInfoFreeList(&chromList);
+bigBedFileClose(&bbi);
+freez(&bigBedPath);
+}
+
+void doEnrichments(struct sqlConnection *conn, struct edwFile *ef, char *path, 
+    struct target *targetList)
 /* Calculate enrichments on for all targets file. The targetList and the
  * grtList are in the same order. */
 {
@@ -123,6 +241,11 @@ struct edwValidFile *vf = edwValidFileLoadByQuery(conn, query);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
 
+/* Loop through targetList zeroing out existing ovelaps. */
+struct target *target;
+for (target = targetList; target != NULL; target = target->next)
+    target->overlapBases = target->uniqOverlapBases = 0;
+
 char *format = vf->format;
 char *ucscDb = vf->ucscDb;
 safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
@@ -130,36 +253,23 @@ struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
 if (assembly == NULL)
     errAbort("Can't find assembly for %s", ucscDb);
 if (sameString(format, "fastq"))
-    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList, grtList);
+    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 else if (sameString(format, "bigWig"))
     verbose(2,"Got bigWig\n");
 else if (sameString(format, "bigBed"))
-    verbose(2,"Got bigBed\n");
+    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
 else if (sameString(format, "narrowPeak"))
-    verbose(2,"Got narrowPeak.bigBed\n");
+    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
 else if (sameString(format, "broadPeak"))
-    verbose(2,"Got broadPeak.bigBed\n");
+    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
 else if (sameString(format, "bam"))
-    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList, grtList);
+    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 else if (sameString(format, "unknown"))
     verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->edwFileName);
 else
     errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
-
 }
 
-
-char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
-/* Return full path (which eventually should be freeMem'd) for fileId */
-{
-char query[256];
-char fileName[PATH_LEN];
-safef(query, sizeof(query), "select edwFileName from edwFile where id=%lld", fileId);
-sqlNeedQuickQuery(conn, query, fileName, sizeof(fileName));
-char path[512];
-safef(path, sizeof(path), "%s%s", edwRootDir, fileName);
-return cloneString(path);
-}
 
 void edwMakeEnrichments(int startFileId, int endFileId)
 /* edwMakeEnrichments - Scan through database and make a makefile to calc. enrichments and store 
@@ -172,33 +282,31 @@ safef(query, sizeof(query),
     "select * from edwFile where id>=%d and id<=%d and md5 != '' and deprecated = ''", 
     startFileId, endFileId);
 struct edwFile *file, *fileList = edwFileLoadByQuery(conn, query);
-uglyf("doing %d files with id's between %d and %d\n", slCount(fileList), startFileId, endFileId);
 
 /* Get list of all targets. */
-struct edwQaEnrichTarget *target, *targetList = 
+struct edwQaEnrichTarget *et, *etList = 
     edwQaEnrichTargetLoadByQuery(conn, "select * from edwQaEnrichTarget");
-uglyf("Got %d targets.\n", slCount(targetList));
 
-/* Load range trees for all targets. */
-struct genomeRangeTree *grt, *grtList=NULL;
-for (target = targetList; target != NULL; target = target->next)
+/* Wrap a new structure around the enrichment targets where we'll store summary info. */
+struct target *target, *targetList = NULL, **targetTail = &targetList;
+for (et = etList; et != NULL; et = et->next)
     {
-    char *targetBed = edwPathForFileId(conn, target->fileId);
-    grt = grtFromSimpleBed(targetBed);
-    slAddHead(&grtList, grt);
-    freeMem(targetBed);
+    char *targetBed = edwPathForFileId(conn, et->fileId);
+    struct genomeRangeTree *grt = grtFromSimpleBed(targetBed);
+    target = targetNew(et, grt);
+    *targetTail = target;
+    targetTail = &target->next;
     }
-slReverse(&grtList);
 
 for (file = fileList; file != NULL; file = file->next)
     {
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s%s", edwRootDir, file->edwFileName);
-    uglyf("processing %s aka %s\n", file->submitFileName, path);
+    verbose(1, "processing %s aka %s\n", file->submitFileName, path);
 
     if (file->tags) // All ones we care about have tags
         {
-	doEnrichments(conn, file, path, targetList, grtList);
+	doEnrichments(conn, file, path, targetList);
 	}
     }
 sqlDisconnect(&conn);
