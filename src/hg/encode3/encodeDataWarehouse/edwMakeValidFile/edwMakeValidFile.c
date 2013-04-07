@@ -7,12 +7,13 @@
 #include "sqlNum.h"
 #include "cheapcgi.h"
 #include "jksql.h"
-#include "encodeDataWarehouse.h"
-#include "edwLib.h"
+#include "genomeRangeTree.h"
 #include "bigWig.h"
 #include "bigBed.h"
 #include "bamFile.h"
 #include "portable.h"
+#include "encodeDataWarehouse.h"
+#include "edwLib.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -116,7 +117,81 @@ if (err != 0)
     errAbort("error executing: %s", command);
 }
 
-void alignFastqMakeBed(struct edwFile *ef, char *fastqPath, struct edwValidFile *vf, FILE *bedF)
+void scanSam(char *samIn, FILE *f, struct genomeRangeTree *grt, long long *retHit, 
+    long long *retMiss,  long long *retTotalBasesInHits)
+/* Scan through sam file doing several things:counting how many reads hit and how many 
+ * miss target during mapping phase, copying those that hit to a little bed file, and 
+ * also defining regions covered in a genomeRangeTree. */
+{
+samfile_t *sf = samopen(samIn, "r", NULL);
+bam_header_t *bamHeader = sf->header;
+bam1_t one;
+ZeroVar(&one);
+int err;
+long long hit = 0, miss = 0, totalBasesInHits = 0;
+while ((err = samread(sf, &one)) >= 0)
+    {
+    int32_t tid = one.core.tid;
+    if (tid < 0)
+	{
+	++miss;
+        continue;
+	}
+    ++hit;
+    char *chrom = bamHeader->target_name[tid];
+    // Approximate here... can do better if parse cigar.
+    int start = one.core.pos;
+    int size = one.core.l_qseq;
+    int end = start + size;	
+    totalBasesInHits += size;
+    boolean isRc = (one.core.flag & BAM_FREVERSE);
+    char strand = '+';
+    if (isRc)
+	{
+	strand = '-';
+	reverseIntRange(&start, &end, bamHeader->target_len[tid]);
+	}
+    fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
+    genomeRangeTreeAdd(grt, chrom, start, end);
+    }
+if (err < 0 && err != -1)
+    errnoAbort("samread err %d", err);
+samclose(sf);
+*retHit = hit;
+*retMiss = miss;
+*retTotalBasesInHits = totalBasesInHits;
+}
+
+static void rangeSummer(void *item, void *context)
+/* This is a callback for rbTreeTraverse with context.  It just adds up
+ * end-start */
+{
+struct range *range = item;
+long long *pSum = context;
+*pSum += range->end - range->start;
+}
+
+long long rangeTreeSumRanges(struct rbTree *tree)
+/* Return sum of end-start of all items. */
+{
+long long sum = 0;
+rbTreeTraverseWithContext(tree, rangeSummer, &sum);
+return sum;
+}
+
+long long genomeRangeTreeSumRanges(struct genomeRangeTree *grt)
+/* Sum up all ranges in tree. */
+{
+long long sum = 0;
+struct hashEl *chrom, *chromList = hashElListHash(grt->hash);
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    rbTreeTraverseWithContext(chrom->val, rangeSummer, &sum);
+hashElFreeList(&chromList);
+return sum;
+}
+
+void alignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
+    char *fastqPath, struct edwValidFile *vf, FILE *bedF)
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
 {
 /* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
@@ -135,8 +210,16 @@ safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, fastqPath,
 systemWithCheck(cmd);
 remove(saiName);
 
-/* Create bed and remove sam temp file */
-samToOpenBed(samName, bedF);
+/* Scan sam file to calculate vf->mapRatio, vf->sampleCoverage and vf->depth. 
+ * and also to produce little bed file for enrichment step. */
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+long long hitCount=0, missCount=0, totalBasesInHits=0;
+scanSam(samName, bedF, grt, &hitCount, &missCount, &totalBasesInHits);
+uglyf("hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", hitCount, missCount, totalBasesInHits, grt);
+vf->mapRatio = (double)hitCount/(hitCount+missCount);
+vf->depth = (double)totalBasesInHits/assembly->baseCount * (double)vf->itemCount/vf->sampleCount;
+long long basesHitBySample = genomeRangeTreeSumRanges(grt);
+vf->sampleCoverage = (double)basesHitBySample/assembly->baseCount;
 remove(samName);
 }
 
@@ -161,7 +244,7 @@ char sampleBedName[PATH_LEN];
 safef(sampleBedName, PATH_LEN, "%sedwSampleBedXXXXXX", edwTempDir());
 int bedFd = mkstemp(sampleBedName);
 FILE *bedF = fdopen(bedFd, "w");
-alignFastqMakeBed(ef, smallFastqName, vf, bedF);
+alignFastqMakeBed(ef, assembly, smallFastqName, vf, bedF);
 carefulClose(&bedF);
 
 remove(smallFastqName);
@@ -227,7 +310,6 @@ while (!done)
     }
 vf->mapRatio = (double)mappedCount/vf->itemCount;
 vf->depth = vf->basesInItems*vf->mapRatio/assembly->baseCount;
-vf->gotMapRatio = TRUE;
 samclose(sf);
 }
 
@@ -242,7 +324,6 @@ vf->basesInSample = vf->basesInItems = sum.sumData;
 vf->sampleCoverage = (double)sum.validCount/assembly->baseCount;
 vf->depth = (double)sum.sumData/assembly->baseCount;
 vf->mapRatio = 1.0;
-vf->gotMapRatio = TRUE;
 bigBedFileClose(&bbi);
 }
 
@@ -256,7 +337,6 @@ vf->sampleCount = vf->itemCount = vf->basesInSample = vf->basesInItems = sum.val
 vf->sampleCoverage = (double)sum.validCount/assembly->baseCount;
 vf->depth = (double)sum.sumData/assembly->baseCount;
 vf->mapRatio = 1.0;
-vf->gotMapRatio = TRUE;
 bigWigFileClose(&bbi);
 }
 
