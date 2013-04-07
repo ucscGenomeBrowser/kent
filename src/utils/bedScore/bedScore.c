@@ -364,6 +364,8 @@ char *line = NULL;
 int lineNum = 0;
 struct bedFileLine *bfl = NULL;
 
+verbose(2, "Reading file '%s' into scorer '%s'\n", inFile, method);
+
 // parse input file and let scorer have a look at each value
 while (lineFileNext(in, &line, NULL))
     {
@@ -391,6 +393,8 @@ FILE *out = mustOpen(outFile, "w");
 char *line = NULL;
 struct bedFileLine *bfl = NULL;
 int lineNum = 0;
+
+verbose(2, "Writing file '%s'\n", outFile);
 
 while (lineFileNext(in, &line, NULL))
     {
@@ -446,17 +450,18 @@ verbose(2, "Writing to output directory '%s'\n", outDir);
 int i;
 for (i = 0; i < count-1; i++)
     {
-    char *inFile = list[i];
+    char *filePath = list[i];
     if (uniform)
         {
-        bedPreScoreFile(inFile);
+        bedPreScoreFile(filePath);
         }
     else
         {
-        struct dyString *dy = dyStringCreate("%s/%s", outDir, list[i]);
-        bedPreScoreFile(inFile);
+        bedPreScoreFile(filePath);
         bedScoreSummarize();
-        bedScoreFile(inFile, dyStringCannibalize(&dy));
+        char *fileName = fileNameFromPath(filePath);
+        struct dyString *dy = dyStringCreate("%s/%s", outDir, fileName);
+        bedScoreFile(filePath, dyStringCannibalize(&dy));
         }
     }
 if (!uniform)
