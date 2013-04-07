@@ -151,6 +151,7 @@ while ((err = samread(sf, &one)) >= 0)
 	strand = '-';
 	reverseIntRange(&start, &end, bamHeader->target_len[tid]);
 	}
+    if (start < 0) start=0;
     fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
     genomeRangeTreeAdd(grt, chrom, start, end);
     }
@@ -304,6 +305,7 @@ while (!done)
 		   strand = '-';
 		   reverseIntRange(&start, &end, bamHeader->target_len[tid]);
 		   }
+	       if (start < 0) start=0;
 	       fprintf(outBed, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
 	       genomeRangeTreeAdd(grt, chrom, start, end);
 	       }
