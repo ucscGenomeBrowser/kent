@@ -104,3 +104,19 @@ for (row = *pList;  row != NULL;  row = nextRow)
     }
 *pList = NULL;
 }
+
+int annoRowCmp(const void *va, const void *vb)
+/* Compare two annoRows' {chrom, start, end}. */
+{
+struct annoRow *rowA = *((struct annoRow **)va);
+struct annoRow *rowB = *((struct annoRow **)vb);
+int dif = strcmp(rowA->chrom, rowB->chrom);
+if (dif == 0)
+    {
+    dif = rowA->start - rowB->start;
+    if (dif == 0)
+	dif = rowA->end - rowB->end;
+    }
+return dif;
+}
+
