@@ -69,3 +69,56 @@ snpSeqFile /gbdb/mm10/snp/snp137.fa
 track snp137 override
 snpSeqFile /gbdb/mm10/snp/snp137.fa
 
+track ucscRetroAli2
+shortLabel Retroposed Genes 2.0
+longLabel Retroposed Genes, Including Pseudogenes 2012-11-13 [ucscRetroAli2]
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo2
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds2
+baseColorUseSequence extFile ucscRetroSeq2 ucscRetroExtFile2
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes - 2012-11-13
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo2
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo2.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes - 2012-11-13
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes - 2012-11-13
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo2
+xrefQuery select ucscRetroInfo2.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes - 2012-11-13
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo2
+xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
