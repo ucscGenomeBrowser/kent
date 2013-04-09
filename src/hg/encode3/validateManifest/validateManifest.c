@@ -14,6 +14,8 @@ char *version = "1.0";
 char *workingDir = ".";
 char *encValData = "encValData";
 
+boolean quickMd5sum = FALSE;  // Just for development testing, do not use
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -42,6 +44,7 @@ errAbort(
 static struct optionSpec options[] = {
     {"dir", OPTION_STRING},
     {"encValData", OPTION_STRING},
+    {"quickMd5sum", OPTION_BOOLEAN},     // Testing option, user should not use
     {NULL, 0},
 };
 
@@ -222,8 +225,9 @@ boolean runCmdLine(char *cmdLine)
 //   some of the exec with wait code from the old ENCODE2 pipeline
 //   Maybe the default timeout should be 8 hours.
 //   I am sure that is more than generous enough for validating a single big file.
+verbose(2, "cmdLine=[%s]\n",cmdLine);
 int retCode = system(cmdLine); 
-uglyf("DEBUG: retCode=%d\n", retCode); // DEBUG REMOVE
+verbose(2, "retCode=%d\n", retCode);
 sleep(1); // give stupid gzip broken pipe errors a chance to happen and print out to stderr
 return (retCode == 0);
 }
@@ -246,7 +250,6 @@ if (quicky)
     }
 else
     safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", mismatches, chromInfo, twoBit, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -259,7 +262,6 @@ char *asFile = getAs("bedRnaElements.as");  // TODO this probably has to change
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -274,7 +276,6 @@ char cmdLine[1024];
 // The following line is nothing but pure hack taken from the first example found in the manifest,
 //  and probably will fail miserably on other lines of the manifest, as this approach is too simple to work still
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed12+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 // TODO actually run the validator
 return runCmdLine(cmdLine);
 }
@@ -285,7 +286,6 @@ boolean validateBigWig(char *fileName)
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigWig -chromInfo=%s %s", chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -294,7 +294,6 @@ boolean validateFastq(char *fileName)
 {
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=fastq %s", fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -303,7 +302,6 @@ boolean validateGtf(char *fileName)
 {
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "GTF: I have no idea what the commandline(s) should be. %s", fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 // TODO actually run the validator
 return FALSE;
 }
@@ -315,7 +313,6 @@ char *asFile = getAs("narrowPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -326,7 +323,6 @@ char *asFile = getAs("broadPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -375,15 +371,17 @@ void validateManifest(char *workingDir)
 {
 
 chdir(workingDir);
+if (!fileExists("manifest.txt"))
+    {
+    warn("manifest.txt not found in workingDir %s", workingDir);
+    usage();
+    }
+
 uglyf("workingDir=%s\n", workingDir);
 
-boolean quickMd5sum = TRUE;
 char *fakeMd5sum = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 if (quickMd5sum)
     uglyf("DEBUG: because md5sum calculations are slow for big files, for testing purposes big files will be assigned md5sum=%s\n", fakeMd5sum);
-
-if (!fileExists("manifest.txt"))
-    usage();
 
 
 struct slRecord *manifestFields = NULL;
@@ -620,6 +618,7 @@ if (argc!=1)
 
 workingDir = optionVal("dir", workingDir);
 encValData = optionVal("encValData", encValData);
+quickMd5sum = optionExists("quickMd5sum");
 
 validateManifest(workingDir);
 
