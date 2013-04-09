@@ -470,6 +470,7 @@ if (haveVal)
 // write to a different temp filename so that the old validated.txt is not lost if this program not complete
 FILE *f = mustOpen("validated.tmp", "w"); 
 
+fprintf(f,"#version %s\n", version);  // write vm version as a comment
 char *tabSep = "";
 // write fieldnames to output
 fprintf(f,"#");  // write leading comment character #
