@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 PROG = ../bedScore
 
-test: regTest miniTest encodeSmallTest encodeTest uniformTest
+test: miniTest encodeSmallTest encodeTest uniformTest asinhTest std2Test
 	echo tested all
 
 miniTest:
@@ -28,6 +28,11 @@ regTest:
 	${PROG} -method=reg -col=7 input/hsmmCtcfJan2011.narrowPeak output/encodeRegTest.bed
 	@diff -w output/encodeRegTest.bed expected/
 
+std2Test:
+	@${MKDIR} output
+	${PROG} -method=std2 -col=7 input/hsmmCtcfJan2011.narrowPeak output/encodeStd2Test.bed
+	#@diff -w output/encodeRegTest.bed expected/
+
 uniformTest:
 	@${MKDIR} -p output/out
 	@cat input/uniform1.bed input/uniform2.bed > input/uniform.bed
@@ -35,3 +40,10 @@ uniformTest:
 	${PROG} -col=7 -uniform input/uniform1.bed input/uniform2.bed output/out
 	@cat output/out/uniform1.bed output/out/uniform2.bed > output/uniform.bed
 	@diff -w output/uniform.bed expected/
+
+# test is from analysis hub, files scored by Steve Wilder (EBI) with minScore set to 370
+# NOTE: rounding differs, so replacing expected/ with output from 
+asinhTest:
+	@${MKDIR} output
+	${PROG} -minScore=370 -method=asinh -col=7 input/broadGm12878Ctcf.jan2011.asinh.narrowPeak output/broadGm12878Ctcf.jan2011.asinh.narrowPeak
+	@diff -w output/broadGm12878Ctcf.jan2011.asinh.narrowPeak expected/
