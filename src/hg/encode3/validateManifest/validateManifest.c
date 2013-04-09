@@ -185,13 +185,26 @@ char *getGenome(char *fileName)
 // as the prefix in the fileName path.
 // Maybe in future can pull this from the hub.txt?
 // ucscDb will be set to the value in the optional column "ucsc_db"
-if (ucscDb)
-    return cloneString(ucscDb);
-char *slash = strchr(fileName, '/');
-if (!slash)
-    errAbort("Expected to find genome in file_name prefix.");
 char genome[256] = "";
-safencat(genome, sizeof genome, fileName, slash - fileName);
+if (ucscDb)
+    {
+    safef(genome, sizeof genome, "%s", ucscDb);
+    }
+else
+    {
+    char *slash = strchr(fileName, '/');
+    if (!slash)
+	errAbort("Expected to find genome in file_name prefix.");
+    safencat(genome, sizeof genome, fileName, slash - fileName);
+    }
+if (
+    !sameString(genome, "hg19") &&
+    !sameString(genome, "hg20") &&
+    !sameString(genome, "hg36") &&
+    !sameString(genome, "mm9") &&
+    !sameString(genome, "mm10") 
+    )
+    errAbort("unknown genome %s", genome);
 return cloneString(genome);
 }
 
