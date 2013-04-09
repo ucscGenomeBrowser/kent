@@ -3,7 +3,7 @@ A = bedGeneParts
 include $(kentSrc)/inc/userApp.mk
 L += -lm
 
-test:
+test::
 	bedGeneParts firstExon test.in firstExon.out
 	diff firstExon.expected firstExon.out
 	bedGeneParts introns test.in introns.out

@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = bedThickToCds
 include $(kentSrc)/inc/userApp.mk
 
-test:
+test::
 	bedThickToCds in.bed out.cds
 	diff expected.cds out.cds
 

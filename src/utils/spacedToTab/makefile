@@ -3,7 +3,7 @@ A = spacedToTab
 include $(kentSrc)/inc/userApp.mk
 L += -lm
 
-test:
+test::
 	spacedToTab in.txt out.tab
 	diff expected.tab out.tab
 	spacedToTab in.txt -sizes=17,21,22 out2.tab

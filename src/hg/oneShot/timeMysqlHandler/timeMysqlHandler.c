@@ -156,14 +156,6 @@ if (dif == 0)
 return dif;
 }
 
-int annoRowCmp(const void *va, const void *vb)
-/* Compare two annoRows' positions. */
-{
-struct annoRow *rowA = *((struct annoRow **)va);
-struct annoRow *rowB = *((struct annoRow **)vb);
-return cmpAnnoRowToPos(rowA, rowB->chrom, rowB->start, rowB->end);
-}
-
 INLINE void dumpRow(FILE *f, char **row, int colCount)
 /* If f is non-NULL, write out tab-sep row to f. */
 {

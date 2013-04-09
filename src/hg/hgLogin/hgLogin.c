@@ -20,6 +20,7 @@
 #include "hgLogin.h"
 #include "gbMembers.h"
 #include "versionInfo.h"
+#include "mailViaPipe.h"
 
 /* ---- Global variables. ---- */
 char msg[4096] = "";
@@ -92,22 +93,6 @@ if isEmpty(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR))
     return cloneString("NULL_mailReturnAddr");
 else
     return cloneString(cfgOption(CFG_LOGIN_MAIL_RETURN_ADDR));
-}
-
-int mailItOut(char *toAddr, char *subject, char *msg, char *fromAddr)
-/* send mail to toAddr address */
-{
-char cmd[4096];
-char fullMail[4096];
-safef(fullMail,sizeof(fullMail),
-    "From: %s\n"
-    "To: %s\n"
-    "Subject: %s\n"
-    "\n%s",
-    fromAddr, toAddr, subject, msg);
-safef(cmd,sizeof(cmd), "echo '%s' | /usr/sbin/sendmail -t -oi",fullMail);      
-int result = system(cmd);
-return result;
 }
 
 /* ---- password functions depend on optionally installed openssl lib ---- */
@@ -386,7 +371,7 @@ void sendActMailOut(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = wikiLinkHost();
 int result;
-result = mailItOut(email, subject, msg, returnAddr);
+result = mailViaPipe(email, subject, msg, returnAddr);
 
 if (result == -1)
     {
@@ -456,7 +441,7 @@ void sendMailOut(char *email, char *subject, char *msg)
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
-result = mailItOut(email, subject, msg, returnAddr);
+result = mailViaPipe(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf( 
@@ -523,7 +508,7 @@ void sendPwdMailOut(char *email, char *subject, char *msg, char *username)
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
-result = mailItOut(email, subject, msg, returnAddr);
+result = mailViaPipe(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf(
@@ -553,9 +538,9 @@ char subject[256];
 char msg[4096];
 char *remoteAddr=getenv("REMOTE_ADDR");
 
-safef(subject, sizeof(subject),"New temporary password for %s", brwName);
+safef(subject, sizeof(subject),"New temporary password for %s", username);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) requested a new password for %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
+    "Someone (probably you, from IP address %s) requested a new password for %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
     remoteAddr, brwName, brwAddr, username, password, signature, returnAddr);
 sendPwdMailOut(email, subject, msg, username);
 }

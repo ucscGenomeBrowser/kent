@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = orfEnum
 include $(kentSrc)/inc/userApp.mk
 
-test:
+test::
 	orfEnum in.fa out.orf
 	diff expected.orf out.orf
 	orfEnum -various in.fa outVarious.orf

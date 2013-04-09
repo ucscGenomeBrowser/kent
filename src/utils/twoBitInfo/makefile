@@ -9,7 +9,7 @@ clean::
 # reuse twoFitToFa input files. for tests
 TEST_IN = ../twoBitToFa/tests/input
 
-test:
+test::
 	${MKDIR} tests/output
 	twoBitInfo ${TEST_IN}/testN.2bit tests/output/testN.info
 	twoBitInfo ${TEST_IN}/testMask.2bit tests/output/testMask.info

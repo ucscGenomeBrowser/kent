@@ -5,7 +5,22 @@
 #include "options.h"
 #include "sqlNum.h"
 #include "basicBed.h"
+#include "hmmstats.h"
+#include "dystring.h"
 #include <values.h>
+
+/* Usage definitions and defaults */
+#define scoreEncode     "encode"
+#define scoreReg        "reg"
+#define scoreLod        "lod"
+#define scoreAsinh      "asinh"
+
+static char *method = scoreEncode;
+static int col = 5;
+static int minScore = 0;
+static int maxScore = 1000;
+static boolean uniform = FALSE;
+static struct scorer *scorer = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -14,34 +29,37 @@ errAbort(
   "bedScore - Add scores to a BED file or transform existing scores\n"
   "usage:\n"
   "   bedScore input.bed output.bed\n"
+  "       or\n"
+  "   bedScore input1.bed input2.bed ... outDir\n"
   "options:\n"
-  "   -col=N      - Column to use as input value (default 5)\n"
-  "   -minScore=N - Minimum score to assign (default 0)\n"
+  "   -col=N      - Column to use as input value (default %d)\n"
   "   -method=\n"
   "             encode - ENCODE pipeline (UCSC) (default)\n"
   "             reg - Regulatory clusters (UCSC) \n"
+  "   -minScore=N - Minimum score to assign (default %d). Not supported for 'reg' method\n"
+  "   -uniform    - Calculate uniform normalization factor across all input files\n"
+  "note:\n"
+  "    If multiple files are specified, they must all be of same BED size\n.",
+  /*
   "             lod - Phastcons log odds (Adam Siepel, Cornell)\n"
-  "             asinh - ENCODE Uniform TFBS (Steve Wilder, ENCODE AWG/EBI)\n"
-  );
+  "             asinh - ENCODE Uniform TFBS (Steve Wilder, ENCODE AWG/EBI)\n",
+  */
+  col, minScore);
 }
-
-/* Globals and defaults */
-int minScore = 0;
-int col = 5;
-char *method = "encode";
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"col", OPTION_INT},
    {"method", OPTION_STRING},
    {"minScore", OPTION_INT},
+   {"uniform", OPTION_BOOLEAN},
    {NULL, 0}
 };
 
-
-/* Capture the BED in BED5ish fashion, but retain comments and empty lines
- * The data lines will be formatted tab-sep, so will lose original whitespace sep
- */
+/* Two structs to enable capturing the BED in BED5ish fashion, while retaining comments and 
+   empty lines. The data lines will be formatted tab-sep, so will lose original 
+   whitespace sepration
+*/
 
 struct bed5
 /* Browser extensible data with 5 fields (somehow not in basic bed!)*/
@@ -65,18 +83,7 @@ struct bedFileLine
     char *text;                 // comment, empty string, or bedPlus portion of data line
     };
 
-void bflOut(struct bedFileLine *bfl, FILE *f)
-/* Output a bed file line to opened file */
-{
-    if (bfl->bed5)
-        {
-        bedOutputN((struct bed *)bfl->bed5, 5, f, '\t', '\t');
-        verbose(3, "inputVal = %f\t", bfl->inputVal);
-        }
-    if (bfl->text)
-        fputs(bfl->text, f);
-    fputs("\n", f);
-}
+/* Functions to manage the bedFileLines */
 
 boolean lineIsData(char *line)
 /* Determine if line is blank or comment */
@@ -105,11 +112,11 @@ if (!lineIsData(line))
     // fflush(stdout);
     return bfl;
     }
-verbose(2, "%s\n", line);
+verbose(3, "%s\n", line);
 wordCount = chopByWhite(line, words, sizeof(words));
 if (bedSize == 0)
     {
-    verbose(2, "wordcount=%d\n", wordCount);
+    verbose(2, "BED size is %d\n", wordCount);
     if (wordCount < 5 || wordCount < col)
         errAbort("Unexpected number of fields in BED file: %d", wordCount);
     bedSize = wordCount;
@@ -132,55 +139,198 @@ if (bedSize > 5)
 return bfl;
 }
 
-/* Scoring methods */
-
-/* Globals for scorers.  Will clean this up later */
-static struct slDouble *inputVals = NULL;      // list of input values to transform
-static double maxVal = 0, minVal = MAXDOUBLE;
-
-void scorerAddInputValue(double inputVal)
-/* Add input value to list, gathering stats as needed by scoring method */
+void bflFree(struct bedFileLine **bfl)
+/* Free memory */
 {
-// TODO
-
-maxVal = max(inputVal, maxVal);
-minVal = min(inputVal, minVal);
-
-slAddHead(&inputVals, slDoubleNew(inputVal));
+freeMem((*bfl)->text);
+if ((*bfl)->bed5)
+    {
+    freeMem((*bfl)->bed5->name);
+    freeMem((*bfl)->bed5->chrom);
+    /* more to free from bed5 ? */
+    }
+freez(bfl);
 }
 
-void scorerWriteBedFile(struct bedFileLine *bfls, FILE *f)
-/* Output all lines in BED, with scores (re)calculated */
-// TODO
+boolean bflIsData(struct bedFileLine *bfl)
+/* Determine if this is a BED line, or just fluff (empty or comment) */
 {
-struct bedFileLine *bfl;
-float a = (1000-minScore) / (maxVal - minVal);
-float b = 1000 - ((1000-minScore) * maxVal) / (maxVal - minVal);
-verbose(2, "min=%f, max=%f, a=%f, b=%f\n", minVal, maxVal, a, b);
-for (bfl = bfls; bfl != NULL; bfl = bfl->next)
-    {
+return (bfl->bed5 != NULL);
+}
+
+void bflSetScore(struct bedFileLine *bfl, int score)
+/* Update score in BED */
+{
+if (bflIsData(bfl))
+    bfl->bed5->score = score;
+}
+
+void bflOut(struct bedFileLine *bfl, FILE *f)
+/* Output a bed file line to opened file */
+{
     if (bfl->bed5)
         {
-        // encode method only as first cut
-        bfl->bed5->score = round((a * bfl->inputVal) + b);
-        verbose(2, "old score: %f, new score: %d\t", bfl->inputVal, bfl->bed5->score);
+        bedOutputN((struct bed *)bfl->bed5, 5, f, '\t', '\t');
+        verbose(3, "inputVal = %f\t", bfl->inputVal);
         }
-    bflOut(bfl, f);
-    }
+    if (bfl->text)
+        fputs(bfl->text, f);
+    fputs("\n", f);
 }
+
+/* Scoring methods */
+
+struct scorer
+/* Representation of scoring method and its local data */
+    {
+    char *name;         /* method identifer */
+    void *info;         /* intermediate values needed by scorer */
+    void *inputValues;  /* save input values if needed by scorer (e.g. to compute quartiles).
+                              This will be populated with input values  as BED is read */
+    void (*inputValue)(struct scorer *scorer, double val);  
+                        /* stash input value or otherwise process */
+    void (*summarize)(struct scorer *scorer);    /* prep for rescoring after seeing all input */
+    double (*outputValue)(struct scorer *scorer, double val);  /* rescore input value */
+    };
+
+/* encode method 
+
+    This method was used the ENCODE pipeline (hgLoadBed -fillInScore), applied to signalValue
+    of ENCODE datasets lacking browser scores.  It computes new score from the function:
+    y = ax+b, where a is <score-range>/<input-range>.
+
+    Author Larry Meyer (in hgLoadBed):
+
+    float a = (1000-minScore) / (max - min);
+    float b = 1000 - ((1000-minScore) * max) / (max - min);
+    safef(query, sizeof(query),
+        "update %s set score = round((%f * %s) + %f)",
+            track, a, fillInScoreColumn, b);
+*/
+
+
+struct scoreEncodeInfo
+    {
+    double minVal, maxVal;
+    double normFactor, normOffset;    // y = ax+b
+    } scoreEncodeInfo = {MAXDOUBLE, 0, 0, 0};
+
+void scoreEncodeIn(struct scorer *scorer, double inputVal)
+/* Gather any info needed from each input value */
+{
+struct scoreEncodeInfo *info = scorer->info;
+verbose(3, "inputVal=%f, oldMin=%f, oldMax=%f\t", inputVal, info->minVal, info->maxVal);
+info->minVal = min(inputVal, info->minVal);
+info->maxVal = max(inputVal, info->maxVal);
+verbose(3, "min=%f, max=%f\n", info->minVal, info->maxVal);
+}
+
+void scoreEncodeSummarize(struct scorer *scorer)
+/* Compute temporary values needed after seeing all input values and before rescoring.
+   For this method, these are coefficients needed for scaling function, f(x) = ax + b.
+  */
+{
+struct scoreEncodeInfo *info = scorer->info;
+double min = info->minVal;
+double max = info->maxVal;
+info->normFactor = (maxScore-minScore) / (max - min);
+info->normOffset = maxScore - ((maxScore-minScore) * max) / (max - min);
+verbose(2, "  min=%f, max=%f, normFactor=%f, normOffset=%f\n", 
+                min, max, info->normFactor, info->normOffset);
+}
+
+double scoreEncodeOut(struct scorer *scorer, double inputVal)
+{
+struct scoreEncodeInfo *info = scorer->info;
+return (round((info->normFactor * inputVal) + info->normOffset));
+}
+
+/* reg method 
+
+   This method is used by the hg/regulate suite to score TFBS peaks (in narrowPeak format)
+   based signalValue.  Input signal values are multiplied by a normalization factor 
+   calculated as the ratio of the maximum score value (1000) to the signal value 
+   at 1 standard deviation from the mean, with values exceeding 1000 capped at 1000. 
+   This has the effect of distributing scores up to mean + 1std across the score range, 
+   but assigning all above to the max score.
+
+   TODO: support for minScore != 0. And verify support for maxScore.
+
+   Author Jim Kent (in regClusterBedExpCfg.c and regClusterMakeTableOfTables)
+*/
+
+struct scoreRegInfo
+    {
+    int count;
+    double minVal, maxVal;
+    double sum, sumSquares;
+    double normFactor;
+    } scoreRegInfo = {0, MAXDOUBLE, 0, 0, 0, 0};
+
+void scoreRegIn(struct scorer *scorer, double inputVal)
+/* Gather any info needed from each input value */
+{
+struct scoreRegInfo *info = scorer->info;
+verbose(3, "inputVal=%f, oldMin=%f, oldMax=%f, oldSum=%f, oldSq = %f\t", 
+            inputVal, info->minVal, info->maxVal, info->sum, info->sumSquares);
+info->count++;
+info->minVal = min(inputVal, info->minVal);
+info->maxVal = max(inputVal, info->maxVal);
+info->sum += inputVal;
+info->sumSquares += (inputVal * inputVal);
+verbose(3, "min=%f, max=%f, sum=%f, squares=%f\n", 
+            info->minVal, info->maxVal, info->sum, info->sumSquares);
+}
+
+void scoreRegSummarize(struct scorer *scorer)
+/* Compute temporary values needed after seeing all input values and before rescoring.
+   For this method, this is the normalization factor, derived from mean and std.
+  */
+{
+struct scoreRegInfo *info = scorer->info;
+double std = calcStdFromSums(info->sum, info->sumSquares, info->count);
+double mean = info->sum/info->count;
+double highEnd = mean + std;
+if (highEnd > info->maxVal) highEnd = info->maxVal;     // needed ?
+info->normFactor = ((double)maxScore)/highEnd;
+verbose(2, "min=%f, max=%f, count=%d, std=%f, mean=%f, norm=%g\n", 
+            info->minVal, info->maxVal, info->count, std, mean, info->normFactor);
+}
+
+double scoreRegOut(struct scorer *scorer, double inputVal)
+/* Adjust scores and output file */
+{
+struct scoreRegInfo *info = scorer->info;
+return (info->normFactor * inputVal);
+}
+
+/* Scorer initialization */
+
+static struct scorer scorers[] = {
+    {scoreEncode, &scoreEncodeInfo, NULL, &scoreEncodeIn, &scoreEncodeSummarize, &scoreEncodeOut},
+    {scoreReg, &scoreRegInfo, NULL, &scoreRegIn, &scoreRegSummarize, &scoreRegOut},
+    {NULL, NULL, NULL, NULL, NULL, NULL}
+};
+
+struct scorer *scorerNew(const char *method)
+/* Locate scorer by name from array of all */
+{
+struct scorer *pScorer;
+for (pScorer = scorers; pScorer->name; pScorer++) 
+    if (sameString(method, pScorer->name))
+        return pScorer;
+errAbort("scorer %s not found", method);
+return NULL;
+}
+
+#ifdef LOD_or_ASINH
+slAddHead(&inputVals, slDoubleNew(inputVal));
+#endif
 
 /*
  * Here are code snippets and comments describing all 4 scoring methods 
  * (gleaned from various sources).  To be integrated (method=encode works as first case)
  */
-
-#ifdef METHOD_encode
-float a = (1000-minScore) / (max - min);
-float b = 1000 - ((1000-minScore) * max) / (max - min);
-safef(query, sizeof(query),
-    "update %s set score = round((%f * %s) + %f)",
-            track, a, fillInScoreColumn, b);
-#endif
 
 #ifdef METHOD_lod
 # calculate coefficients a and b.
@@ -206,70 +356,138 @@ score = 370 if x <= Q1
             = 370 + 630 * (asinh(x) - asinh(Q1)) / (asinh(Q3) - asinh(Q1))   if Q1 < x < Q3
 #endif
 
-#ifdef METHOD_reg
-double calcNormScoreFactor(char *fileName, int scoreCol)
-/* Figure out what to multiply things by to get a nice browser score (0-1000) */
+void bedPreScoreFile(char *inFile)
+/* Read input values and stash values needed for the method */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[scoreCol+1];
-double sum = 0, sumSquares = 0;
-int n = 0;
-double minVal=0, maxVal=0;
-int fieldCount;
-while ((fieldCount = lineFileChop(lf, row)) != 0)
+struct lineFile *in = lineFileOpen(inFile, TRUE);
+char *line = NULL;
+int lineNum = 0;
+struct bedFileLine *bfl = NULL;
+
+verbose(2, "Reading file '%s' into scorer '%s'\n", inFile, method);
+
+// parse input file and let scorer have a look at each value
+while (lineFileNext(in, &line, NULL))
     {
-    lineFileExpectAtLeast(lf, scoreCol+1, fieldCount);
-    double x = sqlDouble(row[scoreCol]);
-    if (n == 0)
-        minVal = maxVal = x;
-    if (x < minVal) minVal = x;
-    if (x > maxVal) maxVal = x;
-    sum += x;
-    sumSquares += x*x;
-    n += 1;
-
-double std = calcStdFromSums(sum, sumSquares, n);
-double mean = sum/n;
-double highEnd = mean + std;
-if (highEnd > maxVal) highEnd = maxVal;
-return 1000.0/highEnd;
+    lineNum++;
+    bfl = bflNew(line, lineNum);
+    if (bflIsData(bfl))
+        scorer->inputValue(scorer, bfl->inputVal);
+    bflFree(&bfl);
+    }
+verbose(2, "Found %d lines in BED file\n", lineNum);
+lineFileClose(&in);
 }
-#endif
 
-void bedScore(char *inFile, char *outFile)
-/* bedScore - Add scores to a BED file. */
+void bedScoreSummarize()
+/* Compute normalize values after all input seen */
+{
+scorer->summarize(scorer);
+}
+
+void bedScoreFile(char *inFile, char *outFile)
+/* Normalize scores and output */
 {
 struct lineFile *in = lineFileOpen(inFile, TRUE);
 FILE *out = mustOpen(outFile, "w");
 char *line = NULL;
+struct bedFileLine *bfl = NULL;
 int lineNum = 0;
-struct bedFileLine *bfl, *bedFileLines = NULL;   // list of lines in BED file
 
-verbose(2, "Reading %s\n", in->fileName);
+verbose(2, "Writing file '%s'\n", outFile);
+
 while (lineFileNext(in, &line, NULL))
     {
-    // parse input file into a list of bedFileLines
     lineNum++;
     bfl = bflNew(line, lineNum);
-    scorerAddInputValue(bfl->inputVal);
-    slAddHead(&bedFileLines, bfl);
+    if (bflIsData(bfl))
+        {
+        // data line, so transform it
+        int score = scorer->outputValue(scorer, bfl->inputVal);
+        score = max(minScore, score);
+        score = min(maxScore, score);
+        bflSetScore(bfl, score);
+        verbose(3, "old score: %f, new score: %d\n", bfl->inputVal, score);
+        }
+    bflOut(bfl, out);
     }
-// (re)score beds and write to output file
-slReverse(&bedFileLines);
-scorerWriteBedFile(bedFileLines, out);
 carefulClose(&out);
 lineFileClose(&in);
+}
+
+char *fileNameFromPath(char *path)
+/* Strip directories from path and return file name */
+{
+char name[FILENAME_LEN];
+char ext[FILEEXT_LEN];
+char buf[FILENAME_LEN + FILEEXT_LEN + 1];
+
+splitPath(path, NULL, name, ext);
+safef(buf, sizeof(buf), "%s%s", &name[0], &ext[0]);
+return (cloneString(buf));
+}
+
+void bedScore(int count, char *list[])
+/* bedScore - Add scores to BED files. 
+ *              If count == 2, file1 is input, file2 is output
+ *              If count > 2, fileN is output dir, others are input files
+ */
+{
+if (count == 2)
+    {
+    // single file
+    char *inFile = list[0];
+    char *outFile = list[1];
+    bedPreScoreFile(inFile);
+    bedScoreSummarize();
+    bedScoreFile(inFile, outFile);
+    return;
+    }
+
+// multiple files
+char *outDir = list[count-1];
+verbose(2, "Writing to output directory '%s'\n", outDir);
+int i;
+for (i = 0; i < count-1; i++)
+    {
+    char *filePath = list[i];
+    if (uniform)
+        {
+        bedPreScoreFile(filePath);
+        }
+    else
+        {
+        bedPreScoreFile(filePath);
+        bedScoreSummarize();
+        char *fileName = fileNameFromPath(filePath);
+        struct dyString *dy = dyStringCreate("%s/%s", outDir, fileName);
+        bedScoreFile(filePath, dyStringCannibalize(&dy));
+        }
+    }
+if (!uniform)
+    return;
+
+bedScoreSummarize();
+for (i = 0; i < count-1; i++)
+    {
+    char *filePath = list[i];
+    char *fileName = fileNameFromPath(filePath);
+    struct dyString *dy = dyStringCreate("%s/%s", outDir, fileName);
+    bedScoreFile(filePath, dyStringCannibalize(&dy));
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
-    usage("Wrong number of arguments");
+if (argc < 3)
+    usage("Too few arguments");
 col = optionInt("col", col);
 minScore = optionInt("minScore", minScore);
+uniform = optionExists("uniform");
 method = optionVal("method", method);
-bedScore(argv[1], argv[2]);
+scorer = scorerNew(method);
+bedScore(argc-1, &argv[1]);
 return 0;
 }

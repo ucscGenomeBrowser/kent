@@ -4,9 +4,10 @@ include $(kentSrc)/inc/userApp.mk
 L += -lm -lz ${SOCKETLIB}
 
 clean::
+	rm -f ${O} ${A}
 	rm -fr tests/output
 
-test:
+test::
 	@rm -fr tests/output
 	@${MKDIR} tests/output
 	-${A} tests/input/foo.bed &> tests/output/foo.bed.txt
