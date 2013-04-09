@@ -338,11 +338,12 @@ char *rTempName(char *dir, char *base, char *suffix)
 char *x;
 static char fileName[PATH_LEN];
 int i;
+char *lastSlash = (lastChar(dir) == '/' ? "" : "/");
 for (i=0;;++i)
     {
     x = semiUniqName(base);
-    safef(fileName, sizeof(fileName), "%s/%s%d%s",
-    	dir, x, i, suffix);
+    safef(fileName, sizeof(fileName), "%s%s%s%d%s",
+    	dir, lastSlash, x, i, suffix);
     if (!fileExists(fileName))
         break;
     }
@@ -650,4 +651,12 @@ if (stat(fileName, &st) < 0)
 if (S_ISREG(st.st_mode))
     return TRUE;
 return FALSE;
+}
+
+void makeSymLink(char *oldName, char *newName)
+/* Return a symbolic link from newName to oldName or die trying */
+{
+int err = symlink(oldName, newName);
+if (err < 0)
+     errnoAbort("Couldn't make symbolic link from %s to %s\n", oldName, newName);
 }

@@ -2140,3 +2140,37 @@ char *commonCssStyles()
 return "";
 }
 
+static void turnCgiVarsToVals(struct hashEl *hel)
+/* To save cgiParseVars clients from doing an extra lookup, replace
+ * hash filled with cgiVars as values with one filled with cgiVar->val
+ * instead.  Since cgiVar->name is same as hashEl->name,  no info is really
+ * lost, and it simplifies the code that uses us. */
+{
+struct cgiVar *var = hel->val;
+hel->val = var->val;
+}
+
+struct cgiParsedVars *cgiParsedVarsNew(char *cgiString)
+/* Build structure containing parsed out cgiString */
+{
+struct cgiParsedVars *tags;
+AllocVar(tags);
+tags->stringBuf = cloneString(cgiString);
+cgiParseInputAbort(tags->stringBuf, &tags->hash, &tags->list);
+hashTraverseEls(tags->hash, turnCgiVarsToVals);
+return tags;
+}
+
+void cgiParsedVarsFree(struct cgiParsedVars **pTags)
+/* Free up memory associated with cgiParsedVars */
+{
+struct cgiParsedVars *tags = *pTags;
+if (tags != NULL)
+    {
+    slFreeList(&tags->list);
+    hashFree(&tags->hash);
+    freeMem(tags->stringBuf);
+    freez(pTags);
+    }
+}
+
