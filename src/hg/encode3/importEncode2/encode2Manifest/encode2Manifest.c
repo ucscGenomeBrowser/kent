@@ -62,10 +62,10 @@ if (composite == NULL || dataType == NULL)
 char *guess = "unknown";
 if (sameString(dataType, "AffyExonArray")) guess = "exon";
 else if (sameString(dataType, "Cage")) guess = "exon";
-else if (sameString(dataType, "ChipSeq")) guess = "regulatory";
+else if (sameString(dataType, "ChipSeq")) guess = "open";
 else if (sameString(dataType, "DnaseDgf")) guess = "promoter";
 else if (sameString(dataType, "DnaseSeq")) guess = "promoter";
-else if (sameString(dataType, "FaireSeq")) guess = "regulatory";
+else if (sameString(dataType, "FaireSeq")) guess = "open";
 else if (sameString(dataType, "Gencode")) guess = "exon";
 else if (sameString(dataType, "MethylArray")) guess = "promoter";
 else if (sameString(dataType, "MethylRrbs")) guess = "promoter";
@@ -77,8 +77,8 @@ else if (sameString(dataType, "RipTiling")) guess = "exon";
 else if (sameString(dataType, "RnaChip")) guess = "exon";
 else if (sameString(dataType, "RnaPet")) guess = "exon";
 else if (sameString(dataType, "RnaSeq")) guess = "exon";
-else if (sameString(dataType, "Switchtear")) guess = "regulatory";
-else if (sameString(dataType, "TfbsValid")) guess = "regulatory";
+else if (sameString(dataType, "Switchtear")) guess = "open";
+else if (sameString(dataType, "TfbsValid")) guess = "open";
 
 /* Do some fine tuning within Chip-seq to treat histone mods differently. */
 if (sameString(dataType, "ChipSeq"))
