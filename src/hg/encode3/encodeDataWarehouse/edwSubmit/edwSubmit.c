@@ -19,8 +19,6 @@
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 
-char *licensePlatePrefix = "ENCFF";
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -31,7 +29,7 @@ errAbort(
   "Generally user is an email address\n"
   "options:\n"
   "   -licensePlatePrefix=prefix (default %s)\n"
-  , licensePlatePrefix
+  , edwLicensePlatePrefix
   );
 }
 
@@ -40,46 +38,6 @@ static struct optionSpec options[] = {
    {"licensePlatePrefix", OPTION_STRING},
    {NULL, 0},
 };
-
-long long now()
-/* Return current time in seconds since Epoch. */
-{
-return time(NULL);
-}
-
-int edwGetHost(struct sqlConnection *conn, char *hostName)
-/* Look up host name in table and return associated ID.  If not found
- * make up new table entry. */
-{
-/* If it's already in table, just return ID. */
-char query[512];
-safef(query, sizeof(query), "select id from edwHost where name='%s'", hostName);
-int hostId = sqlQuickNum(conn, query);
-if (hostId > 0)
-    return hostId;
-
-safef(query, sizeof(query), "insert edwHost (name, firstAdded) values('%s', %lld)", 
-       hostName, now());
-sqlUpdate(conn, query);
-return sqlLastAutoId(conn);
-}
-
-int edwGetSubmitDir(struct sqlConnection *conn, int hostId, char *submitDir)
-/* Get submitDir from database, creating it if it doesn't already exist. */
-{
-/* If it's already in table, just return ID. */
-char query[512];
-safef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
-int dirId = sqlQuickNum(conn, query);
-if (dirId > 0)
-    return dirId;
-
-safef(query, sizeof(query), 
-   "insert edwSubmitDir (url, firstAdded, hostId) values('%s', %lld, %d)", 
-   submitDir, now(), hostId);
-sqlUpdate(conn, query);
-return sqlLastAutoId(conn);
-}
 
 void recordIntoHistory(struct sqlConnection *conn, unsigned id, char *table, boolean success)
 /* Record success/failure into uploadAttempts and historyBits fields of table.   */
@@ -109,7 +67,7 @@ else
 safef(query, sizeof(query), 
     "update %s set historyBits=%lld, %s=%s+1, %s=%lld "
     "where id=%lld",
-    table, historyBits, openResultField, openResultField, lastTimeField, now(),
+    table, historyBits, openResultField, openResultField, lastTimeField, edwNow(),
     (long long)id);
 sqlUpdate(conn, query);
 }
@@ -171,6 +129,8 @@ struct edwFile *edwFileFromFieldedTable(struct fieldedTable *table,
 struct edwFile *bf, *bfList = NULL;
 struct fieldedRow *fr;
 struct dyString *tags = dyStringNew(0);
+char *ucscDbTag = "ucsc_db";
+int ucscDbField = stringArrayIx(ucscDbTag, table->fields, table->fieldCount);
 for (fr = table->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
@@ -190,6 +150,24 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	    cgiEncodeIntoDy(table->fields[i], row[i], tags);
 	    }
 	}
+    if (ucscDbField < 0)
+        {
+	/* Try to make this field up from file name */
+	char *slash = strchr(bf->submitFileName, '/');
+	if (slash == NULL)
+	    errAbort("Can't make up '%s' field from '%s'", ucscDbTag, bf->submitFileName);
+	int len = slash - bf->submitFileName;
+	char ucscDbVal[len+1];
+	memcpy(ucscDbVal, bf->submitFileName, len);
+	ucscDbVal[len] = 0;
+
+	/* Do a little check on it */
+	if (!sameString("mm9", ucscDbVal) && !sameString("hg19", ucscDbVal))
+	    errAbort("Unrecognized ucsc_db %s", ucscDbVal);
+
+	/* Add it to tags. */
+	cgiEncodeIntoDy(ucscDbTag, ucscDbVal, tags);
+	}
     bf->tags = cloneString(tags->string);
 
     /* Fake other fields. */
@@ -202,47 +180,13 @@ dyStringFree(&tags);
 return bfList;
 }
 
-void encode3MakeLicensePlate(char *prefix, int ix, char *out, int outSize)
-/* Make a license-plate type string composed of prefix + funky coding of ix
- * and put result in out. */
-{
-int maxIx = 10*10*10*26*26*26;
-if (ix > maxIx)
-    errAbort("ix exceeds max in encode3MakeLicensePlate.  ix %d, max %d\n", ix, maxIx);
-int prefixSize = strlen(prefix);
-int minSize = prefixSize + 6 + 1;
-if (outSize < minSize)
-    errAbort("outSize (%d) not big enough in encode3MakeLicensePlate", outSize);
-
-/* Copy in prefix. */
-strcpy(out, prefix);
-
-/* Generate the 123ABC part of license plate backwards. */
-char *s = out+minSize;
-int x = ix;
-*(--s) = 0;	// zero tag at end;
-int i;
-for (i=0; i<3; ++i)
-    {
-    int remainder = x%26;
-    *(--s) = 'A' + remainder;
-    x /= 26;
-    }
-for (i=0; i<3; ++i)
-    {
-    int remainder = x%10;
-    *(--s) = '0' + remainder;
-    x /= 10;
-    }
-}
-
 int makeNewEmptySubmitRecord(struct sqlConnection *conn, char *submitUrl, unsigned userId)
 /* Create a submit record around URL and return it's id. */
 {
 char *escapedUrl = sqlEscapeString(submitUrl);
 struct dyString *query = dyStringNew(0);
 dyStringAppend(query, "insert edwSubmit (url, startUploadTime, userId) ");
-dyStringPrintf(query, "VALUES('%s', %lld,  %d)", escapedUrl, now(), userId);
+dyStringPrintf(query, "VALUES('%s', %lld,  %d)", escapedUrl, edwNow(), userId);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 freez(&escapedUrl);
@@ -261,17 +205,6 @@ sqlUpdate(conn, query->string);
 dyStringFree(&query);
 freez(&escapedFileName);
 return sqlLastAutoId(conn);
-}
-
-void edwDirForTime(time_t sinceEpoch, char dir[PATH_LEN])
-/* Return the output directory for a given time. */
-{
-/* Get current time parsed into struct tm */
-struct tm now;
-gmtime_r(&sinceEpoch, &now);
-
-/* make directory string out of year/month/day/ */
-safef(dir, PATH_LEN, "%d/%d/%d/", now.tm_year+1900, now.tm_mon+1, now.tm_mday);
 }
 
 void writeErrToTableAndDie(struct sqlConnection *conn, char *table, int id, char *err)
@@ -304,40 +237,13 @@ writeErrToTableAndDie(conn, "edwFile", fileId, err);
 void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
 /* This will fetch remote data to a temporary file. It fills in tempFileName with the name. */
 {
-/* First find out temp dir and make it. */
-char tempDir[PATH_LEN];
-safef(tempDir, sizeof(tempDir), "%s%s/", edwRootDir, "tmp");
-makeDirsOnPath(tempDir);
-
 /* Now make temp file name with XXXXXX name at end */
-safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", tempDir);
+safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 
 /* Get open file handle. */
 int localFd = mkstemp(tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
-}
-
-#define maxPlateSize 16
-
-void makePlateFileNameAndPath(int edwFileId, char licensePlate[maxPlateSize],
-    char edwFile[PATH_LEN], char serverPath[PATH_LEN])
-/* Convert file id to local file name, and full file path. Make any directories needed
- * along serverPath. */
-{
-/* Figure out edw file name, starting with license plate. */
-encode3MakeLicensePlate(licensePlatePrefix, edwFileId, licensePlate, maxPlateSize);
-
-/* Figure out directory and make any components not already there. */
-char edwDir[PATH_LEN];
-edwDirForTime(now(), edwDir);
-char uploadDir[PATH_LEN];
-safef(uploadDir, sizeof(uploadDir), "%s%s", edwRootDir, edwDir);
-makeDirsOnPath(uploadDir);
-
-/* Figure out full file names */
-safef(edwFile, PATH_LEN, "%s%s", edwDir, licensePlate);
-safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
 }
 
 int edwFileFetch(struct sqlConnection *conn, struct edwFile *bf, int fd, 
@@ -346,7 +252,6 @@ int edwFileFetch(struct sqlConnection *conn, struct edwFile *bf, int fd,
  * Returns fileId. */
 {
 bf->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, bf->submitFileName);
-// encode3MakeLicensePlate(licensePlatePrefix, bf->id, bf->licensePlate, sizeof(bf->licensePlate));
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
@@ -355,12 +260,12 @@ char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    makePlateFileNameAndPath(bf->id, bf->licensePlate, edwFile, edwPath);
-    bf->startUploadTime = now();
+    edwMakePlateFileNameAndPath(bf->id, submitFileName, bf->licensePlate, edwFile, edwPath);
+    bf->startUploadTime = edwNow();
     char tempName[PATH_LEN];
     fetchFdToTempFile(fd, tempName);
     rename(tempName, edwPath);
-    bf->endUploadTime = now();
+    bf->endUploadTime = edwNow();
     bf->edwFileName = cloneString(edwFile);
     }
 errCatchEnd(errCatch);
@@ -416,38 +321,6 @@ if (errCatch->gotError)
     handleFileError(conn, bf->id, errCatch->message->string);
     }
 return bf->id;
-}
-
-long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5)
-/* See if we already got file.  Return fileId if we do,  otherwise -1 */
-{
-/* First see if we have even got the directory. */
-char query[PATH_LEN+512];
-safef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
-int submitDirId = sqlQuickNum(conn, query);
-if (submitDirId <= 0)
-    return -1;
-
-/* The complex truth is that we may have gotten this file multiple times. 
- * We return the most recent version where it got uploaded and passed the post-upload
- * MD5 sum, and thus where the MD5 field is filled in the database. */
-safef(query, sizeof(query), 
-    "select md5,id from edwFile "
-    "where submitFileName='%s' and submitDirId = %d and md5 != '' "
-    "order by submitId desc limit 1"
-    , submitFileName, submitDirId);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-long fileId = -1;
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *dbMd5 = row[0];
-    if (sameWord(md5, dbMd5))
-	fileId = sqlLongLong(row[1]);
-    }
-sqlFreeResult(&sr);
-
-return fileId;
 }
 
 int findFileGivenMd5AndSubmitDir(struct sqlConnection *conn, char *md5, int submitDirId)
@@ -577,7 +450,7 @@ if (errCatchStart(errCatch))
     {
     /* Open remote submission file.  This is most likely where we will fail. */
     int hostId=0, submitDirId = 0;
-    long long startUploadTime = now();
+    long long startUploadTime = edwNow();
     int remoteFd = edwOpenAndRecordInDir(conn, submitDir, submitFile, submitUrl, 
 	&hostId, &submitDirId);
 
@@ -585,7 +458,7 @@ if (errCatchStart(errCatch))
     char tempSubmitFile[PATH_LEN];
     fetchFdToTempFile(remoteFd, tempSubmitFile);
     mustCloseFd(&remoteFd);
-    long long endUploadTime = now();
+    long long endUploadTime = edwNow();
 
     /* Calculate MD5 sum, and see if we already have such a file. */
     char *md5 = md5HexForFile(tempSubmitFile);
@@ -607,9 +480,9 @@ if (errCatchStart(errCatch))
 	fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFile);
 
 	/* Get license plate and file/path names that depend on it. */
-	char licensePlate[maxPlateSize];
+	char licensePlate[edwMaxPlateSize];
 	char edwFile[PATH_LEN];
-	makePlateFileNameAndPath(fileId, licensePlate, edwFile, submitLocalPath);
+	edwMakePlateFileNameAndPath(fileId, submitFile, licensePlate, edwFile, submitLocalPath);
 
 	/* Move file to final resting place and get update time and size from local file system.  */
 	rename(tempSubmitFile, submitLocalPath);
@@ -690,7 +563,7 @@ for (bf = bfList; bf != NULL; bf = bf->next)
 /* If we made it here, update submit endUploadTime */
 safef(query, sizeof(query),
 	"update edwSubmit set endUploadTime=%lld where id=%d", 
-	now(), submitId);
+	edwNow(), submitId);
 sqlUpdate(conn, query);
 
 sqlDisconnect(&conn);
@@ -700,7 +573,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-licensePlatePrefix = optionVal("licensePlatePrefix", licensePlatePrefix);
+edwLicensePlatePrefix = optionVal("licensePlatePrefix", edwLicensePlatePrefix);
 if (argc != 4)
     usage();
 edwSubmit(argv[1], argv[2], argv[3]);

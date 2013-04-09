@@ -10,9 +10,12 @@
 #include "sqlNum.h"
 #include "encode3/encode3Valid.h"
 
-char *version = "1.0";
+char *version = "1.1";
 char *workingDir = ".";
 char *encValData = "encValData";
+char *ucscDb = NULL;
+
+boolean quickMd5sum = FALSE;  // Just for development testing, do not use
 
 void usage()
 /* Explain usage and exit. */
@@ -42,6 +45,7 @@ errAbort(
 static struct optionSpec options[] = {
     {"dir", OPTION_STRING},
     {"encValData", OPTION_STRING},
+    {"quickMd5sum", OPTION_BOOLEAN},     // Testing option, user should not use
     {NULL, 0},
 };
 
@@ -77,7 +81,8 @@ int fieldNameRowsCount = 0;
 while (lineFileNext(lf, &row, NULL))
     {
     //uglyf("%s\n", row); // DEBUG REMOVE
-    if (startsWith("#file_name", row))
+    if ( startsWith("#file_name", row) ||
+	 startsWith("#ucsc_db", row))
 	{
 	if ( fieldNameRowsCount == 0)
 	    {
@@ -174,26 +179,39 @@ return cloneString(asPath);
 
 char *getGenome(char *fileName)
 /* Get genome, e.g. hg19 */
-{  // TODO this could use some more development
+{  
+// TODO this could use some more development
 // but start with something very simple for now
 // such as assuming that the genome is found 
 // as the prefix in the fileName path.
 // Maybe in future can pull this from the hub.txt?
-char *slash = strchr(fileName, '/');
-if (!slash)
-    errAbort("Expected to find genome in file_name prefix.");
+// ucscDb will be set to the value in the optional column "ucsc_db"
 char genome[256] = "";
-safencat(genome, sizeof genome, fileName, slash - fileName);
+if (ucscDb)
+    {
+    safef(genome, sizeof genome, "%s", ucscDb);
+    }
+else
+    {
+    char *slash = strchr(fileName, '/');
+    if (!slash)
+	errAbort("Expected to find genome in file_name prefix.");
+    safencat(genome, sizeof genome, fileName, slash - fileName);
+    }
+if (
+    !sameString(genome, "hg19") &&
+    !sameString(genome, "hg20") &&
+    !sameString(genome, "hg36") &&
+    !sameString(genome, "mm9") &&
+    !sameString(genome, "mm10") 
+    )
+    errAbort("unknown genome %s", genome);
 return cloneString(genome);
 }
 
 char *getChromInfo(char *fileName)
 /* Get path to chromInfo file for fileName */
-{  // TODO this could use some more development
-// but start with something very simple for now
-// such as assuming that the chomInfo file has 
-// a standard location under the assembly name path.
-// Maybe in future can pull this from the hub.txt?
+{
 char *genome = getGenome(fileName);
 char chromInfo[256];
 safef(chromInfo, sizeof chromInfo, "%s/%s/chrom.sizes", encValData, genome);
@@ -202,11 +220,9 @@ return cloneString(chromInfo);
 
 char *getTwoBit(char *fileName)
 /* Get path to twoBit file for fileName */
-{  // TODO this could use some more development
-// but start with something very simple for now
-// such as assuming that the twoBit file has 
-// a standard location under the assembly name path.
-// Maybe in future can pull this from the hub.txt?
+{  
+// TODO this could use some more development
+// Maybe in future can download this from one of our servers?
 char *genome = getGenome(fileName);
 char twoBit[256];
 safef(twoBit, sizeof twoBit, "%s/%s/%s.2bit", encValData, genome, genome);
@@ -222,8 +238,9 @@ boolean runCmdLine(char *cmdLine)
 //   some of the exec with wait code from the old ENCODE2 pipeline
 //   Maybe the default timeout should be 8 hours.
 //   I am sure that is more than generous enough for validating a single big file.
+verbose(2, "cmdLine=[%s]\n",cmdLine);
 int retCode = system(cmdLine); 
-uglyf("DEBUG: retCode=%d\n", retCode); // DEBUG REMOVE
+verbose(2, "retCode=%d\n", retCode);
 sleep(1); // give stupid gzip broken pipe errors a chance to happen and print out to stderr
 return (retCode == 0);
 }
@@ -246,7 +263,6 @@ if (quicky)
     }
 else
     safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", mismatches, chromInfo, twoBit, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -259,7 +275,6 @@ char *asFile = getAs("bedRnaElements.as");  // TODO this probably has to change
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -274,7 +289,6 @@ char cmdLine[1024];
 // The following line is nothing but pure hack taken from the first example found in the manifest,
 //  and probably will fail miserably on other lines of the manifest, as this approach is too simple to work still
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed12+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 // TODO actually run the validator
 return runCmdLine(cmdLine);
 }
@@ -285,7 +299,6 @@ boolean validateBigWig(char *fileName)
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigWig -chromInfo=%s %s", chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -294,7 +307,6 @@ boolean validateFastq(char *fileName)
 {
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=fastq %s", fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -303,7 +315,6 @@ boolean validateGtf(char *fileName)
 {
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "GTF: I have no idea what the commandline(s) should be. %s", fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 // TODO actually run the validator
 return FALSE;
 }
@@ -315,7 +326,6 @@ char *asFile = getAs("narrowPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -326,7 +336,6 @@ char *asFile = getAs("broadPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
-uglyf("cmdLine=[%s]\n",cmdLine);  // DEBUG REMOVE
 return runCmdLine(cmdLine);
 }
 
@@ -375,15 +384,17 @@ void validateManifest(char *workingDir)
 {
 
 chdir(workingDir);
+if (!fileExists("manifest.txt"))
+    {
+    warn("manifest.txt not found in workingDir %s", workingDir);
+    usage();
+    }
+
 uglyf("workingDir=%s\n", workingDir);
 
-boolean quickMd5sum = TRUE;
 char *fakeMd5sum = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 if (quickMd5sum)
     uglyf("DEBUG: because md5sum calculations are slow for big files, for testing purposes big files will be assigned md5sum=%s\n", fakeMd5sum);
-
-if (!fileExists("manifest.txt"))
-    usage();
 
 
 struct slRecord *manifestFields = NULL;
@@ -411,6 +422,7 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
 
 int m_file_name_i = -1;
 int m_format_i = -1;
+int m_ucsc_db_i = -1;    // optional field ucsc_db
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
@@ -419,6 +431,8 @@ for (i=0; i<mFieldCount; ++i)
 	m_file_name_i = i;
     if (sameString(manifestFields->words[i], "format"))
 	m_format_i = i;
+    if (sameString(manifestFields->words[i], "ucsc_db"))
+	m_ucsc_db_i = i;
     }
 if (m_file_name_i == -1)
     errAbort("field file_name not found in manifest.txt");
@@ -472,6 +486,7 @@ if (haveVal)
 // write to a different temp filename so that the old validated.txt is not lost if this program not complete
 FILE *f = mustOpen("validated.tmp", "w"); 
 
+fprintf(f,"#version %s\n", version);  // write vm version as a comment
 char *tabSep = "";
 // write fieldnames to output
 fprintf(f,"#");  // write leading comment character #
@@ -501,6 +516,8 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
     // get file_name, size, datetime
     char *mFileName = rec->words[m_file_name_i];
+    if (m_ucsc_db_i != -1)
+	ucscDb = rec->words[m_ucsc_db_i];
 
     off_t mFileSize = fileSize(mFileName);
     off_t vFileSize = -1;
@@ -620,6 +637,7 @@ if (argc!=1)
 
 workingDir = optionVal("dir", workingDir);
 encValData = optionVal("encValData", encValData);
+quickMd5sum = optionExists("quickMd5sum");
 
 validateManifest(workingDir);
 

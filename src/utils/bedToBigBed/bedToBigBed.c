@@ -654,6 +654,8 @@ if (eim)
         {
 	eim->fileOffsets[i] = ftell(f);
 	maxBedNameSize = eim->maxFieldSize[i];
+	qsort(eim->chunkArrayArray[i], bedCount, 
+	    sizeof(struct bbNamedFileChunk), bbNamedFileChunkCmpByName);
 	assert(sizeof(struct bbNamedFileChunk) == sizeof(eim->chunkArrayArray[i][0]));
 	bptFileBulkIndexToOpenFile(eim->chunkArrayArray[i], sizeof(eim->chunkArrayArray[i][0]), 
 	    bedCount, blockSize, bbNamedFileChunkKey, maxBedNameSize, bbNamedFileChunkVal, 

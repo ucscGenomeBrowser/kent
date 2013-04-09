@@ -150,5 +150,8 @@ boolean maybeTouchFile(char *fileName);
 
 boolean isRegularFile(char *fileName);
 /* Return TRUE if fileName is a regular file. */
+
+void makeSymLink(char *oldName, char *newName);
+/* Return a symbolic link from newName to oldName or die trying */
 #endif /* PORTABLE_H */
 
