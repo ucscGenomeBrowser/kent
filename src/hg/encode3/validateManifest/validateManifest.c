@@ -10,7 +10,7 @@
 #include "sqlNum.h"
 #include "encode3/encode3Valid.h"
 
-char *version = "1.0";
+char *version = "1.1";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
