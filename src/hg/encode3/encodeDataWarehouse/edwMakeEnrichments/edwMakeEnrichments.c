@@ -69,10 +69,10 @@ struct target
 /* Information about a target */
     {
     struct target *next;
-    struct edwQaEnrichTarget *target;
-    struct genomeRangeTree *grt;
-    long long overlapBases;
-    long long uniqOverlapBases;
+    struct edwQaEnrichTarget *target;  /* The database target structure */
+    struct genomeRangeTree *grt;       /* Random access intersection structure for target */
+    long long overlapBases;	       /* Sum of all overlaps with target. */
+    long long uniqOverlapBases;	       /* Sum of unique overlaps with target. */
     };
 
 struct target *targetNew(struct edwQaEnrichTarget *et, struct genomeRangeTree *grt)
