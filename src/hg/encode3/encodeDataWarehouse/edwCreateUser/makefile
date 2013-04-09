@@ -1,13 +1,14 @@
 include ../../../../inc/common.mk
 
-L += ${MYSQLLIBS} -lm
+L += $(MYSQLLIBS) -lm -lz
 MYLIBDIR = ../../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ../lib/${MACHTYPE}/edwlib.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = encode2FastqSubdirsInManifest
-O = encode2FastqSubdirsInManifest.o
 
-encode2FastqSubdirsInManifest: ${O} ${MYLIBS}
+A = edwCreateUser
+O = edwCreateUser.o 
+
+edwCreateUser: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 

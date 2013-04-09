@@ -2,9 +2,9 @@ include ../../../../inc/common.mk
 
 ensScripts = ensGeneToGenePred ensemblDbImport ensemblDownload ensemblGetAll ensemblSuperfamily ensemblVegaMap ensemblExport geneCheckAndLoad hgLoadEnsembl ensemblLoad mkRandomGoldLift mkRandomNTLift
 
-all: ${ensScripts:%=${BINDIR}/%}
+all: ${ensScripts:%=${DESTDIR}${BINDIR}/%}
 
-${BINDIR}/%: %
+${DESTDIR}${BINDIR}/%: %
 	cp -f $< $@
 	chmod a+rx $@
 

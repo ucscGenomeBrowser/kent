@@ -71,19 +71,19 @@ termRegex [A-Z57][-A-Z0-9_]+
 
 
 track numtSeq2012 override
-html numtSeqSusScr2
+html numtSeq2012
 
     track numtS override
-    html numtSeqSusScr2
+    html numtSeq2012 
 
     track numtSAssembled override
-    html numtSeqSusScr2
+    html numtSeq2012 
 
     track numtSMitochondrion override
-    html numtSeqSusScr2
+    html numtSeq2012 
 
     track  bamAllNumtSSorted override
-    html numtSeqSusScr2
+    html numtSeq2012
 
 searchTable numtSMitochondrion
 searchMethod exact

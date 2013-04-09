@@ -1,20 +1,13 @@
-include ../../inc/common.mk
-
+kentSrc = ../..
+A = rowsToCols
+include $(kentSrc)/inc/userApp.mk
 L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = rowsToCols.o
-
-rowsToCols: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/rowsToCols $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/rowsToCols${EXE}
-
-clean:
-	rm -f $O
+clean::
+	rm -fr test/out
 
 tests:
-	mkdir -p test/out
+	${MKDIR} test/out
 	rowsToCols test/in/spaced test/out/spaced
 	diff test/expected/spaced test/out/spaced
 	rowsToCols -varCol test/in/spacedVarious test/out/spacedVarious

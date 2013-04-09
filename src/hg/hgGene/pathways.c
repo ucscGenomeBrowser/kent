@@ -58,7 +58,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<A HREF=\"http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s\" TARGET=_blank>",
+    hPrintf("<A HREF=\"http://www.genome.ad.jp/kegg-bin/show_pathway?%s+%s\" TARGET=_blank>",
     	row[1], row[0]);
     hPrintf("%s</A> - %s<BR>", row[1], row[2]);
     }

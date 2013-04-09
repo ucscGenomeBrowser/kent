@@ -1,37 +1,11 @@
-
-include ../../../../inc/common.mk
-
-L += -lm ${MYSQLLIBS}
-MYLIBDIR = ../../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../../../..
 A = samHit
-
-O = $A.o
-
-my: compile
-	mv $A${EXE} ${BINDIR}/$A
-
-mgsc: compile
-	mv $A${EXE} /usr/local/apache/cgi-bin-mgsc/$A
+include ${kentSrc}/inc/userApp.mk
 
 alpha: compile
-	mv $A${EXE} /usr/local/apache/cgi-bin/$A
+	rm -f ${CGI_BIN}/$A
+	mv $A${EXE} ${CGI_BIN}/$A
 
 beta: compile
-	mv $A${EXE} /usr/local/apache/cgi-bin-beta/$A
-
-compile: $O 
-	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L} 
-	mv ${AOUT} $A${EXE}
-#	${STRIP} $A${EXE}
-	chmod a+rx $A${EXE}
-
-lib:
-	cd ../../lib && ${MAKE}
-
-tags: 
-	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
-
-clean::
-	rm -f $A $A.o $A${EXE}
+	rm -f ${CGI_BIN_BETA}/$A
+	mv $A${EXE} ${CGI_BIN_BETA}/$A

@@ -10,11 +10,11 @@ LOADGAP_O = hgLoadGap.o
 all: hgGoldGapGl hgLoadGap
 
 hgGoldGapGl: ${GOLDGAP_O} ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} -o ${BINDIR}/hgGoldGapGl \
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgGoldGapGl \
 		${GOLDGAP_O} ${MYLIBS} $L
 
 hgLoadGap: ${LOADGAP_O}  ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} -o ${BINDIR}/hgLoadGap \
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgLoadGap \
 		${LOADGAP_O} ${MYLIBS} $L
 
 lib:

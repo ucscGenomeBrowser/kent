@@ -3,7 +3,7 @@ A = twoBitToFa
 include $(kentSrc)/inc/userApp.mk
 L += -lm ${SOCKETLIB}
 
-test:
+test::
 	rm -fr tests/output
 	${MKDIR} tests/output
 	twoBitToFa tests/input/testN.2bit tests/output/testN.fa

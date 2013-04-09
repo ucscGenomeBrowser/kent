@@ -1,24 +1,15 @@
-include ../../inc/common.mk
-
-L += -lm ${SOCKETLIB}
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS = ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = twoBitInfo
-O = twoBitInfo.o
-
-twoBitInfo: ${O} ${MYLIBS}
-	@${MKDIR} "${DESTDIR}${BINDIR}"
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+include $(kentSrc)/inc/userApp.mk
+L += -lm ${SOCKETLIB}
 
 clean::
-	rm -f ${O}
+	rm -fr tests/output
 
 # reuse twoFitToFa input files. for tests
 TEST_IN = ../twoBitToFa/tests/input
 
-test:
+test::
 	${MKDIR} tests/output
 	twoBitInfo ${TEST_IN}/testN.2bit tests/output/testN.info
 	twoBitInfo ${TEST_IN}/testMask.2bit tests/output/testMask.info
@@ -26,4 +17,4 @@ test:
 	twoBitInfo ${TEST_IN}/testMask.2bit:manyLower:2-10 tests/output/ml_sub.info
 	twoBitInfo ${TEST_IN}/testMask.2bit:noLower,startLower tests/output/ml_multiple.info
 	diff -r -x CVS tests/expected tests/output
-	rm -r tests/output
+	rm -fr tests/output

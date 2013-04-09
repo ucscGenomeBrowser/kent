@@ -26,6 +26,12 @@ struct metaTagVal
 struct metaTagVal *metaTagValNew(char *tag, char *val);
 /* Create new meta tag/val */
 
+void metaTagValFree(struct metaTagVal **pMtv);
+/* Free up metaTagVal. */
+
+void metaTagValFreeList(struct metaTagVal **pList);
+/* Free a list of dynamically allocated metaTagVal's */
+
 int metaTagValCmp(const void *va, const void *vb);
 /* Compare to sort based on tag name . */
 
@@ -37,7 +43,7 @@ struct meta
     struct meta *parent;	/* Pointer to parent. */
     char *name;		    /* Same as val of meta tag. Not allocated here. */
     struct metaTagVal *tagList;	/* All tags, including the "meta" one. */
-    int indent;                 /* Indentation level. */
+    int indent;                 /* Indentation level - generally only set if read from file. */
     };
 
 struct meta *metaLoadAll(char *fileName, char *keyTag, char *parentTag,
@@ -52,9 +58,20 @@ struct meta *metaLoadAll(char *fileName, char *keyTag, char *parentTag,
  * will look at the indentation, and if there is a parentTag complain about any
  * disagreements between indentation and parentTag. */
 
+void metaFree(struct meta **pMeta);
+/* Free up memory associated with a meta. */
+
+void metaFreeForest(struct meta **pForest);
+/* Free up all metas in forest and their children. */ 
+
+void metaFreeList(struct meta **pList);
+/* Free a list of dynamically allocated meta's. Use metaFreeForest to free children too. */
+
+#define META_DEFAULT_INDENT 4	/* Default size for meta indentation */
+
 void metaWriteAll(struct meta *metaList, char *fileName, int indent, boolean withParent);
 /* Write out metadata, including children, optionally adding meta tag.   By convention
- * for out meta.txt/meta.ra files, indent is 3, withParent is FALSE. */
+ * for out meta.txt/meta.ra files, indent is 4, withParent is FALSE. */
 
 char *metaLocalTagVal(struct meta *meta, char *tag);
 /* Return value of tag found in this node, not going up to parents. */
@@ -64,7 +81,7 @@ char *metaTagVal(struct meta *meta, char *tag);
  * Returns NULL if tag not found. */
 
 void metaAddTag(struct meta *meta, char *tag, char *val);
-/* Return value of tag found in this node, not going up to parents. */
+/* Add tag/val to meta. */
 
 void metaSortTags(struct meta *meta);
 /* Do canonical sort so that the first tag stays first but the

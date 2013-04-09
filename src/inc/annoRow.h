@@ -44,4 +44,7 @@ void annoRowFree(struct annoRow **pRow, struct annoStreamer *source);
 void annoRowFreeList(struct annoRow **pList, struct annoStreamer *source);
 /* Free a list of annoRows. */
 
+int annoRowCmp(const void *va, const void *vb);
+/* Compare two annoRows' {chrom, start, end}. */
+
 #endif//ndef ANNOROW_H

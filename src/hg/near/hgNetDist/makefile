@@ -10,18 +10,18 @@ O = $A.o
 all: hgNetDist hgLoadNetDist hprdP2p
 
 hgNetDist: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/$A $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/$A${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/$A $O $(MYLIBS) $L
+	${STRIP} ${DESTDIR}${BINDIR}/$A${EXE}
 
 hgLoadNetDist: hgLoadNetDist.o $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadNetDist hgLoadNetDist.o $(MYLIBS) $L
-	${STRIP} ${BINDIR}/hgLoadNetDist${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/hgLoadNetDist hgLoadNetDist.o $(MYLIBS) $L
+	${STRIP} ${DESTDIR}${BINDIR}/hgLoadNetDist${EXE}
 
 hprdP2p: hprdP2p.o $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hprdP2p hprdP2p.o $(MYLIBS) $L
-	${STRIP} ${BINDIR}/hprdP2p${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/hprdP2p hprdP2p.o $(MYLIBS) $L
+	${STRIP} ${DESTDIR}${BINDIR}/hprdP2p${EXE}
 
-hprdP2pHg18: ${BINDIR}/hprdP2p${EXE}
+hprdP2pHg18: ${DESTDIR}${BINDIR}/hprdP2p${EXE}
 	hprdP2p -verbose=2 \
 		/cluster/data/hg18/p2p/hprd/FLAT_FILES/BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt \
 		/cluster/data/hg18/p2p/hprd/FLAT_FILES/PROTEIN_COMPLEXES.txt \
@@ -69,5 +69,5 @@ worm:
 		/cluster/data/ce2/p2p/wormP2P.pathLengths
 	hgLoadNetDist /cluster/data/ce2/p2p/wormP2P.pathLengths ce2 wormP2P
 	
-clean:
+clean::
 	rm -f $O hprdP2p.o

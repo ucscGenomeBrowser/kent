@@ -14,9 +14,12 @@ all: $(USE_DIRS:%=%.all)
 %.all:
 	( cd $* && echo $* && ${MAKE} )
 
-
-
 clean:: $(USE_DIRS:%=%.clean)
 
 %.clean::
 	( cd $* && echo $* && ${MAKE} clean )
+
+compile:: $(USE_DIRS:%=%.compile)
+
+%.compile::
+	( cd $* && echo $* && ${MAKE} compile )

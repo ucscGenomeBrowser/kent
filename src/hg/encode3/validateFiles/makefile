@@ -1,19 +1,8 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = validateFiles
+include $(kentSrc)/inc/userApp.mk
 
-L += $(MYSQLLIBS) -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
-
-O = validateFiles.o
-
-validateFiles: $O ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/validateFiles $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/validateFiles${EXE}
-
-clean:
-	rm -f $O
-
-test: 	validateFiles
+test::
 	rm -rf output
 	mkdir output
 	-validateFiles -type=tagAlign -chromDb=hg18 -genome=/cluster/data/hg18/hg18.2bit input/tagAlign1.txt > output/tagAlign1.out 2>&1 
@@ -32,3 +21,6 @@ test: 	validateFiles
 	#cmp output/bed12bad.out expected/bed12bad.out
 
 # note "-" before the command means you know it will have an error, but continue making
+
+clean::
+	rm -fr output

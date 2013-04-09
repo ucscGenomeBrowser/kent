@@ -1,19 +1,8 @@
-include ../../../../inc/common.mk
+kentSrc = ../../../..
+A = joinerCheck
+include ${kentSrc}/inc/userApp.mk
 
-L += $(MYSQLLIBS) -lm
-MYLIBDIR = ../../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
-O = joinerCheck.o 
-
-joinerCheck: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/joinerCheck $O ${MYLIBS} $L
-#	${STRIP} ${BINDIR}/joinerCheck${EXE}
-
-clean:
-	rm -f $O joinerCheck
-
-test: 
+test::
 	joinerCheck ../all.joiner
 
 foo:
@@ -21,6 +10,3 @@ foo:
 
 ensembl:
 	joinerCheck -fieldListIn=hgwbeta.fields -identifier=ensemblTranscriptId ../all.joiner -keys -fields -database=hg16
-
-compile:: $O ${MYLIBS}
-	${CC} ${COPT} -o joinerCheck $O ${MYLIBS} $L

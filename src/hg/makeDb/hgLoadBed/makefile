@@ -9,10 +9,10 @@ O = hgLoadBed.o
 A = hgLoadBed
 
 hgLoadBed: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgLoadBed${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-compile:	${O} ${MYLIBS}
+compile:       ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L
 
 cgi:: compile

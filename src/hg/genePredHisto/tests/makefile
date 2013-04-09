@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
 featTypes = 5utr cds 3utr
-genePredHisto = ${BINDIR}/genePredHisto
+genePredHisto = genePredHisto
 
 test: exonLenTest exonCntTest ${featTypes:%=%ExonLenTest} ${featTypes:%=%ExonCntTest}
 

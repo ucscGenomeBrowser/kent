@@ -402,6 +402,117 @@ switch(mg->writeMode)
     }
 }
 
+
+inline void mixDot(struct memGfx *img, int x, int y,  float frac, Color col)
+/* Puts a single dot on the image, mixing it with what is already there
+ * based on the frac argument. */
+{
+Color *pt = _mgPixAdr(img,x,y);
+float invFrac = 1 - frac;
+
+int r = COLOR_32_RED(*pt) * invFrac + COLOR_32_RED(col) * frac;
+int g = COLOR_32_GREEN(*pt) * invFrac + COLOR_32_GREEN(col) * frac;
+int b = COLOR_32_BLUE(*pt) * invFrac + COLOR_32_BLUE(col) * frac;
+mgPutDot(img,x,y,MAKECOLOR_32(r,g,b));
+}
+ 
+#define fraction(X) (((double)(X))-(double)(int)(X))
+#define invFraction(X) (1.0-fraction(X))
+
+void mgAliasLine( struct memGfx *mg, int x1, int y1,
+  int x2, int y2, Color color)
+/* Draw an antialiased line using the Wu algorithm. */
+{
+double dx = (double)x2 - (double)x1;
+double dy = (double)y2 - (double)y1;
+
+// figure out what quadrant we're in
+if ( fabs(dx) > fabs(dy) ) 
+    {
+    if ( x2 < x1 ) 
+	{
+	// swap start and end points
+	int tmp = x2;
+	x2 = x1;
+	x1 = tmp;
+
+	tmp = y2;
+	y2 = y1;
+	y1 = tmp;
+	}
+
+    double gradient = dy / dx;
+    double xend = round(x1);
+    double yend = y1 + gradient*(xend - x1);
+    double xgap = invFraction(x1 + 0.5);
+    int xpxl1 = xend;
+    int ypxl1 = (int)yend;
+    mixDot(mg, xpxl1, ypxl1, invFraction(yend)*xgap, color);
+    mixDot(mg, xpxl1, ypxl1+1, fraction(yend)*xgap, color);
+
+    double intery = yend + gradient;
+
+    xend = round(x2);
+    yend = y2 + gradient*(xend - x2);
+    xgap = fraction(x2+0.5);
+    int xpxl2 = xend;
+    int ypxl2 = (int)yend;
+    mixDot(mg, xpxl2, ypxl2, invFraction(yend) * xgap, color);
+    mixDot(mg, xpxl2, ypxl2 + 1, fraction(yend) * xgap, color);
+
+    int x;
+    for(x=xpxl1+1; x <= (xpxl2-1); x++) 
+	{
+	mixDot(mg, x, (int)intery, invFraction(intery), color);
+	mixDot(mg, x, (int)intery + 1, fraction(intery), color);
+	intery += gradient;
+	}
+    } 
+else  // ( fabs(dx) <= fabs(dy) ) 
+    {    
+    if ( y2 < y1 ) 
+	{
+	// swap start and end points
+	int tmp = x2;
+	x2 = x1;
+	x1 = tmp;
+
+	tmp = y2;
+	y2 = y1;
+	y1 = tmp;
+	}
+
+    double gradient = dx / dy;
+    double yend = rint(y1);
+    double xend = x1 + gradient*(yend - y1);
+    double ygap = invFraction(y1 + 0.5);
+    int ypxl1 = yend;
+    int xpxl1 = (int)xend;
+    mixDot(mg, xpxl1, ypxl1, invFraction(xend)*ygap, color);
+    mixDot(mg, xpxl1, ypxl1+1, fraction(xend)*ygap, color);
+    double interx = xend + gradient;
+
+    yend = rint(y2);
+    xend = x2 + gradient*(yend - y2);
+    ygap = fraction(y2+0.5);
+    int ypxl2 = yend;
+    int xpxl2 = (int)xend;
+    mixDot(mg, xpxl2, ypxl2, invFraction(xend) * ygap, color);
+    mixDot(mg, xpxl2, ypxl2 + 1, fraction(xend) * ygap, color);
+
+    int y;
+    for(y=ypxl1+1; y <= (ypxl2-1); y++) 
+	{
+	mixDot(mg, (int)interx, y, invFraction(interx), color);
+	mixDot(mg, (int)interx + 1, y, fraction(interx), color);
+	interx += gradient;
+	}
+    }
+}
+#undef fraction
+#undef invFraction
+
+
 void mgBrezy(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color,
 	int yBase, boolean fillFromBase)
 /* Brezenham line algorithm.  Optionally fill in under line. */
@@ -521,9 +632,13 @@ else
 }
 
 void mgDrawLine(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color)
-/* Draw a line from one point to another. */
+/* Draw a line from one point to another. Draws it antialiased if
+ * it's not horizontal or vertical. */
 {
-mgBrezy(mg, x1, y1, x2, y2, color, 0, FALSE);
+if ((x1 == x2) || (y1 == y2))
+    mgBrezy(mg, x1, y1, x2, y2, color, 0, FALSE);
+else
+    mgAliasLine(mg, x1, y1, x2, y2, color);
 }
 
 void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2, 

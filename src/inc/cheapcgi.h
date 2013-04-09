@@ -401,6 +401,9 @@ void cgiVarSet(char *varName, char *val);
 struct dyString *cgiUrlString();
 /* Get URL-formatted that expresses current CGI variable state. */
 
+void cgiEncodeIntoDy(char *var, char *val, struct dyString *dy);
+/* Add a CGI-encoded &var=val string to dy. */
+
 boolean cgiSpoof(int *pArgc, char *argv[]);
 /* Use the command line to set up things as if we were a CGI program.
  * User types in command line (assuming your program called cgiScript)
@@ -438,7 +441,12 @@ boolean cgiParseInput(char *input, struct hash **retHash,
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back
  * into input, so please don't free input until you're done with
- * the hash. Prints message and returns FALSE if there's an error.*/
+ * the hash. Prints message and returns FALSE if there's an error.
+ * To clean up - slFreeList, hashFree, and only then free input. */
+
+void cgiParseInputAbort(char *input, struct hash **retHash,
+        struct cgiVar **retList);
+/* Parse cgi-style input into a hash table and list as above but abort if there's an error. */
 
 void cgiSimpleTableStart();
 /* start HTML table  -- no customization. Leaves room

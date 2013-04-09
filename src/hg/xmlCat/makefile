@@ -1,17 +1,9 @@
-include ../../inc/common.mk
-
-L += -lm
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
-
-O = xmlCat.o
-
-xmlCat: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/xmlCat $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/xmlCat${EXE}
+kentSrc = ../..
+A = xmlCat
+include $(kentSrc)/inc/userApp.mk
 
 test:: 
-	doTest
+	./doTest
 
-clean:
-	rm -f $O
+clean::
+	rm -fr test/out.xml

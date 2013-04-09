@@ -5,32 +5,32 @@ MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 hgExpDistance_fq: hgExpDistance_fq.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/hgExpDistance $@.o ${MYLIBS} $L -lpthread
-	${STRIP} ${BINDIR}/hgExpDistance${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgExpDistance $@.o ${MYLIBS} $L -lpthread
+	${STRIP} ${DESTDIR}${BINDIR}/hgExpDistance${EXE}
 
 hgExpDistance: hgExpDistance.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/hgExpDistance $@.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgExpDistance${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgExpDistance $@.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/hgExpDistance${EXE}
 
 hgExpDistance_fm: hgExpDistance_fm.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/hgExpDistance_fm $@.o ${MYLIBS} $L -lpthread
-	${STRIP} ${BINDIR}/hgExpDistance_fm${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgExpDistance_fm $@.o ${MYLIBS} $L -lpthread
+	${STRIP} ${DESTDIR}${BINDIR}/hgExpDistance_fm${EXE}
 
 hgExpDistance_tm: hgExpDistance_tm.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/hgExpDistance_tm $@.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/hgExpDistance_tm${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgExpDistance_tm $@.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/hgExpDistance_tm${EXE}
 
 hgExpDistance_fm_tm: hgExpDistance_fm_tm.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/hgExpDistance_fm_tm $@.o ${MYLIBS} $L -lpthread
-	${STRIP} ${BINDIR}/hgExpDistance_fm_tm${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgExpDistance_fm_tm $@.o ${MYLIBS} $L -lpthread
+	${STRIP} ${DESTDIR}${BINDIR}/hgExpDistance_fm_tm${EXE}
 
 hgExpDistance_fq_tm: hgExpDistance_fq_tm.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/hgExpDistance_fq_tm $@.o ${MYLIBS} $L -lpthread
-	${STRIP} ${BINDIR}/hgExpDistance_fq_tm${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgExpDistance_fq_tm $@.o ${MYLIBS} $L -lpthread
+	${STRIP} ${DESTDIR}${BINDIR}/hgExpDistance_fq_tm${EXE}
 
 diffDistTables: diffDistTables.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/diffDistTables $@.o ${MYLIBS} $L
-	${STRIP} ${BINDIR}/diffDistTables${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/diffDistTables $@.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/diffDistTables${EXE}
 
 time: hgExpDistance_tm.o ${MYLIBS}
 	hgExpDistance_tm hg17 gnfAtlas2 gnfAtlas2Exp gnfAtlas2_ORIG_TEST  -verbose=2

@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
 DIFF = diff -u
-genePredToGtf = ${BINDIR}/genePredToGtf
+genePredToGtf = ${DESTDIR}${BINDIR}/genePredToGtf
 
 ##
 # Note: the target bigTest runs this on all mRNAs however some fail because

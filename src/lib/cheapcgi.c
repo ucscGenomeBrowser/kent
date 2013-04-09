@@ -573,12 +573,13 @@ if (inputString == NULL)
     }
 }
 
-static void cgiParseInputAbort(char *input, struct hash **retHash,
+void cgiParseInputAbort(char *input, struct hash **retHash,
         struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back
  * into input, so please don't free input until you're done with
- * the hash. Prints message aborts if there's an error.*/
+ * the hash. Prints message aborts if there's an error.
+ * To clean up - slFreeList, hashFree, and only then free input. */
 {
 char *namePt, *dataPt, *nextNamePt;
 struct hash *hash = *retHash;
@@ -628,7 +629,8 @@ boolean cgiParseInput(char *input, struct hash **retHash,
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back
  * into input, so please don't free input until you're done with
- * the hash. Prints message and returns FALSE if there's an error.*/
+ * the hash. Prints message and returns FALSE if there's an error.
+ * To clean up - slFreeList, hashFree, and only then free input. */
 {
 boolean ok = TRUE;
 int status = setjmp(cgiParseRecover);
@@ -1930,6 +1932,18 @@ for (cv = inputList; cv != NULL; cv = cv->next)
     freez(&e);
     }
 return dy;
+}
+
+void cgiEncodeIntoDy(char *var, char *val, struct dyString *dy)
+/* Add a CGI-encoded &var=val string to dy. */
+{
+if (dy->stringSize != 0)
+    dyStringAppendC(dy, '&');
+dyStringAppend(dy, var);
+dyStringAppendC(dy, '=');
+char *s = cgiEncode(val);
+dyStringAppend(dy, s);
+freez(&s);
 }
 
 void cgiContinueAllVars()

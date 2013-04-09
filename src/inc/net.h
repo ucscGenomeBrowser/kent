@@ -128,7 +128,15 @@ char *urlFromNetParsedUrl(struct netParsedUrl *npu);
 
 int netUrlOpen(char *url);
 /* Return socket descriptor (low-level file handle) for read()ing url data,
- * or -1 if error.  Just close(result) when done. */
+ * or -1 if error.  Just close(result) when done. Errors from this routine
+ * from web urls are rare, because this just opens up enough to read header,
+ * which may just say "file not found." Consider using netUrlMustOpenPastHeader
+ * instead .*/
+
+int netUrlMustOpenPastHeader(char *url);
+/* Get socket descriptor for URL.  Process header, handling any forwarding and
+ * the like.  Do errAbort if there's a problem, which includes anything but a 200
+ * return from http after forwarding. */
 
 int netUrlOpenSockets(char *url, int *retCtrlSocket);
 /* Return socket descriptor (low-level file handle) for read()ing url data,
