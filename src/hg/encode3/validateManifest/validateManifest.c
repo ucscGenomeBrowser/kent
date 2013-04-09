@@ -13,6 +13,7 @@
 char *version = "1.0";
 char *workingDir = ".";
 char *encValData = "encValData";
+char *ucscDb = NULL;
 
 boolean quickMd5sum = FALSE;  // Just for development testing, do not use
 
@@ -177,11 +178,15 @@ return cloneString(asPath);
 
 char *getGenome(char *fileName)
 /* Get genome, e.g. hg19 */
-{  // TODO this could use some more development
+{  
+// TODO this could use some more development
 // but start with something very simple for now
 // such as assuming that the genome is found 
 // as the prefix in the fileName path.
 // Maybe in future can pull this from the hub.txt?
+// ucscDb will be set to the value in the optional column "ucsc_db"
+if (ucscDb)
+    return cloneString(ucscDb);
 char *slash = strchr(fileName, '/');
 if (!slash)
     errAbort("Expected to find genome in file_name prefix.");
@@ -192,11 +197,7 @@ return cloneString(genome);
 
 char *getChromInfo(char *fileName)
 /* Get path to chromInfo file for fileName */
-{  // TODO this could use some more development
-// but start with something very simple for now
-// such as assuming that the chomInfo file has 
-// a standard location under the assembly name path.
-// Maybe in future can pull this from the hub.txt?
+{
 char *genome = getGenome(fileName);
 char chromInfo[256];
 safef(chromInfo, sizeof chromInfo, "%s/%s/chrom.sizes", encValData, genome);
@@ -205,11 +206,9 @@ return cloneString(chromInfo);
 
 char *getTwoBit(char *fileName)
 /* Get path to twoBit file for fileName */
-{  // TODO this could use some more development
-// but start with something very simple for now
-// such as assuming that the twoBit file has 
-// a standard location under the assembly name path.
-// Maybe in future can pull this from the hub.txt?
+{  
+// TODO this could use some more development
+// Maybe in future can download this from one of our servers?
 char *genome = getGenome(fileName);
 char twoBit[256];
 safef(twoBit, sizeof twoBit, "%s/%s/%s.2bit", encValData, genome, genome);
@@ -409,6 +408,7 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
 
 int m_file_name_i = -1;
 int m_format_i = -1;
+int m_ucsc_db_i = -1;    // optional field ucsc_db
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
@@ -417,6 +417,8 @@ for (i=0; i<mFieldCount; ++i)
 	m_file_name_i = i;
     if (sameString(manifestFields->words[i], "format"))
 	m_format_i = i;
+    if (sameString(manifestFields->words[i], "ucsc_db"))
+	m_ucsc_db_i = i;
     }
 if (m_file_name_i == -1)
     errAbort("field file_name not found in manifest.txt");
@@ -500,6 +502,8 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
     // get file_name, size, datetime
     char *mFileName = rec->words[m_file_name_i];
+    if (m_ucsc_db_i != -1)
+	ucscDb = rec->words[m_ucsc_db_i];
 
     off_t mFileSize = fileSize(mFileName);
     off_t vFileSize = -1;
