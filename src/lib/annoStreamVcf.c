@@ -74,7 +74,7 @@ self->record = vcfRecordFromRow(self->vcff, words);
 return self->asWords;
 }
 
-static struct annoRow *asvNextRow(struct annoStreamer *vSelf)
+static struct annoRow *asvNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
 /* Return an annoRow encoding the next VCF record, or NULL if there are no more items. */
 {
 struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
@@ -93,7 +93,7 @@ while (annoFilterRowFails(vSelf->filters, words, self->numCols, &rightFail))
     }
 struct vcfRecord *rec = self->record;
 return annoRowFromStringArray(rec->chrom, rec->chromStart, rec->chromEnd,
-			      rightFail, words, self->numCols);
+			      rightFail, words, self->numCols, callerLm);
 }
 
 static void asvClose(struct annoStreamer **pVSelf)
