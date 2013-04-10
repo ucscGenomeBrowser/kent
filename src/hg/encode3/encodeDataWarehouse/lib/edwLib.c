@@ -2,19 +2,38 @@
  * module for tables and routines to access structs built on tables. */
 
 #include "common.h"
-#include "edwLib.h"
 #include "hex.h"
+#include "dystring.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "portable.h"
 #include "md5.h"
 #include "obscure.h"
+#include "encodeDataWarehouse.h"
+#include "edwLib.h"
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
-char *edwRootDir = "/scratch/kent/encodeDataWarehouse/";
 char *edwLicensePlatePrefix = "ENCFF";
+
+char *edwRootDir = "/scratch/kent/encodeDataWarehouse/";
 char *edwValDataDir = "/scratch/kent/encValData/";
+#ifdef AT_SDSC
+char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
+char *edwValDataDir = "/data/encode3/encValData/";
+#endif
+
+char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
+/* Return full path (which eventually should be freeMem'd) for fileId */
+{
+char query[256];
+char fileName[PATH_LEN];
+safef(query, sizeof(query), "select edwFileName from edwFile where id=%lld", fileId);
+sqlNeedQuickQuery(conn, query, fileName, sizeof(fileName));
+char path[512];
+safef(path, sizeof(path), "%s%s", edwRootDir, fileName);
+return cloneString(path);
+}
 
 char *edwTempDir()
 /* Returns pointer to edwTempDir.  This is shared, so please don't modify. */
@@ -202,6 +221,8 @@ void edwMakeLicensePlate(char *prefix, int ix, char *out, int outSize)
  * and put result in out. */
 {
 int maxIx = 10*10*10*26*26*26;
+if (ix < 0)
+    errAbort("ix must be positive in edwMakeLicensePlate");
 if (ix > maxIx)
     errAbort("ix exceeds max in edwMakeLicensePlate.  ix %d, max %d\n", ix, maxIx);
 int prefixSize = strlen(prefix);
@@ -214,7 +235,7 @@ strcpy(out, prefix);
 
 /* Generate the 123ABC part of license plate backwards. */
 char *s = out+minSize;
-int x = ix;
+int x = ix - 1;	// -1 so start with AAA not AAB
 *(--s) = 0;	// zero tag at end;
 int i;
 for (i=0; i<3; ++i)
@@ -259,6 +280,73 @@ while (--e >= start)
 return NULL;
 }
 
+void edwMakeLocalBaseName(int id, char *baseName, int baseNameSize)
+/* Given a numerical ID, make an easy to pronouce file name */
+{
+char *consonants = "bdfghjklmnprstvwxyz";   // Avoid c and q because make sound ambiguous
+char *vowels = "aeiou";
+int consonantCount = strlen(consonants);
+int vowelCount = strlen(vowels);
+assert(id >= 1);
+int ix = id - 1;   /* We start at zero not 1 */
+int basePos = 0;
+do
+    {
+    char c = consonants[ix%consonantCount];
+    ix /= consonantCount;
+    char v = vowels[ix%vowelCount];
+    ix /= vowelCount;
+    if (basePos + 2 >= baseNameSize)
+        errAbort("Not enough room for %d in %d letters in edwMakeLocalBaseName", id, baseNameSize);
+    baseName[basePos] = c;
+    baseName[basePos+1] = v;
+    basePos += 2;
+    }
+while (ix > 0);
+baseName[basePos] = 0;
+}
+
+char *edwFindDoubleFileSuffix(char *path)
+/* Return pointer to second from last '.' in part of path between last / and end.  
+ * If there aren't two dots, just return pointer to normal single dot suffix. */
+{
+int nameSize = strlen(path);
+char *suffix = lastMatchCharExcept(path, path + nameSize, '.', '/');
+if (suffix != NULL)
+    {
+    char *secondSuffix = lastMatchCharExcept(path, suffix, '.', '/');
+    if (secondSuffix != NULL)
+        suffix = secondSuffix;
+    }
+else
+    suffix = path + nameSize;
+return suffix;
+}
+
+void edwMakeFileNameAndPath(int edwFileId, char *submitFileName, char edwFile[PATH_LEN], char serverPath[PATH_LEN])
+/* Convert file id to local file name, and full file path. Make any directories needed
+ * along serverPath. */
+{
+/* Preserve suffix.  Give ourselves up to two suffixes. */
+char *suffix = edwFindDoubleFileSuffix(submitFileName);
+
+/* Figure out edw file name, starting with baseName. */
+char baseName[32];
+edwMakeLocalBaseName(edwFileId, baseName, sizeof(baseName));
+
+/* Figure out directory and make any components not already there. */
+char edwDir[PATH_LEN];
+edwDirForTime(edwNow(), edwDir);
+char uploadDir[PATH_LEN];
+safef(uploadDir, sizeof(uploadDir), "%s%s", edwRootDir, edwDir);
+makeDirsOnPath(uploadDir);
+
+/* Figure out full file names */
+safef(edwFile, PATH_LEN, "%s%s%s", edwDir, baseName, suffix);
+safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
+}
+
+#ifdef OLD
 void edwMakePlateFileNameAndPath(int edwFileId, char *submitFileName,
     char licensePlate[edwMaxPlateSize], char edwFile[PATH_LEN], char serverPath[PATH_LEN])
 /* Convert file id to local file name, and full file path. Make any directories needed
@@ -289,6 +377,7 @@ makeDirsOnPath(uploadDir);
 safef(edwFile, PATH_LEN, "%s%s%s", edwDir, licensePlate, suffix);
 safef(serverPath, PATH_LEN, "%s%s", edwRootDir, edwFile);
 }
+#endif /* OLD */
 
 static char *localHostName = "localhost";
 static char *localHostDir = "";  
@@ -354,10 +443,22 @@ if (row == NULL)
 return row;
 }
 
-long long edwGetLocalFile(struct sqlConnection *conn, char *localAbsolutePath, boolean symLink)
-/* Get the id of a local file from the database, adding it if it doesn't already exist.
- * Add a local file to the database.  Go ahead and give it a license plate and an ID. 
- * optionally can make it a symbolic link instead of a copy. */
+void edwUpdateFileTags(struct sqlConnection *conn, long long fileId, struct dyString *tags)
+/* Update tags field in edwFile with given value */
+{
+struct dyString *query = dyStringNew(0);
+dyStringAppend(query, "update edwFile set tags='");
+dyStringAppend(query, tags->string);
+dyStringPrintf(query, "' where id=%lld", fileId);
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
+}
+
+struct edwFile *edwGetLocalFile(struct sqlConnection *conn, char *localAbsolutePath, 
+    char *symLinkMd5Sum)
+/* Get record of local file from database, adding it if it doesn't already exist.
+ * Can make it a symLink rather than a copy in which case pass in valid MD5 sum
+ * for symLinkM5dSum. */
 {
 /* First do a reality check on the local absolute path.  Is there a file there? */
 if (localAbsolutePath[0] != '/')
@@ -367,27 +468,18 @@ if (size == -1)
     errAbort("%s does not exist", localAbsolutePath);
 long long updateTime = fileModTime(localAbsolutePath);
 
-/* Get file ID if such a file is already in database. */
+/* Get file if it's in database already. */
 int submitDirId = getLocalSubmitDir(conn);
 int submitId = getLocalSubmit(conn);
 char query[256+PATH_LEN];
-safef(query, sizeof(query), "select id from edwFile where submitId=%d and submitFileName='%s'",
+safef(query, sizeof(query), "select * from edwFile where submitId=%d and submitFileName='%s'",
     submitId, localAbsolutePath);
-long long fileId = sqlQuickLongLong(conn, query);
+struct edwFile *ef = edwFileLoadByQuery(conn, query);
 
 /* If we got something in database, check update time and size, and if it's no change just 
  * return existing database id. */
-if (fileId != 0)
-    {
-    safef(query, sizeof(query), "select updateTime,size from edwFile where id=%lld", fileId);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row = sqlNeedNextRow(sr);
-    long long oldUpdateTime = sqlLongLong(row[0]);
-    long long oldSize =sqlLongLong(row[1]);
-    sqlFreeResult(&sr);
-    if (oldUpdateTime == updateTime && oldSize == size)
-	return fileId;
-    }
+if (ef != NULL && ef->updateTime == updateTime && ef->size == size)
+    return ef;
 
 /* If we got here, then we need to make a new file record. Start with pretty empty record
  * that just has file ID, submitted file name and a few things*/
@@ -396,19 +488,21 @@ safef(query, sizeof(query),
             " values(%d, %d, '%s', %lld)"
 	    , submitId, submitDirId, localAbsolutePath, edwNow());
 sqlUpdate(conn, query);
-fileId = sqlLastAutoId(conn);
+long long fileId = sqlLastAutoId(conn);
 
-/* Create license plate and big data warehouse file/path name. */
-char licensePlate[edwMaxPlateSize];
+/* Create big data warehouse file/path name. */
 char edwFile[PATH_LEN], edwPath[PATH_LEN];
-edwMakePlateFileNameAndPath(fileId, localAbsolutePath, licensePlate, edwFile, edwPath);
+edwMakeFileNameAndPath(fileId, localAbsolutePath, edwFile, edwPath);
 
 /* We're a little paranoid so md5 it */
-char *md5 = "";
+char *md5;
 
 /* Do copy or symbolic linking of file into warehouse managed dir. */
-if (symLink)
+if (symLinkMd5Sum)
+    {
+    md5 = symLinkMd5Sum;
     makeSymLink(localAbsolutePath, edwPath);  
+    }
 else
     {
     copyFile(localAbsolutePath, edwPath);
@@ -417,10 +511,13 @@ else
 
 /* Update file record. */
 safef(query, sizeof(query), 
-    "update edwFile set licensePlate='%s', edwFileName='%s', endUploadTime=%lld,"
+    "update edwFile set edwFileName='%s', endUploadTime=%lld,"
                        "updateTime=%lld, size=%lld, md5='%s' where id=%lld"
-			, licensePlate,edwFile, edwNow(), updateTime, size, md5, fileId);
+			, edwFile, edwNow(), updateTime, size, md5, fileId);
 sqlUpdate(conn, query);
-return fileId;
+
+/* Now, it's a bit of a time waste, but cheap in code, to just load it back from DB. */
+safef(query, sizeof(query), "select * from edwFile where id=%lld", fileId);
+return edwFileLoadByQuery(conn, query);
 }
 

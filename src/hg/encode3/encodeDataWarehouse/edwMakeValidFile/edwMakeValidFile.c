@@ -7,6 +7,7 @@
 #include "sqlNum.h"
 #include "cheapcgi.h"
 #include "jksql.h"
+#include "twoBit.h"
 #include "genomeRangeTree.h"
 #include "bigWig.h"
 #include "bigBed.h"
@@ -14,6 +15,7 @@
 #include "portable.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
+#include "encode3/encode3Valid.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -317,7 +319,7 @@ vf->depth = vf->basesInItems*vf->mapRatio/assembly->baseCount;
 samclose(sf);
 }
 
-void makeValidBigBed( struct sqlConnection *conn, char *path, struct edwFile *eFile, 
+void makeValidBigBed( struct sqlConnection *conn, char *path, struct edwFile *ef, 
 	struct edwAssembly *assembly, char *format, struct edwValidFile *vf)
 /* Fill in fields of vf based on bigBed. */
 {
@@ -331,7 +333,7 @@ vf->mapRatio = 1.0;
 bigBedFileClose(&bbi);
 }
 
-void makeValidBigWig( struct sqlConnection *conn, char *path, struct edwFile *eFile, 
+void makeValidBigWig(struct sqlConnection *conn, char *path, struct edwFile *ef, 
 	struct edwAssembly *assembly, struct edwValidFile *vf)
 /* Fill in fields of vf based on bigWig. */
 {
@@ -366,7 +368,7 @@ fprintf(f, "vf->sampleCoverage = %g\n", vf->sampleCoverage);
 fprintf(f, "vf->sampleCount = %g\n", vf->depth);
 }
 
-void makeValidBam( struct sqlConnection *conn, char *path, struct edwFile *eFile, 
+void makeValidBam( struct sqlConnection *conn, char *path, struct edwFile *ef, 
 	struct edwAssembly *assembly, struct edwValidFile *vf)
 /* Fill out fields of vf based on bam.  Create sample subset as a little bed file. */
 {
@@ -383,66 +385,163 @@ genomeRangeTreeFree(&grt);
 vf->sampleCoverage = (double)basesHitBySample/assembly->baseCount;
 }
 
-void makeValidFile(struct sqlConnection *conn, struct edwFile *eFile, struct cgiParsedVars *tags)
+void makeValid2Bit(struct sqlConnection *conn, char *path, struct edwFile *ef, 
+    struct edwValidFile *vf)
+/* Fill in info about assembly */
+{
+struct twoBitFile *tbf = twoBitOpen(path);
+vf->basesInItems = vf->basesInSample = twoBitTotalSize(tbf);
+vf->itemCount = vf->sampleCount = tbf->seqCount;
+vf->mapRatio = 1.0;
+vf->sampleCoverage = 1.0;
+vf->depth = 1.0;
+twoBitClose(&tbf);
+}
+
+static void needAssembly(struct edwFile *ef, char *format, struct edwAssembly *assembly)
+/* Require assembly tag be present. */
+{
+if (assembly == NULL)
+    errAbort("file id %lld (%s) is %s format and needs an assembly tag to validate", 
+	(long long)ef->id, ef->submitFileName, format);
+}
+
+static char *findTagOrEmpty(struct cgiParsedVars *tags, char *key)
+/* Find key in tags.  If it is not there, or empty, or 'n/a' valued return empty string
+ * otherwise return val */
+{
+char *val = hashFindVal(tags->hash, key);
+if (val == NULL || sameString(val, "n/a"))
+   return "";
+else
+   return val;
+}
+
+void makeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags)
 /* If possible make a edwValidFile record for this.  Makes sure all the right tags are there,
  * and then parses file enough to determine itemCount and the like.  For some files, like fastqs,
  * it will take a subset of the file as a sample so can do QA without processing the whole thing. */
 {
+/* Make up validFile from tags and id */
 struct edwValidFile *vf;
 AllocVar(vf);
-strcpy(vf->licensePlate, eFile->licensePlate);
-vf->fileId = eFile->id;
+vf->fileId = ef->id;
 vf->format = hashFindVal(tags->hash, "format");
-vf->outputType = hashFindVal(tags->hash, "output_type");
-vf->experiment = hashFindVal(tags->hash, "experiment");
-vf->replicate = hashFindVal(tags->hash, "replicate");
+vf->outputType = findTagOrEmpty(tags, "output_type");
+vf->experiment = findTagOrEmpty(tags, "experiment");
+vf->replicate = findTagOrEmpty(tags, "replicate");
 vf->validKey = hashFindVal(tags->hash, "valid_key");
-vf->enrichedIn = hashFindVal(tags->hash, "enriched_in");
-vf->ucscDb = hashFindVal(tags->hash, "ucsc_db");
+vf->enrichedIn = findTagOrEmpty(tags, "enriched_in");
+vf->ucscDb = findTagOrEmpty(tags, "ucsc_db");
 vf->sampleBed = "";
-if (vf->format && vf->outputType && vf->experiment && vf->replicate && 
-	vf->validKey && vf->enrichedIn && vf->ucscDb)
+
+if (vf->format && vf->validKey)	// We only can validate if we have something for format 
     {
+    /* Check validation key */
+    char *validKey = encode3CalcValidationKey(ef->md5, ef->size);
+    if (!sameString(validKey, vf->validKey))
+        errAbort("valid_key does not check.  Make sure to use validateManifest.");
+
     /* Look up assembly. */
-    char *ucscDb = vf->ucscDb;
-    char query[256];
-    safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
-    struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
-    if (assembly == NULL)
-        errAbort("Couldn't find assembly corresponding to %s", ucscDb);
+    struct edwAssembly *assembly = NULL;
+    if (!isEmpty(vf->ucscDb))
+	{
+	char *ucscDb = vf->ucscDb;
+	char query[256];
+	safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
+	assembly = edwAssemblyLoadByQuery(conn, query);
+	if (assembly == NULL)
+	    errAbort("Couldn't find assembly corresponding to %s", ucscDb);
+	}
 
     /* Make path to file */
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s%s", edwRootDir, eFile->edwFileName);
+    safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
 
     /* And dispatch according to format. */
     char *format = vf->format;
     if (sameString(format, "fastq"))
-	makeValidFastq(conn, path, eFile, assembly, vf);
+	{
+	needAssembly(ef, format, assembly);
+	makeValidFastq(conn, path, ef, assembly, vf);
+	}
     else if (sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
 	     sameString(format, "bigBed"))
 	{
-	makeValidBigBed(conn, path, eFile, assembly, format, vf);
+	needAssembly(ef, format, assembly);
+	makeValidBigBed(conn, path, ef, assembly, format, vf);
 	}
     else if (sameString(format, "bigWig"))
         {
-	makeValidBigWig(conn, path, eFile, assembly, vf);
+	needAssembly(ef, format, assembly);
+	makeValidBigWig(conn, path, ef, assembly, vf);
 	}
     else if (sameString(format, "bam"))
         {
-	makeValidBam(conn, path, eFile, assembly, vf);
+	needAssembly(ef, format, assembly);
+	makeValidBam(conn, path, ef, assembly, vf);
+	}
+    else if (sameString(format, "2bit"))
+        {
+	makeValid2Bit(conn, path, ef, vf);
 	}
     else if (sameString(format, "unknown"))
         {
 	}
     else
         {
-	errAbort("Unrecognized format %s for %s\n", format, eFile->edwFileName);
+	errAbort("Unrecognized format %s for %s\n", format, ef->edwFileName);
 	}
 
-    /* Create edwValidRecord with our result */
+    /* Save record except for license plate to DB. */
     edwValidFileSaveToDb(conn, vf, "edwValidFile", 512);
+    vf->id = sqlLastAutoId(conn);
+
+    /* Create license plate around our ID.  File in warehouse to use license plate
+     * instead of baby-babble IDs. */
+	{
+	edwMakeLicensePlate(edwLicensePlatePrefix, vf->id, vf->licensePlate, edwMaxPlateSize);
+
+	/* Create swapped out version of edwFileName in newName. */
+	struct dyString *newName = dyStringNew(0);
+	char *fileName = ef->edwFileName;
+	char *dirEnd = strrchr(fileName, '/');
+	if (dirEnd == NULL)
+	    dirEnd = fileName;
+	else
+	    dirEnd += 1;
+	char *suffix = edwFindDoubleFileSuffix(fileName);
+	dyStringAppendN(newName, fileName, dirEnd - fileName);
+	dyStringAppend(newName, vf->licensePlate);
+	dyStringAppend(newName, suffix);
+	uglyf("Seriously considering renaming %s to %s\n", fileName, newName->string);
+
+	/* Now build full path names and attempt rename in file system. */
+	char oldPath[PATH_LEN], newPath[PATH_LEN];
+	safef(oldPath, sizeof(oldPath), "%s%s", edwRootDir, fileName);
+	safef(newPath, sizeof(newPath), "%s%s", edwRootDir, newName->string);
+	mustRename(oldPath, newPath);
+	uglyf("Actually done renaming %s to %s\n", oldPath, newPath);
+
+	/* Update database with new name - small window of vulnerability here sadly 
+	 * two makeValidates running at same time stepping on each other. */
+	char query[PATH_LEN+256];
+	safef(query, sizeof(query), "update edwFile set edwFileName='%s' where id=%lld",
+	    newName->string, (long long)ef->id);
+	sqlUpdate(conn, query);
+
+	dyStringFree(&newName);
+	}
+
+
+
+    /* Update validFile record with license plate. */
+    char query[256];
+    safef(query, sizeof(query), "update edwValidFile set licensePlate='%s' where id=%lld", 
+	vf->licensePlate, (long long)vf->id);
+    sqlUpdate(conn, query);
     }
+freez(&vf);
 }
 
 void edwMakeValidFile(int startId, int endId)
@@ -452,20 +551,21 @@ void edwMakeValidFile(int startId, int endId)
 struct sqlConnection *conn = sqlConnect(edwDatabase);
 char query[256];
 safef(query, sizeof(query), 
-    "select * from edwFile where id>=%d and id<=%d and md5 != '' and deprecated = ''", 
+    "select * from edwFile where id>=%d and id<=%d and endUploadTime != 0 "
+    "and updateTime != 0 and deprecated = ''", 
     startId, endId);
-struct edwFile *eFile, *eFileList = edwFileLoadByQuery(conn, query);
+struct edwFile *ef, *efList = edwFileLoadByQuery(conn, query);
 
-for (eFile = eFileList; eFile != NULL; eFile = eFile->next)
+for (ef = efList; ef != NULL; ef = ef->next)
     {
-    verbose(1, "processing %s %s\n", eFile->licensePlate, eFile->submitFileName);
+    verbose(1, "processing %s %s\n", ef->edwFileName, ef->submitFileName);
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s%s", edwRootDir, eFile->edwFileName);
+    safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
 
-    if (eFile->tags) // All ones we care about have tags
+    if (ef->tags) // All ones we care about have tags
         {
-	struct cgiParsedVars *tags = cgiParsedVarsNew(eFile->tags);
-	makeValidFile(conn, eFile, tags);
+	struct cgiParsedVars *tags = cgiParsedVarsNew(ef->tags);
+	makeValidFile(conn, ef, tags);
 	cgiParsedVarsFree(&tags);
 	}
     }
