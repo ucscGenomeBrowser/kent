@@ -44,7 +44,6 @@ snpBigWigToTabOut: mkout
 	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
 
 vepOut: mkout
-	hgLoadSqlTab test vepSample ../pgSnp.sql input/annoGrator/vepSample.pgSnp.tab
 	${TESTER} ${DB} $@ | grep -v 'Output produced at' > ${OUT_DIR}/$@.txt
 	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
 

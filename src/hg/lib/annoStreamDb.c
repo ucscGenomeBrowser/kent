@@ -242,40 +242,12 @@ hFreeConn(&(self->conn));
 annoStreamerFree(pVSelf);
 }
 
-static boolean asHasFields(struct annoStreamDb *self, char *chromField, char *startField,
-			   char *endField)
-/* If autoSql def has all three columns, remember their names and column indexes and
- * return TRUE. */
-{
-struct asColumn *columns = self->streamer.asObj->columnList;
-int chromIx = asColumnFindIx(columns, chromField);
-int startIx = asColumnFindIx(columns, startField);
-int endIx = asColumnFindIx(columns, endField);
-if (chromIx >= 0 && startIx >= 0 && endIx >= 0)
-    {
-    self->chromField = cloneString(chromField);
-    self->startField = cloneString(startField);
-    self->endField = cloneString(endField);
-    self->chromIx = chromIx;
-    self->startIx = startIx;
-    self->endIx = endIx;
-    return TRUE;
-    }
-return FALSE;
-}
-
 static boolean asdInitBed3Fields(struct annoStreamDb *self)
 /* Use autoSql to figure out which table fields correspond to {chrom, chromStart, chromEnd}. */
 {
-if (asHasFields(self, "chrom", "chromStart", "chromEnd"))
-    return TRUE;
-if (asHasFields(self, "chrom", "txStart", "txEnd"))
-    return TRUE;
-if (asHasFields(self, "tName", "tStart", "tEnd"))
-    return TRUE;
-if (asHasFields(self, "genoName", "genoStart", "genoEnd"))
-    return TRUE;
-return FALSE;
+struct annoStreamer *vSelf = &(self->streamer);
+return annoStreamerFindBed3Columns(vSelf, &(self->chromIx), &(self->startIx), &(self->endIx),
+				   &(self->chromField), &(self->startField), &(self->endField));
 }
 
 char *sqlTableIndexOnField(struct sqlConnection *conn, char *table, char *field)
