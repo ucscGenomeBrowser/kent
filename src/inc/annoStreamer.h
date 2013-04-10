@@ -42,7 +42,7 @@ struct annoStreamer
     void (*setColumns)(struct annoStreamer *self, struct annoColumn *newColumns);
     /* Get and set output fields */
 
-    struct annoRow *(*nextRow)(struct annoStreamer *self);
+    struct annoRow *(*nextRow)(struct annoStreamer *self, struct lm *lm);
     /* Get next item's output fields from this source */
 
     void (*close)(struct annoStreamer **pSelf);
