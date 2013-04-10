@@ -201,7 +201,7 @@ else
 if (
     !sameString(genome, "hg19") &&
     !sameString(genome, "hg20") &&
-    !sameString(genome, "hg36") &&
+    !sameString(genome, "hg38") &&
     !sameString(genome, "mm9") &&
     !sameString(genome, "mm10") 
     )
@@ -315,6 +315,7 @@ boolean validateGtf(char *fileName)
 {
 char cmdLine[1024];
 safef(cmdLine, sizeof cmdLine, "GTF: I have no idea what the commandline(s) should be. %s", fileName);
+uglyf("%s\n",cmdLine);
 // TODO actually run the validator
 return FALSE;
 }
@@ -486,7 +487,6 @@ if (haveVal)
 // write to a different temp filename so that the old validated.txt is not lost if this program not complete
 FILE *f = mustOpen("validated.tmp", "w"); 
 
-fprintf(f,"#version %s\n", version);  // write vm version as a comment
 char *tabSep = "";
 // write fieldnames to output
 fprintf(f,"#");  // write leading comment character #
@@ -498,6 +498,8 @@ for (i = 0; i < mFieldCount; ++i)
 // include additional fieldnames
 fprintf(f,"\tmd5_sum\tsize\tmodified\tvalid_key");
 fprintf(f,"\n");
+
+fprintf(f,"#version %s\n", version);  // write vm version as a comment
 
 // loop through manifest recs
 struct slRecord *rec = NULL;
@@ -615,9 +617,11 @@ for(rec = manifestRecs; rec; rec = rec->next)
     // include additional fields
     fprintf(f,"\t%s\t%lld\t%ld\t%s", mMd5Hex, (long long)mFileSize, (long)mFileTime, mValidKey);
     fprintf(f,"\n");
+    fflush(f);
 
     ++recNo;
     }
+
 
 carefulClose(&f);
 rename("validated.tmp", "validated.txt"); // replace the old validated file with the new one
