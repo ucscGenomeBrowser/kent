@@ -421,23 +421,23 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
 
 
 
-int m_file_name_i = -1;
-int m_format_i = -1;
-int m_ucsc_db_i = -1;    // optional field ucsc_db
+int mFileNameIdx = -1;
+int mFormatIdx = -1;
+int mUcscDbIdx = -1;    // optional field ucsc_db
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
     {
     if (sameString(manifestFields->words[i], "file_name"))
-	m_file_name_i = i;
+	mFileNameIdx = i;
     if (sameString(manifestFields->words[i], "format"))
-	m_format_i = i;
+	mFormatIdx = i;
     if (sameString(manifestFields->words[i], "ucsc_db"))
-	m_ucsc_db_i = i;
+	mUcscDbIdx = i;
     }
-if (m_file_name_i == -1)
+if (mFileNameIdx == -1)
     errAbort("field file_name not found in manifest.txt");
-if (m_format_i == -1)
+if (mFormatIdx == -1)
     errAbort("field format not found in manifest.txt");
 
 // check if the fieldnames in old validated appear in the same order in manifest.txt
@@ -450,37 +450,37 @@ if (haveVal)
 	    errAbort("field names in old validated.txt do not match those in manifest.txt");
 	}
 // get indexes for old val extra fields
-int v_md5_sum_i = -1;
-int v_size_i = -1;
-int v_modified_i = -1;
-int v_valid_key_i = -1;
+int vMd5SumIdx = -1;
+int vSizeIdx = -1;
+int vModifiedIdx = -1;
+int vValidKeyIdx = -1;
 if (haveVal)
     {
     for (i = mFieldCount; i < vFieldCount; ++i)
 	{
 	if (sameString(vFields->words[i], "md5_sum"))
-	    v_md5_sum_i = i;
+	    vMd5SumIdx = i;
 	if (sameString(vFields->words[i], "size"))
-	    v_size_i = i;
+	    vSizeIdx = i;
 	if (sameString(vFields->words[i], "modified"))
-	    v_modified_i = i;
+	    vModifiedIdx = i;
 	if (sameString(vFields->words[i], "valid_key"))
-	    v_valid_key_i = i;
+	    vValidKeyIdx = i;
 	}
-    if ( v_md5_sum_i   == -1) errAbort("field "  "md5_sum not found in old validated.txt");
-    if ( v_size_i      == -1) errAbort("field "     "size not found in old validated.txt");
-    if ( v_modified_i  == -1) errAbort("field " "modified not found in old validated.txt");
-    if ( v_valid_key_i == -1) errAbort("field ""valid_key not found in old validated.txt");
+    if ( vMd5SumIdx   == -1) errAbort("field "  "md5_sum not found in old validated.txt");
+    if ( vSizeIdx      == -1) errAbort("field "     "size not found in old validated.txt");
+    if ( vModifiedIdx  == -1) errAbort("field " "modified not found in old validated.txt");
+    if ( vValidKeyIdx == -1) errAbort("field ""valid_key not found in old validated.txt");
     }
 
 // calling for the side-effect of checking for duplicate file_names.
 struct hash *mFileNameHash = NULL;  // split on two lines to suppress compiler warning : unused var
-mFileNameHash = makeFileNameHash(manifestRecs, m_file_name_i);
+mFileNameHash = makeFileNameHash(manifestRecs, mFileNameIdx);
 
 // hash old validated records by file_name for quick lookup.
 struct hash *valHash = NULL;
 if (haveVal)
-    valHash = makeFileNameHash(vRecs, m_file_name_i);
+    valHash = makeFileNameHash(vRecs, mFileNameIdx);
 
 
 // open output
@@ -517,9 +517,9 @@ for(rec = manifestRecs; rec; rec = rec->next)
     */
 
     // get file_name, size, datetime
-    char *mFileName = rec->words[m_file_name_i];
-    if (m_ucsc_db_i != -1)
-	ucscDb = rec->words[m_ucsc_db_i];
+    char *mFileName = rec->words[mFileNameIdx];
+    if (mUcscDbIdx != -1)
+	ucscDb = rec->words[mUcscDbIdx];
 
     off_t mFileSize = fileSize(mFileName);
     off_t vFileSize = -1;
@@ -536,7 +536,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
     struct slRecord *vRec = NULL;
     if (haveVal)
 	{
-    	vRec = (struct slRecord *) hashFindVal(valHash, rec->words[m_file_name_i]);
+    	vRec = (struct slRecord *) hashFindVal(valHash, rec->words[mFileNameIdx]);
 	// check if all fields match between manifest and old validated
 	if (vRec)
 	    {
@@ -550,20 +550,20 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    // check that the record correctly matches the actual file sizes.
 	    if (dataMatches)
 		{
-    		vFileSize = sqlLongLong(vRec->words[v_size_i]);  // TODO maybe use my special functions from the validator
+    		vFileSize = sqlLongLong(vRec->words[vSizeIdx]);  // TODO maybe use my special functions from the validator
 		if (vFileSize != mFileSize) dataMatches = FALSE;
 		}
 	    // check that the record correctly matches the actual file timestamp.
 	    if (dataMatches)
 		{
-		vFileTime = sqlLongLong(vRec->words[v_modified_i]);  // There is no sqlLong function, but there should be!
+		vFileTime = sqlLongLong(vRec->words[vModifiedIdx]);  // There is no sqlLong function, but there should be!
 		if (vFileTime != mFileTime) dataMatches = FALSE;
 		}
 	    // verify vValidKey against vMd5Hex.
 	    if (dataMatches)
 		{
-		vMd5Hex   = vRec->words[v_md5_sum_i];
-		vValidKey = vRec->words[v_valid_key_i];
+		vMd5Hex   = vRec->words[vMd5SumIdx];
+		vValidKey = vRec->words[vValidKeyIdx];
 		char *checkValidKey = encode3CalcValidationKey(vMd5Hex, vFileSize);
 		if (sameString(vValidKey,"ERROR")) 
 		    {
@@ -596,7 +596,7 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
 	mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
 
-	char *mFormat = rec->words[m_format_i];
+	char *mFormat = rec->words[mFormatIdx];
 	boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
 
 	if (!fileIsValid)
