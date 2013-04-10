@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PROG = ${BINDIR}/bedScore
+PROG = bedScore
 
 test: miniTest encodeSmallTest encodeTest uniformTest asinhTest std2Test
 	echo tested all

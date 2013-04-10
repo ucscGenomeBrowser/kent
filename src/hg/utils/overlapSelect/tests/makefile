@@ -1,6 +1,6 @@
 include ../../../../inc/common.mk
 
-overlapSelect = ${BINDIR}/overlapSelect
+overlapSelect = overlapSelect
 DIFF = diff -u
 
 # To check memory leaks, enable selectTableFree() in overlapSelect.c and
