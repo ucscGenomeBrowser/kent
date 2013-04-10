@@ -1,26 +1,44 @@
 <h2>Description and display conventions</h2>
 
 <p>
-<b>NumtS</b> (Nuclear mitochondrial sequences) are mitochondrial fragments inserted in nuclear genomic sequences. The most credited hypothesis concerning their generation suggests that in presence of mutagenic agents, or under stress conditions, fragments of mtDNA escape from mitochondria, reach the nucleus and insert into chromosomes during break repair; although NumtS can also derive from duplication of genomic fragments. NumtS may be a cause of contamination during mtDNA sequencing and hence frequent false low heteroplasmic evidences have been reported. The Bioinformatics group chaired by M. Attimonelli (University of Bari, Italy) has produced the RPNumtS (Reference Pig NumtS) compilation annotating  Pig assembled NumtS. To allow the scientific community to access the compilation and to perform genomics comparative analyses inclusive of the NumtS data, the group has designed the Pig NumtS tracks described below.
+<b>NumtS</b> (Nuclear mitochondrial sequences) are mitochondrial fragments inserted 
+in nuclear genomic sequences. The most credited hypothesis concerning their generation 
+suggests that in presence of mutagenic agents, or under stress conditions, fragments of 
+mtDNA escape from mitochondria, reach the nucleus and insert into chromosomes during 
+break repair; although NumtS can also derive from duplication of genomic fragments. 
+NumtS may be a cause of contamination during mtDNA sequencing and hence frequent false 
+low heteroplasmic evidences have been reported. The Bioinformatics group chaired 
+by M. Attimonelli (University of Bari, Italy) has produced the RPNumtS (Reference Pig 
+NumtS) compilation annotating  Pig assembled NumtS. To allow the scientific community to 
+access the compilation and to perform genomics comparative analyses inclusive of the 
+NumtS data, the group has designed the Pig NumtS tracks described below.
 </p>
 
 <p>
-The NumtS tracks show nuclear and mitochondrial regions, based on the High Score Pairs (HSPs) obtained by aligning the mitochondrial reference genome (NC_012095) with the susScr2 assembly of the pig genome.
+The NumtS tracks show nuclear and mitochondrial regions, based on the High Score Pairs 
+(HSPs) obtained by aligning the mitochondrial reference genome (NC_012095) with the 
+susScr2 assembly of the pig genome.
 </p>
  
 <ol>
 <li><b>"NumtS (Nuclear mitochondrial Sequences)" Track</b>
 <p>
-The "NumtS mitochondrial sequences" track shows the mapping of the HSPs returned by BlastN on the nuclear genome. The shading of the items reflect the similarity returned by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every item, a link pointing to the mitochondrial mapping is provided, thus allowing a fast cross among the NumtS genomic contexts.
+The "NumtS mitochondrial sequences" track shows the mapping of the HSPs returned by 
+BlastN on the nuclear genome. The shading of the items reflect the similarity returned 
+by BlastN, and the direction of the arrows is concordant with the strand of the 
+alignment. For every item, a link pointing to the mitochondrial mapping is provided, 
+thus allowing a fast cross among the NumtS genomic contexts.
 </P>
 </li>
 
 <li><b>"NumtS assembled" Track</b>
 <p>
-The "NumtS assembled" track shows items obtained by assembling HSPs annotated in the "NumtS" track fulfilling the following conditions:
+The "NumtS assembled" track shows items obtained by assembling HSPs annotated in the 
+"NumtS" track fulfilling the following conditions:
 <ul>
 <li>The orientation of their alignments must be concordant.</li>
-<li>The distance between them must be less than 2 kb, on the mitochondrial genome as well as on the nuclear genome.</li>
+<li>The distance between them must be less than 2 kb, on the mitochondrial genome 
+as well as on the nuclear genome.</li>
 </ul>
 <p>
 Exceptions for the second condition arise when a long repetitive element is present between two HSPs.
@@ -30,26 +48,36 @@ Exceptions for the second condition arise when a long repetitive element is pres
 
 <li><b>"NumtS on mitochondrion" Track</b>
 <p>
-The "NumtS on mitochondrion" track shows the mapping of the HSPs on the mitochondrial genome. The shading of the items reflects the similarity returned by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every item, a link pointing to the nuclear mapping is provided.
+The "NumtS on mitochondrion" track shows the mapping of the HSPs on the mitochondrial 
+genome. The shading of the items reflects the similarity returned by BlastN, and the 
+direction of the arrows is concordant with the strand of the alignment. For every 
+item, a link pointing to the nuclear mapping is provided.
 </p>
  
 <li><b>"Pig NumtS on mitochondrion SNP" Track</b>
 <p>
-The "Pig NumtS SNP" shows the mapping of the HSPs on the mitochondrial genome, with the SNPs which fall within, derived from comparison with the susScr2 assembly. No shading is here provided. For every item, a link pointing to the nuclear mapping is provided.
+The "Pig NumtS SNP" shows the mapping of the HSPs on the mitochondrial genome, with 
+the SNPs which fall within, derived from comparison with the susScr2 assembly. No 
+shading is here provided. For every item, a link pointing to the nuclear mapping is provided.
 </p>
 </ol> 
 
 <h2>Methods</h2>
 <p>
-NumtS mappings were obtained by running Blast2seq (program: BlastN) between each chromosome of the Pig Genome (susScr2 assembly) and the Pig mitochondrial reference sequence (AC: NC_012095), fixing the e-value threshold to 1e-03. The assembling of the HSPs was performed with spreadsheet interpolation and manual inspection. BED format is used for the first three annotation tracks, while for the last one the SAM/BAM format is preferred.
+NumtS mappings were obtained by running Blast2seq (program: BlastN) between each chromosome 
+of the Pig Genome (susScr2 assembly) and the Pig mitochondrial reference sequence (AC: NC_012095), 
+fixing the e-value threshold to 1e-03. The assembling of the HSPs was performed with spreadsheet 
+interpolation and manual inspection. BED format is used for the first three annotation tracks, 
+while for the last one the SAM/BAM format is preferred.
 </p>
  
 <h2>Credits</h2>
 <p>
-These data were provided by Francesco Maria Calabrese, Dario Leonardo Balacco, Domenico Simone and Marcella Attimonelli from 
-the Department of of Biosciences, Biotechnology and Pharmacological 
+These data were provided by Francesco Maria Calabrese, Dario Leonardo Balacco, Domenico Simone 
+and Marcella Attimonelli from the Department of of Biosciences, Biotechnology and Pharmacological 
 Sciences (University of Bari, Italy).
-Manual inspection and format details have been carried out by Francesco Maria Calabrese, Dario Leonardo Balacco and Domenico Simone.
+Manual inspection and format details have been carried out by Francesco Maria Calabrese, 
+Dario Leonardo Balacco and Domenico Simone.
 </p>
 
 <h2>References</h2>
