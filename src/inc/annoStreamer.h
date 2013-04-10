@@ -104,4 +104,12 @@ void annoStreamerFree(struct annoStreamer **pSelf);
 void annoStreamerSetQuery(struct annoStreamer *self, struct annoGratorQuery *query);
 /* Set query (to be called only by annoGratorQuery which is created after streamers). */
 
+boolean annoStreamerFindBed3Columns(struct annoStreamer *self,
+			    int *retChromIx, int *retStartIx, int *retEndIx,
+			    char **retChromField, char **retStartField, char **retEndField);
+/* Scan autoSql for recognized column names corresponding to BED3 columns.
+ * Set ret*Ix to list index of each column if found, or -1 if not found.
+ * Set ret*Field to column name if found, or NULL if not found.
+ * If all three are found, return TRUE; otherwise return FALSE. */
+
 #endif//ndef ANNOSTREAMER_H
