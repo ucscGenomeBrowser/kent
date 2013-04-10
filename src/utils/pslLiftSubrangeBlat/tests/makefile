@@ -1,5 +1,5 @@
 include ../../../inc/common.mk
-pslLiftSubrangeBlat = ${BINDIR}/pslLiftSubrangeBlat
+pslLiftSubrangeBlat = pslLiftSubrangeBlat
 
 all:
 
