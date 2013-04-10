@@ -111,8 +111,11 @@
 
 <DIV class="trackDbDoc_intro">
 <H1>Track Database Definition</H1>
-<H2>How to declare Dataset Display Settings
-                                        in the Genome Browser</H2>
+<H2>How to declare Dataset Display Settings in the Genome Browser</H2>
+
+    <P><I>Hub contributors should use the <A HREF="trackDbHub.html">Hub Track</A>
+    specific version of this document.</I></P>
+
     <P>This document describes how to declare dataset display characteristics
     in the Genome Browser through trackDb settings.   Introducing new
     datasets for display in the Browser requires declaring the location
@@ -678,7 +681,7 @@
 <DIV class="url"><span class="types all"></span>
 <div class="format">
     <code>url &lt;url&gt;</code><BR>
-    <code>url2 &lt;url&gt;</code><BR>
+    <code>urlLabel &lt;label&gt;</code><BR>
     <code>idInUrlSql &lt;sql for id&gt;</code></div>
     <P>Many tracks allow an external link when an
     individual track data item is examined.  Use this setting to put a
@@ -696,13 +699,13 @@
     <LI>$] - chromEnd location (relative to one)</LI>
     <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
     <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
-    <LI>  $D - database name</LI>
+    <LI>  $D - database name (e.g. "hg19")</LI>
     <LI>  $P - item name portion before first : in name</LI>
     <LI>  $p - item name portion after first : in name
     up to next colon</LI>
     </UL>
-    <P>Note that url2 is also supported for a second
-    external link.
+    <P>The default prompt the user will see for this url is "outside link:".  Use
+    <code>urlLabel</code> to provide a more informative prompt.
     </P>
     <P>For local (non-hub) tracks, an additional setting can be used to find an ID
     from another table based upon the item name or id from the track's
@@ -712,7 +715,7 @@
     token in the sql statement.</P>
     <!-- DONNA - I don't quite understand the idInUrlSql usage 
     TIM responds: By default the ID is the bed column 'name'.  That is what the $$ token
-    gets replaced with in the url provided.  The idUnUrlSql allows having a separate table
+    gets replaced with in the url provided.  The idInUrlSql allows having a separate table
     in the mysql database that holds an alternate id.  No doubt this setting was for a 
     special case added by one engineer for one specific result.  Nevertheless, it is now one 
     of our many settings I needed to document.  So if a wrangler has a case where the 
@@ -722,21 +725,41 @@
     <P><B>Example:</B></P>
     <pre>
     url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
-    url2 https://www.affymetrix.com/LinkServlet?probeset=$$
+    urlLabel NCBI Details:
     idInUrlSql select name from sibTxGraph where id=%s    </pre>
 </DIV>
 
-<DIV class="urlLabel"><span class="types all"></span>
+<DIV class="url_for_hubs"><span class="types all"></span>
 <div class="format">
-    <code>urlLabel &lt;label&gt;</code><BR>
-    <code>url2Label &lt;label&gt;</code></div>
-    <P>This setting is used with <code>url</code> and provides
-    the first part of the text that will become the link.  The second
-    part will be the item name.  Note that <code>url2Label</code> is also supported
-    for a second external link.  Default is "outside link:".</P>
+    <code>url &lt;url&gt;</code><BR>
+    <code>urlLabel &lt;label&gt;</code></div>
+    <P>Many tracks allow an external link when an
+    individual track data item is examined.  Use this setting to put a
+    link to an external URL on the details page.  The url may include
+    wildcards that will be substituted with values from the track data
+    or other Browser variables:</P>
+    <UL>
+    <LI>$$ - ID, will be replaced by the <code>name</code>
+    of an item or other string id depending upon the fields in the
+    given track's type.</LI>
+    <LI>$S - chromomosome name (scaffold name on
+    scaffold assemblies)</LI>
+    <LI>$[ - chromStart location (relative to zero)</LI>
+    <LI>$] - chromEnd location (relative to one)</LI>
+    <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
+    <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
+    <LI>  $D - database name (e.g. "hg19")</LI>
+    <LI>  $P - item name portion before first : in name</LI>
+    <LI>  $p - item name portion after first : in name
+    up to next colon</LI>
+    </UL>
+    <P>The default prompt the user will see for this url is "outside link:".  Use
+    <code>urlLabel</code> to provide a more informative prompt.
+    </P>
     <P><B>Example:</B></P>
-    <pre>   urlLabel Laboratoire de Biologie Moleculaire Eucaryote:</pre>
-    <!--DONNA - todo-->
+    <pre>
+    url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    urlLabel NCBI Details:    </pre>
 </DIV>
 
 <DIV class="wgEncode"><span class="types all"></span>
