@@ -30,8 +30,6 @@ std2Test: outputDir
 
 uniformTest: outputDir
 	${MKDIR} -p output/out
-	@cat input/uniform1.bed input/uniform2.bed > input/uniform.bed
-	${PROG} -col=7 input/uniform.bed expected/uniform.bed
 	${PROG} -col=7 -uniform input/uniform1.bed input/uniform2.bed output/out
 	@cat output/out/uniform1.bed output/out/uniform2.bed > output/uniform.bed
 	@diff -w output/uniform.bed expected/

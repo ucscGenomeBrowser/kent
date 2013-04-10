@@ -111,3 +111,46 @@ annoFilterFreeList(&(self->filters));
 annoColumnFreeList(&(self->columns));
 freez(pSelf);
 }
+
+INLINE boolean findColumn(struct asColumn *columns, char *name, int *retIx, char **retName)
+/* Scan columns for name.
+ * If found, set retIx to column index, set retName to clone of name, and return TRUE.
+ * If not found, set retIx to -1, set retName to NULL, and return FALSE; */
+{
+int ix = asColumnFindIx(columns, name);
+if (retIx != NULL)
+    *retIx = ix;
+if (retName != NULL)
+    {
+    if (ix >= 0)
+	*retName = cloneString(name);
+    else
+	*retName = NULL;
+    }
+return (ix >= 0);
+}
+
+boolean annoStreamerFindBed3Columns(struct annoStreamer *self,
+			    int *retChromIx, int *retStartIx, int *retEndIx,
+			    char **retChromField, char **retStartField, char **retEndField)
+/* Scan autoSql for recognized column names corresponding to BED3 columns.
+ * Set ret*Ix to list index of each column if found, or -1 if not found.
+ * Set ret*Field to column name if found, or NULL if not found.
+ * If all three are found, return TRUE; otherwise return FALSE. */
+{
+struct asColumn *columns = self->asObj->columnList;
+if (findColumn(columns, "chrom", retChromIx, retChromField))
+    {
+    if (findColumn(columns, "chromStart", retStartIx, retStartField))
+	return findColumn(columns, "chromEnd", retEndIx, retEndField);
+    else return (findColumn(columns, "txStart", retStartIx, retStartField) &&
+		 findColumn(columns, "txEnd", retEndIx, retEndField));
+    }
+else if (findColumn(columns, "tName", retChromIx, retChromField))
+    return (findColumn(columns, "tStart", retStartIx, retStartField) &&
+	    findColumn(columns, "tEnd", retEndIx, retEndField));
+else if (findColumn(columns, "genoName", retChromIx, retChromField))
+    return (findColumn(columns, "genoStart", retStartIx, retStartField) &&
+	    findColumn(columns, "genoEnd", retEndIx, retEndField));
+return FALSE;
+}
