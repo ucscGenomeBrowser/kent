@@ -9,6 +9,7 @@
 #include "hex.h"
 #include "sqlNum.h"
 #include "encode3/encode3Valid.h"
+#include "gff.h"
 
 char *version = "1.1";
 char *workingDir = ".";
@@ -313,11 +314,16 @@ return runCmdLine(cmdLine);
 boolean validateGtf(char *fileName)
 /* Validate gtf file */
 {
-char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "GTF: I have no idea what the commandline(s) should be. %s", fileName);
-uglyf("%s\n",cmdLine);
-// TODO actually run the validator
-return FALSE;
+uglyf("GTF: very basic checking only performed.\n");
+/* Open and read file with generic GFF reader and check it is GTF */
+struct gffFile *gff = gffRead(fileName);
+if (!gff->isGtf)
+    {
+    warn("file (%s) is not in GTF format - check it has gene_id and transcript_id", fileName);
+    return FALSE;
+    }
+// TODO actually run a more complete check
+return TRUE;
 }
 
 boolean validateNarrowPeak(char *fileName)
@@ -587,8 +593,6 @@ for(rec = manifestRecs; rec; rec = rec->next)
     else
 	{
 	// get md5_sum
-    	//char *mMd5Hex = mMd5HexForFile(mFileName);   // DEBUG RESTORE  // TODO
-	// DEBUG REMOVE -- hack for speed for development.
 	if (quickMd5sum && mFileSize > 100 * 1024 * 1024)
 	    mMd5Hex = fakeMd5sum;  // "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     	else
@@ -627,6 +631,7 @@ carefulClose(&f);
 rename("validated.tmp", "validated.txt"); // replace the old validated file with the new one
 
 // #file_name      format  experiment      replicate       output_type     biosample       target  localization    update
+// ucsc_db   (this is optional but overrides attempts to get db from file_name path)
 // md5_sum size modified valid_key
 
 }
