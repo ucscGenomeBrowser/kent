@@ -41,7 +41,7 @@ errAbort(
   "options:\n"
   "   cookies=cookie.txt - Cookies is a two column file\n"
   "           containing <cookieName><space><value><newLine>\n"
-  "note: url will need to be in quotes if it contains an ampersand."
+  "note: url will need to be in quotes if it contains an ampersand or question mark."
   );
 }
 
