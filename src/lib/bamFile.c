@@ -683,14 +683,12 @@ void samToBed(char *samIn, char *bedOut)
 /* samToBed - Convert SAM file to a pretty simple minded bed file.. */
 {
 errAbort(COMPILE_WITH_SAMTOOLS, "samToBed");
-return NULL;
 }
 
 void samToOpenBed(char *samIn, FILE *bedOut)
 /* samToBed - Convert SAM file to a pretty simple minded bed file.. */
 {
 errAbort(COMPILE_WITH_SAMTOOLS, "samToOpenBed");
-return NULL;
 }
 
 #endif//ndef USE_BAM
