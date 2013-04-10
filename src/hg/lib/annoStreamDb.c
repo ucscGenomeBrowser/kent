@@ -25,6 +25,7 @@ struct annoStreamDb
     boolean mergeBins;			// TRUE if query results will be in bin order
     struct annoRow *bigItemQueue;	// If mergeBins, accumulate coarse-bin items here
     struct annoRow *smallItemQueue;	// Max 1 item for merge-sorting with bigItemQueue
+    struct lm *qLm;			// localmem for merge-sorting queues
     int minFinestBin;			// Smallest bin number for finest bin level
     boolean gotFinestBin;		// Flag that it's time to merge-sort with bigItemQueue
     };
@@ -53,6 +54,8 @@ if (!streamer->positionIsGenome)
 	// subsequent finest-bin items which will be in chromStart order.
 	self->mergeBins = TRUE;
 	self->bigItemQueue = self->smallItemQueue = NULL;
+	lmCleanup(&(self->qLm));
+	self->qLm = lmInit(0);
 	self->gotFinestBin = FALSE;
 	}
     if (self->endFieldIndexName != NULL)
@@ -97,7 +100,8 @@ while (row && annoFilterRowFails(filterList, row+self->omitBin, numCols, &rightF
 return row;
 }
 
-static struct annoRow *rowToAnnoRow(struct annoStreamDb *self, char **row, boolean rightFail)
+static struct annoRow *rowToAnnoRow(struct annoStreamDb *self, char **row, boolean rightFail,
+				    struct lm *lm)
 /* Extract coords from row and return an annoRow including right-fail status. */
 {
 row += self->omitBin;
@@ -105,7 +109,7 @@ char *chrom = row[self->chromIx];
 uint chromStart = sqlUnsigned(row[self->startIx]);
 uint chromEnd = sqlUnsigned(row[self->endIx]);
 return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row,
-			      self->streamer.numCols);
+			      self->streamer.numCols, lm);
 }
 
 static char **getFinestBinItem(struct annoStreamDb *self, char **row, boolean *pRightFail)
@@ -117,7 +121,7 @@ int bin = atoi(row[0]);
 while (bin < self->minFinestBin)
     {
     // big item -- store aside in queue for merging later, move on to next item
-    slAddHead(&(self->bigItemQueue), rowToAnnoRow(self, row, *pRightFail));
+    slAddHead(&(self->bigItemQueue), rowToAnnoRow(self, row, *pRightFail, self->qLm));
     *pRightFail = FALSE;
     row = nextRowFiltered(self, pRightFail);
     if (row == NULL)
@@ -131,30 +135,29 @@ slSort(&(self->bigItemQueue), annoRowCmp);
 return row;
 }
 
-static struct annoRow *mergeRow(struct annoStreamDb *self, struct annoRow *aRow)
+static struct annoRow *mergeRow(struct annoStreamDb *self, struct annoRow *aRow,
+				struct lm *callerLm)
 /* Compare head of bigItemQueue with (finest-bin) aRow; return the one with
  * lower chromStart and save the other for later.  */
 {
+struct annoRow *outRow = aRow;
 if (self->bigItemQueue == NULL)
     {
     // No coarse-bin items to merge-sort, just stream finest-bin items from here on out.
     self->mergeBins = FALSE;
-    return aRow;
     }
-else
+else if (annoRowCmp(&(self->bigItemQueue), &aRow) < 0)
     {
-    if (annoRowCmp(&(self->bigItemQueue), &aRow) < 0)
-	{
-	// Big item gets to go now, so save aside small item for next time.
-	slAddHead(&(self->smallItemQueue), aRow);
-	return slPopHead(&(self->bigItemQueue));
-	}
-    else
-	return aRow;
+    // Big item gets to go now, so save aside small item for next time.
+    outRow = slPopHead(&(self->bigItemQueue));
+    slAddHead(&(self->smallItemQueue), aRow);
     }
+enum annoRowType rowType = self->streamer.rowType;
+int numCols = self->streamer.numCols;
+return annoRowClone(outRow, rowType, numCols, callerLm);
 }
 
-static struct annoRow *nextQueuedRow(struct annoStreamDb *self)
+static struct annoRow *nextQueuedRow(struct annoStreamDb *self, struct lm *callerLm)
 // Return the head of either bigItemQueue or smallItemQueue, depending on which has
 // the lower chromStart.
 {
@@ -166,10 +169,12 @@ else
 if (self->bigItemQueue == NULL && self->smallItemQueue == NULL)
     // All done merge-sorting, just stream finest-bin items from here on out.
     self->mergeBins = FALSE;
-return row;
+enum annoRowType rowType = self->streamer.rowType;
+int numCols = self->streamer.numCols;
+return annoRowClone(row, rowType, numCols, callerLm);
 }
 
-static struct annoRow *nextRowMergeBins(struct annoStreamDb *self)
+static struct annoRow *nextRowMergeBins(struct annoStreamDb *self, struct lm *callerLm)
 /* Fetch the next filtered row from mysql, merge-sorting coarse-bin items into finest-bin
  * items to maintain chromStart ordering. */
 {
@@ -177,7 +182,7 @@ assert(self->mergeBins && self->hasBin);
 if (self->smallItemQueue)
     // In this case we have already begun merge-sorting; don't pull a new row from mysql,
     // use the queues.  This should keep smallItemQueue's max depth at 1.
-    return nextQueuedRow(self);
+    return nextQueuedRow(self, callerLm);
 else
     {
     // We might need to collect initial coarse-bin items, or might already be merge-sorting.
@@ -192,15 +197,20 @@ else
     // Time to merge-sort finest-bin items from mysql with coarse-bin items from queue.
     if (row != NULL)
 	{
-	struct annoRow *aRow = rowToAnnoRow(self, row, rightFail);
-	return mergeRow(self, aRow);
+	struct annoRow *aRow = rowToAnnoRow(self, row, rightFail, self->qLm);
+	return mergeRow(self, aRow, callerLm);
 	}
     else
-	return slPopHead(&(self->bigItemQueue));
+	{
+	struct annoRow *qRow = slPopHead(&(self->bigItemQueue));
+	enum annoRowType rowType = self->streamer.rowType;
+	int numCols = self->streamer.numCols;
+	return annoRowClone(qRow, rowType, numCols, callerLm);
+	}
     }
 }
 
-static struct annoRow *asdNextRow(struct annoStreamer *vSelf)
+static struct annoRow *asdNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
 /* Perform sql query if we haven't already and return a single
  * annoRow, or NULL if there are no more items. */
 {
@@ -211,12 +221,12 @@ if (self->sr == NULL)
     // This is necessary only if we're using sqlStoreResult in asdDoQuery, harmless otherwise:
     return NULL;
 if (self->mergeBins)
-    return nextRowMergeBins(self);
+    return nextRowMergeBins(self, callerLm);
 boolean rightFail = FALSE;
 char **row = nextRowFiltered(self, &rightFail);
 if (row == NULL)
     return NULL;
-return rowToAnnoRow(self, row, rightFail);
+return rowToAnnoRow(self, row, rightFail, callerLm);
 }
 
 static void asdClose(struct annoStreamer **pVSelf)
@@ -225,7 +235,7 @@ static void asdClose(struct annoStreamer **pVSelf)
 if (pVSelf == NULL)
     return;
 struct annoStreamDb *self = *(struct annoStreamDb **)pVSelf;
-// Let the caller close conn; it might be from a cache.
+lmCleanup(&(self->qLm));
 freeMem(self->table);
 sqlFreeResult(&(self->sr));
 hFreeConn(&(self->conn));
