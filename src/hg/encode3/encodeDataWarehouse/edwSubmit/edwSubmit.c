@@ -301,7 +301,8 @@ if (errCatchStart(errCatch))
         errAbort("%s corrupted in upload md5 %s != %s\n", bf->submitFileName, bf->md5, md5);
 
     /* Finish updating a bunch more of edwFile record. Note there is a requirement in 
-     * the validFile section that bf->updateTime be update last. */
+     * the validFile section that bf->updateTime be updated last.  A nonzero bf->updateTime
+     * is used as a sign of record complete. */
     struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
     dyStringPrintf(dy, "update edwFile set md5='%s',size=%lld,updateTime=%lld",
 	    md5, bf->size, bf->updateTime);
@@ -473,10 +474,11 @@ if (errCatchStart(errCatch))
 	}
     else
         {
-	/* Make nearly empty record - reserves fileId */
+	/* Looks like it's the first time we've seen this submission file, so
+	 * save the file itself.  We'll get to the records inside the file in a bit. */
 	fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFile);
 
-	/* Get file/path names inside warehouse. */
+	/* Get file/path names for submission file inside warehouse. */
 	char edwFile[PATH_LEN];
 	edwMakeFileNameAndPath(fileId, submitFile, edwFile, submitLocalPath);
 
@@ -485,7 +487,7 @@ if (errCatchStart(errCatch))
 	time_t updateTime = fileModTime(submitLocalPath);
 	off_t size = fileSize(submitLocalPath);
 
-	/* Update file table which now should be complete. */
+	/* Update file table which now should be complete including updateTime. */
 	safef(query, sizeof(query), 
 	    "update edwFile set "
 	    " updateTime=%lld, size=%lld, md5='%s', edwFileName='%s',"
@@ -496,7 +498,8 @@ if (errCatchStart(errCatch))
 	sqlUpdate(conn, query);
 	}
 
-    /* Load up submit file as fielded table, make sure all required fields are there,
+    /* By now there is a submit file on the local file system.  Load and
+     * parse up this file as fielded table, make sure all required fields are there,
      * and calculate indexes of required fields. */
     char *requiredFields[] = {"file_name", "md5_sum", "size", "modified"};
     struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, 
