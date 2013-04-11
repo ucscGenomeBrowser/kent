@@ -93,7 +93,8 @@ table edwAssembly
     string name;  "Some human readable name to distinguish this from other collections of DNA"
     string ucscDb;  "Which UCSC database (mm9?  hg19?) associated with it."
     uint twoBitId;  "File ID of associated twoBit file"
-    bigInt baseCount;  "Count of bases"
+    bigInt baseCount;  "Count of bases including N's"
+    bigInt realBaseCount;   "Count of non-N bases in assembly"
     )
 
 table edwValidFile
@@ -165,3 +166,16 @@ table edwQaEnrich
     double uniqEnrich;  "coverage/sampleCoverage"
     )
 
+table edwQaPairCorrelate
+"A correlation between two files of the same type."
+    (
+    uint id;    "Id of this correlation pair"
+    uint elderFileId;   "Id of elder (smaller fileId) in correlated pair"
+    uint youngerFileId;  "Id of younger (larger fileId) in correlated pair"
+    bigInt elderSampleBases;   "Number of bases in elder sample"
+    bigInt youngerSampleBases; "Number of bases in younger sample"
+    bigInt sampleOverlapBases; "Number of bases that overlap between younger and elder sample"
+    double sampleSampleEnrichment; "Amount samples overlap more than expected."
+    double pearsonInEnriched;  "Pearson's R inside enriched areas where there is overlap"
+    ubyte gotPearsonInEnriched; "Nonzero of above value is valid"
+    )

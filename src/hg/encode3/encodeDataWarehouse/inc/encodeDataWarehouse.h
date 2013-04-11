@@ -506,7 +506,7 @@ void edwSubscriberOutput(struct edwSubscriber *el, FILE *f, char sep, char lastS
 #define edwSubscriberCommaOut(el,f) edwSubscriberOutput(el,f,',',',');
 /* Print out edwSubscriber as a comma separated list including final comma. */
 
-#define EDWASSEMBLY_NUM_COLS 6
+#define EDWASSEMBLY_NUM_COLS 7
 
 struct edwAssembly
 /* An assembly - includes reference to a two bit file, and a little name and summary info. */
@@ -517,7 +517,8 @@ struct edwAssembly
     char *name;	/* Some human readable name to distinguish this from other collections of DNA */
     char *ucscDb;	/* Which UCSC database (mm9?  hg19?) associated with it. */
     unsigned twoBitId;	/* File ID of associated twoBit file */
-    long long baseCount;	/* Count of bases */
+    long long baseCount;	/* Count of bases including N's */
+    long long realBaseCount;	/* Count of non-N bases in assembly */
     };
 
 void edwAssemblyStaticLoad(char **row, struct edwAssembly *ret);
@@ -998,6 +999,89 @@ void edwQaEnrichOutput(struct edwQaEnrich *el, FILE *f, char sep, char lastSep);
 
 #define edwQaEnrichCommaOut(el,f) edwQaEnrichOutput(el,f,',',',');
 /* Print out edwQaEnrich as a comma separated list including final comma. */
+
+#define EDWQAPAIRCORRELATE_NUM_COLS 9
+
+struct edwQaPairCorrelate
+/* A correlation between two files of the same type. */
+    {
+    struct edwQaPairCorrelate *next;  /* Next in singly linked list. */
+    unsigned id;	/* Id of this correlation pair */
+    unsigned elderFileId;	/* Id of elder (smaller fileId) in correlated pair */
+    unsigned youngerFileId;	/* Id of younger (larger fileId) in correlated pair */
+    long long elderSampleBases;	/* Number of bases in elder sample */
+    long long youngerSampleBases;	/* Number of bases in younger sample */
+    long long sampleOverlapBases;	/* Number of bases that overlap between younger and elder sample */
+    double sampleSampleEnrichment;	/* Amount samples overlap more than expected. */
+    double pearsonInEnriched;	/* Pearson's R inside enriched areas where there is overlap */
+    unsigned char gotPearsonInEnriched;	/* Nonzero of above value is valid */
+    };
+
+void edwQaPairCorrelateStaticLoad(char **row, struct edwQaPairCorrelate *ret);
+/* Load a row from edwQaPairCorrelate table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct edwQaPairCorrelate *edwQaPairCorrelateLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all edwQaPairCorrelate from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaPairCorrelateFreeList(). */
+
+void edwQaPairCorrelateSaveToDb(struct sqlConnection *conn, struct edwQaPairCorrelate *el, char *tableName, int updateSize);
+/* Save edwQaPairCorrelate as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use edwQaPairCorrelateSaveToDbEscaped() */
+
+void edwQaPairCorrelateSaveToDbEscaped(struct sqlConnection *conn, struct edwQaPairCorrelate *el, char *tableName, int updateSize);
+/* Save edwQaPairCorrelate as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than edwQaPairCorrelateSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
+struct edwQaPairCorrelate *edwQaPairCorrelateLoad(char **row);
+/* Load a edwQaPairCorrelate from row fetched with select * from edwQaPairCorrelate
+ * from database.  Dispose of this with edwQaPairCorrelateFree(). */
+
+struct edwQaPairCorrelate *edwQaPairCorrelateLoadAll(char *fileName);
+/* Load all edwQaPairCorrelate from whitespace-separated file.
+ * Dispose of this with edwQaPairCorrelateFreeList(). */
+
+struct edwQaPairCorrelate *edwQaPairCorrelateLoadAllByChar(char *fileName, char chopper);
+/* Load all edwQaPairCorrelate from chopper separated file.
+ * Dispose of this with edwQaPairCorrelateFreeList(). */
+
+#define edwQaPairCorrelateLoadAllByTab(a) edwQaPairCorrelateLoadAllByChar(a, '\t');
+/* Load all edwQaPairCorrelate from tab separated file.
+ * Dispose of this with edwQaPairCorrelateFreeList(). */
+
+struct edwQaPairCorrelate *edwQaPairCorrelateCommaIn(char **pS, struct edwQaPairCorrelate *ret);
+/* Create a edwQaPairCorrelate out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaPairCorrelate */
+
+void edwQaPairCorrelateFree(struct edwQaPairCorrelate **pEl);
+/* Free a single dynamically allocated edwQaPairCorrelate such as created
+ * with edwQaPairCorrelateLoad(). */
+
+void edwQaPairCorrelateFreeList(struct edwQaPairCorrelate **pList);
+/* Free a list of dynamically allocated edwQaPairCorrelate's */
+
+void edwQaPairCorrelateOutput(struct edwQaPairCorrelate *el, FILE *f, char sep, char lastSep);
+/* Print out edwQaPairCorrelate.  Separate fields with sep. Follow last field with lastSep. */
+
+#define edwQaPairCorrelateTabOut(el,f) edwQaPairCorrelateOutput(el,f,'\t','\n');
+/* Print out edwQaPairCorrelate as a line in a tab-separated file. */
+
+#define edwQaPairCorrelateCommaOut(el,f) edwQaPairCorrelateOutput(el,f,',',',');
+/* Print out edwQaPairCorrelate as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 

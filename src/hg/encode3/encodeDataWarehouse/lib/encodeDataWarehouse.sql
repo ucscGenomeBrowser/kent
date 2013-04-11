@@ -102,7 +102,8 @@ CREATE TABLE edwAssembly (
     name varchar(255) not null,	# Some human readable name to distinguish this from other collections of DNA
     ucscDb varchar(255) not null,	# Which UCSC database (mm9?  hg19?) associated with it.
     twoBitId int unsigned not null,	# File ID of associated twoBit file
-    baseCount bigint not null,	# Count of bases
+    baseCount bigint not null,	# Count of bases including N's
+    realBaseCount bigint not null,	# Count of non-N bases in assembly
               #Indices
     PRIMARY KEY(id)
 );
@@ -176,6 +177,21 @@ CREATE TABLE edwQaEnrich (
     coverage double not null,	# Coverage of target - just targetUniqHits/targetSize
     enrichment double not null,	# Amount we hit target/amount we hit genome
     uniqEnrich double not null,	# coverage/sampleCoverage
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#A correlation between two files of the same type.
+CREATE TABLE edwQaPairCorrelate (
+    id int unsigned auto_increment not null,	# Id of this correlation pair
+    elderFileId int unsigned not null,	# Id of elder (smaller fileId) in correlated pair
+    youngerFileId int unsigned not null,	# Id of younger (larger fileId) in correlated pair
+    elderSampleBases bigint not null,	# Number of bases in elder sample
+    youngerSampleBases bigint not null,	# Number of bases in younger sample
+    sampleOverlapBases bigint not null,	# Number of bases that overlap between younger and elder sample
+    sampleSampleEnrichment double not null,	# Amount samples overlap more than expected.
+    pearsonInEnriched double not null,	# Pearson's R inside enriched areas where there is overlap
+    gotPearsonInEnriched tinyint unsigned not null,	# Nonzero of above value is valid
               #Indices
     PRIMARY KEY(id)
 );

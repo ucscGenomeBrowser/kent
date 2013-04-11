@@ -1307,6 +1307,7 @@ ret->name = row[2];
 ret->ucscDb = row[3];
 ret->twoBitId = sqlUnsigned(row[4]);
 ret->baseCount = sqlLongLong(row[5]);
+ret->realBaseCount = sqlLongLong(row[6]);
 }
 
 struct edwAssembly *edwAssemblyLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1341,8 +1342,8 @@ void edwAssemblySaveToDb(struct sqlConnection *conn, struct edwAssembly *el, cha
  * If worried about this use edwAssemblySaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld)", 
-	tableName,  el->id,  el->taxon,  el->name,  el->ucscDb,  el->twoBitId,  el->baseCount);
+dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld,%lld)", 
+	tableName,  el->id,  el->taxon,  el->name,  el->ucscDb,  el->twoBitId,  el->baseCount,  el->realBaseCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1361,8 +1362,8 @@ char  *name, *ucscDb;
 name = sqlEscapeString(el->name);
 ucscDb = sqlEscapeString(el->ucscDb);
 
-dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld)", 
-	tableName,  el->id,  el->taxon,  name,  ucscDb,  el->twoBitId,  el->baseCount);
+dyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld,%lld)", 
+	tableName,  el->id,  el->taxon,  name,  ucscDb,  el->twoBitId,  el->baseCount,  el->realBaseCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&name);
@@ -1382,6 +1383,7 @@ ret->name = cloneString(row[2]);
 ret->ucscDb = cloneString(row[3]);
 ret->twoBitId = sqlUnsigned(row[4]);
 ret->baseCount = sqlLongLong(row[5]);
+ret->realBaseCount = sqlLongLong(row[6]);
 return ret;
 }
 
@@ -1391,7 +1393,7 @@ struct edwAssembly *edwAssemblyLoadAll(char *fileName)
 {
 struct edwAssembly *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -1409,7 +1411,7 @@ struct edwAssembly *edwAssemblyLoadAllByChar(char *fileName, char chopper)
 {
 struct edwAssembly *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1436,6 +1438,7 @@ ret->name = sqlStringComma(&s);
 ret->ucscDb = sqlStringComma(&s);
 ret->twoBitId = sqlUnsignedComma(&s);
 ret->baseCount = sqlLongLongComma(&s);
+ret->realBaseCount = sqlLongLongComma(&s);
 *pS = s;
 return ret;
 }
@@ -1483,6 +1486,8 @@ fputc(sep,f);
 fprintf(f, "%u", el->twoBitId);
 fputc(sep,f);
 fprintf(f, "%lld", el->baseCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->realBaseCount);
 fputc(lastSep,f);
 }
 
@@ -2520,6 +2525,199 @@ fputc(sep,f);
 fprintf(f, "%g", el->enrichment);
 fputc(sep,f);
 fprintf(f, "%g", el->uniqEnrich);
+fputc(lastSep,f);
+}
+
+void edwQaPairCorrelateStaticLoad(char **row, struct edwQaPairCorrelate *ret)
+/* Load a row from edwQaPairCorrelate table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->elderFileId = sqlUnsigned(row[1]);
+ret->youngerFileId = sqlUnsigned(row[2]);
+ret->elderSampleBases = sqlLongLong(row[3]);
+ret->youngerSampleBases = sqlLongLong(row[4]);
+ret->sampleOverlapBases = sqlLongLong(row[5]);
+ret->sampleSampleEnrichment = sqlDouble(row[6]);
+ret->pearsonInEnriched = sqlDouble(row[7]);
+ret->gotPearsonInEnriched = sqlUnsigned(row[8]);
+}
+
+struct edwQaPairCorrelate *edwQaPairCorrelateLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwQaPairCorrelate from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaPairCorrelateFreeList(). */
+{
+struct edwQaPairCorrelate *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwQaPairCorrelateLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwQaPairCorrelateSaveToDb(struct sqlConnection *conn, struct edwQaPairCorrelate *el, char *tableName, int updateSize)
+/* Save edwQaPairCorrelate as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use edwQaPairCorrelateSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g,%g,%u)", 
+	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment,  el->pearsonInEnriched,  el->gotPearsonInEnriched);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void edwQaPairCorrelateSaveToDbEscaped(struct sqlConnection *conn, struct edwQaPairCorrelate *el, char *tableName, int updateSize)
+/* Save edwQaPairCorrelate as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than edwQaPairCorrelateSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g,%g,%u)", 
+	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment,  el->pearsonInEnriched,  el->gotPearsonInEnriched);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwQaPairCorrelate *edwQaPairCorrelateLoad(char **row)
+/* Load a edwQaPairCorrelate from row fetched with select * from edwQaPairCorrelate
+ * from database.  Dispose of this with edwQaPairCorrelateFree(). */
+{
+struct edwQaPairCorrelate *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->elderFileId = sqlUnsigned(row[1]);
+ret->youngerFileId = sqlUnsigned(row[2]);
+ret->elderSampleBases = sqlLongLong(row[3]);
+ret->youngerSampleBases = sqlLongLong(row[4]);
+ret->sampleOverlapBases = sqlLongLong(row[5]);
+ret->sampleSampleEnrichment = sqlDouble(row[6]);
+ret->pearsonInEnriched = sqlDouble(row[7]);
+ret->gotPearsonInEnriched = sqlUnsigned(row[8]);
+return ret;
+}
+
+struct edwQaPairCorrelate *edwQaPairCorrelateLoadAll(char *fileName) 
+/* Load all edwQaPairCorrelate from a whitespace-separated file.
+ * Dispose of this with edwQaPairCorrelateFreeList(). */
+{
+struct edwQaPairCorrelate *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaPairCorrelateLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaPairCorrelate *edwQaPairCorrelateLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaPairCorrelate from a chopper separated file.
+ * Dispose of this with edwQaPairCorrelateFreeList(). */
+{
+struct edwQaPairCorrelate *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaPairCorrelateLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaPairCorrelate *edwQaPairCorrelateCommaIn(char **pS, struct edwQaPairCorrelate *ret)
+/* Create a edwQaPairCorrelate out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaPairCorrelate */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->elderFileId = sqlUnsignedComma(&s);
+ret->youngerFileId = sqlUnsignedComma(&s);
+ret->elderSampleBases = sqlLongLongComma(&s);
+ret->youngerSampleBases = sqlLongLongComma(&s);
+ret->sampleOverlapBases = sqlLongLongComma(&s);
+ret->sampleSampleEnrichment = sqlDoubleComma(&s);
+ret->pearsonInEnriched = sqlDoubleComma(&s);
+ret->gotPearsonInEnriched = sqlUnsignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaPairCorrelateFree(struct edwQaPairCorrelate **pEl)
+/* Free a single dynamically allocated edwQaPairCorrelate such as created
+ * with edwQaPairCorrelateLoad(). */
+{
+struct edwQaPairCorrelate *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void edwQaPairCorrelateFreeList(struct edwQaPairCorrelate **pList)
+/* Free a list of dynamically allocated edwQaPairCorrelate's */
+{
+struct edwQaPairCorrelate *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaPairCorrelateFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaPairCorrelateOutput(struct edwQaPairCorrelate *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaPairCorrelate.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->elderFileId);
+fputc(sep,f);
+fprintf(f, "%u", el->youngerFileId);
+fputc(sep,f);
+fprintf(f, "%lld", el->elderSampleBases);
+fputc(sep,f);
+fprintf(f, "%lld", el->youngerSampleBases);
+fputc(sep,f);
+fprintf(f, "%lld", el->sampleOverlapBases);
+fputc(sep,f);
+fprintf(f, "%g", el->sampleSampleEnrichment);
+fputc(sep,f);
+fprintf(f, "%g", el->pearsonInEnriched);
+fputc(sep,f);
+fprintf(f, "%u", el->gotPearsonInEnriched);
 fputc(lastSep,f);
 }
 
