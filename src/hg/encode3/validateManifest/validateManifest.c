@@ -390,9 +390,11 @@ else if (startsWith(format,"narrowPeak"))
     result = validateNarrowPeak(fileName);
 else if (startsWith(format,"broadPeak"))
     result = validateBroadPeak(fileName);
+else if (startsWith(format,"unknown"))
+    result = TRUE;
 else
     {
-    warn("Unknown format: %s", format);
+    warn("Unrecognized format: %s", format);
     result = FALSE;
     }
 return result;
