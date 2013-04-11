@@ -252,14 +252,13 @@ void edwSubmitDirOutput(struct edwSubmitDir *el, FILE *f, char sep, char lastSep
 #define edwSubmitDirCommaOut(el,f) edwSubmitDirOutput(el,f,',',',');
 /* Print out edwSubmitDir as a comma separated list including final comma. */
 
-#define EDWFILE_NUM_COLS 15
+#define EDWFILE_NUM_COLS 14
 
 struct edwFile
 /* A file we are tracking that we intend to and maybe have uploaded */
     {
     struct edwFile *next;  /* Next in singly linked list. */
     unsigned id;	/* Autoincrementing file id */
-    char licensePlate[17];	/* A abc123 looking license-platish thing */
     unsigned submitId;	/* Links to id in submit table */
     unsigned submitDirId;	/* Links to id in submitDir table */
     char *submitFileName;	/* File name in submit relative to submit dir */
@@ -594,7 +593,7 @@ struct edwValidFile
     {
     struct edwValidFile *next;  /* Next in singly linked list. */
     unsigned id;	/* ID of validated file */
-    char licensePlate[17];	/* A abc123 looking license-platish thing. Same as in edwFile table */
+    char licensePlate[17];	/* A abc123 looking license-platish thing. */
     unsigned fileId;	/* Pointer to file in main file table */
     char *format;	/* What format it's in from manifest */
     char *outputType;	/* What output_type it is from manifest */
