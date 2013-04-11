@@ -539,16 +539,24 @@ for (bf = bfList; bf != NULL; bf = bf->next)
     safef(submitUrl, submitUrlSize, "%s%s", submitDir, bf->submitFileName);
     if (edwGotFile(conn, submitDir, bf->submitFileName, bf->md5)<0)
 	{
-	verbose(1, "Fetching %s\n", bf->submitFileName);
-	int hostId=0, submitDirId = 0;
-	int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
-	    &hostId, &submitDirId);
-	int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
-	close(fd);
-	safef(query, sizeof(query), "update edwSubmit set newFiles=newFiles+1 where id=%d", 
-	    submitId);
-	sqlUpdate(conn, query);
-	tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
+	/* We can't get a ID for this file. There's two possible reasons - 
+	 * either somebody is in the middle of fetching it or nobody's started. 
+	 * If somebody is in the middle of fetching it, assume they died
+	 * if they took more than an hour,  and start up another fetch.
+	 * So here we fetch unless somebody else is fetching recently. */
+	if (edwGettingFile(conn, submitDir, bf->submitFileName) < 0)
+	    {
+	    verbose(1, "Fetching %s\n", bf->submitFileName);
+	    int hostId=0, submitDirId = 0;
+	    int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
+		&hostId, &submitDirId);
+	    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
+	    close(fd);
+	    safef(query, sizeof(query), "update edwSubmit set newFiles=newFiles+1 where id=%d", 
+		submitId);
+	    sqlUpdate(conn, query);
+	    tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
+	    }
 	}
     else
 	{
