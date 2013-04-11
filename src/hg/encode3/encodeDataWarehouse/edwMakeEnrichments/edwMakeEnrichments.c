@@ -243,7 +243,8 @@ struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
 
 /* Do a pretty complex loop that just aims to set target->overlapBases and ->uniqOverlapBases
  * for all targets.  This is complicated by just wanting to keep one chromosome worth of
- * bigWig data in memory. */
+ * bigWig data in memory. Also just for performance we do a lookup of target range tree to
+ * get chromosome specific one to use, which avoids a hash lookup in the inner loop. */
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     /* Get list of intervals in bigWig for this chromosome, and feed it to a rangeTree. */
@@ -312,9 +313,7 @@ void doEnrichments(struct sqlConnection *conn, struct edwFile *ef, char *path,
  * grtList are in the same order. */
 {
 /* Get validFile from database. */
-char query[256];
-safef(query, sizeof(query), "select * from edwValidFile where fileId=%d", ef->id);
-struct edwValidFile *vf = edwValidFileLoadByQuery(conn, query);
+struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
 
@@ -323,6 +322,7 @@ if (!isEmpty(vf->enrichedIn))
     /* Get our assembly */
     char *format = vf->format;
     char *ucscDb = vf->ucscDb;
+    char query[256];
     safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
     struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
     if (assembly == NULL)
@@ -353,6 +353,10 @@ if (!isEmpty(vf->enrichedIn))
 	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
     else if (sameString(format, "broadPeak"))
 	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "gtf"))
+	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "gff"))
+	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
     else if (sameString(format, "bam"))
 	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
     else if (sameString(format, "unknown"))
@@ -373,26 +377,19 @@ void edwMakeEnrichments(int startFileId, int endFileId)
 {
 /* Make list with all files in ID range */
 struct sqlConnection *conn = sqlConnect(edwDatabase);
-char query[256];
-safef(query, sizeof(query), 
-    "select * from edwFile where id>=%d and id<=%d and md5 != '' and deprecated = ''", 
-    startFileId, endFileId);
-struct edwFile *file, *fileList = edwFileLoadByQuery(conn, query);
+struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startFileId, endFileId);
 
 /* Make up a hash for targets keyed by assembly name. */
-
 struct hash *assemblyToTarget = hashNew(0);
 
-for (file = fileList; file != NULL; file = file->next)
+for (ef = efList; ef != NULL; ef = ef->next)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s%s", edwRootDir, file->edwFileName);
-    verbose(1, "processing %s aka %s\n", file->submitFileName, path);
+    safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
+    verbose(1, "processing %s aka %s\n", ef->submitFileName, path);
 
-    if (file->tags) // All ones we care about have tags
-        {
-	doEnrichments(conn, file, path, assemblyToTarget);
-	}
+    if (ef->tags) // All ones we care about have tags
+	doEnrichments(conn, ef, path, assemblyToTarget);
     }
 sqlDisconnect(&conn);
 }
