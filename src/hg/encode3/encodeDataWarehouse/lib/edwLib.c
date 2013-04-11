@@ -4,6 +4,7 @@
 #include "common.h"
 #include "hex.h"
 #include "dystring.h"
+#include "jksql.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "portable.h"
@@ -48,6 +49,32 @@ if (path[0] == 0)
 return path;
 }
 
+long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName)
+/* See if we are in process of getting file.  Return file record id if it exists even if
+ * it's not complete. Return -1 if record does not exist. */
+{
+/* First see if we have even got the directory. */
+char query[PATH_LEN+512];
+safef(query, sizeof(query), "select id from edwSubmitDir where url='%s'", submitDir);
+int submitDirId = sqlQuickNum(conn, query);
+if (submitDirId <= 0)
+    return -1;
+
+/* Then see if we have file that matches submitDir and submitFileName. */
+int hourInSeconds = 60*60;
+safef(query, sizeof(query), 
+    "select id from edwFile "
+    "where submitFileName='%s' and submitDirId = %d "
+    " and (endUploadTime > startUploadTime or startUploadTime < %lld) "
+    "order by submitId desc limit 1"
+    , submitFileName, submitDirId
+    , (long long)edwNow() - hourInSeconds);
+uglyf("query=%s\n", query);
+long id = sqlQuickLongLong(conn, query);
+if (id == 0)
+    return -1;
+return id;
+}
 
 long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5)
 /* See if we already got file.  Return fileId if we do,  otherwise -1 */
@@ -292,10 +319,10 @@ int ix = id - 1;   /* We start at zero not 1 */
 int basePos = 0;
 do
     {
-    char c = consonants[ix%consonantCount];
-    ix /= consonantCount;
     char v = vowels[ix%vowelCount];
     ix /= vowelCount;
+    char c = consonants[ix%consonantCount];
+    ix /= consonantCount;
     if (basePos + 2 >= baseNameSize)
         errAbort("Not enough room for %d in %d letters in edwMakeLocalBaseName", id, baseNameSize);
     baseName[basePos] = c;
@@ -519,5 +546,42 @@ sqlUpdate(conn, query);
 /* Now, it's a bit of a time waste, but cheap in code, to just load it back from DB. */
 safef(query, sizeof(query), "select * from edwFile where id=%lld", fileId);
 return edwFileLoadByQuery(conn, query);
+}
+
+struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId, int endId)
+/* Return list of all files that are intact (finished uploading and MD5 checked) 
+ * with file IDs between startId and endId - including endId*/
+{
+char query[128];
+safef(query, sizeof(query), 
+    "select * from edwFile where id>=%d and id<=%d and endUploadTime != 0 "
+    "and updateTime != 0 and deprecated = ''", 
+    startId, endId);
+return edwFileLoadByQuery(conn, query);
+}
+
+struct edwFile *edwFileFromId(struct sqlConnection *conn, long long fileId)
+/* Return edwValidFile given fileId - return NULL if not found. */
+{
+char query[128];
+safef(query, sizeof(query), "select * from edwFile where id=%lld", fileId);
+return edwFileLoadByQuery(conn, query);
+}
+
+struct edwFile *edwFileFromIdOrDie(struct sqlConnection *conn, long long fileId)
+/* Return edwValidFile given fileId - aborts if not found. */
+{
+struct edwFile *ef = edwFileFromId(conn, fileId);
+if (ef == NULL)
+    errAbort("Couldn't find file for id %lld\n", fileId);
+return ef;
+}
+
+struct edwValidFile *edwValidFileFromFileId(struct sqlConnection *conn, long long fileId)
+/* Return edwValidFile give fileId - returns NULL if not validated. */
+{
+char query[128];
+safef(query, sizeof(query), "select * from edwValidFile where fileId=%lld", fileId);
+return edwValidFileLoadByQuery(conn, query);
 }
 

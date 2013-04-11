@@ -15,6 +15,10 @@
 long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5);
 /* See if we already got file.  Return fileId if we do,  otherwise -1 */
 
+long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName);
+/* See if we are in process of getting file.  Return file record id if it exists even if
+ * it's not complete so long as it's not too old. Return -1 if record does not exist. */
+
 #define EDW_ACCESS_SIZE 65    /* Size of our access key - currently base64 encoded SHA384 with 
                                * NULL terminator */
 
@@ -79,5 +83,18 @@ struct edwFile *edwGetLocalFile(struct sqlConnection *conn, char *localAbsoluteP
 
 void edwUpdateFileTags(struct sqlConnection *conn, long long fileId, struct dyString *tags);
 /* Update tags field in edwFile with given value */
+
+struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId, int endId);
+/* Return list of all files that are intact (finished uploading and MD5 checked) 
+ * with file IDs between startId and endId - including endId*/
+
+struct edwValidFile *edwValidFileFromFileId(struct sqlConnection *conn, long long fileId);
+/* Return edwValidFile give fileId - returns NULL if not validated. */
+
+struct edwFile *edwFileFromId(struct sqlConnection *conn, long long fileId);
+/* Return edwValidFile given fileId - return NULL if not found. */
+
+struct edwFile *edwFileFromIdOrDie(struct sqlConnection *conn, long long fileId);
+/* Return edwValidFile given fileId - aborts if not found. */
 
 #endif /* EDWLIB_H */
