@@ -1,21 +1,12 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = mafFrags
+include ${kentSrc}/inc/userApp.mk
 
-L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
-O = mafFrags.o
-
-mafFrags: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/mafFrags $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/mafFrags${EXE}
-
-test:
+test::
 	${MKDIR} output
-	mafFrags hg16 humorMm3Rn3 input/hg16.bed output/hg16.maf -orgs=input/hg16.org
+	mafFrags hg16 rat_hmrg input/hg16.bed output/hg16.maf -orgs=input/hg16.org
 	diff -x CVS -r expected output
-	rm -r output
-
+	rm -fr output
 
 clean::
-	rm -fr output ${O} mafFrags
+	rm -fr output

@@ -350,6 +350,14 @@ for (i=0;;++i)
 return fileName;
 }
 
+void mustRename(char *oldName, char *newName)
+/* Rename file or die trying. */
+{
+int err = rename(oldName, newName);
+if (err < 0)
+    errnoAbort("Couldn't rename %s to %s", oldName, newName);
+}
+
 static void eatSlashSlashInPath(char *path)
 /* Convert multiple // to single // */
 {

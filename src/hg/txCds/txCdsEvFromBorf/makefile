@@ -1,18 +1,7 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = txCdsEvFromBorf
+include ${kentSrc}/inc/userApp.mk
 
-L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
-
-O = txCdsEvFromBorf.o
-
-txCdsEvFromBorf: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/txCdsEvFromBorf $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/txCdsEvFromBorf${EXE}
-
-test:
+test::
 	txCdsEvFromBorf in.borf in.fa out.tce
 	diff expected.tce out.tce
-
-clean:
-	rm -f $O

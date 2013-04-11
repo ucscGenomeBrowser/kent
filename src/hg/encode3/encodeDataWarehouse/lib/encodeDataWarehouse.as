@@ -42,7 +42,6 @@ table edwFile
 "A file we are tracking that we intend to and maybe have uploaded"
     (
     uint id;                    "Autoincrementing file id"
-    char[16] licensePlate;      "A abc123 looking license-platish thing"
     uint submitId;              "Links to id in submit table"
     uint submitDirId;           "Links to id in submitDir table"
     lstring submitFileName;     "File name in submit relative to submit dir"
@@ -101,7 +100,7 @@ table edwValidFile
 "A file that has been uploaded, the format checked, and for which at least minimal metadata exists"
     (
     uint id;          "ID of validated file"
-    char[16] licensePlate;  "A abc123 looking license-platish thing. Same as in edwFile table"
+    char[16] licensePlate;  "A abc123 looking license-platish thing."
     uint fileId;      "Pointer to file in main file table"
     string format;    "What format it's in from manifest"
     string outputType; "What output_type it is from manifest"

@@ -12,6 +12,7 @@ struct annoGratorGpVar
 {
     struct annoGrator grator;	// external annoGrator/annoStreamer interface
     boolean cdsOnly;		// if TRUE, restrict output to CDS effects
+    struct lm *lm;		// localmem scratch storage
 };
 
 
@@ -71,27 +72,28 @@ if (input == NULL)
 return input;
 }
 
-static char *uintToString(uint num)
+static char *uintToString(struct lm *lm, uint num)
 {
 char buffer[10];
 
 safef(buffer,sizeof buffer, "%d", num);
-return cloneString(buffer);
+return lmCloneString(lm, buffer);
 }
 
-static void aggvStringifyGpFx(char **words, struct gpFx *effect)
+static void aggvStringifyGpFx(char **words, struct gpFx *effect, struct lm *lm)
 // turn gpFx structure into a list of words
 {
 int count = 0;
 
-words[count++] = cloneString(effect->allele);
-words[count++] = cloneString(blankIfNull(effect->so.transcript));
-words[count++] = uintToString(effect->so.soNumber);
+words[count++] = lmCloneString(lm, effect->allele);
+words[count++] = lmCloneString(lm, blankIfNull(effect->so.transcript));
+words[count++] = uintToString(lm, effect->so.soNumber);
 
+struct codingChange *cc = NULL;
 switch(effect->so.soNumber)
     {
     case intron_variant:
-	words[count++] = uintToString(effect->so.sub.intron.intronNumber);
+	words[count++] = uintToString(lm, effect->so.sub.intron.intronNumber);
 	break;
 
     case inframe_deletion:
@@ -100,32 +102,33 @@ switch(effect->so.soNumber)
     case synonymous_variant:
     case missense_variant:
     case stop_gained:
-	words[count++] = uintToString(effect->so.sub.codingChange.exonNumber);
-	words[count++] = uintToString(effect->so.sub.codingChange.cDnaPosition);
-	words[count++] = uintToString(effect->so.sub.codingChange.cdsPosition);
-	words[count++] = uintToString(effect->so.sub.codingChange.pepPosition);
-	words[count++] = strUpper(cloneString(blankIfNull(effect->so.sub.codingChange.aaOld)));
-	words[count++] = strUpper(cloneString(blankIfNull(effect->so.sub.codingChange.aaNew)));
-	words[count++] = strUpper(cloneString(blankIfNull(effect->so.sub.codingChange.codonOld)));
-	words[count++] = strUpper(cloneString(blankIfNull(effect->so.sub.codingChange.codonNew)));
+	cc = &(effect->so.sub.codingChange);
+	words[count++] = uintToString(lm, cc->exonNumber);
+	words[count++] = uintToString(lm, cc->cDnaPosition);
+	words[count++] = uintToString(lm, cc->cdsPosition);
+	words[count++] = uintToString(lm, cc->pepPosition);
+	words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->aaOld)));
+	words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->aaNew)));
+	words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->codonOld)));
+	words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->codonNew)));
 	break;
 
     default:
 	// write out ancillary information
-	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther0));
-	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther1));
-	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther2));
-	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther3));
-	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther4));
-	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther5));
-	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther6));
-	words[count++] = cloneString(blankIfNull(effect->so.sub.generic.soOther7));
+	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther0));
+	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther1));
+	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther2));
+	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther3));
+	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther4));
+	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther5));
+	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther6));
+	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther7));
 	break;
     };
 
 int needWords = sizeof(effect->so.sub.generic) / sizeof(char *) + 1;
 while (count < needWords)
-    words[count++] = cloneString("");
+    words[count++] = lmCloneString(lm, "");
 }
 
 struct gpFx *annoGratorGpVarGpFxFromRow(struct annoStreamer *sSelf, struct annoRow *row)
@@ -179,8 +182,8 @@ switch(effect->so.soNumber)
 return effect;
 }
 
-static struct annoRow *aggvEffectToRow( struct annoGratorGpVar *self,
-    struct gpFx *effect, struct annoRow *rowIn)
+static struct annoRow *aggvEffectToRow(struct annoGratorGpVar *self, struct gpFx *effect,
+				       struct annoRow *rowIn, struct lm *callerLm)
 // convert a single gpFx record to an augmented genePred annoRow;
 // if cdsOnly and gpFx is not in CDS, return NULL;
 {
@@ -192,21 +195,21 @@ struct annoGrator *gSelf = &(self->grator);
 struct annoStreamer *sSelf = &(gSelf->streamer);
 
 assert(sSelf->numCols > gSelf->mySource->numCols);
-AllocArray(wordsOut, sSelf->numCols);
+lmAllocArray(self->lm, wordsOut, sSelf->numCols);
 
 // copy the genePred fields over
 memcpy(wordsOut, wordsIn, sizeof(char *) * gSelf->mySource->numCols);
 
 // stringify the gpFx structure 
 int count = gSelf->mySource->numCols;
-aggvStringifyGpFx(&wordsOut[count], effect);
+aggvStringifyGpFx(&wordsOut[count], effect, callerLm);
 
-return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, 
-    rowIn->rightJoinFail, wordsOut, sSelf->numCols);
+return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
+			      wordsOut, sSelf->numCols, callerLm);
 }
 
 /* Get the sequence associated with a particular bed concatenated together. */
-struct dnaSeq *twoBitSeqFromBed(struct twoBitFile *tbf, struct bed *bed)
+struct dnaSeq *twoBitSeqFromBed(struct twoBitFile *tbf, struct bed *bed, struct lm *lm)
 {
 struct dnaSeq *block = NULL;
 struct dnaSeq *bedSeq = NULL;
@@ -218,7 +221,7 @@ if(bed->blockCount == 0)
     {
     bedSeq = twoBitReadSeqFragExt(tbf, bed->chrom, bed->chromStart, bed->chromEnd, FALSE, &size);
     freez(&bedSeq->name);
-    bedSeq->name = cloneString(bed->name);
+    bedSeq->name = lmCloneString(lm, bed->name);
     }
 else
     {
@@ -233,8 +236,8 @@ else
 	dnaSeqFree(&block);
 	}
     AllocVar(bedSeq);
-    bedSeq->name = cloneString(bed->name);
-    bedSeq->dna = cloneString(currentSeq->string);
+    bedSeq->name = lmCloneString(lm, bed->name);
+    bedSeq->dna = lmCloneString(lm, currentSeq->string);
     bedSeq->size = strlen(bedSeq->dna);
     dyStringFree(&currentSeq);
     }
@@ -243,29 +246,31 @@ if(bed->strand[0] == '-')
 return bedSeq;
 }
 
-struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, struct twoBitFile *tbf)
+struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, struct twoBitFile *tbf,
+					 struct lm *lm)
 {
 struct bed *bed = bedFromGenePred(pred);
-struct dnaSeq *dnaSeq = twoBitSeqFromBed(tbf, bed);
+struct dnaSeq *dnaSeq = twoBitSeqFromBed(tbf, bed, lm);
 
 return dnaSeq;
 }
 
 
-static struct annoRow *aggvGenRows( struct annoGratorGpVar *self,
-    struct variant *variant, struct genePred *pred, struct annoRow *inRow)
+static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant *variant,
+				    struct genePred *pred, struct annoRow *inRow,
+				    struct lm *callerLm)
 // put out annoRows for all the gpFx that arise from variant and pred
 {
 struct annoGrator *gSelf = &(self->grator);
 struct annoStreamer *sSelf = &(gSelf->streamer);
 // FIXME:  accessing query's tbf is probably bad
-struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->query->tbf);
+struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->query->tbf, self->lm);
 struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
     {
-    struct annoRow *row = aggvEffectToRow(self, effects, inRow);
+    struct annoRow *row = aggvEffectToRow(self, effects, inRow, callerLm);
     if (row != NULL)
 	slAddHead(&rows, row);
     }
@@ -274,19 +279,21 @@ slReverse(&rows);
 return rows;
 }
 
-struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *gSelf,
-	struct annoRow *primaryRow, boolean *retRJFilterFailed)
+struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *gSelf, struct annoRow *primaryRow,
+					 boolean *retRJFilterFailed, struct lm *callerLm)
 // integrate a pgSnp and a genePred, generate as many rows as
 // needed to capture all the changes
 {
 struct annoGratorGpVar *self = (struct annoGratorGpVar *)gSelf;
+lmCleanup(&(self->lm));
+self->lm = lmInit(0);
 // Temporarily tweak primaryRow's start and end to find upstream/downstream overlap:
 int pStart = primaryRow->start, pEnd = primaryRow->end;
 primaryRow->start -= GPRANGE;
 if (primaryRow->start < 0)
     primaryRow->start = 0;
 primaryRow->end += GPRANGE;
-struct annoRow *rows = annoGratorIntegrate(gSelf, primaryRow, retRJFilterFailed);
+struct annoRow *rows = annoGratorIntegrate(gSelf, primaryRow, retRJFilterFailed, self->lm);
 primaryRow->start = pStart;
 primaryRow->end = pEnd;
 
@@ -309,13 +316,13 @@ for(; rows; rows = rows->next)
     char **inWords = rows->data;
 
     // work around genePredLoad's trashing its input
-    char *saveExonStarts = cloneString(inWords[8]);
-    char *saveExonEnds = cloneString(inWords[9]);
+    char *saveExonStarts = lmCloneString(self->lm, inWords[8]);
+    char *saveExonEnds = lmCloneString(self->lm, inWords[9]);
     struct genePred *gp = genePredLoad(inWords);
     inWords[8] = saveExonStarts;
     inWords[9] = saveExonEnds;
 
-    struct annoRow *outRow = aggvGenRows(self, variant, gp, rows);
+    struct annoRow *outRow = aggvGenRows(self, variant, gp, rows, callerLm);
     if (outRow != NULL)
 	{
 	slReverse(&outRow);
@@ -328,6 +335,16 @@ if (self->cdsOnly && outRows == NULL && retRJFilterFailed != NULL)
 return outRows;
 }
 
+void aggvClose(struct annoStreamer **pSSelf)
+/* Close out localmem and all the usual annoGrator stuff. */
+{
+if (*pSSelf != NULL)
+    {
+    struct annoGratorGpVar *self = (struct annoGratorGpVar *)(*pSSelf);
+    lmCleanup(&(self->lm));
+    annoGratorClose(pSSelf);
+    }
+}
 
 struct annoGrator *annoGratorGpVarNew(struct annoStreamer *mySource, boolean cdsOnly)
 /* Make a subclass of annoGrator that combines genePreds from mySource with
@@ -342,7 +359,7 @@ annoGratorInit(gSelf, mySource);
 struct annoStreamer *sSelf = &(gSelf->streamer);
 // We add columns beyond what comes from mySource, so update our public-facing asObject:
 sSelf->setAutoSqlObject(sSelf, annoGpVarAsObj(mySource->asObj));
-
+sSelf->close = aggvClose;
 // integrate by adding gpFx fields
 gSelf->integrate = annoGratorGpVarIntegrate;
 self->cdsOnly = cdsOnly;

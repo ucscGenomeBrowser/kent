@@ -48,7 +48,6 @@ CREATE TABLE edwSubmitDir (
 #A file we are tracking that we intend to and maybe have uploaded
 CREATE TABLE edwFile (
     id int unsigned auto_increment not null,	# Autoincrementing file id
-    licensePlate char(16) not null,	# A abc123 looking license-platish thing
     submitId int unsigned not null,	# Links to id in submit table
     submitDirId int unsigned not null,	# Links to id in submitDir table
     submitFileName longblob not null,	# File name in submit relative to submit dir
@@ -111,7 +110,7 @@ CREATE TABLE edwAssembly (
 #A file that has been uploaded, the format checked, and for which at least minimal metadata exists
 CREATE TABLE edwValidFile (
     id int unsigned auto_increment not null,	# ID of validated file
-    licensePlate char(16) not null,	# A abc123 looking license-platish thing. Same as in edwFile table
+    licensePlate char(16) not null,	# A abc123 looking license-platish thing.
     fileId int unsigned not null,	# Pointer to file in main file table
     format varchar(255) not null,	# What format it's in from manifest
     outputType varchar(255) not null,	# What output_type it is from manifest

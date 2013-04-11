@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-pslStats = ${DESTDIR}${BINDIR}/pslStats
+pslStats = pslStats
 
 test:	untransAlignTest untransQueryTest untransOverallTest \
 	untransAlignUnalnTest untransQueryUnalnTest untransOverallUnalnTest \
