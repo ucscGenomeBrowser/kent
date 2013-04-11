@@ -13,6 +13,7 @@
 #include "bigBed.h"
 #include "bamFile.h"
 #include "portable.h"
+#include "gff.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "encode3/encode3Valid.h"
@@ -228,7 +229,7 @@ remove(samName);
 }
 
 
-#define edwSampleReduction 50
+#define edwSampleReduction 100
 
 void makeValidFastq( struct sqlConnection *conn, char *path, struct edwFile *ef, 
 	struct edwAssembly *assembly, struct edwValidFile *vf)
@@ -398,6 +399,48 @@ vf->depth = 1.0;
 twoBitClose(&tbf);
 }
 
+void makeValidGtf(struct sqlConnection *conn, char *path, struct edwFile *ef, 
+    struct edwAssembly *assembly, struct edwValidFile *vf)
+/* Fill in info about a gtf file. */
+{
+/* Open and read file with generic GFF reader and check it is GTF */
+struct gffFile *gff = gffRead(path);
+if (!gff->isGtf)
+    errAbort("file id %lld (%s) is not in GTF format - check it has gene_id and transcript_id",
+	(long long)ef->id, ef->submitFileName);
+
+/* Convert it to a somewhat smaller less informative bed file for sampling purposes. */
+char sampleFileName[PATH_LEN];
+safef(sampleFileName, PATH_LEN, "%sedwGffBedXXXXXX", edwTempDir());
+int sampleFd = mkstemp(sampleFileName);
+FILE *f = fdopen(sampleFd, "w");
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+
+/* Loop through lines writing out simple bed and adding to genome range tree. */
+struct gffLine *gffLine;
+long long itemCount = 0;
+long long totalSize = 0;
+for (gffLine = gff->lineList; gffLine != NULL; gffLine = gffLine->next)
+    {
+    totalSize += gffLine->end - gffLine->start;
+    fprintf(f, "%s\t%d\t%d\n", gffLine->seq, gffLine->start, gffLine->end);
+    genomeRangeTreeAdd(grt, gffLine->seq, gffLine->start, gffLine->end);
+    ++itemCount;
+    }
+carefulClose(&f);
+
+/* Fill out what we can of vf with info we've gathered. */
+vf->itemCount = vf->sampleCount = itemCount;
+vf->basesInItems = vf->basesInSample = totalSize;
+vf->sampleBed = cloneString(sampleFileName);
+long long basesHitBySample = genomeRangeTreeSumRanges(grt);
+genomeRangeTreeFree(&grt);
+vf->sampleCoverage = (double)basesHitBySample/assembly->baseCount;
+vf->mapRatio = 1.0;
+vf->depth = (double)totalSize/assembly->baseCount;
+gffFileFree(&gff);
+}
+
 static void needAssembly(struct edwFile *ef, char *format, struct edwAssembly *assembly)
 /* Require assembly tag be present. */
 {
@@ -485,6 +528,11 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
         {
 	makeValid2Bit(conn, path, ef, vf);
 	}
+    else if (sameString(format, "gtf"))
+        {
+	needAssembly(ef, format, assembly);
+	makeValidGtf(conn, path, ef, assembly, vf);
+	}
     else if (sameString(format, "unknown"))
         {
 	}
@@ -549,24 +597,28 @@ void edwMakeValidFile(int startId, int endId)
 {
 /* Make list with all files in ID range */
 struct sqlConnection *conn = sqlConnect(edwDatabase);
-char query[256];
-safef(query, sizeof(query), 
-    "select * from edwFile where id>=%d and id<=%d and endUploadTime != 0 "
-    "and updateTime != 0 and deprecated = ''", 
-    startId, endId);
-struct edwFile *ef, *efList = edwFileLoadByQuery(conn, query);
+struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startId, endId);
 
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    verbose(1, "processing %s %s\n", ef->edwFileName, ef->submitFileName);
-    char path[PATH_LEN];
-    safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
-
-    if (ef->tags) // All ones we care about have tags
-        {
-	struct cgiParsedVars *tags = cgiParsedVarsNew(ef->tags);
-	makeValidFile(conn, ef, tags);
-	cgiParsedVarsFree(&tags);
+    char query[256];
+    safef(query, sizeof(query), "select id from edwValidFile where fileId=%lld", (long long)ef->id);
+    long long vfId = sqlQuickLongLong(conn, query);
+    if (vfId != 0)
+	{
+        verbose(2, "already validated %s %s\n", ef->edwFileName, ef->submitFileName);
+	}
+    else
+	{
+	verbose(1, "processing %s %s\n", ef->edwFileName, ef->submitFileName);
+	char path[PATH_LEN];
+	safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
+	if (ef->tags) // All ones we care about have tags
+	    {
+	    struct cgiParsedVars *tags = cgiParsedVarsNew(ef->tags);
+	    makeValidFile(conn, ef, tags);
+	    cgiParsedVarsFree(&tags);
+	    }
 	}
     }
 
