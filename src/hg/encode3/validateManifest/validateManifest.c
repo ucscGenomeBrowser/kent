@@ -15,6 +15,7 @@ char *version = "1.2";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
+char *validateFilesPath = "";
 
 boolean quickMd5sum = FALSE;  // Just for development testing, do not use
 
@@ -274,10 +275,10 @@ if (quicky)
 	warn("Bam Index file missing: %s. Use SAM Tools to create.", bamBai);
 	return FALSE;
 	}
-    safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -chromInfo=%s %s", chromInfo, fileName);
+    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -chromInfo=%s %s", validateFilesPath, chromInfo, fileName);
     }
 else
-    safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", mismatches, chromInfo, twoBit, fileName);
+    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", validateFilesPath, mismatches, chromInfo, twoBit, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -289,7 +290,7 @@ boolean validateBedRnaElements(char *fileName)
 char *asFile = getAs("bedRnaElements.as");  // TODO this probably has to change
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -303,7 +304,7 @@ char cmdLine[1024];
 //  going to be, and how to get it.
 // The following line is nothing but pure hack taken from the first example found in the manifest,
 //  and probably will fail miserably on other lines of the manifest, as this approach is too simple to work still
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed12+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed12+4 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 // TODO actually run the validator
 return runCmdLine(cmdLine);
 }
@@ -313,7 +314,7 @@ boolean validateBigWig(char *fileName)
 {
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigWig -chromInfo=%s %s", chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigWig -chromInfo=%s %s", validateFilesPath, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -321,7 +322,7 @@ boolean validateFastq(char *fileName)
 /* Validate fastq file */
 {
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=fastq %s", fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=fastq %s", validateFilesPath, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -346,7 +347,7 @@ boolean validateNarrowPeak(char *fileName)
 char *asFile = getAs("narrowPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -356,7 +357,7 @@ boolean validateBroadPeak(char *fileName)
 char *asFile = getAs("broadPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -414,6 +415,10 @@ if (!fileExists("manifest.txt"))
     }
 
 uglyf("workingDir=%s\n", workingDir);
+
+if (fileExists("validateFiles"))
+    validateFilesPath = "./";
+
 
 char *fakeMd5sum = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 if (quickMd5sum)
