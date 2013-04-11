@@ -12,7 +12,7 @@ include ../../inc/cgi_build_rules.mk
 
 my:: compile
 	if [ -d "${BINDIR}" ]; then \
-	    cp ${CGI_BIN}-${USER}/$A ${BINDIR}/; \
+	    cp ${CGI_BIN}-${USER}/$A ${DESTDIR}${BINDIR}/; \
 	fi
 
 compile: $O
@@ -21,7 +21,7 @@ compile: $O
 	chmod a+rx $A${EXE}
 
 test: compile
-	${BINDIR}/phyloGif -phyloGif_tree=17way.nh > test.gif
+	${DESTDIR}${BINDIR}/phyloGif -phyloGif_tree=17way.nh > test.gif
 	file test.gif
 
 testWeb: compile

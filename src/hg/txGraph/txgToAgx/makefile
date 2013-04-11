@@ -1,18 +1,10 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = txgToAgx
+include ${kentSrc}/inc/userApp.mk
 
-L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
-
-O = txgToAgx.o
-
-txgToAgx: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/txgToAgx $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/txgToAgx${EXE}
-
-test:
+test::
 	txgToAgx input.txg output.agx
 	diff expected.agx output.agx
 
-clean:
-	rm -f $O
+clean::
+	rm -f output.agx

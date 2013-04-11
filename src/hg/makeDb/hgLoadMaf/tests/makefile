@@ -2,7 +2,7 @@ include ../../../../inc/common.mk
 # tests for hgLoadMaf
 
 PROG = hgLoadMaf
-P = ${BINDIR}/${PROG}
+P = ${PROG}
 
 test: testoutput clean
 

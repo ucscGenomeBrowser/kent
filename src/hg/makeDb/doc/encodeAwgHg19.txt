@@ -684,6 +684,18 @@ mdbPrint hg19 -composite=wgEncodeAwgTfbsUniform > wgEncodeAwgTfbsUniform.ra
 #wgEncodeAwgTfbsHaibU87NrsfPcr2xUniPk - peak count matches:wgEncodeHaibTfbsU87NrsfPcr2xAlnRep0V2 (quality 1)
 #wgEncodeAwgTfbsHaibU87Pol24h8V0416101UniPk - peak count matches: wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep0V2  (quality 1)
 
+cat > scorePeaks.csh << 'EOF'
+et method = $1
+set dir = ${method}ScoredPeaks
+set uniformDir = ${method}UniformScoredPeaks
+rm -fr $dir $uniformDir
+mkdir  $dir $uniformDir
+bedScore -col=7 -verbose=2 -method=$method peaks/*.narrowPeak $dir
+bedScore -uniform -col=7 -verbose=2 -method=reg peaks/*.narrowPeak $uniformDir
+'EOF'
+
+csh scorePeaks.csh reg >&! logs/scorePeaks.reg.log &
+
 
 ###############################################
 # Master list of 2.9M DNase sites from Analysis   (in progress kate)

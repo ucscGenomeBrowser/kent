@@ -99,7 +99,8 @@ void annoGratorQueryExecute(struct annoGratorQuery *query)
 struct annoStreamer *primarySrc = query->primarySource;
 struct annoFormatter *formatter = NULL;
 struct annoRow *primaryRow = NULL;
-while ((primaryRow = primarySrc->nextRow(primarySrc)) != NULL)
+struct lm *lm = lmInit(0);
+while ((primaryRow = primarySrc->nextRow(primarySrc, lm)) != NULL)
     {
     if (primaryRow->rightJoinFail)
 	continue;
@@ -109,7 +110,8 @@ while ((primaryRow = primarySrc->nextRow(primarySrc)) != NULL)
     for (;  grator != NULL;  grator = grator->next)
 	{
 	struct annoGrator *realGrator = (struct annoGrator *)grator;
-	struct annoRow *gratorRows = realGrator->integrate(realGrator, primaryRow, &rjFilterFailed);
+	struct annoRow *gratorRows = realGrator->integrate(realGrator, primaryRow,
+							   &rjFilterFailed, lm);
 	slAddHead(&gratorRowList, slRefNew(gratorRows));
 	if (rjFilterFailed)
 	    break;
@@ -118,13 +120,12 @@ while ((primaryRow = primarySrc->nextRow(primarySrc)) != NULL)
     for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
 	if (!rjFilterFailed)
 	    formatter->formatOne(formatter, primaryRow, gratorRowList);
-    annoRowFree(&primaryRow, primarySrc);
     struct slRef *oneRowList = gratorRowList;
-    grator = (struct annoStreamer *)(query->integrators);
-    for (;  oneRowList != NULL;  oneRowList = oneRowList->next, grator = grator->next)
-	annoRowFreeList((struct annoRow **)&(oneRowList->val), grator);
+    lmCleanup(&lm);
+    lm = lmInit(0);
     slFreeList(&oneRowList);
     }
+lmCleanup(&lm);
 }
 
 void annoGratorQueryFree(struct annoGratorQuery **pQuery)

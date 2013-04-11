@@ -1,6 +1,6 @@
 include ../../../../inc/common.mk
 
-gff3ToGenePred = ${BINDIR}/gff3ToGenePred
+gff3ToGenePred = gff3ToGenePred
 
 # sh commands to deal with gff3ToGenePred shouldhave failed and didn't 
 cmdShouldFail = echo "Error: command should have failed" >&2; false
