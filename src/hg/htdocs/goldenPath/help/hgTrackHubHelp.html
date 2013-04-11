@@ -37,12 +37,11 @@ Browser Track Hubs</B></FONT>
 			 	    <TR><TH HEIGHT=10></TH></TR>
 				    <TR><TD>
 				        <UL>
-				  	    <LI><b><A HREF="#Intro">What
-Are Track Hubs?</A></b>
+				  	    <LI><b><A HREF="#Intro">WhatAre Track Hubs?</A></b>
 					    <LI><b><A HREF="#View">Viewing Track Hubs in the Browser</A></b>
-					    <LI><b><A HREF="#Setup">Setting
-Up Your Own Track Hub</A></b>
+					    <LI><b><A HREF="#Setup">SettingUp Your Own Track Hub</A></b>
 					    <LI><b><A HREF="#Debug">Debugging and Updating Track Hubs</A></b>
+					    <LI><b><A HREF="#Session">Track Hubs and Sessions</A></b>
 					    <LI><b><A HREF="#Register">Registering a Track Hub with UCSC</A></b>
 				  	</UL></TD>
 				    </TR>
@@ -664,6 +663,54 @@ i.e. <em>udcTimeout=300</em>.
 		</TABLE>
 	    </TD></TR>
 	</TABLE>
+
+<!-- ========== Track Hubs and Sessions ============================== -->
+<A NAME="Session"></A><BR>
+
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+            <TR><TD>
+                <TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+                    <TR><TD>
+                        <TABLE BGCOLOR="#D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
+                            <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Track Hubs and Sessions</B></FONT>
+                            </TD></TR>
+                        </TABLE>
+                        <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
+                            <TR><TH HEIGHT=10></TH></TR>
+                            <TR><TD WIDTH=10>&nbsp;</TD><TD>
+<P>The best way to display a track hub, as well as choosing a position and
+visibilities for default tracks, is to configure the 
+browser with your settings and then save a session to a file.
+Instructions for creating a session can be found 
+<A HREF="http://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#Create" TARGET=_BLANK">here</A>.</P>
+<P>By making your session file available over the Internet,
+you can build a URL that will load the session automatically.
+The location of the saved session file should be the same
+directory that holds your hub.txt file.</P>
+<P>There are four required variables for your URL:
+<BLOCKQUOTE><TT>
+<B>db</B> - name of the assembly (e.g. hg19 or mm10)<BR>
+<B>hubUrl</B> - URL to your track hub<BR>
+<B>hgS_loadUrlName</B> - URL to your session file<BR>
+<B>hgS_doLoadUrl</B> - value should be "submit"<BR>
+</TT>
+</BLOCKQUOTE>
+</P>						
+<P>Here is a sample URL:</P>
+<BLOCKQUOTE>
+<pre>
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://myLab.org/myHub.txt&hgS_loadUrlName=http://mySession&hgS_doLoadUrl=submit
+</pre>
+</BLOCKQUOTE>
+                                </TD>
+                                <TD WIDTH=15></TD>
+                            </TR>
+                        </TABLE>
+                    <BR></TD></TR> 
+                </TABLE>
+            </TD></TR>
+        </TABLE>
 
 
 <!-- ========== Registering a Track Hub with UCSC ==================== -->
