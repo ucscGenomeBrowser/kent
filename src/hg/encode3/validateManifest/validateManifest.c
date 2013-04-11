@@ -230,6 +230,14 @@ safef(twoBit, sizeof twoBit, "%s/%s/%s.2bit", encValData, genome, genome);
 return cloneString(twoBit);
 }
 
+char *getBamBai(char *fileName)
+/* Get path to bam index for fileName */
+{  
+char bamBai[256];
+safef(bamBai, sizeof bamBai, "%s.bai", fileName);
+return cloneString(bamBai);
+}
+
 
 boolean runCmdLine(char *cmdLine)
 /* Run command line */
@@ -254,12 +262,18 @@ char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 int mismatches = 7;  // TODO this is totally arbitrary right now
 
-// TODO might want to have a way to run validator on BAM even if the twoBit is not available.
-boolean quicky = TRUE;  // TODO DEBUG QUICK-run by removing -genome and mismatches and stuff.
+// run validator on BAM even if the twoBit is not available.
+boolean quicky = fileExists(twoBit);  // QUICK-run by removing -genome and mismatches and stuff.
 if (quicky)
     {
-    // TODO could add a simple existence check for the corresponding .bam.bai since without -genome=, 
+    // simple existence check for the corresponding .bam.bai since without -genome=, 
     //  vf will not even open the bam index.
+    char *bamBai = getBamBai(fileName);
+    if (!fileExists(bamBai))
+	{
+	warn("Bam Index file missing: %s. Use SAM Tools to create.", bamBai);
+	return FALSE;
+	}
     safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -chromInfo=%s %s", chromInfo, fileName);
     }
 else
