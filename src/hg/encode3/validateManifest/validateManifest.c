@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.1";
+char *version = "1.2";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -519,7 +519,7 @@ for (i = 0; i < mFieldCount; ++i)
 fprintf(f,"\tmd5_sum\tsize\tmodified\tvalid_key");
 fprintf(f,"\n");
 
-fprintf(f,"#version %s\n", version);  // write vm version as a comment
+fprintf(f,"##validateManifest version %s\n", version);  // write vm version as a comment
 
 // loop through manifest recs
 struct slRecord *rec = NULL;
@@ -541,89 +541,100 @@ for(rec = manifestRecs; rec; rec = rec->next)
     if (mUcscDbIdx != -1)
 	ucscDb = rec->words[mUcscDbIdx];
 
-    off_t mFileSize = fileSize(mFileName);
-    off_t vFileSize = -1;
-    time_t mFileTime = fileModTime(mFileName);
-    time_t vFileTime = -1;
-
+    off_t mFileSize = 0;
+    time_t mFileTime = 0;
     char *mMd5Hex = NULL;
     char *mValidKey = NULL;
-    char *vMd5Hex = NULL;
-    char *vValidKey = NULL;
-    
-    boolean dataMatches = FALSE;
-    // look for a matching record in old validated
-    struct slRecord *vRec = NULL;
-    if (haveVal)
+    if (!fileExists(mFileName))
 	{
-    	vRec = (struct slRecord *) hashFindVal(valHash, rec->words[mFileNameIdx]);
-	// check if all fields match between manifest and old validated
-	if (vRec)
-	    {
-	    dataMatches = TRUE;
-	    // check that the fields values match
-	    for (i = 0; i < mFieldCount; ++i)
-		{
-		if (!sameString(rec->words[i], vRec->words[i]))
-		    dataMatches = FALSE;
-		}
-	    // check that the record correctly matches the actual file sizes.
-	    if (dataMatches)
-		{
-    		vFileSize = sqlLongLong(vRec->words[vSizeIdx]);  // TODO maybe use my special functions from the validator
-		if (vFileSize != mFileSize) dataMatches = FALSE;
-		}
-	    // check that the record correctly matches the actual file timestamp.
-	    if (dataMatches)
-		{
-		vFileTime = sqlLongLong(vRec->words[vModifiedIdx]);  // There is no sqlLong function, but there should be!
-		if (vFileTime != mFileTime) dataMatches = FALSE;
-		}
-	    // verify vValidKey against vMd5Hex.
-	    if (dataMatches)
-		{
-		vMd5Hex   = vRec->words[vMd5SumIdx];
-		vValidKey = vRec->words[vValidKeyIdx];
-		char *checkValidKey = encode3CalcValidationKey(vMd5Hex, vFileSize);
-		if (sameString(vValidKey,"ERROR")) 
-		    {
-		    dataMatches = FALSE;
-		    }
-		else if (!sameString(vValidKey,checkValidKey)) 
-		    {
-		    warn("invalid key %s in old validated.txt",vValidKey);  // TODO add line# or filename etc?
-		    dataMatches = FALSE;
-		    }
-		}
-	    
-	    }
-	}
-
-    if (dataMatches)
-	{
-	mMd5Hex = vMd5Hex;
-	mValidKey = vValidKey;
+	uglyf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
+	mValidKey = "ERROR";
+	mMd5Hex = "0";
 	}
     else
 	{
-	// get md5_sum
-	if (quickMd5sum && mFileSize > 100 * 1024 * 1024)
-	    mMd5Hex = fakeMd5sum;  // "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    	else
-	    mMd5Hex = md5HexForFile(mFileName);
 
-	mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
+	mFileSize = fileSize(mFileName);
+	mFileTime = fileModTime(mFileName);
 
-	char *mFormat = rec->words[mFormatIdx];
-	boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
+	char *vMd5Hex = NULL;
+	char *vValidKey = NULL;
+	
+	boolean dataMatches = FALSE;
+	// look for a matching record in old validated
+	if (haveVal)
+	    {
+	    off_t vFileSize = 0;
+	    time_t vFileTime = 0;
+	    struct slRecord *vRec = (struct slRecord *) hashFindVal(valHash, rec->words[mFileNameIdx]);
+	    // check if all fields match between manifest and old validated
+	    if (vRec)
+		{
+		dataMatches = TRUE;
+		// check that the fields values match
+		for (i = 0; i < mFieldCount; ++i)
+		    {
+		    if (!sameString(rec->words[i], vRec->words[i]))
+			dataMatches = FALSE;
+		    }
+		// check that the record correctly matches the actual file sizes.
+		if (dataMatches)
+		    {
+		    vFileSize = sqlLongLong(vRec->words[vSizeIdx]);  // TODO maybe use my special functions from the validator
+		    if (vFileSize != mFileSize) dataMatches = FALSE;
+		    }
+		// check that the record correctly matches the actual file timestamp.
+		if (dataMatches)
+		    {
+		    vFileTime = sqlLongLong(vRec->words[vModifiedIdx]);  // There is no sqlLong function, but there should be!
+		    if (vFileTime != mFileTime) dataMatches = FALSE;
+		    }
+		// verify vValidKey against vMd5Hex.
+		if (dataMatches)
+		    {
+		    vMd5Hex   = vRec->words[vMd5SumIdx];
+		    vValidKey = vRec->words[vValidKeyIdx];
+		    char *checkValidKey = encode3CalcValidationKey(vMd5Hex, vFileSize);
+		    if (sameString(vValidKey,"ERROR")) 
+			{
+			dataMatches = FALSE;
+			}
+		    else if (!sameString(vValidKey,checkValidKey)) 
+			{
+			warn("invalid key %s in old validated.txt",vValidKey);  // TODO add line# or filename etc?
+			dataMatches = FALSE;
+			}
+		    }
+		
+		}
+	    }
 
-	if (!fileIsValid)
-	    mValidKey = "ERROR";
+	if (dataMatches)
+	    {
+	    mMd5Hex = vMd5Hex;
+	    mValidKey = vValidKey;
+	    }
+	else
+	    {
+	    // get md5_sum
+	    if (quickMd5sum && mFileSize > 100 * 1024 * 1024)
+		mMd5Hex = fakeMd5sum;  // "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	    else
+		mMd5Hex = md5HexForFile(mFileName);
+
+	    mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
+
+	    char *mFormat = rec->words[mFormatIdx];
+	    boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
+
+	    if (!fileIsValid)
+		mValidKey = "ERROR";
+
+	    }
 
 	}
 
     uglyf("mFileName = %s size=%lld time=%ld md5=%s validKey=%s\n", mFileName, (long long)mFileSize, (long)mFileTime, mMd5Hex, mValidKey);
-
 
     // write to output
     tabSep = "";
