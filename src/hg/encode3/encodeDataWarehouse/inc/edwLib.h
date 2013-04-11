@@ -12,6 +12,10 @@
 #include "jksql.h"
 #endif
 
+#ifndef BASICBED_H
+#include "basicBed.h"
+#endif
+
 long edwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, char *md5);
 /* See if we already got file.  Return fileId if we do,  otherwise -1 */
 
@@ -96,5 +100,14 @@ struct edwFile *edwFileFromId(struct sqlConnection *conn, long long fileId);
 
 struct edwFile *edwFileFromIdOrDie(struct sqlConnection *conn, long long fileId);
 /* Return edwValidFile given fileId - aborts if not found. */
+
+struct genomeRangeTree *edwMakeGrtFromBed3List(struct bed3 *bedList);
+/* Make up a genomeRangeTree around bed file. */
+
+struct edwAssembly *edwAssemblyForUcscDb(struct sqlConnection *conn, char *ucscDb);
+/* Get assembly for given UCSC ID or die trying */
+
+struct genomeRangeTree *edwGrtFromBigBed(char *fileName);
+/* Return genome range tree for simple (unblocked) bed */
 
 #endif /* EDWLIB_H */

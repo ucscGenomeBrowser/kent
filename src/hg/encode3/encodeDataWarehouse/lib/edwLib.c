@@ -7,7 +7,10 @@
 #include "jksql.h"
 #include "openssl/sha.h"
 #include "base64.h"
+#include "basicBed.h"
+#include "bigBed.h"
 #include "portable.h"
+#include "genomeRangeTree.h"
 #include "md5.h"
 #include "obscure.h"
 #include "encodeDataWarehouse.h"
@@ -583,5 +586,47 @@ struct edwValidFile *edwValidFileFromFileId(struct sqlConnection *conn, long lon
 char query[128];
 safef(query, sizeof(query), "select * from edwValidFile where fileId=%lld", fileId);
 return edwValidFileLoadByQuery(conn, query);
+}
+
+struct genomeRangeTree *edwMakeGrtFromBed3List(struct bed3 *bedList)
+/* Make up a genomeRangeTree around bed file. */
+{
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+struct bed3 *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    genomeRangeTreeAdd(grt, bed->chrom, bed->chromStart, bed->chromEnd);
+return grt;
+}
+
+struct edwAssembly *edwAssemblyForUcscDb(struct sqlConnection *conn, char *ucscDb)
+/* Get assembly for given UCSC ID or die trying */
+{
+char query[256];
+safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", ucscDb);
+struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+if (assembly == NULL)
+    errAbort("Can't find assembly for %s", ucscDb);
+return assembly;
+}
+
+struct genomeRangeTree *edwGrtFromBigBed(char *fileName)
+/* Return genome range tree for simple (unblocked) bed */
+{
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    struct rbTree *tree = genomeRangeTreeFindOrAddRangeTree(grt, chrom->name);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *iv, *ivList = NULL;
+    ivList = bigBedIntervalQuery(bbi, chrom->name, 0, chrom->size, 0, lm);
+    for (iv = ivList; iv != NULL; iv = iv->next)
+        rangeTreeAdd(tree, iv->start, iv->end);
+    lmCleanup(&lm);
+    }
+bigBedFileClose(&bbi);
+bbiChromInfoFreeList(&chromList);
+return grt;
 }
 

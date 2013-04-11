@@ -34,37 +34,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct genomeRangeTree *grtFromBed3List(struct bed3 *bedList)
-/* Make up a genomeRangeTree around bed file. */
-{
-struct genomeRangeTree *grt = genomeRangeTreeNew();
-struct bed3 *bed;
-for (bed = bedList; bed != NULL; bed = bed->next)
-    genomeRangeTreeAdd(grt, bed->chrom, bed->chromStart, bed->chromEnd);
-return grt;
-}
-
-struct genomeRangeTree *grtFromBigBed(char *fileName)
-/* Return genome range tree for simple (unblocked) bed */
-{
-struct bbiFile *bbi = bigBedFileOpen(fileName);
-struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
-struct genomeRangeTree *grt = genomeRangeTreeNew();
-for (chrom = chromList; chrom != NULL; chrom = chrom->next)
-    {
-    struct rbTree *tree = genomeRangeTreeFindOrAddRangeTree(grt, chrom->name);
-    struct lm *lm = lmInit(0);
-    struct bigBedInterval *iv, *ivList = NULL;
-    ivList = bigBedIntervalQuery(bbi, chrom->name, 0, chrom->size, 0, lm);
-    for (iv = ivList; iv != NULL; iv = iv->next)
-        rangeTreeAdd(tree, iv->start, iv->end);
-    lmCleanup(&lm);
-    }
-bigBedFileClose(&bbi);
-bbiChromInfoFreeList(&chromList);
-return grt;
-}
-
 struct target
 /* Information about a target */
     {
@@ -123,7 +92,7 @@ if (isEmpty(sampleBed))
 
 /* Load sample bed, make a range tree to track unique coverage, and get list of all chroms .*/
 struct bed3 *sample, *sampleList = bed3LoadAll(sampleBed);
-struct genomeRangeTree *sampleGrt = grtFromBed3List(sampleList);
+struct genomeRangeTree *sampleGrt = edwMakeGrtFromBed3List(sampleList);
 struct hashEl *chrom, *chromList = hashElListHash(sampleGrt->hash);
 
 /* Iterate through each target - and in lockstep each associated grt to calculate unique overlap */
@@ -165,6 +134,8 @@ for (target = targetList; target != NULL; target = target->next)
     edwQaEnrichFree(&enrich);
     }
 genomeRangeTreeFree(&sampleGrt);
+bed3FreeList(&sampleList);
+hashElFreeList(&chromList);
 }
 
 void doEnrichmentsFromBigBed(struct sqlConnection *conn, 
@@ -298,7 +269,7 @@ struct target *target, *targetList = NULL, **targetTail = &targetList;
 for (et = etList; et != NULL; et = et->next)
     {
     char *targetBed = edwPathForFileId(conn, et->fileId);
-    struct genomeRangeTree *grt = grtFromBigBed(targetBed);
+    struct genomeRangeTree *grt = edwGrtFromBigBed(targetBed);
     target = targetNew(et, grt);
     *targetTail = target;
     targetTail = &target->next;
@@ -322,11 +293,7 @@ if (!isEmpty(vf->enrichedIn))
     /* Get our assembly */
     char *format = vf->format;
     char *ucscDb = vf->ucscDb;
-    char query[256];
-    safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
-    struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
-    if (assembly == NULL)
-	errAbort("Can't find assembly for %s", ucscDb);
+    struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, ucscDb);
 
     struct target *targetList = hashFindVal(assemblyToTarget, assembly->name);
     if (targetList == NULL)
