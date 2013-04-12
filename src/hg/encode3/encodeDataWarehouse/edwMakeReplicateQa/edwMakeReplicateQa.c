@@ -118,7 +118,7 @@ while (--tabsBefore >= 0)
 return atof(s);    // Use atof so don't need to worry about trailing chars 
 }
 
-static void addTargetedCorrelations(struct bbiChromInfo *chrom, struct rbTree *targetRanges,
+static void addBbTargetedCorrelations(struct bbiChromInfo *chrom, struct rbTree *targetRanges,
     struct bbiFile *aBbi, struct bbiFile *bBbi, int numColIx, struct correlate *c)
 /* Find bits of a and b that overlap and also overlap with targetRanges.  Try to extract
  * some number from the bed (which number depends on format) */
@@ -157,6 +157,23 @@ lmCleanup(&lm);
 }
 
 
+static struct genomeRangeTree *genomeRangeTreeForTarget(struct sqlConnection *conn,
+    struct edwAssembly *assembly, char *enrichedIn)
+/* Return genome range tree filled with enrichment target for assembly */
+{
+char query[256];
+safef(query, sizeof(query), "select * from edwQaEnrichTarget where assemblyId=%d and name='%s'", 
+    assembly->id, enrichedIn);
+struct edwQaEnrichTarget *target = edwQaEnrichTargetLoadByQuery(conn, query);
+if (target == NULL)
+   errAbort("Can't find %s enrichment target for assembly %s", enrichedIn, assembly->name);
+char *targetPath = edwPathForFileId(conn, target->fileId);
+struct genomeRangeTree *targetGrt = edwGrtFromBigBed(targetPath);
+edwQaEnrichTargetFree(&target);
+freez(&targetPath);
+return targetGrt;
+}
+    
 void doBigBedReplicate(struct sqlConnection *conn, char *format, struct edwAssembly *assembly,
     struct edwFile *elderEf, struct edwValidFile *elderVf,
     struct edwFile *youngerEf, struct edwValidFile *youngerVf)
@@ -164,26 +181,16 @@ void doBigBedReplicate(struct sqlConnection *conn, char *format, struct edwAssem
  * a new edwQaPairCorrelate record. Do this for a format where we have a bigBed file. */
 {
 uglyf("doBigBedReplicate %s vs %s\n", elderEf->edwFileName, youngerEf->edwFileName);
-char *enrichedIn = elderVf->enrichedIn;
 int numColIx = 0;
 if (sameString(format, "narrowPeak") || sameString(format, "broadPeak"))
     numColIx = 6;	// signalVal
 else
     numColIx = 4;	// score
 numColIx -= 3;		// Subtract off chrom/start/end
+char *enrichedIn = elderVf->enrichedIn;
 if (!isEmpty(enrichedIn) && !sameString(enrichedIn, "unknown"))
     {
-    /* First off load up enrichment target into targetGrt. */
-    char query[256];
-    safef(query, sizeof(query), 
-	"select * from edwQaEnrichTarget where assemblyId=%d and name='%s'", 
-	assembly->id, enrichedIn);
-    struct edwQaEnrichTarget *target = edwQaEnrichTargetLoadByQuery(conn, query);
-    if (target == NULL)
-       errAbort("Can't find %s enrichment target for file ID %lld", enrichedIn, 
-	(long long)youngerEf->id);
-    char *targetPath = edwPathForFileId(conn, target->fileId);
-    struct genomeRangeTree *targetGrt = edwGrtFromBigBed(targetPath);
+    struct genomeRangeTree *targetGrt = genomeRangeTreeForTarget(conn, assembly, enrichedIn);
 
     /* Get open big bed files for both younger and older. */
     char *elderPath = edwPathForFileId(conn, elderEf->id);
@@ -198,7 +205,7 @@ if (!isEmpty(enrichedIn) && !sameString(enrichedIn, "unknown"))
         {
 	struct rbTree *targetRanges = genomeRangeTreeFindRangeTree(targetGrt, chrom->name);
 	if (targetRanges != NULL)
-	    addTargetedCorrelations(chrom, targetRanges, elderBbi, youngerBbi, numColIx, c);
+	    addBbTargetedCorrelations(chrom, targetRanges, elderBbi, youngerBbi, numColIx, c);
 	}
 
     /* Make up correlation structure . */
@@ -206,18 +213,88 @@ if (!isEmpty(enrichedIn) && !sameString(enrichedIn, "unknown"))
     AllocVar(cor);
     cor->elderFileId = elderVf->fileId;
     cor->youngerFileId = youngerVf->fileId;
-    cor->elderSampleBases = elderVf->basesInSample;
-    cor->youngerSampleBases = youngerVf->basesInSample;
     cor->pearsonInEnriched = correlateResult(c);
     cor->gotPearsonInEnriched = TRUE;
     edwQaPairCorrelateSaveToDb(conn, cor, "edwQaPairCorrelate", 128);
 
 
+    genomeRangeTreeFree(&targetGrt);
     freez(&cor);
     correlateFree(&c);
-    freez(&targetPath);
-    freez(&elderPath);
+    bigBedFileClose(&youngerBbi);
+    bigBedFileClose(&elderBbi);
     freez(&youngerPath);
+    freez(&elderPath);
+    }
+}
+
+static void addBwTargetedCorrelations(struct bbiChromInfo *chrom, struct rbTree *targetRanges,
+    struct bigWigValsOnChrom *aVals, struct bigWigValsOnChrom *bVals,
+    struct bbiFile *aBbi, struct bbiFile *bBbi, struct correlate *c)
+/* Find bits of a and b that overlap and also overlap with targetRanges.  Do correlations there */
+{
+if (bigWigValsOnChromFetchData(aVals, chrom->name, aBbi) &&
+    bigWigValsOnChromFetchData(bVals, chrom->name, bBbi) )
+    {
+    double *a = aVals->valBuf, *b = bVals->valBuf;
+    struct range *range, *rangeList = rangeTreeList(targetRanges);
+    for (range = rangeList; range != NULL; range = range->next)
+        {
+	int start = range->start, end = range->end, i;
+	for (i=start; i<end; ++i)
+	    correlateNext(c, a[i], b[i]);
+	}
+    }
+}
+
+void doBigWigReplicate(struct sqlConnection *conn, struct edwAssembly *assembly,
+    struct edwFile *elderEf, struct edwValidFile *elderVf,
+    struct edwFile *youngerEf, struct edwValidFile *youngerVf)
+/* Do correlation analysis between elder and younger and save result to
+ * a new edwQaPairCorrelate record. Do this for a format where we have a bigWig file. */
+{
+uglyf("doBigWigReplicate %s vs %s\n", elderEf->edwFileName, youngerEf->edwFileName);
+char *enrichedIn = elderVf->enrichedIn;
+if (!isEmpty(enrichedIn) && !sameString(enrichedIn, "unknown"))
+    {
+    struct genomeRangeTree *targetGrt = genomeRangeTreeForTarget(conn, assembly, enrichedIn);
+
+    /* Get open big wig files for both younger and older. */
+    char *elderPath = edwPathForFileId(conn, elderEf->id);
+    char *youngerPath = edwPathForFileId(conn, youngerEf->id);
+    struct bbiFile *elderBbi = bigWigFileOpen(elderPath);
+    struct bbiFile *youngerBbi = bigWigFileOpen(youngerPath);
+
+    /* Loop through a chromosome at a time adding to correlation, and at the end save result in r.*/
+    struct correlate *c = correlateNew();
+    struct bbiChromInfo *chrom, *chromList = bbiChromList(elderBbi);
+    struct bigWigValsOnChrom *aVals = bigWigValsOnChromNew();
+    struct bigWigValsOnChrom *bVals = bigWigValsOnChromNew();
+    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+        {
+	struct rbTree *targetRanges = genomeRangeTreeFindRangeTree(targetGrt, chrom->name);
+	if (targetRanges != NULL)
+	    addBwTargetedCorrelations(chrom, targetRanges, aVals, bVals, elderBbi, youngerBbi, c);
+	}
+
+    /* Make up correlation structure . */
+    struct edwQaPairCorrelate *cor;
+    AllocVar(cor);
+    cor->elderFileId = elderVf->fileId;
+    cor->youngerFileId = youngerVf->fileId;
+    cor->gotPearsonInEnriched = TRUE;
+    edwQaPairCorrelateSaveToDb(conn, cor, "edwQaPairCorrelate", 128);
+
+
+    bigWigValsOnChromFree(&bVals);
+    bigWigValsOnChromFree(&aVals);
+    genomeRangeTreeFree(&targetGrt);
+    freez(&cor);
+    correlateFree(&c);
+    bigWigFileClose(&youngerBbi);
+    bigWigFileClose(&elderBbi);
+    freez(&youngerPath);
+    freez(&elderPath);
     }
 }
 
@@ -236,6 +313,10 @@ if (sameString(format, "fastq") || sameString(format, "bam") || sameString(forma
 else if (sameString(format, "broadPeak") || sameString(format, "narrowPeak"))
     {
     doBigBedReplicate(conn, format, assembly, elderEf, elderVf, youngerEf, youngerVf);
+    }
+else if (sameString(format, "bigWig"))
+    {
+    doBigWigReplicate(conn, assembly, elderEf, elderVf, youngerEf, youngerVf);
     }
 else if (sameString(format, "unknown"))
     {
