@@ -310,7 +310,11 @@ if (sameString(format, "fastq") || sameString(format, "bam") || sameString(forma
     {
     doSampleReplicate(conn, format, assembly, elderEf, elderVf, youngerEf, youngerVf);
     }
-else if (sameString(format, "broadPeak") || sameString(format, "narrowPeak"))
+else if (sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
+	 sameString(format, "bedLogR") || sameString(format, "bigBed") ||
+	 sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
+	 sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
+	 sameString(format, "shortFrags"))
     {
     doBigBedReplicate(conn, format, assembly, elderEf, elderVf, youngerEf, youngerVf);
     }
