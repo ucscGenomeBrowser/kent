@@ -508,11 +508,7 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	needAssembly(ef, format, assembly);
 	makeValidFastq(conn, path, ef, assembly, vf);
 	}
-    else if (sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
-	     sameString(format, "bedLogR") || sameString(format, "bigBed") ||
-	     sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
-	     sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
-	     sameString(format, "shortFrags"))
+    else if (edwIsSupportedBigBedFormat(format))
 	{
 	needAssembly(ef, format, assembly);
 	makeValidBigBed(conn, path, ef, assembly, format, vf);

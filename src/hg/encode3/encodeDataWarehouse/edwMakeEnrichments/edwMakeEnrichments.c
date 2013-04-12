@@ -314,11 +314,7 @@ if (!isEmpty(vf->enrichedIn))
 	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
     else if (sameString(format, "bigWig"))
 	doEnrichmentsFromBigWig(conn, ef, vf, assembly, targetList);
-    else if (sameString(format, "bigBed"))
-	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
-    else if (sameString(format, "narrowPeak"))
-	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
-    else if (sameString(format, "broadPeak"))
+    else if (edwIsSupportedBigBedFormat(format))
 	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
     else if (sameString(format, "gtf"))
 	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);

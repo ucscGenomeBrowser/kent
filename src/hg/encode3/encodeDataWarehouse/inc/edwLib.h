@@ -110,4 +110,7 @@ struct edwAssembly *edwAssemblyForUcscDb(struct sqlConnection *conn, char *ucscD
 struct genomeRangeTree *edwGrtFromBigBed(char *fileName);
 /* Return genome range tree for simple (unblocked) bed */
 
+boolean edwIsSupportedBigBedFormat(char *format);
+/* Return TRUE if it's one of the bigBed formats we support. */
+
 #endif /* EDWLIB_H */

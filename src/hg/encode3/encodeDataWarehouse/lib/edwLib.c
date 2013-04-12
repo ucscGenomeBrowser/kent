@@ -629,3 +629,12 @@ bbiChromInfoFreeList(&chromList);
 return grt;
 }
 
+boolean edwIsSupportedBigBedFormat(char *format)
+/* Return TRUE if it's one of the bigBed formats we support. */
+{
+return sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
+	 sameString(format, "bedLogR") || sameString(format, "bigBed") ||
+	 sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
+	 sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
+	 sameString(format, "shortFrags");
+}
