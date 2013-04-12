@@ -17,6 +17,7 @@
 #include "hex.h"
 #include "fieldedTable.h"
 #include "encodeDataWarehouse.h"
+#include "encode3/encode3Valid.h"
 #include "edwLib.h"
 
 void usage()
@@ -419,6 +420,130 @@ slFreeList(&tagList);
 hashFree(&tagHash);
 }
 
+static void allGoodFileNameChars(char *fileName)
+/* Return TRUE if all chars are good for a file name */
+{
+char c, *s = fileName;
+while ((c = *s++) != 0)
+    if (!isalnum(c) && c != '_' && c != '-' && c != '.' && c != '/' && c != '+') 
+        errAbort("Character '%c' (binary %d) not allowed in fileName '%s'", c, (int)c, fileName);
+}
+
+static void allGoodSymbolChars(char *symbol)
+/* Return TRUE if all chars are good for a basic symbol in a controlled vocab */
+{
+char c, *s = symbol;
+while ((c = *s++) != 0)
+    if (!isalnum(c) && c != '_')
+        errAbort("Character '%c' not allowed in symbol '%s'", c, symbol);
+}
+
+static boolean isExperimentId(char *experiment)
+/* Return TRUE if it looks like an ENCODE experiment ID */
+{
+if (startsWith("wgEncode", experiment))
+    return TRUE;
+if (!startsWith("ENC", experiment))
+    return FALSE;
+// Should ideally check two chars after ENC, but standard still changing
+if (!isdigit(experiment[5]) || !isdigit(experiment[6]) || !isdigit(experiment[7]))
+    return FALSE;
+if (!isupper(experiment[8]) || !isupper(experiment[9]) || !isupper(experiment[10]))
+    return FALSE;
+return TRUE;
+}
+
+boolean isAllNum(char *s)
+/* Return TRUE if all characters are numeric (no leading - even) */
+{
+char c;
+while ((c = *s++) != 0)
+    if (!isdigit(c))
+        return FALSE;
+return TRUE;
+}
+
+boolean isAllHexLower(char *s)
+/* Return TRUE if all chars are valid lower case hexadecimal. */
+{
+char c;
+while ((c = *s++) != 0)
+    if (!isdigit(c) && !(c >= 'a' && c <= 'f'))
+        return FALSE;
+return TRUE;
+}
+         
+char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
+    "bigWig", "bigBed", "bedLogR", "bedRnaElements", "bedRrbs", "broadPeak", 
+    "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", };
+int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
+
+char *edwSupportedEnrichedIn[] = {"unknown", "exon", "promoter", "open"};
+int edwSupportedEnrichedInCount = ArraySize(edwSupportedEnrichedIn);
+
+struct edwFile *edwParseSubmitFile(char *submitLocalPath)
+/* Load and parse up this file as fielded table, make sure all required fields are there,
+ * and calculate indexes of required fields.   This produces an edwFile list, but with
+ * still quite a few fields missing - just what can be filled in from submit filled in. */
+{
+char *requiredFields[] = {"file_name", "format", "output_type", "experiment", "replicate", 
+    "enriched_in", "md5_sum", "size",  "modified", "valid_key"};
+struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, 
+	requiredFields, ArraySize(requiredFields));
+
+/* Get offsets of all required fields */
+int fileIx = stringArrayIx("file_name", table->fields, table->fieldCount);
+int formatIx = stringArrayIx("format", table->fields, table->fieldCount);
+int outputIx = stringArrayIx("output_type", table->fields, table->fieldCount);
+int experimentIx = stringArrayIx("experiment", table->fields, table->fieldCount);
+int replicateIx = stringArrayIx("replicate", table->fields, table->fieldCount);
+int enrichedIx = stringArrayIx("enriched_in", table->fields, table->fieldCount);
+int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
+int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
+int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
+int validIx = stringArrayIx("valid_key", table->fields, table->fieldCount);
+
+/* Loop through and make sure all field values are ok */
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char **row = fr->row;
+    char *fileName = row[fileIx];
+    allGoodFileNameChars(fileName);
+    char *format = row[formatIx];
+    if (stringArrayIx(format, edwSupportedFormats, edwSupportedFormatsCount) < 0)
+	errAbort("Format %s is not supported", format);
+    allGoodSymbolChars(row[outputIx]);
+    char *experiment = row[experimentIx];
+    if (!isExperimentId(experiment))
+        errAbort("%s in experiment field does not seem to be an encode experiment", experiment);
+    char *replicate = row[replicateIx];
+    if (differentString(replicate, "pooled") && differentString(replicate, "n/a") )
+	if (!isAllNum(replicate))
+	    errAbort("%s is not a good value for the replicate column", replicate);
+    char *enriched = row[enrichedIx];
+    if (stringArrayIx(enriched, edwSupportedEnrichedIn, edwSupportedEnrichedInCount) < 0)
+        errAbort("Enriched_in %s is not supported", enriched);
+    char *md5 = row[md5Ix];
+    if (strlen(md5) != 32 || !isAllHexLower(md5))
+        errAbort("md5 '%s' is not in all lower case 32 character hexadecimal format.", md5);
+    char *size = row[sizeIx];
+    if (!isAllNum(size))
+        errAbort("Invalid size '%s'", size);
+    char *modified = row[modifiedIx];
+    if (!isAllNum(modified))
+        errAbort("Invalid modification time '%s'", modified);
+    char *validIn = row[validIx];
+    char *realValid = encode3CalcValidationKey(md5, sqlLongLong(size));
+    if (!sameString(validIn, realValid))
+        errAbort("The valid_key %s for %s doesn't fit", validIn, fileName);
+    freez(&realValid);
+    }
+
+return edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
+}
+
+
 void edwSubmit(char *submitUrl, char *user, char *password)
 /* edwSubmit - Submit URL with validated.txt to warehouse. */
 {
@@ -498,19 +623,9 @@ if (errCatchStart(errCatch))
 	sqlUpdate(conn, query);
 	}
 
-    /* By now there is a submit file on the local file system.  Load and
-     * parse up this file as fielded table, make sure all required fields are there,
-     * and calculate indexes of required fields. */
-    char *requiredFields[] = {"file_name", "md5_sum", "size", "modified"};
-    struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, 
-	    requiredFields, ArraySize(requiredFields));
-    int fileIx = stringArrayIx("file_name", table->fields, table->fieldCount);
-    int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
-    int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
-    int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
+    /* By now there is a submit file on the local file system.  */
 
-    /* Convert submit file to a edwFile list with a lot of missing fields. */
-    bfList = edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
+    struct edwFile *bfList = edwParseSubmitFile(submitLocalPath);
 
     /* Save our progress so far to submit table. */
     safef(query, sizeof(query), 
