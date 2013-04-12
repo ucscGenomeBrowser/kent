@@ -509,7 +509,10 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	makeValidFastq(conn, path, ef, assembly, vf);
 	}
     else if (sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
-	     sameString(format, "bigBed"))
+	     sameString(format, "bedLogR") || sameString(format, "bigBed") ||
+	     sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
+	     sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
+	     sameString(format, "shortFrags"))
 	{
 	needAssembly(ef, format, assembly);
 	makeValidBigBed(conn, path, ef, assembly, format, vf);
@@ -562,14 +565,13 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	dyStringAppendN(newName, fileName, dirEnd - fileName);
 	dyStringAppend(newName, vf->licensePlate);
 	dyStringAppend(newName, suffix);
-	uglyf("Seriously considering renaming %s to %s\n", fileName, newName->string);
 
 	/* Now build full path names and attempt rename in file system. */
 	char oldPath[PATH_LEN], newPath[PATH_LEN];
 	safef(oldPath, sizeof(oldPath), "%s%s", edwRootDir, fileName);
 	safef(newPath, sizeof(newPath), "%s%s", edwRootDir, newName->string);
 	mustRename(oldPath, newPath);
-	uglyf("Actually done renaming %s to %s\n", oldPath, newPath);
+	verbose(2, "Renamed %s to %s\n", oldPath, newPath);
 
 	/* Update database with new name - small window of vulnerability here sadly 
 	 * two makeValidates running at same time stepping on each other. */
