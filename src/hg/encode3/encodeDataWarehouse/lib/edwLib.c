@@ -72,7 +72,6 @@ safef(query, sizeof(query),
     "order by submitId desc limit 1"
     , submitFileName, submitDirId
     , (long long)edwNow() - hourInSeconds);
-uglyf("query=%s\n", query);
 long id = sqlQuickLongLong(conn, query);
 if (id == 0)
     return -1;
