@@ -432,10 +432,13 @@ while ((c = *s++) != 0)
 static void allGoodSymbolChars(char *symbol)
 /* Return TRUE if all chars are good for a basic symbol in a controlled vocab */
 {
-char c, *s = symbol;
-while ((c = *s++) != 0)
-    if (!isalnum(c) && c != '_')
-        errAbort("Character '%c' not allowed in symbol '%s'", c, symbol);
+if (!sameString("n/a", symbol))
+    {
+    char c, *s = symbol;
+    while ((c = *s++) != 0)
+	if (!isalnum(c) && c != '_')
+	    errAbort("Character '%c' not allowed in symbol '%s'", c, symbol);
+    }
 }
 
 static boolean isExperimentId(char *experiment)
@@ -478,7 +481,8 @@ char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", };
 int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
 
-char *edwSupportedEnrichedIn[] = {"unknown", "exon", "promoter", "open"};
+char *edwSupportedEnrichedIn[] = {"unknown", "exon", "intron", "promoter", "coding", 
+    "utr", "utr3", "utr5", "open"};
 int edwSupportedEnrichedInCount = ArraySize(edwSupportedEnrichedIn);
 
 struct edwFile *edwParseSubmitFile(char *submitLocalPath)
@@ -625,7 +629,7 @@ if (errCatchStart(errCatch))
 
     /* By now there is a submit file on the local file system.  */
 
-    struct edwFile *bfList = edwParseSubmitFile(submitLocalPath);
+    bfList = edwParseSubmitFile(submitLocalPath);
 
     /* Save our progress so far to submit table. */
     safef(query, sizeof(query), 
