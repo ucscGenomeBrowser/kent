@@ -220,14 +220,6 @@ if (dir[0] != 0)
     }
 }
 
-void mustRename(char *oldPath, char *newPath)
-/* Rename.  If fail print error message and abort. */
-{
-int err = rename(oldPath, newPath);
-if (err != 0)
-    errnoAbort("Couldn't rename %s to %s", oldPath, newPath);
-}
-
 static void applyPatches(char *inName, struct slRef *patchRefList, char *keyField, char *outName,
 	boolean doDelete)
 /* Apply patches in list. */
