@@ -1,9 +1,24 @@
 #!/bin/tcsh -efx
 # Destroy current encodeDataWarehouse and make a fresh one
 hgsql mysql -e "drop database encodeDataWarehouse"
+rm -rf /scratch/kent/encodeDataWarehouse
 hgsql mysql -e "create database encodeDataWarehouse"
 hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 edwCreateUser kent human kent@soe.ucsc.edu
-rm -rf /scratch/kent/encodeDataWarehouse
+edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
+edwAddAssembly 10090 mm9 mm9 /gbdb/mm9/mm9.2bit -symLink=e47354d24b9d95e832c337d42b9f8f71
 edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
 edwAddSubscriber updateLastId 'echo %u > /scratch/kent/encodeDataWarehouse/tmp/lastId'
+hgsql encodeDataWarehouse -e "insert edwQaAgent (name,program) values('makeValidFile', 'edwMakeValidFile');"
+hgsql encodeDataWarehouse -e "insert edwQaAgent (name,program) values('makeEnrichments', 'edwMakeEnrichments');"
+edwAddQaEnrichTarget open hg19 /hive/groups/encode/encode3/encValData/hg19/regions/open.bb
+edwAddQaEnrichTarget exon hg19 /hive/groups/encode/encode3/encValData/hg19/regions/exon.bb
+edwAddQaEnrichTarget promoter hg19 /hive/groups/encode/encode3/encValData/hg19/regions/promoter.bb
+edwAddQaEnrichTarget open mm9 /hive/groups/encode/encode3/encValData/mm9/regions/open.bb
+edwAddQaEnrichTarget exon mm9 /hive/groups/encode/encode3/encValData/mm9/regions/exon.bb
+edwAddQaEnrichTarget promoter mm9 /hive/groups/encode/encode3/encValData/mm9/regions/promoter.bb
+edwSubmit http://encodedcc.sdsc.edu/encode2/hub/5.test kent human
+hgsql encodeDataWarehouse -e 'create view files as select id,edwFileName,size,left(submitFileName,70) from edwFile where errorMessage="" and deprecated=""'
+hgsql encodeDataWarehouse -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from edwQaEnrich e,edwValidFile v,edwFile f,edwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
+hgsql encodeDataWarehouse -e 'create view validFiles as select id,fileId file,format,outputType output,experiment,replicate rep,enrichedIn,ucscDb,itemCount,mapRatio,depth from edwValidFile'
+hgsql encodeDataWarehouse -e 'create view enrichments as select e.id id, e.fileId fileId,t.name target,v.enrichedIn, targetBaseHits,targetUniqHits,coverage,enrichment,uniqEnrich from edwQaEnrich e,edwQaEnrichTarget t,edwValidFile v where e.qaEnrichTargetId = t.id and e.fileId=v.fileId'

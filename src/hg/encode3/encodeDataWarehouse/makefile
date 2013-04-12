@@ -7,7 +7,14 @@ include ../../../inc/common.mk
 USE_DIRS = $(DIRS)
 
 DIRS = \
+    lib \
+    edwAddAssembly \
+    edwAddQaEnrichTarget \
+    edwAddSubscriber \
     edwCreateUser \
+    edwMakeEnrichments \
+    edwMakeReplicateQa \
+    edwMakeValidFile \
     edwResetPassword \
     edwSubmit
 

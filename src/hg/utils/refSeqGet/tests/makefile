@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 # will have to update results from time to time due to database updates
 db = hg18
 
-refSeqGet = ${BINDIR}/refSeqGet
+refSeqGet = refSeqGet
 outExts = psl gp prot.fa rna.fa meta
 
 test:: basicListTest  versionedListTest

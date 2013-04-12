@@ -8,7 +8,6 @@
 #include "mdb.h"
 
 char *metaDbs[] = {"hg19", "mm9"};
-char *Organisms[] = {"Human", "Mouse"};
 char *organisms[] = {"human", "mouse"};
 char *metaTable = "metaDb";
 char *expDb = "hgFixed";
@@ -26,7 +25,7 @@ errAbort(
   "by indentation.  You might think of it as a meta tag tree.  It contains the contents of\n"
   "the hg19 and mm9 metaDb tables and the hgFixed.encodeExp table.\n"
   "usage:\n"
-  "   encode2Meta manifest.tab meta.txt\n"
+  "   encode2Meta database manifest.tab meta.txt\n"
   "options:\n"
   "   -withParent - if set put a parent tag in each stanza in addition to indentation\n"
   "   -maniFields - includes some fileds normally suppressed because they are also in manifest\n"
@@ -387,15 +386,19 @@ for (child = node->children; child !=NULL; child = child->next)
     metaTreeSortChildrenSortTags(child);
 }
 
-void encode2Meta(char *manifestIn, char *outMetaRa)
+void encode2Meta(char *database, char *manifestIn, char *outMetaRa)
 /* encode2Meta - Create meta files.. */
 {
+int dbIx = stringArrayIx(database, metaDbs, ArraySize(metaDbs));
+if (dbIx < 0)
+    errAbort("Unrecognized database %s", database);
+
 /* Create a three level meta.ra format file based on hgFixed.encodeExp
  * and database.metaDb tables. The levels are composite, experiment, file */
 struct metaNode *metaTree = metaTreeNew("encode2");
 
 /* Load up the manifest. */
-struct encode2Manifest *mi, *miList = encode2ManifestLoadAll(manifestIn);
+struct encode2Manifest *mi, *miList = encode2ManifestShortLoadAll(manifestIn);
 struct hash *miHash = hashNew(18);
 for (mi = miList; mi != NULL; mi = mi->next)
     hashAdd(miHash, mi->fileName, mi);
@@ -414,6 +417,10 @@ int i;
 for (i=0; i<ArraySize(metaDbs); ++i)
     {
     char *db = metaDbs[i];
+    if (!sameString(database, db))
+        continue;
+
+    verbose(1, "exploring %s\n", db);
     struct mdbObj *mdb, *mdbList = getMdbList(db);
     verbose(1, "%d meta objects in %s\n", slCount(mdbList), db);
 
@@ -424,7 +431,7 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 	if (objType != NULL && sameString(objType, "composite"))
 	    {
 	    char compositeName[256];
-	    safef(compositeName, sizeof(compositeName), "%s%s", mdb->obj, Organisms[i]);
+	    safef(compositeName, sizeof(compositeName), "%s", mdb->obj);
 	    struct metaNode *compositeNode = metaNodeNew(compositeName);
 	    slAddHead(&metaTree->children, compositeNode);
 	    compositeNode->parent = metaTree;
@@ -550,11 +557,6 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 struct hash *suppress = makeSuppress();
 struct hash *closeEnoughTags = makeCloseEnoughTags();
 
-metaTreeSortChildrenSortTags(metaTree);
-FILE *ugly = mustOpen("ugly.tree", "w");
-metaTreeWrite(0, 0, BIGNUM, FALSE, NULL, metaTree, suppress, ugly);
-carefulClose(&ugly);
-
 metaTreeHoist(metaTree, closeEnoughTags);
 metaTreeSortChildrenSortTags(metaTree);
 FILE *f = mustOpen(outMetaRa, "w");
@@ -573,10 +575,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 withParent = optionExists("withParent");
 maniFields = optionExists("maniFields");
-encode2Meta(argv[1], argv[2]);
+encode2Meta(argv[1], argv[2], argv[3]);
 return 0;
 }

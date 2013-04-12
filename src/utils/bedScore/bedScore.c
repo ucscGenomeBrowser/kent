@@ -12,6 +12,7 @@
 /* Usage definitions and defaults */
 #define scoreEncode     "encode"
 #define scoreReg        "reg"
+#define scoreStd2       "std2"
 #define scoreLod        "lod"
 #define scoreAsinh      "asinh"
 
@@ -35,14 +36,15 @@ errAbort(
   "   -col=N      - Column to use as input value (default %d)\n"
   "   -method=\n"
   "             encode - ENCODE pipeline (UCSC) (default)\n"
-  "             reg - Regulatory clusters (UCSC) \n"
+  "             reg - Regulatory clusters, maxscore at 1 std dev (UCSC) \n"
+  "             std2 - score is maxed at 2 std devs \n"
+  "             asinh - ENCODE Uniform TFBS (Steve Wilder, ENCODE AWG/EBI)\n"
   "   -minScore=N - Minimum score to assign (default %d). Not supported for 'reg' method\n"
   "   -uniform    - Calculate uniform normalization factor across all input files\n"
   "note:\n"
   "    If multiple files are specified, they must all be of same BED size\n.",
   /*
   "             lod - Phastcons log odds (Adam Siepel, Cornell)\n"
-  "             asinh - ENCODE Uniform TFBS (Steve Wilder, ENCODE AWG/EBI)\n",
   */
   col, minScore);
 }
@@ -185,8 +187,6 @@ struct scorer
     {
     char *name;         /* method identifer */
     void *info;         /* intermediate values needed by scorer */
-    void *inputValues;  /* save input values if needed by scorer (e.g. to compute quartiles).
-                              This will be populated with input values  as BED is read */
     void (*inputValue)(struct scorer *scorer, double val);  
                         /* stash input value or otherwise process */
     void (*summarize)(struct scorer *scorer);    /* prep for rescoring after seeing all input */
@@ -254,23 +254,23 @@ return (round((info->normFactor * inputVal) + info->normOffset));
    This has the effect of distributing scores up to mean + 1std across the score range, 
    but assigning all above to the max score.
 
-   TODO: support for minScore != 0. And verify support for maxScore.
+   TODO: support for minScore != 0 ? And verify support for maxScore.
 
    Author Jim Kent (in regClusterBedExpCfg.c and regClusterMakeTableOfTables)
 */
 
-struct scoreRegInfo
+struct scoreStdInfo
     {
     int count;
     double minVal, maxVal;
     double sum, sumSquares;
     double normFactor;
-    } scoreRegInfo = {0, MAXDOUBLE, 0, 0, 0, 0};
+    } scoreStdInfo = {0, MAXDOUBLE, 0, 0, 0, 0};
 
-void scoreRegIn(struct scorer *scorer, double inputVal)
+void scoreStdIn(struct scorer *scorer, double inputVal)
 /* Gather any info needed from each input value */
 {
-struct scoreRegInfo *info = scorer->info;
+struct scoreStdInfo *info = scorer->info;
 verbose(3, "inputVal=%f, oldMin=%f, oldMax=%f, oldSum=%f, oldSq = %f\t", 
             inputVal, info->minVal, info->maxVal, info->sum, info->sumSquares);
 info->count++;
@@ -282,34 +282,105 @@ verbose(3, "min=%f, max=%f, sum=%f, squares=%f\n",
             info->minVal, info->maxVal, info->sum, info->sumSquares);
 }
 
-void scoreRegSummarize(struct scorer *scorer)
+void scoreStdSummarize(struct scorer *scorer)
 /* Compute temporary values needed after seeing all input values and before rescoring.
    For this method, this is the normalization factor, derived from mean and std.
   */
 {
-struct scoreRegInfo *info = scorer->info;
+struct scoreStdInfo *info = scorer->info;
 double std = calcStdFromSums(info->sum, info->sumSquares, info->count);
 double mean = info->sum/info->count;
 double highEnd = mean + std;
+if (sameString(method, "std2"))
+    highEnd += std;
 if (highEnd > info->maxVal) highEnd = info->maxVal;     // needed ?
 info->normFactor = ((double)maxScore)/highEnd;
 verbose(2, "min=%f, max=%f, count=%d, std=%f, mean=%f, norm=%g\n", 
             info->minVal, info->maxVal, info->count, std, mean, info->normFactor);
 }
 
-double scoreRegOut(struct scorer *scorer, double inputVal)
+double scoreStdOut(struct scorer *scorer, double inputVal)
 /* Adjust scores and output file */
 {
-struct scoreRegInfo *info = scorer->info;
+struct scoreStdInfo *info = scorer->info;
 return (info->normFactor * inputVal);
+}
+
+/* asinh method 
+
+   This method was used by the ENCODE Analysis Working Group to assign scores to the
+   January 2011 freeze of ENCODE TFBS, hosted at the ENCODE Integrative Analysis Hub.
+
+   Author: Steve Wilder (in regClusterBedExpCfg.c and regClusterMakeTableOfTables)
+
+   Input signal values are transformed using the inverse trigonometric function, asinh
+   (almost linear for small positive values, tending to logarithmic for large values),
+   and taking the lower and upper quartile as the extreme values.
+
+   i.e if signal values is x, Q1 is lower quartile of signal distribution, 
+   Q3 is upper quartile of signal distribution:
+
+        score = minScore if x <= Q1
+              = maxScore if x >= Q3
+              = minScore + (maxScore-minScore) * (asinh(x) - asinh(Q1)) / (asinh(Q3) - asinh(Q1))
+                     if Q1 < x < Q3
+*/
+
+struct scoreAsinhInfo
+    {
+    int count;
+    double q1, q3;
+    double asinhQ1, asinhQ3;
+    double normFactor;            /* (maxScore-minScore)/(asinh(Q3) - asinh(Q1)) */
+    struct slDouble *inputValues; /* save input values if needed by scorer 
+                                        (e.g. to compute quartiles).
+                                        This will be populated with input values  as BED is read */
+    } scoreAsinhInfo = {0, 0, 0, 0, 0, 0, NULL};
+
+void scoreAsinhIn(struct scorer *scorer, double inputVal)
+/* Gather any info needed from each input value */
+{
+struct scoreAsinhInfo *info = scorer->info;
+verbose(3, "inputVal=%f", inputVal);
+info->count++;
+slAddHead(&info->inputValues, slDoubleNew(inputVal));
+}
+
+void scoreAsinhSummarize(struct scorer *scorer)
+/* Compute temporary values needed after seeing all input values and before rescoring.
+   For this method, this is the normalization factor, derived from mean and std.
+  */
+{
+struct scoreAsinhInfo *info = scorer->info;
+double min, median, max;
+slDoubleBoxWhiskerCalc(info->inputValues, &min, &info->q1, &median, &info->q3, &max);
+info->asinhQ1 = asinh(info->q1);
+info->asinhQ3 = asinh(info->q3);
+verbose(2, "min=%f, q1=%f, median=%f, q3=%f, max=%f, count=%d, asinhQ1=%f, asinhQ3=%f", 
+            min, info->q1, median, info->q3, max, info->count, info->asinhQ1, info->asinhQ3);
+info->normFactor = (maxScore - minScore) / (info->asinhQ3 - info->asinhQ1);
+verbose(2, ", normFactor=%f", info->normFactor);
+}
+
+double scoreAsinhOut(struct scorer *scorer, double inputVal)
+/* Adjust scores and output file */
+{
+struct scoreAsinhInfo *info = scorer->info;
+if (inputVal <= info->q1)
+    return(minScore);
+if (inputVal >= info->q3)
+    return (maxScore);
+return minScore + (info->normFactor * (asinh(inputVal) - info->asinhQ1));
 }
 
 /* Scorer initialization */
 
 static struct scorer scorers[] = {
-    {scoreEncode, &scoreEncodeInfo, NULL, &scoreEncodeIn, &scoreEncodeSummarize, &scoreEncodeOut},
-    {scoreReg, &scoreRegInfo, NULL, &scoreRegIn, &scoreRegSummarize, &scoreRegOut},
-    {NULL, NULL, NULL, NULL, NULL, NULL}
+    {scoreEncode, &scoreEncodeInfo, &scoreEncodeIn, &scoreEncodeSummarize, &scoreEncodeOut},
+    {scoreReg, &scoreStdInfo, &scoreStdIn, &scoreStdSummarize, &scoreStdOut},
+    {scoreStd2, &scoreStdInfo, &scoreStdIn, &scoreStdSummarize, &scoreStdOut},
+    {scoreAsinh, &scoreAsinhInfo, &scoreAsinhIn, &scoreAsinhSummarize, &scoreAsinhOut},
+    {NULL, NULL, NULL, NULL, NULL}
 };
 
 struct scorer *scorerNew(const char *method)
@@ -322,10 +393,6 @@ for (pScorer = scorers; pScorer->name; pScorer++)
 errAbort("scorer %s not found", method);
 return NULL;
 }
-
-#ifdef LOD_or_ASINH
-slAddHead(&inputVals, slDoubleNew(inputVal));
-#endif
 
 /*
  * Here are code snippets and comments describing all 4 scoring methods 
@@ -346,15 +413,6 @@ foreach my $wRef (@lines) {
   }
 #endif
 
-#ifdef METHOD_asinh
-For ENCODE, I set sensible minimum and maximum values, transforming the signal value (seventh column) with the asinh function (almost linear for small positive values, tending to logarithmic for large values), and taking the lower and upper quartile as the extreme values.
-
- i.e if signal values is x, Q1 is lower quartile of signal distribution, Q3 is upper quartile of signal distribution
-
-score = 370 if x <= Q1
-           = 1000 if x>=Q3
-            = 370 + 630 * (asinh(x) - asinh(Q1)) / (asinh(Q3) - asinh(Q1))   if Q1 < x < Q3
-#endif
 
 void bedPreScoreFile(char *inFile)
 /* Read input values and stash values needed for the method */

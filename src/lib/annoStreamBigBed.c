@@ -55,7 +55,7 @@ self->nextInterval = self->nextInterval->next;
 return self->row;
 }
 
-static struct annoRow *asbbNextRow(struct annoStreamer *vSelf)
+static struct annoRow *asbbNextRow(struct annoStreamer *vSelf, struct lm *lm)
 /* Return a single annoRow, or NULL if there are no more items. */
 {
 struct annoStreamBigBed *self = (struct annoStreamBigBed *)vSelf;
@@ -76,7 +76,8 @@ while (annoFilterRowFails(vSelf->filters, row, vSelf->numCols, &rightFail))
     }
 uint chromStart = sqlUnsigned(row[1]);
 uint chromEnd = sqlUnsigned(row[2]);
-return annoRowFromStringArray(vSelf->chrom, chromStart, chromEnd, rightFail, row, vSelf->numCols);
+return annoRowFromStringArray(vSelf->chrom, chromStart, chromEnd, rightFail, row, vSelf->numCols,
+			      lm);
 }
 
 static void asbbClose(struct annoStreamer **pVSelf)

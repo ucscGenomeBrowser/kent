@@ -149,6 +149,7 @@ if (midFix != NULL) // If midfix, replace .narrowPeak etc with midFix.  Used to 
      }
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
+mi->format = asType;
 encode2ManifestShortTabOut(mi, manF);
 }
 
@@ -242,6 +243,7 @@ safef(localFileName, PATH_LEN, "%s", mi->fileName);
 chopSuffix(localFileName);
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
+mi->format = "bigBed";
 encode2ManifestShortTabOut(mi, manF);
 }
 

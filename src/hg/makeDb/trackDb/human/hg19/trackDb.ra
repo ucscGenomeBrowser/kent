@@ -63,113 +63,6 @@ track gwasCatalog override
 snpTable snp137
 snpVersion 137
 
-track ucscRetroAli1
-release alpha
-shortLabel Retroposed Genes
-longLabel Retroposed GenesV1, Including Pseudogenes - November 2010 
-group genes
-type psl
-priority 37.5
-color 20,0,250
-visibility hide
-ucscRetroInfo ucscRetroInfo1
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds
-baseColorUseSequence extFile ucscRetroSeq1 ucscRetroExtFile1
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
-searchName ucscRetroInfoRefSeq1
-searchTable ucscRetroAli1
-searchDescription Retroposed GenesV1, Including Pseudogenes - November 2010
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo1
-dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo1.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
-searchPriority 3.52
-
-searchName ucscRetroInfoMrna1
-searchTable ucscRetroAli1
-searchDescription Retroposed GenesV1, Including Pseudogenes
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-searchPriority 3.55
-
-searchName ucscRetroUniProt1
-searchTable ucscRetroAli1
-searchDescription Retroposed GenesV1, Including Pseudogenes 
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo1
-xrefQuery select ucscRetroInfo1.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
-searchPriority 3.54
-
-searchName ucscRetroKnownGene1
-searchTable ucscRetroAli1
-searchDescription Retroposed GenesV1, Including Pseudogenes
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo1
-xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
-searchPriority 3.53
-
-track ucscRetroAli2
-release alpha
-shortLabel Retroposed Genes 2.0
-longLabel Retroposed Genes, Including Pseudogenes 2011-10-22 [ucscRetroAli2]
-group genes
-type psl
-priority 37.14
-color 20,0,250
-visibility pack
-ucscRetroInfo ucscRetroInfo2
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds2
-baseColorUseSequence extFile ucscRetroSeq2 ucscRetroExtFile2
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-html ucscRetroAli1
-
-searchName ucscRetroInfoRefSeq2
-searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes - 2011-10-22
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo2
-dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo2.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
-searchPriority 3.52
-
-searchName ucscRetroInfoMrna2
-searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes - 2011-10-22
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-searchPriority 3.55
-
-searchName ucscRetroUniProt2
-searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes - 2011-10-22
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo2
-xrefQuery select ucscRetroInfo2.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
-searchPriority 3.54
-
-searchName ucscRetroKnownGene2
-searchTable ucscRetroAli2
-searchDescription Retroposed GenesV2, Including Pseudogenes - 2011-10-22
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo2
-xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
-searchPriority 3.53
-
 track ucscRetroAli4
 shortLabel Retroposed Genes 4.0
 longLabel Retroposed GenesV4, Including Pseudogenes - Sept. 2012
@@ -220,6 +113,59 @@ query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
 dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo4
 xrefQuery select ucscRetroInfo4.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
+track ucscRetroAli5
+shortLabel Retroposed Genes 5.0
+longLabel Retroposed Genes, Including Pseudogenes  [ucscRetroAli5]
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo5
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds5
+baseColorUseSequence extFile ucscRetroSeq5 ucscRetroExtFile5
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq5
+searchTable ucscRetroAli5
+searchDescription Retroposed GenesV5, Including Pseudogenes - 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo5
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo5.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna5
+searchTable ucscRetroAli5
+searchDescription Retroposed GenesV5, Including Pseudogenes - 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt5
+searchTable ucscRetroAli5
+searchDescription Retroposed GenesV5, Including Pseudogenes - 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo5
+xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene5
+searchTable ucscRetroAli5
+searchDescription Retroposed GenesV5, Including Pseudogenes - 
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo5
+xrefQuery select ucscRetroInfo5.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
 track illuminaProbes override

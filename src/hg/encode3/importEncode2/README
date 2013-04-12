@@ -46,9 +46,10 @@ The programs involved in converting the encode2 data to a hub and the order they
     gzip, and sort utilities.
 6) encode2AddTgzContentsToManifest - Go sniff contents of all the .tgz dirs and add them to 
    manifest file.
-7) encode2Meta - Create meta.txt file. This is a hierarchical .ra file with heirarchy defined
-   by indentation.  You might think of it as a meta tag tree.  It contains the contents of
-   the hg19 and mm9 metaDb tables and the hgFixed.encodeExp table.
+7) encode2Meta - Create hg19Meta.txt and mm9Meta.txt files. This is a hierarchical .ra file 
+   with heirarchy defined by indentation.  You might think of it as a meta tag tree.  It contains 
+   the contents of the hg19 and mm9 metaDb tables (from the production rather than development
+   databases) and the hgFixed.encodeExp table.
 8) makeTgzDirPatch - a little script run in hub directory that makes input for next program.
 9) encode2MetaPatchRenamed - adjusts meta.txt file to go from encode2 to encode3 file names.
    In some cases (GFF and .fastq.tgz files) there are multiple encode3 files corresponding

@@ -27,6 +27,14 @@ DIRS = \
 	mafOrder \
 	stageMultiz 
 
+test::
+	@for D in ${USE_DIRS} x; do \
+	  if test "$$D" != "x" ; then \
+	    ( cd $$D && echo $$D && ${MAKE} test ) ;\
+	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+	    fi ;\
+	    done
+
 clean::
 	@for D in ${USE_DIRS} x; do \
 	  if test "$$D" != "x" ; then \

@@ -45,7 +45,7 @@ self->nextInterval = self->intervalList;
 
 static struct annoRow *annoRowFromContigBbiIntervals(char *chrom,
 				struct bbiInterval *startIv, struct bbiInterval *endIv,
-				boolean rightJoinFail)
+				boolean rightJoinFail, struct lm *callerLm)
 /* Given a range of non-NULL contiguous bbiIntervals (i.e. no gaps between intervals),
  * translate into annoRow with annoVector as data. */
 {
@@ -63,10 +63,10 @@ for (iv = startIv;  iv != endIv->next;  iv = iv->next)
 	errAbort("annoRowFromContigBbiIntervals: overflowed baseCount (%s:%d-%d)",
 		 chrom, startIv->start, endIv->end);
     }
-return annoRowWigNew(chrom, startIv->start, endIv->end, rightJoinFail, vals);
+return annoRowWigNew(chrom, startIv->start, endIv->end, rightJoinFail, vals, callerLm);
 }
 
-static struct annoRow *asbwNextRow(struct annoStreamer *vSelf)
+static struct annoRow *asbwNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
 /* Return a single annoRow, or NULL if there are no more items. */
 {
 struct annoStreamBigWig *self = (struct annoStreamBigWig *)vSelf;
@@ -86,7 +86,7 @@ while (annoFilterWigValueFails(vSelf->filters, self->nextInterval->val, &rightFa
 	return NULL;
     }
 if (rightFail)
-    return annoRowFromContigBbiIntervals(vSelf->chrom, startIv, startIv, rightFail);
+    return annoRowFromContigBbiIntervals(vSelf->chrom, startIv, startIv, rightFail, callerLm);
 struct bbiInterval *endIv = startIv, *iv;
 int maxCount = 16 * 1024, count;
 for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->next, count++)
@@ -100,7 +100,7 @@ for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->n
 	break;
     }
 self->nextInterval = endIv->next;
-return annoRowFromContigBbiIntervals(vSelf->chrom, startIv, endIv, rightFail);
+return annoRowFromContigBbiIntervals(vSelf->chrom, startIv, endIv, rightFail, callerLm);
 }
 
 static void asbwClose(struct annoStreamer **pVSelf)

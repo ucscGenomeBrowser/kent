@@ -42,7 +42,6 @@ table edwFile
 "A file we are tracking that we intend to and maybe have uploaded"
     (
     uint id;                    "Autoincrementing file id"
-    char[16] licensePlate;      "A abc123 looking license-platish thing"
     uint submitId;              "Links to id in submit table"
     uint submitDirId;           "Links to id in submitDir table"
     lstring submitFileName;     "File name in submit relative to submit dir"
@@ -54,6 +53,8 @@ table edwFile
     char[32] md5;               "md5 sum of file contents"
     lstring tags;               "CGI encoded name=val pairs from manifest"
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
+    string deprecated; "If non-empty why you shouldn't user this file any more."
+    string replacedBy; "If non-empty license plate of file that replaces this one."
     )
 
 table edwSubmit
@@ -82,5 +83,85 @@ table edwSubscriber
     string dirPattern;   "A string with * and ? wildcards to match hub dir URLs we care about"
     lstring tagPattern;  "A cgi-encoded string of tag=wildcard pairs."
     string onFileEndUpload;     "A unix command string to run with a %u where file id goes"
+    )
+
+table edwAssembly
+"An assembly - includes reference to a two bit file, and a little name and summary info."
+    (
+    uint id;    "Assembly ID"
+    uint taxon; "NCBI taxon number"
+    string name;  "Some human readable name to distinguish this from other collections of DNA"
+    string ucscDb;  "Which UCSC database (mm9?  hg19?) associated with it."
+    uint twoBitId;  "File ID of associated twoBit file"
+    bigInt baseCount;  "Count of bases"
+    )
+
+table edwValidFile
+"A file that has been uploaded, the format checked, and for which at least minimal metadata exists"
+    (
+    uint id;          "ID of validated file"
+    char[16] licensePlate;  "A abc123 looking license-platish thing."
+    uint fileId;      "Pointer to file in main file table"
+    string format;    "What format it's in from manifest"
+    string outputType; "What output_type it is from manifest"
+    string experiment; "What experiment it's in from manifest"
+    string replicate;  "What replicate it is from manifest"
+    string validKey;  "The valid_key tag from manifest"
+    string enrichedIn; "The enriched_in tag from manifest"
+    string ucscDb;    "Something like hg19 or mm9"
+
+    bigint itemCount; "# of items in file: reads for fastqs, lines for beds, bases w/data for wig."
+    bigint basesInItems; "# of bases in items"
+    bigint sampleCount; "# of items in sample if we are just subsampling as we do for reads." 
+    bigint basesInSample; "# of bases in our sample"
+    string sampleBed;   "Path to a temporary bed file holding sample items"
+    double mapRatio;    "Proportion of items that map to genome"
+    double sampleCoverage; "Proportion of assembly covered by at least one item in sample"
+    double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
+    )
+
+table edwQaAgent
+"A program plus parameters with a standard command line that gets run on new files"
+    (
+    uint id;         "ID of this agent"
+    string name;     "Name of agent"
+    string program;  "Program command line name"
+    string options; "Program command line options"
+    string deprecated; "If non-empty why it isn't run any more."
+    )
+
+table edwQaRun
+"Records a bit of information from each QA run we've done on files."
+    (
+    uint id;          "ID of this run"
+    uint agentId;     "ID of agent that made this run"
+    uint startFileId; "ID of file we started on."
+    uint endFileId;   "One past last file we did QA on"
+    bigint startTime; "Start time in seconds since 1970"
+    bigint endTime;   "Start time in seconds since 1970"
+    lstring stderr;   "The output to stderr of the run"
+    )
+
+table edwQaEnrichTarget
+"A target for our enrichment analysis."
+    (
+    uint id;    "ID of this enrichment target"
+    uint assemblyId; "Which assembly this goes to"
+    string name;  "Something like 'exon' or 'promoter'"
+    uint fileId;    "A simple BED 3 format file that defines target. Bases covered are unique"
+    bigint targetSize;  "Total number of bases covered by target"
+    )
+
+table edwQaEnrich
+"An enrichment analysis applied to file."
+    (
+    uint id;    "ID of this enrichment analysis"
+    uint fileId;  "File we are looking at skeptically"
+    uint qaEnrichTargetId;  "Information about an target for this analysis"
+    bigInt targetBaseHits;  "Number of hits to bases in target"
+    bigInt targetUniqHits;  "Number of unique bases hit in target"
+    double coverage;    "Coverage of target - just targetUniqHits/targetSize"
+    double enrichment;  "Amount we hit target/amount we hit genome"
+    double uniqEnrich;  "coverage/sampleCoverage"
     )
 

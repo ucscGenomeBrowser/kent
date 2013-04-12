@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PSLHISTO = ${BINDIR}/pslHisto
+PSLHISTO = pslHisto
 DIFF = diff -u
 
 test:   apqBaseTest apqBaseMultTest cdBaseTest cdBaseMultTest \
