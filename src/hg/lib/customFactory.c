@@ -89,6 +89,8 @@ char prefix[16];
 static int dbTrackCount = 0;
 struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
 ++dbTrackCount;
+if ( dbTrackCount > 1000 )
+    errAbort("ERROR: too many tracks in this submission (more than 1000). Using a <A HREF='/goldenPath/help/hgTrackHubHelp.html' TARGET=_blank>Track Hub</A> may be a better option for this data.");
 safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 track->dbTableName = sqlTempTableName(ctConn, prefix);
 ctAddToSettings(track, "dbTableName", track->dbTableName);
