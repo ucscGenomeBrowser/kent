@@ -12899,6 +12899,24 @@ type mapAlgorithm
 label TopHat v1.3.1
 description TopHat v1.3.1
 
+## quality
+# term (human-readable read type name)
+# tag (machine-readable read type name, no special characters)
+# type (informs pipeline code of stanza type. Should always be readType)
+# description (human-readable description of the read type, unclear where/if it's used)
+
+term caution
+tag QCAUTION
+type quality
+label Caution
+description Moderate quality; likely lower than optimal sensitivity i.e. when all replicates of a dataset have suboptimal moderate scores
+
+term good
+tag QGOOD
+type quality
+label Good
+description High quality; at least one replicate is of high quality allowing rescue OR all replicates are high quality
+
 ### readType
 # term (human-readable read type name)
 # tag (machine-readable read type name, no special characters)
@@ -16742,6 +16760,18 @@ priority 200
 requiredVars term,tag,type,description
 searchable multiSelect
 validate cv or None
+
+term quality
+tag QUALITY
+type typeOfTerm
+label Integrated quality flag
+cvDefined yes
+description Quality assessment based on multiple metrics; manually curated based on automatic flagging 
+optionalVars label,deprecated
+priority 500
+requiredVars term,tag,type,description
+searchable no
+validate cv
 
 term readType
 tag READTYPE
