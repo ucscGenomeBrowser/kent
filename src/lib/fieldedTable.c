@@ -61,18 +61,37 @@ table->cursor = &fr->next;
 return fr;
 }
 
-struct fieldedTable *fieldedTableFromTabFile(char *url, char *requiredFields[], int requiredCount)
+struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *reportFileName, 
+    char *requiredFields[], int requiredCount)
 /* Read table from tab-separated file with a #header line that defines the fields.  Ensures
- * all requiredFields (if any) are present. */
+ * all requiredFields (if any) are present.  The reportFileName is just used for error reporting and 
+ * should be NULL for most purposes.  This is used by edwSubmit though which
+ * first copies to a local file, and we want to report errors from the remote file. 
+ * We do know the remote file exists at least, because we just copied it. */
 {
-struct lineFile *lf = lineFileOpen(url, TRUE);
-char *line;
+/* Open file with fileName */
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+
+/* Substitute in reportFileName for error reporting */
+if (reportFileName != NULL)
+    {
+    if (differentString(reportFileName, fileName))
+        {
+	freeMem(lf->fileName);
+	lf->fileName = cloneString(reportFileName);
+	}
+    }
+else
+    {
+    reportFileName = fileName;
+    }
 
 /* Get first line and turn it into field list. */
+char *line;
 if (!lineFileNext(lf, &line, NULL))
-   errAbort("%s is empty", url);
+   errAbort("%s is empty", reportFileName);
 if (line[0] != '#')
-   errAbort("%s must start with '#' and field names on first line", url);
+   errAbort("%s must start with '#' and field names on first line", reportFileName);
 line = skipLeadingSpaces(line+1);
 int fieldCount = chopByChar(line, '\t', NULL, 0);
 char *fields[fieldCount];
@@ -85,11 +104,11 @@ for (i = 0; i < requiredCount; ++i)
     char *required = requiredFields[i];
     int ix = stringArrayIx(required, fields, fieldCount);
     if (ix < 0)
-        errAbort("%s is missing required field '%s'", url, required);
+        errAbort("%s is missing required field '%s'", reportFileName, required);
     }
 
 /* Create fieldedTable . */
-struct fieldedTable *table = fieldedTableNew(url, fields, fieldCount);
+struct fieldedTable *table = fieldedTableNew(reportFileName, fields, fieldCount);
 while (lineFileRowTab(lf, fields))
     {
     fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
