@@ -488,7 +488,18 @@ if (col->isSizeLink == isSizeLink)
 
 		break;
 	    case t_double:
-		fprintf(f, "ret->%s = sqlDouble(row[%d]);\n", col->name, colIx);
+		if (!withNull)
+		    {
+		    fprintf(f, "ret->%s = sqlDouble(row[%d]);\n", col->name, colIx);
+		    }
+		else
+		    {
+		    fprintf(f, "if (row[%d] != NULL)\n", colIx);
+		    fprintf(f, "    {\n");
+		    fprintf(f, "    ret->%s = needMem(sizeof(double));\n", col->name);
+		    fprintf(f, "    *(ret->%s) = sqlDouble(row[%d]);\n", col->name, colIx);
+		    fprintf(f, "    }\n");
+		    }
 		break;
 	    case t_string:
 	    case t_lstring:
