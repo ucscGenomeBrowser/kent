@@ -10,6 +10,8 @@
 #include "options.h"
 #include "jksql.h"
 #include "cheapcgi.h"
+#include "bits.h"
+#include "portable.h"
 #include "localmem.h"
 #include "bbiFile.h"
 #include "bigBed.h"
@@ -40,7 +42,7 @@ struct target
     struct target *next;
     struct edwQaEnrichTarget *target;  /* The database target structure */
     struct genomeRangeTree *grt;       /* Random access intersection structure for target */
-    long long overlapBases;	       /* Sum of all overlaps with target. */
+    double overlapBases;	       /* Sum of all overlaps with target. */
     long long uniqOverlapBases;	       /* Sum of unique overlaps with target. */
     };
 
@@ -202,6 +204,8 @@ bigBedFileClose(&bbi);
 freez(&bigBedPath);
 }
 
+#ifdef OLDWAY
+/* This old way is ~3 times as slow */
 void doEnrichmentsFromBigWig(struct sqlConnection *conn, 
     struct edwFile *ef, struct edwValidFile *vf, 
     struct edwAssembly *assembly, struct target *targetList)
@@ -212,6 +216,10 @@ char *bigWigPath = edwPathForFileId(conn, ef->id);
 struct bbiFile *bbi = bigWigFileOpen(bigWigPath);
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
 
+/* This takes a while, so let's figure out what parts take the time. */
+long totalBigQueryTime = 0;
+long totalOverlapTime = 0;
+
 /* Do a pretty complex loop that just aims to set target->overlapBases and ->uniqOverlapBases
  * for all targets.  This is complicated by just wanting to keep one chromosome worth of
  * bigWig data in memory. Also just for performance we do a lookup of target range tree to
@@ -220,10 +228,14 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     /* Get list of intervals in bigWig for this chromosome, and feed it to a rangeTree. */
     struct lm *lm = lmInit(0);
+    long startBigQueryTime = clock1000();
     struct bbiInterval *ivList = bigWigIntervalQuery(bbi, chrom->name, 0, chrom->size, lm);
+    long endBigQueryTime = clock1000();
+    totalBigQueryTime += endBigQueryTime - startBigQueryTime;
     struct bbiInterval *iv;
 
     /* Loop through all targets adding overlaps from ivList */
+    long startOverlapTime = clock1000();
     struct target *target;
     for (target = targetList; target != NULL; target = target->next)
         {
@@ -239,8 +251,12 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 		}
 	    }
 	}
+    long endOverlapTime = clock1000();
+    totalOverlapTime += endOverlapTime - startOverlapTime;
     lmCleanup(&lm);
     }
+
+verbose(2, "totalBig %0.3f, totalOverlap %0.3f\n", 0.001*totalBigQueryTime, 0.001*totalOverlapTime);
 
 /* Now loop through targets and save enrichment info to database */
 struct target *target;
@@ -252,6 +268,86 @@ for (target = targetList; target != NULL; target = target->next)
     edwQaEnrichFree(&enrich);
     }
 
+bbiChromInfoFreeList(&chromList);
+bigWigFileClose(&bbi);
+freez(&bigWigPath);
+}
+#endif /* OLDWAY */
+
+
+void doEnrichmentsFromBigWig(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, 
+    struct edwAssembly *assembly, struct target *targetList)
+/* Figure out enrichments from a bigBed file. */
+{
+/* Get path to bigBed, open it, and read all chromosomes. */
+char *bigWigPath = edwPathForFileId(conn, ef->id);
+struct bbiFile *bbi = bigWigFileOpen(bigWigPath);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+struct bigWigValsOnChrom *valsOnChrom = bigWigValsOnChromNew();
+
+/* This takes a while, so let's figure out what parts take the time. */
+long totalBigQueryTime = 0;
+long totalOverlapTime = 0;
+
+/* Do a pretty complex loop that just aims to set target->overlapBases and ->uniqOverlapBases
+ * for all targets.  This is complicated by just wanting to keep one chromosome worth of
+ * bigWig data in memory. Also just for performance we do a lookup of target range tree to
+ * get chromosome specific one to use, which avoids a hash lookup in the inner loop. */
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    long startBigQueryTime = clock1000();
+    boolean gotData = bigWigValsOnChromFetchData(valsOnChrom, chrom->name, bbi);
+    long endBigQueryTime = clock1000();
+    totalBigQueryTime += endBigQueryTime - startBigQueryTime;
+    if (gotData)
+	{
+	double *valBuf = valsOnChrom->valBuf;
+	Bits *covBuf = valsOnChrom->covBuf;
+
+	/* Loop through all targets adding overlaps from ivList */
+	long startOverlapTime = clock1000();
+	struct target *target;
+	for (target = targetList; target != NULL; target = target->next)
+	    {
+	    struct genomeRangeTree *grt = target->grt;
+	    struct rbTree *targetTree = genomeRangeTreeFindRangeTree(grt, chrom->name);
+	    if (targetTree != NULL)
+		{
+		struct range *range, *rangeList = rangeTreeList(targetTree);
+		for (range = rangeList; range != NULL; range = range->next)
+		    {
+		    int s = range->start, e = range->end, i;
+		    for (i=s; i<=e; ++i)
+		        {
+			if (bitReadOne(covBuf, i))
+			    {
+			    double x = valBuf[i];
+			    target->uniqOverlapBases += 1;
+			    target->overlapBases += x;
+			    }
+			}
+		    }
+		}
+	    }
+	long endOverlapTime = clock1000();
+	totalOverlapTime += endOverlapTime - startOverlapTime;
+	}
+    }
+
+verbose(2, "totalBig %0.3f, totalOverlap %0.3f\n", 0.001*totalBigQueryTime, 0.001*totalOverlapTime);
+
+/* Now loop through targets and save enrichment info to database */
+struct target *target;
+for (target = targetList; target != NULL; target = target->next)
+    {
+    struct edwQaEnrich *enrich = enrichFromOverlaps(ef, vf, assembly, target, 
+	target->overlapBases, target->uniqOverlapBases);
+    edwQaEnrichSaveToDb(conn, enrich, "edwQaEnrich", 128);
+    edwQaEnrichFree(&enrich);
+    }
+
+bigWigValsOnChromFree(&valsOnChrom);
 bbiChromInfoFreeList(&chromList);
 bigWigFileClose(&bbi);
 freez(&bigWigPath);
