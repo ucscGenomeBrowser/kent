@@ -216,7 +216,6 @@ void doBigBedReplicate(struct sqlConnection *conn, char *format, struct edwAssem
 /* Do correlation analysis between elder and younger and save result to
  * a new edwQaPairCorrelation record. Do this for a format where we have a bigBed file. */
 {
-uglyf("doBigBedReplicate %s vs %s\n", elderEf->edwFileName, youngerEf->edwFileName);
 int numColIx = 0;
 if (sameString(format, "narrowPeak") || sameString(format, "broadPeak"))
     numColIx = 6;	// signalVal
@@ -324,7 +323,6 @@ void doBigWigReplicate(struct sqlConnection *conn, struct edwAssembly *assembly,
 /* Do correlation analysis between elder and younger and save result to
  * a new edwQaPairCorrelation record. Do this for a format where we have a bigWig file. */
 {
-uglyf("doBigWigReplicate %s vs %s\n", elderEf->edwFileName, youngerEf->edwFileName);
 char *enrichedIn = elderVf->enrichedIn;
 if (!isEmpty(enrichedIn) && !sameString(enrichedIn, "unknown"))
     {
@@ -379,7 +377,8 @@ void doReplicatePair(struct sqlConnection *conn, struct edwAssembly *assembly,
     struct edwFile *youngerEf, struct edwValidFile *youngerVf)
 /* Do processing on a pair of replicates. */
 {
-uglyf("And now for the show:\n\t%s\t%s\n", elderEf->submitFileName, youngerEf->submitFileName);
+verbose(1, "processing pair %lld %s  %lld %s\n", (long long)elderEf->id, 
+    elderEf->submitFileName, (long long)youngerEf->id, youngerEf->submitFileName);
 char *format = elderVf->format;
 if (sameString(format, "fastq") || sameString(format, "bam") || sameString(format, "gff")
     || sameString(format, "gtf"))
