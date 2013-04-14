@@ -256,7 +256,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     lmCleanup(&lm);
     }
 
-verbose(2, "totalBig %0.3f, totalOverlap %0.3f\n", 0.001*totalBigQueryTime, 0.001*totalOverlapTime);
+verbose(1, "totalBig %0.3f, totalOverlap %0.3f\n", 0.001*totalBigQueryTime, 0.001*totalOverlapTime);
 
 /* Now loop through targets and save enrichment info to database */
 struct target *target;
@@ -335,7 +335,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	}
     }
 
-verbose(2, "totalBig %0.3f, totalOverlap %0.3f\n", 0.001*totalBigQueryTime, 0.001*totalOverlapTime);
+verbose(1, "totalBig %0.3f, totalOverlap %0.3f\n", 0.001*totalBigQueryTime, 0.001*totalOverlapTime);
 
 /* Now loop through targets and save enrichment info to database */
 struct target *target;
@@ -445,7 +445,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
     {
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
-    verbose(1, "processing %s aka %s\n", ef->submitFileName, path);
+    verbose(1, "%lld processing %s aka %s\n", (long long)ef->id, ef->submitFileName, path);
 
     if (ef->tags) // All ones we care about have tags
 	doEnrichments(conn, ef, path, assemblyToTarget);

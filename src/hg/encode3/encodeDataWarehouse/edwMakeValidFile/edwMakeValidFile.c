@@ -693,7 +693,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	}
     else
 	{
-	verbose(1, "processing %d %s %s\n", ef->id, ef->edwFileName, ef->submitFileName);
+	verbose(1, "processing %lld %s %s\n", (long long)ef->id, ef->edwFileName, ef->submitFileName);
 	char path[PATH_LEN];
 	safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
 	if (!isEmpty(ef->tags)) // All ones we care about have tags
