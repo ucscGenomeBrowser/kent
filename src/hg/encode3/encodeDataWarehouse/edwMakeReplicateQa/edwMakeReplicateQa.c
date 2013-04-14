@@ -10,6 +10,7 @@
 #include "genomeRangeTree.h"
 #include "correlate.h"
 #include "bigWig.h"
+#include "hmmstats.h"
 #include "bigBed.h"
 // #include "bamFile.h"
 #include "portable.h"
@@ -56,18 +57,36 @@ if (isEmpty(sampleBed))
 return bed3LoadAll(sampleBed);
 }
 
+void setSampleSampleEnrichment(struct edwQaPairSampleOverlap *sam, char *format, 
+    struct edwAssembly *assembly, struct edwValidFile *elderVf, struct edwValidFile *youngerVf)
+/* Figure out sample/sample enrichment. */
+{
+double overlap = sam->sampleOverlapBases;
+double covElder = overlap/sam->elderSampleBases;
+double covYounger = overlap/sam->youngerSampleBases;
+if (sameString(format, "fastq") || sameString(format, "bam"))
+    {
+    /* Adjust for not all bases in fastq sample mapping. */
+    covElder /= elderVf->mapRatio;
+    covYounger /= youngerVf->mapRatio;
+    }
+double enrichment1 = covElder/((double)sam->youngerSampleBases/assembly->realBaseCount);
+double enrichment2 = covYounger/((double)sam->elderSampleBases/assembly->realBaseCount);
+sam->sampleSampleEnrichment = 0.5 * (enrichment1+enrichment2);
+}
+
 void doSampleReplicate(struct sqlConnection *conn, char *format, struct edwAssembly *assembly,
     struct edwFile *elderEf, struct edwValidFile *elderVf,
     struct edwFile *youngerEf, struct edwValidFile *youngerVf)
 /* Do correlation analysis between elder and younger and save result to
- * a new edwQaPairCorrelate record. Do this for a format where we have a bed3 sample file. */
+ * a new edwQaPairSampleOverlap record. Do this for a format where we have a bed3 sample file. */
 {
-struct edwQaPairCorrelate *cor;
-AllocVar(cor);
-cor->elderFileId = elderVf->fileId;
-cor->youngerFileId = youngerVf->fileId;
-cor->elderSampleBases = elderVf->basesInSample;
-cor->youngerSampleBases = youngerVf->basesInSample;
+struct edwQaPairSampleOverlap *sam;
+AllocVar(sam);
+sam->elderFileId = elderVf->fileId;
+sam->youngerFileId = youngerVf->fileId;
+sam->elderSampleBases = elderVf->basesInSample;
+sam->youngerSampleBases = youngerVf->basesInSample;
 
 /* Load up elder into genome range tree. */
 struct bed3 *elderBedList = edwLoadSampleBed3(conn, elderVf);
@@ -82,24 +101,12 @@ for (bed = youngerBedList; bed != NULL; bed = bed->next)
 	bed->chrom, bed->chromStart, bed->chromEnd);
     totalOverlap += overlap;
     }
-cor->sampleOverlapBases = totalOverlap;
-
-/* Figure out sample/sample enrichment. */
-double overlap = totalOverlap;
-double covElder = overlap/cor->elderSampleBases;
-double covYounger = overlap/cor->youngerSampleBases;
-if (sameString(format, "fastq"))
-    {
-    /* Adjust for not all bases in fastq sample mapping. */
-    covElder /= elderVf->mapRatio;
-    covYounger /= youngerVf->mapRatio;
-    }
-double enrichment1 = covElder/((double)cor->youngerSampleBases/assembly->realBaseCount);
-double enrichment2 = covYounger/((double)cor->elderSampleBases/assembly->realBaseCount);
-cor->sampleSampleEnrichment = 0.5 * (enrichment1+enrichment2);
+sam->sampleOverlapBases = totalOverlap;
+setSampleSampleEnrichment(sam, format, assembly, elderVf, youngerVf);
 
 /* Save to database, clean up, go home. */
-edwQaPairCorrelateSaveToDb(conn, cor, "edwQaPairCorrelate", 128);
+edwQaPairSampleOverlapSaveToDb(conn, sam, "edwQaPairSampleOverlap", 128);
+freez(&sam);
 genomeRangeTreeFree(&elderGrt);
 bed3FreeList(&elderBedList);
 bed3FreeList(&youngerBedList);
@@ -118,14 +125,31 @@ while (--tabsBefore >= 0)
 return atof(s);    // Use atof so don't need to worry about trailing chars 
 }
 
-static void addBbTargetedCorrelations(struct bbiChromInfo *chrom, struct rbTree *targetRanges,
-    struct bbiFile *aBbi, struct bbiFile *bBbi, int numColIx, struct correlate *c)
+long long bbIntervalListTotalSpan(struct bigBedInterval *ivList)
+/* Return sum of end-start for whole list */
+{
+long long total = 0;
+struct bigBedInterval *iv;
+for (iv = ivList; iv != NULL; iv = iv->next)
+    total += iv->end - iv->start;
+return total;
+}
+
+static void addBbCorrelations(struct bbiChromInfo *chrom, struct genomeRangeTree *targetGrt,
+    struct bbiFile *aBbi, struct bbiFile *bBbi, 
+    int numColIx, struct correlate *c, struct correlate *cInEnriched,
+    long long *aTotalSpan, long long *bTotalSpan, long long *overlapTotalSpan)
 /* Find bits of a and b that overlap and also overlap with targetRanges.  Try to extract
- * some number from the bed (which number depends on format) */
+ * some number from the bed (which number depends on format). Returns total number of
+ * overlapping bases between the two big-beds. */
 {
 struct lm *lm = lmInit(0);
+struct rbTree *targetRanges = NULL;
+if (targetGrt != NULL)
+    targetRanges = genomeRangeTreeFindRangeTree(targetGrt, chrom->name);
 struct bigBedInterval *a, *aList = bigBedIntervalQuery(aBbi, chrom->name, 0, chrom->size, 0, lm);
 struct bigBedInterval *b, *bList = bigBedIntervalQuery(bBbi, chrom->name, 0, chrom->size, 0, lm);
+long long totalOverlap = 0;
 
 /* This is a slightly complex but useful loop for two sorted lists that will get overlaps between 
  * the two in linear time. */
@@ -137,15 +161,24 @@ for (;;)
         break;
     int s = max(a->start,b->start);
     int e = min(a->end,b->end);
-    if (s < e)
+    int overlap = e - s;
+    if (overlap > 0)
         {
+	totalOverlap += overlap;
+
+	/* Do correlation over a/b overlap */
+	double aVal = getDoubleValAt(a->rest, numColIx);
+	double bVal = getDoubleValAt(b->rest, numColIx);
+	correlateNextMulti(c, aVal, bVal, overlap);
+
 	/* Got intersection of a and b - is it also in targetRange? */
-	int targetOverlap = rangeTreeOverlapSize(targetRanges, s, e);
-	if (targetOverlap > 0)
+	if (targetRanges)
 	    {
-	    double aVal = getDoubleValAt(a->rest, numColIx);
-	    double bVal = getDoubleValAt(b->rest, numColIx);
-	    correlateNextMulti(c, aVal, bVal, targetOverlap);
+	    int targetOverlap = rangeTreeOverlapSize(targetRanges, s, e);
+	    if (targetOverlap > 0)
+		{
+		correlateNextMulti(cInEnriched, aVal, bVal, targetOverlap);
+		}
 	    }
 	}
     if (a->end < b->end)
@@ -153,6 +186,9 @@ for (;;)
     else 
        b = b->next;
     }
+*overlapTotalSpan += totalOverlap;
+*aTotalSpan += bbIntervalListTotalSpan(aList);
+*bTotalSpan += bbIntervalListTotalSpan(bList);
 lmCleanup(&lm);
 }
 
@@ -178,7 +214,7 @@ void doBigBedReplicate(struct sqlConnection *conn, char *format, struct edwAssem
     struct edwFile *elderEf, struct edwValidFile *elderVf,
     struct edwFile *youngerEf, struct edwValidFile *youngerVf)
 /* Do correlation analysis between elder and younger and save result to
- * a new edwQaPairCorrelate record. Do this for a format where we have a bigBed file. */
+ * a new edwQaPairCorrelation record. Do this for a format where we have a bigBed file. */
 {
 uglyf("doBigBedReplicate %s vs %s\n", elderEf->edwFileName, youngerEf->edwFileName);
 int numColIx = 0;
@@ -188,70 +224,105 @@ else
     numColIx = 4;	// score
 numColIx -= 3;		// Subtract off chrom/start/end
 char *enrichedIn = elderVf->enrichedIn;
+struct genomeRangeTree *targetGrt = NULL;
 if (!isEmpty(enrichedIn) && !sameString(enrichedIn, "unknown"))
+    targetGrt = genomeRangeTreeForTarget(conn, assembly, enrichedIn);
+
+/* Get open big bed files for both younger and older. */
+char *elderPath = edwPathForFileId(conn, elderEf->id);
+char *youngerPath = edwPathForFileId(conn, youngerEf->id);
+struct bbiFile *elderBbi = bigBedFileOpen(elderPath);
+struct bbiFile *youngerBbi = bigBedFileOpen(youngerPath);
+
+/* Loop through a chromosome at a time adding to correlation, and at the end save result in r.*/
+struct correlate *c = correlateNew(), *cInEnriched = correlateNew();
+struct bbiChromInfo *chrom, *chromList = bbiChromList(elderBbi);
+long long elderTotalSpan = 0, youngerTotalSpan = 0, overlapTotalSpan = 0;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    struct genomeRangeTree *targetGrt = genomeRangeTreeForTarget(conn, assembly, enrichedIn);
-
-    /* Get open big bed files for both younger and older. */
-    char *elderPath = edwPathForFileId(conn, elderEf->id);
-    char *youngerPath = edwPathForFileId(conn, youngerEf->id);
-    struct bbiFile *elderBbi = bigBedFileOpen(elderPath);
-    struct bbiFile *youngerBbi = bigBedFileOpen(youngerPath);
-
-    /* Loop through a chromosome at a time adding to correlation, and at the end save result in r.*/
-    struct correlate *c = correlateNew();
-    struct bbiChromInfo *chrom, *chromList = bbiChromList(elderBbi);
-    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
-        {
-	struct rbTree *targetRanges = genomeRangeTreeFindRangeTree(targetGrt, chrom->name);
-	if (targetRanges != NULL)
-	    addBbTargetedCorrelations(chrom, targetRanges, elderBbi, youngerBbi, numColIx, c);
-	}
-
-    /* Make up correlation structure . */
-    struct edwQaPairCorrelate *cor;
-    AllocVar(cor);
-    cor->elderFileId = elderVf->fileId;
-    cor->youngerFileId = youngerVf->fileId;
-    cor->pearsonInEnriched = correlateResult(c);
-    cor->gotPearsonInEnriched = TRUE;
-    edwQaPairCorrelateSaveToDb(conn, cor, "edwQaPairCorrelate", 128);
-
-
-    genomeRangeTreeFree(&targetGrt);
-    freez(&cor);
-    correlateFree(&c);
-    bigBedFileClose(&youngerBbi);
-    bigBedFileClose(&elderBbi);
-    freez(&youngerPath);
-    freez(&elderPath);
+    addBbCorrelations(chrom, targetGrt, elderBbi, youngerBbi, numColIx, c, cInEnriched,
+	&elderTotalSpan, &youngerTotalSpan, &overlapTotalSpan);
     }
+
+/* Make up correlation structure and save. */
+struct edwQaPairCorrelation *cor;
+AllocVar(cor);
+cor->elderFileId = elderVf->fileId;
+cor->youngerFileId = youngerVf->fileId;
+cor->pearsonOverall = correlateResult(c);
+cor->pearsonInEnriched = correlateResult(cInEnriched);
+edwQaPairCorrelationSaveToDb(conn, cor, "edwQaPairCorrelation", 128);
+freez(&cor);
+
+/* Also make up sample structure and save.  */
+struct edwQaPairSampleOverlap *sam;
+AllocVar(sam);
+sam->elderFileId = elderVf->fileId;
+sam->youngerFileId = youngerVf->fileId;
+sam->elderSampleBases = elderTotalSpan;
+sam->youngerSampleBases = youngerTotalSpan;
+sam->sampleOverlapBases = overlapTotalSpan;
+setSampleSampleEnrichment(sam, format, assembly, elderVf, youngerVf);
+edwQaPairSampleOverlapSaveToDb(conn, sam, "edwQaPairSampleOverlap", 128);
+freez(&sam);
+
+genomeRangeTreeFree(&targetGrt);
+correlateFree(&c);
+bigBedFileClose(&youngerBbi);
+bigBedFileClose(&elderBbi);
+freez(&youngerPath);
+freez(&elderPath);
 }
 
-static void addBwTargetedCorrelations(struct bbiChromInfo *chrom, struct rbTree *targetRanges,
+static void addBwCorrelations(struct bbiChromInfo *chrom, struct genomeRangeTree *targetGrt,
     struct bigWigValsOnChrom *aVals, struct bigWigValsOnChrom *bVals,
-    struct bbiFile *aBbi, struct bbiFile *bBbi, struct correlate *c)
+    struct bbiFile *aBbi, struct bbiFile *bBbi, 
+    double aThreshold, double bThreshold,
+    struct correlate *c, struct correlate *cInEnriched, struct correlate *cClipped)
 /* Find bits of a and b that overlap and also overlap with targetRanges.  Do correlations there */
 {
+struct rbTree *targetRanges = genomeRangeTreeFindRangeTree(targetGrt, chrom->name);
 if (bigWigValsOnChromFetchData(aVals, chrom->name, aBbi) &&
     bigWigValsOnChromFetchData(bVals, chrom->name, bBbi) )
     {
     double *a = aVals->valBuf, *b = bVals->valBuf;
-    struct range *range, *rangeList = rangeTreeList(targetRanges);
-    for (range = rangeList; range != NULL; range = range->next)
-        {
-	int start = range->start, end = range->end, i;
-	for (i=start; i<end; ++i)
-	    correlateNext(c, a[i], b[i]);
+    int i, end = chrom->size;
+    for (i=0; i<end; ++i)
+	{
+	double aVal = a[i], bVal = b[i];
+	correlateNext(c, aVal, bVal);
+	if (aVal > aThreshold) aVal = aThreshold;
+	if (bVal > bThreshold) bVal = bThreshold;
+	correlateNext(cClipped, aVal, bVal);
+	}
+    if (targetRanges != NULL)
+	{
+	struct range *range, *rangeList = rangeTreeList(targetRanges);
+	for (range = rangeList; range != NULL; range = range->next)
+	    {
+	    int start = range->start, end = range->end;
+	    for (i=start; i<end; ++i)
+		correlateNext(cInEnriched, a[i], b[i]);
+	    }
 	}
     }
+}
+
+double twoStdsOverMean(struct bbiFile *bbi)
+/* Figure out what is two standard deviations over mean for a bigWig file.  This is
+ * an often useful threshold. */
+{
+struct bbiSummaryElement sum = bbiTotalSummary(bbi);
+double mean = sum.sumData/sum.validCount;
+double std = calcStdFromSums(sum.sumData, sum.sumSquares, sum.validCount);
+return mean + 2*std;
 }
 
 void doBigWigReplicate(struct sqlConnection *conn, struct edwAssembly *assembly,
     struct edwFile *elderEf, struct edwValidFile *elderVf,
     struct edwFile *youngerEf, struct edwValidFile *youngerVf)
 /* Do correlation analysis between elder and younger and save result to
- * a new edwQaPairCorrelate record. Do this for a format where we have a bigWig file. */
+ * a new edwQaPairCorrelation record. Do this for a format where we have a bigWig file. */
 {
 uglyf("doBigWigReplicate %s vs %s\n", elderEf->edwFileName, youngerEf->edwFileName);
 char *enrichedIn = elderVf->enrichedIn;
@@ -265,25 +336,30 @@ if (!isEmpty(enrichedIn) && !sameString(enrichedIn, "unknown"))
     struct bbiFile *elderBbi = bigWigFileOpen(elderPath);
     struct bbiFile *youngerBbi = bigWigFileOpen(youngerPath);
 
+    /* Figure out thresholds */
+    double elderThreshold = twoStdsOverMean(elderBbi);
+    double youngerThreshold = twoStdsOverMean(youngerBbi);
+
     /* Loop through a chromosome at a time adding to correlation, and at the end save result in r.*/
-    struct correlate *c = correlateNew();
+    struct correlate *c = correlateNew(), *cInEnriched = correlateNew(), *cClipped = correlateNew();
     struct bbiChromInfo *chrom, *chromList = bbiChromList(elderBbi);
     struct bigWigValsOnChrom *aVals = bigWigValsOnChromNew();
     struct bigWigValsOnChrom *bVals = bigWigValsOnChromNew();
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
         {
-	struct rbTree *targetRanges = genomeRangeTreeFindRangeTree(targetGrt, chrom->name);
-	if (targetRanges != NULL)
-	    addBwTargetedCorrelations(chrom, targetRanges, aVals, bVals, elderBbi, youngerBbi, c);
+	addBwCorrelations(chrom, targetGrt, aVals, bVals, elderBbi, youngerBbi, 
+	    elderThreshold, youngerThreshold, c, cInEnriched, cClipped);
 	}
 
     /* Make up correlation structure . */
-    struct edwQaPairCorrelate *cor;
+    struct edwQaPairCorrelation *cor;
     AllocVar(cor);
     cor->elderFileId = elderVf->fileId;
     cor->youngerFileId = youngerVf->fileId;
-    cor->gotPearsonInEnriched = TRUE;
-    edwQaPairCorrelateSaveToDb(conn, cor, "edwQaPairCorrelate", 128);
+    cor->pearsonOverall = correlateResult(c);
+    cor->pearsonInEnriched = correlateResult(cInEnriched);
+    cor->pearsonClipped = correlateResult(cClipped);
+    edwQaPairCorrelationSaveToDb(conn, cor, "edwQaPairCorrelation", 128);
 
 
     bigWigValsOnChromFree(&bVals);
