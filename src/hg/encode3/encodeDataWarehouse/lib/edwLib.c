@@ -552,7 +552,7 @@ return edwFileLoadByQuery(conn, query);
 
 struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId, int endId)
 /* Return list of all files that are intact (finished uploading and MD5 checked) 
- * with file IDs between startId and endId - including endId*/
+ * with file IDs between startId and endId - including endId */
 {
 char query[128];
 safef(query, sizeof(query), 
@@ -637,4 +637,18 @@ return sameString(format, "broadPeak") || sameString(format, "narrowPeak") ||
 	 sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
 	 sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
 	 sameString(format, "shortFrags");
+}
+
+void edwWriteErrToStderrAndTable(struct sqlConnection *conn, char *table, int id, char *err)
+/* Write out error message to errorMessage field of table. */
+{
+char *trimmedError = trimSpaces(err);
+warn("%s", trimmedError);
+char escapedErrorMessage[2*strlen(trimmedError)+1];
+sqlEscapeString2(escapedErrorMessage, trimmedError);
+struct dyString *query = dyStringNew(0);
+dyStringPrintf(query, "update %s set errorMessage='%s' where id=%d", 
+    table, escapedErrorMessage, id);
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
 }
