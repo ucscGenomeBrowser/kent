@@ -207,15 +207,7 @@ return sqlLastAutoId(conn);
 void writeErrToTableAndDie(struct sqlConnection *conn, char *table, int id, char *err)
 /* Write out error to stderr and also save it in errorMessage field of submit table. */
 {
-char *trimmedError = trimSpaces(err);
-warn("%s", trimmedError);
-char escapedErrorMessage[2*strlen(trimmedError)+1];
-sqlEscapeString2(escapedErrorMessage, trimmedError);
-struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "update %s set errorMessage='%s' where id=%d", 
-    table, escapedErrorMessage, id);
-sqlUpdate(conn, query->string);
-dyStringFree(&query);
+edwWriteErrToStderrAndTable(conn, table, id, err);
 noWarnAbort();
 }
 
@@ -485,14 +477,16 @@ char *edwSupportedEnrichedIn[] = {"unknown", "exon", "intron", "promoter", "codi
     "utr", "utr3", "utr5", "open"};
 int edwSupportedEnrichedInCount = ArraySize(edwSupportedEnrichedIn);
 
-struct edwFile *edwParseSubmitFile(char *submitLocalPath)
+struct edwFile *edwParseSubmitFile(char *submitLocalPath, char *submitUrl)
 /* Load and parse up this file as fielded table, make sure all required fields are there,
  * and calculate indexes of required fields.   This produces an edwFile list, but with
- * still quite a few fields missing - just what can be filled in from submit filled in. */
+ * still quite a few fields missing - just what can be filled in from submit filled in. 
+ * The submitUrl is just used for error reporting.  If it's local, just make it the
+ * same as submitLocalPath. */
 {
 char *requiredFields[] = {"file_name", "format", "output_type", "experiment", "replicate", 
     "enriched_in", "md5_sum", "size",  "modified", "valid_key"};
-struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, 
+struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, submitUrl,
 	requiredFields, ArraySize(requiredFields));
 
 /* Get offsets of all required fields */
@@ -629,7 +623,7 @@ if (errCatchStart(errCatch))
 
     /* By now there is a submit file on the local file system.  */
 
-    bfList = edwParseSubmitFile(submitLocalPath);
+    bfList = edwParseSubmitFile(submitLocalPath, submitUrl);
 
     /* Save our progress so far to submit table. */
     safef(query, sizeof(query), 
