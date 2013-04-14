@@ -181,17 +181,27 @@ CREATE TABLE edwQaEnrich (
     PRIMARY KEY(id)
 );
 
-#A correlation between two files of the same type.
-CREATE TABLE edwQaPairCorrelate (
-    id int unsigned auto_increment not null,	# Id of this correlation pair
+#A comparison of the amount of overlap between two samples that cover ~0.1% to 10% of target.
+CREATE TABLE edwQaPairSampleOverlap (
+    id int unsigned auto_increment not null,	# Id of this qa pair
     elderFileId int unsigned not null,	# Id of elder (smaller fileId) in correlated pair
     youngerFileId int unsigned not null,	# Id of younger (larger fileId) in correlated pair
     elderSampleBases bigint not null,	# Number of bases in elder sample
     youngerSampleBases bigint not null,	# Number of bases in younger sample
     sampleOverlapBases bigint not null,	# Number of bases that overlap between younger and elder sample
     sampleSampleEnrichment double not null,	# Amount samples overlap more than expected.
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#A correlation between two files of the same type.
+CREATE TABLE edwQaPairCorrelation (
+    id int unsigned auto_increment not null,	# Id of this correlation pair
+    elderFileId int unsigned not null,	# Id of elder (smaller fileId) in correlated pair
+    youngerFileId int unsigned not null,	# Id of younger (larger fileId) in correlated pair
     pearsonInEnriched double not null,	# Pearson's R inside enriched areas where there is overlap
-    gotPearsonInEnriched tinyint unsigned not null,	# Nonzero of above value is valid
+    pearsonOverall double not null,	# Pearson's R over all places where both have data
+    pearsonClipped double not null,	# Pearson's R clipped at two standard deviations up from the mean
               #Indices
     PRIMARY KEY(id)
 );

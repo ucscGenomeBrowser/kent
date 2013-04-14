@@ -166,16 +166,25 @@ table edwQaEnrich
     double uniqEnrich;  "coverage/sampleCoverage"
     )
 
-table edwQaPairCorrelate
-"A correlation between two files of the same type."
+table edwQaPairSampleOverlap
+"A comparison of the amount of overlap between two samples that cover ~0.1% to 10% of target."
     (
-    uint id;    "Id of this correlation pair"
+    uint id;    "Id of this qa pair"
     uint elderFileId;   "Id of elder (smaller fileId) in correlated pair"
     uint youngerFileId;  "Id of younger (larger fileId) in correlated pair"
     bigInt elderSampleBases;   "Number of bases in elder sample"
     bigInt youngerSampleBases; "Number of bases in younger sample"
     bigInt sampleOverlapBases; "Number of bases that overlap between younger and elder sample"
     double sampleSampleEnrichment; "Amount samples overlap more than expected."
+    )
+
+table edwQaPairCorrelation
+"A correlation between two files of the same type."
+    (
+    uint id;    "Id of this correlation pair"
+    uint elderFileId;   "Id of elder (smaller fileId) in correlated pair"
+    uint youngerFileId;  "Id of younger (larger fileId) in correlated pair"
     double pearsonInEnriched;  "Pearson's R inside enriched areas where there is overlap"
-    ubyte gotPearsonInEnriched; "Nonzero of above value is valid"
+    double pearsonOverall; "Pearson's R over all places where both have data"
+    double pearsonClipped; "Pearson's R clipped at two standard deviations up from the mean" 
     )

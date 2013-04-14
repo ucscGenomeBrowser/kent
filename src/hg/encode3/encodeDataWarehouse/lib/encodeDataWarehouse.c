@@ -2528,8 +2528,8 @@ fprintf(f, "%g", el->uniqEnrich);
 fputc(lastSep,f);
 }
 
-void edwQaPairCorrelateStaticLoad(char **row, struct edwQaPairCorrelate *ret)
-/* Load a row from edwQaPairCorrelate table into ret.  The contents of ret will
+void edwQaPairSampleOverlapStaticLoad(char **row, struct edwQaPairSampleOverlap *ret)
+/* Load a row from edwQaPairSampleOverlap table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -2540,25 +2540,23 @@ ret->elderSampleBases = sqlLongLong(row[3]);
 ret->youngerSampleBases = sqlLongLong(row[4]);
 ret->sampleOverlapBases = sqlLongLong(row[5]);
 ret->sampleSampleEnrichment = sqlDouble(row[6]);
-ret->pearsonInEnriched = sqlDouble(row[7]);
-ret->gotPearsonInEnriched = sqlUnsigned(row[8]);
 }
 
-struct edwQaPairCorrelate *edwQaPairCorrelateLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all edwQaPairCorrelate from table that satisfy the query given.  
+struct edwQaPairSampleOverlap *edwQaPairSampleOverlapLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwQaPairSampleOverlap from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with edwQaPairCorrelateFreeList(). */
+ * Dispose of this with edwQaPairSampleOverlapFreeList(). */
 {
-struct edwQaPairCorrelate *list = NULL, *el;
+struct edwQaPairSampleOverlap *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = edwQaPairCorrelateLoad(row);
+    el = edwQaPairSampleOverlapLoad(row);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -2566,43 +2564,43 @@ sqlFreeResult(&sr);
 return list;
 }
 
-void edwQaPairCorrelateSaveToDb(struct sqlConnection *conn, struct edwQaPairCorrelate *el, char *tableName, int updateSize)
-/* Save edwQaPairCorrelate as a row to the table specified by tableName. 
+void edwQaPairSampleOverlapSaveToDb(struct sqlConnection *conn, struct edwQaPairSampleOverlap *el, char *tableName, int updateSize)
+/* Save edwQaPairSampleOverlap as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
  * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use edwQaPairCorrelateSaveToDbEscaped() */
+ * If worried about this use edwQaPairSampleOverlapSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g,%g,%u)", 
-	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment,  el->pearsonInEnriched,  el->gotPearsonInEnriched);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g)", 
+	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void edwQaPairCorrelateSaveToDbEscaped(struct sqlConnection *conn, struct edwQaPairCorrelate *el, char *tableName, int updateSize)
-/* Save edwQaPairCorrelate as a row to the table specified by tableName. 
+void edwQaPairSampleOverlapSaveToDbEscaped(struct sqlConnection *conn, struct edwQaPairSampleOverlap *el, char *tableName, int updateSize)
+/* Save edwQaPairSampleOverlap as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than edwQaPairCorrelateSaveToDb().
+ * escapes all simple strings (not arrays of string) but may be slower than edwQaPairSampleOverlapSaveToDb().
  * For example automatically copies and converts: 
  * "autosql's features include" --> "autosql\'s features include" 
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g,%g,%u)", 
-	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment,  el->pearsonInEnriched,  el->gotPearsonInEnriched);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g)", 
+	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-struct edwQaPairCorrelate *edwQaPairCorrelateLoad(char **row)
-/* Load a edwQaPairCorrelate from row fetched with select * from edwQaPairCorrelate
- * from database.  Dispose of this with edwQaPairCorrelateFree(). */
+struct edwQaPairSampleOverlap *edwQaPairSampleOverlapLoad(char **row)
+/* Load a edwQaPairSampleOverlap from row fetched with select * from edwQaPairSampleOverlap
+ * from database.  Dispose of this with edwQaPairSampleOverlapFree(). */
 {
-struct edwQaPairCorrelate *ret;
+struct edwQaPairSampleOverlap *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
@@ -2612,22 +2610,20 @@ ret->elderSampleBases = sqlLongLong(row[3]);
 ret->youngerSampleBases = sqlLongLong(row[4]);
 ret->sampleOverlapBases = sqlLongLong(row[5]);
 ret->sampleSampleEnrichment = sqlDouble(row[6]);
-ret->pearsonInEnriched = sqlDouble(row[7]);
-ret->gotPearsonInEnriched = sqlUnsigned(row[8]);
 return ret;
 }
 
-struct edwQaPairCorrelate *edwQaPairCorrelateLoadAll(char *fileName) 
-/* Load all edwQaPairCorrelate from a whitespace-separated file.
- * Dispose of this with edwQaPairCorrelateFreeList(). */
+struct edwQaPairSampleOverlap *edwQaPairSampleOverlapLoadAll(char *fileName) 
+/* Load all edwQaPairSampleOverlap from a whitespace-separated file.
+ * Dispose of this with edwQaPairSampleOverlapFreeList(). */
 {
-struct edwQaPairCorrelate *list = NULL, *el;
+struct edwQaPairSampleOverlap *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
-    el = edwQaPairCorrelateLoad(row);
+    el = edwQaPairSampleOverlapLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -2635,17 +2631,17 @@ slReverse(&list);
 return list;
 }
 
-struct edwQaPairCorrelate *edwQaPairCorrelateLoadAllByChar(char *fileName, char chopper) 
-/* Load all edwQaPairCorrelate from a chopper separated file.
- * Dispose of this with edwQaPairCorrelateFreeList(). */
+struct edwQaPairSampleOverlap *edwQaPairSampleOverlapLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaPairSampleOverlap from a chopper separated file.
+ * Dispose of this with edwQaPairSampleOverlapFreeList(). */
 {
-struct edwQaPairCorrelate *list = NULL, *el;
+struct edwQaPairSampleOverlap *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = edwQaPairCorrelateLoad(row);
+    el = edwQaPairSampleOverlapLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -2653,10 +2649,10 @@ slReverse(&list);
 return list;
 }
 
-struct edwQaPairCorrelate *edwQaPairCorrelateCommaIn(char **pS, struct edwQaPairCorrelate *ret)
-/* Create a edwQaPairCorrelate out of a comma separated string. 
+struct edwQaPairSampleOverlap *edwQaPairSampleOverlapCommaIn(char **pS, struct edwQaPairSampleOverlap *ret)
+/* Create a edwQaPairSampleOverlap out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new edwQaPairCorrelate */
+ * return a new edwQaPairSampleOverlap */
 {
 char *s = *pS;
 
@@ -2669,37 +2665,35 @@ ret->elderSampleBases = sqlLongLongComma(&s);
 ret->youngerSampleBases = sqlLongLongComma(&s);
 ret->sampleOverlapBases = sqlLongLongComma(&s);
 ret->sampleSampleEnrichment = sqlDoubleComma(&s);
-ret->pearsonInEnriched = sqlDoubleComma(&s);
-ret->gotPearsonInEnriched = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
 
-void edwQaPairCorrelateFree(struct edwQaPairCorrelate **pEl)
-/* Free a single dynamically allocated edwQaPairCorrelate such as created
- * with edwQaPairCorrelateLoad(). */
+void edwQaPairSampleOverlapFree(struct edwQaPairSampleOverlap **pEl)
+/* Free a single dynamically allocated edwQaPairSampleOverlap such as created
+ * with edwQaPairSampleOverlapLoad(). */
 {
-struct edwQaPairCorrelate *el;
+struct edwQaPairSampleOverlap *el;
 
 if ((el = *pEl) == NULL) return;
 freez(pEl);
 }
 
-void edwQaPairCorrelateFreeList(struct edwQaPairCorrelate **pList)
-/* Free a list of dynamically allocated edwQaPairCorrelate's */
+void edwQaPairSampleOverlapFreeList(struct edwQaPairSampleOverlap **pList)
+/* Free a list of dynamically allocated edwQaPairSampleOverlap's */
 {
-struct edwQaPairCorrelate *el, *next;
+struct edwQaPairSampleOverlap *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    edwQaPairCorrelateFree(&el);
+    edwQaPairSampleOverlapFree(&el);
     }
 *pList = NULL;
 }
 
-void edwQaPairCorrelateOutput(struct edwQaPairCorrelate *el, FILE *f, char sep, char lastSep) 
-/* Print out edwQaPairCorrelate.  Separate fields with sep. Follow last field with lastSep. */
+void edwQaPairSampleOverlapOutput(struct edwQaPairSampleOverlap *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaPairSampleOverlap.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);
@@ -2714,10 +2708,184 @@ fputc(sep,f);
 fprintf(f, "%lld", el->sampleOverlapBases);
 fputc(sep,f);
 fprintf(f, "%g", el->sampleSampleEnrichment);
+fputc(lastSep,f);
+}
+
+void edwQaPairCorrelationStaticLoad(char **row, struct edwQaPairCorrelation *ret)
+/* Load a row from edwQaPairCorrelation table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->elderFileId = sqlUnsigned(row[1]);
+ret->youngerFileId = sqlUnsigned(row[2]);
+ret->pearsonInEnriched = sqlDouble(row[3]);
+ret->pearsonOverall = sqlDouble(row[4]);
+ret->pearsonClipped = sqlDouble(row[5]);
+}
+
+struct edwQaPairCorrelation *edwQaPairCorrelationLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwQaPairCorrelation from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwQaPairCorrelationFreeList(). */
+{
+struct edwQaPairCorrelation *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwQaPairCorrelationLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwQaPairCorrelationSaveToDb(struct sqlConnection *conn, struct edwQaPairCorrelation *el, char *tableName, int updateSize)
+/* Save edwQaPairCorrelation as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use edwQaPairCorrelationSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%g)", 
+	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->pearsonInEnriched,  el->pearsonOverall,  el->pearsonClipped);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void edwQaPairCorrelationSaveToDbEscaped(struct sqlConnection *conn, struct edwQaPairCorrelation *el, char *tableName, int updateSize)
+/* Save edwQaPairCorrelation as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than edwQaPairCorrelationSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%g)", 
+	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->pearsonInEnriched,  el->pearsonOverall,  el->pearsonClipped);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct edwQaPairCorrelation *edwQaPairCorrelationLoad(char **row)
+/* Load a edwQaPairCorrelation from row fetched with select * from edwQaPairCorrelation
+ * from database.  Dispose of this with edwQaPairCorrelationFree(). */
+{
+struct edwQaPairCorrelation *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->elderFileId = sqlUnsigned(row[1]);
+ret->youngerFileId = sqlUnsigned(row[2]);
+ret->pearsonInEnriched = sqlDouble(row[3]);
+ret->pearsonOverall = sqlDouble(row[4]);
+ret->pearsonClipped = sqlDouble(row[5]);
+return ret;
+}
+
+struct edwQaPairCorrelation *edwQaPairCorrelationLoadAll(char *fileName) 
+/* Load all edwQaPairCorrelation from a whitespace-separated file.
+ * Dispose of this with edwQaPairCorrelationFreeList(). */
+{
+struct edwQaPairCorrelation *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwQaPairCorrelationLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaPairCorrelation *edwQaPairCorrelationLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwQaPairCorrelation from a chopper separated file.
+ * Dispose of this with edwQaPairCorrelationFreeList(). */
+{
+struct edwQaPairCorrelation *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwQaPairCorrelationLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwQaPairCorrelation *edwQaPairCorrelationCommaIn(char **pS, struct edwQaPairCorrelation *ret)
+/* Create a edwQaPairCorrelation out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwQaPairCorrelation */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->elderFileId = sqlUnsignedComma(&s);
+ret->youngerFileId = sqlUnsignedComma(&s);
+ret->pearsonInEnriched = sqlDoubleComma(&s);
+ret->pearsonOverall = sqlDoubleComma(&s);
+ret->pearsonClipped = sqlDoubleComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwQaPairCorrelationFree(struct edwQaPairCorrelation **pEl)
+/* Free a single dynamically allocated edwQaPairCorrelation such as created
+ * with edwQaPairCorrelationLoad(). */
+{
+struct edwQaPairCorrelation *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void edwQaPairCorrelationFreeList(struct edwQaPairCorrelation **pList)
+/* Free a list of dynamically allocated edwQaPairCorrelation's */
+{
+struct edwQaPairCorrelation *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwQaPairCorrelationFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwQaPairCorrelationOutput(struct edwQaPairCorrelation *el, FILE *f, char sep, char lastSep) 
+/* Print out edwQaPairCorrelation.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->elderFileId);
+fputc(sep,f);
+fprintf(f, "%u", el->youngerFileId);
 fputc(sep,f);
 fprintf(f, "%g", el->pearsonInEnriched);
 fputc(sep,f);
-fprintf(f, "%u", el->gotPearsonInEnriched);
+fprintf(f, "%g", el->pearsonOverall);
+fputc(sep,f);
+fprintf(f, "%g", el->pearsonClipped);
 fputc(lastSep,f);
 }
 
