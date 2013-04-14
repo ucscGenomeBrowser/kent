@@ -22,6 +22,7 @@
 boolean withNull = FALSE;
 boolean makeJson = FALSE;
 boolean makeDjango = FALSE;
+boolean defaultZeros = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -41,6 +42,7 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "              applications to accept and load data into objects\n"
 	 "              with potential 'missing data' (NULL in SQL)\n"
          "              situations.\n"
+	 "  -defaultZeros - will put zero and or empty string as default value\n"
          "  -django - generate method to output object as django model Python code\n"
 	 "  -json - generate method to output the object in JSON (JavaScript) format.\n");
 }
@@ -48,6 +50,7 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
 static struct optionSpec optionSpecs[] = {
     {"dbLink", OPTION_BOOLEAN},
     {"withNull", OPTION_BOOLEAN},
+    {"defaultZeros", OPTION_BOOLEAN},
     {"json", OPTION_BOOLEAN},
     {"django", OPTION_BOOLEAN},
     {NULL, 0}
@@ -60,7 +63,25 @@ fprintf(f, "    %s ", col->name);
 struct dyString *type = asColumnToSqlType(col);
 fprintf(f, "%s", type->string);
 if (!withNull)
-    fprintf(f, " not null");
+    {
+    if (defaultZeros)
+	{
+	char *defaultVal = "";
+	if (!col->isList && !col->isArray)
+	    {
+	    if (col->lowType->stringy)
+		{
+	        if (col->lowType->type == t_string)
+		    defaultVal = " default ''";
+		}
+	    else
+		defaultVal = " default 0";
+	    }
+        fprintf(f, "%s", defaultVal);
+	}
+    else
+	fprintf(f, " not null");
+    }
 fputc(',', f);
 fprintf(f, "\t# %s\n", col->comment);
 dyStringFree(&type);
@@ -1864,6 +1885,7 @@ boolean doDbLoadAndSave = FALSE;
 optionInit(&argc, argv, optionSpecs);
 doDbLoadAndSave = optionExists("dbLink");
 withNull = optionExists("withNull");
+defaultZeros = optionExists("defaultZeros");
 makeJson = optionExists("json");
 makeDjango = optionExists("django");
 
