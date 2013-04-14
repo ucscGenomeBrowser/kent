@@ -20,12 +20,12 @@
 char *edwDatabase = "encodeDataWarehouse";
 char *edwLicensePlatePrefix = "ENCFF";
 
+#ifdef ELSEWHERE
 char *edwRootDir = "/scratch/kent/encodeDataWarehouse/";
 char *edwValDataDir = "/scratch/kent/encValData/";
-#ifdef AT_SDSC
+#endif
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *edwValDataDir = "/data/encode3/encValData/";
-#endif
 
 char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
 /* Return full path (which eventually should be freeMem'd) for fileId */
