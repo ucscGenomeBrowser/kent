@@ -1,10 +1,10 @@
 mkChangeNotes v2
 hg19 wgEncodeAwgTfbsUniform Release 1
-2013-03-21
+2013-04-12
 
 QA Count Summaries for Release 1:
-Tables: 695
-Files: 695
+Tables: 690
+Files: 690
 Gbdbs: 0
 Supplemental: 0
 Other: 3
@@ -15,15 +15,15 @@ Files: 0
 Gbdbs: 0
 
 Sizes of New:
-Table: 935 MB
-Files: 267 MB
+Table: 738 MB
+Files: 273 MB
 Gbdbs: 0 MB
 Supplemental: 0 MB
 Other: 1 MB
-Total: 1203 MB (1 GB)
+Total: 1012 MB
 
 
-New Tables (695):
+New Tables (690):
 wgEncodeAwgTfbsBroadDnd41CtcfUniPk
 wgEncodeAwgTfbsBroadDnd41Ezh239875UniPk
 wgEncodeAwgTfbsBroadGm12878CtcfUniPk
@@ -277,7 +277,6 @@ wgEncodeAwgTfbsHaibPanc1Pol24h8V0416101UniPk
 wgEncodeAwgTfbsHaibPanc1Sin3ak20V0416101UniPk
 wgEncodeAwgTfbsHaibPfsk1Foxp2Pcr2xUniPk
 wgEncodeAwgTfbsHaibPfsk1NrsfPcr2xUniPk
-wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk
 wgEncodeAwgTfbsHaibPfsk1Sin3ak20V0416101UniPk
 wgEncodeAwgTfbsHaibPfsk1Taf1V0416101UniPk
 wgEncodeAwgTfbsHaibSknmcFoxp2Pcr2xUniPk
@@ -319,9 +318,7 @@ wgEncodeAwgTfbsSydhGm12878Ctcfsc15914c20UniPk
 wgEncodeAwgTfbsSydhGm12878E2f4IggmusUniPk
 wgEncodeAwgTfbsSydhGm12878Ebf1sc137065UniPk
 wgEncodeAwgTfbsSydhGm12878Elk112771IggmusUniPk
-wgEncodeAwgTfbsSydhGm12878Gcn5UniPk
 wgEncodeAwgTfbsSydhGm12878Ikzf1iknuclaUniPk
-wgEncodeAwgTfbsSydhGm12878Irf3IggmusUniPk
 wgEncodeAwgTfbsSydhGm12878JundUniPk
 wgEncodeAwgTfbsSydhGm12878MaxIggmusUniPk
 wgEncodeAwgTfbsSydhGm12878Mazab85725IggmusUniPk
@@ -341,7 +338,6 @@ wgEncodeAwgTfbsSydhGm12878Rad21IggrabUniPk
 wgEncodeAwgTfbsSydhGm12878Rfx5200401194IggmusUniPk
 wgEncodeAwgTfbsSydhGm12878Sin3anb6001263IggmusUniPk
 wgEncodeAwgTfbsSydhGm12878Smc3ab9263IggmusUniPk
-wgEncodeAwgTfbsSydhGm12878Spt20UniPk
 wgEncodeAwgTfbsSydhGm12878Stat1UniPk
 wgEncodeAwgTfbsSydhGm12878Stat3IggmusUniPk
 wgEncodeAwgTfbsSydhGm12878Tblr1ab24550IggmusUniPk
@@ -417,7 +413,6 @@ wgEncodeAwgTfbsSydhHelas3E2f4UniPk
 wgEncodeAwgTfbsSydhHelas3E2f6UniPk
 wgEncodeAwgTfbsSydhHelas3Elk112771IggrabUniPk
 wgEncodeAwgTfbsSydhHelas3Elk4UcdUniPk
-wgEncodeAwgTfbsSydhHelas3Gcn5UniPk
 wgEncodeAwgTfbsSydhHelas3Gtf2f1ab28179IggrabUniPk
 wgEncodeAwgTfbsSydhHelas3Hae2f1UniPk
 wgEncodeAwgTfbsSydhHelas3Ini1IggmusUniPk
@@ -456,7 +451,6 @@ wgEncodeAwgTfbsSydhHepg2Bhlhe40cIggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Brca1a300IggrabUniPk
 wgEncodeAwgTfbsSydhHepg2CebpbForsklnUniPk
 wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk
-wgEncodeAwgTfbsSydhHepg2CebpzIggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Chd2ab68301IggrabUniPk
 wgEncodeAwgTfbsSydhHepg2CjunIggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Corestsc30189IggrabUniPk
@@ -477,14 +471,11 @@ wgEncodeAwgTfbsSydhHepg2P300sc582IggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Pgc1aForsklnUniPk
 wgEncodeAwgTfbsSydhHepg2Pol2ForsklnUniPk
 wgEncodeAwgTfbsSydhHepg2Pol2IggrabUniPk
-wgEncodeAwgTfbsSydhHepg2Pol2PravastUniPk
 wgEncodeAwgTfbsSydhHepg2Pol2s2IggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Rad21IggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Rfx5200401194IggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Smc3ab9263IggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Srebp1InslnUniPk
-wgEncodeAwgTfbsSydhHepg2Srebp1PravastUniPk
-wgEncodeAwgTfbsSydhHepg2Srebp2PravastUniPk
 wgEncodeAwgTfbsSydhHepg2TbpIggrabUniPk
 wgEncodeAwgTfbsSydhHepg2Tcf7l2UcdUniPk
 wgEncodeAwgTfbsSydhHepg2Tr4UcdUniPk
@@ -584,7 +575,6 @@ wgEncodeAwgTfbsSydhK562Tr4UcdUniPk
 wgEncodeAwgTfbsSydhK562Ubfsc13125IggmusUniPk
 wgEncodeAwgTfbsSydhK562Ubtfsab1404509IggmusUniPk
 wgEncodeAwgTfbsSydhK562Usf2IggrabUniPk
-wgEncodeAwgTfbsSydhK562Xrcc4UniPk
 wgEncodeAwgTfbsSydhK562Yy1UcdUniPk
 wgEncodeAwgTfbsSydhK562Znf143IggrabUniPk
 wgEncodeAwgTfbsSydhK562Znf263UcdUniPk
@@ -624,6 +614,11 @@ wgEncodeAwgTfbsSydhShsy5yGata2UcdUniPk
 wgEncodeAwgTfbsSydhShsy5yGata3sc269sc269UcdUniPk
 wgEncodeAwgTfbsSydhU2osKap1UcdUniPk
 wgEncodeAwgTfbsSydhU2osSetdb1UcdUniPk
+wgEncodeAwgTfbsUchicagoK562EfosUniPk
+wgEncodeAwgTfbsUchicagoK562Egata2UniPk
+wgEncodeAwgTfbsUchicagoK562Ehdac8UniPk
+wgEncodeAwgTfbsUchicagoK562EjunbUniPk
+wgEncodeAwgTfbsUchicagoK562EjundUniPk
 wgEncodeAwgTfbsUtaA549CtcfUniPk
 wgEncodeAwgTfbsUtaA549Pol2UniPk
 wgEncodeAwgTfbsUtaFibroblCtcfUniPk
@@ -721,7 +716,7 @@ wgEncodeAwgTfbsUwWerirb1CtcfUniPk
 wgEncodeAwgTfbsUwWi38CtcfUniPk
 
 
-New Download Files (695):
+New Download Files (690):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsBroadDnd41CtcfUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsBroadDnd41Ezh239875UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsBroadGm12878CtcfUniPk.narrowPeak.gz
@@ -975,7 +970,6 @@ New Download Files (695):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsHaibPanc1Sin3ak20V0416101UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsHaibPfsk1Foxp2Pcr2xUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsHaibPfsk1NrsfPcr2xUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsHaibPfsk1Pol24h8V0416101UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsHaibPfsk1Sin3ak20V0416101UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsHaibPfsk1Taf1V0416101UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsHaibSknmcFoxp2Pcr2xUniPk.narrowPeak.gz
@@ -1017,9 +1011,7 @@ New Download Files (695):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878E2f4IggmusUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Ebf1sc137065UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Elk112771IggmusUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Gcn5UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Ikzf1iknuclaUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Irf3IggmusUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878JundUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878MaxIggmusUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Mazab85725IggmusUniPk.narrowPeak.gz
@@ -1039,7 +1031,6 @@ New Download Files (695):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Rfx5200401194IggmusUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Sin3anb6001263IggmusUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Smc3ab9263IggmusUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Spt20UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Stat1UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Stat3IggmusUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhGm12878Tblr1ab24550IggmusUniPk.narrowPeak.gz
@@ -1115,7 +1106,6 @@ New Download Files (695):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHelas3E2f6UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHelas3Elk112771IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHelas3Elk4UcdUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHelas3Gcn5UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHelas3Gtf2f1ab28179IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHelas3Hae2f1UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHelas3Ini1IggmusUniPk.narrowPeak.gz
@@ -1154,7 +1144,6 @@ New Download Files (695):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Brca1a300IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2CebpbForsklnUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2CebpbIggrabUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2CebpzIggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Chd2ab68301IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2CjunIggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Corestsc30189IggrabUniPk.narrowPeak.gz
@@ -1175,14 +1164,11 @@ New Download Files (695):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Pgc1aForsklnUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Pol2ForsklnUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Pol2IggrabUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Pol2PravastUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Pol2s2IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Rad21IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Rfx5200401194IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Smc3ab9263IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Srebp1InslnUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Srebp1PravastUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Srebp2PravastUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2TbpIggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Tcf7l2UcdUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhHepg2Tr4UcdUniPk.narrowPeak.gz
@@ -1282,7 +1268,6 @@ New Download Files (695):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhK562Ubfsc13125IggmusUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhK562Ubtfsab1404509IggmusUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhK562Usf2IggrabUniPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhK562Xrcc4UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhK562Yy1UcdUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhK562Znf143IggrabUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhK562Znf263UcdUniPk.narrowPeak.gz
@@ -1322,6 +1307,11 @@ New Download Files (695):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhShsy5yGata3sc269sc269UcdUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhU2osKap1UcdUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsSydhU2osSetdb1UcdUniPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsUchicagoK562EfosUniPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsUchicagoK562Egata2UniPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsUchicagoK562Ehdac8UniPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsUchicagoK562EjunbUniPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsUchicagoK562EjundUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsUtaA549CtcfUniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsUtaA549Pol2UniPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/wgEncodeAwgTfbsUtaFibroblCtcfUniPk.narrowPeak.gz
@@ -1420,8 +1410,8 @@ New Download Files (695):
 
 
 New Other Files (3):
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/foo
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/md5sum.txt
 
 

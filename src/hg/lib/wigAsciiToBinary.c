@@ -374,8 +374,7 @@ while (lineFileNext(lf, &line, NULL))
 
     ++lineCount;
     if ((wibSizeLimit > 0) && (wibSize >= wibSizeLimit))
-        errAbort("data size limit of %lld data values has been exceeded; you must use bigWig files for large datasets<BR><A HREF=\"/goldenPath/help/bigWig.html\">(bigWig help)</A>", wibSizeLimit);
-
+        errAbort("data size limit of %lld data values has been exceeded.  This data can be efficiently displayed with the <A HREF='/goldenPath/help/bigWig.html' TARGET=_blank>bigWig file format</A> in a custom track, or in a <A HREF='/goldenPath/help/hgTrackHubHelp.html' TARGET=_blank>Track Hub</A> for multiple large datasets.", wibSizeLimit);
     line = skipLeadingSpaces(line);
     /*	ignore blank or comment lines	*/
     if ((line == (char *)NULL) || (line[0] == '\0') || (line[0] == '#'))

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkOwnLib.a ${MYLIBDIR}/jkweb.a
 O = gfPcr.o
 
 gfPcr: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/gfPcr $O ${MYLIBS} $L
-#	${STRIP} ${BINDIR}/gfPcr${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/gfPcr $O ${MYLIBS} $L
+#	${STRIP} ${DESTDIR}${BINDIR}/gfPcr${EXE}
 
 clean:
 	rm -f $O
