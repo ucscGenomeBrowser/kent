@@ -39,20 +39,19 @@ for (col = source->columns, i = 0;  col != NULL;  col = col->next, i++)
     }
 }
 
-static void aftInitialize(struct annoFormatter *vSelf, struct annoGratorQuery *query)
+static void aftInitialize(struct annoFormatter *vSelf, struct annoStreamer *primary,
+			  struct annoStreamer *integrators)
 /* Print header, regardless of whether we get any data after this. */
 {
-vSelf->query = query;
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 if (self->needHeader)
     {
-    struct annoStreamer *primary = query->primarySource;
     char *primaryHeader = primary->getHeader(primary);
     if (isNotEmpty(primaryHeader))
-	printf("# Header from primary input:\n%s", primaryHeader);
+	fprintf(self->f, "# Header from primary input:\n%s", primaryHeader);
     printHeaderColumns(self->f, primary, TRUE);
-    struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
-    for (;  grator != NULL;  grator = grator->next)
+    struct annoStreamer *grator;
+    for (grator = integrators;  grator != NULL;  grator = grator->next)
 	printHeaderColumns(self->f, grator, FALSE);
     fputc('\n', self->f);
     self->needHeader = FALSE;
@@ -163,33 +162,30 @@ if (freeWhenDone)
     }
 }
 
-static void aftFormatOne(struct annoFormatter *vSelf, struct annoRow *primaryRow,
-			 struct slRef *gratorRowList)
+static void aftFormatOne(struct annoFormatter *vSelf, struct annoStreamRows *primaryData,
+			 struct annoStreamRows *gratorData, int gratorCount)
 /* Print out tab-separated columns that we have gathered in prior calls to aftCollect,
  * and start over fresh for the next line of output. */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
-// How many rows did each grator give us, and what's the largest # of rows?
+// Got one row from primary; what's the largest # of rows from any grator?
 int maxRows = 1;
-int i;
-struct slRef *grRef;
-int numGrators = slCount(gratorRowList);
-for (i = 0, grRef = gratorRowList;  i < numGrators;  i++, grRef = grRef->next)
+int iG;
+for (iG = 0;  iG < gratorCount;  iG++)
     {
-    int gratorRowCount = slCount(grRef->val);
+    int gratorRowCount = slCount(gratorData[iG].rowList);
     if (gratorRowCount > maxRows)
 	maxRows = gratorRowCount;
     }
 // Print out enough rows to make sure that all grator rows are included.
-struct annoStreamer *primarySource = vSelf->query->primarySource;
-for (i = 0;  i < maxRows;  i++)
+int iR;
+for (iR = 0;  iR < maxRows;  iR++)
     {
-    printColumns(self->f, primarySource, primaryRow, TRUE);
-    struct annoStreamer *grator = (struct annoStreamer *)self->formatter.query->integrators;
-    for (grRef = gratorRowList;  grRef != NULL;  grRef = grRef->next, grator = grator->next)
+    printColumns(self->f, primaryData->streamer, primaryData->rowList, TRUE);
+    for (iG = 0;  iG < gratorCount;  iG++)
 	{
-	struct annoRow *gratorRow = slElementFromIx(grRef->val, i);
-	printColumns(self->f, grator, gratorRow, FALSE);
+	struct annoRow *gratorRow = slElementFromIx(gratorData[iG].rowList, iR);
+	printColumns(self->f, gratorData[iG].streamer, gratorRow, FALSE);
 	}
     fputc('\n', self->f);
     }

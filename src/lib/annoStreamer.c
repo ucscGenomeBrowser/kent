@@ -74,18 +74,14 @@ annoColumnFreeList(&(self->columns));
 self->columns = annoColumnCloneList(newColumns);
 }
 
-void annoStreamerSetQuery(struct annoStreamer *self, struct annoGratorQuery *query)
-/* Set query (to be called only by annoGratorQuery which is created after streamers). */
-{
-self->query = query;
-}
-
-void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj)
+void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
+		      struct asObject *asObj)
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
  * default filters and columns based on asObj.
  * In general, subclasses' constructors will call this first; override nextRow, close,
- * and probably setRegion and setQuery; and then initialize their private data. */
+ * and probably setRegion; and then initialize their private data. */
 {
+self->assembly = assembly;
 self->getAutoSqlObject = annoStreamerGetAutoSqlObject;
 self->setAutoSqlObject = annoStreamerSetAutoSqlObject;
 self->setRegion = annoStreamerSetRegion;
@@ -94,7 +90,6 @@ self->getFilters = annoStreamerGetFilters;
 self->setFilters = annoStreamerSetFilters;
 self->getColumns = annoStreamerGetColumns;
 self->setColumns = annoStreamerSetColumns;
-self->setQuery = annoStreamerSetQuery;
 self->positionIsGenome = TRUE;
 self->setAutoSqlObject(self, asObj);
 }

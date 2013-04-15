@@ -201,14 +201,6 @@ self->mySource->setRegion((struct annoStreamer *)(self->mySource), chrom, rStart
 agReset(self);
 }
 
-void annoGratorSetQuery(struct annoStreamer *vSelf, struct annoGratorQuery *query)
-/* Set query (to be called only by annoGratorQuery which is created after streamers). */
-{
-struct annoGrator *self = (struct annoGrator *)vSelf;
-self->streamer.query = query;
-self->mySource->setQuery((struct annoStreamer *)(self->mySource), query);
-}
-
 static void agSetAutoSqlObject(struct annoStreamer *sSelf, struct asObject *asObj)
 /* Use new asObj and update internal state derived from asObj. */
 {
@@ -229,12 +221,11 @@ void annoGratorInit(struct annoGrator *self, struct annoStreamer *mySource)
  * mySource becomes property of the annoGrator. */
 {
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, mySource->getAutoSqlObject(mySource));
+annoStreamerInit(streamer, mySource->assembly, mySource->getAutoSqlObject(mySource));
 streamer->rowType = mySource->rowType;
 streamer->setAutoSqlObject = agSetAutoSqlObject;
 streamer->setFilters = agSetFilters;
 streamer->setRegion = annoGratorSetRegion;
-streamer->setQuery = annoGratorSetQuery;
 streamer->nextRow = noNextRow;
 streamer->close = annoGratorClose;
 self->qLm = lmInit(0);

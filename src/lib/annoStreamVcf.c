@@ -108,7 +108,8 @@ dyStringFree(&(self->dyGt));
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamVcfNew(char *fileOrUrl, boolean isTabix, int maxRecords)
+struct annoStreamer *annoStreamVcfNew(char *fileOrUrl, boolean isTabix,
+				      struct annoAssembly *aa, int maxRecords)
 /* Create an annoStreamer (subclass) object from a VCF file, which may
  * or may not have been compressed and indexed by tabix. */
 {
@@ -124,7 +125,7 @@ struct annoStreamVcf *self;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 struct asObject *asObj = vcfAsObj();
-annoStreamerInit(streamer, asObj);
+annoStreamerInit(streamer, aa, asObj);
 streamer->rowType = arVcf;
 streamer->setRegion = asvSetRegion;
 streamer->getHeader = asvGetHeader;

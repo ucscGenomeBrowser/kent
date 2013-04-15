@@ -3,6 +3,7 @@
 #ifndef ANNOSTREAMER_H
 #define ANNOSTREAMER_H
 
+#include "annoAssembly.h"
 #include "annoColumn.h"
 #include "annoFilter.h"
 #include "annoRow.h"
@@ -12,9 +13,6 @@
 // interface for communication with other components of the
 // annoGratorQuery framework, and simple methods shared by all
 // subclasses.
-
-// stub in order to avoid problems with circular .h references:
-struct annoGratorQuery;
 
 struct annoStreamer
 /* Generic interface to configure a data source's filters and output data, and then
@@ -29,7 +27,8 @@ struct annoStreamer
     /* Get and set autoSql representation (do not modify or free!) */
 
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
-    /* Set genomic region for query (should be called only by annoGratorQuerySetRegion) */
+    /* Set genomic region for query; if chrom is NULL, region is whole genome.
+     * This must called on all annoGrator components in query, not a subset. */
 
     char *(*getHeader)(struct annoStreamer *self);
     /* Get the file header as a string (possibly NULL, possibly multi-line). */
@@ -43,27 +42,22 @@ struct annoStreamer
     /* Get and set output fields */
 
     struct annoRow *(*nextRow)(struct annoStreamer *self, struct lm *lm);
-    /* Get next item's output fields from this source */
+    /* Get the next item from this source.  Use localmem lm to store returned annoRow. */
 
     void (*close)(struct annoStreamer **pSelf);
     /* Close connection to source and free self. */
 
-    void (*setQuery)(struct annoStreamer *self, struct annoGratorQuery *query);
-    /* For use by annoGratorQuery only: hook up query object after creation */
-
     // Public members -- callers are on the honor system to access these read-only.
-    struct annoGratorQuery *query;	// The query object that owns this streamer.
-    enum annoRowType rowType;
-    int numCols;
-    struct annoFilter *filters;
-    struct annoColumn *columns;
-
-    // Private members -- callers are on the honor system to access these using only methods above.
-    boolean positionIsGenome;
-    char *chrom;
-    uint regionStart;
-    uint regionEnd;
-    struct asObject *asObj;
+    struct annoAssembly *assembly;	// Genome assembly that provides coords for annotations
+    struct asObject *asObj;		// Annotation data definition
+    struct annoFilter *filters;		// Filters to constrain output
+    struct annoColumn *columns;		// Columns to include in output
+    char *chrom;			// Non-NULL if querying a particular region
+    uint regionStart;			// If chrom is non-NULL, region start coord
+    uint regionEnd;			// If chrom is non-NULL, region end coord
+    boolean positionIsGenome;		// True if doing a whole-genome query
+    enum annoRowType rowType;		// Type of annotations (words or wiggle data)
+    int numCols;			// For word-based annotations, number of words/columns
     };
 
 // ---------------------- annoStreamer default methods -----------------------
@@ -91,18 +85,16 @@ struct annoColumn *annoStreamerGetColumns(struct annoStreamer *self);
 void annoStreamerSetColumns(struct annoStreamer *self, struct annoColumn *columns);
 /* Free old columns and use clone of newColumns. */
 
-void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj);
+void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
+		      struct asObject *asObj);
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
  * default filters and columns based on asObj.
  * In general, subclasses' constructors will call this first; override nextRow, close,
- * and probably setRegion and setQuery; and then initialize their private data. */
+ * and probably setRegion; and then initialize their private data. */
 
 void annoStreamerFree(struct annoStreamer **pSelf);
 /* Free self. This should be called at the end of subclass close methods, after
  * subclass-specific connections are closed and resources are freed. */
-
-void annoStreamerSetQuery(struct annoStreamer *self, struct annoGratorQuery *query);
-/* Set query (to be called only by annoGratorQuery which is created after streamers). */
 
 boolean annoStreamerFindBed3Columns(struct annoStreamer *self,
 			    int *retChromIx, int *retStartIx, int *retEndIx,

@@ -100,9 +100,9 @@ self->mySource = annoGratorNew(wigSource);
 return gSelf;
 }
 
-struct annoGrator *annoGrateBigWigNew(char *fileOrUrl)
+struct annoGrator *annoGrateBigWigNew(char *fileOrUrl, struct annoAssembly *aa)
 /* Create an annoGrator subclass for bigWig file or URL. */
 {
-struct annoStreamer *bigWigSource = annoStreamBigWigNew(fileOrUrl);
+struct annoStreamer *bigWigSource = annoStreamBigWigNew(fileOrUrl, aa);
 return annoGrateWigNew(bigWigSource);
 }

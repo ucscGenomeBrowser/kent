@@ -115,7 +115,7 @@ lmCleanup(&(self->intervalQueryLm));
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamBigWigNew(char *fileOrUrl)
+struct annoStreamer *annoStreamBigWigNew(char *fileOrUrl, struct annoAssembly *aa)
 /* Create an annoStreamer (subclass) object from a file or URL. */
 {
 struct bbiFile *bbi = bigWigFileOpen(fileOrUrl);
@@ -123,7 +123,7 @@ struct asObject *asObj = asParseText(annoRowBigWigAsText);
 struct annoStreamBigWig *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asObj);
+annoStreamerInit(streamer, aa, asObj);
 streamer->rowType = arWig;
 streamer->setRegion = asbwSetRegion;
 streamer->nextRow = asbwNextRow;

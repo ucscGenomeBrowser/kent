@@ -63,7 +63,7 @@ if (!streamer->positionIsGenome)
 	// sorting by chromStart.
 	dyStringPrintf(query, " IGNORE INDEX (%s)", self->endFieldIndexName);
     dyStringPrintf(query, " where %s='%s'", self->chromField, streamer->chrom);
-    int chromSize = hashIntVal(streamer->query->chromSizes, streamer->chrom);
+    int chromSize = annoAssemblySeqSize(streamer->assembly, streamer->chrom);
     if (streamer->regionStart != 0 || streamer->regionEnd != chromSize)
 	{
 	dyStringAppend(query, " and ");
@@ -270,7 +270,8 @@ sqlFreeResult(&sr);
 return indexName;
 }
 
-struct annoStreamer *annoStreamDbNew(char *db, char *table, struct asObject *asObj)
+struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
+				     struct asObject *asObj)
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
 {
 struct sqlConnection *conn = hAllocConn(db);
@@ -279,7 +280,7 @@ if (!sqlTableExists(conn, table))
 struct annoStreamDb *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asObj);
+annoStreamerInit(streamer, aa, asObj);
 streamer->rowType = arWords;
 streamer->setRegion = asdSetRegion;
 streamer->nextRow = asdNextRow;

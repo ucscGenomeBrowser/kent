@@ -30,14 +30,6 @@ struct annoStreamWig *self = (struct annoStreamWig *)vSelf;
 self->wigStr->setRegion(self->wigStr, chrom, regionStart, regionEnd);
 }
 
-static void aswSetQuery(struct annoStreamer *vSelf, struct annoGratorQuery *query)
-/* Set query (to be called only by annoGratorQuery which is created after streamers). */
-{
-annoStreamerSetQuery(vSelf, query);
-struct annoStreamWig *self = (struct annoStreamWig *)vSelf;
-self->wigStr->setQuery((struct annoStreamer *)(self->wigStr), query);
-}
-
 static void checkWibFile(struct annoStreamWig *self, char *wibFile)
 /* If self doesn't have a .wib file name and handle open, or if the new wibFile is
  * not the same as the old one, update self to use new wibFile. */
@@ -135,18 +127,18 @@ freeMem(self->wibFile);
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamWigDbNew(char *db, char *table, int maxOutput)
+struct annoStreamer *annoStreamWigDbNew(char *db, char *table, struct annoAssembly *aa,
+					int maxOutput)
 /* Create an annoStreamer (subclass) object from a wiggle database table. */
 {
 struct annoStreamWig *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asParseText(annoRowWigAsText));
+annoStreamerInit(streamer, aa, asParseText(annoRowWigAsText));
 streamer->rowType = arWig;
 streamer->setRegion = aswSetRegion;
-streamer->setQuery = aswSetQuery;
 streamer->nextRow = aswNextRow;
 streamer->close = aswClose;
-self->wigStr = annoStreamDbNew(db, table, asParseText(wiggleAsText));
+self->wigStr = annoStreamDbNew(db, table, aa, asParseText(wiggleAsText));
 return (struct annoStreamer *)self;
 }

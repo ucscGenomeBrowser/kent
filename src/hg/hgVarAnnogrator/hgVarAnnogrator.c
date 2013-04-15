@@ -1811,6 +1811,15 @@ else
     return asObjectFromFields(dbTable, fieldList);
 }
 
+struct annoAssembly *getAnnoAssembly(char *db)
+/* Make annoAssembly for db. */
+{
+char *nibOrTwoBitDir = hDbDbNibPath(db);
+char twoBitPath[HDB_MAX_PATH_STRING];
+safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+return annoAssemblyNew(db, twoBitPath);
+}
+
 struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb, char *chrom)
 /* Figure out the source and type of data and make an annoStreamer. */
 {
@@ -1832,14 +1841,15 @@ if (isHubTrack(table))
 	   trackDbSettingOrDefault(tdb, "bigDataUrl", "-- doh, no bigDataUrl!"));
     errAbort("hgVarAnnogrator can't do hub track with type '%s'", tdb->type);
     }
+struct annoAssembly *assembly = getAnnoAssembly(db);
 if (startsWith("wig", tdb->type))
-    streamer = annoStreamWigDbNew(dataDb, dbTable, maxOutRows);
+    streamer = annoStreamWigDbNew(dataDb, dbTable, assembly, maxOutRows);
 else if (sameString("vcfTabix", tdb->type))
     {
     struct sqlConnection *conn = hAllocConn(db);
     char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
     hFreeConn(&conn);
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
     }
 else
     {
@@ -1850,7 +1860,7 @@ else
     else
 	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
     struct asObject *asObj = getAutoSqlForTable(db, dataDb, maybeSplitTable, tdb);
-    streamer = annoStreamDbNew(dataDb, maybeSplitTable, asObj);
+    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj);
     }
 return streamer;
 }
@@ -1910,7 +1920,10 @@ if (isCustomTrack(src->selTable))
 	errAbort("Can't find dbTableName for custom track %s", src->selTable);
     }
 if (startsWith("wig", tdb->type))
-    grator = annoGrateWigDbNew(dataDb, dbTable, maxOutRows);
+    {
+    struct annoAssembly *assembly = getAnnoAssembly(db);
+    grator = annoGrateWigDbNew(dataDb, dbTable, assembly, maxOutRows);
+    }
 else
     {
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
@@ -1966,11 +1979,8 @@ for (src = queryConfig->sources;  src != NULL;  src = src->next)
     }
 slReverse(&gratorList);
 struct annoFormatter *formatter = formatterFromOutput(queryConfig);
-char *nibOrTwoBitDir = hDbDbNibPath(db);
-char twoBitPath[HDB_MAX_PATH_STRING];
-safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
-struct twoBitFile *tbf = twoBitOpen(twoBitPath);
-struct annoGratorQuery *agq = annoGratorQueryNew(db, NULL, tbf, primary, gratorList, formatter);
+struct annoAssembly *assembly = getAnnoAssembly(db);
+struct annoGratorQuery *agq = annoGratorQueryNew(assembly, primary, gratorList, formatter);
 if (sameString(regionType, hgvaRegionTypeRange))
     annoGratorQuerySetRegion(agq, chrom, start, end);
 annoGratorQueryExecute(agq);

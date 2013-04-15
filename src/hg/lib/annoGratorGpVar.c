@@ -264,7 +264,8 @@ static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant
 struct annoGrator *gSelf = &(self->grator);
 struct annoStreamer *sSelf = &(gSelf->streamer);
 // FIXME:  accessing query's tbf is probably bad
-struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->query->tbf, self->lm);
+struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->assembly->tbf,
+							      self->lm);
 struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence);
 struct annoRow *rows = NULL;
 

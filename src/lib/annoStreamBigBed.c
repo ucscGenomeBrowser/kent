@@ -95,7 +95,7 @@ freeMem(self->endBuf);
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamBigBedNew(char *fileOrUrl, int maxItems)
+struct annoStreamer *annoStreamBigBedNew(char *fileOrUrl, struct annoAssembly *aa, int maxItems)
 /* Create an annoStreamer (subclass) object from a file or URL; if
  * maxItems is 0, all items from a query will be returned, otherwise
  * each query is limited to maxItems. */
@@ -105,7 +105,7 @@ struct asObject *asObj = bigBedAsOrDefault(bbi);
 struct annoStreamBigBed *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asObj);
+annoStreamerInit(streamer, aa, asObj);
 streamer->rowType = arWords;
 streamer->setRegion = asbbSetRegion;
 streamer->nextRow = asbbNextRow;
