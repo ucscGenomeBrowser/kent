@@ -15,17 +15,20 @@ struct annoFormatVep
     {
     struct annoFormatter formatter;	// superclass / external interface
     struct annoFormatVepConfig *config;	// Description of input sources and values for Extras col
-    char *fileName;			// Output filename
-    FILE *f;				// Output file handle
-    boolean needHeader;			// TRUE if we should print out the header
-    int varNameIx;			// Index of name column from variant source, or -1 if N/A
-    int varAllelesIx;			// Index of alleles column from variant source, or -1
-    int geneNameIx;			// Index of gene name (not transcript name) from genePred
-    int snpNameIx;			// Index of name column from dbSNP source, or -1
 
     char *(*getSlashSepAlleles)(char **words);
     // If the variant source doesn't have a single column with slash-separated alleles
     // (varAllelesIx is -1), provide a function that translates into slash-sep.
+
+    char *fileName;			// Output filename
+    FILE *f;				// Output file handle
+    struct lm *lm;			// localmem for scratch storage
+    int lmRowCount;			// counter for periodic localmem cleanup
+    int varNameIx;			// Index of name column from variant source, or -1 if N/A
+    int varAllelesIx;			// Index of alleles column from variant source, or -1
+    int geneNameIx;			// Index of gene name (not transcript name) from genePred
+    int snpNameIx;			// Index of name column from dbSNP source, or -1
+    boolean needHeader;			// TRUE if we should print out the header
     };
 
 static void afVepPrintHeaderExtraTags(struct annoFormatVep *self)
@@ -312,19 +315,30 @@ if (!gotExtra)
     afVepPrintPlaceholders(self->f, 0);
 }
 
+static void afVepLmCleanup(struct annoFormatVep *self)
+{
+self->lmRowCount++;
+if (self->lmRowCount > 1024)
+    {
+    lmCleanup(&(self->lm));
+    self->lm = lmInit(0);
+    self->lmRowCount = 0;
+    }
+}
+
 static void afVepPrintOneLine(struct annoFormatVep *self, struct annoStreamRows *varData,
 			      struct annoRow *gpvRow,
 			      struct annoStreamRows gratorData[], int gratorCount)
 /* Print one line of VEP: a variant, an allele, functional consequences of that allele,
  * and whatever else is included in the config. */
 {
-struct gpFx *gpFx = annoGratorGpVarGpFxFromRow(self->config->gpVarSource, gpvRow);
+struct gpFx *gpFx = annoGratorGpVarGpFxFromRow(self->config->gpVarSource, gpvRow, self->lm);
+afVepLmCleanup(self);
 afVepPrintNameAndLoc(self, varData->rowList);
 afVepPrintPredictions(self, gpvRow, gpFx);
 afVepPrintExistingVar(self, gratorData, gratorCount);
 afVepPrintExtras(self, varData->rowList, gpvRow, gpFx, gratorData, gratorCount);
 fputc('\n', self->f);
-//#*** mem leak gpFx...
 }
 
 static void afVepFormatOne(struct annoFormatter *fSelf, struct annoStreamRows *primaryData,
@@ -345,6 +359,7 @@ if (pFSelf == NULL)
 struct annoFormatVep *self = *(struct annoFormatVep **)pFSelf;
 freeMem(self->fileName);
 carefulClose(&(self->f));
+lmCleanup(&(self->lm));
 annoFormatterFree(pFSelf);
 }
 
@@ -399,6 +414,7 @@ fSelf->formatOne = afVepFormatOne;
 fSelf->close = afVepClose;
 self->fileName = cloneString(fileName);
 self->f = mustOpen(fileName, "w");
+self->lm = lmInit(0);
 self->needHeader = TRUE;
 afVepSetConfig(self, config);
 return (struct annoFormatter *)self;
