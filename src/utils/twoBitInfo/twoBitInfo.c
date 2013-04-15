@@ -2,6 +2,7 @@
 #include "common.h"
 #include "options.h"
 #include "twoBit.h"
+#include "udc.h"
 
 
 void usage()
@@ -15,6 +16,7 @@ errAbort(
   "   -nBed   instead of seq sizes, output BED records that define \n"
   "           areas with N's in sequence\n"
   "   -noNs   outputs the length of each sequence, but does not count Ns \n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   "Output file has the columns::\n"
   "   seqName size\n"
   "\n"
@@ -25,6 +27,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"udcDir", OPTION_STRING},
    {"nBed", OPTION_BOOLEAN},
    {"noNs", OPTION_BOOLEAN},
    {NULL, 0},
@@ -81,6 +84,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 twoBitInfo(argv[1], argv[2]);
 return 0;
 }
