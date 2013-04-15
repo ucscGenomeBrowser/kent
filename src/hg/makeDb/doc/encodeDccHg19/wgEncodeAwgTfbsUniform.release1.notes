@@ -1,6 +1,6 @@
 mkChangeNotes v2
 hg19 wgEncodeAwgTfbsUniform Release 1
-2013-04-12
+2013-04-15
 
 QA Count Summaries for Release 1:
 Tables: 690
@@ -1410,8 +1410,8 @@ New Download Files (690):
 
 
 New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/files.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/foo
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgTfbsUniform/release1/md5sum.txt
 
 
