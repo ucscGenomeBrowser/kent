@@ -280,7 +280,10 @@ if (!sqlTableExists(conn, table))
 struct annoStreamDb *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, aa, asObj);
+int dbtLen = strlen(db) + strlen(table) + 2;
+char dbTable[dbtLen];
+safef(dbTable, dbtLen, "%s.%s", db, table);
+annoStreamerInit(streamer, aa, asObj, dbTable);
 streamer->rowType = arWords;
 streamer->setRegion = asdSetRegion;
 streamer->nextRow = asdNextRow;
@@ -293,8 +296,8 @@ if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
 if (self->hasBin && !sameString(asFirstColumnName, "bin"))
     self->omitBin = 1;
 if (!asdInitBed3Fields(self))
-    errAbort("annoStreamDbNew: can't figure out which fields of %s to use as "
-	     "{chrom, chromStart, chromEnd}.", table);
+    errAbort("annoStreamDbNew: can't figure out which fields of %s.%s to use as "
+	     "{chrom, chromStart, chromEnd}.", db, table);
 // When a table has an index on endField, sometimes the query optimizer uses it
 // and that ruins the sorting.  Fortunately most tables don't anymore.
 self->endFieldIndexName = sqlTableIndexOnField(self->conn, self->table, self->endField);

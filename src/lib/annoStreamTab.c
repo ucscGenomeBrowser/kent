@@ -198,7 +198,7 @@ struct lineFile *lf = astLFOpen(fileOrUrl);
 struct annoStreamTab *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, aa, asObj);
+annoStreamerInit(streamer, aa, asObj, fileOrUrl);
 streamer->rowType = arWords;
 streamer->setRegion = astSetRegion;
 streamer->nextRow = astNextRow;

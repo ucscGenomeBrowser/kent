@@ -43,13 +43,13 @@ if (self->wibFile == NULL || !sameString(self->wibFile, wibFile))
     }
 }
 
-static void paranoidCheckSize(struct wiggle *wiggle)
+static void paranoidCheckSize(struct annoStreamWig *self, struct wiggle *wiggle)
 /* paranoid, consider taking this out when code is stable: */
 {
 int bpLen = wiggle->chromEnd - wiggle->chromStart;
 if (bpLen != (wiggle->span * wiggle->count))
-    errAbort("annoStreamWig: length in bases (%u - %u = %d) != span*count (%u * %u = %u)",
-	     wiggle->chromEnd, wiggle->chromStart, bpLen,
+    errAbort("annoStreamWig %s: length in bases (%u - %u = %d) != span*count (%u * %u = %u)",
+	     self->streamer.name, wiggle->chromEnd, wiggle->chromStart, bpLen,
 	     wiggle->span, wiggle->count, (wiggle->span * wiggle->count));
 }
 
@@ -63,7 +63,7 @@ size_t bytesRead = fread(wigBuf, 1, wiggle->count, self->wibF);
 if (bytesRead != wiggle->count)
     errnoAbort("annoStreamWig: failed to read %u bytes from %s (got %llu)\n",
 	       wiggle->count, wiggle->file, (unsigned long long)bytesRead);
-paranoidCheckSize(wiggle);
+paranoidCheckSize(self, wiggle);
 int i, j, validCount = 0;
 for (i = 0;  i < wiggle->count;  i++)
     {
@@ -133,12 +133,12 @@ struct annoStreamer *annoStreamWigDbNew(char *db, char *table, struct annoAssemb
 {
 struct annoStreamWig *self = NULL;
 AllocVar(self);
+self->wigStr = annoStreamDbNew(db, table, aa, asParseText(wiggleAsText));
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, aa, asParseText(annoRowWigAsText));
+annoStreamerInit(streamer, aa, asParseText(annoRowWigAsText), self->wigStr->name);
 streamer->rowType = arWig;
 streamer->setRegion = aswSetRegion;
 streamer->nextRow = aswNextRow;
 streamer->close = aswClose;
-self->wigStr = annoStreamDbNew(db, table, aa, asParseText(wiggleAsText));
 return (struct annoStreamer *)self;
 }

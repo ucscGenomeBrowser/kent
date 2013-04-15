@@ -62,11 +62,7 @@ FILE *f = self->f;
 fprintf(f, "## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)\n");
 afVepPrintHeaderDate(f);
 fprintf(f, "## Connected to UCSC database %s\n", db);
-
-//#*** IMPLEMENT ME
-char *primaryName = "getNameFromPrimarySource";
-
-fprintf(f, "## Variants: %s\n", primaryName);
+fprintf(f, "## Variants: %s\n", self->config->variantSource->name);
 afVepPrintHeaderExtraTags(self);
 fputs("Uploaded Variation\tLocation\tAllele\tGene\tFeature\tFeature type\tConsequence\t"
       "Position in cDNA\tPosition in CDS\tPosition in protein\tAmino acid change\t"
@@ -271,7 +267,7 @@ for (i = 0;  i < gratorCount;  i++)
     if (gratorData[i].streamer == src)
 	return gratorData[i].rowList;
     }
-errAbort("annoFormatVep: Can't find source in gratorData");
+errAbort("annoFormatVep: Can't find source %s in gratorData", src->name);
 return NULL;
 }
 

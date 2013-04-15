@@ -10,13 +10,13 @@ if (self->prevPChrom == NULL)
 else if (differentString(primaryRow->chrom, self->prevPChrom))
     {
     if (strcmp(primaryRow->chrom, self->prevPChrom) < 0)
-	errAbort("Unsorted input from primarySource (%s < %s)",
-		 primaryRow->chrom, self->prevPChrom);
+	errAbort("annoGrator %s: Unsorted input from primary source (%s < %s)",
+		 self->streamer.name, primaryRow->chrom, self->prevPChrom);
     self->prevPChrom = cloneString(primaryRow->chrom);
     }
 else if (primaryRow->start < self->prevPStart)
-    errAbort("Unsorted input from primarySource (%s, %u < %u)",
-	     primaryRow->chrom, primaryRow->start, self->prevPStart);
+    errAbort("annoGrator %s:Unsorted input from primary source (%s, %u < %u)",
+	     self->streamer.name, primaryRow->chrom, primaryRow->start, self->prevPStart);
 self->prevPStart = primaryRow->start;
 }
 
@@ -50,18 +50,19 @@ if (self->qHead == NULL)
     }
 }
 
-INLINE void agCheckInternalSorting(struct annoRow *newRow, struct annoRow *qTail)
+INLINE void agCheckInternalSorting(struct annoGrator *self, struct annoRow *newRow)
 /* Die if newRow precedes qTail. */
 {
-if (qTail != NULL)
+if (self->qTail != NULL)
     {
-    int cDifNewTail = strcmp(newRow->chrom, qTail->chrom);
+    int cDifNewTail = strcmp(newRow->chrom, self->qTail->chrom);
     if (cDifNewTail < 0)
-	errAbort("Unsorted input from internal source (%s < %s)",
-		 newRow->chrom, qTail->chrom);
-    else if (cDifNewTail == 0 && newRow->start < qTail->start)
-	errAbort("Unsorted input from internal source (%s, %u < %u)",
-		 newRow->chrom, newRow->start, qTail->start);
+	errAbort("annoGrator %s: Unsorted input from internal source %s (%s < %s)",
+		 self->streamer.name, self->mySource->name, newRow->chrom, self->qTail->chrom);
+    else if (cDifNewTail == 0 && newRow->start < self->qTail->start)
+	errAbort("annoGrator %s: Unsorted input from internal source %s (%s, %u < %u)",
+		 self->streamer.name, self->mySource->name,
+		 newRow->chrom, newRow->start, self->qTail->start);
     }
 }
 
@@ -77,7 +78,7 @@ while (!self->eof &&
 	self->eof = TRUE;
     else
 	{
-	agCheckInternalSorting(newRow, self->qTail);
+	agCheckInternalSorting(self, newRow);
 	int cDifNewP = strcmp(newRow->chrom, chrom);
 	if (cDifNewP >= 0)
 	    {
@@ -85,7 +86,8 @@ while (!self->eof &&
 	    if (self->qTail == NULL)
 		{
 		if (self->qHead != NULL)
-		    errAbort("qTail is NULL but qHead is non-NULL");
+		    errAbort("annoGrator %s: qTail is NULL but qHead is non-NULL",
+			     self->streamer.name);
 		self->qHead = self->qTail = newRow;
 		}
 	    else
@@ -160,7 +162,8 @@ freez(pSelf);
 static struct annoRow *noNextRow(struct annoStreamer *self, struct lm *callerLm)
 /* nextRow() is N/A for annoGrator, which needs caller to use integrate() instead. */
 {
-errAbort("nextRow() called on annoGrator object, but integrate() should be called instead");
+errAbort("annoGrator %s: nextRow() called, but integrate() should be called instead",
+	 self->name);
 return NULL;
 }
 
@@ -221,7 +224,8 @@ void annoGratorInit(struct annoGrator *self, struct annoStreamer *mySource)
  * mySource becomes property of the annoGrator. */
 {
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, mySource->assembly, mySource->getAutoSqlObject(mySource));
+annoStreamerInit(streamer, mySource->assembly, mySource->getAutoSqlObject(mySource),
+		 mySource->name);
 streamer->rowType = mySource->rowType;
 streamer->setAutoSqlObject = agSetAutoSqlObject;
 streamer->setFilters = agSetFilters;

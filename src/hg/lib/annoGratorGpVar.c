@@ -52,8 +52,9 @@ for (col = sourceAsObj->columnList;  col != NULL;  col = col->next)
 	    dyStringPrintf(gpPlusGpFx, "%s[%s]\t%s;\t\"%s\"",
 			   col->lowType->name, col->linkedSizeName, col->name, col->comment);
 	else
-	    errAbort("Neither col->fixedSize nor col->linkedSizeName given for column '%s'",
-		     col->name);
+	    errAbort("Neither col->fixedSize nor col->linkedSizeName given for "
+		     "asObj %s column '%s'",
+		     sourceAsObj->name, col->name);
 	}
     else
 	dyStringPrintf(gpPlusGpFx, "%s\t%s;\t\"%s\"", col->lowType->name, col->name, col->comment);

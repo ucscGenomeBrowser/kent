@@ -116,7 +116,8 @@ else if (source->rowType == arWig)
 	words = wordsFromWigRowVals(row);
     }
 else
-    errAbort("annoFormatTab: unrecognized row type %d", source->rowType);
+    errAbort("annoFormatTab: unrecognized row type %d from source %s",
+	     source->rowType, source->name);
 if (retFreeWhenDone != NULL)
     *retFreeWhenDone = freeWhenDone;
 return words;

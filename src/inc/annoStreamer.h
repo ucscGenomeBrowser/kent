@@ -45,6 +45,7 @@ struct annoStreamer
     // Public members -- callers are on the honor system to access these read-only.
     struct annoAssembly *assembly;	// Genome assembly that provides coords for annotations
     struct asObject *asObj;		// Annotation data definition
+    char *name;				// Short identifier, e.g. name of file or database table
     struct annoFilter *filters;		// Filters to constrain output
     char *chrom;			// Non-NULL if querying a particular region
     uint regionStart;			// If chrom is non-NULL, region start coord
@@ -74,7 +75,7 @@ void annoStreamerSetFilters(struct annoStreamer *self, struct annoFilter *newFil
 /* Free old filters and use clone of newFilters. */
 
 void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
-		      struct asObject *asObj);
+		      struct asObject *asObj, char *name);
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
  * default filters and columns based on asObj.
  * In general, subclasses' constructors will call this first; override nextRow, close,

@@ -60,7 +60,7 @@ self->filters = annoFilterCloneList(newFilters);
 }
 
 void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
-		      struct asObject *asObj)
+		      struct asObject *asObj, char *name)
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
  * default filters and columns based on asObj.
  * In general, subclasses' constructors will call this first; override nextRow, close,
@@ -75,6 +75,9 @@ self->getFilters = annoStreamerGetFilters;
 self->setFilters = annoStreamerSetFilters;
 self->positionIsGenome = TRUE;
 self->setAutoSqlObject(self, asObj);
+if (name == NULL)
+    errAbort("annoStreamerInit: need non-NULL name");
+self->name = cloneString(name);
 }
 
 void annoStreamerFree(struct annoStreamer **pSelf)
@@ -84,6 +87,7 @@ void annoStreamerFree(struct annoStreamer **pSelf)
 if (pSelf == NULL)
     return;
 struct annoStreamer *self = *pSelf;
+freez(&(self->name));
 freez(&(self->chrom));
 annoFilterFreeList(&(self->filters));
 freez(pSelf);

@@ -89,8 +89,8 @@ struct annoGrator *annoGrateWigNew(struct annoStreamer *wigSource)
 /* Create an annoGrator subclass for source with rowType == arWig. */
 {
 if (wigSource->rowType != arWig)
-    errAbort("annoGrateWigNew: expected source->rowType arWig (%d), got %d",
-	     arWig, wigSource->rowType);
+    errAbort("annoGrateWigNew: expected source->rowType arWig (%d), got %d from source %s",
+	     arWig, wigSource->rowType, wigSource->name);
 struct annoGrateWig *self;
 AllocVar(self);
 struct annoGrator *gSelf = (struct annoGrator *)self;

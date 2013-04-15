@@ -43,7 +43,7 @@ self->intervalList = bigWigIntervalQuery(self->bbi, streamer->chrom,
 self->nextInterval = self->intervalList;
 }
 
-static struct annoRow *annoRowFromContigBbiIntervals(char *chrom,
+static struct annoRow *annoRowFromContigBbiIntervals(char *name, char *chrom,
 				struct bbiInterval *startIv, struct bbiInterval *endIv,
 				boolean rightJoinFail, struct lm *callerLm)
 /* Given a range of non-NULL contiguous bbiIntervals (i.e. no gaps between intervals),
@@ -60,8 +60,8 @@ for (iv = startIv;  iv != endIv->next;  iv = iv->next)
     for (i = 0;  i < (iv->end - iv->start);  i++)
 	vals[vecOff++] = iv->val;
     if (vecOff > baseCount)
-	errAbort("annoRowFromContigBbiIntervals: overflowed baseCount (%s:%d-%d)",
-		 chrom, startIv->start, endIv->end);
+	errAbort("annoStreamBigWig %s: overflowed baseCount (%s:%d-%d)",
+		 name, chrom, startIv->start, endIv->end);
     }
 return annoRowWigNew(chrom, startIv->start, endIv->end, rightJoinFail, vals, callerLm);
 }
@@ -86,7 +86,8 @@ while (annoFilterWigValueFails(vSelf->filters, self->nextInterval->val, &rightFa
 	return NULL;
     }
 if (rightFail)
-    return annoRowFromContigBbiIntervals(vSelf->chrom, startIv, startIv, rightFail, callerLm);
+    return annoRowFromContigBbiIntervals(vSelf->name, vSelf->chrom,
+					 startIv, startIv, rightFail, callerLm);
 struct bbiInterval *endIv = startIv, *iv;
 int maxCount = 16 * 1024, count;
 for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->next, count++)
@@ -100,7 +101,8 @@ for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->n
 	break;
     }
 self->nextInterval = endIv->next;
-return annoRowFromContigBbiIntervals(vSelf->chrom, startIv, endIv, rightFail, callerLm);
+return annoRowFromContigBbiIntervals(vSelf->name, vSelf->chrom,
+				     startIv, endIv, rightFail, callerLm);
 }
 
 static void asbwClose(struct annoStreamer **pVSelf)
@@ -123,7 +125,7 @@ struct asObject *asObj = asParseText(annoRowBigWigAsText);
 struct annoStreamBigWig *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, aa, asObj);
+annoStreamerInit(streamer, aa, asObj, fileOrUrl);
 streamer->rowType = arWig;
 streamer->setRegion = asbwSetRegion;
 streamer->nextRow = asbwNextRow;
