@@ -126,7 +126,7 @@ AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 struct asObject *asObj = vcfAsObj();
 annoStreamerInit(streamer, aa, asObj, fileOrUrl);
-streamer->rowType = arVcf;
+streamer->rowType = arWords;
 streamer->setRegion = asvSetRegion;
 streamer->getHeader = asvGetHeader;
 streamer->nextRow = asvNextRow;

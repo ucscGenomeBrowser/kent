@@ -103,7 +103,7 @@ if (row == NULL)
     return NULL;
 boolean freeWhenDone = FALSE;
 char **words = NULL;
-if (source->rowType == arWords || source->rowType == arVcf)
+if (source->rowType == arWords)
     words = row->data;
 else if (source->rowType == arWig)
     {

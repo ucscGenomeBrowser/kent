@@ -11,6 +11,7 @@
 #include "annoFormatTab.h"
 #include "annoFormatVep.h"
 #include "dystring.h"
+#include "genePred.h"
 #include "hdb.h"
 #include "memalloc.h"
 #include "pgSnp.h"
@@ -91,8 +92,9 @@ if (info->type == arWig)
     streamer = annoStreamWigDbNew(info->sqlDb, info->tableFileUrl, info->assembly, BIGNUM);
 else if (info->sqlDb != NULL)
     streamer = annoStreamDbNew(info->sqlDb, info->tableFileUrl, info->assembly, info->asObj);
-else if (info->type == arVcf) //#*** arVcf is bogus -- use autoSql comparison
+else if (info->asObj && asObjectsMatch(info->asObj, vcfAsObj()))
     {
+    //#*** this is kludgey, should test for .tbi file:
     boolean looksLikeTabix = endsWith(info->tableFileUrl, ".gz");
     streamer = annoStreamVcfNew(info->tableFileUrl, looksLikeTabix, info->assembly, BIGNUM);
     }
@@ -131,8 +133,7 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     else
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
-	if (doGpFx && gratorList == NULL) //#*** doGpFx should not be applied to all grators!
-	    // #*** again, the real solution here is autoSql recognition
+	if (doGpFx && grInfo->asObj && asObjectsMatchFirstN(grInfo->asObj, genePredAsObj(), 10))
 	    grator = annoGratorGpVarNew(src, FALSE);
 	else
 	    grator = annoGratorNew(src);
@@ -232,7 +233,7 @@ if (doAllTests || sameString(test, vcfEx1))
 #endif//def USE_TABIX && KNETFILE_HOOKS
     struct streamerInfo vcfEx1 = { NULL, assembly, NULL,
 			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz",
-				   arVcf, vcfAsObj() };
+				   arWords, vcfAsObj() };
     dbToTabOut(&vcfEx1, "stdout", NULL, 0, 0, FALSE);
     }
 
@@ -240,7 +241,7 @@ if (doAllTests || sameString(test, vcfEx2))
     {
     struct streamerInfo vcfEx2 = { NULL, assembly, NULL,
 			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExampleTwo.vcf",
-				   arVcf, vcfAsObj() };
+				   arWords, vcfAsObj() };
     dbToTabOut(&vcfEx2, "stdout", NULL, 0, 0, FALSE);
     }
 

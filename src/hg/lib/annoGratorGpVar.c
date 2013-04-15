@@ -43,12 +43,12 @@ struct dyString *gpPlusGpFx = dyStringCreate(aggvAutoSqlStringStart);
 struct asColumn *col;
 for (col = sourceAsObj->columnList;  col != NULL;  col = col->next)
     {
-    if (col->isArray || col->isList)
+    if (col->fixedSize)
+	dyStringPrintf(gpPlusGpFx, "%s[%d]\t%s;\t\"%s\"",
+		       col->lowType->name, col->fixedSize, col->name, col->comment);
+    else if (col->isArray || col->isList)
 	{
-	if (col->fixedSize)
-	    dyStringPrintf(gpPlusGpFx, "%s[%d]\t%s;\t\"%s\"",
-			   col->lowType->name, col->fixedSize, col->name, col->comment);
-	else if (col->linkedSizeName)
+	if (col->linkedSizeName)
 	    dyStringPrintf(gpPlusGpFx, "%s[%s]\t%s;\t\"%s\"",
 			   col->lowType->name, col->linkedSizeName, col->name, col->comment);
 	else

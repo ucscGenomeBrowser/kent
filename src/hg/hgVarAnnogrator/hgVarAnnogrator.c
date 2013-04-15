@@ -27,6 +27,7 @@
 #include "hCommon.h"
 #include "trackDb.h"
 #include "wikiTrack.h"
+#include "genePred.h"
 #include "hgMaf.h"
 #if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
@@ -1865,47 +1866,6 @@ else
 return streamer;
 }
 
-boolean looksLikePgSnp(struct asObject *asObj)
-/* Return TRUE if this has characteristic column names of pgSnp. */
-//#*** Replace me with a general autoSql comparator!!
-{
-boolean gotChromStart = FALSE, gotChromEnd = FALSE, gotAlleleCount = FALSE, gotAlleleFreq = FALSE;
-struct asColumn *col;
-for (col = asObj->columnList;  col != NULL;  col = col->next)
-    {
-    if (sameString(col->name, "chromStart"))
-	gotChromStart = TRUE;
-    else if (sameString(col->name, "chromEnd"))
-	gotChromEnd = TRUE;
-    else if (sameString(col->name, "alleleCount"))
-	gotAlleleCount = TRUE;
-    else if (sameString(col->name, "alleleFreq"))
-	gotAlleleFreq = TRUE;
-    }
-return (gotChromStart && gotChromEnd && gotAlleleCount && gotAlleleFreq);
-}
-
-boolean looksLikeGenePred(struct asObject *asObj)
-/* Return TRUE if this has characteristic column names of genePred. */
-//#*** Replace me with a general autoSql comparator!!
-{
-boolean gotTxStart = FALSE, gotTxEnd = FALSE, gotCdsStart = FALSE, gotExonStarts = FALSE;
-struct asColumn *col;
-for (col = asObj->columnList;  col != NULL;  col = col->next)
-    {
-    if (sameString(col->name, "txStart"))
-	gotTxStart = TRUE;
-    else if (sameString(col->name, "txEnd"))
-	gotTxEnd = TRUE;
-    else if (sameString(col->name, "cdsStart"))
-	gotCdsStart = TRUE;
-    else if (sameString(col->name, "exonStarts"))
-	gotExonStarts = TRUE;
-    }
-return (gotTxStart && gotTxEnd && gotCdsStart && gotExonStarts);
-}
-
-
 struct annoGrator *gratorFromSource(char *db, struct sourceConfig *src, struct trackDb *tdb,
 				    char *chrom, struct annoStreamer *primary)
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator. */
@@ -1927,7 +1887,8 @@ if (startsWith("wig", tdb->type))
 else
     {
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
-    if (looksLikePgSnp(primary->asObj) && looksLikeGenePred(streamer->asObj))
+    if (asObjectsMatch(primary->asObj, pgSnpAsObj()) &&
+	asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
 	grator = annoGratorGpVarNew(streamer, FALSE);
     else
 	grator = annoGratorNew(streamer);

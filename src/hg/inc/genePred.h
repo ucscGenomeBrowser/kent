@@ -295,6 +295,8 @@ boolean exonToPos(struct genePred *gp, unsigned num, int *chromStart, int *chrom
 // map 1-based exon number to genomic coordinates.
 // Returns true if we find the exon in given gene predition; chromStart and chromEnd are set to appropriate region.
 
+struct asObject *genePredAsObj();
+// Return asObject describing fields of genePred
 
 #endif /* GENEPRED_H */
 

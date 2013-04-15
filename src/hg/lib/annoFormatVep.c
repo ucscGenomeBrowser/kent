@@ -6,8 +6,11 @@
 #include "annoGratorGpVar.h"
 #include "annoGratorQuery.h"
 #include "dystring.h"
+#include "genePred.h"
 #include "gpFx.h"
+#include "pgSnp.h"
 #include "portable.h"
+#include "vcf.h"
 #include <time.h>
 
 struct annoFormatVep
@@ -366,23 +369,24 @@ self->config = config;
 struct asColumn *varAsColumns = config->variantSource->asObj->columnList;
 self->varNameIx = -1;
 self->varAllelesIx = -1;
-//#*** get real autoSql col checking:
-if (asColumnFindIx(varAsColumns, "alleleCount"))
+if (asObjectsMatch(config->variantSource->asObj, pgSnpAsObj()))
     {
-    // don't use pgSnp's "name" column as name, it's just alleles
+    // pgSnp's "name" column actually contains slash-separated alleles
     self->varAllelesIx = asColumnFindIx(varAsColumns, "name");
     }
-else
+else if (asObjectsMatch(config->variantSource->asObj, vcfAsObj()))
     {
-    boolean looksLikeVcf = TRUE;
     self->varNameIx = asColumnFindIx(varAsColumns, "name");
-    if (looksLikeVcf)
-	self->getSlashSepAlleles = getSlashSepAllelesFromVcf;
-    else
-	errAbort("afVepSetConfig: can't figure out how to extract variant alleles");
+    self->getSlashSepAlleles = getSlashSepAllelesFromVcf;
     }
+else
+    errAbort("afVepSetConfig: variant source %s doesn't look like pgSnp or VCF",
+	     config->variantSource->name);
 if (config->gpVarSource == NULL)
     errAbort("afVepSetConfig: config must have a gpVarSource");
+else if (! asObjectsMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10))
+    errAbort("afVepSetConfig: gpVarSource %s doesn't look like genePred",
+	     config->gpVarSource->name);
 struct asColumn *gpvAsColumns = config->gpVarSource->asObj->columnList;
 self->geneNameIx = asColumnFindIx(gpvAsColumns, "proteinID");
 if (self->geneNameIx < 0)
