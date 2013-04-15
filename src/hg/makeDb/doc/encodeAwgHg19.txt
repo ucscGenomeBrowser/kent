@@ -760,7 +760,6 @@ cat  << 'EOF' > link.csh
 
     # QA preview (vs. redmine issue)
     encodeQaInit hg19 wgEncodeAwgTfbsUniform 1 10042 -t 
-    # OOPS, failing!  Check notes files...
 
 ###############################################
 # Master list of 2.9M DNase sites from Analysis   (in progress kate)
