@@ -4,7 +4,6 @@
 #define ANNOSTREAMER_H
 
 #include "annoAssembly.h"
-#include "annoColumn.h"
 #include "annoFilter.h"
 #include "annoRow.h"
 
@@ -37,10 +36,6 @@ struct annoStreamer
     void (*setFilters)(struct annoStreamer *self, struct annoFilter *newFilters);
     /* Get and set filters */
 
-    struct annoColumn *(*getColumns)(struct annoStreamer *self);
-    void (*setColumns)(struct annoStreamer *self, struct annoColumn *newColumns);
-    /* Get and set output fields */
-
     struct annoRow *(*nextRow)(struct annoStreamer *self, struct lm *lm);
     /* Get the next item from this source.  Use localmem lm to store returned annoRow. */
 
@@ -51,7 +46,6 @@ struct annoStreamer
     struct annoAssembly *assembly;	// Genome assembly that provides coords for annotations
     struct asObject *asObj;		// Annotation data definition
     struct annoFilter *filters;		// Filters to constrain output
-    struct annoColumn *columns;		// Columns to include in output
     char *chrom;			// Non-NULL if querying a particular region
     uint regionStart;			// If chrom is non-NULL, region start coord
     uint regionEnd;			// If chrom is non-NULL, region end coord
@@ -78,12 +72,6 @@ struct annoFilter *annoStreamerGetFilters(struct annoStreamer *self);
 
 void annoStreamerSetFilters(struct annoStreamer *self, struct annoFilter *newFilters);
 /* Free old filters and use clone of newFilters. */
-
-struct annoColumn *annoStreamerGetColumns(struct annoStreamer *self);
-/* Return supported columns with current settings.  Callers can modify and free when done. */
-
-void annoStreamerSetColumns(struct annoStreamer *self, struct annoColumn *columns);
-/* Free old columns and use clone of newColumns. */
 
 void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
 		      struct asObject *asObj);

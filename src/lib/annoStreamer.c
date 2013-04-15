@@ -15,10 +15,8 @@ void annoStreamerSetAutoSqlObject(struct annoStreamer *self, struct asObject *as
 /* Use new asObj and update internal state derived from asObj. */
 {
 annoFilterFreeList(&(self->filters));
-annoColumnFreeList(&(self->columns));
 self->asObj = asObj;
 self->filters = annoFiltersFromAsObject(asObj);
-self->columns = annoColumnsFromAsObject(asObj);
 self->numCols = slCount(asObj->columnList);
 }
 
@@ -61,19 +59,6 @@ annoFilterFreeList(&(self->filters));
 self->filters = annoFilterCloneList(newFilters);
 }
 
-struct annoColumn *annoStreamerGetColumns(struct annoStreamer *self)
-/* Return supported columns with current settings.  Callers can modify and free when done. */
-{
-return annoColumnCloneList(self->columns);
-}
-
-void annoStreamerSetColumns(struct annoStreamer *self, struct annoColumn *newColumns)
-/* Free old columns and use clone of newColumns. */
-{
-annoColumnFreeList(&(self->columns));
-self->columns = annoColumnCloneList(newColumns);
-}
-
 void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
 		      struct asObject *asObj)
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
@@ -88,8 +73,6 @@ self->setRegion = annoStreamerSetRegion;
 self->getHeader = annoStreamerGetHeader;
 self->getFilters = annoStreamerGetFilters;
 self->setFilters = annoStreamerSetFilters;
-self->getColumns = annoStreamerGetColumns;
-self->setColumns = annoStreamerSetColumns;
 self->positionIsGenome = TRUE;
 self->setAutoSqlObject(self, asObj);
 }
@@ -103,7 +86,6 @@ if (pSelf == NULL)
 struct annoStreamer *self = *pSelf;
 freez(&(self->chrom));
 annoFilterFreeList(&(self->filters));
-annoColumnFreeList(&(self->columns));
 freez(pSelf);
 }
 

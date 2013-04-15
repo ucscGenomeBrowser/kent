@@ -25,17 +25,15 @@ if (source->rowType == arWig)
 	}
     fputs("\tstart\tend", f);
     }
-struct annoColumn *col;
+struct asColumn *col;
 int i;
-for (col = source->columns, i = 0;  col != NULL;  col = col->next, i++)
+for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
     {
-    if (! col->included)
-	continue;
     if (isFirst && i == 0)
 	fputc('#', f);
     else
 	fputc('\t', f);
-    fputs(col->def->name, f);
+    fputs(col->name, f);
     }
 }
 
@@ -144,12 +142,10 @@ if (streamer->rowType == arWig)
     else
 	fputs("\t\t", f);
     }
-struct annoColumn *col;
+int colCount = slCount(streamer->asObj->columnList);
 int i;
-for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
+for (i = 0;  i < colCount;  i++)
     {
-    if (! col->included)
-	continue;
     if (!isFirst || i > 0)
 	fputc('\t', f);
     if (words != NULL)

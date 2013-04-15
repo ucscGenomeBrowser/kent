@@ -1,7 +1,7 @@
 include ../inc/common.mk
 
 
-O = aliType.o annoAssembly.o annoColumn.o annoFilter.o annoFormatter.o annoFormatTab.o \
+O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     annoGrator.o annoGrateWig.o annoGratorQuery.o annoOption.o annoRow.o \
     annoStreamer.o annoStreamBigBed.o annoStreamBigWig.o annoStreamTab.o annoStreamVcf.o \
     apacheLog.o asParse.o axt.o axtAffine.o bamFile.o base64.o \
