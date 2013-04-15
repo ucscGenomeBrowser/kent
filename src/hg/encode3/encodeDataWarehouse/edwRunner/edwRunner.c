@@ -71,26 +71,38 @@ run->pid = 0;
 --curThreads;
 }
 
+struct runner *checkOnChildRunner(boolean doWait)
+/* See if a child has finished and optionally wait for it. */
+{
+if (curThreads > 0)
+    {
+    int status = 0;
+    int waitFlags = (doWait ? 0 : WNOHANG);
+    int child = waitpid(-1, &status, waitFlags);
+    if (child < 0)
+	errnoAbort("Couldn't wait");
+    if (child != 0)
+	{
+	int i;
+	for (i=0; i<maxThreadCount; ++i)
+	    {
+	    struct runner *run = &runners[i];
+	    if (run->pid == child)
+		{
+		finishRun(run, status);
+		return run;
+		}
+	    }
+	internalErr();
+	}
+    }
+return NULL;
+}
+
 struct runner *waitOnChildRunner()
 /* Wait for child to finish. */
 {
-assert(curThreads > 0);
-int status = 0;
-int child = wait(&status);
-if (child < 0)
-    errnoAbort("Couldn't wait");
-int i;
-for (i=0; i<maxThreadCount; ++i)
-    {
-    struct runner *run = &runners[i];
-    if (run->pid == child)
-	{
-	finishRun(run, status);
-	return run;
-	}
-    }
-internalErr();
-return NULL;
+return checkOnChildRunner(TRUE);
 }
 
 struct runner *findFreeRunner()
@@ -158,40 +170,39 @@ void edwRunner(char *now)
 /* edwRunner - Runs pending jobs in edwJob table.. */
 {
 struct edwJob *jobList = NULL;
-int pendingJobCount = 0;
 long long timeBetweenChecks = 30;
 long long lastCheck = edwNow() - timeBetweenChecks;
 for (;;)
     {
-    uglyf("pendingJobCount %d, slCount(jobList)=%d, curThreads %d\n", pendingJobCount, slCount(jobList), curThreads);
-    if (pendingJobCount + curThreads < maxThreadCount)
+    uglyf("slCount(jobList)=%d, curThreads %d\n", slCount(jobList), curThreads);
+    /* Three main cases each iteration: run a job, wait for a job, or look for new jobs.  If we
+     * can't do any of these we go to sleep for a while.  */
+    if (jobList != NULL && curThreads < maxThreadCount)  // Open slot and a job to put in it!
         {
-	if (edwNow() - lastCheck >= timeBetweenChecks)
-	    {
-	    struct sqlConnection *conn = sqlConnect(edwDatabase);
-	    char query[256];
-	    safef(query, sizeof(query), "select * from edwJob where startTime = 0 order by id");
-	    struct edwJob *newJobs = edwJobLoadByQuery(conn, query);
-	    int newJobCount = slCount(newJobs);
-	    pendingJobCount += newJobCount;
-	    uglyf("Got %d new jobs\n", newJobCount);
-	    sqlDisconnect(&conn);
-	    jobList = slCat(jobList, newJobs);
-	    lastCheck = edwNow();
-	    }
-	}
-
-    if (jobList != NULL)
-	{
 	struct runner *runner = findFreeRunner();
 	struct edwJob *job = jobList;
 	jobList = jobList->next;
 	runJob(runner, job);
-	--pendingJobCount;
 	}
-    else if (curThreads > 0)
-	{
+    else if (curThreads == maxThreadCount)   // Are all slots being used, then wait for one to open
+        {
 	waitOnChildRunner();
+	}
+    else if (edwNow() - lastCheck >= timeBetweenChecks)  // Can check database for jobs yet?
+        {
+	/* Would be nice to have a way to wait on DB rather than poll it like this. */
+	struct sqlConnection *conn = sqlConnect(edwDatabase);
+	char query[256];
+	safef(query, sizeof(query), "select * from edwJob where startTime = 0 order by id");
+	struct edwJob *newJobs = edwJobLoadByQuery(conn, query);
+	int newJobCount = slCount(newJobs);
+	uglyf("Got %d new jobs\n", newJobCount);
+	sqlDisconnect(&conn);
+	jobList = slCat(jobList, newJobs);
+	lastCheck = edwNow();
+	}
+    else if (checkOnChildRunner(FALSE) != NULL)	// See if a child has finished
+        {
 	}
     else
         {
