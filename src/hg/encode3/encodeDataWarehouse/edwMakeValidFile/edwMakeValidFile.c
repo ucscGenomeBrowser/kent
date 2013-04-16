@@ -259,7 +259,7 @@ remove(saiName);
 struct genomeRangeTree *grt = genomeRangeTreeNew();
 long long hitCount=0, missCount=0, totalBasesInHits=0;
 scanSam(samName, bedF, grt, &hitCount, &missCount, &totalBasesInHits);
-uglyf("hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", hitCount, missCount, totalBasesInHits, grt);
+verbose(1, "hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", hitCount, missCount, totalBasesInHits, grt);
 vf->mapRatio = (double)hitCount/(hitCount+missCount);
 vf->depth = (double)totalBasesInHits/assembly->baseCount * (double)vf->itemCount/vf->sampleCount;
 long long basesHitBySample = genomeRangeTreeSumRanges(grt);
@@ -288,7 +288,6 @@ carefulClose(&smallF);
 char sampleFastqName[PATH_LEN];
 if (vf->sampleCount > edwSampleTargetSize)
     {
-    uglyf("About to subsample from %lld to %d\n", vf->sampleCount, edwSampleTargetSize);
     safef(sampleFastqName, PATH_LEN, "%sedwSampleFastqXXXXXX", edwTempDir());
     int fd = mkstemp(sampleFastqName);
     FILE *f = fdopen(fd, "w");
