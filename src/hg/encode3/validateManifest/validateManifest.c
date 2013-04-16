@@ -448,24 +448,44 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
 
 
 
+int mUcscDbIdx = -1;    // optional field ucsc_db
 int mFileNameIdx = -1;
 int mFormatIdx = -1;
-int mUcscDbIdx = -1;    // optional field ucsc_db
+int mOutputType = -1;
+int mExperiment = -1;
+int mReplicate = -1;
+int mEnrichedIn = -1;
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
     {
+    if (sameString(manifestFields->words[i], "ucsc_db"))
+	mUcscDbIdx = i;
     if (sameString(manifestFields->words[i], "file_name"))
 	mFileNameIdx = i;
     if (sameString(manifestFields->words[i], "format"))
 	mFormatIdx = i;
-    if (sameString(manifestFields->words[i], "ucsc_db"))
-	mUcscDbIdx = i;
+    if (sameString(manifestFields->words[i], "output_type"))
+	mOutputType = i;
+    if (sameString(manifestFields->words[i], "experiment"))
+	mExperiment = i;
+    if (sameString(manifestFields->words[i], "replicate"))
+	mReplicate = i;
+    if (sameString(manifestFields->words[i], "enriched_in"))
+	mEnrichedIn = i;
     }
 if (mFileNameIdx == -1)
     errAbort("field file_name not found in manifest.txt");
 if (mFormatIdx == -1)
     errAbort("field format not found in manifest.txt");
+if (mOutputType == -1)
+    errAbort("field output_type not found in manifest.txt");
+if (mExperiment == -1)
+    errAbort("field experiment not found in manifest.txt");
+if (mReplicate == -1)
+    errAbort("field replicate not found in manifest.txt");
+if (mEnrichedIn == -1)
+    errAbort("field enriched_in not found in manifest.txt");
 
 // check if the fieldnames in old validated appear in the same order in manifest.txt
 //  although this is currently a minor limitation, it could be removed 
