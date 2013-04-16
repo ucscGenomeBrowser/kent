@@ -12,6 +12,8 @@ DIRS = \
     edwAddQaEnrichTarget \
     edwAddSubscriber \
     edwCreateUser \
+    edwMakeEnrichments \
+    edwMakeReplicateQa \
     edwMakeValidFile \
     edwResetPassword \
     edwSubmit

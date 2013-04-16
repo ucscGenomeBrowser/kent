@@ -1,6 +1,6 @@
 include ../../../../inc/common.mk
-pslMap = ${BINDIR}/pslMap
-#pslMap = valgrind --tool=memcheck --num-callers=25 ${BINDIR}/pslMap
+pslMap = pslMap
+#pslMap = valgrind --tool=memcheck --num-callers=25 pslMap
 
 all:
 

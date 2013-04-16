@@ -34,18 +34,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
-/* Return full path (which eventually should be freeMem'd) for fileId */
-{
-char query[256];
-char fileName[PATH_LEN];
-safef(query, sizeof(query), "select edwFileName from edwFile where id=%lld", fileId);
-sqlNeedQuickQuery(conn, query, fileName, sizeof(fileName));
-char path[512];
-safef(path, sizeof(path), "%s%s", edwRootDir, fileName);
-return cloneString(path);
-}
-
 struct genomeRangeTree *grtFromBed3List(struct bed3 *bedList)
 /* Make up a genomeRangeTree around bed file. */
 {
@@ -56,12 +44,24 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 return grt;
 }
 
-struct genomeRangeTree *grtFromSimpleBed(char *fileName)
+struct genomeRangeTree *grtFromBigBed(char *fileName)
 /* Return genome range tree for simple (unblocked) bed */
 {
-struct bed3 *bedList = bed3LoadAll(fileName);
-struct genomeRangeTree *grt = grtFromBed3List(bedList);
-bed3FreeList(&bedList);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    struct rbTree *tree = genomeRangeTreeFindOrAddRangeTree(grt, chrom->name);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *iv, *ivList = NULL;
+    ivList = bigBedIntervalQuery(bbi, chrom->name, 0, chrom->size, 0, lm);
+    for (iv = ivList; iv != NULL; iv = iv->next)
+        rangeTreeAdd(tree, iv->start, iv->end);
+    lmCleanup(&lm);
+    }
+bigBedFileClose(&bbi);
+bbiChromInfoFreeList(&chromList);
 return grt;
 }
 
@@ -243,7 +243,8 @@ struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
 
 /* Do a pretty complex loop that just aims to set target->overlapBases and ->uniqOverlapBases
  * for all targets.  This is complicated by just wanting to keep one chromosome worth of
- * bigWig data in memory. */
+ * bigWig data in memory. Also just for performance we do a lookup of target range tree to
+ * get chromosome specific one to use, which avoids a hash lookup in the inner loop. */
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     /* Get list of intervals in bigWig for this chromosome, and feed it to a rangeTree. */
@@ -297,7 +298,7 @@ struct target *target, *targetList = NULL, **targetTail = &targetList;
 for (et = etList; et != NULL; et = et->next)
     {
     char *targetBed = edwPathForFileId(conn, et->fileId);
-    struct genomeRangeTree *grt = grtFromSimpleBed(targetBed);
+    struct genomeRangeTree *grt = grtFromBigBed(targetBed);
     target = targetNew(et, grt);
     *targetTail = target;
     targetTail = &target->next;
@@ -312,54 +313,60 @@ void doEnrichments(struct sqlConnection *conn, struct edwFile *ef, char *path,
  * grtList are in the same order. */
 {
 /* Get validFile from database. */
-char query[256];
-safef(query, sizeof(query), "select * from edwValidFile where fileId=%d", ef->id);
-struct edwValidFile *vf = edwValidFileLoadByQuery(conn, query);
+struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
 
-/* Get our assembly */
-char *format = vf->format;
-char *ucscDb = vf->ucscDb;
-safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
-struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
-if (assembly == NULL)
-    errAbort("Can't find assembly for %s", ucscDb);
-
-struct target *targetList = hashFindVal(assemblyToTarget, assembly->name);
-if (targetList == NULL)
+if (!isEmpty(vf->enrichedIn))
     {
-    targetList = targetsForAssembly(conn, assembly);
+    /* Get our assembly */
+    char *format = vf->format;
+    char *ucscDb = vf->ucscDb;
+    char query[256];
+    safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", vf->ucscDb);
+    struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+    if (assembly == NULL)
+	errAbort("Can't find assembly for %s", ucscDb);
+
+    struct target *targetList = hashFindVal(assemblyToTarget, assembly->name);
     if (targetList == NULL)
-        errAbort("No targets for assembly %s", assembly->name);
-    hashAdd(assemblyToTarget, assembly->name, targetList);
+	{
+	targetList = targetsForAssembly(conn, assembly);
+	if (targetList == NULL)
+	    errAbort("No targets for assembly %s", assembly->name);
+	hashAdd(assemblyToTarget, assembly->name, targetList);
+	}
+
+    /* Loop through targetList zeroing out existing ovelaps. */
+    struct target *target;
+    for (target = targetList; target != NULL; target = target->next)
+	target->overlapBases = target->uniqOverlapBases = 0;
+
+    /* Do a big dispatch based on format. */
+    if (sameString(format, "fastq"))
+	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "bigWig"))
+	doEnrichmentsFromBigWig(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "bigBed"))
+	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "narrowPeak"))
+	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "broadPeak"))
+	doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "gtf"))
+	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "gff"))
+	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "bam"))
+	doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+    else if (sameString(format, "unknown"))
+	verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->edwFileName);
+    else
+	errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
+
+    /* Clean up and go home. */
+    edwAssemblyFree(&assembly);
     }
-
-/* Loop through targetList zeroing out existing ovelaps. */
-struct target *target;
-for (target = targetList; target != NULL; target = target->next)
-    target->overlapBases = target->uniqOverlapBases = 0;
-
-/* Do a big dispatch based on format. */
-if (sameString(format, "fastq"))
-    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
-else if (sameString(format, "bigWig"))
-    doEnrichmentsFromBigWig(conn, ef, vf, assembly, targetList);
-else if (sameString(format, "bigBed"))
-    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
-else if (sameString(format, "narrowPeak"))
-    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
-else if (sameString(format, "broadPeak"))
-    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
-else if (sameString(format, "bam"))
-    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
-else if (sameString(format, "unknown"))
-    verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->edwFileName);
-else
-    errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
-
-/* Clean up and go home. */
-edwAssemblyFree(&assembly);
 edwValidFileFree(&vf);
 }
 
@@ -370,26 +377,19 @@ void edwMakeEnrichments(int startFileId, int endFileId)
 {
 /* Make list with all files in ID range */
 struct sqlConnection *conn = sqlConnect(edwDatabase);
-char query[256];
-safef(query, sizeof(query), 
-    "select * from edwFile where id>=%d and id<=%d and md5 != '' and deprecated = ''", 
-    startFileId, endFileId);
-struct edwFile *file, *fileList = edwFileLoadByQuery(conn, query);
+struct edwFile *ef, *efList = edwFileAllIntactBetween(conn, startFileId, endFileId);
 
 /* Make up a hash for targets keyed by assembly name. */
-
 struct hash *assemblyToTarget = hashNew(0);
 
-for (file = fileList; file != NULL; file = file->next)
+for (ef = efList; ef != NULL; ef = ef->next)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s%s", edwRootDir, file->edwFileName);
-    verbose(1, "processing %s aka %s\n", file->submitFileName, path);
+    safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
+    verbose(1, "processing %s aka %s\n", ef->submitFileName, path);
 
-    if (file->tags) // All ones we care about have tags
-        {
-	doEnrichments(conn, file, path, assemblyToTarget);
-	}
+    if (ef->tags) // All ones we care about have tags
+	doEnrichments(conn, ef, path, assemblyToTarget);
     }
 sqlDisconnect(&conn);
 }

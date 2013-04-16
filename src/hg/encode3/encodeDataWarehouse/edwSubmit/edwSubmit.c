@@ -28,14 +28,11 @@ errAbort(
   "   edwSubmit submitUrl user password\n"
   "Generally user is an email address\n"
   "options:\n"
-  "   -licensePlatePrefix=prefix (default %s)\n"
-  , edwLicensePlatePrefix
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"licensePlatePrefix", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -171,7 +168,6 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
     bf->tags = cloneString(tags->string);
 
     /* Fake other fields. */
-    strcpy(bf->licensePlate, "");
     bf->edwFileName  = cloneString("");
     slAddHead(&bfList, bf);
     }
@@ -260,11 +256,11 @@ char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    edwMakePlateFileNameAndPath(bf->id, submitFileName, bf->licensePlate, edwFile, edwPath);
+    edwMakeFileNameAndPath(bf->id, submitFileName, edwFile, edwPath);
     bf->startUploadTime = edwNow();
     char tempName[PATH_LEN];
     fetchFdToTempFile(fd, tempName);
-    rename(tempName, edwPath);
+    mustRename(tempName, edwPath);
     bf->endUploadTime = edwNow();
     bf->edwFileName = cloneString(edwFile);
     }
@@ -285,10 +281,10 @@ errCatchFree(&errCatch);
 /* Now we got the file.  We'll go ahead and save the file name and stuff. */
 char query[256];
 safef(query, sizeof(query),
-       "update edwFile"
-       "  set licensePlate='%s', edwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
+       "update edwFile set"
+       "  edwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
        "  where id = %d"
-       , bf->licensePlate, bf->edwFileName, bf->startUploadTime, bf->endUploadTime, bf->id);
+       , bf->edwFileName, bf->startUploadTime, bf->endUploadTime, bf->id);
 sqlUpdate(conn, query);
 
 /* Wrap the validations in an error catcher that will save error to file table in database */
@@ -304,7 +300,9 @@ if (errCatchStart(errCatch))
     if (!sameWord(md5, bf->md5))
         errAbort("%s corrupted in upload md5 %s != %s\n", bf->submitFileName, bf->md5, md5);
 
-    /* Finish updating a bunch more of edwFile record. */
+    /* Finish updating a bunch more of edwFile record. Note there is a requirement in 
+     * the validFile section that bf->updateTime be updated last.  A nonzero bf->updateTime
+     * is used as a sign of record complete. */
     struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
     dyStringPrintf(dy, "update edwFile set md5='%s',size=%lld,updateTime=%lld",
 	    md5, bf->size, bf->updateTime);
@@ -476,31 +474,32 @@ if (errCatchStart(errCatch))
 	}
     else
         {
-	/* Make nearly empty record - reserves fileId */
+	/* Looks like it's the first time we've seen this submission file, so
+	 * save the file itself.  We'll get to the records inside the file in a bit. */
 	fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFile);
 
-	/* Get license plate and file/path names that depend on it. */
-	char licensePlate[edwMaxPlateSize];
+	/* Get file/path names for submission file inside warehouse. */
 	char edwFile[PATH_LEN];
-	edwMakePlateFileNameAndPath(fileId, submitFile, licensePlate, edwFile, submitLocalPath);
+	edwMakeFileNameAndPath(fileId, submitFile, edwFile, submitLocalPath);
 
 	/* Move file to final resting place and get update time and size from local file system.  */
-	rename(tempSubmitFile, submitLocalPath);
+	mustRename(tempSubmitFile, submitLocalPath);
 	time_t updateTime = fileModTime(submitLocalPath);
 	off_t size = fileSize(submitLocalPath);
 
-	/* Update file table which now should be complete. */
+	/* Update file table which now should be complete including updateTime. */
 	safef(query, sizeof(query), 
 	    "update edwFile set "
-	    " updateTime=%lld, size=%lld, md5='%s', licensePlate='%s', edwFileName='%s',"
+	    " updateTime=%lld, size=%lld, md5='%s', edwFileName='%s',"
 	    " startUploadTime=%lld, endUploadTime=%lld"
 	    " where id=%u\n",
-	    (long long)updateTime, (long long)size, md5, licensePlate, edwFile, 
+	    (long long)updateTime, (long long)size, md5, edwFile, 
 	    startUploadTime, endUploadTime, fileId);
 	sqlUpdate(conn, query);
 	}
 
-    /* Load up submit file as fielded table, make sure all required fields are there,
+    /* By now there is a submit file on the local file system.  Load and
+     * parse up this file as fielded table, make sure all required fields are there,
      * and calculate indexes of required fields. */
     char *requiredFields[] = {"file_name", "md5_sum", "size", "modified"};
     struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, 
@@ -540,16 +539,24 @@ for (bf = bfList; bf != NULL; bf = bf->next)
     safef(submitUrl, submitUrlSize, "%s%s", submitDir, bf->submitFileName);
     if (edwGotFile(conn, submitDir, bf->submitFileName, bf->md5)<0)
 	{
-	verbose(1, "Fetching %s\n", bf->submitFileName);
-	int hostId=0, submitDirId = 0;
-	int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
-	    &hostId, &submitDirId);
-	int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
-	close(fd);
-	safef(query, sizeof(query), "update edwSubmit set newFiles=newFiles+1 where id=%d", 
-	    submitId);
-	sqlUpdate(conn, query);
-	tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
+	/* We can't get a ID for this file. There's two possible reasons - 
+	 * either somebody is in the middle of fetching it or nobody's started. 
+	 * If somebody is in the middle of fetching it, assume they died
+	 * if they took more than an hour,  and start up another fetch.
+	 * So here we fetch unless somebody else is fetching recently. */
+	if (edwGettingFile(conn, submitDir, bf->submitFileName) < 0)
+	    {
+	    verbose(1, "Fetching %s\n", bf->submitFileName);
+	    int hostId=0, submitDirId = 0;
+	    int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
+		&hostId, &submitDirId);
+	    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
+	    close(fd);
+	    safef(query, sizeof(query), "update edwSubmit set newFiles=newFiles+1 where id=%d", 
+		submitId);
+	    sqlUpdate(conn, query);
+	    tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
+	    }
 	}
     else
 	{
@@ -573,7 +580,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-edwLicensePlatePrefix = optionVal("licensePlatePrefix", edwLicensePlatePrefix);
 if (argc != 4)
     usage();
 edwSubmit(argv[1], argv[2], argv[3]);

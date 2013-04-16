@@ -1,6 +1,6 @@
 include ../../../../inc/common.mk
 
-gff3ToPsl = ${BINDIR}/gff3ToPsl
+gff3ToPsl = gff3ToPsl
 
 # sh commands to deal with gff3ToPsl shouldhave failed and didn't 
 cmdShouldFail = echo "Error: command should have failed" >&2; false

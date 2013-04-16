@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PSLFILT = ${BINDIR}/pslCDnaFilter
+PSLFILT = pslCDnaFilter
 DIFF = diff -u --exclude='.nfs*' -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \

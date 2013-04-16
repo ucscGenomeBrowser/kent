@@ -20,8 +20,6 @@ else if (primaryRow->start < self->prevPStart)
 self->prevPStart = primaryRow->start;
 }
 
-//#*** use localmem for queue? one per chrom?  free when empty?  reuse structs?
-
 INLINE void agTrimToStart(struct annoGrator *self, char *chrom, uint start)
 /* If queue contains items whose end is to the left of start, splice them out. */
 {
@@ -40,10 +38,15 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = nextQRow)
 	    prevQRow->next = qRow->next;
 	if (self->qTail == qRow)
 	    self->qTail = prevQRow;
-	annoRowFree(&qRow, self->mySource);
 	}
     else
 	prevQRow = qRow;
+    }
+if (self->qHead == NULL)
+    {
+    // Queue is empty - clean up lm
+    lmCleanup(&(self->qLm));
+    self->qLm = lmInit(0);
     }
 }
 
@@ -69,17 +72,14 @@ INLINE void agFetchToEnd(struct annoGrator *self, char *chrom, uint end)
 while (!self->eof &&
        (self->qTail == NULL || strcmp(self->qTail->chrom, chrom) < 0 || self->qTail->start < end))
     {
-    struct annoRow *newRow = self->mySource->nextRow(self->mySource);
+    struct annoRow *newRow = self->mySource->nextRow(self->mySource, self->qLm);
     if (newRow == NULL)
 	self->eof = TRUE;
     else
 	{
 	agCheckInternalSorting(newRow, self->qTail);
 	int cDifNewP = strcmp(newRow->chrom, chrom);
-	if (cDifNewP < 0)
-	    // newRow->chrom comes before chrom; skip over newRow
-	    annoRowFree(&newRow, (struct annoStreamer *)self);
-	else
+	if (cDifNewP >= 0)
 	    {
 	    // Add newRow to qTail
 	    if (self->qTail == NULL)
@@ -102,7 +102,7 @@ while (!self->eof &&
 }
 
 struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
-				    boolean *retRJFilterFailed)
+				    boolean *retRJFilterFailed, struct lm *callerLm)
 /* Given a single row from the primary source, get all overlapping rows from internal
  * source, and produce joined output rows.
  * If retRJFilterFailed is non-NULL:
@@ -124,7 +124,9 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
     if (qRow->start < primaryRow->end && qRow->end > primaryRow->start &&
 	sameString(qRow->chrom, primaryRow->chrom))
 	{
-	slAddHead(&rowList, annoRowClone(qRow, self->mySource));
+	int numCols = self->mySource->numCols;
+	enum annoRowType rowType = self->mySource->rowType;
+	slAddHead(&rowList, annoRowClone(qRow, rowType, numCols, callerLm));
 	if (rjFailHard && qRow->rightJoinFail)
 	    {
 	    *retRJFilterFailed = TRUE;
@@ -149,13 +151,13 @@ void annoGratorClose(struct annoStreamer **pSelf)
 if (pSelf == NULL)
     return;
 struct annoGrator *self = *(struct annoGrator **)pSelf;
-annoRowFreeList(&(self->qHead), self->mySource);
+lmCleanup(&(self->qLm));
 self->mySource->close(&(self->mySource));
 freeMem(self->prevPChrom);
 freez(pSelf);
 }
 
-static struct annoRow *noNextRow(struct annoStreamer *self)
+static struct annoRow *noNextRow(struct annoStreamer *self, struct lm *callerLm)
 /* nextRow() is N/A for annoGrator, which needs caller to use integrate() instead. */
 {
 errAbort("nextRow() called on annoGrator object, but integrate() should be called instead");
@@ -163,13 +165,14 @@ return NULL;
 }
 
 static void agReset(struct annoGrator *self)
-/* Reset all position associated with state */
+/* Reset all state associated with position */
 {
-freez(&self->prevPChrom);
+freez(&(self->prevPChrom));
 self->prevPStart = 0;
 self->eof = FALSE;
-annoRowFreeList(&(self->qHead), self->mySource);
-self->qTail = NULL;
+lmCleanup(&(self->qLm));
+self->qLm = lmInit(0);
+self->qHead = self->qTail = NULL;
 }
 
 static boolean filtersHaveRJInclude(struct annoFilter *filters)
@@ -234,6 +237,7 @@ streamer->setRegion = annoGratorSetRegion;
 streamer->setQuery = annoGratorSetQuery;
 streamer->nextRow = noNextRow;
 streamer->close = annoGratorClose;
+self->qLm = lmInit(0);
 self->integrate = annoGratorIntegrate;
 self->setOverlapRule = agSetOverlapRule;
 self->overlapRule = agoNoConstraint;

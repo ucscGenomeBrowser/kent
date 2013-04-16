@@ -9,11 +9,13 @@
 #include "hex.h"
 #include "sqlNum.h"
 #include "encode3/encode3Valid.h"
+#include "gff.h"
 
-char *version = "1.1";
+char *version = "1.2";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
+char *validateFilesPath = "";
 
 boolean quickMd5sum = FALSE;  // Just for development testing, do not use
 
@@ -201,7 +203,7 @@ else
 if (
     !sameString(genome, "hg19") &&
     !sameString(genome, "hg20") &&
-    !sameString(genome, "hg36") &&
+    !sameString(genome, "hg38") &&
     !sameString(genome, "mm9") &&
     !sameString(genome, "mm10") 
     )
@@ -229,6 +231,14 @@ safef(twoBit, sizeof twoBit, "%s/%s/%s.2bit", encValData, genome, genome);
 return cloneString(twoBit);
 }
 
+char *getBamBai(char *fileName)
+/* Get path to bam index for fileName */
+{  
+char bamBai[256];
+safef(bamBai, sizeof bamBai, "%s.bai", fileName);
+return cloneString(bamBai);
+}
+
 
 boolean runCmdLine(char *cmdLine)
 /* Run command line */
@@ -253,16 +263,22 @@ char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
 int mismatches = 7;  // TODO this is totally arbitrary right now
 
-// TODO might want to have a way to run validator on BAM even if the twoBit is not available.
-boolean quicky = TRUE;  // TODO DEBUG QUICK-run by removing -genome and mismatches and stuff.
+// run validator on BAM even if the twoBit is not available.
+boolean quicky = fileExists(twoBit);  // QUICK-run by removing -genome and mismatches and stuff.
 if (quicky)
     {
-    // TODO could add a simple existence check for the corresponding .bam.bai since without -genome=, 
+    // simple existence check for the corresponding .bam.bai since without -genome=, 
     //  vf will not even open the bam index.
-    safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -chromInfo=%s %s", chromInfo, fileName);
+    char *bamBai = getBamBai(fileName);
+    if (!fileExists(bamBai))
+	{
+	warn("Bam Index file missing: %s. Use SAM Tools to create.", bamBai);
+	return FALSE;
+	}
+    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -chromInfo=%s %s", validateFilesPath, chromInfo, fileName);
     }
 else
-    safef(cmdLine, sizeof cmdLine, "validateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", mismatches, chromInfo, twoBit, fileName);
+    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", validateFilesPath, mismatches, chromInfo, twoBit, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -274,7 +290,7 @@ boolean validateBedRnaElements(char *fileName)
 char *asFile = getAs("bedRnaElements.as");  // TODO this probably has to change
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -288,7 +304,7 @@ char cmdLine[1024];
 //  going to be, and how to get it.
 // The following line is nothing but pure hack taken from the first example found in the manifest,
 //  and probably will fail miserably on other lines of the manifest, as this approach is too simple to work still
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed12+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed12+4 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 // TODO actually run the validator
 return runCmdLine(cmdLine);
 }
@@ -298,7 +314,7 @@ boolean validateBigWig(char *fileName)
 {
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigWig -chromInfo=%s %s", chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigWig -chromInfo=%s %s", validateFilesPath, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -306,17 +322,23 @@ boolean validateFastq(char *fileName)
 /* Validate fastq file */
 {
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=fastq %s", fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=fastq %s", validateFilesPath, fileName);
 return runCmdLine(cmdLine);
 }
 
 boolean validateGtf(char *fileName)
 /* Validate gtf file */
 {
-char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "GTF: I have no idea what the commandline(s) should be. %s", fileName);
-// TODO actually run the validator
-return FALSE;
+uglyf("GTF: very basic checking only performed.\n");
+/* Open and read file with generic GFF reader and check it is GTF */
+struct gffFile *gff = gffRead(fileName);
+if (!gff->isGtf)
+    {
+    warn("file (%s) is not in GTF format - check it has gene_id and transcript_id", fileName);
+    return FALSE;
+    }
+// TODO actually run a more complete check
+return TRUE;
 }
 
 boolean validateNarrowPeak(char *fileName)
@@ -325,7 +347,7 @@ boolean validateNarrowPeak(char *fileName)
 char *asFile = getAs("narrowPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+4 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -335,7 +357,7 @@ boolean validateBroadPeak(char *fileName)
 char *asFile = getAs("broadPeak.as");
 char *chromInfo = getChromInfo(fileName);
 char cmdLine[1024];
-safef(cmdLine, sizeof cmdLine, "validateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", asFile, chromInfo, fileName);
+safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bigBed6+3 -as=%s -chromInfo=%s %s", validateFilesPath, asFile, chromInfo, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -369,9 +391,11 @@ else if (startsWith(format,"narrowPeak"))
     result = validateNarrowPeak(fileName);
 else if (startsWith(format,"broadPeak"))
     result = validateBroadPeak(fileName);
+else if (startsWith(format,"unknown"))
+    result = TRUE;
 else
     {
-    warn("Unknown format: %s", format);
+    warn("Unrecognized format: %s", format);
     result = FALSE;
     }
 return result;
@@ -391,6 +415,10 @@ if (!fileExists("manifest.txt"))
     }
 
 uglyf("workingDir=%s\n", workingDir);
+
+if (fileExists("validateFiles"))
+    validateFilesPath = "./";
+
 
 char *fakeMd5sum = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 if (quickMd5sum)
@@ -420,24 +448,44 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
 
 
 
-int m_file_name_i = -1;
-int m_format_i = -1;
-int m_ucsc_db_i = -1;    // optional field ucsc_db
+int mUcscDbIdx = -1;    // optional field ucsc_db
+int mFileNameIdx = -1;
+int mFormatIdx = -1;
+int mOutputType = -1;
+int mExperiment = -1;
+int mReplicate = -1;
+int mEnrichedIn = -1;
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
     {
-    if (sameString(manifestFields->words[i], "file_name"))
-	m_file_name_i = i;
-    if (sameString(manifestFields->words[i], "format"))
-	m_format_i = i;
     if (sameString(manifestFields->words[i], "ucsc_db"))
-	m_ucsc_db_i = i;
+	mUcscDbIdx = i;
+    if (sameString(manifestFields->words[i], "file_name"))
+	mFileNameIdx = i;
+    if (sameString(manifestFields->words[i], "format"))
+	mFormatIdx = i;
+    if (sameString(manifestFields->words[i], "output_type"))
+	mOutputType = i;
+    if (sameString(manifestFields->words[i], "experiment"))
+	mExperiment = i;
+    if (sameString(manifestFields->words[i], "replicate"))
+	mReplicate = i;
+    if (sameString(manifestFields->words[i], "enriched_in"))
+	mEnrichedIn = i;
     }
-if (m_file_name_i == -1)
+if (mFileNameIdx == -1)
     errAbort("field file_name not found in manifest.txt");
-if (m_format_i == -1)
+if (mFormatIdx == -1)
     errAbort("field format not found in manifest.txt");
+if (mOutputType == -1)
+    errAbort("field output_type not found in manifest.txt");
+if (mExperiment == -1)
+    errAbort("field experiment not found in manifest.txt");
+if (mReplicate == -1)
+    errAbort("field replicate not found in manifest.txt");
+if (mEnrichedIn == -1)
+    errAbort("field enriched_in not found in manifest.txt");
 
 // check if the fieldnames in old validated appear in the same order in manifest.txt
 //  although this is currently a minor limitation, it could be removed 
@@ -449,44 +497,43 @@ if (haveVal)
 	    errAbort("field names in old validated.txt do not match those in manifest.txt");
 	}
 // get indexes for old val extra fields
-int v_md5_sum_i = -1;
-int v_size_i = -1;
-int v_modified_i = -1;
-int v_valid_key_i = -1;
+int vMd5SumIdx = -1;
+int vSizeIdx = -1;
+int vModifiedIdx = -1;
+int vValidKeyIdx = -1;
 if (haveVal)
     {
     for (i = mFieldCount; i < vFieldCount; ++i)
 	{
 	if (sameString(vFields->words[i], "md5_sum"))
-	    v_md5_sum_i = i;
+	    vMd5SumIdx = i;
 	if (sameString(vFields->words[i], "size"))
-	    v_size_i = i;
+	    vSizeIdx = i;
 	if (sameString(vFields->words[i], "modified"))
-	    v_modified_i = i;
+	    vModifiedIdx = i;
 	if (sameString(vFields->words[i], "valid_key"))
-	    v_valid_key_i = i;
+	    vValidKeyIdx = i;
 	}
-    if ( v_md5_sum_i   == -1) errAbort("field "  "md5_sum not found in old validated.txt");
-    if ( v_size_i      == -1) errAbort("field "     "size not found in old validated.txt");
-    if ( v_modified_i  == -1) errAbort("field " "modified not found in old validated.txt");
-    if ( v_valid_key_i == -1) errAbort("field ""valid_key not found in old validated.txt");
+    if ( vMd5SumIdx   == -1) errAbort("field "  "md5_sum not found in old validated.txt");
+    if ( vSizeIdx      == -1) errAbort("field "     "size not found in old validated.txt");
+    if ( vModifiedIdx  == -1) errAbort("field " "modified not found in old validated.txt");
+    if ( vValidKeyIdx == -1) errAbort("field ""valid_key not found in old validated.txt");
     }
 
 // calling for the side-effect of checking for duplicate file_names.
 struct hash *mFileNameHash = NULL;  // split on two lines to suppress compiler warning : unused var
-mFileNameHash = makeFileNameHash(manifestRecs, m_file_name_i);
+mFileNameHash = makeFileNameHash(manifestRecs, mFileNameIdx);
 
 // hash old validated records by file_name for quick lookup.
 struct hash *valHash = NULL;
 if (haveVal)
-    valHash = makeFileNameHash(vRecs, m_file_name_i);
+    valHash = makeFileNameHash(vRecs, mFileNameIdx);
 
 
 // open output
 // write to a different temp filename so that the old validated.txt is not lost if this program not complete
 FILE *f = mustOpen("validated.tmp", "w"); 
 
-fprintf(f,"#version %s\n", version);  // write vm version as a comment
 char *tabSep = "";
 // write fieldnames to output
 fprintf(f,"#");  // write leading comment character #
@@ -498,6 +545,8 @@ for (i = 0; i < mFieldCount; ++i)
 // include additional fieldnames
 fprintf(f,"\tmd5_sum\tsize\tmodified\tvalid_key");
 fprintf(f,"\n");
+
+fprintf(f,"##validateManifest version %s\n", version);  // write vm version as a comment
 
 // loop through manifest recs
 struct slRecord *rec = NULL;
@@ -515,95 +564,104 @@ for(rec = manifestRecs; rec; rec = rec->next)
     */
 
     // get file_name, size, datetime
-    char *mFileName = rec->words[m_file_name_i];
-    if (m_ucsc_db_i != -1)
-	ucscDb = rec->words[m_ucsc_db_i];
+    char *mFileName = rec->words[mFileNameIdx];
+    if (mUcscDbIdx != -1)
+	ucscDb = rec->words[mUcscDbIdx];
 
-    off_t mFileSize = fileSize(mFileName);
-    off_t vFileSize = -1;
-    time_t mFileTime = fileModTime(mFileName);
-    time_t vFileTime = -1;
-
+    off_t mFileSize = 0;
+    time_t mFileTime = 0;
     char *mMd5Hex = NULL;
     char *mValidKey = NULL;
-    char *vMd5Hex = NULL;
-    char *vValidKey = NULL;
-    
-    boolean dataMatches = FALSE;
-    // look for a matching record in old validated
-    struct slRecord *vRec = NULL;
-    if (haveVal)
+    if (!fileExists(mFileName))
 	{
-    	vRec = (struct slRecord *) hashFindVal(valHash, rec->words[m_file_name_i]);
-	// check if all fields match between manifest and old validated
-	if (vRec)
-	    {
-	    dataMatches = TRUE;
-	    // check that the fields values match
-	    for (i = 0; i < mFieldCount; ++i)
-		{
-		if (!sameString(rec->words[i], vRec->words[i]))
-		    dataMatches = FALSE;
-		}
-	    // check that the record correctly matches the actual file sizes.
-	    if (dataMatches)
-		{
-    		vFileSize = sqlLongLong(vRec->words[v_size_i]);  // TODO maybe use my special functions from the validator
-		if (vFileSize != mFileSize) dataMatches = FALSE;
-		}
-	    // check that the record correctly matches the actual file timestamp.
-	    if (dataMatches)
-		{
-		vFileTime = sqlLongLong(vRec->words[v_modified_i]);  // There is no sqlLong function, but there should be!
-		if (vFileTime != mFileTime) dataMatches = FALSE;
-		}
-	    // verify vValidKey against vMd5Hex.
-	    if (dataMatches)
-		{
-		vMd5Hex   = vRec->words[v_md5_sum_i];
-		vValidKey = vRec->words[v_valid_key_i];
-		char *checkValidKey = encode3CalcValidationKey(vMd5Hex, vFileSize);
-		if (sameString(vValidKey,"ERROR")) 
-		    {
-		    dataMatches = FALSE;
-		    }
-		else if (!sameString(vValidKey,checkValidKey)) 
-		    {
-		    warn("invalid key %s in old validated.txt",vValidKey);  // TODO add line# or filename etc?
-		    dataMatches = FALSE;
-		    }
-		}
-	    
-	    }
-	}
-
-    if (dataMatches)
-	{
-	mMd5Hex = vMd5Hex;
-	mValidKey = vValidKey;
+	uglyf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
+	mValidKey = "ERROR";
+	mMd5Hex = "0";
 	}
     else
 	{
-	// get md5_sum
-    	//char *mMd5Hex = mMd5HexForFile(mFileName);   // DEBUG RESTORE  // TODO
-	// DEBUG REMOVE -- hack for speed for development.
-	if (quickMd5sum && mFileSize > 100 * 1024 * 1024)
-	    mMd5Hex = fakeMd5sum;  // "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    	else
-	    mMd5Hex = md5HexForFile(mFileName);
 
-	mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
+	mFileSize = fileSize(mFileName);
+	mFileTime = fileModTime(mFileName);
 
-	char *mFormat = rec->words[m_format_i];
-	boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
+	char *vMd5Hex = NULL;
+	char *vValidKey = NULL;
+	
+	boolean dataMatches = FALSE;
+	// look for a matching record in old validated
+	if (haveVal)
+	    {
+	    off_t vFileSize = 0;
+	    time_t vFileTime = 0;
+	    struct slRecord *vRec = (struct slRecord *) hashFindVal(valHash, rec->words[mFileNameIdx]);
+	    // check if all fields match between manifest and old validated
+	    if (vRec)
+		{
+		dataMatches = TRUE;
+		// check that the fields values match
+		for (i = 0; i < mFieldCount; ++i)
+		    {
+		    if (!sameString(rec->words[i], vRec->words[i]))
+			dataMatches = FALSE;
+		    }
+		// check that the record correctly matches the actual file sizes.
+		if (dataMatches)
+		    {
+		    vFileSize = sqlLongLong(vRec->words[vSizeIdx]);  // TODO maybe use my special functions from the validator
+		    if (vFileSize != mFileSize) dataMatches = FALSE;
+		    }
+		// check that the record correctly matches the actual file timestamp.
+		if (dataMatches)
+		    {
+		    vFileTime = sqlLongLong(vRec->words[vModifiedIdx]);  // There is no sqlLong function, but there should be!
+		    if (vFileTime != mFileTime) dataMatches = FALSE;
+		    }
+		// verify vValidKey against vMd5Hex.
+		if (dataMatches)
+		    {
+		    vMd5Hex   = vRec->words[vMd5SumIdx];
+		    vValidKey = vRec->words[vValidKeyIdx];
+		    char *checkValidKey = encode3CalcValidationKey(vMd5Hex, vFileSize);
+		    if (sameString(vValidKey,"ERROR")) 
+			{
+			dataMatches = FALSE;
+			}
+		    else if (!sameString(vValidKey,checkValidKey)) 
+			{
+			warn("invalid key %s in old validated.txt",vValidKey);  // TODO add line# or filename etc?
+			dataMatches = FALSE;
+			}
+		    }
+		
+		}
+	    }
 
-	if (!fileIsValid)
-	    mValidKey = "ERROR";
+	if (dataMatches)
+	    {
+	    mMd5Hex = vMd5Hex;
+	    mValidKey = vValidKey;
+	    }
+	else
+	    {
+	    // get md5_sum
+	    if (quickMd5sum && mFileSize > 100 * 1024 * 1024)
+		mMd5Hex = fakeMd5sum;  // "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	    else
+		mMd5Hex = md5HexForFile(mFileName);
+
+	    mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
+
+	    char *mFormat = rec->words[mFormatIdx];
+	    boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
+
+	    if (!fileIsValid)
+		mValidKey = "ERROR";
+
+	    }
 
 	}
 
     uglyf("mFileName = %s size=%lld time=%ld md5=%s validKey=%s\n", mFileName, (long long)mFileSize, (long)mFileTime, mMd5Hex, mValidKey);
-
 
     // write to output
     tabSep = "";
@@ -615,14 +673,17 @@ for(rec = manifestRecs; rec; rec = rec->next)
     // include additional fields
     fprintf(f,"\t%s\t%lld\t%ld\t%s", mMd5Hex, (long long)mFileSize, (long)mFileTime, mValidKey);
     fprintf(f,"\n");
+    fflush(f);
 
     ++recNo;
     }
+
 
 carefulClose(&f);
 rename("validated.tmp", "validated.txt"); // replace the old validated file with the new one
 
 // #file_name      format  experiment      replicate       output_type     biosample       target  localization    update
+// ucsc_db   (this is optional but overrides attempts to get db from file_name path)
 // md5_sum size modified valid_key
 
 }

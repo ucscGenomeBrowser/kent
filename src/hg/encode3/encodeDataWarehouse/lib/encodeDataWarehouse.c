@@ -623,20 +623,19 @@ void edwFileStaticLoad(char **row, struct edwFile *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-safecpy(ret->licensePlate, sizeof(ret->licensePlate), row[1]);
-ret->submitId = sqlUnsigned(row[2]);
-ret->submitDirId = sqlUnsigned(row[3]);
-ret->submitFileName = row[4];
-ret->edwFileName = row[5];
-ret->startUploadTime = sqlLongLong(row[6]);
-ret->endUploadTime = sqlLongLong(row[7]);
-ret->updateTime = sqlLongLong(row[8]);
-ret->size = sqlLongLong(row[9]);
-safecpy(ret->md5, sizeof(ret->md5), row[10]);
-ret->tags = row[11];
-ret->errorMessage = row[12];
-ret->deprecated = row[13];
-ret->replacedBy = row[14];
+ret->submitId = sqlUnsigned(row[1]);
+ret->submitDirId = sqlUnsigned(row[2]);
+ret->submitFileName = row[3];
+ret->edwFileName = row[4];
+ret->startUploadTime = sqlLongLong(row[5]);
+ret->endUploadTime = sqlLongLong(row[6]);
+ret->updateTime = sqlLongLong(row[7]);
+ret->size = sqlLongLong(row[8]);
+safecpy(ret->md5, sizeof(ret->md5), row[9]);
+ret->tags = row[10];
+ret->errorMessage = row[11];
+ret->deprecated = row[12];
+ret->replacedBy = row[13];
 }
 
 struct edwFile *edwFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -671,8 +670,8 @@ void edwFileSaveToDb(struct sqlConnection *conn, struct edwFile *el, char *table
  * If worried about this use edwFileSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,%s,%s,%lld,%lld,%lld,%lld,'%s',%s,%s,'%s','%s')", 
-	tableName,  el->id,  el->licensePlate,  el->submitId,  el->submitDirId,  el->submitFileName,  el->edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->errorMessage,  el->deprecated,  el->replacedBy);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,%s,%s,%lld,%lld,%lld,%lld,'%s',%s,%s,'%s','%s')", 
+	tableName,  el->id,  el->submitId,  el->submitDirId,  el->submitFileName,  el->edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->errorMessage,  el->deprecated,  el->replacedBy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -687,8 +686,7 @@ void edwFileSaveToDbEscaped(struct sqlConnection *conn, struct edwFile *el, char
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *licensePlate, *submitFileName, *edwFileName, *md5, *tags, *errorMessage, *deprecated, *replacedBy;
-licensePlate = sqlEscapeString(el->licensePlate);
+char  *submitFileName, *edwFileName, *md5, *tags, *errorMessage, *deprecated, *replacedBy;
 submitFileName = sqlEscapeString(el->submitFileName);
 edwFileName = sqlEscapeString(el->edwFileName);
 md5 = sqlEscapeString(el->md5);
@@ -697,11 +695,10 @@ errorMessage = sqlEscapeString(el->errorMessage);
 deprecated = sqlEscapeString(el->deprecated);
 replacedBy = sqlEscapeString(el->replacedBy);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s','%s')", 
-	tableName,  el->id,  licensePlate,  el->submitId,  el->submitDirId,  submitFileName,  edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  md5,  tags,  errorMessage,  deprecated,  replacedBy);
+dyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s','%s')", 
+	tableName,  el->id,  el->submitId,  el->submitDirId,  submitFileName,  edwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  md5,  tags,  errorMessage,  deprecated,  replacedBy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&licensePlate);
 freez(&submitFileName);
 freez(&edwFileName);
 freez(&md5);
@@ -719,20 +716,19 @@ struct edwFile *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-safecpy(ret->licensePlate, sizeof(ret->licensePlate), row[1]);
-ret->submitId = sqlUnsigned(row[2]);
-ret->submitDirId = sqlUnsigned(row[3]);
-ret->submitFileName = cloneString(row[4]);
-ret->edwFileName = cloneString(row[5]);
-ret->startUploadTime = sqlLongLong(row[6]);
-ret->endUploadTime = sqlLongLong(row[7]);
-ret->updateTime = sqlLongLong(row[8]);
-ret->size = sqlLongLong(row[9]);
-safecpy(ret->md5, sizeof(ret->md5), row[10]);
-ret->tags = cloneString(row[11]);
-ret->errorMessage = cloneString(row[12]);
-ret->deprecated = cloneString(row[13]);
-ret->replacedBy = cloneString(row[14]);
+ret->submitId = sqlUnsigned(row[1]);
+ret->submitDirId = sqlUnsigned(row[2]);
+ret->submitFileName = cloneString(row[3]);
+ret->edwFileName = cloneString(row[4]);
+ret->startUploadTime = sqlLongLong(row[5]);
+ret->endUploadTime = sqlLongLong(row[6]);
+ret->updateTime = sqlLongLong(row[7]);
+ret->size = sqlLongLong(row[8]);
+safecpy(ret->md5, sizeof(ret->md5), row[9]);
+ret->tags = cloneString(row[10]);
+ret->errorMessage = cloneString(row[11]);
+ret->deprecated = cloneString(row[12]);
+ret->replacedBy = cloneString(row[13]);
 return ret;
 }
 
@@ -742,7 +738,7 @@ struct edwFile *edwFileLoadAll(char *fileName)
 {
 struct edwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
@@ -760,7 +756,7 @@ struct edwFile *edwFileLoadAllByChar(char *fileName, char chopper)
 {
 struct edwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[14];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -782,7 +778,6 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->licensePlate, sizeof(ret->licensePlate));
 ret->submitId = sqlUnsignedComma(&s);
 ret->submitDirId = sqlUnsignedComma(&s);
 ret->submitFileName = sqlStringComma(&s);
@@ -833,10 +828,6 @@ void edwFileOutput(struct edwFile *el, FILE *f, char sep, char lastSep)
 /* Print out edwFile.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->licensePlate);
-if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->submitId);
 fputc(sep,f);

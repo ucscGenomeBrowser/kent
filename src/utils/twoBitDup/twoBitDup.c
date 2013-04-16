@@ -6,6 +6,7 @@
 #include "twoBit.h"
 #include "dnaseq.h"
 #include "math.h"
+#include "udc.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -17,10 +18,12 @@ errAbort(
   "usage:\n"
   "   twoBitDup file.2bit\n"
   "options:\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -58,6 +61,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 twoBitDup(argv[1]);
 return 0;
 }
