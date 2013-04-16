@@ -68,6 +68,8 @@ safef(query, sizeof(query),
 		, taxon, name, ucscDb, (long long)ef->id, baseCount, realBaseCount);
 sqlUpdate(conn, query);
 
+edwAddQaJob(conn, ef->id);
+
 sqlDisconnect(&conn);
 }
 
