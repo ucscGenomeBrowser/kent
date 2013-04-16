@@ -132,30 +132,6 @@ CREATE TABLE edwValidFile (
     PRIMARY KEY(id)
 );
 
-#A program plus parameters with a standard command line that gets run on new files
-CREATE TABLE edwQaAgent (
-    id int unsigned auto_increment,	# ID of this agent
-    name varchar(255) default '',	# Name of agent
-    program varchar(255) default '',	# Program command line name
-    options varchar(255) default '',	# Program command line options
-    deprecated varchar(255) default '',	# If non-empty why it isn't run any more.
-              #Indices
-    PRIMARY KEY(id)
-);
-
-#Records a bit of information from each QA run we've done on files.
-CREATE TABLE edwQaRun (
-    id int unsigned auto_increment,	# ID of this run
-    agentId int unsigned default 0,	# ID of agent that made this run
-    startFileId int unsigned default 0,	# ID of file we started on.
-    endFileId int unsigned default 0,	# One past last file we did QA on
-    startTime bigint default 0,	# Start time in seconds since 1970
-    endTime bigint default 0,	# Start time in seconds since 1970
-    stderr longblob,	# The output to stderr of the run
-              #Indices
-    PRIMARY KEY(id)
-);
-
 #A target for our enrichment analysis.
 CREATE TABLE edwQaEnrichTarget (
     id int unsigned auto_increment,	# ID of this enrichment target
@@ -202,6 +178,18 @@ CREATE TABLE edwQaPairCorrelation (
     pearsonInEnriched double default 0,	# Pearson's R inside enriched areas where there is overlap
     pearsonOverall double default 0,	# Pearson's R over all places where both have data
     pearsonClipped double default 0,	# Pearson's R clipped at two standard deviations up from the mean
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#A job to be run asynchronously and not too many all at once.
+CREATE TABLE edwJob (
+    id int unsigned auto_increment,	# Job id
+    commandLine longblob,	# Command line of job
+    startTime bigint default 0,	# Start time in seconds since 1970
+    endTime bigint default 0,	# End time in seconds since 1970
+    stderr longblob,	# The output to stderr of the run - may be nonembty even with success
+    returnCode int default 0,	# The return code from system command - 0 for success
               #Indices
     PRIMARY KEY(id)
 );

@@ -121,28 +121,6 @@ table edwValidFile
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
     )
 
-table edwQaAgent
-"A program plus parameters with a standard command line that gets run on new files"
-    (
-    uint id;         "ID of this agent"
-    string name;     "Name of agent"
-    string program;  "Program command line name"
-    string options; "Program command line options"
-    string deprecated; "If non-empty why it isn't run any more."
-    )
-
-table edwQaRun
-"Records a bit of information from each QA run we've done on files."
-    (
-    uint id;          "ID of this run"
-    uint agentId;     "ID of agent that made this run"
-    uint startFileId; "ID of file we started on."
-    uint endFileId;   "One past last file we did QA on"
-    bigint startTime; "Start time in seconds since 1970"
-    bigint endTime;   "Start time in seconds since 1970"
-    lstring stderr;   "The output to stderr of the run"
-    )
-
 table edwQaEnrichTarget
 "A target for our enrichment analysis."
     (
@@ -187,4 +165,15 @@ table edwQaPairCorrelation
     double pearsonInEnriched;  "Pearson's R inside enriched areas where there is overlap"
     double pearsonOverall; "Pearson's R over all places where both have data"
     double pearsonClipped; "Pearson's R clipped at two standard deviations up from the mean" 
+    )
+
+table edwJob
+"A job to be run asynchronously and not too many all at once."
+    (
+    uint id;    "Job id"
+    lstring commandLine; "Command line of job"
+    bigInt startTime; "Start time in seconds since 1970"
+    bigInt endTime; "End time in seconds since 1970"
+    lstring stderr; "The output to stderr of the run - may be nonembty even with success"
+    int returnCode; "The return code from system command - 0 for success"
     )
