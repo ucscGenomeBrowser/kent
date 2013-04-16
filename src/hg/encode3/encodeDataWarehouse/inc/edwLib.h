@@ -52,6 +52,12 @@ int edwMustHaveAccess(struct sqlConnection *conn, char *user, char *password);
 int edwCheckUserNameSize(char *user);
 /* Make sure user name not too long. Returns size or aborts if too long. */
 
+struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email);
+/* Return user associated with that email or NULL if not found */
+
+struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email);
+/* Return user associated with email or put up error message. */
+
 void edwMakeSid(char *user, char sid[EDW_ACCESS_SIZE]);
 /* Convert users to sid */
 
@@ -115,5 +121,11 @@ boolean edwIsSupportedBigBedFormat(char *format);
 
 void edwWriteErrToStderrAndTable(struct sqlConnection *conn, char *table, int id, char *err);
 /* Write out error message to errorMessage field of table. */
+
+void edwAddJob(struct sqlConnection *conn, char *command);
+/* Add job to queue to run. */
+
+void edwAddQaJob(struct sqlConnection *conn, long long fileId);
+/* Create job to do QA on this and add to queue */
 
 #endif /* EDWLIB_H */

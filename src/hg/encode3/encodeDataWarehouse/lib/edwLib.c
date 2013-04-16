@@ -67,7 +67,7 @@ if (submitDirId <= 0)
 int hourInSeconds = 60*60;
 safef(query, sizeof(query), 
     "select id from edwFile "
-    "where submitFileName='%s' and submitDirId = %d "
+    "where submitFileName='%s' and submitDirId = %d and errorMessage = '' and deprecated=''"
     " and (endUploadTime > startUploadTime or startUploadTime < %lld) "
     "order by submitId desc limit 1"
     , submitFileName, submitDirId
@@ -191,6 +191,26 @@ int id = edwCheckAccess(conn, user, password);
 if (id == 0)
     errAbort("User/password combination doesn't give access to database");
 return id;
+}
+
+struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email)
+/* Return user associated with that email or NULL if not found */
+{
+char query[256];
+char *escapedEmail = sqlEscapeString(email);
+safef(query, sizeof(query), "select * from edwUser where email='%s'", escapedEmail);
+freez(&escapedEmail);
+struct edwUser *user = edwUserLoadByQuery(conn, query);
+return user;
+}
+
+struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
+/* Return user associated with email or put up error message. */
+{
+struct edwUser *user = edwUserFromEmail(conn, email);
+if (user == NULL)
+    errAbort("No user exists with email %s.", email);
+return user;
 }
 
 void edwMakeSid(char *user, char sid[EDW_ACCESS_SIZE])
@@ -652,3 +672,20 @@ dyStringPrintf(query, "update %s set errorMessage='%s' where id=%d",
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 }
+
+void edwAddJob(struct sqlConnection *conn, char *command)
+/* Add job to queue to run. */
+{
+char query[256+strlen(command)];
+safef(query, sizeof(query), "insert into edwJob (commandLine) values('%s')", command);
+sqlUpdate(conn, query);
+}
+
+void edwAddQaJob(struct sqlConnection *conn, long long fileId)
+/* Create job to do QA on this and add to queue */
+{
+char command[64];
+safef(command, sizeof(command), "edwQaAgent %lld", fileId);
+edwAddJob(conn, command);
+}
+
