@@ -26,9 +26,7 @@ void usage()
 errAbort(
   "edwSubmit - Submit URL with validated.txt to warehouse.\n"
   "usage:\n"
-  "   edwSubmit submitUrl user password\n"
-  "Generally user is an email address\n"
-  "options:\n"
+  "   edwSubmit submitUrl email-address\n"
   );
 }
 
@@ -161,7 +159,10 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 
 	/* Do a little check on it */
 	if (!sameString("mm9", ucscDbVal) && !sameString("hg19", ucscDbVal))
-	    errAbort("Unrecognized ucsc_db %s", ucscDbVal);
+	    errAbort("Unrecognized ucsc_db %s - please arrange files so that the top " 
+	             "level directory in the fileName in the manifest is a UCSC database name "
+		     "like 'hg19' or 'mm9.'  Alternatively please include a ucsc_db column.",
+		     ucscDbVal);
 
 	/* Add it to tags. */
 	cgiEncodeIntoDy(ucscDbTag, ucscDbVal, tags);
@@ -235,12 +236,12 @@ cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
 }
 
-int edwFileFetch(struct sqlConnection *conn, struct edwFile *bf, int fd, 
+int edwFileFetch(struct sqlConnection *conn, struct edwFile *ef, int fd, 
 	char *submitFileName, unsigned submitId, unsigned submitDirId)
-/* Fetch file and if successful update a bunch of the fields in bf with the result. 
+/* Fetch file and if successful update a bunch of the fields in ef with the result. 
  * Returns fileId. */
 {
-bf->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, bf->submitFileName);
+ef->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, ef->submitFileName);
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
@@ -249,13 +250,13 @@ char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    edwMakeFileNameAndPath(bf->id, submitFileName, edwFile, edwPath);
-    bf->startUploadTime = edwNow();
+    edwMakeFileNameAndPath(ef->id, submitFileName, edwFile, edwPath);
+    ef->startUploadTime = edwNow();
     char tempName[PATH_LEN];
     fetchFdToTempFile(fd, tempName);
     mustRename(tempName, edwPath);
-    bf->endUploadTime = edwNow();
-    bf->edwFileName = cloneString(edwFile);
+    ef->endUploadTime = edwNow();
+    ef->edwFileName = cloneString(edwFile);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -277,7 +278,7 @@ safef(query, sizeof(query),
        "update edwFile set"
        "  edwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
        "  where id = %d"
-       , bf->edwFileName, bf->startUploadTime, bf->endUploadTime, bf->id);
+       , ef->edwFileName, ef->startUploadTime, ef->endUploadTime, ef->id);
 sqlUpdate(conn, query);
 
 /* Wrap the validations in an error catcher that will save error to file table in database */
@@ -290,18 +291,18 @@ if (errCatchStart(errCatch))
     md5ForFile(edwPath, md5bin);
     char md5[33];
     hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
-    if (!sameWord(md5, bf->md5))
-        errAbort("%s corrupted in upload md5 %s != %s\n", bf->submitFileName, bf->md5, md5);
+    if (!sameWord(md5, ef->md5))
+        errAbort("%s corrupted in upload md5 %s != %s\n", ef->submitFileName, ef->md5, md5);
 
     /* Finish updating a bunch more of edwFile record. Note there is a requirement in 
-     * the validFile section that bf->updateTime be updated last.  A nonzero bf->updateTime
+     * the validFile section that ef->updateTime be updated last.  A nonzero ef->updateTime
      * is used as a sign of record complete. */
     struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
     dyStringPrintf(dy, "update edwFile set md5='%s',size=%lld,updateTime=%lld",
-	    md5, bf->size, bf->updateTime);
+	    md5, ef->size, ef->updateTime);
     dyStringAppend(dy, ", tags='");
-    dyStringAppend(dy, bf->tags);
-    dyStringPrintf(dy, "' where id=%d", bf->id);
+    dyStringAppend(dy, ef->tags);
+    dyStringPrintf(dy, "' where id=%d", ef->id);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
     success = TRUE;
@@ -309,9 +310,9 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    handleFileError(conn, bf->id, errCatch->message->string);
+    handleFileError(conn, ef->id, errCatch->message->string);
     }
-return bf->id;
+return ef->id;
 }
 
 int findFileGivenMd5AndSubmitDir(struct sqlConnection *conn, char *md5, int submitDirId)
@@ -438,9 +439,8 @@ static boolean isExperimentId(char *experiment)
 {
 if (startsWith("wgEncode", experiment))
     return TRUE;
-if (!startsWith("ENC", experiment))
+if (!startsWith("ENCSR", experiment))
     return FALSE;
-// Should ideally check two chars after ENC, but standard still changing
 if (!isdigit(experiment[5]) || !isdigit(experiment[6]) || !isdigit(experiment[7]))
     return FALSE;
 if (!isupper(experiment[8]) || !isupper(experiment[9]) || !isupper(experiment[10]))
@@ -542,7 +542,7 @@ return edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
 }
 
 
-void edwSubmit(char *submitUrl, char *user, char *password)
+void edwSubmit(char *submitUrl, char *email)
 /* edwSubmit - Submit URL with validated.txt to warehouse. */
 {
 /* Parse out url a little into submitDir and submitFile */
@@ -557,7 +557,12 @@ submitDir[submitDirSize] = 0;  // Add trailing zero
 
 /* Make sure user has access. */
 struct sqlConnection *conn = sqlConnect(edwDatabase);
+struct edwUser *user = edwMustGetUserFromEmail(conn, email);
+int userId = user->id;
+
+#ifdef OLD
 int userId =  edwMustHaveAccess(conn, user, password);
+#endif /* OLD */
 
 /* Make a submit record. */
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, userId);
@@ -668,6 +673,8 @@ for (bf = bfList; bf != NULL; bf = bf->next)
 	    safef(query, sizeof(query), "update edwSubmit set newFiles=newFiles+1 where id=%d", 
 		submitId);
 	    sqlUpdate(conn, query);
+
+	    edwAddQaJob(conn, fileId);
 	    tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
 	    }
 	}
@@ -693,8 +700,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 3)
     usage();
-edwSubmit(argv[1], argv[2], argv[3]);
+edwSubmit(argv[1], argv[2]);
 return 0;
 }
