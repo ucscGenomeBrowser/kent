@@ -173,7 +173,7 @@ struct ucscRetroInfo *ucscRetroInfoLoadAll(char *fileName)
 {
 struct ucscRetroInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[53];
+char *row[52];
 
 while (lineFileRow(lf, row))
     {
@@ -191,7 +191,7 @@ struct ucscRetroInfo *ucscRetroInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct ucscRetroInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[53];
+char *row[52];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {

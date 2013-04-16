@@ -19,6 +19,8 @@ errAbort(
   "      information and gene name\n"
   "     -allErrors - skip groups with errors rather than aborting.\n"
   "      Useful for getting infomation about as many errors as possible.\n"
+  "     -ignoreGroupsWithoutExons - skip groups contain no exons rather than\n"
+  "      generate an error.\n"
   "     -infoOut=file - write a file with information on each transcript\n"
   "     -sourcePrefix=pre - only process entries where the source name has the\n"
   "      specified prefix.  May be repeated.\n"
@@ -32,6 +34,7 @@ static struct optionSpec options[] = {
     {"simple", OPTION_BOOLEAN},
     {"genePredExt", OPTION_BOOLEAN},
     {"allErrors", OPTION_BOOLEAN},
+    {"ignoreGroupsWithoutExons", OPTION_BOOLEAN},
     {"infoOut", OPTION_STRING},
     {"sourcePrefix", OPTION_STRING|OPTION_MULTI},
     {"impliedStopAfterCds", OPTION_BOOLEAN},
@@ -40,6 +43,7 @@ static struct optionSpec options[] = {
 };
 boolean clGenePredExt = FALSE;  /* include frame and geneName */
 boolean clAllErrors = FALSE;    /* report as many errors as possible */
+boolean clIgnoreGroupsWithoutExons = FALSE;  /* ignore groups without exons */
 struct slName *clSourcePrefixes; /* list of source prefixes to match */
 unsigned clGxfOptions = 0;       /* options for converting GTF/GFF */
 boolean doSimple = FALSE;      /* only check column validity */
@@ -90,11 +94,18 @@ if (errCatchStart(errCatch))
     struct genePred *gp = genePredFromGroupedGtf(gtf, group, group->name, optFields, clGxfOptions);
     if (gp == NULL)
         {
-        if (clAllErrors)
-            fprintf(stderr,"no exons defined for %s\n", group->name);
-        else
-            errAbort("no exons defined for %s", group->name);
-        badGroupCount++;
+        if (!clIgnoreGroupsWithoutExons)
+            {
+            char *msg = "no exons defined for group %s, feature %s (perhaps try -ignoreGroupsWithoutExons)";
+            if (clAllErrors)
+                {
+                fprintf(stderr, msg, group->name, group->lineList->feature);
+                fputc('\n', stderr);
+                badGroupCount++;
+                }
+            else
+                errAbort(msg, group->name, group->lineList->feature);
+            }
         }
     else
         {
@@ -106,14 +117,15 @@ errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     // drop trailing newline in caught message
-    int l = strlen(errCatch->message->string);
-    if ((l > 0) && (errCatch->message->string[l-1] == '\n'))
-        errCatch->message->string[l-1] = '\0';
+    if (endsWith(errCatch->message->string, "\n"))
+        dyStringResize(errCatch->message, dyStringLen(errCatch->message)-1);
     if (clAllErrors)
+        {
         fprintf(stderr, "%s\n", errCatch->message->string);
+        badGroupCount++;
+        }
     else
         errAbort("%s", errCatch->message->string);
-    badGroupCount++;
     }
 else
     {
@@ -179,6 +191,7 @@ if (argc != 3)
     usage();
 clGenePredExt = optionExists("genePredExt");
 doSimple = optionExists("simple");
+clIgnoreGroupsWithoutExons = optionExists("ignoreGroupsWithoutExons");
 clAllErrors = optionExists("allErrors");
 clSourcePrefixes = optionMultiVal("sourcePrefix", NULL);
 if (optionExists("impliedStopAfterCds"))
