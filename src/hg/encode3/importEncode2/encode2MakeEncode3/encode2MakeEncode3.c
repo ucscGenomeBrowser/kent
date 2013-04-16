@@ -19,8 +19,13 @@ void usage()
 {
 errAbort(
   "encode2MakeEncode3 - Create a makefile that will reformat and copy encode2 files into\n"
-  "a parallel direcgtory of encode3 files.\n"
+  "a parallel directory of encode3 files. Should be run in San Diego after encode2 files are\n"
+  "already transfered.  In addition to the makefile it creates all the destination subdirs\n"
+  "and a remap file that maps source files to destination files.\n"
+  "The usage is:\n"
   "   encode2MakeEncode3 sourceDir sourceManifest destDir out.make destManifest remapNameFile\n"
+  "When the makefile is run it will transform most element type (GFF and Bed-variants) into\n"
+  "bigBed.  It also unpacks .fastq.tzg files into directories full of .fastq.gz\n"
   "options:\n"
   "   -dataDir=/path/to/encode/asFilesAndChromSizesEtc\n"
   "   -tmpDir=/tmp\n"
@@ -144,7 +149,8 @@ if (midFix != NULL) // If midfix, replace .narrowPeak etc with midFix.  Used to 
      }
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-encode2ManifestTabOut(mi, manF);
+mi->format = asType;
+encode2ManifestShortTabOut(mi, manF);
 }
 
 boolean justCopySuffix(char *fileName)
@@ -193,7 +199,7 @@ safef(localFileName, PATH_LEN, "%s", mi->fileName);
 chopSuffix(localFileName);
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-encode2ManifestTabOut(mi, manF);
+encode2ManifestShortTabOut(mi, manF);
 }
 
 void doGzippedGffToBigBed(struct encode2Manifest *mi, char *sourcePath, char *destPath, 
@@ -205,7 +211,7 @@ void doGzippedGffToBigBed(struct encode2Manifest *mi, char *sourcePath, char *de
 fprintf(f, "%s: %s\n", destPath, sourcePath);
 fprintf(f, "\tln -s %s %s\n", sourcePath, destPath);
 slNameAddHead(pTargetList, destPath);
-encode2ManifestTabOut(mi, manF);
+encode2ManifestShortTabOut(mi, manF);
 
 /* Now convert to big bed. */
 char *tempNameRoot = "gff2bb";
@@ -237,7 +243,8 @@ safef(localFileName, PATH_LEN, "%s", mi->fileName);
 chopSuffix(localFileName);
 strcat(localFileName, ".bigBed");
 mi->fileName = localFileName;
-encode2ManifestTabOut(mi, manF);
+mi->format = "bigBed";
+encode2ManifestShortTabOut(mi, manF);
 }
 
 void processManifestItem(int itemNo, struct encode2Manifest *mi, char *sourceRoot, 
@@ -297,7 +304,7 @@ if (endsWith(fileName, ".fastq.tgz"))
     safef(localFileName, PATH_LEN, "%s", mi->fileName);
     strcat(localFileName, ".dir");
     mi->fileName = localFileName;
-    encode2ManifestTabOut(mi, manF);
+    encode2ManifestShortTabOut(mi, manF);
     }
 else if (endsWith(fileName, ".narrowPeak.gz"))
     {
@@ -375,7 +382,7 @@ else if (justCopySuffix(fileName))
     fprintf(f, "%s: %s\n", destPath, sourcePath);
     fprintf(f, "\tln -s %s %s\n", sourcePath, destPath);
     slNameAddHead(pTargetList, destPath);
-    encode2ManifestTabOut(mi, manF);
+    encode2ManifestShortTabOut(mi, manF);
     }
 else
     {
@@ -390,7 +397,7 @@ void encode2MakeEncode3(char *sourceDir, char *sourceManifest, char *destDir, ch
 /* encode2MakeEncode3 - Copy files in encode2 manifest and in case of tar'd files rezip them 
  * independently. */
 {
-struct encode2Manifest *fileList = encode2ManifestLoadAll(sourceManifest);
+struct encode2Manifest *fileList = encode2ManifestShortLoadAll(sourceManifest);
 verbose(2, "Loaded information on %d files from %s\n", slCount(fileList), sourceManifest);
 verboseTimeInit();
 FILE *f = mustOpen(outMake, "w");

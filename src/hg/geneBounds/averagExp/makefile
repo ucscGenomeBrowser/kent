@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = averagExp.o
 
 averagExp: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/averagExp $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/averagExp${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/averagExp${EXE} $O $(MYLIBS) $L
+	${STRIP} ${DESTDIR}${BINDIR}/averagExp${EXE}
 
 clean::
 	rm -f ${O}

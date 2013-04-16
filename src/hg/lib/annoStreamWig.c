@@ -94,7 +94,7 @@ if (retValidCount != NULL)
     *retValidCount = validCount;
 }
 
-static struct annoRow *aswNextRow(struct annoStreamer *vSelf)
+static struct annoRow *aswNextRow(struct annoStreamer *vSelf, struct lm *callerLm)
 /* Return an annoRow encoding the next chunk of wiggle data, or NULL if there are no more items. */
 {
 struct annoStreamWig *self = (struct annoStreamWig *)vSelf;
@@ -102,7 +102,7 @@ struct annoRow *rowOut = NULL;
 boolean done = FALSE;
 while (!done)
     {
-    struct annoRow *wigRow = self->wigStr->nextRow(self->wigStr);
+    struct annoRow *wigRow = self->wigStr->nextRow(self->wigStr, callerLm);
     if (wigRow == NULL)
 	return NULL;
     struct wiggle wiggle;
@@ -116,10 +116,10 @@ while (!done)
     getFloatArray(self, &wiggle, &rightFail, &validCount, vector);
     if (rightFail || validCount > 0)
 	{
-	rowOut = annoRowWigNew(wigRow->chrom, wigRow->start, wigRow->end, rightFail, vector);
+	rowOut = annoRowWigNew(wigRow->chrom, wigRow->start, wigRow->end, rightFail, vector,
+			       callerLm);
 	done = TRUE;
 	}
-    annoRowFree(&wigRow, self->wigStr);
     }
 return rowOut;
 }

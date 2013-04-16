@@ -1,0 +1,13 @@
+Here lies code to implement the ENCODE Big Data Warehouse (EDW).  The EDW is designed to track 
+a moderate number (1,000,000's) of big (~1GB) files.  It consists of three parts:
+1) A Linux file system with a fairly large block size.
+2) A MySQL database with a relatively small number of tables tracking
+    a) Users (by their email name)
+    b) Hubs (by their URLs)
+    c) Hosts (by their IP and connectivity)
+    d) Submits (by date/submitter/hub)
+    e) Files (by hub file name and EDW license plate).
+    f) Subscribers (jobs that get started when a file of a particular type arrives).
+3) A system to notify subscribers when a file has been recieved.
+
+Note the pipeline code is relatively separate.  The pipeline subscribes to the data warehouse.

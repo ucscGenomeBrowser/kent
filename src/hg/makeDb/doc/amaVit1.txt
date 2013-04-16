@@ -132,25 +132,24 @@ taxId   241585
 587707263       16505   KB265067        19239
 
 ##########################################################################
-# running repeat masker (WORKING - 2013-03-27 - Hiram)
+# running repeat masker (DONE - 2013-03-27 - Hiram)
     mkdir /hive/data/genomes/amaVit1/bed/repeatMasker
     cd /hive/data/genomes/amaVit1/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek amaVit1 > do.log 2>&1 &
-XXX - running - Wed Mar 27 10:43:05 PDT 2013
-    #   real    843m37.578s
+    #   real    163m13.049s
 
     cat faSize.rmsk.txt
-    #   2410758013 bases (132851443 N's 2277906570 real 1390898176 upper
-    #   887008394 lower) in 7741 sequences in 1 files
-    #   Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
-    #      max 52375790 (GL896898) median 1445
-    #   %36.79 masked total, %38.94 masked real
+# 1175404042 bases (47148290 N's 1128255752 real 1068522265 upper
+#       59733487 lower) in 182974 sequences in 1 files
+# Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+#       max 206462 (KB285691) median 2065
+# %5.08 masked total, %5.29 masked real
 
     egrep -i "versi|relea" do.log
-    #    January 10 2013 (open-4-0-0) version of RepeatMasker
-    #       CC   RELEASE 20120418;
+#    January 10 2013 (open-4-0-0) version of RepeatMasker
+# CC   RELEASE 20120418;
 
     featureBits -countGaps amaVit1 rmsk
     #   887930078 bases of 2410758013 (36.832%) in intersection
@@ -160,18 +159,18 @@ XXX - running - Wed Mar 27 10:43:05 PDT 2013
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (TBD - 2013-03-05 - Hiram)
+# running simple repeat (DONE - 2013-03-05 - Hiram)
     mkdir /hive/data/genomes/amaVit1/bed/simpleRepeat
     cd /hive/data/genomes/amaVit1/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	amaVit1 > do.log 2>&1 &
-XXX - running - Wed Mar 27 10:43:38 PDT 2013
-    #   real    9m42.005s
+    #   real    85m49.548s
 
     cat fb.simpleRepeat
-    #   25005240 bases of 2277906570 (1.098%) in intersection
+    #   7849266 bases of 1128255752 (0.696%) in intersection
 
+XXX - waiting to see what WM does
     # add to rmsk after it is done:
     cd /hive/data/genomes/amaVit1
     twoBitMask amaVit1.rmsk.2bit \
@@ -215,38 +214,39 @@ XXX - running - Wed Mar 27 10:43:38 PDT 2013
     #  112417 yes
 
 ##########################################################################
-## WINDOWMASKER (WORKING - 2013-03-27 - Hiram)
+## WINDOWMASKER (DONE - 2013-03-27 - Hiram)
     mkdir /hive/data/genomes/amaVit1/bed/windowMasker
     cd /hive/data/genomes/amaVit1/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev amaVit1 > do.log 2>&1 &
-XXX - running - Wed Mar 27 10:49:51 PDT 2013
-    #   real    185m5.285s
+    #   real    234m56.918s
 
     # Masking statistics
     cat faSize.amaVit1.wmsk.txt
-    # 2410758013 bases (132851443 N's 2277906570 real 1575810421 upper
-    #   702096149 lower) in 7741 sequences in 1 files
-    # Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
-    #   max 52375790 (GL896898) median 1445
-    # %29.12 masked total, %30.82 masked real
+    #   1175404042 bases (47148290 N's 1128255752 real 926668264 upper
+    #           201587488 lower) in 182974 sequences in 1 files
+    #   Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+    #           max 206462 (KB285691) median 2065
+    #   %17.15 masked total, %17.87 masked real
 
     cat faSize.amaVit1.wmsk.sdust.txt
-    #   2410758013 bases (132851443 N's 2277906570 real 1563711507 upper
-    #   714195063 lower) in 7741 sequences in 1 files
-    #   Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
-    #      max 52375790 (GL896898) median 1445
-    #   %29.63 masked total, %31.35 masked real
+    #   1175404042 bases (47148290 N's 1128255752 real 921480969 upper
+    #           206774783 lower) in 182974 sequences in 1 files
+    #   Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+    #           max 206462 (KB285691) median 2065
+    #   %17.59 masked total, %18.33 masked real
 
     cat faSize.amaVit1.cleanWMSdust.txt
-    #   2410758013 bases (132851443 N's 2277906570 real 1563711507 upper
-    #   714195063 lower) in 7741 sequences in 1 files
-    #   Total size: mean 311427.2 sd 2002158.7 min 1000 (AEYP01117479)
-    #   max 52375790 (GL896898) median 1445
-    #   %29.63 masked total, %31.35 masked real
+    #   1175404042 bases (47148290 N's 1128255752 real 921480969
+    #           upper 206774783 lower) in 182974 sequences in 1 files
+    #   Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+    #           max 206462 (KB285691) median 2065
+    #   %17.59 masked total, %18.33 masked real
+
 
     cat fb.amaVit1.windowmaskerSdust.clean.txt
-    #   714195063 bases of 2410758013 (29.625%) in intersection
+    #   206774783 bases of 1175404042 (17.592%) in intersection
+
 
     # how much does this window masker and repeat masker overlap:
     # can be done after rmsk is done.  The script will often
@@ -255,58 +255,81 @@ XXX - running - Wed Mar 27 10:49:51 PDT 2013
     featureBits -countGaps amaVit1 rmsk windowmaskerSdust
     #   453442864 bases of 2410758013 (18.809%) in intersection
 
+    cat fb.amaVit1.rmsk.windowmaskerSdust.txt
+    #   41747742 bases of 1175404042 (3.552%) in intersection
+
     # if the script did fail on that command, finish it:
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-continue=cleanup -dbHost=hgwdev amaVit1 > cleanup.log 2>&1 &
     #   real    1m43.905s
 
 ##########################################################################
-# cpgIslands - (TBD - 2013-03-06 - Hiram)
+# use WindowMasker and TRF for final masked genome (DONE - 2013-03-27 - Hiram)
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/amaVit1
+    twoBitMask bed/windowMasker/amaVit1.cleanWMSdust.2bit \
+	-add bed/simpleRepeat/trfMask.bed amaVit1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa amaVit1.2bit stdout | faSize stdin > faSize.amaVit1.2bit.txt
+    cat faSize.amaVit1.2bit.txt
+
+    #   1175404042 bases (47148290 N's 1128255752 real 921150785 upper
+    #           207104967 lower) in 182974 sequences in 1 files
+    #   Total size: mean 6423.9 sd 11509.9 min 201 (AOCU01226611)
+    #           max 206462 (KB285691) median 2065
+    #   %17.62 masked total, %18.36 masked real
+
+    rm /gbdb/amaVit1/amaVit1.2bit
+    ln -s `pwd`/amaVit1.2bit /gbdb/amaVit1/amaVit1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2013-03-27 - Hiram)
     mkdir /hive/data/genomes/amaVit1/bed/cpgIslands
     cd /hive/data/genomes/amaVit1/bed/cpgIslands
     time doCpgIslands.pl amaVit1 > do.log 2>&1
-    #   real    38m33.141s
+    #   real    160m9.498s
 
     cat fb.amaVit1.cpgIslandExt.txt
-    #   40222518 bases of 2277906570 (1.766%) in intersection
+    #   8721452 bases of 1128255752 (0.773%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2013-03-06 - Hiram)
+# genscan - (DONE - 2013-03-28 - Hiram)
     mkdir /hive/data/genomes/amaVit1/bed/genscan
     cd /hive/data/genomes/amaVit1/bed/genscan
     time doGenscan.pl amaVit1 > do.log 2>&1
-    #   real    33m41.740s
-    # one job failed, changed the -window size to 2000000 to get
-    #   it to complete
-    ./runLastOne.csh GL896906 000 gtf/000/GL896906.gtf \
-         pep/000/GL896906.pep subopt/000/GL896906.bed
-    time doGenscan.pl -continue=makeBed amaVit1 > bed.log 2>&1
-    #   real    4m33.037s
+    # load step broken due to gtfToGenePred binary problems, fixed and
+    # finished the load script manually, then continue:
+
+    time doGenscan.pl -continue=cleanup amaVit1 > cleanup.log 2>&1
+    #   real    3m24.993s
 
     cat fb.amaVit1.genscan.txt
-    #   25257909 bases of 647368134 (3.902%) in intersection
+    #   23027089 bases of 1128255752 (2.041%) in intersection
     cat fb.amaVit1.genscanSubopt.txt
-    #   23439935 bases of 647368134 (3.621%) in intersection
+    #   23060300 bases of 1128255752 (2.044%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (TBD - 2013-03-06 - Hiram)
-    # Use -repMatch=400, based on size -- for human we use 1024
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-03-27 - Hiram)
+    cd /hive/data/genomes/amaVit1
+
+    # Use -repMatch=450, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 2277906570 / 2897316137 \) \* 1024
-    #   ( 2277906570 / 2897316137 ) * 1024 = 805.081744
+    calc \( 1175404042 / 2897316137 \) \* 1024
+    #   ( 1175404042 / 2897316137 ) * 1024 = 415.423683
 
-    # round up to 350
+    # round up to 450
 
     cd /hive/data/genomes/amaVit1
     time blat amaVit1.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/amaVit1.11.ooc -repMatch=350
-    #   Wrote 152295 overused 11-mers to jkStuff/amaVit1.11.ooc
-    #   real    0m59.156s
+      -makeOoc=jkStuff/amaVit1.11.ooc -repMatch=450
+    #   Wrote 9104 overused 11-mers to jkStuff/amaVit1.11.ooc
+    #   real    0m26.387s
 
     # there are no non-bridged gaps, no lift file needed for genbank
     hgsql -N -e "select bridge from gap;" amaVit1 | sort | uniq -c
-    #   109700 yes
+    #   112417 yes
     # find other make doc where gapToLift is used to make nonBridged.bed file
 
 #########################################################################

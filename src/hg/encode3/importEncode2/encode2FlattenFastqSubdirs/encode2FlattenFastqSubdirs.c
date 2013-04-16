@@ -16,8 +16,6 @@ errAbort(
   "destroy subdirs.  Complain and die if any of non-dir files are anything but fastq.\n"
   "usage:\n"
   "   encode2FlattenFastqSubdirs rootDir\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 

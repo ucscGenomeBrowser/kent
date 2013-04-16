@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PSLSWAP = ../pslSwap
+PSLSWAP = pslSwap
 
 test: mrnaTest withSeqTest transTest mrnaNoRcTest withSeqNoRcTest
 

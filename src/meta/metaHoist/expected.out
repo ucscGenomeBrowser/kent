@@ -1,0 +1,27 @@
+meta a
+bozo clown
+name A great tag
+ref 99-99-99
+uniform all same
+
+   meta ab
+   name About something
+
+   meta ac
+   name About something else
+   nut acorn
+
+      meta aca
+      name Three deep
+
+      meta acb
+      name Three deep too
+      berry currant
+
+meta b
+id my id
+license free for all
+name no name
+
+   meta ba
+

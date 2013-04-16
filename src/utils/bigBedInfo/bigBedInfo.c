@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "udc.h"
+#include "bPlusTree.h"
 #include "bbiFile.h"
 #include "bigBed.h"
 #include "obscure.h"
@@ -56,7 +57,11 @@ if (optionExists("extraIndex"))
     {
     struct slName *el, *list = bigBedListExtraIndexes(bbi);
     for (el = list; el != NULL; el = el->next)
-        printf("    %s\n", el->name);
+	{
+	int fieldIx = 0;
+	struct bptFile *bpt = bigBedOpenExtraIndex(bbi, el->name, &fieldIx);
+        printf("    %s (field %d) with %lld items\n", el->name, fieldIx, (long long)bpt->itemCount);
+	}
     }
 printLabelAndLongNumber("itemCount", bigBedItemCount(bbi));
 printLabelAndLongNumber("primaryDataSize", bbi->unzoomedIndexOffset - bbi->unzoomedDataOffset);

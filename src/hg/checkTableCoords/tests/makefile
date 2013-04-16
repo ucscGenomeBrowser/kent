@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-CTC = ${BINDIR}/checkTableCoords
+CTC = checkTableCoords
 GENEPREDS = genePredCTC
 BEDS = bed3CTC bed4CTC bed8CTC bed12CTC
 PSLS = pslCTC

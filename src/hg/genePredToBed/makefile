@@ -1,22 +1,11 @@
-include ../../inc/common.mk
-
-L += -lm ${MYSQLLIBS}
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
+kentSrc = ../..
 A = genePredToBed
-O = genePredToBed.o
+include $(kentSrc)/inc/userApp.mk
 
-genePredToBed: ${O} ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-
-test:
+test::
 	genePredToBed test.genePred test.bed
 	diff expected.bed test.bed
-
-compile:: ${O}
-	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
+	rm -f test.bed
 
 clean::
-	rm -f ${A}${EXE} ${O}
+	rm -f test.bed

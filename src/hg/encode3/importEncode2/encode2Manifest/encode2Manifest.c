@@ -11,8 +11,6 @@
 
 char *metaDbs[] = {"hg19", "mm9"};
 char *metaTable = "metaDb";
-char *expDb = "hgFixed";
-char *expTable = "encodeExp";
 
 /* Command line variables. */
 char *fileRootDir = NULL;   /* If set we look at files a bit. */
@@ -21,7 +19,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "encode2Manifest - Create a encode3 manifest file for encode2 files\n"
+  "encode2Manifest - Create a encode3 manifest file for encode2 files by looking\n"
+  "at the metaDb tables in hg19 and mm9.\n"
   "usage:\n"
   "   encode2Manifest manifest.tab\n"
   "options:\n"
@@ -63,10 +62,10 @@ if (composite == NULL || dataType == NULL)
 char *guess = "unknown";
 if (sameString(dataType, "AffyExonArray")) guess = "exon";
 else if (sameString(dataType, "Cage")) guess = "exon";
-else if (sameString(dataType, "ChipSeq")) guess = "regulatory";
+else if (sameString(dataType, "ChipSeq")) guess = "open";
 else if (sameString(dataType, "DnaseDgf")) guess = "promoter";
 else if (sameString(dataType, "DnaseSeq")) guess = "promoter";
-else if (sameString(dataType, "FaireSeq")) guess = "regulatory";
+else if (sameString(dataType, "FaireSeq")) guess = "open";
 else if (sameString(dataType, "Gencode")) guess = "exon";
 else if (sameString(dataType, "MethylArray")) guess = "promoter";
 else if (sameString(dataType, "MethylRrbs")) guess = "promoter";
@@ -78,8 +77,8 @@ else if (sameString(dataType, "RipTiling")) guess = "exon";
 else if (sameString(dataType, "RnaChip")) guess = "exon";
 else if (sameString(dataType, "RnaPet")) guess = "exon";
 else if (sameString(dataType, "RnaSeq")) guess = "exon";
-else if (sameString(dataType, "Switchtear")) guess = "regulatory";
-else if (sameString(dataType, "TfbsValid")) guess = "regulatory";
+else if (sameString(dataType, "Switchtear")) guess = "open";
+else if (sameString(dataType, "TfbsValid")) guess = "open";
 
 /* Do some fine tuning within Chip-seq to treat histone mods differently. */
 if (sameString(dataType, "ChipSeq"))
@@ -240,14 +239,6 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 void encode2Manifest(char *outFile)
 /* encode2Manifest - Create a encode3 manifest file for encode2 files. */
 {
-/* Load up encodeExp info. */
-struct sqlConnection *expConn = sqlConnect(expDb);
-char query[256];
-safef(query, sizeof(query), "select * from %s", expTable);
-struct encodeExp *expList = encodeExpLoadByQuery(expConn, query);
-sqlDisconnect(&expConn);
-verbose(1, "%d experiments in encodeExp\n", slCount(expList));
-
 int i;
 struct mdbObj *mdbLists[ArraySize(metaDbs)];
 for (i=0; i<ArraySize(metaDbs); ++i)

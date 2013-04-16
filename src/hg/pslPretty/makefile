@@ -1,16 +1,10 @@
-include ../../inc/common.mk
+kentSrc = ../..
+A = pslPretty
+include $(kentSrc)/inc/userApp.mk
 
+test:: testDnax
 
-L += -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkweb.a
-
-O = pslPretty.o
-
-pslPretty: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/pslPretty $O $(MYLIBS) $L
-
-test:: testRna testDnax
+# testRna is missing its test input file rna.psl
 
 testRna::
 	${MKDIR} test/output
@@ -25,4 +19,4 @@ testOld::
 	pslPretty -long -axt input/test1.psl input/S1.lst input/S2.lst output/test1.axt
 
 clean::
-	rm -f ${O}
+	rm -fr test/output

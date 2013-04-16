@@ -13,3 +13,15 @@ all:
 	cd trixSearch && ${MAKE}
 
 clean::
+	cd bptForTwoBit && ${MAKE} clean
+	cd bptLookupStringToBits64 && ${MAKE} clean
+	cd bptMakeStringToBits64 && ${MAKE} clean
+	cd indexfa && ${MAKE} clean
+	cd indexgl && ${MAKE} clean
+	cd ixali && ${MAKE} clean
+	cd ixword1 && ${MAKE} clean
+	cd ixword3 && ${MAKE} clean
+	cd makepgo && ${MAKE} clean
+	cd stToXao && ${MAKE} clean
+	cd ixIxx && ${MAKE} clean
+	cd trixSearch && ${MAKE} clean

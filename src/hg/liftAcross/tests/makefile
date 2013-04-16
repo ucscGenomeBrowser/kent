@@ -1,5 +1,5 @@
 
-all::
+test::
 	liftAcross -warn -bedOut=testOut.bed testAcross.lft \
 		input.gp testOutput.gp 2> testErr.out
 	diff testOutput.gp expectedOutput.gp

@@ -8,6 +8,7 @@
 #include "pipeline.h"
 #include "obscure.h"
 #include "htmshell.h"
+#include "portable.h"
 
 
 struct hgdpPopInfo
@@ -194,13 +195,6 @@ cmd[1] = inFile;
 struct pipeline *pl = pipelineOpen(cmds, pipelineWrite|pipelineAppend, outFile, NULL);
 pipelineWait(pl);
 pipelineFree(&pl);
-}
-
-static void mustRename(char *oldName, char *newName)
-/* Rename a file or errAbort if there's a problem. */
-{
-if (rename(oldName, newName))
-    errAbort("Cannot rename %s to %s", oldName, newName);
 }
 
 static void removeDir(char *dirName)

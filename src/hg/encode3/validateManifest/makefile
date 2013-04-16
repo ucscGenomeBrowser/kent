@@ -1,23 +1,12 @@
-include ../../../inc/common.mk
+kentSrc = ../../..
+A = validateManifest
+include $(kentSrc)/inc/userApp.mk
 
-L += $(MYSQLLIBS) -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
+test:: $A
+	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1 -quickMd5sum
 
-O = validateManifest.o
-
-validateManifest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/validateManifest $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/validateManifest${EXE}
-
-clean:
-	rm -f $O
-
-test: 	validateManifest
-	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1
-
-test2: 	validateManifest
+test2: $A
 	rm -f /hive/groups/encode/encode3/testSets/manifest1/validated.txt
-	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1
+	validateManifest -dir=/hive/groups/encode/encode3/testSets/manifest1 -quickMd5sum
 
 # note "-" before the command means you know it will have an error, but continue making

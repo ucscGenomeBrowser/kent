@@ -1,10 +1,10 @@
 include ../../../inc/common.mk
 
-#blastToPsl = valgrind --tool=memcheck  ${DESTDIR}${BINDIR}/blastToPsl
-blastToPsl = ${DESTDIR}${BINDIR}/blastToPsl
+#blastToPsl = valgrind --tool=memcheck  blastToPsl
+blastToPsl = blastToPsl
 
-#blastXmlToPsl = valgrind --tool=memcheck  ${DESTDIR}${BINDIR}/blastXmlToPsl
-blastXmlToPsl =  ${DESTDIR}${BINDIR}/blastXmlToPsl
+#blastXmlToPsl = valgrind --tool=memcheck  blastXmlToPsl
+blastXmlToPsl =  blastXmlToPsl
 
 all:
 

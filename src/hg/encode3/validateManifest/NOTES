@@ -337,4 +337,24 @@ There is 11 GB of stuff there.
 2.7G    ./mm9
 11G     .
 
+-------------------
 
+"narrowPeak", "bed6+4",
+"broadPeak", "bed6+3",
+"bedRnaElements", "bed6+3",
+"bedLogR", "bed9+1",
+"bedRrbs", "bed9+2",
+"peptideMapping", "bed9+1",
+
+I don't have a broadPeak example yet,
+but I put it in the code.
+
+peptide group did not get funding, so probably
+do not need to support in vm for encode3.
+
+not sure what bedLogR and bedRrbs are,
+or whether they are needed in enc3.
+
+
+
+--------------------

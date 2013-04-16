@@ -89,6 +89,7 @@ UTIL_DIRS = \
 	genePredCheck \
 	genePredHisto \
 	genePredSingleCover \
+	genePredToBed \
 	genePredToGtf \
 	genePredToFakePsl \
 	genePredToMafFrames \

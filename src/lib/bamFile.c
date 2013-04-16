@@ -517,6 +517,46 @@ slReverse(&list);
 return list;
 }
 
+void samToOpenBed(char *samIn, FILE *f)
+/* Like samToOpenBed, but the output is the already open file f. */
+{
+samfile_t *sf = samopen(samIn, "r", NULL);
+bam_header_t *bamHeader = sf->header;
+bam1_t one;
+ZeroVar(&one);
+int err;
+while ((err = samread(sf, &one)) >= 0)
+    {
+    int32_t tid = one.core.tid;
+    if (tid < 0)
+        continue;
+    char *chrom = bamHeader->target_name[tid];
+    // Approximate here... can do better if parse cigar.
+    int start = one.core.pos;
+    int size = one.core.l_qseq;
+    int end = start + size;	
+    boolean isRc = (one.core.flag & BAM_FREVERSE);
+    char strand = '+';
+    if (isRc)
+	{
+	strand = '-';
+	reverseIntRange(&start, &end, bamHeader->target_len[tid]);
+	}
+    fprintf(f, "%s\t%d\t%d\t.\t0\t%c\n", chrom, start, end, strand);
+    }
+if (err < 0 && err != -1)
+    errnoAbort("samread err %d", err);
+samclose(sf);
+}
+
+void samToBed(char *samIn, char *bedOut)
+/* samToBed - Convert SAM file to a pretty simple minded bed file.. */
+{
+FILE *f = mustOpen(bedOut, "w");
+samToOpenBed(samIn, f);
+carefulClose(&f);
+}
+
 #else
 // If we're not compiling with samtools, make stub routines so compile won't fail:
 
@@ -637,6 +677,18 @@ struct bamChromInfo *bamChromList(samfile_t *fh)
 {
 errAbort(COMPILE_WITH_SAMTOOLS, "bamChromList");
 return NULL;
+}
+
+void samToBed(char *samIn, char *bedOut)
+/* samToBed - Convert SAM file to a pretty simple minded bed file.. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "samToBed");
+}
+
+void samToOpenBed(char *samIn, FILE *bedOut)
+/* samToBed - Convert SAM file to a pretty simple minded bed file.. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "samToOpenBed");
 }
 
 #endif//ndef USE_BAM

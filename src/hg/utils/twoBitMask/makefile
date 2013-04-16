@@ -1,19 +1,11 @@
-include ../../../inc/common.mk
-
-L += ${MYSQLLIBS} -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
-
-O = twoBitMask.o
-
-twoBitMask: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/twoBitMask $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/twoBitMask${EXE}
+kentSrc = ../../..
+A = twoBitMask
+include ${kentSrc}/inc/userApp.mk
 
 # reuse twoFitToFa input files. for tests
-TEST_IN = ../../../utils/twoBitToFa/tests/input
+TEST_IN = ${kentSrc}/utils/twoBitToFa/tests/input
 
-test:
+test::
 	${MKDIR} tests/output
 	twoBitMask ${TEST_IN}/testN.2bit -type=bed /dev/null tests/output/testN_noMask.2bit
 	cmp ${TEST_IN}/testN.2bit tests/output/testN_noMask.2bit
@@ -27,6 +19,5 @@ test:
 	cmp ${TEST_IN}/testMask.2bit tests/output/testMask2.2bit
 	rm -r tests/output
 
-clean:
-	rm -f $O
-
+clean::
+	rm -fr tests/output

@@ -1,5 +1,5 @@
 include ../../../../inc/common.mk
-bedToPsl = ${BINDIR}/bedToPsl
+bedToPsl = bedToPsl
 
 all:
 

@@ -4,17 +4,22 @@
 
 #include "common.h"
 
-char nibbleToHex(char n)
+char hexTab[16] = {'0', '1', '2', '3', '4', '5', '6', '7', 
+	'8', '9', 'a', 'b', 'c', 'd', 'e', 'f', };
+/* Convert 0-15 to a hex char */
+
+
+char nibbleToHex(unsigned char n)
 /* convert nibble to hexidecimal character. 0 <= n <= 15. */
 {
-return n + ( n <= 9 ? '0' : ('a'-10) );
+return hexTab[n];
 }
 
 void byteToHex(unsigned char n, char *hex)
 /* convert byte to hexidecimal characters. 0 <= n <= 255. */
 {
-*hex++ = nibbleToHex(n >> 4);
-*hex++ = nibbleToHex(n & 0xf);
+*hex++ = hexTab[n >> 4];
+*hex++ = hexTab[n & 0xf];
 }
 
 char *byteToHexString(unsigned char n)
@@ -44,4 +49,18 @@ n += hexToNibble(*hex++);
 return n;
 }
 
+
+void hexBinaryString(unsigned char *in, int inSize, char *out, int outSize)
+/* Convert possibly long binary string to hex string.
+ * Out size needs to be at least 2x inSize+1 */
+{
+assert(inSize * 2 +1 <= outSize);
+while (--inSize >= 0)
+    {
+    unsigned char c = *in++;
+    *out++ = hexTab[c>>4];
+    *out++ = hexTab[c&0xf];
+    }
+*out = 0;
+}
 

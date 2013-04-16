@@ -573,12 +573,13 @@ if (inputString == NULL)
     }
 }
 
-static void cgiParseInputAbort(char *input, struct hash **retHash,
+void cgiParseInputAbort(char *input, struct hash **retHash,
         struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back
  * into input, so please don't free input until you're done with
- * the hash. Prints message aborts if there's an error.*/
+ * the hash. Prints message aborts if there's an error.
+ * To clean up - slFreeList, hashFree, and only then free input. */
 {
 char *namePt, *dataPt, *nextNamePt;
 struct hash *hash = *retHash;
@@ -628,7 +629,8 @@ boolean cgiParseInput(char *input, struct hash **retHash,
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back
  * into input, so please don't free input until you're done with
- * the hash. Prints message and returns FALSE if there's an error.*/
+ * the hash. Prints message and returns FALSE if there's an error.
+ * To clean up - slFreeList, hashFree, and only then free input. */
 {
 boolean ok = TRUE;
 int status = setjmp(cgiParseRecover);
@@ -1932,6 +1934,18 @@ for (cv = inputList; cv != NULL; cv = cv->next)
 return dy;
 }
 
+void cgiEncodeIntoDy(char *var, char *val, struct dyString *dy)
+/* Add a CGI-encoded &var=val string to dy. */
+{
+if (dy->stringSize != 0)
+    dyStringAppendC(dy, '&');
+dyStringAppend(dy, var);
+dyStringAppendC(dy, '=');
+char *s = cgiEncode(val);
+dyStringAppend(dy, s);
+freez(&s);
+}
+
 void cgiContinueAllVars()
 /* Write back all CGI vars as hidden input for next time around. */
 {
@@ -2124,5 +2138,39 @@ char *commonCssStyles()
 // Contents currently is OBSOLETE as these have been moved to HGStyle.css
 // TODO: remove all traces (from web.c, hgTracks, hgTables) as this funtion does nothing.
 return "";
+}
+
+static void turnCgiVarsToVals(struct hashEl *hel)
+/* To save cgiParseVars clients from doing an extra lookup, replace
+ * hash filled with cgiVars as values with one filled with cgiVar->val
+ * instead.  Since cgiVar->name is same as hashEl->name,  no info is really
+ * lost, and it simplifies the code that uses us. */
+{
+struct cgiVar *var = hel->val;
+hel->val = var->val;
+}
+
+struct cgiParsedVars *cgiParsedVarsNew(char *cgiString)
+/* Build structure containing parsed out cgiString */
+{
+struct cgiParsedVars *tags;
+AllocVar(tags);
+tags->stringBuf = cloneString(cgiString);
+cgiParseInputAbort(tags->stringBuf, &tags->hash, &tags->list);
+hashTraverseEls(tags->hash, turnCgiVarsToVals);
+return tags;
+}
+
+void cgiParsedVarsFree(struct cgiParsedVars **pTags)
+/* Free up memory associated with cgiParsedVars */
+{
+struct cgiParsedVars *tags = *pTags;
+if (tags != NULL)
+    {
+    slFreeList(&tags->list);
+    hashFree(&tags->hash);
+    freeMem(tags->stringBuf);
+    freez(pTags);
+    }
 }
 

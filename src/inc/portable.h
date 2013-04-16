@@ -96,6 +96,9 @@ struct tempName
 void makeTempName(struct tempName *tn, char *base, char *suffix);
 /* Make a good name for a temp file. */
 
+void mustRename(char *oldName, char *newName);
+/* Rename file or die trying. */
+
 char *semiUniqName(char *base);
 /* Figure out a name likely to be unique.
  * Name will have no periods.  Returns a static
@@ -150,5 +153,8 @@ boolean maybeTouchFile(char *fileName);
 
 boolean isRegularFile(char *fileName);
 /* Return TRUE if fileName is a regular file. */
+
+void makeSymLink(char *oldName, char *newName);
+/* Return a symbolic link from newName to oldName or die trying */
 #endif /* PORTABLE_H */
 

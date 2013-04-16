@@ -8,7 +8,6 @@
 #include "mdb.h"
 
 char *metaDbs[] = {"hg19", "mm9"};
-char *Organisms[] = {"Human", "Mouse"};
 char *organisms[] = {"human", "mouse"};
 char *metaTable = "metaDb";
 char *expDb = "hgFixed";
@@ -16,22 +15,27 @@ char *expTable = "encodeExp";
 
 /* Command line variables */
 boolean withParent = FALSE;
+boolean maniFields = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "encode2Meta - Create meta files.\n"
+  "encode2Meta - Create meta.txt file. This is a hierarchical .ra file with heirarchy defined\n"
+  "by indentation.  You might think of it as a meta tag tree.  It contains the contents of\n"
+  "the hg19 and mm9 metaDb tables and the hgFixed.encodeExp table.\n"
   "usage:\n"
-  "   encode2Meta metadata.tab meta.txt\n"
+  "   encode2Meta database manifest.tab meta.txt\n"
   "options:\n"
   "   -withParent - if set put a parent tag in each stanza in addition to indentation\n"
+  "   -maniFields - includes some fileds normally suppressed because they are also in manifest\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"withParent", OPTION_BOOLEAN},
+   {"maniFields", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -151,10 +155,6 @@ void metaTreeWrite(int level, int minLevel, int maxLevel, boolean isFile,
     char *parent, struct metaNode *node, struct hash *suppress, FILE *f)
 /* Write out self and children to file recursively. */
 {
-#ifdef OLD
-if (node->vars == NULL && node->children == NULL)
-    return;
-#endif 
 if (level >= minLevel && level < maxLevel)
     {
     int indent = (level-minLevel)*3;
@@ -332,7 +332,6 @@ hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "lab", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "age", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "grant", cloneDouble(0.8));
-hashAdd(closeEnoughTags, "organism", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "dateSubmitted", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "dateUnrestricted", cloneDouble(0.8));
 hashAdd(closeEnoughTags, "softwareVersion", cloneDouble(0.8));
@@ -348,15 +347,18 @@ struct hash *suppress = hashNew(4);
 hashAdd(suppress, "objType", NULL);   // Inherent in hierarchy or ignored
 hashAdd(suppress, "subId", NULL);     // Submission ID not worth carrying forward
 hashAdd(suppress, "tableName", NULL);	// We aren't interested in tables, just files
-hashAdd(suppress, "dccAccession", NULL);  // Redundant with meta object name
 hashAdd(suppress, "project", NULL);   // Always wgEncode
 hashAdd(suppress, "expId", NULL);     // Redundant with dccAccession
-hashAdd(suppress, "composite", NULL); // Inherent in hierarchy now
 hashAdd(suppress, "cell", NULL);      // Completely redundant with cellType - I checked
 hashAdd(suppress, "sex", NULL);       // This should be implied in cellType
-hashAdd(suppress, "view", NULL);      // This is in maniest
-hashAdd(suppress, "replicate", NULL); // This is in manifest
-hashAdd(suppress, "md5sum", NULL);    // Also in manifest
+if (!maniFields)
+    {
+    hashAdd(suppress, "dccAccession", NULL);  // Redundant with meta object name
+    hashAdd(suppress, "composite", NULL); // Inherent in hierarchy now
+    hashAdd(suppress, "view", NULL);      // This is in maniest
+    hashAdd(suppress, "replicate", NULL); // This is in manifest
+    hashAdd(suppress, "md5sum", NULL);    // Also in manifest
+    }
 return suppress;
 }
 
@@ -384,15 +386,19 @@ for (child = node->children; child !=NULL; child = child->next)
     metaTreeSortChildrenSortTags(child);
 }
 
-void encode2Meta(char *manifestIn, char *outMetaRa)
+void encode2Meta(char *database, char *manifestIn, char *outMetaRa)
 /* encode2Meta - Create meta files.. */
 {
+int dbIx = stringArrayIx(database, metaDbs, ArraySize(metaDbs));
+if (dbIx < 0)
+    errAbort("Unrecognized database %s", database);
+
 /* Create a three level meta.ra format file based on hgFixed.encodeExp
  * and database.metaDb tables. The levels are composite, experiment, file */
 struct metaNode *metaTree = metaTreeNew("encode2");
 
 /* Load up the manifest. */
-struct encode2Manifest *mi, *miList = encode2ManifestLoadAll(manifestIn);
+struct encode2Manifest *mi, *miList = encode2ManifestShortLoadAll(manifestIn);
 struct hash *miHash = hashNew(18);
 for (mi = miList; mi != NULL; mi = mi->next)
     hashAdd(miHash, mi->fileName, mi);
@@ -411,6 +417,10 @@ int i;
 for (i=0; i<ArraySize(metaDbs); ++i)
     {
     char *db = metaDbs[i];
+    if (!sameString(database, db))
+        continue;
+
+    verbose(1, "exploring %s\n", db);
     struct mdbObj *mdb, *mdbList = getMdbList(db);
     verbose(1, "%d meta objects in %s\n", slCount(mdbList), db);
 
@@ -421,7 +431,7 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 	if (objType != NULL && sameString(objType, "composite"))
 	    {
 	    char compositeName[256];
-	    safef(compositeName, sizeof(compositeName), "%s%s", mdb->obj, Organisms[i]);
+	    safef(compositeName, sizeof(compositeName), "%s", mdb->obj);
 	    struct metaNode *compositeNode = metaNodeNew(compositeName);
 	    slAddHead(&metaTree->children, compositeNode);
 	    compositeNode->parent = metaTree;
@@ -547,11 +557,6 @@ for (i=0; i<ArraySize(metaDbs); ++i)
 struct hash *suppress = makeSuppress();
 struct hash *closeEnoughTags = makeCloseEnoughTags();
 
-metaTreeSortChildrenSortTags(metaTree);
-FILE *ugly = mustOpen("ugly.tree", "w");
-metaTreeWrite(0, 0, BIGNUM, FALSE, NULL, metaTree, suppress, ugly);
-carefulClose(&ugly);
-
 metaTreeHoist(metaTree, closeEnoughTags);
 metaTreeSortChildrenSortTags(metaTree);
 FILE *f = mustOpen(outMetaRa, "w");
@@ -570,9 +575,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 withParent = optionExists("withParent");
-encode2Meta(argv[1], argv[2]);
+maniFields = optionExists("maniFields");
+encode2Meta(argv[1], argv[2], argv[3]);
 return 0;
 }

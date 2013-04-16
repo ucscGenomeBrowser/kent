@@ -1,4 +1,4 @@
-PROG=${BINDIR}/netToAxt
+PROG=netToAxt
 
 test: clean all
 

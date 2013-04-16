@@ -8,6 +8,7 @@
 #include "twoBit.h"
 #include "bPlusTree.h"
 #include "basicBed.h"
+#include "udc.h"
 
 
 void usage()
@@ -28,6 +29,7 @@ errAbort(
   "   -bpt=index.bpt - use bpt index instead of built in one\n"
   "   -bed=input.bed - grab sequences specified by input.bed. Will exclude introns\n"
   "   -bedPos        - with -bed, to use chrom:start-end as the fasta ID in output.fa\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   "\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"
@@ -57,6 +59,7 @@ static struct optionSpec options[] = {
    {"bpt", OPTION_STRING},
    {"bed", OPTION_STRING},
    {"bedPos", OPTION_BOOLEAN},
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -203,6 +206,7 @@ clBpt = optionVal("bpt", clBpt);
 clBed = optionVal("bed", clBed);
 clBedPos = optionExists("bedPos");
 noMask = optionExists("noMask");
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 
 if (clBedPos && !clBed) 
     errAbort("the -bedPos option requires the -bed option");

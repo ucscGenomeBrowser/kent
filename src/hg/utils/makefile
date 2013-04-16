@@ -76,3 +76,7 @@ clean:: $(USE_DIRS:%=%.clean)
 %.clean:
 	(cd $* && ${MAKE} clean)
 
+compile:: $(USE_DIRS:%=%.compile)
+	- find . -name '*.o' -exec rm {} \;
+%.compile:
+	(cd $* && ${MAKE} compile)

@@ -508,7 +508,7 @@ else
     strcpy(extraTableName, extraTable);
 }
 
-spConn = sqlConnect( pdb);
+spConn = sqlConnect(UNIPROT_DB_NAME);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 if (wordCount > 1)
@@ -733,7 +733,7 @@ if (list != NULL)
     char query[256], **row, **row2;
     struct sqlResult *sr, *sr2;
     printf("<B>InterPro Domains: </B> ");
-    printf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
+    printf("<A HREF=\"http://www.ebi.ac.uk/interpro/IProteinStructures?ac=%s\" TARGET=_blank>",
         spAcc);
     printf("Graphical view of domain structure</A><BR>");
     safef(query, sizeof(query),
@@ -745,7 +745,6 @@ if (list != NULL)
     while ((row = sqlNextRow(sr)) != NULL)
         {
         char interPro[256];
-        char *pdb = hPdbFromGdb(database);
         safef(interPro, 128, "%s.interProXref", pdb);
             if (hTableExists(database, interPro))
                 {
@@ -2011,8 +2010,7 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
   int rowOffset;
   char *description;
   int start = cartInt(cart, "o");
-  char *pdb = hPdbFromGdb(database);
-  spConn = sqlConnect(pdb);
+  spConn = sqlConnect(UNIPROT_DB_NAME);
 
   genericHeader(tdb,hitName);
   dupe = cloneString(tdb->type);
@@ -2047,20 +2045,27 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
     printf("%s</A> - %s<BR><BR>\n", pfamHit->pfamAC, description);
     freez(&description);
 
-    printf("<B>Domain assignment based on %d%% identity BlastP hit to Pfam-A SwissProt Sequence:</B><BR>\n"
+    if (pfamHit->ident > 0)
+      printf("<B>Domain assignment based on %d%% identity BlastP hit to Pfam-A SwissProt Sequence:</B><BR>\n"
            "<A HREF=\"http://www.expasy.org/uniprot/%s\">%s</A> (%s, %d%% full-length alignment) "
-         "<BR><A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/swisspfamget.pl?name=%s\">[Pfam Domain Structure]</A><BR>\n",
+         "<BR><A HREF=\"http://pfam.sanger.ac.uk/protein/%s\">[Pfam Domain Structure]</A><BR>\n",
          pfamHit->ident,pfamHit->swissAC,pfamHit->swissAC,pfamHit->protCoord,pfamHit->percLen,pfamHit->swissAC);
-
-      printf("<BR><B>Position:</B> "
+    else
+    {
+	printf("<B>Gene:</B> %s<BR><BR>\n", pfamHit->pfamID); 
+	printf("<B>Domain assignment based on Pfam model search using HMMER 3.0</B><BR>\n"
+	     "E-value: %s<BR>(%s, %d%% full-length)<BR>\n",
+	     pfamHit->swissAC,pfamHit->protCoord,pfamHit->percLen);
+    }
+    printf("<BR><B>Position:</B> "
              "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
              hgTracksPathAndSettings(), database, pfamHit->chrom, pfamHit->chromStart + 1, pfamHit->chromEnd);
-      printf("%s:%d-%d</A><BR>\n", pfamHit->chrom, pfamHit->chromStart + 1, pfamHit->chromEnd);
-      printf("<B>Strand:</B> %s<BR>\n", pfamHit->strand);
-      printf("<B>Genomic size: </B> %d nt<BR>\n", (pfamHit->chromEnd - pfamHit->chromStart));
-      if (pfamHit->next != NULL)
+    printf("%s:%d-%d</A><BR>\n", pfamHit->chrom, pfamHit->chromStart + 1, pfamHit->chromEnd);
+    printf("<B>Strand:</B> %s<BR>\n", pfamHit->strand);
+    printf("<B>Genomic size: </B> %d nt<BR>\n", (pfamHit->chromEnd - pfamHit->chromStart));
+    if (pfamHit->next != NULL)
         printf("<hr>\n");
-    }
+  }
   sqlFreeResult(&sr);
   hFreeConn(&conn);
   printTrackHtml(tdb);
