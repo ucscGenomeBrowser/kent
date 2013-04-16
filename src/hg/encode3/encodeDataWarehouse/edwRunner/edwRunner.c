@@ -72,7 +72,8 @@ run->pid = 0;
 }
 
 struct runner *checkOnChildRunner(boolean doWait)
-/* See if a child has finished and optionally wait for it. */
+/* See if a child has finished and optionally wait for it.  Return
+ * a pointer to slot child has freed if it has finished. */
 {
 if (curThreads > 0)
     {
@@ -151,7 +152,7 @@ runner->job = job;
 int childId;
 if ((childId = mustFork()) == 0)
     {
-    /* We be child side */
+    /* We be child side - execute command using system call */
     if (dup2(errFd, STDERR_FILENO) < 0)
         errnoAbort("Can't dup2 stderr to %s", tempFileName);
     int status = system(job->commandLine);
@@ -175,7 +176,7 @@ long long lastCheck = edwNow() - timeBetweenChecks;
 long long lastId = 0;
 for (;;)
     {
-    uglyf("slCount(jobList)=%d, curThreads %d\n", slCount(jobList), curThreads);
+    verbose(2, "slCount(jobList)=%d, curThreads %d\n", slCount(jobList), curThreads);
     /* Three main cases each iteration: run a job, wait for a job, or look for new jobs.  If we
      * can't do any of these we go to sleep for a while.  */
     if (jobList != NULL && curThreads < maxThreadCount)  // Open slot and a job to put in it!
@@ -203,7 +204,7 @@ for (;;)
 	    struct edwJob *lastJob = slLastEl(newJobs);
 	    lastId = lastJob->id;
 	    }
-	uglyf("Got %d new jobs\n", newJobCount);
+	verbose(2, "Got %d new jobs\n", newJobCount);
 	sqlDisconnect(&conn);
 	jobList = slCat(jobList, newJobs);
 	lastCheck = edwNow();
