@@ -18,6 +18,7 @@
 #include "bigBed.h"
 #include "bigWarn.h"
 #include "errCatch.h"
+#include "trackHub.h"
 
 
 
@@ -35,7 +36,9 @@ if (bbi == NULL)
 	}
     else
 	{
-	struct sqlConnection *conn = hAllocConnTrack(database, track->tdb);
+	struct sqlConnection *conn = NULL;
+	if (!trackHubDatabase(database))
+	    conn = hAllocConnTrack(database, track->tdb);
 	fileName = bbiNameFromSettingOrTable(track->tdb, conn, track->table);
 	hFreeConn(&conn);
 	}
