@@ -172,6 +172,7 @@ void edwRunner(char *now)
 struct edwJob *jobList = NULL;
 long long timeBetweenChecks = 30;
 long long lastCheck = edwNow() - timeBetweenChecks;
+long long lastId = 0;
 for (;;)
     {
     uglyf("slCount(jobList)=%d, curThreads %d\n", slCount(jobList), curThreads);
@@ -193,9 +194,15 @@ for (;;)
 	/* Would be nice to have a way to wait on DB rather than poll it like this. */
 	struct sqlConnection *conn = sqlConnect(edwDatabase);
 	char query[256];
-	safef(query, sizeof(query), "select * from edwJob where startTime = 0 order by id");
+	safef(query, sizeof(query), 
+	    "select * from edwJob where startTime = 0 and id > %lld order by id", lastId);
 	struct edwJob *newJobs = edwJobLoadByQuery(conn, query);
 	int newJobCount = slCount(newJobs);
+	if (newJobCount > 0)
+	    {
+	    struct edwJob *lastJob = slLastEl(newJobs);
+	    lastId = lastJob->id;
+	    }
 	uglyf("Got %d new jobs\n", newJobCount);
 	sqlDisconnect(&conn);
 	jobList = slCat(jobList, newJobs);
