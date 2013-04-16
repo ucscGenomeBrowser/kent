@@ -940,7 +940,7 @@ hPrintf("%s",
   "features and usage. "
   "For more complex queries, you may want to use "
   "<A HREF=\"http://main.g2.bx.psu.edu\" target=_BLANK>Galaxy</A> or "
-  "our <A HREF=\"http://genome.ucsc.edu/goldenPath/help/mysql.html\">public "
+  "our <A HREF=\"../goldenPath/help/mysql.html\">public "
   "MySQL server</A>. "
   "To examine the biological function of your set through annotation "
   "enrichments, send the data to "
