@@ -20,6 +20,8 @@
 #include "encode3/encode3Valid.h"
 #include "edwLib.h"
 
+boolean doNow = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -27,11 +29,13 @@ errAbort(
   "edwSubmit - Submit URL with validated.txt to warehouse.\n"
   "usage:\n"
   "   edwSubmit submitUrl email-address\n"
-  );
+  "options:\n"
+  "   -now  If set, start submission now even though one seems to be in progress for same url.");
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"now", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -224,6 +228,15 @@ void handleFileError(struct sqlConnection *conn, int fileId, char *err)
 writeErrToTableAndDie(conn, "edwFile", fileId, err);
 }
 
+int mustMkstemp(char tempFileName[PATH_LEN])
+/* Fill in temporary file name with name of a tmp file and return open file handle. */
+{
+int fd = mkstemp(tempFileName);
+if (fd == -1)
+    errnoAbort("Couldn't make temp file %s", tempFileName);
+return fd;
+}
+
 void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
 /* This will fetch remote data to a temporary file. It fills in tempFileName with the name. */
 {
@@ -231,7 +244,7 @@ void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
 safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 
 /* Get open file handle. */
-int localFd = mkstemp(tempFileName);
+int localFd = mustMkstemp(tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
 }
@@ -541,6 +554,50 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 return edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
 }
 
+struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
+/* Return most recent submission, possibly in progress, from this url */
+{
+int urlSize = strlen(url);
+char escapedUrl[2*urlSize+1];
+sqlEscapeString2(escapedUrl, url);
+int escapedSize = strlen(escapedUrl);
+char query[128 + escapedSize];
+safef(query, sizeof(query), 
+    "select * from edwSubmit where url='%s' order by id desc limit 1", escapedUrl);
+return edwSubmitLoadByQuery(conn, query);
+}
+
+void notOverlappingSelf(struct sqlConnection *conn, char *url)
+/* Ensure we are only submission going on for this URL, allowing for time out
+ * and command line override. */
+{
+if (doNow) // Allow command line override
+    return; 
+
+/* Fetch most recent submission from this URL. */
+struct edwSubmit *old = edwMostRecentSubmission(conn, url);
+if (old == NULL)
+    return;
+
+/* See if we have something in progress, meaning started but not ended. */
+if (old->endUploadTime == 0 && isEmpty(old->errorMessage))
+    {
+    /* Figure out when we started most recent single file in the upload, or when
+     * we started if not files started yet. */
+    char query[256];
+    safef(query, sizeof(query), 
+	"select max(startUploadTime) from edwFile where submitId=%u", old->id);
+    long long maxStartTime = sqlQuickLongLong(conn, query);
+    if (maxStartTime == 0)
+	maxStartTime = old->startUploadTime;
+
+    /* Check against our usual time out. */
+    if (edwNow() - maxStartTime < edwSingleFileTimeout)
+        errAbort("Submission of %s already is in progress.  Please come back in an hour", url);
+    }
+
+edwSubmitFree(&old);
+}
 
 void edwSubmit(char *submitUrl, char *email)
 /* edwSubmit - Submit URL with validated.txt to warehouse. */
@@ -555,14 +612,18 @@ char submitDir[submitDirSize+1];
 memcpy(submitDir, submitUrl, submitDirSize);
 submitDir[submitDirSize] = 0;  // Add trailing zero
 
+
 /* Make sure user has access. */
-struct sqlConnection *conn = sqlConnect(edwDatabase);
+struct sqlConnection *conn = sqlConnectProfile(edwDatabase, edwDatabase);
 struct edwUser *user = edwMustGetUserFromEmail(conn, email);
 int userId = user->id;
 
 #ifdef OLD
 int userId =  edwMustHaveAccess(conn, user, password);
 #endif /* OLD */
+
+/* See if we are already running on same pipe.  If so council patience and quit. */
+notOverlappingSelf(conn, submitUrl);
 
 /* Make a submit record. */
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, userId);
@@ -700,6 +761,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+doNow = optionExists("now");
 if (argc != 3)
     usage();
 edwSubmit(argv[1], argv[2]);
