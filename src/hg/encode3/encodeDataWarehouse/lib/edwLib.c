@@ -19,6 +19,7 @@
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
 char *edwLicensePlatePrefix = "ENCFF";
+int edwSingleFileTimeout = 60*60;   // How many seconds we give ourselves to fetch a single file
 
 #ifdef ELSEWHERE
 char *edwRootDir = "/scratch/kent/encodeDataWarehouse/";
@@ -64,14 +65,13 @@ if (submitDirId <= 0)
     return -1;
 
 /* Then see if we have file that matches submitDir and submitFileName. */
-int hourInSeconds = 60*60;
 safef(query, sizeof(query), 
     "select id from edwFile "
     "where submitFileName='%s' and submitDirId = %d and errorMessage = '' and deprecated=''"
     " and (endUploadTime > startUploadTime or startUploadTime < %lld) "
     "order by submitId desc limit 1"
     , submitFileName, submitDirId
-    , (long long)edwNow() - hourInSeconds);
+    , (long long)edwNow() - edwSingleFileTimeout);
 long id = sqlQuickLongLong(conn, query);
 if (id == 0)
     return -1;
