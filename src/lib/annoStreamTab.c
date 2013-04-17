@@ -189,7 +189,8 @@ freeMem(self->fileOrUrl);
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamTabNew(char *fileOrUrl, struct asObject *asObj)
+struct annoStreamer *annoStreamTabNew(char *fileOrUrl, struct annoAssembly *aa,
+				      struct asObject *asObj)
 /* Create an annoStreamer (subclass) object from a tab-separated text file/URL
  * whose columns are described by asObj (possibly excepting bin column at beginning). */
 {
@@ -197,7 +198,7 @@ struct lineFile *lf = astLFOpen(fileOrUrl);
 struct annoStreamTab *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asObj);
+annoStreamerInit(streamer, aa, asObj, fileOrUrl);
 streamer->rowType = arWords;
 streamer->setRegion = astSetRegion;
 streamer->nextRow = astNextRow;

@@ -5,7 +5,7 @@
 
 #include "annoStreamer.h"
 
-struct annoStreamer *annoStreamBigWigNew(char *fileOrUrl);
+struct annoStreamer *annoStreamBigWigNew(char *fileOrUrl, struct annoAssembly *aa);
 /* Create an annoStreamer (subclass) object from a file or URL. */
 
 #endif//ndef ANNOSTREAMBIGWIG_H

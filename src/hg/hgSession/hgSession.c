@@ -161,15 +161,23 @@ if (thePath == NULL)
 return thePath;
 }
 
+char *appendSForHttps()
+/* if running on https, add the letter s to the url protocol */
+{
+if (cgiServerHttpsIsOn())
+    return "s";
+return "";
+}
+
 void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
 		    boolean encode)
 /* Add to dy an URL that tells hgSession to load a saved session.
  * If encode, cgiEncodeFull the URL. */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-dyStringPrintf(dyTmp, "http://%s%s?hgS_doOtherUser=submit&"
+dyStringPrintf(dyTmp, "http%s://%s%s?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
-	       cgiServerNamePort(), destAppScriptName(), userName, sessionName);
+	       appendSForHttps(), cgiServerNamePort(), destAppScriptName(), userName, sessionName);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -212,8 +220,8 @@ void addUrlLink(struct dyString *dy, char *url, boolean encode)
 {
 struct dyString *dyTmp = dyStringNew(1024);
 char *encodedUrl = cgiEncodeFull(url);
-dyStringPrintf(dyTmp, "http://%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
-	       cgiServerNamePort(), destAppScriptName(), encodedUrl);
+dyStringPrintf(dyTmp, "http%s://%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
+	       appendSForHttps(), cgiServerNamePort(), destAppScriptName(), encodedUrl);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -516,7 +524,7 @@ else if (wikiLinkEnabled())
             " Browser and Email links.</LI>\n",
             wikiLinkUserLoginUrl(cartSessionId(cart)));
     }
-dyStringPrintf(dyUrl, "http://%s%s", cgiServerNamePort(), cgiScriptName());
+dyStringPrintf(dyUrl, "http%s://%s%s", appendSForHttps(), cgiServerNamePort(), cgiScriptName());
 
 printf("<LI>If you have saved your settings to a local file, you can send "
        "email to others with the file as an attachment and direct them to "
@@ -978,8 +986,8 @@ else
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
-	   "<A HREF=\"http://%s%s?%s=%u\">Browser</A>",
-	   cgiServerNamePort(), destAppScriptName(),
+	   "<A HREF=\"http%s://%s%s?%s=%u\">Browser</A>",
+	   appendSForHttps(), cgiServerNamePort(), destAppScriptName(),
 	   cartSessionVarName(), cartSessionId(cart));
     }
 if (lf != NULL)

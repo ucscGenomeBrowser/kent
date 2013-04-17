@@ -42,7 +42,7 @@ struct annoRow *annoRowClone(struct annoRow *rowIn, enum annoRowType rowType, in
 {
 if (rowIn == NULL)
     return NULL;
-if (rowType == arWords || rowType == arVcf)
+if (rowType == arWords)
     return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
 				  rowIn->data, numCols, lm);
 else if (rowType == arWig)

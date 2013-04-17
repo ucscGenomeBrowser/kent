@@ -20392,3 +20392,31 @@ TMPDIR=/scratch/tmp
     registerTrackHandler("wgEncodeGencodeV15", gencodeGeneMethods);
 
 #########################################################################
+# UPDATE COSMIC TRACK - v64 (DONE - 2013-04-17 - Hiram)
+    # take a look at:
+    # ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/
+    # to see what the new version file name is, then:
+
+    cd /hive/data/genomes/hg19/bed/cosmic
+
+    time ~/kent/src/hg/utils/automation/loadCosmic.pl -dryRun hg19 \
+ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v64_260313.csv.gz
+#       New length: 677957
+#       Old length: 616299
+#       Percent bed overlap with previous version: 100.00%
+#       Number of deleted IDs: 1
+#       Number of added IDs: 61659
+
+#       real    1m4.240s
+
+    # that created files in: /hive/data/genomes/hg19/bed/cosmic/v64/
+
+    # then:
+    cd /hive/data/genomes/hg19/bed/cosmic/v64/
+    time ~/kent/src/hg/utils/automation/loadCosmic.pl hg19 \
+ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v64_260313.csv.gz \
+        > do.log 2>&1
+    #   real    0m27.062s
+    #   Read 677957 elements of size 4 from cosmic.bed
+
+############################################################################

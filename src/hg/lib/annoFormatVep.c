@@ -6,8 +6,11 @@
 #include "annoGratorGpVar.h"
 #include "annoGratorQuery.h"
 #include "dystring.h"
+#include "genePred.h"
 #include "gpFx.h"
+#include "pgSnp.h"
 #include "portable.h"
+#include "vcf.h"
 #include <time.h>
 
 struct annoFormatVep
@@ -15,17 +18,20 @@ struct annoFormatVep
     {
     struct annoFormatter formatter;	// superclass / external interface
     struct annoFormatVepConfig *config;	// Description of input sources and values for Extras col
-    char *fileName;			// Output filename
-    FILE *f;				// Output file handle
-    boolean needHeader;			// TRUE if we should print out the header
-    int varNameIx;			// Index of name column from variant source, or -1 if N/A
-    int varAllelesIx;			// Index of alleles column from variant source, or -1
-    int geneNameIx;			// Index of gene name (not transcript name) from genePred
-    int snpNameIx;			// Index of name column from dbSNP source, or -1
 
     char *(*getSlashSepAlleles)(char **words);
     // If the variant source doesn't have a single column with slash-separated alleles
     // (varAllelesIx is -1), provide a function that translates into slash-sep.
+
+    char *fileName;			// Output filename
+    FILE *f;				// Output file handle
+    struct lm *lm;			// localmem for scratch storage
+    int lmRowCount;			// counter for periodic localmem cleanup
+    int varNameIx;			// Index of name column from variant source, or -1 if N/A
+    int varAllelesIx;			// Index of alleles column from variant source, or -1
+    int geneNameIx;			// Index of gene name (not transcript name) from genePred
+    int snpNameIx;			// Index of name column from dbSNP source, or -1
+    boolean needHeader;			// TRUE if we should print out the header
     };
 
 static void afVepPrintHeaderExtraTags(struct annoFormatVep *self)
@@ -52,19 +58,14 @@ fprintf(f, "## Output produced at %d-%02d-%02d %02d:%02d:%02d\n",
 	1900 + tm->tm_year, 1 + tm->tm_mon, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
 }
 
-static void afVepPrintHeader(struct annoFormatVep *self)
+static void afVepPrintHeader(struct annoFormatVep *self, char *db)
 /* Print a header that looks almost like a VEP header. */
 {
 FILE *f = self->f;
 fprintf(f, "## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)\n");
 afVepPrintHeaderDate(f);
-char *db = self->formatter.query->assemblyName;
 fprintf(f, "## Connected to UCSC database %s\n", db);
-
-//#*** IMPLEMENT ME
-char *primaryName = "getNameFromPrimarySource";
-
-fprintf(f, "## Variants: %s\n", primaryName);
+fprintf(f, "## Variants: %s\n", self->config->variantSource->name);
 afVepPrintHeaderExtraTags(self);
 fputs("Uploaded Variation\tLocation\tAllele\tGene\tFeature\tFeature type\tConsequence\t"
       "Position in cDNA\tPosition in CDS\tPosition in protein\tAmino acid change\t"
@@ -72,18 +73,17 @@ fputs("Uploaded Variation\tLocation\tAllele\tGene\tFeature\tFeature type\tConseq
 self->needHeader = FALSE;
 }
 
-static void afVepInitialize(struct annoFormatter *fSelf, struct annoGratorQuery *query)
+static void afVepInitialize(struct annoFormatter *fSelf, struct annoStreamer *primarySource,
+			    struct annoStreamer *integrators)
 /* Print header, regardless of whether we get any data after this. */
 {
-fSelf->query = query;
 struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
 if (self->needHeader)
-    afVepPrintHeader(self);
+    afVepPrintHeader(self, primarySource->assembly->name);
 }
 
 static char *getSlashSepAllelesFromVcf(char **words)
 /* Construct a /-separated allele string from VCF. Do not free result. */
-//#*** is this duplicating anything in pgSnpFromVcf?
 {
 static struct dyString *dy = NULL;
 if (dy == NULL)
@@ -196,12 +196,13 @@ else
     afVepPrintPlaceholders(self->f, 5);
 }
 
-static void afVepPrintExistingVar(struct annoFormatVep *self, struct slRef *gratorRowList)
+static void afVepPrintExistingVar(struct annoFormatVep *self,
+				  struct annoStreamRows gratorData[], int gratorCount)
 /* Print existing variant ID (or placeholder) */
 {
 if (self->snpNameIx >= 0)
     {
-    struct annoRow *snpRows = gratorRowList->val, *row;
+    struct annoRow *snpRows = gratorData[1].rowList, *row;
     if (snpRows != NULL)
 	{
 	int i;
@@ -259,30 +260,32 @@ for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
     }
 }
 
+static struct annoRow *getRowsFromSource(struct annoStreamer *src,
+					 struct annoStreamRows gratorData[], int gratorCount)
+/* Search gratorData for src, and return its rows when found. */
+{
+int i;
+for (i = 0;  i < gratorCount;  i++)
+    {
+    if (gratorData[i].streamer == src)
+	return gratorData[i].rowList;
+    }
+errAbort("annoFormatVep: Can't find source %s in gratorData", src->name);
+return NULL;
+}
+
 static void afVepPrintExtras(struct annoFormatVep *self, struct annoRow *varRow,
 			     struct annoRow *gpvRow, struct gpFx *gpFx,
-			     struct slRef *gratorRowList)
+			     struct annoStreamRows gratorData[], int gratorCount)
 /* Print the Extra column's tag=value; components if we have any. */
 {
 boolean gotExtra = FALSE;
-struct annoRow *snpRows = NULL;
-if (self->snpNameIx >= 0)
-    {
-    snpRows = gratorRowList->val;
-    gratorRowList = gratorRowList->next;
-    }
 struct annoFormatVepExtraSource *extras = self->config->extraSources, *extraSrc;
 for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     {
-    if (gratorRowList == NULL)
-	errAbort("afVepPrintExtra: more extras specified than gratorRowLists delivered.");
     if (extraSrc != extras)
 	fputc(';', self->f);
-    struct annoRow *extraRows = gratorRowList->val;
-    if (extraSrc->source == self->config->snpSource)
-	extraRows = snpRows;
-    else
-	gratorRowList = gratorRowList->next;
+    struct annoRow *extraRows = getRowsFromSource(extraSrc->source, gratorData, gratorCount);
     struct annoFormatVepExtraItem *extraItem;
     for (extraItem = extraSrc->items;  extraItem != NULL;  extraItem = extraItem->next)
 	{
@@ -294,8 +297,6 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 	}
     gotExtra = TRUE;
     }
-if (gratorRowList != NULL)
-    errAbort("afVepPrintExtra: more gratorRowLists delivered than extras specified.");
 // VEP automatically adds DISTANCE for upstream/downstream variants
 if (gpFx->so.soNumber == upstream_gene_variant || gpFx->so.soNumber == downstream_gene_variant)
     {
@@ -313,28 +314,40 @@ if (!gotExtra)
     afVepPrintPlaceholders(self->f, 0);
 }
 
-static void afVepPrintOneLine(struct annoFormatVep *self, struct annoRow *varRow,
-			      struct annoRow *gpvRow, struct slRef *gratorRowList)
+static void afVepLmCleanup(struct annoFormatVep *self)
+{
+self->lmRowCount++;
+if (self->lmRowCount > 1024)
+    {
+    lmCleanup(&(self->lm));
+    self->lm = lmInit(0);
+    self->lmRowCount = 0;
+    }
+}
+
+static void afVepPrintOneLine(struct annoFormatVep *self, struct annoStreamRows *varData,
+			      struct annoRow *gpvRow,
+			      struct annoStreamRows gratorData[], int gratorCount)
 /* Print one line of VEP: a variant, an allele, functional consequences of that allele,
  * and whatever else is included in the config. */
 {
-struct gpFx *gpFx = annoGratorGpVarGpFxFromRow(self->config->gpVarSource, gpvRow);
-afVepPrintNameAndLoc(self, varRow);
+struct gpFx *gpFx = annoGratorGpVarGpFxFromRow(self->config->gpVarSource, gpvRow, self->lm);
+afVepLmCleanup(self);
+afVepPrintNameAndLoc(self, varData->rowList);
 afVepPrintPredictions(self, gpvRow, gpFx);
-afVepPrintExistingVar(self, gratorRowList);
-afVepPrintExtras(self, varRow, gpvRow, gpFx, gratorRowList);
+afVepPrintExistingVar(self, gratorData, gratorCount);
+afVepPrintExtras(self, varData->rowList, gpvRow, gpFx, gratorData, gratorCount);
 fputc('\n', self->f);
-//#*** mem leak gpFx...
 }
 
-static void afVepFormatOne(struct annoFormatter *fSelf, struct annoRow *primaryRow,
-			   struct slRef *gratorRowList)
+static void afVepFormatOne(struct annoFormatter *fSelf, struct annoStreamRows *primaryData,
+			   struct annoStreamRows gratorData[], int gratorCount)
 /* Print one variant's VEP (possibly multiple lines) using collected rows. */
 {
 struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
-struct annoRow *gpVarRows = gratorRowList->val, *gpvRow;
+struct annoRow *gpVarRows = gratorData[0].rowList, *gpvRow;
 for (gpvRow = gpVarRows;  gpvRow != NULL;  gpvRow = gpvRow->next)
-    afVepPrintOneLine(self, primaryRow, gpvRow, gratorRowList->next);
+    afVepPrintOneLine(self, primaryData, gpvRow, gratorData, gratorCount);
 }
 
 static void afVepClose(struct annoFormatter **pFSelf)
@@ -345,6 +358,7 @@ if (pFSelf == NULL)
 struct annoFormatVep *self = *(struct annoFormatVep **)pFSelf;
 freeMem(self->fileName);
 carefulClose(&(self->f));
+lmCleanup(&(self->lm));
 annoFormatterFree(pFSelf);
 }
 
@@ -355,23 +369,24 @@ self->config = config;
 struct asColumn *varAsColumns = config->variantSource->asObj->columnList;
 self->varNameIx = -1;
 self->varAllelesIx = -1;
-//#*** get real autoSql col checking:
-if (asColumnFindIx(varAsColumns, "alleleCount"))
+if (asObjectsMatch(config->variantSource->asObj, pgSnpAsObj()))
     {
-    // don't use pgSnp's "name" column as name, it's just alleles
+    // pgSnp's "name" column actually contains slash-separated alleles
     self->varAllelesIx = asColumnFindIx(varAsColumns, "name");
     }
-else
+else if (asObjectsMatch(config->variantSource->asObj, vcfAsObj()))
     {
-    boolean looksLikeVcf = TRUE;
     self->varNameIx = asColumnFindIx(varAsColumns, "name");
-    if (looksLikeVcf)
-	self->getSlashSepAlleles = getSlashSepAllelesFromVcf;
-    else
-	errAbort("afVepSetConfig: can't figure out how to extract variant alleles");
+    self->getSlashSepAlleles = getSlashSepAllelesFromVcf;
     }
+else
+    errAbort("afVepSetConfig: variant source %s doesn't look like pgSnp or VCF",
+	     config->variantSource->name);
 if (config->gpVarSource == NULL)
     errAbort("afVepSetConfig: config must have a gpVarSource");
+else if (! asObjectsMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10))
+    errAbort("afVepSetConfig: gpVarSource %s doesn't look like genePred",
+	     config->gpVarSource->name);
 struct asColumn *gpvAsColumns = config->gpVarSource->asObj->columnList;
 self->geneNameIx = asColumnFindIx(gpvAsColumns, "proteinID");
 if (self->geneNameIx < 0)
@@ -399,6 +414,7 @@ fSelf->formatOne = afVepFormatOne;
 fSelf->close = afVepClose;
 self->fileName = cloneString(fileName);
 self->f = mustOpen(fileName, "w");
+self->lm = lmInit(0);
 self->needHeader = TRUE;
 afVepSetConfig(self, config);
 return (struct annoFormatter *)self;

@@ -5,7 +5,8 @@
 
 #include "annoGrateWig.h"
 
-struct annoGrator *annoGrateWigDbNew(char *db, char *table, int maxOutput);
+struct annoGrator *annoGrateWigDbNew(char *db, char *table, struct annoAssembly *aa,
+				     int maxOutput);
 /* Create an annoGrator subclass for wiggle data from db.table (and the file it points to). */
 
 #endif//ndef ANNOGRATEWIGDB_H

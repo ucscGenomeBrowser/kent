@@ -90,16 +90,30 @@ else
     return "80";
 }
 
+boolean cgiServerHttpsIsOn()
+/* Return true if HTTPS is on */
+{
+char *httpsIsOn = getenv("HTTPS");
+if (httpsIsOn)
+    return sameString(httpsIsOn, "on");
+else
+    return FALSE;
+}
+
 char *cgiServerNamePort()
 /* Return name of server with port if different than 80 */
 {
 char *port = cgiServerPort();
-char *namePort = cgiServerName();
+char *name = cgiServerName();
 struct dyString *result = newDyString(256);
-if (namePort)
+char *defaultPort = "80";
+if (cgiServerHttpsIsOn())
+    defaultPort = "443";
+
+if (name)
     {
-    dyStringPrintf(result,"%s",namePort);
-    if (differentString(port, "80"))
+    dyStringPrintf(result,"%s",name);
+    if (differentString(port, defaultPort))
 	dyStringPrintf(result,":%s",port);
     return dyStringCannibalize(&result);
     }
