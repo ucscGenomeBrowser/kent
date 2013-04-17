@@ -15,10 +15,8 @@ void annoStreamerSetAutoSqlObject(struct annoStreamer *self, struct asObject *as
 /* Use new asObj and update internal state derived from asObj. */
 {
 annoFilterFreeList(&(self->filters));
-annoColumnFreeList(&(self->columns));
 self->asObj = asObj;
 self->filters = annoFiltersFromAsObject(asObj);
-self->columns = annoColumnsFromAsObject(asObj);
 self->numCols = slCount(asObj->columnList);
 }
 
@@ -61,42 +59,25 @@ annoFilterFreeList(&(self->filters));
 self->filters = annoFilterCloneList(newFilters);
 }
 
-struct annoColumn *annoStreamerGetColumns(struct annoStreamer *self)
-/* Return supported columns with current settings.  Callers can modify and free when done. */
-{
-return annoColumnCloneList(self->columns);
-}
-
-void annoStreamerSetColumns(struct annoStreamer *self, struct annoColumn *newColumns)
-/* Free old columns and use clone of newColumns. */
-{
-annoColumnFreeList(&(self->columns));
-self->columns = annoColumnCloneList(newColumns);
-}
-
-void annoStreamerSetQuery(struct annoStreamer *self, struct annoGratorQuery *query)
-/* Set query (to be called only by annoGratorQuery which is created after streamers). */
-{
-self->query = query;
-}
-
-void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj)
+void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
+		      struct asObject *asObj, char *name)
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
  * default filters and columns based on asObj.
  * In general, subclasses' constructors will call this first; override nextRow, close,
- * and probably setRegion and setQuery; and then initialize their private data. */
+ * and probably setRegion; and then initialize their private data. */
 {
+self->assembly = assembly;
 self->getAutoSqlObject = annoStreamerGetAutoSqlObject;
 self->setAutoSqlObject = annoStreamerSetAutoSqlObject;
 self->setRegion = annoStreamerSetRegion;
 self->getHeader = annoStreamerGetHeader;
 self->getFilters = annoStreamerGetFilters;
 self->setFilters = annoStreamerSetFilters;
-self->getColumns = annoStreamerGetColumns;
-self->setColumns = annoStreamerSetColumns;
-self->setQuery = annoStreamerSetQuery;
 self->positionIsGenome = TRUE;
 self->setAutoSqlObject(self, asObj);
+if (name == NULL)
+    errAbort("annoStreamerInit: need non-NULL name");
+self->name = cloneString(name);
 }
 
 void annoStreamerFree(struct annoStreamer **pSelf)
@@ -106,9 +87,9 @@ void annoStreamerFree(struct annoStreamer **pSelf)
 if (pSelf == NULL)
     return;
 struct annoStreamer *self = *pSelf;
+freez(&(self->name));
 freez(&(self->chrom));
 annoFilterFreeList(&(self->filters));
-annoColumnFreeList(&(self->columns));
 freez(pSelf);
 }
 

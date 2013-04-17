@@ -5,7 +5,8 @@
 
 #include "annoStreamer.h"
 
-struct annoStreamer *annoStreamDbNew(char *db, char *table, struct asObject *asObj);
+struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
+				     struct asObject *asObj);
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
 
 #endif//ndef ANNOSTREAMDB_H

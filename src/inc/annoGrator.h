@@ -68,8 +68,5 @@ struct annoGrator *annoGratorNew(struct annoStreamer *mySource);
 /* Make a new integrator of columns from mySource with (positions of) rows passed to integrate().
  * mySource becomes property of the new annoGrator. */
 
-void annoGratorSetQuery(struct annoStreamer *vSelf, struct annoGratorQuery *query);
-/* Set query (to be called only by annoGratorQuery which is created after streamers). */
-
 void annoGratorClose(struct annoStreamer **pSelf);
 /* Free self (including mySource). */
