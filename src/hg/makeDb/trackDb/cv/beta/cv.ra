@@ -14592,18 +14592,6 @@ type view
 label Splices
 description Subset of aligned reads that cross splice junctions
 
-term SppConservPeaks
-tag SCPPEAKS
-type view
-label Spp Conservative Peaks
-description Regions of conserved enriched signal in experiment performed by SPP
-
-term SppOptimalPeaks
-tag SOPPEAKS
-type view
-label SPP Optimal Peaks
-description Regions of optimal enriched signal in experiment performed by SPP
-
 term SumSignal
 tag SUMSIG
 type view
