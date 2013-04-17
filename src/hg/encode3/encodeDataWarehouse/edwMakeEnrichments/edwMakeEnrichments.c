@@ -94,6 +94,11 @@ if (isEmpty(sampleBed))
 
 /* Load sample bed, make a range tree to track unique coverage, and get list of all chroms .*/
 struct bed3 *sample, *sampleList = bed3LoadAll(sampleBed);
+if (sampleList == NULL)
+    {
+    warn("Sample bed is empty for %s", ef->edwFileName);
+    return;
+    }
 struct genomeRangeTree *sampleGrt = edwMakeGrtFromBed3List(sampleList);
 struct hashEl *chrom, *chromList = hashElListHash(sampleGrt->hash);
 
