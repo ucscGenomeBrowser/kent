@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.2";
+char *version = "1.3";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -269,12 +269,14 @@ if (quicky)
     {
     // simple existence check for the corresponding .bam.bai since without -genome=, 
     //  vf will not even open the bam index.
+    /* I thought this was good to check anyway, but Eurie seems to think not, so commenting out for now.
     char *bamBai = getBamBai(fileName);
     if (!fileExists(bamBai))
 	{
 	warn("Bam Index file missing: %s. Use SAM Tools to create.", bamBai);
 	return FALSE;
 	}
+    */
     safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -chromInfo=%s %s", validateFilesPath, chromInfo, fileName);
     }
 else
