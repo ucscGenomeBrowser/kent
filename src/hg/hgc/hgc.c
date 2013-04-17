@@ -1432,7 +1432,9 @@ struct extraField *extras = extraFieldsGet(database, tdb);
 if (extras == NULL)
     return 0;
 #else///ifndef EXTRA_FIELDS_SUPPORT
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+struct sqlConnection *conn = NULL ;
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
 struct asObject *as = asForTdb(conn, tdb);
 hFreeConn(&conn);
 if (as == NULL)
