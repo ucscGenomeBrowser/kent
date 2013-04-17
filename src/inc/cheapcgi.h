@@ -86,6 +86,9 @@ char *cgiServerPort();
 char *cgiServerNamePort();
 /* Return name of server with port if different than 80 */
 
+boolean cgiServerHttpsIsOn();
+/* Return true if HTTPS is on */
+
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */
 
