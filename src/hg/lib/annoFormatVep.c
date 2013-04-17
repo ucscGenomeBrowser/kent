@@ -19,13 +19,14 @@ struct annoFormatVep
     struct annoFormatter formatter;	// superclass / external interface
     struct annoFormatVepConfig *config;	// Description of input sources and values for Extras col
 
-    char *(*getSlashSepAlleles)(char **words);
+    char *(*getSlashSepAlleles)(char **words, struct dyString *dy);
     // If the variant source doesn't have a single column with slash-separated alleles
     // (varAllelesIx is -1), provide a function that translates into slash-sep.
 
     char *fileName;			// Output filename
     FILE *f;				// Output file handle
     struct lm *lm;			// localmem for scratch storage
+    struct dyString *dyScratch;		// dyString for local temporary use
     int lmRowCount;			// counter for periodic localmem cleanup
     int varNameIx;			// Index of name column from variant source, or -1 if N/A
     int varAllelesIx;			// Index of alleles column from variant source, or -1
@@ -82,32 +83,6 @@ if (self->needHeader)
     afVepPrintHeader(self, primarySource->assembly->name);
 }
 
-static char *getSlashSepAllelesFromVcf(char **words)
-/* Construct a /-separated allele string from VCF. Do not free result. */
-{
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    dy = dyStringNew(0);
-else
-    dyStringClear(dy);
-// VCF reference allele gets its own column:
-dyStringAppend(dy, words[3]);
-// VCF alternate alleles are comma-separated, make them /-separated:
-if (isNotEmpty(words[4]))
-    {
-    char *altAlleles = words[4], *p;
-    while ((p = strchr(altAlleles, ',')) != NULL)
-	{
-	dyStringAppendC(dy, '/');
-	dyStringAppendN(dy, altAlleles, p-altAlleles);
-	altAlleles = p+1;
-	}
-    dyStringAppendC(dy, '/');
-    dyStringAppend(dy, altAlleles);
-    }
-return dy->string;
-}
-
 static void afVepPrintNameAndLoc(struct annoFormatVep *self, struct annoRow *varRow)
 /* Print variant name and position in genome. */
 {
@@ -122,7 +97,7 @@ else
     if (self->varAllelesIx >= 0)
 	alleles = varWords[self->varAllelesIx];
     else
-	alleles = self->getSlashSepAlleles(varWords);
+	alleles = self->getSlashSepAlleles(varWords, self->dyScratch);
     fprintf(self->f, "%s_%u_%s\t", varRow->chrom, start1Based, alleles);
     }
 // Location is chr:start for single-base, chr:start-end for indels:
@@ -359,6 +334,7 @@ struct annoFormatVep *self = *(struct annoFormatVep **)pFSelf;
 freeMem(self->fileName);
 carefulClose(&(self->f));
 lmCleanup(&(self->lm));
+dyStringFree(&(self->dyScratch));
 annoFormatterFree(pFSelf);
 }
 
@@ -377,7 +353,7 @@ if (asObjectsMatch(config->variantSource->asObj, pgSnpAsObj()))
 else if (asObjectsMatch(config->variantSource->asObj, vcfAsObj()))
     {
     self->varNameIx = asColumnFindIx(varAsColumns, "name");
-    self->getSlashSepAlleles = getSlashSepAllelesFromVcf;
+    self->getSlashSepAlleles = vcfGetSlashSepAllelesFromWords;
     }
 else
     errAbort("afVepSetConfig: variant source %s doesn't look like pgSnp or VCF",
@@ -415,6 +391,7 @@ fSelf->close = afVepClose;
 self->fileName = cloneString(fileName);
 self->f = mustOpen(fileName, "w");
 self->lm = lmInit(0);
+self->dyScratch = dyStringNew(0);
 self->needHeader = TRUE;
 afVepSetConfig(self, config);
 return (struct annoFormatter *)self;

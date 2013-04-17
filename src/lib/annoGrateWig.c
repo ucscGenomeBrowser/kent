@@ -60,7 +60,7 @@ while (end > start)
     }
 }
 
-static struct annoRow *agwIntegrate(struct annoGrator *gSelf, struct annoRow *primaryRow,
+static struct annoRow *agwIntegrate(struct annoGrator *gSelf, struct annoStreamRows *primaryData,
 				    boolean *retRJFilterFailed, struct lm *callerLm)
 /* Return wig annoRows that overlap primaryRow position, with NANs weeded out. */
 {
@@ -73,11 +73,12 @@ if (self->lmRowCount >= 4096)
     }
 if (self->lm == NULL)
     self->lm = lmInit(0);
-struct annoRow *rowsIn = annoGratorIntegrate(self->mySource, primaryRow, retRJFilterFailed,
+struct annoRow *rowsIn = annoGratorIntegrate(self->mySource, primaryData, retRJFilterFailed,
 					     self->lm);
 self->lmRowCount += slCount(rowsIn);
 if (retRJFilterFailed && *retRJFilterFailed)
     return NULL;
+struct annoRow *primaryRow = primaryData->rowList;
 struct annoRow *rowIn, *rowOutList = NULL;;
 for (rowIn = rowsIn;  rowIn != NULL;  rowIn = rowIn->next)
     tidyUp(rowIn, &rowOutList, primaryRow->start, primaryRow->end, callerLm);

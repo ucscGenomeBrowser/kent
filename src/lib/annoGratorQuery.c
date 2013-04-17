@@ -87,7 +87,7 @@ while ((primaryRow = primarySrc->nextRow(primarySrc, lm)) != NULL)
 	{
 
 	struct annoGrator *grator = (struct annoGrator *)gratorData[i].streamer;
-	gratorData[i].rowList = grator->integrate(grator, primaryRow, &rjFilterFailed, lm);
+	gratorData[i].rowList = grator->integrate(grator, primaryData, &rjFilterFailed, lm);
 	if (rjFilterFailed)
 	    break;
 	}

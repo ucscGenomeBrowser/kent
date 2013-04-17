@@ -1,19 +1,24 @@
-/* annoGratorGpVar -- integrate pgSNP with gene pred and make gpFx predictions */
+/* annoGratorGpVar -- integrate pgSNP or VCF with gene pred and make gpFx predictions */
 
 #include "annoGratorGpVar.h"
 #include "genePred.h"
 #include "pgSnp.h"
+#include "vcf.h"
 #include "variant.h"
 #include "gpFx.h"
 #include "twoBit.h"
 #include "annoGratorQuery.h"
 
 struct annoGratorGpVar
-{
+    {
     struct annoGrator grator;	// external annoGrator/annoStreamer interface
     boolean cdsOnly;		// if TRUE, restrict output to CDS effects
     struct lm *lm;		// localmem scratch storage
-};
+    struct dyString *dyScratch;	// dyString for local temporary use
+
+    struct variant *(*variantFromRow)(struct annoGratorGpVar *self, struct annoRow *row);
+    // Translate row from whatever format it is (pgSnp or VCF) into generic variant.
+    };
 
 
 static char *aggvAutoSqlStringStart =
@@ -186,7 +191,7 @@ return effect;
 
 static struct annoRow *aggvEffectToRow(struct annoGratorGpVar *self, struct gpFx *effect,
 				       struct annoRow *rowIn, struct lm *callerLm)
-// convert a single gpFx record to an augmented genePred annoRow;
+// convert a single genePred annoRow and gpFx record to an augmented genePred annoRow;
 // if cdsOnly and gpFx is not in CDS, return NULL;
 {
 if (self->cdsOnly && !gpFxIsCodingChange(effect))
@@ -265,7 +270,6 @@ static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant
 {
 struct annoGrator *gSelf = &(self->grator);
 struct annoStreamer *sSelf = &(gSelf->streamer);
-// FIXME:  accessing query's tbf is probably bad
 struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->assembly->tbf,
 							      self->lm);
 struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence);
@@ -282,21 +286,49 @@ slReverse(&rows);
 return rows;
 }
 
-struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *gSelf, struct annoRow *primaryRow,
+static struct variant *variantFromPgSnpRow(struct annoGratorGpVar *self, struct annoRow *row)
+/* Translate pgSnp array of words into variant. */
+{
+struct pgSnp pgSnp;
+pgSnpStaticLoad(row->data, &pgSnp);
+return variantFromPgSnp(&pgSnp, self->lm);
+}
+
+static struct variant *variantFromVcfRow(struct annoGratorGpVar *self, struct annoRow *row)
+/* Translate pgSnp array of words into variant. */
+{
+char *alStr = vcfGetSlashSepAllelesFromWords(row->data, self->dyScratch);
+unsigned alCount = chopByChar(alStr, '/', NULL, 0);
+return variantNew(row->chrom, row->start, row->end, alCount, alStr, self->lm);
+}
+
+static void setVariantFromRow(struct annoGratorGpVar *self, struct annoStreamRows *primaryData)
+/* Depending on autoSql definition of primary source, choose a function to translate
+ * incoming rows into generic variants. */
+{
+if (asObjectsMatch(primaryData->streamer->asObj, pgSnpAsObj()))
+    self->variantFromRow = variantFromPgSnpRow;
+else if (asObjectsMatch(primaryData->streamer->asObj, vcfAsObj()))
+    self->variantFromRow = variantFromVcfRow;
+}
+
+struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *gSelf,
+					 struct annoStreamRows *primaryData,
 					 boolean *retRJFilterFailed, struct lm *callerLm)
-// integrate a pgSnp and a genePred, generate as many rows as
+// integrate a variant and a genePred, generate as many rows as
 // needed to capture all the changes
 {
 struct annoGratorGpVar *self = (struct annoGratorGpVar *)gSelf;
 lmCleanup(&(self->lm));
 self->lm = lmInit(0);
 // Temporarily tweak primaryRow's start and end to find upstream/downstream overlap:
+struct annoRow *primaryRow = primaryData->rowList;
 int pStart = primaryRow->start, pEnd = primaryRow->end;
 primaryRow->start -= GPRANGE;
 if (primaryRow->start < 0)
     primaryRow->start = 0;
 primaryRow->end += GPRANGE;
-struct annoRow *rows = annoGratorIntegrate(gSelf, primaryRow, retRJFilterFailed, self->lm);
+struct annoRow *rows = annoGratorIntegrate(gSelf, primaryData, retRJFilterFailed, self->lm);
 primaryRow->start = pStart;
 primaryRow->end = pEnd;
 
@@ -309,9 +341,9 @@ if (rows == NULL)
 if (retRJFilterFailed && *retRJFilterFailed)
     return NULL;
 
-char **primaryWords = primaryRow->data;
-struct pgSnp *pgSnp = pgSnpLoad(primaryWords);
-struct variant *variant = variantFromPgSnp(pgSnp);
+if (self->variantFromRow == NULL)
+    setVariantFromRow(self, primaryData);
+struct variant *variant = self->variantFromRow(self, primaryRow);
 struct annoRow *outRows = NULL;
 
 for(; rows; rows = rows->next)
@@ -345,6 +377,7 @@ if (*pSSelf != NULL)
     {
     struct annoGratorGpVar *self = (struct annoGratorGpVar *)(*pSSelf);
     lmCleanup(&(self->lm));
+    dyStringFree(&(self->dyScratch));
     annoGratorClose(pSSelf);
     }
 }
@@ -365,6 +398,7 @@ sSelf->setAutoSqlObject(sSelf, annoGpVarAsObj(mySource->asObj));
 sSelf->close = aggvClose;
 // integrate by adding gpFx fields
 gSelf->integrate = annoGratorGpVarIntegrate;
+self->dyScratch = dyStringNew(0);
 self->cdsOnly = cdsOnly;
 
 return gSelf;

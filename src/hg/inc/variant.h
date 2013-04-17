@@ -24,7 +24,12 @@ struct variant   // a single variant
     struct allele *alleles;	/* alleles */
     };
 
-struct variant *variantFromPgSnp(struct pgSnp *pgSnp);
+struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned numAlleles,
+			   char *slashSepAlleles, struct lm *lm);
+/* Create a variant from basic information that is easy to extract from most other variant
+ * formats: coords, allele count, and string of slash-separated alleles. */
+
+struct variant *variantFromPgSnp(struct pgSnp *pgSnp, struct lm *lm);
 /* convert pgSnp record to variant record */
 
 struct allele  *alleleClip(struct allele *allele, int sx, int ex);

@@ -66,26 +66,28 @@ while(count--)
 return ret;
 }
 
-struct variant *variantFromPgSnp(struct pgSnp *pgSnp)
-/* convert pgSnp record to variant record */
+struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned numAlleles,
+			   char *slashSepAlleles, struct lm *lm)
+/* Create a variant from basic information that is easy to extract from most other variant
+ * formats: coords, allele count, and string of slash-separated alleles. */
 {
 struct variant *variant;
 
 // this is probably the wrong way to do this.  Alleles in
 // variant should be their size in query bases
-int alleleLength = pgSnp->chromEnd - pgSnp->chromStart;
+int alleleLength = end - start;
 
 // We have a new variant!
-AllocVar(variant);
-variant->chrom = cloneString(pgSnp->chrom);
-variant->chromStart = pgSnp->chromStart;
-variant->chromEnd = pgSnp->chromEnd;
-variant->numAlleles = pgSnp->alleleCount;
+lmAllocVar(lm, variant);
+variant->chrom = lmCloneString(lm, chrom);
+variant->chromStart = start;
+variant->chromEnd = end;
+variant->numAlleles = numAlleles;
 
 // get the alleles.
-char *nextAlleleString = cloneString(pgSnp->name);
+char *nextAlleleString = lmCloneString(lm, slashSepAlleles);
 int alleleNumber = 0;
-for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
+for( ; alleleNumber < numAlleles; alleleNumber++)
     {
     if (nextAlleleString == NULL)
 	errAbort("number of alleles in pgSnp doesn't match number in name");
@@ -124,11 +126,18 @@ for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
     allele->variant = variant;
     allele->length = alleleStringLength; 
     toLowerN(thisAlleleString, alleleStringLength);
-    allele->sequence = cloneString(thisAlleleString);
+    allele->sequence = lmCloneString(lm, thisAlleleString);
     }
 
 slReverse(&variant->alleles);
 
 return variant;
+}
+
+struct variant *variantFromPgSnp(struct pgSnp *pgSnp, struct lm *lm)
+/* convert pgSnp record to variant record */
+{
+return variantNew(pgSnp->chrom, pgSnp->chromStart, pgSnp->chromEnd, pgSnp->alleleCount,
+		  pgSnp->name, lm);
 }
 

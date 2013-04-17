@@ -1081,3 +1081,26 @@ struct asObject *vcfAsObj()
 {
 return asParseText(vcfDataLineAutoSqlString);
 }
+
+char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy)
+/* Overwrite dy with a /-separated allele string from VCF words;
+ * return dy->string for convenience. */
+{
+dyStringClear(dy);
+// VCF reference allele gets its own column:
+dyStringAppend(dy, words[3]);
+// VCF alternate alleles are comma-separated, make them /-separated:
+if (isNotEmpty(words[4]))
+    {
+    char *altAlleles = words[4], *p;
+    while ((p = strchr(altAlleles, ',')) != NULL)
+	{
+	dyStringAppendC(dy, '/');
+	dyStringAppendN(dy, altAlleles, p-altAlleles);
+	altAlleles = p+1;
+	}
+    dyStringAppendC(dy, '/');
+    dyStringAppend(dy, altAlleles);
+    }
+return dy->string;
+}

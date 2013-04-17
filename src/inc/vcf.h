@@ -271,4 +271,8 @@ char *vcfFilePooledStr(struct vcfFile *vcff, char *str);
 struct asObject *vcfAsObj();
 // Return asObject describing fields of VCF
 
+char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy);
+/* Overwrite dy with a /-separated allele string from VCF words;
+ * return dy->string for convenience. */
+
 #endif // vcf_h
