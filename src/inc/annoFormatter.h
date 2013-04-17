@@ -4,7 +4,6 @@
 #define ANNOFORMATTER_H
 
 #include "annoOption.h"
-#include "annoRow.h"
 #include "annoStreamer.h"
 
 // The real work of aggregating and formatting data is left to
@@ -12,6 +11,13 @@
 // an interface for communication with other components of the
 // annoGratorQuery framework, and simple methods shared by all
 // subclasses.
+
+struct annoStreamRows
+/* An annoStreamer and (possibly NULL) list of rows it generated. */
+    {
+    struct annoStreamer *streamer;	// annoStreamer interface for metadata about row data
+    struct annoRow *rowList;		// row data
+    };
 
 struct annoFormatter
 /* Generic interface to aggregate data fields from multiple sources and write
@@ -24,12 +30,13 @@ struct annoFormatter
     void (*setOptions)(struct annoFormatter *self, struct annoOption *options);
     /* Get and set output options */
 
-    void (*initialize)(struct annoFormatter *self, struct annoGratorQuery *query);
-    /* Initialize output (header, etc) and set query pointer */
+    void (*initialize)(struct annoFormatter *self, struct annoStreamer *primarySource,
+		       struct annoStreamer *integrators);
+    /* Initialize output (print header if applicable, etc). */
 
-    void (*formatOne)(struct annoFormatter *self, struct annoRow *primaryRow,
-		      struct slRef *gratorRowList);
-    /* Aggregate all sources' data for a single primarySource item into output. */
+    void (*formatOne)(struct annoFormatter *self, struct annoStreamRows *primaryData,
+		      struct annoStreamRows gratorData[], int gratorCount);
+    /* Aggregate all sources' data for a single primary-source item into output. */
 
     void (*close)(struct annoFormatter **pSelf);
     /* End of input; finish output, close connection/handle and free self. */
@@ -50,5 +57,10 @@ void annoFormatterSetOptions(struct annoFormatter *self, struct annoOption *newO
 void annoFormatterFree(struct annoFormatter **pSelf);
 /* Free self. This should be called at the end of subclass close methods, after
  * subclass-specific connections are closed and resources are freed. */
+
+// -----------------------------------------------------------------------------
+
+struct annoStreamRows *annoStreamRowsNew(struct annoStreamer *streamerList);
+/* Returns an array of aS&R for each streamer in streamerList. Free array when done. */
 
 #endif//ndef ANNOFORMATTER_H

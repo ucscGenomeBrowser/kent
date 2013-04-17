@@ -121,4 +121,18 @@ boolean asCompareObjs(char *name1, struct asObject *as1, char *name2, struct asO
  * Othewise, return TRUE if the objects columns match through the first numColumnsToCheck fields. 
  * If retNumColumnsSame is not NULL, then it will be set to the number of contiguous matching columns. */
 
+INLINE boolean asObjectsMatchFirstN(struct asObject *as1, struct asObject *as2, int n)
+/* Return TRUE if as1 has the same first n columns as as2. */
+{
+return asCompareObjs(as1->name, as1, as2->name, as2, n, NULL, FALSE);
+}
+
+INLINE boolean asObjectsMatch(struct asObject *as1, struct asObject *as2)
+{
+int colCount = slCount(as1->columnList);
+if (slCount(as2->columnList) != colCount)
+    return FALSE;
+return asCompareObjs(as1->name, as1, as2->name, as2, colCount, NULL, FALSE);
+}
+
 #endif /* ASPARSE_H */

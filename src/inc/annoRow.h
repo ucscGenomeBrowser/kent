@@ -6,7 +6,7 @@
 #include "common.h"
 #include "localmem.h"
 
-enum annoRowType { arUnknown, arWords, arWig, arVcf };
+enum annoRowType { arUnknown, arWords, arWig };
 
 struct annoRow
 /* Representation of a row from a database table or file.  The chrom, start and end

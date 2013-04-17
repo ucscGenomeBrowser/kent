@@ -1,6 +1,6 @@
 ## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)
 ## Connected to UCSC database hg19
-## Variants: getNameFromPrimarySource
+## Variants: input/annoGrator/vepSample.pgSnp.tab
 Uploaded Variation	Location	Allele	Gene	Feature	Feature type	Consequence	Position in cDNA	Position in CDS	Position in protein	Amino acid change	Codon change	Co-located Variation	Extra
 chr1_881907_-/C	chr1:881907-881906		ENSG00000187634	ENST00000342066	Transcript	downstream_gene_variant	-	-	-	-	-	-	DISTANCE=1951
 chr1_881907_-/C	chr1:881907-881906		ENSG00000187634	ENST00000341065	Transcript	downstream_gene_variant	-	-	-	-	-	-	DISTANCE=1951
