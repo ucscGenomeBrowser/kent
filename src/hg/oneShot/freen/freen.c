@@ -1,4 +1,6 @@
 /* freen - My Pet Freen. */
+#include <sys/wait.h>
+#include <sys/types.h>
 #include "common.h"
 #include "linefile.h"
 #include "localmem.h"
@@ -10,36 +12,41 @@
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen input output stderr\n");
+         "usage:  freen input\n");
 }
 
+static struct optionSpec options[] = {
+   {NULL, 0},
+};
 
-void freen(char *input, char *output, char *errOutput)
-/* Test some hair-brained thing. */
+void freen(char *inFile)
 {
-FILE *f = mustOpen(output, "w");
-char *progAndOpts[] = {"wordLine", "-xxx", "stdin", NULL};
-struct pipeline *pl = pipelineOpen1(progAndOpts, pipelineRead|pipelineNoAbort, input,  errOutput);
-struct lineFile *lf = lineFileAttach(input, TRUE, pipelineFd(pl));
-char *line;
-int count = 0;
-while (lineFileNext(lf, &line, NULL))
+/* Need to do I/O that will wait on file to have something */
+FILE *f = mustOpen(inFile, "r");
+int dummyFd = mustOpenFd(inFile, O_WRONLY);
+char buf[1024];
+for (;;)
     {
-    count += 1;
+    char *s = fgets(buf, sizeof(buf), f);
+    if (s != NULL)
+	fputs(buf, stdout);
+    else
+	{
+        fprintf(stderr, "s = NULL, rats\n");
+	sleep(1);
+	}
     }
-fprintf(f, "count is %d\n", count);
-uglyf("Seem to be done\n");
-int err = pipelineWait(pl);
-uglyf("Past the wait err = %d\n", err);
-pipelineFree(&pl);
-uglyf("Past the free\n");
+carefulClose(&f);
+close(dummyFd);
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 4)
+optionInit(&argc, argv, options);
+if (argc != 2)
     usage();
-freen(argv[1], argv[2], argv[3]);
+freen(argv[1]);
 return 0;
 }

@@ -201,4 +201,7 @@ void twoBitOutNBeds(struct twoBitFile *tbf, char *seqName, FILE *outF);
 int twoBitSeqSizeNoNs(struct twoBitFile *tbf, char *seqName);
 /* return the length of the sequence, not counting N's */
 
+long long twoBitTotalSizeNoN(struct twoBitFile *tbf);
+/* return the size of the all the sequence in file, not counting N's*/
+
 #endif /* TWOBIT_H */

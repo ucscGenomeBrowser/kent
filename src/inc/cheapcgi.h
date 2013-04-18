@@ -517,7 +517,7 @@ char *javaScriptLiteralEncode(char *inString);
 struct cgiParsedVars
 /* A parsed out cgi variable string */
     {
-    struct tagsFromCgi *next;	/* In case want to make a list of these. */
+    struct cgiParsedVars *next;	/* In case want to make a list of these. */
     char *stringBuf;		/* Holds strings inside vars. */
     struct cgiVar *list;    /* List of variables. */
     struct hash *hash;	    /* Keyed by varName, value is just value, not cgiVar. */
