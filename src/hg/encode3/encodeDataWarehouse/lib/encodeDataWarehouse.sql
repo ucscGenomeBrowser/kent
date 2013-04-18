@@ -55,7 +55,7 @@ CREATE TABLE edwFile (
     startUploadTime bigint default 0,	# Time when upload started - 0 if not started
     endUploadTime bigint default 0,	# Time when upload finished - 0 if not finished
     updateTime bigint default 0,	# Update time (on system it was uploaded from)
-    size bigint default 0,	# File size
+    size bigint default 0,	# File size in manifest
     md5 char(32) default 0,	# md5 sum of file contents
     tags longblob,	# CGI encoded name=val pairs from manifest
     errorMessage longblob,	# If non-empty contains last error message from upload. If empty upload is ok
@@ -77,6 +77,9 @@ CREATE TABLE edwSubmit (
     fileCount int unsigned default 0,	# Number of files that will be in submit if it were complete.
     oldFiles int unsigned default 0,	# Number of files in submission that were already in warehouse.
     newFiles int unsigned default 0,	# Number of files in submission that are newly uploaded.
+    byteCount bigint default 0,	# Total bytes in submission including old and new
+    oldBytes bigint default 0,	# Bytes in old files.
+    newBytes bigint default 0,	# Bytes in new files (so far).
     errorMessage longblob,	# If non-empty contains last error message. If empty submit is ok
               #Indices
     PRIMARY KEY(id)

@@ -266,7 +266,7 @@ struct edwFile
     long long startUploadTime;	/* Time when upload started - 0 if not started */
     long long endUploadTime;	/* Time when upload finished - 0 if not finished */
     long long updateTime;	/* Update time (on system it was uploaded from) */
-    long long size;	/* File size */
+    long long size;	/* File size in manifest */
     char md5[33];	/* md5 sum of file contents */
     char *tags;	/* CGI encoded name=val pairs from manifest */
     char *errorMessage;	/* If non-empty contains last error message from upload. If empty upload is ok */
@@ -340,7 +340,7 @@ void edwFileOutput(struct edwFile *el, FILE *f, char sep, char lastSep);
 #define edwFileCommaOut(el,f) edwFileOutput(el,f,',',',');
 /* Print out edwFile as a comma separated list including final comma. */
 
-#define EDWSUBMIT_NUM_COLS 11
+#define EDWSUBMIT_NUM_COLS 14
 
 struct edwSubmit
 /* A data submit, typically containing many files.  Always associated with a submit dir. */
@@ -356,6 +356,9 @@ struct edwSubmit
     unsigned fileCount;	/* Number of files that will be in submit if it were complete. */
     unsigned oldFiles;	/* Number of files in submission that were already in warehouse. */
     unsigned newFiles;	/* Number of files in submission that are newly uploaded. */
+    long long byteCount;	/* Total bytes in submission including old and new */
+    long long oldBytes;	/* Bytes in old files. */
+    long long newBytes;	/* Bytes in new files (so far). */
     char *errorMessage;	/* If non-empty contains last error message. If empty submit is ok */
     };
 
