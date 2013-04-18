@@ -196,13 +196,13 @@ return sqlLastAutoId(conn);
 }
 
 int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned submitId, unsigned submitDirId,
-    char *submitFileName)
+    char *submitFileName, long long size)
 /* Make a new, largely empty, record around file and submit info. */
 {
 struct dyString *query = dyStringNew(0);
 char *escapedFileName = sqlEscapeString(submitFileName);
-dyStringAppend(query, "insert edwFile (submitId, submitDirId, submitFileName) ");
-dyStringPrintf(query, "VALUES(%u, %u, '%s')", submitId, submitDirId, escapedFileName);
+dyStringAppend(query, "insert edwFile (submitId, submitDirId, submitFileName, size) ");
+dyStringPrintf(query, "VALUES(%u, %u, '%s', %lld)", submitId, submitDirId, escapedFileName, size);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 freez(&escapedFileName);
@@ -243,7 +243,7 @@ void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
 /* Now make temp file name with XXXXXX name at end */
 safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 
-/* Get open file handle. */
+/* Get open file handle, copy file, and close. */
 int localFd = mustMkstemp(tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
@@ -254,34 +254,48 @@ int edwFileFetch(struct sqlConnection *conn, struct edwFile *ef, int fd,
 /* Fetch file and if successful update a bunch of the fields in ef with the result. 
  * Returns fileId. */
 {
-ef->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, ef->submitFileName);
+ef->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, ef->submitFileName, ef->size);
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
  * ones that are just truncated by downloading the rest,  but not now. */
-char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 struct errCatch *errCatch = errCatchNew();
+char tempName[PATH_LEN] = "";
+char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 if (errCatchStart(errCatch))
     {
-    edwMakeFileNameAndPath(ef->id, submitFileName, edwFile, edwPath);
+    /* Now make temp file name and open temp file in an atomic operation */
+    char *tempDir = edwTempDir();
+    safef(tempName, PATH_LEN, "%sedwSubmitXXXXXX", tempDir);
+    int localFd = mustMkstemp(tempName);
+
+    /* Update file name in database with temp file name so web app can track us. */
+    char query[PATH_LEN+128];
+    safef(query, sizeof(query), 
+	"update edwFile set edwFileName='%s' where id=%lld", 
+	tempName + strlen(edwRootDir), (long long)ef->id);
+    sqlUpdate(conn, query);
+
+    /* Do actual upload tracking how long it takes. */
     ef->startUploadTime = edwNow();
-    char tempName[PATH_LEN];
-    fetchFdToTempFile(fd, tempName);
-    mustRename(tempName, edwPath);
+    cpFile(fd, localFd);
+    mustCloseFd(&localFd);
     ef->endUploadTime = edwNow();
+
+    /* Rename file both in file system and (via ef) database. */
+    edwMakeFileNameAndPath(ef->id, submitFileName, edwFile, edwPath);
+    uglyf("edwFile=%s, edwPath=%s\n", edwFile, edwPath);
+    mustRename(tempName, edwPath);
     ef->edwFileName = cloneString(edwFile);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     /* Attempt to remove any partial file. */
-    if (edwFile[0] != 0)
-        {
-	char path[PATH_LEN];
-	safef(path, sizeof(path), "%s%s", edwRootDir, edwFile);
-	remove(path);
-	}
-    handleSubmitError(conn, submitId, errCatch->message->string);
+    if (tempName[0] != 0)
+	remove(tempName);
+    handleSubmitError(conn, submitId, errCatch->message->string);  // Throws further
+    assert(FALSE);  // We never get here
     }
 errCatchFree(&errCatch);
 
@@ -554,19 +568,6 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 return edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
 }
 
-struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
-/* Return most recent submission, possibly in progress, from this url */
-{
-int urlSize = strlen(url);
-char escapedUrl[2*urlSize+1];
-sqlEscapeString2(escapedUrl, url);
-int escapedSize = strlen(escapedUrl);
-char query[128 + escapedSize];
-safef(query, sizeof(query), 
-    "select * from edwSubmit where url='%s' order by id desc limit 1", escapedUrl);
-return edwSubmitLoadByQuery(conn, query);
-}
-
 void notOverlappingSelf(struct sqlConnection *conn, char *url)
 /* Ensure we are only submission going on for this URL, allowing for time out
  * and command line override. */
@@ -622,7 +623,7 @@ int userId = user->id;
 int userId =  edwMustHaveAccess(conn, user, password);
 #endif /* OLD */
 
-/* See if we are already running on same pipe.  If so council patience and quit. */
+/* See if we are already running on same submission.  If so council patience and quit. */
 notOverlappingSelf(conn, submitUrl);
 
 /* Make a submit record. */
@@ -638,6 +639,7 @@ if (errCatchStart(errCatch))
     /* Open remote submission file.  This is most likely where we will fail. */
     int hostId=0, submitDirId = 0;
     long long startUploadTime = edwNow();
+    uglyf("edwOpenAndRecordInDir(submitDir=%s, submitFile=%s, submitUrl=%s)\n", submitDir, submitFile, submitUrl);
     int remoteFd = edwOpenAndRecordInDir(conn, submitDir, submitFile, submitUrl, 
 	&hostId, &submitDirId);
 
@@ -650,6 +652,7 @@ if (errCatchStart(errCatch))
     /* Calculate MD5 sum, and see if we already have such a file. */
     char *md5 = md5HexForFile(tempSubmitFile);
     int fileId = findFileGivenMd5AndSubmitDir(conn, md5, submitDirId);
+    uglyf("tempSubmitFile=%s, fileId=%d, md5=%s\n", tempSubmitFile, fileId, md5);
 
     /* If we already have it, then delete temp file, otherwise put file in file table. */
     char submitLocalPath[PATH_LEN];
@@ -665,7 +668,7 @@ if (errCatchStart(errCatch))
         {
 	/* Looks like it's the first time we've seen this submission file, so
 	 * save the file itself.  We'll get to the records inside the file in a bit. */
-	fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFile);
+	fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFile, 0);
 
 	/* Get file/path names for submission file inside warehouse. */
 	char edwFile[PATH_LEN];
@@ -689,6 +692,7 @@ if (errCatchStart(errCatch))
 
     /* By now there is a submit file on the local file system.  */
 
+    uglyf("edwParseSubmitFile(%s, %s)\n", submitLocalPath, submitUrl);
     bfList = edwParseSubmitFile(submitLocalPath, submitUrl);
 
     /* Save our progress so far to submit table. */
@@ -709,9 +713,33 @@ errCatchFree(&errCatch);
 /* If we made it here the validated submit file itself got transfered and parses out
  * correctly.   */
 
+/* Weed out files we already have. */
+int oldCount = 0;
+long long oldBytes = 0, newBytes = 0, byteCount = 0;
+struct edwFile *bf, *oldList = NULL, *newList = NULL, *bfNext;
+for (bf = bfList; bf != NULL; bf = bfNext)
+    {
+    bfNext = bf->next;
+    if (edwGotFile(conn, submitDir, bf->submitFileName, bf->md5) >= 0)
+        {
+	++oldCount;
+	oldBytes += bf->size;
+	slAddHead(&oldList, bf);
+	}
+    else
+        slAddHead(&newList, bf);
+    byteCount += bf->size;
+    }
+bfList = NULL;
+
+/* Update database with oldFile count. */
+safef(query, sizeof(query), 
+    "update edwSubmit set oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u",  
+	oldCount, oldBytes, byteCount, submitId);
+sqlUpdate(conn, query);
+
 /* Go through list attempting to load the files if we don't already have them. */
-struct edwFile *bf;
-for (bf = bfList; bf != NULL; bf = bf->next)
+for (bf = newList; bf != NULL; bf = bf->next)
     {
     int submitUrlSize = strlen(submitDir) + strlen(bf->submitFileName) + 1;
     char submitUrl[submitUrlSize];
@@ -731,8 +759,10 @@ for (bf = bfList; bf != NULL; bf = bf->next)
 		&hostId, &submitDirId);
 	    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
 	    close(fd);
-	    safef(query, sizeof(query), "update edwSubmit set newFiles=newFiles+1 where id=%d", 
-		submitId);
+	    newBytes += bf->size;
+	    safef(query, sizeof(query), 
+		"update edwSubmit set newFiles=newFiles+1,newBytes=%lld where id=%d", 
+		newBytes, submitId);
 	    sqlUpdate(conn, query);
 
 	    edwAddQaJob(conn, fileId);
