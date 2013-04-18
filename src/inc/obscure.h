@@ -135,6 +135,9 @@ struct hash *hashNameIntFile(char *fileName);
 struct hash *hashTwoColumnFile(char *fileName);
 /* Given a two column file (key, value) return a hash. */
 
+void shuffleArrayOfChars(char *array, int arraySize, int shuffleCount);
+/* Shuffle array of characters of given size given number of times. */
+
 void shuffleArrayOfPointers(void *pointerArray, int arraySize, 
 	int shuffleCount);
 /* Shuffle array of pointers of given size given number of times. */

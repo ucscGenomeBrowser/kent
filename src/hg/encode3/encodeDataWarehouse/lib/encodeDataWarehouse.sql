@@ -5,177 +5,194 @@
 
 #Someone who submits files to or otherwise interacts with big data warehouse
 CREATE TABLE edwUser (
-    id int unsigned auto_increment not null,	# Autoincremented user ID
-    name varchar(255) not null,	# user name
-    sid char(64) not null,	# sha384 generated user ID - used to identify user in secure way if need be
-    access char(64) not null,	# access code - sha385'd from password and stuff
-    email varchar(255) not null,	# Email address - required
+    id int unsigned auto_increment,	# Autoincremented user ID
+    name varchar(255) default '',	# user name
+    sid char(64) default 0,	# sha384 generated user ID - used to identify user in secure way if need be
+    access char(64) default 0,	# access code - sha385'd from password and stuff
+    email varchar(255) default '',	# Email address - required
               #Indices
     PRIMARY KEY(id)
 );
 
 #A web host we have collected files from - something like www.ncbi.nlm.gov or google.com
 CREATE TABLE edwHost (
-    id int unsigned auto_increment not null,	# Autoincremented host id
-    name varchar(255) not null,	# Name (before DNS lookup)
-    lastOkTime bigint not null,	# Last time host was ok in seconds since 1970
-    lastNotOkTime bigint not null,	# Last time host was not ok in seconds since 1970
-    firstAdded bigint not null,	# Time host was first seen
-    errorMessage longblob not null,	# If non-empty contains last error message from host. If empty host is ok
-    openSuccesses bigint not null,	# Number of times files have been opened ok from this host
-    openFails bigint not null,	# Number of times files have failed to open from this host
-    historyBits bigint not null,	# Open history with most recent in least significant bit. 0 for connection failed, 1 for success
+    id int unsigned auto_increment,	# Autoincremented host id
+    name varchar(255) default '',	# Name (before DNS lookup)
+    lastOkTime bigint default 0,	# Last time host was ok in seconds since 1970
+    lastNotOkTime bigint default 0,	# Last time host was not ok in seconds since 1970
+    firstAdded bigint default 0,	# Time host was first seen
+    errorMessage longblob,	# If non-empty contains last error message from host. If empty host is ok
+    openSuccesses bigint default 0,	# Number of times files have been opened ok from this host
+    openFails bigint default 0,	# Number of times files have failed to open from this host
+    historyBits bigint default 0,	# Open history with most recent in least significant bit. 0 for connection failed, 1 for success
               #Indices
     PRIMARY KEY(id)
 );
 
 #An external data directory we have collected a submit from
 CREATE TABLE edwSubmitDir (
-    id int unsigned auto_increment not null,	# Autoincremented id
-    url longblob not null,	# Web-mounted directory. Includes protocol, host, and final '/'
-    hostId int unsigned not null,	# Id of host it's on
-    lastOkTime bigint not null,	# Last time submit dir was ok in seconds since 1970
-    lastNotOkTime bigint not null,	# Last time submit dir was not ok in seconds since 1970
-    firstAdded bigint not null,	# Time submit dir was first seen
-    errorMessage longblob not null,	# If non-empty contains last error message from dir. If empty dir is ok
-    openSuccesses bigint not null,	# Number of times files have been opened ok from this dir
-    openFails bigint not null,	# Number of times files have failed to open from this dir
-    historyBits bigint not null,	# Open history with most recent in least significant bit. 0 for upload failed, 1 for success
+    id int unsigned auto_increment,	# Autoincremented id
+    url longblob,	# Web-mounted directory. Includes protocol, host, and final '/'
+    hostId int unsigned default 0,	# Id of host it's on
+    lastOkTime bigint default 0,	# Last time submit dir was ok in seconds since 1970
+    lastNotOkTime bigint default 0,	# Last time submit dir was not ok in seconds since 1970
+    firstAdded bigint default 0,	# Time submit dir was first seen
+    errorMessage longblob,	# If non-empty contains last error message from dir. If empty dir is ok
+    openSuccesses bigint default 0,	# Number of times files have been opened ok from this dir
+    openFails bigint default 0,	# Number of times files have failed to open from this dir
+    historyBits bigint default 0,	# Open history with most recent in least significant bit. 0 for upload failed, 1 for success
               #Indices
     PRIMARY KEY(id)
 );
 
 #A file we are tracking that we intend to and maybe have uploaded
 CREATE TABLE edwFile (
-    id int unsigned auto_increment not null,	# Autoincrementing file id
-    submitId int unsigned not null,	# Links to id in submit table
-    submitDirId int unsigned not null,	# Links to id in submitDir table
-    submitFileName longblob not null,	# File name in submit relative to submit dir
-    edwFileName longblob not null,	# File name in big data warehouse relative to edw root dir
-    startUploadTime bigint not null,	# Time when upload started - 0 if not started
-    endUploadTime bigint not null,	# Time when upload finished - 0 if not finished
-    updateTime bigint not null,	# Update time (on system it was uploaded from)
-    size bigint not null,	# File size
-    md5 char(32) not null,	# md5 sum of file contents
-    tags longblob not null,	# CGI encoded name=val pairs from manifest
-    errorMessage longblob not null,	# If non-empty contains last error message from upload. If empty upload is ok
-    deprecated varchar(255) not null,	# If non-empty why you shouldn't user this file any more.
-    replacedBy varchar(255) not null,	# If non-empty license plate of file that replaces this one.
+    id int unsigned auto_increment,	# Autoincrementing file id
+    submitId int unsigned default 0,	# Links to id in submit table
+    submitDirId int unsigned default 0,	# Links to id in submitDir table
+    submitFileName longblob,	# File name in submit relative to submit dir
+    edwFileName longblob,	# File name in big data warehouse relative to edw root dir
+    startUploadTime bigint default 0,	# Time when upload started - 0 if not started
+    endUploadTime bigint default 0,	# Time when upload finished - 0 if not finished
+    updateTime bigint default 0,	# Update time (on system it was uploaded from)
+    size bigint default 0,	# File size in manifest
+    md5 char(32) default 0,	# md5 sum of file contents
+    tags longblob,	# CGI encoded name=val pairs from manifest
+    errorMessage longblob,	# If non-empty contains last error message from upload. If empty upload is ok
+    deprecated varchar(255) default '',	# If non-empty why you shouldn't user this file any more.
+    replacedBy varchar(255) default '',	# If non-empty license plate of file that replaces this one.
               #Indices
     PRIMARY KEY(id)
 );
 
 #A data submit, typically containing many files.  Always associated with a submit dir.
 CREATE TABLE edwSubmit (
-    id int unsigned auto_increment not null,	# Autoincremented submit id
-    url longblob not null,	# Url to validated.txt format file. We copy this file over and give it a fileId if we can.
-    startUploadTime bigint not null,	# Time at start of submit
-    endUploadTime bigint not null,	# Time at end of upload - 0 if not finished
-    userId int unsigned not null,	# Connects to user table id field
-    submitFileId int unsigned not null,	# Points to validated.txt file for submit.
-    submitDirId int unsigned not null,	# Points to the submitDir
-    fileCount int unsigned not null,	# Number of files that will be in submit if it were complete.
-    oldFiles int unsigned not null,	# Number of files in submission that were already in warehouse.
-    newFiles int unsigned not null,	# Number of files in submission that are newly uploaded.
-    errorMessage longblob not null,	# If non-empty contains last error message. If empty submit is ok
+    id int unsigned auto_increment,	# Autoincremented submit id
+    url longblob,	# Url to validated.txt format file. We copy this file over and give it a fileId if we can.
+    startUploadTime bigint default 0,	# Time at start of submit
+    endUploadTime bigint default 0,	# Time at end of upload - 0 if not finished
+    userId int unsigned default 0,	# Connects to user table id field
+    submitFileId int unsigned default 0,	# Points to validated.txt file for submit.
+    submitDirId int unsigned default 0,	# Points to the submitDir
+    fileCount int unsigned default 0,	# Number of files that will be in submit if it were complete.
+    oldFiles int unsigned default 0,	# Number of files in submission that were already in warehouse.
+    newFiles int unsigned default 0,	# Number of files in submission that are newly uploaded.
+    byteCount bigint default 0,	# Total bytes in submission including old and new
+    oldBytes bigint default 0,	# Bytes in old files.
+    newBytes bigint default 0,	# Bytes in new files (so far).
+    errorMessage longblob,	# If non-empty contains last error message. If empty submit is ok
               #Indices
     PRIMARY KEY(id)
 );
 
 #Subscribers can have programs that are called at various points during data submission
 CREATE TABLE edwSubscriber (
-    id int unsigned auto_increment not null,	# ID of subscriber
-    name varchar(255) not null,	# Name of subscriber
-    runOrder double not null,	# Determines order subscribers run in. In case of tie lowest id wins.
-    filePattern varchar(255) not null,	# A string with * and ? wildcards to match files we care about
-    dirPattern varchar(255) not null,	# A string with * and ? wildcards to match hub dir URLs we care about
-    tagPattern longblob not null,	# A cgi-encoded string of tag=wildcard pairs.
-    onFileEndUpload varchar(255) not null,	# A unix command string to run with a %u where file id goes
+    id int unsigned auto_increment,	# ID of subscriber
+    name varchar(255) default '',	# Name of subscriber
+    runOrder double default 0,	# Determines order subscribers run in. In case of tie lowest id wins.
+    filePattern varchar(255) default '',	# A string with * and ? wildcards to match files we care about
+    dirPattern varchar(255) default '',	# A string with * and ? wildcards to match hub dir URLs we care about
+    tagPattern longblob,	# A cgi-encoded string of tag=wildcard pairs.
+    onFileEndUpload varchar(255) default '',	# A unix command string to run with a %u where file id goes
               #Indices
     PRIMARY KEY(id)
 );
 
 #An assembly - includes reference to a two bit file, and a little name and summary info.
 CREATE TABLE edwAssembly (
-    id int unsigned auto_increment not null,	# Assembly ID
-    taxon int unsigned not null,	# NCBI taxon number
-    name varchar(255) not null,	# Some human readable name to distinguish this from other collections of DNA
-    ucscDb varchar(255) not null,	# Which UCSC database (mm9?  hg19?) associated with it.
-    twoBitId int unsigned not null,	# File ID of associated twoBit file
-    baseCount bigint not null,	# Count of bases
+    id int unsigned auto_increment,	# Assembly ID
+    taxon int unsigned default 0,	# NCBI taxon number
+    name varchar(255) default '',	# Some human readable name to distinguish this from other collections of DNA
+    ucscDb varchar(255) default '',	# Which UCSC database (mm9?  hg19?) associated with it.
+    twoBitId int unsigned default 0,	# File ID of associated twoBit file
+    baseCount bigint default 0,	# Count of bases including N's
+    realBaseCount bigint default 0,	# Count of non-N bases in assembly
               #Indices
     PRIMARY KEY(id)
 );
 
 #A file that has been uploaded, the format checked, and for which at least minimal metadata exists
 CREATE TABLE edwValidFile (
-    id int unsigned auto_increment not null,	# ID of validated file
-    licensePlate char(16) not null,	# A abc123 looking license-platish thing.
-    fileId int unsigned not null,	# Pointer to file in main file table
-    format varchar(255) not null,	# What format it's in from manifest
-    outputType varchar(255) not null,	# What output_type it is from manifest
-    experiment varchar(255) not null,	# What experiment it's in from manifest
-    replicate varchar(255) not null,	# What replicate it is from manifest
-    validKey varchar(255) not null,	# The valid_key tag from manifest
-    enrichedIn varchar(255) not null,	# The enriched_in tag from manifest
-    ucscDb varchar(255) not null,	# Something like hg19 or mm9
-    itemCount bigint not null,	# # of items in file: reads for fastqs, lines for beds, bases w/data for wig.
-    basesInItems bigint not null,	# # of bases in items
-    sampleCount bigint not null,	# # of items in sample if we are just subsampling as we do for reads.
-    basesInSample bigint not null,	# # of bases in our sample
-    sampleBed varchar(255) not null,	# Path to a temporary bed file holding sample items
-    mapRatio double not null,	# Proportion of items that map to genome
-    sampleCoverage double not null,	# Proportion of assembly covered by at least one item in sample
-    depth double not null,	# Estimated genome-equivalents covered by possibly overlapping data
-              #Indices
-    PRIMARY KEY(id)
-);
-
-#A program plus parameters with a standard command line that gets run on new files
-CREATE TABLE edwQaAgent (
-    id int unsigned auto_increment not null,	# ID of this agent
-    name varchar(255) not null,	# Name of agent
-    program varchar(255) not null,	# Program command line name
-    options varchar(255) not null,	# Program command line options
-    deprecated varchar(255) not null,	# If non-empty why it isn't run any more.
-              #Indices
-    PRIMARY KEY(id)
-);
-
-#Records a bit of information from each QA run we've done on files.
-CREATE TABLE edwQaRun (
-    id int unsigned auto_increment not null,	# ID of this run
-    agentId int unsigned not null,	# ID of agent that made this run
-    startFileId int unsigned not null,	# ID of file we started on.
-    endFileId int unsigned not null,	# One past last file we did QA on
-    startTime bigint not null,	# Start time in seconds since 1970
-    endTime bigint not null,	# Start time in seconds since 1970
-    stderr longblob not null,	# The output to stderr of the run
+    id int unsigned auto_increment,	# ID of validated file
+    licensePlate char(16) default 0,	# A abc123 looking license-platish thing.
+    fileId int unsigned default 0,	# Pointer to file in main file table
+    format varchar(255) default '',	# What format it's in from manifest
+    outputType varchar(255) default '',	# What output_type it is from manifest
+    experiment varchar(255) default '',	# What experiment it's in from manifest
+    replicate varchar(255) default '',	# What replicate it is from manifest
+    validKey varchar(255) default '',	# The valid_key tag from manifest
+    enrichedIn varchar(255) default '',	# The enriched_in tag from manifest
+    ucscDb varchar(255) default '',	# Something like hg19 or mm9
+    itemCount bigint default 0,	# # of items in file: reads for fastqs, lines for beds, bases w/data for wig.
+    basesInItems bigint default 0,	# # of bases in items
+    sampleCount bigint default 0,	# # of items in sample if we are just subsampling as we do for reads.
+    basesInSample bigint default 0,	# # of bases in our sample
+    sampleBed varchar(255) default '',	# Path to a temporary bed file holding sample items
+    mapRatio double default 0,	# Proportion of items that map to genome
+    sampleCoverage double default 0,	# Proportion of assembly covered by at least one item in sample
+    depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
               #Indices
     PRIMARY KEY(id)
 );
 
 #A target for our enrichment analysis.
 CREATE TABLE edwQaEnrichTarget (
-    id int unsigned auto_increment not null,	# ID of this enrichment target
-    assemblyId int unsigned not null,	# Which assembly this goes to
-    name varchar(255) not null,	# Something like 'exon' or 'promoter'
-    fileId int unsigned not null,	# A simple BED 3 format file that defines target. Bases covered are unique
-    targetSize bigint not null,	# Total number of bases covered by target
+    id int unsigned auto_increment,	# ID of this enrichment target
+    assemblyId int unsigned default 0,	# Which assembly this goes to
+    name varchar(255) default '',	# Something like 'exon' or 'promoter'
+    fileId int unsigned default 0,	# A simple BED 3 format file that defines target. Bases covered are unique
+    targetSize bigint default 0,	# Total number of bases covered by target
               #Indices
     PRIMARY KEY(id)
 );
 
 #An enrichment analysis applied to file.
 CREATE TABLE edwQaEnrich (
-    id int unsigned auto_increment not null,	# ID of this enrichment analysis
-    fileId int unsigned not null,	# File we are looking at skeptically
-    qaEnrichTargetId int unsigned not null,	# Information about an target for this analysis
-    targetBaseHits bigint not null,	# Number of hits to bases in target
-    targetUniqHits bigint not null,	# Number of unique bases hit in target
-    coverage double not null,	# Coverage of target - just targetUniqHits/targetSize
-    enrichment double not null,	# Amount we hit target/amount we hit genome
-    uniqEnrich double not null,	# coverage/sampleCoverage
+    id int unsigned auto_increment,	# ID of this enrichment analysis
+    fileId int unsigned default 0,	# File we are looking at skeptically
+    qaEnrichTargetId int unsigned default 0,	# Information about an target for this analysis
+    targetBaseHits bigint default 0,	# Number of hits to bases in target
+    targetUniqHits bigint default 0,	# Number of unique bases hit in target
+    coverage double default 0,	# Coverage of target - just targetUniqHits/targetSize
+    enrichment double default 0,	# Amount we hit target/amount we hit genome
+    uniqEnrich double default 0,	# coverage/sampleCoverage
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#A comparison of the amount of overlap between two samples that cover ~0.1% to 10% of target.
+CREATE TABLE edwQaPairSampleOverlap (
+    id int unsigned auto_increment,	# Id of this qa pair
+    elderFileId int unsigned default 0,	# Id of elder (smaller fileId) in correlated pair
+    youngerFileId int unsigned default 0,	# Id of younger (larger fileId) in correlated pair
+    elderSampleBases bigint default 0,	# Number of bases in elder sample
+    youngerSampleBases bigint default 0,	# Number of bases in younger sample
+    sampleOverlapBases bigint default 0,	# Number of bases that overlap between younger and elder sample
+    sampleSampleEnrichment double default 0,	# Amount samples overlap more than expected.
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#A correlation between two files of the same type.
+CREATE TABLE edwQaPairCorrelation (
+    id int unsigned auto_increment,	# Id of this correlation pair
+    elderFileId int unsigned default 0,	# Id of elder (smaller fileId) in correlated pair
+    youngerFileId int unsigned default 0,	# Id of younger (larger fileId) in correlated pair
+    pearsonInEnriched double default 0,	# Pearson's R inside enriched areas where there is overlap
+    pearsonOverall double default 0,	# Pearson's R over all places where both have data
+    pearsonClipped double default 0,	# Pearson's R clipped at two standard deviations up from the mean
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#A job to be run asynchronously and not too many all at once.
+CREATE TABLE edwJob (
+    id int unsigned auto_increment,	# Job id
+    commandLine longblob,	# Command line of job
+    startTime bigint default 0,	# Start time in seconds since 1970
+    endTime bigint default 0,	# End time in seconds since 1970
+    stderr longblob,	# The output to stderr of the run - may be nonembty even with success
+    returnCode int default 0,	# The return code from system command - 0 for success
               #Indices
     PRIMARY KEY(id)
 );
