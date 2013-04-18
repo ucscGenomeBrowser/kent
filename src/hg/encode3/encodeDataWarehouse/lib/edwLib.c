@@ -21,10 +21,6 @@ char *edwDatabase = "encodeDataWarehouse";
 char *edwLicensePlatePrefix = "ENCFF";
 int edwSingleFileTimeout = 60*60;   // How many seconds we give ourselves to fetch a single file
 
-#ifdef ELSEWHERE
-char *edwRootDir = "/scratch/kent/encodeDataWarehouse/";
-char *edwValDataDir = "/scratch/kent/encValData/";
-#endif
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *edwValDataDir = "/data/encode3/encValData/";
 
@@ -46,6 +42,8 @@ char *edwTempDir()
 static char path[PATH_LEN];
 if (path[0] == 0)
     {
+    /* Note code elsewhere depends on tmp dire being inside of edwRootDir - also good
+     * to have it there so move to a permanent file is quick and unlikely to fail. */
     safef(path, sizeof(path), "%s%s", edwRootDir, "tmp");
     makeDirsOnPath(path);
     strcat(path, "/");
@@ -687,5 +685,18 @@ void edwAddQaJob(struct sqlConnection *conn, long long fileId)
 char command[64];
 safef(command, sizeof(command), "edwQaAgent %lld", fileId);
 edwAddJob(conn, command);
+}
+
+struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
+/* Return most recent submission, possibly in progress, from this url */
+{
+int urlSize = strlen(url);
+char escapedUrl[2*urlSize+1];
+sqlEscapeString2(escapedUrl, url);
+int escapedSize = strlen(escapedUrl);
+char query[128 + escapedSize];
+safef(query, sizeof(query), 
+    "select * from edwSubmit where url='%s' order by id desc limit 1", escapedUrl);
+return edwSubmitLoadByQuery(conn, query);
 }
 

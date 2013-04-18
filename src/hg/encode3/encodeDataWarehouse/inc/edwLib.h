@@ -129,4 +129,7 @@ void edwAddJob(struct sqlConnection *conn, char *command);
 void edwAddQaJob(struct sqlConnection *conn, long long fileId);
 /* Create job to do QA on this and add to queue */
 
+struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url);
+/* Return most recent submission, possibly in progress, from this url */
+
 #endif /* EDWLIB_H */
