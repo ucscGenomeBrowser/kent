@@ -1921,3 +1921,25 @@ else
     }
 return TRUE;
 }
+
+static char *genePredAutoSqlString =
+    "table genePred\n"
+    "\"A gene prediction.\"\n"
+    "    (\n"
+    "    string name;	\"Name of gene\"\n"
+    "    string chrom;	\"Reference sequence chromosome or scaffold\"\n"
+    "    char[1] strand;     \"+ or - for strand\"\n"
+    "    uint txStart;	\"Transcription start position\"\n"
+    "    uint txEnd;         \"Transcription end position\"\n"
+    "    uint cdsStart;	\"Coding region start\"\n"
+    "    uint cdsEnd;        \"Coding region end\"\n"
+    "    uint exonCount;     \"Number of exons\"\n"
+    "    uint[exonCount] exonStarts; \"Exon start positions\"\n"
+    "    uint[exonCount] exonEnds;   \"Exon end positions\"\n"
+    "    )\n";
+
+struct asObject *genePredAsObj()
+// Return asObject describing fields of genePred
+{
+return asParseText(genePredAutoSqlString);
+}

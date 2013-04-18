@@ -2,7 +2,7 @@ include ../../../../inc/common.mk
 
 all:
 
-test: basic srcPre dups impliedStop ensembl geneNameAsName2 splitStop
+test: basic srcPre dups impliedStop ensembl geneNameAsName2 splitStop ignoreGroupWithoutExons
 
 # basic conversion
 basic: mkdirs
@@ -48,6 +48,12 @@ splitStop: mkdirs
 	gtfToGenePred -genePredExt input/splitStop.gtf output/$@.gp
 	genePredCheck -verbose=0 output/$@.gp
 	diff expected/$@.gp output/$@.gp
+
+ignoreGroupWithoutExons: mkdirs
+	gtfToGenePred -genePredExt -ignoreGroupsWithoutExons input/geneFeature.gtf output/$@.gp
+	genePredCheck -verbose=0 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
 
 mkdirs:
 	mkdir -p output

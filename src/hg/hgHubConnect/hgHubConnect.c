@@ -528,6 +528,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 oldVars = hashNew(10);
+setUdcCacheDir();
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgHubConnect", enteredMainTime);

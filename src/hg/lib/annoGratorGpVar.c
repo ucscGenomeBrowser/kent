@@ -43,17 +43,18 @@ struct dyString *gpPlusGpFx = dyStringCreate(aggvAutoSqlStringStart);
 struct asColumn *col;
 for (col = sourceAsObj->columnList;  col != NULL;  col = col->next)
     {
-    if (col->isArray || col->isList)
+    if (col->fixedSize)
+	dyStringPrintf(gpPlusGpFx, "%s[%d]\t%s;\t\"%s\"",
+		       col->lowType->name, col->fixedSize, col->name, col->comment);
+    else if (col->isArray || col->isList)
 	{
-	if (col->fixedSize)
-	    dyStringPrintf(gpPlusGpFx, "%s[%d]\t%s;\t\"%s\"",
-			   col->lowType->name, col->fixedSize, col->name, col->comment);
-	else if (col->linkedSizeName)
+	if (col->linkedSizeName)
 	    dyStringPrintf(gpPlusGpFx, "%s[%s]\t%s;\t\"%s\"",
 			   col->lowType->name, col->linkedSizeName, col->name, col->comment);
 	else
-	    errAbort("Neither col->fixedSize nor col->linkedSizeName given for column '%s'",
-		     col->name);
+	    errAbort("Neither col->fixedSize nor col->linkedSizeName given for "
+		     "asObj %s column '%s'",
+		     sourceAsObj->name, col->name);
 	}
     else
 	dyStringPrintf(gpPlusGpFx, "%s\t%s;\t\"%s\"", col->lowType->name, col->name, col->comment);
@@ -131,20 +132,21 @@ while (count < needWords)
     words[count++] = lmCloneString(lm, "");
 }
 
-struct gpFx *annoGratorGpVarGpFxFromRow(struct annoStreamer *sSelf, struct annoRow *row)
+struct gpFx *annoGratorGpVarGpFxFromRow(struct annoStreamer *sSelf, struct annoRow *row,
+					struct lm *lm)
 // Turn the string array representation back into a real gpFx.
 // I know this is inefficient and am thinking about a better way.
 {
 if (row == NULL)
     return NULL;
 struct gpFx *effect;
-AllocVar(effect);
+lmAllocVar(lm, effect);
 struct annoGrator *gSelf = (struct annoGrator *)sSelf;
 // get gpFx words which follow internal source's words:
 char **words = (char **)(row->data);
 int count = gSelf->mySource->numCols;
-effect->allele = cloneString(words[count++]);
-effect->so.transcript = cloneString(words[count++]);
+effect->allele = lmCloneString(lm, words[count++]);
+effect->so.transcript = lmCloneString(lm, words[count++]);
 effect->so.soNumber = atol(words[count++]);
 switch(effect->so.soNumber)
     {
@@ -162,21 +164,21 @@ switch(effect->so.soNumber)
 	effect->so.sub.codingChange.cDnaPosition = atol(words[count++]);
 	effect->so.sub.codingChange.cdsPosition = atol(words[count++]);
 	effect->so.sub.codingChange.pepPosition = atol(words[count++]);
-	effect->so.sub.codingChange.aaOld = cloneString(words[count++]);
-	effect->so.sub.codingChange.aaNew = cloneString(words[count++]);
-	effect->so.sub.codingChange.codonOld = cloneString(words[count++]);
-	effect->so.sub.codingChange.codonNew = cloneString(words[count++]);
+	effect->so.sub.codingChange.aaOld = lmCloneString(lm, words[count++]);
+	effect->so.sub.codingChange.aaNew = lmCloneString(lm, words[count++]);
+	effect->so.sub.codingChange.codonOld = lmCloneString(lm, words[count++]);
+	effect->so.sub.codingChange.codonNew = lmCloneString(lm, words[count++]);
 	break;
 
     default:
-	effect->so.sub.generic.soOther0 = cloneString(words[count++]);
-	effect->so.sub.generic.soOther1 = cloneString(words[count++]);
-	effect->so.sub.generic.soOther2 = cloneString(words[count++]);
-	effect->so.sub.generic.soOther3 = cloneString(words[count++]);
-	effect->so.sub.generic.soOther4 = cloneString(words[count++]);
-	effect->so.sub.generic.soOther5 = cloneString(words[count++]);
-	effect->so.sub.generic.soOther6 = cloneString(words[count++]);
-	effect->so.sub.generic.soOther7 = cloneString(words[count++]);
+	effect->so.sub.generic.soOther0 = lmCloneString(lm, words[count++]);
+	effect->so.sub.generic.soOther1 = lmCloneString(lm, words[count++]);
+	effect->so.sub.generic.soOther2 = lmCloneString(lm, words[count++]);
+	effect->so.sub.generic.soOther3 = lmCloneString(lm, words[count++]);
+	effect->so.sub.generic.soOther4 = lmCloneString(lm, words[count++]);
+	effect->so.sub.generic.soOther5 = lmCloneString(lm, words[count++]);
+	effect->so.sub.generic.soOther6 = lmCloneString(lm, words[count++]);
+	effect->so.sub.generic.soOther7 = lmCloneString(lm, words[count++]);
 	break;
     }
 return effect;
@@ -264,7 +266,8 @@ static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant
 struct annoGrator *gSelf = &(self->grator);
 struct annoStreamer *sSelf = &(gSelf->streamer);
 // FIXME:  accessing query's tbf is probably bad
-struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->query->tbf, self->lm);
+struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->assembly->tbf,
+							      self->lm);
 struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence);
 struct annoRow *rows = NULL;
 

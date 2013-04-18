@@ -573,6 +573,7 @@ cgiSpoof(&argc, argv);
 // htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
+setUdcCacheDir();
 oldVars = hashNew(12);
 cart = cartForSession(hUserCookie(), excludeVars, oldVars);
 dispatchLocation();

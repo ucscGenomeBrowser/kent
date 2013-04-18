@@ -448,24 +448,44 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
 
 
 
+int mUcscDbIdx = -1;    // optional field ucsc_db
 int mFileNameIdx = -1;
 int mFormatIdx = -1;
-int mUcscDbIdx = -1;    // optional field ucsc_db
+int mOutputTypeIdx = -1;
+int mExperimentIdx = -1;
+int mReplicateIdx = -1;
+int mEnrichedInIdx = -1;
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
     {
+    if (sameString(manifestFields->words[i], "ucsc_db"))
+	mUcscDbIdx = i;
     if (sameString(manifestFields->words[i], "file_name"))
 	mFileNameIdx = i;
     if (sameString(manifestFields->words[i], "format"))
 	mFormatIdx = i;
-    if (sameString(manifestFields->words[i], "ucsc_db"))
-	mUcscDbIdx = i;
+    if (sameString(manifestFields->words[i], "output_type"))
+	mOutputTypeIdx = i;
+    if (sameString(manifestFields->words[i], "experiment"))
+	mExperimentIdx = i;
+    if (sameString(manifestFields->words[i], "replicate"))
+	mReplicateIdx = i;
+    if (sameString(manifestFields->words[i], "enriched_in"))
+	mEnrichedInIdx = i;
     }
 if (mFileNameIdx == -1)
     errAbort("field file_name not found in manifest.txt");
 if (mFormatIdx == -1)
     errAbort("field format not found in manifest.txt");
+if (mOutputTypeIdx == -1)
+    errAbort("field output_type not found in manifest.txt");
+if (mExperimentIdx == -1)
+    errAbort("field experiment not found in manifest.txt");
+if (mReplicateIdx == -1)
+    errAbort("field replicate not found in manifest.txt");
+if (mEnrichedInIdx == -1)
+    errAbort("field enriched_in not found in manifest.txt");
 
 // check if the fieldnames in old validated appear in the same order in manifest.txt
 //  although this is currently a minor limitation, it could be removed 
@@ -543,6 +563,8 @@ for(rec = manifestRecs; rec; rec = rec->next)
     uglyf("]\n");
     */
 
+    boolean fileIsValid = TRUE; // Default to valid until we know otherwise.
+
     // get file_name, size, datetime
     char *mFileName = rec->words[mFileNameIdx];
     if (mUcscDbIdx != -1)
@@ -550,15 +572,44 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
     off_t mFileSize = 0;
     time_t mFileTime = 0;
-    char *mMd5Hex = NULL;
-    char *mValidKey = NULL;
-    if (!fileExists(mFileName))
+    char *mMd5Hex = "0";
+    char *mValidKey = "ERROR";
+
+    if (fileIsValid && !fileExists(mFileName))
 	{
+	fileIsValid = FALSE;
 	uglyf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
-	mValidKey = "ERROR";
-	mMd5Hex = "0";
 	}
-    else
+
+    // check experiment field
+    char *mExperiment = rec->words[mExperimentIdx];
+    if (fileIsValid)
+	{
+	if (!startsWith("ENCSR", mExperiment))
+	    {
+	    fileIsValid = FALSE;
+	    uglyf("ERROR: %s is not a valid value for the experiment field.  Must start with ENCSR.\n", mExperiment);
+	    }
+	}
+    
+    // check replicate field
+    char *mReplicate = rec->words[mReplicateIdx];
+    if (fileIsValid)
+	{
+	boolean smallNumber = FALSE;
+	int sl = strlen(mReplicate);
+	if (countLeadingDigits(mReplicate) == sl && sl < 3 && sl > 0)
+	    smallNumber = TRUE;
+       	if (!(startsWith("pooled", mReplicate) || startsWith("n/a", mReplicate) || smallNumber))
+	    {
+	    fileIsValid = FALSE;
+    	    uglyf("ERROR: %s is not a valid value for the experiment field.  Must be pooled or n/a or a small unsigned number.\n", mReplicate);
+	    }
+	}
+    
+
+
+    if (fileIsValid)
 	{
 
 	mFileSize = fileSize(mFileName);
@@ -632,14 +683,14 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
 
 	    char *mFormat = rec->words[mFormatIdx];
-	    boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
-
+	    fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
 	    if (!fileIsValid)
 		mValidKey = "ERROR";
 
 	    }
 
 	}
+
 
     uglyf("mFileName = %s size=%lld time=%ld md5=%s validKey=%s\n", mFileName, (long long)mFileSize, (long)mFileTime, mMd5Hex, mValidKey);
 

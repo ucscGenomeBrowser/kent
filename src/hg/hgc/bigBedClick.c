@@ -51,7 +51,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	continue;
     if (bedSize > 3)
 	{
-	char *name = cloneFirstWordInLine(bb->rest);
+	char *name = cloneFirstWordByTab(bb->rest);
 	boolean match = sameString(name, item);
 	freez(&name);
 	if (!match)
