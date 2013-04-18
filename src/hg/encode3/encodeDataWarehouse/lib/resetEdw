@@ -31,3 +31,10 @@ hgsql encodeDataWarehouse -e 'create view validFiles as select licensePlate as a
 hgsql encodeDataWarehouse -e 'create view enrichments as select e.id id, e.fileId fileId,t.name target,v.enrichedIn, targetBaseHits,targetUniqHits,coverage,enrichment,uniqEnrich from edwQaEnrich e,edwQaEnrichTarget t,edwValidFile v where e.qaEnrichTargetId = t.id and e.fileId=v.fileId'
 hgsql encodeDataWarehouse -e 'create view crossEnrichments as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,ev.enrichedIn enrich,sampleSampleEnrichment xEnrichment from edwFile e,edwQaPairSampleOverlap p, edwFile y,edwValidFile ev where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId = e.id'
 hgsql encodeDataWarehouse -e 'create view correlations as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,pearsonInEnriched from edwFile e,edwQaPairCorrelation p, edwFile y where  e.id=p.elderFileId and y.id=p.youngerFileId'
+set fifo = /usr/local/apache/cgi-bin-kent/edwSubmit.fifo
+if (! -e $fifo) then
+    mkfifo $fifo
+    chmod a+x $fifo
+endif
+#killall -q edwSubmitSpooler
+#edwSubmitSpooler $fifo >& /scratch/kent/encodeDataWarehouse/submit.log &
