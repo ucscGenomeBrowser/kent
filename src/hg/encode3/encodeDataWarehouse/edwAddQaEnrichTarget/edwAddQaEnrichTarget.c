@@ -72,6 +72,8 @@ safef(query, sizeof(query),
    , assemblyId, name, (long long)ef->id, targetSize);
 sqlUpdate(conn, query);
 
+edwAddQaJob(conn, ef->id);
+
 printf("Added target %s, id %u,  size %lld\n", name, sqlLastAutoId(conn), targetSize);
 }
 

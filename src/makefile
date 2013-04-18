@@ -120,7 +120,7 @@ test:: $(testDirs:%=%.test)
 %.test:
 	cd $* && ${MAKE} test
 
-LIB_TAGS_IN = lib/*.[hc] hg/lib/*.[hc] jkOwnLib/*.c inc/*.h hg/inc/*.h
+LIB_TAGS_IN = lib/*.[hc] */lib/*.[hc] */*/lib/*.[hc] jkOwnLib/*.c inc/*.h hg/inc/*.h
 
 # build tags for libraries
 .PHONY: tags

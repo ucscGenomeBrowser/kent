@@ -587,6 +587,22 @@ else
     safef(s,slength,"%3.0f %s",((double)size)/d, greek[i]);
 }
 
+void shuffleArrayOfChars(char *array, int arraySize, int shuffleCount)
+/* Shuffle array of characters of given size given number of times. */
+{
+char c;
+int i, randIx;
+
+/* Randomly permute an array using the method from Cormen, et al */
+for (i=0; i<arraySize; ++i)
+    {
+    randIx = i + (rand() % (arraySize - i));
+    c = array[i];
+    array[i] = array[randIx];
+    array[randIx] = c;
+    }
+}
+
 
 void shuffleArrayOfPointers(void *pointerArray, int arraySize, int shuffleCount)
 /* Shuffle array of pointers of given size given number of times. */

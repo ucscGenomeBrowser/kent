@@ -31,6 +31,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+
 void edwAddAssembly(char *taxonString, char *name, char *ucscDb, char *twoBitFile)
 /* edwAddAssembly - Add an assembly to database.. */
 {
@@ -48,6 +49,7 @@ if (asmId != 0)
 /* Get total sequence size from twoBit file, which also makes sure it exists in right format. */
 struct twoBitFile *tbf = twoBitOpen(twoBitFile);
 long long baseCount = twoBitTotalSize(tbf);
+long long realBaseCount = twoBitTotalSizeNoN(tbf);
 twoBitClose(&tbf);
 
 /* Create file record and add tags. */
@@ -61,10 +63,12 @@ dyStringFree(&tags);
 
 /* Insert info into edwAssembly record. */
 safef(query, sizeof(query), 
-   "insert edwAssembly (taxon,name,ucscDb,twoBitId,baseCount) "
-                "values(%d, '%s', '%s', %lld, %lld)"
-		, taxon, name, ucscDb, (long long)ef->id, baseCount);
+   "insert edwAssembly (taxon,name,ucscDb,twoBitId,baseCount,realBaseCount) "
+                "values(%d, '%s', '%s', %lld, %lld, %lld)"
+		, taxon, name, ucscDb, (long long)ef->id, baseCount, realBaseCount);
 sqlUpdate(conn, query);
+
+edwAddQaJob(conn, ef->id);
 
 sqlDisconnect(&conn);
 }

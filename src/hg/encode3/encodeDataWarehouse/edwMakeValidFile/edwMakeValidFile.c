@@ -4,8 +4,11 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "errCatch.h"
+#include "errabort.h"
 #include "sqlNum.h"
 #include "cheapcgi.h"
+#include "obscure.h"
 #include "jksql.h"
 #include "twoBit.h"
 #include "genomeRangeTree.h"
@@ -18,6 +21,9 @@
 #include "edwLib.h"
 #include "encode3/encode3Valid.h"
 
+int maxErrCount = 1;	/* Set from command line. */
+int errCount;		/* Set as we run. */
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -25,11 +31,14 @@ errAbort(
   "edwMakeValidFile - Add range of ids to valid file table.\n"
   "usage:\n"
   "   edwMakeValidFile startId endId\n"
-  );
+  "options:\n"
+  "   maxErrCount=N - maximum errors allowed before it stops, default %d\n"
+  , maxErrCount);
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"maxErrCount", OPTION_INT},
    {NULL, 0},
 };
 
@@ -109,6 +118,37 @@ while (!done)
 	   }
 	}
     }
+lineFileClose(&lf);
+}
+
+void reduceFastqSample(char *source, FILE *f, int oldSize, int newSize, struct edwValidFile *vf)
+/* Copy newSize samples from source into open output f.  */
+{
+/* Make up an array that tells us which random parts of the source file to use. */
+assert(oldSize > newSize);
+char *randomizer = needMem(oldSize);
+memset(randomizer, TRUE, newSize);
+shuffleArrayOfChars(randomizer, oldSize, 1);
+
+vf->basesInSample = 0;
+vf->sampleCount = 0;
+
+struct lineFile *lf = lineFileOpen(source, FALSE);
+int i;
+for (i=0; i<oldSize; ++i)
+    {
+    int seqSize;
+    boolean doIt = randomizer[i];
+    if (!maybeCopyFastqRecord(lf, f, doIt, &seqSize))
+         internalErr();
+    if (doIt)
+         {
+	 vf->basesInSample += seqSize;
+	 vf->sampleCount += 1;
+	 }
+
+    }
+freez(&randomizer);
 lineFileClose(&lf);
 }
 
@@ -219,7 +259,7 @@ remove(saiName);
 struct genomeRangeTree *grt = genomeRangeTreeNew();
 long long hitCount=0, missCount=0, totalBasesInHits=0;
 scanSam(samName, bedF, grt, &hitCount, &missCount, &totalBasesInHits);
-uglyf("hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", hitCount, missCount, totalBasesInHits, grt);
+verbose(1, "hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", hitCount, missCount, totalBasesInHits, grt);
 vf->mapRatio = (double)hitCount/(hitCount+missCount);
 vf->depth = (double)totalBasesInHits/assembly->baseCount * (double)vf->itemCount/vf->sampleCount;
 long long basesHitBySample = genomeRangeTreeSumRanges(grt);
@@ -229,19 +269,35 @@ remove(samName);
 }
 
 
-#define edwSampleReduction 100
+#define edwSampleReduction 40	    /* Initially sample ever Nth read where this defines N */
+#define edwSampleTargetSize 250000  /* We target this many samples */
 
 void makeValidFastq( struct sqlConnection *conn, char *path, struct edwFile *ef, 
 	struct edwAssembly *assembly, struct edwValidFile *vf)
 /* Fill out fields of vf.  Create sample subset. */
 {
-/* Make sample of fastq */
+/* Make initial sample of fastq */
 char smallFastqName[PATH_LEN];
 safef(smallFastqName, PATH_LEN, "%sedwSampleFastqXXXXXX", edwTempDir());
 int smallFd = mkstemp(smallFastqName);
 FILE *smallF = fdopen(smallFd, "w");
 makeSampleOfFastq(path, smallF, edwSampleReduction, vf);
 carefulClose(&smallF);
+
+/* We likely need to reduce this even further, down to 250k reads if possible. */
+char sampleFastqName[PATH_LEN];
+if (vf->sampleCount > edwSampleTargetSize)
+    {
+    safef(sampleFastqName, PATH_LEN, "%sedwSampleFastqXXXXXX", edwTempDir());
+    int fd = mkstemp(sampleFastqName);
+    FILE *f = fdopen(fd, "w");
+    reduceFastqSample(smallFastqName, f, vf->sampleCount, edwSampleTargetSize, vf);
+    carefulClose(&f);
+    remove(smallFastqName);
+    }
+else
+    strcpy(sampleFastqName, smallFastqName);
+
 verbose(1, "Made sample fastq with %lld reads\n", vf->sampleCount);
 
 /* Align fastq and turn results into bed. */
@@ -249,12 +305,12 @@ char sampleBedName[PATH_LEN];
 safef(sampleBedName, PATH_LEN, "%sedwSampleBedXXXXXX", edwTempDir());
 int bedFd = mkstemp(sampleBedName);
 FILE *bedF = fdopen(bedFd, "w");
-alignFastqMakeBed(ef, assembly, smallFastqName, vf, bedF);
+alignFastqMakeBed(ef, assembly, sampleFastqName, vf, bedF);
 carefulClose(&bedF);
 
-remove(smallFastqName);
-
+/* Save result in vf, clean up, go home. */
 vf->sampleBed = cloneString(sampleBedName);
+remove(sampleFastqName);
 }
 
 #define TYPE_BAM  1
@@ -460,7 +516,7 @@ else
    return val;
 }
 
-void makeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags)
+void mustMakeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags)
 /* If possible make a edwValidFile record for this.  Makes sure all the right tags are there,
  * and then parses file enough to determine itemCount and the like.  For some files, like fastqs,
  * it will take a subset of the file as a sample so can do QA without processing the whole thing. */
@@ -508,8 +564,7 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	needAssembly(ef, format, assembly);
 	makeValidFastq(conn, path, ef, assembly, vf);
 	}
-    else if (sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
-	     sameString(format, "bigBed"))
+    else if (edwIsSupportedBigBedFormat(format))
 	{
 	needAssembly(ef, format, assembly);
 	makeValidBigBed(conn, path, ef, assembly, format, vf);
@@ -562,14 +617,13 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	dyStringAppendN(newName, fileName, dirEnd - fileName);
 	dyStringAppend(newName, vf->licensePlate);
 	dyStringAppend(newName, suffix);
-	uglyf("Seriously considering renaming %s to %s\n", fileName, newName->string);
 
 	/* Now build full path names and attempt rename in file system. */
 	char oldPath[PATH_LEN], newPath[PATH_LEN];
 	safef(oldPath, sizeof(oldPath), "%s%s", edwRootDir, fileName);
 	safef(newPath, sizeof(newPath), "%s%s", edwRootDir, newName->string);
 	mustRename(oldPath, newPath);
-	uglyf("Actually done renaming %s to %s\n", oldPath, newPath);
+	verbose(2, "Renamed %s to %s\n", oldPath, newPath);
 
 	/* Update database with new name - small window of vulnerability here sadly 
 	 * two makeValidates running at same time stepping on each other. */
@@ -592,6 +646,34 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 freez(&vf);
 }
 
+boolean makeValidFile(struct sqlConnection *conn, struct edwFile *ef, struct cgiParsedVars *tags)
+/* Attempt to make validation.  If it fails catch error and attach it to ef->errorMessage as well
+ * as sending it to stderr, and return FALSE.  Otherwise return TRUE. */
+{
+struct errCatch *errCatch = errCatchNew();
+boolean success = TRUE;
+if (errCatchStart(errCatch))
+    {
+    mustMakeValidFile(conn, ef, tags);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    edwWriteErrToStderrAndTable(conn, "edwFile", ef->id, errCatch->message->string);
+    warn("This is from submitted file %s", ef->submitFileName);
+    success = FALSE;
+    }
+else
+    {
+    char query[256];
+    safef(query, sizeof(query), "update edwFile set errorMessage='' where id=%lld",
+	(long long)ef->id);
+    sqlUpdate(conn, query);
+    }
+errCatchFree(&errCatch);
+return success;
+}
+
 void edwMakeValidFile(int startId, int endId)
 /* edwMakeValidFile - Add range of ids to valid file table.. */
 {
@@ -610,14 +692,22 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	}
     else
 	{
-	verbose(1, "processing %s %s\n", ef->edwFileName, ef->submitFileName);
+	verbose(1, "processing %lld %s %s\n", (long long)ef->id, ef->edwFileName, ef->submitFileName);
 	char path[PATH_LEN];
 	safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
-	if (ef->tags) // All ones we care about have tags
+	if (!isEmpty(ef->tags)) // All ones we care about have tags
 	    {
 	    struct cgiParsedVars *tags = cgiParsedVarsNew(ef->tags);
-	    makeValidFile(conn, ef, tags);
+	    if (!makeValidFile(conn, ef, tags))
+	        {
+		if (++errCount >= maxErrCount)
+		    errAbort("Aborting after %d errors", errCount);
+		}
 	    cgiParsedVarsFree(&tags);
+	    }
+	else
+	    {
+	    verbose(2, "no tags to validate on %s %s\n", ef->edwFileName, ef->submitFileName);
 	    }
 	}
     }
@@ -631,6 +721,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+maxErrCount = optionInt("maxErrCount", maxErrCount);
 edwMakeValidFile(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }

@@ -16,7 +16,9 @@ DIRS = \
     edwMakeReplicateQa \
     edwMakeValidFile \
     edwResetPassword \
-    edwSubmit
+    edwSubmit \
+    edwSubmitSpooler \
+    edwWebSubmit
 
 TEST_DIRS = \
 	encode2BedDoctor 
