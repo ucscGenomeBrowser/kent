@@ -51,6 +51,7 @@ job->returnCode = status;
 /* Read in stderr */
 size_t errorMessageSize;
 readInGulp(run->errFileName, &job->stderr, &errorMessageSize);
+remove(run->errFileName);
 
 /* Update database with job results */
 struct dyString *dy = dyStringNew(0);
