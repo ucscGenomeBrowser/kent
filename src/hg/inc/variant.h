@@ -1,5 +1,4 @@
-/* variant.h -- a generic variant.  Meant to be capture information that's
- *              in VCF or pgSNP  */
+/* variant.h -- a generic variant.  Meant to capture information that's in VCF or pgSNP. */
 
 #ifndef VARIANT_H
 #define VARIANT_H
