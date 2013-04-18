@@ -27,7 +27,7 @@ errAbort(
 void logIn(struct sqlConnection *conn)
 /* Put up name.  No password for now. */
 {
-printf("Welcome to prototype ENCODE Data Warehouse submission site.<BR>");
+printf("Welcome to the prototype ENCODE Data Warehouse submission site.<BR>");
 printf("Please enter your email address ");
 cgiMakeTextVar("email", "", 32);
 cgiMakeSubmitButton();
@@ -67,7 +67,7 @@ fprintf(fifo, "%s %s\n", email, url);
 carefulClose(&fifo);
 
 /* Give system a second to react, and then try to put up status info about submission. */
-printf("Submission of %s progress....", url);
+printf("Submission of %s is in progress....", url);
 cgiMakeButton("monitor", "monitor submission");
 cgiMakeHiddenVar("email", email);
 cgiMakeHiddenVar("url", url);
@@ -117,6 +117,7 @@ if (sub == NULL)
     }
 else
     {
+    printf("<B>Submission by %s in progress...</B><BR>\n", email);
     printf("<B>url:</B> %s<BR>\n", sub->url);
     if (!isEmpty(sub->errorMessage))
         printf("<B>error:</B> %s<BR>\n", sub->errorMessage);
@@ -133,15 +134,11 @@ else
 	    long long curSize = 0;
 	    if (ef != NULL)
 		{
-		printf("<B>file in route:</B> %s<BR>\n",  ef->submitFileName);
-		printf("<B>file bytes transferred:</B> ");
 		char path[PATH_LEN];
 		safef(path, sizeof(path), "%s%s", edwRootDir, ef->edwFileName);
 		curSize = fileSize(path);
-		printLongWithCommas(stdout, curSize);
-		printf(" of ");
-		printLongWithCommas(stdout, ef->size);
-		printf(" (%d%%)<BR>\n", (int)(100.0 * curSize / ef->size));
+		printf("<B>file in route:</B> %s",  ef->submitFileName);
+		printf(" (%d%% transferred)<BR>\n", (int)(100.0 * curSize / ef->size));
 		printf("<B>total bytes transferred:</B> ");
 		long long totalTransferred = curSize + sub->oldBytes + sub->newBytes;
 		printLongWithCommas(stdout, totalTransferred);
@@ -170,29 +167,43 @@ else
 		}
 	    else
 		 printf("<B>checking MD5...</B><BR>\n");
+	    cgiMakeButton("monitor", "refresh status");
+	    cgiMakeHiddenVar("url", url);
 	    }
 	else
 	    {
-	    struct dyString *duration = formatDuration(endTime - startTime);
+	    int timeSpan = endTime - startTime;
+	    struct dyString *duration = formatDuration(timeSpan);
 	    printf("<B>submission started:</B> %s<BR>\n", ctime(&startTime));
 	    printf("<B>finished submission in :</B> %s<BR>\n", duration->string);
 	    printf("<B>total bytes in submission: </B>");
 	    printLongWithCommas(stdout, sub->byteCount);
 	    printf("<BR>\n");
-	    printf("<B>transfer speed:</B> ");
-	    printLongWithCommas(stdout, sub->newBytes/(endTime - startTime));
-	    printf(" bytes/sec<BR>\n");
+	    if (timeSpan > 0)
+		{
+		printf("<B>transfer speed:</B> ");
+		printLongWithCommas(stdout, sub->newBytes/(endTime - startTime));
+		printf(" bytes/sec<BR>\n");
+		}
+	    cgiMakeButton("submit", "Submit another data set.");
 	    }
 	}
     }
 cgiMakeHiddenVar("email", email);
-cgiMakeHiddenVar("url", url);
-cgiMakeButton("monitor", "refresh status");
+}
+
+static void localWarn(char *format, va_list args)
+/* A little warning handler to override the one with the button that goes nowhere. */
+{
+printf("<B>Error:</B> ");
+vfprintf(stdout, format, args);
+printf("<BR>Please use the back button on your web browser, correct the error, and resubmit.");
 }
 
 void doMiddle()
 /* testSimpleCgi - A simple cgi script.. */
 {
+pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 struct sqlConnection *conn = sqlConnect(edwDatabase);
 if (!cgiVarExists("email"))
@@ -212,6 +223,17 @@ int main(int argc, char *argv[])
 boolean isFromWeb = cgiIsOnWeb();
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
-htmShell("ENCODE Data Warehouse", doMiddle, NULL);
+
+/* Put out HTTP header and HTML HEADER all the way through <BODY> */
+puts("Content-Type:text/html");
+puts("\n");
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
+puts("<HTML><HEAD><TITLE>ENCODE Data Warehouse</TITLE></HEAD><BODY>");
+
+/* Call error handling wrapper that catches us so we write /BODY and /HTML to close up page
+ * even through an errAbort. */
+htmEmptyShell(doMiddle, NULL);
+htmlEnd();
 return 0;
 }
