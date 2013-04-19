@@ -1,4 +1,4 @@
 kentSrc = ../..
 A = bigBedNamedItems
 include $(kentSrc)/inc/userApp.mk
-L += -lm
+L += -lm -lz
