@@ -13,8 +13,7 @@ source `which qaConfig.csh`
 echo "TABLE STATUS files were last dumped:"
 echo " hgwdev: `ls -1 /cluster/data/genbank/var/tblstats/hgwdev | tail -1`"
 echo "hgwbeta: `ls -1 /cluster/data/genbank/var/tblstats/hgwbeta | tail -1`"
-echo " hgnfs1: `ls -1 /cluster/data/genbank/var/tblstats/hgnfs1 | tail -1`"
-echo "     rr: `ls -1 /cluster/data/genbank/var/tblstats/hgnfs1 | tail -1`"
+echo " rrnfs1: `ls -1 /cluster/data/genbank/var/tblstats/rrnfs1 | tail -1`"
 echo 
 
 

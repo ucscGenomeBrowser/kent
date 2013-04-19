@@ -399,7 +399,6 @@ void doMiddle(struct cart *theCart)
 boolean gotDisconnect = FALSE;
 
 cart = theCart;
-setUdcCacheDir();
 
 if (cartVarExists(cart, hgHubDoClear))
     {

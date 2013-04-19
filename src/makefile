@@ -164,8 +164,26 @@ utils-alpha: libs
 	cd utils && ${MAKE} alpha
 	cd hg && ${MAKE} utils
 
-DIRS = ameme blat cdnaAli index reformat xenoAli \
-       dnaDust protDust idbQuery scanIntrons tracks weblet \
-       aladdin getgene primeMate wormAli fuse meta
+DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta
 
+##  cellar archive for obsolete programs
 
+cellarDirs = cdnaAli getgene idbQuery reformat scanIntrons tracks wormAli \
+	xenoAli
+
+buildCellar: libs
+	${MKDIR} ${DESTDIR}${BINDIR}
+	@for D in ${cellarDirs} x; do \
+            if test "$$D" != "x" ; then \
+                ( cd $$D && echo $$D && ${MAKE} ) ;\
+                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+            fi ;\
+	done
+
+cleanCellar:
+	@for D in ${cellarDirs} x; do \
+            if test "$$D" != "x" ; then \
+                ( cd $$D && echo $$D && ${MAKE} clean ) ;\
+                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+            fi ;\
+	done

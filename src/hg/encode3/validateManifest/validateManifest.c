@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.2";
+char *version = "1.4";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -264,21 +264,29 @@ char cmdLine[1024];
 int mismatches = 7;  // TODO this is totally arbitrary right now
 
 // run validator on BAM even if the twoBit is not available.
-boolean quicky = fileExists(twoBit);  // QUICK-run by removing -genome and mismatches and stuff.
-if (quicky)
+boolean hasTwoBit = fileExists(twoBit); 
+if (hasTwoBit)
+    {
+    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", 
+	validateFilesPath, mismatches, chromInfo, twoBit, fileName);
+    }
+else
     {
     // simple existence check for the corresponding .bam.bai since without -genome=, 
     //  vf will not even open the bam index.
+    /* I thought this was good to check anyway since labs should be using bam with index in a hub, 
+	but Eurie seems to think not, so commenting out for now.
     char *bamBai = getBamBai(fileName);
     if (!fileExists(bamBai))
 	{
 	warn("Bam Index file missing: %s. Use SAM Tools to create.", bamBai);
 	return FALSE;
 	}
-    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -chromInfo=%s %s", validateFilesPath, chromInfo, fileName);
+    */
+    // QUICK-run by removing -genome and mismatches and stuff.
+    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -chromInfo=%s %s", 
+	validateFilesPath, chromInfo, fileName);
     }
-else
-    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", validateFilesPath, mismatches, chromInfo, twoBit, fileName);
 return runCmdLine(cmdLine);
 }
 
