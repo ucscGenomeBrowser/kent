@@ -64,6 +64,11 @@ doc2: mkout
 	${DIFF} expected/doc2.h   output/doc2.h  
 	${DIFF} expected/doc2.c   output/doc2.c  
 
+# index
+index: mkout
+	${AUTOSQL} input/index.as output/index
+	${DIFF} expected/index.sql output/index.sql
+
 
 # testHarness
 testHarness: output/mainTest.o output/simpleTest.o testHarness.o
