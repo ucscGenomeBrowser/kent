@@ -260,7 +260,7 @@ An integer (signed or unsigned, small or large) can be make an auto-increment co
 the database automatically assigns an incrementing numerical value to it, by including the
 'auto' key word after the index if any.
 
-Some examples with indexes and autoincrement:
+An example with indexes and autoincrement:
 
 table addressBook
 "A simple address book"
