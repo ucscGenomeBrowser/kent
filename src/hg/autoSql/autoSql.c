@@ -62,25 +62,32 @@ void sqlColumn(struct asColumn *col, FILE *f)
 fprintf(f, "    %s ", col->name);
 struct dyString *type = asColumnToSqlType(col);
 fprintf(f, "%s", type->string);
-if (!withNull)
+if (col->autoIncrement)
     {
-    if (defaultZeros)
+    fprintf(f, " auto_increment");
+    }
+else
+    {
+    if (!withNull)
 	{
-	char *defaultVal = "";
-	if (!col->isList && !col->isArray)
+	if (defaultZeros)
 	    {
-	    if (col->lowType->stringy)
+	    char *defaultVal = "";
+	    if (!col->isList && !col->isArray)
 		{
-	        if (col->lowType->type == t_string)
-		    defaultVal = " default ''";
+		if (col->lowType->stringy)
+		    {
+		    if (col->lowType->type == t_string)
+			defaultVal = " default ''";
+		    }
+		else
+		    defaultVal = " default 0";
 		}
-	    else
-		defaultVal = " default 0";
+	    fprintf(f, "%s", defaultVal);
 	    }
-        fprintf(f, "%s", defaultVal);
+	else
+	    fprintf(f, " not null");
 	}
-    else
-	fprintf(f, " not null");
     }
 fputc(',', f);
 fprintf(f, "\t# %s\n", col->comment);
@@ -98,7 +105,41 @@ for (col = table->columnList; col != NULL; col = col->next)
     sqlColumn(col, f);
 
 fprintf(f,"              #Indices\n");
-fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
+boolean gotIndex = FALSE;
+for (col = table->columnList; col != NULL; col = col->next)
+    {
+    struct asIndex *index = col->index;
+    if (index != NULL)
+        {
+	char *type = index->type;
+	char *sqlType = NULL;
+	if (sameString(type, "primary"))
+	    sqlType = "PRIMARY KEY";
+	else  if (sameString(type, "index"))
+	    sqlType = "INDEX";
+	else  if (sameString(type, "unique"))
+	    sqlType = "UNIQUE";
+	else
+	    errAbort("Unrecognized index type %s", type);
+	if (!gotIndex)
+	    {
+	    gotIndex = TRUE;
+	    }
+	else
+	    {
+	    fprintf(f, ",\n");
+	    }
+	fprintf(f, "    %s(%s", sqlType, col->name);
+	if (index->size != 0)
+	    fprintf(f, "(%d)", index->size);
+	fprintf(f, ")");
+	}
+    }
+
+if (!gotIndex)
+    fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
+else
+    fprintf(f, "\n");
 fprintf(f, ");\n");
 }
 
