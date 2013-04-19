@@ -103,6 +103,8 @@ else
 // Location is chr:start for single-base, chr:start-end for indels:
 if (varRow->end == start1Based)
     fprintf(self->f, "%s:%u\t", varRow->chrom, start1Based);
+else if (start1Based > varRow->end)
+    fprintf(self->f, "%s:%u-%u\t", varRow->chrom, varRow->end, start1Based);
 else
     fprintf(self->f, "%s:%u-%u\t", varRow->chrom, start1Based, varRow->end);
 }
@@ -135,24 +137,34 @@ else
 }
 
 static void afVepPrintPredictions(struct annoFormatVep *self, struct annoRow *gpvRow,
-				  struct gpFx *gpFx)
+				  struct gpFx *gpFx, boolean isInsertion)
 /* Print VEP columns computed by annoGratorGpVar (or placeholders) */
 {
-// variant allele used to calculate the consequence -- need to add to gpFx I guess
+// variant allele used to calculate the consequence
+// For upstream/downstream variants, gpFx leaves allele empty which I think is appropriate,
+// but VEP uses non-reference allele... #*** can we determine that here?
 fprintf(self->f, "%s\t", gpFx->allele);
 // ID of affected gene
 afVepPrintGene(self, gpvRow);
 // ID of feature
-fprintf(self->f, "%s\t", gpFx->so.transcript);
+fprintf(self->f, "%s\t", gpFx->transcript);
 // type of feature {Transcript, RegulatoryFeature, MotifFeature}
 fputs("Transcript\t", self->f);
 // consequence: SO term e.g. splice_region_variant
-fprintf(self->f, "%s\t", soTermToString(gpFx->so.soNumber));
-if (gpFxIsCodingChange(gpFx))
+fprintf(self->f, "%s\t", soTermToString(gpFx->soNumber));
+if (gpFx->detailType == codingChange)
     {
-    struct codingChange *change = &(gpFx->so.sub.codingChange);
-    fprintf(self->f, "%u\t", change->cDnaPosition+1);
-    fprintf(self->f, "%u\t", change->cdsPosition+1);
+    struct codingChange *change = &(gpFx->details.codingChange);
+    if (isInsertion)
+	{
+	fprintf(self->f, "%u-%u\t", change->cDnaPosition, change->cDnaPosition+1);
+	fprintf(self->f, "%u-%u\t", change->cdsPosition, change->cdsPosition+1);
+	}
+    else
+	{
+	fprintf(self->f, "%u\t", change->cDnaPosition+1);
+	fprintf(self->f, "%u\t", change->cdsPosition+1);
+	}
     fprintf(self->f, "%u\t", change->pepPosition+1);
     char *earlyStop = strchr(change->aaNew, 'Z');
     if (earlyStop)
@@ -165,7 +177,16 @@ if (gpFxIsCodingChange(gpFx))
     fprintf(self->f, "%s/%s\t", change->aaOld, change->aaNew);
     fprintf(self->f, "%s/%s\t", change->codonOld, change->codonNew);
     }
-//#*** need a case for non-coding transcript changes -- put in cDnaPosition + 4 placeholders
+else if (gpFx->detailType == nonCodingExon)
+    {
+    int cDnaPosition = gpFx->details.nonCodingExon.cDnaPosition;
+    if (isInsertion)
+	fprintf(self->f, "%u-%u\t", cDnaPosition, cDnaPosition+1);
+    else
+	fprintf(self->f, "%u\t", cDnaPosition+1);
+    // Coding effect columns (except for cDnaPosition) are N/A:
+    afVepPrintPlaceholders(self->f, 4);
+    }
 else
     // Coding effect columns are N/A:
     afVepPrintPlaceholders(self->f, 5);
@@ -273,7 +294,7 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     gotExtra = TRUE;
     }
 // VEP automatically adds DISTANCE for upstream/downstream variants
-if (gpFx->so.soNumber == upstream_gene_variant || gpFx->so.soNumber == downstream_gene_variant)
+if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene_variant)
     {
     if (gotExtra)
 	fputc(';', self->f);
@@ -284,6 +305,27 @@ if (gpFx->so.soNumber == upstream_gene_variant || gpFx->so.soNumber == downstrea
 	distance = varRow->start - gpvRow->end;
     fprintf(self->f, "DISTANCE=%d", distance);
     gotExtra = TRUE;
+    }
+boolean includeExonNumber = TRUE;
+if (includeExonNumber)
+    {
+    // Add Exon or intron number if applicable
+    enum detailType deType = gpFx->detailType;
+    int exonNum = -1;
+    if (deType == codingChange)
+	exonNum = gpFx->details.codingChange.exonNumber;
+    else if (deType == nonCodingExon)
+	exonNum = gpFx->details.nonCodingExon.exonNumber;
+    else if (deType == intron)
+	exonNum = gpFx->details.intron.intronNumber;
+    if (exonNum >= 0)
+	{
+	if (gotExtra)
+	    fputc(';', self->f);
+	char *exonCount = ((char **)(gpvRow->data))[7];
+	fprintf(self->f, "%s=%d/%s", (deType == intron ? "INTRON" : "EXON"), exonNum+1, exonCount);
+	gotExtra = TRUE;
+	}
     }
 if (!gotExtra)
     afVepPrintPlaceholders(self->f, 0);
@@ -309,7 +351,8 @@ static void afVepPrintOneLine(struct annoFormatVep *self, struct annoStreamRows 
 struct gpFx *gpFx = annoGratorGpVarGpFxFromRow(self->config->gpVarSource, gpvRow, self->lm);
 afVepLmCleanup(self);
 afVepPrintNameAndLoc(self, varData->rowList);
-afVepPrintPredictions(self, gpvRow, gpFx);
+boolean isInsertion = (varData->rowList->start == varData->rowList->end);
+afVepPrintPredictions(self, gpvRow, gpFx, isInsertion);
 afVepPrintExistingVar(self, gratorData, gratorCount);
 afVepPrintExtras(self, varData->rowList, gpvRow, gpFx, gratorData, gratorCount);
 fputc('\n', self->f);

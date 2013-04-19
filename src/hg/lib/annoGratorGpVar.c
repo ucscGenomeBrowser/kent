@@ -29,15 +29,16 @@ static char *aggvAutoSqlStringStart =
 static char *aggvAutoSqlStringEnd =
 "string  allele;             \"Allele used to predict functional effect\""
 "string  transcript;         \"ID of affected transcript\""
-"uint    soNumber;           \"Sequence Ontology Number \" "
-"string  soOther0;           \"Ancillary detail 0\""
-"string  soOther1;           \"Ancillary detail 1\""
-"string  soOther2;           \"Ancillary detail 2\""
-"string  soOther3;           \"Ancillary detail 3\""
-"string  soOther4;           \"Ancillary detail 4\""
-"string  soOther5;           \"Ancillary detail 5\""
-"string  soOther6;           \"Ancillary detail 6\""
-"string  soOther7;           \"Ancillary detail 7\""
+"uint    soNumber;           \"Sequence Ontology Number \""
+"uint    detailType;         \"gpFx detail type (1=codingChange, 2=nonCodingExon, 3=intron)\""
+"string  detail0;            \"detail column (per detailType) 0\""
+"string  detail1;            \"detail column (per detailType) 1\""
+"string  detail2;            \"detail column (per detailType) 2\""
+"string  detail3;            \"detail column (per detailType) 3\""
+"string  detail4;            \"detail column (per detailType) 4\""
+"string  detail5;            \"detail column (per detailType) 5\""
+"string  detail6;            \"detail column (per detailType) 6\""
+"string  detail7;            \"detail column (per detailType) 7\""
 ")";
 
 struct asObject *annoGpVarAsObj(struct asObject *sourceAsObj)
@@ -87,54 +88,43 @@ return lmCloneString(lm, buffer);
 }
 
 static void aggvStringifyGpFx(char **words, struct gpFx *effect, struct lm *lm)
-// turn gpFx structure into a list of words
+// turn gpFx structure into array of words
 {
 int count = 0;
 
 words[count++] = lmCloneString(lm, effect->allele);
-words[count++] = lmCloneString(lm, blankIfNull(effect->so.transcript));
-words[count++] = uintToString(lm, effect->so.soNumber);
+words[count++] = lmCloneString(lm, blankIfNull(effect->transcript));
+words[count++] = uintToString(lm, effect->soNumber);
+words[count++] = uintToString(lm, effect->detailType);
+int gpFxNumCols = 4;
 
-struct codingChange *cc = NULL;
-switch(effect->so.soNumber)
+if (effect->detailType == intron)
+    words[count++] = uintToString(lm, effect->details.intron.intronNumber);
+else if (effect->detailType == nonCodingExon)
     {
-    case intron_variant:
-	words[count++] = uintToString(lm, effect->so.sub.intron.intronNumber);
-	break;
+    words[count++] = uintToString(lm, effect->details.nonCodingExon.exonNumber);
+    words[count++] = uintToString(lm, effect->details.nonCodingExon.cDnaPosition);
+    }
+else if (effect->detailType == codingChange)
+    {
+    struct codingChange *cc = &(effect->details.codingChange);
+    words[count++] = uintToString(lm, cc->exonNumber);
+    words[count++] = uintToString(lm, cc->cDnaPosition);
+    words[count++] = uintToString(lm, cc->cdsPosition);
+    words[count++] = uintToString(lm, cc->pepPosition);
+    words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->aaOld)));
+    words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->aaNew)));
+    words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->codonOld)));
+    words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->codonNew)));
+    }
+else if (effect->detailType != none)
+    errAbort("annoGratorGpVar: unknown effect type %d", effect->detailType);
 
-    case inframe_deletion:
-    case inframe_insertion:
-    case frameshift_variant:
-    case synonymous_variant:
-    case missense_variant:
-    case stop_gained:
-	cc = &(effect->so.sub.codingChange);
-	words[count++] = uintToString(lm, cc->exonNumber);
-	words[count++] = uintToString(lm, cc->cDnaPosition);
-	words[count++] = uintToString(lm, cc->cdsPosition);
-	words[count++] = uintToString(lm, cc->pepPosition);
-	words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->aaOld)));
-	words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->aaNew)));
-	words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->codonOld)));
-	words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->codonNew)));
-	break;
+// Add max number of columns added in any if clause above
+gpFxNumCols += 8;
 
-    default:
-	// write out ancillary information
-	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther0));
-	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther1));
-	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther2));
-	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther3));
-	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther4));
-	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther5));
-	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther6));
-	words[count++] = lmCloneString(lm, blankIfNull(effect->so.sub.generic.soOther7));
-	break;
-    };
-
-int needWords = sizeof(effect->so.sub.generic) / sizeof(char *) + 1;
-while (count < needWords)
-    words[count++] = lmCloneString(lm, "");
+while (count < gpFxNumCols)
+    words[count++] = "";
 }
 
 struct gpFx *annoGratorGpVarGpFxFromRow(struct annoStreamer *sSelf, struct annoRow *row,
@@ -150,42 +140,32 @@ struct annoGrator *gSelf = (struct annoGrator *)sSelf;
 // get gpFx words which follow internal source's words:
 char **words = (char **)(row->data);
 int count = gSelf->mySource->numCols;
+
 effect->allele = lmCloneString(lm, words[count++]);
-effect->so.transcript = lmCloneString(lm, words[count++]);
-effect->so.soNumber = atol(words[count++]);
-switch(effect->so.soNumber)
+effect->transcript = lmCloneString(lm, words[count++]);
+effect->soNumber = atol(words[count++]);
+effect->detailType = atol(words[count++]);
+
+if (effect->detailType == intron)
+    effect->details.intron.intronNumber = atol(words[count++]);
+else if (effect->detailType == nonCodingExon)
     {
-    case intron_variant:
-	effect->so.sub.intron.intronNumber = atol(words[count++]);
-	break;
-
-    case inframe_deletion:
-    case inframe_insertion:
-    case frameshift_variant:
-    case synonymous_variant:
-    case missense_variant:
-    case stop_gained:
-	effect->so.sub.codingChange.exonNumber = atol(words[count++]);
-	effect->so.sub.codingChange.cDnaPosition = atol(words[count++]);
-	effect->so.sub.codingChange.cdsPosition = atol(words[count++]);
-	effect->so.sub.codingChange.pepPosition = atol(words[count++]);
-	effect->so.sub.codingChange.aaOld = lmCloneString(lm, words[count++]);
-	effect->so.sub.codingChange.aaNew = lmCloneString(lm, words[count++]);
-	effect->so.sub.codingChange.codonOld = lmCloneString(lm, words[count++]);
-	effect->so.sub.codingChange.codonNew = lmCloneString(lm, words[count++]);
-	break;
-
-    default:
-	effect->so.sub.generic.soOther0 = lmCloneString(lm, words[count++]);
-	effect->so.sub.generic.soOther1 = lmCloneString(lm, words[count++]);
-	effect->so.sub.generic.soOther2 = lmCloneString(lm, words[count++]);
-	effect->so.sub.generic.soOther3 = lmCloneString(lm, words[count++]);
-	effect->so.sub.generic.soOther4 = lmCloneString(lm, words[count++]);
-	effect->so.sub.generic.soOther5 = lmCloneString(lm, words[count++]);
-	effect->so.sub.generic.soOther6 = lmCloneString(lm, words[count++]);
-	effect->so.sub.generic.soOther7 = lmCloneString(lm, words[count++]);
-	break;
+    effect->details.nonCodingExon.exonNumber = atol(words[count++]);
+    effect->details.nonCodingExon.cDnaPosition = atol(words[count++]);
     }
+else if (effect->detailType == codingChange)
+    {
+    effect->details.codingChange.exonNumber = atol(words[count++]);
+    effect->details.codingChange.cDnaPosition = atol(words[count++]);
+    effect->details.codingChange.cdsPosition = atol(words[count++]);
+    effect->details.codingChange.pepPosition = atol(words[count++]);
+    effect->details.codingChange.aaOld = lmCloneString(lm, words[count++]);
+    effect->details.codingChange.aaNew = lmCloneString(lm, words[count++]);
+    effect->details.codingChange.codonOld = lmCloneString(lm, words[count++]);
+    effect->details.codingChange.codonNew = lmCloneString(lm, words[count++]);
+    }
+else if (effect->detailType != none)
+    errAbort("annoGratorGpVar: unknown effect type %d", effect->detailType);
 return effect;
 }
 
@@ -194,22 +174,23 @@ static struct annoRow *aggvEffectToRow(struct annoGratorGpVar *self, struct gpFx
 // convert a single genePred annoRow and gpFx record to an augmented genePred annoRow;
 // if cdsOnly and gpFx is not in CDS, return NULL;
 {
-if (self->cdsOnly && !gpFxIsCodingChange(effect))
+if (self->cdsOnly &&
+    ! (effect->detailType == codingChange && effect->soNumber != synonymous_variant))
     return NULL;
-char **wordsOut;
-char **wordsIn = (char **)rowIn->data;
 struct annoGrator *gSelf = &(self->grator);
 struct annoStreamer *sSelf = &(gSelf->streamer);
-
 assert(sSelf->numCols > gSelf->mySource->numCols);
+
+char **wordsOut;
 lmAllocArray(self->lm, wordsOut, sSelf->numCols);
 
 // copy the genePred fields over
-memcpy(wordsOut, wordsIn, sizeof(char *) * gSelf->mySource->numCols);
+int gpColCount = gSelf->mySource->numCols;
+char **wordsIn = (char **)rowIn->data;
+memcpy(wordsOut, wordsIn, sizeof(char *) * gpColCount);
 
 // stringify the gpFx structure 
-int count = gSelf->mySource->numCols;
-aggvStringifyGpFx(&wordsOut[count], effect, callerLm);
+aggvStringifyGpFx(&wordsOut[gpColCount], effect, callerLm);
 
 return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
 			      wordsOut, sSelf->numCols, callerLm);

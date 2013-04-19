@@ -9,7 +9,39 @@ struct gpFx
     {
     struct gpFx *next;
     char *allele;		// Allele sequence used to determine functional effect
-    struct soCall so;		// Sequence Ontology ID of effect and plus associated data
+    char *transcript;		// ID of feature affected by this call
+    uint soNumber;		// Sequence Ontology Number of effect
+    enum detailType		// This tells which value to use for 'union details' below
+	{
+	unknown,		// Catch uninitialized (except for needMem) use
+	codingChange,		// (non)synonymous variant, deletions in CDS
+	nonCodingExon,		// variant in non-coding gene or UTR of coding gene
+	intron,			// intron_variant
+	none			// variant for which soNumber is enough (e.g. up/downstream)
+	} detailType;
+    union details
+	{
+	struct codingChange     // (non)synonymous variant, deletions in CDS
+	    {
+	    uint exonNumber;	// 0-based exon number (from genePred, beware false "introns")
+	    uint cDnaPosition;	// offset of variant in transcript cDNA
+	    uint cdsPosition;	// offset of variant from transcript's cds start
+	    uint pepPosition;	// offset of variant in translated product
+	    char *aaOld;	// peptides, before change by variant (starting at pepPos)
+	    char *aaNew;	// peptides, changed by variant
+	    char *codonOld;	// codons, before change by variant (starting at cdsPos)
+	    char *codonNew;	// codons, changed by variant
+	    } codingChange;
+	struct nonCodingExon	// variant in non-coding gene or UTR of coding gene
+	    {
+	    uint exonNumber;	// 0-based exon number (from genePred, beware false "introns")
+	    uint cDnaPosition;	// offset of variant in transcript cDNA
+	    } nonCodingExon;
+	struct intron 		// intron_variant
+	    {
+	    uint intronNumber;	// 0-based intron number (from genePred, beware false "introns")
+	    } intron;
+	} details;
     };
 
 struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
@@ -18,12 +50,5 @@ struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
 
 // number of bases up or downstream that we flag
 #define GPRANGE 5000
-
-#define gpFxIsCodingChange(gpfx) (gpfx->so.soNumber == inframe_deletion || \
-				  gpfx->so.soNumber == inframe_insertion || \
-				  gpfx->so.soNumber == frameshift_variant || \
-				  gpfx->so.soNumber == synonymous_variant || \
-				  gpfx->so.soNumber == missense_variant || \
-				  gpfx->so.soNumber == stop_gained)
 
 #endif /* GPFX_H */
