@@ -33,19 +33,27 @@ struct asTypeInfo asTypes[] = {
     {t_simple,  "simple",  FALSE, FALSE, "longblob",          "!error!",       "Simple",   "Simple",   NULL,   "TextField"},
 };
 
+struct asTypeInfo *asTypeFindLow(char *name)
+/* Return asType for a low level type of given name.  (Low level because may be decorated 
+ * with array or pointer  stuff at a higher level).  Returns NULL if not found. */
+{
+int i;
+for (i=0; i<ArraySize(asTypes); ++i)
+    {
+    if (sameWord(asTypes[i].name, name))
+	return &asTypes[i];
+    }
+return NULL;
+}
+
 static struct asTypeInfo *findLowType(struct tokenizer *tkz)
 /* Return low type info.  Squawk and die if s doesn't
  * correspond to one. */
 {
-char *s = tkz->string;
-int i;
-for (i=0; i<ArraySize(asTypes); ++i)
-    {
-    if (sameWord(asTypes[i].name, s))
-	return &asTypes[i];
-    }
-tokenizerErrAbort(tkz, "Unknown type '%s'", s);
-return NULL;
+struct asTypeInfo *type = asTypeFindLow(tkz->string);
+if (type == NULL)
+    tokenizerErrAbort(tkz, "Unknown type '%s'", tkz->string);
+return type;
 }
 
 static void sqlSymDef(struct asColumn *col, struct dyString *dy)

@@ -53,6 +53,10 @@ struct asTypeInfo
     char *djangoName;              /* Django type name */
     };
 
+struct asTypeInfo *asTypeFindLow(char *name);
+/* Return asType for a low level type of given name.  (Low level because may be decorated 
+ * with array or pointer  stuff at a higher level).  Returns NULL if not found. */
+
 struct asIndex
 /* Information about an index */
     {

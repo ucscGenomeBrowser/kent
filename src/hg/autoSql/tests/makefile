@@ -69,6 +69,13 @@ index: mkout
 	${AUTOSQL} input/index.as output/index
 	${DIFF} expected/index.sql output/index.sql
 
+# bin
+binTest: mkout
+	${AUTOSQL} -addBin input/binTest.as output/binTest
+	${DIFF} expected/binTest.sql output/binTest.sql
+	${DIFF} expected/binTest.c output/binTest.c
+	${DIFF} expected/binTest.h output/binTest.h
+
 
 # testHarness
 testHarness: output/mainTest.o output/simpleTest.o testHarness.o

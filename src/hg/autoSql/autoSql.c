@@ -20,6 +20,7 @@
 
 
 boolean withNull = FALSE;
+boolean addBin = FALSE;
 boolean makeJson = FALSE;
 boolean makeDjango = FALSE;
 boolean defaultZeros = FALSE;
@@ -38,6 +39,7 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "options:\n"
          "  -dbLink - optionally generates code to execute queries and\n"
          "            updates of the table.\n"
+	 "  -addBin - Add an initial bin field and index it as (chrom,bin)\n"
 	 "  -withNull - optionally generates code and .sql to enable\n"
          "              applications to accept and load data into objects\n"
 	 "              with potential 'missing data' (NULL in SQL)\n"
@@ -49,6 +51,7 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
 
 static struct optionSpec optionSpecs[] = {
     {"dbLink", OPTION_BOOLEAN},
+    {"addBin", OPTION_BOOLEAN},
     {"withNull", OPTION_BOOLEAN},
     {"defaultZeros", OPTION_BOOLEAN},
     {"json", OPTION_BOOLEAN},
@@ -135,11 +138,19 @@ for (col = table->columnList; col != NULL; col = col->next)
 	fprintf(f, ")");
 	}
     }
+if (addBin && asColumnFind(table, "chrom") != NULL && asColumnFind(table, "bin") != NULL)
+    {
+    if (gotIndex)
+	fprintf(f, ",\n");
+    fprintf(f, "    INDEX (chrom,bin)");
+    gotIndex = TRUE;
+    }
 
 if (!gotIndex)
     fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
 else
     fprintf(f, "\n");
+
 fprintf(f, ");\n");
 }
 
@@ -1907,6 +1918,27 @@ if (makeJson)
 verbose(2, "Made %s object\n", obj->name);
 }
 
+void addBinToChromTables(struct asObject *asList)
+/* Add bin as first field to tables with a chrom field. */
+{
+int addCount = 0;   /* Count how many additions we make */
+struct asObject *as;
+for (as = asList; as != NULL; as = as->next)
+    {
+    if (asColumnFind(as, "chrom") && !asColumnFind(as, "bin"))
+        {
+	++addCount;
+	struct asColumn *col;
+	AllocVar(col);
+	col->name = cloneString("bin");
+	col->comment = cloneString("Bin number for browser speedup");
+	col->lowType = asTypeFindLow("uint");
+	slAddHead(&as->columnList, col);
+	}
+    }
+if (addCount == 0)
+    errAbort("No chrom fields, which are needed for -addBin option");
+}
 
 int main(int argc, char *argv[])
 {
@@ -1925,6 +1957,7 @@ boolean doDbLoadAndSave = FALSE;
 
 optionInit(&argc, argv, optionSpecs);
 doDbLoadAndSave = optionExists("dbLink");
+addBin = optionExists("addBin");
 withNull = optionExists("withNull");
 defaultZeros = optionExists("defaultZeros");
 makeJson = optionExists("json");
@@ -1934,6 +1967,8 @@ if (argc != 3)
     usage();
 
 objList = asParseFile(argv[1]);
+if (addBin)
+    addBinToChromTables(objList);
 outRoot = argv[2];
 /* don't embed directories in files */
 splitPath(outRoot, NULL, outTail, NULL);
