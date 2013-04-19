@@ -14397,24 +14397,11 @@ type view
 label Minus signal
 description Graphs the base-by-base density of tags on the minus strand
 
-
 term Peaks
 tag PKS
 type view
 label Peaks
 description Regions of enriched signal in experiment
-
-term PeakSeqConservPeaks
-tag PSCPEAKS
-type view
-label PeakSeq Conserved Peaks
-description Regions of conserved enriched signal in experiment performed by PeakSeq
-
-term PeakSeqOptimalPeak
-tag PSOPEAKS
-type view
-label PeakSeq Optimal Peaks
-description Regions of optimal enriched signal in experiment performed by PeakSeq
 
 term pepMapFt
 tag PEPMAPFT
