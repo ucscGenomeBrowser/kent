@@ -6,12 +6,12 @@
 ##
 track wgEncodeGencodeV15
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Genes V15
 longLabel Gene Annotations from ENCODE/GENCODE Version 15
 group genes
 dragAndDrop subTracks
-priority 34.08
+priority 34.07
 visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA

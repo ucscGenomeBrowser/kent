@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeV13
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Genes V13
 longLabel Gene Annotations from ENCODE/GENCODE Version 13
 group genes
