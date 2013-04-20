@@ -14,13 +14,13 @@ table edwHost
     (
     uint id;            "Autoincremented host id"
     string name;        "Name (before DNS lookup)"
-    bigint lastOkTime;   "Last time host was ok in seconds since 1970"
-    bigint lastNotOkTime;  "Last time host was not ok in seconds since 1970"
-    bigint firstAdded;     "Time host was first seen"
+    bigInt lastOkTime;   "Last time host was ok in seconds since 1970"
+    bigInt lastNotOkTime;  "Last time host was not ok in seconds since 1970"
+    bigInt firstAdded;     "Time host was first seen"
     lstring errorMessage; "If non-empty contains last error message from host. If empty host is ok"
-    bigint openSuccesses;  "Number of times files have been opened ok from this host"
-    bigint openFails;      "Number of times files have failed to open from this host"
-    bigint historyBits; "Open history with most recent in least significant bit. 0 for connection failed, 1 for success"
+    bigInt openSuccesses;  "Number of times files have been opened ok from this host"
+    bigInt openFails;      "Number of times files have failed to open from this host"
+    bigInt historyBits; "Open history with most recent in least significant bit. 0 for connection failed, 1 for success"
     )
 
 table edwSubmitDir
@@ -29,13 +29,13 @@ table edwSubmitDir
     uint id;            "Autoincremented id"
     lstring url;        "Web-mounted directory. Includes protocol, host, and final '/'"
     uint hostId;        "Id of host it's on"
-    bigint lastOkTime;   "Last time submit dir was ok in seconds since 1970"
-    bigint lastNotOkTime;  "Last time submit dir was not ok in seconds since 1970"
-    bigint firstAdded;     "Time submit dir was first seen"
+    bigInt lastOkTime;   "Last time submit dir was ok in seconds since 1970"
+    bigInt lastNotOkTime;  "Last time submit dir was not ok in seconds since 1970"
+    bigInt firstAdded;     "Time submit dir was first seen"
     lstring errorMessage; "If non-empty contains last error message from dir. If empty dir is ok"
-    bigint openSuccesses;  "Number of times files have been opened ok from this dir"
-    bigint openFails;      "Number of times files have failed to open from this dir"
-    bigint historyBits; "Open history with most recent in least significant bit. 0 for upload failed, 1 for success"
+    bigInt openSuccesses;  "Number of times files have been opened ok from this dir"
+    bigInt openFails;      "Number of times files have failed to open from this dir"
+    bigInt historyBits; "Open history with most recent in least significant bit. 0 for upload failed, 1 for success"
     )
 
 table edwFile
@@ -46,10 +46,10 @@ table edwFile
     uint submitDirId;           "Links to id in submitDir table"
     lstring submitFileName;     "File name in submit relative to submit dir"
     lstring edwFileName;        "File name in big data warehouse relative to edw root dir"
-    bigint startUploadTime;     "Time when upload started - 0 if not started"
-    bigint endUploadTime;       "Time when upload finished - 0 if not finished"
-    bigint updateTime;          "Update time (on system it was uploaded from)"
-    bigint size;                "File size"
+    bigInt startUploadTime;     "Time when upload started - 0 if not started"
+    bigInt endUploadTime;       "Time when upload finished - 0 if not finished"
+    bigInt updateTime;          "Update time (on system it was uploaded from)"
+    bigInt size;                "File size in manifest"
     char[32] md5;               "md5 sum of file contents"
     lstring tags;               "CGI encoded name=val pairs from manifest"
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
@@ -62,14 +62,17 @@ table edwSubmit
     (
     uint id;                 "Autoincremented submit id"
     lstring url;              "Url to validated.txt format file. We copy this file over and give it a fileId if we can." 
-    bigint startUploadTime;   "Time at start of submit"
-    bigint endUploadTime;     "Time at end of upload - 0 if not finished"
+    bigInt startUploadTime;   "Time at start of submit"
+    bigInt endUploadTime;     "Time at end of upload - 0 if not finished"
     uint userId;        "Connects to user table id field"
     uint submitFileId;       "Points to validated.txt file for submit."
     uint submitDirId;    "Points to the submitDir"
     uint fileCount;          "Number of files that will be in submit if it were complete."
     uint oldFiles;           "Number of files in submission that were already in warehouse."
     uint newFiles;           "Number of files in submission that are newly uploaded."
+    bigInt byteCount;        "Total bytes in submission including old and new"
+    bigInt oldBytes;         "Bytes in old files."
+    bigInt newBytes;         "Bytes in new files (so far)."
     lstring errorMessage; "If non-empty contains last error message. If empty submit is ok"
     )
 
@@ -93,7 +96,8 @@ table edwAssembly
     string name;  "Some human readable name to distinguish this from other collections of DNA"
     string ucscDb;  "Which UCSC database (mm9?  hg19?) associated with it."
     uint twoBitId;  "File ID of associated twoBit file"
-    bigInt baseCount;  "Count of bases"
+    bigInt baseCount;  "Count of bases including N's"
+    bigInt realBaseCount;   "Count of non-N bases in assembly"
     )
 
 table edwValidFile
@@ -120,28 +124,6 @@ table edwValidFile
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
     )
 
-table edwQaAgent
-"A program plus parameters with a standard command line that gets run on new files"
-    (
-    uint id;         "ID of this agent"
-    string name;     "Name of agent"
-    string program;  "Program command line name"
-    string options; "Program command line options"
-    string deprecated; "If non-empty why it isn't run any more."
-    )
-
-table edwQaRun
-"Records a bit of information from each QA run we've done on files."
-    (
-    uint id;          "ID of this run"
-    uint agentId;     "ID of agent that made this run"
-    uint startFileId; "ID of file we started on."
-    uint endFileId;   "One past last file we did QA on"
-    bigint startTime; "Start time in seconds since 1970"
-    bigint endTime;   "Start time in seconds since 1970"
-    lstring stderr;   "The output to stderr of the run"
-    )
-
 table edwQaEnrichTarget
 "A target for our enrichment analysis."
     (
@@ -165,3 +147,36 @@ table edwQaEnrich
     double uniqEnrich;  "coverage/sampleCoverage"
     )
 
+table edwQaPairSampleOverlap
+"A comparison of the amount of overlap between two samples that cover ~0.1% to 10% of target."
+    (
+    uint id;    "Id of this qa pair"
+    uint elderFileId;   "Id of elder (smaller fileId) in correlated pair"
+    uint youngerFileId;  "Id of younger (larger fileId) in correlated pair"
+    bigInt elderSampleBases;   "Number of bases in elder sample"
+    bigInt youngerSampleBases; "Number of bases in younger sample"
+    bigInt sampleOverlapBases; "Number of bases that overlap between younger and elder sample"
+    double sampleSampleEnrichment; "Amount samples overlap more than expected."
+    )
+
+table edwQaPairCorrelation
+"A correlation between two files of the same type."
+    (
+    uint id;    "Id of this correlation pair"
+    uint elderFileId;   "Id of elder (smaller fileId) in correlated pair"
+    uint youngerFileId;  "Id of younger (larger fileId) in correlated pair"
+    double pearsonInEnriched;  "Pearson's R inside enriched areas where there is overlap"
+    double pearsonOverall; "Pearson's R over all places where both have data"
+    double pearsonClipped; "Pearson's R clipped at two standard deviations up from the mean" 
+    )
+
+table edwJob
+"A job to be run asynchronously and not too many all at once."
+    (
+    uint id;    "Job id"
+    lstring commandLine; "Command line of job"
+    bigInt startTime; "Start time in seconds since 1970"
+    bigInt endTime; "End time in seconds since 1970"
+    lstring stderr; "The output to stderr of the run - may be nonembty even with success"
+    int returnCode; "The return code from system command - 0 for success"
+    )

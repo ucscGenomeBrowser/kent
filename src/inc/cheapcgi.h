@@ -86,6 +86,9 @@ char *cgiServerPort();
 char *cgiServerNamePort();
 /* Return name of server with port if different than 80 */
 
+boolean cgiServerHttpsIsOn();
+/* Return true if HTTPS is on */
+
 char *cgiRemoteAddr();
 /* Return IP address of client (or "unknown"). */
 
@@ -514,7 +517,7 @@ char *javaScriptLiteralEncode(char *inString);
 struct cgiParsedVars
 /* A parsed out cgi variable string */
     {
-    struct tagsFromCgi *next;	/* In case want to make a list of these. */
+    struct cgiParsedVars *next;	/* In case want to make a list of these. */
     char *stringBuf;		/* Holds strings inside vars. */
     struct cgiVar *list;    /* List of variables. */
     struct hash *hash;	    /* Keyed by varName, value is just value, not cgiVar. */

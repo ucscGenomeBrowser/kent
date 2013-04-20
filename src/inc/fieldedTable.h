@@ -34,9 +34,11 @@ void fieldedTableFree(struct fieldedTable **pTable);
 struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id);
 /* Create a new row and add it to table.  Return row. */
 
-struct fieldedTable *fieldedTableFromTabFile(char *url, char *requiredFields[], int requiredCount);
+struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *requiredFields[], int requiredCount);
 /* Read table from tab-separated file with a #header line that defines the fields.  Ensures
- * all requiredFields (if any) are present. */
+ * all requiredFields (if any) are present.  The url is just used for error reporting and 
+ * should be the same as fileName for most purposes.  This is used by edwSubmit though which
+ * first copies to a local file, and we want to report errors from the url. */
 
 #endif /* FIELDEDTABLE_H */
 

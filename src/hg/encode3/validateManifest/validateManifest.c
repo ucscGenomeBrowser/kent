@@ -11,7 +11,7 @@
 #include "encode3/encode3Valid.h"
 #include "gff.h"
 
-char *version = "1.2";
+char *version = "1.4";
 char *workingDir = ".";
 char *encValData = "encValData";
 char *ucscDb = NULL;
@@ -264,21 +264,29 @@ char cmdLine[1024];
 int mismatches = 7;  // TODO this is totally arbitrary right now
 
 // run validator on BAM even if the twoBit is not available.
-boolean quicky = fileExists(twoBit);  // QUICK-run by removing -genome and mismatches and stuff.
-if (quicky)
+boolean hasTwoBit = fileExists(twoBit); 
+if (hasTwoBit)
+    {
+    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", 
+	validateFilesPath, mismatches, chromInfo, twoBit, fileName);
+    }
+else
     {
     // simple existence check for the corresponding .bam.bai since without -genome=, 
     //  vf will not even open the bam index.
+    /* I thought this was good to check anyway since labs should be using bam with index in a hub, 
+	but Eurie seems to think not, so commenting out for now.
     char *bamBai = getBamBai(fileName);
     if (!fileExists(bamBai))
 	{
 	warn("Bam Index file missing: %s. Use SAM Tools to create.", bamBai);
 	return FALSE;
 	}
-    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -chromInfo=%s %s", validateFilesPath, chromInfo, fileName);
+    */
+    // QUICK-run by removing -genome and mismatches and stuff.
+    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -chromInfo=%s %s", 
+	validateFilesPath, chromInfo, fileName);
     }
-else
-    safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=bam -mismatches=%d -chromInfo=%s -genome=%s %s", validateFilesPath, mismatches, chromInfo, twoBit, fileName);
 return runCmdLine(cmdLine);
 }
 
@@ -451,10 +459,10 @@ if (fileExists("validated.txt"))  // read in the old validated.txt file to save 
 int mUcscDbIdx = -1;    // optional field ucsc_db
 int mFileNameIdx = -1;
 int mFormatIdx = -1;
-int mOutputType = -1;
-int mExperiment = -1;
-int mReplicate = -1;
-int mEnrichedIn = -1;
+int mOutputTypeIdx = -1;
+int mExperimentIdx = -1;
+int mReplicateIdx = -1;
+int mEnrichedInIdx = -1;
 int i = 0;
 // find field numbers needed for required fields.
 for (i=0; i<mFieldCount; ++i)
@@ -466,25 +474,25 @@ for (i=0; i<mFieldCount; ++i)
     if (sameString(manifestFields->words[i], "format"))
 	mFormatIdx = i;
     if (sameString(manifestFields->words[i], "output_type"))
-	mOutputType = i;
+	mOutputTypeIdx = i;
     if (sameString(manifestFields->words[i], "experiment"))
-	mExperiment = i;
+	mExperimentIdx = i;
     if (sameString(manifestFields->words[i], "replicate"))
-	mReplicate = i;
+	mReplicateIdx = i;
     if (sameString(manifestFields->words[i], "enriched_in"))
-	mEnrichedIn = i;
+	mEnrichedInIdx = i;
     }
 if (mFileNameIdx == -1)
     errAbort("field file_name not found in manifest.txt");
 if (mFormatIdx == -1)
     errAbort("field format not found in manifest.txt");
-if (mOutputType == -1)
+if (mOutputTypeIdx == -1)
     errAbort("field output_type not found in manifest.txt");
-if (mExperiment == -1)
+if (mExperimentIdx == -1)
     errAbort("field experiment not found in manifest.txt");
-if (mReplicate == -1)
+if (mReplicateIdx == -1)
     errAbort("field replicate not found in manifest.txt");
-if (mEnrichedIn == -1)
+if (mEnrichedInIdx == -1)
     errAbort("field enriched_in not found in manifest.txt");
 
 // check if the fieldnames in old validated appear in the same order in manifest.txt
@@ -563,6 +571,8 @@ for(rec = manifestRecs; rec; rec = rec->next)
     uglyf("]\n");
     */
 
+    boolean fileIsValid = TRUE; // Default to valid until we know otherwise.
+
     // get file_name, size, datetime
     char *mFileName = rec->words[mFileNameIdx];
     if (mUcscDbIdx != -1)
@@ -570,15 +580,44 @@ for(rec = manifestRecs; rec; rec = rec->next)
 
     off_t mFileSize = 0;
     time_t mFileTime = 0;
-    char *mMd5Hex = NULL;
-    char *mValidKey = NULL;
-    if (!fileExists(mFileName))
+    char *mMd5Hex = "0";
+    char *mValidKey = "ERROR";
+
+    if (fileIsValid && !fileExists(mFileName))
 	{
+	fileIsValid = FALSE;
 	uglyf("ERROR: %s FILE NOT FOUND !!!\n", mFileName);
-	mValidKey = "ERROR";
-	mMd5Hex = "0";
 	}
-    else
+
+    // check experiment field
+    char *mExperiment = rec->words[mExperimentIdx];
+    if (fileIsValid)
+	{
+	if (!startsWith("ENCSR", mExperiment))
+	    {
+	    fileIsValid = FALSE;
+	    uglyf("ERROR: %s is not a valid value for the experiment field.  Must start with ENCSR.\n", mExperiment);
+	    }
+	}
+    
+    // check replicate field
+    char *mReplicate = rec->words[mReplicateIdx];
+    if (fileIsValid)
+	{
+	boolean smallNumber = FALSE;
+	int sl = strlen(mReplicate);
+	if (countLeadingDigits(mReplicate) == sl && sl < 3 && sl > 0)
+	    smallNumber = TRUE;
+       	if (!(startsWith("pooled", mReplicate) || startsWith("n/a", mReplicate) || smallNumber))
+	    {
+	    fileIsValid = FALSE;
+    	    uglyf("ERROR: %s is not a valid value for the experiment field.  Must be pooled or n/a or a small unsigned number.\n", mReplicate);
+	    }
+	}
+    
+
+
+    if (fileIsValid)
 	{
 
 	mFileSize = fileSize(mFileName);
@@ -652,14 +691,14 @@ for(rec = manifestRecs; rec; rec = rec->next)
 	    mValidKey = encode3CalcValidationKey(mMd5Hex, mFileSize);
 
 	    char *mFormat = rec->words[mFormatIdx];
-	    boolean fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
-
+	    fileIsValid = validateFile(mFileName, mFormat); // Call the validator on the file and format.
 	    if (!fileIsValid)
 		mValidKey = "ERROR";
 
 	    }
 
 	}
+
 
     uglyf("mFileName = %s size=%lld time=%ld md5=%s validKey=%s\n", mFileName, (long long)mFileSize, (long)mFileTime, mMd5Hex, mValidKey);
 

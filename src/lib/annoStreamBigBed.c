@@ -50,7 +50,8 @@ int fieldCount = bigBedIntervalToRow(self->nextInterval, streamer->chrom,
 				     self->startBuf, self->endBuf,
 				     self->row, streamer->numCols+1);
 if (fieldCount != streamer->numCols)
-    errAbort("annoStreamBigBed: expected %d columns, got %d", streamer->numCols, fieldCount);
+    errAbort("annoStreamBigBed %s: expected %d columns, got %d",
+	     streamer->name, streamer->numCols, fieldCount);
 self->nextInterval = self->nextInterval->next;
 return self->row;
 }
@@ -95,7 +96,7 @@ freeMem(self->endBuf);
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamBigBedNew(char *fileOrUrl, int maxItems)
+struct annoStreamer *annoStreamBigBedNew(char *fileOrUrl, struct annoAssembly *aa, int maxItems)
 /* Create an annoStreamer (subclass) object from a file or URL; if
  * maxItems is 0, all items from a query will be returned, otherwise
  * each query is limited to maxItems. */
@@ -105,7 +106,7 @@ struct asObject *asObj = bigBedAsOrDefault(bbi);
 struct annoStreamBigBed *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
-annoStreamerInit(streamer, asObj);
+annoStreamerInit(streamer, aa, asObj, fileOrUrl);
 streamer->rowType = arWords;
 streamer->setRegion = asbbSetRegion;
 streamer->nextRow = asbbNextRow;

@@ -27,6 +27,7 @@
 #include "hCommon.h"
 #include "trackDb.h"
 #include "wikiTrack.h"
+#include "genePred.h"
 #include "hgMaf.h"
 #if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
@@ -1811,6 +1812,15 @@ else
     return asObjectFromFields(dbTable, fieldList);
 }
 
+struct annoAssembly *getAnnoAssembly(char *db)
+/* Make annoAssembly for db. */
+{
+char *nibOrTwoBitDir = hDbDbNibPath(db);
+char twoBitPath[HDB_MAX_PATH_STRING];
+safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+return annoAssemblyNew(db, twoBitPath);
+}
+
 struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb, char *chrom)
 /* Figure out the source and type of data and make an annoStreamer. */
 {
@@ -1832,14 +1842,15 @@ if (isHubTrack(table))
 	   trackDbSettingOrDefault(tdb, "bigDataUrl", "-- doh, no bigDataUrl!"));
     errAbort("hgVarAnnogrator can't do hub track with type '%s'", tdb->type);
     }
+struct annoAssembly *assembly = getAnnoAssembly(db);
 if (startsWith("wig", tdb->type))
-    streamer = annoStreamWigDbNew(dataDb, dbTable, maxOutRows);
+    streamer = annoStreamWigDbNew(dataDb, dbTable, assembly, maxOutRows);
 else if (sameString("vcfTabix", tdb->type))
     {
     struct sqlConnection *conn = hAllocConn(db);
     char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
     hFreeConn(&conn);
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
     }
 else
     {
@@ -1850,51 +1861,10 @@ else
     else
 	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
     struct asObject *asObj = getAutoSqlForTable(db, dataDb, maybeSplitTable, tdb);
-    streamer = annoStreamDbNew(dataDb, maybeSplitTable, asObj);
+    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj);
     }
 return streamer;
 }
-
-boolean looksLikePgSnp(struct asObject *asObj)
-/* Return TRUE if this has characteristic column names of pgSnp. */
-//#*** Replace me with a general autoSql comparator!!
-{
-boolean gotChromStart = FALSE, gotChromEnd = FALSE, gotAlleleCount = FALSE, gotAlleleFreq = FALSE;
-struct asColumn *col;
-for (col = asObj->columnList;  col != NULL;  col = col->next)
-    {
-    if (sameString(col->name, "chromStart"))
-	gotChromStart = TRUE;
-    else if (sameString(col->name, "chromEnd"))
-	gotChromEnd = TRUE;
-    else if (sameString(col->name, "alleleCount"))
-	gotAlleleCount = TRUE;
-    else if (sameString(col->name, "alleleFreq"))
-	gotAlleleFreq = TRUE;
-    }
-return (gotChromStart && gotChromEnd && gotAlleleCount && gotAlleleFreq);
-}
-
-boolean looksLikeGenePred(struct asObject *asObj)
-/* Return TRUE if this has characteristic column names of genePred. */
-//#*** Replace me with a general autoSql comparator!!
-{
-boolean gotTxStart = FALSE, gotTxEnd = FALSE, gotCdsStart = FALSE, gotExonStarts = FALSE;
-struct asColumn *col;
-for (col = asObj->columnList;  col != NULL;  col = col->next)
-    {
-    if (sameString(col->name, "txStart"))
-	gotTxStart = TRUE;
-    else if (sameString(col->name, "txEnd"))
-	gotTxEnd = TRUE;
-    else if (sameString(col->name, "cdsStart"))
-	gotCdsStart = TRUE;
-    else if (sameString(col->name, "exonStarts"))
-	gotExonStarts = TRUE;
-    }
-return (gotTxStart && gotTxEnd && gotCdsStart && gotExonStarts);
-}
-
 
 struct annoGrator *gratorFromSource(char *db, struct sourceConfig *src, struct trackDb *tdb,
 				    char *chrom, struct annoStreamer *primary)
@@ -1910,11 +1880,15 @@ if (isCustomTrack(src->selTable))
 	errAbort("Can't find dbTableName for custom track %s", src->selTable);
     }
 if (startsWith("wig", tdb->type))
-    grator = annoGrateWigDbNew(dataDb, dbTable, maxOutRows);
+    {
+    struct annoAssembly *assembly = getAnnoAssembly(db);
+    grator = annoGrateWigDbNew(dataDb, dbTable, assembly, maxOutRows);
+    }
 else
     {
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
-    if (looksLikePgSnp(primary->asObj) && looksLikeGenePred(streamer->asObj))
+    if (asObjectsMatch(primary->asObj, pgSnpAsObj()) &&
+	asObjectsMatchFirstN(streamer->asObj, genePredAsObj(), 10))
 	grator = annoGratorGpVarNew(streamer, FALSE);
     else
 	grator = annoGratorNew(streamer);
@@ -1966,11 +1940,8 @@ for (src = queryConfig->sources;  src != NULL;  src = src->next)
     }
 slReverse(&gratorList);
 struct annoFormatter *formatter = formatterFromOutput(queryConfig);
-char *nibOrTwoBitDir = hDbDbNibPath(db);
-char twoBitPath[HDB_MAX_PATH_STRING];
-safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
-struct twoBitFile *tbf = twoBitOpen(twoBitPath);
-struct annoGratorQuery *agq = annoGratorQueryNew(db, NULL, tbf, primary, gratorList, formatter);
+struct annoAssembly *assembly = getAnnoAssembly(db);
+struct annoGratorQuery *agq = annoGratorQueryNew(assembly, primary, gratorList, formatter);
 if (sameString(regionType, hgvaRegionTypeRange))
     annoGratorQuerySetRegion(agq, chrom, start, end);
 annoGratorQueryExecute(agq);

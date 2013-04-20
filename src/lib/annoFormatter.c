@@ -24,3 +24,16 @@ if (pSelf == NULL)
 annoOptionFreeList(&((*pSelf)->options));
 freez(pSelf);
 }
+
+struct annoStreamRows *annoStreamRowsNew(struct annoStreamer *streamerList)
+/* Return an array of aS&R for each streamer in streamerList. */
+{
+int streamerCount = slCount(streamerList);
+struct annoStreamRows *data = NULL;
+AllocArray(data, streamerCount);
+struct annoStreamer *streamer = streamerList;
+int i = 0;
+for (;  i < streamerCount;  i++, streamer = streamer->next)
+    data[i].streamer = streamer;
+return data;
+}

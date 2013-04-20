@@ -45,8 +45,7 @@ struct ucscRetroInfo
     unsigned coverage;	/* % of bases that align to gene col31 */
     int label;	/* 1=pseudogene,-1 not pseudogene -2 expressed retroGene col32 */
     unsigned milliBad;	/* milliBad score, pseudogene aligned to genome col33 */
-/*    unsigned oldScore; */	/* another heuristic col34 */
-    int alignGapCount;	/* old simple intron count col34 */
+    int alignGapCount;	/* simple intron count col34 */
     int processedIntrons;	/* count of introns removed via retrotransposition col35 */
     int conservedSpliceSites;	/* conserved splice site count col36 */
     int maxOverlap;	/* largest overlap with another mrna col37 */

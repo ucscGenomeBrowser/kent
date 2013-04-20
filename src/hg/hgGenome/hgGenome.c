@@ -542,7 +542,6 @@ void dispatchLocation()
 {
 struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome, oldVars);
-setUdcCacheDir();
 cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
 conn = hAllocConn(database);
@@ -573,6 +572,7 @@ cgiSpoof(&argc, argv);
 // htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
+setUdcCacheDir();
 oldVars = hashNew(12);
 cart = cartForSession(hUserCookie(), excludeVars, oldVars);
 dispatchLocation();
