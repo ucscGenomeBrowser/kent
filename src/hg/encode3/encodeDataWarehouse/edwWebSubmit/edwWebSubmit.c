@@ -30,7 +30,7 @@ void logIn(struct sqlConnection *conn)
 printf("Welcome to the prototype ENCODE Data Warehouse submission site.<BR>");
 printf("Please enter your email address ");
 cgiMakeTextVar("email", "", 32);
-cgiMakeSubmitButton();
+cgiMakeButton("getUrl", "submit");
 }
 
 void getUrl(struct sqlConnection *conn)
@@ -41,7 +41,7 @@ struct edwUser *user = edwMustGetUserFromEmail(conn, email);
 cgiMakeHiddenVar("email", user->email);
 printf("URL ");
 cgiMakeTextVar("url", "", 80);
-cgiMakeSubmitButton();
+cgiMakeButton("submitUrl", "submit");
 }
 
 void submitUrl(struct sqlConnection *conn)
@@ -105,33 +105,87 @@ safef(query, sizeof(query),
 return edwFileLoadByQuery(conn, query);
 }
 
+int showValidationOverview(struct sqlConnection *conn, struct edwSubmit *sub)
+/* Show validation status overview and return number of newly valid items in this
+ * submission */
+{
+printf("<B>Old files from previous submission:</B> %d<BR>\n", sub->oldFiles);
+printf("<B>New files transferred so far:</B> %d<BR>\n", sub->newFiles);
+char query[256];
+safef(query, sizeof(query), 
+    "select count(*) from edwFile where submitId=%u and tags != '' and tags is not null", sub->id);
+int uploadCount = sqlQuickNum(conn, query);
+safef(query, sizeof(query), 
+    "select count(*) from edwFile e,edwValidFile v where e.id = v.fileId and e. submitId=%u",
+    sub->id);
+int validCount = sqlQuickNum(conn, query);
+printf("<B>validated:</B> %d of %d new files<BR>\n", validCount, uploadCount);
+safef(query, sizeof(query),
+    "select count(*) from edwFile where errorMessage is not null and errorMessage != '' "
+    "and submitId=%u", sub->id);
+int errCount = sqlQuickNum(conn, query);
+printf("<B>validation error count:</B> %d<BR>\n", errCount);
+return validCount;
+}
+
+void showValidations(struct sqlConnection *conn)
+{
+printf("Theoretically I would be showing validations.  In real life advise you to go back.");
+}
+
 void monitorSubmission(struct sqlConnection *conn)
 /* Write out information about submission. */
 {
 char *email = trimSpaces(cgiString("email"));
 char *url = trimSpaces(cgiString("url"));
+cgiMakeHiddenVar("url", url);
+cgiMakeHiddenVar("email", email);
 struct edwSubmit *sub = edwMostRecentSubmission(conn, url);
 if (sub == NULL)
     {
+    /* Would be nice to have a way to check this rather than blindly
+     * reassuring user.  Also to give them their queue position.  Since
+     * the queue is a unix fifo though I'm not sure if we can easily
+     * figure out what's piled in it.  I just did a test and it 
+     * looks like the file size according to 'ls' at least doesn't change
+     * when a fifo has stuff pending in it. It's one argument in favor of
+     * shifting the queue to the database like the validation queue.
+     * It's so nice not to have to poll though,  which the fifo gets you 
+     * out of. */
     printf("%s is in submission queue, but upload has not started", url);
     }
 else
     {
-    printf("<B>Submission by %s in progress...</B><BR>\n", email);
+    time_t startTime = sub->startUploadTime;
+    time_t endUploadTime = sub->endUploadTime;
+    time_t endTime = (endUploadTime ? endUploadTime : edwNow());
+    int timeSpan = endTime - startTime;
+    long long thisUploadSize = sub->byteCount - sub->oldBytes;
+    long long curSize = 0;  // Amount of current file we know we've transferred.
+
+    /* Print title letting them know if upload is done or in progress. */
+    printf("<B>Submission by %s is ", email);
+    if (endUploadTime == 0)  
+	printf("in progress...");
+    else
+        printf("uploaded.");
+    printf("</B><BR>\n");
+
+    /* Print URL and how far along we are at the file level. */
     printf("<B>url:</B> %s<BR>\n", sub->url);
+    printf("<B>files already in warehouse:</B> %u<BR>\n", sub->oldFiles);
+    printf("<B>files transferred:</B> %u<BR>\n", sub->newFiles);
+    printf("<B>files remaining:</B> %u<BR>\n", sub->fileCount - sub->oldFiles - sub->newFiles);
+
+    /* Print error message, and in case of error skip file-in-transfer info. */
     if (!isEmpty(sub->errorMessage))
         printf("<B>error:</B> %s<BR>\n", sub->errorMessage);
     else
 	{
-	printf("<B>files finished:</B> %u of %u<BR>\n", 
-	    sub->newFiles + sub->oldFiles, sub->fileCount);
-	time_t startTime = sub->startUploadTime;
-	time_t endTime = sub->endUploadTime;
-	if (endTime == 0)
+	/* If possible print information about file en route */
+	if (endUploadTime == 0)
 	    {
-	    long long timeSoFar = edwNow() - startTime;
 	    struct edwFile *ef = edwFileInProgress(conn, sub->id);
-	    long long curSize = 0;
 	    if (ef != NULL)
 		{
 		char path[PATH_LEN];
@@ -139,57 +193,56 @@ else
 		curSize = fileSize(path);
 		printf("<B>file in route:</B> %s",  ef->submitFileName);
 		printf(" (%d%% transferred)<BR>\n", (int)(100.0 * curSize / ef->size));
-		printf("<B>total bytes transferred:</B> ");
-		long long totalTransferred = curSize + sub->oldBytes + sub->newBytes;
-		printLongWithCommas(stdout, totalTransferred);
-		printf(" of ");
-		printLongWithCommas(stdout, sub->byteCount);
-		printf(" (%d%%)<BR>\n", (int)(100.0 * totalTransferred / sub->byteCount));
-		long long thisUploadSize = sub->byteCount - sub->oldBytes;
-		if (timeSoFar > 0)
-		    {
-		    long long transferredThisTime = curSize + sub->newBytes;
-		    double bytesPerSecond = transferredThisTime/timeSoFar;
-		    printf("<B>transfer speed:</B> ");
-		    printLongWithCommas(stdout, bytesPerSecond);
-		    printf(" bytes/sec<BR>\n");
-		    struct dyString *duration = formatDuration(timeSoFar);
-		    printf("<B>submission started:</B> %s<BR>\n", ctime(&startTime));
-		    printf("<B>submit time so far:</B> %s<BR>\n", duration->string);
-		    long long bytesRemaining = thisUploadSize - curSize - sub->newBytes;
-		    if (bytesPerSecond > 0)
-			{
-			long long estimatedFinish = bytesRemaining/bytesPerSecond;
-			struct dyString *eta = formatDuration(estimatedFinish);
-			printf("<B>estimated finish in:</B> %s<BR>\n", eta->string);
-			}
-		    }
 		}
-	    else
-		 printf("<B>checking MD5...</B><BR>\n");
-	    cgiMakeButton("monitor", "refresh status");
-	    cgiMakeHiddenVar("url", url);
-	    }
-	else
-	    {
-	    int timeSpan = endTime - startTime;
-	    struct dyString *duration = formatDuration(timeSpan);
-	    printf("<B>submission started:</B> %s<BR>\n", ctime(&startTime));
-	    printf("<B>finished submission in :</B> %s<BR>\n", duration->string);
-	    printf("<B>total bytes in submission: </B>");
-	    printLongWithCommas(stdout, sub->byteCount);
-	    printf("<BR>\n");
-	    if (timeSpan > 0)
-		{
-		printf("<B>transfer speed:</B> ");
-		printLongWithCommas(stdout, sub->newBytes/(endTime - startTime));
-		printf(" bytes/sec<BR>\n");
-		}
-	    cgiMakeButton("submit", "Submit another data set.");
 	    }
 	}
+    /* Report bytes transferred */
+    long long transferredThisTime = curSize + sub->newBytes;
+    printf("<B>total bytes transferred:</B> ");
+    long long totalTransferred = transferredThisTime + sub->oldBytes;
+    printLongWithCommas(stdout, totalTransferred);
+    printf(" of ");
+    printLongWithCommas(stdout, sub->byteCount);
+    printf(" (%d%%)<BR>\n", (int)(100.0 * totalTransferred / sub->byteCount));
+
+    /* Report transfer speed if possible */
+    if (timeSpan > 0)
+	{
+	printf("<B>transfer speed:</B> ");
+	printLongWithCommas(stdout, (curSize + sub->newBytes)/timeSpan);
+	printf(" bytes/sec<BR>\n");
+	}
+
+    /* Report start time  and duration */
+    printf("<B>submission started:</B> %s<BR>\n", ctime(&startTime));
+    struct dyString *duration = formatDuration(timeSpan);
+
+    /* Try and give them an ETA if we aren't finished */
+    if (endUploadTime == 0 && timeSpan > 0)
+	{
+	printf("<B>time so far:</B> %s<BR>\n", duration->string);
+	double bytesPerSecond = (double)transferredThisTime/timeSpan;
+	long long bytesRemaining = thisUploadSize - curSize - sub->newBytes;
+	if (bytesPerSecond > 0)
+	    {
+	    long long estimatedFinish = bytesRemaining/bytesPerSecond;
+	    struct dyString *eta = formatDuration(estimatedFinish);
+	    printf("<B>estimated finish in:</B> %s<BR>\n", eta->string);
+	    }
+	}
+    else
+        {
+	printf("<B>submission time:</B> %s<BR>\n", duration->string);
+	}
+    cgiMakeButton("monitor", "refresh status");
+    cgiMakeButton("getUrl", "submit another data set");
     }
-cgiMakeHiddenVar("email", email);
+#ifdef SOON
+uglyf("<BR><BR>--- The part down from here is really rough do not fret if it doesn't work ---<BR>\n");
+int validCount = showValidationOverview(conn, sub);
+if (validCount > 0)
+    cgiMakeButton("validations", "see validation results");
+#endif /* SOON */
 }
 
 static void localWarn(char *format, va_list args)
@@ -206,14 +259,16 @@ void doMiddle()
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 struct sqlConnection *conn = sqlConnect(edwDatabase);
-if (!cgiVarExists("email"))
-    logIn(conn);
-else if (!cgiVarExists("url"))
+if (cgiVarExists("getUrl"))
     getUrl(conn);
-else if (!cgiVarExists("monitor"))
+else if (cgiVarExists("submitUrl"))
     submitUrl(conn);
-else
+else if (cgiVarExists("monitor"))
     monitorSubmission(conn);
+else if (cgiVarExists("validations"))
+    showValidations(conn);
+else
+    logIn(conn);
 printf("</FORM>");
 }
 
