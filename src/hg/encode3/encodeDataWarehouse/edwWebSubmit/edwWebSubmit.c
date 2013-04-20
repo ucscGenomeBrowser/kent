@@ -173,9 +173,14 @@ else
 
     /* Print URL and how far along we are at the file level. */
     printf("<B>url:</B> %s<BR>\n", sub->url);
-    printf("<B>files already in warehouse:</B> %u<BR>\n", sub->oldFiles);
-    printf("<B>files transferred:</B> %u<BR>\n", sub->newFiles);
-    printf("<B>files remaining:</B> %u<BR>\n", sub->fileCount - sub->oldFiles - sub->newFiles);
+    printf("<B>files count:</B> %d<BR>\n", sub->fileCount);
+    if (sub->oldFiles > 0)
+	printf("<B>files already in warehouse:</B> %u<BR>\n", sub->oldFiles);
+    if (sub->oldFiles != sub->fileCount)
+	{
+	printf("<B>files transferred:</B> %u<BR>\n", sub->newFiles);
+	printf("<B>files remaining:</B> %u<BR>\n", sub->fileCount - sub->oldFiles - sub->newFiles);
+	}
 
     /* Print error message, and in case of error skip file-in-transfer info. */
     if (!isEmpty(sub->errorMessage))
@@ -233,9 +238,9 @@ else
     else
         {
 	printf("<B>submission time:</B> %s<BR>\n", duration->string);
+	cgiMakeButton("getUrl", "submit another data set");
 	}
     cgiMakeButton("monitor", "refresh status");
-    cgiMakeButton("getUrl", "submit another data set");
     }
 #ifdef SOON
 uglyf("<BR><BR>--- The part down from here is really rough do not fret if it doesn't work ---<BR>\n");
