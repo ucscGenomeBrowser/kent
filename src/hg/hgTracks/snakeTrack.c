@@ -935,6 +935,7 @@ if (errCatchStart(errCatch))
 	    lf->end = 1000000000;
 	    lf->grayIx = maxShade;
 	    lf->name = cloneString(buffer);
+	    lf->extra = cloneString(buffer);
 	    lf->orientation = (cur->strand == '+') ? 1 : -1;
 	    hashAdd(qChromHash, lf->name, lf);
 	    }
