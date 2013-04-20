@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "log.h"
 
-int maxThreadCount = 2;
+int maxThreadCount = 5;
 
 void usage()
 /* Explain usage and exit. */
