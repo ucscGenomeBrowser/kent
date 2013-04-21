@@ -41,10 +41,13 @@ char *checkAuth()
 {
 /* Get assertion out of CGI variables we were passed.  Put it and pointer to self
  * into cgi variables to pass to assertion checker. */
-char *assertion=cgiString("assertion");
 struct dyString *dyCgi = dyStringNew(0);
+char *assertion=cgiString("assertion");
 cgiEncodeIntoDy("assertion", assertion, dyCgi);
-cgiEncodeIntoDy("audience", "http://hgwdev-kent.cse.ucsc.edu:80", dyCgi);
+char *httpHost = getenv("HTTP_HOST");
+if (httpHost == NULL)
+    errAbort("Missing CGI variable HTTP_HOST");
+cgiEncodeIntoDy("audience", httpHost, dyCgi);
 
 /* Pass a little CGI post request to Persona including our CGI vars. */
 struct dyString *dyHeader = dyStringNew(0);
