@@ -16,8 +16,12 @@ DIRS = \
     edwMakeReplicateQa \
     edwMakeValidFile \
     edwResetPassword \
+    edwRunner \
     edwSubmit \
     edwSubmitSpooler \
+    edwWebAuthLogin \
+    edwWebAuthLogout \
+    edwWebCreateUser \
     edwWebSubmit
 
 TEST_DIRS = \
