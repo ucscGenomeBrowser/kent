@@ -35,6 +35,15 @@ if (string->type != jsonString)
 return string->val.jeString;
 }
 
+char *mustGetEnv(char *name)
+/* Get environment variable or squawk and die */
+{
+char *val = getenv(name);
+if (val == NULL)
+    errAbort("Missing required environment variable %s", name);
+return val;
+}
+
 char *checkAuth()
 /* Check authorization assertion and abort if it does not look good. 
  * Returns with email address if all good. */
@@ -44,10 +53,11 @@ char *checkAuth()
 struct dyString *dyCgi = dyStringNew(0);
 char *assertion=cgiString("assertion");
 cgiEncodeIntoDy("assertion", assertion, dyCgi);
-char *httpHost = getenv("HTTP_HOST");
-if (httpHost == NULL)
-    errAbort("Missing CGI variable HTTP_HOST");
-cgiEncodeIntoDy("audience", httpHost, dyCgi);
+char *server = mustGetEnv("SERVER_NAME");
+char *port = mustGetEnv("SERVER_PORT");
+char serverAndPort[2+strlen(server)+strlen(port)];
+safef(serverAndPort, sizeof(serverAndPort), "%s:%s", server, port);
+cgiEncodeIntoDy("audience", serverAndPort, dyCgi);
 
 /* Pass a little CGI post request to Persona including our CGI vars. */
 struct dyString *dyHeader = dyStringNew(0);
