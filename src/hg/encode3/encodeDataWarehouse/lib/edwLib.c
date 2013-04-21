@@ -12,6 +12,7 @@
 #include "portable.h"
 #include "genomeRangeTree.h"
 #include "md5.h"
+#include "htmshell.h"
 #include "obscure.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
@@ -207,7 +208,11 @@ struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
 {
 struct edwUser *user = edwUserFromEmail(conn, email);
 if (user == NULL)
-    errAbort("No user exists with email %s.", email);
+    errAbort("No user exists with email %s.  If you need an account please contact your "
+             "ENCODE DCC data wrangler, or someone you know who already does have an "
+	     "ENCODE Data Warehouse account, and have them create an account for you with "
+	     "http://%s/cgi-bin/edwWebCreateUser"
+	     , email, getenv("SERVER_NAME"));
 return user;
 }
 
@@ -705,5 +710,46 @@ char query[128 + escapedSize];
 safef(query, sizeof(query), 
     "select * from edwSubmit where url='%s' order by id desc limit 1", escapedUrl);
 return edwSubmitLoadByQuery(conn, query);
+}
+
+void edwWebHeaderWithPersona(char *title)
+/* Print out HTTP and HTML header through <BODY> tag with persona info */
+{
+printf("Content-Type:text/html\r\n");
+printf("\r\n\r\n");
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
+printf("<HTML><HEAD><TITLE>%s</TITLE>\n", title);
+puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
+puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
+puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
+puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
+puts("</HEAD><BODY>");
+}
+
+void edwWebFooterWithPersona()
+/* Print out end tags and persona script stuff */
+{
+htmlEnd();
+puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
+}
+
+void edwCreateNewUser(char *email)
+/* Create new user, checking that user does not already exist. */
+{
+/* Now make sure user is not already in user table. */
+struct sqlConnection *conn = sqlConnectProfile("encodeDataWarehouse", edwDatabase);
+struct dyString *query = dyStringNew(0);
+char *escapedEmail = sqlEscapeString(email);
+dyStringPrintf(query, "select count(*) from edwUser where email = '%s'", escapedEmail);
+if (sqlQuickNum(conn, query->string) > 0)
+    errAbort("User %s already exists", email);
+
+/* Do database insert. */
+dyStringClear(query);
+dyStringPrintf(query, "insert into edwUser (email) values('%s')", escapedEmail);
+sqlUpdate(conn, query->string);
+
+sqlDisconnect(&conn);
 }
 

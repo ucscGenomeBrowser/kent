@@ -135,4 +135,13 @@ void edwAddQaJob(struct sqlConnection *conn, long long fileId);
 struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url);
 /* Return most recent submission, possibly in progress, from this url */
 
+void edwWebHeaderWithPersona(char *title);
+/* Print out HTTP and HTML header through <BODY> tag with persona info */
+
+void edwWebFooterWithPersona();
+/* Print out end tags and persona script stuff */
+
+void edwCreateNewUser(char *email);
+/* Create new user, checking that user does not already exist. */
+
 #endif /* EDWLIB_H */
