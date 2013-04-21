@@ -621,10 +621,6 @@ struct sqlConnection *conn = sqlConnectProfile(edwDatabase, edwDatabase);
 struct edwUser *user = edwMustGetUserFromEmail(conn, email);
 int userId = user->id;
 
-#ifdef OLD
-int userId =  edwMustHaveAccess(conn, user, password);
-#endif /* OLD */
-
 /* See if we are already running on same submission.  If so council patience and quit. */
 notOverlappingSelf(conn, submitUrl);
 
