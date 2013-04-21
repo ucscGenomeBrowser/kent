@@ -14,6 +14,8 @@
 #include "portable.h"
 #include "net.h"
 
+char *userEmail;	/* Filled in by authentication system. */
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -24,21 +26,19 @@ errAbort(
   );
 }
 
-void logIn(struct sqlConnection *conn)
+void logIn()
 /* Put up name.  No password for now. */
 {
 printf("Welcome to the prototype ENCODE Data Warehouse submission site.<BR>");
-printf("Please enter your email address ");
-cgiMakeTextVar("email", "", 32);
-cgiMakeButton("getUrl", "submit");
+printf("Please sign in via Persona");
+printf("<INPUT TYPE=BUTTON NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
 }
 
 void getUrl(struct sqlConnection *conn)
 /* Put up URL. */
 {
-char *email = trimSpaces(cgiString("email"));
-struct edwUser *user = edwMustGetUserFromEmail(conn, email);
-cgiMakeHiddenVar("email", user->email);
+edwMustGetUserFromEmail(conn, userEmail);
+printf("Please enter a URL for a validated manifest file:<BR>");
 printf("URL ");
 cgiMakeTextVar("url", "", 80);
 cgiMakeButton("submitUrl", "submit");
@@ -49,27 +49,23 @@ void submitUrl(struct sqlConnection *conn)
  * progress once it is in progress. */
 {
 /* Parse email and URL out of CGI vars. Do a tiny bit of error checking. */
-char *email = trimSpaces(cgiString("email"));
 char *url = trimSpaces(cgiString("url"));
 if (!stringIn("://", url))
     errAbort("%s doesn't seem to be a valid URL, no '://'", url);
-if (!stringIn("@", email))
-    errAbort("%s doesn't seem to be a valid email, no '@'", email);
 
 /* Do some reality checks that email and URL actually exist. */
-edwMustGetUserFromEmail(conn, email);
+edwMustGetUserFromEmail(conn, userEmail);
 int sd = netUrlMustOpenPastHeader(url);
 close(sd);
 
 /* Write email and URL to fifo used by submission spooler. */
 FILE *fifo = mustOpen("edwSubmit.fifo", "w");
-fprintf(fifo, "%s %s\n", email, url);
+fprintf(fifo, "%s %s\n", userEmail, url);
 carefulClose(&fifo);
 
 /* Give system a second to react, and then try to put up status info about submission. */
 printf("Submission of %s is in progress....", url);
 cgiMakeButton("monitor", "monitor submission");
-cgiMakeHiddenVar("email", email);
 cgiMakeHiddenVar("url", url);
 }
 
@@ -136,10 +132,8 @@ printf("Theoretically I would be showing validations.  In real life advise you t
 void monitorSubmission(struct sqlConnection *conn)
 /* Write out information about submission. */
 {
-char *email = trimSpaces(cgiString("email"));
 char *url = trimSpaces(cgiString("url"));
 cgiMakeHiddenVar("url", url);
-cgiMakeHiddenVar("email", email);
 struct edwSubmit *sub = edwMostRecentSubmission(conn, url);
 if (sub == NULL)
     {
@@ -164,7 +158,7 @@ else
     long long curSize = 0;  // Amount of current file we know we've transferred.
 
     /* Print title letting them know if upload is done or in progress. */
-    printf("<B>Submission by %s is ", email);
+    printf("<B>Submission by %s is ", userEmail);
     if (endUploadTime == 0)  
 	printf("in progress...");
     else
@@ -208,7 +202,10 @@ else
     printLongWithCommas(stdout, totalTransferred);
     printf(" of ");
     printLongWithCommas(stdout, sub->byteCount);
-    printf(" (%d%%)<BR>\n", (int)(100.0 * totalTransferred / sub->byteCount));
+    if (sub->byteCount != 0)
+	printf(" (%d%%)<BR>\n", (int)(100.0 * totalTransferred / sub->byteCount));
+    else
+        printf("<BR>\n");
 
     /* Report transfer speed if possible */
     if (timeSpan > 0)
@@ -264,8 +261,9 @@ void doMiddle()
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 struct sqlConnection *conn = sqlConnect(edwDatabase);
-if (cgiVarExists("getUrl"))
-    getUrl(conn);
+userEmail = findCookieData("email");
+if (userEmail == NULL)
+    logIn();
 else if (cgiVarExists("submitUrl"))
     submitUrl(conn);
 else if (cgiVarExists("monitor"))
@@ -273,7 +271,7 @@ else if (cgiVarExists("monitor"))
 else if (cgiVarExists("validations"))
     showValidations(conn);
 else
-    logIn(conn);
+    getUrl(conn);
 printf("</FORM>");
 }
 
@@ -285,15 +283,12 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 
 /* Put out HTTP header and HTML HEADER all the way through <BODY> */
-puts("Content-Type:text/html");
-puts("\n");
-puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
-	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
-puts("<HTML><HEAD><TITLE>ENCODE Data Warehouse</TITLE></HEAD><BODY>");
+edwWebHeaderWithPersona("Submit data to ENCODE Data Warehouse");
 
 /* Call error handling wrapper that catches us so we write /BODY and /HTML to close up page
  * even through an errAbort. */
 htmEmptyShell(doMiddle, NULL);
-htmlEnd();
+
+edwWebFooterWithPersona();
 return 0;
 }
