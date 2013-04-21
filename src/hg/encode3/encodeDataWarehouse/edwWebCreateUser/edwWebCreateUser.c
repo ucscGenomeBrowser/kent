@@ -4,14 +4,23 @@
 #include "hash.h"
 #include "options.h"
 #include "cheapcgi.h"
+#include "errabort.h"
 #include "htmshell.h"
 #include "edwLib.h"
 
 char *oldUserEmail = NULL;
 
+static void localWarn(char *format, va_list args)
+/* A little warning handler to override the one with the button that goes nowhere. */
+{
+printf("<B>Error:</B> ");
+vfprintf(stdout, format, args);
+}
+
 void doMiddle()
 /* Write what goes between BODY and /BODY */
 {
+pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"edwWebCreateUser\" METHOD=POST>\n");
 printf("<B>Add new user to ENCODE Data Warehouse</B><BR>");
 if (oldUserEmail == NULL)
@@ -34,6 +43,8 @@ else if (cgiVarExists("newUser"))
     }
 else
     {
+    struct sqlConnection *conn = sqlConnect(edwDatabase);
+    edwMustGetUserFromEmail(conn, oldUserEmail);
     printf("%s is authorized to create a new user<BR>\n", oldUserEmail);
     printf("Email of new user:\n");
     cgiMakeTextVar("newUser", NULL, 40);
