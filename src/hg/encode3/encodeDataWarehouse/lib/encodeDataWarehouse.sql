@@ -6,14 +6,9 @@
 #Someone who submits files to or otherwise interacts with big data warehouse
 CREATE TABLE edwUser (
     id int unsigned auto_increment,	# Autoincremented user ID
-    name varchar(255) default '',	# user name
-    sid char(64) default 0,	# sha384 generated user ID - used to identify user in secure way if need be
-    access char(64) default 0,	# access code - sha385'd from password and stuff
     email varchar(255) default '',	# Email address - required
               #Indices
     PRIMARY KEY(id),
-    UNIQUE(name),
-    UNIQUE(sid),
     UNIQUE(email)
 );
 
@@ -70,8 +65,10 @@ CREATE TABLE edwFile (
               #Indices
     PRIMARY KEY(id),
     INDEX(submitId),
+    INDEX(submitDirId),
     INDEX(submitFileName(32)),
-    UNIQUE(edwFileName(32))
+    UNIQUE(edwFileName(32)),
+    INDEX(md5)
 );
 
 #A data submit, typically containing many files.  Always associated with a submit dir.
@@ -93,7 +90,9 @@ CREATE TABLE edwSubmit (
               #Indices
     PRIMARY KEY(id),
     INDEX(url(32)),
-    INDEX(userId)
+    INDEX(userId),
+    INDEX(submitFileId),
+    INDEX(submitDirId)
 );
 
 #Subscribers can have programs that are called at various points during data submission
@@ -146,9 +145,8 @@ CREATE TABLE edwValidFile (
     PRIMARY KEY(id),
     INDEX(licensePlate),
     INDEX(fileId),
-    INDEX(format),
-    INDEX(outputType),
-    INDEX(experiment)
+    INDEX(outputType(16)),
+    INDEX(experiment(16))
 );
 
 #A target for our enrichment analysis.

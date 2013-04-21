@@ -15,10 +15,7 @@ void edwUserStaticLoad(char **row, struct edwUser *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->name = row[1];
-safecpy(ret->sid, sizeof(ret->sid), row[2]);
-safecpy(ret->access, sizeof(ret->access), row[3]);
-ret->email = row[4];
+ret->email = row[1];
 }
 
 struct edwUser *edwUserLoadByQuery(struct sqlConnection *conn, char *query)
@@ -53,8 +50,8 @@ void edwUserSaveToDb(struct sqlConnection *conn, struct edwUser *el, char *table
  * If worried about this use edwUserSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s')", 
-	tableName,  el->id,  el->name,  el->sid,  el->access,  el->email);
+dyStringPrintf(update, "insert into %s values ( %u,'%s')", 
+	tableName,  el->id,  el->email);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -69,19 +66,13 @@ void edwUserSaveToDbEscaped(struct sqlConnection *conn, struct edwUser *el, char
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *name, *sid, *access, *email;
-name = sqlEscapeString(el->name);
-sid = sqlEscapeString(el->sid);
-access = sqlEscapeString(el->access);
+char  *email;
 email = sqlEscapeString(el->email);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s')", 
-	tableName,  el->id,  name,  sid,  access,  email);
+dyStringPrintf(update, "insert into %s values ( %u,'%s')", 
+	tableName,  el->id,  email);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&name);
-freez(&sid);
-freez(&access);
 freez(&email);
 }
 
@@ -93,10 +84,7 @@ struct edwUser *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->name = cloneString(row[1]);
-safecpy(ret->sid, sizeof(ret->sid), row[2]);
-safecpy(ret->access, sizeof(ret->access), row[3]);
-ret->email = cloneString(row[4]);
+ret->email = cloneString(row[1]);
 return ret;
 }
 
@@ -106,7 +94,7 @@ struct edwUser *edwUserLoadAll(char *fileName)
 {
 struct edwUser *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[2];
 
 while (lineFileRow(lf, row))
     {
@@ -124,7 +112,7 @@ struct edwUser *edwUserLoadAllByChar(char *fileName, char chopper)
 {
 struct edwUser *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[2];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -146,9 +134,6 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
-ret->name = sqlStringComma(&s);
-sqlFixedStringComma(&s, ret->sid, sizeof(ret->sid));
-sqlFixedStringComma(&s, ret->access, sizeof(ret->access));
 ret->email = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -161,7 +146,6 @@ void edwUserFree(struct edwUser **pEl)
 struct edwUser *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->name);
 freeMem(el->email);
 freez(pEl);
 }
@@ -183,18 +167,6 @@ void edwUserOutput(struct edwUser *el, FILE *f, char sep, char lastSep)
 /* Print out edwUser.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->sid);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->access);
-if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->email);

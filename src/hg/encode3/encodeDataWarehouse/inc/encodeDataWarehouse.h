@@ -6,16 +6,13 @@
 #define ENCODEDATAWAREHOUSE_H
 
 #include "jksql.h"
-#define EDWUSER_NUM_COLS 5
+#define EDWUSER_NUM_COLS 2
 
 struct edwUser
 /* Someone who submits files to or otherwise interacts with big data warehouse */
     {
     struct edwUser *next;  /* Next in singly linked list. */
     unsigned id;	/* Autoincremented user ID */
-    char *name;	/* user name */
-    char sid[65];	/* sha384 generated user ID - used to identify user in secure way if need be */
-    char access[65];	/* access code - sha385'd from password and stuff */
     char *email;	/* Email address - required */
     };
 
