@@ -43,7 +43,6 @@ struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir,
 struct fileOffsetSize *block, *beforeGap, *afterGap;
 struct udcFile *udc = bbi->udc;
 boolean isSwapped = bbi->isSwapped;
-struct dyString *dy = dyStringNew(32);
 
 /* Set up for uncompression optionally. */
 char *uncompressBuf = NULL;
@@ -84,15 +83,9 @@ for (block = blockList; block != NULL; )
 	    bits32 chr = memReadBits32(&blockPt, isSwapped);	// Read and discard chromId
 	    bits32 s = memReadBits32(&blockPt, isSwapped);
 	    bits32 e = memReadBits32(&blockPt, isSwapped);
-	    int c;
-	    dyStringClear(dy);
-	    // TODO - can simplify this probably just to for (;;) {if ((c = *blockPt++) == 0) ...
-	    while ((c = *blockPt++) >= 0)
-		{
-		if (c == 0)
-		    break;
-		dyStringAppendC(dy, c);
-		}
+
+	    /* calculate length of rest of bed fields */
+	    int restLen = strlen(blockPt);
 
 	    /* If we're actually in range then copy it into a new  element and add to list. */
 	    if (chr == chromId && s < end && e > start)
@@ -104,11 +97,14 @@ for (block = blockList; block != NULL; )
 		lmAllocVar(lm, el);
 		el->start = s;
 		el->end = e;
-		if (dy->stringSize > 0)
-		    el->rest = lmCloneString(lm, dy->string);
+		if (restLen > 0)
+		    el->rest = lmCloneStringZ(lm, blockPt, restLen);
 		el->chromId = chromId;
 		slAddHead(&list, el);
 		}
+
+	    // move blockPt pointer to end of previous bed
+	    blockPt += restLen + 1;
 	    }
 	if (maxItems > 0 && itemCount > maxItems)
 	    break;
@@ -119,7 +115,6 @@ for (block = blockList; block != NULL; )
     freez(&mergedBuf);
     }
 freeMem(uncompressBuf);
-dyStringFree(&dy);
 slFreeList(&blockList);
 slReverse(&list);
 return list;
