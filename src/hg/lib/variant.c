@@ -4,10 +4,8 @@
 #include "common.h"
 #include "variant.h"
 
-struct allele  *alleleClip(struct allele *allele, int sx, int ex)
-/* clip allele to be inside region defined by sx..ex.  Returns 
- * pointer to new allele which should be freed by alleleFree, or variantFree
- */
+struct allele  *alleleClip(struct allele *allele, int sx, int ex, struct lm *lm)
+/* Return new allele pointing to new variant, both clipped to region defined by [sx,ex). */
 {
 struct variant *oldVariant = allele->variant;
 int start = oldVariant->chromStart;
@@ -33,27 +31,28 @@ if (end > ex)
     }
 
 struct variant *newVariant;
-AllocVar(newVariant);
-newVariant->chrom = cloneString(oldVariant->chrom);
+lmAllocVar(lm, newVariant);
+newVariant->chrom = lmCloneString(lm, oldVariant->chrom);
 newVariant->chromStart = start;
 newVariant->chromEnd = end;
 newVariant->numAlleles = 1;
+
 struct allele *newAllele;
-AllocVar(newAllele);
+lmAllocVar(lm, newAllele);
 newVariant->alleles = newAllele;
 newAllele->variant = newVariant;
 newAllele->length = allele->length - delRear - delFront;
 assert(newAllele->length >= 0);
-newAllele->sequence = cloneString(&allele->sequence[delFront]);
+newAllele->sequence = lmCloneString(lm, &allele->sequence[delFront]);
 newAllele->sequence[newAllele->length] = 0;   // cut off delRear part
 
 return newAllele;
 }
 
-static char *addDashes(char *input, int count)
+static char *addDashes(char *input, int count, struct lm *lm)
 /* add dashes at the end of a sequence to pad it out so it's length is count */
 {
-char *ret = needMem(count + 1);
+char *ret = lmAlloc(lm, count + 1);
 int inLen = strlen(input);
 
 safecpy(ret, count + 1, input);
@@ -114,7 +113,7 @@ for( ; alleleNumber < numAlleles; alleleNumber++)
 	{
 	if ( alleleStringLength < alleleLength)
 	    {
-	    thisAlleleString = addDashes(thisAlleleString, alleleLength);
+	    thisAlleleString = addDashes(thisAlleleString, alleleLength, lm);
 	    alleleStringLength = alleleLength;
 	    }
 	}

@@ -18,13 +18,13 @@ return str;
 }
 
 struct gpFx *gpFxNew(char *allele, char *transcript, enum soTerm soNumber,
-		     enum detailType detailType)
+		     enum detailType detailType, struct lm *lm)
 /* Fill in the common members of gpFx; leave soTerm-specific members for caller to fill in. */
 {
 struct gpFx *effect;
-AllocVar(effect);
-effect->allele = collapseDashes(strUpper(cloneString(allele)));
-effect->transcript = cloneString(transcript);
+lmAllocVar(lm, effect);
+effect->allele = collapseDashes(strUpper(lmCloneString(lm, allele)));
+effect->transcript = lmCloneString(lm, transcript);
 effect->soNumber = soNumber;
 effect->detailType = detailType;
 return effect;
@@ -46,50 +46,23 @@ return count;
 }
 
 static char * mergeAllele(char *transcript, int offset, int variantWidth,
-    char *newAlleleSeq, int alleleLength)
+			  char *newAlleleSeq, int alleleLength, struct lm *lm)
 /* merge a variant into an allele */
 {
-char *newTranscript = transcript;
+char *newTranscript = NULL;
 
 if (variantWidth == alleleLength)
     {
-    // for the moment, we're sticking the dashes into the transcripts
-    if (1) //noDashes(newAlleleSeq))
-	{
-	memcpy(&transcript[offset], newAlleleSeq, alleleLength);
-	}
-#ifdef DOESNTKNOWABOUTTHEOFFSETARGUMENT
-    // if we decide not to put the dashes into the resulting transcripts
-    // this will have to be re-written to grok the offset argument
-    else
-	{
-	char *transcriptSource = transcript;
-	int ii;
-	for(ii=0; ii < variantWidth; ii++)
-	    {
-	    if (*newAlleleSeq == '-')
-		{
-		transcriptSource++;
-		}
-	    else
-		{
-		*transcript++ = *newAlleleSeq++;
-		transcriptSource++;
-		}
-	    }
-	while(*transcriptSource)
-	    *transcript++ = *transcriptSource++;
-	*transcript = 0;
-	}
-#endif
+    newTranscript = lmCloneString(lm, transcript);
+    memcpy(&newTranscript[offset], newAlleleSeq, alleleLength);
     }
 else  if (variantWidth > alleleLength)
-    errAbort("allele not padded");
+    errAbort("gpFx: allele not padded");
 else 
     {
     int insertionSize = alleleLength - variantWidth;
     int newLength = strlen(transcript) + insertionSize;
-    newTranscript = needMem(newLength + 1);
+    newTranscript = lmAlloc(lm, newLength + 1);
     char *restOfTranscript = &transcript[offset + variantWidth];
 
     // copy over the part before the variant
@@ -107,18 +80,18 @@ return newTranscript;
 }
 
 char *gpFxModifySequence(struct allele *allele, struct genePred *pred, 
-			 int exonNum, struct psl *transcriptPsl, struct dnaSeq *transcriptSequence,
-			 struct genePred **retNewPred)
+			 int exonNum, int exonQStart, struct dnaSeq *transcriptSequence,
+			 struct genePred **retNewPred, struct lm *lm)
 /* modify a transcript to what it'd be if the alternate allele were present;
  * if transcript length changes, make retNewPred a shallow copy of pred w/tweaked coords. */
 {
 // clip allele to exon
-struct allele *clipAllele = alleleClip(allele, transcriptPsl->tStarts[exonNum], 
-	transcriptPsl->tStarts[exonNum] + transcriptPsl->blockSizes[exonNum]);
+struct allele *clipAllele = alleleClip(allele, pred->exonStarts[exonNum], pred->exonEnds[exonNum],
+				       lm);
 
 // change transcript at variant point
-int exonOffset = clipAllele->variant->chromStart - transcriptPsl->tStarts[exonNum];
-int transcriptOffset = transcriptPsl->qStarts[exonNum] + exonOffset;
+int exonOffset = clipAllele->variant->chromStart - pred->exonStarts[exonNum];
+int transcriptOffset = exonQStart + exonOffset;
 
 int variantWidth = clipAllele->variant->chromEnd - clipAllele->variant->chromStart;
 
@@ -126,7 +99,7 @@ if (variantWidth != clipAllele->length && retNewPred != NULL)
     {
     // OK, now we have to make a new genePred that matches the changed sequence
     int basesAdded = clipAllele->length - variantWidth;
-    struct genePred *newPred = CloneVar(pred);
+    struct genePred *newPred = lmCloneVar(lm, pred);
     int alEnd = clipAllele->variant->chromEnd;
     if (newPred->cdsStart > alEnd)
 	newPred->cdsStart += basesAdded;
@@ -143,8 +116,8 @@ if (variantWidth != clipAllele->length && retNewPred != NULL)
     *retNewPred = newPred;
     }
 
-char *retSequence = cloneString(transcriptSequence->dna);
-char *newAlleleSeq = cloneString(clipAllele->sequence);
+char *retSequence = lmCloneString(lm, transcriptSequence->dna);
+char *newAlleleSeq = lmCloneString(lm, clipAllele->sequence);
 if (*pred->strand == '-')
     {
     transcriptOffset = transcriptSequence->size - (transcriptOffset + strlen(newAlleleSeq));
@@ -153,10 +126,7 @@ if (*pred->strand == '-')
 
 // make the change in the sequence
 retSequence = mergeAllele( retSequence, transcriptOffset, variantWidth, newAlleleSeq,
-			   clipAllele->length);
-
-// clean up
-freeMem(newAlleleSeq);
+			   clipAllele->length, lm);
 
 return retSequence;
 }
@@ -191,7 +161,7 @@ offset += exonOffset;
 return offset;
 }
 
-static char *getCodingSequence(struct genePred *pred, char *transcriptSequence)
+static char *getCodingSequence(struct genePred *pred, char *transcriptSequence, struct lm *lm)
 /* extract the CDS from a transcript */
 {
 if (*pred->strand == '-')
@@ -199,7 +169,7 @@ if (*pred->strand == '-')
 
 // Get leftmost CDS boundary to trim off 5' (or 3' if on minus strand):
 int cdsOffset = getCodingOffsetInTx(pred, '+');
-char *newString = cloneString(transcriptSequence + cdsOffset);
+char *newString = lmCloneString(lm, transcriptSequence + cdsOffset);
 
 // trim off 3' (or 5' if on minus strand)
 newString[genePredCdsSize(pred)] = 0;
@@ -240,26 +210,54 @@ if (numDifferent != NULL)
 return firstChange;
 }
 
+static struct dnaSeq *lmNewSimpleSeq(struct lm *lm, char *seq)
+/* Like newDnaSeq but no name and using localmem. */
+{
+struct dnaSeq *simpleSeq;
+lmAllocVar(lm, simpleSeq);
+simpleSeq->dna = seq;
+simpleSeq->size = strlen(seq);
+return simpleSeq;
+}
+
+static char *lmSimpleTranslate(struct lm *lm, struct dnaSeq *dnaSeq)
+/* Just translate dnaSeq into pep, use 'Z' and truncate for stop codon, and use localmem. */
+{
+int aaLen = (dnaSeq->size / 3) + 1;
+char *pep = lmAlloc(lm, aaLen + 1);
+int i;
+for (i = 0;  i < dnaSeq->size;  i += 3)
+    {
+    char aa = lookupCodon(dnaSeq->dna + i);
+    pep[i/3] = aa;
+    if (aa == '\0')
+	{
+	pep[i/3] = 'Z';
+	break;
+	}
+    }
+if (i < dnaSeq->size && pep[i/3] != 'Z')
+    // incomplete final codon
+    pep[i/3] = 'X';
+return pep;
+}
+
 static void getSequences(struct genePred *pred, char *transcriptSequence,
-    char **retCodingSequence,  char **retAaSeq)
+			 char **retCodingSequence,  char **retAaSeq, struct lm *lm)
 /* get coding sequences for a transcript and a variant transcript */
 {
-char *codingSequence = getCodingSequence(pred, transcriptSequence);
-struct dnaSeq *codingDna = newDnaSeq(codingSequence, strlen(codingSequence), NULL);
-// TRUE here truncates at stop, but doesn't include the Z:
-aaSeq *aaSeq = translateSeq(codingDna, 0, FALSE);
-char *stop = strchr(aaSeq->dna, 'Z');
+char *codingSequence = getCodingSequence(pred, transcriptSequence, lm);
+struct dnaSeq *codingDna = lmNewSimpleSeq(lm, codingSequence);
+char *aaSeq = lmSimpleTranslate(lm, codingDna);
+char *stop = strchr(aaSeq, 'Z');
 if (stop != NULL)
     {
-    *(stop+1) = '\0';
     // If aaSeq was truncated by a stop codon, truncate codingSequence as well:
-    int codingLength = 3*strlen(aaSeq->dna);
+    int codingLength = 3*strlen(aaSeq);
     codingSequence[codingLength] = '\0';
     }
 *retCodingSequence = codingSequence;
-*retAaSeq = cloneString(aaSeq->dna);
-freez(aaSeq);
-freez(codingDna);
+*retAaSeq = aaSeq;
 }
 
 static void setNCExonVals(struct gpFx *gpFx, int exonNum, int cDnaPosition)
@@ -271,7 +269,7 @@ gpFx->details.nonCodingExon.cDnaPosition = cDnaPosition;
 }
 
 struct gpFx *gpFxCheckUtr( struct allele *allele, struct genePred *pred, 
-			   int exonNum, int cDnaPosition)
+			   int exonNum, int cDnaPosition, struct lm *lm)
 /* check for effects in UTR of coding gene -- caller ensures it's in exon, pred is coding
  * and exonNum has been strand-adjusted */
 {
@@ -286,17 +284,18 @@ else if (variant->chromStart < pred->txEnd && variant->chromEnd > pred->cdsEnd)
     term = (*pred->strand == '-') ? _5_prime_UTR_variant : _3_prime_UTR_variant;
 if (term != 0)
     {
-    gpFx = gpFxNew(allele->sequence, pred->name, term, nonCodingExon);
+    gpFx = gpFxNew(allele->sequence, pred->name, term, nonCodingExon, lm);
     setNCExonVals(gpFx, exonNum, cDnaPosition);
     }
 return gpFx;
 }
 
 struct gpFx *gpFxChangedNoncodingExon(struct allele *allele, struct genePred *pred,
-				      int exonNum, int cDnaPosition)
+				      int exonNum, int cDnaPosition, struct lm *lm)
 /* generate an effect for a variant in a non-coding transcript */
 {
-struct gpFx *gpFx = gpFxNew(allele->sequence, pred->name, non_coding_exon_variant, nonCodingExon);
+struct gpFx *gpFx = gpFxNew(allele->sequence, pred->name, non_coding_exon_variant, nonCodingExon,
+			    lm);
 if (*pred->strand == '-')
     exonNum = pred->exonCount - exonNum - 1;
 setNCExonVals(gpFx, exonNum, cDnaPosition);
@@ -403,9 +402,9 @@ else
     }
 }
 
-struct gpFx *gpFxChangedCodingExon(struct allele *allele, struct genePred *pred,
-    int exonNum, struct psl *transcriptPsl, char *transcriptSequence,
-    char *newSequence, struct genePred *newPred)
+struct gpFx *gpFxChangedCodingExon(struct allele *allele, struct genePred *pred, int exonNum,
+				   char *transcriptSequence, char *newSequence,
+				   struct genePred *newPred, struct lm *lm)
 /* calculate effect of allele change on coding transcript */
 {
 struct gpFx *effectsList = NULL;
@@ -415,19 +414,20 @@ if (*pred->strand == '-')
 // first find effects of allele in UTR, if any
 int dnaChangeLength;
 int cDnaPosition = firstChange(newSequence, transcriptSequence, &dnaChangeLength);
-effectsList = gpFxCheckUtr(allele, pred, exonNum, cDnaPosition);
+effectsList = gpFxCheckUtr(allele, pred, exonNum, cDnaPosition, lm);
 
-// calculate original and variant coding AA's
+// calculate original and variant coding DNA and AA's
 char *oldCodingSequence, *newCodingSequence, *oldaa, *newaa;
-getSequences(pred, transcriptSequence, &oldCodingSequence, &oldaa);
-getSequences(newPred, newSequence, &newCodingSequence, &newaa);
+getSequences(pred, transcriptSequence, &oldCodingSequence, &oldaa, lm);
+getSequences(newPred, newSequence, &newCodingSequence, &newaa, lm);
 
 // if coding sequence hasn't changed, we're done (allele == reference allele)
 if (sameString(oldCodingSequence, newCodingSequence))
     return effectsList;
 
 // allocate the effect structure - fill in soNumber and details below
-struct gpFx *effect = gpFxNew(allele->sequence, pred->name, coding_sequence_variant, codingChange);
+struct gpFx *effect = gpFxNew(allele->sequence, pred->name, coding_sequence_variant, codingChange,
+			      lm);
 struct codingChange *cc = &effect->details.codingChange;
 cc->cDnaPosition = cDnaPosition;
 int cdsChangeLength;
@@ -438,12 +438,12 @@ cc->exonNumber = exonNum;
 int codonPosStart = (cc->cdsPosition / 3) ;
 int codonPosEnd = ((cdsChangeLength - 1 + cc->cdsPosition) / 3) ;
 int numCodons = (codonPosEnd - codonPosStart + 1);
-cc->codonOld = cloneStringZ(oldCodingSequence + codonPosStart*3, numCodons*3);
-cc->codonNew = cloneStringZ(newCodingSequence + codonPosStart*3, numCodons*3);
+cc->codonOld = lmCloneStringZ(lm, oldCodingSequence + codonPosStart*3, numCodons*3);
+cc->codonNew = lmCloneStringZ(lm, newCodingSequence + codonPosStart*3, numCodons*3);
 
 cc->pepPosition = codonPosStart;
-cc->aaOld = cloneStringZ(oldaa + cc->pepPosition, numCodons);
-cc->aaNew = cloneStringZ(newaa + cc->pepPosition, numCodons);
+cc->aaOld = lmCloneStringZ(lm, oldaa + cc->pepPosition, numCodons);
+cc->aaNew = lmCloneStringZ(lm, newaa + cc->pepPosition, numCodons);
 
 boolean safeFromNMD = isSafeFromNMD(exonNum, allele->variant, pred);
 setSpecificCodingSoTerm(effect, oldaa, newaa, countDashes(newCodingSequence), cdsChangeLength,
@@ -454,110 +454,73 @@ return effectsList;
 }
 
 
-struct gpFx *gpFxInExon(struct allele *allele, struct genePred *pred, 
-    int exonNum, struct psl *transcriptPsl, struct dnaSeq *transcriptSequence)
+struct gpFx *gpFxInExon(struct allele *allele, struct genePred *pred, int exonNum,
+			int exonQStart, struct dnaSeq *transcriptSequence,
+			struct lm *lm)
 /* generate an effect from a different allele in an exon */
 {
 struct genePred *newPred = pred;
-char *newSequence = gpFxModifySequence(allele, pred, exonNum,
-				       transcriptPsl, transcriptSequence, &newPred);
+char *newSequence = gpFxModifySequence(allele, pred, exonNum, exonQStart, transcriptSequence,
+				       &newPred, lm);
 
 if (sameString(newSequence, transcriptSequence->dna))
     return NULL;  // no change in transcript
 
 struct gpFx *effectsList;
 if (pred->cdsStart != pred->cdsEnd)
-    effectsList = gpFxChangedCodingExon(allele, pred, exonNum, transcriptPsl, 
-					transcriptSequence->dna, newSequence, newPred);
+    effectsList = gpFxChangedCodingExon(allele, pred, exonNum, transcriptSequence->dna,
+					newSequence, newPred, lm);
 else
     {
     int cDnaPosition = firstChange(newSequence, transcriptSequence->dna, NULL);
-    effectsList = gpFxChangedNoncodingExon(allele, pred, exonNum, cDnaPosition);
+    effectsList = gpFxChangedNoncodingExon(allele, pred, exonNum, cDnaPosition, lm);
     }
 
-if (newPred != pred)
-    freeMem(newPred);
 return effectsList;
 }
 
-static struct psl *genePredToPsl(struct genePred *pred)
-/* generate a PSL alignment to a transcript from a genePred */
-{
-int qSize = genePredBases(pred);
-#define BOGUS_CHROM_SIZE  0
-struct psl *psl = pslNew(pred->name, qSize, 0, qSize,
-                         pred->chrom, BOGUS_CHROM_SIZE, 
-			 pred->txStart, pred->txEnd,
-			 pred->strand, pred->exonCount, 0);
-psl->match = psl->qSize;
-
-int i, qNext = 0;
-for (i = 0; i < pred->exonCount; i++)
-    {
-    int exonSize =  pred->exonEnds[i] - pred->exonStarts[i];
-
-    psl->qStarts[i] = qNext;
-    //psl->tStarts[i] = pred->exonStarts[i] + pred->txStart;
-    psl->tStarts[i] = pred->exonStarts[i];
-    psl->blockSizes[i] = exonSize;
-
-/* notnow
-    if (i > 0)
-        {
-        psl->tNumInsert += 1;
-        psl->tBaseInsert += psl->tStarts[i] - pslTEnd(psl, i-1);
-        }
-*/
-
-    psl->blockCount++;
-    qNext += psl->blockSizes[i];
-    }
-
-return psl;
-}
-
-static struct gpFx *gpFxCheckExons(struct variant *variant, 
-    struct genePred *pred, struct dnaSeq *transcriptSequence)
+static struct gpFx *gpFxCheckExons(struct variant *variantList, struct genePred *pred,
+				   struct dnaSeq *transcriptSequence, struct lm *lm)
 // check to see if the variant is in an exon
 {
-int ii;
 struct gpFx *effectsList = NULL;
-struct psl *transcriptPsl = genePredToPsl(pred);
-
-// should copy transcriptSequence if we have more than one variant!!
-for(; variant ; variant = variant->next)
+int exonQStart = 0;
+int ii;
+for (ii=0; ii < pred->exonCount; ii++)
     {
-    struct allele *allele = variant->alleles;
-    for(; allele ; allele = allele->next)
+    struct variant *variant = variantList;
+    for(; variant ; variant = variant->next)
 	{
-	for(ii=0; ii < pred->exonCount; ii++)
+	// check if in an exon
+	int end = variant->chromEnd;
+	if (variant->chromStart == end)
+	    end++;
+	int size;
+	if ((size = positiveRangeIntersection(pred->exonStarts[ii], pred->exonEnds[ii], 
+					      variant->chromStart, end)) > 0)
 	    {
-	    // check if in an exon
-	    int size;
-	    int end = variant->chromEnd;
-	    if (variant->chromStart == end)
-		end++;
-	    if ((size = positiveRangeIntersection(pred->exonStarts[ii], 
-		pred->exonEnds[ii], 
-		variant->chromStart, end)) > 0)
+	    if (size != end - variant->chromStart)
 		{
-		if (size != end - variant->chromStart)
-		    {
-		    struct gpFx *effect = gpFxNew(allele->sequence, pred->name,
-						  complex_transcript_variant, none);
-		    effectsList = slCat(effectsList, effect);
-		    }
-		effectsList = slCat(effectsList, gpFxInExon(allele, pred, ii,
-		    transcriptPsl, transcriptSequence));
+		// variant is not completely in exon
+		struct gpFx *effect = gpFxNew("", pred->name,
+					      complex_transcript_variant, none, lm);
+		effectsList = slCat(effectsList, effect);
+		}
+	    struct allele *allele = variant->alleles;
+	    for(; allele ; allele = allele->next)
+		{
+		effectsList = slCat(effectsList, gpFxInExon(allele, pred, ii, exonQStart,
+							    transcriptSequence, lm));
 		}
 	    }
 	}
+    exonQStart += (pred->exonEnds[ii] - pred->exonStarts[ii]);
     }
 
 return effectsList;
 }
 
-static struct gpFx *gpFxCheckIntrons(struct variant *variant, struct genePred *pred)
+static struct gpFx *gpFxCheckIntrons(struct variant *variant, struct genePred *pred, struct lm *lm)
 // check to see if a single variant overlaps an intron (and possibly splice region)
 //#*** TODO: watch out for "introns" that are actually indels between tx seq and ref genome!
 {
@@ -581,7 +544,7 @@ for (ii=0; ii < pred->exonCount - 1; ii++)
 		 (variant->chromEnd > intronEnd-8 && variant->chromStart < intronEnd+3))
 	    // Within 3 to 8 bases of intron start or end:
 	    soNumber = splice_region_variant;
-	struct gpFx *effects = gpFxNew("", pred->name, soNumber, intron);
+	struct gpFx *effects = gpFxNew("", pred->name, soNumber, intron, lm);
 	effects->details.intron.intronNumber = minusStrand ? (pred->exonCount - ii - 1) : ii;
 	slAddHead(&effectsList, effects);
 	}
@@ -590,7 +553,7 @@ for (ii=0; ii < pred->exonCount - 1; ii++)
 	{
 	// if variant is in exon *but* within 3 bases of splice site,
 	// it also qualifies as splice_region_variant:
-	struct gpFx *effects = gpFxNew("", pred->name, splice_region_variant, intron);
+	struct gpFx *effects = gpFxNew("", pred->name, splice_region_variant, intron, lm);
 	effects->details.intron.intronNumber = minusStrand ? (pred->exonCount - ii - 1) : ii;
 	slAddHead(&effectsList, effects);
 	}
@@ -599,8 +562,8 @@ return effectsList;
 }
 
 
-static struct gpFx *gpFxCheckBackground(struct variant *variant, 
-    struct genePred *pred)
+static struct gpFx *gpFxCheckBackground(struct variant *variant, struct genePred *pred,
+					struct lm *lm)
 // check to see if the variant is up or downstream or in intron of the gene 
 {
 struct gpFx *effectsList = NULL;
@@ -608,7 +571,7 @@ struct gpFx *effectsList = NULL;
 for(; variant ; variant = variant->next)
     {
     // is this variant in an intron
-    effectsList = slCat(effectsList, gpFxCheckIntrons(variant, pred));
+    effectsList = slCat(effectsList, gpFxCheckIntrons(variant, pred, lm));
 
     // Is this variant to the left or right of transcript?
     enum soTerm soNumber = 0;
@@ -630,7 +593,7 @@ for(; variant ; variant = variant->next)
 	}
     if (soNumber != 0)
 	{
-	struct gpFx *effects = gpFxNew("", pred->name, soNumber, none);
+	struct gpFx *effects = gpFxNew("", pred->name, soNumber, none, lm);
 	effectsList = slCat(effectsList, effects);
 	}
     }
@@ -652,7 +615,7 @@ for(; variant; variant = variant->next)
 }
 
 struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
-    struct dnaSeq *transcriptSequence)
+			    struct dnaSeq *transcriptSequence, struct lm *lm)
 // return the predicted effect(s) of a variation list on a genePred
 {
 struct gpFx *effectsList = NULL;
@@ -661,11 +624,12 @@ struct gpFx *effectsList = NULL;
 checkVariantList(variant);
 
 // check to see if SNP is up or downstream in intron 
-effectsList = slCat(effectsList, gpFxCheckBackground(variant, pred));
+effectsList = slCat(effectsList, gpFxCheckBackground(variant, pred, lm));
 
 // check to see if SNP is in the transcript
-effectsList = slCat(effectsList, gpFxCheckExons(variant, pred, 
-    transcriptSequence));
+effectsList = slCat(effectsList, gpFxCheckExons(variant, pred, transcriptSequence, lm));
+
+//#*** sort by position
 
 return effectsList;
 }

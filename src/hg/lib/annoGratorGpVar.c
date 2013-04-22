@@ -196,53 +196,33 @@ return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rig
 			      wordsOut, sSelf->numCols, callerLm);
 }
 
-/* Get the sequence associated with a particular bed concatenated together. */
-struct dnaSeq *twoBitSeqFromBed(struct twoBitFile *tbf, struct bed *bed, struct lm *lm)
-{
-struct dnaSeq *block = NULL;
-struct dnaSeq *bedSeq = NULL;
-int i = 0 ;
-int size;
-assert(bed);
-/* Handle very simple beds and beds with blocks. */
-if(bed->blockCount == 0)
-    {
-    bedSeq = twoBitReadSeqFragExt(tbf, bed->chrom, bed->chromStart, bed->chromEnd, FALSE, &size);
-    freez(&bedSeq->name);
-    bedSeq->name = lmCloneString(lm, bed->name);
-    }
-else
-    {
-    int offSet = bed->chromStart;
-    struct dyString *currentSeq = newDyString(2048);
-    //hNibForChrom(db, bed->chrom, fileName);
-    for(i=0; i<bed->blockCount; i++)
-	{
-	block = twoBitReadSeqFragExt(tbf, bed->chrom, 
-	      offSet+bed->chromStarts[i], offSet+bed->chromStarts[i]+bed->blockSizes[i], FALSE, &size);
-	dyStringAppendN(currentSeq, block->dna, block->size);
-	dnaSeqFree(&block);
-	}
-    AllocVar(bedSeq);
-    bedSeq->name = lmCloneString(lm, bed->name);
-    bedSeq->dna = lmCloneString(lm, currentSeq->string);
-    bedSeq->size = strlen(bedSeq->dna);
-    dyStringFree(&currentSeq);
-    }
-if(bed->strand[0] == '-')
-    reverseComplement(bedSeq->dna, bedSeq->size);
-return bedSeq;
-}
-
 struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, struct twoBitFile *tbf,
 					 struct lm *lm)
+/* Return concatenated genomic sequence of exons of pred. */
 {
-struct bed *bed = bedFromGenePred(pred);
-struct dnaSeq *dnaSeq = twoBitSeqFromBed(tbf, bed, lm);
-
-return dnaSeq;
+int txLen = 0;
+int i;
+for (i=0; i < pred->exonCount; i++)
+    txLen += (pred->exonEnds[i] - pred->exonStarts[i]);
+char *seq = lmAlloc(lm, txLen + 1);
+int offset = 0;
+for (i=0; i < pred->exonCount; i++)
+    {
+    struct dnaSeq *block = twoBitReadSeqFragLower(tbf, pred->chrom, pred->exonStarts[i],
+						  pred->exonEnds[i]);
+    memcpy(seq+offset, block->dna, sizeof(*seq) * block->size);
+    offset += (pred->exonEnds[i] - pred->exonStarts[i]);
+    dnaSeqFree(&block);
+    }
+if(pred->strand[0] == '-')
+    reverseComplement(seq, txLen);
+struct dnaSeq *txSeq = NULL;
+lmAllocVar(lm, txSeq);
+txSeq->name = lmCloneString(lm, pred->name);
+txSeq->dna = seq;
+txSeq->size = txLen;
+return txSeq;
 }
-
 
 static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant *variant,
 				    struct genePred *pred, struct annoRow *inRow,
@@ -253,7 +233,7 @@ struct annoGrator *gSelf = &(self->grator);
 struct annoStreamer *sSelf = &(gSelf->streamer);
 struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->assembly->tbf,
 							      self->lm);
-struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence);
+struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence, self->lm);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
@@ -344,6 +324,7 @@ for(; rows; rows = rows->next)
 	slReverse(&outRow);
 	outRows = slCat(outRow, outRows);
 	}
+    genePredFree(&gp);
     }
 slReverse(&outRows);
 if (self->cdsOnly && outRows == NULL && retRJFilterFailed != NULL)

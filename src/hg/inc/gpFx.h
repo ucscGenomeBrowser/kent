@@ -1,3 +1,5 @@
+/* gpFx --- routines to calculate the effect of variation on a genePred */
+
 #ifndef GPFX_H
 #define GPFX_H
 
@@ -45,7 +47,7 @@ struct gpFx
     };
 
 struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
-    struct dnaSeq *transcriptSequence);
+			    struct dnaSeq *transcriptSequence, struct lm *lm);
 // return the predicted effect(s) of a variation list on a genePred
 
 // number of bases up or downstream that we flag
