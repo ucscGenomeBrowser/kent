@@ -24,8 +24,8 @@ endif
 O = ${A}.o
 objects = ${O} ${extraObjects} ${externObjects}
 
-all ${A}: ${O} ${extraObjects}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A} ${objects} ${MYLIBS} ${L} -lm
+${DESTDIR}${BINDIR}/${A}${EXE}: ${O} ${extraObjects}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} ${objects} ${MYLIBS} ${L} -lm
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 compile:: ${O} ${extraObjects} ${MYLIBS}

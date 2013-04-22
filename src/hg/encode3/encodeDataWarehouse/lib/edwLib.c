@@ -7,7 +7,10 @@
 #include "jksql.h"
 #include "openssl/sha.h"
 #include "base64.h"
+#include "basicBed.h"
+#include "bigBed.h"
 #include "portable.h"
+#include "genomeRangeTree.h"
 #include "md5.h"
 #include "obscure.h"
 #include "encodeDataWarehouse.h"
@@ -16,13 +19,10 @@
 /* System globals - just a few ... for now.  Please seriously not too many more. */
 char *edwDatabase = "encodeDataWarehouse";
 char *edwLicensePlatePrefix = "ENCFF";
+int edwSingleFileTimeout = 60*60;   // How many seconds we give ourselves to fetch a single file
 
-char *edwRootDir = "/scratch/kent/encodeDataWarehouse/";
-char *edwValDataDir = "/scratch/kent/encValData/";
-#ifdef AT_SDSC
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *edwValDataDir = "/data/encode3/encValData/";
-#endif
 
 char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
 /* Return full path (which eventually should be freeMem'd) for fileId */
@@ -42,6 +42,8 @@ char *edwTempDir()
 static char path[PATH_LEN];
 if (path[0] == 0)
     {
+    /* Note code elsewhere depends on tmp dire being inside of edwRootDir - also good
+     * to have it there so move to a permanent file is quick and unlikely to fail. */
     safef(path, sizeof(path), "%s%s", edwRootDir, "tmp");
     makeDirsOnPath(path);
     strcat(path, "/");
@@ -61,15 +63,13 @@ if (submitDirId <= 0)
     return -1;
 
 /* Then see if we have file that matches submitDir and submitFileName. */
-int hourInSeconds = 60*60;
 safef(query, sizeof(query), 
     "select id from edwFile "
-    "where submitFileName='%s' and submitDirId = %d "
+    "where submitFileName='%s' and submitDirId = %d and errorMessage = '' and deprecated=''"
     " and (endUploadTime > startUploadTime or startUploadTime < %lld) "
     "order by submitId desc limit 1"
     , submitFileName, submitDirId
-    , (long long)edwNow() - hourInSeconds);
-uglyf("query=%s\n", query);
+    , (long long)edwNow() - edwSingleFileTimeout);
 long id = sqlQuickLongLong(conn, query);
 if (id == 0)
     return -1;
@@ -189,6 +189,26 @@ int id = edwCheckAccess(conn, user, password);
 if (id == 0)
     errAbort("User/password combination doesn't give access to database");
 return id;
+}
+
+struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email)
+/* Return user associated with that email or NULL if not found */
+{
+char query[256];
+char *escapedEmail = sqlEscapeString(email);
+safef(query, sizeof(query), "select * from edwUser where email='%s'", escapedEmail);
+freez(&escapedEmail);
+struct edwUser *user = edwUserLoadByQuery(conn, query);
+return user;
+}
+
+struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
+/* Return user associated with email or put up error message. */
+{
+struct edwUser *user = edwUserFromEmail(conn, email);
+if (user == NULL)
+    errAbort("No user exists with email %s.", email);
+return user;
 }
 
 void edwMakeSid(char *user, char sid[EDW_ACCESS_SIZE])
@@ -550,7 +570,7 @@ return edwFileLoadByQuery(conn, query);
 
 struct edwFile *edwFileAllIntactBetween(struct sqlConnection *conn, int startId, int endId)
 /* Return list of all files that are intact (finished uploading and MD5 checked) 
- * with file IDs between startId and endId - including endId*/
+ * with file IDs between startId and endId - including endId */
 {
 char query[128];
 safef(query, sizeof(query), 
@@ -583,5 +603,107 @@ struct edwValidFile *edwValidFileFromFileId(struct sqlConnection *conn, long lon
 char query[128];
 safef(query, sizeof(query), "select * from edwValidFile where fileId=%lld", fileId);
 return edwValidFileLoadByQuery(conn, query);
+}
+
+struct genomeRangeTree *edwMakeGrtFromBed3List(struct bed3 *bedList)
+/* Make up a genomeRangeTree around bed file. */
+{
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+struct bed3 *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    genomeRangeTreeAdd(grt, bed->chrom, bed->chromStart, bed->chromEnd);
+return grt;
+}
+
+struct edwAssembly *edwAssemblyForUcscDb(struct sqlConnection *conn, char *ucscDb)
+/* Get assembly for given UCSC ID or die trying */
+{
+char query[256];
+safef(query, sizeof(query), "select * from edwAssembly where ucscDb='%s'", ucscDb);
+struct edwAssembly *assembly = edwAssemblyLoadByQuery(conn, query);
+if (assembly == NULL)
+    errAbort("Can't find assembly for %s", ucscDb);
+return assembly;
+}
+
+struct genomeRangeTree *edwGrtFromBigBed(char *fileName)
+/* Return genome range tree for simple (unblocked) bed */
+{
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+struct genomeRangeTree *grt = genomeRangeTreeNew();
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    struct rbTree *tree = genomeRangeTreeFindOrAddRangeTree(grt, chrom->name);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *iv, *ivList = NULL;
+    ivList = bigBedIntervalQuery(bbi, chrom->name, 0, chrom->size, 0, lm);
+    for (iv = ivList; iv != NULL; iv = iv->next)
+        rangeTreeAdd(tree, iv->start, iv->end);
+    lmCleanup(&lm);
+    }
+bigBedFileClose(&bbi);
+bbiChromInfoFreeList(&chromList);
+return grt;
+}
+
+boolean edwIsSupportedBigBedFormat(char *format)
+/* Return TRUE if it's one of the bigBed formats we support. */
+{
+return sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
+	 sameString(format, "bedLogR") || sameString(format, "bigBed") ||
+	 sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
+	 sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
+	 sameString(format, "shortFrags");
+}
+
+void edwWriteErrToTable(struct sqlConnection *conn, char *table, int id, char *err)
+/* Write out error message to errorMessage field of table. */
+{
+char *trimmedError = trimSpaces(err);
+char escapedErrorMessage[2*strlen(trimmedError)+1];
+sqlEscapeString2(escapedErrorMessage, trimmedError);
+struct dyString *query = dyStringNew(0);
+dyStringPrintf(query, "update %s set errorMessage='%s' where id=%d", 
+    table, escapedErrorMessage, id);
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
+}
+
+void edwWriteErrToStderrAndTable(struct sqlConnection *conn, char *table, int id, char *err)
+/* Write out error message to errorMessage field of table and through stderr. */
+{
+warn("%s", trimSpaces(err));
+edwWriteErrToTable(conn, table, id, err);
+}
+
+
+void edwAddJob(struct sqlConnection *conn, char *command)
+/* Add job to queue to run. */
+{
+char query[256+strlen(command)];
+safef(query, sizeof(query), "insert into edwJob (commandLine) values('%s')", command);
+sqlUpdate(conn, query);
+}
+
+void edwAddQaJob(struct sqlConnection *conn, long long fileId)
+/* Create job to do QA on this and add to queue */
+{
+char command[64];
+safef(command, sizeof(command), "edwQaAgent %lld", fileId);
+edwAddJob(conn, command);
+}
+
+struct edwSubmit *edwMostRecentSubmission(struct sqlConnection *conn, char *url)
+/* Return most recent submission, possibly in progress, from this url */
+{
+int urlSize = strlen(url);
+char escapedUrl[2*urlSize+1];
+sqlEscapeString2(escapedUrl, url);
+int escapedSize = strlen(escapedUrl);
+char query[128 + escapedSize];
+safef(query, sizeof(query), 
+    "select * from edwSubmit where url='%s' order by id desc limit 1", escapedUrl);
+return edwSubmitLoadByQuery(conn, query);
 }
 

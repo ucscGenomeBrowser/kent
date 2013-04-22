@@ -1,12 +1,12 @@
 include ../../../inc/common.mk
 
-BASEMASK = ../baseMask -verbose=0 
-BASEMASKTOBED = ../baseMaskToBed -verbose=0 
-BEDTOBASEMASK = ../bedToBaseMask -verbose=0 
-TRACKTOBASEMASK = ../trackToBaseMask -verbose=0 
-FEATUREBITS = featureBits -countGaps
-BEDSORT = bedSort
-DIFF = diff 
+BASEMASK = ${DESTBINDIR}/baseMask -verbose=0
+BASEMASKTOBED = ${DESTBINDIR}/baseMaskToBed -verbose=0
+BEDTOBASEMASK = ${DESTBINDIR}/bedToBaseMask -verbose=0
+TRACKTOBASEMASK = ${DESTBINDIR}/trackToBaseMask -verbose=0
+FEATUREBITS = ${DESTBINDIR}/featureBits -countGaps
+BEDSORT = ${DESTBINDIR}/bedSort
+DIFF = diff
 TIME = time
 
 test:   bedToBaseMaskTests \

@@ -38,7 +38,7 @@ CREATE TABLE ucscRetroInfo (
     coverage int unsigned not null,	# % of bases that align to gene col31
     label int not null,	# 1=pseudogene,-1 not pseudogene -2 expressed retroGene col32
     milliBad int unsigned not null,	# milliBad score, pseudogene aligned to genome col33
-    alignGapCount int not null,	# old simple intron count col34
+    alignGapCount int not null,	# simple intron count col34
     processedIntrons int not null,	# count of introns removed via retrotransposition col35
     conservedSpliceSites int not null,	# conserved splice site count col36
     maxOverlap int not null,	# largest overlap with another mrna col37

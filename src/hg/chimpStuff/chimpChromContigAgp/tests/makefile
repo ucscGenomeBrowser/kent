@@ -1,13 +1,13 @@
 test:   simpleTest biggerTest
 
-PROG=chimpChromContigAgp
+chimpChromContigAgp=${DESTBINDIR}/chimpChromContigAgp
 
 simpleTest:     mkdirs
-	${PROG} input/chrom.agp input/scaffold.agp output/chromContig.agp
+	${chimpChromContigAgp} input/chrom.agp input/scaffold.agp output/chromContig.agp
 	diff expected/chromContig.agp output
 	
 biggerTest:     mkdirs
-	${PROG} input/chrom2.agp input/scaffold2.agp output/chromContig2.agp
+	${chimpChromContigAgp} input/chrom2.agp input/scaffold2.agp output/chromContig2.agp
 	diff expected/chromContig2.agp output
 
 mkdirs:

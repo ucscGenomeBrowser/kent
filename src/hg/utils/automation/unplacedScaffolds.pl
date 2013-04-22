@@ -98,25 +98,15 @@ if (scalar(@extensions) > 1) {
   }
   die "TO BE DONE";
 } else {
+  my $regex = "\\" . $extensions[0];  # escape the . in .1
   printf STDERR "# one extension found: %s\n", $extensions[0];
-  `zcat $agpFile | sed -e "s/$extensions[0]\t/\t/;" > ${db}.ucsc.agp`;
+  `zcat $agpFile | sed -e "s/$regex\t/\t/;" > ${db}.ucsc.agp`;
   printf STDERR "# written ${db}.ucsc.agp\n";
   printf STDERR "# writing ${db}.ucsc.fa.gz\n";
-  `zcat $fastaFile | sed -e "s/^>gi.*gb./>/; s/$extensions[0]. .*//;" | gzip -c > ${db}.ucsc.fa.gz`;
+  `zcat $fastaFile | sed -e "s/^>gi.*gb./>/; s/$regex. .*//;" | gzip -c > ${db}.ucsc.fa.gz`;
   printf STDERR "# done ${db}.ucsc.fa.gz\n";
   die "ERROR: ../${db}.unmasked.2bit already exists ?"
     if ( -s "../${db}.unmasked.2bit" );
   `faToTwoBit ${db}.ucsc.fa.gz ../${db}.unmasked.2bit`;
   `checkAgpAndFa ${db}.ucsc.agp ../${db}.unmasked.2bit 2>&1 | tail -5 > checkAgp.result.txt`;
 }
-
-exit 0;
-
-__END__
-# verify we don't have any .acc numbers different from .1
-    zcat \
-    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
-        | cut -f1 | egrep "^GL|^ADFV" \
-        | sed -e 's/^GL[0-9][0-9]*//; s/^ADFV[0-9][0-9]*//' | sort | uniq -c
-    #   33196 .1
-

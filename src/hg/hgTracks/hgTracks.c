@@ -421,6 +421,7 @@ if (!IS_KNOWN(track->remoteDataSource))
     //        SET_TO_YES(track->remoteDataSource);
     //    }
     if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
+	startsWithWord("halSnake",track->tdb->type) ||
 	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
         {
         SET_TO_YES(track->remoteDataSource);
@@ -4081,6 +4082,7 @@ char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
 return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
+     || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      && (bdu && strstr(bdu,"://"))
      && (track->subtracks == NULL);
@@ -5583,7 +5585,10 @@ char *position = cartUsualString(cart, "position", hDefaultPos(database));
 char *defaultChrom = hDefaultChrom(database);
 char *freeze = hFreezeFromDb(database);
 struct dyString *title = dyStringNew(512);
-if (stringIn(database, freeze))
+if (freeze == NULL)
+    dyStringPrintf(title, "%s Browser Sequences",
+		   hOrganism(database));
+else if (stringIn(database, freeze))
     dyStringPrintf(title, "%s %s Browser Sequences",
 		   hOrganism(database), freeze);
 else

@@ -65,7 +65,7 @@ snpVersion 137
 
 track ucscRetroAli4
 shortLabel Retroposed Genes 4.0
-longLabel Retroposed GenesV4, Including Pseudogenes - Sept. 2012
+longLabel Retroposed Genes V4, Including Pseudogenes - Sept. 2012
 group genes
 type psl
 priority 37.14
@@ -117,7 +117,7 @@ searchPriority 3.53
 
 track ucscRetroAli5
 shortLabel Retroposed Genes 5.0
-longLabel Retroposed Genes, Including Pseudogenes  [ucscRetroAli5]
+longLabel Retroposed Genes V5, Including Pseudogenes - Feb. 2013
 group genes
 type psl
 priority 37.14
@@ -134,6 +134,7 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+dataVersion Feb. 2013
 
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5

@@ -2,23 +2,40 @@
 # Destroy current encodeDataWarehouse and make a fresh one
 hgsql mysql -e "drop database encodeDataWarehouse"
 rm -rf /scratch/kent/encodeDataWarehouse
+mkdir /scratch/kent/encodeDataWarehouse
 hgsql mysql -e "create database encodeDataWarehouse"
 hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 edwCreateUser kent human kent@soe.ucsc.edu
+edwCreateUser eurie human euriehong@stanford.edu
 edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
 edwAddAssembly 10090 mm9 mm9 /gbdb/mm9/mm9.2bit -symLink=e47354d24b9d95e832c337d42b9f8f71
 edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra
-edwAddSubscriber updateLastId 'echo %u > /scratch/kent/encodeDataWarehouse/tmp/lastId'
-hgsql encodeDataWarehouse -e "insert edwQaAgent (name,program) values('makeValidFile', 'edwMakeValidFile');"
-hgsql encodeDataWarehouse -e "insert edwQaAgent (name,program) values('makeEnrichments', 'edwMakeEnrichments');"
 edwAddQaEnrichTarget open hg19 /hive/groups/encode/encode3/encValData/hg19/regions/open.bb
 edwAddQaEnrichTarget exon hg19 /hive/groups/encode/encode3/encValData/hg19/regions/exon.bb
 edwAddQaEnrichTarget promoter hg19 /hive/groups/encode/encode3/encValData/hg19/regions/promoter.bb
+edwAddQaEnrichTarget coding hg19 /hive/groups/encode/encode3/encValData/hg19/regions/coding.bb
+edwAddQaEnrichTarget intron hg19 /hive/groups/encode/encode3/encValData/hg19/regions/intron.bb
+edwAddQaEnrichTarget utr hg19 /hive/groups/encode/encode3/encValData/hg19/regions/utr.bb
+edwAddQaEnrichTarget utr3 hg19 /hive/groups/encode/encode3/encValData/hg19/regions/utr3.bb
+edwAddQaEnrichTarget utr5 hg19 /hive/groups/encode/encode3/encValData/hg19/regions/utr5.bb
 edwAddQaEnrichTarget open mm9 /hive/groups/encode/encode3/encValData/mm9/regions/open.bb
 edwAddQaEnrichTarget exon mm9 /hive/groups/encode/encode3/encValData/mm9/regions/exon.bb
 edwAddQaEnrichTarget promoter mm9 /hive/groups/encode/encode3/encValData/mm9/regions/promoter.bb
-edwSubmit http://encodedcc.sdsc.edu/encode2/hub/5.test kent human
-hgsql encodeDataWarehouse -e 'create view files as select id,edwFileName,size,left(submitFileName,70) from edwFile where errorMessage="" and deprecated=""'
+edwAddQaEnrichTarget coding mm9 /hive/groups/encode/encode3/encValData/mm9/regions/coding.bb
+edwAddQaEnrichTarget intron mm9 /hive/groups/encode/encode3/encValData/mm9/regions/intron.bb
+edwAddQaEnrichTarget utr3 mm9 /hive/groups/encode/encode3/encValData/mm9/regions/utr3.bb
+edwAddQaEnrichTarget utr5 mm9 /hive/groups/encode/encode3/encValData/mm9/regions/utr5.bb
+edwAddQaEnrichTarget utr mm9 /hive/groups/encode/encode3/encValData/mm9/regions/utr.bb
+hgsql encodeDataWarehouse -e 'create view files as select id,edwFileName,size,left(submitFileName,80) from edwFile where (errorMessage="" or errorMessage is NULL) and deprecated=""'
 hgsql encodeDataWarehouse -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from edwQaEnrich e,edwValidFile v,edwFile f,edwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
-hgsql encodeDataWarehouse -e 'create view validFiles as select id,fileId file,format,outputType output,experiment,replicate rep,enrichedIn,ucscDb,itemCount,mapRatio,depth from edwValidFile'
+hgsql encodeDataWarehouse -e 'create view validFiles as select licensePlate as accession,fileId file,format,outputType output,experiment,replicate rep,enrichedIn,ucscDb,itemCount,mapRatio,depth from edwValidFile'
 hgsql encodeDataWarehouse -e 'create view enrichments as select e.id id, e.fileId fileId,t.name target,v.enrichedIn, targetBaseHits,targetUniqHits,coverage,enrichment,uniqEnrich from edwQaEnrich e,edwQaEnrichTarget t,edwValidFile v where e.qaEnrichTargetId = t.id and e.fileId=v.fileId'
+hgsql encodeDataWarehouse -e 'create view crossEnrichments as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,ev.enrichedIn enrich,sampleSampleEnrichment xEnrichment from edwFile e,edwQaPairSampleOverlap p, edwFile y,edwValidFile ev where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId = e.id'
+hgsql encodeDataWarehouse -e 'create view correlations as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,pearsonInEnriched from edwFile e,edwQaPairCorrelation p, edwFile y where  e.id=p.elderFileId and y.id=p.youngerFileId'
+set fifo = /usr/local/apache/cgi-bin-kent/edwSubmit.fifo
+if (! -e $fifo) then
+    mkfifo $fifo
+    chmod a+x $fifo
+endif
+#killall -q edwSubmitSpooler
+#edwSubmitSpooler $fifo >& /scratch/kent/encodeDataWarehouse/submit.log &

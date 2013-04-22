@@ -2,8 +2,8 @@ include ../../../../inc/common.mk
 
 all: expTest1 chipSeqTest1
 
-UPDATE=mdbUpdate
-PRINT=mdbPrint
+UPDATE=${DESTBINDIR}/mdbUpdate
+PRINT=${DESTBINDIR}/mdbPrint
 
 TABLE=metaDbTest_${USER}
 

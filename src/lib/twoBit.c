@@ -1211,3 +1211,16 @@ if (nBlockCount > 0)
 
 return(size);
 }
+
+long long twoBitTotalSizeNoN(struct twoBitFile *tbf)
+/* return the size of the all the sequence in file, not counting N's*/
+{
+struct twoBitIndex *index;
+long long totalSize = 0;
+for (index = tbf->indexList; index != NULL; index = index->next)
+    {
+    int size = twoBitSeqSizeNoNs(tbf, index->name);
+    totalSize += size;
+    }
+return totalSize;
+}

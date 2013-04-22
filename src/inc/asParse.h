@@ -53,6 +53,18 @@ struct asTypeInfo
     char *djangoName;              /* Django type name */
     };
 
+struct asTypeInfo *asTypeFindLow(char *name);
+/* Return asType for a low level type of given name.  (Low level because may be decorated 
+ * with array or pointer  stuff at a higher level).  Returns NULL if not found. */
+
+struct asIndex
+/* Information about an index */
+    {
+    struct asIndex *next;   /* In case it needs to be on a list. */
+    char *type;	/* 'primary' 'index' or 'uniq' to pass to SQL */
+    int size;	/* If nonzero only index prefix of this many chars. */
+    };
+
 struct asColumn
 /* Info on one column/field */
     {
@@ -68,7 +80,9 @@ struct asColumn
     bool isSizeLink;               /* Flag to tell if have read link. */
     bool isList;                   /* TRUE if a list. */
     bool isArray;                  /* TRUE if an array. */
+    bool autoIncrement;		   /* TRUE if we want to auto_increment this field. */
     struct slName *values;         /* values for symbolic types */
+    struct asIndex *index;	   /* Possibly null index description. */
     };
 
 struct asObject
@@ -120,5 +134,19 @@ boolean asCompareObjs(char *name1, struct asObject *as1, char *name2, struct asO
  * If difference found, print it to stderr.  If abortOnDifference, errAbort.
  * Othewise, return TRUE if the objects columns match through the first numColumnsToCheck fields. 
  * If retNumColumnsSame is not NULL, then it will be set to the number of contiguous matching columns. */
+
+INLINE boolean asObjectsMatchFirstN(struct asObject *as1, struct asObject *as2, int n)
+/* Return TRUE if as1 has the same first n columns as as2. */
+{
+return asCompareObjs(as1->name, as1, as2->name, as2, n, NULL, FALSE);
+}
+
+INLINE boolean asObjectsMatch(struct asObject *as1, struct asObject *as2)
+{
+int colCount = slCount(as1->columnList);
+if (slCount(as2->columnList) != colCount)
+    return FALSE;
+return asCompareObjs(as1->name, as1, as2->name, as2, colCount, NULL, FALSE);
+}
 
 #endif /* ASPARSE_H */

@@ -1,6 +1,7 @@
 include ../../../../inc/common.mk
 
-overlapSelect = overlapSelect
+overlapSelect = ${DESTBINDIR}/overlapSelect
+genePredCheck = ${DESTBINDIR}/genePredCheck
 DIFF = diff -u
 
 # To check memory leaks, enable selectTableFree() in overlapSelect.c and
@@ -760,7 +761,7 @@ wideTest: mkout
 # genePredExt with empty name caused grief
 name2EmptyTest: mkout
 	${overlapSelect} input/name2Empty.gp input/name2Empty.gp output/$@.gp
-	genePredCheck -verbose=0 output/$@.gp
+	${genePredCheck} -verbose=0 output/$@.gp
 	${DIFF} expected/$@.gp output/$@.gp
 
 # psl strand regression

@@ -17,7 +17,10 @@
 #include "hex.h"
 #include "fieldedTable.h"
 #include "encodeDataWarehouse.h"
+#include "encode3/encode3Valid.h"
 #include "edwLib.h"
+
+boolean doNow = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -25,14 +28,14 @@ void usage()
 errAbort(
   "edwSubmit - Submit URL with validated.txt to warehouse.\n"
   "usage:\n"
-  "   edwSubmit submitUrl user password\n"
-  "Generally user is an email address\n"
+  "   edwSubmit submitUrl email-address\n"
   "options:\n"
-  );
+  "   -now  If set, start submission now even though one seems to be in progress for same url.");
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"now", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -160,7 +163,10 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 
 	/* Do a little check on it */
 	if (!sameString("mm9", ucscDbVal) && !sameString("hg19", ucscDbVal))
-	    errAbort("Unrecognized ucsc_db %s", ucscDbVal);
+	    errAbort("Unrecognized ucsc_db %s - please arrange files so that the top " 
+	             "level directory in the fileName in the manifest is a UCSC database name "
+		     "like 'hg19' or 'mm9.'  Alternatively please include a ucsc_db column.",
+		     ucscDbVal);
 
 	/* Add it to tags. */
 	cgiEncodeIntoDy(ucscDbTag, ucscDbVal, tags);
@@ -190,44 +196,47 @@ return sqlLastAutoId(conn);
 }
 
 int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned submitId, unsigned submitDirId,
-    char *submitFileName)
+    char *submitFileName, long long size)
 /* Make a new, largely empty, record around file and submit info. */
 {
 struct dyString *query = dyStringNew(0);
 char *escapedFileName = sqlEscapeString(submitFileName);
-dyStringAppend(query, "insert edwFile (submitId, submitDirId, submitFileName) ");
-dyStringPrintf(query, "VALUES(%u, %u, '%s')", submitId, submitDirId, escapedFileName);
+dyStringAppend(query, "insert edwFile (submitId, submitDirId, submitFileName, size) ");
+dyStringPrintf(query, "VALUES(%u, %u, '%s', %lld)", submitId, submitDirId, escapedFileName, size);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 freez(&escapedFileName);
 return sqlLastAutoId(conn);
 }
 
-void writeErrToTableAndDie(struct sqlConnection *conn, char *table, int id, char *err)
-/* Write out error to stderr and also save it in errorMessage field of submit table. */
-{
-char *trimmedError = trimSpaces(err);
-warn("%s", trimmedError);
-char escapedErrorMessage[2*strlen(trimmedError)+1];
-sqlEscapeString2(escapedErrorMessage, trimmedError);
-struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "update %s set errorMessage='%s' where id=%d", 
-    table, escapedErrorMessage, id);
-sqlUpdate(conn, query->string);
-dyStringFree(&query);
-noWarnAbort();
-}
-
 void handleSubmitError(struct sqlConnection *conn, int submitId, char *err)
 /* Write out error to stderr and also save it in errorMessage field of submit table. */
 {
-writeErrToTableAndDie(conn, "edwSubmit", submitId, err);
+edwWriteErrToStderrAndTable(conn, "edwSubmit", submitId, err);
+noWarnAbort();
 }
 
-void handleFileError(struct sqlConnection *conn, int fileId, char *err)
-/* Write out error to stderr and also save it in errorMessage field of file table. */
+void handleFileError(struct sqlConnection *conn, int submitId, int fileId, char *err)
+/* Write out error to stderr and also save it in errorMessage field of file 
+ * and submit table. */
 {
-writeErrToTableAndDie(conn, "edwFile", fileId, err);
+/* Write out error message to errorMessage field of table. */
+warn("%s", trimSpaces(err));
+edwWriteErrToTable(conn, "edwFile", fileId, err);
+edwWriteErrToTable(conn, "edwSubmit", submitId, err);
+noWarnAbort(err);
+}
+
+int mustMkstemp(char tempFileName[PATH_LEN])
+/* Fill in temporary file name with name of a tmp file and return open file handle. 
+ * Also set permissions to something better. */
+{
+int fd = mkstemp(tempFileName);
+if (fd == -1)
+    errnoAbort("Couldn't make temp file %s", tempFileName);
+if (fchmod(fd, 0664) == -1)
+    errnoAbort("Couldn't change permissions on temp file %s", tempFileName);
+return fd;
 }
 
 void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
@@ -236,45 +245,59 @@ void fetchFdToTempFile(int remoteFd, char tempFileName[PATH_LEN])
 /* Now make temp file name with XXXXXX name at end */
 safef(tempFileName, PATH_LEN, "%sedwSubmitXXXXXX", edwTempDir());
 
-/* Get open file handle. */
-int localFd = mkstemp(tempFileName);
+/* Get open file handle, copy file, and close. */
+int localFd = mustMkstemp(tempFileName);
 cpFile(remoteFd, localFd);
 mustCloseFd(&localFd);
 }
 
-int edwFileFetch(struct sqlConnection *conn, struct edwFile *bf, int fd, 
+int edwFileFetch(struct sqlConnection *conn, struct edwFile *ef, int fd, 
 	char *submitFileName, unsigned submitId, unsigned submitDirId)
-/* Fetch file and if successful update a bunch of the fields in bf with the result. 
+/* Fetch file and if successful update a bunch of the fields in ef with the result. 
  * Returns fileId. */
 {
-bf->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, bf->submitFileName);
+ef->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, ef->submitFileName, ef->size);
 
 /* Wrap getting the file, the actual data transfer, with an error catcher that
  * will remove partly uploaded files.  Perhaps some day we'll attempt to rescue
  * ones that are just truncated by downloading the rest,  but not now. */
-char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 struct errCatch *errCatch = errCatchNew();
+char tempName[PATH_LEN] = "";
+char edwFile[PATH_LEN] = "", edwPath[PATH_LEN];
 if (errCatchStart(errCatch))
     {
-    edwMakeFileNameAndPath(bf->id, submitFileName, edwFile, edwPath);
-    bf->startUploadTime = edwNow();
-    char tempName[PATH_LEN];
-    fetchFdToTempFile(fd, tempName);
+    /* Now make temp file name and open temp file in an atomic operation */
+    char *tempDir = edwTempDir();
+    safef(tempName, PATH_LEN, "%sedwSubmitXXXXXX", tempDir);
+    int localFd = mustMkstemp(tempName);
+
+    /* Update file name in database with temp file name so web app can track us. */
+    char query[PATH_LEN+128];
+    safef(query, sizeof(query), 
+	"update edwFile set edwFileName='%s' where id=%lld", 
+	tempName + strlen(edwRootDir), (long long)ef->id);
+    sqlUpdate(conn, query);
+
+    /* Do actual upload tracking how long it takes. */
+    ef->startUploadTime = edwNow();
+    cpFile(fd, localFd);
+    mustCloseFd(&localFd);
+    ef->endUploadTime = edwNow();
+
+    /* Rename file both in file system and (via ef) database. */
+    edwMakeFileNameAndPath(ef->id, submitFileName, edwFile, edwPath);
+    uglyf("edwFile=%s, edwPath=%s\n", edwFile, edwPath);
     mustRename(tempName, edwPath);
-    bf->endUploadTime = edwNow();
-    bf->edwFileName = cloneString(edwFile);
+    ef->edwFileName = cloneString(edwFile);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     /* Attempt to remove any partial file. */
-    if (edwFile[0] != 0)
-        {
-	char path[PATH_LEN];
-	safef(path, sizeof(path), "%s%s", edwRootDir, edwFile);
-	remove(path);
-	}
-    handleSubmitError(conn, submitId, errCatch->message->string);
+    if (tempName[0] != 0)
+	remove(tempName);
+    handleSubmitError(conn, submitId, errCatch->message->string);  // Throws further
+    assert(FALSE);  // We never get here
     }
 errCatchFree(&errCatch);
 
@@ -284,7 +307,7 @@ safef(query, sizeof(query),
        "update edwFile set"
        "  edwFileName='%s', startUploadTime=%lld, endUploadTime=%lld"
        "  where id = %d"
-       , bf->edwFileName, bf->startUploadTime, bf->endUploadTime, bf->id);
+       , ef->edwFileName, ef->startUploadTime, ef->endUploadTime, ef->id);
 sqlUpdate(conn, query);
 
 /* Wrap the validations in an error catcher that will save error to file table in database */
@@ -297,18 +320,18 @@ if (errCatchStart(errCatch))
     md5ForFile(edwPath, md5bin);
     char md5[33];
     hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
-    if (!sameWord(md5, bf->md5))
-        errAbort("%s corrupted in upload md5 %s != %s\n", bf->submitFileName, bf->md5, md5);
+    if (!sameWord(md5, ef->md5))
+        errAbort("%s has md5 mismatch: %s != %s.  File may be corrupted in upload, or file may have been changed since validateManifest was run.  Please check that md5 of file before upload is really %s.  If it is then try submitting again,  otherwise rerun validateManifest and then try submitting again. \n", ef->submitFileName, ef->md5, md5, ef->md5);
 
     /* Finish updating a bunch more of edwFile record. Note there is a requirement in 
-     * the validFile section that bf->updateTime be updated last.  A nonzero bf->updateTime
+     * the validFile section that ef->updateTime be updated last.  A nonzero ef->updateTime
      * is used as a sign of record complete. */
     struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
     dyStringPrintf(dy, "update edwFile set md5='%s',size=%lld,updateTime=%lld",
-	    md5, bf->size, bf->updateTime);
+	    md5, ef->size, ef->updateTime);
     dyStringAppend(dy, ", tags='");
-    dyStringAppend(dy, bf->tags);
-    dyStringPrintf(dy, "' where id=%d", bf->id);
+    dyStringAppend(dy, ef->tags);
+    dyStringPrintf(dy, "' where id=%d", ef->id);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
     success = TRUE;
@@ -316,9 +339,9 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    handleFileError(conn, bf->id, errCatch->message->string);
+    handleFileError(conn, submitId, ef->id, errCatch->message->string);
     }
-return bf->id;
+return ef->id;
 }
 
 int findFileGivenMd5AndSubmitDir(struct sqlConnection *conn, char *md5, int submitDirId)
@@ -419,7 +442,167 @@ slFreeList(&tagList);
 hashFree(&tagHash);
 }
 
-void edwSubmit(char *submitUrl, char *user, char *password)
+static void allGoodFileNameChars(char *fileName)
+/* Return TRUE if all chars are good for a file name */
+{
+char c, *s = fileName;
+while ((c = *s++) != 0)
+    if (!isalnum(c) && c != '_' && c != '-' && c != '.' && c != '/' && c != '+') 
+        errAbort("Character '%c' (binary %d) not allowed in fileName '%s'", c, (int)c, fileName);
+}
+
+static void allGoodSymbolChars(char *symbol)
+/* Return TRUE if all chars are good for a basic symbol in a controlled vocab */
+{
+if (!sameString("n/a", symbol))
+    {
+    char c, *s = symbol;
+    while ((c = *s++) != 0)
+	if (!isalnum(c) && c != '_')
+	    errAbort("Character '%c' not allowed in symbol '%s'", c, symbol);
+    }
+}
+
+static boolean isExperimentId(char *experiment)
+/* Return TRUE if it looks like an ENCODE experiment ID */
+{
+if (startsWith("wgEncode", experiment))
+    return TRUE;
+if (!startsWith("ENCSR", experiment))
+    return FALSE;
+if (!isdigit(experiment[5]) || !isdigit(experiment[6]) || !isdigit(experiment[7]))
+    return FALSE;
+if (!isupper(experiment[8]) || !isupper(experiment[9]) || !isupper(experiment[10]))
+    return FALSE;
+return TRUE;
+}
+
+boolean isAllNum(char *s)
+/* Return TRUE if all characters are numeric (no leading - even) */
+{
+char c;
+while ((c = *s++) != 0)
+    if (!isdigit(c))
+        return FALSE;
+return TRUE;
+}
+
+boolean isAllHexLower(char *s)
+/* Return TRUE if all chars are valid lower case hexadecimal. */
+{
+char c;
+while ((c = *s++) != 0)
+    if (!isdigit(c) && !(c >= 'a' && c <= 'f'))
+        return FALSE;
+return TRUE;
+}
+         
+char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
+    "bigWig", "bigBed", "bedLogR", "bedRnaElements", "bedRrbs", "broadPeak", 
+    "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", };
+int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
+
+char *edwSupportedEnrichedIn[] = {"unknown", "exon", "intron", "promoter", "coding", 
+    "utr", "utr3", "utr5", "open"};
+int edwSupportedEnrichedInCount = ArraySize(edwSupportedEnrichedIn);
+
+struct edwFile *edwParseSubmitFile(char *submitLocalPath, char *submitUrl)
+/* Load and parse up this file as fielded table, make sure all required fields are there,
+ * and calculate indexes of required fields.   This produces an edwFile list, but with
+ * still quite a few fields missing - just what can be filled in from submit filled in. 
+ * The submitUrl is just used for error reporting.  If it's local, just make it the
+ * same as submitLocalPath. */
+{
+char *requiredFields[] = {"file_name", "format", "output_type", "experiment", "replicate", 
+    "enriched_in", "md5_sum", "size",  "modified", "valid_key"};
+struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, submitUrl,
+	requiredFields, ArraySize(requiredFields));
+
+/* Get offsets of all required fields */
+int fileIx = stringArrayIx("file_name", table->fields, table->fieldCount);
+int formatIx = stringArrayIx("format", table->fields, table->fieldCount);
+int outputIx = stringArrayIx("output_type", table->fields, table->fieldCount);
+int experimentIx = stringArrayIx("experiment", table->fields, table->fieldCount);
+int replicateIx = stringArrayIx("replicate", table->fields, table->fieldCount);
+int enrichedIx = stringArrayIx("enriched_in", table->fields, table->fieldCount);
+int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
+int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
+int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
+int validIx = stringArrayIx("valid_key", table->fields, table->fieldCount);
+
+/* Loop through and make sure all field values are ok */
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char **row = fr->row;
+    char *fileName = row[fileIx];
+    allGoodFileNameChars(fileName);
+    char *format = row[formatIx];
+    if (stringArrayIx(format, edwSupportedFormats, edwSupportedFormatsCount) < 0)
+	errAbort("Format %s is not supported", format);
+    allGoodSymbolChars(row[outputIx]);
+    char *experiment = row[experimentIx];
+    if (!isExperimentId(experiment))
+        errAbort("%s in experiment field does not seem to be an encode experiment", experiment);
+    char *replicate = row[replicateIx];
+    if (differentString(replicate, "pooled") && differentString(replicate, "n/a") )
+	if (!isAllNum(replicate))
+	    errAbort("%s is not a good value for the replicate column", replicate);
+    char *enriched = row[enrichedIx];
+    if (stringArrayIx(enriched, edwSupportedEnrichedIn, edwSupportedEnrichedInCount) < 0)
+        errAbort("Enriched_in %s is not supported", enriched);
+    char *md5 = row[md5Ix];
+    if (strlen(md5) != 32 || !isAllHexLower(md5))
+        errAbort("md5 '%s' is not in all lower case 32 character hexadecimal format.", md5);
+    char *size = row[sizeIx];
+    if (!isAllNum(size))
+        errAbort("Invalid size '%s'", size);
+    char *modified = row[modifiedIx];
+    if (!isAllNum(modified))
+        errAbort("Invalid modification time '%s'", modified);
+    char *validIn = row[validIx];
+    char *realValid = encode3CalcValidationKey(md5, sqlLongLong(size));
+    if (!sameString(validIn, realValid))
+        errAbort("The valid_key %s for %s doesn't fit", validIn, fileName);
+    freez(&realValid);
+    }
+
+return edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
+}
+
+void notOverlappingSelf(struct sqlConnection *conn, char *url)
+/* Ensure we are only submission going on for this URL, allowing for time out
+ * and command line override. */
+{
+if (doNow) // Allow command line override
+    return; 
+
+/* Fetch most recent submission from this URL. */
+struct edwSubmit *old = edwMostRecentSubmission(conn, url);
+if (old == NULL)
+    return;
+
+/* See if we have something in progress, meaning started but not ended. */
+if (old->endUploadTime == 0 && isEmpty(old->errorMessage))
+    {
+    /* Figure out when we started most recent single file in the upload, or when
+     * we started if not files started yet. */
+    char query[256];
+    safef(query, sizeof(query), 
+	"select max(startUploadTime) from edwFile where submitId=%u", old->id);
+    long long maxStartTime = sqlQuickLongLong(conn, query);
+    if (maxStartTime == 0)
+	maxStartTime = old->startUploadTime;
+
+    /* Check against our usual time out. */
+    if (edwNow() - maxStartTime < edwSingleFileTimeout)
+        errAbort("Submission of %s already is in progress.  Please come back in an hour", url);
+    }
+
+edwSubmitFree(&old);
+}
+
+void edwSubmit(char *submitUrl, char *email)
 /* edwSubmit - Submit URL with validated.txt to warehouse. */
 {
 /* Parse out url a little into submitDir and submitFile */
@@ -432,9 +615,18 @@ char submitDir[submitDirSize+1];
 memcpy(submitDir, submitUrl, submitDirSize);
 submitDir[submitDirSize] = 0;  // Add trailing zero
 
+
 /* Make sure user has access. */
-struct sqlConnection *conn = sqlConnect(edwDatabase);
+struct sqlConnection *conn = sqlConnectProfile(edwDatabase, edwDatabase);
+struct edwUser *user = edwMustGetUserFromEmail(conn, email);
+int userId = user->id;
+
+#ifdef OLD
 int userId =  edwMustHaveAccess(conn, user, password);
+#endif /* OLD */
+
+/* See if we are already running on same submission.  If so council patience and quit. */
+notOverlappingSelf(conn, submitUrl);
 
 /* Make a submit record. */
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, userId);
@@ -449,6 +641,7 @@ if (errCatchStart(errCatch))
     /* Open remote submission file.  This is most likely where we will fail. */
     int hostId=0, submitDirId = 0;
     long long startUploadTime = edwNow();
+    uglyf("edwOpenAndRecordInDir(submitDir=%s, submitFile=%s, submitUrl=%s)\n", submitDir, submitFile, submitUrl);
     int remoteFd = edwOpenAndRecordInDir(conn, submitDir, submitFile, submitUrl, 
 	&hostId, &submitDirId);
 
@@ -461,6 +654,7 @@ if (errCatchStart(errCatch))
     /* Calculate MD5 sum, and see if we already have such a file. */
     char *md5 = md5HexForFile(tempSubmitFile);
     int fileId = findFileGivenMd5AndSubmitDir(conn, md5, submitDirId);
+    uglyf("tempSubmitFile=%s, fileId=%d, md5=%s\n", tempSubmitFile, fileId, md5);
 
     /* If we already have it, then delete temp file, otherwise put file in file table. */
     char submitLocalPath[PATH_LEN];
@@ -476,7 +670,7 @@ if (errCatchStart(errCatch))
         {
 	/* Looks like it's the first time we've seen this submission file, so
 	 * save the file itself.  We'll get to the records inside the file in a bit. */
-	fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFile);
+	fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFile, 0);
 
 	/* Get file/path names for submission file inside warehouse. */
 	char edwFile[PATH_LEN];
@@ -498,19 +692,10 @@ if (errCatchStart(errCatch))
 	sqlUpdate(conn, query);
 	}
 
-    /* By now there is a submit file on the local file system.  Load and
-     * parse up this file as fielded table, make sure all required fields are there,
-     * and calculate indexes of required fields. */
-    char *requiredFields[] = {"file_name", "md5_sum", "size", "modified"};
-    struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, 
-	    requiredFields, ArraySize(requiredFields));
-    int fileIx = stringArrayIx("file_name", table->fields, table->fieldCount);
-    int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
-    int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
-    int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
+    /* By now there is a submit file on the local file system.  */
 
-    /* Convert submit file to a edwFile list with a lot of missing fields. */
-    bfList = edwFileFromFieldedTable(table, fileIx, md5Ix, sizeIx, modifiedIx);
+    uglyf("edwParseSubmitFile(%s, %s)\n", submitLocalPath, submitUrl);
+    bfList = edwParseSubmitFile(submitLocalPath, submitUrl);
 
     /* Save our progress so far to submit table. */
     safef(query, sizeof(query), 
@@ -530,9 +715,33 @@ errCatchFree(&errCatch);
 /* If we made it here the validated submit file itself got transfered and parses out
  * correctly.   */
 
+/* Weed out files we already have. */
+int oldCount = 0;
+long long oldBytes = 0, newBytes = 0, byteCount = 0;
+struct edwFile *bf, *oldList = NULL, *newList = NULL, *bfNext;
+for (bf = bfList; bf != NULL; bf = bfNext)
+    {
+    bfNext = bf->next;
+    if (edwGotFile(conn, submitDir, bf->submitFileName, bf->md5) >= 0)
+        {
+	++oldCount;
+	oldBytes += bf->size;
+	slAddHead(&oldList, bf);
+	}
+    else
+        slAddHead(&newList, bf);
+    byteCount += bf->size;
+    }
+bfList = NULL;
+
+/* Update database with oldFile count. */
+safef(query, sizeof(query), 
+    "update edwSubmit set oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u",  
+	oldCount, oldBytes, byteCount, submitId);
+sqlUpdate(conn, query);
+
 /* Go through list attempting to load the files if we don't already have them. */
-struct edwFile *bf;
-for (bf = bfList; bf != NULL; bf = bf->next)
+for (bf = newList; bf != NULL; bf = bf->next)
     {
     int submitUrlSize = strlen(submitDir) + strlen(bf->submitFileName) + 1;
     char submitUrl[submitUrlSize];
@@ -552,9 +761,13 @@ for (bf = bfList; bf != NULL; bf = bf->next)
 		&hostId, &submitDirId);
 	    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
 	    close(fd);
-	    safef(query, sizeof(query), "update edwSubmit set newFiles=newFiles+1 where id=%d", 
-		submitId);
+	    newBytes += bf->size;
+	    safef(query, sizeof(query), 
+		"update edwSubmit set newFiles=newFiles+1,newBytes=%lld where id=%d", 
+		newBytes, submitId);
 	    sqlUpdate(conn, query);
+
+	    edwAddQaJob(conn, fileId);
 	    tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
 	    }
 	}
@@ -580,8 +793,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+doNow = optionExists("now");
+if (argc != 3)
     usage();
-edwSubmit(argv[1], argv[2], argv[3]);
+edwSubmit(argv[1], argv[2]);
 return 0;
 }

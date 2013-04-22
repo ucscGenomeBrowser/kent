@@ -1,7 +1,9 @@
 #!/bin/tcsh -efx
-autoSql encodeDataWarehouse.as encodeDataWarehouse -dbLink
-mv encodeDataWarehouse.h ../inc
-cat encodeDataWarehouse.sql | sed 's/id int unsigned/id int unsigned auto_increment/' > tmp.sql
+autoSql encodeDataWarehouse.as encodeDataWarehouse -dbLink -defaultZeros
+rm ../*/*.o
+pushd .
+cd ..
 make
-mv tmp.sql encodeDataWarehouse.sql
+popd
+mv encodeDataWarehouse.h ../inc
 ./resetEdw

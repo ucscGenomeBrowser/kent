@@ -5,6 +5,7 @@
 #include "tokenizer.h"
 #include "dystring.h"
 #include "asParse.h"
+#include "sqlNum.h"
 
 
 /* n.b. switched double/float from %f to %g to partially address losing
@@ -32,19 +33,27 @@ struct asTypeInfo asTypes[] = {
     {t_simple,  "simple",  FALSE, FALSE, "longblob",          "!error!",       "Simple",   "Simple",   NULL,   "TextField"},
 };
 
+struct asTypeInfo *asTypeFindLow(char *name)
+/* Return asType for a low level type of given name.  (Low level because may be decorated 
+ * with array or pointer  stuff at a higher level).  Returns NULL if not found. */
+{
+int i;
+for (i=0; i<ArraySize(asTypes); ++i)
+    {
+    if (sameWord(asTypes[i].name, name))
+	return &asTypes[i];
+    }
+return NULL;
+}
+
 static struct asTypeInfo *findLowType(struct tokenizer *tkz)
 /* Return low type info.  Squawk and die if s doesn't
  * correspond to one. */
 {
-char *s = tkz->string;
-int i;
-for (i=0; i<ArraySize(asTypes); ++i)
-    {
-    if (sameWord(asTypes[i].name, s))
-	return &asTypes[i];
-    }
-tokenizerErrAbort(tkz, "Unknown type '%s'", s);
-return NULL;
+struct asTypeInfo *type = asTypeFindLow(tkz->string);
+if (type == NULL)
+    tokenizerErrAbort(tkz, "Unknown type '%s'", tkz->string);
+return type;
 }
 
 static void sqlSymDef(struct asColumn *col, struct dyString *dy)
@@ -185,8 +194,41 @@ tokenizerMustMatch(tkz, ")");
 slReverse(&col->values);
 }
 
+int tokenizerUnsignedVal(struct tokenizer *tkz)
+/* Ensure current token is an unsigned integer and return value */
+{
+if (!isdigit(tkz->string[0]))
+    {
+    struct lineFile *lf = tkz->lf;
+    errAbort("expecting number got %s line %d of %s", tkz->string, lf->lineIx, lf->fileName);
+    }
+return sqlUnsigned(tkz->string);
+}
+
+struct asIndex *asParseIndex(struct tokenizer *tkz, struct asColumn *col)
+/* See if there's an index key word and if so parse it and return an asIndex
+ * based on it.  If not an index key word then just return NULL. */
+{
+struct asIndex *index = NULL;
+if (sameString(tkz->string, "primary") || sameString(tkz->string, "unique")
+	|| sameString(tkz->string, "index") )
+    {
+    AllocVar(index);
+    index->type = cloneString(tkz->string);
+    tokenizerMustHaveNext(tkz);
+    if (tkz->string[0] == '[')
+	{
+	tokenizerMustHaveNext(tkz);
+	index->size = tokenizerUnsignedVal(tkz);
+	tokenizerMustHaveNext(tkz);
+	tokenizerMustMatch(tkz, "]");
+	}
+    }
+return index;
+}
+
 static void asParseColDef(struct tokenizer *tkz, struct asObject *obj)
-/* Parse a column definintion */
+/* Parse a column definition */
 {
 struct asColumn *col;
 AllocVar(col);
@@ -207,6 +249,14 @@ else if (tkz->string[0] == '(')
 
 col->name = cloneString(tkz->string);
 tokenizerMustHaveNext(tkz);
+col->index = asParseIndex(tkz, col);
+if (sameString(tkz->string, "auto"))
+    {
+    col->autoIncrement = TRUE;
+    if (!asTypesIsInt(col->lowType->type))
+        errAbort("error - auto with non-integer type for field %s", col->name);
+    tokenizerMustHaveNext(tkz);
+    }
 tokenizerMustMatch(tkz, ";");
 col->comment = cloneString(tkz->string);
 tokenizerMustHaveNext(tkz);
