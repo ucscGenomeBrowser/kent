@@ -6,6 +6,7 @@ mkdir /scratch/kent/encodeDataWarehouse
 hgsql mysql -e "create database encodeDataWarehouse"
 hgsql encodeDataWarehouse < encodeDataWarehouse.sql
 edwCreateUser kent human kent@soe.ucsc.edu
+edwCreateUser eurie human euriehong@stanford.edu
 edwAddAssembly 9606 hg19 hg19 /gbdb/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
 edwAddAssembly 10090 mm9 mm9 /gbdb/mm9/mm9.2bit -symLink=e47354d24b9d95e832c337d42b9f8f71
 edwAddSubscriber wgEncode 'echo good old %u from wgEncode' -tagPattern=wgEncode.ra

@@ -120,6 +120,9 @@ struct genomeRangeTree *edwGrtFromBigBed(char *fileName);
 boolean edwIsSupportedBigBedFormat(char *format);
 /* Return TRUE if it's one of the bigBed formats we support. */
 
+void edwWriteErrToTable(struct sqlConnection *conn, char *table, int id, char *err);
+/* Write out error message to errorMessage field of table. */
+
 void edwWriteErrToStderrAndTable(struct sqlConnection *conn, char *table, int id, char *err);
 /* Write out error message to errorMessage field of table. */
 

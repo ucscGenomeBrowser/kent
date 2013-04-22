@@ -38,7 +38,7 @@ if (list != NULL)
     char query[256], **row, **row2;
     struct sqlResult *sr, *sr2;
     hPrintf("<B>InterPro Domains: </B> ");
-    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IProtein?ac=%s\" TARGET=_blank>",
+    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/entry/%s\" TARGET=_blank>",
     	swissProtAcc);
     hPrintf("Graphical view of domain structure</A><BR>");
     safef(query, sizeof(query),
@@ -49,7 +49,7 @@ if (list != NULL)
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	//hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+	//hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/entry/%s\" TARGET=_blank>", row[0]);
 	//hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
         char interPro[256];
         char *pdb = hPdbFromGdb(db);
@@ -62,14 +62,14 @@ if (list != NULL)
                 sr2 = sqlGetResult(conn, query);
                 if ((row2 = sqlNextRow(sr2)) != NULL)
                     {
-                    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+                    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/entry/%s\" TARGET=_blank>", row[0]);
                     hPrintf("%s</A> - %s <BR>\n", row[0], row2[0]);
                     }
                 sqlFreeResult(&sr2);
                 }
             else
                 {
-                hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+                hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/entry/%s\" TARGET=_blank>", row[0]);
                 hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
                 }
 	}

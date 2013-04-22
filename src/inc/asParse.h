@@ -53,6 +53,18 @@ struct asTypeInfo
     char *djangoName;              /* Django type name */
     };
 
+struct asTypeInfo *asTypeFindLow(char *name);
+/* Return asType for a low level type of given name.  (Low level because may be decorated 
+ * with array or pointer  stuff at a higher level).  Returns NULL if not found. */
+
+struct asIndex
+/* Information about an index */
+    {
+    struct asIndex *next;   /* In case it needs to be on a list. */
+    char *type;	/* 'primary' 'index' or 'uniq' to pass to SQL */
+    int size;	/* If nonzero only index prefix of this many chars. */
+    };
+
 struct asColumn
 /* Info on one column/field */
     {
@@ -68,7 +80,9 @@ struct asColumn
     bool isSizeLink;               /* Flag to tell if have read link. */
     bool isList;                   /* TRUE if a list. */
     bool isArray;                  /* TRUE if an array. */
+    bool autoIncrement;		   /* TRUE if we want to auto_increment this field. */
     struct slName *values;         /* values for symbolic types */
+    struct asIndex *index;	   /* Possibly null index description. */
     };
 
 struct asObject

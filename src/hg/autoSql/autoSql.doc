@@ -248,6 +248,32 @@ struct symTest
     unsigned skills;	/* set column */
     };
 
+INDEXES and AUTOINCREMENT
+
+You can explicitly add indexes to fields in AutoSQL.  If you don't explicitly add an index
+it will assume the first field is the primary key and index it as such.  To add an index
+include one of the keywords 'primary' (for primary key) 'unique' (for an index on a field
+where all values are unique) or 'index' (for fields that may contain duplicate values).  It is 
+possible to just index the first part of a field by including the number of characters.  
+
+An integer (signed or unsigned, small or large) can be make an auto-increment column,  where
+the database automatically assigns an incrementing numerical value to it, by including the
+'auto' key word after the index if any.
+
+An example with indexes and autoincrement:
+
+table addressBook
+"A simple address book"
+    (
+    uint id primary auto; "Autoincrementing primary key for this record."
+    string name unique;  "Name - first or last or both, we don't care, except it must be unique"
+    lstring address;  "Street address"
+    string city index[12];  "City - indexing just first 12 character"
+    uint zipCode index;  "A zip code is always positive, so can be unsigned"
+    char[2] state index;  "Just store the abbreviation for the state"
+    )
+
+
 GRAMMER
 
 The grammer for AutoSQL is:
@@ -265,7 +291,15 @@ declareType:
 	'table'
 
 declareName:  
-	name
+	name 
+        name indexType
+        name 'auto'
+        name indexType 'auto'
+
+indexType:
+        'primary'
+        'index'
+        'unique'
 
 comment: 
 	quotedString
