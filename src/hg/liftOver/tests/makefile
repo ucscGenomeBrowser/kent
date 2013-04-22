@@ -4,10 +4,11 @@ include ../../../inc/common.mk
 
 test:   bin bedPlus3 bed8 simpleTest minus enm001 chuckTest chuckBigTest enr223
 
-PROG=liftOver
+liftOver=${DESTBINDIR}/liftOver
+liftOverMerge=${DESTBINDIR}/liftOverMerge
 
 bed12:	mkdirs
-	${PROG} -hasBin -bedPlus=12 \
+	${liftOver} -hasBin -bedPlus=12 \
             input/bed12.bed \
             /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
                 output/bed12.good.bed output/bed12.bad.bed
@@ -15,7 +16,7 @@ bed12:	mkdirs
                 diff - expected/bed12.bed
 
 bed8:	mkdirs
-	${PROG} \
+	${liftOver} \
             input/bed8.bed \
             /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain.gz \
                 output/bed8.good.bed output/bed8.bad.bed
@@ -23,7 +24,7 @@ bed8:	mkdirs
                 diff - expected/bed8.bed
 
 bin:    mkdirs
-	${PROG} -hasBin -bedPlus=6\
+	${liftOver} -hasBin -bedPlus=6\
             input/bin.bed \
             /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/bin.good.bed output/bin.bad.bed
@@ -31,7 +32,7 @@ bin:    mkdirs
                 diff - expected/bin.bed
 
 bedPlus3:	mkdirs
-	${PROG} -bedPlus=3 \
+	${liftOver} -bedPlus=3 \
             input/bedPlus.bed \
             /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/bedPlus3.good.bed output/bedPlus3.bad.bed
@@ -39,7 +40,7 @@ bedPlus3:	mkdirs
                 diff - expected/bedPlus3.bed
 
 simpleTest:     mkdirs
-	${PROG} \
+	${liftOver} \
             input/mouseRegions.bed \
                 /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr16.chain \
                     output/mouseRegions.good.bed \
@@ -48,7 +49,7 @@ simpleTest:     mkdirs
                 diff - expected/mouseRegions.bed
 
 minus:	mkdirs
-	${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
+	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
                 input/enr223.S.bed \
                     /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr6.chain \
                     output/enr223.S.good.bed \
@@ -58,7 +59,7 @@ minus:	mkdirs
 
 # test w/o multiple
 enm001:	mkdirs
-	${PROG} -minMatch=.01 \
+	${liftOver} -minMatch=.01 \
             input/enm001.bed \
             /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr7.chain \
                 output/enm001.good.bed output/enm001.bad.bed
@@ -66,7 +67,7 @@ enm001:	mkdirs
                 diff - expected/enm001.bed
 
 chuckTest:	mkdirs
-	${PROG} \
+	${liftOver} \
             input/chuckTest.bed \
             /cluster/data/mm2/bed/liftOver/mm2.mm5.liftOver/over/chr19.chain \
                 output/chuckTest.good.bed output/chuckTest.bad.bed
@@ -74,7 +75,7 @@ chuckTest:	mkdirs
                 diff - expected/chuckTest.bed
 
 chuckBigTest:	mkdirs
-	${PROG} \
+	${liftOver} \
             input/chuckBigTest.bed \
             /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/chuckBigTest.good.bed output/chuckBigTest.bad.bed
@@ -83,18 +84,18 @@ chuckBigTest:	mkdirs
 
 # missing expected file
 m7rat:	mkdirs
-	${PROG} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple \
+	${liftOver} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple \
             input/m7rat.bed \
             /cluster/data/hg16/bed/blastz.rn3/axtChain/subset/chr19.chain \
                 output/m7rat.good.bed output/m7rat.bad.bed
-	liftOverMerge ${VERBOSE} -mergeGap=2000 \
+	${liftOverMerge} ${VERBOSE} -mergeGap=2000 \
                 output/m7rat.good.bed output/m7rat.merged.bed
 	cat output/m7rat.merged.bed | \
                 diff - expected/m7rat.bed
 
 # problem with config setting needed to access chain table
 m4mouse:	mkdirs
-	${PROG} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple -chainTable=hg16.chainMm5\
+	${liftOver} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple -chainTable=hg16.chainMm5\
             input/m4mouse.bed \
             /cluster/data/hg16/bed/blastz.mm5/axtChain/subset/chr22.chain \
                 output/m4mouse.good.bed output/m4mouse.bad.bed
@@ -105,7 +106,7 @@ m4mouse:	mkdirs
 # liftOverMerge now ?
 mergeTest: enm006
 enm006:	mkdirs
-	${PROG} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple \
+	${liftOver} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple \
             input/enm006.bed \
             /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chrX.chain \
                 output/enm006.good.bed output/enm006.bad.bed
@@ -114,7 +115,7 @@ enm006:	mkdirs
 
 # missing expected file
 enr112:	mkdirs
-	${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
+	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
                 input/enr112.bed \
                     /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr2.chain \
                     output/enr112.good.bed \
@@ -124,7 +125,7 @@ enr112:	mkdirs
 
 orderTest: enr223
 enr223:	mkdirs
-	${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
+	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
             input/enr223.bed \
                 /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr6.chain \
                     output/enr223.good.bed \
@@ -134,7 +135,7 @@ enr223:	mkdirs
 
 # too slow -- don't use in default test suite
 mm3:	mkdirs
-	${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE}\
+	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE}\
                 /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
                     /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain \
                     output/mm3.all.good.bed \
@@ -144,7 +145,7 @@ mm3:	mkdirs
 
 # too slow -- don't use in default test suite
 multiple:	mkdirs
-	${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE}\
+	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE}\
                 input/mm3.multiple.bed \
                     /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain \
                     output/mm3.multiple.good.bed \
