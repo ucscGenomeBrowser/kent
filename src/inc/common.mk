@@ -169,6 +169,11 @@ ifeq (${ENCODE_PIPELINE_BIN},)
     ENCODE_PIPELINE_BIN=/cluster/data/encode/pipeline/bin
 endif
 
+DESTBINDIR=${DESTDIR}/${BINDIR}
+
+# location of stringify program
+STRINGIFY = ${DESTBINDIR}/stringify
+
 MKDIR=mkdir -p
 ifeq (${STRIP},)
    STRIP=true
@@ -185,9 +190,6 @@ else
   AOUT=a.out
   EXE=
 endif
-
-# location of stringify program
-STRINGIFY = ${DESTDIR}${BINDIR}/stringify
 
 #Lowelab defines
 #The lowelab specific code will be included in compilation if the following conditions are satistied
