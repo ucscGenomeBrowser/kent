@@ -209,31 +209,33 @@ freez(&escapedFileName);
 return sqlLastAutoId(conn);
 }
 
-void writeErrToTableAndDie(struct sqlConnection *conn, char *table, int id, char *err)
-/* Write out error to stderr and also save it in errorMessage field of submit table. */
-{
-edwWriteErrToStderrAndTable(conn, table, id, err);
-noWarnAbort();
-}
-
 void handleSubmitError(struct sqlConnection *conn, int submitId, char *err)
 /* Write out error to stderr and also save it in errorMessage field of submit table. */
 {
-writeErrToTableAndDie(conn, "edwSubmit", submitId, err);
+edwWriteErrToStderrAndTable(conn, "edwSubmit", submitId, err);
+noWarnAbort();
 }
 
-void handleFileError(struct sqlConnection *conn, int fileId, char *err)
-/* Write out error to stderr and also save it in errorMessage field of file table. */
+void handleFileError(struct sqlConnection *conn, int submitId, int fileId, char *err)
+/* Write out error to stderr and also save it in errorMessage field of file 
+ * and submit table. */
 {
-writeErrToTableAndDie(conn, "edwFile", fileId, err);
+/* Write out error message to errorMessage field of table. */
+warn("%s", trimSpaces(err));
+edwWriteErrToTable(conn, "edwFile", fileId, err);
+edwWriteErrToTable(conn, "edwSubmit", submitId, err);
+noWarnAbort(err);
 }
 
 int mustMkstemp(char tempFileName[PATH_LEN])
-/* Fill in temporary file name with name of a tmp file and return open file handle. */
+/* Fill in temporary file name with name of a tmp file and return open file handle. 
+ * Also set permissions to something better. */
 {
 int fd = mkstemp(tempFileName);
 if (fd == -1)
     errnoAbort("Couldn't make temp file %s", tempFileName);
+if (fchmod(fd, 0664) == -1)
+    errnoAbort("Couldn't change permissions on temp file %s", tempFileName);
 return fd;
 }
 
@@ -319,7 +321,7 @@ if (errCatchStart(errCatch))
     char md5[33];
     hexBinaryString(md5bin, sizeof(md5bin), md5, sizeof(md5));
     if (!sameWord(md5, ef->md5))
-        errAbort("%s corrupted in upload md5 %s != %s\n", ef->submitFileName, ef->md5, md5);
+        errAbort("%s has md5 mismatch: %s != %s.  File may be corrupted in upload, or file may have been changed since validateManifest was run.  Please check that md5 of file before upload is really %s.  If it is then try submitting again,  otherwise rerun validateManifest and then try submitting again. \n", ef->submitFileName, ef->md5, md5, ef->md5);
 
     /* Finish updating a bunch more of edwFile record. Note there is a requirement in 
      * the validFile section that ef->updateTime be updated last.  A nonzero ef->updateTime
@@ -337,7 +339,7 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    handleFileError(conn, ef->id, errCatch->message->string);
+    handleFileError(conn, submitId, ef->id, errCatch->message->string);
     }
 return ef->id;
 }

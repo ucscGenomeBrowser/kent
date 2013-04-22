@@ -26,6 +26,13 @@ ifeq (${USE_SSL},)
 endif
 
 
+# libhal: disabled by default
+ifeq (${USE_HAL},1)
+    L+=/cluster/home/braney/hal/lib/halChain.a /cluster/home/braney/hal/lib/halLod.a /cluster/home/braney/hal/lib/halLib.a /cluster/home/braney/sonLib/lib/sonLib.a /hive/groups/recon/local/lib/libhdf5_cpp.a /hive/groups/recon/local/lib/libhdf5.a /hive/groups/recon/local/lib/libhdf5_hl.a /hive/groups/recon/local/lib/libsz.a -lstdc++
+    HG_DEFS+=-DUSE_HAL
+    HG_INC+=-I/cluster/home/braney/hal/chain/inc/
+endif
+
 # libssl: disabled by default
 ifeq (${USE_SSL},1)
     L+=-lssl -lcrypto

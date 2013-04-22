@@ -657,11 +657,10 @@ return sameString(format, "broadPeak") || sameString(format, "narrowPeak") ||
 	 sameString(format, "shortFrags");
 }
 
-void edwWriteErrToStderrAndTable(struct sqlConnection *conn, char *table, int id, char *err)
+void edwWriteErrToTable(struct sqlConnection *conn, char *table, int id, char *err)
 /* Write out error message to errorMessage field of table. */
 {
 char *trimmedError = trimSpaces(err);
-warn("%s", trimmedError);
 char escapedErrorMessage[2*strlen(trimmedError)+1];
 sqlEscapeString2(escapedErrorMessage, trimmedError);
 struct dyString *query = dyStringNew(0);
@@ -670,6 +669,14 @@ dyStringPrintf(query, "update %s set errorMessage='%s' where id=%d",
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 }
+
+void edwWriteErrToStderrAndTable(struct sqlConnection *conn, char *table, int id, char *err)
+/* Write out error message to errorMessage field of table and through stderr. */
+{
+warn("%s", trimSpaces(err));
+edwWriteErrToTable(conn, table, id, err);
+}
+
 
 void edwAddJob(struct sqlConnection *conn, char *command)
 /* Add job to queue to run. */

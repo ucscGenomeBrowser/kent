@@ -6,6 +6,4 @@ cd ..
 make
 popd
 mv encodeDataWarehouse.h ../inc
-cat encodeDataWarehouse.sql | sed 's/id int unsigned default 0/id int unsigned auto_increment/' > tmp.sql
-mv tmp.sql encodeDataWarehouse.sql
 ./resetEdw

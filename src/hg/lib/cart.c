@@ -2493,6 +2493,7 @@ void cgiExitTime(char *cgiName, long enteredMainTime)
 /* single stderr print out called at end of CGI binaries to record run
  * time in apache error_log */
 {
-fprintf(stderr, "CGI_TIME: %s: Overall total time: %ld millis\n",
+if (sameWord("yes", cfgOptionDefault("browser.cgiTime", "yes")) )
+  fprintf(stderr, "CGI_TIME: %s: Overall total time: %ld millis\n",
         cgiName, clock1000() - enteredMainTime);
 }

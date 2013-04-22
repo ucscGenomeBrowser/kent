@@ -11,7 +11,10 @@ CREATE TABLE edwUser (
     access char(64) default 0,	# access code - sha385'd from password and stuff
     email varchar(255) default '',	# Email address - required
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    UNIQUE(name),
+    UNIQUE(sid),
+    UNIQUE(email)
 );
 
 #A web host we have collected files from - something like www.ncbi.nlm.gov or google.com
@@ -26,7 +29,8 @@ CREATE TABLE edwHost (
     openFails bigint default 0,	# Number of times files have failed to open from this host
     historyBits bigint default 0,	# Open history with most recent in least significant bit. 0 for connection failed, 1 for success
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    UNIQUE(name)
 );
 
 #An external data directory we have collected a submit from
@@ -42,7 +46,9 @@ CREATE TABLE edwSubmitDir (
     openFails bigint default 0,	# Number of times files have failed to open from this dir
     historyBits bigint default 0,	# Open history with most recent in least significant bit. 0 for upload failed, 1 for success
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(url(64)),
+    INDEX(hostId)
 );
 
 #A file we are tracking that we intend to and maybe have uploaded
@@ -62,7 +68,10 @@ CREATE TABLE edwFile (
     deprecated varchar(255) default '',	# If non-empty why you shouldn't user this file any more.
     replacedBy varchar(255) default '',	# If non-empty license plate of file that replaces this one.
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(submitId),
+    INDEX(submitFileName(32)),
+    UNIQUE(edwFileName(32))
 );
 
 #A data submit, typically containing many files.  Always associated with a submit dir.
@@ -82,7 +91,9 @@ CREATE TABLE edwSubmit (
     newBytes bigint default 0,	# Bytes in new files (so far).
     errorMessage longblob,	# If non-empty contains last error message. If empty submit is ok
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(url(32)),
+    INDEX(userId)
 );
 
 #Subscribers can have programs that are called at various points during data submission
@@ -132,7 +143,12 @@ CREATE TABLE edwValidFile (
     sampleCoverage double default 0,	# Proportion of assembly covered by at least one item in sample
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(licensePlate),
+    INDEX(fileId),
+    INDEX(format),
+    INDEX(outputType),
+    INDEX(experiment)
 );
 
 #A target for our enrichment analysis.
@@ -143,7 +159,9 @@ CREATE TABLE edwQaEnrichTarget (
     fileId int unsigned default 0,	# A simple BED 3 format file that defines target. Bases covered are unique
     targetSize bigint default 0,	# Total number of bases covered by target
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(assemblyId),
+    INDEX(name)
 );
 
 #An enrichment analysis applied to file.
@@ -157,7 +175,8 @@ CREATE TABLE edwQaEnrich (
     enrichment double default 0,	# Amount we hit target/amount we hit genome
     uniqEnrich double default 0,	# coverage/sampleCoverage
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(fileId)
 );
 
 #A comparison of the amount of overlap between two samples that cover ~0.1% to 10% of target.
@@ -170,7 +189,9 @@ CREATE TABLE edwQaPairSampleOverlap (
     sampleOverlapBases bigint default 0,	# Number of bases that overlap between younger and elder sample
     sampleSampleEnrichment double default 0,	# Amount samples overlap more than expected.
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(elderFileId),
+    INDEX(youngerFileId)
 );
 
 #A correlation between two files of the same type.
@@ -182,7 +203,9 @@ CREATE TABLE edwQaPairCorrelation (
     pearsonOverall double default 0,	# Pearson's R over all places where both have data
     pearsonClipped double default 0,	# Pearson's R clipped at two standard deviations up from the mean
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(elderFileId),
+    INDEX(youngerFileId)
 );
 
 #A job to be run asynchronously and not too many all at once.

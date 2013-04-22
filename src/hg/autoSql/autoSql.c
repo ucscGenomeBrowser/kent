@@ -20,6 +20,7 @@
 
 
 boolean withNull = FALSE;
+boolean addBin = FALSE;
 boolean makeJson = FALSE;
 boolean makeDjango = FALSE;
 boolean defaultZeros = FALSE;
@@ -38,6 +39,7 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "options:\n"
          "  -dbLink - optionally generates code to execute queries and\n"
          "            updates of the table.\n"
+	 "  -addBin - Add an initial bin field and index it as (chrom,bin)\n"
 	 "  -withNull - optionally generates code and .sql to enable\n"
          "              applications to accept and load data into objects\n"
 	 "              with potential 'missing data' (NULL in SQL)\n"
@@ -49,6 +51,7 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
 
 static struct optionSpec optionSpecs[] = {
     {"dbLink", OPTION_BOOLEAN},
+    {"addBin", OPTION_BOOLEAN},
     {"withNull", OPTION_BOOLEAN},
     {"defaultZeros", OPTION_BOOLEAN},
     {"json", OPTION_BOOLEAN},
@@ -62,25 +65,32 @@ void sqlColumn(struct asColumn *col, FILE *f)
 fprintf(f, "    %s ", col->name);
 struct dyString *type = asColumnToSqlType(col);
 fprintf(f, "%s", type->string);
-if (!withNull)
+if (col->autoIncrement)
     {
-    if (defaultZeros)
+    fprintf(f, " auto_increment");
+    }
+else
+    {
+    if (!withNull)
 	{
-	char *defaultVal = "";
-	if (!col->isList && !col->isArray)
+	if (defaultZeros)
 	    {
-	    if (col->lowType->stringy)
+	    char *defaultVal = "";
+	    if (!col->isList && !col->isArray)
 		{
-	        if (col->lowType->type == t_string)
-		    defaultVal = " default ''";
+		if (col->lowType->stringy)
+		    {
+		    if (col->lowType->type == t_string)
+			defaultVal = " default ''";
+		    }
+		else
+		    defaultVal = " default 0";
 		}
-	    else
-		defaultVal = " default 0";
+	    fprintf(f, "%s", defaultVal);
 	    }
-        fprintf(f, "%s", defaultVal);
+	else
+	    fprintf(f, " not null");
 	}
-    else
-	fprintf(f, " not null");
     }
 fputc(',', f);
 fprintf(f, "\t# %s\n", col->comment);
@@ -98,7 +108,49 @@ for (col = table->columnList; col != NULL; col = col->next)
     sqlColumn(col, f);
 
 fprintf(f,"              #Indices\n");
-fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
+boolean gotIndex = FALSE;
+for (col = table->columnList; col != NULL; col = col->next)
+    {
+    struct asIndex *index = col->index;
+    if (index != NULL)
+        {
+	char *type = index->type;
+	char *sqlType = NULL;
+	if (sameString(type, "primary"))
+	    sqlType = "PRIMARY KEY";
+	else  if (sameString(type, "index"))
+	    sqlType = "INDEX";
+	else  if (sameString(type, "unique"))
+	    sqlType = "UNIQUE";
+	else
+	    errAbort("Unrecognized index type %s", type);
+	if (!gotIndex)
+	    {
+	    gotIndex = TRUE;
+	    }
+	else
+	    {
+	    fprintf(f, ",\n");
+	    }
+	fprintf(f, "    %s(%s", sqlType, col->name);
+	if (index->size != 0)
+	    fprintf(f, "(%d)", index->size);
+	fprintf(f, ")");
+	}
+    }
+if (addBin && asColumnFind(table, "chrom") != NULL && asColumnFind(table, "bin") != NULL)
+    {
+    if (gotIndex)
+	fprintf(f, ",\n");
+    fprintf(f, "    INDEX (chrom,bin)");
+    gotIndex = TRUE;
+    }
+
+if (!gotIndex)
+    fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
+else
+    fprintf(f, "\n");
+
 fprintf(f, ");\n");
 }
 
@@ -1866,6 +1918,27 @@ if (makeJson)
 verbose(2, "Made %s object\n", obj->name);
 }
 
+void addBinToChromTables(struct asObject *asList)
+/* Add bin as first field to tables with a chrom field. */
+{
+int addCount = 0;   /* Count how many additions we make */
+struct asObject *as;
+for (as = asList; as != NULL; as = as->next)
+    {
+    if (asColumnFind(as, "chrom") && !asColumnFind(as, "bin"))
+        {
+	++addCount;
+	struct asColumn *col;
+	AllocVar(col);
+	col->name = cloneString("bin");
+	col->comment = cloneString("Bin number for browser speedup");
+	col->lowType = asTypeFindLow("uint");
+	slAddHead(&as->columnList, col);
+	}
+    }
+if (addCount == 0)
+    errAbort("No chrom fields, which are needed for -addBin option");
+}
 
 int main(int argc, char *argv[])
 {
@@ -1884,6 +1957,7 @@ boolean doDbLoadAndSave = FALSE;
 
 optionInit(&argc, argv, optionSpecs);
 doDbLoadAndSave = optionExists("dbLink");
+addBin = optionExists("addBin");
 withNull = optionExists("withNull");
 defaultZeros = optionExists("defaultZeros");
 makeJson = optionExists("json");
@@ -1893,6 +1967,8 @@ if (argc != 3)
     usage();
 
 objList = asParseFile(argv[1]);
+if (addBin)
+    addBinToChromTables(objList);
 outRoot = argv[2];
 /* don't embed directories in files */
 splitPath(outRoot, NULL, outTail, NULL);

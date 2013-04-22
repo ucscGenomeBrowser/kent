@@ -1,5 +1,8 @@
 /* snakeTrack - stuff to load and display snake type tracks in browser.  */
-/*       uses standard chains from the database */
+/*       uses standard chains from the database or HAL files */
+/*       probably the chain and hal support should be in different files
+ *       but they share drawing code
+ */
 
 #include "common.h"
 #include "hash.h"
@@ -12,6 +15,15 @@
 #include "chainLink.h"
 #include "chainDb.h"
 #include "chainCart.h"
+#include "errCatch.h"
+#include "twoBit.h"
+#include "bigWarn.h"
+#include <pthread.h>
+#include "trackHub.h"
+
+#ifdef USE_HAL
+#include "halBlockViz.h"
+#endif
 
 struct snakeFeature
     {
@@ -21,7 +33,11 @@ struct snakeFeature
     int level;				/* level in packed snake */
     int orientation;			/* strand... -1 is '-', 1 is '+' */
     boolean drawn;			/* did we draw this feature? */
+    char *sequence;			/* may have sequence, or NULL */
+    char *qName;			/* chrom name on other species */
     };
+
+// static machinery to calculate packed snake
 
 struct level
 {
@@ -32,7 +48,7 @@ int adjustLevel;	/* used to compress out the unused levels */
 boolean hasBlock;	/* are there any blocks in this level */
 };
 
-static struct level Levels[1000000]; /* for packing the snake */
+static struct level Levels[1000000]; /* for packing the snake, not re-entrant! */
 static int maxLevel = 0;     	     /* deepest level */	
 
 /* blocks that make it through the min size filter */
@@ -53,7 +69,7 @@ if (diff == 0)
 return diff;
 }
 
-void clearLevels()
+static void clearLevels()
 /* clear out the data structure that we use to pack the snake */
 {
 int ii;
@@ -63,7 +79,7 @@ for(ii=0; ii < sizeof(Levels) / sizeof(Levels[0]); ii++)
 maxLevel = 0;
 }
 
-void calcSnake(struct snakeFeature *list, int level)
+static void calcSnake(struct snakeFeature *list, int level)
 // calculate the packed snake
 // updates global newList with unsorted blocks that pass the min
 // size filter.
@@ -185,7 +201,7 @@ struct cartOptions
     int scoreFilter ; /* filter chains by score if > 0 */
     };
 
-int snakeHeight(struct track *tg, enum trackVisibility vis)
+static int snakeHeight(struct track *tg, enum trackVisibility vis)
 /* calculate height of all the snakes being displayed */
 {
 int height = 0;
@@ -199,6 +215,8 @@ for (item=tg->items;item; item = item->next)
     }
 return height;
 }
+
+// mySQL code to read in chains
 
 static void doQuery(struct sqlConnection *conn, char *fullName, 
 			struct lm *lm, struct hash *hash, 
@@ -268,7 +286,7 @@ struct snakeInfo
 int maxLevel;
 } snakeInfo;
 
-void calcPackSnake(struct track *tg, void *item)
+static void calcPackSnake(struct track *tg, void *item)
 {
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 if (lf->components == NULL)
@@ -349,7 +367,7 @@ if (lf->codons == NULL)
     }
 }
 
-int packSnakeItemHeight(struct track *tg, void *item)
+static int packSnakeItemHeight(struct track *tg, void *item)
 // return height of a single packed snake 
 {
 if (item == NULL)
@@ -363,52 +381,9 @@ int lineHeight = tg->lineHeight ;
 return (si->maxLevel + 1) * (2 * lineHeight);
 }
 
-int fullSnakeItemHeight(struct track *tg, void *item)
-// return height of full snake
+static int snakeItemHeight(struct track *tg, void *item)
 {
-struct linkedFeatures  *lf = (struct linkedFeatures *)item;
-struct snakeFeature  *sf;
-int s, e;
-int lineHeight = tg->lineHeight ;
-int oldOrient = 0;
-int tStart, tEnd;
-int size = 0;
-//int count = 0;
-tStart = 0;
-tEnd = 0;
-if (lf->components)
-    size = lineHeight;
-for (sf =  (struct snakeFeature *)lf->components; sf ;  sf = sf->next)
-    {
-    int orient = sf->orientation;
-
-    s = sf->start; e = sf->end;
-    /*
-    if ((e < winStart) || (s > winEnd))
-	continue;
-    if (s < winStart) s = winStart;
-    */
-    
-    if (((oldOrient) && (oldOrient != orient))
-	||  ((oldOrient == 1) && (tEnd) && (s < tEnd))
-	||  ((oldOrient == -1) && (tStart) && (e > tStart)))
-	{
-	size += lineHeight;
-	}
-    oldOrient = orient;
-    tEnd = e;
-    tStart = s;
-    }
-return size;
-}
-
-int snakeItemHeight(struct track *tg, void *item)
-{
-    if (tg->visibility == tvFull)
-	return fullSnakeItemHeight(tg, item);
-    else if (tg->visibility == tvPack)
-	return packSnakeItemHeight(tg, item);
-return 0;
+return packSnakeItemHeight(tg, item);
 }
 
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
@@ -423,7 +398,7 @@ else if (a->score < b->score)
 return 0;
 }
 
-void snakeDraw(struct track *tg, int seqStart, int seqEnd,
+static void snakeDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
@@ -461,14 +436,7 @@ for (item = tg->items; item != NULL; item = item->next)
     } 
 }
 
-void snakeLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis)
-{
-}
-
-void packSnakeDrawAt(struct track *tg, void *item,
+static void packSnakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
@@ -476,17 +444,84 @@ void packSnakeDrawAt(struct track *tg, void *item,
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 calcPackSnake(tg, item);
 
+if (lf->components == NULL)
+    return;
+
+boolean isHalSnake = FALSE;
+if (lf->original == (void *)1)
+    isHalSnake = TRUE;
+
+struct snakeFeature  *sf = (struct snakeFeature *)lf->components, *prevSf = NULL;
+int s = tg->itemStart(tg, item);
+int sClp = (s < winStart) ? winStart : s;
+int x1 = round((sClp - winStart)*scale) + xOff;
+int textX = x1;
+int yOff = y;
+boolean withLabels = (withLeftLabels && (vis == tvPack) && !tg->drawName);
+unsigned   labelColor = MG_BLACK;
+
+// draw the labels (this code needs a clean up )
+if (withLabels)
+    {
+    char *name = tg->itemName(tg, item);
+    int nameWidth = mgFontStringWidth(font, name);
+    int dotWidth = tl.nWidth/2;
+    boolean snapLeft = FALSE;
+    boolean drawNameInverted = FALSE;
+    textX -= nameWidth + dotWidth;
+    snapLeft = (textX < insideX);
+    /* Special tweak for expRatio in pack mode: force all labels
+     * left to prevent only a subset from being placed right: */
+    snapLeft |= (startsWith("expRatio", tg->tdb->type));
+#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    if (theImgBox == NULL && snapLeft)
+#else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    if (snapLeft)        /* Snap label to the left. */
+#endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+        {
+        textX = leftLabelX;
+        assert(hvgSide != NULL);
+        hvGfxUnclip(hvgSide);
+        hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+        if(drawNameInverted)
+            {
+            int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
+            hvGfxBox(hvgSide, boxStart, y, nameWidth+1, tg->heightPer - 1, color);
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+                        MG_WHITE, font, name);
+            }
+        else
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+                        labelColor, font, name);
+        hvGfxUnclip(hvgSide);
+        hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
+        }
+    else
+        {
+        if(drawNameInverted)
+            {
+            hvGfxBox(hvg, textX - 1, y, nameWidth+1, tg->heightPer-1, color);
+            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
+            }
+        else
+            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
+        }
+    }
+
+// now we're going to draw the boxes
+
+s = sf->start;
 int lastE = -1;
+int lastS = -1;
 int offY = y;
-struct snakeFeature  *sf, *prevSf;
 int lineHeight = tg->lineHeight ;
 int tStart, tEnd, qStart;
 int  qs, qe;
-int s, e;
 int heightPer = tg->heightPer;
 int lastX = -1,lastY = y;
 int lastQEnd = 0;
 int lastLevel = -1;
+int e;
 qe = lastQEnd = 0;
 for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
     {
@@ -495,15 +530,25 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     y = offY + (sf->level * 2) * lineHeight;
     s = sf->start; e = sf->end;
     tEnd = sf->end;
+    int osx;
 
     int sx, ex;
     if (!positiveRangeIntersection(winStart, winEnd, s, e))
 	continue;
-    sx = round((double)((int)s-winStart)*scale) + xOff;
+    osx = sx = round((double)((int)s-winStart)*scale) + xOff;
     ex = round((double)((int)e-winStart)*scale) + xOff;
 
     // color by strand
-    color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
+    static Color darkBlueColor = 0;
+    static Color darkRedColor = 0;
+    if (darkRedColor == 0)
+	{
+	//the light blue: rgb(149, 204, 252)
+	//the light red: rgb(232, 156, 156)
+	darkRedColor = hvGfxFindColorIx(hvg, 232,156,156);
+	darkBlueColor = hvGfxFindColorIx(hvg, 149,204,252);
+	}
+    color = (sf->orientation == -1) ? darkRedColor : darkBlueColor;
 
     int w = ex - sx;
     if (w == 0) 
@@ -517,9 +562,85 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	sx = insideX;
 	w -= olap;
 	}
+    char qAddress[4096];
+    safef(qAddress, sizeof qAddress, "qName=%s&qs=%d&qe=%d&qWidth=%d",tg->itemName(tg, item),  qs, qe,  winEnd - winStart);
     mapBoxHgcOrHgGene(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
-		"blockAlign", buffer, NULL, TRUE, "boxAlignExtra=on");
+		buffer, buffer, NULL, TRUE, qAddress);
     hvGfxBox(hvg, sx, y, w, heightPer, color);
+    int ow = w;
+
+    // now draw the mismatches if we're at high enough resolution 
+    if (winBaseCount < 50000)
+    {
+	char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
+	static struct twoBitFile *tbf = NULL;
+	static char *lastTwoBitString = NULL;
+	static struct dnaSeq *seq = NULL;
+	static char *lastQName = NULL;
+
+	// sequence for chain snakes is in 2bit files which we cache
+	if (!isHalSnake)
+	    {
+	    if (twoBitString == NULL)
+		twoBitString = "/gbdb/hg19/hg19.2bit";
+
+	    if ((lastTwoBitString == NULL) ||
+		differentString(lastTwoBitString, twoBitString))
+		{
+		if (tbf != NULL)
+		    {
+		    lastQName = NULL;
+		    twoBitClose(&tbf);
+		    }
+		tbf = twoBitOpen(twoBitString);
+		}
+
+	    // we're reading in the whole chrom
+	    if ((lastQName == NULL) || differentString(sf->qName, lastQName))
+		seq = twoBitReadSeqFrag(tbf, sf->qName,  0, 0);
+	    lastQName = sf->qName;
+	    lastTwoBitString = twoBitString;
+	    }
+
+	char *ourDna;
+	if (isHalSnake)
+	    ourDna = sf->sequence;
+	else
+	    ourDna = &seq->dna[sf->qStart];
+
+	int seqLen = sf->qEnd - sf->qStart;
+	toUpperN(ourDna, seqLen);
+	if (!isHalSnake && (sf->orientation == -1))
+	    reverseComplement(ourDna,seqLen);
+
+	// get the reference sequence
+	struct dnaSeq *extraSeq = hDnaFromSeq(database, chromName, sf->start, sf->end, dnaUpper);
+	int si = s;
+	char *ptr1 = extraSeq->dna;
+	char *ptr2 = ourDna;
+	for(; si < e; si++,ptr1++,ptr2++)
+	    {
+	    if (*ptr1 != *ptr2)
+		{
+		int misX1 = round((double)((int)si-winStart)*scale) + xOff;
+		int misX2 = round((double)((int)(si+1)-winStart)*scale) + xOff;
+		int w1 = misX2 - misX1;
+		if (w1 < 1)
+		    w1 = 1;
+
+		// mismatch!
+		hvGfxBox(hvg, misX1, y, w1, heightPer, MG_RED);
+		}
+	    }
+
+	// if we're zoomed to base level, draw sequence of mismatch
+	if (zoomedToBaseLevel)
+	    {
+	    spreadAlignString(hvg, osx, y, ow, heightPer, MG_WHITE, font, ourDna,
+		extraSeq->dna, seqLen, TRUE, FALSE);
+	    }
+
+    }
     sf->drawn = TRUE;
     tEnd = e;
     tStart = s;
@@ -528,6 +649,9 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     lastLevel = sf->level;
     //lastX = x;
     }
+
+// now we're going to draw the lines between the blocks
+
 lastX = -1,lastY = y;
 lastQEnd = 0;
 lastLevel = 0;
@@ -569,28 +693,26 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	if (lastQEnd != qs)
 	    color = MG_ORANGE;
 
-#ifdef NOTNOW   // insert in query
-	if (sf->orientation == -1)
+	// draw the vertical orange bars if there is an insert in the other sequence
+	if ((winBaseCount < 50000) )
 	    {
-	    if ((lastE == e) && (qs != lastQEnd))
+	    if ((sf->orientation == 1) && (qs != lastQEnd) && (lastE == s))
 		{
-		printf("%d ",qs-lastQEnd);
-		hvGfxLine(hvg, ex, y2, ex, y2 + lineHeight, MG_ORANGE);
+		hvGfxLine(hvg, sx, y2 - lineHeight/2 , sx, y2 + lineHeight/2, MG_ORANGE);
+		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+		mapBoxHgcOrHgGene(hvg, s, e, sx, y2 - lineHeight/2, 1, lineHeight, tg->track,
+				    "foo", buffer, NULL, TRUE, NULL);
+		}
+	    else if ((sf->orientation == -1) && (qs != lastQEnd) && (lastS == e))
+		{
+		hvGfxLine(hvg, ex, y2 - lineHeight/2 , ex, y2 + lineHeight/2, MG_ORANGE);
+		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+		mapBoxHgcOrHgGene(hvg, s, e, ex, y2 - lineHeight/2, 1, lineHeight, tg->track,
+				    "foo", buffer, NULL, TRUE, NULL);
 		}
 	    }
-	else
-	    {
-	    if ((lastE == s )) // && (qs != lastQEnd))
-		printf("%d ",qs-lastQEnd);
-	    if ((lastE == s ) && (qs != lastQEnd))
-		{
-		printf("%d ",qs-lastQEnd);
-		hvGfxLine(hvg, sx, y2, sx, y2 + lineHeight, MG_ORANGE);
-		printf("%d %d |",lastE,s);
-		}
-	    }
-#endif
 
+	// now draw the lines between blocks
 	if ((!((lastX == sx) && (y1 == y2))) &&
 	    (sf->drawn  || ((prevSf != NULL) && (prevSf->drawn))) &&
 	    (((lastE > winStart) && (lastE < winEnd)) || 
@@ -605,16 +727,16 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 			{
 			hvGfxLine(hvg, ex, y1, lastX, y2, color);
 			mapBoxHgcOrHgGene(hvg, s, e, ex, y1, lastX-ex, 1, tg->track,
-				"foo", buffer, NULL, TRUE, NULL);
+				"", buffer, NULL, TRUE, NULL);
 			}
 		    }
 		else
 		    {
-		    if (lastX != sx - 1)
+		    if (lastX != sx)
 			{
 			hvGfxLine(hvg, lastX, y1, sx, y2, color);
 			mapBoxHgcOrHgGene(hvg, s, e, lastX, y1, sx-lastX, 1, tg->track,
-				"foo", buffer, NULL, TRUE, NULL);
+				"", buffer, NULL, TRUE, NULL);
 			}
 		    }
 		}
@@ -625,17 +747,28 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		char buffer[1024];
 		safef(buffer, sizeof buffer, "%d-%d %dbp gap",prevSf->qStart,prevSf->qEnd, qs - lastQEnd);
 		mapBoxHgcOrHgGene(hvg, s, e, sx, y2 - lineHeight - lineHeight/3, 2, lineHeight + lineHeight/3, tg->track,
-	                    "foo", buffer, NULL, TRUE, NULL);
+	                    "", buffer, NULL, TRUE, NULL);
 
 		}
 	    else
 		{
-		hvGfxLine(hvg, lastX-1, y1, sx, y2, color);
-		hvGfxLine(hvg, sx, y2, sx, y2 + lineHeight , color);
 		char buffer[1024];
 		safef(buffer, sizeof buffer, "%d-%d %dbp gap",prevSf->qStart,prevSf->qEnd, qs - lastQEnd);
-		mapBoxHgcOrHgGene(hvg, s, e, sx-1, y2, 2, lineHeight , tg->track,
-	                    "foo", buffer, NULL, TRUE, NULL);
+		if (sf->orientation == -1)
+		    {
+		    hvGfxLine(hvg, lastX-1, y1, ex, y2, color);
+		    hvGfxLine(hvg, ex, y2, ex, y2 + lineHeight , color);
+		    mapBoxHgcOrHgGene(hvg, s, e, ex-1, y2, 2, lineHeight , tg->track,
+				"", buffer, NULL, TRUE, NULL);
+		    }
+		else
+		    {
+		    hvGfxLine(hvg, lastX-1, y1, sx, y2, color);
+		    hvGfxLine(hvg, sx, y2, sx, y2 + lineHeight , color);
+		    mapBoxHgcOrHgGene(hvg, s, e, sx-1, y2, 2, lineHeight , tg->track,
+				"", buffer, NULL, TRUE, NULL);
+
+		    }
 		}
 	    }
 	}
@@ -646,223 +779,27 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	lastX = sx;
     else
 	lastX = ex;
+    lastS = s;
     lastE = e;
     lastLevel = sf->level;
     lastQEnd = qe;
     }
 }
 
-void fullSnakeDrawAt(struct track *tg, void *item,
-	struct hvGfx *hvg, int xOff, int y, double scale, 
-	MgFont *font, Color color, enum trackVisibility vis)
-/* Draw a single simple bed item at position. */
-{
-struct linkedFeatures  *lf = (struct linkedFeatures *)item;
-struct snakeFeature  *sf, *prevSf;
-int s, e;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight ;
-int oldOrient = 0;
-int tStart, tEnd, qStart;
-int lastQEnd = 0;
-int midY;
-int  qs, qe;
-qStart = 0;
-tStart = xOff;
-tEnd = winEnd;
-prevSf = NULL;
 
-qe = lastQEnd = 0;
-for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
-    {
-    int orient = sf->orientation;
-    midY = y + heightPer/2;
-
-    qs = sf->qStart;
-    s = sf->start; e = sf->end;
-    /*
-    if (qs < lastQEnd )
-	continue;
-	*/
-
-    qe = sf->qEnd;
-    /*
-    if ((e < winStart) || (s > winEnd))
-	continue;
-	*/
-
-    //if (s < winStart) s = winStart;
-    
-    if (((oldOrient) && (oldOrient != orient))
-	||  ((oldOrient == 1) && (tEnd) && (s < tEnd))
-	||  ((oldOrient == -1) && (tStart) && (e > tStart)))
-	{
-	if ((qStart) && (sf->qStart - qStart) < 500000)
-	    {
-	    if (oldOrient == 1)
-		{
-		if ((orient == -1) && (tEnd < sf->start))
-		    {
-		    int x1, x2, x3, w;
-
-		    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-		    x2 = round((double)((int)e-winStart)*scale) + xOff + 8;
-		    x3 = round((double)((int)sf->end-winStart)*scale) + xOff;
-		    w = x2-x1;
-		    hvGfxLine(hvg, x1, midY, x2, midY, color);
-		    hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
-		    hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
-		    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    clippedBarbs(hvg, x3, midY + lineHeight, x2-x3, tl.barbHeight, tl.barbSpacing, 
-			     orient, color, FALSE);
-		    }
-		else if ((orient == -1) && (tEnd > sf->start))
-		    {
-		    int x1, x2, x3, w;
-
-		    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-		    x2 = round((double)((int)tEnd-winStart)*scale) + xOff + 8;
-		    x3 = round((double)((int)sf->end-winStart)*scale) + xOff;
-		    w = x2-x1;
-		    hvGfxLine(hvg, x1, midY, x2, midY, color);
-		    hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
-		    hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
-		    clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    clippedBarbs(hvg, x3, midY + lineHeight, x2-x3+1, tl.barbHeight, tl.barbSpacing, 
-			     orient, color, FALSE);
-		    }
-		else if ((orient == 1) && (s < tEnd))
-		    {
-		    int x1, x2, x3,x4, w;
-
-		    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-		    x2 = round((double)((int)tEnd-winStart)*scale) + xOff + 8;
-		    x3 = round((double)((int)s-winStart)*scale) + xOff - 8;
-		    x4 = round((double)((int)s-winStart)*scale) + xOff;
-		    w = x2-x1;
-		    hvGfxLine(hvg, x1, midY, x2, midY, color);
-		    hvGfxBox(hvg, x2, midY-2, 4, 4, color);
-		    hvGfxBox(hvg, x3 - 4, midY-2 + lineHeight, 4, 4, color);
-		    hvGfxLine(hvg, x3, lineHeight + midY, x4, lineHeight+midY, color);
-		    clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    if (x3 > x4)
-			printf("oops\n");
-		    clippedBarbs(hvg, x3, midY +  lineHeight, x4-x3+1, tl.barbHeight, tl.barbSpacing, 
-			     orient , color, FALSE);
-		    }
-		}
-	    else if (oldOrient == -1)
-		{
-		if ((orient == 1) && (tStart >= sf->start))
-		    {
-		    int x1, x2, x3, w;
-
-		    x1 = round((double)((int)tStart-winStart)*scale) + xOff;
-		    x2 = round((double)((int)sf->start-winStart)*scale) + xOff - 8;
-		    x3 = round((double)((int)sf->start-winStart)*scale) + xOff;
-		    w = x1 - x2;
-		    hvGfxLine(hvg, x1, midY, x2, midY, color);
-		    hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
-		    hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
-		    clippedBarbs(hvg, x2, midY, w, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    clippedBarbs(hvg, x2, lineHeight+midY, x3-x2+1, tl.barbHeight, tl.barbSpacing, 
-			     orient, color, FALSE);
-		    }
-		else if ((orient == 1) && (tStart < sf->start))
-		    {
-		    int x1, x2, x3, w;
-
-		    x1 = round((double)((int)tStart-winStart)*scale) + xOff;
-		    x2 = round((double)((int)tStart-winStart)*scale) + xOff - 8;
-		    x3 = round((double)((int)sf->start-winStart)*scale) + xOff;
-		    w = x1-x2;
-		    hvGfxLine(hvg, x1, midY, x2, midY, color);
-		    hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
-		    hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
-		    clippedBarbs(hvg, x2, midY, w, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    if (x3 < x2)
-			printf("oops\n");
-		    clippedBarbs(hvg, x2, midY + lineHeight, x3-x2, tl.barbHeight, tl.barbSpacing, 
-			     orient, color, FALSE);
-		    }
-		else if ((orient == -1) && (e > sf->start))
-		    {
-		    int x1, x2, x3,x4, w;
-
-		    x1 = round((double)((int)tStart-winStart)*scale) + xOff;
-		    x2 = round((double)((int)tStart-winStart)*scale) + xOff - 8;
-		    x3 = round((double)((int)e-winStart)*scale) + xOff + 8;
-		    x4 = round((double)((int)e-winStart)*scale) + xOff;
-		    w = x1-x2;
-		    hvGfxLine(hvg, x1, midY, x2, midY, color);
-		    hvGfxBox(hvg, x2, midY-2, 4, 4, color);
-		    hvGfxLine(hvg, x3, lineHeight + midY, x4, lineHeight+midY, color);
-		    hvGfxBox(hvg, x3, lineHeight + midY-2, 4, 4, color);
-		    clippedBarbs(hvg, x2, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    if (x4 > x3)
-			printf("oops\n");
-		    clippedBarbs(hvg, x4, midY + lineHeight, x3-x4+1, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient , color, FALSE);
-		    }
-		}
-		}
-
-	y += lineHeight;
-	}
-    else if ((oldOrient) && ((qStart) && (sf->qStart - qStart) < 500000))
-	{
-	    int x1, x2, w;
-
-	    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-	    x2 = round((double)((int)sf->start -winStart)*scale) + xOff;
-	    hvGfxLine(hvg, x1, midY, x2, midY, color);
-	    if (x2 > x1)
-		{
-		w = x2-x1;
-		clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient, color, FALSE);
-		}
-	    else
-		{
-		w = x1-x2;
-		clippedBarbs(hvg, x2, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient, color, FALSE);
-		}
-	}
-    color =	    lfChromColor(tg, item, hvg);
-
-color = (sf->orientation == -1) ? MG_RED : MG_BLUE;
-    drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
-			color, lf->score );
-    tEnd = e;
-    tStart = s;
-    qStart = sf->qStart;
-    oldOrient = orient;
-    }
-}
-
-void snakeDrawAt(struct track *tg, void *item,
+static void snakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
     
     if (tg->visibility == tvFull)
-	fullSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
-	    font, color, vis);
-    else if (tg->visibility == tvPack)
 	packSnakeDrawAt(tg, item, hvg, xOff, y, scale, 
 	    font, color, vis);
 }
 
-void fixItems(struct linkedFeatures *lf)
-// put all blocks from a single query chromosome into one
+static void fixItems(struct linkedFeatures *lf)
+// put all chain blocks from a single query chromosome into one
 // linkedFeatures structure
 {
 struct linkedFeatures *firstLf, *next;
@@ -879,6 +816,7 @@ for (;lf; lf = next)
 	}
     for (sf =  (struct snakeFeature *)lf->components; sf != NULL; sf = nextSf)
 	{
+	sf->qName = lf->name;
 	sf->orientation = lf->orientation;
 	nextSf = sf->next;
 	if (firstLf != lf)
@@ -965,7 +903,92 @@ if (hash->size)
 hFreeConn(&conn);
 }
 
+#ifdef USE_HAL
+void halSnakeLoadItems(struct track *tg)
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+    char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
+    int handle = halOpenLOD(fileName);
+    int needSeq = (winBaseCount < 50000) ? 1 : 0;
+    struct hal_block_t* head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, needSeq, 1);
+    struct hal_block_t* cur = head;
+    struct linkedFeatures *lf;
+    struct hash *qChromHash = newHash(5);
+    struct linkedFeatures *lfList = NULL;
+    char buffer[4096];
+
+    while (cur)
+    {
+	struct hashEl* hel;
+
+	//safef(buffer, sizeof buffer, "%s.%c", cur->qChrom,cur->strand);
+	safef(buffer, sizeof buffer, "%s", cur->qChrom);
+	if ((hel = hashLookup(qChromHash, buffer)) == NULL)
+	    {
+	    AllocVar(lf);
+	    lf->original = (void *)1;
+	    slAddHead(&lfList, lf);
+	    lf->start = 0;
+	    lf->end = 1000000000;
+	    lf->grayIx = maxShade;
+	    lf->name = cloneString(buffer);
+	    lf->extra = cloneString(buffer);
+	    lf->orientation = (cur->strand == '+') ? 1 : -1;
+	    hashAdd(qChromHash, lf->name, lf);
+	    }
+	else
+	    {
+	    lf = hel->val;
+	    }
+
+	struct snakeFeature  *sf;
+	AllocVar(sf);
+	slAddHead(&lf->components, sf);
+	
+	sf->start = cur->tStart;
+	sf->end = cur->tStart + cur->size;
+	if (cur->strand == '-')
+	    {
+	    sf->qStart = cur->qStart;
+	    sf->qEnd = cur->qStart + cur->size;
+	    }
+	else
+	    {
+	    sf->qStart = cur->qStart;
+	    sf->qEnd = cur->qStart + cur->size;
+	    }
+	sf->orientation = (cur->strand == '+') ? 1 : -1;
+	sf->sequence = cloneString(cur->sequence);
+
+    //  printBlock(stdout, cur);
+      cur = cur->next;
+    }
+    for(lf=lfList; lf ; lf = lf->next)
+	{
+	slSort(&lf->components, snakeFeatureCmpQStart);
+	}
+    //halFreeBlocks(head);
+    //halClose(handle, myThread);
+
+    tg->items = lfList;
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    tg->networkErrMsg = cloneString(errCatch->message->string);
+    tg->drawItems = bigDrawWarning;
+    tg->totalHeight = bigWarnTotalHeight;
+    }
+errCatchFree(&errCatch);
+}
+#endif // USE_HAL
+
+
 void snakeLoadItems(struct track *tg)
+// Load chains from a mySQL database
 {
 char *track = tg->table;
 struct chain chain;
@@ -992,6 +1015,8 @@ int ourEnd = winEnd;
 // doing this as a preprocessing stage, rather than at run-time
 ourStart = 0;
 ourEnd = 500000000;
+//ourStart = winStart;
+//ourEnd = winEnd;
 if (startsWith("chr",optionChrStr)) 
     {
     safef(extraWhere, sizeof(extraWhere), 
@@ -1101,6 +1126,26 @@ tg->ixColor = MG_BLACK;
 tg->ixAltColor = MG_GRAY;
 }
 
+#ifdef USE_HAL
+void halSnakeMethods(struct track *tg, struct trackDb *tdb, 
+	int wordCount, char *words[])
+{
+//errAbort("halSnakeMethds\n");
+linkedFeaturesMethods(tg);
+tg->canPack = FALSE;
+tdb->canPack = FALSE;
+tg->loadItems = halSnakeLoadItems;
+tg->drawItems = snakeDraw;
+tg->mapItemName = lfMapNameFromExtra;
+tg->subType = lfSubChain;
+//tg->extraUiData = (void *) chainCart;
+tg->totalHeight = snakeHeight; 
+
+tg->drawItemAt = snakeDrawAt;
+tg->itemHeight = snakeItemHeight;
+}
+#endif
+
 void snakeMethods(struct track *tg, struct trackDb *tdb, 
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
@@ -1155,7 +1200,7 @@ else
 	chainCart->chainColor = chainColorChromColors;
     }
 
-tg->canPack = TRUE;
+tg->canPack = FALSE;
 tg->loadItems = snakeLoadItems;
 tg->drawItems = snakeDraw;
 tg->mapItemName = lfMapNameFromExtra;

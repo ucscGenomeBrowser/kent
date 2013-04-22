@@ -119,6 +119,7 @@ db->organism = cloneString(hubGenome->organism);
 db->name = cloneString(hubGenome->name);
 db->active = TRUE;
 db->description = cloneString(hubGenome->description);
+db->orderKey = sqlUnsigned(hashFindVal(hubGenome->settingsHash, "orderKey"));
 
 return db;
 }
@@ -183,6 +184,8 @@ if (globalAssemblyHubList != NULL)
 	}
     }
 
+slSort(&dbList, hDbDbCmpOrderKey);
+slReverse(&dbList);
 return dbList;
 }
 
@@ -606,6 +609,9 @@ else
     char *type = requiredSetting(hub, genome, tdb, "type");
     if (!(startsWithWord("bigWig", type) ||
           startsWithWord("bigBed", type) ||
+#ifdef USE_HAL
+          startsWithWord("halSnake", type) ||
+#endif
           startsWithWord("vcfTabix", type) ||
           startsWithWord("bam", type)))
 	{
