@@ -135,3 +135,18 @@ else if (findColumn(columns, "genoName", retChromIx, retChromField))
 	    findColumn(columns, "genoEnd", retEndIx, retEndField));
 return FALSE;
 }
+
+struct annoStreamRows *annoStreamRowsNew(struct annoStreamer *streamerList)
+/* Returns an array of aSR, one for each streamer in streamerList.
+ * Typically array is reused by overwriting elements' rowList pointers.
+ * Free array when done. */
+{
+int streamerCount = slCount(streamerList);
+struct annoStreamRows *data = NULL;
+AllocArray(data, streamerCount);
+struct annoStreamer *streamer = streamerList;
+int i = 0;
+for (;  i < streamerCount;  i++, streamer = streamer->next)
+    data[i].streamer = streamer;
+return data;
+}

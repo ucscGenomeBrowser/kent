@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-bedIntersect = bedIntersect
+bedIntersect = ${DESTBINDIR}/bedIntersect
 coverages = 5 10 50 100
 
 all::

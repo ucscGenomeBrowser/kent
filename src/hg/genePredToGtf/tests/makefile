@@ -1,7 +1,9 @@
 include ../../../inc/common.mk
 
 DIFF = diff -u
-genePredToGtf = genePredToGtf
+genePredToGtf = ${DESTBINDIR}/genePredToGtf
+gtfToGenePred = ${DESTBINDIR}/gtfToGenePred
+mrnaToGene = ${DESTBINDIR}/mrnaToGene
 
 ##
 # Note: the target bigTest runs this on all mRNAs however some fail because
@@ -57,14 +59,14 @@ bigout/bigTest.diff: bigout/bigTest.orig.gp bigout/bigTest.recreate.gp
 
 # need to drop _2, etc modifiers added wheren their are duplicate alignments
 bigout/bigTest.recreate.gp: bigout/bigTest.orig.gtf
-	gtfToGenePred $< stdout | tawk '{$$1=gensub("_[0-9]+$$", "", "g", $$1); print $$0}' >$@.tmp
+	${gtfToGenePred} $< stdout | tawk '{$$1=gensub("_[0-9]+$$", "", "g", $$1); print $$0}' >$@.tmp
 	mv -f $@.tmp $@
 
 bigout/bigTest.orig.gtf: bigout/bigTest.orig.gp
-	genePredToGtf file $< $@.tmp
+	${genePredToGtf} file $< $@.tmp
 	mv -f $@.tmp $@
 
 bigout/bigTest.orig.gp:
 	@mkdir -p $(dir $@)
-	mrnaToGene -db=hg18 -insertMergeSize=8 all_mrna $@.tmp
+	${mrnaToGene} -db=hg18 -insertMergeSize=8 all_mrna $@.tmp
 	mv -f $@.tmp $@
