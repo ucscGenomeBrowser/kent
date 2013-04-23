@@ -55,6 +55,13 @@ struct annoStreamer
     int numCols;			// For word-based annotations, number of words/columns
     };
 
+struct annoStreamRows
+/* An annoStreamer and (possibly NULL) list of rows it generated. */
+    {
+    struct annoStreamer *streamer;	// annoStreamer interface for metadata about row data
+    struct annoRow *rowList;		// row data
+    };
+
 // ---------------------- annoStreamer default methods -----------------------
 
 struct asObject *annoStreamerGetAutoSqlObject(struct annoStreamer *self);
@@ -92,5 +99,12 @@ boolean annoStreamerFindBed3Columns(struct annoStreamer *self,
  * Set ret*Ix to list index of each column if found, or -1 if not found.
  * Set ret*Field to column name if found, or NULL if not found.
  * If all three are found, return TRUE; otherwise return FALSE. */
+
+// -----------------------------------------------------------------------------
+
+struct annoStreamRows *annoStreamRowsNew(struct annoStreamer *streamerList);
+/* Returns an array of aSR, one for each streamer in streamerList.
+ * Typically array is reused by overwriting elements' rowList pointers.
+ * Free array when done. */
 
 #endif//ndef ANNOSTREAMER_H

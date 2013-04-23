@@ -1,11 +1,13 @@
 include ../../../inc/common.mk
 
+genePredSingleCover = ${DESTBINDIR}/genePredSingleCover
+
 DIFF = diff -u
 
 test:  simpleTest
 
 simpleTest: mkout
-	genePredSingleCover input/simple.gp output/$@.gp
+	${genePredSingleCover} input/simple.gp output/$@.gp
 	${DIFF} expected/$@.gp output/$@.gp
 
 mkout:

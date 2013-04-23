@@ -56,6 +56,9 @@ struct slName *lmSlName(struct lm *lm, char *name);
 /* Shortcut to allocating a single variable in local mem and
  * assigning pointer to it. */
 
+#define lmCloneVar(lm, pt) lmCloneMem(lm, pt, sizeof((pt)[0]))
+/* Allocate copy of a structure. */
+
 #define lmAllocArray(lm, pt, size) (pt = lmAlloc(lm, sizeof(*pt) * (size)))
 /* Shortcut to allocating an array in local mem and
  * assigning pointer to it. */

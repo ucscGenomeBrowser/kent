@@ -24029,7 +24029,7 @@ void doMiddle()
 /* Generate body of HTML. */
 {
 char *track = cartString(cart, "g");
-char *item = cartOptionalString(cart, "i");
+char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 

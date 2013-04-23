@@ -1,3 +1,5 @@
+/* annoGratorGpVar -- integrate pgSNP or VCF with gene pred and make gpFx predictions */
+
 #ifndef ANNOGRATORGPVAR_H
 #define ANNOGRATORGPVAR_H
 

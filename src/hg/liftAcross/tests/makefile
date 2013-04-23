@@ -1,6 +1,9 @@
+include ../../../inc/common.mk
+
+liftAcross=${DESTBINDIR}/liftAcross
 
 test::
-	liftAcross -warn -bedOut=testOut.bed testAcross.lft \
+	${liftAcross} -warn -bedOut=testOut.bed testAcross.lft \
 		input.gp testOutput.gp 2> testErr.out
 	diff testOutput.gp expectedOutput.gp
 	diff testErr.out expectedErr.out

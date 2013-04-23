@@ -1,6 +1,6 @@
 include ../../../../inc/common.mk
 
-MAFRANGES = mafRanges
+MAFRANGES = ${DESTBINDIR}/mafRanges
 DIFF = diff
 
 test: clean all

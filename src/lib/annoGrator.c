@@ -103,7 +103,7 @@ while (!self->eof &&
     }
 }
 
-struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
+struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoStreamRows *primaryData,
 				    boolean *retRJFilterFailed, struct lm *callerLm)
 /* Given a single row from the primary source, get all overlapping rows from internal
  * source, and produce joined output rows.
@@ -113,6 +113,7 @@ struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoRow *pri
  * - overlap rule is agoMustNotOverlap and any overlapping row is found,
  * then set retRJFilterFailed and stop. */
 {
+struct annoRow *primaryRow = primaryData->rowList;
 struct annoRow *rowList = NULL;
 agCheckPrimarySorting(self, primaryRow);
 agTrimToStart(self, primaryRow->chrom, primaryRow->start);
