@@ -10,6 +10,7 @@
 #include "basicBed.h"
 #include "bigBed.h"
 #include "portable.h"
+#include "cheapcgi.h"
 #include "genomeRangeTree.h"
 #include "md5.h"
 #include "htmshell.h"
@@ -115,82 +116,62 @@ long long edwNow()
 return time(NULL);
 }
 
-static void makeShaBase64(unsigned char *inputBuf, int inputSize, char out[EDW_ACCESS_SIZE])
+/* This is size of base64 encoded hash plus 1 for the terminating zero. */
+#define EDW_SID_SIZE 65   
+
+static void makeShaBase64(unsigned char *inputBuf, int inputSize, char out[EDW_SID_SIZE])
 /* Make zero terminated printable cryptographic hash out of in */
 {
 unsigned char shaBuf[48];
 SHA384(inputBuf, inputSize, shaBuf);
 char *base64 = base64Encode((char*)shaBuf, sizeof(shaBuf));
-memcpy(out, base64, EDW_ACCESS_SIZE);
-out[EDW_ACCESS_SIZE-1] = 0; 
+memcpy(out, base64, EDW_SID_SIZE);
+out[EDW_SID_SIZE-1] = 0; 
 freeMem(base64);
 }
 
-void edwMakeAccess(char *password, char access[EDW_ACCESS_SIZE])
-/* Convert password + salt to an access code */
+void edwMakeSid(char *user, char sid[EDW_SID_SIZE])
+/* Convert users to sid */
 {
 /* Salt it well with stuff that is reproducible but hard to guess, and some
- * one time true random stuff. Sneak in password too. */
+ * one time true random stuff. Sneak in user too and time. */
 unsigned char inputBuf[512];
 memset(inputBuf, 0, sizeof(inputBuf));
 int i;
 for (i=0; i<ArraySize(inputBuf); i += 2)
     {
-    inputBuf[i] = i ^ 0x3f;
-    inputBuf[i+1] = -i*i;
+    inputBuf[i] = i ^ 0x29;
+    inputBuf[i+1] = ~i;
     }
 safef((char*)inputBuf, sizeof(inputBuf), 
-    "f186ed79bae8MNKLKEDSP*O:OHe364d73%s<*#$*(#)!DSDFOUIHLjksdfOP:J>KEJWYGk",
-    password);
-makeShaBase64(inputBuf, sizeof(inputBuf), access);
+	"186ED79BAEXzeusdioIsdklnw88e86cd73%s<*#$*(#)!DSDFOUIHLjksdf", user);
+makeShaBase64(inputBuf, sizeof(inputBuf), sid);
 }
 
-#define edwMaxUserNameSize 128     /* Maximum size of an email handle */
-
-int edwCheckUserNameSize(char *user)
-/* Make sure user name not too long. Returns size or aborts if too long. */
+static void edwVerifySid(char *user, char *sidToCheck)
+/* Make sure sid/user combo is good. */
 {
-int size = strlen(user);
-if (size > edwMaxUserNameSize)
-   errAbort("size of user name too long: %s", user);
-return size;
+char sid[EDW_SID_SIZE];
+edwMakeSid(user, sid);
+if (sidToCheck == NULL || memcmp(sidToCheck, sid, EDW_SID_SIZE) != 0)
+    errAbort("Authentication failed, sid mismatch");
 }
 
-int edwCheckAccess(struct sqlConnection *conn, char *user, char *password)
-/* Make sure user exists and password checks out. Returns (non-zero) user ID on success*/
+char *edwGetEmailAndVerify()
+/* Get email from persona-managed cookies and validate them.
+ * Return email address if all is good and user is logged in.
+ * If user not logged in return NULL.  If user logged in but
+ * otherwise things are wrong abort. */
 {
-/* Make escaped version of email string since it may be raw user input. */
-int nameSize  = edwCheckUserNameSize(user);
-char escapedUser[2*nameSize+1];
-sqlEscapeString2(escapedUser, user);
-
-char access[EDW_ACCESS_SIZE];
-edwMakeAccess(password, access);
-
-char query[256];
-safef(query, sizeof(query), "select access,id from edwUser where name='%s'", escapedUser);
-struct sqlResult *sr = sqlGetResult(conn, query);
-int userId = 0;
-char **row;
-if ((row = sqlNextRow(sr)) != NULL)
+char *email = findCookieData("email");
+if (email)
     {
-    if (memcmp(row[0], access, sizeof(access)) == 0)
-	{
-	userId = sqlUnsigned(row[1]);
-	}
+    char *sid = findCookieData("sid");
+    edwVerifySid(email, sid);
     }
-sqlFreeResult(&sr);
-return userId;
+return email;
 }
 
-int edwMustHaveAccess(struct sqlConnection *conn, char *user, char *password)
-/* Check user has access and abort with an error message if not. Returns user id. */
-{
-int id = edwCheckAccess(conn, user, password);
-if (id == 0)
-    errAbort("User/password combination doesn't give access to database");
-return id;
-}
 
 struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with that email or NULL if not found */
@@ -214,24 +195,6 @@ if (user == NULL)
 	     "http://%s/cgi-bin/edwWebCreateUser"
 	     , email, getenv("SERVER_NAME"));
 return user;
-}
-
-void edwMakeSid(char *user, char sid[EDW_ACCESS_SIZE])
-/* Convert users to sid */
-{
-/* Salt it well with stuff that is reproducible but hard to guess, and some
- * one time true random stuff. Sneak in user too and time. */
-unsigned char inputBuf[512];
-memset(inputBuf, 0, sizeof(inputBuf));
-int i;
-for (i=0; i<ArraySize(inputBuf); i += 2)
-    {
-    inputBuf[i] = i ^ 0x29;
-    inputBuf[i+1] = ~i;
-    }
-safef((char*)inputBuf, sizeof(inputBuf), 
-	"186ED79BAEXzeusdioIsdklnw88e86cd73%s<*#$*(#)!DSDFOUIHLjksdf", user);
-makeShaBase64(inputBuf, sizeof(inputBuf), sid);
 }
 
 int edwGetHost(struct sqlConnection *conn, char *hostName)
@@ -751,5 +714,11 @@ dyStringPrintf(query, "insert into edwUser (email) values('%s')", escapedEmail);
 sqlUpdate(conn, query->string);
 
 sqlDisconnect(&conn);
+}
+
+void edwPrintLogOutButton()
+/* Print log out button */
+{
+printf("<INPUT TYPE=button NAME=\"signOut\" VALUE=\"sign out\" id=\"signout\">");
 }
 
