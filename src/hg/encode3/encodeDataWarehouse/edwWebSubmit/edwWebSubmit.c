@@ -42,6 +42,8 @@ printf("Please enter a URL for a validated manifest file:<BR>");
 printf("URL ");
 cgiMakeTextVar("url", "", 80);
 cgiMakeButton("submitUrl", "submit");
+printf("<BR>Submission by %s", userEmail);
+edwPrintLogOutButton();
 }
 
 void submitUrl(struct sqlConnection *conn)
@@ -66,6 +68,7 @@ carefulClose(&fifo);
 /* Give system a second to react, and then try to put up status info about submission. */
 printf("Submission of %s is in progress....", url);
 cgiMakeButton("monitor", "monitor submission");
+edwPrintLogOutButton();
 cgiMakeHiddenVar("url", url);
 }
 
@@ -237,14 +240,9 @@ else
 	printf("<B>submission time:</B> %s<BR>\n", duration->string);
 	cgiMakeButton("getUrl", "submit another data set");
 	}
-    cgiMakeButton("monitor", "refresh status");
     }
-#ifdef SOON
-uglyf("<BR><BR>--- The part down from here is really rough do not fret if it doesn't work ---<BR>\n");
-int validCount = showValidationOverview(conn, sub);
-if (validCount > 0)
-    cgiMakeButton("validations", "see validation results");
-#endif /* SOON */
+cgiMakeButton("monitor", "refresh status");
+edwPrintLogOutButton();
 }
 
 static void localWarn(char *format, va_list args)
@@ -261,7 +259,7 @@ void doMiddle()
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 struct sqlConnection *conn = sqlConnect(edwDatabase);
-userEmail = findCookieData("email");
+userEmail = edwGetEmailAndVerify();
 if (userEmail == NULL)
     logIn();
 else if (cgiVarExists("submitUrl"))
