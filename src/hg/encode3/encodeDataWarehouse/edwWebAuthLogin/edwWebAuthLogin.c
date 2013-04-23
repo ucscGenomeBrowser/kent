@@ -9,6 +9,7 @@
 #include "htmshell.h"
 #include "net.h"
 #include "jsHelper.h"
+#include "edwLib.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -95,9 +96,12 @@ int main(int argc, char *argv[])
 if (!cgiIsOnWeb())
     usage();
 char *email = checkAuth();
+char sid[EDW_SID_SIZE];
+edwMakeSid(email, sid);
 printf("Content-Type:text/plain\r\n");
 printf("Set-Cookie: email=%s\r\n", cgiEncode(email));
+printf("Set-Cookie: sid=%s\r\n", cgiEncode(sid));
 printf("\r\n");
-printf("Successful authentication of %s\n", email);
+printf("ok\n");
 return 0;
 }
