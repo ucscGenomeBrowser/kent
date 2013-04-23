@@ -40,11 +40,13 @@ else if (cgiVarExists("newUser"))
 	oldUserEmail);
     printf(" ");
     cgiMakeButton("submit", "Add another user");
+    edwPrintLogOutButton();
     }
 else
     {
     struct sqlConnection *conn = sqlConnect(edwDatabase);
     edwMustGetUserFromEmail(conn, oldUserEmail);
+    edwPrintLogOutButton();
     printf("%s is authorized to create a new user<BR>\n", oldUserEmail);
     printf("Email of new user:\n");
     cgiMakeTextVar("newUser", NULL, 40);
@@ -58,7 +60,7 @@ int main(int argc, char *argv[])
 {
 if (!cgiIsOnWeb())
     errAbort("edwWebCreateUser is a cgi script not meant to be run from command line.\n");
-oldUserEmail = findCookieData("email");
+oldUserEmail = edwGetEmailAndVerify();
 edwWebHeaderWithPersona("ENCODE Data Warehouse Create User");
 htmEmptyShell(doMiddle, NULL);
 edwWebFooterWithPersona();
