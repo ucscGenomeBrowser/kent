@@ -191,11 +191,11 @@ safef(srcGeneUrl, sizeof(srcGeneUrl),
        database, mi->pg->gChrom, mi->pg->gStart, mi->pg->gEnd);
 
 printf("<TABLE class=\"transMap\">\n");
-printf("<CAPTION>Source gene</CAPTION>\n");
+printf("<H3>Source Gene:</H3>\n");
 printf("<TBODY>\n");
 printf("<TD CLASS=\"transMapNoWrap\"><A HREF=\"%s\" target=_blank>%s</A>", srcGeneUrl, mi->pg->name);
 if (mi->desc == NULL)
-    printf("<TD>&nbsp;<TD>gene no longer in source database");
+    printf("<TD>&nbsp;<TD>Gene no longer in source database");
 else
     printf("<TD>%s<TD>%s", mi->sym, mi->desc);
 printf("</TR>\n");
@@ -209,6 +209,9 @@ static void displayRetroDetails(struct sqlConnection *conn, struct mappingInfo *
 struct ucscRetroInfo *pg = mi->pg;
 char query[256];
 char orthoTable[128];
+char orgDb[128];
+char *org;
+
 if (mi->suffix != NULL && strlen(mi->suffix) > 0)
     safef(orthoTable, sizeof(orthoTable), "%s%sOrtho%s", 
             mi->tblPre, mi->geneSet, mi->suffix);
@@ -217,8 +220,9 @@ else
             mi->tblPre, mi->geneSet);
 
 printf("<TABLE class=\"transMap\">\n");
+printf("<H3>Breaks in Orthology:</H3>\n");
 printf("<THEAD>\n");
-printf("<TR><TH>Orthology (net) Break<TH>Coverage %%</TR>\n");
+printf("<TR><TH>Organism<TH>%% Coverage</TR>\n");
 printf("</THEAD><TBODY>\n");
 if (hTableExists(database, orthoTable))
     {
@@ -230,7 +234,12 @@ if (hTableExists(database, orthoTable))
     while ((row = sqlNextRow(sr)) != NULL)
         {
         struct ucscRetroOrtho *puro = ucscRetroOrthoLoad(row);
-        printf("<TR><TH>%s ", puro->db);
+        /* get substring after "net" prefix and convert first char to lower
+           case then get organism name */
+        safecpy(orgDb, sizeof(orgDb), puro->db+3);
+        orgDb[0] = tolower(orgDb[0]);
+        org = hOrganism(orgDb);
+        printf("<TR><TH>%s (%s) ", org, orgDb);
         printf("<TD>%d</TR>\n", puro->overlap);
         }
     sqlFreeResult(&sr);
@@ -513,7 +522,7 @@ else
     safef(scoreSql, sizeof(scoreSql), "select max(score) from %s%sInfo%s", mi->tblPre, mi->geneSet, mi->suffix);
     }
 printf("<TABLE class=\"transMap\">\n");
-printf("<CAPTION>Retrogene stats</CAPTION>\n");
+printf("<H3>Retrogene Statistics:</H3>\n");
 printf("<THEAD>\n");
 printf("<TR><TH>Feature<TH>Value </TR>\n");
 printf("</THEAD><TBODY>\n");
@@ -524,9 +533,9 @@ else
 printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",  
         pg->score,
         sqlQuickNum(conn, scoreSql) );
-printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
-printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2), pg->exonCover);
-printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d + %d\n", pg->intronCount, pg->alignGapCount);
+printf("<TR><TH>Parent Gene Alignment Coverage (Bases&nbsp;Matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
+printf("<TR><TH>Introns Processed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2), pg->exonCover);
+printf("<TR><TH>Possible Introns or Gaps in Retrogene<TD>%d,%d\n", pg->intronCount, pg->alignGapCount);
 printf("<TR><TH>Conserved Splice Sites<TD>%d</TR>\n",  pg->conservedSpliceSites);
 printf("<TR><TH>Parent Splice Sites<TD>%d</TR>\n",  pg->parentSpliceCount);
 psl = getAlignments(conn, alignTbl, mi->pg->name);
@@ -558,18 +567,18 @@ if (pslList != NULL)
     pslFreeList(&pslList);
     }
 #endif
-printf("<TR><TH>Length of PolyA Tail<TD>%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp </TR><TR><TH>PolyA Tail %% A's(position)<TD>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
+printf("<TR><TH>Length of PolyA Tail<TD>%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp </TR><TR><TH>%% A's from Parent PolyA tail (Position)<TD>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
 if (pg->polyAstart < 0)
     printf("&nbsp;(%d&nbsp;bp&nbsp;before&nbsp;end&nbsp;of&nbsp;retrocopy)<br>\n",-(pg->polyAstart));
 else
     printf("&nbsp;(%d&nbsp;bp&nbsp;past&nbsp;end&nbsp;of&nbsp;retrocopy)<br>\n",pg->polyAstart);
 
-printf("<tr><th>mRNA expression evidence<td>");
+printf("<tr><th>mRNA Expression Evidence<td>");
 if (!sameString(pg->overName, "none"))
     printf("%s&nbsp;(overlap:&nbsp;&nbsp;%d&nbsp;bp)\n", pg->overName, pg->maxOverlap);
 else
     printf("No&nbsp;overlapping");
-printf("<TR><TH>bestorf score (>50 is good)<TD>%4.0f</td></TR>\n",pg->posConf);
+printf("<TR><TH>BESTORF Score (>50 is good)<TD>%4.0f</td></TR>\n",pg->posConf);
 #ifdef score
 printf("<TR><TH>score function<TD>1:xon %d %4.1f conSS %d 2: ax %4.1f 3: pA %4.1f 4: net + %4.1f max (%d, %d) 5: procIntrons %d %4.1f 6:in.cnt %d -%4.1f 7:overlap - %4.1f  8:cov %d*(qe %d- qsz %d)/%d=%4.1f 9:tRep - %4.1f 10:oldintron %d %4.1f </td></TR>\n",
                 pg->exonCover,
