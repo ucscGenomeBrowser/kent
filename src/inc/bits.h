@@ -82,9 +82,20 @@ int bitXorCount(Bits *a, Bits *b, int bitCount);
 void bitNot(Bits *a, int bitCount);
 /* Flip all bits in a. */
 
+void bitReverseRange(Bits *bits, int startIx, int bitCount);
+// Reverses bits in range (e.g. 110010 becomes 010011)
+
 void bitPrint(Bits *a, int startIx, int bitCount, FILE* out);
 /* Print part or all of bit map as a string of 0s and 1s.  Mostly useful for
  * debugging */
+
+void bitsOut(FILE* out, Bits *bits, int startIx, int bitCount, boolean onlyOnes);
+// Print part or all of bit map as a string of 0s and 1s.  Optionally only print 1s and [bracket].
+;
+Bits *bitsIn(struct lm *lm,char *bitString, int len);
+// Returns a bitmap from a string of 1s and 0s.  Any non-zero, non-blank char sets a bit.
+// Returned bitmap is the size of len even if that is longer than the string.
+// Optionally supply local memory.
 
 extern int bitsInByte[256];
 /* Lookup table for how many bits are set in a byte. */

@@ -42,11 +42,36 @@ vBits->haplotypeSlots = 2;  // assume diploid, but then check for complete haplo
 if (homozygousOnly)
     vBits->haplotypeSlots = 1;
 else
-    { // spin through all the subjects to see if any are non-haploid
+    { // spin through all the subjects to see if all are haploid
     for (ix = 0; ix < vcff->genotypeCount && record->genotypes[ix].isHaploid;ix++)
         ;
     if (ix == vcff->genotypeCount)
-        vBits->haplotypeSlots = 1;
+        vBits->haplotypeSlots = 1;  // All are haploid: chrY
+    assert(vBits->haplotypeSlots == 2 || record->chrom[strlen(record->chrom) - 1] == 'Y');
+    }
+
+// Type of variant?
+assert(record->alleles != NULL);
+if(record->alleles != NULL)
+    {
+    int nonRefLen = 0;
+    assert(record->alleles[0] != NULL);
+    int refLen = record->alleles[0] ? strlen(record->alleles[0]) : 0;
+    for (ix = 1; ix < record->alleleCount; ix++)
+        {
+        assert(record->alleles[ix] != NULL);
+        int thisLen = record->alleles[ix] && differentWord(record->alleles[ix],"<DEL>") ?
+                                                                  strlen(record->alleles[ix]) : 0;
+        if (nonRefLen < thisLen)
+            nonRefLen = thisLen;
+        }
+    if (refLen == 1 && nonRefLen == 1)
+        vBits->vType = vtSNP;
+    else if (refLen < nonRefLen)
+        vBits->vType = vtInsertion;
+    else if (refLen > nonRefLen)
+        vBits->vType = vtDeletion;
+    // else unknown
     }
 
 // allocate bits
@@ -113,6 +138,63 @@ for ( ; ix < vcff->genotypeCount;ix++)
 return bits;
 }
 
+Bits *vcfRecordHaploidBits(struct vcfFile *vcff, struct vcfRecord *record)
+// Returns array (1 bit per genotype) for each haploid genotype.
+// This is useful for interpreting chrX.
+{
+// allocate bits
+Bits *bits = lmBitAlloc(vcfFileLm(vcff),vcff->genotypeCount);
+
+// parse genotypes if needed
+if (record->genotypes == NULL)
+    vcfParseGenotypes(record);
+
+// walk through genotypes and set the bit
+int ix = 0;
+for ( ; ix < vcff->genotypeCount;ix++)
+    {
+    if (record->genotypes[ix].isHaploid)
+        bitSetOne(bits,ix);
+    }
+return bits;
+}
+
+int vBitsHaploidCount(struct variantBits *vBits)
+// Returns the number of subjects in the VCF dataset that are haploid at this location
+{
+int haploid = 0;  // Most are not haploid
+
+char *chrom = vBits->record->chrom;
+if (chrom[strlen(chrom) - 1] == 'Y')
+    haploid = vcfBitsSubjectCount(vBits);
+else if (chrom[strlen(chrom) - 1] == 'X')  // chrX is tricky: males are haploid except in PAR
+    {
+    struct vcfRecord *record = vBits->record;
+    struct vcfFile *vcff = record->file;
+
+    // parse genotypes if needed
+    if (record->genotypes == NULL)
+        vcfParseGenotypes(record);
+
+    // walk through genotypes
+    int ix = 0;
+    for ( ; ix < vcff->genotypeCount;ix++)
+        {
+        if (record->genotypes[ix].isHaploid)
+            haploid++;
+        }
+    }
+return haploid;
+}
+
+int vBitsSubjectChromCount(struct variantBits *vBits)
+// Returns the chromosomes in the VCF dataset that are covered at this location
+{
+int haploid = vBitsHaploidCount(vBits);
+int diploid = vcfBitsSubjectCount(vBits) - haploid;
+return ((diploid * 2) + haploid);
+}
+
 struct variantBits *vcfRecordsToVariantBits(struct vcfFile *vcff, struct vcfRecord *records,
                                             boolean phasedOnly, boolean homozygousOnly,
                                             boolean unphasedBits)
@@ -141,8 +223,11 @@ slReverse(&vBitsList);
 return vBitsList;
 }
 
-int vcfVariantBitsDropSparse(struct variantBits **vBitsList, int haploGenomeMin)
-// Drops vBits found in less than a minimum number of haplotype genomes.
+int vcfVariantBitsDropSparse(struct variantBits **vBitsList, int haploGenomeMin,
+                             boolean dropRefErrors)
+// Drops vBits found in less than a minimum number of haplotype genomes.  Supplying 1 will
+// drop variants found in no haplotype genomes.  Declaring dropRefErrors will drop variants
+// in all haplotype genomes (variants where reference is wrong).
 // Returns count of vBits structure that were dropped.
 {
 struct variantBits *vBitsKeep = NULL;
@@ -152,12 +237,143 @@ while ((vBits = slPopHead(vBitsList)) != NULL)
     {
     if (vBits->bitsOn >= haploGenomeMin)
         slAddHead(&vBitsKeep,vBits);
-    else  // drop memory, since this is on lm
-        dropped++;
+    else
+        dropped++;  // if not demoted, drop memory, since this is on lm
     }
-slReverse(&vBitsKeep);
 *vBitsList = vBitsKeep;
+
+if (dropRefErrors)
+    {
+    vBitsKeep = NULL;
+    while ((vBits = slPopHead(vBitsList)) != NULL)
+        {
+        boolean foundRef = FALSE;
+        int genoIx = 0;
+        for (; !foundRef && genoIx < vBits->genotypeSlots; genoIx++)
+            {
+            int haploIx = 0;
+            for (; !foundRef && haploIx < vBits->haplotypeSlots; haploIx++)
+                {
+                if (bitCountRange(vBits->bits,
+                                  vBitsSlot(vBits,genoIx,haploIx,0), vBits->alleleSlots) == 0)
+                    foundRef = TRUE;
+                }
+            }
+
+        if (foundRef)
+            slAddHead(&vBitsKeep,vBits);
+        else  // drop memory, since this is on lm
+            dropped++;  // if not demoted, drop memory, since this is on lm
+        }
+    *vBitsList = vBitsKeep;
+    }
+else
+    slReverse(vBitsList);
+
 return dropped;
+}
+
+int vcfVariantBitsAlleleOccurs(struct variantBits *vBits, unsigned char alleleIx,
+                               boolean homozygousOrHaploid)
+// Counts the number of times a particular allele occurs in the subjects*chroms covered.
+// If homozygousOrHaploid then the allele must occur in both chroms to be counted
+{
+assert((vBits->alleleSlots == 1 && alleleIx <= 1)
+    || (vBits->alleleSlots == 2 && alleleIx <= 3));
+
+// To count ref, we need to know the number of subjects the bitmap covers
+// chrX is the culprit here since it is haploid/diploid
+int subjTotal = vBits->genotypeSlots * vBits->haplotypeSlots;
+if (alleleIx == 0)
+    subjTotal = vBitsSubjectChromCount(vBits);
+
+// Simple case can be taken care of easily
+if (vBits->alleleSlots == 1
+&&  (!homozygousOrHaploid || vBits->haplotypeSlots == 1))
+    {
+    if (alleleIx == 1)           // non-reference
+        return vBits->bitsOn;
+    else                         // reference
+        return subjTotal - vBits->bitsOn;
+    }
+
+// Otherwise, we have to walk the bitmap
+int occurs           = 0;
+int occursHomozygous = 0;
+int genoIx = 0;
+for (; genoIx < vBits->genotypeSlots; genoIx++)
+    {
+    int haploIx = 0;
+    int occursThisSubject = 0;
+    for (; haploIx < vBits->haplotypeSlots; haploIx++)
+        {
+        int bitSlot = vBitsSlot(vBits,genoIx,haploIx,0);
+        switch (alleleIx)
+            {
+            case 0: if (bitCountRange(vBits->bits,bitSlot, vBits->alleleSlots) != 0)
+                        occursThisSubject++; // Any non-reference bit
+                    break;
+            case 1: if (vBits->alleleSlots == 1)
+                        {
+                        if (bitReadOne(vBits->bits,bitSlot))
+                            occursThisSubject++;
+                        }
+                    else
+                        {
+                        if ( bitReadOne(vBits->bits,bitSlot)
+                        &&  !bitReadOne(vBits->bits,bitSlot + 1) )
+                            occursThisSubject++;
+                        }
+                    break;
+            case 2: if (!bitReadOne(vBits->bits,bitSlot)
+                    &&   bitReadOne(vBits->bits,bitSlot + 1) )
+                        occursThisSubject++;
+                    break;
+            case 3: if (bitCountRange(vBits->bits,bitSlot, 2) == 2)
+                        occursThisSubject++;
+                    break;
+            default:
+                    break;
+            }
+        }
+    occurs += occursThisSubject;
+    if ((alleleIx == 0 && occursThisSubject == 0)
+    ||  (alleleIx >  0 && vBits->haplotypeSlots == occursThisSubject))
+        occursHomozygous++;
+    }
+if (alleleIx == 0)
+    occurs = subjTotal - occurs;
+
+return (homozygousOrHaploid ? occursHomozygous : occurs);
+}
+
+int vcfVariantBitsReferenceOccurs(struct vcfFile *vcff, struct variantBits *vBitsList,
+                                  boolean homozygousOrHaploid)
+// For an entire list of vBits structs, counts the times the reference allele occurs.
+// If homozygousOrHaploid then the reference allele must occur in both chroms to be counted
+{
+assert(vBitsList != NULL);
+struct variantBits *vBits = vBitsList;
+// Allocate temporary vBits struct which can hold the 'OR' version of all bitmaps in list
+struct lm *lm = vcfFileLm(vcff);
+struct variantBits *vBitsTemp;
+lmAllocVar(lm,vBitsTemp);
+vBitsTemp->genotypeSlots  = vBits->genotypeSlots;
+vBitsTemp->haplotypeSlots = vBits->haplotypeSlots;
+vBitsTemp->alleleSlots    = vBits->alleleSlots;
+vBitsTemp->record         = vBits->record;
+
+int bitSlots = vBitsSlotCount(vBits);
+vBitsTemp->bits = lmBitClone(lm,vBits->bits, bitSlots);
+
+
+for (vBits = vBits->next; vBits != NULL; vBits = vBits->next)
+    bitOr(vBitsTemp->bits, vBits->bits, bitSlots);
+
+vBitsTemp->bitsOn = bitCountRange(vBitsTemp->bits,0,bitSlots);
+
+// Note the memory will be leaked but it is lm
+return vcfVariantBitsAlleleOccurs(vBitsTemp, 0, homozygousOrHaploid);
 }
 
 int vcfVariantMostPopularCmp(const void *va, const void *vb)
@@ -238,7 +454,9 @@ for (; genoIx < vBitsList->genotypeSlots; genoIx++)
                     }
                 }
             }
-        if (!ignoreReference || hBits->bitsOn > 0) // gonna keep it so flesh it out
+
+        // gonna keep it? so flesh it out (ignoreRef means > 0 && < all)
+        if (!ignoreReference || hBits->bitsOn)
             {
             hBits->genomeIx  = genoIx;
             hBits->haploidIx = haploIx;
@@ -267,6 +485,7 @@ slReverse(&hBitsList);
 return hBitsList;
 }
 
+/*
 int vcfHaploBitsOnCmp(const void *va, const void *vb)
 // Compare to sort haploBits based upon how many bits are on
 {
@@ -281,9 +500,12 @@ if (ret == 0)
     }
 return ret;
 }
+*/
 
-int vcfHaploMemCmp(const void *va, const void *vb)
-// Compare to sort haploBits based upon how many bits are on
+int vcfHaploBitsMemCmp(const void *va, const void *vb)
+// Compare to sort haploBits based on bit by bit memory compare
+// When hBits has been created from vBits sorted by popularity,
+// a mem sort will then allow elmTreeGrow() to add popular variants first.
 {
 const struct haploBits *a = *((struct haploBits **)va);
 const struct haploBits *b = *((struct haploBits **)vb);
@@ -325,7 +547,7 @@ if (hBitsToTest->next == NULL)
     return 0;
 
 // Sort early bits first
-slSort(&hBitsToTest, vcfHaploMemCmp);
+slSort(&hBitsToTest, vcfHaploBitsMemCmp);
 
 // Walk through those of matching size and compare
 int bitCount = hBitsSlotCount(hBitsToTest);

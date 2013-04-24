@@ -5,6 +5,8 @@
 #ifndef GENEPRED_H
 #define GENEPRED_H
 
+#include "dnaseq.h"
+
 struct gff;
 struct gffFile;
 struct gffGroup;
@@ -297,6 +299,19 @@ boolean exonToPos(struct genePred *gp, unsigned num, int *chromStart, int *chrom
 
 struct asObject *genePredAsObj();
 // Return asObject describing fields of genePred
+
+struct dnaSeq *genePredGetDna(char *database, struct genePred *gp,
+                              boolean coding, enum dnaCase dnaCase);
+// Returns the DNA sequence associated with gene prediction.
+// Negative strand genes will return the sequence as read from the negative strand.
+// Optionally restrict to coding sequence only
+
+int genePredBaseToCodingPos(struct genePred *gp, int basePos,
+                            boolean stranded, boolean *isCoding);
+// Given a genePred model and a single (0 based) base position, predict the 0-based
+// DNA (stranded) coding sequence pos.  Dividing this number by 3 should give the AA position!
+// Returns -1 when outside of coding exons unless OPTIONAL isCoding pointer to boolean is
+// provided. In that case, returns last valid position and sets isCoding to FALSE.
 
 #endif /* GENEPRED_H */
 
