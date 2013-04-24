@@ -522,3 +522,25 @@ body.oldStaticPage .sectionContent {
     margin-bottom: 0px;
     padding: 0px;
 }
+
+/* Style for geneAlleles (haplotypes) */
+table#alleles { font-size:small; }
+table#alleles TR.allele { text-align:center; }
+table#alleles TR.allele.rare { display:none; }
+table#alleles TD.pop { text-align:left; }
+table#alleles TH.ref { text-align:right; }
+table#alleles TD.ref { text-align:right; }
+/* table#alleles TH.var { text-align:center; }
+   table#alleles TD.var { text-align:center; font-weight:bold; } */
+table#alleles TD.var { font-weight:bold; }
+table#alleles TH.seq { text-align:left; }
+table#alleles TD.seq { text-align:left; }
+div#haplotypes .hilite { opacity: 0.2; filters.alpha.opacity:20;  position: absolute;
+                                 background-color: #339933; } /* greenish */ 
+div#haplotypes .hiliteSpecial { background-color: #33FFFF; } /* bluish */ 
+div#haplotypes input#allelesShowHide { width:160px; }
+div#haplotypes input.alleleButton { width:220px; }
+div#haplotypes .textOpt   { color:#0000CD; } /* medium blue */
+div#haplotypes .textInfo  { color:#006600; } /* dark green */
+div#haplotypes .textAlert { color:#DC143C; } /* dark red */
+
