@@ -495,6 +495,8 @@ struct hash *seqIdHash = NULL;
 seqIdHash = newHash(0);
 for (i=0; i<partCount; i++) 
     {
+    if (pubsDebug)
+        printf("annotId %s<br>", seqIdCoords[i]);
     hashAdd(seqIdHash, seqIdCoords[i], NULL);
     }
 return seqIdHash;
@@ -650,7 +652,7 @@ static bool printSeqSection(char *articleId, char *title, bool showDesc, struct 
 // get data from mysql
 char query[4096];
 safef(query, sizeof(query), 
-"SELECT fileDesc, snippet, locations, articleId, fileId, seqId, sequence, fileUrl "
+"SELECT fileDesc, snippet, locations, annotId, sequence, fileUrl "
 "FROM %s WHERE articleId='%s';", pubsSequenceTable, articleId);
 if (pubsDebug)
     puts(query);
@@ -691,20 +693,21 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *fileDesc = row[0];
     char *snippet  = row[1];
     char *locString= row[2];
-    char *artId    = row[3];
-    char *fileId   = row[4];
-    char *seqId    = row[5];
-    char *seq      = row[6];
-    char *fileUrl  = row[7];
+    //char *artId    = row[3];
+    //char *fileId   = row[4];
+    //char *seqId    = row[5];
+    char *annotId = row[3];
+    char *seq      = row[4];
+    char *fileUrl  = row[5];
 
     // annotation (=sequence) ID is a 64 bit int with 10 digits for 
     // article, 3 digits for file, 5 for annotation
-    char annotId[100];
+    //char annotId[100];
     
     // some debugging help
-    safef(annotId, 100, "%010d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
-    if (pubsDebug)
-        printf("%s", annotId);
+    //safef(annotId, 100, "%10d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
+    //if (pubsDebug)
+        //printf("artId %s, file %s, annot %s -> annotId %s<br>", artId, fileId, seqId, annotId);
 
     // only display this sequence if we're in the right section
     if (clickedSeqs!=NULL && ((hashLookup(clickedSeqs, annotId)!=NULL) != isClickedSection)) {
@@ -746,7 +749,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 
         // optional debug info column
         if (pubsDebug) 
-            web2PrintCellF("article %s, file %s, seq %s, annotId %s", artId, fileId, seqId, annotId);
+            //web2PrintCellF("article %s, file %s, seq %s, annotId %s", artId, fileId, seqId, annotId);
+            web2PrintCellF("annotId %s", annotId);
 
         // column 3: print links to locations, only print this in the 2nd section
         if (!isClickedSection && !pubsDebug) 
@@ -780,6 +784,8 @@ if (!fasta)
 
 web2EndSection();
 /* Yale Image finder files contain links to the image itself */
+if (pubsDebug)
+    printf("%s %s %d", articleSource, clickedFileUrl, isClickedSection);
 if (stringIn("yif", articleSource) && (clickedFileUrl!=NULL) && isClickedSection) 
     printYifSection(clickedFileUrl);
 
