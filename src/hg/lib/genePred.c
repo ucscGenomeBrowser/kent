@@ -1943,3 +1943,95 @@ struct asObject *genePredAsObj()
 {
 return asParseText(genePredAutoSqlString);
 }
+
+struct dnaSeq *genePredGetDna(char *database, struct genePred *gp,
+                              boolean coding, enum dnaCase dnaCase)
+// Returns the DNA sequence associated with gene prediction.
+// Negative strand genes will return the sequence as read from the negative strand.
+// Optionally restrict to coding sequence only
+{
+struct dnaSeq *dnaSeq = hDnaFromSeq(database, gp->chrom, gp->txStart, gp->txEnd,  dnaCase);
+if (dnaSeq == NULL)
+    return NULL;
+DNA *seq = dnaSeq->dna;
+int len = dnaSeq->size;
+if (coding)
+    {
+    int cdnaOffset = 0, exonIx;
+    for (exonIx = 0; exonIx < gp->exonCount; exonIx++)
+        {
+        int exonStart = max(gp->exonStarts[exonIx],gp->cdsStart);
+        int exonEnd   = min(gp->exonEnds[  exonIx],gp->cdsEnd  );
+        if (exonStart >= exonEnd) // non-coding exon
+            continue;
+        exonStart -= gp->txStart;
+        exonEnd   -= gp->txStart;
+        int exonSize  = exonEnd - exonStart;
+
+        assert(cdnaOffset <= exonStart && exonEnd <= len);
+        if (cdnaOffset < exonStart)
+            memmove(seq + cdnaOffset, seq + exonStart, exonSize);
+        cdnaOffset += exonSize;
+        }
+    seq[cdnaOffset] = '\0';
+    dnaSeq->size = cdnaOffset;
+    }
+
+if (gp->strand[0] == '-')
+    reverseComplement(seq,dnaSeq->size);
+
+return dnaSeq;
+}
+
+int genePredBaseToCodingPos(struct genePred *gp, int basePos,
+                            boolean stranded, boolean *isCoding)
+// Given a genePred model and a single (0 based) base position, predict the 0-based
+// DNA (stranded) coding sequence pos.  Dividing this number by 3 should give the AA position!
+// Returns -1 when outside of coding exons unless OPTIONAL isCoding pointer to boolean is
+// provided. In that case, returns last valid position and sets isCoding to FALSE.
+{
+if (isCoding == NULL && (basePos < gp->cdsStart || basePos >= gp->cdsEnd))
+    return -1;
+
+boolean reverse = (stranded && gp->strand[0] == '-');
+assert(gp->exonStarts != NULL && gp->exonEnds != NULL);
+
+// Walk through exons, advancing depending upon strand
+int codingBasesSoFar = 0;
+int exonIx = (reverse ? (gp->exonCount - 1) : 0);
+while (0 <= exonIx && exonIx < gp->exonCount)
+    {
+    int exonStart = max(gp->exonStarts[exonIx],gp->cdsStart);
+    int exonEnd   = min(gp->exonEnds[  exonIx],gp->cdsEnd  );
+    if (exonStart < exonEnd) // coding exon
+        {
+        // Within this exon?
+        if (exonStart <= basePos && basePos < exonEnd)
+            {
+            if (isCoding != NULL)
+                *isCoding = TRUE;
+            if (reverse)
+                return (codingBasesSoFar + (exonEnd - basePos));
+            else
+                return (codingBasesSoFar + (basePos - exonStart));
+            }
+
+        // Past the target base already?
+        if (( reverse && basePos >= exonEnd  )
+        ||  (!reverse && basePos <  exonStart))
+            break;
+
+        // Yet to reach the target base... accumulate exon worth
+        codingBasesSoFar += (exonEnd - exonStart);
+        }
+
+    exonIx += (reverse ? -1 : 1);
+    }
+
+if (isCoding != NULL && codingBasesSoFar > 0)
+    {
+    *isCoding = FALSE;
+    return codingBasesSoFar;
+    }
+return -1;  // introns not okay
+}

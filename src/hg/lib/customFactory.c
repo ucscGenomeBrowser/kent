@@ -1961,7 +1961,7 @@ if (hashLookup(settings, "viewLimits") == NULL)
 	sum.minVal += 1;
 	sum.maxVal -= 1;
 	}
-    char text[32];
+    char text[1024];
     safef(text, sizeof(text), "%f:%f", sum.minVal, sum.maxVal);
     hashAdd(settings, "viewLimits", cloneString(text));
     }
