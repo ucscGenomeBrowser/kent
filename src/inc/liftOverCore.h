@@ -4,13 +4,9 @@
 #ifndef LIFTOVERCORE_H
 #define LIFTOVERCORE_H
 
-#ifndef BASICBED_H
 #include "basicBed.h"
-#endif
-
-#ifndef CHAIN_H 
+#include "binRange.h"
 #include "chain.h"
-#endif
 
 #define LIFTOVER_MINMATCH        0.95
 #define LIFTOVER_MINBLOCKS       1.00
