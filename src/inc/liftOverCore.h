@@ -4,6 +4,10 @@
 #ifndef LIFTOVERCORE_H
 #define LIFTOVERCORE_H
 
+#include "basicBed.h"
+#include "binRange.h"
+#include "chain.h"
+
 #define LIFTOVER_MINMATCH        0.95
 #define LIFTOVER_MINBLOCKS       1.00
 // The maximum number of words per line that can be lifted:

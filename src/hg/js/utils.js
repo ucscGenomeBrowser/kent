@@ -1396,6 +1396,13 @@ var sortTable = {
     columns: null,
     tbody: null,
     loadingId: null,
+    caseSensitive: false, // sorts are case INSENSITIVE by default
+
+    sortCaseSensitive: function (sensitive)
+    {   // set case senstivity, which can be added to each sortable columnn's onclick event.
+        // or set for the whole table right after initialize()
+        sortTable.caseSensitive = sensitive;
+    },
 
     row: function (tr,sortColumns,row)  // UNUSED: sortTable.fieldCmp works fine
     {
@@ -1405,7 +1412,9 @@ var sortTable = {
         for(var ix=0;ix<sortColumns.cellIxs.length;ix++)
             {
             var th = tr.cells[sortColumns.cellIxs[ix]];
-            this.fields[ix]  = (sortColumns.useAbbr[ix] ? th.abbr : $(th).text()).toLowerCase(); // case insensitive sorts
+            this.fields[ix]  = (sortColumns.useAbbr[ix] ? th.abbr : $(th).text());
+            if (!sortTable.caseSensitive) 
+                this.fields[ix]  = this.fields[ix].toLowerCase(); // case insensitive sorts
             this.reverse[ix] = sortColumns.reverse[ix];
             }
     },
@@ -1423,7 +1432,10 @@ var sortTable = {
 
     field: function (value,reverse,row)
     {
-        this.value   = value.toLowerCase(); // case insensitive sorts NOTE: Do not need to define every field
+        if (sortTable.caseSensitive) 
+            this.value   = value;
+        else
+            this.value   = value.toLowerCase(); // case insensitive sorts
         this.reverse = reverse;
         this.row     = row;
     },
