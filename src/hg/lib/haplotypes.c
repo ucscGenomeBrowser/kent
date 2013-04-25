@@ -447,7 +447,7 @@ if (skew != NULL)
 
 // If we have room, and stdDev is big enough, add it to the end of the population results
 int sz = sizeR - (p - popResult);
-if (stdDev > 0 && sz > 12 && rowCount > 1)
+if (stdDev > 0 && sz > 12 && rowCount > 1 && skew == NULL)
     {
     if (stdDev >= 1000)
         safef(p, sizeR - (p - popResult), " [sd:>1000]");
@@ -468,7 +468,12 @@ char *haploVarId(struct variant *var)
 static char class[256];
 
 if (var->id != NULL && var->id[0] != '\0')
-    return var->id;
+    {
+    char *id = cgiEncodeFull(var->id);
+    stripChar(id, '.');
+    if (id[0] != '\0')
+        return id; // leaked
+    }
 
 safef(class,sizeof(class),"var%d",var->chromStart);
 return class;
@@ -1871,11 +1876,13 @@ return refSeq;
 #define SEQUENCE_CLASS     "seq"
 #define POPULATION_CLASS   "pop"
 #define REFERENCE_CLASS    "ref"
+#define HAPLOTYPE_CLASS    "hap"
+#define HOMOZYGOUS_CLASS   "hom"
+#define SCORE_CLASS        "score"
 
 static void geneAllelesTable(struct cart *cart,
                              struct haploExtras *he, struct haplotypeSet *hapSet,
-                             boolean showAll, boolean dnaView,
-                             boolean fullSeq, boolean tripletView)
+                             boolean dnaView, boolean fullSeq, boolean tripletView)
 // Print gene alleles HTML table.
 {
 int haploCount = slCount(hapSet->haplos);
@@ -1887,6 +1894,8 @@ if (haploCount == 1)
     return;
     }
 boolean diploid = differentWord(hapSet->chrom,"chrY"); // What, no aliens?
+boolean showScores   = cartTimeoutBoolean(cart, HAPLO_SHOW_SCORES, HAPLO_CART_TIMEOUT);
+boolean showRareHaps = cartTimeoutBoolean(cart, HAPLO_RARE_HAPS, HAPLO_CART_TIMEOUT);
 
 struct haplotype *refHap = hapSet->refHap;
 struct haplotype *haplo  = NULL;
@@ -1914,15 +1923,19 @@ hPrintf("<TABLE id='" TABLE_ID "' class='sortable'>"
         "<THEAD><TR class='" ROW_CLASS "' valign='bottom'>");
 
 // Note all headers must have id's for persistent sort order
-hPrintf("<TH id='hapF' abbr='use'>Haplotype<BR>Frequency</TH>");//  abbr='use' for sortable table
-hPrintf("<TH id='hapS' abbr='use' title='Length normalized probability of occurring by chance \n"
-        "(log 10, above zero means more frequent than expected).' nowrap>P-score</TH>");
+hPrintf("<TH id='" HAPLOTYPE_CLASS "F' abbr='use'>Haplotype<BR>Frequency</TH>");// abbr='use': sort
+hPrintf("<TH id='" HAPLOTYPE_CLASS "S' class='" SCORE_CLASS "%s' abbr='use' title="
+        "'Length normalized probability of occurring by chance "
+        "\n(log 10, above zero means more frequent than expected).' nowrap>Hap<br>score</TH>",
+        (showScores ? "" : " hidden"));
 if (diploid)
     {
-    hPrintf("<TH id='homF' abbr='use' title='Homozygous or Haploid'>Homozygous<BR>Frequency</TH>");
-    hPrintf("<TH id='homS' abbr='use' title='Given haplotype frequency, probability of occurring "
-            "by chance \n(log 10, below zero means less frequent than expected).' nowrap>"
-            "P-score</TH>");
+    hPrintf("<TH id='" HOMOZYGOUS_CLASS "F' abbr='use' title='Homozygous or Haploid'>"
+            "Homozygous<BR>Frequency</TH>");
+    hPrintf("<TH id='" HOMOZYGOUS_CLASS "S' class='" SCORE_CLASS "%s' abbr='use' title="
+            "'Given haplotype frequency, probability of occurring homozygous by chance \n"
+            "(log 10, below zero means less frequent than expected).' nowrap>"
+            "Hom<br>score</TH>",(showScores ? "" : " hidden"));
     }
 
 // Show populations
@@ -1930,13 +1943,16 @@ if (he->populationsToo)
     {
     if (he->populationsMinor)
         hPrintf("<TH id='" POPULATION_CLASS "' nowrap "
-                "title='Haplotype distribution across 1000 genome populations"
-                " [unweighted std deviation]'>"
+                "title='Haplotype distribution across 1000 genome populations'>"
                 "Distribution in Populations - 1000 Genome groups</TH>");
     else
         hPrintf("<TH id='" POPULATION_CLASS "' nowrap "
-                "title='Haplotype distribution across major populations "
-                "[unweighted std deviation]'>Distribution in Populations</TH>");
+                "title='Haplotype distribution across major populations'>"
+                "Distribution in Populations</TH>");
+    hPrintf("<TH id='" POPULATION_CLASS "S' class='" SCORE_CLASS "%s' abbr='use' title="
+            "'Semi-weighted population variance score. \n"
+            "Higher scores represent greater skew across populations "
+            "(variance / N).'>Pop<br>score</TH>",(showScores ? "" : " hidden"));
     }
 
 hPrintf("<TH class='" REFERENCE_CLASS "'>Reference<BR>Variants:</TH>");
@@ -1982,7 +1998,7 @@ if (fullSeq)
 hPrintf("</TR></THEAD><TBODY>\n");
 
 float minFreq = 0.01;
-boolean countHidden = 0, countShown = 0, countLowInterest = 0;
+boolean countHidden = 0, countRows = 0, countLowInterest = 0;
 for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
     {
     if (haplo->subjects == 0) // reference haplotype may not be found in 1000 geneomes data!
@@ -1990,20 +2006,17 @@ for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
 
     float hapFreq = (float)haplo->subjects/hapSet->chromN;
 
-    if (hapFreq < minFreq)
-        countLowInterest++;         // Count these regardless of whether they are shown
-
     // Hide low interest alleles
-    if (!showAll && hapFreq < minFreq)
+    countRows++;
+    if (hapFreq < minFreq)
         {
-        hPrintf("<TR class='" ROW_CLASS " rare'>");
-        countHidden++;
+        hPrintf("<TR class='" ROW_CLASS " rare%s'>",(showRareHaps ? "" : " hidden"));
+        countLowInterest++;         // Count these regardless of whether they are shown
+        if (!showRareHaps)
+            countHidden++;
         }
     else
-        {
         hPrintf("<TR class='" ROW_CLASS "'>");
-        countShown++;
-        }
 
     // First some numbers
     hPrintf("<TD abbr='%.3f' title='N=%d of %d'>%.3f</TD>",
@@ -2011,7 +2024,8 @@ for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
             haplo->subjects,hapSet->chromN,hapFreq );
 
     // Would be nice to improve score to better highlight surprise
-    hPrintf("<TD abbr='%08.1f'>",99999 - haplo->haploScore);
+    hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f'>",(showScores ? "" : " hidden"),
+            99999 - haplo->haploScore);
     if (haplo->haploScore >= 1000)
         hPrintf(">1000");
     else //if (haplo->haploScore > 0)
@@ -2028,7 +2042,8 @@ for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
             hPrintf("<TD abbr='%.3f' title='N=%d of %d'>%.3f</TD>",
                     (1 - homFreq), haplo->homCount, hapSet->subjectN, homFreq );
             }
-        hPrintf("<TD abbr='%08.1f'>",99999 - haplo->homScore);
+        hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f'>",(showScores ? "" : " hidden"),
+                99999 - haplo->homScore);
         if (haplo->homCount == 0 && haplo->homScore == 0)
             hPrintf("&nbsp;");
         else if (haplo->homScore >= 1000)
@@ -2044,6 +2059,10 @@ for (haplo = hapSet->haplos ; haplo != NULL; haplo = haplo->next)
         assert(haplo->ho != NULL);
         hPrintf("<TD class='" POPULATION_CLASS "' nowrap>%s</TH>",
                 haplo->ho->popDist ? haplo->ho->popDist : "" );
+        double popScore = ((haplo->ho->popScore * haplo->ho->popScore)/haplo->subjects);
+        // hmmm... popScore *= haplo->variantsCovered;
+        hPrintf("<TD class='" SCORE_CLASS "%s' abbr='%08.1f'>%.1f</TH>",
+                (showScores ? "" : " hidden"),99999 - popScore, popScore );
         }
 
     hPrintf("<TD class='" REFERENCE_CLASS "'>%s</TD>",
@@ -2133,18 +2152,28 @@ hPrintf("</TBODY></TABLE>\n");
 // Show/Hide rare haplotypes button
 if (countLowInterest > 0)
     {
-    hPrintf("<span class='textOpt' id='alleleCounts'>"
-            "Common gene haplotypes shown: %d of %d</span>\n",
-            countShown, (countShown + countHidden));
-    hPrintf("<BR><input type='button' id='allelesShowHide' value='%s rare haplotypes' "
+    if (countHidden == 0)
+        hPrintf("<span class='textAlert' id='alleleCounts'>"
+                "All gene haplotypes shown: %d of %d</span>\n",
+                (countRows - countHidden), countRows);
+    else
+        hPrintf("<span class='textOpt' id='alleleCounts'>"
+                "Common gene haplotypes shown: %d of %d</span>\n",
+                (countRows - countHidden), countRows);
+    hPrintf("<BR><input type='button' id='" HAPLO_RARE_HAPS "' value='%s rare haplotypes' "
             "onclick='alleles.rareAlleleToggle(this);' "
             "title='Show/Hide rare haplotypes that occur with a frequency of less than %g%%'>\n",
-            (countHidden > 0 ? "Show":"Hide"),(minFreq * 100));
+            (showRareHaps ? "Hide":"Show"),(minFreq * 100));
     }
 else
     {
-    hPrintf("<BR>Common gene alleles shown: %d\n",countShown);
+    hPrintf("<BR>Common gene alleles shown: %d\n",countRows);
     }
+hPrintf("&nbsp;<input type='button' id='" HAPLO_SHOW_SCORES "' value='%s scoring' "
+        "onclick='alleles.scoresToggle(this);' style='width:160px;'"
+        "title='Show/Hide all haploptye scores'>\n",(showScores ? "Hide":"Include"));
+hPrintf("&nbsp;&nbsp;<a href='#' onclick='return alleles.setAndRefresh(\""HAPLO_RESET_ALL"\",1);'>"
+        "Reset to defaults</a>\n");
 }
 
 void geneAllelesTableAndControls(struct cart *cart, char *geneId,
@@ -2165,9 +2194,9 @@ hPrintf("<div id='" HAPLO_TABLE "'><!-- " HAPLO_TABLE " begin -->\n");
 hPrintf("Generated from <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000 Genomes</A> "
         "Phase1 variants.");
 
-boolean rareVars     =  sameOk(cartOptionalString(cart, HAPLO_RARE_VAR ), geneId);
-boolean dnaView      =  sameOk(cartOptionalString(cart, HAPLO_DNA_VIEW ), geneId);
-boolean fullGeneView =  sameOk(cartOptionalString(cart, HAPLO_FULL_SEQ ), geneId);
+boolean rareVars     =  cartTimeoutBoolean(cart, HAPLO_RARE_VAR, HAPLO_CART_TIMEOUT);
+boolean dnaView      =  cartTimeoutBoolean(cart, HAPLO_DNA_VIEW, HAPLO_CART_TIMEOUT);
+boolean fullGeneView =  cartTimeoutBoolean(cart, HAPLO_FULL_SEQ, HAPLO_CART_TIMEOUT);
 boolean tripletView  =  FALSE;
 // Support toggling between common and rare variants
 int variantCount = (noHaps ? 0 : hapSet->variantsCovered);
@@ -2208,8 +2237,8 @@ if (!noHaps || !rareVars)
 
 if (!noHaps)
     {
-    boolean distMajor =  sameOk(cartOptionalString(cart, HAPLO_MAJOR_DIST ), geneId);
-    boolean distMinor =  sameOk(cartOptionalString(cart, HAPLO_MINOR_DIST ), geneId);
+    boolean distMajor =  cartTimeoutBoolean(cart, HAPLO_MAJOR_DIST, HAPLO_CART_TIMEOUT);
+    boolean distMinor =  cartTimeoutBoolean(cart, HAPLO_MINOR_DIST, HAPLO_CART_TIMEOUT);
     hPrintf("<input type='button' id='" HAPLO_MAJOR_DIST "'  class='alleleButton' "
             "value='%s distribution' onclick='alleles.toggleButton(this,\"%s\");' "
             "title='%s haplotype distribution across population groups'>\n",
@@ -2217,23 +2246,23 @@ if (!noHaps)
             (distMajor ? "Hide": "Display"));
     if (distMajor)
         {
-        hPrintf("<input type='button' id='" HAPLO_MINOR_DIST "'  class='alleleButton' "
+        hPrintf("<input type='button' id='" HAPLO_MINOR_DIST "' class='alleleButton' "
                 "value='%s' onclick='alleles.toggleButton(this,\"%s\");'>\n",
                 (distMinor ? "Major groups" : "1000 Genome groups"),
                 (distMinor ? "":geneId));
         }
-    hPrintf("<input type='button' id='" HAPLO_DNA_VIEW "'  class='alleleButton' "
+    hPrintf("<input type='button' id='" HAPLO_DNA_VIEW "' class='alleleButton' "
             "value='%s' onclick='alleles.toggleButton(this,\"%s\");'>\n",
             (dnaView ? "Display as amino acids" : "Display as DNA bases"),
             (dnaView ? "":geneId));
-    hPrintf("<input type='button' id='" HAPLO_FULL_SEQ "'  class='alleleButton' "
+    hPrintf("<input type='button' id='" HAPLO_FULL_SEQ "' class='alleleButton' "
             "value='%s' onclick='alleles.toggleButton(this,\"%s\");'>\n",
             (fullGeneView ? "Hide full sequence" : "Show full sequence"),
             (fullGeneView ? "":geneId));
 
-    tripletView  =  sameOk(cartOptionalString(cart, HAPLO_TRIPLETS), geneId);
+    tripletView  =  cartTimeoutBoolean(cart, HAPLO_TRIPLETS, HAPLO_CART_TIMEOUT);
     if (!dnaView && fullGeneView)
-        hPrintf("<input type='button' id='" HAPLO_TRIPLETS "'  class='alleleButton' "
+        hPrintf("<input type='button' id='" HAPLO_TRIPLETS "' class='alleleButton' "
                 "value='%s' onclick='alleles.toggleButton(this,\"%s\");'>\n",
                 (tripletView ? "Hide DNA triplets" : "Show DNA triplet code"),
                 (tripletView ? "":geneId));
@@ -2257,7 +2286,7 @@ if (noHaps)
             "<span style='color:blue;'>common</span> or <span style='color:#DC143C;'>rare</span>"
           : "<span style='color:blue;'>common</span>");
 else // Finally the table of haplotype alleles
-    geneAllelesTable(cart, he, hapSet, FALSE, dnaView, fullGeneView, tripletView );
+    geneAllelesTable(cart, he, hapSet, dnaView, fullGeneView, tripletView );
 
 // Close the container for ajax update.
 hPrintf("<!-- " HAPLO_TABLE " end --></div>\n");
@@ -2267,21 +2296,58 @@ hPrintf("<!-- " HAPLO_TABLE " end --></div>\n");
 // haplotype reading and writing routines
 // --------------------------------------
 
-#define HAPLO_STD_BED_FIELDS    12
-#define HAPLO_BED_PLUS_FIELDS   12
-#define HAPLO_FIELD_COUNT       (HAPLO_STD_BED_FIELDS + HAPLO_BED_PLUS_FIELDS)
-#define HAPLO_VAR_VALS_FIELD     HAPLO_STD_BED_FIELDS
-#define HAPLO_VAR_PROPS_FIELD   (HAPLO_STD_BED_FIELDS + 1)
-#define HAPLO_VAR_IDS_FIELD     (HAPLO_STD_BED_FIELDS + 2)
-#define HAPLO_BITS_FIELD        (HAPLO_STD_BED_FIELDS + 3)
-#define HAPLO_COMMON_ID_FIELD   (HAPLO_STD_BED_FIELDS + 4)
-#define HAPLO_SECOND_ID_FIELD   (HAPLO_STD_BED_FIELDS + 5)
-#define HAPLO_HAPLO_SCORE_FIELD (HAPLO_STD_BED_FIELDS + 6)
-#define HAPLO_HOM_SCORE_FIELD   (HAPLO_STD_BED_FIELDS + 7)
-#define HAPLO_POP_SCORE_FIELD   (HAPLO_STD_BED_FIELDS + 8)
-#define HAPLO_HOM_COUNT_FIELD   (HAPLO_STD_BED_FIELDS + 9)
-#define HAPLO_SUBJECTS_FIELD    (HAPLO_STD_BED_FIELDS + 10)
-#define HAPLO_SUBJECT_IDS_FIELD (HAPLO_STD_BED_FIELDS + 11)
+// bed 12 +
+#define HAPLO_BED "CREATE TABLE %s ("                                  \
+                  "    bin smallint unsigned not null,\n"               \
+                  "    chrom varchar(255) not null,\n"                   \
+                  "    chromStart int unsigned not null,\n"               \
+                  "    chromEnd int unsigned not null,\n"                  \
+                  "    name varchar(255) not null,     # commonId:suffix\n" \
+                  "    score int unsigned not null,\n"                       \
+                  "    strand char(1) not null,\n"                            \
+                  "    thickStart int unsigned not null, # Meaningless here\n" \
+                  "    thickEnd int unsigned not null,  # Meaningless here\n"   \
+                  "    itemRgb int unsigned not null,  # Item R,G,B color\n"     \
+                  "    variantCount int unsigned not null, # Number of blocks\n"  \
+                  "    variantSizes longblob null,   # Comma delimited list\n"     \
+                  "    variantStarts longblob null, # relative to chromStart\n"     \
+                  "    variantVals longblob null,  # non-ref values\n"               \
+                  "    variantProps longblob null,# variant proportions in dataset\n" \
+                  "    variantIds longblob null,                # variant IDs\n"       \
+                  "    variantsCovered int unsigned not null, # model variant count\n"  \
+                  "    bits varchar(1024) null,             # bits as string\n"          \
+                  "    commonId varchar(255) not null,    # accession less suffix\n"      \
+                  "    secondId varchar(255) not null,  # typically gene/protein Id \n"    \
+                  "    haploScore float not null,     # haplotype scoring statistic\n"      \
+                  "    homScore float not null,        # homozygous scoring statistic\n"     \
+                  "    popScore float not null,          # population scoring statistic\n"   \
+                  "    homCount int unsigned not null,     # homozygous or haploid\n"       \
+                  "    subjectCount int unsigned not null,   # subject chromosomes\n"     \
+                  "    subjectIds longblob null, # Subject IDs: d1-a,id1-b,id2-b...\n" \
+                  "    INDEX(chrom(8),bin),\n"          \
+                  "    INDEX(chrom(8),chromStart),\n"    \
+                  "    INDEX(name(20)),\n"                \
+                  "    INDEX(secondId(20),name(20)) );\n"
+
+#define HAPLO_STD_BED_FIELDS     12
+enum geneAlleleTableFields // enum of geneAlleles table columns (0-based index)
+    {
+    gafVarVals = HAPLO_STD_BED_FIELDS,  // first non-std-bed column index
+    gafVarProportions,
+    gafVarIds,
+    gafVarsCovered,
+    gafBits,
+    gafCommonId,
+    gafSecondId,
+    gafHaploScore,
+    gafHomScore,
+    gafPopScore,
+    gafHomCount,
+    gafSubjects,
+    gafSubjectIds,
+    gafFieldCount  // Last field of enum keeps track of size
+    };
+//#define HAPLO_BED_PLUS_FIELDS    (gafFieldCount - HAPLO_STD_BED_FIELDS)
 
 static boolean haplotypeLoadFromRow(char *tableOrFile,struct haploExtras *he,
                                     struct haplotypeSet **pHaploSets, char **row)
@@ -2297,7 +2363,7 @@ verbose(3,"Loaded one row from %s at %s:%d-%d %s\n",
 // Note that is should be efficient if the input file is sorted on commonId;
 boolean isNewHapSet = FALSE;
 struct haplotypeSet *hapSet = *pHaploSets;
-for ( ; hapSet != NULL && differentString(hapSet->commonId,row[HAPLO_COMMON_ID_FIELD]);
+for ( ; hapSet != NULL && differentString(hapSet->commonId,row[gafCommonId]);
         hapSet = hapSet->next)
     ;
 
@@ -2311,9 +2377,9 @@ if (hapSet == NULL)
     hapSet->wideEnd         = bed->chromEnd;
     hapSet->strand[0]       = bed->strand[0];
     hapSet->strand[1]       = '\0';
-    hapSet->commonId        = lmCloneString(he->lm,row[HAPLO_COMMON_ID_FIELD]);
-    if (strlen(row[HAPLO_SECOND_ID_FIELD]) > 0)
-        hapSet->secondId    = lmCloneString(he->lm,row[HAPLO_SECOND_ID_FIELD]);
+    hapSet->commonId        = lmCloneString(he->lm,row[gafCommonId]);
+    if (strlen(row[gafSecondId]) > 0)
+        hapSet->secondId    = lmCloneString(he->lm,row[gafSecondId]);
     hapSet->model           = NULL;  // Don't have it (could look it up?)
     hapSet->isGenePred      = FALSE; // How can we know?
     slAddHead(pHaploSets,hapSet);
@@ -2344,24 +2410,24 @@ else //if (suffix != NULL) // With suffix means non-reference haplotype
         haplo->variants      = lmAlloc(he->lm,sizeof(struct varaiant *) * haplo->variantCount);
 
         // VALUES: Could be zero length if only 1 variant that is deletion
-        assert(row[HAPLO_VAR_VALS_FIELD] != NULL
-            && countChars(row[HAPLO_VAR_VALS_FIELD],',') == haplo->variantCount - 1);
-        char *vals = lmAlloc(he->lm,strlen(row[HAPLO_VAR_VALS_FIELD]) + 5);
-        strcpy(vals,row[HAPLO_VAR_VALS_FIELD]);
+        assert(row[gafVarVals] != NULL
+            && countChars(row[gafVarVals],',') == haplo->variantCount - 1);
+        char *vals = lmAlloc(he->lm,strlen(row[gafVarVals]) + 5);
+        strcpy(vals,row[gafVarVals]);
         strSwapChar(vals,',','\0');
 
         // PROBABILITIES: floating point
-        assert(row[HAPLO_VAR_PROPS_FIELD] != NULL
-            && countChars(row[HAPLO_VAR_PROPS_FIELD],',') == haplo->variantCount - 1);
-        char *props = lmAlloc(he->lm,strlen(row[HAPLO_VAR_PROPS_FIELD]) + 5);
-        strcpy(props,row[HAPLO_VAR_PROPS_FIELD]);
+        assert(row[gafVarProportions] != NULL
+            && countChars(row[gafVarProportions],',') == haplo->variantCount - 1);
+        char *props = lmAlloc(he->lm,strlen(row[gafVarProportions]) + 5);
+        strcpy(props,row[gafVarProportions]);
         strSwapChar(props,',','\0');
 
         // Single variant without ID would have length == 0
-        assert(row[HAPLO_VAR_IDS_FIELD] != NULL
-            && countChars(row[HAPLO_VAR_IDS_FIELD],',') == haplo->variantCount - 1);
-        char *ids = lmAlloc(he->lm,strlen(row[HAPLO_VAR_IDS_FIELD]) + 5);
-        strcpy(ids,row[HAPLO_VAR_IDS_FIELD]);
+        assert(row[gafVarIds] != NULL
+            && countChars(row[gafVarIds],',') == haplo->variantCount - 1);
+        char *ids = lmAlloc(he->lm,strlen(row[gafVarIds]) + 5);
+        strcpy(ids,row[gafVarIds]);
         strSwapChar(ids,',','\0');
 
         int ix = 0;
@@ -2380,30 +2446,31 @@ else //if (suffix != NULL) // With suffix means non-reference haplotype
             props += strlen(props) + 1;
             // TODO: fill in vType somehow?
             }
-        // NOTE: where is variantsCovered??, slList of refHap->variants
+        // NOTE: no slList of refHap->variants!
         }
     }
 
 // Bitmap?
-if (row[HAPLO_BITS_FIELD] != NULL)
+if (row[gafBits] != NULL)
     {
-    haplo->bitCount   = strlen(row[HAPLO_BITS_FIELD]);
-    haplo->bits = bitsIn(he->lm,row[HAPLO_BITS_FIELD], haplo->bitCount);
+    haplo->bitCount   = strlen(row[gafBits]);
+    haplo->bits = bitsIn(he->lm,row[gafBits], haplo->bitCount);
     }
 
-// 1KGenome IDs are comma separated
-haplo->haploScore = sqlDouble(row[HAPLO_HAPLO_SCORE_FIELD]);
-haplo->homScore   = sqlDouble(row[HAPLO_HOM_SCORE_FIELD]);
-haplo->homCount   = sqlSigned(row[HAPLO_HOM_COUNT_FIELD]);
-haplo->subjects   = sqlSigned(row[HAPLO_SUBJECTS_FIELD]);
-haplo->subjectIds = lmCloneString(he->lm,row[HAPLO_SUBJECT_IDS_FIELD]);
+// more counts, scores and subjectIds
+haplo->variantsCovered = sqlSigned(row[gafVarsCovered]);
+haplo->haploScore     = sqlDouble(row[gafHaploScore]);
+haplo->homScore      = sqlDouble(row[gafHomScore]);
+haplo->homCount     = sqlSigned(row[gafHomCount]);
+haplo->subjects    = sqlSigned(row[gafSubjects]);
+haplo->subjectIds = lmCloneString(he->lm,row[gafSubjectIds]);
 
 if (he->populationsToo)
     {
     haploOptionalsEnable(he,haplo);
-    if (differentString(row[HAPLO_POP_SCORE_FIELD],"nan")
-    &&  differentString(row[HAPLO_POP_SCORE_FIELD],"0"  ))
-        haplo->ho->popScore   = sqlDouble(row[HAPLO_POP_SCORE_FIELD]);
+    if (differentString(row[gafPopScore],"nan")
+    &&  differentString(row[gafPopScore],"0"  ))
+        haplo->ho->popScore   = sqlDouble(row[gafPopScore]);
     }
 
 bedFree(&bed);
@@ -2481,12 +2548,12 @@ verbose(1, "Reading %s as haplotypes bed file.\n", lf->fileName);
 char *line;
 while (lineFileNextReal(lf, &line))
     {
-    char *words[HAPLO_FIELD_COUNT+1];
+    char *words[gafFieldCount+1];
     int wordCount = chopTabs(line, words); // Tab delimited only!  No need to duplicate
     // ignore empty lines
     if (0 == wordCount)
         continue;
-    lineFileExpectWords(lf, HAPLO_FIELD_COUNT, wordCount);
+    lineFileExpectWords(lf, gafFieldCount, wordCount);
 
     haplotypeLoadFromRow(lf->fileName,he,pHaploSets,words);
     readCount++;
@@ -2546,9 +2613,9 @@ void haploSetsPrintStats(struct haploExtras *he, FILE *out, char *commonToken,
 // basic counters: sets, haplotypes, non-reference, homozygous/haploid
 int setsFound = 0, setsNr = 0,                                  setsHom    = 0;
 int hapsFound = 0, hapsNr = 0, hapsNrForSet = 0, hapsNrMax = 0, homsForSet = 0;
-int wowsForSet = 0, setsWow = 0; // "wow" is hom/haploid or haploScore is high
-int wowTrigger = (he->variantMinPct == 1 ? 1000 :
-                  he->variantMinPct <= 5 ? 1000 - (100 * he->variantMinPct) : 500 );
+//int wowsForSet = 0, setsWow = 0; // "wow" is hom/haploid or haploScore is high
+//int wowTrigger = (he->variantMinPct == 1 ? 1000 :
+//                  he->variantMinPct <= 5 ? 1000 - (100 * he->variantMinPct) : 500 );
 
 // Towards stddev: subjects, variants, scores
 int    subjects       = 0, subjectMax    = 0, variants       = 0, variantMax    = 0;
@@ -2575,8 +2642,8 @@ for ( ;hapSet != NULL; hapSet = hapSet->next)
             continue;
 
         COUNT_IF(hapsFound,(haplo->subjects > 0));
-        COUNT_IF(wowsForSet,( haplo->haploScore >= wowTrigger &&
-                             (haploIsReference(haplo) || haplo->homCount > 0)));
+        //COUNT_IF(wowsForSet,( haplo->haploScore >= wowTrigger &&
+        //                     (haploIsReference(haplo) || haplo->homCount > 0)));
 
         TALLY_ALL(subjects,subjectSumSq,subjectMax,haplo->subjects); // 1kGenome chroms (>2000)
         TALLY_ALL(variants,variantSumSq,variantMax,haplo->variantCount);
@@ -2599,7 +2666,7 @@ for ( ;hapSet != NULL; hapSet = hapSet->next)
     setsFound++;
     COUNT_IF(setsNr, (hapsNrForSet > 0));
     COUNT_IF(setsHom,(homsForSet   > 0));
-    COUNT_IF(setsWow,(wowsForSet   > 0));
+    //COUNT_IF(setsWow,(wowsForSet   > 0));
 
     TALLY_ALL(hapsNr,hapsNrSumSq,  hapsNrMax,  hapsNrForSet  );
     TALLY_TWO(       hapScoreSumSq,hapScoreMax,hapScoreSetMax);
@@ -2617,7 +2684,7 @@ for ( ;hapSet != NULL; hapSet = hapSet->next)
     homScoreSetMax = 0;
     popScoreSetMax = 0;
     homsForSet = 0;
-    wowsForSet = 0;
+    //wowsForSet = 0;
     }
 
 // Every haplo has subjects and variants, so calculate mean and sd for one model or all models
@@ -2629,7 +2696,8 @@ double variantSD   = CALC_SD(  hapsFound, variantSumSq);
 if (setsFound == 1)
     {
     fprintf(out, "%s: haplotyes:%-3d hom/hap:%-3d ", commonToken, hapsNr, homsForSet );
-    fprintf(out, "wow:%-2d variants:%-3d ",          wowsForSet,hapSet->variantsCovered);
+    //fprintf(out, "wow:%-2d ",     wowsForSet);
+    fprintf(out, "variants:%-3d ",hapSet->variantsCovered);
     fprintf(out, "p-Score max ");
     if (hapScoreSetMax >= 1000)
         fprintf(out,"haplo:>1000 ");
@@ -2665,8 +2733,9 @@ else if (setsFound > 1)
 
     fprintf(out, "\nGene Model Haplotypes (alleles):%d\n",hapsFound);
     fprintf(out, "Models covered:%d  With non-reference haplotypes:%d  "
-                 "Found homozygous/haploid:%d  interesting:%d\n",
-                 setsFound, setsNr, setsHom, setsWow);
+                 "Found homozygous/haploid:%d  ",setsFound, setsNr, setsHom);
+    //fprintf(out, "interesting:%d",setsWow);
+    fprintf(out, "\n");
     fprintf(out, "       Haplotypes: max:%-4d   mean:%-5.2lf  sd:%-5.2lf\n",
                                hapsNrMax, hapsNrMean,   hapsNrSD);
     fprintf(out, "     Haplo pValue: max:%-6.1f mean:%-5.2lf  sd:%-5.2lf\n",
@@ -2808,9 +2877,9 @@ for (ix = 0; ix < haplo->variantCount; ix++)
 for (ix = 0; ix < haplo->variantCount; ix++)
     fprintf(out,"%c%s",VAR_SEPARATOR(ix),VAL_OR_EMPTY(haplo->variants[ix]->id));
 
+fprintf(out,"\t%d\t",haplo->variantsCovered);
 
 // haploGenome ids  (bed 12 +)
-fputc('\t', out);
 if (haplo->bitCount > 0 && haplo->bits != NULL)
     bitsOut(out, haplo->bits, 0, haplo->bitCount, FALSE);
 fprintf(out,"\t%s\t%s\t",hapSet->commonId,hapSet->secondId);
@@ -2911,41 +2980,6 @@ if (!he->readable && differentWord("-",outFile))
 return haploCount;
 }
 
-
-// bed 12 + 5
-// chrom chromStart chromEnd commonId:suffix score(hapCount) strand cdsStart cdsEnd
-//  variantCount len,len,len start,start,start
-//  val,val,val id,id,id commonId secondId subjectCount:subjectId,subjectId,subjectId
-#define HAPLO_BED "CREATE TABLE %s ("                                  \
-                  "    bin smallint unsigned not null,\n"               \
-                  "    chrom varchar(255) not null,\n"                   \
-                  "    chromStart int unsigned not null,\n"               \
-                  "    chromEnd int unsigned not null,\n"                  \
-                  "    name varchar(255) not null,\n"                       \
-                  "    score int unsigned not null,\n"                       \
-                  "    strand char(1) not null,\n"                            \
-                  "    thickStart int unsigned not null, # Meaningless here\n" \
-                  "    thickEnd int unsigned not null,  # Meaningless here\n"   \
-                  "    itemRgb int unsigned not null,  # Item R,G,B color\n"     \
-                  "    variantCount int unsigned not null, # Number of blocks\n"  \
-                  "    variantSizes longblob null,   # Comma delimited list\n"     \
-                  "    variantStarts longblob null, # relative to chromStart\n"     \
-                  "    variantVals longblob null,  # non-ref values\n"               \
-                  "    variantProps longblob null,# variant proportions in dataset\n" \
-                  "    variantIds longblob null,    # variant IDs\n"                   \
-                  "    bits varchar(1024) null,       # bits as string\n"               \
-                  "    commonId varchar(255) not null,  # accession less suffix\n"       \
-                  "    secondId varchar(255) not null,    # typically gene/protein Id \n" \
-                  "    haploScore float not null,        # haplotype scoring statistic\n"  \
-                  "    homScore float not null,         # homozygous scoring statistic\n"   \
-                  "    popScore float not null,        # population distribution stdDev\n" \
-                  "    homCount int unsigned not null,   # homozygous or haploid\n"       \
-                  "    subjectCount int unsigned not null, # subject chromosomes\n"      \
-                  "    subjectIds longblob null, # Subject IDs: d1-a,id1-b,id2-b...\n"  \
-                  "    INDEX(chrom(8),bin),\n"          \
-                  "    INDEX(chrom(8),chromStart),\n"    \
-                  "    INDEX(name(20)),\n"                \
-                  "    INDEX(secondId(20),name(20)) );\n"
 
 int haploSetsWriteToTable(struct haploExtras *he, struct haplotypeSet *haploSets)
 // Load database table from bedList.
