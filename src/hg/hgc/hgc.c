@@ -939,89 +939,110 @@ if (sql != NULL)
 return id;
 }
 
-void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, char *urlSetting, boolean encode)
-/* Print custom URL specified in trackDb settings. */
+char* replaceInUrl(struct trackDb *tdb, char *url, char *idInUrl, boolean encode) 
+/* replace $$ in url with idInUrl. Supports many other wildchards */
 {
-char *url;
-char urlLabelSetting[32];
+struct dyString *uUrl = NULL;
+struct dyString *eUrl = NULL;
+char startString[64], endString[64];
+char *ins[9], *outs[9];
+char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
 
-/* check the url setting prefix and get the correct url setting from trackDb */
+sprintf(startString, "%d", winStart);
+sprintf(endString, "%d", winEnd);
+ins[0] = "$$";
+outs[0] = idInUrl;
+ins[1] = "$T";
+outs[1] = tdb->track;
+ins[2] = "$S";
+outs[2] = seqName;
+ins[3] = "$[";
+outs[3] = startString;
+ins[4] = "$]";
+outs[4] = endString;
+ins[5] = "$s";
+outs[5] = skipChr(seqName);
+ins[6] = "$D";
+outs[6] = database;
+ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
+ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
+if (stringIn(":", idInUrl)) {
+    char *itemClone = cloneString(idInUrl);
+    char *suffix = stringIn(":", itemClone);
+    char *suffixClone = cloneString(suffix+1); /* +1 skip the : */
+    char *nextColon = stringIn(":", suffixClone+1);
+    if (nextColon)	/* terminate suffixClone suffix */
+        *nextColon = '\0';	/* when next colon is present */
+    *suffix = '\0';   /* terminate itemClone prefix */
+    outs[7] = itemClone;
+    outs[8] = suffixClone;
+    /* small memory leak here for these cloned strings */
+    /* not important for a one-time operation in a CGI that will exit */
+} else {
+    outs[7] = idInUrl;	/* otherwise, these are not expected */
+    outs[8] = idInUrl;	/* to be used */
+}
+uUrl = subMulti(url, ArraySize(ins), ins, outs);
+outs[0] = eItem;
+eUrl = subMulti(url, ArraySize(ins), ins, outs);
+freeDyString(&uUrl);
+freeMem(eItem);
+return eUrl->string;
+}
+
+char* constructUrl(struct trackDb *tdb, char *urlSetting, char *idInUrl, boolean encode) 
+{
+/* construct the url by replacing $$, etc in the url given by urlSetting.
+ * Replace $$ with itemName.  */
+
+// check the url setting prefix and get the correct url setting from trackDb 
+char *url;
 if (sameWord(urlSetting, "url"))
     url = tdb->url;
 else
     url = trackDbSetting(tdb, urlSetting);
 
-if (url != NULL && url[0] != 0)
+if (url == NULL || url[0] == 0)
+    return NULL;
+
+char* eUrl = replaceInUrl(tdb, url, idInUrl, encode);
+return eUrl;
+}
+
+void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, char *urlSetting, boolean encode)
+/* Print custom URL specified in trackDb settings. */
+{
+char urlLabelSetting[32];
+
+// first try to resolve itemName via an optional sql statement to something else
+char *idInUrl = getIdInUrl(tdb, itemName);
+if (idInUrl == NULL)
+    return;
+
+// replace the $$ and other wildchards with the url given in tdb 
+char* eUrl = constructUrl(tdb, urlSetting, idInUrl, encode);
+if (eUrl==NULL)
+    return;
+
+/* create the url label setting for trackDb from the url
+   setting prefix */
+safef(urlLabelSetting, sizeof(urlLabelSetting), "%sLabel", urlSetting);
+printf("<B>%s </B>",
+       trackDbSettingOrDefault(tdb, urlLabelSetting, "Outside Link:"));
+printf("<A HREF=\"%s\" target=_blank>", eUrl);
+
+if (sameWord(tdb->table, "npredGene"))
     {
-    char *idInUrl = getIdInUrl(tdb, itemName);
-    if (idInUrl != NULL)
-	{
-	struct dyString *uUrl = NULL;
-	struct dyString *eUrl = NULL;
-	char startString[64], endString[64];
-	char *ins[9], *outs[9];
-	char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
-
-	sprintf(startString, "%d", winStart);
-	sprintf(endString, "%d", winEnd);
-	ins[0] = "$$";
-	outs[0] = idInUrl;
-	ins[1] = "$T";
-	outs[1] = tdb->track;
-	ins[2] = "$S";
-	outs[2] = seqName;
-	ins[3] = "$[";
-	outs[3] = startString;
-	ins[4] = "$]";
-	outs[4] = endString;
-	ins[5] = "$s";
-	outs[5] = skipChr(seqName);
-	ins[6] = "$D";
-	outs[6] = database;
-	ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
-	ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
-	if (stringIn(":", idInUrl)) {
-	    char *itemClone = cloneString(idInUrl);
-	    char *suffix = stringIn(":", itemClone);
-	    char *suffixClone = cloneString(suffix+1); /* +1 skip the : */
-	    char *nextColon = stringIn(":", suffixClone+1);
-	    if (nextColon)	/* terminate suffixClone suffix */
-		*nextColon = '\0';	/* when next colon is present */
-	    *suffix = '\0';   /* terminate itemClone prefix */
-	    outs[7] = itemClone;
-	    outs[8] = suffixClone;
-	    /* small memory leak here for these cloned strings */
-	    /* not important for a one-time operation in a CGI that will exit */
-	} else {
-	    outs[7] = idInUrl;	/* otherwise, these are not expected */
-	    outs[8] = idInUrl;	/* to be used */
-	}
-	uUrl = subMulti(url, ArraySize(ins), ins, outs);
-	outs[0] = eItem;
-	eUrl = subMulti(url, ArraySize(ins), ins, outs);
-        /* create the url label setting for trackDb from the url
-           setting prefix */
-        safef(urlLabelSetting, sizeof(urlLabelSetting), "%sLabel", urlSetting);
-        printf("<B>%s </B>",
-               trackDbSettingOrDefault(tdb, urlLabelSetting, "Outside Link:"));
-        printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
-
-	if (sameWord(tdb->table, "npredGene"))
-	    {
-	    printf("%s (%s)</A><BR>\n", idInUrl, "NCBI MapView");
-	    }
-	else
-	    {
-	    char *label = idInUrl;
-	    if (isNotEmpty(itemLabel) && !sameString(itemName, itemLabel))
-		label = itemLabel;
-	    printf("%s</A><BR>\n", label);
-	    }
-	freeMem(eItem);
-	freeDyString(&uUrl);
-	freeDyString(&eUrl);
-	}
+    printf("%s (%s)</A><BR>\n", idInUrl, "NCBI MapView");
     }
+else
+    {
+    char *label = idInUrl;
+    if (isNotEmpty(itemLabel) && !sameString(itemName, itemLabel))
+        label = itemLabel;
+    printf("%s</A><BR>\n", label);
+    }
+//freeMem(&eUrl); small memory leak
 }
 
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
@@ -1422,6 +1443,55 @@ if (mf != NULL)
     }
 }
 
+struct hash* hashFromString(char* string) 
+/* parse a whitespace-separated string with tuples in the format name=val or
+ * name="val" to a hash name->val */
+{
+if (string==NULL)
+    return NULL;
+
+struct slPair *keyVals = slPairListFromString(string, TRUE);
+if (keyVals==NULL)
+    return NULL;
+
+struct hash *nameToVal = newHash(0);
+struct slPair *kv;
+for (kv = keyVals; kv != NULL; kv = kv->next)
+    hashAdd(nameToVal, kv->name, kv->val);
+return nameToVal;
+}
+
+void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackDb *tdb, char *idList)
+/* if trackDb does not contain a "urls" entry for current column name, just print idList as it is.
+ * Otherwise treat idList as a comma-sep list of IDs and print one row per id, with a link to url,
+ * ($$ in url is OK, wildcards like $P, $p, are also OK)
+ * */
+{
+// try to find a fieldName=url setting in the "urls" tdb statement, print id if not found
+char *url = NULL;
+if (fieldToUrl!=NULL)
+    url = (char*)hashFindVal(fieldToUrl, col->name);
+if ((url==NULL)
+    {
+    printf("<td>%s</td></tr>\n", idList);
+    return;
+    }
+
+// split the id into parts and print each part as a link
+struct slName *slIds = slNameListFromComma(idList);
+struct slName *itemId = NULL;
+printf("<td>");
+for (itemId = slIds; itemId!=NULL; itemId = itemId->next) 
+    {
+    if (itemId!=slIds)
+        printf(", ");
+    char *idUrl = replaceInUrl(tdb, url, itemId->name, TRUE);
+    printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemId->name);
+    } 
+printf("</td></tr>\n");
+freeMem(slIds);
+}
+
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
@@ -1448,6 +1518,9 @@ if (word && (sameWord(word,"bed") || sameWord(word,"bigBed")))
     }
 int count = 0;
 struct asColumn *col = as->columnList;
+char *urlsStr = trackDbSetting(tdb, "urls");
+struct hash* fieldToUrl = hashFromString(urlsStr);
+
 for (;col != NULL && count < fieldCount;col=col->next)
     {
     if (start > 0)  // skip past already known fields
@@ -1469,9 +1542,7 @@ for (;col != NULL && count < fieldCount;col=col->next)
     count++;
     printf("<tr><td><B>%s:</B></td>", col->comment);
     if (col->isList || col->isArray || col->lowType->stringy)
-        {
-        printf("<td>%s</td></tr>\n", fields[ix]);
-        }
+        printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
     else if (asTypesIsInt(col->lowType->type))
         {
         long valInt = strtol(fields[ix],NULL,10);
@@ -1489,11 +1560,10 @@ for (;col != NULL && count < fieldCount;col=col->next)
             printf("<td>%s</td></tr>\n", fields[ix]); // decided not to print error
         }
     else
-        {
         printf("<td>%s</td></tr>\n", fields[ix]);
-        }
     }
 asObjectFree(&as);
+freeMem(fieldToUrl);
 if (count > 0)
     printf("</table>\n");
 

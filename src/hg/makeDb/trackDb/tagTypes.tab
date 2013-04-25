@@ -365,6 +365,7 @@ url2 bed genePred
 url2Label bed genePred
 urlLabel *
 urlName genePred psl
+urls bigBed
 useScore *
 view *
 viewLimits *
