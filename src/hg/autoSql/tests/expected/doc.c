@@ -9,6 +9,9 @@
 #include "output/doc.h"
 
 
+
+char *addressBookCommaSepFieldNames = "name,address,city,zipCode,state";
+
 void addressBookStaticLoad(char **row, struct addressBook *ret)
 /* Load a row from addressBook table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -182,6 +185,9 @@ fprintf(f, "%s", el->state);
 fputc('"',f);
 fputc('}',f);
 }
+
+
+char *symbolColsCommaSepFieldNames = "id,sex,skills";
 
 /* definitions for sex column */
 static char *values_sex[] = {"male", "female", NULL};
