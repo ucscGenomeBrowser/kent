@@ -107,8 +107,10 @@ if __name__ == '__main__':
         bed.append(",".join(diseases))
         bed.append("position %s, amino acid %s changed to %s" % \
             (mut.position, mut.origAa, mut.mutAa))
+        comments = [com for com in comments if com.strip()!=""]
         bed.append(", ".join(comments))
         bed.append(htmlLink('var', varIds))
+        dbSnpIds = [id for id in dbSnpIds if id.strip()!=""]
         bed.append(",".join(dbSnpIds))
         bed.append(htmlLink('uniProt', [acc]))
         bed.append(htmlLink('pubmed', pmids))
