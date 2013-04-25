@@ -14,6 +14,8 @@
 #include "portable.h"
 #include "net.h"
 
+char *userEmail;	/* Filled in by authentication system. */
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -24,24 +26,24 @@ errAbort(
   );
 }
 
-void logIn(struct sqlConnection *conn)
+void logIn()
 /* Put up name.  No password for now. */
 {
 printf("Welcome to the prototype ENCODE Data Warehouse submission site.<BR>");
-printf("Please enter your email address ");
-cgiMakeTextVar("email", "", 32);
-cgiMakeButton("getUrl", "submit");
+printf("Please sign in via Persona");
+printf("<INPUT TYPE=BUTTON NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
 }
 
 void getUrl(struct sqlConnection *conn)
 /* Put up URL. */
 {
-char *email = trimSpaces(cgiString("email"));
-struct edwUser *user = edwMustGetUserFromEmail(conn, email);
-cgiMakeHiddenVar("email", user->email);
+edwMustGetUserFromEmail(conn, userEmail);
+printf("Please enter a URL for a validated manifest file:<BR>");
 printf("URL ");
-cgiMakeTextVar("url", "", 80);
+cgiMakeTextVar("url", emptyForNull(cgiOptionalString("url")), 80);
 cgiMakeButton("submitUrl", "submit");
+printf("<BR>Submission by %s", userEmail);
+edwPrintLogOutButton();
 }
 
 void submitUrl(struct sqlConnection *conn)
@@ -49,27 +51,24 @@ void submitUrl(struct sqlConnection *conn)
  * progress once it is in progress. */
 {
 /* Parse email and URL out of CGI vars. Do a tiny bit of error checking. */
-char *email = trimSpaces(cgiString("email"));
 char *url = trimSpaces(cgiString("url"));
 if (!stringIn("://", url))
     errAbort("%s doesn't seem to be a valid URL, no '://'", url);
-if (!stringIn("@", email))
-    errAbort("%s doesn't seem to be a valid email, no '@'", email);
 
 /* Do some reality checks that email and URL actually exist. */
-edwMustGetUserFromEmail(conn, email);
+edwMustGetUserFromEmail(conn, userEmail);
 int sd = netUrlMustOpenPastHeader(url);
 close(sd);
 
 /* Write email and URL to fifo used by submission spooler. */
-FILE *fifo = mustOpen("edwSubmit.fifo", "w");
-fprintf(fifo, "%s %s\n", email, url);
+FILE *fifo = mustOpen("../userdata/edwSubmit.fifo", "w");
+fprintf(fifo, "%s %s\n", userEmail, url);
 carefulClose(&fifo);
 
 /* Give system a second to react, and then try to put up status info about submission. */
 printf("Submission of %s is in progress....", url);
 cgiMakeButton("monitor", "monitor submission");
-cgiMakeHiddenVar("email", email);
+edwPrintLogOutButton();
 cgiMakeHiddenVar("url", url);
 }
 
@@ -105,41 +104,22 @@ safef(query, sizeof(query),
 return edwFileLoadByQuery(conn, query);
 }
 
-int showValidationOverview(struct sqlConnection *conn, struct edwSubmit *sub)
-/* Show validation status overview and return number of newly valid items in this
- * submission */
+int countNewValid(struct sqlConnection *conn, struct edwSubmit *sub)
+/* Count number of new files in submission that have been validated. */
 {
-printf("<B>Old files from previous submission:</B> %d<BR>\n", sub->oldFiles);
-printf("<B>New files transferred so far:</B> %d<BR>\n", sub->newFiles);
 char query[256];
 safef(query, sizeof(query), 
-    "select count(*) from edwFile where submitId=%u and tags != '' and tags is not null", sub->id);
-int uploadCount = sqlQuickNum(conn, query);
-safef(query, sizeof(query), 
-    "select count(*) from edwFile e,edwValidFile v where e.id = v.fileId and e. submitId=%u",
+    "select count(*) from edwFile e,edwValidFile v where e.id = v.fileId and e.submitId=%u",
     sub->id);
-int validCount = sqlQuickNum(conn, query);
-printf("<B>validated:</B> %d of %d new files<BR>\n", validCount, uploadCount);
-safef(query, sizeof(query),
-    "select count(*) from edwFile where errorMessage is not null and errorMessage != '' "
-    "and submitId=%u", sub->id);
-int errCount = sqlQuickNum(conn, query);
-printf("<B>validation error count:</B> %d<BR>\n", errCount);
-return validCount;
+return sqlQuickNum(conn, query);
 }
 
-void showValidations(struct sqlConnection *conn)
-{
-printf("Theoretically I would be showing validations.  In real life advise you to go back.");
-}
 
 void monitorSubmission(struct sqlConnection *conn)
 /* Write out information about submission. */
 {
-char *email = trimSpaces(cgiString("email"));
 char *url = trimSpaces(cgiString("url"));
 cgiMakeHiddenVar("url", url);
-cgiMakeHiddenVar("email", email);
 struct edwSubmit *sub = edwMostRecentSubmission(conn, url);
 if (sub == NULL)
     {
@@ -164,14 +144,24 @@ else
     long long curSize = 0;  // Amount of current file we know we've transferred.
 
     /* Print title letting them know if upload is done or in progress. */
-    printf("<B>Submission by %s is ", email);
-    if (endUploadTime == 0)  
-	printf("in progress...");
-    else
+    printf("<B>Submission by %s is ", userEmail);
+    if (endUploadTime != 0)  
         printf("uploaded.");
+    else if (!isEmpty(sub->errorMessage))
+	{
+        printf("having problems...");
+	}
+    else
+	printf("in progress...");
     printf("</B><BR>\n");
 
     /* Print URL and how far along we are at the file level. */
+    if (!isEmpty(sub->errorMessage))
+	{
+	printf("<B>error:</B> %s<BR>\n", sub->errorMessage);
+	cgiMakeButton("getUrl", "try submission again");
+	printf("<BR>");
+	}
     printf("<B>url:</B> %s<BR>\n", sub->url);
     printf("<B>files count:</B> %d<BR>\n", sub->fileCount);
     if (sub->oldFiles > 0)
@@ -182,10 +172,11 @@ else
 	printf("<B>files remaining:</B> %u<BR>\n", sub->fileCount - sub->oldFiles - sub->newFiles);
 	}
 
+    /* Report validation status */
+    printf("<B>new files validated:</B> %u of %u<BR>\n", countNewValid(conn, sub), sub->newFiles);
+
     /* Print error message, and in case of error skip file-in-transfer info. */
-    if (!isEmpty(sub->errorMessage))
-        printf("<B>error:</B> %s<BR>\n", sub->errorMessage);
-    else
+    if (isEmpty(sub->errorMessage))
 	{
 	/* If possible print information about file en route */
 	if (endUploadTime == 0)
@@ -208,7 +199,10 @@ else
     printLongWithCommas(stdout, totalTransferred);
     printf(" of ");
     printLongWithCommas(stdout, sub->byteCount);
-    printf(" (%d%%)<BR>\n", (int)(100.0 * totalTransferred / sub->byteCount));
+    if (sub->byteCount != 0)
+	printf(" (%d%%)<BR>\n", (int)(100.0 * totalTransferred / sub->byteCount));
+    else
+        printf("<BR>\n");
 
     /* Report transfer speed if possible */
     if (timeSpan > 0)
@@ -240,14 +234,12 @@ else
 	printf("<B>submission time:</B> %s<BR>\n", duration->string);
 	cgiMakeButton("getUrl", "submit another data set");
 	}
-    cgiMakeButton("monitor", "refresh status");
     }
-#ifdef SOON
-uglyf("<BR><BR>--- The part down from here is really rough do not fret if it doesn't work ---<BR>\n");
-int validCount = showValidationOverview(conn, sub);
-if (validCount > 0)
-    cgiMakeButton("validations", "see validation results");
-#endif /* SOON */
+cgiMakeButton("monitor", "refresh status");
+printf(" <input type=\"button\" value=\"browse submissions\" "
+       "onclick=\"window.location.href='edwWebBrowse';\">\n");
+
+edwPrintLogOutButton();
 }
 
 static void localWarn(char *format, va_list args)
@@ -264,16 +256,15 @@ void doMiddle()
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 struct sqlConnection *conn = sqlConnect(edwDatabase);
-if (cgiVarExists("getUrl"))
-    getUrl(conn);
+userEmail = edwGetEmailAndVerify();
+if (userEmail == NULL)
+    logIn();
 else if (cgiVarExists("submitUrl"))
     submitUrl(conn);
 else if (cgiVarExists("monitor"))
     monitorSubmission(conn);
-else if (cgiVarExists("validations"))
-    showValidations(conn);
 else
-    logIn(conn);
+    getUrl(conn);
 printf("</FORM>");
 }
 
@@ -285,15 +276,12 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 
 /* Put out HTTP header and HTML HEADER all the way through <BODY> */
-puts("Content-Type:text/html");
-puts("\n");
-puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
-	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
-puts("<HTML><HEAD><TITLE>ENCODE Data Warehouse</TITLE></HEAD><BODY>");
+edwWebHeaderWithPersona("Submit data to ENCODE Data Warehouse");
 
 /* Call error handling wrapper that catches us so we write /BODY and /HTML to close up page
  * even through an errAbort. */
 htmEmptyShell(doMiddle, NULL);
-htmlEnd();
+
+edwWebFooterWithPersona();
 return 0;
 }

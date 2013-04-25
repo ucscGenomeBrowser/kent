@@ -568,10 +568,9 @@ if (npu->byteRangeStart != -1)
 return dyStringCannibalize(&dy);
 }
 
-/* this was cloned from rudp.c - move it later for sharing */
-static boolean readReadyWait(int sd, int microseconds)
-/* Wait for descriptor to have some data to read, up to
- * given number of microseconds. */
+int netWaitForData(int sd, int microseconds)
+/* Wait for descriptor to have some data to read, up to given number of
+ * number of microseconds.  Returns amount of data there or zero if timed out. */
 {
 struct timeval tv;
 fd_set set;
@@ -597,13 +596,21 @@ for (;;)
 	if (errno == EINTR)	/* Select interrupted, not timed out. */
 	    continue;
     	else 
-    	    warn("select failure in rudp: %s", strerror(errno));
+    	    warn("select failure %s", strerror(errno));
     	}
     else
 	{
-    	return readyCount > 0;	/* Zero readyCount indicates time out */
+    	return readyCount;	/* Zero readyCount indicates time out */
 	}
     }
+}
+
+static boolean readReadyWait(int sd, int microseconds)
+/* Wait for descriptor to have some data to read, up to given number of
+ * number of microseconds.  Returns true if there is data, false if timed out. */
+{
+int readyCount = netWaitForData(sd, microseconds);
+return readyCount > 0;	/* Zero readyCount indicates time out */
 }
 
 static void sendFtpCommandOnly(int sd, char *cmd)

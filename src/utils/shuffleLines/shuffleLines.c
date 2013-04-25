@@ -32,7 +32,7 @@ char *line;
 
 while (lineFileNext(lf, &line, NULL))
     slNameAddHead(&list, line);
-shuffleList(&list, 1);
+shuffleList(&list);
 for (el = list; el != NULL; el = el->next)
     fprintf(f, "%s\n", el->name);
 carefulClose(&f);

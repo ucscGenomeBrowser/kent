@@ -9,6 +9,9 @@
 #include "output/newTest.h"
 
 
+
+char *pointCommaSepFieldNames = "x,y";
+
 struct point *pointLoad(char **row)
 /* Load a point from row fetched with select * from point
  * from database.  Dispose of this with pointFree(). */
@@ -103,6 +106,9 @@ fputc(sep,f);
 fprintf(f, "%d", el->y);
 fputc(lastSep,f);
 }
+
+
+char *autoTestCommaSepFieldNames = "id,shortName,longName,aliases,ptCount,pts,difCount,difs,xy,valCount,vals";
 
 struct autoTest *autoTestLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all autoTest from table that satisfy the query given.  

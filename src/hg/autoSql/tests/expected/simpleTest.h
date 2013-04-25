@@ -7,6 +7,8 @@
 
 #define POINT_NUM_COLS 2
 
+extern char *pointCommaSepFieldNames;
+
 struct point
 /* A two dimensional point */
     {
@@ -45,6 +47,8 @@ void pointOutput(struct point *el, FILE *f, char sep, char lastSep);
 /* Print out point as a comma separated list including final comma. */
 
 #define NAMEDPOINT_NUM_COLS 2
+
+extern char *namedPointCommaSepFieldNames;
 
 struct namedPoint
 /* A named point */
@@ -88,6 +92,8 @@ void namedPointOutput(struct namedPoint *el, FILE *f, char sep, char lastSep);
 
 #define TRIANGLE_NUM_COLS 2
 
+extern char *triangleCommaSepFieldNames;
+
 struct triangle
 /* A collection of three points. */
     {
@@ -129,6 +135,8 @@ void triangleOutput(struct triangle *el, FILE *f, char sep, char lastSep);
 /* Print out triangle as a comma separated list including final comma. */
 
 #define POLYGON_NUM_COLS 3
+
+extern char *polygonCommaSepFieldNames;
 
 struct polygon
 /* A bunch of connected points. */
@@ -173,6 +181,8 @@ void polygonOutput(struct polygon *el, FILE *f, char sep, char lastSep);
 
 #define PERSON_NUM_COLS 3
 
+extern char *personCommaSepFieldNames;
+
 struct person
 /* Info on a person */
     {
@@ -216,6 +226,8 @@ void personOutput(struct person *el, FILE *f, char sep, char lastSep);
 
 #define COUPLE_NUM_COLS 2
 
+extern char *coupleCommaSepFieldNames;
+
 struct couple
 /* Info on a group of people */
     {
@@ -257,6 +269,8 @@ void coupleOutput(struct couple *el, FILE *f, char sep, char lastSep);
 /* Print out couple as a comma separated list including final comma. */
 
 #define GROUP_NUM_COLS 3
+
+extern char *groupCommaSepFieldNames;
 
 struct group
 /* Info on a group of people */
@@ -301,6 +315,8 @@ void groupOutput(struct group *el, FILE *f, char sep, char lastSep);
 
 #define METAGROUP_NUM_COLS 3
 
+extern char *metaGroupCommaSepFieldNames;
+
 struct metaGroup
 /* Info on many groups */
     {
@@ -343,6 +359,8 @@ void metaGroupOutput(struct metaGroup *el, FILE *f, char sep, char lastSep);
 /* Print out metaGroup as a comma separated list including final comma. */
 
 #define METAGROUPLOGO_NUM_COLS 2
+
+extern char *metaGroupLogoCommaSepFieldNames;
 
 struct metaGroupLogo
 /* Tie together a polygonal logo with a metaGroup */
