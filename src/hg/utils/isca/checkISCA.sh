@@ -1,7 +1,7 @@
 #!/bin/sh -ex
 
 #	Do not modify this script, modify the source tree copy:
-#	src/utils/isca/checkISCA.sh
+#	src/hg/utils/isca/checkISCA.sh
 #	This script is used via a cron job and kept in $HOME/bin/scripts/
 
 #	cron jobs need to ensure this is true
