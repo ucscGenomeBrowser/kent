@@ -217,3 +217,15 @@ CREATE TABLE edwJob (
               #Indices
     PRIMARY KEY(id)
 );
+
+#A submission job to be run asynchronously and not too many all at once.
+CREATE TABLE edwSubmitJob (
+    id int unsigned auto_increment,	# Job id
+    commandLine longblob,	# Command line of job
+    startTime bigint default 0,	# Start time in seconds since 1970
+    endTime bigint default 0,	# End time in seconds since 1970
+    stderr longblob,	# The output to stderr of the run - may be nonembty even with success
+    returnCode int default 0,	# The return code from system command - 0 for success
+              #Indices
+    PRIMARY KEY(id)
+);

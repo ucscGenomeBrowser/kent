@@ -9,6 +9,9 @@
 #include "encodeDataWarehouse.h"
 
 
+
+char *edwUserCommaSepFieldNames = "id,email";
+
 void edwUserStaticLoad(char **row, struct edwUser *ret)
 /* Load a row from edwUser table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -173,6 +176,9 @@ fprintf(f, "%s", el->email);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
+
+
+char *edwHostCommaSepFieldNames = "id,name,lastOkTime,lastNotOkTime,firstAdded,errorMessage,openSuccesses,openFails,historyBits";
 
 void edwHostStaticLoad(char **row, struct edwHost *ret)
 /* Load a row from edwHost table into ret.  The contents of ret will
@@ -378,6 +384,9 @@ fputc(sep,f);
 fprintf(f, "%lld", el->historyBits);
 fputc(lastSep,f);
 }
+
+
+char *edwSubmitDirCommaSepFieldNames = "id,url,hostId,lastOkTime,lastNotOkTime,firstAdded,errorMessage,openSuccesses,openFails,historyBits";
 
 void edwSubmitDirStaticLoad(char **row, struct edwSubmitDir *ret)
 /* Load a row from edwSubmitDir table into ret.  The contents of ret will
@@ -588,6 +597,9 @@ fputc(sep,f);
 fprintf(f, "%lld", el->historyBits);
 fputc(lastSep,f);
 }
+
+
+char *edwFileCommaSepFieldNames = "id,submitId,submitDirId,submitFileName,edwFileName,startUploadTime,endUploadTime,updateTime,size,md5,tags,errorMessage,deprecated,replacedBy";
 
 void edwFileStaticLoad(char **row, struct edwFile *ret)
 /* Load a row from edwFile table into ret.  The contents of ret will
@@ -843,6 +855,9 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+
+char *edwSubmitCommaSepFieldNames = "id,url,startUploadTime,endUploadTime,userId,submitFileId,submitDirId,fileCount,oldFiles,newFiles,byteCount,oldBytes,newBytes,errorMessage";
+
 void edwSubmitStaticLoad(char **row, struct edwSubmit *ret)
 /* Load a row from edwSubmit table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -1073,6 +1088,9 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+
+char *edwSubscriberCommaSepFieldNames = "id,name,runOrder,filePattern,dirPattern,tagPattern,onFileEndUpload";
+
 void edwSubscriberStaticLoad(char **row, struct edwSubscriber *ret)
 /* Load a row from edwSubscriber table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -1283,6 +1301,9 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+
+char *edwAssemblyCommaSepFieldNames = "id,taxon,name,ucscDb,twoBitId,baseCount,realBaseCount";
+
 void edwAssemblyStaticLoad(char **row, struct edwAssembly *ret)
 /* Load a row from edwAssembly table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -1477,6 +1498,9 @@ fputc(sep,f);
 fprintf(f, "%lld", el->realBaseCount);
 fputc(lastSep,f);
 }
+
+
+char *edwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth";
 
 void edwValidFileStaticLoad(char **row, struct edwValidFile *ret)
 /* Load a row from edwValidFile table into ret.  The contents of ret will
@@ -1762,6 +1786,9 @@ fprintf(f, "%g", el->depth);
 fputc(lastSep,f);
 }
 
+
+char *edwQaEnrichTargetCommaSepFieldNames = "id,assemblyId,name,fileId,targetSize";
+
 void edwQaEnrichTargetStaticLoad(char **row, struct edwQaEnrichTarget *ret)
 /* Load a row from edwQaEnrichTarget table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -1941,6 +1968,9 @@ fputc(sep,f);
 fprintf(f, "%lld", el->targetSize);
 fputc(lastSep,f);
 }
+
+
+char *edwQaEnrichCommaSepFieldNames = "id,fileId,qaEnrichTargetId,targetBaseHits,targetUniqHits,coverage,enrichment,uniqEnrich";
 
 void edwQaEnrichStaticLoad(char **row, struct edwQaEnrich *ret)
 /* Load a row from edwQaEnrich table into ret.  The contents of ret will
@@ -2130,6 +2160,9 @@ fprintf(f, "%g", el->uniqEnrich);
 fputc(lastSep,f);
 }
 
+
+char *edwQaPairSampleOverlapCommaSepFieldNames = "id,elderFileId,youngerFileId,elderSampleBases,youngerSampleBases,sampleOverlapBases,sampleSampleEnrichment";
+
 void edwQaPairSampleOverlapStaticLoad(char **row, struct edwQaPairSampleOverlap *ret)
 /* Load a row from edwQaPairSampleOverlap table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -2313,6 +2346,9 @@ fprintf(f, "%g", el->sampleSampleEnrichment);
 fputc(lastSep,f);
 }
 
+
+char *edwQaPairCorrelationCommaSepFieldNames = "id,elderFileId,youngerFileId,pearsonInEnriched,pearsonOverall,pearsonClipped";
+
 void edwQaPairCorrelationStaticLoad(char **row, struct edwQaPairCorrelation *ret)
 /* Load a row from edwQaPairCorrelation table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -2491,6 +2527,9 @@ fprintf(f, "%g", el->pearsonClipped);
 fputc(lastSep,f);
 }
 
+
+char *edwJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode";
+
 void edwJobStaticLoad(char **row, struct edwJob *ret)
 /* Load a row from edwJob table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -2662,6 +2701,199 @@ for (el = *pList; el != NULL; el = next)
 
 void edwJobOutput(struct edwJob *el, FILE *f, char sep, char lastSep) 
 /* Print out edwJob.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->commandLine);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%lld", el->startTime);
+fputc(sep,f);
+fprintf(f, "%lld", el->endTime);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->stderr);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->returnCode);
+fputc(lastSep,f);
+}
+
+
+char *edwSubmitJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode";
+
+void edwSubmitJobStaticLoad(char **row, struct edwSubmitJob *ret)
+/* Load a row from edwSubmitJob table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->commandLine = row[1];
+ret->startTime = sqlLongLong(row[2]);
+ret->endTime = sqlLongLong(row[3]);
+ret->stderr = row[4];
+ret->returnCode = sqlSigned(row[5]);
+}
+
+struct edwSubmitJob *edwSubmitJobLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all edwSubmitJob from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with edwSubmitJobFreeList(). */
+{
+struct edwSubmitJob *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = edwSubmitJobLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void edwSubmitJobSaveToDb(struct sqlConnection *conn, struct edwSubmitJob *el, char *tableName, int updateSize)
+/* Save edwSubmitJob as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use edwSubmitJobSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,%s,%lld,%lld,%s,%d)", 
+	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void edwSubmitJobSaveToDbEscaped(struct sqlConnection *conn, struct edwSubmitJob *el, char *tableName, int updateSize)
+/* Save edwSubmitJob as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than edwSubmitJobSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *commandLine, *stderr;
+commandLine = sqlEscapeString(el->commandLine);
+stderr = sqlEscapeString(el->stderr);
+
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d)", 
+	tableName,  el->id,  commandLine,  el->startTime,  el->endTime,  stderr,  el->returnCode);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&commandLine);
+freez(&stderr);
+}
+
+struct edwSubmitJob *edwSubmitJobLoad(char **row)
+/* Load a edwSubmitJob from row fetched with select * from edwSubmitJob
+ * from database.  Dispose of this with edwSubmitJobFree(). */
+{
+struct edwSubmitJob *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->commandLine = cloneString(row[1]);
+ret->startTime = sqlLongLong(row[2]);
+ret->endTime = sqlLongLong(row[3]);
+ret->stderr = cloneString(row[4]);
+ret->returnCode = sqlSigned(row[5]);
+return ret;
+}
+
+struct edwSubmitJob *edwSubmitJobLoadAll(char *fileName) 
+/* Load all edwSubmitJob from a whitespace-separated file.
+ * Dispose of this with edwSubmitJobFreeList(). */
+{
+struct edwSubmitJob *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileRow(lf, row))
+    {
+    el = edwSubmitJobLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwSubmitJob *edwSubmitJobLoadAllByChar(char *fileName, char chopper) 
+/* Load all edwSubmitJob from a chopper separated file.
+ * Dispose of this with edwSubmitJobFreeList(). */
+{
+struct edwSubmitJob *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = edwSubmitJobLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct edwSubmitJob *edwSubmitJobCommaIn(char **pS, struct edwSubmitJob *ret)
+/* Create a edwSubmitJob out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new edwSubmitJob */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->commandLine = sqlStringComma(&s);
+ret->startTime = sqlLongLongComma(&s);
+ret->endTime = sqlLongLongComma(&s);
+ret->stderr = sqlStringComma(&s);
+ret->returnCode = sqlSignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void edwSubmitJobFree(struct edwSubmitJob **pEl)
+/* Free a single dynamically allocated edwSubmitJob such as created
+ * with edwSubmitJobLoad(). */
+{
+struct edwSubmitJob *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->commandLine);
+freeMem(el->stderr);
+freez(pEl);
+}
+
+void edwSubmitJobFreeList(struct edwSubmitJob **pList)
+/* Free a list of dynamically allocated edwSubmitJob's */
+{
+struct edwSubmitJob *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    edwSubmitJobFree(&el);
+    }
+*pList = NULL;
+}
+
+void edwSubmitJobOutput(struct edwSubmitJob *el, FILE *f, char sep, char lastSep) 
+/* Print out edwSubmitJob.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
 fputc(sep,f);

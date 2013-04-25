@@ -177,3 +177,14 @@ table edwJob
     lstring stderr; "The output to stderr of the run - may be nonembty even with success"
     int returnCode; "The return code from system command - 0 for success"
     )
+
+table edwSubmitJob
+"A submission job to be run asynchronously and not too many all at once."
+    (
+    uint id primary auto;    "Job id"
+    lstring commandLine; "Command line of job"
+    bigInt startTime; "Start time in seconds since 1970"
+    bigInt endTime; "End time in seconds since 1970"
+    lstring stderr; "The output to stderr of the run - may be nonembty even with success"
+    int returnCode; "The return code from system command - 0 for success"
+    )
