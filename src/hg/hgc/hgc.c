@@ -1427,11 +1427,6 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 // sr may be null for bigBeds.
 // Returns number of extra fields actually printed.
 {
-#ifdef EXTRA_FIELDS_SUPPORT
-struct extraField *extras = extraFieldsGet(database, tdb);
-if (extras == NULL)
-    return 0;
-#else///ifndef EXTRA_FIELDS_SUPPORT
 struct sqlConnection *conn = NULL ;
 if (!trackHubDatabase(database))
     conn = hAllocConnTrack(database, tdb);
@@ -1439,7 +1434,6 @@ struct asObject *as = asForTdb(conn, tdb);
 hFreeConn(&conn);
 if (as == NULL)
     return 0;
-#endif///ndef EXTRA_FIELDS_SUPPORT
 
 // We are trying to print extra fields so we need to figure out how many fields to skip
 int start = 0;
@@ -1449,21 +1443,11 @@ if (word && (sameWord(word,"bed") || sameWord(word,"bigBed")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
-    #ifndef EXTRA_FIELDS_SUPPORT
     else // custom beds and bigBeds may not have full type "begBed 9 +"
         start = max(0,slCount(as->columnList) - fieldCount);
-    #else///ifdef EXTRA_FIELDS_SUPPORT
-    // extraFields do not have to define all fields
-    if (fieldCount > slCount(extras))
-        start = 0;
-    #endif///def EXTRA_FIELDS_SUPPORT
     }
 int count = 0;
-#ifdef EXTRA_FIELDS_SUPPORT
-struct extraField *col = extras;
-#else///ifndef EXTRA_FIELDS_SUPPORT
 struct asColumn *col = as->columnList;
-#endif///ndef EXTRA_FIELDS_SUPPORT
 for (;col != NULL && count < fieldCount;col=col->next)
     {
     if (start > 0)  // skip past already known fields
@@ -1483,19 +1467,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
     if (count == 0)
         printf("<br><table>");
     count++;
-    #ifdef EXTRA_FIELDS_SUPPORT
-    printf("<tr><td><B>%s:</B></td>", col->label);
-    if (col->type == ftInteger)
-        {
-        long long valInt = sqlLongLong(fields[ix]);
-        printf("<td>%lld</td></tr>\n", valInt);
-        }
-    else if (col->type == ftFloat)
-        {
-        double valDouble = sqlDouble(fields[ix]);
-        printf("<td>%g</td></tr>\n", valDouble);
-        }
-    #else///ifndef EXTRA_FIELDS_SUPPORT
     printf("<tr><td><B>%s:</B></td>", col->comment);
     if (col->isList || col->isArray || col->lowType->stringy)
         {
@@ -1517,17 +1488,12 @@ for (;col != NULL && count < fieldCount;col=col->next)
         else
             printf("<td>%s</td></tr>\n", fields[ix]); // decided not to print error
         }
-    #endif///ndef EXTRA_FIELDS_SUPPORT
     else
         {
         printf("<td>%s</td></tr>\n", fields[ix]);
         }
     }
-#ifdef EXTRA_FIELDS_SUPPORT
-extraFieldsFree(&extras);
-#else///ifndef EXTRA_FIELDS_SUPPORT
 asObjectFree(&as);
-#endif///ndef EXTRA_FIELDS_SUPPORT
 if (count > 0)
     printf("</table>\n");
 
