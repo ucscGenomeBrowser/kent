@@ -7,6 +7,8 @@
 
 #define PT_NUM_COLS 2
 
+extern char *ptCommaSepFieldNames;
+
 struct pt
 /* Two dimensional point */
     {
@@ -45,6 +47,8 @@ void ptOutput(struct pt *el, FILE *f, char sep, char lastSep);
 /* Print out pt as a comma separated list including final comma. */
 
 #define POINT_NUM_COLS 5
+
+extern char *pointCommaSepFieldNames;
 
 struct point
 /* Three dimensional point */
@@ -96,6 +100,8 @@ void pointOutput(struct point *el, FILE *f, char sep, char lastSep);
 
 #define POLYGON_NUM_COLS 4
 
+extern char *polygonCommaSepFieldNames;
+
 struct polygon
 /* A face */
     {
@@ -144,6 +150,8 @@ void polygonOutput(struct polygon *el, FILE *f, char sep, char lastSep);
 /* Print out polygon as a comma separated list including final comma. */
 
 #define POLYHEDRON_NUM_COLS 5
+
+extern char *polyhedronCommaSepFieldNames;
 
 struct polyhedron
 /* A 3-d object */
@@ -195,6 +203,8 @@ void polyhedronOutput(struct polyhedron *el, FILE *f, char sep, char lastSep);
 
 #define TWOPOINT_NUM_COLS 4
 
+extern char *twoPointCommaSepFieldNames;
+
 struct twoPoint
 /* Two points back to back */
     {
@@ -235,6 +245,8 @@ void twoPointOutput(struct twoPoint *el, FILE *f, char sep, char lastSep);
 /* Print out twoPoint as a comma separated list including final comma. */
 
 #define STRINGARRAY_NUM_COLS 2
+
+extern char *stringArrayCommaSepFieldNames;
 
 struct stringArray
 /* An array of strings */

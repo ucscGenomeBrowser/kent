@@ -3,6 +3,7 @@
 # List of directories to build
 
 DIRS = \
+	encodeDataWarehouse \
 	validateManifest \
 	validateFiles
 

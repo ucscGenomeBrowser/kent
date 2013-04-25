@@ -76,12 +76,19 @@ else
     return FALSE;
 }
 
-void doGzippedBedToBigBed(struct encode2Manifest *mi, char *bedFile, char *assembly,
-    char *asType, char *bedType, char *midFix,
+void doGzippedBedToBigBed(struct encode2Manifest *mi, char *bedFile, char *destPath,
+    char *assembly, char *asType, char *bedType, char *midFix,
     char *destDir, char *destFileName,
     struct slName **pTargetList, FILE *f, FILE *manF)
 /* Convert some bed file to a a bigBed file possibly using an as file. */
 {
+/* First handle the straight up copy - even though minimal changes to bigBed,
+ * for archival purposes Eurie and Cricket want original bed too. */
+fprintf(f, "%s: %s\n", destPath, bedFile);
+fprintf(f, "\tln -s %s %s\n", bedFile, destPath);
+slNameAddHead(pTargetList, destPath);
+encode2ManifestShortTabOut(mi, manF);
+
 /* Figure out name of bigBed file we will output and write it as a make target. */
 char outFileName[FILENAME_LEN];
 safef(outFileName, sizeof(outFileName), "%s%s", destFileName, ".bigBed");
@@ -308,62 +315,62 @@ if (endsWith(fileName, ".fastq.tgz"))
     }
 else if (endsWith(fileName, ".narrowPeak.gz"))
     {
-    doGzippedBedToBigBed(mi, sourcePath, assembly, "narrowPeak", "bed6+4", 
+    doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "narrowPeak", "bed6+4", 
 	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".broadPeak.gz"))
     {
-    doGzippedBedToBigBed(mi, sourcePath, assembly, "broadPeak", "bed6+3", 
+    doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "broadPeak", "bed6+3", 
 	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".bedRnaElements.gz"))
     {
-    doGzippedBedToBigBed(mi, sourcePath, assembly, "bedRnaElements", "bed6+3", 
+    doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "bedRnaElements", "bed6+3", 
 	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".bedLogR.gz"))
     {
-    doGzippedBedToBigBed(mi, sourcePath, assembly, "bedLogR", "bed9+1", 
+    doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "bedLogR", "bed9+1", 
 	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, "bedRrbs.gz"))
     {
-    doGzippedBedToBigBed(mi, sourcePath, assembly, "bedRrbs", "bed9+2", 
+    doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "bedRrbs", "bed9+2", 
 	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".peptideMapping.gz"))
     {
-    doGzippedBedToBigBed(mi, sourcePath, assembly, "peptideMapping", "bed6+4", 
+    doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "peptideMapping", "bed6+4", 
 	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".shortFrags.gz"))
     {
-    doGzippedBedToBigBed(mi, sourcePath, assembly, "shortFrags", "bed6+21", 
+    doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "shortFrags", "bed6+21", 
 	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".bedClusters.gz") || endsWith(fileName, ".bedCluster.gz"))
     {
-    doGzippedBedToBigBed(mi, sourcePath, assembly, NULL, NULL, 
+    doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, NULL, NULL, 
 	NULL, destDir, destFileName, pTargetList, f, manF);
     }
 else if (endsWith(fileName, ".bed.gz") || endsWith(fileName, ".bed9.gz"))
     {
     if (stringIn("wgEncodeHaibMethylRrbs/", fileName))
 	{
-	doGzippedBedToBigBed(mi, sourcePath, assembly, "bedRrbs", "bed9+2", 
+	doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "bedRrbs", "bed9+2", 
 	    NULL, destDir, destFileName, pTargetList, f, manF);
 	}
     else if (stringIn("wgEncodeOpenChromSynth/", fileName))
         {
-	doGzippedBedToBigBed(mi, sourcePath, assembly, "openChromCombinedPeaks", "bed9+12", 
-	    NULL, destDir, destFileName, pTargetList, f, manF);
+	doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, "openChromCombinedPeaks", 
+	    "bed9+12", NULL, destDir, destFileName, pTargetList, f, manF);
 	}
     else
 	{
 	char localName[PATH_LEN];
 	safef(localName, sizeof(localName), "%s", destFileName);
 	chopSuffix(localName);	// remove .bed
-	doGzippedBedToBigBed(mi, sourcePath, assembly, NULL, NULL, 
+	doGzippedBedToBigBed(mi, sourcePath, destPath, assembly, NULL, NULL, 
 	    "", destDir, localName, pTargetList, f, manF);
 	}
     }
