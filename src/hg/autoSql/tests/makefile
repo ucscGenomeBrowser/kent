@@ -1,8 +1,8 @@
 include ../../../inc/common.mk
 
 HG_WARN = ${HG_WARN_ERR}
-AUTOSQL = autoSql
-AUTOSQLJSON = autoSql -json
+AUTOSQL = ${DESTBINDIR}/autoSql
+AUTOSQLJSON = ${AUTOSQL} -json
 DIFF = diff -u
 XINC = -I.
 

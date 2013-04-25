@@ -1,9 +1,9 @@
-/* variant.h -- a generic variant.  Meant to be capture information that's
- *              in VCF or pgSNP  */
+/* variant.h -- a generic variant.  Meant to capture information that's in VCF or pgSNP. */
 
 #ifndef VARIANT_H
 #define VARIANT_H
 
+#include "localmem.h"
 #include "pgSnp.h"
 
 struct allele   // a single allele in a variant. 
@@ -24,12 +24,15 @@ struct variant   // a single variant
     struct allele *alleles;	/* alleles */
     };
 
-struct variant *variantFromPgSnp(struct pgSnp *pgSnp);
+struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned numAlleles,
+			   char *slashSepAlleles, struct lm *lm);
+/* Create a variant from basic information that is easy to extract from most other variant
+ * formats: coords, allele count, and string of slash-separated alleles. */
+
+struct variant *variantFromPgSnp(struct pgSnp *pgSnp, struct lm *lm);
 /* convert pgSnp record to variant record */
 
-struct allele  *alleleClip(struct allele *allele, int sx, int ex);
-/* clip allele to be inside region defined by sx..ex.  Returns 
- * pointer to new allele which should be freed by alleleFree, or variantFree
- */
+struct allele  *alleleClip(struct allele *allele, int sx, int ex, struct lm *lm);
+/* Return new allele pointing to new variant, both clipped to region defined by sx..ex. */
 
 #endif /* VARIANT_H*/

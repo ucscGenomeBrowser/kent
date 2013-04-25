@@ -29,6 +29,7 @@
 #include "wikiTrack.h"
 #include "genePred.h"
 #include "hgMaf.h"
+#include "pgSnp.h"
 #if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS

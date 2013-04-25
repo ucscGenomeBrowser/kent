@@ -24000,11 +24000,36 @@ genericHeader(tdb, itemName);
 doBedDetail(tdb, NULL, itemName);
 } /* end of doQPCRPrimers */
 
+void doSnakeClick(struct trackDb *tdb, char *itemName)
+/* Put up page for snakes. */
+{
+genericHeader(tdb, itemName);
+char *otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+char *hubName = cloneString(database);
+char *ptr = strchr(hubName + 4, '_');
+*ptr = 0;
+char otherDb[4096];
+char *qName = cartOptionalString(cart, "qName");
+int qs = atoi(cartOptionalString(cart, "qs"));
+int qe = atoi(cartOptionalString(cart, "qe"));
+int qWidth = atoi(cartOptionalString(cart, "qWidth"));
+safef(otherDb, sizeof otherDb, "%s_%s", hubName, otherSpecies);
+
+
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=pack\" TARGET=_BLANK><B>Link to block in other species</A><BR>\n", otherDb, qName, qs, qe,hubName,trackHubSkipHubName(database));
+
+int qCenter = (qs + qe) / 2;
+int newQs = qCenter - qWidth/2;
+int newQe = qCenter + qWidth/2;
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=pack\" TARGET=\"_blank\"><B>Link to same window size in other species</A><BR>\n", otherDb, qName, newQs, newQe,hubName,trackHubSkipHubName(database));
+} 
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
 char *track = cartString(cart, "g");
-char *item = cartOptionalString(cart, "i");
+char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
@@ -25219,6 +25244,10 @@ else if (sameString("geneReviews", table))
 else if (startsWith("qPcrPrimers", table))
     {
     doQPCRPrimers(tdb, item);
+    }
+else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
+    {
+    doSnakeClick(tdb, item);
     }
 
 else if (tdb != NULL)
