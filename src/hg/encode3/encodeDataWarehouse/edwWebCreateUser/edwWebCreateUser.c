@@ -22,7 +22,7 @@ void doMiddle()
 {
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"edwWebCreateUser\" METHOD=POST>\n");
-printf("<B>Add new user to ENCODE Data Warehouse</B><BR>");
+printf("<B>Add new user to ENCODE Data Warehouse</B><BR>\n");
 if (oldUserEmail == NULL)
     {
     printf("First an existing user needs to sign in:");
