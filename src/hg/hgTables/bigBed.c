@@ -321,7 +321,7 @@ int orderedCount = count * 4;
 if (orderedCount < 100)
     orderedCount = 100;
 struct bigBedInterval *iv, *ivList = getNElements(bbi, chromList, lm, orderedCount);
-shuffleList(&ivList, 1);
+shuffleList(&ivList);
 // Make a list of item names from intervals.
 int outCount = 0;
 for (iv = ivList;  iv != NULL && outCount < count;  iv = iv->next)

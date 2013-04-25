@@ -277,6 +277,11 @@ INLINE void cartSetBooleanDb(struct cart *cart, char *db, char *var, boolean val
 cartSetBoolean(cart, _cartVarDbName(db, var), val);
 }
 
+boolean cartTimeoutBoolean(struct cart *cart, char *var, int hours);
+// Returns true if a cart var was set to non-zero less than hours ago
+// If the var has expired or val=0, it will be deleted.
+// If val is non-zero and not a time_t, (e.g. 'set') then the timer is started.
+
 void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize);
 /* Make a text control filled with value from cart if it exists or
  * default value otherwise.  If charSize is zero it's calculated to fit

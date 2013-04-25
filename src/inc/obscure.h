@@ -135,14 +135,13 @@ struct hash *hashNameIntFile(char *fileName);
 struct hash *hashTwoColumnFile(char *fileName);
 /* Given a two column file (key, value) return a hash. */
 
-void shuffleArrayOfChars(char *array, int arraySize, int shuffleCount);
+void shuffleArrayOfChars(char *array, int arraySize);
 /* Shuffle array of characters of given size given number of times. */
 
-void shuffleArrayOfPointers(void *pointerArray, int arraySize, 
-	int shuffleCount);
+void shuffleArrayOfPointers(void *pointerArray, int arraySize);
 /* Shuffle array of pointers of given size given number of times. */
 
-void shuffleList(void *pList, int shuffleCount);
+void shuffleList(void *pList);
 /* Randomize order of slList.  Usage:
  *     shuffleList(&list)
  * where list is a pointer to a structure that

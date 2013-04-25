@@ -7,6 +7,8 @@
 
 #define POINT_NUM_COLS 4
 
+extern char *pointCommaSepFieldNames;
+
 struct point
 /* Three dimensional point */
     {
@@ -56,6 +58,8 @@ void pointOutput(struct point *el, FILE *f, char sep, char lastSep);
 
 #define POLYGON_NUM_COLS 3
 
+extern char *polygonCommaSepFieldNames;
+
 struct polygon
 /* A face */
     {
@@ -103,6 +107,8 @@ void polygonOutput(struct polygon *el, FILE *f, char sep, char lastSep);
 /* Print out polygon as a comma separated list including final comma. */
 
 #define POLYHEDRON_NUM_COLS 4
+
+extern char *polyhedronCommaSepFieldNames;
 
 struct polyhedron
 /* A 3-d object */

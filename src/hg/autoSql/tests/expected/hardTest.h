@@ -7,6 +7,8 @@
 
 #define POINT_NUM_COLS 3
 
+extern char *pointCommaSepFieldNames;
+
 struct point
 /* Three dimensional point */
     {
@@ -54,6 +56,8 @@ void pointOutput(struct point *el, FILE *f, char sep, char lastSep);
 /* Print out point as a comma separated list including final comma. */
 
 #define AUTOTEST_NUM_COLS 16
+
+extern char *autoTestCommaSepFieldNames;
 
 struct autoTest
 /* Just a test table */

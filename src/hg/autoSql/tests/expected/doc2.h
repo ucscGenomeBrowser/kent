@@ -7,6 +7,8 @@
 
 #define POINT_NUM_COLS 3
 
+extern char *pointCommaSepFieldNames;
+
 struct point
 /* A three dimensional point */
     {
@@ -50,6 +52,8 @@ void pointJsonOutput(struct point *el, FILE *f);
 
 #define COLOR_NUM_COLS 3
 
+extern char *colorCommaSepFieldNames;
+
 struct color
 /* A red/green/blue format color */
     {
@@ -92,6 +96,8 @@ void colorJsonOutput(struct color *el, FILE *f);
 /* Print out color in JSON format. */
 
 #define FACE_NUM_COLS 3
+
+extern char *faceCommaSepFieldNames;
 
 struct face
 /* A face of a three dimensional solid */
@@ -143,6 +149,8 @@ void faceJsonOutput(struct face *el, FILE *f);
 /* Print out face in JSON format. */
 
 #define POLYHEDRON_NUM_COLS 4
+
+extern char *polyhedronCommaSepFieldNames;
 
 struct polyhedron
 /* A solid three dimensional object */
