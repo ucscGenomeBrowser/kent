@@ -391,7 +391,7 @@ for (i = 0;  i < orderedCount && lineFileChop(lf, words); i++)
     }
 lineFileClose(&lf);
 /* Shuffle list and trim it to count if necessary. */
-shuffleList(&idList, 1);
+shuffleList(&idList);
 struct slName *sl;
 for (sl = idList, i = 0; sl != NULL; sl = sl->next, i++)
     {
