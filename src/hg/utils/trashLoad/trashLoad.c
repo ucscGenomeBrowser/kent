@@ -6,21 +6,29 @@
 #include "options.h"
 #include "trashDir.h"
 
+char *testDir = "loadTest";
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "trashLoad - generate trash file activity load test\n"
   "usage:\n"
-  "   trashLoad <numFiles> <averageSize>\n"
+  "   trashLoad [options] <numFiles> <averageSize>\n"
+  "   constructs a directory ./%s to write files into\n"
   "options:\n"
   "   numFiles - generate this number of files, positive integer\n"
-  "   averageSize - files of this average size, positive integer"
+  "   averageSize - files of this average size, positive integer\n"
+  "   -testDir=<dirName> - specify a different directory than ./'%s'\n"
+  "           note, this will always be relative: ./<dirName>\n"
+  "           it can not be an explicit path.",
+  testDir, testDir
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"testDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -64,44 +72,52 @@ static size_t normalDistribution(long long mean, long long min, long long max)
   return (returnValue);
   }
 
-void trashLoad(int argc, char *argv[])
+void trashLoad(char *fileCount, char *aveSize)
 /* trashLoad - generate trash file activity load test. */
 {
+int i;
 long long bytesWritten = 0;
-long long numFiles = sqlLongLong(argv[1]);
-long long averageSize = sqlLongLong(argv[2]);
+long long numFiles = sqlLongLong(fileCount);
+long long averageSize = sqlLongLong(aveSize);
 if (numFiles < 1)
   errAbort("ERROR: numFiles must be a positive integer, given: %lld\n", numFiles);
 if (averageSize < 1)
   errAbort("ERROR: averageSize must be a positive integer, given: %lld\n", averageSize);
 long long maxSize = averageSize * 5;
-long long i;
 verbose(1, "# trash load test begin, numFiles: %lld, averageSize: %lld, maximum size: %lld\n", numFiles, averageSize, maxSize);
 struct tempName tn;
 
 /* testing normalDistribution, print out a million numbers, send into
  * textHistorgram to view
  */
+// int i;
 // for ( i = 0; i < 1000000; ++i)
 //    printf("%lld\n", (long long)normalDistribution(averageSize, 1, maxSize));
+
+/* generate a single large buffer to write from, and initialize with values */
+char *buf = needMem(maxSize+1);
+int j;
+for ( j = 0; j < maxSize+1; ++j )
+    buf[j] =  (char)(0xff & j);
 
 long beginLoadTest = clock1000();
 for ( i = 0; i < numFiles; ++i)
   {
-  char filePrefix[1024];
-  safef(filePrefix, sizeof(filePrefix), "lt_%lld", i);
-  trashDirFile(&tn, "loadTest", filePrefix, ".txt");
-  FILE *fh = mustOpen(tn.forCgi, "w");
-  int j;
-  char *buf = needMem(maxSize+1);
-  for ( j = 0; j < maxSize+1; ++j )
-     buf[j] =  (char)(0xff & j);
+  char nameBuffer[1024];
+  safef(nameBuffer, sizeof(nameBuffer), "lt_%d", i);
+  trashDirFile(&tn, testDir, nameBuffer, ".txt");
+  char *fileName = tn.forCgi;
+  FILE *fh = mustOpen(fileName, "w");
   size_t writeSize = normalDistribution(averageSize, 1, maxSize);
   bytesWritten += writeSize;
   fwrite(buf, writeSize, 1, fh);
   fclose(fh);
   }
-verbose(1, "# trash load test total run time: %ld millis, %lld total bytes written in %lld files\n", clock1000() - beginLoadTest, bytesWritten, numFiles);
+
+long et = clock1000() - beginLoadTest;
+double bytesPerSecond = (double)bytesWritten/(double)((double)et/1000.0);
+verbose(1, "# %lld total bytes written in %lld files\n", bytesWritten, numFiles);
+verbose(1, "# trash load test total run time: %ld millis, %.0f bytes per second\n", et, bytesPerSecond);
 }
 
 int main(int argc, char *argv[])
@@ -110,6 +126,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-trashLoad(argc, argv);
+testDir = optionVal("testDir", testDir);
+trashLoad(argv[1], argv[2]);
 return 0;
 }
