@@ -317,7 +317,7 @@ if (orderedCount < 10000)
 struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, orderedCount, lm);
 
 /* Shuffle list and extract qNames from first count of them. */
-shuffleList(&samList, 1);
+shuffleList(&samList);
 struct slName *randomIdList = NULL;
 int i;
 for (i=0, sam = samList; i<count && sam != NULL; ++i, sam = sam->next)

@@ -58,7 +58,7 @@ The programs involved in converting the encode2 data to a hub and the order they
    and again with file produced by makeTgzDirPatch.
 
 These programs and scripts converts into the encode2Meta database with a schema
-described in encode2Meta.as.  The programs involved are:
+described in encode2Meta.as.  This is currently not used, but the programs involved were:
 
 1) encodeCvToDb - reads cv.ra and turns it into a directory of tab-separated files
    that you can turn into a SQL database.  Also produces Django models which we are

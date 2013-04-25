@@ -9,6 +9,9 @@
 #include "output/simpleTest.h"
 
 
+
+char *pointCommaSepFieldNames = "x,y";
+
 struct point *pointLoad(char **row)
 /* Load a point from row fetched with select * from point
  * from database.  Dispose of this with pointFree(). */
@@ -80,6 +83,9 @@ fputc(sep,f);
 fprintf(f, "%d", el->y);
 fputc(lastSep,f);
 }
+
+
+char *namedPointCommaSepFieldNames = "name,point";
 
 struct namedPoint *namedPointLoad(char **row)
 /* Load a namedPoint from row fetched with select * from namedPoint
@@ -174,6 +180,9 @@ pointCommaOut(&el->point,f);
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
+
+
+char *triangleCommaSepFieldNames = "name,points";
 
 struct triangle *triangleLoad(char **row)
 /* Load a triangle from row fetched with select * from triangle
@@ -296,6 +305,9 @@ int i;
 }
 fputc(lastSep,f);
 }
+
+
+char *polygonCommaSepFieldNames = "name,vertexCount,vertices";
 
 struct polygon *polygonLoad(char **row)
 /* Load a polygon from row fetched with select * from polygon
@@ -426,6 +438,9 @@ int i;
 fputc(lastSep,f);
 }
 
+
+char *personCommaSepFieldNames = "firstName,lastName,ssn";
+
 struct person *personLoad(char **row)
 /* Load a person from row fetched with select * from person
  * from database.  Dispose of this with personFree(). */
@@ -517,6 +532,9 @@ fputc(sep,f);
 fprintf(f, "%lld", el->ssn);
 fputc(lastSep,f);
 }
+
+
+char *coupleCommaSepFieldNames = "name,members";
 
 struct couple *coupleLoad(char **row)
 /* Load a couple from row fetched with select * from couple
@@ -640,6 +658,9 @@ int i;
 }
 fputc(lastSep,f);
 }
+
+
+char *groupCommaSepFieldNames = "name,size,members";
 
 struct group *groupLoad(char **row)
 /* Load a group from row fetched with select * from group
@@ -771,6 +792,9 @@ int i;
 fputc(lastSep,f);
 }
 
+
+char *metaGroupCommaSepFieldNames = "name,metaSize,groups";
+
 struct metaGroup *metaGroupLoad(char **row)
 /* Load a metaGroup from row fetched with select * from metaGroup
  * from database.  Dispose of this with metaGroupFree(). */
@@ -900,6 +924,9 @@ int i;
 }
 fputc(lastSep,f);
 }
+
+
+char *metaGroupLogoCommaSepFieldNames = "logo,conspiracy";
 
 void metaGroupLogoStaticLoad(char **row, struct metaGroupLogo *ret)
 /* Load a row from metaGroupLogo table into ret.  The contents of ret will

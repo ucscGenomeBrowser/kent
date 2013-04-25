@@ -350,6 +350,8 @@ splitPath(dbObj->name, NULL, defineName, NULL);
 touppers(defineName);
 fprintf(f, "#define %s_NUM_COLS %d\n\n", defineName,
         slCount(dbObj->columnList));
+fprintf(f, "extern char *%sCommaSepFieldNames;\n\n", dbObj->name);
+
 
 for (col = dbObj->columnList; col != NULL; col = col->next)
     {
@@ -1867,6 +1869,16 @@ void cSymColumnDefs(struct asObject *obj, FILE *cFile)
 /* output definitions used for parsing and formating a symbolic column fields */
 {
 struct asColumn *col;
+/* Print out comma separated list of names */
+fprintf(cFile, "\nchar *%sCommaSepFieldNames = \"", obj->name);
+for (col = obj->columnList; col != NULL; col = col->next)
+    {
+    if (col != obj->columnList)  // not first time?
+         fprintf(cFile, ",");
+    fprintf(cFile, "%s", col->name);
+    }
+fprintf(cFile, "\";\n\n");
+
 for (col = obj->columnList; col != NULL; col = col->next)
     {
     if ((col->lowType->type == t_enum) || (col->lowType->type == t_set))

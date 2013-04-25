@@ -9,6 +9,9 @@
 #include "output/doc2.h"
 
 
+
+char *pointCommaSepFieldNames = "x,y,z";
+
 struct point *pointLoad(char **row)
 /* Load a point from row fetched with select * from point
  * from database.  Dispose of this with pointFree(). */
@@ -109,6 +112,9 @@ fprintf(f, "%g", el->z);
 fputc('}',f);
 }
 
+
+char *colorCommaSepFieldNames = "red,green,blue";
+
 struct color *colorLoad(char **row)
 /* Load a color from row fetched with select * from color
  * from database.  Dispose of this with colorFree(). */
@@ -208,6 +214,9 @@ fputc(':',f);
 fprintf(f, "%u", el->blue);
 fputc('}',f);
 }
+
+
+char *faceCommaSepFieldNames = "color,pointCount,points";
 
 struct face *faceLoad(char **row)
 /* Load a face from row fetched with select * from face
@@ -374,6 +383,9 @@ fputc(']',f);
 }
 fputc('}',f);
 }
+
+
+char *polyhedronCommaSepFieldNames = "faceCount,faces,pointCount,points";
 
 struct polyhedron *polyhedronLoad(char **row)
 /* Load a polyhedron from row fetched with select * from polyhedron

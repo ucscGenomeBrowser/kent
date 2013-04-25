@@ -7,6 +7,8 @@
 
 #define SYMTEST_NUM_COLS 3
 
+extern char *symTestCommaSepFieldNames;
+
 enum symTestSex
     {
     symTestMale = 0,
