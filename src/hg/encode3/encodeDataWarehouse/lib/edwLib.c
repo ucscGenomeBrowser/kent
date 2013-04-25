@@ -154,7 +154,7 @@ static void edwVerifySid(char *user, char *sidToCheck)
 char sid[EDW_SID_SIZE];
 edwMakeSid(user, sid);
 if (sidToCheck == NULL || memcmp(sidToCheck, sid, EDW_SID_SIZE) != 0)
-    errAbort("Authentication failed, sid mismatch");
+    errAbort("Authentication failed, sid %s", (sidToCheck ? "fail" : "miss"));
 }
 
 char *edwGetEmailAndVerify()
@@ -687,6 +687,7 @@ puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
 puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
 puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
 puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
+puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
 puts("</HEAD><BODY>");
 }
 
@@ -694,7 +695,6 @@ void edwWebFooterWithPersona()
 /* Print out end tags and persona script stuff */
 {
 htmlEnd();
-puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
 }
 
 void edwCreateNewUser(char *email)
