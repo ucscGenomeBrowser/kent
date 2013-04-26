@@ -800,7 +800,7 @@ else
         verboseTime(2, "%s: generated %d haplotypes VCF data.\n",hapSet->commonId,hapCount);
     }
 //slReverse(&haplos); // Leave list in descending order: entire list will be reversed as one.
-assert(&haplos != NULL);
+assert(haplos != NULL);
 assert(hapCount == slCount(haplos));
 hapSet->haplos = haplos;
 
@@ -2167,7 +2167,7 @@ if (countLowInterest > 0)
     }
 else
     {
-    hPrintf("<BR>Common gene alleles shown: %d\n",countRows);
+    hPrintf("<BR>Common gene alleles shown: %d<BR>\n",countRows);
     }
 hPrintf("&nbsp;<input type='button' id='" HAPLO_SHOW_SCORES "' value='%s scoring' "
         "onclick='alleles.scoresToggle(this);' style='width:160px;'"
