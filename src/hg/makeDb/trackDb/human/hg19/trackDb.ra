@@ -22,42 +22,42 @@ pennantIcon encodeThumbnail.jpg ../ENCODE "encode project"
 
 track switchDbTss override
 origAssembly hg17
-pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
+pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 
 track clonePos override
 longLabel Clone Coverage
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track fishClones override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track gad override
 release beta,public
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track fosEndPairs override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track rgdQtl override
 shortLabel RGD Human QTL
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track rgdRatQtl override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track jaxQtlMapped override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track HInvGeneMrna override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track gwasCatalog override
 snpTable snp137
@@ -171,33 +171,33 @@ searchPriority 3.53
 
 track illuminaProbes override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track eioJcviNAS override
 shortLabel CD34 DnaseI
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track oreganno override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track laminB1Super override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track ucsfBrainMethyl override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgSnp override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 #not all have been lifted, do at subtrack level after adding new
 
 track sestanBrainAtlas override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track hapChainNet
 compositeTrack on
@@ -1858,21 +1858,21 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp130CodingDbSnp,
 codingAnnoLabel_snp130CodingDbSnp dbSNP
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 # Use hg18 file so we don't have to duplicate the 18G:
 snpSeqFile /gbdb/hg18/snp/snp130.fa
 origAssembly hg18
 
 track hapmapSnps override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 longLabel HapMap SNPs (rel27, merged Phase II + Phase III genotypes)
 dataVersion rel27
 hapmapPhase III
 
 track hapmapLdPh override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track nscanGene override
 informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
@@ -1886,147 +1886,147 @@ priority 451
 track pgVenter override
 longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgWatson override
 longLabel James Watson (CSHL) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgYoruban3 override
 longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgYh1 override
 longLabel Han Chinese Individual (YanHuang Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgSjk override
 longLabel Seong-Jin Kim (SJK, GUMS/KOBIC) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA12878 override
 longLabel CEU Trio Daughter NA12878 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA12891 override
 longLabel CEU Trio Father NA12891 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA12892 override
 longLabel CEU Trio Mother NA12892 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA19240 override
 longLabel YRI Trio Daughter NA19240 (1000 Genomes Project) (from Human Mar. 2006 assembly)
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA19239 override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNA19238 override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgKb1Illum override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgKb1454 override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgKb1Indel override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgKb1Comb override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNb1 override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgNb1Indel override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgMd8 override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgMd8Indel override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgTk1 override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgTk1Indel override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgAbtSolid override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgAbt454 override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgAbt454indels override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgAbtIllum override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgChurch override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgAngrist override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgGill override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgGatesSr override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgGatesJr override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgQuake override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgIrish override 
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgSaqqaq override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgSaqqaqHc override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track tgpPhase1
 shortLabel 1000G Ph1 Vars
@@ -2062,7 +2062,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
 
 track tgpRecombRate override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 
 searchTable nscanGene
@@ -2304,7 +2304,7 @@ itemRgb on
 color 0,0,0
 priority 111
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
@@ -2321,7 +2321,7 @@ url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experim
 track evofold override
 mafTrack multiz46way
 origAssembly hg17
-pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
+pennantIcon 17.jpg ../goldenPath/help/liftOver.html "lifted from hg17"
 
 track targetScanS
 shortLabel TS miRNA sites
@@ -2337,36 +2337,36 @@ url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&tax
 
 track ntHumChimpCodingDiff override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track ntSssTop5p override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track ntSssZScorePMVar override
 origAssembly hg18
 type bigWig -8.8332 33.63719
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track ntSssSnps override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track ntOoaHaplo override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track ntMito override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track cgapSage override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track snpArray override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 
 track consIndelsHgMmCanFam
@@ -2379,7 +2379,7 @@ useScore 1
 color 0, 60, 120
 type bed 5 .
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 searchTable consIndelsHgMmCanFam
 searchType bed
@@ -2399,7 +2399,7 @@ noInherit on
 type bed 3 .
 origAssembly hg18
 configureByPopup off
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 
     track polyaDb
@@ -2410,7 +2410,7 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
     priority 1
     type bed 4 .
     origAssembly hg18
-    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 
     track polyaPredict
@@ -2420,7 +2420,7 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
     priority 2
     type bed 8 .
     origAssembly hg18
-    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track polyASeqSites
 compositeTrack on
@@ -3022,7 +3022,7 @@ exonArrows off
 
 track decodeRmap override
 origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track knownGene
 shortLabel UCSC Genes
