@@ -9,6 +9,9 @@
 #include "output/symTest.h"
 
 
+
+char *symTestCommaSepFieldNames = "id,sex,skills";
+
 /* definitions for sex column */
 static char *values_sex[] = {"male", "female", NULL};
 static struct hash *valhash_sex = NULL;

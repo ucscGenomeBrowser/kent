@@ -232,12 +232,16 @@ AA *haploAaSequence(struct haploExtras *he, struct haplotypeSet *hapSet,
 // gene haplotype alleles HTML code
 // --------------------------------
 #define HAPLO_TABLE       "haplotypes"
-#define HAPLO_RARE_VAR    HAPLO_TABLE "RareVar"
-#define HAPLO_DNA_VIEW    HAPLO_TABLE "DnaView"
-#define HAPLO_FULL_SEQ    HAPLO_TABLE "FullSeq"
-#define HAPLO_MAJOR_DIST  HAPLO_TABLE "DistMajor"
-#define HAPLO_MINOR_DIST  HAPLO_TABLE "DistMinor"
-#define HAPLO_TRIPLETS    HAPLO_TABLE "Triplets"
+#define HAPLO_RARE_VAR    HAPLO_TABLE "_rareVar"
+#define HAPLO_DNA_VIEW    HAPLO_TABLE "_dnaView"
+#define HAPLO_FULL_SEQ    HAPLO_TABLE "_fullSeq"
+#define HAPLO_MAJOR_DIST  HAPLO_TABLE "_distMajor"
+#define HAPLO_MINOR_DIST  HAPLO_TABLE "_distMinor"
+#define HAPLO_TRIPLETS    HAPLO_TABLE "_triplets"
+#define HAPLO_RARE_HAPS   HAPLO_TABLE "_rareHaps"
+#define HAPLO_SHOW_SCORES HAPLO_TABLE "_score"
+#define HAPLO_RESET_ALL   HAPLO_TABLE "_reset"
+#define HAPLO_CART_TIMEOUT 72
 
 void geneAllelesTableAndControls(struct cart *cart, char *geneId,
                                  struct haploExtras *he, struct haplotypeSet *hapSet);

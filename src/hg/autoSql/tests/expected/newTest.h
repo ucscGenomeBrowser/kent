@@ -8,6 +8,8 @@
 #include "jksql.h"
 #define POINT_NUM_COLS 2
 
+extern char *pointCommaSepFieldNames;
+
 struct point
 /* A simple point */
     {
@@ -54,6 +56,8 @@ void pointOutput(struct point *el, FILE *f, char sep, char lastSep);
 /* Print out point as a comma separated list including final comma. */
 
 #define AUTOTEST_NUM_COLS 11
+
+extern char *autoTestCommaSepFieldNames;
 
 struct autoTest
 /* Just a test */

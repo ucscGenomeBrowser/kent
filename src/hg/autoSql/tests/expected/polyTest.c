@@ -9,6 +9,9 @@
 #include "output/polyTest.h"
 
 
+
+char *pointCommaSepFieldNames = "acc,x,y,z";
+
 struct point *pointLoad(char **row)
 /* Load a point from row fetched with select * from point
  * from database.  Dispose of this with pointFree(). */
@@ -113,6 +116,9 @@ fputc(sep,f);
 fprintf(f, "%d", el->z);
 fputc(lastSep,f);
 }
+
+
+char *polygonCommaSepFieldNames = "id,pointCount,points";
 
 struct polygon *polygonLoad(char **row)
 /* Load a polygon from row fetched with select * from polygon
@@ -253,6 +259,9 @@ int i;
 }
 fputc(lastSep,f);
 }
+
+
+char *polyhedronCommaSepFieldNames = "id,names,polygonCount,polygons";
 
 struct polyhedron *polyhedronLoad(char **row)
 /* Load a polyhedron from row fetched with select * from polyhedron

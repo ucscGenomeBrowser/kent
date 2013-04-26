@@ -7,6 +7,8 @@
 
 #define ADDRESSBOOK_NUM_COLS 5
 
+extern char *addressBookCommaSepFieldNames;
+
 struct addressBook
 /* A simple address book */
     {
@@ -63,6 +65,8 @@ void addressBookJsonOutput(struct addressBook *el, FILE *f);
 /* Print out addressBook in JSON format. */
 
 #define SYMBOLCOLS_NUM_COLS 3
+
+extern char *symbolColsCommaSepFieldNames;
 
 enum symbolColsSex
     {
