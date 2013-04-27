@@ -587,7 +587,7 @@ else
     safef(s,slength,"%3.0f %s",((double)size)/d, greek[i]);
 }
 
-void shuffleArrayOfChars(char *array, int arraySize, int shuffleCount)
+void shuffleArrayOfChars(char *array, int arraySize)
 /* Shuffle array of characters of given size given number of times. */
 {
 char c;
@@ -603,8 +603,7 @@ for (i=0; i<arraySize; ++i)
     }
 }
 
-
-void shuffleArrayOfPointers(void *pointerArray, int arraySize, int shuffleCount)
+void shuffleArrayOfPointers(void *pointerArray, int arraySize)
 /* Shuffle array of pointers of given size given number of times. */
 {
 void **array = pointerArray, *pt;
@@ -620,7 +619,7 @@ for (i=0; i<arraySize; ++i)
     }
 }
 
-void shuffleList(void *pList, int shuffleCount)
+void shuffleList(void *pList)
 /* Randomize order of slList.  Usage:
  *     randomizeList(&list)
  * where list is a pointer to a structure that
@@ -639,7 +638,7 @@ if (count > 1)
     for (el = list, i=0; el != NULL; el = el->next, i++)
         array[i] = el;
     for (i=0; i<4; ++i)
-        shuffleArrayOfPointers(array, count, shuffleCount);
+        shuffleArrayOfPointers(array, count);
     list = NULL;
     for (i=0; i<count; ++i)
         {

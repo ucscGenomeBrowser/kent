@@ -140,4 +140,8 @@ struct hubConnectStatus *hubConnectLoadHubs(struct cart *cart);
 struct hubConnectStatus *hubConnectGetHubs();
 /* return the static global to the track data hubs */
 
+struct trackDb *hubCollectTracks( char *database, struct trackHub **pHubList, struct grp **pGroupList);
+/* Generate trackDb structures for all the tracks in attached hubs.  
+ * Make grp structures for each hub. */
+
 #endif /* HUBCONNECT_H */

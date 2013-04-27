@@ -27,7 +27,7 @@ struct annoStreamer
 
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
     /* Set genomic region for query; if chrom is NULL, region is whole genome.
-     * This must called on all annoGrator components in query, not a subset. */
+     * This must be called on all annoGrator components in query, not a subset. */
 
     char *(*getHeader)(struct annoStreamer *self);
     /* Get the file header as a string (possibly NULL, possibly multi-line). */

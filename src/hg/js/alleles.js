@@ -12,6 +12,12 @@ var alleles = (function()
     var seqPxPerPos         = 7;
     var ajaxUpdates         = 0;
 
+    // persistence between ajax calls
+    var persistRareHapsShown = false; 
+    var persistScoresShown   = false; 
+    var persistSortReverse   = false;
+    var persistSortColId     = '';
+
 
     function initSortTable()
     { // Initialize the sortable table
@@ -79,10 +85,10 @@ var alleles = (function()
     {   // The sort table is controlled by utls.js, but this is some allele specific stuff
     
         var thisId = $(obj).attr('id');
-        if (alleles.sortColId != thisId)
-            alleles.sortColId  = thisId;
+        if (persistSortColId != thisId)
+            persistSortColId  = thisId;
         else
-            alleles.sortReverse = ( !alleles.sortReverse );
+            persistSortReverse = ( !persistSortReverse );
         
         // Sorted variant is hilited special
         if ($(obj).hasClass('var')) {
@@ -95,15 +101,15 @@ var alleles = (function()
     { // When an ajax update occurs, restore the non-ajax settings state
         
         // See if table was sorted previously
-        if (alleles.sortColId != '') {
+        if (persistSortColId != '') {
     
-            var col = $('table#alleles').find('TH#' + alleles.sortColId);
+            var col = $('table#alleles').find('TH#' + persistSortColId);
             if (col != undefined && col.length != 0) {
                 var colIx = Number( $(col).attr('cellIndex') );
                 $(col).click();
-                if (alleles.sortReverse) {// click twice if reverse order!
-                    alleles.sortReverse = false; // Needed so that it is set again
-                    setTimeout("$('table#alleles').find('TH#" + alleles.sortColId + 
+                if (persistSortReverse) {// click twice if reverse order!
+                    persistSortReverse = false; // Needed so that it is set again
+                    setTimeout("$('table#alleles').find('TH#" + persistSortColId + 
                                                                           "').click();", 50);
                 }
             }
@@ -113,8 +119,13 @@ var alleles = (function()
         $('table#alleles').find('TH').click(function (e) { afterSort(this); });
         
         // Want to show rare haplotypes if they were seen before ajax update
-        if (alleles.rareHaplotypesShown) {
-            alleles.rareAlleleToggle( $('input#allelesShowHide') );
+        if (persistRareHapsShown) {
+            alleles.rareAlleleToggle( $('input#' + sectionName + "_rareHaps"), false );
+        }
+        
+        // Want to show scores if they were seen before ajax update
+        if (persistScoresShown) {
+            alleles.scoresToggle( $('input#' + sectionName + "_score"), false );
         }
         
         // Persist on lighlite as red
@@ -213,13 +224,13 @@ var alleles = (function()
         // - handle indels
     
         // Don't even bother if full sequence isn't showing
-        var fullSeq = $('input#'+sectionName+'FullSeq');
+        var fullSeq = $('input#'+sectionName+'_fullSeq');
         if (fullSeq != undefined && $(fullSeq).val().indexOf('Hide') === -1)
             return;
         
         // DNA view or AA view?
         var spans;
-        var dnaView = $('input#'+sectionName+'DnaView');
+        var dnaView = $('input#'+sectionName+'_dnaView');
         if (dnaView != undefined && $(dnaView).val().indexOf('DNA') === -1) {
             spans = $('table#alleles').find('TH.seq').find('B');
         } else { // AA view
@@ -254,11 +265,6 @@ var alleles = (function()
     // - - - - - Public methods - - - - - 
     return { // returns an object with public methods
     
-        // persistence between ajax calls
-        rareHaplotypesShown: false, 
-        sortReverse:         false,
-        sortColId:           '',
-    
         positionTitle: function (e, obj)
         { // sets the current title to show the position of the pointer
           // Relies upon a span and fixed width text
@@ -269,23 +275,43 @@ var alleles = (function()
             $(obj).attr('title',over.toFixed(0)); // title is simply position
         },
     
-        rareAlleleToggle: function (btn)
+        rareAlleleToggle: function (btn,setCart)
         { // toggle the visibility of rare alleles
-            $('tr.allele.rare').toggle();
-            if ($(btn).val().indexOf('Show') != -1) {
-                $('span#alleleCounts').text( 'All gene haplotypes shown: ' + 
-                                             $('tr.allele:visible').length + ' of ' +
-                                             $('tr.allele').length );
+            var trs = $('table#alleles tbody tr.allele');
+            persistRareHapsShown = ($(btn).val().indexOf('Show') != -1);
+            if (persistRareHapsShown) {
+                $(trs).filter('.rare').removeClass('hidden');
+                var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length;
+                $('span#alleleCounts').text( 'All gene haplotypes shown: ' + counts );
                 $('span#alleleCounts').addClass('textAlert'); 
                 $(btn).val('Hide rare haplotypes');
-                alleles.rareHaplotypesShown = true;
+                if (setCart == undefined || setCart)
+                    setCartVar(sectionName + '_rareHaps','set');
             } else {
-                $('span#alleleCounts').text( 'Common gene haplotypes shown: ' + 
-                                             $('tr.allele:visible').length + ' of ' +
-                                             $('tr.allele').length );
+                $(trs).filter('.rare').addClass('hidden');
+                var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length;
+                $('span#alleleCounts').text( 'Common gene haplotypes shown: ' + counts );
                 $('span#alleleCounts').removeClass('textAlert'); 
                 $(btn).val('Show rare haplotypes');
-                alleles.rareHaplotypesShown = false;
+                if (setCart == undefined || setCart)
+                    setCartVar(sectionName + '_rareHaps','[]');
+            }
+            hilitesResize();
+        },
+        
+        scoresToggle: function (btn,setCart)
+        { // toggle the visibility of scores
+            persistScoresShown = ($(btn).val().indexOf('Include') != -1);
+            if (persistScoresShown) {
+                $('table#alleles').find('.score').removeClass('hidden');
+                $(btn).val('Hide scoring');
+                if (setCart == undefined || setCart)
+                    setCartVar(sectionName + '_score','set');
+            } else {
+                $('table#alleles').find('.score').addClass('hidden');
+                $(btn).val('Include scoring');
+                if (setCart == undefined || setCart)
+                    setCartVar(sectionName + '_score','[]');
             }
             hilitesResize();
         },
@@ -294,12 +320,18 @@ var alleles = (function()
         { // toggles feature that requires ajax
           // Note that ID is same as cart variable and value is boolean "exists"
             if (val != '') {
-                ajaxRequest(btn.id + '=' + val);
+                ajaxRequest(btn.id + '=set');
             } else {
                 ajaxRequest(btn.id + '=[]'); // Will remove cart variable
             }
         },
 
+        setAndRefresh: function  (varName,val)
+        { // Resets all display options to defaults
+            ajaxRequest(varName + '=' + val);
+            return false; // Fake link
+        },
+        
         initialize: function  (sectionId)
         { // Initialize or reinitailze (after ajax) the sortable table
         
@@ -316,7 +348,7 @@ var alleles = (function()
             
             // Calculate some useful constants:
             seqCharsPerPos = 1; // Most cases
-            var tripletButton = normed( $('input#'+sectionName+'Triplets') );
+            var tripletButton = normed( $('input#'+sectionName+'_triplets') );
             if (tripletButton != undefined && $(tripletButton).val().indexOf('Show') === -1)
                 seqCharsPerPos = 3;
             seqPxPerPos = 7;

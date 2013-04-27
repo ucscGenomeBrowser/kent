@@ -42,9 +42,9 @@ struct edwValidFile *findElderReplicates(struct sqlConnection *conn, struct edwV
 {
 char query[256];
 safef(query, sizeof(query), 
-    "select * from edwValidFile where fileId<%d and experiment='%s' and format='%s'"
+    "select * from edwValidFile where id<%d and experiment='%s' and format='%s'"
     " and outputType='%s'"
-    , vf->fileId, vf->experiment, vf->format, vf->outputType);
+    , vf->id, vf->experiment, vf->format, vf->outputType);
 return edwValidFileLoadByQuery(conn, query);
 }
 

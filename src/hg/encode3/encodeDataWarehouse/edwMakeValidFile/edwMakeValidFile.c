@@ -128,7 +128,7 @@ void reduceFastqSample(char *source, FILE *f, int oldSize, int newSize, struct e
 assert(oldSize > newSize);
 char *randomizer = needMem(oldSize);
 memset(randomizer, TRUE, newSize);
-shuffleArrayOfChars(randomizer, oldSize, 1);
+shuffleArrayOfChars(randomizer, oldSize);
 
 vf->basesInSample = 0;
 vf->sampleCount = 0;
