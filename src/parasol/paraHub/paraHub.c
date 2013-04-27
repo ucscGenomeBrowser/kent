@@ -1761,7 +1761,7 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 	    for(i = mach->deadJobIds; i; i = i->next)
 		dyStringPrintf(dy, "%d ", i->val);
 	    dyStringPrintf(dy, "came back.");
-	    logWarn(dy->string);
+	    logWarn("%s", dy->string);
 	    dyStringFree(&dy);
 	    while ((jobIdString = nextWord(&line)) != NULL)
 	        {

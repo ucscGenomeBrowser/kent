@@ -291,8 +291,8 @@ if (thisNodeStr)
     char *redirectCookie = findCookieData("redirect");
     char *redirect = cgiOptionalString("redirect");
 
-    fprintf(stderr, "GALT redirectCookie=%s redirect=%s\n", 
-            redirectCookie, redirect); fflush(stderr); // DEBUG REMOVE
+    //fprintf(stderr, "GALT redirectCookie=%s redirect=%s\n", 
+            //redirectCookie, redirect); fflush(stderr); // DEBUG REMOVE
 
     if (redirect == NULL && redirectCookie == NULL)
         {
@@ -308,7 +308,7 @@ if (thisNodeStr)
             char query[1056];
             safef(query, sizeof query, "select domain from gbNode%s where node = %d", geoSuffix, node);
             char *newDomain = sqlQuickString(centralConn, query);
-            fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
+            //fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
             char *oldDomain = cgiServerName();
             char *port = cgiServerPort();
             char *uri = cgiRequestUri();
@@ -327,7 +327,7 @@ if (thisNodeStr)
                            "<html><head><title>Redirecting to closer site</title></head>\n"
                            "<body><a href=\"%s\">%s</a></body>\n"
                            , newUri , newUri, newUri);
-            fprintf(stderr, "GALT redirect response:\n%s", dy->string); fflush(stderr); // DEBUG REMOVE
+            //fprintf(stderr, "GALT redirect response:\n%s", dy->string); fflush(stderr); // DEBUG REMOVE
             puts(dyStringContents(dy));
             exit(0);
             }

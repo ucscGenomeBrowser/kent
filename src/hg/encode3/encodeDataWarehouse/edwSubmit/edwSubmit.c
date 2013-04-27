@@ -585,20 +585,11 @@ if (old == NULL)
 /* See if we have something in progress, meaning started but not ended. */
 if (old->endUploadTime == 0 && isEmpty(old->errorMessage))
     {
-    /* Figure out when we started most recent single file in the upload, or when
-     * we started if not files started yet. */
-    char query[256];
-    safef(query, sizeof(query), 
-	"select max(startUploadTime) from edwFile where submitId=%u", old->id);
-    long long maxStartTime = sqlQuickLongLong(conn, query);
-    if (maxStartTime == 0)
-	maxStartTime = old->startUploadTime;
-
-    /* Check against our usual time out. */
+    /* Check submission last alive time against our usual time out. */
+    long long maxStartTime = edwSubmitMaxStartTime(old, conn);
     if (edwNow() - maxStartTime < edwSingleFileTimeout)
         errAbort("Submission of %s already is in progress.  Please come back in an hour", url);
     }
-
 edwSubmitFree(&old);
 }
 
@@ -643,7 +634,7 @@ submitDir[submitDirSize] = 0;  // Add trailing zero
 
 
 /* Make sure user has access. */
-struct sqlConnection *conn = sqlConnectProfile(edwDatabase, edwDatabase);
+struct sqlConnection *conn = edwConnectReadWrite();
 struct edwUser *user = edwMustGetUserFromEmail(conn, email);
 int userId = user->id;
 

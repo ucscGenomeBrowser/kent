@@ -145,6 +145,7 @@ etags-all:
 utils: libs
 	${MKDIR} ${SCRIPTS}
 	${MKDIR} ${DESTDIR}${BINDIR}
+	cd parasol && ${MAKE}
 	@for D in ${DIRS} x; do \
             if test "$$D" != "x" ; then \
                 ( cd $$D && echo $$D && ${MAKE} ) ;\
