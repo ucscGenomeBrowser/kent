@@ -26,6 +26,18 @@ int edwSingleFileTimeout = 60*60;   // How many seconds we give ourselves to fet
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *edwValDataDir = "/data/encode3/encValData/";
 
+struct sqlConnection *edwConnect()
+/* Returns a read only connection to database. */
+{
+return sqlConnect(edwDatabase);
+}
+
+struct sqlConnection *edwConnectReadWrite()
+/* Returns read/write connection to database. */
+{
+return sqlConnectProfile("encodeDataWarehouse", edwDatabase);
+}
+
 char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
 /* Return full path (which eventually should be freeMem'd) for fileId */
 {
@@ -675,6 +687,44 @@ safef(query, sizeof(query),
 return edwSubmitLoadByQuery(conn, query);
 }
 
+long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *conn)
+/* Figure out when we started most recent single file in the upload, or when
+ * we started if not files started yet. */
+{
+char query[256];
+safef(query, sizeof(query), 
+    "select max(startUploadTime) from edwFile where submitId=%u", submit->id);
+long long maxStartTime = sqlQuickLongLong(conn, query);
+if (maxStartTime == 0)
+    maxStartTime = submit->startUploadTime;
+return maxStartTime;
+}
+
+int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn)
+/* Count number of new files in submission that have been validated. */
+{
+char query[256];
+safef(query, sizeof(query), 
+    "select count(*) from edwFile e,edwValidFile v where e.id = v.fileId and e.submitId=%u",
+    submit->id);
+return sqlQuickNum(conn, query);
+}
+
+struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf)
+/* Find all replicates of same output and format type for experiment that are elder
+ * (fileId less than your file Id).  Younger replicates are responsible for taking care 
+ * of correlations with older ones.  Sorry younguns, it's like social security. */
+{
+if (sameString(vf->format, "unknown"))
+    return NULL;
+char query[256];
+safef(query, sizeof(query), 
+    "select * from edwValidFile where id<%d and experiment='%s' and format='%s'"
+    " and outputType='%s'"
+    , vf->id, vf->experiment, vf->format, vf->outputType);
+return edwValidFileLoadByQuery(conn, query);
+}
+
 void edwWebHeaderWithPersona(char *title)
 /* Print out HTTP and HTML header through <BODY> tag with persona info */
 {
@@ -697,11 +747,12 @@ void edwWebFooterWithPersona()
 htmlEnd();
 }
 
+
 void edwCreateNewUser(char *email)
 /* Create new user, checking that user does not already exist. */
 {
 /* Now make sure user is not already in user table. */
-struct sqlConnection *conn = sqlConnectProfile("encodeDataWarehouse", edwDatabase);
+struct sqlConnection *conn = edwConnectReadWrite();
 struct dyString *query = dyStringNew(0);
 char *escapedEmail = sqlEscapeString(email);
 dyStringPrintf(query, "select count(*) from edwUser where email = '%s'", escapedEmail);
@@ -720,5 +771,40 @@ void edwPrintLogOutButton()
 /* Print log out button */
 {
 printf("<INPUT TYPE=button NAME=\"signOut\" VALUE=\"sign out\" id=\"signout\">");
+}
+
+struct dyString *edwFormatDuration(long long seconds)
+/* Convert seconds to days/hours/minutes. Return result in a dyString you can free */
+{
+struct dyString *dy = dyStringNew(0);
+int days = seconds/(3600*24);
+if (days > 0)
+    dyStringPrintf(dy, "%d days, ", days);
+seconds -= days*3600*24;
+
+int hours = seconds/3600;
+if (hours > 0)
+    dyStringPrintf(dy, "%d hours", hours);
+seconds -= hours*3600;
+
+if (days == 0)
+    {
+    int minutes = seconds/60;
+    if (minutes > 0)
+	{
+	if (hours > 0)
+	   dyStringPrintf(dy, ", ");
+	dyStringPrintf(dy, "%d minutes", minutes);
+	}
+
+    if (hours == 0)
+	{
+	if (minutes > 0)
+	   dyStringPrintf(dy, ", ");
+	seconds -= minutes*60;
+	dyStringPrintf(dy, "%d seconds", (int)seconds);
+	}
+    }
+return dy;
 }
 
