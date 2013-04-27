@@ -11,9 +11,8 @@ all:
 	cd paraTestJob && ${MAKE}
 	cd parasol && ${MAKE}
 
-install: all
-	cp bin/para* bin/gensub2 ${BINDIR}
-	cp bin/para* bin/gensub2 /cluster/bin/${MACHTYPE}
+install:
+	@echo 'parasol install, please copy ./bin/*  where desired ...'
 
 clean:
 	rm -f */*.o lib/*/*.a
