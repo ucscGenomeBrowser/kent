@@ -16,6 +16,7 @@ DIRS = \
     edwMakeReplicateQa \
     edwMakeValidFile \
     edwRemoveSampleTemps \
+    edwRunDaemon \
     edwRunner \
     edwSubmit \
     edwSubmitSpooler \
