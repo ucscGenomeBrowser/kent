@@ -35,19 +35,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct edwValidFile *findElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf)
-/* Find all replicates of same output and format type for experiment that are elder
- * (fileId less than your file Id).  Younger replicates are responsible for taking care 
- * of correlations with older ones.  Sorry younguns, it's like social security. */
-{
-char query[256];
-safef(query, sizeof(query), 
-    "select * from edwValidFile where id<%d and experiment='%s' and format='%s'"
-    " and outputType='%s'"
-    , vf->id, vf->experiment, vf->format, vf->outputType);
-return edwValidFileLoadByQuery(conn, query);
-}
-
 struct bed3 *edwLoadSampleBed3(struct sqlConnection *conn, struct edwValidFile *vf)
 /* Load up sample bed3 attached to vf */
 {
@@ -414,7 +401,7 @@ char *replicate = vf->replicate;
 if (!isEmpty(replicate) && !sameString(replicate, "both"))
     {
     /* Try to find other replicates of same experiment, format, and output type. */
-    struct edwValidFile *elder, *elderList = findElderReplicates(conn, vf);
+    struct edwValidFile *elder, *elderList = edwFindElderReplicates(conn, vf);
     if (elderList != NULL)
 	{
 	struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
