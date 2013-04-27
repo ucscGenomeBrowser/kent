@@ -183,4 +183,5 @@ void bigBedMethods(struct track *track, struct trackDb *tdb,
 /* Set up bigBed methods. */
 {
 complexBedMethods(track, tdb, TRUE, wordCount, words);
+
 }
