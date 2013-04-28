@@ -5,6 +5,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "sqlNum.h"
+#include "net.h"
 #include "encode3/encode2Manifest.h"
 
 
@@ -57,7 +58,7 @@ fprintf(f, "%s\n", mi->enrichedIn);
 struct encode2Manifest *encode2ManifestLoadAll(char *fileName)
 /* Load all encode2Manifests from file. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = netLineFileOpen(fileName);
 char *row[ENCODE2MANIFEST_NUM_COLS];
 struct encode2Manifest *list = NULL, *fi;
 while (lineFileRow(lf, row))
@@ -74,7 +75,7 @@ struct encode2Manifest *encode2ManifestShortLoadAll(char *fileName)
 {
 struct encode2Manifest *miList = NULL, *mi;
 char *row[6];
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = netLineFileOpen(fileName);
 while (lineFileRow(lf, row))
     {
     AllocVar(mi);

@@ -17,6 +17,7 @@
 #include "hash.h"
 #include "errabort.h"
 #include "meta.h"
+#include "net.h"
 #include "ra.h"
 
 struct metaTagVal *metaTagValNew(char *tag, char *val)
@@ -215,7 +216,7 @@ struct meta *metaLoadAll(char *fileName, char *keyTag, char *parentTag,
  * will look at the indentation, and if there is a parentTag complain about any
  * disagreements between indentation and parentTag. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = netLineFileOpen(fileName);
 struct meta *meta, *forest = NULL, *lastMeta = NULL;
 if (ignoreIndent)
     {
