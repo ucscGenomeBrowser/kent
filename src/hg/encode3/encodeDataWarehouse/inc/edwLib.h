@@ -43,6 +43,9 @@ char *edwPathForFileId(struct sqlConnection *conn, long long fileId);
 char *edwTempDir();
 /* Returns pointer to edwTempDir.  This is shared, so please don't modify. */
 
+char *edwTempDirForToday(char dir[PATH_LEN]);
+/* Fills in dir with temp dir of the day, and returns a pointer to it. */
+
 long long edwNow();
 /* Return current time in seconds since Epoch. */
 
