@@ -15,7 +15,6 @@ DIRS = \
     edwMakeEnrichments \
     edwMakeReplicateQa \
     edwMakeValidFile \
-    edwRemoveSampleTemps \
     edwRunDaemon \
     edwSubmit \
     edwWebAuthLogin \
