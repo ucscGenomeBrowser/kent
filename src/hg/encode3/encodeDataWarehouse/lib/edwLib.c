@@ -65,6 +65,28 @@ if (path[0] == 0)
 return path;
 }
 
+char *edwTempDirForToday(char dir[PATH_LEN])
+/* Fills in dir with temp dir of the day, and returns a pointer to it. */
+{
+char dayDir[PATH_LEN];
+edwDirForTime(edwNow(), dayDir);
+safef(dir, PATH_LEN, "%s%stmp/", edwRootDir, dayDir);
+
+/* Bracket time consuming call to makeDirsOnPath with check that we didn't just do same
+ * thing. */
+static char lastDayDir[PATH_LEN] = "";
+if (!sameString(dayDir, lastDayDir))
+    {
+    strcpy(lastDayDir, dayDir);
+    int len = strlen(dir);
+    dir[len-1] = 0;
+    makeDirsOnPath(dir);
+    dir[len-1] = '/';
+    }
+return dir;
+}
+
+
 long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName)
 /* See if we are in process of getting file.  Return file record id if it exists even if
  * it's not complete. Return -1 if record does not exist. */

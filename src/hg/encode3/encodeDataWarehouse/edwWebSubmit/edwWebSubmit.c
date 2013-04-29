@@ -235,7 +235,10 @@ FILE *fifo = mustOpen("../userdata/edwSubmit.fifo", "w");
 fputc('\n', fifo);
 carefulClose(&fifo);
 
+/* Give the system a half second to react and then put up status info about submission */
+sleep1000(500);
 monitorSubmission(conn);
+
 #ifdef OLD
 /* Give system a second to react, and then try to put up status info about submission. */
 /* consider replacing this with direct call to monitorSubmission. */
