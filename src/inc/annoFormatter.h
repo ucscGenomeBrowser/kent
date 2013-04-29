@@ -12,13 +12,6 @@
 // annoGratorQuery framework, and simple methods shared by all
 // subclasses.
 
-struct annoStreamRows
-/* An annoStreamer and (possibly NULL) list of rows it generated. */
-    {
-    struct annoStreamer *streamer;	// annoStreamer interface for metadata about row data
-    struct annoRow *rowList;		// row data
-    };
-
 struct annoFormatter
 /* Generic interface to aggregate data fields from multiple sources and write
  * output. */
@@ -57,10 +50,5 @@ void annoFormatterSetOptions(struct annoFormatter *self, struct annoOption *newO
 void annoFormatterFree(struct annoFormatter **pSelf);
 /* Free self. This should be called at the end of subclass close methods, after
  * subclass-specific connections are closed and resources are freed. */
-
-// -----------------------------------------------------------------------------
-
-struct annoStreamRows *annoStreamRowsNew(struct annoStreamer *streamerList);
-/* Returns an array of aS&R for each streamer in streamerList. Free array when done. */
 
 #endif//ndef ANNOFORMATTER_H

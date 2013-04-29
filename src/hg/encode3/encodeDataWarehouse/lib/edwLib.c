@@ -10,8 +10,10 @@
 #include "basicBed.h"
 #include "bigBed.h"
 #include "portable.h"
+#include "cheapcgi.h"
 #include "genomeRangeTree.h"
 #include "md5.h"
+#include "htmshell.h"
 #include "obscure.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
@@ -23,6 +25,18 @@ int edwSingleFileTimeout = 60*60;   // How many seconds we give ourselves to fet
 
 char *edwRootDir = "/data/encode3/encodeDataWarehouse/";
 char *edwValDataDir = "/data/encode3/encValData/";
+
+struct sqlConnection *edwConnect()
+/* Returns a read only connection to database. */
+{
+return sqlConnect(edwDatabase);
+}
+
+struct sqlConnection *edwConnectReadWrite()
+/* Returns read/write connection to database. */
+{
+return sqlConnectProfile("encodeDataWarehouse", edwDatabase);
+}
 
 char *edwPathForFileId(struct sqlConnection *conn, long long fileId)
 /* Return full path (which eventually should be freeMem'd) for fileId */
@@ -50,6 +64,28 @@ if (path[0] == 0)
     }
 return path;
 }
+
+char *edwTempDirForToday(char dir[PATH_LEN])
+/* Fills in dir with temp dir of the day, and returns a pointer to it. */
+{
+char dayDir[PATH_LEN];
+edwDirForTime(edwNow(), dayDir);
+safef(dir, PATH_LEN, "%s%stmp/", edwRootDir, dayDir);
+
+/* Bracket time consuming call to makeDirsOnPath with check that we didn't just do same
+ * thing. */
+static char lastDayDir[PATH_LEN] = "";
+if (!sameString(dayDir, lastDayDir))
+    {
+    strcpy(lastDayDir, dayDir);
+    int len = strlen(dir);
+    dir[len-1] = 0;
+    makeDirsOnPath(dir);
+    dir[len-1] = '/';
+    }
+return dir;
+}
+
 
 long edwGettingFile(struct sqlConnection *conn, char *submitDir, char *submitFileName)
 /* See if we are in process of getting file.  Return file record id if it exists even if
@@ -114,82 +150,62 @@ long long edwNow()
 return time(NULL);
 }
 
-static void makeShaBase64(unsigned char *inputBuf, int inputSize, char out[EDW_ACCESS_SIZE])
+/* This is size of base64 encoded hash plus 1 for the terminating zero. */
+#define EDW_SID_SIZE 65   
+
+static void makeShaBase64(unsigned char *inputBuf, int inputSize, char out[EDW_SID_SIZE])
 /* Make zero terminated printable cryptographic hash out of in */
 {
 unsigned char shaBuf[48];
 SHA384(inputBuf, inputSize, shaBuf);
 char *base64 = base64Encode((char*)shaBuf, sizeof(shaBuf));
-memcpy(out, base64, EDW_ACCESS_SIZE);
-out[EDW_ACCESS_SIZE-1] = 0; 
+memcpy(out, base64, EDW_SID_SIZE);
+out[EDW_SID_SIZE-1] = 0; 
 freeMem(base64);
 }
 
-void edwMakeAccess(char *password, char access[EDW_ACCESS_SIZE])
-/* Convert password + salt to an access code */
+void edwMakeSid(char *user, char sid[EDW_SID_SIZE])
+/* Convert users to sid */
 {
 /* Salt it well with stuff that is reproducible but hard to guess, and some
- * one time true random stuff. Sneak in password too. */
+ * one time true random stuff. Sneak in user too and time. */
 unsigned char inputBuf[512];
 memset(inputBuf, 0, sizeof(inputBuf));
 int i;
 for (i=0; i<ArraySize(inputBuf); i += 2)
     {
-    inputBuf[i] = i ^ 0x3f;
-    inputBuf[i+1] = -i*i;
+    inputBuf[i] = i ^ 0x29;
+    inputBuf[i+1] = ~i;
     }
 safef((char*)inputBuf, sizeof(inputBuf), 
-    "f186ed79bae8MNKLKEDSP*O:OHe364d73%s<*#$*(#)!DSDFOUIHLjksdfOP:J>KEJWYGk",
-    password);
-makeShaBase64(inputBuf, sizeof(inputBuf), access);
+	"186ED79BAEXzeusdioIsdklnw88e86cd73%s<*#$*(#)!DSDFOUIHLjksdf", user);
+makeShaBase64(inputBuf, sizeof(inputBuf), sid);
 }
 
-#define edwMaxUserNameSize 128     /* Maximum size of an email handle */
-
-int edwCheckUserNameSize(char *user)
-/* Make sure user name not too long. Returns size or aborts if too long. */
+static void edwVerifySid(char *user, char *sidToCheck)
+/* Make sure sid/user combo is good. */
 {
-int size = strlen(user);
-if (size > edwMaxUserNameSize)
-   errAbort("size of user name too long: %s", user);
-return size;
+char sid[EDW_SID_SIZE];
+edwMakeSid(user, sid);
+if (sidToCheck == NULL || memcmp(sidToCheck, sid, EDW_SID_SIZE) != 0)
+    errAbort("Authentication failed, sid %s", (sidToCheck ? "fail" : "miss"));
 }
 
-int edwCheckAccess(struct sqlConnection *conn, char *user, char *password)
-/* Make sure user exists and password checks out. Returns (non-zero) user ID on success*/
+char *edwGetEmailAndVerify()
+/* Get email from persona-managed cookies and validate them.
+ * Return email address if all is good and user is logged in.
+ * If user not logged in return NULL.  If user logged in but
+ * otherwise things are wrong abort. */
 {
-/* Make escaped version of email string since it may be raw user input. */
-int nameSize  = edwCheckUserNameSize(user);
-char escapedUser[2*nameSize+1];
-sqlEscapeString2(escapedUser, user);
-
-char access[EDW_ACCESS_SIZE];
-edwMakeAccess(password, access);
-
-char query[256];
-safef(query, sizeof(query), "select access,id from edwUser where name='%s'", escapedUser);
-struct sqlResult *sr = sqlGetResult(conn, query);
-int userId = 0;
-char **row;
-if ((row = sqlNextRow(sr)) != NULL)
+char *email = findCookieData("email");
+if (email)
     {
-    if (memcmp(row[0], access, sizeof(access)) == 0)
-	{
-	userId = sqlUnsigned(row[1]);
-	}
+    char *sid = findCookieData("sid");
+    edwVerifySid(email, sid);
     }
-sqlFreeResult(&sr);
-return userId;
+return email;
 }
 
-int edwMustHaveAccess(struct sqlConnection *conn, char *user, char *password)
-/* Check user has access and abort with an error message if not. Returns user id. */
-{
-int id = edwCheckAccess(conn, user, password);
-if (id == 0)
-    errAbort("User/password combination doesn't give access to database");
-return id;
-}
 
 struct edwUser *edwUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with that email or NULL if not found */
@@ -207,26 +223,12 @@ struct edwUser *edwMustGetUserFromEmail(struct sqlConnection *conn, char *email)
 {
 struct edwUser *user = edwUserFromEmail(conn, email);
 if (user == NULL)
-    errAbort("No user exists with email %s.", email);
+    errAbort("No user exists with email %s.  If you need an account please contact your "
+             "ENCODE DCC data wrangler, or someone you know who already does have an "
+	     "ENCODE Data Warehouse account, and have them create an account for you with "
+	     "http://%s/cgi-bin/edwWebCreateUser"
+	     , email, getenv("SERVER_NAME"));
 return user;
-}
-
-void edwMakeSid(char *user, char sid[EDW_ACCESS_SIZE])
-/* Convert users to sid */
-{
-/* Salt it well with stuff that is reproducible but hard to guess, and some
- * one time true random stuff. Sneak in user too and time. */
-unsigned char inputBuf[512];
-memset(inputBuf, 0, sizeof(inputBuf));
-int i;
-for (i=0; i<ArraySize(inputBuf); i += 2)
-    {
-    inputBuf[i] = i ^ 0x29;
-    inputBuf[i+1] = ~i;
-    }
-safef((char*)inputBuf, sizeof(inputBuf), 
-	"186ED79BAEXzeusdioIsdklnw88e86cd73%s<*#$*(#)!DSDFOUIHLjksdf", user);
-makeShaBase64(inputBuf, sizeof(inputBuf), sid);
 }
 
 int edwGetHost(struct sqlConnection *conn, char *hostName)
@@ -705,5 +707,126 @@ char query[128 + escapedSize];
 safef(query, sizeof(query), 
     "select * from edwSubmit where url='%s' order by id desc limit 1", escapedUrl);
 return edwSubmitLoadByQuery(conn, query);
+}
+
+long long edwSubmitMaxStartTime(struct edwSubmit *submit, struct sqlConnection *conn)
+/* Figure out when we started most recent single file in the upload, or when
+ * we started if not files started yet. */
+{
+char query[256];
+safef(query, sizeof(query), 
+    "select max(startUploadTime) from edwFile where submitId=%u", submit->id);
+long long maxStartTime = sqlQuickLongLong(conn, query);
+if (maxStartTime == 0)
+    maxStartTime = submit->startUploadTime;
+return maxStartTime;
+}
+
+int edwSubmitCountNewValid(struct edwSubmit *submit, struct sqlConnection *conn)
+/* Count number of new files in submission that have been validated. */
+{
+char query[256];
+safef(query, sizeof(query), 
+    "select count(*) from edwFile e,edwValidFile v where e.id = v.fileId and e.submitId=%u",
+    submit->id);
+return sqlQuickNum(conn, query);
+}
+
+struct edwValidFile *edwFindElderReplicates(struct sqlConnection *conn, struct edwValidFile *vf)
+/* Find all replicates of same output and format type for experiment that are elder
+ * (fileId less than your file Id).  Younger replicates are responsible for taking care 
+ * of correlations with older ones.  Sorry younguns, it's like social security. */
+{
+if (sameString(vf->format, "unknown"))
+    return NULL;
+char query[256];
+safef(query, sizeof(query), 
+    "select * from edwValidFile where id<%d and experiment='%s' and format='%s'"
+    " and outputType='%s'"
+    , vf->id, vf->experiment, vf->format, vf->outputType);
+return edwValidFileLoadByQuery(conn, query);
+}
+
+void edwWebHeaderWithPersona(char *title)
+/* Print out HTTP and HTML header through <BODY> tag with persona info */
+{
+printf("Content-Type:text/html\r\n");
+printf("\r\n\r\n");
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
+printf("<HTML><HEAD><TITLE>%s</TITLE>\n", title);
+puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
+puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
+puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
+puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
+puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
+puts("</HEAD><BODY>");
+}
+
+void edwWebFooterWithPersona()
+/* Print out end tags and persona script stuff */
+{
+htmlEnd();
+}
+
+
+void edwCreateNewUser(char *email)
+/* Create new user, checking that user does not already exist. */
+{
+/* Now make sure user is not already in user table. */
+struct sqlConnection *conn = edwConnectReadWrite();
+struct dyString *query = dyStringNew(0);
+char *escapedEmail = sqlEscapeString(email);
+dyStringPrintf(query, "select count(*) from edwUser where email = '%s'", escapedEmail);
+if (sqlQuickNum(conn, query->string) > 0)
+    errAbort("User %s already exists", email);
+
+/* Do database insert. */
+dyStringClear(query);
+dyStringPrintf(query, "insert into edwUser (email) values('%s')", escapedEmail);
+sqlUpdate(conn, query->string);
+
+sqlDisconnect(&conn);
+}
+
+void edwPrintLogOutButton()
+/* Print log out button */
+{
+printf("<INPUT TYPE=button NAME=\"signOut\" VALUE=\"sign out\" id=\"signout\">");
+}
+
+struct dyString *edwFormatDuration(long long seconds)
+/* Convert seconds to days/hours/minutes. Return result in a dyString you can free */
+{
+struct dyString *dy = dyStringNew(0);
+int days = seconds/(3600*24);
+if (days > 0)
+    dyStringPrintf(dy, "%d days, ", days);
+seconds -= days*3600*24;
+
+int hours = seconds/3600;
+if (hours > 0)
+    dyStringPrintf(dy, "%d hours", hours);
+seconds -= hours*3600;
+
+if (days == 0)
+    {
+    int minutes = seconds/60;
+    if (minutes > 0)
+	{
+	if (hours > 0)
+	   dyStringPrintf(dy, ", ");
+	dyStringPrintf(dy, "%d minutes", minutes);
+	}
+
+    if (hours == 0)
+	{
+	if (minutes > 0)
+	   dyStringPrintf(dy, ", ");
+	seconds -= minutes*60;
+	dyStringPrintf(dy, "%d seconds", (int)seconds);
+	}
+    }
+return dy;
 }
 

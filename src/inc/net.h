@@ -43,6 +43,10 @@ FILE *netFileFromSocket(int socket);
 /* Wrap a FILE around socket.  This should be fclose'd
  * and separately the socket close'd. */
 
+int netWaitForData(int sd, int microseconds);
+/* Wait for descriptor to have some data to read, up to given number of
+ * number of microseconds.  Returns amount of data there or zero if timed out. */
+
 void netBlockBrokenPipes();
 /* Make it so a broken pipe doesn't kill us. */
 

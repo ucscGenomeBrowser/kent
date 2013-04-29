@@ -26,7 +26,7 @@ struct annoGrator
     struct annoStreamer streamer;	// external annoStreamer interface
 
     // Public method that makes this a 'grator:
-    struct annoRow *(*integrate)(struct annoGrator *self, struct annoRow *primaryRow,
+    struct annoRow *(*integrate)(struct annoGrator *self, struct annoStreamRows *primaryData,
 				 boolean *retRJFilterFailed, struct lm *callerLm);
     /* Integrate internal source's data with single row of primary source's data */
 
@@ -49,7 +49,7 @@ struct annoGrator
 
 // ---------------------- annoGrator default methods -----------------------
 
-struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
+struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoStreamRows *primaryData,
 				    boolean *retRJFilterFailed, struct lm *callerLm);
 /* Given a single row from the primary source, get all overlapping rows from internal
  * source, and produce joined output rows.  Use callerLm to allocate the output rows.

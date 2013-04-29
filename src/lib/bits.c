@@ -329,6 +329,31 @@ while (--byteCount >= 0)
     }
 }
 
+void bitReverseRange(Bits *bits, int startIx, int bitCount)
+// Reverses bits in range (e.g. 110010 becomes 010011)
+{
+if (bitCount <= 0)
+    return;
+int ixA = startIx;
+int ixB = (startIx + bitCount - 1);
+for ( ;ixA < ixB; ixA++, ixB--)
+    {
+    boolean bitA = bitReadOne(bits, ixA);
+    boolean bitB = bitReadOne(bits, ixB);
+    if (!bitA && bitB)
+        {
+        bitSetOne(  bits, ixA);
+        bitClearOne(bits, ixB);
+        }
+    else if (bitA && !bitB)
+        {
+        bitClearOne(bits, ixA);
+        bitSetOne(  bits, ixB);
+        }
+    }
+}
+
+
 void bitPrint(Bits *a, int startIx, int bitCount, FILE* out)
 /* Print part or all of bit map as a string of 0s and 1s.  Mostly useful for
  * debugging */
@@ -342,5 +367,51 @@ for (i = startIx; i < bitCount; i++)
         fputc('0', out);
     }
 fputc('\n', out);
+}
+
+void bitsOut(FILE* out, Bits *bits, int startIx, int bitCount, boolean onlyOnes)
+// Print part or all of bit map as a string of 0s and 1s.  Optionally only print 1s and [bracket].
+{
+if (onlyOnes)
+    fputc('[', out);
+
+int ix = startIx;
+for ( ; ix < bitCount; ix++)
+    {
+    if (bitReadOne(bits, ix))
+        fputc('1', out);
+    else
+        {
+        if (onlyOnes)
+            fputc(' ', out);
+        else
+            fputc('0', out);
+        }
+    }
+if (onlyOnes)
+    fputc(']', out);
+}
+
+Bits *bitsIn(struct lm *lm,char *bitString, int len)
+// Returns a bitmap from a string of 1s and 0s.  Any non-zero, non-blank char sets a bit.
+// Returned bitmap is the size of len even if that is longer than the string.
+// Optionally supply local memory.
+{
+if (bitString == NULL || len == 0)
+    return NULL;
+
+Bits *bits = NULL;
+if (lm != NULL)
+    bits = lmBitAlloc(lm,len);
+else
+    bits = bitAlloc(len);
+
+int ix = 0;
+for ( ;ix < len && bitString[ix] != '\0'; ix++)
+    {
+    if (bitString[ix] != '0' && bitString[ix] != ' ')
+        bitSetOne(bits, ix);
+    }
+return bits;
 }
 

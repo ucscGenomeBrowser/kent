@@ -9,6 +9,9 @@
 #include "output/mainTest.h"
 
 
+
+char *ptCommaSepFieldNames = "x,y";
+
 struct pt *ptLoad(char **row)
 /* Load a pt from row fetched with select * from pt
  * from database.  Dispose of this with ptFree(). */
@@ -80,6 +83,9 @@ fputc(sep,f);
 fprintf(f, "%d", el->y);
 fputc(lastSep,f);
 }
+
+
+char *pointCommaSepFieldNames = "acc,x,y,z,pt";
 
 struct point *pointLoad(char **row)
 /* Load a point from row fetched with select * from point
@@ -198,6 +204,9 @@ ptCommaOut(&el->pt,f);
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
+
+
+char *polygonCommaSepFieldNames = "id,pointCount,points,persp";
 
 struct polygon *polygonLoad(char **row)
 /* Load a polygon from row fetched with select * from polygon
@@ -382,6 +391,9 @@ int i;
 }
 fputc(lastSep,f);
 }
+
+
+char *polyhedronCommaSepFieldNames = "id,names,polygonCount,polygons,screenBox";
 
 struct polyhedron *polyhedronLoad(char **row)
 /* Load a polyhedron from row fetched with select * from polyhedron
@@ -594,6 +606,9 @@ int i;
 fputc(lastSep,f);
 }
 
+
+char *twoPointCommaSepFieldNames = "name,a,b,points";
+
 struct twoPoint *twoPointLoad(char **row)
 /* Load a twoPoint from row fetched with select * from twoPoint
  * from database.  Dispose of this with twoPointFree(). */
@@ -730,6 +745,9 @@ int i;
 }
 fputc(lastSep,f);
 }
+
+
+char *stringArrayCommaSepFieldNames = "numNames,names";
 
 struct stringArray *stringArrayLoad(char **row)
 /* Load a stringArray from row fetched with select * from stringArray

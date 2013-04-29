@@ -18,6 +18,7 @@
 #include "errCatch.h"
 #include "obscure.h"
 #include "hgConfig.h"
+#include "grp.h"
 
 
 boolean isHubTrack(char *trackName)
@@ -641,8 +642,7 @@ else if (tHub != NULL)
 hDisconnectCentral(&conn);
 }
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database,
-	struct trackHub **pHubList)
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database)
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
 {
@@ -660,10 +660,63 @@ if (trackHub != NULL)
 	tdbList = trackDbPolishAfterLinkup(tdbList, database);
 	trackDbPrioritizeContainerItems(tdbList);
 	trackHubPolishTrackNames(trackHub, tdbList);
-	if (tdbList != NULL)
-	    slAddHead(pHubList, trackHub);
 	}
     }
+return tdbList;
+}
+
+static struct grp *grpFromHub(struct hubConnectStatus *hub)
+/* Make up a grp structur from hub */
+{
+struct grp *grp;
+AllocVar(grp);
+char name[16];
+safef(name, sizeof(name), "hub_%d", hub->id);
+grp->name = cloneString(name);
+grp->label = cloneString(hub->trackHub->shortLabel);
+return grp;
+}
+
+struct trackDb *hubCollectTracks( char *database,  struct grp **pGroupList)
+/* Generate trackDb structures for all the tracks in attached hubs.  
+ * Make grp structures for each hub. */
+{
+struct hubConnectStatus *hub, *hubList =  hubConnectGetHubs();
+struct trackDb *tdbList = NULL;
+for (hub = hubList; hub != NULL; hub = hub->next)
+    {
+    if (isEmpty(hub->errorMessage))
+	{
+        /* error catching in so it won't just abort  */
+        struct errCatch *errCatch = errCatchNew();
+        if (errCatchStart(errCatch))
+	    {
+	    struct trackDb *thisList = hubAddTracks(hub, database);
+	    tdbList = slCat(tdbList, thisList);
+	    }
+        errCatchEnd(errCatch);
+        if (errCatch->gotError)
+	    {
+	    warn("%s", errCatch->message->string);
+	    hubUpdateStatus( errCatch->message->string, hub);
+	    }
+	else
+	    {
+	    if (!trackHubDatabase(database))
+		{
+		struct grp *grp = grpFromHub(hub);
+		slAddHead(pGroupList, grp);
+		}
+	    hubUpdateStatus(NULL, hub);
+	    }
+
+	// we're going to free the hubConnectStatus list
+	hub->trackHub = NULL;
+        errCatchFree(&errCatch);
+	}
+    }
+hubConnectStatusFreeList(&hubList);
+
 return tdbList;
 }
 

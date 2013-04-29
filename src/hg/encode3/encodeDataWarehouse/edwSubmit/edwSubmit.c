@@ -585,21 +585,38 @@ if (old == NULL)
 /* See if we have something in progress, meaning started but not ended. */
 if (old->endUploadTime == 0 && isEmpty(old->errorMessage))
     {
-    /* Figure out when we started most recent single file in the upload, or when
-     * we started if not files started yet. */
-    char query[256];
-    safef(query, sizeof(query), 
-	"select max(startUploadTime) from edwFile where submitId=%u", old->id);
-    long long maxStartTime = sqlQuickLongLong(conn, query);
-    if (maxStartTime == 0)
-	maxStartTime = old->startUploadTime;
-
-    /* Check against our usual time out. */
+    /* Check submission last alive time against our usual time out. */
+    long long maxStartTime = edwSubmitMaxStartTime(old, conn);
     if (edwNow() - maxStartTime < edwSingleFileTimeout)
         errAbort("Submission of %s already is in progress.  Please come back in an hour", url);
     }
-
 edwSubmitFree(&old);
+}
+
+static void getSubmittedFile(struct sqlConnection *conn, struct edwFile *bf,  
+    char *submitDir, char *submitUrl, int submitId)
+/* We know the submission, we know what the file is supposed to look like.  Fetch it.
+ * If things go badly catch the error, attach it to the submission record, and then
+ * keep throwing. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    int hostId=0, submitDirId = 0;
+    int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
+	&hostId, &submitDirId);
+    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
+    close(fd);
+    edwAddQaJob(conn, fileId);
+    tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    handleSubmitError(conn, submitId, errCatch->message->string);
+    /* The handleSubmitError will keep on throwing. */
+    }
+errCatchFree(&errCatch);
 }
 
 void edwSubmit(char *submitUrl, char *email)
@@ -617,13 +634,9 @@ submitDir[submitDirSize] = 0;  // Add trailing zero
 
 
 /* Make sure user has access. */
-struct sqlConnection *conn = sqlConnectProfile(edwDatabase, edwDatabase);
+struct sqlConnection *conn = edwConnectReadWrite();
 struct edwUser *user = edwMustGetUserFromEmail(conn, email);
 int userId = user->id;
-
-#ifdef OLD
-int userId =  edwMustHaveAccess(conn, user, password);
-#endif /* OLD */
 
 /* See if we are already running on same submission.  If so council patience and quit. */
 notOverlappingSelf(conn, submitUrl);
@@ -715,6 +728,7 @@ errCatchFree(&errCatch);
 /* If we made it here the validated submit file itself got transfered and parses out
  * correctly.   */
 
+
 /* Weed out files we already have. */
 int oldCount = 0;
 long long oldBytes = 0, newBytes = 0, byteCount = 0;
@@ -756,20 +770,14 @@ for (bf = newList; bf != NULL; bf = bf->next)
 	if (edwGettingFile(conn, submitDir, bf->submitFileName) < 0)
 	    {
 	    verbose(1, "Fetching %s\n", bf->submitFileName);
-	    int hostId=0, submitDirId = 0;
-	    int fd = edwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
-		&hostId, &submitDirId);
-	    int fileId = edwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId);
-	    close(fd);
+	    getSubmittedFile(conn, bf, submitDir, submitUrl, submitId);
 	    newBytes += bf->size;
 	    safef(query, sizeof(query), 
 		"update edwSubmit set newFiles=newFiles+1,newBytes=%lld where id=%d", 
 		newBytes, submitId);
 	    sqlUpdate(conn, query);
-
-	    edwAddQaJob(conn, fileId);
-	    tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
 	    }
+
 	}
     else
 	{

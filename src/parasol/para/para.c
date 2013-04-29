@@ -1071,7 +1071,7 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     if (startsWith("Sick Batch:", line))
 	{
 	sickBatch = TRUE;
-	warn(line);
+	warn("%s", line);
 	freez(&lineEl->val);
 	continue;
 	}
@@ -1597,7 +1597,7 @@ time_t now = time(NULL);
 
 markQueuedJobs(db);
 markRunJobStatus(db);
-printf(jobStatusHdr);
+printf("%s", jobStatusHdr);
 for (job = db->jobList; job != NULL; job = job->next)
     paraJobStatus(job, now);
 }

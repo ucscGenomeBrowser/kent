@@ -53,7 +53,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     genomeRangeTreeFile.o genomicDups.o \
     genomicSuperDups.o geoMirror.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o gpFx.o \
-    growthCondition.o grp.o gwasCatalog.o \
+    growthCondition.o grp.o gwasCatalog.o haplotypes.o \
     hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
     hapmapSnps.o hapmapSnpsCombined.o \
     hCommon.o \
@@ -77,7 +77,6 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rangeTreeFile.o rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
-    rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o \
     rgdQtl.o riken.o rhMapZfishInfo.o rikenBest.o rikenCluster.o rmskOut.o \
     rnaFold.o rnaGene.o rnaGroup.o rnaHybridization.o rnaPLFold.o tRNAs.o gbRNAs.o snoRNAs.o lowelabPfamHit.o lowelabArkinOperonScore.o lowelabTIGROperonScore.o \
     rnaSecStr.o tfbsConsFactors.o \

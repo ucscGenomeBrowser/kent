@@ -1,4 +1,7 @@
-/* soTerm.h --- Sequence Ontology terms and supporting data structures */
+/* soTerm.h --- a subset of locally used Sequence Ontology terms */
+
+// To explore the full tree of SO terms and their relationships, try the MISO browser:
+// http://www.sequenceontology.org/browser/obob.cgi
 
 // would be nice to more closely match Ensembl's subset of SO:
 // http://uswest.ensembl.org/info/docs/variation/predicted_data.html#consequences
@@ -36,44 +39,6 @@ enum soTerm	// the various variant effects
     synonymous_variant=1819,
     inframe_insertion=1821,
     inframe_deletion=1822,
-    };
-
-struct soCall  // a single variant effect call
-    {
-    struct soCall *next;
-    char *transcript;		// ID of feature affected by this call
-    uint    soNumber;           // Sequence Ontology Number of effect
-    union
-	{
-	struct codingChange     // (non)synonymous variant, deletions in CDS
-	    {
-	    uint exonNumber;
-
-	    // the next three should have a length specified too
-	    uint cDnaPosition;		// offset of variant in transcript cDNA
-	    uint cdsPosition;		// offset of variant from transcript's cds start
-	    uint pepPosition;		// offset of variant in translated product
-	    char *aaOld;		// peptides, before change by variant (starting at pepPos)
-	    char *aaNew;		// peptides, changed by variant
-	    char *codonOld;		// codons, before change by variant (starting at cdsPos)
-	    char *codonNew;		// codons, changed by variant
-	    } codingChange;
-	struct     // intron_variant
-	    {
-	    uint intronNumber;
-	    } intron;
-	struct    // a generic variant
-	    {
-	    char    *soOther0;           // Ancillary detail 0
-	    char    *soOther1;           // Ancillary detail 1
-	    char    *soOther2;           // Ancillary detail 2
-	    char    *soOther3;           // Ancillary detail 3
-	    char    *soOther4;           // Ancillary detail 4
-	    char    *soOther5;           // Ancillary detail 5
-	    char    *soOther6;           // Ancillary detail 6
-	    char    *soOther7;           // Ancillary detail 7
-	    } generic;
-	} sub;
     };
 
 char *soTermToString(enum soTerm termNumber);

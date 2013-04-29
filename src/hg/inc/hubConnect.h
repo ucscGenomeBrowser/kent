@@ -129,8 +129,7 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub);
 boolean trackHubHasDatabase(struct trackHub *hub, char *database) ;
 /* Return TRUE if hub has contents for database */
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, 
-    struct trackHub **pHubList);
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database);
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
 
@@ -139,5 +138,9 @@ struct hubConnectStatus *hubConnectLoadHubs(struct cart *cart);
 
 struct hubConnectStatus *hubConnectGetHubs();
 /* return the static global to the track data hubs */
+
+struct trackDb *hubCollectTracks( char *database, struct grp **pGroupList);
+/* Generate trackDb structures for all the tracks in attached hubs.  
+ * Make grp structures for each hub. */
 
 #endif /* HUBCONNECT_H */

@@ -27,7 +27,7 @@ struct annoStreamer
 
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
     /* Set genomic region for query; if chrom is NULL, region is whole genome.
-     * This must called on all annoGrator components in query, not a subset. */
+     * This must be called on all annoGrator components in query, not a subset. */
 
     char *(*getHeader)(struct annoStreamer *self);
     /* Get the file header as a string (possibly NULL, possibly multi-line). */
@@ -53,6 +53,13 @@ struct annoStreamer
     boolean positionIsGenome;		// True if doing a whole-genome query
     enum annoRowType rowType;		// Type of annotations (words or wiggle data)
     int numCols;			// For word-based annotations, number of words/columns
+    };
+
+struct annoStreamRows
+/* An annoStreamer and (possibly NULL) list of rows it generated. */
+    {
+    struct annoStreamer *streamer;	// annoStreamer interface for metadata about row data
+    struct annoRow *rowList;		// row data
     };
 
 // ---------------------- annoStreamer default methods -----------------------
@@ -92,5 +99,12 @@ boolean annoStreamerFindBed3Columns(struct annoStreamer *self,
  * Set ret*Ix to list index of each column if found, or -1 if not found.
  * Set ret*Field to column name if found, or NULL if not found.
  * If all three are found, return TRUE; otherwise return FALSE. */
+
+// -----------------------------------------------------------------------------
+
+struct annoStreamRows *annoStreamRowsNew(struct annoStreamer *streamerList);
+/* Returns an array of aSR, one for each streamer in streamerList.
+ * Typically array is reused by overwriting elements' rowList pointers.
+ * Free array when done. */
 
 #endif//ndef ANNOSTREAMER_H

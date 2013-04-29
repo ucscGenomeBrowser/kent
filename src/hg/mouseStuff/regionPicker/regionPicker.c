@@ -551,7 +551,7 @@ for (consIx=strataCount-1; consIx>=0; --consIx)
 		cs, round(100*genoCuts[consIx]),
 		gs, round(100*genoCuts[geneIx]));
 	    }
-	shuffleList(&strata[consIx][geneIx], 20);
+	shuffleList(&strata[consIx][geneIx]);
 	pickIx = 0;
 	for (win = strata[consIx][geneIx]; win != NULL; win = win->next)
 	    {
