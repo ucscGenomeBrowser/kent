@@ -473,7 +473,7 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 
 safef(subject, sizeof(subject),"Your user name at the %s", brwName);
 safef(msg, sizeof(msg), 
-    "Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at %s: \n\n  %s\n\n%s\n%s", 
+    "Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at the %s: \n\n  %s\n\n%s\n%s", 
    remoteAddr, brwName, users, signature, returnAddr);
 sendMailOut(email, subject, msg);
 }
