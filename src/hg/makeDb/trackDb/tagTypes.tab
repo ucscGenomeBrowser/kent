@@ -217,6 +217,7 @@ maxScore broadPeak narrowPeak
 maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR genepred vcfTabix
 maxWindowToQuery bigWig bed bedlogR
 metadata *
+mouseOverField bigBed
 mgiUrl bed
 mgiUrlLabel bed
 minGrayLevel bed broadPeak narrowPeak bedLogR

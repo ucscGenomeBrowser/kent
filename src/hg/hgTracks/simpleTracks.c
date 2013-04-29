@@ -7623,6 +7623,7 @@ for (lf = lfList; lf != NULL; lf = lf->next)
     hvGfxTextRight(hvg, xOff, y, width - 1,
 	itemHeight, color, font, tg->itemName(tg, lf));
     }
+    track->bigBedraLeftLabels = bigBedLeftLabels;
     */
 }
 
