@@ -642,8 +642,7 @@ else if (tHub != NULL)
 hDisconnectCentral(&conn);
 }
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database,
-	struct trackHub **pHubList)
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database)
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
 {
@@ -661,8 +660,6 @@ if (trackHub != NULL)
 	tdbList = trackDbPolishAfterLinkup(tdbList, database);
 	trackDbPrioritizeContainerItems(tdbList);
 	trackHubPolishTrackNames(trackHub, tdbList);
-	if (tdbList != NULL)
-	    slAddHead(pHubList, trackHub);
 	}
     }
 return tdbList;
@@ -680,7 +677,7 @@ grp->label = cloneString(hub->trackHub->shortLabel);
 return grp;
 }
 
-struct trackDb *hubCollectTracks( char *database, struct trackHub **pHubList, struct grp **pGroupList)
+struct trackDb *hubCollectTracks( char *database,  struct grp **pGroupList)
 /* Generate trackDb structures for all the tracks in attached hubs.  
  * Make grp structures for each hub. */
 {
@@ -694,7 +691,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
 	    {
-	    struct trackDb *thisList = hubAddTracks(hub, database, pHubList);
+	    struct trackDb *thisList = hubAddTracks(hub, database);
 	    tdbList = slCat(tdbList, thisList);
 	    }
         errCatchEnd(errCatch);
