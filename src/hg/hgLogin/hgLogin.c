@@ -538,9 +538,9 @@ char subject[256];
 char msg[4096];
 char *remoteAddr=getenv("REMOTE_ADDR");
 
-safef(subject, sizeof(subject),"New temporary password for %s", username);
+safef(subject, sizeof(subject),"New temporary password for your account at the %s", brwName);
 safef(msg, sizeof(msg),
-    "Someone (probably you, from IP address %s) requested a new password for %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
+    "\n  Someone (probably you, from IP address %s) requested a new password for the %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
     remoteAddr, brwName, brwAddr, username, password, signature, returnAddr);
 sendPwdMailOut(email, subject, msg, username);
 }
