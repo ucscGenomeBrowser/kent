@@ -15,6 +15,7 @@ void usage()
 {
 errAbort(
   "edwRunner - Runs pending jobs in edwJob table.\n"
+  "REPLACED BY edwRunDaemon\n"
   "usage:\n"
   "   edwRunner now\n"
   "options:\n"

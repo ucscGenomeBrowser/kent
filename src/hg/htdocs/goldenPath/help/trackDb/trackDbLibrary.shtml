@@ -610,7 +610,7 @@
     when the user's mouse pointer hovers over the icon.</LI>
     </UL>
     <P><B>Example:</B></P>
-    <pre>    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"</pre>
+    <pre>    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"</pre>
 </DIV>
 
 <DIV class="priority"><span class="types all"></span>

@@ -373,14 +373,13 @@ cartRemove(theCart, "hubId");
 static void checkTrackDbs(struct hubConnectStatus *hubList)
 {
 struct hubConnectStatus *hub = hubList;
-struct trackHub *trackHubList = NULL;
 
 for(; hub; hub = hub->next)
     {
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-	hubAddTracks(hub, database, &trackHubList);
+	hubAddTracks(hub, database);
 	}
     errCatchEnd(errCatch);
     if (errCatch->gotError)

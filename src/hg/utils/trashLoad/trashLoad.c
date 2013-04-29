@@ -118,6 +118,8 @@ long et = clock1000() - beginLoadTest;
 double bytesPerSecond = (double)bytesWritten/(double)((double)et/1000.0);
 verbose(1, "# %lld total bytes written in %lld files\n", bytesWritten, numFiles);
 verbose(1, "# trash load test total run time: %ld millis, %.0f bytes per second\n", et, bytesPerSecond);
+verbose(1, "# %lld\t%lld\t%ld\t%.0f\n", numFiles, bytesWritten, et, bytesPerSecond);
+verbose(1, "# files\tbytes\tmillis\tbytes/sec\n");
 }
 
 int main(int argc, char *argv[])

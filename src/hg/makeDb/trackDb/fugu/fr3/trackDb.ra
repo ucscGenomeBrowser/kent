@@ -17,7 +17,7 @@ searchPriority 8
 
 track ensGene override
 origAssembly fr2
-pennantIcon 2.jpg ../goldenPath/help/fr2ToFr3LiftOver.html "lifted from fr2"
+pennantIcon 2.jpg ../goldenPath/help/liftOver.html "lifted from fr2"
 
 track cons8way
 compositeTrack on

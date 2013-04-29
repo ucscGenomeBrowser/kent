@@ -257,20 +257,7 @@ if (s != NULL)
     }
 }
 
-struct grp *grpFromHub(struct hubConnectStatus *hub)
-/* Make up a grp structur from hub */
-{
-struct grp *grp;
-AllocVar(grp);
-char name[16];
-safef(name, sizeof(name), "hub_%d", hub->id);
-grp->name = cloneString(name);
-grp->label = cloneString(hub->trackHub->shortLabel);
-return grp;
-}
-
-static struct trackDb *getFullTrackList(struct hubConnectStatus *hubList, struct grp **pHubGroups)
-/* Get all tracks including custom tracks if any. */
+static struct trackDb *getFullTrackList(struct grp **pHubGroups)
 {
 struct trackDb *list = hTrackDb(database);
 struct customTrack *ctList, *ct;
@@ -302,43 +289,8 @@ list = newList;
 if (wikiTrackEnabled(database, NULL))
     wikiTrackDb(&list);
 
-/* Add hub tracks. */
-struct hubConnectStatus *hubStatus;
-for (hubStatus = hubList; hubStatus != NULL; hubStatus = hubStatus->next)
-    {
-    /* Load trackDb.ra file and make it into proper trackDb tree */
-    char hubName[64];
-    safef(hubName, sizeof(hubName), "hub_%d", hubStatus->id);
-
-    struct trackHub *hub = hubStatus->trackHub;
-    if (hub != NULL)
-	{
-	hub->name = cloneString(hubName);
-	struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-	if (hubGenome != NULL)
-	    {
-	    struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
-	    tdbList = trackDbLinkUpGenerations(tdbList);
-	    tdbList = trackDbPolishAfterLinkup(tdbList, database);
-	    trackDbPrioritizeContainerItems(tdbList);
-	    if (tdbList != NULL)
-		{
-		list = slCat(list, tdbList);
-		// we don't add the hub group if the database
-		// is a assembly hub since they have their own groups
-		if (!trackHubDatabase(database))
-		    {
-		    struct grp *grp = grpFromHub(hubStatus);
-		    slAddHead(pHubGroups, grp);
-		    }
-		}
-	    }
-	
-	// clear this so it isn't free'd later
-	hubStatus->trackHub = NULL;
-	}
-    }
-slReverse(pHubGroups);
+struct trackDb *tdbList = hubCollectTracks(database, pHubGroups);
+list = slCat(list, tdbList);
 
 /* Create dummy group for custom tracks if any. Add custom tracks to list */
 ctList = getCustomTracks();
@@ -1972,9 +1924,8 @@ void initGroupsTracksTables()
  * containing all tracks and all tables. Set global variables that correspond
  * to the group, track, and table specified in the cart. */
 {
-struct hubConnectStatus *hubList = hubConnectGetHubs();
 struct grp *hubGrpList = NULL;
-fullTrackList = getFullTrackList(hubList, &hubGrpList);
+fullTrackList = getFullTrackList( &hubGrpList);
 fullTrackHash = hashTrackList(fullTrackList);
 fullTableToTdbHash = hashNew(0);
 rAddTablesToHash(fullTrackList, fullTableToTdbHash);

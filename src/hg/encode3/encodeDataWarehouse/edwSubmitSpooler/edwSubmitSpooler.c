@@ -16,6 +16,7 @@ void usage()
 {
 errAbort(
   "edwSubmitSpooler - A little program that just handles reading a URL from a file and feeding it to edwSubmit\n"
+  "REPLACED BY edwRunDaemon\n"
   "usage:\n"
   "   edwSubmitSpooler spoolFifo\n"
   "options:\n"

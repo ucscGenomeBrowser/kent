@@ -198,6 +198,8 @@ static void afVepPrintExistingVar(struct annoFormatVep *self,
 {
 if (self->snpNameIx >= 0)
     {
+    if (gratorCount < 2 || gratorData[1].streamer != self->config->snpSource)
+	errAbort("annoFormatVep: config error, snpSource is not where expected");
     struct annoRow *snpRows = gratorData[1].rowList, *row;
     if (snpRows != NULL)
 	{
