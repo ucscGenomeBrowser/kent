@@ -3416,36 +3416,12 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
+void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList, struct grp **pGrpList)
 /* Load up stuff from data hubs and append to lists. */
 {
-struct hubConnectStatus *hub, *hubList =  hubConnectGetHubs();
-for (hub = hubList; hub != NULL; hub = hub->next)
-    {
-    if (isEmpty(hub->errorMessage))
-	{
+struct trackDb *tdbList = hubCollectTracks(database, pHubList, pGrpList);
 
-        /* error catching in so it won't just abort  */
-        struct errCatch *errCatch = errCatchNew();
-        if (errCatchStart(errCatch))
-	    {
-	    struct trackDb *tdbList = hubAddTracks(hub, database, pHubList);
-	    addTdbListToTrackList(tdbList, NULL, pTrackList);
-	    // we're going to free the hubConnectStatus list
-            hub->trackHub = NULL;
-	    }
-        errCatchEnd(errCatch);
-        if (errCatch->gotError)
-	    {
-	    warn("%s", errCatch->message->string);
-	    hubUpdateStatus( errCatch->message->string, hub);
-	    }
-	else
-	    hubUpdateStatus(NULL, hub);
-        errCatchFree(&errCatch);
-	}
-    }
-hubConnectStatusFreeList(&hubList);
+addTdbListToTrackList(tdbList, NULL, pTrackList);
 }
 
 boolean restrictionEnzymesOk()
@@ -3493,7 +3469,7 @@ for ( ;subtrack != NULL;subtrack = subtrack->next)
 }
 
 static void groupTracks(struct trackHub *hubList, struct track **pTrackList,
-	struct group **pGroupList, int vis)
+	struct group **pGroupList, struct grp *grpList, int vis)
 /* Make up groups and assign tracks to groups.
  * If vis is -1, restore default groups to tracks. */
 {
@@ -3534,34 +3510,28 @@ for (grp = grps; grp != NULL; grp = grp->next)
     }
 grpFreeList(&grps);
 
-/* build group objects from hub */
+double priorityInc;
+double priority;
+if (grpList)
     {
-    int count = slCount(hubList);
-
-    if (count) // if we have track hubs
-	{
-	slSort(&hubList, hubCmpAlpha);	// alphabetize
-	minPriority -= 1.0;             // priority is 1-based
-	// the idea here is to get enough room between priority 1
-        // (which is custom tracks) and the group with the next
-	// priority number, so that the hub nestle inbetween the
-	// custom tracks and everything else at the top of the list
-	// of track groups
-	double priorityInc = (0.9 * minPriority) / count;
-	double priority = 1.0 + priorityInc;
-
-	struct trackHub *hub;
-	for (hub = hubList; hub != NULL; hub = hub->next)
-	    {
-	    AllocVar(group);
-	    group->name = cloneString(hub->name);
-	    group->label = cloneString(hub->shortLabel);
-	    group->defaultPriority = group->priority = priority;
-	    priority += priorityInc;
-	    slAddHead(&list, group);
-	    hashAdd(hash, group->name, group);
-            }
-        }
+    minPriority -= 1.0;             // priority is 1-based
+    // the idea here is to get enough room between priority 1
+    // (which is custom tracks) and the group with the next
+    // priority number, so that the hub nestle inbetween the
+    // custom tracks and everything else at the top of the list
+    // of track groups
+    priorityInc = (0.9 * minPriority) / slCount(grpList);
+    priority = 1.0 + priorityInc;
+    }
+for(; grpList; grpList = grpList->next)
+    {
+    AllocVar(group);
+    group->name = cloneString(grpList->name);
+    group->label = cloneString(grpList->label);
+    group->defaultPriority = group->priority = priority;
+    priority += priorityInc;
+    slAddHead(&list, group);
+    hashAdd(hash, group->name, group);
     }
 
 /* Loop through tracks and fill in their groups.
@@ -3813,13 +3783,10 @@ if (wikiTrackEnabled(database, NULL))
     wikiDisconnect(&conn);
     }
 
-if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
-    { // If a single track was asked for and it is from a hub, then it is already in trackList
-    loadTrackHubs(&trackList, &hubList);
-    slReverse(&hubList);
-    }
+struct grp *grpList = NULL;
+loadTrackHubs(&trackList, &hubList, &grpList);
 loadCustomTracks(&trackList);
-groupTracks(hubList, &trackList, pGroupList, vis);
+groupTracks(hubList, &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);

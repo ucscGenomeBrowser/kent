@@ -1,13 +1,11 @@
 /* freen - My Pet Freen. */
 #include <sys/wait.h>
-#include <sys/types.h>
 #include "common.h"
 #include "linefile.h"
-#include "localmem.h"
 #include "hash.h"
 #include "options.h"
+#include "portable.h"
 #include "jksql.h"
-#include "pipeline.h"
 
 void usage()
 {
@@ -21,23 +19,24 @@ static struct optionSpec options[] = {
 
 void freen(char *inFile)
 {
-/* Need to do I/O that will wait on file to have something */
-FILE *f = mustOpen(inFile, "r");
-int dummyFd = mustOpenFd(inFile, O_WRONLY);
-char buf[1024];
-for (;;)
+int childId = mustFork();
+if (childId == 0)
     {
-    char *s = fgets(buf, sizeof(buf), f);
-    if (s != NULL)
-	fputs(buf, stdout);
+    int err = system(inFile);
+    printf("child says: err = %d\n", err);
+    if (err != 0)
+	exit(-1);
+        // errAbort("system call '%s' had problems", inFile);
     else
-	{
-        fprintf(stderr, "s = NULL, rats\n");
-	sleep(1);
-	}
+	exit(0);
     }
-carefulClose(&f);
-close(dummyFd);
+else
+    {
+    int status = 0;
+    printf("parent got childId=%d\n", childId);
+    int child = waitpid(-1, &status, 0);
+    printf("parent says after waitPid: child=%d, status=%d\n", child, status);
+    }
 }
 
 

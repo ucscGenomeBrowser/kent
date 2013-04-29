@@ -301,8 +301,8 @@ else
 verbose(1, "Made sample fastq with %lld reads\n", vf->sampleCount);
 
 /* Align fastq and turn results into bed. */
-char sampleBedName[PATH_LEN];
-safef(sampleBedName, PATH_LEN, "%sedwSampleBedXXXXXX", edwTempDir());
+char sampleBedName[PATH_LEN], temp[PATH_LEN];
+safef(sampleBedName, PATH_LEN, "%sedwSampleBedXXXXXX", edwTempDirForToday(temp));
 int bedFd = mkstemp(sampleBedName);
 FILE *bedF = fdopen(bedFd, "w");
 alignFastqMakeBed(ef, assembly, sampleFastqName, vf, bedF);
@@ -429,8 +429,8 @@ void makeValidBam( struct sqlConnection *conn, char *path, struct edwFile *ef,
 	struct edwAssembly *assembly, struct edwValidFile *vf)
 /* Fill out fields of vf based on bam.  Create sample subset as a little bed file. */
 {
-char sampleFileName[PATH_LEN];
-safef(sampleFileName, PATH_LEN, "%sedwBamSampleToBedXXXXXX", edwTempDir());
+char sampleFileName[PATH_LEN], temp[PATH_LEN];
+safef(sampleFileName, PATH_LEN, "%sedwBamSampleToBedXXXXXX", edwTempDirForToday(temp));
 int sampleFd = mkstemp(sampleFileName);
 FILE *f = fdopen(sampleFd, "w");
 struct genomeRangeTree *grt = genomeRangeTreeNew();
@@ -466,8 +466,8 @@ if (!gff->isGtf)
 	(long long)ef->id, ef->submitFileName);
 
 /* Convert it to a somewhat smaller less informative bed file for sampling purposes. */
-char sampleFileName[PATH_LEN];
-safef(sampleFileName, PATH_LEN, "%sedwGffBedXXXXXX", edwTempDir());
+char sampleFileName[PATH_LEN], temp[PATH_LEN];
+safef(sampleFileName, PATH_LEN, "%sedwGffBedXXXXXX", edwTempDirForToday(temp));
 int sampleFd = mkstemp(sampleFileName);
 FILE *f = fdopen(sampleFd, "w");
 struct genomeRangeTree *grt = genomeRangeTreeNew();

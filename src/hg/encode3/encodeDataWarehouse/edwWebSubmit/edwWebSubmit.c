@@ -46,55 +46,6 @@ printf("<BR>Submission by %s", userEmail);
 edwPrintLogOutButton();
 }
 
-void submitUrl(struct sqlConnection *conn)
-/* Submit validated manifest if it is not already in process.  Show
- * progress once it is in progress. */
-{
-/* Parse email and URL out of CGI vars. Do a tiny bit of error checking. */
-char *url = trimSpaces(cgiString("url"));
-if (!stringIn("://", url))
-    errAbort("%s doesn't seem to be a valid URL, no '://'", url);
-
-/* Do some reality checks that email and URL actually exist. */
-edwMustGetUserFromEmail(conn, userEmail);
-int sd = netUrlMustOpenPastHeader(url);
-close(sd);
-
-/* Write email and URL to fifo used by submission spooler. */
-FILE *fifo = mustOpen("../userdata/edwSubmit.fifo", "w");
-fprintf(fifo, "%s %s\n", userEmail, url);
-carefulClose(&fifo);
-
-/* Give system a second to react, and then try to put up status info about submission. */
-printf("Submission of %s is in progress....", url);
-cgiMakeButton("monitor", "monitor submission");
-edwPrintLogOutButton();
-cgiMakeHiddenVar("url", url);
-}
-
-struct dyString *formatDuration(long long seconds)
-/* Convert seconds to days/hours/minutes. */
-{
-struct dyString *dy = dyStringNew(0);
-int days = seconds/(3600*24);
-if (days > 0)
-    dyStringPrintf(dy, "%d days, ", days);
-seconds -= days*3600*24;
-
-int hours = seconds/3600;
-if (hours > 0)
-    dyStringPrintf(dy, "%d hours, ", hours);
-seconds -= hours*3600;
-
-int minutes = seconds/60;
-if (minutes > 0)
-    dyStringPrintf(dy, "%d minutes, ", minutes);
-
-seconds -= minutes*60;
-dyStringPrintf(dy, "%d seconds", (int)seconds);
-return dy;
-}
-
 struct edwFile *edwFileInProgress(struct sqlConnection *conn, int submitId)
 /* Return file in submission in process of being uploaded if any. */
 {
@@ -104,16 +55,30 @@ safef(query, sizeof(query),
 return edwFileLoadByQuery(conn, query);
 }
 
-int countNewValid(struct sqlConnection *conn, struct edwSubmit *sub)
-/* Count number of new files in submission that have been validated. */
+int positionInQueue(struct sqlConnection *conn, char *url)
+/* Return position of our URL in submission queue */
 {
 char query[256];
-safef(query, sizeof(query), 
-    "select count(*) from edwFile e,edwValidFile v where e.id = v.fileId and e.submitId=%u",
-    sub->id);
-return sqlQuickNum(conn, query);
+safef(query, sizeof(query), "select commandLine from edwSubmitJob where startTime = 0");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+int aheadOfUs = -1;
+int pos = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *line = row[0];
+    char *edwSubmit = nextQuotedWord(&line);
+    char *lineUrl = nextQuotedWord(&line);
+    if (sameOk(edwSubmit, "edwSubmit") && sameOk(url, lineUrl))
+        {
+	aheadOfUs = pos;
+	break;
+	}
+    ++pos;
+    }
+sqlFreeResult(&sr);
+return aheadOfUs;
 }
-
 
 void monitorSubmission(struct sqlConnection *conn)
 /* Write out information about submission. */
@@ -123,16 +88,15 @@ cgiMakeHiddenVar("url", url);
 struct edwSubmit *sub = edwMostRecentSubmission(conn, url);
 if (sub == NULL)
     {
-    /* Would be nice to have a way to check this rather than blindly
-     * reassuring user.  Also to give them their queue position.  Since
-     * the queue is a unix fifo though I'm not sure if we can easily
-     * figure out what's piled in it.  I just did a test and it 
-     * looks like the file size according to 'ls' at least doesn't change
-     * when a fifo has stuff pending in it. It's one argument in favor of
-     * shifting the queue to the database like the validation queue.
-     * It's so nice not to have to poll though,  which the fifo gets you 
-     * out of. */
-    printf("%s is in submission queue, but upload has not started", url);
+    int posInQueue = positionInQueue(conn, url);
+    if (posInQueue == 0)
+	printf("%s is first in the submission queue, but upload has not started<BR>\n", url);
+    else if (posInQueue > 0)
+        printf("%s is in submission queue with %d submissions ahead of it<BR>\n", url, posInQueue);
+    else
+	{
+        printf("%s status unknown.", url);
+	}
     }
 else
     {
@@ -173,7 +137,8 @@ else
 	}
 
     /* Report validation status */
-    printf("<B>new files validated:</B> %u of %u<BR>\n", countNewValid(conn, sub), sub->newFiles);
+    printf("<B>new files validated:</B> %u of %u<BR>\n", edwSubmitCountNewValid(sub, conn), 
+	sub->newFiles);
 
     /* Print error message, and in case of error skip file-in-transfer info. */
     if (isEmpty(sub->errorMessage))
@@ -214,7 +179,7 @@ else
 
     /* Report start time  and duration */
     printf("<B>submission started:</B> %s<BR>\n", ctime(&startTime));
-    struct dyString *duration = formatDuration(timeSpan);
+    struct dyString *duration = edwFormatDuration(timeSpan);
 
     /* Try and give them an ETA if we aren't finished */
     if (endUploadTime == 0 && timeSpan > 0)
@@ -225,7 +190,7 @@ else
 	if (bytesPerSecond > 0)
 	    {
 	    long long estimatedFinish = bytesRemaining/bytesPerSecond;
-	    struct dyString *eta = formatDuration(estimatedFinish);
+	    struct dyString *eta = edwFormatDuration(estimatedFinish);
 	    printf("<B>estimated finish in:</B> %s<BR>\n", eta->string);
 	    }
 	}
@@ -242,6 +207,48 @@ printf(" <input type=\"button\" value=\"browse submissions\" "
 edwPrintLogOutButton();
 }
 
+void submitUrl(struct sqlConnection *conn)
+/* Submit validated manifest if it is not already in process.  Show
+ * progress once it is in progress. */
+{
+/* Parse email and URL out of CGI vars. Do a tiny bit of error checking. */
+char *url = trimSpaces(cgiString("url"));
+if (!stringIn("://", url))
+    errAbort("%s doesn't seem to be a valid URL, no '://'", url);
+
+/* Do some reality checks that email and URL actually exist. */
+edwMustGetUserFromEmail(conn, userEmail);
+int sd = netUrlMustOpenPastHeader(url);
+close(sd);
+
+/* Create command and add it to edwSubmitJob table. */
+char command[strlen(url) + strlen(userEmail) + 256];
+safef(command, sizeof(command), "edwSubmit '%s' %s", url, userEmail);
+char escapedCommand[2*strlen(command) + 1];
+sqlEscapeString2(escapedCommand, command);
+char query[strlen(escapedCommand)+128];
+safef(query, sizeof(query), "insert edwSubmitJob (commandLine) values('%s')", escapedCommand);
+sqlUpdate(conn, query);
+
+/* Write sync signal (any string ending with newline) to fifo to wake up daemon. */
+FILE *fifo = mustOpen("../userdata/edwSubmit.fifo", "w");
+fputc('\n', fifo);
+carefulClose(&fifo);
+
+/* Give the system a half second to react and then put up status info about submission */
+sleep1000(500);
+monitorSubmission(conn);
+
+#ifdef OLD
+/* Give system a second to react, and then try to put up status info about submission. */
+/* consider replacing this with direct call to monitorSubmission. */
+printf("Submission of %s is in progress....", url);
+cgiMakeButton("monitor", "monitor submission");
+edwPrintLogOutButton();
+cgiMakeHiddenVar("url", url);
+#endif /* OLD */
+}
+
 static void localWarn(char *format, va_list args)
 /* A little warning handler to override the one with the button that goes nowhere. */
 {
@@ -255,7 +262,7 @@ void doMiddle()
 {
 pushWarnHandler(localWarn);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
-struct sqlConnection *conn = sqlConnect(edwDatabase);
+struct sqlConnection *conn = edwConnectReadWrite(edwDatabase);
 userEmail = edwGetEmailAndVerify();
 if (userEmail == NULL)
     logIn();

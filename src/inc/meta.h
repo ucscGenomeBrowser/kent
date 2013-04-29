@@ -88,6 +88,6 @@ void metaSortTags(struct meta *meta);
  * rest are alphabetical. */
 
 struct hash *metaHash(struct meta *forest);
-/* Return hash of meta at all levels of heirarchy keyed by forest. */
+/* Return hash of meta at all levels of heirarchy keyed by meta value. */
 
 #endif /* META_H */

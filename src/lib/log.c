@@ -329,9 +329,17 @@ if (!optionExists("debug"))
     if (mustFork() != 0)
         exit(0);  /* parent goes away */
 
+    /* Put self in our own process group. */
+    setsid();
+
     /* Close all open files first (before logging) */
     for (i = 0; i < maxFiles; i++)
         close(i);
+
+    /* Reopen standard files to /dev/null just in case somebody uses them. */
+    int nullFd = open("/dev/null", O_RDWR);  // Opens stdin
+    dup(nullFd);			     // Stdout goes also to /dev/null
+    dup(nullFd);			     // Stderr goes also to /dev/null
     }
 
 /* Set up log handler. */
