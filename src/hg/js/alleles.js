@@ -118,6 +118,7 @@ var alleles = (function()
         // Make sure that sort command saves the coumn for persistence
         $('table#alleles').find('TH').click(function (e) { afterSort(this); });
         
+        /*
         // Want to show rare haplotypes if they were seen before ajax update
         if (persistRareHapsShown) {
             alleles.rareAlleleToggle( $('input#' + sectionName + "_rareHaps"), false );
@@ -126,7 +127,8 @@ var alleles = (function()
         // Want to show scores if they were seen before ajax update
         if (persistScoresShown) {
             alleles.scoresToggle( $('input#' + sectionName + "_score"), false );
-        }
+        } 
+        */
         
         // Persist on lighlite as red
         if (hiliteId != '')
@@ -286,7 +288,7 @@ var alleles = (function()
                 $('span#alleleCounts').addClass('textAlert'); 
                 $(btn).val('Hide rare haplotypes');
                 if (setCart == undefined || setCart)
-                    setCartVar(sectionName + '_rareHaps','set');
+                    setCartVar(btn.id,'set');
             } else {
                 $(trs).filter('.rare').addClass('hidden');
                 var counts = $(trs).filter(':visible').length + ' of ' + $(trs).length;
@@ -294,38 +296,58 @@ var alleles = (function()
                 $('span#alleleCounts').removeClass('textAlert'); 
                 $(btn).val('Show rare haplotypes');
                 if (setCart == undefined || setCart)
-                    setCartVar(sectionName + '_rareHaps','[]');
+                    setCartVar(btn.id,'[]');
             }
             hilitesResize();
         },
         
         scoresToggle: function (btn,setCart)
         { // toggle the visibility of scores
-            persistScoresShown = ($(btn).val().indexOf('Include') != -1);
+            persistScoresShown = ($(btn).val().indexOf('Show') != -1);
             if (persistScoresShown) {
                 $('table#alleles').find('.score').removeClass('hidden');
                 $(btn).val('Hide scoring');
                 if (setCart == undefined || setCart)
-                    setCartVar(sectionName + '_score','set');
+                    setCartVar(btn.id,'set');
             } else {
                 $('table#alleles').find('.score').addClass('hidden');
-                $(btn).val('Include scoring');
+                $(btn).val('Show scoring');
                 if (setCart == undefined || setCart)
-                    setCartVar(sectionName + '_score','[]');
+                    setCartVar(btn.id,'[]');
             }
             hilitesResize();
         },
         
-        toggleButton: function (btn,val)
-        { // toggles feature that requires ajax
-          // Note that ID is same as cart variable and value is boolean "exists"
-            if (val != '') {
-                ajaxRequest(btn.id + '=set');
+        scoresShow: function (obj,val)
+        { // toggle the visibility of scores
+            persistScoresShown = (val == 'set');
+            if (persistScoresShown) {
+                $('table#alleles').find('.score').removeClass('hidden');
+                $(obj).val('[]');
             } else {
-                ajaxRequest(btn.id + '=[]'); // Will remove cart variable
+                $(obj).val('set');
+                $('table#alleles').find('.score').addClass('hidden');
             }
+            setCartVar(obj.id,val);
+            hilitesResize();
         },
-
+        
+        // TODO: Would be good to hide pop and popScore columns, instead of ajax setAndRefresh
+        /* popShow: function (obj,val)
+        { // toggle the visibility of scores
+            persistScoresShown = (val == 'set');
+            if (val == 'set') {
+                return setAndRefresh(obj.id,val)
+                $('table#alleles').find('.score').removeClass('hidden');
+                //$(obj).val('[]');
+            } else {
+                $(obj).val('set');
+                $('table#alleles').find('.pop').addClass('hidden');
+            }
+            setCartVar(obj.id,val);
+            hilitesResize();
+        },*/
+        
         setAndRefresh: function  (varName,val)
         { // Resets all display options to defaults
             ajaxRequest(varName + '=' + val);
